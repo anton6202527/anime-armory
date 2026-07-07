@@ -49,7 +49,8 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps one full desktop demo seed work: 创作区/制漫剧/那妖魔是姜大人.
+    Keeps configured desktop demo seed works when present. Missing series are
+    skipped. Outer skill demo folders are bundled by desktop/sync-skills.cjs.
     Excludes private agent files, git metadata, dist/, build targets, and
     dependency caches. Does NOT commit release artifacts into git history and
     is not marked as latest.
@@ -404,15 +405,14 @@ select_demo_works() {
     DEMO_WORKS+=("$demo")
   done < <(node "$ROOT/scripts/r2a_select_demo.cjs" "$source_root")
 
-  if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
-    echo "No demo works found under $source_root/创作区" >&2
-    exit 1
-  fi
-
   echo "[r2a] demo works:"
-  for demo in "${DEMO_WORKS[@]}"; do
-    echo "[r2a]   - $demo"
-  done
+  if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
+    echo "[r2a]   - none from 创作区 (outer skill demos may still be bundled)"
+  else
+    for demo in "${DEMO_WORKS[@]}"; do
+      echo "[r2a]   - $demo"
+    done
+  fi
 }
 
 prepare_source_snapshot() {
@@ -559,7 +559,7 @@ prepare_release_source() {
   else
     echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
   fi
-  echo "[r2a] source tree sanitized before build: selected full demo payloads kept"
+  echo "[r2a] source tree sanitized before build: selected demo payloads kept when present"
 }
 
 install_node_deps() {
@@ -684,6 +684,10 @@ format_asset_lines() {
 }
 
 format_demo_lines() {
+  if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
+    printf -- "- none from 创作区; outer skill demos are bundled by desktop/sync-skills.cjs when present\n"
+    return
+  fi
   local demo
   for demo in "${DEMO_WORKS[@]}"; do
     printf -- "- %s\n" "$demo"
@@ -736,11 +740,13 @@ build_macos_assets() {
   local target="$1"
   local dmg_name="$2"
   local app_src="$SOURCE_DIR/desktop/src-tauri/target/$target/release/bundle/macos/AnimeArmory.app"
+  local featured_works
+  featured_works="$(printf '%s\n' "${DEMO_WORKS[@]}")"
 
   (
     cd "$SOURCE_DIR/desktop"
     R2A_INCLUDE_DEMOS=0 \
-    R2A_FEATURED_WORK="${DEMO_WORKS[0]}" \
+    R2A_FEATURED_WORKS="$featured_works" \
       npm run tauri -- build --target "$target" --bundles app --ci
   )
 
@@ -754,10 +760,12 @@ build_macos_assets() {
 
 build_windows_exe() {
   require_cmd makensis
+  local featured_works
+  featured_works="$(printf '%s\n' "${DEMO_WORKS[@]}")"
   (
     cd "$SOURCE_DIR/desktop"
     R2A_INCLUDE_DEMOS=0 \
-    R2A_FEATURED_WORK="${DEMO_WORKS[0]}" \
+    R2A_FEATURED_WORKS="$featured_works" \
       npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
   )
   local exe_src
@@ -832,7 +840,7 @@ $(format_source_lines)
 - Release artifacts committed to git history: no
 - Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
 
-Desktop bundled full demo:
+Desktop bundled full demos from 创作区:
 $(format_demo_lines)
 
 Desktop non-demo work references:

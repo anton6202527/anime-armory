@@ -6,8 +6,9 @@ import {
   readEpisodeWorkspace,
   subscribeMediaPort,
 } from "../api";
-import type { CanvasClip, CanvasData, EpisodeWorkspace, WorkRoot } from "../types";
+import type { CanvasClip, CanvasData, EpisodeWorkspace, LineKey, WorkRoot } from "../types";
 import { ReviewPane } from "./QualitySummary";
+import { QualityInsightsPane } from "./QualityInsightsPane";
 
 function textValue(value: unknown): string {
   if (value == null || value === "") return "—";
@@ -56,11 +57,13 @@ function issueTitle(issue: { dimension?: string; message?: string }): string {
 
 export function EpisodeWorkspacePane({
   root,
+  line,
   ep,
   canvas,
   refreshKey,
 }: {
   root: WorkRoot;
+  line: LineKey;
   ep: string;
   canvas: CanvasData | null;
   refreshKey: number;
@@ -90,7 +93,16 @@ export function EpisodeWorkspacePane({
   const clips = useMemo(() => canvas?.clips ?? [], [canvas?.clips]);
 
   if (loading && !workspace) return <div className="stub-view">读取本集工作台…</div>;
-  if (!workspace) return <ReviewPane summary={canvas?.quality} />;
+  if (!workspace) {
+    return canvas?.quality ? (
+      <div className="review-stack">
+        <ReviewPane summary={canvas.quality} embedded />
+        <QualityInsightsPane root={root} line={line} ep={ep} refreshKey={refreshKey} embedded />
+      </div>
+    ) : (
+      <QualityInsightsPane root={root} line={line} ep={ep} refreshKey={refreshKey} />
+    );
+  }
 
   const m = workspace.metrics ?? {};
   const progress = workspace.progress ?? {};
@@ -120,6 +132,8 @@ export function EpisodeWorkspacePane({
           <div><span>QA</span><b>{textValue(metric(m, "qa_blockers"))}/{textValue(metric(m, "qa_warnings"))}</b></div>
         </div>
       </section>
+
+      <QualityInsightsPane root={root} line={line} ep={ep} refreshKey={refreshKey} embedded />
 
       <section className="episode-section">
         <h3>阶段</h3>

@@ -193,6 +193,35 @@ def visual_contract_values(image_overview: str) -> Dict[str, str]:
     return values
 
 
+def storyboard_style_anchors(sb: Mapping[str, Any]) -> List[str]:
+    contract = sb.get("style_contract") if isinstance(sb.get("style_contract"), Mapping) else {}
+    raw = (contract.get("style_anchor") or contract.get("风格锚")) if isinstance(contract, Mapping) else None
+    if isinstance(raw, str):
+        vals = [raw]
+    elif isinstance(raw, list):
+        vals = [str(x) for x in raw if str(x or "").strip()]
+    else:
+        vals = []
+    return [v.strip() for v in vals if v.strip()]
+
+
+def ensure_style_anchor(style_block: str, sb: Mapping[str, Any]) -> str:
+    anchors = storyboard_style_anchors(sb)
+    m = re.search(r"(?m)^(\s*-\s*(?:style_anchor|风格锚)\s*[:：]\s*)(.+)$", style_block or "")
+    if m:
+        existing = m.group(2).strip()
+        if not anchors or any(anchor in existing for anchor in anchors):
+            return style_block
+        if "继承" not in existing and "`" in existing:
+            return style_block
+        anchor_text = "、".join(f"`{a}`" for a in anchors)
+        return (style_block[:m.start()] + f"{m.group(1)}{anchor_text}（风格锚；style-only，不克隆角色脸和服装）" + style_block[m.end():])
+    if not anchors:
+        return style_block
+    anchor_text = "、".join(f"`{a}`" for a in anchors)
+    return style_block.rstrip() + f"\n- style_anchor：{anchor_text}（风格锚；style-only，不克隆角色脸和服装）"
+
+
 def route_list(route: Mapping[str, Any], key: str) -> str:
     val = route.get(key)
     if isinstance(val, list):
@@ -274,7 +303,7 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
     clips = [c for c in sb.get("clips") or [] if isinstance(c, Mapping)]
     values = visual_contract_values(image_overview)
     visual_block = extract_section(image_overview, "本集视觉一致性契约") or "## 本集视觉一致性契约\n- 色调基线：继承出图总览。"
-    style_block = extract_section(image_overview, "本集基础视觉风格契约") or (
+    style_block = ensure_style_anchor(extract_section(image_overview, "本集基础视觉风格契约") or (
         "## 本集基础视觉风格契约\n"
         f"- 风格名：{project_setting(root, '基础视觉风格', '冷灰写实3D国风漫剧')}\n"
         "- 视觉基调：继承 storyboard/style_contract。\n"
@@ -283,7 +312,7 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
         "- 运动边界：固定/微推/缓跟。\n"
         "- 风格禁忌：不要换脸换衣、不要现代物、不要文字水印。\n"
         "- style_anchor：继承出图风格锚。"
-    )
+    ), sb)
     image_contract = extract_section(image_overview, "本集可看性签收合同")
     total_sec = sum(float(c.get("duration") or 0) for c in clips)
 

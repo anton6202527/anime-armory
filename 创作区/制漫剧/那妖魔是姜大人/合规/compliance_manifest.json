@@ -1,142 +1,153 @@
 {
-  "kind": "n2d_compliance_manifest",
-  "version": 1,
-  "updated_at": "2026-07-06",
-  "distribution_intent": "internal_only",
-  "scope": {
-    "episodes": "all"
-  },
-  "rights": {
-    "source_text": {
-      "status": "original",
-      "evidence": "仓库默认：用户为原著作者，源文本作者自有"
+  "ai_labeling": {
+    "applicable": true,
+    "digital_watermark": {
+      "notes": "数字水印为鼓励项，可外置；本流水线不强制",
+      "status": "optional_external"
     },
-    "adaptation": {
-      "status": "original",
-      "evidence": "仓库默认：同一原著作者进行同源漫剧改编，改编权作者自有"
+    "explicit_label": {
+      "notes": "internal_only 预览不烧录可见角标；转公开发布前运行 n2d-compose/ai_label.py 生成带显式角标的发行母版并将 status=done。",
+      "position": "bottom-right",
+      "prominent_label_spec": "公开发布发行母版需在前5s内出现「AI生成」显式标识，持续≥3s，右下/底部安全区可见，经9:16/16:9裁剪仍保留；当前 internal_only 母版未烧录可见角标。",
+      "status": "pending",
+      "text": "AI生成"
     },
-    "music_bgm": {
-      "status": "not_applicable",
-      "evidence": ""
+    "implicit_metadata": {
+      "applied": true,
+      "content_id": "N2D-YMSJDR-EP01-20260707",
+      "service_provider_code": "SP-INTERNAL-N2D",
+      "spec": "GB45438-2025"
     },
-    "sfx": {
-      "status": "not_applicable",
-      "evidence": ""
-    },
-    "fonts": {
-      "status": "not_applicable",
-      "evidence": ""
-    }
+    "notes": "AI 标识为非阻断发布待办：compose 可 best-effort 落显式标签和元数据；失败不阻断成片/进度，发布前按目标地区/平台补齐"
   },
   "character_likeness": {
     "characters": [
       {
         "character_id": "CHAR_01",
-        "status": "synthetic_character",
-        "evidence": "原创合成角色：姜月初；2026-07-01 用户提供两张非真人风格人物参考图并明确要求用于本项目脸部与身形重定。仅提取脸型/五官比例/眼神/体态/身材，不继承参考图服装、发饰、海报文字、水印、背景或第三方 IP 标识。"
+        "evidence": "原创合成角色：姜月初；2026-07-01 用户提供两张非真人风格人物参考图并明确要求用于本项目脸部与身形重定。仅提取脸型/五官比例/眼神/体态/身材，不继承参考图服装、发饰、海报文字、水印、背景或第三方 IP 标识。",
+        "status": "synthetic_character"
       },
       {
         "character_id": "CHAR_02",
-        "status": "synthetic_character",
-        "evidence": "原创合成角色：裴长青；不使用真人肖像或第三方 IP 脸锚"
+        "evidence": "原创合成角色：裴长青；不使用真人肖像或第三方 IP 脸锚",
+        "status": "synthetic_character"
       },
       {
         "character_id": "CHAR_03",
-        "status": "synthetic_character",
-        "evidence": "原创合成妖物角色：虎山神/虎妖；不使用真人肖像或第三方 IP 脸锚"
+        "evidence": "原创合成妖物角色：虎山神/虎妖；不使用真人肖像或第三方 IP 脸锚",
+        "status": "synthetic_character"
       },
       {
         "character_id": "CHAR_04",
-        "status": "synthetic_character",
-        "evidence": "原创合成角色：陈青源；不使用真人肖像或第三方 IP 脸锚"
+        "evidence": "原创合成角色：陈青源；不使用真人肖像或第三方 IP 脸锚",
+        "status": "synthetic_character"
       },
       {
         "character_id": "GROUP_飞鹰门马队",
-        "status": "synthetic_character",
-        "evidence": "原创合成功能角色组：飞鹰门马队；仅作远景/中景群体、手部/肩背/剪影/火把与马队局部参考，不建立可核验真人肖像"
+        "evidence": "原创合成功能角色组：飞鹰门马队；仅作远景/中景群体、手部/肩背/剪影/火把与马队局部参考，不建立可核验真人肖像",
+        "status": "synthetic_character"
       },
       {
         "character_id": "GROUP_飞鹰门众人",
-        "status": "synthetic_character",
-        "evidence": "原创合成功能角色组：飞鹰门众人；跪地求援/村口怒火群像，仅作群体、手部、肩背、布料和剪影参考，不使用真人肖像或第三方 IP 脸锚。"
+        "evidence": "原创合成功能角色组：飞鹰门众人；跪地求援/村口怒火群像，仅作群体、手部、肩背、布料和剪影参考，不使用真人肖像或第三方 IP 脸锚。",
+        "status": "synthetic_character"
       },
       {
         "character_id": "GROUP_狼妖群",
-        "status": "synthetic_character",
-        "evidence": "原创合成妖物/功能角色组：狼妖群；狼妖哨兵与村道深处狼群，脸部遵循本作妖类规则保持狼首/兽脸结构，不使用真人肖像或第三方 IP 脸锚。"
+        "evidence": "原创合成妖物/功能角色组：狼妖群；狼妖哨兵与村道深处狼群，脸部遵循本作妖类规则保持狼首/兽脸结构，不使用真人肖像或第三方 IP 脸锚。",
+        "status": "synthetic_character"
       },
       {
         "character_id": "CHAR_05",
-        "status": "synthetic_character",
-        "evidence": "原创合成妖物角色：青面郎君；狼首人身青衫狼妖，按用户 2026-07-06 指定狼首参考和妖类脸部规则生成，不使用真人肖像或第三方 IP 脸锚。"
+        "evidence": "原创合成妖物角色：青面郎君；狼首人身青衫狼妖，按用户 2026-07-06 指定狼首参考和妖类脸部规则生成，不使用真人肖像或第三方 IP 脸锚。",
+        "status": "synthetic_character"
       }
     ]
   },
-  "voice": {
-    "status": "synthetic_voice",
-    "uses_voice_clone": false,
-    "authorization_status": "not_applicable",
-    "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence"
-  },
+  "distribution_intent": "internal_only",
   "image_identity": {
-    "uses_cameo": false,
     "authorization_status": "not_applicable",
+    "evidence": "CHAR_01 使用用户会话提供的非真人风格人物参考图作为项目内脸部/身形锚；不使用 Sora cameo，不使用真人肖像或第三方 IP 脸锚；参考范围限定为脸型、五官比例、眼神、体态和身形。",
     "feeds_face_references": true,
-    "evidence": "CHAR_01 使用用户会话提供的非真人风格人物参考图作为项目内脸部/身形锚；不使用 Sora cameo，不使用真人肖像或第三方 IP 脸锚；参考范围限定为脸型、五官比例、眼神、体态和身形。"
+    "uses_cameo": false
+  },
+  "kind": "n2d_compliance_manifest",
+  "localization": {
+    "dub_languages": [],
+    "notes": "内部中文预览，不做出海本地化。",
+    "status": "not_applicable",
+    "subtitle_languages": [
+      "zh"
+    ]
   },
   "platform_review": {
     "targets": [
       {
-        "platform": "internal_preview",
-        "region": "CN",
+        "content_rating_review": "not_applicable",
+        "copyright_review": "not_applicable",
         "language": "zh",
+        "notes": "当前仅用于项目内部预览合成；转正式投放前需改回 publish_candidate/paid_distribution 并补目标平台审核。",
+        "platform": "internal_preview",
         "policy_profile": "internal_preview_policy_2026-07-01",
         "profile_checked_at": "2026-07-01",
-        "copyright_review": "not_applicable",
-        "content_rating_review": "not_applicable",
-        "requires_localization": false,
-        "notes": "当前仅用于项目内部预览合成；转正式投放前需改回 publish_candidate/paid_distribution 并补目标平台审核。"
+        "region": "CN",
+        "requires_localization": false
       }
     ]
   },
-  "localization": {
-    "status": "not_applicable",
-    "subtitle_languages": [
-      "zh"
+  "public_release_prerequisites": {
+    "last_reviewed_at": "2026-07-07T05:20:01+00:00",
+    "must_complete_before_publication": [
+      "distribution_intent 改为 publish_candidate 或 paid_distribution",
+      "目标平台/地区人工终审签收",
+      "按适用地区补规划备案号/上线备案号",
+      "生成带显式 AI 角标的发行母版并复核裁剪存活",
+      "保留元数据隐式标识或平台侧 AIGC 披露凭证"
     ],
-    "dub_languages": [],
-    "notes": "内部中文预览，不做出海本地化。"
+    "status": "not_ready_internal_only"
   },
   "regulatory_filing": {
-    "regime": "NRTA_网络微短剧",
     "applicable": false,
-    "tier": "not_applicable_internal_preview",
-    "planning_filing_no": "not_applicable_internal_preview",
-    "release_filing_no": "not_applicable_internal_preview",
-    "pre_broadcast_review": "not_applicable",
     "filed_at": "",
+    "notes": "内部预览成片免监管备案与播前审核；境内公开投放/付费分发前必须重新补规划备案号、上线备案号和人工终审。",
+    "planning_filing_no": "not_applicable_internal_preview",
     "platform_human_review": "not_applicable",
-    "notes": "内部预览成片免监管备案与播前审核；境内公开投放/付费分发前必须重新补规划备案号、上线备案号和人工终审。"
+    "pre_broadcast_review": "not_applicable",
+    "regime": "NRTA_网络微短剧",
+    "release_filing_no": "not_applicable_internal_preview",
+    "tier": "not_applicable_internal_preview"
   },
-  "ai_labeling": {
-    "applicable": true,
-    "explicit_label": {
-      "status": "pending",
-      "text": "AI生成",
-      "position": "bottom-right",
-      "prominent_label_spec": "TODO: 确认显著标识满足 前5s出现/≥3s持续/显著位/经裁剪存活（2026广电规格）",
-      "notes": "visible label disabled for internal preview; enable AI显式角标=开启 before distribution if required"
+  "rights": {
+    "adaptation": {
+      "evidence": "仓库默认：同一原著作者进行同源漫剧改编，改编权作者自有",
+      "status": "original"
     },
-    "implicit_metadata": {
-      "spec": "GB45438-2025",
-      "service_provider_code": "TODO: 服务提供者编码（GB 45438）",
-      "content_id": "TODO: 内容制作编号",
-      "applied": true
+    "fonts": {
+      "evidence": "",
+      "status": "not_applicable"
     },
-    "digital_watermark": {
-      "status": "optional_external",
-      "notes": "数字水印为鼓励项，可外置；本流水线不强制"
+    "music_bgm": {
+      "evidence": "",
+      "status": "not_applicable"
     },
-    "notes": "AI 标识为非阻断发布待办：compose 可 best-effort 落显式标签和元数据；失败不阻断成片/进度，发布前按目标地区/平台补齐"
+    "sfx": {
+      "evidence": "",
+      "status": "not_applicable"
+    },
+    "source_text": {
+      "evidence": "仓库默认：用户为原著作者，源文本作者自有",
+      "status": "original"
+    }
+  },
+  "scope": {
+    "episodes": "all"
+  },
+  "updated_at": "2026-07-07",
+  "version": 1,
+  "voice": {
+    "authorization_status": "not_applicable",
+    "evidence": "未使用真人参考音；若使用参考音，改为 authorized_clone + approved + evidence",
+    "status": "synthetic_voice",
+    "uses_voice_clone": false
   }
 }

@@ -192,8 +192,8 @@ function ClipEditDialog(props: {
   );
 }
 
-// Infinite canvas for n2d/ad/mv: clip nodes laid out left→right with
-// 接力链 (continuity) edges between consecutive clips and seam transitions.
+// Infinite canvas for visual production lines: clip/panel nodes laid out
+// left→right with continuity or next-panel edges.
 export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
   const { t } = useI18n();
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<Node>([]);

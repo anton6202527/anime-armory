@@ -1,75 +1,18 @@
 {
-  "alert_counts": {
-    "critical": 2,
-    "warn": 4
-  },
-  "alerts": [
-    {
-      "kind": "qa_blockers",
-      "level": "critical",
-      "message": "QA 阻断 342 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
-      "scope": "totals",
-      "threshold": 0,
-      "value": 342
-    },
-    {
-      "kind": "unverified_progress",
-      "level": "critical",
-      "message": "1 处未验证强标 ✅（第1集）：受闸列没有「真跑过+指纹新鲜」的闸门凭据，本季视为 provisional；对当前产物重跑对应 dashboard gate 销账。",
-      "scope": "totals",
-      "value": 1
-    },
-    {
-      "episode": "第1集",
-      "kind": "qa_blockers",
-      "level": "warn",
-      "message": "第1集 QA 阻断 171 项",
-      "scope": "第1集",
-      "threshold": 0,
-      "value": 171
-    },
-    {
-      "episode": "第2集",
-      "kind": "qa_blockers",
-      "level": "warn",
-      "message": "第2集 QA 阻断 5 项",
-      "scope": "第2集",
-      "threshold": 0,
-      "value": 5
-    },
-    {
-      "episode": "第3集",
-      "kind": "qa_blockers",
-      "level": "warn",
-      "message": "第3集 QA 阻断 57 项",
-      "scope": "第3集",
-      "threshold": 0,
-      "value": 57
-    },
-    {
-      "episode": "第4集",
-      "kind": "qa_blockers",
-      "level": "warn",
-      "message": "第4集 QA 阻断 109 项",
-      "scope": "第4集",
-      "threshold": 0,
-      "value": 109
-    }
-  ],
   "episodes": [
     {
-      "blockers_per_attempt": 1.437,
+      "blockers_per_attempt": 0.2381,
       "completion_rate": null,
-      "consistency_blockers": 1,
+      "consistency_blockers": 0,
       "consistency_ledger": {
         "counts": {
-          "block": 6,
+          "block": 4,
           "high": 0,
-          "medium": 20
+          "medium": 21
         },
         "delivery_surface": {
           "blocking_counts": {
-            "block": 6,
+            "block": 4,
             "high": 0
           },
           "required_domains": [
@@ -85,7 +28,7 @@
           "status": "blocked"
         },
         "path": "生产数据/consistency_ledger_第1集.json",
-        "row_count": 23,
+        "row_count": 24,
         "severe_rows": [
           {
             "contract": "ok",
@@ -134,7 +77,7 @@
           },
           {
             "contract": "ok",
-            "detect": "warn",
+            "detect": "ok",
             "id": "LOC_01",
             "kind": "scene",
             "name": "荒野尸骸战场",
@@ -161,7 +104,7 @@
           }
         ]
       },
-      "consistency_warnings": 116,
+      "consistency_warnings": 36,
       "cost_by_provider": {
         "dreamina:credits": 2320.0
       },
@@ -172,31 +115,31 @@
         "credits": 2320.0
       },
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "8h11m25s",
-      "duration_sec": 29485.328,
-      "elapsed_per_finished_min_sec": 14679.664,
+      "duration_hms": "8h15m10s",
+      "duration_sec": 29710.328,
+      "elapsed_per_finished_min_sec": 14791.683,
       "episode": "第1集",
-      "event_count": 640,
+      "event_count": 467,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 119,
+      "generation_attempts": 126,
       "generation_fails": 1,
-      "generation_pass_rate": 0.9916,
-      "generation_passes": 118,
+      "generation_pass_rate": 0.9921,
+      "generation_passes": 125,
       "image_qc_passive": {},
       "missing_deliverables": [
         {
           "asset": "出图/第1集/图片/Clip11_mid.png",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-01T07:40:59+00:00"
         },
         {
           "asset": "出图/第1集/图片/Clip11_end.png",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip11_end.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-01T07:55:14+00:00"
@@ -342,70 +285,75 @@
           "ts": "2026-07-03T14:17:09+00:00"
         }
       ],
-      "one_pass_count": 118,
-      "one_pass_rate": 0.9916,
+      "one_pass_count": 125,
+      "one_pass_rate": 0.9921,
       "progress_next_skill": "n2d-review",
       "progress_next_stage": "审查验收",
-      "qa_blockers": 171,
-      "qa_gate_passes": 4,
+      "qa_blockers": 30,
+      "qa_gate_passes": 6,
       "qa_gate_runs": 8,
-      "qa_infos": 53,
-      "qa_warnings": 309,
+      "qa_infos": 64,
+      "qa_warnings": 258,
       "recent_blockers": [
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/prompts",
-          "msg": "角色资产包分区不存在：prompts",
-          "stage": "image_preflight"
+          "dim": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "msg": "证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。",
+          "stage": "compose"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/lora",
-          "msg": "角色资产包分区不存在：lora",
-          "stage": "image_preflight"
+          "dim": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "msg": "场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+          "stage": "compose"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/voice",
-          "msg": "角色资产包分区不存在：voice",
-          "stage": "image_preflight"
+          "dim": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "msg": "场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+          "stage": "compose"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/adapters",
-          "msg": "角色资产包分区不存在：adapters",
-          "stage": "image_preflight"
+          "dim": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "msg": "证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。",
+          "stage": "review"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/qc",
-          "msg": "角色资产包分区不存在：qc",
-          "stage": "image_preflight"
+          "dim": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "msg": "场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+          "stage": "review"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_02__裴长青/reference",
-          "msg": "角色资产包分区不存在：reference",
-          "stage": "image_preflight"
+          "dim": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "msg": "场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env）",
+          "stage": "review"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_02__裴长青/prompts",
-          "msg": "角色资产包分区不存在：prompts",
-          "stage": "image_preflight"
+          "dim": "验收总账",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_ledger_第1集.json",
+          "msg": "一致性验收总账未清零：block=4 high=0 medium=21。review 不再按单镜看着像放行；请按 consistency_ledger 的交付域/根因回源头修复后复跑。",
+          "stage": "review"
         },
         {
-          "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_02__裴长青/lora",
-          "msg": "角色资产包分区不存在：lora",
-          "stage": "image_preflight"
+          "dim": "进度凭据对账",
+          "loc": "第1集/成片",
+          "msg": "进度「成片」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：compose 仍有 3 个 block 级问题（见 gate_findings_compose_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --stage compose（凡绕过 progress set 直接写 ✅ 都会在此被抓——重跑该阶段闸门盖新鲜凭据后再交付）",
+          "stage": "review"
         }
       ],
       "recoup_ratio": {},
-      "redraw_categories": {},
-      "redraw_count": 0,
-      "redraw_rate": 0.0,
-      "redraw_reasons": {},
+      "redraw_categories": {
+        "other": 33
+      },
+      "redraw_count": 33,
+      "redraw_rate": 0.2619,
+      "redraw_reasons": {
+        "backend_migration_or_pipeline_upgrade_backfilled": 8,
+        "legacy_multi_pass_selection_current_artifact_accepted": 25
+      },
       "release_net_totals": {},
       "release_plays": 0,
       "release_revenue_totals": {},
@@ -415,18 +363,18 @@
       "retention_3s": null,
       "runtime_hms": "2m01s",
       "runtime_sec": 120.515,
-      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json",
       "stages": {
         "compose": {
-          "duration_sec": 6099.0,
-          "generation_attempts": 3,
+          "duration_sec": 6324.0,
+          "generation_attempts": 8,
           "generation_fails": 0,
-          "generation_passes": 3,
+          "generation_passes": 8,
           "missing_deliverables": 0,
-          "qa_blockers": 0,
-          "qa_infos": 3,
-          "qa_warnings": 36,
-          "redraw_count": 0
+          "qa_blockers": 3,
+          "qa_infos": 4,
+          "qa_warnings": 15,
+          "redraw_count": 7
         },
         "image": {
           "duration_sec": 23198.125,
@@ -434,10 +382,10 @@
           "generation_fails": 1,
           "generation_passes": 82,
           "missing_deliverables": 2,
-          "qa_blockers": 6,
-          "qa_infos": 15,
-          "qa_warnings": 128,
-          "redraw_count": 0
+          "qa_blockers": 2,
+          "qa_infos": 16,
+          "qa_warnings": 106,
+          "redraw_count": 21
         },
         "image_preflight": {
           "duration_sec": 0.0,
@@ -445,9 +393,9 @@
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 106,
-          "qa_infos": 8,
-          "qa_warnings": 45,
+          "qa_blockers": 0,
+          "qa_infos": 16,
+          "qa_warnings": 70,
           "redraw_count": 0
         },
         "image_prompt_preflight": {
@@ -462,28 +410,28 @@
           "redraw_count": 0
         },
         "review": {
-          "consistency_blockers": 1,
-          "consistency_warnings": 116,
+          "consistency_blockers": 0,
+          "consistency_warnings": 36,
           "duration_sec": 0.0,
           "generation_attempts": 0,
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 30,
-          "qa_infos": 4,
-          "qa_warnings": 33,
+          "qa_blockers": 5,
+          "qa_infos": 5,
+          "qa_warnings": 15,
           "redraw_count": 0
         },
         "script": {
           "duration_sec": 0.0,
-          "generation_attempts": 1,
+          "generation_attempts": 2,
           "generation_fails": 0,
-          "generation_passes": 1,
+          "generation_passes": 2,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
           "qa_warnings": 0,
-          "redraw_count": 0
+          "redraw_count": 1
         },
         "video": {
           "duration_sec": 147.613,
@@ -491,9 +439,9 @@
           "generation_fails": 0,
           "generation_passes": 28,
           "missing_deliverables": 20,
-          "qa_blockers": 29,
+          "qa_blockers": 20,
           "qa_infos": 7,
-          "qa_warnings": 31,
+          "qa_warnings": 16,
           "redraw_count": 0
         },
         "video_preflight": {
@@ -520,17 +468,17 @@
         },
         "voice": {
           "duration_sec": 40.59,
-          "generation_attempts": 4,
+          "generation_attempts": 5,
           "generation_fails": 0,
-          "generation_passes": 4,
+          "generation_passes": 5,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
           "qa_warnings": 0,
-          "redraw_count": 0
+          "redraw_count": 4
         }
       },
-      "warnings_per_attempt": 2.5966
+      "warnings_per_attempt": 2.0476
     },
     {
       "blockers_per_attempt": 0.0505,
@@ -664,14 +612,14 @@
       "missing_deliverables": [
         {
           "asset": "出图/第2集/图片/Clip03_mid.png",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip03_mid.png",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip03_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-02T15:16:09+00:00"
         },
         {
           "asset": "出图/第2集/图片/Clip04_mid.png",
-          "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip04_mid.png",
+          "path": "创作区/制漫剧/那妖魔是姜大人/出图/第2集/图片/Clip04_mid.png",
           "provider": "Codex",
           "stage": "image",
           "ts": "2026-07-02T18:33:56+00:00"
@@ -748,7 +696,7 @@
       "retention_3s": null,
       "runtime_hms": "1m53s",
       "runtime_sec": 113.229,
-      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第2集/storyboard.json",
       "stages": {
         "compose": {
           "duration_sec": 259.0,
@@ -1068,7 +1016,7 @@
       "retention_3s": null,
       "runtime_hms": "3m24s",
       "runtime_sec": 203.757,
-      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 35766.534,
@@ -1371,7 +1319,7 @@
       "retention_3s": null,
       "runtime_hms": "3m59s",
       "runtime_sec": 239.159,
-      "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第4集/storyboard.json",
+      "runtime_source": "创作区/制漫剧/那妖魔是姜大人/脚本/第4集/storyboard.json",
       "stages": {
         "image": {
           "duration_sec": 13144.198,
@@ -1774,8 +1722,8 @@
       "warnings_per_attempt": null
     }
   ],
-  "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-06T13:45:21+00:00",
+  "event_file": "创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-07T06:39:20+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -2241,16 +2189,16 @@
   "kind": "n2d_production_dashboard",
   "release_metrics_file": "",
   "retention_trend": {},
-  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "root": "创作区/制漫剧/那妖魔是姜大人",
   "totals": {
-    "blockers_per_attempt": 0.8403,
-    "consistency_blockers": 39,
+    "blockers_per_attempt": 0.4855,
+    "consistency_blockers": 38,
     "consistency_ledger_counts": {
-      "block": 19,
+      "block": 17,
       "high": 0,
-      "medium": 83
+      "medium": 84
     },
-    "consistency_warnings": 377,
+    "consistency_warnings": 297,
     "cost_per_finished_min": {
       "credits": 275.943605
     },
@@ -2258,31 +2206,31 @@
       "credits": 3112.0
     },
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "28h41m11s",
-    "duration_sec": 103270.904,
-    "elapsed_per_finished_min_sec": 9157.116,
+    "duration_hms": "28h44m56s",
+    "duration_sec": 103495.904,
+    "elapsed_per_finished_min_sec": 9177.067,
     "episode_count": 10,
-    "event_count": 1788,
+    "event_count": 1615,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 407,
+    "generation_attempts": 414,
     "generation_fails": 11,
-    "generation_pass_rate": 0.973,
-    "generation_passes": 396,
-    "one_pass_count": 387,
-    "one_pass_rate": 0.9509,
-    "qa_blockers": 342,
-    "qa_infos": 182,
-    "qa_warnings": 874,
+    "generation_pass_rate": 0.9734,
+    "generation_passes": 403,
+    "one_pass_count": 394,
+    "one_pass_rate": 0.9517,
+    "qa_blockers": 201,
+    "qa_infos": 193,
+    "qa_warnings": 823,
     "recoup_ratio": {},
     "redraw_categories": {
       "face_consistency": 8,
-      "other": 1,
+      "other": 34,
       "temporal": 4
     },
-    "redraw_count": 13,
-    "redraw_rate": 0.0319,
+    "redraw_count": 46,
+    "redraw_rate": 0.1111,
     "release_net_totals": {},
     "release_plays": 0,
     "release_revenue_totals": {},
@@ -2290,7 +2238,7 @@
     "release_spend_totals": {},
     "runtime_hms": "11m17s",
     "runtime_sec": 676.66,
-    "warnings_per_attempt": 2.1474
+    "warnings_per_attempt": 1.9879
   },
   "version": 1
 }

@@ -1,6 +1,7 @@
 import { pickDefaultAgent } from "../api";
 import { useI18n } from "../i18n";
 import type { AgentInfo } from "../types";
+import { Codicon } from "./Codicon";
 
 /** Auto-detects local AI agent CLIs and lets the user jump into one in the
  *  terminal. Missing mainstream agents stay visible but disabled. */
@@ -25,6 +26,8 @@ export function AgentBar({
   const defaultAgent = agents ? pickDefaultAgent(agents) : null;
   const selectedId = nativeActive ? "native" : activeAgentId || defaultAgent?.id || "native";
   const selectedAgent = (agents ?? []).find((agent) => agent.id === selectedId);
+  const selectedImageCapability = selectedAgent?.found ? selectedAgent.image : "no";
+  const showImageBadge = selectedImageCapability === "yes" || selectedImageCapability === "maybe";
 
   return (
     <div className={["agent-bar", className].filter(Boolean).join(" ")}>
@@ -51,11 +54,19 @@ export function AgentBar({
           {(agents ?? []).map((agent) => (
             <option key={agent.id} value={agent.id} disabled={!agent.found}>
               {agent.name}
-              {agent.id === defaultAgent?.id && agent.found ? ` (${t("agent.default")})` : ""}
               {!agent.found ? ` (${t("agent.notInstalled")})` : ""}
             </option>
           ))}
         </select>
+        {showImageBadge && (
+          <span
+            className={`ab-image-badge ${selectedImageCapability}`}
+            title={selectedImageCapability === "yes" ? t("agent.image") : `${t("agent.image")} ?`}
+            aria-label={selectedImageCapability === "yes" ? t("agent.image") : `${t("agent.image")} ?`}
+          >
+            <Codicon name="sparkle" />
+          </span>
+        )}
       </label>
     </div>
   );

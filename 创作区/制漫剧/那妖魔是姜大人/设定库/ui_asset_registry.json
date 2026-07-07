@@ -1,0 +1,42 @@
+{
+  "assets": [
+    {
+      "bound_clips": [
+        "EP01_CLIP01"
+      ],
+      "font": "PingFang SC Semibold / Noto Sans CJK fallback，禁模型生成手写字。",
+      "frame": "无烘焙面板；透明字幕安全区 overlay，避开人物脸和动作主体。",
+      "id": "UI_OPENING_CAPTION_V1",
+      "kind": "caption_overlay",
+      "layout": "底部安全区单行或两行，compose overlay only，持续 2.4s。",
+      "name": "首屏生存钩子文字 overlay",
+      "palette": "白字配冷灰阴影/半透明暗描边，与冷灰夜场统一。",
+      "render_policy": "compose_overlay_only",
+      "text_template": "谁把我扔进死人堆？"
+    },
+    {
+      "bound_clips": [
+        "EP01_CLIP07",
+        "EP01_CLIP08"
+      ],
+      "font": "PingFang SC / Noto Sans CJK overlay；AI 生图只出空面板，不生成可读中文。",
+      "frame": "金色古卷边框，素纹，中心留空给后期文字层；禁止蓝色科幻屏/手机 UI。",
+      "id": "UI_BAIYAOPU_PANEL_V1",
+      "kind": "system_panel",
+      "layout": "画面中央偏上或上方稳定悬浮，文字区四边留 8% 安全边距，随镜头不透视变形。",
+      "name": "百妖谱金色古卷系统面板 v1",
+      "palette": "暖金边框与冷灰荒野互补；文字为浅金/白，阴影冷灰，避免高饱和霓虹。",
+      "reference_png": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "render_policy": "image_panel_empty + compose_overlay_text",
+      "text_template": [
+        "百妖谱开启",
+        "宿主：姜月初 / 境界：凡境 / 道行：零",
+        "斩杀生物，可得道行",
+        "摹其形，夺其神通"
+      ]
+    }
+  ],
+  "kind": "n2d_ui_asset_registry",
+  "updated_at": "2026-07-07T05:20:01+00:00",
+  "version": 1
+}

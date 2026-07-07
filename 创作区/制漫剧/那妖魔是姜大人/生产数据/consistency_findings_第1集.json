@@ -3,14 +3,14 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第1集",
-  "generated_at": "2026-07-06T12:25:57+00:00",
+  "generated_at": "2026-07-07T06:40:03+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "状态百科(P1)": {
@@ -134,9 +134,9 @@
       },
       "声音空间(ASP)": {
         "block": 0,
-        "warn": 2,
+        "warn": 0,
         "ok": 0,
-        "n": 2,
+        "n": 0,
         "skipped": false
       },
       "物件状态(OST)": {
@@ -162,10 +162,10 @@
       },
       "打斗撞点(SPEC-APEX)": {
         "block": 0,
-        "warn": 2,
+        "warn": 0,
         "ok": 0,
-        "n": 2,
-        "skipped": false
+        "n": 0,
+        "skipped": true
       },
       "空间站位(B1)": {
         "block": 0,
@@ -330,10 +330,10 @@
       },
       "视频VLM判题(VLM1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "视频语义一致(VSEM)": {
         "block": 0,
@@ -344,16 +344,16 @@
       },
       "多人对话音画(DAV)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "物理因果链(CG1)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "相机空间轨迹(CAM1)": {
@@ -386,23 +386,23 @@
       },
       "真值源(TRUTH)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "多视角身份包(MVIEW)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "实体记忆(EMB)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "物件常驻(O3)": {
@@ -428,9 +428,9 @@
       },
       "状态转场视频证据(ST1)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "交互接触(I1)": {
@@ -441,67 +441,67 @@
         "skipped": false
       },
       "结构化交互图谱(I2)": {
-        "block": 1,
-        "warn": 8,
+        "block": 0,
+        "warn": 0,
         "ok": 0,
-        "n": 9,
+        "n": 0,
         "skipped": false
       },
       "物理事件图(PHY)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "世界一致性(WCS)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "视频证据完整性(EVID)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "成片统一(C1)": {
         "block": 0,
-        "warn": 3,
+        "warn": 0,
         "ok": 0,
-        "n": 3,
+        "n": 0,
         "skipped": false
       },
       "成片时间线探针(FT1)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "生成配方(RCP)": {
         "block": 0,
-        "warn": 2,
+        "warn": 0,
         "ok": 0,
-        "n": 2,
+        "n": 0,
         "skipped": false
       },
       "强配方Schema(RCP2)": {
         "block": 0,
-        "warn": 2,
+        "warn": 0,
         "ok": 0,
-        "n": 2,
+        "n": 0,
         "skipped": false
       },
       "系列包装(PKG)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
-        "skipped": true
+        "n": 0,
+        "skipped": false
       },
       "台词语域(D1)": {
         "block": 0,
@@ -519,9 +519,9 @@
       },
       "成本路由(K1)": {
         "block": 0,
-        "warn": 40,
+        "warn": 0,
         "ok": 0,
-        "n": 40,
+        "n": 0,
         "skipped": false
       },
       "人审校准集(CAL)": {
@@ -533,16 +533,16 @@
       },
       "一致性探针包(PROBE)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "系统面板(UI1)": {
         "block": 0,
-        "warn": 2,
+        "warn": 0,
         "ok": 0,
-        "n": 2,
+        "n": 0,
         "skipped": false
       },
       "音乐母题(LM1)": {
@@ -554,9 +554,9 @@
       },
       "系列调色(GRD)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "环境声(AMB)": {
@@ -589,9 +589,9 @@
       },
       "文字渲染(OCR1)": {
         "block": 0,
-        "warn": 6,
+        "warn": 0,
         "ok": 0,
-        "n": 6,
+        "n": 0,
         "skipped": false
       },
       "译名一致(TX1)": {
@@ -616,7 +616,7 @@
         "skipped": true
       }
     },
-    "total_block": 1,
+    "total_block": 0,
     "precision_level": "full",
     "evidence_grade": {
       "by_dim": {
@@ -776,9 +776,9 @@
         },
         "打斗撞点(SPEC-APEX)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "空间站位(B1)": {
@@ -944,9 +944,9 @@
         },
         "视频VLM判题(VLM1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "视频语义一致(VSEM)": {
@@ -1313,48 +1313,6 @@
       "severity": "warn"
     },
     {
-      "scene": "LOC_01 荒野尸骸战场/虎妖攻防轴",
-      "shot": "Clip_06",
-      "verdict": "warn",
-      "msg": "Clip_06（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
-      "metric": "combat_cue_apex_no_keyframe",
-      "clip_label": "裴长青最后一击被踹飞 LOC_01 荒野尸骸战场/虎妖攻防轴 ",
-      "spectacle_type": "fight_exchange",
-      "return_to_stage": "script_stage2",
-      "dimension": "打斗撞点(SPEC-APEX)",
-      "rerun_scope": "回 script_stage2 修复该一致性维度。",
-      "risk_score": 0.6,
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/combat_cue_apex_第1集.json"
-      ],
-      "severity": "warn"
-    },
-    {
-      "scene": "LOC_01 荒野尸骸战场/裴长青脚边",
-      "shot": "Clip_10",
-      "verdict": "warn",
-      "msg": "Clip_10（fight_exchange）：剪辑峰值钉在 [5.0]s，但本镜 continuity.anchors 无 keyframe 锚——跑 `anchor_planner.py <根> <集> --write` 让 apex 命中帧落成真关键帧，剪辑峰值才有离散落点。",
-      "metric": "combat_cue_apex_no_keyframe",
-      "clip_label": "刺杀裴长青 LOC_01 荒野尸骸战场/裴长青脚边 ",
-      "spectacle_type": "fight_exchange",
-      "return_to_stage": "script_stage2",
-      "dimension": "打斗撞点(SPEC-APEX)",
-      "rerun_scope": "回 script_stage2 修复该一致性维度。",
-      "risk_score": 0.6,
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/combat_cue_apex_第1集.json"
-      ],
-      "severity": "warn"
-    },
-    {
       "png": "图片/Clip07_end.png",
       "scene": "荒野尸骸战场",
       "warmth": 0.27,
@@ -1613,59 +1571,6 @@
       "severity": "warn"
     },
     {
-      "source": "voiceover.txt",
-      "target": "storyboard.json",
-      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-      "verdict": "warn",
-      "required_terms": [
-        "钩子"
-      ],
-      "missing_terms": [
-        "钩子"
-      ],
-      "coverage": 0.0,
-      "dimension": "语义谱系(P0)",
-      "return_to_stage": "script_stage2",
-      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "出图/第1集/prompt",
-        "出视频/第1集/prompt"
-      ],
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/ambient_map.json"
-      ],
-      "evidence_family": "audio_sync",
-      "dimension": "声音空间(ASP)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/ambient_map.json",
-        "生产数据/native_av_physics_第1集.json"
-      ],
-      "evidence_family": "audio_sync",
-      "dimension": "声音空间(ASP)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
       "verdict": "warn",
       "message": "节奏/留存 advisory 总分偏低：57.4",
       "loc": "脚本/第1集/storyboard.json",
@@ -1746,6 +1651,21 @@
       "affected_artifacts": [
         "脚本/第1集/storyboard.json"
       ],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/video_vlm_consistency_第1集.json",
+        "出视频/第1集/video_vlm_consistency.json"
+      ],
+      "vlm_raw_verdict": "warn",
+      "dimension": "视频VLM判题(VLM1)",
+      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+      "risk_score": 0.6,
+      "affected_shots": [],
       "severity": "warn"
     },
     {
@@ -1902,34 +1822,6 @@
     },
     {
       "verdict": "warn",
-      "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
-      "return_to_stage": "compose",
-      "affected_artifacts": [
-        "生产数据/dialogue_av_alignment_第1集.json",
-        "合成/第1集"
-      ],
-      "dimension": "多人对话音画(DAV)",
-      "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
-      "risk_score": 0.55,
-      "affected_shots": [],
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-      "return_to_stage": "script_stage2",
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/causal_event_graph_第1集.json"
-      ],
-      "dimension": "物理因果链(CG1)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.5,
-      "affected_shots": [],
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
       "message": "高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。",
       "return_to_stage": "video",
       "affected_artifacts": [
@@ -2067,1245 +1959,9 @@
       "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
       "risk_score": 0.55,
       "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "return_to_stage": "review",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
-      ],
-      "evidence_family": "text_contract",
-      "dimension": "真值源(TRUTH)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.5,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
-      ],
-      "evidence_family": "text_contract",
-      "dimension": "多视角身份包(MVIEW)",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.5,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json"
-      ],
-      "dimension": "实体记忆(EMB)",
-      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-      "risk_score": 0.5,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "检测到 11 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/state_transition_manifest_第1集.json"
-      ],
-      "dimension": "状态转场视频证据(ST1)",
-      "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-      "risk_score": 0.4,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "block",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "block"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_09"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_11"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。",
-      "return_to_stage": "review",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/physical_event_graph_第1集.json",
-        "脚本/第1集/storyboard.json",
-        "出视频/第1集",
-        "生产数据/causal_event_graph_第1集.json"
-      ],
-      "dimension": "物理事件图(PHY)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-      "return_to_stage": "review",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/world_consistency_score_第1集.json"
-      ],
-      "evidence_family": "motion_physics",
-      "dimension": "世界一致性(WCS)",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.5,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。",
-      "return_to_stage": "review",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/video_eval_manifest_第1集.json",
-        "出视频/第1集",
-        "合成/第1集",
-        "生产数据/*_第1集.json"
-      ],
-      "dimension": "视频证据完整性(EVID)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.4,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "成片响度不贴目标：LUFS=-17.99 target=-16.0 true_peak=-2.13",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集",
-        "出视频/第1集/prompt/video_model_routes.json"
-      ],
-      "dimension": "成片统一(C1)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "storyboard 存在多档节奏，但缺 tension_mix/BGM 增益证据；BGM 全集一刀切会削弱钩子与对白清晰度。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "合成/第1集",
-        "出视频/第1集/prompt/video_model_routes.json"
-      ],
-      "dimension": "成片统一(C1)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "缺 room tone / foley 统一证据；原生音画、配音、BGM 混合后空间感可能忽干忽湿。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集",
-        "出视频/第1集/prompt/video_model_routes.json"
-      ],
-      "dimension": "成片统一(C1)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "成片已存在但缺 final_timeline_probe；无法直接量片确认剪点亮度/色温跳、静音缝、响度突变。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集/final_timeline_probe.json",
-        "合成/第1集"
-      ],
-      "dimension": "成片时间线探针(FT1)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。",
-      "return_to_stage": "video",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "生成配方(RCP)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。",
-      "return_to_stage": "video",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "dimension": "生成配方(RCP)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-      "return_to_stage": "video",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "dimension": "强配方Schema(RCP2)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-      "return_to_stage": "video",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "dimension": "强配方Schema(RCP2)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/series_packaging.json",
-        "合成/交付"
-      ],
-      "dimension": "系列包装(PKG)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_场景_荒野尸骸战场.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_场景_荒野尸骸战场.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_武器_横刀.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_武器_横刀.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_三视图.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip01_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip01_first.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip01_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip01_mid.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip01_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_01"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip01_end.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip02_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip02_first.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip02_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip02_mid.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip02_end.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip02_end.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip03_first.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip03_first.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "出图/第1集/图片/Clip03_mid.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/第1集/图片/Clip03_mid.png"
-      ],
-      "dimension": "成本路由(K1)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样。",
-      "return_to_stage": "review",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/consistency_probe_pack.json",
-        "设定库/consistency_probe_pack.json"
-      ],
-      "dimension": "一致性探针包(PROBE)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.2,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "检出 6 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/system_state_ledger.json",
-        "脚本/第1集/storyboard.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/prompt/01_分镜出图.md"
-      ],
-      "dimension": "系统面板(UI1)",
-      "rerun_scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "检出 6 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "设定库/ui_asset_registry.json",
-        "脚本/第1集/storyboard.json",
-        "出图/第1集/prompt/01_分镜出图.md",
-        "设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳"
-      ],
-      "dimension": "系统面板(UI1)",
-      "rerun_scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "第1集 成片缺 合成/第1集/grade_applied.json 套用证据——compose 应留痕本集套用了哪版剧级调色，便于跨集对账。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集/grade_applied.json",
-        "设定库/series_grade.json"
-      ],
-      "dimension": "系列调色(GRD)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.25,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_07 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_09"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_10"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "Clip_11 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-      "return_to_stage": "image",
-      "affected_shots": [
-        "Clip_11"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "dimension": "文字渲染(OCR1)",
-      "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-      "risk_score": 0.35,
-      "severity": "warn"
     }
   ],
   "auto_return_tasks": [
-    {
-      "return_to_stage": "script_stage2",
-      "dimensions": [
-        "语义谱系(P0)"
-      ],
-      "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位产物：脚本/第1集/storyboard.json、出图/第1集/prompt、出视频/第1集/prompt",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "出图/第1集/prompt",
-        "出视频/第1集/prompt"
-      ],
-      "findings": [
-        {
-          "source": "voiceover.txt",
-          "target": "storyboard.json",
-          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-          "verdict": "warn",
-          "required_terms": [
-            "钩子"
-          ],
-          "missing_terms": [
-            "钩子"
-          ],
-          "coverage": 0.0,
-          "dimension": "语义谱系(P0)",
-          "return_to_stage": "script_stage2",
-          "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-          "risk_score": 0.8,
-          "affected_shots": [],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json",
-            "出图/第1集/prompt",
-            "出视频/第1集/prompt"
-          ]
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "声音空间(ASP)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/ambient_map.json、生产数据/native_av_physics_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/ambient_map.json",
-        "生产数据/native_av_physics_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/ambient_map.json"
-          ],
-          "evidence_family": "audio_sync",
-          "dimension": "声音空间(ASP)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.3
-        },
-        {
-          "verdict": "warn",
-          "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/ambient_map.json",
-            "生产数据/native_av_physics_第1集.json"
-          ],
-          "evidence_family": "audio_sync",
-          "dimension": "声音空间(ASP)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.3
-        }
-      ]
-    },
     {
       "return_to_stage": "script_stage2",
       "dimensions": [
@@ -3417,6 +2073,34 @@
           "affected_artifacts": [
             "脚本/第1集/storyboard.json"
           ]
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "视频VLM判题(VLM1)"
+      ],
+      "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位产物：生产数据/video_vlm_consistency_第1集.json、出视频/第1集/video_vlm_consistency.json",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/video_vlm_consistency_第1集.json",
+        "出视频/第1集/video_vlm_consistency.json"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/video_vlm_consistency_第1集.json",
+            "出视频/第1集/video_vlm_consistency.json"
+          ],
+          "vlm_raw_verdict": "warn",
+          "dimension": "视频VLM判题(VLM1)",
+          "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+          "risk_score": 0.6,
+          "affected_shots": []
         }
       ]
     },
@@ -3588,60 +2272,6 @@
       ]
     },
     {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "多人对话音画(DAV)"
-      ],
-      "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；定位产物：生产数据/dialogue_av_alignment_第1集.json、合成/第1集",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/dialogue_av_alignment_第1集.json",
-        "合成/第1集"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
-          "return_to_stage": "compose",
-          "affected_artifacts": [
-            "生产数据/dialogue_av_alignment_第1集.json",
-            "合成/第1集"
-          ],
-          "dimension": "多人对话音画(DAV)",
-          "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
-          "risk_score": 0.55,
-          "affected_shots": []
-        }
-      ]
-    },
-    {
-      "return_to_stage": "script_stage2",
-      "dimensions": [
-        "物理因果链(CG1)"
-      ],
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位产物：脚本/第1集/storyboard.json、生产数据/causal_event_graph_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/causal_event_graph_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
-          "return_to_stage": "script_stage2",
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json",
-            "生产数据/causal_event_graph_第1集.json"
-          ],
-          "dimension": "物理因果链(CG1)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.5,
-          "affected_shots": []
-        }
-      ]
-    },
-    {
       "return_to_stage": "video",
       "dimensions": [
         "运动质量(MOT1)"
@@ -3808,1004 +2438,6 @@
           "dimension": "高动态成片证据(SPECV)",
           "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
           "risk_score": 0.55
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "真值源(TRUTH)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：设定库/consistency_truth_map.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "return_to_stage": "review",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/consistency_truth_map.json"
-          ],
-          "evidence_family": "text_contract",
-          "dimension": "真值源(TRUTH)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.5
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "多视角身份包(MVIEW)"
-      ],
-      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：设定库/identity_eval_pack.json、生产数据/identity_eval_pack.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/identity_eval_pack.json",
-            "生产数据/identity_eval_pack.json"
-          ],
-          "evidence_family": "text_contract",
-          "dimension": "多视角身份包(MVIEW)",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "risk_score": 0.5
-        }
-      ]
-    },
-    {
-      "return_to_stage": "image",
-      "dimensions": [
-        "实体记忆(EMB)"
-      ],
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "本集有重复/核心实体（CHAR_01, CHAR_01/囚犯初醒态, CHAR_01/百妖谱能力触发态, CHAR_01__, CHAR_02, CHAR_02/濒死战损态）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/entity_memory_bank.json",
-            "出图/共享/entity_memory_bank.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json"
-          ],
-          "dimension": "实体记忆(EMB)",
-          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
-          "risk_score": 0.5
-        }
-      ]
-    },
-    {
-      "return_to_stage": "video",
-      "dimensions": [
-        "状态转场视频证据(ST1)"
-      ],
-      "scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。；定位产物：脚本/第1集/storyboard.json、生产数据/state_transition_manifest_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "生产数据/state_transition_manifest_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "检测到 11 个疑似状态变化镜，但缺 state_transition_manifest；无法验证视频里 before→after 是否真的完成。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json",
-            "生产数据/state_transition_manifest_第1集.json"
-          ],
-          "dimension": "状态转场视频证据(ST1)",
-          "rerun_scope": "回 n2d-image 修 visual_state_ledger / 出图分镜状态锁；必要时回 storyboard 修角色状态演进。",
-          "risk_score": 0.4
-        }
-      ]
-    },
-    {
-      "return_to_stage": "script_stage2",
-      "dimensions": [
-        "结构化交互图谱(I2)"
-      ],
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_07、Clip_08、Clip_09、Clip_11；定位产物：脚本/第1集/storyboard.json",
-      "affected_shots": [
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09",
-        "Clip_11"
-      ],
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_01"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_03"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "block",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_05"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_07"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_09"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_11"
-          ],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "物理事件图(PHY)"
-      ],
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位产物：生产数据/physical_event_graph_第1集.json、脚本/第1集/storyboard.json、出视频/第1集、生产数据/causal_event_graph_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/physical_event_graph_第1集.json",
-        "脚本/第1集/storyboard.json",
-        "出视频/第1集",
-        "生产数据/causal_event_graph_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "本集存在物理/因果动作且已有媒体，但缺 physical_event_graph；无法归因到具体 law/object/frame/violation。",
-          "return_to_stage": "review",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/physical_event_graph_第1集.json",
-            "脚本/第1集/storyboard.json",
-            "出视频/第1集",
-            "生产数据/causal_event_graph_第1集.json"
-          ],
-          "dimension": "物理事件图(PHY)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "世界一致性(WCS)"
-      ],
-      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位产物：生产数据/world_consistency_score_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/world_consistency_score_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "已有媒体或世界/物理/时序 sidecar，但缺 world_consistency_score；对象持久、关系稳定、因果合规、flicker 仍散在报告里，dashboard 无法看集级世界一致性趋势。",
-          "return_to_stage": "review",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/world_consistency_score_第1集.json"
-          ],
-          "evidence_family": "motion_physics",
-          "dimension": "世界一致性(WCS)",
-          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-          "risk_score": 0.5
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "视频证据完整性(EVID)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/video_eval_manifest_第1集.json、出视频/第1集、合成/第1集、生产数据/*_第1集.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/video_eval_manifest_第1集.json",
-        "出视频/第1集",
-        "合成/第1集",
-        "生产数据/*_第1集.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "本集已有媒体但缺 video_eval_manifest；视频 VLM/语义/物理/运动/相机/对白证据没有统一任务清单。",
-          "return_to_stage": "review",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/video_eval_manifest_第1集.json",
-            "出视频/第1集",
-            "合成/第1集",
-            "生产数据/*_第1集.json"
-          ],
-          "dimension": "视频证据完整性(EVID)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.4
-        }
-      ]
-    },
-    {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "成片统一(C1)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：合成/第1集、出视频/第1集/prompt/video_model_routes.json、脚本/第1集/storyboard.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "成片响度不贴目标：LUFS=-17.99 target=-16.0 true_peak=-2.13",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "合成/第1集",
-            "出视频/第1集/prompt/video_model_routes.json"
-          ],
-          "dimension": "成片统一(C1)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "storyboard 存在多档节奏，但缺 tension_mix/BGM 增益证据；BGM 全集一刀切会削弱钩子与对白清晰度。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json",
-            "合成/第1集",
-            "出视频/第1集/prompt/video_model_routes.json"
-          ],
-          "dimension": "成片统一(C1)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "缺 room tone / foley 统一证据；原生音画、配音、BGM 混合后空间感可能忽干忽湿。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "合成/第1集",
-            "出视频/第1集/prompt/video_model_routes.json"
-          ],
-          "dimension": "成片统一(C1)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.35
-        }
-      ]
-    },
-    {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "成片时间线探针(FT1)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：合成/第1集/final_timeline_probe.json、合成/第1集",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集/final_timeline_probe.json",
-        "合成/第1集"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "成片已存在但缺 final_timeline_probe；无法直接量片确认剪点亮度/色温跳、静音缝、响度突变。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "合成/第1集/final_timeline_probe.json",
-            "合成/第1集"
-          ],
-          "dimension": "成片时间线探针(FT1)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.3
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "生成配方(RCP)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "生成配方(RCP)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.3
-        },
-        {
-          "verdict": "warn",
-          "message": "合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "dimension": "生成配方(RCP)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.3
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "强配方Schema(RCP2)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "dimension": "强配方Schema(RCP2)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "dimension": "强配方Schema(RCP2)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.35
-        }
-      ]
-    },
-    {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "系列包装(PKG)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/series_packaging.json、合成/交付",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/series_packaging.json",
-        "合成/交付"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/series_packaging.json",
-            "合成/交付"
-          ],
-          "dimension": "系列包装(PKG)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.2
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "成本路由(K1)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_01、Clip_02、Clip_03；定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes.json、出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png、出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png、出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png、出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png、出图/共享/图片/定妆_场景_荒野尸骸战场.png、出图/共享/图片/定妆_武器_横刀.png",
-      "affected_shots": [
-        "Clip_01",
-        "Clip_02",
-        "Clip_03"
-      ],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "出视频/第1集/prompt/video_model_routes.json",
-        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-        "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-        "出图/共享/图片/定妆_武器_横刀.png",
-        "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
-        "出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
-        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_侧面.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_背面.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_三视图.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png",
-        "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
-        "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
-        "出图/第1集/图片/Clip01_first.png",
-        "出图/第1集/图片/Clip01_mid.png",
-        "出图/第1集/图片/Clip01_end.png",
-        "出图/第1集/图片/Clip02_first.png",
-        "出图/第1集/图片/Clip02_mid.png",
-        "出图/第1集/图片/Clip02_end.png",
-        "出图/第1集/图片/Clip03_first.png",
-        "出图/第1集/图片/Clip03_mid.png"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_场景_荒野尸骸战场.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_场景_荒野尸骸战场.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_武器_横刀.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_武器_横刀.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        },
-        {
-          "verdict": "warn",
-          "message": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
-          "return_to_stage": "image",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "出视频/第1集/prompt/video_model_routes.json",
-            "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png"
-          ],
-          "dimension": "成本路由(K1)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "一致性探针包(PROBE)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/consistency_probe_pack.json、设定库/consistency_probe_pack.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/consistency_probe_pack.json",
-        "设定库/consistency_probe_pack.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样。",
-          "return_to_stage": "review",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/consistency_probe_pack.json",
-            "设定库/consistency_probe_pack.json"
-          ],
-          "dimension": "一致性探针包(PROBE)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.2
-        }
-      ]
-    },
-    {
-      "return_to_stage": "image",
-      "dimensions": [
-        "系统面板(UI1)"
-      ],
-      "scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。；定位镜头：Clip_02；定位产物：设定库/system_state_ledger.json、脚本/第1集/storyboard.json、设定库/ui_asset_registry.json、出图/第1集/prompt/01_分镜出图.md、设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳",
-      "affected_shots": [
-        "Clip_02"
-      ],
-      "affected_artifacts": [
-        "设定库/system_state_ledger.json",
-        "脚本/第1集/storyboard.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/prompt/01_分镜出图.md",
-        "设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "检出 6 个系统数值/HUD 镜头，但缺 system_state_ledger；等级/经验/成长值单调性无法复核。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/system_state_ledger.json",
-            "脚本/第1集/storyboard.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/prompt/01_分镜出图.md"
-          ],
-          "dimension": "系统面板(UI1)",
-          "rerun_scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
-          "risk_score": 0.3
-        },
-        {
-          "verdict": "warn",
-          "message": "检出 6 个 UI/HUD/图中文字镜头，但缺 设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳；建库锁面板定妆底图（边框/配色/字体/版式）并 image2image 只换数值区。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "affected_artifacts": [
-            "设定库/ui_asset_registry.json",
-            "脚本/第1集/storyboard.json",
-            "出图/第1集/prompt/01_分镜出图.md",
-            "设定库/ui_asset_registry.json——系统面板/血条/等级框跨集易漂、面板中文渲染不稳"
-          ],
-          "dimension": "系统面板(UI1)",
-          "rerun_scope": "回 n2d-image 复用 ui_asset_registry 的面板定妆底图（边框/配色/字体/版式锁），只重出数值/文案区；系统面板/血条/等级框等 HUD 跨集应是同一套视觉，中文文字渲染漂移则回 n2d-image 重出或改用独立文字图层叠加。",
-          "risk_score": 0.3
-        }
-      ]
-    },
-    {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "系列调色(GRD)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：合成/第1集/grade_applied.json、设定库/series_grade.json",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "合成/第1集/grade_applied.json",
-        "设定库/series_grade.json"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "第1集 成片缺 合成/第1集/grade_applied.json 套用证据——compose 应留痕本集套用了哪版剧级调色，便于跨集对账。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "合成/第1集/grade_applied.json",
-            "设定库/series_grade.json"
-          ],
-          "dimension": "系列调色(GRD)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.25
-        }
-      ]
-    },
-    {
-      "return_to_stage": "image",
-      "dimensions": [
-        "文字渲染(OCR1)"
-      ],
-      "scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。；定位镜头：Clip_02、Clip_07、Clip_08、Clip_09、Clip_10、Clip_11；定位产物：出图/第1集/prompt/01_分镜出图.md、生产数据/text_render_第1集.json、设定库/ui_asset_registry.json、出图/第1集/图片",
-      "affected_shots": [
-        "Clip_02",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09",
-        "Clip_10",
-        "Clip_11"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/prompt/01_分镜出图.md",
-        "生产数据/text_render_第1集.json",
-        "设定库/ui_asset_registry.json",
-        "出图/第1集/图片"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "Clip_02 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_02"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "Clip_07 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_07"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "Clip_08 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "Clip_09 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_09"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "Clip_10 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_10"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
-        },
-        {
-          "verdict": "warn",
-          "message": "Clip_11 含图中文字（面板/牌匾等）但未声明预期文字——补 ui_asset_registry.text_template 或镜头「图中文字：…」字段，OCR 才有对照基准；并跑 text_render_runner 实读校验。",
-          "return_to_stage": "image",
-          "affected_shots": [
-            "Clip_11"
-          ],
-          "affected_artifacts": [
-            "出图/第1集/prompt/01_分镜出图.md",
-            "生产数据/text_render_第1集.json",
-            "设定库/ui_asset_registry.json",
-            "出图/第1集/图片"
-          ],
-          "dimension": "文字渲染(OCR1)",
-          "rerun_scope": "回 n2d-image 重出图中文字渲染错的镜头：系统面板数值/属性、牌匾/匾额/招牌、卷轴书页等中文字若 OCR 实读与预期不符（错字/缺笔/乱码/数值不对），优先改用独立文字图层叠加而非让模型画；预期文字来自 ui_asset_registry.text_template 或 storyboard 声明，校验经 text_render sidecar。",
-          "risk_score": 0.35
         }
       ]
     }

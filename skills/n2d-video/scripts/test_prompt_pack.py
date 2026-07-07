@@ -47,6 +47,7 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     _write_json(root / "脚本" / ep / "storyboard.json", {
+        "style_contract": {"style_anchor": ["出图/共享/图片/风格锚.png"]},
         "clips": [{
             "id": "EP01_CLIP01",
             "label": "冷开",
@@ -103,6 +104,7 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "本集导演一致性契约" in overview
     assert "本集模型路由表" in overview
     assert "本集近景身份风险表" in overview
+    assert "风格锚.png" in overview
     assert "## Clip 01（时长 4.200s · EP01_CLIP01 · 冷开）" in clips
     assert "剧本可看性合同" in clips
     assert "她发现自己被追杀。" in clips
@@ -111,6 +113,30 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "原生音画策略" in clips and "mouth_visible=yes" in clips
     assert "检查清单（视频三件套自查" in clips
     assert "自检（生成后逐条过" in clips
+
+
+def test_prompt_pack_fills_style_anchor_from_storyboard_when_overview_is_generic(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    (root / "_设置.md").write_text("制作模式：先出视频后配音\n", encoding="utf-8")
+    (root / "出图" / ep / "prompt").mkdir(parents=True)
+    (root / "出图" / ep / "prompt" / "00_总览.md").write_text(
+        """# 第1集 出图总览
+
+## 本集基础视觉风格契约
+- 风格名：冷灰写实3D国风漫剧
+- style_anchor：继承出图风格锚。
+""",
+        encoding="utf-8",
+    )
+    _write_json(root / "脚本" / ep / "storyboard.json", {
+        "style_contract": {"style_anchor": ["出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"]},
+        "clips": [],
+    })
+
+    overview, _ = prompt_pack.build(root, ep)
+
+    assert "style_anchor：`出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png`" in overview
 
 
 def test_clip_id_prefers_clip_number_over_episode_number() -> None:

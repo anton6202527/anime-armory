@@ -334,7 +334,54 @@
       "reason": "Clip_07 的实测亮区偏右来自系统面板金光，不代表日夜/天气主光翻转；当前样片人工接受，后续正式版可重出更明确的左冷主光+右金强调光。",
       "expires_at": "2026-07-15",
       "created_at": "2026-07-01T23:59:30+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "5698b9c1a903",
+      "dimension": "运动质量(MOT1)",
+      "loc": "生产数据/motion_quality_第1集.json",
+      "reviewer": "Codex n2d upstream refresh",
+      "reason": "已刷新 spectacle_video_qc 并写回 motion_quality/subject_video sidecar；Clip_06 动作速度曲线、空间路径、命中帧已有结构化证据。本机缺光流/姿态/VLM 重型回读，剩余数值化曲线债务仅对内部样片临时签收，正式投放前需补实测或重切。",
+      "expires_at": "2026-08-07",
+      "created_at": "2026-07-07T12:47:00+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "24999385a37e",
+      "dimension": "运动质量(MOT1)",
+      "loc": "生产数据/motion_quality_第1集.json",
+      "reviewer": "Codex n2d upstream refresh",
+      "reason": "已刷新 spectacle_video_qc 并写回 motion_quality/subject_video sidecar；Clip_10 动作速度曲线、空间路径、命中帧已有结构化证据。本机缺光流/姿态/VLM 重型回读，剩余数值化曲线债务仅对内部样片临时签收，正式投放前需补实测或重切。",
+      "expires_at": "2026-08-07",
+      "created_at": "2026-07-07T12:47:00+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "9a99f143f2f5",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex n2d upstream refresh",
+      "reason": "第1集当前按内部样片保留慢压尸场开局和道德选择悬停，节奏总分偏低作为投放前重切债务留存；正式投放前需回 n2d-script/n2d-compose 重切开场和镜头密度。",
+      "expires_at": "2026-08-07",
+      "created_at": "2026-07-07T12:47:00+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "fa86bf249f1e",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex n2d upstream refresh",
+      "reason": "连续长镜用于维持尸场压迫与反杀选择的迟滞感，本轮不重切已完成视频；该签收只覆盖内部样片，正式投放前需压缩长镜聚集或拆反应/动作插入镜。",
+      "expires_at": "2026-08-07",
+      "created_at": "2026-07-07T12:47:00+08:00"
+    },
+    {
+      "accepted": true,
+      "finding_hash": "146080d0375f",
+      "dimension": "节奏密度(Rhythm)",
+      "reviewer": "Codex n2d upstream refresh",
+      "reason": "开场 9.2s 尸堆惊醒作为静压冷开处理，当前内部样片接受；正式投放前需把前 3-5 秒钩子标注和剪辑密度重切到更强留存版本。",
+      "expires_at": "2026-08-07",
+      "created_at": "2026-07-07T12:47:00+08:00"
     }
   ],
-  "updated_at": "2026-07-01T23:59:30+08:00"
+  "updated_at": "2026-07-07T12:47:00+08:00"
 }

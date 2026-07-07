@@ -1,49 +1,12 @@
 {
-  "kind": "n2d_asset_reference_registry",
-  "version": 1,
-  "generated_at": "2026-07-06T07:45:43+00:00",
   "assets": [
     {
-      "id": "LOC_01",
-      "type": "scene",
-      "name": "荒野尸骸战场",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-          "status": "ready"
-        },
-        "front": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-          "status": "ready"
-        },
-        "empty_plate": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-          "status": "ready"
-        },
-        "lighting_plate": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-          "status": "ready"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "场景卡/LOC_01_荒野尸骸战场.md",
-          "status": "ready",
-          "sha256": "3ee243f06ee6a9835e5a4ce22ac8647fcf4c0a83dc26c75fef06f8072040f7cf"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-          "status": "ready",
-          "sha256": "29216dbc3fd84ce7937d2cae317909fa17f042cf81322012be1ec0798140fe16"
-        }
-      ],
+      "axis_rules": "浅坑/遗体/巨石方位固定；姜月初画左/中低位；向官道离开时视线看画面深处；反打不越轴。",
       "constraints": {
-        "layout": "大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。",
-        "light_anchor": "冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。",
         "axis_rules": "巨岩旁虎妖尸身/复苏点、半截断刀钉地位置、裴长青半跪处、姜月初醒来的尸堆边、南向逃跑路不得漂移。",
         "face_policy": "faceless",
+        "layout": "大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。",
+        "light_anchor": "冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -51,13 +14,87 @@
           "空间轴线随机跳变"
         ]
       },
-      "face_policy": "faceless",
+      "core": true,
+      "doors_windows": "室外荒野无门窗；不得新增室内门窗、宫殿结构或现代建筑。",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
+      "face_policy": "faceless",
+      "floor_plan": "浅坑与遗体在画右低位，巨岩/虎妖尸身为后景地标，姜月初活动区在画左/中低位，逃跑路向画面深处延伸。",
+      "frequency": 8,
+      "id": "LOC_01",
+      "lighting_signature": {
+        "accent_light": "百妖谱 gold only after Clip07; tiger blood/demon aura dark red-black only as story accent",
+        "color_temperature": "4200K cold moon / overcast scatter",
+        "do_not_shift": [
+          "modern neon",
+          "warm sunset wash",
+          "high saturation game glow",
+          "random landmark relight"
+        ],
+        "dominant_palette": [
+          "cold blue-gray",
+          "dust brown",
+          "dark dried blood red"
+        ],
+        "fill_light": "thin ground fog bounce, low saturation",
+        "key_light": "soft cold top/side moon scatter, low contrast except UI/VFX beats",
+        "source": "Codex production debt refresh from scene_dna.color_lighting_weather/constraints.light_anchor",
+        "updated_at": "2026-07-07T06:15:23+00:00",
+        "weather": "dry wind, low fog near ground"
+      },
+      "name": "荒野尸骸战场",
+      "reference_group": {
+        "empty_plate": {
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "status": "ready"
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "status": "ready"
+        },
+        "lighting_plate": {
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "status": "ready"
+        },
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "场景卡/LOC_01_荒野尸骸战场.md",
+          "sha256": "3ee243f06ee6a9835e5a4ce22ac8647fcf4c0a83dc26c75fef06f8072040f7cf",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+          "sha256": "29216dbc3fd84ce7937d2cae317909fa17f042cf81322012be1ec0798140fe16",
+          "slot": "primary_reference",
+          "status": "ready"
+        }
+      ],
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+            "status": "ready"
+          }
+        },
+        "single_angle": true
+      },
       "scene_dna": {
+        "architecture_materials": "枯草、乱石、泥地、低雾、黑血暗红痕迹。",
         "belonging_anchor": "荒野尸骸战场",
+        "color_lighting_weather": "青灰、土褐、黑血暗红；冷月/阴天散射主光。",
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ],
         "landmarks": [
           "巨岩旁虎妖尸身/复苏点",
           "半截断刀钉地位置",
@@ -65,9 +102,6 @@
           "姜月初醒来的尸堆边",
           "南向逃跑路"
         ],
-        "spatial_layout": "空旷边地荒野，乱石、枯草、尸堆与低雾形成冷灰纵深。",
-        "architecture_materials": "枯草、乱石、泥地、低雾、黑血暗红痕迹。",
-        "color_lighting_weather": "青灰、土褐、黑血暗红；冷月/阴天散射主光。",
         "resident_assets": [
           {
             "asset": "荒野战场整体",
@@ -82,89 +116,30 @@
             "phrase": "fog"
           }
         ],
-        "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
-        ]
+        "spatial_layout": "空旷边地荒野，乱石、枯草、尸堆与低雾形成冷灰纵深。"
       },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by 第3集 prompt pack",
-      "core": true,
-      "frequency": 8,
-      "spatial_layout": "空旷边地荒野，乱石与巨岩散落；浅坑/遗体/巨石方位固定，姜月初画左/中低位，南向逃跑路通向画面深处。",
-      "floor_plan": "浅坑与遗体在画右低位，巨岩/虎妖尸身为后景地标，姜月初活动区在画左/中低位，逃跑路向画面深处延伸。",
-      "doors_windows": "室外荒野无门窗；不得新增室内门窗、宫殿结构或现代建筑。",
-      "axis_rules": "浅坑/遗体/巨石方位固定；姜月初画左/中低位；向官道离开时视线看画面深处；反打不越轴。",
       "screen_direction_rules": "姜月初由尸场向官道离开时保持向画面深处/南向逃跑路运动；尸堆和浅坑不跳边。",
-      "scene_atlas": {
-        "single_angle": true,
-        "base_views": {
-          "front": {
-            "path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-            "status": "ready"
-          }
-        }
-      }
+      "self_check_note": "existing shared PNG reused by 第3集 prompt pack",
+      "self_check_passed": true,
+      "spatial_layout": "空旷边地荒野，乱石与巨岩散落；浅坑/遗体/巨石方位固定，姜月初画左/中低位，南向逃跑路通向画面深处。",
+      "type": "scene"
     },
     {
-      "id": "PROP_尸场物资包",
-      "type": "prop",
-      "name": "尸场物资包",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
-          "status": "ready"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
-          "status": "ready"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
-          "status": "ready"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "道具卡/PROP_尸场物资包.md",
-          "status": "ready",
-          "sha256": "34cdb2186a3c7b9360761e3efcbd0c7dbef6b306d3af188d138dcbff518ba933"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
-          "status": "ready",
-          "sha256": "1921a01d84cd4ca485a1b99b53b1315ecde95d461f143098365cd4958ad24ced"
-        },
-        {
-          "slot": "scale_reference",
-          "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
-          "status": "ready",
-          "sha256": "cce47b17bb73cfbddb1e8dd16bf52a856a5f600b1e27cf7600a419d058e6af57"
-        },
-        {
-          "slot": "in_hand_reference",
-          "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
-          "status": "ready",
-          "sha256": "4cd05e222e73ed95f1adfc47a8f39bccfeff2a4521901f1b8eaaae71a0b5674c"
-        }
-      ],
       "constraints": {
-        "structure": "银子、肉脯、水囊和镇魔卫衣物边角组成的尸场物资包；件数、布料包裹关系和手持比例稳定。",
-        "layout": "尸场搜物镜头中的银子、肉脯、水囊和镇魔卫衣物边角物资包，结构与件数保持稳定。",
-        "light_anchor": "服从 LOC_01 冷灰月光和低雾，不自带现代高饱和反光。",
         "axis_rules": "作为手部搜物接触点，比例与手持关系清楚。",
         "face_policy": "faceless",
+        "layout": "尸场搜物镜头中的银子、肉脯、水囊和镇魔卫衣物边角物资包，结构与件数保持稳定。",
+        "light_anchor": "服从 LOC_01 冷灰月光和低雾，不自带现代高饱和反光。",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "银子、肉脯、水囊和镇魔卫衣物边角组成的尸场物资包；件数、布料包裹关系和手持比例稳定。"
       },
-      "face_policy": "faceless",
+      "core": true,
+      "current_state": "尸场搜物中临时取得的生存物资",
       "drift_forbidden": [
         "不要让尸场物资包结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -172,170 +147,174 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by 第3集 prompt pack",
-      "core": true,
+      "face_policy": "faceless",
       "frequency": 2,
+      "id": "PROP_尸场物资包",
+      "lifecycle": "第3集 Clip02 被姜月初搜出并作为求生物资使用；后续如转移/丢弃需更新状态。",
+      "name": "尸场物资包",
       "owner": "CHAR_01",
-      "current_state": "尸场搜物中临时取得的生存物资",
-      "lifecycle": "第3集 Clip02 被姜月初搜出并作为求生物资使用；后续如转移/丢弃需更新状态。"
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
+          "status": "ready"
+        },
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "道具卡/PROP_尸场物资包.md",
+          "sha256": "34cdb2186a3c7b9360761e3efcbd0c7dbef6b306d3af188d138dcbff518ba933",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包.png",
+          "sha256": "1921a01d84cd4ca485a1b99b53b1315ecde95d461f143098365cd4958ad24ced",
+          "slot": "primary_reference",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_比例.png",
+          "sha256": "cce47b17bb73cfbddb1e8dd16bf52a856a5f600b1e27cf7600a419d058e6af57",
+          "slot": "scale_reference",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_道具_尸场物资包_手持.png",
+          "sha256": "4cd05e222e73ed95f1adfc47a8f39bccfeff2a4521901f1b8eaaae71a0b5674c",
+          "slot": "in_hand_reference",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "existing shared PNG reused by 第3集 prompt pack",
+      "self_check_passed": true,
+      "type": "prop"
     },
     {
+      "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
+      "constraints": {
+        "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
+        "face_policy": "faceless",
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ]
+      },
+      "core": true,
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "drift_forbidden": [
+        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
+        "不要把荒野画成室内或宫殿"
+      ],
+      "face_policy": "faceless",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "frequency": 12,
       "id": "LOC_02",
-      "type": "scene",
+      "lighting_signature": {
+        "accent_light": "small torch/fire point only, never full warm wash",
+        "color_temperature": "4300K cold pre-dawn moon with small torch-warm accents",
+        "do_not_shift": [
+          "daylight noon",
+          "modern streetlight",
+          "warm tavern color"
+        ],
+        "dominant_palette": [
+          "cold gray-blue road",
+          "black clothing",
+          "muted torch amber"
+        ],
+        "fill_light": "weak haze bounce, dark road edges",
+        "key_light": "low side moonlight from road axis",
+        "source": "Codex production debt refresh from scene_dna.color_lighting_weather/constraints.light_anchor",
+        "updated_at": "2026-07-07T06:15:23+00:00",
+        "weather": "night road haze before dawn"
+      },
       "name": "荒野官道夜路",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
           "status": "ready"
         },
         "front": {
+          "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+          "status": "ready"
+        },
+        "primary": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
           "status": "ready"
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
           "status": "ready"
-        },
-        "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_荒野官道夜路_平面图.png",
-          "status": "ready"
         }
       },
       "reference_slots": [
         {
-          "slot": "asset_card",
           "path": "场景卡/LOC_02_荒野官道夜路.md",
-          "status": "ready",
-          "sha256": "c0c3c1bdf4f27fbc5d2cc9128abe3968746fa75ba711d034e256960353024817"
+          "sha256": "c0c3c1bdf4f27fbc5d2cc9128abe3968746fa75ba711d034e256960353024817",
+          "slot": "asset_card",
+          "status": "ready"
         },
         {
-          "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-          "status": "ready",
-          "sha256": "c4a87823ed60eb64e0607a8f97788bc2ab4b131badfae09ec50e19aadf283cc8"
+          "sha256": "c4a87823ed60eb64e0607a8f97788bc2ab4b131badfae09ec50e19aadf283cc8",
+          "slot": "primary_reference",
+          "status": "ready"
         }
       ],
-      "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
-        "face_policy": "faceless",
-        "must_not_have": [
-          "现代物件",
-          "平台UI",
-          "水印",
-          "空间轴线随机跳变"
-        ]
-      },
-      "face_policy": "faceless",
-      "drift_forbidden": [
-        "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
-        "不要把荒野画成室内或宫殿"
-      ],
-      "scene_dna": {
-        "belonging_anchor": "荒野官道夜路",
-        "landmarks": [
-          "荒野官道夜路"
-        ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "荒野官道夜路",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "荒野官道夜路"
-        ],
-        "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack",
-      "core": true,
-      "frequency": 12,
-      "spatial_layout": "保持 storyboard 场景轴线和地标。",
-      "floor_plan": "保持 storyboard 场景轴线和地标。",
-      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
-      "screen_direction_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
       "scene_atlas": {
         "base_views": {
-          "front": {
-            "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
-            "status": "ready"
-          },
           "back": {
             "path": "出图/共享/图片/定妆_场景_荒野官道夜路_反打.png",
             "status": "ready"
-          }
-        }
-      }
-    },
-    {
-      "id": "LOC_03",
-      "type": "scene",
-      "name": "上盘村村口与村道",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.523667+00:00"
-          }
-        },
-        "front": {
-          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.523888+00:00"
-          }
-        },
-        "reverse": {
-          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared reverse reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.523906+00:00"
-          }
-        },
-        "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared floor_plan reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.523926+00:00"
+          },
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_荒野官道夜路.png",
+            "status": "ready"
           }
         }
       },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "场景卡/LOC_03_上盘村村口与村道.md",
-          "status": "ready",
-          "sha256": "39b06450e9563602cfbb099bec848c8ba04c21cd1e1dcdcad971d56432b9c87d"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-          "status": "ready"
-        }
-      ],
+      "scene_dna": {
+        "architecture_materials": "荒野官道夜路",
+        "belonging_anchor": "荒野官道夜路",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ],
+        "landmarks": [
+          "荒野官道夜路"
+        ],
+        "resident_assets": [
+          "荒野官道夜路"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。"
+      },
+      "screen_direction_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "self_check_passed": true,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "type": "scene"
+    },
+    {
+      "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
       "constraints": {
-        "layout": "保持 storyboard 场景轴线和地标。",
-        "light_anchor": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
         "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
         "face_policy": "faceless",
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
         "must_not_have": [
           "现代物件",
           "平台UI",
@@ -343,105 +322,150 @@
           "空间轴线随机跳变"
         ]
       },
-      "face_policy": "faceless",
+      "core": true,
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
       "drift_forbidden": [
         "不要丢失巨岩/尸堆/逃跑方向等连续性锚点",
         "不要把荒野画成室内或宫殿"
       ],
-      "scene_dna": {
-        "belonging_anchor": "上盘村村口与村道",
-        "landmarks": [
-          "上盘村村口与村道"
-        ],
-        "spatial_layout": "保持 storyboard 场景轴线和地标。",
-        "architecture_materials": "上盘村村口与村道",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "上盘村村口与村道"
-        ],
-        "forbidden": [
-          "现代物件",
-          "地标漂移",
-          "空间轴线随机跳变"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "core": true,
-      "frequency": 12,
-      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "face_policy": "faceless",
       "floor_plan": "保持 storyboard 场景轴线和地标。",
-      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
-      "axis_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
-      "screen_direction_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
-      "scene_atlas": {
-        "base_views": {
-          "front": {
-            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
-            "status": "ready",
-            "human_review": {
-              "status": "accepted",
-              "reviewer": "image_qc.mark_finalized",
-              "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-06T08:01:38.523942+00:00"
-            }
-          },
-          "back": {
-            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
-            "status": "ready",
-            "human_review": {
-              "status": "accepted",
-              "reviewer": "image_qc.mark_finalized",
-              "reason": "shared back reference passed finalized review",
-              "reviewed_at": "2026-07-06T08:01:38.523951+00:00"
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "WEAPON_01",
-      "type": "weapon",
-      "name": "横刀",
+      "frequency": 12,
+      "id": "LOC_03",
+      "lighting_signature": {
+        "accent_light": "darkened blood marks only when story needs, not gore-forward",
+        "color_temperature": "4800K cold morning mist scatter",
+        "do_not_shift": [
+          "sunny pastoral warmth",
+          "modern props",
+          "gore-saturated red"
+        ],
+        "dominant_palette": [
+          "mist gray",
+          "mud road brown",
+          "desaturated village wood"
+        ],
+        "fill_light": "soft haze, low local contrast",
+        "key_light": "diffuse morning fog from village entrance axis",
+        "source": "Codex production debt refresh from scene_dna.color_lighting_weather/constraints.light_anchor",
+        "updated_at": "2026-07-07T06:15:23+00:00",
+        "weather": "morning fog with shadowed village depth"
+      },
+      "name": "上盘村村口与村道",
       "reference_group": {
+        "floor_plan": {
+          "human_review": {
+            "reason": "shared floor_plan reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523926+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
+          "status": "ready"
+        },
+        "front": {
+          "human_review": {
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523888+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+          "status": "ready"
+        },
         "primary": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "human_review": {
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523667+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
           "status": "ready"
         },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "ready"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
+        "reverse": {
+          "human_review": {
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.523906+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
           "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "场景卡/LOC_03_上盘村村口与村道.md",
+          "sha256": "39b06450e9563602cfbb099bec848c8ba04c21cd1e1dcdcad971d56432b9c87d",
           "slot": "asset_card",
-          "path": "道具卡/WEAPON_01_横刀.md",
-          "status": "ready",
-          "sha256": "ed76c5bb1a6f59c39205f1ce3c100ef4a6de7a0d444441c703136985515e40c3"
+          "status": "ready"
         },
         {
+          "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "ready",
-          "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d"
+          "status": "ready"
         }
       ],
+      "scene_atlas": {
+        "base_views": {
+          "back": {
+            "human_review": {
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-06T08:01:38.523951+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "status": "accepted"
+            },
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
+            "status": "ready"
+          },
+          "front": {
+            "human_review": {
+              "reason": "shared front reference passed finalized review",
+              "reviewed_at": "2026-07-06T08:01:38.523942+00:00",
+              "reviewer": "image_qc.mark_finalized",
+              "status": "accepted"
+            },
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+            "status": "ready"
+          }
+        }
+      },
+      "scene_dna": {
+        "architecture_materials": "上盘村村口与村道",
+        "belonging_anchor": "上盘村村口与村道",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ],
+        "landmarks": [
+          "上盘村村口与村道"
+        ],
+        "resident_assets": [
+          "上盘村村口与村道"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。"
+      },
+      "screen_direction_rules": "LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。",
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "type": "scene"
+    },
+    {
+      "character_id": null,
       "constraints": {
-        "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
         "face_policy": "faceless",
         "must_not_have": [
           "变成长剑",
           "华丽仙剑",
           "现代军刀",
           "多把复制"
-        ]
+        ],
+        "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。"
       },
-      "face_policy": "faceless",
       "drift_forbidden": [
         "不要让横刀结构/颜色/尺寸漂移",
         "不要变成长剑",
@@ -449,92 +473,92 @@
         "不要现代军刀",
         "不要多把复制"
       ],
+      "face_policy": "faceless",
+      "id": "WEAPON_01",
+      "name": "横刀",
+      "owner": "剧情资产",
+      "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready"
+        },
+        "primary": {
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "道具卡/WEAPON_01_横刀.md",
+          "sha256": "ed76c5bb1a6f59c39205f1ce3c100ef4a6de7a0d444441c703136985515e40c3",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_武器_横刀.png",
+          "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+          "slot": "primary_reference",
+          "status": "ready"
+        }
+      ],
       "scene_dna": {
-        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "横刀"
-        ],
-        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "belonging_anchor": "横刀 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "横刀"
-        ],
         "forbidden": [
           "横刀结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "横刀"
+        ],
+        "resident_assets": [
+          "横刀"
+        ],
+        "spatial_layout": "横刀只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
-      "self_check_passed": true,
       "self_check_note": "existing shared PNG reused by prompt pack",
+      "self_check_passed": true,
+      "type": "weapon",
       "weapon_profile": {
-        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
-        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
-        "scale": "按角色手部比例，竖屏可读但不夸张。",
-        "material": "暗银金属、低反光、战损血尘克制呈现。",
-        "palette": "暗银、黑柄、冷灰血尘",
-        "ornament_motif": "镇魔司制式，低调克制。",
         "carry_modes": [
           "手持",
           "落地",
           "近景局部"
         ],
         "combat_usage": "本集关键动作道具；不可变成长剑/仙剑/现代军刀。",
-        "vfx_signature": "不主动发光；只继承场景光位。",
+        "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
         "forbidden_drift": [
           "不要变成长剑",
           "不要华丽仙剑",
           "不要现代军刀"
-        ]
-      },
-      "owner": "剧情资产",
-      "character_id": null
+        ],
+        "material": "暗银金属、低反光、战损血尘克制呈现。",
+        "ornament_motif": "镇魔司制式，低调克制。",
+        "palette": "暗银、黑柄、冷灰血尘",
+        "scale": "按角色手部比例，竖屏可读但不夸张。",
+        "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "vfx_signature": "不主动发光；只继承场景光位。"
+      }
     },
     {
-      "id": "PROP_镇魔司黑衣赤纹",
-      "type": "prop",
-      "name": "镇魔司黑衣赤纹",
-      "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
-          "status": "ready"
-        },
-        "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
-          "status": "ready"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
-          "status": "ready"
-        }
-      },
-      "reference_slots": [
-        {
-          "slot": "asset_card",
-          "path": "道具卡/PROP_镇魔司黑衣赤纹.md",
-          "status": "ready",
-          "sha256": "09f232b4c76e679267ddfd027a065a858e75a822606ef5605decad603ff233b1"
-        },
-        {
-          "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
-          "status": "ready",
-          "sha256": "5146f7384a83f38fde8e468580ab848d8c07cba243be80b2c0e0172e02937250"
-        }
-      ],
       "constraints": {
-        "structure": "PROP 镇魔司黑衣赤纹",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "PROP 镇魔司黑衣赤纹"
       },
-      "face_policy": "faceless",
+      "current_state": "PROP 镇魔司黑衣赤纹",
       "drift_forbidden": [
         "不要让镇魔司黑衣赤纹结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -542,28 +566,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "镇魔司黑衣赤纹 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "镇魔司黑衣赤纹"
-        ],
-        "spatial_layout": "镇魔司黑衣赤纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP 镇魔司黑衣赤纹",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "镇魔司黑衣赤纹"
-        ],
-        "forbidden": [
-          "镇魔司黑衣赤纹结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack",
-      "owner": "剧情资产",
-      "current_state": "PROP 镇魔司黑衣赤纹",
+      "face_policy": "faceless",
+      "id": "PROP_镇魔司黑衣赤纹",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -571,73 +575,71 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "MOUNT_GROUP_01",
-      "type": "prop",
-      "name": "飞鹰门马匹与火把",
+      },
+      "name": "镇魔司黑衣赤纹",
+      "owner": "剧情资产",
       "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
+          "status": "ready"
+        },
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-04T17:14:15.710524+00:00"
-          }
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-04T17:14:15.710609+00:00"
-          }
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
-            "reason": "shared in_hand reference passed finalized review",
-            "reviewed_at": "2026-07-04T17:14:15.710626+00:00"
-          }
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "道具卡/PROP_镇魔司黑衣赤纹.md",
+          "sha256": "09f232b4c76e679267ddfd027a065a858e75a822606ef5605decad603ff233b1",
           "slot": "asset_card",
-          "path": "道具卡/MOUNT_GROUP_01_飞鹰门马匹与火把.md",
-          "status": "ready",
-          "sha256": "6166f64443ca96c47ceb1ed25f12957824d7719cdd69005b86459e95805fb582"
+          "status": "ready"
         },
         {
+          "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+          "sha256": "5146f7384a83f38fde8e468580ab848d8c07cba243be80b2c0e0172e02937250",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
-          "status": "ready",
-          "sha256": "14cff1f95041797c02d01cd033e059fb00c289084731766d839dfbe087750e53",
-          "human_review": {
-            "status": "pending",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
-          }
+          "status": "ready"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "PROP 镇魔司黑衣赤纹",
+        "belonging_anchor": "镇魔司黑衣赤纹 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "镇魔司黑衣赤纹结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "镇魔司黑衣赤纹"
+        ],
+        "resident_assets": [
+          "镇魔司黑衣赤纹"
+        ],
+        "spatial_layout": "镇魔司黑衣赤纹只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "self_check_passed": true,
+      "type": "prop"
+    },
+    {
       "constraints": {
-        "structure": "飞鹰门马匹与火把",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "飞鹰门马匹与火把"
       },
-      "face_policy": "faceless",
+      "current_state": "飞鹰门马匹与火把",
       "drift_forbidden": [
         "不要让飞鹰门马匹与火把结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -645,28 +647,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "飞鹰门马匹与火把 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "飞鹰门马匹与火把"
-        ],
-        "spatial_layout": "飞鹰门马匹与火把只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "飞鹰门马匹与火把",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "飞鹰门马匹与火把"
-        ],
-        "forbidden": [
-          "飞鹰门马匹与火把结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "existing shared PNG reused by prompt pack",
-      "owner": "剧情资产",
-      "current_state": "飞鹰门马匹与火把",
+      "face_policy": "faceless",
+      "id": "MOUNT_GROUP_01",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -674,68 +656,93 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "PROP_上盘村断石碑",
-      "type": "prop",
-      "name": "上盘村断石碑",
+      },
+      "name": "飞鹰门马匹与火把",
+      "owner": "剧情资产",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
-          "status": "ready",
+        "in_hand": {
           "human_review": {
-            "status": "accepted",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-04T17:14:15.710626+00:00",
             "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_手持.png",
+          "status": "ready"
+        },
+        "primary": {
+          "human_review": {
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:03:07.883883+00:00"
-          }
+            "reviewed_at": "2026-07-04T17:14:15.710524+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
-          "status": "ready",
           "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
             "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:03:07.884029+00:00"
-          }
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
-          "status": "ready",
-          "human_review": {
-            "status": "accepted",
+            "reviewed_at": "2026-07-04T17:14:15.710609+00:00",
             "reviewer": "image_qc.mark_finalized",
-            "reason": "shared in_hand reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:03:07.884042+00:00"
-          }
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把_比例.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "道具卡/MOUNT_GROUP_01_飞鹰门马匹与火把.md",
+          "sha256": "6166f64443ca96c47ceb1ed25f12957824d7719cdd69005b86459e95805fb582",
           "slot": "asset_card",
-          "path": "道具卡/PROP_上盘村断石碑.md",
-          "status": "ready",
-          "sha256": "dca281a0f4497e725e926231fe0905abcf75586a1dceef226349fd689fd6b175"
+          "status": "ready"
         },
         {
+          "human_review": {
+            "reason": "Codex text-generated character candidate requires human approval before ready",
+            "status": "pending"
+          },
+          "path": "出图/共享/图片/定妆_道具_飞鹰门马匹与火把.png",
+          "sha256": "14cff1f95041797c02d01cd033e059fb00c289084731766d839dfbe087750e53",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
           "status": "ready"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "飞鹰门马匹与火把",
+        "belonging_anchor": "飞鹰门马匹与火把 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "飞鹰门马匹与火把结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "飞鹰门马匹与火把"
+        ],
+        "resident_assets": [
+          "飞鹰门马匹与火把"
+        ],
+        "spatial_layout": "飞鹰门马匹与火把只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "self_check_passed": true,
+      "type": "prop"
+    },
+    {
       "constraints": {
-        "structure": "PROP 上盘村断石碑",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "PROP 上盘村断石碑"
       },
-      "face_policy": "faceless",
+      "current_state": "PROP 上盘村断石碑",
       "drift_forbidden": [
         "不要让上盘村断石碑结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -743,28 +750,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "上盘村断石碑 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "上盘村断石碑"
-        ],
-        "spatial_layout": "上盘村断石碑只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP 上盘村断石碑",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "上盘村断石碑"
-        ],
-        "forbidden": [
-          "上盘村断石碑结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "PROP 上盘村断石碑",
+      "face_policy": "faceless",
+      "id": "PROP_上盘村断石碑",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -772,62 +759,88 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "PROP_村道血迹破布",
-      "type": "prop",
-      "name": "村道血迹破布",
+      },
+      "name": "上盘村断石碑",
+      "owner": "剧情资产",
       "reference_group": {
-        "primary": {
-          "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
-          "status": "ready",
+        "in_hand": {
           "human_review": {
-            "status": "accepted",
+            "reason": "shared in_hand reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:03:07.884042+00:00",
             "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
+          "status": "ready"
+        },
+        "primary": {
+          "human_review": {
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.695401+00:00"
-          }
+            "reviewed_at": "2026-07-06T08:03:07.883883+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
-          "status": "ready",
           "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
             "reason": "shared scale_ref reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.695564+00:00"
-          }
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_村道血迹破布_手持.png",
-          "status": "planned"
+            "reviewed_at": "2026-07-06T08:03:07.884029+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "道具卡/PROP_上盘村断石碑.md",
+          "sha256": "dca281a0f4497e725e926231fe0905abcf75586a1dceef226349fd689fd6b175",
           "slot": "asset_card",
-          "path": "道具卡/PROP_村道血迹破布.md",
-          "status": "ready",
-          "sha256": "6a1f35a166037e14fd502a8e2d2a76598f0d4fb1cbb593166466f917421516c3"
+          "status": "ready"
         },
         {
+          "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
           "status": "ready"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "PROP 上盘村断石碑",
+        "belonging_anchor": "上盘村断石碑 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "上盘村断石碑结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "上盘村断石碑"
+        ],
+        "resident_assets": [
+          "上盘村断石碑"
+        ],
+        "spatial_layout": "上盘村断石碑只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "type": "prop"
+    },
+    {
       "constraints": {
-        "structure": "PROP 村道血迹破布",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "PROP 村道血迹破布"
       },
-      "face_policy": "faceless",
+      "current_state": "PROP 村道血迹破布",
       "drift_forbidden": [
         "不要让村道血迹破布结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -835,28 +848,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "村道血迹破布 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "村道血迹破布"
-        ],
-        "spatial_layout": "村道血迹破布只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP 村道血迹破布",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "村道血迹破布"
-        ],
-        "forbidden": [
-          "村道血迹破布结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "PROP 村道血迹破布",
+      "face_policy": "faceless",
+      "id": "PROP_村道血迹破布",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -864,56 +857,82 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "PROP_木架残肢剪影",
-      "type": "prop",
-      "name": "木架残肢剪影",
+      },
+      "name": "村道血迹破布",
+      "owner": "剧情资产",
       "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_村道血迹破布_手持.png",
+          "status": "planned"
+        },
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
-          "status": "ready",
           "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:38.697726+00:00"
-          }
+            "reviewed_at": "2026-07-06T08:01:38.695401+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+          "status": "ready"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_木架残肢剪影_比例.png",
-          "status": "planned"
-        },
-        "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_木架残肢剪影_手持.png",
-          "status": "planned"
+          "human_review": {
+            "reason": "shared scale_ref reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:38.695564+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
         {
+          "path": "道具卡/PROP_村道血迹破布.md",
+          "sha256": "6a1f35a166037e14fd502a8e2d2a76598f0d4fb1cbb593166466f917421516c3",
           "slot": "asset_card",
-          "path": "道具卡/PROP_木架残肢剪影.md",
-          "status": "ready",
-          "sha256": "4791df1c9fb28f5f758a34d7f90cd8ef3d7f93548c4180bb62bd8b7c174df17f"
+          "status": "ready"
         },
         {
+          "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
           "status": "ready"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "PROP 村道血迹破布",
+        "belonging_anchor": "村道血迹破布 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "村道血迹破布结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "村道血迹破布"
+        ],
+        "resident_assets": [
+          "村道血迹破布"
+        ],
+        "spatial_layout": "村道血迹破布只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "type": "prop"
+    },
+    {
       "constraints": {
-        "structure": "PROP 木架残肢剪影",
         "face_policy": "faceless",
         "must_not_have": [
           "现代物件",
           "文字水印",
           "结构漂移",
           "数量漂移"
-        ]
+        ],
+        "structure": "PROP 木架残肢剪影"
       },
-      "face_policy": "faceless",
+      "current_state": "PROP 木架残肢剪影",
       "drift_forbidden": [
         "不要让木架残肢剪影结构/颜色/尺寸漂移",
         "不要现代物件",
@@ -921,28 +940,8 @@
         "不要结构漂移",
         "不要数量漂移"
       ],
-      "scene_dna": {
-        "belonging_anchor": "木架残肢剪影 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "木架残肢剪影"
-        ],
-        "spatial_layout": "木架残肢剪影只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
-        "architecture_materials": "PROP 木架残肢剪影",
-        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "木架残肢剪影"
-        ],
-        "forbidden": [
-          "木架残肢剪影结构漂移",
-          "现代物件",
-          "文字水印",
-          "数量漂移"
-        ]
-      },
-      "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
-      "owner": "剧情资产",
-      "current_state": "PROP 木架残肢剪影",
+      "face_policy": "faceless",
+      "id": "PROP_木架残肢剪影",
       "lifecycle": {
         "first_seen": "第1集",
         "state_order": [
@@ -950,48 +949,75 @@
           "本集引用"
         ],
         "status": "active"
-      }
-    },
-    {
-      "id": "VFX_狼爪寒光",
-      "type": "vfx",
-      "name": "狼爪寒光",
+      },
+      "name": "木架残肢剪影",
+      "owner": "剧情资产",
       "reference_group": {
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_木架残肢剪影_手持.png",
+          "status": "planned"
+        },
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
-          "status": "ready",
           "human_review": {
-            "status": "accepted",
-            "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-06T08:01:39.549621+00:00"
-          }
+            "reviewed_at": "2026-07-06T08:01:38.697726+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
+          "status": "ready"
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_木架残肢剪影_比例.png",
+          "status": "planned"
         }
       },
       "reference_slots": [
         {
+          "path": "道具卡/PROP_木架残肢剪影.md",
+          "sha256": "4791df1c9fb28f5f758a34d7f90cd8ef3d7f93548c4180bb62bd8b7c174df17f",
           "slot": "asset_card",
-          "path": "道具卡/VFX_狼爪寒光.md",
-          "status": "ready",
-          "sha256": "434c2e64ece75561e9b7377eabe5377852bbcc994aa0e606dec18ef643ef2330"
+          "status": "ready"
         },
         {
+          "path": "出图/共享/图片/定妆_道具_木架残肢剪影.png",
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
           "status": "ready"
         }
       ],
+      "scene_dna": {
+        "architecture_materials": "PROP 木架残肢剪影",
+        "belonging_anchor": "木架残肢剪影 属于本集剧情资产，不是独立场景。",
+        "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
+        "forbidden": [
+          "木架残肢剪影结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ],
+        "landmarks": [
+          "木架残肢剪影"
+        ],
+        "resident_assets": [
+          "木架残肢剪影"
+        ],
+        "spatial_layout": "木架残肢剪影只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
+      },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "type": "prop"
+    },
+    {
       "constraints": {
-        "structure": "VFX 狼爪寒光",
         "face_policy": "faceless",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "structure": "VFX 狼爪寒光"
       },
-      "face_policy": "faceless",
       "drift_forbidden": [
         "不要让狼爪寒光结构/颜色/尺寸漂移",
         "不要随机改色",
@@ -999,227 +1025,339 @@
         "不要现代科幻UI",
         "不要过度血腥猎奇"
       ],
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
+      "id": "VFX_狼爪寒光",
+      "is_entity_weapon": false,
+      "name": "狼爪寒光",
+      "reference_group": {
+        "primary": {
+          "human_review": {
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-06T08:01:39.549621+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "道具卡/VFX_狼爪寒光.md",
+          "sha256": "434c2e64ece75561e9b7377eabe5377852bbcc994aa0e606dec18ef643ef2330",
+          "slot": "asset_card",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+          "slot": "primary_reference",
+          "status": "ready"
+        }
+      ],
       "scene_dna": {
-        "belonging_anchor": "狼爪寒光 属于本集剧情资产，不是独立场景。",
-        "landmarks": [
-          "狼爪寒光"
-        ],
-        "spatial_layout": "狼爪寒光只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
         "architecture_materials": "VFX 狼爪寒光",
+        "belonging_anchor": "狼爪寒光 属于本集剧情资产，不是独立场景。",
         "color_lighting_weather": "LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。",
-        "resident_assets": [
-          "狼爪寒光"
-        ],
         "forbidden": [
           "狼爪寒光结构漂移",
           "现代物件",
           "文字水印",
           "数量漂移"
-        ]
+        ],
+        "landmarks": [
+          "狼爪寒光"
+        ],
+        "resident_assets": [
+          "狼爪寒光"
+        ],
+        "spatial_layout": "狼爪寒光只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。"
       },
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。"
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     },
     {
-      "id": "VFX_妖气",
-      "type": "vfx",
-      "name": "妖气",
-      "status": "registered",
-      "face_policy": "faceless",
-      "reference_group": {
-        "primary": {
-          "status": "ready",
-          "path": "设定库/vfx_contracts/VFX_妖气.md"
-        }
-      },
       "constraints": {
-        "visual_contract": "冷灰低饱和妖气雾流；贴地、绕爪、绕刀，不做页游光污染。",
-        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "冷灰低饱和妖气雾流；贴地、绕爪、绕刀，不做页游光污染。"
       },
+      "core": false,
       "drift_forbidden": [
         "不要漂成现代手机UI",
         "不要生成随机可读文字",
         "不要高饱和光污染"
       ],
-      "self_check_passed": true,
-      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
-      "core": false,
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
       "frequency": 1,
-      "reference_slots": [
-        {
-          "slot": "vfx_contract",
+      "id": "VFX_妖气",
+      "is_entity_weapon": false,
+      "name": "妖气",
+      "reference_group": {
+        "primary": {
           "path": "设定库/vfx_contracts/VFX_妖气.md",
           "status": "ready"
         }
-      ]
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_妖气.md",
+          "slot": "vfx_contract",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     },
     {
-      "id": "VFX_残余金纹",
-      "type": "vfx",
-      "name": "残余金纹",
-      "status": "registered",
-      "face_policy": "faceless",
-      "reference_group": {
-        "primary": {
-          "status": "ready",
-          "path": "设定库/vfx_contracts/VFX_残余金纹.md"
-        }
-      },
       "constraints": {
-        "visual_contract": "百妖谱或道行流转后的克制暖金残纹；细线、短暂、低亮度。",
-        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "百妖谱或道行流转后的克制暖金残纹；细线、短暂、低亮度。"
       },
+      "core": false,
       "drift_forbidden": [
         "不要漂成现代手机UI",
         "不要生成随机可读文字",
         "不要高饱和光污染"
       ],
-      "self_check_passed": true,
-      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
-      "core": false,
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
       "frequency": 1,
-      "reference_slots": [
-        {
-          "slot": "vfx_contract",
+      "id": "VFX_残余金纹",
+      "is_entity_weapon": false,
+      "name": "残余金纹",
+      "reference_group": {
+        "primary": {
           "path": "设定库/vfx_contracts/VFX_残余金纹.md",
           "status": "ready"
         }
-      ]
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_残余金纹.md",
+          "slot": "vfx_contract",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     },
     {
-      "id": "VFX_系统面板",
-      "type": "vfx",
-      "name": "系统面板",
-      "status": "registered",
-      "face_policy": "faceless",
-      "reference_group": {
-        "primary": {
-          "status": "ready",
-          "path": "设定库/vfx_contracts/VFX_系统面板.md"
-        }
-      },
       "constraints": {
-        "visual_contract": "百妖谱/系统信息后期 overlay 视觉契约；古卷暖金边框，文字由 compose 渲染。",
-        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
           "AI生成可读文字",
           "现代手机UI",
           "随机蓝色科幻屏",
           "乱码文字"
-        ]
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "百妖谱/系统信息后期 overlay 视觉契约；古卷暖金边框，文字由 compose 渲染。"
       },
+      "core": false,
       "drift_forbidden": [
         "不要漂成现代手机UI",
         "不要生成随机可读文字",
         "不要高饱和光污染"
       ],
-      "self_check_passed": true,
-      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
-      "core": false,
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
       "frequency": 1,
-      "reference_slots": [
-        {
-          "slot": "vfx_contract",
+      "id": "VFX_系统面板",
+      "is_entity_weapon": false,
+      "name": "系统面板",
+      "reference_group": {
+        "primary": {
           "path": "设定库/vfx_contracts/VFX_系统面板.md",
           "status": "ready"
         }
-      ]
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_系统面板.md",
+          "slot": "vfx_contract",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     },
     {
-      "id": "VFX_虎山神摹影",
-      "type": "vfx",
-      "name": "虎山神摹影",
-      "status": "registered",
-      "face_policy": "faceless",
-      "reference_group": {
-        "primary": {
-          "status": "ready",
-          "path": "设定库/vfx_contracts/VFX_虎山神摹影.md"
-        }
-      },
       "constraints": {
-        "visual_contract": "虎山神残影被百妖谱收录的剪影/金线效果；保持虎首妖物轮廓。",
-        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "虎山神残影被百妖谱收录的剪影/金线效果；保持虎首妖物轮廓。"
       },
+      "core": false,
       "drift_forbidden": [
         "不要漂成现代手机UI",
         "不要生成随机可读文字",
         "不要高饱和光污染"
       ],
-      "self_check_passed": true,
-      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
-      "core": false,
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
       "frequency": 1,
-      "reference_slots": [
-        {
-          "slot": "vfx_contract",
+      "id": "VFX_虎山神摹影",
+      "is_entity_weapon": false,
+      "name": "虎山神摹影",
+      "reference_group": {
+        "primary": {
           "path": "设定库/vfx_contracts/VFX_虎山神摹影.md",
           "status": "ready"
         }
-      ]
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_虎山神摹影.md",
+          "slot": "vfx_contract",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     },
     {
-      "id": "VFX_道行计数overlay",
-      "type": "vfx",
-      "name": "道行计数 overlay",
-      "status": "registered",
-      "face_policy": "faceless",
-      "reference_group": {
-        "primary": {
-          "status": "ready",
-          "path": "设定库/vfx_contracts/VFX_道行计数overlay.md"
-        }
-      },
       "constraints": {
-        "visual_contract": "道行数字变化的后期 overlay 契约；古卷金色计数，不让视频模型烤字。",
-        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
         "light_anchor": "服从本集冷灰写实3D国风漫剧色调；百妖谱/系统类仅用克制暖金。",
         "must_not_have": [
           "随机改色",
           "遮挡主体脸",
           "现代科幻UI",
           "过度血腥猎奇"
-        ]
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "道行数字变化的后期 overlay 契约；古卷金色计数，不让视频模型烤字。"
       },
+      "core": false,
       "drift_forbidden": [
         "不要漂成现代手机UI",
         "不要生成随机可读文字",
         "不要高饱和光污染"
       ],
-      "self_check_passed": true,
-      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
-      "core": false,
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
       "frequency": 1,
-      "reference_slots": [
-        {
-          "slot": "vfx_contract",
+      "id": "VFX_道行计数overlay",
+      "is_entity_weapon": false,
+      "name": "道行计数 overlay",
+      "reference_group": {
+        "primary": {
           "path": "设定库/vfx_contracts/VFX_道行计数overlay.md",
           "status": "ready"
         }
-      ]
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_道行计数overlay.md",
+          "slot": "vfx_contract",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "compose gate 补登记：第2集已出图/出视频后发现分镜引用 VFX id 未入 registry；本条作为后期 overlay/VFX 契约登记，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
+    },
+    {
+      "constraints": {
+        "light_anchor": "服从冷灰写实3D国风漫剧色调；仅做暖金低饱和剧情强调。",
+        "must_not_have": [
+          "现代手机UI",
+          "蓝紫科幻屏",
+          "随机乱码文字",
+          "高饱和光污染",
+          "遮挡主体脸"
+        ],
+        "render_policy": "compose_overlay_or_vfx_layer; no_baked_random_text",
+        "visual_contract": "百妖谱开启、道行规则反馈与眼中映光的克制暖金古卷光；不生成随机可读文字。"
+      },
+      "core": true,
+      "drift_forbidden": [
+        "不要漂成现代手机UI",
+        "不要生成随机可读文字",
+        "不要大面积爆光遮脸"
+      ],
+      "equipment_routing_note": "视觉/后期效果资产；不是实体武器或主角本命法宝，实体横刀走 WEAPON_01。",
+      "equipment_routing_updated_at": "2026-07-07T06:20:46+00:00",
+      "face_policy": "faceless",
+      "frequency": 1,
+      "id": "VFX_百妖谱金光",
+      "is_entity_weapon": false,
+      "name": "百妖谱金光",
+      "reference_group": {
+        "contract": {
+          "path": "设定库/vfx_contracts/VFX_百妖谱金光.md",
+          "status": "ready"
+        },
+        "primary": {
+          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "path": "设定库/vfx_contracts/VFX_百妖谱金光.md",
+          "sha256": "7bb5be7a9f9559e329d93c4d5d29ce5f73288abc6d179234e557cb70dd0a171d",
+          "slot": "vfx_contract",
+          "status": "ready"
+        },
+        {
+          "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+          "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+          "slot": "visual_reference",
+          "status": "ready"
+        }
+      ],
+      "self_check_note": "第1集 review 上游返工补登记；复用已存在百妖谱金色古卷面板资产，不新增付费素材。",
+      "self_check_passed": true,
+      "status": "registered",
+      "type": "vfx",
+      "weapon_like_role": "vfx_only"
     }
   ],
-  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+  "generated_at": "2026-07-07T04:00:49+00:00",
+  "kind": "n2d_asset_reference_registry",
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。",
+  "version": 1
 }

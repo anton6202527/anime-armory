@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createWork, deleteWork, scanWorkspace } from "../api";
+import { Codicon } from "../components/Codicon";
 import { useI18n, useLineLabel } from "../i18n";
 import type { LineInfo, WorkRoot } from "../types";
 
@@ -87,8 +88,13 @@ export function Line(props: {
         <div className="crumb">
           {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
         </div>
-        <button className="line-skills-btn" onClick={() => onShowSkills(line)}>
-          {t("line.skillsButton")}
+        <button
+          className="line-skills-btn"
+          title={t("line.skillsButton")}
+          aria-label={t("line.skillsButton")}
+          onClick={() => onShowSkills(line)}
+        >
+          <Codicon name="wrench" />
         </button>
       </div>
 

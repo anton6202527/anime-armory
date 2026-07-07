@@ -12,10 +12,11 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { listen } from "@tauri-apps/api/event";
 import "@xterm/xterm/css/xterm.css";
-import { ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
+import { pickDefaultAgent, ptyKill, ptyResize, ptySpawn, ptyWrite } from "../api";
 import { useI18n } from "../i18n";
 import type { AgentInfo } from "../types";
 import { AgentBar } from "./AgentBar";
+import { Codicon } from "./Codicon";
 
 const b64ToBytes = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
 
@@ -63,7 +64,8 @@ type TerminalSessionHandle = {
 
 let terminalSessionSeq = 0;
 const DEFAULT_RAIL_WIDTH = 128;
-const MIN_RAIL_WIDTH = 96;
+const MIN_RAIL_WIDTH = 32;
+const COMPACT_RAIL_WIDTH = 46;
 const MAX_RAIL_WIDTH = 260;
 
 function terminalSessionId(): string {
@@ -410,7 +412,9 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     const [placeholderClosed, setPlaceholderClosed] = useState(false);
     const [railWidth, setRailWidth] = useState(() => {
       const saved = Number(window.localStorage.getItem("aa.terminalRailWidth"));
-      return Number.isFinite(saved) && saved > 0 ? saved : DEFAULT_RAIL_WIDTH;
+      if (!Number.isFinite(saved) || saved <= 0) return DEFAULT_RAIL_WIDTH;
+      if (saved <= 44) return MIN_RAIL_WIDTH;
+      return Math.min(MAX_RAIL_WIDTH, Math.max(MIN_RAIL_WIDTH, saved));
     });
     const activeIdRef = useRef(activeId);
     const sessionRefs = useRef<Map<string, TerminalSessionHandle>>(new Map());
@@ -450,7 +454,8 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     }, [onRuntimeStatus]);
 
     function addSession() {
-      const next = makeSession();
+      const def = pickDefaultAgent(agents ?? []);
+      const next = def ? makeSession(def.command, def.id) : makeSession();
       setSessions((prev) => [...prev, next]);
       setActiveId(next.id);
       onRuntimeStatus?.({});
@@ -603,7 +608,11 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
             window.dispatchEvent(new Event("resize"));
           }}
         />
-        <aside className="terminal-session-rail" style={{ width: railWidth }} aria-label={t("terminal.sessions")}>
+        <aside
+          className={"terminal-session-rail" + (railWidth <= COMPACT_RAIL_WIDTH ? " compact" : "")}
+          style={{ width: railWidth }}
+          aria-label={t("terminal.sessions")}
+        >
           <div className="terminal-session-list" role="tablist" aria-label={t("terminal.sessions")}>
             {sessions.map((session) => (
               <div
@@ -639,7 +648,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
                     closeSession(session.id);
                   }}
                 >
-                  ×
+                  <Codicon name="trash" />
                 </button>
               </div>
             ))}

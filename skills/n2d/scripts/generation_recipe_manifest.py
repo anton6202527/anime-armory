@@ -127,7 +127,18 @@ def event_asset_rel(root: Path, event: Mapping[str, Any]) -> str:
         try:
             return Path(raw).resolve().relative_to(root.resolve()).as_posix()
         except Exception:
-            return raw.replace(os.sep, "/")
+            pass
+    # Production events may survive project moves or machine-user changes.  If an
+    # event still contains ".../<project-name>/出视频/..." or a relative path with
+    # the workspace prefix, recover the project-local suffix so manifests remain
+    # portable across checkouts.
+    parts = Path(raw).parts
+    root_name = root.name
+    if root_name in parts:
+        idx = len(parts) - 1 - list(reversed(parts)).index(root_name)
+        tail = parts[idx + 1 :]
+        if tail:
+            return norm_rel(os.path.join(*tail))
     return norm_rel(raw)
 
 

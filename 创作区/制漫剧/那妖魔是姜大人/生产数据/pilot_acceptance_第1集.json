@@ -1,0 +1,123 @@
+{
+  "checks": {
+    "action": "pass",
+    "face": "pass",
+    "lipsync": "pass",
+    "routing": "pass",
+    "scene": "pass",
+    "seam": "pass"
+  },
+  "clips": [
+    {
+      "artifact_path": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+      "artifact_sha256": "b4eb5ff281ff1ec9a68b7ff200cdce9d1bad1ba55651139e3da2a9c8f7d8a56e",
+      "clip_id": "Clip_02_part1",
+      "coverage": [
+        "face",
+        "scene",
+        "action",
+        "seam",
+        "routing"
+      ],
+      "qc_report": "生产数据/video_qc/第1集/01_11/video_qc_第1集_01_11.json",
+      "why": "首集主看点和世界危险揭示；split relay 前半段覆盖新场景、核心角色、虎妖尸身与接缝起点。"
+    },
+    {
+      "artifact_path": "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+      "artifact_sha256": "ef58ed26018d644c61aa3124b7772bf6243e8ff6779f0564fe85bb3758055c49",
+      "clip_id": "Clip_02_part2",
+      "coverage": [
+        "face",
+        "scene",
+        "action",
+        "lipsync",
+        "seam",
+        "routing"
+      ],
+      "qc_report": "生产数据/video_qc/第1集/01_11/video_qc_第1集_01_11.json",
+      "why": "首集最高风险代表镜头的 split relay 后半段；覆盖多角色、虎妖/VFX、接缝延续和后配音模式的音画同步风险。"
+    },
+    {
+      "artifact_path": "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+      "artifact_sha256": "3c2e2123d179be736e8e5441eb8d00d82710174239e3a9e2392109b2392341ce",
+      "clip_id": "Clip_03_part2",
+      "coverage": [
+        "face",
+        "scene",
+        "action",
+        "lipsync",
+        "seam",
+        "routing"
+      ],
+      "qc_report": "生产数据/video_qc/第1集/01_11/video_qc_第1集_01_11.json",
+      "why": "压迫交易与横刀/救命关系建立；覆盖多人交互、武器持有、表情近景、对白后配音和主路由。"
+    },
+    {
+      "artifact_path": "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "artifact_sha256": "7f8c52496145958615c9c01d493d0fce5d53b181cbe73adcbff1c5266c3ef8e9",
+      "clip_id": "Clip_04",
+      "coverage": [
+        "face",
+        "scene",
+        "action",
+        "routing"
+      ],
+      "qc_report": "生产数据/video_qc/第1集/04_04/video_qc_第1集_04_04.json",
+      "why": "搀扶站位与伤势拖累，覆盖接触动作和中段节奏。"
+    }
+  ],
+  "coverage": [
+    "face",
+    "scene",
+    "action",
+    "lipsync",
+    "seam",
+    "routing"
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-07T11:29:00+08:00",
+  "kind": "n2d_pilot_acceptance",
+  "notes": [
+    "本项目设置为先出视频后配音、对口型关闭、视频生成音频策略为无声视频流；pilot 的 lipsync 检查口径为后期真配音拟合到锁定镜头，不要求视频模型原生口型。",
+    "代表镜头选自 pilot_risk_sampler 的 Clip_02/Clip_03/Clip_04；视频 QC 批次 01_11 覆盖全 16 个物理 MP4，findings_count=0。",
+    "pilot acceptance 只证明首集代表镜头证据包已补齐；全量验收仍以 n2d-review 的 score、ledger、release_verdict 为准。"
+  ],
+  "qc_evidence": {
+    "batch_contact_sheet": {
+      "path": "生产数据/video_qc/第1集/01_11/contact_sheet_01_11.jpg",
+      "sha256": "b491fb5ec79c7345b7065c303531dd7c1d894ca9bf2e4076e36d0ff5e37014a9"
+    },
+    "batch_report": {
+      "findings_count": 0,
+      "path": "生产数据/video_qc/第1集/01_11/video_qc_第1集_01_11.json",
+      "sha256": "9256ae990840c11578b5abdfdda1672c6de51fa4eee4bdd9623862eb79ce04a4"
+    }
+  },
+  "reviewed_by": "codex-mechanical-review",
+  "reviewer": "codex-mechanical-review",
+  "risk_selection": {
+    "method": "pilot_risk_sampler first/new/high-risk deterministic sampler",
+    "risk_factors": [
+      "big_expression_closeup",
+      "complex_action_or_contact",
+      "multi_character_interaction",
+      "native_av_or_lipsync",
+      "new_backend_route",
+      "new_character",
+      "new_scene_or_vfx",
+      "seam_sensitive"
+    ],
+    "selected_clips": [
+      "Clip_02",
+      "Clip_03",
+      "Clip_04"
+    ]
+  },
+  "signoff": {
+    "reviewer": "codex-mechanical-review",
+    "scope": "representative mechanical pilot evidence for internal n2d review gate",
+    "signed_at": "2026-07-07T11:29:00+08:00"
+  },
+  "status": "accepted",
+  "version": 1
+}

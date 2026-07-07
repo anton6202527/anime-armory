@@ -1,0 +1,9 @@
+{
+  "character_id": "CHAR_01",
+  "episode_1_note": "第1集真实配音由 n2d-voice 生成并在 compose 阶段混入；FishSpeech 本地服务已关闭。",
+  "generated_at": "2026-07-07T04:00:49+00:00",
+  "kind": "n2d_character_voice_profile",
+  "name": "姜月初",
+  "policy": "project_tts_voice; no real-person voice cloning without authorization",
+  "version": 1
+}

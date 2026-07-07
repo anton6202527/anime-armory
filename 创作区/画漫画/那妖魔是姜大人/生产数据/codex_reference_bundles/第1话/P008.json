@@ -7,15 +7,15 @@
   "cli_image_input_count": 2,
   "references": [
     {
-      "id": "CHAR_PEI",
-      "path": "出图/共享/图片/CHAR_PEI__anchor.png",
-      "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05"
-    },
-    {
       "id": "CHAR_JYC",
       "path": "出图/共享/图片/CHAR_JYC__anchor.png",
-      "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3"
+      "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+      "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
     }
   ],
-  "created_at": "2026-07-06T19:32:46"
+  "created_at": "2026-07-07T11:17:01"
 }

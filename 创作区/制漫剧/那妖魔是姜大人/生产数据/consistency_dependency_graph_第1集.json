@@ -6,23 +6,23 @@
       "to": "clip:Clip_01"
     },
     {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_01"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_01"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_02"
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_02"
     },
     {
@@ -36,13 +36,18 @@
       "to": "clip:Clip_02"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_03"
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_03"
     },
     {
@@ -57,6 +62,16 @@
     },
     {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_03"
     },
@@ -66,11 +81,6 @@
       "to": "clip:Clip_04"
     },
     {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_04"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_04"
@@ -81,13 +91,23 @@
       "to": "clip:Clip_04"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_05"
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_05"
     },
     {
@@ -106,12 +126,22 @@
       "to": "clip:Clip_05"
     },
     {
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "entity:LOC_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
       "from": "episode:第1集",
       "relation": "contains",
       "to": "clip:Clip_06"
     },
     {
-      "from": "entity:LOC_01",
+      "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_06"
     },
@@ -131,7 +161,7 @@
       "to": "clip:Clip_06"
     },
     {
-      "from": "entity:CHAR_01",
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_06"
     },
@@ -141,11 +171,6 @@
       "to": "clip:Clip_07"
     },
     {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_07"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_07"
@@ -156,18 +181,23 @@
       "to": "clip:Clip_07"
     },
     {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_07"
     },
     {
       "from": "episode:第1集",
       "relation": "contains",
-      "to": "clip:Clip_08"
-    },
-    {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
       "to": "clip:Clip_08"
     },
     {
@@ -191,13 +221,13 @@
       "to": "clip:Clip_08"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_09"
-    },
-    {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_09"
     },
     {
@@ -221,13 +251,13 @@
       "to": "clip:Clip_09"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_10"
-    },
-    {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_10"
     },
     {
@@ -241,18 +271,23 @@
       "to": "clip:Clip_10"
     },
     {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_10"
     },
     {
       "from": "episode:第1集",
       "relation": "contains",
-      "to": "clip:Clip_11"
-    },
-    {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
       "to": "clip:Clip_11"
     },
     {
@@ -272,6 +307,11 @@
     },
     {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_11"
     },
@@ -1316,6 +1356,12 @@
       "source": "asset_registry"
     },
     {
+      "id": "entity:VFX_百妖谱金光",
+      "kind": "vfx",
+      "label": "百妖谱金光",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:VFX_系统面板",
       "kind": "vfx",
       "label": "系统面板",
@@ -1767,9 +1813,9 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 11,
-    "edges": 220,
+    "edges": 228,
     "images": 31,
-    "nodes": 103,
+    "nodes": 104,
     "videos": 16
   },
   "version": 1

@@ -1,7 +1,12 @@
 {
   "available": false,
   "character_groups": [
-    "CHAR_01|native:CHAR_01_native"
+    "CHAR_01|native:CHAR_01_native",
+    "姜月初|SHEN",
+    "旁白|NARR",
+    "系统|SYS",
+    "虎山神|SHEN",
+    "裴长青|SHEN"
   ],
   "episode": "第1集",
   "groups": {},

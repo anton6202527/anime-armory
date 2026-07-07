@@ -1,0 +1,924 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-07T03:01:31+00:00",
+  "judge_schema_required": [
+    "judge_model",
+    "rubric_version",
+    "frame_sample_manifest",
+    "question_chain",
+    "self_consistency_votes"
+  ],
+  "kind": "n2d_video_eval_manifest",
+  "media": [
+    "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+    "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+    "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+    "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+    "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+    "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+    "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
+    "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
+    "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+    "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+    "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+    "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
+    "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+    "出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+    "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+    "出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+    "合成/第1集/_clipcache/n_31865dbf9ccf8c49.mp4",
+    "合成/第1集/_clipcache/n_627e28388e65b232.mp4",
+    "合成/第1集/_clipcache/n_69928d5193aef2ed.mp4",
+    "合成/第1集/_clipcache/n_86b130e8e4d76759.mp4",
+    "合成/第1集/_clipcache/n_89211c10bf5c50c4.mp4",
+    "合成/第1集/_clipcache/n_8e0b806f30718da0.mp4",
+    "合成/第1集/_clipcache/n_ae244c19148ba896.mp4",
+    "合成/第1集/_clipcache/n_bf648f2d187b5471.mp4",
+    "合成/第1集/_clipcache/n_cc9a9d2b6bec15b8.mp4",
+    "合成/第1集/_clipcache/n_d2cf06185073c9a3.mp4",
+    "合成/第1集/_clipcache/n_f1a1553abd1ff605.mp4",
+    "合成/第1集/_work/concat.mp4",
+    "合成/第1集/成片_第1集_zh.mp4"
+  ],
+  "notes": [
+    "Heavy VLM/embedding/tracking runners should consume this manifest and write the sidecars listed in sidecar_targets.",
+    "Do not mark missing evidence as pass; use needs_review/warn until a runner or human review fills verdicts."
+  ],
+  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "sidecar_targets": {
+    "camera": "生产数据/camera_trajectory_probe_第1集.json",
+    "causal_event": "生产数据/causal_event_graph_第1集.json",
+    "dialogue_av": "生产数据/dialogue_av_alignment_第1集.json",
+    "motion": "生产数据/motion_quality_第1集.json",
+    "physical_event": "生产数据/physical_event_graph_第1集.json",
+    "subject_video": "生产数据/subject_video_consistency_第1集.json",
+    "video_semantic": "生产数据/video_semantic_consistency_第1集.json",
+    "video_vlm": "生产数据/video_vlm_consistency_第1集.json"
+  },
+  "tasks": [
+    {
+      "clip": "Clip_01",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_01_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_02",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_02_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_03",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_03_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+        "出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_04",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_04_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_05",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_05_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
+        "出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_06",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_06_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_07",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_07_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+        "出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_08",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_08_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_09",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_09_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_09_刀尖抬起.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_10",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_10_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    },
+    {
+      "clip": "Clip_11",
+      "frame_sampling": {
+        "ffmpeg_hint": "ffmpeg -i <clip.mp4> -vf fps=1 <frames_dir>/Clip_11_%04d.png",
+        "max_frames": 16,
+        "min_frames": 5,
+        "strategy": "start_mid_end_plus_action_peaks"
+      },
+      "media": [
+        "出视频/第1集/视频/Clip_11_我只想活下去.mp4"
+      ],
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "fracture",
+        "liquid",
+        "contact_continuity",
+        "state_conservation"
+      ],
+      "questions": [
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "subject",
+          "question": "该镜头中主体/角色是否保持参考身份、服装和关键特征一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "scene",
+          "question": "该镜头的场景、光线、背景结构是否与分镜/上一镜保持一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "action",
+          "question": "该镜头动作是否完成，运动是否平滑且没有冻结/抽搐？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "physics",
+          "question": "该镜头的物理因果是否成立，动作结果是否符合规则：collision, gravity_drop, fracture, liquid, contact_continuity, state_conservation？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "dialogue",
+          "question": "该镜头的说话人、台词归属、轮次和口型是否一致？"
+        },
+        {
+          "expected_from": [
+            "脚本/第1集/storyboard.json",
+            "出视频/第1集/prompt/00_总览.md"
+          ],
+          "kind": "camera",
+          "question": "该镜头相机运动方向、深度、越轴和抖动是否符合设计？"
+        }
+      ],
+      "risk_kinds": [
+        "subject",
+        "scene",
+        "action",
+        "physics",
+        "dialogue",
+        "camera"
+      ]
+    }
+  ],
+  "version": 1
+}

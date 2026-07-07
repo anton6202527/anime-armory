@@ -61,6 +61,44 @@ def test_contract_trace_requires_source_id_to_reach_prompt_and_artifact(tmp_path
     assert "prompt_or_generation_recipe" in blocked["findings"][0]["message"]
 
 
+def test_contract_trace_episode_scope_defers_future_trace_ids(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "设定库" / "source_comprehension.json", {
+        "kind": "n2d_source_comprehension",
+        "status": "confirmed",
+        "understanding_contract": {
+            "episode_promise_basis": [
+                {"trace_id": "SRC_PROMISE_001", "promise": "本集必须兑现"},
+                {"trace_id": "SRC_PROMISE_002", "promise": "第2集再兑现"},
+            ],
+            "character_motives": [],
+            "causality_chain": [],
+            "foreshadowing_ledger": [],
+            "episode_trace_scope": {
+                ep: {
+                    "required_trace_ids": ["SRC_PROMISE_001"],
+                    "deferred_trace_ids": ["SRC_PROMISE_002"],
+                },
+            },
+        },
+    })
+    _write_json(tmp_path / "脚本" / ep / "preventive_contracts.json", {
+        "episode_promise": {"source_trace_ids": ["SRC_PROMISE_001"]},
+        "shots": [{"clip_id": "Clip_01", "source_trace_ids": ["SRC_PROMISE_001"]}],
+    })
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {"clips": [{"clip_id": "Clip_01", "source_trace_ids": ["SRC_PROMISE_001"]}]})
+    (tmp_path / "出图" / ep / "prompt").mkdir(parents=True)
+    (tmp_path / "出图" / ep / "prompt" / "01.md").write_text("SRC_PROMISE_001 Clip_01", encoding="utf-8")
+    _write_bytes(tmp_path / "出图" / ep / "图片" / "Clip01.png", b"clip")
+
+    payload = contract_trace.build_report(tmp_path, ep)
+
+    assert payload["status"] == "pass"
+    assert payload["summary"]["active_trace_ids"] == 1
+    assert payload["summary"]["deferred_trace_ids"] == 1
+    assert any(row["trace_id"] == "SRC_PROMISE_002" and row["scope_status"] == "deferred" for row in payload["rows"])
+
+
 def test_mini_pilot_blocks_high_risk_clip_until_evidence_manifest(tmp_path: Path) -> None:
     ep = "第2集"
     _write_json(tmp_path / "脚本" / ep / "storyboard.json", {

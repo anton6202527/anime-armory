@@ -112,6 +112,71 @@ def source_trace_ids(root: Path) -> Dict[str, Dict[str, Any]]:
     return out
 
 
+def _episode_aliases(episode: str) -> Set[str]:
+    raw = str(episode or "").strip()
+    aliases = {raw}
+    m = re.search(r"(\d+)", raw)
+    if m:
+        n = int(m.group(1))
+        aliases.update({str(n), f"{n:02d}", f"第{n}集", f"EP{n:02d}", f"ep{n:02d}", f"episode_{n:02d}"})
+    return {x for x in aliases if x}
+
+
+def _episode_trace_scope(root: Path, episode: str, known_ids: Set[str]) -> Dict[str, Any]:
+    """Return per-episode trace scope when the source contract provides one.
+
+    Older projects do not have episode_trace_scope. In that case we keep the
+    historical behavior and require every SRC_* trace in source_comprehension to
+    reach this episode's contract/prompt/artifact chain.
+    """
+    data = source_contract(root)
+    contract = data.get("understanding_contract") if isinstance(data.get("understanding_contract"), Mapping) else {}
+    raw = None
+    if isinstance(contract, Mapping):
+        raw = contract.get("episode_trace_scope") or contract.get("episode_scoped_trace_ids") or contract.get("trace_scope_by_episode")
+    if raw is None:
+        raw = data.get("episode_trace_scope") if isinstance(data, Mapping) else None
+    if not isinstance(raw, Mapping):
+        return {"enabled": False, "required": set(known_ids), "deferred": set(), "scope_source": "all_source_trace_ids"}
+
+    entry = None
+    for key in _episode_aliases(episode):
+        if isinstance(raw.get(key), Mapping):
+            entry = raw.get(key)
+            break
+    if not isinstance(entry, Mapping):
+        return {"enabled": False, "required": set(known_ids), "deferred": set(), "scope_source": "all_source_trace_ids"}
+
+    required = set()
+    for key in ("required_trace_ids", "active_trace_ids", "consume_trace_ids", "must_consume_trace_ids", "this_episode_trace_ids"):
+        required.update(trace_ids_in(entry.get(key)))
+    deferred = set()
+    for key in ("deferred_trace_ids", "future_trace_ids", "not_due_trace_ids", "later_trace_ids"):
+        deferred.update(trace_ids_in(entry.get(key)))
+
+    # Support compact row syntax:
+    # {"items":[{"trace_id":"SRC_PROMISE_001","status":"required"}, ...]}
+    for key in ("items", "rows", "traces"):
+        rows = entry.get(key)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, Mapping):
+                continue
+            ids = trace_ids_in(row)
+            status = str(row.get("status") or row.get("scope") or row.get("phase") or "").lower()
+            if status in {"deferred", "future", "not_due", "later"}:
+                deferred.update(ids)
+            else:
+                required.update(ids)
+
+    if not required:
+        required = set(known_ids) - deferred
+    required &= known_ids
+    deferred = (deferred & known_ids) - required
+    return {"enabled": True, "required": required, "deferred": deferred, "scope_source": "episode_trace_scope"}
+
+
 def _storyboard(root: Path, episode: str) -> List[Mapping[str, Any]]:
     data = load_json(root / "脚本" / episode / "storyboard.json")
     clips = data.get("clips") if isinstance(data, Mapping) else []
@@ -213,7 +278,33 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
     if source_contract(root) and not source_ids:
         findings.append({"severity": "block", "code": "missing_source_trace_ids", "message": "源理解合同缺 SRC_* trace_id，confirmed 不能证明被下游消费。"})
 
+    scope = _episode_trace_scope(root, episode, set(source_ids))
+    active_ids: Set[str] = set(scope["required"])
+    deferred_ids: Set[str] = set(scope["deferred"])
+
     for trace_id, meta in sorted(source_ids.items()):
+        if trace_id in deferred_ids:
+            rows.append({
+                **meta,
+                "episode_contract": False,
+                "clips": [],
+                "prompt": False,
+                "artifacts": [],
+                "missing": [],
+                "scope_status": "deferred",
+            })
+            continue
+        if trace_id not in active_ids:
+            rows.append({
+                **meta,
+                "episode_contract": False,
+                "clips": [],
+                "prompt": False,
+                "artifacts": [],
+                "missing": [],
+                "scope_status": "out_of_scope",
+            })
+            continue
         clips = sorted(cid for cid, refs in shot_refs.items() if trace_id in refs)
         artifacts = sorted({path for cid in clips for path in _clip_artifacts(root, episode, cid)})
         missing = []
@@ -225,7 +316,7 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
             missing.append("prompt_or_generation_recipe")
         if not artifacts:
             missing.append("final_shot_artifact")
-        row = {**meta, "episode_contract": trace_id in ep_refs, "clips": clips, "prompt": trace_id in prompt_refs, "artifacts": artifacts, "missing": missing}
+        row = {**meta, "episode_contract": trace_id in ep_refs, "clips": clips, "prompt": trace_id in prompt_refs, "artifacts": artifacts, "missing": missing, "scope_status": "active"}
         rows.append(row)
         if missing:
             findings.append({
@@ -244,7 +335,14 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
         "episode": episode,
         "generated_at": now_iso(),
         "status": "blocked" if findings else "pass",
-        "summary": {"source_trace_ids": len(source_ids), "block": len(findings), "traced": sum(1 for r in rows if not r["missing"])},
+        "summary": {
+            "source_trace_ids": len(source_ids),
+            "active_trace_ids": len(active_ids),
+            "deferred_trace_ids": len(deferred_ids),
+            "scope_source": scope["scope_source"],
+            "block": len(findings),
+            "traced": sum(1 for r in rows if r.get("scope_status") == "active" and not r["missing"]),
+        },
         "source_comprehension": relpath(root, root / "设定库" / "source_comprehension.json"),
         "rows": rows,
         "findings": findings,

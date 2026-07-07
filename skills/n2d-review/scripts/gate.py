@@ -2283,7 +2283,7 @@ def check_compose_foley_native_audio_policy(root: str, ep: str) -> None:
                 return_to_stage="compose",
                 confidence="heuristic",
             )
-        return
+            return
     if os.path.isfile(foley_wav):
         add(
             WARN,
@@ -2294,6 +2294,23 @@ def check_compose_foley_native_audio_policy(root: str, ep: str) -> None:
             return_to_stage="compose",
             confidence="heuristic",
         )
+
+
+def _final_timeline_probe_passes(root: str, ep: str) -> bool:
+    data = load_json(os.path.join(root, "生产数据", f"final_timeline_probe_{ep}.json"))
+    if not isinstance(data, dict) or data.get("kind") != "n2d_final_timeline_probe":
+        return False
+    if data.get("findings"):
+        return False
+    actual = data.get("actual_duration_sec")
+    expected = data.get("expected_duration_sec")
+    tolerance = data.get("duration_tolerance_sec")
+    try:
+        return abs(float(actual) - float(expected)) <= float(tolerance)
+    except Exception:
+        return False
+
+
 def check_video_assets(root: str, ep: str) -> None:
     check_video_stage_raw_output_policy(root, ep)
     clips = clip_files(root, ep)
@@ -2301,8 +2318,12 @@ def check_video_assets(root: str, ep: str) -> None:
         add(BLOCK, "视频", os.path.join(root, "出视频", ep, "视频"), "缺 clip MP4")
         return
     sb = load_storyboard(root, ep)
+    final_timeline_ok = _final_timeline_probe_passes(root, ep)
     if sb and len(clips) != len(sb.get("clips", [])):
-        add(WARN, "视频", os.path.join(root, "出视频", ep, "视频"), f"clip 数 {len(clips)} 与 storyboard clips {len(sb.get('clips', []))} 不一致")
+        sev = INFO if final_timeline_ok else WARN
+        tail = "；final_timeline_probe 已验证成片时间线，raw split 数量差异仅作原料说明" if final_timeline_ok else ""
+        add(sev, "视频", os.path.join(root, "出视频", ep, "视频"),
+            f"clip 数 {len(clips)} 与 storyboard clips {len(sb.get('clips', []))} 不一致{tail}")
     audio_probe = [(c, has_audio(c)) for c in clips]
     audio_hits = [c for c, a in audio_probe if a]
     unprobeable = [c for c, a in audio_probe if a is None]
@@ -2330,7 +2351,9 @@ def check_video_assets(root: str, ep: str) -> None:
         if all(d is not None for d in actuals):
             total = sum(d for d in actuals if d is not None)
             if abs(total - target) > 1.0:
-                add(WARN, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s")
+                sev = INFO if final_timeline_ok else WARN
+                tail = "；final_timeline_probe 已验证最终成片时长，raw split 总长差异仅作原料说明" if final_timeline_ok else ""
+                add(sev, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s{tail}")
 def check_compose_inputs(root: str, ep: str) -> None:
     check_video_assets(root, ep)
     check_placeholder_policy(root, ep, "compose")

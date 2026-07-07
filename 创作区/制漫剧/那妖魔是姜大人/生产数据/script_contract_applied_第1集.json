@@ -1,13 +1,22 @@
 {
   "accepted": true,
-  "contract_content_hash": "c6709e7a0edc572f",
-  "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+  "contract_content_hash": "6d65899937eb7828",
+  "contract_file_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
   "contract_path": "生产数据/script_quality_contract_第1集.json",
-  "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+  "contract_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
+  "deferred_source_trace_ids": [
+    "SRC_PROMISE_002",
+    "SRC_PROMISE_003",
+    "SRC_PROMISE_004",
+    "SRC_MOTIVE_002",
+    "SRC_CAUSE_003",
+    "SRC_CAUSE_004",
+    "SRC_FORESHADOW_003"
+  ],
   "episode": "第1集",
   "kind": "n2d_script_contract_application",
-  "reviewed_at": "2026-07-06T12:20:40+00:00",
-  "reviewer": "n2d-video prompt author",
+  "reviewed_at": "2026-07-07T06:08:25+00:00",
+  "reviewer": "Codex production debt refresh 2026-07-07",
   "scopes": [
     {
       "applied_clip_ids": [
@@ -27,22 +36,42 @@
         "core_attraction",
         "first_3s_visual_hook",
         "retention_promise_ledger",
+        "pacing_allocation",
         "clip_dramatic_function",
         "audience_question_ledger",
         "performance_cues"
       ],
-      "contract_content_hash": "c6709e7a0edc572f",
-      "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "contract_content_hash": "6d65899937eb7828",
+      "contract_file_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
       "contract_path": "生产数据/script_quality_contract_第1集.json",
-      "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
-      "evidence": [
-        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
-        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      "contract_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
+      "deferred_source_trace_ids": [
+        "SRC_PROMISE_002",
+        "SRC_PROMISE_003",
+        "SRC_PROMISE_004",
+        "SRC_MOTIVE_002",
+        "SRC_CAUSE_003",
+        "SRC_CAUSE_004",
+        "SRC_FORESHADOW_003"
       ],
-      "prompt_path": "出视频/第1集/prompt/01_clips.md",
-      "prompt_sha256": "f7b212e11954c0f34cfdd996541e985ff6188ea54ceeed1f46fdf094e21f8cdf",
-      "reviewed_at": "2026-07-03T12:57:40+00:00",
-      "scope": "出视频"
+      "evidence": [
+        "出图 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
+        "逐镜出图 prompt 已承接 dramatic_function/audience_effect/pacing_allocation，构图、表演和画面信息不改写剧本承诺。",
+        "source_trace_ids 已按第1集 episode_trace_scope 贯通到出图/出视频签收收据；第2/3集线索只登记 deferred，不作为本集阻断。"
+      ],
+      "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
+      "prompt_sha256": "97304a0879767eb116c91892f6924e88ffb7d25b5fb20b642e239b731bf7178e",
+      "reviewed_at": "2026-07-07T05:46:55+00:00",
+      "scope": "出图",
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_001",
+        "SRC_CAUSE_002",
+        "SRC_FORESHADOW_001",
+        "SRC_FORESHADOW_002"
+      ]
     },
     {
       "applied_clip_ids": [
@@ -62,22 +91,95 @@
         "core_attraction",
         "first_3s_visual_hook",
         "retention_promise_ledger",
+        "pacing_allocation",
         "clip_dramatic_function",
         "audience_question_ledger",
         "performance_cues"
       ],
-      "contract_content_hash": "c6709e7a0edc572f",
-      "contract_file_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
+      "contract_content_hash": "6d65899937eb7828",
+      "contract_file_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
       "contract_path": "生产数据/script_quality_contract_第1集.json",
-      "contract_sha256": "d9cf45f1791ac2c77fd40ed66c24320c95a445fc16bae941a272c58d98843f56",
-      "evidence": [
-        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺和观众问题处理。",
-        "逐 Clip prompt 已承接 dramatic_function/audience_effect，运动与表演不改写剧本承诺。"
+      "contract_sha256": "bca34fca327835ea65019457b925d3c2f356cef0991946057c46562f49467fe8",
+      "deferred_source_trace_ids": [
+        "SRC_PROMISE_002",
+        "SRC_PROMISE_003",
+        "SRC_PROMISE_004",
+        "SRC_MOTIVE_002",
+        "SRC_CAUSE_003",
+        "SRC_CAUSE_004",
+        "SRC_FORESHADOW_003"
       ],
-      "prompt_path": "出图/第1集/prompt/01_分镜出图.md",
-      "prompt_sha256": "6b92fdf8e29cdcef7a2a8fd0c0a4444f38f801611e3af0efed3e2f3e0b557461",
-      "reviewed_at": "2026-07-06T12:20:40+00:00",
-      "scope": "出图"
+      "evidence": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。",
+        "source_trace_ids 已继承到本 scope 签收收据；延期线索只登记 deferred，不作为本集消费阻断。"
+      ],
+      "prompt_path": "出视频/第1集/prompt/01_clips.md",
+      "prompt_sha256": "12152ccddb20927101703301abd76fa463e4e3847f04c0764960e8d319e7a5b6",
+      "reviewed_at": "2026-07-07T06:08:25+00:00",
+      "scope": "出视频",
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_001",
+        "SRC_CAUSE_002",
+        "SRC_FORESHADOW_001",
+        "SRC_FORESHADOW_002"
+      ],
+      "source_trace_scope": {
+        "deferred_trace_ids": [
+          "SRC_PROMISE_002",
+          "SRC_PROMISE_003",
+          "SRC_PROMISE_004",
+          "SRC_MOTIVE_002",
+          "SRC_CAUSE_003",
+          "SRC_CAUSE_004",
+          "SRC_FORESHADOW_003"
+        ],
+        "episode": "第1集",
+        "rationale": "第1集只打开尸场求生、百妖谱杀妖得道行、裴长青压力/身份物证和长期心理债种子；第2/3集以后才打开的贱籍通行、上盘村、狼妖小弧等不应作为第1集消费阻断。",
+        "required_trace_ids": [
+          "SRC_PROMISE_001",
+          "SRC_MOTIVE_001",
+          "SRC_MOTIVE_003",
+          "SRC_CAUSE_001",
+          "SRC_CAUSE_002",
+          "SRC_FORESHADOW_001",
+          "SRC_FORESHADOW_002"
+        ]
+      }
     }
-  ]
+  ],
+  "source_trace_ids": [
+    "SRC_PROMISE_001",
+    "SRC_MOTIVE_001",
+    "SRC_MOTIVE_003",
+    "SRC_CAUSE_001",
+    "SRC_CAUSE_002",
+    "SRC_FORESHADOW_001",
+    "SRC_FORESHADOW_002"
+  ],
+  "source_trace_scope": {
+    "deferred_trace_ids": [
+      "SRC_PROMISE_002",
+      "SRC_PROMISE_003",
+      "SRC_PROMISE_004",
+      "SRC_MOTIVE_002",
+      "SRC_CAUSE_003",
+      "SRC_CAUSE_004",
+      "SRC_FORESHADOW_003"
+    ],
+    "episode": "第1集",
+    "rationale": "第1集只打开尸场求生、百妖谱杀妖得道行、裴长青压力/身份物证和长期心理债种子；第2/3集以后才打开的贱籍通行、上盘村、狼妖小弧等不应作为第1集消费阻断。",
+    "required_trace_ids": [
+      "SRC_PROMISE_001",
+      "SRC_MOTIVE_001",
+      "SRC_MOTIVE_003",
+      "SRC_CAUSE_001",
+      "SRC_CAUSE_002",
+      "SRC_FORESHADOW_001",
+      "SRC_FORESHADOW_002"
+    ]
+  }
 }

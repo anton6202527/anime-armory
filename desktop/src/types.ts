@@ -88,6 +88,26 @@ export interface WorkChangeDetail {
   message: string;
 }
 
+export interface WorkSearchMatch {
+  line: number;
+  preview: string;
+}
+
+export interface WorkSearchResult {
+  path: string;
+  name: string;
+  size: number;
+  name_match: boolean;
+  matches: WorkSearchMatch[];
+}
+
+export interface WorkSearchResponse {
+  query: string;
+  results: WorkSearchResult[];
+  scanned: number;
+  capped: boolean;
+}
+
 export interface WorkFileWriteResult {
   size: number;
   mtime: number;
@@ -227,7 +247,7 @@ export interface CanvasQualitySummary {
 }
 
 export interface CanvasData {
-  source: "review_ui" | "storyboard" | "none";
+  source: "review_ui" | "storyboard" | "panel_script" | "none";
   episode: string;
   title?: string;
   total_duration?: number;
@@ -235,6 +255,68 @@ export interface CanvasData {
   clips: CanvasClip[];
   seams: CanvasSeam[];
   quality?: CanvasQualitySummary;
+}
+
+export interface QualityInsightMetric {
+  label: string;
+  value: string;
+  tone?: "pass" | "warn" | "block" | "info" | string;
+}
+
+export interface QualityInsightDimension {
+  key?: string;
+  label: string;
+  score?: number;
+  value?: string;
+  max?: number;
+  status?: string;
+  blocks: number;
+  warnings: number;
+  infos: number;
+  detail?: string;
+  evidence: string[];
+}
+
+export interface QualityInsightIssue {
+  severity: "block" | "warn" | "info" | string;
+  dimension?: string;
+  title: string;
+  message?: string;
+  stage?: string;
+  path?: string;
+  source?: string;
+}
+
+export interface QualityInsightTask {
+  priority?: string;
+  title: string;
+  skill?: string;
+  stage?: string;
+  detail?: string;
+}
+
+export interface QualityInsightArtifact {
+  label: string;
+  path: string;
+  exists: boolean;
+  kind?: string;
+}
+
+export interface QualityInsights {
+  line: LineKey | string;
+  episode?: string;
+  status?: string;
+  score?: number;
+  verdict?: string;
+  blocks: number;
+  warnings: number;
+  infos: number;
+  metrics: QualityInsightMetric[];
+  dimensions: QualityInsightDimension[];
+  issues: QualityInsightIssue[];
+  tasks: QualityInsightTask[];
+  artifacts: QualityInsightArtifact[];
+  source_files: string[];
 }
 
 export interface EpisodeWorkspaceIssue {

@@ -1,0 +1,136 @@
+{
+  "backend_results": [
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "character_turnaround",
+      "score": null,
+      "status": "needs_run"
+    },
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "core_prop_transfer",
+      "score": null,
+      "status": "needs_run"
+    },
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "same_scene_multiview",
+      "score": null,
+      "status": "needs_run"
+    },
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "physical_interaction",
+      "score": null,
+      "status": "needs_run"
+    },
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "state_transition",
+      "score": null,
+      "status": "needs_run"
+    },
+    {
+      "backend": "seedance",
+      "notes": "route primary backend registered for future probe; no fake score",
+      "scenario": "native_av_dialogue",
+      "score": null,
+      "status": "needs_run"
+    }
+  ],
+  "kind": "n2d_consistency_probe_pack",
+  "latest_result": "initialized_from_current_production_evidence_no_heavy_probe_run",
+  "notes": [
+    "该 probe pack 是哨兵清单与输入指纹，不代表已完成 VLM/DINOv2/SyncNet 评测。"
+  ],
+  "run_id": "probe-pack-init-20260707",
+  "scenarios": [
+    {
+      "assets": [
+        "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+        "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png"
+      ],
+      "baseline_hash": "7ce5d641a1a4eac0",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "7fd7cec7acc28a31",
+      "scenario": "character_turnaround",
+      "status": "initialized_needs_probe_run"
+    },
+    {
+      "assets": [
+        "出图/共享/图片/定妆_武器_横刀.png",
+        "脚本/第1集/storyboard.json"
+      ],
+      "baseline_hash": "99d01454764b5f38",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "b2df727c74c73f06",
+      "scenario": "core_prop_transfer",
+      "status": "initialized_needs_probe_run"
+    },
+    {
+      "assets": [
+        "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+        "出图/第1集/图片/Clip01_first.png",
+        "出图/第1集/图片/Clip02_first.png"
+      ],
+      "baseline_hash": "d5b39cb22a94db51",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "b78c378144ac4aa4",
+      "scenario": "same_scene_multiview",
+      "status": "initialized_needs_probe_run"
+    },
+    {
+      "assets": [
+        "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+        "生产数据/state_transition_manifest_第1集.json"
+      ],
+      "baseline_hash": "c9a5417b36d14dc6",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "7e942de809c6717b",
+      "scenario": "physical_interaction",
+      "status": "initialized_needs_probe_run"
+    },
+    {
+      "assets": [
+        "生产数据/state_transition_manifest_第1集.json",
+        "生产数据/state_transition_frames/第1集/Clip_10_before.jpg",
+        "生产数据/state_transition_frames/第1集/Clip_10_after.jpg"
+      ],
+      "baseline_hash": "de8c4df960d95c89",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "226ded8feae97116",
+      "scenario": "state_transition",
+      "status": "initialized_needs_probe_run"
+    },
+    {
+      "assets": [
+        "生产数据/dialogue_av_alignment_第1集.json",
+        "合成/第1集/配音/voice_zh_fitted.wav"
+      ],
+      "baseline_hash": "72ae67cd233a9962",
+      "checks": [
+        "identity/scene/state/interaction regression sentinel"
+      ],
+      "input_fingerprint": "5cb4353e709cc9f5",
+      "scenario": "native_av_dialogue",
+      "status": "initialized_needs_probe_run"
+    }
+  ],
+  "updated_at": "2026-07-07T05:29:44+00:00",
+  "version": 1
+}

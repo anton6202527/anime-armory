@@ -25,9 +25,9 @@ import {
   renameWorkEntry,
   revealWorkEntry,
   subscribeMediaPort,
-  workDeleted,
   workDir,
 } from "../api";
+import { buildWorkTreeDecorations, type WorkTreeDecoration } from "../explorerDecorations";
 import { useI18n } from "../i18n";
 import { activeSkin, type FileIconKind } from "../skins";
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
@@ -154,10 +154,6 @@ function TreeIcon({ entry, collapsed }: { entry: SkillTreeEntry; collapsed: bool
   );
 }
 
-function hasChangeStatus(status?: string): boolean {
-  return status === "u" || status === "m";
-}
-
 function treeGuideStyle(depth: number): CSSProperties {
   if (depth <= 0) return {};
   const guide = "linear-gradient(var(--tree-indent-guide), var(--tree-indent-guide))";
@@ -228,10 +224,25 @@ function makeLoadMoreEntry(dir: string, page: DirPageState): SkillTreeEntry {
   };
 }
 
+function decorationTitle(
+  t: ReturnType<typeof useI18n>["t"],
+  entry: SkillTreeEntry,
+  decoration: WorkTreeDecoration,
+): string {
+  const kind =
+    decoration.kind === "modified"
+      ? t("files.decoration.modified")
+      : decoration.kind === "deleted"
+        ? t("files.decoration.deleted")
+        : t("files.decoration.untracked");
+  return entry.is_dir || decoration.rollup
+    ? t("files.decoration.folderTitle", { path: entry.path, kind })
+    : t("files.decoration.fileTitle", { path: entry.path, kind });
+}
+
 export function FilesPane({
   root,
   refreshKey,
-  initialChangeCount,
   allowNovelImport = false,
   active = true,
   onImported,
@@ -239,7 +250,6 @@ export function FilesPane({
 }: {
   root: WorkRoot;
   refreshKey: number;
-  initialChangeCount?: number;
   allowNovelImport?: boolean;
   active?: boolean;
   onImported?: (result: ImportWorkSourcesResult) => void;
@@ -255,7 +265,6 @@ export function FilesPane({
   const collapsedDirsRef = useRef<Set<string>>(new Set());
   const [tree, setTree] = useState<SkillTreeEntry[]>([]);
   const [dirPages, setDirPages] = useState<Map<string, DirPageState>>(() => new Map());
-  const [deleted, setDeleted] = useState<string[]>([]);
   const [collapsedDirs, setCollapsedDirs] = useState<Set<string>>(() => new Set());
   const [treeScrollTop, setTreeScrollTop] = useState(0);
   const [treeViewportHeight, setTreeViewportHeight] = useState(0);
@@ -336,7 +345,6 @@ export function FilesPane({
     setEditorDirty(false);
     setTree([]);
     setDirPages(new Map());
-    setDeleted([]);
     setTreeScrollTop(0);
     treeScrollRef.current?.scrollTo({ top: 0 });
     previewCacheRef.current.clear();
@@ -405,10 +413,13 @@ export function FilesPane({
         const loadedOpenDirs = [...dirPagesRef.current.keys()]
           .filter((dir) => dir && !collapsedDirsRef.current.has(dir))
           .sort((a, b) => directChildDepth(a) - directChildDepth(b));
-        const [listing, nextDeleted] = await Promise.all([
-          workDir(root.path, "", 0, TREE_PAGE_LIMIT).catch(() => ({ entries: [], total: 0, offset: 0, limit: TREE_PAGE_LIMIT, has_more: false })),
-          workDeleted(root.path).catch(() => [] as string[]),
-        ]);
+        const listing = await workDir(root.path, "", 0, TREE_PAGE_LIMIT).catch(() => ({
+          entries: [],
+          total: 0,
+          offset: 0,
+          limit: TREE_PAGE_LIMIT,
+          has_more: false,
+        }));
         if (!alive) return;
         const rootPage: DirPageState = {
           loaded: listing.entries.length,
@@ -438,7 +449,6 @@ export function FilesPane({
         }
         setTree(nextTree);
         setDirPages(nextPages);
-        setDeleted(nextDeleted);
         if (!collapseInitializedRef.current) {
           collapseInitializedRef.current = true;
           setCollapsedDirs(new Set(listing.entries.filter((e) => e.is_dir && e.depth === 0).map((e) => e.path)));
@@ -452,12 +462,7 @@ export function FilesPane({
     };
   }, [root.path, refreshKey, localRefresh]);
 
-  const changedFileCount = useMemo(
-    () => tree.filter((e) => !e.is_dir && !e.truncated && hasChangeStatus(e.status)).length,
-    [tree],
-  );
-  const scannedChangeCount = changedFileCount + deleted.length;
-  const changeCount = initialChangeCount ?? scannedChangeCount;
+  const treeDecorations = useMemo(() => buildWorkTreeDecorations(tree), [tree]);
 
   function absPath(rel: string): string {
     return rel ? `${root.path}/${rel}` : root.path;
@@ -855,11 +860,6 @@ export function FilesPane({
       }}
     >
       <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
-        <div className="files-toolbar">
-          <span className={"files-change-count" + (changeCount ? " dirty" : "")}>
-            {changeCount ? t("files.changeCount", { count: changeCount }) : t("files.noChanges")}
-          </span>
-        </div>
         <div
           className="files-tree"
           role="tree"
@@ -904,11 +904,15 @@ export function FilesPane({
                 }
                 const collapsed = e.is_dir && collapsedDirs.has(e.path);
                 const active = e.path === sel || e.path === focusedPath;
+                const decoration = treeDecorations.get(e.path);
                 return (
                   <div
                     key={e.path}
                     className={
-                      "tree-line" + (e.is_dir ? " dir" : "") + (active ? " active" : "")
+                      "tree-line" +
+                      (e.is_dir ? " dir" : "") +
+                      (active ? " active" : "") +
+                      (decoration ? ` decorated decoration-${decoration.kind}` : "")
                     }
                     style={{
                       ...treeGuideStyle(e.depth),
@@ -939,6 +943,15 @@ export function FilesPane({
                     />
                     <TreeIcon entry={e} collapsed={collapsed} />
                     <span className="tree-label">{e.name}</span>
+                    {decoration && (
+                      <span
+                        className={"tree-decoration" + (e.is_dir || decoration.rollup ? " rollup" : "")}
+                        title={decorationTitle(t, e, decoration)}
+                        aria-label={decorationTitle(t, e, decoration)}
+                      >
+                        {e.is_dir || decoration.rollup ? "" : decoration.marker}
+                      </span>
+                    )}
                   </div>
                 );
               })}

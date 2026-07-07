@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "ad_timeline",
+  "duration_sec": 30,
+  "aspect": "9:16",
+  "clips": [
+    {
+      "id": "C01",
+      "start": 0,
+      "end": 4,
+      "function": "hook",
+      "visual": "night desk with scattered notes, phone notifications, warm realistic lighting",
+      "vo": "今天的照片、语音、待办，都散在不同角落。"
+    },
+    {
+      "id": "C02",
+      "start": 4,
+      "end": 9,
+      "function": "pain",
+      "visual": "young creator sits down, tired, blank journal page open",
+      "vo": "你不用再把一天重新整理一遍。"
+    },
+    {
+      "id": "C03",
+      "start": 9,
+      "end": 16,
+      "function": "product_demo",
+      "visual": "abstract app cards collect photo, voice note and todo into a daily journal page",
+      "vo": "打开星盒，把碎片收成一页手账。"
+    },
+    {
+      "id": "C04",
+      "start": 16,
+      "end": 22,
+      "function": "benefit",
+      "visual": "unfinished task folds into tomorrow checklist, interface becomes calm and clean",
+      "vo": "没完成的事，也会安静变成明日清单。"
+    },
+    {
+      "id": "C05",
+      "start": 22,
+      "end": 27,
+      "function": "emotional_payoff",
+      "visual": "user saves the page, warm room settles, relaxed expression",
+      "vo": "星盒手账 App，把今天稳稳收好。"
+    },
+    {
+      "id": "C06",
+      "start": 27,
+      "end": 30,
+      "function": "cta",
+      "visual": "end card with brand name, slogan and CTA",
+      "vo": "立即预约内测。"
+    }
+  ]
+}

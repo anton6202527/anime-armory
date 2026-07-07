@@ -53,372 +53,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "audio_visual_sync"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "配音",
-          "dim_key": "audio_visual_sync",
-          "dimension": "配音",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "第1集",
-          "message": "先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
-          "msg": "先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "资产引用注册层"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "资产引用注册层",
-          "dim_key": "资产引用注册层",
-          "dimension": "资产引用注册层",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
-          "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "video_prompt",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "人物在场链"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
-          "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：尸骸前景、荒野尸场。若是有意不连续，请把转场写清楚。",
-          "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：尸骸前景、荒野尸场。若是有意不连续，请把转场写清楚。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
-          "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#4→clip#5",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎山神摹影。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎山神摹影。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5→clip#6",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
-          "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎山神摹影。若是有意不连续，请把转场写清楚。",
-          "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎山神摹影。若是有意不连续，请把转场写清楚。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：VFX_系统面板。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：VFX_系统面板。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7→clip#8",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#9→clip#10",
-          "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
-          "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "人物在场链",
-          "dim_key": "人物在场链",
-          "dimension": "人物在场链",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#10→clip#11",
-          "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "生视频后端连通性"
       ],
       "findings": [
@@ -449,63 +83,6 @@
       ],
       "return_to_stage": "video_prompt",
       "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第1集/prompt",
-        "出视频/第1集/prompt",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "semantic_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "出图/第1集/prompt",
-            "出视频/第1集/prompt",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "语义谱系(P0)",
-          "dim_key": "semantic_continuity",
-          "dimension": "语义谱系(P0)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "storyboard.json",
-          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-          "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json",
-            "出图/第1集/prompt",
-            "出视频/第1集/prompt"
-          ],
-          "affected_shots": [],
-          "dim": "语义谱系(P0)",
-          "dim_key": "semantic_continuity",
-          "dimension": "语义谱系(P0)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-          "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-          "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。；回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位产物：出图/第1集/prompt、出视频/第1集/prompt、脚本/第1集/storyboard.json"
     },
     {
       "affected_artifacts": [
@@ -551,136 +128,13 @@
     },
     {
       "affected_artifacts": [
-        "出图/共享/图片",
-        "出图/第1集/图片"
+        "出图/共享/图片"
       ],
-      "affected_shots": [
-        "Clip_08"
-      ],
+      "affected_shots": [],
       "dimensions": [
         "character_consistency"
       ],
       "findings": [
-        {
-          "affected_artifacts": [
-            "出图/共享/图片"
-          ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
-          "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/共享/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "dim": "脸(G1)",
-          "dim_key": "character_consistency",
-          "dimension": "脸(G1)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/第1集/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "dim": "脸(G1)",
-          "dim_key": "character_consistency",
-          "dimension": "脸(G1)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/第1集/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/第1集/图片"
-          ],
-          "affected_shots": [
-            "Clip_08"
-          ],
-          "dim": "脸(G1)",
-          "dim_key": "character_consistency",
-          "dimension": "脸(G1)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/第1集/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/共享/图片"
-          ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
-          "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/共享/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "出图/共享/图片"
-          ],
-          "affected_shots": [],
-          "dim": "锚点门(N3)",
-          "dim_key": "character_consistency",
-          "dimension": "锚点门(N3)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "出图/共享/图片",
-          "message": "一致性审计发现问题",
-          "msg": "一致性审计发现问题",
-          "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "return_to_stage": "image",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        },
         {
           "affected_artifacts": [
             "出图/共享/图片"
@@ -692,8 +146,8 @@
           "episode": "第1集",
           "gate_stage": "video",
           "loc": "出图/共享/图片",
-          "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
-          "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
+          "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
           "return_to_stage": "image",
           "sev": "warn",
@@ -702,43 +156,7 @@
         }
       ],
       "return_to_stage": "image",
-      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位镜头：Clip_08；定位产物：出图/共享/图片、出图/第1集/图片"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dimensions": [
-        "interaction_continuity"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "Clip_04"
-          ],
-          "dim": "结构化交互图谱(I2)",
-          "dim_key": "interaction_continuity",
-          "dimension": "结构化交互图谱(I2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_04；定位产物：脚本/第1集/storyboard.json"
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：出图/共享/图片"
     },
     {
       "affected_artifacts": [
@@ -750,7 +168,10 @@
         "Clip_03",
         "Clip_04",
         "Clip_05",
-        "Clip_06"
+        "Clip_06",
+        "Clip_07",
+        "Clip_09",
+        "Clip_10"
       ],
       "dimensions": [
         "multimodal_continuity"
@@ -865,267 +286,170 @@
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_01、Clip_03、Clip_04、Clip_05、Clip_06；定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "production_ops_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
         },
         {
           "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "强配方Schema(RCP2)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "强配方Schema(RCP2)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/配音/voice_zh.wav"
-          ],
-          "affected_shots": [],
-          "dim": "生成配方(RCP)",
-          "dim_key": "production_ops_consistency",
-          "dimension": "生成配方(RCP)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "生产数据/production_events.jsonl",
-          "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "return_to_stage": "video",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "video",
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、脚本/第1集/storyboard.json、合成/第1集/配音/voice_zh.wav"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "EP01_CLIP01",
-        "EP01_CLIP02",
-        "EP01_CLIP03",
-        "EP01_CLIP04",
-        "EP01_CLIP05",
-        "EP01_CLIP06",
-        "EP01_CLIP07",
-        "EP01_CLIP08",
-        "EP01_CLIP09",
-        "EP01_CLIP10",
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09",
-        "Clip_10"
-      ],
-      "dimensions": [
-        "rhythm_density"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [],
-          "dim": "节奏密度(Rhythm)",
-          "dim_key": "rhythm_density",
-          "dimension": "节奏密度(Rhythm)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：57.4。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9a99f143f2f5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：57.4。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9a99f143f2f5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
+            "生产数据/video_semantic_consistency_第1集.json",
+            "出视频/第1集/video_semantic_consistency.json"
           ],
           "affected_shots": [
-            "EP01_CLIP01",
-            "EP01_CLIP02",
-            "EP01_CLIP03",
-            "EP01_CLIP04",
-            "EP01_CLIP05",
-            "EP01_CLIP06",
-            "EP01_CLIP07",
-            "EP01_CLIP08",
-            "EP01_CLIP09",
-            "EP01_CLIP10",
-            "Clip_01",
-            "Clip_02",
-            "Clip_03",
-            "Clip_04",
-            "Clip_05",
-            "Clip_06",
-            "Clip_07",
-            "Clip_08",
-            "Clip_09",
+            "Clip_07"
+          ],
+          "dim": "视频语义一致(VSEM)",
+          "dim_key": "multimodal_continuity",
+          "dimension": "视频语义一致(VSEM)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/video_semantic_consistency_第1集.json",
+          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/video_semantic_consistency_第1集.json",
+            "出视频/第1集/video_semantic_consistency.json"
+          ],
+          "affected_shots": [
+            "Clip_09"
+          ],
+          "dim": "视频语义一致(VSEM)",
+          "dim_key": "multimodal_continuity",
+          "dimension": "视频语义一致(VSEM)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/video_semantic_consistency_第1集.json",
+          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "生产数据/video_semantic_consistency_第1集.json",
+            "出视频/第1集/video_semantic_consistency.json"
+          ],
+          "affected_shots": [
             "Clip_10"
           ],
-          "dim": "节奏密度(Rhythm)",
-          "dim_key": "rhythm_density",
-          "dimension": "节奏密度(Rhythm)",
+          "dim": "视频语义一致(VSEM)",
+          "dim_key": "multimodal_continuity",
+          "dimension": "视频语义一致(VSEM)",
           "episode": "第1集",
           "gate_stage": "video",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "[production一致性升级:重复同维度] 连续 10 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=fa86bf249f1e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 连续 10 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=fa86bf249f1e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        },
-        {
-          "affected_artifacts": [
-            "脚本/第1集/storyboard.json"
-          ],
-          "affected_shots": [
-            "EP01_CLIP01",
-            "Clip_01"
-          ],
-          "dim": "节奏密度(Rhythm)",
-          "dim_key": "rhythm_density",
-          "dimension": "节奏密度(Rhythm)",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "脚本/第1集/storyboard.json",
-          "message": "[production一致性升级:重复同维度] 开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 死人堆惊醒』），疑慢热；开场镜时长 9.2s > 5s，前3秒易掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=146080d0375f，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "msg": "[production一致性升级:重复同维度] 开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 死人堆惊醒』），疑慢热；开场镜时长 9.2s > 5s，前3秒易掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=146080d0375f，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-          "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-          "return_to_stage": "script_stage2",
-          "sev": "block",
-          "severity": "block",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。；定位镜头：EP01_CLIP01、EP01_CLIP02、EP01_CLIP03、EP01_CLIP04、EP01_CLIP05、EP01_CLIP06、EP01_CLIP07、EP01_CLIP08、EP01_CLIP09、EP01_CLIP10、Clip_01、Clip_02、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_08、Clip_09、Clip_10；定位产物：脚本/第1集/storyboard.json"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dimensions": [
-        "fidelity-gate"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第1集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/第1集/图片",
-            "出视频/第1集/prompt",
-            "出视频/第1集/视频"
-          ],
-          "affected_shots": [],
-          "dim": "fidelity-gate",
-          "dim_key": "fidelity-gate",
-          "dimension": "fidelity-gate",
-          "episode": "第1集",
-          "gate_stage": "video",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
-          "message": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
-          "msg": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
-          "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-          "return_to_stage": "video_prompt",
+          "loc": "生产数据/video_semantic_consistency_第1集.json",
+          "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "return_to_stage": "video",
           "sev": "warn",
           "severity": "warn",
           "source": "n2d-dashboard/gate"
         }
       ],
-      "return_to_stage": "video_prompt",
-      "scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json、出图/共享/identity_registry.json、出图/第1集/图片、出视频/第1集/prompt、出视频/第1集/视频"
+      "return_to_stage": "video",
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位镜头：Clip_01、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_09、Clip_10；定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_consistency.json"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/video_vlm_consistency_第1集.json",
+        "出视频/第1集/video_vlm_consistency.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "semantic_continuity"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "生产数据/video_vlm_consistency_第1集.json",
+            "出视频/第1集/video_vlm_consistency.json"
+          ],
+          "affected_shots": [],
+          "dim": "视频VLM判题(VLM1)",
+          "dim_key": "semantic_continuity",
+          "dimension": "视频VLM判题(VLM1)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "生产数据/video_vlm_consistency_第1集.json",
+          "message": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "msg": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+          "return_to_stage": "video",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "video",
+      "scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。；定位产物：生产数据/video_vlm_consistency_第1集.json、出视频/第1集/video_vlm_consistency.json"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/asset_registry.json"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dimensions": [
+        "scene_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/共享/asset_registry.json"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "场景(O2)",
+          "dim_key": "scene_consistency",
+          "dimension": "场景(O2)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "出图/第1集/图片",
+            "出图/共享/asset_registry.json"
+          ],
+          "affected_shots": [
+            "Clip_07"
+          ],
+          "dim": "场景(O2)",
+          "dim_key": "scene_consistency",
+          "dimension": "场景(O2)",
+          "episode": "第1集",
+          "gate_stage": "video",
+          "loc": "出图/第1集/图片",
+          "message": "一致性审计发现问题",
+          "msg": "一致性审计发现问题",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "return_to_stage": "image",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "image",
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位镜头：Clip_07；定位产物：出图/第1集/图片、出图/共享/asset_registry.json"
     },
     {
       "affected_artifacts": [
@@ -1157,8 +481,8 @@
           "episode": "第1集",
           "gate_stage": "video",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "另有 97 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-          "msg": "另有 97 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "msg": "另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
           "return_to_stage": "review",
           "sev": "warn",
@@ -1206,326 +530,14 @@
         "出视频/第1集/视频"
       ],
       "affected_shots": [],
-      "dim": "配音",
-      "dim_key": "audio_visual_sync",
-      "dimension": "配音",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "第1集",
-      "message": "先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
-      "msg": "先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "资产引用注册层",
-      "dim_key": "资产引用注册层",
-      "dimension": "资产引用注册层",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/出图/共享/asset_registry.json asset#3",
-      "message": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-      "msg": "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
-      "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：尸骸前景、荒野尸场。若是有意不连续，请把转场写清楚。",
-      "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：尸骸前景、荒野尸场。若是有意不连续，请把转场写清楚。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#1→clip#2",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、巨岩、黑色妖血。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-      "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
-      "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、巨岩、黑色妖血。若是有意不连续，请把转场写清楚。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#2→clip#3",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_02、WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#4→clip#5",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎山神摹影。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03、VFX_虎山神摹影。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#5→clip#6",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：WEAPON_01。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
-      "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎山神摹影。若是有意不连续，请把转场写清楚。",
-      "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03、VFX_虎山神摹影。若是有意不连续，请把转场写清楚。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6→clip#7",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：VFX_系统面板。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：VFX_系统面板。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7→clip#8",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#9→clip#10",
-      "message": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
-      "msg": "实体从上一 Clip 消失但缺出画/画外/换场解释：CHAR_03。若是有意不连续，请把转场写清楚。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "人物在场链",
-      "dim_key": "人物在场链",
-      "dimension": "人物在场链",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#10→clip#11",
-      "message": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-      "msg": "实体在下一 Clip 出现但缺入画/换场解释：CHAR_03。若是新入场，请把 entry_exit 写成机器真值。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
       "dim": "导演运镜落实",
       "dim_key": "导演运镜落实",
       "dimension": "导演运镜落实",
       "episode": "第1集",
       "gate_stage": "video",
       "loc": "创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
-      "message": "director_camera_plan_第1集.json（11 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
-      "msg": "director_camera_plan_第1集.json（11 镜）的出图运镜注入已逐镜签收落实（director_camera_plan_applied_第1集.json·SHA 绑定 plan+prompt）。",
+      "message": "director_camera_plan_第1集.json（11 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
+      "msg": "director_camera_plan_第1集.json（11 镜）的出图运镜词汇已现身 prompt 包（命中 5/5：起幅、运动余量、构图防呆、导演意图、镜头/机位）——文档级已消费。要逐镜精确归属请落 director_camera_plan_applied_第1集.json（结构化签收）。",
       "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "image",
       "sev": "info",
@@ -1654,27 +666,6 @@
     },
     {
       "affected_artifacts": [
-        "出图/第1集/prompt",
-        "出视频/第1集/prompt",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "语义谱系(P0)",
-      "dim_key": "semantic_continuity",
-      "dimension": "语义谱系(P0)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "storyboard.json",
-      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-      "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。；缺：钩子",
-      "rerun_scope": "修 storyboard→出图/出视频 prompt 的语义继承缺口；必要时重跑 n2d-script 阶段2。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
         "合规/compliance_manifest.json",
         "脚本/第1集/storyboard.json",
         "出图/共享/identity_registry.json",
@@ -1702,176 +693,14 @@
         "出图/共享/图片"
       ],
       "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/共享/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [
-        "Clip_04"
-      ],
-      "dim": "结构化交互图谱(I2)",
-      "dim_key": "interaction_continuity",
-      "dimension": "结构化交互图谱(I2)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "msg": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dim": "脸(G1)",
-      "dim_key": "character_consistency",
-      "dimension": "脸(G1)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/第1集/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dim": "脸(G1)",
-      "dim_key": "character_consistency",
-      "dimension": "脸(G1)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/第1集/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/第1集/图片"
-      ],
-      "affected_shots": [
-        "Clip_08"
-      ],
-      "dim": "脸(G1)",
-      "dim_key": "character_consistency",
-      "dimension": "脸(G1)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/第1集/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/共享/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "affected_shots": [],
-      "dim": "锚点门(N3)",
-      "dim_key": "character_consistency",
-      "dimension": "锚点门(N3)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "出图/共享/图片",
-      "message": "一致性审计发现问题",
-      "msg": "一致性审计发现问题",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "return_to_stage": "image",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json",
-        "出图/第1集/prompt",
-        "出视频/第1集/prompt"
-      ],
-      "affected_shots": [],
-      "dim": "语义谱系(P0)",
-      "dim_key": "semantic_continuity",
-      "dimension": "语义谱系(P0)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-      "msg": "`钩子` 留存标记未进入 storyboard 节奏/导演意图。",
-      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "affected_shots": [],
       "dim": "跨集脸漂(G5)",
       "dim_key": "character_consistency",
       "dimension": "跨集脸漂(G5)",
       "episode": "第1集",
       "gate_stage": "video",
       "loc": "出图/共享/图片",
-      "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
-      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4429)，相对基线掉幅 -0.0372，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "message": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "msg": "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
       "return_to_stage": "image",
       "sev": "warn",
@@ -1990,167 +819,132 @@
     },
     {
       "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "强配方Schema(RCP2)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "强配方Schema(RCP2)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=d09405458b41，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dim": "强配方Schema(RCP2)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "强配方Schema(RCP2)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=7ce84b0043c3，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "生成配方(RCP)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "生成配方(RCP)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 脚本/第1集/storyboard.json 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=ee84f2db209c284e，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=38f444c87a82，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/配音/voice_zh.wav"
-      ],
-      "affected_shots": [],
-      "dim": "生成配方(RCP)",
-      "dim_key": "production_ops_consistency",
-      "dimension": "生成配方(RCP)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "生产数据/production_events.jsonl",
-      "message": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 合成/第1集/配音/voice_zh.wav 生成事件缺配方字段：seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=584f6548fdede418，但复跑审计证据不完整。。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=80f4926f0ac5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "return_to_stage": "video",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
-      ],
-      "affected_shots": [],
-      "dim": "节奏密度(Rhythm)",
-      "dim_key": "rhythm_density",
-      "dimension": "节奏密度(Rhythm)",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：57.4。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9a99f143f2f5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 节奏/留存 advisory 总分偏低：57.4。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=9a99f143f2f5，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
+        "生产数据/video_semantic_consistency_第1集.json",
+        "出视频/第1集/video_semantic_consistency.json"
       ],
       "affected_shots": [
-        "EP01_CLIP01",
-        "EP01_CLIP02",
-        "EP01_CLIP03",
-        "EP01_CLIP04",
-        "EP01_CLIP05",
-        "EP01_CLIP06",
-        "EP01_CLIP07",
-        "EP01_CLIP08",
-        "EP01_CLIP09",
-        "EP01_CLIP10",
-        "Clip_01",
-        "Clip_02",
-        "Clip_03",
-        "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
-        "Clip_08",
-        "Clip_09",
+        "Clip_07"
+      ],
+      "dim": "视频语义一致(VSEM)",
+      "dim_key": "multimodal_continuity",
+      "dimension": "视频语义一致(VSEM)",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第1集.json",
+        "出视频/第1集/video_semantic_consistency.json"
+      ],
+      "affected_shots": [
+        "Clip_09"
+      ],
+      "dim": "视频语义一致(VSEM)",
+      "dim_key": "multimodal_continuity",
+      "dimension": "视频语义一致(VSEM)",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "生产数据/video_semantic_consistency_第1集.json",
+        "出视频/第1集/video_semantic_consistency.json"
+      ],
+      "affected_shots": [
         "Clip_10"
       ],
-      "dim": "节奏密度(Rhythm)",
-      "dim_key": "rhythm_density",
-      "dimension": "节奏密度(Rhythm)",
+      "dim": "视频语义一致(VSEM)",
+      "dim_key": "multimodal_continuity",
+      "dimension": "视频语义一致(VSEM)",
       "episode": "第1集",
       "gate_stage": "video",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "[production一致性升级:重复同维度] 连续 10 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=fa86bf249f1e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 连续 10 个长镜聚集（EP01_CLIP01→EP01_CLIP02→EP01_CLIP03→EP01_CLIP04→EP01_CLIP05→EP01_CLIP06→EP01_CLIP07→EP01_CLIP08→EP01_CLIP09→EP01_CLIP10），疑节奏塌·掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=fa86bf249f1e，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
+      "loc": "生产数据/video_semantic_consistency_第1集.json",
+      "message": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "msg": "DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
       "affected_artifacts": [
-        "脚本/第1集/storyboard.json"
+        "生产数据/video_vlm_consistency_第1集.json",
+        "出视频/第1集/video_vlm_consistency.json"
       ],
-      "affected_shots": [
-        "EP01_CLIP01",
-        "Clip_01"
-      ],
-      "dim": "节奏密度(Rhythm)",
-      "dim_key": "rhythm_density",
-      "dimension": "节奏密度(Rhythm)",
+      "affected_shots": [],
+      "dim": "视频VLM判题(VLM1)",
+      "dim_key": "semantic_continuity",
+      "dimension": "视频VLM判题(VLM1)",
       "episode": "第1集",
       "gate_stage": "video",
-      "loc": "脚本/第1集/storyboard.json",
-      "message": "[production一致性升级:重复同维度] 开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 死人堆惊醒』），疑慢热；开场镜时长 9.2s > 5s，前3秒易掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=146080d0375f，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "msg": "[production一致性升级:重复同维度] 开场镜未见冷开场/钩子标注（rhythm/label=『铺垫·长镜 死人堆惊醒』），疑慢热；开场镜时长 9.2s > 5s，前3秒易掉留存。如确认为可接受，写入 生产数据/consistency_advisory_signoff_第1集.json 的 accepted 后复跑；finding_hash=146080d0375f，签收需包含 accepted=true/reviewer/reason/expires_at，并匹配 finding_hash 或 dimension+message_contains/loc_contains/shot。",
-      "rerun_scope": "回 n2d-script 阶段2重切镜头时长曲线、补钩子/爽点/集尾 cliffhanger。",
-      "return_to_stage": "script_stage2",
-      "sev": "block",
-      "severity": "block",
+      "loc": "生产数据/video_vlm_consistency_第1集.json",
+      "message": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+      "msg": "本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+      "rerun_scope": "回 n2d-script 阶段1/2或 prompt 生成层，修 raw/voiceover→storyboard→出图/出视频的语义谱系断点、VLM 判题失败与称谓口头禅漂移。伏笔兑现(SP1)：坑没填/兑现早于种下回 n2d-script 修 setup_payoff_ledger 与拆集边界。",
+      "return_to_stage": "video",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/asset_registry.json"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "场景(O2)",
+      "dim_key": "scene_consistency",
+      "dimension": "场景(O2)",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "出图/第1集/图片",
+        "出图/共享/asset_registry.json"
+      ],
+      "affected_shots": [
+        "Clip_07"
+      ],
+      "dim": "场景(O2)",
+      "dim_key": "scene_consistency",
+      "dimension": "场景(O2)",
+      "episode": "第1集",
+      "gate_stage": "video",
+      "loc": "出图/第1集/图片",
+      "message": "一致性审计发现问题",
+      "msg": "一致性审计发现问题",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "return_to_stage": "image",
+      "sev": "warn",
+      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2169,36 +963,12 @@
       "episode": "第1集",
       "gate_stage": "video",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(2维/2族/4条·最坏block)",
-      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_08(2维/2族/4条·最坏block)",
+      "message": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/3条·最坏warn)",
+      "msg": "1 个镜被多检测器同时报，已按证据族归并（severity 以最坏维度为准，勿按条数重复计=双计数）：Clip_07(2维/2族/3条·最坏warn)",
       "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "review",
       "sev": "info",
       "severity": "info",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第1集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/第1集/图片",
-        "出视频/第1集/prompt",
-        "出视频/第1集/视频"
-      ],
-      "affected_shots": [],
-      "dim": "fidelity-gate",
-      "dim_key": "fidelity-gate",
-      "dimension": "fidelity-gate",
-      "episode": "第1集",
-      "gate_stage": "video",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/vlm_canonical_第1集.json",
-      "message": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
-      "msg": "出视频后建议跑 vlm_verify --write 落 canonical 通过表，否则 compose/review gate 会 BLOCK。",
-      "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
-      "return_to_stage": "video_prompt",
-      "sev": "warn",
-      "severity": "warn",
       "source": "n2d-dashboard/gate"
     },
     {
@@ -2241,8 +1011,8 @@
       "episode": "第1集",
       "gate_stage": "video",
       "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-      "message": "另有 97 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
-      "msg": "另有 97 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "message": "另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+      "msg": "另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
       "rerun_scope": "先修尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video gate；未过 gate 不出视频。",
       "return_to_stage": "review",
       "sev": "warn",
@@ -2251,24 +1021,23 @@
     }
   ],
   "gate_stage": "video",
-  "generated_at": "2026-07-03T14:39:26+00:00",
+  "generated_at": "2026-07-07T06:38:25+00:00",
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/identity_registry.json": "78698990cb706edc09098434fc371327da5ecb32902f2b4ec8e1804c0d0ee9cb",
+      "出图/共享/asset_registry.json": "0d234a542076b35479c2641ecffe36dcf8bc55d538dd15275cc443c3ff4eaecd",
+      "出图/共享/identity_registry.json": "759707a4e2e34610c65eee92bcfba2a590243faacaa52448375250fcc336705f",
       "出图/共享/图片": null,
-      "出图/第1集/prompt": null,
       "出图/第1集/图片": null,
       "出视频/第1集/prompt": null,
       "出视频/第1集/video_semantic_consistency.json": null,
+      "出视频/第1集/video_vlm_consistency.json": null,
       "出视频/第1集/视频": null,
-      "合成/第1集/配音/voice_zh.wav": "652cfdad954f0d54966e4f20144e400eb03b59f22da1f1ae7d2f9542d3153d5f",
-      "合规/compliance_manifest.json": "e209565e4e45092751a30843ed60c2b8d014f07b39f2188fb9840d083ba44a54",
-      "生产数据/generation_recipe_第1集.json": "efba2dbbe1f35e3ad418410258d5f2fd34459a0b332758243d4e8bb26e55eb6d",
-      "生产数据/production_events.jsonl": "f39235f9a4fbda594e74eac94862f08a3a23df6f853d6bb11d86bc13bff8c857",
+      "合规/compliance_manifest.json": "84bcf5dfa281cbffd138160bfa05af9f850e40215223cbc7c674941010623fe5",
       "生产数据/video_semantic_consistency_第1集.json": "59936ed867378aae29613e0e74b0e5b35fc0433f42d3843b2bfa448a2af889af",
-      "脚本/第1集/storyboard.json": "2e6f1b047c1a30bbc57d12ee6ab4607958805f34d3faa0b8db86cfbbba6838ef"
+      "生产数据/video_vlm_consistency_第1集.json": "21d80ce2983c920947b881c12d4dbd879592dc6f3452ea9bf6db2144b53e858e",
+      "脚本/第1集/storyboard.json": "6e4ae73bad21e05aa892aa54a9b7f30fd950377ee3df7279312a78da6a138899"
     },
-    "sha": "9afa7d8feff2a4f9ed5c7a65b5d9790218b7e0fa16cf524eb1fb6d8fc8a6ed0e"
+    "sha": "e0889f7b1e31f174f273a639ee7ef9c31e5923ec1d223a37b79e862a59fba93b"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -2278,20 +1047,10 @@
   },
   "summary": {
     "by_dim": {
-      "fidelity-gate": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
       "一致性总审": {
         "block": 0,
         "info": 0,
         "warn": 1
-      },
-      "人物在场链": {
-        "block": 0,
-        "info": 0,
-        "warn": 11
       },
       "剧本可看性合同": {
         "block": 0,
@@ -2308,14 +1067,14 @@
         "info": 0,
         "warn": 1
       },
+      "场景(O2)": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
       "导演运镜落实": {
         "block": 0,
         "info": 2,
-        "warn": 0
-      },
-      "强配方Schema(RCP2)": {
-        "block": 2,
-        "info": 0,
         "warn": 0
       },
       "现实覆盖": {
@@ -2323,47 +1082,22 @@
         "info": 1,
         "warn": 0
       },
-      "生成配方(RCP)": {
-        "block": 2,
-        "info": 0,
-        "warn": 0
-      },
       "生视频后端连通性": {
         "block": 0,
         "info": 0,
         "warn": 1
       },
-      "结构化交互图谱(I2)": {
-        "block": 1,
-        "info": 0,
-        "warn": 0
-      },
-      "脸(G1)": {
-        "block": 0,
-        "info": 0,
-        "warn": 3
-      },
-      "节奏密度(Rhythm)": {
-        "block": 3,
-        "info": 0,
-        "warn": 0
-      },
-      "视频语义一致(VSEM)": {
-        "block": 0,
-        "info": 0,
-        "warn": 5
-      },
-      "证据等级": {
+      "视频VLM判题(VLM1)": {
         "block": 0,
         "info": 0,
         "warn": 1
       },
-      "语义谱系(P0)": {
+      "视频语义一致(VSEM)": {
         "block": 0,
         "info": 0,
-        "warn": 2
+        "warn": 8
       },
-      "资产引用注册层": {
+      "证据等级": {
         "block": 0,
         "info": 0,
         "warn": 1
@@ -2377,24 +1111,14 @@
         "block": 0,
         "info": 1,
         "warn": 0
-      },
-      "配音": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
-      "锚点门(N3)": {
-        "block": 1,
-        "info": 0,
-        "warn": 2
       }
     },
     "severity": {
-      "block": 9,
+      "block": 0,
       "info": 7,
-      "warn": 31
+      "warn": 16
     },
-    "total": 47
+    "total": 23
   },
   "version": 1
 }

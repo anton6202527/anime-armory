@@ -684,13 +684,17 @@ def unique(items: Iterable[str]) -> List[str]:
 
 def extract_shots(text: str) -> List[str]:
     shots: List[str] = []
-    for match in re.finditer(r"(?i)\b(EP\d+[_-]CLIP[_-]?0*(\d+)|CLIP[_\s-]*0*(\d+))\b", text or ""):
+    # Keep English clip IDs strict.  Loose matching of "clip 16" turned
+    # inventory text such as "physical clip 16" into a fake affected shot
+    # `Clip_16` when split-part videos were present.
+    for match in re.finditer(r"(?i)\b(EP\d+[_-]CLIP[_-]?0*(\d+))(?=$|[^0-9A-Za-z])", text or ""):
         raw = match.group(1)
-        number = match.group(2) or match.group(3)
-        if raw.upper().startswith("EP"):
-            shots.append(raw.upper().replace("-", "_"))
+        number = match.group(2)
+        shots.append(raw.upper().replace("-", "_"))
         if number:
             shots.append(f"Clip_{int(number):02d}")
+    for match in re.finditer(r"(?i)\bCLIP[_-]0*(\d+)(?=$|[^0-9A-Za-z])", text or ""):
+        shots.append(f"Clip_{int(match.group(1)):02d}")
     for match in re.finditer(r"镜头\s*0*(\d+)", text or ""):
         shots.append(f"Clip_{int(match.group(1)):02d}")
     return unique(shots)

@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import os
 import sys
@@ -48,6 +49,11 @@ SFX_EMPHASIS = (
     "命中", "撞点", "破防", "反杀", "破境", "突破", "雷劫", "武技", "剑气", "斗法",
     "开炉", "成丹", "出器", "淬火", "炼器", "炼丹", "hit-stop", "impact",
 )
+VERSION = 1
+
+
+def now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
 
 
 def _as_float(value: Any) -> Optional[float]:
@@ -124,14 +130,28 @@ def load_clips(root: str, ep: str) -> Optional[List[Dict[str, Any]]]:
 def analyze(root: str, ep: str) -> Dict[str, Any]:
     clips = load_clips(root, ep)
     if clips is None:
-        return {"available": False, "segments": [], "volume_expr": str(DEFAULT_GAIN),
+        return {"kind": "n2d_tension_mix", "version": VERSION, "episode": ep, "generated_at": now_iso(),
+                "status": "missing_storyboard", "available": False, "segments": [], "volume_expr": str(DEFAULT_GAIN),
                 "notes": [f"缺 脚本/{ep}/storyboard.json——先做分镜设计；compose 不传 BGM_GAIN_EXPR 时保持固定 ducking"]}
     segs = build_segments(clips)
     expr = build_volume_expr(segs)
     sfx = [s for s in segs if any(k in s["rhythm"] for k in SFX_EMPHASIS)]
-    return {"available": True, "segments": segs, "volume_expr": expr,
+    return {"kind": "n2d_tension_mix", "version": VERSION, "episode": ep, "generated_at": now_iso(),
+            "status": "pass", "available": True, "segments": segs, "volume_expr": expr,
             "sfx_emphasis": [{"id": s["id"], "at": [s["start"], s["end"]], "rhythm": s["rhythm"]} for s in sfx],
             "notes": []}
+
+
+def write_report(root: str, ep: str, payload: Dict[str, Any]) -> str:
+    prod = os.path.join(root, "生产数据")
+    os.makedirs(prod, exist_ok=True)
+    path = os.path.join(prod, f"tension_mix_{ep}.json")
+    tmp = f"{path}.tmp.{os.getpid()}"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2, sort_keys=True)
+        f.write("\n")
+    os.replace(tmp, path)
+    return os.path.relpath(path, root)
 
 
 def main(argv: List[str]) -> int:
@@ -140,8 +160,11 @@ def main(argv: List[str]) -> int:
     ap.add_argument("episode")
     ap.add_argument("--expr", action="store_true", help="只打 ffmpeg volume 表达式（喂 compose.sh BGM_GAIN_EXPR）")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--write", action="store_true", help="写入 生产数据/tension_mix_第N集.json 供 production consistency 消费")
     ns = ap.parse_args(argv)
     res = analyze(ns.root.rstrip("/"), ns.episode)
+    if ns.write:
+        res["output"] = write_report(ns.root.rstrip("/"), ns.episode, res)
     if ns.expr:
         print(res["volume_expr"]); return 0
     if ns.json:

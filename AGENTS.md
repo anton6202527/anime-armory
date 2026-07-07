@@ -39,13 +39,14 @@
 
 ## 必须遵守的项目约定
 
-> **完整设计法条（怎么*建造* skill）的唯一权威是 [`docs/skill-design-principles.md`](docs/skill-design-principles.md)**（跨线宪法：独立性 / 选择点适配 / 合规闸门 / VCS-free 交付 / README 同步）。下面是速查摘要，新增或改 skill 前请读宪法本体，别在各处复述。可机检的条文跑 `python3 tools/validate_skills.py`（E1 无 git / B2 裸 skill 名 / B7 定妆基础包 / B9 无持久主体 ID 与项目记忆分层 / F1 README 索引 / F3 入口文档同步）与 `tools/independence-audit/scripts/check_independence.py`（跨线独立性）。
+> **完整设计法条（怎么*建造* skill）的唯一权威是 [`docs/skill-design-principles.md`](docs/skill-design-principles.md)**（跨线宪法：独立性 / 选择点适配 / 合规闸门 / VCS-free 交付 / README 同步）。下面是速查摘要，新增或改 skill 前请读宪法本体，别在各处复述。可机检的条文跑 `python3 tools/validate_skills.py`（E1 无 git / B2 裸 skill 名 / B7 定妆基础包 / B9 无持久主体 ID 与项目记忆分层 / F1 README 索引 / F3 入口文档同步 / F7 系列规模统计）与 `tools/independence-audit/scripts/check_independence.py`（跨线独立性）。
 
 - **进度**：每个作品根有 `_进度.md`（状态机）。**先读它**判断走到哪一步、下一步做什么；做完**回写**。
 - **偏好/选择点**：凡"让用户选"的点（平台/后端/分辨率/音色…），首次问一次→用本线 `*-settings` 写进 `<作品根>/_设置.md`→同项目沉默沿用。**别在 skill 代码里写死**唯一路径。
 - **候选项更新 + 适配层**：选择菜单只是带日期的候选快照，不是真理。涉及模型/平台/法规/价格/规格等会变的信息，执行前应按需要用专业知识、项目 references、官方文档或实时搜索核验并刷新候选；用户永远可以手输 `自定义`/`manual`。skill 执行时不要直接依赖菜单文案，而要经适配层把用户选择归一到能力、参数、CLI/API、降级方案和合规闸门；适配不了就停下说明缺口，不要偷偷换路。机检与落地工具（仅 n2d/ad 有候选源）：`python3 skills/<line>/_lib/freshness.py` 报哪些候选快照过期；同目录 `refresh.py` 跑「搜索核验 → 改候选 → bump 采集日期 + 落 provenance」。各线策略差异是故意的（如 ad 禁即梦 ≠ n2d 放行即梦官方），分别刷新、绝不合并候选清单。
 - **合规闸门（硬性）**：克隆真人歌手嗓需授权（2026 opt-in），未授权拒做。词曲/小说默认公版 / 自有 / 已授权。
 - **改了 skill 集合**（增/删/改职责）→ 必须同步更新 `skills/README.md` 索引。
+- **改了任一系列 skill 文本/脚本** → 跑 `python3 tools/update_skill_stats.py`，同步 `skills/README.md` 统计表和各总领 skill 第一行规模统计；`validate_skills.py --only F7` 会拦截过期统计。
 - **改了跨线引用 / `_lib` / 调度入口** → 跑 `python3 tools/independence-audit/scripts/check_independence.py`，确保没有误引公共层或别线代码。
 - **本机工具/环境**（macOS）：`ffmpeg`（精简版，**无 libass/drawtext**，字幕走 Pillow 渲 PNG + overlay）；conda 环境 `cosyvoice`(含 librosa/whisper)、`acestep`(本地出歌)、`fish-speech`；系统 Python 3.14 + PEP668 装不了重依赖，音频类用上述 conda env。踩坑细节见各 skill `references/`。
 

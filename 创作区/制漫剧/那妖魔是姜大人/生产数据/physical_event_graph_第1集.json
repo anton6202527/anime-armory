@@ -1,0 +1,191 @@
+{
+  "kind": "n2d_physical_event_graph",
+  "version": 1,
+  "episode": "第1集",
+  "source": "n2d-script upstream rerun 2026-07-07",
+  "events": [
+    {
+      "event_id": "PE01_tiger_blood_gravity_drip",
+      "clip_id": "EP01_CLIP02",
+      "law": [
+        "liquid",
+        "gravity_drop"
+      ],
+      "object_ids": [
+        "CHAR_03",
+        "黑色妖血",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP02 3-8s",
+      "evidence_frames": [
+        "Clip02_mid",
+        "Clip02_end"
+      ],
+      "expected_state_delta": "黑色妖血从 CHAR_03 胸口伤处向下滴落到巨岩/地面，不漂浮、不转移到 CHAR_01。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE02_blade_release_ground_impact",
+      "clip_id": "EP01_CLIP03",
+      "law": [
+        "collision",
+        "gravity_drop",
+        "impenetrability",
+        "contact_continuity"
+      ],
+      "object_ids": [
+        "CHAR_02",
+        "WEAPON_01",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP03 4-11s",
+      "evidence_frames": [
+        "Clip03_mid",
+        "Clip03_end"
+      ],
+      "expected_state_delta": "WEAPON_01 从 CHAR_02 侧释放后向地面运动并停在姜月初脚前，刀尖与地面接触后不穿过 CHAR_01 身体。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE03_support_weight_transfer",
+      "clip_id": "EP01_CLIP04",
+      "law": [
+        "gravity_support",
+        "contact_continuity",
+        "momentum_conservation"
+      ],
+      "object_ids": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP04 0-8s",
+      "evidence_frames": [
+        "Clip04_first",
+        "Clip04_mid",
+        "Clip04_end"
+      ],
+      "expected_state_delta": "CHAR_02 的身体重量压到 CHAR_01 肩/手支撑点，二人脚步分离移动，不发生肢体融合或悬空滑行。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE04_tiger_revival_state_change",
+      "clip_id": "EP01_CLIP05",
+      "law": [
+        "state_conservation",
+        "gravity_support",
+        "liquid"
+      ],
+      "object_ids": [
+        "CHAR_03",
+        "黑色妖血",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP05 full clip",
+      "evidence_frames": [
+        "Clip05_first",
+        "Clip05_mid",
+        "Clip05_end"
+      ],
+      "expected_state_delta": "CHAR_03 从诈死尸身转为复苏态，身体由地面/巨岩支撑抬起，胸口黑血状态连续保留。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE05_pei_attack_knockback",
+      "clip_id": "EP01_CLIP06",
+      "law": [
+        "collision",
+        "momentum_conservation",
+        "gravity_drop",
+        "contact_continuity"
+      ],
+      "object_ids": [
+        "CHAR_02",
+        "CHAR_03",
+        "WEAPON_01",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP06 full clip",
+      "evidence_frames": [
+        "Clip06_first",
+        "Clip06_mid",
+        "Clip06_end"
+      ],
+      "expected_state_delta": "CHAR_02 的攻击被 CHAR_03 力量反制后产生后退/倒飞，WEAPON_01 不瞬移到 CHAR_01 手中。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE06_weapon_pickup_from_ground",
+      "clip_id": "EP01_CLIP09",
+      "law": [
+        "object_permanence",
+        "contact_continuity",
+        "gravity_support"
+      ],
+      "object_ids": [
+        "CHAR_01",
+        "WEAPON_01",
+        "LOC_01"
+      ],
+      "frame_range": "EP01_CLIP09 first half",
+      "evidence_frames": [
+        "Clip09_first",
+        "Clip09_mid"
+      ],
+      "expected_state_delta": "WEAPON_01 从地面静止状态转为 CHAR_01 手持状态，刀身离地但尚未接触 CHAR_02。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE07_stab_contact",
+      "clip_id": "EP01_CLIP10",
+      "law": [
+        "collision",
+        "impenetrability",
+        "liquid",
+        "contact_continuity"
+      ],
+      "object_ids": [
+        "CHAR_01",
+        "CHAR_02",
+        "WEAPON_01"
+      ],
+      "frame_range": "EP01_CLIP10 full clip",
+      "evidence_frames": [
+        "Clip10_first",
+        "Clip10_mid",
+        "Clip10_end"
+      ],
+      "expected_state_delta": "WEAPON_01 由 CHAR_01 控制并与 CHAR_02 胸前发生刺入接触，刀柄仍由 CHAR_01 控制，CHAR_02 进入僵住/受创状态。",
+      "rule_pass": true,
+      "verdict": "pass"
+    },
+    {
+      "event_id": "PE08_after_stab_hold",
+      "clip_id": "EP01_CLIP11",
+      "law": [
+        "state_conservation",
+        "contact_continuity"
+      ],
+      "object_ids": [
+        "CHAR_01",
+        "CHAR_02",
+        "WEAPON_01",
+        "VFX_系统面板"
+      ],
+      "frame_range": "EP01_CLIP11 full clip",
+      "evidence_frames": [
+        "Clip11_first",
+        "Clip11_end"
+      ],
+      "expected_state_delta": "刺杀后的持有和受创状态延续到黑场，WEAPON_01 不掉落，VFX_系统面板不提前结算。",
+      "rule_pass": true,
+      "verdict": "pass"
+    }
+  ]
+}

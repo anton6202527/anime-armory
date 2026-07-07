@@ -4,18 +4,7 @@
   "chapter": "第1话",
   "panel_id": "P001",
   "reference_input_mode": "codex_exec_image_flags",
-  "cli_image_input_count": 2,
-  "references": [
-    {
-      "id": "LOC_WILD",
-      "path": "出图/共享/图片/LOC_WILD__anchor.png",
-      "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093"
-    },
-    {
-      "id": "MON_TIGER",
-      "path": "出图/共享/图片/MON_TIGER__anchor.png",
-      "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a"
-    }
-  ],
-  "created_at": "2026-07-06T18:30:57"
+  "cli_image_input_count": 0,
+  "references": [],
+  "created_at": "2026-07-07T10:35:44"
 }

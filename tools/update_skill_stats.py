@@ -1,68 +1,268 @@
-import os
-import glob
-import re
-from datetime import datetime
+#!/usr/bin/env python3
+"""Update and validate per-line skill size statistics.
 
-def count_lines(filepath):
+This keeps two surfaces in sync:
+  1. skills/README.md scale table.
+  2. The first body line of each top-level dispatcher skill
+     (skills/n2d/SKILL.md, skills/novel/SKILL.md, ...).
+"""
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from dataclasses import dataclass
+from datetime import date
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+SKILLS = REPO / "skills"
+README = SKILLS / "README.md"
+SERIES = ("n2d", "novel", "comic", "song", "mv", "ad")
+TEXT_SUFFIXES = {".md", ".py", ".sh", ".json", ".html"}
+
+STAT_RE = re.compile(
+    r"^> 规模统计：Skill 数 \d+ \| SKILL\.md 总行数 \d+ \| 目录文本总行数 \d+$"
+)
+README_DATE_RE = re.compile(r"> 统计时间：\d{4}-\d{2}-\d{2}。")
+README_ROW_RE = {
+    line: re.compile(
+        rf"\| {line} \| `{line}` \+ `{line}-\*` \| \d+ \| \d+ \| \d+ \|"
+    )
+    for line in SERIES
+}
+README_TOTAL_RE = re.compile(
+    r"\| \*\*合计\*\* \| `skills/\*/SKILL\.md` \| \*\*\d+\*\* \| \d+ \| \d+ \|"
+)
+
+
+@dataclass(frozen=True)
+class SkillStats:
+    skills: int
+    skill_md_lines: int
+    total_lines: int
+
+
+def count_lines(path: Path) -> int:
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return sum(1 for _ in f)
-    except:
+        with path.open("r", encoding="utf-8") as fh:
+            return sum(1 for _ in fh)
+    except OSError:
         return 0
 
-def get_stats():
-    series = ['n2d', 'novel', 'comic', 'song', 'mv', 'ad']
-    stats = {s: {'skills': 0, 'skill_md_lines': 0, 'total_lines': 0} for s in series}
-    
-    for s in series:
-        # Match 'series' and 'series-*'
-        skill_dirs = [d for d in os.listdir('skills') if os.path.isdir(os.path.join('skills', d)) and (d == s or d.startswith(s + '-'))]
-        stats[s]['skills'] = len(skill_dirs)
-        
-        for sd in skill_dirs:
-            skill_path = os.path.join('skills', sd)
-            skill_md = os.path.join(skill_path, 'SKILL.md')
-            if os.path.isfile(skill_md):
-                stats[s]['skill_md_lines'] += count_lines(skill_md)
-                
-            # Count text files in the skill directory
-            for ext in ['.md', '.py', '.sh', '.json', '.html']:
-                for filepath in glob.glob(os.path.join(skill_path, '**', f'*{ext}'), recursive=True):
-                    # Exclude __pycache__
-                    if '__pycache__' not in filepath:
-                        stats[s]['total_lines'] += count_lines(filepath)
-                        
+
+def dispatcher_skill_path(line: str) -> Path:
+    return SKILLS / line / "SKILL.md"
+
+
+def is_dispatcher_skill(path: Path) -> bool:
+    return any(path == dispatcher_skill_path(line) for line in SERIES)
+
+
+def stat_line_count(path: Path) -> int:
+    try:
+        lines = path.read_text("utf-8", "ignore").splitlines()
+    except OSError:
+        return 0
+    return sum(1 for line in lines if STAT_RE.match(line))
+
+
+def normalized_line_count(path: Path) -> int:
+    """Count lines after normalizing dispatcher stats to exactly one line."""
+    lines = count_lines(path)
+    if not is_dispatcher_skill(path):
+        return lines
+    stats = stat_line_count(path)
+    if stats == 0:
+        return lines + 1
+    if stats > 1:
+        return lines - (stats - 1)
+    return lines
+
+
+def skill_dirs_for(line: str) -> list[Path]:
+    return sorted(
+        d
+        for d in SKILLS.iterdir()
+        if d.is_dir() and (d.name == line or d.name.startswith(f"{line}-"))
+    )
+
+
+def get_stats() -> dict[str, SkillStats]:
+    stats: dict[str, SkillStats] = {}
+    for line in SERIES:
+        skill_dirs = skill_dirs_for(line)
+        skill_count = len(skill_dirs)
+        skill_md_lines = 0
+        total_lines = 0
+        for skill_dir in skill_dirs:
+            skill_md = skill_dir / "SKILL.md"
+            if skill_md.is_file():
+                skill_md_lines += normalized_line_count(skill_md)
+            for path in skill_dir.rglob("*"):
+                if not path.is_file() or path.suffix not in TEXT_SUFFIXES:
+                    continue
+                if "__pycache__" in path.parts:
+                    continue
+                total_lines += normalized_line_count(path)
+        stats[line] = SkillStats(skill_count, skill_md_lines, total_lines)
     return stats
 
-def update_readme(stats):
-    with open('skills/README.md', 'r', encoding='utf-8') as f:
-        content = f.read()
-        
-    today = datetime.now().strftime('%Y-%m-%d')
-    
-    total_skills = sum(s['skills'] for s in stats.values())
-    total_md_lines = sum(s['skill_md_lines'] for s in stats.values())
-    total_text_lines = sum(s['total_lines'] for s in stats.values())
-    
-    # Update date
-    content = re.sub(r'> 统计时间：\d{4}-\d{2}-\d{2}。', f'> 统计时间：{today}。', content)
-    
-    # Update table rows
-    for s in ['n2d', 'novel', 'comic', 'song', 'mv', 'ad']:
-        pattern = r'\| ' + s + r' \| `(?:' + s + r')` \+ `(?:' + s + r')-\*` \| \d+ \| \d+ \| \d+ \|'
-        replacement = f"| {s} | `{s}` + `{s}-*` | {stats[s]['skills']} | {stats[s]['skill_md_lines']} | {stats[s]['total_lines']} |"
-        content = re.sub(pattern, replacement, content)
-        
-    # Update total row
-    pattern = r'\| \*\*合计\*\* \| `skills/\*/SKILL\.md` \| \*\*\d+\*\* \| \d+ \| \d+ \|'
-    replacement = f"| **合计** | `skills/*/SKILL.md` | **{total_skills}** | {total_md_lines} | {total_text_lines} |"
-    content = re.sub(pattern, replacement, content)
-    
-    with open('skills/README.md', 'w', encoding='utf-8') as f:
-        f.write(content)
 
-if __name__ == '__main__':
+def total_stats(stats: dict[str, SkillStats]) -> SkillStats:
+    return SkillStats(
+        skills=sum(item.skills for item in stats.values()),
+        skill_md_lines=sum(item.skill_md_lines for item in stats.values()),
+        total_lines=sum(item.total_lines for item in stats.values()),
+    )
+
+
+def stat_line(line: str, stats: dict[str, SkillStats]) -> str:
+    item = stats[line]
+    return (
+        f"> 规模统计：Skill 数 {item.skills} | "
+        f"SKILL.md 总行数 {item.skill_md_lines} | "
+        f"目录文本总行数 {item.total_lines}"
+    )
+
+
+def frontmatter_end_index(lines: list[str]) -> int:
+    if not lines or lines[0].strip() != "---":
+        return 0
+    for idx in range(1, len(lines)):
+        if lines[idx].strip() == "---":
+            return idx + 1
+    return 0
+
+
+def render_dispatcher_skill(path: Path, line: str, stats: dict[str, SkillStats]) -> str:
+    original = path.read_text("utf-8")
+    had_final_newline = original.endswith("\n")
+    lines = original.splitlines()
+    lines = [item for item in lines if not STAT_RE.match(item)]
+    idx = frontmatter_end_index(lines)
+    lines.insert(idx, stat_line(line, stats))
+    text = "\n".join(lines)
+    if had_final_newline:
+        text += "\n"
+    return text
+
+
+def render_readme(stats: dict[str, SkillStats]) -> str:
+    content = README.read_text("utf-8")
+    today = date.today().isoformat()
+    content = README_DATE_RE.sub(f"> 统计时间：{today}。", content)
+
+    for line in SERIES:
+        item = stats[line]
+        replacement = (
+            f"| {line} | `{line}` + `{line}-*` | "
+            f"{item.skills} | {item.skill_md_lines} | {item.total_lines} |"
+        )
+        content = README_ROW_RE[line].sub(replacement, content)
+
+    total = total_stats(stats)
+    total_replacement = (
+        f"| **合计** | `skills/*/SKILL.md` | **{total.skills}** | "
+        f"{total.skill_md_lines} | {total.total_lines} |"
+    )
+    content = README_TOTAL_RE.sub(total_replacement, content)
+    return content
+
+
+def expected_updates(stats: dict[str, SkillStats]) -> dict[Path, str]:
+    updates = {README: render_readme(stats)}
+    for line in SERIES:
+        path = dispatcher_skill_path(line)
+        if path.is_file():
+            updates[path] = render_dispatcher_skill(path, line, stats)
+    return updates
+
+
+def update_files(stats: dict[str, SkillStats]) -> list[Path]:
+    changed: list[Path] = []
+    for path, expected in expected_updates(stats).items():
+        current = path.read_text("utf-8")
+        if current == expected:
+            continue
+        path.write_text(expected, encoding="utf-8")
+        changed.append(path)
+    return changed
+
+
+def validate_stats(stats: dict[str, SkillStats]) -> list[str]:
+    bad: list[str] = []
+    readme = README.read_text("utf-8", "ignore")
+    for line in SERIES:
+        item = stats[line]
+        expected_row = (
+            f"| {line} | `{line}` + `{line}-*` | "
+            f"{item.skills} | {item.skill_md_lines} | {item.total_lines} |"
+        )
+        if expected_row not in readme:
+            bad.append(f"skills/README.md: {line} 规模统计过期，应为：{expected_row}")
+
+        path = dispatcher_skill_path(line)
+        if not path.is_file():
+            bad.append(f"{path.relative_to(REPO)}: 总领 skill 不存在，无法写入规模统计")
+            continue
+        lines = path.read_text("utf-8", "ignore").splitlines()
+        idx = frontmatter_end_index(lines)
+        expected_stat = stat_line(line, stats)
+        actual = lines[idx] if idx < len(lines) else ""
+        if actual != expected_stat:
+            bad.append(
+                f"{path.relative_to(REPO)}:{idx + 1}: 总领 skill 第一行规模统计过期，"
+                f"应为：{expected_stat}"
+            )
+        extra_stats = [i + 1 for i, value in enumerate(lines) if STAT_RE.match(value)]
+        if extra_stats != [idx + 1]:
+            bad.append(
+                f"{path.relative_to(REPO)}: 规模统计行必须且只能出现在 frontmatter 后第一行；"
+                f"当前行号：{extra_stats}"
+            )
+
+    total = total_stats(stats)
+    expected_total = (
+        f"| **合计** | `skills/*/SKILL.md` | **{total.skills}** | "
+        f"{total.skill_md_lines} | {total.total_lines} |"
+    )
+    if expected_total not in readme:
+        bad.append(f"skills/README.md: 合计规模统计过期，应为：{expected_total}")
+    return bad
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Update per-line skill size statistics")
+    parser.add_argument("--check", action="store_true", help="only validate stats, do not write files")
+    args = parser.parse_args(argv)
+
     stats = get_stats()
-    print("New Stats:", stats)
-    update_readme(stats)
-    print("Updated README.md")
+    if args.check:
+        bad = validate_stats(stats)
+        if bad:
+            for item in bad:
+                print(item)
+            print("\nRun: python3 tools/update_skill_stats.py", file=sys.stderr)
+            return 1
+        print("Skill stats are up to date.")
+        return 0
+
+    changed = update_files(stats)
+    for line in SERIES:
+        item = stats[line]
+        print(
+            f"{line}: skills={item.skills}, "
+            f"skill_md_lines={item.skill_md_lines}, total_lines={item.total_lines}"
+        )
+    if changed:
+        print("Updated:")
+        for path in changed:
+            print(f"  - {path.relative_to(REPO)}")
+    else:
+        print("No files changed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -951,12 +951,35 @@ def _production_events_path(root: str) -> str:
     return os.path.join(root, "生产数据", "production_events.jsonl")
 def _norm_rel_path(path: str) -> str:
     return os.path.normpath(str(path).strip()).replace(os.sep, "/")
+def _project_local_asset_rel(root: str, asset: object) -> str:
+    raw = str(asset or "").strip()
+    if not raw:
+        return ""
+    root_abs = os.path.abspath(root)
+    if os.path.isabs(raw):
+        try:
+            raw_abs = os.path.abspath(raw)
+            if os.path.commonpath([root_abs, raw_abs]) == root_abs:
+                return os.path.relpath(raw_abs, root_abs).replace(os.sep, "/")
+        except Exception:
+            pass
+    root_name = os.path.basename(root_abs)
+    parts = [p for p in _norm_rel_path(raw).split("/") if p and p != "."]
+    for idx in range(len(parts) - 1, -1, -1):
+        if parts[idx] == root_name:
+            tail = parts[idx + 1:]
+            if tail:
+                return _norm_rel_path("/".join(tail))
+    return _norm_rel_path(raw)
 def _asset_matches(root: str, asset: object, target_rel: str) -> bool:
     if not asset:
         return False
     asset_s = str(asset).strip()
     target_rel_norm = _norm_rel_path(target_rel)
     target_abs = os.path.abspath(target_rel if os.path.isabs(target_rel) else os.path.join(root, target_rel))
+    asset_rel_norm = _project_local_asset_rel(root, asset_s)
+    if asset_rel_norm == target_rel_norm:
+        return True
     if os.path.isabs(asset_s):
         return os.path.abspath(asset_s) == target_abs
     return _norm_rel_path(asset_s) == target_rel_norm or os.path.abspath(os.path.join(root, asset_s)) == target_abs
@@ -1004,12 +1027,7 @@ def _event_asset_rel(root: str, event: Dict[str, Any]) -> Optional[str]:
     raw = str(asset).strip()
     if not raw:
         return None
-    if os.path.isabs(raw):
-        try:
-            return os.path.relpath(os.path.abspath(raw), os.path.abspath(root)).replace(os.sep, "/")
-        except Exception:
-            return raw.replace(os.sep, "/")
-    return _norm_rel_path(raw)
+    return _project_local_asset_rel(root, raw)
 def _is_prohibited_face_patch_event(event: Dict[str, Any]) -> bool:
     generation = _event_generation(event)
     meta = _event_meta(event)
@@ -2926,6 +2944,11 @@ def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
         return True
     if str(asset.get("id") or "").strip().startswith("WEAPON_"):
         return True
+    if asset_type in {"vfx", "effect"} and asset.get("is_entity_weapon") is False:
+        return False
+    weapon_like_role = str(asset.get("weapon_like_role") or "").strip().lower()
+    if asset_type in {"vfx", "effect"} and weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon"}:
+        return False
     blob = json.dumps(asset, ensure_ascii=False).lower()
     for term in WEAPON_LIKE_ASSET_TERMS:
         needle = term.lower()
@@ -4057,31 +4080,52 @@ def _sha256_file(path: str) -> Optional[str]:
         return h.hexdigest()
     except Exception:
         return None
-def _form_anchor_relpath(form: Mapping) -> str:
-    """form 的锚点定妆图（front 主参考）项目相对路径；缺 front 时回退第一张可用视图。"""
-    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
-    front = rg.get("front")
-    if isinstance(front, str) and front.strip():
-        return front.strip()
-    if isinstance(front, Mapping):
-        path = str(front.get("path") or "").strip()
+def _reference_node_path(value: Any) -> str:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    if isinstance(value, Mapping):
+        path = str(value.get("path") or "").strip()
         if path:
             return path
-    for v in rg.values():
-        if isinstance(v, str) and v.strip():
-            return v.strip()
-        if isinstance(v, Mapping):
-            path = str(v.get("path") or "").strip()
+    if isinstance(value, list):
+        for item in value:
+            path = _reference_node_path(item)
             if path:
                 return path
-        if isinstance(v, list):
-            for item in v:
-                if isinstance(item, Mapping):
-                    path = str(item.get("path") or "").strip()
-                    if path:
-                        return path
-                if isinstance(item, str) and item.strip():
-                    return item.strip()
+    return ""
+
+
+def _form_anchor_relpath(form: Mapping) -> str:
+    """form 的锚点定妆图项目相对路径；局部群像优先 silhouette 而不是 hand/outfit 片段。"""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    partial_refs = atlas.get("partial_refs") if isinstance(atlas.get("partial_refs"), Mapping) else {}
+    primary_keys = ("front", "primary", "silhouette")
+    secondary_keys = ("three_quarter", "side", "halfbody", "outfit", "hand")
+    for key in primary_keys:
+        path = _reference_node_path(rg.get(key))
+        if path:
+            return path
+    for key in primary_keys:
+        path = _reference_node_path(partial_refs.get(key))
+        if path:
+            return path
+    for key in secondary_keys:
+        path = _reference_node_path(rg.get(key))
+        if path:
+            return path
+    for key in secondary_keys:
+        path = _reference_node_path(partial_refs.get(key))
+        if path:
+            return path
+    for value in rg.values():
+        path = _reference_node_path(value)
+        if path:
+            return path
+    for value in partial_refs.values():
+        path = _reference_node_path(value)
+        if path:
+            return path
     return ""
 # 近景/特写景别标记（脸占画面主体、表情漂移=脸重画最致命的镜）。
 _CLOSEUP_MARKERS = (

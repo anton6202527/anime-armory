@@ -4,6 +4,7 @@
   "chapter": "第1话",
   "model": "GPT Image 2",
   "channel": "Codex CLI",
+  "text_language": "中文",
   "jobs": [
     {
       "panel_id": "P001",
@@ -12,232 +13,308 @@
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：血色夕阳下的破败荒野，枯草连天，囚犯尸体与黑衣镇魔卫尸体散落，远处巨大的虎妖尸身倚在岩石旁。；场景：LOC_WILD；构图与表演：大远景，竖向条漫开场大格，尸体做剪影和局部血迹，不做过度血腥特写。；共享参考ID：LOC_WILD、MON_TIGER；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "LOC_WILD",
-          "path": "出图/共享/图片/LOC_WILD__anchor.png"
-        },
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
-        }
-      ],
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：灰白荒野全景，枯草连天，雾气贴地，囚犯尸骸散落，远处巨岩旁隐约有虎头人身的巨大尸影。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；场景：LOC_WASTELAND；构图与表演：竖向大格；俯视压迫构图；黑白灰水墨荒野，尸骸只做轮廓和血迹，不做过度 gore 特写；下方预留旁白位。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [],
       "result_path": "出图/第1话/panels/P001.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:32:50",
+      "generated_at": "2026-07-07T10:37:42",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "f1a8042cb48b4d97c5dc346e8f195d53792549a969c1acdaef5652699dee85ad",
+      "artifact_sha256": "3e679d4ff3077267878348a736fea6051850e8615a107a76f81620e76fab3184",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
+      "reference_input_count": 0,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P001/P001_20260706_183057_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P001",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P001.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 0,
+        "reference_input_count": 0,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P002",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 700
+        "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初从枯草和泥土中撑起身，灰白囚服沾满尘土，脸上茫然又惊惧。；角色：姜月初；场景：LOC_WILD；构图与表演：中近景，突出少女瘦弱、衣服破旧、现代灵魂的错愕。；共享参考ID：CHAR_JYC、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初穿着灰扑扑囚服坐在尸骸之间，长发凌乱，脸上有尘土和轻微血污，神情茫然又警觉。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初；场景：LOC_WASTELAND；构图与表演：中近景；必须继承 CHAR_JYC 的脸型、眼型、黑长发和清冷气质；服装改成囚服，不要头冠、伞和礼服；预留旁白留白。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "LOC_WILD",
-          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P002.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:34:37",
+      "generated_at": "2026-07-07T10:21:29",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "bdedf1670c9d74037925e836acfde44b6413c1a04b1d259cffc1cb675907b028",
+      "artifact_sha256": "225881eed60036d5b8289cffb17aef338a7daab83024b2fe0e042397726a1745",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
+      "reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P002/P002_20260706_183250_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P002",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P002.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 1,
+        "reference_input_count": 1,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P003",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 840
+        "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：破碎记忆像碎片一样压入她脑海：大唐王朝、妖魔横行、罪臣之女、发配边疆。；角色：姜月初；场景：LOC_WILD；构图与表演：记忆碎片叠化：京城门影、囚车、妖影、枷锁。不要画现代电子 UI。；共享参考ID：CHAR_JYC；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "CHAR_JYC",
-          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        }
-      ],
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：虎妖尸体倚在巨岩上，人身虎头，体魄如小山，胸膛有巨大黑血窟窿，黑色妖血流入荒草。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：虎妖；场景：LOC_WASTELAND；构图与表演：低机位仰拍；虎妖遮住半个画面，姜月初只做前景小剪影；血洞表现为黑色妖血和破衣，不做内脏细节。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [],
       "result_path": "出图/第1话/panels/P003.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:36:48",
+      "generated_at": "2026-07-07T10:40:43",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "0d1eeec5d31f45f06a5eea87fb61449dd4cd0214d09ed1f9e1d9c2398b5c35aa",
+      "artifact_sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 1,
+      "reference_input_count": 0,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P003/P003_20260706_183437_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P003",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P003.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 0,
+        "reference_input_count": 0,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P004",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 1040
+        "height": 960
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初看见虎妖尸身，人身虎头、体魄如小山，胸膛有巨大血洞，黑色妖血流了一地。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：低机位看虎妖尸体，姜月初在画面边缘显得很小。；共享参考ID：CHAR_JYC、MON_TIGER、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "CHAR_JYC",
-          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
-        },
-        {
-          "id": "LOC_WILD",
-          "path": "出图/共享/图片/LOC_WILD__anchor.png"
-        }
-      ],
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：裴长青半跪在泥地里，黑衣赤纹劲装破损，断刀插在身前支撑身体，左臂不自然垂下。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：裴长青；场景：LOC_WASTELAND；构图与表演：中景；裴长青不要画得完全英武，必须重伤濒死；赤色云纹只做局部点色；右上预留对白。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [],
       "result_path": "出图/第1话/panels/P004.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:39:00",
+      "generated_at": "2026-07-07T10:45:30",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "ad591a2f3629cee13b4df379cf2554b076ab8cbfe0a3b62cc2f1de3dd11581fd",
+      "artifact_sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
+      "reference_input_count": 0,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P004/P004_20260706_183648_previous.png"
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P004",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "warn",
+        "path": "出图/第1话/panels/P004.png",
+        "size": {
+          "width": 1296,
+          "height": 960
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "declared_reference_count": 0,
+        "reference_input_count": 0,
+        "blank_region_candidates": [
+          {
+            "x": 901,
+            "y": 336,
+            "w": 154,
+            "h": 98,
+            "area": 5160
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": false,
+        "manual_review": {
+          "status": "accepted",
+          "reviewer": "codex",
+          "note": "背景雾气和右侧留白，不是烘焙气泡；已人工接受。"
         }
-      ]
+      }
     },
     {
       "panel_id": "P005",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 760
+        "height": 700
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半跪在地的裴长青以断刀支撑身体，黑衣赤纹，浑身是伤，抬眼看向姜月初。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：裴长青近景，脸色惨白但眼神仍有压迫；断刀插地。；共享参考ID：CHAR_PEI、CHAR_JYC、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初屏住呼吸后退半步，眼睛看向裴长青，身体却向荒野另一侧准备转身逃走。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初；场景：LOC_WASTELAND；构图与表演：半身反应格；继承 CHAR_JYC 脸；表情是紧张中带现代人吐槽感；脚尖后撤要清楚，禁止把脚画成手。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
-        {
-          "id": "CHAR_PEI",
-          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
-        },
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "PROP_HENGDAO",
-          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P005.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:41:13",
+      "generated_at": "2026-07-07T10:50:11",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "54b8b2099b718db4a1e8b031418e607c561632cfb50506fb0715b33610472f9a",
+      "artifact_sha256": "ffb81c22fe1687cc2c72e1ebb69bde04b902e78c90adaf46e3ff0ea9810c8e5c",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
+      "reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P005/P005_20260706_183900_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P005",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P005.png",
+        "size": {
+          "width": 1296,
+          "height": 700
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 700
+        },
+        "declared_reference_count": 1,
+        "reference_input_count": 1,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P006",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 700
+        "height": 920
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初悄然后退，眼神警惕，脚尖已经转向荒野深处。；角色：姜月初；场景：LOC_WILD；构图与表演：小格，脚步和眼神特写，表现逃跑念头。；共享参考ID：CHAR_JYC、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：半截断刀咻地钉入姜月初脚前半步的泥地，刀柄震颤，枯草和碎土飞起。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初；场景：LOC_WASTELAND；构图与表演：脚部和刀的特写；姜月初囚鞋/脚尖僵住，刀锋落点必须清楚；不出现额外手掌。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "LOC_WILD",
-          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P006.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T18:59:53",
+      "generated_at": "2026-07-07T10:56:01",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "08efb9423ab97b0467d204297aa0cc9760daf865fcfa8655e8354196a6eda013",
+      "artifact_sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
+      "reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P006/P006_20260706_184113_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P006",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P006.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 1,
+        "reference_input_count": 1,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P007",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 840
+        "height": 880
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：半截断刀破风飞来，钉在姜月初脚前半步，泥土碎溅；前景必须读成布鞋脚尖和小腿僵住，不是手掌撑地。；角色：姜月初；场景：LOC_WILD；构图与表演：刀刃近景，姜月初脚尖/布鞋僵住；脚、鞋、小腿和地面受力清楚，手不要成为地面支撑点；强动线。；共享参考ID：CHAR_JYC、PROP_HENGDAO；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：裴长青抬起苍白的脸，姜月初僵硬站在几步外，两人隔着尸骸与断刀对峙。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青；场景：LOC_WASTELAND；构图与表演：横向张力构图但输出为竖格；姜月初脸保持 CHAR_JYC；对白区放在两人头顶空雾处，不挡脸。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_HENGDAO=镇魔司横刀 / 断刀；风格契约:古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。；备注:由 P006 合格刀落点面板种下的临时道具锚点。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
@@ -247,65 +324,122 @@
       "result_path": "出图/第1话/panels/P007.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:32:46",
+      "generated_at": "2026-07-07T11:14:24",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "f38915dda9ebf4b104900ef5e4fcd96c9ac50617fb4384dbfed3cfc594eafeb8",
+      "artifact_sha256": "a3a47492800ebaf67a7f4ba3d151fec0cc423252a84a673077cce64e6fa305c7",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
+      "reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
       "history": [
         {
           "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P007/P007_20260706_185953_previous.png"
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P007/P007_20260707_111218_previous.png"
         }
-      ]
+      ],
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P007",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P007.png",
+        "size": {
+          "width": 1296,
+          "height": 880
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 880
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P008",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 880
+        "height": 1080
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青半跪喘息，自报身份；姜月初僵硬回头，脸上写着不情愿。；角色：裴长青、姜月初；场景：LOC_WILD；构图与表演：上下分层构图：裴长青低位但气势压人，姜月初被迫听条件。；共享参考ID：CHAR_PEI、CHAR_JYC；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初吃力架起高大的裴长青，男人大半重量压在她肩上，两人踉跄向南，脚下拖出血痕。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青；场景：LOC_WASTELAND；构图与表演：身体受力要清楚；姜月初瘦弱但不是 Q 版；裴长青右臂搭肩、双脚拖地；不要身体融合或多手。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
-        {
-          "id": "CHAR_PEI",
-          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
-        },
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P008.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:38:39",
+      "generated_at": "2026-07-07T11:19:42",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "855b8a9bfa3b9f7907bd1f3334ab551c44967b0b7f2f185dc8c7d2dc07446487",
+      "artifact_sha256": "be8d2ccea279c7e776dce97a27eb5c5543f36ea768aad2b9833571f9cfdcb030",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
       "reference_input_count": 2,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P008/P008_20260706_193246_previous.png"
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P008",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "warn",
+        "path": "出图/第1话/panels/P008.png",
+        "size": {
+          "width": 1296,
+          "height": 1080
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1080
+        },
+        "declared_reference_count": 2,
+        "reference_input_count": 2,
+        "blank_region_candidates": [
+          {
+            "x": 885,
+            "y": 0,
+            "w": 410,
+            "h": 265,
+            "area": 57053
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": false,
+        "manual_review": {
+          "status": "accepted",
+          "reviewer": "codex",
+          "note": "高亮天空雾气，不是文字容器；已人工接受。"
         }
-      ]
+      }
     },
     {
       "panel_id": "P009",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 740
+        "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初吃力把裴长青右臂架到肩上，两人踉跄往南走，身后是虎妖尸体和满地残骸。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：横向中景，姜月初被重量压弯，虎妖尸体留在背景。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER、LOC_WILD；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：两人背后，原本倒伏的虎妖尸体旁传来异响；姜月初和裴长青同时僵住，只露出背影和侧脸。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青、虎妖；场景：LOC_WASTELAND；构图与表演：恐怖停顿格；后景虎妖轮廓开始抬起；姜月初侧脸继承 CHAR_JYC，表情瞬间空白；对白在高处雾中。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER=虎妖 / 虎山神；风格契约:人身虎头，大如小山，破损衣甲，胸口巨大黑血洞，黑色妖气和虎纹毛发；压迫感高但不做内脏特写。；备注:由 P003 合格面板种下的临时虎妖锚点。后续可补专门妖物设定图。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -318,43 +452,51 @@
         {
           "id": "MON_TIGER",
           "path": "出图/共享/图片/MON_TIGER__anchor.png"
-        },
-        {
-          "id": "LOC_WILD",
-          "path": "出图/共享/图片/LOC_WILD__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P009.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:42:38",
+      "generated_at": "2026-07-07T11:25:14",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "174d714d93f8c323e060a99ff544a460429760ee6535b57538eb788869722d3b",
+      "artifact_sha256": "79548f0fca0931a92dc647e0edcf2b7ab25a435c6484b79e55c64284abf0842f",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
+      "reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P009/P009_20260706_193839_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P009",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P009.png",
+        "size": {
+          "width": 1296,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 840
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P010",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 1040
+        "height": 1120
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：身后的虎妖尸体发出咳声，巨大虎爪从地面撑起，胸口血洞仍然狰狞。；角色：虎妖、姜月初、裴长青；场景：LOC_WILD；构图与表演：本话第二个大格，虎妖从背景复起，姜月初和裴长青前景僵住。；共享参考ID：MON_TIGER、CHAR_JYC、CHAR_PEI；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：虎妖从巨岩旁缓缓站起，胸前巨大黑血窟窿依旧可怖，脖颈扭动，虎口咧笑，俯视地上的二人。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青、虎妖；场景：LOC_WASTELAND；构图与表演：重点大格；虎妖占画面上三分之二，姜月初和裴长青在下方很小；压迫感强，避免过度血腥特写。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER=虎妖 / 虎山神；风格契约:人身虎头，大如小山，破损衣甲，胸口巨大黑血洞，黑色妖气和虎纹毛发；压迫感高但不做内脏特写。；备注:由 P003 合格面板种下的临时虎妖锚点。后续可补专门妖物设定图。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
-        },
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
@@ -362,34 +504,73 @@
         {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png"
+        },
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P010.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:44:54",
+      "generated_at": "2026-07-07T11:40:52",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "ab4d217b5dc2a6be29d9358ac23b20044925a45bfd84494248d3455c4e806de4",
+      "artifact_sha256": "613c048cb257578a49fa9516fcb71649ca234bbe601050ba540e94a6b6537816",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
       "reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P010/P010_20260706_194238_previous.png"
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P010",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "warn",
+        "path": "出图/第1话/panels/P010.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "blank_region_candidates": [
+          {
+            "x": 1200,
+            "y": 361,
+            "w": 95,
+            "h": 132,
+            "area": 6217
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": false,
+        "manual_review": {
+          "status": "accepted",
+          "reviewer": "codex",
+          "note": "高亮云雾和大光比背景，不是文字容器；已人工接受。"
         }
-      ]
+      }
     },
     {
       "panel_id": "P011",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 780
+        "height": 840
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初手上一松，裴长青直挺挺摔在地上；两人都盯着复活的虎妖。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：姜月初惊到失手，裴长青摔落不做喜剧化，保持绝望。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：裴长青暴喝挥横刀扑向虎妖，下一瞬被虎妖一脚蹬飞，刀从手中脱落。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：裴长青、虎妖、姜月初；场景：LOC_WASTELAND；构图与表演：动作格可用对角线速度线；脚踢接触点清楚，虎妖腿脚不能画成手；姜月初作为前景惊惧小身影。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER=虎妖 / 虎山神；风格契约:人身虎头，大如小山，破损衣甲，胸口巨大黑血洞，黑色妖气和虎纹毛发；压迫感高但不做内脏特写。；备注:由 P003 合格面板种下的临时虎妖锚点。后续可补专门妖物设定图。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -407,55 +588,95 @@
       "result_path": "出图/第1话/panels/P011.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:47:45",
+      "generated_at": "2026-07-07T11:48:19",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "3bdfa2d68a3f0c77e95127458b317951ccea6ac6a51174c58324f30d83bf7dcb",
+      "artifact_sha256": "53d7035314151bddfa246eccd1fad105a34ec2d5eb9e2c7c76cf5a0e490011d0",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
       "reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P011/P011_20260706_194454_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P011",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P011.png",
+        "size": {
+          "width": 1296,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 840
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P012",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 840
+        "height": 760
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：虎妖扭动脖颈，居高临下俯视二人；裴长青脸色惨白，意识到它已接近鸣骨境。；角色：虎妖、裴长青；场景：LOC_WILD；构图与表演：虎妖占画面三分之二，裴长青在下方小而虚弱。；共享参考ID：MON_TIGER、CHAR_PEI；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：裴长青重重砸在姜月初脚边，横刀落在旁边；姜月初低头看着他，虎妖阴影压过来。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青、虎妖；场景：LOC_WASTELAND；构图与表演：俯视构图；姜月初脸部继承 CHAR_JYC，但眼神从恐惧转向急速思考；横刀必须在她脚边可见。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || MON_TIGER=虎妖 / 虎山神；风格契约:人身虎头，大如小山，破损衣甲，胸口巨大黑血洞，黑色妖气和虎纹毛发；压迫感高但不做内脏特写。；备注:由 P003 合格面板种下的临时虎妖锚点。后续可补专门妖物设定图。 || PROP_HENGDAO=镇魔司横刀 / 断刀；风格契约:古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。；备注:由 P006 合格刀落点面板种下的临时道具锚点。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
+        },
         {
           "id": "MON_TIGER",
           "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
-          "id": "CHAR_PEI",
-          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
       "result_path": "出图/第1话/panels/P012.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:50:28",
+      "generated_at": "2026-07-07T11:53:37",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "2a1b202e6aa342007dcabbc53f56f21156bb09a08f7509ecb28d2a710f55d889",
+      "artifact_sha256": "941c1addf424d95c399470b0ebc282ac440076c8a04c307656edf22ce733a6ff",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 2,
+      "reference_input_count": 4,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P012/P012_20260706_194745_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P012",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P012.png",
+        "size": {
+          "width": 1296,
+          "height": 760
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 760
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P013",
@@ -464,17 +685,109 @@
         "width": 1296,
         "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青强行捡起横刀扑上，刀光劈向虎妖脖颈；虎妖一脚后发先至，把他踹飞。；角色：裴长青、虎妖、姜月初；场景：LOC_WILD；构图与表演：动作大格，刀光和虎妖腿部动势交叉；裴长青飞向姜月初脚边。；共享参考ID：CHAR_PEI、MON_TIGER、CHAR_JYC、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：一副古朴绘卷在姜月初眼前徐徐展开，金色字迹化作光点，照亮她苍白的脸和颤抖的瞳孔。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初；场景：LOC_WASTELAND；构图与表演：重点大格；系统文字不要直接生成可读内容，只画金色文字光点和卷轴；姜月初正脸必须严格继承 CHAR_JYC；预留后期系统提示区。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+        }
+      ],
+      "result_path": "出图/第1话/panels/P013.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T10:23:42",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "959d40cbc78895d1490e18da787138269546419663f42cb18b61bf3b9b09282b",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P013",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P013.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 1,
+        "reference_input_count": 1,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P014",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 840
+      },
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初的视线从虎妖移到脚边奄奄一息的裴长青，画面用冷白光切出她半张脸，眼神发沉。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青；场景：LOC_WASTELAND；构图与表演：心理转折格；女主半脸特写与地上裴长青虚焦同框；继承 CHAR_JYC，表情不是邪笑，而是被逼到极限的空冷。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+        },
         {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png"
+        }
+      ],
+      "result_path": "出图/第1话/panels/P014.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T12:01:34",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "74d47e042add034161c20b3c568be24e443e228b93e273ea32b80a14490b28b2",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P014",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P014.png",
+        "size": {
+          "width": 1296,
+          "height": 840
         },
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
+        "expected_size": {
+          "width": 1296,
+          "height": 840
         },
+        "declared_reference_count": 2,
+        "reference_input_count": 2,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P015",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 840
+      },
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初俯身捡起横刀，长发垂落遮住大半面庞，手臂微微颤抖，刀柄沾着裴长青的余温。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初；场景：LOC_WASTELAND；构图与表演：手和刀柄特写结合女主低头剪影；手腕、刀柄、刀刃关系清楚；不能多手或刀柄融合；保留 CHAR_JYC 的黑长发轮廓。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_HENGDAO=镇魔司横刀 / 断刀；风格契约:古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。；备注:由 P006 合格刀落点面板种下的临时道具锚点。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png"
@@ -484,104 +797,48 @@
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P013.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T19:57:12",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "c4078c31ed79718e0a3d64a1374b55ea8ed3233baef86000ec3caaf68ebd2b7a",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P013/P013_20260706_195028_previous.png"
-        }
-      ]
-    },
-    {
-      "panel_id": "P014",
-      "status": "ready",
-      "size": {
-        "width": 1296,
-        "height": 840
-      },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初跌坐在地，虎妖步步逼近；她眼前忽然展开古朴绘卷，金色字迹浮现。；角色：姜月初、虎妖；场景：LOC_WILD；构图与表演：大格，绘卷光照亮姜月初惊惧的脸；虎妖虚化在后方压迫。；共享参考ID：CHAR_JYC、MON_TIGER、SYS_BAIYAOPU；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "CHAR_JYC",
-          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
-        },
-        {
-          "id": "SYS_BAIYAOPU",
-          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
-        }
-      ],
-      "result_path": "出图/第1话/panels/P014.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T20:00:56",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "7871243da46820225a9bbe63b4a9a80414d8a1a67096ce5a9fa2fff06f912c78",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P014/P014_20260706_195712_previous.png"
-        }
-      ]
-    },
-    {
-      "panel_id": "P015",
-      "status": "ready",
-      "size": {
-        "width": 1296,
-        "height": 840
-      },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：百妖谱绘卷特写，金色字迹列出宿主、凡境、武学无、道行零，以及斩杀生物可获得道行的规则。；场景：LOC_WILD；构图与表演：画面不要直接生成清晰文字，留出系统文字区域给后期嵌字。；共享参考ID：SYS_BAIYAOPU；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "SYS_BAIYAOPU",
-          "path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png"
-        }
-      ],
       "result_path": "出图/第1话/panels/P015.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T20:04:36",
+      "generated_at": "2026-07-07T12:09:16",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "98ab3e0dae26970640b9557b92d2106e90434f9fe37556fbb27d0f58a89aabae",
+      "artifact_sha256": "be4cdc8e8290eb129841b2a03ec37a2b02ca6e72fda83e70c4939d9fefa4aa4f",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 1,
+      "reference_input_count": 2,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P015/P015_20260706_200056_previous.png"
-        }
-      ]
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P015",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P015.png",
+        "size": {
+          "width": 1296,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 840
+        },
+        "declared_reference_count": 2,
+        "reference_input_count": 2,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P016",
       "status": "ready",
       "size": {
         "width": 1296,
-        "height": 840
+        "height": 1040
       },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：姜月初握住掉落的横刀，低头发抖；虎妖在前方逼近，裴长青奄奄一息躺在她脚边。；角色：姜月初、裴长青、虎妖；场景：LOC_WILD；构图与表演：三角构图：虎妖、姜月初、裴长青；重点放姜月初颤抖的手和刀柄。；共享参考ID：CHAR_JYC、CHAR_PEI、MON_TIGER、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
+      "prompt": "无字漫画分格画面，新国风水墨彩漫(黑白灰主调, 冷白高光, 古风妖魔, 电影感荒野雾气, 精致国漫脸)；画面事实：姜月初低声道歉，横刀没入裴长青胸口；画面聚焦她冷白脸颊上的血点和颤抖眼神，刀入肉只做遮挡剪影。；项目风格锚与一致性契约：style_contract:新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。；consistency_policy:女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。；forbidden_inheritance:不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。；角色：姜月初、裴长青；场景：LOC_WASTELAND；构图与表演：结尾大格；不要内脏和过度血腥，刀入胸用前景衣料和黑影遮挡；姜月初脸必须继承 CHAR_JYC，眼神是恐惧、决断和自我厌恶混合；底部留黑场给下话钩子。；共享参考ID与不可漂移约束：CHAR_JYC=姜月初；角色DNA:瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。；定妆契约:第1话穿囚服、血污、尘土、惊惧、决断等状态时仍必须保持同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷眼神；不要换成泛韩漫脸、Q版脸、短发、圆脸或甜美脸。；年龄/形态继承:年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度，不得换脸、换眼型、换发际线。；禁继承:不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。；备注:用户图像是女主脸等基础模版。正式批量出图前建议补 front/three_quarter/side/back 专门定妆多视图。；已定义年龄形态:穿越初始,镇魔司误认；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PEI=裴长青；角色DNA:二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。；定妆契约:所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。；年龄/形态继承:第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。；禁继承:不要继承女主脸、女主长发和囚服；不要画成妖物或路人。；备注:Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_HENGDAO=镇魔司横刀 / 断刀；风格契约:古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。；备注:由 P006 合格刀落点面板种下的临时道具锚点。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "references": [
         {
           "id": "CHAR_JYC",
@@ -590,10 +847,6 @@
         {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png"
-        },
-        {
-          "id": "MON_TIGER",
-          "path": "出图/共享/图片/MON_TIGER__anchor.png"
         },
         {
           "id": "PROP_HENGDAO",
@@ -603,100 +856,41 @@
       "result_path": "出图/第1话/panels/P016.png",
       "source": "Codex CLI",
       "model": "GPT Image 2",
-      "generated_at": "2026-07-06T20:08:52",
+      "generated_at": "2026-07-07T12:15:33",
       "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "3ec9d7b0173de20068aa2c447eb58c51aefa0d7fc3ffab6bcb582242b0416ee6",
+      "artifact_sha256": "4a94f4b1740f71942fb8bc673df628fb2ef84a1a3975659f6ce12c1680a3ee96",
       "attempt": 1,
       "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 4,
+      "reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
       "history": [
         {
           "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P016/P016_20260706_200436_previous.png"
-        }
-      ]
-    },
-    {
-      "panel_id": "P017",
-      "status": "ready",
-      "size": {
-        "width": 1296,
-        "height": 760
-      },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：裴长青仰面看着少女持刀背影，姜月初长发遮住半张脸，表情看不清。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：静默小格，留白压迫；不要提前暴露她要刺谁。；共享参考ID：CHAR_JYC、CHAR_PEI、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "CHAR_JYC",
-          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
-        },
-        {
-          "id": "CHAR_PEI",
-          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
-        },
-        {
-          "id": "PROP_HENGDAO",
-          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P016/P016_20260707_121255_previous.png"
         }
       ],
-      "result_path": "出图/第1话/panels/P017.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T20:10:43",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "e9a556f48d85e8f5743383f9b226b5841564e937cba59259c8a90f20dc807048",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P017/P017_20260706_200852_previous.png"
-        }
-      ]
-    },
-    {
-      "panel_id": "P018",
-      "status": "ready",
-      "size": {
-        "width": 1296,
-        "height": 1120
-      },
-      "prompt": "无字漫画分格画面，暗黑国风彩色条漫，电影感荒野、强血色反差、人物脸部稳定；画面事实：横刀刺入裴长青胸口，血线溅起；裴长青眼中满是错愕，姜月初的手仍在剧烈发抖。；角色：姜月初、裴长青；场景：LOC_WILD；构图与表演：结尾大格，避开内脏特写；用手、刀、错愕眼神和血线表达冲击。末尾留黑场或大留白。；共享参考ID：CHAR_JYC、CHAR_PEI、PROP_HENGDAO；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；线条清晰，主体明确，角色脸部和服装稳定，适合后期嵌字",
-      "negative_prompt": "文字，水印，logo，乱码字，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，服装漂移，低清晰度，过度血腥细节",
-      "references": [
-        {
-          "id": "CHAR_JYC",
-          "path": "出图/共享/图片/CHAR_JYC__anchor.png"
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P016",
+        "created_at": "2026-07-07T12:28:18",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P016.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
         },
-        {
-          "id": "CHAR_PEI",
-          "path": "出图/共享/图片/CHAR_PEI__anchor.png"
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
         },
-        {
-          "id": "PROP_HENGDAO",
-          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png"
-        }
-      ],
-      "result_path": "出图/第1话/panels/P018.png",
-      "source": "Codex CLI",
-      "model": "GPT Image 2",
-      "generated_at": "2026-07-06T20:13:56",
-      "backend_version": "codex-cli 0.142.5",
-      "artifact_sha256": "db12d928dccd4bb27c07d279314640ea04feb37b743d562593df07ebc1349c4c",
-      "attempt": 1,
-      "reference_input_mode": "codex_exec_image_flags",
-      "reference_input_count": 3,
-      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
-      "history": [
-        {
-          "kind": "archived_previous",
-          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人/出图/第1话/candidates/P018/P018_20260706_201043_previous.png"
-        }
-      ]
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     }
-  ],
-  "text_language": "中文"
+  ]
 }

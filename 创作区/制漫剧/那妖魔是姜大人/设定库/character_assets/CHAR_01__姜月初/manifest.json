@@ -1,21 +1,29 @@
 {
-  "kind": "n2d_project_character_asset_bundle",
-  "version": 1,
   "character_id": "CHAR_01",
+  "created_by": "n2d-image image_prompt_pack.py",
+  "directories": {
+    "adapters": "设定库/character_assets/CHAR_01__姜月初/adapters",
+    "lora": "设定库/character_assets/CHAR_01__姜月初/lora",
+    "prompts": "设定库/character_assets/CHAR_01__姜月初/prompts",
+    "qc": "设定库/character_assets/CHAR_01__姜月初/qc",
+    "reference": "设定库/character_assets/CHAR_01__姜月初/reference",
+    "voice": "设定库/character_assets/CHAR_01__姜月初/voice"
+  },
+  "kind": "n2d_project_character_asset_bundle",
   "name": "姜月初",
   "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
-  "directories": {
-    "reference": "设定库/character_assets/CHAR_01__姜月初/reference",
-    "prompts": "设定库/character_assets/CHAR_01__姜月初/prompts",
-    "lora": "设定库/character_assets/CHAR_01__姜月初/lora",
-    "voice": "设定库/character_assets/CHAR_01__姜月初/voice",
-    "adapters": "设定库/character_assets/CHAR_01__姜月初/adapters",
-    "qc": "设定库/character_assets/CHAR_01__姜月初/qc"
+  "section_indexes": {
+    "adapters": "设定库/character_assets/CHAR_01__姜月初/adapters/image2image_reference_chain.json",
+    "lora": "设定库/character_assets/CHAR_01__姜月初/lora/status.json",
+    "prompts": "设定库/character_assets/CHAR_01__姜月初/prompts/identity_lock_prompt.md",
+    "qc": "设定库/character_assets/CHAR_01__姜月初/qc/multiview_identity_第1集.json",
+    "reference": "设定库/character_assets/CHAR_01__姜月初/reference/multiview_index.json",
+    "voice": "设定库/character_assets/CHAR_01__姜月初/voice/voice_profile.json"
   },
   "truth_sources": {
-    "identity_registry": "出图/共享/identity_registry.json",
-    "character_card": "设定库/characters/姜月初.md"
+    "character_card": "设定库/characters/姜月初.md",
+    "identity_registry": "出图/共享/identity_registry.json"
   },
-  "created_by": "n2d-image image_prompt_pack.py",
-  "updated_at": "2026-07-06T02:47:14+00:00"
+  "updated_at": "2026-07-07T04:00:49+00:00",
+  "version": 1
 }

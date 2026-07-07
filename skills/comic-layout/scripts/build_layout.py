@@ -21,12 +21,22 @@ HEAVY_FUNCTIONS = {
     "physical_burden",
     "mystery_glint",
     "water_source_reveal",
+    "green_water_reveal",
+    "spirit_rice_reveal",
+    "spirit_rice_pour",
+    "ration_shortfall",
 }
 MEDIUM_FUNCTIONS = {
     "compressed_backstory",
     "labor_montage",
     "task_assignment",
     "rules_and_threat",
+    "wash_basin",
+    "morning_canteen",
+    "breakfast_reward",
+    "zhang_visit",
+    "rice_allocation",
+    "night_water_finish",
 }
 COMPACT_FUNCTIONS = {
     "reaction",
@@ -40,11 +50,31 @@ COMPACT_FUNCTIONS = {
     "proactive_choice",
     "night_fifth_trip",
     "approach_basin",
+    "sleep_transition",
+    "spoilage_question",
+    "spoilage_decision",
+    "night_worry",
+    "door_knock",
+    "empty_room_choice",
 }
 
-HEAVY_TOKENS = ("opening", "hook", "cliffhanger", "reveal", "peak", "turning", "humiliation", "burden", "glint", "source")
-MEDIUM_TOKENS = ("montage", "assignment", "threat", "scale", "backstory")
-COMPACT_TOKENS = ("reaction", "transition", "setup", "question", "leave", "empty", "approach")
+HEAVY_TOKENS = (
+    "opening",
+    "hook",
+    "cliffhanger",
+    "reveal",
+    "peak",
+    "turning",
+    "humiliation",
+    "burden",
+    "glint",
+    "source",
+    "green_water",
+    "spirit_rice",
+    "shortfall",
+)
+MEDIUM_TOKENS = ("montage", "assignment", "threat", "scale", "backstory", "canteen", "allocation", "visit")
+COMPACT_TOKENS = ("reaction", "transition", "setup", "question", "leave", "empty", "approach", "worry", "knock")
 
 
 def load_json(path: Path) -> dict:

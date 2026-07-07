@@ -35,6 +35,7 @@ import re
 import shlex
 import subprocess
 import sys
+import datetime as dt
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
 # 视觉动因 → SFX 标签 + 类别（impact=点状落在动作时刻；ambience=铺满整 clip）。
@@ -54,6 +55,7 @@ SFX_RULES = (
 )
 
 DEFAULT_ACTION_FRACTION = 0.5  # impact 类无任何拍点数据时，落在 clip 中点（最后兜底·估计）
+VERSION = 1
 
 # 命中/撞点秒抽取（治"打斗 SFX 落 clip 中点估计、对不上画面命中帧"）——与
 # anchor_planner.apex_anchor_seconds 同口径（vendored 保 n2d-compose 自包含·跨 skill 不 import）。
@@ -326,6 +328,70 @@ def _render_silent(out_wav: str, duration: float) -> bool:
         return False
 
 
+def _now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+def _rel(root: str, path: str) -> str:
+    try:
+        return os.path.relpath(path, root)
+    except Exception:
+        return path
+
+
+def build_foley_evidence(
+    root: str,
+    ep: str,
+    plan: Sequence[Mapping[str, Any]],
+    plan_path: str,
+    out_wav: str,
+    duration: float,
+    policy: Mapping[str, Any],
+    *,
+    render_status: str,
+    backend_configured: bool,
+    backend_used: bool,
+) -> Dict[str, Any]:
+    """Production-facing evidence sidecar consumed by n2d-review.
+
+    The work files stay in 合成/_work; this report records whether the audible
+    foley is real backend output, an intentional silent placeholder, or
+    suppressed because native AV clip audio is preserved.
+    """
+    return {
+        "kind": "n2d_foley_evidence",
+        "version": VERSION,
+        "episode": ep,
+        "generated_at": _now_iso(),
+        "status": render_status,
+        "duration_sec": round(float(duration or 0.0), 3),
+        "event_count": len([x for x in plan if isinstance(x, Mapping)]),
+        "backend_configured": backend_configured,
+        "backend_used": backend_used,
+        "policy": dict(policy),
+        "plan_path": _rel(root, plan_path),
+        "mix_path": _rel(root, out_wav),
+        "mix_exists": os.path.exists(out_wav),
+        "events": list(plan),
+        "notes": [
+            "silent_placeholder 表示已产可对齐占位轨，但未配置真 V2A 拟音后端；不冒充真实音效。",
+            "suppressed_native_av 表示原生音画音轨被保留，compose 侧拟音被抑制以避免双层声效。",
+        ],
+    }
+
+
+def write_foley_evidence(root: str, ep: str, payload: Mapping[str, Any]) -> str:
+    prod = os.path.join(root, "生产数据")
+    os.makedirs(prod, exist_ok=True)
+    path = os.path.join(prod, f"foley_{ep}.json")
+    tmp = f"{path}.tmp.{os.getpid()}"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2, sort_keys=True)
+        f.write("\n")
+    os.replace(tmp, path)
+    return _rel(root, path)
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     argv = list(argv if argv is not None else sys.argv[1:])
     if len(argv) < 2:
@@ -369,6 +435,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         f.write("\n")
     if policy["mode"] == "suppress":
         if _render_silent(out_wav, dur):
+            write_foley_evidence(root, ep, build_foley_evidence(
+                root, ep, plan, plan_path, out_wav, dur, policy,
+                render_status="suppressed_native_av",
+                backend_configured=False,
+                backend_used=False,
+            ))
             print(f"原生音画后端自带同步音效（{policy['reason']}）→ compose 侧 V2A foley 已抑制，"
                   f"避免双层打击声/糊。拟音计划 {len(plan)} 事件仅留档 foley_plan.json；"
                   "如需强制叠加 compose foley：FORCE_COMPOSE_FOLEY=1。")
@@ -377,12 +449,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     backend = load_foley_backend()
     if backend is not None and backend(plan_path, out_wav, dur):
+        write_foley_evidence(root, ep, build_foley_evidence(
+            root, ep, plan, plan_path, out_wav, dur, policy,
+            render_status="backend_rendered",
+            backend_configured=True,
+            backend_used=True,
+        ))
         print(f"✓ 拟音：真 V2A 后端合成 {len(plan)} 个 SFX 事件（N2D_FOLEY_CMD）。")
         return 0
     if backend is not None:
         print("⚠️ N2D_FOLEY_CMD 后端执行失败 → 回退静音占位轨。", file=sys.stderr)
     # 默认/回退：静音占位（诚实——计划已产，真音效需配 N2D_FOLEY_CMD 后端）
     if _render_silent(out_wav, dur):
+        write_foley_evidence(root, ep, build_foley_evidence(
+            root, ep, plan, plan_path, out_wav, dur, policy,
+            render_status="silent_placeholder",
+            backend_configured=backend is not None,
+            backend_used=False,
+        ))
         print(f"拟音计划 {len(plan)} 个事件已产；当前为**静音占位轨**（配 N2D_FOLEY_CMD 接 Woosh/Mirelo 等 V2A 后端出真音效）。")
         return 0
     return 1  # 连静音轨都没产出 → compose 回退自造

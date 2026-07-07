@@ -1,149 +1,36 @@
 {
-  "kind": "n2d_source_comprehension",
-  "version": 1,
-  "register": "modern_zh",
-  "lang_guess": "modern_baihua",
+  "comprehension_doc": "设定库/source_comprehension.md",
   "confidence": "high",
-  "signals": [
-    "现代白话特征：「的」密度 2.9%、现代虚词 3.0%"
-  ],
+  "kind": "n2d_source_comprehension",
+  "lang_guess": "modern_baihua",
+  "register": "modern_zh",
   "scores": {
+    "cjk_ratio": 0.826,
     "classical_strong": 0.0182,
     "de_density": 0.0285,
     "modern_marker": 0.0302,
-    "yue_count": 13,
     "trad_ratio": 0.0,
-    "cjk_ratio": 0.826
+    "yue_count": 13
   },
+  "signals": [
+    "现代白话特征：「的」密度 2.9%、现代虚词 3.0%"
+  ],
+  "source": "小说/那妖魔是姜大人.txt",
   "source_traits": {
-    "content_chars": 1863984,
     "chapter_markers": 1638,
+    "content_chars": 1863984,
     "long_form": true,
     "power_system_likely": true
   },
-  "source": "小说/那妖魔是姜大人.txt",
   "status": "confirmed",
-  "comprehension_doc": "设定库/source_comprehension.md",
   "understanding_contract": {
-    "modern_understanding": "现代灵魂姜月初穿入大唐妖魔世界，开局在尸场求生。第1集百妖谱开启并逼她杀裴长青取道行；第2集她斩虎山神、收录妖物、获得猛虎快刀圆满和闻弦初境；第3集她埋葬裴长青、换上镇魔司黑衣赤纹伪装身份，在官道被飞鹰门陈青源误认为镇魔司大人，被跪求救上盘村百姓；第4-5集承接狼妖小弧，检验她的身份伪装、战力和道德选择。",
-    "episode_promise_basis": [
-      {
-        "trace_id": "SRC_PROMISE_001",
-        "promise": "百妖谱杀妖得道行、收录妖物得长期能力",
-        "opened_at": "第1-2集",
-        "payoff_or_progress": "虎山神摹影已兑现；后续每个妖物小弧继续推进成长",
-        "risk_if_cut": "系统流爽点和主角变强逻辑断裂"
-      },
-      {
-        "trace_id": "SRC_PROMISE_002",
-        "promise": "裴长青之死形成姜月初的道德债",
-        "opened_at": "第2集",
-        "payoff_or_progress": "第3集埋葬与穿镇魔司衣物时继续压住她的心理负担",
-        "risk_if_cut": "主角会变成纯利己工具人"
-      },
-      {
-        "trace_id": "SRC_PROMISE_003",
-        "promise": "贱籍/无路引身份困境",
-        "opened_at": "第3集",
-        "payoff_or_progress": "推动她临时借镇魔司外壳通行，后续寻找合法身份解决",
-        "risk_if_cut": "她为什么不能直接隐居或入城会失去动机"
-      },
-      {
-        "trace_id": "SRC_PROMISE_004",
-        "promise": "上盘村百姓危在旦夕，镇魔司大人必须选择是否出手",
-        "opened_at": "第3集尾",
-        "payoff_or_progress": "第4-5集狼妖小弧兑现",
-        "risk_if_cut": "第3集没有追更钩子"
-      }
-    ],
-    "character_motives": [
-      {
-        "trace_id": "SRC_MOTIVE_001",
-        "character": "姜月初",
-        "want": "活下去，摆脱贱籍/流民身份，掌握百妖谱规则",
-        "obstacle": "无户籍路引、镇魔司伪装会暴露、妖魔威胁和道德债",
-        "choice_pressure": "第3集拒绝救村最安全，答应才符合镇魔司大人的身份和她尚存的底线",
-        "arc_delta": "从单纯求生，被迫迈向承担身份责任"
-      },
-      {
-        "trace_id": "SRC_MOTIVE_002",
-        "character": "陈青源",
-        "want": "救上盘村乡亲",
-        "obstacle": "飞鹰门打不过狼妖，县兵无力，州府救援太慢",
-        "choice_pressure": "只能赌眼前镇魔司大人愿意出手",
-        "arc_delta": "把姜月初从逃亡路推入公共事件"
-      },
-      {
-        "trace_id": "SRC_MOTIVE_003",
-        "character": "裴长青",
-        "want": "死前维护镇魔司职责并传回虎妖消息",
-        "obstacle": "重伤濒死且被姜月初杀死",
-        "choice_pressure": "死后通过衣物、横刀、身份和债务继续影响姜月初",
-        "arc_delta": "从濒死引路人转为主角的道德阴影"
-      }
-    ],
-    "causality_chain": [
-      {
-        "trace_id": "SRC_CAUSE_001",
-        "cause": "姜家获罪，原身是贱籍流放犯",
-        "effect": "姜月初无法正常通行、投宿、入城，必须寻找身份解法",
-        "must_keep": "身份死局",
-        "adaptation_note": "户籍细节可压缩，但贱籍/路引危险不可删"
-      },
-      {
-        "trace_id": "SRC_CAUSE_002",
-        "cause": "裴长青和镇魔卫全灭",
-        "effect": "姜月初获得镇魔司制服、横刀和伪装外壳",
-        "must_keep": "身份误认的物理证据",
-        "adaptation_note": "搜尸换衣要成戏，不能一句带过"
-      },
-      {
-        "trace_id": "SRC_CAUSE_003",
-        "cause": "飞鹰门看到黑衣赤纹制服",
-        "effect": "陈青源误认她为镇魔司大人并跪求救援",
-        "must_keep": "第3集反差钩子",
-        "adaptation_note": "靠动作和沉默压迫制造喜剧压力"
-      },
-      {
-        "trace_id": "SRC_CAUSE_004",
-        "cause": "上盘村被狼妖占据且州府救援太慢",
-        "effect": "姜月初成为眼前唯一希望",
-        "must_keep": "集尾追更压力",
-        "adaptation_note": "惨状说明要克制但足够明确"
-      }
-    ],
-    "foreshadowing_ledger": [
-      {
-        "trace_id": "SRC_FORESHADOW_001",
-        "setup": "摹影虎山神是否能继续进阶",
-        "payoff_plan": "后续道行充足或新妖物小弧中推进",
-        "status": "ongoing",
-        "do_not_drop_reason": "系统成长长线"
-      },
-      {
-        "trace_id": "SRC_FORESHADOW_002",
-        "setup": "裴长青能否还命",
-        "payoff_plan": "作为姜月初长期心理债和成长目标保留",
-        "status": "ongoing",
-        "do_not_drop_reason": "主角道德底线"
-      },
-      {
-        "trace_id": "SRC_FORESHADOW_003",
-        "setup": "镇魔司身份伪装",
-        "payoff_plan": "第3-5集用于威慑，后续可能暴露",
-        "status": "active",
-        "do_not_drop_reason": "身份小弧推进器"
-      }
-    ],
     "adaptation_boundaries": {
-      "preserve": [
-        "现代吐槽反差",
-        "百妖谱成长机制",
-        "裴长青之死的道德债",
-        "贱籍/路引身份困境",
-        "镇魔司误认",
-        "上盘村求救",
-        "闻弦战力标尺"
+      "do_not_change": [
+        "姜月初不是主动圣母，而是被迫选择",
+        "系统不能无代价开挂",
+        "陈青源是求援不是命令",
+        "姜月初尚未获得合法镇魔司身份",
+        "第3集必须以救不救上盘村/唯一希望形成追更钩子"
       ],
       "modernize_or_compress": [
         "户籍制度说明",
@@ -152,20 +39,156 @@
         "上盘村惨状细节",
         "长段心理活动压成短句/旁白"
       ],
-      "do_not_change": [
-        "姜月初不是主动圣母，而是被迫选择",
-        "系统不能无代价开挂",
-        "陈青源是求援不是命令",
-        "姜月初尚未获得合法镇魔司身份",
-        "第3集必须以救不救上盘村/唯一希望形成追更钩子"
+      "preserve": [
+        "现代吐槽反差",
+        "百妖谱成长机制",
+        "裴长青之死的道德债",
+        "贱籍/路引身份困境",
+        "镇魔司误认",
+        "上盘村求救",
+        "闻弦战力标尺"
       ]
     },
+    "causality_chain": [
+      {
+        "adaptation_note": "户籍细节可压缩，但贱籍/路引危险不可删",
+        "cause": "姜家获罪，原身是贱籍流放犯",
+        "effect": "姜月初无法正常通行、投宿、入城，必须寻找身份解法",
+        "must_keep": "身份死局",
+        "trace_id": "SRC_CAUSE_001"
+      },
+      {
+        "adaptation_note": "搜尸换衣要成戏，不能一句带过",
+        "cause": "裴长青和镇魔卫全灭",
+        "effect": "姜月初获得镇魔司制服、横刀和伪装外壳",
+        "must_keep": "身份误认的物理证据",
+        "trace_id": "SRC_CAUSE_002"
+      },
+      {
+        "adaptation_note": "靠动作和沉默压迫制造喜剧压力",
+        "cause": "飞鹰门看到黑衣赤纹制服",
+        "effect": "陈青源误认她为镇魔司大人并跪求救援",
+        "must_keep": "第3集反差钩子",
+        "trace_id": "SRC_CAUSE_003"
+      },
+      {
+        "adaptation_note": "惨状说明要克制但足够明确",
+        "cause": "上盘村被狼妖占据且州府救援太慢",
+        "effect": "姜月初成为眼前唯一希望",
+        "must_keep": "集尾追更压力",
+        "trace_id": "SRC_CAUSE_004"
+      }
+    ],
+    "character_motives": [
+      {
+        "arc_delta": "从单纯求生，被迫迈向承担身份责任",
+        "character": "姜月初",
+        "choice_pressure": "第3集拒绝救村最安全，答应才符合镇魔司大人的身份和她尚存的底线",
+        "obstacle": "无户籍路引、镇魔司伪装会暴露、妖魔威胁和道德债",
+        "trace_id": "SRC_MOTIVE_001",
+        "want": "活下去，摆脱贱籍/流民身份，掌握百妖谱规则"
+      },
+      {
+        "arc_delta": "把姜月初从逃亡路推入公共事件",
+        "character": "陈青源",
+        "choice_pressure": "只能赌眼前镇魔司大人愿意出手",
+        "obstacle": "飞鹰门打不过狼妖，县兵无力，州府救援太慢",
+        "trace_id": "SRC_MOTIVE_002",
+        "want": "救上盘村乡亲"
+      },
+      {
+        "arc_delta": "从濒死引路人转为主角的道德阴影",
+        "character": "裴长青",
+        "choice_pressure": "死后通过衣物、横刀、身份和债务继续影响姜月初",
+        "obstacle": "重伤濒死且被姜月初杀死",
+        "trace_id": "SRC_MOTIVE_003",
+        "want": "死前维护镇魔司职责并传回虎妖消息"
+      }
+    ],
+    "episode_promise_basis": [
+      {
+        "opened_at": "第1-2集",
+        "payoff_or_progress": "虎山神摹影已兑现；后续每个妖物小弧继续推进成长",
+        "promise": "百妖谱杀妖得道行、收录妖物得长期能力",
+        "risk_if_cut": "系统流爽点和主角变强逻辑断裂",
+        "trace_id": "SRC_PROMISE_001"
+      },
+      {
+        "opened_at": "第2集",
+        "payoff_or_progress": "第3集埋葬与穿镇魔司衣物时继续压住她的心理负担",
+        "promise": "裴长青之死形成姜月初的道德债",
+        "risk_if_cut": "主角会变成纯利己工具人",
+        "trace_id": "SRC_PROMISE_002"
+      },
+      {
+        "opened_at": "第3集",
+        "payoff_or_progress": "推动她临时借镇魔司外壳通行，后续寻找合法身份解决",
+        "promise": "贱籍/无路引身份困境",
+        "risk_if_cut": "她为什么不能直接隐居或入城会失去动机",
+        "trace_id": "SRC_PROMISE_003"
+      },
+      {
+        "opened_at": "第3集尾",
+        "payoff_or_progress": "第4-5集狼妖小弧兑现",
+        "promise": "上盘村百姓危在旦夕，镇魔司大人必须选择是否出手",
+        "risk_if_cut": "第3集没有追更钩子",
+        "trace_id": "SRC_PROMISE_004"
+      }
+    ],
+    "episode_trace_scope": {
+      "第1集": {
+        "deferred_trace_ids": [
+          "SRC_PROMISE_002",
+          "SRC_PROMISE_003",
+          "SRC_PROMISE_004",
+          "SRC_MOTIVE_002",
+          "SRC_CAUSE_003",
+          "SRC_CAUSE_004",
+          "SRC_FORESHADOW_003"
+        ],
+        "rationale": "第1集只打开尸场求生、百妖谱杀妖得道行、裴长青压力/身份物证和长期心理债种子；第2/3集以后才打开的贱籍通行、上盘村、狼妖小弧等不应作为第1集消费阻断。",
+        "required_trace_ids": [
+          "SRC_PROMISE_001",
+          "SRC_MOTIVE_001",
+          "SRC_MOTIVE_003",
+          "SRC_CAUSE_001",
+          "SRC_CAUSE_002",
+          "SRC_FORESHADOW_001",
+          "SRC_FORESHADOW_002"
+        ],
+        "updated_at": "2026-07-07T05:20:01+00:00"
+      }
+    },
+    "foreshadowing_ledger": [
+      {
+        "do_not_drop_reason": "系统成长长线",
+        "payoff_plan": "后续道行充足或新妖物小弧中推进",
+        "setup": "摹影虎山神是否能继续进阶",
+        "status": "ongoing",
+        "trace_id": "SRC_FORESHADOW_001"
+      },
+      {
+        "do_not_drop_reason": "主角道德底线",
+        "payoff_plan": "作为姜月初长期心理债和成长目标保留",
+        "setup": "裴长青能否还命",
+        "status": "ongoing",
+        "trace_id": "SRC_FORESHADOW_002"
+      },
+      {
+        "do_not_drop_reason": "身份小弧推进器",
+        "payoff_plan": "第3-5集用于威慑，后续可能暴露",
+        "setup": "镇魔司身份伪装",
+        "status": "active",
+        "trace_id": "SRC_FORESHADOW_003"
+      }
+    ],
+    "modern_understanding": "现代灵魂姜月初穿入大唐妖魔世界，开局在尸场求生。第1集百妖谱开启并逼她杀裴长青取道行；第2集她斩虎山神、收录妖物、获得猛虎快刀圆满和闻弦初境；第3集她埋葬裴长青、换上镇魔司黑衣赤纹伪装身份，在官道被飞鹰门陈青源误认为镇魔司大人，被跪求救上盘村百姓；第4-5集承接狼妖小弧，检验她的身份伪装、战力和道德选择。",
     "power_system_rules": {
       "applicable": "yes",
-      "level_or_rank_rules": [
-        "当前已确认凡境、闻弦初境、闻弦境生物，不提前自由发明更高境界",
-        "虎山神和青面郎君均作为闻弦级标尺",
-        "镇魔司、民间门派、妖物之间存在明确战力差"
+      "combat_consistency_rules": [
+        "姜月初有闻弦初境和猛虎快刀圆满，可以打闻弦妖物但仍有风险",
+        "青面郎君不能被轻易秒杀，必须靠信息、刀法、配合或战术",
+        "普通飞鹰门成员能牵制小妖，不能单独解决闻弦主妖"
       ],
       "growth_constraints": [
         "道行是有限资源",
@@ -173,16 +196,16 @@
         "收录妖物消耗巨大但带来长期能力",
         "第2集后只剩二十五年道行，不能无限开挂"
       ],
-      "combat_consistency_rules": [
-        "姜月初有闻弦初境和猛虎快刀圆满，可以打闻弦妖物但仍有风险",
-        "青面郎君不能被轻易秒杀，必须靠信息、刀法、配合或战术",
-        "普通飞鹰门成员能牵制小妖，不能单独解决闻弦主妖"
+      "level_or_rank_rules": [
+        "当前已确认凡境、闻弦初境、闻弦境生物，不提前自由发明更高境界",
+        "虎山神和青面郎君均作为闻弦级标尺",
+        "镇魔司、民间门派、妖物之间存在明确战力差"
       ],
       "not_applicable_reason": ""
     },
     "source_register_strategy": {
-      "register": "modern_zh",
       "dialogue_style": "短句、现代吐槽、古代身份压迫混合；旁白负责压缩世界观，角色台词负责选择和压力。",
+      "register": "modern_zh",
       "terms_to_keep": [
         "百妖谱",
         "道行",
@@ -197,5 +220,6 @@
       ],
       "terms_to_translate": []
     }
-  }
+  },
+  "version": 1
 }

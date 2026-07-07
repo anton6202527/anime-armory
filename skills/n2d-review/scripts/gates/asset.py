@@ -199,7 +199,7 @@ def check_asset_reference_registry(
             if asset_type in {"scene", "location"}:
                 if not any(k in constraints for k in ("layout", "axis", "light_anchor", "structure")):
                     add(BLOCK, "资产引用注册层", loc, "场景资产 constraints 必须锁 layout/axis/light_anchor/structure 至少一项")
-                if "lighting_signature" not in constraints:
+                if not (constraints.get("lighting_signature") or asset.get("lighting_signature")):
                     add(WARN, "资产引用注册层", loc, "建议为反复出现的场景增加 lighting_signature（色温/饱和度/主光位），以防跨镜色调突变")
 
             if asset_type in {"prop", *ASSET_WEAPON_TYPES} and "structure" not in constraints:

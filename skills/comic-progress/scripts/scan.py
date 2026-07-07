@@ -131,6 +131,27 @@ def has_longline_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
     return True, "长线专门定妆未补齐：" + "；".join(pieces)
 
 
+def has_style_blocker(root: Path, chapter: str) -> tuple[bool, str, str]:
+    report_path = root / "生产数据" / f"comic_style_consistency_{chapter}.json"
+    if not report_path.is_file():
+        return True, "缺少风格一致性报告，请先跑 comic-review/style_consistency", "comic-review"
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return True, "风格一致性报告不可解析，请重跑 comic-review/style_consistency", "comic-review"
+    summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+    block_count = int(summary.get("block_count") or 0)
+    if block_count > 0:
+        examples = [
+            str(item.get("panel_id") or item.get("artifact") or item.get("code"))
+            for item in report.get("findings") or []
+            if isinstance(item, dict) and item.get("severity") == "block"
+        ]
+        suffix = "：" + "、".join(item for item in examples[:8] if item) if examples else ""
+        return True, f"风格一致性仍有 {block_count} 个阻断{suffix}", "comic-image"
+    return False, "", ""
+
+
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
@@ -164,6 +185,18 @@ def summarize_project(root: Path) -> dict:
                         "chapter": chapter,
                         "next_stage": "专门定妆",
                         "next_skill": "comic-identity",
+                        "complete": False,
+                        "reason": reason,
+                    }
+                )
+                continue
+            blocked, reason, skill = has_style_blocker(root, chapter)
+            if blocked:
+                fronts.append(
+                    {
+                        "chapter": chapter,
+                        "next_stage": "风格一致性复核" if skill == "comic-review" else "风格返修",
+                        "next_skill": skill,
                         "complete": False,
                         "reason": reason,
                     }

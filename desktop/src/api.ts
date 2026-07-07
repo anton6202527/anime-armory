@@ -11,6 +11,7 @@ import type {
   ImportWorkSourcesResult,
   LineInfo,
   NextAction,
+  QualityInsights,
   SkillInfo,
   SkillTreeEntry,
   WorkChangeDetail,
@@ -18,6 +19,7 @@ import type {
   WorkChangeSummary,
   WorkDirListing,
   WorkFileWriteResult,
+  WorkSearchResponse,
   WorkSnapshot,
 } from "./types";
 
@@ -153,6 +155,24 @@ export async function workDeleted(root: string): Promise<string[]> {
   return invoke<string[]>("work_deleted", { root });
 }
 
+export async function searchWorkFiles(
+  root: string,
+  query: string,
+  includeContent = true,
+  caseSensitive = false,
+  wholeWord = false,
+  useRegex = false,
+): Promise<WorkSearchResponse> {
+  return invoke<WorkSearchResponse>("search_work_files", {
+    root,
+    query,
+    includeContent,
+    caseSensitive,
+    wholeWord,
+    useRegex,
+  });
+}
+
 export async function createWorkEntry(
   root: string,
   parentRel: string,
@@ -193,6 +213,10 @@ export async function openSourceRepo(): Promise<void> {
 /** Open a trusted http(s) URL in the system browser. */
 export async function openExternalUrl(url: string): Promise<void> {
   return invoke("open_external_url", { url });
+}
+
+export async function setAppTerminalVisible(visible: boolean): Promise<void> {
+  return invoke("set_app_terminal_visible", { visible });
 }
 
 /** Create an empty work folder under a line's product dir; returns its absolute path.
@@ -264,6 +288,14 @@ export async function readCanvas(root: string, ep: string): Promise<CanvasData> 
 
 export async function readEpisodeWorkspace(root: string, ep: string): Promise<EpisodeWorkspace | null> {
   return invoke<EpisodeWorkspace | null>("read_episode_workspace", { root, ep });
+}
+
+export async function readQualityInsights(
+  root: string,
+  line: string,
+  ep?: string | null,
+): Promise<QualityInsights> {
+  return invoke<QualityInsights>("read_quality_insights", { root, line, ep: ep ?? null });
 }
 
 export async function readCanvasLayout(root: string, ep: string): Promise<CanvasLayout> {

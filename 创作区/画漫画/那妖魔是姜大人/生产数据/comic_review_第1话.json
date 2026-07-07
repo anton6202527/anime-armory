@@ -1,21 +1,25 @@
 {
   "schema_version": 1,
   "kind": "comic_review",
-  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-06T22:47:58",
+  "created_at": "2026-07-07T14:34:35",
   "verdict": "pass",
   "settings": {
     "定妆级别": "长线专门定妆",
+    "参考一致性策略": "共享参考图",
+    "年龄形态继承": "开启",
+    "角色一致性硬闸": "关闭",
+    "风格锚": "用户提供女主参考图；仅锁姜月初脸型、眼型、发质、气质和黑白仙侠审美，不继承拼图版式、水印、平台 UI、伞和头冠为固定剧情设定",
     "文字语言": "中文",
     "合规用途": "自用草稿"
   },
   "summary": {
-    "panel_count": 18,
-    "issue_count": 3,
+    "panel_count": 16,
+    "issue_count": 11,
     "block_count": 0,
     "warn_count": 0,
-    "info_count": 3
+    "info_count": 11
   },
   "artifacts": {
     "panel_script": "脚本/第1话/panel_script.json",
@@ -23,6 +27,7 @@
     "lettering": "排版/第1话/lettering.json",
     "manifest": "排版/第1话/export_manifest.json",
     "identity_report": "生产数据/comic_identity_report_第1话.json",
+    "style_report": "生产数据/comic_style_consistency_第1话.json",
     "rendered": [
       {
         "path": "排版/第1话/长图/longstrip.webp",
@@ -42,21 +47,180 @@
           "P013",
           "P014",
           "P015",
-          "P016",
-          "P017",
-          "P018"
+          "P016"
         ],
         "size": {
-          "width": 1296,
-          "height": 16048
-        }
+          "width": 1440,
+          "height": 15456
+        },
+        "format": "webp"
       }
     ],
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第1话_lettering_slots.jpg",
+      "items": 24,
+      "missing_slots": []
+    },
     "qa_preview": "生产数据/qa_previews/第1话_longstrip_preview.webp",
     "contact_sheet": "生产数据/panel_contact_sheet_第1话.jpg"
   },
-  "raw_bubble_candidates": [],
+  "raw_bubble_candidates": [
+    {
+      "panel_id": "P004",
+      "path": "出图/第1话/panels/P004.png",
+      "components": [
+        {
+          "x": 909,
+          "y": 337,
+          "w": 143,
+          "h": 97,
+          "area": 4738
+        }
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "path": "出图/第1话/panels/P008.png",
+      "components": [
+        {
+          "x": 885,
+          "y": 0,
+          "w": 410,
+          "h": 267,
+          "area": 57204
+        }
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "path": "出图/第1话/panels/P010.png",
+      "components": [
+        {
+          "x": 1198,
+          "y": 361,
+          "w": 97,
+          "h": 132,
+          "area": 6254
+        }
+      ]
+    }
+  ],
+  "accepted_raw_bubble_candidates": [
+    {
+      "panel_id": "P004",
+      "path": "出图/第1话/panels/P004.png",
+      "components": [
+        {
+          "x": 909,
+          "y": 337,
+          "w": 143,
+          "h": 97,
+          "area": 4738
+        }
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "path": "出图/第1话/panels/P008.png",
+      "components": [
+        {
+          "x": 885,
+          "y": 0,
+          "w": 410,
+          "h": 267,
+          "area": 57204
+        }
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "path": "出图/第1话/panels/P010.png",
+      "components": [
+        {
+          "x": 1198,
+          "y": 361,
+          "w": 97,
+          "h": 132,
+          "area": 6254
+        }
+      ]
+    }
+  ],
+  "style_consistency": {
+    "verdict": "pass",
+    "summary": {
+      "panel_count": 16,
+      "finding_count": 5,
+      "block_count": 0,
+      "warn_count": 0,
+      "info_count": 5
+    }
+  },
   "issues": [
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：候选区域位于右侧天空和荒野雾面，是预留对白位置附近的自然亮部，不是模型烘焙的空白气泡或文字框。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第1话/panels/P008.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：候选区域位于右上天空/雾光留白，用于后期对白，不含气泡边框、尾巴或文字容器。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检"
+    },
+    {
+      "severity": "info",
+      "category": "image",
+      "artifact": "出图/第1话/panels/P010.png",
+      "reason": "疑似烘焙空白气泡已人审签收为误报：候选区域是虎妖复起大格的逆光天空/烟雾亮面，不是烘焙空白气泡；最终对白由 comic-compose 后期绘制。",
+      "return_to": "comic-review",
+      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第1话/panels/P001.png",
+      "reason": "风格指纹内聚度 0.7469 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "风格指纹内聚度 0.7122 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第1话/panels/P003.png",
+      "reason": "风格指纹内聚度 0.8420 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第1话/panels/P010.png",
+      "reason": "风格指纹内聚度 0.8389 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
+    {
+      "severity": "info",
+      "category": "style",
+      "artifact": "出图/第1话/panels/P013.png",
+      "reason": "风格指纹内聚度 0.8360 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "return_to": "comic-review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
     {
       "severity": "info",
       "category": "rights",
@@ -83,6 +247,7 @@
     }
   ],
   "notes": [
+    "已刷新风格一致性报告：生产数据/comic_style_consistency_第1话.md",
     "已刷新 QA 长图预览：生产数据/qa_previews/第1话_longstrip_preview.webp",
     "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第1话.jpg"
   ],

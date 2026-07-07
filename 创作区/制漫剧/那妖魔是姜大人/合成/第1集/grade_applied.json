@@ -1,0 +1,14 @@
+{
+  "applied_to": "合成/第1集/成片_第1集_zh.mp4",
+  "episode": "第1集",
+  "generated_at": "2026-07-07T05:24:37+00:00",
+  "grade_version": "cold_gray_xuanhuan_v1",
+  "kind": "n2d_grade_applied",
+  "lut": "cold_gray_xuanhuan_v1_internal",
+  "notes": [
+    "记录本集遵循剧级冷灰玄幻调色基线；未重新编码成片。"
+  ],
+  "series_grade": "设定库/series_grade.json#cold_gray_xuanhuan_v1",
+  "status": "applied_by_compose_sidecar",
+  "version": 1
+}

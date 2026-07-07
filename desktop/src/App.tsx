@@ -10,6 +10,7 @@ import {
   defaultWorkspace,
   resolveRepo,
   seedDemos,
+  setAppTerminalVisible,
 } from "./api";
 import { useI18n, type Language } from "./i18n";
 import { installSkinPlugin } from "./skins";
@@ -58,6 +59,9 @@ export function App() {
   // active tab id, or null = show the home area
   const [activeId, setActiveId] = useState<string | null>(null);
   const [skillsLine, setSkillsLine] = useState<LineInfo | null>(null);
+  const [terminalVisible, setTerminalVisible] = useState(() => {
+    return window.localStorage.getItem("aa.terminalVisible") !== "false";
+  });
   const tabUseSeq = useRef(0);
 
   useEffect(() => {
@@ -66,20 +70,38 @@ export function App() {
 
   useEffect(() => {
     let alive = true;
-    let unlisten: (() => void) | null = null;
+    let unlistenLanguage: (() => void) | null = null;
+    let unlistenTerminal: (() => void) | null = null;
     listen<Language>("anime-armory:set-language", (event) => {
       if (event.payload === "zh" || event.payload === "en") setLanguage(event.payload);
     })
       .then((fn) => {
-        if (alive) unlisten = fn;
+        if (alive) unlistenLanguage = fn;
         else fn();
       })
       .catch((e) => console.error("menu language listener failed", e));
+    listen<boolean>("anime-armory:toggle-terminal", (event) => {
+      setTerminalVisible((visible) => {
+        const next = typeof event.payload === "boolean" ? event.payload : !visible;
+        window.localStorage.setItem("aa.terminalVisible", String(next));
+        return next;
+      });
+    })
+      .then((fn) => {
+        if (alive) unlistenTerminal = fn;
+        else fn();
+      })
+      .catch((e) => console.error("menu terminal listener failed", e));
     return () => {
       alive = false;
-      unlisten?.();
+      unlistenLanguage?.();
+      unlistenTerminal?.();
     };
   }, [setLanguage]);
+
+  useEffect(() => {
+    setAppTerminalVisible(terminalVisible).catch((e) => console.error("terminal menu sync failed", e));
+  }, [terminalVisible]);
 
   function nextTabUse() {
     tabUseSeq.current += 1;
@@ -107,7 +129,7 @@ export function App() {
   // canvas refits (hidden tabs stay mounted with display:none)
   useEffect(() => {
     window.dispatchEvent(new Event("resize"));
-  }, [activeId]);
+  }, [activeId, terminalVisible]);
 
   async function pickWorkspace() {
     const picked = await open({ directory: true, multiple: false, defaultPath: workspaceRoot });
@@ -222,6 +244,7 @@ export function App() {
               line={t.line}
               root={t.root}
               active={activeId === t.id}
+              terminalVisible={terminalVisible}
               onRootChanged={(root) => replaceWorkRoot(t.id, t.line, root)}
               onBack={() => {
                 setActiveId(null);

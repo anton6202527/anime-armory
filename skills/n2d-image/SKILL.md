@@ -223,9 +223,10 @@ python3 skills/n2d-image/scripts/reference_planner.py <作品根> 第N集
 **逐单位循环**（每个粒度单位 = 1 张 / N 张 / 一场景）：
 1. 生成这一单位。
 2. 走「筛选宽容 + 重抽预算」自检，落档 / 废料归档（与本节正交：粒度/优先序定**出的顺序与停审颗粒**，预算/筛选定**每张抽几次、何时放行**）。
-3. **停下来给用户看这一单位的产出**（贴 PNG 路径 + 一句说明），问：「这单位 OK 吗？要重抽 / 改 prompt / 换参考图，还是继续下一单位？」
-4. 用户「继续」→ 出下一单位；「要调」→ 就地改（prompt / 参考图 / 重抽档）重出本单位，再继续。
-5. 每单位落档后即回写 `出图` 列分子（X/Y），进度随时可查（`n2d-progress`）。
+3. **逐图即时 QC**：每生成并落档 1 张 PNG（含共享定妆、首帧、中段锚帧、尾帧），立即跑 n2d 自己的 `image_qc` 最小可用入口；当前脚本若只能全量扫描，就对当前作品/本集全量跑一次并只把新图相关 finding 作为继续/重抽依据。`block` 或降级精度命中近景/多人同框时先修这张，不继续生成后续图；`review/warn` 必须在本线报告里留下人工签收或重抽记录。不得把这一步抽成公共实现，也不得复用其它系列的 QC 实现。
+4. **停下来给用户看这一单位的产出**（贴 PNG 路径 + 一句说明），问：「这单位 OK 吗？要重抽 / 改 prompt / 换参考图，还是继续下一单位？」
+5. 用户「继续」→ 出下一单位；「要调」→ 就地改（prompt / 参考图 / 重抽档）重出本单位，再继续。
+6. 每单位落档后即回写 `出图` 列分子（X/Y），进度随时可查（`n2d-progress`）。
 
 > **整集档例外**：选 `整集` 才回到旧行为（>10 张可 spawn 子 agent 并发、最后统一报告），不逐单位停审。`小批`/`按场景` 在「批」层停审。
 
@@ -387,7 +388,7 @@ python3 skills/n2d/_lib/image_backend_adapter.py scan --json
    - 若落档的是 `continuity.midframe/anchors` 声明的 `_mid` / `_aK` 中段锚帧，**必须先按该镜「中段锚帧生成方式」和自检确认动作/姿态确实处于首帧与尾帧之间**，再在记账命令追加 `--meta self_check=pass`（可再补 `--meta mode=codex_image2image_midframe`、`--meta source_image=...`）。`video_preflight` 会读取最新一条该资产 image generation/redraw 事件；PNG 存在但缺 `self_check=pass`，或最新记录是 fail，会 BLOCK，避免“只锁人锁景、动作未成立”的 `_mid` 混进正式闸门。
    若本次是重抽或失败，`--event redraw --status fail --redraw-reason "<脸漂移|构图错|硬性禁忌|...>"` 也必须记录。
 
-**本集分镜全部落档后，跑出图落档机检（生图后闸门，与 gate 互补）**：
+**每张/每单位落档后先跑出图落档机检；本集分镜全部落档后再跑一次收尾总闸（生图后闸门，与 gate 互补）**：
 ```bash
 # 首选 full QC 环境（有 Pillow/cv2/insightface/onnxruntime/buffalo_l）
 /opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python skills/n2d-image/scripts/image_qc.py <作品根> 第N集 --json

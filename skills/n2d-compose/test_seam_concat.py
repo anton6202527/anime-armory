@@ -47,6 +47,22 @@ def test_no_storyboard_all_cut_single_run():
     assert runs == [[0, 1, 2, 3]]  # 单 run → 等价 concat -c copy
 
 
+def test_split_relay_cached_names_keep_storyboard_alignment():
+    files = [
+        "/tmp/clip_01_n_a.mp4",
+        "/tmp/clip_02_part1_n_b.mp4",
+        "/tmp/clip_02_part2_n_c.mp4",
+        "/tmp/clip_03_n_d.mp4",
+    ]
+    plan = s.build_plan(files, ["硬切", "微溶解", "硬切"], ["", "", ""], "cut")
+
+    assert plan["used_storyboard"] is True
+    assert plan["n_logical"] == 3
+    assert not plan["warnings"]
+    assert plan["seams"][1]["reason"] == "内部拆段接力(clip_02)"
+    assert plan["seams"][2]["decision"] == "dissolve"
+
+
 def test_xfade_offsets_and_filter():
     assert s.xfade_offsets([5, 4, 3], 0.25) == [4.75, 8.5]
     filt, final = s.build_xfade_filter([5, 4, 3], 0.25)

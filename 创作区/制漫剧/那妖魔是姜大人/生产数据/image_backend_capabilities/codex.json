@@ -68,103 +68,103 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": "Codex CLI"
     },
     "max_reference_images": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "official": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "cli_probe",
-      "observed_text": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
-      "source": "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
+      "source": "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "cli_probe",
+  "evidence_kind": "cli_help",
   "kind": "n2d_image_backend_refresh_evidence",
-  "note": "2026-07-06 scan: codex auto_usable=true; GPT Image 2 via Codex selected; codex_image_runner supports codex exec --image reference attachments and PNG落档",
+  "note": "2026-07-07 local CLI refresh: codex exec exposes --image <FILE> attachments; features list reports image_generation stable=true; doctor reports Codex CLI 0.142.5 current/healthy. n2d route remains GPT Image 2 via Codex CLI with multi-image reference attachments and PNG落档 through codex_image_runner; no official persistent subject-id/handle evidence; no generation submitted.",
   "source_urls": [],
   "sources": [
-    "local Codex CLI probe + n2d image_backend_adapter scan + codex_image_runner help"
+    "local Codex CLI 0.142.5: codex --help; codex exec --help; codex features list; codex doctor"
   ],
-  "verified_at": "2026-07-06"
+  "verified_at": "2026-07-07"
 }

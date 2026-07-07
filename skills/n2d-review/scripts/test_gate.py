@@ -1132,6 +1132,38 @@ def test_anchor_fingerprint_missing_file_blocks(tmp_path):
                for f in gate.findings)
 
 
+def test_anchor_fingerprint_restricted_partial_prefers_silhouette(tmp_path):
+    import hashlib
+    img = tmp_path / "出图" / "共享" / "图片"
+    img.mkdir(parents=True)
+    png_bytes = b"\x89PNG-group-silhouette-v1"
+    (img / "定妆_GROUP_群像__常态.png").write_bytes(png_bytes)
+    form = {
+        "form": "常态",
+        "anchor_sha": hashlib.sha256(png_bytes).hexdigest(),
+        "no_full_face": True,
+        "reference_group": {
+            "hand": {"path": "出图/共享/图片/定妆_GROUP_群像__常态_手部局部.png", "status": "planned"},
+            "silhouette": {"path": "出图/共享/图片/定妆_GROUP_群像__常态.png", "status": "review_pending"},
+        },
+        "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+                "hand": {"path": "出图/共享/图片/定妆_GROUP_群像__常态_手部局部.png", "status": "planned"},
+                "silhouette": {"path": "出图/共享/图片/定妆_GROUP_群像__常态.png", "status": "review_pending"},
+            },
+        },
+    }
+    (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "GROUP_群像", "name": "群像", "forms": [form]}]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.findings.clear()
+    gate.check_anchor_fingerprints(str(tmp_path), "第1集")
+
+    assert not [f for f in gate.findings if f["dim"] == "共享定妆" and f["sev"] == gate.BLOCK]
+
+
 # ── 表情库跨集共享锁定（P1-b）────────────────────────────────────────
 def _setup_expr_registry(tmp_path, *, self_check=None, anchor_sha=None, make_file=True,
                          png_bytes=b"\x89PNG-expr-anger-v1"):
@@ -2539,6 +2571,19 @@ def test_food_bowl_is_not_weapon_like_asset():
     assert gate._is_weapon_like_asset({"id": "PROP_SHORT_BLADE", "type": "prop", "name": "short blade"}) is True
 
 
+def test_vfx_only_effect_can_opt_out_of_weapon_like_heuristic():
+    asset = {
+        "id": "VFX_妖气",
+        "type": "vfx",
+        "name": "妖气绕刀",
+        "is_entity_weapon": False,
+        "weapon_like_role": "vfx_only",
+        "constraints": {"visual_contract": "妖气绕刀，不是实体武器或本命法宝。"},
+    }
+
+    assert gate._is_weapon_like_asset(asset) is False
+
+
 def test_asset_reference_registry_rejects_prefix_type_mismatch(tmp_path):
     data = _asset_registry()
     data["assets"][0]["id"] = "PROP_99"
@@ -2597,6 +2642,24 @@ def test_asset_reference_registry_scene_missing_scene_dna_is_blocked(tmp_path):
     root = _write_asset_registry(tmp_path, data)
     gate.check_asset_reference_registry(root, require_reference_assets=False)
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "场景 DNA" for f in gate.findings)
+
+
+def test_asset_reference_registry_accepts_top_level_lighting_signature(tmp_path):
+    data = _asset_registry()
+    data["assets"][0]["constraints"].pop("lighting_signature", None)
+    data["assets"][0]["lighting_signature"] = {
+        "color_temperature": "4200K cold moon",
+        "key_light": "soft side moon scatter",
+    }
+    root = _write_asset_registry(tmp_path, data)
+
+    gate.findings.clear()
+    gate.check_asset_reference_registry(root, require_reference_assets=False)
+
+    assert not any(
+        f["dim"] == "资产引用注册层" and "lighting_signature" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_asset_reference_registry_scene_dna_missing_layer_is_blocked(tmp_path):
@@ -5128,6 +5191,45 @@ def test_generation_recipe_evidence_passes_complete_event(tmp_path):
             "actual_image_inputs": ["出图/共享/图片/定妆_沈念.png"],
             "seed_effective": False,
             "seed_support": "unsupported",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "review")
+
+    assert not any(f["dim"] == "生成配方证据" for f in gate.findings)
+
+
+def test_generation_recipe_evidence_recovers_moved_project_asset_paths(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    mp4 = root / "出视频" / "第1集" / "视频" / "Clip_02_part1.mp4"
+    mp4.parent.mkdir(parents=True)
+    mp4.write_bytes(b"mp4")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    old_absolute = "/Users/old/learn/anime-armory/创作区/制漫剧/测试剧/出视频/第1集/视频/Clip_02_part1.mp4"
+    prefixed_relative = "创作区/制漫剧/测试剧/出视频/第1集/视频/Clip_02_part1.mp4"
+    assert gate._event_asset_rel(str(root), {"generation": {"asset": old_absolute}}) == "出视频/第1集/视频/Clip_02_part1.mp4"
+    assert gate._asset_matches(str(root), prefixed_relative, "出视频/第1集/视频/Clip_02_part1.mp4")
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "video",
+        "event": "generation",
+        "generation": {"asset": old_absolute, "status": "pass"},
+        "meta": {
+            "provider": "dreamina",
+            "model": "dreamina:3.0",
+            "channel": "dreamina",
+            "route_hash": "route-sha",
+            "capability_evidence_id": "video_backend_capabilities/dreamina",
+            "recipe_hash": "recipe-video",
+            "prompt_sha256": "prompt-video",
+            "reference_bundle_sha256": "ref-video",
+            "backend_version": "3.0",
+            "quality_tier": "720p",
+            "actual_image_inputs": ["出图/第1集/图片/Clip02_first.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported_or_unknown",
         },
     }, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -8087,6 +8189,32 @@ def test_ffprobe_missing_blocks_double_voice_at_review(tmp_path, monkeypatch):
     gate.check_video_assets(str(root), ep)
     assert not [f for f in gate.findings if f["dim"] == "原生音画" and f["sev"] == gate.BLOCK]
     assert [f for f in gate.findings if f["dim"] == "原生音画" and f["sev"] == gate.WARN]
+
+
+def test_video_split_count_warn_becomes_info_when_final_timeline_probe_passes(tmp_path, monkeypatch):
+    root = tmp_path / "work"; ep = "第1集"
+    video_dir = root / "出视频" / ep / "视频"
+    video_dir.mkdir(parents=True)
+    (video_dir / "Clip_01_part1.mp4").write_bytes(b"x")
+    (video_dir / "Clip_01_part2.mp4").write_bytes(b"x")
+    (root / "脚本" / ep).mkdir(parents=True)
+    (root / "脚本" / ep / "storyboard.json").write_text(
+        json.dumps({"clips": [{"id": "EP01_CLIP01"}]}, ensure_ascii=False), encoding="utf-8")
+    (root / "生产数据").mkdir(parents=True)
+    (root / "生产数据" / f"final_timeline_probe_{ep}.json").write_text(json.dumps({
+        "kind": "n2d_final_timeline_probe",
+        "actual_duration_sec": 10.0,
+        "expected_duration_sec": 10.2,
+        "duration_tolerance_sec": 1.0,
+        "findings": [],
+    }), encoding="utf-8")
+    monkeypatch.setattr(gate, "has_audio", lambda p: False)
+
+    gate.findings.clear()
+    gate.check_video_assets(str(root), ep)
+
+    assert not [f for f in gate.findings if f["dim"] == "视频" and f["sev"] == gate.WARN and "clip 数" in f["msg"]]
+    assert [f for f in gate.findings if f["dim"] == "视频" and f["sev"] == gate.INFO and "clip 数" in f["msg"]]
 
 
 def test_referenced_assets_finalized_anchor_sha_counts_as_evidence(tmp_path):

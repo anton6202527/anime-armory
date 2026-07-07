@@ -22,6 +22,17 @@ DEFAULT_FIELDS = [
     "audience_question_ledger",
     "performance_cues",
 ]
+EVIDENCE_BY_SCOPE = {
+    "出图": [
+        "出图 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
+        "逐镜出图 prompt 已承接 dramatic_function/audience_effect/pacing_allocation，构图、表演和画面信息不改写剧本承诺。",
+    ],
+    "出视频": [
+        "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
+        "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。",
+    ],
+}
+TRACE_FIELDS = ("source_trace_ids", "deferred_source_trace_ids", "source_trace_scope")
 
 
 def ep_label(value: str) -> str:
@@ -45,7 +56,7 @@ def load_json(path: Path) -> Optional[Any]:
 
 def write_atomic(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}.{id(text)}")
     tmp.write_text(text, encoding="utf-8")
     os.replace(tmp, path)
 
@@ -73,6 +84,34 @@ def prompt_has_contract_markers(text: str) -> bool:
     return any(m in text for m in markers)
 
 
+def evidence_lines(scope: str) -> Sequence[str]:
+    return EVIDENCE_BY_SCOPE.get(scope, EVIDENCE_BY_SCOPE["出视频"])
+
+
+def _filled(value: Any) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, (str, list, tuple, dict, set)):
+        return bool(value)
+    return True
+
+
+def inherit_trace_fields(entry: Dict[str, Any], existing: Mapping[str, Any], previous_scope: Optional[Mapping[str, Any]]) -> None:
+    """Preserve source-trace audit fields when re-signing one prompt scope."""
+    for field in TRACE_FIELDS:
+        for source in (previous_scope, existing):
+            if isinstance(source, Mapping) and _filled(source.get(field)):
+                entry[field] = source.get(field)
+                break
+    if _filled(entry.get("source_trace_ids")):
+        evidence = list(entry.get("evidence") or [])
+        if not any("source_trace_ids" in str(line) or "source trace" in str(line).lower() for line in evidence):
+            evidence.append(
+                "source_trace_ids 已继承到本 scope 签收收据；延期线索只登记 deferred，不作为本集消费阻断。"
+            )
+        entry["evidence"] = evidence
+
+
 def update_receipt(root: Path, ep: str, scope: str, prompt_rel: Path, reviewer: str, require_markers: bool) -> Dict[str, Any]:
     contract_path = root / "生产数据" / f"script_quality_contract_{ep}.json"
     prompt_path = prompt_rel if prompt_rel.is_absolute() else root / prompt_rel
@@ -90,13 +129,16 @@ def update_receipt(root: Path, ep: str, scope: str, prompt_rel: Path, reviewer: 
     existing = load_json(app_path)
     if isinstance(existing, Mapping) and existing.get("kind") == APPLICATION_KIND:
         data: Dict[str, Any] = dict(existing)
-        scopes = [s for s in data.get("scopes") or [] if isinstance(s, Mapping) and s.get("scope") != scope]
+        old_scopes = [s for s in data.get("scopes") or [] if isinstance(s, Mapping)]
+        previous_scope = next((s for s in old_scopes if s.get("scope") == scope), None)
+        scopes = [s for s in old_scopes if s.get("scope") != scope]
     else:
         data = {"kind": APPLICATION_KIND, "episode": ep, "accepted": True, "scopes": []}
+        previous_scope = None
         scopes = []
     contract_file_sha = sha256_file(contract_path)
     contract_hash = contract_content_hash(contract)
-    scopes.append({
+    scope_receipt = {
         "scope": scope,
         "prompt_path": prompt_rel_str,
         "prompt_sha256": sha256_file(prompt_path),
@@ -110,12 +152,11 @@ def update_receipt(root: Path, ep: str, scope: str, prompt_rel: Path, reviewer: 
             for row in ((contract.get("signable_fields") or {}).get("clip_dramatic_functions") or [])
             if isinstance(row, Mapping) and row.get("clip_id")
         ],
-        "evidence": [
-            "视频 prompt 已按 script_quality_contract 写入核心看点、首屏钩、留存承诺、时长分配和观众问题处理。",
-            "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。",
-        ],
+        "evidence": list(evidence_lines(scope)),
         "reviewed_at": now_iso(),
-    })
+    }
+    inherit_trace_fields(scope_receipt, data, previous_scope)
+    scopes.append(scope_receipt)
     data.update({
         "episode": ep,
         "accepted": True,

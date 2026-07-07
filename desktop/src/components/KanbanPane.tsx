@@ -6,14 +6,24 @@ import type { CanvasClip, CanvasFrame } from "../types";
 import { QualitySummaryStrip } from "./QualitySummary";
 import type { ViewProps } from "../views/registry";
 
-// Kanban board for canvas lines (n2d/ad/mv): the same per-episode clips as the
+// Kanban board for canvas lines: the same per-episode clips/panels as the
 // infinite canvas, laid out by production artifacts. Columns are intentionally
 // non-exclusive: a clip with video should still appear in "已出图".
-type KanbanColumnKey = "todo" | "image" | "video";
-const COLUMNS: { key: KanbanColumnKey; labelKey: "kanban.todo" | "kanban.image" | "kanban.video"; of: (c: CanvasClip) => boolean }[] = [
+type KanbanColumnKey = "todo" | "image" | "video" | "review";
+type KanbanColumn = {
+  key: KanbanColumnKey;
+  labelKey: "kanban.todo" | "kanban.image" | "kanban.video" | "kanban.review";
+  of: (c: CanvasClip) => boolean;
+};
+const VIDEO_COLUMNS: KanbanColumn[] = [
   { key: "todo", labelKey: "kanban.todo", of: (c) => !hasImage(c) },
   { key: "image", labelKey: "kanban.image", of: hasImage },
   { key: "video", labelKey: "kanban.video", of: (c) => c.video_exists },
+];
+const COMIC_COLUMNS: KanbanColumn[] = [
+  { key: "todo", labelKey: "kanban.todo", of: (c) => !hasImage(c) },
+  { key: "image", labelKey: "kanban.image", of: hasImage },
+  { key: "review", labelKey: "kanban.review", of: (c) => c.qa_blocks > 0 || c.qa_warnings > 0 || c.qa.length > 0 },
 ];
 
 function hasImage(clip: CanvasClip): boolean {
@@ -83,7 +93,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
   return (
     <>
     <div className="kanban-card" title={clipTooltip(clip)}>
-      {kind === "image" && frames.length > 0 && (
+      {(kind === "image" || kind === "review") && frames.length > 0 && (
         <div className="kanban-frame-grid" aria-label={`${clip.label} frames`}>
           {frames.slice(0, 4).map((frame, idx) => {
             const url = frame.abs ? withRevision(mediaUrl(frame.abs)) : "";
@@ -188,7 +198,8 @@ export function KanbanPane({ canvas, refreshKey = 0 }: ViewProps) {
   const { t } = useI18n();
   const groups = useMemo(() => {
     const clips = canvas?.clips ?? [];
-    return COLUMNS.map((col) => ({ ...col, clips: clips.filter(col.of) }));
+    const columns = canvas?.source === "panel_script" ? COMIC_COLUMNS : VIDEO_COLUMNS;
+    return columns.map((col) => ({ ...col, clips: clips.filter(col.of) }));
   }, [canvas]);
 
   if (!canvas || canvas.clips.length === 0) {

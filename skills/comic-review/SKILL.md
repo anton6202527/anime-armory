@@ -19,6 +19,7 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, 
 
 - `生产数据/comic_review_第N话.json`。
 - `生产数据/comic_review_第N话.md`。
+- `生产数据/comic_style_consistency_第N话.json/md` 与 `consistency_findings_style_第N话.json`：面板风格一致性、场景族群基线、调色离群、拼贴/分栏/外框嫌疑和生成配方一致性 findings。
 - `_进度.md`：人工或机器审查通过后，把 `审查` 标 `✅`；有阻断问题时不回写完成。
 
 ## 怎么跑
@@ -35,7 +36,19 @@ python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --
 python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话 --write-progress
 ```
 
-脚本会刷新 `生产数据/qa_previews/第N话_longstrip_preview.webp`，并检查设置、脚本、排版、嵌字、导出 manifest、一致性报告、权利状态和疑似烘焙空白气泡。视觉美术判断仍需人工复核；机检发现的疑似气泡是定位线索，不是像素级最终判决。
+脚本会刷新 `生产数据/qa_previews/第N话_longstrip_preview.webp`，并检查设置、脚本、排版、嵌字、导出 manifest、一致性报告、权利状态、`lettering_slot_qc` 嵌字槽位接触表和疑似烘焙空白气泡。视觉美术判断仍需人工复核；机检发现的疑似气泡是定位线索，不是像素级最终判决。
+
+只跑风格一致性机检：
+
+```bash
+python3 skills/comic-review/scripts/style_consistency.py "创作区/画漫画/作品名" --chapter 第1话
+```
+
+该报告使用漫画线自包含的风格一致性口径：同一话必须统一生图模型/渠道、登记风格锚/`style_contract`，并用面板风格指纹检查画风/照片感/细节密度离群；全话基线之外还会按场景族群复核，避免把脚本计划内的日景、夜景、山路、水底或蒙太奇误判成画风漂移。同场景会检查冷暖/品绿调色横跳，并检测疑似内部分栏、拼贴 gutter、外框/截图边。`block` 回 `comic-image` 重抽，`warn` 必须人审签收或重抽。
+
+若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。
+
+若“疑似烘焙空白气泡”其实是天空、雾光、宣纸留白或系统绘卷等计划内亮部，可写 `生产数据/raw_bubble_acceptance_第N话.json` 做人审签收。`accepted_findings[]` 至少包含 `{"code":"raw_bubble_candidate","panel_id":"Pxxx","reason":"...","evidence":"..."}`；重跑 `comic-review` 后对应项会降为 `info`，但该格重抽后必须重新复核。
 
 ## 审查维度
 
@@ -47,6 +60,7 @@ python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --
 | 画面可读性 | 主体、表情、动作、道具是否清楚 |
 | 气泡遮挡 | 是否挡脸、手、关键动作、重要道具 |
 | 角色一致性 | 脸、发型、服装、标志物是否跨格稳定 |
+| 风格一致性 | 生图模型/渠道是否统一，风格锚是否登记，面板是否出现照片感/色彩/细节密度离群，场景族群内是否自洽，同场景是否冷暖调色横跳，是否出现多面板拼贴 gutter 或外框/截图边 |
 | 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |
 | 高一致性长线口径 | 开启高一致性参考策略、年龄形态继承或角色硬闸时，是否登记风格锚、角色 DNA、禁漂移项和形态继承策略 |
 | 手脚/动作解剖 | 脚尖、脚步、踩踏、跪地、武器落点是否被画成手或漂浮肢体 |

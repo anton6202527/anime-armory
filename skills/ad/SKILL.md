@@ -2,6 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（创意策划→脚本→VO配音→分镜→角色/场景/产品定妆→AI出图→AI视频→剪辑包装→AI披露→质检）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + 多时长 cutdown + 多比例）。**不拆集**（一条主片是整体，可以很长）；多时长/多比例/A·B 走 cutdown 交付件矩阵。**自包含**。读 _进度.md 路由到 ad-progress(只读进度) / ad-update(更新影响计划) / ad-craft(契约/gate/AI披露) / ad-concept(创意) / ad-script(脚本+分镜+广告法机检) / ad-voice(VO配音) / ad-image(三层定妆+出图) / ad-video(图生视频) / ad-compose(剪辑包装+交付) / ad-review(M0质检)。Use when given a 客户需求/brief（**哪怕只有一句话**，缺项由 ad-concept 访谈补齐）, a product/brand to advertise, or an existing 创作区/拍广告/项目/ folder, or asked 拍广告 / 做广告片 / 广告创意 / 广告脚本 / TVC / 信息流广告 / 品牌片 / 产品demo / 带货视频. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, ad.
 ---
+> 规模统计：Skill 数 13 | SKILL.md 总行数 822 | 目录文本总行数 11873
 
 # ad — 拍广告生产线 · 总调度
 

@@ -21,6 +21,7 @@ description: 画漫画出图阶段。Use when preparing shared visual references
 - `出图/第N话/prompt/panel_jobs.json`：逐格出图任务包，schema 见 `references/prompt_job_schema.md`。
 - `出图/第N话/panels/P001.png` 等面板图。
 - `生产数据/codex_reference_bundles/第N话/Pxxx.json`：Codex 真实图片参考入参证据。
+- `生产数据/panel_qc/第N话/Pxxx.json`：每格落盘后即时 deterministic QC，记录 PNG/尺寸/参考输入/疑似烘焙气泡问题；人工视觉判断仍需现场复核。
 - `_进度.md`：job 包完成标 `出图包=✅`；面板图齐全标 `出图=✅`。
 
 ## 怎么跑
@@ -54,6 +55,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 ```
 
 建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
+每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=warn/block` 时不要继续无脑批跑；先看具体 panel，必要时补共享参考、压缩 prompt 或 `--force --targets Pxxx` 重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
 
 带 `references` 的格子默认要求 reference path 存在。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；只有明确需要纯文生图试验时才加 `--allow-missing-refs`。
 
@@ -79,9 +81,11 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 4. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 5. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
 6. Codex 路线必须把 reference path 转成真实 `--image` 入参，而不是只把路径写进 prompt。
-7. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
-8. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪后把 `出图` 标 `✅`。
-9. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
+7. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；再做人工视觉复核，重点看脸、服装、手脚、武器接触点、文字水印和剧情动作是否跑偏。
+8. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽；不要把坏图继续传给排版合成。
+9. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
+10. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无待重抽目标后把 `出图` 标 `✅`。
+11. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
 
 ## Prompt 要点
 

@@ -124,7 +124,7 @@ def write_project(
             "label": "打斗高光",
             "duration": 9,
             "description": "主角起手、命中、反应三拍打斗高光。",
-            "pacing_role": "打斗高光",
+            "pacing_role": "打斗高光反应镜",
             "runtime_priority": "primary",
             "dramatic_function": "用动作兑现反击爽点",
             "audience_effect": "获得打斗冲击与情绪释放",
@@ -268,5 +268,6 @@ def test_primary_highlight_clip_may_use_long_runtime(tmp_path: Path) -> None:
     contract = SQG.build_contract(root, "第1集", write_aux=True)
     codes = {f["code"] for f in contract["findings"] if f["severity"] == "block"}
     assert "long_clip_without_primary_runtime" not in codes
+    assert "compressed_clip_too_long_without_plan" not in codes
     pacing = contract["signable_fields"]["pacing_allocation"]["runtime_summary"]
     assert pacing["primary_duration"] >= 12

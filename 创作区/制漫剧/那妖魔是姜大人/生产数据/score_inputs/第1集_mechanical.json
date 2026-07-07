@@ -2,13 +2,13 @@
   {
     "dim": "完整性",
     "loc": "第1集",
-    "msg": "配音仍为占位音色（占位:true）——可用于出图 demo 的 rough timing；正式出视频/合成前必须换真实配音重定时",
-    "sev": "🔴"
+    "msg": "产物快照：配音句 28 · 视频片段 16 · 成片 1",
+    "sev": "🟢"
   },
   {
-    "dim": "完整性",
+    "dim": "字幕",
     "loc": "第1集",
-    "msg": "产物快照：配音句 28 · clip 16 · 成片 1",
+    "msg": "检测到 fitted 配音轨 voice_*_fitted.wav：逐句原始时长清单 start 不再代表成片时间轴，跳过字幕起点漂移对账；以 compose/visual 的成片≈配音≈字幕末行对账为准。",
     "sev": "🟢"
   },
   {
@@ -20,8 +20,8 @@
   {
     "dim": "视频",
     "loc": "第1集",
-    "msg": "clip MP4 数 16 与 storyboard clips 11 不一致",
-    "sev": "🟡"
+    "msg": "检测到 split-part 视频：物理 MP4 16 / 逻辑 clip 11 / storyboard 11",
+    "sev": "🟢"
   },
   {
     "dim": "原生音轨",
@@ -30,9 +30,15 @@
     "sev": "🟡"
   },
   {
+    "dim": "时长",
+    "loc": "第1集",
+    "msg": "源 clip 物理总长 127.86s 与镜头时长累计 120.52s 差 7.34s；已检测到 fitted 配音轨且成片 120.10s≈锁定槽位，split 时长已由 compose Time-Warp 修正。",
+    "sev": "🟢"
+  },
+  {
     "dim": "一致性",
     "loc": "第1集",
-    "msg": "检测到脸部识别库——跑 `python3 scripts/face_consistency.py <作品根> 第N集` 出崩脸分档报告（**自标定 flag-band**：用本作定妆组内部互相余弦当'同一人下限'地板，再分 🔴/🟡/🟢，不用写死的单一阈值；详见该脚本头注）",
+    "msg": "脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分",
     "sev": "🟢"
   }
 ]

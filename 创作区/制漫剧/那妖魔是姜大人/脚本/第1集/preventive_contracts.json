@@ -99,7 +99,15 @@
     "opening_hook": "姜月初在荒野尸骸战场惊醒，发现自己夹在濒死镇魔司裴长青与诈死虎山神之间。",
     "payoff_or_progress": "百妖谱规则开启，姜月初意识到斩杀生物可得道行，并把求生目标转向场上唯一还活着的人。",
     "promise": "本集承诺她必须弄懂百妖谱规则，并在无户籍、无武学、无退路的处境里找到活路。",
-    "source_trace_ids": []
+    "source_trace_ids": [
+      "SRC_PROMISE_001",
+      "SRC_MOTIVE_001",
+      "SRC_MOTIVE_003",
+      "SRC_CAUSE_001",
+      "SRC_CAUSE_002",
+      "SRC_FORESHADOW_001",
+      "SRC_FORESHADOW_002"
+    ]
   },
   "interaction_physics": [
     {
@@ -1270,7 +1278,11 @@
       "dramatic_function": "冷开场建立“尸场醒来”的生死危机，把观众立即拉进主角无助处境。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "静音也能读懂她刚穿越就落入死局，产生“她怎么活”的第一问题。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_CAUSE_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1278,7 +1290,12 @@
       "dramatic_function": "扩大世界观危险：虎首人身妖魔尸身与荒野尸场证明这是妖魔大唐。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众确认危险不是幻觉，同时被“虎妖真死了吗”悬念牵住。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_CAUSE_001",
+        "SRC_FORESHADOW_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1286,7 +1303,13 @@
       "dramatic_function": "让裴长青以威胁和交易介入，给姜月初一个不可信但暂时可走的生路。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众感到她被官差和身份双重压迫，理解她没有轻松逃跑选项。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_MOTIVE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_001",
+        "SRC_CAUSE_002",
+        "SRC_FORESHADOW_002"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1294,7 +1317,11 @@
       "dramatic_function": "用搀扶南行让姜月初暂时接受交易，并把人物位置推进到虎妖复苏前一刻。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众获得短暂缓和后立刻等待背后异响的反扑。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_MOTIVE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_002"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1302,7 +1329,11 @@
       "dramatic_function": "反转虎妖未死，推翻“尸体安全”的判断，把逃生计划打碎。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众从安全误判跌回绝境，期待裴长青如何解释或抵抗。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_FORESHADOW_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1310,7 +1341,12 @@
       "dramatic_function": "裴长青最后一击失败，证明正面武力路线断绝。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众看到最强战力被一脚击溃，接受姜月初必须寻找非常规活路。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_002",
+        "SRC_FORESHADOW_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1318,7 +1354,11 @@
       "dramatic_function": "百妖谱第一次开启，给主角绝境中的唯一规则性生路。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众获得金手指爽点，同时立刻想知道规则能否马上救命。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_FORESHADOW_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1326,7 +1366,10 @@
       "dramatic_function": "把系统规则指向“斩杀生物”，并把可杀目标从虎妖转向裴长青。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众意识到规则有代价，开始预判主角会不会突破道德底线。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1334,7 +1377,11 @@
       "dramatic_function": "姜月初摸刀并权衡虎妖与裴长青，完成刺杀选择前的心理转折。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众看见她不是冲动黑化，而是在无路可走中被规则逼到刀口。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_FORESHADOW_002"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1342,7 +1389,13 @@
       "dramatic_function": "执行反选择：姜月初刺杀裴长青，把本集推到道德反转高潮。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众受到“她真刺了”的冲击，追问系统是否认可、裴长青是否会死。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_MOTIVE_003",
+        "SRC_CAUSE_002",
+        "SRC_FORESHADOW_002"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     },
     {
@@ -1350,7 +1403,11 @@
       "dramatic_function": "在刺杀后留白，锁住“我只想活下去”的人物底色和第2集悬念。",
       "editing_intent": "按起因-反应-转折递进，保持尸场轴线和集尾悬念。",
       "emotional_turn": "观众带着百妖谱是否生效、虎妖是否扑来、裴长青命运三重问题进入下一集。",
-      "source_trace_ids": [],
+      "source_trace_ids": [
+        "SRC_PROMISE_001",
+        "SRC_MOTIVE_001",
+        "SRC_FORESHADOW_002"
+      ],
       "visual_question": "观众追问姜月初如何活下去以及百妖谱规则会怎样兑现。"
     }
   ],

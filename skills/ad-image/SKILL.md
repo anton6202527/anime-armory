@@ -26,6 +26,8 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片�
 python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--storyboard PATH] [--strict]
 ```
 
+**逐图即时 QC（ad 线自维护）**：每生成并落档 1 张定妆、首帧或尾帧 PNG，先跑广告线自己的最小 QC，再继续下一张。产品/KV/品牌露出/代言人关键镜必须立即跑 `product_qc.py`（当前脚本以阶段目录全量扫描为主，就全量跑一次并重点处理新图 finding）；普通痛点/空镜也要做 ad-image 本线落档自检（PNG 有效、主比例/安全框、是否有不该出现的 logo/文字/产品变形、是否符合 storyboard 资产声明），并在生产事件或返修记录中留痕。`summary.block>0` 或关键镜未能确认时先重抽/改 prompt/补产品参考，不把坏图传给 `ad-video`。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
+
 五项检（自包含；缺 Pillow/numpy 优雅降级，只跑 prompt-lint 并在报告标降级）：
 1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
 2. **brand-color ΔE**：产品镜主色 vs `visual_contract.品牌色` HEX（CIE76 Lab）。超阈 → block，临界 → warn；无区域信息取整图主色并降级 warn。
@@ -50,7 +52,9 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
    2. **写视觉契约总览**（`出图/分镜/prompt/00_总览.md`）：继承 `storyboard.json.visual_contract`（品牌色/光位锚/画风/构图），逐镜带视线方向/光位/起幅余量。
    3. **万能安全区对账**：出图时，确保核心资产位于 8x8 网格中心，为多画幅裁切预留边缘。
 
-4. 回写 `_进度.md` 出图 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" image --status ✅ --artifact 出图/分镜`，提示 `ad-video`。
+4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。
+5. **批次/全片收尾 QC**：一批或全部分镜出完后再跑一次 `product_qc.py`，确认报告时间晚于所有关键 PNG，`summary.block==0` 且无待确认关键镜后才进入 `ad-video`。
+6. 回写 `_进度.md` 出图 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" image --status ✅ --artifact 出图/分镜`，提示 `ad-video`。
 
 ## 广告专有强化
 
@@ -83,3 +87,4 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 | 项目内混用生图后端 | 一个项目锁一个后端；切换要记录并重出受影响图 |
 | logo 摆错位/被裁 | 产品 checklist 锁 logo 位置与最小留白 |
 | 把 `预算一般` 当成广告产品图也能差不多 | 错。产品/KV/代言人/品牌露出都属于关键图片，预算一般也要严格自检直到满意 |
+| 出完一批才发现产品/logo 漂 | 违反逐图即时 QC；每张产品/KV/品牌镜落档后立刻跑 ad-image 的 `product_qc.py`，不过先修当前图 |

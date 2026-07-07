@@ -9,10 +9,10 @@
 | file | exists | bytes | sha256 |
 |---|---:|---:|---|
 | _设置.md | True | 3694 | `f9b90dff81d4` |
-| _进度.md | True | 6959 | `d463ef904464` |
-| 生产数据/score_第1集.json | True | 49409 | `4ecc944a8b0c` |
-| 生产数据/consistency_ledger_第1集.json | True | 272675 | `f2efb7b79814` |
-| 生产数据/review_ui_findings_第1集.json | True | 152295 | `50d71517d84c` |
+| _进度.md | True | 7770 | `0fb49ce52b73` |
+| 生产数据/score_第1集.json | True | 40257 | `02cd70655a4c` |
+| 生产数据/consistency_ledger_第1集.json | True | 272923 | `1fa39ac6dcd6` |
+| 生产数据/review_ui_findings_第1集.json | True | 145285 | `49858ef8764c` |
 
 ## Missing
 

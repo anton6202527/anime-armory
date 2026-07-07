@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第1话",
+  "panel_id": "P009",
+  "created_at": "2026-07-07T12:28:18",
+  "verdict": "pass",
+  "path": "出图/第1话/panels/P009.png",
+  "size": {
+    "width": 1296,
+    "height": 840
+  },
+  "expected_size": {
+    "width": 1296,
+    "height": 840
+  },
+  "declared_reference_count": 3,
+  "reference_input_count": 3,
+  "blank_region_candidates": [],
+  "issues": [],
+  "manual_review_required": false
+}

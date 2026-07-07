@@ -46,12 +46,17 @@ const RELEASE_OMIT_DIR_NAMES = new Set([
   '_clipcache',
   '_downloads',
   '_work',
+  'image_qc',
   'local_sdxl_cache',
   'local_train',
   'lora',
   'lora_cloud_packages',
+  'reference_enhanced',
+  'video_qc',
   'video_raw_with_audio',
+  'video_repair_backups',
   '废料',
+  '候选',
 ]);
 
 const SENSITIVE_EXACT_NAMES = new Set([

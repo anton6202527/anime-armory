@@ -48,6 +48,25 @@ def test_flag_matches_clip_by_full_id_and_label():
     assert review_ui.flag_matches_clip({"message": "第5集无关 50 帧"}, c) is False
 
 
+def test_flatten_evidence_uses_per_evidence_counts_for_severity() -> None:
+    score = {
+        "dimensions": [{
+            "status": "fail",
+            "label": "角色 DNA",
+            "evidence": [
+                "脸(G1): block=0 warn=0 ok=31 skipped=False",
+                "跨集脸漂(G5): block=0 warn=1 ok=0 skipped=False",
+                "dashboard block[image_preflight/角色资产包]: 角色资产包分区不存在：reference",
+                "无计数但维度失败",
+            ],
+        }]
+    }
+
+    flags = review_ui.flatten_evidence(score)
+
+    assert [flag["severity"] for flag in flags] == ["info", "warn", "block", "block"]
+
+
 def test_deeplink_anchor_and_focus_in_html(tmp_path: Path) -> None:
     # 跨集深链落点：clip 卡有 data-clip-id 锚点 + #clip 聚焦逻辑
     manifest = {"kind": "n2d_review_ui", "episode": "第1集", "root": str(tmp_path),

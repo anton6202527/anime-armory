@@ -2,6 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, page layout, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-layout, comic-identity, comic-image, comic-batch, comic-compose, comic-review, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, comic.
 ---
+> 规模统计：Skill 数 10 | SKILL.md 总行数 723 | 目录文本总行数 8008
 
 # comic — 画漫画生产线总调度
 

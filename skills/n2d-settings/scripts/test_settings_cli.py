@@ -64,6 +64,31 @@ def test_set_force_allows_experimental_value(tmp_path: Path) -> None:
     assert "- 生视频模型：未来模型X" in (root / "_设置.md").read_text(encoding="utf-8")
 
 
+def test_compliance_usage_alias_normalizes_to_internal_only(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+
+    rc = cli.main(["set", str(root), "合规用途", "demo学习使用", "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["new"] == "internal_only"
+    assert "- 合规用途：internal_only" in (root / "_设置.md").read_text(encoding="utf-8")
+
+
+def test_image2image_reference_chain_setting_is_valid(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (root / "_设置.md").write_text(
+        "- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链\n",
+        encoding="utf-8",
+    )
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["errors"] == 0
+
+
 def test_reset_removes_setting(tmp_path: Path, capsys) -> None:
     root = make_project(tmp_path)
 

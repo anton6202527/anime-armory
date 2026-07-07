@@ -1,1 +1,1 @@
-[0:v][4:v]overlay=0:0:enable='between(t,51.000,59.000)'[p0];[p0][5:v]overlay=0:0:enable='between(t,59.000,67.000)'[vpanel]
+[0:v][4:v]overlay=0:0:enable='between(t,82.149,93.346)'[p0];[p0][5:v]overlay=0:0:enable='between(t,93.346,101.934)'[vpanel]

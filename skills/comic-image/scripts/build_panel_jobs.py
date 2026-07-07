@@ -44,34 +44,41 @@ def path_relative_to_root(root: Path, path: Path) -> str:
         return str(path)
 
 
-def resolve_reference_path(root: Path, ref_id: str, registry: dict) -> str:
+def resolve_reference_paths(root: Path, ref_id: str, registry: dict) -> list[dict[str, str]]:
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     asset = assets.get(ref_id) if isinstance(assets, dict) else None
-    candidates: list[Path] = []
+    candidates: list[tuple[str, Path]] = []
     if isinstance(asset, dict):
         for key in ("anchor_path", "primary_path", "path"):
             raw = asset.get(key)
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                candidates.append((key, path if path.is_absolute() else root / path))
         views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
         for key in ("front", "three_quarter", "face", "side", "back"):
             raw = views.get(key) if isinstance(views, dict) else ""
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                candidates.append((key, path if path.is_absolute() else root / path))
         for item in asset.get("reference_images") or []:
             raw = item.get("path") if isinstance(item, dict) else item
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                role = str(item.get("view") or item.get("role") or "reference_image") if isinstance(item, dict) else "reference_image"
+                candidates.append((role, path if path.is_absolute() else root / path))
     shared = root / "出图" / "共享" / "图片"
     for suffix in ("__anchor.png", ".png", ".jpg", ".jpeg", ".webp"):
-        candidates.append(shared / f"{ref_id}{suffix}")
-    for path in candidates:
+        candidates.append(("anchor", shared / f"{ref_id}{suffix}"))
+    out: list[dict[str, str]] = []
+    seen: set[Path] = set()
+    for role, path in candidates:
         if path.is_file():
-            return path_relative_to_root(root, path)
-    return ""
+            resolved = path.resolve()
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            out.append({"id": ref_id, "path": path_relative_to_root(root, path), "view": role})
+    return out[:4] if ref_id.startswith("CHAR_") else out[:1]
 
 
 def compact_metadata(value: Any, *, max_len: int = 460) -> str:
@@ -206,8 +213,9 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "prompt": build_prompt(panel, style, registry),
                 "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
                 "references": [
-                    {"id": ref, "path": resolve_reference_path(root, str(ref), registry)}
+                    item
                     for ref in panel_reference_ids(panel)
+                    for item in (resolve_reference_paths(root, str(ref), registry) or [{"id": str(ref), "path": ""}])
                 ],
                 "result_path": "",
                 "source": channel,
