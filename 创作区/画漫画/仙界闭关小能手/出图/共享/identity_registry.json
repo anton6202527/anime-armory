@@ -528,13 +528,28 @@
       ],
       "notes": "第2话高频夜访与食堂压迫角色；若长期出现，应补齐 front / three_quarter / side / back / face 多视图。",
       "sha256": "c914fb1263320cdc29b0da997b5d004802ef49973465026d473f42c763c5e122",
-      "updated_at": "2026-07-07T14:28:27",
+      "updated_at": "2026-07-07T17:25:38",
       "views": {
         "front": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
         "three_quarter": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
         "side": "出图/共享/图片/CHAR_ZHANG_LAODA__side.png",
         "back": "出图/共享/图片/CHAR_ZHANG_LAODA__back.png",
         "face": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png"
+      },
+      "variant_policy": "张老大当前为成年杂役头目基准形态；后续只允许在同一成年脸部 DNA 下调整场景光线、衣物脏污程度、疲惫/假笑/压迫表情和动作姿态，不允许少年化、仙师化、换脸、换发际线、换体量或更换服装主色。",
+      "age_variants": {
+        "adult_baseline": {
+          "story_age": "成年",
+          "role": "秀竹峰杂役头目/前期压迫源",
+          "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+          "allowed_changes": "食堂、夜访、黑暗大殿等场景光线变化；粗布外袍开合、袖口油污、手部泥痕、假笑或轻蔑表情可变化。",
+          "forbidden_changes": "不能少年化、不能美型仙师化、不能瘦削化、不能换短发或清爽发型、不能丢失胡茬/浓眉/粗壮体量/油污手。"
+        },
+        "minor_injury_or_pressure": {
+          "inherit_from": "adult_baseline",
+          "allowed_changes": "可增加汗水、灰尘、轻微伤痕或更压迫的阴影。",
+          "forbidden_changes": "不做重伤毁容、魔化、妖化或高阶觉醒灵纹；不能遮掉五官导致身份无法辨认。"
+        }
       }
     },
     "PROP_BROKEN_BASIN": {

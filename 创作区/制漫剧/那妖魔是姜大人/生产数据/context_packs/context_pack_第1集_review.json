@@ -34,21 +34,21 @@
   "episode": "第1集",
   "files": [
     {
-      "bytes": 3694,
+      "bytes": 4168,
       "exists": true,
-      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n- 对口型：关闭  # source=explicit_user\n- 视频生成音频策略：无声视频流  # source=explicit_user\n- 出视频规格：预算充足  # source=explicit_user\n- 本机LoRA慢速策略：放弃本机训练，改走 image2image_reference_chain  # source=explicit_user\n- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链  # source=explicit_user\n- 生图AI：Codex  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生成优先序：关键镜优先  # source=explicit_user\n- 生成粒度：小批  # source=explicit_user\n- 妖类脸部规则：妖物/妖族人物脸部尽量保持对应野兽的头脸结构；狼妖像狼、虎妖像虎，只允许身体/衣袍人形化，不把兽脸磨成人类俊脸或网红脸  # source=explicit_user\n## 记录\n- 2026-07-06 用户指定：以后的妖脸部尽量保持对应野兽，狼妖青面郎君按用户给定狼首参考重出\n- 2026-07-06 用户指定：粒度按批次来\n- 2026-07-06 n2d-image默认：共享定妆优先，其后关键镜优先\n- 2026-07-06 第4集统一生图模型，访问入口Codex\n- 2026-07-06 第4集出图前扫描：自动可落PNG通道仅codex；用户确认do并选择按批次\n- 2026-07-05 用户指定：本机 LoRA 检测/训练过慢时放弃，不作为出图前置，直接走 image2image/多图参考链生图\n- 2026-07-04 设置 出视频规格 = 预算充足 (source=explicit_user, 原值: None)\n- 2026-07-03 用户指定：非原生音画生视频默认走不带声音的视频流，声音统一交后期\n- 2026-07-03 用户指定：非原生音画默认不走音频参考口型，避免生视频进入带声音/音频条件路径\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置",
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n- 对口型：关闭  # source=explicit_user\n- 视频生成音频策略：无声视频流  # source=explicit_user\n- 出视频规格：预算充足  # source=explicit_user\n- 本机LoRA慢速策略：放弃本机训练，改走 image2image_reference_chain  # source=explicit_user\n- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链  # source=explicit_user\n- 生图AI：Codex  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生成优先序：关键镜优先  # source=explicit_user\n- 生成粒度：小批  # source=explicit_user\n- 妖类脸部规则：妖物/妖族人物脸部尽量保持对应野兽的头脸结构；狼妖像狼、虎妖像虎，只允许身体/衣袍人形化，不把兽脸磨成人类俊脸或网红脸  # source=explicit_user\n- 合规用途：internal_only  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n## 记录\n- 2026-07-07 用户指定：当前用途为自用 demo/学习，不按 production 级重型后端默认阻断；转正式 production 前再改 production 并补 DINOv2/SyncNet/OWLv2/VLM 等证据\n- 2026-07-07 用户指定：本项目用途为自己做 demo/学习使用，不公开发布；公开发布前再改 publish_candidate/paid_distribution 并补平台合规\n- 2026-07-06 用户指定：以后的妖脸部尽量保持对应野兽，狼妖青面郎君按用户给定狼首参考重出\n- 2026-07-06 用户指定：粒度按批次来\n- 2026-07-06 n2d-image默认：共享定妆优先，其后关键镜优先\n- 2026-07-06 第4集统一生图模型，访问入口Codex\n- 2026-07-06 第4集出图前扫描：自动可落PNG通道仅codex；用户确认do并选择按批次\n- 2026-07-05 用户指定：本机 LoRA 检测/训练过慢时放弃，不作为出图前置，直接走 image2image/多图参考链生图\n- 2026-07-04 设置 出视频规格 = 预算充足 (source=explicit_user, 原值: None)\n- 2026-07-03 用户指定：非原生音画生视频默认走不带声音的视频流，声音统一交后期\n- 2026-07-03 用户指定：非原生音画默认不走音频参考口型，避免生视频进入带声音/音频条件路径\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-0\n...",
       "relpath": "_设置.md",
-      "sha256": "f9b90dff81d4510321553b0a5ccb4c479e6613b2e48c617ed782b6a437e246e6"
+      "sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585"
     },
     {
-      "bytes": 7770,
+      "bytes": 20356,
       "exists": true,
-      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 35/35 | ✅ | 10/10 | ✅ | ✅ |\n| 第3集 | 2506 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 58/58 | ✅ | 3/10 | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 21/34 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 第1集当前状态\n- 2026-07-07：已按 `n2d-review 创作区/制漫剧/那妖魔是姜大人 第1集` 刷新 review gate / score / ledger / review-ui / failure taxonomy / release verdict；当前 `release_verdict=blocked`、`score=73/85 fail`、`consistency_ledger block=6 high=0`、`review_ui_findings block=40 warn=111`，`验收` 保持 ⬜。\n- 2026-07-07：本轮发现并修复 score/review 机检的 split clip 统计问题：`Clip_02_part1/part2` 不再被误算成额外逻辑镜头，`score` 不再生成不存在的 `Clip_16` 返工目标；新增回归测试已通过。\n- 2026-07-07：当前最具体下一步：先补第1集 `pilot_acceptance_第1集.json`，并回 `n2d-voice`/`n2d-compose` 处理真实配音与 split 视频时长/音画同步；完成后重跑 `n2d-review` 刷新验收。\n## 第2集当前状态\n- 2026-07-06：成片已合成并响度修正，母版为 `合成/第2集/成片_第2集_zh.mp4`；`image`/`video`/`compose` gate 已通过，成片时长/响度对账通过。修复前正式 `review` / `release_verdict` 结论为 `blocked`，`验收` 保持 ⬜。\n- 2026-07-06：已补最终 MP4 的 compose 生成配方账与 `generation_recipe_manifest_第2集.json`，RCP/RCP2 对最终母版不再阻断；同时刷新 `score_第2集.*`、`consistency_ledger_第2集.*`、`review_ui_第2集.*`、`failure_taxonomy_第2集.*`、`release_verdict_第2集.*`。\n- 2026-07-06：修复前正式验收主阻断：`score=52/fail`，`consistency_ledger block=3`，`release_verdict=blocked`。最硬的内容侧问题是 `视频语义一致(VSEM)`：`Clip_07_part2` subject similarity `0.5434 < 0.55`；`Clip_10` 为 warn。\n- 2026-07-06：已替换 `Clip_07_part2` 并重合成/响度规整，刷新 VSEM、score、ledger、review-ui、failure taxonomy、release verdict；当前 `score=90/pass`、`consistency_ledger block=0 high=0`、`release_verdict=int\n...",
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 35/35 | ✅ | 10/10 | ✅ | ✅ |\n| 第3集 | 2506 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 58/58 | ✅ | 3/10 | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 21/34 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 第1集当前状态\n- 2026-07-07：已补第1集 `生产数据/pilot_acceptance_第1集.json`，`pilot_release_gate=pass`、`mini_pilot=pass`；首集 pilot 缺失不再是验收阻断。\n- 2026-07-07：已回 `n2d-voice` 用 FishSpeech 补真实配音，`placeholder_lines=0`，`配音=✅`；已生成 fitted 配音 `合成/第1集/配音/voice_zh_fitted.wav`（120.515s，sha256 `5680f3034230176d0016d6a106bcf6ea866f50e9c47b92c871fa5ceace29d38b`）。\n- 2026-07-07：已回 `n2d-compose` 重合成，split 视频通过 Time-Warp 对齐锁定槽位；最终母版 `合成/第1集/成片_第1集_zh.mp4` 时长 120.10s，响度 `-15.76 LUFS / -2.70 dBTP`，sha256 `aa6392dcc6fc030ee1d887da388fa2fd7b84b860f7843b2ea92dcfb8464b8ccb`。\n- 2026-07-07：已完成本轮上游返工：补 `设定库/identity_eval_pack.json`、`设定库/character_assets/CHAR_01__姜月初/` 六分区索引、`VFX_百妖谱金光` 资产登记；`production_breakdown_check_第1集.json=pass`；`generation_recipe_manifest_第1集.json=pass`，10 条 split 视频均追到 `production_events.jsonl:line 419-429`。\n- 2026-07-07：已按上游返工要求处理 `review_ui_findings_第1集.json` 的角色 DNA/形体阻断：23 条旧导出项已刷新为 `角色 DNA/形体一致性 block=0 / warn=2 / info=15`；其中 6 条角色资产包分区旧 block 被最新 score/review-ui 清出，剩余为跨集脸漂与机械脸检依赖 warn。已用 `facefusion` 环境刷新 full `image_qc`，`degraded=false`、`hard_blocks=0`、face/hair/outfit 均 `ok=31`；已补 `storyboard.json`、`voice_zh.wav`、`成片_第1集_zh.mp4` 的 RCP/RCP2 生产事件，`generation_recipe_第1集.json` findings=0。\n- 2026-07-07：上一轮按正确顺序刷新 score / review-ui / ledger / failure taxonomy / release verdict；当时 `release_v\n...",
       "relpath": "_进度.md",
-      "sha256": "0fb49ce52b739ede78bc68e7117e6a635f51cde639addc4c329bee4c5a3bc645"
+      "sha256": "33e4e42e213eac83efefecab1355c9c177ef2d1328cd8e549e8cc05dd1150ba2"
     },
     {
-      "bytes": 40257,
+      "bytes": 33861,
       "exists": true,
       "preview": {
         "episode": "第1集",
@@ -75,10 +75,10 @@
         "version": 1
       },
       "relpath": "生产数据/score_第1集.json",
-      "sha256": "02cd70655a4ca903a12f6a1d9aadfff4a17586cb9d85b6c85d4d87718ae05937"
+      "sha256": "12db804364f3bd9a245af1bdb1875f3b7c6f5aca037793173e275c17227024f0"
     },
     {
-      "bytes": 272923,
+      "bytes": 181210,
       "exists": true,
       "preview": {
         "kind": "n2d_consistency_ledger",
@@ -100,10 +100,10 @@
         "version": 1
       },
       "relpath": "生产数据/consistency_ledger_第1集.json",
-      "sha256": "1fa39ac6dcd64dda69968559747571223a45e4500fa076aa2d08b3f9d893e499"
+      "sha256": "39506ed24b76eee2785138dba1b3b7ac8b85676ac3ce1363d9a1129b7b319618"
     },
     {
-      "bytes": 145285,
+      "bytes": 112911,
       "exists": true,
       "preview": {
         "episode": "第1集",
@@ -112,8 +112,8 @@
           "by_dim": {
             "UI/系统面板/HUD 一致性": {
               "block": 0,
-              "info": 0,
-              "warn": 3
+              "info": 1,
+              "warn": 0
             },
             "交互/接触因果一致性": {
               "block": 0,
@@ -122,38 +122,38 @@
             },
             "图中文字渲染一致性（OCR 校验）": {
               "block": 0,
-              "info": 0,
-              "warn": 5
+              "info": 1,
+              "warn": 0
             },
             "场景/构图连续性": {
-              "block": 0,
-              "info": 0,
-              "warn": 37
+              "block": 22,
+              "info": 12,
+              "warn": 6
             },
             "多模态漂移": {
               "block": 0,
-              "info": 0,
-              "warn": 9
+              "info": 3,
+              "warn": 5
             },
             "字幕正确性": {
               "block": 0,
-              "info": 0,
-              "warn": 4
+              "info": 5,
+              "warn": 0
             },
             "成片/包装一致性": {
               "block": 0,
-              "info": 0,
-              "warn": 14
+              "info": 6,
+              "warn": 0
             },
             "状态百科": {
               "block": 0,
-              "info": 0,
-              "warn": 3
+              "info": 2,
+              "warn": 0
             },
             "生产操作一致性": {
               "block": 0,
-              "info": 0,
-              "warn": 17
+              "info": 7,
+              "warn": 0
             },
             "节奏密度": {
               "block": 0,
@@ -171,14 +171,14 @@
               "warn": 0
             },
             "角色 DNA/形体一致性（脸/发型/身形/手）": {
-              "block": 27,
-              "info": 0,
-              "warn": 0
+              "block": 3,
+              "info": 15,
+              "warn": 1
             },
             "语义继承": {
               "block": 0,
-              "info": 6,
-              "warn": 0
+              "info": 4,
+              "warn": 3
             },
             "音乐母题/leitmotif 一致性": {
               "block": 0,
@@ -186,14 +186,14 @@
               "warn": 0
             },
             "音画同步": {
-              "block": 13,
-              "info": 0,
-              "warn": 0
+              "block": 0,
+              "info": 3,
+              "warn": 6
             },
             "音色一致性": {
               "block": 0,
-              "info": 0,
-              "warn": 4
+              "info": 2,
+              "warn": 2
             },
             "风格一致性": {
               "block": 0,
@@ -202,11 +202,11 @@
             }
           },
           "severity": {
-            "block": 40,
-            "info": 19,
-            "warn": 111
+            "block": 25,
+            "info": 74,
+            "warn": 38
           },
-          "total": 170
+          "total": 137
         },
         "top_level_keys": [
           "auto_return_tasks",
@@ -222,7 +222,7 @@
         "version": 1
       },
       "relpath": "生产数据/review_ui_findings_第1集.json",
-      "sha256": "49858ef8764cb451a03a89f33187aa22422b242f3f37b2e826ab3e2fb680be8d"
+      "sha256": "1ea40b9addba1bc72527cbb92eaf1fac71df6e933044a2af62d19002ccd646cd"
     }
   ],
   "genre_pack_context": {
@@ -230,7 +230,6 @@
       {
         "label": "系统面板/HUD",
         "matched_clips": [
-          "EP01_CLIP02",
           "EP01_CLIP07",
           "EP01_CLIP08",
           "EP01_CLIP09",
@@ -252,7 +251,7 @@
       }
     ],
     "episode": "第1集",
-    "generated_at": "2026-07-07T03:42:50+00:00",
+    "generated_at": "2026-07-07T09:25:50+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",
@@ -291,7 +290,7 @@
     "summary": {
       "active_scenes": 1,
       "issues": 0,
-      "matched_clips": 6
+      "matched_clips": 5
     },
     "version": 1
   },

@@ -3,7 +3,6 @@
     {
       "label": "系统面板/HUD",
       "matched_clips": [
-        "EP01_CLIP02",
         "EP01_CLIP07",
         "EP01_CLIP08",
         "EP01_CLIP09",
@@ -25,7 +24,7 @@
     }
   ],
   "episode": "第1集",
-  "generated_at": "2026-07-07T03:42:50+00:00",
+  "generated_at": "2026-07-07T09:25:50+00:00",
   "genre": {
     "genre_key": "chuanyue",
     "label": "穿越",
@@ -64,7 +63,7 @@
   "summary": {
     "active_scenes": 1,
     "issues": 0,
-    "matched_clips": 6
+    "matched_clips": 5
   },
   "version": 1
 }

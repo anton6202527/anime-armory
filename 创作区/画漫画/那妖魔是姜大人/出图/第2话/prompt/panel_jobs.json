@@ -645,7 +645,7 @@
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 920
@@ -679,8 +679,38 @@
           "view": "anchor_path"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P010.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T17:28:30",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "7923adc9ad8255861900339ae97f569644b2e44af3e7f67c996fa0f5015fa2bf",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P010.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P010",
+        "created_at": "2026-07-07T17:28:30",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P010.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P011",

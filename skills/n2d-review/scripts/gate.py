@@ -1685,6 +1685,8 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
         "环境交互约束",
         "首帧保持",
         "在场链约束",
+        "接缝执行包",
+        "执行配方约束",
         "人物运动",
         "镜头运动",
         "情绪节奏",
@@ -1705,6 +1707,28 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                     loc,
                     f"在场链约束缺 {key}；每条视频 prompt 必须把 storyboard.entity_schedule 的必在/画外/禁入真值传到执行端，不能只写泛化的“不要新增”。",
                 )
+    if not (_has_field(section, "接缝执行包") or _has_field(section, "Handoff Package")):
+        add(
+            BLOCK,
+            "接缝执行包",
+            loc,
+            "缺接缝执行包；每条视频 prompt 必须把 first_frame/end_frame/midframes/need_endframe/anchor_consumption/fallback 写成执行真值，避免文字接缝和真实入参脱节。",
+        )
+    else:
+        for key in ("first_frame", "end_frame", "midframes", "need_endframe", "anchor_consumption", "fallback"):
+            if key not in section:
+                add(BLOCK, "接缝执行包", loc, f"接缝执行包缺字段：{key}")
+    if not (_has_field(section, "执行配方") or _has_field(section, "Execution Recipe")):
+        add(
+            BLOCK,
+            "执行配方",
+            loc,
+            "缺执行配方 / Execution Recipe；视频 prompt 必须说明 frame_inputs/reference_inputs/control_inputs/audio_inputs/fallback/anchor_consumption，不能只交裸文本 prompt 给后端。",
+        )
+    else:
+        for key in ("frame_inputs", "reference_inputs", "control_inputs", "audio_inputs", "fallback", "anchor_consumption"):
+            if key not in section:
+                add(BLOCK, "执行配方", loc, f"执行配方缺字段：{key}")
     if "角色身份注册层" not in section:
         add(BLOCK, "资产身份注册层", loc, "缺角色身份注册层字段；含角色镜必须继承 identity_registry.json，无人物镜写“无”")
     if not _has_line_field(section, "身份锁定约束"):
@@ -1745,6 +1769,27 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 "模型路由",
                 loc,
                 "模型路由 identity_requirement=none 但本 Clip 写了角色身份注册层/CHAR_xx；必须改为 reference_group 或后端原生身份绑定，避免执行端少传身份参考。",
+            )
+        mode_value = str((route or {}).get("mode") or "").strip().lower()
+        identity_req_value = str((route or {}).get("identity_requirement") or "").strip().lower()
+        if mode_value and mode_value not in {"text2video", "t2v"} and re.search(r"frame_inputs\s*=\s*(无|none|null|n/a|na)(?:[；;,，\s]|$)", section, re.I):
+            add(
+                BLOCK,
+                "执行配方",
+                loc,
+                f"路由 mode={mode_value} 需要首帧/尾帧/锚帧等图像入参，但执行配方 frame_inputs 为空；先回 n2d-video prompt/router 修真实入参。",
+            )
+        if (
+            identity_req_value
+            and identity_req_value not in {"none", "no", "无", "not_required"}
+            and has_character_identity_layer
+            and re.search(r"reference_inputs\s*=\s*(无|none|null|n/a|na)(?:[；;,，\s]|$)", section, re.I)
+        ):
+            add(
+                BLOCK,
+                "执行配方",
+                loc,
+                f"路由 identity_requirement={identity_req_value} 且本 Clip 含角色身份层，但执行配方 reference_inputs 为空；这会让后端只按首帧猜脸，必须传 reference_group/Character ID/Face Lock 或明确降级保真拍法。",
             )
     if "模型路由约束" not in section:
         add(BLOCK, "模型路由", loc, "中文视频 prompt 缺模型路由约束；必须说明按 primary_backend 写平台参数，失败才切 fallback/degrade_plan")

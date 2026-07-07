@@ -13,7 +13,8 @@
         "合成/第1集/_clipcache/clip_01_n_dea4d03d8fa90a12.mp4"
       ],
       "characters": [
-        "CHAR_01"
+        "CHAR_01",
+        "CHAR_03"
       ],
       "assets": [
         "LOC_01"
@@ -163,7 +164,10 @@
         "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
         "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
         "合成/第1集/_clipcache/clip_04_n_ddb76adb35a84606.mp4",
+        "合成/第1集/_clipcache/clip_06_part1_n_33088cb30b0b8f49.mp4",
         "合成/第1集/_clipcache/clip_06_part1_n_c52fd8d92915a928.mp4",
+        "合成/第1集/_clipcache/clip_06_part2_n_898dab97bd788f0d.mp4",
+        "合成/第1集/_clipcache/clip_06_part2_n_9d40ac1c23284769.mp4",
         "合成/第1集/_clipcache/clip_06_part2_n_f619928ff87f6535.mp4",
         "合成/第1集/_clipcache/n_ddb76adb35a84606.mp4"
       ],
@@ -247,7 +251,8 @@
       ],
       "characters": [
         "CHAR_01",
-        "CHAR_02"
+        "CHAR_02",
+        "CHAR_03"
       ],
       "assets": [
         "LOC_01",

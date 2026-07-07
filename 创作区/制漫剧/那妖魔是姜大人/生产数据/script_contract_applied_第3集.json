@@ -6,7 +6,7 @@
   "contract_sha256": "f93efee4927bc1e1d80f48994625bfca98f3e0fe2acf38c9961a9ff80f065711",
   "episode": "第3集",
   "kind": "n2d_script_contract_application",
-  "reviewed_at": "2026-07-07T09:07:53+00:00",
+  "reviewed_at": "2026-07-07T09:29:01+00:00",
   "reviewer": "codex",
   "scopes": [
     {
@@ -74,8 +74,8 @@
         "逐 Clip prompt 已承接 dramatic_function/audience_effect/pacing_allocation，运动、表演和时长重心不改写剧本承诺。"
       ],
       "prompt_path": "出视频/第3集/prompt/01_clips.md",
-      "prompt_sha256": "f21a86b8bdb384918acd65e8ed7c504376cec75daf619843cf3ecb98534c29e5",
-      "reviewed_at": "2026-07-07T09:07:53+00:00",
+      "prompt_sha256": "bc16b0387a339be47474b705eeedbaf1600bb522749b3b82b6509bad109de92d",
+      "reviewed_at": "2026-07-07T09:29:01+00:00",
       "scope": "出视频"
     }
   ]

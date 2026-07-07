@@ -10,6 +10,15 @@
       "multi_subject_swap": null
     },
     {
+      "clip": "Clip_01",
+      "subject": "CHAR_03",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
       "clip": "Clip_02",
       "subject": "CHAR_01",
       "category": "character",
@@ -75,6 +84,15 @@
     {
       "clip": "Clip_10",
       "subject": "CHAR_02",
+      "category": "character",
+      "evidence_status": "measured",
+      "subject_fidelity": null,
+      "text_relevance": null,
+      "multi_subject_swap": null
+    },
+    {
+      "clip": "Clip_10",
+      "subject": "CHAR_03",
       "category": "character",
       "evidence_status": "measured",
       "subject_fidelity": null,

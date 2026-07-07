@@ -3,8 +3,8 @@
   "kind": "comic_review",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/仙界闭关小能手",
   "chapter": "第2话",
-  "created_at": "2026-07-07T17:24:53",
-  "verdict": "block",
+  "created_at": "2026-07-07T17:26:24",
+  "verdict": "revise",
   "settings": {
     "定妆级别": "长线专门定妆+n2d级一致性",
     "参考一致性策略": "n2d级共享参考图+多视图+形态继承",
@@ -16,10 +16,10 @@
   },
   "summary": {
     "panel_count": 18,
-    "issue_count": 6,
-    "block_count": 1,
+    "issue_count": 4,
+    "block_count": 0,
     "warn_count": 4,
-    "info_count": 1
+    "info_count": 0
   },
   "artifacts": {
     "panel_script": "脚本/第2话/panel_script.json",
@@ -58,7 +58,11 @@
         "format": "png"
       }
     ],
-    "lettering_slot_qc": {},
+    "lettering_slot_qc": {
+      "path": "生产数据/qa_previews/第2话_lettering_slots.jpg",
+      "items": 25,
+      "missing_slots": []
+    },
     "qa_preview": "生产数据/qa_previews/第2话_longstrip_preview.webp",
     "contact_sheet": "生产数据/panel_contact_sheet_第2话.jpg"
   },
@@ -75,22 +79,6 @@
     }
   },
   "issues": [
-    {
-      "severity": "info",
-      "category": "lettering",
-      "artifact": "排版/第2话/export_manifest.json",
-      "reason": "manifest 未记录嵌字槽位 QC 接触表，长条图过高时不便逐字复核",
-      "return_to": "comic-compose",
-      "suggested_fix": "用 export_longstrip.py --render --qc-slots 重新导出"
-    },
-    {
-      "severity": "block",
-      "category": "identity",
-      "artifact": "出图/共享/identity_registry.json",
-      "reason": "CHAR_ZHANG_LAODA 缺少年龄/形态继承策略",
-      "return_to": "comic-identity",
-      "suggested_fix": "登记 age_variants 或 variant_policy，明确少年/成年/受伤/觉醒等形态如何继承定型图"
-    },
     {
       "severity": "warn",
       "category": "style",

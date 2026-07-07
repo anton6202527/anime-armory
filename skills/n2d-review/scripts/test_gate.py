@@ -128,6 +128,8 @@ GOOD_VIDEO_CLIP = """## Clip 1（时长 5.0s · 镜头1） **节奏**：铺垫·
 **运动精修**：幅度=极小；能量=克制蓄压；身体守卫=肩颈和下巴不大幅扭动，脸部轮廓不拉伸，手部不穿过衣襟。
 **环境交互**：残烛光在眼下轻轻跳动，床幔阴影随呼吸微动，前景托盘保持不位移。
 **模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑
+**接缝执行包 / Handoff Package**：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图
+**执行配方 / Execution Recipe**：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false
 **角色身份注册层**：`CHAR_SHEN/常态`；目标后端 dreamina=fallback_reference_group；fallback reference_group=出图/共享/图片/定妆_沈念.png + 侧面/半身参考；高危角度=deep_shadow；禁漂项=face_shape/hairstyle/outfit_palette
 **近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则用 MCU/侧脸/反应镜保真实现。
 **原生音画策略**：audio_intent=none；risk=low；mouth_visible=no；speech_policy=no_native_speech；compose_policy=丢弃；review=生成后确认无原生人声
@@ -155,6 +157,8 @@ continuity:
 运动精修约束：幅度极小，能量克制，脸部轮廓和发髻不拉伸，手部不穿模；
 环境交互约束：残烛光在眼下轻跳，床幔阴影随呼吸微动；
 模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance,kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 dreamina 支持的 image2video 能力；失败按 degrade_plan 改侧脸或切 fallback 重跑；
+接缝执行包：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；
+执行配方约束：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；
 身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；
 近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则用 MCU/OTS/侧脸保真实现；
 在场链约束：required_presence=CHAR_SHEN,PROP_鸩酒托盘；offscreen_presence=CHAR_LIU；forbidden_presence=现代手机,modern vehicles,random readable text,watermark；只允许登记实体进入清晰画面，offscreen 只能画外/虚焦/反应承接，forbidden 完全不出现；
@@ -4696,6 +4700,46 @@ def test_video_clip_presence_chain_constraint_requires_three_fields():
 
     assert any(
         f["sev"] == gate.BLOCK and f["dim"] == "人物在场链" and "forbidden_presence" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_video_clip_missing_handoff_package_is_blocked():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**接缝执行包 / Handoff Package**：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图\n",
+        "",
+    ).replace(
+        "接缝执行包：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；\n",
+        "",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "接缝执行包" for f in gate.findings)
+
+
+def test_video_clip_missing_execution_recipe_is_blocked():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "**执行配方 / Execution Recipe**：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false\n",
+        "",
+    ).replace(
+        "执行配方约束：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；\n",
+        "",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "执行配方" for f in gate.findings)
+
+
+def test_video_clip_identity_route_blocks_empty_reference_inputs():
+    clip = GOOD_VIDEO_CLIP.replace("reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘", "reference_inputs=none")
+    route = {"mode": "image2video", "identity_requirement": "reference_group"}
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip, route=route)
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "执行配方" and "reference_inputs" in f["msg"]
         for f in gate.findings
     )
 

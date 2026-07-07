@@ -854,7 +854,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_生锈铁锁_比例.png",
@@ -875,7 +875,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -1050,7 +1050,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_水桶与扁担.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_水桶与扁担_比例.png",
@@ -1071,7 +1071,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_水桶与扁担.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {
@@ -1239,7 +1239,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_黑陶破盆_比例.png",
@@ -1260,7 +1260,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {

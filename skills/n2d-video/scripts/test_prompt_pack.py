@@ -111,6 +111,10 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "观众追问她怎么活。" in clips
     assert "**运动精修**：" in clips
     assert "原生音画策略" in clips and "mouth_visible=yes" in clips
+    assert "接缝执行包 / Handoff Package" in clips
+    assert "执行配方 / Execution Recipe" in clips
+    assert "执行配方约束" in clips
+    assert "frame_inputs=" in clips and "reference_inputs=" in clips and "anchor_consumption=" in clips
     assert "近景升格守卫" in clips
     assert "不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸" in clips
     assert "检查清单（视频三件套自查" in clips

@@ -302,5 +302,10 @@
     "drawn_items": 25,
     "skipped_empty_items": [],
     "empty_slots_removed": []
+  },
+  "lettering_slot_qc": {
+    "path": "生产数据/qa_previews/第2话_lettering_slots.jpg",
+    "items": 25,
+    "missing_slots": []
   }
 }

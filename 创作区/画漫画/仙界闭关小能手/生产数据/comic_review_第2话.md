@@ -1,9 +1,9 @@
 # 漫画审查报告 — 第2话
 
-- 生成时间：2026-07-07T17:24:53
-- 结论：block
+- 生成时间：2026-07-07T17:26:24
+- 结论：revise
 - panel 数：18
-- block/warn/info：1 / 4 / 1
+- block/warn/info：0 / 4 / 0
 
 ## 设置
 
@@ -28,8 +28,6 @@
 
 | severity | category | artifact | reason | return_to | suggested_fix |
 |---|---|---|---|---|---|
-| info | lettering | 排版/第2话/export_manifest.json | manifest 未记录嵌字槽位 QC 接触表，长条图过高时不便逐字复核 | comic-compose | 用 export_longstrip.py --render --qc-slots 重新导出 |
-| block | identity | 出图/共享/identity_registry.json | CHAR_ZHANG_LAODA 缺少年龄/形态继承策略 | comic-identity | 登记 age_variants 或 variant_policy，明确少年/成年/受伤/觉醒等形态如何继承定型图 |
 | warn | style | 出图/第2话/panels/P001.png | 风格指纹内聚度 0.8525 明显低于本话中位 0.9128，疑似画风、细节密度或照片感跳变。 | comic-image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
 | warn | style | 出图/第2话/panels/P007.png | 风格指纹内聚度 0.8666 明显低于本话中位 0.9128，疑似画风、细节密度或照片感跳变。 | comic-image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
 | warn | style | 出图/第2话/panels/P009.png | 风格指纹内聚度 0.8536 明显低于本话中位 0.9128，疑似画风、细节密度或照片感跳变。 | comic-image | 与全话 contact sheet 并排人审；若确实跳变，回 comic-image 用同一风格锚和参考图重抽该格。 |
