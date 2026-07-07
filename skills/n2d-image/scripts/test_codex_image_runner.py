@@ -2010,6 +2010,40 @@ def test_style_anchor_registry_uses_selected_anchor_before_anchor_list(tmp_path:
     assert codex_image_runner.load_style_anchor_paths(tmp_path) == [selected_rel]
 
 
+def test_shared_prop_board_guidance_blocks_people_for_primary_prop() -> None:
+    section = codex_image_runner.ClipSection("PROP_TEST", "## PROP_TEST", "", "")
+    target = codex_image_runner.Target(
+        "PROP_TEST::定妆_道具_木扁担",
+        "PROP_TEST",
+        "shared",
+        "出图/共享/图片/定妆_道具_木扁担.png",
+        section,
+    )
+    target.aliases = {"PROP_TEST"}
+
+    guidance = codex_image_runner.shared_prop_board_guidance(target)
+
+    assert "只画干净物件本体" in guidance
+    assert "禁止人物、手、肩膀" in guidance
+
+
+def test_shared_prop_board_guidance_allows_faceless_scale_for_variant() -> None:
+    section = codex_image_runner.ClipSection("PROP_TEST", "## PROP_TEST", "", "")
+    target = codex_image_runner.Target(
+        "PROP_TEST::定妆_道具_木扁担_手持",
+        "PROP_TEST",
+        "shared",
+        "出图/共享/图片/定妆_道具_木扁担_手持.png",
+        section,
+    )
+    target.aliases = {"PROP_TEST"}
+
+    guidance = codex_image_runner.shared_prop_board_guidance(target)
+
+    assert "可以出现无脸手部" in guidance
+    assert "只画干净物件本体" not in guidance
+
+
 def test_style_anchor_target_marks_registry_ready(tmp_path: Path) -> None:
     rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
 

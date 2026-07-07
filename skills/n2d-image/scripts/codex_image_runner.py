@@ -2144,6 +2144,27 @@ def _target_has_character_alias(target: Target) -> bool:
     return any(alias.startswith("CHAR_") for alias in aliases)
 
 
+def _target_has_prop_alias(target: Target) -> bool:
+    aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
+    return any(alias.startswith(("PROP_", "WEAPON_")) for alias in aliases)
+
+
+def shared_prop_board_guidance(target: Target) -> str:
+    if target.mode != "shared" or not _target_has_prop_alias(target):
+        return ""
+    stem = Path(target.rel_path).stem
+    if any(token in stem for token in ("_手持", "_比例", "_in_hand", "_scale")):
+        return (
+            "- 道具派生参考板：可以出现无脸手部、无脸人台或下巴以下尺度参照，但不得出现清晰人脸、"
+            "具名角色身份、随机服装抢戏或身体残片穿过道具结构。"
+        )
+    return (
+        "- 道具主参考板：只画干净物件本体，置于中性棚拍台面或极简同风格地面；禁止人物、手、肩膀、背影、"
+        "身体残片、头发、脸、脚、随机比例人、持握动作或剧情动作。比例/手持语义只作为尺寸说明，"
+        "不要把“压在少年肩上/体量压过少年”等剧情描述画成人物；手持和比例另由 `_手持` / `_比例` 槽生成。"
+    )
+
+
 def _target_is_restricted_partial(target: Target) -> bool:
     stem = Path(target.rel_path).stem
     text = f"{stem}\n{target.section.body}"
@@ -2158,6 +2179,9 @@ def shared_style_guidance(target: Target, reference_bundle: Optional[Dict[str, A
         lines.append(f"- {RESTRICTED_PARTIAL_BOARD_GUIDANCE}")
     elif _target_has_character_alias(target):
         lines.append("- 人物主参考板采用中性站姿/中性表情，角色正面或 45° 身份可辨，但不要看镜头式写真感。")
+    prop_guidance = shared_prop_board_guidance(target)
+    if prop_guidance:
+        lines.append(prop_guidance)
     has_style = any(str(item.get("kind") or "") == "style" for item in (reference_bundle or {}).get("items") or [])
     if has_style:
         lines.append(f"- {STYLE_ONLY_REFERENCE_GUIDANCE}")

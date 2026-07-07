@@ -575,9 +575,47 @@ def add(sev: str, dim: str, loc: str, msg: str, risk_score: Optional[float] = No
 # 把"满档 vs 凭 waiver 交付"变成 gate 输出里的可查字段（与 image runner 的 record_waiver 互补——
 # 那条管 --skip-* 显式跳闸，这条管 N2D_ALLOW_DEGRADED_QC 缺依赖降级放行）。
 _DEGRADED_QC_WAIVERS: List[Dict[str, str]] = []
-def degraded_qc_active() -> bool:
-    """N2D_ALLOW_DEGRADED_QC=1 逃生口是否开启（缺依赖时显式自负其责放行）。单一判定入口。"""
-    return os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+def degraded_qc_mode(root: str = "") -> str:
+    """Return the active degraded-QC waiver mode, if any.
+
+    `N2D_ALLOW_DEGRADED_QC=1` remains the universal explicit escape hatch. For
+    self-use projects, the same intent can be persisted in project settings so a
+    review rerun does not depend on remembering a shell env var.
+    """
+    if os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1":
+        return "env"
+    if not root:
+        return ""
+    try:
+        profile = consistency_release_profile(root)
+    except Exception:
+        profile = "demo"
+    if profile != "demo":
+        return ""
+    intents = [v.lower() for v in _settings_values(root, ("合规用途", "distribution_intent"))]
+    try:
+        data = load_json(compliance_manifest_path(root))
+        if isinstance(data, dict):
+            intents.append(_status(data.get("distribution_intent")).lower())
+    except Exception:
+        pass
+    if any(v in COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS for v in intents):
+        return "project_internal_demo"
+    return ""
+
+
+def degraded_qc_active(root: str = "") -> bool:
+    """Whether degraded heavy-QC evidence is explicitly accepted for this run."""
+    return bool(degraded_qc_mode(root))
+
+
+def degraded_qc_waiver_label(root: str = "") -> str:
+    mode = degraded_qc_mode(root)
+    if mode == "project_internal_demo":
+        return "项目设置 internal_only + demo"
+    if mode == "env":
+        return "N2D_ALLOW_DEGRADED_QC=1"
+    return "未开启"
 def note_degraded_qc_waiver(dim: str, ep: str, loc: str, reason: str) -> None:
     """单一计数 chokepoint：登记一条因 N2D_ALLOW_DEGRADED_QC 把一致性 BLOCK 降级放行的 waiver。
     各降级点照常 add(WARN, …) 出人类可读 note；额外调本函数把它计入账本（结构化·可查）。"""
@@ -4766,7 +4804,7 @@ def _check_fidelity_gate_active(root: str, ep: str, stage: str) -> None:
         pass
     return_to = "image"
     scope = "回 n2d-image 重出 canonical 不通过的镜"
-    allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+    allow_degraded = degraded_qc_active(root)
     # 铁律 B11（2026-06-27）：终验 fidelity-gate（像素 VLM 脸验证）demo 与 production 同标准——
     # 不随 profile 降级；缺 VLM 后端不再是 demo 静默 WARN 免单，而是 BLOCK，唯一出口是显式留痕
     # N2D_ALLOW_DEGRADED_QC=1（C4 豁免堵死：把"缺依赖默认放行"改成"缺依赖必须显式自负其责"）。
@@ -4776,14 +4814,14 @@ def _check_fidelity_gate_active(root: str, ep: str, stage: str) -> None:
                                     stale_reason or "VLM fidelity-gate 未激活·终验降级放行")
             add(WARN, "fidelity-gate", canonical_path,
                 f"{(stale_reason + '；') if stale_reason else ''}"
-                "终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；"
+                f"终验 fidelity-gate 未激活但已通过{degraded_qc_waiver_label(root)}放行（自负其责·已留痕）；"
                 "脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
                 risk_score=0.8)
             return
         msg = (
             "终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。"
             "缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。"
-            "（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）"
+            "（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 自负其责。）"
         )
         if stale_reason:
             msg = f"{stale_reason}（旧绿不算数·必须对当前图重跑 vlm_verify --write）——{msg}"
@@ -4960,8 +4998,8 @@ def evidence_grade_findings(summary: Mapping[str, Any], stage: str,
             f"{('；本集最弱证据级=' + weakest) if weakest else ''}。")
     delivery = stage in {"compose", "review"}
     if delivery and not allow_waiver:
-        return [(BLOCK, base + "交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。")]
-    note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行·自负其责）" if allow_waiver else "（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
+        return [(BLOCK, base + "交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 自负其责。")]
+    note = "（已显式降级 QC 放行·自负其责）" if allow_waiver else "（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
     return [(WARN, base + note)]
 def _finding_sort_key(f: dict) -> tuple:
     """Sort key for gate findings: BLOCK → WARN (by risk_score desc) → INFO.
