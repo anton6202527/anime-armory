@@ -766,7 +766,7 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_空木桶.png",
-          "status": "planned"
+          "status": "ready"
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_道具_空木桶_比例.png",
@@ -787,7 +787,7 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_空木桶.png",
-          "status": "planned"
+          "status": "ready"
         }
       ],
       "constraints": {

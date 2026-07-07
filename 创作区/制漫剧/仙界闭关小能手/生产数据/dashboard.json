@@ -24,7 +24,7 @@
   ],
   "episodes": [
     {
-      "blockers_per_attempt": 4.0455,
+      "blockers_per_attempt": 3.8696,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
@@ -33,23 +33,23 @@
       "cost_per_finished_min": {},
       "cost_totals": {},
       "deliverable_pass_rate": 0.0,
-      "duration_hms": "40m29s",
-      "duration_sec": 2428.787,
-      "elapsed_per_finished_min_sec": 1877.783,
+      "duration_hms": "59m06s",
+      "duration_sec": 3546.422,
+      "elapsed_per_finished_min_sec": 2741.867,
       "episode": "第1集",
-      "event_count": 174,
+      "event_count": 175,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
       "final_pass_rate": 0.0,
       "follow_next_rate": null,
-      "generation_attempts": 22,
+      "generation_attempts": 23,
       "generation_fails": 1,
-      "generation_pass_rate": 0.9545,
-      "generation_passes": 21,
+      "generation_pass_rate": 0.9565,
+      "generation_passes": 22,
       "image_qc_passive": {},
       "missing_deliverables": [],
-      "one_pass_count": 21,
-      "one_pass_rate": 0.9545,
+      "one_pass_count": 22,
+      "one_pass_rate": 0.9565,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
       "qa_blockers": 89,
@@ -124,10 +124,10 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 2385.387,
-          "generation_attempts": 17,
+          "duration_sec": 3503.022,
+          "generation_attempts": 18,
           "generation_fails": 1,
-          "generation_passes": 16,
+          "generation_passes": 17,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
@@ -168,7 +168,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.8636
+      "warnings_per_attempt": 1.7826
     },
     {
       "blockers_per_attempt": null,
@@ -649,7 +649,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-07T09:03:32+00:00",
+  "generated_at": "2026-07-07T09:24:14+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1117,7 +1117,7 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 4.0455,
+    "blockers_per_attempt": 3.8696,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
@@ -1128,20 +1128,20 @@
     "cost_per_finished_min": {},
     "cost_totals": {},
     "deliverable_pass_rate": 0.0,
-    "duration_hms": "40m29s",
-    "duration_sec": 2428.787,
-    "elapsed_per_finished_min_sec": 1877.783,
+    "duration_hms": "59m06s",
+    "duration_sec": 3546.422,
+    "elapsed_per_finished_min_sec": 2741.867,
     "episode_count": 10,
-    "event_count": 174,
+    "event_count": 175,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
     "final_pass_rate": 0.0,
-    "generation_attempts": 22,
+    "generation_attempts": 23,
     "generation_fails": 1,
-    "generation_pass_rate": 0.9545,
-    "generation_passes": 21,
-    "one_pass_count": 21,
-    "one_pass_rate": 0.9545,
+    "generation_pass_rate": 0.9565,
+    "generation_passes": 22,
+    "one_pass_count": 22,
+    "one_pass_rate": 0.9565,
     "qa_blockers": 89,
     "qa_infos": 21,
     "qa_warnings": 41,
@@ -1156,7 +1156,7 @@
     "release_spend_totals": {},
     "runtime_hms": "1m18s",
     "runtime_sec": 77.606,
-    "warnings_per_attempt": 1.8636
+    "warnings_per_attempt": 1.7826
   },
   "version": 1
 }
