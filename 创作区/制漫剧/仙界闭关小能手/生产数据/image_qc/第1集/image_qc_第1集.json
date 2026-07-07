@@ -72,8 +72,8 @@
           "intra_pairs": 3
         },
         "CHAR_HE_PINGSHENG__常态": {
-          "ep_mean_score": 0.3693,
-          "ep_n_shots": 2,
+          "ep_mean_score": 0.3849,
+          "ep_n_shots": 3,
           "floor": 0.4533,
           "floor_calibrated": true,
           "has_main": true,
@@ -127,6 +127,17 @@
           "score": 0.4636,
           "score_vs_main": 0.3388,
           "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_HE_PINGSHENG__常态",
+          "face_idx": 2,
+          "floor": 0.4533,
+          "floor_calibrated": true,
+          "png": "图片/Clip_01_a2.png",
+          "score": 0.4487,
+          "score_vs_main": 0.4161,
+          "verdict": "warn"
         }
       ]
     },
@@ -171,6 +182,13 @@
           "floor": 0.2971,
           "png": "图片/Clip_01_a1.png",
           "score": 0.747,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_HE_PINGSHENG__常态",
+          "floor": 0.2971,
+          "png": "图片/Clip_01_a2.png",
+          "score": 0.7722,
           "verdict": "ok"
         }
       ]
@@ -402,6 +420,13 @@
           "png": "图片/Clip_01_a1.png",
           "score": 0.8231,
           "verdict": "ok"
+        },
+        {
+          "char": "CHAR_HE_PINGSHENG__常态",
+          "floor": 0.2306,
+          "png": "图片/Clip_01_a2.png",
+          "score": 0.7844,
+          "verdict": "ok"
         }
       ]
     },
@@ -428,9 +453,9 @@
               "空间轴线随机跳变"
             ]
           },
+          "median_dist": 12.5,
           "registered_id": "LOC_BLACK_HALL",
-          "shots": 2,
-          "skipped": "组<3镜"
+          "shots": 3
         }
       },
       "impact_physics": [],
@@ -499,9 +524,21 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 6,
+    "covered": 5,
     "face_mode": "insightface",
-    "missing": [],
+    "missing": [
+      {
+        "face_coverage_required": true,
+        "face_verdict": "warn",
+        "identity_refs": [
+          "CHAR_HE_PINGSHENG/常态"
+        ],
+        "label": "镜头 1（`EP01_CLIP01` · 黑殿围审与费钱货羞辱 · dialogue_shot_reverse）",
+        "png": "图片/Clip_01_a2.png",
+        "reason": "face_verdict_warn",
+        "shot": "Clip_01"
+      }
+    ],
     "notes": [],
     "pending": [
       {
@@ -653,7 +690,7 @@
     "required": 6,
     "skipped": [],
     "unclassified": [],
-    "verdict": "ok"
+    "verdict": "block"
   },
   "human_image_review": {
     "active_rejects": 0,
@@ -672,11 +709,12 @@
       "出图/第1集/prompt/01_分镜出图.md": "f7504781a6b6787f18c539f98ea7ad064f1d921ccf5d5406ea4f41823eb3b7ee",
       "出图/第1集/图片/Clip01_first.png": "fa332ffdf7f007d9f52178d1374beb87dfba98a55046e1c17f201f29d4376378",
       "出图/第1集/图片/Clip_01_a1.png": "83a207950451e902ea109828827ce014cbb14750b4ba845afbda8323e7394e82",
+      "出图/第1集/图片/Clip_01_a2.png": "ce14abb11048f5d6211259bbe534aee1f1ce96b329f3e6fad147339bcb1f8e79",
       "生产数据/image_qc/第1集/face_confirmations.json": "69dee9f7125856af11e84454782289141096cbf2dfba69f0db4b73d051523710",
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": "d6e2802cc7335fd7a14a117e6636dde7702415d263a669a18bcdb57539a9ea8c"
     },
-    "sha": "ae7ef3b68f405a72f56a3b5dce349a7413560027cdef0d211987bf3d784016fa"
+    "sha": "8bdac600bb1356dc7fa72c4224fd73a96d2f577995542e5ab66947875f74c853"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -913,7 +951,7 @@
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
     "confirmed": 0,
-    "pending": 3,
+    "pending": 6,
     "targets": [
       {
         "asset": "PROP_CARRYING_POLE",
@@ -934,6 +972,27 @@
         "scale": "None",
         "shot": "Clip_01",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_CARRYING_POLE_Clip_01_Clip_01_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_CARRYING_POLE",
+        "asset_name": "木扁担",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP01_CLIP01` · 黑殿围审与费钱货羞辱 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip_01_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip_01_a2.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_木扁担.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_CARRYING_POLE_Clip_01_Clip_01_a2_compare.png",
         "stitched": true
       },
       {
@@ -962,6 +1021,31 @@
         "stitched": true
       },
       {
+        "asset": "PROP_SERVANT_HALL_LAMP",
+        "asset_name": "黑殿旧油灯",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP01_CLIP01` · 黑殿围审与费钱货羞辱 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移",
+          "现代电灯",
+          "霓虹",
+          "清晰文字",
+          "华丽仙器"
+        ],
+        "png": "图片/Clip_01_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip_01_a2.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_黑殿旧油灯.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SERVANT_HALL_LAMP_Clip_01_Clip_01_a2_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_WATER_JAR_PAIR",
         "asset_name": "两口水缸",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
@@ -981,9 +1065,30 @@
         "shot": "Clip_01",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JAR_PAIR_Clip_01_Clip_01_a1_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_WATER_JAR_PAIR",
+        "asset_name": "两口水缸",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP01_CLIP01` · 黑殿围审与费钱货羞辱 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip_01_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/第1集/图片/Clip_01_a2.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_两口水缸.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JAR_PAIR_Clip_01_Clip_01_a2_compare.png",
+        "stitched": true
       }
     ],
-    "total": 3
+    "total": 6
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -998,7 +1103,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "semantic_drift": {
     "available": true,
-    "compared": 2,
+    "compared": 3,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -1009,6 +1114,11 @@
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_HE_PINGSHENG__常态」↔ 本镜 图片/Clip_01_a1.png DINO/CLIP cosine=0.34 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_HE_PINGSHENG__常态」↔ 本镜 图片/Clip_01_a2.png DINO/CLIP cosine=0.47 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -1038,18 +1148,18 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 2,
-    "distance": 1.423,
+    "checked": 3,
+    "distance": 1.438,
     "episode_fingerprint": {
-      "contrast": 42.0,
-      "edge": 18.4,
+      "contrast": 41.0,
+      "edge": 18.0,
       "sat": 34.0
     },
     "findings": [
       {
         "code": "style_attribution_drift",
         "level": "warn",
-        "msg": "风格归属佐证：本集 2 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.42 ≥ 1.00）——渲染可能漂出「自定义（半写实3D国风仙侠漫剧·金色符纹法阵）」。锚[饱和72.5/对比134.5/边缘30.8] vs 本集[饱和34.0/对比42.0/边缘18.4]；最偏离镜：Clip_01_a1.png（偏离 1.44）。人判：是否踩 风格禁忌（禁止截图UI、播放按钮、搜索框、字幕水印、右侧平台竖字、黄色话题字、成年觉醒金纹提前污染少年常态。）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
+        "msg": "风格归属佐证：本集 3 帧整体风格指纹偏离风格锚（明暗对比偏离最大，归一距离 1.44 ≥ 1.00）——渲染可能漂出「自定义（半写实3D国风仙侠漫剧·金色符纹法阵）」。锚[饱和72.5/对比134.5/边缘30.8] vs 本集[饱和34.0/对比41.0/边缘18.0]；最偏离镜：Clip_01_a2.png（偏离 1.47）。人判：是否踩 风格禁忌（禁止截图UI、播放按钮、搜索框、字幕水印、右侧平台竖字、黄色话题字、成年觉醒金纹提前污染少年常态。）；确认漂移则回 n2d-image 重出本集偏离镜或重锚风格。"
       }
     ],
     "intent": {
@@ -1070,7 +1180,7 @@
     }
   },
   "summary": {
-    "advisory": 6,
+    "advisory": 8,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -1082,12 +1192,18 @@
         "block": 0,
         "noface": 0,
         "ok": 2,
+        "warn": 1
+      },
+      "face_reference_coverage": {
+        "block": 1,
+        "noface": 0,
+        "ok": 5,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 2,
+        "ok": 3,
         "warn": 0
       },
       "human_anatomy": {
@@ -1111,7 +1227,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 2,
+        "ok": 3,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1121,7 +1237,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 3,
+        "block": 6,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1142,7 +1258,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 2
+        "warn": 3
       },
       "style_attribution": {
         "block": 0,
@@ -1152,20 +1268,20 @@
       }
     },
     "degraded": false,
-    "hard_blocks": 3,
+    "hard_blocks": 7,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 2,
+    "checked": 3,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "黑殿和杂役区冷灰低饱和；夜潭以青灰月光为主，只在破盆微光处出现克制暖金。",
       "warmth": "cool"
     },
-    "luma_median": 28.2,
+    "luma_median": 26.7,
     "warmth_median": 0.0
   },
   "version": 1,

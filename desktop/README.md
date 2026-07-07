@@ -38,7 +38,7 @@ cd desktop
 npm install                 # done (frontend deps)
 npm run app:dev             # = tauri dev: builds Rust, launches the app, hot-reloads the React side
 ```
-First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. Packaged builds ship full skills plus any configured demo works: existing `创作区` demos from `desktop/demo-works.json`, and demo folders under outer dispatcher skills such as `skills/ad/demo`. Missing series are skipped. First launch seeds bundled works into the app workspace without overwriting user files. To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker).
+First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. Packaged builds ship full skills, but full demo works are not bundled into the app. `desktop/demo-works.json` defines one downloadable demo per series; `scripts/r2a_release.sh` publishes them as `AnimeArmory_demo_<line>.zip` release assets, and the app downloads/extracts a demo only when the user clicks "下载示例". To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker).
 
 Frontend-only (no native shell, for quick UI work):
 ```sh

@@ -185,10 +185,7 @@ fn catalog_entry_download_url(entry: &DemoCatalogEntry, asset_name: &str) -> Str
         .unwrap_or_else(|| format!("{}/{}", demo_download_base(), asset_name))
 }
 
-fn demo_info_from_entry(
-    workspace: &Path,
-    entry: &DemoCatalogEntry,
-) -> Option<DemoDownloadInfo> {
+fn demo_info_from_entry(workspace: &Path, entry: &DemoCatalogEntry) -> Option<DemoDownloadInfo> {
     let line_key = catalog_entry_line_key(entry)?;
     let asset_name = catalog_entry_asset_name(entry, &line_key);
     let rel = entry.rel();
@@ -203,17 +200,17 @@ fn demo_info_from_entry(
         download_url: catalog_entry_download_url(entry, &asset_name),
         sha256: entry.sha256.clone(),
         size: entry.size,
-        source: entry.source.clone().unwrap_or_else(|| "release-demo".into()),
+        source: entry
+            .source
+            .clone()
+            .unwrap_or_else(|| "release-demo".into()),
         installed,
         path: installed.then(|| path.to_string_lossy().to_string()),
     })
 }
 
 #[tauri::command]
-pub fn list_demo_downloads(
-    app: tauri::AppHandle,
-    workspace_root: String,
-) -> Vec<DemoDownloadInfo> {
+pub fn list_demo_downloads(app: tauri::AppHandle, workspace_root: String) -> Vec<DemoDownloadInfo> {
     let workspace = Path::new(&workspace_root);
     load_demo_catalog(&app)
         .iter()
@@ -2529,7 +2526,10 @@ fn extract_zip_safe(zip_path: &Path, dst: &Path) -> Result<(), String> {
     Ok(())
 }
 
-fn find_extracted_demo_root(extract_dir: &Path, info: &DemoDownloadInfo) -> Result<PathBuf, String> {
+fn find_extracted_demo_root(
+    extract_dir: &Path,
+    info: &DemoDownloadInfo,
+) -> Result<PathBuf, String> {
     let expected = extract_dir.join(&info.rel);
     if expected.join("_进度.md").is_file() {
         return Ok(expected);
@@ -2541,10 +2541,7 @@ fn find_extracted_demo_root(extract_dir: &Path, info: &DemoDownloadInfo) -> Resu
     if extract_dir.join("_进度.md").is_file() {
         return Ok(extract_dir.to_path_buf());
     }
-    Err(format!(
-        "示例包结构不匹配，未找到 {} 或 _进度.md",
-        info.rel
-    ))
+    Err(format!("示例包结构不匹配，未找到 {} 或 _进度.md", info.rel))
 }
 
 fn select_demo_info_for_line(

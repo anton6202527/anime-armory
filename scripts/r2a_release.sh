@@ -49,8 +49,8 @@ Semantics:
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Keeps configured desktop demo seed works when present. Missing series are
-    skipped. Outer skill demo folders are bundled by desktop/sync-skills.cjs.
+    Publishes configured desktop demo works as separate Release zip assets.
+    Missing series are skipped. The desktop app downloads demos on demand.
     Excludes private agent files, git metadata, dist/, build targets, and
     dependency caches. Does NOT commit release artifacts into git history and
     is not marked as latest.
@@ -59,7 +59,7 @@ Semantics:
     Snapshot this local checkout, build the public all-release package set,
     upload it to anime-armory Releases as release assets, update corresponding
     README download links, and mark the release as latest. Desktop packages keep
-    one full demo seed work: 创作区/制漫剧/那妖魔是姜大人. Excludes private agent
+    no full demo payloads; configured demos are Release zip assets. Excludes private agent
     files, git metadata, dist/, build targets, and dependency caches. The VSIX
     keeps only vscode-extension's own lightweight bundled seed work root.
 
@@ -67,6 +67,12 @@ Release artifact names:
   AnimeArmory_macos_arm64.dmg
   AnimeArmory_windows.exe
   anime-armory.vsix
+  AnimeArmory_demo_novel.zip
+  AnimeArmory_demo_n2d.zip
+  AnimeArmory_demo_comic.zip
+  AnimeArmory_demo_song.zip
+  AnimeArmory_demo_mv.zip
+  AnimeArmory_demo_ad.zip
 
 VSIX packaging intentionally does not copy selected desktop demo payloads.
 
@@ -668,6 +674,39 @@ validate_nonempty() {
   fi
 }
 
+demo_line_key() {
+  case "$1" in
+    "写小说") echo "novel" ;;
+    "制漫剧") echo "n2d" ;;
+    "画漫画") echo "comic" ;;
+    "写歌") echo "song" ;;
+    "制MV") echo "mv" ;;
+    "拍广告") echo "ad" ;;
+    *)
+      echo "Unknown creative line for demo asset: $1" >&2
+      exit 1
+      ;;
+  esac
+}
+
+build_demo_zip_assets() {
+  require_cmd zip
+  local demo rest line key asset stage
+  for demo in "${DEMO_WORKS[@]}"; do
+    rest="${demo#创作区/}"
+    line="${rest%%/*}"
+    key="$(demo_line_key "$line")"
+    asset="$ARTIFACT_DIR/AnimeArmory_demo_${key}.zip"
+    stage="$(mktemp -d "${TMPDIR:-/tmp}/r2a-demo-${key}.XXXXXX")"
+    copy_work_payload "$SOURCE_DIR" "$stage" "$demo"
+    rm -f "$asset"
+    (cd "$stage" && zip -qr "$asset" "创作区")
+    rm -rf "$stage"
+    validate_zip "$asset"
+    ASSETS+=("$asset")
+  done
+}
+
 require_assets() {
   if [[ "${#ASSETS[@]}" -eq 0 ]]; then
     echo "No release assets were built; aborting release steps" >&2
@@ -685,7 +724,7 @@ format_asset_lines() {
 
 format_demo_lines() {
   if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
-    printf -- "- none from 创作区; outer skill demos are bundled by desktop/sync-skills.cjs when present\n"
+    printf -- "- none from 创作区; no demo zip assets will be uploaded\n"
     return
   fi
   local demo
@@ -840,7 +879,7 @@ $(format_source_lines)
 - Release artifacts committed to git history: no
 - Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
 
-Desktop bundled full demos from 创作区:
+Release demo zip assets from 创作区:
 $(format_demo_lines)
 
 Desktop non-demo work references:
@@ -968,6 +1007,7 @@ run_release() {
   require_cmd codesign
   require_cmd ditto
   require_cmd unzip
+  require_cmd zip
 
   prepare_release_source
   install_node_deps "$SOURCE_DIR/desktop"
@@ -975,9 +1015,11 @@ run_release() {
   rm -f \
     "$ARTIFACT_DIR/AnimeArmory_macos_arm64.dmg" \
     "$ARTIFACT_DIR/AnimeArmory_windows.exe" \
-    "$ARTIFACT_DIR/anime-armory.vsix"
+    "$ARTIFACT_DIR/anime-armory.vsix" \
+    "$ARTIFACT_DIR"/AnimeArmory_demo_*.zip
 
   build_macos_assets "aarch64-apple-darwin" "AnimeArmory_macos_arm64.dmg"
+  build_demo_zip_assets
 
   if [[ "$RELEASE_ALL" == "1" ]]; then
     build_windows_exe
