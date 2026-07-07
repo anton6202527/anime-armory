@@ -7,6 +7,8 @@ import type {
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
+  DemoDownloadInfo,
+  DemoInstallResult,
   EpisodeWorkspace,
   ImportWorkSourcesResult,
   LineInfo,
@@ -241,6 +243,16 @@ export async function resolveRepo(devRepo: string): Promise<string> {
 /** Seed bundled sample works into the workspace once; returns count. */
 export async function seedDemos(workspaceRoot: string): Promise<number> {
   return invoke<number>("seed_demos", { workspaceRoot });
+}
+
+/** Available per-line demo zips published as GitHub Release assets. */
+export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDownloadInfo[]> {
+  return invoke<DemoDownloadInfo[]>("list_demo_downloads", { workspaceRoot });
+}
+
+/** Download one line's demo zip from Releases, extract into workspace, and mark it as DEMO. */
+export async function installDemo(workspaceRoot: string, line: string): Promise<DemoInstallResult> {
+  return invoke<DemoInstallResult>("install_demo", { workspaceRoot, line });
 }
 
 /** Move a work folder to the system Trash; guarded to the workspace root AND

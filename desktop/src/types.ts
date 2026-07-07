@@ -10,6 +10,25 @@ export interface WorkRoot {
   is_demo: boolean;
 }
 
+export interface DemoDownloadInfo {
+  line: string;
+  line_key: LineKey;
+  name: string;
+  rel: string;
+  asset_name: string;
+  download_url: string;
+  sha256?: string | null;
+  size?: number | null;
+  source: string;
+  installed: boolean;
+  path?: string | null;
+}
+
+export interface DemoInstallResult {
+  root: WorkRoot;
+  already_installed: boolean;
+}
+
 export interface LineInfo {
   line: LineKey;
   label: string;

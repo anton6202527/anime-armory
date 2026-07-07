@@ -115,7 +115,8 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot, then seed bundled sample works.
+  // resolve the dedicated workspace on boot. seedDemos is a legacy no-op for
+  // current builds because full demos are downloaded from Release assets.
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {

@@ -136,6 +136,91 @@ fn load_demo_catalog(app: &tauri::AppHandle) -> Vec<DemoCatalogEntry> {
     Vec::new()
 }
 
+fn line_key_for_product(product: &str) -> Option<&'static str> {
+    LINES
+        .iter()
+        .find(|(_, _, dir, _)| *dir == product)
+        .map(|(key, _, _, _)| *key)
+}
+
+fn product_for_line_key(line_key: &str) -> Option<&'static str> {
+    LINES
+        .iter()
+        .find(|(key, _, _, _)| *key == line_key)
+        .map(|(_, _, dir, _)| *dir)
+}
+
+fn catalog_entry_line_key(entry: &DemoCatalogEntry) -> Option<String> {
+    entry
+        .line_key
+        .clone()
+        .or_else(|| line_key_for_product(&entry.line).map(|key| key.to_string()))
+}
+
+fn demo_asset_name_for_key(line_key: &str) -> String {
+    format!("AnimeArmory_demo_{line_key}.zip")
+}
+
+fn demo_download_base() -> String {
+    std::env::var("ANIME_ARMORY_DEMO_RELEASE_BASE")
+        .ok()
+        .map(|value| value.trim().trim_end_matches('/').to_string())
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| DEFAULT_RELEASE_DOWNLOAD_BASE.to_string())
+}
+
+fn catalog_entry_asset_name(entry: &DemoCatalogEntry, line_key: &str) -> String {
+    entry
+        .asset_name
+        .clone()
+        .filter(|value| !value.trim().is_empty())
+        .unwrap_or_else(|| demo_asset_name_for_key(line_key))
+}
+
+fn catalog_entry_download_url(entry: &DemoCatalogEntry, asset_name: &str) -> String {
+    entry
+        .download_url
+        .clone()
+        .filter(|value| value.starts_with("https://") || value.starts_with("http://"))
+        .unwrap_or_else(|| format!("{}/{}", demo_download_base(), asset_name))
+}
+
+fn demo_info_from_entry(
+    workspace: &Path,
+    entry: &DemoCatalogEntry,
+) -> Option<DemoDownloadInfo> {
+    let line_key = catalog_entry_line_key(entry)?;
+    let asset_name = catalog_entry_asset_name(entry, &line_key);
+    let rel = entry.rel();
+    let path = workspace.join(&rel);
+    let installed = path.join("_进度.md").is_file();
+    Some(DemoDownloadInfo {
+        line: entry.line.clone(),
+        line_key,
+        name: entry.name.clone(),
+        rel,
+        asset_name: asset_name.clone(),
+        download_url: catalog_entry_download_url(entry, &asset_name),
+        sha256: entry.sha256.clone(),
+        size: entry.size,
+        source: entry.source.clone().unwrap_or_else(|| "release-demo".into()),
+        installed,
+        path: installed.then(|| path.to_string_lossy().to_string()),
+    })
+}
+
+#[tauri::command]
+pub fn list_demo_downloads(
+    app: tauri::AppHandle,
+    workspace_root: String,
+) -> Vec<DemoDownloadInfo> {
+    let workspace = Path::new(&workspace_root);
+    load_demo_catalog(&app)
+        .iter()
+        .filter_map(|entry| demo_info_from_entry(workspace, entry))
+        .collect()
+}
+
 fn demo_origins_path(workspace: &Path) -> PathBuf {
     workspace.join(WORKSPACE_META_DIR).join(DEMO_ORIGINS_FILE)
 }
@@ -2372,9 +2457,181 @@ fn seed_resource_works(
     Ok((seeded, origins_changed))
 }
 
-/// Seed bundled sample works into the app workspace. Builds may include
-/// configured 创作区 demos and outer skill demo folders under resources/demos;
-/// existing user works are never overwritten.
+fn demo_cache_dir() -> Result<PathBuf, String> {
+    let base = dirs::cache_dir()
+        .or_else(dirs::data_local_dir)
+        .ok_or("无法定位下载缓存目录")?;
+    let dir = base.join(APP_CONFIG_DIR).join("demo-downloads");
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    Ok(dir)
+}
+
+fn unique_demo_temp_dir(line_key: &str) -> Result<PathBuf, String> {
+    let millis = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|e| e.to_string())?
+        .as_millis();
+    let dir = demo_cache_dir()?.join(format!("{line_key}-{millis}"));
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    Ok(dir)
+}
+
+fn sha256_file(path: &Path) -> Result<String, String> {
+    let mut file = fs::File::open(path).map_err(|e| e.to_string())?;
+    let mut hasher = Sha256::new();
+    let mut buf = [0u8; 64 * 1024];
+    loop {
+        let n = file.read(&mut buf).map_err(|e| e.to_string())?;
+        if n == 0 {
+            break;
+        }
+        hasher.update(&buf[..n]);
+    }
+    let digest = hasher.finalize();
+    Ok(digest.iter().map(|b| format!("{b:02x}")).collect())
+}
+
+fn download_file(url: &str, dst: &Path) -> Result<(), String> {
+    let mut response = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(600))
+        .user_agent("AnimeArmory Desktop")
+        .build()
+        .map_err(|e| e.to_string())?
+        .get(url)
+        .send()
+        .map_err(|e| format!("下载失败：{e}"))?
+        .error_for_status()
+        .map_err(|e| format!("下载失败：{e}"))?;
+    let mut out = fs::File::create(dst).map_err(|e| e.to_string())?;
+    std::io::copy(&mut response, &mut out).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+fn extract_zip_safe(zip_path: &Path, dst: &Path) -> Result<(), String> {
+    let file = fs::File::open(zip_path).map_err(|e| e.to_string())?;
+    let mut archive = zip::ZipArchive::new(file).map_err(|e| format!("zip 无效：{e}"))?;
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i).map_err(|e| e.to_string())?;
+        let Some(rel) = entry.enclosed_name().map(|p| p.to_owned()) else {
+            return Err(format!("zip 内含非法路径：{}", entry.name()));
+        };
+        let out_path = dst.join(rel);
+        if entry.is_dir() {
+            fs::create_dir_all(&out_path).map_err(|e| e.to_string())?;
+            continue;
+        }
+        if let Some(parent) = out_path.parent() {
+            fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+        }
+        let mut out = fs::File::create(&out_path).map_err(|e| e.to_string())?;
+        std::io::copy(&mut entry, &mut out).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+fn find_extracted_demo_root(extract_dir: &Path, info: &DemoDownloadInfo) -> Result<PathBuf, String> {
+    let expected = extract_dir.join(&info.rel);
+    if expected.join("_进度.md").is_file() {
+        return Ok(expected);
+    }
+    let named = extract_dir.join(&info.name);
+    if named.join("_进度.md").is_file() {
+        return Ok(named);
+    }
+    if extract_dir.join("_进度.md").is_file() {
+        return Ok(extract_dir.to_path_buf());
+    }
+    Err(format!(
+        "示例包结构不匹配，未找到 {} 或 _进度.md",
+        info.rel
+    ))
+}
+
+fn select_demo_info_for_line(
+    app: &tauri::AppHandle,
+    workspace: &Path,
+    line_key: &str,
+) -> Result<DemoDownloadInfo, String> {
+    if product_for_line_key(line_key).is_none() {
+        return Err("未知系列".into());
+    }
+    load_demo_catalog(app)
+        .iter()
+        .filter_map(|entry| demo_info_from_entry(workspace, entry))
+        .find(|info| info.line_key == line_key)
+        .ok_or_else(|| "该系列没有配置可下载示例".into())
+}
+
+/// Download one line's demo zip from GitHub Releases, extract it into the app
+/// workspace, and tag it as a demo. Existing works are never overwritten.
+#[tauri::command]
+pub fn install_demo(
+    app: tauri::AppHandle,
+    workspace_root: String,
+    line: String,
+) -> Result<DemoInstallResult, String> {
+    let line_key = line.trim();
+    let workspace = Path::new(&workspace_root);
+    fs::create_dir_all(workspace).map_err(|e| e.to_string())?;
+    let info = select_demo_info_for_line(&app, workspace, line_key)?;
+    validate_rel_path(&info.rel, false)?;
+
+    let target = workspace.join(&info.rel);
+    if target.exists() {
+        let mut demo_origins = load_demo_origins(workspace);
+        if demo_origins.insert(info.rel.clone()) {
+            write_demo_origins(workspace, &demo_origins)?;
+        }
+        return Ok(DemoInstallResult {
+            root: WorkRoot {
+                name: info.name,
+                path: target.to_string_lossy().to_string(),
+                has_progress: target.join("_进度.md").is_file(),
+                is_demo: true,
+            },
+            already_installed: true,
+        });
+    }
+
+    let temp_dir = unique_demo_temp_dir(line_key)?;
+    let zip_path = temp_dir.join(&info.asset_name);
+    let extract_dir = temp_dir.join("extract");
+    fs::create_dir_all(&extract_dir).map_err(|e| e.to_string())?;
+
+    download_file(&info.download_url, &zip_path)?;
+    if let Some(expected) = info.sha256.as_ref().filter(|s| !s.trim().is_empty()) {
+        let actual = sha256_file(&zip_path)?;
+        if actual.to_ascii_lowercase() != expected.trim().to_ascii_lowercase() {
+            let _ = fs::remove_dir_all(&temp_dir);
+            return Err("示例包校验失败，已拒绝安装".into());
+        }
+    }
+
+    extract_zip_safe(&zip_path, &extract_dir)?;
+    let extracted = find_extracted_demo_root(&extract_dir, &info)?;
+    if let Some(parent) = target.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    copy_dir_all(&extracted, &target).map_err(|e| e.to_string())?;
+    let _ = fs::remove_dir_all(&temp_dir);
+
+    let mut demo_origins = load_demo_origins(workspace);
+    demo_origins.insert(info.rel.clone());
+    write_demo_origins(workspace, &demo_origins)?;
+
+    Ok(DemoInstallResult {
+        root: WorkRoot {
+            name: info.name,
+            path: target.to_string_lossy().to_string(),
+            has_progress: target.join("_进度.md").is_file(),
+            is_demo: true,
+        },
+        already_installed: false,
+    })
+}
+
+/// Legacy bundled-work seeding. Current builds keep full demos in GitHub
+/// Release assets, so this is normally a no-op; retained for older packages.
 #[tauri::command]
 pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
     let ws = Path::new(&workspace_root);
