@@ -64,7 +64,13 @@
       }
     ]
   },
-  "distribution_intent": "internal_only",
+    "distribution_intent": "internal_only",
+    "intended_use": {
+        "purpose": "personal_demo_learning",
+        "public_release": false,
+        "paid_distribution": false,
+        "notes": "用户明确：当前仅自己做 demo / 学习使用，不公开发布；转公开发布或投放前须改 _设置.md 合规用途并补发布合规证据。"
+    },
   "image_identity": {
     "authorization_status": "not_applicable",
     "evidence": "CHAR_01 使用用户会话提供的非真人风格人物参考图作为项目内脸部/身形锚；不使用 Sora cameo，不使用真人肖像或第三方 IP 脸锚；参考范围限定为脸型、五官比例、眼神、体态和身形。",
