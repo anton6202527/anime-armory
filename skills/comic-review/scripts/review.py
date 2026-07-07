@@ -148,6 +148,11 @@ def is_publish_like_usage(value: str) -> bool:
     return not any(token in usage for token in draft_tokens)
 
 
+def is_demo_like_usage(value: str) -> bool:
+    usage = str(value or "").strip().lower()
+    return any(token in usage for token in ("demo", "学习", "草稿", "自用", "内部", "测试", "预览", "draft", "internal", "preview", "test"))
+
+
 def find_panel_image(panel_dir: Path, panel_id: str) -> Path | None:
     for ext in IMAGE_EXTS:
         candidate = panel_dir / f"{panel_id}{ext}"
@@ -578,27 +583,54 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
 
     rights = (meta.get("rights") or {}) if isinstance(meta, dict) else {}
     publish_like = is_publish_like_usage(settings["合规用途"])
+    demo_like = is_demo_like_usage(settings["合规用途"])
     for key, label in (("font_status", "字体权利"), ("asset_status", "素材权利")):
         if str(rights.get(key) or "").startswith("pending"):
+            if publish_like:
+                add_issue(
+                    issues,
+                    "block",
+                    "_meta.json",
+                    f"{label}仍是 {rights.get(key)}",
+                    "comic-review",
+                    "发布/商用前确认授权并更新 _meta.json",
+                    "rights",
+                )
+            elif demo_like:
+                notes.append(f"{settings['合规用途']} 用途：{label}={rights.get(key)}，仅记录，不进入发布授权流程。")
+            else:
+                add_issue(
+                    issues,
+                    "info",
+                    "_meta.json",
+                    f"{label}仍是 {rights.get(key)}",
+                    "comic-review",
+                    "发布/商用前确认授权并更新 _meta.json",
+                    "rights",
+                )
+    if manifest.get("font_status") == "system_font_draft":
+        if publish_like:
             add_issue(
                 issues,
-                "block" if publish_like else "info",
-                "_meta.json",
-                f"{label}仍是 {rights.get(key)}",
-                "comic-review",
-                "发布/商用前确认授权并更新 _meta.json",
+                "block",
+                "排版/" + chapter + "/export_manifest.json",
+                "当前使用 system_font_draft，不能当正式发布字体授权",
+                "comic-compose",
+                "发布前用已授权字体重新导出，或更新字体授权记录",
                 "rights",
             )
-    if manifest.get("font_status") == "system_font_draft":
-        add_issue(
-            issues,
-            "block" if publish_like else "info",
-            "排版/" + chapter + "/export_manifest.json",
-            "当前使用 system_font_draft，不能当正式发布字体授权",
-            "comic-compose",
-            "发布前用已授权字体重新导出，或更新字体授权记录",
-            "rights",
-        )
+        elif demo_like:
+            notes.append(f"{settings['合规用途']} 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。")
+        else:
+            add_issue(
+                issues,
+                "info",
+                "排版/" + chapter + "/export_manifest.json",
+                "当前使用 system_font_draft，不能当正式发布字体授权",
+                "comic-compose",
+                "发布前用已授权字体重新导出，或更新字体授权记录",
+                "rights",
+            )
 
     rendered = manifest.get("rendered") or []
     preview = refresh_preview(root, chapter, rendered) if refresh_qa_preview else ""

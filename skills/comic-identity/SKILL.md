@@ -34,7 +34,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --map CHAR_JYC=P002 --map CHAR_PEI=P005 --map MON_TIGER=P004 --overwrite
 ```
 
-生成一致性报告并回填可解析路径：
+已有 `panel_jobs.json` 后，生成一致性报告并回填可解析路径：
 
 ```bash
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 report --write
@@ -64,7 +64,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ## 工作流
 
-1. 先跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
+1. 若本话还没有 `出图/第N话/prompt/panel_jobs.json`，先用 `comic-image` 的 `build_panel_jobs.py` 生成；再跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
 2. 对常驻角色和关键资产建立锚点。短 demo 可从已采纳面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 子命令从当前 anchor 生成并登记多视图；`--backend auto` 会优先用可用后端，必要时可显式指定 `dreamina`。
    - `views` 默认对非 `front` 视图优先使用已存在的 `front` 定妆图作为参考锚点，避免原剧情格的坐跪、挥砍、裁切等动作姿态污染多视图；需要强制用原始锚点时传 `--no-prefer-front-anchor`。
 3. 重新跑 `report --write`，确认每个带 reference 的格子都有真实图片路径。

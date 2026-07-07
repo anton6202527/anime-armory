@@ -78,7 +78,11 @@ def test_compliance_usage_alias_normalizes_to_internal_only(tmp_path: Path, caps
 def test_image2image_reference_chain_setting_is_valid(tmp_path: Path, capsys) -> None:
     root = make_project(tmp_path)
     (root / "_设置.md").write_text(
-        "- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链\n",
+        "\n".join([
+            "- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链",
+            "- 本机LoRA慢速策略：放弃本机训练，改走 image2image_reference_chain",
+            "- 妖类脸部规则：狼妖像狼、虎妖像虎，不磨成人类俊脸",
+        ]) + "\n",
         encoding="utf-8",
     )
 
@@ -87,6 +91,7 @@ def test_image2image_reference_chain_setting_is_valid(tmp_path: Path, capsys) ->
     assert rc == 0
     out = json.loads(capsys.readouterr().out)
     assert out["errors"] == 0
+    assert "unknown setting key" not in "\n".join(row["message"] for row in out["rows"])
 
 
 def test_reset_removes_setting(tmp_path: Path, capsys) -> None:

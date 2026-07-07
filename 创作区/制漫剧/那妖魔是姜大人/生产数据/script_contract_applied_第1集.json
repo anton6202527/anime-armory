@@ -15,8 +15,8 @@
   ],
   "episode": "第1集",
   "kind": "n2d_script_contract_application",
-  "reviewed_at": "2026-07-07T06:08:25+00:00",
-  "reviewer": "Codex production debt refresh 2026-07-07",
+  "reviewed_at": "2026-07-07T08:43:42+00:00",
+  "reviewer": "n2d-video prompt author",
   "scopes": [
     {
       "applied_clip_ids": [
@@ -115,8 +115,8 @@
         "source_trace_ids 已继承到本 scope 签收收据；延期线索只登记 deferred，不作为本集消费阻断。"
       ],
       "prompt_path": "出视频/第1集/prompt/01_clips.md",
-      "prompt_sha256": "12152ccddb20927101703301abd76fa463e4e3847f04c0764960e8d319e7a5b6",
-      "reviewed_at": "2026-07-07T06:08:25+00:00",
+      "prompt_sha256": "8b28ebaf7f854320331a6758633ff7d5275ffe91a05eb3a1057f9a43452a1edc",
+      "reviewed_at": "2026-07-07T08:43:42+00:00",
       "scope": "出视频",
       "source_trace_ids": [
         "SRC_PROMISE_001",

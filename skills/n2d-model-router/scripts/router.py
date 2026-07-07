@@ -486,7 +486,12 @@ def clip_character_refs(clip: Mapping[str, Any]) -> List[Dict[str, str]]:
     refs: List[Dict[str, str]] = []
     for key in CHARACTER_FIELD_KEYS:
         refs.extend(_collect_character_refs(clip.get(key)))
-    refs.extend(_collect_character_refs(_clip_text(clip), allow_raw=False))
+    # Structured cast fields are the visible-character truth when present.
+    # Prose fields often mention offscreen/forbidden characters in continuity,
+    # degrade plans, or negative prompts; treating those mentions as references
+    # can make the video backend render exactly the face we meant to avoid.
+    if not any(ref.get("character_id") for ref in refs):
+        refs.extend(_collect_character_refs(_clip_text(clip), allow_raw=False))
     out: List[Dict[str, str]] = []
     seen: set[tuple[str, str, str]] = set()
     for ref in refs:

@@ -87,6 +87,7 @@ from n2d_contract import (  # noqa: E402
     production_mode_keys,
     SPECTACLE_SEQUENCE_PLAN_KIND,
     STYLE_CONTRACT_FIELDS,
+    COMPACT_NARRATIVE_TEMPLATE_FIELDS,
     SPECTACLE_TEMPLATE_FIELDS,
     GENERIC_TEMPLATE_VALUES,
     VIDEO_MODEL_ROUTES_KIND,
@@ -297,6 +298,7 @@ def _default_root_cause(dim: str, msg: str = "", loc: str = "") -> Dict[str, str
 
 SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     **SPECTACLE_TEMPLATE_FIELDS,
+    **COMPACT_NARRATIVE_TEMPLATE_FIELDS,
     "dialogue_shot_reverse": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "axis", "eyeline", "shot_pairing",
@@ -850,9 +852,30 @@ def episode_registry_reference_ids(root: str, ep: str) -> Tuple[set, set]:
     """
     text = "\n".join(_episode_reference_texts(root, ep))
     char_refs = episode_registry_identity_refs(root, ep, text=text)
-    _reg_chars, reg_assets = _registered_registry_ids(root)
+    reg_chars, reg_assets = _registered_registry_ids(root)
+    char_refs = {_normalize_registered_character_marker(ref, reg_chars) for ref in char_refs}
     asset_refs = {_normalize_registered_asset_marker(ref, reg_assets) for ref in ASSET_ID_RE.findall(text)}
     return {ref.split("/", 1)[0] for ref in char_refs}, asset_refs
+
+
+def _normalize_registered_character_marker(ref: str, registered_chars: set) -> str:
+    token = str(ref or "").strip().rstrip("*")
+    if not token:
+        return token
+    if "/" in token:
+        base, form = token.split("/", 1)
+        normalized_base = _normalize_registered_character_marker(base, registered_chars)
+        return f"{normalized_base}/{form}" if form else normalized_base
+    if token in registered_chars:
+        return token
+    if token.endswith("_partial"):
+        base = token[: -len("_partial")]
+        if base in registered_chars:
+            return base
+    m = re.match(r"^(.+)_\d{1,3}$", token)
+    if m and m.group(1) in registered_chars:
+        return m.group(1)
+    return token
 
 
 def _normalize_registered_asset_marker(ref: str, registered_assets: set) -> str:
@@ -2938,15 +2961,21 @@ def _weapon_profile(asset: Mapping[str, object]) -> Tuple[Mapping[str, object], 
         if isinstance(value, Mapping):
             return value, field
     return {}, ASSET_WEAPON_PROFILE_NAMES[0]
+def _weapon_term_is_negated(blob: str, start: int) -> bool:
+    """Do not promote assets to weapon-like solely from negative/forbidden text."""
+    window = blob[max(0, start - 12):start]
+    return any(token in window for token in ("不要", "不得", "不能", "不应", "不是", "非", "禁止", "避免", "不放大成"))
 def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
     asset_type = str(asset.get("type") or "").strip().lower()
     if asset_type in ASSET_WEAPON_TYPES:
         return True
     if str(asset.get("id") or "").strip().startswith("WEAPON_"):
         return True
+    weapon_like_role = str(asset.get("weapon_like_role") or "").strip().lower()
+    if weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon", "not_weapon", "prop_only"}:
+        return False
     if asset_type in {"vfx", "effect"} and asset.get("is_entity_weapon") is False:
         return False
-    weapon_like_role = str(asset.get("weapon_like_role") or "").strip().lower()
     if asset_type in {"vfx", "effect"} and weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon"}:
         return False
     blob = json.dumps(asset, ensure_ascii=False).lower()
@@ -2956,7 +2985,9 @@ def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
             if re.search(rf"(?<![a-z]){re.escape(needle)}(?![a-z])", blob):
                 return True
         elif needle in blob:
-            return True
+            start = blob.find(needle)
+            if not _weapon_term_is_negated(blob, start):
+                return True
     return False
 def _asset_owner_present(asset: Mapping[str, object], profile: Mapping[str, object]) -> bool:
     owner_fields = ("owner", "character_id", "owner_character_id", "bound_character", "signature_owner")

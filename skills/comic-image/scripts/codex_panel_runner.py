@@ -413,11 +413,12 @@ def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference
 硬性要求：
 1. 已附参考图优先级高于文字；同一个 CHAR/MON/PROP/LOC/SYS 参考 ID 在所有面板中必须保持同一角色、同一妖物、同一道具或同一场景资产，不得换脸、换发型、换服装主色、换体型或换关键结构。
 2. 多角色同框时，按参考 ID 分别锁定身份，不要把一个角色的脸、发型、衣服套到另一个角色身上。
-3. 只生成一张无字漫画画面，不要水印、logo、签名、字幕、中文、英文或乱码字。
+3. 只生成一张无字漫画画面，不要水印、logo、签名、印章、角标、字幕、中文、英文或乱码字；画面四角必须干净，不能出现任何小字或作者署名。
 4. 不要画对白气泡、空白气泡、旁白框、标题框或任何文字容器；如需要后期嵌字，只在不挡脸、不挡手脚、不挡关键道具的位置保留低细节留白区域，由 comic-compose 另行绘制气泡和文字。
-5. 画风、题材、色彩和光效必须服从“正向要求”中的项目风格锚与当前面板事实，不要套用其它项目的默认风格。
-6. 危险、受伤或压迫感只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
-7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+5. 画面必须铺满整张画布，不要外框、截图边、白色斜线边、相框、胶片边、画中画边框、内部漫画分格线或拼贴式多面板版式；当前任务只输出一个完整面板。
+6. 画风、题材、色彩和光效必须服从“正向要求”中的项目风格锚与当前面板事实，不要套用其它项目的默认风格。
+7. 危险、受伤或压迫感只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
+8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -436,7 +437,15 @@ def anatomy_guidance(job: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
+def run_codex(
+    prompt: str,
+    root: Path,
+    timeout_sec: int,
+    image_paths: list[Path],
+    *,
+    ignore_user_config: bool = False,
+    ignore_rules: bool = False,
+) -> subprocess.CompletedProcess[str]:
     cmd = [
         "codex",
         "exec",
@@ -444,6 +453,12 @@ def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]
         "--enable",
         "image_generation",
     ]
+    if os.environ.get("COMIC_CODEX_DISABLE_RESPECT_SYSTEM_PROXY", "").lower() in {"1", "true", "yes"}:
+        cmd.extend(["--disable", "respect_system_proxy"])
+    if ignore_user_config:
+        cmd.append("--ignore-user-config")
+    if ignore_rules:
+        cmd.append("--ignore-rules")
     for path in image_paths:
         cmd.extend(["--image", str(path)])
     cmd.extend(["-s", "read-only", "-C", str(root), prompt])
@@ -534,6 +549,16 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
     parser.add_argument("--allow-missing-refs", action="store_true", help="允许带 references 的格子在参考图缺失时继续文生图")
     parser.add_argument("--timeout-sec", type=int, default=240)
+    parser.add_argument(
+        "--ignore-user-config",
+        action="store_true",
+        help="不加载用户 Codex 配置/技能，用干净的 image_generation 子进程重试卡在说明文档输出的请求",
+    )
+    parser.add_argument(
+        "--ignore-rules",
+        action="store_true",
+        help="不加载用户/项目 execpolicy 规则；用于继续隔离卡在说明文档输出的 Codex 子进程",
+    )
     parser.add_argument("--no-resize", action="store_true")
     parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
     args = parser.parse_args()
@@ -578,7 +603,14 @@ def main() -> int:
             with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
                 prompt = build_prompt(job, root.name, args.chapter, reference_records)
-                proc = run_codex(prompt, repo, args.timeout_sec, reference_paths)
+                proc = run_codex(
+                    prompt,
+                    repo,
+                    args.timeout_sec,
+                    reference_paths,
+                    ignore_user_config=args.ignore_user_config,
+                    ignore_rules=args.ignore_rules,
+                )
                 error = ""
                 if proc.returncode != 0:
                     error = format_failure(proc)

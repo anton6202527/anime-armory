@@ -1,12 +1,12 @@
 {
   "kind": "n2d.voice_manifest_meta",
-  "voiceover_fingerprint": "23c904a78e4a8451e6b481db1c842a053f9c9e1935741f9db2c968726b627af7",
+  "voiceover_fingerprint": "0d8c57fc3df2500754d98bc41e30a9349afff295ca9e29892d9759394e48b6ac",
   "lines": 17,
   "placeholder_lines": 17,
   "provider": "say",
   "lang": "zh",
-  "duration_sec": 58.967,
-  "expected_duration_sec": 56.52,
+  "duration_sec": 77.606,
+  "expected_duration_sec": 64.153,
   "duration_anomaly_lines": [],
-  "generated_at": "2026-07-07T01:24:39Z"
+  "generated_at": "2026-07-07T07:19:22Z"
 }

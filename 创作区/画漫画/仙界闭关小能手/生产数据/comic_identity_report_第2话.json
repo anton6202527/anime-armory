@@ -3,7 +3,7 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/仙界闭关小能手",
   "chapter": "第2话",
-  "created_at": "2026-07-07T14:29:38",
+  "created_at": "2026-07-07T17:22:51",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -51,13 +51,18 @@
   "panels": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -68,28 +73,28 @@
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P001.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -102,31 +107,31 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P002.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -139,25 +144,20 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P003.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -167,6 +167,11 @@
         },
         {
           "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
           "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
         },
@@ -174,38 +179,23 @@
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P004.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P005",
-      "status": "planned",
-      "valid_reference_count": 8,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -219,45 +209,25 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P005.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P006",
-      "status": "planned",
-      "valid_reference_count": 8,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -271,29 +241,19 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P006.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -303,6 +263,11 @@
         },
         {
           "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
           "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
         },
@@ -312,25 +277,20 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P007.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 1,
       "valid_references": [
         {
@@ -340,20 +300,25 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 1,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P008.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -366,31 +331,31 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P009.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -401,22 +366,17 @@
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P010.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 4,
       "valid_references": [
         {
@@ -426,6 +386,11 @@
         },
         {
           "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
           "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
         },
@@ -433,38 +398,23 @@
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P011.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P012",
-      "status": "planned",
-      "valid_reference_count": 8,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -478,45 +428,25 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P012.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P013",
-      "status": "planned",
-      "valid_reference_count": 8,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -530,45 +460,25 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P013.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P014",
-      "status": "planned",
-      "valid_reference_count": 8,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -582,29 +492,19 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P014.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
@@ -614,6 +514,11 @@
         },
         {
           "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
           "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
         },
@@ -621,11 +526,6 @@
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "PROP_BROKEN_BASIN",
@@ -634,30 +534,20 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P015.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P016",
-      "status": "planned",
-      "valid_reference_count": 9,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
-          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867"
-        },
-        {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
-          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -671,16 +561,6 @@
         },
         {
           "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
-          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
-          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
-          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244"
-        },
-        {
-          "id": "CHAR_ZHANG_LAODA",
           "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
           "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
         },
@@ -691,20 +571,25 @@
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P016.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P017",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -717,31 +602,31 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P017.json",
       "needs_rerun": false,
       "rerun_reason": ""
     },
     {
       "panel_id": "P018",
-      "status": "planned",
+      "status": "ready",
       "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "CHAR_HE_PINGSHENG",
           "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
           "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
         },
         {
           "id": "CHAR_HE_PINGSHENG",
@@ -754,19 +639,14 @@
           "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45"
         },
         {
-          "id": "CHAR_HE_PINGSHENG",
-          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
-          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
-        },
-        {
           "id": "PROP_BROKEN_BASIN",
           "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
           "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
         }
       ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P018.json",
       "needs_rerun": false,
       "rerun_reason": ""
     }

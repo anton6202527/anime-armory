@@ -904,7 +904,18 @@ def report_markdown(report: dict[str, Any]) -> str:
 def report(args: argparse.Namespace) -> int:
     root = Path(args.project_root).expanduser().resolve()
     chapter = args.chapter
-    jobs = load_json(jobs_path(root, chapter))
+    job_path = jobs_path(root, chapter)
+    if not job_path.is_file():
+        rel_job_path = rel_to_root(root, job_path)
+        raise SystemExit(
+            f"missing {rel_job_path}; run `python3 skills/comic-image/scripts/build_panel_jobs.py "
+            f"\"{root}\" --chapter {chapter}` before `comic-identity report`"
+        )
+    try:
+        jobs = load_json(job_path)
+    except json.JSONDecodeError as exc:
+        rel_job_path = rel_to_root(root, job_path)
+        raise SystemExit(f"invalid JSON in {rel_job_path}: {exc}") from exc
     registry = load_registry(root)
     changed = bind_job_references(root, jobs, registry) if args.write else 0
     if args.write:

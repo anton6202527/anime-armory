@@ -50,6 +50,12 @@ def test_verdict_identity_and_flicker():
     assert tc.verdict(None, 0.0, id_floor=0.6, flicker_max=0.06) == "ok"
 
 
+def test_identity_precision_verdict_flags_closeup_without_embedding():
+    assert tc.identity_precision_verdict(closeup=True, min_id=None) == "warn"
+    assert tc.identity_precision_verdict(closeup=True, min_id=0.8) == "ok"
+    assert tc.identity_precision_verdict(closeup=False, min_id=None) == "ok"
+
+
 def test_shot_num_parses_both_namings():
     import temporal_consistency as t
     assert t._shot_num("镜头7_小禾冲入.png") == 7

@@ -168,6 +168,37 @@ ASSET_ID_HINTS.update({
     "PROP_WATER_JAR": {**ASSET_ID_HINTS["PROP_WATER_JARS"], "name": "食堂水缸"},
     "PROP_DOOR_LOCK": {**ASSET_ID_HINTS["PROP_KEY_LOCK"], "name": "门栓铁锁"},
     "PROP_DOOR": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "破屋木门"},
+    "LOC_BLACK_HALL": {**ASSET_ID_HINTS["LOC_ZAYI_DADIAN"], "name": "黑暗杂役大殿", "path_name": "定妆_场景_黑暗杂役大殿"},
+    "LOC_BLACK_HALL_TO_WATER_YARD": {**ASSET_ID_HINTS["LOC_ZAYI_WATER_JARS"], "name": "黑殿到水缸区转场", "path_name": "定妆_场景_黑殿到水缸区转场"},
+    "LOC_SERVANT_QUARTER": {**ASSET_ID_HINTS["LOC_ZAYI_HUT"], "name": "杂役空房", "path_name": "定妆_场景_杂役空房"},
+    "LOC_MOUNTAIN_PATH_NIGHT": {**ASSET_ID_HINTS["LOC_HOUSHAN_WATER_PATH"], "name": "夜山路", "path_name": "定妆_场景_夜山路"},
+    "LOC_WATER_ROUTE": {**ASSET_ID_HINTS["LOC_HOUSHAN_WATER_PATH"], "name": "后山挑水路", "path_name": "定妆_场景_后山挑水路"},
+    "LOC_NIGHT_POOL": {**ASSET_ID_HINTS["LOC_HOUSHAN_QIANTAN"], "name": "夜潭", "path_name": "定妆_场景_夜潭"},
+    "PROP_SERVANT_HALL_LAMP": {
+        "name": "黑殿旧油灯",
+        "path_name": "定妆_道具_黑殿旧油灯",
+        "profile": "黑暗杂役大殿里的旧油灯/粗陶灯盏，弱暖光只照出压迫轮廓，不现代、不华丽、不抢人物脸。",
+        "must_not_have": ["现代电灯", "霓虹", "清晰文字", "华丽仙器"],
+    },
+    "PROP_IRON_BOWL": {
+        "name": "旧铁碗",
+        "path_name": "定妆_道具_旧铁碗",
+        "profile": "杂役空房里的旧铁碗，边缘磨损、暗哑铁色、可装粗饭，贫瘠生活道具，不现代、不发光。",
+        "must_not_have": ["精致金碗", "现代餐具", "文字水印", "神器光效"],
+    },
+    "PROP_EMPTY_BUCKETS": {
+        "name": "空木桶",
+        "path_name": "定妆_道具_空木桶",
+        "profile": "挑水前的旧木桶，桶内空、木箍磨损、低饱和旧木色，体量适合瘦小少年挑担。",
+        "must_not_have": ["塑料桶", "金属水桶", "现代提手", "自动盛水"],
+    },
+    "PROP_RUST_LOCK": {
+        "name": "生锈铁锁",
+        "path_name": "定妆_道具_生锈铁锁",
+        "profile": "杂役空房门上或手里的生锈铁锁/旧钥匙，小件暗铁色，表现贫瘠和管束，不放大成法器。",
+        "must_not_have": ["现代密码锁", "崭新金锁", "符文法器", "文字水印"],
+        "weapon_like_role": "not_entity_weapon",
+    },
     "VFX_INNER_SECT_FACELESS_SILHOUETTE": {
         "name": "内门无脸剪影层",
         "path_name": "定妆_远景修士剪影",
@@ -244,6 +275,11 @@ PARTIAL_CHARACTER_BOARD_RULES = (
 )
 
 EP_RE = re.compile(r"\d+")
+INNER_FOCUS_RE = re.compile(
+    r"内心戏|内心独白|心声|心理反应|心理活动|心念|心想|暗想|自省|心里一沉|心里想|"
+    r"inner monologue|internal monologue|thought beat|subjective reaction",
+    re.I,
+)
 
 
 def shot_number(value: Any) -> Optional[int]:
@@ -543,6 +579,24 @@ def flatten_contract_value(value: Any) -> str:
     return str(value or "").strip()
 
 
+def summarize_contract_value(value: Any, limit: int = 260) -> str:
+    text = flatten_contract_value(value)
+    if len(text) <= limit:
+        return text
+    parts = [part.strip() for part in text.split("；") if part.strip()]
+    kept: List[str] = []
+    size = 0
+    for part in parts:
+        extra = len(part) + (1 if kept else 0)
+        if kept and size + extra > max(20, limit - 1):
+            break
+        if not kept and len(part) > max(20, limit - 1):
+            return part[: max(20, limit - 1)].rstrip("=：:，,；; ") + "…"
+        kept.append(part)
+        size += extra
+    return ("；".join(kept) or text[: max(20, limit - 1)].rstrip("=：:，,；; ")) + "…"
+
+
 def load_script_contract(root: Path, ep: str) -> Mapping[str, Any]:
     data = load_json(root / "生产数据" / f"script_quality_contract_{ep}.json")
     if isinstance(data, Mapping) and data.get("kind") == SCRIPT_QUALITY_CONTRACT_KIND:
@@ -579,22 +633,22 @@ def script_contract_global_lines(fields: Mapping[str, Any]) -> List[str]:
             if summary.get("compressed_clip_ids"):
                 bits.append("一笔带过=" + ",".join(str(x) for x in summary.get("compressed_clip_ids")[:8]))
         if declared:
-            bits.append(flatten_contract_value(declared)[:180])
+            bits.append(summarize_contract_value(declared, 180))
         if bits:
             lines.append("  - Pacing: " + "；".join(bits))
     ledger = fields.get("retention_promise_ledger")
     if isinstance(ledger, list):
         for idx, row in enumerate(ledger[:8], start=1):
-            text = flatten_contract_value(row)
+            text = summarize_contract_value(row, 260)
             if text:
-                lines.append(f"  - R{idx:02d}: {text[:260]}")
+                lines.append(f"  - R{idx:02d}: {text}")
     qledger = fields.get("audience_question_ledger")
     questions = qledger.get("questions") if isinstance(qledger, Mapping) else []
     if isinstance(questions, list):
         for idx, row in enumerate(questions[:8], start=1):
-            text = flatten_contract_value(row)
+            text = summarize_contract_value(row, 260)
             if text:
-                lines.append(f"  - Q{idx:02d}: {text[:260]}")
+                lines.append(f"  - Q{idx:02d}: {text}")
     return lines
 
 
@@ -683,6 +737,32 @@ def pick_existing_ref(root: Path, candidates: Sequence[str], *, key: str = "", s
     return ref_item(root, first, key=key, source=source or first)
 
 
+def external_visual_reference_entries(root: Path, cid: str, cfg: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    """User-provided identity anchors that should be attached before the first generated makeup PNG."""
+    name = safe_slug(str(cfg.get("name") or cid))
+    candidates = [
+        f"出图/共享/图片/{cid}_定型参考.png",
+        f"出图/共享/图片/{cid}_定型参考_待绑定.png",
+        f"出图/共享/图片/{cid}_定型参考_成年觉醒态.png",
+        f"出图/共享/图片/{cid}_参考.png",
+        f"出图/共享/图片/{name}_定型参考.png",
+    ]
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    for rel in candidates:
+        if rel in seen or not (root / rel).is_file():
+            continue
+        seen.add(rel)
+        out.append({
+            "path": rel,
+            "status": "ready",
+            "source": "user_provided_project_reference",
+            "use_policy": "identity_reference",
+            "sha256": sha256_file(root / rel),
+        })
+    return out
+
+
 def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
     pattern = rf"^#\s*{kind}卡\s*[—-]\s*(.+?)（ID[:：]\s*([^)）]+)[)）]"
     m = re.search(pattern, text, re.M)
@@ -690,6 +770,20 @@ def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
         name_m = re.search(rf"^#\s*{kind}卡\s*[：:]\s*(.+?)\s*$", text, re.M)
         return (name_m.group(1).strip(), "") if name_m else ("", "")
     return m.group(1).strip(), m.group(2).strip()
+
+
+def parse_character_card_identity(text: str, fallback_name: str = "") -> Tuple[str, str]:
+    name, cid = parse_card_header(text, "角色")
+    if not cid:
+        m = re.search(r"^\s*-\s*character_id\s*[:：]\s*`?([^`\s]+)`?\s*$", text, re.M)
+        if m:
+            cid = m.group(1).strip()
+    if not name:
+        header = re.search(r"^#\s*角色卡[：:]\s*(.+?)\s*$", text, re.M)
+        if header:
+            name = header.group(1).strip()
+    name = name or fallback_name
+    return name, cid
 
 
 def character_asset_index(root: Path) -> Dict[str, Dict[str, Any]]:
@@ -824,20 +918,35 @@ def project_style_name(root: Path) -> str:
 
 def required_character_ids(story: Mapping[str, Any]) -> List[str]:
     ids: List[str] = []
+
+    def normalize_marker(raw: Any) -> str:
+        text = str(raw or "").strip().strip("`，。、；;*")
+        text = text.split("/", 1)[0]
+        if text.endswith("_partial"):
+            text = text[: -len("_partial")]
+        m = re.match(r"^(.+)_\d{1,3}$", text)
+        if m and m.group(1) in ids:
+            text = m.group(1)
+        return text
+
+    def add_marker(raw: Any) -> None:
+        text = normalize_marker(raw)
+        if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
+            ids.append(text)
+
     for clip in story.get("clips") or []:
         if not isinstance(clip, Mapping):
             continue
         for cid in clip.get("character_ids") or []:
-            text = str(cid).strip()
-            if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
-                ids.append(text)
+            add_marker(cid)
     vc = visual_contract(story)
     states = vc.get("角色状态演进") or vc.get("角色状态演进表") or {}
     if isinstance(states, Mapping):
         for key in states:
-            text = str(key).split()[0]
-            if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
-                ids.append(text)
+            add_marker(str(key).split()[0])
+    blob = json.dumps(story, ensure_ascii=False)
+    for token in re.findall(r"(?<![A-Za-z0-9_])(?:CHAR|CROWD|GROUP)_[A-Za-z0-9_]*[A-Za-z0-9]", blob):
+        add_marker(token)
     return ids
 
 
@@ -1067,6 +1176,50 @@ FALLBACK_CHARACTER_VISUALS: Dict[str, Dict[str, str]] = {
         "relative_scale": "瘦得像快折的竹竿，比王敦矮很多，站在谷口显得单薄。",
         "performance_signature": "先低头忍耐，抬头时眼神干净倔强；火塘会朝他方向偏转。",
     },
+    "CHAR_ZHANG_LAODA": {
+        "name": "张老大",
+        "scope": "第1集秀竹峰杂役班压迫者/短线小反派",
+        "age_context": "三十多岁的粗砺成年男修杂役头目",
+        "face": "粗宽脸，颧骨硬，眼神势利下压，嘴角常带嘲讽；不是俊美主角脸。",
+        "hair": "黑发用旧布巾或低髻束起，鬓角略乱，发际线和头巾轮廓稳定。",
+        "outfit": "低饱和深灰褐杂役头目袍，衣料比普通杂役稍厚但仍旧，腰带粗旧，袖口磨损。",
+        "accessories": "可有旧木牌、账册或短鞭感压迫道具；本集以水缸、扁担命令为主。",
+        "relative_scale": "成年男性体格，比贺平生高壮一圈，高位俯视形成压迫。",
+        "performance_signature": "俯视、嘴角压笑、手势下令，视线锁贺平生或水缸，不看镜头摆拍。",
+    },
+    "CHAR_HAN_LAOSAN": {
+        "name": "韩老三",
+        "scope": "第1集功能性带路杂役/不展开支线",
+        "age_context": "二十多到三十岁的普通成年杂役",
+        "face": "普通瘦长杂役脸，神情麻木疲惫，五官不抢戏；本集多为半身、过肩或侧背。",
+        "hair": "黑发随意束起，几缕碎发，低阶杂役布巾。",
+        "outfit": "洗旧灰青杂役短袍，袖口和裤脚磨损，布鞋带泥。",
+        "accessories": "可携小木牌、饭碗或钥匙等功能性小道具；不建立高光法器。",
+        "relative_scale": "普通成年男性体格，比贺平生略高，存在感低于主角。",
+        "performance_signature": "带路、递物、过肩提示，动作短促实用，不展开情绪表演。",
+    },
+    "GROUP_SERVANTS": {
+        "name": "群杂役",
+        "scope": "第1集黑殿围观杂役群/压迫氛围层",
+        "age_context": "少年到成年底层杂役群像",
+        "face": "只保留侧脸、背影、低清笑影和半圆围堵轮廓，不建立可复用个人正脸。",
+        "hair": "群体黑发粗布束发，轮廓低调，不抢贺平生和张老大的主脸。",
+        "outfit": "灰青、灰褐、脏白低饱和杂役短袍群像，袖口磨损、布鞋沾泥。",
+        "accessories": "木桶、扫帚、破布包等底层生活小道具只作氛围，不能抢主道具。",
+        "relative_scale": "前景/后景半圆压边形成包围，单个体量不抢主角。",
+        "performance_signature": "哄笑、侧头、低声议论、围堵压边；清晰主脸最多作为低优先级侧影。",
+    },
+    "CHAR_FEMALE_LEAD": {
+        "name": "女主待绑定",
+        "scope": "待确认女主/用户参考母本/本集禁止入镜",
+        "age_context": "成年态参考；若剧情需要少女态必须另行派生",
+        "face": "东方女主鹅蛋脸，大而清澈的眼睛，清冷温润神态，精致但不低幼；脸部 DNA 来自用户参考母本。",
+        "hair": "长黑发半束，发丝柔顺，发冠和发饰等级按剧情身份可降低但发量和气质不漂。",
+        "outfit": "姓名确认前只保留白金仙衣和金色法阵高阶审美作为风格锚；正式出场时按身份重派生常态服装。",
+        "accessories": "精致发冠、长坠耳饰和金色法阵只属于高阶/参考态；早期形态需降级。",
+        "relative_scale": "成年仙子参考体态，具体身高体量待剧情绑定。",
+        "performance_signature": "清冷温润、克制、眼神干净；本集只作风格/脸部母本，不进入分镜画面。",
+    },
     "CHAR_04": {
         "name": "陈青源",
         "scope": "第3集飞鹰门门主/求救误认线关键角色",
@@ -1224,7 +1377,7 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         by_id[cid] = (card_path or (card_dir / f"{name}.md"), name, text)
     for path in sorted(card_dir.glob("*.md")) if card_dir.is_dir() else []:
         text = path.read_text(encoding="utf-8")
-        name, cid = parse_card_header(text, "角色")
+        name, cid = parse_character_card_identity(text, path.stem)
         if cid:
             by_id[cid] = (path, name, text)
     if not by_id and not needed:
@@ -1593,6 +1746,11 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 asset_type="scene",
                 visual=vc,
             )
+            hint_drift = hint.get("drift") if isinstance(hint.get("drift"), list) else []
+            drift_terms = [str(x) for x in hint_drift if str(x).strip()] or [
+                "不要丢失本场景地标、空间轴线、光位和常驻物件",
+                "不要把本场景随机改成仙宫、现代空间或无关地点",
+            ]
             defs[aid] = {
                 "type": "scene",
                 "name": name or str(req.get("name") or aid),
@@ -1606,12 +1764,12 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     "face_policy": "faceless",
                     "must_not_have": ["现代物件", "平台UI", "水印", "空间轴线随机跳变"],
                 },
-                "drift": ["不要丢失巨岩/尸堆/逃跑方向等连续性锚点", "不要把荒野画成室内或宫殿"],
+                "drift": drift_terms,
                 "scene_dna": scene_dna,
                 "spatial_layout": anchors or "",
                 "axis_rules": flatten(vc.get("场景轴线视线", {})),
                 "screen_direction_rules": flatten(vc.get("场景轴线视线", {})),
-                "self_check": "巨岩、尸堆、冷灰荒野、角色站位和逃跑方向可读。",
+                "self_check": f"{name or aid} 的地标、空间布局、光位、角色站位和出入口方向可读。",
             }
             continue
         atype = str(req.get("type") or ("weapon" if aid.startswith("WEAPON_") else "vfx" if aid.startswith("VFX_") else "prop"))
@@ -1700,6 +1858,8 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             }
         elif isinstance(hint.get("weapon_profile"), Mapping):
             defs[aid]["weapon_profile"] = dict(hint["weapon_profile"])
+        if isinstance(hint.get("weapon_like_role"), str) and hint.get("weapon_like_role"):
+            defs[aid]["weapon_like_role"] = str(hint["weapon_like_role"])
     return defs or ASSET_DEFS
 
 
@@ -1996,7 +2156,7 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 form["restricted_partial"] = True
                 form["no_full_face"] = True
             forms.append(form)
-        chars.append({
+        character: Dict[str, Any] = {
             "id": cid,
             "name": cfg["name"],
             "scope": cfg["scope"],
@@ -2008,7 +2168,11 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 "identity_anchor_form": cfg["form"],
                 "forms": [str(f.get("form") or "") for f in forms],
             },
-        })
+        }
+        external_refs = external_visual_reference_entries(root, cid, cfg)
+        if external_refs:
+            character["external_visual_references"] = external_refs
+        chars.append(character)
     return {
         "kind": IDENTITY_REGISTRY_KIND,
         "version": 1,
@@ -2101,6 +2265,8 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             asset["weapon_profile"] = cfg["weapon_profile"]
             asset["owner"] = cfg.get("owner")
             asset["character_id"] = cfg.get("character_id")
+        if isinstance(cfg.get("weapon_like_role"), str) and cfg.get("weapon_like_role"):
+            asset["weapon_like_role"] = cfg["weapon_like_role"]
         assets.append(asset)
     return {
         "kind": ASSET_REFERENCE_REGISTRY_KIND,
@@ -2208,6 +2374,73 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
     for aid in asset_ids_from_value(clip, include_aliases=False):
         add_unique(ids, aid)
     return ids
+
+
+def clip_text_blob(clip: Mapping[str, Any], keys: Sequence[str]) -> str:
+    parts: List[str] = []
+    for key in keys:
+        if key not in clip:
+            continue
+        value = clip.get(key)
+        if isinstance(value, (Mapping, list)):
+            parts.append(json.dumps(value, ensure_ascii=False, sort_keys=True))
+        else:
+            parts.append(str(value or ""))
+    return "\n".join(parts)
+
+
+def is_inner_focus_clip(clip: Mapping[str, Any]) -> bool:
+    text = clip_text_blob(clip, (
+        "id",
+        "label",
+        "scene",
+        "description",
+        "dramatic_function",
+        "story_function",
+        "rhythm",
+        "audience_effect",
+        "template",
+        "template_contract",
+        "shots",
+        "subtitle_lines",
+        "voiceover",
+    ))
+    return bool(INNER_FOCUS_RE.search(text))
+
+
+def inner_focus_context_reason(clip: Mapping[str, Any]) -> str:
+    for key in ("inner_focus_context_reason", "context_presence_reason"):
+        value = flatten(clip.get(key))
+        if value:
+            return value
+    policy = clip.get("inner_focus_policy") if isinstance(clip.get("inner_focus_policy"), Mapping) else {}
+    for key in ("context_reason", "allow_context"):
+        value = flatten(policy.get(key))
+        if value:
+            return value
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    for key in ("inner_focus_context_reason", "inner_focus_allow_context"):
+        value = flatten(contract.get(key))
+        if value:
+            return value
+    return ""
+
+
+def inner_focus_directive(clip: Mapping[str, Any], chars: Sequence[str], assets: Sequence[str]) -> str:
+    if not is_inner_focus_clip(clip):
+        return ""
+    subject = chars[0] if chars else "本镜思考主体"
+    others = [c for c in chars[1:]]
+    context_reason = inner_focus_context_reason(clip)
+    context_line = f"；若保留其他实体，必须服务：{context_reason}" if context_reason else ""
+    other_line = f"；非焦点主体 {', '.join(others)} 不给清晰脸/全身/新增动作" if others else ""
+    asset_line = f"；非必要资产 {', '.join(assets[:4])} 不抢画面" if assets else ""
+    return (
+        f"内心戏主体隔离：画面焦点只给 {subject} 的 CU/MCU/手部/眼神/呼吸/光影反应；"
+        "其他人物、妖魔、系统面板、武器或道具默认转为画外、虚焦剪影、极弱记忆符号或禁入，"
+        "不要重复上一镜群像/怪物/道具陈列，不让背景实体抢走心理反应。"
+        f"{other_line}{asset_line}{context_line}"
+    )
 
 
 def continuity_frame_count(clip: Mapping[str, Any]) -> Tuple[int, bool, bool]:
@@ -2413,6 +2646,48 @@ def style_anchor_rels(sc: Mapping[str, Any]) -> List[str]:
 
 def primary_style_anchor_rel(sc: Mapping[str, Any]) -> str:
     return style_anchor_rels(sc)[0]
+
+
+def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, Any]:
+    sc = style_contract(story)
+    style_name = style_name_from_contract(sc)
+    anchors: List[Dict[str, Any]] = []
+    for idx, rel in enumerate(style_anchor_rels(sc)):
+        path = root / rel
+        entry: Dict[str, Any] = {
+            "id": "STYLE_ANCHOR" if idx == 0 else f"STYLE_ANCHOR_{idx + 1}",
+            "name": style_name,
+            "path": rel,
+            "status": "ready" if path.is_file() else "planned",
+            "use_policy": "style_only",
+            "identity_policy": "do_not_clone_face_or_costume",
+            "role": "shared_rendering_language_anchor",
+        }
+        if path.is_file():
+            entry["sha256"] = sha256_file(path)
+        anchors.append(entry)
+    selected = dict(anchors[0]) if anchors else {
+        "id": "STYLE_ANCHOR",
+        "name": style_name,
+        "path": style_anchor_path_for(style_name),
+        "status": "planned",
+        "use_policy": "style_only",
+        "identity_policy": "do_not_clone_face_or_costume",
+        "role": "shared_rendering_language_anchor",
+    }
+    return {
+        "kind": "n2d_style_anchor_registry",
+        "version": 1,
+        "generated_at": now_iso(),
+        "style_name": style_name,
+        "selected_anchor": selected,
+        "anchors": anchors,
+        "rules": {
+            "use_policy": "style_only",
+            "identity_policy": "do_not_clone_face_or_costume",
+            "notes": STYLE_REFERENCE_BOARD_RULES,
+        },
+    }
 
 
 def visual_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -2922,8 +3197,8 @@ def overview_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[M
         "",
         "## 本集可看性签收合同",
         f"- 合同来源：`生产数据/script_quality_contract_{ep}.json`；status={script_contract.get('status', 'missing')}；content_hash={script_contract_content_hash(script_contract) or '-'}",
-        f"- 核心看点：{flatten_contract_value(script_fields.get('core_attraction'))[:260] or '缺；回 n2d-script 补 core_attraction'}",
-        f"- 首屏 0-3s 视觉钩：{flatten_contract_value(script_fields.get('first_3s_visual_hook'))[:260] or '缺；回 n2d-script 补 first_3s_visual_hook'}",
+        f"- 核心看点：{summarize_contract_value(script_fields.get('core_attraction'), 260) or '缺；回 n2d-script 补 core_attraction'}",
+        f"- 首屏 0-3s 视觉钩：{summarize_contract_value(script_fields.get('first_3s_visual_hook'), 260) or '缺；回 n2d-script 补 first_3s_visual_hook'}",
         f"- 留存承诺账本：{len(script_fields.get('retention_promise_ledger') or [])} 条；出图不得把承诺/兑现链画散。",
         f"- 观众问题账本：{len((script_fields.get('audience_question_ledger') or {}).get('questions') or [])} 条；开放问题必须以视觉钩、道具、表演或集尾断点接住。",
         *script_contract_global_lines(script_fields),
@@ -3020,6 +3295,73 @@ def identity_lock_sentence(chars: Sequence[str], idx: Optional[int] = None, asse
     return "；".join(parts)
 
 
+def clip_has_screen_surface(clip: Mapping[str, Any], assets: Sequence[str], desc: str) -> bool:
+    template = str(clip.get("template") or "").strip()
+    if template in {"screen_insert", "system_panel"}:
+        return True
+    asset_blob = " ".join(str(a) for a in assets)
+    if re.search(r"VFX_.*(系统|面板|PANEL|屏幕)", asset_blob, re.I):
+        return True
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    signal = " ".join([
+        template,
+        str(desc or ""),
+        str(contract.get("motif_id") or ""),
+        str(contract.get("vfx_asset") or ""),
+        str(contract.get("screen_content_ref") or ""),
+        str(contract.get("device_lock") or ""),
+    ])
+    return bool(re.search(r"系统面板|屏幕插入|设备屏幕|手机屏幕|电脑屏幕|光幕平面|字幕卡", signal))
+
+
+def compact_director_fallback(clip: Mapping[str, Any], desc: str) -> Tuple[str, str]:
+    template = str(clip.get("template") or "").strip()
+    label = str(clip.get("label") or "")
+    if template == "task_order":
+        return (
+            "为「道具插入镜 + 压迫反打」预留前景压线和反应空间；扁担/水缸先读清，人物不要顶边。",
+            "任务下达镜以道具压迫和角色反应为第一目标：先让水缸/扁担可读，再落到贺平生接令的低位反应。",
+        )
+    if template == "compressed_flashback":
+        return (
+            "为「物件快闪压缩叙事」预留清晰插入镜空间；每帧只突出一个物件或一个背影/手部，不展开新支线。",
+            "背景压缩镜只交代身世和杂役处境，不拉成长回忆；物件证据比人物表演优先。",
+        )
+    if template == "night_route_choice":
+        return (
+            "为「夜路跟随 + 侧脸停顿」预留行进方向 lead room；先读路，再读少年压下犹豫继续走。",
+            "主动选择镜要拍出少年在黑暗山路里仍往前走的意志，不英雄化、不提前给觉醒光效。",
+        )
+    if template == "labor_montage":
+        return (
+            "为「肩部/水桶/脚步三连剪」预留局部特写空间；每个痛点只拍一处，疲惫递增但不混成慢风景。",
+            "挑水蒙太奇以身体代价为第一目标：肩压、水溢、脚滑和第五趟到水边要短促可读。",
+        )
+    if template == "object_discovery":
+        return (
+            "为「水底道具发现 + 末尾微光硬断」预留道具 ECU 空间；观众先看见异常，主角后反应。",
+            "核心道具入场镜要克制神异：破盆仍像破旧日用品，只用盆底一线微光留下追更钩。",
+        )
+    if "挑水" in desc or "水桶" in desc or "扁担" in desc:
+        return (
+            "为劳动动作预留肩线、桶绳和脚步空间；道具接触点清楚，动作方向留 15%-25% 余量。",
+            "劳动压迫镜以身体负担和道具重量为第一目标，不拍成慢生活风景。",
+        )
+    return (
+        "为本镜主体动作/视线方向预留 15%-25% 运动余量；主体不要顶边，首帧抓起幅不抓顶点。",
+        f"导演意图服务本镜戏剧功能：{label or desc or '按 storyboard 戏剧功能聚焦主体和信息'}。",
+    )
+
+
+def sanitize_director_image_injection(clip: Mapping[str, Any], assets: Sequence[str], desc: str, move: str, intent: str) -> Tuple[str, str]:
+    if clip_has_screen_surface(clip, assets, desc):
+        return move, intent
+    polluted = "屏幕/面板镜" in intent or "锁定屏幕/光幕平面" in move or "文字和 UI 漂移" in intent
+    if not polluted:
+        return move, intent
+    return compact_director_fallback(clip, desc)
+
+
 def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], drow: Mapping[str, Any], story: Mapping[str, Any]) -> str:
     cid = str(clip.get("id") or f"EP01_CLIP{idx:02d}")
     contract = load_script_contract(root, ep)
@@ -3069,6 +3411,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         desc = " ".join(str(s.get("desc") or "") for s in shots if isinstance(s, Mapping))
     desc = desc or str(clip.get("description") or clip.get("label") or "")
     desc = str(sanitize_future_state_text(desc, idx))
+    move, intent = sanitize_director_image_injection(clip, assets, desc, str(move), str(intent))
     lens = lens_with_physical_defaults(raw_lens, desc)
     body_guard = body_grounding_directive(clip, str(lens), desc)
     anatomy_guard = anatomy_integrity_directive(chars, str(lens))
@@ -3081,6 +3424,9 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         negative = [str(negative)]
     negative = [str(item) for item in negative]
     asset_forbidden = asset_forbidden_terms(assets)
+    inner_focus = inner_focus_directive(clip, chars, assets)
+    if inner_focus:
+        negative.append("内心戏镜头不要重复上一镜群像/妖魔/道具陈列，不要让非焦点人物清晰入画，不要让系统面板/武器/VFX 抢主观情绪。")
     slots = "无"
     strategy = "单人/空镜，无需多人同框分区。"
     distinct_line = "；".join(
@@ -3114,7 +3460,16 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         for c in chars
         if c in CHARACTER_DEFS
     ) or "无具名主体"
-    tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。" if need_end else "末镜无尾帧，continuity.need_endframe=false；最后眼部 ECU 硬断，仍不得纯文重抽。"
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    story_clips = story.get("clips") if isinstance(story.get("clips"), list) else []
+    is_last_clip = bool(story_clips) and idx >= len(story_clips)
+    if need_end:
+        tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。"
+    elif is_last_clip:
+        tail = "本集最终镜无尾帧，continuity.need_endframe=false；最终 cliffhanger/硬断仍不得纯文重抽角色脸和道具结构。"
+    else:
+        reason = str(cont.get("endframe_exempt_reason") or "本镜以换场/空镜/时间跳转豁免尾帧接力").strip()
+        tail = f"本镜尾帧豁免：{reason}；continuity.need_endframe=false；若仍生成接力帧，只能基于同镜首帧 image2image 派生。"
     mid = "中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。" if has_mid else "本镜无中段锚帧。"
     char_phrase = "；".join(character_anchor_for_clip(c, idx) for c in chars if c in CHARACTER_DEFS)
     asset_phrase = "；".join(str(ASSET_DEFS[a]["name"]) for a in assets if a in ASSET_DEFS)
@@ -3152,6 +3507,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**手部归属合约**：{hand_guard}",
         f"**身体接地/裁切防呆**：{body_guard}",
         f"**构图防呆**：{comp_guard}",
+        f"**内心戏主体隔离**：{inner_focus or '非内心戏/按 entity_schedule 在场链执行'}",
         f"**本镜状态锁**：{state_lock}",
         f"**导演意图**：{intent}；必须服务剧本可看性合同：{dramatic_function or '先补戏剧功能'}。",
         f"**专项镜头模板**：shot_type={clip.get('template', '')}；beats={json.dumps(template_contract.get('beats', []), ensure_ascii=False)}；blocking={template_contract.get('blocking', '')}；camera_rule={template_contract.get('camera_rule', '')}；continuity_must={json.dumps(template_contract.get('continuity_must', []), ensure_ascii=False)}；negative={json.dumps(negative, ensure_ascii=False)}。",
@@ -3168,7 +3524,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "|---|---|",
         f"| ① 戏剧目标 | {dramatic_function or clip.get('rhythm', '')}；观众效果={audience_effect or '-'} |",
         f"| ② 主体/表演 | {', '.join(char_bindings) if char_bindings else '空镜/证据'}；{char_phrase} |",
-        f"| ③ 构图/轴线 | {comp_guard} |",
+        f"| ③ 构图/轴线 | {comp_guard}；{inner_focus or '按在场链执行'} |",
         f"| ④ 光色/天气 | {tone_line} |",
         f"| ⑤ 景别/镜头 | {lens} |",
         f"| ⑥ 动作/运动 | {move}；{anatomy_guard}；{hand_guard}；{body_guard} |",
@@ -3180,7 +3536,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；{face_guard}；",
         f"身份锁定句：{identity_lock}；",
         f"锚点句：{char_phrase or asset_phrase}；",
-        f"镜头构图：{lens}；{comp_guard}；视线方向={axis_line}；竖屏9:16；",
+        f"镜头构图：{lens}；{comp_guard}；{inner_focus + '；' if inner_focus else ''}视线方向={axis_line}；竖屏9:16；",
         f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
@@ -3213,8 +3569,8 @@ def shots_md(root: Path, ep: str, story: Mapping[str, Any], clips: Sequence[Mapp
         "",
         "### 剧本可看性全局合同",
         f"- 合同来源：`生产数据/script_quality_contract_{ep}.json`；content_hash={script_contract_content_hash(script_contract) or '-'}",
-        f"- 核心看点：{flatten_contract_value(script_fields.get('core_attraction'))[:260] or '缺 core_attraction'}",
-        f"- 首屏钩子：{flatten_contract_value(script_fields.get('first_3s_visual_hook'))[:260] or '缺 first_3s_visual_hook'}",
+        f"- 核心看点：{summarize_contract_value(script_fields.get('core_attraction'), 260) or '缺 core_attraction'}",
+        f"- 首屏钩子：{summarize_contract_value(script_fields.get('first_3s_visual_hook'), 260) or '缺 first_3s_visual_hook'}",
         *script_contract_global_lines(script_fields),
         "",
     ]
@@ -3474,6 +3830,8 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     written.append(root / "出图" / "共享" / "prompt" / "角色定妆.md")
     write_text(root / "出图" / "共享" / "prompt" / "风格锚.md", shared_style_anchor_prompt(story))
     written.append(root / "出图" / "共享" / "prompt" / "风格锚.md")
+    write_json(root / STYLE_ANCHOR_REGISTRY_REL, style_anchor_registry(root, story))
+    written.append(root / STYLE_ANCHOR_REGISTRY_REL)
     write_text(root / "出图" / "共享" / "prompt" / "场景定妆.md", shared_scene_prompt(story))
     written.append(root / "出图" / "共享" / "prompt" / "场景定妆.md")
     prop_ids = [aid for aid, cfg in ASSET_DEFS.items() if cfg["type"] in {"prop", "weapon"}]

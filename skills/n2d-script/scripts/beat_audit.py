@@ -101,7 +101,7 @@ LINK_WINDOW = 3       # 集尾钩 / 下集冷开场 的窗口拍数（取首/尾
 # 2026 Sensor Tower：下一集解锁率与本集**开场钩子强度**相关性高于集尾悬念——开场是最高杠杆留存信号。
 DEFAULT_COLD_OPEN_PULL_FLOOR = 0.3
 # 开场拉力四层正则（与 cold_open_quality_score 共用·提到模块级，G1 逐集与 --series 同源单一真值）。
-COLD_OPEN_CONFLICT_RE = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗)")
+COLD_OPEN_CONFLICT_RE = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗|围审|审问|逼问|压迫|羞辱|嘲笑|围住|受审|俯视)")
 COLD_OPEN_SUSPENSE_RE = re.compile(r"(谁|什么|为什么|怎么|哪里|何时|秘密|真相|隐瞒|神秘|未知|谜|疑|奇怪|不对劲)")
 COLD_OPEN_INFO_RE = re.compile(r"(发现|揭露|原来|其实|真相|证据|线索|秘密|第一次|首次|竟然|没想到)")
 
@@ -114,9 +114,9 @@ PROMISE_DUE_KEYS = ("payoff_due", "payoff_episode", "payoff_ep", "payoff_clip", 
 # 静音可读的视觉钩"，不强迫每个开场都填"冲突"。`visual_conflict` 保留为向后兼容别名（老项目不报错）。
 FIRST_SCREEN_REQUIRED_FIELDS = {
     "visual_hook": ("visual_hook", "visual_conflict"),
-    "content_proposition": ("content_proposition",),
+    "content_proposition": ("content_proposition", "content_promise"),
     "onscreen_text": ("onscreen_text",),
-    "muted_safe_proof": ("muted_safe_proof",),
+    "muted_safe_proof": ("muted_safe_proof", "muted_readable", "muted_safe"),
     "expected_metric": ("expected_metric",),
 }
 # 钩子类型分类（导演节奏 §二的五类 + 情绪冲突；中英双写）。可选字段 `hook_type`：写了就校验是否在表内，
@@ -197,7 +197,8 @@ def _contract_text(contract) -> str:
         return contract
     if isinstance(contract, dict):
         keys = ("visual", "visual_hook", "画面", "onscreen_text", "onscreen_text_hook", "text",
-                "caption", "title", "muted_safe_proof", "proof", "proposition", "description")
+                "caption", "title", "muted_safe_proof", "content_promise", "muted_readable",
+                "proof", "proposition", "description")
         return " ".join(str(contract.get(k) or "") for k in keys)
     return str(contract or "")
 
@@ -389,10 +390,39 @@ def _contract_muted_safe(contract) -> bool:
             return True
         if isinstance(explicit, str) and explicit.strip().lower() in {"true", "yes", "y", "1", "是", "已证明", "安全"}:
             return True
+        readable = contract.get("muted_readable")
+        if readable is True:
+            return True
+        if isinstance(readable, str) and readable.strip().lower() in {"true", "yes", "y", "1", "是", "已证明", "安全"}:
+            return True
         proof_text = " ".join(str(contract.get(k) or "") for k in ("muted_safe_proof", "visual_hook", "visual_conflict", "onscreen_text"))
         if _nonempty(contract.get("muted_safe_proof")) and VISUAL_HOOK_RE.search(proof_text):
             return True
     return bool(VISUAL_HOOK_RE.search(_contract_text(contract)))
+
+
+def _storyboard_first_6s_visual_hook(sb) -> bool:
+    """A cold open may be carried by image/blocking rather than spoken text."""
+    if not isinstance(sb, dict):
+        return False
+    contract_texts = []
+    for contract in _candidate_first_screen_contracts(sb):
+        contract_texts.append(_contract_text(contract))
+    first = _first_clip(sb)
+    if not isinstance(first, dict):
+        return False
+    first_blob = " ".join(str(first.get(key) or "") for key in ("label", "pacing_role", "dramatic_function", "audience_effect", "description"))
+    blob = " ".join([first_blob, *contract_texts])
+    return bool(
+        first_blob.strip()
+        and (
+            COLD_OPEN_CONFLICT_RE.search(first_blob)
+            or COLD_OPEN_SUSPENSE_RE.search(first_blob)
+            or COLD_OPEN_INFO_RE.search(first_blob)
+            or HOOK_CONTENT_RE.search(first_blob)
+            or (VISUAL_HOOK_RE.search(first_blob) and (COLD_OPEN_SUSPENSE_RE.search(blob) or COLD_OPEN_CONFLICT_RE.search(blob)))
+        )
+    )
 
 
 def audit_first_screen_contract(root, ep, beats):
@@ -464,7 +494,7 @@ def audit_first_screen_contract(root, ep, beats):
                              f"首屏烧屏文字偏少：{units} units/{duration:.1f}s = {density:.1f}/s，低于参考 {caption_min:g}-{caption_max:g}/s；确认画面钩足够强"))
         break
     head = beats[:2]
-    if head and not any(_inferred_hook(b) for b in head):
+    if head and not any(_inferred_hook(b) for b in head) and not _storyboard_first_6s_visual_hook(sb):
         severity = "must" if thresholds["first_6s_hook_required"] else "warn"
         findings.append((severity, "missing_first_6s_beat_hook",
                          "storyboard 写了首屏契约，但 voiceover 前2拍/约前6秒没有钩子信号：让台词/画面节拍与 first_3s_visual_hook 对齐"))

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_FEMALE_LEAD",
+  "name": "女主（待剧情确认姓名后绑定）",
+  "scope": "待确认女主/用户参考母本/本集禁止入镜",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/reference",
+    "prompts": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/prompts",
+    "lora": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/lora",
+    "voice": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/voice",
+    "adapters": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/adapters",
+    "qc": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/女主（待剧情确认姓名后绑定）.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-07T08:18:21+00:00"
+}

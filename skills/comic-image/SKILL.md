@@ -65,6 +65,14 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --max-attempts 3
 ```
 
+如果 Codex 子进程没有返回 `image_generation_end`，而是输出 imagegen/prompting 使用说明后超时，说明该子进程被用户配置或技能加载带偏；保留真实 `--image` 附件，改用干净子进程重试：
+
+```bash
+python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 --targets P003 --timeout-sec 600 --ignore-user-config
+```
+
+若仍复现同类说明文档输出，再追加 `--ignore-rules`；若两者仍不能稳定返回 PNG，应停下报告当前 Codex CLI 子进程不可稳定落图，不要继续批量重试消耗额度。
+
 若人工看图后需要重抽某几格，用 `--force --targets P003,P007`；旧图会归档到 `出图/第N话/candidates/<panel_id>/`，新图覆盖正式 `panels/Pxxx.png` 并写入 job history。
 
 ```bash

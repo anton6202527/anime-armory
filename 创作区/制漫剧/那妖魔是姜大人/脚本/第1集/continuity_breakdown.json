@@ -135,8 +135,8 @@
     },
     {
       "clip_id": "EP01_CLIP06",
-      "end_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
-      "eyeline": "裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。",
+      "end_state": "裴长青倒飞砸在姜月初脚边，横刀滑到画左前景；尘土扫过姜月初手背和衣袖，她只以侧背/OTS轮廓接住反应，不露清晰正脸。",
+      "eyeline": "裴长青看画右虎妖，虎妖看画左裴长青；姜月初只以画外/侧背视线目击脚边裴，不给清晰脸。",
       "knowledge_state": {
         "CHAR_01": [
           "看见裴长青彻底失败"
@@ -155,10 +155,10 @@
         "CHAR_03",
         "WEAPON_01"
       ],
-      "screen_direction": "守本场左右轴线；视线接力：裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。；转场方式：action_cut。",
+      "screen_direction": "守本场左右轴线；视线接力：裴长青看画右虎妖，虎妖看画左裴长青；姜月初只作画外/侧背/手部轮廓反应。；转场方式：action_cut。",
       "start_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
       "transition_guard": "action_cut",
-      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_02、CHAR_03、WEAPON_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_02、CHAR_03、WEAPON_01；CHAR_01 只允许画外/侧背/手部/衣袖轮廓，不做清晰正脸；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },
     {
       "clip_id": "EP01_CLIP07",

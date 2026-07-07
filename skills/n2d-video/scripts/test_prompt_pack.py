@@ -111,6 +111,8 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "观众追问她怎么活。" in clips
     assert "**运动精修**：" in clips
     assert "原生音画策略" in clips and "mouth_visible=yes" in clips
+    assert "近景升格守卫" in clips
+    assert "不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸" in clips
     assert "检查清单（视频三件套自查" in clips
     assert "自检（生成后逐条过" in clips
 
@@ -143,6 +145,115 @@ def test_clip_id_prefers_clip_number_over_episode_number() -> None:
     assert prompt_pack.clip_id("EP03_CLIP01", 99) == "Clip_01"
     assert prompt_pack.clip_id("EP10_CLIP09", 99) == "Clip_09"
     assert prompt_pack.clip_id("Clip_07", 99) == "Clip_07"
+
+
+def test_inner_focus_directive_isolates_video_motion_subject() -> None:
+    clip = {
+        "description": "姜月初内心独白：这百妖谱到底是什么。",
+        "dramatic_function": "内心戏，表现疑惧。",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "object_ids": ["VFX_系统面板"],
+    }
+
+    directive = prompt_pack.inner_focus_directive(
+        clip,
+        [str(x) for x in clip["character_ids"]],
+        [str(x) for x in clip["object_ids"]],
+    )
+
+    assert "内心戏主体隔离" in directive
+    assert "视频运动只服务 CHAR_01" in directive
+    assert "非焦点主体 CHAR_02" in directive
+    assert "不要重复上一镜群像" in directive
+
+
+def test_closeup_promotion_guard_requires_closeup_anchor() -> None:
+    guard = prompt_pack.closeup_promotion_guard(
+        {
+            "id": "EP01_CLIP06",
+            "description": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+            "character_ids": ["CHAR_01", "CHAR_02"],
+            "shots": [{"lens": "CU 缓推", "desc": "姜月初低头看裴长青。"}],
+            "continuity": {"expression_span": "大"},
+        },
+        {"shot_type": "fight_exchange", "identity_requirement": "reference_group"},
+        ["CHAR_01", "CHAR_02"],
+        "虎山神咧嘴。",
+        "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+        "CU 缓推",
+        "轻微推镜头",
+        "大",
+    )
+
+    assert "近景升格守卫" in guard
+    assert "不得把首/中/尾锚帧里脸部很小" in guard
+    assert "full image_qc" in guard
+    assert "禁止让视频模型补一张新脸" in guard
+
+
+def test_ending_reaction_hold_guard_keeps_offscreen_character_out_until_cut() -> None:
+    guard = prompt_pack.ending_reaction_hold_guard(
+        {
+            "id": "EP01_CLIP06",
+            "label": "横刀落幅",
+            "description": "横刀留在地面，衣袖侧背反应，不露姜月初正脸。",
+            "continuity": {"end_state": "横刀和手部停住，给下一镜硬切。"},
+        },
+        ["CHAR_01"],
+        "横刀和手部停住，地面物件反应",
+        "hard_cut",
+    )
+
+    assert "最后 0.5 秒" in guard
+    assert "offscreen_presence=CHAR_01" in guard
+    assert "不在本 Clip 尾段提前预演下一构图" in guard
+
+
+def test_prompt_pack_adds_tail_hold_for_offscreen_object_reaction(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    (root / "_设置.md").write_text("制作模式：先出视频后配音\n", encoding="utf-8")
+    (root / "出图" / ep / "prompt").mkdir(parents=True)
+    (root / "出图" / ep / "prompt" / "00_总览.md").write_text(
+        "## 本集基础视觉风格契约\n- style_anchor：`出图/共享/图片/风格锚.png`\n",
+        encoding="utf-8",
+    )
+    _write_json(root / "脚本" / ep / "storyboard.json", {
+        "clips": [{
+            "id": "EP01_CLIP06",
+            "label": "横刀落幅",
+            "duration": 6.0,
+            "scene": "荒野",
+            "dramatic_function": "横刀落地，给下一镜系统开启留白。",
+            "audience_effect": "观众看到危机落点。",
+            "character_ids": ["CHAR_02"],
+            "object_ids": ["WEAPON_01"],
+            "firstframe_png": "出图/第1集/图片/Clip06_first.png",
+            "continuity": {
+                "start_state": "裴长青倒飞。",
+                "action": "横刀劈下后落地。",
+                "end_state": "横刀和手部停住，衣袖侧背反应。",
+                "transition": "hard_cut",
+            },
+            "entity_schedule": {
+                "required_presence": ["CHAR_02", "WEAPON_01"],
+                "offscreen_presence": ["CHAR_01"],
+            },
+            "shots": [{"lens": "OTS 侧背", "desc": "手部和横刀反应。"}],
+        }]
+    })
+    _write_json(root / "出视频" / ep / "prompt" / "video_model_routes.json", {
+        "routes": [{"clip_id": "Clip_06", "shot_type": "fight_reaction", "native_audio_policy": "none"}],
+    })
+
+    _, clips = prompt_pack.build(root, ep)
+
+    assert "尾端落幅保持" in clips
+    assert "最后 0.5 秒必须维持 storyboard 的手部/物件/侧背/反打落幅直到剪点" in clips
+    assert "offscreen_presence=CHAR_01" in clips
+    assert "在场链约束：required_presence=CHAR_02、WEAPON_01" in clips
+    assert "forbidden_presence" in clips
+    assert "不要提前把 offscreen 角色拉回清晰入画" in clips
 
 
 def test_action_choreography_line_merges_template_contract_fields() -> None:

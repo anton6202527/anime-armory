@@ -15,50 +15,100 @@
     {
       "clip_index": 1,
       "clip_id": "EP01_CLIP01",
-      "duration": 19.573,
-      "rule": "D0 三帧契约默认中锚（use=split）",
+      "duration": 25.459,
+      "rule": "R2 普通长镜（25.459s/4拍）",
       "anchors": [
         {
-          "anchor_png": "出图/第1集/图片/Clip_01_mid.png",
-          "at_sec": 9.79,
+          "anchor_png": "出图/第1集/图片/Clip_01_a1.png",
+          "at_sec": 5.09,
           "use": "split",
-          "reason": "default: 三帧契约（use=split）"
+          "reason": "auto: R2 普通长镜（25.459s/4拍）",
+          "source_duration": 25.459
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_01_a2.png",
+          "at_sec": 10.18,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（25.459s/4拍）",
+          "source_duration": 25.459
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_01_a3.png",
+          "at_sec": 15.28,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（25.459s/4拍）",
+          "source_duration": 25.459
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_01_a4.png",
+          "at_sec": 20.37,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（25.459s/4拍）",
+          "source_duration": 25.459
         }
       ],
       "added_cost": {
-        "images": 1,
-        "video_segments": 1
+        "images": 4,
+        "video_segments": 4
       }
     },
     {
       "clip_index": 2,
       "clip_id": "EP01_CLIP02",
-      "duration": 9.76,
-      "rule": "D0 三帧契约默认中锚（use=split）",
+      "duration": 13.332,
+      "rule": "R2 普通长镜（13.332s/3拍）",
       "anchors": [
         {
-          "anchor_png": "出图/第1集/图片/Clip_02_mid.png",
-          "at_sec": 4.88,
+          "anchor_png": "出图/第1集/图片/Clip_02_a1.png",
+          "at_sec": 4.44,
           "use": "split",
-          "reason": "default: 三帧契约（use=split）"
+          "reason": "auto: R2 普通长镜（13.332s/3拍）",
+          "source_duration": 13.332
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_02_a2.png",
+          "at_sec": 8.89,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（13.332s/3拍）",
+          "source_duration": 13.332
         }
       ],
       "added_cost": {
-        "images": 1,
-        "video_segments": 1
+        "images": 2,
+        "video_segments": 2
       }
     },
     {
       "clip_index": 3,
       "clip_id": "EP01_CLIP03",
-      "duration": 3.003,
+      "duration": 3.662,
       "rule": "D0 三帧契约默认中锚（use=qc）",
       "anchors": [
         {
           "anchor_png": "出图/第1集/图片/Clip_03_mid.png",
-          "at_sec": 1.5,
+          "at_sec": 1.83,
           "use": "qc",
-          "reason": "default: 三帧契约（use=qc）"
+          "reason": "default: 三帧契约（use=qc；中间拍：空房铁碗和粗饭快闪）",
+          "source_duration": 3.662
+        }
+      ],
+      "added_cost": {
+        "images": 1,
+        "video_segments": 0
+      }
+    },
+    {
+      "clip_index": 4,
+      "clip_id": "EP01_CLIP04",
+      "duration": 5.859,
+      "rule": "D0 三帧契约默认中锚（use=qc）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip_04_mid.png",
+          "at_sec": 2.93,
+          "use": "qc",
+          "reason": "default: 三帧契约（use=qc；中间拍：听见远处笑声停半拍）",
+          "source_duration": 5.859
         }
       ],
       "added_cost": {
@@ -69,44 +119,68 @@
     {
       "clip_index": 5,
       "clip_id": "EP01_CLIP05",
-      "duration": 7.099,
-      "rule": "D0 三帧契约默认中锚（use=qc）",
+      "duration": 10.943,
+      "rule": "R2 普通长镜（10.943s/4拍）",
       "anchors": [
         {
-          "anchor_png": "出图/第1集/图片/Clip_05_mid.png",
-          "at_sec": 3.55,
-          "use": "qc",
-          "reason": "default: 三帧契约（use=qc）"
-        }
-      ],
-      "added_cost": {
-        "images": 1,
-        "video_segments": 0
-      }
-    },
-    {
-      "clip_index": 6,
-      "clip_id": "EP01_CLIP06",
-      "duration": 16.572,
-      "rule": "D0 三帧契约默认中锚（use=split）",
-      "anchors": [
-        {
-          "anchor_png": "出图/第1集/图片/Clip_06_mid.png",
-          "at_sec": 8.29,
+          "anchor_png": "出图/第1集/图片/Clip_05_a1.png",
+          "at_sec": 5.47,
           "use": "split",
-          "reason": "default: 三帧契约（use=split）"
+          "reason": "auto: R2 普通长镜（10.943s/4拍）",
+          "source_duration": 10.943
         }
       ],
       "added_cost": {
         "images": 1,
         "video_segments": 1
       }
+    },
+    {
+      "clip_index": 6,
+      "clip_id": "EP01_CLIP06",
+      "duration": 18.351,
+      "rule": "R2 普通长镜（18.351s/5拍）",
+      "anchors": [
+        {
+          "anchor_png": "出图/第1集/图片/Clip_06_a1.png",
+          "at_sec": 4.59,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（18.351s/5拍）",
+          "source_duration": 18.351
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_06_a2.png",
+          "at_sec": 9.18,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（18.351s/5拍）",
+          "source_duration": 18.351
+        },
+        {
+          "anchor_png": "出图/第1集/图片/Clip_06_a3.png",
+          "at_sec": 13.76,
+          "use": "split",
+          "reason": "auto: R2 普通长镜（18.351s/5拍）",
+          "source_duration": 18.351
+        }
+      ],
+      "added_cost": {
+        "images": 3,
+        "video_segments": 3
+      }
     }
   ],
   "skipped": [
     {
       "clip": "EP01_CLIP01",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP01",
       "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP02",
@@ -114,7 +188,15 @@
     },
     {
       "clip": "EP01_CLIP03",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP03",
       "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP04",
@@ -122,27 +204,28 @@
     },
     {
       "clip": "EP01_CLIP05",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP05",
       "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"
     },
     {
       "clip": "EP01_CLIP06",
       "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"
     }
   ],
-  "exempted": [
-    {
-      "clip_index": 4,
-      "clip": "EP01_CLIP04",
-      "duration": 2.96,
-      "reason": "极短镜 <3.0s，中帧与首尾几乎重合（三帧契约豁免）"
-    }
-  ],
+  "exempted": [],
   "summary": {
-    "clips_planned": 5,
-    "total_anchors": 5,
-    "added_images": 5,
-    "added_video_segments": 3,
-    "exempted_clips": 1
+    "clips_planned": 6,
+    "total_anchors": 12,
+    "added_images": 12,
+    "added_video_segments": 10,
+    "exempted_clips": 0
   },
   "backend_selection": {
     "backend": "",

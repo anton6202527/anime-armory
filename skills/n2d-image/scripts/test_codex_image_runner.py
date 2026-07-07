@@ -24,6 +24,40 @@ def test_format_codex_failure_keeps_stdout_and_stderr():
     assert "stdout=jsonl api error" in msg
 
 
+def test_run_codex_retries_transient_transport_failure(monkeypatch, tmp_path: Path) -> None:
+    calls = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        if len(calls) == 1:
+            return subprocess.CompletedProcess(cmd, 1, stdout='{"type":"error","message":"stream disconnected"}', stderr="tls handshake eof")
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(codex_image_runner.time, "sleep", lambda _seconds: None)
+
+    proc = codex_image_runner.run_codex(tmp_path, "prompt", 10, [])
+
+    assert proc.returncode == 0
+    assert len(calls) == 2
+    assert calls[0] == calls[1]
+
+
+def test_run_codex_does_not_retry_non_transient_failure(monkeypatch, tmp_path: Path) -> None:
+    calls = []
+
+    def fake_run(cmd, **kwargs):
+        calls.append(list(cmd))
+        return subprocess.CompletedProcess(cmd, 1, stdout="content policy denied", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    proc = codex_image_runner.run_codex(tmp_path, "prompt", 10, [])
+
+    assert proc.returncode == 1
+    assert len(calls) == 1
+
+
 def test_image_qc_python_prefers_configured_executable(tmp_path: Path, monkeypatch) -> None:
     fake_python = tmp_path / "python"
     fake_python.write_text("#!/bin/sh\n", encoding="utf-8")
@@ -296,8 +330,41 @@ def test_sync_image_progress_refreshes_stale_existing_denominator(tmp_path: Path
     monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
 
     assert codex_image_runner.current_image_progress_total(tmp_path, "第1集") == 83
-    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (1, 2)
-    assert captured["cmd"][-1] == "1/2"
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 3)
+    assert captured["cmd"][-1] == "2/3"
+
+
+def test_sync_image_progress_refreshes_episode_only_denominator_when_shared_exists(tmp_path: Path, monkeypatch) -> None:
+    (tmp_path / "_进度.md").write_text(
+        "| 集 | 字数 | 出图 |\n"
+        "|---|---:|---|\n"
+        "| 第1集 | 100 | 1/2 |\n",
+        encoding="utf-8",
+    )
+    shared_prompt = tmp_path / "出图" / "共享" / "prompt" / "风格锚.md"
+    shared_prompt.parent.mkdir(parents=True)
+    shared_prompt.write_text(
+        "## 风格锚\n"
+        "**目标存档**：`出图/共享/图片/风格锚_TEST.png`\n",
+        encoding="utf-8",
+    )
+    write_prompt(
+        tmp_path,
+        "## Clip_01\n"
+        "**目标**：`出图/第1集/图片/Clip01_first.png` `出图/第1集/图片/Clip01_end.png`\n",
+    )
+    write_valid_png(tmp_path / "出图" / "共享" / "图片" / "风格锚_TEST.png")
+    write_valid_png(tmp_path / "出图" / "第1集" / "图片" / "Clip01_first.png")
+    captured: dict[str, list[str]] = {}
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = list(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 3)
+    assert captured["cmd"][-1] == "2/3"
 
 
 def test_sync_image_progress_preserves_matching_existing_denominator(tmp_path: Path, monkeypatch) -> None:
@@ -1873,6 +1940,74 @@ def test_shared_reference_inputs_include_project_style_anchor(tmp_path: Path) ->
     assert inputs[0]["rel_path"] == style_rel
     assert "统一规格的定妆参考板" in prompt
     assert "不得继承风格锚里的具体人物身份" in prompt
+
+
+def test_character_reference_overrides_duplicate_style_anchor_input(tmp_path: Path) -> None:
+    style_rel = "出图/共享/图片/CHAR_01_定型参考.png"
+    write_valid_png(tmp_path / style_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "style_anchor_registry.json").write_text(
+        json.dumps({
+            "kind": "n2d_style_anchor_registry",
+            "selected_anchor": {
+                "path": style_rel,
+                "status": "ready",
+                "use_policy": "style_only",
+            },
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "identity_registry.json").write_text(
+        json.dumps({
+            "characters": [{
+                "id": "CHAR_01",
+                "external_visual_references": [{"path": style_rel, "status": "ready"}],
+                "forms": [{"form": "常态", "reference_group": {}}],
+            }]
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+    rel = "出图/共享/图片/定妆_沈念_常态.png"
+    section = codex_image_runner.ClipSection(
+        clip="CHAR_01",
+        title="## CHAR_01 沈念",
+        body=f"**目标存档**：`{rel}`\n角色定妆。",
+        target_line=f"`{rel}`",
+    )
+    target = codex_image_runner.Target("CHAR_01::定妆_沈念_常态", "CHAR_01", "shared", rel, section)
+    target.aliases = {"CHAR_01", "CHAR_01/常态"}
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第1集", target, bundle)
+
+    assert inputs[0]["rel_path"] == style_rel
+    assert inputs[0]["role"] == "character"
+    assert inputs[0]["owner"] == "CHAR_01/常态"
+    assert inputs[0]["upgraded_from_style_anchor"] is True
+
+
+def test_style_anchor_registry_uses_selected_anchor_before_anchor_list(tmp_path: Path) -> None:
+    selected_rel = "出图/共享/图片/STYLE_SELECTED.png"
+    extra_rel = "出图/共享/图片/STYLE_EXTRA.png"
+    write_valid_png(tmp_path / selected_rel)
+    write_valid_png(tmp_path / extra_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "style_anchor_registry.json").write_text(
+        json.dumps({
+            "kind": "n2d_style_anchor_registry",
+            "selected_anchor": {"path": selected_rel, "status": "ready"},
+            "anchors": [
+                {"path": selected_rel, "status": "ready"},
+                {"path": extra_rel, "status": "ready"},
+            ],
+        }, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    assert codex_image_runner.load_style_anchor_paths(tmp_path) == [selected_rel]
 
 
 def test_style_anchor_target_marks_registry_ready(tmp_path: Path) -> None:

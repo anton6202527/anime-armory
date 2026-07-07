@@ -1264,20 +1264,19 @@
     {
       "audience_effect": "观众看到最强战力被一脚击溃，接受姜月初必须寻找非常规活路。",
       "character_ids": [
-        "CHAR_01",
         "CHAR_02",
         "CHAR_03"
       ],
       "character_slots": [
         {
           "character_id": "CHAR_01",
-          "face_priority": "主检",
-          "screen_position": "画左前景/近景主检脸，囚犯初醒态或百妖谱触发态",
+          "face_priority": "画外/侧背参考",
+          "screen_position": "画左前景侧背/OTS/手部衣袖轮廓，只作目击者，不生成清晰正脸或近景脸",
           "slot": "LEFT_SLOT"
         },
         {
           "character_id": "CHAR_02",
-          "face_priority": "次检",
+          "face_priority": "主检",
           "screen_position": "画右下/近中景半跪或倒地，黑衣赤纹战损，左臂扭曲",
           "slot": "RIGHT_LOW_SLOT"
         },
@@ -1291,25 +1290,25 @@
       "continuity": {
         "anchors": [
           {
-            "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+            "anchor_png": "出图/第1集/图片/Clip06_mid_reaction.png",
             "at_sec": 5.0,
-            "reason": "apex: mid 图经视觉复核为命中/刺入撞点；对齐 combat_cue_apex 审计剪辑峰值 5.0s，兼作本镜唯一中段锚帧。",
+            "reason": "apex/reaction: 由原 Clip06_mid 裁切为手部/横刀/身体局部锚，避开姜月初清晰正脸；对齐 combat_cue_apex 审计剪辑峰值 5.0s，兼作本镜唯一中段锚帧。",
             "use": "keyframe"
           }
         ],
-        "end_state": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
-        "endframe_png": "出图/第1集/图片/Clip06_end.png",
-        "entry_exit": "Clip06 WEAPON_01 横刀入画，CHAR_02 从画左扑向画右；CHAR_03 保持画右高位在画内，CHAR_01 位于画外/前景等待接裴长青倒地。",
-        "expression_span": "大",
-        "eyeline": "裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。",
+        "end_state": "裴长青倒飞砸在姜月初脚边，横刀滑到画左前景；尘土扫过姜月初手背和衣袖，她只以侧背/OTS轮廓接住反应，不露清晰正脸。",
+        "endframe_png": "出图/第1集/图片/Clip06_end_reaction.png",
+        "entry_exit": "Clip06 WEAPON_01 横刀入画，CHAR_02 从画左扑向画右；CHAR_03 保持画右高位在画内；CHAR_01 只保留画外/画左前景侧背、手部或衣袖轮廓，禁止清晰正脸入画。",
+        "expression_span": "中",
+        "eyeline": "裴长青看画右虎妖，虎妖看画左裴长青；姜月初只以画外/侧背视线目击脚边裴，不给清晰脸。",
         "need_endframe": true,
         "offscreen_presence": [
           "CHAR_01"
         ],
-        "shot_size": "MS→CU命中→MS",
+        "shot_size": "MS→CU命中→MS低机位手部/横刀反应",
         "start_state": "虎山神咧嘴，金黄凶眼亮起；裴长青脸色血色尽褪。",
         "transition": "action_cut",
-        "微表情节拍": "裴长青咬牙暴起→命中痛苦→倒地失焦；姜月初惊恐僵住。"
+        "微表情节拍": "裴长青咬牙暴起→命中痛苦→倒地失焦；姜月初只用手指僵住、肩背绷紧和衣袖沾尘表达惊恐。"
       },
       "dialogue_indices": [
         16,
@@ -1318,15 +1317,11 @@
       "dramatic_function": "裴长青最后一击失败，证明正面武力路线断绝。",
       "duration": 14.586,
       "duration_rationale": "14.586s 用裴长青最后一击失败证明虎妖威胁等级，并把横刀失控、唯一活物规则前提推到台面。",
-      "endframe_png": "出图/第1集/图片/Clip06_end.png",
+      "endframe_png": "出图/第1集/图片/Clip06_end_reaction.png",
       "entity_schedule": {
         "characters": [
-          "CHAR_01/囚犯初醒态",
           "CHAR_02/濒死战损态",
-          "CHAR_03/复苏态",
-          "CHAR_01",
-          "CHAR_02",
-          "CHAR_03"
+          "CHAR_03/复苏态"
         ],
         "knowledge_state": {
           "CHAR_01": [
@@ -1345,6 +1340,9 @@
         "objects": [
           "WEAPON_01",
           "VFX_虎山神摹影"
+        ],
+        "offscreen_presence": [
+          "CHAR_01"
         ],
         "required_presence": [
           "CHAR_02",
@@ -1396,7 +1394,6 @@
             "characters": [
               "CHAR_02/濒死战损态",
               "CHAR_03/复苏态",
-              "CHAR_01",
               "CHAR_02",
               "CHAR_03"
             ],
@@ -1418,7 +1415,6 @@
             "characters": [
               "CHAR_02/濒死战损态",
               "CHAR_03/复苏态",
-              "CHAR_01",
               "CHAR_02",
               "CHAR_03"
             ],
@@ -1435,14 +1431,11 @@
           "video_prompt": "虎妖脚掌命中裴胸口，尘土和衣摆顺画左方向炸开，轻震屏。"
         },
         {
-          "desc": "裴长青倒飞砸在姜月初脚边，横刀落地。",
+          "desc": "裴长青倒飞砸在姜月初脚边，横刀滑到画左前景，姜月初只露手部/衣袖/侧背反应。",
           "entity_schedule": {
             "characters": [
-              "CHAR_01/囚犯初醒态",
               "CHAR_02/濒死战损态",
-              "CHAR_01",
-              "CHAR_02",
-              "CHAR_03"
+              "CHAR_02"
             ],
             "locations": [
               "LOC_01"
@@ -1452,9 +1445,9 @@
               "VFX_虎山神摹影"
             ]
           },
-          "lens": "MS 低机位",
+          "lens": "MS 低机位 + 手部/横刀插入镜",
           "t": "5-9s",
-          "video_prompt": "裴长青倒飞砸地，尘土扑到姜月初脸上，横刀滑到她脚边。"
+          "video_prompt": "裴长青倒飞砸地，横刀滑到画左前景；尘土扫过姜月初手背和灰褐衣袖，她只作侧背/OTS轮廓反应，不露清晰正脸。"
         }
       ],
       "source_trace_ids": [
@@ -1480,9 +1473,9 @@
           "虎妖右腿后发先至命中胸口",
           "裴长青倒飞砸回姜月初脚边"
         ],
-        "blocking": "裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位，姜月初在画左前景被迫目击。",
+        "blocking": "裴长青从画左前景扑向画右巨岩处虎妖；虎妖始终画右高位；姜月初只作画左前景侧背/OTS/手部轮廓目击，不给清晰正脸。",
         "camera_path": "起手固定微推，命中帧短促快推，受击落地低幅震动",
-        "camera_rule": "MS起手→CU命中帧→MS受击落地；不环绕，不越轴，命中帧短促快推。",
+        "camera_rule": "MS起手→CU命中帧→MS低机位落刀/手部反应；不环绕，不越轴，命中帧短促快推，不推成姜月初正脸近景。",
         "combat_micro_expression": "裴长青咬牙强撑，命中时痛苦瞳孔收缩；虎妖轻蔑无惧。",
         "contact_points": [
           "虎妖右脚掌",
@@ -1493,7 +1486,7 @@
           "虎妖胸口黑血窟窿保持",
           "裴从画左扑向画右再被踹回画左"
         ],
-        "degrade_plan": "若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞受击反应三段。",
+        "degrade_plan": "若双主体接触不稳，拆为裴起手单人镜、虎妖脚掌命中特写、裴倒飞砸地+横刀滑近姜月初手部/侧背反应三段；禁止姜月初正脸近景。",
         "force_direction": "虎妖画右→裴长青画左前景，力向右上到左下",
         "impact_frame": "命中 5.0s：虎妖脚掌命中裴长青胸口，裴身体弓起，尘土和衣摆顺画左方向飞散。",
         "interaction_graph": {
@@ -1521,18 +1514,18 @@
             "虎妖右脚掌位于命中接触点最前层",
             "裴长青胸口和身体弓起为中层",
             "横刀侧向运动不遮挡脚掌接触点",
-            "姜月初只作前景/侧景目击者，不参与接触"
+            "姜月初只作画外/侧背/手部轮廓目击者，不参与接触，不给清晰脸"
           ],
           "participants": [
             "CHAR_02",
             "CHAR_03",
             "WEAPON_01"
           ],
-          "release_frame": "命中后裴长青倒飞落地，右手松开横刀；WEAPON_01 落在姜月初脚边，供 EP01_CLIP08 手摸刀承接。",
+          "release_frame": "命中后裴长青倒飞落地，右手松开横刀；WEAPON_01 落在姜月初脚边，画面只给她手部/衣袖承接，供 EP01_CLIP08 手摸刀承接。",
           "transfer_event": "WEAPON_01 从 CHAR_02 持握状态转为落地可拾取状态；不是递交，因受击脱手完成持有因果。"
         },
         "keyframe_plan": {
-          "end": "横刀落在姜月初脚边",
+          "end": "横刀落在姜月初脚边，姜月初手部/衣袖入画，不露正脸",
           "impact_or_apex": "虎妖脚掌命中裴胸口",
           "intent_mid": "裴长青扑向虎妖",
           "result_or_recovery": "裴倒飞砸地",
@@ -1542,7 +1535,8 @@
           "不要让裴长青飞向错误方向",
           "不要新增武器",
           "不要多人混战",
-          "不要看镜头摆拍"
+          "不要看镜头摆拍",
+          "不要把姜月初从小脸/侧背升格成清晰正脸近景"
         ],
         "physics_guard": {
           "axis_lock": "画左裴长青 ↔ 画右虎妖，不越轴",
@@ -1568,7 +1562,7 @@
           "命中帧看清虎妖脚掌接触裴胸口",
           "落地看清裴砸到姜月初脚边"
         ],
-        "recovery_beat": "裴长青倒地后横刀落在姜月初可触及的位置",
+        "recovery_beat": "裴长青倒地后横刀落在姜月初可触及的位置，只用手部/衣袖/侧背轮廓表现她的惊恐反应",
         "regional_construct_required": true,
         "screen_direction": "裴长青画左→画右进攻，被踢回画左",
         "secondary_motion": "裴衣摆、尘土和血珠顺画左方向飞出。",

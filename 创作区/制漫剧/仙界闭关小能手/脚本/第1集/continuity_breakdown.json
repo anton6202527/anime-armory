@@ -1,0 +1,113 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第1集",
+  "generated_at": "2026-07-07T07:23:09+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "end_state": "贺平生被费钱货羞辱，群杂役哄笑，仍低头忍住。",
+      "eyeline": "贺平生向上看张老大，张老大向下审视。",
+      "knowledge_state": "贺平生知道自己被追问年龄与灵根、被当成费钱货羞辱；张老大知道他是五行灵根杂役新人；群杂役只知道可嘲笑新人；无人知道后续黑陶破盆。",
+      "location_id": "LOC_BLACK_HALL",
+      "props_continuity": "关键物件保持可追踪：PROP_SERVANT_HALL_LAMP；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "GROUP_SERVANTS"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：贺平生向上看张老大，张老大向下审视。；转场方式：j_cut。",
+      "start_state": "贺平生刚被带进黑殿，低头、空手、灰褐旧杂役衣。",
+      "transition_guard": "j_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA、GROUP_SERVANTS；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "end_state": "贺平生接下扁担，任务从羞辱变成行动。",
+      "eyeline": "张老大看水缸和贺平生，贺平生先看水缸再低头。",
+      "knowledge_state": "贺平生知道挑水苦差落到自己身上，水缸不满就会被继续刁难；张老大知道任务量和压迫目的；贺平生仍不知道夜潭异常。",
+      "location_id": "LOC_BLACK_HALL_TO_WATER_YARD",
+      "props_continuity": "关键物件保持可追踪：PROP_WATER_JAR_PAIR、PROP_CARRYING_POLE；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "PROP_WATER_JAR_PAIR",
+        "PROP_CARRYING_POLE"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：张老大看水缸和贺平生，贺平生先看水缸再低头。；转场方式：match_cut。",
+      "start_state": "贺平生刚被群笑压住，仍在黑殿边缘。",
+      "transition_guard": "match_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA、PROP_WATER_JAR_PAIR、PROP_CARRYING_POLE；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "end_state": "贺平生确认只能留在杂役班。",
+      "eyeline": "快闪以物件为主，不做复杂视线。",
+      "knowledge_state": "观众获得贺平生无处可退的最低背景；贺平生只确认自己只能留在杂役班；韩老三只完成带路信息，不新增机缘线索。",
+      "location_id": "LOC_SERVANT_QUARTER",
+      "props_continuity": "关键物件保持可追踪：PROP_OLD_BUNDLE、PROP_IRON_BOWL、PROP_WATER_JAR_PAIR；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN",
+        "PROP_OLD_BUNDLE",
+        "PROP_IRON_BOWL",
+        "PROP_WATER_JAR_PAIR"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：快闪以物件为主，不做复杂视线。；转场方式：empty_buffer。",
+      "start_state": "贺平生已接下任务，背景信息压入快闪。",
+      "transition_guard": "empty_buffer",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、CHAR_HAN_LAOSAN、PROP_OLD_BUNDLE、PROP_IRON_BOWL、PROP_WATER_JAR_PAIR；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "end_state": "贺平生进入后山水路，决定提前挑水熟路。",
+      "eyeline": "先看黑暗山路，再看远处水声方向。",
+      "knowledge_state": "贺平生知道明天任务重，提前认路能少挨罚；他只知道后山有水声，不知道水潭里有黑陶破盆。",
+      "location_id": "LOC_MOUNTAIN_PATH_NIGHT",
+      "props_continuity": "关键物件保持可追踪：PROP_EMPTY_BUCKETS、PROP_RUST_LOCK；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_EMPTY_BUCKETS"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：先看黑暗山路，再看远处水声方向。；转场方式：action_cut。",
+      "start_state": "贺平生拿到空桶和铁锁钥匙，夜里独自出门。",
+      "transition_guard": "action_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_EMPTY_BUCKETS；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "end_state": "第五趟抵达水边，身体疲惫，脚步不稳。",
+      "eyeline": "从低头看脚路转向水面微光。",
+      "knowledge_state": "贺平生知道自己已到第五趟且体力逼近极限，并注意到潭底微光；他尚未判断物件性质。",
+      "location_id": "LOC_WATER_ROUTE",
+      "props_continuity": "关键物件保持可追踪：PROP_CARRYING_POLE、PROP_WATER_BUCKETS；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_CARRYING_POLE",
+        "PROP_WATER_BUCKETS"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：从低头看脚路转向水面微光。；转场方式：eyeline。",
+      "start_state": "贺平生开始挑水，夜路向水潭延伸。",
+      "transition_guard": "eyeline",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_CARRYING_POLE、PROP_WATER_BUCKETS；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "end_state": "贺平生误以为只是破盆，观众看见盆底微光再亮。",
+      "eyeline": "贺平生视线从水面到手中破盆，最后画面切到道具微光。",
+      "knowledge_state": "贺平生误以为捞到的只是可用来洗衣的破盆；观众看见盆底微光复亮，知道第2集必须兑现异常。",
+      "location_id": "LOC_NIGHT_POOL",
+      "props_continuity": "关键物件保持可追踪：PROP_BLACK_CLAY_BASIN；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BLACK_CLAY_BASIN"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：贺平生视线从水面到手中破盆，最后画面切到道具微光。；转场方式：hard_cut。",
+      "start_state": "贺平生疲惫站在水边，低头发现潭底微光。",
+      "transition_guard": "hard_cut",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_HE_PINGSHENG、PROP_BLACK_CLAY_BASIN；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

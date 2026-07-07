@@ -1,507 +1,336 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "project": "仙界闭关小能手",
-  "updated_at": "2026-07-06",
-  "notes": [
-    "用户提供的两张截图为定型参考母本；正式定妆包仍需生成中性背景三视图、45度、侧背、半身/全身、脸部锚和表情锚。",
-    "截图中的播放按钮、搜索框、字幕、水印、平台UI不得继承到任何生成画面。",
-    "年龄变化只改变年龄体量、服装阶层、状态光效，不改变脸型五官比例和核心气质。"
-  ],
+  "generated_at": "2026-07-07T08:18:21+00:00",
   "characters": [
     {
       "id": "CHAR_HE_PINGSHENG",
       "name": "贺平生",
-      "scope": "全篇男主",
-      "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__he_pingsheng",
-        "role": "long_lead",
-        "truth_policy": "identity_registry is machine truth; character bible/card are human-readable truth"
-      },
-      "source_reference_lineage": {
-        "reference_id": "REF_HE_PINGSHENG_ADULT_AWAKENED",
-        "path": "设定库/reference_images/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-        "shared_image_path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-        "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
-        "usage": "face_dna_and_adult_awakened_form_reference",
-        "do_not_inherit": [
-          "adult age for episode 1",
-          "blood at mouth for normal state",
-          "large golden facial cracks for episode 1 normal state",
-          "screenshot UI",
-          "play button",
-          "search box",
-          "subtitle",
-          "watermark"
-        ]
-      },
-      "evolution_profile": {
-        "version": 1,
-        "mode": "same_identity_progressive_upgrade",
-        "identity_anchor_form": "成年觉醒态参考母本",
-        "age_sensitive": true,
-        "form_naming_policy": "age_or_age_band_required_when_age_sensitive",
-        "filename_policy": "age-sensitive forms use 定妆_贺平生_<年龄或年龄档>_<形态>*.png",
-        "identity_invariants": [
-          "eastern_male_face_bone_structure",
-          "facial_proportions",
-          "straight_nose",
-          "thick_brows",
-          "gray_black_eye_highlights",
-          "long_black_hair_core_hairline",
-          "calm_defiant_gaze"
-        ],
-        "allowed_evolution_axes": {
-          "age_body": "第1集14岁偏瘦少年；成年后骨量、身量、气场增强，但五官比例同源",
-          "outfit": "杂役粗布、外门/内门弟子服、高阶法袍可升级，服装阶层随剧情变化",
-          "aura_vfx": "金色灵力裂纹只作为觉醒/受伤/高阶状态，不是第1集少年常态",
-          "demeanor": "从谨慎隐忍到冷静强势，眼神底色不变"
-        },
-        "stages": [
-          {
-            "stage_id": "teen_servant",
-            "label": "14岁少年杂役",
-            "age_band": "14岁",
-            "episode_range": "第1集起",
-            "forms": [
-              "14岁少年杂役态"
-            ],
-            "target_file_prefix": "定妆_贺平生_14岁少年杂役态",
-            "locked_identity_from": "REF_HE_PINGSHENG_ADULT_AWAKENED",
-            "visual_delta": {
-              "outfit": "灰褐粗布杂役服，旧布腰带，无贵重发冠",
-              "aura_vfx": "无大面积金纹，可仅有极弱灵光暗示",
-              "body": "瘦弱少年，肩背被水桶压弯"
-            }
-          },
-          {
-            "stage_id": "adult_awakened",
-            "label": "成年觉醒/高阶受伤态",
-            "age_band": "成年",
-            "episode_range": "后续高阶章节",
-            "forms": [
-              "成年觉醒态参考母本"
-            ],
-            "target_file_prefix": "定妆_贺平生_成年觉醒态",
-            "locked_identity_from": "REF_HE_PINGSHENG_ADULT_AWAKENED",
-            "visual_delta": {
-              "outfit": "高阶仙侠法袍或战损状态",
-              "aura_vfx": "可出现参考图同类金色灵力裂纹",
-              "body": "成年身量与更强气场"
-            }
-          }
-        ],
-        "transition_policy": "all age/form variants must derive from the user-provided adult awakened face reference or a finalized same-lineage makeup image; pure text redraw is forbidden",
-        "forbidden": [
-          "new_face",
-          "new_hairline_without_story_reason",
-          "episode_1_full_adult_golden_cracks",
-          "screenshot_ui_inheritance",
-          "body_type_reset"
-        ]
-      },
+      "scope": "核心长线兄弟线/火工少年",
+      "tier": "核心长线",
       "forms": [
         {
-          "form": "成年觉醒态参考母本",
-          "age_band": "成年/高阶态参考",
-          "asset_key": "贺平生_成年觉醒态参考母本",
-          "anchor_phrase": "东方青年男主骨相，长黑发，浓眉，灰黑眼神光，冷静倔强，金色灵力裂纹仅限觉醒态",
+          "form": "常态",
+          "asset_key": "CHAR_HE_PINGSHENG__常态",
+          "anchor_phrase": "贺平生·14岁；见 `设定库/characters/贺平生.md`；必须继承用户男主定型参考的脸部 DNA。·破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
           "character_dna": {
-            "face": "东方青年男主脸，轮廓清俊，五官比例端正，直鼻，唇形清晰，冷静倔强的受伤神情",
-            "hair": "长黑发，核心发际线和额前碎发轮廓稳定",
-            "outfit": "成年高阶仙侠法袍或战损高阶服，不能回填到第1集少年杂役态",
-            "accessories": "高阶发饰/法袍配件可随阶段出现，第1集少年态无贵重发饰",
-            "texture": "半写实3D国风仙侠，皮肤细腻，金色灵力裂纹有发光体积感"
+            "face": "14岁；见 `设定库/characters/贺平生.md`；必须继承用户男主定型参考的脸部 DNA。",
+            "hair": "黑发乱束，几缕碎发垂在额前，发尾干枯。",
+            "outfit": "破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+            "accessories": "草鞋、旧布包；火工身份出现时可带小火钳或柴篮。",
+            "texture": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "瘦得像快折的竹竿，比王敦矮很多，站在谷口显得单薄。"
           },
           "wardrobe_profile": {
-            "version": 1,
-            "silhouette": "成年高阶仙侠长袍或战损形态，肩颈比例挺拔",
-            "layers": [
-              "外层法袍",
-              "内层交领",
-              "灵力纹理状态层"
-            ],
-            "collar": "仙侠交领或护颈结构",
-            "sleeve": "宽袖或战损袖口按后续剧情决定",
-            "waist": "腰封/玉带按境界升级",
-            "hem": "长袍下摆，允许战损",
-            "fabric": "丝绸/法袍材质，微反光但不塑料",
-            "pattern": "金色灵纹仅觉醒态可增强",
-            "palette": {
-              "primary": "#2A2C30",
-              "secondary": "#C8BBA0",
-              "accent": "#F0A641",
-              "allowed_lighting_shift": "冷灰环境或金色灵光可改变明度，不得变成现代服装"
-            },
-            "accessory_lock": "成年态可有发冠/法袍配饰，少年杂役态禁止继承",
-            "allowed_state_modifiers": [
-              "血迹",
-              "灵力裂纹",
-              "战损",
-              "冰冷雾气"
-            ],
+            "silhouette": "破旧灰青短袍，袖口磨破，草鞋开口露泥脚趾，裤脚沾泥。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
-              "短发",
-              "金发",
-              "现代西装",
-              "平台UI",
-              "大面积换脸"
-            ],
-            "aliases": [
-              "成年觉醒态",
-              "金色灵力裂纹",
-              "高阶战损态"
+              "不要把贺平生换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "不要变成欧美脸、不要短发、不要随机换瞳色、不要把少年态画成成年、不要把成年参考的血迹/裂纹提前用到常态"
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-            "side": "出图/共享/图片/定妆_贺平生_成年觉醒态_侧.png",
-            "back": "出图/共享/图片/定妆_贺平生_成年觉醒态_背.png",
-            "outfit": "出图/共享/图片/定妆_贺平生_成年觉醒态_半身.png",
-            "turnaround": "出图/共享/图片/定妆_贺平生_成年觉醒态_三视图.png",
-            "face_anchor_refs": [
-              {
-                "label": "用户成年觉醒参考",
-                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-                "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
-                "status": "ready_reference_only"
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-07T08:25:06.349343+00:00"
               }
-            ]
-          },
-          "reference_atlas": {
-            "version": 1,
-            "build_tier": "core_full",
-            "base_views": {
-              "front": {
-                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-                "status": "ready"
-              },
-              "three_quarter": {
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_45度.png",
-                "status": "planned"
-              },
-              "side": {
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_侧.png",
-                "status": "planned"
-              },
-              "half_body": {
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_半身.png",
-                "status": "planned"
-              },
-              "full_body": {
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_全身.png",
-                "status": "planned"
-              },
-              "back": {
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_背.png",
-                "status": "planned"
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
               }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_三视图.png",
+              "status": "planned"
             },
             "face_anchor_refs": [
               {
-                "label": "adult_awakened_user_reference",
-                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
                 "status": "ready",
-                "priority": "core"
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.349531+00:00"
+                }
               }
-            ],
-            "expression_refs": [
-              {
-                "emotion": "中性倔强",
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_表情_中性倔强.png",
-                "status": "planned",
-                "priority": "core"
-              }
-            ],
-            "action_refs": [
-              {
-                "action": "施法",
-                "path": "出图/共享/图片/定妆_贺平生_成年觉醒态_动作_施法.png",
-                "status": "planned",
-                "priority": "on_demand"
-              }
-            ],
-            "outfit_refs": [],
-            "selection_policy": {
-              "closeup": [
-                "front",
-                "face_anchor_refs"
-              ],
-              "three_quarter": [
-                "three_quarter",
-                "front"
-              ],
-              "profile": [
-                "side",
-                "front"
-              ],
-              "back_view": [
-                "back",
-                "half_body"
-              ],
-              "full_body_action": [
-                "full_body",
-                "action_refs",
-                "front"
-              ],
-              "fight_or_spell": [
-                "action_refs",
-                "front",
-                "face_anchor_refs"
-              ]
-            },
-            "fallback_policy": "only the user reference is ready; planned views must be generated before formal batch image/video"
-          },
-          "identity_adapters": {
-            "image": {
-              "codex": {
-                "mode": "reference_group",
-                "status": "fallback_reference_group",
-                "reference": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png"
-              }
-            },
-            "video": {
-              "dreamina": {
-                "mode": "first_last_frame",
-                "status": "fallback_reference_group"
-              },
-              "kling": {
-                "mode": "character_id",
-                "status": "unregistered"
-              }
-            },
-            "lora": {
-              "status": "candidate",
-              "reason": "全篇男主，若参考图压不住跨集脸漂则升LoRA或原生主体ID"
-            }
-          },
-          "generation_control": {
-            "seed_strategy": "fixed_pool",
-            "seed_pool": [
-              2101,
-              2102,
-              2103,
-              2104
-            ],
-            "usage": {
-              "turnaround": 2101,
-              "expression": 2102,
-              "closeup": 2103,
-              "shot": 2104
-            },
-            "backend_support": {
-              "codex": "unsupported_or_unknown",
-              "openai": "unsupported_or_unknown",
-              "dreamina": "unsupported_or_unknown",
-              "kling": "backend_dependent_verify_adapter"
-            }
-          },
-          "angle_policy": {
-            "allowed": [
-              "front",
-              "three_quarter",
-              "side",
-              "over_shoulder"
-            ],
-            "risky": [
-              "extreme_top",
-              "extreme_low",
-              "face_too_small",
-              "deep_shadow"
-            ],
-            "requires_extra_reference": [
-              "three_quarter",
-              "side",
-              "back",
-              "full_body_action",
-              "multi_person_contact"
             ]
-          },
-          "drift_forbidden": [
-            "face_shape",
-            "facial_proportions",
-            "long_black_hair",
-            "core_hairline",
-            "gray_black_eye_highlights",
-            "episode_1_age_mismatch",
-            "screenshot_ui"
-          ]
-        },
-        {
-          "form": "14岁少年杂役态",
-          "age_band": "14岁",
-          "asset_key": "贺平生_14岁少年杂役态",
-          "anchor_phrase": "十四岁瘦弱少年杂役，继承成年参考图的眉眼脸部DNA，长黑发简束，灰褐粗布衣，谨慎隐忍",
-          "character_dna": {
-            "face": "从成年觉醒参考年轻化的东方少年脸，五官比例同源，眉眼清俊但更稚嫩，眼神谨慎倔强",
-            "hair": "长黑发简束，额前碎发自然，无华丽发冠",
-            "outfit": "灰褐粗布杂役服，窄袖，旧布腰带，肩部和袖口轻磨损",
-            "accessories": "铁碗、钥匙、扁担水桶按剧情出现；无玉冠、无贵重法器",
-            "texture": "半写实3D国风仙侠，皮肤更少年，衣料粗糙低反光，环境脏旧压迫"
-          },
-          "wardrobe_profile": {
-            "version": 1,
-            "silhouette": "瘦弱少年直身粗布短袍/旧杂役服，肩线窄，动作被水桶压弯",
-            "layers": [
-              "外层灰褐粗布短袍",
-              "内层旧白/灰交领",
-              "深灰旧布腰带"
-            ],
-            "collar": "简陋交领，不华丽",
-            "sleeve": "窄袖，袖口磨损",
-            "waist": "旧布腰带，无玉佩",
-            "hem": "过膝旧袍，方便挑水",
-            "fabric": "粗布、低反光、轻污渍",
-            "pattern": "无刺绣，无金边",
-            "palette": {
-              "primary": "#5D5147",
-              "secondary": "#8B8173",
-              "accent": "#2F2B28",
-              "allowed_lighting_shift": "冷月/暗屋可降低明度，不得变白金仙衣"
-            },
-            "accessory_lock": "无贵重配饰；扁担、水桶、铁碗、黑旧陶盆是剧情道具",
-            "allowed_state_modifiers": [
-              "汗水",
-              "灰尘",
-              "衣角磨损",
-              "肩部压痕"
-            ],
-            "forbidden_drift": [
-              "成年脸",
-              "金色面纹常态",
-              "嘴角血迹常态",
-              "白金仙衣",
-              "华丽发冠",
-              "现代服装"
-            ],
-            "aliases": [
-              "少年杂役态",
-              "灰褐粗布杂役服",
-              "挑水少年"
-            ]
-          },
-          "reference_group": {
-            "front": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_正面.png",
-            "side": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_侧.png",
-            "back": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_背.png",
-            "outfit": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_半身.png",
-            "turnaround": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_三视图.png",
-            "source_face_lineage": {
-              "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-              "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
-              "method": "age_down_from_user_reference_required"
-            }
           },
           "reference_atlas": {
-            "version": 1,
-            "build_tier": "core_full",
+            "build_tier": "full_makeup_pack",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_正面.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.349546+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_45度.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_侧.png",
-                "status": "planned"
-              },
-              "half_body": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_半身.png",
-                "status": "planned"
-              },
-              "full_body": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_全身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             },
             "face_anchor_refs": [
               {
-                "label": "adult_reference_lineage",
-                "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
-                "status": "ready_reference_only",
-                "priority": "lineage"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             ],
             "expression_refs": [
               {
-                "emotion": "隐忍",
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_表情_隐忍.png",
-                "status": "planned",
-                "priority": "core"
-              },
-              {
-                "emotion": "震惊",
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_表情_震惊.png",
-                "status": "planned",
-                "priority": "core"
+                "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.349583+00:00"
+                }
               }
             ],
-            "action_refs": [
-              {
-                "action": "挑水",
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_动作_挑水.png",
-                "status": "planned",
-                "priority": "core"
-              },
-              {
-                "action": "蹲身捞盆",
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_动作_捞盆.png",
-                "status": "planned",
-                "priority": "core"
-              }
-            ],
-            "outfit_refs": [
-              {
-                "part": "servant_outfit_full_body",
-                "path": "出图/共享/图片/定妆_贺平生_14岁少年杂役态_全身.png",
-                "status": "planned",
-                "priority": "core"
-              }
-            ],
-            "selection_policy": {
-              "closeup": [
-                "front",
-                "face_anchor_refs",
-                "expression_refs"
-              ],
-              "three_quarter": [
-                "three_quarter",
-                "front"
-              ],
-              "profile": [
-                "side",
-                "front"
-              ],
-              "back_view": [
-                "back",
-                "half_body"
-              ],
-              "full_body_action": [
-                "full_body",
-                "action_refs",
-                "outfit_refs"
-              ],
-              "fight_or_spell": [
-                "action_refs",
-                "front",
-                "face_anchor_refs"
-              ]
-            },
-            "fallback_policy": "formal image/video should wait for planned teen makeup views; adult reference may only guide face DNA"
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_HE_PINGSHENG_贺平生.md",
+              "status": "ready",
+              "sha256": "86ce00a6fa68e8a6cd199a900de33fae261b5bc87db4b424ba40a70090038fc3"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
                 "mode": "reference_group",
                 "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
               }
             },
             "video": {
@@ -512,291 +341,452 @@
               "kling": {
                 "mode": "character_id",
                 "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
               }
             },
             "lora": {
-              "status": "candidate",
-              "reason": "第1集核心形态，先出基础定妆包；若跨集漂移则升LoRA/主体库"
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
             }
           },
           "generation_control": {
             "seed_strategy": "fixed_pool",
             "seed_pool": [
-              2111,
-              2112,
-              2113,
-              2114
+              1200,
+              1201,
+              1202,
+              1203,
+              1204,
+              1205
             ],
             "usage": {
-              "turnaround": 2111,
-              "expression": 2112,
-              "closeup": 2113,
-              "shot": 2114
+              "turnaround": 1200,
+              "expression": 1201,
+              "closeup": 1202,
+              "shot": 1203
             },
             "backend_support": {
               "codex": "unsupported_or_unknown",
-              "openai": "unsupported_or_unknown",
-              "dreamina": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
               "kling": "backend_dependent_verify_adapter"
-            }
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
           },
           "angle_policy": {
             "allowed": [
               "front",
               "three_quarter",
               "side",
-              "back",
-              "over_shoulder"
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
             ],
             "risky": [
+              "deep_shadow",
+              "face_too_small",
               "extreme_top",
               "extreme_low",
-              "face_too_small",
-              "deep_shadow",
-              "adult_face_pull"
+              "strong_vfx_over_face"
             ],
             "requires_extra_reference": [
-              "three_quarter",
-              "side",
-              "back",
-              "full_body_action",
-              "multi_person_contact"
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
             ]
           },
           "drift_forbidden": [
-            "adult_age",
-            "adult_golden_cracks_normal_state",
-            "blood_mouth_normal_state",
-            "white_gold_immortal_robe",
-            "new_face",
-            "short_hair",
-            "screenshot_ui"
-          ]
+            "不要把贺平生换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "不要变成欧美脸、不要短发、不要随机换瞳色、不要把少年态画成成年、不要把成年参考的血迹/裂纹提前用到常态"
+          ],
+          "performance_signature": "先低头忍耐，抬头时眼神干净倔强；火塘会朝他方向偏转。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "anchor_sha": "82ddb1a28a187fa1e86f1c9072c805df4042c5c5801a39670686abb94dd2bc66"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
+        "base_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/reference",
+          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/prompts",
+          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/lora",
+          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/voice",
+          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/adapters",
+          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      },
+      "external_visual_references": [
+        {
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+          "status": "ready",
+          "source": "user_provided_project_reference",
+          "use_policy": "identity_reference",
+          "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729"
         }
       ]
     },
     {
-      "id": "CHAR_FEMALE_LEAD",
-      "name": "女主待绑定",
-      "scope": "女主候选/待剧情确认姓名",
-      "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_FEMALE_LEAD__pending/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__pending",
-        "role": "pending_lead",
-        "truth_policy": "identity_registry is machine truth; bind name after source confirms"
-      },
-      "source_reference_lineage": {
-        "reference_id": "REF_FEMALE_LEAD_GOLDEN_ARRAY",
-        "path": "设定库/reference_images/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-        "shared_image_path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-        "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6",
-        "usage": "face_dna_and_high_rank_female_style_reference",
-        "do_not_inherit": [
-          "screenshot UI",
-          "play button",
-          "subtitle",
-          "platform text",
-          "unconfirmed plot role in episode 1"
-        ]
-      },
-      "evolution_profile": {
-        "version": 1,
-        "mode": "same_identity_progressive_upgrade",
-        "identity_anchor_form": "成年仙子高阶态参考母本",
-        "age_sensitive": true,
-        "identity_invariants": [
-          "eastern_female_oval_face",
-          "large_clear_eyes",
-          "long_black_hair",
-          "calm_luminous_gaze",
-          "white_gold_xianxia_temperament"
-        ],
-        "allowed_evolution_axes": {
-          "age_body": "若前期出现少女态，必须从同一脸部DNA年轻化派生",
-          "outfit": "白金仙衣可作为高阶审美锚点，具体宗门服色待剧情确认",
-          "aura_vfx": "金色法阵/符纹作为高阶灵力语汇，不能无理由常态化"
-        },
-        "stages": [
-          {
-            "stage_id": "adult_high_rank_reference",
-            "label": "成年仙子/高阶态参考",
-            "age_band": "成年",
-            "episode_range": "待剧情确认",
-            "forms": [
-              "成年仙子高阶态参考母本"
-            ],
-            "target_file_prefix": "定妆_女主待绑定_成年仙子高阶态",
-            "locked_identity_from": "REF_FEMALE_LEAD_GOLDEN_ARRAY",
-            "visual_delta": {
-              "outfit": "白金仙衣",
-              "aura_vfx": "金色法阵/符纹背景",
-              "demeanor": "清冷温润"
-            }
-          }
-        ],
-        "transition_policy": "bind concrete name and forms only after source confirms; any age/form variant derives from the same user reference",
-        "forbidden": [
-          "new_face",
-          "screenshot_ui_inheritance",
-          "episode_1_unconfirmed_insertion"
-        ]
-      },
+      "id": "CHAR_ZHANG_LAODA",
+      "name": "张老大",
+      "scope": "第1集秀竹峰杂役班压迫者/短线小反派",
+      "tier": "单集角色",
       "forms": [
         {
-          "form": "成年仙子高阶态参考母本",
-          "age_band": "成年/高阶态参考",
-          "asset_key": "女主待绑定_成年仙子高阶态参考母本",
-          "anchor_phrase": "东方女主鹅蛋脸，大而清澈的眼睛，长黑发，清冷温润气质，白金仙衣，金色法阵灵力语汇",
+          "form": "常态",
+          "asset_key": "CHAR_ZHANG_LAODA__常态",
+          "anchor_phrase": "张老大·三十多岁的粗砺成年男修杂役头目；粗宽脸，颧骨硬，眼神势利下压，嘴角常带嘲讽；不是俊美主角脸。·低饱和深灰褐杂役头目袍，衣料比普通杂役稍厚但仍旧，腰带粗旧，袖口磨损。",
           "character_dna": {
-            "face": "东方精致鹅蛋脸，五官柔和清晰，大而清澈的眼睛，清冷温润",
-            "hair": "长黑发，高阶仙子发饰可按剧情出现",
-            "outfit": "白金仙衣审美锚点，具体身份和宗门服色待剧情确认",
-            "accessories": "精致发饰、耳坠可作为高阶形态配饰，待剧情确认",
-            "texture": "半写实3D国风仙侠，柔和金色体积光，法阵符纹背景可做高阶灵力语汇"
+            "face": "三十多岁的粗砺成年男修杂役头目；粗宽脸，颧骨硬，眼神势利下压，嘴角常带嘲讽；不是俊美主角脸。",
+            "hair": "黑发用旧布巾或低髻束起，鬓角略乱，发际线和头巾轮廓稳定。",
+            "outfit": "低饱和深灰褐杂役头目袍，衣料比普通杂役稍厚但仍旧，腰带粗旧，袖口磨损。",
+            "accessories": "可有旧木牌、账册或短鞭感压迫道具；本集以水缸、扁担命令为主。",
+            "texture": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "成年男性体格，比贺平生高壮一圈，高位俯视形成压迫。"
           },
           "wardrobe_profile": {
-            "version": 1,
-            "silhouette": "白金色高阶仙衣，轻纱层次，肩颈清雅",
-            "layers": [
-              "白金外层仙衣",
-              "浅金内层交领",
-              "轻纱/披帛"
-            ],
-            "collar": "仙侠交领，线条清洁",
-            "sleeve": "宽袖轻纱",
-            "waist": "细腰封或金色细饰",
-            "hem": "长裙/仙衣下摆，轻盈",
-            "fabric": "丝绸与轻纱，柔和反光",
-            "pattern": "细金纹，不大面积堆砌",
-            "palette": {
-              "primary": "#F2E7D1",
-              "secondary": "#D9C89C",
-              "accent": "#F1B947",
-              "allowed_lighting_shift": "金色法阵可增强暖光，不得变成现代礼服"
-            },
-            "accessory_lock": "发饰和耳坠精致但不现代",
-            "allowed_state_modifiers": [
-              "金色法阵光",
-              "柔和灵力辉光"
-            ],
+            "silhouette": "低饱和深灰褐杂役头目袍，衣料比普通杂役稍厚但仍旧，腰带粗旧，袖口磨损。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
             "forbidden_drift": [
-              "现代妆造",
-              "短发",
-              "夸张西式皇冠",
-              "平台UI",
-              "字幕"
-            ],
-            "aliases": [
-              "女主高阶态",
-              "白金仙衣",
-              "金色法阵仙子"
+              "不要把张老大换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
             ]
           },
           "reference_group": {
-            "front": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-            "side": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_侧.png",
-            "back": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_背.png",
-            "outfit": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_半身.png",
-            "turnaround": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_三视图.png",
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-07T08:36:48.146823+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_三视图.png",
+              "status": "planned"
+            },
             "face_anchor_refs": [
               {
-                "label": "用户女主高阶参考",
-                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-                "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6",
-                "status": "ready_reference_only"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.147062+00:00"
+                }
               }
             ]
           },
           "reference_atlas": {
-            "version": 1,
-            "build_tier": "core_full",
+            "build_tier": "full_makeup_pack",
             "base_views": {
               "front": {
-                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-                "status": "ready"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.147084+00:00"
+                }
               },
               "three_quarter": {
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_45度.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               },
               "side": {
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_侧.png",
-                "status": "planned"
-              },
-              "half_body": {
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_半身.png",
-                "status": "planned"
-              },
-              "full_body": {
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_全身.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               },
               "back": {
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_背.png",
-                "status": "planned"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             },
             "face_anchor_refs": [
               {
-                "label": "female_lead_user_reference",
-                "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
-                "status": "ready",
-                "priority": "core"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
               }
             ],
             "expression_refs": [
               {
-                "emotion": "清冷",
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_表情_清冷.png",
-                "status": "planned",
-                "priority": "core"
+                "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.147134+00:00"
+                }
               }
             ],
-            "action_refs": [
-              {
-                "action": "施法",
-                "path": "出图/共享/图片/定妆_女主待绑定_成年仙子高阶态_动作_施法.png",
-                "status": "planned",
-                "priority": "on_demand"
-              }
-            ],
-            "outfit_refs": [],
-            "selection_policy": {
-              "closeup": [
-                "front",
-                "face_anchor_refs"
-              ],
-              "three_quarter": [
-                "three_quarter",
-                "front"
-              ],
-              "profile": [
-                "side",
-                "front"
-              ],
-              "back_view": [
-                "back",
-                "half_body"
-              ],
-              "full_body_action": [
-                "full_body",
-                "action_refs",
-                "front"
-              ],
-              "fight_or_spell": [
-                "action_refs",
-                "front",
-                "face_anchor_refs"
-              ]
-            },
-            "fallback_policy": "do not insert into episode 1 unless source requires; planned views must be generated after name binding"
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
           },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_ZHANG_LAODA_张老大.md",
+              "status": "ready",
+              "sha256": "98dd03189c946a7655925231dd5987b6eee6f3578fbc12194c118529ec780782"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
           "identity_adapters": {
             "image": {
               "codex": {
                 "mode": "reference_group",
-                "status": "fallback_reference_group",
-                "reference": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png"
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
               }
             },
             "video": {
@@ -807,66 +797,1262 @@
               "kling": {
                 "mode": "character_id",
                 "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
               }
             },
             "lora": {
-              "status": "candidate",
-              "reason": "女主长线角色，待姓名和出场批次确认后再决定是否升档"
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
             }
           },
           "generation_control": {
             "seed_strategy": "fixed_pool",
             "seed_pool": [
-              2201,
-              2202,
-              2203,
-              2204
+              1300,
+              1301,
+              1302,
+              1303,
+              1304,
+              1305
             ],
             "usage": {
-              "turnaround": 2201,
-              "expression": 2202,
-              "closeup": 2203,
-              "shot": 2204
+              "turnaround": 1300,
+              "expression": 1301,
+              "closeup": 1302,
+              "shot": 1303
             },
             "backend_support": {
               "codex": "unsupported_or_unknown",
-              "openai": "unsupported_or_unknown",
-              "dreamina": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
               "kling": "backend_dependent_verify_adapter"
-            }
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
           },
           "angle_policy": {
             "allowed": [
               "front",
               "three_quarter",
               "side",
-              "over_shoulder"
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
             ],
             "risky": [
+              "deep_shadow",
+              "face_too_small",
               "extreme_top",
               "extreme_low",
-              "face_too_small",
-              "deep_shadow"
+              "strong_vfx_over_face"
             ],
             "requires_extra_reference": [
-              "three_quarter",
-              "side",
-              "back",
-              "full_body_action",
-              "multi_person_contact"
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
             ]
           },
           "drift_forbidden": [
-            "face_shape",
-            "large_clear_eyes",
-            "long_black_hair",
-            "white_gold_xianxia_temperament",
-            "new_face",
-            "screenshot_ui",
-            "unconfirmed_episode_1_insertion"
-          ]
+            "不要把张老大换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "俯视、嘴角压笑、手势下令，视线锁贺平生或水缸，不看镜头摆拍。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "anchor_sha": "cd825992a52283f390ad2a1b9b95597f4e2ecd12e4c7bc4b3d01bb6fa206e9e1"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
+        "base_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/reference",
+          "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/prompts",
+          "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/lora",
+          "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/voice",
+          "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/adapters",
+          "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "GROUP_SERVANTS",
+      "name": "群杂役",
+      "scope": "第1集黑殿围观杂役群/压迫氛围层",
+      "tier": "局部参考",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "GROUP_SERVANTS__常态",
+          "anchor_phrase": "群杂役·少年到成年底层杂役群像；只保留侧脸、背影、低清笑影和半圆围堵轮廓，不建立可复用个人正脸。·灰青、灰褐、脏白低饱和杂役短袍群像，袖口磨损、布鞋沾泥。",
+          "character_dna": {
+            "face": "少年到成年底层杂役群像；只保留侧脸、背影、低清笑影和半圆围堵轮廓，不建立可复用个人正脸。",
+            "hair": "群体黑发粗布束发，轮廓低调，不抢贺平生和张老大的主脸。",
+            "outfit": "灰青、灰褐、脏白低饱和杂役短袍群像，袖口磨损、布鞋沾泥。",
+            "accessories": "木桶、扫帚、破布包等底层生活小道具只作氛围，不能抢主道具。",
+            "texture": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "前景/后景半圆压边形成包围，单个体量不抢主角。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "灰青、灰褐、脏白低饱和杂役短袍群像，袖口磨损、布鞋沾泥。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把群杂役换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "silhouette": {
+              "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared silhouette reference passed finalized review",
+                "reviewed_at": "2026-07-07T08:36:48.247340+00:00"
+              }
+            },
+            "hand": {
+              "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态_手部局部.png",
+              "status": "planned"
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态_布料局部.png",
+              "status": "planned"
+            }
+          },
+          "reference_atlas": {
+            "build_tier": "restricted_partial",
+            "partial_refs": {
+              "silhouette": {
+                "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared silhouette reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.247538+00:00"
+                }
+              },
+              "hand": {
+                "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态_手部局部.png",
+                "status": "planned"
+              },
+              "outfit": {
+                "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态_布料局部.png",
+                "status": "planned"
+              }
+            },
+            "no_full_face": true,
+            "notes": "功能角色只使用局部/剪影/手部参考，绝不正脸，不建完整主角脸。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/GROUP_SERVANTS.md",
+              "status": "ready",
+              "sha256": "554c8f5d1ed3a0a0113005ae7c117da0bd44d6b203090e84a52ca746b1cc1aab"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_GROUP_SERVANTS__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1400,
+              1401,
+              1402,
+              1403,
+              1404,
+              1405
+            ],
+            "usage": {
+              "turnaround": 1400,
+              "expression": 1401,
+              "closeup": 1402,
+              "shot": 1403
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把群杂役换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "哄笑、侧头、低声议论、围堵压边；清晰主脸最多作为低优先级侧影。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "restricted_partial": true,
+          "no_full_face": true,
+          "anchor_sha": "d0b31430cc6cc02a225beed4d23943e4f6796c781daa9261d5f5ba5a9aa1aba9"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/GROUP_SERVANTS__群杂役/manifest.json",
+        "package_dir": "设定库/character_assets/GROUP_SERVANTS__群杂役",
+        "base_dir": "设定库/character_assets/GROUP_SERVANTS__群杂役",
+        "sections": {
+          "reference": "设定库/character_assets/GROUP_SERVANTS__群杂役/reference",
+          "prompts": "设定库/character_assets/GROUP_SERVANTS__群杂役/prompts",
+          "lora": "设定库/character_assets/GROUP_SERVANTS__群杂役/lora",
+          "voice": "设定库/character_assets/GROUP_SERVANTS__群杂役/voice",
+          "adapters": "设定库/character_assets/GROUP_SERVANTS__群杂役/adapters",
+          "qc": "设定库/character_assets/GROUP_SERVANTS__群杂役/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_HAN_LAOSAN",
+      "name": "韩老三",
+      "scope": "第1集功能性带路杂役/不展开支线",
+      "tier": "单集角色",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_HAN_LAOSAN__常态",
+          "anchor_phrase": "韩老三·二十多到三十岁的普通成年杂役；普通瘦长杂役脸，神情麻木疲惫，五官不抢戏；本集多为半身、过肩或侧背。·洗旧灰青杂役短袍，袖口和裤脚磨损，布鞋带泥。",
+          "character_dna": {
+            "face": "二十多到三十岁的普通成年杂役；普通瘦长杂役脸，神情麻木疲惫，五官不抢戏；本集多为半身、过肩或侧背。",
+            "hair": "黑发随意束起，几缕碎发，低阶杂役布巾。",
+            "outfit": "洗旧灰青杂役短袍，袖口和裤脚磨损，布鞋带泥。",
+            "accessories": "可携小木牌、饭碗或钥匙等功能性小道具；不建立高光法器。",
+            "texture": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "普通成年男性体格，比贺平生略高，存在感低于主角。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "洗旧灰青杂役短袍，袖口和裤脚磨损，布鞋带泥。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把韩老三换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-07T08:36:48.041550+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_三视图.png",
+              "status": "planned"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.041738+00:00"
+                }
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.041753+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:36:48.041789+00:00"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_HAN_LAOSAN_韩老三.md",
+              "status": "ready",
+              "sha256": "16f66efa65a8d6d16c1440020c15da9bf1ad4cad5f1200a9e38bbb40b4d99e58"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1500,
+              1501,
+              1502,
+              1503,
+              1504,
+              1505
+            ],
+            "usage": {
+              "turnaround": 1500,
+              "expression": 1501,
+              "closeup": 1502,
+              "shot": 1503
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把韩老三换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句"
+          ],
+          "performance_signature": "带路、递物、过肩提示，动作短促实用，不展开情绪表演。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "anchor_sha": "ae1957c5a06bbe3c886372e7ab0b1256796a4185580be7f22b5af73751c23030"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
+        "base_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/reference",
+          "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/prompts",
+          "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/lora",
+          "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/voice",
+          "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/adapters",
+          "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      }
+    },
+    {
+      "id": "CHAR_FEMALE_LEAD",
+      "name": "女主（待剧情确认姓名后绑定）",
+      "scope": "待确认女主/用户参考母本/本集禁止入镜",
+      "tier": "核心长线",
+      "forms": [
+        {
+          "form": "常态",
+          "asset_key": "CHAR_FEMALE_LEAD__常态",
+          "anchor_phrase": "女主（待剧情确认姓名后绑定）·成年；东方女主鹅蛋脸，大而清澈的眼睛，清冷温润神态，精致但不低幼；脸部 DNA 来自用户参考母本。·姓名确认前只保留白金仙衣和金色法阵高阶审美作为风格锚；正式出场时按身份重派生常态服装。",
+          "character_dna": {
+            "face": "成年；东方女主鹅蛋脸，大而清澈的眼睛，清冷温润神态，精致但不低幼；脸部 DNA 来自用户参考母本。",
+            "hair": "长黑发半束，发丝柔顺，发冠和发饰等级按剧情身份可降低但发量和气质不漂。",
+            "outfit": "姓名确认前只保留白金仙衣和金色法阵高阶审美作为风格锚；正式出场时按身份重派生常态服装。",
+            "accessories": "精致发冠、长坠耳饰和金色法阵只属于高阶/参考态；早期形态需降级。",
+            "texture": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）；冷灰低饱和材质"
+          },
+          "physical_scale": {
+            "relative_scale": "成年仙子参考体态，具体身高体量待剧情绑定。"
+          },
+          "wardrobe_profile": {
+            "silhouette": "姓名确认前只保留白金仙衣和金色法阵高阶审美作为风格锚；正式出场时按身份重派生常态服装。",
+            "palette": "冷灰、深青、玄黑、低饱和旧金属",
+            "layers": "古装内外层明确",
+            "collar": "古装交领/束领，不现代圆领",
+            "sleeve": "窄袖或布袖按角色身份",
+            "waist": "束腰/旧腰带",
+            "hem": "竖屏下摆完整但不拖成仙侠飘带",
+            "fabric": "低饱和布料/皮革/旧金属",
+            "forbidden_drift": [
+              "不要把女主（待剧情确认姓名后绑定）换成其他脸",
+              "不要现代服饰",
+              "不要高饱和页游光效",
+              "不要丢失本角色锚点句",
+              "不要变成欧美脸、不要换成短发、不要随机改瞳色、不要把法阵文字烤成乱码字幕、不要继承截图 UI"
+            ]
+          },
+          "reference_group": {
+            "front": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+              "status": "ready",
+              "human_review": {
+                "status": "accepted",
+                "reviewer": "image_qc.mark_finalized",
+                "reason": "shared front reference passed finalized review",
+                "reviewed_at": "2026-07-07T08:25:06.357165+00:00"
+              }
+            },
+            "three_quarter": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_45度.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "side": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_侧.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "back": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_背.png",
+              "status": "planned",
+              "derivation": {
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "outfit": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "half_body": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_半身.png",
+              "status": "planned",
+              "derivation": {
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "source_sha256": "prompt-stage-source-pending",
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ]
+              }
+            },
+            "turnaround": {
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_三视图.png",
+              "status": "planned"
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expressions": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.357339+00:00"
+                }
+              }
+            ]
+          },
+          "reference_atlas": {
+            "build_tier": "full_makeup_pack",
+            "base_views": {
+              "front": {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "status": "ready",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared front reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.357354+00:00"
+                }
+              },
+              "three_quarter": {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_45度.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "side": {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_侧.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "back": {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_背.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "controlled_multiref_generation",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              },
+              "half_body": {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_半身.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            },
+            "face_anchor_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态_脸部特写_脸锚裁切.png",
+                "status": "planned",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ],
+            "expression_refs": [
+              {
+                "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                "status": "ready",
+                "derivation": {
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+                  "source_sha256": "prompt-stage-source-pending",
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ]
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "status": "accepted",
+                  "reviewer": "image_qc.mark_finalized",
+                  "reason": "shared expression_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-07T08:25:06.357392+00:00"
+                }
+              }
+            ],
+            "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
+          },
+          "reference_slots": [
+            {
+              "slot": "character_card",
+              "path": "角色卡/CHAR_FEMALE_LEAD_女主_待剧情确认姓名后绑定.md",
+              "status": "ready",
+              "sha256": "cf3c1e187945a588bfe49cde00f9ef3595c3dafafbcbd1960c88661f55a7e4ce"
+            },
+            {
+              "slot": "primary_reference",
+              "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
+              "status": "review_pending",
+              "human_review": {
+                "status": "pending",
+                "reason": "Codex text-generated character candidate requires human approval before ready"
+              }
+            }
+          ],
+          "identity_adapters": {
+            "image": {
+              "codex": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "openai": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "dreamina": {
+                "mode": "reference_group",
+                "status": "fallback_reference_group"
+              },
+              "seedream": {
+                "mode": "universal_reference",
+                "status": "unregistered"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "video": {
+              "dreamina": {
+                "mode": "first_last_frame",
+                "status": "fallback_reference_group"
+              },
+              "kling": {
+                "mode": "character_id",
+                "status": "unregistered"
+              },
+              "seedance": {
+                "mode": "face_lock",
+                "status": "unregistered"
+              },
+              "veo": {
+                "mode": "reference_controls",
+                "status": "unregistered"
+              },
+              "sora": {
+                "mode": "character_cameo",
+                "status": "unregistered"
+              }
+            },
+            "lora": {
+              "status": "not_needed",
+              "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。"
+            }
+          },
+          "generation_control": {
+            "seed_strategy": "fixed_pool",
+            "seed_pool": [
+              1600,
+              1601,
+              1602,
+              1603,
+              1604,
+              1605
+            ],
+            "usage": {
+              "turnaround": 1600,
+              "expression": 1601,
+              "closeup": 1602,
+              "shot": 1603
+            },
+            "backend_support": {
+              "codex": "unsupported_or_unknown",
+              "openai": "backend_dependent",
+              "dreamina": "backend_dependent",
+              "seedream": "backend_dependent_verify_adapter",
+              "kling": "backend_dependent_verify_adapter"
+            },
+            "fallback_policy": "record seed no-op/degraded when backend does not support seed; never treat unsupported seed as reproducible.",
+            "record_required": [
+              "requested_seed",
+              "effective_seed",
+              "seed_effective",
+              "seed_support",
+              "seed_strategy"
+            ]
+          },
+          "angle_policy": {
+            "allowed": [
+              "front",
+              "three_quarter",
+              "side",
+              "MCU",
+              "CU",
+              "MS",
+              "shot_reverse"
+            ],
+            "risky": [
+              "deep_shadow",
+              "face_too_small",
+              "extreme_top",
+              "extreme_low",
+              "strong_vfx_over_face"
+            ],
+            "requires_extra_reference": [
+              "ECU",
+              "大表情",
+              "背光暗部",
+              "多人同框近景"
+            ]
+          },
+          "drift_forbidden": [
+            "不要把女主（待剧情确认姓名后绑定）换成其他脸",
+            "不要现代服饰",
+            "不要高饱和页游光效",
+            "不要丢失本角色锚点句",
+            "不要变成欧美脸、不要换成短发、不要随机改瞳色、不要把法阵文字烤成乱码字幕、不要继承截图 UI"
+          ],
+          "performance_signature": "清冷温润、克制、眼神干净；本集只作风格/脸部母本，不进入分镜画面。",
+          "signature_equipment": [],
+          "self_check_passed": true,
+          "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+          "anchor_sha": "e44c0301bcbaf732dc763839cafdba97c6731a9e83f36c90cd2e0416656d5294"
+        }
+      ],
+      "asset_bundle": {
+        "manifest": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/manifest.json",
+        "package_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
+        "base_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
+        "sections": {
+          "reference": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/reference",
+          "prompts": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/prompts",
+          "lora": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/lora",
+          "voice": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/voice",
+          "adapters": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/adapters",
+          "qc": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/qc"
+        }
+      },
+      "evolution_profile": {
+        "mode": "single_anchor",
+        "identity_anchor_form": "常态",
+        "forms": [
+          "常态"
+        ]
+      },
+      "external_visual_references": [
+        {
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+          "status": "ready",
+          "source": "user_provided_project_reference",
+          "use_policy": "identity_reference",
+          "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6"
         }
       ]
     }
-  ]
+  ],
+  "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"
 }

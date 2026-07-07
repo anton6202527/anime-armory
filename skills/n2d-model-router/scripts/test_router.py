@@ -81,6 +81,40 @@ def test_mid_anchor_without_endframe_does_not_consume_last_frame(tmp_path):
     assert all("first/end frame" not in line for line in allowances)
 
 
+def test_structured_character_ids_prevent_offscreen_prose_from_becoming_refs(tmp_path):
+    root = _root(tmp_path)
+    _write_storyboard(root, [{
+        "id": "Clip 1",
+        "template": "fight_exchange",
+        "scene": "裴长青倒飞，虎妖压迫",
+        "character_ids": ["CHAR_02", "CHAR_03"],
+        "entity_schedule": {
+            "characters": ["CHAR_02", "CHAR_03"],
+            "offscreen_presence": ["CHAR_01"],
+            "required_presence": ["CHAR_02", "CHAR_03"],
+        },
+        "continuity": {
+            "end_state": "CHAR_01 只在画外以手部/衣袖/OTS轮廓反应，不露清晰正脸。",
+            "negative": "禁止 CHAR_01 正脸近景。",
+        },
+        "template_contract": {
+            "degrade_plan": "不稳就改手部/物件反应；禁止 CHAR_01 clear face。",
+        },
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+    ids = [c.get("character_id") for c in route["clip_characters"]]
+    recipe_ids = [
+        c.get("character_id")
+        for c in route["execution_recipe"]["reference_inputs"]["characters"]
+    ]
+
+    assert ids == ["CHAR_02", "CHAR_03"]
+    assert recipe_ids == ["CHAR_02", "CHAR_03"]
+    assert "CHAR_01" not in ids
+    assert "CHAR_01" not in recipe_ids
+
+
 def test_refresh_execution_reroutes_mid_anchor_to_native_multiframe_backend():
     route = {
         "clip_id": "Clip_01",

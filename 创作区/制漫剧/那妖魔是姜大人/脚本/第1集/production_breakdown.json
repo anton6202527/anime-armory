@@ -254,27 +254,26 @@
     },
     {
       "characters": [
-        "CHAR_01",
         "CHAR_02",
         "CHAR_03"
       ],
       "clip_id": "EP01_CLIP06",
       "department_notes": {
-        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, CHAR_03；关键物件 WEAPON_01, VFX_虎山神摹影。",
-        "camera": "景别/机位：MS→CU命中→MS；视线/轴线：裴长青看画右虎妖，虎妖看画左裴长青，姜月初看脚边裴。；模板：fight_exchange。",
+        "art": "场景 LOC_01；清晰入画角色 CHAR_02, CHAR_03；CHAR_01 只作画外/侧背/OTS/手部衣袖轮廓，不生成清晰正脸；关键物件 WEAPON_01, VFX_虎山神摹影。",
+        "camera": "景别/机位：MS→CU命中→MS低机位手部/横刀反应；视线/轴线：裴长青看画右虎妖，虎妖看画左裴长青；姜月初只以画外/侧背视线目击，不给清晰脸。；模板：fight_exchange。",
         "post": "转场 action_cut；VFX 可画形状/光效；若出现可读文字或数值，一律改由 compose overlay。"
       },
       "image_video_requirements": {
         "anchors": [
           {
-            "anchor_png": "出图/第1集/图片/Clip06_mid.png",
+            "anchor_png": "出图/第1集/图片/Clip06_mid_reaction.png",
             "at_sec": 3.0,
-            "reason": "auto: R1 高运动模板 fight_exchange（9s/4拍）；synced to landed ClipNN_mid asset for video_prompt_preflight",
+            "reason": "reaction override: 由原 Clip06_mid 裁切为手部/横刀/身体局部锚，避开姜月初清晰正脸；用于 video_prompt_preflight 的局部重跑。",
             "use": "split"
           }
         ],
-        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
-        "endframe": "出图/第1集/图片/Clip06_end.png",
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 本镜禁止把姜月初小脸/侧背/画外目击升格成清晰正脸近景；尾段优先横刀、手部、衣袖、侧背/OTS反应。",
+        "endframe": "出图/第1集/图片/Clip06_end_reaction.png",
         "firstframe": "出图/第1集/图片/Clip06_first.png"
       },
       "label": "裴长青最后一击被踹飞",

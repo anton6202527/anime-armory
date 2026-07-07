@@ -214,7 +214,7 @@ def main() -> int:
     parser.add_argument("--lettering", default="后期嵌字")
     parser.add_argument("--export-format", default="webp+png")
     parser.add_argument("--region", default="未指定")
-    parser.add_argument("--usage", default="自用草稿")
+    parser.add_argument("--usage", default="demo学习")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()

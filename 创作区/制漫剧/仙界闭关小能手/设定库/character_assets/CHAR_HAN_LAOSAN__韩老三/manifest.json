@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_HAN_LAOSAN",
+  "name": "韩老三",
+  "scope": "第1集功能性带路杂役/不展开支线",
+  "directories": {
+    "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/reference",
+    "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/prompts",
+    "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/lora",
+    "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/voice",
+    "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/adapters",
+    "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/韩老三.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-07T08:18:21+00:00"
+}

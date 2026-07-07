@@ -39,7 +39,7 @@ ACTION_WORDS = (
 )
 DIALOGUE_WORDS = ("对话", "反打", "过肩", "dialogue", "shot_reverse", "talk", "审讯", "谈判")
 RELEASE_WORDS = ("释放", "孤独", "失落", "退场", "结尾", "余韵", "aftermath", "release")
-SCREEN_WORDS = ("系统面板", "screen_insert", "面板", "光幕", "字幕卡", "overlay")
+SCREEN_WORDS = ("系统面板", "screen_insert", "system_panel", "面板", "光幕", "字幕卡")
 OVERACTIVE_WORDS = ("旋转", "360", "环绕飞", "飞行", "急速", "极速", "快速拉近", "急推", "急拉", "甩镜", "螺旋", "翻滚")
 CLOSEUP_WORDS = ("ECU", "CU", "BCU", "MCU", "特写", "近景", "中近景", "close")
 WIDE_WORDS = ("ELS", "LS", "远景", "全景", "大全景", "定场", "wide", "establishing")
@@ -112,6 +112,27 @@ def clip_expression_span(clip: Dict[str, Any]) -> str:
     return str(cont.get("expression_span") or clip.get("expression_span") or clip.get("表情幅度") or "")
 
 
+def clip_has_screen_surface(clip: Dict[str, Any]) -> bool:
+    """True only for actual screen/panel shots, not generic compose overlay subtitles."""
+    template = clip_template(clip)
+    if template in {"screen_insert", "system_panel"}:
+        return True
+    tpl = _template_contract(clip)
+    targeted = " ".join(str(tpl.get(k) or "") for k in (
+        "motif_id",
+        "vfx_asset",
+        "screen_content_ref",
+        "device_lock",
+        "panel_tier",
+    ))
+    object_ids = clip.get("object_ids") or clip.get("objects") or []
+    if not isinstance(object_ids, list):
+        object_ids = [object_ids]
+    object_text = " ".join(str(x or "") for x in object_ids)
+    narrative_text = " ".join(str(clip.get(k) or "") for k in ("description", "label", "scene", "rhythm"))
+    return _has_any(f"{template} {targeted} {object_text} {narrative_text}", SCREEN_WORDS)
+
+
 def extract_camera_text(clip: Dict[str, Any]) -> str:
     cont = _continuity(clip)
     tpl = _template_contract(clip)
@@ -148,7 +169,7 @@ def classify_clip(clip: Dict[str, Any]) -> Dict[str, bool]:
         "action": _has_any(f"{template} {text}", ACTION_WORDS),
         "dialogue": _has_any(f"{template} {text}", DIALOGUE_WORDS),
         "release": _has_any(f"{rhythm} {text}", RELEASE_WORDS),
-        "screen": _has_any(f"{template} {text}", SCREEN_WORDS),
+        "screen": clip_has_screen_surface(clip),
         "closeup": _has_any(shot, CLOSEUP_WORDS),
         "wide": _has_any(shot, WIDE_WORDS),
         "big_expression": "大" in expression or "large" in expression.lower(),

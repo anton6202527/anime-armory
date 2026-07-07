@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_motif_plan",
+  "episode": "第1集",
+  "genre": {
+    "genre": "修仙",
+    "confidence": 1.0,
+    "hits": 3,
+    "matched": [
+      "修仙",
+      "修真",
+      "灵根"
+    ],
+    "by_genre": [
+      {
+        "genre": "修仙",
+        "hits": 3,
+        "matched": [
+          "修仙",
+          "修真",
+          "灵根"
+        ]
+      },
+      {
+        "genre": "系统流",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "穿越",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "都市",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "宫斗",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "赘婿",
+        "hits": 0,
+        "matched": []
+      },
+      {
+        "genre": "战神",
+        "hits": 0,
+        "matched": []
+      }
+    ]
+  },
+  "motif_clips": [],
+  "summary": {
+    "genre": "修仙",
+    "motif_clips": 0,
+    "panel_clips": 0,
+    "storyboard_present": true
+  }
+}

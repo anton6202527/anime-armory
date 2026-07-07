@@ -1,6 +1,6 @@
 # 漫画一致性报告 — 第2话
 
-- 生成时间：2026-07-07T14:29:38
+- 生成时间：2026-07-07T17:22:51
 - reference 总数：3
 - 缺失 reference：0
 - 需要重抽格：0
@@ -9,21 +9,21 @@
 
 | panel | status | refs | missing | generated_with_refs |
 |---|---|---:|---|---:|
-| P001 | planned | 4 | - | 0 |
-| P002 | planned | 5 | - | 0 |
-| P003 | planned | 5 | - | 0 |
-| P004 | planned | 4 | - | 0 |
-| P005 | planned | 8 | - | 0 |
-| P006 | planned | 8 | - | 0 |
-| P007 | planned | 5 | - | 0 |
-| P008 | planned | 1 | - | 0 |
-| P009 | planned | 5 | - | 0 |
-| P010 | planned | 4 | - | 0 |
-| P011 | planned | 4 | - | 0 |
-| P012 | planned | 8 | - | 0 |
-| P013 | planned | 8 | - | 0 |
-| P014 | planned | 8 | - | 0 |
-| P015 | planned | 5 | - | 0 |
-| P016 | planned | 9 | - | 0 |
-| P017 | planned | 5 | - | 0 |
-| P018 | planned | 5 | - | 0 |
+| P001 | ready | 4 | - | 4 |
+| P002 | ready | 5 | - | 5 |
+| P003 | ready | 5 | - | 5 |
+| P004 | ready | 4 | - | 4 |
+| P005 | ready | 4 | - | 4 |
+| P006 | ready | 4 | - | 4 |
+| P007 | ready | 5 | - | 5 |
+| P008 | ready | 1 | - | 1 |
+| P009 | ready | 5 | - | 5 |
+| P010 | ready | 4 | - | 4 |
+| P011 | ready | 4 | - | 4 |
+| P012 | ready | 4 | - | 4 |
+| P013 | ready | 4 | - | 4 |
+| P014 | ready | 4 | - | 4 |
+| P015 | ready | 5 | - | 5 |
+| P016 | ready | 5 | - | 5 |
+| P017 | ready | 5 | - | 5 |
+| P018 | ready | 5 | - | 5 |

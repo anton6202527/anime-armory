@@ -228,6 +228,27 @@ def test_long_rule_hit_with_only_midframe_is_upgraded_to_anchors(tmp_path):
     assert cont_after["anchors"]
 
 
+def test_generated_default_anchor_is_refreshed_after_duration_change(tmp_path):
+    cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
+            "anchors": [{"anchor_png": "出图/第1集/图片/镜头01_mid.png",
+                         "at_sec": 3.0, "use": "qc", "reason": "default: 三帧契约（use=qc）"}]}
+    root = _write_project(tmp_path, [
+        _clip(1, 12, shots=[{"t": "0-3s"}, {"t": "3-6s"}, {"t": "6-9s"}, {"t": "9-12s"}],
+              continuity=cont),
+    ])
+    plan = ap.plan_episode(root, "第1集", default_midframe=True)
+
+    assert len(plan["planned"]) == 1
+    assert plan["planned"][0]["rule"].startswith("R2")
+    assert any("已有自动 anchors" in item["why"] for item in plan["skipped"])
+    assert ap.write_back(root, "第1集", plan) == 1
+    sb = json.loads(open(os.path.join(root, "脚本", "第1集", "storyboard.json"),
+                         encoding="utf-8").read())
+    anchors = sb["clips"][0]["continuity"]["anchors"]
+    assert anchors[0]["reason"].startswith("auto: R2")
+    assert anchors[0]["source_duration"] == 12.0
+
+
 def test_stale_manual_anchor_outside_duration_is_replanned_or_exempted(tmp_path):
     cont = {"start_state": "s", "end_state": "e", "transition": "硬切", "need_endframe": True,
             "anchors": [{"anchor_png": "出图/第1集/图片/镜头01_mid.png",

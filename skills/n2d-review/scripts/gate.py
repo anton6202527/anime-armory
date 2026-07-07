@@ -1684,6 +1684,7 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
         "运动精修约束",
         "环境交互约束",
         "首帧保持",
+        "在场链约束",
         "人物运动",
         "镜头运动",
         "情绪节奏",
@@ -1695,6 +1696,15 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
     for key in compact_prompt_fields:
         if not _has_line_field(section, key):
             add(BLOCK, "prompt", loc, f"中文视频 prompt 缺字段：{key}")
+    if _has_line_field(section, "在场链约束"):
+        for key in ("required_presence", "offscreen_presence", "forbidden_presence"):
+            if key not in section:
+                add(
+                    BLOCK,
+                    "人物在场链",
+                    loc,
+                    f"在场链约束缺 {key}；每条视频 prompt 必须把 storyboard.entity_schedule 的必在/画外/禁入真值传到执行端，不能只写泛化的“不要新增”。",
+                )
     if "角色身份注册层" not in section:
         add(BLOCK, "资产身份注册层", loc, "缺角色身份注册层字段；含角色镜必须继承 identity_registry.json，无人物镜写“无”")
     if not _has_line_field(section, "身份锁定约束"):

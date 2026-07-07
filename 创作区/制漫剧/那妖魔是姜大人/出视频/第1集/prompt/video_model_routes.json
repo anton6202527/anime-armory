@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-04T02:40:51+00:00",
+  "generated_at": "2026-07-07T08:14:08+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -34,7 +34,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -44,7 +44,6 @@
       "max_clip_seconds": 15,
       "clip_seconds": 9.236,
       "risk_flags": [
-        "identity_escalated",
         "native_multiframe",
         "seam_relay"
       ],
@@ -81,7 +80,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -121,7 +119,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -146,7 +143,7 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
@@ -185,11 +182,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_01",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -227,8 +225,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -251,8 +249,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -289,10 +287,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -310,7 +308,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "face_lock_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -325,7 +323,6 @@
       "risk_flags": [
         "duration_segment_relay",
         "identity_drift_risk",
-        "identity_escalated",
         "native_multiframe",
         "readability_hold_required",
         "seam_relay",
@@ -365,7 +362,6 @@
         "接力镜：primary「dreamina」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜 16.57s 超过 dreamina 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 2 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「dreamina」无原生身份锁，升锁改用「seedance」(Character ID/Face Lock) 把脸钉死后再生成。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -435,7 +431,6 @@
         "max_segment_seconds": 12.57,
         "reason": "split paid generation into first/mid/end relay segments under backend cap"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -460,12 +455,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "face_lock_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "face_lock_or_reference_group"
             }
           ],
           "assets": [
@@ -531,11 +526,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_02",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -573,8 +569,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -597,8 +593,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -635,10 +631,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -656,7 +652,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -670,7 +666,6 @@
       "clip_seconds": 18.752,
       "risk_flags": [
         "duration_segment_relay",
-        "identity_escalated",
         "mouth_visible",
         "native_multiframe",
         "seam_relay"
@@ -709,7 +704,6 @@
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜 18.752s 超过 seedance 单次上限 15s；执行侧必须按现有首/中/尾帧拆成 2 段 first_last_relay 付费提交，每段不超过上限，再在后续合成阶段接回。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -778,7 +772,6 @@
         "max_segment_seconds": 14.752,
         "reason": "split paid generation into first/mid/end relay segments under backend cap"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -803,16 +796,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -874,11 +868,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_03",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -916,8 +911,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -940,8 +935,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -978,10 +973,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -999,7 +994,7 @@
       "mode": "frames2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1013,7 +1008,6 @@
       "clip_seconds": 10.01,
       "risk_flags": [
         "identity_drift_risk",
-        "identity_escalated",
         "mouth_visible",
         "multi_person",
         "native_multiframe",
@@ -1067,7 +1061,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 10.01s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -1108,7 +1101,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -1121,7 +1113,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "native_identity_lock_required",
+        "reference_strategy": "character_id_or_reference_group",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1150,16 +1142,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -1175,7 +1168,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "native_identity_lock_required",
+            "reference_strategy": "character_id_or_reference_group",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1215,11 +1208,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_04",
-        "winner": "identity_affinity",
+        "winner": "motion_control_required",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1257,8 +1251,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -1281,8 +1275,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1319,10 +1313,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -1340,7 +1334,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -1357,7 +1351,6 @@
       "clip_seconds": 12.995,
       "risk_flags": [
         "identity_drift_risk",
-        "identity_escalated",
         "mouth_visible",
         "native_multiframe",
         "seam_relay"
@@ -1395,7 +1388,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 12.995s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -1435,7 +1427,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -1460,21 +1451,22 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -1509,11 +1501,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_05",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1551,8 +1544,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -1575,8 +1568,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -1613,10 +1606,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -1634,11 +1627,8 @@
       "mode": "frames2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
-        {
-          "character_id": "CHAR_01"
-        },
         {
           "character_id": "CHAR_02"
         },
@@ -1654,7 +1644,6 @@
         "contact_motion",
         "feature_melting_risk",
         "identity_drift_risk",
-        "identity_escalated",
         "motion_reference_candidate",
         "mouth_visible",
         "multi_person",
@@ -1744,7 +1733,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 14.586s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
         "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
       ],
@@ -1789,7 +1777,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": true,
@@ -1804,7 +1791,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "native_identity_lock_required",
+        "reference_strategy": "character_id_or_reference_group",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1831,19 +1818,14 @@
         "reference_inputs": {
           "characters": [
             {
-              "character_id": "CHAR_01",
-              "form": "",
-              "binding": "native_identity_lock_required"
-            },
-            {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
@@ -1864,7 +1846,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "native_identity_lock_required",
+            "reference_strategy": "character_id_or_reference_group",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -1907,11 +1889,12 @@
       },
       "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_06",
-        "winner": "identity_affinity",
+        "winner": "motion_control_required",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -1949,8 +1932,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -1973,8 +1956,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2011,10 +1994,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -2032,7 +2015,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2045,7 +2028,6 @@
       "max_clip_seconds": 15,
       "clip_seconds": 11.197,
       "risk_flags": [
-        "identity_escalated",
         "native_multiframe",
         "seam_relay"
       ],
@@ -2082,7 +2064,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（duration 11.197s exceeds kling max 10s; storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -2122,7 +2103,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -2147,16 +2127,17 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -2191,11 +2172,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_07",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2233,8 +2215,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -2257,8 +2239,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2295,10 +2277,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -2316,7 +2298,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2332,7 +2314,6 @@
       "max_clip_seconds": 15,
       "clip_seconds": 8.588,
       "risk_flags": [
-        "identity_escalated",
         "native_multiframe",
         "seam_relay"
       ],
@@ -2369,7 +2350,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -2409,7 +2389,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -2434,21 +2413,22 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -2483,11 +2463,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_08",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2525,8 +2506,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -2549,8 +2530,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2587,10 +2568,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -2608,7 +2589,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2624,7 +2605,6 @@
       "max_clip_seconds": 15,
       "clip_seconds": 9.988,
       "risk_flags": [
-        "identity_escalated",
         "mouth_visible",
         "native_multiframe",
         "seam_relay"
@@ -2662,7 +2642,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -2702,7 +2681,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -2727,21 +2705,22 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -2776,11 +2755,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_09",
-        "winner": "identity_affinity",
+        "winner": "cross_episode_baseline",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -2818,8 +2798,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -2842,8 +2822,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -2880,10 +2860,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -2901,7 +2881,7 @@
       "mode": "frames2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2918,7 +2898,6 @@
         "contact_motion",
         "feature_melting_risk",
         "identity_drift_risk",
-        "identity_escalated",
         "motion_reference_candidate",
         "mouth_visible",
         "native_multiframe",
@@ -3007,7 +2986,6 @@
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」storyboard 帧/时长契约不匹配（storyboard has mid anchors but primary lacks native mid-anchor control）；当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
         "接力镜：primary「seedance」支持双关键帧——把上一镜尾帧作本镜首帧硬约束(首尾插值)，接缝结构保证。",
         "本镜中段锚帧会被后端作为原生时间轴关键帧消费。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。",
         "seedance 支持视频片段参考（reference_video_motion）：把同段前一条已通过的 clip 作运动/风格参考喂进去，锁运镜节奏与运动风格（与图身份锁正交的跨镜运动连续性轴）。"
       ],
@@ -3052,7 +3030,6 @@
         "auto_routable": true,
         "action": "submit first/mid/end frames in one native multi-keyframe request"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": true,
@@ -3067,7 +3044,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "native_identity_lock_required",
+        "reference_strategy": "character_id_or_reference_group",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -3096,12 +3073,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
@@ -3122,7 +3099,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "native_identity_lock_required",
+            "reference_strategy": "character_id_or_reference_group",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -3165,11 +3142,12 @@
       },
       "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_10",
-        "winner": "identity_affinity",
+        "winner": "motion_control_required",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3207,8 +3185,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -3231,8 +3209,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -3269,10 +3247,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -3290,7 +3268,7 @@
       "mode": "frames2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "native_identity_lock_required",
+      "identity_requirement": "character_id_or_reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -3307,7 +3285,6 @@
       "clip_seconds": 2.053,
       "risk_flags": [
         "identity_drift_risk",
-        "identity_escalated",
         "multi_person"
       ],
       "seam_relay": {
@@ -3354,7 +3331,6 @@
         "multi-person staging needs reference controls and stable screen direction",
         "single-backend generic generation often swaps faces or screen positions",
         "执行渠道「Dreamina」下改用可执行后端「seedance」；原 primary「kling」当前渠道不可自动付费路由（confidence=conservative; execution_backend=kling），降为 fallback。",
-        "⚠️本镜 identity 已失败 2 次：primary「seedance」已具原生身份锁，强制 native_identity_lock_required，并补 reference_group 角度 / 拆镜降难度。",
         "质量档=high：本镜身份/物理吃重，值 pro 档把脸与运动钉稳（落档侧解析为后端 pro model_version）。"
       ],
       "prompt_requirements": [
@@ -3394,7 +3370,6 @@
         "auto_routable": true,
         "action": "manual confirmation required before paid generation"
       },
-      "locked_backend": "seedance",
       "quality_tier": "high",
       "motion_reference": {
         "applicable": false
@@ -3407,7 +3382,7 @@
           "outfit_palette",
           "named_character_screen_slot"
         ],
-        "reference_strategy": "native_identity_lock_required",
+        "reference_strategy": "character_id_or_reference_group",
         "motion_readability_allowances": [
           "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
           "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -3436,21 +3411,22 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_02",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             },
             {
               "character_id": "CHAR_03",
               "form": "",
-              "binding": "native_identity_lock_required"
+              "binding": "character_id_or_reference_group"
             }
           ],
           "assets": [
-            "LOC_01"
+            "LOC_01",
+            "WEAPON_01"
           ],
           "max_reference_images": 0,
           "motion_reference": {
@@ -3466,7 +3442,7 @@
               "outfit_palette",
               "named_character_screen_slot"
             ],
-            "reference_strategy": "native_identity_lock_required",
+            "reference_strategy": "character_id_or_reference_group",
             "motion_readability_allowances": [
               "prefer MCU/OTS/side/back/reaction inserts over forcing unstable full-body closeups",
               "allow wider framing or reduced facial detail during complex motion, but preserve costume silhouette and screen slot",
@@ -3506,11 +3482,12 @@
         }
       },
       "urgency_tier": "realtime",
+      "baseline_anchored": true,
       "policy_resolution": {
         "kind": "n2d_route_policy_resolution",
         "version": 1,
         "clip_id": "Clip_11",
-        "winner": "identity_affinity",
+        "winner": "motion_control_required",
         "priority_order": [
           "fixed_mode",
           "compliance_capability_evidence",
@@ -3548,8 +3525,8 @@
           {
             "policy": "identity_affinity",
             "priority": 3,
-            "active": true,
-            "effect": "locked_backend=seedance"
+            "active": false,
+            "effect": ""
           },
           {
             "policy": "identity_failure_escalation",
@@ -3572,8 +3549,8 @@
           {
             "policy": "cross_episode_baseline",
             "priority": 7,
-            "active": false,
-            "effect": ""
+            "active": true,
+            "effect": "baseline primary=seedance"
           },
           {
             "policy": "spectacle_benchmark",
@@ -3610,10 +3587,10 @@
           {
             "surface": "backend_choice",
             "policies": [
-              "identity_affinity",
+              "cross_episode_baseline",
               "cost_quality_tier"
             ],
-            "winner": "identity_affinity",
+            "winner": "cross_episode_baseline",
             "resolution": "priority_lattice"
           }
         ],
@@ -3622,6 +3599,15 @@
     }
   ],
   "motion_spectacle_guidance_applied": 2,
+  "baseline_drift": [
+    {
+      "clip_id": "Clip_02",
+      "shot_type": "realm_portal",
+      "was": "dreamina",
+      "now": "seedance"
+    }
+  ],
+  "baseline_anchored": true,
   "hero_multi_version": {
     "enabled": false,
     "hero_clips": [],

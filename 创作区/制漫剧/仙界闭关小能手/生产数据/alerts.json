@@ -1,12 +1,30 @@
 {
-  "alerts": [],
+  "alerts": [
+    {
+      "kind": "qa_blockers",
+      "level": "critical",
+      "message": "QA 阻断 89 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
+      "scope": "totals",
+      "threshold": 0,
+      "value": 89
+    },
+    {
+      "episode": "第1集",
+      "kind": "qa_blockers",
+      "level": "warn",
+      "message": "第1集 QA 阻断 89 项",
+      "scope": "第1集",
+      "threshold": 0,
+      "value": 89
+    }
+  ],
   "counts": {
-    "critical": 0,
-    "warn": 0
+    "critical": 1,
+    "warn": 1
   },
-  "generated_at": "2026-07-07T01:24:39+00:00",
+  "generated_at": "2026-07-07T09:03:32+00:00",
   "kind": "n2d_production_alerts",
-  "root": "创作区/制漫剧/仙界闭关小能手",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "thresholds": {
     "beat_density_variance_ceiling": null,
     "bounce_3s_ceiling": null,

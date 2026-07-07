@@ -157,6 +157,7 @@ continuity:
 模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance,kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 dreamina 支持的 image2video 能力；失败按 degrade_plan 改侧脸或切 fallback 重跑；
 身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；
 近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则用 MCU/OTS/侧脸保真实现；
+在场链约束：required_presence=CHAR_SHEN,PROP_鸩酒托盘；offscreen_presence=CHAR_LIU；forbidden_presence=现代手机,modern vehicles,random readable text,watermark；只允许登记实体进入清晰画面，offscreen 只能画外/虚焦/反应承接，forbidden 完全不出现；
 原生音画约束：默认禁止原生人声，不生成对白/旁白/哼唱；本镜 compose_policy=丢弃；
 首帧保持：保持首帧已锁定的沈念脸型、发髻、服装、冷宫寝殿、烛火光位和前景鸩酒托盘，不重定人物外貌、场景布局或光色；
 人物运动：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制；
@@ -2571,6 +2572,30 @@ def test_food_bowl_is_not_weapon_like_asset():
     assert gate._is_weapon_like_asset({"id": "PROP_SHORT_BLADE", "type": "prop", "name": "short blade"}) is True
 
 
+def test_prop_forbidden_magic_weapon_text_does_not_make_weapon_like_asset():
+    asset = {
+        "id": "PROP_RUST_LOCK",
+        "type": "prop",
+        "name": "生锈铁锁",
+        "profile": "杂役空房门上的生锈铁锁，小件暗铁色，不放大成法器。",
+        "drift_forbidden": ["不要符文法器", "不要神器光效"],
+    }
+
+    assert gate._is_weapon_like_asset(asset) is False
+
+
+def test_prop_can_opt_out_of_weapon_like_heuristic():
+    asset = {
+        "id": "PROP_RUST_LOCK",
+        "type": "prop",
+        "name": "旧锁",
+        "profile": "证物线索道具，不是武器。",
+        "weapon_like_role": "not_entity_weapon",
+    }
+
+    assert gate._is_weapon_like_asset(asset) is False
+
+
 def test_vfx_only_effect_can_opt_out_of_weapon_like_heuristic():
     asset = {
         "id": "VFX_妖气",
@@ -3250,6 +3275,52 @@ def test_storyboard_multi_character_same_frame_full_contract_passes(tmp_path):
     gate.check_storyboard_special_templates(root, "第1集")
 
     assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
+def test_storyboard_compact_narrative_templates_are_known(tmp_path):
+    gate.findings.clear()
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP05",
+            "label": "挑水压迫蒙太奇",
+            "template": "labor_montage",
+            "template_contract": {
+                "template_id": "labor_montage",
+                "beats": ["肩背被扁担压红", "水桶溢出", "脚步打滑"],
+                "blocking": "人物与道具单主体，每个切点只拍一处痛点。",
+                "camera_rule": "近景细节比大远景重要。",
+                "continuity_must": ["疲惫递增", "水桶形态稳定"],
+                "negative": "不要拍成慢生活风景。",
+                "post_cue_points": ["扁担吱呀", "水溢出"],
+                "degrade_plan": "若动作不稳定，拆肩部、水桶、脚步三张。",
+            },
+        }],
+    )
+
+    gate.check_storyboard_special_templates(root, "第1集")
+
+    assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
+def test_episode_registry_refs_normalize_partial_and_age_aliases(tmp_path):
+    root = tmp_path / "作品"
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    (root / "出图" / "共享").mkdir(parents=True)
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "EP01_CLIP03",
+            "template_contract": {"face_priority": ["CHAR_HE_PINGSHENG_partial"]},
+            "axis": {"characters": ["CHAR_HE_PINGSHENG_14"]},
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_HE_PINGSHENG", "forms": [{"form": "常态"}]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    chars, _assets = gate.episode_registry_reference_ids(str(root), "第1集")
+
+    assert chars == {"CHAR_HE_PINGSHENG"}
 
 
 def test_storyboard_ensemble_template_missing_focus_hierarchy_is_blocked(tmp_path):
@@ -4605,6 +4676,28 @@ def test_video_clip_missing_compact_prompt_fields_is_blocked():
 
     for key in ("首帧保持", "情绪节奏", "禁止"):
         assert any(f["sev"] == gate.BLOCK and f["dim"] == "prompt" and key in f["msg"] for f in gate.findings)
+
+
+def test_video_clip_missing_presence_chain_constraint_is_blocked():
+    clip = GOOD_VIDEO_CLIP.replace(
+        "在场链约束：required_presence=CHAR_SHEN,PROP_鸩酒托盘；offscreen_presence=CHAR_LIU；forbidden_presence=现代手机,modern vehicles,random readable text,watermark；只允许登记实体进入清晰画面，offscreen 只能画外/虚焦/反应承接，forbidden 完全不出现；\n",
+        "",
+    )
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "prompt" and "在场链约束" in f["msg"] for f in gate.findings)
+
+
+def test_video_clip_presence_chain_constraint_requires_three_fields():
+    clip = GOOD_VIDEO_CLIP.replace("forbidden_presence=现代手机,modern vehicles,random readable text,watermark；", "")
+
+    gate.check_video_clip_prompt_section("01_clips.md", clip)
+
+    assert any(
+        f["sev"] == gate.BLOCK and f["dim"] == "人物在场链" and "forbidden_presence" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_video_clip_suspect_camera_move_warns():
@@ -8526,6 +8619,127 @@ def test_storyboard_presence_chain_allows_explicit_entry(tmp_path):
     root = _write_storyboard_with_clips(tmp_path, clips)
     gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
     assert not any(f["dim"] == "人物在场链" and f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def _entity_final_clip(**extra):
+    clip = {
+        "id": "Clip_01",
+        "scene": "冷宫寝殿",
+        "firstframe_png": "出图/第1集/图片/Clip_01.png",
+        "continuity": {
+            "start_state": "沈念坐在床榻阴影里",
+            "action": "沈念缓慢抬眼",
+            "end_state": "沈念眼神定住",
+            "transition": "hard_cut",
+            "need_endframe": False,
+            "endframe_exempt_reason": "最终 Clip 无下一镜接力",
+            "midframe_exempt_reason": "极短镜<3s 无明显姿态变化",
+        },
+    }
+    clip.update(extra)
+    return clip
+
+
+def test_storyboard_entity_schedule_missing_blocks_before_video(tmp_path):
+    gate.findings.clear()
+    clip = _entity_final_clip(
+        character_ids=["CHAR_SHEN"],
+        object_ids=["PROP_TOKEN"],
+        location_id="LOC_ROOM",
+    )
+    root = _write_storyboard_with_clips(tmp_path, [clip])
+    _touch_png(root, "出图/第1集/图片/Clip_01.png")
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=True)
+
+    assert any(f["dim"] == "实体排程" and f["sev"] == gate.BLOCK and "缺 entity_schedule" in f["msg"]
+               for f in gate.findings)
+
+
+def test_storyboard_entity_schedule_missing_expected_blocks(tmp_path):
+    gate.findings.clear()
+    clip = _entity_final_clip(
+        character_ids=["CHAR_SHEN"],
+        object_ids=["PROP_TOKEN"],
+        location_id="LOC_ROOM",
+        entity_schedule={
+            "characters": ["CHAR_SHEN"],
+            "locations": ["LOC_ROOM"],
+            "required_presence": ["CHAR_SHEN", "PROP_TOKEN"],
+            "forbidden_presence": ["现代手机"],
+        },
+    )
+    root = _write_storyboard_with_clips(tmp_path, [clip])
+    _touch_png(root, "出图/第1集/图片/Clip_01.png")
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=True)
+
+    assert any(f["dim"] == "实体排程" and f["sev"] == gate.BLOCK and "物件 PROP_TOKEN" in f["msg"]
+               for f in gate.findings)
+
+
+def test_storyboard_entity_schedule_offscreen_visible_conflict_blocks(tmp_path):
+    gate.findings.clear()
+    clip = _entity_final_clip(
+        character_ids=["CHAR_SHEN"],
+        entity_schedule={
+            "characters": ["CHAR_SHEN"],
+            "required_presence": ["CHAR_SHEN"],
+            "offscreen_presence": ["CHAR_SHEN"],
+        },
+    )
+    root = _write_storyboard_with_clips(tmp_path, [clip])
+    _touch_png(root, "出图/第1集/图片/Clip_01.png")
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=True)
+
+    assert any(f["dim"] == "实体排程" and f["sev"] == gate.BLOCK and "offscreen_presence" in f["msg"]
+               for f in gate.findings)
+
+
+def test_storyboard_adjacent_duplicate_clips_warn(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN"], "s", "e",
+                       action="沈念缓慢抬眼，烛火在脸侧跳动"),
+        _presence_clip("Clip_02", ["CHAR_SHEN"], "e", "f",
+                       action="沈念缓慢抬眼，烛火在脸侧跳动"),
+    ]
+    for clip in clips:
+        clip.update({
+            "label": "沈念压住恐惧",
+            "template": "dialogue_closeup",
+            "dramatic_function": "让观众看到沈念压住恐惧",
+            "audience_effect": "观众感到她在硬撑",
+        })
+    root = _write_storyboard_with_clips(tmp_path, clips)
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert any(f["dim"] == "Clip 去重" and f["sev"] == gate.WARN for f in gate.findings)
+
+
+def test_storyboard_adjacent_duplicate_clips_allow_intentional_repeat(tmp_path):
+    gate.findings.clear()
+    clips = [
+        _presence_clip("Clip_01", ["CHAR_SHEN"], "s", "e",
+                       action="沈念缓慢抬眼，烛火在脸侧跳动"),
+        _presence_clip("Clip_02", ["CHAR_SHEN"], "e", "f",
+                       action="沈念缓慢抬眼，烛火在脸侧跳动",
+                       duplicate_intent_reason="故意重复用于闪回对照"),
+    ]
+    for clip in clips:
+        clip.update({
+            "label": "沈念压住恐惧",
+            "template": "dialogue_closeup",
+            "dramatic_function": "让观众看到沈念压住恐惧",
+            "audience_effect": "观众感到她在硬撑",
+        })
+    root = _write_storyboard_with_clips(tmp_path, clips)
+
+    gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
+
+    assert not any(f["dim"] == "Clip 去重" for f in gate.findings)
 
 
 def test_storyboard_ordinary_cut_state_mismatch_warns_not_blocks(tmp_path):

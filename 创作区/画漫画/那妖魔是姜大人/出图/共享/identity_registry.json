@@ -280,6 +280,42 @@
       "display_name": "镇魔司横刀 / 断刀",
       "primary_path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
       "style_contract": "古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。"
+    },
+    "LOC_WASTELAND": {
+      "id": "LOC_WASTELAND",
+      "type": "location",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/LOC_WASTELAND__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "创作区/画漫画/那妖魔是姜大人/出图/第1话/panels/P001.png",
+        "source_path": "出图/第1话/panels/P001.png"
+      },
+      "sha256": "3e679d4ff3077267878348a736fea6051850e8615a107a76f81620e76fab3184",
+      "updated_at": "2026-07-07T15:01:38",
+      "notes": "由第1话 P001 荒野全景种下的临时场景锚点；后续可补专门 LOC_WASTELAND 场景设定图。",
+      "display_name": "破败荒野",
+      "primary_path": "出图/共享/图片/LOC_WASTELAND__anchor.png",
+      "style_contract": "破败荒野、枯草连天、尸骸遍地、灰白雾气、巨岩、冷白高光和黑白灰水墨边缘；血色只作局部点缀，不做过度 gore。"
+    },
+    "SYS_BAIYAOPU": {
+      "id": "SYS_BAIYAOPU",
+      "type": "system_asset",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "创作区/画漫画/那妖魔是姜大人/出图/第1话/panels/P013.png",
+        "source_path": "出图/第1话/panels/P013.png"
+      },
+      "sha256": "959d40cbc78895d1490e18da787138269546419663f42cb18b61bf3b9b09282b",
+      "updated_at": "2026-07-07T15:01:38",
+      "notes": "由第1话 P013 百妖谱展开面板种下的临时系统视觉锚点；后续可补专门卷轴/金字/摹影流程设定图。",
+      "display_name": "百妖谱",
+      "primary_path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+      "style_contract": "古朴绘卷，冷白环境里浮现金色字迹和光点；系统文字只作为后期嵌字，不在图像中生成可读字。第2话可表现墨线摹影虎山神和妖物馈赠倒灌。"
     }
   }
 }

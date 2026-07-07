@@ -1290,6 +1290,8 @@ def load_style_anchor_paths(root: Path) -> List[str]:
             add(node)
 
     scan(data.get("selected_anchor") or data.get("style_anchor"))
+    if anchors:
+        return anchors
     scan(data.get("anchors"))
     return anchors
 
@@ -1906,7 +1908,18 @@ def codex_reference_inputs_for_target(
         if rel_path == target.rel_path:
             return
         path = root / rel_path
-        if not path.is_file() or rel_path in seen:
+        if not path.is_file():
+            return
+        if rel_path in seen:
+            if role == "character":
+                for item in inputs:
+                    if item.get("rel_path") == rel_path and item.get("role") == "style":
+                        item["role"] = "character"
+                        item["owner"] = owner
+                        item["source"] = source
+                        item["priority"] = priority_for(rel_path, "character")
+                        item["upgraded_from_style_anchor"] = True
+                        break
             return
         seen.add(rel_path)
         try:
@@ -2458,6 +2471,24 @@ def build_codex_command(repo: Path, prompt: str, reference_inputs: Sequence[Dict
     return cmd
 
 
+TRANSIENT_CODEX_FAILURE_MARKERS = (
+    "tls handshake eof",
+    "stream disconnected",
+    "failed to connect to websocket",
+    "error sending request",
+    "http/request failed",
+    "transport channel closed",
+    "timeout waiting for child process",
+)
+
+
+def transient_codex_transport_failure(proc: subprocess.CompletedProcess[str]) -> bool:
+    if proc.returncode == 0:
+        return False
+    text = f"{proc.stderr or ''}\n{proc.stdout or ''}".lower()
+    return any(marker in text for marker in TRANSIENT_CODEX_FAILURE_MARKERS)
+
+
 def run_codex(
     repo: Path,
     prompt: str,
@@ -2465,15 +2496,29 @@ def run_codex(
     reference_inputs: Sequence[Dict[str, Any]],
 ) -> subprocess.CompletedProcess[str]:
     cmd = build_codex_command(repo, prompt, reference_inputs)
-    return subprocess.run(
-        cmd,
-        stdin=subprocess.DEVNULL,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout_sec,
-    )
+    attempts = max(1, int(os.environ.get("N2D_CODEX_TRANSPORT_RETRIES", "3")))
+    delay_sec = max(0.0, float(os.environ.get("N2D_CODEX_TRANSPORT_RETRY_DELAY", "5")))
+    proc: subprocess.CompletedProcess[str]
+    for attempt in range(1, attempts + 1):
+        proc = subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout_sec,
+        )
+        if not transient_codex_transport_failure(proc) or attempt >= attempts:
+            return proc
+        print(
+            f"[retry] Codex transport failure on attempt {attempt}/{attempts}; retrying",
+            file=sys.stderr,
+        )
+        if delay_sec:
+            time.sleep(delay_sec * attempt)
+    return proc
+
 
 
 def format_codex_failure(proc: subprocess.CompletedProcess[str]) -> str:
@@ -3545,24 +3590,30 @@ def episode_image_target_count(root: Path, episode: str) -> int:
 
 
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
+    combined_done, combined_total = image_progress_counts(root, episode)
+    episode_done = episode_image_done_count(root, episode)
+    episode_total = episode_image_target_count(root, episode)
+    has_shared_scope = combined_total > episode_total
+    live_done = combined_done if has_shared_scope else episode_done
+    live_total = combined_total if has_shared_scope else episode_total
+
     current_total = current_image_progress_total(root, episode)
     if current_total:
-        done = episode_image_done_count(root, episode)
-        live_total = episode_image_target_count(root, episode)
         total = current_total
         preserve_stale = os.environ.get("N2D_PRESERVE_IMAGE_PROGRESS_TOTAL", "").strip().lower() in {
             "1", "true", "yes", "on",
         }
         if live_total and live_total != current_total and not preserve_stale:
             print(
-                f"[progress] 出图 denominator {current_total} differs from live prompt targets {live_total}; "
+                f"[progress] 出图 denominator {current_total} differs from live image-plan targets {live_total}; "
                 f"using {live_total}",
                 file=sys.stderr,
             )
             total = live_total
+        done = live_done
         done = min(done, total)
     else:
-        done, total = image_progress_counts(root, episode)
+        done, total = combined_done, combined_total
     if total <= 0:
         return None
     cmd = [

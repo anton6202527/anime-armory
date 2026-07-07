@@ -1,5 +1,6 @@
 const GLYPHS = {
   files: "\ueaf0",
+  close: "\uea76",
   trash: "\uea81",
   wrench: "\ueb65",
   sourceControl: "\uea68",
@@ -29,6 +30,7 @@ const GLYPHS = {
 
 const CLASS_NAMES = {
   files: "files",
+  close: "close",
   trash: "trash",
   wrench: "wrench",
   sourceControl: "source-control",

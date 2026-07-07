@@ -1,7 +1,7 @@
 {
   "kind": "n2d_compliance_manifest",
   "version": 1,
-  "updated_at": "2026-07-06",
+  "updated_at": "2026-07-07",
   "distribution_intent": "internal_only",
   "scope": {
     "episodes": "all"
@@ -39,6 +39,21 @@
         "character_id": "CHAR_FEMALE_LEAD",
         "status": "synthetic_character",
         "evidence": "原创合成角色；用户提供定型参考图作为身份母本，姓名待剧情绑定"
+      },
+      {
+        "character_id": "CHAR_ZHANG_LAODA",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；第1集杂役压迫者角色，无真人肖像母本或授权克隆需求"
+      },
+      {
+        "character_id": "CHAR_HAN_LAOSAN",
+        "status": "synthetic_character",
+        "evidence": "原创合成角色；第1集功能性带路/杂役角色，无真人肖像母本或授权克隆需求"
+      },
+      {
+        "character_id": "GROUP_SERVANTS",
+        "status": "synthetic_character",
+        "evidence": "原创合成群像；第1集杂役人群/背景角色集合，不绑定真人肖像"
       }
     ]
   },

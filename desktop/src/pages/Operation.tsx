@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { listen } from "@tauri-apps/api/event";
@@ -51,8 +52,17 @@ const OP_RIGHT_MIN_WIDTH = 300;
 const OP_RIGHT_MAX_WIDTH = 340;
 const OP_BOTTOM_MIN_HEIGHT = 180;
 const OP_BOTTOM_MAX_HEIGHT = 440;
+const OP_LEFT_RAIL_WIDTH = 54;
+const FILES_SIDE_DEFAULT_WIDTH = 280;
+const FILES_SPLITTER_WIDTH = 7;
 type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
 type TerminalDock = "side" | "bottom";
+
+function readFilesSideWidth(): number {
+  const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
+  if (!Number.isFinite(saved) || saved <= 0) return FILES_SIDE_DEFAULT_WIDTH;
+  return saved;
+}
 
 export function Operation(props: {
   repoRoot: string;
@@ -106,6 +116,7 @@ export function Operation(props: {
     if (!Number.isFinite(saved) || saved <= 0) return null;
     return Math.min(OP_BOTTOM_MAX_HEIGHT, Math.max(OP_BOTTOM_MIN_HEIGHT, saved));
   });
+  const [filesSideWidth, setFilesSideWidth] = useState(readFilesSideWidth);
   const [terminalDock, setTerminalDock] = useState<TerminalDock>(() => {
     return window.localStorage.getItem("aa.op.terminalDock") === "bottom" ? "bottom" : "side";
   });
@@ -260,6 +271,17 @@ export function Operation(props: {
     if (!terminalVisible) setLeftCollapsed(false);
     window.dispatchEvent(new Event("resize"));
   }, [terminalVisible]);
+
+  useEffect(() => {
+    const syncFilesSideWidth = () => setFilesSideWidth(readFilesSideWidth());
+    syncFilesSideWidth();
+    window.addEventListener("resize", syncFilesSideWidth);
+    window.addEventListener("storage", syncFilesSideWidth);
+    return () => {
+      window.removeEventListener("resize", syncFilesSideWidth);
+      window.removeEventListener("storage", syncFilesSideWidth);
+    };
+  }, []);
 
   useEffect(() => {
     if (!active || !secondaryReady || !termReady || agents === null) return;
@@ -483,12 +505,24 @@ export function Operation(props: {
     terminalDock === "bottom" ? t("operation.resizeTerminalHeightTitle") : t("operation.resizeTerminalTitle");
   const terminalPanelStyle =
     terminalDock === "bottom"
-      ? bottomHeight
-        ? { height: bottomHeight }
-        : undefined
+      ? undefined
       : rightWidth
         ? { width: rightWidth }
         : undefined;
+  const tabHasFileSizedSidebar = tab === "files" || tab === "search" || tab === "changes";
+  const bottomDockSidebarWidth =
+    !leftCollapsed && sidePanelOpen && tabHasFileSizedSidebar
+      ? OP_LEFT_RAIL_WIDTH + filesSideWidth + FILES_SPLITTER_WIDTH
+      : OP_LEFT_RAIL_WIDTH;
+  const opBodyStyle = {
+    "--op-files-side-width": `${Math.round(filesSideWidth)}px`,
+    ...(terminalVisible && terminalDock === "bottom"
+      ? {
+          "--op-bottom-sidebar-width": `${Math.round(bottomDockSidebarWidth)}px`,
+          ...(bottomHeight ? { "--op-terminal-bottom-height": `${Math.round(bottomHeight)}px` } : {}),
+        }
+      : {}),
+  } as CSSProperties;
 
   return (
     <div className="op">
@@ -528,13 +562,14 @@ export function Operation(props: {
           (terminalVisible ? ` op-body-terminal-${terminalDock}` : " op-body-terminal-hidden")
         }
         ref={bodyRef}
+        style={opBodyStyle}
       >
         <div className={"op-left" + (leftCollapsed ? " collapsed" : "")}>
           <div className="op-left-rail" aria-label={t("operation.leftDeferred")}>
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "files" ? " active" : "")}
-              title={t("operation.filesTab")}
+              data-tooltip={t("operation.filesTab")}
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
             >
@@ -543,7 +578,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "search" ? " active" : "")}
-              title={t("operation.searchTab")}
+              data-tooltip={t("operation.searchTab")}
               aria-label={t("operation.searchTab")}
               onClick={() => openLeft("search")}
             >
@@ -552,7 +587,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
-              title={t("operation.skillsTab")}
+              data-tooltip={t("operation.skillsTab")}
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
             >
@@ -562,7 +597,7 @@ export function Operation(props: {
               <button
                 type="button"
                 className={"rail-tab" + (sidePanelOpen && tab === "canvas" ? " active" : "")}
-                title={t("operation.canvasTab")}
+                data-tooltip={t("operation.canvasTab")}
                 aria-label={t("operation.canvasTab")}
                 onClick={() => openLeft("canvas")}
               >
@@ -573,7 +608,7 @@ export function Operation(props: {
               <button
                 type="button"
                 className={"rail-tab" + (sidePanelOpen && tab === "kanban" ? " active" : "")}
-                title={t("operation.boardTab")}
+                data-tooltip={t("operation.boardTab")}
                 aria-label={t("operation.boardTab")}
                 onClick={() => openLeft("kanban")}
               >
@@ -583,7 +618,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "review" ? " active" : "")}
-              title={t("operation.reviewTab")}
+              data-tooltip={t("operation.reviewTab")}
               aria-label={t("operation.reviewTab")}
               onClick={() => openLeft("review")}
             >
@@ -596,7 +631,7 @@ export function Operation(props: {
                 (sidePanelOpen && tab === "changes" ? " active" : "") +
                 (changeCount ? " dirty" : "")
               }
-              title={`${t("operation.changesTab")} · ${changeLabel}`}
+              data-tooltip={`${t("operation.changesTab")} · ${changeLabel}`}
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >

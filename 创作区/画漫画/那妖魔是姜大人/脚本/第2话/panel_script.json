@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_script",
+  "title": "那妖魔是姜大人",
+  "chapter": "第2话",
+  "chapter_title": "收录：虎山神",
+  "status": "ready",
+  "source": {
+    "path": "源本/从变身少女开始斩妖除魔.txt",
+    "range": "第2章 收录：虎山神"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "consequence_hook",
+      "description": "横刀没入裴长青胸口后的近景，姜月初的手仍握着刀柄，温热血点溅到她冷白脸颊，裴长青瞪大眼睛看着她。",
+      "characters": [
+        "姜月初",
+        "裴长青"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [
+        {
+          "speaker": "裴长青",
+          "text": "你……",
+          "tone": "错愕将断"
+        }
+      ],
+      "narration": "刀锋入肉的阻滞，清晰地从掌心传来。",
+      "sfx": [],
+      "art_notes": "承接第1话结尾的大格；不做内脏特写，用衣料、黑影和血点表现刺入；姜月初正侧脸必须继承 CHAR_JYC，眼神是恐惧、决断和反胃混合。",
+      "references": [
+        "CHAR_JYC",
+        "CHAR_PEI",
+        "PROP_HENGDAO"
+      ]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "moral_recoil",
+      "description": "裴长青眼里的光迅速黯淡，姜月初松不开刀柄，指节发白，身体微微发抖，荒野风雾压低。",
+      "characters": [
+        "姜月初",
+        "裴长青"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "杀了人。她亲手杀了人。",
+      "sfx": [],
+      "art_notes": "窄竖格；姜月初不要邪笑，脸上是现代人第一次杀人的崩溃感；裴长青死亡只用眼神和垂落手臂表现。",
+      "references": [
+        "CHAR_JYC",
+        "CHAR_PEI"
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "monster_commentary",
+      "description": "虎妖歪着虎头站在后方，胸前黑血洞仍在，像看稀奇般俯视姜月初和裴长青。",
+      "characters": [
+        "虎妖",
+        "姜月初",
+        "裴长青"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [
+        {
+          "speaker": "虎妖",
+          "text": "本以为你们人族，也讲几分同袍之义。",
+          "tone": "讥诮"
+        },
+        {
+          "speaker": "虎妖",
+          "text": "倒不想，竟这般凉薄。",
+          "tone": "不齿"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "低机位压迫；虎妖上半身占画面大部，姜月初在前景偏小；对白留在虎妖头侧雾区，不挡虎头轮廓。",
+      "references": [
+        "MON_TIGER",
+        "CHAR_JYC",
+        "CHAR_PEI"
+      ]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "system_reward",
+      "description": "古朴百妖谱在姜月初眼前浮现，金色字迹像光点一样落下，照亮她苍白且沾血的半张脸。",
+      "characters": [
+        "姜月初"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "百妖谱的字迹骤然一变。",
+      "sfx": [],
+      "art_notes": "系统提示区预留足够空白；面板图只画卷轴和金字光点，不生成可读文字；姜月初视线被强行拉回现实。",
+      "references": [
+        "CHAR_JYC",
+        "SYS_BAIYAOPU"
+      ]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "survival_decision",
+      "description": "姜月初一手按住裴长青的肩，一手用力把横刀从胸口拔出，血花溅上她破旧囚服，她的眼神沉下去。",
+      "characters": [
+        "姜月初",
+        "裴长青"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "对错、道德、良知……在能活下去之前，都是空谈。",
+      "sfx": [
+        "噗"
+      ],
+      "art_notes": "动作要清楚但克制血腥；姜月初脸继承 CHAR_JYC，表情从崩溃收束成空冷；刀柄、手、胸口遮挡关系不能错。",
+      "references": [
+        "CHAR_JYC",
+        "CHAR_PEI",
+        "PROP_HENGDAO"
+      ]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "action_charge",
+      "description": "夕阳余晖映在荒野枯草和尸骸上，姜月初瘦弱身影持横刀冲向虎妖，刀身反射冷白血色光。",
+      "characters": [
+        "姜月初",
+        "虎妖"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "二十年道行，尽付一刀。",
+      "sfx": [],
+      "art_notes": "重点竖向动作大格；姜月初仍是血污囚服，不突然换装；刀和身体形成对角冲刺线；留出旁白框位置。",
+      "references": [
+        "CHAR_JYC",
+        "MON_TIGER",
+        "PROP_HENGDAO"
+      ]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "monster_attack",
+      "description": "虎妖张开血盆大口咆哮，巨大利爪带着腥风和飞沙枯草，从上方压向冲来的姜月初。",
+      "characters": [
+        "虎妖",
+        "姜月初"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "吼——"
+      ],
+      "art_notes": "虎爪压迫占上半画面，姜月初是下方小身影；注意虎妖利爪结构，不画成人手；咆哮拟声词后期嵌字。",
+      "references": [
+        "MON_TIGER",
+        "CHAR_JYC"
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "strike_contact",
+      "description": "刀光一闪，姜月初横斩而出，人与妖的身影在画面中央交错，虎爪和横刀之间迸出一道细长血线。",
+      "characters": [
+        "姜月初",
+        "虎妖"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "铮"
+      ],
+      "art_notes": "高速交错格；可用黑白速度线和一点血色，不要画成乱糊；姜月初动作要有刀法本能但仍带初学者蛮横感。",
+      "references": [
+        "CHAR_JYC",
+        "MON_TIGER",
+        "PROP_HENGDAO"
+      ]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "kill_reveal",
+      "description": "姜月初单膝跪地吐血，横刀脱手插在远处泥地里；她身后虎妖保持挥爪姿势僵住，下一瞬硕大虎头滚落。",
+      "characters": [
+        "姜月初",
+        "虎妖"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "一息。两息。",
+      "sfx": [
+        "噗"
+      ],
+      "art_notes": "重点大格；前景姜月初七窍渗血要克制，重点是脱力和死寂；虎头滚落可用剪影和黑血，避免过度 gore。",
+      "references": [
+        "CHAR_JYC",
+        "MON_TIGER",
+        "PROP_HENGDAO"
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "new_reward",
+      "description": "姜月初趴在泥地里大口喘息，眼前百妖谱再次浮现，金色系统字迹层层展开。",
+      "characters": [
+        "姜月初"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "活下来了。",
+      "sfx": [
+        "喝……喝……"
+      ],
+      "art_notes": "低角度贴地视角；脸上泥土、血污和疲惫明显，但五官仍继承 CHAR_JYC；系统提示留白区较大。",
+      "references": [
+        "CHAR_JYC",
+        "SYS_BAIYAOPU"
+      ]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "choice_collect",
+      "description": "姜月初脸颊贴着泥土，几乎动弹不得，只用极轻的声音回应悬在眼前的百妖谱。",
+      "characters": [
+        "姜月初"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [
+        {
+          "speaker": "姜月初",
+          "text": "收录。",
+          "tone": "虚弱却果断"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "近景；嘴唇和眼神清楚，身体脱力；不要出现现代 UI 面板，百妖谱是古朴绘卷和金色字迹。",
+      "references": [
+        "CHAR_JYC",
+        "SYS_BAIYAOPU"
+      ]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "power_unlock",
+      "description": "百妖谱无风自动，墨线笔走龙蛇，绘出吊睛白额猛虎；画中猛虎双瞳亮起幽红光，力量倒灌回姜月初身体。",
+      "characters": [
+        "姜月初",
+        "虎山神绘影"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [],
+      "narration": "摹画其影，定其妖形。",
+      "sfx": [
+        "轰——"
+      ],
+      "art_notes": "系统奇观大格；卷轴、墨虎、金光、幽红虎瞳是重点；不要画可读系统文字，后期嵌入“猛虎快刀（圆满）”。",
+      "references": [
+        "CHAR_JYC",
+        "SYS_BAIYAOPU",
+        "MON_TIGER"
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "status_reveal",
+      "description": "一炷香后，姜月初缓缓站起，五指握住插在泥地里的横刀，眼神清明，血污囚服在风中猎猎。",
+      "characters": [
+        "姜月初"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [
+        {
+          "speaker": "姜月初",
+          "text": "原来，这才是道行的真正用法。",
+          "tone": "低声领悟"
+        }
+      ],
+      "narration": "闻弦初境。猛虎快刀。道行二十五年。",
+      "sfx": [],
+      "art_notes": "人物恢复力量但不能美化成华服；仍是同一囚服、血污、黑长发；横刀入手契合，表现初获刀法的变化。",
+      "references": [
+        "CHAR_JYC",
+        "PROP_HENGDAO",
+        "SYS_BAIYAOPU"
+      ]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "quiet_cliffhanger",
+      "description": "姜月初蹲在裴长青尚有余温的尸体旁，伸手轻轻合上他的眼睛；远处虎妖尸首、荒草和夕雾沉默铺开。",
+      "characters": [
+        "姜月初",
+        "裴长青"
+      ],
+      "location": "LOC_WASTELAND",
+      "dialogue": [
+        {
+          "speaker": "姜月初",
+          "text": "抱歉。",
+          "tone": "很轻"
+        },
+        {
+          "speaker": "姜月初",
+          "text": "若有来日……我攒够道行，或许能还你一命。",
+          "tone": "疲惫自嘲"
+        }
+      ],
+      "narration": "身不由己时，已经无所谓忍不忍心。",
+      "sfx": [],
+      "art_notes": "结尾留白大格；姜月初脸部悲伤克制，不要哭成夸张表情；裴长青死亡画面庄重克制；底部可留黑场接下一话。",
+      "references": [
+        "CHAR_JYC",
+        "CHAR_PEI",
+        "LOC_WASTELAND"
+      ]
+    }
+  ]
+}

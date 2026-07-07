@@ -17,6 +17,22 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 KIND = "n2d_video_prompt_pack"
+INNER_FOCUS_RE = re.compile(
+    r"内心戏|内心独白|心声|心理反应|心理活动|心念|心想|暗想|自省|心里一沉|心里想|"
+    r"inner monologue|internal monologue|thought beat|subjective reaction",
+    re.I,
+)
+CLOSEUP_PROMOTION_RE = re.compile(
+    r"\b(?:ECU|BCU|MCU|CU|OTS)\b|close[- ]?up|reaction shot|近景|特写|半特写|反打|"
+    r"推近|缓推|脸部|抬眼|低头看|大表情|表情幅度\s*=\s*大|倒飞砸|脚边|扑到.*脸",
+    re.I,
+)
+ENDING_REACTION_HOLD_RE = re.compile(
+    r"手部|横刀|刀|剑|衣袖|袖口|手指|脚边|地面|物件|道具|武器|物体|侧背|背影|侧脸|"
+    r"OTS|反打|不露脸|无脸|禁止.*脸|不要.*脸|object reaction|hand|sleeve|weapon|prop|"
+    r"side[- ]?face|side[- ]?back|no clear face|no face|hold",
+    re.I,
+)
 
 
 def ep_label(value: str) -> str:
@@ -75,6 +91,147 @@ def one_line(value: Any, default: str = "无") -> str:
     else:
         text = str(value or "").strip()
     return re.sub(r"\s+", " ", text) if text else default
+
+
+def clip_text_blob(clip: Mapping[str, Any], keys: Sequence[str]) -> str:
+    parts: List[str] = []
+    for key in keys:
+        if key not in clip:
+            continue
+        value = clip.get(key)
+        if isinstance(value, (Mapping, list)):
+            parts.append(json.dumps(value, ensure_ascii=False, sort_keys=True))
+        else:
+            parts.append(str(value or ""))
+    return "\n".join(parts)
+
+
+def is_inner_focus_clip(clip: Mapping[str, Any]) -> bool:
+    return bool(INNER_FOCUS_RE.search(clip_text_blob(clip, (
+        "id",
+        "label",
+        "scene",
+        "description",
+        "dramatic_function",
+        "story_function",
+        "rhythm",
+        "audience_effect",
+        "template",
+        "template_contract",
+        "shots",
+        "subtitle_lines",
+        "voiceover",
+    ))))
+
+
+def inner_focus_context_reason(clip: Mapping[str, Any]) -> str:
+    for key in ("inner_focus_context_reason", "context_presence_reason"):
+        value = one_line(clip.get(key), "")
+        if value:
+            return value
+    policy = clip.get("inner_focus_policy") if isinstance(clip.get("inner_focus_policy"), Mapping) else {}
+    for key in ("context_reason", "allow_context"):
+        value = one_line(policy.get(key), "")
+        if value:
+            return value
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    for key in ("inner_focus_context_reason", "inner_focus_allow_context"):
+        value = one_line(contract.get(key), "")
+        if value:
+            return value
+    return ""
+
+
+def inner_focus_directive(clip: Mapping[str, Any], chars: Sequence[str], assets: Sequence[str]) -> str:
+    if not is_inner_focus_clip(clip):
+        return ""
+    subject = chars[0] if chars else "本镜思考主体"
+    others = [c for c in chars[1:]]
+    context_reason = inner_focus_context_reason(clip)
+    context_line = f"；若保留其他实体，必须服务：{context_reason}" if context_reason else ""
+    other_line = f"；非焦点主体 {', '.join(others)} 不给清晰脸/全身/新增动作" if others else ""
+    asset_line = f"；非必要资产 {', '.join(assets[:4])} 不做运动焦点" if assets else ""
+    return (
+        f"内心戏主体隔离：视频运动只服务 {subject} 的眼神、呼吸、手指、微表情或光影反应；"
+        "其他人物、妖魔、系统面板、武器或道具默认画外、虚焦、剪影或静止背景符号，"
+        "不要重复上一镜群像/怪物/道具陈列，不让背景实体产生新动作。"
+        f"{other_line}{asset_line}{context_line}"
+    )
+
+
+def closeup_promotion_guard(
+    clip: Mapping[str, Any],
+    route: Mapping[str, Any],
+    chars: Sequence[str],
+    start: str,
+    end: str,
+    lenses: str,
+    camera: str,
+    span: str,
+) -> str:
+    """Guard against video models inventing a new close-up face from small anchor faces."""
+    if not chars:
+        return ""
+    blob = "\n".join([
+        clip_text_blob(clip, (
+            "id",
+            "label",
+            "description",
+            "dramatic_function",
+            "audience_effect",
+            "scene",
+            "shots",
+            "template_contract",
+            "continuity",
+        )),
+        json.dumps(route, ensure_ascii=False, sort_keys=True),
+        start,
+        end,
+        lenses,
+        camera,
+        f"expression_span={span}",
+    ])
+    if not CLOSEUP_PROMOTION_RE.search(blob):
+        return ""
+    focus = chars[0]
+    return (
+        f"近景升格守卫：不得把首/中/尾锚帧里脸部很小、侧背、遮挡或非主焦点的 {focus} "
+        "直接推成清晰近脸；只有已落档且 full image_qc 通过的同源近景锚帧/脸部特写/表情参考可支撑 CU/MCU。"
+        "缺该锚帧时，落幅停在原锚帧景别，或改 MCU/OTS/侧脸/手部/物件反应镜，禁止让视频模型补一张新脸。"
+    )
+
+
+def ending_reaction_hold_guard(
+    clip: Mapping[str, Any],
+    offscreen_presence: Sequence[str],
+    end: str,
+    transition: str,
+) -> str:
+    """Keep reaction/object endings from leaking offscreen characters before the cut."""
+    offscreen = [str(x) for x in offscreen_presence if str(x).strip()]
+    if not offscreen:
+        return ""
+    blob = "\n".join([
+        end,
+        transition,
+        clip_text_blob(clip, (
+            "label",
+            "description",
+            "dramatic_function",
+            "audience_effect",
+            "shots",
+            "template_contract",
+            "continuity",
+        )),
+    ])
+    if not ENDING_REACTION_HOLD_RE.search(blob):
+        return ""
+    names = ", ".join(offscreen)
+    return (
+        f"最后 0.5 秒必须维持 storyboard 的手部/物件/侧背/反打落幅直到剪点；"
+        f"offscreen_presence={names} 不得在剪点前被拉回清晰脸、全身主体或新增动作。"
+        "若需要展示该角色进场或系统反应，交给下一 Clip 开始，不在本 Clip 尾段提前预演下一构图。"
+    )
 
 
 def md_table_escape(value: Any) -> str:
@@ -491,12 +648,27 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     )
     recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
     assets = ", ".join([x for x in [location] + objects if x])
+    asset_ids = [x for x in [location] + objects if x]
+    inner_focus = inner_focus_directive(clip, chars, asset_ids)
     frame_control = route.get("anchor_consumption") if isinstance(route.get("anchor_consumption"), Mapping) else {}
     first = str(clip.get("firstframe_png") or f"出图/{ep}/图片/{cid}.png")
     endframe = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
     anchors = [a for a in cont.get("anchors") or [] if isinstance(a, Mapping)]
     mid = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
     span = str(cont.get("expression_span") or "微")
+    closeup_guard = closeup_promotion_guard(clip, route, chars, start, end, lenses, camera, span)
+    tail_hold_guard = ending_reaction_hold_guard(
+        clip,
+        [str(x) for x in entity.get("offscreen_presence") or []],
+        end,
+        one_line(cont.get("transition"), ""),
+    )
+    if inner_focus:
+        negative += " 内心戏镜头不要重复上一镜群像/妖魔/道具陈列，不要让非焦点人物清晰入画或产生新动作，不要让系统面板/武器/VFX 抢主观情绪。"
+    if closeup_guard:
+        negative += " 不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸；缺同源近景锚帧时改 MCU/OTS/侧脸/手部/物件反应。"
+    if tail_hold_guard:
+        negative += " 本镜尾端保持手部/物件/侧背/反打落幅直到剪点，不要提前把 offscreen 角色拉回清晰入画或预演下一镜构图。"
 
     lines = [
         f"## Clip {idx:02d}（时长 {float(clip.get('duration') or 0):.3f}s · {raw_id} · {label}）",
@@ -517,6 +689,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**起幅**：{start}",
         f"**落幅**：{end}",
         f"**场面调度**：{one_line(lenses, '按 storyboard 镜头链')}；角色={one_line(chars, '无')}；资产={assets or '无'}；轴线/视线={one_line(cont.get('eyeline'), '按出图总览')}",
+        f"**内心戏主体隔离**：{inner_focus or '非内心戏/按 entity_schedule 在场链执行'}",
         f"**表演节拍**：[0-30%] 承接首帧并建立状态；[30-75%] {action}；[75-100%] 停到落幅，给下一镜接点。",
         "**运动精修**：物理层锁定；动作只服务本镜导演意图。",
         f"- 幅度：{amp}",
@@ -530,12 +703,14 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**Motion Control / 物理交互控制**：{motion_control_line(route)}",
         f"**角色身份注册层**：{identity_line(forms, chars)}；本镜绑定={one_line(chars, '无人物')}；资产引用注册层={assets or '无'}。",
         f"**近景/反打身份锁定**：主焦点={one_line(chars[:1], '无')}；脸部特写/表情参考/expressions 优先；表情锚=起幅情绪→落幅情绪；表情幅度={span}；锁脸不锁情：只动眉眼嘴角，脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤保持；配角不稳则 MCU/OTS/侧脸/手部/物件反应保真实现。",
+        f"**近景升格守卫**：{closeup_guard or '未触发近景升格；按当前首/中/尾锚帧景别生成，不主动新增近脸。'}",
+        f"**尾端落幅保持**：{tail_hold_guard or '未触发；按 continuity.end_state 自然停住，不提前预演下一 Clip。'}",
         f"**原生音画策略**：audio_intent=none; risk=low; mouth_visible={mouth}; speech_policy=no_native_speech; compose_policy=丢弃; review=生成后确认无原生人声。",
         "**衔接设计**：",
         f"- 入点：{start}",
         f"- 出点：{end}",
         f"- 转场：{one_line(cont.get('transition'), '硬切/动作切按 storyboard')}",
-        f"- 连贯性：{constraints}",
+        f"- 连贯性：{constraints}; inner_focus={inner_focus or '无'}",
         "",
         "**continuity**：",
         f"- start_state：{start}",
@@ -559,6 +734,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"起幅：{start};",
         f"落幅：{end};",
         f"场面调度：{one_line(lenses, '按 storyboard 镜头链')}；角色槽位={one_line(chars, '无')}；资产ID={assets or '无'}；",
+        f"内心戏主体隔离：{inner_focus or '非内心戏/按在场链执行'}；",
         f"表演节拍：[0-30%] 承接首帧；[30-75%] {action}；[75-100%] {end};",
         f"运动精修约束：幅度={amp}；能量={energy}；身体守卫=脸型五官比例发型发髻服装轮廓保持，手部归属清楚，遮挡不穿模；",
         "环境交互约束：冷月与火把光影轻微随动，低雾/尘土/衣袂/火把烟提供动态反馈，不改变首帧设定；",
@@ -568,23 +744,29 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"物理交互约束：读取 motion_control_manifest.json；{motion_control_line(route)}；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；",
         f"身份锁定约束：{identity_line(forms, chars)}；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；",
         f"近景身份锁定约束：表情锚起→止，表情幅度={span}；锁脸不锁情；无原生锁时限制低幅表情和小角度转头，必要时 MCU/OTS/侧脸/手部/物件反应保真实现；",
+        f"在场链约束：{constraints}；只允许 required_presence/entity_schedule/首帧已登记的人物、物件、场景和特效进入清晰画面；offscreen_presence 只能作为画外声音、影子、侧背/手部/物件反应承接，不得清晰入画抢动作；forbidden_presence 完全不出现；",
+        f"近景升格守卫：{closeup_guard or '不主动把小脸/远脸升格成近脸；按锚帧景别保持。'}；",
+        f"尾端落幅保持：{tail_hold_guard or '按 continuity.end_state 停住，不提前预演下一 Clip。'}；",
         "原生音画约束：默认禁止原生人声；audio_intent=none；speech_policy=no_native_speech；compose_policy=丢弃；",
         "首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心；不重定视觉设定；",
         f"人物运动：{action}；表情只动面部肌肉，脸型五官比例不变；",
         f"镜头运动：{camera}；",
         f"情绪节奏：[0-30%] 克制承接；[30-75%] 张力推进；[75-100%] 定住，服务{one_line(clip.get('rhythm'), '本镜节奏')}；",
         "动态细节：低雾缓流、衣袂微动、火把烟或土粒细动，与人物动作产生轻微物理反馈；",
-        f"衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按{one_line(cont.get('transition'), '转场')}服务下一镜；",
-        "禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；",
+        f"衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints 和在场链约束，避开 continuity.negative，按{one_line(cont.get('transition'), '转场')}服务下一镜；",
+        "禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；内心戏镜头不得重复上一镜群像/妖魔/道具陈列；",
         "声音约束：无对白、无旁白、不要生成原生人声；声音只作为后期 n2d-compose 的剪辑意图。",
         "```",
         "",
         "### 视频 prompt（英文，目标=安全兜底/Veo/海外）",
         "```",
-        f"continuity: start from {start}; perform only {action}; end on {end}; preserve {constraints}; avoid face drift, costume changes, new characters, text, logos, watermarks, and generated native voice.",
+        f"continuity: start from {start}; perform only {action}; end on {end}; preserve {constraints}; follow required_presence/offscreen_presence/forbidden_presence exactly; avoid face drift, costume changes, unregistered characters or props, text, logos, watermarks, and generated native voice.",
+        f"inner-focus isolation: {inner_focus or 'not an inner-focus shot; follow entity schedule.'}",
         f"director intent: {dramatic}; audience effect: {audience}.",
         f"character motion: {action}; camera motion: {camera}; dynamic detail: cold moonlight, torch smoke, dust, fog, and fabric move subtly with the action.",
         "close-up identity lock: preserve face shape, facial proportions, eye spacing, nose bridge, jawline, hairstyle, signature accessories, and costume palette; lock face not emotion; downgrade unstable close-ups to MCU, OTS, side-face, hand or object reaction shots.",
+        "close-up promotion guard: do not turn a small, distant, side/back, occluded, or non-primary anchor face into a clear close-up face unless a same-source close-up anchor/expression reference has passed full image QC.",
+        f"ending reaction hold: {tail_hold_guard or 'hold the continuity.end_state until the cut and do not preview the next clip early.'}",
         "native audio policy: audio_intent=none; speech_policy=no_native_speech; compose_policy=discard.",
         "```",
         "",
@@ -593,10 +775,14 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- ✅ 剧本可看性合同 dramatic_function / audience_effect 已进入 prompt。",
         "- ✅ 导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互齐全。",
         "- ✅ 中文 prompt 已写首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止。",
+        "- ✅ 在场链约束 required_presence/offscreen_presence/forbidden_presence 已进入中文 prompt。",
         "- ✅ ④人物运动动作链明确，幅度与能量可控。",
         "- ✅ ②镜头运动有结构化运镜词和速度。",
         "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不乱甩。",
         "- ✅ 模型路由、Motion Control、角色身份注册层、原生音画策略已继承。",
+        "- ✅ 内心戏/心理反应镜只让主焦点运动；其他实体无结构化例外时不得清晰入画或抢动作。",
+        "- ✅ 近景升格守卫：CU/MCU/反打落幅不得从小脸/远脸直接补新脸；缺近景锚帧则改保真拍法或回 n2d-image 补锚。",
+        "- ✅ 尾端落幅保持：offscreen 角色不在最后 0.5 秒提前清晰入画，手部/物件/侧背反应维持到剪点。",
         "",
         "### 自检（生成后逐条过 · 落档闸门）",
         "- [ ] 首帧一致性：人物脸/服装/场景与首帧一致。",
@@ -608,6 +794,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- [ ] 导演调度完成本镜意图，起幅/落幅可剪。",
         "- [ ] 模型路由结果符合 primary 强项；失败按 fallback/degrade_plan，不临场乱换。",
         "- [ ] 近景身份：脸型、五官比例、发型发髻、标志配饰、服装配色稳定。",
+        "- [ ] 帧级近脸：最终 MP4 内任何新增/推近的主角清晰脸都仍是同一角色；若像换人，废料重跑或回 image 补近景锚帧。",
         "- [ ] 原生音画：确认无 AI 自带台词/旁白/哼唱。",
         "- [ ] 落档判定：通过落 `出视频/%s/视频/%s.mp4`；失败进废料并改 prompt/拆 Clip。" % (ep, cid),
         "",
