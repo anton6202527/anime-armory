@@ -184,26 +184,17 @@
         "entry_exit": "开场直接进入被围状态；尾帧群笑压向贺平生。"
       },
       "continuity": {
+        "need_endframe": true,
         "start_state": "贺平生刚被带进黑殿，低头、空手、灰褐旧杂役衣。",
         "end_state": "贺平生被费钱货羞辱，群杂役哄笑，仍低头忍住。",
         "eyeline": "贺平生向上看张老大，张老大向下审视。",
-        "midframe": "张老大说出费钱货时，贺平生脸部近景压住情绪。",
         "tailframe": "群杂役笑声压住画面，张老大的命令声准备接入水缸。",
         "anchors": [
           {
-            "at_sec": 0,
-            "use": "start",
-            "frame": "黑殿围审定场"
-          },
-          {
-            "at_sec": 5,
-            "use": "keyframe",
-            "frame": "五行灵根答出口后众人反应"
-          },
-          {
-            "at_sec": 10,
-            "use": "tail",
-            "frame": "群笑压近贺平生"
+            "anchor_png": "出图/第1集/图片/Clip_01_mid.png",
+            "at_sec": 9.79,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
           }
         ]
       }
@@ -288,26 +279,17 @@
         }
       ],
       "continuity": {
+        "need_endframe": true,
         "start_state": "贺平生刚被群笑压住，仍在黑殿边缘。",
         "end_state": "贺平生接下扁担，任务从羞辱变成行动。",
         "eyeline": "张老大看水缸和贺平生，贺平生先看水缸再低头。",
-        "midframe": "扁担横穿画面，压向贺平生肩头。",
         "tailframe": "扁担压肩的动作接入破旧包袱快闪。",
         "anchors": [
           {
-            "at_sec": 10,
-            "use": "start",
-            "frame": "水缸近景接入"
-          },
-          {
-            "at_sec": 14.5,
-            "use": "keyframe",
-            "frame": "张老大命令压下"
-          },
-          {
-            "at_sec": 19,
-            "use": "tail",
-            "frame": "贺平生接扁担"
+            "anchor_png": "出图/第1集/图片/Clip_02_mid.png",
+            "at_sec": 4.88,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
           }
         ]
       }
@@ -375,26 +357,18 @@
         "entry_exit": "从扁担压肩匹配到包袱带被攥紧；尾帧空桶出门。"
       },
       "continuity": {
+        "need_endframe": false,
+        "endframe_exempt_reason": "背景快闪到夜路为空间跳转，用空镜缓冲而非尾帧接力。",
         "start_state": "贺平生已接下任务，背景信息压入快闪。",
         "end_state": "贺平生确认只能留在杂役班。",
         "eyeline": "快闪以物件为主，不做复杂视线。",
-        "midframe": "空房和粗饭一闪而过。",
         "tailframe": "空桶出门接夜路。",
         "anchors": [
           {
-            "at_sec": 19,
-            "use": "start",
-            "frame": "破旧包袱"
-          },
-          {
-            "at_sec": 21,
-            "use": "keyframe",
-            "frame": "空房粗饭"
-          },
-          {
-            "at_sec": 23,
-            "use": "tail",
-            "frame": "贺平生背空桶出门"
+            "anchor_png": "出图/第1集/图片/Clip_03_mid.png",
+            "at_sec": 1.5,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc）"
           }
         ]
       }
@@ -470,28 +444,12 @@
         }
       ],
       "continuity": {
+        "need_endframe": true,
         "start_state": "贺平生拿到空桶和铁锁钥匙，夜里独自出门。",
         "end_state": "贺平生进入后山水路，决定提前挑水熟路。",
         "eyeline": "先看黑暗山路，再看远处水声方向。",
-        "midframe": "听见远处笑声时停住半拍。",
         "tailframe": "脚步踩进山路碎石，接挑水蒙太奇。",
-        "anchors": [
-          {
-            "at_sec": 23,
-            "use": "start",
-            "frame": "夜路背桶出门"
-          },
-          {
-            "at_sec": 27,
-            "use": "keyframe",
-            "frame": "停步听见远处笑声"
-          },
-          {
-            "at_sec": 31,
-            "use": "tail",
-            "frame": "继续向后山水路走"
-          }
-        ]
+        "midframe_exempt_reason": "极短镜 <3.0s，中帧与首尾几乎重合（三帧契约豁免）"
       }
     },
     {
@@ -574,31 +532,17 @@
         }
       ],
       "continuity": {
+        "need_endframe": true,
         "start_state": "贺平生开始挑水，夜路向水潭延伸。",
         "end_state": "第五趟抵达水边，身体疲惫，脚步不稳。",
         "eyeline": "从低头看脚路转向水面微光。",
-        "midframe": "肩头磨红和水桶溢出。",
         "tailframe": "脚下一滑，视线落到潭底微光。",
         "anchors": [
           {
-            "at_sec": 31,
-            "use": "start",
-            "frame": "扁担压肩"
-          },
-          {
-            "at_sec": 35,
-            "use": "keyframe",
-            "frame": "水桶溢出和手指发白"
-          },
-          {
-            "at_sec": 40,
-            "use": "keyframe",
-            "frame": "脚步打滑"
-          },
-          {
-            "at_sec": 44,
-            "use": "tail",
-            "frame": "低头看向潭水"
+            "anchor_png": "出图/第1集/图片/Clip_05_mid.png",
+            "at_sec": 3.55,
+            "use": "qc",
+            "reason": "default: 三帧契约（use=qc）"
           }
         ]
       }
@@ -687,31 +631,18 @@
         }
       ],
       "continuity": {
+        "need_endframe": false,
+        "endframe_exempt_reason": "本集最终 cliffhanger 定格，无下一 Clip 尾帧接力。",
         "start_state": "贺平生疲惫站在水边，低头发现潭底微光。",
         "end_state": "贺平生误以为只是破盆，观众看见盆底微光再亮。",
         "eyeline": "贺平生视线从水面到手中破盆，最后画面切到道具微光。",
-        "midframe": "指尖入水，黑陶破盆露出边缘。",
         "tailframe": "破盆离水滴水，盆底一线暖金微光。",
         "anchors": [
           {
-            "at_sec": 44,
-            "use": "start",
-            "frame": "水底微光"
-          },
-          {
-            "at_sec": 49,
-            "use": "keyframe",
-            "frame": "伸手触到黑陶破盆"
-          },
-          {
-            "at_sec": 55,
-            "use": "keyframe",
-            "frame": "贺平生捞起破盆疲惫失笑"
-          },
-          {
-            "at_sec": 60,
-            "use": "tail",
-            "frame": "盆底微光硬断"
+            "anchor_png": "出图/第1集/图片/Clip_06_mid.png",
+            "at_sec": 8.29,
+            "use": "split",
+            "reason": "default: 三帧契约（use=split）"
           }
         ]
       }
