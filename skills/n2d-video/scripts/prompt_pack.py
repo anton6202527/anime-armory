@@ -455,6 +455,35 @@ def motion_control_line(route: Mapping[str, Any]) -> str:
     )
 
 
+def handoff_package_line(
+    first: str,
+    endframe: str,
+    mid_count: int,
+    cont: Mapping[str, Any],
+    frame_control: Mapping[str, Any],
+    fallback: str,
+) -> str:
+    """Machine-readable summary of the frame handoff the runner must preserve."""
+    return (
+        f"first_frame={first or '无'}；end_frame={endframe or '无'}；midframes={mid_count}；"
+        f"need_endframe={cont.get('need_endframe')}；transition={one_line(cont.get('transition'), '按 storyboard')}；"
+        f"entry_exit={one_line(cont.get('entry_exit') or cont.get('entry_exit_plan'), '按 entity_schedule')}；"
+        f"anchor_consumption={one_line(frame_control)}；fallback={fallback}"
+    )
+
+
+def execution_recipe_line(recipe: Mapping[str, Any], frame_control: Mapping[str, Any], fallback: str) -> str:
+    """Compact execution recipe copied into every prompt block and submit prompt."""
+    return (
+        f"frame_inputs={one_line(recipe.get('frame_inputs'), '按首帧/尾帧/锚帧')}；"
+        f"reference_inputs={one_line(recipe.get('reference_inputs'), 'reference_group fallback')}；"
+        f"control_inputs={one_line(recipe.get('control_inputs'), '按 Motion Control manifest 或 degrade_only')}；"
+        f"audio_inputs={one_line(recipe.get('audio_inputs'), 'none')}；"
+        f"fallback={one_line(recipe.get('fallback') or fallback)}；"
+        f"anchor_consumption={one_line(frame_control)}"
+    )
+
+
 def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping[str, Mapping[str, Any]],
                     image_overview: str, forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool]) -> str:
     clips = [c for c in sb.get("clips") or [] if isinstance(c, Mapping)]
@@ -655,6 +684,9 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     endframe = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
     anchors = [a for a in cont.get("anchors") or [] if isinstance(a, Mapping)]
     mid = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
+    mid_count = (1 if mid else 0) + len(anchors)
+    handoff_line = handoff_package_line(first, endframe, mid_count, cont, frame_control, fallback)
+    exec_line = execution_recipe_line(recipe, frame_control, fallback)
     span = str(cont.get("expression_span") or "微")
     closeup_guard = closeup_promotion_guard(clip, route, chars, start, end, lenses, camera, span)
     tail_hold_guard = ending_reaction_hold_guard(
@@ -699,7 +731,8 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**动作编排契约 / Action Choreography**：{action_choreography_line(route, clip)}",
         f"**专项镜头模板**：template={one_line(route.get('template') or route.get('shot_type'), '无')}；blocking/continuity_must/negative 继承 storyboard，不临场改戏。",
         f"**模型路由**：{route_line}",
-        f"**执行配方 / Execution Recipe**：frame_inputs={one_line(recipe.get('frame_inputs'), '按首帧/尾帧/锚帧')}；reference_inputs={one_line(recipe.get('reference_inputs'), 'reference_group fallback')}；control_inputs={one_line(recipe.get('control_inputs'), '按 Motion Control manifest 或 degrade_only')}；audio_inputs={one_line(recipe.get('audio_inputs'), 'none')}；fallback={one_line(recipe.get('fallback') or fallback)}；anchor_consumption={one_line(frame_control)}",
+        f"**接缝执行包 / Handoff Package**：{handoff_line}",
+        f"**执行配方 / Execution Recipe**：{exec_line}",
         f"**Motion Control / 物理交互控制**：{motion_control_line(route)}",
         f"**角色身份注册层**：{identity_line(forms, chars)}；本镜绑定={one_line(chars, '无人物')}；资产引用注册层={assets or '无'}。",
         f"**近景/反打身份锁定**：主焦点={one_line(chars[:1], '无')}；脸部特写/表情参考/expressions 优先；表情锚=起幅情绪→落幅情绪；表情幅度={span}；锁脸不锁情：只动眉眼嘴角，脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤保持；配角不稳则 MCU/OTS/侧脸/手部/物件反应保真实现。",
@@ -741,6 +774,8 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"动作编排约束：{action_choreography_line(route, clip)}；",
         f"专项模板约束：template={one_line(route.get('template') or route.get('shot_type'), '无')}；按 storyboard template_contract 执行；",
         f"模型路由约束：读取 video_model_routes.json；本镜 primary_backend={one_line(route.get('primary_backend'))}，fallback={route_list(route, 'fallback_backends') or '无'}，mode={one_line(route.get('mode'))}，native_audio_policy={one_line(route.get('native_audio_policy'), 'none')}，identity_requirement={one_line(route.get('identity_requirement'))}；失败按 degrade_plan={fallback}；",
+        f"接缝执行包：{handoff_line}；",
+        f"执行配方约束：{exec_line}；真正提交给后端时必须把 frame_inputs/reference_inputs/control_inputs/audio_inputs 按该配方组织，不得只提交裸文本 prompt；",
         f"物理交互约束：读取 motion_control_manifest.json；{motion_control_line(route)}；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；",
         f"身份锁定约束：{identity_line(forms, chars)}；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；",
         f"近景身份锁定约束：表情锚起→止，表情幅度={span}；锁脸不锁情；无原生锁时限制低幅表情和小角度转头，必要时 MCU/OTS/侧脸/手部/物件反应保真实现；",
@@ -776,6 +811,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- ✅ 导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互齐全。",
         "- ✅ 中文 prompt 已写首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止。",
         "- ✅ 在场链约束 required_presence/offscreen_presence/forbidden_presence 已进入中文 prompt。",
+        "- ✅ 接缝执行包 / 执行配方约束已进入中文 prompt，frame_inputs/reference_inputs/control_inputs/audio_inputs 与 route 一致。",
         "- ✅ ④人物运动动作链明确，幅度与能量可控。",
         "- ✅ ②镜头运动有结构化运镜词和速度。",
         "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不乱甩。",
