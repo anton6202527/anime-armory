@@ -70,6 +70,31 @@ def find_final_master(root: Path, ep: str) -> Optional[Path]:
     return candidates[0] if candidates else None
 
 
+def resolve_video_path(root: Path, raw: Optional[str]) -> Optional[Path]:
+    if not raw:
+        return None
+    path = Path(raw).expanduser()
+    return path if path.is_absolute() else root / path
+
+
+def clip_id_from_video(path: Path, clip: Optional[str]) -> str:
+    if clip:
+        return str(clip)
+    m = re.search(r"Clip[_-]?(\d+)", path.name, re.IGNORECASE)
+    return f"Clip_{int(m.group(1)):02d}" if m else path.stem
+
+
+def single_video_segments(path: Path, duration: Optional[float], clip: Optional[str]) -> List[Dict[str, Any]]:
+    end = float(duration or 0.0)
+    return [{
+        "clip": clip_id_from_video(path, clip),
+        "start_sec": 0.0,
+        "end_sec": round(end, 3),
+        "duration_sec": round(end, 3),
+        "source": "single_video",
+    }]
+
+
 def storyboard_segments(root: Path, ep: str) -> List[Dict[str, Any]]:
     probe = load_json(root / "生产数据" / f"final_timeline_probe_{ep}.json")
     if isinstance(probe, Mapping) and isinstance(probe.get("segments"), list):
@@ -240,9 +265,11 @@ def render_markdown(packet: Mapping[str, Any]) -> str:
 
 
 def build_packet(root: Path, ep: str, start: Optional[float], end: Optional[float],
-                 interval: float, max_frames: int) -> Dict[str, Any]:
+                 interval: float, max_frames: int, video: Optional[str] = None,
+                 clip: Optional[str] = None) -> Dict[str, Any]:
     ep = ep_label(ep)
-    master = find_final_master(root, ep)
+    explicit_video = resolve_video_path(root, video)
+    master = explicit_video or find_final_master(root, ep)
     if master is None:
         return {
             "kind": KIND,
@@ -252,19 +279,30 @@ def build_packet(root: Path, ep: str, start: Optional[float], end: Optional[floa
             "master": "",
             "warnings": ["final master not found"],
         }
+    if not master.is_file():
+        return {
+            "kind": KIND,
+            "version": 1,
+            "episode": ep,
+            "status": "missing_video_source",
+            "master": rel(root, master),
+            "warnings": [f"video source not found: {master}"],
+        }
     duration = ffprobe_duration(master)
     start_sec = 0.0 if start is None else max(0.0, start)
     end_sec = (duration or start_sec) if end is None else max(0.0, end)
     if duration is not None:
         end_sec = min(end_sec, max(0.0, duration - 0.05))
-    segments = storyboard_segments(root, ep)
+    segments = single_video_segments(master, duration, clip) if explicit_video else storyboard_segments(root, ep)
     times = sample_times(start_sec, end_sec, interval, max_frames)
-    frames_dir = root / "生产数据" / "video_face_drift_watch" / ep / f"{start_sec:.2f}_{end_sec:.2f}s"
+    source_id = re.sub(r"[^A-Za-z0-9_.-]+", "_", master.stem).strip("_")[:80] or "video"
+    packet_id = f"{source_id}_{start_sec:.2f}_{end_sec:.2f}s" if explicit_video else f"{start_sec:.2f}_{end_sec:.2f}s"
+    frames_dir = root / "生产数据" / "video_face_drift_watch" / ep / packet_id
     frames, warnings = extract_frames(root, master, frames_dir, times, segments)
     contact_sheet, sheet_warning = make_contact_sheet(
         root,
         frames,
-        root / "生产数据" / f"video_face_drift_watch_{ep}_{start_sec:.2f}_{end_sec:.2f}s.jpg",
+        root / "生产数据" / f"video_face_drift_watch_{ep}_{packet_id}.jpg",
     )
     if sheet_warning:
         warnings.append(sheet_warning)
@@ -275,6 +313,9 @@ def build_packet(root: Path, ep: str, start: Optional[float], end: Optional[floa
         "episode": ep,
         "status": "ready_for_human_frame_identity_review" if frames else "no_frames_extracted",
         "master": rel(root, master),
+        "source_kind": "single_video" if explicit_video else "final_master",
+        "source_clip": (clip or "") if explicit_video else "",
+        "packet_id": packet_id,
         "master_duration_sec": round(duration, 3) if duration is not None else None,
         "start_sec": round(start_sec, 3),
         "end_sec": round(end_sec, 3),
@@ -301,20 +342,22 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--end", type=float, default=None)
     ap.add_argument("--interval", type=float, default=0.5)
     ap.add_argument("--max-frames", type=int, default=120)
+    ap.add_argument("--video", default=None, help="optional single clip MP4 to inspect before final compose")
+    ap.add_argument("--clip", default=None, help="clip id for --video packets, e.g. Clip_03")
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
     root = Path(ns.root).resolve()
     ep = ep_label(ns.episode)
-    packet = build_packet(root, ep, ns.start, ns.end, ns.interval, ns.max_frames)
+    packet = build_packet(root, ep, ns.start, ns.end, ns.interval, ns.max_frames, ns.video, ns.clip)
     if ns.write:
-        suffix = f"{packet.get('start_sec')}_{packet.get('end_sec')}s".replace(".", "_")
+        suffix = str(packet.get("packet_id") or f"{packet.get('start_sec')}_{packet.get('end_sec')}s").replace(".", "_")
         json_path = root / "生产数据" / f"video_face_drift_watch_{ep}_{suffix}.json"
         md_path = root / "生产数据" / f"video_face_drift_watch_{ep}_{suffix}.md"
-        write_atomic(json_path, json.dumps(packet, ensure_ascii=False, indent=2) + "\n")
-        write_atomic(md_path, render_markdown(packet))
         packet["json_path"] = rel(root, json_path)
         packet["markdown_path"] = rel(root, md_path)
+        write_atomic(json_path, json.dumps(packet, ensure_ascii=False, indent=2) + "\n")
+        write_atomic(md_path, render_markdown(packet))
     if ns.json:
         print(json.dumps(packet, ensure_ascii=False, indent=2))
     else:

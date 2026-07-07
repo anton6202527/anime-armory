@@ -3726,5 +3726,14 @@
         "cost_quality_tier"
       ]
     }
+  },
+  "baseline_override": {
+    "accepted": true,
+    "reviewer": "Codex n2d-review 2026-07-07",
+    "reason": "Clip_02 时长 16.57s 且需要多关键帧/分段接力；当前项目保留 baseline primary=seedance，但本 clip 已按执行能力使用 dreamina 作为实际执行后端并完成视频证据登记。仅限本 clip，不刷新全局基线。",
+    "expires_at": "2026-08-07",
+    "affected_routes": [
+      "Clip_02"
+    ]
   }
 }

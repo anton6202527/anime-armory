@@ -41,19 +41,19 @@
       "sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585"
     },
     {
-      "bytes": 20356,
+      "bytes": 22872,
       "exists": true,
       "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ⬜ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 35/35 | ✅ | 10/10 | ✅ | ✅ |\n| 第3集 | 2506 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 58/58 | ✅ | 3/10 | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 21/34 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 第1集当前状态\n- 2026-07-07：已补第1集 `生产数据/pilot_acceptance_第1集.json`，`pilot_release_gate=pass`、`mini_pilot=pass`；首集 pilot 缺失不再是验收阻断。\n- 2026-07-07：已回 `n2d-voice` 用 FishSpeech 补真实配音，`placeholder_lines=0`，`配音=✅`；已生成 fitted 配音 `合成/第1集/配音/voice_zh_fitted.wav`（120.515s，sha256 `5680f3034230176d0016d6a106bcf6ea866f50e9c47b92c871fa5ceace29d38b`）。\n- 2026-07-07：已回 `n2d-compose` 重合成，split 视频通过 Time-Warp 对齐锁定槽位；最终母版 `合成/第1集/成片_第1集_zh.mp4` 时长 120.10s，响度 `-15.76 LUFS / -2.70 dBTP`，sha256 `aa6392dcc6fc030ee1d887da388fa2fd7b84b860f7843b2ea92dcfb8464b8ccb`。\n- 2026-07-07：已完成本轮上游返工：补 `设定库/identity_eval_pack.json`、`设定库/character_assets/CHAR_01__姜月初/` 六分区索引、`VFX_百妖谱金光` 资产登记；`production_breakdown_check_第1集.json=pass`；`generation_recipe_manifest_第1集.json=pass`，10 条 split 视频均追到 `production_events.jsonl:line 419-429`。\n- 2026-07-07：已按上游返工要求处理 `review_ui_findings_第1集.json` 的角色 DNA/形体阻断：23 条旧导出项已刷新为 `角色 DNA/形体一致性 block=0 / warn=2 / info=15`；其中 6 条角色资产包分区旧 block 被最新 score/review-ui 清出，剩余为跨集脸漂与机械脸检依赖 warn。已用 `facefusion` 环境刷新 full `image_qc`，`degraded=false`、`hard_blocks=0`、face/hair/outfit 均 `ok=31`；已补 `storyboard.json`、`voice_zh.wav`、`成片_第1集_zh.mp4` 的 RCP/RCP2 生产事件，`generation_recipe_第1集.json` findings=0。\n- 2026-07-07：上一轮按正确顺序刷新 score / review-ui / ledger / failure taxonomy / release verdict；当时 `release_v\n...",
       "relpath": "_进度.md",
-      "sha256": "33e4e42e213eac83efefecab1355c9c177ef2d1328cd8e549e8cc05dd1150ba2"
+      "sha256": "6cd0f1a16f387910c205471fd3010e4d564ebc05af186858bd4e994f3ed27a5e"
     },
     {
-      "bytes": 33861,
+      "bytes": 28542,
       "exists": true,
       "preview": {
         "episode": "第1集",
         "kind": "n2d_episode_review_score",
-        "status": "fail",
+        "status": "pass",
         "top_level_keys": [
           "auto_return_tasks",
           "character_consistency_kpi",
@@ -75,10 +75,10 @@
         "version": 1
       },
       "relpath": "生产数据/score_第1集.json",
-      "sha256": "12db804364f3bd9a245af1bdb1875f3b7c6f5aca037793173e275c17227024f0"
+      "sha256": "604eb08c25ab855eaf716d933ca8410622cf03fda586454ad0b8629437ac381a"
     },
     {
-      "bytes": 181210,
+      "bytes": 171400,
       "exists": true,
       "preview": {
         "kind": "n2d_consistency_ledger",
@@ -100,10 +100,10 @@
         "version": 1
       },
       "relpath": "生产数据/consistency_ledger_第1集.json",
-      "sha256": "39506ed24b76eee2785138dba1b3b7ac8b85676ac3ce1363d9a1129b7b319618"
+      "sha256": "c307e3ff8b7ec9b44db321f55910bf8b4c91d7f43cd13c8f21f834e7a3d6455a"
     },
     {
-      "bytes": 112911,
+      "bytes": 107859,
       "exists": true,
       "preview": {
         "episode": "第1集",
@@ -126,9 +126,9 @@
               "warn": 0
             },
             "场景/构图连续性": {
-              "block": 22,
-              "info": 12,
-              "warn": 6
+              "block": 0,
+              "info": 13,
+              "warn": 24
             },
             "多模态漂移": {
               "block": 0,
@@ -152,8 +152,8 @@
             },
             "生产操作一致性": {
               "block": 0,
-              "info": 7,
-              "warn": 0
+              "info": 6,
+              "warn": 4
             },
             "节奏密度": {
               "block": 0,
@@ -171,9 +171,9 @@
               "warn": 0
             },
             "角色 DNA/形体一致性（脸/发型/身形/手）": {
-              "block": 3,
-              "info": 15,
-              "warn": 1
+              "block": 0,
+              "info": 14,
+              "warn": 3
             },
             "语义继承": {
               "block": 0,
@@ -202,11 +202,11 @@
             }
           },
           "severity": {
-            "block": 25,
-            "info": 74,
-            "warn": 38
+            "block": 0,
+            "info": 73,
+            "warn": 62
           },
-          "total": 137
+          "total": 135
         },
         "top_level_keys": [
           "auto_return_tasks",
@@ -222,7 +222,7 @@
         "version": 1
       },
       "relpath": "生产数据/review_ui_findings_第1集.json",
-      "sha256": "1ea40b9addba1bc72527cbb92eaf1fac71df6e933044a2af62d19002ccd646cd"
+      "sha256": "b7fedac470cbf7f5ab4931b8e36713f49313f3ec6b36e5eb7c05a9f43667ba0e"
     }
   ],
   "genre_pack_context": {
@@ -251,7 +251,7 @@
       }
     ],
     "episode": "第1集",
-    "generated_at": "2026-07-07T09:25:50+00:00",
+    "generated_at": "2026-07-07T10:19:38+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",

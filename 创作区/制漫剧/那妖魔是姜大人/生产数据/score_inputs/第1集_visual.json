@@ -1,6 +1,6 @@
 {
   "episode": "第1集",
-  "generated_at": "2026-07-07T06:40:05+00:00",
+  "generated_at": "2026-07-07T10:20:40+00:00",
   "kind": "n2d_score_visual_checks",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "sections": {
@@ -8,18 +8,18 @@
       "available": true,
       "blocks": 0,
       "evidence": [
-        "成片 vs srt 时长差 0.42s > 0.4s"
+        "音画时长对账通过：成片 120.12s"
       ],
-      "infos": 0,
+      "infos": 1,
       "metrics": {
-        "final_sec": 120.1,
+        "final_sec": 120.117007,
         "srt_sec": 120.515,
         "storyboard_sec": 120.515,
         "voice_sec": 120.515034
       },
       "name": "av_duration",
       "skipped": false,
-      "warnings": 1
+      "warnings": 0
     },
     "final_rhythm_density": {
       "available": true,
@@ -30,9 +30,9 @@
       "infos": 0,
       "metrics": {
         "clip_count": 11,
-        "final_sec": 120.1,
+        "final_sec": 120.117,
         "hook_count": 10,
-        "hook_interval_sec": 12.01,
+        "hook_interval_sec": 12.012,
         "shot_density_per_min": 5.495
       },
       "name": "final_rhythm_density",
@@ -48,7 +48,7 @@
         "镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
         "被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
         "虎妖诈死复苏 接缝 dHash 距离 32 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-        "裴长青最后一击被踹飞 接缝 dHash 距离 35 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+        "裴长青最后一击被踹飞 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
         "百妖谱第一次开启 接缝 dHash 距离 26 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
         "系统规则指向唯一活物 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
         "刀尖抬起 接缝 dHash 距离 26 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
@@ -56,7 +56,7 @@
       ],
       "infos": 0,
       "metrics": {
-        "avg_dhash_distance": 28.3,
+        "avg_dhash_distance": 27.7,
         "max_dhash_distance": 35,
         "pairs": 10
       },
@@ -68,16 +68,16 @@
       "available": true,
       "blocks": 0,
       "evidence": [
-        "未发现 mouth_visible=yes 风险标记；口型检测可按需接入外部报告"
+        "发现 6 处可见口型风险，但缺 lip-sync/SyncNet 外部检测报告"
       ],
-      "infos": 1,
+      "infos": 0,
       "metrics": {
-        "mouth_visible_no_hits": 22,
-        "mouth_visible_yes_hits": 0
+        "mouth_visible_no_hits": 5,
+        "mouth_visible_yes_hits": 6
       },
       "name": "lip_sync",
       "skipped": false,
-      "warnings": 0
+      "warnings": 1
     },
     "subtitle_ocr": {
       "available": false,

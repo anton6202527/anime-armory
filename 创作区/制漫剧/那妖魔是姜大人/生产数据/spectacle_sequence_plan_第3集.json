@@ -208,7 +208,7 @@
       "camera_path": "ELS 固定建立距离，MS 轻推到陈青源下马。",
       "in_state": "官道远景，孤月下她独自走在路中。",
       "out_state": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
-      "continuity_text": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 大 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe",
+      "continuity_text": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 中 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe",
       "control_inputs_required": [
         "pose_sequence",
         "depth_sequence",
@@ -416,7 +416,7 @@
           "clip_id": "Clip_05",
           "in": "官道远景，孤月下她独自走在路中。",
           "out": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
-          "continuity": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 大 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe"
+          "continuity": "官道远景，孤月下她独自走在路中。 陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。 姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。 ELS 官道马队 → MS 陈青源下马 中 reaction_cut True 入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。 出图/第3集/图片/Clip05_a1.png 5.0 远景火把由官道深处压近，姜月初仍是前景小人。 keyframe 出图/第3集/图片/Clip05_a2.png 11.0 陈青源勒缰停马，马蹄和尘土停在中景。 keyframe 出图/第3集/图片/Clip05_a3.png 17.0 陈青源下马后火光照清黑衣赤纹，误认问题抛出。 keyframe"
         }
       ],
       "required_controls": [

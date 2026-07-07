@@ -1,7 +1,7 @@
 {
   "artifact_namespace": {
     "available": true,
-    "declared_targets": 31,
+    "declared_targets": 33,
     "notes": [],
     "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/prompt/01_分镜出图.md",
     "stale": []
@@ -11,38 +11,7 @@
     "findings": [],
     "notes": []
   },
-  "asset_human_review": [
-    {
-      "asset": "荒野尸骸战场",
-      "kind": "scene",
-      "png": "图片/Clip07_first.png",
-      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_first.png",
-      "ref": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-      "shot": "Clip_07",
-      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png",
-      "stitched": true
-    },
-    {
-      "asset": "荒野尸骸战场",
-      "kind": "scene",
-      "png": "图片/Clip07_mid.png",
-      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_mid.png",
-      "ref": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-      "shot": "Clip_07",
-      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png",
-      "stitched": true
-    },
-    {
-      "asset": "荒野尸骸战场",
-      "kind": "scene",
-      "png": "图片/Clip07_end.png",
-      "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第1集/图片/Clip07_end.png",
-      "ref": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
-      "shot": "Clip_07",
-      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/asset_review/scene_Clip_07_compare.png",
-      "stitched": true
-    }
-  ],
+  "asset_human_review": [],
   "asset_lifecycle": {
     "available": true,
     "checked": 17,
@@ -350,6 +319,13 @@
           "verdict": "ok"
         },
         {
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "png": "图片/Clip06_end_reaction.png",
+          "verdict": "noface"
+        },
+        {
           "anchor": "best_of_variants",
           "char": "CHAR_01__囚犯初醒态",
           "face_idx": 1,
@@ -370,6 +346,13 @@
           "score": 0.5332,
           "score_vs_main": 0.5151,
           "verdict": "ok"
+        },
+        {
+          "chars": [
+            "CHAR_01__囚犯初醒态"
+          ],
+          "png": "图片/Clip06_mid_reaction.png",
+          "verdict": "noface"
         },
         {
           "anchor": "best_of_variants",
@@ -701,6 +684,14 @@
           "verdict": "ok"
         },
         {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip06_end_reaction.png",
+          "score": 0.1717,
+          "verdict": "ok"
+        },
+        {
           "abs_verdict": "block",
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.2087,
@@ -714,6 +705,14 @@
           "floor": 0.2087,
           "png": "图片/Clip06_mid.png",
           "score": 0.0637,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.2087,
+          "png": "图片/Clip06_mid_reaction.png",
+          "score": 0.1642,
           "verdict": "ok"
         },
         {
@@ -1207,6 +1206,14 @@
           "abs_verdict": "block",
           "char": "CHAR_01__囚犯初醒态",
           "floor": 0.293,
+          "png": "图片/Clip06_end_reaction.png",
+          "score": 0.1498,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
           "png": "图片/Clip06_first.png",
           "score": 0.0449,
           "verdict": "ok"
@@ -1217,6 +1224,14 @@
           "floor": 0.293,
           "png": "图片/Clip06_mid.png",
           "score": 0.052,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "warn",
+          "char": "CHAR_01__囚犯初醒态",
+          "floor": 0.293,
+          "png": "图片/Clip06_mid_reaction.png",
+          "score": 0.2051,
           "verdict": "ok"
         },
         {
@@ -1340,9 +1355,9 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 26.8,
+          "median_dist": 27.2,
           "registered_id": "LOC_01",
-          "shots": 31
+          "shots": 33
         }
       },
       "impact_physics": [],
@@ -1353,32 +1368,7 @@
         "场景[荒野尸骸战场] 已注册light_anchor：冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。。验收时请重点核对。",
         "场景[荒野尸骸战场] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。"
       ],
-      "shots": [
-        {
-          "avg_dist": 0.393,
-          "group_median": 0.168,
-          "kind": "光色",
-          "png": "图片/Clip07_first.png",
-          "scene": "荒野尸骸战场",
-          "verdict": "warn"
-        },
-        {
-          "avg_dist": 0.391,
-          "group_median": 0.168,
-          "kind": "光色",
-          "png": "图片/Clip07_mid.png",
-          "scene": "荒野尸骸战场",
-          "verdict": "warn"
-        },
-        {
-          "avg_dist": 0.396,
-          "group_median": 0.168,
-          "kind": "光色",
-          "png": "图片/Clip07_end.png",
-          "scene": "荒野尸骸战场",
-          "verdict": "warn"
-        }
-      ]
+      "shots": []
     },
     "seam": {
       "available": true,
@@ -1693,6 +1683,20 @@
     "pending": [],
     "precision_level": "full",
     "required": 31,
+    "skipped": [
+      {
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip06_mid_reaction.png",
+        "reason": "faceless_reaction_anchor",
+        "shot": "Clip_06"
+      },
+      {
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip06_end_reaction.png",
+        "reason": "faceless_reaction_anchor",
+        "shot": "Clip_06"
+      }
+    ],
     "unclassified": [],
     "verdict": "ok"
   },
@@ -1709,7 +1713,7 @@
       "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第1集/prompt/00_总览.md": "5f100c4f3a0978e41379205bca180b63f160c98790019f45223d0191cb897b7e",
-      "出图/第1集/prompt/01_分镜出图.md": "97304a0879767eb116c91892f6924e88ffb7d25b5fb20b642e239b731bf7178e",
+      "出图/第1集/prompt/01_分镜出图.md": "0614996e73954af1c4fac4418b2eedc5eed42bf938f36641347b0f11b2df0576",
       "出图/第1集/图片/Clip01_end.png": "5ede059a44944aa81505a56b3c2da291e76cd96b7ad20b77b0ec1c7250710c2f",
       "出图/第1集/图片/Clip01_first.png": "fd5051e6af145be84f969bc5d983832337f6755db4451a8374da31699e1a165b",
       "出图/第1集/图片/Clip01_mid.png": "642ca8abb96993a4eaf8d9e8ab5f627572268a70a500c7b03ab395e6b75abacb",
@@ -1726,8 +1730,10 @@
       "出图/第1集/图片/Clip05_first.png": "66edb1739c8096dbe6e00cfe59dc7d2b0fd8d46c645557ed8bb436a2bcfbaf30",
       "出图/第1集/图片/Clip05_mid.png": "2d44b2cdaddd3774575dd21b2879a32aeafa534b6c593fa066e9653a5afbbc4b",
       "出图/第1集/图片/Clip06_end.png": "c33e3a1d090b2553257c5de9851b0ab2d62d334cb55415ffad5fbf3f060425ee",
+      "出图/第1集/图片/Clip06_end_reaction.png": "469b4d875a6e09bc3e7d90c6c9a7a803933387a346d3652c7234246f6fef6e81",
       "出图/第1集/图片/Clip06_first.png": "32330d46e188f52609d2289a632013f1a70a3670e0fa4baeb6bd86425d7dc507",
       "出图/第1集/图片/Clip06_mid.png": "f172a012742087f3b293d23f271e045105c82eb2ff65aa91b0f407770b59c224",
+      "出图/第1集/图片/Clip06_mid_reaction.png": "5fc0a061a5c71c721741d37e714df210e33dd87f887f3ccf455cb32a9bbd313d",
       "出图/第1集/图片/Clip07_end.png": "34526b2f4ffe9fcbe584725742be5a87faa6c9f2e7e4dd6adc4223da16c1ff37",
       "出图/第1集/图片/Clip07_first.png": "05699548d7241c660a0126246f0623f5588bf212c8c73239b0ecf960b5e0a47f",
       "出图/第1集/图片/Clip07_mid.png": "b1c4dd9a421448f96f19ba3f8d2ed2761cf8c19c4c71bda104cb888970695e9d",
@@ -1745,13 +1751,14 @@
       "生产数据/image_qc/第1集/human_image_review.json": null,
       "生产数据/image_qc/第1集/prop_shape_confirmations.json": null
     },
-    "sha": "bb56b3a516cf0492a18da9e630b15e7ddfda974288239de87292a12b77d464a4"
+    "sha": "d632bbf1769992b80c6cb7d568e7399ceef29e7f6770414b51e90414451738e8"
   },
   "kind": "n2d_image_qc",
   "lint": {
     "available": true,
     "character_shots": [
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1760,6 +1767,7 @@
         "shot": "Clip_01"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1768,6 +1776,7 @@
         "shot": "Clip_01"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1776,6 +1785,7 @@
         "shot": "Clip_01"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1784,6 +1794,7 @@
         "shot": "Clip_02"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1792,6 +1803,7 @@
         "shot": "Clip_02"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1800,6 +1812,7 @@
         "shot": "Clip_02"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1808,6 +1821,7 @@
         "shot": "Clip_03"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1816,6 +1830,7 @@
         "shot": "Clip_03"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1824,6 +1839,7 @@
         "shot": "Clip_03"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1832,6 +1848,7 @@
         "shot": "Clip_04"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1840,6 +1857,7 @@
         "shot": "Clip_04"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1848,6 +1866,7 @@
         "shot": "Clip_04"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1856,6 +1875,7 @@
         "shot": "Clip_05"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1864,6 +1884,7 @@
         "shot": "Clip_05"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1872,6 +1893,7 @@
         "shot": "Clip_05"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1880,6 +1902,7 @@
         "shot": "Clip_06"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1888,6 +1911,7 @@
         "shot": "Clip_06"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1896,6 +1920,27 @@
         "shot": "Clip_06"
       },
       {
+        "face_check_policy": "faceless_reaction_anchor",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip06_mid_reaction.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_check_policy": "faceless_reaction_anchor",
+        "face_coverage_required": false,
+        "identity_refs": [
+          "CHAR_01/囚犯初醒态"
+        ],
+        "label": "镜头 6（`EP01_CLIP06` · 裴长青最后一击被踹飞 · fight_exchange）",
+        "png": "出图/第1集/图片/Clip06_end_reaction.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1904,6 +1949,7 @@
         "shot": "Clip_07"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1912,6 +1958,7 @@
         "shot": "Clip_07"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1920,6 +1967,7 @@
         "shot": "Clip_07"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1928,6 +1976,7 @@
         "shot": "Clip_08"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1936,6 +1985,7 @@
         "shot": "Clip_08"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1944,6 +1994,7 @@
         "shot": "Clip_08"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1952,6 +2003,7 @@
         "shot": "Clip_09"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1960,6 +2012,7 @@
         "shot": "Clip_09"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1968,6 +2021,7 @@
         "shot": "Clip_09"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1976,6 +2030,7 @@
         "shot": "Clip_10"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1984,6 +2039,7 @@
         "shot": "Clip_10"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -1992,6 +2048,7 @@
         "shot": "Clip_10"
       },
       {
+        "face_coverage_required": true,
         "identity_refs": [
           "CHAR_01/囚犯初醒态"
         ],
@@ -2194,7 +2251,7 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 34,
+    "compared": 33,
     "findings": [
       {
         "code": "semantic_drift_low",
@@ -2279,12 +2336,22 @@
       {
         "code": "semantic_drift_low",
         "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_end_reaction.png DINO/CLIP cosine=0.14 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
         "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_mid.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__囚犯初醒态」↔ 本镜 图片/Clip06_mid_reaction.png DINO/CLIP cosine=0.04 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
@@ -2408,12 +2475,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 31,
-    "distance": 0.4,
+    "checked": 33,
+    "distance": 0.382,
     "episode_fingerprint": {
-      "contrast": 128.0,
-      "edge": 25.1,
-      "sat": 34.0
+      "contrast": 127.0,
+      "edge": 25.0,
+      "sat": 33.0
     },
     "findings": [],
     "intent": {
@@ -2437,7 +2504,7 @@
     }
   },
   "summary": {
-    "advisory": 72,
+    "advisory": 71,
     "by_check": {
       "anchors": {
         "block": 0,
@@ -2447,14 +2514,14 @@
       },
       "face": {
         "block": 0,
-        "noface": 0,
+        "noface": 2,
         "ok": 31,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 31,
+        "ok": 33,
         "warn": 0
       },
       "human_anatomy": {
@@ -2478,7 +2545,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 31,
+        "ok": 33,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -2491,7 +2558,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 3
+        "warn": 0
       },
       "seam": {
         "block": 0,
@@ -2503,7 +2570,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 31
+        "warn": 33
       },
       "shot_scale_contract": {
         "block": 0,
@@ -2519,14 +2586,14 @@
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 31,
+    "checked": 33,
     "findings": [],
     "intent": {
       "brightness": "dark",
       "evidence": "冷青灰荒野 + 土褐枯草 + 黑血暗红；百妖谱出现前禁止暖金主光，出现后金光只照姜月初眼睛和手部。",
       "warmth": "cool"
     },
-    "luma_median": 57.3,
+    "luma_median": 57.0,
     "warmth_median": -0.1
   },
   "version": 1,

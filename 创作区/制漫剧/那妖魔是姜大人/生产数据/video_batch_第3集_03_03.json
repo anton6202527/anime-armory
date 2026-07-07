@@ -7,6 +7,14 @@
   "items": [
     {
       "accepted_at": "2026-07-06T20:29:55+0800",
+      "actual_image_inputs": [
+        "出图/第3集/图片/Clip03_first.png",
+        "出图/第3集/图片/Clip03_first_a1.png",
+        "出图/第3集/图片/Clip03_first_a2.png",
+        "出图/第3集/图片/Clip03_first_a3.png",
+        "出图/第3集/图片/Clip03_first_a4.png",
+        "出图/第3集/图片/Clip03_end.png"
+      ],
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 4,
@@ -25,17 +33,22 @@
         "supports_native_mid_anchors": true
       },
       "anchor_consumption_mode": "native_multiframe",
+      "artifact_sha256": "4ba78f760d0cb90db47f2f3e23baf1b546febdc739066d2a03813f81e90899e1",
       "audio_policy_enforced": "already_silent",
+      "backend_version": "seedance2.0_vip",
       "clip": "Clip_03",
       "cost_provider": "dreamina",
       "credit_count": 50,
+      "effective_seed": "none",
       "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_end.png",
       "end_image_rel": "出图/第3集/图片/Clip03_end.png",
+      "fail_reason": "成片身份回验 block：dense_face_watch 镜出现片内身份 warn×1；warn=粗筛交人判，不能静默 accept。重出本镜或确认误报后 --allow-qc-block 强制验收",
       "frame_control_mode": "multi_keyframe",
       "gen_status": "querying",
       "heading": "## Clip 03（时长 24.832s · EP03_CLIP03 · 黑衣赤纹：借来的官威）",
       "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip03_first.png",
       "image_rel": "出图/第3集/图片/Clip03_first.png",
+      "input_fingerprint": "30f292dc76e9246e21721e00b5f7ce27a68c0fc694462ca39648f787e2890e60",
       "last_query": {
         "credit_count": 50,
         "gen_status": "success",
@@ -67,6 +80,8 @@
       "last_submit_returncode": 0,
       "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第3集.jsonl",
       "logid": "2026070620240219216811300587277C8",
+      "manifest_backend": "dreamina",
+      "manifest_model_version": "seedance2.0_vip",
       "mode_backend": "multiframe2video",
       "model_version": "seedance2.0_vip",
       "multiframe_images": [
@@ -106,7 +121,20 @@
         "status": "updated",
         "voice_path": ""
       },
+      "post_video_qc": {
+        "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+        "dense_face_watch_required": true,
+        "identity_qc_required": true,
+        "required_reports": [
+          "video_qc",
+          "temporal_consistency",
+          "video_face_drift_watch"
+        ],
+        "return_to_stage": "video_or_image_then_compose",
+        "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows"
+      },
       "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/03_03/prompts/Clip_03_黑衣赤纹：借来的官威.prompt.txt",
+      "prompt_sha256": "71abf23dad562517cd0d3e3b2d8e86b2aa9368d1d916edad311a39289cb152f4",
       "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/03_03/video_qc_第3集_03_03.json",
       "qc_machine": {
         "anchor_blocks": 0,
@@ -123,7 +151,17 @@
       },
       "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/03_03/video_qc_第3集_03_03.md",
       "qc_overridden": false,
-      "status": "accepted",
+      "quality_tier": "720p",
+      "recipe_hash": "4037388c37f0b8b95545750ad8cfc809674cf7a999ab26bee2ea36229e81fc57",
+      "reference_bundle_sha256": "f632af8fbda39e92938304cc543d33895ba754bec7550b4b39b858a4cba9e3e4",
+      "route_clip_id": "Clip_03",
+      "route_execution_recipe_hash": "506af80dce7934699c9b91ac4c599421f415a3ea47046594408bdab3bf17c4b3",
+      "route_hash": "08c8859ee55eb42cdb3d89f8afe1468ffaff68b9dbaab7f89b0a5c3c3354eb07",
+      "route_mode": "image2video",
+      "route_primary_backend": "seedance",
+      "seed_effective": false,
+      "seed_support": "unsupported_or_unknown",
+      "status": "qc_blocked",
       "story_duration": 24.832,
       "submit_duration": 24.832,
       "submit_id": "e7b8d059-0e47-4b7f-8f35-b6db68028718",
@@ -138,7 +176,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:29:55+0800",
+  "updated_at": "2026-07-07T19:34:48+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"

@@ -560,6 +560,14 @@ def _clip_number(item: Dict[str, Any]) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
+def _base_clip_id(value: Any) -> str:
+    m = re.search(r"Clip[_-]?(\d+)", str(value or ""), re.IGNORECASE)
+    if m:
+        return clip_key(int(m.group(1)))
+    m = re.search(r"(\d+)", str(value or ""))
+    return clip_key(int(m.group(1))) if m else str(value or "")
+
+
 def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
                       anchors_by_clip: Dict[int, Dict[str, Any]]) -> bool:
     """If the clip has valid in-range mid-anchors, attach multiframe2video fields to the item.
@@ -721,6 +729,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         missing.append(str(png))
                 if missing:
                     item["anchor_consumption_issue"] = "split relay keyframe PNG missing: " + ", ".join(missing)
+                    refresh_item_recipe_evidence(root, episode, item)
                     items.append(item)
                     continue
                 
@@ -773,6 +782,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         "start_image_rel": part_item["image_rel"],
                         "end_image_rel": part_item["end_image_rel"],
                     }
+                    refresh_item_recipe_evidence(root, episode, part_item)
                     parts.append(part_item)
                 
                 items.extend(parts)
@@ -781,7 +791,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                 "mid anchors declared but backend cannot consume native mid anchors"
                 if not supports_last else "mid anchors declared but end frame is missing for split relay"
             )
-        
+        refresh_item_recipe_evidence(root, episode, item)
         items.append(item)
     
     payload = {
@@ -1536,9 +1546,94 @@ def qc_override_payload(clip: str, machine: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def qc_block_payload(item: Dict[str, Any]) -> Dict[str, Any]:
+    machine = item.get("qc_machine") if isinstance(item.get("qc_machine"), dict) else {}
+    clip = str(item.get("clip") or "?")
+    reason = str(item.get("fail_reason") or "video QC blocked")
+    return {
+        "qa": {
+            "severity": "block",
+            "dim": "成片身份回验",
+            "loc": clip,
+            "msg": reason,
+            "check": "post_video_qc",
+            "outcome": "qc_blocked",
+            "seam_blocks": machine.get("seam_blocks", 0),
+            "intra_blocks": machine.get("intra_blocks", 0),
+            "intra_warns": machine.get("intra_warns", 0),
+            "anchor_blocks": machine.get("anchor_blocks", 0),
+            "anchor_warns": machine.get("anchor_warns", 0),
+        },
+        "meta": {
+            "clip": clip,
+            "target": item.get("target") or "",
+            "qc_json": item.get("qc_json") or "",
+            "qc_markdown": item.get("qc_markdown") or "",
+            "post_video_qc": item.get("post_video_qc") if isinstance(item.get("post_video_qc"), dict) else {},
+            "return_to_stage": "video",
+        },
+    }
+
+
+def _ensure_dense_face_watch_packet(root: Path, episode: str, item: Dict[str, Any],
+                                    target: Path) -> None:
+    policy = item.get("post_video_qc") if isinstance(item.get("post_video_qc"), dict) else {}
+    if policy.get("dense_face_watch_required") is not True:
+        return
+    if os.environ.get("N2D_SKIP_DENSE_FACE_WATCH") == "1":
+        item["video_face_drift_watch"] = {"status": "skipped_by_env"}
+        return
+    script = SKILLS_DIR / "n2d-review" / "scripts" / "video_face_drift_watch.py"
+    if not script.is_file():
+        item["video_face_drift_watch"] = {"status": "missing_script", "script": str(script)}
+        return
+    cmd = [
+        sys.executable,
+        str(script),
+        str(root),
+        episode,
+        "--video",
+        str(target),
+        "--clip",
+        str(item.get("clip") or ""),
+        "--interval",
+        "0.5",
+        "--max-frames",
+        "80",
+        "--write",
+        "--json",
+    ]
+    try:
+        proc = subprocess.run(cmd, check=False, capture_output=True, text=True, timeout=180)
+    except Exception as exc:  # pragma: no cover - defensive around local ffmpeg/process state
+        item["video_face_drift_watch"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+        return
+    payload: Dict[str, Any] = {"status": "error", "returncode": proc.returncode}
+    try:
+        payload = json.loads(proc.stdout[proc.stdout.find("{"):])
+    except Exception:
+        payload["stdout_tail"] = proc.stdout[-500:]
+        payload["stderr_tail"] = proc.stderr[-500:]
+    item["video_face_drift_watch"] = {
+        "status": payload.get("status") or ("ok" if proc.returncode == 0 else "error"),
+        "json_path": payload.get("json_path") or "",
+        "markdown_path": payload.get("markdown_path") or "",
+        "contact_sheet": payload.get("contact_sheet") or "",
+        "frames": len(payload.get("frames") or []) if isinstance(payload.get("frames"), list) else 0,
+        "returncode": proc.returncode,
+    }
+
+
 def record_qc_override(root: Path, episode: str, item: Dict[str, Any]) -> None:
     dashboard = _load_dashboard_module()
     payload = qc_override_payload(item.get("clip", "?"), item.get("qc_machine") or {})
+    event = dashboard.make_event(episode, "video", "qa", source="n2d-video/video_runner.py", **payload)
+    dashboard.append_events(str(root), [event])
+
+
+def record_qc_block(root: Path, episode: str, item: Dict[str, Any]) -> None:
+    dashboard = _load_dashboard_module()
+    payload = qc_block_payload(item)
     event = dashboard.make_event(episode, "video", "qa", source="n2d-video/video_runner.py", **payload)
     dashboard.append_events(str(root), [event])
 
@@ -1596,16 +1691,23 @@ def _existing_file_digest(root: Path, path: Any) -> str:
     return f"{_rel_path(root, p)}:missing"
 
 
-def _actual_image_inputs(item: Dict[str, Any]) -> List[str]:
+def _raw_image_inputs(item: Dict[str, Any]) -> List[str]:
+    multiframe = [str(value) for value in item.get("multiframe_images") or [] if value]
+    if multiframe:
+        return multiframe
     images: List[str] = []
     for key in ("image", "end_image"):
         value = item.get(key)
         if value:
             images.append(str(value))
-    for value in item.get("multiframe_images") or []:
-        if value:
-            images.append(str(value))
     return images
+
+
+def _actual_image_inputs(item: Dict[str, Any]) -> List[str]:
+    explicit = item.get("actual_image_inputs")
+    if isinstance(explicit, list) and explicit:
+        return [str(value) for value in explicit if str(value or "").strip()]
+    return _raw_image_inputs(item)
 
 
 def _capability_evidence_id(root: Path) -> str:
@@ -1638,6 +1740,7 @@ def _item_target_path(root: Path, episode: str, item: Dict[str, Any]) -> Path:
 
 
 def _route_for_clip(root: Path, episode: str, clip_id: str) -> Dict[str, Any]:
+    wanted = _base_clip_id(clip_id)
     path = root / "出视频" / episode / "prompt" / "video_model_routes.json"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -1651,9 +1754,46 @@ def _route_for_clip(root: Path, episode: str, clip_id: str) -> Dict[str, Any]:
         for route in routes:
             if not isinstance(route, dict):
                 continue
-            if str(route.get("clip_id") or route.get("clip") or route.get("id") or "") == clip_id:
+            route_clip = str(route.get("clip_id") or route.get("clip") or route.get("id") or "")
+            if route_clip == clip_id or _base_clip_id(route_clip) == wanted:
                 return dict(route)
     return {}
+
+
+def _post_video_qc_for_item(root: Path, episode: str, item: Dict[str, Any],
+                            route: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
+    route_data = dict(route) if isinstance(route, Mapping) else _route_for_clip(root, episode, _base_clip_id(item.get("clip")))
+    recipe = route_data.get("execution_recipe") if isinstance(route_data.get("execution_recipe"), Mapping) else {}
+    policy = recipe.get("post_video_qc") if isinstance(recipe.get("post_video_qc"), Mapping) else route_data.get("post_video_qc")
+    if isinstance(policy, Mapping) and policy:
+        return dict(policy)
+    item_policy = item.get("post_video_qc")
+    if isinstance(item_policy, Mapping) and item_policy:
+        return dict(item_policy)
+    return {}
+
+
+def refresh_item_recipe_evidence(root: Path, episode: str, item: Dict[str, Any],
+                                 manifest: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
+    route = _route_for_clip(root, episode, _base_clip_id(item.get("clip")))
+    item["route_clip_id"] = _base_clip_id(item.get("clip"))
+    item["route_hash"] = _route_hash(root, episode)
+    if route:
+        item["route_primary_backend"] = route.get("primary_backend") or ""
+        item["route_mode"] = route.get("mode") or ""
+        recipe = route.get("execution_recipe")
+        if isinstance(recipe, Mapping):
+            item["route_execution_recipe_hash"] = _sha256_text(json.dumps(recipe, ensure_ascii=False, sort_keys=True))
+        policy = _post_video_qc_for_item(root, episode, item, route)
+        if policy:
+            item["post_video_qc"] = policy
+    images = _raw_image_inputs(item)
+    item["actual_image_inputs"] = [_rel_path(root, p) for p in images]
+    item["reference_bundle_sha256"] = _sha256_text("\n".join(_existing_file_digest(root, p) for p in images))
+    if manifest is not None:
+        item["manifest_backend"] = str(manifest.get("backend") or "")
+        item["manifest_model_version"] = str(manifest.get("model_version") or "")
+    return item
 
 
 def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manifest: Dict[str, Any]) -> Dict[str, Any]:
@@ -1661,6 +1801,7 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     model_version = str(item.get("model_version") or manifest.get("model_version") or "unknown")
     video_resolution = str(manifest.get("video_resolution") or "unknown")
     route = _route_for_clip(root, episode, str(item.get("clip") or ""))
+    post_qc = _post_video_qc_for_item(root, episode, item, route)
     prompt_path = Path(str(item.get("prompt_file") or ""))
     prompt = prompt_path.read_text(encoding="utf-8") if prompt_path.is_file() else ""
     prompt = _append_dialogue_fact_contract(
@@ -1676,6 +1817,7 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
     identity_registry_sha256 = _file_sha_or_empty(root, "出图/共享/identity_registry.json")
     asset_registry_sha256 = _file_sha_or_empty(root, "出图/共享/asset_registry.json")
     route_hash = _route_hash(root, episode)
+    recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
     target_path = _item_target_path(root, episode, item)
     artifact_sha256 = _artifact_sha(root, target_path)
     mode = str(route.get("mode") or item.get("mode_backend") or item.get("mode") or "accepted_existing_video")
@@ -1695,6 +1837,8 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "identity_registry_sha256": identity_registry_sha256,
         "asset_registry_sha256": asset_registry_sha256,
         "artifact_sha256": artifact_sha256,
+        "route_execution_recipe_hash": _sha256_text(json.dumps(recipe, ensure_ascii=False, sort_keys=True)) if recipe else "",
+        "post_video_qc": post_qc,
         "adapter_version": "n2d-video.video_runner.acceptance_recipe.v2",
         "qc_version": "n2d-video.video_qc.v1",
         "seed_effective": False,
@@ -1731,6 +1875,8 @@ def acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any], manif
         "identity_registry_sha256": identity_registry_sha256,
         "asset_registry_sha256": asset_registry_sha256,
         "artifact_sha256": artifact_sha256,
+        "route_execution_recipe_hash": meta["route_execution_recipe_hash"],
+        "post_video_qc": post_qc,
         "input_fingerprint": meta["input_fingerprint"],
         "submit_id": meta["submit_id"],
     }
@@ -1826,6 +1972,51 @@ def update_progress(root: Path, episode: str) -> None:
     subprocess.run([sys.executable, str(progress_py), "set", str(root), episode, "视频", f"{count}/{total}"], check=False)
 
 
+def _post_video_qc_block_reasons(policy: Mapping[str, Any], machine: Mapping[str, Any]) -> List[str]:
+    if not policy or policy.get("identity_qc_required") is not True:
+        return []
+    dense = policy.get("dense_face_watch_required") is True
+    if not dense:
+        return []
+    reasons: List[str] = []
+    if int(machine.get("intra_checked") or 0) <= 0:
+        reasons.append(
+            "成片身份回验 block：本镜要求 dense_face_watch，但 video_qc 没有覆盖片内近脸身份采样；"
+            "请补 temporal_consistency/video_face_drift_watch 证据或回退低风险构图后重出"
+        )
+    if int(machine.get("intra_warns") or 0) > 0:
+        reasons.append(
+            f"成片身份回验 block：dense_face_watch 镜出现片内身份 warn×{machine.get('intra_warns')}；"
+            "warn=粗筛交人判，不能静默 accept"
+        )
+    return reasons
+
+
+def stamp_acceptance_recipe_meta(root: Path, episode: str, item: Dict[str, Any],
+                                 manifest: Mapping[str, Any]) -> Dict[str, Any]:
+    refresh_item_recipe_evidence(root, episode, item, manifest)
+    meta = acceptance_recipe_meta(root, episode, item, dict(manifest))
+    for key in (
+        "recipe_hash",
+        "prompt_sha256",
+        "reference_bundle_sha256",
+        "backend_version",
+        "quality_tier",
+        "actual_image_inputs",
+        "route_hash",
+        "route_execution_recipe_hash",
+        "input_fingerprint",
+        "artifact_sha256",
+        "post_video_qc",
+        "seed_effective",
+        "effective_seed",
+        "seed_support",
+    ):
+        if key in meta:
+            item[key] = meta[key]
+    return meta
+
+
 def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool = False, no_progress: bool = False,
                 allow_qc_block: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
@@ -1841,12 +2032,17 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     qc_clip = qc["clips"][0] if qc.get("clips") else None
     machine = qc.get("machine_summary") or {}
     item["qc_machine"] = machine
+    post_qc_policy = _post_video_qc_for_item(root, episode, item)
+    if post_qc_policy:
+        item["post_video_qc"] = post_qc_policy
+    post_qc_reasons = _post_video_qc_block_reasons(post_qc_policy, machine)
     anchor_blocks = int(machine.get("anchor_blocks") or 0)
     native_anchor_expected = item.get("anchor_consumption_mode") == "native_multiframe"
     qc_blocks = (
         int(machine.get("seam_blocks") or 0)
         + int(machine.get("intra_blocks") or 0)
         + (anchor_blocks if native_anchor_expected else 0)
+        + len(post_qc_reasons)
     )
     if qc_blocks and not allow_qc_block:
         reasons = []
@@ -1856,10 +2052,16 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
             reasons.append(f"近景片内身份 block×{machine['intra_blocks']}（脸被表情带着重画，非双帧接力镜）")
         if native_anchor_expected and machine.get("anchor_blocks"):
             reasons.append(f"中段锚帧对账 block×{machine['anchor_blocks']}（声明原生消费中锚，但生成视频中段明显偏离锚帧）")
+        reasons.extend(post_qc_reasons)
         item["status"] = "qc_blocked"
+        item["target_path"] = str(target)
         item["qc_json"] = qc.get("json_path")
+        item["qc_markdown"] = qc.get("markdown_path")
         item["fail_reason"] = "；".join(reasons) + "。重出本镜或确认误报后 --allow-qc-block 强制验收"
+        stamp_acceptance_recipe_meta(root, episode, item, manifest)
         update_manifest(manifest_file, manifest)
+        if not no_record:
+            record_qc_block(root, episode, item)
         raise RuntimeError(f"{item['clip']} {item['fail_reason']}（详见 {qc.get('markdown_path')}）")
     overridden = bool(qc_blocks) and allow_qc_block
     item["status"] = "accepted"
@@ -1868,10 +2070,12 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     item["qc_json"] = qc.get("json_path")
     item["qc_markdown"] = qc.get("markdown_path")
     item["accepted_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    stamp_acceptance_recipe_meta(root, episode, item, manifest)
     try:
         item["native_av_sidecar"] = native_av_sidecar.update_sidecars(root, episode, item, target, qc_clip)
     except Exception as exc:
         item["native_av_sidecar"] = {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+    _ensure_dense_face_watch_packet(root, episode, item, target)
     update_manifest(manifest_file, manifest)
     if not no_record:
         if overridden:

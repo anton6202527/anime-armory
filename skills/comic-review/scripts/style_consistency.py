@@ -23,18 +23,30 @@ GRADE_WARMTH_MARGIN = 0.20
 GRADE_TINT_MARGIN = 0.18
 
 
-def style_context_bucket(location: str) -> str:
+def _norm_bucket(value: str) -> str:
+    return re.sub(r"\s+", "_", str(value or "").strip())[:32] or "unknown"
+
+
+def style_context_bucket(location: str, explicit: str = "") -> str:
     """Group panels whose planned scene lighting/content should be compared together."""
+    if str(explicit or "").strip():
+        return _norm_bucket(explicit)
     loc = (location or "unknown").strip()
-    if any(token in loc for token in ("山路", "后山", "浅潭", "山泉", "水底", "崎岖")):
+    if any(token in loc for token in ("山", "林", "坡", "岭", "野外", "荒野")):
         return "outdoor_mountain"
-    if any(token in loc for token in ("大殿", "殿门")):
-        return "dark_hall"
-    if "杂役院" in loc:
-        return "servant_yard"
-    if "回忆" in loc or "蒙太奇" in loc:
+    if any(token in loc for token in ("水", "泉", "潭", "河", "湖", "海", "雨")):
+        return "water_or_rain"
+    if any(token in loc for token in ("殿", "堂", "厅", "馆", "庙", "祠")):
+        return "hall_interior"
+    if any(token in loc for token in ("院", "庭", "园", "校场", "广场")):
+        return "yard_or_courtyard"
+    if any(token in loc for token in ("房", "室", "屋", "寝", "床", "门口")):
+        return "room_interior"
+    if any(token in loc for token in ("街", "市", "巷", "城", "码头")):
+        return "street_or_city"
+    if any(token in loc for token in ("回忆", "梦", "幻", "蒙太奇")):
         return "montage"
-    return re.sub(r"\s+", "_", loc)[:24] or "unknown"
+    return _norm_bucket(loc)
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -297,13 +309,17 @@ def panel_order(root: Path, chapter: str) -> list[str]:
     return [str(panel.get("panel_id")) for panel in script.get("panels") or [] if panel.get("panel_id")]
 
 
-def panel_locations(root: Path, chapter: str) -> dict[str, str]:
+def panel_contexts(root: Path, chapter: str) -> dict[str, dict[str, str]]:
     script = load_json(root / "脚本" / chapter / "panel_script.json", {})
-    out: dict[str, str] = {}
+    out: dict[str, dict[str, str]] = {}
     for panel in script.get("panels") or []:
         pid = str(panel.get("panel_id") or "")
         if pid:
-            out[pid] = str(panel.get("location") or "unknown").strip() or "unknown"
+            explicit = str(panel.get("style_bucket") or panel.get("scene_family") or panel.get("visual_context") or "").strip()
+            out[pid] = {
+                "location": str(panel.get("location") or "unknown").strip() or "unknown",
+                "style_bucket": explicit,
+            }
     return out
 
 
@@ -314,6 +330,108 @@ def find_panel(root: Path, chapter: str, panel_id: str) -> Path | None:
         if path.is_file():
             return path
     return None
+
+
+def preview_label(item: dict[str, Any]) -> str:
+    code = str(item.get("code") or "")
+    severity = str(item.get("machine_severity") or item.get("severity") or "")
+    panel_id = str(item.get("panel_id") or "")
+    if code:
+        return f"{panel_id} {code} {severity}".strip()
+    return panel_id
+
+
+def render_preview_sheet(
+    root: Path,
+    chapter: str,
+    panel_ids: Sequence[str],
+    labels: dict[str, str],
+    out: Path,
+    *,
+    thumb_w: int,
+    cols: int,
+) -> str | None:
+    try:
+        from PIL import Image, ImageDraw
+    except Exception:
+        return None
+    tiles = []
+    pad = 12
+    label_h = 34
+    for panel_id in panel_ids:
+        path = find_panel(root, chapter, panel_id)
+        if not path:
+            continue
+        try:
+            image = Image.open(path).convert("RGB")
+        except OSError:
+            continue
+        ratio = thumb_w / max(image.width, 1)
+        thumb_h = max(1, round(image.height * ratio))
+        image = image.resize((thumb_w, thumb_h), Image.Resampling.LANCZOS)
+        tile = Image.new("RGB", (thumb_w, thumb_h + label_h), "white")
+        tile.paste(image, (0, label_h))
+        draw = ImageDraw.Draw(tile)
+        draw.text((8, 10), labels.get(panel_id, panel_id)[:58], fill=(20, 20, 20))
+        tiles.append(tile)
+    if not tiles:
+        return None
+
+    rows = (len(tiles) + cols - 1) // cols
+    row_heights = [max(tile.height for tile in tiles[row * cols : (row + 1) * cols]) for row in range(rows)]
+    canvas_w = cols * thumb_w + (cols + 1) * pad
+    canvas_h = sum(row_heights) + (rows + 1) * pad
+    canvas = Image.new("RGB", (canvas_w, canvas_h), (235, 235, 235))
+    y = pad
+    for row in range(rows):
+        x = pad
+        for tile in tiles[row * cols : (row + 1) * cols]:
+            canvas.paste(tile, (x, y))
+            x += thumb_w + pad
+        y += row_heights[row] + pad
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(out, quality=92)
+    return rel(root, out)
+
+
+def write_preview_artifacts(root: Path, chapter: str, report: dict[str, Any]) -> dict[str, str]:
+    panels = [str(item.get("panel_id") or "") for item in report.get("panels") or [] if item.get("panel_id")]
+    out_dir = root / "生产数据" / "qa_previews"
+    artifacts: dict[str, str] = {}
+    contact = render_preview_sheet(
+        root,
+        chapter,
+        panels,
+        {panel_id: panel_id for panel_id in panels},
+        out_dir / f"{chapter}_panels_contact_sheet.jpg",
+        thumb_w=300,
+        cols=4,
+    )
+    if contact:
+        artifacts["contact_sheet"] = contact
+
+    by_panel: dict[str, list[str]] = {}
+    for finding in report.get("findings") or []:
+        panel_id = str(finding.get("panel_id") or "")
+        if not panel_id:
+            continue
+        by_panel.setdefault(panel_id, []).append(preview_label(finding))
+    if by_panel:
+        detail_ids = [panel_id for panel_id in panels if panel_id in by_panel]
+        labels = {panel_id: "; ".join(by_panel[panel_id]) for panel_id in detail_ids}
+        detail = render_preview_sheet(
+            root,
+            chapter,
+            detail_ids,
+            labels,
+            out_dir / f"{chapter}_style_outliers_detail.jpg",
+            thumb_w=420,
+            cols=2,
+        )
+        if detail:
+            artifacts["findings_detail"] = detail
+    return artifacts
 
 
 def add_finding(
@@ -407,7 +525,7 @@ def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, 
 def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: int = DEFAULT_BINS) -> dict[str, Any]:
     root = root.resolve()
     ids = panel_order(root, chapter)
-    locations = panel_locations(root, chapter)
+    contexts = panel_contexts(root, chapter)
     registry = load_json(root / "出图" / "共享" / "identity_registry.json", {})
     jobs = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
     findings: list[dict[str, Any]] = []
@@ -481,11 +599,12 @@ def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: i
                 evidence_family="artifact_presence",
             )
             continue
+        context = contexts.get(pid, {})
         item = {
             "panel_id": pid,
             "path": rel(root, path),
-            "location": locations.get(pid, "unknown"),
-            "style_context_bucket": style_context_bucket(locations.get(pid, "unknown")),
+            "location": context.get("location", "unknown"),
+            "style_context_bucket": style_context_bucket(context.get("location", "unknown"), context.get("style_bucket", "")),
             "size": data["size"],
             "sat_mean": round(float(data["sat_mean"]), 4),
             "val_mean": round(float(data["val_mean"]), 4),
@@ -716,6 +835,9 @@ def markdown(report: dict[str, Any]) -> str:
 
 
 def write_outputs(root: Path, chapter: str, report: dict[str, Any]) -> dict[str, str]:
+    previews = write_preview_artifacts(root, chapter, report)
+    if previews:
+        report["preview_artifacts"] = previews
     out_json = root / "生产数据" / f"comic_style_consistency_{chapter}.json"
     out_md = root / "生产数据" / f"comic_style_consistency_{chapter}.md"
     out_findings = root / "生产数据" / f"consistency_findings_style_{chapter}.json"

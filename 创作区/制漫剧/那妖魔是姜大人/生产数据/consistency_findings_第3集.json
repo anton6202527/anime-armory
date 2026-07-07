@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第3集",
-  "generated_at": "2026-07-06T11:37:27+00:00",
+  "generated_at": "2026-07-07T12:13:49+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -32,7 +32,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "契约继承": {
         "block": 0,
@@ -43,15 +43,15 @@
       },
       "锚点门(N3)": {
         "block": 0,
-        "warn": 4,
-        "ok": 2,
-        "n": 6,
-        "skipped": false
+        "warn": 0,
+        "ok": 0,
+        "n": 0,
+        "skipped": true
       },
       "脸(G1)": {
-        "block": 8,
-        "warn": 1,
-        "ok": 49,
+        "block": 0,
+        "warn": 0,
+        "ok": 58,
         "n": 58,
         "skipped": false
       },
@@ -113,16 +113,16 @@
       },
       "片内时序(N2)": {
         "block": 0,
-        "warn": 0,
-        "ok": 0,
-        "n": 0,
-        "skipped": true
+        "warn": 2,
+        "ok": 1,
+        "n": 3,
+        "skipped": false
       },
       "状态化表情(EXP2)": {
         "block": 0,
         "warn": 0,
-        "ok": 5,
-        "n": 5,
+        "ok": 4,
+        "n": 4,
         "skipped": false
       },
       "运动语法(MG1)": {
@@ -134,9 +134,9 @@
       },
       "声音空间(ASP)": {
         "block": 0,
-        "warn": 1,
+        "warn": 2,
         "ok": 0,
-        "n": 1,
+        "n": 2,
         "skipped": false
       },
       "物件状态(OST)": {
@@ -249,7 +249,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "身高比例(R1)": {
         "block": 0,
@@ -312,7 +312,7 @@
         "warn": 0,
         "ok": 0,
         "n": 0,
-        "skipped": false
+        "skipped": true
       },
       "音色声纹": {
         "block": 0,
@@ -337,45 +337,45 @@
       },
       "视频语义一致(VSEM)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "多人对话音画(DAV)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "物理因果链(CG1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "相机空间轨迹(CAM1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "运动质量(MOT1)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "主体视频一致(S2V)": {
         "block": 0,
-        "warn": 0,
+        "warn": 1,
         "ok": 0,
-        "n": 0,
-        "skipped": true
+        "n": 1,
+        "skipped": false
       },
       "高动态成片证据(SPECV)": {
         "block": 0,
@@ -386,23 +386,23 @@
       },
       "真值源(TRUTH)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "多视角身份包(MVIEW)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "实体记忆(EMB)": {
         "block": 0,
-        "warn": 1,
+        "warn": 11,
         "ok": 0,
-        "n": 1,
+        "n": 11,
         "skipped": false
       },
       "物件常驻(O3)": {
@@ -442,9 +442,9 @@
       },
       "结构化交互图谱(I2)": {
         "block": 0,
-        "warn": 8,
+        "warn": 5,
         "ok": 0,
-        "n": 8,
+        "n": 5,
         "skipped": false
       },
       "物理事件图(PHY)": {
@@ -498,10 +498,10 @@
       },
       "系列包装(PKG)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
-        "skipped": true
+        "n": 0,
+        "skipped": false
       },
       "台词语域(D1)": {
         "block": 0,
@@ -616,7 +616,7 @@
         "skipped": false
       }
     },
-    "total_block": 9,
+    "total_block": 1,
     "precision_level": "full",
     "evidence_grade": {
       "by_dim": {
@@ -645,7 +645,7 @@
           "tier": "pixel",
           "actual": "pixel",
           "achievable": "pixel",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "契约继承": {
@@ -657,9 +657,9 @@
         },
         "锚点门(N3)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "脸(G1)": {
@@ -727,9 +727,9 @@
         },
         "片内时序(N2)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "状态化表情(EXP2)": {
@@ -862,7 +862,7 @@
           "tier": "pixel",
           "actual": "pixel",
           "achievable": "pixel",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "身高比例(R1)": {
@@ -923,9 +923,9 @@
         },
         "音画情绪一致(AVE)": {
           "tier": "structured",
-          "actual": "structured",
+          "actual": "absent",
           "achievable": "structured",
-          "applicable": true,
+          "applicable": false,
           "under_proven": false
         },
         "音色声纹": {
@@ -951,45 +951,45 @@
         },
         "视频语义一致(VSEM)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "多人对话音画(DAV)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "物理因果链(CG1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "相机空间轨迹(CAM1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "运动质量(MOT1)": {
           "tier": "structured",
-          "actual": "absent",
+          "actual": "structured",
           "achievable": "structured",
-          "applicable": false,
+          "applicable": true,
           "under_proven": false
         },
         "主体视频一致(S2V)": {
           "tier": "advanced",
-          "actual": "embedding",
+          "actual": "structured",
           "achievable": "embedding",
-          "applicable": false,
-          "under_proven": false
+          "applicable": true,
+          "under_proven": true
         },
         "高动态成片证据(SPECV)": {
           "tier": "structured",
@@ -1230,269 +1230,13 @@
           "under_proven": false
         }
       },
-      "under_proven": [],
+      "under_proven": [
+        "主体视频一致(S2V)"
+      ],
       "weakest": "structured"
     }
   },
   "findings": [
-    {
-      "char": "CHAR_01__囚犯初醒态",
-      "faces": 1,
-      "box_ratio": 0.0031,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_01__镇魔司伪装态",
-      "faces": 1,
-      "box_ratio": 0.0067,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_02__濒死战损态",
-      "faces": 1,
-      "box_ratio": 0.0091,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "char": "CHAR_04__常态",
-      "faces": 1,
-      "box_ratio": 0.0095,
-      "verdict": "warn",
-      "dimension": "锚点门(N3)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.8,
-      "affected_shots": [],
-      "affected_artifacts": [
-        "出图/共享/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip05_a1.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.2187,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "score_vs_main": 0.1357,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip05_a2.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.2637,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.2029,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip05_a3.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.1847,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.1564,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip05_end.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.2117,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "score_vs_main": 0.1876,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip05_first.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.3175,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 0,
-      "score_vs_main": 0.2123,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip07_end.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.4585,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.4314,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip07_first.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.5082,
-      "floor": 0.5736,
-      "verdict": "warn",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.4574,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip07_first_a1.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.4913,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.4356,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
-    {
-      "png": "图片/Clip07_first_a2.png",
-      "char": "CHAR_01__镇魔司伪装态",
-      "score": 0.473,
-      "floor": 0.5736,
-      "verdict": "block",
-      "floor_calibrated": true,
-      "face_idx": 1,
-      "score_vs_main": 0.4473,
-      "anchor": "best_of_variants",
-      "dimension": "脸(G1)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.85,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第3集/图片"
-      ],
-      "severity": "block"
-    },
     {
       "verdict": "warn",
       "shot": "CHAR_01__囚犯初醒态 第1集→第2集",
@@ -1525,6 +1269,50 @@
         "出图/第3集/图片"
       ],
       "severity": "block"
+    },
+    {
+      "clip": "Clip_01_埋尸冷开：欠命账落地.mp4",
+      "frames": 16,
+      "sampled_target": 16,
+      "duration": 10.68,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第3集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_03_黑衣赤纹：借来的官威.mp4",
+      "frames": 24,
+      "sampled_target": 24,
+      "duration": 25.18,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第3集/视频"
+      ],
+      "severity": "warn"
     },
     {
       "png": "图片/Clip08_first_a1.png",
@@ -1609,7 +1397,7 @@
     {
       "verdict": "warn",
       "shot": "场景[荒野尸骸战场] 跨3集",
-      "msg": "场景[荒野尸骸战场] 跨集色调/光位漂移 L1=0.6143（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
+      "msg": "场景[荒野尸骸战场] 跨集色调/光位漂移 L1=0.6315（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
       "scene": "荒野尸骸战场",
       "dimension": "跨集场景漂移(SCNX)",
       "return_to_stage": "image",
@@ -1930,6 +1718,21 @@
       "severity": "warn"
     },
     {
+      "verdict": "warn",
+      "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
+      "return_to_stage": "compose",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "设定库/ambient_map.json",
+        "生产数据/native_av_physics_第3集.json"
+      ],
+      "evidence_family": "audio_sync",
+      "dimension": "声音空间(ASP)",
+      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+      "risk_score": 0.3,
+      "severity": "warn"
+    },
+    {
       "clips": [
         "EP03_CLIP01",
         "EP03_CLIP02",
@@ -1979,44 +1782,279 @@
     },
     {
       "verdict": "warn",
-      "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-      "return_to_stage": "review",
-      "affected_shots": [],
+      "message": "本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。",
+      "return_to_stage": "video",
       "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
+        "生产数据/video_semantic_consistency_第3集.json",
+        "出视频/第3集/video_semantic_consistency.json",
+        "脚本/视频契约"
       ],
-      "evidence_family": "text_contract",
-      "dimension": "真值源(TRUTH)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.5,
+      "evidence_missing": true,
+      "required_evidence": "video_semantic_consistency",
+      "dimension": "视频语义一致(VSEM)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.65,
+      "affected_shots": [],
       "severity": "warn"
     },
     {
       "verdict": "warn",
-      "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-      "return_to_stage": "image",
-      "affected_shots": [],
+      "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+      "return_to_stage": "compose",
       "affected_artifacts": [
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
+        "生产数据/dialogue_av_alignment_第3集.json",
+        "合成/第3集"
       ],
-      "evidence_family": "text_contract",
-      "dimension": "多视角身份包(MVIEW)",
+      "dimension": "多人对话音画(DAV)",
+      "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+      "risk_score": 0.55,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+      "return_to_stage": "script_stage2",
+      "affected_artifacts": [
+        "脚本/第3集/storyboard.json",
+        "生产数据/causal_event_graph_第3集.json"
+      ],
+      "dimension": "物理因果链(CG1)",
+      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+      "risk_score": 0.5,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "视频含明确镜头运动/空间轨迹，但缺 camera_trajectory_probe；无法核验运动方向、深度、越轴和抖动连续性。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/camera_trajectory_probe_第3集.json",
+        "出视频/第3集"
+      ],
+      "evidence_missing": true,
+      "required_evidence": "camera_trajectory_probe",
+      "dimension": "相机空间轨迹(CAM1)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.45,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "视频含明确动作/运动镜，但缺 motion_quality 报告；无法核验冻结、抽搐、速度突变和动作完成度。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/motion_quality_第3集.json",
+        "出视频/第3集"
+      ],
+      "evidence_missing": true,
+      "required_evidence": "motion_quality",
+      "dimension": "运动质量(MOT1)",
+      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+      "risk_score": 0.45,
+      "affected_shots": [],
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "本集已有主体/角色契约和视频产物，但缺 subject_video_consistency；无法核验视频侧主体保真、多主体串脸、自然度和背景解耦。",
+      "return_to_stage": "video",
+      "affected_artifacts": [
+        "生产数据/subject_video_consistency_第3集.json",
+        "出视频/第3集"
+      ],
+      "evidence_missing": true,
+      "required_evidence": "subject_video_consistency",
+      "dimension": "主体视频一致(S2V)",
       "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-      "risk_score": 0.5,
+      "risk_score": 0.65,
+      "affected_shots": [],
       "severity": "warn"
     },
     {
       "verdict": "warn",
-      "message": "本集有重复/核心实体（CHAR_01, CHAR_01__, CHAR_01__囚犯初醒态, CHAR_01__镇魔司伪装态, CHAR_02, CHAR_04）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+      "message": "重复/核心实体 CHAR_04 出现于 10 镜，但 entity_memory_bank 没有已验收记忆条目。",
       "return_to_stage": "image",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
         "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
         "出图/共享/identity_registry.json"
       ],
+      "entity_id": "CHAR_04",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 CHAR_01__囚犯初醒态 出现于 2 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "CHAR_01__囚犯初醒态",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 WEAPON_01 横刀 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "WEAPON_01 横刀",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 CHAR_01__镇魔司伪装态 出现于 8 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "CHAR_01__镇魔司伪装态",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 PROP_镇魔司黑衣赤纹 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "PROP_镇魔司黑衣赤纹",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 LOC_02 出现于 7 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "LOC_02",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 LOC_02 荒野官道夜路 出现于 7 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "LOC_02 荒野官道夜路",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 GROUP_飞鹰门马队 出现于 3 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "GROUP_飞鹰门马队",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 CHAR_04__ 出现于 6 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "CHAR_04__",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 CHAR_04__常态 出现于 6 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "CHAR_04__常态",
+      "dimension": "实体记忆(EMB)",
+      "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+      "risk_score": 0.5,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "重复/核心实体 MOUNT_GROUP_01 飞鹰门马匹与火把 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+      "return_to_stage": "image",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/entity_memory_bank.json",
+        "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
+        "出图/共享/identity_registry.json"
+      ],
+      "entity_id": "MOUNT_GROUP_01 飞鹰门马匹与火把",
       "dimension": "实体记忆(EMB)",
       "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
       "risk_score": 0.5,
@@ -2072,51 +2110,6 @@
       "return_to_stage": "script_stage2",
       "affected_shots": [
         "Clip_04"
-      ],
-      "affected_artifacts": [
-        "脚本/第3集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_05"
-      ],
-      "affected_artifacts": [
-        "脚本/第3集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_06"
-      ],
-      "affected_artifacts": [
-        "脚本/第3集/storyboard.json"
-      ],
-      "dimension": "结构化交互图谱(I2)",
-      "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-      "risk_score": 0.45,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "return_to_stage": "script_stage2",
-      "affected_shots": [
-        "Clip_07"
       ],
       "affected_artifacts": [
         "脚本/第3集/storyboard.json"
@@ -2260,20 +2253,6 @@
       "dimension": "强配方Schema(RCP2)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
       "risk_score": 0.35,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。",
-      "return_to_stage": "compose",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/series_packaging.json",
-        "合成/交付"
-      ],
-      "dimension": "系列包装(PKG)",
-      "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-      "risk_score": 0.2,
       "severity": "warn"
     },
     {
@@ -2907,11 +2886,13 @@
     },
     {
       "verdict": "warn",
-      "message": "项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样。",
+      "message": "当前 route.primary_backend=dreamina 未出现在 probe backend_scores；路由没有哨兵基准兜底。",
       "return_to_stage": "review",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/consistency_probe_pack.json",
+        "出视频/第3集/prompt/video_model_routes.json",
+        "生产数据/video_model_routes.json",
         "设定库/consistency_probe_pack.json"
       ],
       "dimension": "一致性探针包(PROBE)",
@@ -2957,10 +2938,11 @@
       "dimensions": [
         "声音空间(ASP)"
       ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/ambient_map.json",
+      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/ambient_map.json、生产数据/native_av_physics_第3集.json",
       "affected_shots": [],
       "affected_artifacts": [
-        "设定库/ambient_map.json"
+        "设定库/ambient_map.json",
+        "生产数据/native_av_physics_第3集.json"
       ],
       "findings": [
         {
@@ -2970,6 +2952,20 @@
           "affected_shots": [],
           "affected_artifacts": [
             "设定库/ambient_map.json"
+          ],
+          "evidence_family": "audio_sync",
+          "dimension": "声音空间(ASP)",
+          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
+          "risk_score": 0.3
+        },
+        {
+          "verdict": "warn",
+          "message": "原生音画物理契约存在，但 acoustic_space 未标 native clip/声源映射；原生声、配音、BGM 混合后难查错声源/错混响。",
+          "return_to_stage": "compose",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "设定库/ambient_map.json",
+            "生产数据/native_av_physics_第3集.json"
           ],
           "evidence_family": "audio_sync",
           "dimension": "声音空间(ASP)",
@@ -3060,56 +3056,174 @@
       ]
     },
     {
-      "return_to_stage": "review",
+      "return_to_stage": "video",
       "dimensions": [
-        "真值源(TRUTH)"
+        "视频语义一致(VSEM)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：设定库/consistency_truth_map.json",
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/video_semantic_consistency_第3集.json、出视频/第3集/video_semantic_consistency.json、脚本/视频契约",
       "affected_shots": [],
       "affected_artifacts": [
-        "设定库/consistency_truth_map.json"
+        "生产数据/video_semantic_consistency_第3集.json",
+        "出视频/第3集/video_semantic_consistency.json",
+        "脚本/视频契约"
       ],
       "findings": [
         {
           "verdict": "warn",
-          "message": "项目已有 identity_registry / asset_registry / storyboard / state ledger / generation_recipe 等多种真值源，但缺 consistency_truth_map；冲突时无法机器说明谁覆盖谁。",
-          "return_to_stage": "review",
-          "affected_shots": [],
+          "message": "本集已有视频产物和脚本/视频契约，但缺 video_semantic_consistency；无法核验视频侧主体/背景语义是否随视频生成漂移。",
+          "return_to_stage": "video",
           "affected_artifacts": [
-            "设定库/consistency_truth_map.json"
+            "生产数据/video_semantic_consistency_第3集.json",
+            "出视频/第3集/video_semantic_consistency.json",
+            "脚本/视频契约"
           ],
-          "evidence_family": "text_contract",
-          "dimension": "真值源(TRUTH)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.5
+          "evidence_missing": true,
+          "required_evidence": "video_semantic_consistency",
+          "dimension": "视频语义一致(VSEM)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.65,
+          "affected_shots": []
         }
       ]
     },
     {
-      "return_to_stage": "review",
+      "return_to_stage": "compose",
       "dimensions": [
-        "多视角身份包(MVIEW)"
+        "多人对话音画(DAV)"
       ],
-      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：设定库/identity_eval_pack.json、生产数据/identity_eval_pack.json",
+      "scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。；定位产物：生产数据/dialogue_av_alignment_第3集.json、合成/第3集",
       "affected_shots": [],
       "affected_artifacts": [
-        "设定库/identity_eval_pack.json",
-        "生产数据/identity_eval_pack.json"
+        "生产数据/dialogue_av_alignment_第3集.json",
+        "合成/第3集"
       ],
       "findings": [
         {
           "verdict": "warn",
-          "message": "核心/长线角色 CHAR_01 缺 identity_eval_pack / multiview_identity_pack；后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
-          "return_to_stage": "image",
-          "affected_shots": [],
+          "message": "检测到原生音/多人对话视频产物，但缺 dialogue_av_alignment；无法核验说话人、口型、镜头对人和台词顺序。",
+          "return_to_stage": "compose",
           "affected_artifacts": [
-            "设定库/identity_eval_pack.json",
-            "生产数据/identity_eval_pack.json"
+            "生产数据/dialogue_av_alignment_第3集.json",
+            "合成/第3集"
           ],
-          "evidence_family": "text_contract",
-          "dimension": "多视角身份包(MVIEW)",
+          "dimension": "多人对话音画(DAV)",
+          "rerun_scope": "回 n2d-compose 对齐配音轨、clip 时长、原生音轨策略和多人对话说话人结构；若时长源头错，回 n2d-script 阶段2。",
+          "risk_score": 0.55,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "script_stage2",
+      "dimensions": [
+        "物理因果链(CG1)"
+      ],
+      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位产物：脚本/第3集/storyboard.json、生产数据/causal_event_graph_第3集.json",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "脚本/第3集/storyboard.json",
+        "生产数据/causal_event_graph_第3集.json"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "视频/脚本包含明显物理因果动作，但缺 causal_event_graph；状态转场之外的因果链无法复核。",
+          "return_to_stage": "script_stage2",
+          "affected_artifacts": [
+            "脚本/第3集/storyboard.json",
+            "生产数据/causal_event_graph_第3集.json"
+          ],
+          "dimension": "物理因果链(CG1)",
+          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
+          "risk_score": 0.5,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "相机空间轨迹(CAM1)"
+      ],
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位产物：生产数据/camera_trajectory_probe_第3集.json、出视频/第3集",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/camera_trajectory_probe_第3集.json",
+        "出视频/第3集"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "视频含明确镜头运动/空间轨迹，但缺 camera_trajectory_probe；无法核验运动方向、深度、越轴和抖动连续性。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/camera_trajectory_probe_第3集.json",
+            "出视频/第3集"
+          ],
+          "evidence_missing": true,
+          "required_evidence": "camera_trajectory_probe",
+          "dimension": "相机空间轨迹(CAM1)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.45,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "运动质量(MOT1)"
+      ],
+      "scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。；定位产物：生产数据/motion_quality_第3集.json、出视频/第3集",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/motion_quality_第3集.json",
+        "出视频/第3集"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "视频含明确动作/运动镜，但缺 motion_quality 报告；无法核验冻结、抽搐、速度突变和动作完成度。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/motion_quality_第3集.json",
+            "出视频/第3集"
+          ],
+          "evidence_missing": true,
+          "required_evidence": "motion_quality",
+          "dimension": "运动质量(MOT1)",
+          "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
+          "risk_score": 0.45,
+          "affected_shots": []
+        }
+      ]
+    },
+    {
+      "return_to_stage": "video",
+      "dimensions": [
+        "主体视频一致(S2V)"
+      ],
+      "scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。；定位产物：生产数据/subject_video_consistency_第3集.json、出视频/第3集",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/subject_video_consistency_第3集.json",
+        "出视频/第3集"
+      ],
+      "findings": [
+        {
+          "verdict": "warn",
+          "message": "本集已有主体/角色契约和视频产物，但缺 subject_video_consistency；无法核验视频侧主体保真、多主体串脸、自然度和背景解耦。",
+          "return_to_stage": "video",
+          "affected_artifacts": [
+            "生产数据/subject_video_consistency_第3集.json",
+            "出视频/第3集"
+          ],
+          "evidence_missing": true,
+          "required_evidence": "subject_video_consistency",
+          "dimension": "主体视频一致(S2V)",
           "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
-          "risk_score": 0.5
+          "risk_score": 0.65,
+          "affected_shots": []
         }
       ]
     },
@@ -3118,26 +3232,187 @@
       "dimensions": [
         "实体记忆(EMB)"
       ],
-      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、出图/共享/entity_memory_bank.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json",
+      "scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。；定位产物：生产数据/entity_memory_bank.json、脚本/第3集/storyboard.json、出图/共享/entity_memory_bank.json、出图/共享/identity_registry.json",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/entity_memory_bank.json",
-        "出图/共享/entity_memory_bank.json",
         "脚本/第3集/storyboard.json",
+        "出图/共享/entity_memory_bank.json",
         "出图/共享/identity_registry.json"
       ],
       "findings": [
         {
           "verdict": "warn",
-          "message": "本集有重复/核心实体（CHAR_01, CHAR_01__, CHAR_01__囚犯初醒态, CHAR_01__镇魔司伪装态, CHAR_02, CHAR_04）但缺 entity_memory_bank；后续镜头无法按已验收画面检索实体视角/表情/地点记忆。",
+          "message": "重复/核心实体 CHAR_04 出现于 10 镜，但 entity_memory_bank 没有已验收记忆条目。",
           "return_to_stage": "image",
           "affected_shots": [],
           "affected_artifacts": [
             "生产数据/entity_memory_bank.json",
-            "出图/共享/entity_memory_bank.json",
             "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
             "出图/共享/identity_registry.json"
           ],
+          "entity_id": "CHAR_04",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 CHAR_01__囚犯初醒态 出现于 2 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "CHAR_01__囚犯初醒态",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 WEAPON_01 横刀 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "WEAPON_01 横刀",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 CHAR_01__镇魔司伪装态 出现于 8 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "CHAR_01__镇魔司伪装态",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 PROP_镇魔司黑衣赤纹 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "PROP_镇魔司黑衣赤纹",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 LOC_02 出现于 7 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "LOC_02",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 LOC_02 荒野官道夜路 出现于 7 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "LOC_02 荒野官道夜路",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 GROUP_飞鹰门马队 出现于 3 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "GROUP_飞鹰门马队",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 CHAR_04__ 出现于 6 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "CHAR_04__",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 CHAR_04__常态 出现于 6 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "CHAR_04__常态",
+          "dimension": "实体记忆(EMB)",
+          "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
+          "risk_score": 0.5
+        },
+        {
+          "verdict": "warn",
+          "message": "重复/核心实体 MOUNT_GROUP_01 飞鹰门马匹与火把 出现于 4 镜，但 entity_memory_bank 没有已验收记忆条目。",
+          "return_to_stage": "image",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/entity_memory_bank.json",
+            "脚本/第3集/storyboard.json",
+            "出图/共享/entity_memory_bank.json",
+            "出图/共享/identity_registry.json"
+          ],
+          "entity_id": "MOUNT_GROUP_01 飞鹰门马匹与火把",
           "dimension": "实体记忆(EMB)",
           "rerun_scope": "回 n2d-image 或 n2d-video 按离群道具/场景/法宝参考组只重出受影响镜头；必要时补资产 taxonomy 和视频侧 embedding probe。",
           "risk_score": 0.5
@@ -3176,14 +3451,11 @@
       "dimensions": [
         "结构化交互图谱(I2)"
       ],
-      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_02、Clip_03、Clip_04、Clip_05、Clip_06、Clip_07、Clip_09、Clip_10；定位产物：脚本/第3集/storyboard.json",
+      "scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。；定位镜头：Clip_02、Clip_03、Clip_04、Clip_09、Clip_10；定位产物：脚本/第3集/storyboard.json",
       "affected_shots": [
         "Clip_02",
         "Clip_03",
         "Clip_04",
-        "Clip_05",
-        "Clip_06",
-        "Clip_07",
         "Clip_09",
         "Clip_10"
       ],
@@ -3225,48 +3497,6 @@
           "return_to_stage": "script_stage2",
           "affected_shots": [
             "Clip_04"
-          ],
-          "affected_artifacts": [
-            "脚本/第3集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_05"
-          ],
-          "affected_artifacts": [
-            "脚本/第3集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_06"
-          ],
-          "affected_artifacts": [
-            "脚本/第3集/storyboard.json"
-          ],
-          "dimension": "结构化交互图谱(I2)",
-          "rerun_scope": "回 n2d-script 阶段2补 interaction_graph/contact_graph、左右手/持有状态、持有账本、递交/释放因果和 causal_event_graph；必要时重跑 n2d-model-router 补 motion_control。",
-          "risk_score": 0.45
-        },
-        {
-          "verdict": "warn",
-          "message": "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-          "return_to_stage": "script_stage2",
-          "affected_shots": [
-            "Clip_07"
           ],
           "affected_artifacts": [
             "脚本/第3集/storyboard.json"
@@ -3478,33 +3708,6 @@
           "dimension": "强配方Schema(RCP2)",
           "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
           "risk_score": 0.35
-        }
-      ]
-    },
-    {
-      "return_to_stage": "compose",
-      "dimensions": [
-        "系列包装(PKG)"
-      ],
-      "scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。；定位产物：设定库/series_packaging.json、合成/交付",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "设定库/series_packaging.json",
-        "合成/交付"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "缺系列包装规范（片头/片尾/封面字/字幕字体/转场音效/平台交付名）；多集发布会出现包装漂移。",
-          "return_to_stage": "compose",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "设定库/series_packaging.json",
-            "合成/交付"
-          ],
-          "dimension": "系列包装(PKG)",
-          "rerun_scope": "回 n2d-compose 统一响度、混剪色彩、BGM/room tone、字幕样式、成片时间线探针与系列包装；缺规范先补 series_packaging。系列调色(GRD)漂移补/复用 series_grade.json 的 LUT/白平衡/对比基线；环境声(AMB)漂移补/复用 ambient_map.json 的每场环境声床。",
-          "risk_score": 0.2
         }
       ]
     },
@@ -3763,20 +3966,24 @@
       "dimensions": [
         "一致性探针包(PROBE)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/consistency_probe_pack.json、设定库/consistency_probe_pack.json",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/consistency_probe_pack.json、出视频/第3集/prompt/video_model_routes.json、生产数据/video_model_routes.json、设定库/consistency_probe_pack.json",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/consistency_probe_pack.json",
+        "出视频/第3集/prompt/video_model_routes.json",
+        "生产数据/video_model_routes.json",
         "设定库/consistency_probe_pack.json"
       ],
       "findings": [
         {
           "verdict": "warn",
-          "message": "项目已有多集或媒体产物，但缺 consistency_probe_pack；后端/模板升级没有固定哨兵小样。",
+          "message": "当前 route.primary_backend=dreamina 未出现在 probe backend_scores；路由没有哨兵基准兜底。",
           "return_to_stage": "review",
           "affected_shots": [],
           "affected_artifacts": [
             "生产数据/consistency_probe_pack.json",
+            "出视频/第3集/prompt/video_model_routes.json",
+            "生产数据/video_model_routes.json",
             "设定库/consistency_probe_pack.json"
           ],
           "dimension": "一致性探针包(PROBE)",

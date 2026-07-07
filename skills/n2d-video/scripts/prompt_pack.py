@@ -479,6 +479,7 @@ def execution_recipe_line(recipe: Mapping[str, Any], frame_control: Mapping[str,
         f"reference_inputs={one_line(recipe.get('reference_inputs'), 'reference_group fallback')}；"
         f"control_inputs={one_line(recipe.get('control_inputs'), '按 Motion Control manifest 或 degrade_only')}；"
         f"audio_inputs={one_line(recipe.get('audio_inputs'), 'none')}；"
+        f"post_video_qc={one_line(recipe.get('post_video_qc'), 'standard video_qc')}；"
         f"fallback={one_line(recipe.get('fallback') or fallback)}；"
         f"anchor_consumption={one_line(frame_control)}"
     )

@@ -76,11 +76,13 @@
         "locations": [
           "LOC_01"
         ],
-        "objects": [],
+        "objects": [
+          "尸骸前景"
+        ],
         "required_presence": [
           "CHAR_01",
           "尸骸前景",
-          "荒野尸场"
+          "LOC_01"
         ]
       },
       "firstframe_png": "出图/第1集/图片/Clip01_first.png",
@@ -292,7 +294,8 @@
           "LOC_01"
         ],
         "objects": [
-          "黑色妖血"
+          "黑色妖血",
+          "巨岩"
         ],
         "required_presence": [
           "CHAR_01",

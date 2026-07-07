@@ -1,7 +1,7 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-07T08:18:21+00:00",
+  "generated_at": "2026-07-07T10:23:25+00:00",
   "assets": [
     {
       "id": "LOC_BLACK_HALL",
@@ -15,7 +15,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.467786+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.285896+00:00"
           }
         },
         "front": {
@@ -25,16 +25,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.467945+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.286019+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_黑暗杂役大殿_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.286031+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_黑暗杂役大殿_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_黑暗杂役大殿.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -47,7 +53,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_黑暗杂役大殿.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "34ef800d5e3251ebf1e090a03c2d9e8e7890916a86455c112877cf5f8b137a3d"
         }
       ],
       "constraints": {
@@ -60,7 +67,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "left_top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；夜/内，画左门缝冷光，低照度，灰褐冷调。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -93,7 +107,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "张老大画右前景压迫，贺平生画左下，群杂役两侧与后景围压。",
@@ -110,12 +124,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.467982+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.286052+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_黑暗杂役大殿_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.286061+00:00"
+            }
           }
         }
       }
@@ -127,15 +147,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_黑殿旧油灯.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.790845+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_黑殿旧油灯_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_黑殿旧油灯.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_黑殿旧油灯_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_黑殿旧油灯.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -148,7 +174,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_黑殿旧油灯.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "9c4040bc4202736bf588fdef3577fab51f550877097b63192c2d18b8fabba029"
         }
       ],
       "constraints": {
@@ -195,8 +222,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "黑暗杂役大殿里的旧油灯/粗陶灯盏，弱暖光只照出压迫轮廓，不现代、不华丽、不抢人物脸。",
       "lifecycle": {
@@ -215,15 +242,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_木扁担.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.684674+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_木扁担_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_木扁担.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_木扁担_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_木扁担.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -236,7 +269,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_木扁担.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "d4892a87506593848c9cf7a9843ed56f7153f02b60e96e0e18959725acb1f0d3"
         }
       ],
       "constraints": {
@@ -275,8 +309,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "旧木扁担，磨损发亮，压在少年肩上，肩部红痕清晰，动作真实。",
       "lifecycle": {
@@ -295,15 +329,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_两口水缸.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.723179+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_两口水缸_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_两口水缸.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_两口水缸_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_两口水缸.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -316,7 +356,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_两口水缸.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "b5ec4657f83840a5f7a13e8783c2d3a947d58d0867c64af63b14ea666e21a2dd"
         }
       ],
       "constraints": {
@@ -355,8 +396,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "两口巨大旧陶水缸，边缘磨损，缸内水线可见，放在杂役院中，体量压过十四岁少年。",
       "lifecycle": {
@@ -380,7 +421,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.569666+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.347051+00:00"
           }
         },
         "front": {
@@ -390,16 +431,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.569852+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.347185+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_黑殿到水缸区转场_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.347198+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_黑殿到水缸区转场_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_黑殿到水缸区转场.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -412,7 +459,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_黑殿到水缸区转场.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "f753d7730f8da7327197c3f570c42179d75bab773bdee0f9052d3c603e5a07c2"
         }
       ],
       "constraints": {
@@ -425,7 +473,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；清晨冷灰或脏暖低饱和侧光，水面和缸壁轻微反光。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -457,7 +512,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "两口巨大水缸占后景或中后景，角色在前景显得很小，水缸边沿高过少年肩头。",
@@ -474,12 +529,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.569901+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.347218+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_黑殿到水缸区转场_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.347226+00:00"
+            }
           }
         }
       }
@@ -491,15 +552,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_旧铁碗.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.844244+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_旧铁碗_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_旧铁碗.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_旧铁碗_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_旧铁碗.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -512,7 +579,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_旧铁碗.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "de6cf0d8d720f2c38aa52069eca5a9be977a657cfb0bd51a7a313c95f5978238"
         }
       ],
       "constraints": {
@@ -557,8 +625,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "杂役空房里的旧铁碗，边缘磨损、暗哑铁色、可装粗饭，贫瘠生活道具，不现代、不发光。",
       "lifecycle": {
@@ -577,15 +645,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_破旧包袱.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.729394+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_破旧包袱_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_破旧包袱.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_破旧包袱_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_破旧包袱.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -598,7 +672,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_破旧包袱.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "fdbaaf96e5a7beb3bc216b55f06c3fe61609d045534b6e597eddf4229be2e641"
         }
       ],
       "constraints": {
@@ -637,8 +712,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "灰布破旧包袱，被少年手指攥紧，象征无依无靠。",
       "lifecycle": {
@@ -662,7 +737,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.367249+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.407179+00:00"
           }
         },
         "front": {
@@ -672,16 +747,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.367499+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.407311+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_杂役空房_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.407324+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_杂役空房_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_杂役空房.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -694,7 +775,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_杂役空房.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "4ea9aa4feeb809e153ac7ca549ac14d8429723eabeb8dfcc1adb202a31313b5b"
         }
       ],
       "constraints": {
@@ -707,7 +789,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -732,7 +821,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -749,12 +838,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.367537+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.407349+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_杂役空房_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.407357+00:00"
+            }
           }
         }
       }
@@ -766,15 +861,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_空木桶.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.748867+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_空木桶_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_空木桶.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_空木桶_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_空木桶.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -787,7 +888,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_空木桶.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "705d95fc2889245cdeed152659a9a2e06fd38e4b356982d1d756c627bf7a0508"
         }
       ],
       "constraints": {
@@ -834,8 +936,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "挑水前的旧木桶，桶内空、木箍磨损、低饱和旧木色，体量适合瘦小少年挑担。",
       "lifecycle": {
@@ -854,15 +956,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.741133+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_生锈铁锁_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_生锈铁锁_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -875,7 +983,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_生锈铁锁.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "c9cd0e0487f6acc9e8fdbf0b643eff714703c8ccdb506fb7fb33264bdc74eee1"
         }
       ],
       "constraints": {
@@ -920,8 +1029,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "杂役空房门上或手里的生锈铁锁/旧钥匙，小件暗铁色，表现贫瘠和管束，不放大成法器。",
       "lifecycle": {
@@ -946,7 +1055,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.673966+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.470520+00:00"
           }
         },
         "front": {
@@ -956,16 +1065,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.674174+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.470683+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_夜山路_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.470696+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_夜山路_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_夜山路.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -978,7 +1093,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_夜山路.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "071aef4794982cc8d2a8e607e39295b5a377d6687f592ba8d1fcb0561b0fc078"
         }
       ],
       "constraints": {
@@ -991,7 +1107,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -1016,7 +1139,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -1033,12 +1156,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.674225+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.470718+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_夜山路_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.470726+00:00"
+            }
           }
         }
       }
@@ -1050,15 +1179,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_水桶与扁担.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.842149+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_水桶与扁担_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_水桶与扁担_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_水桶与扁担.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -1071,7 +1206,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_水桶与扁担.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "f7e61dcecea90959804e685921fbf0dec0908efe8c6fb858bde754e3c122f315"
         }
       ],
       "constraints": {
@@ -1110,8 +1246,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "两只旧木水桶，水面晃动外溢，绳索粗糙，近景可读重量。",
       "lifecycle": {
@@ -1135,7 +1271,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.473157+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.530754+00:00"
           }
         },
         "front": {
@@ -1145,16 +1281,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.473318+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.530897+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.530910+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_后山挑水路_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -1167,7 +1309,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_后山挑水路.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "bdccaf91692d19d662ead582ae4cec29e9f6a8f18601d13d001b9ead3826a78c"
         }
       ],
       "constraints": {
@@ -1180,7 +1323,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -1205,7 +1355,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -1222,12 +1372,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.473355+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.530930+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_后山挑水路_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.530938+00:00"
+            }
           }
         }
       }
@@ -1239,15 +1395,21 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
-          "status": "ready"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared primary reference passed finalized review",
+            "reviewed_at": "2026-07-07T09:37:52.732706+00:00"
+          }
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_黑陶破盆_比例.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
+          "status": "ready"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_黑陶破盆_手持.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -1260,7 +1422,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_道具_黑陶破盆.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "77772ee55baf606efa79127f827d26048093b86869f2db6e3677ef326fe1bba1"
         }
       ],
       "constraints": {
@@ -1299,8 +1462,8 @@
           "数量漂移"
         ]
       },
-      "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_passed": true,
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "owner": "剧情资产",
       "current_state": "黑乎乎的破旧陶盆，边缘缺口，沾水和砂石，外观看似普通，盆底只有一线极弱暖金微光，不能像神器光柱。",
       "lifecycle": {
@@ -1324,7 +1487,7 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared primary reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.394247+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.592699+00:00"
           }
         },
         "front": {
@@ -1334,16 +1497,22 @@
             "status": "accepted",
             "reviewer": "image_qc.mark_finalized",
             "reason": "shared front reference passed finalized review",
-            "reviewed_at": "2026-07-07T08:51:34.394369+00:00"
+            "reviewed_at": "2026-07-07T10:11:42.592829+00:00"
           }
         },
         "reverse": {
           "path": "出图/共享/图片/定妆_场景_夜潭_反打.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "image_qc.mark_finalized",
+            "reason": "shared reverse reference passed finalized review",
+            "reviewed_at": "2026-07-07T10:11:42.592842+00:00"
+          }
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_夜潭_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_夜潭.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -1356,7 +1525,8 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_场景_夜潭.png",
-          "status": "ready"
+          "status": "ready",
+          "sha256": "e28f3276e1e26e5cd912a469b9ad1eb171b901d8c99ba1f82ba56554edc083a4"
         }
       ],
       "constraints": {
@@ -1369,7 +1539,14 @@
           "平台UI",
           "水印",
           "空间轴线随机跳变"
-        ]
+        ],
+        "lighting_signature": {
+          "color_temperature": "mixed_cool_warm",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "top",
+          "source_text": "LOC_BLACK_HALL 上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。 LOC_WATER_ROUTE 夜路青灰月光，水桶和肩背有湿冷反光。 LOC_NIGHT_POOL 水面冷月光；破盆微光只在末帧盆底一线暖金出现。；夜，冷蓝月光，破盆只有极弱微光。",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
       },
       "face_policy": "faceless",
       "drift_forbidden": [
@@ -1402,7 +1579,7 @@
         ]
       },
       "self_check_passed": true,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "浅潭居中，巨石与小瀑布在后景，挑水桶/扁担靠近前景。",
@@ -1419,12 +1596,18 @@
               "status": "accepted",
               "reviewer": "image_qc.mark_finalized",
               "reason": "shared front reference passed finalized review",
-              "reviewed_at": "2026-07-07T08:51:34.394397+00:00"
+              "reviewed_at": "2026-07-07T10:11:42.592864+00:00"
             }
           },
           "back": {
             "path": "出图/共享/图片/定妆_场景_夜潭_反打.png",
-            "status": "planned"
+            "status": "ready",
+            "human_review": {
+              "status": "accepted",
+              "reviewer": "image_qc.mark_finalized",
+              "reason": "shared back reference passed finalized review",
+              "reviewed_at": "2026-07-07T10:11:42.592872+00:00"
+            }
           }
         }
       }

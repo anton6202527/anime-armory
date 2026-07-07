@@ -6,7 +6,12 @@
   "episode": "第3集",
   "items": [
     {
-      "accepted_at": "2026-07-06T20:15:06+0800",
+      "accepted_at": "2026-07-07T18:18:36+0800",
+      "actual_image_inputs": [
+        "出图/第3集/图片/Clip02_first.png",
+        "出图/第3集/图片/Clip02_mid.png",
+        "出图/第3集/图片/Clip02_end.png"
+      ],
       "anchor_consumption": {
         "action": "submit first/mid/end frames in one native multi-keyframe request",
         "anchor_count": 1,
@@ -25,10 +30,13 @@
         "supports_native_mid_anchors": true
       },
       "anchor_consumption_mode": "native_multiframe",
+      "artifact_sha256": "598919473485903f1cd1bb2180f9d93440194bffd855f52a9cfef47384dafcc1",
       "audio_policy_enforced": "already_silent",
+      "backend_version": "seedance2.0_vip",
       "clip": "Clip_02",
       "cost_provider": "dreamina",
       "credit_count": 24,
+      "effective_seed": "none",
       "end_image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_end.png",
       "end_image_rel": "出图/第3集/图片/Clip02_end.png",
       "frame_control_mode": "multi_keyframe",
@@ -36,6 +44,7 @@
       "heading": "## Clip 02（时长 11.778s · EP03_CLIP02 · 搜尸求生：生存物资）",
       "image": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip02_first.png",
       "image_rel": "出图/第3集/图片/Clip02_first.png",
+      "input_fingerprint": "e6cb01f67b6bf7103e1d9cd8e84f4acdbad147f658c212adf2175a4ba96e1969",
       "last_query": {
         "credit_count": 24,
         "gen_status": "success",
@@ -67,6 +76,8 @@
       "last_submit_returncode": 0,
       "last_submit_stdout_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_submissions_第3集.jsonl",
       "logid": "202607062011361921681130059294422",
+      "manifest_backend": "dreamina",
+      "manifest_model_version": "seedance2.0_vip",
       "mode_backend": "multiframe2video",
       "model_version": "seedance2.0_vip",
       "multiframe_images": [
@@ -94,7 +105,19 @@
         "status": "updated",
         "voice_path": ""
       },
+      "post_video_qc": {
+        "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+        "dense_face_watch_required": false,
+        "identity_qc_required": true,
+        "required_reports": [
+          "video_qc",
+          "temporal_consistency"
+        ],
+        "return_to_stage": "video_or_image_then_compose",
+        "sample_policy": "standard start/mid/end machine QC; escalate to dense frame review if reviewer sees face drift"
+      },
       "prompt_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_batches/第3集/02_02/prompts/Clip_02_搜尸求生：生存物资.prompt.txt",
+      "prompt_sha256": "4af003835971c7be5894fe87cb023e48d529127c1d4d221c4258bebd8acf6170",
       "qc_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/02_02/video_qc_第3集_02_02.json",
       "qc_machine": {
         "anchor_blocks": 0,
@@ -102,12 +125,22 @@
         "anchor_skipped": 0,
         "anchor_warns": 0,
         "seam_blocks": 0,
-        "seam_info": 1,
+        "seam_info": 2,
         "seam_warns": 0,
-        "seams_checked": 1
+        "seams_checked": 2
       },
       "qc_markdown": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/video_qc/第3集/02_02/video_qc_第3集_02_02.md",
       "qc_overridden": false,
+      "quality_tier": "720p",
+      "recipe_hash": "dc41197865e045ea3c183bbe2e9902e6a8e5f290613dc22689981f0c3eda8adc",
+      "reference_bundle_sha256": "1eb72699292554f4f980d2cc40490564edb76d36432dea08e1e636e890d398f6",
+      "route_clip_id": "Clip_02",
+      "route_execution_recipe_hash": "a8220ae79e6f5a0f04e2dbb20d8ad5b701b8bb7d95346d3d6eecaf2983f41735",
+      "route_hash": "08c8859ee55eb42cdb3d89f8afe1468ffaff68b9dbaab7f89b0a5c3c3354eb07",
+      "route_mode": "image2video",
+      "route_primary_backend": "dreamina",
+      "seed_effective": false,
+      "seed_support": "unsupported_or_unknown",
       "status": "accepted",
       "story_duration": 11.778,
       "submit_duration": 12,
@@ -123,7 +156,7 @@
   "ratio": "9:16",
   "requested_model_version": "auto",
   "requested_video_resolution": "auto",
-  "updated_at": "2026-07-06T20:15:06+0800",
+  "updated_at": "2026-07-07T18:18:36+0800",
   "version": 1,
   "video_budget_tier": "预算充足",
   "video_resolution": "720p"

@@ -561,6 +561,7 @@ def main() -> int:
     )
     parser.add_argument("--no-resize", action="store_true")
     parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
+    parser.add_argument("--continue-on-qc-block", action="store_true", help="调试用：遇到 post_qc=block 仍继续后续格；默认立即停下")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
@@ -590,6 +591,7 @@ def main() -> int:
     panel_dir = root / "出图" / args.chapter / "panels"
     candidate_root = root / "出图" / args.chapter / "candidates"
     failures = 0
+    qc_blocked = 0
     for job in jobs:
         pid = job.get("panel_id")
         final = panel_dir / f"{pid}.png"
@@ -640,16 +642,19 @@ def main() -> int:
                 os.replace(temp_path, final)
                 rel = str(final.relative_to(root))
                 post_qc = {} if args.no_post_qc else post_qc_panel(root, args.chapter, job, final, reference_records)
+                post_qc_verdict = str(post_qc.get("verdict") or "skipped")
                 history = job.get("history") if isinstance(job.get("history"), list) else []
                 if archived_existing:
                     history.append({"kind": "archived_previous", "path": archived_existing})
+                generated_at = dt.datetime.now().isoformat(timespec="seconds")
+                status = "qc_block" if post_qc_verdict == "block" else "ready"
                 job.update(
                     {
-                        "status": "ready",
+                        "status": status,
                         "result_path": rel,
                         "source": CODEX_CHANNEL,
                         "model": CODEX_MODEL,
-                        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+                        "generated_at": generated_at,
                         "backend_version": backend_version,
                         "artifact_sha256": file_sha256(final),
                         "attempt": attempt,
@@ -663,9 +668,9 @@ def main() -> int:
                     job["history"] = history[-10:]
                 job.pop("error", None)
                 append_event(root, {
-                    "ts": job["generated_at"],
+                    "ts": generated_at,
                     "panel_id": pid,
-                    "status": "ready",
+                    "status": status,
                     "backend": CODEX_CHANNEL,
                     "model": CODEX_MODEL,
                     "path": rel,
@@ -675,12 +680,18 @@ def main() -> int:
                     "reference_manifest": rel_to_root(root, reference_manifest),
                     "reference_input_count": len(reference_records),
                     "reference_input_paths": [record["path"] for record in reference_records],
-                    "post_qc_verdict": post_qc.get("verdict") if post_qc else "skipped",
+                    "post_qc_verdict": post_qc_verdict,
                     "duration_sec": round(time.monotonic() - started, 2),
                     "backend_version": backend_version,
                 })
                 write_json(jobs_path, data)
-                print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts})", flush=True)
+                if post_qc_verdict == "block":
+                    qc_blocked += 1
+                    print(f"[qc-block] {pid} -> {rel}; see {rel_to_root(root, root / '生产数据' / 'panel_qc' / args.chapter / f'{pid}.json')}", file=sys.stderr, flush=True)
+                    if not args.continue_on_qc_block:
+                        return 3
+                else:
+                    print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts}, post_qc={post_qc_verdict})", flush=True)
                 break
         else:
             if last_error:
@@ -704,6 +715,8 @@ def main() -> int:
                 write_json(jobs_path, data)
     if all_ready(root, data.get("jobs") or []):
         update_progress(root, args.chapter, "出图", "✅")
+    if qc_blocked:
+        return 3
     return 1 if failures else 0
 
 

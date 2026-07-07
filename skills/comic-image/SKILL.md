@@ -55,7 +55,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 ```
 
 建议先 `--targets P001 --limit 1` 做 smoke test；通过后再批跑。生成完成会更新 `panel_jobs.json` 的 `result_path/status`，全部面板就绪时把本话 `出图` 标为 `✅`。
-每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=warn/block` 时不要继续无脑批跑；先看具体 panel，必要时补共享参考、压缩 prompt 或 `--force --targets Pxxx` 重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
+每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=block` 时该 job 标为 `qc_block` 而不是 `ready`，默认立即停止批跑，不能进入合成；修复后用 `--force --targets Pxxx` 重抽。`verdict=warn` 可继续登记，但 `comic-review gate --stage image` 会要求人审签收或重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
 
 带 `references` 的格子默认要求 reference path 存在。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；只有明确需要纯文生图试验时才加 `--allow-missing-refs`。
 
@@ -84,16 +84,18 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 ## 工作流
 
 1. 读 `panel_script.json` 和 `layout.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
-2. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；若项目登记了 `character_dna`、`variant_policy`、`STYLE_` 风格锚，逐格 prompt 必须消费这些契约。
-3. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
-4. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
-5. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
-6. Codex 路线必须把 reference path 转成真实 `--image` 入参，而不是只把路径写进 prompt。
-7. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；再做人工视觉复核，重点看脸、服装、手脚、武器接触点、文字水印和剧情动作是否跑偏。
-8. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽；不要把坏图继续传给排版合成。
-9. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
-10. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无待重抽目标后把 `出图` 标 `✅`。
-11. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
+2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
+3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；若项目登记了 `character_dna`、`variant_policy`、`STYLE_` 风格锚，逐格 prompt 必须消费这些契约。
+4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚和混用生成配方；`comic-batch` 会自动跑。
+5. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
+6. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
+7. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
+8. Codex 路线必须把 reference path 转成真实 `--image` 入参，而不是只把路径写进 prompt。
+9. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
+10. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
+11. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
+12. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无 `qc_block` 或待重抽目标后把 `出图` 标 `✅`。
+13. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
 
 ## Prompt 要点
 

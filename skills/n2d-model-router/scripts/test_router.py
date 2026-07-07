@@ -76,6 +76,9 @@ def test_mid_anchor_without_endframe_does_not_consume_last_frame(tmp_path):
     assert frame_inputs["mid_anchors"] == 1
     assert frame_inputs["last_frame"] is False
     assert frame_inputs["native_timeline_frames"] == 2
+    assert route["execution_recipe"]["post_video_qc"]["identity_qc_required"] is True
+    assert route["execution_recipe"]["post_video_qc"]["dense_face_watch_required"] is True
+    assert "video_face_drift_watch" in route["execution_recipe"]["post_video_qc"]["required_reports"]
     allowances = route["identity_preservation_plan"]["motion_readability_allowances"]
     assert any("first frame and registered reference group" in line for line in allowances)
     assert all("first/end frame" not in line for line in allowances)

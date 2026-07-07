@@ -61,6 +61,7 @@ REDRAW_REASON_CATEGORIES = {
     "reference_crop": "参考图裁切",
     "prompt_conflict": "prompt 冲突",
     "temporal": "时序/接缝",
+    "backend_migration": "后端/管线迁移",
     "other": "其他",
 }
 # 自由文本 → 维度：按序首个命中即归类（顺序即优先级），无命中落 other。
@@ -72,6 +73,7 @@ REDRAW_REASON_KEYWORDS = (
     ("scene_drift", ("场景", "光位", "背景", "环境", "scene")),
     ("style_drift", ("画风", "风格", "style")),
     ("temporal", ("接缝", "时序", "闪烁", "跳切", "flicker", "seam", "temporal")),
+    ("backend_migration", ("后端迁移", "管线迁移", "backend_migration", "pipeline_upgrade")),
     ("reference_crop", ("参考图", "裁切", "crop")),
     ("prompt_conflict", ("prompt 冲突", "提示词冲突", "词冲突", "prompt conflict")),
 )

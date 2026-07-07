@@ -6,8 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+try:
+    from image_backend_adapter import ImageBackendCapabilities, resolve_capabilities
+except Exception:  # pragma: no cover - keep job building usable in partially-copied skill folders
+    ImageBackendCapabilities = Any  # type: ignore
+    resolve_capabilities = None  # type: ignore
 
 
 PRESERVE_GENERATION_KEYS = {
@@ -25,9 +35,9 @@ PRESERVE_GENERATION_KEYS = {
     "post_qc",
     "last_error",
 }
-MAX_REFERENCE_IMAGES_PER_JOB = 6
-SINGLE_CHARACTER_REFERENCE_LIMIT = 4
-MULTI_CHARACTER_REFERENCE_LIMIT = 2
+LEGACY_MAX_REFERENCE_IMAGES_PER_JOB = 6
+LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT = 4
+LEGACY_MULTI_CHARACTER_REFERENCE_LIMIT = 2
 REFERENCE_VIEW_PRIORITY = {
     "anchor_path": 0,
     "anchor": 0,
@@ -108,7 +118,7 @@ def resolve_reference_paths(root: Path, ref_id: str, registry: dict) -> list[dic
                 continue
             seen.add(resolved)
             out.append({"id": ref_id, "path": path_relative_to_root(root, path), "view": role})
-    return out[:4] if ref_id.startswith("CHAR_") else out[:1]
+    return out
 
 
 def compact_metadata(value: Any, *, max_len: int = 460) -> str:
@@ -181,38 +191,65 @@ def reference_priority(item: dict[str, str]) -> tuple[int, str]:
     return (REFERENCE_VIEW_PRIORITY.get(view, 99), str(item.get("path") or ""))
 
 
-def panel_references(root: Path, panel: dict, registry: dict) -> list[dict[str, str]]:
+def ref_kind(ref_id: str) -> str:
+    if ref_id.startswith("CHAR_") or ref_id.startswith("MON_"):
+        return "character"
+    if ref_id.startswith("STYLE_"):
+        return "style"
+    return "asset"
+
+
+def _cap_value(caps: Any, name: str, default: int) -> int:
+    try:
+        value = int(getattr(caps, name))
+    except Exception:
+        return default
+    return max(0, value)
+
+
+def panel_references(root: Path, panel: dict, registry: dict, caps: Any) -> list[dict[str, str]]:
     grouped: dict[str, list[dict[str, str]]] = {}
     for ref_id in panel_reference_ids(panel):
         resolved = resolve_reference_paths(root, str(ref_id), registry) or [{"id": str(ref_id), "path": ""}]
         grouped[ref_id] = sorted(resolved, key=reference_priority)
 
     character_ids = [ref_id for ref_id in grouped if ref_id.startswith("CHAR_")]
-    char_limit = SINGLE_CHARACTER_REFERENCE_LIMIT if len(character_ids) <= 1 else MULTI_CHARACTER_REFERENCE_LIMIT
+    char_limit = (
+        _cap_value(caps, "single_character_reference_limit", LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT)
+        if len(character_ids) <= 1
+        else _cap_value(caps, "multi_character_reference_limit", LEGACY_MULTI_CHARACTER_REFERENCE_LIMIT)
+    )
+    non_character_limit = _cap_value(caps, "non_character_reference_limit", 1)
+    style_limit = _cap_value(caps, "style_reference_limit", 1)
+    max_refs = _cap_value(caps, "reference_image_limit", LEGACY_MAX_REFERENCE_IMAGES_PER_JOB)
     selected: list[dict[str, str]] = []
-    deferred_character_groups: list[list[dict[str, str]]] = []
+    deferred_groups: list[list[dict[str, str]]] = []
     for ref_id, refs in grouped.items():
-        if ref_id.startswith("CHAR_"):
-            selected.extend(refs[:char_limit])
-            if len(character_ids) <= 1 and refs[char_limit:]:
-                deferred_character_groups.append(list(refs[char_limit:]))
+        kind = ref_kind(ref_id)
+        if kind == "character":
+            limit = char_limit
+        elif kind == "style":
+            limit = style_limit
         else:
-            selected.extend(refs[:1])
+            limit = non_character_limit
+        selected.extend(refs[:limit])
+        if refs[limit:]:
+            deferred_groups.append(list(refs[limit:]))
 
-    while len(selected) < MAX_REFERENCE_IMAGES_PER_JOB and any(deferred_character_groups):
+    while len(selected) < max_refs and any(deferred_groups):
         progressed = False
-        for refs in deferred_character_groups:
-            if len(selected) >= MAX_REFERENCE_IMAGES_PER_JOB:
+        for refs in deferred_groups:
+            if len(selected) >= max_refs:
                 break
             if refs:
                 selected.append(refs.pop(0))
                 progressed = True
         if not progressed:
             break
-    if len(selected) > MAX_REFERENCE_IMAGES_PER_JOB:
-        non_char = [item for item in selected if not str(item.get("id") or "").startswith("CHAR_")]
-        char = [item for item in selected if str(item.get("id") or "").startswith("CHAR_")]
-        selected = (non_char + char)[:MAX_REFERENCE_IMAGES_PER_JOB]
+    if len(selected) > max_refs:
+        non_char = [item for item in selected if ref_kind(str(item.get("id") or "")) != "character"]
+        char = [item for item in selected if ref_kind(str(item.get("id") or "")) == "character"]
+        selected = (non_char + char)[:max_refs]
     return selected
 
 
@@ -264,6 +301,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
     rects = panel_rects(layout)
     model = read_setting(root, "生图模型", "自定义")
     channel = read_setting(root, "生图渠道", "manual")
+    caps = resolve_capabilities(model, channel) if resolve_capabilities else None
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     text_language = read_setting(root, "文字语言", "中文")
     registry = load_reference_registry(root)
@@ -280,8 +318,9 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
                 "references": [
                     item
-                    for item in panel_references(root, panel, registry)
+                    for item in panel_references(root, panel, registry, caps)
                 ],
+                "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",
                 "source": channel,
             }
@@ -292,6 +331,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
         "chapter": chapter,
         "model": model,
         "channel": channel,
+        "backend_capabilities": caps.to_dict() if caps else {},
         "text_language": text_language,
         "jobs": jobs,
     }

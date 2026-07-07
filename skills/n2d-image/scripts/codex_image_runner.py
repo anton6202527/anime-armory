@@ -2952,6 +2952,19 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
             reason = str(row.get("reason") or "missing").strip()
             problems.append(f"face_reference_coverage:{reason}")
 
+    prop_targets: List[Dict[str, Any]] = []
+    prop_shape = payload.get("prop_shape_review") or {}
+    for row in prop_shape.get("targets") or []:
+        if not isinstance(row, dict):
+            continue
+        if row.get("confirmed"):
+            continue
+        if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+            continue
+        prop_targets.append(row)
+        asset = str(row.get("asset") or row.get("asset_name") or "registered_prop").strip()
+        problems.append(f"prop_shape_review:{asset}")
+
     checks = payload.get("checks") or {}
     for check_name in ("face", "hair", "outfit"):
         for row in (checks.get(check_name) or {}).get("shots") or []:
@@ -3007,6 +3020,19 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
         lines.append("- hair:block 修复：发型、发髻、发际线和头发轮廓必须回到对应角色脸锚/半身参考。")
     if any(p.startswith("outfit") for p in problems):
         lines.append("- outfit:block 修复：服装剪影、领口、袖口、腰带、纹样、主色和关键配饰必须回到对应角色/道具参考。")
+    if prop_targets:
+        lines.append(
+            "- prop_shape_review 修复：本镜上次登记道具需要人工形状确认；重抽必须让需要出场的登记道具清楚可辨，"
+            "外形、材质、数量和时代感以附件/registry 为准，不要用暗影、极远景、半截遮挡或模糊来逃避检查。"
+        )
+        for row in prop_targets[:6]:
+            asset = str(row.get("asset") or "registered_prop").strip()
+            name = str(row.get("asset_name") or "").strip()
+            ref = str(row.get("ref") or "").strip()
+            forbidden = "、".join(str(x) for x in (row.get("must_not_have") or []) if str(x).strip())
+            suffix = f"；禁：{forbidden}" if forbidden else ""
+            label = f"{asset}（{name}）" if name else asset
+            lines.append(f"  - {label}: 按参考 `{ref}` 的结构与旧化材质生成{suffix}。")
     lines.append("- 不要降低画质或缩小主体来逃避 QC；必须清晰、高分辨率、无水印、无字幕、无 UI。")
     return "\n".join(lines)
 

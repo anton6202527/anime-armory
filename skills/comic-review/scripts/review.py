@@ -25,6 +25,10 @@ try:
     import style_consistency
 except Exception:  # pragma: no cover - review must still run if optional style gate breaks
     style_consistency = None
+try:
+    import character_consistency
+except Exception:  # pragma: no cover - review must still run if optional character gate breaks
+    character_consistency = None
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -388,6 +392,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         "identity_report": root / "生产数据" / f"comic_identity_report_{chapter}.json",
         "identity_registry": root / "出图" / "共享" / "identity_registry.json",
         "style_report": root / "生产数据" / f"comic_style_consistency_{chapter}.json",
+        "character_report": root / "生产数据" / f"comic_character_consistency_{chapter}.json",
         "panel_dir": root / "出图" / chapter / "panels",
     }
     for key in ("progress", "settings", "meta", "panel_script", "layout", "lettering", "manifest"):
@@ -581,6 +586,35 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
                 "style",
             )
 
+    character_report: dict[str, Any] = {}
+    if character_consistency is None:
+        add_issue(
+            issues,
+            "warn",
+            "skills/comic-review/scripts/character_consistency.py",
+            "角色一致性机检模块不可用，已跳过角色并排复核图和 face/hair/outfit 指纹检查",
+            "comic-review",
+            "修复 character_consistency.py 后重跑 comic-review",
+            "character",
+        )
+    else:
+        character_report = character_consistency.analyze(root, chapter)
+        character_paths = character_consistency.write_outputs(root, chapter, character_report)
+        notes.append(f"已刷新角色一致性报告：{character_paths['markdown']}")
+        for finding in character_report.get("findings") or []:
+            severity = str(finding.get("severity") or "warn")
+            if severity not in {"block", "warn", "info"}:
+                severity = "warn"
+            add_issue(
+                issues,
+                severity,
+                str(finding.get("artifact") or finding.get("panel_id") or paths["character_report"].relative_to(root)),
+                str(finding.get("reason") or "角色一致性 finding"),
+                "comic-image" if severity in {"block", "warn"} else "comic-review",
+                str(finding.get("suggested_fix") or "按角色一致性报告返修"),
+                "character",
+            )
+
     rights = (meta.get("rights") or {}) if isinstance(meta, dict) else {}
     publish_like = is_publish_like_usage(settings["合规用途"])
     demo_like = is_demo_like_usage(settings["合规用途"])
@@ -663,6 +697,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             "manifest": str(paths["manifest"].relative_to(root)),
             "identity_report": str(paths["identity_report"].relative_to(root)),
             "style_report": str(paths["style_report"].relative_to(root)),
+            "character_report": str(paths["character_report"].relative_to(root)),
             "rendered": rendered,
             "lettering_slot_qc": slot_qc,
             "qa_preview": preview,
@@ -673,6 +708,11 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         "style_consistency": {
             "verdict": style_report.get("verdict", "skipped") if isinstance(style_report, dict) else "skipped",
             "summary": style_report.get("summary", {}) if isinstance(style_report, dict) else {},
+        },
+        "character_consistency": {
+            "verdict": character_report.get("verdict", "skipped") if isinstance(character_report, dict) else "skipped",
+            "summary": character_report.get("summary", {}) if isinstance(character_report, dict) else {},
+            "contact_sheet": character_report.get("contact_sheet", "") if isinstance(character_report, dict) else "",
         },
         "issues": issues,
         "notes": notes,
@@ -725,6 +765,13 @@ def write_markdown(report: dict, path: Path) -> None:
         lines += ["", "## 风格一致性", ""]
         lines.append(f"- 结论：{style.get('verdict')}")
         lines.append(f"- 摘要：{json.dumps(style.get('summary') or {}, ensure_ascii=False)}")
+    if report.get("character_consistency"):
+        character = report["character_consistency"]
+        lines += ["", "## 角色一致性", ""]
+        lines.append(f"- 结论：{character.get('verdict')}")
+        lines.append(f"- 摘要：{json.dumps(character.get('summary') or {}, ensure_ascii=False)}")
+        if character.get("contact_sheet"):
+            lines.append(f"- 并排复核图：`{character.get('contact_sheet')}`")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

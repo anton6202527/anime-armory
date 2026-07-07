@@ -915,6 +915,37 @@ def _extract_target_png(body: str) -> Optional[str]:
     return targets[0] if targets else None
 
 
+FACE_COVERAGE_EXEMPT_MARKERS = (
+    "faceless_reaction_anchor",
+    "no_face_reaction_anchor",
+    "face_coverage=skip",
+    "face_check_policy=skip",
+    "脸部覆盖豁免",
+    "无脸反应锚",
+)
+
+
+def _face_coverage_exempt_pngs(body: str) -> Set[str]:
+    """Prompt-declared per-target face coverage exemptions.
+
+    This is intentionally target-scoped. A multi-character shot may include
+    inserted OTS/profile/hand/prop reaction anchors where a comparable face is
+    not intended, while the regular first/mid/end frames must still pass full
+    face coverage.
+    """
+    exempt: Set[str] = set()
+    for line in str(body or "").splitlines():
+        if not any(marker in line for marker in FACE_COVERAGE_EXEMPT_MARKERS):
+            continue
+        for png in _png_tokens(line):
+            if _is_reference_png(png):
+                continue
+            key = _coverage_png_key(png)
+            if key:
+                exempt.add(key)
+    return exempt
+
+
 def _primary_slot_identity_refs(body: str) -> List[str]:
     """逐镜多人槽位里显式标为 primary/主检/星标 的身份引用。
 
@@ -978,14 +1009,19 @@ def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
         return []
     id_refs = _coverage_identity_refs(body, raw_refs)
     targets = _extract_target_pngs(body) or [None]
+    face_exempt = _face_coverage_exempt_pngs(body)
     out: List[Dict[str, Any]] = []
     for png in targets:
         shot = _shot_key(png) or _shot_key(label) or label
+        png_key = _coverage_png_key(png)
+        face_required = not (png_key and png_key in face_exempt)
         out.append({
             "label": label,
             "shot": shot,
             "png": png,
             "identity_refs": sorted(set(id_refs)),
+            "face_coverage_required": face_required,
+            **({"face_check_policy": "faceless_reaction_anchor"} if not face_required else {}),
         })
     return out
 
@@ -3293,8 +3329,17 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
             "notes": ["缺出图 prompt lint，无法建立角色镜覆盖清单；已有落档 PNG 时不得进入 video。"],
         }
 
+    skipped_face_coverage: List[Dict[str, Any]] = []
     for raw in manifest:
         rec = dict(raw)
+        if rec.get("face_coverage_required") is False:
+            skipped_face_coverage.append({
+                "shot": rec.get("shot"),
+                "png": rec.get("png"),
+                "label": rec.get("label"),
+                "reason": rec.get("face_check_policy") or "face_coverage_required_false",
+            })
+            continue
         resolved = _resolve_existing_character_png(Path(root), ep, rec)
         if resolved:
             rec["png"] = resolved
@@ -3364,6 +3409,7 @@ def face_reference_coverage(payload: Dict[str, Any], root: Path, ep: str) -> Dic
         "missing": missing,
         "unclassified": unclassified,
         "pending": pending,
+        "skipped": skipped_face_coverage,
         "precision_level": "full" if full else ("degraded" if face else "none"),
         "face_mode": face.get("mode"),
         "verdict": "block" if missing else "ok",
@@ -4299,9 +4345,40 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
     """收集本形态**应紧裁的脸锚**参考：reference_group.face_anchor_refs、
     reference_atlas.face_anchor_refs / expression_refs。返回 [(label, rel_path)]。纯函数·可测。
     （不收 reference_group.front/half/full——那些是宽身位主参考/服装参考，本就脸小，不该被本门误判。）"""
+    def item_path(value: Any) -> str:
+        if isinstance(value, Mapping):
+            return str(value.get("path") or value.get("ref") or value.get("file") or "").strip()
+        return str(value or "").strip()
+
+    def norm(path: str) -> str:
+        return path.replace("\\", "/").lstrip("./")
+
+    def wide_ref_paths() -> Set[str]:
+        paths: Set[str] = set()
+        for key in ("front", "three_quarter", "side", "back", "outfit", "half_body", "turnaround"):
+            rel = item_path(rg.get(key))
+            if rel:
+                paths.add(norm(rel))
+        base_views = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+        for value in base_views.values():
+            rel = item_path(value)
+            if rel:
+                paths.add(norm(rel))
+        return paths
+
+    def looks_like_tight_face_ref(label: str, rel: str) -> bool:
+        text = f"{label} {Path(rel).stem}".lower()
+        return any(token in text for token in (
+            "脸", "face", "anchor", "closeup", "close-up", "特写", "表情", "expression", "mood", "emotion"
+        ))
+
+    def is_base_expression(label: str) -> bool:
+        return label.strip().lower() in {"基础", "base", "basic", "front", "正脸", "主参考", "常态"}
+
     out: List[Tuple[str, str]] = []
     rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
     atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    wide_refs = wide_ref_paths()
     sources = [("face_anchor", rg.get("face_anchor_refs")),
                ("face_anchor", atlas.get("face_anchor_refs")),
                ("expression", atlas.get("expression_refs"))]
@@ -4317,6 +4394,12 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
                 label = str(item.get("label") or item.get("emotion") or kind)
             rel = str(path or "").strip()
             if rel and rel.lower().endswith(".png"):
+                if kind == "expression":
+                    # 「基础」表情经常只是正面/半身主参考的别名，不是紧裁脸锚；宽身位脸小是合理的。
+                    # 真正的表情库仍会因路径/标签含“脸/表情/face/expression”等信号而进入本门。
+                    same_as_wide_ref = norm(rel) in wide_refs
+                    if same_as_wide_ref and (is_base_expression(label) or not looks_like_tight_face_ref(label, rel)):
+                        continue
                 out.append((label, rel))
     return out
 

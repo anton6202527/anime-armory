@@ -77,7 +77,7 @@
       },
       "high_action": false,
       "expected_motion": "large_establishing",
-      "subject": "CHAR_01",
+      "subject": "CHAR_03",
       "category": "character"
     },
     {
@@ -316,7 +316,7 @@
       },
       "high_action": true,
       "expected_motion": "fight_exchange",
-      "subject": "CHAR_02",
+      "subject": "CHAR_03",
       "category": "character"
     }
   ],

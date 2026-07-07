@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第1集",
-  "generated_at": "2026-07-07T09:26:19+00:00",
+  "generated_at": "2026-07-07T10:20:39+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -51,8 +51,8 @@
       "脸(G1)": {
         "block": 0,
         "warn": 0,
-        "ok": 31,
-        "n": 31,
+        "ok": 33,
+        "n": 33,
         "skipped": false
       },
       "无脸崩坏(G1b)": {
@@ -86,8 +86,8 @@
       "服装配色(N1)": {
         "block": 0,
         "warn": 0,
-        "ok": 31,
-        "n": 31,
+        "ok": 33,
+        "n": 33,
         "skipped": false
       },
       "服装独立(COST)": {
@@ -100,8 +100,8 @@
       "发型(H1)": {
         "block": 0,
         "warn": 0,
-        "ok": 31,
-        "n": 31,
+        "ok": 33,
+        "n": 33,
         "skipped": false
       },
       "辨识标记(MK1)": {
@@ -148,9 +148,9 @@
       },
       "场景(O2)": {
         "block": 0,
-        "warn": 3,
+        "warn": 0,
         "ok": 0,
-        "n": 3,
+        "n": 0,
         "skipped": false
       },
       "跨集场景漂移(SCNX)": {
@@ -184,8 +184,8 @@
       "景深一致(DOF1)": {
         "block": 0,
         "warn": 0,
-        "ok": 31,
-        "n": 31,
+        "ok": 33,
+        "n": 33,
         "skipped": false
       },
       "景深锁(DOFL)": {
@@ -205,8 +205,8 @@
       "色温调色(GRADE1)": {
         "block": 0,
         "warn": 6,
-        "ok": 25,
-        "n": 31,
+        "ok": 27,
+        "n": 33,
         "skipped": false
       },
       "光照签名(LSIG)": {
@@ -484,16 +484,16 @@
       },
       "生成配方(RCP)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "强配方Schema(RCP2)": {
         "block": 0,
-        "warn": 1,
+        "warn": 0,
         "ok": 0,
-        "n": 1,
+        "n": 0,
         "skipped": false
       },
       "系列包装(PKG)": {
@@ -519,9 +519,9 @@
       },
       "成本路由(K1)": {
         "block": 0,
-        "warn": 3,
+        "warn": 10,
         "ok": 0,
-        "n": 3,
+        "n": 10,
         "skipped": false
       },
       "人审校准集(CAL)": {
@@ -617,7 +617,7 @@
       }
     },
     "total_block": 0,
-    "precision_level": "degraded",
+    "precision_level": "full",
     "evidence_grade": {
       "by_dim": {
         "语义谱系(P0)": {
@@ -643,7 +643,7 @@
         },
         "状态像素验证(SP1V)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -664,63 +664,63 @@
         },
         "脸(G1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "embedding",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "无脸崩坏(G1b)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "跨集脸漂(G5)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "embedding",
           "achievable": "embedding",
           "applicable": true,
           "under_proven": false
         },
         "表情连续(EXP1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "表情过锁(EXP3)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "服装配色(N1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "服装独立(COST)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "发型(H1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "辨识标记(MK1)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
@@ -734,7 +734,7 @@
         },
         "状态化表情(EXP2)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -762,7 +762,7 @@
         },
         "场景(O2)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -783,21 +783,21 @@
         },
         "空间站位(B1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "风格(S1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "景深一致(DOF1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -811,14 +811,14 @@
         },
         "特效窜色(VFXC)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "色温调色(GRADE1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -853,35 +853,35 @@
         },
         "糊/低质(N4)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "手部/解剖(N5)": {
           "tier": "pixel",
-          "actual": "absent",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": false,
           "under_proven": false
         },
         "身高比例(R1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "轴线视线(X1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
         },
         "天气时辰(W1)": {
           "tier": "pixel",
-          "actual": "declared",
+          "actual": "pixel",
           "achievable": "pixel",
           "applicable": true,
           "under_proven": false
@@ -1233,7 +1233,7 @@
       "under_proven": [
         "主体视频一致(S2V)"
       ],
-      "weakest": "declared"
+      "weakest": "structured"
     }
   },
   "findings": [
@@ -1583,72 +1583,12 @@
       "severity": "warn"
     },
     {
-      "png": "图片/Clip07_first.png",
-      "scene": "荒野尸骸战场",
-      "kind": "光色",
-      "avg_dist": 0.393,
-      "group_median": 0.168,
-      "verdict": "warn",
-      "dimension": "场景(O2)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/图片",
-        "出图/共享/asset_registry.json"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip07_mid.png",
-      "scene": "荒野尸骸战场",
-      "kind": "光色",
-      "avg_dist": 0.391,
-      "group_median": 0.168,
-      "verdict": "warn",
-      "dimension": "场景(O2)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/图片",
-        "出图/共享/asset_registry.json"
-      ],
-      "severity": "warn"
-    },
-    {
-      "png": "图片/Clip07_end.png",
-      "scene": "荒野尸骸战场",
-      "kind": "光色",
-      "avg_dist": 0.396,
-      "group_median": 0.168,
-      "verdict": "warn",
-      "dimension": "场景(O2)",
-      "return_to_stage": "image",
-      "rerun_scope": "回 n2d-image 修场景定妆、光位锚、轴线视线、时辰天气、字幕安全区或尾帧；必要时回 n2d-video 重出接缝/相机轨迹/运动质量 clip。",
-      "risk_score": 0.55,
-      "affected_shots": [
-        "Clip_07"
-      ],
-      "affected_artifacts": [
-        "出图/第1集/图片",
-        "出图/共享/asset_registry.json"
-      ],
-      "severity": "warn"
-    },
-    {
       "png": "图片/Clip07_end.png",
       "scene": "荒野尸骸战场",
       "warmth": 0.27,
       "tint": 0.023,
       "warmth_dev": 0.361,
-      "tint_dev": 0.04,
+      "tint_dev": 0.041,
       "verdict": "warn",
       "message": "图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.27 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。",
       "dimension": "色温调色(GRADE1)",
@@ -1885,7 +1825,7 @@
     {
       "metric": "light_dir",
       "png": "Clip06_mid_reaction.png",
-      "scene": "(全集)",
+      "scene": "场景_荒野尸骸战场.png",
       "prev_light_az": "right",
       "light_az": "left",
       "verdict": "warn",
@@ -2313,32 +2253,17 @@
     },
     {
       "verdict": "warn",
-      "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=d33909993e58497f，但复跑审计证据不完整。",
-      "return_to_stage": "video",
+      "message": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "compose",
       "affected_shots": [],
       "affected_artifacts": [
         "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
+        "出视频/第1集/prompt/video_model_routes.json",
         "合成/第1集/成片_第1集_zh.mp4"
       ],
-      "dimension": "生成配方(RCP)",
+      "dimension": "成本路由(K1)",
       "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.3,
-      "severity": "warn"
-    },
-    {
-      "verdict": "warn",
-      "message": "合成/第1集/成片_第1集_zh.mp4 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-      "return_to_stage": "video",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/成片_第1集_zh.mp4"
-      ],
-      "dimension": "强配方Schema(RCP2)",
-      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-      "risk_score": 0.35,
+      "risk_score": 0.2,
       "severity": "warn"
     },
     {
@@ -2358,7 +2283,105 @@
     },
     {
       "verdict": "warn",
-      "message": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "message": "出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "出图/第1集/图片/Clip06_mid_reaction.png"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "出图/第1集/图片/Clip06_end_reaction.png"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "compose",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "合成/第1集/成片_第1集_zh.mp4"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "出图/第1集/图片/Clip06_mid_reaction.png"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "image",
+      "affected_shots": [
+        "Clip_06"
+      ],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "出图/第1集/图片/Clip06_end_reaction.png"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+      "return_to_stage": "compose",
+      "affected_shots": [],
+      "affected_artifacts": [
+        "生产数据/production_events.jsonl",
+        "出视频/第1集/prompt/video_model_routes.json",
+        "合成/第1集/成片_第1集_zh.mp4"
+      ],
+      "dimension": "成本路由(K1)",
+      "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+      "risk_score": 0.2,
+      "severity": "warn"
+    },
+    {
+      "verdict": "warn",
+      "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
       "return_to_stage": "compose",
       "affected_shots": [],
       "affected_artifacts": [
@@ -2872,67 +2895,9 @@
     {
       "return_to_stage": "review",
       "dimensions": [
-        "生成配方(RCP)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、合成/第1集/成片_第1集_zh.mp4",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/成片_第1集_zh.mp4"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺配方字段：mode, seed/seed_degrade, backend_version/model_version, declared_recipe_hash；已可推导 hash=d33909993e58497f，但复跑审计证据不完整。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/成片_第1集_zh.mp4"
-          ],
-          "dimension": "生成配方(RCP)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.3
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
-        "强配方Schema(RCP2)"
-      ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位产物：生产数据/production_events.jsonl、生产数据/generation_recipe_第1集.json、合成/第1集/成片_第1集_zh.mp4",
-      "affected_shots": [],
-      "affected_artifacts": [
-        "生产数据/production_events.jsonl",
-        "生产数据/generation_recipe_第1集.json",
-        "合成/第1集/成片_第1集_zh.mp4"
-      ],
-      "findings": [
-        {
-          "verdict": "warn",
-          "message": "合成/第1集/成片_第1集_zh.mp4 强配方 schema 缺字段：prompt_sha256, reference_bundle_sha256/reference_manifest, input_fingerprint, settings_sha256, artifact_sha256, adapter_version, qc_version, backend_version/model_version, seed_effective_or_unsupported；recipe_hash 已有但还不能完整复现/归因。",
-          "return_to_stage": "video",
-          "affected_shots": [],
-          "affected_artifacts": [
-            "生产数据/production_events.jsonl",
-            "生产数据/generation_recipe_第1集.json",
-            "合成/第1集/成片_第1集_zh.mp4"
-          ],
-          "dimension": "强配方Schema(RCP2)",
-          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
-          "risk_score": 0.35
-        }
-      ]
-    },
-    {
-      "return_to_stage": "review",
-      "dimensions": [
         "成本路由(K1)"
       ],
-      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_06；定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes.json、合成/第1集/成片_第1集_zh.mp4、出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。；定位镜头：Clip_06；定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes.json、合成/第1集/成片_第1集_zh.mp4、出图/第1集/图片/Clip06_mid_reaction.png、出图/第1集/图片/Clip06_end_reaction.png、出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
       "affected_shots": [
         "Clip_06"
       ],
@@ -2940,6 +2905,8 @@
         "生产数据/production_events.jsonl",
         "出视频/第1集/prompt/video_model_routes.json",
         "合成/第1集/成片_第1集_zh.mp4",
+        "出图/第1集/图片/Clip06_mid_reaction.png",
+        "出图/第1集/图片/Clip06_end_reaction.png",
         "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
       ],
       "findings": [
@@ -2960,6 +2927,112 @@
         {
           "verdict": "warn",
           "message": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "compose",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "合成/第1集/成片_第1集_zh.mp4"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_06"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "出图/第1集/图片/Clip06_mid_reaction.png"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_06"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "出图/第1集/图片/Clip06_end_reaction.png"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "compose",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "合成/第1集/成片_第1集_zh.mp4"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_06"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "出图/第1集/图片/Clip06_mid_reaction.png"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "image",
+          "affected_shots": [
+            "Clip_06"
+          ],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "出图/第1集/图片/Clip06_end_reaction.png"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
+          "return_to_stage": "compose",
+          "affected_shots": [],
+          "affected_artifacts": [
+            "生产数据/production_events.jsonl",
+            "出视频/第1集/prompt/video_model_routes.json",
+            "合成/第1集/成片_第1集_zh.mp4"
+          ],
+          "dimension": "成本路由(K1)",
+          "rerun_scope": "回对应 image/video/compose/review 生成节点补 production_events、recipe_hash、强配方 schema、后端/seed/参考图记录、成本、重试原因、人审校准集与一致性 probe；不得让未登记媒体进入交付。",
+          "risk_score": 0.2
+        },
+        {
+          "verdict": "warn",
+          "message": "合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。",
           "return_to_stage": "compose",
           "affected_shots": [],
           "affected_artifacts": [

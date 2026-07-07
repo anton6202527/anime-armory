@@ -51,6 +51,7 @@ def check_multimodal_continuity(root: str, ep: str) -> None:
     )
 
 IMAGE_QC_AUTHORITATIVE_DIMS = {"脸(G1)", "发型(H1)", "服装配色(N1)", "风格(S1)", "场景(O2)", "多模态(P2)", "手部/解剖(N5)"}
+HUMAN_REVIEW_SIGNOFF_DIMS = {"发型(H1)"}
 
 
 def _image_qc_clears_pixel_blocks(root: str, ep: str) -> bool:
@@ -238,6 +239,16 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             advisory_signed = True
             advisory_downgrades += 1
             advisory_note = "[consistency_advisory_signoff 已签收·视频后验证据] "
+        if (
+            sev == BLOCK
+            and stage in {"video", "compose", "review"}
+            and dim in HUMAN_REVIEW_SIGNOFF_DIMS
+            and _advisory_row_signed_off(root, ep, row)
+        ):
+            sev = WARN
+            advisory_signed = True
+            advisory_downgrades += 1
+            advisory_note = "[consistency_advisory_signoff 已人工复核签收·像素误报] "
         strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
         if sev == WARN and strict_block and not intentional_signed and not qc_downgraded and not advisory_signed:
             sev = BLOCK

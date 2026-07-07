@@ -704,6 +704,23 @@ def test_character_shot_manifests_include_mid_and_end_targets() -> None:
     ]
 
 
+def test_character_shot_manifests_support_per_target_faceless_reaction_anchor() -> None:
+    blk = _char_block("Clip 06 反应锚")
+    blk["body"] = (
+        "**目标落档**：`出图/第1集/图片/Clip06_first.png` "
+        "`出图/第1集/图片/Clip06_mid_reaction.png` "
+        "`出图/第1集/图片/Clip06_end.png`\n"
+        "**逐目标脸检策略**：`出图/第1集/图片/Clip06_mid_reaction.png` "
+        "face_check_policy=faceless_reaction_anchor；OTS/侧脸/手部/物件反应锚，不要求正脸比对。\n"
+        + blk["body"]
+    )
+
+    manifests = image_qc.character_shot_manifests(blk)
+
+    assert [m["face_coverage_required"] for m in manifests] == [True, False, True]
+    assert manifests[1]["face_check_policy"] == "faceless_reaction_anchor"
+
+
 def test_character_shot_manifest_uses_primary_slot_identity_refs() -> None:
     blk = {
         "label": "Clip 02 反打",
@@ -1733,6 +1750,31 @@ def test_face_reference_coverage_passes_full_ok_match(tmp_path: Path) -> None:
     assert coverage["missing"] == []
 
 
+def test_face_reference_coverage_skips_per_target_faceless_reaction_anchor(tmp_path: Path) -> None:
+    png = tmp_path / "出图" / "第1集" / "图片" / "Clip06_mid_reaction.png"
+    png.parent.mkdir(parents=True)
+    png.write_bytes(b"x")
+    payload = {
+        "checks": {"face": {"available": True, "mode": "insightface", "shots": [
+            {"png": "图片/Clip06_mid_reaction.png", "verdict": "noface"},
+        ]}},
+        "lint": {"available": True, "findings": [], "character_shots": [
+            {"label": "Clip 06", "shot": "Clip_06",
+             "png": "出图/第1集/图片/Clip06_mid_reaction.png",
+             "identity_refs": ["CHAR_01/常态"],
+             "face_coverage_required": False,
+             "face_check_policy": "faceless_reaction_anchor"},
+        ]},
+    }
+
+    coverage = image_qc.face_reference_coverage(payload, tmp_path, "第1集")
+
+    assert coverage["verdict"] == "ok"
+    assert coverage["required"] == 0
+    assert coverage["missing"] == []
+    assert coverage["skipped"][0]["reason"] == "faceless_reaction_anchor"
+
+
 def test_face_reference_coverage_prefers_exact_png_over_clip_worst(tmp_path: Path) -> None:
     png = tmp_path / "出图" / "第1集" / "图片" / "Clip_02_冷开场_mid.png"
     png.parent.mkdir(parents=True)
@@ -2212,7 +2254,11 @@ def test_face_anchor_ref_items_collects_only_tight_crops():
             "face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"],
         },
         "reference_atlas": {
-            "expression_refs": [{"emotion": "怒", "path": "出图/共享/图片/表情_沈念_怒.png"}],
+            "base_views": {"front": {"path": "出图/共享/图片/定妆_沈念.png"}},
+            "expression_refs": [
+                {"emotion": "基础", "path": "出图/共享/图片/定妆_沈念.png"},
+                {"emotion": "怒", "path": "出图/共享/图片/表情_沈念_怒.png"},
+            ],
         },
     }
     items = image_qc._face_anchor_ref_items(form)
@@ -2220,6 +2266,35 @@ def test_face_anchor_ref_items_collects_only_tight_crops():
     assert "出图/共享/图片/定妆_沈念_脸部特写.png" in paths
     assert "出图/共享/图片/表情_沈念_怒.png" in paths
     assert "出图/共享/图片/定妆_沈念.png" not in paths  # 宽身位主参考不收
+
+
+def test_audit_face_anchor_quality_ignores_base_expression_alias_to_front(tmp_path):
+    import pytest
+    Image = pytest.importorskip("PIL.Image", reason="Pillow 装在 facefusion conda env，系统 Python 无")
+    root = tmp_path / "剧"
+    img_dir = root / "出图" / "共享" / "图片"
+    img_dir.mkdir(parents=True)
+    # 正面全身/宽身位参考脸占比可很小；紧裁脸锚才进入本门。
+    Image.new("RGB", (320, 960), (128, 128, 128)).save(img_dir / "定妆_沈念.png")
+    Image.new("RGB", (1024, 1024), (128, 128, 128)).save(img_dir / "定妆_沈念_脸部特写.png")
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({
+        "characters": [{"id": "CHAR_01", "name": "沈念", "scope": "核心长线女主", "forms": [{
+            "form": "常态",
+            "reference_group": {
+                "front": {"path": "出图/共享/图片/定妆_沈念.png"},
+                "face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"],
+            },
+            "reference_atlas": {
+                "base_views": {"front": {"path": "出图/共享/图片/定妆_沈念.png"}},
+                "face_anchor_refs": ["出图/共享/图片/定妆_沈念_脸部特写.png"],
+                "expression_refs": [{"emotion": "基础", "path": "出图/共享/图片/定妆_沈念.png"}],
+            },
+        }]}]
+    }, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_face_anchor_quality(root, "第1集")
+    assert res["available"]
+    assert res["checked"] == 2
+    assert not [f for f in res["findings"] if "定妆_沈念.png" in f["msg"]]
 
 
 def test_audit_face_anchor_quality_flags_low_res(tmp_path):

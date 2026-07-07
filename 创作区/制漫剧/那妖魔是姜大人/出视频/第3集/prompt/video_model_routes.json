@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-06T11:45:35+00:00",
+  "generated_at": "2026-07-07T11:35:18+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -245,6 +245,18 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -522,6 +534,17 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": false,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency"
+          ],
+          "sample_policy": "standard start/mid/end machine QC; escalate to dense frame review if reviewer sees face drift",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -919,6 +942,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -1345,6 +1380,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -1831,6 +1878,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -2217,6 +2276,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -2565,6 +2636,18 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -3041,6 +3124,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "motion_spectacle_guidance": "本镜是打斗/法术/动作高潮镜——在身份与动作可读优先的前提下，按电影级动作大片标准堆视觉信息密度（\"经费在燃烧\"），分四层落实，特效一律服务动作与主体、绝不糊脸或盖过受力点：① 光：体积光 / 丁达尔光束穿过烟尘或雾气；强逆光 + 边缘轮廓光把主体从压暗环境里拔出来、明暗对比拉大（拒绝平光）；命中/爆发帧给一束 motivated 强光。② 纵深：前景放虚焦的余烬/火星/飞尘/断裂物做前景遮挡，中景清晰主体，远景用大气透视压灰——三层纵深拉开空间，别贴成平面。③ 环境受力：动作让环境有反应——扬尘、碎屑顺受力方向飞溅、地面皲裂/凹陷、气浪掀动布幔草木、火星四溅，战场可见破坏感与规模感。④ 运动能量：高速段顺攻击方向给速度线 + 拖影 motion blur；发丝/衣摆/飘带被气流甩动（二级运动）；命中瞬间呈升格慢放般的张力定格（动态定格·不是平静站姿）。调色走具体色彩科学（压暗环境、提亮主体、控制高光溢出），避免泛泛\"cinematic/电影感\"套词；色与光遵守本场光位锚与风格禁忌。",
@@ -3439,6 +3534,18 @@
               "submit_mode": "first_last_relay"
             }
           ]
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",
@@ -3712,6 +3819,18 @@
           "frame_contract_supported": true,
           "motion_reference_supported": false,
           "motion_control_level": "medium"
+        },
+        "post_video_qc": {
+          "identity_qc_required": true,
+          "dense_face_watch_required": true,
+          "required_reports": [
+            "video_qc",
+            "temporal_consistency",
+            "video_face_drift_watch"
+          ],
+          "sample_policy": "start/mid/end machine QC plus dense human frame review on clear-face windows",
+          "acceptance_policy": "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift",
+          "return_to_stage": "video_or_image_then_compose"
         }
       },
       "urgency_tier": "realtime",

@@ -151,52 +151,6 @@
       ],
       "affected_shots": [],
       "dimensions": [
-        "character_consistency"
-      ],
-      "findings": [
-        {
-          "affected_artifacts": [
-            "合规/compliance_manifest.json",
-            "脚本/第3集/storyboard.json",
-            "出图/共享/identity_registry.json",
-            "出图/共享/asset_registry.json",
-            "生产数据/identity_adapter_matrix.json",
-            "出图/第3集/图片",
-            "出视频/第3集/prompt",
-            "出视频/第3集/control"
-          ],
-          "affected_shots": [],
-          "dim": "表情一致性",
-          "dim_key": "character_consistency",
-          "dimension": "表情一致性",
-          "episode": "第3集",
-          "gate_stage": "video_preflight",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
-          "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
-          "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
-          "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-          "return_to_stage": "script_stage2",
-          "sev": "warn",
-          "severity": "warn",
-          "source": "n2d-dashboard/gate"
-        }
-      ],
-      "return_to_stage": "script_stage2",
-      "scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。；定位产物：合规/compliance_manifest.json、脚本/第3集/storyboard.json、出图/共享/identity_registry.json、出图/共享/asset_registry.json、生产数据/identity_adapter_matrix.json、出图/第3集/图片、出视频/第3集/prompt、出视频/第3集/control"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "出视频/第3集/prompt",
-        "出视频/第3集/control"
-      ],
-      "affected_shots": [],
-      "dimensions": [
         "生视频后端连通性"
       ],
       "findings": [
@@ -401,32 +355,6 @@
         "出视频/第3集/control"
       ],
       "affected_shots": [],
-      "dim": "表情一致性",
-      "dim_key": "character_consistency",
-      "dimension": "表情一致性",
-      "episode": "第3集",
-      "gate_stage": "video_preflight",
-      "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第3集/storyboard.json clip#5",
-      "message": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
-      "msg": "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；若确为远景/空镜风险较低，否则复核景别或下调跨度档。",
-      "rerun_scope": "先修身份矩阵/路由、首尾帧、视频 prompt、导演一致性契约、基础视觉风格契约或缺失 PNG，再重跑 video_preflight；未过不得调用出视频后端。",
-      "return_to_stage": "script_stage2",
-      "sev": "warn",
-      "severity": "warn",
-      "source": "n2d-dashboard/gate"
-    },
-    {
-      "affected_artifacts": [
-        "合规/compliance_manifest.json",
-        "脚本/第3集/storyboard.json",
-        "出图/共享/identity_registry.json",
-        "出图/共享/asset_registry.json",
-        "生产数据/identity_adapter_matrix.json",
-        "出图/第3集/图片",
-        "出视频/第3集/prompt",
-        "出视频/第3集/control"
-      ],
-      "affected_shots": [],
       "dim": "生视频后端连通性",
       "dim_key": "生视频后端连通性",
       "dimension": "生视频后端连通性",
@@ -495,7 +423,7 @@
     }
   ],
   "gate_stage": "video_preflight",
-  "generated_at": "2026-07-07T09:29:17+00:00",
+  "generated_at": "2026-07-07T10:17:36+00:00",
   "inputs_fingerprint": {
     "files": {
       "出图/共享/asset_registry.json": "0d234a542076b35479c2641ecffe36dcf8bc55d538dd15275cc443c3ff4eaecd",
@@ -504,10 +432,10 @@
       "出视频/第3集/control": null,
       "出视频/第3集/prompt": null,
       "合规/compliance_manifest.json": "fb427391ac5922378b389dcdab5abd88bff2832f7a6d83a239134f57170f5a02",
-      "生产数据/identity_adapter_matrix.json": "affe026d11ede8a9a94242c176ba40d185d81a3b56a8a2226419f94c27836b19",
-      "脚本/第3集/storyboard.json": "dc05426fd3c1b15a23909ac7152426a6cf9ac087d2baeac5f41af8ccf7ae3617"
+      "生产数据/identity_adapter_matrix.json": "b4a3530e147b186219a40f7da130175a978ed092fdbb2cc19312bc0f9a193858",
+      "脚本/第3集/storyboard.json": "793baa2b50ca4bf332761955563fcaacd89ebac202e3d1eef82b0180e2af8315"
     },
-    "sha": "34d0d4f9f095dea142b0dd9e1ca27138d79f514e3388bc6c7668829cd56e85cb"
+    "sha": "6896ad9380dc62337ab6b2c5a22cdf932920f68c14cbe218c99ad4a52a20dfd0"
   },
   "kind": "n2d_consistency_findings",
   "root": "创作区/制漫剧/那妖魔是姜大人",
@@ -547,11 +475,6 @@
         "info": 0,
         "warn": 1
       },
-      "表情一致性": {
-        "block": 0,
-        "info": 0,
-        "warn": 1
-      },
       "配音": {
         "block": 0,
         "info": 0,
@@ -561,9 +484,9 @@
     "severity": {
       "block": 0,
       "info": 5,
-      "warn": 5
+      "warn": 4
     },
-    "total": 10
+    "total": 9
   },
   "version": 1
 }

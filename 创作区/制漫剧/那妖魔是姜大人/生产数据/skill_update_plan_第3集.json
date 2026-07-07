@@ -1,41 +1,64 @@
 {
   "baseline_bootstrapped": false,
   "changed_files": [
-    "skills/n2d-image/scripts/codex_image_runner.py"
+    "skills/n2d-image/scripts/image_prompt_pack.py",
+    "skills/n2d-review/SKILL.md",
+    "skills/n2d-review/scripts/gate.py",
+    "skills/n2d-review/scripts/gate_core.py",
+    "skills/n2d-review/scripts/video_face_drift_watch.py",
+    "skills/n2d-video/SKILL.md",
+    "skills/n2d-video/scripts/video_runner.py",
+    "skills/n2d/SKILL.md"
   ],
   "changed_skills": [
-    "n2d-image"
+    "n2d",
+    "n2d-image",
+    "n2d-review",
+    "n2d-video"
   ],
   "commands": [
-    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from image_prompt --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
-    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image  # 重出图后验像素一致性（含 image_qc）"
+    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from image_prompt --scope \"skill 更新后重制到 video·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image  # 重出图后验像素一致性（含 image_qc）"
   ],
-  "contract_inheritance": null,
-  "created_at": "2026-07-04T14:37:15+00:00",
-  "current_stage": "image",
+  "contract_inheritance": {
+    "asset_blocks": 0,
+    "field_blocks": 0,
+    "field_warns": 0,
+    "freshness": "fresh",
+    "generated_at": "2026-07-07T10:17:14Z",
+    "identity_blocks": 0,
+    "inherited": true,
+    "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.json",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第3集.md",
+    "samples": [],
+    "status": "ok",
+    "verdict": "pass"
+  },
+  "created_at": "2026-07-07T11:35:18+00:00",
+  "current_stage": "video",
   "current_todo": {
-    "column": "出图",
-    "command": "n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
-    "label": "出图",
+    "column": "视频",
+    "command": "n2d-video /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集",
+    "label": "图生视频",
     "note": "",
-    "skill": "n2d-image",
-    "stage_key": "image",
-    "status": "40/116"
+    "skill": "n2d-video",
+    "stage_key": "video",
+    "status": "3/10"
   },
   "episode": "第3集",
   "execution_steps": [
     {
-      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from image_prompt --scope \"skill 更新后重制到 image·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
+      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 3 --rerun-from image_prompt --scope \"skill 更新后重制到 video·复用共享定妆库·只重出本集分镜帧\" --max-concurrency 1 --max-retries 1",
       "role": "queue_bounded_rerun",
       "type": "command"
     },
     {
-      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集`",
+      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第3集`",
       "role": "manual_alternative",
       "type": "agent_step"
     },
     {
-      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image  # 重出图后验像素一致性（含 image_qc）",
+      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第3集 --stage image  # 重出图后验像素一致性（含 image_qc）",
       "role": "verify_after_image_regen",
       "run_when": "仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
       "type": "command"
@@ -44,38 +67,38 @@
   "gate_refresh_needed": false,
   "gate_refresh_stages": [],
   "image_consistency": {
-    "advisory": 1,
+    "advisory": 66,
     "consistent": true,
-    "degraded": true,
+    "degraded": false,
     "freshness": "fresh",
     "hard_blocks": 0,
-    "precision_level": "degraded",
-    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
+    "precision_level": "full",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
     "samples": [
-      "逐镜参考规划有 24 条行动项未确认落实（无持久主体 ID 后端×大变化镜 10 镜）：镜头 EP03_CLIP01、EP03_CLIP02、EP03_CLIP03、EP03_CLIP04、EP03_CLIP05、EP03_CLIP06、EP03_CLIP07、EP03_CLIP08…。请按 reference_plan_第3集.md 把补拍/多样参考/控制网/升档落进 出图/第3集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第3集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_01/囚犯初醒态。",
-      "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。"
+      "发型(H1): 图片/Clip02_mid.png",
+      "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
     ],
     "status": "ok",
     "verdict": "review"
   },
   "image_qc_environment": {
-    "advisory": 1,
-    "degraded": true,
+    "advisory": 66,
+    "degraded": false,
     "finding_samples": [
-      "逐镜参考规划有 24 条行动项未确认落实（无持久主体 ID 后端×大变化镜 10 镜）：镜头 EP03_CLIP01、EP03_CLIP02、EP03_CLIP03、EP03_CLIP04、EP03_CLIP05、EP03_CLIP06、EP03_CLIP07、EP03_CLIP08…。请按 reference_plan_第3集.md 把补拍/多样参考/控制网/升档落进 出图/第3集/prompt/01_分镜出图.md 后再付费出图；不能让参考规划停在侧车文件里。若已完成人审落实，请写结构化 `生产数据/reference_plan_application_第3集.json`（kind=n2d_reference_plan_application, accepted=true, reviewer, plan_sha256, prompt_path, prompt_sha256, applied_action_count, applied_evidence）。当前落实证据状态：plan_sha256 与当前 reference_plan 不一致。 建议升 LoRA：CHAR_01/囚犯初醒态。",
-      "长线剧（第3集）仍用无持久主体后端（codex）逐镜参考图派生，且核心/常驻角色缺 native subject / Face Lock / face_embedding / LoRA：姜月初(CHAR_01/囚犯初醒态)、姜月初(CHAR_01/镇魔司伪装态)。production 长线第3集起这不是建议项，会跨集累积脸漂；请先注册原生主体、启用 face_embedding，或对核心角色完成 LoRA 后再付费出图。【G-I1 推荐升档】长线默认起点应为可注册主体 ID（②·先于 LoRA）：可灵主体库 / 即梦角色库 / Seedream Universal Reference（注册一次按 ID 跨镜跨集引用）；或对核心角色训 LoRA。hero/反复崩脸角色可叠 max-lock 栈：主体 ID + PuLID(脸保真) + 低强度角色 LoRA(~0.6) + ControlNet。在 n2d-image 选择点 `生图模型` 带此推荐向用户摆「换后端=整集重做定妆的一致性税」知情权衡，不私自写死后端。"
+      "发型(H1): 图片/Clip02_mid.png",
+      "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。"
     ],
     "freshness": "fresh",
     "hard_blocks": 0,
-    "jump_reason": "视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
-    "jump_to_stage": "image",
-    "precision_level": "degraded",
-    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
-    "recommended_install": "优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。",
-    "report_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.json",
-    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
+    "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "jump_to_stage": "video",
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.json",
+    "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第3集/image_qc_第3集.md",
     "status": "ok",
-    "user_notice": "图片质检环境：degraded；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：优先用 facefusion conda env：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python -m pip install pillow opencv-python onnxruntime insightface scikit-image；首次跑 FaceAnalysis(name='buffalo_l') 预热/下载模型。若无该 env，用 Python 3.10-3.12 conda env；系统 Python 3.14 不作为重视觉依赖首选。；当前应停在/回退：image；原因：视觉质检为降级结果，正式进 video 前需补依赖重跑到 full 精度",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
     "verdict": "review"
   },
   "kind": "n2d_skill_update_plan",
@@ -85,8 +108,8 @@
     "真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。",
     "共享定妆库默认沿用：本次变更未命中定妆库生产规则（标准三视图/角色一致性/资产注册/LoRA），`出图/共享/图片/` 的定妆照/场景照 PNG 与 identity_registry 复用不重出，重制范围只覆盖本集分镜帧。n2d-image 共享先行硬闸门会跳过已 ✅ 的共享 PNG，直接以其为参考重出分镜。"
   ],
-  "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.json",
-  "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.md",
+  "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.json",
+  "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第3集.md",
   "rebuild_needed": true,
   "regen_mode": "最小",
   "relevant_skills": [
@@ -98,16 +121,24 @@
     "n2d-review",
     "n2d-script",
     "n2d-update",
+    "n2d-video",
     "n2d-voice"
   ],
   "rerun_from": "image_prompt",
-  "rerun_until": "image",
-  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "rerun_until": "video",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "shared_lock_changed_files": [],
   "shared_lock_reuse": true,
   "smart_suggestions": [],
   "snapshot_changed_files": [
-    "skills/n2d-image/scripts/codex_image_runner.py"
+    "skills/n2d-image/scripts/image_prompt_pack.py",
+    "skills/n2d-review/SKILL.md",
+    "skills/n2d-review/scripts/gate.py",
+    "skills/n2d-review/scripts/gate_core.py",
+    "skills/n2d-review/scripts/video_face_drift_watch.py",
+    "skills/n2d-video/SKILL.md",
+    "skills/n2d-video/scripts/video_runner.py",
+    "skills/n2d/SKILL.md"
   ],
   "source_drift": {
     "status": "clean"
@@ -118,6 +149,8 @@
     "compliant": true,
     "enforced": true,
     "exempt_clips": 0,
+    "missing_endframe_clips": [],
+    "missing_frame_files": [],
     "total_clips": 10,
     "violating_clips": []
   }

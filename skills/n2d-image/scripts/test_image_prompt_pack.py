@@ -82,6 +82,44 @@ def test_weapon_refs_are_not_labeled_as_props() -> None:
     assert "道具定妆" not in refs[0]
 
 
+def test_shot_refs_include_ready_auxiliary_character_angles(tmp_path: Path) -> None:
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    for name in (
+        "定妆_CHAR_TEST__常态.png",
+        "定妆_CHAR_TEST__常态_脸部特写_脸锚裁切.png",
+        "定妆_CHAR_TEST__常态_45度.png",
+        "定妆_CHAR_TEST__常态_侧.png",
+        "定妆_CHAR_TEST__常态_半身.png",
+        "定妆_GROUP_TEST__常态.png",
+        "定妆_GROUP_TEST__常态_手部局部.png",
+    ):
+        (image_dir / name).write_bytes(b"\x89PNG\r\n\x1a\n")
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.CHARACTER_DEFS = {
+            "CHAR_TEST": {"asset_key": "CHAR_TEST__常态", "form": "常态", "tier": "core", "name": "测试角色"},
+            "GROUP_TEST": {
+                "asset_key": "GROUP_TEST__常态",
+                "form": "常态",
+                "tier": "restricted_partial",
+                "name": "测试群像",
+            },
+        }
+        refs = image_prompt_pack.shot_refs(["CHAR_TEST", "GROUP_TEST"], [], tmp_path)
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    joined = "\n".join(refs)
+    assert "辅助角度锚" in joined
+    assert "定妆_CHAR_TEST__常态_45度.png" in joined
+    assert "定妆_CHAR_TEST__常态_侧.png" in joined
+    assert "定妆_CHAR_TEST__常态_半身.png" in joined
+    assert "定妆_CHAR_TEST__常态_背.png" not in joined
+    assert "GROUP_TEST" in joined
+    assert "定妆_GROUP_TEST__常态_手部局部.png" not in joined
+
+
 def test_prompt_safe_forbidden_avoids_wardrobe_false_positive() -> None:
     text = image_prompt_pack.prompt_safe_forbidden(["Q版", "塑料盔甲", "平台录屏UI"])
 
@@ -269,7 +307,7 @@ def test_derived_scene_drift_uses_generic_continuity_not_stale_wildland(tmp_path
     assert "空间轴线" in drift
 
 
-def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
+def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Path) -> None:
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
         image_prompt_pack.ASSET_DEFS = {
@@ -312,6 +350,7 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
 
         scene_prompt = image_prompt_pack.shared_scene_prompt({})
         asset_prompt = image_prompt_pack.shared_asset_prompt("prop", "道具定妆", ["PROP_TEST"])
+        registry = image_prompt_pack.build_asset_registry(tmp_path)
     finally:
         image_prompt_pack.ASSET_DEFS = old_defs
 
@@ -321,6 +360,12 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
     assert "黑色交领窄袖、束腰、衣襟袖口克制暗红纹样" in asset_prompt
     assert "无脸人台或折叠衣物尺度参考" in asset_prompt
     assert "资产参考图默认不生成未绑定身份的清晰人物脸" in asset_prompt
+    scene_asset = next(item for item in registry["assets"] if item["id"] == "LOC_TEST")
+    signature = scene_asset["constraints"]["lighting_signature"]
+    assert signature["color_temperature"] == "mixed_cool_warm"
+    assert signature["key_light_direction"] == "right"
+    assert "mean_hue" not in signature
+    assert signature["numeric_measurement"] == "pending_after_landed_frame_qc"
 
 
 def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> None:

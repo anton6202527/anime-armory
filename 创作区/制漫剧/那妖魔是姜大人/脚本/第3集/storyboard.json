@@ -1265,7 +1265,7 @@
         "end_state": "陈青源问“可是镇魔司的大人当面”，火光照到姜月初脸上。",
         "eyeline": "姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。",
         "shot_size": "ELS 官道马队 → MS 陈青源下马",
-        "expression_span": "大",
+        "expression_span": "中",
         "transition": "reaction_cut",
         "need_endframe": true,
         "entry_exit": "入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。",
@@ -1509,6 +1509,73 @@
         ],
         "physics_guard": "马、人、缰绳、地面接触关系明确；马队不穿模、不越轴。"
       },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_04",
+            "GROUP_飞鹰门马队",
+            "MOUNT_GROUP_01",
+            "PROP_镇魔司黑衣赤纹",
+            "LOC_02"
+          ],
+          "contact_points": [
+            "MOUNT_GROUP_01 horse hooves contact only LOC_02 road surface; no contact with CHAR_01",
+            "GROUP_飞鹰门马队 riders hold reins and torches in background/midground silhouettes",
+            "CHAR_04 hands hold reins before dismount, then release reins and land feet on road before speaking",
+            "CHAR_01 remains foreground-left and does not touch horses, riders, or CHAR_04 in this clip",
+            "PROP_镇魔司黑衣赤纹 stays worn by CHAR_01, visible as identity cue, not transferred"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "face",
+              "shoulders",
+              "hands",
+              "black_robe_silhouette"
+            ],
+            "CHAR_04": [
+              "face",
+              "hands",
+              "feet",
+              "torso"
+            ],
+            "GROUP_飞鹰门马队": [
+              "riders_as_silhouettes",
+              "hands_on_reins",
+              "torch_arms"
+            ],
+            "MOUNT_GROUP_01": [
+              "horses",
+              "hooves",
+              "reins",
+              "saddles"
+            ]
+          },
+          "holder_state": {
+            "reins": "held by riders or CHAR_04 before dismount, released/still after stop",
+            "torches": "held by GROUP_飞鹰门马队 background riders only",
+            "PROP_镇魔司黑衣赤纹": "worn by CHAR_01 throughout, no transfer"
+          },
+          "occlusion_order": [
+            "CHAR_01 foreground-left small silhouette",
+            "LOC_02 road dust midground",
+            "CHAR_04 and nearest horse midground-right",
+            "GROUP_飞鹰门马队 torches/horses background"
+          ],
+          "force_direction": "horses decelerate forward along road axis; CHAR_04 dismounts downward to ground; CHAR_01 holds still",
+          "motion_vector": "MOUNT_GROUP_01 and GROUP_飞鹰门马队 move from deep background toward midground, stop several steps away from CHAR_01; CHAR_04 dismounts into right-mid slot.",
+          "transfer_event": "none",
+          "release_frame": "CHAR_04 releases reins only after feet contact road",
+          "failure_modes": [
+            "horse_body_merge_with_CHAR_01",
+            "random_clear_crowd_faces",
+            "reins_or_torches_attached_to_wrong_hands",
+            "PROP_镇魔司黑衣赤纹_transfer_to_CHAR_04"
+          ],
+          "notes": "Keeps the horse-team entrance readable while preventing contact fusion and random new clear faces."
+        }
+      ],
       "editing_intent": "空旷远景压低人物，给马队入场空间",
       "character_slots": [
         {
@@ -1810,6 +1877,66 @@
           "反应切回姜月初，火把光位连续"
         ]
       },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_04",
+            "GROUP_飞鹰门马队",
+            "PROP_镇魔司黑衣赤纹",
+            "LOC_02"
+          ],
+          "contact_points": [
+            "CHAR_01 and CHAR_04 communicate through eyeline only; no body contact",
+            "CHAR_01 hands remain inside robe silhouette or relaxed at side, never reaching toward CHAR_04",
+            "CHAR_04 hands stay in respectful waiting/salute posture, never grabbing CHAR_01 or robe",
+            "GROUP_飞鹰门马队 remains background torch silhouettes and does not enter foreground contact space",
+            "PROP_镇魔司黑衣赤纹 remains worn by CHAR_01 as visible authority cue"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "face",
+              "eyes",
+              "mouth_small_motion",
+              "hands",
+              "shoulders"
+            ],
+            "CHAR_04": [
+              "face",
+              "eyes",
+              "hands",
+              "torso"
+            ],
+            "GROUP_飞鹰门马队": [
+              "background_heads_as_silhouettes",
+              "torches"
+            ]
+          },
+          "holder_state": {
+            "PROP_镇魔司黑衣赤纹": "worn by CHAR_01 throughout dialogue, not touched by CHAR_04",
+            "torches": "held by background riders only",
+            "hands": "CHAR_01 hands and CHAR_04 hands stay separated by dialogue distance"
+          },
+          "occlusion_order": [
+            "A-side CHAR_01 foreground/upper-left face lock",
+            "B-side CHAR_04 lower-right face lock",
+            "GROUP_飞鹰门马队 background silhouettes",
+            "LOC_02 firelight and road haze"
+          ],
+          "force_direction": "dialogue/reaction only; no grab, push, pull, strike, or handoff",
+          "motion_vector": "Shot-reverse-shot stays on LOC_02 axis; CHAR_01 holds upper-left position and CHAR_04 lower-right position without crossing or touching.",
+          "transfer_event": "none",
+          "release_frame": "none",
+          "failure_modes": [
+            "face_swap_between_CHAR_01_and_CHAR_04",
+            "robe_or_hand_fusion",
+            "crowd_member_steps_into_clear_foreground",
+            "mouth_motion_becomes_exaggerated_lipsync"
+          ],
+          "notes": "Locks this as cold-authority reaction dialogue, not a new crowd or contact action."
+        }
+      ],
       "character_slots": [
         {
           "slot": "LEFT_SLOT",
@@ -2103,6 +2230,73 @@
         ],
         "crowd_simplification": "除陈青源外，群体只保留低头/跪地/火把剪影，不追求多张清晰脸。"
       },
+      "interaction_graph": [
+        {
+          "schema": "n2d.interaction_graph.v1",
+          "participants": [
+            "CHAR_01",
+            "CHAR_04",
+            "GROUP_飞鹰门马队",
+            "MOUNT_GROUP_01",
+            "LOC_02"
+          ],
+          "contact_points": [
+            "CHAR_04 one knee contacts LOC_02 road surface during plea; hands stay in salute/pleading pose",
+            "GROUP_飞鹰门马队 knees/feet contact road surface in background synchronized kneel, faces stay simplified",
+            "MOUNT_GROUP_01 horses remain behind kneeling group, hooves contact road only",
+            "CHAR_01 remains standing foreground/upper slot and is not touched by CHAR_04 or crowd",
+            "No character grabs, surrounds, or physically blocks CHAR_01"
+          ],
+          "body_part_ownership": {
+            "CHAR_01": [
+              "face",
+              "eyes",
+              "shoulders",
+              "hands",
+              "standing_silhouette"
+            ],
+            "CHAR_04": [
+              "face",
+              "knees",
+              "hands",
+              "torso"
+            ],
+            "GROUP_飞鹰门马队": [
+              "knees",
+              "heads_as_silhouettes",
+              "hands",
+              "torches"
+            ],
+            "MOUNT_GROUP_01": [
+              "horses",
+              "hooves",
+              "reins"
+            ]
+          },
+          "holder_state": {
+            "torches": "held only by background group silhouettes or set behind them; not in CHAR_01 hands",
+            "reins": "remain with horses/background riders, not tangled with kneeling bodies",
+            "CHAR_04": "kneeling plea posture; no prop transfer"
+          },
+          "occlusion_order": [
+            "CHAR_01 standing high foreground",
+            "CHAR_04 kneeling midground clear face",
+            "GROUP_飞鹰门马队 kneeling silhouettes and torches background",
+            "MOUNT_GROUP_01 horses behind group"
+          ],
+          "force_direction": "CHAR_04 lowers one knee downward; GROUP_飞鹰门马队 lowers in place; no forward collision into CHAR_01",
+          "motion_vector": "CHAR_04 moves from standing/lower midground into one-knee plea; GROUP_飞鹰门马队 lowers in place behind him; CHAR_01 remains fixed high/foreground.",
+          "transfer_event": "none",
+          "release_frame": "kneel completes when CHAR_04 knee touches LOC_02 road surface and hands settle in plea pose",
+          "failure_modes": [
+            "crowd_surrounds_or_touches_CHAR_01",
+            "random_clear_crowd_faces",
+            "horse_hooves_merge_with_kneeling_bodies",
+            "hands_or_knees_attach_to_wrong_character"
+          ],
+          "notes": "Preserves the responsibility-pressure beat through height hierarchy and group rhythm without physical contact with CHAR_01."
+        }
+      ],
       "character_slots": [
         {
           "slot": "UPPER_LEFT_SLOT",

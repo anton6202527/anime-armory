@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第3话",
+  "panel_id": "P007",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_HE_PINGSHENG",
+      "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+      "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+    },
+    {
+      "id": "CHAR_HE_PINGSHENG",
+      "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+      "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2"
+    },
+    {
+      "id": "CHAR_ZHANG_LAODA",
+      "path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+      "sha256": "c914fb1263320cdc29b0da997b5d004802ef49973465026d473f42c763c5e122"
+    },
+    {
+      "id": "CHAR_ZHANG_LAODA",
+      "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
+      "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87"
+    },
+    {
+      "id": "PROP_BROKEN_BASIN",
+      "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+      "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
+    }
+  ],
+  "created_at": "2026-07-07T18:11:08"
+}

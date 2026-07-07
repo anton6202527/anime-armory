@@ -339,5 +339,10 @@
     "spectacle_clips": 3,
     "contract_missing_clips": 0,
     "motion_control_required_clips": 3
-  }
+  },
+  "written_motion_control_manifests": [
+    "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_02/motion_control_manifest.json",
+    "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_03/motion_control_manifest.json",
+    "创作区/制漫剧/那妖魔是姜大人/出视频/第3集/control/Clip_05/motion_control_manifest.json"
+  ]
 }

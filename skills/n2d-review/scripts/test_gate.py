@@ -369,17 +369,114 @@ def test_route_execution_recipe_missing_blocks():
 def test_route_execution_recipe_complete_passes():
     gate.check_route_execution_recipe({
         "clip_id": "Clip_01",
+        "mode": "image2video",
         "execution_recipe": {
-            "frame_inputs": {"first_frame": "a.png", "consumption_mode": "first_last", "native_timeline_frames": []},
+            "frame_inputs": {"first_frame": True, "consumption_mode": "first_last", "native_timeline_frames": 2},
             "reference_inputs": {"characters": [], "assets": [], "max_reference_images": 0, "motion_reference": {}},
             "control_inputs": {"required": True, "manifest_path": "出视频/第1集/control/Clip_01/motion_control_manifest.json"},
-            "audio_inputs": {},
-            "fallback": {},
-            "capability_match": {},
+            "audio_inputs": {
+                "video_generation_audio_policy": "无声视频流",
+                "native_audio_policy": "none",
+                "speech_policy": "no_native_speech",
+                "requires_voice_track": False,
+            },
+            "fallback": {"fallback_backends": ["dreamina"], "degrade_plan": "split/retry"},
+            "capability_match": {
+                "frame_contract_supported": True,
+                "motion_reference_supported": False,
+                "motion_control_level": "medium",
+            },
+            "post_video_qc": {
+                "identity_qc_required": False,
+                "dense_face_watch_required": False,
+                "required_reports": ["video_qc"],
+                "acceptance_policy": "block_clear_wrong_closeup_face",
+            },
         },
     }, "routes.json", 1)
 
     assert not gate.findings
+
+
+def test_route_execution_recipe_identity_requires_post_video_qc():
+    gate.check_route_execution_recipe({
+        "clip_id": "Clip_01",
+        "mode": "image2video",
+        "identity_requirement": "reference_group",
+        "execution_recipe": {
+            "frame_inputs": {"first_frame": True, "consumption_mode": "first_last", "native_timeline_frames": 2},
+            "reference_inputs": {
+                "characters": [{"character_id": "CHAR_01", "binding": "reference_group"}],
+                "assets": [],
+                "max_reference_images": 0,
+                "motion_reference": {},
+            },
+            "control_inputs": {"required": False},
+            "audio_inputs": {
+                "video_generation_audio_policy": "无声视频流",
+                "native_audio_policy": "none",
+                "speech_policy": "no_native_speech",
+                "requires_voice_track": False,
+            },
+            "fallback": {"fallback_backends": ["dreamina"], "degrade_plan": "retry"},
+            "capability_match": {"frame_contract_supported": True, "motion_reference_supported": False, "motion_control_level": "none"},
+            "post_video_qc": {
+                "identity_qc_required": False,
+                "dense_face_watch_required": True,
+                "required_reports": ["video_qc", "temporal_consistency"],
+                "acceptance_policy": "block_clear_wrong_closeup_face",
+            },
+        },
+    }, "routes.json", 1)
+
+    assert any(f["dim"] == "执行配方" and "identity_qc_required 不为 true" in f["msg"] for f in gate.findings)
+    assert any(f["dim"] == "执行配方" and "缺 video_face_drift_watch" in f["msg"] for f in gate.findings)
+
+
+def test_route_execution_recipe_image_mode_requires_first_frame():
+    gate.check_route_execution_recipe({
+        "clip_id": "Clip_01",
+        "mode": "image2video",
+        "identity_requirement": "none",
+        "execution_recipe": {
+            "frame_inputs": {"first_frame": False, "consumption_mode": "first_last", "native_timeline_frames": 2},
+            "reference_inputs": {"characters": [], "assets": [], "max_reference_images": 0, "motion_reference": {}},
+            "control_inputs": {"required": False},
+            "audio_inputs": {
+                "video_generation_audio_policy": "无声视频流",
+                "native_audio_policy": "none",
+                "speech_policy": "no_native_speech",
+                "requires_voice_track": False,
+            },
+            "fallback": {"fallback_backends": ["dreamina"], "degrade_plan": "retry"},
+            "capability_match": {"frame_contract_supported": True, "motion_reference_supported": False, "motion_control_level": "none"},
+        },
+    }, "routes.json", 1)
+
+    assert any(f["dim"] == "执行配方" and "first_frame" in f["msg"] for f in gate.findings)
+
+
+def test_route_execution_recipe_identity_requires_character_refs():
+    gate.check_route_execution_recipe({
+        "clip_id": "Clip_01",
+        "mode": "image2video",
+        "identity_requirement": "reference_group",
+        "execution_recipe": {
+            "frame_inputs": {"first_frame": True, "consumption_mode": "first_last", "native_timeline_frames": 2},
+            "reference_inputs": {"characters": [], "assets": [], "max_reference_images": 0, "motion_reference": {}},
+            "control_inputs": {"required": False},
+            "audio_inputs": {
+                "video_generation_audio_policy": "无声视频流",
+                "native_audio_policy": "none",
+                "speech_policy": "no_native_speech",
+                "requires_voice_track": False,
+            },
+            "fallback": {"fallback_backends": ["dreamina"], "degrade_plan": "retry"},
+            "capability_match": {"frame_contract_supported": True, "motion_reference_supported": False, "motion_control_level": "none"},
+        },
+    }, "routes.json", 1)
+
+    assert any(f["dim"] == "执行配方" and "reference_inputs.characters 为空" in f["msg"] for f in gate.findings)
 
 
 # ── 表情跨度结构化闸门（finding #1：跨情绪近景必须首尾双帧） ─────────────────────────
@@ -5365,6 +5462,8 @@ def test_generation_recipe_evidence_recovers_moved_project_asset_paths(tmp_path)
             "backend_version": "3.0",
             "quality_tier": "720p",
             "actual_image_inputs": ["出图/第1集/图片/Clip02_first.png"],
+            "route_execution_recipe_hash": "route-recipe-video",
+            "post_video_qc": {"identity_qc_required": False, "dense_face_watch_required": False},
             "seed_effective": False,
             "seed_support": "unsupported_or_unknown",
         },
@@ -5373,6 +5472,202 @@ def test_generation_recipe_evidence_recovers_moved_project_asset_paths(tmp_path)
     gate.check_generation_recipe_evidence(str(root), "第1集", "review")
 
     assert not any(f["dim"] == "生成配方证据" for f in gate.findings)
+
+
+def test_generation_recipe_evidence_video_requires_post_qc_recipe_fields(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    mp4 = root / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    mp4.parent.mkdir(parents=True)
+    mp4.write_bytes(b"mp4")
+    prod = root / "生产数据"
+    prod.mkdir(parents=True)
+    (prod / "production_events.jsonl").write_text(json.dumps({
+        "episode": "第1集",
+        "stage": "video",
+        "event": "generation",
+        "generation": {"asset": "出视频/第1集/视频/Clip_01.mp4", "status": "pass"},
+        "meta": {
+            "provider": "dreamina",
+            "model": "dreamina:3.0",
+            "channel": "dreamina",
+            "route_hash": "route-sha",
+            "capability_evidence_id": "video_backend_capabilities/dreamina",
+            "recipe_hash": "recipe-video",
+            "prompt_sha256": "prompt-video",
+            "reference_bundle_sha256": "ref-video",
+            "backend_version": "3.0",
+            "quality_tier": "720p",
+            "actual_image_inputs": ["出图/第1集/图片/Clip01_first.png"],
+            "seed_effective": False,
+            "seed_support": "unsupported_or_unknown",
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    gate.check_generation_recipe_evidence(str(root), "第1集", "review")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "生成配方证据"
+        and "post_video_qc" in f["msg"]
+        and "route_execution_recipe_hash" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def _write_dense_route(root: Path, clip_id: str = "Clip_01") -> None:
+    routes = root / "出视频" / "第1集" / "prompt" / "video_model_routes.json"
+    routes.parent.mkdir(parents=True, exist_ok=True)
+    routes.write_text(json.dumps({
+        "kind": gate.VIDEO_MODEL_ROUTES_KIND,
+        "routes": [{
+            "clip_id": clip_id,
+            "execution_recipe": {
+                "post_video_qc": {
+                    "identity_qc_required": True,
+                    "dense_face_watch_required": True,
+                    "required_reports": ["video_qc", "temporal_consistency", "video_face_drift_watch"],
+                    "acceptance_policy": "block_clear_wrong_closeup_face",
+                }
+            },
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_video_post_qc_artifacts_skips_unmade_dense_route_during_video(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root, "Clip_04")
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "video")
+
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "成片身份回验"
+        and "Clip_04 路由要求 dense_face_watch" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_video_post_qc_artifacts_blocks_existing_video_without_manifest(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root, "Clip_04")
+    video = root / "出视频" / "第1集" / "视频" / "Clip_04_test.mp4"
+    video.parent.mkdir(parents=True, exist_ok=True)
+    video.write_bytes(b"fake mp4")
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "video")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "成片身份回验"
+        and "Clip_04 路由要求 dense_face_watch" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def _write_video_batch_item(root: Path, item: dict) -> None:
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "video_batch_第1集_01_01.json").write_text(json.dumps({
+        "kind": "n2d_video_batch",
+        "episode": "第1集",
+        "items": [item],
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_video_post_qc_artifacts_blocks_missing_dense_watch_packet(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root)
+    _write_video_batch_item(root, {
+        "clip": "Clip_01",
+        "status": "accepted",
+        "qc_machine": {"intra_checked": 1, "intra_warns": 0},
+    })
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "video")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "成片身份回验" and "密集抽帧包" in f["msg"] for f in gate.findings)
+
+
+def test_video_post_qc_artifacts_review_blocks_missing_human_verdict(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root)
+    _write_video_batch_item(root, {
+        "clip": "Clip_01",
+        "status": "accepted",
+        "qc_machine": {"intra_checked": 1, "intra_warns": 0},
+    })
+    prod = root / "生产数据"
+    (prod / "video_face_drift_watch_第1集_Clip_01_0_00_1_00s.json").write_text(json.dumps({
+        "kind": "n2d_video_face_drift_watch",
+        "episode": "第1集",
+        "status": "ready_for_human_frame_identity_review",
+        "packet_id": "Clip_01_0.00_1.00s",
+        "frames": [{"clip": "Clip_01", "path": "frame.jpg"}],
+        "contact_sheet": "生产数据/video_face_drift_watch_第1集_Clip_01_0.00_1.00s.jpg",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "review")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "成片身份回验" and "human_review" in f["msg"] for f in gate.findings)
+
+
+def test_video_post_qc_artifacts_blocks_intra_warn_without_human_pass(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root)
+    _write_video_batch_item(root, {
+        "clip": "Clip_01",
+        "status": "accepted",
+        "qc_machine": {"intra_checked": 1, "intra_warns": 1},
+    })
+    prod = root / "生产数据"
+    (prod / "video_face_drift_watch_第1集_Clip_01_0_00_1_00s.json").write_text(json.dumps({
+        "kind": "n2d_video_face_drift_watch",
+        "episode": "第1集",
+        "status": "ready_for_human_frame_identity_review",
+        "packet_id": "Clip_01_0.00_1.00s",
+        "frames": [{"clip": "Clip_01", "path": "frame.jpg"}],
+        "contact_sheet": "生产数据/video_face_drift_watch_第1集_Clip_01_0.00_1.00s.jpg",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "video")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "成片身份回验"
+        and "片内身份 warn" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_video_post_qc_artifacts_human_pass_downgrades_intra_warn(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_dense_route(root)
+    _write_video_batch_item(root, {
+        "clip": "Clip_01",
+        "status": "accepted",
+        "qc_overridden": True,
+        "qc_machine": {"intra_checked": 1, "intra_warns": 1},
+    })
+    prod = root / "生产数据"
+    (prod / "video_face_drift_watch_第1集_Clip_01_0_00_1_00s.json").write_text(json.dumps({
+        "kind": "n2d_video_face_drift_watch",
+        "episode": "第1集",
+        "status": "ready_for_human_frame_identity_review",
+        "packet_id": "Clip_01_0.00_1.00s",
+        "frames": [{"clip": "Clip_01", "path": "frame.jpg"}],
+        "contact_sheet": "生产数据/video_face_drift_watch_第1集_Clip_01_0.00_1.00s.jpg",
+        "human_review": {
+            "identity_verdict": "pass",
+            "reviewer": "qa",
+            "reason": "contact sheet confirms same character",
+        },
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_video_post_qc_artifacts(str(root), "第1集", "video")
+
+    hits = [f for f in gate.findings if f["dim"] == "成片身份回验"]
+    assert hits and any(f["sev"] == gate.WARN and "人工密集抽帧复核签收" in f["msg"] for f in hits)
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] == "成片身份回验" for f in gate.findings)
 
 
 def test_translation_glossary_release_gate_blocks_missing_file(tmp_path):
@@ -8932,6 +9227,20 @@ def test_degraded_precision_review_waived_by_env(monkeypatch, tmp_path):
     assert any(f["sev"] == "warn" and "放行" in str(f["msg"]) for f in fs)
 
 
+def test_degraded_precision_review_waived_by_internal_demo_setting(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "w"
+    (root / "生产数据").mkdir(parents=True)
+    (root / "_设置.md").write_text("- 一致性严格度: demo\n- 合规用途: internal_only\n", encoding="utf-8")
+    monkeypatch.delenv("N2D_ALLOW_DEGRADED_QC", raising=False)
+    monkeypatch.setattr(gate.subprocess, "run",
+                        lambda *a, **k: _FakeProc(json.dumps({"summary": {"precision_level": "degraded"}, "findings": []}), 0))
+    gate.check_consistency_audit_gate(str(root), "第1集", stage="review")
+    fs = list(gate.findings)
+    assert not any(f["sev"] == "block" for f in fs)
+    assert any(f["sev"] == "warn" and "internal_only + demo" in str(f["msg"]) for f in fs)
+
+
 def test_degraded_precision_compose_waived_by_env(monkeypatch, tmp_path):
     fs = _run_consistency(monkeypatch, tmp_path,
                           {"summary": {"precision_level": "degraded"}, "findings": []}, "compose",
@@ -9853,6 +10162,83 @@ def test_video_evidence_native_block_downgraded_by_advisory_signoff(tmp_path, mo
     assert vsem and all(f["sev"] == gate.WARN for f in vsem)
     assert any("consistency_advisory_signoff 已签收" in f["msg"] for f in vsem)
     assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_hair_block_can_be_downgraded_by_human_review_signoff_at_video(tmp_path, monkeypatch):
+    gate.findings.clear()
+    prod = tmp_path / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "consistency_advisory_signoff_第1集.json").write_text(json.dumps({
+        "accepted": [{
+            "accepted": True,
+            "dimension": "发型(H1)",
+            "message_contains": "发型机检低分",
+            "shot": "Clip_02",
+            "reviewer": "qa",
+            "reason": "人工复核首中尾帧：高马尾、绳束和凌乱额发一致，机检低分来自俯视角与月光高反。",
+            "expires_at": "2099-01-01",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    payload = {
+        "summary": {
+            "precision_level": "full",
+            "by_dim": {"发型(H1)": {"block": 1, "warn": 0, "ok": 0, "n": 1}},
+        },
+        "findings": [{
+            "severity": "block",
+            "dimension": "发型(H1)",
+            "message": "发型机检低分：Clip02_mid.png score below floor.",
+            "affected_shots": ["Clip_02"],
+            "affected_artifacts": ["出图/第1集/图片"],
+            "return_to_stage": "image",
+            "risk_score": 0.55,
+        }],
+    }
+    _patch_audit(monkeypatch, json.dumps(payload, ensure_ascii=False))
+
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="video")
+
+    h1 = [f for f in gate.findings if f["dim"] == "发型(H1)"]
+    assert h1 and all(f["sev"] == gate.WARN for f in h1)
+    assert any("人工复核签收" in f["msg"] for f in h1)
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
+def test_face_block_is_not_downgraded_by_human_review_signoff_at_video(tmp_path, monkeypatch):
+    gate.findings.clear()
+    prod = tmp_path / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "consistency_advisory_signoff_第1集.json").write_text(json.dumps({
+        "accepted": [{
+            "accepted": True,
+            "dimension": "脸(G1)",
+            "message_contains": "脸部机检低分",
+            "shot": "Clip_02",
+            "reviewer": "qa",
+            "reason": "不应通过普通 advisory signoff 放行真实脸部身份 block。",
+            "expires_at": "2099-01-01",
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    payload = {
+        "summary": {
+            "precision_level": "full",
+            "by_dim": {"脸(G1)": {"block": 1, "warn": 0, "ok": 0, "n": 1}},
+        },
+        "findings": [{
+            "severity": "block",
+            "dimension": "脸(G1)",
+            "message": "脸部机检低分：Clip02_mid.png score below floor.",
+            "affected_shots": ["Clip_02"],
+            "affected_artifacts": ["出图/第1集/图片"],
+            "return_to_stage": "image",
+            "risk_score": 0.85,
+        }],
+    }
+    _patch_audit(monkeypatch, json.dumps(payload, ensure_ascii=False))
+
+    gate.check_consistency_audit_gate(str(tmp_path), "第1集", stage="video")
+
+    assert any(f["dim"] == "脸(G1)" and f["sev"] == gate.BLOCK for f in gate.findings)
 
 
 def test_intentional_signoff_ignored_for_ineligible_face_dim(tmp_path, monkeypatch):

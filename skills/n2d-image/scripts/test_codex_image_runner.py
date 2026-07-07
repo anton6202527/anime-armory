@@ -790,6 +790,60 @@ def test_target_qc_retry_guidance_includes_face_warn_score(tmp_path: Path) -> No
     assert "不要只给纯侧脸" in guidance
 
 
+def test_target_qc_retry_guidance_includes_prop_shape_review(tmp_path: Path) -> None:
+    report = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(
+        json.dumps(
+            {
+                "face_reference_coverage": {"missing": []},
+                "checks": {},
+                "lint": {"findings": []},
+                "prop_shape_review": {
+                    "targets": [
+                        {
+                            "asset": "PROP_CARRYING_POLE",
+                            "asset_name": "木扁担",
+                            "png": "图片/Clip01_first.png",
+                            "ref": "出图/共享/图片/定妆_道具_木扁担.png",
+                            "must_not_have": ["现代物件", "文字水印", "结构漂移"],
+                            "confirmed": False,
+                        },
+                        {
+                            "asset": "PROP_OK",
+                            "png": "图片/Clip01_first.png",
+                            "confirmed": True,
+                        },
+                    ]
+                },
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip_01",
+        body="CHAR_01 少年在黑殿受审，旁边有木扁担。",
+        target_line="`出图/第1集/图片/Clip01_first.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_01",
+        "Clip_01",
+        "firstframe",
+        "出图/第1集/图片/Clip01_first.png",
+        section,
+    )
+
+    guidance = codex_image_runner.target_qc_retry_guidance(tmp_path, "第1集", target)
+
+    assert "prop_shape_review:PROP_CARRYING_POLE" in guidance
+    assert "登记道具需要人工形状确认" in guidance
+    assert "木扁担" in guidance
+    assert "定妆_道具_木扁担.png" in guidance
+    assert "PROP_OK" not in guidance
+
+
 def test_codex_prompt_for_group_character_split_ref_forces_single_member(tmp_path: Path) -> None:
     section = codex_image_runner.ClipSection(
         clip="CHAR_PURSUER",

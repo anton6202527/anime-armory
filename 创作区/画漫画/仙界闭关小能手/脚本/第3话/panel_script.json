@@ -1,0 +1,388 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_script",
+  "title": "仙界闭关小能手",
+  "chapter": "第3话",
+  "status": "draft_ready_for_layout",
+  "adaptation_source": {
+    "source_file": "源本/仙界闭关小能手.txt",
+    "source_range": "第003章 白米变金米",
+    "notes": "第3话首次明确破盆升级灵米能力；结尾保留藏拙策略。"
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "wake_smell",
+      "description": "黎明微亮，杂役院远处传来急促金属敲击声，贺平生在简陋床上困倦睁眼，鼻尖像闻到一缕浓郁米香。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房黎明",
+      "dialogue": [],
+      "narration": "新的一天来了。又要干活了。",
+      "sfx": [
+        "叮叮当当"
+      ],
+      "art_notes": "黎明冷光，床铺简陋，少年疲惫；米香只用轻微暖色空气流暗示，不画文字或气泡。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "gold_rice_reveal",
+      "description": "黑暗空房里，窗台附近的黑旧破陶盆中盛满金灿灿的大米，暖金微光照亮周围冷暗地面，贺平生坐起身震住。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房黎明",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "这是……"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "本话第一重点大格；破盆外形必须沿用 PROP_BROKEN_BASIN，米粒满盆金色但不要法阵爆炸、不要系统面板；画面铺满无外框。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "not_a_dream",
+      "description": "贺平生揉眼后狠狠掐自己大腿，痛得皱眉，眼神从迷糊变成清醒震惊。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房黎明",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "不是做梦！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嘶"
+      ],
+      "art_notes": "反应格，脸部保持少年版主角 DNA；不做夸张 Q 版表情。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "gold_rice_touch",
+      "description": "近景：贺平生蹑手蹑脚来到破盆前，手指插入满盆金米中轻轻拨起，米粒从指缝滑落，全是金色极品灵米。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房窗边",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "极品灵米？"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "沙"
+      ],
+      "art_notes": "本话道具重点大格；手、米粒、破盆缺口必须清楚；金光柔和，不能遮住米粒形态。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "quantity_change",
+      "description": "贺平生低头看着满盆金米，脑海中浮现昨夜半盆白绿普通灵米的残影对比，意识到品质和数量都变了。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房窗边",
+      "dialogue": [],
+      "narration": "昨日半盆普通灵米，今日竟成了满盆金米。",
+      "sfx": [],
+      "art_notes": "只做一个完整画面中的淡淡记忆残影，不要内部漫画分格、白色分隔线或画中画；破盆仍是同一个。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "check_lock",
+      "description": "贺平生猛地回头看向木门，门栓和铁锁都紧紧扣着，门缝没有任何被打开的痕迹。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房门口",
+      "dialogue": [],
+      "narration": "门栓紧闭，不可能有人进来。",
+      "sfx": [],
+      "art_notes": "悬疑推理小格，门锁、门闩、少年侧脸都要清楚。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "door_knock",
+      "description": "门外突然传来猛烈拍门声，张老大粗壮的影子压在门上，屋内贺平生一惊，身体挡在破盆和门之间。",
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "location": "杂役院空房门口黎明",
+      "dialogue": [
+        {
+          "speaker": "张老大",
+          "text": "贺平生！还没起床？"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "砰砰砰"
+      ],
+      "art_notes": "张老大可以只做门外压迫剪影，但体量和声音压迫感要强；不要让他看见金米。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "secret_hide",
+      "description": "贺平生慌而不乱，双手把盛着金米的黑旧破盆推进床底，再用杂乱旧衣服盖住。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房床边",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "马上就来！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "窸窣"
+      ],
+      "art_notes": "秘密隐藏动作要清楚；床底、衣服、破盆位置明确；金光被衣物压暗，不要外泄太夸张。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "breakfast_warning",
+      "description": "食堂外屋檐下，贺平生端着铁碗狼吞虎咽，老鲍在窗口给他多打肉，张老大站到一旁居高临下警告。",
+      "characters": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "老鲍"
+      ],
+      "location": "秀竹峰杂役院食堂外",
+      "dialogue": [
+        {
+          "speaker": "张老大",
+          "text": "今儿的任务必须完成。"
+        },
+        {
+          "speaker": "贺平生",
+          "text": "哎哎哎……"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "张老大体量压迫，贺平生表面恭顺但心思不在饭上；食堂和第2话保持一致。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "no_cooking",
+      "description": "饭后回屋，贺平生反锁木门，把金米从床底搬出，靠近米香时立刻警觉地捂住鼻口，意识到不能煮。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房白日",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "不行，绝对不能煮。"
+        }
+      ],
+      "narration": "极品灵米的香味，恐怕能传出很远。",
+      "sfx": [
+        "咔"
+      ],
+      "art_notes": "门锁、破盆、金米和谨慎表情同框；不要画灶台烹煮成功，只画“否决这个想法”。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "raw_gold_rice",
+      "description": "贺平生抓起一把金色灵米，低头直接吞下生米，另一只手紧紧护着破盆。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房白日",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "煮熟不行，那我就吞生的！"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "咽"
+      ],
+      "art_notes": "动作要朴素克制，不要夸张吞宝特效；金米是米粒不是丹药。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "energy_surge",
+      "description": "几口金米下肚，贺平生仍蹲坐在简陋空房地上，一只手按着腹部，脸色由疲惫转为清醒，腹中有很淡的暖金光透出。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房白日",
+      "dialogue": [],
+      "narration": "一团暖火，从腹中冲向四肢百骸。",
+      "sfx": [
+        "嗡"
+      ],
+      "art_notes": "本话第二重点格但必须克制：他仍是十四岁杂役少年，坐/蹲在屋内感受体内暖流；只用腹部和四肢周围的淡淡暖金光表现恢复体力，不要站立张臂、不要觉醒法阵、不要高阶灵纹爆发、不要超级英雄姿势。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "concealment_strategy",
+      "description": "贺平生把金米从破盆里倒进闲置裤筒，两头扎紧，做成丑陋枕头，再用破旧衣物盖住。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院空房床边",
+      "dialogue": [],
+      "narration": "这样即便有人闯进屋，也瞧不出端倪。",
+      "sfx": [
+        "扎"
+      ],
+      "art_notes": "藏米策略清楚：破盆、裤筒、米粒、床铺、旧衣物；不要让金米散落过多。",
+      "references": [
+        "CHAR_HE_PINGSHENG",
+        "PROP_BROKEN_BASIN"
+      ]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "water_taste_change",
+      "description": "后山山泉边，贺平生放下水桶，俯身喝了两口清水，微微皱眉，觉得泉水不如以前好喝。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "后山山泉浅潭白日",
+      "dialogue": [
+        {
+          "speaker": "贺平生",
+          "text": "味道……好像变了。"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "哗"
+      ],
+      "art_notes": "后山泉水延续第1话场景；不要画成污染或毒水，只是主角口感变化。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "water_task_speed",
+      "description": "贺平生挑起两个装满水的巨大木桶，肩膀挺直，脚步轻快，木桶在阳光下晃动却不再压弯他。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "后山山路白日",
+      "dialogue": [],
+      "narration": "今日的水桶，竟轻了许多。",
+      "sfx": [
+        "哗啦"
+      ],
+      "art_notes": "表现力量提升但不变成飞行或法术；扁担、肩膀、桶水重量和步伐要清楚。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "speed_montage",
+      "description": "一张连续完整画面里，贺平生的身影在山路、水缸、山泉之间快速往返，上午未过，食堂门口大水缸已经被装满。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "后山山路到杂役院水缸白日",
+      "dialogue": [],
+      "narration": "不到一上午，十趟水已经完成。",
+      "sfx": [],
+      "art_notes": "本话第三重点大格；必须是一张完整连续画面，用重复残影/远近身影表现速度，不要内部拼贴分格、白色分隔线或画中画。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "self_restraint",
+      "description": "山泉边树影下，贺平生停下来休息，回头望向已装满的方向，脸上喜色被谨慎压下。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "后山山泉树影",
+      "dialogue": [],
+      "narration": "太快了，会惹人怀疑。",
+      "sfx": [],
+      "art_notes": "藏拙心理重点；表情是克制、警觉，不是得意大笑。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "chapter_hook",
+      "description": "夜色降临很久后，贺平生故意装作疲惫，慢慢把第二十趟水倒进水缸，月光下他垂着眼，把真正的轻松藏住。",
+      "characters": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "location": "杂役院水缸旁夜景",
+      "dialogue": [],
+      "narration": "今日二十趟，终于结束。",
+      "sfx": [
+        "哗啦"
+      ],
+      "art_notes": "结尾钩子：他已经得到力量，但选择藏拙；夜景与P001呼应，不能表现得太高调。",
+      "references": [
+        "CHAR_HE_PINGSHENG"
+      ]
+    }
+  ]
+}

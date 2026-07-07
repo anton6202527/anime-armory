@@ -1181,7 +1181,82 @@ def execution_recipe_for_route(
     plan = entry.get("identity_preservation_plan")
     if isinstance(plan, Mapping) and plan:
         recipe["reference_inputs"]["identity_preservation_plan"] = dict(plan)
+    recipe["post_video_qc"] = post_video_qc_plan(entry, clip)
     return recipe
+
+
+def _identity_qc_required(entry: Mapping[str, Any]) -> bool:
+    identity = str(entry.get("identity_requirement") or "").strip().lower()
+    if identity in {"", "none", "not_needed", "not_required", "no", "无"}:
+        return False
+    chars = entry.get("clip_characters")
+    return isinstance(chars, list) and any(isinstance(c, Mapping) and (c.get("character_id") or c.get("raw")) for c in chars)
+
+
+def _clip_identity_risk_text(entry: Mapping[str, Any], clip: Mapping[str, Any]) -> str:
+    parts: List[str] = [
+        str(entry.get("shot_type") or ""),
+        str(entry.get("template") or ""),
+        str(clip.get("template") or ""),
+        str(clip.get("scene") or ""),
+        str(clip.get("label") or ""),
+        str(clip.get("desc") or ""),
+    ]
+    for shot in clip.get("shots") or []:
+        if not isinstance(shot, Mapping):
+            continue
+        parts.extend(str(shot.get(k) or "") for k in ("lens", "desc", "action", "camera", "shot_size"))
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    parts.extend(str(cont.get(k) or "") for k in ("expression_span", "start_state", "end_state", "action"))
+    return " ".join(parts).lower()
+
+
+def _dense_face_watch_required(entry: Mapping[str, Any], clip: Mapping[str, Any]) -> bool:
+    if not _identity_qc_required(entry):
+        return False
+    flags = {str(x).strip() for x in (entry.get("risk_flags") or []) if str(x).strip()}
+    shot_type = str(entry.get("shot_type") or "").strip()
+    text = _clip_identity_risk_text(entry, clip)
+    closeup_tokens = (
+        "cu", "mcu", "closeup", "close-up", "dialogue_closeup", "dialogue_shot_reverse",
+        "shot_reverse", "近景", "特写", "反打", "脸", "表情", "五官", "正脸", "说话",
+    )
+    return (
+        shot_type in {"dialogue_closeup", "dialogue_shot_reverse", "reveal_reaction_chain", "relationship_turn", "public_confrontation"}
+        or bool(flags & {"identity_drift_risk", "mouth_visible", "face_contact_risk", "multi_person", "character_backend_conflict", "identity_escalated"})
+        or any(token in text for token in closeup_tokens)
+    )
+
+
+def post_video_qc_plan(entry: Mapping[str, Any], clip: Mapping[str, Any]) -> Dict[str, Any]:
+    """Machine-readable post-generation identity QC contract.
+
+    Route-level consistency work is only useful if the accept/review layers know
+    which clips require dense identity evidence.  This block is consumed by the
+    prompt pack, gate and video runner; it is deliberately policy-based, not a
+    backend-specific instruction string.
+    """
+    identity_required = _identity_qc_required(entry)
+    dense = _dense_face_watch_required(entry, clip)
+    reports = ["video_qc"]
+    if identity_required:
+        reports.append("temporal_consistency")
+    if dense:
+        reports.append("video_face_drift_watch")
+    return {
+        "identity_qc_required": identity_required,
+        "dense_face_watch_required": dense,
+        "required_reports": reports,
+        "sample_policy": (
+            "start/mid/end machine QC plus dense human frame review on clear-face windows"
+            if dense else "standard start/mid/end machine QC; escalate to dense frame review if reviewer sees face drift"
+        ),
+        "acceptance_policy": (
+            "block_clear_wrong_closeup_face; block_dense_warn_until_human_review; "
+            "no VLM/signoff override for true face drift"
+        ),
+        "return_to_stage": "video_or_image_then_compose",
+    }
 
 
 def action_choreography_contract(shot_type: str) -> Dict[str, Any]:

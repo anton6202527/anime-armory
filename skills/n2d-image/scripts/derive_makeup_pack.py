@@ -130,7 +130,17 @@ def _content_column_bounds(img: Image.Image) -> tuple[int, int]:
     if not segments:
         return 0, width - 1
     center = width / 2
-    return max(segments, key=lambda item: (item[1] - item[0] + 1) - abs(((item[0] + item[1]) / 2) - center) * 0.25)
+    best = max(segments, key=lambda item: (item[1] - item[0] + 1) - abs(((item[0] + item[1]) / 2) - center) * 0.25)
+
+    # The column finder exists for turnaround splits that have dark padding and
+    # a bright portrait column.  Plain studio front references have no padding:
+    # the brightest long segment is often just the neutral gray background at an
+    # image edge, which would push face crops completely off the subject.
+    touches_edge = best[0] <= width * 0.04 or best[1] >= width - 1 - width * 0.04
+    off_center = abs(((best[0] + best[1]) / 2) - center) > width * 0.18
+    if touches_edge and off_center:
+        return 0, width - 1
+    return best
 
 
 def _background_rgb(img: Image.Image, x_left: int, x_right: int) -> tuple[int, int, int]:

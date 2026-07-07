@@ -1,112 +1,50 @@
 {
   "alert_counts": {
-    "critical": 1,
-    "warn": 1
+    "critical": 0,
+    "warn": 0
   },
-  "alerts": [
-    {
-      "kind": "qa_blockers",
-      "level": "critical",
-      "message": "QA 阻断 89 项（阈值 >0）；先按 recent_blockers 修复再继续付费生成",
-      "scope": "totals",
-      "threshold": 0,
-      "value": 89
-    },
-    {
-      "episode": "第1集",
-      "kind": "qa_blockers",
-      "level": "warn",
-      "message": "第1集 QA 阻断 89 项",
-      "scope": "第1集",
-      "threshold": 0,
-      "value": 89
-    }
-  ],
+  "alerts": [],
   "episodes": [
     {
-      "blockers_per_attempt": 3.4231,
+      "blockers_per_attempt": 0.0,
       "completion_rate": null,
       "consistency_blockers": 0,
       "consistency_ledger": {},
-      "consistency_warnings": 0,
+      "consistency_warnings": 5,
       "cost_by_provider": {},
       "cost_per_finished_min": {},
       "cost_totals": {},
-      "deliverable_pass_rate": 0.0,
-      "duration_hms": "1h04m02s",
-      "duration_sec": 3841.788,
-      "elapsed_per_finished_min_sec": 2970.225,
+      "deliverable_pass_rate": 0.9762,
+      "duration_hms": "1h48m52s",
+      "duration_sec": 6531.9,
+      "elapsed_per_finished_min_sec": 5050.048,
       "episode": "第1集",
-      "event_count": 178,
+      "event_count": 70,
       "false_positive_recoveries": 0,
       "false_positive_recovery_rate": 0.0,
-      "final_pass_rate": 0.0,
+      "final_pass_rate": 0.9762,
       "follow_next_rate": null,
-      "generation_attempts": 26,
+      "generation_attempts": 42,
       "generation_fails": 1,
-      "generation_pass_rate": 0.9615,
-      "generation_passes": 25,
-      "image_qc_passive": {},
+      "generation_pass_rate": 0.9762,
+      "generation_passes": 41,
+      "image_qc_passive": {
+        "advisory": 5,
+        "freshness": "fresh",
+        "hard_blocks": 0,
+        "path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/image_qc_第1集.json"
+      },
       "missing_deliverables": [],
-      "one_pass_count": 25,
-      "one_pass_rate": 0.9615,
+      "one_pass_count": 41,
+      "one_pass_rate": 0.9762,
       "progress_next_skill": "n2d-image",
       "progress_next_stage": "出图",
-      "qa_blockers": 89,
-      "qa_gate_passes": 0,
+      "qa_blockers": 0,
+      "qa_gate_passes": 1,
       "qa_gate_runs": 1,
       "qa_infos": 21,
-      "qa_warnings": 41,
-      "recent_blockers": [
-        {
-          "dim": "预防式合同",
-          "loc": "CHAR_HAN_LAOSAN",
-          "msg": "reference_slot_gate: 核心/出场角色 CHAR_HAN_LAOSAN 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "CHAR_HE_PINGSHENG",
-          "msg": "reference_slot_gate: 核心/出场角色 CHAR_HE_PINGSHENG 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "CHAR_ZHANG_LAODA",
-          "msg": "reference_slot_gate: 核心/出场角色 CHAR_ZHANG_LAODA 引用槽位未绑定真实产物：出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "GROUP_SERVANTS",
-          "msg": "reference_slot_gate: 核心/出场角色 GROUP_SERVANTS 引用槽位未绑定真实产物：出图/共享/图片/定妆_GROUP_SERVANTS__常态.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "LOC_BLACK_HALL",
-          "msg": "reference_slot_gate: 道具/场景 LOC_BLACK_HALL 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_黑暗杂役大殿.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "LOC_BLACK_HALL_TO_WATER_YARD",
-          "msg": "reference_slot_gate: 道具/场景 LOC_BLACK_HALL_TO_WATER_YARD 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_黑殿到水缸区转场.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "LOC_MOUNTAIN_PATH_NIGHT",
-          "msg": "reference_slot_gate: 道具/场景 LOC_MOUNTAIN_PATH_NIGHT 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_夜山路.png 不存在",
-          "stage": "image_preflight"
-        },
-        {
-          "dim": "预防式合同",
-          "loc": "LOC_NIGHT_POOL",
-          "msg": "reference_slot_gate: 道具/场景 LOC_NIGHT_POOL 引用槽位未绑定真实产物：出图/共享/图片/定妆_场景_夜潭.png 不存在",
-          "stage": "image_preflight"
-        }
-      ],
+      "qa_warnings": 11,
+      "recent_blockers": [],
       "recoup_ratio": {},
       "redraw_categories": {},
       "redraw_count": 0,
@@ -124,14 +62,15 @@
       "runtime_source": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
       "stages": {
         "image": {
-          "duration_sec": 3798.388,
-          "generation_attempts": 21,
+          "consistency_warnings": 5,
+          "duration_sec": 6488.5,
+          "generation_attempts": 37,
           "generation_fails": 1,
-          "generation_passes": 20,
+          "generation_passes": 36,
           "missing_deliverables": 0,
           "qa_blockers": 0,
           "qa_infos": 0,
-          "qa_warnings": 0,
+          "qa_warnings": 5,
           "redraw_count": 0
         },
         "image_preflight": {
@@ -140,9 +79,9 @@
           "generation_fails": 0,
           "generation_passes": 0,
           "missing_deliverables": 0,
-          "qa_blockers": 89,
+          "qa_blockers": 0,
           "qa_infos": 21,
-          "qa_warnings": 41,
+          "qa_warnings": 6,
           "redraw_count": 0
         },
         "script": {
@@ -168,7 +107,7 @@
           "redraw_count": 0
         }
       },
-      "warnings_per_attempt": 1.5769
+      "warnings_per_attempt": 0.2619
     },
     {
       "blockers_per_attempt": null,
@@ -649,7 +588,7 @@
     }
   ],
   "event_file": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/production_events.jsonl",
-  "generated_at": "2026-07-07T09:29:10+00:00",
+  "generated_at": "2026-07-07T12:11:47+00:00",
   "industry_benchmark": {
     "_retention_benchmark_schema_valid": true,
     "_retention_benchmark_source": "reference",
@@ -1117,34 +1056,34 @@
   "retention_trend": {},
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
   "totals": {
-    "blockers_per_attempt": 3.4231,
+    "blockers_per_attempt": 0.0,
     "consistency_blockers": 0,
     "consistency_ledger_counts": {
       "block": 0,
       "high": 0,
       "medium": 0
     },
-    "consistency_warnings": 0,
+    "consistency_warnings": 5,
     "cost_per_finished_min": {},
     "cost_totals": {},
-    "deliverable_pass_rate": 0.0,
-    "duration_hms": "1h04m02s",
-    "duration_sec": 3841.788,
-    "elapsed_per_finished_min_sec": 2970.225,
+    "deliverable_pass_rate": 0.9762,
+    "duration_hms": "1h48m52s",
+    "duration_sec": 6531.9,
+    "elapsed_per_finished_min_sec": 5050.048,
     "episode_count": 10,
-    "event_count": 178,
+    "event_count": 70,
     "false_positive_recoveries": 0,
     "false_positive_recovery_rate": 0.0,
-    "final_pass_rate": 0.0,
-    "generation_attempts": 26,
+    "final_pass_rate": 0.9762,
+    "generation_attempts": 42,
     "generation_fails": 1,
-    "generation_pass_rate": 0.9615,
-    "generation_passes": 25,
-    "one_pass_count": 25,
-    "one_pass_rate": 0.9615,
-    "qa_blockers": 89,
+    "generation_pass_rate": 0.9762,
+    "generation_passes": 41,
+    "one_pass_count": 41,
+    "one_pass_rate": 0.9762,
+    "qa_blockers": 0,
     "qa_infos": 21,
-    "qa_warnings": 41,
+    "qa_warnings": 11,
     "recoup_ratio": {},
     "redraw_categories": {},
     "redraw_count": 0,
@@ -1156,7 +1095,7 @@
     "release_spend_totals": {},
     "runtime_hms": "1m18s",
     "runtime_sec": 77.606,
-    "warnings_per_attempt": 1.5769
+    "warnings_per_attempt": 0.2619
   },
   "version": 1
 }

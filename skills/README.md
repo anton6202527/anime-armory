@@ -23,13 +23,13 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4536 | 228078 |
+| n2d | `n2d` + `n2d-*` | 21 | 4536 | 229631 |
 | novel | `novel` + `novel-*` | 29 | 3040 | 61473 |
-| comic | `comic` + `comic-*` | 10 | 731 | 8220 |
+| comic | `comic` + `comic-*` | 10 | 758 | 9687 |
 | song | `song` + `song-*` | 10 | 534 | 4851 |
 | mv | `mv` + `mv-*` | 14 | 992 | 10590 |
 | ad | `ad` + `ad-*` | 13 | 822 | 11873 |
-| **合计** | `skills/*/SKILL.md` | **97** | 10655 | 325085 |
+| **合计** | `skills/*/SKILL.md` | **97** | 10682 | 328105 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -222,13 +222,13 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 调度 | `comic` | 路由画漫画请求、初始化项目、读取 `_进度.md` 并分诊到阶段 skill |
 | 进度·下一步（只读） | `comic-progress` | 扫 `创作区/画漫画/<项目>/_进度.md` 阶段表 → 汇总每话前沿；只读不改文件；出图后会检查共享参考、长线多视图和风格一致性报告是否阻断合成 |
 | 设置管理 | `comic-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/comic/_lib/settings.py` |
-| 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
+| 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图前后自动跑 comic gate；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |
 | 页面排版 | `comic-layout` | `panel_script.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位 |
 | 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、定型图角色 DNA、年龄/形态继承、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划 |
-| 出图 | `comic-image` | 逐格 prompt/job 包、真实参考图入参、风格锚/角色 DNA 契约注入、面板图登记；每格落档写 comic 自己的 `panel_qc`；不绑定具体后端 |
+| 出图 | `comic-image` | 逐格 prompt/job 包、后端参考图预算适配、真实参考图入参、风格锚/角色 DNA 契约注入、面板图登记；每格落档写 comic 自己的 `panel_qc`，`block` 不算 ready；不绑定具体后端 |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、文字语言选择、按 layout 渲染页面图、长图分段、WebP/PNG 尺寸 fallback、`export_manifest.json` 与进度回写 |
-| 质检/自审 | `comic-review` | 阅读顺序、文字遮挡、角色一致性、风格一致性/场景族群基线/调色离群/拼贴或外框嫌疑、高一致性风格锚/形态继承硬闸、导出规格、权利状态与返修清单 |
+| 质检/自审 | `comic-review` | 阶段 gate、阅读顺序、文字遮挡、角色一致性并排复核与 face/hair/outfit 启发式、风格一致性/场景族群基线/调色离群/拼贴或外框嫌疑、高一致性风格锚/形态继承硬闸、导出规格、权利状态与返修清单 |
 
 **默认产品路径**：`comic` 立项 → `comic-script` 分话大纲/分格 → `comic-layout` 排版 → `comic-identity` 共享定妆/一致性引用 → `comic-image` 面板图 → `comic-review` 风格一致性复核 → `comic-compose` 嵌字/长图导出 → `comic-review` 发布审查。需要从当前前沿批量推进或预算充足多抽时用 `comic-batch` 编排阶段脚本。默认按长线连载口径补专门定妆多视图；文字默认后期中文嵌字，可在 `文字语言` 选择英文或中英双语，不让图像模型直接烘焙正文；人物/资产漂移先回 `comic-identity`，风格/调色/拼贴/外框离群先回 `comic-image`，不要直接合成。
 

@@ -714,7 +714,7 @@
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 760
@@ -748,12 +748,42 @@
           "view": "anchor_path"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P011.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T17:36:25",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "a06afbd959b961296bad431aa6077adb55fe750313dd8e902206fba676e72fd3",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P011.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P011",
+        "created_at": "2026-07-07T17:36:25",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P011.png",
+        "size": {
+          "width": 1296,
+          "height": 760
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 760
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -792,12 +822,42 @@
           "view": "anchor_path"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P012.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T17:42:51",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "375944d1b42ec5900da0d83b766da9dd4527287b531f7c99d9ecfdc6520cbdd2",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 6,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P012.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P012",
+        "created_at": "2026-07-07T17:42:51",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P012.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 6,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -836,12 +896,42 @@
           "view": "anchor_path"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P013.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T17:52:37",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "c4a4ef199ca52822f1e8fd0c3b9b8f0d2e49e98b2bac8c17c5f804cd0a228c0e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 6,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P013.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P013",
+        "created_at": "2026-07-07T17:52:37",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P013.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 6,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1160
@@ -875,8 +965,57 @@
           "view": "anchor_path"
         }
       ],
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P014.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-07T17:56:10",
+      "backend_version": "codex-cli 0.142.5",
+      "artifact_sha256": "c4413addebba68f34f377ee95f9a8874a2e18636539efa5e468c524f4158e3fe",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P014.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P014",
+        "created_at": "2026-07-07T17:56:10",
+        "verdict": "warn",
+        "path": "出图/第2话/panels/P014.png",
+        "size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [
+          {
+            "x": 860,
+            "y": 0,
+            "w": 435,
+            "h": 209,
+            "area": 36972
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": false,
+        "manual_review": {
+          "reviewed_at": "2026-07-07T17:57:11",
+          "verdict": "pass",
+          "reason": "机检命中的右上角亮区是天空/雾光留白，不是对白气泡、旁白框或烘焙文字容器；画面无文字、水印、logo。"
+        }
+      }
     }
   ]
 }

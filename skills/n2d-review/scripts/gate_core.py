@@ -1193,6 +1193,10 @@ def _recipe_return_stage_for_asset(rel: str) -> str:
     return "image" if rel.lower().endswith(".png") else "video"
 def _recipe_event_missing_fields(event: Mapping[str, Any]) -> List[str]:
     missing = [key for key in RECIPE_REQUIRED_FIELDS if _event_value_any(event, key) in (None, "", [], {})]
+    if str(_event_value_any(event, "stage") or "").strip() == "video":
+        for key in ("route_execution_recipe_hash", "post_video_qc"):
+            if _event_value_any(event, key) in (None, "", [], {}):
+                missing.append(key)
     seed_effective = _event_value_any(event, "seed_effective", "effective_seed")
     if seed_effective in (None, "", [], {}):
         missing.append("seed_effective/effective_seed=false")

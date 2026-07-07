@@ -2196,6 +2196,62 @@ def asset_ref_existing(root: Path, candidates: Sequence[str]) -> Dict[str, Any]:
     return item
 
 
+def scene_lighting_signature(cfg: Mapping[str, Any], constraints: Mapping[str, Any]) -> Dict[str, Any]:
+    """Derive a structured scene light signature from existing scene text.
+
+    The review gate only needs a registered `lighting_signature`, while later
+    pixel checks use numeric `mean_hue`/`saturation_range` only when explicitly
+    present.  Prompt-pack generation should therefore preserve measured-free
+    text and light direction instead of inventing brittle numeric thresholds.
+    """
+    existing = constraints.get("lighting_signature")
+    if isinstance(existing, Mapping) and existing:
+        return dict(existing)
+    scene_dna = cfg.get("scene_dna") if isinstance(cfg.get("scene_dna"), Mapping) else {}
+    parts = [
+        constraints.get("light_anchor"),
+        scene_dna.get("color_lighting_weather"),
+        cfg.get("profile"),
+    ]
+    text = "；".join(str(p).strip() for p in parts if str(p or "").strip())
+    if not text:
+        return {}
+    low = text.lower()
+    cool = any(k in low for k in ("冷", "月", "青", "蓝", "灰", "cool", "moon", "blue"))
+    warm = any(k in low for k in ("暖", "灯", "火", "金", "晨光", "warm", "lamp", "fire", "gold"))
+    if cool and warm:
+        color_temperature = "mixed_cool_warm"
+    elif cool:
+        color_temperature = "cool_low_key"
+    elif warm:
+        color_temperature = "warm_low_key"
+    else:
+        color_temperature = "neutral_low_key"
+    if any(k in text for k in ("低饱和", "灰", "旧", "脏", "暗", "low saturation", "desaturated")):
+        saturation_profile = "low_desaturated"
+    else:
+        saturation_profile = "controlled"
+
+    h = ""
+    v = ""
+    if any(k in text for k in ("画左", "左侧", "左前", "左后", "左")) or "left" in low:
+        h = "left"
+    elif any(k in text for k in ("画右", "右侧", "右前", "右后", "右")) or "right" in low:
+        h = "right"
+    if any(k in text for k in ("上方", "顶", "天井", "overhead", "top")):
+        v = "top"
+    elif any(k in text for k in ("下方", "底光", "脚下", "under", "bottom")):
+        v = "bottom"
+    direction = "_".join(p for p in (h, v) if p) or "storyboard_defined"
+    return {
+        "color_temperature": color_temperature,
+        "saturation_profile": saturation_profile,
+        "key_light_direction": direction,
+        "source_text": text[:240],
+        "numeric_measurement": "pending_after_landed_frame_qc",
+    }
+
+
 def build_asset_registry(root: Path) -> Dict[str, Any]:
     assets: List[Dict[str, Any]] = []
     for aid, cfg in ASSET_DEFS.items():
@@ -2213,6 +2269,11 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
                 "scale_ref": asset_ref_existing(root, [path_name + "_比例", path_name]),
                 "in_hand": asset_ref_existing(root, [path_name + "_手持", path_name]),
             })
+        constraints = dict(cfg.get("constraints") or {}) if isinstance(cfg.get("constraints"), Mapping) else {}
+        if cfg["type"] in {"scene", "location"} and not constraints.get("lighting_signature"):
+            lighting_signature = scene_lighting_signature(cfg, constraints)
+            if lighting_signature:
+                constraints["lighting_signature"] = lighting_signature
         asset: Dict[str, Any] = {
             "id": aid,
             "type": cfg["type"],
@@ -2222,8 +2283,8 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
                 reference_slot(root, asset_reference_card_rel(aid, cfg), "asset_card"),
                 reference_slot(root, str(primary.get("path") or ""), "primary_reference") if primary.get("path") else {"slot": "primary_reference", "path": "", "status": "planned"},
             ],
-            "constraints": cfg.get("constraints", {}),
-            "face_policy": (cfg.get("constraints") or {}).get("face_policy") if isinstance(cfg.get("constraints"), Mapping) else "faceless",
+            "constraints": constraints,
+            "face_policy": constraints.get("face_policy") if constraints else "faceless",
                 "drift_forbidden": cfg.get("drift", []),
                 "scene_dna": cfg.get("scene_dna") or complete_asset_scene_dna(cfg, asset_id=aid, asset_type=str(cfg.get("type") or ""), visual={}),
                 "self_check_passed": bool((root / primary["path"]).is_file()),
@@ -2239,17 +2300,17 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             asset.update({
                 "core": True,
                 "frequency": 12,
-                "spatial_layout": cfg.get("spatial_layout") or cfg.get("constraints", {}).get("layout", "按 storyboard 场景轴线和地标保持。"),
-                "floor_plan": cfg.get("floor_plan") or cfg.get("constraints", {}).get("layout", "按 storyboard 场景轴线和地标保持。"),
+                "spatial_layout": cfg.get("spatial_layout") or constraints.get("layout", "按 storyboard 场景轴线和地标保持。"),
+                "floor_plan": cfg.get("floor_plan") or constraints.get("layout", "按 storyboard 场景轴线和地标保持。"),
                 "doors_windows": cfg.get("doors_windows") or "按场景卡，不新增现代门窗或室内结构。",
-                "axis_rules": cfg.get("axis_rules") or cfg.get("constraints", {}).get("axis_rules", "按 storyboard 场景轴线视线保持。"),
-                "screen_direction_rules": cfg.get("screen_direction_rules") or cfg.get("constraints", {}).get("axis_rules", "按 storyboard 场景轴线视线保持。"),
+                "axis_rules": cfg.get("axis_rules") or constraints.get("axis_rules", "按 storyboard 场景轴线视线保持。"),
+                "screen_direction_rules": cfg.get("screen_direction_rules") or constraints.get("axis_rules", "按 storyboard 场景轴线视线保持。"),
                 "scene_dna": cfg.get("scene_dna") or {
                     "belonging_anchor": cfg["name"],
                     "landmarks": [cfg["name"]],
-                    "spatial_layout": cfg.get("constraints", {}).get("layout", ""),
+                    "spatial_layout": constraints.get("layout", ""),
                     "architecture_materials": cfg.get("positive", ""),
-                    "color_lighting_weather": cfg.get("constraints", {}).get("light_anchor", ""),
+                    "color_lighting_weather": constraints.get("light_anchor", ""),
                     "resident_assets": [],
                     "forbidden": "现代物件、地标漂移、空间轴线随机跳变。",
                     "dof_profile": {"depth_intent": "medium"},
@@ -2886,6 +2947,24 @@ def face_anchor_ref(root: Optional[Path], cid: str, idx: Optional[int] = None, a
     return str(item.get("path") if isinstance(item, Mapping) else shared_rel(str(cfg["asset_key"]), "_脸部特写"))
 
 
+def auxiliary_character_refs(root: Optional[Path], cid: str, idx: Optional[int] = None, assets: Sequence[str] = ()) -> List[Tuple[str, str]]:
+    cfg = active_character_form_cfg(cid, idx, assets)
+    if not cfg or cfg.get("tier") == "restricted_partial":
+        return []
+    ak = str(cfg.get("asset_key") or cid)
+    candidates = [
+        ("45度锚", shared_rel(ak, "_45度")),
+        ("侧面锚", shared_rel(ak, "_侧")),
+        ("背面锚", shared_rel(ak, "_背")),
+        ("半身锚", shared_rel(ak, "_半身")),
+    ]
+    refs: List[Tuple[str, str]] = []
+    for label, rel in candidates:
+        if root is None or (root / rel).is_file():
+            refs.append((label, rel))
+    return refs
+
+
 def make_shared_index(root: Path, story: Optional[Mapping[str, Any]] = None) -> str:
     sc = style_contract(story or {})
     style_anchor_rel = primary_style_anchor_rel(sc)
@@ -3243,6 +3322,10 @@ def shot_refs(chars: Sequence[str], assets: Sequence[str], root: Optional[Path] 
         lines.append(f"- 人物定妆：`{primary_character_ref(root, cid, idx, assets)}`，强度 {strength}，绑定 `{cid}/{cfg['form']}`。")
         if cfg["tier"] != "restricted_partial":
             lines.append(f"- 脸部特写：`{face_anchor_ref(root, cid, idx, assets)}`，强度 0.70，近景/反打锁脸。")
+            aux_refs = auxiliary_character_refs(root, cid, idx, assets)
+            if aux_refs:
+                aux_text = "；".join(f"{label} `{rel}`" for label, rel in aux_refs)
+                lines.append(f"- 辅助角度锚：{aux_text}；用于侧脸、背身、半身和多人反打时保持同一服装轮廓与头肩比例。")
     for aid in assets:
         cfg = ASSET_DEFS.get(aid)
         if not cfg:

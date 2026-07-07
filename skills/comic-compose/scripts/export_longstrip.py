@@ -843,26 +843,51 @@ def update_export_checklist(root: Path, chapter: str, *, pages_ready: bool, long
     path = root / "_进度.md"
     if not path.is_file():
         return False
-    replacements = {
-        f"- [ ] {chapter} 页面图": f"- [x] {chapter} 页面图",
-        f"- [ ] {chapter} 长图": f"- [x] {chapter} 长图",
-        f"- [ ] {chapter} export_manifest.json": f"- [x] {chapter} export_manifest.json",
-    }
-    ready = {
-        f"- [ ] {chapter} 页面图": pages_ready,
-        f"- [ ] {chapter} 长图": longstrip_ready,
-        f"- [ ] {chapter} export_manifest.json": manifest_ready,
+    targets = {
+        f"{chapter} 页面图": pages_ready,
+        f"{chapter} 长图": longstrip_ready,
+        f"{chapter} export_manifest.json": manifest_ready,
     }
     lines = path.read_text(encoding="utf-8").splitlines()
     changed = False
+    seen: set[str] = set()
     out: list[str] = []
     for line in lines:
         stripped = line.strip()
-        if ready.get(stripped):
+        match = re.match(r"^-\s+\[[ xX]\]\s+(.+?)\s*$", stripped)
+        if match and match.group(1) in targets:
+            label = match.group(1)
+            seen.add(label)
+            desired = f"- [{'x' if targets[label] else ' '}] {label}"
             indent = line[: len(line) - len(line.lstrip())]
-            line = indent + replacements[stripped]
-            changed = True
+            new_line = indent + desired
+            if new_line != line:
+                line = new_line
+                changed = True
         out.append(line)
+    missing = [label for label in targets if label not in seen]
+    if missing:
+        insert_at = None
+        in_export_section = False
+        last_export_item = None
+        for idx, line in enumerate(out):
+            stripped = line.strip()
+            if stripped == "## 导出":
+                in_export_section = True
+                insert_at = idx + 1
+                continue
+            if in_export_section and stripped.startswith("## "):
+                break
+            if in_export_section and stripped.startswith("- ["):
+                last_export_item = idx
+        if last_export_item is not None:
+            insert_at = last_export_item + 1
+        if insert_at is None:
+            out.extend(["", "## 导出"])
+            insert_at = len(out)
+        additions = [f"- [{'x' if targets[label] else ' '}] {label}" for label in missing]
+        out[insert_at:insert_at] = additions
+        changed = True
     if changed:
         path.write_text("\n".join(out) + "\n", encoding="utf-8")
     return changed

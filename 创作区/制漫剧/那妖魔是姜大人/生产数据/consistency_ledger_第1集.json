@@ -1,12 +1,12 @@
 {
   "counts": {
-    "block": 5,
+    "block": 0,
     "high": 0,
-    "medium": 19
+    "medium": 24
   },
   "delivery_surface": {
     "blocking_counts": {
-      "block": 5,
+      "block": 0,
       "high": 0
     },
     "required_domains": [
@@ -19,7 +19,7 @@
       "合规",
       "生产操作"
     ],
-    "status": "blocked"
+    "status": "pass"
   },
   "dependency_graph": {
     "available": true,
@@ -28,23 +28,23 @@
     "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第1集.json",
     "summary": {
       "clips": 11,
-      "edges": 250,
+      "edges": 266,
       "images": 33,
-      "nodes": 107,
+      "nodes": 108,
       "videos": 16
     }
   },
   "domain_counts": {
-    "block": 5,
+    "block": 0,
     "high": 0,
-    "medium": 2
+    "medium": 7
   },
   "domains": [
     {
       "counts": {
-        "block": 1,
+        "block": 0,
         "high": 0,
-        "medium": 56
+        "medium": 57
       },
       "findings": [
         {
@@ -106,7 +106,7 @@
       ],
       "key": "story",
       "label": "剧情",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -122,9 +122,9 @@
     },
     {
       "counts": {
-        "block": 5,
+        "block": 0,
         "high": 0,
-        "medium": 108
+        "medium": 144
       },
       "findings": [
         {
@@ -186,7 +186,7 @@
       ],
       "key": "character",
       "label": "角色",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -194,7 +194,6 @@
         "gate:image_prompt_preflight",
         "gate:image",
         "gate:review",
-        "gate:video_preflight",
         "gate:video",
         "review-ui",
         "score"
@@ -281,32 +280,11 @@
     },
     {
       "counts": {
-        "block": 22,
+        "block": 0,
         "high": 0,
-        "medium": 196
+        "medium": 181
       },
       "findings": [
-        {
-          "dimension": "场景(O2)",
-          "loc": "",
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "",
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "",
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "色温调色(GRADE1)",
           "loc": "",
@@ -341,11 +319,32 @@
           "message": " 色温调色(GRADE1)   图片/Clip08_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.14 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "",
+          "message": " 色温调色(GRADE1)   图片/Clip08_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.158 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "运动质量(MOT1)",
+          "loc": "",
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "运动质量(MOT1)",
+          "loc": "",
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ],
       "key": "shot",
       "label": "镜头",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -362,9 +361,9 @@
     },
     {
       "counts": {
-        "block": 2,
+        "block": 0,
         "high": 0,
-        "medium": 16
+        "medium": 18
       },
       "findings": [
         {
@@ -384,14 +383,14 @@
         {
           "dimension": "证据等级",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
-          "severity": "block",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
           "source": "gate:compose"
         },
         {
           "dimension": "证据等级",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -412,21 +411,21 @@
         {
           "dimension": "证据等级",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
-          "severity": "block",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
           "source": "gate:review"
         },
         {
           "dimension": "证据等级",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
           "severity": "warn",
           "source": "gate:video"
         }
       ],
       "key": "audio",
       "label": "音频",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -489,7 +488,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -519,9 +518,9 @@
     },
     {
       "counts": {
-        "block": 4,
+        "block": 0,
         "high": 0,
-        "medium": 27
+        "medium": 38
       },
       "findings": [
         {
@@ -583,7 +582,7 @@
       ],
       "key": "ops",
       "label": "生产操作",
-      "overall": "block",
+      "overall": "warn",
       "sources": [
         "detect",
         "gate:compose",
@@ -591,7 +590,6 @@
         "gate:image_prompt_preflight",
         "gate:image",
         "gate:review",
-        "gate:video_preflight",
         "gate:video_prompt_preflight",
         "gate:video",
         "review-ui",
@@ -617,646 +615,6 @@
   },
   "kind": "n2d_consistency_ledger",
   "root_causes": [
-    {
-      "anchor": "consistency_findings_第1集.json",
-      "dimensions": [
-        "证据等级"
-      ],
-      "domain": "audio",
-      "severity": "block",
-      "sources": [
-        "gate:compose",
-        "gate:image",
-        "gate:review",
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
-          "severity": "block",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRAD",
-          "severity": "block",
-          "source": "gate:review"
-        },
-        {
-          "dimension": "证据等级",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOC",
-          "severity": "warn",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "episode",
-      "dimensions": [
-        "角色 DNA/形体一致性（脸/发型/身形/手）"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "episode",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手） 跨集脸漂(G5): block=0 warn=1 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "episode",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手） mechanical[一致性] 第1集: 脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "episode",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手） dashboard block[compose/证据等级]: 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=str",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "episode",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手） dashboard block[review/证据等级]: 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=stru",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "score_第1集.json",
-      "dimensions": [
-        "角色 DNA/形体一致性（脸/发型/身形/手）"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "score"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
-          "loc": "生产数据/score_第1集.json",
-          "message": "角色 DNA/形体一致性（脸/发型/身形/手）: status=fail score=16 block=2 warn=1",
-          "severity": "block",
-          "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "video_model_routes.json",
-      "dimensions": [
-        "后端跨集锁"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "后端跨集锁",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/video_model_routes.json",
-          "message": "后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；高风险/含角色镜头的路由漂移必须写结构化 baseline_override（accepted/reviewer/reason/expires_at/affected_routes）或刷新基线",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "image_qc_第1集.json",
-      "dimensions": [
-        "出图落档QC"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "出图落档QC",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.json",
-          "message": "出图落档QC 输入首帧晚于上次 image_qc（出图后改过帧未重验）——出视频前先重跑 image_qc，避免动画一张未验首帧。",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "production_events.jsonl",
-      "dimensions": [
-        "生成配方证据"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "生成配方证据",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "生成配方证据 出图/第1集/图片/Clip06_end_reaction.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、r",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        },
-        {
-          "dimension": "生成配方证据",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/production_events.jsonl",
-          "message": "生成配方证据 出图/第1集/图片/Clip06_mid_reaction.png 是本集最终媒体，但 production_events.jsonl 缺对应 image/video generation/redraw pass 记录；无法追溯 provider/model/channel/route_hash、capability_evidence_id、r",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "score_第1集.json",
-      "dimensions": [
-        "自动审片总分"
-      ],
-      "domain": "ops",
-      "severity": "block",
-      "sources": [
-        "score"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "自动审片总分",
-          "loc": "生产数据/score_第1集.json",
-          "message": "score status=fail total=80 threshold=85",
-          "severity": "block",
-          "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "EP01_CLIP01",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP01",
-          "message": "场景/构图连续性 运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_01 定位产物：生产数据/motion_qualit",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP01",
-          "message": "场景/构图连续性 高动态成片证据(SPECV) detail: Clip_01 large_establishing 缺 Motion Control ready 输入：camera_path, depth_sequence, parallax_layers。 定位镜头：Clip_01 定位产物：出视频/第1集/control/Clip_01/motion_",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP01",
-          "message": "场景/构图连续性 visual[image_similarity] 死人堆惊醒 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "EP01_CLIP01",
-          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_01 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
-          "severity": "warn",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "EP01_CLIP02",
-      "dimensions": [
-        "场景/构图连续性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP02",
-          "message": "场景/构图连续性 运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_02 定位产物：生产数据/motion_qualit",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP02",
-          "message": "场景/构图连续性 高动态成片证据(SPECV) detail: Clip_02 realm_portal 缺 Motion Control ready 输入：depth_sequence, camera_path, spatial_path, vfx_layers。 定位镜头：Clip_02 定位产物：出视频/第1集/control/Clip_02/moti",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP02",
-          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "EP01_CLIP03",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP03",
-          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "EP01_CLIP03",
-          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_03 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
-          "severity": "warn",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "EP01_CLIP04",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "EP01_CLIP04",
-          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "EP01_CLIP04",
-          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_04 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
-          "severity": "warn",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "episode",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 场景(O2): block=0 warn=3 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 天气时辰(W1): block=0 warn=5 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 色温调色(GRADE1): block=0 warn=6 ok=25 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 运动质量(MOT1): block=0 warn=2 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 高动态成片证据(SPECV): block=0 warn=6 ok=0 skipped=False",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 mechanical[尾帧] 第1集: 本集需要尾帧接力 10 处",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 visual[image_similarity]: block=0 warn=10 skipped=False metrics={\"avg_dhash_distance\": 28.3, \"max_dhash_distance\": 35, \"pairs\": 10}",
-          "severity": "warn",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "episode",
-          "message": "场景/构图连续性 dashboard block[compose/现实覆盖]: 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-rev",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "resident_presence_第1集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:compose",
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/resident_presence_第1集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
-          "severity": "block",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/resident_presence_第1集.json",
-          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/resident_presence.py \"",
-          "severity": "block",
-          "source": "gate:review"
-        }
-      ]
-    },
-    {
-      "anchor": "scene_embed_第1集.json",
-      "dimensions": [
-        "现实覆盖"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:compose",
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/scene_embed_第1集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
-          "severity": "block",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "现实覆盖",
-          "loc": "生产数据/scene_embed_第1集.json",
-          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧",
-          "severity": "block",
-          "source": "gate:review"
-        }
-      ]
-    },
-    {
-      "anchor": "score_第1集.json",
-      "dimensions": [
-        "场景/构图连续性",
-        "多模态漂移"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "score"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "生产数据/score_第1集.json",
-          "message": "场景/构图连续性: status=fail score=0 block=4 warn=32",
-          "severity": "block",
-          "source": "score"
-        },
-        {
-          "dimension": "多模态漂移",
-          "loc": "生产数据/score_第1集.json",
-          "message": "多模态漂移: status=warn score=88 block=0 warn=8",
-          "severity": "warn",
-          "source": "score"
-        }
-      ]
-    },
-    {
-      "anchor": "seam:1 死人堆惊醒->看见虎妖尸身",
-      "dimensions": [
-        "场景/构图连续性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:1 死人堆惊醒->看见虎妖尸身",
-          "message": "场景/构图连续性 visual[image_similarity] 死人堆惊醒 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:1 死人堆惊醒->看见虎妖尸身",
-          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "seam:2 看见虎妖尸身->镇魔司压迫交易",
-      "dimensions": [
-        "场景/构图连续性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:2 看见虎妖尸身->镇魔司压迫交易",
-          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:2 看见虎妖尸身->镇魔司压迫交易",
-          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "seam:3 镇魔司压迫交易->被迫扶裴南行",
-      "dimensions": [
-        "场景/构图连续性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:3 镇魔司压迫交易->被迫扶裴南行",
-          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        },
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:3 镇魔司压迫交易->被迫扶裴南行",
-          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "seam:4 被迫扶裴南行->虎妖诈死复苏",
-      "dimensions": [
-        "场景/构图连续性"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "review-ui"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "场景/构图连续性",
-          "loc": "seam:4 被迫扶裴南行->虎妖诈死复苏",
-          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
-          "severity": "block",
-          "source": "review-ui"
-        }
-      ]
-    },
-    {
-      "anchor": "成片",
-      "dimensions": [
-        "进度凭据对账"
-      ],
-      "domain": "shot",
-      "severity": "block",
-      "sources": [
-        "gate:review"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "进度凭据对账",
-          "loc": "第1集/成片",
-          "message": "进度凭据对账 进度「成片」标 ✅ 却无新鲜通过的闸门凭据（gate_failed）：闸门未过：compose 仍有 3 个 block 级问题（见 gate_findings_compose_第1集.json）。修掉 block 后重跑 → python3 skills/n2d-dashboard/scripts/dashboard.py gate \"创作区",
-          "severity": "block",
-          "source": "gate:review"
-        }
-      ]
-    },
-    {
-      "anchor": "storyboard.json clip#6",
-      "dimensions": [
-        "中段锚帧"
-      ],
-      "domain": "story",
-      "severity": "block",
-      "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "中段锚帧",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#6",
-          "message": "中段锚帧 锚帧 1 PNG 已存在但缺中段动作自检 pass 记账：出图/第1集/图片/Clip06_mid_reaction.png；落档后必须记录 image generation --status pass --meta self_check=pass，确认它不是只锁人锁景，而是姿态/动作确实落在首尾帧中间。",
-          "severity": "block",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
     {
       "anchor": "WEAPON_01",
       "dimensions": [
@@ -1530,6 +888,51 @@
       ]
     },
     {
+      "anchor": "consistency_findings_第1集.json",
+      "dimensions": [
+        "证据等级"
+      ],
+      "domain": "audio",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:image",
+        "gate:review",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
+          "source": "gate:review"
+        },
+        {
+          "dimension": "证据等级",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
+          "message": "证据等级 证据等级未达标(PENDING)：主体视频一致(S2V) 本可验到 embedding/pixel 级，本次只到结构/启发式级（torch-DINOv2 跨帧主体一致 / SyncNet 口型词级 进阶依赖未装，未数值化验证）；本集最弱证据级=structured。（已显式降级 QC 放行·自负其责）",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
       "anchor": "episode",
       "dimensions": [
         "音画同步",
@@ -1545,35 +948,35 @@
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 mechanical[完整性] 第1集: 产物快照：配音句 28 · 视频片段 16 · 成片 1",
+          "message": "音画同步 mechanical[完整性] 第1集: 产物快照：配音句 28 · 视频片段 16 · 成片 3",
           "severity": "warn",
           "source": "review-ui"
         },
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 mechanical[时长] 第1集: 源 clip 物理总长 127.86s 与镜头时长累计 120.52s 差 7.34s；已检测到 fitted 配音轨且成片 120.10s≈锁定槽位，split 时长已由 compose Time-Warp 修正。",
+          "message": "音画同步 mechanical[时长] 第1集: 源 clip 物理总长 125.78s 与镜头时长累计 120.52s 差 5.26s；已检测到 fitted 配音轨且成片 120.10s≈锁定槽位，split 时长已由 compose Time-Warp 修正。",
           "severity": "warn",
           "source": "review-ui"
         },
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 visual[av_duration]: block=0 warn=1 skipped=False metrics={\"final_sec\": 120.1, \"srt_sec\": 120.515, \"storyboard_sec\": 120.515, \"voice_sec\": 120.515034}",
+          "message": "音画同步 visual[av_duration] 音画时长对账通过：成片 120.12s",
           "severity": "warn",
           "source": "review-ui"
         },
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 visual[av_duration] 成片 vs srt 时长差 0.42s > 0.4s",
+          "message": "音画同步 visual[lip_sync]: block=0 warn=1 skipped=False metrics={\"mouth_visible_no_hits\": 5, \"mouth_visible_yes_hits\": 6}",
           "severity": "warn",
           "source": "review-ui"
         },
         {
           "dimension": "音画同步",
           "loc": "episode",
-          "message": "音画同步 visual[lip_sync] 未发现 mouth_visible=yes 风险标记；口型检测可按需接入外部报告",
+          "message": "音画同步 visual[lip_sync] 发现 6 处可见口型风险，但缺 lip-sync/SyncNet 外部检测报告",
           "severity": "warn",
           "source": "review-ui"
         },
@@ -2431,6 +1834,62 @@
       ]
     },
     {
+      "anchor": "episode",
+      "dimensions": [
+        "角色 DNA/形体一致性（脸/发型/身形/手）"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "episode",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手） 跨集脸漂(G5): block=0 warn=1 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "episode",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手） 片内时序(N2): block=0 warn=15 ok=1 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "episode",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手） mechanical[一致性] 第1集: 脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "角色 DNA/形体一致性（脸/发型/身形/手）"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "角色 DNA/形体一致性（脸/发型/身形/手）",
+          "loc": "生产数据/score_第1集.json",
+          "message": "角色 DNA/形体一致性（脸/发型/身形/手）: status=warn score=86 block=0 warn=16",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
       "anchor": "图片",
       "dimensions": [
         "跨集脸漂(G5)"
@@ -2665,6 +2124,78 @@
       ]
     },
     {
+      "anchor": "视频",
+      "dimensions": [
+        "片内时序(N2)"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:review",
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第1集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:compose"
+        }
+      ]
+    },
+    {
       "anchor": "compliance_manifest.json",
       "dimensions": [
         "合规前置"
@@ -2711,7 +2242,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -2722,6 +2253,34 @@
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP06",
+      "dimensions": [
+        "生产操作一致性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生产操作一致性",
+          "loc": "EP01_CLIP06",
+          "message": "生产操作一致性 成本路由(K1) detail: 出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 定位镜头：Clip_06 定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "生产操作一致性",
+          "loc": "EP01_CLIP06",
+          "message": "生产操作一致性 成本路由(K1) detail: 出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 定位镜头：Clip_06 定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -2743,30 +2302,58 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 47 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:compose"
         },
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 7 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 5 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:image"
         },
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 47 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:review"
         },
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第1集.json",
-          "message": "一致性总审 另有 24 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 47 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第1集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "生产操作一致性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生产操作一致性",
+          "loc": "episode",
+          "message": "生产操作一致性 成本路由(K1): block=0 warn=10 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "生产操作一致性",
+          "loc": "episode",
+          "message": "生产操作一致性 成本路由(K1) detail: 创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换成本。 定位产物：生产数据/production_events.jsonl、出视频/第1集/prompt/video_model_routes.json、合成/第",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -2844,6 +2431,56 @@
       ]
     },
     {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "生产操作一致性"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "生产操作一致性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "生产操作一致性: status=warn score=88 block=0 warn=10",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "第1集",
+      "dimensions": [
+        "一致性满档账"
+      ],
+      "domain": "ops",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "一致性满档账",
+          "loc": "第1集",
+          "message": "一致性满档账 本集本次 gate 凭 3 条降级 QC waiver 放行（交付边界·非满档一致性交付）：维度 现实覆盖、证据等级。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "一致性满档账",
+          "loc": "第1集",
+          "message": "一致性满档账 本集本次 gate 凭 3 条降级 QC waiver 放行（交付边界·非满档一致性交付）：维度 现实覆盖、证据等级。这些维度未在满档(full)精度下验证，全靠 N2D_ALLOW_DEGRADED_QC 显式放行——已记账 `full_grade=false`，装齐依赖复跑可消账。",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
       "anchor": "01_分镜出图.md",
       "dimensions": [
         "物理尺寸对账"
@@ -2873,89 +2510,138 @@
       ]
     },
     {
-      "anchor": "Clip07_end.png",
+      "anchor": "EP01_CLIP01",
       "dimensions": [
-        "scene_consistency"
+        "场景/构图连续性",
+        "多模态漂移"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "review-ui"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_end.png",
-          "message": "scene_consistency  图片/Clip07_end.png 场景 O2 初筛：图片/Clip07_end.png 光色（非阻断） ",
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP01",
+          "message": "场景/构图连续性 运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_01 定位产物：生产数据/motion_qualit",
           "severity": "warn",
-          "source": "detect"
+          "source": "review-ui"
         },
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_end.png",
-          "message": "scene_consistency 场景 O2 初筛：图片/Clip07_end.png 光色（非阻断）",
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP01",
+          "message": "场景/构图连续性 高动态成片证据(SPECV) detail: Clip_01 large_establishing 缺 Motion Control ready 输入：camera_path, depth_sequence, parallax_layers。 定位镜头：Clip_01 定位产物：出视频/第1集/control/Clip_01/motion_",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP01",
+          "message": "场景/构图连续性 visual[image_similarity] 死人堆惊醒 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "EP01_CLIP01",
+          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_01 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
     {
-      "anchor": "Clip07_first.png",
+      "anchor": "EP01_CLIP02",
       "dimensions": [
-        "scene_consistency"
+        "场景/构图连续性"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "review-ui"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_first.png",
-          "message": "scene_consistency  图片/Clip07_first.png 场景 O2 初筛：图片/Clip07_first.png 光色（非阻断） ",
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP02",
+          "message": "场景/构图连续性 运动质量(MOT1) detail: 高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 定位镜头：Clip_02 定位产物：生产数据/motion_qualit",
           "severity": "warn",
-          "source": "detect"
+          "source": "review-ui"
         },
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_first.png",
-          "message": "scene_consistency 场景 O2 初筛：图片/Clip07_first.png 光色（非阻断）",
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP02",
+          "message": "场景/构图连续性 高动态成片证据(SPECV) detail: Clip_02 realm_portal 缺 Motion Control ready 输入：depth_sequence, camera_path, spatial_path, vfx_layers。 定位镜头：Clip_02 定位产物：出视频/第1集/control/Clip_02/moti",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP02",
+          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
     {
-      "anchor": "Clip07_mid.png",
+      "anchor": "EP01_CLIP03",
       "dimensions": [
-        "scene_consistency"
+        "场景/构图连续性",
+        "多模态漂移"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "detect",
-        "gate:image"
+        "review-ui"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_mid.png",
-          "message": "scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断） ",
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP03",
+          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
           "severity": "warn",
-          "source": "detect"
+          "source": "review-ui"
         },
         {
-          "dimension": "scene_consistency",
-          "loc": "图片/Clip07_mid.png",
-          "message": "scene_consistency 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断）",
+          "dimension": "多模态漂移",
+          "loc": "EP01_CLIP03",
+          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_03 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
           "severity": "warn",
-          "source": "gate:image"
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP04",
+      "dimensions": [
+        "场景/构图连续性",
+        "多模态漂移"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP04",
+          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "EP01_CLIP04",
+          "message": "多模态漂移 视频语义一致(VSEM) detail: DINOv2 whole-frame similarity is below the configured VSEM threshold. 定位镜头：Clip_04 定位产物：生产数据/video_semantic_consistency_第1集.json、出视频/第1集/video_semantic_c",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -3003,6 +2689,27 @@
           "dimension": "场景/构图连续性",
           "loc": "EP01_CLIP06",
           "message": "场景/构图连续性 高动态成片证据(SPECV) detail: Clip_06 fight_exchange 动作关键维未实测：optical_flow_direction, limb_artifact, motion_blur_plausibility（光流方向对账/肢体畸变/运动模糊）。按 sampling_plan 在动作峰值帧加密抽帧，跑动作-art",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "EP01_CLIP07",
+      "dimensions": [
+        "场景/构图连续性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "EP01_CLIP07",
+          "message": "场景/构图连续性 mechanical[衔接] clip#7: start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，需无缝尾帧接力时再原样继承",
           "severity": "warn",
           "source": "review-ui"
         }
@@ -3061,7 +2768,7 @@
       "symptoms": [
         {
           "dimension": "生视频后端连通性",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生视频后端连通性 生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -3079,6 +2786,70 @@
           "message": "生视频后端连通性 生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL",
           "severity": "warn",
           "source": "gate:video"
+        }
+      ]
+    },
+    {
+      "anchor": "episode",
+      "dimensions": [
+        "场景/构图连续性",
+        "多模态漂移"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 天气时辰(W1): block=0 warn=6 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 色温调色(GRADE1): block=0 warn=6 ok=27 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 运动质量(MOT1): block=0 warn=2 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 高动态成片证据(SPECV): block=0 warn=6 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 mechanical[尾帧] 第1集: 本集需要尾帧接力 10 处",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "episode",
+          "message": "场景/构图连续性 visual[image_similarity]: block=0 warn=10 skipped=False metrics={\"avg_dhash_distance\": 27.7, \"max_dhash_distance\": 35, \"pairs\": 10}",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "episode",
+          "message": "多模态漂移 视频语义一致(VSEM): block=0 warn=8 ok=0 skipped=False",
+          "severity": "warn",
+          "source": "review-ui"
         }
       ]
     },
@@ -3104,14 +2875,203 @@
       ]
     },
     {
+      "anchor": "resident_presence_第1集.json",
+      "dimensions": [
+        "现实覆盖"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/resident_presence_第1集.json",
+          "message": "现实覆盖 场景常驻陈设在场(OWLv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/resident_presence.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "scene_embed_第1集.json",
+      "dimensions": [
+        "现实覆盖"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "gate:compose",
+        "gate:review"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env",
+          "severity": "warn",
+          "source": "gate:compose"
+        },
+        {
+          "dimension": "现实覆盖",
+          "loc": "生产数据/scene_embed_第1集.json",
+          "message": "现实覆盖 场景语义嵌入(DINOv2) 适用但休眠（后端没真验证），已通过项目设置 internal_only + demo放行（自负其责·已计债）；本次交付未真验该轴一致性。跑 python3 skills/n2d-review/scripts/scene_embed.py \"创作区/制漫剧/那妖魔是姜大人\" 第1集 --write（需对应重型后端 env",
+          "severity": "warn",
+          "source": "gate:review"
+        }
+      ]
+    },
+    {
+      "anchor": "score_第1集.json",
+      "dimensions": [
+        "场景/构图连续性",
+        "多模态漂移"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "score"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "生产数据/score_第1集.json",
+          "message": "场景/构图连续性: status=warn score=86 block=0 warn=31",
+          "severity": "warn",
+          "source": "score"
+        },
+        {
+          "dimension": "多模态漂移",
+          "loc": "生产数据/score_第1集.json",
+          "message": "多模态漂移: status=warn score=88 block=0 warn=8",
+          "severity": "warn",
+          "source": "score"
+        }
+      ]
+    },
+    {
+      "anchor": "seam:1 死人堆惊醒->看见虎妖尸身",
+      "dimensions": [
+        "场景/构图连续性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:1 死人堆惊醒->看见虎妖尸身",
+          "message": "场景/构图连续性 visual[image_similarity] 死人堆惊醒 接缝 dHash 距离 29 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:1 死人堆惊醒->看见虎妖尸身",
+          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "seam:2 看见虎妖尸身->镇魔司压迫交易",
+      "dimensions": [
+        "场景/构图连续性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:2 看见虎妖尸身->镇魔司压迫交易",
+          "message": "场景/构图连续性 visual[image_similarity] 看见虎妖尸身 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:2 看见虎妖尸身->镇魔司压迫交易",
+          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "seam:3 镇魔司压迫交易->被迫扶裴南行",
+      "dimensions": [
+        "场景/构图连续性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:3 镇魔司压迫交易->被迫扶裴南行",
+          "message": "场景/构图连续性 visual[image_similarity] 镇魔司压迫交易 接缝 dHash 距离 28 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        },
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:3 镇魔司压迫交易->被迫扶裴南行",
+          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
+      "anchor": "seam:4 被迫扶裴南行->虎妖诈死复苏",
+      "dimensions": [
+        "场景/构图连续性"
+      ],
+      "domain": "shot",
+      "severity": "warn",
+      "sources": [
+        "review-ui"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "场景/构图连续性",
+          "loc": "seam:4 被迫扶裴南行->虎妖诈死复苏",
+          "message": "场景/构图连续性 visual[image_similarity] 被迫扶裴南行 接缝 dHash 距离 24 > 22：视觉差异较大，按剪辑语义人判是否为合法跳切",
+          "severity": "warn",
+          "source": "review-ui"
+        }
+      ]
+    },
+    {
       "anchor": "shot",
       "dimensions": [
-        "场景(O2)",
         "色温调色(GRADE1)",
         "运动质量(MOT1)",
         "高动态成片证据(SPECV)",
-        "生成配方(RCP)",
-        "强配方Schema(RCP2)",
         "成本路由(K1)",
         "multimodal_continuity",
         "style_consistency",
@@ -3126,27 +3086,6 @@
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": null,
-          "message": " 场景(O2)    ",
-          "severity": "warn",
-          "source": "detect"
-        },
         {
           "dimension": "色温调色(GRADE1)",
           "loc": null,
@@ -3181,130 +3120,76 @@
           "message": " 色温调色(GRADE1)   图片/Clip08_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.14 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
           "severity": "warn",
           "source": "detect"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": null,
+          "message": " 色温调色(GRADE1)   图片/Clip08_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.158 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "运动质量(MOT1)",
+          "loc": null,
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "severity": "warn",
+          "source": "detect"
+        },
+        {
+          "dimension": "运动质量(MOT1)",
+          "loc": null,
+          "message": " 运动质量(MOT1)   高动作后验报告缺字段：speed_curve, spatial_path/distance_curve；动作镜不能只看 prompt/manifest，需用抽帧、姿态/光流或 VLM 回读速度曲线、命中帧和距离/空间曲线是否成立。 ",
+          "severity": "warn",
+          "source": "detect"
         }
       ]
     },
     {
-      "anchor": "video_semantic_consistency_第1集.json",
+      "anchor": "video_model_routes.json",
       "dimensions": [
-        "视频语义一致(VSEM)"
+        "后端跨集锁"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:compose",
-        "gate:review",
+        "gate:video_preflight",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "dimension": "后端跨集锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/video_model_routes.json",
+          "message": "后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；确认基线后端仍合适，否则 --write-baseline 刷新基线。Clip_02(realm_portal):dreamina→seedance",
           "severity": "warn",
-          "source": "gate:compose"
+          "source": "gate:video_preflight"
         },
         {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
+          "dimension": "后端跨集锁",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/出视频/第1集/prompt/video_model_routes.json",
+          "message": "后端跨集锁 1 个 clip 的 shot_type 自然路由与 设定库/model_routes_baseline 不符，已按基线锚定（原后端降 fallback）；确认基线后端仍合适，否则 --write-baseline 刷新基线。Clip_02(realm_portal):dreamina→seedance",
           "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "视频语义一致(VSEM)",
-          "loc": "生产数据/video_semantic_consistency_第1集.json",
-          "message": "视频语义一致(VSEM) DINOv2 whole-frame similarity is below the configured VSEM threshold.",
-          "severity": "warn",
-          "source": "gate:compose"
+          "source": "gate:video"
         }
       ]
     },
     {
       "anchor": "图片",
       "dimensions": [
-        "场景(O2)",
         "天气时辰(W1)",
         "色温调色(GRADE1)"
       ],
       "domain": "shot",
       "severity": "warn",
       "sources": [
-        "gate:compose",
-        "gate:image",
-        "gate:review",
-        "gate:video"
+        "gate:image"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "场景(O2)",
+          "dimension": "天气时辰(W1)",
           "loc": "出图/第1集/图片",
-          "message": "场景(O2) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "出图/第1集/图片",
-          "message": "场景(O2) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:compose"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "出图/第1集/图片",
-          "message": "场景(O2) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "出图/第1集/图片",
-          "message": "场景(O2) 一致性审计发现问题",
-          "severity": "warn",
-          "source": "gate:image"
-        },
-        {
-          "dimension": "场景(O2)",
-          "loc": "出图/第1集/图片",
-          "message": "场景(O2) 一致性审计发现问题",
+          "message": "天气时辰(W1) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:image"
         },
@@ -3325,7 +3210,35 @@
         {
           "dimension": "天气时辰(W1)",
           "loc": "出图/第1集/图片",
-          "message": "天气时辰(W1) 一致性审计发现问题",
+          "message": "天气时辰(W1) 主光方位 left→right 硬翻转（疑光位跳·人比对相邻镜）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第1集/图片",
+          "message": "天气时辰(W1) 光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "天气时辰(W1)",
+          "loc": "出图/第1集/图片",
+          "message": "天气时辰(W1) 主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "出图/第1集/图片",
+          "message": "色温调色(GRADE1) 图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.27 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "色温调色(GRADE1)",
+          "loc": "出图/第1集/图片",
+          "message": "色温调色(GRADE1) 图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.243 vs 场景中位 -0.091）；同场景调色横跳像换相机/换调色，人核对是否有意，否则统一白平衡/调色重出。",
           "severity": "warn",
           "source": "gate:image"
         }
@@ -3346,7 +3259,7 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第1集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesl",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔",
           "severity": "warn",
           "source": "gate:video_preflight"
         }
@@ -3620,7 +3533,7 @@
         {
           "dimension": "节奏密度",
           "loc": "episode",
-          "message": "节奏密度 visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 11, \"final_sec\": 120.1, \"hook_count\": 10, \"hook_interval_sec\": 12.01, \"shot_density_per_min\":",
+          "message": "节奏密度 visual[final_rhythm_density]: block=0 warn=1 skipped=False metrics={\"clip_count\": 11, \"final_sec\": 120.117, \"hook_count\": 10, \"hook_interval_sec\": 12.012, \"shot_density_per_mi",
           "severity": "warn",
           "source": "review-ui"
         },
@@ -3814,51 +3727,46 @@
       "domain": "story",
       "severity": "warn",
       "sources": [
-        "gate:video_preflight"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "故事板",
-          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
-          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
-          "severity": "warn",
-          "source": "gate:video_preflight"
-        }
-      ]
-    },
-    {
-      "anchor": "video_vlm_consistency_第1集.json",
-      "dimensions": [
-        "视频VLM判题(VLM1)"
-      ],
-      "domain": "story",
-      "severity": "warn",
-      "sources": [
         "gate:compose",
+        "gate:image",
         "gate:review",
+        "gate:video_preflight",
         "gate:video"
       ],
       "suggested_return_to_stage": "",
       "symptoms": [
         {
-          "dimension": "视频VLM判题(VLM1)",
-          "loc": "生产数据/video_vlm_consistency_第1集.json",
-          "message": "视频VLM判题(VLM1) 本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "dimension": "故事板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
           "severity": "warn",
           "source": "gate:compose"
         },
         {
-          "dimension": "视频VLM判题(VLM1)",
-          "loc": "生产数据/video_vlm_consistency_第1集.json",
-          "message": "视频VLM判题(VLM1) 本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "dimension": "故事板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "severity": "warn",
+          "source": "gate:image"
+        },
+        {
+          "dimension": "故事板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
           "severity": "warn",
           "source": "gate:review"
         },
         {
-          "dimension": "视频VLM判题(VLM1)",
-          "loc": "生产数据/video_vlm_consistency_第1集.json",
-          "message": "视频VLM判题(VLM1) 本机未配置重型 VLM runner；此文件仅占位并指向 manifest，不能作为 pass 结论。",
+          "dimension": "故事板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "severity": "warn",
+          "source": "gate:video_preflight"
+        },
+        {
+          "dimension": "故事板",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/脚本/第1集/storyboard.json clip#7",
+          "message": "故事板 start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -4178,9 +4086,6 @@
     "[warn]  片内时序(N2)    ",
     "[warn]  片内时序(N2)    ",
     "[warn]  片内时序(N2)    ",
-    "[warn]  场景(O2)    ",
-    "[warn]  场景(O2)    ",
-    "[warn]  场景(O2)    ",
     "[warn]  色温调色(GRADE1)   图片/Clip07_end.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.27 vs",
     "[warn]  色温调色(GRADE1)   图片/Clip07_first.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.243",
     "[warn]  色温调色(GRADE1)   图片/Clip07_mid.png：色温/调色与同场景其它镜不一致——本镜偏暖(琥珀)（暖冷 0.246 v",
@@ -4214,19 +4119,21 @@
     "[warn]  高动态成片证据(SPECV)   Clip_06 fight_exchange 动作关键维未实测：optical_flow_directi",
     "[warn]  高动态成片证据(SPECV)   Clip_10 fight_exchange 缺高动态后验证据字段：contact_map。 ",
     "[warn]  高动态成片证据(SPECV)   Clip_10 fight_exchange 动作关键维未实测：optical_flow_directi",
-    "[warn]  生成配方(RCP)   合成/第1集/成片_第1集_zh.mp4 生成事件缺配方字段：mode, seed/seed_degrade, b",
-    "[warn]  强配方Schema(RCP2)   合成/第1集/成片_第1集_zh.mp4 强配方 schema 缺字段：prompt_sha256, ",
     "[warn]  成本路由(K1)   创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记",
     "[warn]  成本路由(K1)   创作区/制漫剧/那妖魔是姜大人/合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记",
+    "[warn]  成本路由(K1)   出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无",
+    "[warn]  成本路由(K1)   出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无",
+    "[warn]  成本路由(K1)   合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换",
+    "[warn]  成本路由(K1)   出图/第1集/图片/Clip06_mid_reaction.png 生成事件缺 cost/provider 记账；无",
+    "[warn]  成本路由(K1)   出图/第1集/图片/Clip06_end_reaction.png 生成事件缺 cost/provider 记账；无",
+    "[warn]  成本路由(K1)   合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换",
+    "[warn]  成本路由(K1)   合成/第1集/成片_第1集_zh.mp4 生成事件缺 cost/provider 记账；无法计算重试性价比和模型切换",
     "[warn] style_consistency  None 景别像素兜底：镜3 声明 CU(特写) 但 出图/第1集/图片/Clip03_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜6 声明 CU(特写) 但 出图/第1集/图片/Clip06_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜7 声明 CU(特写) 但 出图/第1集/图片/Clip07_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜8 声明 CU(特写) 但 出图/第1集/图片/Clip08_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜9 声明 CU(特写) 但 出图/第1集/图片/Clip09_end.png",
     "[warn] style_consistency  None 景别像素兜底：镜11 声明 CU(特写) 但 出图/第1集/图片/Clip11_first.",
-    "[warn] scene_consistency  图片/Clip07_first.png 场景 O2 初筛：图片/Clip07_first.png 光色",
-    "[warn] scene_consistency  图片/Clip07_mid.png 场景 O2 初筛：图片/Clip07_mid.png 光色（非阻断",
-    "[warn] scene_consistency  图片/Clip07_end.png 场景 O2 初筛：图片/Clip07_end.png 光色（非阻断",
     "[warn] image_prompt_lint  None 镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）：近景/特写镜头缺乏物理镜头参数",
     "[warn] image_prompt_lint  None 镜头 1（`EP01_CLIP01` · 死人堆惊醒 · ）：缺『身份锁定句』（多参考/编辑",
     "[warn] image_prompt_lint  None 镜头 3（`EP01_CLIP03` · 镇魔司压迫交易 · dialogue_shot_r",
