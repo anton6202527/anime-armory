@@ -1,0 +1,71 @@
+{
+  "confirmations": [
+    {
+      "asset": "PROP_CARRYING_POLE",
+      "asset_name": "木扁担",
+      "confirmed_at": "2026-07-07T12:09:22+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "fa332ffdf7f007d9f52178d1374beb87dfba98a55046e1c17f201f29d4376378",
+      "reason": "人工目检当前PNG并排图：木扁担、水缸、旧油灯/灯盏均清楚可辨，破旧古代材质；未见现代物件、文字水印、结构漂移或数量漂移。",
+      "reviewer": "Codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_CARRYING_POLE_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_SERVANT_HALL_LAMP",
+      "asset_name": "黑殿旧油灯",
+      "confirmed_at": "2026-07-07T12:09:22+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移",
+        "现代电灯",
+        "霓虹",
+        "清晰文字",
+        "华丽仙器"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "fa332ffdf7f007d9f52178d1374beb87dfba98a55046e1c17f201f29d4376378",
+      "reason": "人工目检当前PNG并排图：木扁担、水缸、旧油灯/灯盏均清楚可辨，破旧古代材质；未见现代物件、文字水印、结构漂移或数量漂移。",
+      "reviewer": "Codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_SERVANT_HALL_LAMP_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    },
+    {
+      "asset": "PROP_WATER_JAR_PAIR",
+      "asset_name": "两口水缸",
+      "confirmed_at": "2026-07-07T12:09:22+00:00",
+      "must_not_have": [
+        "现代物件",
+        "文字水印",
+        "结构漂移",
+        "数量漂移"
+      ],
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "fa332ffdf7f007d9f52178d1374beb87dfba98a55046e1c17f201f29d4376378",
+      "reason": "人工目检当前PNG并排图：木扁担、水缸、旧油灯/灯盏均清楚可辨，破旧古代材质；未见现代物件、文字水印、结构漂移或数量漂移。",
+      "reviewer": "Codex",
+      "scale": "None",
+      "shot": "Clip_01",
+      "source": "image_qc:manual_prop_shape_confirm",
+      "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/image_qc/第1集/prop_shape_review/PROP_WATER_JAR_PAIR_Clip_01_Clip01_first_compare.png",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_prop_shape_confirmations",
+  "updated_at": "2026-07-07T12:09:22+00:00",
+  "version": 1
+}

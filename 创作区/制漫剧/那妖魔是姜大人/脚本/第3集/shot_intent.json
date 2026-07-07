@@ -2,7 +2,7 @@
   "kind": "n2d_shot_intent",
   "version": 1,
   "episode": "第3集",
-  "storyboard_sha": "b6eaa12c25d4d82e8ee65ccab2f8cd02e8303d1ab4fd33f0633b626a29402b88",
+  "storyboard_sha": "b3b05c765ac2172ba3d954d0f4a8084bce730a8c583c67393d7507bb106cb8d9",
   "shots": [
     {
       "clip": "EP03_CLIP01",
@@ -47,7 +47,7 @@
     {
       "clip": "EP03_CLIP05",
       "clip_no": 5,
-      "expression_span": "大",
+      "expression_span": "中",
       "need_endframe": true,
       "motion_intensity": "",
       "action_beat": false,
@@ -98,7 +98,7 @@
       "clip": "EP03_CLIP10",
       "clip_no": 10,
       "expression_span": "大",
-      "need_endframe": false,
+      "need_endframe": true,
       "motion_intensity": "",
       "action_beat": false,
       "closeup": true,

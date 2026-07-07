@@ -5,49 +5,49 @@
       "clips": [
         {
           "duration": 9.236,
-          "flags": 8,
+          "flags": 6,
           "has_video": true,
           "id": "EP01_CLIP01",
           "index": 1,
           "label": "死人堆惊醒",
           "scene": "LOC_01 荒野尸骸战场/冷灰夜/外",
-          "status": "block",
+          "status": "warn",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC1%E9%9B%86/%E5%9B%BE%E7%89%87/Clip01_first.png",
           "transition": "eyeline"
         },
         {
           "duration": 16.57,
-          "flags": 9,
+          "flags": 5,
           "has_video": true,
           "id": "EP01_CLIP02",
           "index": 2,
           "label": "看见虎妖尸身",
           "scene": "LOC_01 荒野尸骸战场/巨岩方向",
-          "status": "block",
+          "status": "warn",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC1%E9%9B%86/%E5%9B%BE%E7%89%87/Clip02_first.png",
           "transition": "j_cut"
         },
         {
           "duration": 18.752,
-          "flags": 4,
+          "flags": 3,
           "has_video": true,
           "id": "EP01_CLIP03",
           "index": 3,
           "label": "镇魔司压迫交易",
           "scene": "LOC_01 荒野尸骸战场/裴长青半跪处",
-          "status": "block",
+          "status": "warn",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC1%E9%9B%86/%E5%9B%BE%E7%89%87/Clip03_first.png",
           "transition": "action_cut"
         },
         {
           "duration": 10.01,
-          "flags": 4,
+          "flags": 3,
           "has_video": true,
           "id": "EP01_CLIP04",
           "index": 4,
           "label": "被迫扶裴南行",
           "scene": "LOC_01 荒野尸骸战场/南向逃路线",
-          "status": "block",
+          "status": "warn",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC1%E9%9B%86/%E5%9B%BE%E7%89%87/Clip04_first.png",
           "transition": "j_cut"
         },
@@ -65,7 +65,7 @@
         },
         {
           "duration": 14.586,
-          "flags": 1,
+          "flags": 5,
           "has_video": true,
           "id": "EP01_CLIP06",
           "index": 6,
@@ -89,7 +89,7 @@
         },
         {
           "duration": 8.588,
-          "flags": 2,
+          "flags": 1,
           "has_video": true,
           "id": "EP01_CLIP08",
           "index": 8,
@@ -101,7 +101,7 @@
         },
         {
           "duration": 9.988,
-          "flags": 2,
+          "flags": 1,
           "has_video": true,
           "id": "EP01_CLIP09",
           "index": 9,
@@ -125,21 +125,21 @@
         },
         {
           "duration": 2.053,
-          "flags": 0,
+          "flags": 1,
           "has_video": true,
           "id": "EP01_CLIP11",
           "index": 11,
           "label": "我只想活下去",
           "scene": "LOC_01 荒野尸骸战场/集尾定格",
-          "status": "pass",
+          "status": "warn",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC1%E9%9B%86/%E5%9B%BE%E7%89%87/Clip11_first.png",
           "transition": "hard_cut"
         }
       ],
-      "done_stages": 13,
+      "done_stages": 14,
       "episode": "第1集",
       "episode_app": {
-        "exists": false,
+        "exists": true,
         "json": "episodes/第1集.json",
         "url": "episode_app_第1集.html"
       },
@@ -151,13 +151,13 @@
       },
       "has_storyboard": true,
       "metrics": {
-        "cost_text": "2320 credits",
-        "duration_hms": "8h11m25s",
-        "event_count": 665,
+        "cost_text": "2600 credits",
+        "duration_hms": "8h22m09s",
+        "event_count": 472,
         "final_pass_rate": 0.0,
-        "qa_blockers": 268,
-        "qa_warnings": 244,
-        "redraw_rate": 0.0,
+        "qa_blockers": 22,
+        "qa_warnings": 259,
+        "redraw_rate": 0.2734,
         "runtime_hms": "2m01s"
       },
       "num": 1,
@@ -167,8 +167,8 @@
       },
       "score": {
         "available": true,
-        "status": "fail",
-        "total_score": 50
+        "status": "pass",
+        "total_score": 93
       },
       "seams": [
         {
@@ -256,14 +256,14 @@
         "素材清单": "done",
         "视频": "done",
         "视频prompt": "done",
-        "配音": "rough",
+        "配音": "done",
         "验收": "todo"
       },
       "total_stages": 15,
       "word_count": "3293"
     },
     {
-      "accepted": false,
+      "accepted": true,
       "clips": [
         {
           "duration": 12.582,
@@ -386,19 +386,14 @@
           "transition": "cliffhanger_cut"
         }
       ],
-      "done_stages": 14,
+      "done_stages": 15,
       "episode": "第2集",
       "episode_app": {
         "exists": true,
         "json": "episodes/第2集.json",
         "url": "episode_app_第2集.html"
       },
-      "frontier": {
-        "cmd": "n2d-review 创作区/制漫剧/那妖魔是姜大人 第2集",
-        "col": "验收",
-        "label": "审查验收",
-        "skill": "n2d-review"
-      },
+      "frontier": null,
       "has_storyboard": true,
       "metrics": {
         "cost_text": "696 credits",
@@ -500,7 +495,7 @@
         "视频": "done",
         "视频prompt": "done",
         "配音": "done",
-        "验收": "todo"
+        "验收": "done"
       },
       "total_stages": 15,
       "word_count": "2188"
@@ -511,36 +506,36 @@
         {
           "duration": 10.88,
           "flags": 0,
-          "has_video": false,
+          "has_video": true,
           "id": "EP03_CLIP01",
           "index": 1,
           "label": "埋尸冷开：欠命账落地",
           "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
-          "status": "warn",
+          "status": "pass",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC3%E9%9B%86/%E5%9B%BE%E7%89%87/Clip01_first.png",
           "transition": "match_cut"
         },
         {
           "duration": 11.778,
           "flags": 0,
-          "has_video": false,
+          "has_video": true,
           "id": "EP03_CLIP02",
           "index": 2,
           "label": "搜尸求生：生存物资",
           "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
-          "status": "warn",
+          "status": "pass",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC3%E9%9B%86/%E5%9B%BE%E7%89%87/Clip02_first.png",
           "transition": "match_cut"
         },
         {
           "duration": 24.832,
           "flags": 0,
-          "has_video": false,
+          "has_video": true,
           "id": "EP03_CLIP03",
           "index": 3,
           "label": "黑衣赤纹：借来的官威",
           "scene": "LOC_01 荒野尸骸战场/冷灰月夜/外",
-          "status": "warn",
+          "status": "pass",
           "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC3%E9%9B%86/%E5%9B%BE%E7%89%87/Clip03_first.png",
           "transition": "eyeline_cut"
         },
@@ -629,7 +624,7 @@
           "transition": "cliffhanger_cut"
         }
       ],
-      "done_stages": 9,
+      "done_stages": 11,
       "episode": "第3集",
       "episode_app": {
         "exists": false,
@@ -637,19 +632,19 @@
         "url": "episode_app_第3集.html"
       },
       "frontier": {
-        "cmd": "n2d-image 创作区/制漫剧/那妖魔是姜大人 第3集",
-        "col": "出图",
-        "label": "出图",
-        "skill": "n2d-image"
+        "cmd": "n2d-video 创作区/制漫剧/那妖魔是姜大人 第3集",
+        "col": "视频",
+        "label": "图生视频",
+        "skill": "n2d-video"
       },
       "has_storyboard": true,
       "metrics": {
-        "cost_text": "—",
-        "duration_hms": "9h31m12s",
-        "event_count": 620,
+        "cost_text": "96 credits",
+        "duration_hms": "9h56m57s",
+        "event_count": 403,
         "final_pass_rate": 0.0,
-        "qa_blockers": 348,
-        "qa_warnings": 124,
+        "qa_blockers": 57,
+        "qa_warnings": 161,
         "redraw_rate": 0.0,
         "runtime_hms": "3m24s"
       },
@@ -730,7 +725,7 @@
       ],
       "stages": {
         "bgm": "done",
-        "出图": "partial",
+        "出图": "done",
         "出图prompt": "done",
         "分镜设计": "done",
         "剧本改编": "done",
@@ -740,8 +735,8 @@
         "封面": "done",
         "成片": "todo",
         "素材清单": "done",
-        "视频": "todo",
-        "视频prompt": "todo",
+        "视频": "partial",
+        "视频prompt": "done",
         "配音": "rough",
         "验收": "todo"
       },
@@ -820,7 +815,7 @@
           "label": "狼妖哨响：正主将至",
           "scene": "上盘村村口/晨雾血迹/外",
           "status": "warn",
-          "thumb": null,
+          "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC4%E9%9B%86/%E5%9B%BE%E7%89%87/Clip06_first.png",
           "transition": "hard_cut"
         },
         {
@@ -832,7 +827,7 @@
           "label": "青面郎君登场：学人踱步",
           "scene": "上盘村村道/狼妖盘踞/外",
           "status": "warn",
-          "thumb": null,
+          "thumb": "../%E5%87%BA%E5%9B%BE/%E7%AC%AC4%E9%9B%86/%E5%9B%BE%E7%89%87/Clip07_first.png",
           "transition": "eyeline/match_cut"
         },
         {
@@ -900,11 +895,11 @@
       "has_storyboard": true,
       "metrics": {
         "cost_text": "—",
-        "duration_hms": "2h23m00s",
-        "event_count": 325,
+        "duration_hms": "3h45m13s",
+        "event_count": 334,
         "final_pass_rate": 0.0,
         "qa_blockers": 109,
-        "qa_warnings": 161,
+        "qa_warnings": 160,
         "redraw_rate": 0.0,
         "runtime_hms": "3m59s"
       },
@@ -1359,7 +1354,7 @@
       "word_count": "2036"
     }
   ],
-  "generated_at": "2026-07-06T10:23:21+00:00",
+  "generated_at": "2026-07-07T10:20:42+00:00",
   "kind": "n2d_production_board",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "stages": [
@@ -1381,12 +1376,13 @@
   ],
   "summary": {
     "bottleneck": {
-      "出图": 2,
-      "审查验收": 2,
+      "出图": 1,
+      "图生视频": 1,
+      "审查验收": 1,
       "阶段1·剧本改编": 6
     },
-    "completion_pct": 38.0,
-    "done_episodes": 0,
+    "completion_pct": 40.7,
+    "done_episodes": 1,
     "episodes": 10,
     "first_action": {
       "cmd": "n2d-review 创作区/制漫剧/那妖魔是姜大人 第1集",

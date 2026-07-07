@@ -94,6 +94,22 @@ find model: /tmp/model.onnx detection [1, 3, '?', '?'] 127.5 128.0
     assert parsed["summary"]["by_dim"]["脸(G1)"]["warn"] == 1
 
 
+def test_extract_shots_ignores_clip_inventory_counts() -> None:
+    text = (
+        "产物快照：配音句 28 · clip 16 · 成片 1；"
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4；"
+        "EP01_CLIP03 连续性风险；镜头24·旁白"
+    )
+
+    shots = score.extract_shots(text)
+
+    assert "Clip_16" not in shots
+    assert "Clip_02" in shots
+    assert "EP01_CLIP03" in shots
+    assert "Clip_03" in shots
+    assert "Clip_24" in shots
+
+
 def test_warning_score_is_capped_per_dimension() -> None:
     points, status = score.severity_counts_to_score(blocks=0, warnings=12, infos=0, skipped=False)
     assert points == 88

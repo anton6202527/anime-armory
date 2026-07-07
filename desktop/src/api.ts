@@ -7,10 +7,13 @@ import type {
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
+  DemoDownloadInfo,
+  DemoInstallResult,
   EpisodeWorkspace,
   ImportWorkSourcesResult,
   LineInfo,
   NextAction,
+  QualityInsights,
   SkillInfo,
   SkillTreeEntry,
   WorkChangeDetail,
@@ -18,6 +21,7 @@ import type {
   WorkChangeSummary,
   WorkDirListing,
   WorkFileWriteResult,
+  WorkSearchResponse,
   WorkSnapshot,
 } from "./types";
 
@@ -153,6 +157,24 @@ export async function workDeleted(root: string): Promise<string[]> {
   return invoke<string[]>("work_deleted", { root });
 }
 
+export async function searchWorkFiles(
+  root: string,
+  query: string,
+  includeContent = true,
+  caseSensitive = false,
+  wholeWord = false,
+  useRegex = false,
+): Promise<WorkSearchResponse> {
+  return invoke<WorkSearchResponse>("search_work_files", {
+    root,
+    query,
+    includeContent,
+    caseSensitive,
+    wholeWord,
+    useRegex,
+  });
+}
+
 export async function createWorkEntry(
   root: string,
   parentRel: string,
@@ -195,6 +217,10 @@ export async function openExternalUrl(url: string): Promise<void> {
   return invoke("open_external_url", { url });
 }
 
+export async function setAppTerminalVisible(visible: boolean): Promise<void> {
+  return invoke("set_app_terminal_visible", { visible });
+}
+
 /** Create an empty work folder under a line's product dir; returns its absolute path.
  *  `repoRoot` is passed so the backend can refuse to create inside the project repo. */
 export async function createWork(dir: string, repoRoot: string, name: string): Promise<string> {
@@ -217,6 +243,16 @@ export async function resolveRepo(devRepo: string): Promise<string> {
 /** Seed bundled sample works into the workspace once; returns count. */
 export async function seedDemos(workspaceRoot: string): Promise<number> {
   return invoke<number>("seed_demos", { workspaceRoot });
+}
+
+/** Available per-line demo zips published as GitHub Release assets. */
+export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDownloadInfo[]> {
+  return invoke<DemoDownloadInfo[]>("list_demo_downloads", { workspaceRoot });
+}
+
+/** Download one line's demo zip from Releases, extract into workspace, and mark it as DEMO. */
+export async function installDemo(workspaceRoot: string, line: string): Promise<DemoInstallResult> {
+  return invoke<DemoInstallResult>("install_demo", { workspaceRoot, line });
 }
 
 /** Move a work folder to the system Trash; guarded to the workspace root AND
@@ -264,6 +300,14 @@ export async function readCanvas(root: string, ep: string): Promise<CanvasData> 
 
 export async function readEpisodeWorkspace(root: string, ep: string): Promise<EpisodeWorkspace | null> {
   return invoke<EpisodeWorkspace | null>("read_episode_workspace", { root, ep });
+}
+
+export async function readQualityInsights(
+  root: string,
+  line: string,
+  ep?: string | null,
+): Promise<QualityInsights> {
+  return invoke<QualityInsights>("read_quality_insights", { root, line, ep: ep ?? null });
 }
 
 export async function readCanvasLayout(root: string, ep: string): Promise<CanvasLayout> {

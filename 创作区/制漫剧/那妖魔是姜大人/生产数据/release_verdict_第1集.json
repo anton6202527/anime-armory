@@ -1,0 +1,382 @@
+{
+  "blocking_reasons": [],
+  "components": [
+    {
+      "message": "progress DAG 通过。",
+      "name": "progress_dag",
+      "status": "pass"
+    },
+    {
+      "message": "P-3 制片/场记交接已 confirmed。",
+      "name": "production_handoff",
+      "path": "脚本/第1集",
+      "status": "pass"
+    },
+    {
+      "message": "首集 pilot 通过：clips=4。",
+      "name": "pilot_release_gate",
+      "path": "生产数据/pilot_acceptance_第1集.json",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "summary": {
+          "issues": 0,
+          "risk_clips": 3
+        }
+      },
+      "message": "mini-pilot 已覆盖本集新/高风险条件：risk_clips=3。",
+      "name": "mini_pilot",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "summary": {
+          "active_trace_ids": 7,
+          "block": 0,
+          "deferred_trace_ids": 7,
+          "scope_source": "episode_trace_scope",
+          "source_trace_ids": 14,
+          "traced": 7
+        }
+      },
+      "message": "源理解 trace_id 已贯通到每集合同/分镜/生成证据/镜头产物。",
+      "name": "contract_trace",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "field_verdict": {
+          "distribution_intent": "internal_only",
+          "episode": "第1集",
+          "issues": [
+            "INFO /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签（AI 标识非阻断；发布前按目标地区/平台补齐）"
+          ],
+          "kind": "n2d_compliance_field_verdict",
+          "stage": "review",
+          "status": "internal-only",
+          "summary": {
+            "block": 0,
+            "nonblocking": 1,
+            "total": 1
+          },
+          "version": 1
+        },
+        "issues": [
+          "INFO /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签（AI 标识非阻断；发布前按目标地区/平台补齐）"
+        ]
+      },
+      "message": "字段级合规存在发布待办：INFO/WARN=1；distribution_intent=internal_only。",
+      "name": "compliance",
+      "path": "合规/compliance_manifest.json",
+      "status": "warn"
+    },
+    {
+      "details": {
+        "distribution_intent": "internal_only"
+      },
+      "message": "发行 profile=demo；正式发布请改 cn_public/overseas/commercial 复核。",
+      "name": "release_profile",
+      "path": "合规/compliance_manifest.json",
+      "status": "pass"
+    },
+    {
+      "details": [
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+        "clip 含原生音轨；当前策略=丢弃，compose 会剥离以避免原生台词与配音双人声",
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "统一标准已按「Codex」自动加载弥补措施：加载 reference_group + face_embedding：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。"
+      ],
+      "message": "gate 有 warn=259，需结合 taxonomy 判断是否只可 demo。",
+      "name": "gate",
+      "status": "warn"
+    },
+    {
+      "message": "score 通过：score=93, threshold=85。",
+      "name": "score",
+      "path": "生产数据/score_第1集.json",
+      "status": "pass"
+    },
+    {
+      "message": "consistency ledger 通过。",
+      "name": "ledger",
+      "path": "生产数据/consistency_ledger_第1集.json",
+      "status": "pass"
+    },
+    {
+      "details": [
+        "跨集脸漂(G5): block=0 warn=1 ok=0 skipped=False",
+        "片内时序(N2): block=0 warn=15 ok=1 skipped=False",
+        "mechanical[一致性] 第1集: 脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分"
+      ],
+      "message": "review-ui findings 有 warn=62。",
+      "name": "review_ui",
+      "path": "生产数据/review_ui_findings_第1集.json",
+      "status": "warn"
+    },
+    {
+      "message": "image_qc full 且新鲜。",
+      "name": "image_qc",
+      "path": "生产数据/image_qc/第1集/image_qc_第1集.json",
+      "status": "pass"
+    },
+    {
+      "message": "生成配方 manifest 通过。",
+      "name": "generation_recipe",
+      "path": "生产数据/generation_recipe_manifest_第1集.json",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "episode": "第1集",
+        "findings": [
+          {
+            "code": "payoff_gap_over_20s",
+            "details": [
+              {
+                "at_sec": 25.81,
+                "clip_index": 2,
+                "gap_sec": 25.81
+              }
+            ],
+            "message": "超过 20 秒缺信息回报/阻碍/兑现/反转信号。",
+            "return_to_stage": "script_stage2",
+            "severity": "warn"
+          }
+        ],
+        "generated_at": "2026-07-07T10:20:42+00:00",
+        "kind": "n2d_audience_experience",
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+        "status": "warn",
+        "summary": {
+          "block": 0,
+          "clips": 11,
+          "duration_sec_est": 120.52,
+          "warn": 1
+        },
+        "version": 1
+      },
+      "message": "观众体验 gate 有 warn：可能制作没错但不想追。",
+      "name": "audience_experience",
+      "status": "warn"
+    },
+    {
+      "details": {
+        "metrics": {
+          "cost_per_finished_min": null,
+          "events": 493,
+          "evidence_files": 14,
+          "face_drift_rate": 0.0,
+          "finding_rows": 513,
+          "generation_events": 133,
+          "lipsync_failure_rate": 0.0,
+          "qc_block_rate": 0.0,
+          "qc_blocks": 0,
+          "redraw_events": 4,
+          "redraw_rate": 0.0301,
+          "seam_failure_rate": 0.0
+        },
+        "thresholds": {
+          "max_cost_per_finished_min": 1000.0,
+          "max_face_drift_rate": 0.08,
+          "max_lipsync_failure_rate": 0.08,
+          "max_qc_block_rate": 0.15,
+          "max_redraw_rate": 0.35,
+          "max_seam_failure_rate": 0.05
+        }
+      },
+      "message": "批量 stop-loss 未触发。",
+      "name": "stop_loss",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "masters": [
+          {
+            "bytes": 128773853,
+            "mtime": "2026-07-07T09:53:26+00:00",
+            "path": "合成/第1集/成片_第1集_zh.mp4",
+            "sha256": "cba94cb2f496f149ea0ab4dd6005af0fa355829dbf10ea6fb15872a3e27bdf34"
+          },
+          {
+            "bytes": 128771749,
+            "mtime": "2026-07-07T09:31:37+00:00",
+            "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4",
+            "sha256": "266a74e6c848f98fd12ea7ad10000a41b14fb9882f7a8c555140647582187a3a"
+          },
+          {
+            "bytes": 127847525,
+            "mtime": "2026-07-07T09:31:37+00:00",
+            "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4",
+            "sha256": "b01c0ac0da83e490ee6646907183dbb25a5afb7550baba3e88b80396f25dd47d"
+          }
+        ],
+        "selected": "合成/第1集/成片_第1集_zh.mp4"
+      },
+      "message": "最终母版存在：合成/第1集/成片_第1集_zh.mp4。",
+      "name": "final_master",
+      "path": "合成/第1集/成片_第1集_zh.mp4",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "masters": [
+          {
+            "bytes": 128773853,
+            "mtime": "2026-07-07T09:53:26+00:00",
+            "path": "合成/第1集/成片_第1集_zh.mp4",
+            "sha256": "cba94cb2f496f149ea0ab4dd6005af0fa355829dbf10ea6fb15872a3e27bdf34"
+          },
+          {
+            "bytes": 128771749,
+            "mtime": "2026-07-07T09:31:37+00:00",
+            "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4",
+            "sha256": "266a74e6c848f98fd12ea7ad10000a41b14fb9882f7a8c555140647582187a3a"
+          },
+          {
+            "bytes": 127847525,
+            "mtime": "2026-07-07T09:31:37+00:00",
+            "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4",
+            "sha256": "b01c0ac0da83e490ee6646907183dbb25a5afb7550baba3e88b80396f25dd47d"
+          }
+        ]
+      },
+      "message": "发布证据晚于最终母版，时序新鲜。",
+      "name": "release_evidence_freshness",
+      "status": "pass"
+    },
+    {
+      "details": {
+        "by_category": {
+          "backend": 18,
+          "director_blocking": 76,
+          "image_prompt": 154,
+          "production_breakdown": 16,
+          "qc": 126,
+          "script": 85
+        },
+        "escalated_blocks": 0,
+        "findings": 475
+      },
+      "message": "存在 findings=475 条，但未升级 block。",
+      "name": "failure_taxonomy",
+      "status": "warn"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-07T10:20:43+00:00",
+  "kind": "n2d_release_verdict",
+  "profile": "demo",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "status": "internal-only",
+  "summary": {
+    "block": 0,
+    "pass": 13,
+    "warn": 5
+  },
+  "version": 1,
+  "warnings": [
+    {
+      "details": {
+        "field_verdict": {
+          "distribution_intent": "internal_only",
+          "episode": "第1集",
+          "issues": [
+            "INFO /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签（AI 标识非阻断；发布前按目标地区/平台补齐）"
+          ],
+          "kind": "n2d_compliance_field_verdict",
+          "stage": "review",
+          "status": "internal-only",
+          "summary": {
+            "block": 0,
+            "nonblocking": 1,
+            "total": 1
+          },
+          "version": 1
+        },
+        "issues": [
+          "INFO /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: ai_labeling.explicit_label.status 尚非 done；成片未确认已落显式标签（AI 标识非阻断；发布前按目标地区/平台补齐）"
+        ]
+      },
+      "message": "字段级合规存在发布待办：INFO/WARN=1；distribution_intent=internal_only。",
+      "name": "compliance",
+      "path": "合规/compliance_manifest.json",
+      "status": "warn"
+    },
+    {
+      "details": [
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+        "clip 含原生音轨；当前策略=丢弃，compose 会剥离以避免原生台词与配音双人声",
+        "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+        "统一标准已按「Codex」自动加载弥补措施：加载 reference_group + face_embedding：正/45度/侧/半身/脸锚/表情库按镜头风险选入参；近景/大表情/暗光镜强制同源脸锚或表情参考，并用 full image_qc 回验；长线核心角反复漂移时升档到原生主体或 LoRA，不降低角色一致性标准。这些是后端差异的执行补偿，不降低 n2d 的出图标准。"
+      ],
+      "message": "gate 有 warn=259，需结合 taxonomy 判断是否只可 demo。",
+      "name": "gate",
+      "status": "warn"
+    },
+    {
+      "details": [
+        "跨集脸漂(G5): block=0 warn=1 ok=0 skipped=False",
+        "片内时序(N2): block=0 warn=15 ok=1 skipped=False",
+        "mechanical[一致性] 第1集: 脸部相似度度量已跳过（未装 face_recognition/insightface）——崩脸暂由人判清单覆盖；装库后跑 scripts/face_consistency.py 自动给每镜 vs 定妆锚点打分"
+      ],
+      "message": "review-ui findings 有 warn=62。",
+      "name": "review_ui",
+      "path": "生产数据/review_ui_findings_第1集.json",
+      "status": "warn"
+    },
+    {
+      "details": {
+        "episode": "第1集",
+        "findings": [
+          {
+            "code": "payoff_gap_over_20s",
+            "details": [
+              {
+                "at_sec": 25.81,
+                "clip_index": 2,
+                "gap_sec": 25.81
+              }
+            ],
+            "message": "超过 20 秒缺信息回报/阻碍/兑现/反转信号。",
+            "return_to_stage": "script_stage2",
+            "severity": "warn"
+          }
+        ],
+        "generated_at": "2026-07-07T10:20:42+00:00",
+        "kind": "n2d_audience_experience",
+        "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+        "status": "warn",
+        "summary": {
+          "block": 0,
+          "clips": 11,
+          "duration_sec_est": 120.52,
+          "warn": 1
+        },
+        "version": 1
+      },
+      "message": "观众体验 gate 有 warn：可能制作没错但不想追。",
+      "name": "audience_experience",
+      "status": "warn"
+    },
+    {
+      "details": {
+        "by_category": {
+          "backend": 18,
+          "director_blocking": 76,
+          "image_prompt": 154,
+          "production_breakdown": 16,
+          "qc": 126,
+          "script": 85
+        },
+        "escalated_blocks": 0,
+        "findings": 475
+      },
+      "message": "存在 findings=475 条，但未升级 block。",
+      "name": "failure_taxonomy",
+      "status": "warn"
+    }
+  ]
+}

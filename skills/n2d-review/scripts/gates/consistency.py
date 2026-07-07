@@ -51,6 +51,7 @@ def check_multimodal_continuity(root: str, ep: str) -> None:
     )
 
 IMAGE_QC_AUTHORITATIVE_DIMS = {"脸(G1)", "发型(H1)", "服装配色(N1)", "风格(S1)", "场景(O2)", "多模态(P2)", "手部/解剖(N5)"}
+HUMAN_REVIEW_SIGNOFF_DIMS = {"发型(H1)"}
 
 
 def _image_qc_clears_pixel_blocks(root: str, ep: str) -> bool:
@@ -141,7 +142,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
         # 铁律 B11（2026-06-27·C4 豁免堵死）：降级精度=脸/像素一致性其实没机检过。此前 demo image/video
         # 只 WARN 静默放行（"不强制装依赖"），现 demo 与 production 同标准——四个阶段都不给绿灯，缺 insightface
         # 不再是默认免单，唯一出口是显式留痕 N2D_ALLOW_DEGRADED_QC=1（把"缺依赖默认放行"改成"显式自负其责"）。
-        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        allow_degraded = degraded_qc_active(root)
         strict_stage = stage in {"compose", "review", "image", "video"}
         if strict_stage and not allow_degraded:
             boundary = (
@@ -154,13 +155,13 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
                 "一致性总审",
                 loc,
                 f"一致性审计精度为 {precision}（insightface 等不可用，脸/像素一致性未真正验证）；"
-                f"{boundary}不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。",
+                f"{boundary}不放行——请在 full 环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 放行并自负其责。",
                 return_to_stage="review",
             )
         else:
             if allow_degraded and strict_stage:
                 note_degraded_qc_waiver("一致性总审", ep, loc, f"审计精度 {precision}·像素一致性降级放行")
-            note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if allow_degraded else ""
+            note = f"（已通过{degraded_qc_waiver_label(root)}放行）" if allow_degraded else ""
             add(
                 WARN,
                 "一致性总审",
@@ -171,7 +172,7 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
 
     # 证据等级账本（#3）：advanced tier（torch/syncnet 进阶依赖缺位的跨帧主体一致/口型词级）此前完全
     # 不可见也不阻断；这里在交付边界把"本可验到 embedding/pixel 却只到结构级"的维度判 PENDING→BLOCK。
-    eg_allow_waiver = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+    eg_allow_waiver = degraded_qc_active(root)
     eg_under = (summary.get("evidence_grade") or {}).get("under_proven") or [] if isinstance(summary.get("evidence_grade"), Mapping) else []
     if eg_allow_waiver and stage in {"compose", "review"} and eg_under:
         note_degraded_qc_waiver("证据等级", ep, loc, f"advanced tier 未达标降级放行：{('、').join(str(d) for d in eg_under)}")
@@ -238,6 +239,16 @@ def check_consistency_audit_gate(root: str, ep: str, stage: str = "review") -> N
             advisory_signed = True
             advisory_downgrades += 1
             advisory_note = "[consistency_advisory_signoff 已签收·视频后验证据] "
+        if (
+            sev == BLOCK
+            and stage in {"video", "compose", "review"}
+            and dim in HUMAN_REVIEW_SIGNOFF_DIMS
+            and _advisory_row_signed_off(root, ep, row)
+        ):
+            sev = WARN
+            advisory_signed = True
+            advisory_downgrades += 1
+            advisory_note = "[consistency_advisory_signoff 已人工复核签收·像素误报] "
         strict_block, strict_reason = _strict_advisory_should_block(root, ep, stage, row, summary)
         if sev == WARN and strict_block and not intentional_signed and not qc_downgraded and not advisory_signed:
             sev = BLOCK
@@ -425,7 +436,7 @@ def check_consistency_reality_coverage(root: str, ep: str, stage: str) -> None:
             f"休眠 {summ['dormant']}（适用但后端没真出活）。stage={stage}")
     if not deliverable:
         return
-    allow_degraded = degraded_qc_active()
+    allow_degraded = degraded_qc_active(root)
     for r in rows:
         if not r["dormant"]:
             continue
@@ -434,13 +445,13 @@ def check_consistency_reality_coverage(root: str, ep: str, stage: str) -> None:
         if allow_degraded:
             note_degraded_qc_waiver("现实覆盖", ep, loc, f"{r['label']} 后端休眠·交付降级放行")
             add(WARN, "现实覆盖", loc,
-                f"{r['label']} 适用但休眠（后端没真验证），N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已计债）；"
+                f"{r['label']} 适用但休眠（后端没真验证），已通过{degraded_qc_waiver_label(root)}放行（自负其责·已计债）；"
                 f"本次交付未真验该轴一致性。{run_hint}",
                 risk_score=0.75)
         else:
             add(BLOCK, "现实覆盖", loc,
                 f"{r['label']} 适用却休眠：项目登记了它要查的数据，但交付前它没真跑（缺后端/sidecar）——"
-                f"「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 计债放行。{run_hint}",
+                f"「跑了数据却没执行一致性」正是这种休眠。装好后端真验，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 计债放行。{run_hint}",
                 risk_score=0.85, return_to_stage="image",
                 rerun_scope=f"对当前产物跑 {r['producer']} --write（真后端）", affected_artifacts=[loc])
 

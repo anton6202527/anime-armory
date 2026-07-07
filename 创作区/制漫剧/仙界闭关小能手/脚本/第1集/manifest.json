@@ -52,7 +52,7 @@
       "path": "脚本/第1集/voiceover.txt",
       "exists": true,
       "kind": "file",
-      "sha256": "770984faef420b7923ea15b849d05acb6d92ba7ad81e424d357e3fe5c85bab3f"
+      "sha256": "043e547709a1038333270f14a8470304348e8d5547ffdc974cf4bd35ed75ee19"
     },
     {
       "stage": "script_stage1",
@@ -94,21 +94,21 @@
       "path": "合成/第1集/配音/voice_zh.wav",
       "exists": true,
       "kind": "file",
-      "sha256": "9e1bd52212c9f657bc617d802cd01571ec99e452511166e9893a225af7233e74"
+      "sha256": "8b1f12c1fff34510739610a14a536f60a5d2b8ae3b94e9ea2f6f29bf7f4ca27d"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/时长清单.json",
       "exists": true,
       "kind": "file",
-      "sha256": "e11dd21a5405dd8f6e34279ba437969c1c1105a786d287f57e69364abe1bd8d8"
+      "sha256": "90e9fb90e96ee758ef6b92cdb4a50346228a78568ba0e92c4c77d87cfdcf8070"
     },
     {
       "stage": "voice",
       "path": "合成/第1集/配音/_占位说明.md",
       "exists": true,
       "kind": "file",
-      "sha256": "7a11b0957fe7435b289e28819347f9d5a9b490ba1307564a987a2655118fde0a"
+      "sha256": "68708fe9d2fca7a529c6bb66fc79a2fb7eb13a691218175916128e201429aa16"
     },
     {
       "stage": "script_stage2",
@@ -164,35 +164,35 @@
       "path": "脚本/第1集/分镜剧本.md",
       "exists": true,
       "kind": "file",
-      "sha256": "653e1de6b65f5a4fdd7f6f2a0b3774fb2b42f1b41db9d4ea6a8f09c8ba3c9be7"
+      "sha256": "8507edb488f0eb9b4e7813514dcdadcdaff07289dbce702687c92e4abc5b6fb5"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/故事板.md",
       "exists": true,
       "kind": "file",
-      "sha256": "4afec9b3d52ce84eaf077a1d61340acbe3e602fc1dc8031b35b7f8806d38be22"
+      "sha256": "f78b34c26e2f3a301c7ff68b5f4f3b8539bd53100bc5986fceb1902a1e5dc35a"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/storyboard.json",
       "exists": true,
       "kind": "file",
-      "sha256": "645dce4c3763f2f3d6bc488ffcd24c8ac3d90bf6f0d82a897c7da6aa20d192cf"
+      "sha256": "1f7986b5b0add44479861c4bca17ef350271729fb8139dbbf8c266815b3a4ced"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/素材清单.md",
       "exists": true,
       "kind": "file",
-      "sha256": "733826b8a27fed673a4586aa2dcb14e2384f9cde73bf32ef995891c38b4aca9d"
+      "sha256": "e1236d969d7577b8d011939163c06c72af77e3b0eacbf91e3661b43bf0834a6e"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/字幕_中文.srt",
       "exists": true,
       "kind": "file",
-      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+      "sha256": "d54955534ebce7cd1c53639fc87305478ca64425c09ed74c1e90a50204dca6ed"
     },
     {
       "stage": "script_stage2",
@@ -203,40 +203,44 @@
     {
       "stage": "script_stage2",
       "path": "脚本/第1集/镜头时长.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "d58b51a868acd3e70c24872ff9f5999657d220d19c28b81bd0772573fff7c3a7"
     },
     {
       "stage": "image_prompt",
       "path": "出图/共享/prompt/00_索引.md",
       "exists": true,
       "kind": "file",
-      "sha256": "c0767d47428bed2a450125808568b224db3634ccacfd4ac7f60138fd32762289"
+      "sha256": "2b434d33aeb3572a3f8ca4f42511258e6c56e86d9f336e55f61c2c5b2e2fe177"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/00_总览.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "b47abe8d45af42d13372cfd9111b69ebb2a84980dd04a46018308d47c6cdde71"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第1集/prompt/01_分镜出图.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "f7504781a6b6787f18c539f98ea7ad064f1d921ccf5d5406ea4f41823eb3b7ee"
     },
     {
       "stage": "image",
       "path": "出图/共享/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 2
+      "file_count": 54
     },
     {
       "stage": "image",
       "path": "出图/第1集/图片",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "dir",
+      "file_count": 2
     },
     {
       "stage": "video_prompt",
@@ -305,7 +309,7 @@
       "kind": "missing"
     }
   ],
-  "last_progress_column": "配音",
-  "last_progress_value": "⏳rough",
-  "last_progress_state": "rough"
+  "last_progress_column": "出图",
+  "last_progress_value": "55/75",
+  "last_progress_state": "partial"
 }

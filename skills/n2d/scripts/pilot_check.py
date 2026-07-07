@@ -6,12 +6,17 @@ import argparse
 import datetime as dt
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
 
 
 VERSION = 1
 REQUIRED_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+import preventive_contracts  # noqa: E402
 
 
 def now_iso() -> str:
@@ -84,6 +89,8 @@ def check(root: Path, episode: str) -> Dict[str, Any]:
     bad_checks = [k for k in sorted(REQUIRED_COVERAGE) if str(checks.get(k) or "").strip().lower() not in {"pass", "ok", "accepted"}]
     if bad_checks:
         issues.append(f"checks not pass: {', '.join(bad_checks)}")
+    evidence_issues = preventive_contracts.pilot_acceptance_evidence_issues(root, data)
+    issues.extend(evidence_issues)
     return {
         "kind": "n2d_pilot_check",
         "version": VERSION,

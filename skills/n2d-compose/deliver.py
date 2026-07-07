@@ -120,9 +120,19 @@ def durations_for(duration_setting, master_label="正片"):
 
 # ── 母带定位 + 矩阵构建 ──────────────────────────────────────────────────────
 
+def _is_backup_or_work_cut(path):
+    name = os.path.basename(str(path or "")).lower()
+    return any(token in name for token in (".pre_", ".pre-", ".bak", ".backup", ".tmp", ".loudnorm_tmp"))
+
+
 def find_master(root, ep):
-    """合成/<集>/成片_*.mp4 → 最新一个（交付/ 下的派生件不算母带）。无 → None。"""
-    cands = sorted(glob.glob(os.path.join(root, "合成", ep, "成片_*.mp4")))
+    """合成/<集>/ 下找母带，排除 loudnorm/backup/temp 派生件。无 → None。"""
+    base = os.path.join(root, "合成", ep)
+    for name in (f"成片_{ep}_zh.mp4", f"成片_{ep}.mp4"):
+        preferred = os.path.join(base, name)
+        if os.path.isfile(preferred):
+            return preferred
+    cands = [p for p in sorted(glob.glob(os.path.join(base, "成片_*.mp4"))) if not _is_backup_or_work_cut(p)]
     if not cands:
         return None
     return max(cands, key=lambda p: os.path.getmtime(p))

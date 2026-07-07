@@ -7,10 +7,12 @@ use std::io::Read;
 use std::path::{Component, Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::thread;
-use std::time::{Duration, Instant, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use tauri::Manager;
 
 // ---- workspace scan ----
@@ -42,16 +44,23 @@ const CHANGE_SUMMARY_FILE_LIMIT: usize = 30_000;
 const HASH_COMPARE_LIMIT: u64 = 1024 * 1024;
 const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
 const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
+const WORK_SEARCH_FILE_LIMIT: usize = 30_000;
+const WORK_SEARCH_RESULT_LIMIT: usize = 300;
+const WORK_SEARCH_MATCH_LIMIT_PER_FILE: usize = 12;
+const WORK_SEARCH_TEXT_LIMIT: u64 = 1024 * 1024;
+const WORK_SEARCH_DEPTH_LIMIT: usize = 10;
 const CANVAS_PROMPT_PREVIEW_LIMIT: usize = 4096;
 const APP_CONFIG_DIR: &str = "anime-armory";
 const WORKSPACE_META_DIR: &str = ".anime-armory";
 const DEMO_ORIGINS_FILE: &str = "demo_origins.json";
 const DEMO_CATALOG_FILE: &str = "demo_catalog.json";
+const DEFAULT_RELEASE_DOWNLOAD_BASE: &str =
+    "https://github.com/anton6202527/anime-armory/releases/latest/download";
 
 const LINES: &[(&str, &str, &str, &str)] = &[
     // (key, label, product dir, view)
     ("n2d", "制漫剧 (n2d)", "制漫剧", "canvas"),
-    ("comic", "画漫画 (comic)", "画漫画", "files"),
+    ("comic", "画漫画 (comic)", "画漫画", "canvas"),
     ("ad", "拍广告 (ad)", "拍广告", "canvas"),
     ("mv", "制MV (mv)", "制MV", "canvas"),
     ("song", "写歌 (song)", "写歌", "audio"),
@@ -65,9 +74,15 @@ fn demo_rel(product: &str, name: &str) -> String {
 #[derive(Clone, Deserialize)]
 struct DemoCatalogEntry {
     line: String,
+    line_key: Option<String>,
     name: String,
     rel: Option<String>,
     is_demo: Option<bool>,
+    asset_name: Option<String>,
+    download_url: Option<String>,
+    sha256: Option<String>,
+    size: Option<u64>,
+    source: Option<String>,
 }
 
 impl DemoCatalogEntry {
@@ -76,6 +91,27 @@ impl DemoCatalogEntry {
             .clone()
             .unwrap_or_else(|| demo_rel(&self.line, &self.name))
     }
+}
+
+#[derive(Serialize)]
+pub struct DemoDownloadInfo {
+    line: String,
+    line_key: String,
+    name: String,
+    rel: String,
+    asset_name: String,
+    download_url: String,
+    sha256: Option<String>,
+    size: Option<u64>,
+    source: String,
+    installed: bool,
+    path: Option<String>,
+}
+
+#[derive(Serialize)]
+pub struct DemoInstallResult {
+    root: WorkRoot,
+    already_installed: bool,
 }
 
 fn load_demo_catalog(app: &tauri::AppHandle) -> Vec<DemoCatalogEntry> {
@@ -98,6 +134,88 @@ fn load_demo_catalog(app: &tauri::AppHandle) -> Vec<DemoCatalogEntry> {
         }
     }
     Vec::new()
+}
+
+fn line_key_for_product(product: &str) -> Option<&'static str> {
+    LINES
+        .iter()
+        .find(|(_, _, dir, _)| *dir == product)
+        .map(|(key, _, _, _)| *key)
+}
+
+fn product_for_line_key(line_key: &str) -> Option<&'static str> {
+    LINES
+        .iter()
+        .find(|(key, _, _, _)| *key == line_key)
+        .map(|(_, _, dir, _)| *dir)
+}
+
+fn catalog_entry_line_key(entry: &DemoCatalogEntry) -> Option<String> {
+    entry
+        .line_key
+        .clone()
+        .or_else(|| line_key_for_product(&entry.line).map(|key| key.to_string()))
+}
+
+fn demo_asset_name_for_key(line_key: &str) -> String {
+    format!("AnimeArmory_demo_{line_key}.zip")
+}
+
+fn demo_download_base() -> String {
+    std::env::var("ANIME_ARMORY_DEMO_RELEASE_BASE")
+        .ok()
+        .map(|value| value.trim().trim_end_matches('/').to_string())
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| DEFAULT_RELEASE_DOWNLOAD_BASE.to_string())
+}
+
+fn catalog_entry_asset_name(entry: &DemoCatalogEntry, line_key: &str) -> String {
+    entry
+        .asset_name
+        .clone()
+        .filter(|value| !value.trim().is_empty())
+        .unwrap_or_else(|| demo_asset_name_for_key(line_key))
+}
+
+fn catalog_entry_download_url(entry: &DemoCatalogEntry, asset_name: &str) -> String {
+    entry
+        .download_url
+        .clone()
+        .filter(|value| value.starts_with("https://") || value.starts_with("http://"))
+        .unwrap_or_else(|| format!("{}/{}", demo_download_base(), asset_name))
+}
+
+fn demo_info_from_entry(workspace: &Path, entry: &DemoCatalogEntry) -> Option<DemoDownloadInfo> {
+    let line_key = catalog_entry_line_key(entry)?;
+    let asset_name = catalog_entry_asset_name(entry, &line_key);
+    let rel = entry.rel();
+    let path = workspace.join(&rel);
+    let installed = path.join("_进度.md").is_file();
+    Some(DemoDownloadInfo {
+        line: entry.line.clone(),
+        line_key,
+        name: entry.name.clone(),
+        rel,
+        asset_name: asset_name.clone(),
+        download_url: catalog_entry_download_url(entry, &asset_name),
+        sha256: entry.sha256.clone(),
+        size: entry.size,
+        source: entry
+            .source
+            .clone()
+            .unwrap_or_else(|| "release-demo".into()),
+        installed,
+        path: installed.then(|| path.to_string_lossy().to_string()),
+    })
+}
+
+#[tauri::command]
+pub fn list_demo_downloads(app: tauri::AppHandle, workspace_root: String) -> Vec<DemoDownloadInfo> {
+    let workspace = Path::new(&workspace_root);
+    load_demo_catalog(&app)
+        .iter()
+        .filter_map(|entry| demo_info_from_entry(workspace, entry))
+        .collect()
 }
 
 fn demo_origins_path(workspace: &Path) -> PathBuf {
@@ -264,6 +382,29 @@ pub struct WorkChangeDetail {
     new_text: String,
     text_available: bool,
     message: String,
+}
+
+#[derive(Serialize)]
+pub struct WorkSearchMatch {
+    line: usize,
+    preview: String,
+}
+
+#[derive(Serialize)]
+pub struct WorkSearchResult {
+    path: String,
+    name: String,
+    size: u64,
+    name_match: bool,
+    matches: Vec<WorkSearchMatch>,
+}
+
+#[derive(Serialize, Default)]
+pub struct WorkSearchResponse {
+    query: String,
+    results: Vec<WorkSearchResult>,
+    scanned: usize,
+    capped: bool,
 }
 
 /// The file/folder tree under `skills/<dir>/` for the skills-detail view.
@@ -1323,6 +1464,191 @@ pub fn read_work_file(root: String, rel: String) -> Result<String, String> {
     Ok(String::from_utf8_lossy(&bytes).into_owned())
 }
 
+fn is_search_text_file(path: &Path) -> bool {
+    matches!(
+        path.extension()
+            .and_then(|s| s.to_str())
+            .unwrap_or_default()
+            .to_ascii_lowercase()
+            .as_str(),
+        "txt"
+            | "md"
+            | "markdown"
+            | "mdx"
+            | "json"
+            | "jsonl"
+            | "yaml"
+            | "yml"
+            | "toml"
+            | "py"
+            | "sh"
+            | "bash"
+            | "zsh"
+            | "rs"
+            | "ts"
+            | "tsx"
+            | "js"
+            | "jsx"
+            | "cjs"
+            | "mjs"
+            | "css"
+            | "html"
+            | "xml"
+            | "svg"
+            | "srt"
+            | "csv"
+            | "log"
+            | "sql"
+    )
+}
+
+fn search_preview(line: &str) -> String {
+    let compact = line.trim().replace('\t', "  ");
+    compact.chars().take(240).collect()
+}
+
+fn text_matches(path: &Path, matcher: &Regex) -> Vec<WorkSearchMatch> {
+    let Ok(meta) = fs::metadata(path) else {
+        return Vec::new();
+    };
+    if !meta.is_file() || meta.len() > WORK_SEARCH_TEXT_LIMIT || !is_search_text_file(path) {
+        return Vec::new();
+    }
+    let Ok(bytes) = fs::read(path) else {
+        return Vec::new();
+    };
+    if bytes.contains(&0) {
+        return Vec::new();
+    }
+    let text = String::from_utf8_lossy(&bytes);
+    let mut matches = Vec::new();
+    for (idx, line) in text.lines().enumerate() {
+        if matcher.is_match(line) {
+            matches.push(WorkSearchMatch {
+                line: idx + 1,
+                preview: search_preview(line),
+            });
+            if matches.len() >= WORK_SEARCH_MATCH_LIMIT_PER_FILE {
+                break;
+            }
+        }
+    }
+    matches
+}
+
+struct SearchOptions<'a> {
+    matcher: &'a Regex,
+    include_content: bool,
+}
+
+fn search_work_dir(
+    dir: &Path,
+    prefix: &str,
+    depth: usize,
+    opts: &SearchOptions<'_>,
+    results: &mut Vec<WorkSearchResult>,
+    scanned: &mut usize,
+) -> bool {
+    if depth > WORK_SEARCH_DEPTH_LIMIT {
+        return false;
+    }
+    if *scanned >= WORK_SEARCH_FILE_LIMIT || results.len() >= WORK_SEARCH_RESULT_LIMIT {
+        return true;
+    }
+    let mut entries: Vec<_> = match fs::read_dir(dir) {
+        Ok(rd) => rd.flatten().collect(),
+        Err(_) => return false,
+    };
+    entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
+    for e in entries {
+        if *scanned >= WORK_SEARCH_FILE_LIMIT || results.len() >= WORK_SEARCH_RESULT_LIMIT {
+            return true;
+        }
+        let name = e.file_name().to_string_lossy().to_string();
+        if should_skip_tree_entry(&name) {
+            continue;
+        }
+        let rel = if prefix.is_empty() {
+            name.clone()
+        } else {
+            format!("{prefix}/{name}")
+        };
+        let path = e.path();
+        if path.is_dir() {
+            if search_work_dir(&path, &rel, depth + 1, opts, results, scanned) {
+                return true;
+            }
+            continue;
+        }
+        *scanned += 1;
+        let meta = match fs::metadata(&path) {
+            Ok(meta) if meta.is_file() => meta,
+            _ => continue,
+        };
+        let name_match = opts.matcher.is_match(&rel);
+        let matches = if opts.include_content {
+            text_matches(&path, opts.matcher)
+        } else {
+            Vec::new()
+        };
+        if name_match || !matches.is_empty() {
+            results.push(WorkSearchResult {
+                path: rel,
+                name,
+                size: meta.len(),
+                name_match,
+                matches,
+            });
+        }
+    }
+    false
+}
+
+#[tauri::command]
+pub fn search_work_files(
+    root: String,
+    query: String,
+    include_content: Option<bool>,
+    case_sensitive: Option<bool>,
+    whole_word: Option<bool>,
+    use_regex: Option<bool>,
+) -> Result<WorkSearchResponse, String> {
+    let query = query.trim().to_string();
+    if query.is_empty() {
+        return Ok(WorkSearchResponse::default());
+    }
+    let base = existing_work_path(&root, "", true)?;
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    let case_sensitive = case_sensitive.unwrap_or(false);
+    let mut source = if use_regex.unwrap_or(false) {
+        query.clone()
+    } else {
+        regex::escape(&query)
+    };
+    if whole_word.unwrap_or(false) {
+        source = format!(r"\b(?:{source})\b");
+    }
+    let matcher = regex::RegexBuilder::new(&source)
+        .case_insensitive(!case_sensitive)
+        .build()
+        .map_err(|e| format!("搜索表达式无效：{e}"))?;
+    let opts = SearchOptions {
+        matcher: &matcher,
+        include_content: include_content.unwrap_or(true),
+    };
+    let mut results = Vec::new();
+    let mut scanned = 0usize;
+    let capped = search_work_dir(&base, "", 0, &opts, &mut results, &mut scanned);
+    Ok(WorkSearchResponse {
+        query,
+        results,
+        scanned,
+        capped,
+    })
+}
+
 #[tauri::command]
 pub fn write_work_file(
     root: String,
@@ -2128,9 +2454,181 @@ fn seed_resource_works(
     Ok((seeded, origins_changed))
 }
 
-/// Seed bundled sample works into the app workspace. Current builds include one
-/// complete pinned demo under resources/demos; existing user works are never
-/// overwritten.
+fn demo_cache_dir() -> Result<PathBuf, String> {
+    let base = dirs::cache_dir()
+        .or_else(dirs::data_local_dir)
+        .ok_or("无法定位下载缓存目录")?;
+    let dir = base.join(APP_CONFIG_DIR).join("demo-downloads");
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    Ok(dir)
+}
+
+fn unique_demo_temp_dir(line_key: &str) -> Result<PathBuf, String> {
+    let millis = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|e| e.to_string())?
+        .as_millis();
+    let dir = demo_cache_dir()?.join(format!("{line_key}-{millis}"));
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    Ok(dir)
+}
+
+fn sha256_file(path: &Path) -> Result<String, String> {
+    let mut file = fs::File::open(path).map_err(|e| e.to_string())?;
+    let mut hasher = Sha256::new();
+    let mut buf = [0u8; 64 * 1024];
+    loop {
+        let n = file.read(&mut buf).map_err(|e| e.to_string())?;
+        if n == 0 {
+            break;
+        }
+        hasher.update(&buf[..n]);
+    }
+    let digest = hasher.finalize();
+    Ok(digest.iter().map(|b| format!("{b:02x}")).collect())
+}
+
+fn download_file(url: &str, dst: &Path) -> Result<(), String> {
+    let mut response = reqwest::blocking::Client::builder()
+        .timeout(Duration::from_secs(600))
+        .user_agent("AnimeArmory Desktop")
+        .build()
+        .map_err(|e| e.to_string())?
+        .get(url)
+        .send()
+        .map_err(|e| format!("下载失败：{e}"))?
+        .error_for_status()
+        .map_err(|e| format!("下载失败：{e}"))?;
+    let mut out = fs::File::create(dst).map_err(|e| e.to_string())?;
+    std::io::copy(&mut response, &mut out).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+fn extract_zip_safe(zip_path: &Path, dst: &Path) -> Result<(), String> {
+    let file = fs::File::open(zip_path).map_err(|e| e.to_string())?;
+    let mut archive = zip::ZipArchive::new(file).map_err(|e| format!("zip 无效：{e}"))?;
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i).map_err(|e| e.to_string())?;
+        let Some(rel) = entry.enclosed_name().map(|p| p.to_owned()) else {
+            return Err(format!("zip 内含非法路径：{}", entry.name()));
+        };
+        let out_path = dst.join(rel);
+        if entry.is_dir() {
+            fs::create_dir_all(&out_path).map_err(|e| e.to_string())?;
+            continue;
+        }
+        if let Some(parent) = out_path.parent() {
+            fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+        }
+        let mut out = fs::File::create(&out_path).map_err(|e| e.to_string())?;
+        std::io::copy(&mut entry, &mut out).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+fn find_extracted_demo_root(
+    extract_dir: &Path,
+    info: &DemoDownloadInfo,
+) -> Result<PathBuf, String> {
+    let expected = extract_dir.join(&info.rel);
+    if expected.join("_进度.md").is_file() {
+        return Ok(expected);
+    }
+    let named = extract_dir.join(&info.name);
+    if named.join("_进度.md").is_file() {
+        return Ok(named);
+    }
+    if extract_dir.join("_进度.md").is_file() {
+        return Ok(extract_dir.to_path_buf());
+    }
+    Err(format!("示例包结构不匹配，未找到 {} 或 _进度.md", info.rel))
+}
+
+fn select_demo_info_for_line(
+    app: &tauri::AppHandle,
+    workspace: &Path,
+    line_key: &str,
+) -> Result<DemoDownloadInfo, String> {
+    if product_for_line_key(line_key).is_none() {
+        return Err("未知系列".into());
+    }
+    load_demo_catalog(app)
+        .iter()
+        .filter_map(|entry| demo_info_from_entry(workspace, entry))
+        .find(|info| info.line_key == line_key)
+        .ok_or_else(|| "该系列没有配置可下载示例".into())
+}
+
+/// Download one line's demo zip from GitHub Releases, extract it into the app
+/// workspace, and tag it as a demo. Existing works are never overwritten.
+#[tauri::command]
+pub fn install_demo(
+    app: tauri::AppHandle,
+    workspace_root: String,
+    line: String,
+) -> Result<DemoInstallResult, String> {
+    let line_key = line.trim();
+    let workspace = Path::new(&workspace_root);
+    fs::create_dir_all(workspace).map_err(|e| e.to_string())?;
+    let info = select_demo_info_for_line(&app, workspace, line_key)?;
+    validate_rel_path(&info.rel, false)?;
+
+    let target = workspace.join(&info.rel);
+    if target.exists() {
+        let mut demo_origins = load_demo_origins(workspace);
+        if demo_origins.insert(info.rel.clone()) {
+            write_demo_origins(workspace, &demo_origins)?;
+        }
+        return Ok(DemoInstallResult {
+            root: WorkRoot {
+                name: info.name,
+                path: target.to_string_lossy().to_string(),
+                has_progress: target.join("_进度.md").is_file(),
+                is_demo: true,
+            },
+            already_installed: true,
+        });
+    }
+
+    let temp_dir = unique_demo_temp_dir(line_key)?;
+    let zip_path = temp_dir.join(&info.asset_name);
+    let extract_dir = temp_dir.join("extract");
+    fs::create_dir_all(&extract_dir).map_err(|e| e.to_string())?;
+
+    download_file(&info.download_url, &zip_path)?;
+    if let Some(expected) = info.sha256.as_ref().filter(|s| !s.trim().is_empty()) {
+        let actual = sha256_file(&zip_path)?;
+        if actual.to_ascii_lowercase() != expected.trim().to_ascii_lowercase() {
+            let _ = fs::remove_dir_all(&temp_dir);
+            return Err("示例包校验失败，已拒绝安装".into());
+        }
+    }
+
+    extract_zip_safe(&zip_path, &extract_dir)?;
+    let extracted = find_extracted_demo_root(&extract_dir, &info)?;
+    if let Some(parent) = target.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    copy_dir_all(&extracted, &target).map_err(|e| e.to_string())?;
+    let _ = fs::remove_dir_all(&temp_dir);
+
+    let mut demo_origins = load_demo_origins(workspace);
+    demo_origins.insert(info.rel.clone());
+    write_demo_origins(workspace, &demo_origins)?;
+
+    Ok(DemoInstallResult {
+        root: WorkRoot {
+            name: info.name,
+            path: target.to_string_lossy().to_string(),
+            has_progress: target.join("_进度.md").is_file(),
+            is_demo: true,
+        },
+        already_installed: false,
+    })
+}
+
+/// Legacy bundled-work seeding. Current builds keep full demos in GitHub
+/// Release assets, so this is normally a no-op; retained for older packages.
 #[tauri::command]
 pub fn seed_demos(app: tauri::AppHandle, workspace_root: String) -> Result<usize, String> {
     let ws = Path::new(&workspace_root);
@@ -2332,6 +2830,74 @@ pub struct CanvasQualitySummary {
 }
 
 #[derive(Serialize, Default)]
+pub struct QualityInsightMetric {
+    label: String,
+    value: String,
+    tone: Option<String>,
+}
+
+#[derive(Serialize, Default)]
+pub struct QualityInsightDimension {
+    key: Option<String>,
+    label: String,
+    score: Option<f64>,
+    value: Option<String>,
+    max: Option<f64>,
+    status: Option<String>,
+    blocks: i64,
+    warnings: i64,
+    infos: i64,
+    detail: Option<String>,
+    evidence: Vec<String>,
+}
+
+#[derive(Serialize, Default)]
+pub struct QualityInsightIssue {
+    severity: String,
+    dimension: Option<String>,
+    title: String,
+    message: Option<String>,
+    stage: Option<String>,
+    path: Option<String>,
+    source: Option<String>,
+}
+
+#[derive(Serialize, Default)]
+pub struct QualityInsightTask {
+    priority: Option<String>,
+    title: String,
+    skill: Option<String>,
+    stage: Option<String>,
+    detail: Option<String>,
+}
+
+#[derive(Serialize, Default)]
+pub struct QualityInsightArtifact {
+    label: String,
+    path: String,
+    exists: bool,
+    kind: Option<String>,
+}
+
+#[derive(Serialize, Default)]
+pub struct QualityInsights {
+    line: String,
+    episode: Option<String>,
+    status: Option<String>,
+    score: Option<f64>,
+    verdict: Option<String>,
+    blocks: i64,
+    warnings: i64,
+    infos: i64,
+    metrics: Vec<QualityInsightMetric>,
+    dimensions: Vec<QualityInsightDimension>,
+    issues: Vec<QualityInsightIssue>,
+    tasks: Vec<QualityInsightTask>,
+    artifacts: Vec<QualityInsightArtifact>,
+    source_files: Vec<String>,
+}
+
+#[derive(Serialize, Default)]
 pub struct CanvasData {
     source: String, // review_ui | storyboard | none
     episode: String,
@@ -2395,6 +2961,11 @@ fn ep_num(name: &str) -> i64 {
     digits.parse().unwrap_or(1_000_000)
 }
 
+fn number_from_id(id: &str) -> Option<i64> {
+    let digits: String = id.chars().filter(|c| c.is_ascii_digit()).collect();
+    digits.parse().ok()
+}
+
 fn list_episodes(root: &Path) -> Vec<String> {
     let mut eps = Vec::new();
     if let Ok(entries) = fs::read_dir(root.join("脚本")) {
@@ -2456,12 +3027,20 @@ fn storyboard_path(root: &str, ep: &str) -> Result<PathBuf, String> {
     existing_work_path(root, &rel, false)
 }
 
+fn panel_script_path(root: &str, ep: &str) -> Result<PathBuf, String> {
+    let rel = format!("脚本/{ep}/panel_script.json");
+    existing_work_path(root, &rel, false)
+}
+
 fn find_clip_index(clips: &[Value], clip_id: &str, number: Option<i64>) -> Option<usize> {
-    if let Some(idx) = clips
-        .iter()
-        .position(|c| c.get("id").and_then(|v| v.as_str()) == Some(clip_id))
-    {
-        return Some(idx);
+    let id_keys = ["id", "panel_id"];
+    for key in id_keys {
+        if let Some(idx) = clips
+            .iter()
+            .position(|c| c.get(key).and_then(|v| v.as_str()) == Some(clip_id))
+        {
+            return Some(idx);
+        }
     }
     if let Some(n) = number {
         if let Some(idx) = clips
@@ -2476,6 +3055,14 @@ fn find_clip_index(clips: &[Value], clip_id: &str, number: Option<i64>) -> Optio
                 .and_then(|v| v.as_str())
                 .map(|id| id.ends_with(&needle) || id.contains(&format!("CLIP{needle}")))
                 .unwrap_or(false)
+                || c.get("panel_id")
+                    .and_then(|v| v.as_str())
+                    .map(|id| {
+                        id.ends_with(&needle)
+                            || id == format!("P{n:03}")
+                            || id == format!("P{n:02}")
+                    })
+                    .unwrap_or(false)
         });
     }
     None
@@ -2498,6 +3085,27 @@ fn set_string_field(
         obj.remove(key);
     } else {
         obj.insert(key.to_string(), Value::String(value.to_string()));
+    }
+}
+
+fn split_list_text(input: &str) -> Vec<String> {
+    input
+        .split(|c| matches!(c, '\n' | ',' | '，' | '、' | ';' | '；'))
+        .map(|part| part.trim())
+        .filter(|part| !part.is_empty())
+        .map(|part| part.to_string())
+        .collect()
+}
+
+fn set_string_array_field(obj: &mut serde_json::Map<String, Value>, key: &str, input: &str) {
+    let values = split_list_text(input);
+    if values.is_empty() {
+        obj.remove(key);
+    } else {
+        obj.insert(
+            key.to_string(),
+            Value::Array(values.into_iter().map(Value::String).collect()),
+        );
     }
 }
 
@@ -2840,6 +3448,997 @@ fn quality_summary(
     })
 }
 
+fn summary_count(data: Option<&Value>, key: &str) -> i64 {
+    data.and_then(|v| v.get("summary"))
+        .map(|summary| {
+            n_i64(summary, key)
+                .max(n_i64(summary, &key.replace("_count", "")))
+                .max(n_i64(summary, &key.replace("block_count", "block")))
+                .max(n_i64(summary, &key.replace("warn_count", "warn")))
+                .max(n_i64(summary, &key.replace("info_count", "info")))
+        })
+        .unwrap_or(0)
+}
+
+fn score_from_status(blocks: i64, warnings: i64, complete: bool) -> Option<f64> {
+    if blocks > 0 {
+        Some(50.0)
+    } else if warnings > 0 {
+        Some(75.0)
+    } else if complete {
+        Some(100.0)
+    } else {
+        None
+    }
+}
+
+fn comic_return_tasks_from_findings(findings: Option<&Value>) -> Vec<CanvasReturnTask> {
+    findings
+        .and_then(|v| v.get("findings"))
+        .and_then(|v| v.as_array())
+        .map(|items| {
+            items
+                .iter()
+                .take(12)
+                .map(|item| CanvasReturnTask {
+                    return_to_stage: s(item, "return_to_stage").or_else(|| Some("image".into())),
+                    scope: s(item, "suggested_fix")
+                        .or_else(|| s(item, "reason"))
+                        .map(|value| short_text(&value, 360)),
+                    affected_shots: s(item, "panel_id").map(|id| vec![id]).unwrap_or_default(),
+                    dimensions: s(item, "dimension")
+                        .or_else(|| s(item, "code"))
+                        .map(|value| vec![value])
+                        .unwrap_or_default(),
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+fn comic_quality_summary(
+    root: &Path,
+    ep: &str,
+    clips: &[CanvasClip],
+) -> Option<CanvasQualitySummary> {
+    if clips.is_empty() {
+        return None;
+    }
+    let style = read_json(
+        &root
+            .join("生产数据")
+            .join(format!("comic_style_consistency_{ep}.json")),
+    );
+    let findings = read_json(
+        &root
+            .join("生产数据")
+            .join(format!("consistency_findings_style_{ep}.json")),
+    );
+    let identity = read_json(
+        &root
+            .join("生产数据")
+            .join(format!("comic_identity_report_{ep}.json")),
+    );
+    let jobs = read_json(
+        &root
+            .join("出图")
+            .join(ep)
+            .join("prompt")
+            .join("panel_jobs.json"),
+    );
+
+    let panel_count = clips.len() as i64;
+    let image_count = clips.iter().filter(|clip| clip.first_frame_exists).count() as i64;
+    let clip_blocks: i64 = clips.iter().map(|clip| clip.qa_blocks).sum();
+    let clip_warnings: i64 = clips.iter().map(|clip| clip.qa_warnings).sum();
+    let clip_infos: i64 = clips.iter().map(|clip| clip.qa_infos).sum();
+    let style_blocks = summary_count(style.as_ref(), "block_count")
+        .max(summary_count(findings.as_ref(), "block_count"));
+    let style_warnings = summary_count(style.as_ref(), "warn_count")
+        .max(summary_count(findings.as_ref(), "warn_count"));
+    let style_infos = summary_count(style.as_ref(), "info_count")
+        .max(summary_count(findings.as_ref(), "info_count"));
+    let missing_refs = identity
+        .as_ref()
+        .and_then(|v| v.get("summary"))
+        .map(|summary| n_i64(summary, "missing_ref_count"))
+        .unwrap_or(0);
+    let rerun_targets = identity
+        .as_ref()
+        .and_then(|v| v.get("summary"))
+        .map(|summary| n_i64(summary, "rerun_target_count"))
+        .unwrap_or(0);
+
+    let blocks = clip_blocks.max(style_blocks).max(missing_refs);
+    let warnings = clip_warnings.max(style_warnings).max(rerun_targets);
+    let infos = clip_infos.max(style_infos);
+    let complete = image_count == panel_count && panel_count > 0 && blocks == 0 && warnings == 0;
+    let status = if blocks > 0 {
+        "block"
+    } else if warnings > 0 {
+        "warn"
+    } else if complete {
+        "pass"
+    } else {
+        "draft"
+    };
+
+    let mut dimensions = Vec::new();
+    dimensions.push(CanvasScoreDimension {
+        key: Some("panel_qc".into()),
+        label: "单格后检".into(),
+        status: Some(status.into()),
+        score: score_from_status(clip_blocks, clip_warnings, image_count > 0),
+        blocks: clip_blocks,
+        warnings: clip_warnings,
+        infos: clip_infos,
+        return_to_stage: if clip_blocks > 0 || clip_warnings > 0 {
+            Some("image".into())
+        } else {
+            None
+        },
+        rerun_scope: None,
+        evidence: vec![
+            format!("生产数据/panel_qc/{ep}/"),
+            format!("出图/{ep}/prompt/panel_jobs.json"),
+        ],
+    });
+    if style.is_some() || findings.is_some() {
+        dimensions.push(CanvasScoreDimension {
+            key: Some("style_consistency".into()),
+            label: "风格一致性".into(),
+            status: style
+                .as_ref()
+                .and_then(|v| s(v, "verdict"))
+                .or_else(|| findings.as_ref().and_then(|v| s(v, "verdict"))),
+            score: score_from_status(style_blocks, style_warnings, true),
+            blocks: style_blocks,
+            warnings: style_warnings,
+            infos: style_infos,
+            return_to_stage: if style_blocks > 0 || style_warnings > 0 {
+                Some("image".into())
+            } else {
+                None
+            },
+            rerun_scope: findings
+                .as_ref()
+                .and_then(|v| v.get("findings"))
+                .and_then(|v| v.as_array())
+                .and_then(|items| items.first())
+                .and_then(|item| s(item, "suggested_fix").or_else(|| s(item, "reason")))
+                .map(|value| short_text(&value, 260)),
+            evidence: vec![
+                format!("生产数据/comic_style_consistency_{ep}.json"),
+                format!("生产数据/consistency_findings_style_{ep}.json"),
+            ],
+        });
+    }
+    if identity.is_some() {
+        dimensions.push(CanvasScoreDimension {
+            key: Some("identity_references".into()),
+            label: "角色参考完整性".into(),
+            status: if missing_refs > 0 {
+                Some("block".into())
+            } else if rerun_targets > 0 {
+                Some("warn".into())
+            } else {
+                Some("pass".into())
+            },
+            score: score_from_status(missing_refs, rerun_targets, true),
+            blocks: missing_refs,
+            warnings: rerun_targets,
+            infos: 0,
+            return_to_stage: if missing_refs > 0 || rerun_targets > 0 {
+                Some("image".into())
+            } else {
+                None
+            },
+            rerun_scope: None,
+            evidence: vec![format!("生产数据/comic_identity_report_{ep}.json")],
+        });
+    }
+
+    let mut metrics = vec![
+        CanvasMetric {
+            label: "分格".into(),
+            value: panel_count.to_string(),
+        },
+        CanvasMetric {
+            label: "已出图".into(),
+            value: image_count.to_string(),
+        },
+        CanvasMetric {
+            label: "待出图".into(),
+            value: (panel_count - image_count).max(0).to_string(),
+        },
+    ];
+    if let Some(model) = jobs.as_ref().and_then(|v| s(v, "model")) {
+        metrics.push(CanvasMetric {
+            label: "出图模型".into(),
+            value: model,
+        });
+    }
+    if root
+        .join("生产数据")
+        .join(format!("panel_contact_sheet_{ep}.jpg"))
+        .exists()
+    {
+        metrics.push(CanvasMetric {
+            label: "联络图".into(),
+            value: "已生成".into(),
+        });
+    }
+
+    Some(CanvasQualitySummary {
+        source: Some(format!("脚本/{ep}/panel_script.json")),
+        score: score_from_status(blocks, warnings, complete),
+        verdict: Some(status.into()),
+        status: Some(status.into()),
+        blocks,
+        warnings,
+        infos,
+        dimensions,
+        tasks: comic_return_tasks_from_findings(findings.as_ref()),
+        metrics,
+    })
+}
+
+fn severity_tone(raw: Option<String>) -> String {
+    let value = raw.unwrap_or_else(|| "info".into()).to_ascii_lowercase();
+    if value.contains("block")
+        || value.contains("blocking")
+        || value == "critical"
+        || value == "error"
+        || value == "fail"
+        || value == "failed"
+    {
+        "block".into()
+    } else if value.contains("warn")
+        || value == "action_required"
+        || value == "needs_revision"
+        || value == "suggestion"
+        || value == "should"
+    {
+        "warn".into()
+    } else if value == "pass" || value == "ok" || value == "done" || value == "accepted" {
+        "pass".into()
+    } else {
+        "info".into()
+    }
+}
+
+fn status_from_counts(blocks: i64, warnings: i64, score: Option<f64>) -> Option<String> {
+    if blocks > 0 {
+        Some("block".into())
+    } else if warnings > 0 {
+        Some("warn".into())
+    } else if score.is_some() {
+        Some("pass".into())
+    } else {
+        None
+    }
+}
+
+fn push_insight_metric(
+    out: &mut QualityInsights,
+    label: &str,
+    value: Option<String>,
+    tone: Option<&str>,
+) {
+    let Some(value) = value else {
+        return;
+    };
+    if value.trim().is_empty() {
+        return;
+    }
+    out.metrics.push(QualityInsightMetric {
+        label: label.into(),
+        value,
+        tone: tone.map(|v| v.to_string()),
+    });
+}
+
+fn push_insight_artifact(out: &mut QualityInsights, root: &Path, label: &str, rel: &str, kind: &str) {
+    if rel.trim().is_empty() {
+        return;
+    }
+    let exists = root.join(rel).exists();
+    out.artifacts.push(QualityInsightArtifact {
+        label: label.into(),
+        path: rel.into(),
+        exists,
+        kind: Some(kind.into()),
+    });
+}
+
+fn push_source_file(out: &mut QualityInsights, root: &Path, rel: &str, label: &str) -> bool {
+    if root.join(rel).is_file() {
+        if !out.source_files.iter().any(|item| item == rel) {
+            out.source_files.push(rel.into());
+        }
+        push_insight_artifact(out, root, label, rel, "evidence");
+        true
+    } else {
+        false
+    }
+}
+
+fn ratio_metric(value: Option<f64>) -> Option<String> {
+    value.map(|v| format!("{:.1}%", v * 100.0))
+}
+
+fn score_label(value: Option<f64>) -> Option<String> {
+    value.map(|v| {
+        if (v.fract()).abs() < f64::EPSILON {
+            format!("{}", v as i64)
+        } else {
+            format!("{v:.1}")
+        }
+    })
+}
+
+fn insight_counts_from_summary(summary: Option<&Value>) -> (i64, i64, i64) {
+    let Some(summary) = summary else {
+        return (0, 0, 0);
+    };
+    let sev = summary.get("severity");
+    let blocks = sev
+        .map(|v| n_i64(v, "block"))
+        .unwrap_or(0)
+        .max(n_i64(summary, "block"))
+        .max(n_i64(summary, "blocks"))
+        .max(n_i64(summary, "block_count"))
+        .max(n_i64(summary, "blocking_count"))
+        .max(n_i64(summary, "qa_blockers"))
+        .max(n_i64(summary, "consistency_blockers"));
+    let warnings = sev
+        .map(|v| n_i64(v, "warn"))
+        .unwrap_or(0)
+        .max(n_i64(summary, "warn"))
+        .max(n_i64(summary, "warnings"))
+        .max(n_i64(summary, "warn_count"))
+        .max(n_i64(summary, "warning_count"))
+        .max(n_i64(summary, "suggestion_count"))
+        .max(n_i64(summary, "qa_warnings"))
+        .max(n_i64(summary, "consistency_warnings"));
+    let infos = sev
+        .map(|v| n_i64(v, "info"))
+        .unwrap_or(0)
+        .max(n_i64(summary, "infos"))
+        .max(n_i64(summary, "info_count"))
+        .max(n_i64(summary, "polish_count"));
+    (blocks, warnings, infos)
+}
+
+fn push_task_from_value(out: &mut QualityInsights, raw: &Value) {
+    let title = s(raw, "action")
+        .or_else(|| s(raw, "title"))
+        .or_else(|| s(raw, "scope"))
+        .or_else(|| s(raw, "fix_hint"))
+        .or_else(|| s(raw, "suggested_fix"))
+        .unwrap_or_else(|| "未命名返工任务".into());
+    out.tasks.push(QualityInsightTask {
+        priority: s(raw, "priority"),
+        title: short_text(&title, 180),
+        skill: s(raw, "recommended_skill").or_else(|| s(raw, "skill")),
+        stage: s(raw, "return_to_stage").or_else(|| s(raw, "stage")),
+        detail: s(raw, "dimension")
+            .or_else(|| s(raw, "reason"))
+            .or_else(|| s(raw, "message"))
+            .map(|v| short_text(&v, 260)),
+    });
+}
+
+fn push_issue_from_value(out: &mut QualityInsights, raw: &Value) {
+    let severity = if raw
+        .get("blocking")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false)
+    {
+        "block".into()
+    } else {
+        severity_tone(s(raw, "severity").or_else(|| s(raw, "sev")).or_else(|| s(raw, "status")))
+    };
+    let title = s(raw, "problem")
+        .or_else(|| s(raw, "reason"))
+        .or_else(|| s(raw, "message"))
+        .or_else(|| s(raw, "msg"))
+        .or_else(|| s(raw, "code"))
+        .or_else(|| s(raw, "id"))
+        .unwrap_or_else(|| "未命名问题".into());
+    let path = s(raw, "loc")
+        .or_else(|| s(raw, "path"))
+        .or_else(|| s(raw, "artifact"))
+        .or_else(|| {
+            raw.get("affected_files")
+                .and_then(|v| v.as_array())
+                .and_then(|items| items.first())
+                .and_then(|v| v.as_str())
+                .map(|v| v.to_string())
+        });
+    out.issues.push(QualityInsightIssue {
+        severity,
+        dimension: s(raw, "dimension")
+            .or_else(|| s(raw, "dim"))
+            .or_else(|| s(raw, "category")),
+        title: short_text(&title, 160),
+        message: s(raw, "fix_hint")
+            .or_else(|| s(raw, "suggested_fix"))
+            .or_else(|| s(raw, "evidence"))
+            .or_else(|| s(raw, "rerun_scope"))
+            .map(|v| short_text(&v, 280)),
+        stage: s(raw, "return_to_stage").or_else(|| s(raw, "gate_stage")),
+        path,
+        source: s(raw, "source"),
+    });
+}
+
+fn push_dimensions_from_by_dim(out: &mut QualityInsights, source_label: &str, by_dim: Option<&Value>) {
+    let Some(obj) = by_dim.and_then(|v| v.as_object()) else {
+        return;
+    };
+    let mut dims: Vec<QualityInsightDimension> = obj
+        .iter()
+        .map(|(key, raw)| {
+            let blocks = n_i64(raw, "block").max(n_i64(raw, "blocks"));
+            let warnings = n_i64(raw, "warn")
+                .max(n_i64(raw, "warning"))
+                .max(n_i64(raw, "warnings"));
+            let infos = n_i64(raw, "info").max(n_i64(raw, "infos"));
+            QualityInsightDimension {
+                key: Some(key.clone()),
+                label: key.clone(),
+                score: score_from_status(blocks, warnings, true),
+                value: Some(format!("{blocks}/{warnings}/{infos}")),
+                max: Some(100.0),
+                status: status_from_counts(blocks, warnings, Some(100.0)),
+                blocks,
+                warnings,
+                infos,
+                detail: Some("block / warn / info".into()),
+                evidence: vec![source_label.into()],
+            }
+        })
+        .collect();
+    dims.sort_by(|a, b| {
+        b.blocks
+            .cmp(&a.blocks)
+            .then(b.warnings.cmp(&a.warnings))
+            .then(b.infos.cmp(&a.infos))
+    });
+    out.dimensions.extend(dims.into_iter().take(14));
+}
+
+fn collect_tasks_from_array(out: &mut QualityInsights, data: &Value, key: &str, limit: usize) {
+    if let Some(items) = data.get(key).and_then(|v| v.as_array()) {
+        for item in items.iter().take(limit) {
+            push_task_from_value(out, item);
+        }
+    }
+}
+
+fn collect_issues_from_array(out: &mut QualityInsights, data: &Value, key: &str, limit: usize) {
+    if let Some(items) = data.get(key).and_then(|v| v.as_array()) {
+        for item in items.iter().take(limit) {
+            push_issue_from_value(out, item);
+        }
+    }
+}
+
+fn collect_novel_score(root: &Path, out: &mut QualityInsights) {
+    let rel = "评分/score_report.json";
+    let Some(score_data) = read_json(&root.join(rel)) else {
+        return;
+    };
+    push_source_file(out, root, rel, "小说评分");
+    out.score = n_f64(&score_data, "total_score")
+        .or_else(|| n_f64(&score_data, "overall_score"))
+        .or(out.score);
+    out.verdict = s(&score_data, "verdict").or(out.verdict.take());
+    out.status = s(&score_data, "production_decision").or(out.status.take());
+    push_insight_metric(out, "评分档", s(&score_data, "target_platform"), None);
+    push_insight_metric(out, "评分", score_label(out.score), Some("pass"));
+    push_insight_metric(out, "判定", s(&score_data, "verdict"), None);
+    if let Some(scope) = score_data.get("scope") {
+        push_insight_metric(
+            out,
+            "章节数",
+            scope.get("chapter_count").and_then(value_label),
+            None,
+        );
+    }
+    if let Some(arr) = score_data.get("scores").and_then(|v| v.as_array()) {
+        for item in arr.iter().take(12) {
+            let label = s(item, "dimension_label")
+                .or_else(|| s(item, "dimension"))
+                .unwrap_or_else(|| "评分维度".into());
+            let score = n_f64(item, "raw_score").or_else(|| n_f64(item, "score"));
+            let mut evidence = Vec::new();
+            if let Some(v) = s(item, "evidence") {
+                evidence.push(short_text(&v, 180));
+            }
+            if let Some(v) = s(item, "improve_by") {
+                evidence.push(short_text(&v, 180));
+            }
+            out.dimensions.push(QualityInsightDimension {
+                key: s(item, "dimension"),
+                label,
+                score,
+                value: n_f64(item, "weighted_score").map(|v| format!("加权 {v:.1}")),
+                max: Some(10.0),
+                status: status_from_counts(0, if score.unwrap_or(10.0) < 7.0 { 1 } else { 0 }, score),
+                blocks: 0,
+                warnings: if score.unwrap_or(10.0) < 7.0 { 1 } else { 0 },
+                infos: 0,
+                detail: s(item, "comment").map(|v| short_text(&v, 260)),
+                evidence,
+            });
+        }
+    }
+    for (key, label) in [
+        ("title_check", "标题侧"),
+        ("adaptation_check", "转制潜力"),
+    ] {
+        if let Some(check) = score_data.get(key).filter(|v| v.is_object()) {
+            let score = n_f64(check, "total");
+            let max = n_f64(check, "max_total");
+            let risky = check
+                .get("needs_rename")
+                .or_else(|| check.get("low_potential"))
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false);
+            out.dimensions.push(QualityInsightDimension {
+                key: Some(key.into()),
+                label: label.into(),
+                score,
+                value: max.map(|m| format!("/ {m:.0}")),
+                max,
+                status: Some(if risky { "warn" } else { "pass" }.into()),
+                blocks: 0,
+                warnings: if risky { 1 } else { 0 },
+                infos: 0,
+                detail: s(check, "comment").map(|v| short_text(&v, 280)),
+                evidence: vec![rel.into()],
+            });
+        }
+    }
+    if let Some(prior) = score_data.get("repetition_prior") {
+        let level = prior
+            .get("prior")
+            .and_then(|v| s(v, "level"))
+            .or_else(|| prior.get("summary").and_then(|v| s(v, "prior_level")));
+        push_insight_metric(out, "重复/机械先验", level, None);
+        if let Some(summary) = prior.get("summary") {
+            push_insight_metric(
+                out,
+                "相邻最高重复",
+                summary
+                    .get("adjacent_max_jaccard")
+                    .and_then(|v| v.as_f64())
+                    .map(|v| format!("{:.2}%", v * 100.0)),
+                None,
+            );
+            push_insight_metric(
+                out,
+                "低压缩章节",
+                summary.get("low_chapter_compression_count").and_then(value_label),
+                None,
+            );
+        }
+    }
+    if let Some(deductions) = score_data.get("deductions").and_then(|v| v.as_array()) {
+        for item in deductions.iter().take(6) {
+            let title = s(item, "item").unwrap_or_else(|| "扣分项".into());
+            out.issues.push(QualityInsightIssue {
+                severity: "warn".into(),
+                dimension: Some("score_deduction".into()),
+                title,
+                message: s(item, "reason").map(|v| short_text(&v, 260)),
+                stage: Some("score".into()),
+                path: Some(rel.into()),
+                source: Some("novel-score".into()),
+            });
+        }
+    }
+    collect_tasks_from_array(out, &score_data, "next_actions", 8);
+}
+
+fn collect_novel_review(root: &Path, out: &mut QualityInsights) {
+    let rel = "审稿/review_report.json";
+    let Some(review_data) = read_json(&root.join(rel)) else {
+        return;
+    };
+    push_source_file(out, root, rel, "小说审稿");
+    if let Some(summary) = review_data.get("summary") {
+        let blocks = n_i64(summary, "blocking_count").max(n_i64(summary, "block_count"));
+        let warnings = n_i64(summary, "suggestion_count").max(n_i64(summary, "warning_count"));
+        let infos = n_i64(summary, "polish_count").max(n_i64(summary, "info_count"));
+        out.blocks += blocks;
+        out.warnings += warnings;
+        out.infos += infos;
+        out.dimensions.push(QualityInsightDimension {
+            key: Some("novel_review".into()),
+            label: "审稿问题".into(),
+            score: score_from_status(blocks, warnings, true),
+            value: Some(format!("{} 项", blocks + warnings + infos)),
+            max: Some(100.0),
+            status: s(summary, "verdict").or_else(|| status_from_counts(blocks, warnings, Some(100.0))),
+            blocks,
+            warnings,
+            infos,
+            detail: Some("blocking / suggestion / polish".into()),
+            evidence: vec![rel.into()],
+        });
+    }
+    collect_issues_from_array(out, &review_data, "findings", 12);
+    collect_tasks_from_array(out, &review_data, "next_actions", 8);
+}
+
+fn collect_novel_compliance(root: &Path, out: &mut QualityInsights) {
+    let rel = "合规/compliance_profile.json";
+    let Some(data) = read_json(&root.join(rel)) else {
+        push_source_file(out, root, "合规/compliance_profile.md", "合规 Profile");
+        return;
+    };
+    push_source_file(out, root, rel, "合规 Profile");
+    push_insight_metric(out, "合规阻断", data.get("blocking").and_then(value_label), None);
+    push_insight_metric(out, "合规提醒", data.get("warning").and_then(value_label), None);
+    if let Some(axes) = data.get("target_axes").and_then(|v| v.as_object()) {
+        let enabled: Vec<String> = axes
+            .iter()
+            .filter_map(|(key, value)| {
+                if value.as_bool().unwrap_or(false) {
+                    Some(key.clone())
+                } else {
+                    None
+                }
+            })
+            .collect();
+        if !enabled.is_empty() {
+            push_insight_metric(out, "发布轴", Some(enabled.join(" / ")), None);
+        }
+    }
+    if let Some(reqs) = data.get("requirements").and_then(|v| v.as_array()) {
+        for req in reqs.iter().take(12) {
+            let status = s(req, "status");
+            let severity = s(req, "severity");
+            let ok = status
+                .as_deref()
+                .map(|v| matches!(v, "ok" | "pass" | "done" | "confirmed"))
+                .unwrap_or(false);
+            let tone = if ok {
+                "pass".into()
+            } else {
+                severity_tone(severity.clone().or(status.clone()))
+            };
+            let blocks = if tone == "block" { 1 } else { 0 };
+            let warnings = if tone == "warn" { 1 } else { 0 };
+            out.blocks += blocks;
+            out.warnings += warnings;
+            out.dimensions.push(QualityInsightDimension {
+                key: s(req, "id"),
+                label: s(req, "title").or_else(|| s(req, "id")).unwrap_or_else(|| "合规项".into()),
+                score: score_from_status(blocks, warnings, true),
+                value: status.clone(),
+                max: Some(100.0),
+                status: Some(tone.clone()),
+                blocks,
+                warnings,
+                infos: if tone == "info" { 1 } else { 0 },
+                detail: s(req, "reason").map(|v| short_text(&v, 260)),
+                evidence: string_array(req, "evidence_source_ids", 4),
+            });
+            if tone != "pass" {
+                out.issues.push(QualityInsightIssue {
+                    severity: tone,
+                    dimension: Some("compliance".into()),
+                    title: s(req, "title").or_else(|| s(req, "id")).unwrap_or_else(|| "合规待办".into()),
+                    message: s(req, "reason").map(|v| short_text(&v, 280)),
+                    stage: Some("release".into()),
+                    path: Some(rel.into()),
+                    source: Some("compliance_profile".into()),
+                });
+            }
+        }
+    }
+}
+
+fn collect_novel_dashboard(root: &Path, out: &mut QualityInsights) {
+    let rel = "生产数据/novel_dashboard.json";
+    let Some(data) = read_json(&root.join(rel)) else {
+        return;
+    };
+    push_source_file(out, root, rel, "小说看板");
+    if let Some(stage_counts) = data.get("stage_counts").and_then(|v| v.as_object()) {
+        for (key, value) in stage_counts {
+            push_insight_metric(out, &format!("阶段 {key}"), value_label(value), None);
+        }
+    }
+    if let Some(release) = data.get("release") {
+        let ready = release
+            .get("release_ready")
+            .and_then(|v| v.as_bool())
+            .map(|v| if v { "ready" } else { "not ready" }.to_string());
+        push_insight_metric(out, "导出状态", ready, None);
+        let blockers = n_i64(release, "blocker_count");
+        out.blocks += blockers;
+        push_insight_metric(out, "导出阻断", Some(blockers.to_string()), None);
+    }
+    if let Some(revision) = data.get("revision") {
+        push_insight_metric(out, "修订任务", revision.get("task_count").and_then(value_label), None);
+        push_insight_metric(out, "修订冲突", revision.get("conflicts").and_then(value_label), None);
+    }
+    for rel in [
+        "生产数据/novel_dashboard.html",
+        "生产数据/visuals/novel_review_heatmap.html",
+        "生产数据/visuals/novel_revision_kanban.html",
+        "生产数据/visuals/novel_emotion_curve.html",
+        "生产数据/visuals/novel_foreshadow_ledger.html",
+        "生产数据/visuals/novel_relationship_timeline.html",
+    ] {
+        push_insight_artifact(out, root, rel.rsplit('/').next().unwrap_or(rel), rel, "visual");
+    }
+}
+
+fn select_dashboard_episode<'a>(data: &'a Value, ep: Option<&str>) -> Option<&'a Value> {
+    let episodes = data.get("episodes").and_then(|v| v.as_array())?;
+    if let Some(ep) = ep {
+        if let Some(found) = episodes
+            .iter()
+            .find(|item| s(item, "episode").as_deref() == Some(ep))
+        {
+            return Some(found);
+        }
+    }
+    episodes.last().or_else(|| episodes.first())
+}
+
+fn collect_dashboard_insights(root: &Path, out: &mut QualityInsights, ep: Option<&str>) {
+    let rel = "生产数据/dashboard.json";
+    let Some(data) = read_json(&root.join(rel)) else {
+        return;
+    };
+    push_source_file(out, root, rel, "生产看板");
+    if let Some(ep_data) = select_dashboard_episode(&data, ep) {
+        out.episode = s(ep_data, "episode").or(out.episode.take());
+        push_insight_metric(out, "成品通过率", ratio_metric(n_f64(ep_data, "final_pass_rate")), None);
+        push_insight_metric(out, "生成通过率", ratio_metric(n_f64(ep_data, "generation_pass_rate")), None);
+        push_insight_metric(out, "尝试", ep_data.get("generation_attempts").and_then(value_label), None);
+        push_insight_metric(out, "重抽", ep_data.get("redraw_count").and_then(value_label), None);
+        push_insight_metric(out, "耗时", s(ep_data, "duration_hms"), None);
+        if let Some(costs) = ep_data.get("cost_totals").and_then(|v| v.as_object()) {
+            for (unit, value) in costs.iter().take(3) {
+                push_insight_metric(out, &format!("成本 {unit}"), value_label(value), None);
+            }
+        }
+        let qa_blocks = n_i64(ep_data, "qa_blockers");
+        let qa_warnings = n_i64(ep_data, "qa_warnings");
+        let consistency_blocks = n_i64(ep_data, "consistency_blockers");
+        let consistency_warnings = n_i64(ep_data, "consistency_warnings");
+        out.blocks += qa_blocks + consistency_blocks;
+        out.warnings += qa_warnings + consistency_warnings;
+        out.dimensions.push(QualityInsightDimension {
+            key: Some("final_pass_rate".into()),
+            label: "成片通过率".into(),
+            score: n_f64(ep_data, "final_pass_rate").map(|v| v * 100.0),
+            value: ratio_metric(n_f64(ep_data, "final_pass_rate")),
+            max: Some(100.0),
+            status: status_from_counts(qa_blocks, qa_warnings, Some(100.0)),
+            blocks: qa_blocks,
+            warnings: qa_warnings,
+            infos: 0,
+            detail: Some("QA blockers / warnings".into()),
+            evidence: vec![rel.into()],
+        });
+        out.dimensions.push(QualityInsightDimension {
+            key: Some("generation_pass_rate".into()),
+            label: "生成通过率".into(),
+            score: n_f64(ep_data, "generation_pass_rate").map(|v| v * 100.0),
+            value: ratio_metric(n_f64(ep_data, "generation_pass_rate")),
+            max: Some(100.0),
+            status: status_from_counts(0, n_i64(ep_data, "generation_fails"), Some(100.0)),
+            blocks: 0,
+            warnings: n_i64(ep_data, "generation_fails"),
+            infos: 0,
+            detail: Some("generation_passes / generation_attempts".into()),
+            evidence: vec![rel.into()],
+        });
+        out.dimensions.push(QualityInsightDimension {
+            key: Some("consistency".into()),
+            label: "一致性".into(),
+            score: score_from_status(consistency_blocks, consistency_warnings, true),
+            value: Some(format!("{consistency_blocks}/{consistency_warnings}")),
+            max: Some(100.0),
+            status: status_from_counts(consistency_blocks, consistency_warnings, Some(100.0)),
+            blocks: consistency_blocks,
+            warnings: consistency_warnings,
+            infos: 0,
+            detail: Some("consistency blockers / warnings".into()),
+            evidence: vec![rel.into()],
+        });
+    } else if let Some(alerts) = data.get("alert_counts") {
+        let (blocks, warnings, infos) = insight_counts_from_summary(Some(alerts));
+        out.blocks += blocks;
+        out.warnings += warnings;
+        out.infos += infos;
+        push_insight_metric(out, "成品通过率", ratio_metric(n_f64(alerts, "final_pass_rate")), None);
+        push_insight_metric(out, "生成通过率", ratio_metric(n_f64(alerts, "generation_pass_rate")), None);
+        push_insight_metric(out, "下一阶段", s(alerts, "progress_next_stage"), None);
+    }
+}
+
+fn collect_yield_insights(root: &Path, out: &mut QualityInsights) {
+    let rel = "生产数据/yield_summary.json";
+    let Some(data) = read_json(&root.join(rel)) else {
+        return;
+    };
+    push_source_file(out, root, rel, "出图产能");
+    push_insight_metric(out, "可用率", ratio_metric(n_f64(&data, "usable_yield")), None);
+    push_insight_metric(out, "重抽率", ratio_metric(n_f64(&data, "reroll_rate")), None);
+    push_insight_metric(out, "候选数", data.get("total_candidates").and_then(value_label), None);
+    out.dimensions.push(QualityInsightDimension {
+        key: Some("usable_yield".into()),
+        label: "候选可用率".into(),
+        score: n_f64(&data, "usable_yield").map(|v| v * 100.0),
+        value: ratio_metric(n_f64(&data, "usable_yield")),
+        max: Some(100.0),
+        status: status_from_counts(0, if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 { 1 } else { 0 }, Some(100.0)),
+        blocks: 0,
+        warnings: if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 { 1 } else { 0 },
+        infos: 0,
+        detail: Some("survivors / candidates".into()),
+        evidence: vec![rel.into()],
+    });
+}
+
+fn collect_finding_json(root: &Path, out: &mut QualityInsights, rel: &str, data: &Value) {
+    push_source_file(out, root, rel, rel);
+    let summary = data.get("summary");
+    let (blocks, warnings, infos) = insight_counts_from_summary(summary);
+    out.blocks += blocks;
+    out.warnings += warnings;
+    out.infos += infos;
+    if blocks > 0 || warnings > 0 || infos > 0 {
+        out.dimensions.push(QualityInsightDimension {
+            key: Some(rel.into()),
+            label: rel
+                .rsplit('/')
+                .next()
+                .unwrap_or(rel)
+                .trim_end_matches(".json")
+                .into(),
+            score: score_from_status(blocks, warnings, true),
+            value: Some(format!("{blocks}/{warnings}/{infos}")),
+            max: Some(100.0),
+            status: status_from_counts(blocks, warnings, Some(100.0)),
+            blocks,
+            warnings,
+            infos,
+            detail: Some("block / warn / info".into()),
+            evidence: vec![rel.into()],
+        });
+    }
+    push_dimensions_from_by_dim(out, rel, summary.and_then(|v| v.get("by_dim")));
+    collect_issues_from_array(out, data, "findings", 10);
+    collect_issues_from_array(out, data, "issues", 10);
+    collect_tasks_from_array(out, data, "auto_return_tasks", 6);
+    collect_tasks_from_array(out, data, "return_tasks", 6);
+    collect_tasks_from_array(out, data, "next_actions", 6);
+}
+
+fn should_collect_production_json(name: &str, ep: Option<&str>) -> bool {
+    if !name.ends_with(".json") {
+        return false;
+    }
+    let prefixes = [
+        "gate_findings",
+        "review_ui_findings",
+        "release_verdict",
+        "comic_review",
+        "comic_style_consistency",
+        "comic_identity_report",
+        "consistency_findings",
+        "raw_bubble_acceptance",
+        "style_consistency_acceptance",
+        "image_qc",
+        "video_qc",
+        "score_",
+    ];
+    if !prefixes.iter().any(|prefix| name.starts_with(prefix)) {
+        return false;
+    }
+    match ep {
+        Some(ep) if name.contains('第') => name.contains(ep),
+        _ => true,
+    }
+}
+
+fn collect_generic_production(root: &Path, out: &mut QualityInsights, ep: Option<&str>) {
+    collect_dashboard_insights(root, out, ep);
+    collect_yield_insights(root, out);
+    let prod = root.join("生产数据");
+    let Ok(entries) = fs::read_dir(&prod) else {
+        return;
+    };
+    let mut files: Vec<PathBuf> = entries
+        .flatten()
+        .map(|entry| entry.path())
+        .filter(|path| path.is_file())
+        .filter(|path| {
+            path.file_name()
+                .and_then(|v| v.to_str())
+                .map(|name| should_collect_production_json(name, ep))
+                .unwrap_or(false)
+        })
+        .collect();
+    files.sort();
+    for path in files.into_iter().take(24) {
+        let Some(name) = path.file_name().and_then(|v| v.to_str()) else {
+            continue;
+        };
+        let rel = format!("生产数据/{name}");
+        if let Some(data) = read_json(&path) {
+            collect_finding_json(root, out, &rel, &data);
+        }
+    }
+    for rel in [
+        "合规/compliance_manifest.json",
+        "合规/AI使用说明.md",
+        "生产数据/dashboard.html",
+        "生产数据/board.html",
+        "生产数据/dashboard.md",
+    ] {
+        push_insight_artifact(out, root, rel.rsplit('/').next().unwrap_or(rel), rel, "evidence");
+    }
+}
+
+fn finalize_quality_insights(out: &mut QualityInsights) {
+    out.issues.truncate(28);
+    out.tasks.truncate(18);
+    out.metrics.truncate(28);
+    out.dimensions.sort_by(|a, b| {
+        b.blocks
+            .cmp(&a.blocks)
+            .then(b.warnings.cmp(&a.warnings))
+            .then_with(|| {
+                a.score
+                    .unwrap_or(999.0)
+                    .partial_cmp(&b.score.unwrap_or(999.0))
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+    });
+    out.dimensions.truncate(24);
+    let mut seen = HashSet::new();
+    out.artifacts.retain(|item| seen.insert(item.path.clone()));
+    out.artifacts.truncate(24);
+    if out.status.is_none() {
+        out.status = status_from_counts(out.blocks, out.warnings, out.score);
+    }
+}
+
+#[tauri::command]
+pub fn read_quality_insights(root: String, line: String, ep: Option<String>) -> QualityInsights {
+    let root_p = Path::new(&root);
+    let clean_ep = ep
+        .filter(|value| validate_episode_name(value).is_ok())
+        .filter(|value| !value.trim().is_empty());
+    let mut out = QualityInsights {
+        line: line.clone(),
+        episode: clean_ep.clone(),
+        ..Default::default()
+    };
+    if line == "novel" {
+        collect_novel_score(root_p, &mut out);
+        collect_novel_review(root_p, &mut out);
+        collect_novel_compliance(root_p, &mut out);
+        collect_novel_dashboard(root_p, &mut out);
+    } else {
+        collect_generic_production(root_p, &mut out, clean_ep.as_deref());
+    }
+    finalize_quality_insights(&mut out);
+    out
+}
+
 fn push_frame(
     frames: &mut Vec<CanvasFrame>,
     root: &Path,
@@ -3038,6 +4637,336 @@ fn seams_from_clips(clips: &[CanvasClip], data: &Value) -> Vec<CanvasSeam> {
         });
     }
     seams
+}
+
+fn sequential_seams(clips: &[CanvasClip], transition: Option<&str>) -> Vec<CanvasSeam> {
+    let mut seams = Vec::new();
+    for i in 0..clips.len().saturating_sub(1) {
+        seams.push(CanvasSeam {
+            from: clips[i].id.clone(),
+            to: clips[i + 1].id.clone(),
+            transition: transition.map(|value| value.to_string()),
+        });
+    }
+    seams
+}
+
+fn comic_panel_jobs(root: &Path, ep: &str) -> BTreeMap<String, Value> {
+    read_json(
+        &root
+            .join("出图")
+            .join(ep)
+            .join("prompt")
+            .join("panel_jobs.json"),
+    )
+    .and_then(|v| v.get("jobs").and_then(|jobs| jobs.as_array()).cloned())
+    .map(|jobs| {
+        jobs.into_iter()
+            .filter_map(|job| s(&job, "panel_id").map(|id| (id, job)))
+            .collect()
+    })
+    .unwrap_or_default()
+}
+
+fn comic_panel_qc(root: &Path, ep: &str, panel_id: &str, job: Option<&Value>) -> Option<Value> {
+    job.and_then(|j| j.get("post_qc"))
+        .filter(|v| v.is_object())
+        .cloned()
+        .or_else(|| {
+            read_json(
+                &root
+                    .join("生产数据")
+                    .join("panel_qc")
+                    .join(ep)
+                    .join(format!("{panel_id}.json")),
+            )
+        })
+}
+
+fn comic_findings_by_panel(root: &Path, ep: &str) -> BTreeMap<String, Vec<Value>> {
+    let mut out: BTreeMap<String, Vec<Value>> = BTreeMap::new();
+    for file in [
+        format!("consistency_findings_style_{ep}.json"),
+        format!("comic_consistency_findings_{ep}.json"),
+    ] {
+        let Some(data) = read_json(&root.join("生产数据").join(file)) else {
+            continue;
+        };
+        let Some(findings) = data.get("findings").and_then(|v| v.as_array()) else {
+            continue;
+        };
+        for finding in findings {
+            if let Some(panel_id) = s(finding, "panel_id") {
+                out.entry(panel_id).or_default().push(finding.clone());
+            }
+        }
+    }
+    out
+}
+
+fn comic_dialogue_lines(panel: &Value) -> Vec<String> {
+    panel
+        .get("dialogue")
+        .and_then(|v| v.as_array())
+        .map(|items| {
+            items
+                .iter()
+                .filter_map(|item| {
+                    let text = s(item, "text")?;
+                    let speaker = s(item, "speaker").unwrap_or_default();
+                    if speaker.trim().is_empty() {
+                        Some(text)
+                    } else {
+                        Some(format!("{speaker}: {text}"))
+                    }
+                })
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+fn comic_dialogue_from_text(input: &str) -> Vec<Value> {
+    input
+        .lines()
+        .map(|line| line.trim())
+        .filter(|line| !line.is_empty())
+        .map(|line| {
+            let mut obj = serde_json::Map::new();
+            let split_at = line.find('：').or_else(|| line.find(':'));
+            if let Some(idx) = split_at {
+                let speaker = line[..idx].trim();
+                let text = line[idx + 1..].trim();
+                if !speaker.is_empty() {
+                    obj.insert("speaker".into(), Value::String(speaker.to_string()));
+                }
+                obj.insert("text".into(), Value::String(text.to_string()));
+            } else {
+                obj.insert("text".into(), Value::String(line.to_string()));
+            }
+            Value::Object(obj)
+        })
+        .collect()
+}
+
+fn set_dialogue_field(obj: &mut serde_json::Map<String, Value>, input: &str) {
+    let values = comic_dialogue_from_text(input);
+    if values.is_empty() {
+        obj.remove("dialogue");
+    } else {
+        obj.insert("dialogue".into(), Value::Array(values));
+    }
+}
+
+fn comic_panel_size_label(job: Option<&Value>) -> Option<String> {
+    let size = job.and_then(|j| j.get("size"))?;
+    let w = size.get("width").and_then(|v| v.as_i64())?;
+    let h = size.get("height").and_then(|v| v.as_i64())?;
+    Some(format!("{w}x{h}"))
+}
+
+fn comic_panel_prompt(panel: &Value, job: Option<&Value>) -> Option<String> {
+    let mut parts = Vec::new();
+    if let Some(desc) = s(panel, "description") {
+        parts.push(format!("description: {desc}"));
+    }
+    if let Some(notes) = s(panel, "art_notes") {
+        parts.push(format!("art_notes: {notes}"));
+    }
+    let dialogue = comic_dialogue_lines(panel);
+    if !dialogue.is_empty() {
+        parts.push(format!("dialogue: {}", dialogue.join(" / ")));
+    }
+    if let Some(narration) = s(panel, "narration").filter(|v| !v.trim().is_empty()) {
+        parts.push(format!("narration: {narration}"));
+    }
+    let sfx = string_array(panel, "sfx", 12);
+    if !sfx.is_empty() {
+        parts.push(format!("sfx: {}", sfx.join(" / ")));
+    }
+    if let Some(job_prompt) = job.and_then(|j| s(j, "prompt")) {
+        parts.push(format!("image_prompt: {}", short_text(&job_prompt, 1200)));
+    }
+    if let Some(negative) = job.and_then(|j| s(j, "negative_prompt")) {
+        parts.push(format!("negative_prompt: {}", short_text(&negative, 600)));
+    }
+    if parts.is_empty() {
+        None
+    } else {
+        Some(short_text(&parts.join("\n"), CANVAS_PROMPT_PREVIEW_LIMIT))
+    }
+}
+
+fn accepted_manual_review(qc: &Value) -> bool {
+    qc.get("manual_review")
+        .and_then(|v| s(v, "status"))
+        .map(|status| {
+            status.eq_ignore_ascii_case("accepted") || status.eq_ignore_ascii_case("pass")
+        })
+        .unwrap_or(false)
+}
+
+fn push_comic_qc_flags(flags: &mut Vec<QaFlag>, qc: Option<&Value>) {
+    let Some(qc) = qc else {
+        return;
+    };
+    let accepted = accepted_manual_review(qc);
+    let verdict = s(qc, "verdict").unwrap_or_else(|| "info".into());
+    if let Some(issues) = qc.get("issues").and_then(|v| v.as_array()) {
+        for issue in issues {
+            flags.push(QaFlag {
+                severity: if accepted {
+                    "info".into()
+                } else {
+                    s(issue, "severity").unwrap_or_else(|| verdict.clone())
+                },
+                status: Some(if accepted {
+                    "accepted".into()
+                } else {
+                    verdict.clone()
+                }),
+                dimension: s(issue, "category").or_else(|| Some("panel_qc".into())),
+                message: s(issue, "reason").or_else(|| s(issue, "message")),
+                score: None,
+            });
+        }
+    }
+    if verdict != "pass" && flags.is_empty() {
+        flags.push(QaFlag {
+            severity: if accepted { "info".into() } else { verdict },
+            status: s(qc, "verdict"),
+            dimension: Some("panel_qc".into()),
+            message: Some("面板后检未通过或需要复核".into()),
+            score: None,
+        });
+    }
+    if qc
+        .get("manual_review_required")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false)
+        && !accepted
+    {
+        flags.push(QaFlag {
+            severity: "warn".into(),
+            status: Some("manual_review_required".into()),
+            dimension: Some("panel_qc".into()),
+            message: Some("需要人工复核".into()),
+            score: None,
+        });
+    }
+}
+
+fn push_comic_finding_flags(flags: &mut Vec<QaFlag>, findings: Option<&Vec<Value>>) {
+    let Some(findings) = findings else {
+        return;
+    };
+    for finding in findings {
+        flags.push(QaFlag {
+            severity: s(finding, "severity").unwrap_or_else(|| "warn".into()),
+            status: s(finding, "status"),
+            dimension: s(finding, "dimension")
+                .or_else(|| s(finding, "code"))
+                .or_else(|| Some("consistency".into())),
+            message: s(finding, "reason")
+                .or_else(|| s(finding, "suggested_fix"))
+                .or_else(|| s(finding, "message")),
+            score: None,
+        });
+    }
+}
+
+fn qa_counts(qa: &[QaFlag]) -> (i64, i64, i64) {
+    let blocks = qa
+        .iter()
+        .filter(|f| {
+            f.severity.eq_ignore_ascii_case("block") || f.status.as_deref() == Some("block")
+        })
+        .count() as i64;
+    let warnings = qa
+        .iter()
+        .filter(|f| f.severity.eq_ignore_ascii_case("warn") || f.status.as_deref() == Some("warn"))
+        .count() as i64;
+    let infos = qa
+        .iter()
+        .filter(|f| f.severity.eq_ignore_ascii_case("info") || f.status.as_deref() == Some("info"))
+        .count() as i64;
+    (blocks, warnings, infos)
+}
+
+fn from_comic_panel_script(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
+    let empty = vec![];
+    let panels = data
+        .get("panels")
+        .and_then(|p| p.as_array())
+        .unwrap_or(&empty);
+    let jobs = comic_panel_jobs(root, ep);
+    let findings = comic_findings_by_panel(root, ep);
+    panels
+        .iter()
+        .enumerate()
+        .map(|(i, panel)| {
+            let panel_id = s(panel, "panel_id").unwrap_or_else(|| format!("P{:03}", i + 1));
+            let job = jobs.get(&panel_id);
+            let qc = comic_panel_qc(root, ep, &panel_id, job);
+            let prompt = comic_panel_prompt(panel, job);
+            let image_rel = job
+                .and_then(|j| s(j, "result_path"))
+                .or_else(|| qc.as_ref().and_then(|q| s(q, "path")))
+                .or_else(|| Some(format!("出图/{ep}/panels/{panel_id}.png")));
+            let (image_abs, image_exists) = rel_abs(root, image_rel);
+            let frames = vec![CanvasFrame {
+                role: "panel".into(),
+                label: "成图".into(),
+                abs: image_abs.clone(),
+                exists: image_exists,
+                at_sec: None,
+                prompt: prompt.clone(),
+            }];
+            let mut qa = Vec::new();
+            push_comic_qc_flags(&mut qa, qc.as_ref());
+            push_comic_finding_flags(&mut qa, findings.get(&panel_id));
+            if let Some(status) = job.and_then(|j| s(j, "status")) {
+                if status != "ready" && status != "done" && status != "pass" {
+                    qa.push(QaFlag {
+                        severity: "warn".into(),
+                        status: Some(status.clone()),
+                        dimension: Some("image_job".into()),
+                        message: Some(format!("出图任务状态：{status}")),
+                        score: None,
+                    });
+                }
+            }
+            let (qa_blocks, qa_warnings, qa_infos) = qa_counts(&qa);
+            let score = if qa_blocks > 0 {
+                Some(50.0)
+            } else if qa_warnings > 0 {
+                Some(75.0)
+            } else if image_exists || qc.is_some() {
+                Some(100.0)
+            } else {
+                None
+            };
+            CanvasClip {
+                id: panel_id.clone(),
+                number: number_from_id(&panel_id).or(Some((i + 1) as i64)),
+                label: s(panel, "story_function").unwrap_or_else(|| panel_id.clone()),
+                duration: None,
+                scene: s(panel, "location"),
+                rhythm: s(panel, "story_function"),
+                template: comic_panel_size_label(job),
+                first_frame_abs: image_abs,
+                first_frame_exists: image_exists,
+                video_abs: None,
+                video_exists: false,
+                frames,
+                prompt,
+                qa,
+                score,
+                qa_blocks,
+                qa_warnings,
+                qa_infos,
+            }
+        })
+        .collect()
 }
 
 fn insert_clip_key(lookup: &mut BTreeMap<String, String>, key: &str, id: &str) {
@@ -3244,6 +5173,20 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
         }
     }
 
+    // 3) comic panel_script.json fallback (画漫画: panels + optional panel jobs/QC)
+    let panel_script = root_p.join("脚本").join(&ep).join("panel_script.json");
+    if let Ok(txt) = fs::read_to_string(&panel_script) {
+        if let Ok(v) = serde_json::from_str::<Value>(&txt) {
+            let clips = from_comic_panel_script(root_p, &ep, &v);
+            out.seams = sequential_seams(&clips, Some("下一格"));
+            out.title = s(&v, "title");
+            out.source = "panel_script".into();
+            out.quality = comic_quality_summary(root_p, &ep, &clips);
+            out.clips = clips;
+            return out;
+        }
+    }
+
     out
 }
 
@@ -3314,14 +5257,28 @@ pub fn read_clip_edit(
     clip_id: String,
     number: Option<i64>,
 ) -> Result<ClipEditData, String> {
-    let path = storyboard_path(&root, &ep)?;
+    if let Ok(path) = storyboard_path(&root, &ep) {
+        return read_storyboard_clip_edit(path, &ep, &clip_id, number);
+    }
+    if let Ok(path) = panel_script_path(&root, &ep) {
+        return read_panel_clip_edit(path, &ep, &clip_id, number);
+    }
+    Err("找不到 storyboard.json 或 panel_script.json".into())
+}
+
+fn read_storyboard_clip_edit(
+    path: PathBuf,
+    ep: &str,
+    clip_id: &str,
+    number: Option<i64>,
+) -> Result<ClipEditData, String> {
     let txt = fs::read_to_string(&path).map_err(|e| e.to_string())?;
     let data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;
     let clips = data
         .get("clips")
         .and_then(|v| v.as_array())
         .ok_or("storyboard.json 缺 clips 数组")?;
-    let idx = find_clip_index(clips, &clip_id, number).ok_or("找不到对应 Clip，未写入")?;
+    let idx = find_clip_index(clips, clip_id, number).ok_or("找不到对应 Clip，未写入")?;
     let clip = clips.get(idx).ok_or("找不到对应 Clip，未写入")?;
     Ok(ClipEditData {
         source_rel: format!("脚本/{ep}/storyboard.json"),
@@ -3340,6 +5297,38 @@ pub fn read_clip_edit(
     })
 }
 
+fn read_panel_clip_edit(
+    path: PathBuf,
+    ep: &str,
+    clip_id: &str,
+    number: Option<i64>,
+) -> Result<ClipEditData, String> {
+    let txt = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    let data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;
+    let panels = data
+        .get("panels")
+        .and_then(|v| v.as_array())
+        .ok_or("panel_script.json 缺 panels 数组")?;
+    let idx = find_clip_index(panels, clip_id, number).ok_or("找不到对应分格，未写入")?;
+    let panel = panels.get(idx).ok_or("找不到对应分格，未写入")?;
+    let panel_id = value_string(panel, "panel_id");
+    Ok(ClipEditData {
+        source_rel: format!("脚本/{ep}/panel_script.json"),
+        id: panel_id.clone(),
+        number: number_from_id(&panel_id).or(number),
+        label: value_string(panel, "story_function"),
+        duration: None,
+        scene: value_string(panel, "location"),
+        rhythm: value_string(panel, "story_function"),
+        template: string_array(panel, "characters", 20).join("、"),
+        prompt: value_string(panel, "description"),
+        image_prompt: value_string(panel, "art_notes"),
+        video_prompt: value_string(panel, "narration"),
+        positive_prompt: comic_dialogue_lines(panel).join("\n"),
+        negative_prompt: string_array(panel, "sfx", 20).join("、"),
+    })
+}
+
 #[tauri::command]
 pub fn write_clip_edit(
     root: String,
@@ -3348,7 +5337,23 @@ pub fn write_clip_edit(
     number: Option<i64>,
     patch: ClipEditPatch,
 ) -> Result<ClipEditData, String> {
-    let path = storyboard_path(&root, &ep)?;
+    if let Ok(path) = storyboard_path(&root, &ep) {
+        write_storyboard_clip_edit(path, root, ep, clip_id, number, patch)
+    } else if let Ok(path) = panel_script_path(&root, &ep) {
+        write_panel_clip_edit(path, root, ep, clip_id, number, patch)
+    } else {
+        Err("找不到 storyboard.json 或 panel_script.json".into())
+    }
+}
+
+fn write_storyboard_clip_edit(
+    path: PathBuf,
+    root: String,
+    ep: String,
+    clip_id: String,
+    number: Option<i64>,
+    patch: ClipEditPatch,
+) -> Result<ClipEditData, String> {
     let txt = fs::read_to_string(&path).map_err(|e| e.to_string())?;
     let mut data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;
     let clips = data
@@ -3382,6 +5387,48 @@ pub fn write_clip_edit(
     set_string_field(clip, "video_prompt", patch.video_prompt.trim(), true);
     set_string_field(clip, "positive_prompt", patch.positive_prompt.trim(), true);
     set_string_field(clip, "negative_prompt", patch.negative_prompt.trim(), true);
+
+    let next = serde_json::to_string_pretty(&data).map_err(|e| e.to_string())?;
+    fs::write(&path, format!("{next}\n")).map_err(|e| e.to_string())?;
+    read_clip_edit(root, ep, clip_id, number)
+}
+
+fn write_panel_clip_edit(
+    path: PathBuf,
+    root: String,
+    ep: String,
+    clip_id: String,
+    number: Option<i64>,
+    patch: ClipEditPatch,
+) -> Result<ClipEditData, String> {
+    let txt = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+    let mut data: Value = serde_json::from_str(&txt).map_err(|e| e.to_string())?;
+    let panels = data
+        .get_mut("panels")
+        .and_then(|v| v.as_array_mut())
+        .ok_or("panel_script.json 缺 panels 数组")?;
+    let idx = find_clip_index(panels, &clip_id, number).ok_or("找不到对应分格，未写入")?;
+    let panel = panels
+        .get_mut(idx)
+        .and_then(|v| v.as_object_mut())
+        .ok_or("分格不是对象，未写入")?;
+
+    let story_function = if patch.label.trim().is_empty() {
+        patch.rhythm.trim()
+    } else {
+        patch.label.trim()
+    };
+    if story_function.trim().is_empty() {
+        return Err("分格功能不能为空".into());
+    }
+    set_string_field(panel, "story_function", story_function.trim(), false);
+    set_string_field(panel, "location", patch.scene.trim(), true);
+    set_string_array_field(panel, "characters", patch.template.trim());
+    set_string_field(panel, "description", patch.prompt.trim(), true);
+    set_string_field(panel, "art_notes", patch.image_prompt.trim(), true);
+    set_string_field(panel, "narration", patch.video_prompt.trim(), true);
+    set_dialogue_field(panel, patch.positive_prompt.trim());
+    set_string_array_field(panel, "sfx", patch.negative_prompt.trim());
 
     let next = serde_json::to_string_pretty(&data).map_err(|e| e.to_string())?;
     fs::write(&path, format!("{next}\n")).map_err(|e| e.to_string())?;

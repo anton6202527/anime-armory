@@ -59,11 +59,11 @@
       "transition_type": "action_cut"
     },
     {
-      "continuity_guard": "姜月初先看脚边裴长青，再看眼前金色面板。",
+      "continuity_guard": "Clip06 尾段只用尘土、横刀滑近、姜月初手部/衣袖/侧背轮廓承接；Clip07 再进入姜月初主观面板，不在 Clip06 尾段生成清晰正脸。",
       "from_beat": "EP01_CLIP06",
-      "in_point": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+      "in_point": "裴长青倒飞砸在姜月初脚边，横刀滑到画左前景；尘土扫过姜月初手背和衣袖形成遮挡。",
       "need_endframe": true,
-      "out_point": "裴长青倒飞砸在姜月初脚边，尘土扑到她脸上。",
+      "out_point": "裴长青倒飞砸在姜月初脚边，横刀滑到画左前景；姜月初只以侧背/OTS轮廓接反应，不露清晰正脸。",
       "seam_id": "Seam_06",
       "sound_bridge": "环境声先稳住空间，剪点处用短促音效托住信息落点",
       "to_beat": "EP01_CLIP07",

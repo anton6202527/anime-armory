@@ -1,130 +1,134 @@
 {
   "schema_version": 1,
   "kind": "comic_identity_registry",
+  "style_contract": "新国风水墨彩漫；黑白灰主调，冷白高光，局部赤色和金色点缀；荒野雾气、妖气、水墨边缘、电影式大光比；人物脸部精致但保持漫画线稿可读性。",
+  "consistency_policy": "女主姜月初以用户提供参考图为最高优先级。所有出场都必须继承同一脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；服装、伤污、发丝凌乱程度和特效随剧情变化。",
+  "forbidden_inheritance": "不得继承参考图拼图版式、平台水印、小红书号、可读文字、播放器/社媒 UI、伞面结构、太极光球；头冠、礼服和黑白仙裙只可作为后续专门造型灵感，不是第1话囚服开局固定设定。",
   "assets": {
     "CHAR_JYC": {
       "id": "CHAR_JYC",
       "type": "character",
       "status": "ready",
+      "display_name": "姜月初",
       "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
-      "source": {
-        "kind": "accepted_panel_anchor",
-        "chapter": "第1话",
-        "source": "P002",
-        "source_path": "出图/第1话/panels/P002.png"
-      },
-      "sha256": "dfc33e7a1d1d2bc555d21b1ea1766069371d9c27c966ed9bed9d5da398a35fa3",
-      "updated_at": "2026-07-06T22:47:31",
-      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.",
+      "primary_path": "出图/共享/图片/CHAR_JYC__anchor.png",
       "views": {
+        "face": "出图/共享/图片/CHAR_JYC__face.png",
         "front": "出图/共享/图片/CHAR_JYC__front.png",
         "three_quarter": "出图/共享/图片/CHAR_JYC__three_quarter.png",
-        "back": "出图/共享/图片/CHAR_JYC__back.png",
         "side": "出图/共享/图片/CHAR_JYC__side.png",
-        "face": "出图/共享/图片/CHAR_JYC__face.png"
+        "back": "出图/共享/图片/CHAR_JYC__back.png"
       },
       "reference_images": [
         {
+          "view": "anchor",
+          "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+          "source": {
+            "kind": "user_provided_reference",
+            "original_path": "/Users/wesley/Desktop/1b4d4eccdae20d0446eb5601914babbb.jpg",
+            "instruction": "以这张图作为女主角脸等基本模版"
+          }
+        },
+        {
           "view": "front",
           "path": "出图/共享/图片/CHAR_JYC__front.png",
-          "sha256": "36953c025b48503fb9b504bcb46524bb36c39c93673b1cba51b4fa4f49312bc6",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
             "anchor_kind": "registry_anchor",
             "view": "front",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "02c7996a-2b8d-4653-9fe4-70d9b566e985"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "three_quarter",
           "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
-          "sha256": "98f9dd5dec530730fb770b43a7ebdb9431373fc2bb2a5b09de134531d35fdb48",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_JYC__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "three_quarter",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "0a6f54db-e705-4876-893d-483347920ef1"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "side",
           "path": "出图/共享/图片/CHAR_JYC__side.png",
-          "sha256": "b313ee60ae50a0f6afde775f412d865bec6159feed6c236fed42f59975645995",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_JYC__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "side",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "e7615af7-d9ba-4148-9776-7726656bbb7a"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "back",
           "path": "出图/共享/图片/CHAR_JYC__back.png",
-          "sha256": "f895e21004ca8b2bfdef5591775cd9177f92bccace21d96636bd303390c328d8",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_JYC__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "back",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "45e2e96d-de8b-48ad-a34f-09cd5ea3e1a2"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "face",
           "path": "出图/共享/图片/CHAR_JYC__face.png",
-          "sha256": "a225a52e25269acbcce1d5b138881ac6197ebc6b320f65174f11385b2b6b88e5",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550",
           "source": {
-            "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_JYC__anchor.png",
-            "anchor_kind": "front_view_anchor",
-            "view": "face",
-            "chapter": "第1话",
-            "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "1:1",
-            "submit_id": "f9db6e10-3f4d-40b6-b82d-ac7be16586c1"
+            "kind": "cropped_user_reference",
+            "from": "出图/共享/图片/CHAR_JYC__source_reference.jpg",
+            "crop_note": "中段正脸/头肩近景，用于锁脸"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         }
-      ]
+      ],
+      "character_dna": "瓜子脸/窄下颌，冷白肤色，黑色长发，额前碎发，眼型细长清冷，琥珀冷光瞳，鼻梁秀挺，唇形克制，气质清冷、危险、克制；参考图里的精致3D国漫脸是脸部基础模版。长期基础定妆体态纤细高挑，黑白水墨仙侠长衣或轻甲裙装，黑纱披帛/水墨衣摆可作为轮廓标志。",
+      "dna_contract": "专门定妆多视图 front/three_quarter/side/back/face 是长期基础包：继承用户参考图的脸型、眼型、发际线、发量、黑长发轮廓、冷白肤色和清冷危险气质；全身视图使用干净稳定的黑白水墨仙侠服装，不画囚服、尘土、血污、战损、狼狈破布或剧情动作。第1话穿越初始面板可临时改成灰扑扑囚服和伤污，但必须只改服装/状态，不得换脸、换眼型或换发际线。",
+      "variant_policy": "年龄形态继承开启。后续少年/成年、受伤、觉醒、换装、镇魔司黑衣、妖气缠身等形态只改年龄比例、服装层、伤污和特效强度；长期基础定妆始终作为最高优先级脸部与体态锚点，不得换脸、换发际线、换眼型或丢失黑长发轮廓。",
+      "forbidden_inheritance": "不继承参考图拼图边框、顶部桥面、平台水印、小红书号、可读文字、纸伞、银色头冠、太极光球、露肩礼服为第1话固定设定；没有剧情要求时不要出现这些元素。",
+      "age_variants": {
+        "长期基础定妆": {
+          "costume": "干净稳定的黑白水墨仙侠长衣或轻甲裙装，黑纱披帛/水墨衣摆，冷白肤色，黑长发，清冷危险气质",
+          "must_inherit": "CHAR_JYC face DNA"
+        },
+        "穿越初始": {
+          "costume": "灰扑扑囚服，尘土，少量血污，黑长发凌乱",
+          "must_inherit": "CHAR_JYC face DNA"
+        },
+        "镇魔司误认": {
+          "costume": "黑衣赤纹制服可披在外层，脸和发型继承 CHAR_JYC",
+          "must_inherit": "CHAR_JYC face DNA"
+        }
+      },
+      "notes": "用户图像是女主脸等基础模版。专门定妆多视图应服务长期一致性，不继承第1话囚服狼狈状态；囚服只作为章节面板状态覆盖。",
+      "updated_at": "2026-07-07T13:14:59"
     },
     "CHAR_PEI": {
       "id": "CHAR_PEI",
@@ -134,12 +138,18 @@
       "source": {
         "kind": "accepted_panel_anchor",
         "chapter": "第1话",
-        "source": "P005",
-        "source_path": "出图/第1话/panels/P005.png"
+        "source": "P004",
+        "source_path": "出图/第1话/panels/P004.png"
       },
-      "sha256": "b199c1f2ea0b88300fde61d4bcaa0c4400a8b684bc56c964ef890a3b2b302e05",
-      "updated_at": "2026-07-06T22:47:31",
+      "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf",
+      "updated_at": "2026-07-07T13:14:59",
       "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available.",
+      "display_name": "裴长青",
+      "primary_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+      "character_dna": "二十出头镇魔司队正，黑发束起，脸色苍白，重伤濒死但眼神坚硬；黑衣劲装，衣襟与袖口有赤色云纹。",
+      "dna_contract": "所有裴长青出场必须继承黑衣赤纹镇魔司制服、重伤状态、挺拔但虚弱的体态；不得换成白衣囚服、普通村民或女主同款服装。",
+      "variant_policy": "第1话仅重伤濒死形态；可改变姿势和伤口程度，不得换服装主色和身份气质。",
+      "forbidden_inheritance": "不要继承女主脸、女主长发和囚服；不要画成妖物或路人。",
       "views": {
         "front": "出图/共享/图片/CHAR_PEI__front.png",
         "three_quarter": "出图/共享/图片/CHAR_PEI__three_quarter.png",
@@ -151,102 +161,87 @@
         {
           "view": "front",
           "path": "出图/共享/图片/CHAR_PEI__front.png",
-          "sha256": "2d43b91477ee6b0526167954222a15f14a753b2969e15d11a92301414737e1d7",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
             "anchor_kind": "registry_anchor",
             "view": "front",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "79bb4fc0-a455-4c51-a452-2b4c1f283450"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "three_quarter",
           "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
-          "sha256": "fcd5384f9de996b929e77431709411b4bd705533758df64167de8095b50ecd20",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
             "anchor_path": "出图/共享/图片/CHAR_PEI__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "three_quarter",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "e705797f-0456-47f5-97b5-ccd5c815cd3a"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "side",
           "path": "出图/共享/图片/CHAR_PEI__side.png",
-          "sha256": "5f55c1b2115154320f29082d309a5ffdcb311e92645f3c10e8b76f936fd0aa05",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_PEI__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "side",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "a01b2054-d670-4df8-8ed8-b04127ea1eb7"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "back",
           "path": "出图/共享/图片/CHAR_PEI__back.png",
-          "sha256": "dbb5d2a38cf44b8487d517f6b88251392c0096172973bf943b8efbc9b768a61d",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_PEI__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "back",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "3:4",
-            "submit_id": "1e66671e-673a-4b1c-88e3-efea884a09c0"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         },
         {
           "view": "face",
           "path": "出图/共享/图片/CHAR_PEI__face.png",
-          "sha256": "bace9c8a17ba1238dfdf034f71a815f9efc70c75d1708b34166b2b2f4a8539cc",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24",
           "source": {
             "kind": "generated_character_view",
-            "backend": "Dreamina official CLI",
-            "model": "Dreamina image2image",
-            "anchor_path": "出图/共享/图片/CHAR_PEI__anchor.png",
+            "anchor_path": "出图/共享/图片/CHAR_PEI__front.png",
             "anchor_kind": "front_view_anchor",
             "view": "face",
             "chapter": "第1话",
             "attempt": 1,
-            "model_version": "5.0",
-            "resolution_type": "2k",
-            "ratio": "1:1",
-            "submit_id": "4fb38e47-a40a-4d90-8519-49fb42a16464"
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
           },
-          "updated_at": "2026-07-06T22:47:31"
+          "updated_at": "2026-07-07T13:14:59"
         }
       ]
     },
@@ -258,27 +253,15 @@
       "source": {
         "kind": "accepted_panel_anchor",
         "chapter": "第1话",
-        "source": "P004",
-        "source_path": "出图/第1话/panels/P004.png"
+        "source": "P003",
+        "source_path": "出图/第1话/panels/P003.png"
       },
-      "sha256": "50159680642eb8384284bc7fea7a19957b2d88f3b09b6269a57ca5ea1c4fb60a",
-      "updated_at": "2026-07-06T17:02:35",
-      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
-    },
-    "LOC_WILD": {
-      "id": "LOC_WILD",
-      "type": "location",
-      "status": "ready",
-      "anchor_path": "出图/共享/图片/LOC_WILD__anchor.png",
-      "source": {
-        "kind": "accepted_panel_anchor",
-        "chapter": "第1话",
-        "source": "P001",
-        "source_path": "出图/第1话/panels/P001.png"
-      },
-      "sha256": "9c7cae3451ddbcc7f555116b9cb19d023c30bb08c613848c843f3133b1e50093",
-      "updated_at": "2026-07-06T17:02:35",
-      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+      "sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80",
+      "updated_at": "2026-07-07T11:09:46",
+      "notes": "由 P003 合格面板种下的临时虎妖锚点。后续可补专门妖物设定图。",
+      "display_name": "虎妖 / 虎山神",
+      "primary_path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "style_contract": "人身虎头，大如小山，破损衣甲，胸口巨大黑血洞，黑色妖气和虎纹毛发；压迫感高但不做内脏特写。"
     },
     "PROP_HENGDAO": {
       "id": "PROP_HENGDAO",
@@ -288,12 +271,33 @@
       "source": {
         "kind": "accepted_panel_anchor",
         "chapter": "第1话",
-        "source": "P007",
-        "source_path": "出图/第1话/panels/P007.png"
+        "source": "P006",
+        "source_path": "出图/第1话/panels/P006.png"
       },
-      "sha256": "752e2aa91a758ce37b10efe3afd5ea52c748c3d453afdd8ce78b47c14c647689",
-      "updated_at": "2026-07-06T17:02:35",
-      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+      "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa",
+      "updated_at": "2026-07-07T11:09:46",
+      "notes": "由 P006 合格刀落点面板种下的临时道具锚点。",
+      "display_name": "镇魔司横刀 / 断刀",
+      "primary_path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+      "style_contract": "古代横刀，黑金刀柄，血污刀身，可完整刀或半截断刀；刀柄、刀刃、手、地面接触点必须清楚。"
+    },
+    "LOC_WASTELAND": {
+      "id": "LOC_WASTELAND",
+      "type": "location",
+      "status": "ready",
+      "anchor_path": "出图/共享/图片/LOC_WASTELAND__anchor.png",
+      "source": {
+        "kind": "accepted_panel_anchor",
+        "chapter": "第1话",
+        "source": "创作区/画漫画/那妖魔是姜大人/出图/第1话/panels/P001.png",
+        "source_path": "出图/第1话/panels/P001.png"
+      },
+      "sha256": "3e679d4ff3077267878348a736fea6051850e8615a107a76f81620e76fab3184",
+      "updated_at": "2026-07-07T15:01:38",
+      "notes": "由第1话 P001 荒野全景种下的临时场景锚点；后续可补专门 LOC_WASTELAND 场景设定图。",
+      "display_name": "破败荒野",
+      "primary_path": "出图/共享/图片/LOC_WASTELAND__anchor.png",
+      "style_contract": "破败荒野、枯草连天、尸骸遍地、灰白雾气、巨岩、冷白高光和黑白灰水墨边缘；血色只作局部点缀，不做过度 gore。"
     },
     "SYS_BAIYAOPU": {
       "id": "SYS_BAIYAOPU",
@@ -303,12 +307,15 @@
       "source": {
         "kind": "accepted_panel_anchor",
         "chapter": "第1话",
-        "source": "P015",
-        "source_path": "出图/第1话/panels/P015.png"
+        "source": "创作区/画漫画/那妖魔是姜大人/出图/第1话/panels/P013.png",
+        "source_path": "出图/第1话/panels/P013.png"
       },
-      "sha256": "4a09362e8b0a27fb6c0ab851d40eecece631fb332017213cda64469e9ee76e3a",
-      "updated_at": "2026-07-06T17:02:35",
-      "notes": "Shared anchor seeded from an accepted comic panel; replace with dedicated turnaround/design-sheet art when available."
+      "sha256": "959d40cbc78895d1490e18da787138269546419663f42cb18b61bf3b9b09282b",
+      "updated_at": "2026-07-07T15:01:38",
+      "notes": "由第1话 P013 百妖谱展开面板种下的临时系统视觉锚点；后续可补专门卷轴/金字/摹影流程设定图。",
+      "display_name": "百妖谱",
+      "primary_path": "出图/共享/图片/SYS_BAIYAOPU__anchor.png",
+      "style_contract": "古朴绘卷，冷白环境里浮现金色字迹和光点；系统文字只作为后期嵌字，不在图像中生成可读字。第2话可表现墨线摹影虎山神和妖物馈赠倒灌。"
     }
   }
 }

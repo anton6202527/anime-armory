@@ -89,7 +89,7 @@ def sync_storyboard_durations_from_manifest(root, ep, manifest, gap=0.4):
     clips that explicitly declare 1-based voiceover_indices.
     """
     sb_p = os.path.join(root, '脚本', ep, 'storyboard.json')
-    empty = {'duration': 0, 'frame_contract': 0}
+    empty = {'duration': 0, 'frame_contract': 0, 'timeline': 0}
     if not os.path.isfile(sb_p):
         return empty
     try:
@@ -129,15 +129,44 @@ def sync_storyboard_durations_from_manifest(root, ep, manifest, gap=0.4):
         if not same:
             clip['duration'] = new_duration
             duration_changed += 1
-    if duration_changed or frame_contract_changed:
-        total_duration = 0.0
-        for clip in clips:
-            dur = _clip_duration(clip) if isinstance(clip, dict) else None
-            if dur is not None:
-                total_duration += dur
-        data['total_duration'] = round(total_duration, 3)
+    timeline_changed, total_duration = normalize_storyboard_timeline(clips)
+    try:
+        total_same = abs(float(data.get('total_duration')) - total_duration) < 0.001
+    except (TypeError, ValueError):
+        total_same = False
+    if not total_same:
+        data['total_duration'] = total_duration
+        timeline_changed += 1
+    if duration_changed or frame_contract_changed or timeline_changed:
         json.dump(data, open(sb_p, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-    return {'duration': duration_changed, 'frame_contract': frame_contract_changed}
+    return {'duration': duration_changed, 'frame_contract': frame_contract_changed, 'timeline': timeline_changed}
+
+def _same_second(value, expected):
+    try:
+        return abs(float(value) - expected) < 0.001
+    except (TypeError, ValueError):
+        return False
+
+def normalize_storyboard_timeline(clips):
+    """Rebuild cumulative start_sec/end_sec after clip durations change."""
+    changed = 0
+    cursor = 0.0
+    for clip in clips:
+        if not isinstance(clip, dict):
+            continue
+        dur = _clip_duration(clip)
+        if dur is None:
+            continue
+        start = round(cursor, 3)
+        end = round(cursor + dur, 3)
+        if not _same_second(clip.get('start_sec'), start):
+            clip['start_sec'] = start
+            changed += 1
+        if not _same_second(clip.get('end_sec'), end):
+            clip['end_sec'] = end
+            changed += 1
+        cursor += dur
+    return changed, round(cursor, 3)
 
 def normalize_clip_frame_contract(clip):
     """Drop stale top-level frame paths contradicted by continuity policy."""
@@ -474,6 +503,8 @@ def main():
     synced = sync_storyboard_durations_from_manifest(root, ep, manifest, gap)
     if synced.get('duration'):
         print(f"  storyboard.json 已按 voiceover_indices 回填 {synced.get('duration')} 个 Clip duration，并更新 total_duration。")
+    if synced.get('timeline'):
+        print(f"  storyboard.json 已同步 {synced.get('timeline')} 处 Clip start_sec/end_sec 时间轴。")
     if synced.get('frame_contract'):
         print(f"  storyboard.json 已清理 {synced.get('frame_contract')} 个与 continuity 矛盾的旧帧路径。")
     _apply_priors()

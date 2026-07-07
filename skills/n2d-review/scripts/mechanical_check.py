@@ -190,7 +190,7 @@ def check_completeness(root, ep, manifest):
     clips = glob.glob(n("出视频", ep, "视频", "*.mp4"))
     finals = glob.glob(n("*成片_" + ep + "*.mp4")) + glob.glob(n("合成", ep, "成片*.mp4"))
     add(INFO, "完整性", ep,
-        f"产物快照：配音句 {len(manifest) if manifest else 0} · clip {len(clips)} · 成片 {len(finals)}")
+        f"产物快照：配音句 {len(manifest) if manifest else 0} · 视频片段 {len(clips)} · 成片 {len(finals)}")
 
 
 def _ffprobe(path):
@@ -213,11 +213,50 @@ def _duration(path):
         return None
 
 
+def _final_master(root, ep):
+    matches = sorted(glob.glob(os.path.join(root, "合成", ep, f"成片_{ep}_*.mp4")))
+    return matches[-1] if matches else None
+
+
 def _has_audio(path):
     data = _ffprobe(path)
     if not data:
         return None
     return any(s.get("codec_type") == "audio" for s in data.get("streams", []))
+
+
+def _clip_number_from_text(text):
+    match = re.search(r"(?i)(?:^|[^0-9A-Za-z])(?:EP\d+[_-])?CLIP[_-]?0*(\d+)(?=$|[^0-9A-Za-z])", text or "")
+    return int(match.group(1)) if match else None
+
+
+def _storyboard_clip_numbers(clips):
+    numbers = []
+    for idx, clip in enumerate(clips, 1):
+        num = None
+        if isinstance(clip, dict):
+            for key in ("id", "clip_id", "shot_id", "label"):
+                num = _clip_number_from_text(str(clip.get(key) or ""))
+                if num is not None:
+                    break
+        numbers.append(num if num is not None else idx)
+    return set(numbers)
+
+
+def _video_clip_groups(paths):
+    groups = {}
+    unknown = []
+    for path in sorted(paths):
+        num = _clip_number_from_text(os.path.basename(path))
+        if num is None:
+            unknown.append(path)
+            continue
+        groups.setdefault(num, []).append(path)
+    return groups, unknown
+
+
+def _is_split_part(path):
+    return re.search(r"(?i)(?:^|[_-])part0*\d+(?=\.[^.]+$|[_-])", os.path.basename(path)) is not None
 
 
 def check_storyboard_and_video(root, ep):
@@ -259,22 +298,50 @@ def check_storyboard_and_video(root, ep):
         add(INFO, "尾帧", ep, f"本集需要尾帧接力 {need_endframes} 处")
 
     mp4s = sorted(glob.glob(os.path.join(root, "出视频", ep, "视频", "*.mp4")))
-    if mp4s and len(mp4s) != len(clips):
-        add(WARN, "视频", ep, f"clip MP4 数 {len(mp4s)} 与 storyboard clips {len(clips)} 不一致")
+    expected_nums = _storyboard_clip_numbers(clips)
+    video_groups, unknown_mp4s = _video_clip_groups(mp4s)
+    logical_nums = set(video_groups)
+    missing = sorted(expected_nums - logical_nums)
+    extra = sorted(logical_nums - expected_nums)
+    unsplit_dupes = {
+        num: paths for num, paths in video_groups.items()
+        if len(paths) > 1 and not all(_is_split_part(p) for p in paths)
+    }
+    if mp4s and (missing or extra or unknown_mp4s or unsplit_dupes):
+        parts = []
+        if missing:
+            parts.append("缺逻辑镜头 " + ", ".join(f"Clip_{n:02d}" for n in missing[:8]))
+        if extra:
+            parts.append("多出逻辑镜头 " + ", ".join(f"Clip_{n:02d}" for n in extra[:8]))
+        if unknown_mp4s:
+            parts.append(f"无法识别镜头号 MP4 {len(unknown_mp4s)} 个")
+        if unsplit_dupes:
+            parts.append("疑似重复非 part MP4 " + ", ".join(f"Clip_{n:02d}" for n in sorted(unsplit_dupes)[:8]))
+        add(WARN, "视频", ep, f"逻辑 clip 与 storyboard 不一致（物理 MP4 {len(mp4s)} / 逻辑 clip {len(logical_nums)} / storyboard {len(clips)}）：{'；'.join(parts)}")
+    elif mp4s and len(mp4s) != len(logical_nums):
+        add(INFO, "视频", ep, f"检测到 split-part 视频：物理 MP4 {len(mp4s)} / 逻辑 clip {len(logical_nums)} / storyboard {len(clips)}")
     audio = [p for p in mp4s if _has_audio(p)]
     if audio:
         add(WARN, "原生音轨", audio[0], "clip 含原生音轨；compose 默认应丢弃。若按 opt-in 混入环境声，需确认低风险、无口型、无原生人声")
     shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
-    # 仅当整集 clip 都齐了(len(mp4s)==len(clips))才比总长——增量生产中只出了几个 clip 时
+    # 仅当整集逻辑 clip 都齐了才比总长。split part 会产生多个物理 MP4，
+    # 不能再用 len(mp4s)==len(clips) 判整集是否齐。
     # 拿部分对全集总时长会刷无意义的「差 N 秒」假警告。
-    if os.path.exists(shots_p) and mp4s and len(mp4s) == len(clips):
+    if os.path.exists(shots_p) and mp4s and not missing and not extra and not unknown_mp4s and not unsplit_dupes:
         try:
             target = sum(float(v) for v in json.load(open(shots_p, encoding="utf-8")).values())
             ds = [_duration(p) for p in mp4s]
             if all(d is not None for d in ds):
                 total = sum(d for d in ds if d is not None)
                 if abs(total - target) > 1.0:
-                    add(WARN, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s")
+                    final = _final_master(root, ep)
+                    final_d = _duration(final) if final and has_fitted_voice(root, ep) else None
+                    if final_d is not None and abs(final_d - target) <= 1.0:
+                        add(INFO, "时长", ep,
+                            f"源 clip 物理总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s；"
+                            f"已检测到 fitted 配音轨且成片 {final_d:.2f}s≈锁定槽位，split 时长已由 compose Time-Warp 修正。")
+                    else:
+                        add(WARN, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s")
         except Exception:
             pass
 

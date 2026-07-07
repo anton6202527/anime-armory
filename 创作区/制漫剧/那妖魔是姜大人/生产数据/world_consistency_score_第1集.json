@@ -1,0 +1,24 @@
+{
+  "components": {
+    "causal_compliance": 0.84,
+    "flicker_penalty": 0.82,
+    "object_permanence": 0.82,
+    "relation_stability": 0.84
+  },
+  "episode": "第1集",
+  "evidence": [
+    "生产数据/contract_trace_第1集.json",
+    "生产数据/final_timeline_probe_第1集.json",
+    "生产数据/dialogue_av_alignment_第1集.json",
+    "生产数据/room_tone_第1集.json",
+    "生产数据/consistency_ledger_第1集.json"
+  ],
+  "generated_at": "2026-07-07T05:24:37+00:00",
+  "kind": "n2d_world_consistency_score",
+  "measurement_scope": "rollup_from_existing_sidecars_and_human_readable_contracts_no_heavy_vlm",
+  "notes": [
+    "该分数是保守 rollup，不代表 DINOv2/OWLv2/SyncNet/VLM 已完成。重型后端证据仍由各 sidecar 单独追踪。"
+  ],
+  "version": 1,
+  "world_consistency_score": 0.82
+}

@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import json
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import foley_agent as fa  # noqa: E402
@@ -189,3 +190,28 @@ def test_resolve_backend_native_av_reads_episode_routes(tmp_path):
         encoding="utf-8",
     )
     assert fa._resolve_backend_native_av(str(tmp_path), "第1集") is True
+
+
+def test_write_foley_evidence_creates_production_sidecar(tmp_path):
+    root = str(tmp_path)
+    plan_path = os.path.join(root, "合成", "第1集", "_work", "foley_plan.json")
+    out_wav = os.path.join(root, "合成", "第1集", "_work", "foley_mix.wav")
+    payload = fa.build_foley_evidence(
+        root,
+        "第1集",
+        [{"tag": "footsteps", "start": 0.0}],
+        plan_path,
+        out_wav,
+        3.0,
+        {"mode": "full", "reason": "silent_backend"},
+        render_status="silent_placeholder",
+        backend_configured=False,
+        backend_used=False,
+    )
+
+    rel = fa.write_foley_evidence(root, "第1集", payload)
+
+    assert rel == os.path.join("生产数据", "foley_第1集.json")
+    data = json.loads((tmp_path / rel).read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_foley_evidence"
+    assert data["status"] == "silent_placeholder"

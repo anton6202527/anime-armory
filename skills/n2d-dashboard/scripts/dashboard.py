@@ -2041,9 +2041,10 @@ def run_image_qc_findings(root: str, episode: str, *, fail_closed: bool) -> List
     script = os.path.join(REPO_SKILLS, "n2d-image", "scripts", "image_qc.py")
     if not os.path.isfile(script):
         return [image_qc_failure_finding(root, episode, f"脚本缺失：{script}")] if fail_closed else []
+    image_qc_python = os.environ.get("N2D_IMAGE_QC_PYTHON") or sys.executable
     try:
         proc = subprocess.run(
-            [sys.executable, script, root, episode, "--findings"],
+            [image_qc_python, script, root, episode, "--findings"],
             text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False, timeout=600,
         )
     except Exception as exc:

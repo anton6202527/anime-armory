@@ -4,6 +4,7 @@
 """
 import os
 import sys
+import json
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tension_mix as tm  # noqa: E402
@@ -56,3 +57,13 @@ def test_expr_is_ffmpeg_safe_chars():
     # 只含 ffmpeg volume eval 允许的字符（数字/between/if/逗号/括号/点），无空格/引号
     assert " " not in expr and "'" not in expr and '"' not in expr
     assert expr.startswith("if(between(t,0,3.5),0.95,")
+
+
+def test_write_report_creates_production_evidence(tmp_path):
+    payload = {"kind": "n2d_tension_mix", "episode": "第1集", "segments": []}
+
+    rel = tm.write_report(str(tmp_path), "第1集", payload)
+
+    assert rel == os.path.join("生产数据", "tension_mix_第1集.json")
+    data = json.loads((tmp_path / rel).read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_tension_mix"

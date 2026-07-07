@@ -1,0 +1,167 @@
+{
+  "actual_duration_sec": 120.1,
+  "cuts": [
+    {
+      "cut": "Clip_01->Clip_02",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 9.236,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_02->Clip_03",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 25.806,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_03->Clip_04",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 44.558,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_04->Clip_05",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 54.568,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_05->Clip_06",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 67.563,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_06->Clip_07",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 82.149,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_07->Clip_08",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 93.346,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_08->Clip_09",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 101.934,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_09->Clip_10",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 111.922,
+      "verdict": "pass"
+    },
+    {
+      "cut": "Clip_10->Clip_11",
+      "measurement_scope": "storyboard_expected_cut",
+      "timecode": 118.462,
+      "verdict": "pass"
+    }
+  ],
+  "duration_tolerance_sec": 2.41,
+  "episode": "第1集",
+  "expected_duration_sec": 120.515,
+  "final_master": "合成/第1集/成片_第1集_zh.mp4",
+  "findings": [],
+  "generated_at": "2026-07-07T05:20:35+00:00",
+  "kind": "n2d_final_timeline_probe",
+  "notes": [
+    "本探针仅记录最终成片时长与 storyboard 理论时间线；亮度/响度/静音缝需重型 AV 后端另写字段。"
+  ],
+  "segments": [
+    {
+      "clip": "Clip_01",
+      "expected_duration_sec": 9.236,
+      "expected_end_sec": 9.236,
+      "expected_start_sec": 0.0,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_02",
+      "expected_duration_sec": 16.57,
+      "expected_end_sec": 25.806,
+      "expected_start_sec": 9.236,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_03",
+      "expected_duration_sec": 18.752,
+      "expected_end_sec": 44.558,
+      "expected_start_sec": 25.806,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_04",
+      "expected_duration_sec": 10.01,
+      "expected_end_sec": 54.568,
+      "expected_start_sec": 44.558,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_05",
+      "expected_duration_sec": 12.995,
+      "expected_end_sec": 67.563,
+      "expected_start_sec": 54.568,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_06",
+      "expected_duration_sec": 14.586,
+      "expected_end_sec": 82.149,
+      "expected_start_sec": 67.563,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_07",
+      "expected_duration_sec": 11.197,
+      "expected_end_sec": 93.346,
+      "expected_start_sec": 82.149,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_08",
+      "expected_duration_sec": 8.588,
+      "expected_end_sec": 101.934,
+      "expected_start_sec": 93.346,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_09",
+      "expected_duration_sec": 9.988,
+      "expected_end_sec": 111.922,
+      "expected_start_sec": 101.934,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_10",
+      "expected_duration_sec": 6.54,
+      "expected_end_sec": 118.462,
+      "expected_start_sec": 111.922,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    },
+    {
+      "clip": "Clip_11",
+      "expected_duration_sec": 2.053,
+      "expected_end_sec": 120.515,
+      "expected_start_sec": 118.462,
+      "measurement_scope": "storyboard_expected_timeline",
+      "verdict": "pass"
+    }
+  ],
+  "status": "pass",
+  "version": 1
+}

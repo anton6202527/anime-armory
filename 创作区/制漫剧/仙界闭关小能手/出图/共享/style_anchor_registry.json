@@ -1,0 +1,43 @@
+{
+  "kind": "n2d_style_anchor_registry",
+  "version": 1,
+  "generated_at": "2026-07-07T10:23:25+00:00",
+  "style_name": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）",
+  "selected_anchor": {
+    "id": "STYLE_ANCHOR",
+    "name": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）",
+    "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+    "status": "ready",
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "role": "shared_rendering_language_anchor",
+    "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729"
+  },
+  "anchors": [
+    {
+      "id": "STYLE_ANCHOR",
+      "name": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）",
+      "path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "status": "ready",
+      "use_policy": "style_only",
+      "identity_policy": "do_not_clone_face_or_costume",
+      "role": "shared_rendering_language_anchor",
+      "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729"
+    },
+    {
+      "id": "STYLE_ANCHOR_2",
+      "name": "自定义（半写实3D国风仙侠漫剧·金色符纹法阵）",
+      "path": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png",
+      "status": "ready",
+      "use_policy": "style_only",
+      "identity_policy": "do_not_clone_face_or_costume",
+      "role": "shared_rendering_language_anchor",
+      "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6"
+    }
+  ],
+  "rules": {
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "notes": "统一风格锚只锁本剧渲染语言：写实国漫 / 影视级写实短剧质感、半写实 3D 国漫、冷灰低饱和、自然皮肤、旧木/布料/金属材质、镜头焦段、材质颗粒和整体色彩倾向；不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
+  }
+}

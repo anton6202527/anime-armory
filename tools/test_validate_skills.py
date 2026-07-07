@@ -26,3 +26,7 @@ def test_real_workspace_path_lint_flags_concrete_work_path():
 def test_real_workspace_path_lint_allows_generic_tmp_project_path():
     line = 'root = tmp_path / "创作区" / "制漫剧" / "测试剧"'
     assert not validate_skills._line_mentions_real_work_path(line, {"LintFixtureRealWork"})
+
+
+def test_skill_stats_sync_is_registered():
+    assert "F7" in validate_skills.CHECKS

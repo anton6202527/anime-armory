@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P008",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 1,
+  "references": [
+    {
+      "id": "PROP_BROKEN_BASIN",
+      "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+      "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d"
+    }
+  ],
+  "created_at": "2026-07-07T15:41:35"
+}

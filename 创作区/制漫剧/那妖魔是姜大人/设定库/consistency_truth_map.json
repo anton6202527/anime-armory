@@ -1,0 +1,40 @@
+{
+  "kind": "n2d_consistency_truth_map",
+  "truth_sources": {
+    "character_identity": {
+      "purpose": "角色 DNA、形态、身份锚和后端主体绑定最高真值源",
+      "source": "出图/共享/identity_registry.json",
+      "wins_over": [
+        "角色自然语言描述",
+        "generation_recipe"
+      ]
+    },
+    "generation_recipe": {
+      "evidence_only": true,
+      "purpose": "复现和归因证据，不覆盖身份/状态/空间设定",
+      "source": "生产数据/generation_recipe_第N集.json"
+    },
+    "intentional_exception": {
+      "expires_required": true,
+      "purpose": "导演有意例外签收；无签收时默认按上游真值源执行",
+      "source": "生产数据/consistency_advisory_signoff_第N集.json"
+    },
+    "scene_space": {
+      "purpose": "LOC_01 尸场空间、声场和固定地标",
+      "source": "设定库/scene_floorplan.json + 设定库/ambient_map.json",
+      "wins_over": [
+        "逐镜背景自由描述"
+      ]
+    },
+    "visual_state": {
+      "purpose": "本集伤态、系统状态、道具持有和视觉状态区间",
+      "source": "脚本/第1集/storyboard.json + 设定库/system_state_ledger.json",
+      "wins_over": [
+        "逐镜 prompt",
+        "generation_recipe"
+      ]
+    }
+  },
+  "updated_at": "2026-07-07T05:24:37+00:00",
+  "version": 1
+}

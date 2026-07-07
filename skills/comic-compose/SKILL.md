@@ -19,9 +19,9 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 ## 输出
 
 - `排版/第N话/export_manifest.json`。
-- `排版/第N话/pages/`：页漫或审查分页。
-- `排版/第N话/长图/longstrip.webp`；显式设置分段高度时输出 `part_001.webp` 等分段长图。
-- `_进度.md`：导出就绪后把 `嵌字合成` 标为 `✅`。
+- `排版/第N话/pages/`：按 `layout.json` 渲染的页漫或审查分页；超出 WebP 单边上限时自动落 PNG。
+- `排版/第N话/长图/longstrip.webp` 或 `longstrip.png`；显式设置分段高度时输出 `part_001.webp/png` 等分段长图。
+- `_进度.md`：导出就绪后把 `嵌字合成` 标为 `✅`，并勾选本话页面图、长图和 `export_manifest.json` 导出清单。
 
 ## 怎么跑
 
@@ -38,13 +38,13 @@ python3 skills/comic-compose/scripts/build_lettering.py "创作区/画漫画/作
 python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-如果已安装 Pillow，可渲染长图：
+如果已安装 Pillow，可按 layout 渲染页面图和长图：
 
 ```bash
-python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render
+python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --write-progress
 ```
 
-渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。
+渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
 
 ## 嵌字原则
 
@@ -62,7 +62,7 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 
 ## 长图策略
 
-- 默认导出单张 `longstrip.webp`，便于 App 内审阅和直接交付。
+- 默认导出单张 `longstrip.webp`，便于 App 内审阅和直接交付；若单张高度超过 WebP 能力上限，则按 `导出格式` 自动改用 `longstrip.png`。
 - 只有显式设置 `单话分段高度` 为正数或传 `--max-height` 时，才切成多个 part，避免目标平台不接受超高图片。
 - 每个导出物都要在 `export_manifest.json` 登记 panel 顺序和尺寸。
 - 缺 panel 图时也要写 manifest，并列出 `missing_panels`，方便继续生产。

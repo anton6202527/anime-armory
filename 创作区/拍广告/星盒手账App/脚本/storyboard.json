@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "kind": "ad_storyboard",
+  "title": "星盒手账App首发短片",
+  "duration_sec": 30,
+  "aspect": "9:16",
+  "clips": [
+    {
+      "id": "C01",
+      "duration": 4,
+      "scene": "夜晚桌面",
+      "shot": "俯拍推近，桌面物件形成轻微压迫感",
+      "prompt": "realistic cinematic vertical ad, warm night desk, laptop edge, sticky notes, ceramic cup, smartphone notifications, no real brand UI, soft city bokeh outside window",
+      "product_lock": "手机屏幕只显示抽象通知和星盒文字占位"
+    },
+    {
+      "id": "C02",
+      "duration": 5,
+      "scene": "书桌前",
+      "shot": "中近景，主角坐下，手停在空白页面上",
+      "prompt": "young female freelancer in casual homewear, tired but calm, blank journal page, warm desk lamp, realistic film look, no celebrity likeness",
+      "product_lock": "不展示真实第三方软件界面"
+    },
+    {
+      "id": "C03",
+      "duration": 7,
+      "scene": "星盒界面抽象演示",
+      "shot": "手机特写，卡片式信息归位",
+      "prompt": "close-up smartphone, abstract app interface cards labeled photo voice todo moving into daily journal draft, clean minimal UI, Chinese placeholder text, brand color teal and warm yellow",
+      "product_lock": "功能为概念动效，避免承诺自动生成结果"
+    },
+    {
+      "id": "C04",
+      "duration": 6,
+      "scene": "明日清单",
+      "shot": "界面动效转场到明日清单",
+      "prompt": "unfinished checklist items fold gently into tomorrow list, calm organized mobile interface, warm realistic reflection on phone glass",
+      "product_lock": "保留“明日清单”文字"
+    },
+    {
+      "id": "C05",
+      "duration": 5,
+      "scene": "情绪落点",
+      "shot": "近景，主角保存后放松，灯光稳定",
+      "prompt": "young creator softly smiles after saving journal, warm lamp, quiet room, cinematic close-up, natural face, no glamour styling",
+      "product_lock": "手机可见星盒抽象页面"
+    },
+    {
+      "id": "C06",
+      "duration": 3,
+      "scene": "片尾",
+      "shot": "静态 end card",
+      "prompt": "minimal vertical end card, text logo 星盒, slogan 把今天稳稳收好, CTA 立即预约内测, warm off-white background, teal accent",
+      "product_lock": "必须清晰展示品牌、slogan、CTA"
+    }
+  ]
+}

@@ -2,14 +2,14 @@
   "kind": "n2d_identity_adapter_matrix",
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-06T11:45:00+00:00",
+  "generated_at": "2026-07-07T11:35:19+00:00",
   "summary": {
     "forms": 8,
-    "forms_with_reference_group_ready": 6,
+    "forms_with_reference_group_ready": 8,
     "forms_with_native_image_ready": 2,
     "forms_with_native_video_ready": 0,
     "forms_with_lora_ready": 0,
-    "forms_with_gaps": 2,
+    "forms_with_gaps": 0,
     "anchor_fingerprint": "6f05ff9c0259449cb58102820a33cbf8848053963c206a0c80ede76487266a9a",
     "forms_with_anchor_pinned": 6,
     "characters_needing_lora_upgrade": []
@@ -43,105 +43,150 @@
           "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+          "exists": true
+        },
+        "legacy_refs": {
           "path": "",
           "exists": false
         },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+          "exists": true
+        },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
                 },
-                "emotion": "克制"
+                "emotion": "克制",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+                "status": "ready"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
-                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
                 },
-                "emotion": "震动"
+                "emotion": "震动",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+                "status": "ready"
+              },
+              {
+                "derivation": {
+                  "method": "existing_reference_anchor",
+                  "updated_at": "2026-07-07T05:27:58+00:00"
+                },
+                "emotion": "冷静",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+                "status": "ready"
+              },
+              {
+                "derivation": {
+                  "method": "existing_expression_alias",
+                  "sha256": "530ce6668092508d4e4feb7aeec53d817fe8d68f32f7db69f51b57eb74ad6cba",
+                  "updated_at": "2026-07-07T06:13:04+00:00"
+                },
+                "emotion": "克制_原图",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png",
+                "status": "ready"
+              },
+              {
+                "derivation": {
+                  "method": "existing_expression_alias",
+                  "sha256": "00c9d21364ea32b6fe45e8c23e119587a21b09c180f5c41f382393a29b14fe09",
+                  "updated_at": "2026-07-07T06:13:04+00:00"
+                },
+                "emotion": "震动_原图",
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png",
+                "status": "ready"
               }
-            ]
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                  "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+                "status": "ready"
+              }
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+              "status": "ready"
+            },
+            "legacy_refs": [
+              {
+                "derivation": {
+                  "canonical_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                  "method": "existing_reference_alias",
+                  "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+                  "updated_at": "2026-07-07T06:13:04+00:00"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+                "status": "ready"
+              }
+            ],
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+                "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -165,7 +210,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "image2image_reference_chain",
           "status": "ready",
           "ready": true,
@@ -175,7 +220,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "image2image_reference_chain",
           "status": "ready",
           "ready": true,
@@ -187,16 +242,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -247,8 +292,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -257,8 +302,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -291,18 +336,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -345,110 +390,128 @@
           "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
-          "path": "",
-          "exists": false
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+          "exists": true
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+          "exists": true
         },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-04T14:20:17.429834+00:00"
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-07-04T14:20:17.429869+00:00"
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
-                "status": "ready",
+                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
-                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pass",
-                  "reviewer": "agent_visual_review",
                   "reason": "expression anchor finalized from reference_group.expressions",
                   "reviewed_at": "2026-07-06T08:58:05.820075+00:00",
-                  "reviewed_by": "image_qc --finalize-expr"
+                  "reviewed_by": "image_qc --finalize-expr",
+                  "reviewer": "agent_visual_review",
+                  "status": "pass"
                 },
-                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
-                "self_check_passed": true
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "self_check_passed": true,
+                "status": "ready"
+              },
+              {
+                "derivation": {
+                  "method": "existing_reference_anchor",
+                  "updated_at": "2026-07-07T05:27:58+00:00"
+                },
+                "emotion": "压迫",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "status": "ready"
+              },
+              {
+                "derivation": {
+                  "method": "existing_reference_anchor",
+                  "updated_at": "2026-07-07T05:27:58+00:00"
+                },
+                "emotion": "克制",
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+                "status": "ready"
               }
-            ]
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                  "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+                "status": "ready"
+              }
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+              },
+              "human_review": {
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-04T14:20:17.429869+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_半身.png",
+              "status": "ready"
+            },
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+                "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+              },
+              "human_review": {
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-04T14:20:17.429834+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -472,7 +535,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "image2image_reference_chain",
           "status": "ready",
           "ready": true,
@@ -482,7 +545,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "image2image_reference_chain",
           "status": "ready",
           "ready": true,
@@ -494,16 +567,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -554,8 +617,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -564,8 +627,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -598,18 +661,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -656,115 +719,115 @@
           "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
-          "path": "",
-          "exists": false
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+          "exists": true
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+          "exists": true
         },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031396+00:00"
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:30.031452+00:00"
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-04T17:13:30.031480+00:00"
-                }
-              }
-            ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                "status": "ready",
+                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
-                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
                 },
                 "emotion": "基础",
                 "human_review": {
-                  "status": "pass",
-                  "reviewer": "agent.visual_review",
                   "reason": "expression anchor finalized from reference_group.expressions",
+                  "reviewed_at": "2026-07-04T17:16:01.069070+00:00",
                   "reviewed_by": "image_qc --finalize-expr",
-                  "reviewed_at": "2026-07-04T17:16:01.069070+00:00"
+                  "reviewer": "agent.visual_review",
+                  "status": "pass"
                 },
-                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
+                "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "status": "ready"
               }
-            ]
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                  "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
+                },
+                "human_review": {
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-04T17:13:30.031480+00:00",
+                  "reviewer": "image_qc.mark_finalized",
+                  "status": "accepted"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+                "status": "ready"
+              }
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
+              },
+              "human_review": {
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031452+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+              "status": "ready"
+            },
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+                "source_sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6"
+              },
+              "human_review": {
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-04T17:13:30.031396+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -788,7 +851,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -798,7 +861,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -810,16 +883,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -870,8 +933,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -880,8 +943,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -914,18 +977,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -962,33 +1025,45 @@
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "",
           "exists": false
         },
+        "hand": {
+          "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+          "exists": true
+        },
         "silhouette": {
           "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
           "exists": true
         },
-        "hand": {
-          "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
-          "exists": false
-        },
         "_extra": {
           "value": {
-            "silhouette": {
-              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
-              "status": "review_pending",
-              "human_review": {
-                "status": "pending",
-                "reason": "Codex text-generated character candidate requires human approval before ready"
-              }
-            },
             "hand": {
+              "derivation": {
+                "crop_box_px": [
+                  19,
+                  836,
+                  470,
+                  1271
+                ],
+                "method": "contact_sheet_crop",
+                "source_path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+                "source_sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+                "updated_at": "2026-07-07T06:13:04+00:00"
+              },
               "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
-              "status": "planned"
+              "status": "ready"
+            },
+            "silhouette": {
+              "human_review": {
+                "reason": "Codex text-generated character candidate requires human approval before ready",
+                "status": "pending"
+              },
+              "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+              "status": "review_pending"
             }
           },
           "exists": true
@@ -998,78 +1073,66 @@
         "silhouette",
         "outfit"
       ],
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "openai": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
-          "ready": false,
-          "binding": "reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "seedream": {
-          "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": false,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1077,61 +1140,51 @@
         "dreamina": {
           "mode": "first_last_frame",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "seedance": {
           "mode": "face_lock",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "veo": {
-          "mode": "reference_controls",
-          "status": "unregistered",
-          "ready": false,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1158,18 +1211,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -1178,20 +1231,7 @@
         "不要高饱和页游光效",
         "不要丢失本角色锚点句"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "image.dreamina:reference_group_assets_missing",
-        "image.kling:reference_group_assets_missing",
-        "image.openai:reference_group_assets_missing",
-        "image.seedream:reference_group_assets_missing",
-        "image.sora:reference_group_assets_missing",
-        "missing_reference:outfit",
-        "video.dreamina:reference_group_assets_missing",
-        "video.kling:reference_group_assets_missing",
-        "video.seedance:reference_group_assets_missing",
-        "video.sora:reference_group_assets_missing",
-        "video.veo:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -1219,41 +1259,53 @@
         },
         "outfit": {
           "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
-          "exists": false
+          "exists": true
         },
         "turnaround": {
           "path": "",
           "exists": false
         },
+        "hand": {
+          "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+          "exists": true
+        },
         "silhouette": {
           "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
           "exists": true
         },
-        "hand": {
-          "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
-          "exists": false
-        },
         "_extra": {
           "value": {
-            "silhouette": {
-              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
-              "status": "review_pending",
-              "human_review": {
-                "status": "pending",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "Codex text-generated character candidate requires human approval before ready",
-                "reviewed_at": "2026-07-04T17:13:51.263312+00:00"
-              }
-            },
             "hand": {
-              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
-              "status": "planned",
+              "derivation": {
+                "crop_box_px": [
+                  0,
+                  752,
+                  395,
+                  1271
+                ],
+                "method": "contact_sheet_crop",
+                "source_path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+                "source_sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+                "updated_at": "2026-07-07T06:13:04+00:00"
+              },
               "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
                 "reason": "shared hand reference passed finalized review",
-                "reviewed_at": "2026-07-04T17:13:51.263419+00:00"
-              }
+                "reviewed_at": "2026-07-04T17:13:51.263419+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+              "status": "ready"
+            },
+            "silhouette": {
+              "human_review": {
+                "reason": "Codex text-generated character candidate requires human approval before ready",
+                "reviewed_at": "2026-07-04T17:13:51.263312+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "pending"
+              },
+              "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+              "status": "review_pending"
             }
           },
           "exists": true
@@ -1263,78 +1315,66 @@
         "silhouette",
         "outfit"
       ],
-      "reference_group_ready": false,
+      "reference_group_ready": true,
       "image_bindings": {
         "codex": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "openai": {
-          "mode": "reference_group",
-          "status": "fallback_reference_group",
-          "ready": false,
-          "binding": "reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "seedream": {
-          "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": false,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
+          "mode": "reference_group",
+          "status": "fallback_reference_group",
+          "ready": true,
+          "binding": "reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "seedream": {
+          "mode": "universal_reference",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1342,61 +1382,51 @@
         "dreamina": {
           "mode": "first_last_frame",
           "status": "fallback_reference_group",
-          "ready": false,
+          "ready": true,
           "binding": "reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "kling": {
           "mode": "character_id",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "seedance": {
           "mode": "face_lock",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
-          "recommendations": []
-        },
-        "veo": {
-          "mode": "reference_controls",
-          "status": "unregistered",
-          "ready": false,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
           "recommendations": []
         },
         "sora": {
           "mode": "character_cameo",
           "status": "unregistered",
-          "ready": false,
+          "ready": true,
           "binding": "fallback_reference_group",
           "handle": "",
           "needs_action": "",
-          "gaps": [
-            "reference_group_assets_missing"
-          ],
+          "gaps": [],
+          "recommendations": []
+        },
+        "veo": {
+          "mode": "reference_controls",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
           "recommendations": []
         }
       },
@@ -1423,18 +1453,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -1443,20 +1473,7 @@
         "不要高饱和页游光效",
         "不要丢失本角色锚点句"
       ],
-      "gaps": [
-        "image.codex:reference_group_assets_missing",
-        "image.dreamina:reference_group_assets_missing",
-        "image.kling:reference_group_assets_missing",
-        "image.openai:reference_group_assets_missing",
-        "image.seedream:reference_group_assets_missing",
-        "image.sora:reference_group_assets_missing",
-        "missing_reference:outfit",
-        "video.dreamina:reference_group_assets_missing",
-        "video.kling:reference_group_assets_missing",
-        "video.seedance:reference_group_assets_missing",
-        "video.sora:reference_group_assets_missing",
-        "video.veo:reference_group_assets_missing"
-      ],
+      "gaps": [],
       "recommendations": [
         "image: no ready native image subject; for multi-character/cross-episode drift register a subject library / Character Cameo (Seedream Universal Reference / Kling 主体库 / Sora Cameo) — otherwise reference_group fallback stays in effect",
         "video: no ready native identity adapter; high-risk clips should use reference_group fallback or register Character ID/Face Lock/reference controls"
@@ -1490,140 +1507,140 @@
           "path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
-          "path": "",
-          "exists": false
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+          "exists": true
+        },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+          "exists": true
         },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "turnaround_split",
-                "source_path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
-                "source_sha256": "53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57",
-                "crop_box": [
-                  249,
-                  0,
-                  456,
-                  1672
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-06T07:27:56+00:00"
-              },
-              "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared three_quarter reference passed finalized review",
-                "reviewed_at": "2026-07-06T07:22:09.209357+00:00"
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
-                "source_sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
-                "crop_box": [
-                  322,
-                  359,
-                  618,
-                  879
-                ],
-                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                "generated_at": "2026-07-06T07:27:56+00:00"
-              },
-              "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
-              "dimensions": {
-                "width": 941,
-                "height": 1672
-              },
-              "human_review": {
-                "status": "accepted",
-                "reviewer": "image_qc.mark_finalized",
-                "reason": "shared half_body reference passed finalized review",
-                "reviewed_at": "2026-07-06T07:22:09.209400+00:00"
-              }
-            },
-            "face_anchor_refs": [
+            "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
-                "status": "ready",
                 "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
-                  "source_sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+                  "source_sha256": "prompt-stage-source-pending"
+                },
+                "dimensions": {
+                  "height": 1672,
+                  "width": 941
+                },
+                "emotion": "基础",
+                "human_review": {
+                  "reason": "shared expressions[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-06T07:22:09.209430+00:00",
+                  "reviewer": "image_qc.mark_finalized",
+                  "status": "accepted"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "sha256": "b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f",
+                "status": "ready"
+              }
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
                   "crop_box": [
                     309,
                     359,
                     631,
                     654
                   ],
+                  "generated_at": "2026-07-06T07:27:57+00:00",
                   "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
-                  "generated_at": "2026-07-06T07:27:57+00:00"
-                },
-                "label": "CHAR_05/常态 同源脸锚",
-                "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
-                "dimensions": {
-                  "width": 941,
-                  "height": 1672
-                },
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-06T07:22:09.209419+00:00"
-                }
-              }
-            ],
-            "expressions": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
-                "status": "ready",
-                "derivation": {
                   "method": "front_crop",
                   "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
-                  "source_sha256": "prompt-stage-source-pending",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
+                  "source_sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a"
                 },
-                "emotion": "基础",
-                "human_review": {
-                  "status": "accepted",
-                  "reviewer": "image_qc.mark_finalized",
-                  "reason": "shared expressions[0] reference passed finalized review",
-                  "reviewed_at": "2026-07-06T07:22:09.209430+00:00"
-                },
-                "sha256": "b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f",
                 "dimensions": {
-                  "width": 941,
-                  "height": 1672
-                }
+                  "height": 1672,
+                  "width": 941
+                },
+                "human_review": {
+                  "reason": "shared face_anchor_refs[0] reference passed finalized review",
+                  "reviewed_at": "2026-07-06T07:22:09.209419+00:00",
+                  "reviewer": "image_qc.mark_finalized",
+                  "status": "accepted"
+                },
+                "label": "CHAR_05/常态 同源脸锚",
+                "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+                "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
+                "status": "ready"
               }
-            ]
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  322,
+                  359,
+                  618,
+                  879
+                ],
+                "generated_at": "2026-07-06T07:27:56+00:00",
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+                "source_sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a"
+              },
+              "dimensions": {
+                "height": 1672,
+                "width": 941
+              },
+              "human_review": {
+                "reason": "shared half_body reference passed finalized review",
+                "reviewed_at": "2026-07-06T07:22:09.209400+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+              "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+              "status": "ready"
+            },
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  249,
+                  0,
+                  456,
+                  1672
+                ],
+                "generated_at": "2026-07-06T07:27:56+00:00",
+                "generated_by": "skills/n2d-image/scripts/derive_makeup_pack.py",
+                "method": "turnaround_split",
+                "source_path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
+                "source_sha256": "53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57"
+              },
+              "dimensions": {
+                "height": 1672,
+                "width": 941
+              },
+              "human_review": {
+                "reason": "shared three_quarter reference passed finalized review",
+                "reviewed_at": "2026-07-06T07:22:09.209357+00:00",
+                "reviewer": "image_qc.mark_finalized",
+                "status": "accepted"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+              "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -1647,7 +1664,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -1657,7 +1674,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -1669,16 +1696,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -1729,8 +1746,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -1739,8 +1756,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -1773,18 +1790,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -1830,105 +1847,121 @@
           "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+          "exists": true
+        },
+        "legacy_refs": {
           "path": "",
           "exists": false
         },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+          "exists": true
+        },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-                "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-                "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
                 },
-                "emotion": "克制"
+                "emotion": "克制",
+                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png",
+                "status": "ready"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
-                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
                 },
-                "emotion": "震动"
+                "emotion": "震动",
+                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png",
+                "status": "ready"
               }
-            ]
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                  "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png",
+                "status": "ready"
+              }
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png",
+              "status": "ready"
+            },
+            "legacy_refs": [
+              {
+                "derivation": {
+                  "canonical_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                  "method": "existing_reference_alias",
+                  "sha256": "01f0757f41a95c47fca667f611ccef0b977ddfd46a241f3d3ab3135dcd638b29",
+                  "updated_at": "2026-07-07T06:13:04+00:00"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态.png",
+                "status": "ready"
+              }
+            ],
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+                "source_sha256": "727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -1952,7 +1985,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -1962,7 +1995,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -1974,16 +2017,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2034,8 +2067,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2044,8 +2077,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2078,18 +2111,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [
@@ -2133,105 +2166,121 @@
           "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
           "exists": true
         },
-        "three_quarter": {
-          "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
-          "exists": true
-        },
-        "half_body": {
-          "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
-          "exists": true
+        "expressions": {
+          "path": "",
+          "exists": false
         },
         "face_anchor_refs": {
           "path": "",
           "exists": false
         },
-        "expressions": {
+        "half_body": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+          "exists": true
+        },
+        "legacy_refs": {
           "path": "",
           "exists": false
         },
+        "three_quarter": {
+          "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+          "exists": true
+        },
         "_extra": {
           "value": {
-            "three_quarter": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
-              "status": "ready",
-              "derivation": {
-                "method": "controlled_multiref_generation",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "half_body": {
-              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
-              "status": "ready",
-              "derivation": {
-                "method": "front_crop",
-                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
-                "crop_box": [
-                  0,
-                  0,
-                  1,
-                  1
-                ]
-              }
-            },
-            "face_anchor_refs": [
-              {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
-                "status": "ready",
-                "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
-                  "crop_box": [
-                    0,
-                    0,
-                    1,
-                    1
-                  ]
-                }
-              }
-            ],
             "expressions": [
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
                 },
-                "emotion": "克制"
+                "emotion": "克制",
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png",
+                "status": "ready"
               },
               {
-                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
-                "status": "ready",
                 "derivation": {
-                  "method": "front_crop",
-                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
-                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40",
                   "crop_box": [
                     0,
                     0,
                     1,
                     1
-                  ]
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
                 },
-                "emotion": "震动"
+                "emotion": "震动",
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png",
+                "status": "ready"
               }
-            ]
+            ],
+            "face_anchor_refs": [
+              {
+                "derivation": {
+                  "crop_box": [
+                    0,
+                    0,
+                    1,
+                    1
+                  ],
+                  "method": "front_crop",
+                  "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png",
+                "status": "ready"
+              }
+            ],
+            "half_body": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "front_crop",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png",
+              "status": "ready"
+            },
+            "legacy_refs": [
+              {
+                "derivation": {
+                  "canonical_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                  "method": "existing_reference_alias",
+                  "sha256": "f1089a30460ff6865bda78a246562447ae877058c75abd15c21c27c60243742d",
+                  "updated_at": "2026-07-07T06:13:04+00:00"
+                },
+                "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态.png",
+                "status": "ready"
+              }
+            ],
+            "three_quarter": {
+              "derivation": {
+                "crop_box": [
+                  0,
+                  0,
+                  1,
+                  1
+                ],
+                "method": "controlled_multiref_generation",
+                "source_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+                "source_sha256": "380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40"
+              },
+              "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png",
+              "status": "ready"
+            }
           },
           "exists": true
         }
@@ -2255,7 +2304,7 @@
           "gaps": [],
           "recommendations": []
         },
-        "openai": {
+        "dreamina": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -2265,7 +2314,17 @@
           "gaps": [],
           "recommendations": []
         },
-        "dreamina": {
+        "kling": {
+          "mode": "character_id",
+          "status": "unregistered",
+          "ready": true,
+          "binding": "fallback_reference_group",
+          "handle": "",
+          "needs_action": "",
+          "gaps": [],
+          "recommendations": []
+        },
+        "openai": {
           "mode": "reference_group",
           "status": "fallback_reference_group",
           "ready": true,
@@ -2277,16 +2336,6 @@
         },
         "seedream": {
           "mode": "universal_reference",
-          "status": "unregistered",
-          "ready": true,
-          "binding": "fallback_reference_group",
-          "handle": "",
-          "needs_action": "",
-          "gaps": [],
-          "recommendations": []
-        },
-        "kling": {
-          "mode": "character_id",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2337,8 +2386,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "veo": {
-          "mode": "reference_controls",
+        "sora": {
+          "mode": "character_cameo",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2347,8 +2396,8 @@
           "gaps": [],
           "recommendations": []
         },
-        "sora": {
-          "mode": "character_cameo",
+        "veo": {
+          "mode": "reference_controls",
           "status": "unregistered",
           "ready": true,
           "binding": "fallback_reference_group",
@@ -2381,18 +2430,18 @@
           "MS",
           "shot_reverse"
         ],
+        "requires_extra_reference": [
+          "ECU",
+          "大表情",
+          "背光暗部",
+          "多人同框近景"
+        ],
         "risky": [
           "deep_shadow",
           "face_too_small",
           "extreme_top",
           "extreme_low",
           "strong_vfx_over_face"
-        ],
-        "requires_extra_reference": [
-          "ECU",
-          "大表情",
-          "背光暗部",
-          "多人同框近景"
         ]
       },
       "drift_forbidden": [

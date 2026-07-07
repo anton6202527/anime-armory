@@ -1,36 +1,29 @@
 # 漫画一致性报告 — 第1话
 
-- 生成时间：2026-07-06T23:05:47
+- 生成时间：2026-07-07T12:57:16
 - reference 总数：1
 - 缺失 reference：0
 - 需要重抽格：0
-
-## 人物多视图缺口
-
-| character | missing views |
-|---|---|
-| CHAR_FEMALE_LEAD | front, three_quarter, side, back, face |
-| CHAR_HE_PINGSHENG | front, three_quarter, side, back, face |
 
 ## 每格状态
 
 | panel | status | refs | missing | generated_with_refs |
 |---|---|---:|---|---:|
-| P001 | planned | 1 | - | 0 |
-| P002 | planned | 1 | - | 0 |
-| P003 | planned | 1 | - | 0 |
-| P004 | planned | 1 | - | 0 |
-| P005 | planned | 1 | - | 0 |
-| P006 | planned | 1 | - | 0 |
-| P007 | planned | 1 | - | 0 |
-| P008 | planned | 1 | - | 0 |
-| P009 | planned | 1 | - | 0 |
-| P010 | planned | 1 | - | 0 |
-| P011 | planned | 1 | - | 0 |
-| P012 | planned | 1 | - | 0 |
-| P013 | planned | 1 | - | 0 |
-| P014 | planned | 1 | - | 0 |
-| P015 | planned | 1 | - | 0 |
-| P016 | planned | 0 | - | 0 |
-| P017 | planned | 1 | - | 0 |
-| P018 | planned | 1 | - | 0 |
+| P001 | ready | 1 | - | 1 |
+| P002 | ready | 1 | - | 1 |
+| P003 | ready | 1 | - | 1 |
+| P004 | ready | 1 | - | 1 |
+| P005 | ready | 1 | - | 1 |
+| P006 | ready | 1 | - | 1 |
+| P007 | ready | 4 | - | 4 |
+| P008 | ready | 1 | - | 1 |
+| P009 | ready | 4 | - | 4 |
+| P010 | ready | 1 | - | 1 |
+| P011 | ready | 1 | - | 1 |
+| P012 | ready | 4 | - | 4 |
+| P013 | ready | 1 | - | 1 |
+| P014 | ready | 4 | - | 4 |
+| P015 | ready | 4 | - | 4 |
+| P016 | ready | 4 | - | 4 |
+| P017 | ready | 4 | - | 4 |
+| P018 | ready | 4 | - | 4 |

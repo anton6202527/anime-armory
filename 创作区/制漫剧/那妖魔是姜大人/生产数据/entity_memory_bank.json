@@ -1,0 +1,231 @@
+{
+  "entries": [
+    {
+      "accepted": true,
+      "entity_id": "CHAR_01",
+      "media_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP01",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_01/囚犯初醒态",
+      "media_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP01",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_01/百妖谱能力触发态",
+      "media_path": "出图/第1集/图片/Clip07_first.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP07",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_01__",
+      "media_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP01",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_02",
+      "media_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP03",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_02/濒死战损态",
+      "media_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP03",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_02/被刺承接态",
+      "media_path": "出图/第1集/图片/Clip10_first.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP10",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_02__",
+      "media_path": "出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP03",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_03",
+      "media_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP05",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_03/复苏态",
+      "media_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP05",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "CHAR_03__",
+      "media_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP05",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "LOC_01",
+      "media_path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP01",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "LOC_01 荒野尸骸战场",
+      "media_path": "出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP01",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "VFX_系统面板",
+      "media_path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP07",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "VFX_虎山神摹影",
+      "media_path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP05",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    },
+    {
+      "accepted": true,
+      "entity_id": "WEAPON_01",
+      "media_path": "出图/共享/图片/定妆_武器_横刀.png",
+      "qc_verdict": "pass",
+      "reference_plan": "本集生成前参考/后续集检索基线；重型 embedding 未跑时作为人工验收记忆。",
+      "reliability": 0.86,
+      "retrieved_for": [
+        "第1集"
+      ],
+      "source_clip": "EP01_CLIP03",
+      "source_episode": "第1集",
+      "used_for_generation": true
+    }
+  ],
+  "kind": "n2d_entity_memory_bank",
+  "updated_at": "2026-07-07T05:24:37+00:00",
+  "version": 1
+}

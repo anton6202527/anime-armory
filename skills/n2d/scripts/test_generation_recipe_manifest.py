@@ -92,3 +92,29 @@ def test_generation_recipe_manifest_write_check_and_hash(tmp_path: Path) -> None
     result = generation_recipe_manifest.check_manifest(tmp_path, episode)
     assert result["status"] == "fail"
     assert any("sha256 mismatch" in item for item in result["issues"])
+
+
+def test_generation_recipe_manifest_recovers_moved_project_asset_paths(tmp_path: Path) -> None:
+    root = tmp_path / "移动项目样例"
+    episode = "第1集"
+    mp4 = root / "出视频" / episode / "视频" / "Clip_02_part1.mp4"
+    mp4.parent.mkdir(parents=True)
+    mp4.write_bytes(b"mp4")
+    old_absolute = (
+        "/Users/old/archive/workspace/移动项目样例/"
+        f"出视频/{episode}/视频/Clip_02_part1.mp4"
+    )
+    prefixed_relative = f"archive/workspace/移动项目样例/出视频/{episode}/视频/Clip_02_part1.mp4"
+
+    assert generation_recipe_manifest.event_asset_rel(root, _event(episode, "video", old_absolute)) == (
+        f"出视频/{episode}/视频/Clip_02_part1.mp4"
+    )
+    assert generation_recipe_manifest.event_asset_rel(root, _event(episode, "video", prefixed_relative)) == (
+        f"出视频/{episode}/视频/Clip_02_part1.mp4"
+    )
+
+    _write_events(root, [_event(episode, "video", old_absolute)])
+
+    payload = generation_recipe_manifest.build_manifest(root, episode)
+
+    assert payload["status"] == "pass"

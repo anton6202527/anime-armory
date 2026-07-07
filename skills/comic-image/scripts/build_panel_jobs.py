@@ -6,8 +6,48 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+try:
+    from image_backend_adapter import ImageBackendCapabilities, resolve_capabilities
+except Exception:  # pragma: no cover - keep job building usable in partially-copied skill folders
+    ImageBackendCapabilities = Any  # type: ignore
+    resolve_capabilities = None  # type: ignore
+
+
+PRESERVE_GENERATION_KEYS = {
+    "status",
+    "result_path",
+    "source",
+    "model",
+    "generated_at",
+    "backend_version",
+    "artifact_sha256",
+    "attempt",
+    "reference_input_mode",
+    "reference_input_count",
+    "reference_manifest",
+    "post_qc",
+    "last_error",
+}
+LEGACY_MAX_REFERENCE_IMAGES_PER_JOB = 6
+LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT = 4
+LEGACY_MULTI_CHARACTER_REFERENCE_LIMIT = 2
+REFERENCE_VIEW_PRIORITY = {
+    "anchor_path": 0,
+    "anchor": 0,
+    "primary_path": 0,
+    "face": 1,
+    "front": 2,
+    "three_quarter": 3,
+    "side": 4,
+    "back": 5,
+}
 
 
 def load_json(path: Path) -> dict:
@@ -44,34 +84,41 @@ def path_relative_to_root(root: Path, path: Path) -> str:
         return str(path)
 
 
-def resolve_reference_path(root: Path, ref_id: str, registry: dict) -> str:
+def resolve_reference_paths(root: Path, ref_id: str, registry: dict) -> list[dict[str, str]]:
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     asset = assets.get(ref_id) if isinstance(assets, dict) else None
-    candidates: list[Path] = []
+    candidates: list[tuple[str, Path]] = []
     if isinstance(asset, dict):
         for key in ("anchor_path", "primary_path", "path"):
             raw = asset.get(key)
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                candidates.append((key, path if path.is_absolute() else root / path))
         views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
         for key in ("front", "three_quarter", "face", "side", "back"):
             raw = views.get(key) if isinstance(views, dict) else ""
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                candidates.append((key, path if path.is_absolute() else root / path))
         for item in asset.get("reference_images") or []:
             raw = item.get("path") if isinstance(item, dict) else item
             if isinstance(raw, str) and raw.strip():
                 path = Path(raw)
-                candidates.append(path if path.is_absolute() else root / path)
+                role = str(item.get("view") or item.get("role") or "reference_image") if isinstance(item, dict) else "reference_image"
+                candidates.append((role, path if path.is_absolute() else root / path))
     shared = root / "出图" / "共享" / "图片"
     for suffix in ("__anchor.png", ".png", ".jpg", ".jpeg", ".webp"):
-        candidates.append(shared / f"{ref_id}{suffix}")
-    for path in candidates:
+        candidates.append(("anchor", shared / f"{ref_id}{suffix}"))
+    out: list[dict[str, str]] = []
+    seen: set[Path] = set()
+    for role, path in candidates:
         if path.is_file():
-            return path_relative_to_root(root, path)
-    return ""
+            resolved = path.resolve()
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            out.append({"id": ref_id, "path": path_relative_to_root(root, path), "view": role})
+    return out
 
 
 def compact_metadata(value: Any, *, max_len: int = 460) -> str:
@@ -102,12 +149,14 @@ def asset_contract(ref_id: str, asset: dict[str, Any]) -> str:
     for key, title in (
         ("character_dna", "角色DNA"),
         ("dna_contract", "定妆契约"),
+        ("prop_contract", "道具契约"),
         ("variant_policy", "年龄/形态继承"),
         ("forbidden_inheritance", "禁继承"),
         ("style_contract", "风格契约"),
         ("notes", "备注"),
     ):
-        text = compact_metadata(asset.get(key))
+        limit = 300 if key in {"character_dna", "prop_contract"} else 180
+        text = compact_metadata(asset.get(key), max_len=limit)
         if text:
             parts.append(f"{title}:{text}")
     age_variants = asset.get("age_variants")
@@ -120,16 +169,10 @@ def asset_contract(ref_id: str, asset: dict[str, Any]) -> str:
 
 def registry_style_contract(registry: dict) -> str:
     parts: list[str] = []
-    for key in ("style_contract", "consistency_policy", "forbidden_inheritance"):
-        text = compact_metadata(registry.get(key), max_len=620)
+    for key, limit in (("style_contract", 360), ("consistency_policy", 260), ("forbidden_inheritance", 160)):
+        text = compact_metadata(registry.get(key), max_len=limit)
         if text:
             parts.append(f"{key}:{text}")
-    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
-    for ref_id, asset in sorted(assets.items()):
-        if not isinstance(asset, dict):
-            continue
-        if ref_id.startswith("STYLE_") or str(asset.get("type") or "").lower() == "style":
-            parts.append(asset_contract(ref_id, asset))
     return "；".join(parts)
 
 
@@ -141,6 +184,73 @@ def panel_reference_ids(panel: dict) -> list[str]:
             if ref_id and ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")) and ref_id not in ids:
                 ids.append(ref_id)
     return ids
+
+
+def reference_priority(item: dict[str, str]) -> tuple[int, str]:
+    view = str(item.get("view") or "")
+    return (REFERENCE_VIEW_PRIORITY.get(view, 99), str(item.get("path") or ""))
+
+
+def ref_kind(ref_id: str) -> str:
+    if ref_id.startswith("CHAR_") or ref_id.startswith("MON_"):
+        return "character"
+    if ref_id.startswith("STYLE_"):
+        return "style"
+    return "asset"
+
+
+def _cap_value(caps: Any, name: str, default: int) -> int:
+    try:
+        value = int(getattr(caps, name))
+    except Exception:
+        return default
+    return max(0, value)
+
+
+def panel_references(root: Path, panel: dict, registry: dict, caps: Any) -> list[dict[str, str]]:
+    grouped: dict[str, list[dict[str, str]]] = {}
+    for ref_id in panel_reference_ids(panel):
+        resolved = resolve_reference_paths(root, str(ref_id), registry) or [{"id": str(ref_id), "path": ""}]
+        grouped[ref_id] = sorted(resolved, key=reference_priority)
+
+    character_ids = [ref_id for ref_id in grouped if ref_id.startswith("CHAR_")]
+    char_limit = (
+        _cap_value(caps, "single_character_reference_limit", LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT)
+        if len(character_ids) <= 1
+        else _cap_value(caps, "multi_character_reference_limit", LEGACY_MULTI_CHARACTER_REFERENCE_LIMIT)
+    )
+    non_character_limit = _cap_value(caps, "non_character_reference_limit", 1)
+    style_limit = _cap_value(caps, "style_reference_limit", 1)
+    max_refs = _cap_value(caps, "reference_image_limit", LEGACY_MAX_REFERENCE_IMAGES_PER_JOB)
+    selected: list[dict[str, str]] = []
+    deferred_groups: list[list[dict[str, str]]] = []
+    for ref_id, refs in grouped.items():
+        kind = ref_kind(ref_id)
+        if kind == "character":
+            limit = char_limit
+        elif kind == "style":
+            limit = style_limit
+        else:
+            limit = non_character_limit
+        selected.extend(refs[:limit])
+        if refs[limit:]:
+            deferred_groups.append(list(refs[limit:]))
+
+    while len(selected) < max_refs and any(deferred_groups):
+        progressed = False
+        for refs in deferred_groups:
+            if len(selected) >= max_refs:
+                break
+            if refs:
+                selected.append(refs.pop(0))
+                progressed = True
+        if not progressed:
+            break
+    if len(selected) > max_refs:
+        non_char = [item for item in selected if ref_kind(str(item.get("id") or "")) != "character"]
+        char = [item for item in selected if ref_kind(str(item.get("id") or "")) == "character"]
+        selected = (non_char + char)[:max_refs]
+    return selected
 
 
 def panel_rects(layout: dict) -> dict[str, dict]:
@@ -191,6 +301,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
     rects = panel_rects(layout)
     model = read_setting(root, "生图模型", "自定义")
     channel = read_setting(root, "生图渠道", "manual")
+    caps = resolve_capabilities(model, channel) if resolve_capabilities else None
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     text_language = read_setting(root, "文字语言", "中文")
     registry = load_reference_registry(root)
@@ -206,9 +317,10 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "prompt": build_prompt(panel, style, registry),
                 "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
                 "references": [
-                    {"id": ref, "path": resolve_reference_path(root, str(ref), registry)}
-                    for ref in panel_reference_ids(panel)
+                    item
+                    for item in panel_references(root, panel, registry, caps)
                 ],
+                "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",
                 "source": channel,
             }
@@ -219,9 +331,45 @@ def build_jobs(root: Path, chapter: str) -> dict:
         "chapter": chapter,
         "model": model,
         "channel": channel,
+        "backend_capabilities": caps.to_dict() if caps else {},
         "text_language": text_language,
         "jobs": jobs,
     }
+
+
+def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> int:
+    path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    if not path.is_file():
+        return 0
+    try:
+        existing = load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return 0
+    old_by_id = {
+        str(job.get("panel_id")): job
+        for job in existing.get("jobs", [])
+        if isinstance(job, dict) and job.get("panel_id")
+    }
+    preserved = 0
+    for job in jobs.get("jobs", []):
+        if not isinstance(job, dict):
+            continue
+        old = old_by_id.get(str(job.get("panel_id")))
+        if not old or old.get("status") != "ready":
+            continue
+        result_path = str(old.get("result_path") or "")
+        if not result_path:
+            continue
+        result = Path(result_path)
+        if not result.is_absolute():
+            result = root / result
+        if not result.is_file():
+            continue
+        for key in PRESERVE_GENERATION_KEYS:
+            if key in old:
+                job[key] = old[key]
+        preserved += 1
+    return preserved
 
 
 def write_reference_index(root: Path, chapter: str, jobs: dict) -> None:
@@ -285,13 +433,15 @@ def main() -> int:
 
     root = Path(args.project_root).expanduser().resolve()
     jobs = build_jobs(root, args.chapter)
+    preserved = preserve_ready_jobs(root, args.chapter, jobs)
     out_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(jobs, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     write_reference_index(root, args.chapter, jobs)
     if not args.no_progress:
         update_progress(root, args.chapter, "出图包", "✅")
-    print(f"[ok] {out_path}")
+    suffix = f" preserved_ready={preserved}" if preserved else ""
+    print(f"[ok] {out_path}{suffix}")
     return 0
 
 

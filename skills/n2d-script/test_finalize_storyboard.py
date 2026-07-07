@@ -97,8 +97,13 @@ def test_finalize_syncs_storyboard_clip_durations_from_voiceover_indices(tmp_pat
     sb = json.load(open(sb_p, encoding="utf-8"))
     assert sb["clips"][0]["duration"] == 2.5
     assert sb["clips"][1]["duration"] == 3.0
+    assert sb["clips"][0]["start_sec"] == 0.0
+    assert sb["clips"][0]["end_sec"] == 2.5
+    assert sb["clips"][1]["start_sec"] == 2.5
+    assert sb["clips"][1]["end_sec"] == 5.5
     assert sb["total_duration"] == 5.5
     assert "回填 2 个 Clip duration" in r.stdout
+    assert "Clip start_sec/end_sec 时间轴" in r.stdout
 
 
 def test_finalize_removes_stale_frame_paths_when_continuity_exempts_them(tmp_path):

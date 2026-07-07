@@ -17,16 +17,34 @@ HEAVY_FUNCTIONS = {
     "cliffhanger",
     "chapter_hook",
     "reveal",
+    "major_reveal",
     "public_humiliation",
     "physical_burden",
-    "mystery_glint",
-    "water_source_reveal",
+    "resource_reveal",
+    "resource_transform",
+    "power_surge",
+    "breakthrough",
+    "speed_montage",
 }
 MEDIUM_FUNCTIONS = {
     "compressed_backstory",
     "labor_montage",
     "task_assignment",
     "rules_and_threat",
+    "wash_basin",
+    "morning_canteen",
+    "breakfast_reward",
+    "zhang_visit",
+    "rice_allocation",
+    "night_water_finish",
+    "secret_hide",
+    "raw_resource_use",
+    "concealment_strategy",
+    "task_speedup",
+    "self_restraint",
+    "warning",
+    "resource_allocation",
+    "strategy_choice",
 }
 COMPACT_FUNCTIONS = {
     "reaction",
@@ -40,11 +58,59 @@ COMPACT_FUNCTIONS = {
     "proactive_choice",
     "night_fifth_trip",
     "approach_basin",
+    "sleep_transition",
+    "spoilage_question",
+    "spoilage_decision",
+    "night_worry",
+    "door_knock",
+    "empty_room_choice",
+    "wake_smell",
+    "not_a_dream",
+    "check_lock",
+    "breakfast_warning",
+    "sensory_change",
 }
 
-HEAVY_TOKENS = ("opening", "hook", "cliffhanger", "reveal", "peak", "turning", "humiliation", "burden", "glint", "source")
-MEDIUM_TOKENS = ("montage", "assignment", "threat", "scale", "backstory")
-COMPACT_TOKENS = ("reaction", "transition", "setup", "question", "leave", "empty", "approach")
+HEAVY_TOKENS = (
+    "opening",
+    "hook",
+    "cliffhanger",
+    "reveal",
+    "peak",
+    "turning",
+    "humiliation",
+    "burden",
+    "glint",
+    "source",
+    "energy",
+    "power",
+    "surge",
+    "breakthrough",
+    "resource",
+    "transform",
+    "upgrade",
+    "speed",
+    "shortfall",
+)
+MEDIUM_TOKENS = (
+    "montage",
+    "assignment",
+    "threat",
+    "scale",
+    "backstory",
+    "canteen",
+    "allocation",
+    "visit",
+    "hide",
+    "conceal",
+    "restraint",
+    "strategy",
+    "warning",
+    "choice",
+    "raw",
+    "task",
+)
+COMPACT_TOKENS = ("reaction", "transition", "setup", "question", "leave", "empty", "approach", "worry", "knock", "smell", "lock")
 
 
 def load_json(path: Path) -> dict:
@@ -79,6 +145,27 @@ def parse_max_segment_height(value: str, default: int = 0) -> int:
     return int(match.group(0)) if match else default
 
 
+def explicit_layout_weight(panel: dict) -> str:
+    for key in ("layout_weight", "visual_weight", "importance"):
+        raw = str(panel.get(key) or "").strip().lower()
+        if not raw:
+            continue
+        if raw in {"heavy", "large", "big", "重点", "大格", "强", "高"}:
+            return "heavy"
+        if raw in {"medium", "normal", "标准", "中"}:
+            return "medium"
+        if raw in {"compact", "small", "轻", "低", "小格"}:
+            return "compact"
+        if raw.isdigit():
+            value = int(raw)
+            if value >= 3:
+                return "heavy"
+            if value <= 1:
+                return "compact"
+            return "medium"
+    return ""
+
+
 def panel_height(panel: dict) -> int:
     fn = str(panel.get("story_function", "")).strip()
     dialogue_count = len(panel.get("dialogue") or [])
@@ -88,11 +175,12 @@ def panel_height(panel: dict) -> int:
     notes = str(panel.get("art_notes") or "")
     description = str(panel.get("description") or "")
     wants_big = any(token in notes or token in description for token in ("大格", "重点", "钩子", "压迫", "奇观"))
-    if fn in HEAVY_FUNCTIONS or any(token in lowered for token in HEAVY_TOKENS) or wants_big:
+    explicit = explicit_layout_weight(panel)
+    if explicit == "heavy" or fn in HEAVY_FUNCTIONS or any(token in lowered for token in HEAVY_TOKENS) or wants_big:
         base = 960
-    elif fn in MEDIUM_FUNCTIONS or any(token in lowered for token in MEDIUM_TOKENS):
+    elif explicit == "medium" or fn in MEDIUM_FUNCTIONS or any(token in lowered for token in MEDIUM_TOKENS):
         base = 840
-    elif fn in COMPACT_FUNCTIONS:
+    elif explicit == "compact" or fn in COMPACT_FUNCTIONS:
         base = 620
     elif any(token in lowered for token in COMPACT_TOKENS):
         base = 680

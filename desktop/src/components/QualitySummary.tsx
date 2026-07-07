@@ -32,7 +32,13 @@ export function QualitySummaryStrip({ summary }: { summary?: CanvasQualitySummar
   );
 }
 
-export function ReviewPane({ summary }: { summary?: CanvasQualitySummary | null }) {
+export function ReviewPane({
+  summary,
+  embedded = false,
+}: {
+  summary?: CanvasQualitySummary | null;
+  embedded?: boolean;
+}) {
   const { t } = useI18n();
   const topDimensions = useMemo(
     () => (summary?.dimensions ?? []).slice(0, 18),
@@ -45,7 +51,7 @@ export function ReviewPane({ summary }: { summary?: CanvasQualitySummary | null 
 
   const tone = scoreTone(summary.score, summary.blocks, summary.warnings);
   return (
-    <div className="review-pane">
+    <div className={embedded ? "review-pane embedded" : "review-pane"}>
       <div className="review-hero">
         <div className={"review-total " + tone}>
           <span>{t("review.totalScore")}</span>

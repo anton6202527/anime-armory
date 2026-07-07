@@ -1,0 +1,36 @@
+{
+  "brand_visual": {
+    "motifs": [
+      "百妖谱金色古卷",
+      "冷灰尸场",
+      "镇魔司赤纹黑衣"
+    ],
+    "palette": "cold gray + warm gold accent"
+  },
+  "cover": {
+    "avoid": "夸张营销大字遮脸",
+    "template": "姜月初冷灰近景 + 暖金百妖谱边光 + 右侧短标题"
+  },
+  "episode_card": {
+    "duration_sec": 0,
+    "format": "第N集 + 本集钩子短句",
+    "policy": "平台封面/外部包装，不插入当前成片时间线"
+  },
+  "intro": "无片头，首屏直接冷开场；平台包装在封面/标题承载。",
+  "kind": "n2d_series_packaging",
+  "outro": "第1集硬断留白，不追加片尾；批量发布时片尾 CTA 另行合成发行版。",
+  "platform_specs": {
+    "internal_preview": "1080x1920 mp4 h264/aac",
+    "public_release": "按目标平台另行导出；公开前补 AI 显式角标发行母版"
+  },
+  "subtitle_style": {
+    "color": "#F6F0E6",
+    "font": "PingFang SC / Noto Sans CJK",
+    "outline": "#141414 65%",
+    "safe_area": "9:16 bottom 12% / 16:9 bottom 8%"
+  },
+  "title_treatment": "片名/集名使用冷灰底+暖金小标题；不在正片内新增大字卡，短视频封面单独生成。",
+  "transition_sfx": "短促低频 whoosh / 金属擦声，只在切集/爽点处使用；内部预览可静音占位。",
+  "updated_at": "2026-07-07T05:24:37+00:00",
+  "version": 1
+}

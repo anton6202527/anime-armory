@@ -87,6 +87,7 @@ from n2d_contract import (  # noqa: E402
     production_mode_keys,
     SPECTACLE_SEQUENCE_PLAN_KIND,
     STYLE_CONTRACT_FIELDS,
+    COMPACT_NARRATIVE_TEMPLATE_FIELDS,
     SPECTACLE_TEMPLATE_FIELDS,
     GENERIC_TEMPLATE_VALUES,
     VIDEO_MODEL_ROUTES_KIND,
@@ -297,6 +298,7 @@ def _default_root_cause(dim: str, msg: str = "", loc: str = "") -> Dict[str, str
 
 SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     **SPECTACLE_TEMPLATE_FIELDS,
+    **COMPACT_NARRATIVE_TEMPLATE_FIELDS,
     "dialogue_shot_reverse": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
         "axis", "eyeline", "shot_pairing",
@@ -573,9 +575,47 @@ def add(sev: str, dim: str, loc: str, msg: str, risk_score: Optional[float] = No
 # 把"满档 vs 凭 waiver 交付"变成 gate 输出里的可查字段（与 image runner 的 record_waiver 互补——
 # 那条管 --skip-* 显式跳闸，这条管 N2D_ALLOW_DEGRADED_QC 缺依赖降级放行）。
 _DEGRADED_QC_WAIVERS: List[Dict[str, str]] = []
-def degraded_qc_active() -> bool:
-    """N2D_ALLOW_DEGRADED_QC=1 逃生口是否开启（缺依赖时显式自负其责放行）。单一判定入口。"""
-    return os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+def degraded_qc_mode(root: str = "") -> str:
+    """Return the active degraded-QC waiver mode, if any.
+
+    `N2D_ALLOW_DEGRADED_QC=1` remains the universal explicit escape hatch. For
+    self-use projects, the same intent can be persisted in project settings so a
+    review rerun does not depend on remembering a shell env var.
+    """
+    if os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1":
+        return "env"
+    if not root:
+        return ""
+    try:
+        profile = consistency_release_profile(root)
+    except Exception:
+        profile = "demo"
+    if profile != "demo":
+        return ""
+    intents = [v.lower() for v in _settings_values(root, ("合规用途", "distribution_intent"))]
+    try:
+        data = load_json(compliance_manifest_path(root))
+        if isinstance(data, dict):
+            intents.append(_status(data.get("distribution_intent")).lower())
+    except Exception:
+        pass
+    if any(v in COMPLIANCE_INTERNAL_DISTRIBUTION_INTENTS for v in intents):
+        return "project_internal_demo"
+    return ""
+
+
+def degraded_qc_active(root: str = "") -> bool:
+    """Whether degraded heavy-QC evidence is explicitly accepted for this run."""
+    return bool(degraded_qc_mode(root))
+
+
+def degraded_qc_waiver_label(root: str = "") -> str:
+    mode = degraded_qc_mode(root)
+    if mode == "project_internal_demo":
+        return "项目设置 internal_only + demo"
+    if mode == "env":
+        return "N2D_ALLOW_DEGRADED_QC=1"
+    return "未开启"
 def note_degraded_qc_waiver(dim: str, ep: str, loc: str, reason: str) -> None:
     """单一计数 chokepoint：登记一条因 N2D_ALLOW_DEGRADED_QC 把一致性 BLOCK 降级放行的 waiver。
     各降级点照常 add(WARN, …) 出人类可读 note；额外调本函数把它计入账本（结构化·可查）。"""
@@ -850,9 +890,30 @@ def episode_registry_reference_ids(root: str, ep: str) -> Tuple[set, set]:
     """
     text = "\n".join(_episode_reference_texts(root, ep))
     char_refs = episode_registry_identity_refs(root, ep, text=text)
-    _reg_chars, reg_assets = _registered_registry_ids(root)
+    reg_chars, reg_assets = _registered_registry_ids(root)
+    char_refs = {_normalize_registered_character_marker(ref, reg_chars) for ref in char_refs}
     asset_refs = {_normalize_registered_asset_marker(ref, reg_assets) for ref in ASSET_ID_RE.findall(text)}
     return {ref.split("/", 1)[0] for ref in char_refs}, asset_refs
+
+
+def _normalize_registered_character_marker(ref: str, registered_chars: set) -> str:
+    token = str(ref or "").strip().rstrip("*")
+    if not token:
+        return token
+    if "/" in token:
+        base, form = token.split("/", 1)
+        normalized_base = _normalize_registered_character_marker(base, registered_chars)
+        return f"{normalized_base}/{form}" if form else normalized_base
+    if token in registered_chars:
+        return token
+    if token.endswith("_partial"):
+        base = token[: -len("_partial")]
+        if base in registered_chars:
+            return base
+    m = re.match(r"^(.+)_\d{1,3}$", token)
+    if m and m.group(1) in registered_chars:
+        return m.group(1)
+    return token
 
 
 def _normalize_registered_asset_marker(ref: str, registered_assets: set) -> str:
@@ -951,12 +1012,35 @@ def _production_events_path(root: str) -> str:
     return os.path.join(root, "生产数据", "production_events.jsonl")
 def _norm_rel_path(path: str) -> str:
     return os.path.normpath(str(path).strip()).replace(os.sep, "/")
+def _project_local_asset_rel(root: str, asset: object) -> str:
+    raw = str(asset or "").strip()
+    if not raw:
+        return ""
+    root_abs = os.path.abspath(root)
+    if os.path.isabs(raw):
+        try:
+            raw_abs = os.path.abspath(raw)
+            if os.path.commonpath([root_abs, raw_abs]) == root_abs:
+                return os.path.relpath(raw_abs, root_abs).replace(os.sep, "/")
+        except Exception:
+            pass
+    root_name = os.path.basename(root_abs)
+    parts = [p for p in _norm_rel_path(raw).split("/") if p and p != "."]
+    for idx in range(len(parts) - 1, -1, -1):
+        if parts[idx] == root_name:
+            tail = parts[idx + 1:]
+            if tail:
+                return _norm_rel_path("/".join(tail))
+    return _norm_rel_path(raw)
 def _asset_matches(root: str, asset: object, target_rel: str) -> bool:
     if not asset:
         return False
     asset_s = str(asset).strip()
     target_rel_norm = _norm_rel_path(target_rel)
     target_abs = os.path.abspath(target_rel if os.path.isabs(target_rel) else os.path.join(root, target_rel))
+    asset_rel_norm = _project_local_asset_rel(root, asset_s)
+    if asset_rel_norm == target_rel_norm:
+        return True
     if os.path.isabs(asset_s):
         return os.path.abspath(asset_s) == target_abs
     return _norm_rel_path(asset_s) == target_rel_norm or os.path.abspath(os.path.join(root, asset_s)) == target_abs
@@ -1004,12 +1088,7 @@ def _event_asset_rel(root: str, event: Dict[str, Any]) -> Optional[str]:
     raw = str(asset).strip()
     if not raw:
         return None
-    if os.path.isabs(raw):
-        try:
-            return os.path.relpath(os.path.abspath(raw), os.path.abspath(root)).replace(os.sep, "/")
-        except Exception:
-            return raw.replace(os.sep, "/")
-    return _norm_rel_path(raw)
+    return _project_local_asset_rel(root, raw)
 def _is_prohibited_face_patch_event(event: Dict[str, Any]) -> bool:
     generation = _event_generation(event)
     meta = _event_meta(event)
@@ -1114,6 +1193,10 @@ def _recipe_return_stage_for_asset(rel: str) -> str:
     return "image" if rel.lower().endswith(".png") else "video"
 def _recipe_event_missing_fields(event: Mapping[str, Any]) -> List[str]:
     missing = [key for key in RECIPE_REQUIRED_FIELDS if _event_value_any(event, key) in (None, "", [], {})]
+    if str(_event_value_any(event, "stage") or "").strip() == "video":
+        for key in ("route_execution_recipe_hash", "post_video_qc"):
+            if _event_value_any(event, key) in (None, "", [], {}):
+                missing.append(key)
     seed_effective = _event_value_any(event, "seed_effective", "effective_seed")
     if seed_effective in (None, "", [], {}):
         missing.append("seed_effective/effective_seed=false")
@@ -2920,12 +3003,23 @@ def _weapon_profile(asset: Mapping[str, object]) -> Tuple[Mapping[str, object], 
         if isinstance(value, Mapping):
             return value, field
     return {}, ASSET_WEAPON_PROFILE_NAMES[0]
+def _weapon_term_is_negated(blob: str, start: int) -> bool:
+    """Do not promote assets to weapon-like solely from negative/forbidden text."""
+    window = blob[max(0, start - 12):start]
+    return any(token in window for token in ("不要", "不得", "不能", "不应", "不是", "非", "禁止", "避免", "不放大成"))
 def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
     asset_type = str(asset.get("type") or "").strip().lower()
     if asset_type in ASSET_WEAPON_TYPES:
         return True
     if str(asset.get("id") or "").strip().startswith("WEAPON_"):
         return True
+    weapon_like_role = str(asset.get("weapon_like_role") or "").strip().lower()
+    if weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon", "not_weapon", "prop_only"}:
+        return False
+    if asset_type in {"vfx", "effect"} and asset.get("is_entity_weapon") is False:
+        return False
+    if asset_type in {"vfx", "effect"} and weapon_like_role in {"vfx_only", "effect_only", "not_entity_weapon"}:
+        return False
     blob = json.dumps(asset, ensure_ascii=False).lower()
     for term in WEAPON_LIKE_ASSET_TERMS:
         needle = term.lower()
@@ -2933,7 +3027,9 @@ def _is_weapon_like_asset(asset: Mapping[str, object]) -> bool:
             if re.search(rf"(?<![a-z]){re.escape(needle)}(?![a-z])", blob):
                 return True
         elif needle in blob:
-            return True
+            start = blob.find(needle)
+            if not _weapon_term_is_negated(blob, start):
+                return True
     return False
 def _asset_owner_present(asset: Mapping[str, object], profile: Mapping[str, object]) -> bool:
     owner_fields = ("owner", "character_id", "owner_character_id", "bound_character", "signature_owner")
@@ -4057,31 +4153,52 @@ def _sha256_file(path: str) -> Optional[str]:
         return h.hexdigest()
     except Exception:
         return None
-def _form_anchor_relpath(form: Mapping) -> str:
-    """form 的锚点定妆图（front 主参考）项目相对路径；缺 front 时回退第一张可用视图。"""
-    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
-    front = rg.get("front")
-    if isinstance(front, str) and front.strip():
-        return front.strip()
-    if isinstance(front, Mapping):
-        path = str(front.get("path") or "").strip()
+def _reference_node_path(value: Any) -> str:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    if isinstance(value, Mapping):
+        path = str(value.get("path") or "").strip()
         if path:
             return path
-    for v in rg.values():
-        if isinstance(v, str) and v.strip():
-            return v.strip()
-        if isinstance(v, Mapping):
-            path = str(v.get("path") or "").strip()
+    if isinstance(value, list):
+        for item in value:
+            path = _reference_node_path(item)
             if path:
                 return path
-        if isinstance(v, list):
-            for item in v:
-                if isinstance(item, Mapping):
-                    path = str(item.get("path") or "").strip()
-                    if path:
-                        return path
-                if isinstance(item, str) and item.strip():
-                    return item.strip()
+    return ""
+
+
+def _form_anchor_relpath(form: Mapping) -> str:
+    """form 的锚点定妆图项目相对路径；局部群像优先 silhouette 而不是 hand/outfit 片段。"""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    partial_refs = atlas.get("partial_refs") if isinstance(atlas.get("partial_refs"), Mapping) else {}
+    primary_keys = ("front", "primary", "silhouette")
+    secondary_keys = ("three_quarter", "side", "halfbody", "outfit", "hand")
+    for key in primary_keys:
+        path = _reference_node_path(rg.get(key))
+        if path:
+            return path
+    for key in primary_keys:
+        path = _reference_node_path(partial_refs.get(key))
+        if path:
+            return path
+    for key in secondary_keys:
+        path = _reference_node_path(rg.get(key))
+        if path:
+            return path
+    for key in secondary_keys:
+        path = _reference_node_path(partial_refs.get(key))
+        if path:
+            return path
+    for value in rg.values():
+        path = _reference_node_path(value)
+        if path:
+            return path
+    for value in partial_refs.values():
+        path = _reference_node_path(value)
+        if path:
+            return path
     return ""
 # 近景/特写景别标记（脸占画面主体、表情漂移=脸重画最致命的镜）。
 _CLOSEUP_MARKERS = (
@@ -4691,7 +4808,7 @@ def _check_fidelity_gate_active(root: str, ep: str, stage: str) -> None:
         pass
     return_to = "image"
     scope = "回 n2d-image 重出 canonical 不通过的镜"
-    allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+    allow_degraded = degraded_qc_active(root)
     # 铁律 B11（2026-06-27）：终验 fidelity-gate（像素 VLM 脸验证）demo 与 production 同标准——
     # 不随 profile 降级；缺 VLM 后端不再是 demo 静默 WARN 免单，而是 BLOCK，唯一出口是显式留痕
     # N2D_ALLOW_DEGRADED_QC=1（C4 豁免堵死：把"缺依赖默认放行"改成"缺依赖必须显式自负其责"）。
@@ -4701,14 +4818,14 @@ def _check_fidelity_gate_active(root: str, ep: str, stage: str) -> None:
                                     stale_reason or "VLM fidelity-gate 未激活·终验降级放行")
             add(WARN, "fidelity-gate", canonical_path,
                 f"{(stale_reason + '；') if stale_reason else ''}"
-                "终验 fidelity-gate 未激活但 N2D_ALLOW_DEGRADED_QC=1 放行（自负其责·已留痕）；"
+                f"终验 fidelity-gate 未激活但已通过{degraded_qc_waiver_label(root)}放行（自负其责·已留痕）；"
                 "脸一致分数未经 VLM canonical 验证，mechanical pass 不构成角色设定完整验证。",
                 risk_score=0.8)
             return
         msg = (
             "终验须 fidelity-gate 激活——跑 vlm_verify --write 落 canonical 通过表。"
             "缺 VLM 语义判定时，脸(G1)的机械通过不构成角色设定完整验证。"
-            "（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。）"
+            "（无 VLM 后端时装依赖或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 自负其责。）"
         )
         if stale_reason:
             msg = f"{stale_reason}（旧绿不算数·必须对当前图重跑 vlm_verify --write）——{msg}"
@@ -4885,8 +5002,8 @@ def evidence_grade_findings(summary: Mapping[str, Any], stage: str,
             f"{('；本集最弱证据级=' + weakest) if weakest else ''}。")
     delivery = stage in {"compose", "review"}
     if delivery and not allow_waiver:
-        return [(BLOCK, base + "交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 自负其责。")]
-    note = "（已显式 N2D_ALLOW_DEGRADED_QC 放行·自负其责）" if allow_waiver else "（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
+        return [(BLOCK, base + "交付边界不放行——在装好进阶依赖的环境复跑，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 自负其责。")]
+    note = "（已显式降级 QC 放行·自负其责）" if allow_waiver else "（出图/出视频阶段先 WARN，交付边界 compose/review 将 BLOCK）"
     return [(WARN, base + note)]
 def _finding_sort_key(f: dict) -> tuple:
     """Sort key for gate findings: BLOCK → WARN (by risk_score desc) → INFO.
@@ -5112,7 +5229,9 @@ __all__ = [
     'heuristic_demotion_rollup',
     'add',
     '_DEGRADED_QC_WAIVERS',
+    'degraded_qc_mode',
     'degraded_qc_active',
+    'degraded_qc_waiver_label',
     'note_degraded_qc_waiver',
     'consistency_waiver_rollup',
     'CONSISTENCY_RULE_REGISTRY',

@@ -57,9 +57,9 @@
     "anchor_skipped": 0,
     "anchor_warns": 0,
     "seam_blocks": 0,
-    "seam_info": 1,
+    "seam_info": 2,
     "seam_warns": 0,
-    "seams_checked": 1
+    "seams_checked": 2
   },
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "seams": [
@@ -71,6 +71,18 @@
       "strictness": "info",
       "struct_verdict": "warn",
       "to_clip": "Clip_02",
+      "transition": "match_cut",
+      "verdict": "info",
+      "verdict_if_relay": "warn"
+    },
+    {
+      "color_dist": 0.0179,
+      "color_verdict": "ok",
+      "dist": 19,
+      "from_clip": "Clip_02",
+      "strictness": "info",
+      "struct_verdict": "warn",
+      "to_clip": "Clip_03",
       "transition": "match_cut",
       "verdict": "info",
       "verdict_if_relay": "warn"

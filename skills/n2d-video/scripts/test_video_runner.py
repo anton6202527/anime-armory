@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
+
+import pytest
 
 
 SCRIPT = Path(__file__).with_name("video_runner.py")
@@ -737,6 +740,21 @@ def test_qc_override_payload_marks_false_positive_sample():
     assert video_runner.qc_override_payload("x", {})["qa"]["seam_blocks"] == 0
 
 
+def test_qc_block_payload_records_blocking_identity_qc() -> None:
+    p = video_runner.qc_block_payload({
+        "clip": "Clip_03",
+        "target": "Clip_03.mp4",
+        "fail_reason": "dense identity warn",
+        "qc_json": "qc.json",
+        "qc_machine": {"intra_warns": 1, "anchor_warns": 3},
+    })
+
+    assert p["qa"]["severity"] == "block"
+    assert p["qa"]["outcome"] == "qc_blocked"
+    assert p["qa"]["intra_warns"] == 1
+    assert p["meta"]["clip"] == "Clip_03"
+
+
 def test_acceptance_recipe_meta_has_release_gate_fields(tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：抬眼；\n镜头运动：慢推；", encoding="utf-8")
@@ -746,7 +764,20 @@ def test_acceptance_recipe_meta_has_release_gate_fields(tmp_path: Path) -> None:
     end.write_bytes(b"end")
     routes = tmp_path / "出视频" / "第1集" / "prompt" / "video_model_routes.json"
     routes.parent.mkdir(parents=True)
-    routes.write_text('{"routes":[]}', encoding="utf-8")
+    routes.write_text(json.dumps({
+        "routes": [{
+            "clip_id": "Clip_01",
+            "mode": "image2video",
+            "execution_recipe": {
+                "post_video_qc": {
+                    "identity_qc_required": True,
+                    "dense_face_watch_required": True,
+                    "required_reports": ["video_qc", "temporal_consistency", "video_face_drift_watch"],
+                    "acceptance_policy": "block_clear_wrong_closeup_face",
+                }
+            },
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
     cap = tmp_path / "生产数据" / "video_backend_capabilities" / "seedance__via_dreamina.json"
     cap.parent.mkdir(parents=True)
     cap.write_text('{"backend":"seedance"}', encoding="utf-8")
@@ -779,12 +810,16 @@ def test_acceptance_recipe_meta_has_release_gate_fields(tmp_path: Path) -> None:
         "backend_version",
         "quality_tier",
         "actual_image_inputs",
+        "route_execution_recipe_hash",
+        "post_video_qc",
         "seed_effective",
         "effective_seed",
         "seed_support",
     }
     assert required <= set(meta)
     assert meta["actual_image_inputs"] == ["first.png", "end.png"]
+    assert meta["route_execution_recipe_hash"]
+    assert meta["post_video_qc"]["identity_qc_required"] is True
     assert meta["seed_effective"] is False
     assert meta["seed_support"] == "unsupported_or_unknown"
 
@@ -895,6 +930,51 @@ def test_accept_clip_updates_native_av_sidecar(monkeypatch, tmp_path: Path) -> N
     assert item["native_av_sidecar"]["status"] == "updated"
     saved = video_runner.load_json(manifest_file)
     assert saved["items"][0]["native_av_sidecar"]["physics_path"].endswith("native_av_physics_第1集.json")
+
+
+def test_accept_clip_blocks_dense_identity_without_intra_qc(monkeypatch, tmp_path: Path) -> None:
+    video = tmp_path / "出视频" / "第1集" / "视频" / "Clip_01.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"mp4")
+    routes = tmp_path / "出视频" / "第1集" / "prompt" / "video_model_routes.json"
+    routes.parent.mkdir(parents=True)
+    routes.write_text(json.dumps({
+        "routes": [{
+            "clip_id": "Clip_01",
+            "execution_recipe": {
+                "post_video_qc": {
+                    "identity_qc_required": True,
+                    "dense_face_watch_required": True,
+                    "required_reports": ["video_qc", "temporal_consistency", "video_face_drift_watch"],
+                    "acceptance_policy": "block_clear_wrong_closeup_face",
+                }
+            },
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(
+        manifest_file,
+        {
+            "episode": "第1集",
+            "items": [{"clip": "Clip_01", "target": "Clip_01.mp4", "status": "downloaded"}],
+        },
+    )
+
+    def fake_run_qc(root, episode, clips, qc_range, **_kwargs):
+        return {
+            "clips": [{"has_audio": False}],
+            "machine_summary": {"seam_blocks": 0, "intra_blocks": 0, "intra_checked": 0, "anchor_blocks": 0},
+            "json_path": "qc.json",
+            "markdown_path": "qc.md",
+        }
+
+    monkeypatch.setattr(video_runner.video_qc, "run_qc", fake_run_qc)
+
+    with pytest.raises(RuntimeError, match="dense_face_watch"):
+        video_runner.accept_clip(tmp_path, manifest_file, "Clip_01", no_record=True, no_progress=True)
+
+    saved = video_runner.load_json(manifest_file)
+    assert saved["items"][0]["status"] == "qc_blocked"
 
 
 def test_query_clip_replaces_stale_existing_target(monkeypatch, tmp_path: Path) -> None:

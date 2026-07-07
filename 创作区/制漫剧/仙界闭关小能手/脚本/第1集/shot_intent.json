@@ -2,7 +2,7 @@
   "kind": "n2d_shot_intent",
   "version": 1,
   "episode": "第1集",
-  "storyboard_sha": "5d6d987e4ab6e578c9e338806d2de9d96bd1edf703893b7a91fe5f5d020f81b8",
+  "storyboard_sha": "b52cd2dbbea91d2a81ce7dc1fc0c22f18dec8b65f51507c61dbd654fea114f1e",
   "shots": [
     {
       "clip": "EP01_CLIP01",
@@ -31,7 +31,7 @@
       "need_endframe": false,
       "motion_intensity": "",
       "action_beat": false,
-      "closeup": false,
+      "closeup": true,
       "identity_requirement": ""
     },
     {

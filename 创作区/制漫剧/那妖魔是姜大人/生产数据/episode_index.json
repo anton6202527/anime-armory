@@ -1,38 +1,43 @@
 {
   "episodes": [
     {
-      "accepted": true,
+      "accepted": false,
       "clips": 11,
-      "cost_text": "2320 credits",
+      "cost_text": "2600 credits",
       "done_stages": 14,
-      "duration_hms": "8h11m25s",
+      "duration_hms": "8h22m09s",
       "episode": "第1集",
       "episode_app": {
-        "exists": false,
+        "exists": true,
         "json": "episodes/第1集.json",
         "url": "episode_app_第1集.html"
       },
       "final_pass_rate": 0.0,
-      "frontier": null,
+      "frontier": {
+        "cmd": "n2d-review 创作区/制漫剧/那妖魔是姜大人 第1集",
+        "col": "验收",
+        "label": "审查验收",
+        "skill": "n2d-review"
+      },
       "has_storyboard": true,
       "num": 1,
-      "qa_blockers": 268,
-      "qa_warnings": 244,
-      "redraw_rate": 0.0,
+      "qa_blockers": 22,
+      "qa_warnings": 259,
+      "redraw_rate": 0.2734,
       "review_ui": {
         "exists": true,
         "url": "review_ui_第1集.html"
       },
       "runtime_hms": "2m01s",
-      "score": 52,
-      "score_status": "warn",
+      "score": 93,
+      "score_status": "pass",
       "total_stages": 15
     },
     {
-      "accepted": false,
-      "clips": 0,
+      "accepted": true,
+      "clips": 10,
       "cost_text": "696 credits",
-      "done_stages": 2,
+      "done_stages": 15,
       "duration_hms": "6h47m35s",
       "episode": "第2集",
       "episode_app": {
@@ -41,32 +46,27 @@
         "url": "episode_app_第2集.html"
       },
       "final_pass_rate": 0.0,
-      "frontier": {
-        "cmd": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第2集",
-        "col": "剧本改编",
-        "label": "阶段1·剧本改编",
-        "skill": "n2d-script"
-      },
-      "has_storyboard": false,
+      "frontier": null,
+      "has_storyboard": true,
       "num": 2,
       "qa_blockers": 5,
       "qa_warnings": 239,
       "redraw_rate": 0.1313,
       "review_ui": {
-        "exists": false,
+        "exists": true,
         "url": "review_ui_第2集.html"
       },
       "runtime_hms": "1m53s",
-      "score": null,
-      "score_status": "missing",
+      "score": 90,
+      "score_status": "pass",
       "total_stages": 15
     },
     {
       "accepted": false,
-      "clips": 0,
-      "cost_text": "—",
-      "done_stages": 2,
-      "duration_hms": "9h31m12s",
+      "clips": 10,
+      "cost_text": "96 credits",
+      "done_stages": 11,
+      "duration_hms": "9h56m57s",
       "episode": "第3集",
       "episode_app": {
         "exists": false,
@@ -75,15 +75,15 @@
       },
       "final_pass_rate": 0.0,
       "frontier": {
-        "cmd": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第3集",
-        "col": "剧本改编",
-        "label": "阶段1·剧本改编",
-        "skill": "n2d-script"
+        "cmd": "n2d-video 创作区/制漫剧/那妖魔是姜大人 第3集",
+        "col": "视频",
+        "label": "图生视频",
+        "skill": "n2d-video"
       },
-      "has_storyboard": false,
+      "has_storyboard": true,
       "num": 3,
-      "qa_blockers": 348,
-      "qa_warnings": 124,
+      "qa_blockers": 57,
+      "qa_warnings": 161,
       "redraw_rate": 0.0,
       "review_ui": {
         "exists": false,
@@ -96,10 +96,10 @@
     },
     {
       "accepted": false,
-      "clips": 0,
+      "clips": 11,
       "cost_text": "—",
-      "done_stages": 2,
-      "duration_hms": "2h23m00s",
+      "done_stages": 9,
+      "duration_hms": "3h45m13s",
       "episode": "第4集",
       "episode_app": {
         "exists": false,
@@ -108,15 +108,15 @@
       },
       "final_pass_rate": 0.0,
       "frontier": {
-        "cmd": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第4集",
-        "col": "剧本改编",
-        "label": "阶段1·剧本改编",
-        "skill": "n2d-script"
+        "cmd": "n2d-image 创作区/制漫剧/那妖魔是姜大人 第4集",
+        "col": "出图",
+        "label": "出图",
+        "skill": "n2d-image"
       },
-      "has_storyboard": false,
+      "has_storyboard": true,
       "num": 4,
       "qa_blockers": 109,
-      "qa_warnings": 161,
+      "qa_warnings": 160,
       "redraw_rate": 0.0,
       "review_ui": {
         "exists": false,
@@ -326,21 +326,24 @@
       "total_stages": 15
     }
   ],
-  "generated_at": "2026-07-06T10:23:21+00:00",
+  "generated_at": "2026-07-07T10:20:42+00:00",
   "kind": "n2d_episode_index",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "bottleneck": {
-      "阶段1·剧本改编": 9
+      "出图": 1,
+      "图生视频": 1,
+      "审查验收": 1,
+      "阶段1·剧本改编": 6
     },
-    "completion_pct": 21.3,
+    "completion_pct": 40.7,
     "done_episodes": 1,
     "episodes": 10,
     "first_action": {
-      "cmd": "n2d-script 创作区/制漫剧/那妖魔是姜大人 第2集",
-      "episode": "第2集",
-      "label": "阶段1·剧本改编",
-      "skill": "n2d-script"
+      "cmd": "n2d-review 创作区/制漫剧/那妖魔是姜大人 第1集",
+      "episode": "第1集",
+      "label": "审查验收",
+      "skill": "n2d-review"
     }
   },
   "title": "那妖魔是姜大人",

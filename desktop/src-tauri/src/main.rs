@@ -6,20 +6,26 @@ mod media;
 mod pty;
 mod watch;
 
+use std::sync::Mutex;
+
 use tauri::{
     menu::{AboutMetadata, CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
-    Emitter, Wry,
+    Emitter, Manager, Wry,
 };
 
 const MENU_SET_LANGUAGE_ZH: &str = "anime-armory:set-language-zh";
 const MENU_SET_LANGUAGE_EN: &str = "anime-armory:set-language-en";
 const MENU_DOWNLOAD_LATEST: &str = "anime-armory:download-latest";
+const MENU_TOGGLE_TERMINAL: &str = "anime-armory:toggle-terminal";
 const EVENT_SET_LANGUAGE: &str = "anime-armory:set-language";
+const EVENT_TOGGLE_TERMINAL: &str = "anime-armory:toggle-terminal";
 
 #[cfg(target_os = "macos")]
 struct AppMenuLabels {
     language: &'static str,
     download_latest: &'static str,
+    show_terminal: &'static str,
+    hide_terminal: &'static str,
 }
 
 #[cfg(target_os = "macos")]
@@ -28,17 +34,25 @@ fn app_menu_labels(language: &str) -> AppMenuLabels {
         AppMenuLabels {
             language: "Language",
             download_latest: "Download Latest App",
+            show_terminal: "Show Terminal",
+            hide_terminal: "Hide Terminal",
         }
     } else {
         AppMenuLabels {
             language: "语言",
             download_latest: "下载最新 app",
+            show_terminal: "显示 Terminal",
+            hide_terminal: "隐藏 Terminal",
         }
     }
 }
 
 #[cfg(target_os = "macos")]
-fn build_app_menu(app_handle: &tauri::AppHandle, language: &str) -> tauri::Result<Menu<Wry>> {
+fn build_app_menu(
+    app_handle: &tauri::AppHandle,
+    language: &str,
+    terminal_visible: bool,
+) -> tauri::Result<Menu<Wry>> {
     let pkg_info = app_handle.package_info();
     let config = app_handle.config();
     let labels = app_menu_labels(language);
@@ -105,6 +119,17 @@ fn build_app_menu(app_handle: &tauri::AppHandle, language: &str) -> tauri::Resul
                         true,
                         None::<&str>,
                     )?,
+                    &MenuItem::with_id(
+                        app_handle,
+                        MENU_TOGGLE_TERMINAL,
+                        if terminal_visible {
+                            labels.hide_terminal
+                        } else {
+                            labels.show_terminal
+                        },
+                        true,
+                        None::<&str>,
+                    )?,
                     &PredefinedMenuItem::separator(app_handle)?,
                     &PredefinedMenuItem::services(app_handle, None)?,
                     &PredefinedMenuItem::separator(app_handle)?,
@@ -148,23 +173,97 @@ fn build_app_menu(app_handle: &tauri::AppHandle, language: &str) -> tauri::Resul
 
 #[cfg(target_os = "macos")]
 fn build_default_app_menu(app_handle: &tauri::AppHandle) -> tauri::Result<Menu<Wry>> {
-    build_app_menu(app_handle, "zh")
+    build_app_menu(app_handle, "zh", true)
 }
 
 #[cfg(target_os = "macos")]
-fn set_app_menu_language(app: &tauri::AppHandle, language: &str) -> Result<(), String> {
-    let menu = build_app_menu(app, language).map_err(|e| e.to_string())?;
+fn set_app_menu(
+    app: &tauri::AppHandle,
+    language: &str,
+    terminal_visible: bool,
+) -> Result<(), String> {
+    let menu = build_app_menu(app, language, terminal_visible).map_err(|e| e.to_string())?;
     app.set_menu(menu).map(|_| ()).map_err(|e| e.to_string())
 }
 
 #[cfg(not(target_os = "macos"))]
-fn set_app_menu_language(_app: &tauri::AppHandle, _language: &str) -> Result<(), String> {
+fn set_app_menu(
+    _app: &tauri::AppHandle,
+    _language: &str,
+    _terminal_visible: bool,
+) -> Result<(), String> {
     Ok(())
+}
+
+#[derive(Debug)]
+struct AppUiState {
+    language: Mutex<String>,
+    terminal_visible: Mutex<bool>,
+}
+
+impl Default for AppUiState {
+    fn default() -> Self {
+        Self {
+            language: Mutex::new("zh".to_string()),
+            terminal_visible: Mutex::new(true),
+        }
+    }
+}
+
+fn update_app_language(app: &tauri::AppHandle, language: String) -> Result<(), String> {
+    let state = app.state::<AppUiState>();
+    let terminal_visible = *state
+        .terminal_visible
+        .lock()
+        .map_err(|_| "terminal state lock poisoned".to_string())?;
+    *state
+        .language
+        .lock()
+        .map_err(|_| "language state lock poisoned".to_string())? = language.clone();
+    set_app_menu(app, &language, terminal_visible)
+}
+
+fn update_app_terminal_visible(app: &tauri::AppHandle, visible: bool) -> Result<(), String> {
+    let state = app.state::<AppUiState>();
+    let language = state
+        .language
+        .lock()
+        .map_err(|_| "language state lock poisoned".to_string())?
+        .clone();
+    *state
+        .terminal_visible
+        .lock()
+        .map_err(|_| "terminal state lock poisoned".to_string())? = visible;
+    set_app_menu(app, &language, visible)
+}
+
+fn toggle_app_terminal_visible(app: &tauri::AppHandle) -> Result<bool, String> {
+    let state = app.state::<AppUiState>();
+    let language = state
+        .language
+        .lock()
+        .map_err(|_| "language state lock poisoned".to_string())?
+        .clone();
+    let next_visible = {
+        let mut terminal_visible = state
+            .terminal_visible
+            .lock()
+            .map_err(|_| "terminal state lock poisoned".to_string())?;
+        *terminal_visible = !*terminal_visible;
+        *terminal_visible
+    };
+    set_app_menu(app, &language, next_visible)?;
+    Ok(next_visible)
 }
 
 #[tauri::command]
 fn set_app_language(app: tauri::AppHandle, language: String) -> Result<(), String> {
-    set_app_menu_language(&app, &language)
+    update_app_language(&app, language)
+}
+
+#[tauri::command]
+fn set_app_terminal_visible(app: tauri::AppHandle, visible: bool) -> Result<(), String> {
+    update_app_terminal_visible(&app, visible)
 }
 
 #[cfg(not(target_os = "macos"))]
@@ -177,16 +276,21 @@ fn main() {
         .menu(build_default_app_menu)
         .on_menu_event(|app, event| {
             if event.id() == MENU_SET_LANGUAGE_ZH {
-                let _ = set_app_menu_language(app, "zh");
+                let _ = update_app_language(app, "zh".to_string());
                 let _ = app.emit(EVENT_SET_LANGUAGE, "zh");
             } else if event.id() == MENU_SET_LANGUAGE_EN {
-                let _ = set_app_menu_language(app, "en");
+                let _ = update_app_language(app, "en".to_string());
                 let _ = app.emit(EVENT_SET_LANGUAGE, "en");
             } else if event.id() == MENU_DOWNLOAD_LATEST {
                 let _ = commands::open_source_repo();
+            } else if event.id() == MENU_TOGGLE_TERMINAL {
+                if let Ok(visible) = toggle_app_terminal_visible(app) {
+                    let _ = app.emit(EVENT_TOGGLE_TERMINAL, visible);
+                }
             }
         })
         .plugin(tauri_plugin_dialog::init())
+        .manage(AppUiState::default())
         .manage(pty::PtyManager::default())
         .manage(media::MediaState::default())
         .manage(watch::WatchState::default())
@@ -211,6 +315,7 @@ fn main() {
             commands::archive_work_changes,
             commands::archive_work_change,
             commands::work_deleted,
+            commands::search_work_files,
             commands::read_work_file,
             commands::write_work_file,
             commands::create_work_entry,
@@ -226,16 +331,20 @@ fn main() {
             commands::default_workspace,
             commands::resolve_repo,
             commands::seed_demos,
+            commands::list_demo_downloads,
+            commands::install_demo,
             commands::create_work,
             commands::delete_work,
             commands::read_canvas,
             commands::read_episode_workspace,
+            commands::read_quality_insights,
             commands::read_canvas_layout,
             commands::write_canvas_layout,
             commands::read_clip_edit,
             commands::write_clip_edit,
             commands::read_next_action,
             set_app_language,
+            set_app_terminal_visible,
             watch::watch_root,
             watch::unwatch_root,
         ])

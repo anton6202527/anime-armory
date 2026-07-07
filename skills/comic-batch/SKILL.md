@@ -5,7 +5,7 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，判断当前前沿，然后调用本线已有阶段脚本推进。它不替代 `comic-script` / `comic-layout` / `comic-image` / `comic-compose` / `comic-review`，只负责把一话的批量执行、重抽、候选归档和下一步衔接串起来。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，判断当前前沿，然后调用本线已有阶段脚本推进。它不替代 `comic-script` / `comic-layout` / `comic-image` / `comic-compose` / `comic-review`，只负责把一话的批量执行、重抽、候选归档和下一步衔接串起来。出图前必须先跑 `comic-review` 的 `image_preflight` gate；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
 
 ## 适用场景
 
@@ -46,7 +46,9 @@ python3 skills/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chap
 
 ## 完成判定
 
-- `comic-image` runner 会在所有 job `ready` 且 PNG 有效时把 `_进度.md` 的 `出图` 标为 `✅`。
+- `comic-batch` 调用出图 runner 前先跑 `skills/comic-review/scripts/gate.py --stage image_preflight`；被 gate block 时不启动付费/批量出图。
+- `comic-image` runner 会在所有 job `ready` 且 PNG 有效时把 `_进度.md` 的 `出图` 标为 `✅`；`post_qc=block` 的格子标 `qc_block`，不算 ready。
+- runner 完成后 `comic-batch` 会跑 `skills/comic-review/scripts/gate.py --stage image`，刷新风格一致性和角色一致性报告。
 - `comic-batch` 只在阶段脚本成功时继续，不吞掉失败。
 - 出图完成后下一步通常是 `comic-compose`；正式发布前仍要跑 `comic-review`。
 

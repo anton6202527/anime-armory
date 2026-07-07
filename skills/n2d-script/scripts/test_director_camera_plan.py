@@ -119,3 +119,29 @@ def test_backend_control_degrades_to_natural_language_without_evidence(tmp_path)
 
     assert plan["clips"][0]["backend_control"]["control_idiom"] == "natural_language"
     assert "自然语言运镜" in plan["clips"][0]["video_prompt_injection"]["后端控制写法"]
+
+
+def test_subtitle_overlay_does_not_make_clip_screen_insert():
+    clip = _clip("CU 特写", template="labor_montage", rhythm="压迫·爽点")
+    clip["subtitle_lines"] = [{"render_policy": "compose_overlay_only", "text": "第五趟"}]
+    clip["description"] = "扁担压肩、水桶溢水、脚步打滑三连剪。"
+
+    out = dcp.analyze_clip(clip, 1)
+
+    assert dcp.classify_clip(clip)["screen"] is False
+    assert "屏幕/面板镜" not in out["recommended"]["reason"]
+
+
+def test_real_screen_insert_still_gets_screen_camera():
+    clip = _clip("CU 插入", template="screen_insert")
+    clip["template_contract"] = {
+        "template_id": "screen_insert",
+        "screen_content_ref": "系统面板",
+        "text_layer": "overlay",
+    }
+
+    out = dcp.analyze_clip(clip, 1)
+
+    assert dcp.classify_clip(clip)["screen"] is True
+    assert out["recommended"]["camera_move_zh"] == "固定机位"
+    assert "屏幕/面板镜" in out["recommended"]["reason"]

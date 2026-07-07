@@ -2,6 +2,7 @@
   "kind": "n2d_motion_control_manifest",
   "version": 1,
   "clip_id": "Clip_05",
+  "spectacle_type": "mount_ride",
   "status": "degrade_only",
   "control_inputs": {
     "pose_sequence": {
@@ -40,15 +41,10 @@
       "path": "出视频/第3集/control/Clip_05/parallax_layers.json"
     }
   },
-  "contact_points": [],
-  "occlusion_order": [],
-  "body_part_ownership": [],
-  "failure_modes": [
-    "rider_mount_contact_drift",
-    "gait_cycle_reset",
-    "pose_drift",
-    "harness_morph",
-    "background_stickiness"
-  ],
-  "degrade_plan": "Cut to front/back reaction shots or split into approach, pass-by, and exit clips."
+  "degrade_plan": "Cut to front/back reaction shots or split into approach, pass-by, and exit clips.",
+  "notes": [
+    "坐骑必须入 BEAST/MOUNT 资产库，锁体型、角/鳞/毛色、鞍具和骑手接触点。",
+    "gait_cycle 只写一种主步态；速度交给尘土、草木、披风、鬃毛和侧向跟拍。",
+    "不稳时拆成坐骑特写、骑手反应、侧向奔跑、落地/停步四类短镜。"
+  ]
 }

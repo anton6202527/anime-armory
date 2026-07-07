@@ -40,6 +40,8 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 | 出图 | `comic-image` |
 | 出图已完成但引用缺失/旧图未用真实参考 | `comic-identity` |
 | `定妆级别=长线专门定妆` 且常驻人物多视图缺失 | `comic-identity` |
+| 出图已完成但缺少风格一致性报告 | `comic-review` |
+| 风格一致性报告存在 block | `comic-image` |
 | 嵌字合成 | `comic-compose` |
 | 审查 | `comic-review` |
 

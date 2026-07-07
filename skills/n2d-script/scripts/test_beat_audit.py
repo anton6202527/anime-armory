@@ -143,6 +143,37 @@ def test_unmarked_ending_cliffhanger_downgraded_not_false_warn():
     assert "ending_hook_unmarked" in c
 
 
+def test_first_screen_legacy_aliases_are_accepted():
+    root = _mk_ep("[镜头1·旁白·低沉·快] 黑暗的大殿里，少年被围住。\n[镜头2·张老大·逼问·中] 你多大了？\n")
+    epd = Path(root) / "脚本" / "第1集"
+    (epd / "storyboard.json").write_text(json.dumps({
+        "first_3s_visual_hook": {
+            "visual_hook": "黑暗大殿里，十四岁少年被一圈杂役围住。",
+            "hook_type": "悬念",
+            "content_promise": "这个少年为什么刚入门就被当成废物？",
+            "onscreen_text": "五行灵根？",
+            "muted_readable": True,
+            "expected_metric": {"primary": "retention_3s", "target": 0.8},
+        },
+        "clips": [
+            {
+                "id": "EP01_CLIP01",
+                "label": "黑殿围审",
+                "pacing_role": "冷开场主钩",
+                "description": "张老大高位俯视审问，贺平生被围住。",
+            }
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    beats = B.parse_voiceover(str(epd / "voiceover.txt"))
+
+    findings = B.audit_first_screen_contract(root, "第1集", beats)
+    c = codes(findings)
+
+    assert "incomplete_first_3s_visual_hook" not in c
+    assert "first_3s_not_muted_safe" not in c
+    assert "missing_first_6s_beat_hook" not in c
+
+
 def test_flat_emotion_arc_flagged():
     # ≥6 拍情绪全是单一/平缓 → flat_emotion_arc warn
     vo = "".join(f"[镜头{i}·沈念·平静·慢] 日常对话第{i}句。\n" for i in range(1, 8))

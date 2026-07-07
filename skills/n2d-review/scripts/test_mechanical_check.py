@@ -140,6 +140,63 @@ def test_storyboard_state_handoff_mismatch_warns_not_blocks(tmp_path):
     assert not _blocks("start_state")
 
 
+def test_split_part_videos_count_as_logical_clips(tmp_path, monkeypatch):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    ep_dir = os.path.join(root, "脚本", ep)
+    video_dir = os.path.join(root, "出视频", ep, "视频")
+    os.makedirs(ep_dir, exist_ok=True)
+    os.makedirs(video_dir, exist_ok=True)
+    with open(os.path.join(ep_dir, "storyboard.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "clips": [
+                {"id": "EP01_CLIP01", "continuity": {"start_state": "A", "end_state": "B", "transition": "cut", "need_endframe": False}},
+                {"id": "EP01_CLIP02", "continuity": {"start_state": "B", "end_state": "C", "transition": "cut", "need_endframe": False}},
+            ]
+        }, f, ensure_ascii=False)
+    for name in ("Clip_01_开场.mp4", "Clip_02_动作_part1.mp4", "Clip_02_动作_part2.mp4"):
+        open(os.path.join(video_dir, name), "wb").write(b"mp4")
+    monkeypatch.setattr(mc, "_has_audio", lambda path: False)
+
+    mc.check_storyboard_and_video(root, ep)
+
+    assert not _warns("逻辑 clip 与 storyboard 不一致")
+    assert any(f[0] == mc.INFO and "split-part 视频" in f[3] for f in mc.findings)
+
+
+def test_split_source_duration_warn_suppressed_after_fitted_compose(tmp_path, monkeypatch):
+    mc.findings.clear()
+    root, ep = str(tmp_path), "第1集"
+    ep_dir = os.path.join(root, "脚本", ep)
+    video_dir = os.path.join(root, "出视频", ep, "视频")
+    final_dir = os.path.join(root, "合成", ep)
+    voice_dir = os.path.join(final_dir, "配音")
+    os.makedirs(ep_dir, exist_ok=True)
+    os.makedirs(video_dir, exist_ok=True)
+    os.makedirs(voice_dir, exist_ok=True)
+    with open(os.path.join(ep_dir, "storyboard.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "clips": [
+                {"id": "EP01_CLIP01", "continuity": {"start_state": "A", "end_state": "B", "transition": "cut", "need_endframe": False}},
+                {"id": "EP01_CLIP02", "continuity": {"start_state": "B", "end_state": "C", "transition": "cut", "need_endframe": False}},
+            ]
+        }, f, ensure_ascii=False)
+    with open(os.path.join(ep_dir, "镜头时长.json"), "w", encoding="utf-8") as f:
+        json.dump({"镜头1": 5.0, "镜头2": 5.0}, f, ensure_ascii=False)
+    for name in ("Clip_01_开场.mp4", "Clip_02_动作_part1.mp4", "Clip_02_动作_part2.mp4"):
+        open(os.path.join(video_dir, name), "wb").write(b"mp4")
+    open(os.path.join(voice_dir, "voice_zh_fitted.wav"), "wb").write(b"wav")
+    final = os.path.join(final_dir, f"成片_{ep}_zh.mp4")
+    open(final, "wb").write(b"mp4")
+    monkeypatch.setattr(mc, "_has_audio", lambda path: False)
+    monkeypatch.setattr(mc, "_duration", lambda path: 10.0 if "成片_" in path else 6.0)
+
+    mc.check_storyboard_and_video(root, ep)
+
+    assert not _warns("clip 总长")
+    assert any(f[0] == mc.INFO and "Time-Warp 修正" in f[3] for f in mc.findings)
+
+
 def test_check_completeness_placeholder_blocks(tmp_path):
     mc.findings.clear()
     root, ep = str(tmp_path), "第1集"

@@ -1290,6 +1290,8 @@ def load_style_anchor_paths(root: Path) -> List[str]:
             add(node)
 
     scan(data.get("selected_anchor") or data.get("style_anchor"))
+    if anchors:
+        return anchors
     scan(data.get("anchors"))
     return anchors
 
@@ -1906,7 +1908,18 @@ def codex_reference_inputs_for_target(
         if rel_path == target.rel_path:
             return
         path = root / rel_path
-        if not path.is_file() or rel_path in seen:
+        if not path.is_file():
+            return
+        if rel_path in seen:
+            if role == "character":
+                for item in inputs:
+                    if item.get("rel_path") == rel_path and item.get("role") == "style":
+                        item["role"] = "character"
+                        item["owner"] = owner
+                        item["source"] = source
+                        item["priority"] = priority_for(rel_path, "character")
+                        item["upgraded_from_style_anchor"] = True
+                        break
             return
         seen.add(rel_path)
         try:
@@ -2131,6 +2144,27 @@ def _target_has_character_alias(target: Target) -> bool:
     return any(alias.startswith("CHAR_") for alias in aliases)
 
 
+def _target_has_prop_alias(target: Target) -> bool:
+    aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
+    return any(alias.startswith(("PROP_", "WEAPON_")) for alias in aliases)
+
+
+def shared_prop_board_guidance(target: Target) -> str:
+    if target.mode != "shared" or not _target_has_prop_alias(target):
+        return ""
+    stem = Path(target.rel_path).stem
+    if any(token in stem for token in ("_手持", "_比例", "_in_hand", "_scale")):
+        return (
+            "- 道具派生参考板：可以出现无脸手部、无脸人台或下巴以下尺度参照，但不得出现清晰人脸、"
+            "具名角色身份、随机服装抢戏或身体残片穿过道具结构。"
+        )
+    return (
+        "- 道具主参考板：只画干净物件本体，置于中性棚拍台面或极简同风格地面；禁止人物、手、肩膀、背影、"
+        "身体残片、头发、脸、脚、随机比例人、持握动作或剧情动作。比例/手持语义只作为尺寸说明，"
+        "不要把“压在少年肩上/体量压过少年”等剧情描述画成人物；手持和比例另由 `_手持` / `_比例` 槽生成。"
+    )
+
+
 def _target_is_restricted_partial(target: Target) -> bool:
     stem = Path(target.rel_path).stem
     text = f"{stem}\n{target.section.body}"
@@ -2145,6 +2179,9 @@ def shared_style_guidance(target: Target, reference_bundle: Optional[Dict[str, A
         lines.append(f"- {RESTRICTED_PARTIAL_BOARD_GUIDANCE}")
     elif _target_has_character_alias(target):
         lines.append("- 人物主参考板采用中性站姿/中性表情，角色正面或 45° 身份可辨，但不要看镜头式写真感。")
+    prop_guidance = shared_prop_board_guidance(target)
+    if prop_guidance:
+        lines.append(prop_guidance)
     has_style = any(str(item.get("kind") or "") == "style" for item in (reference_bundle or {}).get("items") or [])
     if has_style:
         lines.append(f"- {STYLE_ONLY_REFERENCE_GUIDANCE}")
@@ -2458,6 +2495,24 @@ def build_codex_command(repo: Path, prompt: str, reference_inputs: Sequence[Dict
     return cmd
 
 
+TRANSIENT_CODEX_FAILURE_MARKERS = (
+    "tls handshake eof",
+    "stream disconnected",
+    "failed to connect to websocket",
+    "error sending request",
+    "http/request failed",
+    "transport channel closed",
+    "timeout waiting for child process",
+)
+
+
+def transient_codex_transport_failure(proc: subprocess.CompletedProcess[str]) -> bool:
+    if proc.returncode == 0:
+        return False
+    text = f"{proc.stderr or ''}\n{proc.stdout or ''}".lower()
+    return any(marker in text for marker in TRANSIENT_CODEX_FAILURE_MARKERS)
+
+
 def run_codex(
     repo: Path,
     prompt: str,
@@ -2465,15 +2520,29 @@ def run_codex(
     reference_inputs: Sequence[Dict[str, Any]],
 ) -> subprocess.CompletedProcess[str]:
     cmd = build_codex_command(repo, prompt, reference_inputs)
-    return subprocess.run(
-        cmd,
-        stdin=subprocess.DEVNULL,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
-        timeout=timeout_sec,
-    )
+    attempts = max(1, int(os.environ.get("N2D_CODEX_TRANSPORT_RETRIES", "3")))
+    delay_sec = max(0.0, float(os.environ.get("N2D_CODEX_TRANSPORT_RETRY_DELAY", "5")))
+    proc: subprocess.CompletedProcess[str]
+    for attempt in range(1, attempts + 1):
+        proc = subprocess.run(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=timeout_sec,
+        )
+        if not transient_codex_transport_failure(proc) or attempt >= attempts:
+            return proc
+        print(
+            f"[retry] Codex transport failure on attempt {attempt}/{attempts}; retrying",
+            file=sys.stderr,
+        )
+        if delay_sec:
+            time.sleep(delay_sec * attempt)
+    return proc
+
 
 
 def format_codex_failure(proc: subprocess.CompletedProcess[str]) -> str:
@@ -2883,6 +2952,19 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
             reason = str(row.get("reason") or "missing").strip()
             problems.append(f"face_reference_coverage:{reason}")
 
+    prop_targets: List[Dict[str, Any]] = []
+    prop_shape = payload.get("prop_shape_review") or {}
+    for row in prop_shape.get("targets") or []:
+        if not isinstance(row, dict):
+            continue
+        if row.get("confirmed"):
+            continue
+        if episode_png_key(str(row.get("png") or ""), episode) != target_key:
+            continue
+        prop_targets.append(row)
+        asset = str(row.get("asset") or row.get("asset_name") or "registered_prop").strip()
+        problems.append(f"prop_shape_review:{asset}")
+
     checks = payload.get("checks") or {}
     for check_name in ("face", "hair", "outfit"):
         for row in (checks.get(check_name) or {}).get("shots") or []:
@@ -2938,6 +3020,19 @@ def target_qc_retry_guidance(root: Path, episode: str, target: Target) -> str:
         lines.append("- hair:block 修复：发型、发髻、发际线和头发轮廓必须回到对应角色脸锚/半身参考。")
     if any(p.startswith("outfit") for p in problems):
         lines.append("- outfit:block 修复：服装剪影、领口、袖口、腰带、纹样、主色和关键配饰必须回到对应角色/道具参考。")
+    if prop_targets:
+        lines.append(
+            "- prop_shape_review 修复：本镜上次登记道具需要人工形状确认；重抽必须让需要出场的登记道具清楚可辨，"
+            "外形、材质、数量和时代感以附件/registry 为准，不要用暗影、极远景、半截遮挡或模糊来逃避检查。"
+        )
+        for row in prop_targets[:6]:
+            asset = str(row.get("asset") or "registered_prop").strip()
+            name = str(row.get("asset_name") or "").strip()
+            ref = str(row.get("ref") or "").strip()
+            forbidden = "、".join(str(x) for x in (row.get("must_not_have") or []) if str(x).strip())
+            suffix = f"；禁：{forbidden}" if forbidden else ""
+            label = f"{asset}（{name}）" if name else asset
+            lines.append(f"  - {label}: 按参考 `{ref}` 的结构与旧化材质生成{suffix}。")
     lines.append("- 不要降低画质或缩小主体来逃避 QC；必须清晰、高分辨率、无水印、无字幕、无 UI。")
     return "\n".join(lines)
 
@@ -3545,24 +3640,30 @@ def episode_image_target_count(root: Path, episode: str) -> int:
 
 
 def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
+    combined_done, combined_total = image_progress_counts(root, episode)
+    episode_done = episode_image_done_count(root, episode)
+    episode_total = episode_image_target_count(root, episode)
+    has_shared_scope = combined_total > episode_total
+    live_done = combined_done if has_shared_scope else episode_done
+    live_total = combined_total if has_shared_scope else episode_total
+
     current_total = current_image_progress_total(root, episode)
     if current_total:
-        done = episode_image_done_count(root, episode)
-        live_total = episode_image_target_count(root, episode)
         total = current_total
         preserve_stale = os.environ.get("N2D_PRESERVE_IMAGE_PROGRESS_TOTAL", "").strip().lower() in {
             "1", "true", "yes", "on",
         }
         if live_total and live_total != current_total and not preserve_stale:
             print(
-                f"[progress] 出图 denominator {current_total} differs from live prompt targets {live_total}; "
+                f"[progress] 出图 denominator {current_total} differs from live image-plan targets {live_total}; "
                 f"using {live_total}",
                 file=sys.stderr,
             )
             total = live_total
+        done = live_done
         done = min(done, total)
     else:
-        done, total = image_progress_counts(root, episode)
+        done, total = combined_done, combined_total
     if total <= 0:
         return None
     cmd = [

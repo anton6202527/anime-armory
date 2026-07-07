@@ -9,10 +9,12 @@
       "spectacle_type": "large_establishing",
       "evidence_status": "measured",
       "media": [
-        "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4"
+        "出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+        "合成/第1集/_clipcache/clip_01_n_dea4d03d8fa90a12.mp4"
       ],
       "characters": [
-        "CHAR_01"
+        "CHAR_01",
+        "CHAR_03"
       ],
       "assets": [
         "LOC_01"
@@ -75,7 +77,7 @@
       },
       "high_action": false,
       "expected_motion": "large_establishing",
-      "subject": "CHAR_01",
+      "subject": "CHAR_03",
       "category": "character"
     },
     {
@@ -84,10 +86,13 @@
       "evidence_status": "measured",
       "media": [
         "出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
-        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4"
+        "出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+        "合成/第1集/_clipcache/clip_02_part1_n_d3b509fabca623c9.mp4",
+        "合成/第1集/_clipcache/clip_02_part2_n_b43fe6ec6dec5921.mp4"
       ],
       "characters": [
         "CHAR_01",
+        "CHAR_02",
         "CHAR_03"
       ],
       "assets": [
@@ -157,7 +162,14 @@
       "evidence_status": "measured",
       "media": [
         "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
-        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+        "出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+        "合成/第1集/_clipcache/clip_04_n_ddb76adb35a84606.mp4",
+        "合成/第1集/_clipcache/clip_06_part1_n_33088cb30b0b8f49.mp4",
+        "合成/第1集/_clipcache/clip_06_part1_n_c52fd8d92915a928.mp4",
+        "合成/第1集/_clipcache/clip_06_part2_n_898dab97bd788f0d.mp4",
+        "合成/第1集/_clipcache/clip_06_part2_n_9d40ac1c23284769.mp4",
+        "合成/第1集/_clipcache/clip_06_part2_n_f619928ff87f6535.mp4",
+        "合成/第1集/_clipcache/n_ddb76adb35a84606.mp4"
       ],
       "characters": [
         "CHAR_01",
@@ -234,11 +246,13 @@
       "spectacle_type": "fight_exchange",
       "evidence_status": "measured",
       "media": [
-        "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4"
+        "出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+        "合成/第1集/_clipcache/clip_10_n_4dc7e5e8e5aa29a7.mp4"
       ],
       "characters": [
         "CHAR_01",
-        "CHAR_02"
+        "CHAR_02",
+        "CHAR_03"
       ],
       "assets": [
         "LOC_01",
@@ -302,7 +316,7 @@
       },
       "high_action": true,
       "expected_motion": "fight_exchange",
-      "subject": "CHAR_02",
+      "subject": "CHAR_03",
       "category": "character"
     }
   ],

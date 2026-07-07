@@ -73,7 +73,7 @@
     "CHAR_HE_PINGSHENG": {
       "id": "CHAR_HE_PINGSHENG",
       "type": "character",
-      "status": "anchor_ready",
+      "status": "ready",
       "display_name": "贺平生",
       "role": "男主",
       "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
@@ -95,6 +95,91 @@
           "source": {
             "kind": "user_screenshot_reference"
           }
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "sha256": "6af05563cae78e332f5964c7edfa3a9954952024d04ca501a4f3269a9c4f5867",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T10:58:19"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "sha256": "5757c7ed29e7afa2d1d013e3553d955bfc20d5d03725bcb327093b1eda86aa45",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T10:59:57"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__side.png",
+          "sha256": "6c842e812555046ca458c5f6b1a1bf62f2c4b646e0e3eae838ecc7e9100ba21c",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:02:29"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__back.png",
+          "sha256": "106f0c47519e79a8236d81a04d7b508c06bc55ae2772285480e445fea0ecf365",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:04:22"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "sha256": "b2c7e10386f5e636282f798b8c2aa0754a05161d52c02c0f47f9fe43997970d2",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:06:59"
         }
       ],
       "character_dna": {
@@ -144,14 +229,20 @@
         "录屏压缩糊",
         "把成年锚点直接用于第1话十四岁开局"
       ],
-      "views": {},
+      "views": {
+        "front": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_HE_PINGSHENG__side.png",
+        "back": "出图/共享/图片/CHAR_HE_PINGSHENG__back.png",
+        "face": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png"
+      },
       "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26",
-      "updated_at": "2026-07-06"
+      "updated_at": "2026-07-07T11:06:59"
     },
     "CHAR_FEMALE_LEAD": {
       "id": "CHAR_FEMALE_LEAD",
       "type": "character",
-      "status": "anchor_ready",
+      "status": "ready",
       "display_name": "女主（待剧情绑定姓名）",
       "role": "女主/高阶仙门女性锚点",
       "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__anchor.png",
@@ -173,6 +264,91 @@
           "source": {
             "kind": "user_screenshot_reference"
           }
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+          "sha256": "ec515017acf74c5de8d9455f75ccc02145196546a1be9af93fb38bca6aad4545",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:09:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD__three_quarter.png",
+          "sha256": "454838c04d1241896b406e78944c32c8b0bf73e4e329b02808f265ad40a7d522",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:12:07"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD__side.png",
+          "sha256": "0c99e3d899fdaa021771325846d5f5c32ee6b5f321040fd14d6eb196a170d28e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:14:54"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD__back.png",
+          "sha256": "cca901a0aef89422d6a0c7a195856add5ee77b052d0ab8b92b4bfb29362e0648",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:16:45"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_FEMALE_LEAD__face.png",
+          "sha256": "45a9d9efd5272bb897d0cdb95a0b7221d2e6a081db3697e45d042bb0e7ceb5ec",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T11:18:48"
         }
       ],
       "character_dna": {
@@ -211,9 +387,210 @@
         "低幼 Q 版",
         "现代写真感"
       ],
-      "views": {},
+      "views": {
+        "front": "出图/共享/图片/CHAR_FEMALE_LEAD__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_FEMALE_LEAD__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_FEMALE_LEAD__side.png",
+        "back": "出图/共享/图片/CHAR_FEMALE_LEAD__back.png",
+        "face": "出图/共享/图片/CHAR_FEMALE_LEAD__face.png"
+      },
       "sha256": "17b600b3d5eb4b6bdf31238d64e8580935bc66923ddf44b3903d5fce63f4576b",
-      "updated_at": "2026-07-06"
+      "updated_at": "2026-07-07T11:18:48"
+    },
+    "CHAR_ZHANG_LAODA": {
+      "id": "CHAR_ZHANG_LAODA",
+      "type": "character",
+      "status": "ready",
+      "display_name": "张老大",
+      "role": "前期杂役头目/压迫源",
+      "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+      "primary_path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+          "role": "cropped_panel_anchor",
+          "view": "three_quarter_upper_body",
+          "source": {
+            "kind": "accepted_panel_crop",
+            "chapter": "第1话",
+            "panel_id": "P003",
+            "raw_path": "出图/第1话/panels/P003.png",
+            "note": "第1话已采纳张老大压迫表情与服饰锚点；后续需保持同一脸、发型、体量与油污质感。"
+          }
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+          "sha256": "63a1c1d5aad08deb07b5f8c1260eb95a08c8234b3394f7fcc81de474763e2335",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第2话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T14:19:25"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
+          "sha256": "a8fc951ad8eaba556646f1934ee53aaaf1bdefa8f054cd8117d15036b0464244",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第2话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T14:21:27"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__side.png",
+          "sha256": "329247028772a2dd5fadfb0a67ff94fcf464aa4fdbfbdc0014e6b27026ffe18e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第2话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T14:24:20"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__back.png",
+          "sha256": "5bb85b3fa14f511cb174c11cd37c1daba13cde7d3c86755897642fde25c7f0fc",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第2话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T14:26:09"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
+          "sha256": "a95129b48d2747d8ac4d148a004ca3b5f8ba706fcd5372e068fb791ff66a2c87",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第2话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.142.5"
+          },
+          "updated_at": "2026-07-07T14:28:27"
+        }
+      ],
+      "character_dna": {
+        "body": "粗壮高大的杂役头目，肩背厚，手臂粗，站姿压迫，动作常带指使和俯视感。",
+        "face": "东方粗粝男性脸，颧骨和下颌硬，浓眉，窄眼带油滑笑意，胡茬或短须，神情轻蔑。",
+        "hair": "黑色长发或乱束发，发量厚，略油腻，不要清爽少年感。",
+        "costume": "深色破旧粗布/皮革感杂役头目衣，灰黑、暗褐、铁锈色为主，袖口和手掌带油污泥痕。",
+        "temperament": "小权力压迫者，粗鲁、精明、会假装照顾新人，笑里带欺压。"
+      },
+      "dna_contract": [
+        "每次出现都保持同一粗壮体量、浓眉窄眼、胡茬、黑长发和油污手。",
+        "可以根据场景换粗布外袍或厨房/杂役院光线，但不能美型化、年轻化、瘦削化或变成正派仙师。",
+        "他是底层杂役头目，不穿高阶仙门华服，不带华丽法器。"
+      ],
+      "style_contract": "跟随影视级写实国漫修仙短剧质感；张老大的画面可偏暗、脏、压迫，但仍需清晰五官和稳定服装材质。",
+      "forbidden_inheritance": [
+        "低幼Q版",
+        "少年美型脸",
+        "现代黑帮西装",
+        "高阶仙师华服",
+        "过度卡通反派脸",
+        "截图UI",
+        "文字水印"
+      ],
+      "notes": "第2话高频夜访与食堂压迫角色；若长期出现，应补齐 front / three_quarter / side / back / face 多视图。",
+      "sha256": "c914fb1263320cdc29b0da997b5d004802ef49973465026d473f42c763c5e122",
+      "updated_at": "2026-07-07T17:25:38",
+      "views": {
+        "front": "出图/共享/图片/CHAR_ZHANG_LAODA__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_ZHANG_LAODA__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_ZHANG_LAODA__side.png",
+        "back": "出图/共享/图片/CHAR_ZHANG_LAODA__back.png",
+        "face": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png"
+      },
+      "variant_policy": "张老大当前为成年杂役头目基准形态；后续只允许在同一成年脸部 DNA 下调整场景光线、衣物脏污程度、疲惫/假笑/压迫表情和动作姿态，不允许少年化、仙师化、换脸、换发际线、换体量或更换服装主色。",
+      "age_variants": {
+        "adult_baseline": {
+          "story_age": "成年",
+          "role": "秀竹峰杂役头目/前期压迫源",
+          "anchor_path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+          "allowed_changes": "食堂、夜访、黑暗大殿等场景光线变化；粗布外袍开合、袖口油污、手部泥痕、假笑或轻蔑表情可变化。",
+          "forbidden_changes": "不能少年化、不能美型仙师化、不能瘦削化、不能换短发或清爽发型、不能丢失胡茬/浓眉/粗壮体量/油污手。"
+        },
+        "minor_injury_or_pressure": {
+          "inherit_from": "adult_baseline",
+          "allowed_changes": "可增加汗水、灰尘、轻微伤痕或更压迫的阴影。",
+          "forbidden_changes": "不做重伤毁容、魔化、妖化或高阶觉醒灵纹；不能遮掉五官导致身份无法辨认。"
+        }
+      }
+    },
+    "PROP_BROKEN_BASIN": {
+      "id": "PROP_BROKEN_BASIN",
+      "type": "prop",
+      "status": "ready",
+      "display_name": "黑旧陶盆 / 聚宝盆前身",
+      "anchor_path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "role": "cropped_prop_anchor",
+          "source": {
+            "kind": "accepted_panel_crop",
+            "chapter": "第1话",
+            "panel_id": "P016",
+            "raw_path": "出图/第1话/panels/P016.png",
+            "note": "第1话潭底破盆锚点；后续外形必须保持朴素破旧，不提前神化。"
+          }
+        }
+      ],
+      "prop_contract": {
+        "shape": "圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。",
+        "material": "旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。",
+        "behavior": "盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。",
+        "lighting": "可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。"
+      },
+      "notes": "核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。",
+      "forbidden_inheritance": [
+        "金属盆",
+        "现代塑料盆",
+        "崭新瓷碗",
+        "系统屏幕",
+        "会说话法宝",
+        "过早金光爆发",
+        "复杂神器雕花",
+        "文字水印"
+      ],
+      "sha256": "ff20126dc55ae8baaa83ff8336b59e4f1d6feb05e57f41a8d0e055dd8807879d",
+      "updated_at": "2026-07-07T14:15:54"
     }
   }
 }

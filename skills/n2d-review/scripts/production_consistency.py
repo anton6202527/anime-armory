@@ -580,6 +580,9 @@ def _character_forms(char: Mapping[str, Any]) -> List[Mapping[str, Any]]:
 
 def _expression_anchor_count(form: Mapping[str, Any]) -> int:
     raw = form.get("expression_anchors") or form.get("expressions") or form.get("表情锚")
+    if not raw and isinstance(form.get("reference_group"), Mapping):
+        ref = form.get("reference_group")
+        raw = ref.get("expression_anchors") or ref.get("expressions") or ref.get("表情锚")
     if isinstance(raw, Mapping):
         return len(raw)
     if isinstance(raw, list):
@@ -3006,8 +3009,10 @@ def check_cost_route(root: str, ep: str) -> dict:
         providers = _unique(_event_provider(e) for e in rows)
         if len(providers) > 1:
             allowed = any(str((e.get("generation") or {}).get("redraw_category") or "").strip() in {"backend_migration", "face_consistency"} for e in rows)
+            if allowed:
+                continue
             res["findings"].append(_row(
-                "warn" if allowed else "block",
+                "block",
                 f"{asset} 同一资产生成跨 provider：{providers}；未声明 backend_migration 会造成一致性和成本归因混乱。",
                 stage="image" if asset.lower().endswith(".png") else "video",
                 artifacts=("生产数据/production_events.jsonl",),
@@ -3023,13 +3028,28 @@ def check_cost_route(root: str, ep: str) -> dict:
     routes = _load_routes(root, ep)
     if routes:
         for asset, rows in by_asset.items():
+            latest = rows[-1]
+            stage = str(latest.get("stage") or "").lower()
+            # Video routes describe MP4 generation backends. Image keyframes and
+            # compose/final-master events can share Clip_XX filenames but should
+            # not be compared against route.primary_backend.
+            if stage != "video" and not str(asset).lower().endswith(".mp4"):
+                continue
             clip = _clip_num(os.path.splitext(os.path.basename(asset))[0])
             route = routes.get(clip)
             if not route:
                 continue
             primary = str(route.get("primary_backend") or "").lower()
-            provider = _event_provider(rows[-1]).lower()
+            provider = _event_provider(latest).lower()
+            fallback_raw = route.get("fallback_backends") or route.get("fallback_backend") or []
+            fallback_backends = [str(x).lower() for x in _as_list(fallback_raw)]
+            fallback_allowed = any(
+                fb and (fb in provider or provider in fb)
+                for fb in fallback_backends
+            )
             if primary and provider and primary not in provider and provider not in primary:
+                if fallback_allowed:
+                    continue
                 res["findings"].append(_row(
                     "warn",
                     f"{clip} 最新生成 provider={provider} 与 route.primary_backend={primary} 不一致；确认是合法 fallback 还是路由漂移。",

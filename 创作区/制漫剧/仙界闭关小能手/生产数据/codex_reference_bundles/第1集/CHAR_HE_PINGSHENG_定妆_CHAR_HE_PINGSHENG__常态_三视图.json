@@ -1,0 +1,161 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 4,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+      "bytes": 1852196,
+      "owner": "CHAR_HE_PINGSHENG::定妆_CHAR_HE_PINGSHENG__常态_三视图",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态__82ddb1a28a18_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2177378,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态__82ddb1a28a18_941x1672_to_1024x1819.png",
+      "prepared_sha256": "cbf74b7cd85278c6dcba65eae8386e1a7e96d000c41864e15fb30fb97b3a9025",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "82ddb1a28a187fa1e86f1c9072c805df4042c5c5801a39670686abb94dd2bc66",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+      "bytes": 1088208,
+      "owner": "CHAR_HE_PINGSHENG::定妆_CHAR_HE_PINGSHENG__常态_三视图",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态_半身__a4b55d4dfd68_941x1672_to_1024x1819.png",
+      "prepared_bytes": 1197642,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态_半身__a4b55d4dfd68_941x1672_to_1024x1819.png",
+      "prepared_sha256": "02f763dee4054804e1adb9508d5b51ea27116e204c09076e803412856419dd2e",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "a4b55d4dfd68c1c8aad0450964b268db749feb82ecaa37d96c55bdfb9a6aeb63",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png",
+      "bytes": 669656,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切__90e02f108c31_941x1672_to_1024x1819.png",
+      "prepared_bytes": 703933,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切__90e02f108c31_941x1672_to_1024x1819.png",
+      "prepared_sha256": "5c5078306fde5ab6d80daf0d6ec1c10cb588b8fbedd93da40d4e4e2547f6c246",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "90e02f108c310853fe3cbe5895efff8beb41ede6f097bab5315c16d7192678d0",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "bytes": 2998716,
+      "owner": "CHAR_HE_PINGSHENG/常态",
+      "priority": 30,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1468,
+        "original_long_edge": 1740,
+        "original_short_edge": 1468,
+        "original_width": 1740,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "role": "character",
+      "sequence": 2,
+      "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+      "source": "reference_bundle",
+      "upgraded_from_style_anchor": true
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_HE_PINGSHENG",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+        "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
+        "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_脸部特写_脸锚裁切.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_HE_PINGSHENG::定妆_CHAR_HE_PINGSHENG__常态_三视图",
+  "target": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态_三视图.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

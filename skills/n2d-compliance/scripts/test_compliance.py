@@ -31,6 +31,25 @@ def test_init_manifest_uses_identity_registry_characters(tmp_path: Path) -> None
     assert ids == ["CHAR_A", "CHAR_B"]
 
 
+def test_default_manifest_inherits_project_compliance_usage(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("- 合规用途：paid_distribution\n", encoding="utf-8")
+
+    data = compliance.default_manifest(root, "第1集")
+
+    assert data["distribution_intent"] == "paid_distribution"
+
+
+def test_default_manifest_defaults_to_internal_demo_usage(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+
+    data = compliance.default_manifest(root, "第1集")
+
+    assert data["distribution_intent"] == "internal_only"
+
+
 def test_check_manifest_reports_missing_registry_character(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     reg = root / "出图" / "common"

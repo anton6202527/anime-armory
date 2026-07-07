@@ -1,0 +1,159 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 4,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+      "bytes": 1961058,
+      "owner": "CHAR_HAN_LAOSAN::定妆_CHAR_HAN_LAOSAN__常态_三视图",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态__ae1957c5a06b_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2324076,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态__ae1957c5a06b_941x1672_to_1024x1819.png",
+      "prepared_sha256": "dabda035699c288d4e38bfa39ff8b20997d0e36833c6bd67fcea11ea8959f6a9",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+      "role": "source_frame",
+      "sequence": 0,
+      "sha256": "ae1957c5a06bbe3c886372e7ab0b1256796a4185580be7f22b5af73751c23030",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+      "bytes": 960647,
+      "owner": "CHAR_HAN_LAOSAN::定妆_CHAR_HAN_LAOSAN__常态_三视图",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态_半身__f54abcd928ca_941x1672_to_1024x1819.png",
+      "prepared_bytes": 1047704,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态_半身__f54abcd928ca_941x1672_to_1024x1819.png",
+      "prepared_sha256": "37873453f410705c64d9d164fc94377d3a0456917459727d8d34786cfc8e847f",
+      "priority": 0,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+      "role": "source_frame",
+      "sequence": 1,
+      "sha256": "f54abcd928ca5aa831d215f2ec7155c3182143e1c11f986aa9fb93feef9130bc",
+      "source": "same_source_makeup_parent",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png",
+      "bytes": 705176,
+      "owner": "CHAR_HAN_LAOSAN/常态",
+      "prepared_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切__002d40f62bd3_941x1672_to_1024x1819.png",
+      "prepared_bytes": 746293,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切__002d40f62bd3_941x1672_to_1024x1819.png",
+      "prepared_sha256": "b78a5704d3860b9938ec5b18200efafb562acf13dc1c2f4fb3edfffbc453d5b7",
+      "priority": 10,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png",
+      "role": "character",
+      "sequence": 3,
+      "sha256": "002d40f62bd37f4e6b5ed93219f15d8e5d099b83caeae20be93bc85f7aab6f15",
+      "source": "reference_bundle",
+      "source_abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png"
+    },
+    {
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "bytes": 2998716,
+      "owner": "STYLE_ANCHOR",
+      "priority": 60,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": false,
+        "max_long_edge": 2048,
+        "min_short_edge": 1024,
+        "original_height": 1468,
+        "original_long_edge": 1740,
+        "original_short_edge": 1468,
+        "original_width": 1740,
+        "policy": "low_res_reference_enhancement",
+        "status": "source_resolution_ok"
+      },
+      "rel_path": "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png",
+      "role": "style",
+      "sequence": 2,
+      "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729",
+      "source": "reference_bundle"
+    }
+  ],
+  "episode": "第1集",
+  "items": [
+    {
+      "id": "STYLE_ANCHOR",
+      "kind": "style",
+      "paths": [
+        "出图/共享/图片/CHAR_HE_PINGSHENG_定型参考_成年觉醒态.png"
+      ],
+      "use_policy": "style_only"
+    },
+    {
+      "form": "常态",
+      "id": "CHAR_HAN_LAOSAN",
+      "kind": "character",
+      "paths": [
+        "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
+        "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_半身.png",
+        "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_脸部特写_脸锚裁切.png"
+      ]
+    }
+  ],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "CHAR_HAN_LAOSAN::定妆_CHAR_HAN_LAOSAN__常态_三视图",
+  "target": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态_三视图.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

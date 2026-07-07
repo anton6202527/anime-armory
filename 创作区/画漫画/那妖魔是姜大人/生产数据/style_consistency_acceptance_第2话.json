@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "kind": "comic_style_consistency_acceptance",
+  "chapter": "第2话",
+  "accepted_at": "2026-07-07T19:32:16+0800",
+  "accepted_by": "codex_visual_qc",
+  "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg",
+  "accepted_findings": [
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P004",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "百妖谱初次浮现金光是脚本指定系统转折格；局部金色光点属于本项目风格锚允许的金色点缀，人物脸型、囚服状态、荒野灰调和水墨边缘未漂移。",
+      "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P006",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "P006 脚本明确要求“夕阳余晖映在荒野枯草和尸骸上”，暖光偏离来自计划内光效；虎妖体量、女主囚服、横刀、荒野和水墨暗部与战斗段连续。",
+      "evidence": "脚本/第2话/panel_script.json::P006；生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P008",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "高速刀爪交错格需要速度线、墨痕和血线，细节密度高于静态格属于计划内动作表现；角色与虎妖造型、黑白灰水墨基调仍一致。",
+      "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P010",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "百妖谱再次展开并照亮女主是脚本指定系统提示格；金色卷轴光造成指纹离群，但女主脸部、血污囚服、泥地荒野和水墨线条未漂移。",
+      "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "location_color_grade_shift",
+      "panel_id": "P010",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "同场景暖度偏离来自百妖谱金光照明，是系统特效而非场景白平衡漂移；后续嵌字会在该区域承接系统提示。",
+      "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P011",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-07T19:32:16+0800",
+      "reason": "P011 是百妖谱近景追问格，局部卷轴和低角度脸部近景导致指纹离群；人物 DNA、发型、囚服状态、冷灰荒野背景与 P010/P012 连续。",
+      "evidence": "生产数据/qa_previews/第2话_panels_contact_sheet.jpg；生产数据/qa_previews/第2话_style_outliers_detail.jpg"
+    }
+  ]
+}

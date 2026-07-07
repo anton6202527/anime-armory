@@ -13,6 +13,7 @@
   - T1  测试文件不得硬编码引用真实 `创作区/**` 作品路径；需要样例应使用 tmp_path 或 tests/fixtures。
   - F1  改了 skill 集合必须同步 skills/README.md 索引：每个 skills/<name>/ 都要在 README 出现。
   - F3  入口文档同步：AGENTS/GEMINI/CLAUDE 不得保留过期命令或旧路径，关键入口保持一致。
+  - F7  系列规模统计同步：skills/README.md 与六个总领 skill 第一行统计不得过期。
 
 零依赖、纯标准库，从仓库根跑：
     python3 tools/validate_skills.py            # 全检，违规 exit 1
@@ -26,6 +27,8 @@ import importlib.util
 import re
 import sys
 from pathlib import Path
+
+import update_skill_stats
 
 REPO = Path(__file__).resolve().parent.parent
 SKILLS = REPO / "skills"
@@ -324,6 +327,11 @@ def check_readme_index() -> list[str]:
     return bad
 
 
+def check_skill_stats_sync() -> list[str]:
+    """F7: README scale table and top-level dispatcher stat lines must be fresh."""
+    return update_skill_stats.validate_stats(update_skill_stats.get_stats())
+
+
 def check_entry_docs_sync() -> list[str]:
     """F3: 入口文档关键命令、路由入口和过期写法同步检查。"""
     bad: list[str] = []
@@ -529,6 +537,7 @@ CHECKS = {
     "T1": ("测试不得引用真实创作区作品路径", check_tests_do_not_reference_real_workspace_projects),
     "F1": ("skills/README.md 索引同步", check_readme_index),
     "F3": ("入口文档同步", check_entry_docs_sync),
+    "F7": ("系列规模统计同步", check_skill_stats_sync),
 }
 
 

@@ -119,6 +119,21 @@ def test_detective_evidence_beats_count_as_advancing():
     assert "dialogue_not_advancing" not in codes(result)
 
 
+def test_short_drama_pressure_phrases_count_as_advancing_and_motivated():
+    root = _mk_ep(
+        "[镜头1·张老大·粗声逼问·快] 站直。我问你，叫什么？多大了？\n"
+        "[镜头2·贺平生·谨慎低头·快] 回张老大，我今年十四岁。\n"
+        "[镜头3·张老大·威胁逼问·快] 什么灵根？说错一句，就滚出外门。\n"
+        "[镜头4·贺平生·压低·快] 五行灵根。\n"
+        "[镜头5·张老大·压迫·快] 水不满，我要拿你顶罪。\n"
+    )
+
+    result = SI.audit_episode(root, "第1集")
+
+    assert "dialogue_not_advancing" not in codes(result)
+    assert "motivation_vector_missing" not in codes(result)
+
+
 def test_fake_cliffhanger_warned():
     root = _mk_ep(
         "[镜头1·旁白·平静·慢] 风吹过院子。\n"

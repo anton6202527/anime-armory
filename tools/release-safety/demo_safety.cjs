@@ -46,12 +46,20 @@ const RELEASE_OMIT_DIR_NAMES = new Set([
   '_clipcache',
   '_downloads',
   '_work',
+  'final_backups',
+  'image_qc',
   'local_sdxl_cache',
   'local_train',
   'lora',
   'lora_cloud_packages',
+  'reference_enhanced',
+  'video_qc',
+  'video_backups',
   'video_raw_with_audio',
+  'video_repair_backups',
   '废料',
+  '候选',
+  '出视频',
 ]);
 
 const SENSITIVE_EXACT_NAMES = new Set([
@@ -133,7 +141,11 @@ const MEDIA_EXTENSIONS = new Set([
 const SENSITIVE_SEGMENT_RE =
   /(^|[._ -])(api[_-]?key|apikey|auth|bearer|client[_-]?secret|cookie|credential|credentials|login|password|passwd|private[_-]?key|refresh[_-]?token|secret|secrets|session|token|tokens)([._ -]|$)/i;
 
-const RELEASE_OMIT_FILE_RE = /\.prelimit-\d{8}[-_]\d{4}\.[^.]+$/i;
+const RELEASE_OMIT_FILE_PATTERNS = [
+  /\.prelimit-\d{8}[-_]\d{4}\.[^.]+$/i,
+  /\.pre_loudnorm(?:[._-].*)?\.[^.]+$/i,
+  /\.loudnorm_tmp(?:[._-].*)?\.[^.]+$/i,
+];
 
 const SECRET_CONTENT_PATTERNS = [
   { name: 'private-key-block', re: /-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----/ },
@@ -175,9 +187,12 @@ function sensitivePathReason(src, root) {
     if (/^license\.(key|pem|p12|pfx)$/i.test(part)) return `license key file: ${part}`;
     if (SENSITIVE_EXTENSIONS.has(path.extname(lower))) return `sensitive extension: ${part}`;
     if (SENSITIVE_SEGMENT_RE.test(part)) return `sensitive name segment: ${part}`;
+    if (/\.parts$/i.test(part)) return `generated release-omitted directory: ${part}`;
   }
   const name = parts[parts.length - 1] || '';
-  if (RELEASE_OMIT_FILE_RE.test(name)) return `generated release-omitted file: ${name}`;
+  for (const pattern of RELEASE_OMIT_FILE_PATTERNS) {
+    if (pattern.test(name)) return `generated release-omitted file: ${name}`;
+  }
   return null;
 }
 

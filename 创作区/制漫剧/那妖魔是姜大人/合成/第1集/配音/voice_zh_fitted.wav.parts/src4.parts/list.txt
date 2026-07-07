@@ -1,0 +1,2 @@
+file 'p0.wav'
+file 'g0.wav'

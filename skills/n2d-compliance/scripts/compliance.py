@@ -35,6 +35,10 @@ from n2d_contract import (  # noqa: E402  合规清单 kind / 身份注册路径
     COMPLIANCE_STATUS_LIKE_VALUES,
     identity_registry_path,
 )
+try:  # Project intent is a setting choice; compliance keeps working if settings helpers are unavailable.
+    from settings import get_setting  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover - standalone fallback
+    get_setting = None  # type: ignore
 
 
 KIND = COMPLIANCE_MANIFEST_KIND
@@ -151,6 +155,17 @@ def identity_character_ids(root: Path) -> List[str]:
     return out
 
 
+def default_distribution_intent(root: Path) -> str:
+    if get_setting is None:
+        return "internal_only"
+    intent = str(get_setting(str(root), "合规用途", "internal_only") or "").strip()
+    if intent in {"publish_candidate", "paid_distribution", "internal_only"}:
+        return intent
+    if intent in {"demo", "demo_only", "test"}:
+        return "internal_only"
+    return "internal_only"
+
+
 def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
     chars = identity_character_ids(root)
     if not chars:
@@ -159,7 +174,7 @@ def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
         "kind": KIND,
         "version": 1,
         "updated_at": now_date(),
-        "distribution_intent": "publish_candidate",
+        "distribution_intent": default_distribution_intent(root),
         "scope": {"episodes": [episode] if episode else "all"},
         "rights": {
             "source_text": {

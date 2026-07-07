@@ -134,6 +134,8 @@ def main() -> int:
     translations = load_translation_map(translation_path)
     text_language = read_setting(root, "文字语言", "中文")
     lettering = build_lettering(panel_script, layout, translations, text_language)
+    if not lettering.get("chapter"):
+        lettering["chapter"] = args.chapter
     if translations:
         lettering["translation_map"] = str(translation_path.relative_to(root))
     out_path = root / "排版" / args.chapter / "lettering.json"

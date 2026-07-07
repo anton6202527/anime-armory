@@ -47,6 +47,31 @@ ACTION_ANCHOR_RISK_FLAGS = frozenset({
     "fast_motion",
     "physics",
 })
+INNER_FOCUS_RE = re.compile(
+    r"内心戏|内心独白|心声|心理反应|心理活动|心念|心想|暗想|自省|心里一沉|心里想|"
+    r"inner monologue|internal monologue|thought beat|subjective reaction",
+    re.I,
+)
+CHARACTER_PREFIXES = ("CHAR_", "GROUP_", "CROWD_")
+
+VISUAL_CONTRACT_ALIASES = {
+    "色调基线": ("色调基线", "color_baseline", "tone_baseline", "visual_tone_baseline"),
+    "场景光位锚": ("场景光位锚", "scene_light_anchors", "light_anchors", "lighting_anchors"),
+    "场景轴线视线": ("场景轴线视线", "axis_and_eyeline", "scene_axis_eyeline", "axis_eyeline"),
+    "角色状态演进": ("角色状态演进", "character_state_progression", "character_state_ledger", "state_progression"),
+    "景别阶梯": ("景别阶梯", "shot_size_ladder", "shot_scale_ladder", "lens_ladder"),
+}
+
+STYLE_CONTRACT_ALIASES = {
+    "风格名": ("风格名", "style_name", "name"),
+    "视觉基调": ("视觉基调", "visual_tone", "tone"),
+    "镜头与构图": ("镜头与构图", "composition", "camera_composition"),
+    "光色策略": ("光色策略", "lighting", "color_lighting_strategy", "lighting_strategy"),
+    "运动边界": ("运动边界", "motion_boundaries", "motion_boundary", "camera_motion_boundaries"),
+    "风格禁忌": ("风格禁忌", "negative", "style_negative", "style_taboo"),
+}
+
+TIMELINE_TOLERANCE_SEC = 0.05
 
 _REALM_PORTAL_WEAK_TERMS = frozenset({
     "穿越", "魂穿", "身穿", "穿到", "醒来在", "异界", "transmigration", "isekai",
@@ -75,6 +100,13 @@ def missing(value: Any) -> bool:
     if isinstance(value, (list, dict)) and not value:
         return True
     return False
+
+
+def get_alias(mapping: Dict[str, Any], field: str, aliases: Dict[str, Tuple[str, ...]]) -> Any:
+    for key in aliases.get(field, (field,)):
+        if key in mapping:
+            return mapping.get(key)
+    return None
 
 
 def clip_id(clip: Dict[str, Any], index: int) -> str:
@@ -133,6 +165,20 @@ def duration_of(clip: Dict[str, Any]) -> Optional[float]:
     return None
 
 
+def number_of(clip: Dict[str, Any], *keys: str) -> Optional[float]:
+    for key in keys:
+        value = clip.get(key)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            m = re.search(r"-?\d+(?:\.\d+)?", value)
+            if m:
+                return float(m.group(0))
+    return None
+
+
 def action_anchor_text(clip: Dict[str, Any]) -> str:
     """Text surface for deciding whether a clip is a long/heavy action chain."""
     parts: List[str] = []
@@ -177,6 +223,85 @@ def _listish(value: Any) -> List[str]:
     return []
 
 
+def _text_blob(value: Any) -> str:
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    return str(value or "")
+
+
+def is_inner_focus_clip(clip: Dict[str, Any]) -> bool:
+    parts: List[str] = []
+    for key in (
+        "id",
+        "label",
+        "scene",
+        "description",
+        "dramatic_function",
+        "story_function",
+        "rhythm",
+        "audience_effect",
+        "template",
+        "template_contract",
+        "shots",
+        "subtitle_lines",
+        "voiceover",
+    ):
+        if key in clip:
+            parts.append(_text_blob(clip.get(key)))
+    return bool(INNER_FOCUS_RE.search("\n".join(parts)))
+
+
+def _character_like_items(value: Any) -> List[str]:
+    out: List[str] = []
+    for item in _listish(value):
+        if item.startswith(CHARACTER_PREFIXES) and item not in out:
+            out.append(item)
+    return out
+
+
+def inner_focus_presence(clip: Dict[str, Any]) -> List[str]:
+    out: List[str] = []
+    for item in _character_like_items(clip.get("character_ids")):
+        if item not in out:
+            out.append(item)
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), dict) else {}
+    for key in ("required_presence", "foreground_presence", "visible_presence"):
+        for item in _character_like_items(schedule.get(key)):
+            if item not in out:
+                out.append(item)
+    return out
+
+
+def has_inner_focus_context_exception(clip: Dict[str, Any]) -> bool:
+    for key in ("inner_focus_allow_context", "inner_focus_context_reason", "context_presence_reason"):
+        value = clip.get(key)
+        if value not in (None, "", False, []):
+            return True
+    policy = clip.get("inner_focus_policy")
+    if isinstance(policy, dict) and any(policy.get(key) not in (None, "", False, []) for key in ("allow_context", "context_reason")):
+        return True
+    contract = clip.get("template_contract")
+    if isinstance(contract, dict) and any(contract.get(key) not in (None, "", False, []) for key in ("inner_focus_allow_context", "inner_focus_context_reason")):
+        return True
+    return False
+
+
+def check_inner_focus_isolation(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc: str) -> None:
+    if not is_inner_focus_clip(clip):
+        return
+    visible = inner_focus_presence(clip)
+    if len(visible) <= 1 or has_inner_focus_context_exception(clip):
+        return
+    add(
+        rows,
+        "warn",
+        "内心戏主体隔离",
+        loc,
+        "内心戏/心理反应镜默认只保留思考主体入画；其余人物/妖魔/道具应转为 offscreen/虚焦剪影/记忆符号或 forbidden_presence，"
+        "避免重复上一镜群像导致观感像重复生成。若确需同框压迫，请写 inner_focus_context_reason 或 inner_focus_allow_context=true。",
+    )
+
+
 def action_anchor_requirement(clip: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     template = str(clip.get("template") or "").strip()
     contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), dict) else {}
@@ -218,7 +343,7 @@ def check_contract_fields(rows: List[Dict[str, Any]], data: Dict[str, Any], path
         add(rows, "block", "视觉契约", path, "storyboard.json 缺 visual_contract；分镜阶段必须先定色调、光位、轴线、状态和景别阶梯。")
     else:
         for field in VISUAL_CONTRACT_FIELDS:
-            if missing(vc.get(field)):
+            if missing(get_alias(vc, field, VISUAL_CONTRACT_ALIASES)):
                 add(rows, "block", "视觉契约", path, f"visual_contract 缺字段或为空：{field}")
 
     sc = data.get("style_contract")
@@ -229,7 +354,7 @@ def check_contract_fields(rows: List[Dict[str, Any]], data: Dict[str, Any], path
             add(rows, "block", "基础视觉风格契约", path, "storyboard.json 缺 style_contract；基础视觉风格必须在分镜阶段结构化。")
     else:
         for field in STYLE_CONTRACT_FIELDS:
-            if missing(sc.get(field)):
+            if missing(get_alias(sc, field, STYLE_CONTRACT_ALIASES)):
                 add(rows, "block", "基础视觉风格契约", path, f"style_contract 缺字段或为空：{field}")
         anchors = sc.get("style_anchor") or sc.get("风格锚") or sc.get("anchors")
         if isinstance(anchors, str):
@@ -321,6 +446,47 @@ def check_anchor_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc:
         prev = max(prev, float(at))
 
 
+def check_timeline(rows: List[Dict[str, Any]], clips: List[Dict[str, Any]], path: str) -> None:
+    cursor = 0.0
+    saw_explicit_time = False
+    for index, clip in enumerate(clips, 1):
+        loc = f"{path} {clip_id(clip, index)}"
+        duration = duration_of(clip)
+        start = number_of(clip, "start_sec", "start", "开始秒", "起始秒")
+        end = number_of(clip, "end_sec", "end", "结束秒", "终止秒")
+        if start is None and end is None:
+            if duration is not None:
+                cursor += duration
+            continue
+        saw_explicit_time = True
+        if duration is None:
+            continue
+        if start is None or end is None:
+            add(rows, "block", "时间轴契约", loc, "clip 同时使用显式时间轴时必须成对填写 start_sec/end_sec。")
+            cursor += duration
+            continue
+        if abs(start - cursor) > TIMELINE_TOLERANCE_SEC:
+            add(
+                rows,
+                "block",
+                "时间轴契约",
+                loc,
+                f"start_sec={start:g} 与前序 duration 累计 {cursor:g}s 不一致；请重跑 finalize 或修正手填时间轴。",
+            )
+        expected_end = start + duration
+        if abs(end - expected_end) > TIMELINE_TOLERANCE_SEC:
+            add(
+                rows,
+                "block",
+                "时间轴契约",
+                loc,
+                f"end_sec={end:g} 但 start_sec+duration={expected_end:g}s；手填时间轴会让字幕/视频切段错位。",
+            )
+        cursor = expected_end
+    if saw_explicit_time and cursor <= 0:
+        add(rows, "block", "时间轴契约", path, "显式时间轴存在但累计时长不可解析。")
+
+
 def validate(root: str, ep: str) -> Dict[str, Any]:
     path = storyboard_path(root, ep)
     rows: List[Dict[str, Any]] = []
@@ -340,6 +506,8 @@ def validate(root: str, ep: str) -> Dict[str, Any]:
     if not isinstance(clips, list) or not clips:
         add(rows, "block", "故事板", path, "storyboard.json 缺非空 clips[]。")
         return {"ok": False, "findings": rows}
+    dict_clips = [clip for clip in clips if isinstance(clip, dict)]
+    check_timeline(rows, dict_clips, path)
     policy = data.get("policy") if isinstance(data.get("policy"), dict) else {}
     enforce_midframe = backend_supports_three_plus_frames(policy.get("video_backend"))
     for index, clip in enumerate(clips, 1):
@@ -353,6 +521,7 @@ def validate(root: str, ep: str) -> Dict[str, Any]:
             add(rows, "block", "镜头时长", loc, "clip 缺可解析的 duration（duration/duration_sec/时长/seconds 之一）；原生音画下镜头时长靠它定时间预算，分镜设计时必须填 Clip duration。")
         check_template_contract(rows, clip, loc)
         check_anchor_contract(rows, clip, loc, enforce_midframe)
+        check_inner_focus_isolation(rows, clip, loc)
     return {"ok": not any(r["severity"] == "block" for r in rows), "findings": rows}
 
 

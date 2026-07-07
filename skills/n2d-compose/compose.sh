@@ -223,7 +223,8 @@ while IFS=$'\t' read -r c dur speed_mode punch_vf; do
   [ -f "$c" ] || continue
   CLIPS+=("$c")
   key=$(python3 -c "import os,hashlib,sys;p=sys.argv[1];print(hashlib.md5(f'{os.path.basename(p)}:{os.path.getmtime(p)}:{sys.argv[2]}:{sys.argv[3]}:{sys.argv[4]}:{sys.argv[5]}'.encode()).hexdigest()[:16])" "$c" "${PXW}x${PXH}:${VIDEO_CRF}:${VIDEO_PRESET}" "$dur" "$speed_mode" "$punch_vf")
-  nf="$CACHE/n_${key}.mp4"
+  clip_tag=$(python3 -c "import os,re,sys;name=os.path.basename(sys.argv[1]);m=re.search(r'(Clip[_ -]*0*\\d+)(?:[^A-Za-z0-9]+part\\s*0*(\\d+))?', name, re.I);base=(m.group(1).replace(' ','_').replace('-','_') if m else 'clip');part=(('_part'+m.group(2)) if (m and m.group(2)) else '');print((base+part).lower())" "$c")
+  nf="$CACHE/${clip_tag}_n_${key}.mp4"
   
   if [ ! -f "$nf" ]; then
     TRIM_OPT=""

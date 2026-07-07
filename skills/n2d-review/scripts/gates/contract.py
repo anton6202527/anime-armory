@@ -492,6 +492,10 @@ _PRESENCE_ENTRY_EXIT_KEYS = (
 )
 _PRESENCE_ID_KEYS = ("id", "asset_id", "character_id", "object_id", "prop_id", "name", "label")
 _PRESENCE_SPLIT_RE = re.compile(r"[,，、;；]\s*")
+_PRESENCE_EMPTY_TOKENS = {
+    "", "无", "none", "null", "n/a", "na", "nil", "未定", "按首帧", "按首帧画面",
+    "按storyboard", "按 storyboard", "无人物", "无角色", "无道具", "无资产", "无地点",
+}
 _PRESENCE_EXIT_MARKERS = (
     "出画", "离开", "离场", "退场", "退出", "走出", "消失", "转为画外", "画外",
     "不在画面", "镜头切到", "反打", "过肩", "ots", "offscreen", "out of frame",
@@ -506,6 +510,18 @@ _PRESENCE_DISCONTINUITY_MARKERS = (
     "空镜", "明确不连续", "另一个地点", "scene change", "time jump", "cutaway",
     "establishing shot", "establishing",
 )
+
+
+def _presence_clean(tokens: Iterable[str]) -> set[str]:
+    out: set[str] = set()
+    for token in tokens:
+        t = str(token or "").strip()
+        if not t:
+            continue
+        if t.lower() in _PRESENCE_EMPTY_TOKENS or t in _PRESENCE_EMPTY_TOKENS:
+            continue
+        out.add(t)
+    return out
 
 
 def _presence_token(value: Any) -> str:
@@ -539,7 +555,7 @@ def _presence_tokens(value: Any) -> set[str]:
             if key_s and key_s not in _PRESENCE_ID_KEYS:
                 out.add(_presence_entity_key(key_s))
             out |= _presence_tokens(item)
-        return {t for t in out if t}
+        return _presence_clean(out)
     if isinstance(value, (list, tuple, set)):
         out: set[str] = set()
         for item in value:
@@ -548,7 +564,7 @@ def _presence_tokens(value: Any) -> set[str]:
     text = str(value or "").strip()
     if not text:
         return set()
-    return {_presence_entity_key(part.strip()) for part in _PRESENCE_SPLIT_RE.split(text) if part.strip()}
+    return _presence_clean(_presence_entity_key(part.strip()) for part in _PRESENCE_SPLIT_RE.split(text) if part.strip())
 
 
 def _presence_collect(section: Any, keys: Sequence[str]) -> set[str]:
@@ -574,11 +590,132 @@ def _presence_contract(clip: Mapping[str, Any]) -> dict:
     visible |= required
     has_contract = bool(schedule or required or offscreen or forbidden)
     return {
-        "visible": {x for x in visible if x},
-        "offscreen": {x for x in offscreen if x},
-        "forbidden": {x for x in forbidden if x},
+        "visible": _presence_clean(visible),
+        "offscreen": _presence_clean(offscreen),
+        "forbidden": _presence_clean(forbidden),
         "has_contract": has_contract,
     }
+
+
+_SCHEDULE_CHAR_KEYS = ("characters", "character_ids", "roles", "cast", "subjects", "人物", "角色", "在场角色")
+_SCHEDULE_OBJECT_KEYS = ("objects", "object_ids", "props", "prop_ids", "weapons", "weapon_ids", "道具", "物件")
+_SCHEDULE_LOCATION_KEYS = ("locations", "location_ids", "location_id", "scene_id", "loc_id", "地点", "场地")
+_SCHEDULE_REQUIRED_KEYS = _PRESENCE_REQUIRED_KEYS
+_SCHEDULE_OFFSCREEN_KEYS = _PRESENCE_OFFSCREEN_KEYS
+_SCHEDULE_FORBIDDEN_KEYS = _PRESENCE_FORBIDDEN_KEYS
+
+
+def _schedule_expected_entities(clip: Mapping[str, Any]) -> dict[str, set[str]]:
+    """Explicit top-level/shot IDs that must be mirrored in entity_schedule."""
+    expected = {"characters": set(), "objects": set(), "locations": set()}
+    sections: List[Any] = [clip]
+    shots = clip.get("shots")
+    if isinstance(shots, list):
+        sections.extend(s for s in shots if isinstance(s, Mapping))
+    for section in sections:
+        if not isinstance(section, Mapping):
+            continue
+        expected["characters"] |= _presence_collect(section, _SCHEDULE_CHAR_KEYS)
+        expected["objects"] |= _presence_collect(section, _SCHEDULE_OBJECT_KEYS)
+        expected["locations"] |= _presence_collect(section, _SCHEDULE_LOCATION_KEYS)
+    return {k: _presence_clean(v) for k, v in expected.items()}
+
+
+def _schedule_declared_entities(schedule: Mapping[str, Any]) -> dict[str, set[str]]:
+    return {
+        "characters": _presence_collect(schedule, _SCHEDULE_CHAR_KEYS),
+        "objects": _presence_collect(schedule, _SCHEDULE_OBJECT_KEYS),
+        "locations": _presence_collect(schedule, _SCHEDULE_LOCATION_KEYS),
+        "required": _presence_collect(schedule, _SCHEDULE_REQUIRED_KEYS),
+        "offscreen": _presence_collect(schedule, _SCHEDULE_OFFSCREEN_KEYS),
+        "forbidden": _presence_collect(schedule, _SCHEDULE_FORBIDDEN_KEYS),
+    }
+
+
+def _check_storyboard_entity_schedule_integrity(
+    root: str,
+    ep: str,
+    clips: Sequence[Any],
+    require_frame_assets: bool,
+) -> None:
+    """Clip-level entity_schedule must be a hard pre-video truth table, not a note."""
+    for idx, clip in enumerate(clips, 1):
+        if not isinstance(clip, Mapping):
+            continue
+        loc = f"{storyboard_path(root, ep)} clip#{idx}"
+        expected = _schedule_expected_entities(clip)
+        expected_all = expected["characters"] | expected["objects"] | expected["locations"]
+        schedule = clip.get("entity_schedule") or clip.get("实体排程")
+        if not isinstance(schedule, Mapping) or not schedule:
+            if expected_all:
+                sev = BLOCK if require_frame_assets else WARN
+                add(
+                    sev,
+                    "实体排程",
+                    loc,
+                    "Clip 已声明角色/物件/地点 ID，但缺 entity_schedule；视频模型会把“谁必须在场、谁只能画外、谁禁止出现”"
+                    "留给 prompt 猜，容易生成重复 clip、陌生人/陌生物乱入或人物槽位互换。"
+                    "请在 script_stage2 补 entity_schedule.characters/objects/locations/required_presence/offscreen_presence/forbidden_presence，"
+                    "旧项目可先跑 storyboard_contract_backfill.py 再人工复核。",
+                    return_to_stage="script_stage2",
+                )
+            continue
+        declared = _schedule_declared_entities(schedule)
+        missing_chars = sorted(expected["characters"] - declared["characters"])
+        missing_objects = sorted(expected["objects"] - declared["objects"])
+        missing_locations = sorted(expected["locations"] - declared["locations"])
+        if missing_chars or missing_objects or missing_locations:
+            bits: List[str] = []
+            if missing_chars:
+                bits.append("角色 " + "、".join(missing_chars[:8]))
+            if missing_objects:
+                bits.append("物件 " + "、".join(missing_objects[:8]))
+            if missing_locations:
+                bits.append("地点 " + "、".join(missing_locations[:4]))
+            sev = BLOCK if require_frame_assets else WARN
+            add(
+                sev,
+                "实体排程",
+                loc,
+                "entity_schedule 漏登记已在 clip/shots 字段出现的" + "；".join(bits) + "。"
+                "执行端只消费 entity_schedule 真值表；漏登记会让 prompt 只写“不要新增”却没有正向槽位，容易乱入或串脸。",
+                return_to_stage="script_stage2",
+            )
+        declared_visible = declared["characters"] | declared["objects"] | declared["locations"] | expected_all
+        required_unbound = sorted(declared["required"] - declared_visible)
+        if required_unbound:
+            sev = BLOCK if require_frame_assets else WARN
+            add(
+                sev,
+                "实体排程",
+                loc,
+                "required_presence 指向未在 characters/objects/locations 或 clip 显式字段登记的实体："
+                + "、".join(required_unbound[:8])
+                + "。必须先登记实体槽位，再要求它在场。",
+                return_to_stage="script_stage2",
+            )
+        offscreen_conflict = sorted((declared_visible | declared["required"]) & declared["offscreen"])
+        if offscreen_conflict:
+            add(
+                BLOCK,
+                "实体排程",
+                loc,
+                "同一实体同时被登记为可见/必须出现和 offscreen_presence："
+                + "、".join(offscreen_conflict[:8])
+                + "。画外保留只能用于不清晰入画的声音、影子、手部/物件/反应承接；请拆清楚可见槽位与画外槽位。",
+                return_to_stage="script_stage2",
+            )
+        forbidden_conflict = sorted((declared_visible | declared["required"]) & declared["forbidden"])
+        if forbidden_conflict:
+            add(
+                BLOCK,
+                "实体排程",
+                loc,
+                "同一实体同时被登记为可见/必须出现和 forbidden_presence："
+                + "、".join(forbidden_conflict[:8])
+                + "。先修分镜真值，不要把矛盾交给视频模型随机解释。",
+                return_to_stage="script_stage2",
+            )
 
 
 def _presence_text_blob(*sections: Any) -> str:
@@ -622,6 +759,133 @@ def _presence_continuous_pair(prev_clip: Mapping[str, Any], next_clip: Mapping[s
     if prev_scene and next_scene and prev_scene != next_scene:
         return False
     return bool(prev_cont.get("need_endframe") is True or next_cont.get("start_state") == prev_cont.get("end_state"))
+
+
+_DUPLICATE_TEXT_KEYS = (
+    "label", "template", "shot_type", "description", "desc", "summary", "action", "prompt",
+    "visual", "画面", "镜头", "dramatic_function", "audience_effect", "rhythm", "beat",
+)
+_DUPLICATE_ALLOW_KEYS = (
+    "intentional_repeat_reason", "duplicate_intent_reason", "repetition_purpose",
+    "repeat_reason", "复现理由", "重复意图", "重复理由",
+)
+_DUPLICATE_ALLOW_MARKERS = (
+    "故意重复", "有意重复", "重复用于", "回放", "闪回", "梦魇", "对照", "复现",
+    "拆段", "接力", "延续同一动作", "第二段", "part2", "part 2", "split",
+    "relay", "continuation", "intentional repeat", "flashback",
+)
+_DUPLICATE_STOPWORDS = {
+    "clip", "shot", "scene", "none", "null", "start", "end", "state", "action",
+    "the", "and", "with", "into", "from", "this", "that", "only",
+    "镜头", "本镜", "画面", "动作", "人物", "保持", "承接", "结尾", "开始",
+}
+
+
+def _duplicate_blob(clip: Mapping[str, Any]) -> str:
+    bits: List[str] = []
+    for key in _DUPLICATE_TEXT_KEYS:
+        value = clip.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    for key in ("action", "start_state", "end_state", "transition", "entry_exit", "handoff_mode"):
+        value = cont.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    for key in ("beats", "blocking", "camera_rule", "continuity_must"):
+        value = contract.get(key)
+        if value not in (None, ""):
+            bits.append(json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else str(value))
+    return " ".join(bits).lower()
+
+
+def _duplicate_tokens(text: str) -> set[str]:
+    text = re.sub(r"\bclip[_\s-]?\d+\b", " ", str(text or "").lower())
+    text = re.sub(r"\bep\d+[_\s-]?clip\d+\b", " ", text)
+    tokens = set()
+    for word in re.findall(r"[a-z0-9_]{3,}", text):
+        if word not in _DUPLICATE_STOPWORDS:
+            tokens.add(word)
+    for seq in re.findall(r"[\u4e00-\u9fff]{2,}", text):
+        if seq in _DUPLICATE_STOPWORDS:
+            continue
+        if len(seq) <= 4:
+            tokens.add(seq)
+        else:
+            tokens.update(seq[i:i + 2] for i in range(0, len(seq) - 1))
+    return {t for t in tokens if t and t not in _DUPLICATE_STOPWORDS}
+
+
+def _clip_action_norm(clip: Mapping[str, Any]) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    text = str(cont.get("action") or clip.get("action") or clip.get("description") or clip.get("desc") or "").lower()
+    text = re.sub(r"\bclip[_\s-]?\d+\b", " ", text)
+    text = re.sub(r"\s+", "", text)
+    return text.strip()
+
+
+def _clip_repeat_allowed(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    for clip in (prev_clip, next_clip):
+        for key in _DUPLICATE_ALLOW_KEYS:
+            if str(clip.get(key) or "").strip():
+                return True
+        cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+        for key in _DUPLICATE_ALLOW_KEYS:
+            if str(cont.get(key) or "").strip():
+                return True
+    blob = _presence_text_blob(prev_clip, next_clip) + " " + _duplicate_blob(prev_clip) + " " + _duplicate_blob(next_clip)
+    return _presence_has_any(blob, _DUPLICATE_ALLOW_MARKERS)
+
+
+def _check_storyboard_adjacent_clip_distinctness(
+    root: str,
+    ep: str,
+    clips: Sequence[Any],
+    require_frame_assets: bool,
+) -> None:
+    """Catch adjacent clips that are likely duplicate generations before spending video budget."""
+    production = consistency_release_profile(root, "video_preflight", ep) == "production"
+    for (idx, prev_clip), (next_idx, next_clip) in zip(enumerate(clips, 1), enumerate(clips[1:], 2)):
+        if not isinstance(prev_clip, Mapping) or not isinstance(next_clip, Mapping):
+            continue
+        if _clip_repeat_allowed(prev_clip, next_clip):
+            continue
+        prev_contract = _presence_contract(prev_clip)
+        next_contract = _presence_contract(next_clip)
+        prev_visible = prev_contract["visible"]
+        next_visible = next_contract["visible"]
+        same_visible = bool(prev_visible and prev_visible == next_visible)
+        prev_scene = str(prev_clip.get("scene") or prev_clip.get("场景") or prev_clip.get("location_id") or "").strip()
+        next_scene = str(next_clip.get("scene") or next_clip.get("场景") or next_clip.get("location_id") or "").strip()
+        same_scene = bool(prev_scene and next_scene and prev_scene == next_scene)
+        prev_template = str(prev_clip.get("template") or prev_clip.get("shot_type") or "").strip()
+        next_template = str(next_clip.get("template") or next_clip.get("shot_type") or "").strip()
+        same_template = bool(prev_template and next_template and prev_template == next_template)
+        if not (same_scene or same_visible or same_template):
+            continue
+        prev_tokens = _duplicate_tokens(_duplicate_blob(prev_clip))
+        next_tokens = _duplicate_tokens(_duplicate_blob(next_clip))
+        if len(prev_tokens | next_tokens) < 8:
+            action_dup = bool(_clip_action_norm(prev_clip) and _clip_action_norm(prev_clip) == _clip_action_norm(next_clip))
+            if not action_dup:
+                continue
+            similarity = 1.0
+        else:
+            similarity = len(prev_tokens & next_tokens) / max(1, len(prev_tokens | next_tokens))
+        if similarity < 0.82:
+            continue
+        sev = BLOCK if (production and require_frame_assets) else WARN
+        loc = f"{storyboard_path(root, ep)} clip#{idx}→clip#{next_idx}"
+        add(
+            sev,
+            "Clip 去重",
+            loc,
+            f"相邻 Clip 的场景/实体/模板/动作语义高度相似（similarity={similarity:.2f}），且没有写 duplicate_intent_reason/"
+            "intentional_repeat_reason/拆段接力理由。视频生成会很容易得到重复 clip。请合并、改景别/动作/信息增量，"
+            "或明确写这是回放/闪回/故意复现/同动作拆段接力。",
+            return_to_stage="script_stage2",
+        )
 
 
 _EXACT_STATE_HANDOFF_MARKERS = (
@@ -927,7 +1191,9 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                         add(BLOCK, "中段锚帧", full, f"声明了锚帧 {k} 但锚帧 PNG 不存在")
                     else:
                         _check_midframe_generation_self_check(root, ep, str(png), loc, k)
+    _check_storyboard_entity_schedule_integrity(root, ep, clips, require_frame_assets)
     _check_storyboard_presence_chain(root, ep, clips)
+    _check_storyboard_adjacent_clip_distinctness(root, ep, clips, require_frame_assets)
     return data
 
 def check_storyboard_visual_contract(root: str, ep: str) -> None:

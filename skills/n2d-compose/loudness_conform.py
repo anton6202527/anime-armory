@@ -119,10 +119,31 @@ def measure(path: str, ffmpeg: str = "ffmpeg") -> Optional[dict]:
         return None
 
 
+def _is_backup_or_work_cut(path: str) -> bool:
+    """True for backup/temp derivatives that must not be treated as master."""
+    name = os.path.basename(str(path or "")).lower()
+    return any(token in name for token in (
+        ".pre_",
+        ".pre-",
+        ".bak",
+        ".backup",
+        ".tmp",
+        ".loudnorm_tmp",
+    ))
+
+
 def _find_final_cut(root: str, ep: str) -> Optional[str]:
-    """合成/<ep>/ 下找成片 mp4（成片_*.mp4），多个取最新。无 → None。"""
+    """合成/<ep>/ 下找成片母带，排除 loudnorm/backup/temp 派生件。"""
     import glob
-    cands = sorted(glob.glob(os.path.join(root, "合成", ep, "成片_*.mp4")))
+    base = os.path.join(root, "合成", ep)
+    for name in (f"成片_{ep}_zh.mp4", f"成片_{ep}.mp4"):
+        preferred = os.path.join(base, name)
+        if os.path.isfile(preferred):
+            return preferred
+    cands = [
+        p for p in sorted(glob.glob(os.path.join(base, "成片_*.mp4")))
+        if not _is_backup_or_work_cut(p)
+    ]
     if not cands:
         return None
     return max(cands, key=lambda p: os.path.getmtime(p))

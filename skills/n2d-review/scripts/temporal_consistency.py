@@ -208,6 +208,18 @@ def verdict(min_id: Optional[float], flicker: float,
     return sev
 
 
+def identity_precision_verdict(closeup: bool, min_id: Optional[float]) -> str:
+    """Close-up clips without measurable face identity are not a pass.
+
+    `verdict(None, 0)` stays ok as a pure metric result: missing embeddings do
+    not prove drift. At the review layer, however, a close-up face clip with no
+    identity measurement must surface for human review or a full InsightFace run.
+    """
+    if closeup and min_id is None:
+        return "warn"
+    return "ok"
+
+
 def _max(a: str, b: str) -> str:
     order = {"ok": 1, "warn": 2, "block": 3}
     return a if order[a] >= order[b] else b
@@ -414,14 +426,22 @@ def analyze(root: str, ep: str, frames: int = DEFAULT_FRAMES,
             fl = flicker_index(lumas)
             mid = min_consecutive_cosine(embs) if len(embs) >= 2 else None
             raw_v = verdict(mid, fl, id_floor, flicker_max)
+            precision_v = identity_precision_verdict(closeup, mid)
+            raw_v = _worse(raw_v, precision_v)
             v = relax_temporal_verdict(raw_v, bool(relax_reason))
             row = {
                 "clip": os.path.basename(mp4), "frames": len(fpaths),
                 "sampled_target": k, "duration": round(dur, 2) if dur else None, "closeup": closeup,
                 "min_id_cos": round(mid, 4) if mid is not None else None,
+                "identity_precision": "measured" if mid is not None else ("insufficient_precision" if closeup else "not_measured"),
                 "flicker": round(fl, 4), "tci": round(temporal_consistency_index(lumas), 4),
                 "verdict": v,
             }
+            if precision_v == "warn":
+                row["identity_precision_reason"] = (
+                    "close-up clip lacks at least two measurable face embeddings; "
+                    "run with full InsightFace or review dense sampled frames by eye"
+                )
             if relax_reason and raw_v == "block":
                 # 留痕：本镜 BLOCK 因「该镜本就该动/该变情绪」降为 WARN，绝不静默放行（abs_verdict 可回溯）。
                 row["abs_verdict"] = "block"

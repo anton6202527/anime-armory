@@ -9,13 +9,13 @@
 - EP01_CLIP11（2.053s）：极短镜 <3.0s，中帧与首尾几乎重合（三帧契约豁免）
 
 ## 跳过
-- EP01_CLIP01：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP02：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP03：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP04：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP05：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP06：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP07：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP08：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP09：已手动声明 midframe/anchors，人工优先
-- EP01_CLIP10：已手动声明 midframe/anchors，人工优先
+- EP01_CLIP01：已手动声明 anchors，人工优先
+- EP01_CLIP02：已手动声明 anchors，人工优先
+- EP01_CLIP03：已手动声明 anchors，人工优先
+- EP01_CLIP04：已手动声明 anchors，人工优先
+- EP01_CLIP05：已手动声明 anchors，人工优先
+- EP01_CLIP06：已手动声明 anchors，人工优先
+- EP01_CLIP07：已手动声明 anchors，人工优先
+- EP01_CLIP08：已手动声明 anchors，人工优先
+- EP01_CLIP09：已手动声明 anchors，人工优先
+- EP01_CLIP10：已手动声明 anchors，人工优先

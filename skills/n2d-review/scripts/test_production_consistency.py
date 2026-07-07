@@ -587,6 +587,11 @@ def test_register_pure_helpers() -> None:
     assert pc.overlong_lines(["任意"], 0) == []
 
 
+def test_expression_anchor_count_reads_reference_group_expressions() -> None:
+    form = {"reference_group": {"expressions": [{"path": "a"}, {"path": "b"}, {"path": "c"}]}}
+    assert pc._expression_anchor_count(form) == 3
+
+
 def test_floorplan_warns_repeated_scene_without_plan(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"
@@ -625,6 +630,91 @@ def test_series_packaging_requires_platform_and_brand_fields(tmp_path: Path) -> 
     messages = "\n".join(row["message"] for row in res["findings"])
     assert "platform_specs" in messages
     assert "brand_visual" in messages
+
+
+def test_cost_route_does_not_compare_image_events_to_video_routes(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir()
+    routes = root / "出视频" / ep / "prompt"
+    routes.mkdir(parents=True)
+    _write_json(routes / "video_model_routes.json", {
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "seedance"}],
+    })
+    (prod / "production_events.jsonl").write_text(
+        json.dumps({
+            "episode": ep,
+            "event": "generation",
+            "stage": "image",
+            "generation": {"asset": f"出图/{ep}/图片/Clip01_first.png", "provider": "codex", "status": "pass"},
+            "cost": {"provider": "codex", "tracking_status": "untracked"},
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    res = pc.check_cost_route(str(root), ep)
+
+    assert not any("route.primary_backend" in row["message"] for row in res["findings"])
+
+
+def test_cost_route_allows_declared_video_fallback_backend(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir()
+    routes = root / "出视频" / ep / "prompt"
+    routes.mkdir(parents=True)
+    _write_json(routes / "video_model_routes.json", {
+        "routes": [{"clip_id": "Clip_01", "primary_backend": "seedance", "fallback_backends": ["dreamina"]}],
+    })
+    (prod / "production_events.jsonl").write_text(
+        json.dumps({
+            "episode": ep,
+            "event": "generation",
+            "stage": "video",
+            "generation": {"asset": f"出视频/{ep}/视频/Clip_01.mp4", "provider": "dreamina", "status": "pass"},
+            "cost": {"provider": "dreamina", "tracking_status": "untracked"},
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    res = pc.check_cost_route(str(root), ep)
+
+    assert not any("route.primary_backend" in row["message"] for row in res["findings"])
+
+
+def test_cost_route_allows_declared_backend_migration(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    prod = root / "生产数据"
+    prod.mkdir()
+    (prod / "production_events.jsonl").write_text(
+        json.dumps({
+            "episode": ep,
+            "event": "generation",
+            "stage": "compose",
+            "generation": {"asset": f"合成/{ep}/成片.mp4", "provider": "local-ffmpeg", "status": "pass"},
+            "cost": {"provider": "local-ffmpeg", "tracking_status": "local"},
+        }, ensure_ascii=False) + "\n" +
+        json.dumps({
+            "episode": ep,
+            "event": "generation",
+            "stage": "compose",
+            "generation": {
+                "asset": f"合成/{ep}/成片.mp4",
+                "provider": "local-ffmpeg-loudnorm",
+                "status": "pass",
+                "redraw_category": "backend_migration",
+            },
+            "cost": {"provider": "local-ffmpeg-loudnorm", "tracking_status": "local"},
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+    res = pc.check_cost_route(str(root), ep)
+
+    assert not any("跨 provider" in row["message"] for row in res["findings"])
 
 
 # ── P4：注册表不连贯（block 级）经 CAL 浮现为 finding（掣肘四：注册表此前只判存在性）──

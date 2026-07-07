@@ -377,6 +377,25 @@ def load_consistency_ledger(root: Path, ep: str) -> Dict[str, Any]:
     }
 
 
+def evidence_severity(status: str, evidence: Any) -> str:
+    text = str(evidence or "")
+    count_match = re.search(r"\bblock=(\d+)\s+warn=(\d+)", text)
+    if count_match:
+        blocks = int(count_match.group(1) or 0)
+        warns = int(count_match.group(2) or 0)
+        if blocks:
+            return "block"
+        if warns:
+            return "warn"
+        return "info"
+    if "dashboard block[" in text:
+        return "block"
+    if "dashboard warn[" in text:
+        return "warn"
+    status = str(status or "info")
+    return "block" if status == "fail" else "warn" if status in {"warn", "insufficient_data"} else "info"
+
+
 def flatten_evidence(score: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
     if not isinstance(score, dict):
         return []
@@ -385,10 +404,9 @@ def flatten_evidence(score: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not isinstance(dim, dict):
             continue
         status = str(dim.get("status") or "info")
-        severity = "block" if status == "fail" else "warn" if status in {"warn", "insufficient_data"} else "info"
         for evidence in dim.get("evidence", []) or []:
             flags.append({
-                "severity": severity,
+                "severity": evidence_severity(status, evidence),
                 "dimension": dim.get("label") or dim.get("key") or "QA",
                 "message": str(evidence),
                 "score": dim.get("score"),

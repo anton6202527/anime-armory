@@ -1,11 +1,11 @@
 {
   "batches": [],
   "budget": {
-    "accepted_total": 1.2,
+    "accepted_total": 1.4,
     "blocked_tasks": 0,
-    "estimated_total": 1.2,
+    "estimated_total": 1.4,
     "limit": null,
-    "recomputed_at": "2026-07-03T11:36:01+00:00",
+    "recomputed_at": "2026-07-07T02:37:32+00:00",
     "scope": "ledger",
     "unit": "mixed"
   },
@@ -20,19 +20,19 @@
   },
   "generated_at": "2026-07-03T04:11:55+00:00",
   "kind": "n2d_batch_queue",
-  "last_plan_at": "2026-07-03T11:36:01+00:00",
+  "last_plan_at": "2026-07-07T02:37:32+00:00",
   "max_concurrency": 1,
   "max_retries": 1,
-  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "by_stage": {
-      "script_stage1": 2,
+      "script_stage1": 3,
       "voice": 1
     },
     "by_status": {
-      "done": 3
+      "done": 4
     },
-    "total": 3
+    "total": 4
   },
   "tasks": [
     {
@@ -150,8 +150,54 @@
       "stage_label": "角色配音",
       "status": "done",
       "updated_at": "2026-07-03T11:38:59+00:00"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [],
+      "agent_command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集",
+      "attempts": 0,
+      "coarse_fingerprints": [],
+      "command": "n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集",
+      "created_at": "2026-07-07T02:37:32+00:00",
+      "episode": "第1集",
+      "estimated_cost": {
+        "amount": 0.2,
+        "unit": "work_units"
+      },
+      "finding_fingerprints": [],
+      "gate_stage": null,
+      "history": [
+        {
+          "action": "blocked_agent",
+          "note": "script_stage1 is an agent creative stage, not a batch shell wrapper; run `n2d-script /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集` manually, then re-plan deterministic downstream stages.",
+          "ts": "2026-07-07T02:37:32+00:00"
+        },
+        {
+          "action": "plan:dedupe",
+          "base_id": "001-script_stage1-rerun",
+          "ts": "2026-07-07T02:37:32+00:00"
+        },
+        {
+          "action": "mark:pass",
+          "note": "n2d-script upstream rerun completed: script_quality_gate/source_adaptation/beat/director_blocking/validate_timings pass",
+          "ts": "2026-07-07T02:44:52+00:00"
+        }
+      ],
+      "id": "001-script_stage1-rerun-2",
+      "idempotency_key": "dd5bd565b7e900ec",
+      "last_note": "n2d-script upstream rerun completed: script_quality_gate/source_adaptation/beat/director_blocking/validate_timings pass",
+      "max_retries": 1,
+      "owner": "n2d-script",
+      "priority": 1,
+      "reason": "rerun",
+      "rerun_scope": "skill 更新后重制到 review",
+      "runner_mode": "agent_required",
+      "stage_key": "script_stage1",
+      "stage_label": "阶段1·剧本改编",
+      "status": "done",
+      "updated_at": "2026-07-07T02:44:52+00:00"
     }
   ],
-  "updated_at": "2026-07-03T14:51:25+00:00",
+  "updated_at": "2026-07-07T02:44:52+00:00",
   "version": 1
 }

@@ -15,43 +15,43 @@
   "skipped": [
     {
       "clip": "EP01_CLIP01",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP02",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP03",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP04",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP05",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP06",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP07",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP08",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP09",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     },
     {
       "clip": "EP01_CLIP10",
-      "why": "已手动声明 midframe/anchors，人工优先"
+      "why": "已手动声明 anchors，人工优先"
     }
   ],
   "exempted": [

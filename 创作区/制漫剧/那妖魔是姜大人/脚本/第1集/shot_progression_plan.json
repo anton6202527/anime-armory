@@ -51,9 +51,9 @@
     {
       "beat_id": "EP01_CLIP06",
       "camera_motivation": "加速·碎切：把本镜信息用动作、反应和空间关系拍清楚",
-      "camera_move": "起手固定微推，命中帧短促快推，受击落地低幅震动",
-      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂局势变化和下一步悬念；保留CHAR_01、CHAR_02、CHAR_03反应或道具/VFX落点。",
-      "peak_shot_size": "MS→CU命中→MS",
+      "camera_move": "起手固定微推，命中帧短促快推，受击落地低幅震动并停在横刀/手部/侧背反应",
+      "must_have_insert_or_reaction": "观众能在静音竖屏下看懂裴长青失败和横刀落到姜月初手边；保留CHAR_02、CHAR_03动作和WEAPON_01落点，CHAR_01只作手部/衣袖/侧背轮廓，不给正脸近景。",
+      "peak_shot_size": "MS→CU命中→MS低机位手部/横刀反应",
       "release_shot_size": "action_cut",
       "start_shot_size": "MS"
     },

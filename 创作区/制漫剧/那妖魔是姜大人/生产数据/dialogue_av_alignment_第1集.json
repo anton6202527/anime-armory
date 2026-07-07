@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "clip": "EP01_CLIP03",
+      "measurement_scope": "script_subtitle_voice_fitting",
+      "message": "最终母版使用后配 voice_zh_fitted 与字幕/旁白轨；无声视频流原生音轨未保留。",
+      "narration_stability_ok": true,
+      "speaker_match": true,
+      "syncnet_status": "not_run_no_lip_motion_backend",
+      "turn_order_ok": true,
+      "turn_taking_ok": true,
+      "utterance_match": true
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "measurement_scope": "script_subtitle_voice_fitting",
+      "message": "刺杀段为后配台词/旁白结构对齐；未伪造 SyncNet 分数。",
+      "narration_stability_ok": true,
+      "speaker_match": true,
+      "syncnet_status": "not_run_no_lip_motion_backend",
+      "turn_order_ok": true,
+      "turn_taking_ok": true,
+      "utterance_match": true
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-07T05:20:01+00:00",
+  "kind": "n2d_dialogue_av_alignment",
+  "mode": "post_dub_voice_track_native_clip_audio_discarded",
+  "notes": [
+    "本 sidecar 只证明后配结构、字幕/台词顺序与说话人归属；SyncNet/口型数值需重型后端另写。"
+  ],
+  "status": "pass_structural_post_dub",
+  "version": 1
+}

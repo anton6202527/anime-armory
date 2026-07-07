@@ -220,6 +220,27 @@ def test_image_qc_findings_reruns_degraded_report(monkeypatch, tmp_path: Path) -
     assert findings == [{"sev": "block", "dim": "出图落档QC", "msg": "rerun degraded"}]
 
 
+def test_image_qc_findings_uses_configured_python(monkeypatch, tmp_path: Path) -> None:
+    captured: dict[str, list[str]] = {}
+
+    class Proc:
+        returncode = 0
+        stdout = "[]"
+        stderr = ""
+
+    def _run(args, **_kwargs):
+        captured["args"] = args
+        return Proc()
+
+    monkeypatch.setenv("N2D_IMAGE_QC_PYTHON", "/envs/facefusion/bin/python")
+    monkeypatch.setattr(dashboard.subprocess, "run", _run)
+
+    findings = dashboard.run_image_qc_findings(str(tmp_path), "第1集", fail_closed=True)
+
+    assert findings == []
+    assert captured["args"][0] == "/envs/facefusion/bin/python"
+
+
 def test_image_qc_findings_prefers_existing_full_report(monkeypatch, tmp_path: Path) -> None:
     report_dir = tmp_path / "生产数据" / "image_qc" / "第1集"
     report_dir.mkdir(parents=True)

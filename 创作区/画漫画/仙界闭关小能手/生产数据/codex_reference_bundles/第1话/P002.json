@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P002",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 1,
+  "references": [
+    {
+      "id": "CHAR_HE_PINGSHENG",
+      "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+      "sha256": "b290298774f5aadfae0c18cb9ea0e207fb107bdc7f93d509531415681f49dd26"
+    }
+  ],
+  "created_at": "2026-07-07T09:54:43"
+}

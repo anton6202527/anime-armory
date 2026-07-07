@@ -205,6 +205,26 @@ def test_front_crop_uses_subject_bbox_for_padded_split_front(tmp_path: Path) -> 
     assert face_item["dimensions"] == {"width": 800, "height": 1200}
 
 
+def test_front_crop_uses_full_width_when_bright_background_touches_edge(tmp_path: Path) -> None:
+    front = tmp_path / "front.png"
+    img = Image.new("RGB", (800, 1200), (186, 186, 186))
+    # A normal studio portrait: no black padding, light gray background, dark
+    # subject in the center. The brightest column segment touches the right
+    # edge, so it must not be treated as the useful portrait column.
+    img.paste(Image.new("RGB", (120, 130), (42, 34, 30)), (340, 150))   # hair/head
+    img.paste(Image.new("RGB", (220, 720), (70, 74, 78)), (290, 280))  # robe/body
+    img.save(front)
+
+    im = Image.open(front).convert("RGB")
+    assert derive_makeup_pack._content_column_bounds(im) == (0, 799)
+    crop_box = derive_makeup_pack._front_crop_box(im, "face_anchor_refs")
+
+    assert crop_box[0] < 330
+    assert crop_box[2] > 470
+    assert 110 <= crop_box[1] <= 180
+    assert crop_box[3] <= 420
+
+
 def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     image_dir = root / "出图" / "共享" / "图片"

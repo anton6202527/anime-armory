@@ -215,6 +215,161 @@ def resize_png(path: Path, size: dict[str, int]) -> None:
     fitted.save(path)
 
 
+def likely_blank_bubble_regions(path: Path) -> list[dict[str, int]]:
+    """Conservative hint for baked blank bubbles/text boxes in raw panel art."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return []
+    try:
+        image = Image.open(path).convert("RGB")
+    except OSError:
+        return []
+
+    src_w, src_h = image.size
+    max_w = 420
+    scale = min(1.0, max_w / max(src_w, 1))
+    if scale < 1.0:
+        image = image.resize((max(1, int(src_w * scale)), max(1, int(src_h * scale))))
+    w, h = image.size
+    pixels = image.load()
+    mask = [[False] * w for _ in range(h)]
+    for y in range(h):
+        for x in range(w):
+            r, g, b = pixels[x, y]
+            if r >= 238 and g >= 238 and b >= 230 and max(r, g, b) - min(r, g, b) <= 35:
+                mask[y][x] = True
+
+    seen = [[False] * w for _ in range(h)]
+    regions: list[dict[str, int]] = []
+    min_area = max(220, int(w * h * 0.003))
+    for y in range(h):
+        for x in range(w):
+            if not mask[y][x] or seen[y][x]:
+                continue
+            stack = [(x, y)]
+            seen[y][x] = True
+            area = 0
+            min_x = max_x = x
+            min_y = max_y = y
+            while stack:
+                cx, cy = stack.pop()
+                area += 1
+                min_x = min(min_x, cx)
+                max_x = max(max_x, cx)
+                min_y = min(min_y, cy)
+                max_y = max(max_y, cy)
+                for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                    if 0 <= nx < w and 0 <= ny < h and mask[ny][nx] and not seen[ny][nx]:
+                        seen[ny][nx] = True
+                        stack.append((nx, ny))
+            bw = max_x - min_x + 1
+            bh = max_y - min_y + 1
+            if area < min_area or bw < 30 or bh < 18:
+                continue
+            inv = 1.0 / scale if scale else 1.0
+            regions.append(
+                {
+                    "x": int(min_x * inv),
+                    "y": int(min_y * inv),
+                    "w": int(bw * inv),
+                    "h": int(bh * inv),
+                    "area": int(area * inv * inv),
+                }
+            )
+    return regions[:8]
+
+
+def image_size(path: Path) -> tuple[int, int]:
+    try:
+        from PIL import Image
+    except ImportError:
+        return (0, 0)
+    try:
+        with Image.open(path) as image:
+            return image.size
+    except OSError:
+        return (0, 0)
+
+
+def post_qc_panel(
+    root: Path,
+    chapter: str,
+    job: dict[str, Any],
+    path: Path,
+    reference_records: list[dict[str, str]],
+) -> dict[str, Any]:
+    issues: list[dict[str, str]] = []
+    pid = str(job.get("panel_id") or path.stem)
+    if not png_valid(path):
+        issues.append(
+            {
+                "severity": "block",
+                "category": "artifact",
+                "reason": "generated file is missing or not a valid PNG",
+            }
+        )
+
+    actual_w, actual_h = image_size(path)
+    expected = job.get("size") or {}
+    expected_w = int(expected.get("width") or 0)
+    expected_h = int(expected.get("height") or 0)
+    if expected_w > 0 and expected_h > 0 and (actual_w, actual_h) != (expected_w, expected_h):
+        issues.append(
+            {
+                "severity": "warn",
+                "category": "size",
+                "reason": f"image size {actual_w}x{actual_h} differs from job size {expected_w}x{expected_h}",
+            }
+        )
+
+    declared_refs = [ref for ref in job.get("references") or [] if isinstance(ref, dict) and ref.get("id")]
+    if declared_refs and len(reference_records) < len(declared_refs):
+        issues.append(
+            {
+                "severity": "block",
+                "category": "reference",
+                "reason": f"only {len(reference_records)} real reference inputs for {len(declared_refs)} declared references",
+            }
+        )
+
+    blank_regions = likely_blank_bubble_regions(path)
+    if blank_regions:
+        issues.append(
+            {
+                "severity": "warn",
+                "category": "baked_text_container",
+                "reason": f"found {len(blank_regions)} likely blank white region(s); manually verify this is not a baked bubble",
+            }
+        )
+
+    verdict = "pass"
+    if any(issue["severity"] == "block" for issue in issues):
+        verdict = "block"
+    elif any(issue["severity"] == "warn" for issue in issues):
+        verdict = "warn"
+
+    payload = {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": chapter,
+        "panel_id": pid,
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "verdict": verdict,
+        "path": rel_to_root(root, path),
+        "size": {"width": actual_w, "height": actual_h},
+        "expected_size": {"width": expected_w, "height": expected_h},
+        "declared_reference_count": len(declared_refs),
+        "reference_input_count": len(reference_records),
+        "blank_region_candidates": blank_regions,
+        "issues": issues,
+        "manual_review_required": verdict != "pass",
+    }
+    out = root / "生产数据" / "panel_qc" / chapter / f"{pid}.json"
+    write_json(out, payload)
+    return payload
+
+
 def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
     if not png_valid(path):
         return ""
@@ -225,7 +380,7 @@ def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
     return str(archived)
 
 
-def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict[str, str]]) -> str:
+def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference_records: list[dict[str, str]]) -> str:
     size = job.get("size") or {}
     width = int(size.get("width") or 1296)
     height = int(size.get("height") or 900)
@@ -239,7 +394,7 @@ def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict
     anatomy = anatomy_guidance(job)
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
-项目：《那妖魔是姜大人》漫画第1话《百妖谱》
+项目：《{project_name}》漫画{chapter}
 面板：{job.get('panel_id')}
 目标尺寸：{width}x{height}，长宽比约 {width / max(height, 1):.3f}
 
@@ -258,11 +413,12 @@ def build_prompt(job: dict[str, Any], chapter: str, reference_records: list[dict
 硬性要求：
 1. 已附参考图优先级高于文字；同一个 CHAR/MON/PROP/LOC/SYS 参考 ID 在所有面板中必须保持同一角色、同一妖物、同一道具或同一场景资产，不得换脸、换发型、换服装主色、换体型或换关键结构。
 2. 多角色同框时，按参考 ID 分别锁定身份，不要把一个角色的脸、发型、衣服套到另一个角色身上。
-3. 只生成一张无字漫画画面，不要水印、logo、签名、字幕、中文、英文或乱码字。
+3. 只生成一张无字漫画画面，不要水印、logo、签名、印章、角标、字幕、中文、英文或乱码字；画面四角必须干净，不能出现任何小字或作者署名。
 4. 不要画对白气泡、空白气泡、旁白框、标题框或任何文字容器；如需要后期嵌字，只在不挡脸、不挡手脚、不挡关键道具的位置保留低细节留白区域，由 comic-compose 另行绘制气泡和文字。
-5. 暗黑国风彩色条漫，电影感荒野，血色夕阳与冷青阴影，高反差但主体清晰。
-6. 血腥只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
-7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+5. 画面必须铺满整张画布，不要外框、截图边、白色斜线边、相框、胶片边、画中画边框、内部漫画分格线或拼贴式多面板版式；当前任务只输出一个完整面板。
+6. 画风、题材、色彩和光效必须服从“正向要求”中的项目风格锚与当前面板事实，不要套用其它项目的默认风格。
+7. 危险、受伤或压迫感只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
+8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -281,7 +437,15 @@ def anatomy_guidance(job: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
+def run_codex(
+    prompt: str,
+    root: Path,
+    timeout_sec: int,
+    image_paths: list[Path],
+    *,
+    ignore_user_config: bool = False,
+    ignore_rules: bool = False,
+) -> subprocess.CompletedProcess[str]:
     cmd = [
         "codex",
         "exec",
@@ -289,6 +453,12 @@ def run_codex(prompt: str, root: Path, timeout_sec: int, image_paths: list[Path]
         "--enable",
         "image_generation",
     ]
+    if os.environ.get("COMIC_CODEX_DISABLE_RESPECT_SYSTEM_PROXY", "").lower() in {"1", "true", "yes"}:
+        cmd.extend(["--disable", "respect_system_proxy"])
+    if ignore_user_config:
+        cmd.append("--ignore-user-config")
+    if ignore_rules:
+        cmd.append("--ignore-rules")
     for path in image_paths:
         cmd.extend(["--image", str(path)])
     cmd.extend(["-s", "read-only", "-C", str(root), prompt])
@@ -379,7 +549,19 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
     parser.add_argument("--allow-missing-refs", action="store_true", help="允许带 references 的格子在参考图缺失时继续文生图")
     parser.add_argument("--timeout-sec", type=int, default=240)
+    parser.add_argument(
+        "--ignore-user-config",
+        action="store_true",
+        help="不加载用户 Codex 配置/技能，用干净的 image_generation 子进程重试卡在说明文档输出的请求",
+    )
+    parser.add_argument(
+        "--ignore-rules",
+        action="store_true",
+        help="不加载用户/项目 execpolicy 规则；用于继续隔离卡在说明文档输出的 Codex 子进程",
+    )
     parser.add_argument("--no-resize", action="store_true")
+    parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
+    parser.add_argument("--continue-on-qc-block", action="store_true", help="调试用：遇到 post_qc=block 仍继续后续格；默认立即停下")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
@@ -409,6 +591,7 @@ def main() -> int:
     panel_dir = root / "出图" / args.chapter / "panels"
     candidate_root = root / "出图" / args.chapter / "candidates"
     failures = 0
+    qc_blocked = 0
     for job in jobs:
         pid = job.get("panel_id")
         final = panel_dir / f"{pid}.png"
@@ -421,8 +604,15 @@ def main() -> int:
         for attempt in range(1, max_attempts + 1):
             with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
-                prompt = build_prompt(job, args.chapter, reference_records)
-                proc = run_codex(prompt, repo, args.timeout_sec, reference_paths)
+                prompt = build_prompt(job, root.name, args.chapter, reference_records)
+                proc = run_codex(
+                    prompt,
+                    repo,
+                    args.timeout_sec,
+                    reference_paths,
+                    ignore_user_config=args.ignore_user_config,
+                    ignore_rules=args.ignore_rules,
+                )
                 error = ""
                 if proc.returncode != 0:
                     error = format_failure(proc)
@@ -451,31 +641,36 @@ def main() -> int:
                 final.parent.mkdir(parents=True, exist_ok=True)
                 os.replace(temp_path, final)
                 rel = str(final.relative_to(root))
+                post_qc = {} if args.no_post_qc else post_qc_panel(root, args.chapter, job, final, reference_records)
+                post_qc_verdict = str(post_qc.get("verdict") or "skipped")
                 history = job.get("history") if isinstance(job.get("history"), list) else []
                 if archived_existing:
                     history.append({"kind": "archived_previous", "path": archived_existing})
+                generated_at = dt.datetime.now().isoformat(timespec="seconds")
+                status = "qc_block" if post_qc_verdict == "block" else "ready"
                 job.update(
                     {
-                        "status": "ready",
+                        "status": status,
                         "result_path": rel,
                         "source": CODEX_CHANNEL,
                         "model": CODEX_MODEL,
-                        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+                        "generated_at": generated_at,
                         "backend_version": backend_version,
                         "artifact_sha256": file_sha256(final),
                         "attempt": attempt,
                         "reference_input_mode": "codex_exec_image_flags",
                         "reference_input_count": len(reference_records),
                         "reference_manifest": rel_to_root(root, reference_manifest),
+                        "post_qc": post_qc,
                     }
                 )
                 if history:
                     job["history"] = history[-10:]
                 job.pop("error", None)
                 append_event(root, {
-                    "ts": job["generated_at"],
+                    "ts": generated_at,
                     "panel_id": pid,
-                    "status": "ready",
+                    "status": status,
                     "backend": CODEX_CHANNEL,
                     "model": CODEX_MODEL,
                     "path": rel,
@@ -485,11 +680,18 @@ def main() -> int:
                     "reference_manifest": rel_to_root(root, reference_manifest),
                     "reference_input_count": len(reference_records),
                     "reference_input_paths": [record["path"] for record in reference_records],
+                    "post_qc_verdict": post_qc_verdict,
                     "duration_sec": round(time.monotonic() - started, 2),
                     "backend_version": backend_version,
                 })
                 write_json(jobs_path, data)
-                print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts})", flush=True)
+                if post_qc_verdict == "block":
+                    qc_blocked += 1
+                    print(f"[qc-block] {pid} -> {rel}; see {rel_to_root(root, root / '生产数据' / 'panel_qc' / args.chapter / f'{pid}.json')}", file=sys.stderr, flush=True)
+                    if not args.continue_on_qc_block:
+                        return 3
+                else:
+                    print(f"[ok] {pid} -> {rel} (attempt {attempt}/{max_attempts}, post_qc={post_qc_verdict})", flush=True)
                 break
         else:
             if last_error:
@@ -513,6 +715,8 @@ def main() -> int:
                 write_json(jobs_path, data)
     if all_ready(root, data.get("jobs") or []):
         update_progress(root, args.chapter, "出图", "✅")
+    if qc_blocked:
+        return 3
     return 1 if failures else 0
 
 

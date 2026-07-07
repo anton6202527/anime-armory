@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { readWorkFile } from "../api";
 import { useI18n } from "../i18n";
 import { Codicon } from "./Codicon";
@@ -75,6 +76,18 @@ function isDone(value: string): boolean {
   return /^(done|complete|completed|pass|完成|已完成|已定稿)$/.test(s);
 }
 
+function readableSymbols(value: string): string {
+  let s = stripMarkdown(value).replace(/[\uFE0e\uFE0f]/g, "");
+  s = s
+    .replace(/⏳\s*rough/gi, "rough 占位")
+    .replace(/✅|☑|✔/g, "完成")
+    .replace(/⬜|☐|□|◻|▫/g, "待做")
+    .replace(/⏳/g, "占位")
+    .replace(/❌|✗|✘/g, "失败")
+    .replace(/⚠/g, "警告");
+  return compact(s);
+}
+
 function parseTables(progress: string): Array<{ headers: string[]; rows: string[][] }> {
   const lines = progress.split(/\r?\n/);
   const tables: Array<{ headers: string[]; rows: string[][] }> = [];
@@ -130,7 +143,8 @@ function matrixStep(progress: string): ProgressStep | null {
         if (skipHeaders.has(header)) continue;
         if (isDone(row[i])) continue;
         const unit = row[0];
-        const message = `${unit} → ${header}（${row[i]}）`;
+        const status = readableSymbols(row[i]);
+        const message = status ? `${unit} → ${header}（${status}）` : `${unit} → ${header}`;
         return {
           message,
           sourceLine: row.join(" | "),
@@ -178,9 +192,10 @@ function parseProgress(progress: string, line: string): ProgressStep | null {
 
 function stepLabel(step: ProgressStep | null): string {
   if (!step) return "";
-  return step.skill && !step.message.toLowerCase().includes(step.skill.toLowerCase())
-    ? `${step.message} → ${step.skill}`
-    : step.message;
+  const message = readableSymbols(step.message);
+  return step.skill && !message.toLowerCase().includes(step.skill.toLowerCase())
+    ? `${message} → ${step.skill}`
+    : message;
 }
 
 // Current-progress strip, driven by the work root's `_进度.md`.
@@ -270,63 +285,66 @@ export function NextActionStrip(props: {
   );
   const headline = t("next.next");
 
-  const detailsModal = detailsOpen ? (
-    <div className="modal-backdrop project-settings-backdrop" onClick={() => setDetailsOpen(false)}>
-      <div className="project-settings-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-        <div className="project-settings-head">
-          <h2>{t("projectSettings.title")}</h2>
-          <button
-            type="button"
-            className="project-settings-close"
-            aria-label={t("common.close")}
-            title={t("common.close")}
-            onClick={() => setDetailsOpen(false)}
-          >
-            ×
-          </button>
-        </div>
-        {details.loading ? (
-          <div className="project-settings-loading">{t("common.loading")}</div>
-        ) : (
-          <div className="project-settings-body">
-            <section>
-              <h3>{t("projectSettings.settingsHeading")}</h3>
-              {details.settingsText ? (
-                <pre>{details.settingsText}</pre>
-              ) : (
-                <div className="project-settings-empty">
-                  {details.settingsError
-                    ? t("projectSettings.settingsMissing", { error: details.settingsError.slice(0, 120) })
-                    : t("projectSettings.noSettings")}
-                </div>
-              )}
-            </section>
-            <section>
-              <h3>{t("projectSettings.progressHeading")}</h3>
-              <div className="project-next-summary">
-                <span>{t("projectSettings.nextLabel")}</span>
-                <b>
-                  {stepLabel(detailStep)
-                    || (details.progressError
-                      ? t("next.unavailable", { error: details.progressError.slice(0, 80) })
-                      : t("next.loading"))}
-                </b>
+  const detailsModal = detailsOpen
+    ? createPortal(
+        <div className="modal-backdrop project-settings-backdrop" onClick={() => setDetailsOpen(false)}>
+          <div className="project-settings-modal" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+            <div className="project-settings-head">
+              <h2>{t("projectSettings.title")}</h2>
+              <button
+                type="button"
+                className="project-settings-close"
+                aria-label={t("common.close")}
+                title={t("common.close")}
+                onClick={() => setDetailsOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            {details.loading ? (
+              <div className="project-settings-loading">{t("common.loading")}</div>
+            ) : (
+              <div className="project-settings-body">
+                <section>
+                  <h3>{t("projectSettings.settingsHeading")}</h3>
+                  {details.settingsText ? (
+                    <pre>{details.settingsText}</pre>
+                  ) : (
+                    <div className="project-settings-empty">
+                      {details.settingsError
+                        ? t("projectSettings.settingsMissing", { error: details.settingsError.slice(0, 120) })
+                        : t("projectSettings.noSettings")}
+                    </div>
+                  )}
+                </section>
+                <section>
+                  <h3>{t("projectSettings.progressHeading")}</h3>
+                  <div className="project-next-summary">
+                    <span>{t("projectSettings.nextLabel")}</span>
+                    <b>
+                      {stepLabel(detailStep)
+                        || (details.progressError
+                          ? t("next.unavailable", { error: details.progressError.slice(0, 80) })
+                          : t("next.loading"))}
+                    </b>
+                  </div>
+                  {details.progressText ? (
+                    <pre>{details.progressText}</pre>
+                  ) : (
+                    <div className="project-settings-empty">
+                      {details.progressError
+                        ? t("projectSettings.progressMissing", { error: details.progressError.slice(0, 120) })
+                        : t("next.noProgress")}
+                    </div>
+                  )}
+                </section>
               </div>
-              {details.progressText ? (
-                <pre>{details.progressText}</pre>
-              ) : (
-                <div className="project-settings-empty">
-                  {details.progressError
-                    ? t("projectSettings.progressMissing", { error: details.progressError.slice(0, 120) })
-                    : t("next.noProgress")}
-                </div>
-              )}
-            </section>
+            )}
           </div>
-        )}
-      </div>
-    </div>
-  ) : null;
+        </div>,
+        document.body,
+      )
+    : null;
 
   function withProjectDetails(content: ReactNode) {
     return (
@@ -339,6 +357,7 @@ export function NextActionStrip(props: {
 
   useEffect(() => {
     if (!enabled) {
+      setDetailsOpen(false);
       setStep(null);
       setError("");
       return;

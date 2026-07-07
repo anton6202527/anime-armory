@@ -40,6 +40,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 - **尾帧接力（仅同段落连续硬切·按需）**：MV 默认卡点硬切，接点靠"视觉身份一致 + 卡点准"。但凡 `clip_plan.json` 标 `need_end_frame=true` 的接缝（同段落·非卡点切·人物姿态连续，如副歌内一段连续动作分两 clip），**除首帧外再出一张尾帧 PNG `出图/段落/图片/Clip_XXX_end.png`，其构图/姿态 = 下一 clip 首帧**——用上一镜 end_state 派生、喂同一套定妆组锁人，供 mv-video 首尾双帧引导焊接点。换段/卡点切不出尾帧（省 credit）。尾帧也按导演视角八维出，只是构图对齐下一首帧。
 - **画风统一**：依视觉蓝图 global_style；跨段不跳风。
 - **筛选宽容铁律**：候选图**能用就用，尽量不重抽**。轻微偏差（构图小动、表情微差、目光朝向略偏、环境细节小出入）→ 直接通过落档，**不要拖节奏**。只有命中硬伤之一才重抽：① 核心人/物/场景错位 ② 主角脸/画风漂移到识别不出 ③ 违反硬性禁忌（错景别 / 出字幕 logo / 该用演出光却均匀打亮到无戏）。
+- **逐图即时 QC（mv 线自维护）**：每生成并落档 1 张共享定妆、Clip 首帧或尾帧 PNG，立刻跑 mv 自己的 `scripts/image_qc.py` 最小可用入口；当前脚本以作品根全量扫描为主，就全量跑一次并重点处理新 PNG 的 finding。`block` 先重抽/修 prompt/换参考，不继续下一张；`review/warn` 必须在 mv 线报告或人工签收中留痕。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
 - **重抽预算铁律（两档全局统一）**：`重抽预算策略` 只保留两档，按 `../skills/mv-craft/references/选择点与偏好.md` 读 `_设置.md`→全局默认→首次问一次，**默认=预算充足**。旧值 `预算不足` / `预算不够` 一律归并为 `预算一般`。这里的“满意”以本张图的落档自检 + 用户/制作判断为准，每次重抽都必须记录事件、保留候选或废料，不设固定次数上限：
 
   | 策略 | 主角 / 副歌高光镜（爽点·副歌·反转·封面候选）| 配角 / 普通段镜 | 终止 |
@@ -68,8 +69,9 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 2. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
 3. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
 4. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
-5. **出图落档机检**：出完一批图后跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`，机检主角脸漂移/主色漂移/锚点句落地，按 `verdict` 决定是否要重抽（见下节）。
-6. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
+5. **逐图落档机检**：每张 PNG 落档后立即跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`；当前脚本会写全曲报告，执行者必须重点看新落档 PNG 的 face/palette/lint/local-patch finding。该张未过时先处理，不把坏首帧传给 mv-video。
+6. **批次/全曲收尾机检**：一批或全曲图出完后再跑一次同命令，确认报告时间晚于所有 PNG，按 `verdict` 决定是否要重抽（见下节）。
+7. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
 
 ## 出图落档机检（image_qc · MV 版）
 
@@ -119,7 +121,7 @@ python3 skills/mv-image/scripts/image_qc.py <作品根> --no-pixel   # 只跑锚
 | 跨段画风跳变 | 统一 global_style + 同一生图工具(同一集不换) |
 | 分镜不看段落/卡点 | 按视觉蓝图段落 + beatgrid 疏密出图 |
 | 跳过 mv-plan 直接按感觉出图 | 先跑 mv-plan，按 `clip_plan.json` 的 prompt/path 出首帧 |
-| 跳过 image_qc 就进 mv-video | `mv-craft gate --stage video_jobs` 会挡住；先跑 `mv-image/scripts/image_qc.py` 并处理 hard/degraded |
+| 跳过逐图 image_qc 就进 mv-video | `mv-craft gate --stage video_jobs` 会挡住；每张首/尾帧落档后先跑 `mv-image/scripts/image_qc.py`，批后再收尾跑一次，并处理 hard/degraded |
 | 用本地贴脸/换脸修复让 embedding 过关 | 禁用。应回 mv-image 用共享定妆/参考输入/后端主体库真实重抽，不能把身份像素贴回最终帧 |
 | 后配歌曲未补最终歌就出图 | 先补成品歌、跑 mv-beat 和正式 mv-plan；rough 蓝图不生成正式图 |
 | clip_plan 标了 `need_end_frame` 却只出首帧 | 同段落连续硬切接缝补尾帧 PNG `Clip_XXX_end.png`（=下一首帧构图），供 mv-video 首尾双帧锁接点 |

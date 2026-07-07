@@ -6,23 +6,23 @@
       "to": "clip:Clip_01"
     },
     {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_01"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_01"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_02"
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_01"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_02"
     },
     {
@@ -36,13 +36,18 @@
       "to": "clip:Clip_02"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_03"
+      "from": "entity:CHAR_02",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_02"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_03"
     },
     {
@@ -57,6 +62,16 @@
     },
     {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_03"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_03"
     },
@@ -66,11 +81,6 @@
       "to": "clip:Clip_04"
     },
     {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_04"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_04"
@@ -81,13 +91,23 @@
       "to": "clip:Clip_04"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_05"
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_04"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_05"
     },
     {
@@ -106,13 +126,18 @@
       "to": "clip:Clip_05"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_06"
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_05"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_06"
     },
     {
@@ -126,23 +151,23 @@
       "to": "clip:Clip_06"
     },
     {
-      "from": "entity:WEAPON_01",
-      "relation": "referenced_by_clip",
-      "to": "clip:Clip_06"
-    },
-    {
       "from": "entity:CHAR_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_06"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_07"
+      "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
     },
     {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_06"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_07"
     },
     {
@@ -156,18 +181,23 @@
       "to": "clip:Clip_07"
     },
     {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_07"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_07"
     },
     {
       "from": "episode:第1集",
       "relation": "contains",
-      "to": "clip:Clip_08"
-    },
-    {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
       "to": "clip:Clip_08"
     },
     {
@@ -191,13 +221,13 @@
       "to": "clip:Clip_08"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_09"
-    },
-    {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_08"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_09"
     },
     {
@@ -221,13 +251,13 @@
       "to": "clip:Clip_09"
     },
     {
-      "from": "episode:第1集",
-      "relation": "contains",
-      "to": "clip:Clip_10"
-    },
-    {
       "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
+      "to": "clip:Clip_09"
+    },
+    {
+      "from": "episode:第1集",
+      "relation": "contains",
       "to": "clip:Clip_10"
     },
     {
@@ -241,18 +271,23 @@
       "to": "clip:Clip_10"
     },
     {
+      "from": "entity:CHAR_03",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_10"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_10"
     },
     {
       "from": "episode:第1集",
       "relation": "contains",
-      "to": "clip:Clip_11"
-    },
-    {
-      "from": "entity:LOC_01",
-      "relation": "referenced_by_clip",
       "to": "clip:Clip_11"
     },
     {
@@ -272,6 +307,11 @@
     },
     {
       "from": "entity:WEAPON_01",
+      "relation": "referenced_by_clip",
+      "to": "clip:Clip_11"
+    },
+    {
+      "from": "entity:LOC_01",
       "relation": "referenced_by_clip",
       "to": "clip:Clip_11"
     },
@@ -523,12 +563,22 @@
     {
       "from": "clip:Clip_06",
       "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_end_reaction.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
       "to": "image:出图/第1集/图片/Clip06_first.png"
     },
     {
       "from": "clip:Clip_06",
       "relation": "renders_image",
       "to": "image:出图/第1集/图片/Clip06_mid.png"
+    },
+    {
+      "from": "clip:Clip_06",
+      "relation": "renders_image",
+      "to": "image:出图/第1集/图片/Clip06_mid_reaction.png"
     },
     {
       "from": "clip:Clip_07",
@@ -811,12 +861,22 @@
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
+      "from": "image:出图/第1集/图片/Clip06_end_reaction.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
+    },
+    {
       "from": "image:出图/第1集/图片/Clip06_first.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip06_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip06_mid_reaction.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4"
     },
@@ -836,12 +896,22 @@
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
     },
     {
+      "from": "image:出图/第1集/图片/Clip06_end_reaction.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
       "from": "image:出图/第1集/图片/Clip06_first.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
     },
     {
       "from": "image:出图/第1集/图片/Clip06_mid.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
+    },
+    {
+      "from": "image:出图/第1集/图片/Clip06_mid_reaction.png",
       "relation": "image_to_video",
       "to": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4"
     },
@@ -1064,6 +1134,166 @@
       "from": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4",
       "relation": "composed_into",
       "to": "final:合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_01_死人堆惊醒.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_02_看见虎妖尸身_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_03_镇魔司压迫交易_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_04_被迫扶裴南行.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_05_虎妖诈死复苏_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_06_裴长青最后一击被踹飞_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part1.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_07_百妖谱第一次开启_part2.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_08_系统规则指向唯一活物.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_09_刀尖抬起.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_10_刺杀裴长青.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
+    },
+    {
+      "from": "video:出视频/第1集/视频/Clip_11_我只想活下去.mp4",
+      "relation": "composed_into",
+      "to": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
     },
     {
       "from": "episode:第1集",
@@ -1316,6 +1546,12 @@
       "source": "asset_registry"
     },
     {
+      "id": "entity:VFX_百妖谱金光",
+      "kind": "vfx",
+      "label": "百妖谱金光",
+      "source": "asset_registry"
+    },
+    {
       "id": "entity:VFX_系统面板",
       "kind": "vfx",
       "label": "系统面板",
@@ -1392,6 +1628,18 @@
       "kind": "final_video",
       "label": "成片_第1集_zh.mp4",
       "path": "合成/第1集/成片_第1集_zh.mp4"
+    },
+    {
+      "id": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4",
+      "kind": "final_video",
+      "label": "成片_第1集_zh.pre_loudnorm_20260707_175321.mp4",
+      "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_20260707_175321.mp4"
+    },
+    {
+      "id": "final:合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4",
+      "kind": "final_video",
+      "label": "成片_第1集_zh.pre_loudnorm_fix.mp4",
+      "path": "合成/第1集/成片_第1集_zh.pre_loudnorm_fix.mp4"
     },
     {
       "id": "image:出图/第1集/图片/Clip01_end.png",
@@ -1490,6 +1738,12 @@
       "path": "出图/第1集/图片/Clip06_end.png"
     },
     {
+      "id": "image:出图/第1集/图片/Clip06_end_reaction.png",
+      "kind": "image",
+      "label": "Clip06_end_reaction.png",
+      "path": "出图/第1集/图片/Clip06_end_reaction.png"
+    },
+    {
       "id": "image:出图/第1集/图片/Clip06_first.png",
       "kind": "image",
       "label": "Clip06_first.png",
@@ -1500,6 +1754,12 @@
       "kind": "image",
       "label": "Clip06_mid.png",
       "path": "出图/第1集/图片/Clip06_mid.png"
+    },
+    {
+      "id": "image:出图/第1集/图片/Clip06_mid_reaction.png",
+      "kind": "image",
+      "label": "Clip06_mid_reaction.png",
+      "path": "出图/第1集/图片/Clip06_mid_reaction.png"
     },
     {
       "id": "image:出图/第1集/图片/Clip07_end.png",
@@ -1584,7 +1844,7 @@
       "kind": "route",
       "label": "Clip_01",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1592,7 +1852,7 @@
       "kind": "route",
       "label": "Clip_02",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1600,7 +1860,7 @@
       "kind": "route",
       "label": "Clip_03",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1608,7 +1868,7 @@
       "kind": "route",
       "label": "Clip_04",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -1616,7 +1876,7 @@
       "kind": "route",
       "label": "Clip_05",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1624,7 +1884,7 @@
       "kind": "route",
       "label": "Clip_06",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -1632,7 +1892,7 @@
       "kind": "route",
       "label": "Clip_07",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1640,7 +1900,7 @@
       "kind": "route",
       "label": "Clip_08",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1648,7 +1908,7 @@
       "kind": "route",
       "label": "Clip_09",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "cross_episode_baseline",
       "primary_backend": "seedance"
     },
     {
@@ -1656,7 +1916,7 @@
       "kind": "route",
       "label": "Clip_10",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -1664,7 +1924,7 @@
       "kind": "route",
       "label": "Clip_11",
       "path": "出视频/第1集/prompt/video_model_routes.json",
-      "policy_winner": "identity_affinity",
+      "policy_winner": "motion_control_required",
       "primary_backend": "seedance"
     },
     {
@@ -1767,9 +2027,9 @@
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 11,
-    "edges": 220,
-    "images": 31,
-    "nodes": 103,
+    "edges": 266,
+    "images": 33,
+    "nodes": 108,
     "videos": 16
   },
   "version": 1

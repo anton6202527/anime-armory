@@ -1,0 +1,107 @@
+{
+  "available": true,
+  "episode": "第1集",
+  "generated_at": "2026-07-07T05:20:11+00:00",
+  "kind": "n2d_tension_mix",
+  "notes": [],
+  "segments": [
+    {
+      "end": 9.236,
+      "gain": 0.58,
+      "id": "EP01_CLIP01",
+      "rhythm": "铺垫·长镜",
+      "start": 0.0
+    },
+    {
+      "end": 25.806,
+      "gain": 0.58,
+      "id": "EP01_CLIP02",
+      "rhythm": "铺垫·长镜",
+      "start": 9.236
+    },
+    {
+      "end": 44.558,
+      "gain": 0.82,
+      "id": "EP01_CLIP03",
+      "rhythm": "加速·碎切",
+      "start": 25.806
+    },
+    {
+      "end": 54.568,
+      "gain": 0.58,
+      "id": "EP01_CLIP04",
+      "rhythm": "铺垫·长镜",
+      "start": 44.558
+    },
+    {
+      "end": 67.563,
+      "gain": 0.6,
+      "id": "EP01_CLIP05",
+      "rhythm": "揭示·反应链",
+      "start": 54.568
+    },
+    {
+      "end": 82.149,
+      "gain": 0.82,
+      "id": "EP01_CLIP06",
+      "rhythm": "加速·碎切",
+      "start": 67.563
+    },
+    {
+      "end": 93.346,
+      "gain": 0.95,
+      "id": "EP01_CLIP07",
+      "rhythm": "爽点·CU硬切",
+      "start": 82.149
+    },
+    {
+      "end": 101.934,
+      "gain": 0.58,
+      "id": "EP01_CLIP08",
+      "rhythm": "铺垫·长镜",
+      "start": 93.346
+    },
+    {
+      "end": 111.922,
+      "gain": 0.82,
+      "id": "EP01_CLIP09",
+      "rhythm": "加速·碎切",
+      "start": 101.934
+    },
+    {
+      "end": 118.462,
+      "gain": 0.95,
+      "id": "EP01_CLIP10",
+      "rhythm": "爽点·CU硬切",
+      "start": 111.922
+    },
+    {
+      "end": 120.515,
+      "gain": 0.36,
+      "id": "EP01_CLIP11",
+      "rhythm": "留白·定格",
+      "start": 118.462
+    }
+  ],
+  "sfx_emphasis": [
+    {
+      "at": [
+        82.149,
+        93.346
+      ],
+      "id": "EP01_CLIP07",
+      "rhythm": "爽点·CU硬切"
+    },
+    {
+      "at": [
+        111.922,
+        118.462
+      ],
+      "id": "EP01_CLIP10",
+      "rhythm": "爽点·CU硬切"
+    }
+  ],
+  "status": "pass",
+  "version": 1,
+  "volume_expr": "if(between(t,0,9.236),0.58,if(between(t,9.236,25.806),0.58,if(between(t,25.806,44.558),0.82,if(between(t,44.558,54.568),0.58,if(between(t,54.568,67.563),0.6,if(between(t,67.563,82.149),0.82,if(between(t,82.149,93.346),0.95,if(between(t,93.346,101.934),0.58,if(between(t,101.934,111.922),0.82,if(between(t,111.922,118.462),0.95,if(between(t,118.462,120.515),0.36,0.6)))))))))))"
+}

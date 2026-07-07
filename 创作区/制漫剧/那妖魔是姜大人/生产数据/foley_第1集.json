@@ -1,0 +1,23 @@
+{
+  "backend_configured": false,
+  "backend_used": false,
+  "duration_sec": 120.515,
+  "episode": "第1集",
+  "event_count": 0,
+  "events": [],
+  "generated_at": "2026-07-07T08:56:14+00:00",
+  "kind": "n2d_foley_evidence",
+  "mix_exists": true,
+  "mix_path": "合成/第1集/_work/foley_mix.wav",
+  "notes": [
+    "silent_placeholder 表示已产可对齐占位轨，但未配置真 V2A 拟音后端；不冒充真实音效。",
+    "suppressed_native_av 表示原生音画音轨被保留，compose 侧拟音被抑制以避免双层声效。"
+  ],
+  "plan_path": "合成/第1集/_work/foley_plan.json",
+  "policy": {
+    "mode": "full",
+    "reason": "clip_audio_discarded:compose_foley_is_only_sfx_source"
+  },
+  "status": "silent_placeholder",
+  "version": 1
+}

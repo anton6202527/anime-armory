@@ -13,6 +13,7 @@ from typing import Any
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
+WEBP_MAX_DIMENSION = 16383
 FONT_CANDIDATES = (
     "/System/Library/Fonts/PingFang.ttc",
     "/System/Library/Fonts/STHeiti Medium.ttc",
@@ -39,6 +40,13 @@ TEXT_LANGUAGE_ALIASES = {
     "英中": "英上中下",
     "英上中下": "英上中下",
     "英文上中文下": "英上中下",
+}
+
+FORMAT_ALIASES = {
+    "webp": "webp",
+    "png": "png",
+    "jpg": "jpg",
+    "jpeg": "jpg",
 }
 
 
@@ -77,6 +85,36 @@ def parse_max_height(value: str | int | None, default: int = 0) -> int:
         return 0
     match = re.search(r"\d+", raw)
     return int(match.group(0)) if match else default
+
+
+def parse_export_formats(value: str | None) -> list[str]:
+    raw = str(value or "").strip().lower()
+    if not raw:
+        return ["webp"]
+    formats: list[str] = []
+    for token in re.split(r"[+,\s/]+", raw):
+        fmt = FORMAT_ALIASES.get(token.strip())
+        if fmt and fmt not in formats:
+            formats.append(fmt)
+    return formats or ["webp"]
+
+
+def choose_output_format(formats: list[str], width: int, height: int) -> str:
+    for fmt in formats:
+        if fmt == "webp" and max(width, height) <= WEBP_MAX_DIMENSION:
+            return fmt
+        if fmt in {"png", "jpg"}:
+            return fmt
+    return "png"
+
+
+def save_canvas(image: Any, path: Path, fmt: str) -> None:
+    if fmt == "webp":
+        image.save(path, quality=92)
+    elif fmt == "jpg":
+        image.save(path, quality=92)
+    else:
+        image.save(path)
 
 
 def ordered_panel_ids(layout: dict) -> list[str]:
@@ -466,7 +504,18 @@ def apply_lettering(image, panel_id: str, slot_info: dict[str, Any], items: list
     return image, stats
 
 
-def build_manifest(root: Path, chapter: str, layout_path: Path, panel_dir: Path, out_dir: Path, max_height: int, lettering_path: Path | None, font_path: str) -> dict:
+def build_manifest(
+    root: Path,
+    chapter: str,
+    layout_path: Path,
+    panel_dir: Path,
+    out_dir: Path,
+    page_dir: Path,
+    max_height: int,
+    lettering_path: Path | None,
+    font_path: str,
+    export_formats: list[str],
+) -> dict:
     layout = load_json(layout_path)
     panel_ids = ordered_panel_ids(layout)
     panels = []
@@ -484,87 +533,190 @@ def build_manifest(root: Path, chapter: str, layout_path: Path, panel_dir: Path,
         "layout": str(layout_path.relative_to(root)),
         "panel_dir": str(panel_dir.relative_to(root)),
         "out_dir": str(out_dir.relative_to(root)),
+        "page_dir": str(page_dir.relative_to(root)),
         "lettering": str(lettering_path.relative_to(root)) if lettering_path and lettering_path.is_file() else "",
         "font": font_path,
         "font_status": "system_font_draft" if font_path else "pillow_default_fallback",
+        "export_formats": export_formats,
         "max_segment_height": max_height,
         "split_mode": "height" if max_height > 0 else "single",
         "panels": panels,
         "missing_panels": missing,
+        "pages": [],
         "rendered": [],
     }
 
 
-def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int, gap: int, background: str, layout: dict, lettering: dict | None, text_language: str) -> None:
+def panel_slot_info(panel: dict) -> dict[str, Any]:
+    slots = {}
+    for slot in panel.get("bubble_slots", []):
+        sid = slot.get("slot_id")
+        if sid:
+            slots[sid] = slot
+    return {"panel": panel, "slots": slots}
+
+
+def cleanup_outputs(out_dir: Path, page_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    page_dir.mkdir(parents=True, exist_ok=True)
+    for pattern in ("part_*.webp", "part_*.png", "part_*.jpg", "longstrip.webp", "longstrip.png", "longstrip.jpg"):
+        for stale in out_dir.glob(pattern):
+            stale.unlink()
+    for pattern in ("page_*.webp", "page_*.png", "page_*.jpg"):
+        for stale in page_dir.glob(pattern):
+            stale.unlink()
+
+
+def merge_lettering_stats(total: dict[str, Any], stats: dict[str, Any]) -> None:
+    total["drawn_items"] += stats["drawn_items"]
+    total["skipped_empty_items"].extend(stats["skipped_empty_items"])
+    total["empty_slots_removed"].extend(stats["empty_slots_removed"])
+
+
+def render_layout_pages(
+    manifest: dict,
+    root: Path,
+    page_dir: Path,
+    background: str,
+    layout: dict,
+    lettering: dict | None,
+    text_language: str,
+    export_formats: list[str],
+) -> tuple[list[tuple[dict[str, Any], Any]], dict[str, Any]]:
+    from PIL import Image
+
+    panel_items = {item["panel_id"]: item for item in manifest["panels"]}
+    lettering_items = lettering_by_panel(lettering or {})
+    font_path = manifest.get("font", "")
+    language_mode = normalize_text_language(text_language)
+    rendered_pages: list[tuple[dict[str, Any], Any]] = []
+    lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
+
+    for idx, segment in enumerate(layout.get("segments", []), 1):
+        panels = sorted(segment.get("panels", []), key=lambda p: (p.get("y", 0), p.get("x", 0)))
+        width = int(segment.get("width") or max((float(p.get("x", 0)) + float(p.get("w", 0)) for p in panels), default=0))
+        height = int(segment.get("height") or max((float(p.get("y", 0)) + float(p.get("h", 0)) for p in panels), default=0))
+        if width <= 0 or height <= 0:
+            continue
+        canvas = Image.new("RGB", (width, height), background)
+        page_panel_ids: list[str] = []
+        for panel in panels:
+            pid = str(panel.get("panel_id") or "")
+            item = panel_items.get(pid)
+            if not item:
+                continue
+            image = Image.open(root / item["path"]).convert("RGB")
+            item["source_size"] = {"width": image.width, "height": image.height}
+            target_w = int(panel.get("w") or image.width)
+            target_h = int(panel.get("h") or image.height)
+            if image.size != (target_w, target_h):
+                image = image.resize((target_w, target_h))
+            image, stats = apply_lettering(
+                image,
+                pid,
+                panel_slot_info(panel),
+                lettering_items.get(pid, []),
+                font_path,
+                language_mode,
+            )
+            merge_lettering_stats(lettering_stats, stats)
+            item["size"] = {"width": image.width, "height": image.height}
+            canvas.paste(image, (int(panel.get("x") or 0), int(panel.get("y") or 0)))
+            page_panel_ids.append(pid)
+
+        fmt = choose_output_format(export_formats, canvas.width, canvas.height)
+        page_path = page_dir / f"page_{idx:03d}.{fmt}"
+        save_canvas(canvas, page_path, fmt)
+        meta = {
+            "path": str(page_path.relative_to(root)),
+            "segment_id": segment.get("segment_id", f"S{idx:03d}"),
+            "panel_ids": page_panel_ids,
+            "size": {"width": canvas.width, "height": canvas.height},
+            "format": fmt,
+        }
+        rendered_pages.append((meta, canvas))
+
+    return rendered_pages, lettering_stats
+
+
+def combine_pages(page_canvases: list[tuple[dict[str, Any], Any]], gap: int, background: str):
+    from PIL import Image
+
+    width = max(canvas.width for _meta, canvas in page_canvases)
+    height = sum(canvas.height for _meta, canvas in page_canvases) + gap * max(0, len(page_canvases) - 1)
+    combined = Image.new("RGB", (width, height), background)
+    y = 0
+    panel_ids: list[str] = []
+    for meta, canvas in page_canvases:
+        x = math.floor((width - canvas.width) / 2)
+        combined.paste(canvas, (x, y))
+        y += canvas.height + gap
+        panel_ids.extend(meta.get("panel_ids") or [])
+    return combined, panel_ids
+
+
+def render_longstrip(
+    manifest: dict,
+    root: Path,
+    out_dir: Path,
+    page_dir: Path,
+    max_height: int,
+    gap: int,
+    background: str,
+    layout: dict,
+    lettering: dict | None,
+    text_language: str,
+    export_formats: list[str],
+) -> None:
     try:
         from PIL import Image
     except ImportError as exc:
         raise RuntimeError("Pillow 未安装；已可生成 manifest，如需渲染长图请先安装 Pillow。") from exc
 
-    slots = panel_slot_map(layout)
-    lettering_items = lettering_by_panel(lettering or {})
-    font_path = manifest.get("font", "")
     language_mode = normalize_text_language(text_language)
-    images = []
-    lettering_stats = {"drawn_items": 0, "skipped_empty_items": [], "empty_slots_removed": []}
-    for item in manifest["panels"]:
-        path = root / item["path"]
-        image = Image.open(path).convert("RGB")
-        image, stats = apply_lettering(
-            image,
-            item["panel_id"],
-            slots.get(item["panel_id"], {}),
-            lettering_items.get(item["panel_id"], []),
-            font_path,
-            language_mode,
-        )
-        lettering_stats["drawn_items"] += stats["drawn_items"]
-        lettering_stats["skipped_empty_items"].extend(stats["skipped_empty_items"])
-        lettering_stats["empty_slots_removed"].extend(stats["empty_slots_removed"])
-        images.append((item["panel_id"], image))
-        item["size"] = {"width": image.width, "height": image.height}
-
-    if not images:
+    cleanup_outputs(out_dir, page_dir)
+    page_canvases, lettering_stats = render_layout_pages(
+        manifest, root, page_dir, background, layout, lettering, language_mode, export_formats
+    )
+    manifest["pages"] = [meta for meta, _canvas in page_canvases]
+    if not page_canvases:
         return
 
-    width = max(image.width for _, image in images)
-    parts: list[list[tuple[str, Image.Image]]] = []
-    current: list[tuple[str, Image.Image]] = []
-    current_h = 0
-    for pid, image in images:
-        add_h = image.height + (gap if current else 0)
-        if max_height > 0 and current and current_h + add_h > max_height:
-            parts.append(current)
-            current = []
-            current_h = 0
-            add_h = image.height
-        current.append((pid, image))
-        current_h += add_h
-    if current:
-        parts.append(current)
-
-    out_dir.mkdir(parents=True, exist_ok=True)
-    for stale in out_dir.glob("part_*.webp"):
-        stale.unlink()
-    stale_single = out_dir / "longstrip.webp"
-    if stale_single.exists():
-        stale_single.unlink()
-
+    combined, panel_ids = combine_pages(page_canvases, gap, background)
     rendered = []
-    for idx, part in enumerate(parts, 1):
-        height = sum(img.height for _, img in part) + gap * max(0, len(part) - 1)
-        canvas = Image.new("RGB", (width, height), background)
-        y = 0
-        panel_ids = []
-        for pid, image in part:
-            x = math.floor((width - image.width) / 2)
-            canvas.paste(image, (x, y))
-            y += image.height + gap
-            panel_ids.append(pid)
-        out_name = "longstrip.webp" if max_height <= 0 and len(parts) == 1 else f"part_{idx:03d}.webp"
+    if max_height <= 0:
+        fmt = choose_output_format(export_formats, combined.width, combined.height)
+        out_name = f"longstrip.{fmt}"
         out_path = out_dir / out_name
-        canvas.save(out_path, quality=92)
-        rendered.append({"path": str(out_path.relative_to(root)), "panel_ids": panel_ids, "size": {"width": width, "height": height}})
+        save_canvas(combined, out_path, fmt)
+        rendered.append(
+            {
+                "path": str(out_path.relative_to(root)),
+                "panel_ids": panel_ids,
+                "size": {"width": combined.width, "height": combined.height},
+                "format": fmt,
+            }
+        )
+    else:
+        y = 0
+        idx = 1
+        while y < combined.height:
+            bottom = min(combined.height, y + max_height)
+            crop = combined.crop((0, y, combined.width, bottom))
+            fmt = choose_output_format(export_formats, crop.width, crop.height)
+            out_path = out_dir / f"part_{idx:03d}.{fmt}"
+            save_canvas(crop, out_path, fmt)
+            rendered.append(
+                {
+                    "path": str(out_path.relative_to(root)),
+                    "panel_ids": panel_ids,
+                    "size": {"width": crop.width, "height": crop.height},
+                    "y_range": [y, bottom],
+                    "format": fmt,
+                }
+            )
+            y = bottom
+            idx += 1
     manifest["rendered"] = rendered
     manifest["lettering_rendered"] = lettering_stats["drawn_items"] > 0
     manifest["text_language"] = language_mode
@@ -575,6 +727,172 @@ def render_longstrip(manifest: dict, root: Path, out_dir: Path, max_height: int,
     manifest["lettering_stats"] = lettering_stats
 
 
+def slot_records(layout: dict) -> dict[tuple[str, str], dict[str, Any]]:
+    records: dict[tuple[str, str], dict[str, Any]] = {}
+    for idx, segment in enumerate(layout.get("segments", []), 1):
+        segment_id = str(segment.get("segment_id") or f"S{idx:03d}")
+        for panel in segment.get("panels", []):
+            pid = str(panel.get("panel_id") or "")
+            if not pid:
+                continue
+            for slot in panel.get("bubble_slots", []):
+                sid = str(slot.get("slot_id") or "")
+                if sid:
+                    records[(pid, sid)] = {"segment_id": segment_id, "slot": slot}
+    return records
+
+
+def build_page_map(manifest: dict, root: Path) -> dict[str, Any]:
+    from PIL import Image
+
+    pages: dict[str, Any] = {}
+    for page in manifest.get("pages") or []:
+        segment_id = str(page.get("segment_id") or "")
+        page_path = page.get("path")
+        if segment_id and page_path:
+            pages[segment_id] = Image.open(root / page_path).convert("RGB")
+    return pages
+
+
+def save_lettering_qc_sheet(
+    manifest: dict,
+    root: Path,
+    layout: dict,
+    lettering: dict | None,
+    out_path: Path,
+    *,
+    thumb_w: int = 360,
+    thumb_h: int = 170,
+    cols: int = 4,
+) -> dict[str, Any]:
+    from PIL import Image, ImageDraw
+
+    items = (lettering or {}).get("items") or []
+    if not items:
+        return {"path": "", "items": 0, "missing_slots": []}
+    pages = build_page_map(manifest, root)
+    slots = slot_records(layout)
+    rows = math.ceil(len(items) / cols)
+    sheet = Image.new("RGB", (cols * thumb_w, rows * thumb_h), (245, 245, 245))
+    draw = ImageDraw.Draw(sheet)
+    label_font = load_font(18, manifest.get("font", ""))
+    missing_slots: list[str] = []
+    resampling = getattr(Image, "Resampling", Image).LANCZOS
+
+    for idx, item in enumerate(items):
+        row, col = divmod(idx, cols)
+        x0, y0 = col * thumb_w, row * thumb_h
+        text = str(item.get("text_zh") or item.get("text") or item.get("text_en") or "")
+        label = f"{item.get('item_id')} {item.get('panel_id')} {item.get('type')} {text}"
+        draw.rectangle((x0, y0, x0 + thumb_w - 1, y0 + 23), fill=(25, 25, 25))
+        draw.text((x0 + 6, y0 + 3), label[:36], font=label_font, fill=(255, 255, 255))
+
+        pid = str(item.get("panel_id") or "")
+        sid = str(item.get("slot_id") or "")
+        record = slots.get((pid, sid))
+        if not record:
+            missing_slots.append(f"{pid}:{sid}")
+            continue
+        page = pages.get(record["segment_id"])
+        if page is None:
+            missing_slots.append(f"{pid}:{sid}")
+            continue
+        slot = record["slot"]
+        pad = 60
+        left = max(0, int(slot.get("x", 0) or 0) - pad)
+        top = max(0, int(slot.get("y", 0) or 0) - pad)
+        right = min(page.width, int((slot.get("x", 0) or 0) + (slot.get("w", 0) or 0)) + pad)
+        bottom = min(page.height, int((slot.get("y", 0) or 0) + (slot.get("h", 0) or 0)) + pad)
+        if right <= left or bottom <= top:
+            missing_slots.append(f"{pid}:{sid}")
+            continue
+        crop = page.crop((left, top, right, bottom))
+        crop.thumbnail((thumb_w, thumb_h - 28), resampling)
+        sheet.paste(crop, (x0 + (thumb_w - crop.width) // 2, y0 + 24))
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out_path, quality=92)
+    return {"path": str(out_path.relative_to(root)), "items": len(items), "missing_slots": missing_slots}
+
+
+def update_progress(root: Path, chapter: str, stage: str, value: str) -> bool:
+    path = root / "_进度.md"
+    if not path.is_file():
+        return False
+    lines = path.read_text(encoding="utf-8").splitlines()
+    headers: list[str] = []
+    updated = False
+    out: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("|"):
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            if cells and cells[0] == "话":
+                headers = cells
+            elif headers and len(cells) >= len(headers) and cells[0] == chapter and stage in headers:
+                cells[headers.index(stage)] = value
+                line = "| " + " | ".join(cells) + " |"
+                updated = True
+        out.append(line)
+    if updated:
+        path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return updated
+
+
+def update_export_checklist(root: Path, chapter: str, *, pages_ready: bool, longstrip_ready: bool, manifest_ready: bool) -> bool:
+    path = root / "_进度.md"
+    if not path.is_file():
+        return False
+    targets = {
+        f"{chapter} 页面图": pages_ready,
+        f"{chapter} 长图": longstrip_ready,
+        f"{chapter} export_manifest.json": manifest_ready,
+    }
+    lines = path.read_text(encoding="utf-8").splitlines()
+    changed = False
+    seen: set[str] = set()
+    out: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        match = re.match(r"^-\s+\[[ xX]\]\s+(.+?)\s*$", stripped)
+        if match and match.group(1) in targets:
+            label = match.group(1)
+            seen.add(label)
+            desired = f"- [{'x' if targets[label] else ' '}] {label}"
+            indent = line[: len(line) - len(line.lstrip())]
+            new_line = indent + desired
+            if new_line != line:
+                line = new_line
+                changed = True
+        out.append(line)
+    missing = [label for label in targets if label not in seen]
+    if missing:
+        insert_at = None
+        in_export_section = False
+        last_export_item = None
+        for idx, line in enumerate(out):
+            stripped = line.strip()
+            if stripped == "## 导出":
+                in_export_section = True
+                insert_at = idx + 1
+                continue
+            if in_export_section and stripped.startswith("## "):
+                break
+            if in_export_section and stripped.startswith("- ["):
+                last_export_item = idx
+        if last_export_item is not None:
+            insert_at = last_export_item + 1
+        if insert_at is None:
+            out.extend(["", "## 导出"])
+            insert_at = len(out)
+        additions = [f"- [{'x' if targets[label] else ' '}] {label}" for label in missing]
+        out[insert_at:insert_at] = additions
+        changed = True
+    if changed:
+        path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return changed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="漫画长图导出 manifest/渲染")
     parser.add_argument("project_root")
@@ -582,19 +900,25 @@ def main() -> int:
     parser.add_argument("--layout", default=None)
     parser.add_argument("--panel-dir", default=None)
     parser.add_argument("--out-dir", default=None)
+    parser.add_argument("--page-dir", default=None)
     parser.add_argument("--lettering", default=None)
     parser.add_argument("--no-lettering", action="store_true")
     parser.add_argument("--font", default=None)
+    parser.add_argument("--formats", default=None, help="导出格式，如 webp、png 或 webp+png；默认读 _设置.md 的 导出格式")
     parser.add_argument("--max-height", default=None, help="最大分段高度；0/不分段/单张 表示导出一张 longstrip.webp")
     parser.add_argument("--gap", type=int, default=24)
     parser.add_argument("--background", default="#ffffff")
     parser.add_argument("--render", action="store_true", help="用 Pillow 实际渲染长图")
+    parser.add_argument("--write-progress", action="store_true", help="导出成功后回写 _进度.md 的 嵌字合成")
+    parser.add_argument("--qc-slots", action="store_true", help="渲染后输出嵌字槽位 QC 接触表")
+    parser.add_argument("--qc-out", default=None, help="嵌字槽位 QC 接触表输出路径")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     layout_path = Path(args.layout).expanduser().resolve() if args.layout else root / "排版" / args.chapter / "layout.json"
     panel_dir = Path(args.panel_dir).expanduser().resolve() if args.panel_dir else root / "出图" / args.chapter / "panels"
     out_dir = Path(args.out_dir).expanduser().resolve() if args.out_dir else root / "排版" / args.chapter / "长图"
+    page_dir = Path(args.page_dir).expanduser().resolve() if args.page_dir else root / "排版" / args.chapter / "pages"
     lettering_path = None if args.no_lettering else (Path(args.lettering).expanduser().resolve() if args.lettering else root / "排版" / args.chapter / "lettering.json")
     font_path = resolve_font_path(args.font)
     manifest_path = root / "排版" / args.chapter / "export_manifest.json"
@@ -604,19 +928,53 @@ def main() -> int:
         return 2
     panel_dir.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
+    page_dir.mkdir(parents=True, exist_ok=True)
     layout = load_json(layout_path)
     lettering = load_json(lettering_path) if lettering_path and lettering_path.is_file() else None
     max_height = parse_max_height(args.max_height, parse_max_height(read_setting(root, "单话分段高度", "0")))
-    manifest = build_manifest(root, args.chapter, layout_path, panel_dir, out_dir, max_height, lettering_path, font_path)
+    export_formats = parse_export_formats(args.formats or read_setting(root, "导出格式", "webp"))
+    manifest = build_manifest(
+        root,
+        args.chapter,
+        layout_path,
+        panel_dir,
+        out_dir,
+        page_dir,
+        max_height,
+        lettering_path,
+        font_path,
+        export_formats,
+    )
     text_language = normalize_text_language(read_setting(root, "文字语言", (lettering or {}).get("language_mode", "中文") if lettering else "中文"))
     manifest["text_language"] = text_language
 
     if args.render:
         try:
-            render_longstrip(manifest, root, out_dir, max_height, args.gap, args.background, layout, lettering, text_language)
+            render_longstrip(
+                manifest,
+                root,
+                out_dir,
+                page_dir,
+                max_height,
+                args.gap,
+                args.background,
+                layout,
+                lettering,
+                text_language,
+                export_formats,
+            )
         except RuntimeError as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")
+
+    if args.qc_slots and args.render and manifest.get("pages"):
+        qc_path = (
+            Path(args.qc_out).expanduser().resolve()
+            if args.qc_out
+            else root / "生产数据" / "qa_previews" / f"{args.chapter}_lettering_slots.jpg"
+        )
+        manifest["lettering_slot_qc"] = save_lettering_qc_sheet(manifest, root, layout, lettering, qc_path)
+        print(f"[ok] lettering slot QC {qc_path}")
 
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -625,6 +983,23 @@ def main() -> int:
         print("[warn] 缺少面板图：" + ", ".join(manifest["missing_panels"]))
     if manifest["rendered"]:
         print(f"[ok] rendered {len(manifest['rendered'])} file(s)")
+    if args.write_progress:
+        if not manifest["missing_panels"] and manifest["rendered"] and manifest.get("lettering"):
+            value = "✅"
+        elif not manifest["missing_panels"]:
+            value = "⏳manifest"
+        else:
+            value = ""
+        if value and update_progress(root, args.chapter, "嵌字合成", value):
+            print(f"[ok] progress 嵌字合成={value}")
+        if update_export_checklist(
+            root,
+            args.chapter,
+            pages_ready=bool(manifest.get("pages")),
+            longstrip_ready=bool(manifest.get("rendered")),
+            manifest_ready=manifest_path.is_file(),
+        ):
+            print("[ok] progress export checklist updated")
     return 0
 
 

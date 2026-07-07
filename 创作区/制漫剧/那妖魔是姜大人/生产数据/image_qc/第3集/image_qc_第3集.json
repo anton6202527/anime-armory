@@ -55,7 +55,7 @@
   ],
   "asset_lifecycle": {
     "available": true,
-    "checked": 16,
+    "checked": 17,
     "findings": [
       {
         "asset": "PROP_尸场物资包",
@@ -158,6 +158,18 @@
           "intra_pairs": 4
         },
         "CHAR_05__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "GROUP_飞鹰门众人__常态": {
           "floor": 0.5,
           "floor_calibrated": false,
           "has_main": false,
@@ -847,6 +859,14 @@
         "CHAR_05__常态": {
           "floor": 0.5555,
           "intra_pairs": 6
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "GROUP_飞鹰门众人__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
         }
       },
       "margin": 0.08,
@@ -1386,6 +1406,11 @@
           "type": "vfx"
         },
         {
+          "id": "VFX_百妖谱金光",
+          "name": "百妖谱金光",
+          "type": "vfx"
+        },
+        {
           "id": "VFX_系统面板",
           "name": "系统面板",
           "type": "vfx"
@@ -1412,71 +1437,81 @@
         "姜月初",
         "CHAR_01",
         "CHAR_01__囚犯初醒态",
+        "CHAR_01__囚犯初醒态_背面.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态_表情_震动.png', 'status': 'ready'}]",
+        "CHAR_01__囚犯初醒态_脸部特写.png', 'status': 'ready'}]",
         "CHAR_01__囚犯初醒态_正面.png', 'status': 'ready'}",
-        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__囚犯初醒态_半身.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态.png', 'status': 'ready'}]",
+        "CHAR_01__囚犯初醒态_侧面.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态_45度.png', 'status': 'ready'}",
         "CHAR_01__囚犯初醒态_三视图.png', 'status': 'ready'}",
-        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_01__囚犯初醒态_正面.png', 'source_sha256': '55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
         "CHAR_01__镇魔司伪装态",
-        "CHAR_01__镇魔司伪装态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429748+00:00'}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429834+00:00'}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429849+00:00'}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429859+00:00'}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00'}}",
-        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00'}}",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent_visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-06T08:58:05.820075+00:00', 'reviewed_by': 'image_qc --finalize-expr'}, 'anchor_sha': 'ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6', 'self_check_passed': True}]",
+        "CHAR_01__镇魔司伪装态_背.png', 'status': 'ready'}",
+        "CHAR_01__镇魔司伪装态_半身.png', 'status': 'ready'}]",
+        "CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png', 'status': 'ready'}]",
+        "CHAR_01__镇魔司伪装态.png', 'status': 'ready'}",
+        "CHAR_01__镇魔司伪装态_半身.png', 'status': 'ready'}",
+        "CHAR_01__镇魔司伪装态_侧.png', 'status': 'ready'}",
+        "CHAR_01__镇魔司伪装态_45度.png', 'status': 'ready'}",
+        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'ready'}",
         "陈青源",
         "CHAR_04",
         "CHAR_04__常态",
-        "CHAR_04__常态.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031300+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031396+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031413+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031429+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031452+00:00'}}",
-        "CHAR_04__常态_三视图.png', 'status': 'ready', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031464+00:00'}}",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031480+00:00'}}]",
-        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'pass', 'reviewer': 'agent.visual_review', 'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_by': 'image_qc --finalize-expr', 'reviewed_at': '2026-07-04T17:16:01.069070+00:00'}, 'anchor_sha': '107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9'}]",
+        "CHAR_04__常态_背.png', 'status': 'ready'}",
+        "CHAR_04__常态.png', 'status': 'ready'}]",
+        "CHAR_04__常态_脸部特写_脸锚裁切.png', 'status': 'ready'}]",
+        "CHAR_04__常态.png', 'status': 'ready'}",
+        "CHAR_04__常态_半身.png', 'status': 'ready'}",
+        "CHAR_04__常态_侧.png', 'status': 'ready'}",
+        "CHAR_04__常态_45度.png', 'status': 'ready'}",
+        "CHAR_04__常态_三视图.png', 'status': 'ready'}",
         "GROUP_飞鹰门众人",
         "GROUP_飞鹰门众人__常态",
-        "GROUP_飞鹰门众人__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reason': 'Codex text-generated character candidate requires human approval before ready'}}",
-        "GROUP_飞鹰门众人__常态_手部局部.png', 'status': 'planned'}",
-        "GROUP_飞鹰门众人__常态_布料局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00'}}",
+        "GROUP_飞鹰门众人__常态_手部局部.png', 'status': 'ready'}",
+        "GROUP_飞鹰门众人__常态_布料局部.png', 'status': 'ready'}",
+        "GROUP_飞鹰门众人__常态.png', 'status': 'review_pending'}",
         "GROUP_狼妖群",
         "GROUP_狼妖群__常态",
-        "GROUP_狼妖群__常态.png', 'status': 'review_pending', 'human_review': {'status': 'pending', 'reviewer': 'image_qc.mark_finalized', 'reason': 'Codex text-generated character candidate requires human approval before ready', 'reviewed_at': '2026-07-04T17:13:51.263312+00:00'}}",
-        "GROUP_狼妖群__常态_手部局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared hand reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263419+00:00'}}",
-        "GROUP_狼妖群__常态_布料局部.png', 'status': 'planned', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263436+00:00'}}",
+        "GROUP_狼妖群__常态_手部局部.png', 'status': 'ready'}",
+        "GROUP_狼妖群__常态_布料局部.png', 'status': 'ready'}",
+        "GROUP_狼妖群__常态.png', 'status': 'review_pending'}",
         "青面郎君",
         "CHAR_05",
         "CHAR_05__常态",
-        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}}",
-        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209357+00:00'}}",
-        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'd804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209371+00:00'}}",
-        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': '642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209382+00:00'}}",
-        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209392+00:00'}}",
-        "derive_makeup_pack.py', 'generated_at': '2026-07-06T07:27:56+00:00'}, 'sha256': 'd0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209400+00:00'}}",
-        "风格锚_冷灰写实3D国风漫剧.png', 'sha256': 'ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531', 'role': 'style', 'owner': 'STYLE_ANCHOR', 'source': 'reference_bundle'}]}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209409+00:00'}, 'sha256': '53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57', 'dimensions': {'width': 941, 'height': 1672}}",
-        "常态 同源脸锚', 'sha256': '493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890', 'dimensions': {'width': 941, 'height': 1672}, 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209419+00:00'}}]",
-        "CHAR_05__常态.png', 'source_sha256': 'prompt-stage-source-pending', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'status': 'accepted', 'reviewer': 'image_qc.mark_finalized', 'reason': 'shared expressions[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209430+00:00'}, 'sha256': 'b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f', 'dimensions': {'width': 941, 'height': 1672}}]",
+        "CHAR_05__常态_背.png', 'sha256': '642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a', 'status': 'ready'}",
+        "CHAR_05__常态.png', 'sha256': 'b0d25f1ecca8e01450b0b6c4f7f2739c2e7654fdb47ac339c5cf63bf6619b10f', 'status': 'ready'}]",
+        "CHAR_05__常态_脸部特写_脸锚裁切.png', 'sha256': '493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890', 'status': 'ready'}]",
+        "CHAR_05__常态.png', 'sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'status': 'ready'}",
+        "CHAR_05__常态_半身.png', 'sha256': 'd0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca', 'status': 'ready'}",
+        "CHAR_05__常态_半身.png', 'status': 'ready'}",
+        "CHAR_05__常态_侧.png', 'sha256': 'd804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b', 'status': 'ready'}",
+        "CHAR_05__常态_45度.png', 'sha256': 'bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0', 'status': 'ready'}",
+        "CHAR_05__常态_三视图.png', 'sha256': '53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57', 'status': 'ready'}",
         " 虎妖",
         "CHAR_03",
         "CHAR_03__诈死复苏态",
+        "CHAR_03__诈死复苏态_背面.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态_表情_震动.png', 'status': 'ready'}]",
+        "CHAR_03__诈死复苏态_脸部特写.png', 'status': 'ready'}]",
         "CHAR_03__诈死复苏态_正面.png', 'status': 'ready'}",
-        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_03__诈死复苏态_半身.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态.png', 'status': 'ready'}]",
+        "CHAR_03__诈死复苏态_侧面.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态_45度.png', 'status': 'ready'}",
         "CHAR_03__诈死复苏态_三视图.png', 'status': 'ready'}",
-        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_03__诈死复苏态_正面.png', 'source_sha256': '727404cabf02bcf2cae4549dc7014ba73ec977e8de6da95e0e8342c7685901d3', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
         "裴长青",
         "CHAR_02",
         "CHAR_02__濒死战损态",
+        "CHAR_02__濒死战损态_背面.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_表情_震动.png', 'status': 'ready'}]",
+        "CHAR_02__濒死战损态_脸部特写.png', 'status': 'ready'}]",
         "CHAR_02__濒死战损态_正面.png', 'status': 'ready'}",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}",
-        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}}]",
-        "CHAR_02__濒死战损态_正面.png', 'source_sha256': '380bbbac868619a7a56db9aa29f02b5e2c0b22fdb05d034400990685fe74fb40', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]"
+        "CHAR_02__濒死战损态_半身.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态.png', 'status': 'ready'}]",
+        "CHAR_02__濒死战损态_侧面.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_45度.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}"
       ],
       "embedding_backend": "rgb_hist+dhash",
       "episode": "第3集",
@@ -1500,6 +1535,10 @@
         "PROP_镇魔司黑衣赤纹": {
           "median_dist": 0.442,
           "shots": 8
+        },
+        "VFX_百妖谱金光": {
+          "shots": 2,
+          "skipped": "组<3镜"
         },
         "WEAPON_01": {
           "median_dist": 0.456,
@@ -1539,6 +1578,14 @@
         "CHAR_05__常态": {
           "floor": 0.8482,
           "intra_pairs": 6
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "GROUP_飞鹰门众人__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
         }
       },
       "margin": 0.1,
@@ -2051,15 +2098,15 @@
       },
       "impact_physics": [],
       "notes": [
-        "场景[荒野官道夜路] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
-        "场景[荒野官道夜路] 已注册light_anchor：LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。。验收时请重点核对。",
         "场景[荒野官道夜路] 已注册axis_rules：LOC_02 姜月初画面上方/前景，求援者低位跪地；反打不越轴。 LOC_03 村口到村道深处纵轴；青面郎君从深景压出，姜月初从村口逼近。。验收时请重点核对。",
         "场景[荒野官道夜路] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[荒野官道夜路] 已注册light_anchor：LOC_02 冷月/黎明前侧光 + 火把暖点；黑衣赤纹可读。 LOC_03 晨雾散射冷光 + 村道深处阴影；血迹发黑不猎奇。。验收时请重点核对。",
         "场景[荒野官道夜路] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
-        "场景[荒野尸骸战场] 已注册layout：大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。。验收时请重点核对。",
-        "场景[荒野尸骸战场] 已注册light_anchor：冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。。验收时请重点核对。",
         "场景[荒野尸骸战场] 已注册axis_rules：巨岩旁虎妖尸身/复苏点、半截断刀钉地位置、裴长青半跪处、姜月初醒来的尸堆边、南向逃跑路不得漂移。。验收时请重点核对。",
         "场景[荒野尸骸战场] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册layout：大唐边地荒野，枯草连天，乱石与巨岩散落；囚队与镇魔司小队遭妖物伏击后的尸骸战场。。验收时请重点核对。",
+        "场景[荒野尸骸战场] 已注册light_anchor：冷灰夜色或天光将尽；风大，空气干冷，低雾贴地；光源以冷月/阴天散射为主，百妖谱金光和妖血暗光只作剧情强调。。验收时请重点核对。",
         "场景[荒野尸骸战场] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。"
       ],
       "shots": [
@@ -2279,15 +2326,15 @@
       {
         "below_abs_low": true,
         "char": "CHAR_01__囚犯初醒态",
-        "drop": -0.0404,
+        "drop": -0.0401,
         "episode_from": "第1集",
         "episode_to": "第2集",
-        "from_mean": 0.4057,
+        "from_mean": 0.406,
         "severity": "medium",
         "to_mean": 0.4461
       }
     ],
-    "history_chars": 3
+    "history_chars": 2
   },
   "episode": "第3集",
   "face_anchor_lighting": {
@@ -2426,8 +2473,8 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "d4110dfd8994eb4421118ac8826d99f733a47c48c46c84b9b7960fcb4d941a7c",
-      "出图/共享/identity_registry.json": "8f28ab8481c0b4304beb5ebd474a1c8cb31aed98bcccd62c0a689273644c23ae",
+      "出图/共享/asset_registry.json": "0d234a542076b35479c2641ecffe36dcf8bc55d538dd15275cc443c3ff4eaecd",
+      "出图/共享/identity_registry.json": "759707a4e2e34610c65eee92bcfba2a590243faacaa52448375250fcc336705f",
       "出图/共享/style_anchor_registry.json": "552073ff4fd33dd782d374d3e35c64af498b08aa52ca8c82bb924a0a4a652472",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
       "出图/第3集/prompt/00_总览.md": "fa387f126bc10718847ed06a50e6bdb7716614978194019360dbca4299bf2bea",
@@ -2494,7 +2541,7 @@
       "生产数据/image_qc/第3集/human_image_review.json": null,
       "生产数据/image_qc/第3集/prop_shape_confirmations.json": "d3b601063f80b5e71f28e7f296ac03b6bb4b3df866c991c92e963b669738d287"
     },
-    "sha": "8e46474cd887506dc9d4c77f1de8a8a9f9e4786a5cc7d9d6cc63d69ffead8dee"
+    "sha": "0d5680b891507a4ece6272fef1774a81f2767faa1c27bc26e047d92dcf9cde7b"
   },
   "kind": "n2d_image_qc",
   "lint": {

@@ -467,6 +467,36 @@
       "weather": "fog",
       "season": null,
       "time_transition": false
+    },
+    {
+      "png": "Clip06_end_reaction.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 28.4,
+      "warmth": -0.004,
+      "daypart": "night",
+      "light_cx": 0.674,
+      "light_az": "right",
+      "light_cy": 0.386,
+      "light_elev": "center",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
+    },
+    {
+      "png": "Clip06_mid_reaction.png",
+      "scene": "场景_荒野尸骸战场.png",
+      "luma": 32.0,
+      "warmth": -0.001,
+      "daypart": "night",
+      "light_cx": 0.308,
+      "light_az": "left",
+      "light_cy": 0.445,
+      "light_elev": "center",
+      "declared_light": "",
+      "weather": null,
+      "season": null,
+      "time_transition": false
     }
   ],
   "scenes": {
@@ -502,19 +532,22 @@
         "Clip10_first.png",
         "Clip10_mid.png",
         "Clip10_end.png",
-        "Clip11_first.png"
+        "Clip11_first.png",
+        "Clip06_end_reaction.png",
+        "Clip06_mid_reaction.png"
       ],
       "dayparts": {
         "day": 3,
-        "night": 28
+        "night": 30
       },
       "light_azimuths": {
-        "left": 15,
+        "left": 16,
         "center": 15,
-        "right": 1
+        "right": 2
       },
       "light_elevations": {
-        "top": 31
+        "top": 31,
+        "center": 2
       },
       "weathers": {
         "fog": 11
@@ -550,15 +583,21 @@
           "png": "Clip07_first.png",
           "verdict": "warn",
           "message": "光位锚声明主光在「left」，实测最亮区却偏「right」——实测光向与声明光位锚矛盾，人核对是否光打反/写错锚。"
+        },
+        {
+          "metric": "light_dir",
+          "png": "Clip06_mid_reaction.png",
+          "verdict": "warn",
+          "message": "主光方位 right→left 硬翻转（疑光位跳·人比对相邻镜）"
         }
       ]
     }
   },
   "summary": {
     "scene_count": 1,
-    "finding_count": 5,
+    "finding_count": 6,
     "block_count": 0,
-    "warn_count": 5
+    "warn_count": 6
   },
   "source": "n2d-review/world_continuity"
 }

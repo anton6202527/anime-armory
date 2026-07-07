@@ -73,6 +73,9 @@ export const forgeSkin: SkinPlugin = {
     "--file-audio-icon": "#89d185",
     "--file-md-icon": "#6bb6ff",
     "--file-json-icon": "#dcdc60",
+    "--scm-untracked": "#89d185",
+    "--scm-modified": "#cca700",
+    "--scm-deleted": "#f48771",
   },
   monacoThemeName: "anime-armory-forge",
   monacoTheme: {

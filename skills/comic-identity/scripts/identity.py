@@ -430,7 +430,8 @@ def character_view_prompt(
 角色 ID：{character_id}
 视图：{view} / {view_label}
 
-已附一张当前采纳角色参考图。必须以它为最高优先级，保持同一角色 DNA、脸型、发型、发量、年龄感、服装主形制和整体画风。
+已附一张当前采纳角色参考图。必须以它为最高优先级，保持同一角色 DNA、脸型、发型、发量、服装主形制和整体画风。
+年龄、身高体量、服饰阶层和状态强度必须服从下面的项目定妆契约；如果契约声明本话基准形态是少年/杂役/受伤/觉醒等，不要把附件锚点的成年感或剧情动作原样继承成当前标准视图。
 如果参考图来自剧情动作或受伤场面，只保留身份、服装和伤痕信息，不继承原图的坐姿、跪姿、弯腰、挥砍、镜头裁切或动态构图。
 如果参考图来自截图，播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，不得继承进角色设计。
 
@@ -442,11 +443,11 @@ def character_view_prompt(
 
 画面要求：
 1. 生成单人角色 reference art，不要场景叙事，不要其他人物、妖物、气泡、文字、logo、水印。
-2. 中性浅灰或低饱和纯色背景，柔和均匀光，适合后续作为漫画多视图参考图传给生图后端。
+2. 中性浅灰或低饱和纯色背景，柔和均匀光，同一角色所有视图都要像同一套 turn-around 定妆图，适合后续作为漫画多视图参考图传给生图后端。
 3. {view_rules}
 4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
 5. 不同年龄、闭关前后、受伤、觉醒、换装或境界变化都必须继承当前角色 DNA；只能改年龄比例、状态、服饰层和特效强度，不得换脸、换发际线、换眼型或丢失标志物。
-6. 不要画成现代写真、游戏 UI、角色卡边框或多格拼图；本次只输出这一张 {view} 视图。
+6. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 {view} 视图，画面里只能有一个完整角色。
 7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
@@ -652,11 +653,22 @@ def source_path(root: Path, chapter: str, panels: dict[str, Path], raw: str) -> 
     return path
 
 
-def resolve_reference_path(root: Path, ref_id: str, registry: dict) -> str:
+def resolve_reference_path(root: Path, ref_id: str, registry: dict, view: str = "") -> str:
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     asset = assets.get(ref_id) if isinstance(assets, dict) else None
     candidates: list[Path] = []
     if isinstance(asset, dict):
+        if view:
+            views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
+            raw_view = views.get(view) if isinstance(views, dict) else ""
+            if isinstance(raw_view, str) and raw_view.strip():
+                candidates.append(resolve_path(root, raw_view))
+            for item in asset.get("reference_images") or []:
+                if not isinstance(item, dict) or str(item.get("view") or "") != view:
+                    continue
+                raw = item.get("path")
+                if isinstance(raw, str) and raw.strip():
+                    candidates.append(resolve_path(root, raw))
         for key in ("anchor_path", "primary_path", "path"):
             raw = asset.get(key)
             if isinstance(raw, str) and raw.strip():
@@ -710,7 +722,7 @@ def bind_job_references(root: Path, jobs: dict, registry: dict) -> int:
             rid = str(ref.get("id") or "")
             if not rid:
                 continue
-            path = resolve_reference_path(root, rid, registry)
+            path = resolve_reference_path(root, rid, registry, view=str(ref.get("view") or ""))
             if path and ref.get("path") != path:
                 ref["path"] = path
                 changed += 1
@@ -892,7 +904,18 @@ def report_markdown(report: dict[str, Any]) -> str:
 def report(args: argparse.Namespace) -> int:
     root = Path(args.project_root).expanduser().resolve()
     chapter = args.chapter
-    jobs = load_json(jobs_path(root, chapter))
+    job_path = jobs_path(root, chapter)
+    if not job_path.is_file():
+        rel_job_path = rel_to_root(root, job_path)
+        raise SystemExit(
+            f"missing {rel_job_path}; run `python3 skills/comic-image/scripts/build_panel_jobs.py "
+            f"\"{root}\" --chapter {chapter}` before `comic-identity report`"
+        )
+    try:
+        jobs = load_json(job_path)
+    except json.JSONDecodeError as exc:
+        rel_job_path = rel_to_root(root, job_path)
+        raise SystemExit(f"invalid JSON in {rel_job_path}: {exc}") from exc
     registry = load_registry(root)
     changed = bind_job_references(root, jobs, registry) if args.write else 0
     if args.write:

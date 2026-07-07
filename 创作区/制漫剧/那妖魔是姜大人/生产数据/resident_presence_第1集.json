@@ -3,7 +3,628 @@
   "source": "resident_presence",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第1集",
-  "probes": [],
+  "probes": [
+    {
+      "shot": "图片/Clip01_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip01_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip01_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip01_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip01_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip01_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip02_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip02_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip02_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip02_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip02_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip02_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip03_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip03_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip03_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip03_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip03_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip03_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip04_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip04_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip04_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip04_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip04_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip04_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip05_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip05_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip05_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip05_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip05_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip05_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip06_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip06_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip06_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip06_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip06_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip06_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip07_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip07_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip07_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip07_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip07_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip07_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip08_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip08_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip08_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip08_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip08_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip08_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip09_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip09_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip09_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip09_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip09_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip09_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip10_end.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip10_end.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip10_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip10_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip10_mid.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip10_mid.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    },
+    {
+      "shot": "图片/Clip11_first.png",
+      "scene": "荒野尸骸战场",
+      "loc": "LOC_01",
+      "image": "出图/第1集/图片/Clip11_first.png",
+      "expected_assets": [
+        {
+          "asset": "荒野战场整体",
+          "phrase": "battlefield"
+        },
+        {
+          "asset": "乱石",
+          "phrase": "rocks"
+        },
+        {
+          "asset": "低雾",
+          "phrase": "fog"
+        }
+      ]
+    }
+  ],
   "findings": [],
   "detector_ran": false,
   "notes": [

@@ -13,8 +13,22 @@ from collections import deque
 from datetime import datetime
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+try:
+    import style_consistency
+except Exception:  # pragma: no cover - review must still run if optional style gate breaks
+    style_consistency = None
+try:
+    import character_consistency
+except Exception:  # pragma: no cover - review must still run if optional character gate breaks
+    character_consistency = None
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -65,6 +79,13 @@ def add_issue(
             "suggested_fix": suggested_fix,
         }
     )
+
+
+def display_path(root: Path, path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return str(path)
 
 
 def ordered_panel_ids(layout: dict) -> list[str]:
@@ -121,6 +142,19 @@ def has_style_anchor(registry: dict) -> bool:
         if ref_id.startswith("STYLE_") or str(asset.get("type") or "").lower() == "style":
             return True
     return False
+
+
+def is_publish_like_usage(value: str) -> bool:
+    usage = str(value or "").strip().lower()
+    if not usage:
+        return False
+    draft_tokens = ("草稿", "打样", "内部", "自用", "测试", "预览", "demo", "draft", "internal", "preview", "test")
+    return not any(token in usage for token in draft_tokens)
+
+
+def is_demo_like_usage(value: str) -> bool:
+    usage = str(value or "").strip().lower()
+    return any(token in usage for token in ("demo", "学习", "草稿", "自用", "内部", "测试", "预览", "draft", "internal", "preview", "test"))
 
 
 def find_panel_image(panel_dir: Path, panel_id: str) -> Path | None:
@@ -201,6 +235,26 @@ def visual_white_components(path: Path) -> list[dict[str, int]]:
                 }
             )
     return components[:8]
+
+
+def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
+    path = root / "生产数据" / f"raw_bubble_acceptance_{chapter}.json"
+    data = load_json(path, {})
+    accepted: dict[str, dict[str, Any]] = {}
+    if not isinstance(data, dict):
+        return accepted
+    for item in data.get("accepted_findings") or []:
+        if not isinstance(item, dict):
+            continue
+        panel_id = str(item.get("panel_id") or "").strip()
+        code = str(item.get("code") or "raw_bubble_candidate").strip()
+        if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
+            accepted[panel_id] = item
+    for panel_id in data.get("accepted_panels") or []:
+        pid = str(panel_id).strip()
+        if pid and pid not in accepted:
+            accepted[pid] = {"panel_id": pid, "code": "raw_bubble_candidate", "reason": "accepted by panel list"}
+    return accepted
 
 
 def refresh_preview(root: Path, chapter: str, rendered: list[dict]) -> str:
@@ -337,6 +391,8 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         "manifest": root / "排版" / chapter / "export_manifest.json",
         "identity_report": root / "生产数据" / f"comic_identity_report_{chapter}.json",
         "identity_registry": root / "出图" / "共享" / "identity_registry.json",
+        "style_report": root / "生产数据" / f"comic_style_consistency_{chapter}.json",
+        "character_report": root / "生产数据" / f"comic_character_consistency_{chapter}.json",
         "panel_dir": root / "出图" / chapter / "panels",
     }
     for key in ("progress", "settings", "meta", "panel_script", "layout", "lettering", "manifest"):
@@ -376,6 +432,42 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         add_issue(issues, "block", "排版/" + chapter + "/export_manifest.json", "导出 manifest 记录缺图：" + ", ".join(manifest_missing), "comic-image", "补齐缺失 panel 图后重新导出", "export")
     if not manifest.get("rendered"):
         add_issue(issues, "block", "排版/" + chapter + "/export_manifest.json", "未登记实际渲染导出物", "comic-compose", "运行 export_longstrip.py --render", "export")
+
+    slot_qc = manifest.get("lettering_slot_qc") if isinstance(manifest.get("lettering_slot_qc"), dict) else {}
+    if manifest.get("lettering_rendered"):
+        if not slot_qc:
+            add_issue(
+                issues,
+                "info",
+                "排版/" + chapter + "/export_manifest.json",
+                "manifest 未记录嵌字槽位 QC 接触表，长条图过高时不便逐字复核",
+                "comic-compose",
+                "用 export_longstrip.py --render --qc-slots 重新导出",
+                "lettering",
+            )
+        else:
+            qc_path = root / str(slot_qc.get("path") or "")
+            missing_slots = [str(item) for item in slot_qc.get("missing_slots") or []]
+            if not qc_path.is_file():
+                add_issue(
+                    issues,
+                    "warn",
+                    "排版/" + chapter + "/export_manifest.json",
+                    "manifest 记录了 lettering_slot_qc，但 QC 图文件不存在",
+                    "comic-compose",
+                    "用 export_longstrip.py --render --qc-slots 重新导出",
+                    "lettering",
+                )
+            if missing_slots:
+                add_issue(
+                    issues,
+                    "warn",
+                    display_path(root, qc_path),
+                    "嵌字槽位 QC 接触表存在缺失 slot：" + ", ".join(missing_slots[:20]),
+                    "comic-compose",
+                    "同步 layout/lettering 后重新导出并复核槽位接触表",
+                    "lettering",
+                )
 
     setting_lang = settings["文字语言"]
     manifest_lang = str(manifest.get("text_language") or "").strip()
@@ -440,40 +532,139 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         components = visual_white_components(image_path)
         if components:
             raw_bubble_hits.append({"panel_id": pid, "path": str(image_path.relative_to(root)), "components": components[:3]})
-    if raw_bubble_hits:
+    raw_bubble_acceptance = load_raw_bubble_acceptance(root, chapter)
+    accepted_raw_bubble_hits = [hit for hit in raw_bubble_hits if hit["panel_id"] in raw_bubble_acceptance]
+    unresolved_raw_bubble_hits = [hit for hit in raw_bubble_hits if hit["panel_id"] not in raw_bubble_acceptance]
+    if unresolved_raw_bubble_hits:
         add_issue(
             issues,
             "warn",
             "出图/" + chapter + "/panels",
-            "原始面板图疑似烘焙了空白气泡/文字容器：" + ", ".join(hit["panel_id"] for hit in raw_bubble_hits[:18]),
+            "原始面板图疑似烘焙了空白气泡/文字容器：" + ", ".join(hit["panel_id"] for hit in unresolved_raw_bubble_hits[:18]),
             "comic-image",
             "后续重抽这些格时要求无字画面、无空白气泡，只保留低细节留白；系统绘卷等叙事道具可人工豁免",
             "image",
         )
-
-    rights = (meta.get("rights") or {}) if isinstance(meta, dict) else {}
-    publish_like = settings["合规用途"] not in ("自用草稿", "内部草稿", "草稿")
-    for key, label in (("font_status", "字体权利"), ("asset_status", "素材权利")):
-        if str(rights.get(key) or "").startswith("pending"):
-            add_issue(
-                issues,
-                "block" if publish_like else "info",
-                "_meta.json",
-                f"{label}仍是 {rights.get(key)}",
-                "comic-review",
-                "发布/商用前确认授权并更新 _meta.json",
-                "rights",
-            )
-    if manifest.get("font_status") == "system_font_draft":
+    for hit in accepted_raw_bubble_hits:
+        acceptance = raw_bubble_acceptance.get(hit["panel_id"], {})
         add_issue(
             issues,
-            "block" if publish_like else "info",
-            "排版/" + chapter + "/export_manifest.json",
-            "当前使用 system_font_draft，不能当正式发布字体授权",
-            "comic-compose",
-            "发布前用已授权字体重新导出，或更新字体授权记录",
-            "rights",
+            "info",
+            hit["path"],
+            "疑似烘焙空白气泡已人审签收为误报：" + str(acceptance.get("reason") or "计划内亮部/雾面/叙事道具"),
+            "comic-review",
+            "若该格重抽或构图变化，需要重新复核原始图空白气泡机检",
+            "image",
         )
+
+    style_report: dict[str, Any] = {}
+    if style_consistency is None:
+        add_issue(
+            issues,
+            "warn",
+            "skills/comic-review/scripts/style_consistency.py",
+            "风格一致性机检模块不可用，已跳过严格画风离群检查",
+            "comic-review",
+            "修复 style_consistency.py 后重跑 comic-review",
+            "style",
+        )
+    else:
+        style_report = style_consistency.analyze(root, chapter)
+        style_paths = style_consistency.write_outputs(root, chapter, style_report)
+        notes.append(f"已刷新风格一致性报告：{style_paths['markdown']}")
+        for finding in style_report.get("findings") or []:
+            severity = str(finding.get("severity") or "warn")
+            if severity not in {"block", "warn", "info"}:
+                severity = "warn"
+            add_issue(
+                issues,
+                severity,
+                str(finding.get("artifact") or finding.get("panel_id") or paths["style_report"].relative_to(root)),
+                str(finding.get("reason") or "风格一致性 finding"),
+                "comic-image" if severity in {"block", "warn"} else "comic-review",
+                str(finding.get("suggested_fix") or "按风格一致性报告返修"),
+                "style",
+            )
+
+    character_report: dict[str, Any] = {}
+    if character_consistency is None:
+        add_issue(
+            issues,
+            "warn",
+            "skills/comic-review/scripts/character_consistency.py",
+            "角色一致性机检模块不可用，已跳过角色并排复核图和 face/hair/outfit 指纹检查",
+            "comic-review",
+            "修复 character_consistency.py 后重跑 comic-review",
+            "character",
+        )
+    else:
+        character_report = character_consistency.analyze(root, chapter)
+        character_paths = character_consistency.write_outputs(root, chapter, character_report)
+        notes.append(f"已刷新角色一致性报告：{character_paths['markdown']}")
+        for finding in character_report.get("findings") or []:
+            severity = str(finding.get("severity") or "warn")
+            if severity not in {"block", "warn", "info"}:
+                severity = "warn"
+            add_issue(
+                issues,
+                severity,
+                str(finding.get("artifact") or finding.get("panel_id") or paths["character_report"].relative_to(root)),
+                str(finding.get("reason") or "角色一致性 finding"),
+                "comic-image" if severity in {"block", "warn"} else "comic-review",
+                str(finding.get("suggested_fix") or "按角色一致性报告返修"),
+                "character",
+            )
+
+    rights = (meta.get("rights") or {}) if isinstance(meta, dict) else {}
+    publish_like = is_publish_like_usage(settings["合规用途"])
+    demo_like = is_demo_like_usage(settings["合规用途"])
+    for key, label in (("font_status", "字体权利"), ("asset_status", "素材权利")):
+        if str(rights.get(key) or "").startswith("pending"):
+            if publish_like:
+                add_issue(
+                    issues,
+                    "block",
+                    "_meta.json",
+                    f"{label}仍是 {rights.get(key)}",
+                    "comic-review",
+                    "发布/商用前确认授权并更新 _meta.json",
+                    "rights",
+                )
+            elif demo_like:
+                notes.append(f"{settings['合规用途']} 用途：{label}={rights.get(key)}，仅记录，不进入发布授权流程。")
+            else:
+                add_issue(
+                    issues,
+                    "info",
+                    "_meta.json",
+                    f"{label}仍是 {rights.get(key)}",
+                    "comic-review",
+                    "发布/商用前确认授权并更新 _meta.json",
+                    "rights",
+                )
+    if manifest.get("font_status") == "system_font_draft":
+        if publish_like:
+            add_issue(
+                issues,
+                "block",
+                "排版/" + chapter + "/export_manifest.json",
+                "当前使用 system_font_draft，不能当正式发布字体授权",
+                "comic-compose",
+                "发布前用已授权字体重新导出，或更新字体授权记录",
+                "rights",
+            )
+        elif demo_like:
+            notes.append(f"{settings['合规用途']} 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。")
+        else:
+            add_issue(
+                issues,
+                "info",
+                "排版/" + chapter + "/export_manifest.json",
+                "当前使用 system_font_draft，不能当正式发布字体授权",
+                "comic-compose",
+                "发布前用已授权字体重新导出，或更新字体授权记录",
+                "rights",
+            )
 
     rendered = manifest.get("rendered") or []
     preview = refresh_preview(root, chapter, rendered) if refresh_qa_preview else ""
@@ -505,11 +696,24 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             "lettering": str(paths["lettering"].relative_to(root)),
             "manifest": str(paths["manifest"].relative_to(root)),
             "identity_report": str(paths["identity_report"].relative_to(root)),
+            "style_report": str(paths["style_report"].relative_to(root)),
+            "character_report": str(paths["character_report"].relative_to(root)),
             "rendered": rendered,
+            "lettering_slot_qc": slot_qc,
             "qa_preview": preview,
             "contact_sheet": contact_sheet,
         },
         "raw_bubble_candidates": raw_bubble_hits,
+        "accepted_raw_bubble_candidates": accepted_raw_bubble_hits,
+        "style_consistency": {
+            "verdict": style_report.get("verdict", "skipped") if isinstance(style_report, dict) else "skipped",
+            "summary": style_report.get("summary", {}) if isinstance(style_report, dict) else {},
+        },
+        "character_consistency": {
+            "verdict": character_report.get("verdict", "skipped") if isinstance(character_report, dict) else "skipped",
+            "summary": character_report.get("summary", {}) if isinstance(character_report, dict) else {},
+            "contact_sheet": character_report.get("contact_sheet", "") if isinstance(character_report, dict) else "",
+        },
         "issues": issues,
         "notes": notes,
     }
@@ -552,8 +756,22 @@ def write_markdown(report: dict, path: Path) -> None:
             lines.append("| " + " | ".join(str(item).replace("|", "\\|").replace("\n", " ") for item in row) + " |")
     if report.get("raw_bubble_candidates"):
         lines += ["", "## 疑似烘焙气泡", ""]
+        accepted_panels = {str(hit.get("panel_id")) for hit in report.get("accepted_raw_bubble_candidates") or []}
         for hit in report["raw_bubble_candidates"]:
-            lines.append(f"- {hit['panel_id']}: `{hit['path']}` components={len(hit.get('components') or [])}")
+            status = "已签收为误报" if str(hit.get("panel_id")) in accepted_panels else "待处理"
+            lines.append(f"- {hit['panel_id']}: `{hit['path']}` components={len(hit.get('components') or [])}，{status}")
+    if report.get("style_consistency"):
+        style = report["style_consistency"]
+        lines += ["", "## 风格一致性", ""]
+        lines.append(f"- 结论：{style.get('verdict')}")
+        lines.append(f"- 摘要：{json.dumps(style.get('summary') or {}, ensure_ascii=False)}")
+    if report.get("character_consistency"):
+        character = report["character_consistency"]
+        lines += ["", "## 角色一致性", ""]
+        lines.append(f"- 结论：{character.get('verdict')}")
+        lines.append(f"- 摘要：{json.dumps(character.get('summary') or {}, ensure_ascii=False)}")
+        if character.get("contact_sheet"):
+            lines.append(f"- 并排复核图：`{character.get('contact_sheet')}`")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

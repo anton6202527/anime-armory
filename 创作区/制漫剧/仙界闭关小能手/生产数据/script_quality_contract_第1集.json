@@ -1,17 +1,9 @@
 {
-  "content_hash": "35325eede111b16c",
-  "contract_hash": "35325eede111b16c",
+  "content_hash": "94938a751f35f4dc",
+  "contract_hash": "94938a751f35f4dc",
   "episode": "第1集",
-  "findings": [
-    {
-      "clip": "EP01_CLIP04",
-      "code": "spectacle_clip_too_short_without_beat",
-      "message": "奇观 Clip 仅 2.96s；若是打斗/爆发主看点，建议给足起手-命中-反应节拍；若只是一笔带过，补 compression_plan。",
-      "path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
-      "severity": "warn"
-    }
-  ],
-  "generated_at": "2026-07-07T01:29:15+00:00",
+  "findings": [],
+  "generated_at": "2026-07-07T07:24:18+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -171,7 +163,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "用围审和嘲笑把主角的低位、五行灵根劣势和杂役阶层压迫一次打出。",
-        "duration": 19.573,
+        "duration": 25.459,
         "key_clip": true,
         "pacing_role": "冷开场主钩",
         "primary_runtime": true,
@@ -185,7 +177,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "把口头羞辱转成会压垮身体的具体苦差，建立夜潭破盆的因果。",
-        "duration": 9.76,
+        "duration": 13.332,
         "key_clip": false,
         "pacing_role": "主线任务落点",
         "primary_runtime": true,
@@ -196,10 +188,10 @@
       {
         "audience_effect": "观众获得最低限度背景理解，然后立刻回到行动线。",
         "clip_id": "EP01_CLIP03",
-        "compressed_runtime": true,
+        "compressed_runtime": false,
         "compression_plan": true,
         "dramatic_function": "补足贺平生为什么无路可退，但不占用主时长。",
-        "duration": 3.003,
+        "duration": 3.662,
         "key_clip": false,
         "pacing_role": "背景一笔带过",
         "primary_runtime": true,
@@ -210,10 +202,10 @@
       {
         "audience_effect": "观众开始站到主角一边，知道他不是只会挨打。",
         "clip_id": "EP01_CLIP04",
-        "compressed_runtime": true,
+        "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "用动作表现主角谨慎和韧性，避免用长心理旁白解释。",
-        "duration": 2.96,
+        "duration": 5.859,
         "key_clip": false,
         "pacing_role": "主角主动性",
         "primary_runtime": true,
@@ -227,7 +219,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "兑现二十趟挑水的体力压迫，让破盆机缘显得是苦活尽头撞出的结果。",
-        "duration": 7.099,
+        "duration": 10.943,
         "key_clip": false,
         "pacing_role": "身体压迫高光",
         "primary_runtime": true,
@@ -241,7 +233,7 @@
         "compressed_runtime": false,
         "compression_plan": false,
         "dramatic_function": "把本集苦活转成金手指入口，留下第2集必须兑现的破盆异常。",
-        "duration": 16.572,
+        "duration": 18.351,
         "key_clip": true,
         "pacing_role": "集尾钩子高光",
         "primary_runtime": true,
@@ -255,7 +247,7 @@
         "clip_id": "EP01_CLIP01",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 19.573,
+        "duration": 25.459,
         "pacing_role": "冷开场主钩",
         "primary_runtime": true,
         "runtime_priority": "primary"
@@ -264,25 +256,25 @@
         "clip_id": "EP01_CLIP02",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 9.76,
+        "duration": 13.332,
         "pacing_role": "主线任务落点",
         "primary_runtime": true,
         "runtime_priority": "primary"
       },
       {
         "clip_id": "EP01_CLIP03",
-        "compressed_runtime": true,
+        "compressed_runtime": false,
         "compression_plan": true,
-        "duration": 3.003,
+        "duration": 3.662,
         "pacing_role": "背景一笔带过",
         "primary_runtime": true,
         "runtime_priority": "low"
       },
       {
         "clip_id": "EP01_CLIP04",
-        "compressed_runtime": true,
+        "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 2.96,
+        "duration": 5.859,
         "pacing_role": "主角主动性",
         "primary_runtime": true,
         "runtime_priority": "primary"
@@ -291,7 +283,7 @@
         "clip_id": "EP01_CLIP05",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 7.099,
+        "duration": 10.943,
         "pacing_role": "身体压迫高光",
         "primary_runtime": true,
         "runtime_priority": "highlight"
@@ -300,7 +292,7 @@
         "clip_id": "EP01_CLIP06",
         "compressed_runtime": false,
         "compression_plan": false,
-        "duration": 16.572,
+        "duration": 18.351,
         "pacing_role": "集尾钩子高光",
         "primary_runtime": true,
         "runtime_priority": "highlight"
@@ -313,12 +305,16 @@
     },
     "first_3s_visual_hook": {
       "content_promise": "这个少年为什么刚入门就被当成废物？他会怎样活下去？",
+      "content_proposition": "这个少年为什么刚入门就被当成废物？他会怎样活下去？",
       "expected_metric": {
         "primary": "retention_3s",
-        "target": 0.72
+        "target": 0.8
       },
+      "hook_type": "悬念",
       "muted_readable": true,
-      "onscreen_text": "五行灵根？",
+      "muted_safe": true,
+      "muted_safe_proof": "关声也能从黑暗大殿围审、少年低位、张老大高位俯视和烧屏“五行灵根？”读懂压迫悬念。",
+      "onscreen_text": "十四岁杂役，刚入门就被判五行废灵根？",
       "visual_hook": "黑暗杂役大殿里，瘦小的贺平生被一圈杂役围住，张老大从高位俯视审问。"
     },
     "pacing_allocation": {
@@ -349,9 +345,9 @@
           "EP01_CLIP05",
           "EP01_CLIP06"
         ],
-        "primary_duration": 58.967,
+        "primary_duration": 77.606,
         "primary_runtime_share": 1.0,
-        "total_duration": 58.967,
+        "total_duration": 77.606,
         "unclassified_duration": 0.0
       },
       "source": "storyboard.pacing_allocation"
@@ -377,13 +373,14 @@
         "promise_type": "survival_task"
       },
       {
+        "delayed_payoff_ep": "第2集",
         "expected_next_handling": "第2集冷开场兑现清水变碧绿，证明破盆能改变水质。",
         "hook_id": "H_EP01_003",
         "opened_at": "EP01_CLIP06",
         "payoff_due": "第2集",
         "payoff_status": "open",
         "promise": "黑陶破盆不是普通破盆。",
-        "promise_type": "mystery_object"
+        "promise_type": "cliffhanger_mystery_object"
       }
     ]
   },
@@ -393,9 +390,9 @@
     "storyboard": "脚本/第1集/storyboard.json"
   },
   "source_sha256": {
-    "adaptation_triage": "9beddbe50defe01dfab2e660968aacefa7aedf35ee1d28f9c18e31dc3492df09",
+    "adaptation_triage": "38093d7231dfb03a65480887b960f0ac23d86bbc1151db5ba32255cec58aa4f6",
     "story_quality_pack": "9c7aa15a35b615959579ff1b5a8dcbca73555e127a57484530b7530b35e23b24",
-    "storyboard": "b9134087992839de15b93282b9b4f7945e3f29b37683ddf4ea6af07ef7c627f6"
+    "storyboard": "dd2d6700b797e4046206dd685a982547efac5b6b5e53f423ab45fc77bbedbc8d"
   },
   "status": "pass",
   "summary": {
@@ -405,7 +402,7 @@
     "open_questions": 0,
     "primary_runtime_share": 1.0,
     "status": "pass",
-    "warnings": 1
+    "warnings": 0
   },
   "version": 1
 }

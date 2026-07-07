@@ -1,4 +1,14 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { listen } from "@tauri-apps/api/event";
 import {
   detectAgents,
@@ -17,6 +27,7 @@ import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { KanbanPane } from "../components/KanbanPane";
 import { EpisodeWorkspacePane } from "../components/EpisodeWorkspacePane";
+import { QualityInsightsPane } from "../components/QualityInsightsPane";
 import { SkillsBrowser } from "../components/SkillsBrowser";
 import { Codicon } from "../components/Codicon";
 import { useI18n, useLineLabel } from "../i18n";
@@ -33,26 +44,49 @@ const CanvasPane = lazy(() =>
   import("../components/CanvasPane").then((mod) => ({ default: mod.CanvasPane })),
 );
 
+const SearchPane = lazy(() =>
+  import("../components/SearchPane").then((mod) => ({ default: mod.SearchPane })),
+);
+
+const OP_RIGHT_MIN_WIDTH = 300;
+const OP_RIGHT_MAX_WIDTH = 340;
+const OP_BOTTOM_MIN_HEIGHT = 180;
+const OP_BOTTOM_MAX_HEIGHT = 440;
+const OP_LEFT_RAIL_WIDTH = 54;
+const FILES_SIDE_DEFAULT_WIDTH = 280;
+const FILES_SPLITTER_WIDTH = 7;
+type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
+type TerminalDock = "side" | "bottom";
+
+function readFilesSideWidth(): number {
+  const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
+  if (!Number.isFinite(saved) || saved <= 0) return FILES_SIDE_DEFAULT_WIDTH;
+  return saved;
+}
+
 export function Operation(props: {
   repoRoot: string;
   line: LineInfo;
   root: WorkRoot;
   active: boolean;
+  terminalVisible: boolean;
   onRootChanged: (root: WorkRoot) => void;
   onBack: () => void;
 }) {
-  const { repoRoot, line, root, active, onRootChanged, onBack } = props;
+  const { repoRoot, line, root, active, terminalVisible, onRootChanged, onBack } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [canvas, setCanvas] = useState<CanvasData | null>(null);
   const [ep, setEp] = useState<string>("第1集");
   const [err, setErr] = useState<string>("");
-  // left-pane sub-tabs: 文件 (default, every line) + 画布 / 看板 (canvas lines: n2d/ad/mv)
+  // left-pane sub-tabs: 文件/搜索/技能/变动 for every line, plus visual 画布/看板 and all-line 质检.
   const isCanvasLine = line.view === "canvas";
-  const [tab, setTab] = useState<"files" | "skills" | "changes" | "canvas" | "kanban" | "review">("files");
+  const [tab, setTab] = useState<LeftTab>("files");
   const [leftCollapsed, setLeftCollapsed] = useState(false);
-  // both 画布 and 看板 are per-episode views driven by canvas data
-  const isBoardTab = tab === "canvas" || tab === "kanban" || tab === "review";
+  const [sidePanelOpen, setSidePanelOpen] = useState(true);
+  // 画布/看板 are per-episode views driven by canvas data; 质检 is available to every line.
+  const isCanvasBoardTab = tab === "canvas" || tab === "kanban";
+  const shouldReadCanvas = isCanvasLine && (isCanvasBoardTab || tab === "review");
   // bumped (debounced) whenever the work root changes on disk → re-pull data
   const [refreshKey, setRefreshKey] = useState(0);
   const [changeScanKey, setChangeScanKey] = useState(0);
@@ -74,14 +108,32 @@ export function Operation(props: {
   const bodyRef = useRef<HTMLDivElement>(null);
   const [rightWidth, setRightWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.rightWidth"));
-    return Number.isFinite(saved) && saved > 0 ? saved : null;
+    if (!Number.isFinite(saved) || saved <= 0) return null;
+    return Math.min(OP_RIGHT_MAX_WIDTH, Math.max(OP_RIGHT_MIN_WIDTH, saved));
+  });
+  const [bottomHeight, setBottomHeight] = useState<number | null>(() => {
+    const saved = Number(window.localStorage.getItem("aa.op.bottomHeight"));
+    if (!Number.isFinite(saved) || saved <= 0) return null;
+    return Math.min(OP_BOTTOM_MAX_HEIGHT, Math.max(OP_BOTTOM_MIN_HEIGHT, saved));
+  });
+  const [filesSideWidth, setFilesSideWidth] = useState(readFilesSideWidth);
+  const [terminalDock, setTerminalDock] = useState<TerminalDock>(() => {
+    return window.localStorage.getItem("aa.op.terminalDock") === "bottom" ? "bottom" : "side";
   });
 
   function clampRightWidth(width: number, total: number): number {
-    const minRight = 320;
     const minLeft = Math.min(420, Math.max(260, total * 0.35));
-    const maxRight = Math.max(minRight, total - minLeft);
-    return Math.min(maxRight, Math.max(minRight, width));
+    const availableMax = Math.max(OP_RIGHT_MIN_WIDTH, total - minLeft);
+    const maxRight = Math.min(OP_RIGHT_MAX_WIDTH, availableMax);
+    return Math.min(maxRight, Math.max(OP_RIGHT_MIN_WIDTH, width));
+  }
+
+  function clampBottomHeight(height: number, total: number): number {
+    const minBottom = Math.min(OP_BOTTOM_MIN_HEIGHT, Math.max(120, total * 0.28));
+    const minTop = Math.min(360, Math.max(180, total * 0.35));
+    const availableMax = Math.max(minBottom, total - minTop);
+    const maxBottom = Math.min(OP_BOTTOM_MAX_HEIGHT, availableMax);
+    return Math.min(maxBottom, Math.max(minBottom, height));
   }
 
   function showToast(message: string) {
@@ -90,8 +142,13 @@ export function Operation(props: {
     toastTimer.current = window.setTimeout(() => setToast(null), 1600);
   }
 
-  function openLeft(nextTab: "files" | "skills" | "changes" | "canvas" | "kanban" | "review") {
+  function openLeft(nextTab: LeftTab) {
+    if (sidePanelOpen && tab === nextTab) {
+      setSidePanelOpen(false);
+      return;
+    }
     setTab(nextTab);
+    setSidePanelOpen(true);
     setLeftCollapsed(false);
   }
 
@@ -165,23 +222,66 @@ export function Operation(props: {
   }, [active, termReady, root.path]);
 
   useEffect(() => {
-    if (rightWidth == null) return;
+    if (rightWidth == null || terminalDock !== "side") return;
     const sync = () => {
       const body = bodyRef.current;
       if (!body) return;
       const rect = body.getBoundingClientRect();
       const next = clampRightWidth(rightWidth, rect.width);
-      if (Math.round(next) !== Math.round(rightWidth)) setRightWidth(next);
+      if (Math.round(next) !== Math.round(rightWidth)) {
+        setRightWidth(next);
+        window.localStorage.setItem("aa.op.rightWidth", String(Math.round(next)));
+      }
     };
     sync();
     window.addEventListener("resize", sync);
     return () => window.removeEventListener("resize", sync);
-  }, [rightWidth]);
+  }, [rightWidth, terminalDock]);
+
+  useEffect(() => {
+    if (bottomHeight == null || terminalDock !== "bottom") return;
+    const sync = () => {
+      const body = bodyRef.current;
+      if (!body) return;
+      const rect = body.getBoundingClientRect();
+      const next = clampBottomHeight(bottomHeight, rect.height);
+      if (Math.round(next) !== Math.round(bottomHeight)) {
+        setBottomHeight(next);
+        window.localStorage.setItem("aa.op.bottomHeight", String(Math.round(next)));
+      }
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, [bottomHeight, terminalDock]);
+
+  useEffect(() => {
+    window.localStorage.setItem("aa.op.terminalDock", terminalDock);
+    window.dispatchEvent(new Event("resize"));
+    const timer = window.setTimeout(() => window.dispatchEvent(new Event("resize")), 120);
+    return () => window.clearTimeout(timer);
+  }, [terminalDock]);
 
   useEffect(() => {
     if (!active || !secondaryReady) return;
     probeAgents(false);
   }, [active, secondaryReady, probeAgents]);
+
+  useEffect(() => {
+    if (!terminalVisible) setLeftCollapsed(false);
+    window.dispatchEvent(new Event("resize"));
+  }, [terminalVisible]);
+
+  useEffect(() => {
+    const syncFilesSideWidth = () => setFilesSideWidth(readFilesSideWidth());
+    syncFilesSideWidth();
+    window.addEventListener("resize", syncFilesSideWidth);
+    window.addEventListener("storage", syncFilesSideWidth);
+    return () => {
+      window.removeEventListener("resize", syncFilesSideWidth);
+      window.removeEventListener("storage", syncFilesSideWidth);
+    };
+  }, []);
 
   useEffect(() => {
     if (!active || !secondaryReady || !termReady || agents === null) return;
@@ -235,7 +335,7 @@ export function Operation(props: {
   // load canvas data for the current episode (also re-runs on fs change)
   useEffect(() => {
     let alive = true;
-    if (!active || !secondaryReady || leftCollapsed || !isCanvasLine || !isBoardTab) return;
+    if (!active || !secondaryReady || !sidePanelOpen || !shouldReadCanvas) return;
     readCanvas(root.path, ep)
       .then((d) => {
         if (!alive) return;
@@ -246,14 +346,14 @@ export function Operation(props: {
     return () => {
       alive = false;
     };
-  }, [active, secondaryReady, leftCollapsed, isCanvasLine, isBoardTab, root.path, ep, refreshKey]);
+  }, [active, secondaryReady, sidePanelOpen, shouldReadCanvas, root.path, ep, refreshKey]);
 
   useEffect(() => {
-    if (!active || !secondaryReady || !isCanvasLine || !isBoardTab) return;
+    if (!active || !secondaryReady || !shouldReadCanvas) return;
     ensureMedia()
       .then(() => mediaAllowRoot(root.path))
       .catch(() => {});
-  }, [active, secondaryReady, isCanvasLine, isBoardTab, root.path]);
+  }, [active, secondaryReady, shouldReadCanvas, root.path]);
 
   // watch the work root; debounce a stream of fs events into one refresh
   const timer = useRef<number | null>(null);
@@ -359,22 +459,35 @@ export function Operation(props: {
     terminalMode === "native" && agents !== null && !hasDetectedAgent
       ? t("terminal.noAgentPlaceholder")
       : undefined;
+  const canvasSourceHint =
+    canvas?.source === "storyboard"
+      ? t("operation.storyboardSource")
+      : canvas?.source === "panel_script"
+        ? t("operation.panelScriptSource")
+        : "";
 
-  function startTerminalResize(ev: React.PointerEvent<HTMLDivElement>) {
+  function startTerminalResize(ev: ReactPointerEvent<HTMLDivElement>) {
     const body = bodyRef.current;
     if (!body) return;
     ev.preventDefault();
     const rect = body.getBoundingClientRect();
-    document.body.classList.add("resizing-op-terminal");
+    const resizingClass = terminalDock === "bottom" ? "resizing-op-terminal-bottom" : "resizing-op-terminal-side";
+    document.body.classList.add(resizingClass);
 
     const move = (e: PointerEvent) => {
-      const next = clampRightWidth(rect.right - e.clientX, rect.width);
-      setRightWidth(next);
-      window.localStorage.setItem("aa.op.rightWidth", String(Math.round(next)));
+      if (terminalDock === "bottom") {
+        const next = clampBottomHeight(rect.bottom - e.clientY, rect.height);
+        setBottomHeight(next);
+        window.localStorage.setItem("aa.op.bottomHeight", String(Math.round(next)));
+      } else {
+        const next = clampRightWidth(rect.right - e.clientX, rect.width);
+        setRightWidth(next);
+        window.localStorage.setItem("aa.op.rightWidth", String(Math.round(next)));
+      }
       window.dispatchEvent(new Event("resize"));
     };
     const up = () => {
-      document.body.classList.remove("resizing-op-terminal");
+      document.body.classList.remove(resizingClass);
       document.removeEventListener("pointermove", move);
       document.removeEventListener("pointerup", up);
       window.dispatchEvent(new Event("resize"));
@@ -383,6 +496,34 @@ export function Operation(props: {
     document.addEventListener("pointerup", up);
   }
 
+  const dockTarget: TerminalDock = terminalDock === "side" ? "bottom" : "side";
+  const dockTitle =
+    dockTarget === "bottom" ? t("operation.dockTerminalBottom") : t("operation.dockTerminalSide");
+  const resizeTerminalAria =
+    terminalDock === "bottom" ? t("operation.resizeTerminalHeightAria") : t("operation.resizeTerminalAria");
+  const resizeTerminalTitle =
+    terminalDock === "bottom" ? t("operation.resizeTerminalHeightTitle") : t("operation.resizeTerminalTitle");
+  const terminalPanelStyle =
+    terminalDock === "bottom"
+      ? undefined
+      : rightWidth
+        ? { width: rightWidth }
+        : undefined;
+  const tabHasFileSizedSidebar = tab === "files" || tab === "search" || tab === "changes";
+  const bottomDockSidebarWidth =
+    !leftCollapsed && sidePanelOpen && tabHasFileSizedSidebar
+      ? OP_LEFT_RAIL_WIDTH + filesSideWidth + FILES_SPLITTER_WIDTH
+      : OP_LEFT_RAIL_WIDTH;
+  const opBodyStyle = {
+    "--op-files-side-width": `${Math.round(filesSideWidth)}px`,
+    ...(terminalVisible && terminalDock === "bottom"
+      ? {
+          "--op-bottom-sidebar-width": `${Math.round(bottomDockSidebarWidth)}px`,
+          ...(bottomHeight ? { "--op-terminal-bottom-height": `${Math.round(bottomHeight)}px` } : {}),
+        }
+      : {}),
+  } as CSSProperties;
+
   return (
     <div className="op">
       <div className="op-top">
@@ -390,7 +531,7 @@ export function Operation(props: {
         <div className="crumb">
           {lineLabel(line)} / <b>{root.name}</b>
         </div>
-        {isCanvasLine && isBoardTab && episodes.length > 0 && (
+        {isCanvasLine && shouldReadCanvas && episodes.length > 0 && (
           <div className="ep-switch">
             <select
               className="ep-select"
@@ -407,20 +548,28 @@ export function Operation(props: {
             </select>
           </div>
         )}
-        {isCanvasLine && isBoardTab && canvas?.source === "storyboard" && (
+        {isCanvasLine && shouldReadCanvas && canvasSourceHint && (
           <span className="reason" style={{ color: "var(--warn)" }}>
-            {t("operation.storyboardSource")}
+            {canvasSourceHint}
           </span>
         )}
       </div>
 
-      <div className={"op-body" + (leftCollapsed ? " op-body-left-collapsed" : "")} ref={bodyRef}>
+      <div
+        className={
+          "op-body" +
+          (leftCollapsed ? " op-body-left-collapsed" : "") +
+          (terminalVisible ? ` op-body-terminal-${terminalDock}` : " op-body-terminal-hidden")
+        }
+        ref={bodyRef}
+        style={opBodyStyle}
+      >
         <div className={"op-left" + (leftCollapsed ? " collapsed" : "")}>
           <div className="op-left-rail" aria-label={t("operation.leftDeferred")}>
             <button
               type="button"
-              className={"rail-tab" + (tab === "files" ? " active" : "")}
-              title={t("operation.filesTab")}
+              className={"rail-tab" + (sidePanelOpen && tab === "files" ? " active" : "")}
+              data-tooltip={t("operation.filesTab")}
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
             >
@@ -428,8 +577,17 @@ export function Operation(props: {
             </button>
             <button
               type="button"
-              className={"rail-tab rail-skills" + (tab === "skills" ? " active" : "")}
-              title={t("operation.skillsTab")}
+              className={"rail-tab" + (sidePanelOpen && tab === "search" ? " active" : "")}
+              data-tooltip={t("operation.searchTab")}
+              aria-label={t("operation.searchTab")}
+              onClick={() => openLeft("search")}
+            >
+              <Codicon name="search" />
+            </button>
+            <button
+              type="button"
+              className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
+              data-tooltip={t("operation.skillsTab")}
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
             >
@@ -438,40 +596,42 @@ export function Operation(props: {
             {isCanvasLine && (
               <button
                 type="button"
-                className={"rail-tab" + (tab === "canvas" ? " active" : "")}
-                title={t("operation.canvasTab")}
+                className={"rail-tab" + (sidePanelOpen && tab === "canvas" ? " active" : "")}
+                data-tooltip={t("operation.canvasTab")}
                 aria-label={t("operation.canvasTab")}
                 onClick={() => openLeft("canvas")}
               >
-                <Codicon name="deviceCameraVideo" />
+                <Codicon name="layout" />
               </button>
             )}
             {isCanvasLine && (
               <button
                 type="button"
-                className={"rail-tab" + (tab === "kanban" ? " active" : "")}
-                title={t("operation.boardTab")}
+                className={"rail-tab" + (sidePanelOpen && tab === "kanban" ? " active" : "")}
+                data-tooltip={t("operation.boardTab")}
                 aria-label={t("operation.boardTab")}
                 onClick={() => openLeft("kanban")}
               >
-                <Codicon name="checklist" />
-              </button>
-            )}
-            {isCanvasLine && (
-              <button
-                type="button"
-                className={"rail-tab" + (tab === "review" ? " active" : "")}
-                title={t("operation.reviewTab")}
-                aria-label={t("operation.reviewTab")}
-                onClick={() => openLeft("review")}
-              >
-                <Codicon name="warning" />
+                <Codicon name="project" />
               </button>
             )}
             <button
               type="button"
-              className={"rail-tab rail-change" + (tab === "changes" ? " active" : "") + (changeCount ? " dirty" : "")}
-              title={`${t("operation.changesTab")} · ${changeLabel}`}
+              className={"rail-tab" + (sidePanelOpen && tab === "review" ? " active" : "")}
+              data-tooltip={t("operation.reviewTab")}
+              aria-label={t("operation.reviewTab")}
+              onClick={() => openLeft("review")}
+            >
+              <Codicon name="beaker" />
+            </button>
+            <button
+              type="button"
+              className={
+                "rail-tab rail-change" +
+                (sidePanelOpen && tab === "changes" ? " active" : "") +
+                (changeCount ? " dirty" : "")
+              }
+              data-tooltip={`${t("operation.changesTab")} · ${changeLabel}`}
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >
@@ -482,94 +642,136 @@ export function Operation(props: {
                 <span className="rail-badge">{changeCount > 99 ? "99+" : changeCount}</span>
               ) : null}
             </button>
-            <button
-              type="button"
-              className="rail-tab rail-toggle"
-              title={t("operation.collapseLeft")}
-              aria-label={t("operation.collapseLeft")}
-              onClick={() => setLeftCollapsed((value) => !value)}
-            >
-              <Codicon name={leftCollapsed ? "chevronRight" : "chevronLeft"} />
-            </button>
           </div>
           {!leftCollapsed && (
             <div className="op-left-content">
               <div className="subtab-body">
                 {!secondaryReady ? (
                   <div className="stub-view">{t("common.loading")}</div>
-                ) : tab === "changes" ? (
-                  <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                    <ChangesPane
-                      root={root}
-                      refreshKey={changeScanKey}
-                      baselineVersion={baselineVersion}
-                      summary={changeSummary}
-                      onArchived={(summary) => {
-                        changeSummaryEpochRef.current += 1;
-                        setChangeSummary(summary);
-                        setBaselineVersion((version) => version + 1);
-                        setChangeScanKey((key) => key + 1);
-                      }}
-                    />
-                  </Suspense>
-                ) : tab === "skills" ? (
-                  <SkillsBrowser repoRoot={repoRoot} line={line} />
-                ) : isCanvasLine && isBoardTab ? (
-                  err ? (
-                    <div className="stub-view">{t("common.readFailed", { error: err })}</div>
-                  ) : !canvas ? (
-                    <div className="stub-view">{t("common.loading")}</div>
-                  ) : tab === "review" ? (
-                    <EpisodeWorkspacePane root={root} ep={ep} canvas={canvas} refreshKey={refreshKey} />
-                  ) : tab === "kanban" ? (
-                    <KanbanPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
-                  ) : (
-                    <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                      <CanvasPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
-                    </Suspense>
-                  )
                 ) : (
-                  <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                    <FilesPane
-                      root={root}
-                      refreshKey={refreshKey + baselineVersion}
-                      initialChangeCount={changeSummary == null ? undefined : changeCount}
-                      allowNovelImport={line.line === "n2d" && workIsEmpty}
-                      active={active}
-                      onImported={(result) => {
-                        if (result.root !== root.path || result.name !== root.name) {
-                          onRootChanged({
-                            name: result.name,
-                            path: result.root,
-                            has_progress: false,
-                            is_demo: root.is_demo,
-                          });
-                        }
-                        setRefreshKey((key) => key + 1);
-                        setChangeScanKey((key) => key + 1);
-                      }}
-                      onOpenTerminal={enterNativeTerminal}
-                    />
-                  </Suspense>
+                  <>
+                    <div className={"subtab-layer" + (sidePanelOpen && tab !== "files" ? " hidden" : "")}>
+                      <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                        <FilesPane
+                          root={root}
+                          refreshKey={refreshKey + baselineVersion}
+                          allowNovelImport={line.line === "n2d" && workIsEmpty}
+                          active={active}
+                          sideVisible={sidePanelOpen && tab === "files"}
+                          onImported={(result) => {
+                            if (result.root !== root.path || result.name !== root.name) {
+                              onRootChanged({
+                                name: result.name,
+                                path: result.root,
+                                has_progress: false,
+                                is_demo: root.is_demo,
+                              });
+                            }
+                            setRefreshKey((key) => key + 1);
+                            setChangeScanKey((key) => key + 1);
+                          }}
+                          onOpenTerminal={enterNativeTerminal}
+                        />
+                      </Suspense>
+                    </div>
+                    {sidePanelOpen && tab === "changes" && (
+                      <div className="subtab-layer">
+                        <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                          <ChangesPane
+                            root={root}
+                            refreshKey={changeScanKey}
+                            baselineVersion={baselineVersion}
+                            summary={changeSummary}
+                            onArchived={(summary) => {
+                              changeSummaryEpochRef.current += 1;
+                              setChangeSummary(summary);
+                              setBaselineVersion((version) => version + 1);
+                              setChangeScanKey((key) => key + 1);
+                            }}
+                          />
+                        </Suspense>
+                      </div>
+                    )}
+                    {sidePanelOpen && tab === "search" && (
+                      <div className="subtab-layer">
+                        <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                          <SearchPane root={root} refreshKey={refreshKey + baselineVersion} />
+                        </Suspense>
+                      </div>
+                    )}
+                    {sidePanelOpen && tab === "skills" && (
+                      <div className="subtab-layer">
+                        <SkillsBrowser repoRoot={repoRoot} line={line} />
+                      </div>
+                    )}
+                    {sidePanelOpen && tab === "review" && (
+                      <div className="subtab-layer">
+                        {isCanvasLine ? (
+                          err ? (
+                            <div className="stub-view">{t("common.readFailed", { error: err })}</div>
+                          ) : !canvas ? (
+                            <div className="stub-view">{t("common.loading")}</div>
+                          ) : (
+                            <EpisodeWorkspacePane
+                              root={root}
+                              line={line.line}
+                              ep={ep}
+                              canvas={canvas}
+                              refreshKey={refreshKey}
+                            />
+                          )
+                        ) : (
+                          <QualityInsightsPane
+                            root={root}
+                            line={line.line}
+                            ep={null}
+                            refreshKey={refreshKey + baselineVersion}
+                          />
+                        )}
+                      </div>
+                    )}
+                    {sidePanelOpen && isCanvasLine && isCanvasBoardTab && (
+                      <div className="subtab-layer">
+                        {err ? (
+                          <div className="stub-view">{t("common.readFailed", { error: err })}</div>
+                        ) : !canvas ? (
+                          <div className="stub-view">{t("common.loading")}</div>
+                        ) : tab === "kanban" ? (
+                          <KanbanPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
+                        ) : (
+                          <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                            <CanvasPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
+                          </Suspense>
+                        )}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
           )}
         </div>
-        <div
-          className="op-splitter"
-          role="separator"
-          aria-orientation="vertical"
-          aria-label={t("operation.resizeTerminalAria")}
-          title={t("operation.resizeTerminalTitle")}
-          onPointerDown={startTerminalResize}
-          onDoubleClick={() => {
-            setRightWidth(null);
-            window.localStorage.removeItem("aa.op.rightWidth");
-            window.dispatchEvent(new Event("resize"));
-          }}
-        />
-        <div className="op-right" style={rightWidth ? { width: rightWidth } : undefined}>
+        {terminalVisible && (
+          <div
+            className="op-splitter"
+            role="separator"
+            aria-orientation={terminalDock === "bottom" ? "horizontal" : "vertical"}
+            aria-label={resizeTerminalAria}
+            title={resizeTerminalTitle}
+            onPointerDown={startTerminalResize}
+            onDoubleClick={() => {
+              if (terminalDock === "bottom") {
+                setBottomHeight(null);
+                window.localStorage.removeItem("aa.op.bottomHeight");
+              } else {
+                setRightWidth(null);
+                window.localStorage.removeItem("aa.op.rightWidth");
+              }
+              window.dispatchEvent(new Event("resize"));
+            }}
+          />
+        )}
+        <div className="op-right" style={terminalPanelStyle}>
           <NextActionStrip
             repoRoot={repoRoot}
             line={line.line}
@@ -582,15 +784,26 @@ export function Operation(props: {
             missingProgressPrompt={missingProgressPrompt}
             onExecutePrompt={runPromptInAgent}
             afterSettingsAction={
-              <button
-                type="button"
-                className="project-settings-btn terminal-new-btn"
-                title={t("terminal.newSession")}
-                aria-label={t("terminal.newSession")}
-                onClick={() => termRef.current?.newSession()}
-              >
-                +
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="project-settings-btn terminal-new-btn"
+                  title={t("terminal.newSession")}
+                  aria-label={t("terminal.newSession")}
+                  onClick={() => termRef.current?.newSession()}
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  className={`project-settings-btn terminal-dock-btn terminal-dock-btn-${dockTarget}`}
+                  title={dockTitle}
+                  aria-label={dockTitle}
+                  onClick={() => setTerminalDock(dockTarget)}
+                >
+                  <span className="terminal-dock-icon" aria-hidden="true" />
+                </button>
+              </>
             }
           />
           <TerminalPane

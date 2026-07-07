@@ -287,6 +287,37 @@ def midframe_png_name(clip: Dict[str, Any], ep: str, index: int) -> str:
     return f"出图/{ep}/图片/Clip_{index:02d}_mid.png"
 
 
+def _duration_matches(value: Any, duration: Any) -> bool:
+    try:
+        return abs(float(value) - float(duration)) < 0.001
+    except (TypeError, ValueError):
+        return False
+
+
+def _generated_anchor_reason(text: Any) -> bool:
+    raw = str(text or "").strip()
+    return raw.startswith("auto:") or raw.startswith("default:")
+
+
+def generated_anchor_contract_stale(cont: Dict[str, Any], duration: Any) -> bool:
+    """Generated anchors should be refreshed when source duration changed or is absent.
+
+    Hand-authored anchors remain protected by existing_anchor_contract_valid().
+    """
+    if not isinstance(cont, dict):
+        return False
+    anchors = cont.get("anchors")
+    if isinstance(anchors, list) and anchors:
+        generated = [a for a in anchors if isinstance(a, dict) and _generated_anchor_reason(a.get("reason"))]
+        if not generated:
+            return False
+        return any(not _duration_matches(a.get("source_duration"), duration) for a in generated)
+    mid = cont.get("midframe")
+    if isinstance(mid, dict) and _generated_anchor_reason(mid.get("reason")):
+        return not _duration_matches(mid.get("source_duration"), duration)
+    return False
+
+
 def middle_beat_hint(clip: Dict[str, Any]) -> str:
     """中段锚帧的内容提示 = 表演节拍中间拍（template_contract.beats 中位项）。"""
     tc = clip.get("template_contract")
@@ -340,9 +371,12 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
         has_anchors = cont.get("anchors") is not None
         if has_mid or has_anchors:
             valid_existing = existing_anchor_contract_valid(cont, duration)
-            if valid_existing and has_anchors:
+            generated_stale = generated_anchor_contract_stale(cont, duration)
+            if valid_existing and has_anchors and not generated_stale:
                 skipped.append({"clip": cid, "why": "已手动声明 anchors，人工优先"})
                 continue
+            if valid_existing and has_anchors and generated_stale:
+                skipped.append({"clip": cid, "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"})
             if valid_existing and has_mid and not rule:
                 skipped.append({"clip": cid, "why": "已手动声明 midframe，且未命中多锚规则，人工优先"})
                 continue
@@ -376,6 +410,7 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
                     "use": "keyframe" if _is_apex(t) else "split",
                     "reason": ("apex: 命中/爆发帧（强制关键帧·动作/运镜/光/表情四轴撞点）"
                                if _is_apex(t) else f"auto: {rule}"),
+                    "source_duration": round(float(duration), 3),
                 } for k, t in enumerate(merged, 1)]
                 planned.append({
                     "clip_index": i, "clip_id": cid, "duration": duration,
@@ -406,6 +441,7 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
                 "at_sec": at,
                 "use": use,
                 "reason": f"default: 三帧契约（use={use}" + (f"；中间拍：{hint}" if hint else "") + "）",
+                "source_duration": round(float(duration), 3),
             }],
             "added_cost": {"images": 1, "video_segments": 1 if use == "split" else 0},
         })
@@ -479,7 +515,8 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
         has_existing = cont.get("midframe") is not None or cont.get("anchors") is not None
         p = by_index.get(i)
         valid_existing = existing_anchor_contract_valid(cont, clip.get("duration")) if has_existing else False
-        if has_existing and valid_existing and cont.get("anchors") is not None:
+        generated_stale = generated_anchor_contract_stale(cont, clip.get("duration")) if has_existing else False
+        if has_existing and valid_existing and cont.get("anchors") is not None and not generated_stale:
             continue  # 写回前再护一次：有效手动 anchors 优先
         if has_existing and valid_existing and cont.get("midframe") is not None and not p:
             continue  # 普通镜有效手动 midframe 优先；命中多锚规则时 p 会覆盖

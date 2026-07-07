@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="17572" viewBox="0 0 1440 17572">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="17572" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">S001</tspan></text>
+<rect x="72" y="28" width="1296" height="780" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  wake_smell</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">黎明微亮，杂役院远处传来急促金属敲击声，贺平生在简陋床上困倦睁眼，鼻尖像闻到一缕浓郁米香。</tspan></text>
+<text x="100" y="648" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：新的一天来了。又要干活了。 | SFX：叮叮当当</tspan></text>
+<rect x="120" y="72" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="106" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B001N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="338" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="372" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B001S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="836" width="1296" height="960" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="884" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P002  gold_rice_reveal</tspan></text>
+<text x="100" y="934" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">黑暗空房里，窗台附近的黑旧破陶盆中盛满金灿灿的大米，暖金微光照亮周围冷暗地面，贺平生坐起身震住。</tspan></text>
+<text x="100" y="1636" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：这是……</tspan></text>
+<rect x="882" y="880" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="914" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B002D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="1824" width="1296" height="700" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1872" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P003  not_a_dream</tspan></text>
+<text x="100" y="1922" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生揉眼后狠狠掐自己大腿，痛得皱眉，眼神从迷糊变成清醒震惊。</tspan></text>
+<text x="100" y="2364" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：不是做梦！ | SFX：嘶</tspan></text>
+<rect x="882" y="1868" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="1902" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B003D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="2094" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="2128" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B003S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="2552" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="2600" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  gold_rice_touch</tspan></text>
+<text x="100" y="2650" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">近景：贺平生蹑手蹑脚来到破盆前，手指插入满盆金米中轻轻拨起，米粒从指缝滑落，全是金色极品灵米。</tspan></text>
+<text x="100" y="3432" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：极品灵米？ | SFX：沙</tspan></text>
+<rect x="882" y="2596" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="2630" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B004D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="2992" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="3026" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B004S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="3620" width="1296" height="840" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3668" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  quantity_change</tspan></text>
+<text x="100" y="3718" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生低头看着满盆金米，脑海中浮现昨夜半盆白绿普通灵米的残影对比，意识到品质和数量都变了。</tspan></text>
+<text x="100" y="4300" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：昨日半盆普通灵米，今日竟成了满盆金米。</tspan></text>
+<rect x="120" y="3664" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3698" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B005N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="4488" width="1296" height="700" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4536" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P006  check_lock</tspan></text>
+<text x="100" y="4586" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生猛地回头看向木门，门栓和铁锁都紧紧扣着，门缝没有任何被打开的痕迹。</tspan></text>
+<text x="100" y="5028" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：门栓紧闭，不可能有人进来。</tspan></text>
+<rect x="120" y="4532" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4566" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B006N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="5216" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="5264" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  door_knock</tspan></text>
+<text x="100" y="5314" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">门外突然传来猛烈拍门声，张老大粗壮的影子压在门上，屋内贺平生一惊，身体挡在破盆和门之间。</tspan></text>
+<text x="100" y="6096" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：贺平生！还没起床？ | SFX：砰砰砰</tspan></text>
+<rect x="882" y="5260" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="5294" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B007D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="5656" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="5690" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="6284" width="1296" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6332" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P008  secret_hide</tspan></text>
+<text x="100" y="6382" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生慌而不乱，双手把盛着金米的黑旧破盆推进床底，再用杂乱旧衣服盖住。</tspan></text>
+<text x="100" y="7044" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：马上就来！ | SFX：窸窣</tspan></text>
+<rect x="882" y="6328" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="6362" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B008D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="6664" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6698" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B008S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="7232" width="1296" height="1080" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7280" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P009  breakfast_warning</tspan></text>
+<text x="100" y="7330" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">食堂外屋檐下，贺平生端着铁碗狼吞虎咽，老鲍在窗口给他多打肉，张老大站到一旁居高临下警告。</tspan></text>
+<text x="100" y="8152" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">张老大：今儿的任务必须完成。 | 贺平生：哎哎哎……</tspan></text>
+<rect x="882" y="7276" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="7310" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B009D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="7430" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="7464" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B009D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+<rect x="72" y="8340" width="1296" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="8388" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P010  no_cooking</tspan></text>
+<text x="100" y="8438" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">饭后回屋，贺平生反锁木门，把金米从床底搬出，靠近米香时立刻警觉地捂住鼻口，意识到不能煮。</tspan></text>
+<text x="100" y="9100" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：极品灵米的香味，恐怕能传出很远。 |</tspan><tspan x="100" dy="32">贺平生：不行，绝对不能煮。 | SFX：咔</tspan></text>
+<rect x="120" y="8384" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="8418" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B010N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="8522" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="8556" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B010D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="8720" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8754" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B010S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="9288" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="9336" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  raw_gold_rice</tspan></text>
+<text x="100" y="9386" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生抓起一把金色灵米，低头直接吞下生米，另一只手紧紧护着破盆。</tspan></text>
+<text x="100" y="10168" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：煮熟不行，那我就吞生的！ | SFX：咽</tspan></text>
+<rect x="882" y="9332" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="9366" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B011D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="9728" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="9762" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B011S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="10356" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10404" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  energy_surge</tspan></text>
+<text x="100" y="10454" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">几口金米下肚，贺平生腹中泛起暖洋洋的金色热流，暖光沿四肢百骸扩散，疲惫神色迅速消退。</tspan></text>
+<text x="100" y="11316" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一团暖火，从腹中冲向四肢百骸。 | SFX：嗡</tspan></text>
+<rect x="120" y="10400" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10434" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B012N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="10836" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="10870" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="11504" width="1296" height="1000" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11552" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P013  concealment_strategy</tspan></text>
+<text x="100" y="11602" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生把金米从破盆里倒进闲置裤筒，两头扎紧，做成丑陋枕头，再用破旧衣物盖住。</tspan></text>
+<text x="100" y="12344" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：这样即便有人闯进屋，也瞧不出端倪。 | SFX：扎</tspan></text>
+<rect x="120" y="11548" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="11582" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B013N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="11924" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="11958" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B013S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="12532" width="1296" height="700" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="12580" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  water_taste_change</tspan></text>
+<text x="100" y="12630" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">后山山泉边，贺平生放下水桶，俯身喝了两口清水，微微皱眉，觉得泉水不如以前好喝。</tspan></text>
+<text x="100" y="13072" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生：味道……好像变了。 | SFX：哗</tspan></text>
+<rect x="882" y="12576" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="12610" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B014D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="540" y="12802" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="12836" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B014S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="13260" width="1296" height="1000" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13308" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P015  water_task_speed</tspan></text>
+<text x="100" y="13358" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">贺平生挑起两个装满水的巨大木桶，肩膀挺直，脚步轻快，木桶在阳光下晃动却不再压弯他。</tspan></text>
+<text x="100" y="14100" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：今日的水桶，竟轻了许多。 | SFX：哗啦</tspan></text>
+<rect x="120" y="13304" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13338" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B015N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="13680" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="13714" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B015S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="14288" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="14336" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P016  speed_montage</tspan></text>
+<text x="100" y="14386" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">一张连续完整画面里，贺平生的身影在山路、水缸、山泉之间快速往返，上午未过，食堂门口大水缸已经被装满。</tspan></text>
+<text x="100" y="15168" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：不到一上午，十趟水已经完成。</tspan></text>
+<rect x="120" y="14332" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="14366" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B016N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="15356" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="15404" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P017  self_restraint</tspan></text>
+<text x="100" y="15454" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">山泉边树影下，贺平生停下来休息，回头望向已装满的方向，脸上喜色被谨慎压下。</tspan></text>
+<text x="100" y="16236" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：太快了，会惹人怀疑。</tspan></text>
+<rect x="120" y="15400" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="15434" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B017N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="16424" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="16472" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P018  chapter_hook</tspan></text>
+<text x="100" y="16522" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夜色降临很久后，贺平生故意装作疲惫，慢慢把第二十趟水倒进水缸，月光下他垂着眼，把真正的轻松藏住。</tspan></text>
+<text x="100" y="17384" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：今日二十趟，终于结束。 | SFX：哗啦</tspan></text>
+<rect x="120" y="16468" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="16502" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B018N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="16904" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="16938" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B018S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+</svg>

@@ -64,6 +64,7 @@ DEFAULTS = {
     "AI显式角标": "仅元数据",
     "字幕语言": "中文",
     "变现模式": "免费",
+    "合规用途": "internal_only",
 }
 
 
@@ -230,18 +231,50 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("后期拟音策略", ("n2d",), ("自动", "强制叠加", "关闭")),
     SettingSpec("生成粒度", ("n2d",), ("逐个", "小批", "按场景分批", "整集", "自定义"), parameterized=True, composite=True),
     SettingSpec("生成优先序", ("n2d",), ("关键镜优先", "分镜顺序", "先易后难")),
-    SettingSpec("一致性增强", ("n2d",), ("锚点+参考图", "指定参考图", "+LoRA"), key_aliases=("一致性增强(LoRA)",), parameterized=True),
+    SettingSpec(
+        "一致性增强",
+        ("n2d",),
+        ("锚点+参考图", "指定参考图", "+LoRA", "image2image_reference_chain", "本机慢速不等待，优先 image2image/多图参考链"),
+        key_aliases=("一致性增强(LoRA)",),
+        parameterized=True,
+    ),
+    SettingSpec("本机LoRA慢速策略", ("n2d",), parameterized=True, syncable=False),
     SettingSpec("一致性严格度", ("n2d",), ("demo", "standard", "production", "production_no_cost_image"),
                 key_aliases=("一致性发布档", "一致性落地档", "一致性验收档", "制作质量档")),
     SettingSpec("重抽预算策略", ("n2d",), ("预算充足", "预算一般")),
     SettingSpec("脸一致性机检后端", ("n2d",), ("arcface", "styleid", "自动按画风"), key_aliases=("脸encoder", "face_encoder")),
     SettingSpec("N2D_STYLEID_MODEL", ("n2d",), ("kwanY/styleid", "自定义"), key_aliases=("StyleID模型", "StyleID model"), parameterized=True, syncable=False),
+    SettingSpec("妖类脸部规则", ("n2d",), parameterized=True),
     SettingSpec("更新重制策略", ("n2d",), ("最小", "严审刷新")),
     SettingSpec("BGM来源", ("n2d",), ("占位", "文件", "Suno"), parameterized=True),
     SettingSpec("接缝兜底", ("n2d",), ("硬切", "微溶解", "报警"), parameterized=True),
     SettingSpec("目标平台", ("n2d",), ("抖音", "快手", "B站", "小红书", "红果", "YouTube", "TikTok", "ReelShort", "视频号", "跨平台", "未定"), parameterized=True, sensitive=True),
     SettingSpec("发行地区", ("n2d",), ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义"), parameterized=True, sensitive=True),
-    SettingSpec("合规用途", ("n2d",), ("internal_only", "publish_candidate", "paid_distribution"), sensitive=True),
+    SettingSpec(
+        "合规用途",
+        ("n2d",),
+        ("internal_only", "publish_candidate", "paid_distribution"),
+        aliases={
+            "demo": "internal_only",
+            "demo_only": "internal_only",
+            "内部demo": "internal_only",
+            "内部 demo": "internal_only",
+            "内部预览": "internal_only",
+            "内部学习": "internal_only",
+            "学习demo": "internal_only",
+            "学习 demo": "internal_only",
+            "demo学习使用": "internal_only",
+            "做demo学习使用": "internal_only",
+            "自用demo": "internal_only",
+            "不发布": "internal_only",
+            "不公开发布": "internal_only",
+            "发布候选": "publish_candidate",
+            "公开发布候选": "publish_candidate",
+            "付费投放": "paid_distribution",
+            "商业投放": "paid_distribution",
+        },
+        sensitive=True,
+    ),
 
     # shared physical tools.
     SettingSpec("换脸后端", ("all",), ("FaceFusion",), syncable=False),
@@ -707,6 +740,9 @@ def validate_setting(key: str, value: str, *, family: Optional[str] = None) -> D
     if not spec:
         return {"level": "warn", "key": key, "value": value, "message": "unknown setting key"}
     value = normalize_setting_value(spec.key, value)
+    alias_value = spec.aliases.get(_norm(value)) if spec.aliases else None
+    if alias_value:
+        value = normalize_setting_value(spec.key, alias_value)
     if spec.metadata:
         return {"level": "info", "key": key, "canonical_key": spec.key, "value": value, "message": "project metadata"}
     if spec.key == "生视频AI":
@@ -894,6 +930,11 @@ def global_settings_path(repo_root: str) -> str:
 def normalize_setting_value(key: str, value: str) -> str:
     """Normalize historical setting aliases that should not leak into execution."""
     normalized = (value or "").strip()
+    spec = get_setting_spec(key)
+    if spec and spec.aliases:
+        alias = spec.aliases.get(_norm(normalized))
+        if alias:
+            normalized = alias
     if key == "重抽预算策略" and normalized in {"预算不足", "预算不够"}:
         return "预算一般"
     if key == "更新重制策略" and normalized == "保图刷新":

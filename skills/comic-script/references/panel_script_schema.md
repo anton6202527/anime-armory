@@ -36,3 +36,5 @@
 - `dialogue`：只存文字，不要求画进图里。
 - `art_notes`：给排版和出图用，包含景别、构图、表情、动作、需要参考的资产。
 - `references`：角色、场景、道具、服装、特效等引用 ID；MVP 可先留自然语言，正式出图前再规范。
+- `layout_weight` / `visual_weight` / `importance`（可选）：`heavy` / `medium` / `compact` 或 1-3，用于让 `comic-layout` 以数据驱动方式决定大格/中格/小格，避免把具体项目 story_function 写进通用脚本。
+- `style_bucket` / `scene_family` / `visual_context`（可选）：同一场景/光色族群标识，供 `comic-review` 的风格一致性按计划内场景分组，避免把夜景、梦境、蒙太奇、系统光效等合理差异误判成画风漂移。

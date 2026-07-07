@@ -18,10 +18,14 @@ Exit codes:
 """
 from __future__ import annotations
 
+import glob
+import json
+import os
+import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Mapping
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 # 共享基座（增量2·按证据族拆分）：常量/findings/add/无状态助手全部住 gate_core，
 # gate.py 只留 check_*/run/main。gates/<family>.py 后续也从 gate_core 取，避免循环导入。
@@ -1327,21 +1331,301 @@ def check_route_execution_recipe(route: Mapping[str, Any], routes_path: str, idx
             return_to_stage="video_prompt",
         )
         return
-    required_sections = ("frame_inputs", "reference_inputs", "control_inputs", "audio_inputs", "fallback", "capability_match")
+    required_sections = ("frame_inputs", "reference_inputs", "control_inputs", "audio_inputs", "fallback", "capability_match", "post_video_qc")
     for section in required_sections:
         if not isinstance(recipe.get(section), Mapping):
             add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe 缺结构块：{section}", return_to_stage="video_prompt")
     frame = recipe.get("frame_inputs") if isinstance(recipe.get("frame_inputs"), Mapping) else {}
     refs = recipe.get("reference_inputs") if isinstance(recipe.get("reference_inputs"), Mapping) else {}
     controls = recipe.get("control_inputs") if isinstance(recipe.get("control_inputs"), Mapping) else {}
+    audio = recipe.get("audio_inputs") if isinstance(recipe.get("audio_inputs"), Mapping) else {}
+    fallback = recipe.get("fallback") if isinstance(recipe.get("fallback"), Mapping) else {}
+    capability = recipe.get("capability_match") if isinstance(recipe.get("capability_match"), Mapping) else {}
+    post_qc = recipe.get("post_video_qc") if isinstance(recipe.get("post_video_qc"), Mapping) else {}
     for key in ("first_frame", "consumption_mode", "native_timeline_frames"):
         if key not in frame or frame.get(key) in (None, ""):
             add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.frame_inputs 缺字段：{key}", return_to_stage="video_prompt")
     for key in ("characters", "assets", "max_reference_images", "motion_reference"):
         if key not in refs:
             add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.reference_inputs 缺字段：{key}", return_to_stage="video_prompt")
+    for key in ("video_generation_audio_policy", "native_audio_policy", "speech_policy", "requires_voice_track"):
+        if key not in audio:
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.audio_inputs 缺字段：{key}", return_to_stage="video_prompt")
+    for key in ("fallback_backends", "degrade_plan"):
+        if key not in fallback:
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.fallback 缺字段：{key}", return_to_stage="video_prompt")
+    for key in ("frame_contract_supported", "motion_reference_supported", "motion_control_level"):
+        if key not in capability:
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.capability_match 缺字段：{key}", return_to_stage="video_prompt")
+    for key in ("identity_qc_required", "dense_face_watch_required", "required_reports", "acceptance_policy"):
+        if key not in post_qc:
+            add(BLOCK, "执行配方", routes_path, f"{clip_id} execution_recipe.post_video_qc 缺字段：{key}", return_to_stage="video_prompt")
+    mode = str(route.get("mode") or recipe.get("mode") or "").strip().lower()
+    if mode and mode not in {"text2video", "t2v"} and frame.get("first_frame") is not True:
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} mode={route.get('mode')} 但 execution_recipe.frame_inputs.first_frame 不为 true；"
+            "图生/帧生视频必须把首帧作为真实入参，不能退化为裸文本。",
+            return_to_stage="video_prompt",
+        )
+    if _identity_route_requires_character_refs(route) and not refs.get("characters"):
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} identity_requirement={route.get('identity_requirement')} 但 execution_recipe.reference_inputs.characters 为空；"
+            "角色镜必须把 reference_group / Character ID / Face Lock 等身份引用写进真实配方。",
+            return_to_stage="video_prompt",
+        )
+    if _identity_route_requires_character_refs(route) and post_qc.get("identity_qc_required") is not True:
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} 含身份路由但 execution_recipe.post_video_qc.identity_qc_required 不为 true；"
+            "成片验收必须知道本镜需要身份回验，不能只在 prompt 阶段声明身份锁。",
+            return_to_stage="video_prompt",
+        )
+    reports = {str(x).strip() for x in (post_qc.get("required_reports") or []) if str(x).strip()} if isinstance(post_qc.get("required_reports"), list) else set()
+    if post_qc.get("identity_qc_required") is True and "temporal_consistency" not in reports:
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} post_video_qc.identity_qc_required=true 但 required_reports 缺 temporal_consistency；"
+            "身份镜验收至少要有片内一致性机检/降级人审入口。",
+            return_to_stage="video_prompt",
+        )
+    if post_qc.get("dense_face_watch_required") is True and "video_face_drift_watch" not in reports:
+        add(
+            BLOCK,
+            "执行配方",
+            routes_path,
+            f"{clip_id} post_video_qc.dense_face_watch_required=true 但 required_reports 缺 video_face_drift_watch；"
+            "近景/反打/说话/多人身份高风险镜必须把密集抽帧人审包接入验收链。",
+            return_to_stage="video_prompt",
+        )
+    if route.get("native_audio_policy") == "native_speech" and audio.get("speech_policy") != "native_speech":
+        add(BLOCK, "执行配方", routes_path, f"{clip_id} native_speech 路由与 execution_recipe.audio_inputs.speech_policy 不一致", return_to_stage="video_prompt")
     if controls.get("required") is True and not controls.get("manifest_path"):
         add(BLOCK, "执行配方", routes_path, f"{clip_id} 需要 Motion Control 但 execution_recipe.control_inputs 缺 manifest_path", return_to_stage="video_prompt")
+
+
+def _norm_clip_id(value: object) -> str:
+    text = str(value or "").strip()
+    m = re.search(r"Clip[_-]?(\d+)", text, re.I)
+    if m:
+        return f"Clip_{int(m.group(1)):02d}"
+    return text
+
+
+def _dense_post_qc_routes(root: str, ep: str) -> List[Tuple[str, Mapping[str, Any], Mapping[str, Any]]]:
+    path = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    data = load_json(path)
+    routes = data.get("routes") if isinstance(data, Mapping) else None
+    out: List[Tuple[str, Mapping[str, Any], Mapping[str, Any]]] = []
+    if not isinstance(routes, list):
+        return out
+    for route in routes:
+        if not isinstance(route, Mapping):
+            continue
+        recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
+        policy = recipe.get("post_video_qc") if isinstance(recipe.get("post_video_qc"), Mapping) else route.get("post_video_qc")
+        if not isinstance(policy, Mapping) or policy.get("dense_face_watch_required") is not True:
+            continue
+        clip_id = _norm_clip_id(route.get("clip_id") or route.get("clip") or route.get("id"))
+        if clip_id:
+            out.append((clip_id, route, policy))
+    return out
+
+
+def _latest_video_batch_item(root: str, ep: str, clip_id: str) -> Tuple[str, Optional[Mapping[str, Any]]]:
+    patterns = [
+        os.path.join(root, "生产数据", f"video_batch_{ep}_*.json"),
+        os.path.join(root, "生产数据", "video_batches", ep, "*", "*.json"),
+    ]
+    candidates: List[Tuple[float, str, Mapping[str, Any]]] = []
+    for pattern in patterns:
+        for path in glob.glob(pattern):
+            data = load_json(path)
+            items = data.get("items") if isinstance(data, Mapping) else None
+            if not isinstance(items, list):
+                continue
+            for item in items:
+                if isinstance(item, Mapping) and _norm_clip_id(item.get("clip")) == clip_id:
+                    try:
+                        mtime = os.path.getmtime(path)
+                    except OSError:
+                        mtime = 0.0
+                    candidates.append((mtime, path, item))
+    if not candidates:
+        return "", None
+    candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
+    return candidates[0][1], candidates[0][2]
+
+
+def _packet_mentions_clip(packet: Mapping[str, Any], clip_id: str) -> bool:
+    fields = [
+        packet.get("packet_id"),
+        packet.get("master"),
+        packet.get("source_clip"),
+        packet.get("clip"),
+    ]
+    if any(_norm_clip_id(value) == clip_id for value in fields):
+        return True
+    for key in ("frames", "segments"):
+        rows = packet.get(key)
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if isinstance(row, Mapping) and _norm_clip_id(row.get("clip")) == clip_id:
+                return True
+    return False
+
+
+def _dense_watch_packets_for_clip(root: str, ep: str, clip_id: str) -> List[Tuple[str, Mapping[str, Any]]]:
+    pattern = os.path.join(root, "生产数据", f"video_face_drift_watch_{ep}_*.json")
+    out: List[Tuple[str, Mapping[str, Any]]] = []
+    for path in glob.glob(pattern):
+        data = load_json(path)
+        if not isinstance(data, Mapping):
+            continue
+        if data.get("kind") != "n2d_video_face_drift_watch":
+            continue
+        if _packet_mentions_clip(data, clip_id):
+            out.append((path, data))
+    return sorted(out)
+
+
+def _video_artifacts_for_clip(root: str, ep: str, clip_id: str) -> List[str]:
+    video_dir = os.path.join(root, "出视频", ep, "视频")
+    if not os.path.isdir(video_dir):
+        return []
+    out: List[str] = []
+    for path in glob.glob(os.path.join(video_dir, "*.mp4")):
+        if os.path.basename(os.path.dirname(path)) == "_downloads":
+            continue
+        if _norm_clip_id(os.path.basename(path)) == clip_id:
+            out.append(path)
+    return sorted(out)
+
+
+def _dense_watch_human_pass(packet: Mapping[str, Any]) -> bool:
+    review = packet.get("human_review") or packet.get("review")
+    if not isinstance(review, Mapping):
+        return False
+    for key in ("identity_verdict", "face_identity", "verdict", "status"):
+        value = str(review.get(key) or "").strip().lower()
+        if value in {"pass", "passed", "same_character", "same_identity", "一致", "同一角色", "人工通过"}:
+            return True
+    return False
+
+
+def check_video_post_qc_artifacts(root: str, ep: str, stage: str) -> None:
+    """Post-video identity QC must become stage evidence, not a side note in routes."""
+    if stage not in {"video", "compose", "review"}:
+        return
+    routes_path = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    for clip_id, _route, _policy in _dense_post_qc_routes(root, ep):
+        manifest_path, item = _latest_video_batch_item(root, ep, clip_id)
+        if item is None:
+            existing_videos = _video_artifacts_for_clip(root, ep, clip_id)
+            if stage == "video" and not existing_videos:
+                # Video stage can be partially complete. Do not require post-video
+                # acceptance evidence for clips that have not been generated yet.
+                continue
+            add(
+                BLOCK,
+                "成片身份回验",
+                routes_path,
+                f"{clip_id} 路由要求 dense_face_watch，但找不到对应 video_batch manifest item；"
+                "必须通过 video_runner accept 写入 qc_machine/post_video_qc/video_face_drift_watch 证据后再进入合成/验收。",
+                return_to_stage="video",
+                affected_artifacts=existing_videos or [routes_path],
+                evidence_family="face_embedding",
+            )
+            continue
+        status = str(item.get("status") or "").strip()
+        machine = item.get("qc_machine") if isinstance(item.get("qc_machine"), Mapping) else {}
+        if status == "qc_blocked":
+            add(
+                BLOCK,
+                "成片身份回验",
+                manifest_path,
+                f"{clip_id} 已被 video_runner 标记 qc_blocked：{item.get('fail_reason') or '缺 fail_reason'}",
+                return_to_stage="video",
+                affected_artifacts=[manifest_path, str(item.get("qc_json") or ""), str(item.get("qc_markdown") or "")],
+                evidence_family="face_embedding",
+            )
+            continue
+        packets = _dense_watch_packets_for_clip(root, ep, clip_id)
+        ready_packets = [
+            (path, packet) for path, packet in packets
+            if packet.get("status") == "ready_for_human_frame_identity_review"
+            and isinstance(packet.get("frames"), list)
+            and len(packet.get("frames") or []) > 0
+        ]
+        human_pass = any(_dense_watch_human_pass(packet) for _path, packet in ready_packets)
+        if int(machine.get("intra_warns") or 0) > 0 or item.get("qc_overridden") is True:
+            if human_pass:
+                add(
+                    WARN,
+                    "成片身份回验",
+                    ready_packets[-1][0],
+                    f"{clip_id} dense_face_watch 存在片内身份 warn/强制放行记录，但已有 "
+                    "human_review.identity_verdict=pass；按人工密集抽帧复核签收降级为 WARN，"
+                    "公开发布前仍建议重出或补重型身份一致性证据。",
+                    return_to_stage="video",
+                    affected_artifacts=[ready_packets[-1][0], str(ready_packets[-1][1].get("contact_sheet") or "")],
+                    evidence_family="human_signoff",
+                )
+            else:
+                add(
+                    BLOCK,
+                    "成片身份回验",
+                    manifest_path,
+                    f"{clip_id} dense_face_watch 镜存在片内身份 warn/强制放行记录；"
+                    "不能用 --allow-qc-block 静默通过，必须确认误报并重出可审计 watch 包，真脸漂则回 video/image 重出。",
+                    return_to_stage="video",
+                    affected_artifacts=[manifest_path, str(item.get("qc_json") or ""), str(item.get("qc_markdown") or "")],
+                    evidence_family="face_embedding",
+                )
+                continue
+        if int(machine.get("intra_checked") or 0) <= 0:
+            add(
+                BLOCK,
+                "成片身份回验",
+                manifest_path,
+                f"{clip_id} dense_face_watch 镜缺片内近脸身份采样 qc_machine.intra_checked；"
+                "必须重跑 video_runner accept/video_qc，不能只凭首帧和接缝验收。",
+                return_to_stage="video",
+                evidence_family="face_embedding",
+            )
+        if not ready_packets:
+            add(
+                BLOCK,
+                "成片身份回验",
+                manifest_path,
+                f"{clip_id} dense_face_watch 镜缺 video_face_drift_watch 密集抽帧包；"
+                f"请跑 `python3 skills/n2d-review/scripts/video_face_drift_watch.py <作品根> {ep} --video <本clip.mp4> --clip {clip_id} --write`。",
+                return_to_stage="video",
+                affected_artifacts=[manifest_path],
+                evidence_family="face_embedding",
+            )
+            continue
+        if stage in {"compose", "review"} and not human_pass:
+            add(
+                WARN if stage == "compose" else BLOCK,
+                "成片身份回验",
+                ready_packets[-1][0],
+                f"{clip_id} 已有密集抽帧包，但缺 human_review.identity_verdict=pass；"
+                "交付验收前必须人工看 contact sheet，确认清晰近脸仍是同一角色。真脸漂不能签收。",
+                return_to_stage="video",
+                affected_artifacts=[ready_packets[-1][0], str(ready_packets[-1][1].get("contact_sheet") or "")],
+                evidence_family="human_signoff",
+            )
 def check_motion_identity_priority(route: Mapping[str, Any], routes_path: str, idx: int) -> None:
     """High-action clips must state how motion freedom and identity lock are reconciled."""
     if not _route_is_high_action(route):
@@ -1684,6 +1968,9 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
         "运动精修约束",
         "环境交互约束",
         "首帧保持",
+        "在场链约束",
+        "接缝执行包",
+        "执行配方约束",
         "人物运动",
         "镜头运动",
         "情绪节奏",
@@ -1695,6 +1982,37 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
     for key in compact_prompt_fields:
         if not _has_line_field(section, key):
             add(BLOCK, "prompt", loc, f"中文视频 prompt 缺字段：{key}")
+    if _has_line_field(section, "在场链约束"):
+        for key in ("required_presence", "offscreen_presence", "forbidden_presence"):
+            if key not in section:
+                add(
+                    BLOCK,
+                    "人物在场链",
+                    loc,
+                    f"在场链约束缺 {key}；每条视频 prompt 必须把 storyboard.entity_schedule 的必在/画外/禁入真值传到执行端，不能只写泛化的“不要新增”。",
+                )
+    if not (_has_field(section, "接缝执行包") or _has_field(section, "Handoff Package")):
+        add(
+            BLOCK,
+            "接缝执行包",
+            loc,
+            "缺接缝执行包；每条视频 prompt 必须把 first_frame/end_frame/midframes/need_endframe/anchor_consumption/fallback 写成执行真值，避免文字接缝和真实入参脱节。",
+        )
+    else:
+        for key in ("first_frame", "end_frame", "midframes", "need_endframe", "anchor_consumption", "fallback"):
+            if key not in section:
+                add(BLOCK, "接缝执行包", loc, f"接缝执行包缺字段：{key}")
+    if not (_has_field(section, "执行配方") or _has_field(section, "Execution Recipe")):
+        add(
+            BLOCK,
+            "执行配方",
+            loc,
+            "缺执行配方 / Execution Recipe；视频 prompt 必须说明 frame_inputs/reference_inputs/control_inputs/audio_inputs/fallback/anchor_consumption，不能只交裸文本 prompt 给后端。",
+        )
+    else:
+        for key in ("frame_inputs", "reference_inputs", "control_inputs", "audio_inputs", "fallback", "anchor_consumption"):
+            if key not in section:
+                add(BLOCK, "执行配方", loc, f"执行配方缺字段：{key}")
     if "角色身份注册层" not in section:
         add(BLOCK, "资产身份注册层", loc, "缺角色身份注册层字段；含角色镜必须继承 identity_registry.json，无人物镜写“无”")
     if not _has_line_field(section, "身份锁定约束"):
@@ -1735,6 +2053,27 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 "模型路由",
                 loc,
                 "模型路由 identity_requirement=none 但本 Clip 写了角色身份注册层/CHAR_xx；必须改为 reference_group 或后端原生身份绑定，避免执行端少传身份参考。",
+            )
+        mode_value = str((route or {}).get("mode") or "").strip().lower()
+        identity_req_value = str((route or {}).get("identity_requirement") or "").strip().lower()
+        if mode_value and mode_value not in {"text2video", "t2v"} and re.search(r"frame_inputs\s*=\s*(无|none|null|n/a|na)(?:[；;,，\s]|$)", section, re.I):
+            add(
+                BLOCK,
+                "执行配方",
+                loc,
+                f"路由 mode={mode_value} 需要首帧/尾帧/锚帧等图像入参，但执行配方 frame_inputs 为空；先回 n2d-video prompt/router 修真实入参。",
+            )
+        if (
+            identity_req_value
+            and identity_req_value not in {"none", "no", "无", "not_required"}
+            and has_character_identity_layer
+            and re.search(r"reference_inputs\s*=\s*(无|none|null|n/a|na)(?:[；;,，\s]|$)", section, re.I)
+        ):
+            add(
+                BLOCK,
+                "执行配方",
+                loc,
+                f"路由 identity_requirement={identity_req_value} 且本 Clip 含角色身份层，但执行配方 reference_inputs 为空；这会让后端只按首帧猜脸，必须传 reference_group/Character ID/Face Lock 或明确降级保真拍法。",
             )
     if "模型路由约束" not in section:
         add(BLOCK, "模型路由", loc, "中文视频 prompt 缺模型路由约束；必须说明按 primary_backend 写平台参数，失败才切 fallback/degrade_plan")
@@ -2283,7 +2622,7 @@ def check_compose_foley_native_audio_policy(root: str, ep: str) -> None:
                 return_to_stage="compose",
                 confidence="heuristic",
             )
-        return
+            return
     if os.path.isfile(foley_wav):
         add(
             WARN,
@@ -2294,6 +2633,23 @@ def check_compose_foley_native_audio_policy(root: str, ep: str) -> None:
             return_to_stage="compose",
             confidence="heuristic",
         )
+
+
+def _final_timeline_probe_passes(root: str, ep: str) -> bool:
+    data = load_json(os.path.join(root, "生产数据", f"final_timeline_probe_{ep}.json"))
+    if not isinstance(data, dict) or data.get("kind") != "n2d_final_timeline_probe":
+        return False
+    if data.get("findings"):
+        return False
+    actual = data.get("actual_duration_sec")
+    expected = data.get("expected_duration_sec")
+    tolerance = data.get("duration_tolerance_sec")
+    try:
+        return abs(float(actual) - float(expected)) <= float(tolerance)
+    except Exception:
+        return False
+
+
 def check_video_assets(root: str, ep: str) -> None:
     check_video_stage_raw_output_policy(root, ep)
     clips = clip_files(root, ep)
@@ -2301,8 +2657,12 @@ def check_video_assets(root: str, ep: str) -> None:
         add(BLOCK, "视频", os.path.join(root, "出视频", ep, "视频"), "缺 clip MP4")
         return
     sb = load_storyboard(root, ep)
+    final_timeline_ok = _final_timeline_probe_passes(root, ep)
     if sb and len(clips) != len(sb.get("clips", [])):
-        add(WARN, "视频", os.path.join(root, "出视频", ep, "视频"), f"clip 数 {len(clips)} 与 storyboard clips {len(sb.get('clips', []))} 不一致")
+        sev = INFO if final_timeline_ok else WARN
+        tail = "；final_timeline_probe 已验证成片时间线，raw split 数量差异仅作原料说明" if final_timeline_ok else ""
+        add(sev, "视频", os.path.join(root, "出视频", ep, "视频"),
+            f"clip 数 {len(clips)} 与 storyboard clips {len(sb.get('clips', []))} 不一致{tail}")
     audio_probe = [(c, has_audio(c)) for c in clips]
     audio_hits = [c for c, a in audio_probe if a]
     unprobeable = [c for c, a in audio_probe if a is None]
@@ -2311,13 +2671,13 @@ def check_video_assets(root: str, ep: str) -> None:
     # 探不了原生音轨又存在配音轨 = 双人声硬闸门其实没校验过，默认 BLOCK（与降级精度一致性审计同一套
     # 「缺核心检测工具→交付边界拦截」策略，逃生口同为 N2D_ALLOW_DEGRADED_QC=1·留痕自负其责）。
     if unprobeable and voice_track_exists(root, ep):
-        allow_degraded = os.environ.get("N2D_ALLOW_DEGRADED_QC") == "1"
+        allow_degraded = degraded_qc_active(root)
         if allow_degraded:
             note_degraded_qc_waiver("原生音画", ep, os.path.join(root, "出视频", ep, "视频"),
                                     "ffprobe 不可用·原生音轨硬闸降级放行")
         sev = WARN if allow_degraded else BLOCK
-        tail = ("（已显式 N2D_ALLOW_DEGRADED_QC 放行）" if allow_degraded
-                else "装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 放行并自负其责。")
+        tail = (f"（已通过{degraded_qc_waiver_label(root)}放行）" if allow_degraded
+                else "装 ffprobe 后重跑，或显式 N2D_ALLOW_DEGRADED_QC=1 / 项目 internal_only demo 放行并自负其责。")
         add(sev, "原生音画", os.path.join(root, "出视频", ep, "视频"),
             f"ffprobe 不可用，{len(unprobeable)} 个 clip 无法探测原生音轨——"
             f"「原生台词 + n2d-voice 配音 = 双人声」硬闸门无法校验，交付边界不放行。{tail}")
@@ -2330,7 +2690,9 @@ def check_video_assets(root: str, ep: str) -> None:
         if all(d is not None for d in actuals):
             total = sum(d for d in actuals if d is not None)
             if abs(total - target) > 1.0:
-                add(WARN, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s")
+                sev = INFO if final_timeline_ok else WARN
+                tail = "；final_timeline_probe 已验证最终成片时长，raw split 总长差异仅作原料说明" if final_timeline_ok else ""
+                add(sev, "时长", ep, f"clip 总长 {total:.2f}s 与镜头时长累计 {target:.2f}s 差 {abs(total-target):.2f}s{tail}")
 def check_compose_inputs(root: str, ep: str) -> None:
     check_video_assets(root, ep)
     check_placeholder_policy(root, ep, "compose")
@@ -2862,6 +3224,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_script_contract_consumption(root, ep, ("出图", "出视频"))
         check_video_stage_raw_output_policy(root, ep)
         check_generation_recipe_evidence(root, ep, stage)
+        check_video_post_qc_artifacts(root, ep, stage)
         check_contract_inheritance(root, ep)
         check_cross_episode_contract(root, ep)
         check_identity_handoff_inheritance(root, ep)
@@ -2903,6 +3266,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_stylized_face_encoder_policy(root, ep, stage)
         check_translation_glossary_release_gate(root, ep, stage)
         check_generation_recipe_evidence(root, ep, stage)
+        check_video_post_qc_artifacts(root, ep, stage)
         check_series_retention_gate(root, ep, stage)
         check_consistency_audit_gate(root, ep, stage="compose")
         check_progress_receipt_reconcile(root, ep, current_stage="compose")  # H3：成片前对账已标 ✅ 的上游受闸列都有新鲜凭据
@@ -2926,6 +3290,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_stylized_face_encoder_policy(root, ep, stage)
         check_translation_glossary_release_gate(root, ep, stage)
         check_generation_recipe_evidence(root, ep, stage)
+        check_video_post_qc_artifacts(root, ep, stage)
         check_cross_episode_contract(root, ep)
         check_cross_episode_character_definition(root, ep)
         check_identity_handoff_inheritance(root, ep)

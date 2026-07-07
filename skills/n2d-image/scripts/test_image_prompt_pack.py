@@ -82,11 +82,98 @@ def test_weapon_refs_are_not_labeled_as_props() -> None:
     assert "道具定妆" not in refs[0]
 
 
+def test_shot_refs_include_ready_auxiliary_character_angles(tmp_path: Path) -> None:
+    image_dir = tmp_path / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    for name in (
+        "定妆_CHAR_TEST__常态.png",
+        "定妆_CHAR_TEST__常态_脸部特写_脸锚裁切.png",
+        "定妆_CHAR_TEST__常态_45度.png",
+        "定妆_CHAR_TEST__常态_侧.png",
+        "定妆_CHAR_TEST__常态_半身.png",
+        "定妆_GROUP_TEST__常态.png",
+        "定妆_GROUP_TEST__常态_手部局部.png",
+    ):
+        (image_dir / name).write_bytes(b"\x89PNG\r\n\x1a\n")
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.CHARACTER_DEFS = {
+            "CHAR_TEST": {"asset_key": "CHAR_TEST__常态", "form": "常态", "tier": "core", "name": "测试角色"},
+            "GROUP_TEST": {
+                "asset_key": "GROUP_TEST__常态",
+                "form": "常态",
+                "tier": "restricted_partial",
+                "name": "测试群像",
+            },
+        }
+        refs = image_prompt_pack.shot_refs(["CHAR_TEST", "GROUP_TEST"], [], tmp_path)
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    joined = "\n".join(refs)
+    assert "辅助角度锚" in joined
+    assert "定妆_CHAR_TEST__常态_45度.png" in joined
+    assert "定妆_CHAR_TEST__常态_侧.png" in joined
+    assert "定妆_CHAR_TEST__常态_半身.png" in joined
+    assert "定妆_CHAR_TEST__常态_背.png" not in joined
+    assert "GROUP_TEST" in joined
+    assert "定妆_GROUP_TEST__常态_手部局部.png" not in joined
+
+
 def test_prompt_safe_forbidden_avoids_wardrobe_false_positive() -> None:
     text = image_prompt_pack.prompt_safe_forbidden(["Q版", "塑料盔甲", "平台录屏UI"])
 
     assert "塑料硬质防具质感" in text
     assert "塑料盔甲" not in text
+
+
+def test_summarize_contract_value_does_not_cut_mid_field() -> None:
+    text = image_prompt_pack.summarize_contract_value({
+        "content_promise": "这个少年为什么刚入门就被当成废物？他会怎样活下去？",
+        "content_proposition": "这个少年为什么刚入门就被当成废物？他会怎样活下去？",
+        "expected_metric": {"primary": "retention_3s", "target": 0.8},
+        "hook_type": "悬念",
+        "muted_safe_proof": "关声也能从黑暗大殿围审、少年低位、张老大高位俯视和烧屏“五行灵根？”读懂压迫悬念。",
+        "onscreen_text": "十四岁，五行灵根？",
+    }, 180)
+
+    assert text.endswith("…")
+    assert "onscreen_text=十四" not in text
+
+
+def test_character_card_identity_parses_metadata_style_card() -> None:
+    text = "# 角色卡：女主（待剧情确认姓名后绑定）\n\n- character_id: `CHAR_FEMALE_LEAD`\n"
+
+    name, cid = image_prompt_pack.parse_character_card_identity(text, "女主_待绑定")
+
+    assert name == "女主（待剧情确认姓名后绑定）"
+    assert cid == "CHAR_FEMALE_LEAD"
+
+
+def test_inner_focus_directive_isolates_subject_and_context_entities() -> None:
+    clip = {
+        "description": "姜月初内心独白：这百妖谱到底是什么。",
+        "dramatic_function": "内心戏，表现主角疑惧。",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "object_ids": ["VFX_系统面板"],
+    }
+
+    directive = image_prompt_pack.inner_focus_directive(
+        clip,
+        image_prompt_pack.clip_chars(clip),
+        image_prompt_pack.clip_assets(clip),
+    )
+
+    assert "内心戏主体隔离" in directive
+    assert "画面焦点只给 CHAR_01" in directive
+    assert "非焦点主体 CHAR_02" in directive
+    assert "不要重复上一镜群像" in directive
+
+
+def test_non_inner_focus_clip_has_no_inner_focus_directive() -> None:
+    clip = {"description": "姜月初抬剑迎敌。", "character_ids": ["CHAR_01", "CHAR_02"]}
+
+    assert image_prompt_pack.inner_focus_directive(clip, image_prompt_pack.clip_chars(clip), []) == ""
 
 
 def test_style_anchor_prompt_and_overview_inherit_story_style_contract(tmp_path: Path) -> None:
@@ -118,6 +205,29 @@ def test_style_anchor_prompt_and_overview_inherit_story_style_contract(tmp_path:
     assert "`出图/共享/图片/风格锚_国漫写实.png`" in style_prompt
     assert "no room set, no window, no furniture" in style_prompt
     assert "style_anchor：`出图/共享/图片/风格锚_国漫写实.png`" in overview
+
+
+def test_style_anchor_registry_marks_existing_anchor_ready(tmp_path: Path) -> None:
+    rel = "出图/共享/图片/风格锚_国漫写实.png"
+    anchor = tmp_path / rel
+    anchor.parent.mkdir(parents=True)
+    anchor.write_bytes(b"style-anchor")
+    story = {
+        "style_contract": {
+            "风格名": "国漫写实",
+            "style_anchor": [rel],
+        }
+    }
+
+    registry = image_prompt_pack.style_anchor_registry(tmp_path, story)
+
+    selected = registry["selected_anchor"]
+    assert registry["kind"] == "n2d_style_anchor_registry"
+    assert selected["path"] == rel
+    assert selected["status"] == "ready"
+    assert selected["use_policy"] == "style_only"
+    assert selected["identity_policy"] == "do_not_clone_face_or_costume"
+    assert selected["sha256"] == image_prompt_pack.sha256_file(anchor)
 
 
 def test_dict_asset_requirements_canonicalize_human_aliases() -> None:
@@ -176,7 +286,28 @@ def test_material_list_supplies_asset_names_and_prompts(tmp_path: Path) -> None:
     assert "PROP GREEN WATER" not in defs["PROP_GREEN_WATER"]["positive"]
 
 
-def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
+def test_project_asset_hints_prevent_ascii_id_display_names(tmp_path: Path) -> None:
+    story = {"clips": [{"object_ids": ["PROP_IRON_BOWL", "PROP_EMPTY_BUCKETS", "PROP_RUST_LOCK"]}]}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    assert defs["PROP_IRON_BOWL"]["name"] == "旧铁碗"
+    assert defs["PROP_EMPTY_BUCKETS"]["name"] == "空木桶"
+    assert defs["PROP_RUST_LOCK"]["name"] == "生锈铁锁"
+    assert defs["PROP_RUST_LOCK"]["weapon_like_role"] == "not_entity_weapon"
+
+
+def test_derived_scene_drift_uses_generic_continuity_not_stale_wildland(tmp_path: Path) -> None:
+    story = {"clips": [{"location_id": "LOC_UNKNOWN_HALL"}]}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+    drift = "；".join(defs["LOC_UNKNOWN_HALL"]["drift"])
+
+    assert "巨岩/尸堆" not in drift
+    assert "空间轴线" in drift
+
+
+def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Path) -> None:
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
         image_prompt_pack.ASSET_DEFS = {
@@ -219,6 +350,7 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
 
         scene_prompt = image_prompt_pack.shared_scene_prompt({})
         asset_prompt = image_prompt_pack.shared_asset_prompt("prop", "道具定妆", ["PROP_TEST"])
+        registry = image_prompt_pack.build_asset_registry(tmp_path)
     finally:
         image_prompt_pack.ASSET_DEFS = old_defs
 
@@ -228,6 +360,12 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints() -> None:
     assert "黑色交领窄袖、束腰、衣襟袖口克制暗红纹样" in asset_prompt
     assert "无脸人台或折叠衣物尺度参考" in asset_prompt
     assert "资产参考图默认不生成未绑定身份的清晰人物脸" in asset_prompt
+    scene_asset = next(item for item in registry["assets"] if item["id"] == "LOC_TEST")
+    signature = scene_asset["constraints"]["lighting_signature"]
+    assert signature["color_temperature"] == "mixed_cool_warm"
+    assert signature["key_light_direction"] == "right"
+    assert "mean_hue" not in signature
+    assert signature["numeric_measurement"] == "pending_after_landed_frame_qc"
 
 
 def test_magic_prop_keeps_weapon_profile_in_asset_registry(tmp_path: Path) -> None:
@@ -373,6 +511,55 @@ def test_shot_prompt_section_emits_identity_lock_phrase_and_lens_params(tmp_path
     assert "\n身份锁定句：" in text
     assert "`CHAR_SHEN_YAN/常态` 必须与人物定妆和脸部特写参考保持同一张脸" in text
     assert "物理镜头参数：85mm, f/1.8" in text
+
+
+def test_shot_prompt_section_sanitizes_false_screen_director_injection(tmp_path: Path) -> None:
+    clip = {
+        "id": "EP01_CLIP05",
+        "label": "挑水压迫蒙太奇",
+        "template": "labor_montage",
+        "character_ids": ["CHAR_HE_PINGSHENG"],
+        "object_ids": ["PROP_WATER_BUCKETS"],
+        "continuity": {"shot_size": "CU", "need_endframe": True},
+        "description": "扁担压肩、水桶溢水、脚步打滑三连剪。",
+    }
+    drow = {"image_prompt_injection": {
+        "镜头/机位": "CU",
+        "起幅·运动余量": "为「固定机位，锁定屏幕/光幕平面，不漂移，只允许轻微呼吸式微动」预留前景/背景运动余量。",
+        "导演意图": "屏幕/面板镜以可读性为第一目标，固定机位避免文字和 UI 漂移。",
+    }}
+
+    text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clip, drow, {"clips": [clip]})
+
+    assert "屏幕/面板镜" not in text
+    assert "锁定屏幕/光幕平面" not in text
+    assert "挑水蒙太奇以身体代价为第一目标" in text
+
+
+def test_nonfinal_endframe_exemption_is_not_called_final_shot(tmp_path: Path) -> None:
+    clips = [
+        {
+            "id": "EP01_CLIP01",
+            "character_ids": ["CHAR_HE_PINGSHENG"],
+            "continuity": {
+                "shot_size": "CU",
+                "need_endframe": False,
+                "endframe_exempt_reason": "快闪到夜路为空间跳转，用空镜缓冲。",
+            },
+            "description": "破旧包袱快闪。",
+        },
+        {
+            "id": "EP01_CLIP02",
+            "character_ids": ["CHAR_HE_PINGSHENG"],
+            "continuity": {"shot_size": "CU", "need_endframe": False},
+            "description": "最终硬断。",
+        },
+    ]
+
+    text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clips[0], {}, {"clips": clips})
+
+    assert "本镜尾帧豁免" in text
+    assert "末镜无尾帧" not in text
 
 
 def test_hand_ownership_directive_supplies_lint_contract() -> None:

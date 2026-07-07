@@ -1,0 +1,22 @@
+{
+  "confirmations": [
+    {
+      "char": "CHAR_HE_PINGSHENG__常态",
+      "confirmed_at": "2026-07-07T12:09:22+00:00",
+      "floor": 0.4533,
+      "original_verdict": "warn",
+      "png": "图片/Clip01_first.png",
+      "png_sha256": "fa332ffdf7f007d9f52178d1374beb87dfba98a55046e1c17f201f29d4376378",
+      "reason": "人工目检当前PNG：贺平生眼鼻嘴三角区、发髻、破旧灰青衣与少年体态可辨；机检分数0.4109接近0.4533阈值，warn主要来自低头侧前角度和多人同框。",
+      "reviewer": "Codex",
+      "score": 0.4109,
+      "score_vs_main": 0.3999,
+      "shot": "Clip_01",
+      "source": "image_qc:manual_face_confirm",
+      "verdict": "ok"
+    }
+  ],
+  "kind": "n2d_face_confirmations",
+  "updated_at": "2026-07-07T12:09:22+00:00",
+  "version": 1
+}

@@ -72,6 +72,20 @@ def main() -> int:
         print(f"[comic-batch] next stage is {stage}; use the matching comic-* skill first", flush=True)
         return 2
 
+    preflight = [
+        sys.executable,
+        "skills/comic-review/scripts/gate.py",
+        str(root),
+        "--chapter",
+        args.chapter,
+        "--stage",
+        "image_preflight",
+    ]
+    rc = run_cmd(preflight, repo)
+    if rc != 0:
+        print("[comic-batch] image_preflight gate blocked; fix findings before paid/batch image generation", flush=True)
+        return rc
+
     cmd = [
         sys.executable,
         "skills/comic-image/scripts/codex_panel_runner.py",
@@ -89,7 +103,19 @@ def main() -> int:
         cmd.extend(["--limit", str(args.limit)])
     if args.force:
         cmd.append("--force")
-    return run_cmd(cmd, repo)
+    rc = run_cmd(cmd, repo)
+    if rc != 0:
+        return rc
+    image_gate = [
+        sys.executable,
+        "skills/comic-review/scripts/gate.py",
+        str(root),
+        "--chapter",
+        args.chapter,
+        "--stage",
+        "image",
+    ]
+    return run_cmd(image_gate, repo)
 
 
 if __name__ == "__main__":

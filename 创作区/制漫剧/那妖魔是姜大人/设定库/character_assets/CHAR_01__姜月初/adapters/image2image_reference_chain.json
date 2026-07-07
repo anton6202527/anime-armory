@@ -1,0 +1,136 @@
+{
+  "character_id": "CHAR_01",
+  "generated_at": "2026-07-07T04:00:49+00:00",
+  "image": {
+    "囚犯初醒态": {
+      "codex": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "dreamina": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "kling": {
+        "mode": "character_id",
+        "status": "unregistered"
+      },
+      "openai": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "seedream": {
+        "mode": "universal_reference",
+        "status": "unregistered"
+      },
+      "sora": {
+        "mode": "character_cameo",
+        "status": "unregistered"
+      }
+    },
+    "镇魔司伪装态": {
+      "codex": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "dreamina": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "kling": {
+        "mode": "character_id",
+        "status": "unregistered"
+      },
+      "openai": {
+        "actual_image_input_required": true,
+        "evidence": "2026-07-05 用户确认本机 LoRA 过慢后放弃，改走共享定妆 + 脸部特写 + 同源表情库 + Codex/GPT Image 2 真实图片入参 manifest + full image_qc 回验；见 _进度.md 第3集当前状态与 生产数据/codex_reference_bundles/第3集。",
+        "full_qc_required": true,
+        "mode": "image2image_reference_chain",
+        "reference_manifest_required": true,
+        "status": "ready",
+        "updated_at": "2026-07-06T07:30:05+00:00"
+      },
+      "seedream": {
+        "mode": "universal_reference",
+        "status": "unregistered"
+      },
+      "sora": {
+        "mode": "character_cameo",
+        "status": "unregistered"
+      }
+    }
+  },
+  "kind": "n2d_character_identity_adapter_index",
+  "version": 1,
+  "video": {
+    "囚犯初醒态": {
+      "dreamina": {
+        "mode": "first_last_frame",
+        "status": "fallback_reference_group"
+      },
+      "kling": {
+        "mode": "character_id",
+        "status": "unregistered"
+      },
+      "seedance": {
+        "mode": "face_lock",
+        "status": "unregistered"
+      },
+      "sora": {
+        "mode": "character_cameo",
+        "status": "unregistered"
+      },
+      "veo": {
+        "mode": "reference_controls",
+        "status": "unregistered"
+      }
+    },
+    "镇魔司伪装态": {
+      "dreamina": {
+        "mode": "first_last_frame",
+        "status": "fallback_reference_group"
+      },
+      "kling": {
+        "mode": "character_id",
+        "status": "unregistered"
+      },
+      "seedance": {
+        "mode": "face_lock",
+        "status": "unregistered"
+      },
+      "sora": {
+        "mode": "character_cameo",
+        "status": "unregistered"
+      },
+      "veo": {
+        "mode": "reference_controls",
+        "status": "unregistered"
+      }
+    }
+  }
+}

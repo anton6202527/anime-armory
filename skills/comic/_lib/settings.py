@@ -22,16 +22,19 @@ DEFAULTS = {
     "页面尺寸": "1440xauto",
     "单话分段高度": "0",
     "基础视觉风格": "彩色国漫条漫",
+    "风格锚": "未指定",
     "生图模型": "GPT Image 2",
     "生图渠道": "Codex CLI",
     "生图AI": "Codex",
     "参考一致性策略": "共享参考图",
     "定妆级别": "长线专门定妆",
+    "年龄形态继承": "关闭",
+    "角色一致性硬闸": "关闭",
     "文字语言": "中文",
     "嵌字方式": "后期嵌字",
     "导出格式": "webp+png",
     "发行地区": "未指定",
-    "合规用途": "自用草稿",
+    "合规用途": "demo学习",
 }
 
 VISUAL_STYLE_PRESETS = (
@@ -129,6 +132,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
         parameterized=True,
         freeform=True,
     ),
+    SettingSpec("风格锚", ("comic",), parameterized=True, freeform=True),
     SettingSpec(
         "生图模型",
         ("comic",),
@@ -158,6 +162,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
         key_aliases=("角色定妆级别", "角色定妆策略"),
         parameterized=True,
     ),
+    SettingSpec("年龄形态继承", ("comic",), ("开启", "关闭"), key_aliases=("形态继承", "年龄继承")),
+    SettingSpec("角色一致性硬闸", ("comic",), ("开启", "关闭"), key_aliases=("一致性硬闸", "角色硬闸")),
     SettingSpec(
         "文字语言",
         ("comic",),
@@ -168,7 +174,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("嵌字方式", ("comic",), ("后期嵌字", "手工嵌字", "图像内文字"), sensitive=True),
     SettingSpec("导出格式", ("comic",), ("webp+png", "png", "webp", "jpg", "pdf", "自定义"), parameterized=True),
     SettingSpec("发行地区", ("comic",), ("未指定", "中国大陆", "港澳台", "北美", "全球", "自定义"), parameterized=True, sensitive=True),
-    SettingSpec("合规用途", ("comic",), ("自用草稿", "发布候选", "商用", "授权交付", "自定义"), parameterized=True, sensitive=True),
+    SettingSpec("合规用途", ("comic",), ("demo学习", "自用草稿", "发布候选", "商用", "授权交付", "自定义"), parameterized=True, sensitive=True),
 )
 
 SETTING_LINE_RE = re.compile(
@@ -531,18 +537,23 @@ def sync_global_settings(work_root: str, fields: Dict[str, str]) -> str:
     lines = content.splitlines()
     for key, value in fields.items():
         canonical = canonical_setting_key(key, detect_family(work_root))
+        normalized_value = normalize_setting_value(canonical, value)
         pattern = re.compile(rf"^(\s*[-*]\s*(?:\*\*)?{re.escape(canonical)}(?:\*\*)?\s*[:：]\s*)(.+)$")
         replaced = False
-        for i, line in enumerate(lines):
+        kept: List[str] = []
+        for line in lines:
             match = pattern.match(line)
             if match:
-                lines[i] = f"{match.group(1)}{value}"
-                replaced = True
-                break
+                if not replaced:
+                    kept.append(f"{match.group(1)}{normalized_value}")
+                    replaced = True
+                continue
+            kept.append(line)
+        lines = kept
         if not replaced:
             if lines and lines[-1].strip():
                 lines.append("")
-            lines.append(f"- {canonical}: {value}")
+            lines.append(f"- {canonical}: {normalized_value}")
     with open(global_path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines).rstrip() + "\n")
     return global_path
@@ -585,6 +596,25 @@ def normalize_setting_value(key: str, value: str) -> str:
             "英中": "英上中下",
             "英上中下": "英上中下",
             "英文上中文下": "英上中下",
+        }
+        if lowered in aliases:
+            return aliases[lowered]
+    if key == "合规用途":
+        lowered = _norm(normalized)
+        aliases = {
+            "demo": "demo学习",
+            "demo学习": "demo学习",
+            "学习demo": "demo学习",
+            "做demo学习使用": "demo学习",
+            "学习使用": "demo学习",
+            "内部demo": "demo学习",
+            "internal_only": "demo学习",
+            "internal only": "demo学习",
+            "draft": "demo学习",
+            "preview": "demo学习",
+            "test": "demo学习",
+            "自用": "自用草稿",
+            "自用草稿": "自用草稿",
         }
         if lowered in aliases:
             return aliases[lowered]

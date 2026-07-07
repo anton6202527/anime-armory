@@ -377,6 +377,38 @@ SPECTACLE_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     ),
 }
 
+COMPACT_NARRATIVE_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
+    # Vertical n2d episodes often need tight narrative-compression templates
+    # that are not high-motion spectacles but still carry prompt-critical
+    # blocking, beat, and continuity contracts.
+    "task_order": TEMPLATE_BASE_FIELDS + (
+        "post_cue_points",
+        "character_slots",
+        "same_frame_policy",
+        "overlap_rules",
+        "face_priority",
+    ),
+    "compressed_flashback": TEMPLATE_BASE_FIELDS + (
+        "post_cue_points",
+        "character_slots",
+        "same_frame_policy",
+        "overlap_rules",
+        "face_priority",
+    ),
+    "night_route_choice": TEMPLATE_BASE_FIELDS + (
+        "post_cue_points",
+    ),
+    "labor_montage": TEMPLATE_BASE_FIELDS + (
+        "post_cue_points",
+        "degrade_plan",
+    ),
+    "object_discovery": TEMPLATE_BASE_FIELDS + (
+        "evidence_chain",
+        "post_cue_points",
+        "vfx_rule",
+    ),
+}
+
 LARGE_ESTABLISHING_FIELDS: Tuple[str, ...] = (
     "geography_map",
     "scale_reference",
@@ -586,6 +618,8 @@ def action_choreography_required_fields(shot_type: str) -> Tuple[str, ...]:
 def spectacle_required_fields(kind: str) -> Tuple[str, ...]:
     if kind in SPECTACLE_TEMPLATE_FIELDS:
         return SPECTACLE_TEMPLATE_FIELDS[kind]
+    if kind in COMPACT_NARRATIVE_TEMPLATE_FIELDS:
+        return COMPACT_NARRATIVE_TEMPLATE_FIELDS[kind]
     if kind == "large_establishing":
         return LARGE_ESTABLISHING_FIELDS
     return ()

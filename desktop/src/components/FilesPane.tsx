@@ -25,12 +25,13 @@ import {
   renameWorkEntry,
   revealWorkEntry,
   subscribeMediaPort,
-  workDeleted,
   workDir,
 } from "../api";
+import { buildWorkTreeDecorations, type WorkTreeDecoration } from "../explorerDecorations";
 import { useI18n } from "../i18n";
 import { activeSkin, type FileIconKind } from "../skins";
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
+import { Codicon } from "./Codicon";
 
 const MonacoFileEditor = lazy(() =>
   import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
@@ -62,6 +63,7 @@ type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "text";
 type ContextMenuState = { x: number; y: number; entry: SkillTreeEntry | null };
 type DirPageState = { loaded: number; total: number; hasMore: boolean; loading?: boolean };
 type Size = { width: number; height: number };
+type EditorTab = { path: string; pinned: boolean };
 
 function ext(name: string): string {
   const i = name.lastIndexOf(".");
@@ -71,6 +73,11 @@ function ext(name: string): string {
 function parentRel(path: string): string {
   const i = path.lastIndexOf("/");
   return i < 0 ? "" : path.slice(0, i);
+}
+
+function basename(path: string): string {
+  const i = path.lastIndexOf("/");
+  return i < 0 ? path : path.slice(i + 1);
 }
 
 function shellQuote(value: string): string {
@@ -154,10 +161,6 @@ function TreeIcon({ entry, collapsed }: { entry: SkillTreeEntry; collapsed: bool
   );
 }
 
-function hasChangeStatus(status?: string): boolean {
-  return status === "u" || status === "m";
-}
-
 function treeGuideStyle(depth: number): CSSProperties {
   if (depth <= 0) return {};
   const guide = "linear-gradient(var(--tree-indent-guide), var(--tree-indent-guide))";
@@ -228,20 +231,36 @@ function makeLoadMoreEntry(dir: string, page: DirPageState): SkillTreeEntry {
   };
 }
 
+function decorationTitle(
+  t: ReturnType<typeof useI18n>["t"],
+  entry: SkillTreeEntry,
+  decoration: WorkTreeDecoration,
+): string {
+  const kind =
+    decoration.kind === "modified"
+      ? t("files.decoration.modified")
+      : decoration.kind === "deleted"
+        ? t("files.decoration.deleted")
+        : t("files.decoration.untracked");
+  return entry.is_dir || decoration.rollup
+    ? t("files.decoration.folderTitle", { path: entry.path, kind })
+    : t("files.decoration.fileTitle", { path: entry.path, kind });
+}
+
 export function FilesPane({
   root,
   refreshKey,
-  initialChangeCount,
   allowNovelImport = false,
   active = true,
+  sideVisible = true,
   onImported,
   onOpenTerminal,
 }: {
   root: WorkRoot;
   refreshKey: number;
-  initialChangeCount?: number;
   allowNovelImport?: boolean;
   active?: boolean;
+  sideVisible?: boolean;
   onImported?: (result: ImportWorkSourcesResult) => void;
   onOpenTerminal?: (command?: string) => void;
 }) {
@@ -255,11 +274,11 @@ export function FilesPane({
   const collapsedDirsRef = useRef<Set<string>>(new Set());
   const [tree, setTree] = useState<SkillTreeEntry[]>([]);
   const [dirPages, setDirPages] = useState<Map<string, DirPageState>>(() => new Map());
-  const [deleted, setDeleted] = useState<string[]>([]);
   const [collapsedDirs, setCollapsedDirs] = useState<Set<string>>(() => new Set());
   const [treeScrollTop, setTreeScrollTop] = useState(0);
   const [treeViewportHeight, setTreeViewportHeight] = useState(0);
   const [sel, setSel] = useState<string>(""); // selected file's rel path
+  const [tabs, setTabs] = useState<EditorTab[]>([]);
   const [focusedPath, setFocusedPath] = useState<string>("");
   const [text, setText] = useState<string>("");
   const [err, setErr] = useState<string>("");
@@ -327,6 +346,7 @@ export function FilesPane({
   useEffect(() => {
     setCollapsedDirs(new Set());
     setSel("");
+    setTabs([]);
     setFocusedPath("");
     setText("");
     setErr("");
@@ -336,7 +356,6 @@ export function FilesPane({
     setEditorDirty(false);
     setTree([]);
     setDirPages(new Map());
-    setDeleted([]);
     setTreeScrollTop(0);
     treeScrollRef.current?.scrollTo({ top: 0 });
     previewCacheRef.current.clear();
@@ -405,10 +424,13 @@ export function FilesPane({
         const loadedOpenDirs = [...dirPagesRef.current.keys()]
           .filter((dir) => dir && !collapsedDirsRef.current.has(dir))
           .sort((a, b) => directChildDepth(a) - directChildDepth(b));
-        const [listing, nextDeleted] = await Promise.all([
-          workDir(root.path, "", 0, TREE_PAGE_LIMIT).catch(() => ({ entries: [], total: 0, offset: 0, limit: TREE_PAGE_LIMIT, has_more: false })),
-          workDeleted(root.path).catch(() => [] as string[]),
-        ]);
+        const listing = await workDir(root.path, "", 0, TREE_PAGE_LIMIT).catch(() => ({
+          entries: [],
+          total: 0,
+          offset: 0,
+          limit: TREE_PAGE_LIMIT,
+          has_more: false,
+        }));
         if (!alive) return;
         const rootPage: DirPageState = {
           loaded: listing.entries.length,
@@ -438,7 +460,6 @@ export function FilesPane({
         }
         setTree(nextTree);
         setDirPages(nextPages);
-        setDeleted(nextDeleted);
         if (!collapseInitializedRef.current) {
           collapseInitializedRef.current = true;
           setCollapsedDirs(new Set(listing.entries.filter((e) => e.is_dir && e.depth === 0).map((e) => e.path)));
@@ -452,15 +473,24 @@ export function FilesPane({
     };
   }, [root.path, refreshKey, localRefresh]);
 
-  const changedFileCount = useMemo(
-    () => tree.filter((e) => !e.is_dir && !e.truncated && hasChangeStatus(e.status)).length,
-    [tree],
-  );
-  const scannedChangeCount = changedFileCount + deleted.length;
-  const changeCount = initialChangeCount ?? scannedChangeCount;
+  const treeDecorations = useMemo(() => buildWorkTreeDecorations(tree), [tree]);
+  const treeByPath = useMemo(() => new Map(tree.map((entry) => [entry.path, entry])), [tree]);
 
   function absPath(rel: string): string {
     return rel ? `${root.path}/${rel}` : root.path;
+  }
+
+  function entryForPath(path: string): SkillTreeEntry | null {
+    if (!path) return null;
+    const entry = treeByPath.get(path);
+    if (entry) return entry;
+    return {
+      name: basename(path),
+      path,
+      depth: path.split("/").filter(Boolean).length - 1,
+      is_dir: false,
+      status: "",
+    };
   }
 
   function entryTerminalDir(entry: SkillTreeEntry | null): string {
@@ -501,8 +531,7 @@ export function FilesPane({
           };
       const imported = result.imported;
       if (imported[0]) {
-        setSel(imported[0]);
-        setFocusedPath(imported[0]);
+        openFileTab(imported[0], true);
       }
       setImportNotice(t("files.importedNovel", { count: imported.length }));
       onImported?.(result);
@@ -539,6 +568,95 @@ export function FilesPane({
 
   const canImportNovel = active && allowNovelImport && tree.length === 0;
 
+  function confirmDiscardForSwitch(nextPath: string): boolean {
+    if (!editorDirty || nextPath === sel) return true;
+    const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
+    if (ok) setEditorDirty(false);
+    return ok;
+  }
+
+  function openFileTab(path: string, pinned: boolean) {
+    if (!path || !confirmDiscardForSwitch(path)) return;
+    setFocusedPath(path);
+    setSel(path);
+    setTabs((prev) => {
+      const existingIndex = prev.findIndex((tab) => tab.path === path);
+      if (existingIndex >= 0) {
+        return prev.map((tab, index) =>
+          index === existingIndex ? { ...tab, pinned: tab.pinned || pinned } : tab,
+        );
+      }
+      if (pinned) return [...prev, { path, pinned: true }];
+      const previewIndex = prev.findIndex((tab) => !tab.pinned);
+      if (previewIndex < 0) return [...prev, { path, pinned: false }];
+      const next = [...prev];
+      next[previewIndex] = { path, pinned: false };
+      return next;
+    });
+  }
+
+  function closeEditorTab(path: string) {
+    const index = tabs.findIndex((tab) => tab.path === path);
+    if (index < 0) return;
+    if (editorDirty && sel === path) {
+      const ok = window.confirm(t("files.discardUnsavedConfirm", { path }));
+      if (!ok) return;
+      setEditorDirty(false);
+    }
+    const nextTabs = tabs.filter((tab) => tab.path !== path);
+    setTabs(nextTabs);
+    if (sel !== path) return;
+    const nextActive = nextTabs[Math.min(index, nextTabs.length - 1)] ?? null;
+    setSel(nextActive?.path ?? "");
+    setFocusedPath(nextActive?.path ?? "");
+    if (!nextActive) {
+      setText("");
+      setErr("");
+    }
+  }
+
+  function removeEntryTabs(entry: SkillTreeEntry) {
+    const matches = (path: string) => path === entry.path || (entry.is_dir && path.startsWith(`${entry.path}/`));
+    const removedActive = sel ? matches(sel) : false;
+    const firstRemovedIndex = Math.max(0, tabs.findIndex((tab) => matches(tab.path)));
+    const nextTabs = tabs.filter((tab) => !matches(tab.path));
+    setTabs(nextTabs);
+    if (removedActive) {
+      const nextActive = nextTabs[Math.min(firstRemovedIndex, nextTabs.length - 1)] ?? null;
+      setSel(nextActive?.path ?? "");
+      setFocusedPath(nextActive?.path ?? "");
+      setEditorDirty(false);
+      if (!nextActive) {
+        setText("");
+        setErr("");
+      }
+    }
+  }
+
+  function renameOpenTabs(entry: SkillTreeEntry, nextRel: string) {
+    const renamedPath = (path: string): string | null => {
+      if (path === entry.path) return entry.is_dir ? null : nextRel;
+      if (entry.is_dir && path.startsWith(`${entry.path}/`)) return `${nextRel}${path.slice(entry.path.length)}`;
+      return path;
+    };
+    setTabs((prev) =>
+      prev
+        .map((tab) => {
+          const path = renamedPath(tab.path);
+          return path ? { ...tab, path } : null;
+        })
+        .filter((tab): tab is EditorTab => Boolean(tab)),
+    );
+    if (sel) {
+      const nextSel = renamedPath(sel);
+      setSel(nextSel ?? "");
+    }
+    if (focusedPath) {
+      const nextFocused = renamedPath(focusedPath);
+      setFocusedPath(nextFocused ?? "");
+    }
+  }
+
   useEffect(() => {
     if (!canImportNovel) return;
     const webview = getCurrentWebview();
@@ -564,10 +682,7 @@ export function FilesPane({
   function openContextMenu(ev: React.MouseEvent, entry: SkillTreeEntry | null) {
     ev.preventDefault();
     ev.stopPropagation();
-    if (entry) {
-      setFocusedPath(entry.path);
-      if (!entry.is_dir) setSel(entry.path);
-    }
+    if (entry) setFocusedPath(entry.path);
     setMenu({
       x: Math.min(ev.clientX, Math.max(0, window.innerWidth - 260)),
       y: Math.min(ev.clientY, Math.max(0, window.innerHeight - 360)),
@@ -595,8 +710,8 @@ export function FilesPane({
       if (parent) next.delete(parent);
       return next;
     });
-    if (kind === "file") setSel(rel);
-    setFocusedPath(rel);
+    if (kind === "file") openFileTab(rel, true);
+    else setFocusedPath(rel);
     refreshFiles();
   }
 
@@ -609,10 +724,7 @@ export function FilesPane({
     const nextName = window.prompt(t("files.renamePrompt"), entry.name);
     if (!nextName || nextName === entry.name) return;
     const nextRel = await renameWorkEntry(root.path, entry.path, nextName);
-    if (sel === entry.path) setSel(entry.is_dir ? "" : nextRel);
-    else if (entry.is_dir && sel.startsWith(`${entry.path}/`)) setSel("");
-    if (focusedPath === entry.path) setFocusedPath(nextRel);
-    else if (entry.is_dir && focusedPath.startsWith(`${entry.path}/`)) setFocusedPath("");
+    renameOpenTabs(entry, nextRel);
     refreshFiles();
   }
 
@@ -625,7 +737,7 @@ export function FilesPane({
     const ok = window.confirm(t("files.deleteConfirm", { path: entry.path }));
     if (!ok) return;
     await deleteWorkEntry(root.path, entry.path);
-    if (sel === entry.path || sel.startsWith(`${entry.path}/`)) setSel("");
+    removeEntryTabs(entry);
     if (focusedPath === entry.path || focusedPath.startsWith(`${entry.path}/`)) setFocusedPath("");
     refreshFiles();
   }
@@ -645,7 +757,7 @@ export function FilesPane({
     [treeEndIndex, treeStartIndex, visibleTree],
   );
   const virtualTreeHeight = visibleTree.length * TREE_ROW_HEIGHT;
-  const selEntry = useMemo(() => tree.find((e) => e.path === sel) || null, [tree, sel]);
+  const selEntry = useMemo(() => entryForPath(sel), [treeByPath, sel]);
   const kind = selEntry ? previewKind(selEntry.name) : "";
   const abs = selEntry ? `${root.path}/${selEntry.path}` : "";
   const previewVersion = selEntry
@@ -787,13 +899,12 @@ export function FilesPane({
       toggleDir(entry.path);
       return;
     }
-    if (editorDirty && entry.path !== sel) {
-      const ok = window.confirm(t("files.discardUnsavedConfirm", { path: sel }));
-      if (!ok) return;
-      setEditorDirty(false);
-    }
-    setFocusedPath(entry.path);
-    setSel(entry.path);
+    openFileTab(entry.path, false);
+  }
+
+  function pinEntryTab(entry: SkillTreeEntry) {
+    if (entry.truncated || entry.is_dir || isLoadMoreEntry(entry)) return;
+    openFileTab(entry.path, true);
   }
 
   function onEntryKeyDown(e: React.KeyboardEvent<HTMLDivElement>, entry: SkillTreeEntry) {
@@ -832,7 +943,11 @@ export function FilesPane({
 
   return (
     <div
-      className={"files-pane" + (canImportNovel && draggingNovel ? " dragging-import" : "")}
+      className={
+        "files-pane" +
+        (sideVisible ? "" : " files-pane-side-hidden") +
+        (canImportNovel && draggingNovel ? " dragging-import" : "")
+      }
       ref={paneRef}
       onDragOver={(event) => {
         if (!canImportNovel) return;
@@ -854,198 +969,278 @@ export function FilesPane({
         }
       }}
     >
-      <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
-        <div className="files-toolbar">
-          <span className={"files-change-count" + (changeCount ? " dirty" : "")}>
-            {changeCount ? t("files.changeCount", { count: changeCount }) : t("files.noChanges")}
-          </span>
-        </div>
-        <div
-          className="files-tree"
-          role="tree"
-          ref={treeScrollRef}
-          onScroll={(event) => setTreeScrollTop(event.currentTarget.scrollTop)}
-          onContextMenu={(event) => openContextMenu(event, null)}
-        >
-          {tree.length === 0 && (
-            <div className={"files-empty" + (canImportNovel ? " import-empty" : "")}>
-              {canImportNovel ? (
-                <>
-                  <div className="import-empty-title">{t("files.importNovelTitle")}</div>
-                  <div className="import-empty-hint">{t("files.importNovelHint")}</div>
-                  <button type="button" className="import-file-btn" disabled={importing} onClick={chooseNovelFiles}>
-                    {importing ? t("files.importing") : t("files.importNovelButton")}
-                  </button>
-                  {importNotice && <div className="import-empty-notice">{importNotice}</div>}
-                </>
-              ) : (
-                t("common.emptyDir")
+      {sideVisible && (
+        <>
+          <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
+            <div
+              className="files-tree"
+              role="tree"
+              ref={treeScrollRef}
+              onScroll={(event) => setTreeScrollTop(event.currentTarget.scrollTop)}
+              onContextMenu={(event) => openContextMenu(event, null)}
+            >
+              {tree.length === 0 && (
+                <div className={"files-empty" + (canImportNovel ? " import-empty" : "")}>
+                  {canImportNovel ? (
+                    <>
+                      <div className="import-empty-title">{t("files.importNovelTitle")}</div>
+                      <div className="import-empty-hint">{t("files.importNovelHint")}</div>
+                      <button type="button" className="import-file-btn" disabled={importing} onClick={chooseNovelFiles}>
+                        {importing ? t("files.importing") : t("files.importNovelButton")}
+                      </button>
+                      {importNotice && <div className="import-empty-notice">{importNotice}</div>}
+                    </>
+                  ) : (
+                    t("common.emptyDir")
+                  )}
+                </div>
               )}
-            </div>
-          )}
-          {tree.length > 0 && (
-            <div className="files-tree-spacer" style={{ height: virtualTreeHeight }}>
-              {virtualRows.map(({ entry: e, index }) => {
-                if (e.truncated) {
-                  return (
-                    <div
-                      key={e.path}
-                      className="tree-line tree-limit"
-                      style={{ transform: `translateY(${index * TREE_ROW_HEIGHT}px)` }}
-                      role="note"
-                      title={t("files.treeCapped", { count: e.size ?? visibleTree.length })}
-                    >
-                      <span className="tree-disclosure placeholder" aria-hidden="true" />
-                      <span className="tree-label">
-                        {t("files.treeCapped", { count: e.size ?? visibleTree.length })}
-                      </span>
-                    </div>
-                  );
-                }
-                const collapsed = e.is_dir && collapsedDirs.has(e.path);
-                const active = e.path === sel || e.path === focusedPath;
-                return (
-                  <div
-                    key={e.path}
-                    className={
-                      "tree-line" + (e.is_dir ? " dir" : "") + (active ? " active" : "")
+              {tree.length > 0 && (
+                <div className="files-tree-spacer" style={{ height: virtualTreeHeight }}>
+                  {virtualRows.map(({ entry: e, index }) => {
+                    if (e.truncated) {
+                      return (
+                        <div
+                          key={e.path}
+                          className="tree-line tree-limit"
+                          style={{ transform: `translateY(${index * TREE_ROW_HEIGHT}px)` }}
+                          role="note"
+                          title={t("files.treeCapped", { count: e.size ?? visibleTree.length })}
+                        >
+                          <span className="tree-disclosure placeholder" aria-hidden="true" />
+                          <span className="tree-label">
+                            {t("files.treeCapped", { count: e.size ?? visibleTree.length })}
+                          </span>
+                        </div>
+                      );
                     }
-                    style={{
-                      ...treeGuideStyle(e.depth),
-                      paddingLeft: TREE_BASE_PADDING + e.depth * TREE_INDENT,
-                      transform: `translateY(${index * TREE_ROW_HEIGHT}px)`,
-                    }}
-                    onClick={() => activateEntry(e)}
-                    onContextMenu={(event) => openContextMenu(event, e)}
-                    onKeyDown={(event) => onEntryKeyDown(event, e)}
-                    role="treeitem"
-                    aria-expanded={e.is_dir ? !collapsed : undefined}
-                    aria-selected={active}
-                    tabIndex={0}
-                    title={
-                      e.is_dir
-                        ? t("files.dirToggleTitle", {
-                            path: e.path,
-                            action: collapsed ? t("common.expand") : t("common.collapse"),
-                          })
-                        : e.path
-                    }
-                  >
-                    <span
-                      className={
-                        "tree-disclosure" + (e.is_dir ? (collapsed ? " collapsed" : " expanded") : " placeholder")
-                      }
-                      aria-hidden="true"
-                    />
-                    <TreeIcon entry={e} collapsed={collapsed} />
-                    <span className="tree-label">{e.name}</span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-      <div
-        className="files-splitter"
-        role="separator"
-        aria-orientation="vertical"
-        aria-label={t("files.resizeAria")}
-        title={t("files.resizeTitle")}
-        onPointerDown={startSideResize}
-        onDoubleClick={() => {
-          setSideWidth(null);
-          window.localStorage.removeItem("aa.files.sideWidth");
-          window.dispatchEvent(new Event("resize"));
-        }}
-      />
-      <div className="files-preview">
-        {!selEntry ? (
-          <div className="files-empty">{t("files.selectFile")}</div>
-        ) : kind === "img" ? (
-          <div className="files-image-preview">
-            <div className="files-image-toolbar">
-              <span className="files-image-title" title={selEntry.path}>{selEntry.name}</span>
-              <div className="files-image-controls">
-                <button
-                  type="button"
-                  aria-label={t("files.zoomOut")}
-                  title={t("files.zoomOut")}
-                  disabled={!imageNatural || imageZoom <= IMAGE_ZOOM_MIN}
-                  onClick={() => zoomImage(1 / 1.2)}
-                >
-                  −
-                </button>
-                <button
-                  type="button"
-                  className="files-image-zoom-value"
-                  aria-label={t("files.zoomReset")}
-                  title={t("files.zoomReset")}
-                  disabled={!imageNatural}
-                  onClick={resetImageZoom}
-                >
-                  {imageZoomPercent}%
-                </button>
-                <button
-                  type="button"
-                  aria-label={t("files.zoomIn")}
-                  title={t("files.zoomIn")}
-                  disabled={!imageNatural || imageZoom >= IMAGE_ZOOM_MAX}
-                  onClick={() => zoomImage(1.2)}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            <div className="files-media files-image-stage" ref={imageStageRef} onWheel={onImageWheel}>
-              {abs && (
-                <div className="files-image-frame" style={imageFrameStyle}>
-                  <img
-                    className="files-zoom-image"
-                    src={mediaSrc(abs)}
-                    alt={selEntry.name}
-                    style={imageStyle}
-                    onLoad={(event) => {
-                      const img = event.currentTarget;
-                      setImageNatural({
-                        width: img.naturalWidth || img.width || 1,
-                        height: img.naturalHeight || img.height || 1,
-                      });
-                    }}
-                  />
+                    const collapsed = e.is_dir && collapsedDirs.has(e.path);
+                    const active = e.path === sel || e.path === focusedPath;
+                    const decoration = treeDecorations.get(e.path);
+                    return (
+                      <div
+                        key={e.path}
+                        className={
+                          "tree-line" +
+                          (e.is_dir ? " dir" : "") +
+                          (active ? " active" : "") +
+                          (decoration ? ` decorated decoration-${decoration.kind}` : "")
+                        }
+                        style={{
+                          ...treeGuideStyle(e.depth),
+                          paddingLeft: TREE_BASE_PADDING + e.depth * TREE_INDENT,
+                          transform: `translateY(${index * TREE_ROW_HEIGHT}px)`,
+                        }}
+                        onClick={() => activateEntry(e)}
+                        onDoubleClick={() => pinEntryTab(e)}
+                        onContextMenu={(event) => openContextMenu(event, e)}
+                        onKeyDown={(event) => onEntryKeyDown(event, e)}
+                        role="treeitem"
+                        aria-expanded={e.is_dir ? !collapsed : undefined}
+                        aria-selected={active}
+                        tabIndex={0}
+                        title={
+                          e.is_dir
+                            ? t("files.dirToggleTitle", {
+                                path: e.path,
+                                action: collapsed ? t("common.expand") : t("common.collapse"),
+                              })
+                            : e.path
+                        }
+                      >
+                        <span
+                          className={
+                            "tree-disclosure" + (e.is_dir ? (collapsed ? " collapsed" : " expanded") : " placeholder")
+                          }
+                          aria-hidden="true"
+                        />
+                        <TreeIcon entry={e} collapsed={collapsed} />
+                        <span className="tree-label">{e.name}</span>
+                        {decoration && (
+                          <span
+                            className={"tree-decoration" + (e.is_dir || decoration.rollup ? " rollup" : "")}
+                            title={decorationTitle(t, e, decoration)}
+                            aria-label={decorationTitle(t, e, decoration)}
+                          >
+                            {e.is_dir || decoration.rollup ? "" : decoration.marker}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
           </div>
-        ) : kind === "video" ? (
-          <div className="files-media">{abs && <video src={mediaSrc(abs)} controls preload="metadata" />}</div>
-        ) : kind === "audio" ? (
-          <div className="files-media"><audio src={mediaSrc(abs)} controls /></div>
-        ) : err ? (
-          <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
-        ) : (
-          <Suspense fallback={<div className="files-empty">{t("common.loading")}</div>}>
-            <MonacoFileEditor
-              rootPath={root.path}
-              entry={selEntry}
-              absPath={abs}
-              text={text}
-              loadVersion={previewVersion}
-              expectedMtime={selEntry.mtime ?? 0}
-              onDirtyChange={setEditorDirty}
-              onReload={() => {
-                setEditorDirty(false);
-                previewCacheRef.current.clear();
-                refreshFiles();
-              }}
-              onSaved={(_, savedText) => {
-                setText(savedText);
-                previewCacheRef.current.clear();
-                refreshFiles();
-              }}
-            />
-          </Suspense>
+          <div
+            className="files-splitter"
+            role="separator"
+            aria-orientation="vertical"
+            aria-label={t("files.resizeAria")}
+            title={t("files.resizeTitle")}
+            onPointerDown={startSideResize}
+            onDoubleClick={() => {
+              setSideWidth(null);
+              window.localStorage.removeItem("aa.files.sideWidth");
+              window.dispatchEvent(new Event("resize"));
+            }}
+          />
+        </>
+      )}
+      <div className="files-preview">
+        {tabs.length > 0 && (
+          <div className="files-editor-tabs" role="tablist" aria-label={t("files.openEditors")}>
+            {tabs.map((editorTab) => {
+              const tabEntry = entryForPath(editorTab.path);
+              if (!tabEntry) return null;
+              const activeTab = editorTab.path === sel;
+              const decoration = treeDecorations.get(editorTab.path);
+              return (
+                <div
+                  key={editorTab.path}
+                  className={
+                    "files-editor-tab" +
+                    (activeTab ? " active" : "") +
+                    (editorTab.pinned ? "" : " preview") +
+                    (decoration ? ` decoration-${decoration.kind}` : "")
+                  }
+                  role="tab"
+                  aria-selected={activeTab}
+                  tabIndex={0}
+                  title={editorTab.path}
+                  onClick={() => openFileTab(editorTab.path, editorTab.pinned)}
+                  onDoubleClick={() => openFileTab(editorTab.path, true)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    openFileTab(editorTab.path, editorTab.pinned);
+                  }}
+                >
+                  <TreeIcon entry={tabEntry} collapsed />
+                  <span className="editor-tab-label">{tabEntry.name}</span>
+                  {decoration && !tabEntry.is_dir && (
+                    <span className="editor-tab-decoration" title={decorationTitle(t, tabEntry, decoration)}>
+                      {decoration.marker}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    className="editor-tab-close"
+                    aria-label={t("files.closeEditor", { path: editorTab.path })}
+                    title={t("files.closeEditor", { path: editorTab.path })}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      closeEditorTab(editorTab.path);
+                    }}
+                  >
+                    <Codicon name="close" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         )}
+        {selEntry && (
+          <div className="files-editor-breadcrumb" title={selEntry.path}>
+            {selEntry.path.split("/").map((part, index, parts) => (
+              <span className="files-breadcrumb-part" key={`${part}-${index}`}>
+                {index > 0 && <span className="files-breadcrumb-separator">›</span>}
+                <span className={index === parts.length - 1 ? "current" : ""}>{part}</span>
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="files-preview-content">
+          {!selEntry ? (
+            <div className="files-editor-empty">
+              <div className="files-editor-empty-title">{t("files.emptyEditorTitle")}</div>
+              <div className="files-editor-empty-hint">{t("files.emptyEditorHint")}</div>
+            </div>
+          ) : kind === "img" ? (
+            <div className="files-image-preview">
+              <div className="files-image-toolbar">
+                <span className="files-image-title" title={selEntry.path}>{selEntry.name}</span>
+                <div className="files-image-controls">
+                  <button
+                    type="button"
+                    aria-label={t("files.zoomOut")}
+                    title={t("files.zoomOut")}
+                    disabled={!imageNatural || imageZoom <= IMAGE_ZOOM_MIN}
+                    onClick={() => zoomImage(1 / 1.2)}
+                  >
+                    −
+                  </button>
+                  <button
+                    type="button"
+                    className="files-image-zoom-value"
+                    aria-label={t("files.zoomReset")}
+                    title={t("files.zoomReset")}
+                    disabled={!imageNatural}
+                    onClick={resetImageZoom}
+                  >
+                    {imageZoomPercent}%
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={t("files.zoomIn")}
+                    title={t("files.zoomIn")}
+                    disabled={!imageNatural || imageZoom >= IMAGE_ZOOM_MAX}
+                    onClick={() => zoomImage(1.2)}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <div className="files-media files-image-stage" ref={imageStageRef} onWheel={onImageWheel}>
+                {abs && (
+                  <div className="files-image-frame" style={imageFrameStyle}>
+                    <img
+                      className="files-zoom-image"
+                      src={mediaSrc(abs)}
+                      alt={selEntry.name}
+                      style={imageStyle}
+                      onLoad={(event) => {
+                        const img = event.currentTarget;
+                        setImageNatural({
+                          width: img.naturalWidth || img.width || 1,
+                          height: img.naturalHeight || img.height || 1,
+                        });
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : kind === "video" ? (
+            <div className="files-media">{abs && <video src={mediaSrc(abs)} controls preload="metadata" />}</div>
+          ) : kind === "audio" ? (
+            <div className="files-media"><audio src={mediaSrc(abs)} controls /></div>
+          ) : err ? (
+            <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
+          ) : (
+            <Suspense fallback={<div className="files-empty">{t("common.loading")}</div>}>
+              <MonacoFileEditor
+                rootPath={root.path}
+                entry={selEntry}
+                absPath={abs}
+                text={text}
+                loadVersion={previewVersion}
+                expectedMtime={selEntry.mtime ?? 0}
+                onDirtyChange={setEditorDirty}
+                onReload={() => {
+                  setEditorDirty(false);
+                  previewCacheRef.current.clear();
+                  refreshFiles();
+                }}
+                onSaved={(_, savedText) => {
+                  setText(savedText);
+                  previewCacheRef.current.clear();
+                  refreshFiles();
+                }}
+              />
+            </Suspense>
+          )}
+        </div>
       </div>
       {menu && (
         <div

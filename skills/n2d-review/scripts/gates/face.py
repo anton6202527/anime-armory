@@ -684,7 +684,7 @@ def check_character_backend_pin(root: str, ep: str) -> None:
 
 def check_anchor_fingerprints(root: str, ep: str) -> None:
     """共享定妆锚点指纹钉死（治跨集脸漂的结构根因之一）：identity_registry 的 form 若显式登记
-    `anchor_sha`（opt-in），就校验磁盘上 front 定妆图当前 sha256 == 注册值。锚点被悄改/丢失 =
+    `anchor_sha`（opt-in），就校验磁盘上主锚点定妆图当前 sha256 == 注册值。锚点被悄改/丢失 =
     下游每镜（含跨集每一集）继承换脸 → BLOCK。
 
     **纯 opt-in**：未登记 `anchor_sha` 的 form = 未启用钉死 → 跳过（向后兼容，现有作品/先出视频
@@ -713,8 +713,8 @@ def check_anchor_fingerprints(root: str, ep: str) -> None:
         full = os.path.join(root, rel) if rel else ""
         if not rel or not os.path.isfile(full):
             add(BLOCK, "共享定妆", reg_path,
-                f"定妆锚点 `{label}` 已登记 anchor_sha 但 front 定妆图缺失"
-                f"（{rel or 'reference_group 未填 front'}）——锚点丢失，下游每镜无母图可派生，跨集必漂；"
+                f"定妆锚点 `{label}` 已登记 anchor_sha 但锚点定妆图缺失"
+                f"（{rel or 'reference_group 未填主锚点路径'}）——锚点丢失，下游每镜无母图可派生，跨集必漂；"
                 "补回原锚点定妆图，或重新 `image_qc --pin-anchor`。")
             continue
         actual = _sha256_file(full)

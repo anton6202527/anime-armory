@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { createWork, deleteWork, scanWorkspace } from "../api";
+import { createWork, deleteWork, installDemo, listDemoDownloads, scanWorkspace } from "../api";
+import { Codicon } from "../components/Codicon";
 import { useI18n, useLineLabel } from "../i18n";
-import type { LineInfo, WorkRoot } from "../types";
+import type { DemoDownloadInfo, LineInfo, WorkRoot } from "../types";
 
 /** A line's 创作区: its existing works + a 新建作品 entry. Works live in the
  *  app's dedicated workspace, fully separate from the skills repo demos. */
@@ -23,13 +24,16 @@ export function Line(props: {
   const [newName, setNewName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<WorkRoot | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [availableDemo, setAvailableDemo] = useState<DemoDownloadInfo | null>(null);
+  const [installingDemo, setInstallingDemo] = useState(false);
 
   // re-pull this line's roots (so a freshly created/deleted work shows up)
   function refresh() {
-    return scanWorkspace(workspaceRoot)
-      .then((lines) => {
+    return Promise.all([scanWorkspace(workspaceRoot), listDemoDownloads(workspaceRoot)])
+      .then(([lines, demos]) => {
         const fresh = lines.find((l) => l.line === line.line);
         if (fresh) setRoots(fresh.roots);
+        setAvailableDemo(demos.find((demo) => demo.line_key === line.line && !demo.installed) ?? null);
         return fresh;
       })
       .catch((e) => setErr(String(e)));
@@ -80,6 +84,22 @@ export function Line(props: {
     }
   }
 
+  async function downloadDemo() {
+    if (installingDemo) return;
+    setErr("");
+    setInstallingDemo(true);
+    try {
+      const result = await installDemo(workspaceRoot, line.line);
+      const fresh = await refresh();
+      const root = fresh?.roots.find((r) => r.path === result.root.path) ?? result.root;
+      onOpen(root);
+    } catch (e) {
+      setErr(t("line.downloadDemoFailed", { error: String(e) }));
+    } finally {
+      setInstallingDemo(false);
+    }
+  }
+
   return (
     <div className="line-page">
       <div className="line-page-top">
@@ -87,8 +107,13 @@ export function Line(props: {
         <div className="crumb">
           {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
         </div>
-        <button className="line-skills-btn" onClick={() => onShowSkills(line)}>
-          {t("line.skillsButton")}
+        <button
+          className="line-skills-btn"
+          title={t("line.skillsButton")}
+          aria-label={t("line.skillsButton")}
+          onClick={() => onShowSkills(line)}
+        >
+          <Codicon name="wrench" />
         </button>
       </div>
 
@@ -126,6 +151,25 @@ export function Line(props: {
             </div>
           );
         })}
+
+        {availableDemo && (
+          <div
+            className={"root-card demo-download-card" + (installingDemo ? " installing" : "")}
+            onClick={downloadDemo}
+            role="button"
+            aria-disabled={installingDemo}
+          >
+            <div className="demo-download-icon">
+              <Codicon name="project" />
+            </div>
+            <div className="name">
+              {installingDemo ? t("line.downloadingDemo") : t("line.downloadDemo")}
+            </div>
+            <div className="meta">
+              {t("line.downloadDemoMeta", { name: availableDemo.name })}
+            </div>
+          </div>
+        )}
 
         {creating ? (
           <div className="root-card new-card editing">

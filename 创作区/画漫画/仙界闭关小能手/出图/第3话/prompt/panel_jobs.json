@@ -1,0 +1,1208 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_jobs",
+  "chapter": "第3话",
+  "model": "GPT Image 2",
+  "channel": "Codex CLI",
+  "text_language": "中文",
+  "jobs": [
+    {
+      "panel_id": "P001",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 780
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：黎明微亮，杂役院远处传来急促金属敲击声，贺平生在简陋床上困倦睁眼，鼻尖像闻到一缕浓郁米香。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房黎明；构图与表演：黎明冷光，床铺简陋，少年疲惫；米香只用轻微暖色空气流暗示，不画文字或气泡。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P001.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "6c804902ec82d19c1e7249bcf466dce398e9e76874dfaa355be4e00519447e6e",
+      "generated_at": "2026-07-07T17:51:46",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P001.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P001",
+        "created_at": "2026-07-07T17:51:46",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P001.png",
+        "size": {
+          "width": 1296,
+          "height": 780
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 780
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P002",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 960
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：黑暗空房里，窗台附近的黑旧破陶盆中盛满金灿灿的大米，暖金微光照亮周围冷暗地面，贺平生坐起身震住。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房黎明；构图与表演：本话第一重点大格；破盆外形必须沿用 PROP_BROKEN_BASIN，米粒满盆金色但不要法阵爆炸、不要系统面板；画面铺满无外框。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P002.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "0ad95dd317b429e430561f3a12ecef14bf4d3c8e7ac4e0d91503e3e21b7e4979",
+      "generated_at": "2026-07-07T17:56:59",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P002.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P002",
+        "created_at": "2026-07-07T17:56:59",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P002.png",
+        "size": {
+          "width": 1296,
+          "height": 960
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P003",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 700
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生揉眼后狠狠掐自己大腿，痛得皱眉，眼神从迷糊变成清醒震惊。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房黎明；构图与表演：反应格，脸部保持少年版主角 DNA；不做夸张 Q 版表情。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P003.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "485fbb6ffc765b55d33f083d73b3d5eef8dc567ce9cfb02e911a81e6b828adf4",
+      "generated_at": "2026-07-07T18:01:23",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P003.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P003",
+        "created_at": "2026-07-07T18:01:23",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P003.png",
+        "size": {
+          "width": 1296,
+          "height": 700
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 700
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P004",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：近景：贺平生蹑手蹑脚来到破盆前，手指插入满盆金米中轻轻拨起，米粒从指缝滑落，全是金色极品灵米。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房窗边；构图与表演：本话道具重点大格；手、米粒、破盆缺口必须清楚；金光柔和，不能遮住米粒形态。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P004.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "807aa22fefe53807a46fbc97e2bf9b1ed9648a748102e80873c1190509f963f2",
+      "generated_at": "2026-07-07T18:04:32",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P004.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P004",
+        "created_at": "2026-07-07T18:04:32",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P004.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P005",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 840
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生低头看着满盆金米，脑海中浮现昨夜半盆白绿普通灵米的残影对比，意识到品质和数量都变了。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房窗边；构图与表演：只做一个完整画面中的淡淡记忆残影，不要内部漫画分格、白色分隔线或画中画；破盆仍是同一个。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P005.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "b2e686a01d6ba2dca9e17c6bcb4c14914a9482a0a74cdd1295f328da5621cb43",
+      "generated_at": "2026-07-07T18:07:28",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P005.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P005",
+        "created_at": "2026-07-07T18:07:28",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P005.png",
+        "size": {
+          "width": 1296,
+          "height": 840
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 840
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P006",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 700
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生猛地回头看向木门，门栓和铁锁都紧紧扣着，门缝没有任何被打开的痕迹。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房门口；构图与表演：悬疑推理小格，门锁、门闩、少年侧脸都要清楚。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P006.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "9a1ea29ad5a00a6f8b67e60803c67e62bb6fc71a393e1d58283521ac8ad5d9b2",
+      "generated_at": "2026-07-07T18:11:08",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P006.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P006",
+        "created_at": "2026-07-07T18:11:08",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P006.png",
+        "size": {
+          "width": 1296,
+          "height": 700
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 700
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P007",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：门外突然传来猛烈拍门声，张老大粗壮的影子压在门上，屋内贺平生一惊，身体挡在破盆和门之间。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA；场景：杂役院空房门口黎明；构图与表演：张老大可以只做门外压迫剪影，但体量和声音压迫感要强；不要让他看见金米。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_ZHANG_LAODA=张老大；角色DNA:body:粗壮高大的杂役头目，肩背厚，手臂粗，站姿压迫，动作常带指使和俯视感。；face:东方粗粝男性脸，颧骨和下颌硬，浓眉，窄眼带油滑笑意，胡茬或短须，神情轻蔑。；hair:黑色长发或乱束发，发量厚，略油腻，不要清爽少年感。；costume:深色破旧粗布/皮革感杂役头目衣，灰黑、暗褐、铁锈色为主，袖口和手掌带油污泥痕。；temperament:小权力压迫者，粗鲁、精明、会假装照顾新人，笑里带欺压。；定妆契约:每次出现都保持同一粗壮体量、浓眉窄眼、胡茬、黑长发和油污手。；可以根据场景换粗布外袍或厨房/杂役院光线，但不能美型化、年轻化、瘦削化或变成正派仙师。；他是底层杂役头目，不穿高阶仙门华服，不带华丽法器。；年龄/形态继承:张老大当前为成年杂役头目基准形态；后续只允许在同一成年脸部 DNA 下调整场景光线、衣物脏污程度、疲惫/假笑/压迫表情和动作姿态，不允许少年化、仙师化、换脸、换发际线、换体量或更换服装主色。；禁继承:低幼Q版；少年美型脸；现代黑帮西装；高阶仙师华服；过度卡通反派脸；截图UI；文字水印；风格契约:跟随影视级写实国漫修仙短剧质感；张老大的画面可偏暗、脏、压迫，但仍需清晰五官和稳定服装材质。；备注:第2话高频夜访与食堂压迫角色；若长期出现，应补齐 front / three_quarter / side / back / face 多视图。；已定义年龄形态:adult_baseline,minor_injury_or_pressure；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_ZHANG_LAODA",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_ZHANG_LAODA",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P007.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "339103b8c1346d6afb18da1025d407b9e06960f02778cc8671e074375c9d36d9",
+      "generated_at": "2026-07-07T18:14:21",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P007.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P007",
+        "created_at": "2026-07-07T18:14:21",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P007.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P008",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 920
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生慌而不乱，双手把盛着金米的黑旧破盆推进床底，再用杂乱旧衣服盖住。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房床边；构图与表演：秘密隐藏动作要清楚；床底、衣服、破盆位置明确；金光被衣物压暗，不要外泄太夸张。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P008.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "95d20c84b9847ae655d85cd025907eb693138c203975439a44ef2edcfcb47dfc",
+      "generated_at": "2026-07-07T18:16:37",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P008.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P008",
+        "created_at": "2026-07-07T18:16:37",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P008.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P009",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1080
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：食堂外屋檐下，贺平生端着铁碗狼吞虎咽，老鲍在窗口给他多打肉，张老大站到一旁居高临下警告。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG、CHAR_ZHANG_LAODA、老鲍；场景：秀竹峰杂役院食堂外；构图与表演：张老大体量压迫，贺平生表面恭顺但心思不在饭上；食堂和第2话保持一致。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_ZHANG_LAODA=张老大；角色DNA:body:粗壮高大的杂役头目，肩背厚，手臂粗，站姿压迫，动作常带指使和俯视感。；face:东方粗粝男性脸，颧骨和下颌硬，浓眉，窄眼带油滑笑意，胡茬或短须，神情轻蔑。；hair:黑色长发或乱束发，发量厚，略油腻，不要清爽少年感。；costume:深色破旧粗布/皮革感杂役头目衣，灰黑、暗褐、铁锈色为主，袖口和手掌带油污泥痕。；temperament:小权力压迫者，粗鲁、精明、会假装照顾新人，笑里带欺压。；定妆契约:每次出现都保持同一粗壮体量、浓眉窄眼、胡茬、黑长发和油污手。；可以根据场景换粗布外袍或厨房/杂役院光线，但不能美型化、年轻化、瘦削化或变成正派仙师。；他是底层杂役头目，不穿高阶仙门华服，不带华丽法器。；年龄/形态继承:张老大当前为成年杂役头目基准形态；后续只允许在同一成年脸部 DNA 下调整场景光线、衣物脏污程度、疲惫/假笑/压迫表情和动作姿态，不允许少年化、仙师化、换脸、换发际线、换体量或更换服装主色。；禁继承:低幼Q版；少年美型脸；现代黑帮西装；高阶仙师华服；过度卡通反派脸；截图UI；文字水印；风格契约:跟随影视级写实国漫修仙短剧质感；张老大的画面可偏暗、脏、压迫，但仍需清晰五官和稳定服装材质。；备注:第2话高频夜访与食堂压迫角色；若长期出现，应补齐 front / three_quarter / side / back / face 多视图。；已定义年龄形态:adult_baseline,minor_injury_or_pressure；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_ZHANG_LAODA",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_ZHANG_LAODA",
+          "path": "出图/共享/图片/CHAR_ZHANG_LAODA__face.png",
+          "view": "face"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P009.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "374058bf732b14d04a8800701b0fb698599ea9b0ffe1ccbab8a6fd1891e76c42",
+      "generated_at": "2026-07-07T18:22:25",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P009.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P009",
+        "created_at": "2026-07-07T18:22:25",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P009.png",
+        "size": {
+          "width": 1296,
+          "height": 1080
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1080
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P010",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 920
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：饭后回屋，贺平生反锁木门，把金米从床底搬出，靠近米香时立刻警觉地捂住鼻口，意识到不能煮。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房白日；构图与表演：门锁、破盆、金米和谨慎表情同框；不要画灶台烹煮成功，只画“否决这个想法”。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P010.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "62ab3e2c3084c578805ea9d40ebead9c3caded46c9048f207ac783b2f733d5d4",
+      "generated_at": "2026-07-07T18:25:22",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P010.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P010",
+        "created_at": "2026-07-07T18:25:22",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P010.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P011",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生抓起一把金色灵米，低头直接吞下生米，另一只手紧紧护着破盆。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房白日；构图与表演：动作要朴素克制，不要夸张吞宝特效；金米是米粒不是丹药。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P011.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "031547167953b368c680e85d02ee961c5ea5548c193ae6c1afd2ec4a582cb1f6",
+      "generated_at": "2026-07-07T18:30:34",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P011.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P011",
+        "created_at": "2026-07-07T18:30:34",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P011.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P012",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：几口金米下肚，贺平生仍蹲坐在简陋空房地上，一只手按着腹部，脸色由疲惫转为清醒，腹中有很淡的暖金光透出。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房白日；构图与表演：本话第二重点格但必须克制：他仍是十四岁杂役少年，坐/蹲在屋内感受体内暖流；只用腹部和四肢周围的淡淡暖金光表现恢复体力，不要站立张臂、不要觉醒法阵、不要高阶灵纹爆发、不要超级英雄姿势。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P012.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "1b0d327ea7281d3b9a63ded7aa84e957e883ed0424c2520c512dc6bc5ffa98b5",
+      "generated_at": "2026-07-07T19:21:00",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P012.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P012",
+        "created_at": "2026-07-07T19:21:00",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P012.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      },
+      "history": [
+        {
+          "kind": "archived_previous",
+          "path": "/Users/wesley/learn/anime-armory/创作区/画漫画/仙界闭关小能手/出图/第3话/candidates/P012/P012_20260707_190045_previous.png"
+        }
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1000
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生把金米从破盆里倒进闲置裤筒，两头扎紧，做成丑陋枕头，再用破旧衣物盖住。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院空房床边；构图与表演：藏米策略清楚：破盆、裤筒、米粒、床铺、旧衣物；不要让金米散落过多。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_BROKEN_BASIN=黑旧陶盆 / 聚宝盆前身；道具契约:shape:圆形黑旧陶盆，浅口宽沿，边缘有缺口、裂纹、磨损和泥水痕，陶面不规则。；material:旧黑陶/粗陶，暗灰黑、褐黑、湿冷反光，不能像金属碗或新瓷碗。；behavior:盛放水、灵米等资源时可出现数量/品质异常，但盆本体不说话、不显示系统面板、不主动飞起。；lighting:可反射月光或被内容物映出轻微青绿/金色光；第2话只画绿水和普通低阶灵米，不提前画成金米奇观。；禁继承:金属盆；现代塑料盆；崭新瓷碗；系统屏幕；会说话法宝；过早金光爆发；复杂神器雕花；文字水印；备注:核心长线道具；同一破盆在房间、窗口、手中、桌上、地上都需保持缺口位置、旧黑陶质感和朴素轮廓。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "PROP_BROKEN_BASIN",
+          "path": "出图/共享/图片/PROP_BROKEN_BASIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P013.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "53fb4ef6efca572c9fb77640e4b6bc418dc8207bb450f0c067316ab2521b0c62",
+      "generated_at": "2026-07-07T18:37:24",
+      "attempt": 1,
+      "reference_input_count": 5,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P013.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P013",
+        "created_at": "2026-07-07T18:37:24",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P013.png",
+        "size": {
+          "width": 1296,
+          "height": 1000
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1000
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P014",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 700
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：后山山泉边，贺平生放下水桶，俯身喝了两口清水，微微皱眉，觉得泉水不如以前好喝。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：后山山泉浅潭白日；构图与表演：后山泉水延续第1话场景；不要画成污染或毒水，只是主角口感变化。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P014.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "b78e800726e27af74c9c7f37712ac4007cfd59b2c7545fc9d45d3f34e384f8bb",
+      "generated_at": "2026-07-07T18:41:12",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P014.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P014",
+        "created_at": "2026-07-07T18:41:12",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P014.png",
+        "size": {
+          "width": 1296,
+          "height": 700
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 700
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P015",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1000
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：贺平生挑起两个装满水的巨大木桶，肩膀挺直，脚步轻快，木桶在阳光下晃动却不再压弯他。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：后山山路白日；构图与表演：表现力量提升但不变成飞行或法术；扁担、肩膀、桶水重量和步伐要清楚。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P015.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "c68d56bbf42f6d44de347d3613d5fef72579b79848a53b81c93be99db9c288c0",
+      "generated_at": "2026-07-07T18:46:35",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P015.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P015",
+        "created_at": "2026-07-07T18:46:35",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P015.png",
+        "size": {
+          "width": 1296,
+          "height": 1000
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1000
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P016",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：一张连续完整画面里，贺平生的身影在山路、水缸、山泉之间快速往返，上午未过，食堂门口大水缸已经被装满。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：后山山路到杂役院水缸白日；构图与表演：本话第三重点大格；必须是一张完整连续画面，用重复残影/远近身影表现速度，不要内部拼贴分格、白色分隔线或画中画。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P016.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "36ff4a6d989d5807e30fd67ff674f2275dc6a2bd7c354ba17cafbe7089cdbbaa",
+      "generated_at": "2026-07-07T18:49:12",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P016.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P016",
+        "created_at": "2026-07-07T18:49:12",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P016.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P017",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：山泉边树影下，贺平生停下来休息，回头望向已装满的方向，脸上喜色被谨慎压下。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：后山山泉树影；构图与表演：藏拙心理重点；表情是克制、警觉，不是得意大笑。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P017.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "50da9692955b82df3dd62baf0e66c81bb091a130d7e401bf5767e0cf3109fd31",
+      "generated_at": "2026-07-07T18:54:34",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P017.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P017",
+        "created_at": "2026-07-07T18:54:34",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P017.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    },
+    {
+      "panel_id": "P018",
+      "status": "ready",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(影视级写实国漫, 修仙短剧质感, 半厚涂, 电影级大光比, 精致发丝与服饰材质, 冷暖灵力光效, 竖向条漫)；画面事实：夜色降临很久后，贺平生故意装作疲惫，慢慢把第二十趟水倒进水缸，月光下他垂着眼，把真正的轻松藏住。；项目风格锚与一致性契约：style_contract:name:影视级写实国漫修仙短剧质感；source:用户提供的男女主定型截图 + 制漫剧开发包 global_style；look:半写实 3D 国风仙侠漫剧，东方美型写实脸，精修皮肤，清晰眼神光，真实发丝和服饰材质，电影级景深与体积光。；lighting:常态冷灰/青灰宗门环境；觉醒、法阵、灵米、聚宝盆或法术使用暖金主高光，光源必须有叙事来源。；effects:金色符纹、法阵、灵力裂纹、柔焦体积光；特效不能吞没五官或改变脸部身份。；comic_adaptation:漫画可做半厚涂线稿化和分格可读性增强，但不能降级成低细节彩漫、Q 版、泛韩漫脸或页游塑料感。；consistency_policy:grade:n2d_aligned；rules:定型图为最高优先级身份锚点，逐格出图必须真实传入可解析参考图。；常驻角色进入批量生产前补 front / three_quarter / side / back / face 多视图。；少年、成年、闭关、受伤、觉醒、境界变化、换装等形态必须从同一 character_dna 继承，不得换脸。；漫画分格可以调整构图和线稿密度，但脸型、发际线、眼型、发量、气质、标志物和整体画风不得漂移。；forbidden_inheritance:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排平台标题；水印；识别画面按钮；录屏边框；截图压缩糊；平台 UI；角色：CHAR_HE_PINGSHENG；场景：杂役院水缸旁夜景；构图与表演：结尾钩子：他已经得到力量，但选择藏拙；夜景与P001呼应，不能表现得太高调。；共享参考ID与不可漂移约束：CHAR_HE_PINGSHENG=贺平生；角色DNA:baseline_story_age:第1话开局是十四岁杂役少年；当前定型图更接近成年/觉醒态，只作为脸部 DNA 和后续高阶形态锚点。；face:东方青年美型写实脸，长脸偏瘦但不尖，眉骨清晰，浓黑直眉，鼻梁挺直，薄唇，眼神克制、冷静、带受伤后的坚忍。；hair:黑色长发，高发量，额前中分碎发，发际线清楚，后发厚重；少年态可降低发冠和发量厚度，但不能变短发或换发际线。；eyes:灰黑/冷灰眼，眼型修长，眼神光清晰。；marks:额心金红火焰状灵纹，眉上和面颊金红裂纹式灵力纹路；受伤/觉醒态可以增强亮度，常态少年可弱化但不能随意换图案体系。；costume:国风修仙服饰，成年/觉醒态偏金白衣领…；定妆契约:第1话不得把贺平生画成成年人开局；十四岁少年版必须从这张成年/觉醒锚点派生。；换年龄只改变脸部稚嫩度、身高体量、服饰阶层和灵纹强度，不改变眼型、眉形、发际线、鼻梁、唇形和内在气质。；脸部金红灵纹是后续觉醒/受伤/高阶形态标志；少年常态可隐藏或弱化，但出现时必须沿用同一纹路语言。；不能把播放按钮、搜索框、字幕、竖排标题、水印或截图 UI 当成妆造。；年龄/形态继承:所有年龄和形态必须以 CHAR_HE_PINGSHENG 的脸部 DNA 为主线：少年版是同一张脸的幼年化，成年/觉醒/受伤版是同一张脸的状态增强；任何形态都不得生成新的男主脸。；禁继承:播放按钮；搜索框；平台字幕；黄色话题字；右侧竖排标题；水印；截图 UI；录屏压缩糊；把成年锚点直接用于第1话十四岁开局；风格契约:跟随 STYLE_XIANJIE_CINEMATIC_REALISTIC_GUOMAN；男性画面可偏冷灰、烟雾、岩壁/宗门阴影，金红灵纹作为暖光来源。；已定义年龄形态:teen_opening,adult_awakening,injured_awakening；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "references": [
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_HE_PINGSHENG",
+          "path": "出图/共享/图片/CHAR_HE_PINGSHENG__three_quarter.png",
+          "view": "three_quarter"
+        }
+      ],
+      "result_path": "出图/第3话/panels/P018.png",
+      "source": "Codex CLI",
+      "artifact_sha256": "77236988b7a15a80a5d51a22a60fece8c86064d39e457248020fea93b0378717",
+      "generated_at": "2026-07-07T18:57:52",
+      "attempt": 1,
+      "reference_input_count": 4,
+      "reference_input_mode": "codex_exec_image_flags",
+      "backend_version": "codex-cli 0.142.5",
+      "model": "GPT Image 2",
+      "reference_manifest": "生产数据/codex_reference_bundles/第3话/P018.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第3话",
+        "panel_id": "P018",
+        "created_at": "2026-07-07T18:57:52",
+        "verdict": "pass",
+        "path": "出图/第3话/panels/P018.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
+    }
+  ]
+}

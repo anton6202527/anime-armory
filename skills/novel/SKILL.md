@@ -2,6 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3040 | 目录文本总行数 61473
 
 # novel — 小说工坊调度入口
 

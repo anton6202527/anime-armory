@@ -10,7 +10,7 @@
 #   1) pytest skills/         全量纯逻辑测试（**逐目录隔离进程**，避免跨线同名 vendored 模块在
 #                             单进程全树收集时互相遮蔽；重 conda 依赖的测试自身优雅跳过）
 #   2) pytest tools/          元工具自身的测试
-#   3) validate_skills.py     设计law机检（E1 VCS-free / B* / F1 README 索引同步 / F3 入口文档同步）
+#   3) validate_skills.py     设计law机检（E1 VCS-free / B* / F1 README 索引同步 / F3 入口文档同步 / F7 规模统计同步）
 #   4) check_independence.py  系列独立性（无 skills/common、无跨线 import）
 #   5) novel self-audit       novel 专项 registry/README/路由/队列/市场基准治理
 #

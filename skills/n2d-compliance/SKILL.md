@@ -29,6 +29,8 @@ description: P0 compliance and rights preflight for n2d. Create and validate 合
 python3 skills/n2d-compliance/scripts/compliance.py <作品根> --init
 ```
 
+初始化会先读 `<作品根>/_设置.md` 的 `合规用途`（缺省来自默认设置 `internal_only`）。自己做 demo / 学习 / 内部预览时保持 `合规用途=internal_only`；只有准备公开发布候选或付费投放时，才改为 `publish_candidate` / `paid_distribution` 并补平台审核、备案、本地化和发布标识证据。
+
 检查合规包：
 
 ```bash

@@ -1,0 +1,186 @@
+{
+  "kind": "n2d_causal_event_graph",
+  "version": 1,
+  "episode": "第1集",
+  "source": "n2d-script upstream rerun 2026-07-07",
+  "events": [
+    {
+      "id": "CE01_weapon_warning_release",
+      "clip_id": "EP01_CLIP03",
+      "cause_clip": "EP01_CLIP03",
+      "effect_clip": "EP01_CLIP03",
+      "cause": "裴长青以断刀威胁姜月初并释放 WEAPON_01。",
+      "effect": "WEAPON_01 钉在姜月初脚前半步，迫使她停下并听完交易。",
+      "before_state": "WEAPON_01 由 CHAR_02 控制或贴近 CHAR_02 侧。",
+      "after_state": "WEAPON_01 嵌入地面，CHAR_01 尚未接触。",
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP03"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP03 4-11s"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE02_body_support_south_move",
+      "clip_id": "EP01_CLIP04",
+      "cause_clip": "EP01_CLIP03",
+      "effect_clip": "EP01_CLIP04",
+      "cause": "姜月初接受交易并伸手扶起重伤的裴长青。",
+      "effect": "裴长青重量压到姜月初肩上，二人沿南向逃路线踉跄移动。",
+      "before_state": "CHAR_01 与 CHAR_02 分离对峙。",
+      "after_state": "CHAR_01 支撑 CHAR_02，身体接触持续到湿咳打断。",
+      "physical_rules": [
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP04"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP04 0-8s"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE03_tiger_revival_interrupts_escape",
+      "clip_id": "EP01_CLIP05",
+      "cause_clip": "EP01_CLIP05",
+      "effect_clip": "EP01_CLIP05",
+      "cause": "虎山神诈死状态解除，金眼亮起并从巨岩处复苏。",
+      "effect": "姜月初与裴长青的逃生接触被迫中断，二人重新面向虎妖威胁。",
+      "before_state": "CHAR_03 被误认为尸身，CHAR_01/CHAR_02 正向南移动。",
+      "after_state": "CHAR_03 进入复苏态，CHAR_01/CHAR_02 停止南行并后撤警惕。",
+      "physical_rules": [
+        "state_conservation",
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP05"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP05 full clip"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE04_pei_failed_attack_knockback",
+      "clip_id": "EP01_CLIP06",
+      "cause_clip": "EP01_CLIP06",
+      "effect_clip": "EP01_CLIP06",
+      "cause": "裴长青尝试最后一击，但虎山神以更强力量反制。",
+      "effect": "裴长青被踹飞/击退，正面武力路线失败，WEAPON_01 后续落入姜月初可触范围。",
+      "before_state": "CHAR_02 尚能短促攻击，CHAR_03 压迫前方。",
+      "after_state": "CHAR_02 倒退/受创，CHAR_01 必须寻找非常规生路。",
+      "physical_rules": [
+        "collision",
+        "gravity_drop",
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP06"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP06 full clip"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE05_rule_reframes_living_target",
+      "clip_id": "EP01_CLIP08",
+      "cause_clip": "EP01_CLIP07",
+      "effect_clip": "EP01_CLIP08",
+      "cause": "百妖谱给出斩杀生物可得道行的规则。",
+      "effect": "姜月初的视线从虎妖转向唯一近处活物裴长青与地上的 WEAPON_01。",
+      "before_state": "CHAR_01 只知道虎妖威胁和系统开启。",
+      "after_state": "CHAR_01 理解可执行规则的代价，开始形成刺杀选择。",
+      "physical_rules": [
+        "state_conservation"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP07",
+        "EP01_CLIP08"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP07 panel reveal",
+        "EP01_CLIP08 eyeline to WEAPON_01 and CHAR_02"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE06_weapon_pickup_before_stab",
+      "clip_id": "EP01_CLIP09",
+      "cause_clip": "EP01_CLIP08",
+      "effect_clip": "EP01_CLIP09",
+      "cause": "WEAPON_01 位于姜月初可触范围内，百妖谱规则将其变成可执行工具。",
+      "effect": "姜月初手指握住刀柄并将刀尖抬起，WEAPON_01 持有者从地面转为 CHAR_01。",
+      "before_state": "WEAPON_01 在地面，无人物持有。",
+      "after_state": "WEAPON_01 由 CHAR_01 手持，刀尖尚未接触 CHAR_02。",
+      "physical_rules": [
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP09"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP09 first half"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE07_stab_creates_cliffhanger_state",
+      "clip_id": "EP01_CLIP10",
+      "cause_clip": "EP01_CLIP09",
+      "effect_clip": "EP01_CLIP10",
+      "cause": "姜月初完成握刀与道德选择，将 WEAPON_01 指向裴长青。",
+      "effect": "WEAPON_01 刺入 CHAR_02 胸前，裴长青瞳孔僵住，百妖谱是否生效被延迟到第2集。",
+      "before_state": "WEAPON_01 由 CHAR_01 抬起但未命中 CHAR_02。",
+      "after_state": "WEAPON_01 与 CHAR_02 胸前发生刺入接触，CHAR_01 仍控制刀柄。",
+      "physical_rules": [
+        "collision",
+        "contact_continuity",
+        "liquid"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP10"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP10 full clip"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    },
+    {
+      "id": "CE08_survival_line_holds_result",
+      "clip_id": "EP01_CLIP11",
+      "cause_clip": "EP01_CLIP10",
+      "effect_clip": "EP01_CLIP11",
+      "cause": "刺杀动作完成，但系统结算结果未展示。",
+      "effect": "姜月初只留下生存宣言，WEAPON_01 不掉落，结果悬念保留。",
+      "before_state": "CHAR_01 刚刺中 CHAR_02。",
+      "after_state": "CHAR_01 仍处于刺杀 aftermath，剪断在系统 payoff 前。",
+      "physical_rules": [
+        "state_conservation",
+        "contact_continuity"
+      ],
+      "evidence_clips": [
+        "EP01_CLIP11"
+      ],
+      "evidence_frames": [
+        "EP01_CLIP11 full clip"
+      ],
+      "order_ok": true,
+      "rule_pass": true
+    }
+  ]
+}

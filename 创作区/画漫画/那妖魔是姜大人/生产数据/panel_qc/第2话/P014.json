@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第2话",
+  "panel_id": "P014",
+  "created_at": "2026-07-07T17:56:10",
+  "verdict": "warn",
+  "path": "出图/第2话/panels/P014.png",
+  "size": {
+    "width": 1296,
+    "height": 1160
+  },
+  "expected_size": {
+    "width": 1296,
+    "height": 1160
+  },
+  "declared_reference_count": 5,
+  "reference_input_count": 5,
+  "blank_region_candidates": [
+    {
+      "x": 860,
+      "y": 0,
+      "w": 435,
+      "h": 209,
+      "area": 36972
+    }
+  ],
+  "issues": [
+    {
+      "severity": "warn",
+      "category": "baked_text_container",
+      "reason": "found 1 likely blank white region(s); manually verify this is not a baked bubble"
+    }
+  ],
+  "manual_review_required": false,
+  "manual_review": {
+    "reviewed_at": "2026-07-07T17:57:11",
+    "verdict": "pass",
+    "reason": "机检命中的右上角亮区是天空/雾光留白，不是对白气泡、旁白框或烘焙文字容器；画面无文字、水印、logo。"
+  }
+}

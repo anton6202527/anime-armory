@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "ad_project",
+  "title": "星盒手账App首发短片",
+  "brand": "星盒",
+  "image_backend": "Codex",
+  "video_model": "Seedance 2.0",
+  "video_channel": "即梦/Dreamina",
+  "video_backend": "即梦/Dreamina",
+  "adlaw_region": "中国大陆",
+  "deliverables": [
+    {
+      "deliverable_id": "master",
+      "label": "主片",
+      "duration": "30s",
+      "aspect": "9:16",
+      "kind": "master",
+      "spec": "平台默认",
+      "status": "⬜",
+      "path": ""
+    }
+  ]
+}

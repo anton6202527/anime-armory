@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="14180" viewBox="0 0 1440 14180">
+<rect width="100%" height="100%" fill="#f3f0e8"/>
+<rect x="0" y="0" width="1440" height="14180" fill="#fbfaf7" stroke="#d4c8b4" stroke-width="2"/>
+<text x="36" y="44" font-size="28" fill="#7a5a20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="36" dy="0">S001</tspan></text>
+<rect x="72" y="28" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="76" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P001  consequence_hook</tspan></text>
+<text x="100" y="126" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">横刀没入裴长青胸口后的近景，姜月初的手仍握着刀柄，温热血点溅到她冷白脸颊，裴长青瞪大眼睛看着她。</tspan></text>
+<text x="100" y="908" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：刀锋入肉的阻滞，清晰地从掌心传来。 | 裴长青：你……</tspan></text>
+<rect x="120" y="72" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="106" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B001N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="210" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="244" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B001D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="1096" width="1296" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="1144" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P002  moral_recoil</tspan></text>
+<text x="100" y="1194" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">裴长青眼里的光迅速黯淡，姜月初松不开刀柄，指节发白，身体微微发抖，荒野风雾压低。</tspan></text>
+<text x="100" y="1776" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：杀了人。她亲手杀了人。</tspan></text>
+<rect x="120" y="1140" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="1174" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B002N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="1964" width="1296" height="1080" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="2012" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P003  monster_commentary</tspan></text>
+<text x="100" y="2062" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">虎妖歪着虎头站在后方，胸前黑血洞仍在，像看稀奇般俯视姜月初和裴长青。</tspan></text>
+<text x="100" y="2884" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">虎妖：本以为你们人族，也讲几分同袍之义。 |</tspan><tspan x="100" dy="32">虎妖：倒不想，竟这般凉薄。</tspan></text>
+<rect x="882" y="2008" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="2042" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B003D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="2162" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="2196" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B003D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+<rect x="72" y="3072" width="1296" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3120" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P004  system_reward</tspan></text>
+<text x="100" y="3170" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">古朴百妖谱在姜月初眼前浮现，金色字迹像光点一样落下，照亮她苍白且沾血的半张脸。</tspan></text>
+<text x="100" y="3752" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：百妖谱的字迹骤然一变。</tspan></text>
+<rect x="120" y="3116" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="3150" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B004N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="3940" width="1296" height="920" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="3988" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P005  survival_decision</tspan></text>
+<text x="100" y="4038" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初一手按住裴长青的肩，一手用力把横刀从胸口拔出，血花溅上她破旧囚服，她的眼神沉下去。</tspan></text>
+<text x="100" y="4700" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：对错、道德、良知……在能活下去之前，都是空谈。 | SFX：噗</tspan></text>
+<rect x="120" y="3984" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4018" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B005N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="4320" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="4354" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B005S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="4888" width="1296" height="1040" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="4936" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P006  action_charge</tspan></text>
+<text x="100" y="4986" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">夕阳余晖映在荒野枯草和尸骸上，姜月初瘦弱身影持横刀冲向虎妖，刀身反射冷白血色光。</tspan></text>
+<text x="100" y="5768" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：二十年道行，尽付一刀。</tspan></text>
+<rect x="120" y="4932" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="4966" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B006N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="72" y="5956" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="6004" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P007  monster_attack</tspan></text>
+<text x="100" y="6054" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">虎妖张开血盆大口咆哮，巨大利爪带着腥风和飞沙枯草，从上方压向冲来的姜月初。</tspan></text>
+<text x="100" y="6836" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：吼——</tspan></text>
+<rect x="540" y="6396" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="6430" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B007S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="7024" width="1296" height="840" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7072" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P008  strike_contact</tspan></text>
+<text x="100" y="7122" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">刀光一闪，姜月初横斩而出，人与妖的身影在画面中央交错，虎爪和横刀之间迸出一道细长血线。</tspan></text>
+<text x="100" y="7704" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">SFX：铮</tspan></text>
+<rect x="540" y="7364" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="7398" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B008S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="7892" width="1296" height="1120" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="7940" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P009  kill_reveal</tspan></text>
+<text x="100" y="7990" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初单膝跪地吐血，横刀脱手插在远处泥地里；她身后虎妖保持挥爪姿势僵住，下一瞬硕大虎头滚落。</tspan></text>
+<text x="100" y="8852" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：一息。两息。 | SFX：噗</tspan></text>
+<rect x="120" y="7936" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="7970" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B009N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="8372" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="8406" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B009S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="9040" width="1296" height="920" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="9088" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P010  new_reward</tspan></text>
+<text x="100" y="9138" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初趴在泥地里大口喘息，眼前百妖谱再次浮现，金色系统字迹层层展开。</tspan></text>
+<text x="100" y="9800" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：活下来了。 | SFX：喝……喝……</tspan></text>
+<rect x="120" y="9084" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="9118" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B010N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="9420" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="9454" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B010S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="9988" width="1296" height="760" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10036" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P011  choice_collect</tspan></text>
+<text x="100" y="10086" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初脸颊贴着泥土，几乎动弹不得，只用极轻的声音回应悬在眼前的百妖谱。</tspan></text>
+<text x="100" y="10588" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初：收录。</tspan></text>
+<rect x="882" y="10032" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="10066" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B011D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="10776" width="1296" height="1120" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="10824" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P012  power_unlock</tspan></text>
+<text x="100" y="10874" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">百妖谱无风自动，墨线笔走龙蛇，绘出吊睛白额猛虎；画中猛虎双瞳亮起幽红光，力量倒灌回姜月初身体。</tspan></text>
+<text x="100" y="11736" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：摹画其影，定其妖形。 | SFX：轰——</tspan></text>
+<rect x="120" y="10820" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="10854" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B012N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="540" y="11256" width="360" height="150" rx="28" fill="none" stroke="#b4433d" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="556" y="11290" font-size="20" fill="#b4433d" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="556" dy="0">B012S</tspan><tspan x="556" dy="27">sfx</tspan></text>
+<rect x="72" y="11924" width="1296" height="1040" rx="8" fill="#eee7dc" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="11972" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P013  status_reveal</tspan></text>
+<text x="100" y="12022" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">一炷香后，姜月初缓缓站起，五指握住插在泥地里的横刀，眼神清明，血污囚服在风中猎猎。</tspan></text>
+<text x="100" y="12804" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：闻弦初境。猛虎快刀。道行二十五年。 |</tspan><tspan x="100" dy="32">姜月初：原来，这才是道行的真正用法。</tspan></text>
+<rect x="120" y="11968" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="12002" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B013N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="12106" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="12140" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B013D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="72" y="12992" width="1296" height="1160" rx="8" fill="#e5e0d8" stroke="#1f1f1f" stroke-width="4"/>
+<text x="100" y="13040" font-size="30" fill="#111111" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">P014  quiet_cliffhanger</tspan></text>
+<text x="100" y="13090" font-size="26" fill="#333333" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">姜月初蹲在裴长青尚有余温的尸体旁，伸手轻轻合上他的眼睛；远处虎妖尸首、荒草和夕雾沉默铺开。</tspan></text>
+<text x="100" y="13992" font-size="24" fill="#5b2b20" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="100" dy="0">旁白：身不由己时，已经无所谓忍不忍心。 | 姜月初：抱歉。 |</tspan><tspan x="100" dy="32">姜月初：若有来日……我攒够道行，或许能还你一命。</tspan></text>
+<rect x="120" y="13036" width="560" height="118" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="136" y="13070" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="136" dy="0">B014N</tspan><tspan x="136" dy="27">narration</tspan></text>
+<rect x="882" y="13174" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="898" y="13208" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="898" dy="0">B014D1</tspan><tspan x="898" dy="27">dialogue</tspan></text>
+<rect x="128" y="13328" width="430" height="136" rx="28" fill="none" stroke="#3d72b4" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="144" y="13362" font-size="20" fill="#3d72b4" font-family="PingFang SC, Heiti SC, sans-serif"><tspan x="144" dy="0">B014D2</tspan><tspan x="144" dy="27">dialogue</tspan></text>
+</svg>

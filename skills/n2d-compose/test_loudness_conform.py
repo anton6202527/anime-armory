@@ -2,6 +2,8 @@
 """loudness_conform 纯数学单测。
 cd skills/n2d-compose && python -m pytest test_loudness_conform.py -q
 """
+import os
+
 import loudness_conform as lc
 
 
@@ -115,3 +117,17 @@ def test_parse_loudnorm_json_none_on_garbage():
 
 def test_measure_none_when_path_missing():
     assert lc.measure("/no/such/file.mp4") is None
+
+
+def test_find_final_cut_prefers_master_over_newer_loudnorm_backup(tmp_path):
+    ep = "第1集"
+    out = tmp_path / "合成" / ep
+    out.mkdir(parents=True)
+    master = out / f"成片_{ep}_zh.mp4"
+    backup = out / f"成片_{ep}_zh.pre_loudnorm_fix.mp4"
+    master.write_bytes(b"master")
+    backup.write_bytes(b"backup")
+    os.utime(master, (100, 100))
+    os.utime(backup, (200, 200))
+
+    assert lc._find_final_cut(str(tmp_path), ep) == str(master)

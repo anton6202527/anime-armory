@@ -13,7 +13,7 @@
 | 角色 DNA 断层 | 判（+机选） | 先读 `设定库/角色圣经.md` + `identity_registry.json`，每集 `镜头*.png` 与 `定妆_<角色>.png` / 半身 / 侧背 / 表情参考并排比五层：脸、发型、服装、配饰、质感；装库则跑 `scripts/face_consistency.py` 自标定 flag-band（脸层），低于 地板−margin=🔴/地板带=🟡，不写死阈值。**🟡 边界镜可上 DreamSim 仲裁（G-I4·opt-in `N2D_DREAMSIM_ARBITER=1`）**：embedder 拿不准时用人眼一致的整图感知 vs 角色 bank 破平（sim≥bank 地板→ok，<地板−margin→block），默认关、缺库行为不变 | 任一层漂到识别不出 🔴 / 轻漂 🟡 |
 | 发型/发色漂移（DNA 第2层） | 判（+机选） | 脸锁住≠发型锁住。装 Pillow 跑 `scripts/hair_consistency.py`：头部区域发色 + 发型轮廓复合指纹 vs 定妆组，自标定 flag-band；人判看披发/盘发/发色/发饰是否漂 | 发型识别不出 🔴 / 轻漂 🟡 |
 | 服装/配色漂移（DNA 第3层）| 判（+机选）| 脸锁住≠服装锁住（"夹克色第4镜就漂"）。装 Pillow 跑 `scripts/outfit_consistency.py`：人物镜加权色相直方图 vs 定妆组(优先半身)，自标定 flag-band | 服色/剪影识别不出 🔴 / 轻漂 🟡 |
-| 片内时序（单 clip 内）| 判（+机选）| 首帧+接缝之外的盲区：clip 内"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 跑 `scripts/temporal_consistency.py`：帧间人脸余弦最小值(身份漂移)+帧间亮度差(flicker/TCI) | 片内身份漂/强闪 🔴 / 轻闪 🟡 |
+| 片内时序（单 clip 内）| 判（+机选）| 首帧+接缝之外的盲区：clip 内"几秒后脸渐变/发际线闪"。装 ffmpeg(+insightface) 跑 `scripts/temporal_consistency.py`：帧间人脸余弦最小值(身份漂移)+帧间亮度差(flicker/TCI)。近景 clip 缺可测人脸 embedding 时标 `identity_precision=insufficient_precision`，不可当 ok；用户肉眼指出某段脸漂时跑 `scripts/video_face_drift_watch.py --start <s> --end <s> --write` 出密集抽帧拼版 | 片内身份漂/清晰近脸换人 🔴 / 缺身份精度或轻闪 🟡 |
 | 定妆主参考质量(锚点门) | 机+判 | 锚点一脏下游全继承。跑 `scripts/face_consistency.py --audit-anchor`：每 `定妆_<角色>.png` 须恰好 1 张清晰够大正脸 | 0张/多张 🔴 / 脸太小 🟡 |
 | 糊 / 低质（无参考）| 机+判 | 跑 `scripts/quality_check.py`：Laplacian 方差自标定本集中位数，显著偏低=相对糊（关键镜更严）| 明显糊 🔴 / 偏糊 🟡 |
 | 形态变体串味 | 判 | 觉醒态/银牌态是否以常态定妆为参考、特征延续 | 🟡 |

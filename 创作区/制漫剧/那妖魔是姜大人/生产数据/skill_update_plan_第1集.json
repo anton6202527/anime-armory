@@ -1,47 +1,14 @@
 {
   "baseline_bootstrapped": false,
-  "changed_files": [
-    "skills/n2d-compose/compose.sh",
-    "skills/n2d-dashboard/scripts/dashboard.py",
-    "skills/n2d-image/SKILL.md",
-    "skills/n2d-image/scripts/codex_image_runner.py",
-    "skills/n2d-image/scripts/derive_makeup_pack.py",
-    "skills/n2d-image/scripts/image_prompt_pack.py",
-    "skills/n2d-image/scripts/image_qc.py",
-    "skills/n2d-image/scripts/vlm_verify.py",
-    "skills/n2d-review/SKILL.md",
-    "skills/n2d-review/scripts/backends/presence_owlv2.py",
-    "skills/n2d-review/scripts/consistency_audit.py",
-    "skills/n2d-review/scripts/consistency_ledger.py",
-    "skills/n2d-review/scripts/gate.py",
-    "skills/n2d-review/scripts/mechanical_check.py",
-    "skills/n2d-review/scripts/motion_quality_consistency.py",
-    "skills/n2d-review/scripts/resident_presence.py",
-    "skills/n2d-review/scripts/scene_consistency.py",
-    "skills/n2d-review/scripts/video_semantic_runner.py",
-    "skills/n2d/scripts/audience_experience.py",
-    "skills/n2d/scripts/failure_taxonomy.py",
-    "skills/n2d/scripts/preventive_contracts.py",
-    "skills/n2d/scripts/release_verdict.py",
-    "skills/n2d/scripts/stop_loss.py"
-  ],
-  "changed_skills": [
-    "n2d",
-    "n2d-compose",
-    "n2d-dashboard",
-    "n2d-image",
-    "n2d-review"
-  ],
-  "commands": [
-    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review\" --max-concurrency 1 --max-retries 1",
-    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）"
-  ],
+  "changed_files": [],
+  "changed_skills": [],
+  "commands": [],
   "contract_inheritance": {
     "asset_blocks": 0,
     "field_blocks": 0,
     "field_warns": 0,
-    "freshness": "stale",
-    "generated_at": "2026-07-03T12:25:49Z",
+    "freshness": "fresh",
+    "generated_at": "2026-07-07T10:04:24Z",
     "identity_blocks": 0,
     "inherited": true,
     "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/contract_inheritance_第1集.json",
@@ -50,7 +17,7 @@
     "status": "ok",
     "verdict": "pass"
   },
-  "created_at": "2026-07-06T10:29:07+00:00",
+  "created_at": "2026-07-07T10:19:38+00:00",
   "current_stage": "review",
   "current_todo": {
     "column": "验收",
@@ -62,76 +29,53 @@
     "status": "⬜"
   },
   "episode": "第1集",
-  "execution_steps": [
-    {
-      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 1 --rerun-from image_prompt --scope \"skill 更新后重制到 review\" --max-concurrency 1 --max-retries 1",
-      "role": "queue_bounded_rerun",
-      "type": "command"
-    },
-    {
-      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-image /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第1集`",
-      "role": "manual_alternative",
-      "type": "agent_step"
-    },
-    {
-      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第1集 --stage image  # 重出图后验像素一致性（含 image_qc）",
-      "role": "verify_after_image_regen",
-      "run_when": "仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
-      "type": "command"
-    }
-  ],
-  "gate_refresh_needed": true,
-  "gate_refresh_stages": [
-    "image"
-  ],
+  "execution_steps": [],
+  "gate_refresh_needed": false,
+  "gate_refresh_stages": [],
   "image_consistency": {
-    "advisory": 32,
+    "advisory": 71,
     "consistent": true,
     "degraded": false,
-    "freshness": "stale",
+    "freshness": "fresh",
     "hard_blocks": 0,
     "precision_level": "full",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.md",
     "samples": [
-      "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚"
+      "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "片内时序(N2)"
     ],
     "status": "ok",
     "verdict": "review"
   },
   "image_qc_environment": {
-    "advisory": 32,
+    "advisory": 71,
     "degraded": false,
     "finding_samples": [
-      "接触/持有镜缺结构化 interaction_graph；自由文本提示无法稳定约束接触点、身体部位归属与遮挡顺序。",
-      "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚"
+      "CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚",
+      "片内时序(N2)"
     ],
-    "freshness": "stale",
+    "freshness": "fresh",
     "hard_blocks": 0,
     "jump_reason": "full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
     "jump_to_stage": "video",
     "precision_level": "full",
-    "python": "/opt/homebrew/Caskroom/miniconda/base/bin/python3",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
     "recommended_install": "",
     "report_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.json",
     "report_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第1集/image_qc_第1集.md",
     "status": "ok",
-    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniconda/base/bin/python3；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：video；原因：full image_qc 仅有非阻断初筛项，已作为 gate warn 入账；不阻断进入 video",
     "verdict": "review"
   },
   "kind": "n2d_skill_update_plan",
   "needs_record": false,
   "newly_relevant_skills": [],
   "notes": [
-    "真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。",
-    "共享定妆库需复核（非默认沿用）：本次变更命中定妆库生产规则（skills/n2d-image/SKILL.md）。先按最新规则复核、必要时重出共享定妆/场景，再用 `python3 skills/n2d-image/scripts/asset_impact.py <作品根> <改动的定妆资产>` 级联出引用它、需跟着重出的本集分镜。",
-    "三帧契约豁免：路由后端 deferred_auto_route 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。",
-    "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第1集` 再据此判断。",
-    "契约继承报告已过期（生成后出图/出视频 prompt 又改了，inputs_fingerprint 失配）：`inherited` 结论不可信，先重跑 `python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第1集` 再判。"
+    "三帧契约豁免：路由后端 deferred_auto_route 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
   ],
   "plan_json": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第1集.json",
   "plan_md": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第1集.md",
-  "rebuild_needed": true,
+  "rebuild_needed": false,
   "regen_mode": "最小",
   "relevant_skills": [
     "n2d",
@@ -146,39 +90,13 @@
     "n2d-video",
     "n2d-voice"
   ],
-  "rerun_from": "image_prompt",
+  "rerun_from": null,
   "rerun_until": "review",
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
-  "shared_lock_changed_files": [
-    "skills/n2d-image/SKILL.md"
-  ],
+  "shared_lock_changed_files": [],
   "shared_lock_reuse": false,
   "smart_suggestions": [],
-  "snapshot_changed_files": [
-    "skills/n2d-compose/compose.sh",
-    "skills/n2d-dashboard/scripts/dashboard.py",
-    "skills/n2d-image/SKILL.md",
-    "skills/n2d-image/scripts/codex_image_runner.py",
-    "skills/n2d-image/scripts/derive_makeup_pack.py",
-    "skills/n2d-image/scripts/image_prompt_pack.py",
-    "skills/n2d-image/scripts/image_qc.py",
-    "skills/n2d-image/scripts/vlm_verify.py",
-    "skills/n2d-review/SKILL.md",
-    "skills/n2d-review/scripts/backends/presence_owlv2.py",
-    "skills/n2d-review/scripts/consistency_audit.py",
-    "skills/n2d-review/scripts/consistency_ledger.py",
-    "skills/n2d-review/scripts/gate.py",
-    "skills/n2d-review/scripts/mechanical_check.py",
-    "skills/n2d-review/scripts/motion_quality_consistency.py",
-    "skills/n2d-review/scripts/resident_presence.py",
-    "skills/n2d-review/scripts/scene_consistency.py",
-    "skills/n2d-review/scripts/video_semantic_runner.py",
-    "skills/n2d/scripts/audience_experience.py",
-    "skills/n2d/scripts/failure_taxonomy.py",
-    "skills/n2d/scripts/preventive_contracts.py",
-    "skills/n2d/scripts/release_verdict.py",
-    "skills/n2d/scripts/stop_loss.py"
-  ],
+  "snapshot_changed_files": [],
   "source_drift": {
     "status": "clean"
   },

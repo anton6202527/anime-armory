@@ -296,7 +296,8 @@ def validate_pacing(story: Mapping[str, Any], path: str) -> Tuple[Dict[str, Any]
             clip.get("template"),
         )
         explicit_primary = bool(PRIMARY_RUNTIME_RE.search(text))
-        compressed = bool(COMPRESSED_RUNTIME_RE.search(text))
+        compressed_signal = bool(COMPRESSED_RUNTIME_RE.search(text))
+        compressed = compressed_signal and not explicit_primary
         is_spectacle = spectacle_clip(clip)
         is_key = key_clip(clip, idx, total)
 
