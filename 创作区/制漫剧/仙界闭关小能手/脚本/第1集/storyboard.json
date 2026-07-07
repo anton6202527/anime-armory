@@ -51,8 +51,16 @@
   ],
   "pacing_allocation": {
     "total_target_sec": 60,
-    "primary_runtime_focus": ["EP01_CLIP01", "EP01_CLIP02", "EP01_CLIP04", "EP01_CLIP05", "EP01_CLIP06"],
-    "compressed_clip_ids": ["EP01_CLIP03"],
+    "primary_runtime_focus": [
+      "EP01_CLIP01",
+      "EP01_CLIP02",
+      "EP01_CLIP04",
+      "EP01_CLIP05",
+      "EP01_CLIP06"
+    ],
+    "compressed_clip_ids": [
+      "EP01_CLIP03"
+    ],
     "strategy": "主时长给黑殿羞辱、挑水死令、主动提前认路、挑水压迫和夜潭破盆；父母身世、资源被夺、空屋粗饭只用4秒快闪。"
   },
   "style_contract": {
@@ -60,7 +68,41 @@
     "visual_tone": "冷灰底层仙门环境与克制暖金奇物微光对比；人物为半写实3D国风仙侠漫剧脸。",
     "composition": "9:16竖屏，近景情绪优先；脸部中上三分之一，道具和水面中下三分之一。",
     "lighting": "黑殿冷暗，山路青灰，破盆只给微弱暖金光。",
-    "negative": "禁止截图UI、播放按钮、搜索框、字幕水印、右侧平台竖字、黄色话题字、成年觉醒金纹提前污染少年常态。"
+    "negative": "禁止截图UI、播放按钮、搜索框、字幕水印、右侧平台竖字、黄色话题字、成年觉醒金纹提前污染少年常态。",
+    "style_anchor": "出图/共享/图片/CHAR_FEMALE_LEAD_定型参考_待绑定.png"
+  },
+  "visual_contract": {
+    "color_baseline": "黑殿和杂役区冷灰低饱和；夜潭以青灰月光为主，只在破盆微光处出现克制暖金。",
+    "scene_light_anchors": [
+      {
+        "location_id": "LOC_BLACK_HALL",
+        "key_light": "上方冷暗天井光，张老大一侧有弱暖灯，贺平生脸部受压在阴影里。"
+      },
+      {
+        "location_id": "LOC_WATER_ROUTE",
+        "key_light": "夜路青灰月光，水桶和肩背有湿冷反光。"
+      },
+      {
+        "location_id": "LOC_NIGHT_POOL",
+        "key_light": "水面冷月光；破盆微光只在末帧盆底一线暖金出现。"
+      }
+    ],
+    "axis_and_eyeline": "黑殿压迫轴线以贺平生低位为锚；出殿后跟随贺平生向后山右上行进；夜潭最后从人物轴切到道具轴。",
+    "character_state_progression": [
+      {
+        "character_id": "CHAR_HE_PINGSHENG",
+        "from_clip": "EP01_CLIP01",
+        "to_clip": "EP01_CLIP06",
+        "state": "14岁少年杂役态；粗布旧衣从干净到肩背磨红、发丝微乱，但不出现成年觉醒金纹、口角血或华服。"
+      }
+    ],
+    "shot_size_ladder": [
+      "MS",
+      "CU",
+      "LS",
+      "CU montage",
+      "ECU object"
+    ]
   },
   "policy": {
     "tailframe_default": true,
@@ -74,16 +116,30 @@
       "id": "EP01_CLIP01",
       "beat_id": "Beat_01",
       "label": "黑殿围审与费钱货羞辱",
-      "duration": 10,
+      "duration": 19.573,
       "start_sec": 0,
       "end_sec": 10,
       "pacing_role": "冷开场主钩",
       "runtime_priority": "primary",
       "duration_policy": "10秒用于建立压迫、身份问答和费钱货落点；这是首屏留存核心。",
-      "voiceover_indices": [1, 2, 3, 4, 5, 6],
+      "voiceover_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "location_id": "LOC_BLACK_HALL",
-      "character_ids": ["CHAR_HE_PINGSHENG", "CHAR_ZHANG_LAODA", "GROUP_SERVANTS"],
-      "object_ids": ["PROP_SERVANT_HALL_LAMP"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA",
+        "GROUP_SERVANTS"
+      ],
+      "object_ids": [
+        "PROP_SERVANT_HALL_LAMP"
+      ],
       "template": "dialogue_shot_reverse",
       "dramatic_function": "用围审和嘲笑把主角的低位、五行灵根劣势和杂役阶层压迫一次打出。",
       "audience_effect": "观众立刻知道主角被羞辱，并等待他如何在仙门底层活下去。",
@@ -109,13 +165,22 @@
         "axis": "黑殿左右轴线稳定，反打不越轴",
         "blocking": "压迫方高位，受压方低位，前景杂役压边",
         "camera_rule": "先定场后近景反打，费钱货落点怼张老大嘴角和贺平生眼神",
-        "post_cue_points": ["费钱货落点短鼓", "群笑压半秒即切"],
+        "post_cue_points": [
+          "费钱货落点短鼓",
+          "群笑压半秒即切"
+        ],
         "negative": "贺平生仍为14岁少年杂役态，不出现成年觉醒金纹或口角血。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "CHAR_ZHANG_LAODA", "GROUP_SERVANTS"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "GROUP_SERVANTS"
+        ],
         "offscreen_presence": [],
-        "forbidden_presence": ["CHAR_FEMALE_LEAD"],
+        "forbidden_presence": [
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "开场直接进入被围状态；尾帧群笑压向贺平生。"
       },
       "continuity": {
@@ -125,9 +190,21 @@
         "midframe": "张老大说出费钱货时，贺平生脸部近景压住情绪。",
         "tailframe": "群杂役笑声压住画面，张老大的命令声准备接入水缸。",
         "anchors": [
-          {"at_sec": 0, "use": "start", "frame": "黑殿围审定场"},
-          {"at_sec": 5, "use": "keyframe", "frame": "五行灵根答出口后众人反应"},
-          {"at_sec": 10, "use": "tail", "frame": "群笑压近贺平生"}
+          {
+            "at_sec": 0,
+            "use": "start",
+            "frame": "黑殿围审定场"
+          },
+          {
+            "at_sec": 5,
+            "use": "keyframe",
+            "frame": "五行灵根答出口后众人反应"
+          },
+          {
+            "at_sec": 10,
+            "use": "tail",
+            "frame": "群笑压近贺平生"
+          }
         ]
       }
     },
@@ -135,16 +212,25 @@
       "id": "EP01_CLIP02",
       "beat_id": "Beat_02",
       "label": "张老大落下挑水死令",
-      "duration": 9,
+      "duration": 9.76,
       "start_sec": 10,
       "end_sec": 19,
       "pacing_role": "主线任务落点",
       "runtime_priority": "primary",
       "duration_policy": "9秒承接羞辱，必须把任务、水缸和责罚威胁拍清楚。",
-      "voiceover_indices": [7, 8],
+      "voiceover_indices": [
+        8,
+        9
+      ],
       "location_id": "LOC_BLACK_HALL_TO_WATER_YARD",
-      "character_ids": ["CHAR_HE_PINGSHENG", "CHAR_ZHANG_LAODA"],
-      "object_ids": ["PROP_WATER_JAR_PAIR", "PROP_CARRYING_POLE"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_ZHANG_LAODA"
+      ],
+      "object_ids": [
+        "PROP_WATER_JAR_PAIR",
+        "PROP_CARRYING_POLE"
+      ],
       "template": "task_order",
       "dramatic_function": "把口头羞辱转成会压垮身体的具体苦差，建立夜潭破盆的因果。",
       "audience_effect": "观众知道主角不是随便去水边，而是被迫进入高强度挑水行动线。",
@@ -169,13 +255,25 @@
         "story_function": "任务与威胁下达",
         "blocking": "张老大靠近镜头，扁担成为横向压线；贺平生后退半步后接下。",
         "camera_rule": "道具先行，命令随道具落地；不要拍成普通交代镜。",
-        "post_cue_points": ["水缸入画给低频声", "扁担上肩给木响"],
+        "post_cue_points": [
+          "水缸入画给低频声",
+          "扁担上肩给木响"
+        ],
         "negative": "不要让贺平生顶嘴或正面反抗。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "CHAR_ZHANG_LAODA", "PROP_WATER_JAR_PAIR", "PROP_CARRYING_POLE"],
-        "offscreen_presence": ["GROUP_SERVANTS"],
-        "forbidden_presence": ["CHAR_FEMALE_LEAD"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "CHAR_ZHANG_LAODA",
+          "PROP_WATER_JAR_PAIR",
+          "PROP_CARRYING_POLE"
+        ],
+        "offscreen_presence": [
+          "GROUP_SERVANTS"
+        ],
+        "forbidden_presence": [
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "从群笑接水缸；尾帧扁担压到贺平生肩上。"
       },
       "interaction_graph": [
@@ -196,9 +294,21 @@
         "midframe": "扁担横穿画面，压向贺平生肩头。",
         "tailframe": "扁担压肩的动作接入破旧包袱快闪。",
         "anchors": [
-          {"at_sec": 10, "use": "start", "frame": "水缸近景接入"},
-          {"at_sec": 14.5, "use": "keyframe", "frame": "张老大命令压下"},
-          {"at_sec": 19, "use": "tail", "frame": "贺平生接扁担"}
+          {
+            "at_sec": 10,
+            "use": "start",
+            "frame": "水缸近景接入"
+          },
+          {
+            "at_sec": 14.5,
+            "use": "keyframe",
+            "frame": "张老大命令压下"
+          },
+          {
+            "at_sec": 19,
+            "use": "tail",
+            "frame": "贺平生接扁担"
+          }
         ]
       }
     },
@@ -206,17 +316,26 @@
       "id": "EP01_CLIP03",
       "beat_id": "Beat_03",
       "label": "身世与杂役处境四秒快闪",
-      "duration": 4,
+      "duration": 3.003,
       "start_sec": 19,
       "end_sec": 23,
       "pacing_role": "背景一笔带过",
       "runtime_priority": "low",
       "duration_policy": "非关键背景只给4秒，不独立成长戏。",
       "compression_plan": "三枚快闪：破旧包袱、空房粗饭、两口水缸；旁白只保留父母早亡、资源被夺、无人照拂的因果。",
-      "voiceover_indices": [9, 10],
+      "voiceover_indices": [
+        10
+      ],
       "location_id": "LOC_SERVANT_QUARTER",
-      "character_ids": ["CHAR_HE_PINGSHENG", "CHAR_HAN_LAOSAN"],
-      "object_ids": ["PROP_OLD_BUNDLE", "PROP_IRON_BOWL", "PROP_WATER_JAR_PAIR"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG",
+        "CHAR_HAN_LAOSAN"
+      ],
+      "object_ids": [
+        "PROP_OLD_BUNDLE",
+        "PROP_IRON_BOWL",
+        "PROP_WATER_JAR_PAIR"
+      ],
       "template": "compressed_flashback",
       "dramatic_function": "补足贺平生为什么无路可退，但不占用主时长。",
       "audience_effect": "观众获得最低限度背景理解，然后立刻回到行动线。",
@@ -234,13 +353,25 @@
         "template_id": "compressed_flashback",
         "story_function": "背景压缩",
         "camera_rule": "不做回忆长镜，只拍物件证据。",
-        "post_cue_points": ["短弦切片", "铁碗轻响"],
+        "post_cue_points": [
+          "短弦切片",
+          "铁碗轻响"
+        ],
         "negative": "不展开父母死亡场面，不新增仇人脸。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "PROP_OLD_BUNDLE", "PROP_IRON_BOWL", "PROP_WATER_JAR_PAIR"],
-        "offscreen_presence": ["CHAR_ZHANG_LAODA"],
-        "forbidden_presence": ["CHAR_FEMALE_LEAD"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_OLD_BUNDLE",
+          "PROP_IRON_BOWL",
+          "PROP_WATER_JAR_PAIR"
+        ],
+        "offscreen_presence": [
+          "CHAR_ZHANG_LAODA"
+        ],
+        "forbidden_presence": [
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "从扁担压肩匹配到包袱带被攥紧；尾帧空桶出门。"
       },
       "continuity": {
@@ -250,9 +381,21 @@
         "midframe": "空房和粗饭一闪而过。",
         "tailframe": "空桶出门接夜路。",
         "anchors": [
-          {"at_sec": 19, "use": "start", "frame": "破旧包袱"},
-          {"at_sec": 21, "use": "keyframe", "frame": "空房粗饭"},
-          {"at_sec": 23, "use": "tail", "frame": "贺平生背空桶出门"}
+          {
+            "at_sec": 19,
+            "use": "start",
+            "frame": "破旧包袱"
+          },
+          {
+            "at_sec": 21,
+            "use": "keyframe",
+            "frame": "空房粗饭"
+          },
+          {
+            "at_sec": 23,
+            "use": "tail",
+            "frame": "贺平生背空桶出门"
+          }
         ]
       }
     },
@@ -260,16 +403,23 @@
       "id": "EP01_CLIP04",
       "beat_id": "Beat_04",
       "label": "贺平生主动提前认路",
-      "duration": 8,
+      "duration": 2.96,
       "start_sec": 23,
       "end_sec": 31,
       "pacing_role": "主角主动性",
       "runtime_priority": "primary",
       "duration_policy": "8秒用于把贺平生从被动受压推进成主动求生的人。",
-      "voiceover_indices": [11],
+      "voiceover_indices": [
+        11
+      ],
       "location_id": "LOC_MOUNTAIN_PATH_NIGHT",
-      "character_ids": ["CHAR_HE_PINGSHENG"],
-      "object_ids": ["PROP_EMPTY_BUCKETS", "PROP_RUST_LOCK"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_EMPTY_BUCKETS",
+        "PROP_RUST_LOCK"
+      ],
       "template": "night_route_choice",
       "dramatic_function": "用动作表现主角谨慎和韧性，避免用长心理旁白解释。",
       "audience_effect": "观众开始站到主角一边，知道他不是只会挨打。",
@@ -288,13 +438,24 @@
         "story_function": "主动选择",
         "blocking": "单人夜路，压力来自远处笑声和黑暗山路。",
         "camera_rule": "先给路的长度，再给少年侧脸，不做英雄化大光效。",
-        "post_cue_points": ["远处笑声", "木桶轻碰"],
+        "post_cue_points": [
+          "远处笑声",
+          "木桶轻碰"
+        ],
         "negative": "不出现飞行、法术或成年觉醒光纹。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "PROP_EMPTY_BUCKETS"],
-        "offscreen_presence": ["GROUP_SERVANTS"],
-        "forbidden_presence": ["CHAR_ZHANG_LAODA", "CHAR_FEMALE_LEAD"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_EMPTY_BUCKETS"
+        ],
+        "offscreen_presence": [
+          "GROUP_SERVANTS"
+        ],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "从空桶出门接夜路；尾帧脚步进入水路。"
       },
       "interaction_graph": [
@@ -315,9 +476,21 @@
         "midframe": "听见远处笑声时停住半拍。",
         "tailframe": "脚步踩进山路碎石，接挑水蒙太奇。",
         "anchors": [
-          {"at_sec": 23, "use": "start", "frame": "夜路背桶出门"},
-          {"at_sec": 27, "use": "keyframe", "frame": "停步听见远处笑声"},
-          {"at_sec": 31, "use": "tail", "frame": "继续向后山水路走"}
+          {
+            "at_sec": 23,
+            "use": "start",
+            "frame": "夜路背桶出门"
+          },
+          {
+            "at_sec": 27,
+            "use": "keyframe",
+            "frame": "停步听见远处笑声"
+          },
+          {
+            "at_sec": 31,
+            "use": "tail",
+            "frame": "继续向后山水路走"
+          }
         ]
       }
     },
@@ -325,16 +498,24 @@
       "id": "EP01_CLIP05",
       "beat_id": "Beat_05",
       "label": "挑水压迫蒙太奇",
-      "duration": 13,
+      "duration": 7.099,
       "start_sec": 31,
       "end_sec": 44,
       "pacing_role": "身体压迫高光",
       "runtime_priority": "highlight",
       "duration_policy": "13秒给本集核心行动压力，但只取肩痛、溢水、脚滑三组信息，不拍完整往返。",
-      "voiceover_indices": [12, 13],
+      "voiceover_indices": [
+        12,
+        13
+      ],
       "location_id": "LOC_WATER_ROUTE",
-      "character_ids": ["CHAR_HE_PINGSHENG"],
-      "object_ids": ["PROP_CARRYING_POLE", "PROP_WATER_BUCKETS"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_CARRYING_POLE",
+        "PROP_WATER_BUCKETS"
+      ],
       "template": "labor_montage",
       "dramatic_function": "兑现二十趟挑水的体力压迫，让破盆机缘显得是苦活尽头撞出的结果。",
       "audience_effect": "观众感到他真的撑到极限，愿意继续看他发现异常。",
@@ -359,14 +540,26 @@
         "story_function": "体力压迫兑现",
         "blocking": "人物与道具单主体，避免多人干扰；每个切点只拍一处痛点。",
         "camera_rule": "近景细节比大远景重要；三连剪后给水边低头视线。",
-        "post_cue_points": ["扁担吱呀", "水溢出", "脚滑碎石", "喘息压低"],
+        "post_cue_points": [
+          "扁担吱呀",
+          "水溢出",
+          "脚滑碎石",
+          "喘息压低"
+        ],
         "degrade_plan": "若连续挑水动作不稳定，拆为肩部特写、水桶特写、脚步特写三张首帧分别出视频。",
         "negative": "不要拍完整二十趟路线，不要让画面变成慢生活风景。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "PROP_CARRYING_POLE", "PROP_WATER_BUCKETS"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_CARRYING_POLE",
+          "PROP_WATER_BUCKETS"
+        ],
         "offscreen_presence": [],
-        "forbidden_presence": ["CHAR_ZHANG_LAODA", "CHAR_FEMALE_LEAD"],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "从山路脚步接扁担压肩；尾帧脚下一滑低头看水面。"
       },
       "interaction_graph": [
@@ -387,10 +580,26 @@
         "midframe": "肩头磨红和水桶溢出。",
         "tailframe": "脚下一滑，视线落到潭底微光。",
         "anchors": [
-          {"at_sec": 31, "use": "start", "frame": "扁担压肩"},
-          {"at_sec": 35, "use": "keyframe", "frame": "水桶溢出和手指发白"},
-          {"at_sec": 40, "use": "keyframe", "frame": "脚步打滑"},
-          {"at_sec": 44, "use": "tail", "frame": "低头看向潭水"}
+          {
+            "at_sec": 31,
+            "use": "start",
+            "frame": "扁担压肩"
+          },
+          {
+            "at_sec": 35,
+            "use": "keyframe",
+            "frame": "水桶溢出和手指发白"
+          },
+          {
+            "at_sec": 40,
+            "use": "keyframe",
+            "frame": "脚步打滑"
+          },
+          {
+            "at_sec": 44,
+            "use": "tail",
+            "frame": "低头看向潭水"
+          }
         ]
       }
     },
@@ -398,16 +607,25 @@
       "id": "EP01_CLIP06",
       "beat_id": "Beat_06",
       "label": "夜潭黑陶破盆微光硬断",
-      "duration": 16,
+      "duration": 16.572,
       "start_sec": 44,
       "end_sec": 60,
       "pacing_role": "集尾钩子高光",
       "runtime_priority": "highlight",
       "duration_policy": "16秒给核心道具第一次入场；先让观众看见异常，再让主角误判成破盆，最后微光硬断。",
-      "voiceover_indices": [14, 15, 16, 17],
+      "voiceover_indices": [
+        14,
+        15,
+        16,
+        17
+      ],
       "location_id": "LOC_NIGHT_POOL",
-      "character_ids": ["CHAR_HE_PINGSHENG"],
-      "object_ids": ["PROP_BLACK_CLAY_BASIN"],
+      "character_ids": [
+        "CHAR_HE_PINGSHENG"
+      ],
+      "object_ids": [
+        "PROP_BLACK_CLAY_BASIN"
+      ],
       "template": "object_discovery",
       "dramatic_function": "把本集苦活转成金手指入口，留下第2集必须兑现的破盆异常。",
       "audience_effect": "观众知道这不是普通破盆，会追问它能带来什么变化。",
@@ -430,16 +648,31 @@
       "template_contract": {
         "template_id": "object_discovery",
         "story_function": "核心道具入场",
-        "evidence_chain": ["水底微光", "黑陶破盆", "主角误判", "盆底再亮"],
+        "evidence_chain": [
+          "水底微光",
+          "黑陶破盆",
+          "主角误判",
+          "盆底再亮"
+        ],
         "camera_rule": "观众先见异常，主角后见；最后一帧只给微光，不提前神器化。",
-        "post_cue_points": ["水滴声放大", "破盆出水吸附声", "轻金属泛音硬断"],
+        "post_cue_points": [
+          "水滴声放大",
+          "破盆出水吸附声",
+          "轻金属泛音硬断"
+        ],
         "vfx_rule": "暖金微光只在盆底一线出现，不扩散成法阵。",
         "negative": "不要让贺平生立刻知道宝物用途；不要出现第2集碧绿水提前剧透。"
       },
       "entity_schedule": {
-        "required_presence": ["CHAR_HE_PINGSHENG", "PROP_BLACK_CLAY_BASIN"],
+        "required_presence": [
+          "CHAR_HE_PINGSHENG",
+          "PROP_BLACK_CLAY_BASIN"
+        ],
         "offscreen_presence": [],
-        "forbidden_presence": ["CHAR_ZHANG_LAODA", "CHAR_FEMALE_LEAD"],
+        "forbidden_presence": [
+          "CHAR_ZHANG_LAODA",
+          "CHAR_FEMALE_LEAD"
+        ],
         "entry_exit": "从低头看水接水底微光；尾帧定格破盆微光。"
       },
       "interaction_graph": [
@@ -460,10 +693,26 @@
         "midframe": "指尖入水，黑陶破盆露出边缘。",
         "tailframe": "破盆离水滴水，盆底一线暖金微光。",
         "anchors": [
-          {"at_sec": 44, "use": "start", "frame": "水底微光"},
-          {"at_sec": 49, "use": "keyframe", "frame": "伸手触到黑陶破盆"},
-          {"at_sec": 55, "use": "keyframe", "frame": "贺平生捞起破盆疲惫失笑"},
-          {"at_sec": 60, "use": "tail", "frame": "盆底微光硬断"}
+          {
+            "at_sec": 44,
+            "use": "start",
+            "frame": "水底微光"
+          },
+          {
+            "at_sec": 49,
+            "use": "keyframe",
+            "frame": "伸手触到黑陶破盆"
+          },
+          {
+            "at_sec": 55,
+            "use": "keyframe",
+            "frame": "贺平生捞起破盆疲惫失笑"
+          },
+          {
+            "at_sec": 60,
+            "use": "tail",
+            "frame": "盆底微光硬断"
+          }
         ]
       }
     }
@@ -487,5 +736,6 @@
       "character_id": "CHAR_ZHANG_LAODA",
       "cue": "粗暴但不失控，像习惯压人的杂役头目。"
     }
-  ]
+  ],
+  "total_duration": 58.967
 }

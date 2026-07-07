@@ -1,0 +1,311 @@
+{
+  "kind": "n2d_episode_manifest",
+  "schema_version": 2,
+  "episode": "第1集",
+  "stage": "all",
+  "production_mode": "先出视频后配音",
+  "artifacts": [
+    {
+      "stage": "source",
+      "path": "开发包/series_bible.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "ae479f2b9bfa350187fbd755c4707caa0b963fb88e18f0610a12211b532373a8"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/adaptation_strategy.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8220a5dca9d5e975b6ce62eca780be161b1ac0aae57352576c4cd7550d753f9f"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/season_arc.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "0af69748452363004a672aa68e6eff610d378c7bdc15b06912eb9fef55b57f27"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/production_feasibility.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "05bd20cebb17b25c5cd251d60bb9fb4bae8a0fa110f64ed110bd60d360cb38f1"
+    },
+    {
+      "stage": "source",
+      "path": "开发包/pilot_greenlight.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6a720aaa1b79a9d513dcd975cdc4f53f512692149d9a4d4797009234b7b00f20"
+    },
+    {
+      "stage": "source",
+      "path": "脚本/第1集/raw.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "a00c2d0f09d82cba68fc88bd93c91f19cb27d9acb0b84551dd3775cb7b133d17"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第1集/voiceover.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "770984faef420b7923ea15b849d05acb6d92ba7ad81e424d357e3fe5c85bab3f"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第1集/bgm.txt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "629da5796c7aa90e7731ad28348cbede70d6debb09a8a3140a56df8c7c350e4a"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "脚本/第1集/封面.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "66967363fc97d34d1b61e60095663798903b3c965c5c361a0b7285f20990e1e7"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/global_style.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "dca235b23dbe03903c5c4c00056b08bc12e252c17e35ac0297625e9f7cc901da"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/characters/_角色总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "6ce43be30b263422da8b10ec6e8e8a1f1375ee02c52544507a7f13c4cfc46a9c"
+    },
+    {
+      "stage": "script_stage1",
+      "path": "设定库/locations/_场景总表.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "01dfbeb17a44a139827757add4a3a3109c7a68c417d3ab3dca41a28ff523fbf0"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第1集/配音/voice_zh.wav",
+      "exists": true,
+      "kind": "file",
+      "sha256": "9e1bd52212c9f657bc617d802cd01571ec99e452511166e9893a225af7233e74"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第1集/配音/时长清单.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "e11dd21a5405dd8f6e34279ba437969c1c1105a786d287f57e69364abe1bd8d8"
+    },
+    {
+      "stage": "voice",
+      "path": "合成/第1集/配音/_占位说明.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "7a11b0957fe7435b289e28819347f9d5a9b490ba1307564a987a2655118fde0a"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/director_beat_sheet.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8cc822003bb9deb929c0e0834d919aa343c3c3228f8b2437d48a3c3b59db8e7c"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/axis_blocking_map.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "d6f6bdc463b7dc7fb8a2645743e1f464ccb3240e8acf8c16158fb92a4a9fecb7"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/shot_progression_plan.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "8c9f36ca313824d5cd99c33bcdffe17cb16cfb7d9026135f472c3a585b8d85ab"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/transition_map.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "ef2fa031ff805fd90675d0d10665d8351dc19de9cab7e53de75d14066a857755"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/vertical_composition_plan.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "366c8bc6d5b728a3fe2db93f031bd94b55ab6cabdee1bfacf54f118050ea42e9"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/edit_rhythm_map.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "2f2642f8876613a6d3c512fbdd9bcf0f3825953314a29823f07f490012351e37"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "生产数据/director_blocking_pack_第1集.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "a109aea6709312d04950b8539eb12e9b1050fd35d32ea79f82ef21ff66b379a3"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/分镜剧本.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "653e1de6b65f5a4fdd7f6f2a0b3774fb2b42f1b41db9d4ea6a8f09c8ba3c9be7"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/故事板.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "4afec9b3d52ce84eaf077a1d61340acbe3e602fc1dc8031b35b7f8806d38be22"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/storyboard.json",
+      "exists": true,
+      "kind": "file",
+      "sha256": "645dce4c3763f2f3d6bc488ffcd24c8ac3d90bf6f0d82a897c7da6aa20d192cf"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/素材清单.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "733826b8a27fed673a4586aa2dcb14e2384f9cde73bf32ef995891c38b4aca9d"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/字幕_中文.srt",
+      "exists": true,
+      "kind": "file",
+      "sha256": "91d39a573ca82657f22e1536474796d7ae353f5a4fecc9aefb5292720e7e3631"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/字幕_英文.srt",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "script_stage2",
+      "path": "脚本/第1集/镜头时长.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/共享/prompt/00_索引.md",
+      "exists": true,
+      "kind": "file",
+      "sha256": "c0767d47428bed2a450125808568b224db3634ccacfd4ac7f60138fd32762289"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第1集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image_prompt",
+      "path": "出图/第1集/prompt/01_分镜出图.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "image",
+      "path": "出图/共享/图片",
+      "exists": true,
+      "kind": "dir",
+      "file_count": 2
+    },
+    {
+      "stage": "image",
+      "path": "出图/第1集/图片",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第1集/prompt/00_总览.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video_prompt",
+      "path": "出视频/第1集/prompt/01_clips.md",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "video",
+      "path": "出视频/第1集/视频",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第1集/成片_第1集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "compose",
+      "path": "合成/第1集/成片_第1集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/score_第1集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/consistency_ledger_第1集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_第1集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "生产数据/review_ui_findings_第1集.json",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第1集/成片_第1集_zh.mp4",
+      "exists": false,
+      "kind": "missing"
+    },
+    {
+      "stage": "review",
+      "path": "合成/第1集/成片_第1集_bilingual.mp4",
+      "exists": false,
+      "kind": "missing"
+    }
+  ],
+  "last_progress_column": "配音",
+  "last_progress_value": "⏳rough",
+  "last_progress_state": "rough"
+}
