@@ -1538,7 +1538,6 @@ fn text_matches(path: &Path, matcher: &Regex) -> Vec<WorkSearchMatch> {
 
 struct SearchOptions<'a> {
     matcher: &'a Regex,
-    include_content: bool,
 }
 
 fn search_work_dir(
@@ -1586,11 +1585,7 @@ fn search_work_dir(
             _ => continue,
         };
         let name_match = opts.matcher.is_match(&rel);
-        let matches = if opts.include_content {
-            text_matches(&path, opts.matcher)
-        } else {
-            Vec::new()
-        };
+        let matches = text_matches(&path, opts.matcher);
         if name_match || !matches.is_empty() {
             results.push(WorkSearchResult {
                 path: rel,
@@ -1608,7 +1603,6 @@ fn search_work_dir(
 pub fn search_work_files(
     root: String,
     query: String,
-    include_content: Option<bool>,
     case_sensitive: Option<bool>,
     whole_word: Option<bool>,
     use_regex: Option<bool>,
@@ -1634,10 +1628,7 @@ pub fn search_work_files(
         .case_insensitive(!case_sensitive)
         .build()
         .map_err(|e| format!("搜索表达式无效：{e}"))?;
-    let opts = SearchOptions {
-        matcher: &matcher,
-        include_content: include_content.unwrap_or(true),
-    };
+    let opts = SearchOptions { matcher: &matcher };
     let mut results = Vec::new();
     let mut scanned = 0usize;
     let capped = search_work_dir(&base, "", 0, &opts, &mut results, &mut scanned);

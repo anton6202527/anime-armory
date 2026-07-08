@@ -13,8 +13,14 @@ README_LINK_MODE="${R2A_README_LINK_MODE:-auto}"
 SIGNING_IDENTITY="${R2A_SIGNING_IDENTITY:-${APPLE_SIGNING_IDENTITY:--}}"
 NOTARY_PROFILE="${R2A_NOTARY_KEYCHAIN_PROFILE:-${APPLE_NOTARY_KEYCHAIN_PROFILE:-}}"
 REQUIRE_GATEKEEPER="${R2A_REQUIRE_GATEKEEPER:-0}"
+R2A_GH_HTTP_TIMEOUT_VALUE="${R2A_GH_HTTP_TIMEOUT:-}"
+if [[ "$R2A_GH_HTTP_TIMEOUT_VALUE" =~ ^[0-9]+$ ]]; then
+  R2A_GH_HTTP_TIMEOUT_VALUE="${R2A_GH_HTTP_TIMEOUT_VALUE}s"
+fi
 
 RELEASE_ALL=0
+BUILD_APP_ASSETS=1
+BUILD_DEMO_ASSETS=0
 UPLOAD=1
 UPDATE_README=1
 WORK=""
@@ -40,17 +46,18 @@ usage() {
   cat <<'EOF'
 Usage:
   r2a [--all]
+  r2a --demo-assets
 
 Equivalent script entry:
-  bash scripts/r2a_release.sh [--all] [--no-upload] [--no-readme] [--readme-link-mode auto|latest|tag] [--remote-source --source-ref ref]
+  bash scripts/r2a_release.sh [--all] [--demo-assets] [--with-demo-assets] [--no-upload] [--no-readme] [--readme-link-mode auto|latest|tag] [--remote-source --source-ref ref]
 
 Semantics:
   r2a
     Snapshot this local checkout, build only the macOS Apple Silicon DMG,
     upload it to anime-armory Releases as a release asset, and update only
     that DMG README link.
-    Publishes configured desktop demo works as separate Release zip assets.
-    Missing series are skipped. The desktop app downloads demos on demand.
+    Does not rebuild demo zip assets. The desktop app downloads existing demo
+    zips from the latest Release on demand.
     Excludes private agent files, git metadata, dist/, build targets, and
     dependency caches. Does NOT commit release artifacts into git history and
     is not marked as latest.
@@ -58,10 +65,20 @@ Semantics:
   r2a --all
     Snapshot this local checkout, build the public all-release package set,
     upload it to anime-armory Releases as release assets, update corresponding
-    README download links, and mark the release as latest. Desktop packages keep
-    no full demo payloads; configured demos are Release zip assets. Excludes private agent
-    files, git metadata, dist/, build targets, and dependency caches. The VSIX
+    README download links, and mark the release as latest. Does not rebuild
+    demo zip assets. Desktop packages keep no full demo payloads; the app
+    downloads existing demo zips from the latest Release on demand. The VSIX
     keeps only vscode-extension's own lightweight bundled seed work root.
+
+  r2a --demo-assets
+    Build and upload configured desktop demo works as separate Release zip
+    assets only. Does not build app installers, does not update README download
+    links, does not overwrite existing release notes, and does not mark the
+    release latest. Missing series are skipped.
+
+  r2a --all --with-demo-assets
+    Legacy combined path: build all app installers and demo zip assets in one
+    run. This is slower because large demo zips are packaged and uploaded too.
 
 Release artifact names:
   AnimeArmory_macos_arm64.dmg
@@ -77,6 +94,11 @@ Release artifact names:
 VSIX packaging intentionally does not copy selected desktop demo payloads.
 
 Options:
+  --demo-assets, --demos, --demo
+                         Build/upload only demo zip assets.
+  --with-demo-assets     Also build/upload demo zip assets in an app release.
+  --apps-only, --no-demo-assets
+                         Build/upload app installers only. This is the default.
   --remote-source        Build from a remote clone instead of this local checkout.
   --source-ref REF       Remote branch/tag to clone when --remote-source is used. Default: main.
   --source-repo URL      Remote source git URL when --remote-source is used. Default: anime-armory.
@@ -96,6 +118,12 @@ Environment:
   R2A_SIGNING_IDENTITY           macOS codesign identity. Default: ad-hoc "-".
   R2A_NOTARY_KEYCHAIN_PROFILE    Optional notarytool keychain profile.
   R2A_REQUIRE_GATEKEEPER=1       Fail if spctl rejects the macOS app.
+  R2A_GH_HTTP_TIMEOUT            Optional GitHub CLI HTTP timeout. Unset by default.
+  R2A_GH_RETRIES                 Retry count for GitHub metadata commands. Default: 10.
+  R2A_UPLOAD_RETRIES             Retry count per uploaded asset. Default: 10.
+  R2A_ASSUME_RELEASE_EXISTS=1    Recovery mode: skip the initial release existence lookup.
+  R2A_SKIP_REMOTE_DIGEST_PRECHECK=1
+                                  Recovery mode: upload without the pre-upload digest skip check.
 
 Download URL policy:
   Fixed, reproducible tag URL:
@@ -108,6 +136,21 @@ EOF
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --release)
+      shift
+      ;;
+    --demo-assets|--demos|--demo)
+      BUILD_APP_ASSETS=0
+      BUILD_DEMO_ASSETS=1
+      shift
+      ;;
+    --with-demo-assets)
+      BUILD_APP_ASSETS=1
+      BUILD_DEMO_ASSETS=1
+      shift
+      ;;
+    --apps-only|--no-demo-assets)
+      BUILD_APP_ASSETS=1
+      BUILD_DEMO_ASSETS=0
       shift
       ;;
     all|--all)
@@ -168,6 +211,12 @@ case "$SOURCE_MODE" in
     exit 2
     ;;
 esac
+
+if [[ "$BUILD_APP_ASSETS" != "1" && "$RELEASE_ALL" == "1" ]]; then
+  echo "r2a: --all only applies to app installer builds." >&2
+  echo "r2a: use --demo-assets alone for demo zips, or --all --with-demo-assets for the legacy combined path." >&2
+  exit 2
+fi
 
 case "$README_LINK_MODE" in
   auto|latest|tag) ;;
@@ -267,6 +316,25 @@ copy_selected_demo_payloads() {
   done
 }
 
+copy_selected_demo_references() {
+  local src_root="$1"
+  local dst_root="$2"
+  local demo
+  for demo in "${DEMO_WORKS[@]}"; do
+    copy_work_reference "$src_root" "$dst_root" "$demo"
+  done
+}
+
+copy_selected_demo_source() {
+  local src_root="$1"
+  local dst_root="$2"
+  if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    copy_selected_demo_payloads "$src_root" "$dst_root"
+  else
+    copy_selected_demo_references "$src_root" "$dst_root"
+  fi
+}
+
 copy_full_reference_lines() {
   local src_root="$1"
   local dst_root="$2"
@@ -294,7 +362,7 @@ snapshot_local_source() {
 
   echo "[r2a] snapshotting local checkout: $ROOT"
   rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
-  copy_selected_demo_payloads "$ROOT" "$SOURCE_DIR"
+  copy_selected_demo_source "$ROOT" "$SOURCE_DIR"
   copy_full_reference_lines "$ROOT" "$SOURCE_DIR"
 
   SOURCE_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo "unknown")"
@@ -425,7 +493,9 @@ prepare_source_snapshot() {
   if [[ "$SOURCE_MODE" == "remote" ]]; then
     clone_source
     select_demo_works "$SOURCE_DIR"
-    pull_selected_demo_lfs
+    if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+      pull_selected_demo_lfs
+    fi
   else
     snapshot_local_source
   fi
@@ -565,7 +635,11 @@ prepare_release_source() {
   else
     echo "[r2a] release source is local checkout snapshot; release artifacts are uploaded to GitHub Release assets"
   fi
-  echo "[r2a] source tree sanitized before build: selected demo payloads kept when present"
+  if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    echo "[r2a] source tree sanitized before build: selected demo payloads kept for demo zip assets"
+  else
+    echo "[r2a] source tree sanitized before build: selected demo references kept for app catalog; full payloads are not copied"
+  fi
 }
 
 install_node_deps() {
@@ -699,11 +773,56 @@ build_demo_zip_assets() {
     asset="$ARTIFACT_DIR/AnimeArmory_demo_${key}.zip"
     stage="$(mktemp -d "${TMPDIR:-/tmp}/r2a-demo-${key}.XXXXXX")"
     copy_work_payload "$SOURCE_DIR" "$stage" "$demo"
+    prune_demo_asset_stage "$stage/$demo" "$line" "$key"
     rm -f "$asset"
-    (cd "$stage" && zip -qr "$asset" "创作区")
+    (
+      cd "$stage"
+      find "创作区" -exec touch -h -t 202001010000 {} + 2>/dev/null || find "创作区" -exec touch -t 202001010000 {} +
+      COPYFILE_DISABLE=1 zip -X -qr "$asset" "创作区"
+    )
     rm -rf "$stage"
     validate_zip "$asset"
     ASSETS+=("$asset")
+  done
+}
+
+prune_demo_asset_stage() {
+  local work_dir="$1"
+  local line="$2"
+  local key="$3"
+  [[ -d "$work_dir" ]] || return
+  case "$key" in
+    n2d)
+      echo "[r2a] slimming n2d demo asset to first-episode media payload"
+      keep_only_named_child_dirs "$work_dir/出图" "第1集"
+      keep_only_named_child_dirs "$work_dir/合成" "第1集"
+      find "$work_dir/合成/第1集/配音" -maxdepth 1 -type f -name 'line_*.wav' -delete 2>/dev/null || true
+      ;;
+    *)
+      ;;
+  esac
+  : "$line"
+}
+
+keep_only_named_child_dirs() {
+  local dir="$1"
+  shift
+  [[ -d "$dir" ]] || return
+  local child name keep wanted
+  for child in "$dir"/*; do
+    [[ -e "$child" ]] || continue
+    [[ -d "$child" ]] || continue
+    name="$(basename "$child")"
+    keep=0
+    for wanted in "$@"; do
+      if [[ "$name" == "$wanted" ]]; then
+        keep=1
+        break
+      fi
+    done
+    if [[ "$keep" != "1" ]]; then
+      rm -rf "$child"
+    fi
   done
 }
 
@@ -724,7 +843,7 @@ format_asset_lines() {
 
 format_demo_lines() {
   if [[ "${#DEMO_WORKS[@]}" -eq 0 ]]; then
-    printf -- "- none from 创作区; no demo zip assets will be uploaded\n"
+    printf -- "- none from 创作区\n"
     return
   fi
   local demo
@@ -773,6 +892,44 @@ format_asset_download_lines() {
     base="$(basename "$asset")"
     printf -- "- https://github.com/%s/releases/download/%s/%s\n" "$TARGET_REPO" "$TAG" "$base"
   done
+}
+
+package_set_label() {
+  if [[ "$BUILD_APP_ASSETS" == "1" && "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    if [[ "$RELEASE_ALL" == "1" ]]; then
+      echo "macOS Apple Silicon DMG + Windows EXE + VSIX + demo zip assets"
+    else
+      echo "macOS Apple Silicon DMG + demo zip assets"
+    fi
+    return
+  fi
+  if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    if [[ "$RELEASE_ALL" == "1" ]]; then
+      echo "macOS Apple Silicon DMG + Windows EXE + VSIX"
+    else
+      echo "macOS Apple Silicon DMG only"
+    fi
+    return
+  fi
+  echo "demo zip assets only"
+}
+
+demo_asset_mode_line() {
+  if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    echo "Demo zip assets: built and uploaded in this run."
+  else
+    echo "Demo zip assets: not rebuilt in this run; existing Release demo assets are retained."
+  fi
+}
+
+vsix_note_line() {
+  if [[ "$BUILD_APP_ASSETS" == "1" && "$RELEASE_ALL" == "1" ]]; then
+    echo "VSIX seed work root: existing vscode-extension/创作区 only; selected desktop demo payloads not copied."
+  elif [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    echo "VSIX: not built in this release."
+  else
+    echo "VSIX: not built in demo-assets release."
+  fi
 }
 
 build_macos_assets() {
@@ -877,15 +1034,16 @@ $([[ "$UPLOAD" == "1" ]] && echo "Built locally and uploaded as GitHub Release a
 $(format_source_lines)
 - Release repo: https://github.com/${TARGET_REPO}
 - Release artifacts committed to git history: no
-- Package set: $([[ "$RELEASE_ALL" == "1" ]] && echo "macOS Apple Silicon DMG + Windows EXE + VSIX" || echo "macOS Apple Silicon DMG only")
+- Package set: $(package_set_label)
+- $(demo_asset_mode_line)
 
-Release demo zip assets from 创作区:
+Configured demo works for release download:
 $(format_demo_lines)
 
 Desktop non-demo work references:
 $(format_full_reference_lines)
 
-$([[ "$RELEASE_ALL" == "1" ]] && echo "VSIX seed work root: existing vscode-extension/创作区 only; selected desktop demo payloads not copied." || echo "VSIX: not built in this release.")
+$(vsix_note_line)
 
 Assets:
 $(format_asset_lines)
@@ -904,37 +1062,216 @@ upload_release() {
   require_cmd gh
   local notes="$1"
   local latest_args=(--latest=false)
-  if [[ "$RELEASE_ALL" == "1" ]]; then
+  if [[ "$BUILD_APP_ASSETS" == "1" && "$RELEASE_ALL" == "1" ]]; then
     latest_args=(--latest)
   fi
-  if GH_HTTP_TIMEOUT="${GH_HTTP_TIMEOUT:-600}" gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
-    GH_HTTP_TIMEOUT="${GH_HTTP_TIMEOUT:-600}" gh release upload "$TAG" "${ASSETS[@]}" "$OUT_DIR/SHA256SUMS.txt" \
-      --repo "$TARGET_REPO" \
-      --clobber
-    if [[ "$RELEASE_ALL" == "1" ]]; then
-      GH_HTTP_TIMEOUT="${GH_HTTP_TIMEOUT:-600}" gh release edit "$TAG" \
+  if release_exists; then
+    if [[ "$BUILD_APP_ASSETS" == "1" && "$RELEASE_ALL" == "1" ]]; then
+      gh_retry "edit release ${TAG}" gh release edit "$TAG" \
         --repo "$TARGET_REPO" \
         --title "AnimeArmory ${TAG}" \
         --notes-file "$notes" \
         --latest
-    else
-      GH_HTTP_TIMEOUT="${GH_HTTP_TIMEOUT:-600}" gh release edit "$TAG" \
+    elif [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+      gh_retry "edit release ${TAG}" gh release edit "$TAG" \
         --repo "$TARGET_REPO" \
         --title "AnimeArmory ${TAG}" \
         --notes-file "$notes"
+    else
+      echo "[r2a] demo-assets release: keeping existing release notes for ${TAG}"
     fi
   else
-    GH_HTTP_TIMEOUT="${GH_HTTP_TIMEOUT:-600}" gh release create "$TAG" "${ASSETS[@]}" "$OUT_DIR/SHA256SUMS.txt" \
+    gh_retry "create release ${TAG}" gh release create "$TAG" \
       --repo "$TARGET_REPO" \
       --title "AnimeArmory ${TAG}" \
       --notes-file "$notes" \
       "${latest_args[@]}"
   fi
+
+  upload_assets_sequentially
+  write_remote_checksums
+  upload_asset_with_retry "$OUT_DIR/SHA256SUMS.txt"
+}
+
+run_gh() {
+  if [[ -n "$R2A_GH_HTTP_TIMEOUT_VALUE" ]]; then
+    GH_HTTP_TIMEOUT="$R2A_GH_HTTP_TIMEOUT_VALUE" "$@"
+  else
+    "$@"
+  fi
+}
+
+gh_retry() {
+  local description="$1"
+  shift
+  local max_attempts="${R2A_GH_RETRIES:-10}"
+  local attempt=1
+  local status=1
+  while (( attempt <= max_attempts )); do
+    if run_gh "$@"; then
+      return 0
+    fi
+    status=$?
+    [[ "$status" -ne 0 ]] || status=1
+    echo "[r2a] GitHub command failed: ${description} (attempt ${attempt}/${max_attempts})" >&2
+    attempt=$((attempt + 1))
+    if (( attempt <= max_attempts )); then
+      sleep $((attempt * 5))
+    fi
+  done
+  return "$status"
+}
+
+release_exists() {
+  local output max_attempts attempt status
+  if [[ "${R2A_ASSUME_RELEASE_EXISTS:-0}" == "1" ]]; then
+    echo "[r2a] assuming GitHub release exists for ${TAG} (R2A_ASSUME_RELEASE_EXISTS=1)"
+    return 0
+  fi
+  max_attempts="${R2A_GH_RETRIES:-10}"
+  attempt=1
+  status=1
+  while (( attempt <= max_attempts )); do
+    if output="$(run_gh gh release view "$TAG" --repo "$TARGET_REPO" 2>&1 >/dev/null)"; then
+      return 0
+    fi
+    status=$?
+    [[ "$status" -ne 0 ]] || status=1
+    if printf '%s' "$output" | grep -Eiq 'not found|could not resolve to a Release'; then
+      return 1
+    fi
+    echo "[r2a] GitHub release lookup failed for ${TAG} (attempt ${attempt}/${max_attempts}): ${output}" >&2
+    attempt=$((attempt + 1))
+    if (( attempt <= max_attempts )); then
+      sleep $((attempt * 5))
+    fi
+  done
+  echo "Failed to check GitHub release ${TAG}: ${output}" >&2
+  exit "$status"
+}
+
+upload_assets_sequentially() {
+  require_assets
+  local asset
+  for asset in "${ASSETS[@]}"; do
+    upload_asset_with_retry "$asset"
+  done
+}
+
+asset_sha256() {
+  local path="$1"
+  if command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$path" | awk '{print $1}'
+  else
+    sha256sum "$path" | awk '{print $1}'
+  fi
+}
+
+remote_asset_sha256() {
+  require_cmd python3
+  local name="$1"
+  local assets_json="$OUT_DIR/release-assets-upload.json"
+  gh_retry "read release assets for ${name}" gh release view "$TAG" --repo "$TARGET_REPO" --json assets > "$assets_json"
+  python3 - "$assets_json" "$name" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+assets_path = Path(sys.argv[1])
+name = sys.argv[2]
+data = json.loads(assets_path.read_text(encoding="utf-8"))
+for asset in data.get("assets", []):
+    if asset.get("name") != name:
+        continue
+    if asset.get("state") and asset.get("state") != "uploaded":
+        continue
+    digest = asset.get("digest") or ""
+    if digest.startswith("sha256:"):
+        print(digest.removeprefix("sha256:"))
+    break
+PY
+}
+
+upload_asset_with_retry() {
+  local asset="$1"
+  local base local_digest remote_digest attempt max_attempts wait_seconds
+  base="$(basename "$asset")"
+  local_digest="$(asset_sha256 "$asset")"
+  if [[ "${R2A_SKIP_REMOTE_DIGEST_PRECHECK:-0}" == "1" ]]; then
+    remote_digest=""
+  else
+    remote_digest="$(remote_asset_sha256 "$base" || true)"
+  fi
+  if [[ -n "$remote_digest" && "$remote_digest" == "$local_digest" ]]; then
+    echo "[r2a] asset already up to date: $base"
+    return
+  fi
+
+  max_attempts="${R2A_UPLOAD_RETRIES:-10}"
+  attempt=1
+  while (( attempt <= max_attempts )); do
+    echo "[r2a] uploading asset: $base (attempt ${attempt}/${max_attempts})"
+    if run_gh gh release upload "$TAG" "$asset" \
+      --repo "$TARGET_REPO" \
+      --clobber; then
+      wait_seconds=3
+      for _ in 1 2 3; do
+        remote_digest="$(remote_asset_sha256 "$base" || true)"
+        if [[ "$remote_digest" == "$local_digest" ]]; then
+          return
+        fi
+        sleep "$wait_seconds"
+      done
+      echo "[r2a] uploaded $base but remote digest did not match yet; retrying" >&2
+    else
+      echo "[r2a] upload failed for $base; retrying if attempts remain" >&2
+    fi
+    attempt=$((attempt + 1))
+    if (( attempt <= max_attempts )); then
+      sleep $((attempt * 10))
+    fi
+  done
+
+  echo "Failed to upload verified release asset after ${max_attempts} attempts: $base" >&2
+  exit 1
+}
+
+write_remote_checksums() {
+  require_cmd gh
+  require_cmd python3
+  local assets_json="$OUT_DIR/release-assets.json"
+  gh_retry "read release assets for checksums" gh release view "$TAG" --repo "$TARGET_REPO" --json assets > "$assets_json"
+  python3 - "$assets_json" "$OUT_DIR/SHA256SUMS.txt" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+assets_path = Path(sys.argv[1])
+out_path = Path(sys.argv[2])
+data = json.loads(assets_path.read_text(encoding="utf-8"))
+rows = []
+missing = []
+for asset in data.get("assets", []):
+    name = asset.get("name") or ""
+    if not name or name == "SHA256SUMS.txt":
+        continue
+    if asset.get("state") and asset.get("state") != "uploaded":
+        continue
+    digest = asset.get("digest") or ""
+    if not digest.startswith("sha256:"):
+        missing.append(name)
+        continue
+    rows.append((name, digest.removeprefix("sha256:")))
+if missing:
+    raise SystemExit("missing sha256 digest for release asset(s): " + ", ".join(sorted(missing)))
+rows.sort(key=lambda item: item[0])
+out_path.write_text("".join(f"{digest}  {name}\n" for name, digest in rows), encoding="utf-8")
+PY
 }
 
 effective_readme_link_mode() {
   if [[ "$README_LINK_MODE" == "auto" ]]; then
-    if [[ "$RELEASE_ALL" == "1" ]]; then
+    if [[ "$BUILD_APP_ASSETS" == "1" && "$RELEASE_ALL" == "1" ]]; then
       echo "latest"
     else
       echo "tag"
@@ -946,6 +1283,9 @@ effective_readme_link_mode() {
 
 update_target_readme_links() {
   if [[ "$UPLOAD" != "1" || "$UPDATE_README" != "1" ]]; then
+    return
+  fi
+  if [[ "$BUILD_APP_ASSETS" != "1" ]]; then
     return
   fi
   require_assets
@@ -1002,15 +1342,21 @@ PY
 
 run_release() {
   require_cmd node
-  require_cmd npm
-  require_cmd hdiutil
-  require_cmd codesign
-  require_cmd ditto
   require_cmd unzip
-  require_cmd zip
+  if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    require_cmd npm
+    require_cmd hdiutil
+    require_cmd codesign
+    require_cmd ditto
+  fi
+  if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    require_cmd zip
+  fi
 
   prepare_release_source
-  install_node_deps "$SOURCE_DIR/desktop"
+  if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    install_node_deps "$SOURCE_DIR/desktop"
+  fi
 
   rm -f \
     "$ARTIFACT_DIR/AnimeArmory_macos_arm64.dmg" \
@@ -1018,12 +1364,16 @@ run_release() {
     "$ARTIFACT_DIR/anime-armory.vsix" \
     "$ARTIFACT_DIR"/AnimeArmory_demo_*.zip
 
-  build_macos_assets "aarch64-apple-darwin" "AnimeArmory_macos_arm64.dmg"
-  build_demo_zip_assets
+  if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    build_macos_assets "aarch64-apple-darwin" "AnimeArmory_macos_arm64.dmg"
+    if [[ "$RELEASE_ALL" == "1" ]]; then
+      build_windows_exe
+      build_vsix
+    fi
+  fi
 
-  if [[ "$RELEASE_ALL" == "1" ]]; then
-    build_windows_exe
-    build_vsix
+  if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
+    build_demo_zip_assets
   fi
 
   write_checksums

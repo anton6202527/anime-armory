@@ -39,6 +39,8 @@ import preventive_contracts  # noqa: E402
 import audience_experience  # noqa: E402
 import contract_trace  # noqa: E402
 import pilot_risk_sampler  # noqa: E402
+import production_locks  # noqa: E402
+import script_supervisor_log  # noqa: E402
 import stop_loss  # noqa: E402
 
 
@@ -46,7 +48,14 @@ VERSION = 1
 OUT_JSON = "release_verdict_{episode}.json"
 OUT_MD = "release_verdict_{episode}.md"
 PILOT_REQUIRED_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
-PRODUCTION_REQUIRED_FILES = ("production_breakdown.json", "continuity_breakdown.json", "ai_call_sheet.md")
+PRODUCTION_REQUIRED_FILES = (
+    "production_breakdown.json",
+    "continuity_breakdown.json",
+    "continuity_bible.json",
+    "ai_shooting_schedule.json",
+    "ai_call_sheet.md",
+)
+PRODUCTION_HANDOFF_MANIFEST = "production_handoff_pack.json"
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
 CONFIRMED_RE = re.compile(r"(?im)^\s*(?:status|状态)\s*[:：]\s*(?:confirmed|已确认|pass|通过)\s*$")
 STRICT_PROFILES = {"production", "commercial", "cn_public", "overseas"}
@@ -213,6 +222,21 @@ def check_production_handoff(root: Path, episode: str) -> Dict[str, Any]:
             continue
         ok, issues = _json_confirmed(path) if path.suffix == ".json" else _markdown_confirmed(path)
         rows.append({"file": rel, "status": "pass" if ok else "block", "issues": issues})
+    manifest = ep_dir / PRODUCTION_HANDOFF_MANIFEST
+    mrel = relpath(root, manifest)
+    mdata = load_json(manifest)
+    miss: List[str] = []
+    if not isinstance(mdata, dict):
+        miss.append("production_handoff_pack.json 缺失或无效")
+    else:
+        if str(mdata.get("status") or "").strip().lower() != "confirmed":
+            miss.append("status 不是 confirmed")
+        fresh = fingerprint_is_fresh(mdata.get("inputs_fingerprint"), str(root))
+        if fresh is False:
+            miss.append("inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff")
+        elif fresh is None:
+            miss.append("缺 inputs_fingerprint，不能证明 handoff 对应当前输入")
+    rows.append({"file": mrel, "status": "pass" if not miss else "block", "issues": miss})
     blockers = [r for r in rows if r["status"] != "pass"]
     if blockers:
         return component(
@@ -223,6 +247,35 @@ def check_production_handoff(root: Path, episode: str) -> Dict[str, Any]:
             details=blockers,
         )
     return component("production_handoff", "pass", "P-3 制片/场记交接已 confirmed。", path=relpath(root, ep_dir))
+
+
+def check_production_locks(root: Path, episode: str) -> Dict[str, Any]:
+    report = production_locks.check_ledger(root, episode, write_missing=False, stage="review")
+    status = str(report.get("status") or "").lower()
+    if status != "pass":
+        findings = report.get("findings") if isinstance(report.get("findings"), list) else []
+        msg = "锁版账未通过；先确认 source/script/storyboard/style_identity/voice_timing/picture lock，或记录解锁决策后重跑。"
+        return component(
+            "production_locks",
+            "block",
+            msg,
+            path=report.get("lock_path") or relpath(root, production_locks.lock_path(root, episode)),
+            details={"findings": findings[:20], "check_path": report.get("check_path")},
+        )
+    return component("production_locks", "pass", "生产锁版账通过，未发现锁后漂移。", path=report.get("lock_path"))
+
+
+def check_script_supervisor_log(root: Path, episode: str) -> Dict[str, Any]:
+    report = script_supervisor_log.check_log(root, episode, write_missing=False)
+    if report.get("status") != "pass":
+        return component(
+            "script_supervisor_log",
+            "block",
+            "缺生成后场记日志或存在未签收 take；先跑 script_supervisor_log.py check --write-missing 并确认 accepted_take。",
+            path=report.get("log_path"),
+            details={"findings": (report.get("findings") or [])[:20], "check_path": report.get("check_path")},
+        )
+    return component("script_supervisor_log", "pass", "生成后场记日志已覆盖 storyboard Clip 和 accepted take。", path=report.get("log_path"))
 
 
 def gate_files(root: Path, episode: str) -> List[Path]:
@@ -606,6 +659,8 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
     components = [
         check_progress_dag(root, episode),
         check_production_handoff(root, episode),
+        check_script_supervisor_log(root, episode),
+        check_production_locks(root, episode),
         check_pilot(root, episode),
         check_mini_pilot(root, episode, profile),
         check_contract_trace(root, episode, profile),

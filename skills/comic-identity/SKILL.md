@@ -77,6 +77,9 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 带 `CHAR_` 或 `MON_` 的格子如果是旧图、没有 reference manifest、或生成时 `reference_input_count=0`，必须进 `rerun_targets`。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
 - 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；`定妆级别=长线专门定妆` 时这些缺口是进入发布/连载审查前的阻断项。
+- 角色一致性不只看“像不像脸”。登记 `character_dna/dna_contract` 时必须覆盖脸型、眼型/眼距、鼻梁/嘴型、发际线、发型轮廓、服装主色、标志配饰/伤痕/灵纹、身高体态和眼神气质；这些字段会被 `comic-image` 写入逐格 prompt。
+- `visual_contract.scene_anchors` 里的 `LOC_` 场景锚同样属于 identity 层资产：关键场景必须登记布局、常驻物件、主光方向/冷暖、轴线视线和禁漂移项。缺场景锚时不要直接批量出图。
+- 漫画格的眼神和完整性标准不低于 n2d：角色必须有戏内 `gaze_target`，身体和关键道具必须完整可读；“漫画夸张”“Q版动态”不能作为换脸、换眼型、丢手脚、丢服装标志或场景漂移的豁免。
 - `参考一致性策略` 选择高一致性长线口径或开启 `年龄形态继承` 时，角色资产必须有可读的 DNA/禁漂移项和形态继承说明；缺失时先回本 skill 补登记，不要让 `comic-image` 用松散 prompt 硬跑。
 - 出图阶段不再生产空白气泡：台词、旁白、拟声词和气泡形状属于 `comic-compose`。旧图中遗留无字气泡时，优先回 `comic-image` 重出无气泡画面；无法重出时，合成阶段只能遮盖对应文字槽，不应留下空泡。
 

@@ -18,7 +18,7 @@
 1. 源本/点子/脚本进入 `源本/`，写 `_meta.json` 记录来源和权利状态。
 2. `comic-script` 产 `设定库/story_bible.md`、`脚本/第N话/分话大纲.md`、`panel_script.json`。
 3. `comic-layout` 产 `排版/第N话/layout.json`，决定页漫或条漫、阅读方向、格子比例、气泡占位。
-4. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记。
+4. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记；job 必须消费 `panel_script.json` 的视觉一致性契约（角色完整性、视线目标、场景布局、光位/冷暖、轴线视线）。
 5. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图和 manifest。
 6. `comic-review` 审阅读顺序、遮挡、文字密度、角色一致性、改编取舍、平台规格，再生成返修清单。
 
@@ -33,10 +33,10 @@
 - `comic-script`、`comic-layout`、`comic-image`、`comic-compose`、`comic-review` 的 SKILL.md 交付契约。
 - `comic-compose/scripts/export_longstrip.py`：读取 layout 和面板图，写导出 manifest；安装 Pillow 时可选渲染单张长图，显式设置分段高度时才切分。
 
-暂缓：
+MVP 之后继续增强：
 
 - 自动出图后端适配层。
-- 像素级角色一致性机检。
+- 更强像素级角色/场景一致性机检（当前已有共享参考、视觉契约、风格/角色并排报告和启发式指纹；后续可接 VLM/人脸 embedding/深度布局检测，但不得降低现有 gate）。
 - 大规模批跑、更新影响扫描、投放数据回灌。
 - 富交互排版 UI。
 
@@ -54,7 +54,7 @@
 
 不要让图像模型直接生成中文台词正文。推荐：
 
-- 面板图只画无字画面、空白气泡或预留区域。
+- 面板图只画无字画面和低细节留白区域；不要把对白气泡、空白气泡、旁白框或文字框烘焙进图像。
 - 台词、旁白、拟声词进入 `lettering.json`。
 - 项目 `_设置.md` 的 `文字语言` 默认 `中文`，可选 `英文`、`中上英下`、`英上中下` 或 `自定义语言(...)`。
 - 合成阶段用 SVG、HTML canvas 或 Pillow 渲染文字，再贴到页面或长图。

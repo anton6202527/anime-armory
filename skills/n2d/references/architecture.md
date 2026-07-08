@@ -17,11 +17,11 @@
 | 阶段 | Skill | 关注点 | 不关注 |
 |---|---|---|---|
 | 调度 | `n2d` | 路由 + 全局架构 | 任何具体生产细节 |
-| ①剧本改编 | `n2d-script`(阶段1) | 拆集 + 台词/bgm/封面 + 角色/场景卡 + global_style | 分镜 / AI CLI 调用 |
+| ①剧本改编 | `n2d-script`(阶段1) | 拆集 + 台词/bgm/封面 + 角色/场景卡 + global_style + table read 围读包 | 分镜 / AI CLI 调用 |
 | ②配音 | `n2d-voice` | `配音先行` 的逐句 AI 配音 + 时长清单.json；`原生音画` 下只作可选旁白/回退层 | 分镜 / 出图 |
-| ③分镜设计 | `n2d-script`(阶段2) | 按制作模式定稿分镜剧本/故事板/素材清单/SRT：原生音画读脚本时长，配音先行读真实配音时长 | 出图细节 |
+| ③分镜设计 | `n2d-script`(阶段2) | 按制作模式定稿分镜剧本/故事板/素材清单/SRT：原生音画读脚本时长，配音先行读真实配音时长；出图前补 executable animatic、P-3 制片拆解和 batch seed | 出图细节 |
 | ④出图 | `n2d-image` | 两层出图 prompt（定妆库+本集分镜）+ 扫 CLI + 生图 | 视频 prompt |
-| ⑤视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导；默认主流程完成边界 | 物料模板 |
+| ⑤视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导；默认 `clip_delivery_complete` 边界 | 物料模板 |
 | ⑥合成（可选） | `n2d-compose` | 用户启用 `合成阶段` 后，FFmpeg 脚本化剪辑 + BGM + 烧字幕 → 成片 | prompt 设计 |
 
 > **两个非显然的顺序决定**：① `配音先行` 才把配音前移到分镜之前，用逐句实测时长驱动镜头；`原生音画` 则由脚本/故事板时长直接驱动分镜，说话镜在视频后端一次生成台词+口型+环境声。② 出图分两层（先共享定妆库锁脸/场景/画风，再本集分镜，保跨镜一致）。
@@ -59,12 +59,22 @@
 │   ├── characters/                       角色设定（一角色一文件）
 │   ├── locations/                        场景设定
 │   └── voicebank/                        音色引用/音色库
+├── 生产数据/                             机器证据 / gate / 队列 / 锁版账本
+│   ├── animatic_第N集.json / animatic_第N集.html
+│   ├── ai_shooting_schedule_batch_seed_第N集.json / .md
+│   ├── final_timeline_probe_第N集.json
+│   ├── script_supervisor_log_第N集.jsonl / script_supervisor_log_第N集_summary.json
+│   └── creative_decision_log.jsonl        重大变更/豁免/降级的生产决策账
 ├── 废料/                                 废料归档（4 选 1 / 废图 / 废视频）
 ├── 脚本/                                 ← n2d-script（①剧本改编 + ③分镜设计）
 │   └── 第N集/
 │       ├── raw.txt                       拆集出来的原文片段
 │       ├── voiceover.txt / bgm.txt / 封面.md   ①剧本改编产物
+│       ├── table_read_packet.json / table_read_packet.md  ①后围读验收包
 │       ├── 分镜剧本.md / 故事板.md / 素材清单.md  ③分镜设计产物（配音后回跑）
+│       ├── animatic_packet.json / animatic_packet.md       ③后粗剪签收包（timed 预览落 生产数据/）
+│       ├── production_breakdown.json / continuity_breakdown.json / continuity_bible.json
+│       ├── ai_shooting_schedule.json / ai_call_sheet.md    P-3 制片/场记/排期/通告
 │       ├── 字幕_中文.srt / 字幕_英文.srt（英文仅海外/中英双语时生成）
 │       └── 镜头时长.json                 ③定稿锁定的逐镜头时长（驱动 Clip 长）
 ├── 合成/第N集/配音/                       ← n2d-voice（②配音）：line_NN.wav + voice_zh.wav + 时长清单.json（落「合成」层，不在出视频）
@@ -95,7 +105,8 @@
     └── 第N集/
         ├── 配音/                         ← n2d-voice 产物（line_NN.wav / voice_zh.wav / 时长清单.json）
         ├── _voicecache/                  配音缓存
-        ├── _work/                        compose 中间件（每次重建）
+        ├── _work/                        compose 中间件（含 timeline.json；每次重建）
+        ├── rough_cut_preview.html        粗剪 HTML 预览（rough cut lock 证据）
         └── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
 ```
 
@@ -173,9 +184,9 @@
 | 分镜设计 / 素材清单 / 字幕中 / 字幕英 | n2d-script 阶段2 | 按制作模式定稿分镜剧本/故事板/素材清单/SRT；配音先行读真实配音时长，原生音画读 `storyboard.json clips[].duration` |
 | 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享定妆库 + 本集分镜） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
-| 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数`；默认主流程到这里完成 |
-| 成片 | n2d-compose | 可选尾段：剪辑合成 + BGM + 烧字幕 → 成片完成；默认不参与完成判定 |
-| 验收 | n2d-review | 可选尾段：review gate + score + consistency ledger + review-ui 全部通过，并经人工显式签收 |
+| 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数`；默认到这里是 `clip_delivery_complete`，不是可发布母版 |
+| 成片 | n2d-compose | 可选尾段：剪辑合成 + BGM + 烧字幕 → 成片完成；默认不参与 clip 完成判定 |
+| 验收 | n2d-review | 可选尾段：review gate + score + consistency ledger + review-ui + release/readiness + production locks + creative governance 全部通过，并经人工显式签收 |
 
 **调度规则**：任一必经列为 ⬜ 时，对应 skill 可以接手该集；列已 ✅ 时，下游 skill 才能继续。`成片/验收` 只有在 `_设置.md` 写 `合成阶段: 启用`，或本集已经开始这两个列时才参与路由。完整逐列路由判断见调度器 `SKILL.md`。
 
@@ -243,7 +254,8 @@ n2d-voice →
 n2d-script（阶段2）→
   1. 跑 finalize_storyboard.py → 用实测时长定 分镜剧本 + 故事板(Clip时长) + 镜头时长.json
   2. 产 素材清单 + 字幕_中文.srt（默认中文-only；海外才加 字幕_英文.srt）
-  3. 分镜设计/素材清单/字幕中 列 ✅ → 报告：可调 n2d-image
+  3. 分镜设计/素材清单/字幕中 列 ✅
+  4. 确认 animatic_packet + timed animatic + P-3 交接包 → 可导入 batch seed 或直接调 n2d-image
 
 用户：跑 n2d-image 创作区/制漫剧/我的小说 第1集
 
@@ -254,7 +266,7 @@ n2d-image →
   4. 出 PNG → 用户筛 → 落档 出图/{共享,第N集}/ → 出图列填 K/N
   5. 全部生成 → 出图列 K/K → 报告可调 n2d-video
 
-用户：跑 n2d-video ... → 默认主流程完成；如需母带/BGM/字幕，再启用 n2d-compose（成片落 合成/第1集/）
+用户：跑 n2d-video ... → 默认到 clip_delivery_complete；如需母带/BGM/字幕/发布包，再启用 n2d-compose（成片落 合成/第1集/）并走 review/readiness
 ```
 
 ---
@@ -286,7 +298,7 @@ def dispatch(work_root):
             return ("n2d-compose", episode.id, "未合成")
         if compose_tail and episode["验收"] != "✅":
             return ("n2d-review", episode.id, "未验收")
-    return (None, None, "全集默认主流程完工")
+    return (None, None, "全集 clip_delivery_complete（若启用合成尾段且验收通过，则为 master_delivery_complete）")
 ```
 
 > 实际不需要另写脚本——机读路由用 `n2d/progress.py`，它经 `n2d/_lib/n2d_route.py` 复用 `n2d_contract.STAGE_GRAPH` 并按 `制作模式` 与 `合成阶段` 调整依赖。`制作模式=先出视频后配音` 的 `⏳rough` 放行、合成尾段启用后的补真音、`制作模式=原生音画` 的配音可选旁白层，都在同一套路由里生效。
@@ -295,4 +307,4 @@ def dispatch(work_root):
 
 ## 七、配音 / 分镜 / 合成阶段（均已实现）
 
-主状态机已全部落地：制作模式决定是否先跑配音；`配音先行` 是 `n2d-voice` 前移到分镜与出图之前，`原生音画` 是脚本时长驱动分镜并由视频后端生成台词+口型；默认主流程在 `视频` 列完成后收尾。只有用户启用 `合成阶段` 或本集已开始 `成片/验收` 时，才进入 `n2d-compose` 和 `n2d-review` 刷新 review gate、score、验收总账和 review-ui；发布包/交付口径下再由人工显式签收 `验收` 列。完整逐列路由见调度器 SKILL.md。
+主状态机已全部落地：制作模式决定是否先跑配音；`配音先行` 是 `n2d-voice` 前移到分镜与出图之前，`原生音画` 是脚本时长驱动分镜并由视频后端生成台词+口型；默认在 `视频` 列完成后收为 `clip_delivery_complete`。只有用户启用 `合成阶段` 或本集已开始 `成片/验收` 时，才进入 `n2d-compose` 和 `n2d-review` 刷新 review gate、score、验收总账、review-ui、release/readiness、production locks 和 creative governance；发布包/交付口径下再由人工显式签收 `验收` 列，形成 `master_delivery_complete`。完整逐列路由见调度器 SKILL.md。

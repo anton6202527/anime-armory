@@ -1,4 +1,4 @@
-# anime-armory
+# 创作兵工厂（anime-armory）
 
 **Language / 语言**：中文（默认） | [English](#en)
 
@@ -6,12 +6,14 @@
 
 ## 中文
 
-一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
+**创作兵工厂**是一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
+
+`anime-armory` 是仓库名、安装包与兼容性代号；顶层中文产品名统一为 **创作兵工厂**。其中 n2d 这条“小说文本 -> AI 漫剧 / 短剧”生产线可称为 **漫剧兵工厂**，但不再作为整个项目的总称。
 
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成六条彼此独立、可单独分发的生产线：
 
 - **小说（novel）**：立项 / 观察素材 / 审美样本 -> 章纲 -> 写作 -> 审稿 / 评分 / 专业编辑 -> 导出
-- **小说文本 -> AI 漫剧 / 短剧（n2d）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
+- **漫剧兵工厂（n2d，小说文本 -> AI 漫剧 / 短剧）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
 - **漫画（comic）**：故事 / 点子 / 脚本 -> 分话大纲 -> 分格脚本 -> 页面排版 -> 出图 -> 嵌字 -> 长图导出
 - **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
@@ -39,14 +41,14 @@
 
 ## 桌面端 App 能做什么
 
-桌面端 App 是 anime-armory 的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
+桌面端 App 是创作兵工厂的本地制作中控台：打开后先选择工作区，再按生产线进入 `制漫剧`、`画漫画`、`拍广告`、`制MV`、`写歌`、`写小说` 等作品目录。它把原本散在文件夹、终端和 skill 文档里的信息收拢到一个界面里，让制作团队能直观看到每条线有多少作品、每个项目走到哪一步、下一步该调用哪个 skill。
 
 进入项目后，App 会把左侧文件树、分镜画布 / 生产看板、右侧下一步提示和 AI agent 终端放在同一个工作台里。用户可以一边查看脚本、定妆图、分镜图、质检报告和生产数据，一边按右侧建议直接进入 Claude Code / Codex CLI / Gemini CLI 继续执行 `n2d-image`、`n2d-video`、`n2d-compose` 等阶段任务。
 
 <table>
   <tr>
     <td width="50%">
-      <img src="docs/app-screenshots/app-home.png" alt="AnimeArmory 桌面端首页，展示生产线和作品数量" />
+      <img src="docs/app-screenshots/app-home.png" alt="创作兵工厂桌面端首页，展示生产线和作品数量" />
       <br />
       <strong>生产线首页</strong><br />
       统一展示已接入桌面端的创作线，点击即可进入对应作品区。
@@ -132,10 +134,12 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 **桌面端 App / VS Code 插件发布（推荐走 `r2a`）**：
 
-当前 `r2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建 target；桌面端内置当前全部 skill，并带一个完整示例作品 `创作区/制漫剧/那妖魔是姜大人`。
+当前 `r2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建 target；桌面端内置当前全部 skill，只带 demo 下载目录，不内置完整 demo payload。
 
-- `/r2a`：Codex slash command，本地构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release assets，并更新 README 里这个 DMG 的下载链接；单包 release 默认不标为 latest，README 默认使用固定 tag 链接。
-- `/r2a --all`：本地构建并上传“下载安装”表里的全部安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；桌面端安装包带一个完整示例作品；VS Code `.vsix` 只保留扩展目录里自带的轻量种子创作区。`--all` 的 README 链接默认使用 `releases/latest/download/...`。
+- `/r2a`：Codex slash command，本地构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release assets，并更新 README 里这个 DMG 的下载链接；不重打 demo zip；单包 release 默认不标为 latest，README 默认使用固定 tag 链接。
+- `/r2a --all`：本地构建并上传“下载安装”表里的全部 app 安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；不重打 demo zip；桌面端安装包只带 demo 下载目录，VS Code `.vsix` 只保留扩展目录里自带的轻量种子创作区。`--all` 的 README 链接默认使用 `releases/latest/download/...`。
+- `/r2a --demo-assets`：只打包并上传各线 demo zip assets：`AnimeArmory_demo_novel.zip`、`AnimeArmory_demo_n2d.zip`、`AnimeArmory_demo_comic.zip`、`AnimeArmory_demo_song.zip`、`AnimeArmory_demo_mv.zip`、`AnimeArmory_demo_ad.zip`；不打 app、不更新 README app 链接、不覆盖已有 release notes、不标 latest。demo 内容没变时不需要跑。
+- `/r2a --all --with-demo-assets`：旧式合并路径，一次性打 app + demo zip；大 demo 会显著拖慢发布，只在确实要同批重发 demo 时用。
 - release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `R2A_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
 - README 下载链接策略：如果希望链接永久可复现，用固定 tag 链接，例如 `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`；如果希望 README 永远指向最新包，用 `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`。可用 `--readme-link-mode tag|latest|auto` 显式指定。
 - 如需旧行为从远程分支/标签打包，可加 `--remote-source --source-ref <ref>`。
@@ -301,12 +305,14 @@ anime-armory/
 
 [中文（默认）](#zh-cn) | English
 
-`anime-armory` is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
+Creation Armory (`anime-armory`) is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
+
+`anime-armory` remains the repository name and compatibility codename. The top-level product name is Creation Armory / 创作兵工厂; the n2d line is the comic-drama armory / 漫剧兵工厂.
 
 The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into six independent production lines:
 
 - **Novel (`novel`)**: project setup / observation notes / aesthetic samples -> chapter outline -> drafting -> review / scoring / professional editing -> export
-- **Novel text -> AI comic-drama / short drama (`n2d`)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
+- **Comic-drama armory (`n2d`, novel text -> AI comic-drama / short drama)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
 - **Comics (`comic`)**: story / idea / script -> chapter outline -> panel script -> layout -> images -> lettering -> long-scroll export
 - **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
 - **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
@@ -389,10 +395,12 @@ Published packages use the stable filenames listed above when uploaded to the `a
 
 **Desktop App / VS Code extension release, recommended `r2a` flow:**
 
-`r2a` now builds from a clean snapshot of the local checkout, produces installers locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory`. Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build targets. Desktop packages bundle all current skills plus one full sample work: `创作区/制漫剧/那妖魔是姜大人`.
+`r2a` now builds from a clean snapshot of the local checkout, produces installers locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory`. Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build targets. Desktop packages bundle all current skills plus a demo download catalog, not full demo payloads.
 
-- `/r2a`: Codex slash command that builds the macOS Apple Silicon `.dmg` locally, uploads it to `anime-armory` Release assets, and updates the matching README download link. Single-asset releases are not marked as latest by default, so README uses a fixed tag URL by default.
-- `/r2a --all`: builds and uploads every installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. Desktop packages include one full sample work; the VSIX keeps only its own lightweight bundled seed work root. For `--all`, README uses `releases/latest/download/...` by default.
+- `/r2a`: Codex slash command that builds the macOS Apple Silicon `.dmg` locally, uploads it to `anime-armory` Release assets, and updates the matching README download link. It does not rebuild demo zips. Single-asset releases are not marked as latest by default, so README uses a fixed tag URL by default.
+- `/r2a --all`: builds and uploads every app installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. It does not rebuild demo zips. Desktop packages include release-download demo catalog entries; the VSIX keeps only its own lightweight bundled seed work root. For `--all`, README uses `releases/latest/download/...` by default.
+- `/r2a --demo-assets`: builds and uploads only the per-line demo zip assets: `AnimeArmory_demo_novel.zip`, `AnimeArmory_demo_n2d.zip`, `AnimeArmory_demo_comic.zip`, `AnimeArmory_demo_song.zip`, `AnimeArmory_demo_mv.zip`, and `AnimeArmory_demo_ad.zip`. It does not build app installers, update README app links, overwrite existing release notes, or mark the release latest. Skip this when demo payloads have not changed.
+- `/r2a --all --with-demo-assets`: legacy combined path that builds app installers and demo zips in one run. This is slower because large demo zips are packaged and uploaded too.
 - Before upload, `r2a` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `R2A_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
 - README link policy: use a fixed tag URL for reproducible downloads, for example `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`; use `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg` when the README should always point to the newest package. Override with `--readme-link-mode tag|latest|auto`.
 - To build from a remote branch or tag instead of the local checkout, use `--remote-source --source-ref <ref>`.

@@ -66,7 +66,7 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage review
 ```
 
-`image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、混用模型/渠道等问题；`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。
+`image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、缺 `visual_contract`、逐格缺人物完整性/眼神目标、逐格缺场景布局/光位/轴线、`LOC_` 未登记、无理由看镜头、多人同格缺站位/遮挡/接触点、混用模型/渠道等问题；`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。
 
 若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。
 
@@ -82,6 +82,10 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 | 画面可读性 | 主体、表情、动作、道具是否清楚 |
 | 气泡遮挡 | 是否挡脸、手、关键动作、重要道具 |
 | 角色一致性 | 脸、发型、服装、标志物是否跨格稳定 |
+| 人物完整性 | 头发、脸、手、脚、服装、标志物和关键道具是否完整可读；动作格是否裁掉叙事必要部位 |
+| 眼神/视线一致性 | `gaze_target`、`eyeline_direction` 是否存在且具体；角色是否看向戏内对象而不是“坚定眼神/看前方/无理由看镜头” |
+| 场景连续性 | `scene_anchor_id` 是否登记到 `visual_contract.scene_anchors`；空间布局、主光方向/冷暖、轴线视线、常驻物件和前后景层级是否跨格继承 |
+| 站位/遮挡一致性 | 多人同格是否写清左右、前后景、遮挡、接触点和视线轴线，避免正反打或动作格空间关系漂移 |
 | 角色指纹/并排证据 | `CHAR_` 参考图是否与本话出场 panel 并排可审，face/hair/outfit 启发式是否提示异常 |
 | 风格一致性 | 生图模型/渠道是否统一，风格锚是否登记，面板是否出现照片感/色彩/细节密度离群，场景族群内是否自洽，同场景是否冷暖调色横跳，是否出现多面板拼贴 gutter 或外框/截图边 |
 | 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |

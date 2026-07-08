@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
   <key>NSDesktopFolderUsageDescription</key>
-  <string>AnimeArmory needs access to novels, images, audio, and video files you place on Desktop so it can import them into your projects.</string>
+  <string>Creation Armory needs access to novels, images, audio, and video files you place on Desktop so it can import them into your projects.</string>
   <key>NSDocumentsFolderUsageDescription</key>
-  <string>AnimeArmory needs access to novels and project references in Documents when you paste paths or ask the AI agent to process them.</string>
+  <string>Creation Armory needs access to novels and project references in Documents when you paste paths or ask the AI agent to process them.</string>
   <key>NSDownloadsFolderUsageDescription</key>
-  <string>AnimeArmory needs access to downloaded novels and media assets when you paste paths or drag them into a project.</string>
+  <string>Creation Armory needs access to downloaded novels and media assets when you paste paths or drag them into a project.</string>
   <key>NSNetworkVolumesUsageDescription</key>
-  <string>AnimeArmory needs access to selected novels and media assets on network volumes when they are used as project inputs.</string>
+  <string>Creation Armory needs access to selected novels and media assets on network volumes when they are used as project inputs.</string>
   <key>NSRemovableVolumesUsageDescription</key>
-  <string>AnimeArmory needs access to selected novels and media assets on external drives when they are used as project inputs.</string>
+  <string>Creation Armory needs access to selected novels and media assets on external drives when they are used as project inputs.</string>
 </dict>
 </plist>

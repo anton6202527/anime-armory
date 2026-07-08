@@ -30,6 +30,15 @@ try:
 except Exception:  # pragma: no cover - review must still run if optional character gate breaks
     character_consistency = None
 
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+try:
+    from platform_profiles import profile_for_platform, validate_manifest as validate_platform_manifest
+except Exception:  # pragma: no cover
+    profile_for_platform = None
+    validate_platform_manifest = None
+
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 
@@ -128,6 +137,271 @@ def panel_reference_ids(panel_script: dict) -> set[str]:
                 if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")):
                     ids.add(ref_id)
     return ids
+
+
+def compact_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        text = value.strip()
+    elif isinstance(value, list):
+        text = "；".join(compact_text(item) for item in value)
+    elif isinstance(value, dict):
+        text = "；".join(f"{key}:{compact_text(item)}" for key, item in value.items())
+    else:
+        text = str(value).strip()
+    return " ".join(text.split()).strip("； ")
+
+
+def panel_refs(panel: dict) -> list[str]:
+    ids: list[str] = []
+    for key in ("references", "characters"):
+        for raw in panel.get(key) or []:
+            ref_id = str(raw).strip()
+            if ref_id and ref_id not in ids:
+                ids.append(ref_id)
+    return ids
+
+
+def panel_character_refs(panel: dict) -> list[str]:
+    return [ref_id for ref_id in panel_refs(panel) if ref_id.startswith(("CHAR_", "MON_"))]
+
+
+def panel_character_count(panel: dict) -> int:
+    names = {compact_text(name) for name in panel.get("characters") or [] if compact_text(name)}
+    names.update(panel_character_refs(panel))
+    return len(names)
+
+
+def panel_has_character(panel: dict) -> bool:
+    return bool(panel.get("characters")) or bool(panel_character_refs(panel))
+
+
+def panel_scene_anchor_id(panel: dict) -> str:
+    for key in ("scene_anchor_id", "scene_id", "location_id"):
+        value = compact_text(panel.get(key))
+        if value:
+            return value
+    for ref_id in panel_refs(panel):
+        if ref_id.startswith("LOC_"):
+            return ref_id
+    return ""
+
+
+def panel_has_scene(panel: dict) -> bool:
+    return bool(compact_text(panel.get("location")) or panel_scene_anchor_id(panel))
+
+
+def contract_value(panel: dict, inherited: dict, *keys: str) -> str:
+    for key in keys:
+        value = compact_text(panel.get(key))
+        if value:
+            return value
+    for key in keys:
+        value = compact_text(inherited.get(key))
+        if value:
+            return value
+    return ""
+
+
+CAMERA_GAZE_TERMS = (
+    "看镜头",
+    "直视镜头",
+    "看读者",
+    "直视读者",
+    "看观众",
+    "直视观众",
+    "looking at viewer",
+    "eye contact with camera",
+    "camera",
+    "viewer",
+)
+POV_CAMERA_ROLE_TERMS = ("pov", "主观", "第一人称", "破第四墙", "直视镜头", "直视读者")
+VAGUE_GAZE_TERMS = ("坚定", "冷静", "愤怒", "悲伤", "惊讶", "眼神", "目光", "远方", "前方", "某处", "none", "n/a")
+FACE_INTEGRITY_TERMS = ("脸", "五官", "眼", "眼型", "眼距", "发际线", "发型", "头发")
+BODY_INTEGRITY_TERMS = ("手", "脚", "肢体", "身体", "腿", "手臂", "完整", "道具", "武器", "接触点")
+
+
+def contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    lowered = text.lower()
+    return any(term.lower() in lowered for term in terms)
+
+
+def camera_role_allows_direct_gaze(panel: dict) -> bool:
+    return contains_any(compact_text(panel.get("camera_role")) + " " + compact_text(panel.get("pov")), POV_CAMERA_ROLE_TERMS)
+
+
+def is_vague_gaze_target(value: str) -> bool:
+    text = value.strip().lower()
+    if not text:
+        return False
+    return any(term.lower() == text or term.lower() in text for term in VAGUE_GAZE_TERMS)
+
+
+def is_weak_integrity_contract(value: str) -> bool:
+    text = value.strip()
+    if not text:
+        return False
+    return not (contains_any(text, FACE_INTEGRITY_TERMS) and contains_any(text, BODY_INTEGRITY_TERMS))
+
+
+def visual_scene_anchors(panel_script: dict) -> dict:
+    visual_contract = panel_script.get("visual_contract") if isinstance(panel_script.get("visual_contract"), dict) else {}
+    anchors = visual_contract.get("scene_anchors") if isinstance(visual_contract.get("scene_anchors"), dict) else {}
+    return anchors if isinstance(anchors, dict) else {}
+
+
+def check_visual_contract_issues(panel_script: dict, chapter: str, issues: list[dict[str, str]]) -> None:
+    panels = panel_script.get("panels") if isinstance(panel_script.get("panels"), list) else []
+    if not panels:
+        return
+    visual_contract = panel_script.get("visual_contract") if isinstance(panel_script.get("visual_contract"), dict) else {}
+    scene_anchors = visual_scene_anchors(panel_script)
+    if not visual_contract:
+        add_issue(
+            issues,
+            "block",
+            "脚本/" + chapter + "/panel_script.json",
+            "panel_script 缺少 visual_contract，无法审查角色脸、眼神、场景光位和轴线一致性",
+            "comic-script",
+            "补 visual_contract.scene_anchors / character_integrity_policy 后重建出图包",
+            "visual_contract",
+        )
+    elif not scene_anchors:
+        add_issue(
+            issues,
+            "block",
+            "脚本/" + chapter + "/panel_script.json",
+            "visual_contract 缺少 scene_anchors；长线漫画场景不能只靠逐格自然语言",
+            "comic-script",
+            "登记 LOC_ 场景锚，并写 spatial_layout / lighting_anchor / axis_eyeline",
+            "visual_contract",
+        )
+    for scene_id, scene_contract in scene_anchors.items():
+        if not isinstance(scene_contract, dict):
+            continue
+        missing = [key for key in ("spatial_layout", "lighting_anchor", "axis_eyeline") if not compact_text(scene_contract.get(key))]
+        if missing:
+            add_issue(
+                issues,
+                "block",
+                f"脚本/{chapter}/panel_script.json#visual_contract.scene_anchors.{scene_id}",
+                f"{scene_id} 场景锚缺少：" + ",".join(missing),
+                "comic-script",
+                "补齐该 LOC_ 的布局、光位和轴线视线",
+                "visual_contract",
+            )
+    for panel in panels:
+        if not isinstance(panel, dict):
+            continue
+        pid = compact_text(panel.get("panel_id")) or "unknown"
+        artifact = f"脚本/{chapter}/panel_script.json#{pid}"
+        if panel_has_character(panel):
+            gaze_target = contract_value(panel, {}, "gaze_target", "eyeline_target")
+            eyeline_direction = contract_value(panel, {}, "eyeline_direction", "gaze_direction")
+            integrity = contract_value(panel, visual_contract, "character_integrity", "completeness_notes", "character_integrity_policy")
+            missing = []
+            if not gaze_target:
+                missing.append("gaze_target")
+            if not eyeline_direction:
+                missing.append("eyeline_direction")
+            if not integrity:
+                missing.append("character_integrity/completeness_notes")
+            if missing:
+                add_issue(
+                    issues,
+                    "block",
+                    artifact,
+                    f"{pid} 含角色但缺少人物/眼神契约：" + ",".join(missing),
+                    "comic-script",
+                    "补眼神目标、视线方向、脸/眼/发/服装/手脚完整性后再出图",
+                    "visual_contract",
+                )
+            if gaze_target and contains_any(gaze_target, CAMERA_GAZE_TERMS) and not camera_role_allows_direct_gaze(panel):
+                add_issue(
+                    issues,
+                    "block",
+                    artifact,
+                    f"{pid} 的 gaze_target 指向读者/镜头，但没有 POV 或破第四墙叙事理由",
+                    "comic-script",
+                    "改成戏内对象/对手/道具/画外声源，或明确 camera_role=POV/破第四墙",
+                    "visual_contract",
+                )
+            elif gaze_target and is_vague_gaze_target(gaze_target):
+                add_issue(
+                    issues,
+                    "warn",
+                    artifact,
+                    f"{pid} 的 gaze_target 过泛：{gaze_target}",
+                    "comic-script",
+                    "改成读者能定位的戏内目标，如对话对象、道具、命中点或画外声源",
+                    "visual_contract",
+                )
+            if integrity and is_weak_integrity_contract(integrity):
+                add_issue(
+                    issues,
+                    "warn",
+                    artifact,
+                    f"{pid} 的人物完整性契约未同时覆盖脸/眼/发和手脚/身体/关键道具",
+                    "comic-script",
+                    "补脸型、眼型/眼距、发际线、发型、服装标志、手脚和关键道具完整性",
+                    "visual_contract",
+                )
+        if panel_has_scene(panel):
+            scene_id = panel_scene_anchor_id(panel)
+            scene_contract = scene_anchors.get(scene_id) if scene_id in scene_anchors and isinstance(scene_anchors.get(scene_id), dict) else {}
+            missing_scene = []
+            if not scene_id:
+                missing_scene.append("scene_anchor_id/LOC_")
+            elif visual_contract and scene_id not in scene_anchors:
+                add_issue(
+                    issues,
+                    "block",
+                    artifact,
+                    f"{pid} 使用 {scene_id}，但 visual_contract.scene_anchors 未登记该场景锚",
+                    "comic-script",
+                    "登记该 LOC_ 场景锚，或改用已登记场景锚",
+                    "visual_contract",
+                )
+            if not contract_value(panel, scene_contract, "spatial_layout", "scene_layout", "layout"):
+                missing_scene.append("spatial_layout")
+            if not contract_value(panel, scene_contract, "lighting_anchor", "light_anchor"):
+                missing_scene.append("lighting_anchor")
+            if not contract_value(panel, scene_contract, "axis_eyeline", "eyeline_axis", "axis"):
+                missing_scene.append("axis_eyeline")
+            if missing_scene:
+                add_issue(
+                    issues,
+                    "block",
+                    artifact,
+                    f"{pid} 含场景但缺少场景连续性契约：" + ",".join(missing_scene),
+                    "comic-script",
+                    "补 LOC_ 场景锚、空间布局、光位/冷暖和轴线视线",
+                    "visual_contract",
+                )
+            if panel_character_count(panel) >= 2 and not contract_value(panel, scene_contract, "spatial_relationships", "blocking", "staging"):
+                add_issue(
+                    issues,
+                    "block",
+                    artifact,
+                    f"{pid} 含多个角色但缺少人物左右/前后景/遮挡或轴线关系",
+                    "comic-script",
+                    "补 spatial_relationships/blocking/staging，写清站位、遮挡和关键接触点",
+                    "visual_contract",
+                )
+
+
+def source_semantics_requires_normalization(panel_script: dict, source_semantics: dict) -> bool:
+    script_meta = panel_script.get("source_semantics") if isinstance(panel_script.get("source_semantics"), dict) else {}
+    return bool(source_semantics.get("requires_normalization") or script_meta.get("requires_normalization"))
+
+
+def required_source_semantic_panel_fields(source_semantics: dict) -> list[str]:
+    contract = source_semantics.get("panel_script_contract") if isinstance(source_semantics.get("panel_script_contract"), dict) else {}
+    fields = contract.get("required_panel_fields_when_normalized")
+    if isinstance(fields, list) and all(isinstance(item, str) for item in fields):
+        return fields
+    return ["source_excerpt", "meaning_zh", "text_target", "adaptation_note"]
 
 
 def has_style_anchor(registry: dict) -> bool:
@@ -386,6 +660,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         "settings": root / "_设置.md",
         "meta": root / "_meta.json",
         "panel_script": root / "脚本" / chapter / "panel_script.json",
+        "source_semantics": root / "脚本" / chapter / "source_semantics.json",
         "layout": root / "排版" / chapter / "layout.json",
         "lettering": root / "排版" / chapter / "lettering.json",
         "manifest": root / "排版" / chapter / "export_manifest.json",
@@ -400,6 +675,9 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             add_issue(issues, "block", str(paths[key].relative_to(root)), "审查必需文件缺失", "comic-" + ("compose" if key in ("lettering", "manifest") else "script"), "补齐文件后重新运行 comic-review", "missing_artifact")
 
     panel_script = load_json(paths["panel_script"], {})
+    script_source_meta = panel_script.get("source_semantics") if isinstance(panel_script.get("source_semantics"), dict) else {}
+    source_semantics_path = root / str(script_source_meta.get("path") or paths["source_semantics"].relative_to(root))
+    source_semantics = load_json(source_semantics_path, {})
     layout = load_json(paths["layout"], {})
     lettering = load_json(paths["lettering"], {})
     manifest = load_json(paths["manifest"], {})
@@ -415,10 +693,53 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
 
     if not script_panels:
         add_issue(issues, "block", "脚本/" + chapter + "/panel_script.json", "没有可审查的 panels", "comic-script", "补齐分格脚本", "script")
+    semantics_file_exists = source_semantics_path.is_file()
+    script_requires_semantics = bool(script_source_meta.get("requires_normalization"))
+    if semantics_file_exists or script_requires_semantics:
+        if not source_semantics:
+            add_issue(
+                issues,
+                "block",
+                display_path(root, source_semantics_path),
+                "source_semantics 元数据存在但文件不可解析或缺失",
+                "comic-script",
+                "重新运行 source_semantics_gate.py 并修复输出文件",
+                "script",
+            )
+        elif source_semantics.get("requires_normalization") and source_semantics.get("status") != "pass":
+            add_issue(
+                issues,
+                "block",
+                display_path(root, source_semantics_path),
+                "源语义归一化 gate 未通过：" + "；".join(map(str, source_semantics.get("issues") or [])),
+                "comic-script",
+                "补齐专名表、逐段释义、目标嵌字文本、歧义处理和改编取舍账后重跑 gate",
+                "script",
+            )
+    if source_semantics_requires_normalization(panel_script, source_semantics):
+        required_fields = required_source_semantic_panel_fields(source_semantics)
+        missing_trace: list[str] = []
+        for panel in panel_script.get("panels") or []:
+            pid = str(panel.get("panel_id") or "")
+            missing = [field for field in required_fields if not str(panel.get(field) or "").strip()]
+            if missing:
+                missing_trace.append(f"{pid or 'unknown'}({','.join(missing)})")
+        if missing_trace:
+            add_issue(
+                issues,
+                "block",
+                "脚本/" + chapter + "/panel_script.json",
+                "归一化源本的 panel 缺少语义追溯字段：" + "；".join(missing_trace[:20]),
+                "comic-script",
+                "为每格补 source_excerpt、meaning_zh、text_target、adaptation_note 后再排版",
+                "script",
+            )
     for panel in panel_script.get("panels") or []:
         pid = str(panel.get("panel_id") or "")
         if not str(panel.get("story_function") or "").strip():
             add_issue(issues, "warn", pid, "story_function 为空，审查难以判断本格叙事功能", "comic-script", "补上本格叙事功能", "script")
+    if isinstance(panel_script, dict):
+        check_visual_contract_issues(panel_script, chapter, issues)
 
     missing_in_layout = [pid for pid in script_panels if pid not in layout_panels]
     if missing_in_layout:
@@ -489,6 +810,50 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
     unknown_slots = sorted(item_slot_ids - slot_ids)
     if unknown_slots:
         add_issue(issues, "warn", "排版/" + chapter + "/lettering.json", "lettering 引用了 layout 不存在的 slot：" + ", ".join(unknown_slots), "comic-compose", "同步 layout 和 lettering 的 slot_id", "lettering")
+
+    text_layout_qc = manifest.get("text_layout_qc") if isinstance(manifest.get("text_layout_qc"), dict) else {}
+    unsupported_text = text_layout_qc.get("unsupported_items") if isinstance(text_layout_qc.get("unsupported_items"), list) else []
+    if unsupported_text:
+        ids = [str(item.get("item_id") or item.get("panel_id") or "") for item in unsupported_text if isinstance(item, dict)]
+        add_issue(
+            issues,
+            "block",
+            "排版/" + chapter + "/lettering.json",
+            "当前嵌字 renderer 不支持 RTL 或需词典分词文字：" + ", ".join(item for item in ids[:20] if item),
+            "comic-compose",
+            "改用人工/专业排版 renderer，或改成当前 renderer 支持的目标嵌字语言后重新导出",
+            "lettering",
+        )
+
+    platform_findings = manifest.get("platform_findings") if isinstance(manifest.get("platform_findings"), list) else []
+    for finding in platform_findings:
+        if not isinstance(finding, dict):
+            continue
+        severity = str(finding.get("severity") or "warn")
+        if severity not in {"block", "warn", "info"}:
+            severity = "warn"
+        add_issue(
+            issues,
+            severity,
+            str(finding.get("artifact") or "排版/" + chapter + "/export_manifest.json"),
+            str(finding.get("reason") or "平台导出规格 finding"),
+            "comic-compose",
+            str(finding.get("suggested_fix") or "按目标平台 profile 重新导出"),
+            "export",
+        )
+    if not platform_findings and validate_platform_manifest and profile_for_platform:
+        profile = profile_for_platform(str(manifest.get("target_platform") or read_setting(root, "目标平台", "通用")))
+        for finding in validate_platform_manifest(root, manifest, profile, settings["合规用途"]):
+            severity = str(finding.get("severity") or "warn")
+            add_issue(
+                issues,
+                severity if severity in {"block", "warn", "info"} else "warn",
+                str(finding.get("artifact") or "排版/" + chapter + "/export_manifest.json"),
+                str(finding.get("reason") or "平台导出规格 finding"),
+                "comic-compose",
+                str(finding.get("suggested_fix") or "按目标平台 profile 重新导出"),
+                "export",
+            )
 
     consistency_text = " ".join(str(settings.get(key) or "") for key in ("参考一致性策略", "年龄形态继承", "角色一致性硬闸"))
     high_grade_consistency = any(token in consistency_text.lower() for token in ("dna", "形态继承", "硬闸", "高一致性", "多视图"))
@@ -692,6 +1057,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
         },
         "artifacts": {
             "panel_script": str(paths["panel_script"].relative_to(root)),
+            "source_semantics": display_path(root, source_semantics_path) if source_semantics_path else "",
             "layout": str(paths["layout"].relative_to(root)),
             "lettering": str(paths["lettering"].relative_to(root)),
             "manifest": str(paths["manifest"].relative_to(root)),

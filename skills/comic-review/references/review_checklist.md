@@ -18,6 +18,11 @@
 
 - 必需 panel 图齐全。
 - 主角脸、发型、服装、标志物跨格稳定。
+- 含角色格已在 `panel_script.json` 写 `gaze_target`、`eyeline_direction` 和 `character_integrity/completeness_notes`；眼神锁具体戏内目标，不写“坚定眼神/看前方/远方”，不无理由看读者镜头。
+- 人物完整性不因漫画风格降级：头发、脸、手、脚、服装、标志物和关键道具完整可读；动作格不裁掉叙事必要部位。
+- 含场景格已写 `scene_anchor_id`，且该 `LOC_` 已登记在 `visual_contract.scene_anchors`；空间布局、光位/冷暖、轴线视线、常驻物件和禁漂移项可跨格继承。
+- 多人同格已写 `spatial_relationships/blocking/staging`：谁在画左/画右、前景/后景、遮挡、接触点和正反打轴线都明确。
+- 同一 `LOC_` 场景跨格不得随机换建筑结构、门窗位置、主光方向、冷暖光、人物左右关系或常驻道具；剧情改光/换轴/换景必须在脚本里说明。
 - 生图模型/渠道、风格锚和 `style_contract` 统一；`comic_style_consistency_第N话.json` 没有 block，场景族群调整只能用于脚本计划内的光线/场景变化。
 - 同一话不能突然从影视级写实国漫跳到低细节彩漫、现代写真、页游塑料感、泛韩漫脸或明显不同调色。
 - 同场景冷暖光、饱和度、细节密度和照片感应稳定；有意回忆/蒙太奇变调需要能从脚本叙事解释。

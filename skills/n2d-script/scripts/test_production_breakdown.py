@@ -43,7 +43,7 @@ def _write_storyboard(root: Path, ep: str = "第1集") -> None:
 def _confirm_pack(root: Path, ep: str = "第1集") -> None:
     pb.scaffold(root, ep)
     ep_dir = root / "脚本" / ep
-    for name in ("production_breakdown.json", "continuity_breakdown.json"):
+    for name in ("production_breakdown.json", "continuity_breakdown.json", "continuity_bible.json", "ai_shooting_schedule.json"):
         path = ep_dir / name
         data = json.loads(path.read_text(encoding="utf-8"))
         data["status"] = "confirmed"
@@ -52,6 +52,9 @@ def _confirm_pack(root: Path, ep: str = "第1集") -> None:
     call_sheet = (ep_dir / "ai_call_sheet.md").read_text(encoding="utf-8")
     call_sheet = call_sheet.replace("status: draft", "status: confirmed").replace("待补", "已填写")
     (ep_dir / "ai_call_sheet.md").write_text(call_sheet, encoding="utf-8")
+    manifest = json.loads((ep_dir / "production_handoff_pack.json").read_text(encoding="utf-8"))
+    manifest["status"] = "confirmed"
+    (ep_dir / "production_handoff_pack.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def test_scaffold_creates_production_handoff_files(tmp_path: Path) -> None:
@@ -62,7 +65,12 @@ def test_scaffold_creates_production_handoff_files(tmp_path: Path) -> None:
     assert result["kind"] == pb.KIND
     for name in pb.REQUIRED_FILES:
         assert (tmp_path / "脚本" / "第1集" / name).exists()
+    assert (tmp_path / "生产数据" / "ai_shooting_schedule_batch_seed_第1集.json").exists()
     assert (tmp_path / "生产数据" / "production_handoff_pack_第1集.md").exists()
+    schedule = json.loads((tmp_path / "脚本" / "第1集" / "ai_shooting_schedule.json").read_text(encoding="utf-8"))
+    bible = json.loads((tmp_path / "脚本" / "第1集" / "continuity_bible.json").read_text(encoding="utf-8"))
+    assert schedule["tasks"][0]["resource_plan"]["video_backend_slot"]
+    assert bible["clips"][0]["state"]["start_state"] == "A 持令牌入画"
 
 
 def test_check_blocks_draft_pack(tmp_path: Path) -> None:
@@ -72,7 +80,7 @@ def test_check_blocks_draft_pack(tmp_path: Path) -> None:
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "block"
-    assert report["summary"]["block"] == len(pb.REQUIRED_FILES)
+    assert report["summary"]["block"] == len(pb.REQUIRED_FILES) + 1
 
 
 def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
@@ -82,7 +90,7 @@ def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
-    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES)
+    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 2
     assert Path(report["check_path"]).is_file()
 
 
@@ -93,7 +101,7 @@ def test_scaffold_confirm_can_pass_when_storyboard_is_complete(tmp_path: Path) -
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
-    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES)
+    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 2
 
 
 def test_scaffold_drops_stale_endframe_when_continuity_exempts_it(tmp_path: Path) -> None:
@@ -141,3 +149,19 @@ def test_scaffold_confirm_fills_missing_knowledge_state(tmp_path: Path) -> None:
     cont = json.loads((tmp_path / "脚本" / "第1集" / "continuity_breakdown.json").read_text(encoding="utf-8"))
     assert "待补" not in json.dumps(cont, ensure_ascii=False)
     assert "不提前知道后续转折" in cont["rows"][0]["knowledge_state"]
+
+
+def test_check_blocks_stale_handoff_after_storyboard_change(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"][0]["label"] = "改过的冷开"
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    report = pb.check(tmp_path, "第1集")
+
+    assert report["status"] == "block"
+    manifest = next(row for row in report["files"] if row["rel"].endswith("production_handoff_pack.json"))
+    assert any("inputs_fingerprint" in issue for issue in manifest["issues"])

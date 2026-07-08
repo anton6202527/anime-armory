@@ -52,7 +52,7 @@ const OP_RIGHT_MIN_WIDTH = 300;
 const OP_RIGHT_MAX_WIDTH = 340;
 const OP_BOTTOM_MIN_HEIGHT = 180;
 const OP_BOTTOM_MAX_HEIGHT = 440;
-const OP_LEFT_RAIL_WIDTH = 54;
+const OP_LEFT_RAIL_WIDTH = 48;
 const FILES_SIDE_DEFAULT_WIDTH = 280;
 const FILES_SPLITTER_WIDTH = 7;
 type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
@@ -570,6 +570,7 @@ export function Operation(props: {
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "files" ? " active" : "")}
               data-tooltip={t("operation.filesTab")}
+              data-tooltip-placement="right"
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
             >
@@ -579,6 +580,7 @@ export function Operation(props: {
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "search" ? " active" : "")}
               data-tooltip={t("operation.searchTab")}
+              data-tooltip-placement="right"
               aria-label={t("operation.searchTab")}
               onClick={() => openLeft("search")}
             >
@@ -588,6 +590,7 @@ export function Operation(props: {
               type="button"
               className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
               data-tooltip={t("operation.skillsTab")}
+              data-tooltip-placement="right"
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
             >
@@ -598,6 +601,7 @@ export function Operation(props: {
                 type="button"
                 className={"rail-tab" + (sidePanelOpen && tab === "canvas" ? " active" : "")}
                 data-tooltip={t("operation.canvasTab")}
+                data-tooltip-placement="right"
                 aria-label={t("operation.canvasTab")}
                 onClick={() => openLeft("canvas")}
               >
@@ -609,6 +613,7 @@ export function Operation(props: {
                 type="button"
                 className={"rail-tab" + (sidePanelOpen && tab === "kanban" ? " active" : "")}
                 data-tooltip={t("operation.boardTab")}
+                data-tooltip-placement="right"
                 aria-label={t("operation.boardTab")}
                 onClick={() => openLeft("kanban")}
               >
@@ -619,6 +624,7 @@ export function Operation(props: {
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "review" ? " active" : "")}
               data-tooltip={t("operation.reviewTab")}
+              data-tooltip-placement="right"
               aria-label={t("operation.reviewTab")}
               onClick={() => openLeft("review")}
             >
@@ -632,6 +638,7 @@ export function Operation(props: {
                 (changeCount ? " dirty" : "")
               }
               data-tooltip={`${t("operation.changesTab")} · ${changeLabel}`}
+              data-tooltip-placement="right"
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >

@@ -16,7 +16,16 @@ REG = {
 
 
 def test_scene_resident_assets_only_nonempty_loc():
-    assert rp.scene_resident_assets(REG) == {"LOC_A": ["残匾", "碎梁"]}
+    assert rp.scene_resident_assets(REG) == {
+        "LOC_A": [{"asset": "残匾", "phrase": "残匾"}, {"asset": "碎梁", "phrase": "碎梁"}]
+    }
+
+
+def test_scene_resident_assets_keeps_detect_phrase():
+    reg = {"LOC_A": {"id": "LOC_A", "scene_dna": {"resident_assets": [
+        {"asset": "残匾", "detect_phrase": "破损木匾"},
+    ]}}}
+    assert rp.scene_resident_assets(reg) == {"LOC_A": [{"asset": "残匾", "phrase": "破损木匾"}]}
 
 
 def test_scene_resident_assets_empty_registry():

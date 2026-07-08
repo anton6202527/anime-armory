@@ -186,6 +186,67 @@ def write_report(root: Path, episode: str, payload: Mapping[str, Any]) -> str:
     return relpath(root, path)
 
 
+def render_rough_cut_html(payload: Mapping[str, Any]) -> str:
+    rows = []
+    for seg in payload.get("segments") or []:
+        if not isinstance(seg, Mapping):
+            continue
+        rows.append(
+            "<tr>"
+            f"<td>{seg.get('clip')}</td>"
+            f"<td>{seg.get('expected_start_sec')}</td>"
+            f"<td>{seg.get('expected_end_sec')}</td>"
+            f"<td>{seg.get('expected_duration_sec')}</td>"
+            f"<td>{seg.get('verdict')}</td>"
+            "</tr>"
+        )
+    return """<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rough Cut Preview</title>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:24px;line-height:1.5}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:6px 8px;text-align:left}</style>
+</head>
+<body>
+""" + f"""
+<h1>{payload.get('episode')} Rough Cut Timeline</h1>
+<p>final_master: {payload.get('final_master') or '-'}</p>
+<p>duration: actual={payload.get('actual_duration_sec')} expected={payload.get('expected_duration_sec')}</p>
+<table><thead><tr><th>Clip</th><th>Start</th><th>End</th><th>Duration</th><th>Verdict</th></tr></thead><tbody>
+{''.join(rows)}
+</tbody></table>
+</body></html>
+"""
+
+
+def write_timeline_outputs(root: Path, episode: str, payload: Dict[str, Any]) -> Dict[str, str]:
+    work = root / "合成" / episode / "_work"
+    work.mkdir(parents=True, exist_ok=True)
+    timeline = {
+        "kind": "n2d_rough_cut_timeline",
+        "version": VERSION,
+        "episode": episode,
+        "generated_at": payload.get("generated_at") or now_iso(),
+        "status": payload.get("status"),
+        "final_master": payload.get("final_master") or "",
+        "expected_duration_sec": payload.get("expected_duration_sec"),
+        "actual_duration_sec": payload.get("actual_duration_sec"),
+        "segments": payload.get("segments") or [],
+        "cuts": payload.get("cuts") or [],
+    }
+    timeline_path = work / "timeline.json"
+    tmp = timeline_path.with_name(f"{timeline_path.name}.tmp.{os.getpid()}")
+    tmp.write_text(json.dumps(timeline, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    os.replace(tmp, timeline_path)
+    rough_html = root / "合成" / episode / "rough_cut_preview.html"
+    tmp_html = rough_html.with_name(f"{rough_html.name}.tmp.{os.getpid()}")
+    tmp_html.write_text(render_rough_cut_html(payload), encoding="utf-8")
+    os.replace(tmp_html, rough_html)
+    return {
+        "timeline": relpath(root, timeline_path),
+        "rough_cut_preview": relpath(root, rough_html),
+    }
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="write lightweight final timeline probe")
     ap.add_argument("root")
@@ -201,6 +262,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     payload = build_report(root, ns.episode)
     if ns.write:
         payload["output"] = write_report(root, ns.episode, payload)
+        payload["timeline_outputs"] = write_timeline_outputs(root, ns.episode, payload)
     if ns.json:
         print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
     else:

@@ -38,6 +38,11 @@ try:
     from image_backend_adapter import resolve_capabilities
 except Exception:  # pragma: no cover
     resolve_capabilities = None
+try:
+    from platform_profiles import profile_for_platform, validate_manifest as validate_platform_manifest
+except Exception:  # pragma: no cover
+    profile_for_platform = None
+    validate_platform_manifest = None
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 SKILLS_ROOT = Path(__file__).resolve().parents[2]
@@ -161,6 +166,365 @@ def check_required(root: Path, chapter: str, findings: list[dict[str, Any]], key
                 "补齐该阶段产物后重跑 gate。",
             )
     return paths
+
+
+def check_source_semantics(root: Path, chapter: str, panel_script: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    script_source_meta = panel_script.get("source_semantics") if isinstance(panel_script.get("source_semantics"), dict) else {}
+    source_semantics_path = root / str(script_source_meta.get("path") or Path("脚本") / chapter / "source_semantics.json")
+    source_semantics = load_json(source_semantics_path, {})
+    semantics_file_exists = source_semantics_path.is_file()
+    script_requires_semantics = bool(script_source_meta.get("requires_normalization"))
+    if semantics_file_exists or script_requires_semantics:
+        if not source_semantics:
+            add(
+                findings,
+                "block",
+                "source_semantics_missing_or_invalid",
+                rel(root, source_semantics_path),
+                "source_semantics 元数据存在但文件不可解析或缺失。",
+                "script",
+                "重新运行 source_semantics_gate.py 并修复输出文件。",
+            )
+            return
+        if source_semantics.get("requires_normalization") and source_semantics.get("status") != "pass":
+            add(
+                findings,
+                "block",
+                "source_semantics_not_passed",
+                rel(root, source_semantics_path),
+                "源语义归一化 gate 未通过：" + "；".join(map(str, source_semantics.get("issues") or [])),
+                "script",
+                "补齐专名表、逐段释义、目标嵌字文本、歧义处理和改编取舍账后重跑 gate。",
+            )
+    if not (source_semantics.get("requires_normalization") or script_requires_semantics):
+        return
+    contract = source_semantics.get("panel_script_contract") if isinstance(source_semantics.get("panel_script_contract"), dict) else {}
+    fields = contract.get("required_panel_fields_when_normalized")
+    required_fields = fields if isinstance(fields, list) and all(isinstance(item, str) for item in fields) else ["source_excerpt", "meaning_zh", "text_target", "adaptation_note"]
+    missing_trace: list[str] = []
+    for panel in panel_script.get("panels") or []:
+        if not isinstance(panel, dict):
+            continue
+        pid = str(panel.get("panel_id") or "unknown")
+        missing = [field for field in required_fields if not str(panel.get(field) or "").strip()]
+        if missing:
+            missing_trace.append(f"{pid}({','.join(missing)})")
+    if missing_trace:
+        add(
+            findings,
+            "block",
+            "source_semantics_panel_trace_missing",
+            f"脚本/{chapter}/panel_script.json",
+            "归一化源本的 panel 缺少语义追溯字段：" + "；".join(missing_trace[:20]),
+            "script",
+            "为每格补 source_excerpt、meaning_zh、text_target、adaptation_note 后再排版/出图。",
+        )
+
+
+def compact_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        text = value.strip()
+    elif isinstance(value, list):
+        text = "；".join(compact_text(item) for item in value)
+    elif isinstance(value, dict):
+        text = "；".join(f"{key}:{compact_text(item)}" for key, item in value.items())
+    else:
+        text = str(value).strip()
+    return " ".join(text.split()).strip("； ")
+
+
+def panel_reference_ids(panel: dict[str, Any]) -> list[str]:
+    ids: list[str] = []
+    for key in ("references", "characters"):
+        for raw in panel.get(key) or []:
+            ref_id = str(raw).strip()
+            if ref_id and ref_id not in ids:
+                ids.append(ref_id)
+    return ids
+
+
+def panel_has_character(panel: dict[str, Any]) -> bool:
+    return bool(panel.get("characters")) or any(ref_id.startswith(("CHAR_", "MON_")) for ref_id in panel_reference_ids(panel))
+
+
+def panel_scene_anchor_id(panel: dict[str, Any]) -> str:
+    for key in ("scene_anchor_id", "scene_id", "location_id"):
+        value = compact_text(panel.get(key))
+        if value:
+            return value
+    for ref_id in panel_reference_ids(panel):
+        if ref_id.startswith("LOC_"):
+            return ref_id
+    return ""
+
+
+def panel_has_scene(panel: dict[str, Any]) -> bool:
+    return bool(compact_text(panel.get("location")) or panel_scene_anchor_id(panel))
+
+
+def visual_contract_from(panel_script: dict[str, Any]) -> dict[str, Any]:
+    contract = panel_script.get("visual_contract")
+    return contract if isinstance(contract, dict) else {}
+
+
+def scene_contract_from(visual_contract: dict[str, Any], scene_id: str) -> dict[str, Any]:
+    anchors = visual_contract.get("scene_anchors") if isinstance(visual_contract.get("scene_anchors"), dict) else {}
+    contract = anchors.get(scene_id) if scene_id else {}
+    return contract if isinstance(contract, dict) else {}
+
+
+def contract_value(panel: dict[str, Any], scene_contract: dict[str, Any], *keys: str) -> str:
+    for key in keys:
+        text = compact_text(panel.get(key))
+        if text:
+            return text
+    for key in keys:
+        text = compact_text(scene_contract.get(key))
+        if text:
+            return text
+    return ""
+
+
+CAMERA_GAZE_TERMS = (
+    "看镜头",
+    "直视镜头",
+    "看读者",
+    "直视读者",
+    "看观众",
+    "直视观众",
+    "looking at viewer",
+    "eye contact with camera",
+    "camera",
+    "viewer",
+)
+POV_CAMERA_ROLE_TERMS = ("pov", "主观", "第一人称", "破第四墙", "直视镜头", "直视读者")
+VAGUE_GAZE_TERMS = ("坚定", "冷静", "愤怒", "悲伤", "惊讶", "眼神", "目光", "远方", "前方", "某处", "none", "n/a")
+FACE_INTEGRITY_TERMS = ("脸", "五官", "眼", "眼型", "眼距", "发际线", "发型", "头发")
+BODY_INTEGRITY_TERMS = ("手", "脚", "肢体", "身体", "腿", "手臂", "完整", "道具", "武器", "接触点")
+
+
+def contains_any(text: str, terms: tuple[str, ...]) -> bool:
+    lowered = text.lower()
+    return any(term.lower() in lowered for term in terms)
+
+
+def camera_role_allows_direct_gaze(panel: dict[str, Any]) -> bool:
+    return contains_any(compact_text(panel.get("camera_role")) + " " + compact_text(panel.get("pov")), POV_CAMERA_ROLE_TERMS)
+
+
+def is_vague_gaze_target(value: str) -> bool:
+    text = value.strip().lower()
+    if not text:
+        return False
+    return any(term.lower() == text or term.lower() in text for term in VAGUE_GAZE_TERMS)
+
+
+def is_weak_integrity_contract(value: str) -> bool:
+    text = value.strip()
+    if not text:
+        return False
+    return not (contains_any(text, FACE_INTEGRITY_TERMS) and contains_any(text, BODY_INTEGRITY_TERMS))
+
+
+def visual_scene_anchors(visual_contract: dict[str, Any]) -> dict[str, Any]:
+    anchors = visual_contract.get("scene_anchors") if isinstance(visual_contract.get("scene_anchors"), dict) else {}
+    return anchors if isinstance(anchors, dict) else {}
+
+
+def panel_character_refs(panel: dict[str, Any]) -> list[str]:
+    return [ref_id for ref_id in panel_reference_ids(panel) if ref_id.startswith(("CHAR_", "MON_"))]
+
+
+def panel_character_count(panel: dict[str, Any]) -> int:
+    names = {compact_text(name) for name in panel.get("characters") or [] if compact_text(name)}
+    names.update(panel_character_refs(panel))
+    return len(names)
+
+
+def check_panel_visual_contract(root: Path, chapter: str, panel_script: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    panels = panel_script.get("panels") if isinstance(panel_script.get("panels"), list) else []
+    if not panels:
+        return
+    visual_contract = visual_contract_from(panel_script)
+    if not visual_contract:
+        add(
+            findings,
+            "block",
+            "visual_contract_missing",
+            f"脚本/{chapter}/panel_script.json",
+            "panel_script 缺少 visual_contract，无法锁本话风格、场景光位、轴线视线和角色完整性口径。",
+            "script",
+            "在 panel_script.json 顶层补 visual_contract.scene_anchors / character_integrity_policy 后重建出图包。",
+        )
+    scene_anchors = visual_scene_anchors(visual_contract)
+    if visual_contract and not scene_anchors:
+        add(
+            findings,
+            "block",
+            "visual_scene_anchors_missing",
+            f"脚本/{chapter}/panel_script.json",
+            "visual_contract 缺少 scene_anchors；漫画长线场景不能只靠逐格自然语言临场发挥。",
+            "script",
+            "登记 LOC_ 场景锚，并写 spatial_layout / lighting_anchor / axis_eyeline / resident_assets / forbidden_drift。",
+        )
+    for scene_id, scene_contract in scene_anchors.items():
+        if not isinstance(scene_contract, dict):
+            continue
+        missing_anchor = [
+            key
+            for key in ("spatial_layout", "lighting_anchor", "axis_eyeline")
+            if not compact_text(scene_contract.get(key))
+        ]
+        if missing_anchor:
+            add(
+                findings,
+                "block",
+                "scene_anchor_contract_incomplete",
+                f"脚本/{chapter}/panel_script.json#visual_contract.scene_anchors.{scene_id}",
+                f"{scene_id} 场景锚缺少：" + ",".join(missing_anchor) + "。场景锚必须锁布局、光位和轴线视线。",
+                "script",
+                "补齐该 LOC_ 的 spatial_layout、lighting_anchor、axis_eyeline 后重建出图包。",
+            )
+    for panel in panels:
+        if not isinstance(panel, dict):
+            continue
+        pid = compact_text(panel.get("panel_id")) or "unknown"
+        artifact = f"脚本/{chapter}/panel_script.json#{pid}"
+        if panel_has_character(panel):
+            missing: list[str] = []
+            gaze_target = contract_value(panel, {}, "gaze_target", "eyeline_target")
+            if not gaze_target:
+                missing.append("gaze_target")
+            if not contract_value(panel, {}, "eyeline_direction", "gaze_direction"):
+                missing.append("eyeline_direction")
+            integrity_contract = contract_value(panel, visual_contract, "character_integrity", "completeness_notes", "character_integrity_policy")
+            if not integrity_contract:
+                missing.append("character_integrity/completeness_notes")
+            if missing:
+                add(
+                    findings,
+                    "block",
+                    "panel_character_contract_missing",
+                    artifact,
+                    f"{pid} 含角色但缺少人物一致性字段：" + ",".join(missing) + "。漫画格也必须锁脸、眼神目标和身体完整性。",
+                    "script",
+                    "补 gaze_target、eyeline_direction、character_integrity/completeness_notes；动作格写清不看镜头和视线锁定戏内目标。",
+                )
+            if gaze_target and contains_any(gaze_target, CAMERA_GAZE_TERMS) and not camera_role_allows_direct_gaze(panel):
+                add(
+                    findings,
+                    "block",
+                    "panel_camera_gaze_unjustified",
+                    artifact,
+                    f"{pid} 的 gaze_target 指向读者/镜头，但 camera_role 未声明 POV 或破第四墙。无理由看镜头会破坏眼神一致性。",
+                    "script",
+                    "把 gaze_target 改成戏内对象/对手/道具/画外声源，或明确 camera_role=POV/破第四墙 并说明叙事理由。",
+                )
+            elif gaze_target and is_vague_gaze_target(gaze_target):
+                add(
+                    findings,
+                    "warn",
+                    "panel_gaze_target_vague",
+                    artifact,
+                    f"{pid} 的 gaze_target 过泛：{gaze_target}。眼神目标应是读者能定位的戏内对象。",
+                    "script",
+                    "改成对话对象、对手、道具、命中点、画外声源或下一动作目标。",
+                )
+            if integrity_contract and is_weak_integrity_contract(integrity_contract):
+                add(
+                    findings,
+                    "warn",
+                    "panel_character_integrity_weak",
+                    artifact,
+                    f"{pid} 的人物完整性契约太泛，未同时覆盖脸/眼/发和手脚/身体/关键道具。",
+                    "script",
+                    "补脸型、眼型/眼距、发际线、发型、服装标志，以及手脚/身体/道具/接触点完整性。",
+                )
+        if panel_has_scene(panel):
+            scene_id = panel_scene_anchor_id(panel)
+            scene_contract = scene_contract_from(visual_contract, scene_id)
+            missing_scene: list[str] = []
+            if not scene_id:
+                missing_scene.append("scene_anchor_id/LOC_")
+            elif visual_contract and scene_id not in scene_anchors:
+                add(
+                    findings,
+                    "block",
+                    "panel_scene_anchor_unregistered",
+                    artifact,
+                    f"{pid} 使用 {scene_id}，但 visual_contract.scene_anchors 未登记该场景锚。",
+                    "script",
+                    "在 visual_contract.scene_anchors 登记该 LOC_，或把本格 scene_anchor_id 改成已登记场景锚。",
+                )
+            if not contract_value(panel, scene_contract, "spatial_layout", "scene_layout", "layout"):
+                missing_scene.append("spatial_layout")
+            if not contract_value(panel, scene_contract, "lighting_anchor", "light_anchor"):
+                missing_scene.append("lighting_anchor")
+            if not contract_value(panel, scene_contract, "axis_eyeline", "eyeline_axis", "axis"):
+                missing_scene.append("axis_eyeline")
+            if missing_scene:
+                add(
+                    findings,
+                    "block",
+                    "panel_scene_contract_missing",
+                    artifact,
+                    f"{pid} 含场景但缺少场景连续性字段：" + ",".join(missing_scene) + "。同一场景必须继承布局、光位和轴线视线。",
+                    "script",
+                    "补 visual_contract.scene_anchors 或逐格 scene_anchor_id/spatial_layout/lighting_anchor/axis_eyeline 后重建出图包。",
+                )
+            if panel_character_count(panel) >= 2 and not contract_value(panel, scene_contract, "spatial_relationships", "blocking", "staging"):
+                add(
+                    findings,
+                    "block",
+                    "panel_multi_character_staging_missing",
+                    artifact,
+                    f"{pid} 含多个角色但缺少人物左右/前后景/遮挡或轴线关系，容易造成跨格站位和视线漂移。",
+                    "script",
+                    "补 spatial_relationships/blocking/staging，写清谁在画左/画右、谁在前景/后景、遮挡和关键接触点。",
+                )
+
+
+def check_manifest_profile(root: Path, chapter: str, manifest: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    for item in manifest.get("platform_findings") or []:
+        if not isinstance(item, dict):
+            continue
+        add(
+            findings,
+            str(item.get("severity") or "warn"),
+            str(item.get("code") or "platform_profile"),
+            str(item.get("artifact") or f"排版/{chapter}/export_manifest.json"),
+            str(item.get("reason") or ""),
+            "compose",
+            str(item.get("suggested_fix") or "按平台 profile 重新导出。"),
+        )
+    if validate_platform_manifest and profile_for_platform:
+        platform = str(manifest.get("target_platform") or read_setting(root, "目标平台", "通用"))
+        profile = profile_for_platform(platform)
+        usage = read_setting(root, "合规用途", "自用草稿")
+        for item in validate_platform_manifest(root, manifest, profile, usage):
+            add(
+                findings,
+                str(item.get("severity") or "warn"),
+                str(item.get("code") or "platform_profile"),
+                str(item.get("artifact") or f"排版/{chapter}/export_manifest.json"),
+                str(item.get("reason") or ""),
+                "compose",
+                str(item.get("suggested_fix") or "按平台 profile 重新导出。"),
+            )
+    text_qc = manifest.get("text_layout_qc") if isinstance(manifest.get("text_layout_qc"), dict) else {}
+    unsupported = text_qc.get("unsupported_items") if isinstance(text_qc.get("unsupported_items"), list) else []
+    if unsupported:
+        add(
+            findings,
+            "block",
+            "unsupported_text_layout",
+            f"排版/{chapter}/lettering.json",
+            "当前嵌字 renderer 不支持 RTL 或需词典分词文字：" + "；".join(str(item.get("item_id") or item) for item in unsupported[:20] if isinstance(item, dict)),
+            "compose",
+            "改用人工/专业排版 renderer，或改成当前 renderer 支持的目标嵌字语言后重新导出。",
+        )
 
 
 def check_identity(root: Path, report: dict[str, Any], findings: list[dict[str, Any]]) -> None:
@@ -287,6 +651,10 @@ def merge_consistency_report(report: dict[str, Any], findings: list[dict[str, An
 
 def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:
     paths = check_required(root, chapter, findings, ("settings", "panel_script", "layout", "panel_jobs"))
+    panel_script = load_json(paths["panel_script"], {})
+    if isinstance(panel_script, dict):
+        check_source_semantics(root, chapter, panel_script, findings)
+        check_panel_visual_contract(root, chapter, panel_script, findings)
     jobs = load_json(paths["panel_jobs"], {})
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
@@ -322,6 +690,7 @@ def run_compose(root: Path, chapter: str, findings: list[dict[str, Any]], notes:
             add(findings, "block", "manifest_missing_panels", rel(root, paths["manifest"]), "export_manifest 仍记录缺图。", "compose", "补图并重新导出。")
         if not manifest.get("rendered"):
             add(findings, "block", "manifest_not_rendered", rel(root, paths["manifest"]), "尚未登记实际渲染导出物。", "compose", "运行 export_longstrip.py --render。")
+        check_manifest_profile(root, chapter, manifest, findings)
 
 
 def run_review(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:

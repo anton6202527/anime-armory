@@ -9,6 +9,9 @@ from pathlib import Path
 SCRIPT = Path(__file__).with_name("queue.py")
 SCRIPT_DIR = SCRIPT.resolve().parent
 sys.path = [p for p in sys.path if Path(p or ".").resolve() != SCRIPT_DIR]
+shadow = sys.modules.get("queue")
+if shadow is not None and Path(getattr(shadow, "__file__", "") or "").resolve() == SCRIPT.resolve():
+    del sys.modules["queue"]
 spec = importlib.util.spec_from_file_location("n2d_batch_queue", SCRIPT)
 queue = importlib.util.module_from_spec(spec)
 assert spec.loader is not None

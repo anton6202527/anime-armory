@@ -717,6 +717,64 @@ def tasks_from_asset_impact(
     return dedupe_task_ids(tasks)
 
 
+def tasks_from_shooting_schedule(
+    root: str,
+    schedule: Dict[str, Any],
+    *,
+    cost_estimates: Dict[str, Dict[str, Any]],
+    max_retries: int,
+    episodes: Optional[Set[str]] = None,
+) -> List[Dict[str, Any]]:
+    """Convert P-3 ai_shooting_schedule / batch seed into executable queue tasks."""
+    if not isinstance(schedule, dict):
+        raise ValueError("not a shooting schedule payload")
+    kind = str(schedule.get("kind") or "")
+    if kind not in {"n2d_ai_shooting_schedule", "n2d_ai_shooting_schedule_batch_seed"}:
+        raise ValueError("not an n2d ai shooting schedule or batch seed")
+    default_ep = str(schedule.get("episode") or "").strip()
+    source = str(schedule.get("source_schedule") or "脚本/<集>/ai_shooting_schedule.json")
+    raw_items = schedule.get("batch_tasks") if kind.endswith("batch_seed") else schedule.get("tasks")
+    tasks: List[Dict[str, Any]] = []
+    for item in raw_items or []:
+        if not isinstance(item, dict):
+            continue
+        ep_pair = _episode_from_item(item, default_ep)
+        if ep_pair is None:
+            continue
+        ep_raw, ep = ep_pair
+        if not _episode_selected(ep_raw, ep, episodes):
+            continue
+        cid = str(item.get("clip_id") or item.get("shot") or "").strip()
+        if not cid:
+            continue
+        stage_keys = [str(item.get("stage_key") or "").strip()]
+        if not stage_keys[0]:
+            stage_keys = ["image", "video"]
+        for stage_key in stage_keys:
+            spec = find_stage(stage_key)
+            scope = str(item.get("rerun_scope") or f"AI shooting schedule {ep} {cid} {stage_key}").strip()
+            artifacts = _string_list(item.get("affected_artifacts"))
+            shots = _string_list(item.get("affected_shots")) or [cid]
+            task = task_from_spec(
+                root,
+                ep,
+                spec,
+                reason="shooting_schedule",
+                priority=len(tasks) + 1,
+                cost_estimates=cost_estimates,
+                max_retries=max_retries,
+                rerun_scope=scope,
+                affected_artifacts=artifacts,
+                affected_shots=shots,
+            )
+            task["schedule_bucket"] = item.get("schedule_bucket") or ""
+            task["risk_tier"] = item.get("risk_tier") or item.get("priority") or ""
+            task["source_schedule"] = source
+            task["source_schedule_order"] = item.get("source_schedule_order") or item.get("production_order") or ""
+            tasks.append(task)
+    return dedupe_task_ids(tasks)
+
+
 def _string_list(value: Any) -> List[str]:
     if not isinstance(value, list):
         return []
@@ -2183,6 +2241,19 @@ def cmd_plan(ns: argparse.Namespace) -> int:
             max_retries=ns.max_retries,
             episodes=selected,
         )
+    elif ns.from_shooting_schedule:
+        schedule_path = ns.from_shooting_schedule
+        if not os.path.isabs(schedule_path):
+            schedule_path = os.path.join(root, schedule_path)
+        with open(schedule_path, encoding="utf-8") as fh:
+            schedule_payload = json.load(fh)
+        tasks = tasks_from_shooting_schedule(
+            root,
+            schedule_payload,
+            cost_estimates=estimates,
+            max_retries=ns.max_retries,
+            episodes=selected,
+        )
     elif ns.rerun_from:
         if not selected:
             raise SystemExit("--rerun-from requires --episodes")
@@ -2498,6 +2569,8 @@ def parser() -> argparse.ArgumentParser:
                       help="读 n2d-review consistency_findings_*.json（kind=n2d_consistency_findings），直接建审查返工任务")
     plan.add_argument("--from-consistency-ledger",
                       help="读 n2d-review consistency_ledger_*.json（kind=n2d_consistency_ledger），按 root_causes 直接建审查返工任务")
+    plan.add_argument("--from-shooting-schedule",
+                      help="读 n2d-script P-3 ai_shooting_schedule 或生产数据/ai_shooting_schedule_batch_seed_*.json，建按 Clip 排序的 image/video 队列任务")
     plan.add_argument("--scope", help="human-readable rerun scope")
     plan.add_argument("--affected-artifact", action="append", default=[])
     plan.add_argument("--affected-shot", action="append", default=[])

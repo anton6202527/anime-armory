@@ -29,9 +29,17 @@ from n2d_const import PRODUCTION_DIR, PRODUCTION_READINESS_KIND  # noqa: E402
 from n2d_schema_registry import scan_artifacts, write_validation  # noqa: E402
 from gate_policy_matrix import validate_matrix as validate_gate_policy_matrix  # noqa: E402
 import artifact_lineage  # noqa: E402
+import creative_governance  # noqa: E402
 import gate_policy_coverage  # noqa: E402
 import generation_recipe_manifest  # noqa: E402
 import genre_packs  # noqa: E402
+import production_locks  # noqa: E402
+import script_supervisor_log  # noqa: E402
+
+try:
+    from settings import get_setting  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover
+    get_setting = None  # type: ignore
 
 
 VERSION = 1
@@ -227,6 +235,63 @@ def run_release(root: Path, episode: str, *, write: bool, asset: Optional[str]) 
     ]
 
 
+def run_production_locks(root: Path, episode: str, *, write: bool) -> Dict[str, Any]:
+    payload = production_locks.check_ledger(root, episode, write_missing=write, stage="review")
+    return check(
+        "production_locks",
+        "fail" if payload.get("status") != "pass" else "pass",
+        f"block={(payload.get('summary') or {}).get('block', 0)} locks={(payload.get('summary') or {}).get('locks', 0)}",
+        path=payload.get("lock_path") or relpath(root, production_locks.lock_path(root, episode)),
+        check_path=payload.get("check_path"),
+    )
+
+
+def run_script_supervisor_log(root: Path, episode: str, *, write: bool) -> Dict[str, Any]:
+    payload = script_supervisor_log.check_log(root, episode, write_missing=write)
+    return check(
+        "script_supervisor_log",
+        "fail" if payload.get("status") != "pass" else "pass",
+        f"rows={(payload.get('summary') or {}).get('rows', 0)} accepted={(payload.get('summary') or {}).get('accepted_clips', 0)} block={(payload.get('summary') or {}).get('block', 0)}",
+        path=payload.get("log_path"),
+        check_path=payload.get("check_path"),
+    )
+
+
+def governance_decision_required(root: Path, *, scale_up: bool = False) -> bool:
+    if scale_up:
+        return True
+    profile = ""
+    intent = ""
+    smoke = ""
+    if get_setting is not None:
+        try:
+            profile = str(get_setting(str(root), "一致性严格度", "") or "").strip().lower()
+            intent = str(get_setting(str(root), "合规用途", "") or "").strip().lower()
+            smoke = str(get_setting(str(root), "后端Smoke硬闸", "") or "").strip()
+        except Exception:
+            profile = intent = smoke = ""
+    if profile.startswith("production") or intent == "paid_distribution" or smoke in {"是", "true", "1", "yes"}:
+        return True
+    return (production_dir(root) / queue_mod.QUEUE_JSON).is_file()
+
+
+def run_creative_governance(root: Path, *, write: bool, require_decision: bool = False) -> Dict[str, Any]:
+    payload = creative_governance.check(
+        root,
+        write_missing=write,
+        require_decision=require_decision,
+        reason="production_readiness" if require_decision else "",
+    )
+    status = str(payload.get("status") or "warn")
+    return check(
+        "creative_governance",
+        "fail" if status == "block" else ("warn" if status == "warn" else "pass"),
+        f"decisions={(payload.get('summary') or {}).get('decisions', 0)} block={(payload.get('summary') or {}).get('block', 0)} warn={(payload.get('summary') or {}).get('warn', 0)}",
+        path=(payload.get("paths") or {}).get("raci"),
+        check_path=payload.get("check_path"),
+    )
+
+
 def run_genre_packs(root: Path, episode: str, *, write: bool) -> Dict[str, Any]:
     payload = genre_packs.validate_all()
     context = genre_packs.build_context(root, episode, "review")
@@ -419,6 +484,7 @@ def build_readiness(root: Path, episode: str, *, write: bool = False, asset: Opt
                     scale_up: bool = False) -> Dict[str, Any]:
     root = root.resolve()
     scale_up_mode = scale_up_required(root, explicit=scale_up)
+    require_decision = governance_decision_required(root, scale_up=scale_up_mode)
     checks: List[Dict[str, Any]] = []
     checks.append(run_next_action(root, episode, skip=skip_next_action))
     checks.extend(run_event_ledger(root, write=write, strict_trace=strict_trace))
@@ -427,6 +493,9 @@ def build_readiness(root: Path, episode: str, *, write: bool = False, asset: Opt
     checks.append(run_gate_inventory())
     checks.append(run_gate_policy_coverage(root, episode, write=write))
     checks.append(run_artifact_validation(root, write=write))
+    checks.append(run_script_supervisor_log(root, episode, write=write))
+    checks.append(run_production_locks(root, episode, write=write))
+    checks.append(run_creative_governance(root, write=write, require_decision=require_decision))
     checks.extend(run_batch_checks(root, write=write))
     checks.extend(run_release(root, episode, write=write, asset=asset))
     checks.extend(run_freshness_checks(root))

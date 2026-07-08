@@ -44,14 +44,14 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/作品名" --chapter 第1话 --render --write-progress
 ```
 
-渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
+渲染时默认读取 `排版/第N话/lettering.json`，用系统中文字体做草稿嵌字，并在 `export_manifest.json` 里记录 `font_status=system_font_draft`、`text_language`、`target_platform`、`platform_profile`、`text_layout_qc`、`lettering_rendered=true`、`bilingual_lettering` 与空槽清理统计。正式发布前需要确认字体授权，或用 `--font path/to/font.ttf` 指定已授权字体。如目标平台限制图片高度，可传 `--max-height 12000` 或在 `_设置.md` 写对应高度来导出分段。`--formats webp+png` 会优先输出 WebP，遇到超高长图超过 WebP 单边限制时自动落 PNG 并写入 manifest。RTL 或需词典断行的文字会被 `text_layout_qc` 阻断当前 Pillow 草稿渲染，需改用人工/专业排版 renderer。长条图太高不便逐字检查时，加 `--qc-slots` 输出 `生产数据/qa_previews/第N话_lettering_slots.jpg`，manifest 会记录 `lettering_slot_qc` 路径和缺失槽位。
 
 ## 嵌字原则
 
 文字不要烘焙在出图 prompt 里。推荐流程：
 
 1. 面板图保持无字、无烘焙气泡，只预留低细节留白。
-2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。
+2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；生成草案时会优先读取 `dialogue[].text_target` / `narration_target`，保留 `text_source` 便于追溯；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。
 3. 合成阶段绘制最终不规则对白气泡/旁白容器并渲染文字；不要在不规则气泡里再叠一个矩形文字框。
 4. 没有文字的槽位不画气泡；旧图里烘焙的空白气泡应回 `comic-image` 重出或在审查中标返修。
 5. 字体、商用授权和目标地区发布规范在正式发布前确认。
@@ -63,7 +63,7 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 ## 长图策略
 
 - 默认导出单张 `longstrip.webp`，便于 App 内审阅和直接交付；若单张高度超过 WebP 能力上限，则按 `导出格式` 自动改用 `longstrip.png`。
-- 只有显式设置 `单话分段高度` 为正数或传 `--max-height` 时，才切成多个 part，避免目标平台不接受超高图片。
+- 只有显式设置 `单话分段高度` 为正数或传 `--max-height` 时，才切成多个 part，避免目标平台不接受超高图片；发布候选/商用导出还会按 `目标平台` profile 检查宽度、格式、文件大小和规格证据新鲜度。
 - 每个导出物都要在 `export_manifest.json` 登记 panel 顺序和尺寸。
 - 缺 panel 图时也要写 manifest，并列出 `missing_panels`，方便继续生产。
 

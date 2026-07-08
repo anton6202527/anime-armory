@@ -37,6 +37,7 @@ export function ClipNode({ data, selected }: NodeProps) {
   const { t } = useI18n();
   const clip = data as unknown as EditableCanvasClip;
   const [previewFrame, setPreviewFrame] = useState<CanvasFrame | null>(null);
+  const [previewLighting, setPreviewLighting] = useState(false);
   const [previewVideo, setPreviewVideo] = useState(false);
   // re-render once the media server port is ready (else thumbs stay "未出图")
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
@@ -81,7 +82,10 @@ export function ClipNode({ data, selected }: NodeProps) {
               onPointerDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
-                if (url) setPreviewFrame(frame);
+                if (url) {
+                  setPreviewLighting(false);
+                  setPreviewFrame(frame);
+                }
               }}
             >
               <span className="frame-label">{frame.label || frame.role || `帧${idx + 1}`}</span>
@@ -165,12 +169,35 @@ export function ClipNode({ data, selected }: NodeProps) {
         onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
           event.stopPropagation();
+          setPreviewLighting(false);
           setPreviewFrame(null);
         }}
       >
-        <div className="media-preview" onClick={(event) => event.stopPropagation()}>
-          <button type="button" className="media-preview-close" onClick={() => setPreviewFrame(null)}>×</button>
-          <img src={previewUrl} alt={`${clip.label} ${previewFrame.label}`} />
+        <div className={"media-preview" + (previewLighting ? " light-on" : "")} onClick={(event) => event.stopPropagation()}>
+          <div className="media-preview-tools">
+            <button
+              type="button"
+              className={"media-preview-tool" + (previewLighting ? " active" : "")}
+              aria-pressed={previewLighting}
+              title={previewLighting ? t("canvas.lightOff") : t("canvas.lightOn")}
+              onClick={() => setPreviewLighting((value) => !value)}
+            >
+              {t("canvas.lightButton")}
+            </button>
+          </div>
+          <button
+            type="button"
+            className="media-preview-close"
+            onClick={() => {
+              setPreviewLighting(false);
+              setPreviewFrame(null);
+            }}
+          >
+            ×
+          </button>
+          <div className="media-preview-image-wrap">
+            <img src={previewUrl} alt={`${clip.label} ${previewFrame.label}`} />
+          </div>
           <div className="media-preview-meta">
             <strong>{clip.number != null ? `${clip.number}. ` : ""}{clip.label} · {previewFrame.label}</strong>
             <span>{previewFrame.abs}</span>

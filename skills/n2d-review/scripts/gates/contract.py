@@ -1504,6 +1504,7 @@ __all__ = [
     'check_script_quality_contract',
     'check_script_contract_consumption',
     'check_storyboard_contract',
+    '_check_storyboard_adjacent_clip_distinctness',
     'check_storyboard_visual_contract',
     'check_storyboard_style_contract',
     'check_storyboard_possession_gate',

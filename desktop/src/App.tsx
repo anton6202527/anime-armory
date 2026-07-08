@@ -4,6 +4,7 @@ import { message, open } from "@tauri-apps/plugin-dialog";
 import { Home } from "./pages/Home";
 import { Line } from "./pages/Line";
 import { Operation } from "./pages/Operation";
+import { GlobalTooltip } from "./components/GlobalTooltip";
 import { TopTabs, type WorkTab } from "./components/TopTabs";
 import {
   DEFAULT_REPO,
@@ -270,6 +271,7 @@ export function App() {
           />
         </Suspense>
       )}
+      <GlobalTooltip />
     </div>
   );
 }

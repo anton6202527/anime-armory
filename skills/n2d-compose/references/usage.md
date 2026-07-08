@@ -60,7 +60,7 @@ clip 原生音频：
 ## 配音轨来源 / 占位守门 / 先出视频后配音拟合
 - **VOICEFILE 覆盖**：默认用 `配音/voice_{zh,en}.wav`；设 `VOICEFILE=/path/x.wav` 可指定别的轨（如拟合轨）。
 - **占位守门**：`时长清单.json` 含占位句且未设 VOICEFILE 时，compose 拒绝合成（占位≠真实时长）。rough preview 用 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
-- **`制作模式=先出视频后配音`（快速 demo·不推荐）**：默认 `视频` 完成即收尾；只有启用 `合成阶段` 后，合成前才必须拟合后期补录的真音到已锁镜头长：
+- **`制作模式=先出视频后配音`（快速 demo·不推荐）**：默认 `视频` 完成只表示 `clip_delivery_complete`；只有启用 `合成阶段` 后，合成前才必须拟合后期补录的真音到已锁镜头长：
   ```
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh            # dry-run 对账
   python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply    # 出 voice_zh_fitted.wav
@@ -89,13 +89,15 @@ compose 出成片即主流程收尾；默认读选择点 `AI显式角标=仅元�
 发布/交给运营前，先跑事件账本审计，再生成发布证据包：
 
 ```bash
+python3 skills/n2d-compose/scripts/final_timeline_probe.py <作品根> 第N集 --write --json
+python3 skills/n2d/scripts/script_supervisor_log.py <作品根> 第N集 check --write-missing --json
 python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
 python3 skills/n2d-dashboard/scripts/event_ledger.py replay <作品根> --write
 python3 skills/n2d-compose/release_manifest.py build <作品根> 第N集 --stage review --write
 python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 ```
 
-输出 `合规/release_manifest_第N集.json/md`，汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收和发布待办。`readiness.status=blocked` 时不进入投放。
+`final_timeline_probe.py --write` 会落 `生产数据/final_timeline_probe_第N集.json`、`合成/第N集/_work/timeline.json`、`合成/第N集/rough_cut_preview.html`，作为 rough cut lock 证据；`script_supervisor_log.py` 会落 `生产数据/script_supervisor_log_第N集.jsonl` 和摘要，作为生成后场记日志。release manifest 输出 `合规/release_manifest_第N集.json/md`，汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收和发布待办。`readiness.status=blocked` 时不进入投放。
 
 ## 进度回写
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。

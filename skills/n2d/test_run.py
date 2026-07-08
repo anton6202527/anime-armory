@@ -139,6 +139,42 @@ def _write_confirmed_preventive_contract(root, ep="第1集"):
         }, fh, ensure_ascii=False)
 
 
+def _write_confirmed_story_acceptance(root, ep="第1集", kind="table_read"):
+    ep_dir = os.path.join(root, "脚本", ep)
+    os.makedirs(ep_dir, exist_ok=True)
+    json_name = "table_read_packet.json" if kind == "table_read" else "animatic_packet.json"
+    md_name = "table_read_packet.md" if kind == "table_read" else "animatic_packet.md"
+    if kind == "table_read":
+        input_rels = [
+            f"脚本/{ep}/voiceover.txt",
+            f"合成/{ep}/配音/时长清单.json",
+            f"生产数据/script_quality_contract_{ep}.json",
+        ]
+    else:
+        input_rels = [
+            f"脚本/{ep}/storyboard.json",
+            f"脚本/{ep}/镜头时长.json",
+            f"脚本/{ep}/字幕_中文.srt",
+            f"合成/{ep}/配音/voice_zh.wav",
+        ]
+    payload = {
+        "kind": "n2d_table_read_packet" if kind == "table_read" else "n2d_animatic_packet",
+        "version": 1,
+        "episode": ep,
+        "status": "confirmed",
+        "inputs_fingerprint": artifact_fingerprint(root, input_rels),
+        "acceptance": {
+            "reviewer": "fixture",
+            "dialogue_voice_distinct": "accepted",
+            "duration_risk_understood": "accepted",
+        },
+    }
+    with open(os.path.join(ep_dir, json_name), "w", encoding="utf-8") as fh:
+        json.dump(payload, fh, ensure_ascii=False)
+    with open(os.path.join(ep_dir, md_name), "w", encoding="utf-8") as fh:
+        fh.write(f"---\nkind: {payload['kind']}\nstatus: confirmed\n---\n# confirmed\n")
+
+
 # ── 前沿解析 + stage key 反查（真实 fixture 文件）──────────────────────────────
 def test_resolve_frontier_image():
     root = make_work(ALL_DONE_TO["image"])
@@ -223,7 +259,7 @@ def test_next_action_done_after_review_signoff():
     root = make_work(cells)
     na = run.next_action(root, "第1集")
     assert na["stop_reason"] == "done"
-    assert "默认主流程已完成" in na["action_card"]["headline"]
+    assert "clip_delivery_complete" in na["action_card"]["to_user"]
 
 
 def test_production_mode_menu_defaults_to_video_first_post_dub():
@@ -344,6 +380,39 @@ def test_review_acceptance_outputs_runs_episode_closeout(monkeypatch):
     assert "failure_taxonomy.py" in names
     assert names[-1] == "release_verdict.py"
     assert not probes.review_acceptance_block
+
+
+def test_review_acceptance_outputs_preserves_warn_status(monkeypatch):
+    root = make_work(ALL_DONE_TO["review"])
+
+    def fake_run(cmd):
+        name = os.path.basename(cmd[1])
+        status = "warn" if name == "creative_governance.py" else "pass"
+        return _CP(0, json.dumps({"findings": [], "status": status}, ensure_ascii=False), "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    monkeypatch.setattr(run, "_review_acceptance_issue", lambda _root, _ep: None)
+
+    probes = run.Probes()
+    run._run_review_acceptance_outputs(root, "第1集", probes)
+
+    creative = next(row for row in probes.prework if row["step"] == "creative_governance")
+    assert creative["status"] == "warn"
+    assert not probes.review_acceptance_block
+
+
+def test_action_card_includes_prework_status_summary():
+    root = make_work(ALL_DONE_TO["review"])
+    probes = run.Probes(prework=[
+        {"step": "creative_governance", "status": "warn"},
+        {"step": "release_verdict", "status": "pass"},
+    ])
+
+    na = run.decide(root, _route("review"), "review", probes)
+
+    summary = na["action_card"]["prework_status_summary"]
+    assert summary["counts"]["warn"] == 1
+    assert summary["counts"]["pass"] == 1
 
 
 def test_decide_compliance_blocks_paid_stage():
@@ -522,8 +591,11 @@ def test_gather_probes_blocks_script_stage2_without_confirmed_director_pack():
     _write_confirmed_preventive_contract(root)
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
+    na = run.decide(root, _route("script_stage2"), "script_stage2", probes)
 
-    assert probes.prework_block and "P-2 导演排戏包" in probes.prework_block
+    assert probes.prework_block and "围读验收包" in probes.prework_block
+    assert any("P-2 导演排戏包" in row["message"] for row in probes.prework_blocks)
+    assert any("P-2 导演排戏包" in row["message"] for row in na["action_card"]["prework_blocks"])
     assert any(pw["step"] == "director_blocking_pack" and pw["status"] == "block" for pw in probes.prework)
     assert os.path.exists(os.path.join(root, "脚本", "第1集", "director_beat_sheet.json"))
 
@@ -536,8 +608,11 @@ def test_gather_probes_blocks_script_stage2_without_episode_promise_contract():
     _write_confirmed_director_pack(root)
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
+    na = run.decide(root, _route("script_stage2"), "script_stage2", probes)
 
-    assert probes.prework_block and "预防式合同" in probes.prework_block
+    assert probes.prework_block and "围读验收包" in probes.prework_block
+    assert any("预防式合同" in row["message"] for row in probes.prework_blocks)
+    assert any("预防式合同" in row["message"] for row in na["action_card"]["prework_blocks"])
     assert any(pw["step"] == "preventive_contracts" and pw["status"] == "block" for pw in probes.prework)
     assert os.path.exists(os.path.join(root, "脚本", "第1集", "preventive_contracts.json"))
 
@@ -549,6 +624,7 @@ def test_gather_probes_allows_script_stage2_with_confirmed_director_pack():
     open(os.path.join(ep_dir, "voiceover.txt"), "w", encoding="utf-8").write("她推门而入。\n他抬头看见令牌。\n")
     _write_confirmed_preventive_contract(root)
     _write_confirmed_director_pack(root)
+    _write_confirmed_story_acceptance(root, kind="table_read")
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
 

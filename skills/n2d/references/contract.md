@@ -20,7 +20,7 @@
 | `N/M` | 部分完成；仅 `N >= M` 算完成 |
 | `—` / `N/A` / `无` | 本集不适用，路由视为已满足 |
 
-`raw` 是源文本展示列，不计入生产完成度。`成片` / `验收` 是可选尾段列：默认 `合成阶段=跳过` 时不计入主流程完成判定，`视频` 列完成即默认完结；当 `_设置.md` 写 `合成阶段: 启用`，或某集已经开始 `成片/验收`，才继续路由到 compose/review。
+`raw` 是源文本展示列，不计入生产完成度。`成片` / `验收` 是可选尾段列：默认 `合成阶段=跳过` 时不计入镜头交付完成判定，`视频` 列完成表示 `clip_delivery_complete`，不是可发布母版；当 `_设置.md` 写 `合成阶段: 启用`，或某集已经开始 `成片/验收`，才继续路由到 compose/review/readiness，最终通过人工签收后才形成 `master_delivery_complete`。
 
 ## 2. 阶段图
 
@@ -43,9 +43,15 @@
 
 `source` 阶段除 `脚本/第N集/raw.txt` 外，还会由 `split_novel.py` 自动落 P-1 开发包草稿：`开发包/series_bible.md`、`adaptation_strategy.json`、`season_arc.json`、`production_feasibility.json`、`pilot_greenlight.md`。这些文件不新增 `_进度.md` 列；它们由 `run.py` 在 `script_stage1` 前置 `development_pack` gate 校验，必须全部 `confirmed` 后才进入正式剧本改编。
 
+`script_stage2` 前先有 table read 围读包，不新增 `_进度.md` 列：`脚本/第N集/table_read_packet.json`、`table_read_packet.md`。这些文件由 `run.py` 在 `script_stage2` 前置 `story_acceptance_packets --kind table_read` gate 校验，必须 `confirmed` 后才进入 P-2；检查结果落 `生产数据/story_acceptance_packets_check_table_read_第N集.json`。
+
 `script_stage2` 前还有一层 P-2 导演排戏包，不新增 `_进度.md` 列：`脚本/第N集/director_beat_sheet.json`、`axis_blocking_map.json`、`shot_progression_plan.json`、`transition_map.json`、`vertical_composition_plan.json`、`edit_rhythm_map.json`。这些文件由 `run.py` 在 `script_stage2` 前置 `director_blocking_pack` gate 校验，必须全部 `confirmed` 后才进入正式分镜；汇总说明落 `生产数据/director_blocking_pack_第N集.md`，检查结果落 `生产数据/director_blocking_pack_check_第N集.json`。
 
-`image_prompt` 前还有一层 P-3 制片拆解包，不新增 `_进度.md` 列：`脚本/第N集/production_breakdown.json`、`continuity_breakdown.json`、`ai_call_sheet.md`。这些文件由 `run.py` 在 `image_prompt` 前置 `production_breakdown` gate 校验，必须全部 `confirmed` 且无 `待补/TODO` 后才进入出图 prompt；汇总说明落 `生产数据/production_handoff_pack_第N集.md`，检查结果落 `生产数据/production_breakdown_check_第N集.json`。
+`image_prompt` 前先有 executable animatic 粗剪包，不新增 `_进度.md` 列：`脚本/第N集/animatic_packet.json`、`animatic_packet.md`、`生产数据/animatic_第N集.json`、`生产数据/animatic_第N集.html`。这些文件由 `run.py` 在 `image_prompt` 前置 `story_acceptance_packets --kind animatic` gate 校验；packet 必须 `confirmed`，timed HTML/JSON 必须能由 `storyboard.json` + `镜头时长.json` 生成后才进入 P-3；检查结果落 `生产数据/story_acceptance_packets_check_animatic_第N集.json`。
+
+`image_prompt` 前还有一层 P-3 制片拆解包，不新增 `_进度.md` 列：`脚本/第N集/production_breakdown.json`、`continuity_breakdown.json`、`continuity_bible.json`、`ai_shooting_schedule.json`、`ai_call_sheet.md`、`生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`。这些文件由 `run.py` 在 `image_prompt` 前置 `production_breakdown` gate 校验，必须全部 `confirmed` 且无 `待补/TODO` 后才进入出图 prompt；汇总说明落 `生产数据/production_handoff_pack_第N集.md`，检查结果落 `生产数据/production_breakdown_check_第N集.json`。batch seed 是 `n2d-batch queue.py plan --from-shooting-schedule` 的输入，把 AI 拍摄排期转换成 image/video 队列任务草案。
+
+`review/release` 前不再只看最终 MP4。`run.py` 会先刷新 `final_timeline_probe.py --write` 和 `script_supervisor_log.py check --write-missing`：前者落 `生产数据/final_timeline_probe_第N集.json`、`合成/第N集/_work/timeline.json`、`合成/第N集/rough_cut_preview.html`，形成 rough cut lock；后者落 `生产数据/script_supervisor_log_第N集.jsonl` 与摘要，要求 storyboard 每个 Clip 都能对到 accepted take 和真实资产。`production_locks.py` 按层检查 `video_material_lock`、`rough_cut_lock`、`picture_lock`；锁版后若出现缺失/陈旧/waiver/QC 降级，`creative_governance.py` 会强制 `生产数据/creative_decision_log.jsonl` 中存在 production-ready 决策账，再允许继续 release/readiness。
 
 ## 3. 制作模式
 
@@ -60,7 +66,7 @@
 模式感知规则：
 
 - `配音先行`：`配音=⏳rough` 只算“已尝试”，不算满足；image/video gate 会阻断占位配音。
-- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；默认 `视频` 完成即收尾。只有 `合成阶段=启用` 或本集已开始成片/验收时，合成前才必须补真实配音，且 `n2d-route` 会把前沿从 `compose` 拦回 `n2d-voice`。
+- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；默认 `视频` 完成即收为 `clip_delivery_complete`。只有 `合成阶段=启用` 或本集已开始成片/验收时，合成前才必须补真实配音，且 `n2d-route` 会把前沿从 `compose` 拦回 `n2d-voice`。
 - `原生音画`：`配音` 对主流程视作可选旁白层；分镜时长来自 `storyboard.json clips[].duration`，compose 默认保留 clip 原生音轨，避免丢台词。
 
 ## 4. 每集 manifest

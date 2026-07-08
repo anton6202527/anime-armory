@@ -1,6 +1,6 @@
-# AnimeArmory — Desktop (Tauri + React)
+# Creation Armory — Desktop (Tauri + React)
 
-A Tauri 2 + Vite/React/TS desktop shell for the anime-armory creation factory.
+A Tauri 2 + Vite/React/TS desktop shell for Creation Armory, the local creative production factory in the `anime-armory` repo.
 
 ## Design Laws
 
@@ -38,7 +38,7 @@ cd desktop
 npm install                 # done (frontend deps)
 npm run app:dev             # = tauri dev: builds Rust, launches the app, hot-reloads the React side
 ```
-First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. Packaged builds ship full skills, but full demo works are not bundled into the app. `desktop/demo-works.json` defines one downloadable demo per series; `scripts/r2a_release.sh` publishes them as `AnimeArmory_demo_<line>.zip` release assets, and the app downloads/extracts a demo only when the user clicks "下载示例". To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker).
+First `tauri dev` compiles the Rust crate (a few minutes once). The skills repo is inferred from the live checkout in dev and falls back to bundled resources in packaged builds. Packaged builds ship full skills, but full demo works are not bundled into the app. `desktop/demo-works.json` defines one downloadable demo per series; `scripts/r2a_release.sh` publishes them as `AnimeArmory_demo_<line>.zip` release assets, and the app downloads/extracts a demo only when the user clicks "下载示例". To force a dev repo, set `VITE_ANIME_ARMORY_REPO=/absolute/path/to/anime-armory`. The works workspace is chosen at runtime via the "切换工作区…" button (uses the native folder picker). `AnimeArmory` remains the compatibility name for release assets and app workspace paths; the user-facing product name is Creation Armory / 创作兵工厂.
 
 Frontend-only (no native shell, for quick UI work):
 ```sh

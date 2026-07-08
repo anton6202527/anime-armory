@@ -1,13 +1,13 @@
 ---
 name: n2d-compose
-description: Optional post-video stage of n2d (剪映合成的脚本化替代) — assemble a finished episode 成片 from 视频/ clips + (可选)配音轨 + (可选)BGM(占位/文件/Suno) + 烧录双语字幕. Default n2d completion is 视频 done; use this only when the user enables 合成阶段 or asks for 成片/BGM/subtitles/release packaging. Mixes voice with BGM ducking, burns subtitles via Pillow+overlay (本机 ffmpeg 无 libass). Writes _进度.md 成片 column. Use when asked to 合成, 合成成片, 成片, 加BGM, 加背景音乐, 烧字幕, 混音, 出成片, 导出成片. Triggers 合成, 成片, 加BGM, 背景音乐, 烧字幕, 混音, 导出, compose, 剪映.
+description: Optional post-video stage of n2d (剪映合成的脚本化替代) — assemble a finished episode 成片 from 视频/ clips + (可选)配音轨 + (可选)BGM(占位/文件/Suno) + 烧录双语字幕. Default n2d video completion is clip_delivery_complete, not publishable master; use this when the user enables 合成阶段 or asks for 成片/BGM/subtitles/release packaging/master delivery. Mixes voice with BGM ducking, burns subtitles via Pillow+overlay (本机 ffmpeg 无 libass). Writes _进度.md 成片 column. Use when asked to 合成, 合成成片, 成片, 加BGM, 加背景音乐, 烧字幕, 混音, 出成片, 导出成片, 母版, 发布包. Triggers 合成, 成片, 加BGM, 背景音乐, 烧字幕, 混音, 导出, compose, 剪映, 母版, 发布.
 ---
 
 # n2d-compose — 合成成片（剪映那步的脚本化替代）
 
 把一集的 `视频/`(clips) + `配音/voice_*.wav`(可选) + BGM(可选) + 字幕 烧成 `成片_第N集_{mode}.mp4`。
 
-> **可选尾段**：n2d 默认在 `视频` 列完成后收尾；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。
+> **可选尾段**：n2d 默认在 `视频` 列完成后收为 `clip_delivery_complete`；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。`master_delivery_complete` 还需要后续 release/readiness、production locks、creative governance 和人工验收通过，不能把单个 MP4 存在误当可发布。
 
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
@@ -32,11 +32,11 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
   - 默认策略走 `创作偏好-默认.md`，可在 `_设置.md` 记 `接缝兜底=硬切|微溶解|报警`；接法属可控点，拿不准时按"有意硬切硬切、跳变溶解、缺空镜报警"。
   - **实现现状（已落地·不再是 TODO）**：`compose.sh` 拼接步已改调 `seam_concat.py`——自动读 `storyboard.json` 每接缝 `continuity.transition` 分类：**硬切→裸拼、微溶解→局部 `xfade`、缺空镜→报警**（写 `合成/<ep>/_work/接缝报告.md` + stderr）。**支持 Split Relay (拆段接力)**：同一逻辑镜的子段（`_partN`）强制硬切以保证无缝，仅跨逻辑镜接缝才应用 storyboard 转场。实现策略：硬切/报警/Split子段相连的 clip 归为一个 run 先 `concat -c copy`（零重编码），只在**溶解接缝**间做 xfade，把重编码压到最小。**无溶解接缝时等价今天的 `concat -c copy`**；clip 数与 storyboard 对不上、或 ffmpeg 失败 → 自动回退裸拼，绝不中断合成。兜底/溶解秒可用环境变量 `SEAM_FALLBACK`（默认硬切）/`SEAM_DISSOLVE_SEC`（默认 0.25）覆盖。缺空镜仍只报警**不自造素材**——要消除生硬跳切需人工补一个空镜 clip 再合成。`seam_concat.py --plan-only` 可干跑看接法计划。
 - **配音先行**：BGM 垫在配音下面并被配音 ducking（先有配音再压 BGM）。配音轨由 n2d-voice 在前置阶段产出，本 skill **只消费不生成**。
-- **默认后期配音线（2026-07 起）**：长期量产默认 `制作模式=配音先行`，不是原生音画。视频层只生产无声 Image2Video；对白层由 CosyVoice / Fish Speech / MiniMax Speech / 其它 TTS 独立生成并按角色固定音色；音效层单独规划脚步、开门、风雨、爆炸、打斗、环境声；音乐层按剧情段落铺温馨/战斗/悲伤等情绪，不按镜头碎切；最后由 FFmpeg 统一混音、ducking、烧字幕并输出 MP4。`原生音画` 仅作为快速预览或特殊后端选项。
+- **后配音默认线（2026-07 当前代码默认）**：`制作模式` 的机器真值来自 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT`，当前为 `先出视频后配音`：先用估算/占位时长推进画面，真实配音在视频后补并拟合。长期量产、少返工或声音一致性优先时，应在首跑选择里主动改 `制作模式=配音先行`；那条线的视频层只生产无声 Image2Video，对白层由 CosyVoice / Fish Speech / MiniMax Speech / 其它 TTS 独立生成并按角色固定音色。`原生音画` 仅作为快速预览或特殊后端选项。
 - **张力感知 BGM 增益（爽点抬/细节压·替代一刀切）**：`DUCK_RATIO` 是整集统一档；要让爽点/爆发镜 BGM 顶上去、悬念/细节镜压更狠，先跑 `python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr` 读 `storyboard.json` 每 Clip `rhythm` 映射成随时间变化的 BGM 基准音量包络，再喂给 compose：`BGM_GAIN_EXPR="$(python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr)" bash compose.sh ...`。这条增益作用在 voice 侧链 ducking **之前**的 BGM 基准上，与既有 `DUCK_RATIO` 侧链叠加。**不传 `BGM_GAIN_EXPR` 时保持原固定 `0.9/0.85` 行为**（向后兼容）；缺 storyboard 时给提示不臆造。`tension_mix.py`（无 `--expr`）打人读包络图 + 建议叠音效的爽点镜清单。
 - **🎼 角色/势力主题动机（leitmotif·确定性复用）**：BGM 此前只到「逐集情绪 + 张力 ducking」，没有跨集「听见就知道是他」的复现旋律。生成式音乐跨集维持同一动机极不稳，故用**确定性复用**：可选 `<作品根>/设定库/motif.json`（`{"沈念":{"file":"素材/motif/shen.wav","cue":"focus","gain":0.5}}`）一次性登记角色/势力的一段动机 clip。compose `[6/6]` 后自动跑 `motif_registry.py --mix`：读 `时长清单.json` 在角色焦点 span 开头铺**同一段 clip**（`min_gap` 去重防刷屏），视频流直 copy 只改音轨。缺 motif.json=空规划 no-op，成片一字不动。巡检：`python3 motif_registry.py <作品根> 第N集`。
 - **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`，量成片**集成响度/真峰** vs 平台目标（youtube/bilibili/tiktok≈-14、broadcast -23、默认 -16 LUFS·候选快照），advisory 不阻断——超标给整改提示（既有逐句 loudnorm + dynaudnorm/alimiter 之外的最终符合性对账）。`--platform` 可指定目标。
-- **交付包装证据包（review warn 回灌）**：成片通过不只看 MP4 存在。每次正式合成后要补齐或刷新 `final_timeline_probe_第N集.json`、`合成/<集>/grade_applied.json`、混合视频后端时的 color match/grade report、`tension_mix`/BGM gain 证据、room tone/foley/ambient bed 证据、`loudness_conform` 报告和 `series_packaging`/release manifest。缺这些证据时，review/score 的 `delivery_packaging_consistency` 只能给 warn/缺数据；production/release profile 下先回 compose 补证据，不把内部预览误当可投放母带。
+- **粗剪锁版 + 交付包装证据包（review warn 回灌）**：成片通过不只看 MP4 存在。每次正式合成后要补齐或刷新 `final_timeline_probe_第N集.json`；`final_timeline_probe.py --write` 同时写 `合成/<集>/_work/timeline.json` 和 `合成/<集>/rough_cut_preview.html`，这是 rough cut lock 的机器证据。生成后 review 前还会补 `script_supervisor_log_第N集.jsonl`，把每个 storyboard Clip 对到 accepted take/资产/连续性偏差。除此之外还要补齐 `合成/<集>/grade_applied.json`、混合视频后端时的 color match/grade report、`tension_mix`/BGM gain 证据、room tone/foley/ambient bed 证据、`loudness_conform` 报告和 `series_packaging`/release manifest。缺这些证据时，review/score 的 `delivery_packaging_consistency` 只能给 warn/缺数据；production/release profile 下先回 compose 补证据，不把内部预览误当可投放母带。
 - **audio_timing_gate 前置**：正式合成前 `run.py next` 与 `dashboard gate --stage compose` 会消费 `脚本/第N集/preventive_contracts.json` 的 `audio_timing`。对白近景、后配音、原生音画必须先写清口型、字幕、声纹/音色、时长拟合和 overflow 策略；缺字段回 `script_stage2`，不要等 compose 时才发现音画无法对齐。
 - **clip 原生音频处理（P1 原生音画 / 配音先行分流）**：Veo / Seedance / Kling 出的 clip 可能**自带原生音轨**（环境音甚至台词）。n2d-video 阶段保留平台原片，不提前去音轨；本 skill 是唯一处理原生音轨的地方。默认 `配音先行` 会丢弃 clip 原生音轨，不让原生台词接管角色声音；只有显式 `原生音画` 时才保留原片音轨承接台词。选择点 `视频原生音轨`：
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。
@@ -120,7 +120,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 合规/release_manifest_第N集.md
 ```
 
-`readiness.status=ready` 的最小条件：母带存在且 SHA256 可验、`compliance.py --check` 无 BLOCK、gate findings 无 block、存在人审签收。AI 标识/水印/C2PA 仍按本线铁律只进发布待办，不阻断 compose；但 release manifest 会把这些待办集中列出来，避免“主流程已合成”被误当成“可以投放”。
+`readiness.status=ready` 的最小条件：母带存在且 SHA256 可验、`compliance.py --check` 无 BLOCK、gate findings 无 block、production locks 未漂移、crew RACI 可追责、存在人审签收。AI 标识/水印/C2PA 仍按本线铁律只进发布待办，不阻断 compose；但 release manifest 会把这些待办集中列出来，避免“主流程已合成”被误当成“可以投放”。
 
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物，必须是 AI 平台原片，不应出现 `.noaudio.mp4`、`*_noaudio.mp4` 或 `_raw_with_audio/` 这类提前剥音轨中间件）。否则报错建议先 n2d-video。
@@ -183,7 +183,7 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 
 ## 完成后 · 可选后续
 
-回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户。默认主流程早已在 `视频` 完成时收尾；若本次启用合成尾段是为了发布包或交付母带，建议继续跑 review/release 证据包并人工签收「验收」列：
+回写「成片」列后，**跑 `python3 skills/n2d/progress.py <作品根>` 看整部前沿**，并把下一步念给用户。默认镜头交付早已在 `视频` 完成时收为 `clip_delivery_complete`；若本次启用合成尾段是为了发布包或交付母带，继续跑 review/release/readiness 证据包、production locks 和人工签收「验收」列：
 
 ```
 第K集 成片完成：合成/第K集/成片_第K集_{mode}.mp4
@@ -192,7 +192,8 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 - 质检验收（发布包/交付母带建议）：
     python3 skills/n2d/run.py next <作品根> 第K集
     # 自动刷新 review gate、progress DAG、P-3 check、score、consistency_ledger、review-ui、
-    # failure_taxonomy、release_verdict；通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
+    # failure_taxonomy、release_verdict、production_locks、creative_governance；
+    # 通过后停在 needs_acceptance_signoff，再显式回写「验收」列 ✅
 - 上线后投放回灌：n2d-feedback <作品根> --metrics <平台指标.csv>   留存/追更/跳出反哺导演节奏；
     # 付费/追更平台的 platform_metrics 需带 paywall_position_sec / paywall_after_promise_id / unlock_friction / continue_path
     再 n2d-dashboard build <作品根> --markdown 看成本/ROI/通过率
@@ -201,6 +202,8 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 - 发布前归档：
     python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>
     python3 skills/n2d-compose/release_manifest.py build <作品根> 第K集 --stage review --write
+    python3 skills/n2d/scripts/production_locks.py <作品根> 第K集 check --json
+    python3 skills/n2d/scripts/creative_governance.py <作品根> check --json
 ```
 
 > 量产时优先 `n2d-batch` 排队推进多集，`n2d-dashboard` 盯成本/通过率/重抽率，红灯先回产线修。

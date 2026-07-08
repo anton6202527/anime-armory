@@ -1,6 +1,6 @@
-# Anime Armory Factory
+# Creation Armory / 创作兵工厂
 
-Anime Armory Factory 是 `anime-armory` 的 VS Code 制作面板，用来把作品按固定目录组织起来，并配合 AI agent 按 workflow skills 批量生产小说、漫剧、漫画、歌曲、MV 和广告。
+Creation Armory（创作兵工厂）是 `anime-armory` 的 VS Code 制作面板，用来把作品按固定目录组织起来，并配合 AI agent 按 workflow skills 批量生产小说、漫剧、漫画、歌曲、MV 和广告。`anime-armory` 保留为仓库名和扩展内部 ID；“漫剧兵工厂”只指 n2d 这条漫剧生产线。
 
 扩展内置六条创作线的 workflow skills，并自带一个**种子工作根**：`创作区/` 下会预置 `写小说`、`制漫剧`、`画漫画`、`写歌`、`制MV`、`拍广告` 六个目录。VSIX release 包只保留扩展目录里自带的轻量样例，不复制桌面端各系列冠军 demo；暂时没有样例的系列也会保留目录入口。创作区（作品区）默认就用这个自带工作根。
 
@@ -11,8 +11,8 @@ https://github.com/anton6202527/anime-armory
 
 ## 快速开始
 
-1. 点开左侧 anime-armory 图标——面板会自动开一个终端，定位到当前创作区。
-2. （推荐）用 `File → Open Folder` 打开你自己的项目根，或执行命令 `anime-armory: 选择仓库目录` 指定创作区——这样产物保存在你自己的目录里，且面板实时刷新最稳。
+1. 点开左侧 Creation Armory 图标——面板会自动开一个终端，定位到当前创作区。
+2. （推荐）用 `File → Open Folder` 打开你自己的项目根，或执行命令 `创作兵工厂: 选择仓库目录` 指定创作区——这样产物保存在你自己的目录里，且面板实时刷新最稳。
 3. 在 `创作区/<系列>` 目录下新建作品文件夹，或直接打开内置 demo。
 4. 在终端里让本地 AI agent 读取作品目录和 `_进度.md`，按当前阶段继续生产。
 
@@ -73,7 +73,7 @@ https://github.com/anton6202527/anime-armory
 
 创作区按以下优先级解析：
 
-1. 经 `anime-armory: 选择仓库目录` 指定的外部作品根（会自动开启 `Use External Works`）；
+1. 经 `创作兵工厂: 选择仓库目录` 指定的外部作品根（会自动开启 `Use External Works`）；
 2. 否则用扩展自带的种子工作根；
 3. 否则用当前打开的工作区。
 
@@ -88,7 +88,7 @@ https://github.com/anton6202527/anime-armory
 - 首次打开面板会自动开一个终端，定位到当前创作区目录。
 - 在 `创作区/制漫剧/<作品名>` 上可右键打开 `生产看板`、`本集工作台`，或刷新按集数据。输出落在作品自己的 `生产数据/`：`board.html`、`episode_index.json`、`episodes/第N集.json`、`episode_app_第N集.html`。
 - 文件树按 VS Code 风格懒加载：只在展开目录时读取；大目录默认先显示 500 项，点 `加载更多...` 继续展开；自动刷新只监听作品线顶层和已展开目录的浅层变化，适合含大量图片、视频和 JSON 的项目。
-- `Skills` 文件树默认隐藏；调试时在设置里搜索 `anime-armory` 打开 `Show Skills`。
+- `Skills` 文件树默认隐藏；调试时在设置里搜索 `Creation Armory` 或 `anime-armory` 打开 `Show Skills`。
 
 ## 合规提醒
 

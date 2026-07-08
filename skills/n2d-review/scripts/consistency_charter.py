@@ -238,6 +238,13 @@ CHARTER: Dict[str, Dict[str, Any]] = {
         "rationale": "production 高运动镜缺中段锚帧/锚点即 BLOCK；普通 first-frame-only demo 仍按成本 WARN。",
         "decided": "2026-06-29",
     },
+    "_check_storyboard_adjacent_clip_distinctness": {
+        "dim": "Clip 去重", "required_severity": "block",
+        "may_be_profile_gated": True, "may_be_opt_in": False, "review_status": "production_consistency_default",
+        "rationale": "相邻 Clip 高相似且未写 intentional_repeat/拆段接力理由时，production 视频前必须 BLOCK；"
+                     "demo 可先 WARN 便于快速预览，但这是一条显式登记的 profile 分级，不能静默漂移。",
+        "decided": "2026-07-07",
+    },
 
     # ── 显式登记·profile 门控保留（留存/叙事议题·非出图出视频一致性范围）──────────────────
     # 完整性守护要求"任何 profile 门控 BLOCK 都必须登记裁决"；这 3 个是节奏/留存闸，用户明确划在

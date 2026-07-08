@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -29,8 +30,12 @@ CONFIRMED_RE = re.compile(r"(?im)^\s*(?:status|状态)\s*[:：]\s*(?:confirmed|�
 REQUIRED_FILES = (
     "production_breakdown.json",
     "continuity_breakdown.json",
+    "continuity_bible.json",
+    "ai_shooting_schedule.json",
     "ai_call_sheet.md",
 )
+BATCH_SEED_JSON = "ai_shooting_schedule_batch_seed_{episode}.json"
+BATCH_SEED_MD = "ai_shooting_schedule_batch_seed_{episode}.md"
 
 
 def now_iso() -> str:
@@ -74,6 +79,50 @@ def load_json(path: Path) -> Any:
         return json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return None
+
+
+def file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def artifact_fingerprint(root: Path, rels: Iterable[str]) -> Dict[str, Any]:
+    files: Dict[str, str | None] = {}
+    h = hashlib.sha256()
+    for rel in sorted({str(r).replace(os.sep, "/") for r in rels}):
+        path = root / rel
+        digest = file_sha256(path) if path.is_file() else None
+        files[rel] = digest
+        h.update(rel.encode("utf-8"))
+        h.update(b"\0")
+        h.update((digest or "-").encode("ascii"))
+        h.update(b"\n")
+    return {"files": files, "sha": h.hexdigest()}
+
+
+def fingerprint_is_fresh(recorded: Any, root: Path) -> bool | None:
+    if not isinstance(recorded, Mapping):
+        return None
+    files = recorded.get("files")
+    sha = recorded.get("sha")
+    if not isinstance(files, Mapping) or not isinstance(sha, str) or not sha:
+        return None
+    return artifact_fingerprint(root, [str(k) for k in files.keys()])["sha"] == sha
+
+
+def handoff_input_rels(ep: str) -> List[str]:
+    return [
+        "设定库/source_comprehension.json",
+        f"脚本/{ep}/voiceover.txt",
+        f"脚本/{ep}/storyboard.json",
+        f"脚本/{ep}/镜头时长.json",
+        f"脚本/{ep}/director_blocking_pack.json",
+        f"脚本/{ep}/preventive_contracts.json",
+        f"生产数据/script_quality_contract_{ep}.json",
+    ]
 
 
 def _episode_dir(root: Path, ep: str) -> Path:
@@ -325,6 +374,285 @@ def _continuity_breakdown(ep: str, clips: List[Dict[str, Any]], *, confirmed: bo
     }
 
 
+def _sidecar_status(root: Path, ep: str, name: str, rel: str) -> Dict[str, Any]:
+    path = root / rel
+    data = load_json(path) if path.suffix == ".json" else None
+    status = ""
+    if isinstance(data, Mapping):
+        status = str(data.get("status") or data.get("verdict") or "").strip()
+    return {
+        "name": name,
+        "path": rel,
+        "exists": path.exists(),
+        "status": status or ("present" if path.exists() else "missing"),
+    }
+
+
+def _source_contract(root: Path) -> Dict[str, Any]:
+    path = root / "设定库" / "source_comprehension.json"
+    data = load_json(path)
+    if not isinstance(data, Mapping):
+        return {"path": "设定库/source_comprehension.json", "exists": False, "status": "missing", "trace_ids": []}
+    contract = data.get("understanding_contract") if isinstance(data.get("understanding_contract"), Mapping) else {}
+    trace_ids: List[str] = []
+    blob = json.dumps(data, ensure_ascii=False)
+    for match in re.finditer(r"\bSRC_[A-Za-z0-9_.:-]+\b", blob):
+        trace = match.group(0)
+        if trace not in trace_ids:
+            trace_ids.append(trace)
+    return {
+        "path": "设定库/source_comprehension.json",
+        "exists": True,
+        "status": str(data.get("status") or "").strip() or "unknown",
+        "trace_ids": trace_ids[:50],
+        "contract_fields": sorted(contract.keys()),
+    }
+
+
+def _continuity_bible(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
+    continuity_path = _episode_dir(root, ep) / "continuity_breakdown.json"
+    continuity_data = load_json(continuity_path)
+    rows_by_clip: Dict[str, Mapping[str, Any]] = {}
+    if isinstance(continuity_data, Mapping):
+        for row in continuity_data.get("rows") or []:
+            if isinstance(row, Mapping):
+                cid = str(row.get("clip_id") or "").strip()
+                if cid:
+                    rows_by_clip[cid] = row
+
+    clips_out: List[Dict[str, Any]] = []
+    for idx, clip in enumerate(clips, start=1):
+        cid = _clip_id(clip, idx)
+        continuity = _clip_continuity(clip)
+        entity = _clip_entity(clip)
+        row = rows_by_clip.get(cid, {})
+        clips_out.append({
+            "clip_id": cid,
+            "scene": clip.get("scene") or "",
+            "location_id": clip.get("location_id") or "",
+            "entities": {
+                "characters": _as_list(entity.get("characters") or clip.get("character_ids")),
+                "objects": _as_list(entity.get("objects") or clip.get("object_ids")),
+                "locations": _as_list(entity.get("locations") or clip.get("location_id")),
+                "required_presence": _as_list(entity.get("required_presence")),
+                "offscreen_presence": _as_list(entity.get("offscreen_presence")),
+                "forbidden_presence": _as_list(entity.get("forbidden_presence")),
+            },
+            "state": {
+                "start_state": continuity.get("start_state") or row.get("start_state") or "",
+                "end_state": continuity.get("end_state") or row.get("end_state") or "",
+                "entry_exit": continuity.get("entry_exit") or row.get("entry_exit") or "",
+                "knowledge_state": entity.get("knowledge_state") or row.get("knowledge_state") or {},
+            },
+            "screen_direction": row.get("screen_direction") or _screen_direction(clip),
+            "transition_guard": continuity.get("transition") or row.get("transition_guard") or "cut",
+            "trace_ids": _as_list(clip.get("trace_ids") or clip.get("source_trace_ids") or clip.get("contract_trace_ids")),
+        })
+
+    sidecars = [
+        _sidecar_status(root, ep, "state_transition_manifest", f"生产数据/state_transition_manifest_{ep}.json"),
+        _sidecar_status(root, ep, "interaction_graph", f"生产数据/interaction_graph_{ep}.json"),
+        _sidecar_status(root, ep, "contact_graph", f"生产数据/contact_graph_{ep}.json"),
+        _sidecar_status(root, ep, "causal_event_graph", f"生产数据/causal_event_graph_{ep}.json"),
+        _sidecar_status(root, ep, "story_integrity_ledger", "设定库/story_integrity_ledger.json"),
+        _sidecar_status(root, ep, "thread_scheduler", "设定库/thread_scheduler.json"),
+        _sidecar_status(root, ep, "contract_trace", f"生产数据/contract_trace_{ep}.json"),
+    ]
+    return {
+        "kind": "n2d_continuity_bible",
+        "version": VERSION,
+        "episode": ep,
+        "status": "confirmed" if confirmed else "draft",
+        "generated_at": now_iso(),
+        "owner": "script_supervisor",
+        "inputs": {
+            "source_comprehension": "设定库/source_comprehension.json",
+            "storyboard": f"脚本/{ep}/storyboard.json",
+            "continuity_breakdown": f"脚本/{ep}/continuity_breakdown.json",
+        },
+        "source_contract": _source_contract(root),
+        "sidecars": sidecars,
+        "clips": clips_out,
+        "open_continuity_questions": [
+            row for row in sidecars
+            if not row.get("exists") and row["name"] in {"state_transition_manifest", "interaction_graph", "causal_event_graph"}
+        ],
+    }
+
+
+def _schedule_priority(clip: Mapping[str, Any]) -> str:
+    template = _clip_template(clip)
+    text = json.dumps(clip, ensure_ascii=False)
+    high_tokens = ("fight", "action", "追逐", "打斗", "拥抱", "拉扯", "亲密", "system", "系统", "CU", "MCU")
+    if any(token in template or token in text for token in high_tokens):
+        return "high"
+    continuity = _clip_continuity(clip)
+    if _as_list(continuity.get("anchors")) or continuity.get("need_endframe"):
+        return "medium"
+    return "normal"
+
+
+def _schedule_bucket(priority: str) -> str:
+    if priority == "high":
+        return "pilot_high_risk_first"
+    if priority == "medium":
+        return "continuity_sensitive"
+    return "standard_batch"
+
+
+def _ai_shooting_schedule(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
+    tasks: List[Dict[str, Any]] = []
+    for idx, clip in enumerate(clips, start=1):
+        cid = _clip_id(clip, idx)
+        continuity = _clip_continuity(clip)
+        priority = _schedule_priority(clip)
+        needs_review = priority in {"high", "medium"} or bool(_screen_texts(clip))
+        tasks.append({
+            "clip_id": cid,
+            "production_order": idx,
+            "schedule_bucket": _schedule_bucket(priority),
+            "priority": priority,
+            "estimated_duration_sec": clip.get("duration") or clip.get("seconds") or "",
+            "scene": clip.get("scene") or "",
+            "dependencies": {
+                "storyboard": f"脚本/{ep}/storyboard.json#{cid}",
+                "production_breakdown": f"脚本/{ep}/production_breakdown.json#{cid}",
+                "continuity_bible": f"脚本/{ep}/continuity_bible.json#{cid}",
+                "firstframe": clip.get("firstframe_png") or "",
+                "endframe": clip.get("endframe_png") or continuity.get("endframe_png") or "",
+                "anchors": _as_list(continuity.get("anchors")),
+            },
+            "resource_plan": {
+                "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+                "video_backend_slot": "按 n2d-model-router route primary/fallback 分配",
+                "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+                "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+            },
+            "risk": {
+                "tier": priority,
+                "template": _clip_template(clip),
+                "backend_risk": _backend_risk(clip),
+                "review_required": needs_review,
+            },
+            "fallback_route": {
+                "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+                "video": "native_multiframe → split_relay → shorter_clip_degrade",
+                "post": "screen_text/字幕/花字统一 compose overlay",
+            },
+            "batch_hint": {
+                "idempotency_scope": f"{ep}:{cid}:image_video",
+                "rerun_scope": f"只重跑 {cid} 及其受影响接缝/后期证据",
+            },
+        })
+    return {
+        "kind": "n2d_ai_shooting_schedule",
+        "version": VERSION,
+        "episode": ep,
+        "status": "confirmed" if confirmed else "draft",
+        "generated_at": now_iso(),
+        "owner": "assistant_director",
+        "inputs": {
+            "storyboard": f"脚本/{ep}/storyboard.json",
+            "production_breakdown": f"脚本/{ep}/production_breakdown.json",
+            "continuity_bible": f"脚本/{ep}/continuity_bible.json",
+            "batch_queue": "生产数据/batch_queue.json",
+        },
+        "policy": {
+            "high_risk_first": True,
+            "do_not_batch_past_unreviewed_high_risk_clip": True,
+            "call_sheet_is_ordering_not_authorization": True,
+        },
+        "tasks": tasks,
+        "summary": {
+            "clip_count": len(tasks),
+            "high_risk": sum(1 for t in tasks if t["priority"] == "high"),
+            "medium_risk": sum(1 for t in tasks if t["priority"] == "medium"),
+        },
+    }
+
+
+def _batch_seed_from_schedule(root: Path, ep: str, schedule: Mapping[str, Any]) -> Dict[str, Any]:
+    tasks: List[Dict[str, Any]] = []
+    source_tasks = [t for t in (schedule.get("tasks") or []) if isinstance(t, Mapping)]
+    order_rank = {"high": 0, "medium": 1, "normal": 2}
+    ordered = sorted(
+        source_tasks,
+        key=lambda t: (order_rank.get(str(t.get("priority") or "normal"), 3), int(t.get("production_order") or 9999)),
+    )
+    priority = 1
+    for task in ordered:
+        cid = str(task.get("clip_id") or "").strip()
+        if not cid:
+            continue
+        for stage_key in ("image", "video"):
+            tasks.append({
+                "episode": ep,
+                "stage_key": stage_key,
+                "clip_id": cid,
+                "priority": priority,
+                "reason": "shooting_schedule",
+                "schedule_bucket": task.get("schedule_bucket") or "",
+                "risk_tier": (task.get("risk") or {}).get("tier") if isinstance(task.get("risk"), Mapping) else task.get("priority"),
+                "affected_shots": [cid],
+                "affected_artifacts": [],
+                "rerun_scope": f"AI shooting schedule {ep} {cid} {stage_key}：按排期单镜执行，保留受影响接缝返工边界。",
+                "resource_plan": task.get("resource_plan") if isinstance(task.get("resource_plan"), Mapping) else {},
+                "dependencies": task.get("dependencies") if isinstance(task.get("dependencies"), Mapping) else {},
+                "source_schedule_order": task.get("production_order") or priority,
+            })
+            priority += 1
+    return {
+        "kind": "n2d_ai_shooting_schedule_batch_seed",
+        "version": VERSION,
+        "episode": ep,
+        "status": "ready" if tasks else "block",
+        "generated_at": now_iso(),
+        "source_schedule": f"脚本/{ep}/ai_shooting_schedule.json",
+        "batch_queue_command": f"python3 skills/n2d-batch/scripts/queue.py plan {root} --from-shooting-schedule 生产数据/{BATCH_SEED_JSON.format(episode=ep)}",
+        "policy": {
+            "one_task_per_clip_stage": True,
+            "high_risk_first": True,
+            "queue_merge_default": True,
+        },
+        "summary": {
+            "seed_tasks": len(tasks),
+            "clips": len({t["clip_id"] for t in tasks}),
+            "stages": sorted({t["stage_key"] for t in tasks}),
+        },
+        "batch_tasks": tasks,
+    }
+
+
+def _write_batch_seed(root: Path, ep: str, schedule: Mapping[str, Any], *, force: bool = False) -> Tuple[str, str]:
+    seed = _batch_seed_from_schedule(root, ep, schedule)
+    json_path = root / "生产数据" / BATCH_SEED_JSON.format(episode=ep)
+    md_path = root / "生产数据" / BATCH_SEED_MD.format(episode=ep)
+    if force or not json_path.exists():
+        write_json_atomic(json_path, seed)
+    if force or not md_path.exists():
+        lines = [
+            f"# AI Shooting Schedule Batch Seed — {ep}",
+            "",
+            f"- status: {seed.get('status')}",
+            f"- seed tasks: {(seed.get('summary') or {}).get('seed_tasks', 0)}",
+            f"- source: `脚本/{ep}/ai_shooting_schedule.json`",
+            "",
+            "## Import",
+            "",
+            f"```bash\npython3 skills/n2d-batch/scripts/queue.py plan {root} --from-shooting-schedule 生产数据/{BATCH_SEED_JSON.format(episode=ep)}\n```",
+            "",
+            "| priority | stage | clip | bucket | scope |",
+            "|---|---|---|---|---|",
+        ]
+        for task in seed.get("batch_tasks") or []:
+            lines.append(
+                f"| {task.get('priority')} | {task.get('stage_key')} | {task.get('clip_id')} | "
+                f"{task.get('schedule_bucket') or '-'} | {str(task.get('rerun_scope') or '').replace('|', '/')} |"
+            )
+        write_atomic(md_path, "\n".join(lines).rstrip() + "\n")
+    return str(json_path), str(md_path)
+
+
 def _ai_call_sheet(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> str:
     rows = []
     for idx, clip in enumerate(clips, start=1):
@@ -355,6 +683,8 @@ status: {'confirmed' if confirmed else 'draft'}
 
 ## 放行前依赖
 - P-1 开发包 confirmed；P-2 导演排戏包 confirmed；本 P-3 包 confirmed 后才进入出图 prompt。
+- `ai_shooting_schedule.json` 已列出高风险优先级、后端槽位、预算/并发护栏和 batch rerun scope。
+- `continuity_bible.json` 已把 source/storyboard/entity/state/sidecar 聚合成场记真值源。
 - 角色/场景/道具/VFX 参考从共享 identity_registry / asset_registry 继承；新增缺口由出图 prompt 标为 reference plan。
 - 系统文字、状态数值、字幕和花字走 compose overlay；生图/视频只留空面板与安全区。
 - 合规包按 internal_only demo 使用，平台审核/备案/出海本地化留到转投放前补齐。
@@ -387,6 +717,7 @@ def _write_overview(root: Path, ep: str, report: Mapping[str, Any] | None = None
         "",
     ]
     lines.extend(f"- `脚本/{ep}/{name}`" for name in REQUIRED_FILES)
+    lines.append(f"- `生产数据/{BATCH_SEED_JSON.format(episode=ep)}`")
     if report:
         lines.extend([
             "",
@@ -410,15 +741,19 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
     ep_dir = _episode_dir(root, ep)
     clips = _clips(root, ep)
     created: List[str] = []
+    schedule_payload = _ai_shooting_schedule(root, ep, clips, confirmed=confirmed)
     payloads: Tuple[Tuple[str, Mapping[str, Any]], ...] = (
         ("production_breakdown.json", _production_breakdown(root, ep, clips, confirmed=confirmed)),
         ("continuity_breakdown.json", _continuity_breakdown(ep, clips, confirmed=confirmed)),
+        ("continuity_bible.json", _continuity_bible(root, ep, clips, confirmed=confirmed)),
+        ("ai_shooting_schedule.json", schedule_payload),
     )
     for name, payload in payloads:
         if write_json_if_absent(ep_dir / name, payload, force=force):
             created.append(f"脚本/{ep}/{name}")
     if write_text_if_absent(ep_dir / "ai_call_sheet.md", _ai_call_sheet(root, ep, clips, confirmed=confirmed), force=force):
         created.append(f"脚本/{ep}/ai_call_sheet.md")
+    seed_json, seed_md = _write_batch_seed(root, ep, schedule_payload, force=force)
     manifest = {
         "kind": KIND,
         "version": VERSION,
@@ -426,6 +761,8 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
         "status": "confirmed" if confirmed else "draft",
         "generated_at": now_iso(),
         "root": str(root),
+        "inputs": {rel.rsplit("/", 1)[-1]: rel for rel in handoff_input_rels(ep)},
+        "inputs_fingerprint": artifact_fingerprint(root, handoff_input_rels(ep)),
         "required_files": [f"脚本/{ep}/{name}" for name in REQUIRED_FILES],
         "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
     }
@@ -439,7 +776,51 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
         "created": created,
         "manifest": f"脚本/{ep}/production_handoff_pack.json",
         "overview_path": overview,
+        "batch_seed": [seed_json, seed_md],
     }
+
+
+def _batch_seed_status(root: Path, ep: str) -> Dict[str, Any]:
+    path = root / "生产数据" / BATCH_SEED_JSON.format(episode=ep)
+    data = load_json(path)
+    issues: List[str] = []
+    if not isinstance(data, dict):
+        issues.append("batch seed JSON 缺失或无效")
+    else:
+        if data.get("kind") != "n2d_ai_shooting_schedule_batch_seed":
+            issues.append("kind 不是 n2d_ai_shooting_schedule_batch_seed")
+        if str(data.get("status") or "").lower() != "ready":
+            issues.append("status 不是 ready")
+        if not data.get("batch_tasks"):
+            issues.append("batch_tasks 为空")
+    md = root / "生产数据" / BATCH_SEED_MD.format(episode=ep)
+    if not md.is_file():
+        issues.append("batch seed markdown 缺失")
+    return {
+        "rel": f"生产数据/{BATCH_SEED_JSON.format(episode=ep)}",
+        "status": "pass" if not issues else "block",
+        "issues": issues,
+    }
+
+
+def _handoff_manifest_status(root: Path, ep: str) -> Dict[str, Any]:
+    rel = f"脚本/{ep}/production_handoff_pack.json"
+    path = root / rel
+    data = load_json(path)
+    issues: List[str] = []
+    if not isinstance(data, Mapping):
+        issues.append("production_handoff_pack.json 缺失或无效")
+    else:
+        if data.get("kind") != KIND:
+            issues.append("kind 不是 n2d_production_handoff_pack")
+        if str(data.get("status") or "").strip().lower() != "confirmed":
+            issues.append("status 不是 confirmed")
+        fresh = fingerprint_is_fresh(data.get("inputs_fingerprint"), root)
+        if fresh is False:
+            issues.append("inputs_fingerprint 已过期，上游输入变更后需重新确认 P-3 handoff")
+        elif fresh is None:
+            issues.append("缺 inputs_fingerprint，不能证明 handoff 对应当前输入")
+    return {"rel": rel, "status": "pass" if not issues else "block", "issues": issues}
 
 
 def _json_status(path: Path) -> Tuple[str, List[str]]:
@@ -481,6 +862,8 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
             continue
         status, issues = _json_status(path) if path.suffix == ".json" else _md_status(path)
         rows.append({"rel": rel, "status": status, "issues": issues})
+    rows.append(_handoff_manifest_status(root, ep))
+    rows.append(_batch_seed_status(root, ep))
     blockers = [row for row in rows if row["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,
@@ -490,7 +873,7 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         "episode": ep,
         "status": "pass" if not blockers else "block",
         "summary": {
-            "required": len(REQUIRED_FILES),
+            "required": len(rows),
             "pass": len(rows) - len(blockers),
             "block": len(blockers),
         },
@@ -498,7 +881,7 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         "scaffold_command": f"python3 skills/n2d-script/scripts/production_breakdown.py {root} {ep} scaffold --write",
         "next_when_blocked": (
             "补齐 P-3 制片拆解三件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
-            "之后重跑 check，再进入出图 prompt。"
+            "确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。"
         ),
     }
     out = root / "生产数据" / f"production_breakdown_check_{ep}.json"

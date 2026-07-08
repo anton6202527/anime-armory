@@ -1,7 +1,7 @@
 {
   "name": "anime-armory",
-  "displayName": "anime-armory",
-  "description": "VS Code panel for organizing anime-armory creative production workflows.",
+  "displayName": "Creation Armory",
+  "description": "VS Code panel for organizing Creation Armory creative production workflows.",
   "version": "0.9.41",
   "publisher": "armory",
   "private": true,
@@ -25,7 +25,7 @@
       "activitybar": [
         {
           "id": "animeArmory",
-          "title": "anime-armory",
+          "title": "Creation Armory",
           "icon": "media/icon.svg"
         }
       ]
@@ -34,7 +34,7 @@
       "animeArmory": [
         {
           "id": "animeArmoryView",
-          "name": "anime-armory",
+          "name": "Creation Armory",
           "icon": "media/icon.svg"
         }
       ]
@@ -42,12 +42,12 @@
     "commands": [
       {
         "command": "animeArmory.refresh",
-        "title": "anime-armory: 刷新",
+        "title": "创作兵工厂: 刷新",
         "icon": "$(refresh)"
       },
       {
         "command": "animeArmory.selectRepo",
-        "title": "anime-armory: 选择仓库目录",
+        "title": "创作兵工厂: 选择仓库目录",
         "icon": "$(folder-opened)"
       },
       {
@@ -116,7 +116,7 @@
       }
     ],
     "configuration": {
-      "title": "anime-armory",
+      "title": "Creation Armory",
       "properties": {
         "animeArmory.repoRoot": {
           "type": "string",
@@ -126,12 +126,12 @@
         "animeArmory.useExternalWorks": {
           "type": "boolean",
           "default": false,
-          "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“anime-armory: 选择仓库目录”会自动开启。"
+          "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“创作兵工厂: 选择仓库目录”会自动开启。"
         },
         "animeArmory.openTerminalOnReveal": {
           "type": "boolean",
           "default": true,
-          "description": "第一次点开 anime-armory 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
+          "description": "第一次点开 Creation Armory 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
         },
         "animeArmory.showSkills": {
           "type": "boolean",

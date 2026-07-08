@@ -4,12 +4,19 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).with_name("production_readiness.py")
 spec = importlib.util.spec_from_file_location("production_readiness", SCRIPT)
 production_readiness = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(production_readiness)
+
+
+@pytest.fixture(autouse=True)
+def _stable_ffprobe(monkeypatch):
+    monkeypatch.setattr(production_readiness.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
 
 
 def _release_ready_project(root: Path, episode: str) -> None:
@@ -39,6 +46,10 @@ def _release_ready_project(root: Path, episode: str) -> None:
     video = root / "出视频" / episode / "视频" / "Clip_01.mp4"
     video.parent.mkdir(parents=True)
     video.write_bytes(b"clip")
+    timeline = root / "合成" / episode / "_work" / "timeline.json"
+    timeline.parent.mkdir(parents=True)
+    timeline.write_text('{"kind":"n2d_rough_cut_timeline","version":1,"segments":[]}', encoding="utf-8")
+    (root / "合成" / episode / "rough_cut_preview.html").write_text("<html>rough</html>", encoding="utf-8")
     route_dir = root / "出视频" / episode / "prompt"
     route_dir.mkdir(parents=True)
     (route_dir / "video_model_routes.json").write_text('{"kind":"n2d_video_model_routes","version":1,"routes":[]}', encoding="utf-8")
@@ -47,6 +58,20 @@ def _release_ready_project(root: Path, episode: str) -> None:
     (shared / "identity_registry.json").write_text('{"kind":"n2d_identity_registry","version":1,"characters":[]}', encoding="utf-8")
     (shared / "asset_registry.json").write_text('{"kind":"n2d_asset_reference_registry","version":1,"assets":[]}', encoding="utf-8")
     (prod / f"budget_{episode}.json").write_text('{"kind":"n2d_budget_evidence","version":1,"status":"pass"}', encoding="utf-8")
+    (prod / f"final_timeline_probe_{episode}.json").write_text('{"kind":"n2d_final_timeline_probe","version":1,"status":"pass","segments":[]}', encoding="utf-8")
+    (prod / f"video_qc_{episode}.json").write_text('{"kind":"n2d_video_qc","version":1,"status":"pass"}', encoding="utf-8")
+    (prod / f"script_supervisor_log_{episode}.jsonl").write_text(
+        json.dumps({
+            "kind": "n2d_script_supervisor_log",
+            "version": 1,
+            "episode": episode,
+            "clip_id": "Clip_01",
+            "take_id": "Clip_01",
+            "asset": f"出视频/{episode}/视频/Clip_01.mp4",
+            "accepted_take": True,
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     cap = prod / "image_backend_capabilities"
     cap.mkdir()
     (cap / "codex.json").write_text('{"kind":"n2d_backend_capability_evidence","version":1,"status":"fresh"}', encoding="utf-8")
@@ -126,6 +151,20 @@ def _release_ready_project(root: Path, episode: str) -> None:
     (prod / "production_events.jsonl").write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in events), encoding="utf-8")
     (prod / f"review_signoff_{episode}.json").write_text('{"kind":"n2d_review_signoff","version":1,"status":"approved","reviewer":"qa"}', encoding="utf-8")
     (prod / f"score_{episode}.json").write_text('{"kind":"n2d_episode_review_score","version":1,"status":"pass","score":91}', encoding="utf-8")
+    production_readiness.production_locks.scaffold(root, episode, confirmed=True, reviewer="qa", force=True)
+    decision = {
+        "kind": "n2d_creative_decision",
+        "version": 1,
+        "decision_type": "release_lock",
+        "owner": "producer",
+        "scope": "production_readiness",
+        "accepted_choice": "按当前锁版账进入 release readiness",
+        "reason": "测试夹具已补齐交付证据，允许统一交付门聚合。",
+        "affected_artifacts": [f"生产数据/production_locks_{episode}.json"],
+        "affected_stages": ["review"],
+        "follow_up_batch_scope": "none",
+    }
+    (prod / "creative_decisions.jsonl").write_text(json.dumps(decision, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def test_production_readiness_writes_unified_gate(tmp_path: Path) -> None:

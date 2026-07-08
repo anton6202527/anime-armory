@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.39",
   "type": "module",
-  "description": "Tauri + React desktop shell for the anime-armory creation factory (left infinite canvas / right native terminal).",
+  "description": "Tauri + React desktop shell for Creation Armory, the anime-armory creative production factory.",
   "scripts": {
     "sync-skills": "node sync-skills.cjs",
     "dev": "vite",

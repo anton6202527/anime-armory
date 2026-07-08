@@ -186,6 +186,55 @@ def panel_reference_ids(panel: dict) -> list[str]:
     return ids
 
 
+def panel_scene_anchor_id(panel: dict) -> str:
+    for key in ("scene_anchor_id", "scene_id", "location_id"):
+        value = str(panel.get(key) or "").strip()
+        if value:
+            return value
+    for ref_id in panel_reference_ids(panel):
+        if ref_id.startswith("LOC_"):
+            return ref_id
+    return ""
+
+
+def scene_anchor_contract(panel_script: dict, scene_id: str) -> dict[str, Any]:
+    visual_contract = panel_script.get("visual_contract") if isinstance(panel_script.get("visual_contract"), dict) else {}
+    anchors = visual_contract.get("scene_anchors") if isinstance(visual_contract.get("scene_anchors"), dict) else {}
+    contract = anchors.get(scene_id) if scene_id and isinstance(anchors, dict) else {}
+    return contract if isinstance(contract, dict) else {}
+
+
+def first_contract_value(*values: Any) -> str:
+    for value in values:
+        text = compact_metadata(value)
+        if text:
+            return text
+    return ""
+
+
+def panel_continuity_contract(panel: dict, panel_script: dict) -> dict[str, str]:
+    scene_id = panel_scene_anchor_id(panel)
+    scene_contract = scene_anchor_contract(panel_script, scene_id)
+    visual_contract = panel_script.get("visual_contract") if isinstance(panel_script.get("visual_contract"), dict) else {}
+    return {
+        key: value
+        for key, value in {
+            "scene_anchor_id": scene_id,
+            "spatial_layout": first_contract_value(panel.get("spatial_layout"), panel.get("scene_layout"), scene_contract.get("spatial_layout"), scene_contract.get("layout")),
+            "lighting_anchor": first_contract_value(panel.get("lighting_anchor"), panel.get("light_anchor"), scene_contract.get("lighting_anchor"), scene_contract.get("light_anchor")),
+            "axis_eyeline": first_contract_value(panel.get("axis_eyeline"), panel.get("axis"), scene_contract.get("axis_eyeline"), scene_contract.get("eyeline_axis")),
+            "resident_assets": first_contract_value(panel.get("resident_assets"), scene_contract.get("resident_assets")),
+            "gaze_target": first_contract_value(panel.get("gaze_target"), panel.get("eyeline_target")),
+            "eyeline_direction": first_contract_value(panel.get("eyeline_direction"), panel.get("gaze_direction")),
+            "camera_role": first_contract_value(panel.get("camera_role"), panel.get("pov")),
+            "continuity_from": first_contract_value(panel.get("continuity_from"), panel.get("previous_panel")),
+            "character_integrity": first_contract_value(panel.get("character_integrity"), panel.get("completeness_notes"), visual_contract.get("character_integrity_policy")),
+            "spatial_relationships": first_contract_value(panel.get("spatial_relationships"), panel.get("blocking"), panel.get("staging")),
+        }.items()
+        if value
+    }
+
+
 def reference_priority(item: dict[str, str]) -> tuple[int, str]:
     view = str(item.get("view") or "")
     return (REFERENCE_VIEW_PRIORITY.get(view, 99), str(item.get("path") or ""))
@@ -263,9 +312,10 @@ def panel_rects(layout: dict) -> dict[str, dict]:
     return rects
 
 
-def build_prompt(panel: dict, style: str, registry: dict) -> str:
+def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict) -> str:
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     ref_ids = panel_reference_ids(panel)
+    continuity = panel_continuity_contract(panel, panel_script)
     parts = [
         f"无字漫画分格画面，{style}",
         f"画面事实：{panel.get('description', '')}",
@@ -277,6 +327,36 @@ def build_prompt(panel: dict, style: str, registry: dict) -> str:
         parts.append("角色：" + "、".join(map(str, panel.get("characters", []))))
     if panel.get("location"):
         parts.append("场景：" + str(panel.get("location")))
+    if continuity:
+        scene_parts = []
+        for key, label in (
+            ("scene_anchor_id", "场景锚"),
+            ("spatial_layout", "空间布局"),
+            ("lighting_anchor", "光位/光色"),
+            ("axis_eyeline", "轴线/视线"),
+            ("resident_assets", "常驻物件"),
+            ("continuity_from", "承接上一格"),
+            ("spatial_relationships", "人物站位/前后景"),
+        ):
+            if continuity.get(key):
+                scene_parts.append(f"{label}:{continuity[key]}")
+        if scene_parts:
+            parts.append("场景一致性契约：" + "；".join(scene_parts))
+        if continuity.get("gaze_target") or continuity.get("eyeline_direction") or continuity.get("camera_role"):
+            parts.append(
+                "视线/眼神契约："
+                + "；".join(
+                    item
+                    for item in (
+                        f"目标={continuity.get('gaze_target')}" if continuity.get("gaze_target") else "",
+                        f"方向={continuity.get('eyeline_direction')}" if continuity.get("eyeline_direction") else "",
+                        f"镜头角色={continuity.get('camera_role')}" if continuity.get("camera_role") else "",
+                    )
+                    if item
+                )
+            )
+        if continuity.get("character_integrity"):
+            parts.append("人物完整性契约：" + continuity["character_integrity"])
     if panel.get("art_notes"):
         parts.append("构图与表演：" + str(panel.get("art_notes")))
     if ref_ids:
@@ -291,6 +371,9 @@ def build_prompt(panel: dict, style: str, registry: dict) -> str:
     if panel.get("dialogue") or panel.get("narration"):
         parts.append("在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字")
     parts.append("定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除")
+    if panel.get("characters") or any(ref_id.startswith(("CHAR_", "MON_")) for ref_id in ref_ids):
+        parts.append("角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位")
+        parts.append("除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标")
     parts.append("线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字")
     return "；".join(part for part in parts if part)
 
@@ -314,8 +397,9 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "panel_id": pid,
                 "status": "planned",
                 "size": {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))},
-                "prompt": build_prompt(panel, style, registry),
-                "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+                "prompt": build_prompt(panel, style, registry, panel_script),
+                "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+                "continuity_contract": panel_continuity_contract(panel, panel_script),
                 "references": [
                     item
                     for item in panel_references(root, panel, registry, caps)

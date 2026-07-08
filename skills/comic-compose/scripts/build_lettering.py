@@ -6,7 +6,14 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from text_metadata import infer_language_metadata, normalize_text_language
 
 
 def load_json(path: Path) -> dict:
@@ -34,10 +41,36 @@ def read_setting(root: Path, key: str, default: str) -> str:
     return default
 
 
-def text_fields(text: str, translations: dict[str, str]) -> dict[str, str]:
+def first_text(record: dict, keys: tuple[str, ...]) -> str:
+    for key in keys:
+        value = str(record.get(key, "") or "").strip()
+        if value:
+            return value
+    return ""
+
+
+def text_fields(text: str, translations: dict[str, str], text_language: str, source_text: str = "", zh_hint: str = "") -> dict[str, str]:
     text = str(text or "").strip()
-    out = {"text": text, "text_zh": text}
-    en = translations.get(text, "").strip()
+    mode = normalize_text_language(text_language)
+    metadata = infer_language_metadata(text, mode)
+    out = {"text": text, **metadata}
+    source = str(source_text or "").strip()
+    if source and source != text:
+        out["text_source"] = source
+        source_meta = infer_language_metadata(source, "")
+        out["source_lang"] = source_meta["lang"]
+        out["source_dir"] = source_meta["dir"]
+    if mode == "英文":
+        out["text_en"] = text
+        if zh_hint:
+            out["text_zh"] = str(zh_hint).strip()
+    elif mode.startswith("自定义语言"):
+        out["text_custom"] = text
+        if zh_hint:
+            out["text_zh"] = str(zh_hint).strip()
+    else:
+        out["text_zh"] = text
+    en = first_text({"text_en": translations.get(text, "")}, ("text_en",))
     if en:
         out["text_en"] = en
     return out
@@ -66,7 +99,8 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
         if not pid:
             continue
         panel_slots = slots.get(pid, {})
-        if str(panel.get("narration", "")).strip():
+        narration_text = first_text(panel, ("narration_target", "target_narration", "narration"))
+        if narration_text:
             slot = (panel_slots.get("narration") or [{}])[0]
             items.append(
                 {
@@ -74,7 +108,13 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
                     "panel_id": pid,
                     "type": "narration",
                     "speaker": "",
-                    **text_fields(str(panel.get("narration", "")).strip(), translations),
+                    **text_fields(
+                        narration_text,
+                        translations,
+                        text_language,
+                        first_text(panel, ("narration_source", "source_excerpt")),
+                        str(panel.get("meaning_zh", "") or "").strip(),
+                    ),
                     "slot_id": slot.get("slot_id", ""),
                     "style": {"font": "project_default", "size": 42, "direction": "horizontal", "bubble": "caption"},
                 }
@@ -83,13 +123,20 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
         dialogue_slots = panel_slots.get("dialogue") or []
         for idx, dialogue in enumerate(panel.get("dialogue") or []):
             slot = dialogue_slots[idx] if idx < len(dialogue_slots) else {}
+            dialogue_text = first_text(dialogue, ("text_target", "target_text", "text"))
             items.append(
                 {
                     "item_id": f"L{counter:03d}",
                     "panel_id": pid,
                     "type": "dialogue",
                     "speaker": dialogue.get("speaker", ""),
-                    **text_fields(dialogue.get("text", ""), translations),
+                    **text_fields(
+                        dialogue_text,
+                        translations,
+                        text_language,
+                        first_text(dialogue, ("source_text", "text_source", "source_excerpt")),
+                        str(panel.get("meaning_zh", "") or "").strip(),
+                    ),
                     "tone": dialogue.get("tone", ""),
                     "slot_id": slot.get("slot_id", ""),
                     "style": {"font": "project_default", "size": 44, "direction": "horizontal", "bubble": "round"},
@@ -98,14 +145,18 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
             counter += 1
         if panel.get("sfx"):
             slot = (panel_slots.get("sfx") or [{}])[0]
-            for sfx in panel.get("sfx") or []:
+            sfx_targets = panel.get("sfx_target") or panel.get("target_sfx") or []
+            if isinstance(sfx_targets, str):
+                sfx_targets = [sfx_targets]
+            for idx, sfx in enumerate(panel.get("sfx") or []):
+                sfx_text = str(sfx_targets[idx] if idx < len(sfx_targets) and str(sfx_targets[idx]).strip() else sfx).strip()
                 items.append(
                     {
                         "item_id": f"L{counter:03d}",
                         "panel_id": pid,
                         "type": "sfx",
                         "speaker": "",
-                        **text_fields(str(sfx), translations),
+                        **text_fields(sfx_text, translations, text_language, str(sfx)),
                         "slot_id": slot.get("slot_id", ""),
                         "style": {"font": "project_default", "size": 72, "direction": "horizontal", "bubble": "none"},
                     }
@@ -115,7 +166,8 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
         "schema_version": 1,
         "kind": "comic_lettering",
         "chapter": panel_script.get("chapter", ""),
-        "language_mode": text_language,
+        "language_mode": normalize_text_language(text_language),
+        "text_metadata_version": 1,
         "items": items,
     }
 

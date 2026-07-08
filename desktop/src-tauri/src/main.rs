@@ -40,9 +40,9 @@ fn app_menu_labels(language: &str) -> AppMenuLabels {
     } else {
         AppMenuLabels {
             language: "语言",
-            download_latest: "下载最新 app",
-            show_terminal: "显示 Terminal",
-            hide_terminal: "隐藏 Terminal",
+            download_latest: "下载最新App",
+            show_terminal: "显示Terminal",
+            hide_terminal: "隐藏Terminal",
         }
     }
 }

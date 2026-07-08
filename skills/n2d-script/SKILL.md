@@ -1,11 +1,11 @@
 ---
 name: n2d-script
-description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats，先做改编取舍 triage（成戏/旁白带过/后文带出/并入/删除）→ voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**）。支持从中间章节开工前先补「中段开工前情资产包」（主角身份基准/形象生命周期/前情摘要/关键卡/前后窗口）。阶段2·分镜设计（模式感知）：默认先出视频后配音，用估算/占位时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长；配音先行则由真实配音时长驱动，原生音画则用脚本规划 Clip 时长。阶段2 会把每 Clip 在场/画外/禁入/出入场锁成 entity_schedule + continuity 契约，还检测题材与复现母题桥段（穿越/系统流的系统面板/升级/签到/抽奖），人确认后注入镜头/台词/出图（motif_detector）。 Use when given a novel path (first run = split + refine episode 1), asked to start from a middle chapter/window, asked to refine a specific episode's materials, or to detect 题材/母题 and enhance 系统面板/升级 recurring scenes. Triggers 拆集, 中段开工, 从中间章节开始, 前情资产包, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style, 题材检测, 母题, 系统面板, 升级场景, 穿越系统流增强.
+description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel into per-episode dramatic beats，先做改编取舍 triage（成戏/旁白带过/后文带出/并入/删除）→ voiceover台词 + bgm + 封面 + 角色/场景卡 + global_style（**不做分镜**），并用 table_read_packet 做围读验收。支持从中间章节开工前先补「中段开工前情资产包」（主角身份基准/形象生命周期/前情摘要/关键卡/前后窗口）。阶段2·分镜设计（模式感知）：默认先出视频后配音，用估算/占位时长设计 分镜剧本 + 故事板(Clip时长) + 素材清单 + 字幕SRT + 镜头时长；配音先行则由真实配音时长驱动，原生音画则用脚本规划 Clip 时长。阶段2 会把每 Clip 在场/画外/禁入/出入场锁成 entity_schedule + continuity 契约，并用 animatic_packet + timed animatic HTML/JSON 做粗剪验收；出图 prompt 前再生成 production_breakdown / continuity_breakdown / continuity_bible / ai_shooting_schedule / ai_shooting_schedule_batch_seed / ai_call_sheet 交接包，还检测题材与复现母题桥段（穿越/系统流的系统面板/升级/签到/抽奖），人确认后注入镜头/台词/出图（motif_detector）。 Use when given a novel path (first run = split + refine episode 1), asked to start from a middle chapter/window, asked to refine a specific episode's materials, or to detect 题材/母题 and enhance 系统面板/升级 recurring scenes. Triggers 拆集, 中段开工, 从中间章节开始, 前情资产包, 分镜剧本, 故事板, 素材清单, 配音文案, BGM, 封面 prompt, 双语字幕, SRT, 角色卡, 场景卡, global_style, 题材检测, 母题, 系统面板, 升级场景, 穿越系统流增强.
 ---
 
 # n2d-script — 阶段1 剧本改编 + 阶段2 分镜设计（模式感知）
 
-你是 **AI 漫剧编剧室 + 导演预演 + 制片交接合同**。两阶段：**阶段1 剧本改编**（台词先行，不做分镜）→ 按 `制作模式` 决定是否先跑 n2d-voice 占位/真实时长 → **阶段2 分镜设计**（默认先出视频后配音，由估算/占位时长先推进镜头；配音先行才由真实配音时长驱动；原生音画由脚本规划 Clip 时长）。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事；但本阶段必须把“好看”和“紧凑”拆成可签收字段，形成 `生产数据/script_quality_contract_第N集.json/md`，并在出图 prompt 前经 P-3 制片拆解包把 storyboard 翻译成逐镜生产拆解、连续性拆解和 AI 通告单，让下游按合同消费，而不是只交一份散文剧本/分镜。
+你是 **AI 漫剧编剧室 + 导演预演 + 制片交接合同**。两阶段：**阶段1 剧本改编**（台词先行，不做分镜）→ table read 围读验收 → 按 `制作模式` 决定是否先跑 n2d-voice 占位/真实时长 → **阶段2 分镜设计**（默认先出视频后配音，由估算/占位时长先推进镜头；配音先行才由真实配音时长驱动；原生音画由脚本规划 Clip 时长）→ animatic 粗剪验收 → P-3 制片拆解。**不出图、不出视频**——那是 `n2d-image` 和 `n2d-video` 的事；但本阶段必须把“好看”和“紧凑”拆成可签收字段，形成 `生产数据/script_quality_contract_第N集.json/md`，并在出图 prompt 前经 P-3 制片拆解包把 storyboard 翻译成逐镜生产拆解、连续性拆解、场记连续性 bible、AI 拍摄排期、AI 通告单和可导入 batch 的队列种子，让下游按合同消费，而不是只交一份散文剧本/分镜。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -36,6 +36,7 @@ description: Stage 1+定稿 of n2d — 阶段1·剧本改编：split a novel int
 - **对白活人感（写 voiceover/台词前必读 `references/对白与活人感.md`）**：AI 能写对白、难写活人感——直陈情绪、说教、旁白代角色总结是短剧头号劝退，也是 AI 输给真人的那一格。改编不是把旁白念出来：把源小说的叙述/心理描写**转成被角色说出来、做出来**的台词（潜台词>直给、show-not-tell、动机藏进行为、设定靠情境逼出、留白、言行不一、信息不对称）；每个有台词的角色落「角色声音卡」做到**遮名盲听辨人**；冷开场首句带钩、爽点台词情绪+信息双回报、长度贴口播时长。写完用 `python3 scripts/subtext_audit.py <作品根> 第N集` 自检（**advisory·不阻断**，宪法 B10），命中的 AI 味回参考对应条改。
 - **画风统一**：依项目 `global_style.md` 与 `style_contract`；禁止跑到未选择的风格（如未选 Q版却低幼化）或跨镜画风漂移。
 - **生产数据记账铁律（P0）**：阶段1 剧本改编、阶段2 分镜设计完成后，都要调用 `n2d-dashboard` 记录 `stage=script` 事件：耗时、使用的模型/agent/provider、产物路径、涉及集数；若边界重切、分镜返工或 validate_timings 失败，记录 `redraw_reason` 或 QA 事件。脚本文本便宜但会决定下游贵工位，成本和返工不能漏算。
+- **低成本验收先于贵工位（P0）**：阶段1 后先做 `table_read_packet`，检查台词可演性、角色声音、信息密度和时长风险；阶段2 后先做 `animatic_packet` + timed animatic HTML/JSON，检查镜头节奏、信息可读、连续性和贵工位风险。两者都是 `story_acceptance_packets.py` 生成/检查的前置包，不新增 `_进度.md` 列，但未 confirmed 或 executable preview 生成失败时，`run.py next` 会阻断进入下一贵工位。
 
 ## 入口
 
@@ -312,9 +313,19 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
 - 可并行：n2d-script <作品根> 第K+1集 精修下一集物料（低成本前期，不阻塞本集）
 ```
 
+## 阶段1.2 — Table read 围读验收包（导演排戏前先听戏）
+
+Stage 1 交出 voiceover 后，不要直接进入导演排戏。先做低成本围读验收：检查台词是否像角色本人会说、信息密度是否能被口播消化、情绪转折是否有可演依据、时长风险是否会把后续镜头推爆。`n2d/run.py next|enter` 在 `script_stage2` 前会自动跑：
+
+```bash
+python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第N集 check --kind table_read --json --write-missing
+```
+
+缺文件时会在 `脚本/第N集/` 生成 `table_read_packet.json` 与 `table_read_packet.md`，并在 `生产数据/story_acceptance_packets_check_table_read_第N集.json` 汇总缺口。补完后把 JSON 顶层 `status` 改为 `confirmed`，每条 blocker/warn 要有处理结论或明确豁免理由。这个包不新增 `_进度.md` 列；未确认时 `run.py next` 返回 `prework_failed`，不会进入 P-2。
+
 ## 阶段1.5 — P-2 导演排戏包（分镜前先排戏）
 
-Stage 1 交出 voiceover 后，不要直接把台词逐句翻译成 storyboard。先做导演排戏：把本集拆成戏剧 beat，确定人物怎么站、怎么走、看向哪里，镜头如何由远到近、如何接、什么时候动、为什么动。`n2d/run.py next|enter` 在 `script_stage2` 前会自动跑：
+围读确认后，不要直接把台词逐句翻译成 storyboard。先做导演排戏：把本集拆成戏剧 beat，确定人物怎么站、怎么走、看向哪里，镜头如何由远到近、如何接、什么时候动、为什么动。`n2d/run.py next|enter` 在 `script_stage2` 前会自动跑：
 
 ```bash
 python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第N集 check --json --write-missing
@@ -331,9 +342,19 @@ python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第N集 
 
 **签收口径**：模板默认 `"status": "draft"`。补完、删掉所有 `待补/TODO` 后，把每个文件置为 `"status": "confirmed"` 才放行。P-2 是 Stage 2 的输入，不新增 `_进度.md` 列；未确认时 `run.py next` 返回 `prework_failed`，不会进入正式分镜。
 
+## 阶段2.4 — Animatic 粗剪验收包（出图 prompt 前先看节奏）
+
+Stage 2 交出 `storyboard.json` 和 `镜头时长.json` 后，先做一次低成本但可执行的 animatic 验收：`story_acceptance_packets.py` 会调用 `animatic_assembler.py`，在 `生产数据/` 物化 `animatic_第N集.json` 与 `animatic_第N集.html`。HTML 是 timed rough preview：有 storyboard/产物图时嵌图，没有图时用 timed slate 保留镜头时长、台词摘要、节奏和风险备注。这个 gate 不是只写观点，而是先看一遍真实时长顺序，再确认镜头节奏、0-3 秒钩子、信息可读、连续性、昂贵镜头风险和可能的重切点。`n2d/run.py next|enter` 在 `image_prompt` 前会自动跑：
+
+```bash
+python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第N集 check --kind animatic --json --write-missing
+```
+
+缺文件时会在 `脚本/第N集/` 生成 `animatic_packet.json` 与 `animatic_packet.md`，并在 `生产数据/story_acceptance_packets_check_animatic_第N集.json` 汇总缺口。补完后把 JSON 顶层 `status` 改为 `confirmed`；若决定不修某个节奏/连续性风险，必须写明 `waiver_reason` 或等价取舍说明。这个包不新增 `_进度.md` 列；未确认、或 timed animatic manifest/HTML 不能生成时，都不会进入出图 prompt。
+
 ## 阶段2.5 — P-3 制片拆解包（出图 prompt 前先交接）
 
-Stage 2 交出 `storyboard.json` 后，不要直接让 n2d-image 临场理解“要拍什么”。先做制片拆解：逐镜列角色、场景、道具、服装、妆发、VFX/overlay、声音、后端风险；再做连续性拆解和 AI 拍摄通告单。`n2d/run.py next|enter` 在 `image_prompt` 前会自动跑：
+Animatic 确认后，不要直接让 n2d-image 临场理解“要拍什么”。先做制片拆解：逐镜列角色、场景、道具、服装、妆发、VFX/overlay、声音、后端风险；再做连续性拆解、场记连续性 bible、AI 拍摄排期、AI 拍摄通告单和 batch 队列种子。`n2d/run.py next|enter` 在 `image_prompt` 前会自动跑：
 
 ```bash
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 check --json --write-missing
@@ -343,13 +364,23 @@ python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第N集 ch
 
 - `脚本/第N集/production_breakdown.json`
 - `脚本/第N集/continuity_breakdown.json`
+- `脚本/第N集/continuity_bible.json`
+- `脚本/第N集/ai_shooting_schedule.json`
 - `脚本/第N集/ai_call_sheet.md`
+- `生产数据/ai_shooting_schedule_batch_seed_第N集.json`
+- `生产数据/ai_shooting_schedule_batch_seed_第N集.md`
 
-**签收口径**：模板默认 `status=draft`。补完、删掉所有 `待补/TODO` 后，把每个文件置为 `status=confirmed` 才放行。P-3 是出图 prompt 的输入，不新增 `_进度.md` 列；未确认时 `run.py next` 返回 `prework_failed`，不会进入出图 prompt。
+**签收口径**：模板默认 `status=draft`。补完、删掉所有 `待补/TODO` 后，把每个文件置为 `status=confirmed` 才放行。`continuity_bible.json` 是场记连续性真值，`ai_shooting_schedule.json` 是 AI 拍摄顺序/并行/依赖计划，`ai_call_sheet.md` 是给执行者看的当日通告单，`ai_shooting_schedule_batch_seed_第N集.json` 是给 `n2d-batch` 导入的机器队列草案。P-3 是出图 prompt 的输入，不新增 `_进度.md` 列；未确认时 `run.py next` 返回 `prework_failed`，不会进入出图 prompt。
+
+导入队列时用：
+
+```bash
+python3 skills/n2d-batch/scripts/queue.py plan <作品根> --from-shooting-schedule <作品根>/生产数据/ai_shooting_schedule_batch_seed_第N集.json
+```
 
 ## 阶段2 — 分镜设计（配音后回跑本 skill，**时长驱动镜头**）
 
-**触发**：`配音先行` 模式下，该集 `配音` 列必须为 ✅（n2d-voice 已产真实配音 `合成/第N集/配音/时长清单.json`）后回跑本 skill；`配音=⏳rough` 仍视为未定稿，拒绝并提示先 n2d-voice 换真实配音。`先出视频后配音` 模式下允许 `配音=⏳rough` 作为估算时间脚手架，但必须用 `FINALIZE_ALLOW_PLACEHOLDER=1` 显式放行。若 `制作模式=原生音画`，说话镜不跑逐句配音，本阶段按 `storyboard.json clips[].duration` 推出 `镜头时长.json`，不因 `配音` 列 ⬜ 阻塞。**进入本阶段前必须先过 P-2 导演排戏包**；storyboard 要消费 `director_beat_sheet`、`axis_blocking_map`、`shot_progression_plan`、`transition_map`、`vertical_composition_plan` 和 `edit_rhythm_map`，不能临场发明轴线/衔接/运镜。
+**触发**：`配音先行` 模式下，该集 `配音` 列必须为 ✅（n2d-voice 已产真实配音 `合成/第N集/配音/时长清单.json`）后回跑本 skill；`配音=⏳rough` 仍视为未定稿，拒绝并提示先 n2d-voice 换真实配音。`先出视频后配音` 模式下允许 `配音=⏳rough` 作为估算时间脚手架，但必须用 `FINALIZE_ALLOW_PLACEHOLDER=1` 显式放行。若 `制作模式=原生音画`，说话镜不跑逐句配音，本阶段按 `storyboard.json clips[].duration` 推出 `镜头时长.json`，不因 `配音` 列 ⬜ 阻塞。**进入本阶段前必须先过 table read 围读包 + P-2 导演排戏包**；storyboard 要消费 `table_read_packet` 的台词/时长取舍结论，以及 `director_beat_sheet`、`axis_blocking_map`、`shot_progression_plan`、`transition_map`、`vertical_composition_plan` 和 `edit_rhythm_map`，不能临场发明轴线/衔接/运镜。
 
 > **`制作模式`=`先出视频后配音`（当前默认后配音）时的差异**（见 n2d SKILL「制作模式」节，并向用户复述音画拟合/局部重切风险）：`时长清单.json` 是 **估算/占位**（先跑一次 `n2d-voice` 出占位轨当时间脚手架，真实配音留到出视频后）。本步 `finalize_storyboard.py` 的占位硬闸门用 `FINALIZE_ALLOW_PLACEHOLDER=1` 放行——产出的字幕/镜头时长是**估算值**，真实配音补上后**可能要回跑本步重定时、甚至重切重出部分镜头**。`配音先行` 和 `原生音画` 都不要加这个环境变量。
 
@@ -411,8 +442,8 @@ python3 skills/n2d-dashboard/scripts/dashboard.py record <作品根> \
 - 分镜剧本 / 故事板+storyboard.json / 素材清单 / 镜头时长.json / script_quality_contract ✅；validate_timings 与 script_quality_gate 通过
 - _进度.md 已勾选阶段2 列
 下一步建议：
-- n2d-image <作品根> 第K集  出两层 prompt（共享定妆库 + 本集分镜）+ 出图 PNG
-  （正式出图前会先过 dashboard gate image_preflight；缺 compliance/registries 会拦，按提示先补）
+- 先确认 animatic_packet + timed animatic + P-3 交接包（production_breakdown / continuity_breakdown / continuity_bible / ai_shooting_schedule / ai_shooting_schedule_batch_seed / ai_call_sheet），再进 n2d-image <作品根> 第K集 出两层 prompt（共享定妆库 + 本集分镜）+ 出图 PNG
+  （正式出图前会先过 dashboard gate image_preflight；缺 table_read/animatic/P-3/compliance/registries 会拦，按提示先补）
 - 可并行：n2d-script <作品根> 第K+1集 推进下一集
 ```
 

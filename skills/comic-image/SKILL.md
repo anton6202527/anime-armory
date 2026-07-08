@@ -84,9 +84,12 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 ## 工作流
 
 1. 读 `panel_script.json` 和 `layout.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
+   - 正式出图前，`panel_script.json` 顶层 `visual_contract` 和逐格视觉契约必须存在。含角色格必须消费 `gaze_target / eyeline_direction / character_integrity`；含场景格必须消费 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`，眼神目标必须是具体戏内对象，多人同格必须有站位/遮挡/接触点。这些字段会写入 job 的 `continuity_contract`，并进入 prompt。
+   - 漫画格也要锁脸、眼神和身体完整性：脸型、眼型/眼距、发际线、发型、服装主色、配饰/伤痕/标志物、手脚和关键道具不能跨格漂移；动作格不得为了构图裁掉叙事需要的头发、脸、手脚、武器或接触点。
+   - 除非本格明确 `camera_role=POV/破第四墙`，不要让角色看读者镜头；眼神应锁定对话对象、对手、武器/道具、命中点、画外声源或下一动作目标。
 2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
 3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；若项目登记了 `character_dna`、`variant_policy`、`STYLE_` 风格锚，逐格 prompt 必须消费这些契约。
-4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚和混用生成配方；`comic-batch` 会自动跑。
+4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约和混用生成配方；`comic-batch` 会自动跑。
 5. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
 6. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 7. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
@@ -106,6 +109,8 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 用户截图参考里的播放按钮、字幕、搜索框、平台 UI、竖排标题、水印不是视觉设定，必须进入 negative prompt 或禁继承说明。
 - 风格要跟项目风格锚一致；不要退化成低细节彩漫、Q 版、泛化韩漫脸，或和定型图不相干的模型默认风格。
 - 场景与道具引用写成结构化 ID 或清晰路径。
+- 场景连续性写成可执行约束：同一 `scene_anchor_id/LOC_` 的空间布局、主光方向、冷暖色、常驻物件、人物左右关系和前后景层级必须继承；剧情改光、换轴或换景必须在 panel_script 里写理由。
+- 眼神一致性写成正向约束：`gaze_target` 是读者能看懂的戏内目标，不是泛泛“坚定眼神”；动作/冲突格还要写“镜头是旁观者，角色不看镜头，视线锁定 X”。
 - 需要文字的区域只写“预留低细节留白区域”，不要画空白气泡；气泡形状、文字、中英双语由 `comic-compose` 绘制。
 - 动作格写清手、脚、武器、道具和地面的接触点；脚部叙事必须能看出鞋靴/脚尖/小腿和地面受力，不能用手掌替代脚掌。
 - 复杂动作拆分为多格或标注分层/合成建议。

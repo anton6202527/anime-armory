@@ -145,10 +145,22 @@ def panel_script(title: str) -> dict:
         "title": title,
         "chapter": "第1话",
         "status": "draft",
+        "source_semantics": {
+            "path": "脚本/第1话/source_semantics.json",
+            "requires_normalization": False,
+            "source_language": "",
+            "target_text_language": "",
+            "target_text_metadata": {},
+            "status": "pass",
+        },
         "panels": [
             {
                 "panel_id": "P001",
                 "story_function": "opening_hook",
+                "source_excerpt": "",
+                "meaning_zh": "",
+                "text_target": "",
+                "adaptation_note": "",
                 "description": "待补：首格画面",
                 "characters": [],
                 "location": "",

@@ -160,7 +160,6 @@ export async function workDeleted(root: string): Promise<string[]> {
 export async function searchWorkFiles(
   root: string,
   query: string,
-  includeContent = true,
   caseSensitive = false,
   wholeWord = false,
   useRegex = false,
@@ -168,7 +167,6 @@ export async function searchWorkFiles(
   return invoke<WorkSearchResponse>("search_work_files", {
     root,
     query,
-    includeContent,
     caseSensitive,
     wholeWord,
     useRegex,

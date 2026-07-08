@@ -23,8 +23,30 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import os
+import sys
+import sysconfig
+from pathlib import Path
+
+
+def _ensure_stdlib_queue_module() -> None:
+    """Guard ThreadPoolExecutor against repo-local queue.py shadowing stdlib."""
+    stdlib_queue = Path(sysconfig.get_path("stdlib")) / "queue.py"
+    current = sys.modules.get("queue")
+    current_file = Path(getattr(current, "__file__", "") or "") if current is not None else None
+    if current is not None and current_file == stdlib_queue:
+        return
+    spec = importlib.util.spec_from_file_location("queue", stdlib_queue)
+    if spec is None or spec.loader is None:
+        return
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["queue"] = module
+    spec.loader.exec_module(module)
+
+
+_ensure_stdlib_queue_module()
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 

@@ -152,6 +152,40 @@ def has_style_blocker(root: Path, chapter: str) -> tuple[bool, str, str]:
     return False, "", ""
 
 
+def has_source_semantics_blocker(root: Path, chapter: str) -> tuple[bool, str]:
+    panel_path = root / "脚本" / chapter / "panel_script.json"
+    if not panel_path.is_file():
+        return False, ""
+    try:
+        panel_script = json.loads(panel_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False, ""
+    meta = panel_script.get("source_semantics") if isinstance(panel_script.get("source_semantics"), dict) else {}
+    source_path = root / str(meta.get("path") or Path("脚本") / chapter / "source_semantics.json")
+    requires = bool(meta.get("requires_normalization"))
+    if not source_path.is_file() and not requires:
+        return False, ""
+    try:
+        report = json.loads(source_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return True, "source_semantics 缺失或不可解析"
+    if report.get("requires_normalization") and report.get("status") != "pass":
+        return True, "源语义归一化 gate 未通过"
+    if not (report.get("requires_normalization") or requires):
+        return False, ""
+    fields = ["source_excerpt", "meaning_zh", "text_target", "adaptation_note"]
+    missing = []
+    for panel in panel_script.get("panels") or []:
+        if not isinstance(panel, dict):
+            continue
+        miss = [field for field in fields if not str(panel.get(field) or "").strip()]
+        if miss:
+            missing.append(f"{panel.get('panel_id') or 'unknown'}({','.join(miss)})")
+    if missing:
+        return True, "panel 缺语义追溯字段：" + "；".join(missing[:8])
+    return False, ""
+
+
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
@@ -165,6 +199,19 @@ def summarize_project(root: Path) -> dict:
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break
+        if next_stage not in (None, "源本/企划", "漫画脚本"):
+            blocked, reason = has_source_semantics_blocker(root, chapter)
+            if blocked:
+                fronts.append(
+                    {
+                        "chapter": chapter,
+                        "next_stage": "源语义归一化",
+                        "next_skill": "comic-script",
+                        "complete": False,
+                        "reason": reason,
+                    }
+                )
+                continue
         if next_stage in ("嵌字合成", "审查"):
             blocked, reason = has_identity_blocker(root, chapter)
             if blocked:

@@ -8,8 +8,16 @@ import hashlib
 import json
 import math
 import re
+import sys
 from pathlib import Path
 from typing import Any
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from platform_profiles import profile_for_platform, validate_manifest
+from text_metadata import normalize_text_language, unsupported_lettering_items
 
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -21,26 +29,6 @@ FONT_CANDIDATES = (
     "/System/Library/Fonts/Supplemental/Songti.ttc",
     "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
 )
-
-TEXT_LANGUAGE_ALIASES = {
-    "zh": "中文",
-    "chinese": "中文",
-    "cn": "中文",
-    "中文": "中文",
-    "en": "英文",
-    "english": "英文",
-    "英文": "英文",
-    "zh_en": "中上英下",
-    "zh-en": "中上英下",
-    "中英": "中上英下",
-    "中上英下": "中上英下",
-    "中文上英文下": "中上英下",
-    "en_zh": "英上中下",
-    "en-zh": "英上中下",
-    "英中": "英上中下",
-    "英上中下": "英上中下",
-    "英文上中文下": "英上中下",
-}
 
 FORMAT_ALIASES = {
     "webp": "webp",
@@ -64,14 +52,6 @@ def read_setting(root: Path, key: str, default: str = "") -> str:
         if match:
             return match.group(1).strip()
     return default
-
-
-def normalize_text_language(value: str | None) -> str:
-    raw = str(value or "").strip()
-    if not raw:
-        return "中文"
-    lowered = re.sub(r"\s+", " ", raw).lower()
-    return TEXT_LANGUAGE_ALIASES.get(lowered, raw)
 
 
 def parse_max_height(value: str | int | None, default: int = 0) -> int:
@@ -946,9 +926,23 @@ def main() -> int:
         export_formats,
     )
     text_language = normalize_text_language(read_setting(root, "文字语言", (lettering or {}).get("language_mode", "中文") if lettering else "中文"))
+    target_platform = read_setting(root, "目标平台", "通用")
+    usage = read_setting(root, "合规用途", "自用草稿")
+    platform_profile = profile_for_platform(target_platform)
     manifest["text_language"] = text_language
+    manifest["target_platform"] = target_platform
+    manifest["platform_profile"] = platform_profile.to_manifest()
+    unsupported_text = unsupported_lettering_items(lettering, text_language)
+    manifest["text_layout_qc"] = {
+        "renderer": "pillow_draft",
+        "unsupported_items": unsupported_text,
+        "verdict": "block" if unsupported_text else "pass",
+    }
 
-    if args.render:
+    if args.render and unsupported_text:
+        manifest["render_error"] = "当前 Pillow 草稿嵌字不支持 RTL 或需词典分词的目标文字；请改用人工/专业排版 renderer。"
+        print(f"[warn] {manifest['render_error']}")
+    elif args.render:
         try:
             render_longstrip(
                 manifest,
@@ -966,6 +960,8 @@ def main() -> int:
         except RuntimeError as err:
             manifest["render_error"] = str(err)
             print(f"[warn] {err}")
+
+    manifest["platform_findings"] = validate_manifest(root, manifest, platform_profile, usage)
 
     if args.qc_slots and args.render and manifest.get("pages"):
         qc_path = (

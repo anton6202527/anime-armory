@@ -27,22 +27,44 @@ function ext(name: string): string {
   return i < 0 ? "" : name.slice(i + 1).toLowerCase();
 }
 
-const codeExts = new Set([
-  "css",
-  "html",
-  "js",
-  "jsx",
-  "py",
-  "rs",
-  "sh",
-  "swift",
-  "toml",
-  "ts",
-  "tsx",
-  "xml",
-  "yaml",
-  "yml",
-]);
+const fileIconByExt: Record<string, Omit<SkinFileIcon, "kind"> & { kind?: FileIconKind }> = {
+  bash: { cls: "file-shell", label: "$" },
+  cjs: { cls: "file-js", label: "JS" },
+  css: { cls: "file-css", label: "#" },
+  csv: { cls: "file-text", label: "CSV" },
+  docx: { cls: "file-text", label: "W" },
+  env: { cls: "file-config", label: "." },
+  html: { cls: "file-html", label: "<>" },
+  js: { cls: "file-js", label: "JS" },
+  json: { cls: "file-json", kind: "json", label: "{}" },
+  jsonl: { cls: "file-json", kind: "json", label: "{}" },
+  jsx: { cls: "file-js", label: "JSX" },
+  lock: { cls: "file-lock", label: "L" },
+  markdown: { cls: "file-md", kind: "markdown", label: "MD" },
+  md: { cls: "file-md", kind: "markdown", label: "MD" },
+  mdx: { cls: "file-md", kind: "markdown", label: "MD" },
+  mjs: { cls: "file-js", label: "JS" },
+  pdf: { cls: "file-text", label: "PDF" },
+  pptx: { cls: "file-text", label: "P" },
+  py: { cls: "file-py", label: "PY" },
+  rs: { cls: "file-rs", label: "RS" },
+  scss: { cls: "file-css", label: "S" },
+  sh: { cls: "file-shell", label: "$" },
+  swift: { cls: "file-code", label: "SW" },
+  toml: { cls: "file-config", label: "T" },
+  ts: { cls: "file-ts", label: "TS" },
+  tsx: { cls: "file-ts", label: "TSX" },
+  txt: { cls: "file-text", label: "TXT" },
+  xml: { cls: "file-html", label: "<>" },
+  xlsx: { cls: "file-text", label: "X" },
+  yaml: { cls: "file-yaml", label: "Y" },
+  yml: { cls: "file-yaml", label: "Y" },
+  zsh: { cls: "file-shell", label: "$" },
+};
+
+function textIcon(icon: Omit<SkinFileIcon, "kind"> & { kind?: FileIconKind }): SkinFileIcon {
+  return { ...icon, kind: icon.kind ?? "code" };
+}
 
 export const forgeSkin: SkinPlugin = {
   id: "forge",
@@ -73,6 +95,15 @@ export const forgeSkin: SkinPlugin = {
     "--file-audio-icon": "#89d185",
     "--file-md-icon": "#6bb6ff",
     "--file-json-icon": "#dcdc60",
+    "--file-js-icon": "#f1e05a",
+    "--file-ts-icon": "#519aba",
+    "--file-html-icon": "#e37933",
+    "--file-css-icon": "#519aba",
+    "--file-python-icon": "#3572a5",
+    "--file-rust-icon": "#dea584",
+    "--file-shell-icon": "#89d185",
+    "--file-yaml-icon": "#c586c0",
+    "--file-config-icon": "#a8b3c4",
     "--scm-untracked": "#89d185",
     "--scm-modified": "#cca700",
     "--scm-deleted": "#f48771",
@@ -104,6 +135,13 @@ export const forgeSkin: SkinPlugin = {
   },
   fileIcon(entry) {
     if (entry.is_dir) return { cls: "file-folder", kind: "generic" };
+    const lowerName = entry.name.toLowerCase();
+    if (lowerName === "vite.config.ts" || lowerName === "vite.config.js") {
+      return textIcon({ cls: "file-js", label: "V" });
+    }
+    if (lowerName === "package.json" || lowerName === "package-lock.json") {
+      return textIcon({ cls: "file-js", label: "npm" });
+    }
     const e = ext(entry.name);
     if (["png", "jpg", "jpeg", "webp", "gif", "bmp", "svg"].includes(e)) {
       return { cls: "file-img", kind: "image" };
@@ -112,9 +150,9 @@ export const forgeSkin: SkinPlugin = {
     if (["wav", "mp3", "m4a", "aac", "flac", "ogg"].includes(e)) {
       return { cls: "file-audio", kind: "audio", label: "♪" };
     }
-    if (["md", "markdown", "mdx"].includes(e)) return { cls: "file-md", kind: "markdown", label: "M" };
-    if (["json", "jsonl"].includes(e)) return { cls: "file-json", kind: "json", label: "{}" };
-    if (codeExts.has(e)) return { cls: "file-code", kind: "code", label: "</>" };
+    const mapped = fileIconByExt[e];
+    if (mapped) return textIcon(mapped);
+    if (lowerName.startsWith(".")) return textIcon({ cls: "file-config", label: "." });
     return { cls: "file-generic", kind: "generic" };
   },
 };

@@ -694,6 +694,13 @@ CONSISTENCY_RULE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "stages": ("image_preflight", "image", "video_prompt_preflight", "video", "compose", "review"),
         "tests": ("test_referenced_markers_unknown_id_blocks",),
     },
+    "storyboard_adjacent_clip_distinctness": {
+        "dimension": "Clip 去重",
+        "source": "脚本/第N集/storyboard.json clips[]",
+        "gate_function": "_check_storyboard_adjacent_clip_distinctness",
+        "stages": ("video_preflight",),
+        "tests": ("test_storyboard_adjacent_duplicate_clips_warn",),
+    },
     "evidence_grade": {
         "dimension": "证据等级",
         "source": "consistency_audit.py summary.evidence_grade (proof_type 账本)",
@@ -1596,11 +1603,20 @@ def backend_smoke_gate_enabled(root: str) -> bool:
         return _truthy_setting(env)
     if _truthy_setting(get_setting(root, "后端Smoke硬闸", "")):
         return True
-    # 付费投放（放量批量产线）默认强制证活性：仅刷官方文档、或没有产物的手录 pass 都不等于
-    # 当前账号/渠道真能跑。demo/内部预览仍走 opt-in，符合「主流程不硬绑后端·缺依赖优雅降级」。
-    data = load_json(compliance_manifest_path(root))
-    if isinstance(data, dict) and _status(data.get("distribution_intent")) == "paid_distribution":
+    # production / 付费 / batch 放量默认强制证活性：仅刷官方文档、或没有产物的手录 pass 都不等于
+    # 当前账号/渠道真能跑。demo/内部预览仍可用 env/设置显式关闭或保持非阻断。
+    try:
+        if consistency_release_profile(root) == "production":
+            return True
+    except Exception:
+        pass
+    intent_blob = " ".join(_settings_values(root, ("合规用途", "distribution_intent", "投放时效", "urgency"))).lower()
+    if any(token in intent_blob for token in ("paid_distribution", "付费", "商业", "batch", "batch_24h", "隔夜批量", "批量", "flex")):
         return True
+    data = load_json(compliance_manifest_path(root))
+    if isinstance(data, dict):
+        if _status(data.get("distribution_intent")) == "paid_distribution":
+            return True
     return False
 def backend_smoke_max_age_days() -> int:
     raw = os.environ.get("N2D_BACKEND_SMOKE_MAX_AGE_DAYS", "7")

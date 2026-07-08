@@ -32,7 +32,12 @@ function PlaceholderNext({
   return (
     <div className={"next-strip next-progress-strip" + (enabled ? "" : " next-strip-disabled")}>
       <span className="headline">{headline}</span>
-      <div className="next-progress-value" aria-disabled={!enabled} title={message}>
+      <div
+        className="next-progress-value"
+        aria-disabled={!enabled}
+        data-tooltip={message}
+        data-tooltip-placement="bottom"
+      >
         <span>{message}</span>
       </div>
       {action}
@@ -443,7 +448,7 @@ export function NextActionStrip(props: {
   return withProjectDetails(
     <div className="next-strip next-progress-strip">
       <span className="headline">{headline}</span>
-      <div className="next-progress-value" title={title}>
+      <div className="next-progress-value" data-tooltip={title} data-tooltip-placement="bottom">
         <span>{progressText}</span>
       </div>
       {settingsActions}

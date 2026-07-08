@@ -6,7 +6,14 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from text_metadata import estimated_line_count
 
 
 HEAVY_FUNCTIONS = {
@@ -166,10 +173,35 @@ def explicit_layout_weight(panel: dict) -> str:
     return ""
 
 
+def first_text(record: dict, keys: tuple[str, ...]) -> str:
+    for key in keys:
+        value = str(record.get(key, "") or "").strip()
+        if value:
+            return value
+    return ""
+
+
+def target_dialogue_text(dialogue: dict) -> str:
+    return first_text(dialogue, ("text_target", "target_text", "text"))
+
+
+def narration_text(panel: dict) -> str:
+    return first_text(panel, ("narration_target", "target_narration", "narration"))
+
+
+def text_overflow_units(panel: dict) -> int:
+    units = 0
+    if narration_text(panel):
+        units += max(0, estimated_line_count(narration_text(panel), 560, 42) - 2)
+    for dialogue in panel.get("dialogue") or []:
+        units += max(0, estimated_line_count(target_dialogue_text(dialogue), 430, 44) - 2)
+    return units
+
+
 def panel_height(panel: dict) -> int:
     fn = str(panel.get("story_function", "")).strip()
     dialogue_count = len(panel.get("dialogue") or [])
-    has_narration = bool(str(panel.get("narration", "")).strip())
+    has_narration = bool(narration_text(panel))
     has_sfx = bool(panel.get("sfx") or [])
     lowered = fn.lower()
     notes = str(panel.get("art_notes") or "")
@@ -192,7 +224,13 @@ def panel_height(panel: dict) -> int:
         base += 80
     if has_sfx:
         base += 80
-    return min(max(base, 560), 1240)
+    base += min(260, text_overflow_units(panel) * 36)
+    return min(max(base, 560), 1500)
+
+
+def text_slot_height(text: str, slot_w: int, font_size: int, base: int) -> int:
+    lines = estimated_line_count(text, slot_w, font_size)
+    return base + max(0, lines - 2) * 34
 
 
 def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
@@ -202,7 +240,9 @@ def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
     w = rect["w"]
     h = rect["h"]
     cursor_y = y + 44
-    if str(panel.get("narration", "")).strip():
+    panel_narration = narration_text(panel)
+    if panel_narration:
+        slot_h = text_slot_height(panel_narration, min(560, w - 96), 42, 118)
         slots.append(
             {
                 "slot_id": f"B{index:03d}N",
@@ -210,13 +250,13 @@ def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
                 "x": x + 48,
                 "y": cursor_y,
                 "w": min(560, w - 96),
-                "h": 118,
+                "h": slot_h,
             }
         )
-        cursor_y += 138
-    for dialogue_index, _dialogue in enumerate(panel.get("dialogue") or [], 1):
+        cursor_y += slot_h + 20
+    for dialogue_index, dialogue in enumerate(panel.get("dialogue") or [], 1):
         slot_w = 430
-        slot_h = 136
+        slot_h = text_slot_height(target_dialogue_text(dialogue), slot_w, 44, 136)
         side_right = dialogue_index % 2 == 1
         slot_x = x + w - slot_w - 56 if side_right else x + 56
         slots.append(

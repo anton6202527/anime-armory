@@ -6,6 +6,8 @@ import os
 import time
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).with_name("release_verdict.py")
 spec = importlib.util.spec_from_file_location("release_verdict", SCRIPT)
@@ -14,6 +16,11 @@ assert spec.loader is not None
 spec.loader.exec_module(release_verdict)
 
 from skill_snapshot import artifact_fingerprint  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def _stable_ffprobe(monkeypatch):
+    monkeypatch.setattr(release_verdict.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
 
 
 def _write_json(path: Path, payload: dict) -> None:
@@ -65,13 +72,51 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     _write_json(root / "生产数据" / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(root / "生产数据" / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(root / "生产数据" / f"generation_recipe_manifest_{episode}.json", {"kind": "n2d_generation_recipe_manifest", "version": 1, "status": "pass", "records": [], "summary": {}, "root": str(root), "episode": episode})
+    _write_json(root / "设定库" / "source_comprehension.json", {"kind": "n2d_source_comprehension", "status": "confirmed"})
+    _write_json(root / "脚本" / episode / "storyboard.json", {"kind": "n2d_storyboard", "clips": [{"id": "Clip_01", "duration": 1.0}]})
+    _write_json(root / "脚本" / episode / "镜头时长.json", {"Clip_01": 1.0})
+    (root / "脚本" / episode / "voiceover.txt").write_text("台词\n", encoding="utf-8")
+    _write_json(root / "生产数据" / f"script_quality_contract_{episode}.json", {"kind": "n2d_script_quality_contract", "status": "pass"})
     _write_json(root / "脚本" / episode / "production_breakdown.json", {"kind": "n2d_production_breakdown", "version": 1, "episode": episode, "status": "confirmed", "scene_breakdowns": []})
     _write_json(root / "脚本" / episode / "continuity_breakdown.json", {"kind": "n2d_continuity_breakdown", "version": 1, "episode": episode, "status": "confirmed", "rows": []})
+    _write_json(root / "脚本" / episode / "continuity_bible.json", {"kind": "n2d_continuity_bible", "version": 1, "episode": episode, "status": "confirmed", "clips": []})
+    _write_json(root / "脚本" / episode / "ai_shooting_schedule.json", {"kind": "n2d_ai_shooting_schedule", "version": 1, "episode": episode, "status": "confirmed", "tasks": []})
     call_sheet = root / "脚本" / episode / "ai_call_sheet.md"
     call_sheet.parent.mkdir(parents=True, exist_ok=True)
     call_sheet.write_text("---\nkind: n2d_ai_call_sheet\nstatus: confirmed\n---\n# call sheet\n", encoding="utf-8")
+    handoff_inputs = [
+        "设定库/source_comprehension.json",
+        f"脚本/{episode}/voiceover.txt",
+        f"脚本/{episode}/storyboard.json",
+        f"脚本/{episode}/镜头时长.json",
+        f"生产数据/script_quality_contract_{episode}.json",
+    ]
+    _write_json(root / "脚本" / episode / "production_handoff_pack.json", {
+        "kind": "n2d_production_handoff_pack",
+        "version": 1,
+        "episode": episode,
+        "status": "confirmed",
+        "inputs_fingerprint": artifact_fingerprint(str(root), handoff_inputs),
+    })
     clip1_hash = _write_bytes(root / "出视频" / episode / "Clip01.mp4", b"pilot clip 1")
     clip2_hash = _write_bytes(root / "出视频" / episode / "Clip02.mp4", b"pilot clip 2")
+    _write_bytes(root / "出视频" / episode / "视频" / "Clip_01.mp4", b"accepted take 1")
+    _write_json(root / "出视频" / episode / "prompt" / "video_model_routes.json", {"kind": "n2d_video_model_routes", "status": "pass"})
+    _write_json(root / "合成" / episode / "_work" / "timeline.json", {"kind": "n2d_rough_cut_timeline", "episode": episode, "segments": []})
+    (root / "合成" / episode / "rough_cut_preview.html").write_text("<html>rough</html>", encoding="utf-8")
+    _write_json(root / "生产数据" / f"final_timeline_probe_{episode}.json", {"kind": "n2d_final_timeline_probe", "episode": episode, "status": "pass", "segments": []})
+    (root / "生产数据" / f"script_supervisor_log_{episode}.jsonl").write_text(
+        json.dumps({
+            "kind": "n2d_script_supervisor_log",
+            "version": 1,
+            "episode": episode,
+            "clip_id": "Clip_01",
+            "take_id": "Clip_01",
+            "asset": f"出视频/{episode}/视频/Clip_01.mp4",
+            "accepted_take": True,
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     _write_json(root / "生产数据" / "pilot_qc_Clip01.json", {"status": "pass"})
     _write_json(root / "生产数据" / "pilot_qc_Clip02.json", {"status": "pass"})
     _write_json(root / "生产数据" / f"pilot_acceptance_{episode}.json", {
@@ -101,6 +146,8 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
         "summary": {"hard_blocks": 0, "verdict": "pass"},
         "inputs_fingerprint": fp,
     })
+    _write_json(root / "生产数据" / f"video_qc_{episode}.json", {"kind": "n2d_video_qc", "status": "pass"})
+    release_verdict.production_locks.scaffold(root, episode, confirmed=True, reviewer="qa", force=True)
 
 
 def test_release_verdict_internal_only_when_all_components_pass(tmp_path: Path) -> None:
@@ -136,6 +183,17 @@ def test_release_verdict_blocks_missing_production_handoff(tmp_path: Path) -> No
     handoff = next(c for c in payload["components"] if c["name"] == "production_handoff")
     assert handoff["status"] == "block"
     assert "P-3" in handoff["message"]
+
+
+def test_release_verdict_blocks_stale_production_handoff(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    (tmp_path / "脚本" / "第1集" / "storyboard.json").write_text('{"clips":[{"id":"Clip_01"},{"id":"Clip_02"}]}', encoding="utf-8")
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集")
+
+    handoff = next(c for c in payload["components"] if c["name"] == "production_handoff")
+    assert handoff["status"] == "block"
+    assert any("inputs_fingerprint" in "；".join(row["issues"]) for row in handoff["details"])
 
 
 def test_release_verdict_blocks_missing_pilot_acceptance(tmp_path: Path) -> None:

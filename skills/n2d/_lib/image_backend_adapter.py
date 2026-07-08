@@ -84,6 +84,9 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
     "codex": {
         "label": "Codex CLI (访问入口) · 模型 GPT Image 2",
         "model": "GPT Image 2",  # C5: 生成者=具体模型；codex 只是访问入口/壳
+        "model_precision": "normalized_family",
+        "exact_model_id": "",
+        "exact_model_evidence_required": True,
         "channel": "Codex CLI",
         "adapter_kind": "codex_cli",
         "official": True,
@@ -111,11 +114,14 @@ BACKEND_API_ADAPTERS: Dict[str, Dict[str, Any]] = {
         "cost_tier": "project_default",
         "best_for": ("default_n2d", "character_consistency", "multi_reference", "facial_expression_control", "agentic_prompt_repair"),
         "limitations": ("no_registerable_subject_id", "reference_budget_local_policy"),
-        "evidence": {"verified_at": "2026-06-25", "source": "local codex CLI (codex exec --image) + OpenAI GPT Image/ChatGPT Images official docs; exact model id requires per-run evidence; no official subject-id evidence"},
+        "evidence": {"verified_at": "2026-06-25", "source": "local codex CLI (codex exec --image) + OpenAI GPT Image/ChatGPT Images official docs; GPT Image 2 is n2d's normalized family label here, exact provider model id requires per-run evidence; no official subject-id evidence"},
     },
     "openai": {
         "label": "OpenAI Images API (访问入口) · 模型 GPT Image 2",
         "model": "GPT Image 2",  # C5: 生成者=具体模型
+        "model_precision": "normalized_family",
+        "exact_model_id": "",
+        "exact_model_evidence_required": True,
         "channel": "OpenAI Images API",
         "adapter_kind": "openai_images",
         "official": True,
@@ -320,6 +326,9 @@ def backend_adapter(raw: Optional[str]) -> Dict[str, Any]:
     adapter["multi_reference"] = bool(identity.get("multi_reference") or adapter.get("reference_input", {}).get("max_total"))
     # C5: 生成者必须指认到具体模型；canonical(渠道壳) 仅作访问入口。缺登记时退回渠道名占位并标待补。
     adapter.setdefault("model", "未登记具体模型（C5：需指认到模型名，不能用渠道壳）")
+    adapter.setdefault("model_precision", "provider_model" if adapter.get("model") else "unknown")
+    adapter.setdefault("exact_model_id", "")
+    adapter.setdefault("exact_model_evidence_required", False)
     adapter.setdefault("channel", adapter.get("label") or (canonical or key))
     return adapter
 
@@ -574,6 +583,9 @@ def current_image_backend_selection(root: str) -> Dict[str, Any]:
         "access": access,
         "image_model": model,
         "adapter_model": adapter.get("model") or "",
+        "model_precision": adapter.get("model_precision") or "",
+        "exact_model_id": adapter.get("exact_model_id") or "",
+        "exact_model_evidence_required": bool(adapter.get("exact_model_evidence_required")),
         "channel": adapter.get("channel") or "",
         "persistent_subject": bool(adapter.get("persistent_subject")),
         "subject_registration": bool(adapter.get("subject_registration")),
@@ -664,6 +676,9 @@ def default_capability_assertions(raw: Optional[str]) -> Dict[str, Any]:
     modes = adapter.get("generation_modes") or ()
     return {
         "model": adapter.get("model") or "",
+        "model_precision": adapter.get("model_precision") or "",
+        "exact_model_id": adapter.get("exact_model_id") or "",
+        "exact_model_evidence_required": bool(adapter.get("exact_model_evidence_required")),
         "channel": adapter.get("channel") or "",
         "official": bool(adapter.get("official")),
         "auto_runnable": bool(adapter.get("auto_runnable")),
@@ -788,13 +803,20 @@ def write_refresh_evidence(
     source_urls: Sequence[str] = (),
     note: str = "",
     evidence_kind: str = "",
+    exact_model_id: str = "",
     today: Optional[str] = None,
 ) -> Path:
     path = refresh_evidence_path(root, backend)
     path.parent.mkdir(parents=True, exist_ok=True)
     date_s = today or dt.date.today().isoformat()
+    values = default_capability_assertions(backend)
+    exact_model_id = str(exact_model_id or "").strip()
+    if exact_model_id:
+        values["exact_model_id"] = exact_model_id
+        values["model_precision"] = "provider_model"
+        values["exact_model_evidence_required"] = False
     assertions = structured_capability_assertions(
-        default_capability_assertions(backend),
+        values,
         sources=sources,
         source_urls=source_urls,
         evidence_kind=evidence_kind,
@@ -808,6 +830,12 @@ def write_refresh_evidence(
         "source_urls": list(source_urls),
         "evidence_kind": evidence_kind,
         "capability_assertions": assertions,
+        "model_evidence": {
+            "normalized_model_label": backend_adapter(backend).get("model") or "",
+            "exact_model_id": exact_model_id,
+            "precision": "provider_model" if exact_model_id else str(backend_adapter(backend).get("model_precision") or ""),
+            "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
+        },
         "note": note,
         "adapter": backend_adapter(backend),
     }
@@ -871,6 +899,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     p.add_argument("--source", action="append", required=True)
     p.add_argument("--source-url", action="append", default=[])
     p.add_argument("--evidence-kind", default="")
+    p.add_argument("--exact-model-id", default="", help="exact provider model id observed for this run, if exposed")
     p.add_argument("--note", default="")
     p.add_argument("--date", default=None)
 
@@ -909,6 +938,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             source_urls=ns.source_url,
             evidence_kind=ns.evidence_kind,
             note=ns.note,
+            exact_model_id=ns.exact_model_id,
             today=ns.date,
         )
         payload = {"path": str(path), "status": "written"}

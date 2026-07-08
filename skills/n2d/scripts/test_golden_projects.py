@@ -6,6 +6,8 @@ import shutil
 import sys
 from pathlib import Path
 
+import pytest
+
 
 REPO = Path(__file__).resolve().parents[3]
 LIB = REPO / "skills" / "n2d" / "_lib"
@@ -22,6 +24,11 @@ spec = importlib.util.spec_from_file_location("production_readiness_for_golden",
 production_readiness = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 spec.loader.exec_module(production_readiness)
+
+
+@pytest.fixture(autouse=True)
+def _stable_ffprobe(monkeypatch):
+    monkeypatch.setattr(production_readiness.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
 
 
 def _stage_key(route: dict) -> str:
@@ -100,6 +107,8 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     master = root / "合成" / episode / f"成片_{episode}_zh.mp4"
     master.parent.mkdir(parents=True, exist_ok=True)
     master.write_bytes(b"master")
+    _write_json(root / "合成" / episode / "_work" / "timeline.json", {"kind": "n2d_rough_cut_timeline", "version": 1, "segments": []})
+    (root / "合成" / episode / "rough_cut_preview.html").write_text("<html>rough</html>", encoding="utf-8")
 
     _write_json(root / "出视频" / episode / "prompt" / "video_model_routes.json", {"kind": "n2d_video_model_routes", "version": 1, "routes": []})
     _write_json(root / "出图" / "共享" / "identity_registry.json", {"kind": "n2d_identity_registry", "version": 1, "characters": []})
@@ -108,6 +117,20 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     prod = root / "生产数据"
     prod.mkdir(exist_ok=True)
     _write_json(prod / f"budget_{episode}.json", {"kind": "n2d_budget_evidence", "version": 1, "status": "pass"})
+    _write_json(prod / f"final_timeline_probe_{episode}.json", {"kind": "n2d_final_timeline_probe", "version": 1, "status": "pass", "segments": []})
+    _write_json(prod / f"video_qc_{episode}.json", {"kind": "n2d_video_qc", "version": 1, "status": "pass"})
+    (prod / f"script_supervisor_log_{episode}.jsonl").write_text(
+        json.dumps({
+            "kind": "n2d_script_supervisor_log",
+            "version": 1,
+            "episode": episode,
+            "clip_id": "Clip_01",
+            "take_id": "Clip_01",
+            "asset": f"出视频/{episode}/视频/Clip_01.mp4",
+            "accepted_take": True,
+        }, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     _write_json(prod / "image_backend_capabilities" / "fixture.json", {"kind": "n2d_backend_capability_evidence", "version": 1, "status": "fresh"})
     _write_json(prod / "image_qc" / episode / f"image_qc_{episode}.json", {"kind": "n2d_image_qc", "version": 1, "status": "pass"})
     _write_json(prod / f"contract_inheritance_{episode}.json", {"kind": "n2d_contract_inheritance", "version": 1, "status": "pass"})
@@ -132,6 +155,23 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     ]
     (prod / "production_events.jsonl").write_text(
         "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in events),
+        encoding="utf-8",
+    )
+    production_readiness.production_locks.scaffold(root, episode, confirmed=True, reviewer="golden", force=True)
+    decision = {
+        "kind": "n2d_creative_decision",
+        "version": 1,
+        "decision_type": "release_lock",
+        "owner": "producer",
+        "scope": "golden_project_release_readiness",
+        "accepted_choice": "使用当前 enrich 后证据作为 release readiness 黄金样例",
+        "reason": "golden fixture 需要稳定覆盖生产治理硬闸。",
+        "affected_artifacts": [f"生产数据/production_locks_{episode}.json"],
+        "affected_stages": ["review"],
+        "follow_up_batch_scope": "none",
+    }
+    (prod / "creative_decisions.jsonl").write_text(
+        json.dumps(decision, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 

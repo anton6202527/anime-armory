@@ -104,6 +104,28 @@ def test_refresh_evidence_status_lifecycle(tmp_path):
     assert stale["status"] == "stale"
 
 
+def test_codex_model_label_distinguishes_exact_model_evidence(tmp_path):
+    data = adapter.backend_adapter("Codex")
+    assert data["model"] == "GPT Image 2"
+    assert data["model_precision"] == "normalized_family"
+    assert data["exact_model_evidence_required"] is True
+
+    adapter.write_refresh_evidence(
+        str(tmp_path),
+        "Codex",
+        sources=["OpenAI Images docs + Codex CLI output"],
+        source_urls=["https://platform.openai.com/docs/guides/image-generation"],
+        evidence_kind="official_docs",
+        note="exact model id exposed by this run",
+        exact_model_id="gpt-image-2",
+        today="2026-07-07",
+    )
+    fresh = adapter.refresh_evidence_status(str(tmp_path), "Codex", today=dt.date(2026, 7, 7))
+    assert fresh["status"] == "fresh"
+    assert fresh["capability_assertions"]["exact_model_id"]["value"] == "gpt-image-2"
+    assert fresh["capability_assertions"]["model_precision"]["value"] == "provider_model"
+
+
 def test_image_backend_baseline_detects_project_switch(tmp_path):
     (tmp_path / "_设置.md").write_text("- 生图AI: Codex\n- 生图模型: GPT Image 2\n", encoding="utf-8")
     path = adapter.write_image_backend_baseline(str(tmp_path))

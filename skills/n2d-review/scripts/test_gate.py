@@ -1907,6 +1907,17 @@ def test_backend_smoke_gate_default_on_for_paid_distribution(tmp_path, monkeypat
     assert gate.backend_smoke_gate_enabled(str(root)) is True
 
 
+def test_backend_smoke_gate_default_on_for_production_and_batch(tmp_path, monkeypatch):
+    monkeypatch.delenv("N2D_REQUIRE_BACKEND_SMOKE", raising=False)
+    root = tmp_path / "制漫剧" / "测试剧_smoke"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("一致性严格度: production\n", encoding="utf-8")
+    assert gate.backend_smoke_gate_enabled(str(root)) is True
+
+    (root / "_设置.md").write_text("投放时效: 隔夜批量\n", encoding="utf-8")
+    assert gate.backend_smoke_gate_enabled(str(root)) is True
+
+
 def test_backend_smoke_gate_env_override_wins(tmp_path, monkeypatch):
     root = tmp_path / "制漫剧" / "测试剧2"
     root.mkdir(parents=True)

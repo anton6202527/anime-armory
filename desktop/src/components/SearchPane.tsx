@@ -19,26 +19,6 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function splitSearchPatterns(value: string): string[] {
-  return value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function pathMatchesPattern(path: string, pattern: string): boolean {
-  const source = escapeRegExp(pattern).replace(/\\\*/g, ".*");
-  return new RegExp(source, "i").test(path);
-}
-
-function filterByPatterns(path: string, includePattern: string, excludePattern: string): boolean {
-  const includes = splitSearchPatterns(includePattern);
-  const excludes = splitSearchPatterns(excludePattern);
-  if (includes.length && !includes.some((pattern) => pathMatchesPattern(path, pattern))) return false;
-  if (excludes.some((pattern) => pathMatchesPattern(path, pattern))) return false;
-  return true;
-}
-
 export function SearchPane({
   root,
   refreshKey,
@@ -50,24 +30,17 @@ export function SearchPane({
   const [query, setQuery] = useState("");
   const [replaceOpen, setReplaceOpen] = useState(true);
   const [replaceText, setReplaceText] = useState("");
-  const [includeContent, setIncludeContent] = useState(true);
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [wholeWord, setWholeWord] = useState(false);
   const [useRegex, setUseRegex] = useState(false);
   const [preserveCase, setPreserveCase] = useState(false);
-  const [includePattern, setIncludePattern] = useState("");
-  const [excludePattern, setExcludePattern] = useState("");
   const [replaceBusy, setReplaceBusy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [response, setResponse] = useState<WorkSearchResponse | null>(null);
   const [selectedPath, setSelectedPath] = useState("");
 
-  const allResults = response?.results ?? [];
-  const results = useMemo(
-    () => allResults.filter((result) => filterByPatterns(result.path, includePattern, excludePattern)),
-    [allResults, excludePattern, includePattern],
-  );
+  const results = response?.results ?? [];
   const selected = useMemo(
     () => results.find((result) => result.path === selectedPath) ?? results[0] ?? null,
     [results, selectedPath],
@@ -76,8 +49,6 @@ export function SearchPane({
   useEffect(() => {
     setQuery("");
     setReplaceText("");
-    setIncludePattern("");
-    setExcludePattern("");
     setResponse(null);
     setSelectedPath("");
     setErr("");
@@ -96,7 +67,7 @@ export function SearchPane({
     setLoading(true);
     setErr("");
     const timer = window.setTimeout(() => {
-      searchWorkFiles(root.path, clean, includeContent, caseSensitive, wholeWord, useRegex)
+      searchWorkFiles(root.path, clean, caseSensitive, wholeWord, useRegex)
         .then((result) => {
           if (!alive) return;
           setResponse(result);
@@ -120,7 +91,7 @@ export function SearchPane({
       alive = false;
       window.clearTimeout(timer);
     };
-  }, [caseSensitive, includeContent, query, refreshKey, root.path, useRegex, wholeWord]);
+  }, [caseSensitive, query, refreshKey, root.path, useRegex, wholeWord]);
 
   async function runAction(action: () => Promise<void>) {
     try {
@@ -174,7 +145,7 @@ export function SearchPane({
       }
       const clean = query.trim();
       const nextResponse = clean
-        ? await searchWorkFiles(root.path, clean, includeContent, caseSensitive, wholeWord, useRegex)
+        ? await searchWorkFiles(root.path, clean, caseSensitive, wholeWord, useRegex)
         : null;
       setResponse(nextResponse);
       setSelectedPath(nextResponse?.results[0]?.path ?? "");
@@ -188,7 +159,7 @@ export function SearchPane({
 
   const status =
     !query.trim()
-      ? t("search.placeholder")
+      ? ""
       : loading
         ? t("common.loading")
         : err
@@ -211,7 +182,7 @@ export function SearchPane({
                 const clean = query.trim();
                 if (!clean) return;
                 setLoading(true);
-                searchWorkFiles(root.path, clean, includeContent, caseSensitive, wholeWord, useRegex)
+                searchWorkFiles(root.path, clean, caseSensitive, wholeWord, useRegex)
                   .then((result) => {
                     setResponse(result);
                     setSelectedPath(result.results[0]?.path ?? "");
@@ -325,45 +296,13 @@ export function SearchPane({
               </div>
             </div>
           )}
-          <div className="search-glob">
-            <label>{t("search.filesToInclude")}</label>
-            <div className="search-glob-box">
-              <input
-                value={includePattern}
-                aria-label={t("search.filesToInclude")}
-                onChange={(event) => setIncludePattern(event.target.value)}
-              />
-              <button type="button" title={t("search.more")} aria-label={t("search.more")}>
-                <Codicon name="more" />
-              </button>
-            </div>
-          </div>
-          <div className="search-glob">
-            <label>{t("search.filesToExclude")}</label>
-            <div className="search-glob-box">
-              <input
-                value={excludePattern}
-                aria-label={t("search.filesToExclude")}
-                onChange={(event) => setExcludePattern(event.target.value)}
-              />
-              <button type="button" title={t("search.more")} aria-label={t("search.more")}>
-                <Codicon name="more" />
-              </button>
-            </div>
-          </div>
-          <label className="search-content-option" title={t("search.includeContent")}>
-            <input
-              type="checkbox"
-              checked={includeContent}
-              onChange={(event) => setIncludeContent(event.target.checked)}
-            />
-            <span>{t("search.includeContent")}</span>
-          </label>
         </div>
-        <div className={"search-status" + (err ? " error" : "")}>
-          {status}
-          {response?.capped ? ` · ${t("search.capped")}` : ""}
-        </div>
+        {(status || response?.capped) && (
+          <div className={"search-status" + (err ? " error" : "")}>
+            {status}
+            {response?.capped ? ` · ${t("search.capped")}` : ""}
+          </div>
+        )}
         <div className="search-results">
           {results.map((result) => (
             <button
