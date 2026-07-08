@@ -391,6 +391,75 @@ def check_visual_contract_issues(panel_script: dict, chapter: str, issues: list[
                 )
 
 
+def traditional_workflow_enabled(root: Path) -> bool:
+    return read_setting(root, "传统原稿流程", "启用") not in {"关闭", "off", "disabled", "false", "False"}
+
+
+def finishing_panel_ids(finishing_plan: dict) -> set[str]:
+    ids: set[str] = set()
+    for panel in finishing_plan.get("panels") or []:
+        if isinstance(panel, dict) and panel.get("panel_id"):
+            ids.add(str(panel.get("panel_id")))
+    return ids
+
+
+def check_traditional_manga_issues(root: Path, chapter: str, panel_script: dict, layout: dict, issues: list[dict[str, str]]) -> None:
+    if not traditional_workflow_enabled(root):
+        return
+    name_path = root / "排版" / chapter / "name_board.json"
+    finish_path = root / "出图" / chapter / "finishing" / "finishing_plan.json"
+    name_board = load_json(name_path, {})
+    finishing_plan = load_json(finish_path, {})
+    if not name_board:
+        add_issue(
+            issues,
+            "warn",
+            display_path(root, name_path),
+            "传统原稿流程已启用，但缺少缩略分镜/name_board；页流、翻页钩子和格子轻重缺少ネーム层证据",
+            "comic-name",
+            "运行 comic-name 生成 name_board.json，再重建 layout",
+            "traditional_manga",
+        )
+    manuscript = layout.get("manuscript") if isinstance(layout.get("manuscript"), dict) else {}
+    if not manuscript or not manuscript.get("safe_area"):
+        add_issue(
+            issues,
+            "warn",
+            "排版/" + chapter + "/layout.json",
+            "layout 缺少原稿 trim/safe_area/inner_frame，页漫或投稿规格有裁切和嵌字风险",
+            "comic-layout",
+            "重跑 comic-layout，并确认已接入 comic-name 的原稿安全框",
+            "traditional_manga",
+        )
+    if not finishing_plan:
+        add_issue(
+            issues,
+            "warn",
+            display_path(root, finish_path),
+            "缺少墨线/黑场/网点/效果线计划，出图 prompt 缺传统完成稿层",
+            "comic-finishing",
+            "运行 comic-finishing 生成 finishing_plan.json 后重建出图包",
+            "traditional_manga",
+        )
+    else:
+        planned = finishing_panel_ids(finishing_plan)
+        missing = [
+            str(panel.get("panel_id"))
+            for panel in panel_script.get("panels") or []
+            if isinstance(panel, dict) and panel.get("panel_id") and str(panel.get("panel_id")) not in planned
+        ]
+        if missing:
+            add_issue(
+                issues,
+                "warn",
+                display_path(root, finish_path),
+                "这些 panel 缺少传统原稿收尾计划：" + ", ".join(missing[:20]),
+                "comic-finishing",
+                "重跑 comic-finishing 或补齐对应 panel 的 ink/tone/effects 计划",
+                "traditional_manga",
+            )
+
+
 def source_semantics_requires_normalization(panel_script: dict, source_semantics: dict) -> bool:
     script_meta = panel_script.get("source_semantics") if isinstance(panel_script.get("source_semantics"), dict) else {}
     return bool(source_semantics.get("requires_normalization") or script_meta.get("requires_normalization"))
@@ -740,6 +809,7 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
             add_issue(issues, "warn", pid, "story_function 为空，审查难以判断本格叙事功能", "comic-script", "补上本格叙事功能", "script")
     if isinstance(panel_script, dict):
         check_visual_contract_issues(panel_script, chapter, issues)
+        check_traditional_manga_issues(root, chapter, panel_script, layout if isinstance(layout, dict) else {}, issues)
 
     missing_in_layout = [pid for pid in script_panels if pid not in layout_panels]
     if missing_in_layout:

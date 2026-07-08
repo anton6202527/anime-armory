@@ -1,6 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { openWorkEntry, readWorkFile, revealWorkEntry, searchWorkFiles, writeWorkFile } from "../api";
 import { useI18n } from "../i18n";
+import {
+  COLLAPSE_LEFT_SIDEBAR_EVENT,
+  FILES_SIDE_COLLAPSE_WIDTH,
+  clampFilesSideWidth,
+  clearStoredFilesSideWidth,
+  commitFilesSideWidth,
+  draftFilesSideWidth,
+  readCurrentFilesSideWidth,
+} from "../paneLayout";
 import type { WorkRoot, WorkSearchResponse } from "../types";
 import { Codicon } from "./Codicon";
 
@@ -39,6 +48,7 @@ export function SearchPane({
   const [err, setErr] = useState("");
   const [response, setResponse] = useState<WorkSearchResponse | null>(null);
   const [selectedPath, setSelectedPath] = useState("");
+  const paneRef = useRef<HTMLDivElement>(null);
 
   const results = response?.results ?? [];
   const selected = useMemo(
@@ -99,6 +109,39 @@ export function SearchPane({
     } catch (e) {
       window.alert(String(e));
     }
+  }
+
+  function startSideResize(ev: ReactPointerEvent<HTMLDivElement>) {
+    const pane = paneRef.current;
+    if (!pane) return;
+    ev.preventDefault();
+    const splitter = ev.currentTarget;
+    const rect = pane.getBoundingClientRect();
+    document.body.classList.add("resizing-search-side");
+    splitter.classList.add("resizing");
+    let latestWidth = readCurrentFilesSideWidth();
+
+    const move = (e: PointerEvent) => {
+      const next = clampFilesSideWidth(e.clientX - rect.left, rect.width);
+      latestWidth = next;
+      draftFilesSideWidth(next);
+      window.dispatchEvent(new Event("resize"));
+    };
+    const up = () => {
+      document.body.classList.remove("resizing-search-side");
+      splitter.classList.remove("resizing");
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      if (latestWidth <= FILES_SIDE_COLLAPSE_WIDTH) {
+        clearStoredFilesSideWidth();
+        window.dispatchEvent(new Event(COLLAPSE_LEFT_SIDEBAR_EVENT));
+      } else {
+        commitFilesSideWidth(latestWidth);
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
   }
 
   function replacementPattern(): RegExp | null {
@@ -169,7 +212,7 @@ export function SearchPane({
             : "";
 
   return (
-    <div className="search-pane">
+    <div className="search-pane" ref={paneRef}>
       <aside className="search-side">
         <div className="search-view-title">
           <span>{t("search.title")}</span>
@@ -323,6 +366,17 @@ export function SearchPane({
           ))}
         </div>
       </aside>
+      <div
+        className="search-splitter"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label={t("files.resizeAria")}
+        onPointerDown={startSideResize}
+        onDoubleClick={() => {
+          clearStoredFilesSideWidth();
+          window.dispatchEvent(new Event("resize"));
+        }}
+      />
       <section className="search-detail">
         {!selected ? (
           <div className="search-empty">{query.trim() ? t("search.noResult") : t("search.select")}</div>

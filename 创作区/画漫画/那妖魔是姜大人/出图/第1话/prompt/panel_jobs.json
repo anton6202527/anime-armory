@@ -166,7 +166,9 @@
         "chapter": "第1话",
         "panel_id": "P004",
         "created_at": "2026-07-07T12:28:18",
-        "verdict": "warn",
+        "verdict": "pass",
+        "machine_verdict": "warn",
+        "manual_acceptance_effective": true,
         "path": "出图/第1话/panels/P004.png",
         "size": {
           "width": 1296,
@@ -395,7 +397,9 @@
         "chapter": "第1话",
         "panel_id": "P008",
         "created_at": "2026-07-07T12:28:18",
-        "verdict": "warn",
+        "verdict": "pass",
+        "machine_verdict": "warn",
+        "manual_acceptance_effective": true,
         "path": "出图/第1话/panels/P008.png",
         "size": {
           "width": 1296,
@@ -526,7 +530,9 @@
         "chapter": "第1话",
         "panel_id": "P010",
         "created_at": "2026-07-07T12:28:18",
-        "verdict": "warn",
+        "verdict": "pass",
+        "machine_verdict": "warn",
+        "manual_acceptance_effective": true,
         "path": "出图/第1话/panels/P010.png",
         "size": {
           "width": 1296,

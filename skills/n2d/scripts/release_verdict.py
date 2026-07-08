@@ -250,7 +250,7 @@ def check_production_handoff(root: Path, episode: str) -> Dict[str, Any]:
 
 
 def check_production_locks(root: Path, episode: str) -> Dict[str, Any]:
-    report = production_locks.check_ledger(root, episode, write_missing=False, stage="review")
+    report = production_locks.check_ledger(root, episode, write_missing=False, stage="review", write_check=False)
     status = str(report.get("status") or "").lower()
     if status != "pass":
         findings = report.get("findings") if isinstance(report.get("findings"), list) else []
@@ -355,7 +355,31 @@ def check_review_ui(root: Path, episode: str) -> Dict[str, Any]:
     return component("review_ui", "pass", "review-ui 通过且不陈旧。", path=relpath(root, manifest))
 
 
-def check_image_qc(root: Path, episode: str) -> Dict[str, Any]:
+def _structured_signoff_fresh(root: Path, episode: str, source_path: Path) -> Tuple[bool, str]:
+    prod = production_dir(root)
+    candidates = (
+        prod / f"image_qc_advisory_signoff_{episode}.json",
+        prod / f"consistency_advisory_signoff_{episode}.json",
+    )
+    source_mtime = source_path.stat().st_mtime if source_path.is_file() else 0
+    for path in candidates:
+        data = load_json(path)
+        if not isinstance(data, dict):
+            continue
+        try:
+            if path.stat().st_mtime < source_mtime:
+                continue
+        except OSError:
+            continue
+        status = str(data.get("status") or data.get("verdict") or "").strip().lower()
+        accepted = data.get("accepted") if isinstance(data.get("accepted"), list) else []
+        approvals = data.get("approvals") if isinstance(data.get("approvals"), list) else []
+        if status in {"approved", "accepted", "pass", "ok", "signed_off"} or accepted or approvals:
+            return True, relpath(root, path)
+    return False, ""
+
+
+def check_image_qc(root: Path, episode: str, profile: str = "demo") -> Dict[str, Any]:
     path = production_dir(root) / "image_qc" / episode / f"image_qc_{episode}.json"
     data = load_json(path)
     if not isinstance(data, dict):
@@ -373,6 +397,16 @@ def check_image_qc(root: Path, episode: str) -> Dict[str, Any]:
         return component("image_qc", "block", f"image_qc 精度不是 full：{precision or 'unknown'}。", path=relpath(root, path))
     if hard or verdict in {"block", "blocked", "fail"}:
         return component("image_qc", "block", f"image_qc 未放行：hard_blocks={hard}, verdict={verdict or 'unknown'}。", path=relpath(root, path))
+    if verdict in {"review", "warn", "advisory"} and _strict_release_context(root, profile):
+        signed, signoff_path = _structured_signoff_fresh(root, episode, path)
+        if not signed:
+            return component(
+                "image_qc",
+                "block",
+                f"image_qc verdict={verdict}；production/公开发布/投放前必须补结构化 advisory signoff 后再放行。",
+                path=relpath(root, path),
+            )
+        return component("image_qc", "pass", f"image_qc full 且 review advisory 已签收：{signoff_path}。", path=relpath(root, path))
     return component("image_qc", "pass", "image_qc full 且新鲜。", path=relpath(root, path))
 
 
@@ -670,7 +704,7 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_score(root, episode),
         check_ledger(root, episode),
         check_review_ui(root, episode),
-        check_image_qc(root, episode),
+        check_image_qc(root, episode, profile),
         check_generation_recipe(root, episode),
         check_audience_experience(root, episode, profile),
         check_stop_loss(root, episode, profile),

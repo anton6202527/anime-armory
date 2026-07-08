@@ -16,6 +16,8 @@
     "persistent_subject": false
   },
   "text_language": "中文",
+  "render_stage": "网点完成稿",
+  "finishing_plan": "出图/第1话/finishing/finishing_plan.json",
   "jobs": [
     {
       "panel_id": "P001",
@@ -32,6 +34,13 @@
         "eyeline_direction": "画右下方",
         "character_integrity": "脸型/眼型/发际线/服装主色/标志物和肢体完整性继承 CHAR_MAIN",
         "continuity_from": "P000"
+      },
+      "traditional_finish_contract": {
+        "ink_plan": "clean contour and readable hands",
+        "black_fill_plan": "solid blacks behind antagonist",
+        "tone_plan": "20 percent background screentone",
+        "effects_plan": "focus lines toward reveal object",
+        "no_bake_text_contract": "dialogue and narration stay out of raw images"
       },
       "reference_budget": {
         "adapter_id": "manual_or_unknown",
@@ -72,3 +81,14 @@
 - `continuity_from / spatial_relationships`：承接上一格的站位、伤痕、道具状态、接触点和前后景遮挡关系；多人同格必须写清左右、前后景、遮挡和关键接触点。
 
 缺这些字段时，`comic-review gate --stage image_preflight` 会在付费/批量出图前阻断，要求回 `comic-script` 补视觉契约后重建 job 包。
+
+`traditional_finish_contract` 来自 `出图/第N话/finishing/finishing_plan.json`。它不替代视觉一致性契约，而是把传统漫画完成稿手法注入 prompt：
+
+- `art_stage_sequence` / `render_stage`：目标稿层，如清线稿、墨线+黑场、网点完成稿、彩色完成稿。
+- `ink_plan` / `black_fill_plan`：线条、轮廓、线宽、黑场、负形和焦点层级。
+- `tone_plan` / `value_plan`：网点、灰阶、材质、空间深度和黑白灰可读性。
+- `effects_plan`：速度线、集中线、冲击线、闪光、漫符、背景省略。
+- `lettering_sfx_plan`：拟声词是否作为画面元素绘制；对白和旁白仍后期嵌字。
+- `no_bake_text_contract`：禁止正文、空白气泡、旁白框、UI 字、乱码字、水印烘焙进原图。
+
+启用传统原稿流程但缺该字段时，`comic-review gate --stage image_preflight` 给 warn，建议先跑 `comic-finishing` 并重建出图包。

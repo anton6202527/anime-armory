@@ -7,6 +7,8 @@ type TooltipState = {
   anchor: HTMLElement;
   text: string;
   preferred: Placement;
+  align: "center" | "corner";
+  anchorPoint: { x: number; y: number } | null;
   placement: Placement;
   ready: boolean;
   style: CSSProperties;
@@ -14,6 +16,8 @@ type TooltipState = {
 
 const MARGIN = 8;
 const GAP = 8;
+const CURSOR_GAP_X = 12;
+const CURSOR_GAP_Y = 16;
 const MAX_WIDTH = 360;
 
 function isPlacement(value: string | null): value is Placement {
@@ -39,12 +43,9 @@ function suppressNativeTitle(el: HTMLElement): void {
   el.removeAttribute("title");
 }
 
-function restoreNativeTitle(el: HTMLElement | null): void {
-  if (!el) return;
-  const title = el.getAttribute("data-aa-title");
-  if (!title || el.hasAttribute("data-tooltip")) return;
-  el.setAttribute("title", title);
-  el.removeAttribute("data-aa-title");
+function suppressNativeTitles(root: ParentNode = document): void {
+  if (root instanceof HTMLElement) suppressNativeTitle(root);
+  root.querySelectorAll?.<HTMLElement>("[title]").forEach(suppressNativeTitle);
 }
 
 function closestTooltipElement(target: EventTarget | null): HTMLElement | null {
@@ -53,10 +54,15 @@ function closestTooltipElement(target: EventTarget | null): HTMLElement | null {
     : null;
 }
 
+function eventPoint(event: Event): { x: number; y: number } | null {
+  return event instanceof MouseEvent
+    ? { x: event.clientX, y: event.clientY }
+    : null;
+}
+
 export function GlobalTooltip() {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const activeAnchorRef = useRef<HTMLElement | null>(null);
-  const titleOwnerRef = useRef<HTMLElement | null>(null);
   const hideTimerRef = useRef<number | null>(null);
   const [tip, setTip] = useState<TooltipState | null>(null);
 
@@ -68,29 +74,23 @@ export function GlobalTooltip() {
 
   function hideTooltip() {
     clearHideTimer();
-    restoreNativeTitle(titleOwnerRef.current);
-    titleOwnerRef.current = null;
     setTip(null);
   }
 
-  function showTooltip(el: HTMLElement) {
+  function showTooltip(el: HTMLElement, point: { x: number; y: number } | null = null) {
     const text = tooltipText(el).trim();
     if (!text) return;
-    if (titleOwnerRef.current && titleOwnerRef.current !== el) {
-      restoreNativeTitle(titleOwnerRef.current);
-      titleOwnerRef.current = null;
-    }
-    if (el.hasAttribute("title")) {
-      suppressNativeTitle(el);
-      titleOwnerRef.current = el;
-    }
+    suppressNativeTitle(el);
     const placementAttr = el.getAttribute("data-tooltip-placement");
-    const preferred = isPlacement(placementAttr) ? placementAttr : "top";
+    const hasExplicitPlacement = isPlacement(placementAttr);
+    const preferred = hasExplicitPlacement ? placementAttr : "right";
     clearHideTimer();
     setTip({
       anchor: el,
       text,
       preferred,
+      align: hasExplicitPlacement ? "center" : "corner",
+      anchorPoint: hasExplicitPlacement ? null : point,
       placement: preferred,
       ready: false,
       style: {
@@ -106,16 +106,35 @@ export function GlobalTooltip() {
   }, [tip?.anchor]);
 
   useEffect(() => {
-    function onPointerOver(event: PointerEvent) {
+    suppressNativeTitles();
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.target instanceof HTMLElement) {
+          suppressNativeTitle(mutation.target);
+          continue;
+        }
+        for (const node of mutation.addedNodes) {
+          if (node instanceof HTMLElement) suppressNativeTitles(node);
+        }
+      }
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["title"],
+      childList: true,
+      subtree: true,
+    });
+
+    function onHoverIn(event: Event) {
       const el = closestTooltipElement(event.target);
       if (!el) return;
-      showTooltip(el);
+      showTooltip(el, eventPoint(event));
     }
 
-    function onPointerOut(event: PointerEvent) {
+    function onHoverOut(event: Event) {
       const current = activeAnchorRef.current;
       if (!current) return;
-      const next = event.relatedTarget instanceof Node ? event.relatedTarget : null;
+      const next = "relatedTarget" in event && event.relatedTarget instanceof Node ? event.relatedTarget : null;
       if (next && current.contains(next)) return;
       hideTimerRef.current = window.setTimeout(hideTooltip, 60);
     }
@@ -134,19 +153,47 @@ export function GlobalTooltip() {
       hideTooltip();
     }
 
-    window.addEventListener("pointerover", onPointerOver, true);
-    window.addEventListener("pointerout", onPointerOut, true);
+    function onPointerMove(event: Event) {
+      const current = activeAnchorRef.current;
+      if (!current) return;
+      const el = closestTooltipElement(event.target);
+      if (el !== current) return;
+      const point = eventPoint(event);
+      if (!point) return;
+      setTip((existing) => {
+        if (!existing || existing.anchor !== current || existing.align !== "corner" || !existing.anchorPoint) {
+          return existing;
+        }
+        if (
+          Math.abs(existing.anchorPoint.x - point.x) < 2 &&
+          Math.abs(existing.anchorPoint.y - point.y) < 2
+        ) {
+          return existing;
+        }
+        return { ...existing, anchorPoint: point, ready: false };
+      });
+    }
+
+    window.addEventListener("pointerover", onHoverIn, true);
+    window.addEventListener("pointerout", onHoverOut, true);
+    window.addEventListener("pointermove", onPointerMove, true);
+    window.addEventListener("mouseover", onHoverIn, true);
+    window.addEventListener("mouseout", onHoverOut, true);
     window.addEventListener("focusin", onFocusIn, true);
     window.addEventListener("focusout", onFocusOut, true);
     window.addEventListener("resize", hideTooltip);
     window.addEventListener("scroll", hideTooltip, true);
     return () => {
-      window.removeEventListener("pointerover", onPointerOver, true);
-      window.removeEventListener("pointerout", onPointerOut, true);
+      window.removeEventListener("pointerover", onHoverIn, true);
+      window.removeEventListener("pointerout", onHoverOut, true);
+      window.removeEventListener("pointermove", onPointerMove, true);
+      window.removeEventListener("mouseover", onHoverIn, true);
+      window.removeEventListener("mouseout", onHoverOut, true);
       window.removeEventListener("focusin", onFocusIn, true);
       window.removeEventListener("focusout", onFocusOut, true);
       window.removeEventListener("resize", hideTooltip);
       window.removeEventListener("scroll", hideTooltip, true);
+      observer.disconnect();
       hideTooltip();
     };
   }, []);
@@ -163,12 +210,32 @@ export function GlobalTooltip() {
     const height = tipRect.height;
     const centerX = anchorRect.left + anchorRect.width / 2;
     const centerY = anchorRect.top + anchorRect.height / 2;
+    const align = tip.align;
+    const anchorPoint = tip.anchorPoint;
     function coordinates(next: Placement): { left: number; top: number } {
+      if (anchorPoint && align === "corner") {
+        if (next === "left") {
+          return { left: anchorPoint.x - width - CURSOR_GAP_X, top: anchorPoint.y + CURSOR_GAP_Y };
+        }
+        if (next === "top") {
+          return { left: anchorPoint.x + CURSOR_GAP_X, top: anchorPoint.y - height - CURSOR_GAP_Y };
+        }
+        if (next === "bottom") {
+          return { left: anchorPoint.x + CURSOR_GAP_X, top: anchorPoint.y + CURSOR_GAP_Y };
+        }
+        return { left: anchorPoint.x + CURSOR_GAP_X, top: anchorPoint.y + CURSOR_GAP_Y };
+      }
       if (next === "right") {
-        return { left: anchorRect.right + GAP, top: centerY - height / 2 };
+        return {
+          left: anchorRect.right + GAP,
+          top: align === "corner" ? anchorRect.bottom + 2 : centerY - height / 2,
+        };
       }
       if (next === "left") {
-        return { left: anchorRect.left - width - GAP, top: centerY - height / 2 };
+        return {
+          left: anchorRect.left - width - GAP,
+          top: align === "corner" ? anchorRect.bottom + 2 : centerY - height / 2,
+        };
       }
       if (next === "bottom") {
         return { left: centerX - width / 2, top: anchorRect.bottom + GAP };
@@ -193,8 +260,10 @@ export function GlobalTooltip() {
     }
     left = clamp(left, MARGIN, window.innerWidth - width - MARGIN);
     top = clamp(top, MARGIN, window.innerHeight - height - MARGIN);
-    const arrowX = clamp(centerX - left, 10, width - 10);
-    const arrowY = clamp(centerY - top, 10, height - 10);
+    const arrowSourceX = anchorPoint?.x ?? centerX;
+    const arrowSourceY = anchorPoint?.y ?? centerY;
+    const arrowX = clamp(arrowSourceX - left, 10, width - 10);
+    const arrowY = clamp(arrowSourceY - top, 10, height - 10);
 
     setTip((current) => {
       if (!current || current.anchor !== tip.anchor || current.text !== tip.text) return current;
@@ -211,7 +280,7 @@ export function GlobalTooltip() {
         } as CSSProperties,
       };
     });
-  }, [tip?.anchor, tip?.text, tip?.preferred, tip?.ready]);
+  }, [tip?.anchor, tip?.text, tip?.preferred, tip?.align, tip?.anchorPoint, tip?.ready]);
 
   if (!tip) return null;
 

@@ -1,0 +1,244 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": true,
+    "prework_steps": [
+      "doctor",
+      "production_breakdown",
+      "reference_slot_gate",
+      "identity",
+      "reference_plan",
+      "image_preflight_gate",
+      "compliance"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": false,
+    "requires_human_approval": true,
+    "requires_trace": true,
+    "schema_version": 1,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image",
+    "stop_policy": "needs_payment_confirm",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第5集",
+  "files": [
+    {
+      "bytes": 4168,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：先出视频后配音  # source=explicit_user\n- 项目规模：多集长线  # source=explicit_user\n- 基础视觉风格：冷灰写实3D国风漫剧  # source=explicit_user\n- 视频模型路由：自动按镜头路由  # source=explicit_user\n- 首切范围：部分先切  # source=explicit_user\n- 字幕语言：中文  # source=explicit_user\n- 题材：穿越  # source=explicit_user\n- 母题增强：仅建议  # source=explicit_user\n- 生视频渠道：Dreamina  # source=explicit_user\n- 视频原生音轨：丢弃  # source=explicit_user\n- 脸一致性机检后端：styleid  # source=explicit_user\n- N2D_STYLEID_MODEL：kwanY/styleid  # source=explicit_user\n- 对口型：关闭  # source=explicit_user\n- 视频生成音频策略：无声视频流  # source=explicit_user\n- 出视频规格：预算充足  # source=explicit_user\n- 本机LoRA慢速策略：放弃本机训练，改走 image2image_reference_chain  # source=explicit_user\n- 一致性增强(LoRA)：本机慢速不等待，优先 image2image/多图参考链  # source=explicit_user\n- 生图AI：Codex  # source=explicit_user\n- 生图模型：GPT Image 2  # source=explicit_user\n- 生成优先序：关键镜优先  # source=explicit_user\n- 生成粒度：小批  # source=explicit_user\n- 妖类脸部规则：妖物/妖族人物脸部尽量保持对应野兽的头脸结构；狼妖像狼、虎妖像虎，只允许身体/衣袍人形化，不把兽脸磨成人类俊脸或网红脸  # source=explicit_user\n- 合规用途：internal_only  # source=explicit_user\n- 一致性严格度：demo  # source=explicit_user\n## 记录\n- 2026-07-07 用户指定：当前用途为自用 demo/学习，不按 production 级重型后端默认阻断；转正式 production 前再改 production 并补 DINOv2/SyncNet/OWLv2/VLM 等证据\n- 2026-07-07 用户指定：本项目用途为自己做 demo/学习使用，不公开发布；公开发布前再改 publish_candidate/paid_distribution 并补平台合规\n- 2026-07-06 用户指定：以后的妖脸部尽量保持对应野兽，狼妖青面郎君按用户给定狼首参考重出\n- 2026-07-06 用户指定：粒度按批次来\n- 2026-07-06 n2d-image默认：共享定妆优先，其后关键镜优先\n- 2026-07-06 第4集统一生图模型，访问入口Codex\n- 2026-07-06 第4集出图前扫描：自动可落PNG通道仅codex；用户确认do并选择按批次\n- 2026-07-05 用户指定：本机 LoRA 检测/训练过慢时放弃，不作为出图前置，直接走 image2image/多图参考链生图\n- 2026-07-04 设置 出视频规格 = 预算充足 (source=explicit_user, 原值: None)\n- 2026-07-03 用户指定：非原生音画生视频默认走不带声音的视频流，声音统一交后期\n- 2026-07-03 用户指定：非原生音画默认不走音频参考口型，避免生视频进入带声音/音频条件路径\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，使用官方 StyleID 模型候选\n- 2026-07-02 第2集 image_preflight 触发风格化脸 StyleID 发布闸，切到 StyleID 机检后端\n- 2026-07-02 用户纠正：后配音应为先出视频后配音，并设为默认模式\n- 2026-07-02 用户指定后配音：制作模式=先出视频后配音，视频层无声，真实配音后期 compose 统一合成\n- 2026-07-02 用户指定生视频后端用不带声音/后期统一加音，compose 丢弃 clip 原生音轨\n- 2026-07-02 设置 视频原生音轨 = 丢弃 (source=explicit_user, 原值: None)\n- 2026-07-01 视频执行通道设为 Dreamina/即梦，用 seedance 路由消费首中尾多关键帧\n- 2026-06-30 首跑推荐：先检测并报告母题，注入前再确认\n- 2026-06-30 根据源文开篇预填：现代人穿越到大唐妖魔世界\n- 2026-06-30 首跑推荐：国内中文漫剧先产中文字幕\n- 2026-06-30 首跑推荐：先粗切前 10 集验证边界与风格\n- 2026-06-30 首跑推荐：视频后端延后到 n2d-video 阶段按镜头路由\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-06-30 用户确认推荐首跑设置\n- 2026-0\n...",
+      "relpath": "_设置.md",
+      "sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585"
+    },
+    {
+      "bytes": 29173,
+      "exists": true,
+      "preview": "# 那妖魔是姜大人 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 33/33 | ✅ | 11/11 | ✅ | ✅ |\n| 第2集 | 2188 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ | ✅ | 35/35 | ✅ | 10/10 | ✅ | ✅ |\n| 第3集 | 2506 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 58/58 | ✅ | 4/10 | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | ✅ | ✅ | 34/34 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ✅ | 72/125 | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n## 第5集当前状态\n- 2026-07-08：用户人工指出 `Clip01_first.png` 横刀视觉上出现“双向/多刃实体刀刃”问题；判定为非剧情设定，而是 `WEAPON_01` 横刀实体与 `VFX_狼爪寒光` 光轨边界未锁死导致的武器拓扑错误。已停掉本轮 Codex image2 出图进程，作废并归档 `Clip01_first.png`、`Clip01_first_a1.png`、`Clip01_first_a2.png` 及对应 `codex_reference_bundles/第5集/Clip_01*.json` 到 `废料/.../武器拓扑双刃_20260708/`；`出图` 进度回滚为 `72/125`。已加严 `WEAPON_01` 一柄一刃/单侧锋刃/刀背非刃约束，`VFX_狼爪寒光` 只允许半透明光轨、不得实体化为第二刀刃；下一步需重建出图 prompt/preflight 后从第5集 `Clip_01` 重新出图。\n## 第1集当前状态\n- 2026-07-07：已补第1集 `生产数据/pilot_acceptance_第1集.json`，`pilot_release_gate=pass`、`mini_pilot=pass`；首集 pilot 缺失不再是验收阻断。\n- 2026-07-07：已回 `n2d-voice` 用 FishSpeech 补真实配音，`placeholder_lines=0`，`配音=✅`；已生成 fitted 配音 `合成/第1集/配音/voice_zh_fitted.wav`（120.515s，sha256 `5680f3034230176d0016d6a106bcf6ea866f50e9c47b92c871fa5ceace29d38b`）。\n- 2026-07-07：已回 `n2d-compose` 重合成，split 视频通过 Time-Warp 对齐锁定槽位；最终母版 `合成/第1集/成片_第1集_zh.mp4` 时长 120.10s，响度 `-15.76 LUFS / -2.70 dBTP`，sha256 `aa6392dcc6fc030ee1d887da388fa2fd7b84b860f7843b2ea92dcfb8464b8ccb`。\n- 2026-07-07：已完成本轮上游返工：补 `设定库/identity_eval_pack.json`、`设定库/character_assets/CHAR_01__姜月初/` 六分区索引、`VFX_百妖谱金光` 资产登记；`production_breakdown_check_第1集.json=pass`；`generation_recipe_manifest_第1集.json=pass`，10 条 split 视频均追到 `production_events.jsonl:line 419-429`。\n- 2026-07-07：已按上游返工要求处理 `review_ui_findings_第1集.json`\n...",
+      "relpath": "_进度.md",
+      "sha256": "f961b9e413a670e28a39356675a7f6debde7f347a0c5ea343f9295217d9b5f55"
+    },
+    {
+      "bytes": 345378,
+      "exists": true,
+      "preview": "# 第5集 分镜出图 Prompt\n本文件为最终分镜出图 prompt，已落实参考规划与导演镜头计划。\n### 剧本可看性全局合同\n- 合同来源：`生产数据/script_quality_contract_第5集.json`；content_hash=b15f239da897d889\n- 核心看点：第4集埋下的狼妖围杀在本集兑现：姜月初用圆满《猛虎快刀》一刀压住群狼，却也被闻弦境青面郎君打伤，最后被迫消耗一百五十二年道行开挂。\n- 首屏钩子：audience_question=她能不能只靠圆满快刀杀穿狼妖群？；content_proposition=她必须在群狼扑杀里证明这身镇魔司黑衣不是假架子。；expected_metric=primary=retention_3s；rationale=承接上集硬钩并直接进入动作付费点，冷开信息量足。；target=0.84；muted_readable=无声也能从狼妖扑击、横刀出鞘和飞鹰门众人后退读出开战。；muted_safe_proof=无声观看也能从群狼冲锋、黑衣少女按刀和飞鹰门众人惊惧读出危机。…\n  - Pacing: primary=100% compressed=0%；主时长=EP05_CLIP01,EP05_CLIP02,EP05_CLIP03,EP05_CLIP04,EP05_CLIP05,EP05_CLIP06,EP05_CLIP07,EP05_CLIP08；compressed_clips=EP05_CLIP04；EP05_CLIP08；primary_clips=EP05_CLIP01；EP05_CLIP02；EP05_CLIP03；EP05_CLIP05；EP05_CLIP06；EP05_CLIP07；EP05_CLIP09…\n  - R01: hook_id=EP05_HOOK_OPEN；opened_at=Clip01；payoff_due=Clip02；payoff_evidence=姜月初一刀逼青面郎君抓同伴挡刀，并劈开肉盾狼妖。；payoff_status=paid；promise=第4集尾钩“杀了她”如何被第一刀接住；promise_type=combat_payoff\n  - R02: hook_id=EP05_HOOK_POWER_GAP；opened_at=Clip05；payoff_due=Clip07；payoff_evidence=刀爪对撞后双方受伤，姜月初腹部被撕开三道爪痕。；payoff_status=paid；promise=闻弦境青面郎君真正出手后姜月初能否硬接；promise_type=power_scale\n  - R03: delayed_payoff_ep=第6集；hook_id=EP05_HOOK_SYSTEM；opened_at=Clip09；payoff_due=第6集冷开；payoff_status=delayed；promise=一百五十二年道行灌入虎妖画卷后会发生什么；promise_type=system_upgrade\n  - Q01: expected_next_handling=本集兑现/推进；question_context=心里盘算。打不过，那就开挂。 💥反转 [镜头25·旁白·系统·慢] 古朴绘卷在脑海中一闪而逝。道行，一百五十二年。；question_id=Q01；signal=系统；status=paid_or_progressed\n  - Q02: expected_next_handling=本集兑现/推进；question_context=鹰门众人不抢主角脸，只作为护主半圆人墙和刀剑前景。 - 系统面板只画空古卷与安全留白，所有可读文字走 compose；question_id=Q02；signal=系统；status=paid_or_progressed\n  - Q03: expected_next_handling=本集兑现/推进；question_context=ff_ep 第6集 第一刀能不能接住群狼扑杀？ 青面郎君为何会被激怒到亲自下场？ 姜月初对闻弦境的真实胜算有多少？；question_id=Q03；signal=为何；status=paid_or_progressed\n  - Q04: expected_next_handling=本集兑现/推进；question_context=story_function 百妖谱金色古卷和黑白世界是系统流母题的视觉化兑现。 scene 姜月初主观识海/百妖谱；question_id=Q04；signal=系统；status=paid_or_progressed\n  - Q05: expected_next_handling=本集兑现/推进；question_context=妖的咆哮，全都远去。天地，只剩黑白二色。 rhythm 系统开挂集尾·抽空 continuity_story sta；question_id=Q05；signal=系统；status=paid_or_progressed\n## 镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）\n**剧本描述**：青面郎君沿第4集尾帧的五道狼爪压迫保持前景/中近景，狼妖群从他身后和画面两侧直接扑杀，接上“杀了她”的命令。 姜月初保持前集站位，肩线不退，右手压住横刀刀柄，陈青源等人只在后景惊住。 横刀贴着狼爪冷光出鞘，姜月初清冷眼神越过近处狼爪锁住青面郎君。\n**剧本可看性合同**：戏剧功能=直接兑现第4集集尾“杀了她”，让狼妖群扑杀和横刀出鞘成为0-3秒视觉钩。；观众效果=观众立刻进入战斗，不再等待解释，追问第一刀如何\n...",
+      "relpath": "出图/第5集/prompt/01_分镜出图.md",
+      "sha256": "b233ebf801ba89b771019c6abd6b9e629f3f05c44e0ceeea7cf18753b3b7d9b7"
+    },
+    {
+      "bytes": 143456,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_identity_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "characters",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/identity_registry.json",
+      "sha256": "0431a11cc927f318469311a0635cd5d98de3c68144bfc310ef63a79a4df91dc3"
+    },
+    {
+      "bytes": 36719,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_asset_reference_registry",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "generated_at",
+          "assets",
+          "notes"
+        ],
+        "version": 1
+      },
+      "relpath": "出图/共享/asset_registry.json",
+      "sha256": "a516e5f838fa25b2f424ab0114509071ada9832aede5e6f4e915b9090ca8f58c"
+    },
+    {
+      "exists": false,
+      "relpath": "生产数据/reference_pack_第5集.json"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [
+      {
+        "label": "系统面板/HUD",
+        "matched_clips": [
+          "EP05_CLIP08",
+          "EP05_CLIP09"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP05_CLIP08",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP05_CLIP09",
+            "missing": [
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "中文字乱码",
+          "数值不一致",
+          "面板风格跨集漂移"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+      },
+      {
+        "label": "现代物品/知识落地",
+        "matched_clips": [
+          "EP05_CLIP02"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP05_CLIP02",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          }
+        ],
+        "production_risks": [
+          "道具形态漂移",
+          "古今材质冲突",
+          "手持关系错"
+        ],
+        "required_contract_fields": [
+          "mount_contact",
+          "harness_lock",
+          "screen_direction"
+        ],
+        "scene_id": "anachronism_prop",
+        "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明"
+      }
+    ],
+    "episode": "第5集",
+    "generated_at": "2026-07-08T14:56:11+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "raw": "穿越"
+    },
+    "issues": [
+      {
+        "clip": "EP05_CLIP08",
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP05_CLIP09",
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP05_CLIP02",
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形"
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+      }
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+    "stage_key": "image",
+    "status": "warn",
+    "summary": {
+      "active_scenes": 2,
+      "issues": 3,
+      "matched_clips": 3
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "生产数据/reference_pack_第5集.json"
+  ],
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "stage_key": "image",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "出图/第5集/prompt/01_分镜出图.md",
+      "出图/共享/identity_registry.json",
+      "出图/共享/asset_registry.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

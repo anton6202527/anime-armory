@@ -77,6 +77,25 @@ def load_reference_registry(root: Path) -> dict:
     return data if isinstance(data, dict) else {}
 
 
+def load_finishing_plan(root: Path, chapter: str) -> dict[str, Any]:
+    path = root / "出图" / chapter / "finishing" / "finishing_plan.json"
+    if not path.is_file():
+        return {}
+    try:
+        data = load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def finishing_by_panel(plan: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    for panel in plan.get("panels") or []:
+        if isinstance(panel, dict) and panel.get("panel_id"):
+            out[str(panel.get("panel_id"))] = panel
+    return out
+
+
 def path_relative_to_root(root: Path, path: Path) -> str:
     try:
         return str(path.resolve().relative_to(root.resolve()))
@@ -312,7 +331,7 @@ def panel_rects(layout: dict) -> dict[str, dict]:
     return rects
 
 
-def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict) -> str:
+def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict, finish: dict[str, Any], render_stage: str) -> str:
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     ref_ids = panel_reference_ids(panel)
     continuity = panel_continuity_contract(panel, panel_script)
@@ -359,6 +378,22 @@ def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict) ->
             parts.append("人物完整性契约：" + continuity["character_integrity"])
     if panel.get("art_notes"):
         parts.append("构图与表演：" + str(panel.get("art_notes")))
+    finish_parts = []
+    for key, label in (
+        ("art_stage_sequence", "传统稿层顺序"),
+        ("ink_plan", "墨线计划"),
+        ("black_fill_plan", "黑场计划"),
+        ("tone_plan", "网点/灰阶计划"),
+        ("value_plan", "黑白灰可读性"),
+        ("effects_plan", "效果线/漫符计划"),
+        ("lettering_sfx_plan", "拟声词画法"),
+        ("no_bake_text_contract", "无字原图契约"),
+    ):
+        text = compact_metadata(finish.get(key), max_len=360)
+        if text:
+            finish_parts.append(f"{label}:{text}")
+    if finish_parts:
+        parts.append(f"传统漫画原稿收尾契约（目标稿层={render_stage or '完成稿'}）：" + "；".join(finish_parts))
     if ref_ids:
         contracts = []
         for ref_id in ref_ids:
@@ -387,19 +422,24 @@ def build_jobs(root: Path, chapter: str) -> dict:
     caps = resolve_capabilities(model, channel) if resolve_capabilities else None
     style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     text_language = read_setting(root, "文字语言", "中文")
+    render_stage = read_setting(root, "出图稿层", "完成稿")
     registry = load_reference_registry(root)
+    finishing_plan = load_finishing_plan(root, chapter)
+    finishing_map = finishing_by_panel(finishing_plan)
     jobs = []
     for panel in panel_script.get("panels", []):
         pid = panel.get("panel_id")
         rect = rects.get(pid, {})
+        finish = finishing_map.get(str(pid), {})
         jobs.append(
             {
                 "panel_id": pid,
                 "status": "planned",
                 "size": {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))},
-                "prompt": build_prompt(panel, style, registry, panel_script),
+                "prompt": build_prompt(panel, style, registry, panel_script, finish, render_stage),
                 "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
                 "continuity_contract": panel_continuity_contract(panel, panel_script),
+                "traditional_finish_contract": finish,
                 "references": [
                     item
                     for item in panel_references(root, panel, registry, caps)
@@ -417,6 +457,8 @@ def build_jobs(root: Path, chapter: str) -> dict:
         "channel": channel,
         "backend_capabilities": caps.to_dict() if caps else {},
         "text_language": text_language,
+        "render_stage": render_stage,
+        "finishing_plan": str(Path("出图") / chapter / "finishing" / "finishing_plan.json") if finishing_plan else "",
         "jobs": jobs,
     }
 

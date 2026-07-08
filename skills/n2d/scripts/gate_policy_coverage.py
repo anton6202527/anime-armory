@@ -64,6 +64,24 @@ GROUP_COVERAGE: Dict[str, Dict[str, Any]] = {
         "tests": ["skills/n2d-script/scripts/test_story_integrity_audit.py", "skills/n2d-review/scripts/test_gate.py"],
         "evidence": ["脚本/{ep}/storyboard.json", "生产数据/spectacle_plan_{ep}.json"],
     },
+    "story_economy": {
+        "implementation": ["skills/n2d-script/scripts/story_economy_audit.py", "skills/n2d-review/scripts/gate.py"],
+        "tests": ["skills/n2d-script/scripts/test_story_economy_audit.py", "skills/n2d-review/scripts/test_gate.py"],
+        "evidence": ["生产数据/story_economy_audit_{ep}.json"],
+        "release_required": True,
+    },
+    "production_handoff": {
+        "implementation": ["skills/n2d-script/scripts/production_breakdown.py", "skills/n2d-review/scripts/gate.py"],
+        "tests": ["skills/n2d-script/scripts/test_production_breakdown.py", "skills/n2d-review/scripts/test_gate.py"],
+        "evidence": ["脚本/{ep}/production_handoff_pack.json", "脚本/{ep}/continuity_chain.json", "脚本/{ep}/continuity_bible.json", "脚本/{ep}/ai_shooting_schedule.json", "脚本/{ep}/ai_call_sheet.md"],
+        "release_required": True,
+    },
+    "production_locks": {
+        "implementation": ["skills/n2d/scripts/production_locks.py", "skills/n2d-review/scripts/gate.py"],
+        "tests": ["skills/n2d/scripts/test_production_locks.py", "skills/n2d-review/scripts/test_gate.py"],
+        "evidence": ["生产数据/production_locks_{ep}.json"],
+        "release_required": True,
+    },
     "identity_registry": {
         "implementation": ["skills/n2d-identity/scripts/identity.py", "skills/n2d-review/scripts/gate.py"],
         "tests": ["skills/n2d-identity/scripts/test_identity.py", "skills/n2d-review/scripts/test_gate.py"],
@@ -209,6 +227,12 @@ GROUP_COVERAGE: Dict[str, Dict[str, Any]] = {
         "evidence": ["生产数据/review_signoff_{ep}.json", "生产数据/acceptance_signoff_{ep}.json"],
         "release_required": True,
     },
+    "release_verdict": {
+        "implementation": ["skills/n2d/scripts/release_verdict.py"],
+        "tests": ["skills/n2d/scripts/test_release_verdict.py"],
+        "evidence": ["生产数据/release_verdict_{ep}.json"],
+        "release_required": True,
+    },
 }
 
 
@@ -240,6 +264,9 @@ GROUP_GATE_CHECKS: Dict[str, List[str]] = {
     "subtitle_alignment": ["check_subtitle_alignment", "check_native_av_subtitle_alignment"],
     "motion_contract": ["check_motion_control_route"],
     "skill_freshness": ["check_skill_freshness"],
+    "story_economy": ["check_story_economy_audit"],
+    "production_handoff": ["check_production_handoff_pack"],
+    "production_locks": ["check_production_locks_preflight"],
 }
 
 _GATE_PY = REPO_ROOT / "skills" / "n2d-review" / "scripts" / "gate.py"

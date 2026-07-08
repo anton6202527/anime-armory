@@ -8,6 +8,15 @@ import {
   workChanges,
 } from "../api";
 import { useI18n } from "../i18n";
+import {
+  COLLAPSE_LEFT_SIDEBAR_EVENT,
+  FILES_SIDE_COLLAPSE_WIDTH,
+  clampFilesSideWidth,
+  clearStoredFilesSideWidth,
+  commitFilesSideWidth,
+  draftFilesSideWidth,
+  readCurrentFilesSideWidth,
+} from "../paneLayout";
 import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
@@ -112,30 +121,33 @@ export function ChangesPane({
     });
   }
 
-  function clampSideWidth(width: number, total: number): number {
-    const minSide = total < 500 ? 160 : 220;
-    const minPreview = Math.min(320, Math.max(180, total * 0.35));
-    const maxSide = Math.max(minSide, total - minPreview);
-    return Math.min(maxSide, Math.max(minSide, width));
-  }
-
   function startSideResize(ev: ReactPointerEvent<HTMLDivElement>) {
     const pane = paneRef.current;
     if (!pane) return;
     ev.preventDefault();
+    const splitter = ev.currentTarget;
     const rect = pane.getBoundingClientRect();
     document.body.classList.add("resizing-changes-side");
+    splitter.classList.add("resizing");
+    let latestWidth = readCurrentFilesSideWidth();
 
     const move = (e: PointerEvent) => {
-      const next = clampSideWidth(e.clientX - rect.left, rect.width);
-      window.localStorage.setItem("aa.files.sideWidth", String(Math.round(next)));
-      window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+      const next = clampFilesSideWidth(e.clientX - rect.left, rect.width);
+      latestWidth = next;
+      draftFilesSideWidth(next);
       window.dispatchEvent(new Event("resize"));
     };
     const up = () => {
       document.body.classList.remove("resizing-changes-side");
+      splitter.classList.remove("resizing");
       document.removeEventListener("pointermove", move);
       document.removeEventListener("pointerup", up);
+      if (latestWidth <= FILES_SIDE_COLLAPSE_WIDTH) {
+        clearStoredFilesSideWidth();
+        window.dispatchEvent(new Event(COLLAPSE_LEFT_SIDEBAR_EVENT));
+      } else {
+        commitFilesSideWidth(latestWidth);
+      }
       window.dispatchEvent(new Event("resize"));
     };
     document.addEventListener("pointermove", move);
@@ -253,6 +265,7 @@ export function ChangesPane({
 
   const selectedEntry = changes.find((change) => change.path === selected) ?? null;
   const count = summary ? summary.changed + summary.deleted : changes.length;
+  const showToolbar = loading || changes.length > 0 || archiving || restoring || Boolean(archivingPath || restoringPath);
   const kindLabel = {
     added: t("changes.kind.added"),
     modified: t("changes.kind.modified"),
@@ -263,32 +276,34 @@ export function ChangesPane({
   return (
     <div className="changes-pane" ref={paneRef}>
       <div className="changes-side">
-        <div className="changes-toolbar">
-          <span className="changes-toolbar-spacer" aria-hidden="true" />
-          <span className={"changes-count" + (changes.length ? " dirty" : "")}>
-            {loading ? t("common.loading") : count}
-          </span>
-          <button
-            type="button"
-            className="changes-action"
-            disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
-            title={t("changes.restoreAllTitle")}
-            aria-label={t("changes.restoreAllTitle")}
-            onClick={restore}
-          >
-            {restoring ? "…" : <Codicon name="discard" />}
-          </button>
-          <button
-            type="button"
-            className="changes-action"
-            disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
-            title={t("changes.archiveAllTitle")}
-            aria-label={t("changes.archiveAllTitle")}
-            onClick={archive}
-          >
-            {archiving ? "…" : <Codicon name="add" />}
-          </button>
-        </div>
+        {showToolbar && (
+          <div className="changes-toolbar">
+            <span className="changes-toolbar-spacer" aria-hidden="true" />
+            <span className={"changes-count" + (changes.length ? " dirty" : "")}>
+              {loading ? t("common.loading") : count}
+            </span>
+            <button
+              type="button"
+              className="changes-action"
+              disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
+              title={t("changes.restoreAllTitle")}
+              aria-label={t("changes.restoreAllTitle")}
+              onClick={restore}
+            >
+              {restoring ? "…" : <Codicon name="discard" />}
+            </button>
+            <button
+              type="button"
+              className="changes-action"
+              disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
+              title={t("changes.archiveAllTitle")}
+              aria-label={t("changes.archiveAllTitle")}
+              onClick={archive}
+            >
+              {archiving ? "…" : <Codicon name="add" />}
+            </button>
+          </div>
+        )}
         {err && <div className="changes-error">{err}</div>}
         {!loading && !err && changes.length === 0 && (
           <div className="changes-empty">{t("changes.empty")}</div>
@@ -352,8 +367,7 @@ export function ChangesPane({
         aria-label={t("files.resizeAria")}
         onPointerDown={startSideResize}
         onDoubleClick={() => {
-          window.localStorage.removeItem("aa.files.sideWidth");
-          window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+          clearStoredFilesSideWidth();
           window.dispatchEvent(new Event("resize"));
         }}
       />

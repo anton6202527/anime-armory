@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4599 | 目录文本总行数 236097
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4614 | 目录文本总行数 238934
 
 # n2d — 主状态机调度器
 
@@ -115,13 +115,14 @@ python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1�
 python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
 python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
-> **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，该 Clip 必须在 `shot_reverse_patterns` 登记；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，供出图、出视频和 review gate 消费。无理由越轴、左右互换、看镜头替代看戏内对象，视为连续性硬伤，不靠后期补救。
+> **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右或 9:16 纵深高低位、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，先跑 `python3 skills/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 --write --sync-axis-map` 物化 `脚本/第N集/shot_reverse_contract.json` 并回填 `shot_reverse_patterns[]`；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，出图/出视频 prompt 收据也会记录该合同 SHA。无理由越轴、左右互换、看镜头替代看戏内对象、OTS 没有前景肩部，视为连续性硬伤，不靠后期补救。
 > **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：每集完成 Stage 2 storyboard 后，`run.py next/enter` 在 `image_prompt` 前先跑 `story_acceptance_packets.py check --kind animatic --write-missing`。未确认则生成 `animatic_packet.json/md` 并阻断，同时从 `storyboard.json` + `镜头时长.json` 物化 `生产数据/animatic_第N集.json/html`。HTML 是可播放/可浏览的 timed rough preview：有图则嵌入 storyboard/产物图，没有图则用 timed slate 承接节奏。放行要同时满足预览可生成、packet `status=confirmed`，并写清 0-3 秒钩子、节奏曲线、信息可读、镜头连续和贵工位风险。
 ```bash
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing
 ```
 > **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 确认后，`run.py next/enter` 在 `image_prompt` 前继续自动跑 `production_breakdown.py check --write-missing`。未确认则生成草稿并阻断出图 prompt，要求先补齐 `production_breakdown.json`、`continuity_breakdown.json`、`continuity_chain.json`、`continuity_bible.json`、`ai_shooting_schedule.json`、`ai_call_sheet.md` 和 `生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`，删除待补/TODO 并全部 `status=confirmed`。其中 `continuity_chain` 是镜头间场记链：Clip N 的 `continuity.transition/need_endframe` 描述 **Clip N → Clip N+1**，接力 seam 必须声明上一镜尾帧和下一镜首帧，跨集首镜必须声明承接上一集或有意跳切理由；`continuity_bible` 是本集场记连续性真值，`ai_shooting_schedule` 是 AI 拍摄顺序与并行/依赖安排，batch seed 是可导入 `n2d-batch` 的 image/video 队列草案，避免只按镜号顺序把昂贵工位串行化。
+> **接缝硬合同（视频前新增硬闸）**：`video_prompt_preflight/video_preflight/video` 会直接检查 `continuity_chain.json` 的每个 seam：from/to clip 不得断裂或重复，必须有 from_end_state、to_start_state、人物/资产出入场链、轴线/视线/画面方向、J/L cut 或声画衔接说明，以及边界帧路径 + sha256。只有写明 `intentional_discontinuity_reason` 的有意跳切可豁免帧级接力；否则缺任一项回 `n2d-script` 修，不让断裂接缝进视频生成。
 ```bash
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
@@ -249,6 +250,7 @@ python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
 > python3 skills/n2d/run.py next <作品根> --json   # 机器可读 NextAction（代理消费 frontier/prework/stop_reason/action_card/gate）
 > ```
 > 它返回的 `stop_reason` ∈ `{needs_agent_gen, needs_payment_confirm, needs_choice, needs_compliance, needs_acceptance_signoff, blocked_by_entry_check, capability_evidence_required, blocked_by_gate, blocked_by_image_qc, blocked_by_review_acceptance, env_missing, done}`——**代理据此只在"需要脑子/钱包/签字"处停下问人，其余前置已自动跑完**。`blocked_by_entry_check` 表示源文本漂移或 skill 更新重制计划未处理；`capability_evidence_required` 表示当前视频后端只有 conservative/manual/deprecated 能力证据，付费前必须刷新证据或换后端；`blocked_by_gate` 会透传 `return_to_stage`/`findings_path` 指向最小返工；`blocked_by_image_qc` 专指出图落档 QC 未过，先回 `n2d-image` 修复/确认受影响图，不当成后端环境缺失。设计契约见 `../../docs/n2d-编排器设计.md`。
+> 入口检查若发现 skill/source/资产漂移，`run.py next|enter` 会先自动跑 `skills/n2d/scripts/repair_preflight.py <作品根> 第N集 --stage <stage> --write-missing --json`（视频链路会尝试 `--repair-qc`），再刷新 entry check；仍未通过才停下给报告路径。出图/出视频 prompt pack 还会分别写 `生产数据/consumed_contracts_image_prompt_第N集.json`、`consumed_contracts_video_prompt_第N集.json`，绑定 storyboard、continuity_chain、script_quality_contract、director_camera_plan、reference_plan 和 prompt 文件 SHA；preflight 发现缺失或 SHA 过期即回对应 prompt 阶段。
 > NextAction 同时带 `action_contract`、`trace`、`action_card.context_pack`、`action_card.creative_loop`、`action_card.specialist`：`n2d-supervisor` 只消费这些契约做上层编排和专家派发，不能让单个 skill 自己决定下一步、改 `_进度.md`、绕过 gate 或执行付费操作。
 > 产物契约体检统一走 schema registry：`python3 skills/n2d/scripts/validate_artifacts.py <作品根> --write` 会扫描现有 JSON/JSONL，校验 `kind/version`、关键机器字段、batch/trace/context/supervisor/gate policy 等结构，落 `生产数据/artifact_validation.{json,md}`。它不替代业务 gate，只回答“机器产物能不能被路由和审计”。
 > Gate 策略矩阵已数据化在 `skills/n2d/_lib/gate_policy_matrix.json`：每个 gate stage 声明 family、人审边界、trace 策略和 required check groups；`n2d-review/scripts/gate.py` 读取该矩阵决定 preflight family，具体检查仍由现有 gate 函数执行。发布前 `gate_policy_coverage.py` 会把这些 check groups 映射到实现、测试和本集 release 证据，缺口 fail-closed。

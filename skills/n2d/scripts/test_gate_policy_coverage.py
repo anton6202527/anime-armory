@@ -21,6 +21,13 @@ def _release_evidence(root: Path, episode: str) -> None:
     (root / "_进度.md").write_text("| 集 | 验收 |\n|---|---|\n| 第1集 | ✅ |\n", encoding="utf-8")
     _write_json(root / "合规" / "compliance_manifest.json", {"kind": "n2d_compliance_manifest", "version": 1})
     _write_json(root / "脚本" / episode / "storyboard.json", {"kind": "storyboard", "clips": []})
+    _write_json(root / "生产数据" / f"story_economy_audit_{episode}.json", {"kind": "n2d_story_economy_audit", "version": 1, "ok": True, "summary": {"blocks": 0}})
+    _write_json(root / "脚本" / episode / "production_handoff_pack.json", {"kind": "n2d_production_handoff_pack", "version": 1, "status": "confirmed"})
+    _write_json(root / "脚本" / episode / "continuity_chain.json", {"kind": "n2d_continuity_chain", "version": 1, "status": "confirmed", "summary": {"block": 0}})
+    _write_json(root / "脚本" / episode / "continuity_bible.json", {"kind": "n2d_continuity_bible", "version": 1, "status": "confirmed"})
+    _write_json(root / "脚本" / episode / "ai_shooting_schedule.json", {"kind": "n2d_ai_shooting_schedule", "version": 1, "status": "confirmed"})
+    (root / "脚本" / episode / "ai_call_sheet.md").write_text("status: confirmed\n# call sheet\n", encoding="utf-8")
+    _write_json(root / "生产数据" / f"production_locks_{episode}.json", {"kind": "n2d_production_locks", "version": 1, "status": "confirmed", "locks": []})
     _write_json(root / "出图" / "共享" / "identity_registry.json", {"kind": "n2d_identity_registry", "version": 1})
     _write_json(root / "出图" / "共享" / "asset_registry.json", {"kind": "n2d_asset_reference_registry", "version": 1})
     _write_json(root / "生产数据" / f"budget_{episode}.json", {"status": "pass"})
@@ -41,6 +48,7 @@ def _release_evidence(root: Path, episode: str) -> None:
     _write_json(root / "生产数据" / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(root / "生产数据" / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(root / "生产数据" / f"review_signoff_{episode}.json", {"status": "approved"})
+    _write_json(root / "生产数据" / f"release_verdict_{episode}.json", {"kind": "n2d_release_verdict", "version": 1, "status": "internal-only"})
 
 
 def test_gate_policy_coverage_fails_missing_release_evidence(tmp_path: Path) -> None:

@@ -9,6 +9,57 @@
     "path": "源本/从变身少女开始斩妖除魔.txt",
     "range": "第1章 百妖谱"
   },
+  "visual_contract": {
+    "style_baseline": "第1话统一为新国风水墨彩漫：黑白灰荒野主调、冷白雾光、大光比剪影，局部赤色血污和系统金色光点只作为剧情强调；线稿、面部精度和水墨边缘不得跨格跳成写实照片感或低成本彩漫。",
+    "character_integrity_policy": "含角色格必须锁脸型、眼型/眼距、发际线、发型轮廓、服装主色、标志物和肢体完整性；动作格必须写清手脚归属、身体接触点、武器落点和不可裁掉的叙事部位，不能因为漫画风格弱化脸、眼、发、手脚和关键道具一致性。",
+    "scene_anchors": {
+      "LOC_WASTELAND": {
+        "spatial_layout": "破败荒野从北侧巨岩和虎妖尸身向南侧逃离方向展开；枯草、尸骸、低雾和泥地贯穿全话，巨岩/虎妖位于画面深处或高位，姜月初与裴长青多在低位近景或中景活动。",
+        "lighting_anchor": "主光为冷白天光和荒野雾面反光，整体低饱和、高反差；虎妖复起格允许强逆光黑影，系统格允许金色卷轴光打亮姜月初脸部，但不得随机改成暖日光、室内光或霓虹光。",
+        "axis_eyeline": "默认轴线是南北逃离方向与巨岩压迫方向：虎妖/巨岩在画面上方或深处压向下方人物，裴长青多位于画左或近地，姜月初在画右/近景承受压力；正反打必须保持谁看谁、谁压迫谁的方向连续。",
+        "spatial_relationships": "多人同格先锁姜月初、裴长青、虎妖的左右/高低/前后景关系，再变换景别；遮挡只可服务于受力、压迫或隐藏血腥，不得遮掉脸、手脚、刀柄、胸口命中点和关键视线。",
+        "resident_assets": [
+          "巨岩",
+          "枯草",
+          "低雾",
+          "泥地",
+          "尸骸轮廓",
+          "虎妖黑血",
+          "镇魔司横刀/断刀"
+        ],
+        "forbidden_drift": [
+          "不得换成室内、城镇、森林或日光晴野",
+          "不得让巨岩、虎妖尸身和横刀位置无理由跳变",
+          "不得把冷白雾光随机改成暖黄主光",
+          "不得把尸骸血迹画成过度 gore 特写"
+        ]
+      }
+    },
+    "character_state_timeline": {
+      "CHAR_JYC": [
+        {
+          "from_panel": "P002",
+          "state": "灰扑扑囚服、黑长发凌乱、脸有尘土和少量血污；后续所有本话出场必须继承同一脸型、眼型、发际线和黑长发轮廓。"
+        },
+        {
+          "from_panel": "P013",
+          "state": "系统金光只改变脸部受光和瞳孔高光，不改变脸、发、年龄形态和囚服状态。"
+        }
+      ],
+      "CHAR_PEI": [
+        {
+          "from_panel": "P004",
+          "state": "黑衣赤纹镇魔司劲装破损、重伤濒死、左臂无力；后续只能改变姿态和受伤程度，不得换脸或换装。"
+        }
+      ],
+      "MON_TIGER": [
+        {
+          "from_panel": "P003",
+          "state": "人身虎头、小山般体量、胸前巨大黑血洞；复起后仍保留黑血洞、虎头轮廓和压迫尺度。"
+        }
+      ]
+    }
+  },
   "panels": [
     {
       "panel_id": "P001",
@@ -16,6 +67,10 @@
       "description": "灰白荒野全景，枯草连天，雾气贴地，囚犯尸骸散落，远处巨岩旁隐约有虎头人身的巨大尸影。",
       "characters": [],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "荒野全景建立：巨岩和虎妖尸影在远处高位，尸骸和枯草铺满中下部，低雾贴地形成后续人物行动空间。",
+      "lighting_anchor": "冷白雾光从画面上方和远处漫反射，地面和尸骸保持低饱和灰调，局部血迹只做暗赤点缀。",
+      "axis_eyeline": "镜头从高处压向荒野深处，建立巨岩/虎妖在远处压迫、人物未来从下方近景进入的轴线。",
       "dialogue": [],
       "narration": "风里带着腥气。",
       "sfx": [],
@@ -30,6 +85,13 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初坐在尸骸之间的低位近景，远处巨岩和虎妖尸影保持在她视线方向的画面深处。",
+      "lighting_anchor": "冷白雾光从画面深处扫过她的侧脸和囚服，脸部有柔冷高光，背景尸骸压暗。",
+      "axis_eyeline": "姜月初位于画面低位，视线沿荒野深处指向虎妖尸影，延续 P001 的远近压迫轴线。",
+      "gaze_target": "远处巨岩旁的虎妖尸影和近处散落尸骸",
+      "eyeline_direction": "画右上方到画面深处",
+      "character_integrity": "姜月初必须继承 CHAR_JYC 的脸型、眼型/眼距、发际线和黑长发轮廓；囚服、手臂、腿脚和坐姿完整可读，不得多手、缺脚或把尸骸线条接到身体上。",
       "dialogue": [],
       "narration": "姜月初愣愣地看着眼前的一切。",
       "sfx": [],
@@ -46,6 +108,13 @@
         "虎妖"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "虎妖尸体倚在远处巨岩下方并占据画面主体，姜月初只作为低位前景小剪影承接 P002 的视线。",
+      "lighting_anchor": "冷白天光从巨岩上方切出虎头、人身轮廓和胸前黑血洞，血洞内部保持黑暗。",
+      "axis_eyeline": "低机位从姜月初前景仰向虎妖尸体，虎头朝向画面下方的姜月初剪影。",
+      "gaze_target": "画面下方的姜月初剪影和胸前黑血洞位置",
+      "eyeline_direction": "虎头朝画面下方压落",
+      "character_integrity": "虎妖的虎脸、眼眶、虎纹毛发、人身躯干、手脚轮廓和胸前黑血洞必须完整可辨；不得把虎妖肢体画成人手脚混乱或改成普通野兽。",
       "dialogue": [],
       "narration": "人身，虎头。即便没了声息，凶煞之气仍扑面而来。",
       "sfx": [],
@@ -62,6 +131,13 @@
         "裴长青"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "裴长青半跪在泥地中景，断刀插在身前支撑身体；姜月初在画外或远处承接他发出的命令。",
+      "lighting_anchor": "冷白雾光勾出裴长青苍白脸、黑衣赤纹和断刀反光，身体下半部压在暗部泥地里。",
+      "axis_eyeline": "裴长青从画左低位抬头看向画右的姜月初，命令声把轴线从虎妖压迫转向两人对峙。",
+      "gaze_target": "画右几步外的姜月初",
+      "eyeline_direction": "画右上方",
+      "character_integrity": "裴长青必须保留苍白脸、眼型、束发、黑衣赤纹和重伤姿态；左臂、手、膝、断刀和支撑接触点完整可读，不得换成女主脸或普通路人装。",
       "dialogue": [
         {
           "speaker": "裴长青",
@@ -85,6 +161,13 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初站在荒野中低位，身体朝逃离方向偏转，头和视线仍被画左的裴长青牵住。",
+      "lighting_anchor": "冷白雾光打在她半张脸和囚服褶皱上，背后荒草压暗，脚尖处留清晰地面接触。",
+      "axis_eyeline": "姜月初从画右看向画左的裴长青，身体动势则向画右外侧准备逃离，形成视线和行动相反的张力。",
+      "gaze_target": "画左半跪的裴长青",
+      "eyeline_direction": "画左下方",
+      "character_integrity": "姜月初继承 CHAR_JYC 的脸型、眼型/眼距、发际线和黑长发；囚服、肩颈、双手、脚尖后撤和身体转向完整可读，脚不得被画成手。",
       "dialogue": [],
       "narration": "你说过来就过来？",
       "sfx": [],
@@ -101,6 +184,13 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "特写锁在姜月初脚前半步的泥地和断刀落点，脚尖、刀锋、碎土和枯草在同一低位平面。",
+      "lighting_anchor": "冷白高光沿刀锋和泥地湿痕闪出，周边保持灰黑暗部，突出刀落点。",
+      "axis_eyeline": "镜头顺裴长青掷刀方向切到姜月初脚前，威胁线从画左上落向画右下泥地。",
+      "gaze_target": "脚前半步钉入泥地的断刀",
+      "eyeline_direction": "画面下方的刀锋落点",
+      "character_integrity": "本格可不露姜月初的脸/眼/发，但不得出现替代脸；她的脚、腿部归属、囚鞋、刀柄、刀刃、泥地接触点和身体受惊僵住的姿态必须完整可读，禁止额外手掌。",
       "dialogue": [],
       "narration": "",
       "sfx": [
@@ -121,6 +211,14 @@
         "裴长青"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "裴长青在画左低位半跪，姜月初在画右几步外僵立，尸骸和断刀位于两人之间形成分隔线。",
+      "lighting_anchor": "冷白雾光从两人头顶后方切出轮廓，裴长青脸和姜月初脸各保留可读冷高光，对白区留在上方雾面。",
+      "axis_eyeline": "两人沿画左下到画右上的斜轴互相看向对方，断刀和尸骸构成中间轴线。",
+      "gaze_target": "姜月初和裴长青隔着断刀互相对视",
+      "eyeline_direction": "姜月初看画左下；裴长青看画右上",
+      "character_integrity": "姜月初继承 CHAR_JYC 的脸、眼、发和囚服状态；裴长青继承苍白脸、束发、黑衣赤纹和重伤身体；两人的手脚、身体轮廓、断刀道具和地面接触点都要完整可读。",
+      "spatial_relationships": "裴长青画左低位半跪，姜月初画右中景站立；断刀/尸骸在两人之间，不遮脸，只分隔对峙距离。",
       "dialogue": [
         {
           "speaker": "裴长青",
@@ -151,6 +249,14 @@
         "裴长青"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初在画左/近景承重，裴长青高大身体压在她肩上，两人沿南向逃离线向画右深处踉跄。",
+      "lighting_anchor": "冷白雾光从逃离方向反打两人轮廓，肩部接触点和拖地血痕有局部高光。",
+      "axis_eyeline": "两人视线和身体动势都被迫转向南向逃离路径，背后虎妖尸身仍在画面后方压迫。",
+      "gaze_target": "南向逃离路径和裴长青压在肩上的身体重量",
+      "eyeline_direction": "画右深处",
+      "character_integrity": "姜月初的脸、眼、发、双手、肩背和脚步必须可读；裴长青的脸、眼、束发、黑衣赤纹、右臂搭肩、双腿拖地和身体重量接触点必须明确，禁止身体融合或多手。",
+      "spatial_relationships": "姜月初在前景低位托住裴长青，裴长青身体斜压在她肩上；右臂搭肩、双脚拖地，血痕从两人脚后延续。",
       "dialogue": [
         {
           "speaker": "姜月初",
@@ -181,6 +287,14 @@
         "虎妖"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初和裴长青背对画面停在前中景，虎妖尸体在后景巨岩旁开始抬起，三者形成前低后高压迫层级。",
+      "lighting_anchor": "背后虎妖区域压暗，冷白雾光从巨岩边缘勾出复起轮廓，两人侧脸只留惊停高光。",
+      "axis_eyeline": "两人的头和视线同时转向画面后方的虎妖声源，虎妖的压迫线从后景落向两人背影。",
+      "gaze_target": "身后虎妖复起的异响位置",
+      "eyeline_direction": "画面后方巨岩旁",
+      "character_integrity": "姜月初侧脸、眼型、黑发和囚服轮廓必须继承；裴长青苍白侧脸、束发、黑衣赤纹和重伤身体必须继承；虎妖虎脸、躯干、手脚和黑血洞保持连续可辨。",
+      "spatial_relationships": "姜月初与裴长青在前中景互相搀扶，虎妖在后景高位抬起；两人背影不遮掉虎妖头部和胸口黑洞。",
       "dialogue": [
         {
           "speaker": "虎妖",
@@ -209,6 +323,14 @@
         "虎妖"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "虎妖从巨岩旁站起占画面上方三分之二，姜月初和裴长青在下方低位显得很小。",
+      "lighting_anchor": "强冷白逆光从虎妖背后切出巨大黑影和胸口黑血洞，两名人物下方保持暗部轮廓。",
+      "axis_eyeline": "虎妖从画面上方俯压看向下方二人，二人从低位仰向虎妖，正反压迫轴线明确。",
+      "gaze_target": "地面下方的姜月初和裴长青",
+      "eyeline_direction": "虎妖向画面下方俯视；两人向画面上方仰看",
+      "character_integrity": "虎妖虎脸、眼、虎纹、人身躯干、手脚和胸前黑血洞必须完整；姜月初与裴长青虽小但脸/眼/发型、服装主色、身体轮廓和站位关系不可串脸或缺肢。",
+      "spatial_relationships": "虎妖高位巨物压住画面上部，姜月初和裴长青在下方低位并列/搀扶；高度差和距离不可反转。",
       "dialogue": [
         {
           "speaker": "虎妖",
@@ -238,6 +360,14 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "裴长青从低位斜扑向虎妖，虎妖腿脚从高位踢出，姜月初在前景或侧边小身影目击。",
+      "lighting_anchor": "冷白雾光沿动作对角线形成速度线高光，踢击接触点和脱手横刀留清楚反光。",
+      "axis_eyeline": "动作轴线从画左下裴长青扑击到画右上虎妖，再被虎妖一脚反打回画面下方。",
+      "gaze_target": "虎妖踢击裴长青的接触点和脱手横刀",
+      "eyeline_direction": "沿动作对角线从画左下到画右上再折回画下",
+      "character_integrity": "裴长青的脸、眼、束发、黑衣赤纹、挥刀手和被踢身体必须清楚；虎妖虎脸、腿脚、手臂和身体不可画成多手多脚；姜月初的小身影保留黑发/囚服轮廓。",
+      "spatial_relationships": "裴长青在中低位扑向高位虎妖，虎妖脚踢接触裴长青身体，横刀从裴长青手中脱落；姜月初不挡动作接触点。",
       "dialogue": [
         {
           "speaker": "裴长青",
@@ -266,6 +396,14 @@
         "虎妖"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "裴长青砸在姜月初脚边，横刀落在近旁，虎妖阴影从画面上方或后方压过来。",
+      "lighting_anchor": "姜月初脚边和横刀有冷白边缘光，虎妖阴影压暗上半画面，保留裴长青苍白脸的微弱反光。",
+      "axis_eyeline": "姜月初从高位低头看裴长青和横刀，虎妖压迫线从画面上方落向二人。",
+      "gaze_target": "脚边的裴长青和横刀",
+      "eyeline_direction": "画面下方近景",
+      "character_integrity": "姜月初的脸、眼、黑发、手脚和低头姿态必须可读；裴长青苍白脸、眼、束发、黑衣赤纹、身体倒地状态和横刀道具完整，虎妖虎脸/身体阴影保持压迫轮廓。",
+      "spatial_relationships": "姜月初站在上方/近侧，裴长青倒在她脚边，横刀在两人之间，虎妖阴影从后上方覆盖但不遮掉横刀。",
       "dialogue": [
         {
           "speaker": "虎妖",
@@ -291,6 +429,13 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "百妖谱卷轴在姜月初面前展开，卷轴和金色光点处于前景，姜月初正脸位于光后方，荒野退成暗背景。",
+      "lighting_anchor": "本格允许系统金光作为局部动机光，从卷轴正面打亮姜月初脸、眼和瞳孔；环境仍保留冷白荒野雾光。",
+      "axis_eyeline": "姜月初的视线从虎妖压迫转到眼前卷轴，卷轴光成为新的视觉中心。",
+      "gaze_target": "眼前展开的百妖谱卷轴和金色光点",
+      "eyeline_direction": "画面正前近景的卷轴位置",
+      "character_integrity": "姜月初正脸必须严格继承 CHAR_JYC 的脸型、眼型/眼距、发际线、黑长发和冷白肤色；双手/肩颈/身体轮廓和卷轴道具关系完整，系统金光不得改脸或换发型。",
       "dialogue": [],
       "narration": "百妖谱。",
       "sfx": [],
@@ -308,6 +453,14 @@
         "裴长青"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初半脸特写占画面一侧，裴长青倒在脚边虚焦区域，虎妖阴影仍从远处压入构图。",
+      "lighting_anchor": "冷白光切出姜月初半张脸，系统金光余辉只保留极弱眼部反射，裴长青处于冷灰暗部。",
+      "axis_eyeline": "姜月初的视线从虎妖位置下移到脚边裴长青和横刀，心理轴线从外部威胁转为取舍。",
+      "gaze_target": "脚边的裴长青和横刀",
+      "eyeline_direction": "画面下方近景",
+      "character_integrity": "姜月初半脸必须继承 CHAR_JYC 的脸、眼、发际线和黑发轮廓；裴长青的脸、眼、束发、黑衣赤纹和倒地身体在虚焦中仍可辨，手脚和横刀位置不可丢失。",
+      "spatial_relationships": "姜月初在近景高位，裴长青倒在她脚边虚焦，虎妖只作为后方压迫阴影；视线和遮挡都指向裴长青。",
       "dialogue": [],
       "narration": "荒野之上，除了那头杀不死的虎妖，唯一还活着的生物……",
       "sfx": [],
@@ -325,6 +478,13 @@
         "姜月初"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "低位近景聚焦姜月初俯身的手、刀柄和垂落黑发，裴长青身体位置在画外近旁承接 P014。",
+      "lighting_anchor": "冷白雾光沿刀柄、手腕和发丝边缘打亮，脸部大半落暗以保留选择前的压抑。",
+      "axis_eyeline": "姜月初的头和视线压向手中的横刀，动作轴线从画上方俯身落到画下方刀柄。",
+      "gaze_target": "手中的横刀刀柄",
+      "eyeline_direction": "画面下方近景",
+      "character_integrity": "本格可让姜月初的脸/眼部分被长发遮住，但脸型、发际线和黑发轮廓不能变；手腕、手指、身体俯身姿态、刀柄、刀刃和接触点必须完整可读，禁止多手或刀柄融合。",
       "dialogue": [],
       "narration": "这是她唯一的生机。",
       "sfx": [],
@@ -343,6 +503,14 @@
         "裴长青"
       ],
       "location": "LOC_WASTELAND",
+      "scene_anchor_id": "LOC_WASTELAND",
+      "spatial_layout": "姜月初在近景上方压低身体，裴长青胸口和衣料在下方/前景遮挡刀入肉细节，横刀命中点处于两人之间。",
+      "lighting_anchor": "冷白光切出姜月初脸颊血点和发丝，命中点用黑影和衣料遮挡；底部黑场保留结尾压暗。",
+      "axis_eyeline": "姜月初的视线落向裴长青胸口横刀命中点，裴长青处于失力下方，二人轴线从 P014 的取舍收束到命中点。",
+      "gaze_target": "裴长青胸口的横刀命中点",
+      "eyeline_direction": "画面下方近景",
+      "character_integrity": "姜月初的脸、眼、发际线、黑长发、手臂和身体压低姿态必须继承 CHAR_JYC；裴长青脸、眼、黑衣赤纹、胸口衣料、手脚和身体位置保持可读，横刀刀柄/刀身/命中点完整但血腥细节遮挡。",
+      "spatial_relationships": "姜月初在近景上方俯身持刀，裴长青在下方受击；刀位于两人身体之间，衣料遮挡血腥，不遮姜月初脸和关键手部。",
       "dialogue": [
         {
           "speaker": "姜月初",

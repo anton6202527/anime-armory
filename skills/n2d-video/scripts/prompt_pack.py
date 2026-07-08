@@ -10,6 +10,8 @@ deterministic prompt pack that the video preflight gate can inspect.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -17,6 +19,8 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 KIND = "n2d_video_prompt_pack"
+CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
+CONSUMED_CONTRACTS_VERSION = 1
 INNER_FOCUS_RE = re.compile(
     r"内心戏|内心独白|心声|心理反应|心理活动|心念|心想|暗想|自省|心里一沉|心里想|"
     r"inner monologue|internal monologue|thought beat|subjective reaction",
@@ -74,6 +78,25 @@ def write_atomic(path: Path, text: str) -> None:
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(text, encoding="utf-8")
     os.replace(tmp, path)
+
+
+def write_json_atomic(path: Path, data: Mapping[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def now_iso() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
 
 
 def one_line(value: Any, default: str = "无") -> str:
@@ -290,6 +313,38 @@ def contract_clip_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
         if isinstance(row, Mapping):
             out[clip_id(row.get("clip_id"), idx)] = row
     return out
+
+
+def shot_reverse_contract_map(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "脚本" / ep / "shot_reverse_contract.json")
+    rows = data.get("patterns") if isinstance(data, Mapping) else []
+    out: Dict[str, Mapping[str, Any]] = {}
+    for idx, row in enumerate(rows or [], 1):
+        if not isinstance(row, Mapping):
+            continue
+        raw = str(row.get("clip_id") or "").strip()
+        if raw:
+            out[raw] = row
+            out[clip_id(raw, idx)] = row
+    return out
+
+
+def shot_reverse_video_line(pattern: Mapping[str, Any]) -> str:
+    participants = pattern.get("participants") if isinstance(pattern.get("participants"), Mapping) else {}
+    a = participants.get("A") if isinstance(participants.get("A"), Mapping) else {}
+    b = participants.get("B") if isinstance(participants.get("B"), Mapping) else {}
+    sides = pattern.get("screen_sides") if isinstance(pattern.get("screen_sides"), Mapping) else {}
+    coverage = pattern.get("coverage") if isinstance(pattern.get("coverage"), Mapping) else {}
+    return "；".join([
+        f"axis_id={one_line(pattern.get('axis_id'))}",
+        f"A={one_line(a.get('character_id'))}，位置={one_line(a.get('screen_position'))}，视线={one_line(a.get('eyeline_direction'))}",
+        f"B={one_line(b.get('character_id'))}，位置={one_line(b.get('screen_position'))}，视线={one_line(b.get('eyeline_direction'))}",
+        f"站位模式={one_line(sides.get('spatial_mode'))}，A/B 不互换",
+        f"OTS 前景肩部={one_line(coverage.get('a_ots'))} / {one_line(coverage.get('b_ots'))}",
+        f"coverage={one_line(pattern.get('camera_coverage'))}",
+        f"镜头匹配={one_line(pattern.get('lens_height_distance_match'))}",
+        f"越轴策略={one_line(pattern.get('crossing_axis_policy'))}；缓冲镜={one_line(pattern.get('buffer_or_reestablishing'))}",
+    ])
 
 
 def contract_retention_lines(root: Path, ep: str) -> List[str]:
@@ -691,6 +746,7 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
 def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: Mapping[str, Any],
                 forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
                 contract_rows: Mapping[str, Mapping[str, Any]],
+                shot_reverse_rows: Mapping[str, Mapping[str, Any]],
                 incoming_seam: Optional[Mapping[str, Any]] = None,
                 outgoing_seam: Optional[Mapping[str, Any]] = None) -> str:
     cid = clip_id(clip.get("id"), idx)
@@ -724,6 +780,8 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"native_audio_policy={one_line(route.get('native_audio_policy'), 'none')}; "
         f"identity_requirement={one_line(route.get('identity_requirement'))}; degrade_plan={fallback}"
     )
+    shot_reverse_pattern = shot_reverse_rows.get(raw_id) or shot_reverse_rows.get(cid) or {}
+    shot_reverse_line = shot_reverse_video_line(shot_reverse_pattern) if isinstance(shot_reverse_pattern, Mapping) and shot_reverse_pattern else ""
     recipe = route.get("execution_recipe") if isinstance(route.get("execution_recipe"), Mapping) else {}
     assets = ", ".join([x for x in [location] + objects if x])
     asset_ids = [x for x in [location] + objects if x]
@@ -772,6 +830,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**起幅**：{start}",
         f"**落幅**：{end}",
         f"**场面调度**：{one_line(lenses, '按 storyboard 镜头链')}；角色={one_line(chars, '无')}；资产={assets or '无'}；轴线/视线={one_line(cont.get('eyeline'), '按出图总览')}",
+        f"**正反打视频合同**：{shot_reverse_line}" if shot_reverse_line else "**正反打视频合同**：本镜未登记 shot_reverse_contract；若临场改成反打/过肩，先回 n2d-script 生成合同。",
         f"**内心戏主体隔离**：{inner_focus or '非内心戏/按 entity_schedule 在场链执行'}",
         f"**表演节拍**：[0-30%] 承接首帧并建立状态；[30-75%] {action}；[75-100%] 停到落幅，给下一镜接点。",
         "**运动精修**：物理层锁定；动作只服务本镜导演意图。",
@@ -819,6 +878,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"起幅：{start};",
         f"落幅：{end};",
         f"场面调度：{one_line(lenses, '按 storyboard 镜头链')}；角色槽位={one_line(chars, '无')}；资产ID={assets or '无'}；",
+        f"正反打/对峙合同约束：{shot_reverse_line or '不适用；若改成反打，必须先补 shot_reverse_contract。'}；",
         f"内心戏主体隔离：{inner_focus or '非内心戏/按在场链执行'}；",
         f"表演节拍：[0-30%] 承接首帧；[30-75%] {action}；[75-100%] {end};",
         f"运动精修约束：幅度={amp}；能量={energy}；身体守卫=脸型五官比例发型发髻服装轮廓保持，手部归属清楚，遮挡不穿模；",
@@ -896,6 +956,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
 def render_clips(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping[str, Mapping[str, Any]],
                  forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
                  contract_rows: Mapping[str, Mapping[str, Any]],
+                 shot_reverse_rows: Mapping[str, Mapping[str, Any]],
                  chain: Mapping[str, Any]) -> str:
     clips = [c for c in sb.get("clips") or [] if isinstance(c, Mapping)]
     incoming_map, outgoing_map = continuity_chain_maps(chain)
@@ -914,6 +975,7 @@ def render_clips(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping
             forms,
             mouths,
             contract_rows,
+            shot_reverse_rows,
             incoming_map.get(cid),
             outgoing_map.get(cid),
         ))
@@ -927,12 +989,13 @@ def build(root: Path, ep: str) -> Tuple[str, str]:
     forms = identity_forms(root)
     mouths = mouth_map(root, ep)
     contract_rows = contract_clip_map(root, ep)
+    shot_reverse_rows = shot_reverse_contract_map(root, ep)
     chain = continuity_chain(root, ep)
     image_overview_path = root / "出图" / ep / "prompt" / "00_总览.md"
     image_overview = image_overview_path.read_text(encoding="utf-8") if image_overview_path.is_file() else ""
     return (
         render_overview(root, ep, sb, route_rows, image_overview, forms, mouths),
-        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows, chain),
+        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows, shot_reverse_rows, chain),
     )
 
 
@@ -943,6 +1006,51 @@ def write_outputs(root: Path, ep: str, overview: str, clips: str) -> Tuple[Path,
     write_atomic(p0, overview.rstrip() + "\n")
     write_atomic(p1, clips.rstrip() + "\n")
     return p0, p1
+
+
+def consumed_contract_inputs(ep: str) -> List[Tuple[str, Path]]:
+    return [
+        ("storyboard", Path("脚本") / ep / "storyboard.json"),
+        ("continuity_chain", Path("脚本") / ep / "continuity_chain.json"),
+        ("shot_reverse_contract", Path("脚本") / ep / "shot_reverse_contract.json"),
+        ("script_quality_contract", Path("生产数据") / f"script_quality_contract_{ep}.json"),
+        ("director_camera_plan", Path("生产数据") / f"director_camera_plan_{ep}.json"),
+        ("reference_plan", Path("生产数据") / f"reference_plan_{ep}.json"),
+    ]
+
+
+def write_consumed_contracts_receipt(root: Path, ep: str, prompt_paths: Sequence[Path]) -> Path:
+    contracts: List[Dict[str, Any]] = []
+    for name, rel in consumed_contract_inputs(ep):
+        path = root / rel
+        contracts.append({
+            "name": name,
+            "path": str(rel),
+            "exists": path.is_file(),
+            "sha256": sha256_file(path) if path.is_file() else "",
+        })
+    prompt_files: List[Dict[str, Any]] = []
+    for path in prompt_paths:
+        rel = path.relative_to(root)
+        prompt_files.append({
+            "path": str(rel),
+            "exists": path.is_file(),
+            "sha256": sha256_file(path) if path.is_file() else "",
+        })
+    out = root / "生产数据" / f"consumed_contracts_video_prompt_{ep}.json"
+    write_json_atomic(out, {
+        "kind": CONSUMED_CONTRACTS_KIND,
+        "version": CONSUMED_CONTRACTS_VERSION,
+        "episode": ep,
+        "scope": "video_prompt",
+        "accepted": True,
+        "reviewer": "Codex n2d-video prompt pack",
+        "generated_by": "skills/n2d-video/scripts/prompt_pack.py",
+        "generated_at": now_iso(),
+        "contracts": contracts,
+        "prompt_files": prompt_files,
+    })
+    return out
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -957,11 +1065,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     overview, clips = build(root, ep)
     if ns.write:
         p0, p1 = write_outputs(root, ep, overview, clips)
+        receipt = write_consumed_contracts_receipt(root, ep, (p0, p1))
         if ns.json:
-            print(json.dumps({"overview": str(p0), "clips": str(p1)}, ensure_ascii=False, indent=2))
+            print(json.dumps({"overview": str(p0), "clips": str(p1), "receipt": str(receipt)}, ensure_ascii=False, indent=2))
         else:
             print(f"wrote {p0}")
             print(f"wrote {p1}")
+            print(f"wrote {receipt}")
     else:
         print(overview)
         print("\n--- 01_clips.md ---\n")

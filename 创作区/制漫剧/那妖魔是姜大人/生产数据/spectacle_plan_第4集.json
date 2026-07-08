@@ -272,5 +272,9 @@
     "spectacle_clips": 2,
     "contract_missing_clips": 0,
     "motion_control_required_clips": 2
-  }
+  },
+  "written_motion_control_manifests": [
+    "创作区/制漫剧/那妖魔是姜大人/出视频/第4集/control/Clip_03/motion_control_manifest.json",
+    "创作区/制漫剧/那妖魔是姜大人/出视频/第4集/control/Clip_11/motion_control_manifest.json"
+  ]
 }

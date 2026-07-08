@@ -27,7 +27,10 @@
         "font": "project_default",
         "size": 44,
         "direction": "horizontal",
-        "bubble": "round"
+        "bubble": "round",
+        "drawn_lettering_mode": "post_lettering_sfx",
+        "integration": "",
+        "shape": ""
       }
     }
   ]
@@ -49,5 +52,6 @@
 - `lang` / `dir` / `script` / `line_break` 是每条最终嵌字文本的语言、方向和断行元数据。RTL 或 `line_break=dictionary_required` 的文字不得用当前 Pillow 草稿 renderer 静默渲染，必须换专业排版 renderer 或人工嵌字。
 - 空字符串不应生成最终气泡；导出脚本会跳过无文字 item 和未使用的 `bubble_slots`。
 - `dialogue` / `narration` 的最终容器由 `comic-compose` 绘制；不要在图像阶段烘焙空白气泡，也不要在不规则气泡内部再加矩形文字框。
+- `sfx` 可以带 `style.drawn_lettering_mode`、`integration`、`shape`，从 `finishing_plan.json` 的 `lettering_sfx_plan` 继承。`drawn_sfx` 表示拟声词可作为传统漫画画面节奏元素处理；但对白、旁白和系统正文仍应后期嵌字，不应烘焙进 raw panel。
 
 正式发布前必须确认字体授权。MVP 可先用系统字体做草稿，但应在 manifest 或审查报告里标明 `font_status`。

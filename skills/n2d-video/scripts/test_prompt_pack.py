@@ -98,6 +98,8 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
             "audience_effect": "观众追问她怎么活。",
         }]}
     })
+    _write_json(root / "生产数据" / f"director_camera_plan_{ep}.json", {"kind": "n2d_director_camera_plan"})
+    _write_json(root / "生产数据" / f"reference_plan_{ep}.json", {"kind": "n2d_reference_plan"})
     _write_json(root / "脚本" / ep / "continuity_chain.json", {
         "kind": "n2d_continuity_chain",
         "version": 1,
@@ -121,6 +123,26 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
             "severity": "pass",
         }],
     })
+    _write_json(root / "脚本" / ep / "shot_reverse_contract.json", {
+        "kind": "n2d_shot_reverse_contract",
+        "patterns": [{
+            "clip_id": "EP01_CLIP01",
+            "axis_id": "AXIS_LOC_01_CHAR_01_VS_CHAR_02",
+            "participants": {
+                "A": {"character_id": "CHAR_01", "screen_position": "画左前景", "eyeline_direction": "看画右，不看镜头"},
+                "B": {"character_id": "CHAR_02", "screen_position": "画右中景", "eyeline_direction": "看画左，不看镜头"},
+            },
+            "screen_sides": {"spatial_mode": "left_right"},
+            "coverage": {
+                "a_ots": "焦点 CHAR_01；CHAR_02 的前景肩部虚化",
+                "b_ots": "焦点 CHAR_02；CHAR_01 的前景肩部虚化",
+            },
+            "camera_coverage": "clean single + OTS + insert",
+            "lens_height_distance_match": "50-85mm 中长焦，相近高度和距离",
+            "crossing_axis_policy": "禁止越轴；需要建立镜缓冲",
+            "buffer_or_reestablishing": "荒野道具插入或双人建立镜",
+        }],
+    })
 
     overview, clips = prompt_pack.build(root, ep)
 
@@ -136,8 +158,22 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "原生音画策略" in clips and "mouth_visible=yes" in clips
     assert "接缝执行包 / Handoff Package" in clips
     assert "连续性链路 / Continuity Chain" in clips
+    assert "正反打视频合同" in clips
+    assert "AXIS_LOC_01_CHAR_01_VS_CHAR_02" in clips
     assert "第0集/Clip_09→第1集/Clip_01" in clips
     assert "boundary_frame=出图/第0集/图片/Clip_09_end.png" in clips
+
+    p0, p1 = prompt_pack.write_outputs(root, ep, overview, clips)
+    receipt = prompt_pack.write_consumed_contracts_receipt(root, ep, (p0, p1))
+    data = json.loads(receipt.read_text(encoding="utf-8"))
+    assert data["kind"] == "n2d_prompt_consumed_contracts"
+    assert data["scope"] == "video_prompt"
+    assert {row["name"] for row in data["contracts"]} >= {"storyboard", "continuity_chain", "shot_reverse_contract", "script_quality_contract"}
+    continuity = next(row for row in data["contracts"] if row["name"] == "continuity_chain")
+    assert continuity["exists"] is True and continuity["sha256"]
+    shot_reverse = next(row for row in data["contracts"] if row["name"] == "shot_reverse_contract")
+    assert shot_reverse["exists"] is True and shot_reverse["sha256"]
+    assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])
     assert "执行配方 / Execution Recipe" in clips
     assert "执行配方约束" in clips
     assert "frame_inputs=" in clips and "reference_inputs=" in clips and "anchor_consumption=" in clips

@@ -1,12 +1,12 @@
 {
   "kind": "n2d_identity_voice_drift_report",
   "version": 1,
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "generated_at": "2026-07-08T09:21:41+00:00",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "generated_at": "2026-07-08T14:56:12+00:00",
   "episodes": [
     {
       "episode": "第1集",
-      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第1集/配音/时长清单.json",
+      "manifest": "合成/第1集/配音/时长清单.json",
       "status": "ok",
       "lines": 28,
       "characters": {
@@ -29,7 +29,7 @@
     },
     {
       "episode": "第2集",
-      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第2集/配音/时长清单.json",
+      "manifest": "合成/第2集/配音/时长清单.json",
       "status": "ok",
       "lines": 28,
       "characters": {
@@ -52,7 +52,7 @@
     },
     {
       "episode": "第3集",
-      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第3集/配音/时长清单.json",
+      "manifest": "合成/第3集/配音/时长清单.json",
       "status": "ok",
       "lines": 37,
       "characters": {
@@ -72,7 +72,7 @@
     },
     {
       "episode": "第4集",
-      "manifest": "创作区/制漫剧/那妖魔是姜大人/合成/第4集/配音/时长清单.json",
+      "manifest": "合成/第4集/配音/时长清单.json",
       "status": "ok",
       "lines": 46,
       "characters": {
@@ -95,6 +95,26 @@
           "say:Tingting_placeholder"
         ],
         "青面郎君": [
+          "say:Tingting_placeholder"
+        ]
+      }
+    },
+    {
+      "episode": "第5集",
+      "manifest": "合成/第5集/配音/时长清单.json",
+      "status": "ok",
+      "lines": 28,
+      "characters": {
+        "旁白": [
+          "say:Tingting_placeholder"
+        ],
+        "青面郎君": [
+          "say:Tingting_placeholder"
+        ],
+        "姜月初": [
+          "say:Tingting_placeholder"
+        ],
+        "陈青源": [
           "say:Tingting_placeholder"
         ]
       }
@@ -306,15 +326,87 @@
         "镜头46"
       ],
       "scope": "第4集 角色「青面郎君」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "姜月初",
+      "episode": "第5集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 3,
+      "first_affected_line_idx": 10,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头11",
+        "镜头12",
+        "镜头26"
+      ],
+      "scope": "第5集 角色「姜月初」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "旁白",
+      "episode": "第5集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 21,
+      "first_affected_line_idx": 0,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头1",
+        "镜头2",
+        "镜头3",
+        "镜头4",
+        "镜头6",
+        "镜头7",
+        "镜头8",
+        "镜头9",
+        "镜头14",
+        "镜头15",
+        "镜头16",
+        "镜头17",
+        "镜头18",
+        "镜头19",
+        "镜头20",
+        "镜头21",
+        "镜头23",
+        "镜头24",
+        "镜头25",
+        "镜头27",
+        "镜头28"
+      ],
+      "scope": "第5集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "陈青源",
+      "episode": "第5集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 1,
+      "first_affected_line_idx": 21,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头22"
+      ],
+      "scope": "第5集 角色「陈青源」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
+    },
+    {
+      "character": "青面郎君",
+      "episode": "第5集",
+      "voice_key_used": "say:Tingting_placeholder",
+      "lines": 3,
+      "first_affected_line_idx": 4,
+      "return_to_stage": "voice",
+      "affected_shots": [
+        "镜头5",
+        "镜头10",
+        "镜头13"
+      ],
+      "scope": "第5集 角色「青面郎君」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成"
     }
   ],
   "summary": {
-    "episodes_total": 4,
-    "episodes_checked": 4,
+    "episodes_total": 5,
+    "episodes_checked": 5,
     "episodes_insufficient": 0,
     "drifts": 0,
     "voicemap_mismatches": 0,
-    "placeholder_revoice": 11
+    "placeholder_revoice": 15
   },
   "notes": [
     "voicemap.json 缺失或不可解析，跳过 voicemap 对账（n2d-voice 写 设定库/voicemap.json 后启用）"

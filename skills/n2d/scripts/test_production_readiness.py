@@ -26,6 +26,14 @@ def _release_ready_project(root: Path, episode: str) -> None:
     script_dir.mkdir(parents=True)
     (script_dir / "storyboard.json").write_text('{"kind":"storyboard","clips":[]}', encoding="utf-8")
     (script_dir / "字幕_中文.srt").write_text("1\n00:00:00,000 --> 00:00:01,000\n对白\n", encoding="utf-8")
+    (script_dir / "production_handoff_pack.json").write_text('{"kind":"n2d_production_handoff_pack","version":1,"status":"confirmed"}', encoding="utf-8")
+    (script_dir / "continuity_chain.json").write_text('{"kind":"n2d_continuity_chain","version":1,"status":"confirmed","summary":{"block":0}}', encoding="utf-8")
+    (script_dir / "continuity_bible.json").write_text('{"kind":"n2d_continuity_bible","version":1,"status":"confirmed"}', encoding="utf-8")
+    (script_dir / "ai_shooting_schedule.json").write_text('{"kind":"n2d_ai_shooting_schedule","version":1,"status":"confirmed"}', encoding="utf-8")
+    (script_dir / "ai_call_sheet.md").write_text("status: confirmed\n# call sheet\n", encoding="utf-8")
+    style = root / "设定库" / "global_style.md"
+    style.parent.mkdir(parents=True, exist_ok=True)
+    style.write_text("status: confirmed\n", encoding="utf-8")
 
     compliance = production_readiness.release_manifest.compliance
     data = compliance.default_manifest(root, episode)
@@ -60,6 +68,7 @@ def _release_ready_project(root: Path, episode: str) -> None:
     (prod / f"budget_{episode}.json").write_text('{"kind":"n2d_budget_evidence","version":1,"status":"pass"}', encoding="utf-8")
     (prod / f"final_timeline_probe_{episode}.json").write_text('{"kind":"n2d_final_timeline_probe","version":1,"status":"pass","segments":[]}', encoding="utf-8")
     (prod / f"video_qc_{episode}.json").write_text('{"kind":"n2d_video_qc","version":1,"status":"pass"}', encoding="utf-8")
+    (prod / f"story_economy_audit_{episode}.json").write_text('{"kind":"n2d_story_economy_audit","version":1,"status":"pass","summary":{"blocks":0}}', encoding="utf-8")
     (prod / f"script_supervisor_log_{episode}.jsonl").write_text(
         json.dumps({
             "kind": "n2d_script_supervisor_log",
@@ -72,6 +81,7 @@ def _release_ready_project(root: Path, episode: str) -> None:
         }, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+    (prod / "identity_adapter_matrix.json").write_text('{"kind":"n2d_identity_adapter_matrix","version":1,"forms":[]}', encoding="utf-8")
     cap = prod / "image_backend_capabilities"
     cap.mkdir()
     (cap / "codex.json").write_text('{"kind":"n2d_backend_capability_evidence","version":1,"status":"fresh"}', encoding="utf-8")
@@ -103,6 +113,7 @@ def _release_ready_project(root: Path, episode: str) -> None:
     }, ensure_ascii=False), encoding="utf-8")
     (prod / f"review_ui_{episode}.json").write_text('{"kind":"n2d_review_ui","version":1,"status":"pass"}', encoding="utf-8")
     (prod / f"review_ui_findings_{episode}.json").write_text(json.dumps({"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []}, ensure_ascii=False), encoding="utf-8")
+    (prod / f"release_verdict_{episode}.json").write_text('{"kind":"n2d_release_verdict","version":1,"status":"internal-only"}', encoding="utf-8")
 
     def event(stage: str, asset_rel: str) -> dict:
         return {
@@ -167,9 +178,10 @@ def _release_ready_project(root: Path, episode: str) -> None:
     (prod / "creative_decisions.jsonl").write_text(json.dumps(decision, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def test_production_readiness_writes_unified_gate(tmp_path: Path) -> None:
+def test_production_readiness_writes_unified_gate(monkeypatch, tmp_path: Path) -> None:
     episode = "第1集"
     _release_ready_project(tmp_path, episode)
+    monkeypatch.setattr(production_readiness.freshness, "check_all", lambda: [])
 
     payload = production_readiness.build_readiness(tmp_path, episode, write=True, skip_next_action=True)
 

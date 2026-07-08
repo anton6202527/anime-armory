@@ -687,7 +687,7 @@ CONSISTENCY_RULE_REGISTRY: Dict[str, Dict[str, Any]] = {
         "source": "生产数据/skill_update_snapshot.json (n2d/_lib/skill_freshness.py)",
         "gate_function": "check_skill_freshness",
         "stages": ("image_prompt_preflight", "image_preflight", "video_prompt_preflight", "video_preflight"),
-        "tests": ("test_skill_freshness_warns_on_material_drift_before_spend",),
+        "tests": ("test_skill_freshness_blocks_on_material_drift_before_spend",),
     },
     "referenced_markers_resolve": {
         "dimension": "资产引用注册层",

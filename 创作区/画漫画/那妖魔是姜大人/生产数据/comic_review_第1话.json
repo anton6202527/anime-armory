@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "comic_review",
-  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-07T14:51:51",
+  "created_at": "2026-07-08T22:49:01",
   "verdict": "pass",
   "settings": {
     "定妆级别": "长线专门定妆",
@@ -23,11 +23,13 @@
   },
   "artifacts": {
     "panel_script": "脚本/第1话/panel_script.json",
+    "source_semantics": "脚本/第1话/source_semantics.json",
     "layout": "排版/第1话/layout.json",
     "lettering": "排版/第1话/lettering.json",
     "manifest": "排版/第1话/export_manifest.json",
     "identity_report": "生产数据/comic_identity_report_第1话.json",
     "style_report": "生产数据/comic_style_consistency_第1话.json",
+    "character_report": "生产数据/comic_character_consistency_第1话.json",
     "rendered": [
       {
         "path": "排版/第1话/长图/longstrip.webp",
@@ -156,6 +158,18 @@
       "info_count": 5
     }
   },
+  "character_consistency": {
+    "verdict": "pass",
+    "summary": {
+      "character_count": 2,
+      "panel_binding_count": 22,
+      "finding_count": 0,
+      "block_count": 0,
+      "warn_count": 0,
+      "info_count": 0
+    },
+    "contact_sheet": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg"
+  },
   "issues": [
     {
       "severity": "info",
@@ -224,11 +238,11 @@
   ],
   "notes": [
     "已刷新风格一致性报告：生产数据/comic_style_consistency_第1话.md",
+    "已刷新角色一致性报告：生产数据/comic_character_consistency_第1话.md",
     "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
     "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
     "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
     "已刷新 QA 长图预览：生产数据/qa_previews/第1话_longstrip_preview.webp",
     "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第1话.jpg"
-  ],
-  "progress_written": true
+  ]
 }

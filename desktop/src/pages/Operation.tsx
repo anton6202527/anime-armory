@@ -25,12 +25,18 @@ import {
 import type { AgentInfo, CanvasData, LineInfo, WorkChangeSummary, WorkRoot } from "../types";
 import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
-import { KanbanPane } from "../components/KanbanPane";
-import { EpisodeWorkspacePane } from "../components/EpisodeWorkspacePane";
-import { QualityInsightsPane } from "../components/QualityInsightsPane";
-import { SkillsBrowser } from "../components/SkillsBrowser";
 import { Codicon } from "../components/Codicon";
 import { useI18n, useLineLabel } from "../i18n";
+import {
+  COLLAPSE_LEFT_SIDEBAR_EVENT,
+  FILES_SIDE_COLLAPSE_WIDTH,
+  FILES_SIDE_WIDTH_CHANGED_EVENT,
+  clampFilesSideWidth,
+  commitFilesSideWidth,
+  draftFilesSideWidth,
+  readCurrentFilesSideWidth,
+  readStoredFilesSideWidth,
+} from "../paneLayout";
 
 const FilesPane = lazy(() =>
   import("../components/FilesPane").then((mod) => ({ default: mod.FilesPane })),
@@ -48,23 +54,34 @@ const SearchPane = lazy(() =>
   import("../components/SearchPane").then((mod) => ({ default: mod.SearchPane })),
 );
 
-const OP_RIGHT_MIN_WIDTH = 300;
+const KanbanPane = lazy(() =>
+  import("../components/KanbanPane").then((mod) => ({ default: mod.KanbanPane })),
+);
+
+const EpisodeWorkspacePane = lazy(() =>
+  import("../components/EpisodeWorkspacePane").then((mod) => ({ default: mod.EpisodeWorkspacePane })),
+);
+
+const QualityInsightsPane = lazy(() =>
+  import("../components/QualityInsightsPane").then((mod) => ({ default: mod.QualityInsightsPane })),
+);
+
+const SkillsBrowser = lazy(() =>
+  import("../components/SkillsBrowser").then((mod) => ({ default: mod.SkillsBrowser })),
+);
+
+const OP_RIGHT_MIN_WIDTH = 72;
 const OP_RIGHT_MAX_WIDTH = 340;
-const OP_BOTTOM_MIN_HEIGHT = 180;
+const OP_BOTTOM_MIN_HEIGHT = 82;
 const OP_BOTTOM_MAX_HEIGHT = 440;
 const OP_LEFT_RAIL_WIDTH = 48;
-const FILES_SIDE_DEFAULT_WIDTH = 280;
+const TERMINAL_SIDE_COLLAPSE_WIDTH = 56;
+const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = 48;
 type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
 type TerminalDock = "side" | "bottom";
 
 function isMacPlatform(): boolean {
   return /Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
-}
-
-function readFilesSideWidth(): number {
-  const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
-  if (!Number.isFinite(saved) || saved <= 0) return FILES_SIDE_DEFAULT_WIDTH;
-  return saved;
 }
 
 export function Operation(props: {
@@ -135,24 +152,23 @@ export function Operation(props: {
     if (!Number.isFinite(saved) || saved <= 0) return null;
     return Math.min(OP_BOTTOM_MAX_HEIGHT, Math.max(OP_BOTTOM_MIN_HEIGHT, saved));
   });
-  const [filesSideWidth, setFilesSideWidth] = useState(readFilesSideWidth);
+  const [filesSideWidth, setFilesSideWidth] = useState(readStoredFilesSideWidth);
   const [terminalDock, setTerminalDock] = useState<TerminalDock>(() => {
     return window.localStorage.getItem("aa.op.terminalDock") === "bottom" ? "bottom" : "side";
   });
 
   function clampRightWidth(width: number, total: number): number {
     const minLeft = Math.min(420, Math.max(260, total * 0.35));
-    const availableMax = Math.max(OP_RIGHT_MIN_WIDTH, total - minLeft);
+    const availableMax = Math.max(0, total - minLeft);
     const maxRight = Math.min(OP_RIGHT_MAX_WIDTH, availableMax);
     return Math.min(maxRight, Math.max(OP_RIGHT_MIN_WIDTH, width));
   }
 
   function clampBottomHeight(height: number, total: number): number {
-    const minBottom = Math.min(OP_BOTTOM_MIN_HEIGHT, Math.max(120, total * 0.28));
     const minTop = Math.min(360, Math.max(180, total * 0.35));
-    const availableMax = Math.max(minBottom, total - minTop);
+    const availableMax = Math.max(0, total - minTop);
     const maxBottom = Math.min(OP_BOTTOM_MAX_HEIGHT, availableMax);
-    return Math.min(maxBottom, Math.max(minBottom, height));
+    return Math.min(maxBottom, Math.max(OP_BOTTOM_MIN_HEIGHT, height));
   }
 
   function showToast(message: string) {
@@ -173,6 +189,7 @@ export function Operation(props: {
     setTab(nextTab);
     setSidePanelOpen(true);
     setLeftCollapsed(false);
+    setFilesSideWidth(readStoredFilesSideWidth());
   }
 
   function openWorkFile(path: string) {
@@ -306,6 +323,15 @@ export function Operation(props: {
   }, [terminalVisible]);
 
   useEffect(() => {
+    const collapseLeftSidebar = () => {
+      setSidePanelOpen(false);
+      setLeftCollapsed(false);
+    };
+    window.addEventListener(COLLAPSE_LEFT_SIDEBAR_EVENT, collapseLeftSidebar);
+    return () => window.removeEventListener(COLLAPSE_LEFT_SIDEBAR_EVENT, collapseLeftSidebar);
+  }, []);
+
+  useEffect(() => {
     if (
       !active ||
       !terminalVisible ||
@@ -319,13 +345,13 @@ export function Operation(props: {
   }, [active, terminalVisible, newTerminalRequestSeq, newTerminalRequestTargetId, root.path]);
 
   useEffect(() => {
-    const syncFilesSideWidth = () => setFilesSideWidth(readFilesSideWidth());
-    syncFilesSideWidth();
-    window.addEventListener("anime-armory:files-side-width-changed", syncFilesSideWidth);
+    setFilesSideWidth(readStoredFilesSideWidth());
+    const syncFilesSideWidth = () => setFilesSideWidth(readCurrentFilesSideWidth());
+    window.addEventListener(FILES_SIDE_WIDTH_CHANGED_EVENT, syncFilesSideWidth);
     window.addEventListener("resize", syncFilesSideWidth);
     window.addEventListener("storage", syncFilesSideWidth);
     return () => {
-      window.removeEventListener("anime-armory:files-side-width-changed", syncFilesSideWidth);
+      window.removeEventListener(FILES_SIDE_WIDTH_CHANGED_EVENT, syncFilesSideWidth);
       window.removeEventListener("resize", syncFilesSideWidth);
       window.removeEventListener("storage", syncFilesSideWidth);
     };
@@ -365,7 +391,7 @@ export function Operation(props: {
   }, [root.path]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || !secondaryReady) return;
     let alive = true;
     const epoch = ++changeSummaryEpochRef.current;
     workChangeSummary(root.path)
@@ -378,7 +404,7 @@ export function Operation(props: {
     return () => {
       alive = false;
     };
-  }, [active, root.path, changeScanKey, baselineVersion]);
+  }, [active, secondaryReady, root.path, changeScanKey, baselineVersion]);
 
   // load canvas data for the current episode (also re-runs on fs change)
   useEffect(() => {
@@ -404,7 +430,7 @@ export function Operation(props: {
   }, [active, secondaryReady, shouldReadCanvas, root.path]);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || !secondaryReady) return;
     const onKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase();
       const cmd = event.metaKey || event.ctrlKey;
@@ -472,7 +498,7 @@ export function Operation(props: {
   // or external processes that can be missed on a few platforms. This keeps the
   // file tree, canvas, kanban, and next-action strip converging automatically.
   useEffect(() => {
-    if (!active) return;
+    if (!active || !secondaryReady) return;
     let alive = true;
     let inFlight = false;
     let initialTimer: number | null = null;
@@ -560,17 +586,24 @@ export function Operation(props: {
     const body = bodyRef.current;
     if (!body) return;
     ev.preventDefault();
+    const splitter = ev.currentTarget;
     const rect = body.getBoundingClientRect();
     const resizingClass = terminalDock === "bottom" ? "resizing-op-terminal-bottom" : "resizing-op-terminal-side";
     document.body.classList.add(resizingClass);
+    splitter.classList.add("resizing");
+    let latestSize = terminalDock === "bottom"
+      ? (bottomHeight ?? rect.height * 0.34)
+      : (rightWidth ?? Math.min(OP_RIGHT_MAX_WIDTH, rect.width * 0.42));
 
     const move = (e: PointerEvent) => {
       if (terminalDock === "bottom") {
         const next = clampBottomHeight(rect.bottom - e.clientY, rect.height);
+        latestSize = next;
         setBottomHeight(next);
         window.localStorage.setItem("aa.op.bottomHeight", String(Math.round(next)));
       } else {
         const next = clampRightWidth(rect.right - e.clientX, rect.width);
+        latestSize = next;
         setRightWidth(next);
         window.localStorage.setItem("aa.op.rightWidth", String(Math.round(next)));
       }
@@ -578,8 +611,58 @@ export function Operation(props: {
     };
     const up = () => {
       document.body.classList.remove(resizingClass);
+      splitter.classList.remove("resizing");
       document.removeEventListener("pointermove", move);
       document.removeEventListener("pointerup", up);
+      if (terminalDock === "bottom" && latestSize <= TERMINAL_BOTTOM_COLLAPSE_HEIGHT) {
+        setBottomHeight(null);
+        window.localStorage.removeItem("aa.op.bottomHeight");
+        onCloseTerminal();
+      } else if (terminalDock === "side" && latestSize <= TERMINAL_SIDE_COLLAPSE_WIDTH) {
+        setRightWidth(null);
+        window.localStorage.removeItem("aa.op.rightWidth");
+        onCloseTerminal();
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
+  }
+
+  function startCollapsedSidebarResize(ev: ReactPointerEvent<HTMLDivElement>) {
+    const left = ev.currentTarget.parentElement;
+    if (!left) return;
+    ev.preventDefault();
+    const splitter = ev.currentTarget;
+    const rect = left.getBoundingClientRect();
+    const available = Math.max(0, rect.width - OP_LEFT_RAIL_WIDTH);
+    document.body.classList.add("resizing-op-left-restore");
+    splitter.classList.add("resizing");
+    let latestWidth = 0;
+
+    const move = (e: PointerEvent) => {
+      const next = clampFilesSideWidth(e.clientX - rect.left - OP_LEFT_RAIL_WIDTH, available);
+      latestWidth = next;
+      if (next > FILES_SIDE_COLLAPSE_WIDTH) {
+        setSidePanelOpen(true);
+        setLeftCollapsed(false);
+        setFilesSideWidth(next);
+        draftFilesSideWidth(next);
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+    const up = () => {
+      document.body.classList.remove("resizing-op-left-restore");
+      splitter.classList.remove("resizing");
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      if (latestWidth <= FILES_SIDE_COLLAPSE_WIDTH) {
+        setSidePanelOpen(false);
+        commitFilesSideWidth(latestWidth);
+      } else {
+        const committed = commitFilesSideWidth(latestWidth);
+        if (committed != null) setFilesSideWidth(committed);
+      }
       window.dispatchEvent(new Event("resize"));
     };
     document.addEventListener("pointermove", move);
@@ -692,6 +775,25 @@ export function Operation(props: {
             </button>
             <button
               type="button"
+              className={
+                "rail-tab rail-change" +
+                (sidePanelOpen && tab === "changes" ? " active" : "") +
+                (changeCount ? " dirty" : "")
+              }
+              data-tooltip={`${shortcutTitle(t("operation.changesTab"), shortcut.changes)} · ${changeLabel}`}
+              data-tooltip-placement="right"
+              aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
+              onClick={() => openLeft("changes")}
+            >
+              <Codicon name="sourceControl" />
+              {changeSummary == null ? (
+                <span className="rail-badge loading">…</span>
+              ) : changeCount > 0 ? (
+                <span className="rail-badge">{changeCount > 99 ? "99+" : changeCount}</span>
+              ) : null}
+            </button>
+            <button
+              type="button"
               className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
               data-tooltip={shortcutTitle(t("operation.skillsTab"), shortcut.skills)}
               data-tooltip-placement="right"
@@ -734,26 +836,16 @@ export function Operation(props: {
             >
               <Codicon name="beaker" />
             </button>
-            <button
-              type="button"
-              className={
-                "rail-tab rail-change" +
-                (sidePanelOpen && tab === "changes" ? " active" : "") +
-                (changeCount ? " dirty" : "")
-              }
-              data-tooltip={`${shortcutTitle(t("operation.changesTab"), shortcut.changes)} · ${changeLabel}`}
-              data-tooltip-placement="right"
-              aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
-              onClick={() => openLeft("changes")}
-            >
-              <Codicon name="sourceControl" />
-              {changeSummary == null ? (
-                <span className="rail-badge loading">…</span>
-              ) : changeCount > 0 ? (
-                <span className="rail-badge">{changeCount > 99 ? "99+" : changeCount}</span>
-              ) : null}
-            </button>
           </div>
+          {!leftCollapsed && !sidePanelOpen && tabHasFileSizedSidebar && (
+            <div
+              className="op-left-restore-splitter"
+              role="separator"
+              aria-orientation="vertical"
+              aria-label={t("files.resizeAria")}
+              onPointerDown={startCollapsedSidebarResize}
+            />
+          )}
           {!leftCollapsed && (
             <div className="op-left-content">
               <div className="subtab-body">
@@ -813,7 +905,9 @@ export function Operation(props: {
                     )}
                     {sidePanelOpen && tab === "skills" && (
                       <div className="subtab-layer">
-                        <SkillsBrowser repoRoot={repoRoot} line={line} />
+                        <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                          <SkillsBrowser repoRoot={repoRoot} line={line} />
+                        </Suspense>
                       </div>
                     )}
                     {sidePanelOpen && tab === "review" && (
@@ -824,21 +918,25 @@ export function Operation(props: {
                           ) : !canvas ? (
                             <div className="stub-view">{t("common.loading")}</div>
                           ) : (
-                            <EpisodeWorkspacePane
-                              root={root}
-                              line={line.line}
-                              ep={ep}
-                              canvas={canvas}
-                              refreshKey={refreshKey}
-                            />
+                            <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                              <EpisodeWorkspacePane
+                                root={root}
+                                line={line.line}
+                                ep={ep}
+                                canvas={canvas}
+                                refreshKey={refreshKey}
+                              />
+                            </Suspense>
                           )
                         ) : (
-                          <QualityInsightsPane
-                            root={root}
-                            line={line.line}
-                            ep={null}
-                            refreshKey={refreshKey + baselineVersion}
-                          />
+                          <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                            <QualityInsightsPane
+                              root={root}
+                              line={line.line}
+                              ep={null}
+                              refreshKey={refreshKey + baselineVersion}
+                            />
+                          </Suspense>
                         )}
                       </div>
                     )}
@@ -849,7 +947,9 @@ export function Operation(props: {
                         ) : !canvas ? (
                           <div className="stub-view">{t("common.loading")}</div>
                         ) : tab === "kanban" ? (
-                          <KanbanPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
+                          <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
+                            <KanbanPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
+                          </Suspense>
                         ) : (
                           <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
                             <CanvasPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
@@ -917,7 +1017,6 @@ export function Operation(props: {
                 <button
                   type="button"
                   className="project-settings-btn terminal-close-btn"
-                  title={shortcutTitle(t("terminal.hidePanel"), shortcut.hidePanel)}
                   aria-label={t("terminal.hidePanel")}
                   onClick={onCloseTerminal}
                 >

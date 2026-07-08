@@ -63,9 +63,9 @@ type TerminalSessionHandle = {
 };
 
 let terminalSessionSeq = 0;
-const DEFAULT_RAIL_WIDTH = 128;
-const MIN_RAIL_WIDTH = 32;
-const COMPACT_RAIL_WIDTH = 46;
+const MIN_RAIL_WIDTH = 30;
+const COMPACT_RAIL_WIDTH = 54;
+const DEFAULT_RAIL_WIDTH = MIN_RAIL_WIDTH;
 const MAX_RAIL_WIDTH = 260;
 
 function terminalSessionId(): string {
@@ -411,9 +411,11 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
     const [activeId, setActiveId] = useState(() => sessions[0]?.id || "");
     const [placeholderClosed, setPlaceholderClosed] = useState(false);
     const [railWidth, setRailWidth] = useState(() => {
-      const saved = Number(window.localStorage.getItem("aa.terminalRailWidth"));
-      if (!Number.isFinite(saved) || saved <= 0) return DEFAULT_RAIL_WIDTH;
-      if (saved <= 44) return MIN_RAIL_WIDTH;
+      const raw = window.localStorage.getItem("aa.terminalRailWidth");
+      if (raw == null) return DEFAULT_RAIL_WIDTH;
+      const saved = Number(raw);
+      if (!Number.isFinite(saved) || saved < MIN_RAIL_WIDTH) return DEFAULT_RAIL_WIDTH;
+      if (saved <= 46) return MIN_RAIL_WIDTH;
       return Math.min(MAX_RAIL_WIDTH, Math.max(MIN_RAIL_WIDTH, saved));
     });
     const activeIdRef = useRef(activeId);
@@ -464,7 +466,9 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
 
     function startRailResize(ev: ReactPointerEvent<HTMLDivElement>) {
       ev.preventDefault();
+      const splitter = ev.currentTarget;
       document.body.classList.add("resizing-terminal-rail");
+      splitter.classList.add("resizing");
       const startX = ev.clientX;
       const startWidth = railWidth;
 
@@ -476,6 +480,7 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
       };
       const up = () => {
         document.body.classList.remove("resizing-terminal-rail");
+        splitter.classList.remove("resizing");
         document.removeEventListener("pointermove", move);
         document.removeEventListener("pointerup", up);
         window.dispatchEvent(new Event("resize"));
@@ -621,7 +626,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
                 tabIndex={0}
                 aria-selected={session.id === activeId}
                 aria-label={session.title}
-                title={session.title}
                 onClick={() => {
                   setActiveId(session.id);
                   onRuntimeStatus?.({});
@@ -640,7 +644,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
                 <button
                   type="button"
                   className="terminal-session-close"
-                  title={t("terminal.closeSession")}
                   aria-label={t("terminal.closeSession")}
                   onClick={(event) => {
                     event.stopPropagation();

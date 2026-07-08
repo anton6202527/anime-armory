@@ -1,0 +1,746 @@
+{
+  "episode": "第4集",
+  "generated_at": "2026-07-08T14:18:18+00:00",
+  "kind": "n2d_production_locks",
+  "locks": [
+    {
+      "affected_departments": [
+        "writer",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 2,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-07T13:21:53+00:00",
+          "path": "设定库/source_comprehension.json",
+          "sha256": "f5eccc3c10118d0cfb834c6b604c3dda3388062ac20f20cb71ef9b9d159bf052"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-03T11:16:50+00:00",
+          "path": "小说/_源指纹.json",
+          "sha256": "7b94a385df8d9d0ace44d30c52006c39873112348930ad213f1901919c39ca5a"
+        }
+      ],
+      "episode": "第4集",
+      "label": "源理解锁",
+      "lock_id": "source_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "writer",
+        "producer"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "writer",
+        "director",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 3,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "脚本/第4集/voiceover.txt",
+          "sha256": "349fc9bae95bdbd5297a62af9fd5c408f14afc8a3158deecbf433d7f841ddc04"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "脚本/第4集/bgm.txt",
+          "sha256": "5464d8f0b5849005dd2273c1560a190770da5177b59bf1f80119e503448b990e"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "生产数据/script_quality_contract_第4集.json",
+          "sha256": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24"
+        }
+      ],
+      "episode": "第4集",
+      "label": "剧本锁",
+      "lock_id": "script_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "writer",
+        "director",
+        "producer"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "script_supervisor",
+        "producer",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 3,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-08T12:50:58+00:00",
+          "path": "脚本/第4集/storyboard.json",
+          "sha256": "14679ae06e1a72e2abdc82da8e6ace20af2a6567f7e1c11320b7735a6eecc66d"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "脚本/第4集/镜头时长.json",
+          "sha256": "4d2e97d3740f9d0c144fbc8a5437d9941d447386b884bf6728e60ac84dd57a65"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "脚本/第4集/director_blocking_pack.json",
+          "sha256": "ddb6845fa955a0002ae8fd9e88dfad914af669ff0af6e06ba7bcce8e797da89c"
+        }
+      ],
+      "episode": "第4集",
+      "label": "分镜锁",
+      "lock_id": "storyboard_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "director",
+        "script_supervisor",
+        "producer"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "art_director",
+        "identity_supervisor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 3,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-07T13:21:49+00:00",
+          "path": "_设置.md",
+          "sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-03T11:16:50+00:00",
+          "path": "设定库/global_style.md",
+          "sha256": "c969f4802ac0b095cc1264a62f2c43295493f7b979227255017a35759cd08b4e"
+        },
+        {
+          "exists": false,
+          "path": "设定库/identity_registry.json",
+          "sha256": ""
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-08T13:23:19+00:00",
+          "path": "生产数据/identity_adapter_matrix.json",
+          "sha256": "c36ea4bcedc738a1db5eb77c48a05488a2d188c7e4a084ff16ed975fc9034096"
+        }
+      ],
+      "episode": "第4集",
+      "label": "风格身份锁",
+      "lock_id": "style_identity_lock",
+      "missing_artifacts": [
+        "设定库/identity_registry.json"
+      ],
+      "required_approver_roles": [
+        "director",
+        "art_director",
+        "identity_supervisor"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "voice_director",
+        "editor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 2,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/时长清单.json",
+          "sha256": "8376163546a1267b9afb7ef0edf1cebebf12d7d0f1382c7ecc8bbef2c523bd35"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/voice_zh.wav",
+          "sha256": "7096cca9ebe8c2cc8a2b269e955d9f83647fb897ea09b23d3bdf9555d93839db"
+        }
+      ],
+      "episode": "第4集",
+      "label": "声音时长锁",
+      "lock_id": "voice_timing_lock",
+      "missing_artifacts": [],
+      "required_approver_roles": [
+        "voice_director",
+        "editor"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "qc",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 2,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "出视频/第4集/视频",
+          "sha256": ""
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-08T13:23:17+00:00",
+          "path": "出视频/第4集/prompt/video_model_routes.json",
+          "sha256": "153ad72595ce1e404f1e4cb6406959777fc2d6771049246fa4247bae83b53eea"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-08T12:50:58+00:00",
+          "path": "生产数据/image_qc/第4集/image_qc_第4集.json",
+          "sha256": "4e924a710f64f1d002f9c4e947eef686216a8fa565b3f28bb455246c4d35ae9f"
+        },
+        {
+          "exists": false,
+          "path": "生产数据/video_qc_第4集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第4集",
+      "label": "视频素材锁",
+      "lock_id": "video_material_lock",
+      "missing_artifacts": [
+        "出视频/第4集/视频",
+        "生产数据/video_qc_第4集.json"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "qc"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "post_supervisor",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 0,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "合成/第4集/_work/timeline.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "合成/第4集/rough_cut_preview.html",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/final_timeline_probe_第4集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第4集",
+      "label": "粗剪时间线锁",
+      "lock_id": "rough_cut_lock",
+      "missing_artifacts": [
+        "合成/第4集/_work/timeline.json",
+        "合成/第4集/rough_cut_preview.html",
+        "生产数据/final_timeline_probe_第4集.json"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "post_supervisor"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "director",
+        "editor",
+        "qc",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 0,
+      "artifacts": [
+        {
+          "exists": false,
+          "path": "合成/第4集/成片*.mp4",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/final_timeline_probe_第4集.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/script_supervisor_log_第4集.jsonl",
+          "sha256": ""
+        }
+      ],
+      "episode": "第4集",
+      "label": "最终画面锁",
+      "lock_id": "picture_lock",
+      "missing_artifacts": [
+        "合成/第4集/成片*.mp4",
+        "生产数据/final_timeline_probe_第4集.json",
+        "生产数据/script_supervisor_log_第4集.jsonl"
+      ],
+      "required_approver_roles": [
+        "director",
+        "editor",
+        "qc"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    },
+    {
+      "affected_departments": [
+        "producer",
+        "post_supervisor",
+        "compliance",
+        "batch",
+        "dashboard"
+      ],
+      "approved_at": "",
+      "approver": "",
+      "artifact_count": 51,
+      "artifacts": [
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/_占位说明.md",
+          "sha256": "68708fe9d2fca7a529c6bb66fc79a2fb7eb13a691218175916128e201429aa16"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/emotion_flow.json",
+          "sha256": "c25a5f68d23e29a9eeff8cb264314f2e276d1777656128916ad15b29c14f9ae0"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_00.wav",
+          "sha256": "1950ed9e1ba81100e1609fc88ac978956dad40a20ed6f41e174779cb9cb7ae4d"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_01.wav",
+          "sha256": "279f2db10284e86008dd39a89316f0fc66deff83ebe414731893beb9b62c5ab0"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_02.wav",
+          "sha256": "410a6a9c9251ec504d3ffd3a55d01bf11ce85229f5e586e598d1c5d660429f2a"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_03.wav",
+          "sha256": "46fbabdda2935a348d1e740b98888556189762f829c3dc55bcebe8c2ff9699b5"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_04.wav",
+          "sha256": "afe2bab1509d102aa3bb30e882cb8b0f54b5c718f05feb625ef780f94af845ee"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_05.wav",
+          "sha256": "367b0184aec0a867ee5905ae4063f69defb3689d190e894e62294b4eed05de66"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_06.wav",
+          "sha256": "429fc92af6ab24c2ca3c16ed12c32e60a0933cd58066d108fdcf3bb79ce37f55"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_07.wav",
+          "sha256": "41278019bcd49cc58019ca4f8153a65d7a334bf9f225e2d06358ad84815c92f8"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_08.wav",
+          "sha256": "488b77c781725d499095d0a476cd4d438a118a5f69e2a7a9d7551573917bc9ec"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_09.wav",
+          "sha256": "0d14e8746925dd655eb3882413e4356f0ba6fb08a65f743979fdcc1d8dc306c5"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_10.wav",
+          "sha256": "6bec9585a948ec062c2a8a5629cab1377b03b9b624c0bd2afa2aa382b30aa472"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_11.wav",
+          "sha256": "379a619f6bd1997c15d2909f999340e62ad22361dd463734555996cc9219baa3"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_12.wav",
+          "sha256": "bda80e18db08762a71b9fe09ec0e78df04b271ea897d82e1d708749c7e9bb11d"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_13.wav",
+          "sha256": "221b1735325c2c985b06dc3b77be73b3465752b65683fe5c1bb24c7a6c2929dd"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_14.wav",
+          "sha256": "b1797104176722d7afa78566a49d07e0e84c0f42e964979c1408935943969da0"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_15.wav",
+          "sha256": "741b5e42f4cc3064935b018d12e4944cefb5cc0c481aa50b9bba02acbf26f127"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_16.wav",
+          "sha256": "2c99575052458c2d287c48020707195ee78f5a1ee94663c2d43eae77ca3d659c"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_17.wav",
+          "sha256": "f86193611c28a711ffd1d8245049bbae53ace81c21442e991466b2eea4a0b678"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_18.wav",
+          "sha256": "697134f1946851a41bd784afbd32253433e7be1cccf7da265cd3c6ec7dbcac58"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_19.wav",
+          "sha256": "176a86f1a1a0cca01e62b54852367d519c3597b38a35c8c89d81da3a5b9da101"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_20.wav",
+          "sha256": "9eb4438826989ca7f84a4ee3829709d21fac81fba1c5eae7ee520f2b8ee72195"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_21.wav",
+          "sha256": "b27d2fa4d4fb1a7b960b723b550b4a7316b0452a4043520e6715a1652876e4c9"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_22.wav",
+          "sha256": "bcf6850a85373a9268ac1018d14b578fc7b34d5a2c8a3cf7231fd1324c514013"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_23.wav",
+          "sha256": "64ec387063177fac19db5af8c69f34d67d1123268b7efb22700f2c10f4869679"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_24.wav",
+          "sha256": "c658f68c22412e1833b15e63ff973f03a2392d8e64a1a2e49ab4532eb9a5ad41"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_25.wav",
+          "sha256": "51ebc9bac368bb5b6af555f4ee75a92275f9c06c6d68e8f5964ab4ecfda2d574"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_26.wav",
+          "sha256": "ee764dbdfb5b016d237adf1567ec05ae3b9bed89e44463e15affe5784095e9e7"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_27.wav",
+          "sha256": "4db7ae05ab87551a6928ea825f5d4d6e732592c532559d1f628cb74fe0181e8e"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_28.wav",
+          "sha256": "893c5dfe790ca634cd041bd00545e91333aeabb7fd16fcc56a800dbee6b70861"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_29.wav",
+          "sha256": "cd5a2eb1b83e56ea5891d120fc7bc32f7ebac4b9d6200e70dd12cd5be2d633cb"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_30.wav",
+          "sha256": "ab15eb3f98ba82c24b4a390b79359f8e1f9ec8fc021700bf5402e6fd05e8bede"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_31.wav",
+          "sha256": "297dfafb531a8e1aa59fa3cb341412ce47c86beb1d848f343e16204d69aceeac"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_32.wav",
+          "sha256": "de33db8b6609de2bd13aee9ec8d5cefa3d6c0449c780e9f865607b0dabb2de5c"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_33.wav",
+          "sha256": "55e56add51ee05af8ab22bfcb45031627bd8feb22080fd8e5fff211b27eca5e0"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_34.wav",
+          "sha256": "35b6399e68cb3e1f4190bf139b6339f4fdc9c759779fe1824295e7181a572fdb"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_35.wav",
+          "sha256": "e9f913ecc6de2678f35f8d319c24fb9c83b3852ca1bd53368262c66e5640e4b8"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_36.wav",
+          "sha256": "4309eb7122e9a83894c2c1434a887909aaa104669fe9ac4d06998b79f410a6dc"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_37.wav",
+          "sha256": "1b37931698169cf593850be68f8b38b4a7ec75c5369b4c2ed146ef5033f220c2"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_38.wav",
+          "sha256": "233b4dd119ce59f264a58235562d35883d9c8754981958d29c8beed8554372b4"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_39.wav",
+          "sha256": "f4ce932313958d686888e3b8ae01a66d88f67ef5c699583d2ac9885c53324fde"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_40.wav",
+          "sha256": "a0782f4b7d3d0312df7235913c2338e5cec12b143bbc78a643d5738a7a43235b"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_41.wav",
+          "sha256": "c40b7a681c3147be26c244ab874f0770bbc302157a53b400c4c5ee2ddf370640"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_42.wav",
+          "sha256": "cd2230d708336f5bfb9533c1c7419bcb6140473500f8fa251b0e653740c11518"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_43.wav",
+          "sha256": "24799cb380d1944cab4dcf527e05fa7a6b64b2c420bc059980dd283544a7f89a"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_44.wav",
+          "sha256": "0fc78b654425514f952cadff5acf4be3b5ca5367b98937bb042b8e67520155fe"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/line_45.wav",
+          "sha256": "39bd4e7d3b363bcbea31f8887017337b3f4d77e8886d36c9652b648a6ddb2531"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/voice_zh.wav",
+          "sha256": "7096cca9ebe8c2cc8a2b269e955d9f83647fb897ea09b23d3bdf9555d93839db"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/时长清单.json",
+          "sha256": "8376163546a1267b9afb7ef0edf1cebebf12d7d0f1382c7ecc8bbef2c523bd35"
+        },
+        {
+          "exists": true,
+          "mtime": "2026-07-06T13:18:33+00:00",
+          "path": "合成/第4集/配音/时长清单.meta.json",
+          "sha256": "93c55a14d80598b05ec087c17af0a05c2db089805bf59731dae19f1b53ba3761"
+        },
+        {
+          "exists": false,
+          "path": "合规/release_manifest_第4集.json",
+          "sha256": ""
+        },
+        {
+          "exists": false,
+          "path": "生产数据/release_verdict_第4集.json",
+          "sha256": ""
+        }
+      ],
+      "episode": "第4集",
+      "label": "交付母版锁",
+      "lock_id": "delivery_lock",
+      "missing_artifacts": [
+        "合规/release_manifest_第4集.json",
+        "生产数据/release_verdict_第4集.json"
+      ],
+      "required_approver_roles": [
+        "producer",
+        "post_supervisor",
+        "compliance"
+      ],
+      "status": "draft",
+      "unlock_protocol": {
+        "record_in": "生产数据/creative_decisions.jsonl",
+        "requires_affected_stage_list": true,
+        "requires_reason": true,
+        "then": "用 n2d-batch 只排受影响镜头/阶段，不整集无账重跑"
+      }
+    }
+  ],
+  "notes": [
+    "confirmed 表示锁定的是当前 hash；后续文件变化会由 check 标 stale。",
+    "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
+  ],
+  "status": "draft",
+  "version": 1
+}

@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 
-STAGES = ["源本/企划", "漫画脚本", "页面排版", "出图包", "出图", "嵌字合成", "审查"]
+STAGES = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
 
 
 def repo_root() -> Path:

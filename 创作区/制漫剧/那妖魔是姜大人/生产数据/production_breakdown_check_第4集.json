@@ -12,21 +12,55 @@
       "status": "pass"
     },
     {
+      "issues": [
+        "status 不是 confirmed",
+        "continuity_chain 仍有阻断 seam：Clip_03→Clip_04(missing_episode_boundary_contract)"
+      ],
+      "rel": "脚本/第4集/continuity_chain.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed"
+      ],
+      "rel": "脚本/第4集/continuity_bible.json",
+      "status": "block"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed"
+      ],
+      "rel": "脚本/第4集/ai_shooting_schedule.json",
+      "status": "block"
+    },
+    {
       "issues": [],
       "rel": "脚本/第4集/ai_call_sheet.md",
       "status": "pass"
+    },
+    {
+      "issues": [
+        "status 不是 confirmed"
+      ],
+      "rel": "脚本/第4集/production_handoff_pack.json",
+      "status": "block"
+    },
+    {
+      "issues": [],
+      "rel": "生产数据/ai_shooting_schedule_batch_seed_第4集.json",
+      "status": "pass"
     }
   ],
-  "generated_at": "2026-07-06T02:49:41+00:00",
+  "generated_at": "2026-07-08T14:47:38+00:00",
   "kind": "n2d_production_handoff_pack_check",
-  "next_when_blocked": "补齐 P-3 制片拆解三件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；之后重跑 check，再进入出图 prompt。",
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py 创作区/制漫剧/那妖魔是姜大人 第4集 scaffold --write",
-  "status": "pass",
+  "next_when_blocked": "补齐 P-3 制片交接包，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第4集 scaffold --write",
+  "status": "block",
   "summary": {
-    "block": 0,
-    "pass": 3,
-    "required": 3
+    "block": 4,
+    "pass": 4,
+    "required": 8
   },
   "version": 1
 }

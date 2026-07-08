@@ -40,7 +40,7 @@ LOCK_POINTS: Tuple[Tuple[str, str, Tuple[str, ...], Tuple[str, ...]], ...] = (
     ("source_lock", "源理解锁", ("设定库/source_comprehension.json", "小说/_源指纹.json"), ("writer", "producer")),
     ("script_lock", "剧本锁", ("脚本/{ep}/voiceover.txt", "脚本/{ep}/bgm.txt", "生产数据/script_quality_contract_{ep}.json"), ("writer", "director", "producer")),
     ("storyboard_lock", "分镜锁", ("脚本/{ep}/storyboard.json", "脚本/{ep}/镜头时长.json", "脚本/{ep}/director_blocking_pack.json"), ("director", "script_supervisor", "producer")),
-    ("style_identity_lock", "风格身份锁", ("_设置.md", "设定库/global_style.md", "设定库/identity_registry.json", "生产数据/identity_adapter_matrix.json"), ("director", "art_director", "identity_supervisor")),
+    ("style_identity_lock", "风格身份锁", ("_设置.md", "设定库/global_style.md", "出图/共享/identity_registry.json", "生产数据/identity_adapter_matrix.json"), ("director", "art_director", "identity_supervisor")),
     ("voice_timing_lock", "声音时长锁", ("合成/{ep}/配音/时长清单.json", "合成/{ep}/配音/voice_zh.wav"), ("voice_director", "editor")),
     ("video_material_lock", "视频素材锁", ("出视频/{ep}/视频", "出视频/{ep}/prompt/video_model_routes.json", "生产数据/image_qc/{ep}/image_qc_{ep}.json", "生产数据/video_qc_{ep}.json"), ("director", "editor", "qc")),
     ("rough_cut_lock", "粗剪时间线锁", ("合成/{ep}/_work/timeline.json", "合成/{ep}/rough_cut_preview.html", "生产数据/final_timeline_probe_{ep}.json"), ("director", "editor", "post_supervisor")),
@@ -65,13 +65,15 @@ STAGE_LOCK_IDS: Mapping[str, Tuple[str, ...]] = {
 }
 
 STAGE_ALIASES = {
-    "image_preflight": "image_prompt",
+    "image_prompt_preflight": "image_prompt",
+    "image_preflight": "image",
+    "video_prompt_preflight": "video_prompt",
     "video_preflight": "video_prompt",
     "review_acceptance": "review",
     "post_compose_review": "review",
 }
 
-MATERIALIZED_REQUIRED_LOCK_IDS = {"video_material_lock", "rough_cut_lock", "picture_lock"}
+MATERIALIZED_REQUIRED_LOCK_IDS = {"style_identity_lock", "video_material_lock", "rough_cut_lock", "picture_lock"}
 
 
 def now_iso() -> str:
@@ -214,7 +216,8 @@ def scaffold(root: Path, ep: str, *, confirmed: bool = False, reviewer: str = ""
     return {"kind": KIND, "episode": normalize_episode(ep), "status": "written", "path": str(path)}
 
 
-def check_ledger(root: Path, ep: str, *, write_missing: bool = False, stage: str | None = None) -> Dict[str, Any]:
+def check_ledger(root: Path, ep: str, *, write_missing: bool = False, stage: str | None = None,
+                 write_check: bool = False) -> Dict[str, Any]:
     ep = normalize_episode(ep)
     stage_key = normalize_stage(stage)
     selected_ids = stage_lock_ids(stage_key)
@@ -275,8 +278,11 @@ def check_ledger(root: Path, ep: str, *, write_missing: bool = False, stage: str
     }
     stage_part = f"{stage_key}_" if stage_key else ""
     out = production_dir(root) / f"production_locks_check_{stage_part}{ep}.json"
-    write_json(out, payload)
-    payload["check_path"] = str(out)
+    if write_check:
+        write_json(out, payload)
+        payload["check_path"] = str(out)
+    else:
+        payload["check_path_expected"] = str(out)
     return payload
 
 
@@ -291,6 +297,7 @@ def main(argv: List[str] | None = None) -> int:
     p_scaffold.add_argument("--force", action="store_true")
     p_check = sub.add_parser("check")
     p_check.add_argument("--write-missing", action="store_true")
+    p_check.add_argument("--write-check", action="store_true", help="write production_locks_check_<stage>_<episode>.json")
     p_check.add_argument("--stage", default="", help="limit check to lock points needed by this stage")
     p_check.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
@@ -300,7 +307,8 @@ def main(argv: List[str] | None = None) -> int:
         payload = scaffold(root, ns.episode, confirmed=ns.confirm, reviewer=ns.reviewer, force=ns.force)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
-    payload = check_ledger(root, ns.episode, write_missing=ns.write_missing, stage=ns.stage)
+    payload = check_ledger(root, ns.episode, write_missing=ns.write_missing, stage=ns.stage,
+                           write_check=ns.write_check or ns.write_missing)
     print(json.dumps(payload, ensure_ascii=False, indent=2) if ns.json else f"production locks: {payload['status']}")
     return 0 if payload["status"] == "pass" else 1
 

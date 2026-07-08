@@ -1,6 +1,6 @@
 ---
 name: comic-compose
-description: 画漫画嵌字与导出阶段。Use when lettering comic panels, placing speech bubbles, captions, narration, SFX, exporting pages or long-scroll segments, creating export_manifest.json, or composing final comic deliverables for projects under 创作区/画漫画. Triggers 漫画合成, 嵌字, 气泡, 旁白框, 拟声词, 长图, 导出漫画, export_manifest, comic-compose.
+description: 画漫画嵌字与导出阶段。Use when lettering comic panels, placing speech bubbles, captions, narration, SFX, carrying drawn SFX metadata from finishing_plan.json, exporting pages or long-scroll segments, creating export_manifest.json, or composing final comic deliverables for projects under 创作区/画漫画. Triggers 漫画合成, 嵌字, 气泡, 旁白框, 拟声词, 手绘拟声词, 长图, 导出漫画, export_manifest, comic-compose.
 ---
 
 # comic-compose — 嵌字、长图和导出
@@ -12,6 +12,7 @@ description: 画漫画嵌字与导出阶段。Use when lettering comic panels, p
 - `排版/第N话/layout.json`。
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/lettering.json`。
+- 可选 `出图/第N话/finishing/finishing_plan.json`：拟声词是否作为传统手绘 lettering 元素融入画面。
 - `出图/第N话/panels/P001.png` 等面板图。
 - `生产数据/comic_identity_report_第N话.json/md`：若本话存在角色/资产 references，应先由 `comic-identity` 确认无缺失引用和无待重抽格。
 - `_设置.md`：导出格式、单话分段高度、文字语言、嵌字方式。`单话分段高度: 0` 表示不分段，`文字语言` 默认中文。
@@ -51,10 +52,12 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 文字不要烘焙在出图 prompt 里。推荐流程：
 
 1. 面板图保持无字、无烘焙气泡，只预留低细节留白。
-2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；生成草案时会优先读取 `dialogue[].text_target` / `narration_target`，保留 `text_source` 便于追溯；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。
+2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；生成草案时会优先读取 `dialogue[].text_target` / `narration_target`，保留 `text_source` 便于追溯；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。拟声词可继承 finishing plan 的 `drawn_sfx` 元数据。
 3. 合成阶段绘制最终不规则对白气泡/旁白容器并渲染文字；不要在不规则气泡里再叠一个矩形文字框。
 4. 没有文字的槽位不画气泡；旧图里烘焙的空白气泡应回 `comic-image` 重出或在审查中标返修。
 5. 字体、商用授权和目标地区发布规范在正式发布前确认。
+
+`drawn_sfx` 只允许拟声词作为画面节奏元素；对白、旁白和系统正文仍不应烘焙进 raw panel。
 
 若用户发现“空白气泡没有文字”，先说明这是当前阶段正确状态；本 skill 会从 `panel_script.json` 生成 `lettering.json` 并在导出时嵌字。若用户发现“人物换了一个人”，不要继续合成，先回 `comic-identity` 补共享参考并重抽受影响面板。
 

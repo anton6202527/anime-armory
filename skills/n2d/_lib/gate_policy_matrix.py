@@ -17,6 +17,7 @@ KIND = "n2d_gate_policy_matrix"
 VERSION = 1
 MATRIX_PATH = Path(__file__).with_name("gate_policy_matrix.json")
 REQUIRED_STAGE_FIELDS = ("family", "human_boundary", "trace_policy", "required_check_groups")
+POLICY_ONLY_STAGES = {"review_acceptance"}
 
 
 def load_matrix(path: Optional[str] = None) -> Dict[str, Any]:
@@ -37,7 +38,7 @@ def validate_matrix(data: Optional[Dict[str, Any]] = None) -> List[str]:
     expected = set(GATE_STAGES)
     got = set(stages)
     missing = sorted(expected - got)
-    extra = sorted(got - expected)
+    extra = sorted(got - expected - POLICY_ONLY_STAGES)
     if missing:
         errors.append(f"missing stage policies: {', '.join(missing)}")
     if extra:

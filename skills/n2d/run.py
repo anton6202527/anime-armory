@@ -539,7 +539,7 @@ def _explicit_choice_missing(root: str, key: str) -> bool:
     return project_setting_source(root, key) not in EXPLICIT_SETTING_SOURCES
 
 
-def _entry_check_block(checks: List[Dict[str, Any]], stage_key: str) -> Optional[str]:
+def _entry_check_block(checks: List[Dict[str, Any]], stage_key: str, root: str = "") -> Optional[str]:
     if stage_key not in ENTRY_GATED_STAGES:
         return None
     for chk in checks:
@@ -553,10 +553,16 @@ def _entry_check_block(checks: List[Dict[str, Any]], stage_key: str) -> Optional
             if plan.get("rebuild_needed"):
                 return (
                     f"skill 更新影响当前集，需先执行/确认重制计划：{plan.get('plan_md') or detail or '见 skill_update_plan'}。"
+                    f"统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"{root or '<作品根>'}\" "
+                    f"{chk.get('episode') or '<集>'} --stage {stage_key} --write-missing --json"
                 )
             source_drift = plan.get("source_drift") if isinstance(plan.get("source_drift"), dict) else {}
             if source_drift.get("status") == "drift":
-                return f"update_plan 检测到源文本漂移：{detail or plan.get('plan_md') or ''}。先处理源更新影响。"
+                return (
+                    f"update_plan 检测到源文本漂移：{detail or plan.get('plan_md') or ''}。先处理源更新影响。"
+                    f"统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"{root or '<作品根>'}\" "
+                    f"{chk.get('episode') or '<集>'} --stage {stage_key} --write-missing --json"
+                )
     return None
 
 
@@ -716,13 +722,12 @@ def _run_review_evidence_pre_gate(root: str, ep: str, p: Probes) -> None:
             r = _run([sys.executable, script, *args])
             status = _script_result_status(r.returncode, r.stdout)
             p.prework.append({"step": step, "status": status, "detail": _finding_detail(r.stdout, r.stderr)})
-            if status == "block" and not p.prework_block:
-                p.prework_block = f"{step} 未通过；先补齐粗剪时间线/场记日志证据。"
+            if status == "block":
+                _record_prework_block(p, step, f"{step} 未通过；先补齐粗剪时间线/场记日志证据。")
         except Exception as e:  # pragma: no cover
             detail = str(e)[:160]
             p.prework.append({"step": step, "status": "block", "detail": detail})
-            if not p.prework_block:
-                p.prework_block = f"{step} 无法运行：{detail}"
+            _record_prework_block(p, step, f"{step} 无法运行：{detail}")
     for step, script_name, args in (
         ("spectacle_video_qc", "spectacle_video_qc.py", [root, ep, "--write", "--write-sidecars"]),
         ("motion_reference_library", "motion_reference_library.py", [root, ep, "--write"]),
@@ -734,13 +739,12 @@ def _run_review_evidence_pre_gate(root: str, ep: str, p: Probes) -> None:
             r = _run([sys.executable, script, *args])
             status = _script_result_status(r.returncode, r.stdout)
             p.prework.append({"step": step, "status": status, "detail": _finding_detail(r.stdout, r.stderr)})
-            if status == "block" and not p.prework_block:
-                p.prework_block = f"{step} 未通过；先补齐成片侧高动态/动作证据。"
+            if status == "block":
+                _record_prework_block(p, step, f"{step} 未通过；先补齐成片侧高动态/动作证据。")
         except Exception as e:  # pragma: no cover
             detail = str(e)[:160]
             p.prework.append({"step": step, "status": "block", "detail": detail})
-            if not p.prework_block:
-                p.prework_block = f"{step} 无法运行：{detail}"
+            _record_prework_block(p, step, f"{step} 无法运行：{detail}")
 
 
 def _run_review_acceptance_outputs(root: str, ep: str, p: Probes) -> None:
@@ -913,11 +917,10 @@ def _run_series_retention_prework(p: Probes, root: str, ep: str) -> None:
                 findings = out.get("findings") if isinstance(out, dict) else []
                 warn_n = sum(1 for f in findings if isinstance(f, dict) and f.get("severity") == "warn")
                 if r.returncode != 0:
-                    if not p.prework_block:
-                        p.prework_block = (
-                            "pilot_arc_contract 未通过；第1-2集也必须先锁系列承诺、主角欲望、首个兑现/阻碍/反转，"
-                            "再进入出图 prompt。"
-                        )
+                    _record_prework_block(p, "pilot_arc_contract_gate", (
+                        "pilot_arc_contract 未通过；第1-2集也必须先锁系列承诺、主角欲望、首个兑现/阻碍/反转，"
+                        "再进入出图 prompt。"
+                    ))
                     p.prework.append({
                         "step": "pilot_arc_contract_gate",
                         "status": "block",
@@ -950,11 +953,10 @@ def _run_series_retention_prework(p: Probes, root: str, ep: str) -> None:
                         blockers.append(msg)
             if blockers:
                 detail = blockers[0][:200]
-                if not p.prework_block:
-                    p.prework_block = (
-                        "series_retention_gate 未通过；先回 n2d-script 调整跨集冷开场链、雷同桥段或看点高潮位，"
-                        "再进入出图 prompt。"
-                    )
+                _record_prework_block(p, "series_retention_gate", (
+                    "series_retention_gate 未通过；先回 n2d-script 调整跨集冷开场链、雷同桥段或看点高潮位，"
+                    "再进入出图 prompt。"
+                ))
                 p.prework.append({"step": "series_retention_gate", "status": "block", "detail": detail})
             else:
                 other_n = sum(len(out.get(k) or []) for k in ("cold_open_chain_findings", "highlight_climax_findings")) + len(out.get("duplicates") or [])
@@ -970,8 +972,7 @@ def _run_series_retention_prework(p: Probes, root: str, ep: str) -> None:
             findings = out.get("findings") if isinstance(out, dict) else []
             detail = _finding_detail(r.stdout, r.stderr)
             if r.returncode != 0:
-                if not p.prework_block:
-                    p.prework_block = "series_balance 未通过；全剧后段钩子/反转曲线塌陷，先回 n2d-script 重排高能桥段。"
+                _record_prework_block(p, "series_balance", "series_balance 未通过；全剧后段钩子/反转曲线塌陷，先回 n2d-script 重排高能桥段。")
                 p.prework.append({"step": "series_balance", "status": "block", "detail": detail})
             else:
                 warn_n = sum(1 for f in findings if isinstance(f, dict) and f.get("severity") == "warn")
@@ -1136,6 +1137,53 @@ def _run_production_locks_prework(p: Probes, root: str, ep: str, stage_key: str,
         p.prework.append({"step": "production_locks", "stage": stage_key, "status": "block", "detail": detail})
 
 
+def _run_repair_preflight_prework(p: Probes, root: str, ep: str, stage_key: str) -> str:
+    """Run the unified repair/preflight once when entry checks detect drift."""
+    if stage_key not in ENTRY_GATED_STAGES:
+        return ""
+    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "repair_preflight.py")
+    if not os.path.exists(script):
+        detail = "缺 skills/n2d/scripts/repair_preflight.py，无法自动清理 stale QC/缺 lock/断裂引用"
+        _record_prework_block(p, "repair_preflight", detail)
+        p.prework.append({"step": "repair_preflight", "stage": stage_key, "status": "block", "detail": detail})
+        return detail
+    args = [sys.executable, script, root, ep, "--stage", stage_key, "--write-missing", "--json"]
+    if stage_key in IMAGE_QC_STRICT_STAGES:
+        args.insert(-1, "--repair-qc")
+    try:
+        r = _run(args)
+        report = _parse_trailing_json(r.stdout) or {}
+        summary = report.get("summary") if isinstance(report.get("summary"), dict) else {}
+        status = str(report.get("status") or ("pass" if r.returncode == 0 else "block")).strip().lower()
+        if r.returncode != 0:
+            status = "block"
+        steps = report.get("steps") if isinstance(report.get("steps"), list) else []
+        blocked = [row for row in steps if isinstance(row, dict) and row.get("status") == "block"]
+        detail = _finding_detail(r.stdout, r.stderr) or (
+            f"block={summary.get('block', len(blocked))} warn={summary.get('warn', 0)} pass={summary.get('pass', 0)}"
+        )
+        path = report.get("path") or os.path.join(root, "生产数据", f"repair_preflight_{stage_key}_{ep}.json")
+        entry = {
+            "step": "repair_preflight",
+            "stage": stage_key,
+            "status": "pass" if status == "pass" else "warn" if status == "warn" else "block",
+            "detail": detail[:240],
+            "check_path": path,
+        }
+        p.prework.append(entry)
+        note = f"已自动执行 repair_preflight（{entry['status']}）：{detail[:160]}；报告：{path}"
+        if entry["status"] == "block":
+            first = blocked[0] if blocked else {}
+            block_detail = str(first.get("detail") or detail or "repair_preflight 未通过")[:240]
+            _record_prework_block(p, "repair_preflight", f"repair_preflight 未通过（{stage_key}）：{block_detail}。先按报告修复后再继续。")
+        return note
+    except Exception as e:  # pragma: no cover
+        detail = str(e)[:160]
+        _record_prework_block(p, "repair_preflight", f"repair_preflight 无法运行：{detail}")
+        p.prework.append({"step": "repair_preflight", "stage": stage_key, "status": "block", "detail": detail})
+        return f"repair_preflight 无法运行：{detail}"
+
+
 def _image_qc_report_path(root: str, ep: str) -> str:
     return os.path.join(root, "生产数据", "image_qc", ep, f"image_qc_{ep}.json")
 
@@ -1185,7 +1233,7 @@ def gather_preview_probes(root: str, route: Dict[str, Any], stage_key: str) -> P
     ep = route.get("ep")
     if ep:
         p.entry_checks = entry_checks(root, ep, stage_key=stage_key, preview=True)
-        p.entry_check_block = _entry_check_block(p.entry_checks, stage_key)
+        p.entry_check_block = _entry_check_block(p.entry_checks, stage_key, root)
     if stage_key in IMAGE_QC_STRICT_STAGES and ep:
         issue = _image_qc_gate_issue(root, ep)
         if issue:
@@ -1226,7 +1274,14 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     if ep:
         p.entry_checks = entry_checks(root, ep, stage_key=stage_key)
-        p.entry_check_block = _entry_check_block(p.entry_checks, stage_key)
+        p.entry_check_block = _entry_check_block(p.entry_checks, stage_key, root)
+        if p.entry_check_block:
+            repair_note = _run_repair_preflight_prework(p, root, ep, stage_key)
+            p.entry_checks = entry_checks(root, ep, stage_key=stage_key)
+            refreshed_block = _entry_check_block(p.entry_checks, stage_key, root)
+            p.entry_check_block = refreshed_block
+            if p.entry_check_block and repair_note:
+                p.entry_check_block = f"{p.entry_check_block} {repair_note}"
     p.capability_block = _video_capability_block(root, stage_key)
     script_stage1_missing_choices: List[str] = []
     if stage_key == "script_stage1":
@@ -1268,8 +1323,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     "status": "pass" if status == "pass" else ("block" if status == "fail" else "warn"),
                     "detail": f"genre={(out.get('genre') or {}).get('genre_key') or '-'} active={(out.get('summary') or {}).get('active_scenes', 0)}",
                 })
-                if status == "fail" and stage_key in {"video_prompt", "video", "compose", "review"} and not p.prework_block:
-                    p.prework_block = "genre_pack_context 未通过；先补齐本题材典型场景的运动契约/降级方案，再进入下游 gate。"
+                if status == "fail" and stage_key in {"video_prompt", "video", "compose", "review"}:
+                    _record_prework_block(p, "genre_pack_context", "genre_pack_context 未通过；先补齐本题材典型场景的运动契约/降级方案，再进入下游 gate。")
             except Exception as e:  # pragma: no cover
                 p.prework.append({"step": "genre_pack_context", "status": "skip", "detail": str(e)[:160]})
 
@@ -1298,13 +1353,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     reg = report.get("register")
                     issues = [str(x) for x in (report.get("contract_issues") or [])]
                     issue_text = "；".join(issues[:6]) or (report.get("message") or "")[:220]
-                    p.prework_block = (
+                    _record_prework_block(p, "source_comprehension_gate", (
                         f"源理解合同未确认或不完整（register={reg}）：{issue_text}。"
                         "小说不能只切章节；要先把现代白话理解、爽点/承诺账、人物动机、因果链、伏笔账、"
                         "设定/战力规则变成可审计输入。先跑 "
                         f"python3 skills/n2d-script/scripts/source_language.py {root} --scaffold，"
                         "补全 设定库/source_comprehension.md 与 "
-                        "source_comprehension.json.understanding_contract，并把 status 置 confirmed，再从理解层拆集。")
+                        "source_comprehension.json.understanding_contract，并把 status 置 confirmed，再从理解层拆集。"))
                     p.prework.append({"step": "source_comprehension_gate", "status": "block",
                                       "detail": issue_text[:240], "register": reg})
                 else:
@@ -1333,16 +1388,14 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         detail = str(first.get("message") or first)[:160]
                     else:
                         detail = (r.stderr or r.stdout or "").strip()[:160]
-                    if not p.prework_block:
-                        p.prework_block = (
-                            "中段开工前情资产包未通过；先补齐 "
-                            f"{midstart_pack}，再写 voiceover。"
-                        )
+                    _record_prework_block(p, "midstart_context", (
+                        "中段开工前情资产包未通过；先补齐 "
+                        f"{midstart_pack}，再写 voiceover。"
+                    ))
                     p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"midstart_context 无法运行：{detail}"
+                _record_prework_block(p, "midstart_context", f"midstart_context 无法运行：{detail}")
                 p.prework.append({"step": "midstart_context", "status": "block", "detail": detail})
 
         script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "boundary_audit.py")
@@ -1362,27 +1415,24 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                                           "review_path": review_json})
                     else:
                         detail = _finding_detail(rr.stdout, rr.stderr)
-                        if not p.prework_block:
-                            p.prework_block = (
-                                "boundary_audit 标出高风险粗胚边界；先运行 "
-                                f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
-                                f"填写 {review_json} 的 decision/notes，再复跑 check。"
-                            )
+                        _record_prework_block(p, "boundary_audit", (
+                            "boundary_audit 标出高风险粗胚边界；先运行 "
+                            f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
+                            f"填写 {review_json} 的 decision/notes，再复跑 check。"
+                        ))
                         p.prework.append({"step": "boundary_audit", "status": "block",
                                           "detail": detail[:160], "review_path": review_json})
                 else:
                     detail = (r.stdout or r.stderr or "").strip().splitlines()[-1:] or [""]
-                    if not p.prework_block:
-                        p.prework_block = (
-                            "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
-                            f"{review_json}，再写 voiceover。"
-                        )
+                    _record_prework_block(p, "boundary_audit", (
+                        "boundary_audit 标出高风险粗胚边界；先做 5-10 集窗口复核并写 "
+                        f"{review_json}，再写 voiceover。"
+                    ))
                     p.prework.append({"step": "boundary_audit", "status": "block",
                                       "detail": (detail[0] if detail else "")[:160]})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"boundary_audit 无法运行：{detail}"
+                _record_prework_block(p, "boundary_audit", f"boundary_audit 无法运行：{detail}")
                 p.prework.append({"step": "boundary_audit", "status": "block", "detail": detail})
 
         dev_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "development_pack.py")
@@ -1398,16 +1448,15 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     "detail": f"{summary.get('pass', 0)}/{summary.get('required', 5)} confirmed",
                     "check_path": report.get("check_path") or os.path.join(root, "生产数据", "development_pack_check.json"),
                 })
-                if status != "pass" and not p.prework_block and not script_stage1_missing_choices:
-                    p.prework_block = (
+                if status != "pass" and not script_stage1_missing_choices:
+                    _record_prework_block(p, "development_pack", (
                         "P-1 开发包未确认；先补齐 开发包/series_bible.md、adaptation_strategy.json、"
                         "season_arc.json、production_feasibility.json、pilot_greenlight.md，删除待补/TODO，"
                         "并把每个文件 status 改为 confirmed，再进入阶段1写词。"
-                    )
+                    ))
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"development_pack 无法运行：{detail}"
+                _record_prework_block(p, "development_pack", f"development_pack 无法运行：{detail}")
                 p.prework.append({"step": "development_pack", "status": "block", "detail": detail})
 
     # director_blocking_pack：阶段2 分镜前先过导演排戏层，不让 storyboard 临场发明轴线/调度/转场。
@@ -1516,8 +1565,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             if "detail" in o:
                 entry["detail"] = o["detail"]
             p.prework.append(entry)
-            if o["status"] == "block" and not p.prework_block:
-                p.prework_block = o.get("block_msg") or f"{o['step']} 未通过"
+            if o["status"] == "block":
+                _record_prework_block(p, str(o["step"]), o.get("block_msg") or f"{o['step']} 未通过")
 
         _run_series_retention_prework(p, root, ep)
 
@@ -1532,8 +1581,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 info_n = sum(1 for f in findings if isinstance(f, dict) and f.get("severity") == "info")
                 detail = f"warn={warn_n} info={info_n}"
                 if r.returncode != 0 or block_n:
-                    if not p.prework_block:
-                        p.prework_block = "story_integrity_audit 无法完成剧情完整性体检；先回 n2d-script 补 voiceover/剧情账本。"
+                    _record_prework_block(p, "story_integrity_audit", "story_integrity_audit 无法完成剧情完整性体检；先回 n2d-script 补 voiceover/剧情账本。")
                     p.prework.append({"step": "story_integrity_audit", "status": "block",
                                       "detail": _finding_detail(r.stdout, r.stderr) or detail})
                 else:
@@ -1554,8 +1602,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 if isinstance(summary, dict):
                     detail = f"max_score={summary.get('max_score', 0)} high_risk={summary.get('warn_or_higher', 0)}"
                 if r.returncode != 0:
-                    if not p.prework_block:
-                        p.prework_block = "shot_risk_audit 发现必须先处理的高风险镜头；先回 n2d-script 拆镜/补锚帧/降级同框。"
+                    _record_prework_block(p, "shot_risk_audit", "shot_risk_audit 发现必须先处理的高风险镜头；先回 n2d-script 拆镜/补锚帧/降级同框。")
                     p.prework.append({"step": "shot_risk_audit", "status": "block", "detail": _finding_detail(r.stdout, r.stderr)})
                 else:
                     status = "warn" if isinstance(summary, dict) and int(summary.get("warn_or_higher") or 0) else "pass"
@@ -1662,13 +1709,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     p.prework.append({"step": step, "status": "pass"})
                 else:
                     detail = _finding_detail(r.stdout, r.stderr)
-                    if not p.prework_block:
-                        p.prework_block = f"{step} 无法生成；先修复 storyboard 或脚本错误后再继续。"
+                    _record_prework_block(p, step, f"{step} 无法生成；先修复 storyboard 或脚本错误后再继续。")
                     p.prework.append({"step": step, "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"{step} 无法运行：{detail}"
+                _record_prework_block(p, step, f"{step} 无法运行：{detail}")
                 p.prework.append({"step": step, "status": "block", "detail": detail})
 
         # 奇观连续性留痕（best-effort·绝不阻断）：序列总账生成后把状态写回 _进度.md 可见列。
@@ -1704,11 +1749,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     p.prework.append({"step": "model_router", "status": "ok"})
                 else:
                     detail = (r.stderr or r.stdout or "").strip()[:160]
-                    p.prework_block = f"model_router 退出码 {r.returncode}{f'：{detail}' if detail else ''}"
+                    _record_prework_block(p, "model_router", f"model_router 退出码 {r.returncode}{f'：{detail}' if detail else ''}")
                     p.prework.append({"step": "model_router", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                p.prework_block = f"model_router 无法运行：{detail}"
+                _record_prework_block(p, "model_router", f"model_router 无法运行：{detail}")
                 p.prework.append({"step": "model_router", "status": "block", "detail": detail})
         mouth_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "mouth_detect.py")
         if os.path.exists(mouth_script):
@@ -1729,13 +1774,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     p.prework.append({"step": "spectacle_motion_plan", "status": "pass"})
                 else:
                     detail = _finding_detail(r.stdout, r.stderr)
-                    if not p.prework_block:
-                        p.prework_block = "spectacle_plan Motion Control 骨架生成失败；先修复 storyboard/控制契约。"
+                    _record_prework_block(p, "spectacle_motion_plan", "spectacle_plan Motion Control 骨架生成失败；先修复 storyboard/控制契约。")
                     p.prework.append({"step": "spectacle_motion_plan", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"spectacle_motion_plan 无法运行：{detail}"
+                _record_prework_block(p, "spectacle_motion_plan", f"spectacle_motion_plan 无法运行：{detail}")
                 p.prework.append({"step": "spectacle_motion_plan", "status": "block", "detail": detail})
 
         sequence_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "spectacle_sequence_plan.py")
@@ -1746,13 +1789,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     p.prework.append({"step": "spectacle_sequence_plan", "status": "pass"})
                 else:
                     detail = _finding_detail(r.stdout, r.stderr)
-                    if not p.prework_block:
-                        p.prework_block = "spectacle_sequence_plan 生成失败；先修复 storyboard 的高动态/大场景连续性契约。"
+                    _record_prework_block(p, "spectacle_sequence_plan", "spectacle_sequence_plan 生成失败；先修复 storyboard 的高动态/大场景连续性契约。")
                     p.prework.append({"step": "spectacle_sequence_plan", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"spectacle_sequence_plan 无法运行：{detail}"
+                _record_prework_block(p, "spectacle_sequence_plan", f"spectacle_sequence_plan 无法运行：{detail}")
                 p.prework.append({"step": "spectacle_sequence_plan", "status": "block", "detail": detail})
 
         controller_script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "trajectory_controller_plan.py")
@@ -1798,8 +1839,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     "status": "pass" if r.returncode == 0 else "block",
                     "detail": _finding_detail(r.stdout, r.stderr),
                 })
-                if r.returncode != 0 and not p.prework_block:
-                    p.prework_block = "共享视频物化失败；先修复 storyboard 的 shared_video/source 或共享视频文件。"
+                if r.returncode != 0:
+                    _record_prework_block(p, "shared_video_materialize", "共享视频物化失败；先修复 storyboard 的 shared_video/source 或共享视频文件。")
             except Exception as e:  # pragma: no cover
                 p.prework.append({"step": "shared_video_materialize", "status": "skip", "detail": str(e)[:160]})
 
@@ -1812,13 +1853,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                     p.prework.append({"step": "action_edit_cues", "status": "pass"})
                 else:
                     detail = _finding_detail(r.stdout, r.stderr)
-                    if not p.prework_block:
-                        p.prework_block = "action_edit_cues 生成失败；先修复 storyboard 后再合成。"
+                    _record_prework_block(p, "action_edit_cues", "action_edit_cues 生成失败；先修复 storyboard 后再合成。")
                     p.prework.append({"step": "action_edit_cues", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                if not p.prework_block:
-                    p.prework_block = f"action_edit_cues 无法运行：{detail}"
+                _record_prework_block(p, "action_edit_cues", f"action_edit_cues 无法运行：{detail}")
                 p.prework.append({"step": "action_edit_cues", "status": "block", "detail": detail})
 
     if stage_key == "review" and ep:
@@ -1853,11 +1892,11 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                             "detail": (planned_detail or detail) + "；计划中的共享参考缺口交由 stage gate 定位/阻断。",
                         })
                     else:
-                        p.prework_block = f"identity adapter matrix 刷新退出码 {r.returncode}{f'：{detail}' if detail else ''}"
+                        _record_prework_block(p, "identity", f"identity adapter matrix 刷新退出码 {r.returncode}{f'：{detail}' if detail else ''}")
                         p.prework.append({"step": "identity", "status": "block", "detail": detail})
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
-                p.prework_block = f"identity adapter matrix 无法刷新：{detail}"
+                _record_prework_block(p, "identity", f"identity adapter matrix 无法刷新：{detail}")
                 p.prework.append({"step": "identity", "status": "block", "detail": detail})
 
     # image_qc：出图落档后的机检报告必须 full 且无 hard block，才允许进入视频/合成链路。

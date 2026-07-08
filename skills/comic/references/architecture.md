@@ -9,7 +9,9 @@
 - `story_bible`：世界观、角色、关系、题材承诺、画风。
 - `chapter_outline`：本话目标、冲突、转折、收束、钩子。
 - `panel_script.json`：逐格叙事功能、画面、角色、台词、旁白、拟声词。
+- `name_board.json`：传统ネーム/缩略分镜，先定页流、格子轻重、翻页钩子、气泡优先级和原稿安全框。
 - `layout.json`：页或条漫分段、每格坐标、阅读顺序、气泡占位。
+- `finishing_plan.json`：墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划。
 
 完整小说适合做“源本改漫画”，但原创漫画可以直接从蓝图和分话大纲开始。已有对白脚本也可以直接转为分格脚本。
 
@@ -17,10 +19,12 @@
 
 1. 源本/点子/脚本进入 `源本/`，写 `_meta.json` 记录来源和权利状态。
 2. `comic-script` 产 `设定库/story_bible.md`、`脚本/第N话/分话大纲.md`、`panel_script.json`。
-3. `comic-layout` 产 `排版/第N话/layout.json`，决定页漫或条漫、阅读方向、格子比例、气泡占位。
-4. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记；job 必须消费 `panel_script.json` 的视觉一致性契约（角色完整性、视线目标、场景布局、光位/冷暖、轴线视线）。
-5. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图和 manifest。
-6. `comic-review` 审阅读顺序、遮挡、文字密度、角色一致性、改编取舍、平台规格，再生成返修清单。
+3. `comic-name` 产 `排版/第N话/name_board.json` 和 SVG 缩略分镜，把传统漫画的ネーム层前置。
+4. `comic-layout` 产 `排版/第N话/layout.json`，决定页漫或条漫、阅读方向、格子比例、气泡占位，并继承 name board 的原稿安全框、页侧、翻页钩子和气泡优先级。
+5. `comic-finishing` 产 `出图/第N话/finishing/finishing_plan.json`，把墨线、黑场、网点/灰阶、效果线、漫符和拟声词画法写成出图可消费的契约。
+6. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记；job 必须消费 `panel_script.json` 的视觉一致性契约（角色完整性、视线目标、场景布局、光位/冷暖、轴线视线）和 `finishing_plan.json` 的传统原稿契约。
+7. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图和 manifest。
+8. `comic-review` 审阅读顺序、遮挡、文字密度、角色一致性、传统工艺层、改编取舍、平台规格，再生成返修清单。
 
 ## MVP 边界
 
@@ -30,13 +34,14 @@
 
 - `comic` 总调度与项目初始化脚本。
 - `comic-progress` 只读进度扫描脚本。
-- `comic-script`、`comic-layout`、`comic-image`、`comic-compose`、`comic-review` 的 SKILL.md 交付契约。
+- `comic-script`、`comic-name`、`comic-layout`、`comic-finishing`、`comic-image`、`comic-compose`、`comic-review` 的 SKILL.md 交付契约。
 - `comic-compose/scripts/export_longstrip.py`：读取 layout 和面板图，写导出 manifest；安装 Pillow 时可选渲染单张长图，显式设置分段高度时才切分。
 
 MVP 之后继续增强：
 
 - 自动出图后端适配层。
 - 更强像素级角色/场景一致性机检（当前已有共享参考、视觉契约、风格/角色并排报告和启发式指纹；后续可接 VLM/人脸 embedding/深度布局检测，但不得降低现有 gate）。
+- 更强传统原稿审美机检：版面流向、黑白灰价值、网点密度、效果线方向和拟声词融入度可逐步从 warn 升级为项目可选硬闸。
 - 大规模批跑、更新影响扫描、投放数据回灌。
 - 富交互排版 UI。
 

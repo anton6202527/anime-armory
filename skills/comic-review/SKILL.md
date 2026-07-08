@@ -1,6 +1,6 @@
 ---
 name: comic-review
-description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, 发布前检查, comic-review.
+description: 画漫画审查阶段。Use when reviewing comic scripts, name boards, layouts, traditional ink/tone/effects coverage, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, ネーム检查, 网点检查, 效果线检查, 发布前检查, comic-review.
 ---
 
 # comic-review — 漫画审查与返修
@@ -12,6 +12,7 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, layouts, 
 - `_进度.md`、`_设置.md`。
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/layout.json`、`lettering.json`、`export_manifest.json`。
+- 可选 `排版/第N话/name_board.json` 和 `出图/第N话/finishing/finishing_plan.json`。
 - `出图/第N话/panels/`。
 - 可选源本、故事圣经和共享参考。
 
@@ -86,6 +87,7 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 | 眼神/视线一致性 | `gaze_target`、`eyeline_direction` 是否存在且具体；角色是否看向戏内对象而不是“坚定眼神/看前方/无理由看镜头” |
 | 场景连续性 | `scene_anchor_id` 是否登记到 `visual_contract.scene_anchors`；空间布局、主光方向/冷暖、轴线视线、常驻物件和前后景层级是否跨格继承 |
 | 站位/遮挡一致性 | 多人同格是否写清左右、前后景、遮挡、接触点和视线轴线，避免正反打或动作格空间关系漂移 |
+| 传统工艺层 | 启用 `传统原稿流程` 时，是否有 name board、原稿安全区、墨线/黑场/网点/效果线计划，以及出图 job 是否消费 finishing plan |
 | 角色指纹/并排证据 | `CHAR_` 参考图是否与本话出场 panel 并排可审，face/hair/outfit 启发式是否提示异常 |
 | 风格一致性 | 生图模型/渠道是否统一，风格锚是否登记，面板是否出现照片感/色彩/细节密度离群，场景族群内是否自洽，同场景是否冷暖调色横跳，是否出现多面板拼贴 gutter 或外框/截图边 |
 | 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |
@@ -109,8 +111,10 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 - `severity`：block / warn / info。
 - `artifact`：具体文件或 panel_id。
 - `reason`：为什么影响阅读或发布。
-- `return_to`：回 `comic-script` / `comic-layout` / `comic-image` / `comic-compose`。
+- `return_to`：回 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-image` / `comic-compose`。
 - `suggested_fix`：最小返修动作。
+
+缺 name board 或 finishing plan 默认是 warn/info；角色脸、眼神、场景轴线和共享参考缺口仍按原硬闸处理。
 
 ## 不做什么
 

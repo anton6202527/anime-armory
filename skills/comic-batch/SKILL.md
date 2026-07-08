@@ -1,18 +1,18 @@
 ---
 name: comic-batch
-description: 画漫画流程推进与批跑控制。Use when advancing a comic chapter from its current _进度.md frontier, batch-running panel image generation, rerolling selected panels, or chaining image -> compose -> review for projects under 创作区/画漫画. It orchestrates existing comic-* stage scripts and keeps paid/high-cost generation explicit. Triggers 漫画批跑, 漫画自动推进, 抽到满意为止, 批量出图, 重抽漫画格, comic-batch.
+description: 画漫画流程推进与批跑控制。Use when advancing a comic chapter from its current _进度.md frontier, batch-running panel image generation, rerolling selected panels, or chaining image -> compose -> review for projects under 创作区/画漫画. It recognizes comic-name and comic-finishing frontiers, orchestrates existing comic-* stage scripts, and keeps paid/high-cost generation explicit. Triggers 漫画批跑, 漫画自动推进, 抽到满意为止, 批量出图, 重抽漫画格, comic-batch.
 ---
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，判断当前前沿，然后调用本线已有阶段脚本推进。它不替代 `comic-script` / `comic-layout` / `comic-image` / `comic-compose` / `comic-review`，只负责把一话的批量执行、重抽、候选归档和下一步衔接串起来。出图前必须先跑 `comic-review` 的 `image_preflight` gate；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，判断当前前沿，然后调用本线已有阶段脚本推进。它不替代 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-image` / `comic-compose` / `comic-review`，只负责把一话的批量执行、重抽、候选归档和下一步衔接串起来。出图前必须先跑 `comic-review` 的 `image_preflight` gate；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
 
 ## 适用场景
 
 - 用户已经确认付费/高成本出图，要求继续批量生成面板图。
 - 预算充足，需要对失败或不满意面板多次重抽。
 - 出图齐全后，需要继续衔接嵌字合成或审查。
-- 一话中途被打断，需要从 `_进度.md` 和 job 包恢复。
+- 一话中途被打断，需要从 `_进度.md` 和 job 包恢复；如果前沿停在缩略分镜、页面排版或原稿收尾，它会提示先用对应 stage skill，而不会自动跳过传统工艺层。
 
 ## 输入
 

@@ -88,3 +88,44 @@ def test_build_lettering_uses_narration_target_for_chinese_mode() -> None:
     assert item["text_source"] == "太祖曰。"
     assert item["lang"] == "zh-Hans"
     assert item["line_break"] == "cjk"
+
+
+def test_build_lettering_carries_drawn_sfx_plan() -> None:
+    panel_script = {
+        "chapter": "第1话",
+        "panels": [
+            {
+                "panel_id": "P001",
+                "sfx": ["砰"],
+            }
+        ],
+    }
+    layout = {
+        "segments": [
+            {
+                "panels": [
+                    {
+                        "panel_id": "P001",
+                        "bubble_slots": [{"slot_id": "B001S", "type": "sfx"}],
+                    }
+                ]
+            }
+        ]
+    }
+    finishing_map = {
+        "P001": {
+            "lettering_sfx_plan": {
+                "mode": "drawn_sfx",
+                "integration": "along impact zone",
+                "shape": "jagged impact",
+            }
+        }
+    }
+
+    lettering = build_lettering.build_lettering(panel_script, layout, {}, "中文", finishing_map)
+
+    item = lettering["items"][0]
+    assert item["type"] == "sfx"
+    assert item["style"]["drawn_lettering_mode"] == "drawn_sfx"
+    assert item["style"]["integration"] == "along impact zone"
+    assert item["style"]["shape"] == "jagged impact"

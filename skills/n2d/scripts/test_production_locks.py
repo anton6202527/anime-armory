@@ -10,6 +10,9 @@ def _write_release_inputs(root: Path, ep: str = "第1集") -> None:
     (root / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (root / "设定库").mkdir(parents=True)
     (root / "设定库" / "source_comprehension.json").write_text('{"status":"confirmed"}', encoding="utf-8")
+    (root / "设定库" / "global_style.md").write_text("status: confirmed\n", encoding="utf-8")
+    (root / "出图" / "共享").mkdir(parents=True, exist_ok=True)
+    (root / "出图" / "共享" / "identity_registry.json").write_text('{"kind":"n2d_identity_registry","characters":[]}', encoding="utf-8")
     (root / "脚本" / ep).mkdir(parents=True)
     (root / "脚本" / ep / "voiceover.txt").write_text("台词", encoding="utf-8")
     (root / "脚本" / ep / "bgm.txt").write_text("BGM", encoding="utf-8")
@@ -27,6 +30,7 @@ def _write_release_inputs(root: Path, ep: str = "第1集") -> None:
     (root / "出视频" / ep / "prompt").mkdir(parents=True, exist_ok=True)
     (root / "出视频" / ep / "prompt" / "video_model_routes.json").write_text('{"kind":"n2d_video_model_routes"}', encoding="utf-8")
     (root / "生产数据").mkdir(parents=True, exist_ok=True)
+    (root / "生产数据" / "identity_adapter_matrix.json").write_text('{"kind":"n2d_identity_adapter_matrix","forms":[]}', encoding="utf-8")
     (root / "生产数据" / "image_qc" / ep).mkdir(parents=True, exist_ok=True)
     (root / "生产数据" / "image_qc" / ep / f"image_qc_{ep}.json").write_text('{"kind":"n2d_image_qc","status":"pass"}', encoding="utf-8")
     (root / "生产数据" / f"video_qc_{ep}.json").write_text('{"kind":"n2d_video_qc","status":"pass"}', encoding="utf-8")
@@ -67,6 +71,14 @@ def test_stage_scoped_check_ignores_later_unconfirmed_locks(tmp_path: Path) -> N
     assert full["status"] == "block"
 
 
+def test_preflight_stage_aliases_use_expected_lock_scope() -> None:
+    assert locks.stage_lock_ids("image_prompt_preflight") == locks.stage_lock_ids("image_prompt")
+    assert locks.stage_lock_ids("image_preflight") == locks.stage_lock_ids("image")
+    assert "style_identity_lock" in locks.stage_lock_ids("image_preflight")
+    assert locks.stage_lock_ids("video_prompt_preflight") == locks.stage_lock_ids("video_prompt")
+    assert locks.stage_lock_ids("video_preflight") == locks.stage_lock_ids("video_prompt")
+
+
 def test_review_lock_blocks_missing_rough_cut_artifact(tmp_path: Path) -> None:
     _write_release_inputs(tmp_path)
     locks.scaffold(tmp_path, "第1集", confirmed=True, reviewer="qa")
@@ -87,3 +99,33 @@ def test_compose_lock_blocks_missing_video_material_artifact(tmp_path: Path) -> 
 
     assert report["status"] == "block"
     assert any(f["code"] == "lock_required_artifact_missing" and f["lock_id"] == "video_material_lock" for f in report["findings"])
+
+
+def test_image_preflight_blocks_missing_style_identity_artifact(tmp_path: Path) -> None:
+    _write_release_inputs(tmp_path)
+    locks.scaffold(tmp_path, "第1集", confirmed=True, reviewer="qa")
+    (tmp_path / "出图" / "共享" / "identity_registry.json").unlink()
+
+    report = locks.check_ledger(tmp_path, "第1集", stage="image_preflight")
+
+    assert report["status"] == "block"
+    assert any(
+        f["code"] == "lock_required_artifact_missing" and f["lock_id"] == "style_identity_lock"
+        for f in report["findings"]
+    )
+
+
+def test_check_ledger_does_not_write_check_report_unless_requested(tmp_path: Path) -> None:
+    _write_release_inputs(tmp_path)
+    locks.scaffold(tmp_path, "第1集", confirmed=True, reviewer="qa")
+    expected = tmp_path / "生产数据" / "production_locks_check_image_第1集.json"
+
+    report = locks.check_ledger(tmp_path, "第1集", stage="image_preflight")
+
+    assert report["status"] == "pass"
+    assert not expected.exists()
+    assert report["check_path_expected"] == str(expected)
+
+    written = locks.check_ledger(tmp_path, "第1集", stage="image_preflight", write_check=True)
+    assert written["check_path"] == str(expected)
+    assert expected.is_file()

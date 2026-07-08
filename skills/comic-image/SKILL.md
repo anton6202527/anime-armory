@@ -1,6 +1,6 @@
 ---
 name: comic-image
-description: 画漫画出图阶段。Use when preparing shared visual references, per-panel image prompts, generation job packets, registering panel images, or checking textless comic art for projects under 创作区/画漫画. Produces 出图/共享 references, 出图/第N话/prompt job packs, and 出图/第N话/panels images. Triggers 漫画出图, 分格出图, panel image, 漫画prompt, 角色定妆, 场景参考, 道具参考, comic-image.
+description: 画漫画出图阶段。Use when preparing shared visual references, per-panel image prompts, generation job packets, traditional manga ink/tone/effects contracts, registering panel images, or checking textless comic art for projects under 创作区/画漫画. Produces 出图/共享 references, 出图/第N话/prompt job packs, and 出图/第N话/panels images. Triggers 漫画出图, 分格出图, panel image, 漫画prompt, 角色定妆, 场景参考, 道具参考, 墨线, 网点, 效果线, comic-image.
 ---
 
 # comic-image — 漫画出图包与面板图
@@ -13,6 +13,7 @@ description: 画漫画出图阶段。Use when preparing shared visual references
 - `设定库/story_bible.md`。
 - `脚本/第N话/panel_script.json`。
 - `排版/第N话/layout.json`。
+- 可选 `出图/第N话/finishing/finishing_plan.json`：墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划。
 - `出图/共享/identity_registry.json` 与 `出图/共享/图片/`：由 `comic-identity` 维护的角色、场景、道具参考。
 
 ## 输出
@@ -83,10 +84,11 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ## 工作流
 
-1. 读 `panel_script.json` 和 `layout.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
+1. 读 `panel_script.json`、`layout.json` 和可选 `finishing_plan.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
    - 正式出图前，`panel_script.json` 顶层 `visual_contract` 和逐格视觉契约必须存在。含角色格必须消费 `gaze_target / eyeline_direction / character_integrity`；含场景格必须消费 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`，眼神目标必须是具体戏内对象，多人同格必须有站位/遮挡/接触点。这些字段会写入 job 的 `continuity_contract`，并进入 prompt。
    - 漫画格也要锁脸、眼神和身体完整性：脸型、眼型/眼距、发际线、发型、服装主色、配饰/伤痕/标志物、手脚和关键道具不能跨格漂移；动作格不得为了构图裁掉叙事需要的头发、脸、手脚、武器或接触点。
    - 除非本格明确 `camera_role=POV/破第四墙`，不要让角色看读者镜头；眼神应锁定对话对象、对手、武器/道具、命中点、画外声源或下一动作目标。
+   - 启用传统原稿流程时，应先跑 `comic-finishing`，让 job 带 `traditional_finish_contract`，把墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划注入 prompt。缺该契约时 gate 给 warn，正式长线项目应补齐后再批量出图。
 2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
 3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；若项目登记了 `character_dna`、`variant_policy`、`STYLE_` 风格锚，逐格 prompt 必须消费这些契约。
 4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约和混用生成配方；`comic-batch` 会自动跑。
@@ -115,6 +117,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 动作格写清手、脚、武器、道具和地面的接触点；脚部叙事必须能看出鞋靴/脚尖/小腿和地面受力，不能用手掌替代脚掌。
 - 复杂动作拆分为多格或标注分层/合成建议。
 - 输出尺寸跟随 `layout.json` 的面板比例。
+- 传统漫画完成稿要写清目标稿层：清线稿、墨线+黑场、网点完成稿或彩色完成稿；不要只写“漫画风”。网点、速度线、集中线、冲击闪、漫符必须服务阅读和动作路径，不遮挡脸、手、脚、关键道具或最终文字槽。
 - 不写具体在世画师、具体 IP、角色名或“某作品同款”作为风格提示；改写成可执行视觉特征。
 
 ## 不做什么

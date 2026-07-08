@@ -7,37 +7,37 @@
       "family": "image_prompt_preflight",
       "human_boundary": "agent_generation",
       "trace_policy": "recommended",
-      "required_check_groups": ["compliance", "progress", "voice_timing", "storyboard_contract", "style_contract", "special_templates", "skill_freshness"]
+      "required_check_groups": ["compliance", "progress", "voice_timing", "storyboard_contract", "style_contract", "special_templates", "story_economy", "production_handoff", "skill_freshness"]
     },
     "image_preflight": {
       "family": "image",
       "human_boundary": "paid_or_irreversible",
       "trace_policy": "required_for_batch",
-      "required_check_groups": ["compliance", "progress", "identity_registry", "asset_registry", "storyboard_contract", "retention", "budget", "backend_evidence", "skill_freshness"]
+      "required_check_groups": ["compliance", "progress", "identity_registry", "asset_registry", "storyboard_contract", "story_economy", "production_handoff", "production_locks", "retention", "budget", "backend_evidence", "skill_freshness"]
     },
     "image": {
       "family": "image",
       "human_boundary": "post_generation_qc",
       "trace_policy": "required",
-      "required_check_groups": ["image_qc", "consistency_audit", "generation_recipe", "seed_events", "contract_inheritance"]
+      "required_check_groups": ["story_economy", "production_handoff", "image_qc", "consistency_audit", "generation_recipe", "seed_events", "contract_inheritance"]
     },
     "video_prompt_preflight": {
       "family": "video_prompt_preflight",
       "human_boundary": "agent_generation",
       "trace_policy": "recommended",
-      "required_check_groups": ["compliance", "progress", "identity_handoff", "asset_handoff", "image_qc", "model_router", "motion_contract", "skill_freshness"]
+      "required_check_groups": ["compliance", "progress", "story_economy", "production_handoff", "production_locks", "identity_handoff", "asset_handoff", "image_qc", "model_router", "motion_contract", "skill_freshness"]
     },
     "video_preflight": {
       "family": "video",
       "human_boundary": "paid_or_irreversible",
       "trace_policy": "required_for_batch",
-      "required_check_groups": ["compliance", "progress", "identity_handoff", "asset_handoff", "image_qc", "video_routes", "budget", "backend_evidence", "skill_freshness"]
+      "required_check_groups": ["compliance", "progress", "story_economy", "production_handoff", "production_locks", "identity_handoff", "asset_handoff", "image_qc", "video_routes", "budget", "backend_evidence", "skill_freshness"]
     },
     "video": {
       "family": "video",
       "human_boundary": "post_generation_qc",
       "trace_policy": "required",
-      "required_check_groups": ["video_assets", "consistency_audit", "generation_recipe", "contract_inheritance", "semantic_lineage"]
+      "required_check_groups": ["story_economy", "production_handoff", "video_assets", "consistency_audit", "generation_recipe", "contract_inheritance", "semantic_lineage"]
     },
     "compose": {
       "family": "compose",
@@ -50,6 +50,12 @@
       "human_boundary": "human_acceptance_signoff",
       "trace_policy": "required",
       "required_check_groups": ["compliance", "video_assets", "score", "review_ui", "consistency_ledger", "subtitle_alignment", "human_review"]
+    },
+    "review_acceptance": {
+      "family": "review",
+      "human_boundary": "human_acceptance_signoff",
+      "trace_policy": "required",
+      "required_check_groups": ["compliance", "progress", "production_handoff", "production_locks", "identity_registry", "asset_registry", "image_qc", "video_routes", "video_assets", "compose_inputs", "subtitle_alignment", "voice_identity", "consistency_audit", "generation_recipe", "seed_events", "contract_inheritance", "semantic_lineage", "score", "review_ui", "consistency_ledger", "human_review", "release_verdict"]
     }
   }
 }

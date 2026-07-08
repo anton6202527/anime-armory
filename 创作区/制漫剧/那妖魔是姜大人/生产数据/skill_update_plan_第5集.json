@@ -1,0 +1,472 @@
+{
+  "baseline_bootstrapped": false,
+  "changed_files": [
+    "skills/n2d-batch/SKILL.md",
+    "skills/n2d-batch/scripts/queue.py",
+    "skills/n2d-image/QUICKSTART.md",
+    "skills/n2d-image/SKILL.md",
+    "skills/n2d-image/references/cli_registry.md",
+    "skills/n2d-image/references/lora_consistency.md",
+    "skills/n2d-image/references/platforms.md",
+    "skills/n2d-image/references/prompt_format.md",
+    "skills/n2d-image/scripts/codex_image_runner.py",
+    "skills/n2d-image/scripts/derive_makeup_pack.py",
+    "skills/n2d-image/scripts/dreamina_image_runner.py",
+    "skills/n2d-image/scripts/image_prompt_pack.py",
+    "skills/n2d-image/scripts/image_qc.py",
+    "skills/n2d-review/SKILL.md",
+    "skills/n2d-review/references/checklist.md",
+    "skills/n2d-review/scripts/consistency_audit.py",
+    "skills/n2d-review/scripts/consistency_charter.py",
+    "skills/n2d-review/scripts/gate.py",
+    "skills/n2d-review/scripts/gate_core.py",
+    "skills/n2d-review/scripts/gates/backend.py",
+    "skills/n2d-review/scripts/gates/consistency.py",
+    "skills/n2d-review/scripts/gates/contract.py",
+    "skills/n2d-review/scripts/video_face_drift_watch.py",
+    "skills/n2d-script/SKILL.md",
+    "skills/n2d-script/references/formats.md",
+    "skills/n2d-script/references/platforms.md",
+    "skills/n2d-script/references/专项镜头模板库.md",
+    "skills/n2d-script/scripts/animatic_assembler.py",
+    "skills/n2d-script/scripts/director_blocking_pack.py",
+    "skills/n2d-script/scripts/production_breakdown.py",
+    "skills/n2d-script/scripts/shot_split_decision.py",
+    "skills/n2d-script/scripts/story_acceptance_packets.py",
+    "skills/n2d-script/scripts/story_economy_audit.py",
+    "skills/n2d-script/scripts/storyboard_contract_backfill.py",
+    "skills/n2d/Q&A.md",
+    "skills/n2d/SKILL.md",
+    "skills/n2d/_lib/continuity_chain.py",
+    "skills/n2d/_lib/gate_policy_matrix.json",
+    "skills/n2d/_lib/image_backend_adapter.py",
+    "skills/n2d/_lib/n2d_action_registry.py",
+    "skills/n2d/_lib/prework_cache.py",
+    "skills/n2d/_lib/settings.py",
+    "skills/n2d/references/architecture.md",
+    "skills/n2d/references/contract.md",
+    "skills/n2d/references/制作模式与视频路由.md",
+    "skills/n2d/references/模型矩阵.md",
+    "skills/n2d/references/选择点与偏好.md",
+    "skills/n2d/run.py",
+    "skills/n2d/scripts/creative_governance.py",
+    "skills/n2d/scripts/gate_policy_coverage.py",
+    "skills/n2d/scripts/preventive_contracts.py",
+    "skills/n2d/scripts/production_locks.py",
+    "skills/n2d/scripts/production_readiness.py",
+    "skills/n2d/scripts/release_verdict.py",
+    "skills/n2d/scripts/repair_preflight.py",
+    "skills/n2d/scripts/script_supervisor_log.py"
+  ],
+  "changed_skills": [
+    "n2d",
+    "n2d-batch",
+    "n2d-image",
+    "n2d-review",
+    "n2d-script"
+  ],
+  "commands": [
+    "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 5 --rerun-from script_stage1 --scope \"skill 更新后重制到 image\" --max-concurrency 1 --max-retries 1",
+    "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image  # 重出图后验像素一致性（含 image_qc）"
+  ],
+  "contract_inheritance": null,
+  "created_at": "2026-07-08T14:56:11+00:00",
+  "current_stage": "image",
+  "current_todo": {
+    "column": "出图",
+    "command": "n2d-image /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第5集",
+    "label": "出图返修",
+    "note": "image_qc=block，hard_blocks=3；先修复报告阻断并重跑 image_qc：/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/image_qc_第5集.md",
+    "skill": "n2d-image",
+    "stage_key": "image",
+    "status": "72/125"
+  },
+  "episode": "第5集",
+  "execution_steps": [
+    {
+      "command": "python3 skills/n2d-batch/scripts/queue.py plan \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" --episodes 5 --rerun-from script_stage1 --scope \"skill 更新后重制到 image\" --max-concurrency 1 --max-retries 1",
+      "role": "queue_bounded_rerun",
+      "type": "command"
+    },
+    {
+      "instruction": "排队后由 n2d-batch runner 或对应 stage skill 执行返工；不要同时手工运行阶段命令，避免队列账本与实际产物分叉。 手工替代路径仅在不使用 batch 时执行：`n2d-script /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第5集`",
+      "role": "manual_alternative",
+      "type": "agent_step"
+    },
+    {
+      "command": "python3 skills/n2d-dashboard/scripts/dashboard.py gate \"/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image  # 重出图后验像素一致性（含 image_qc）",
+      "role": "verify_after_image_regen",
+      "run_when": "仅在 n2d-batch/阶段 skill 已实际完成图片重出后运行；只生成队列计划时不要当作已验收。",
+      "type": "command"
+    }
+  ],
+  "gate_refresh_needed": true,
+  "gate_refresh_stages": [
+    "image"
+  ],
+  "image_consistency": {
+    "advisory": 10,
+    "consistent": false,
+    "degraded": false,
+    "freshness": "stale",
+    "hard_blocks": 3,
+    "precision_level": "full",
+    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/image_qc_第5集.md",
+    "samples": [
+      "image_preflight 前置锁版账未通过：source_lock status 不是 confirmed；script_lock status 不是 confirmed；storyboard_lock status 不是 confirmed。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image_preflight --write-missing`。",
+      "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第5集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"创作区/制漫剧/那妖魔是姜大人\" 第5集` 固化新基线。"
+    ],
+    "status": "ok",
+    "verdict": "block"
+  },
+  "image_qc_environment": {
+    "advisory": 10,
+    "degraded": false,
+    "finding_samples": [
+      "image_preflight 前置锁版账未通过：source_lock status 不是 confirmed；script_lock status 不是 confirmed；storyboard_lock status 不是 confirmed。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image_preflight --write-missing`。",
+      "前期物料可能已过期：n2d, n2d-image, n2d-script 自上次 skill 基线后有改动，可能影响本阶段（image）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔是姜大人\" 第5集` 评估哪些物料需重制；统一修复/预检入口：`python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/那妖魔是姜大人\" 第5集 --stage image --write-missing`。完成重制或确认接受现状后再 `python3 skills/n2d-update/scripts/update_plan.py record \"创作区/制漫剧/那妖魔是姜大人\" 第5集` 固化新基线。"
+    ],
+    "freshness": "stale",
+    "hard_blocks": 3,
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "report_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/image_qc_第5集.json",
+    "report_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/image_qc_第5集.md",
+    "status": "ok",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "verdict": "block"
+  },
+  "kind": "n2d_skill_update_plan",
+  "needs_record": false,
+  "newly_relevant_skills": [],
+  "notes": [
+    "真正执行前先看 diff/计划；涉及出图/出视频/配音/合成等付费或不可逆步骤时必须再次确认。",
+    "共享定妆库需复核（非默认沿用）：本次变更命中定妆库生产规则（skills/n2d-image/SKILL.md, skills/n2d-image/references/cli_registry.md, skills/n2d-image/references/lora_consistency.md, skills/n2d-image/references/platforms.md, skills/n2d-image/references/prompt_format.md）。先按最新规则复核、必要时重出共享定妆/场景，再用 `python3 skills/n2d-image/scripts/asset_impact.py <作品根> <改动的定妆资产>` 级联出引用它、需跟着重出的本集分镜。",
+    "三帧契约豁免：路由后端 None 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。",
+    "图片一致性存在硬阻断（image_qc verdict=block，hard_blocks=3）：见 `/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/image_qc_第5集.md`，崩脸/服装/场景/接缝需重出受影响镜。",
+    "图片一致性报告已过期（image_qc 之后出图被重生成，inputs_fingerprint 失配）：当前结论不可信，先重跑 `python3 skills/n2d-image/scripts/image_qc.py <作品根> 第5集` 再据此判断。"
+  ],
+  "plan_json": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第5集.json",
+  "plan_md": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/skill_update_plan_第5集.md",
+  "rebuild_needed": true,
+  "regen_mode": "最小",
+  "relevant_skills": [
+    "n2d",
+    "n2d-batch",
+    "n2d-dashboard",
+    "n2d-image",
+    "n2d-lora",
+    "n2d-review",
+    "n2d-script",
+    "n2d-update",
+    "n2d-voice"
+  ],
+  "rerun_from": "script_stage1",
+  "rerun_until": "image",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_lock_changed_files": [
+    "skills/n2d-image/SKILL.md",
+    "skills/n2d-image/references/cli_registry.md",
+    "skills/n2d-image/references/lora_consistency.md",
+    "skills/n2d-image/references/platforms.md",
+    "skills/n2d-image/references/prompt_format.md"
+  ],
+  "shared_lock_reuse": false,
+  "smart_suggestions": [],
+  "snapshot_changed_files": [
+    "skills/n2d-batch/SKILL.md",
+    "skills/n2d-batch/scripts/queue.py",
+    "skills/n2d-image/QUICKSTART.md",
+    "skills/n2d-image/SKILL.md",
+    "skills/n2d-image/references/cli_registry.md",
+    "skills/n2d-image/references/lora_consistency.md",
+    "skills/n2d-image/references/platforms.md",
+    "skills/n2d-image/references/prompt_format.md",
+    "skills/n2d-image/scripts/codex_image_runner.py",
+    "skills/n2d-image/scripts/derive_makeup_pack.py",
+    "skills/n2d-image/scripts/dreamina_image_runner.py",
+    "skills/n2d-image/scripts/image_prompt_pack.py",
+    "skills/n2d-image/scripts/image_qc.py",
+    "skills/n2d-review/SKILL.md",
+    "skills/n2d-review/references/checklist.md",
+    "skills/n2d-review/scripts/consistency_audit.py",
+    "skills/n2d-review/scripts/consistency_charter.py",
+    "skills/n2d-review/scripts/gate.py",
+    "skills/n2d-review/scripts/gate_core.py",
+    "skills/n2d-review/scripts/gates/backend.py",
+    "skills/n2d-review/scripts/gates/consistency.py",
+    "skills/n2d-review/scripts/gates/contract.py",
+    "skills/n2d-review/scripts/video_face_drift_watch.py",
+    "skills/n2d-script/SKILL.md",
+    "skills/n2d-script/references/formats.md",
+    "skills/n2d-script/references/platforms.md",
+    "skills/n2d-script/references/专项镜头模板库.md",
+    "skills/n2d-script/scripts/animatic_assembler.py",
+    "skills/n2d-script/scripts/director_blocking_pack.py",
+    "skills/n2d-script/scripts/production_breakdown.py",
+    "skills/n2d-script/scripts/shot_split_decision.py",
+    "skills/n2d-script/scripts/story_acceptance_packets.py",
+    "skills/n2d-script/scripts/story_economy_audit.py",
+    "skills/n2d-script/scripts/storyboard_contract_backfill.py",
+    "skills/n2d/Q&A.md",
+    "skills/n2d/SKILL.md",
+    "skills/n2d/_lib/continuity_chain.py",
+    "skills/n2d/_lib/gate_policy_matrix.json",
+    "skills/n2d/_lib/image_backend_adapter.py",
+    "skills/n2d/_lib/n2d_action_registry.py",
+    "skills/n2d/_lib/prework_cache.py",
+    "skills/n2d/_lib/settings.py",
+    "skills/n2d/references/architecture.md",
+    "skills/n2d/references/contract.md",
+    "skills/n2d/references/制作模式与视频路由.md",
+    "skills/n2d/references/模型矩阵.md",
+    "skills/n2d/references/选择点与偏好.md",
+    "skills/n2d/run.py",
+    "skills/n2d/scripts/creative_governance.py",
+    "skills/n2d/scripts/gate_policy_coverage.py",
+    "skills/n2d/scripts/preventive_contracts.py",
+    "skills/n2d/scripts/production_locks.py",
+    "skills/n2d/scripts/production_readiness.py",
+    "skills/n2d/scripts/release_verdict.py",
+    "skills/n2d/scripts/repair_preflight.py",
+    "skills/n2d/scripts/script_supervisor_log.py"
+  ],
+  "source_drift": {
+    "status": "clean"
+  },
+  "strict_image_refresh": false,
+  "three_frame_compliance": {
+    "backend": null,
+    "compliant": true,
+    "enforced": false,
+    "exempt_clips": 0,
+    "missing_endframe_clips": [],
+    "missing_frame_files": [
+      {
+        "clip_id": "EP05_CLIP01",
+        "path": "出图/第5集/图片/Clip01_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP01",
+        "path": "出图/第5集/图片/Clip01_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP01",
+        "path": "出图/第5集/图片/Clip01_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP01",
+        "path": "出图/第5集/图片/Clip01_first_a4.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP01",
+        "path": "出图/第5集/图片/Clip01_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP02",
+        "path": "出图/第5集/图片/Clip02_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP02",
+        "path": "出图/第5集/图片/Clip02_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP02",
+        "path": "出图/第5集/图片/Clip02_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP02",
+        "path": "出图/第5集/图片/Clip02_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_first_a4.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_first_a5.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP03",
+        "path": "出图/第5集/图片/Clip03_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP04",
+        "path": "出图/第5集/图片/Clip04_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP04",
+        "path": "出图/第5集/图片/Clip04_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP04",
+        "path": "出图/第5集/图片/Clip04_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP05",
+        "path": "出图/第5集/图片/Clip05_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP05",
+        "path": "出图/第5集/图片/Clip05_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP05",
+        "path": "出图/第5集/图片/Clip05_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP06",
+        "path": "出图/第5集/图片/Clip06_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP06",
+        "path": "出图/第5集/图片/Clip06_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP06",
+        "path": "出图/第5集/图片/Clip06_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP06",
+        "path": "出图/第5集/图片/Clip06_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a4.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a5.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a6.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_first_a7.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP07",
+        "path": "出图/第5集/图片/Clip07_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP08",
+        "path": "出图/第5集/图片/Clip08_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP08",
+        "path": "出图/第5集/图片/Clip08_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP08",
+        "path": "出图/第5集/图片/Clip08_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP08",
+        "path": "出图/第5集/图片/Clip08_first_a4.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP08",
+        "path": "出图/第5集/图片/Clip08_end.png",
+        "role": "endframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_first_a1.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_first_a2.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_first_a3.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_first_a4.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_first_a5.png",
+        "role": "midframe"
+      },
+      {
+        "clip_id": "EP05_CLIP09",
+        "path": "出图/第5集/图片/Clip09_end.png",
+        "role": "endframe"
+      }
+    ],
+    "total_clips": 9,
+    "violating_clips": []
+  }
+}

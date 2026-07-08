@@ -1,14 +1,14 @@
 ---
 name: comic
-description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, page layout, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-layout, comic-identity, comic-image, comic-batch, comic-compose, comic-review, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, comic.
+description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, manga name board/ネーム, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, ネーム, 缩略分镜, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, comic.
 ---
-> 规模统计：Skill 数 10 | SKILL.md 总行数 800 | 目录文本总行数 12124
+> 规模统计：Skill 数 12 | SKILL.md 总行数 920 | 目录文本总行数 13703
 
 # comic — 画漫画生产线总调度
 
-把一个故事源、点子或已有脚本做成可发布的漫画。产物落在 `创作区/画漫画/作品名/`，最小闭环是：源本/企划 → 漫画脚本 → 页面/条漫排版 → 出图包 → 面板图 → 嵌字合成 → 审查。
+把一个故事源、点子或已有脚本做成可发布的漫画。产物落在 `创作区/画漫画/作品名/`，最小闭环是：源本/企划 → 漫画脚本 → 缩略分镜/ネーム → 页面/条漫排版 → 原稿收尾计划 → 出图包 → 面板图 → 嵌字合成 → 审查。
 
-comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-layout` / `comic-identity` / `comic-image` / `comic-batch` / `comic-compose` / `comic-review` / `comic-progress`。
+comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-identity` / `comic-image` / `comic-batch` / `comic-compose` / `comic-review` / `comic-progress`。
 
 详细结构见 `references/architecture.md`；选择点和私有偏好见 `references/选择点与偏好.md`；基础视觉风格候选见 `references/视觉风格候选.md`。
 
@@ -30,7 +30,7 @@ comic 是总调度，不直接替代阶段 skill。它负责定位作品根、�
 
 本线不写死平台、模型、画幅或导出格式。先读项目 `_设置.md`；缺失时读用户私有全局默认；仍缺失时首次询问并写回 `_设置.md`。合规、不可逆、会产生费用的步骤每次重新确认。
 
-核心选择点：`输入模式`、`漫画形态`、`阅读方向`、`目标平台`、`基础视觉风格`、`风格锚`、`页面尺寸`、`单话分段高度`、`生图模型`、`生图渠道`、`参考一致性策略`、`定妆级别`、`年龄形态继承`、`角色一致性硬闸`、`文字语言`、`嵌字方式`、`导出格式`、`发行地区`、`合规用途`。具体说明见 `references/选择点与偏好.md`。
+核心选择点：`输入模式`、`漫画形态`、`阅读方向`、`目标平台`、`基础视觉风格`、`风格锚`、`页面尺寸`、`单话分段高度`、`传统原稿流程`、`出图稿层`、`原稿规格`、`版式模板策略`、`网点策略`、`效果线策略`、`生图模型`、`生图渠道`、`参考一致性策略`、`定妆级别`、`年龄形态继承`、`角色一致性硬闸`、`文字语言`、`嵌字方式`、`导出格式`、`发行地区`、`合规用途`。具体说明见 `references/选择点与偏好.md`。
 
 ## 项目骨架
 
@@ -40,8 +40,9 @@ comic 是总调度，不直接替代阶段 skill。它负责定位作品根、�
 ├── 源本/                    原始故事、梗概或脚本
 ├── 设定库/                  story_bible、角色卡、场景卡、道具卡、style_guide
 ├── 脚本/第1话/              分话大纲.md、panel_script.json
-├── 排版/第1话/              layout.json、lettering.json、pages/、长图/
+├── 排版/第1话/              name_board.json、layout.json、lettering.json、name/、pages/、长图/
 ├── 出图/共享/               identity_registry、角色/场景/道具参考与 prompt 包
+├── 出图/第1话/finishing/    finishing_plan.json、墨线/黑场/网点/效果线计划
 ├── 出图/第1话/panels/       每格图像
 └── 生产数据/                manifest、审查报告、导出记录
 ```
@@ -64,7 +65,9 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 |---|---|---|
 | 调度/立项 | `comic` | `_设置.md`、`_进度.md`、`_meta.json`、目录骨架 |
 | 漫画脚本 | `comic-script` | `分话大纲.md`、`panel_script.json`、角色/场景/道具设定草案 |
-| 页面排版 | `comic-layout` | `layout.json`，含 page/scroll_segment/panel 坐标、阅读顺序、气泡占位 |
+| 缩略分镜/ネーム | `comic-name` | `name_board.json`、缩略分镜 SVG、页流、格子轻重、翻页钩子、原稿安全框 |
+| 页面排版 | `comic-layout` | `layout.json`，含 page/scroll_segment/panel 坐标、阅读顺序、气泡占位，并继承 name board 元数据 |
+| 原稿收尾 | `comic-finishing` | `finishing_plan.json`，含墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划 |
 | 一致性资产 | `comic-identity` | `identity_registry.json`、共享锚点、引用绑定、重抽计划 |
 | 出图包/出图 | `comic-image` | 逐格 prompt/job 包、后端参考图预算适配、真实参考图入参、`panels/*.png` 登记和 post-QC |
 | 流程批跑 | `comic-batch` | 从当前前沿调用阶段脚本；出图前后自动跑 comic gate；出图阶段支持多抽、重抽指定格和候选归档 |
@@ -77,6 +80,8 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 - 用户给作品根或 `_进度.md`：先跑 `comic-progress` 或直接读 `_进度.md`，再按当前前沿路由。
 - 用户只有故事点子：用本 skill 初始化 `原创漫画`，下一步 `comic-script`。
 - 用户给源本、小说、梗概或剧本：初始化 `源本改漫画` 或 `脚本改漫画`，下一步 `comic-script`；若源本是外语、文言/古汉语或混合语言，先做源语义归一化 gate 再分格。
+- 用户问“传统漫画流程 / 怎么更像手画漫画 / 页流 / ネーム / 分镜草稿”：路由 `comic-name`，确认后再回 `comic-layout`。
+- 用户问“网点 / 墨线 / 黑场 / 速度线 / 集中线 / 漫符 / 拟声词怎么画”：路由 `comic-finishing`，确认后重建 `comic-image` 出图包。
 - 用户问“长图怎么出 / 怎么嵌字”：路由 `comic-compose`。
 - 用户问“画面图怎么生成 / prompt 怎么写”：路由 `comic-image`。
 - 用户问“角色不像 / 换脸 / 定妆 / 共享参考 / 出图一致性”：路由 `comic-identity`；修完后再回 `comic-image` 重抽受影响格。
@@ -88,6 +93,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 - 源本可选，故事蓝图和分格脚本必需。
 - 外语、文言/古汉语和混合源本可以继续改漫画，但必须先归一到源语言、目标嵌字语言、专名表、白话/译文、歧义和改编取舍账，再让逐格脚本保留语义追溯字段。
 - 面板图尽量不直接生成台词；台词、旁白、拟声词通过 `lettering.json` 后期嵌字，`文字语言` 默认中文，可选英文或中英双语上下排版，保证清晰、可改、可审。
+- **传统漫画工艺层**：默认启用 `传统原稿流程`。`comic-name` 先做ネーム，把页流、格子轻重、翻页钩子、气泡优先级和原稿安全框定下来；`comic-finishing` 再把墨线、黑场、网点/灰阶、效果线、漫符和拟声词画法写成结构化计划；`comic-image` 必须消费该计划生成无字面板图。缺 name board 或 finishing plan 时 gate 只给 warn，不替代角色/场景一致性硬闸。
 - **漫画一致性不降级铁律**：漫画不是“粗略草图”，不能因为是分格静态图就降低角色脸、人物完整性、眼神、场景、光位和轴线标准。正式出图前，`panel_script.json` 顶层必须有 `visual_contract`，逐格必须写清 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline / gaze_target / eyeline_direction / character_integrity`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`；`gaze_target` 不能写成“坚定眼神/看前方/看镜头”（除非 `camera_role=POV/破第四墙`）；多人同格必须写站位/遮挡/接触点。`comic-review gate --stage image_preflight` 缺字段或字段不可执行即阻断，回 `comic-script` 补契约，不允许靠宽泛 prompt 或后期合成蒙混。
 - 默认按长线连载口径做角色定妆：常驻角色进入批量生产前补专门定妆和多视图；短 demo 才显式改成锚点过渡。
 - 用户提供的定型图必须写入 `identity_registry.json` 的角色 DNA / 禁漂移项；同一角色的少年、成年、受伤、觉醒、换装等形态只允许继承性变化，不得换脸或换画风。需要高一致性长线口径时，`comic-review` 把风格锚、年龄形态继承和多视图缺口作为硬闸。

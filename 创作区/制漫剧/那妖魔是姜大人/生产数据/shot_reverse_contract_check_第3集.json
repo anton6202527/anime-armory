@@ -1,0 +1,25 @@
+{
+  "kind": "n2d_shot_reverse_contract_check",
+  "version": 1,
+  "episode": "第3集",
+  "status": "pass",
+  "generated_at": "2026-07-08T20:04:03+00:00",
+  "contract_path": "脚本/第3集/shot_reverse_contract.json",
+  "report_path": "生产数据/shot_reverse_contract_第3集.md",
+  "summary": {
+    "patterns": 5,
+    "block": 0,
+    "warn": 1,
+    "info": 0
+  },
+  "issues": [
+    {
+      "clip_id": "EP03_CLIP07",
+      "severity": "warn",
+      "code": "vertical_crowd_risk",
+      "message": "9:16 正反打含 3+ 主体，横向并排会导致脸小和关系乱。",
+      "suggestion": "用建立镜 + 过肩/纵深 + 插入/反应近景，不做多人横排近景。"
+    }
+  ],
+  "synced_axis_blocking_map": "脚本/第3集/axis_blocking_map.json"
+}

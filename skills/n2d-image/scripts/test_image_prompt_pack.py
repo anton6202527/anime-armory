@@ -151,6 +151,53 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "不是实体武器" in shot_text
 
 
+def test_shot_prompt_consumes_shot_reverse_contract(tmp_path: Path) -> None:
+    ep = "第1集"
+    (tmp_path / "脚本" / ep).mkdir(parents=True)
+    (tmp_path / "脚本" / ep / "shot_reverse_contract.json").write_text(json.dumps({
+        "kind": "n2d_shot_reverse_contract",
+        "patterns": [{
+            "clip_id": "EP01_CLIP02",
+            "axis_id": "AXIS_LOC_HALL_CHAR_A_VS_CHAR_B",
+            "participants": {
+                "A": {"character_id": "CHAR_A", "screen_position": "画左前景", "eyeline_direction": "看画右，不看镜头"},
+                "B": {"character_id": "CHAR_B", "screen_position": "画右中景", "eyeline_direction": "看画左，不看镜头"},
+            },
+            "screen_sides": {"spatial_mode": "left_right"},
+            "coverage": {
+                "a_ots": "焦点 CHAR_A；CHAR_B 的前景肩部虚化",
+                "b_ots": "焦点 CHAR_B；CHAR_A 的前景肩部虚化",
+            },
+            "camera_coverage": "clean single + OTS + insert",
+            "lens_height_distance_match": "50-85mm 中长焦，相近高度和距离",
+            "crossing_axis_policy": "禁止越轴；需要建立镜缓冲",
+            "buffer_or_reestablishing": "火把插入或双人建立镜",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    clip = {
+        "id": "EP01_CLIP02",
+        "template": "dialogue_shot_reverse",
+        "description": "两人对峙。",
+        "character_ids": ["CHAR_A", "CHAR_B"],
+        "continuity": {"eyeline": "CHAR_A 看画右，CHAR_B 看画左"},
+    }
+    story = {"clips": [clip], "visual_contract": {}, "style_contract": {}}
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.CHARACTER_DEFS = {
+            "CHAR_A": {"name": "角色A", "asset_key": "CHAR_A__常态", "form": "常态", "tier": "core"},
+            "CHAR_B": {"name": "角色B", "asset_key": "CHAR_B__常态", "form": "常态", "tier": "core"},
+        }
+        text = image_prompt_pack.shot_prompt_section(tmp_path, ep, 2, clip, {}, story)
+    finally:
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    assert "**正反打合同**" in text
+    assert "AXIS_LOC_HALL_CHAR_A_VS_CHAR_B" in text
+    assert "谁的肩" not in text
+    assert "正反打合同：" in text
+
+
 def test_shot_refs_include_ready_auxiliary_character_angles(tmp_path: Path) -> None:
     image_dir = tmp_path / "出图" / "共享" / "图片"
     image_dir.mkdir(parents=True)
@@ -851,3 +898,40 @@ def test_sanitize_future_state_removes_camera_gaze_language() -> None:
     assert "侧对镜头" not in out
     assert "直视主镜头" not in out
     assert "视线不看镜头" in out
+
+
+def test_write_consumed_contracts_receipt_records_image_prompt_inputs(tmp_path: Path) -> None:
+    ep = "第1集"
+    files = {
+        f"脚本/{ep}/storyboard.json": {"clips": [{"id": "Clip_01"}]},
+        f"脚本/{ep}/continuity_chain.json": {"kind": "n2d_continuity_chain", "seams": []},
+        f"脚本/{ep}/shot_reverse_contract.json": {"kind": "n2d_shot_reverse_contract", "patterns": []},
+        f"生产数据/script_quality_contract_{ep}.json": {"kind": "n2d_script_quality_contract"},
+        f"生产数据/director_camera_plan_{ep}.json": {"kind": "n2d_director_camera_plan"},
+        f"生产数据/reference_plan_{ep}.json": {"kind": "n2d_reference_plan"},
+        f"出图/{ep}/prompt/00_总览.md": "# overview\n",
+        f"出图/{ep}/prompt/01_分镜出图.md": "# shots\n",
+    }
+    for rel, payload in files.items():
+        path = tmp_path / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if isinstance(payload, str):
+            path.write_text(payload, encoding="utf-8")
+        else:
+            path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    receipt = image_prompt_pack.write_consumed_contracts_receipt(tmp_path, ep)
+    data = json.loads(receipt.read_text(encoding="utf-8"))
+
+    assert data["kind"] == "n2d_prompt_consumed_contracts"
+    assert data["scope"] == "image_prompt"
+    assert {row["name"] for row in data["contracts"]} == {
+        "storyboard",
+        "continuity_chain",
+        "shot_reverse_contract",
+        "script_quality_contract",
+        "director_camera_plan",
+        "reference_plan",
+    }
+    assert all(row["exists"] and row["sha256"] for row in data["contracts"])
+    assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])

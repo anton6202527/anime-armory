@@ -73,6 +73,7 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     _write_json(root / "生产数据" / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(root / "生产数据" / f"generation_recipe_manifest_{episode}.json", {"kind": "n2d_generation_recipe_manifest", "version": 1, "status": "pass", "records": [], "summary": {}, "root": str(root), "episode": episode})
     _write_json(root / "设定库" / "source_comprehension.json", {"kind": "n2d_source_comprehension", "status": "confirmed"})
+    (root / "设定库" / "global_style.md").write_text("status: confirmed\n", encoding="utf-8")
     _write_json(root / "脚本" / episode / "storyboard.json", {"kind": "n2d_storyboard", "clips": [{"id": "Clip_01", "duration": 1.0}]})
     _write_json(root / "脚本" / episode / "镜头时长.json", {"Clip_01": 1.0})
     (root / "脚本" / episode / "voiceover.txt").write_text("台词\n", encoding="utf-8")
@@ -137,6 +138,8 @@ def _release_ready_project(root: Path, episode: str = "第1集") -> None:
     image = root / image_rel
     image.parent.mkdir(parents=True, exist_ok=True)
     image.write_bytes(b"png")
+    _write_json(root / "出图" / "共享" / "identity_registry.json", {"kind": "n2d_identity_registry", "version": 1, "characters": []})
+    _write_json(root / "生产数据" / "identity_adapter_matrix.json", {"kind": "n2d_identity_adapter_matrix", "version": 1, "forms": []})
     fp = artifact_fingerprint(str(root), [image_rel])
     _write_json(root / "生产数据" / "image_qc" / episode / f"image_qc_{episode}.json", {
         "kind": "n2d_image_qc",
@@ -171,6 +174,40 @@ def test_release_verdict_blocks_stale_image_qc(tmp_path: Path) -> None:
     image_qc = next(c for c in payload["components"] if c["name"] == "image_qc")
     assert image_qc["status"] == "block"
     assert "stale" in image_qc["message"]
+
+
+def test_release_verdict_blocks_image_qc_review_in_strict_profile(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    path = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["summary"]["verdict"] = "review"
+    _write_json(path, data)
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集", profile="production")
+
+    assert payload["status"] == "blocked"
+    image_qc = next(c for c in payload["components"] if c["name"] == "image_qc")
+    assert image_qc["status"] == "block"
+    assert "verdict=review" in image_qc["message"]
+
+
+def test_release_verdict_allows_signed_image_qc_review_in_strict_profile(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    path = tmp_path / "生产数据" / "image_qc" / "第1集" / "image_qc_第1集.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["summary"]["verdict"] = "review"
+    _write_json(path, data)
+    _write_json(tmp_path / "生产数据" / "image_qc_advisory_signoff_第1集.json", {
+        "kind": "n2d_image_qc_advisory_signoff",
+        "status": "approved",
+        "accepted": [{"dimension": "image_qc_review", "reason": "测试确认非阻断 advisory"}],
+    })
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集", profile="production")
+
+    image_qc = next(c for c in payload["components"] if c["name"] == "image_qc")
+    assert image_qc["status"] == "pass"
+    assert "已签收" in image_qc["message"]
 
 
 def test_release_verdict_blocks_missing_production_handoff(tmp_path: Path) -> None:

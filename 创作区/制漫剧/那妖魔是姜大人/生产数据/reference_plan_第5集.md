@@ -1,6 +1,6 @@
 # 逐镜参考规划（治跨集脸漂）
 
-- root: 创作区/制漫剧/那妖魔是姜大人
+- root: /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人
 - episode: 第5集
 - 生图后端: GPT Image 2（渠道 Codex CLI）（codex · 策略 multi_reference）
 - 镜头数: 9 ｜ 弱后端×大变化镜: 9

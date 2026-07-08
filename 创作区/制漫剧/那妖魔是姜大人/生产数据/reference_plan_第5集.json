@@ -1,7 +1,7 @@
 {
   "kind": "n2d_reference_plan",
   "version": 1,
-  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "episode": "第5集",
   "backend": "codex",
   "backend_label": "GPT Image 2（渠道 Codex CLI）",

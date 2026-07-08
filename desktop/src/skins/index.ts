@@ -1,6 +1,32 @@
 import type { SkillTreeEntry } from "../types";
 
-export type FileIconKind = "image" | "video" | "audio" | "markdown" | "json" | "python" | "code" | "generic";
+export type FileIconKind =
+  | "audio"
+  | "code"
+  | "config"
+  | "css"
+  | "csv"
+  | "generic"
+  | "html"
+  | "image"
+  | "javascript"
+  | "json"
+  | "lock"
+  | "markdown"
+  | "npm"
+  | "pdf"
+  | "python"
+  | "react"
+  | "rust"
+  | "shell"
+  | "spreadsheet"
+  | "text"
+  | "typescript"
+  | "vite"
+  | "video"
+  | "word"
+  | "xml"
+  | "yaml";
 
 export type SkinFileIcon = {
   cls: string;
@@ -28,42 +54,42 @@ function ext(name: string): string {
 }
 
 const fileIconByExt: Record<string, Omit<SkinFileIcon, "kind"> & { kind?: FileIconKind }> = {
-  bash: { cls: "file-shell", label: "$" },
-  cjs: { cls: "file-js", label: "JS" },
-  css: { cls: "file-css", label: "#" },
-  csv: { cls: "file-text", label: "CSV" },
-  docx: { cls: "file-text", label: "W" },
-  env: { cls: "file-config", label: "." },
-  html: { cls: "file-html", label: "<>" },
-  js: { cls: "file-js", label: "JS" },
+  bash: { cls: "file-shell", kind: "shell" },
+  cjs: { cls: "file-js", kind: "javascript" },
+  css: { cls: "file-css", kind: "css" },
+  csv: { cls: "file-csv", kind: "csv" },
+  docx: { cls: "file-word", kind: "word" },
+  env: { cls: "file-config", kind: "config" },
+  html: { cls: "file-html", kind: "html" },
+  js: { cls: "file-js", kind: "javascript" },
   json: { cls: "file-json", kind: "json", label: "{}" },
   jsonl: { cls: "file-json", kind: "json", label: "{}" },
-  jsx: { cls: "file-js", label: "JSX" },
-  lock: { cls: "file-lock", label: "L" },
+  jsx: { cls: "file-react", kind: "react" },
+  lock: { cls: "file-lock", kind: "lock" },
   markdown: { cls: "file-md", kind: "markdown", label: "MD" },
   md: { cls: "file-md", kind: "markdown", label: "MD" },
   mdx: { cls: "file-md", kind: "markdown", label: "MD" },
-  mjs: { cls: "file-js", label: "JS" },
-  pdf: { cls: "file-text", label: "PDF" },
-  pptx: { cls: "file-text", label: "P" },
+  mjs: { cls: "file-js", kind: "javascript" },
+  pdf: { cls: "file-pdf", kind: "pdf" },
+  pptx: { cls: "file-text", kind: "text" },
   py: { cls: "file-py", kind: "python" },
-  rs: { cls: "file-rs", label: "RS" },
-  scss: { cls: "file-css", label: "S" },
-  sh: { cls: "file-shell", label: "$" },
-  swift: { cls: "file-code", label: "SW" },
-  toml: { cls: "file-config", label: "T" },
-  ts: { cls: "file-ts", label: "TS" },
-  tsx: { cls: "file-ts", label: "TSX" },
-  txt: { cls: "file-text", label: "TXT" },
-  xml: { cls: "file-html", label: "<>" },
-  xlsx: { cls: "file-text", label: "X" },
-  yaml: { cls: "file-yaml", label: "Y" },
-  yml: { cls: "file-yaml", label: "Y" },
-  zsh: { cls: "file-shell", label: "$" },
+  rs: { cls: "file-rs", kind: "rust" },
+  scss: { cls: "file-css", kind: "css" },
+  sh: { cls: "file-shell", kind: "shell" },
+  swift: { cls: "file-code", kind: "code" },
+  toml: { cls: "file-config", kind: "config" },
+  ts: { cls: "file-ts", kind: "typescript" },
+  tsx: { cls: "file-react", kind: "react" },
+  txt: { cls: "file-text", kind: "text" },
+  xml: { cls: "file-xml", kind: "xml" },
+  xlsx: { cls: "file-xls", kind: "spreadsheet" },
+  yaml: { cls: "file-yaml", kind: "yaml" },
+  yml: { cls: "file-yaml", kind: "yaml" },
+  zsh: { cls: "file-shell", kind: "shell" },
 };
 
 function textIcon(icon: Omit<SkinFileIcon, "kind"> & { kind?: FileIconKind }): SkinFileIcon {
-  return { ...icon, kind: icon.kind ?? "code" };
+  return { ...icon, kind: icon.kind ?? "generic" };
 }
 
 export const forgeSkin: SkinPlugin = {
@@ -80,6 +106,8 @@ export const forgeSkin: SkinPlugin = {
     "--text": "#e3e7ed",
     "--muted": "#929ba8",
     "--accent": "#58a6ff",
+    "--active-bar": "#3f6c87",
+    "--splitter-active": "#3f6c87",
     "--block": "#ff6f7d",
     "--warn": "#f2c05b",
     "--info": "#58a6ff",
@@ -88,22 +116,22 @@ export const forgeSkin: SkinPlugin = {
     "--editor-line": "#222325",
     "--editor-selection": "#27496d",
     "--folder-icon": "#78b7ff",
-    "--file-icon": "#a8b3c4",
+    "--file-icon": "#d4d7d6",
     "--file-code-icon": "#d7ba7d",
-    "--file-image-icon": "#c586d9",
+    "--file-image-icon": "#a074c4",
     "--file-video-icon": "#ff6f9f",
-    "--file-audio-icon": "#89d185",
-    "--file-md-icon": "#6bb6ff",
-    "--file-json-icon": "#dcdc60",
-    "--file-js-icon": "#f1e05a",
+    "--file-audio-icon": "#a074c4",
+    "--file-md-icon": "#519aba",
+    "--file-json-icon": "#cbcb41",
+    "--file-js-icon": "#cbcb41",
     "--file-ts-icon": "#519aba",
     "--file-html-icon": "#e37933",
     "--file-css-icon": "#519aba",
-    "--file-python-icon": "#3572a5",
-    "--file-rust-icon": "#dea584",
-    "--file-shell-icon": "#89d185",
-    "--file-yaml-icon": "#c586c0",
-    "--file-config-icon": "#a8b3c4",
+    "--file-python-icon": "#519aba",
+    "--file-rust-icon": "#6d8086",
+    "--file-shell-icon": "#8dc149",
+    "--file-yaml-icon": "#a074c4",
+    "--file-config-icon": "#6d8086",
     "--scm-untracked": "#89d185",
     "--scm-modified": "#cca700",
     "--scm-deleted": "#f48771",
@@ -137,10 +165,10 @@ export const forgeSkin: SkinPlugin = {
     if (entry.is_dir) return { cls: "file-folder", kind: "generic" };
     const lowerName = entry.name.toLowerCase();
     if (lowerName === "vite.config.ts" || lowerName === "vite.config.js") {
-      return textIcon({ cls: "file-js", label: "V" });
+      return { cls: "file-vite", kind: "vite" };
     }
     if (lowerName === "package.json" || lowerName === "package-lock.json") {
-      return textIcon({ cls: "file-js", label: "npm" });
+      return { cls: "file-npm", kind: "npm" };
     }
     const e = ext(entry.name);
     if (["png", "jpg", "jpeg", "webp", "gif", "bmp", "svg"].includes(e)) {
@@ -152,7 +180,7 @@ export const forgeSkin: SkinPlugin = {
     }
     const mapped = fileIconByExt[e];
     if (mapped) return textIcon(mapped);
-    if (lowerName.startsWith(".")) return textIcon({ cls: "file-config", label: "." });
+    if (lowerName.startsWith(".")) return { cls: "file-config", kind: "config" };
     return { cls: "file-generic", kind: "generic" };
   },
 };

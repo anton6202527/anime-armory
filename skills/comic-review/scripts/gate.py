@@ -486,6 +486,98 @@ def check_panel_visual_contract(root: Path, chapter: str, panel_script: dict[str
                 )
 
 
+def traditional_workflow_enabled(root: Path) -> bool:
+    return read_setting(root, "传统原稿流程", "启用") not in {"关闭", "off", "disabled", "false", "False"}
+
+
+def finishing_panel_map(plan: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    for panel in plan.get("panels") or []:
+        if isinstance(panel, dict) and panel.get("panel_id"):
+            out[str(panel.get("panel_id"))] = panel
+    return out
+
+
+def check_traditional_manga_contract(
+    root: Path,
+    chapter: str,
+    panel_script: dict[str, Any],
+    layout: dict[str, Any],
+    jobs: dict[str, Any],
+    findings: list[dict[str, Any]],
+) -> None:
+    if not traditional_workflow_enabled(root):
+        return
+    name_path = root / "排版" / chapter / "name_board.json"
+    finish_path = root / "出图" / chapter / "finishing" / "finishing_plan.json"
+    name_board = load_json(name_path, {})
+    finishing_plan = load_json(finish_path, {})
+    if not name_board:
+        add(
+            findings,
+            "warn",
+            "name_board_missing",
+            rel(root, name_path),
+            "传统原稿流程已启用，但缺少缩略分镜/name_board；页流、翻页钩子和格子轻重缺少ネーム层证据。",
+            "name",
+            "运行 comic-name 生成 name_board.json，再重建 layout。",
+            evidence_family="workflow",
+        )
+    manuscript = layout.get("manuscript") if isinstance(layout.get("manuscript"), dict) else {}
+    if not manuscript or not manuscript.get("safe_area"):
+        add(
+            findings,
+            "warn",
+            "manuscript_safe_area_missing",
+            f"排版/{chapter}/layout.json",
+            "layout 缺少 manuscript.safe_area / trim_box；页漫或投稿规格下容易把关键画面、气泡或拟声词放进裁切风险区。",
+            "layout",
+            "重跑 comic-layout，并确认已接入 comic-name 的原稿安全框。",
+            evidence_family="workflow",
+        )
+    finish_map = finishing_panel_map(finishing_plan if isinstance(finishing_plan, dict) else {})
+    if not finishing_plan:
+        add(
+            findings,
+            "warn",
+            "finishing_plan_missing",
+            rel(root, finish_path),
+            "传统原稿流程已启用，但缺少墨线/黑场/网点/效果线计划，出图 prompt 只能泛泛写漫画风。",
+            "finishing",
+            "运行 comic-finishing 生成 finishing_plan.json 后重建出图包。",
+            evidence_family="workflow",
+        )
+    script_ids = [str(panel.get("panel_id")) for panel in panel_script.get("panels") or [] if isinstance(panel, dict) and panel.get("panel_id")]
+    missing_finish = [pid for pid in script_ids if finishing_plan and pid not in finish_map]
+    if missing_finish:
+        add(
+            findings,
+            "warn",
+            "panel_finishing_contract_missing",
+            rel(root, finish_path),
+            "这些 panel 缺少传统原稿收尾计划：" + "、".join(missing_finish[:20]),
+            "finishing",
+            "重跑 comic-finishing 或手工补 panels[].ink_plan/tone_plan/effects_plan。",
+            evidence_family="workflow",
+        )
+    missing_job_finish = [
+        str(job.get("panel_id"))
+        for job in jobs.get("jobs") or []
+        if isinstance(job, dict) and not job.get("traditional_finish_contract")
+    ]
+    if finishing_plan and missing_job_finish:
+        add(
+            findings,
+            "warn",
+            "panel_job_finish_contract_not_applied",
+            f"出图/{chapter}/prompt/panel_jobs.json",
+            "这些 job 未注入 traditional_finish_contract：" + "、".join(missing_job_finish[:20]),
+            "image",
+            "重跑 comic-image/scripts/build_panel_jobs.py，让出图包消费 finishing_plan。",
+            evidence_family="workflow",
+        )
+
+
 def check_manifest_profile(root: Path, chapter: str, manifest: dict[str, Any], findings: list[dict[str, Any]]) -> None:
     for item in manifest.get("platform_findings") or []:
         if not isinstance(item, dict):
@@ -655,9 +747,12 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     if isinstance(panel_script, dict):
         check_source_semantics(root, chapter, panel_script, findings)
         check_panel_visual_contract(root, chapter, panel_script, findings)
+    layout = load_json(paths["layout"], {})
     jobs = load_json(paths["panel_jobs"], {})
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
+    if isinstance(panel_script, dict) and isinstance(layout, dict) and isinstance(jobs, dict):
+        check_traditional_manga_contract(root, chapter, panel_script, layout, jobs, findings)
     report = refresh_identity_report(root, chapter, findings, no_refresh=no_refresh)
     check_identity(root, report, findings)
     check_style_contract(root, findings)

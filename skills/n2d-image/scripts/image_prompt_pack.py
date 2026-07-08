@@ -33,6 +33,8 @@ REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
 SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
 SCRIPT_QUALITY_CONTRACT_KIND = "n2d_script_quality_contract"
+CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
+CONSUMED_CONTRACTS_VERSION = 1
 SCRIPT_CONTRACT_REQUIRED_FIELDS = [
     "core_attraction",
     "first_3s_visual_hook",
@@ -683,6 +685,43 @@ def flatten(value: Any) -> str:
     if isinstance(value, list):
         return " ".join(flatten(v) for v in value)
     return str(value or "")
+
+
+def shot_reverse_contract_patterns(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "脚本" / ep / "shot_reverse_contract.json")
+    if not isinstance(data, Mapping):
+        return {}
+    out: Dict[str, Mapping[str, Any]] = {}
+    for row in data.get("patterns") or []:
+        if not isinstance(row, Mapping):
+            continue
+        cid = str(row.get("clip_id") or "").strip()
+        if cid:
+            out[cid] = row
+    return out
+
+
+def shot_reverse_prompt_line(root: Path, ep: str, clip: Mapping[str, Any], idx: int) -> str:
+    pattern = shot_reverse_contract_patterns(root, ep).get(str(clip.get("id") or f"EP01_CLIP{idx:02d}"))
+    if not isinstance(pattern, Mapping):
+        return ""
+    participants = pattern.get("participants") if isinstance(pattern.get("participants"), Mapping) else {}
+    a = participants.get("A") if isinstance(participants.get("A"), Mapping) else {}
+    b = participants.get("B") if isinstance(participants.get("B"), Mapping) else {}
+    coverage = pattern.get("coverage") if isinstance(pattern.get("coverage"), Mapping) else {}
+    sides = pattern.get("screen_sides") if isinstance(pattern.get("screen_sides"), Mapping) else {}
+    a_id = str(a.get("character_id") or "")
+    b_id = str(b.get("character_id") or "")
+    return "；".join([
+        f"axis_id={pattern.get('axis_id')}",
+        f"A={a_id}，位置={a.get('screen_position')}，视线={a.get('eyeline_direction')}",
+        f"B={b_id}，位置={b.get('screen_position')}，视线={b.get('eyeline_direction')}",
+        f"站位模式={sides.get('spatial_mode')}，A/B 不互换",
+        f"OTS={coverage.get('a_ots')} / {coverage.get('b_ots')}",
+        f"coverage={flatten_contract_value(pattern.get('camera_coverage'))}",
+        f"镜头匹配={flatten_contract_value(pattern.get('lens_height_distance_match'))}",
+        f"越轴={flatten_contract_value(pattern.get('crossing_axis_policy'))}；缓冲={flatten_contract_value(pattern.get('buffer_or_reestablishing'))}",
+    ])
 
 
 def safe_slug(value: str) -> str:
@@ -3776,6 +3815,9 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     style_name = style_name_from_contract(sc)
     style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
     axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
+    shot_reverse_line = shot_reverse_prompt_line(root, ep, clip, idx)
+    shot_reverse_lines = [f"**正反打合同**：{shot_reverse_line}"] if shot_reverse_line else []
+    shot_reverse_positive = f"正反打合同：{shot_reverse_line}；" if shot_reverse_line else ""
     tone_line = clip_visual_tone(vc, idx)
     state_lock = state_lock_line(story, chars, idx, assets)
     target_paths, frame_parts = continuity_target_paths(ep, idx, clip)
@@ -3801,6 +3843,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "**逐主体参考绑定**：每个清晰主体只喂自己的定妆/脸部特写/表情参考，不把多角色拼成一张不可寻址参考表。",
         f"**区分锚点（互斥发色/服装主色/配饰）**：{distinct_line}。",
         f"**视线方向**：{axis_line}；非 POV 镜不看镜头。",
+        *shot_reverse_lines,
         f"**光位锚**：{json.dumps(vc.get('场景光位锚', {}), ensure_ascii=False)}",
         f"**镜头/机位**：{lens}",
         f"**起幅·运动余量**：{move}",
@@ -3838,7 +3881,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"身份锁定句：{identity_lock}；",
         f"锚点句：{char_phrase or asset_phrase}；",
         f"资产拓扑锁：{asset_topology_lock}；",
-        f"镜头构图：{lens}；{comp_guard}；{inner_focus + '；' if inner_focus else ''}视线方向={axis_line}；竖屏9:16；",
+        f"镜头构图：{lens}；{comp_guard}；{inner_focus + '；' if inner_focus else ''}{shot_reverse_positive}视线方向={axis_line}；竖屏9:16；",
         f"动作瞬间：{cross_handoff_positive}{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
@@ -4027,6 +4070,55 @@ def write_application_receipts(root: Path, ep: str, clips: Sequence[Mapping[str,
     return out
 
 
+def consumed_contract_inputs(ep: str) -> List[Tuple[str, Path]]:
+    return [
+        ("storyboard", Path("脚本") / ep / "storyboard.json"),
+        ("continuity_chain", Path("脚本") / ep / "continuity_chain.json"),
+        ("shot_reverse_contract", Path("脚本") / ep / "shot_reverse_contract.json"),
+        ("script_quality_contract", Path("生产数据") / f"script_quality_contract_{ep}.json"),
+        ("director_camera_plan", Path("生产数据") / f"director_camera_plan_{ep}.json"),
+        ("reference_plan", Path("生产数据") / f"reference_plan_{ep}.json"),
+    ]
+
+
+def write_consumed_contracts_receipt(root: Path, ep: str) -> Path:
+    prompt_rels = [
+        Path("出图") / ep / "prompt" / "00_总览.md",
+        Path("出图") / ep / "prompt" / "01_分镜出图.md",
+    ]
+    contracts: List[Dict[str, Any]] = []
+    for name, rel in consumed_contract_inputs(ep):
+        path = root / rel
+        contracts.append({
+            "name": name,
+            "path": str(rel),
+            "exists": path.is_file(),
+            "sha256": sha256_file(path) if path.is_file() else "",
+        })
+    prompt_files: List[Dict[str, Any]] = []
+    for rel in prompt_rels:
+        path = root / rel
+        prompt_files.append({
+            "path": str(rel),
+            "exists": path.is_file(),
+            "sha256": sha256_file(path) if path.is_file() else "",
+        })
+    out = root / "生产数据" / f"consumed_contracts_image_prompt_{ep}.json"
+    write_json(out, {
+        "kind": CONSUMED_CONTRACTS_KIND,
+        "version": CONSUMED_CONTRACTS_VERSION,
+        "episode": ep,
+        "scope": "image_prompt",
+        "accepted": True,
+        "reviewer": "Codex n2d-image prompt pack",
+        "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
+        "generated_at": now_iso(),
+        "contracts": contracts,
+        "prompt_files": prompt_files,
+    })
+    return out
+
+
 def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
     written: List[Path] = []
     for folder in ("角色卡", "场景卡", "道具卡"):
@@ -4149,6 +4241,7 @@ def write_pack(root: Path, ep: str) -> Dict[str, Any]:
     write_text(root / "设定库" / "角色圣经.md", role_bible_md())
     written.append(root / "设定库" / "角色圣经.md")
     written += write_application_receipts(root, ep, clips)
+    written.append(write_consumed_contracts_receipt(root, ep))
     return {
         "kind": "n2d_image_prompt_pack_result",
         "root": str(root),

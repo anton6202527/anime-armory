@@ -70,6 +70,15 @@
       "narration_target": "可选：最终嵌字旁白",
       "sfx": ["轰"],
       "art_notes": "景别、构图、表情、动作、禁漂移项",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "翻页前停顿",
+      "ink_plan": "清线轮廓、线宽变化、脸和手保持可读",
+      "black_fill_plan": "反派背后黑场压迫，但不遮挡五官和关键道具",
+      "tone_plan": "背景 20% 网点，衣料 40% 网点，焦点物保留白",
+      "value_plan": "三值阅读：脸亮、披风暗、背景中灰",
+      "effects_plan": "集中线指向匕首反光，速度线跟随挥刀路径",
       "references": ["CHAR_MAIN", "LOC_001"]
     }
   ]
@@ -93,6 +102,8 @@
 - `character_integrity` / `completeness_notes`：含角色格必填。说明本格如何保持脸型、眼型/眼距、发际线、发型轮廓、服装主色、配饰/伤痕/标志物和身体完整性；动作格还要写清手脚归属、接触点和不可裁掉的部位。只写“保持人物完整”不够。
 - `continuity_from` / `spatial_relationships`：推荐必填；多人同格时必须写。前者说明承接哪一格的状态、伤痕、道具或站位；后者锁人物左右、前后景、遮挡和关键接触点，减少跨格空间漂移。
 - `layout_weight` / `visual_weight` / `importance`（可选）：`heavy` / `medium` / `compact` 或 1-3，用于让 `comic-layout` 以数据驱动方式决定大格/中格/小格，避免把具体项目 story_function 写进通用脚本。
+- `panel_shape` / `border_style` / `gutter_intent`（可选）：传统ネーム层使用。`panel_shape` 可写 `wide`、`tall`、`small`、`full_width`、`borderless` 等；`gutter_intent` 写本格前后的停顿、快切、翻页钩子或呼吸。
+- `ink_plan` / `black_fill_plan` / `tone_plan` / `value_plan` / `effects_plan`（可选）：传统原稿收尾计划。`comic-finishing` 会优先继承这些字段，缺失时按风格和叙事功能生成默认计划。黑白页漫和日漫网点风格建议显式写 `tone_plan`；动作、冲击、揭示格建议显式写 `effects_plan`。
 - `style_bucket` / `scene_family` / `visual_context`（可选）：同一场景/光色族群标识，供 `comic-review` 的风格一致性按计划内场景分组，避免把夜景、梦境、蒙太奇、系统光效等合理差异误判成画风漂移。
 
 ## 一致性底线

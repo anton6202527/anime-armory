@@ -30,7 +30,7 @@ const GLYPHS = {
   chevronRight: "\ueab6",
   settingsGear: "\ueb51",
   settings: "\ueb52",
-  bell: "\uea8f",
+  bell: "\ueaa2",
 } as const;
 
 const CLASS_NAMES = {

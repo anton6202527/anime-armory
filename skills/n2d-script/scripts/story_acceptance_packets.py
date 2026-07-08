@@ -18,6 +18,8 @@ import importlib.util
 import json
 import os
 import re
+import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
@@ -296,6 +298,71 @@ def _animatic_preview_status(root: Path, ep: str) -> Dict[str, Any]:
     }
 
 
+def _parse_json_stdout(text: str) -> Any:
+    text = (text or "").strip()
+    if not text:
+        return None
+    try:
+        return json.loads(text)
+    except Exception:
+        pass
+    start = text.rfind("\n{")
+    if start >= 0:
+        try:
+            return json.loads(text[start + 1:])
+        except Exception:
+            return None
+    return None
+
+
+def _story_economy_status(root: Path, ep: str) -> Dict[str, Any]:
+    script = Path(__file__).with_name("story_economy_audit.py")
+    out = root / "生产数据" / f"story_economy_audit_{ep}.json"
+    if not script.is_file():
+        return {
+            "packet": "story_economy",
+            "file": str(out),
+            "status": "block",
+            "issues": ["缺 story_economy_audit.py"],
+        }
+    try:
+        r = subprocess.run(
+            [sys.executable, str(script), str(root), ep, "--strict", "--write", "--json"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except Exception as exc:
+        return {
+            "packet": "story_economy",
+            "file": str(out),
+            "status": "block",
+            "issues": [f"story_economy_audit 无法运行：{str(exc)[:160]}"],
+        }
+    report = _parse_json_stdout(r.stdout) or load_json(out)
+    issues: List[str] = []
+    if not isinstance(report, Mapping):
+        detail = (r.stderr or r.stdout or "").strip().splitlines()[-1:] or [""]
+        issues.append(f"story_economy_audit 未输出有效 JSON：{detail[0][:160]}")
+    else:
+        over_budget = report.get("over_budget") if isinstance(report.get("over_budget"), list) else []
+        for row in over_budget[:5]:
+            if isinstance(row, Mapping):
+                issues.append(str(row.get("reason") or row.get("clip_id") or "story clip 超预算"))
+        if r.returncode != 0 and not issues:
+            issues.append("story_economy_audit --strict 未通过")
+        if report.get("ok") is not True and not issues:
+            issues.append("story_economy_audit ok=false")
+    if r.returncode != 0 and not issues:
+        issues.append("story_economy_audit --strict 未通过")
+    return {
+        "packet": "story_economy",
+        "file": str(out),
+        "status": "pass" if not issues else "block",
+        "issues": issues,
+    }
+
+
 def render_md(payload: Mapping[str, Any]) -> str:
     kind = str(payload.get("kind") or "")
     title = "围读验收包" if "table_read" in kind else "Animatic 粗剪验收包"
@@ -388,6 +455,7 @@ def check(root: Path, ep: str, *, kind: str = "both", write_missing: bool = Fals
             rows.append({"packet": item, "file": str(path), "status": status, "issues": issues})
         if item == "animatic":
             rows.append(_animatic_preview_status(root, ep))
+            rows.append(_story_economy_status(root, ep))
     blockers = [r for r in rows if r["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,

@@ -12,7 +12,10 @@ from pathlib import Path
 ROUTE = {
     "源本/企划": "comic-script",
     "漫画脚本": "comic-script",
+    "缩略分镜": "comic-name",
     "页面排版": "comic-layout",
+    "原稿收尾": "comic-finishing",
+    "传统收尾": "comic-finishing",
     "出图包": "comic-image",
     "出图": "comic-image",
     "嵌字合成": "comic-compose",

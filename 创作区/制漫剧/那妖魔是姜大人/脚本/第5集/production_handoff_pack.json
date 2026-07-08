@@ -1,7 +1,7 @@
 {
   "episode": "第5集",
   "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
-  "generated_at": "2026-07-08T09:57:16+00:00",
+  "generated_at": "2026-07-08T14:56:11+00:00",
   "inputs": {
     "director_blocking_pack.json": "脚本/第5集/director_blocking_pack.json",
     "preventive_contracts.json": "脚本/第5集/preventive_contracts.json",
@@ -16,22 +16,23 @@
       "生产数据/script_quality_contract_第5集.json": "005bb4701448acaae1d3981f5d526bfafd26fcd7ce2cd249b1c177eeb5f2f554",
       "脚本/第5集/director_blocking_pack.json": null,
       "脚本/第5集/preventive_contracts.json": "b9a2e8500e5916e3c2a863d39366c3121c23652109dc226429bced069187a886",
-      "脚本/第5集/storyboard.json": "8d39ea4450e7e2c1ca32507cc14dfa68c5bf439a7cf471d05e883a1396c5414b",
+      "脚本/第5集/storyboard.json": "3fbb67f0c40cfd148247997f508e773d6bf5e7e374e3f21ad9ed2aba540004fc",
       "脚本/第5集/voiceover.txt": "f3c5e81e33e97922cd29672b559d55d81f521b7d484229ee71ed591dad5b5120",
       "脚本/第5集/镜头时长.json": "56049500b6bc861fa4c0ec252d9d8ae4e03eef4ec9a041a6c44a6f867acce592",
       "设定库/source_comprehension.json": "f5eccc3c10118d0cfb834c6b604c3dda3388062ac20f20cb71ef9b9d159bf052"
     },
-    "sha": "6d815bff3383f9fdf8a5eeee5761956b5b1bf650183cf53d6468b043928fd2fa"
+    "sha": "e839eb312bb6b09d21ec7fd8abf1a142e2a8dc0c2db58e00678e24a0e7a48336"
   },
   "kind": "n2d_production_handoff_pack",
   "required_files": [
     "脚本/第5集/production_breakdown.json",
     "脚本/第5集/continuity_breakdown.json",
+    "脚本/第5集/continuity_chain.json",
     "脚本/第5集/continuity_bible.json",
     "脚本/第5集/ai_shooting_schedule.json",
     "脚本/第5集/ai_call_sheet.md"
   ],
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "status": "confirmed",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "status": "draft",
   "version": 1
 }

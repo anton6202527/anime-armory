@@ -35,9 +35,6 @@ export function Home(props: {
   return (
     <div className="home">
       <h1>{t("app.name")}</h1>
-      <div className="repo">
-        <span>{t("home.workspace", { path: workspaceRoot })}</span>
-      </div>
       {err && <div className="empty">{t("common.scanFailed", { error: err })}</div>}
 
       <div className="line-grid">

@@ -1,6 +1,6 @@
 ---
 name: comic-progress
-description: 画漫画进度仪表盘与下一步建议。Use when the user asks current status, next step, checklist, or progress for comic projects under 创作区/画漫画. It scans _进度.md read-only, checks whether finished panel art still needs comic-identity consistency work or long-serial dedicated character sheets, and routes to comic-script, comic-layout, comic-identity, comic-image, comic-compose, or comic-review without modifying files. Triggers 漫画进度, 画漫画进度, 下一步, 到哪了, 查进度, 一致性下一步, comic-progress.
+description: 画漫画进度仪表盘与下一步建议。Use when the user asks current status, next step, checklist, or progress for comic projects under 创作区/画漫画. It scans _进度.md read-only, checks whether finished panel art still needs comic-identity consistency work or long-serial dedicated character sheets, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-compose, or comic-review without modifying files. Triggers 漫画进度, 画漫画进度, 下一步, 到哪了, 查进度, 缩略分镜进度, 原稿收尾进度, 一致性下一步, comic-progress.
 ---
 
 # comic-progress — 画漫画进度扫描
@@ -35,7 +35,10 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 |---|---|
 | 源本/企划 | `comic-script` |
 | 漫画脚本 | `comic-script` |
+| 缩略分镜 | `comic-name` |
 | 页面排版 | `comic-layout` |
+| 原稿收尾 | `comic-finishing` |
+| 传统收尾（旧列名） | `comic-finishing` |
 | 出图包 | `comic-image` |
 | 出图 | `comic-image` |
 | 出图已完成但引用缺失/旧图未用真实参考 | `comic-identity` |

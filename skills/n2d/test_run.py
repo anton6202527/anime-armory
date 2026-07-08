@@ -100,7 +100,16 @@ def _write_confirmed_director_pack(root, ep="第1集"):
     os.makedirs(ep_dir, exist_ok=True)
     payloads = {
         "director_beat_sheet.json": {"kind": "fixture", "status": "confirmed", "beats": [{"beat_id": "Beat_01", "dramatic_function": "冲突"}]},
-        "axis_blocking_map.json": {"kind": "fixture", "status": "confirmed", "scene_axis_rules": [{"main_axis": "A-B"}]},
+        "axis_blocking_map.json": {
+            "kind": "fixture",
+            "status": "confirmed",
+            "scene_axis_rules": [{"main_axis": "A-B"}],
+            "shot_reverse_patterns": [{
+                "pattern_id": "no_shot_reverse_in_fixture",
+                "mode": "none_until_storyboard_uses_dialogue_shot_reverse",
+                "applies_to": [],
+            }],
+        },
         "shot_progression_plan.json": {"kind": "fixture", "status": "confirmed", "progressions": [{"beat_id": "Beat_01", "camera_move": "缓慢推镜"}]},
         "transition_map.json": {"kind": "fixture", "status": "confirmed", "seams": [{"from_beat": "Beat_01", "to_beat": "Beat_02", "transition_type": "eyeline"}]},
         "vertical_composition_plan.json": {"kind": "fixture", "status": "confirmed", "composition_rules": {"safe_zone": "bottom clear"}},
@@ -426,6 +435,54 @@ def test_decide_entry_check_blocks_before_generation():
     p = run.Probes(entry_check_block="源文本已漂移")
     na = run.decide(root, _route("image"), "image", p)
     assert na["stop_reason"] == "blocked_by_entry_check"
+
+
+def test_entry_check_block_includes_repair_preflight_command():
+    root = make_work(ALL_DONE_TO["image"])
+    msg = run._entry_check_block([{
+        "step": "update_plan",
+        "episode": "第1集",
+        "status": "rebuild_needed",
+        "plan": {"rebuild_needed": True, "plan_md": "生产数据/skill_update_plan_第1集.md"},
+    }], "image", root)
+
+    assert msg
+    assert "repair_preflight.py" in msg
+    assert root in msg
+    assert "第1集" in msg
+    assert "--stage image" in msg
+
+
+def test_gather_probes_auto_runs_repair_preflight_for_entry_block(monkeypatch):
+    root = make_work(ALL_DONE_TO["image"])
+    calls = {"entry": 0, "repair": 0}
+
+    def fake_entry_checks(*_args, **_kwargs):
+        calls["entry"] += 1
+        if calls["entry"] == 1:
+            return [{
+                "step": "update_plan",
+                "episode": "第1集",
+                "status": "rebuild_needed",
+                "plan": {"rebuild_needed": True, "plan_md": "生产数据/skill_update_plan_第1集.md"},
+            }]
+        return []
+
+    def fake_repair(p, *_args, **_kwargs):
+        calls["repair"] += 1
+        p.prework.append({"step": "repair_preflight", "status": "pass"})
+        return "repair ok"
+
+    monkeypatch.setattr(run, "entry_checks", fake_entry_checks)
+    monkeypatch.setattr(run, "_run_repair_preflight_prework", fake_repair)
+    monkeypatch.setattr(run, "_run", lambda *a, **k: _CP(0, '{"status":"pass","summary":{"pass":1}}', ""))
+
+    probes = run.gather_probes(root, _route("image"), "image")
+
+    assert calls["entry"] >= 2
+    assert calls["repair"] == 1
+    assert probes.entry_check_block is None
+    assert any(row["step"] == "repair_preflight" for row in probes.prework)
 
 
 def test_decide_capability_evidence_blocks_before_video():

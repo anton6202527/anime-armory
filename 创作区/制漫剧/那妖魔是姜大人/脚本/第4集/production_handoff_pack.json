@@ -1,14 +1,38 @@
 {
   "episode": "第4集",
   "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
-  "generated_at": "2026-07-06T02:49:41+00:00",
+  "generated_at": "2026-07-08T14:19:04+00:00",
+  "inputs": {
+    "director_blocking_pack.json": "脚本/第4集/director_blocking_pack.json",
+    "preventive_contracts.json": "脚本/第4集/preventive_contracts.json",
+    "script_quality_contract_第4集.json": "生产数据/script_quality_contract_第4集.json",
+    "source_comprehension.json": "设定库/source_comprehension.json",
+    "storyboard.json": "脚本/第4集/storyboard.json",
+    "voiceover.txt": "脚本/第4集/voiceover.txt",
+    "镜头时长.json": "脚本/第4集/镜头时长.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "生产数据/script_quality_contract_第4集.json": "3dd9742ddcabfab0072ae2e7b895fe6b514d681c422221ec183172802e7a5a24",
+      "脚本/第4集/director_blocking_pack.json": "ddb6845fa955a0002ae8fd9e88dfad914af669ff0af6e06ba7bcce8e797da89c",
+      "脚本/第4集/preventive_contracts.json": "8b9513e4a74137e3a9c5c78dd5e2aa8ccda3f28f949c3ec53d5bb6212f0dbe71",
+      "脚本/第4集/storyboard.json": "14679ae06e1a72e2abdc82da8e6ace20af2a6567f7e1c11320b7735a6eecc66d",
+      "脚本/第4集/voiceover.txt": "349fc9bae95bdbd5297a62af9fd5c408f14afc8a3158deecbf433d7f841ddc04",
+      "脚本/第4集/镜头时长.json": "4d2e97d3740f9d0c144fbc8a5437d9941d447386b884bf6728e60ac84dd57a65",
+      "设定库/source_comprehension.json": "f5eccc3c10118d0cfb834c6b604c3dda3388062ac20f20cb71ef9b9d159bf052"
+    },
+    "sha": "b98f08d36680ebbb19a6d283fcdfe4eb837b9ff060b40cfeaf707672613f1e04"
+  },
   "kind": "n2d_production_handoff_pack",
   "required_files": [
     "脚本/第4集/production_breakdown.json",
     "脚本/第4集/continuity_breakdown.json",
+    "脚本/第4集/continuity_chain.json",
+    "脚本/第4集/continuity_bible.json",
+    "脚本/第4集/ai_shooting_schedule.json",
     "脚本/第4集/ai_call_sheet.md"
   ],
-  "root": "创作区/制漫剧/那妖魔是姜大人",
+  "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "status": "draft",
   "version": 1
 }

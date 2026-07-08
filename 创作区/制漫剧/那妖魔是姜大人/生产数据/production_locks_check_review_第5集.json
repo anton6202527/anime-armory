@@ -1,0 +1,116 @@
+{
+  "checked_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock",
+    "style_identity_lock",
+    "voice_timing_lock",
+    "video_material_lock",
+    "rough_cut_lock",
+    "picture_lock"
+  ],
+  "episode": "第5集",
+  "findings": [
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "source_lock",
+      "message": "source_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "script_lock",
+      "message": "script_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "storyboard_lock",
+      "message": "storyboard_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "style_identity_lock",
+      "message": "style_identity_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "生产数据/identity_adapter_matrix.json"
+      ],
+      "code": "lock_artifact_stale",
+      "lock_id": "style_identity_lock",
+      "message": "style_identity_lock 锁定后文件已变化：生产数据/identity_adapter_matrix.json",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "voice_timing_lock",
+      "message": "voice_timing_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "video_material_lock",
+      "message": "video_material_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "出视频/第5集/视频",
+        "出视频/第5集/prompt/video_model_routes.json",
+        "生产数据/video_qc_第5集.json"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "video_material_lock",
+      "message": "video_material_lock 缺必需实体产物：出视频/第5集/视频, 出视频/第5集/prompt/video_model_routes.json, 生产数据/video_qc_第5集.json",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "rough_cut_lock",
+      "message": "rough_cut_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "合成/第5集/_work/timeline.json",
+        "合成/第5集/rough_cut_preview.html",
+        "生产数据/final_timeline_probe_第5集.json"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "rough_cut_lock",
+      "message": "rough_cut_lock 缺必需实体产物：合成/第5集/_work/timeline.json, 合成/第5集/rough_cut_preview.html, 生产数据/final_timeline_probe_第5集.json",
+      "severity": "block"
+    },
+    {
+      "code": "lock_not_confirmed",
+      "lock_id": "picture_lock",
+      "message": "picture_lock status 不是 confirmed",
+      "severity": "block"
+    },
+    {
+      "artifacts": [
+        "合成/第5集/成片*.mp4",
+        "生产数据/final_timeline_probe_第5集.json",
+        "生产数据/script_supervisor_log_第5集.jsonl"
+      ],
+      "code": "lock_required_artifact_missing",
+      "lock_id": "picture_lock",
+      "message": "picture_lock 缺必需实体产物：合成/第5集/成片*.mp4, 生产数据/final_timeline_probe_第5集.json, 生产数据/script_supervisor_log_第5集.jsonl",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-08T14:56:16+00:00",
+  "kind": "n2d_production_locks_check",
+  "lock_path": "生产数据/production_locks_第5集.json",
+  "stage": "review",
+  "status": "block",
+  "summary": {
+    "block": 12,
+    "locks": 8,
+    "required_locks": 8
+  },
+  "version": 1
+}

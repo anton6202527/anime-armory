@@ -1,6 +1,6 @@
 ---
 name: comic-script
-description: 画漫画脚本阶段。Use when converting a story source, idea, outline, or existing script into comic story bible updates, chapter outlines, panel scripts, dialogue, narration, SFX, and per-panel dramatic functions. Produces 设定库/story_bible.md, 脚本/第N话/分话大纲.md, and panel_script.json for projects under 创作区/画漫画. Triggers 漫画脚本, 分格脚本, 分话大纲, panel_script, 分格, 漫画改编, 写漫画故事板, comic-script.
+description: 画漫画脚本阶段。Use when converting a story source, idea, outline, or existing script into comic story bible updates, chapter outlines, panel scripts, dialogue, narration, SFX, per-panel dramatic functions, visual contracts, layout weights, and optional ink/tone/effects hints. Produces 设定库/story_bible.md, 脚本/第N话/分话大纲.md, and panel_script.json for projects under 创作区/画漫画. Triggers 漫画脚本, 分格脚本, 分话大纲, panel_script, 分格, 漫画改编, 写漫画故事板, comic-script.
 ---
 
 # comic-script — 漫画脚本与分格
@@ -31,7 +31,7 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 3. 源本是外语、文言/古汉语、混合语言，或用户要求跨语种/古文改编时，先跑源语义归一化 gate；未通过前不要写最终 `panel_script.json`。
 4. 选择分话目标：本话必须有开场吸引、冲突推进、转折或爽点、结尾钩子。
 5. 写 `分话大纲.md`，避免只按字数切段；边界服从戏剧闭环。
-6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。若本话经过源语义归一化，每格还要保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。
+6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。若本话经过源语义归一化，每格还要保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。需要传统漫画审美时，可预填 `layout_weight`、`panel_shape`、`gutter_intent`、`ink_plan`、`black_fill_plan`、`tone_plan`、`value_plan`、`effects_plan`，供 `comic-name` 和 `comic-finishing` 继承。
 7. 台词写入结构字段，不要求图像模型直接生成文字；跨语种/古文改编时，最终嵌字文本写 `dialogue[].text_target`、`narration_target` 或对应目标字段，原文不要覆盖掉。
 8. 自检通过后回写 `_进度.md` 的 `漫画脚本` 列。
 
@@ -61,6 +61,7 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 
 - 每格只承担一个主要阅读动作：揭示、反应、动作、转折、信息或留白。
 - 大格用于情绪峰值、奇观、转折或页末钩子，不用于普通交代。
+- 重要格写 `layout_weight=heavy`，过渡/反应格写 `compact` 或 `medium`；这会影响 `comic-name` 的ネーム和 `comic-layout` 的格子比例。
 - 台词要短；一个气泡尽量不超过两行，长说明拆成旁白或多格。
 - 外语、文言/古汉语、专名密集文本的衡量以“语义动作”和“可嵌字目标文本”为准，不用源文长度直接决定格数。
 - 角色首次出场格要给足识别信息：脸、发型、服装、标志物或动作习惯。
@@ -68,6 +69,7 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 - 含场景格必须继承同一 `LOC_` 场景锚：空间布局、常驻物件、主光方向/冷暖和人物左右轴线不能跨格随机漂移。
 - 人物完整性要逐格写清：脸型、眼型/眼距、发际线、发型轮廓、服装主色、标志物、手脚和关键道具是否完整可读；动作格写清接触点和不可裁掉的部位。
 - 复杂动作拆成“准备 → 接触/爆发 → 后果”，不要塞进一格。
+- 动作、冲击、揭示、恐惧、速度感强的格子可写 `effects_plan`；黑白页漫和日漫网点风格建议写 `tone_plan` 或让 `comic-finishing` 生成显式计划。
 - 出图难点只影响实现路径，不删掉必要剧情；必要时在 `art_notes` 标明分层、反打或合成建议。
 
 ## 回写进度

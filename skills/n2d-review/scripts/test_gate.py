@@ -48,6 +48,237 @@ def test_preventive_contracts_gate_forwards_block(monkeypatch, tmp_path):
     )
 
 
+def test_production_handoff_gate_blocks_missing_p3(monkeypatch, tmp_path):
+    gate.findings.clear()
+
+    def fake_run(cmd, *args, **kwargs):
+        payload = {
+            "status": "block",
+            "summary": {"pass": 4, "required": 8},
+            "check_path": str(tmp_path / "生产数据" / "production_breakdown_check_第1集.json"),
+            "files": [
+                {"rel": "脚本/第1集/continuity_chain.json", "status": "missing", "issues": ["文件缺失"]},
+                {"rel": "脚本/第1集/ai_call_sheet.md", "status": "block", "issues": ["缺 status: confirmed"]},
+            ],
+        }
+        return gate.subprocess.CompletedProcess(cmd, 1, json.dumps(payload, ensure_ascii=False), "")
+
+    monkeypatch.setattr(gate.subprocess, "run", fake_run)
+    gate.check_production_handoff_pack(str(tmp_path), "第1集", "image_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "P-3制片交接包" and f["sev"] == gate.BLOCK]
+    assert hits and "continuity_chain.json" in hits[0]["msg"]
+    assert "repair_preflight.py" in hits[0]["msg"]
+
+
+def test_story_economy_gate_blocks_strict_failure(monkeypatch, tmp_path):
+    gate.findings.clear()
+
+    def fake_run(cmd, *args, **kwargs):
+        payload = {
+            "ok": False,
+            "findings": [{
+                "severity": "block",
+                "clip": "Clip_02",
+                "code": "non_premium_story_clip_too_long",
+                "message": "Clip_02 当前 25s，建议压缩",
+            }],
+        }
+        return gate.subprocess.CompletedProcess(cmd, 1, json.dumps(payload, ensure_ascii=False), "")
+
+    monkeypatch.setattr(gate.subprocess, "run", fake_run)
+    gate.check_story_economy_audit(str(tmp_path), "第1集", "image_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "剧情经济性" and f["sev"] == gate.BLOCK]
+    assert hits and "Clip_02" in hits[0]["msg"]
+    assert hits[0].get("return_to_stage") == "script_stage2"
+
+
+def test_production_locks_gate_blocks_missing_lock(monkeypatch, tmp_path):
+    gate.findings.clear()
+
+    def fake_run(cmd, *args, **kwargs):
+        payload = {
+            "status": "block",
+            "findings": [{"severity": "block", "code": "missing_lock_ledger", "message": "缺锁版账"}],
+            "check_path": str(tmp_path / "生产数据" / "production_locks_check_image_preflight_第1集.json"),
+        }
+        return gate.subprocess.CompletedProcess(cmd, 1, json.dumps(payload, ensure_ascii=False), "")
+
+    monkeypatch.setattr(gate.subprocess, "run", fake_run)
+    gate.check_production_locks_preflight(str(tmp_path), "第1集", "image_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "生产锁版账" and f["sev"] == gate.BLOCK]
+    assert hits and "缺锁版账" in hits[0]["msg"]
+    assert "repair_preflight.py" in hits[0]["msg"]
+
+
+def test_series_handoff_contract_blocks_missing_pickup_and_throw(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep_dir = root / "脚本" / "第2集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "storyboard.json").write_text(json.dumps({"clips": [{"id": "Clip_01"}]}, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_series_handoff_contract(str(root), "第2集", "image_prompt_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "跨集承接合同" and f["sev"] == gate.BLOCK]
+    assert hits and "previous_episode_pickup" in hits[0]["msg"]
+    assert "next_episode_receivable_hook" in hits[0]["msg"]
+
+
+def test_series_handoff_contract_blocks_thin_placeholder(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep_dir = root / "脚本" / "第2集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "storyboard.json").write_text(json.dumps({
+        "series_handoff": {
+            "previous_episode_pickup": "同上",
+            "next_episode_receivable_hook": "待补",
+        },
+        "clips": [{"id": "Clip_01"}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_series_handoff_contract(str(root), "第2集", "image_prompt_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "跨集承接合同" and f["sev"] == gate.BLOCK]
+    assert hits and "内容过薄" in hits[0]["msg"]
+
+
+def _write_prompt_consumed_inputs(root, ep="第1集"):
+    files = {
+        f"脚本/{ep}/storyboard.json": {"clips": [{"id": "Clip_01"}]},
+        f"脚本/{ep}/continuity_chain.json": {"kind": "n2d_continuity_chain", "seams": []},
+        f"生产数据/script_quality_contract_{ep}.json": {"kind": "n2d_script_quality_contract"},
+        f"生产数据/director_camera_plan_{ep}.json": {"kind": "n2d_director_camera_plan"},
+        f"生产数据/reference_plan_{ep}.json": {"kind": "n2d_reference_plan"},
+        f"出图/{ep}/prompt/00_总览.md": "# overview\n",
+        f"出图/{ep}/prompt/01_分镜出图.md": "# shots\n",
+    }
+    for rel, payload in files.items():
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if isinstance(payload, str):
+            path.write_text(payload, encoding="utf-8")
+        else:
+            path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+
+def _sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_prompt_consumed_contracts_block_when_upstream_stale(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    _write_prompt_consumed_inputs(root, ep)
+    receipt = {
+        "kind": "n2d_prompt_consumed_contracts",
+        "scope": "image_prompt",
+        "accepted": True,
+        "contracts": [
+            {"name": "storyboard", "path": f"脚本/{ep}/storyboard.json", "exists": True, "sha256": _sha(root / "脚本" / ep / "storyboard.json")},
+            {"name": "continuity_chain", "path": f"脚本/{ep}/continuity_chain.json", "exists": True, "sha256": _sha(root / "脚本" / ep / "continuity_chain.json")},
+            {"name": "script_quality_contract", "path": f"生产数据/script_quality_contract_{ep}.json", "exists": True, "sha256": _sha(root / "生产数据" / f"script_quality_contract_{ep}.json")},
+            {"name": "director_camera_plan", "path": f"生产数据/director_camera_plan_{ep}.json", "exists": True, "sha256": _sha(root / "生产数据" / f"director_camera_plan_{ep}.json")},
+            {"name": "reference_plan", "path": f"生产数据/reference_plan_{ep}.json", "exists": True, "sha256": _sha(root / "生产数据" / f"reference_plan_{ep}.json")},
+        ],
+        "prompt_files": [
+            {"path": f"出图/{ep}/prompt/00_总览.md", "exists": True, "sha256": _sha(root / "出图" / ep / "prompt" / "00_总览.md")},
+            {"path": f"出图/{ep}/prompt/01_分镜出图.md", "exists": True, "sha256": _sha(root / "出图" / ep / "prompt" / "01_分镜出图.md")},
+        ],
+    }
+    out = root / "生产数据" / f"consumed_contracts_image_prompt_{ep}.json"
+    out.write_text(json.dumps(receipt, ensure_ascii=False), encoding="utf-8")
+    (root / "脚本" / ep / "storyboard.json").write_text(json.dumps({"clips": [{"id": "Clip_02"}]}, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_prompt_consumed_contracts(str(root), ep, "image_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "Prompt消费收据" and f["sev"] == gate.BLOCK]
+    assert hits and "storyboard 已变更" in hits[0]["msg"]
+
+
+def test_seam_hard_contract_blocks_missing_axis_audio_hash(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    ep_dir = root / "脚本" / ep
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "continuity_chain.json").write_text(json.dumps({
+        "kind": "n2d_continuity_chain",
+        "seams": [{
+            "from_clip": "Clip_01",
+            "to_clip": "Clip_02",
+            "transition": "match_cut",
+            "from_end_state": "角色在画左举刀，火光从右侧扫过。",
+            "to_start_state": "下一镜仍保持画左举刀，火光方向不变。",
+            "common_entities": ["CHAR_01"],
+            "required_boundary_frame": "出图/第1集/图片/Clip01_end.png",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_seam_hard_contract(str(root), ep, "video_prompt_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "Clip接缝硬合同" and f["sev"] == gate.BLOCK]
+    assert hits and "轴线/视线" in hits[0]["msg"] and "J/L cut" in hits[0]["msg"] and "sha256" in hits[0]["msg"]
+
+
+def test_seam_hard_contract_passes_complete_contract(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    frame = root / "出图" / ep / "图片" / "Clip01_end.png"
+    frame.parent.mkdir(parents=True)
+    frame.write_bytes(b"frame-v1")
+    ep_dir = root / "脚本" / ep
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "continuity_chain.json").write_text(json.dumps({
+        "kind": "n2d_continuity_chain",
+        "seams": [{
+            "from_clip": "Clip_01",
+            "to_clip": "Clip_02",
+            "transition": "match_cut",
+            "from_end_state": "角色在画左举刀，火光从右侧扫过。",
+            "to_start_state": "下一镜仍保持画左举刀，火光方向不变。",
+            "common_entities": ["CHAR_01", "WEAPON_01"],
+            "axis": "人物保持画左，视线向画右，不越轴。",
+            "audio_cut": "上一镜刀鸣做 J cut 延入下一镜半秒。",
+            "required_boundary_frame": f"出图/{ep}/图片/Clip01_end.png",
+            "required_boundary_frame_sha256": hashlib.sha256(b"frame-v1").hexdigest(),
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_seam_hard_contract(str(root), ep, "video_prompt_preflight")
+
+    assert not [f for f in gate.findings if f["dim"] == "Clip接缝硬合同" and f["sev"] == gate.BLOCK]
+
+
+def test_dialogue_timing_mode_blocks_video_first_placeholder(monkeypatch, tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep_dir = root / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "storyboard.json").write_text(json.dumps({
+        "clips": [
+            {"id": "Clip_01", "template": "dialogue_shot_reverse", "dialogue_indices": [1]},
+            {"id": "Clip_02", "template": "dialogue_shot_reverse", "dialogue_indices": [2]},
+            {"id": "Clip_03", "template": "dialogue_shot_reverse", "dialogue_indices": [3]},
+            {"id": "Clip_04", "template": "establishing"},
+        ]
+    }, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(gate, "is_native_av_production", lambda *_a, **_k: False)
+    monkeypatch.setattr(gate, "is_video_first", lambda *_a, **_k: True)
+    monkeypatch.setattr(gate, "voice_is_placeholder", lambda *_a, **_k: True)
+
+    gate.check_dialogue_timing_mode(str(root), "第1集", "video_preflight")
+
+    hits = [f for f in gate.findings if f["dim"] == "配音时长模式" and f["sev"] == gate.BLOCK]
+    assert hits and "对白" in hits[0]["msg"]
+    assert hits[0].get("return_to_stage") == "voice"
+
+
 GOOD_SHOT = """## 镜头 1（冷开场）🔑关键镜
 
 **目标存档**：`出图/第1集/图片/镜头1_冷开场.png`
@@ -3931,6 +4162,7 @@ def _patch_image_prompt_preflight_dependencies(monkeypatch):
         "check_drift_risk_advisories", "check_cross_episode_character_definition",
         "check_storyboard_contract", "check_storyboard_visual_contract",
         "check_storyboard_style_contract", "check_storyboard_special_templates",
+        "check_series_handoff_contract", "check_story_economy_audit", "check_production_handoff_pack",
     ):
         monkeypatch.setattr(gate, name, lambda *a, **k: None)
 
@@ -3945,6 +4177,8 @@ def _patch_video_prompt_preflight_dependencies(monkeypatch):
         "check_expression_span_frame_contract", "check_image_assets", "check_input_frame_qc",
         "check_multimodal_continuity", "check_semantic_lineage", "check_state_continuity",
         "check_video_backend_reachable",
+        "check_dialogue_timing_mode",
+        "check_story_economy_audit", "check_production_handoff_pack", "check_production_locks_preflight",
     ):
         monkeypatch.setattr(gate, name, lambda *a, **k: None)
     monkeypatch.setattr(gate, "episode_registry_reference_ids", lambda *a, **k: (set(), set()))
@@ -10679,22 +10913,23 @@ def _write_skill_baseline(root, sf, mutate=None):
         json.dump(snap, fh, ensure_ascii=False)
 
 
-def test_skill_freshness_warns_on_material_drift_before_spend():
-    """花钱出图前：生产物料的 skill（n2d-image）自基线后改动 → WARN·路由 n2d-update；
+def test_skill_freshness_blocks_on_material_drift_before_spend():
+    """花钱出图前：生产物料的 skill（n2d-image）自基线后改动 → BLOCK·路由 n2d-update/repair_preflight；
     fresh / 无基线 / 仅 gate-only 改动各自的分级。"""
     import tempfile
 
     sf = gate.skill_freshness
     assert sf is not None
 
-    # 1) material drift（n2d-image/SKILL.md 改了）→ WARN，消息含 n2d-image 与 update_plan 路由
+    # 1) material drift（n2d-image/SKILL.md 改了）→ BLOCK，消息含 n2d-image 与 update_plan/repair_preflight 路由
     with tempfile.TemporaryDirectory() as td:
         _write_skill_baseline(td, sf, mutate="skills/n2d-image/SKILL.md")
         gate.findings.clear()
         gate.check_skill_freshness(td, "第1集", "image_preflight")
         hit = [f for f in gate.findings if f["dim"] == "物料新鲜度"]
-        assert hit and hit[0]["sev"] == gate.WARN
+        assert hit and hit[0]["sev"] == gate.BLOCK
         assert "n2d-image" in hit[0]["msg"] and "update_plan.py check" in hit[0]["msg"]
+        assert "repair_preflight.py" in hit[0]["msg"]
 
     # 2) fresh（基线 == 当前）→ 无声通过
     with tempfile.TemporaryDirectory() as td:

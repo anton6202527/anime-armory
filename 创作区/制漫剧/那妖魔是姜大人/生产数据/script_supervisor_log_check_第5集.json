@@ -1,0 +1,27 @@
+{
+  "episode": "第5集",
+  "findings": [
+    {
+      "code": "missing_script_supervisor_log",
+      "message": "缺场记 JSONL。",
+      "severity": "block"
+    },
+    {
+      "clip_id": "Clip_05",
+      "code": "clip_without_accepted_take",
+      "message": "Clip_05 缺 accepted_take。",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-08T14:56:16+00:00",
+  "kind": "n2d_script_supervisor_log_check",
+  "log_path": "生产数据/script_supervisor_log_第5集.jsonl",
+  "status": "block",
+  "summary": {
+    "accepted_clips": 0,
+    "block": 2,
+    "expected_clips": 1,
+    "rows": 0
+  },
+  "version": 1
+}

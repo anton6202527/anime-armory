@@ -29,6 +29,25 @@ def load_translation_map(path: Path) -> dict[str, str]:
     return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
 
 
+def load_finishing_plan(root: Path, chapter: str) -> dict:
+    path = root / "出图" / chapter / "finishing" / "finishing_plan.json"
+    if not path.is_file():
+        return {}
+    try:
+        data = load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def finishing_by_panel(plan: dict) -> dict[str, dict]:
+    out = {}
+    for panel in plan.get("panels") or []:
+        if isinstance(panel, dict) and panel.get("panel_id"):
+            out[str(panel.get("panel_id"))] = panel
+    return out
+
+
 def read_setting(root: Path, key: str, default: str) -> str:
     path = root / "_设置.md"
     if not path.is_file():
@@ -90,7 +109,8 @@ def slots_by_panel(layout: dict) -> dict[str, dict[str, list[dict]]]:
     return out
 
 
-def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str], text_language: str) -> dict:
+def build_lettering(panel_script: dict, layout: dict, translations: dict[str, str], text_language: str, finishing_map: dict[str, dict] | None = None) -> dict:
+    finishing_map = finishing_map or {}
     slots = slots_by_panel(layout)
     items = []
     counter = 1
@@ -148,6 +168,11 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
             sfx_targets = panel.get("sfx_target") or panel.get("target_sfx") or []
             if isinstance(sfx_targets, str):
                 sfx_targets = [sfx_targets]
+            finish = finishing_map.get(str(pid), {})
+            sfx_plan = finish.get("lettering_sfx_plan") if isinstance(finish.get("lettering_sfx_plan"), dict) else {}
+            integration = str(sfx_plan.get("integration") or "").strip()
+            shape = str(sfx_plan.get("shape") or "").strip()
+            mode = str(sfx_plan.get("mode") or "post_lettering_sfx").strip()
             for idx, sfx in enumerate(panel.get("sfx") or []):
                 sfx_text = str(sfx_targets[idx] if idx < len(sfx_targets) and str(sfx_targets[idx]).strip() else sfx).strip()
                 items.append(
@@ -158,7 +183,15 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
                         "speaker": "",
                         **text_fields(sfx_text, translations, text_language, str(sfx)),
                         "slot_id": slot.get("slot_id", ""),
-                        "style": {"font": "project_default", "size": 72, "direction": "horizontal", "bubble": "none"},
+                        "style": {
+                            "font": "project_default",
+                            "size": 72,
+                            "direction": "horizontal",
+                            "bubble": "none",
+                            "drawn_lettering_mode": mode,
+                            "integration": integration,
+                            "shape": shape,
+                        },
                     }
                 )
                 counter += 1
@@ -185,7 +218,8 @@ def main() -> int:
     translation_path = Path(args.translation_map).expanduser().resolve() if args.translation_map else root / "排版" / args.chapter / "lettering_translations.json"
     translations = load_translation_map(translation_path)
     text_language = read_setting(root, "文字语言", "中文")
-    lettering = build_lettering(panel_script, layout, translations, text_language)
+    finishing_map = finishing_by_panel(load_finishing_plan(root, args.chapter))
+    lettering = build_lettering(panel_script, layout, translations, text_language, finishing_map)
     if not lettering.get("chapter"):
         lettering["chapter"] = args.chapter
     if translations:

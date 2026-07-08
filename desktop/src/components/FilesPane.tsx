@@ -29,6 +29,17 @@ import {
 } from "../api";
 import { buildWorkTreeDecorations, type WorkTreeDecoration } from "../explorerDecorations";
 import { useI18n } from "../i18n";
+import {
+  COLLAPSE_LEFT_SIDEBAR_EVENT,
+  FILES_SIDE_COLLAPSE_WIDTH,
+  FILES_SIDE_WIDTH_CHANGED_EVENT,
+  clampFilesSideWidth,
+  clearStoredFilesSideWidth,
+  commitFilesSideWidth,
+  draftFilesSideWidth,
+  readCurrentFilesSideWidthOrNull,
+  readStoredFilesSideWidthOrNull,
+} from "../paneLayout";
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
@@ -47,8 +58,8 @@ const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
 const MARKDOWN = new Set(["md", "markdown", "mdx"]);
 const JSONISH = new Set(["json", "jsonl"]);
 const TREE_ROW_HEIGHT = 22;
-const TREE_BASE_PADDING = 8;
-const TREE_INDENT = 16;
+const TREE_BASE_PADDING = 4;
+const TREE_INDENT = 12;
 const TREE_OVERSCAN = 12;
 const TREE_PAGE_LIMIT = 500;
 const PREVIEW_CACHE_LIMIT = 4;
@@ -244,10 +255,7 @@ export function FilesPane({
   const [imageNatural, setImageNatural] = useState<Size | null>(null);
   const [imageViewport, setImageViewport] = useState<Size>({ width: 0, height: 0 });
   const [localRefresh, setLocalRefresh] = useState(0); // bump after file operations (no fs event)
-  const [sideWidth, setSideWidth] = useState<number | null>(() => {
-    const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
-    return Number.isFinite(saved) && saved > 0 ? saved : null;
-  });
+  const [sideWidth, setSideWidth] = useState<number | null>(readStoredFilesSideWidthOrNull);
   // re-render once the media server port is ready (else media URLs are empty)
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
 
@@ -275,23 +283,15 @@ export function FilesPane({
     };
   }, [menu]);
 
-  function clampSideWidth(width: number, total: number): number {
-    const minSide = total < 500 ? 160 : 220;
-    const minPreview = Math.min(320, Math.max(180, total * 0.35));
-    const maxSide = Math.max(minSide, total - minPreview);
-    return Math.min(maxSide, Math.max(minSide, width));
-  }
-
   useEffect(() => {
     const syncSharedSideWidth = () => {
-      const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
-      setSideWidth(Number.isFinite(saved) && saved > 0 ? saved : null);
+      setSideWidth(readCurrentFilesSideWidthOrNull());
     };
-    window.addEventListener("anime-armory:files-side-width-changed", syncSharedSideWidth);
+    window.addEventListener(FILES_SIDE_WIDTH_CHANGED_EVENT, syncSharedSideWidth);
     window.addEventListener("storage", syncSharedSideWidth);
     window.addEventListener("resize", syncSharedSideWidth);
     return () => {
-      window.removeEventListener("anime-armory:files-side-width-changed", syncSharedSideWidth);
+      window.removeEventListener(FILES_SIDE_WIDTH_CHANGED_EVENT, syncSharedSideWidth);
       window.removeEventListener("storage", syncSharedSideWidth);
       window.removeEventListener("resize", syncSharedSideWidth);
     };
@@ -303,7 +303,7 @@ export function FilesPane({
       const pane = paneRef.current;
       if (!pane) return;
       const rect = pane.getBoundingClientRect();
-      const next = clampSideWidth(sideWidth, rect.width);
+      const next = clampFilesSideWidth(sideWidth, rect.width);
       if (Math.round(next) !== Math.round(sideWidth)) setSideWidth(next);
     };
     sync();
@@ -921,20 +921,32 @@ export function FilesPane({
     const pane = paneRef.current;
     if (!pane) return;
     ev.preventDefault();
+    const splitter = ev.currentTarget;
     const rect = pane.getBoundingClientRect();
     document.body.classList.add("resizing-files-side");
+    splitter.classList.add("resizing");
+    let latestWidth = sideWidth ?? 280;
 
     const move = (e: PointerEvent) => {
-      const next = clampSideWidth(e.clientX - rect.left, rect.width);
+      const next = clampFilesSideWidth(e.clientX - rect.left, rect.width);
+      latestWidth = next;
       setSideWidth(next);
-      window.localStorage.setItem("aa.files.sideWidth", String(Math.round(next)));
-      window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+      draftFilesSideWidth(next);
       window.dispatchEvent(new Event("resize"));
     };
     const up = () => {
       document.body.classList.remove("resizing-files-side");
+      splitter.classList.remove("resizing");
       document.removeEventListener("pointermove", move);
       document.removeEventListener("pointerup", up);
+      if (latestWidth <= FILES_SIDE_COLLAPSE_WIDTH) {
+        setSideWidth(null);
+        clearStoredFilesSideWidth();
+        window.dispatchEvent(new Event(COLLAPSE_LEFT_SIDEBAR_EVENT));
+      } else {
+        const committed = commitFilesSideWidth(latestWidth);
+        if (committed != null) setSideWidth(committed);
+      }
       window.dispatchEvent(new Event("resize"));
     };
     document.addEventListener("pointermove", move);
@@ -945,6 +957,7 @@ export function FilesPane({
   const menuRel = menuEntry?.path ?? "";
   const menuAbs = absPath(menuRel);
   const menuCanCreate = !menuEntry || menuEntry.is_dir;
+  const filesSideStyle = sideWidth != null ? { width: sideWidth, flexBasis: sideWidth } : undefined;
 
   return (
     <div
@@ -976,7 +989,7 @@ export function FilesPane({
     >
       {sideVisible && (
         <>
-          <div className="files-side" style={sideWidth ? { width: sideWidth } : undefined}>
+          <div className="files-side" style={filesSideStyle}>
             <div
               className="files-tree"
               role="tree"
@@ -1044,14 +1057,7 @@ export function FilesPane({
                         aria-expanded={e.is_dir ? !collapsed : undefined}
                         aria-selected={active}
                         tabIndex={0}
-                        title={
-                          e.is_dir
-                            ? t("files.dirToggleTitle", {
-                                path: e.path,
-                                action: collapsed ? t("common.expand") : t("common.collapse"),
-                              })
-                            : e.path
-                        }
+                        title={e.is_dir ? undefined : e.path}
                       >
                         <span
                           className={
@@ -1085,8 +1091,7 @@ export function FilesPane({
             onPointerDown={startSideResize}
             onDoubleClick={() => {
               setSideWidth(null);
-              window.localStorage.removeItem("aa.files.sideWidth");
-              window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+              clearStoredFilesSideWidth();
               window.dispatchEvent(new Event("resize"));
             }}
           />

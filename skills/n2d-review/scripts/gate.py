@@ -3014,6 +3014,584 @@ def check_preventive_contracts(root: str, ep: str, stage: str) -> None:
         add(BLOCK, "预防式合同", stage, f"preventive_contracts.py 退出码 {r.returncode}，但未返回 block finding。")
 
 
+def _skills_dir() -> str:
+    return os.path.abspath(os.path.join(SCRIPT_DIR, "..", ".."))
+
+
+def _repair_preflight_command(root: str, ep: str, stage: str) -> str:
+    return (
+        f'python3 skills/n2d/scripts/repair_preflight.py "{root}" {ep} '
+        f"--stage {stage} --write-missing"
+    )
+
+
+def _run_json_tool(cmd: List[str]) -> Tuple[int, Dict[str, Any], str]:
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    payload = _loads_json_from_noisy_stdout(r.stdout)
+    detail = (r.stderr or r.stdout or "").strip()
+    if not isinstance(payload, dict):
+        payload = {}
+    return r.returncode, payload, detail
+
+
+def check_production_handoff_pack(root: str, ep: str, stage: str) -> None:
+    """P-3 production handoff must be complete before image/video work.
+
+    `run.py` already runs production_breakdown.py as prework, but batch/r2a/dashboard
+    callers can enter gate directly.  This check makes the P-3 package a true
+    gate invariant instead of a dispatcher-only convention.
+    """
+    script = os.path.join(_skills_dir(), "n2d-script", "scripts", "production_breakdown.py")
+    if not os.path.exists(script):
+        add(
+            BLOCK,
+            "P-3制片交接包",
+            script,
+            "缺 production_breakdown.py，无法核验 continuity_chain/continuity_bible/拍摄计划/通告单；"
+            "fail-closed，先恢复脚本再继续。",
+            return_to_stage="script_stage2",
+        )
+        return
+    code, report, detail = _run_json_tool([sys.executable, script, root, ep, "check", "--json"])
+    if code == 0 and str(report.get("status") or "").strip() == "pass":
+        return
+    files = [row for row in report.get("files") or [] if isinstance(row, Mapping) and row.get("status") != "pass"]
+    examples = []
+    for row in files[:6]:
+        issues = "；".join(str(x) for x in (row.get("issues") or [])) or str(row.get("status") or "")
+        examples.append(f"{row.get('rel')}: {issues}")
+    summary = report.get("summary") if isinstance(report.get("summary"), Mapping) else {}
+    loc = report.get("check_path") or os.path.join(root, "生产数据", f"production_breakdown_check_{ep}.json")
+    add(
+        BLOCK,
+        "P-3制片交接包",
+        str(loc),
+        "P-3 制片交接包未通过："
+        f"{summary.get('pass', 0)}/{summary.get('required', '?')} confirmed。"
+        "进入出图/视频前必须补齐并确认 continuity_chain.json、continuity_bible.json、"
+        "ai_shooting_schedule.json、ai_call_sheet.md 等交接文件；"
+        + ("问题示例：" + "；".join(examples) + "。" if examples else f"详情：{detail[:240]}。")
+        + f"统一修复入口：`{_repair_preflight_command(root, ep, stage)}`。",
+        return_to_stage="script_stage2",
+        affected_artifacts=[str(row.get("rel") or "") for row in files[:20]],
+        recovery_command=_repair_preflight_command(root, ep, stage),
+        evidence_family="production_handoff",
+    )
+
+
+def check_story_economy_audit(root: str, ep: str, stage: str) -> None:
+    """Story economy must pass before expensive image/video generation."""
+    script = os.path.join(_skills_dir(), "n2d-script", "scripts", "story_economy_audit.py")
+    if not os.path.exists(script):
+        add(
+            BLOCK,
+            "剧情经济性",
+            script,
+            "缺 story_economy_audit.py，无法证明剧情已压缩到该详拍的段落；fail-closed，先恢复脚本。",
+            return_to_stage="script_stage2",
+        )
+        return
+    code, report, detail = _run_json_tool([sys.executable, script, root, ep, "--strict", "--json"])
+    findings = [f for f in report.get("findings") or [] if isinstance(f, Mapping)]
+    blocks = [f for f in findings if str(f.get("severity") or "").lower() == "block"]
+    warnings = [f for f in findings if str(f.get("severity") or "").lower() == "warn"]
+    if code == 0 and report.get("ok", False):
+        if warnings and stage in {"image_preflight", "video_preflight"}:
+            add(
+                WARN,
+                "剧情经济性",
+                os.path.join(root, "脚本", ep, "storyboard.json"),
+                f"story_economy_audit 仍有 {len(warnings)} 条压缩建议；本次不硬拦，但建议在付费生成前处理，"
+                "避免解释/行进/普通反应占用视频预算。",
+                return_to_stage="script_stage2",
+                evidence_family="story_economy",
+            )
+        return
+    examples = []
+    for row in blocks[:5]:
+        clip = str(row.get("clip") or "").strip()
+        examples.append(f"{clip} {row.get('code')}: {row.get('message')}")
+    add(
+        BLOCK,
+        "剧情经济性",
+        os.path.join(root, "脚本", ep, "storyboard.json"),
+        "story_economy_audit 未通过；昂贵出图/出视频前必须先压缩非战斗、非强情绪、解释/行进/普通反应长段。"
+        + ("问题示例：" + "；".join(examples) + "。" if examples else f"详情：{detail[:240]}。")
+        + f"统一修复入口：`{_repair_preflight_command(root, ep, stage)}`。",
+        return_to_stage="script_stage2",
+        affected_artifacts=[os.path.join(root, "脚本", ep, "storyboard.json")],
+        recovery_command=_repair_preflight_command(root, ep, stage),
+        evidence_family="story_economy",
+    )
+
+
+def check_production_locks_preflight(root: str, ep: str, stage: str) -> None:
+    """Stage lock ledger must exist and be fresh at paid/irreversible boundaries."""
+    script = os.path.join(_skills_dir(), "n2d", "scripts", "production_locks.py")
+    if not os.path.exists(script):
+        add(
+            BLOCK,
+            "生产锁版账",
+            script,
+            "缺 production_locks.py，无法核验锁版账；fail-closed，先恢复脚本。",
+            return_to_stage="script_stage2",
+        )
+        return
+    code, report, detail = _run_json_tool([sys.executable, script, root, ep, "check", "--stage", stage, "--json"])
+    if code == 0 and str(report.get("status") or "").strip() == "pass":
+        return
+    findings_rows = [f for f in report.get("findings") or [] if isinstance(f, Mapping)]
+    examples = [str(f.get("message") or f.get("code") or "") for f in findings_rows[:5]]
+    loc = report.get("check_path") or os.path.join(root, "生产数据", f"production_locks_check_{stage}_{ep}.json")
+    add(
+        BLOCK,
+        "生产锁版账",
+        str(loc),
+        f"{stage} 前置锁版账未通过："
+        + ("；".join(examples) if examples else detail[:240] or "缺失或未确认")
+        + f"。先用统一修复入口补缺失 lock 草稿、确认锁版或记录解锁/最小返工范围："
+        f"`{_repair_preflight_command(root, ep, stage)}`。",
+        return_to_stage="script_stage2",
+        affected_artifacts=[str(f.get("artifacts") or f.get("lock_id") or "") for f in findings_rows[:20]],
+        recovery_command=_repair_preflight_command(root, ep, stage),
+        evidence_family="production_locks",
+    )
+
+
+def _episode_storyboard(root: str, ep: str) -> Mapping[str, Any]:
+    data = load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
+    return data if isinstance(data, Mapping) else {}
+
+
+def _storyboard_clips(data: Mapping[str, Any]) -> List[Mapping[str, Any]]:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else data.get("shots")
+    return [c for c in clips or [] if isinstance(c, Mapping)]
+
+
+def _field_value(data: Mapping[str, Any], *keys: str) -> Any:
+    for key in keys:
+        if key in data and _filled(data.get(key)):
+            return data.get(key)
+    handoff = data.get("series_handoff") if isinstance(data.get("series_handoff"), Mapping) else {}
+    for key in keys:
+        if key in handoff and _filled(handoff.get(key)):
+            return handoff.get(key)
+    return None
+
+
+PROMPT_CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
+PROMPT_CONSUMED_REQUIRED = [
+    "storyboard",
+    "continuity_chain",
+    "script_quality_contract",
+    "director_camera_plan",
+    "reference_plan",
+]
+PROMPT_CONSUMED_EXPECTED = {
+    "storyboard": lambda ep: os.path.join("脚本", ep, "storyboard.json"),
+    "continuity_chain": lambda ep: os.path.join("脚本", ep, "continuity_chain.json"),
+    "script_quality_contract": lambda ep: os.path.join("生产数据", f"script_quality_contract_{ep}.json"),
+    "director_camera_plan": lambda ep: os.path.join("生产数据", f"director_camera_plan_{ep}.json"),
+    "reference_plan": lambda ep: os.path.join("生产数据", f"reference_plan_{ep}.json"),
+}
+PROMPT_CONSUMED_PROMPTS = {
+    "image_prompt": [
+        lambda ep: os.path.join("出图", ep, "prompt", "00_总览.md"),
+        lambda ep: os.path.join("出图", ep, "prompt", "01_分镜出图.md"),
+    ],
+    "video_prompt": [
+        lambda ep: os.path.join("出视频", ep, "prompt", "00_总览.md"),
+        lambda ep: os.path.join("出视频", ep, "prompt", "01_clips.md"),
+    ],
+}
+
+
+def _norm_receipt_rel(value: Any) -> str:
+    return os.path.normpath(str(value or "").strip()).replace("\\", "/")
+
+
+def _receipt_scope_for_stage(stage: str) -> Optional[str]:
+    if stage in {"image_preflight", "image"}:
+        return "image_prompt"
+    if stage in {"video_preflight", "video"}:
+        return "video_prompt"
+    return None
+
+
+def check_prompt_consumed_contracts(root: str, ep: str, stage: str) -> None:
+    """Paid stages must consume the current upstream contracts, not stale prompt files."""
+    scope = _receipt_scope_for_stage(stage)
+    if not scope:
+        return
+    path = os.path.join(root, "生产数据", f"consumed_contracts_{scope}_{ep}.json")
+    data = load_json(path)
+    if not isinstance(data, Mapping):
+        add(
+            BLOCK,
+            "Prompt消费收据",
+            path,
+            f"进入 {stage} 前缺 {scope} prompt 消费收据；请重跑对应 prompt pack，让下游写入 storyboard、continuity_chain、script_quality_contract、director_camera_plan、reference_plan 的 sha256。",
+            return_to_stage="image_prompt" if scope == "image_prompt" else "video_prompt",
+            evidence_family="contract",
+        )
+        return
+
+    issues: List[str] = []
+    if data.get("kind") != PROMPT_CONSUMED_CONTRACTS_KIND:
+        issues.append("kind 不是 n2d_prompt_consumed_contracts")
+    if data.get("scope") != scope:
+        issues.append(f"scope={data.get('scope')!r}，应为 {scope!r}")
+    if data.get("accepted") is not True:
+        issues.append("accepted 不是 true")
+
+    contracts = data.get("contracts") if isinstance(data.get("contracts"), list) else []
+    by_name = {str(row.get("name") or ""): row for row in contracts if isinstance(row, Mapping)}
+    for name in PROMPT_CONSUMED_REQUIRED:
+        row = by_name.get(name)
+        rel = _norm_receipt_rel(row.get("path") if row else PROMPT_CONSUMED_EXPECTED[name](ep))
+        expected_rel = _norm_receipt_rel(PROMPT_CONSUMED_EXPECTED[name](ep))
+        if row is None:
+            issues.append(f"缺 contract 记录：{name}")
+            continue
+        if rel != expected_rel:
+            issues.append(f"{name} path={rel}，应为 {expected_rel}")
+        current = os.path.join(root, rel)
+        recorded_sha = str(row.get("sha256") or "").strip()
+        if not row.get("exists") or not recorded_sha:
+            issues.append(f"{name} 未记录存在且带 sha256")
+        elif not os.path.isfile(current):
+            issues.append(f"{name} 当前文件缺失：{rel}")
+        else:
+            current_sha = _sha256_file(current)
+            if current_sha and current_sha != recorded_sha:
+                issues.append(f"{name} 已变更但 prompt 未重签：{rel}")
+
+    prompt_rows = data.get("prompt_files") if isinstance(data.get("prompt_files"), list) else []
+    by_path = {_norm_receipt_rel(row.get("path")): row for row in prompt_rows if isinstance(row, Mapping)}
+    for rel_fn in PROMPT_CONSUMED_PROMPTS[scope]:
+        rel = _norm_receipt_rel(rel_fn(ep))
+        row = by_path.get(rel)
+        current = os.path.join(root, rel)
+        if row is None:
+            issues.append(f"缺 prompt 文件记录：{rel}")
+            continue
+        recorded_sha = str(row.get("sha256") or "").strip()
+        if not row.get("exists") or not recorded_sha:
+            issues.append(f"prompt 未记录存在且带 sha256：{rel}")
+        elif not os.path.isfile(current):
+            issues.append(f"prompt 当前文件缺失：{rel}")
+        else:
+            current_sha = _sha256_file(current)
+            if current_sha and current_sha != recorded_sha:
+                issues.append(f"prompt 已被改动但消费收据未更新：{rel}")
+
+    if not issues:
+        return
+    add(
+        BLOCK,
+        "Prompt消费收据",
+        path,
+        "prompt pack 消费合同不新鲜或不完整，禁止进入昂贵生成："
+        + "；".join(issues[:8])
+        + ("；…" if len(issues) > 8 else ""),
+        return_to_stage="image_prompt" if scope == "image_prompt" else "video_prompt",
+        evidence_family="contract",
+    )
+
+
+_PLACEHOLDER_TEXT_RE = re.compile(
+    r"^\s*(?:todo|tbd|待补|待定|占位|placeholder|xxx|无|none|null|n/?a|略|同上|见上|待确认)\s*$",
+    re.I,
+)
+
+
+def _contract_text(value: Any) -> str:
+    if isinstance(value, str):
+        return value.strip()
+    try:
+        return json.dumps(value, ensure_ascii=False, sort_keys=True)
+    except Exception:
+        return str(value or "").strip()
+
+
+def _meaningful_contract_value(value: Any, min_chars: int = 8) -> bool:
+    if not _filled(value):
+        return False
+    text = re.sub(r"\s+", "", _contract_text(value))
+    if len(text) < min_chars:
+        return False
+    return not _PLACEHOLDER_TEXT_RE.match(text)
+
+
+def _value_any(seam: Mapping[str, Any], names: Tuple[str, ...]) -> Any:
+    for name in names:
+        value = seam.get(name)
+        if _filled(value):
+            return value
+    return None
+
+
+def _path_and_hash_from_seam(seam: Mapping[str, Any]) -> Tuple[str, str]:
+    path_names = (
+        "required_boundary_frame",
+        "boundary_frame",
+        "from_end_frame",
+        "from_endframe",
+        "end_frame",
+        "endframe",
+        "endframe_png",
+        "from_endframe_png",
+    )
+    hash_names = (
+        "required_boundary_frame_sha256",
+        "boundary_frame_sha256",
+        "from_end_frame_sha256",
+        "from_endframe_sha256",
+        "end_frame_sha256",
+        "endframe_sha256",
+        "endframe_png_sha256",
+        "sha256",
+    )
+    path = ""
+    digest = ""
+    for name in path_names:
+        value = seam.get(name)
+        if isinstance(value, Mapping):
+            path = str(value.get("path") or value.get("rel") or value.get("file") or "").strip()
+            digest = str(value.get("sha256") or value.get("hash") or "").strip()
+        elif _filled(value):
+            path = str(value).strip()
+        if path:
+            break
+    if not digest:
+        for name in hash_names:
+            value = seam.get(name)
+            if _filled(value) and not isinstance(value, Mapping):
+                digest = str(value).strip()
+                break
+    return path, digest
+
+
+def _continuity_chain_seams(data: Mapping[str, Any]) -> List[Mapping[str, Any]]:
+    raw = data.get("seams")
+    if isinstance(raw, list) and raw:
+        return [s for s in raw if isinstance(s, Mapping)]
+    clips = [c for c in data.get("clips") or [] if isinstance(c, Mapping)]
+    seams: List[Mapping[str, Any]] = []
+    for idx in range(max(0, len(clips) - 1)):
+        current = clips[idx]
+        nxt = clips[idx + 1]
+        seams.append({
+            "from_clip": current.get("clip_id") or current.get("id") or f"Clip_{idx + 1:02d}",
+            "to_clip": nxt.get("clip_id") or nxt.get("id") or f"Clip_{idx + 2:02d}",
+            "from_end_state": current.get("end_state"),
+            "to_start_state": nxt.get("start_state"),
+            "transition": current.get("transition_to_next") or current.get("transition"),
+            "required_boundary_frame": current.get("endframe_png") or current.get("end_frame"),
+            "common_entities": sorted(set(_listify(current.get("required_presence"))) & set(_listify(nxt.get("required_presence")))),
+        })
+    return seams
+
+
+def check_seam_hard_contract(root: str, ep: str, stage: str) -> None:
+    """Clip seams need executable visual/audio continuity before video spending."""
+    if stage not in {"video_prompt_preflight", "video_preflight", "video"}:
+        return
+    path = os.path.join(root, "脚本", ep, "continuity_chain.json")
+    data = load_json(path)
+    if not isinstance(data, Mapping):
+        return
+    issues: List[str] = []
+    clips = [c for c in data.get("clips") or [] if isinstance(c, Mapping)]
+    clip_ids = [str(c.get("clip_id") or c.get("id") or "").strip() for c in clips if _filled(c.get("clip_id") or c.get("id"))]
+    duplicate_ids = sorted({cid for cid in clip_ids if clip_ids.count(cid) > 1})
+    if duplicate_ids:
+        issues.append(f"continuity_chain clips[] clip_id 重复：{', '.join(duplicate_ids[:5])}")
+
+    seams = _continuity_chain_seams(data)
+    if not seams and len(clips) > 1:
+        issues.append("缺 seams[]，且无法从 clips[] 推导接缝")
+    for idx, seam in enumerate(seams, start=1):
+        label = f"seam#{idx}"
+        from_clip = str(seam.get("from_clip") or "").strip()
+        to_clip = str(seam.get("to_clip") or "").strip()
+        if not from_clip or not to_clip:
+            issues.append(f"{label} 缺 from_clip/to_clip")
+        elif from_clip == to_clip and seam.get("scope") != "episode_boundary":
+            issues.append(f"{label} from_clip 与 to_clip 相同：{from_clip}")
+        if not _meaningful_contract_value(_value_any(seam, ("transition", "transition_to_next", "cut_type")), min_chars=3):
+            issues.append(f"{label} 缺可执行 transition")
+        discontinuity_reason = _value_any(seam, ("intentional_discontinuity_reason", "jump_cut_reason", "time_jump_reason"))
+        intentional = _meaningful_contract_value(discontinuity_reason, min_chars=10)
+        if not intentional:
+            if not _meaningful_contract_value(_value_any(seam, ("from_end_state", "previous_out_point", "out_point", "end_state")), min_chars=10):
+                issues.append(f"{label} 缺 from_end_state/out_point")
+            if not _meaningful_contract_value(_value_any(seam, ("to_start_state", "next_in_point", "in_point", "start_state")), min_chars=10):
+                issues.append(f"{label} 缺 to_start_state/in_point")
+            entity_value = _value_any(seam, (
+                "entry_exit",
+                "entity_entry_exit",
+                "continuity_entities",
+                "common_entities",
+                "required_presence_delta",
+                "presence_delta",
+            ))
+            if not _meaningful_contract_value(entity_value, min_chars=5):
+                issues.append(f"{label} 缺人物/资产出入场链 entry_exit/common_entities")
+            axis_value = _value_any(seam, (
+                "screen_side",
+                "screen_sides",
+                "eyeline",
+                "axis",
+                "axis_eyeline",
+                "shot_reverse_continuity",
+                "screen_direction",
+            ))
+            if not _meaningful_contract_value(axis_value, min_chars=5):
+                issues.append(f"{label} 缺轴线/视线/画面方向合同")
+            audio_value = _value_any(seam, (
+                "audio_cut",
+                "jl_cut",
+                "j_l_cut",
+                "audio_bridge",
+                "audio_transition",
+                "sound_bridge",
+                "no_audio_reason",
+            ))
+            if not _meaningful_contract_value(audio_value, min_chars=5):
+                issues.append(f"{label} 缺 J/L cut 或声画衔接说明")
+            frame_rel, frame_sha = _path_and_hash_from_seam(seam)
+            if not frame_rel:
+                issues.append(f"{label} 缺 required_boundary_frame/from_end_frame")
+            elif not frame_sha:
+                issues.append(f"{label} 缺边界帧 sha256：{frame_rel}")
+            else:
+                frame_path = os.path.join(root, frame_rel)
+                if not os.path.isfile(frame_path):
+                    issues.append(f"{label} 边界帧文件缺失：{frame_rel}")
+                else:
+                    current_sha = _sha256_file(frame_path)
+                    if current_sha and current_sha != frame_sha:
+                        issues.append(f"{label} 边界帧 sha256 已过期：{frame_rel}")
+        if len(issues) >= 16:
+            break
+
+    if not issues:
+        return
+    add(
+        BLOCK,
+        "Clip接缝硬合同",
+        path,
+        "continuity_chain 的 clip/seam 还不足以进入视频生成："
+        + "；".join(issues[:12])
+        + ("；…" if len(issues) > 12 else "")
+        + "。请在 n2d-script/repair_preflight 回补 start/end state、出入场、轴线/视线、J/L cut 和边界帧 sha256。",
+        return_to_stage="script_stage2",
+        evidence_family="continuity",
+    )
+
+
+_PICKUP_TOKENS_RE = re.compile(r"上一集|上集|前集|前情|承接|兑现|延迟|悬念|钩子|上一问题|未解|previous|prior|payoff|hook|delay|bridge", re.I)
+_THROW_TOKENS_RE = re.compile(r"下一集|下集|继续|悬念|问题|目标|承诺|未兑现|待兑现|钩子|危机|追问|next|hook|promise|question|payoff", re.I)
+
+
+def _handoff_quality_issue(value: Any, label: str, token_re: re.Pattern[str]) -> Optional[str]:
+    if not _meaningful_contract_value(value, min_chars=12):
+        return f"{label} 内容过薄或是占位"
+    text = _contract_text(value)
+    if not token_re.search(text):
+        return f"{label} 没有明确写承接/兑现/延迟/可接收问题"
+    return None
+
+
+def check_series_handoff_contract(root: str, ep: str, stage: str) -> None:
+    """Early episodes must explicitly pick up and throw cross-episode hooks."""
+    if stage not in {"image_prompt_preflight", "image_preflight", "image"}:
+        return
+    data = _episode_storyboard(root, ep)
+    if not data:
+        return  # storyboard_contract owns missing/invalid storyboard.
+    n = _ce_episode_number(ep)
+    if not n or n > 5:
+        return
+    issues: List[str] = []
+    hook_bridge = data.get("hook_bridge") if isinstance(data.get("hook_bridge"), Mapping) else {}
+    previous_pickup = _field_value(data, "previous_episode_pickup", "opening_bridge")
+    if not previous_pickup and _filled(hook_bridge.get("answers_prev_hook") or hook_bridge.get("bridge_text") or hook_bridge.get("delayed_payoff_ep")):
+        previous_pickup = hook_bridge
+    if n > 1 and not previous_pickup:
+        issues.append("缺 previous_episode_pickup/opening_bridge：本集开头没有明示接住上一集问题、延迟兑现或切线理由")
+    elif n > 1:
+        issue = _handoff_quality_issue(previous_pickup, "previous_episode_pickup/opening_bridge", _PICKUP_TOKENS_RE)
+        if issue:
+            issues.append(issue)
+    final_flag = bool(data.get("final_episode") or (isinstance(data.get("series_handoff"), Mapping) and data["series_handoff"].get("final_episode")))
+    next_throw = _field_value(data, "ending_throw", "next_episode_receivable_hook")
+    ledger = data.get("retention_promise_ledger") if isinstance(data.get("retention_promise_ledger"), list) else []
+    if not next_throw and any(isinstance(row, Mapping) and _filled(row.get("payoff_due") or row.get("delayed_payoff_ep")) for row in ledger):
+        next_throw = ledger
+    if not final_flag and not next_throw:
+        issues.append("缺 ending_throw/next_episode_receivable_hook：本集没有给下一集可承接的问题、目标或未兑现承诺")
+    elif not final_flag:
+        issue = _handoff_quality_issue(next_throw, "ending_throw/next_episode_receivable_hook", _THROW_TOKENS_RE)
+        if issue:
+            issues.append(issue)
+    if not issues:
+        return
+    add(
+        BLOCK,
+        "跨集承接合同",
+        os.path.join(root, "脚本", ep, "storyboard.json"),
+        "早期集必须显式写跨集承接合同，避免集与集之间像拼接短片："
+        + "；".join(issues)
+        + "。建议字段：series_handoff.previous_episode_pickup / opening_bridge / ending_throw / next_episode_receivable_hook。",
+        return_to_stage="script_stage2",
+        evidence_family="retention",
+    )
+
+
+def _clip_is_dialogue_heavy(clip: Mapping[str, Any]) -> bool:
+    template = str(clip.get("template") or clip.get("rhythm") or "").lower()
+    if "dialogue" in template or "shot_reverse" in template or "反打" in template or "对话" in template:
+        return True
+    if _filled(clip.get("native_speech")):
+        return True
+    if isinstance(clip.get("dialogue_indices"), list) and clip.get("dialogue_indices"):
+        return True
+    if isinstance(clip.get("dialogue_lines"), list) and clip.get("dialogue_lines"):
+        return True
+    text = json.dumps(clip, ensure_ascii=False)
+    return any(token in text for token in ("说话", "对白", "台词", "质问", "回答", "dialogue"))
+
+
+def check_dialogue_timing_mode(root: str, ep: str, stage: str) -> None:
+    """Dialogue-heavy episodes cannot enter video on rough video-first timing."""
+    if stage not in {"video_prompt_preflight", "video_preflight"}:
+        return
+    if is_native_av_production(root) or not is_video_first(root):
+        return
+    if voice_is_placeholder(root, ep) is not True:
+        return
+    data = _episode_storyboard(root, ep)
+    clips = _storyboard_clips(data)
+    if not clips:
+        return
+    dialogue = [c for c in clips if _clip_is_dialogue_heavy(c)]
+    ratio = len(dialogue) / max(1, len(clips))
+    if len(dialogue) < 3 and ratio < 0.35:
+        return
+    add(
+        BLOCK,
+        "配音时长模式",
+        os.path.join(root, "脚本", ep, "storyboard.json"),
+        f"本集对白/反打/说话镜占比高（{len(dialogue)}/{len(clips)}），但仍是「先出视频后配音」+ 占位/估算时长。"
+        "这类集若先出视频，clip 节奏、停顿、口型和 J/L cut 会被粗时长锁死。"
+        "先切到配音先行或至少生成真实配音/可信时长清单，再重跑分镜定时和 video preflight。",
+        return_to_stage="voice",
+        evidence_family="audio_sync",
+    )
+
+
 def run(root: str, ep: str, stage: str) -> None:
     _DEGRADED_QC_WAIVERS.clear()  # 每次 gate 运行重置降级 waiver 账本（进程内复用/测试安全）
     _HEURISTIC_BLOCK_DEMOTIONS.clear()  # 同上：重置启发式降级账本
@@ -3051,6 +3629,9 @@ def run(root: str, ep: str, stage: str) -> None:
         check_stylized_face_encoder_policy(root, ep, stage)
         check_storyboard_special_templates(root, ep)
         check_script_quality_contract(root, ep)
+        check_series_handoff_contract(root, ep, stage)
+        check_story_economy_audit(root, ep, stage)
+        check_production_handoff_pack(root, ep, stage)
         check_skill_freshness(root, ep, stage)  # 重生成出图 prompt 前先看 skill 是否漂移
     elif check_stage == "image":
         check_compliance_manifest(root, ep, check_stage)
@@ -3070,6 +3651,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_backend_reachable(root, ep)
         check_budget_cap(root, ep)
         if stage == "image_preflight":
+            check_production_locks_preflight(root, ep, stage)
             check_image_backend_api_refresh(root, ep)
         # 已测得的跨集脸/资产漂移 BLOCK 不分预检/出图后——整个 image family 都跑，避免直接 `--stage image`
         # 跳过预检时上一集已漂移的角色蒙混过出图后 gate。
@@ -3085,7 +3667,7 @@ def run(root: str, ep: str, stage: str) -> None:
             # gate（不走 run.py --strict），这道地板此前只在 run.py 生效、批量路径漏掉，平庸集照样烧钱出图。
             check_series_retention_gate(root, ep, stage)    # 系列冷开场链 / pilot 弧（激活原 dead-code 的 image_preflight 分支）
             check_episode_narrative_floor(root, ep, stage)  # 逐集首屏 3s 钩 / 留存承诺账本（must→production BLOCK·可签收）
-            check_skill_freshness(root, ep, stage)          # 花钱出图前：skill 漂移 → 物料可能过期（WARN·路由 n2d-update）
+            check_skill_freshness(root, ep, stage)          # 花钱出图前：skill 漂移 → 物料可能过期（BLOCK·路由 n2d-update/repair_preflight）
         # 两层出图不变量（2026-06-27 修 charter 审计发现的"声明漏洞"）：出图闸此前对共享资产只验
         # identity_registry/asset_registry 里写没写 status:ready 字符串，不验多角度定妆/武器/服饰的
         # 共享 PNG 是否真在磁盘——真存在性核对被推迟到出视频阶段，于是逐镜帧/clip 可能在共享图仅
@@ -3118,6 +3700,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_action_handoff(root, ep)
         check_storyboard_special_templates(root, ep)
         check_script_quality_contract(root, ep)
+        check_series_handoff_contract(root, ep, stage)
+        check_story_economy_audit(root, ep, stage)
+        check_production_handoff_pack(root, ep, stage)
+        check_prompt_consumed_contracts(root, ep, stage)
         check_image_prompt_overview(root, ep)
         check_prompt_checklists(root, ep, "image")
         check_script_contract_consumption(root, ep, ("出图",))
@@ -3173,6 +3759,11 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_special_templates(root, ep)
         check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
         check_script_quality_contract(root, ep)
+        check_dialogue_timing_mode(root, ep, stage)
+        check_story_economy_audit(root, ep, stage)
+        check_production_handoff_pack(root, ep, stage)
+        check_production_locks_preflight(root, ep, stage)
+        check_seam_hard_contract(root, ep, stage)
         check_script_contract_consumption(root, ep, ("出图",))
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
@@ -3192,7 +3783,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_progress_artifact_signoff(root, ep, video_prereq)
         check_placeholder_policy(root, ep, check_stage)
         if stage == "video_preflight":
-            check_skill_freshness(root, ep, stage)  # 花钱出视频前：skill 漂移 → 物料可能过期（WARN·路由 n2d-update）
+            check_skill_freshness(root, ep, stage)  # 花钱出视频前：skill 漂移 → 物料可能过期（BLOCK·路由 n2d-update/repair_preflight）
         check_voiceover_fingerprint(root, ep)
         # 一角一色跨集契约：video 阶段也再校一次（出图→出视频之间若改了 voicemap/补配音）。
         check_timing_manifest_complete(root, ep)
@@ -3212,6 +3803,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_special_templates(root, ep)
         check_director_camera_plan_consumption(root, ep)  # 导演运镜计划→出视频 prompt 消费收据（治「规划好没落片」）
         check_script_quality_contract(root, ep)
+        check_dialogue_timing_mode(root, ep, stage)
         check_spectacle_sequence_plan(root, ep)
         check_action_beat_budget(root, ep, check_stage)
         check_expression_span_frame_contract(root, ep)
@@ -3221,6 +3813,10 @@ def run(root: str, ep: str, stage: str) -> None:
         check_video_prompt_frames(root, ep, stage)
         check_video_backend_reachable(root, ep)
         check_budget_cap(root, ep)
+        if stage == "video_preflight":
+            check_production_locks_preflight(root, ep, stage)
+        check_seam_hard_contract(root, ep, stage)
+        check_prompt_consumed_contracts(root, ep, stage)
         check_multimodal_continuity(root, ep)
         check_prompt_checklists(root, ep, "video")
         check_script_contract_consumption(root, ep, ("出图", "出视频"))
@@ -3231,6 +3827,8 @@ def run(root: str, ep: str, stage: str) -> None:
         check_cross_episode_contract(root, ep)
         check_identity_handoff_inheritance(root, ep)
         check_asset_handoff_inheritance(root, ep)
+        check_story_economy_audit(root, ep, stage)
+        check_production_handoff_pack(root, ep, stage)
         check_semantic_lineage(root, ep)
         check_state_continuity(root, ep)
         if stage == "video":

@@ -103,3 +103,19 @@ def test_visual_contract_blocks_camera_gaze_and_unregistered_scene(tmp_path: Pat
     assert "panel_camera_gaze_unjustified" in codes(findings)
     assert "panel_scene_anchor_unregistered" in codes(findings)
     assert "panel_multi_character_staging_missing" in codes(findings)
+
+
+def test_traditional_contract_missing_warns_not_blocks(tmp_path: Path) -> None:
+    root = tmp_path
+    chapter = "第1话"
+    (root / "_设置.md").write_text("- 传统原稿流程：启用\n", encoding="utf-8")
+    panel_script = {"panels": [{"panel_id": "P001", "description": "主角推门。"}]}
+    layout = {"segments": [{"panels": [{"panel_id": "P001"}]}]}
+    jobs = {"jobs": [{"panel_id": "P001"}]}
+    findings: list[dict] = []
+
+    gate.check_traditional_manga_contract(root, chapter, panel_script, layout, jobs, findings)
+
+    assert "name_board_missing" in codes(findings)
+    assert "finishing_plan_missing" in codes(findings)
+    assert {item["severity"] for item in findings} == {"warn"}

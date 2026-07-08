@@ -22,12 +22,14 @@ SUBDIRS = (
     "源本",
     "设定库",
     "脚本/第1话",
+    "排版/第1话/name",
     "排版/第1话/pages",
     "排版/第1话/长图",
     "出图/共享/prompt",
     "出图/共享/图片",
     "出图/第1话/prompt",
     "出图/第1话/panels",
+    "出图/第1话/finishing",
     "生产数据",
     "废料",
 )
@@ -57,6 +59,12 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 - 目标平台: {args.platform}
 - 页面尺寸: {args.page_size}
 - 单话分段高度: {args.max_segment_height}
+- 传统原稿流程: {args.traditional_workflow}
+- 出图稿层: {args.render_stage}
+- 原稿规格: {args.manuscript_spec}
+- 版式模板策略: {args.name_strategy}
+- 网点策略: {args.tone_strategy}
+- 效果线策略: {args.effects_strategy}
 - 基础视觉风格: {args.visual_style}
 - 风格锚: {args.style_anchor}
 - 生图模型: {args.image_model}
@@ -81,9 +89,9 @@ def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) 
 > 输入模式={args.mode} 漫画形态={args.format} 阅读方向={args.reading_direction}
 
 ## 章节流程
-| 话 | 源本/企划 | 漫画脚本 | 页面排版 | 出图包 | 出图 | 嵌字合成 | 审查 |
-|---|---|---|---|---|---|---|---|
-| 第1话 | {source_status} | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 | 原稿收尾 | 出图包 | 出图 | 嵌字合成 | 审查 |
+|---|---|---|---|---|---|---|---|---|---|
+| 第1话 | {source_status} | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 
 ## 导出
 - [ ] 第1话 页面图
@@ -168,6 +176,13 @@ def panel_script(title: str) -> dict:
                 "narration": "",
                 "sfx": [],
                 "art_notes": "",
+                "layout_weight": "heavy",
+                "panel_shape": "full_width",
+                "border_style": "standard",
+                "gutter_intent": "opening pause",
+                "ink_plan": "clean outer contour, readable face/hands/props, solid black only where it supports focal contrast",
+                "tone_plan": "style-driven tones or grayscale; keep text-safe areas low detail",
+                "effects_plan": "use action/focus/speed lines only when they clarify motion or impact",
                 "references": [],
             }
         ],
@@ -181,6 +196,12 @@ def layout_json(args: argparse.Namespace) -> dict:
         "chapter": "第1话",
         "format": args.format,
         "reading_direction": args.reading_direction,
+        "manuscript": {
+            "spec": args.manuscript_spec,
+            "trim_box": {"x": 0, "y": 0, "w": int(args.page_size.split("x", 1)[0]), "h": 1800},
+            "safe_area": {"x": 72, "y": 72, "w": int(args.page_size.split("x", 1)[0]) - 144, "h": 1656},
+            "bleed": 0,
+        },
         "canvas": {"width": int(args.page_size.split("x", 1)[0]), "height": "auto"},
         "segments": [
             {
@@ -213,6 +234,12 @@ def main() -> int:
     parser.add_argument("--reading-direction", default="从上到下")
     parser.add_argument("--page-size", default="1440xauto")
     parser.add_argument("--max-segment-height", default="0", help="最大分段高度；0 表示默认导出单张长图")
+    parser.add_argument("--traditional-workflow", default="启用")
+    parser.add_argument("--render-stage", default="完成稿")
+    parser.add_argument("--manuscript-spec", default="数字条漫")
+    parser.add_argument("--name-strategy", default="自动ネーム")
+    parser.add_argument("--tone-strategy", default="风格驱动")
+    parser.add_argument("--effects-strategy", default="剧情驱动")
     parser.add_argument("--visual-style", default="彩色国漫条漫")
     parser.add_argument("--style-anchor", default="未指定")
     parser.add_argument("--image-model", default="GPT Image 2")

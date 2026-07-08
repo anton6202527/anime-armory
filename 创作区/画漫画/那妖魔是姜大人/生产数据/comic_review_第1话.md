@@ -1,6 +1,6 @@
 # 漫画审查报告 — 第1话
 
-- 生成时间：2026-07-07T14:51:51
+- 生成时间：2026-07-08T22:49:01
 - 结论：pass
 - panel 数：16
 - block/warn/info：0 / 0 / 8
@@ -18,6 +18,7 @@
 ## 记录
 
 - 已刷新风格一致性报告：生产数据/comic_style_consistency_第1话.md
+- 已刷新角色一致性报告：生产数据/comic_character_consistency_第1话.md
 - demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。
 - demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。
 - demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。
@@ -47,3 +48,9 @@
 
 - 结论：pass
 - 摘要：{"panel_count": 16, "finding_count": 5, "block_count": 0, "warn_count": 0, "info_count": 5}
+
+## 角色一致性
+
+- 结论：pass
+- 摘要：{"character_count": 2, "panel_binding_count": 22, "finding_count": 0, "block_count": 0, "warn_count": 0, "info_count": 0}
+- 并排复核图：`生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg`

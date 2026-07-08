@@ -1,0 +1,120 @@
+{
+  "kind": "n2d_cinematic_coverage_grammar",
+  "version": 1,
+  "updated_at": "2026-07-09",
+  "scope": "traditional film coverage techniques adapted for n2d 9:16 AI production",
+  "patterns": [
+    {
+      "id": "establishing_master",
+      "name": "建立镜 / master establishing",
+      "use_when": "新场景、新轴线、新人物关系、越轴后重新定向、动作段开头。",
+      "n2d_contract": "先确认地点、A/B 方位、前中后景、光位和行动轴线；后续近景不得背离。",
+      "prompt_requirements": ["地点与地标", "A/B 屏幕或纵深位置", "主光方向", "下一镜接力方向"],
+      "vertical_9x16": "竖屏建立镜用纵深和高低位，不把多人横向排满。"
+    },
+    {
+      "id": "two_shot",
+      "name": "双人镜 / two-shot",
+      "use_when": "关系状态、距离、权力高低需要同框读懂。",
+      "n2d_contract": "双人镜只负责关系建立；清晰台词和强表情转 clean single / OTS / reaction。",
+      "prompt_requirements": ["谁画左/右或前/后", "谁是 primary", "是否允许两张清晰脸", "多人同框身份槽位"],
+      "vertical_9x16": "近景双人镜优先前景肩部+背景脸，避免横向两张脸都小。"
+    },
+    {
+      "id": "ots_pair",
+      "name": "过肩正反打 / OTS pair",
+      "use_when": "对话、审问、求援、压迫、试探，需要保留对手存在感。",
+      "n2d_contract": "OTS 必须写前景是谁的肩/侧背/背头、焦点是谁、A/B 视线方向和轴线不越线。",
+      "prompt_requirements": ["foreground_shoulder", "focus_subject", "eyeline_direction", "lens_height_distance_match"],
+      "vertical_9x16": "用前景肩部占一侧边缘，背景脸留足可读面积。"
+    },
+    {
+      "id": "clean_single",
+      "name": "干净单人镜 / clean single",
+      "use_when": "关键台词、强反应、身份锁脸、情绪峰值。",
+      "n2d_contract": "只让一名具名角色成为清晰焦点；对手可画外或虚焦肩部，不新增清晰脸。",
+      "prompt_requirements": ["focus_subject", "screen_position", "eyeline_target", "closeup_anchor_or_reference_group"],
+      "vertical_9x16": "CU/MCU 保证脸部面积和眼鼻嘴清晰。"
+    },
+    {
+      "id": "reaction_shot",
+      "name": "反应镜 / reaction shot",
+      "use_when": "信息落到人脸上、压住台词后的沉默、留白、尾钩。",
+      "n2d_contract": "反应镜必须承接上一镜信息，不重演动作；视线看戏内来源，不看镜头。",
+      "prompt_requirements": ["收到的信息", "反应主体", "起止微表情", "落幅时长/剪点"],
+      "vertical_9x16": "反应近景可比双人同框更省脸漂风险。"
+    },
+    {
+      "id": "insert_cutaway",
+      "name": "插入镜 / cutaway",
+      "use_when": "道具证据、手部动作、视线目标、越轴缓冲、节奏压缩。",
+      "n2d_contract": "插入镜要有明确证据或节奏功能，不是随机空镜；道具/手部归属必须清楚。",
+      "prompt_requirements": ["insert_subject", "story_function", "owner/holder", "return_direction"],
+      "vertical_9x16": "插入镜可放大手、道具、爪刃、火把、系统面板底框。"
+    },
+    {
+      "id": "match_on_action",
+      "name": "动作连续剪 / match on action",
+      "use_when": "下马、拔刀、递物、推门、攻击起手、扁担落肩等动作跨镜。",
+      "n2d_contract": "上一镜动作出点必须等于下一镜动作入点；方向、手部归属和接触点连续。",
+      "prompt_requirements": ["from_action_state", "to_action_state", "screen_direction", "contact_point"],
+      "vertical_9x16": "用同一动作方向贯穿纵深，避免镜间左右反跳。"
+    },
+    {
+      "id": "eyeline_cut",
+      "name": "视线剪 / eyeline cut",
+      "use_when": "角色看向画外目标，再切目标或反应。",
+      "n2d_contract": "上一镜视线方向必须能推出下一镜目标方位；目标出现后再切回反应。",
+      "prompt_requirements": ["looker", "eyeline_direction", "target", "reaction_return"],
+      "vertical_9x16": "视线可连接上/下/前/后景，减少横向挤脸。"
+    },
+    {
+      "id": "j_cut_l_cut",
+      "name": "J-cut / L-cut 声画错位剪",
+      "use_when": "对白先入、尾句压到下一镜、旁白压缩背景、情绪延迟兑现。",
+      "n2d_contract": "只记录剪辑意图；声音执行由 n2d-compose，视频 prompt 不生成原生旁白。",
+      "prompt_requirements": ["audio_lead_or_tail", "visual_in", "dialogue/narration owner", "compose_overlay_policy"],
+      "vertical_9x16": "声音桥能让画面用反应镜或插入镜承接信息。"
+    },
+    {
+      "id": "reestablishing_buffer",
+      "name": "重建空间 / buffer shot",
+      "use_when": "越轴、换阵位、从群像切近景、从内心戏回现实。",
+      "n2d_contract": "必须重申空间、轴线、人物方位或以空镜/道具/建立镜重新定向。",
+      "prompt_requirements": ["axis_reset_reason", "buffer_subject", "new_screen_direction"],
+      "vertical_9x16": "用门框、火把、村道纵深、殿柱、水缸等空间锚重建方向。"
+    },
+    {
+      "id": "axial_pressure",
+      "name": "纵轴对压 / axial pressure",
+      "use_when": "强弱对峙、跪求、审问、反派压出、主角步步逼近。",
+      "n2d_contract": "用深处/前景、上/下、高/低位表达权力，不靠横排站位。",
+      "prompt_requirements": ["foreground_subject", "background_subject", "pressure_direction", "lens_compression"],
+      "vertical_9x16": "竖屏首选手法；脸部保持单焦点，关系由纵深读出。"
+    },
+    {
+      "id": "low_angle_power",
+      "name": "压迫性低角度 / low-angle power",
+      "use_when": "权力、威胁、压场、反派或伪装官威。",
+      "n2d_contract": "低角度必须服务权力关系；与反打镜的高度差要在合同里说明。",
+      "prompt_requirements": ["subject", "camera_height", "power_relation", "matching_reverse_height"],
+      "vertical_9x16": "低角度可拉高主体，不要让脸被下巴/暗部遮死。"
+    },
+    {
+      "id": "reveal_closeup",
+      "name": "信息揭示特写 / reveal close-up",
+      "use_when": "身份、武器、狼爪、系统面板、证物、表情真相揭示。",
+      "n2d_contract": "特写只揭示一个信息点；文字走 overlay，道具/身体归属锁清楚。",
+      "prompt_requirements": ["revealed_information", "single_focus", "owner_or_context", "return_reaction"],
+      "vertical_9x16": "用 ECU/insert 放大信息，下一镜用 reaction/establish 交代关系。"
+    },
+    {
+      "id": "montage_ellipsis",
+      "name": "蒙太奇省略 / montage ellipsis",
+      "use_when": "背景压缩、赶路、重复劳动、训练、记忆快闪。",
+      "n2d_contract": "每个短镜只给一个信息点；用物件、动作、状态变化串联，不扩成长戏。",
+      "prompt_requirements": ["beats", "time_compression", "state_delta", "sound_or_cut_rhythm"],
+      "vertical_9x16": "多用物件插入和身体局部，不新增无名清晰脸。"
+    }
+  ]
+}

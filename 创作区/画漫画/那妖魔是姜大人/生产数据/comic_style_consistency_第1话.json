@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "comic_style_consistency",
-  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-07T14:51:50",
+  "created_at": "2026-07-08T22:53:38",
   "available": true,
   "margin": 0.04,
   "bins": 16,
@@ -505,5 +505,9 @@
   ],
   "notes": [
     "已按 生产数据/style_consistency_acceptance_第1话.json 人审签收 5 条风格一致性 finding；原始机器 severity 保留在 machine_severity。"
-  ]
+  ],
+  "preview_artifacts": {
+    "contact_sheet": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg",
+    "findings_detail": "生产数据/qa_previews/第1话_style_outliers_detail.jpg"
+  }
 }

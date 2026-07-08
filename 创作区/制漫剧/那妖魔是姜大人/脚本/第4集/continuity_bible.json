@@ -1,0 +1,1028 @@
+{
+  "clips": [
+    {
+      "clip_id": "EP04_CLIP01",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_02"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [
+          "狼妖群"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_02"
+        ]
+      },
+      "location_id": "LOC_02",
+      "scene": "荒野官道夜路/冷灰黎明前/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {
+        "axis_line": "姜月初站画面上方/前景，陈青源和飞鹰门众人跪在下方/后景；求援者仰视，姜月初俯视，不越过官道轴线。",
+        "buffer_or_reestablishing": "众人跪地广角、官道火把/黑衣赤纹插入、陈青源眼神 cutaway 可作为缓冲和重新定向镜；不得直接跳到反轴近景。",
+        "camera_coverage": "clean single + low-angle reaction + kneeling group establishing + cutaway/reaction；清晰近景默认拆正反打，不把姜月初、陈青源和众人挤成多人特写。",
+        "coverage_order": [
+          "陈青源低位求援 CU / MCU",
+          "姜月初沉默中近景反应",
+          "飞鹰门众人跪地广角建立",
+          "姜月初内心拒绝的 clean single 反打",
+          "陈青源眼神暗下作为落幅"
+        ],
+        "crossing_axis_policy": "默认禁止越轴；若必须重新定向，只能先回到官道双人/群像建立镜或空镜确认主轴，再进入下一组反打。",
+        "eyeline_match": "陈青源抬眼看姜月初黑衣赤纹；姜月初先避开再压回视线，众人视线集中到她身上。",
+        "lens_height_distance_match": "A/B 反打保持 50-85mm 中长焦、相近镜头距离和冷灰侧光；陈青源低机位仰视、姜月初略高机位俯压用于权力关系，但背景深度、焦段质感和官道方向连续。",
+        "screen_sides": {
+          "locked_rule": "官道轴线不越线；反打中姜月初保持上方/前景压迫位，陈青源保持低位/后景仰视位，不左右互换。",
+          "screen_lower_background": "CHAR_04/常态（陈青源）与飞鹰门众人",
+          "screen_upper_foreground": "CHAR_01/镇魔司伪装态（姜月初）"
+        },
+        "shot_pairing": "陈青源求援 CU -> 姜月初沉默中近景 -> 众人跪地广角 -> 姜月初内心拒绝反打。"
+      },
+      "state": {
+        "end_state": "旁白句子落点：可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": []
+        },
+        "start_state": "陈青源句子入点：大人，求您救上盘村。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP02",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_02"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [
+          "狼妖群"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_02"
+        ]
+      },
+      "location_id": "LOC_02",
+      "scene": "荒野官道夜路/冷灰黎明前/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "旁白句子落点：她答应的不是一声谢，是从此被这身黑衣绑住。十里八乡，抬头不见低头见。救上盘村，就是救自家人。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": []
+        },
+        "start_state": "陈青源句子入点：是在下......唐突了。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP03",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_02"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把"
+        ],
+        "offscreen_presence": [
+          "狼妖群"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "LOC_02"
+        ]
+      },
+      "location_id": "LOC_02",
+      "scene": "荒野官道夜路/冷灰黎明前/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "陈青源句子落点：此獠，怕是已入闻弦之境。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": []
+        },
+        "start_state": "年轻门人句子入点：大人，您请，救人要紧。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP04",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_02"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把"
+        ],
+        "offscreen_presence": [
+          "狼妖群"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "LOC_02"
+        ]
+      },
+      "location_id": "LOC_02",
+      "scene": "返村官道/冷风马蹄/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "陈青源句子落点：其余几头只是刚开灵智的小妖，凶悍，却没那头狼妖难缠。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": []
+        },
+        "start_state": "姜月初句子入点：闻弦？又是闻弦？"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP05",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_02"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布",
+          "PROP_木架残肢剪影"
+        ],
+        "offscreen_presence": [
+          "狼妖群"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "PROP_镇魔司黑衣赤纹",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布",
+          "PROP_木架残肢剪影",
+          "LOC_02"
+        ]
+      },
+      "location_id": "LOC_02",
+      "scene": "返村官道/冷风马蹄/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：hard_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "旁白句子落点：这就是她答应后的代价。胃里翻江倒海，脸上却不能有半点表情。镇魔司大人，不能先吐。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": []
+        },
+        "start_state": "旁白句子入点：马蹄追了一夜。天边泛白时，上盘村终于到了。"
+      },
+      "trace_ids": [],
+      "transition_guard": "hard_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP06",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布",
+          "PROP_木架残肢剪影"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "PROP_镇魔司黑衣赤纹",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布",
+          "PROP_木架残肢剪影",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村口/晨雾血迹/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：hard_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "旁白句子落点：它半眯着绿油油的眸子，打了个哈欠，满脸不耐。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "狼妖哨兵句子入点：它们发现人了！嗷呜——！"
+      },
+      "trace_ids": [],
+      "transition_guard": "hard_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP07",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "GROUP_飞鹰门众人",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/狼妖盘踞/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "青面郎君句子落点：我要守住这村血食。尔等乡亲，在我眼里，不过是圈里的牲口。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "青面郎君句子入点：我还当来了什么了不得的人物。原来，还是你们。昨日让尔等逃脱，已是天大的运气。今日还敢回来送死？"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP08",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/狼妖盘踞/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "旁白句子落点：一声轻响。姜月初翻身下马，靴子踩进村道尘土。这一刻，她选择出手。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "旁白句子入点：飞鹰门众人目眦欲裂。陈青源一把抓住身边的年轻人，眼睛却看向姜月初。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP09",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01 横刀"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01 横刀",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/狼妖盘踞/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "青面郎君句子落点：是。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "旁白句子入点：她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP10",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01 横刀"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01 横刀",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/狼妖盘踞/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：eyeline/match_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "姜月初句子落点：杀一头会说人话的畜生，|| 算是值了。",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "旁白句子入点：答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。"
+      },
+      "trace_ids": [],
+      "transition_guard": "eyeline/match_cut"
+    },
+    {
+      "clip_id": "EP04_CLIP11",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_狼爪寒光"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_狼爪寒光",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/狼妖盘踞/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初与求援者/青面郎君沿既定主轴反打；狼妖群只在后景施压，不乱切视线。；转场方式：hard_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "青面郎君句子落点：杀了她！",
+        "entry_exit": "入画/出画按 entity_schedule 接续；姜月初、陈青源、青面郎君、狼妖群不得凭空出现或消失。",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道自己是假镇魔司",
+            "本集选择接下上盘村危机"
+          ],
+          "CHAR_05": [
+            "占据上盘村",
+            "低估姜月初"
+          ]
+        },
+        "start_state": "青面郎君句子入点：你若不是穿着这身皮，我也懒得与你废话！"
+      },
+      "trace_ids": [],
+      "transition_guard": "hard_cut"
+    }
+  ],
+  "continuity_chain": {
+    "seams": [
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "LOC_02"
+        ],
+        "from_clip": "Clip_03",
+        "from_end_state": "姜月初没有立刻答应，也没有拒绝；火把在她眼里摇成一条细亮的线，尾帧定住半拍后硬切黑。",
+        "from_episode": "第3集",
+        "intentional_discontinuity_reason": "",
+        "issues": [
+          {
+            "code": "missing_episode_boundary_contract",
+            "message": "跨集首镜缺 continuity.episode_boundary：必须声明承接上一集，或写有意跳切理由。",
+            "severity": "block"
+          }
+        ],
+        "next_firstframe": "出图/第4集/图片/Clip01_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第3集/图片/Clip10_end.png",
+        "same_location": true,
+        "scope": "episode_boundary",
+        "severity": "block",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "陈青源句子入点：大人，求您救上盘村。",
+        "transition": "cliffhanger_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "LOC_02",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "旁白句子落点：可陈青源的眼神，一点点暗了下去。那些跪着的人，也像被夜风吹灭了火。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip02_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip01_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "陈青源句子入点：是在下......唐突了。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "LOC_02",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "旁白句子落点：她答应的不是一声谢，是从此被这身黑衣绑住。十里八乡，抬头不见低头见。救上盘村，就是救自家人。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip03_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip02_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "年轻门人句子入点：大人，您请，救人要紧。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "LOC_02",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "陈青源句子落点：此獠，怕是已入闻弦之境。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip04_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip03_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "姜月初句子入点：闻弦？又是闻弦？",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "LOC_02",
+          "MOUNT_GROUP_01 飞鹰门马匹与火把",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "陈青源句子落点：其余几头只是刚开灵智的小妖，凶悍，却没那头狼妖难缠。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip05_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip04_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "旁白句子入点：马蹄追了一夜。天边泛白时，上盘村终于到了。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "PROP_上盘村断石碑",
+          "PROP_木架残肢剪影",
+          "PROP_村道血迹破布",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "旁白句子落点：这就是她答应后的代价。胃里翻江倒海，脸上却不能有半点表情。镇魔司大人，不能先吐。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip06_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip05_end.png",
+        "same_location": false,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "狼妖哨兵句子入点：它们发现人了！嗷呜——！",
+        "transition": "hard_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "旁白句子落点：它半眯着绿油油的眸子，打了个哈欠，满脸不耐。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip07_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip06_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "青面郎君句子入点：我还当来了什么了不得的人物。原来，还是你们。昨日让尔等逃脱，已是天大的运气。今日还敢回来送死？",
+        "transition": "hard_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "青面郎君句子落点：我要守住这村血食。尔等乡亲，在我眼里，不过是圈里的牲口。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip08_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip07_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "旁白句子入点：飞鹰门众人目眦欲裂。陈青源一把抓住身边的年轻人，眼睛却看向姜月初。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "旁白句子落点：一声轻响。姜月初翻身下马，靴子踩进村道尘土。这一刻，她选择出手。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip09_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip08_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "旁白句子入点：她一步一步逼近。青面郎君终于收起笑，目光落在那身黑衣赤纹上。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01 横刀"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "青面郎君句子落点：是。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip10_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip09_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "旁白句子入点：答完这一声，它才发现，气势竟被眼前这瘦弱少女压下去一分。",
+        "transition": "eyeline/match_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "姜月初句子落点：杀一头会说人话的畜生，|| 算是值了。",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第4集/图片/Clip11_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip10_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第4集",
+        "to_start_state": "青面郎君句子入点：你若不是穿着这身皮，我也懒得与你废话！",
+        "transition": "eyeline/match_cut"
+      }
+    ],
+    "status": "draft",
+    "summary": {
+      "block": 1,
+      "clips": 11,
+      "design_cuts": 0,
+      "episode_boundaries": 1,
+      "intentional_discontinuities": 0,
+      "relays": 11,
+      "seams": 11,
+      "warn": 0
+    }
+  },
+  "episode": "第4集",
+  "generated_at": "2026-07-08T14:18:18+00:00",
+  "inputs": {
+    "continuity_breakdown": "脚本/第4集/continuity_breakdown.json",
+    "continuity_chain": "脚本/第4集/continuity_chain.json",
+    "source_comprehension": "设定库/source_comprehension.json",
+    "storyboard": "脚本/第4集/storyboard.json"
+  },
+  "kind": "n2d_continuity_bible",
+  "open_continuity_questions": [
+    {
+      "exists": false,
+      "name": "state_transition_manifest",
+      "path": "生产数据/state_transition_manifest_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "interaction_graph",
+      "path": "生产数据/interaction_graph_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "causal_event_graph",
+      "path": "生产数据/causal_event_graph_第4集.json",
+      "status": "missing"
+    }
+  ],
+  "owner": "script_supervisor",
+  "sidecars": [
+    {
+      "exists": false,
+      "name": "state_transition_manifest",
+      "path": "生产数据/state_transition_manifest_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "interaction_graph",
+      "path": "生产数据/interaction_graph_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "contact_graph",
+      "path": "生产数据/contact_graph_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "causal_event_graph",
+      "path": "生产数据/causal_event_graph_第4集.json",
+      "status": "missing"
+    },
+    {
+      "exists": true,
+      "name": "story_integrity_ledger",
+      "path": "设定库/story_integrity_ledger.json",
+      "status": "present"
+    },
+    {
+      "exists": true,
+      "name": "thread_scheduler",
+      "path": "设定库/thread_scheduler.json",
+      "status": "present"
+    },
+    {
+      "exists": false,
+      "name": "contract_trace",
+      "path": "生产数据/contract_trace_第4集.json",
+      "status": "missing"
+    }
+  ],
+  "source_contract": {
+    "contract_fields": [
+      "adaptation_boundaries",
+      "causality_chain",
+      "character_motives",
+      "episode_promise_basis",
+      "episode_trace_scope",
+      "foreshadowing_ledger",
+      "modern_understanding",
+      "power_system_rules",
+      "source_register_strategy"
+    ],
+    "exists": true,
+    "path": "设定库/source_comprehension.json",
+    "status": "confirmed",
+    "trace_ids": [
+      "SRC_CAUSE_001",
+      "SRC_CAUSE_002",
+      "SRC_CAUSE_003",
+      "SRC_CAUSE_004",
+      "SRC_MOTIVE_001",
+      "SRC_MOTIVE_002",
+      "SRC_MOTIVE_003",
+      "SRC_PROMISE_001",
+      "SRC_PROMISE_002",
+      "SRC_PROMISE_003",
+      "SRC_PROMISE_004",
+      "SRC_FORESHADOW_003",
+      "SRC_FORESHADOW_001",
+      "SRC_FORESHADOW_002"
+    ]
+  },
+  "status": "draft",
+  "version": 1
+}

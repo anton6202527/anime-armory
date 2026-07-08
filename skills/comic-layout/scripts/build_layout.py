@@ -124,6 +124,16 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_optional_json(path: Path) -> dict:
+    if not path.is_file():
+        return {}
+    try:
+        data = load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def read_setting(root: Path, key: str, default: str) -> str:
     path = root / "_设置.md"
     if not path.is_file():
@@ -139,6 +149,45 @@ def read_setting(root: Path, key: str, default: str) -> str:
 def parse_width(value: str, default: int = 1440) -> int:
     match = re.match(r"\s*(\d+)\s*x", value)
     return int(match.group(1)) if match else default
+
+
+def manuscript_boxes(root: Path, width: int, comic_format: str, name_board: dict) -> dict:
+    manuscript = name_board.get("manuscript") if isinstance(name_board.get("manuscript"), dict) else {}
+    if manuscript:
+        return manuscript
+    spec = read_setting(root, "原稿规格", "数字条漫")
+    if "页漫" in comic_format or "B5" in spec or "A4" in spec:
+        height = int(width * 1.42)
+        bleed = max(24, width // 32)
+        safe = max(72, width // 15)
+        inner = max(104, width // 11)
+    else:
+        height = "auto"
+        bleed = 0
+        safe = max(72, width // 20)
+        inner = safe
+    numeric_h = int(height) if isinstance(height, int) else 1800
+    return {
+        "spec": spec,
+        "trim_box": {"x": 0, "y": 0, "w": width, "h": height},
+        "safe_area": {"x": safe, "y": safe, "w": width - safe * 2, "h": max(1, numeric_h - safe * 2)},
+        "bleed": bleed,
+        "inner_frame": {"x": inner, "y": inner, "w": width - inner * 2, "h": max(1, numeric_h - inner * 2)},
+    }
+
+
+def name_panel_index(name_board: dict) -> dict[str, tuple[dict, dict]]:
+    out: dict[str, tuple[dict, dict]] = {}
+    for page in name_board.get("pages") or []:
+        if not isinstance(page, dict):
+            continue
+        for panel in page.get("panels") or []:
+            if not isinstance(panel, dict):
+                continue
+            pid = str(panel.get("panel_id") or "")
+            if pid:
+                out[pid] = (page, panel)
+    return out
 
 
 def parse_max_segment_height(value: str, default: int = 0) -> int:
@@ -257,7 +306,12 @@ def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
     for dialogue_index, dialogue in enumerate(panel.get("dialogue") or [], 1):
         slot_w = 430
         slot_h = text_slot_height(target_dialogue_text(dialogue), slot_w, 44, 136)
+        bubble_first = str(rect.get("bubble_first") or "")
         side_right = dialogue_index % 2 == 1
+        if bubble_first == "left_top":
+            side_right = False if dialogue_index == 1 else side_right
+        elif bubble_first == "right_top":
+            side_right = True if dialogue_index == 1 else side_right
         slot_x = x + w - slot_w - 56 if side_right else x + 56
         slots.append(
             {
@@ -287,9 +341,12 @@ def bubble_slots(panel: dict, rect: dict, index: int) -> list[dict]:
 def build_layout(root: Path, chapter: str, max_segment_height: int, gutter: int) -> dict:
     panel_path = root / "脚本" / chapter / "panel_script.json"
     panel_script = load_json(panel_path)
+    name_board = load_optional_json(root / "排版" / chapter / "name_board.json")
+    name_panels = name_panel_index(name_board)
     width = parse_width(read_setting(root, "页面尺寸", "1440xauto"))
     comic_format = read_setting(root, "漫画形态", "条漫")
     reading_direction = read_setting(root, "阅读方向", "从上到下")
+    manuscript = manuscript_boxes(root, width, comic_format, name_board)
     margin = 72
     panel_w = width - margin * 2
 
@@ -306,12 +363,24 @@ def build_layout(root: Path, chapter: str, max_segment_height: int, gutter: int)
             segment_index += 1
             current = {"segment_id": f"S{segment_index:03d}", "width": width, "height": 0, "panels": []}
             y = gutter
+        pid = str(panel["panel_id"])
+        name_page, name_panel = name_panels.get(pid, ({}, {}))
         rect = {
             "panel_id": panel["panel_id"],
             "x": margin,
             "y": y,
             "w": panel_w,
             "h": h,
+            "layout_weight": name_panel.get("layout_weight") or explicit_layout_weight(panel) or "medium",
+            "panel_shape": name_panel.get("panel_shape") or panel.get("panel_shape") or "standard",
+            "border_style": name_panel.get("border_style") or panel.get("border_style") or "standard",
+            "gutter_intent": name_panel.get("gutter_intent") or panel.get("gutter_intent") or "",
+            "bubble_first": name_panel.get("bubble_first") or "",
+            "effects_hint": name_panel.get("effects_hint") or panel.get("effects_plan") or panel.get("effects_hint") or "",
+            "name_page_id": name_page.get("page_id") or "",
+            "page_side": name_page.get("page_side") or ("scroll" if "条漫" in comic_format else ""),
+            "spread_id": name_page.get("spread_id") or "",
+            "page_turn_hook": name_page.get("page_turn_hook") or "",
         }
         rect["bubble_slots"] = bubble_slots(panel, rect, index)
         current["panels"].append(rect)
@@ -327,6 +396,8 @@ def build_layout(root: Path, chapter: str, max_segment_height: int, gutter: int)
         "chapter": chapter,
         "format": comic_format,
         "reading_direction": reading_direction,
+        "manuscript": manuscript,
+        "name_board": str(Path("排版") / chapter / "name_board.json") if name_board else "",
         "canvas": {"width": width, "height": "auto"},
         "segments": segments,
     }
@@ -359,6 +430,8 @@ def write_notes(root: Path, chapter: str, layout: dict) -> None:
         "",
         f"- 形态：{layout.get('format')}",
         f"- 阅读方向：{layout.get('reading_direction')}",
+        f"- 原稿规格：{(layout.get('manuscript') or {}).get('spec', '')}",
+        f"- 缩略分镜：{layout.get('name_board') or '未接入'}",
         f"- 分段数：{len(layout.get('segments', []))}",
         f"- 面板数：{total_panels}",
         "- 气泡坐标为 MVP 占位，正式嵌字前需人工检查是否挡脸、手、刀、妖物关键动作。",

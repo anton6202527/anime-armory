@@ -107,12 +107,11 @@ function AppStatusBar({
         ) : null}
         <button
           type="button"
-          className="statusbar-button"
+          className="statusbar-button statusbar-notifications"
           title={t("status.notifications")}
           aria-label={t("status.notifications")}
         >
           <Codicon name="bell" />
-          <span>0</span>
         </button>
       </div>
     </div>

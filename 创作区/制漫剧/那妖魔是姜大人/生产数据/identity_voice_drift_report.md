@@ -1,9 +1,9 @@
 # 音色跨集漂移报表
 
-- root: 创作区/制漫剧/那妖魔是姜大人
-- generated_at: 2026-07-08T09:21:41+00:00
-- 可检集: 4/4（数据不足 0 集）
-- 跨集/集内漂移: 0；voicemap 不符: 0；占位待重配: 11
+- root: /Users/lalala/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人
+- generated_at: 2026-07-08T14:56:12+00:00
+- 可检集: 5/5（数据不足 0 集）
+- 跨集/集内漂移: 0；voicemap 不符: 0；占位待重配: 15
 
 - note: voicemap.json 缺失或不可解析，跳过 voicemap 对账（n2d-voice 写 设定库/voicemap.json 后启用）
 
@@ -15,6 +15,7 @@
 | 第2集 | ok | 28 | 旁白:NARR; 裴长青:SHEN; 系统:SYS; 姜月初:SHEN; 虎山神:SHEN |
 | 第3集 | ok | 37 | 旁白:say:Tingting_placeholder; 姜月初:say:Tingting_placeholder; 陈青源:say:Tingting_placeholder; 众人:say:Tingting_placeholder |
 | 第4集 | ok | 46 | 陈青源:say:Tingting_placeholder; 旁白:say:Tingting_placeholder; 姜月初:say:Tingting_placeholder; 众人:say:Tingting_placeholder; 年轻门人:say:Tingting_placeholder; 狼妖哨兵:say:Tingting_placeholder; 青面郎君:say:Tingting_placeholder |
+| 第5集 | ok | 28 | 旁白:say:Tingting_placeholder; 青面郎君:say:Tingting_placeholder; 姜月初:say:Tingting_placeholder; 陈青源:say:Tingting_placeholder |
 
 ## 漂移明细
 
@@ -48,3 +49,11 @@
   - 回流：return_to_stage=voice；第4集 角色「陈青源」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
 - 「青面郎君」第4集：say:Tingting_placeholder（7 句）
   - 回流：return_to_stage=voice；第4集 角色「青面郎君」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「姜月初」第5集：say:Tingting_placeholder（3 句）
+  - 回流：return_to_stage=voice；第5集 角色「姜月初」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「旁白」第5集：say:Tingting_placeholder（21 句）
+  - 回流：return_to_stage=voice；第5集 角色「旁白」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「陈青源」第5集：say:Tingting_placeholder（1 句）
+  - 回流：return_to_stage=voice；第5集 角色「陈青源」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成
+- 「青面郎君」第5集：say:Tingting_placeholder（3 句）
+  - 回流：return_to_stage=voice；第5集 角色「青面郎君」为占位应急轨（say:Tingting_placeholder），需用注册音色重配（n2d-voice）后再出图/合成

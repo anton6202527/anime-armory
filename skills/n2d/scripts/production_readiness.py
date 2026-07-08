@@ -236,7 +236,7 @@ def run_release(root: Path, episode: str, *, write: bool, asset: Optional[str]) 
 
 
 def run_production_locks(root: Path, episode: str, *, write: bool) -> Dict[str, Any]:
-    payload = production_locks.check_ledger(root, episode, write_missing=write, stage="review")
+    payload = production_locks.check_ledger(root, episode, write_missing=write, stage="review", write_check=write)
     return check(
         "production_locks",
         "fail" if payload.get("status") != "pass" else "pass",

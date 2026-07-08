@@ -221,9 +221,8 @@ def check_skill_freshness(root: str, ep: str, stage: str) -> None:
     动机（本次审计闭合的缺口）：skill 漂移检测（git-free SHA256 内容快照基线，存于
     `生产数据/skill_update_snapshot.json`）此前**只在用户手动跑 `n2d-update` 时**才发生；而真正花钱的
     `image_preflight`/`video_preflight` 预检从不查它——于是 skill 升级后，旧物料可能已过期，却照样烧钱
-    生成。这里把同一套检测下沉到预检：命中即 **WARN（advisory·不硬阻断）** 并路由回 n2d-update 评估
-    精确重制范围。不 BLOCK——是否重制是判断题（最小 vs 严审刷新；横切/gate-only 改动常无需重制），交给
-    精确规划器；硬拦会在 skill 自身开发期反复打断流水线。只读不写（不在 gate 里落基线，避免副作用）。
+    生成。这里把同一套检测下沉到预检：命中生产输入物料漂移即 **BLOCK** 并路由回 n2d-update/repair_preflight
+    评估精确重制范围；横切/QC/gate-only 改动仍只 INFO。只读不写（不在 gate 里落基线，避免副作用）。
 
     判定为 skill 粒度的粗判（偏向"花钱前先去查"），精确的文件→阶段/artifact-vs-gate-only 裁决由
     `n2d-update/update_plan.py` 给出。二者共享同一份观测白名单常量（skill_freshness 单一来源）。
@@ -261,11 +260,19 @@ def check_skill_freshness(root: str, ep: str, stage: str) -> None:
     material = res.get("material_skills") or []
     changed = res.get("changed_skills") or []
     if material:
-        add(WARN, "物料新鲜度", ep,
+        repair_cmd = (
+            f'python3 skills/n2d/scripts/repair_preflight.py "{root}" {ep} '
+            f"--stage {until_key} --write-missing"
+        )
+        add(BLOCK, "物料新鲜度", ep,
             f"前期物料可能已过期：{', '.join(material)} 自上次 skill 基线后有改动，"
             f"可能影响本阶段（{until_key}）的输入物料。出图/出视频是花钱且不可逆的步骤——"
-            f"先跑 `{check_cmd}` 评估哪些物料需重制，再决定是否生成。{bootstrap_note}",
-            advisory=True, evidence_family="freshness")
+            f"先跑 `{check_cmd}` 评估哪些物料需重制；统一修复/预检入口：`{repair_cmd}`。"
+            f"完成重制或确认接受现状后再 `{record_cmd}` 固化新基线。{bootstrap_note}",
+            return_to_stage="update_plan",
+            recovery_command=repair_cmd,
+            advisory=False,
+            evidence_family="freshness")
     elif changed:
         add(INFO, "物料新鲜度", ep,
             f"skill 有改动但仅限横切/QC/gate 层（{', '.join(changed)}），不影响本阶段输入物料；"
