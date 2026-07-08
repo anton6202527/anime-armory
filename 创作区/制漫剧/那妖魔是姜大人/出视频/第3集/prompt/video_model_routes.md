@@ -4,7 +4,7 @@
 - routing_mode: auto
 - production_mode: 先出视频后配音 (av_mode=voice_first)
 - default_backend: dreamina
-- generated_at: 2026-07-07T11:35:18+00:00
+- generated_at: 2026-07-08T09:21:40+00:00
 
 ## 本集模型路由表
 
@@ -17,9 +17,9 @@
 | Clip_05 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | mount_ride | dreamina | seedance | image2video | high | native_multiframe | none | face_lock_or_reference_group | required | motion_control_required | action_choreography_required, duration_segment_relay, high_speed_motion, identity_drift_risk, multishot_reroute_candidate, native_multiframe, pose_drift_risk, seam_relay, spatial_path_risk | Cut to front/back reaction shots or split into approach, pass-by, and exit clips. |
 | Clip_06 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | duration_segment_relay, mouth_visible, multi_person, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 | Clip_07 | CHAR_01, CHAR_04, GROUP_飞鹰门马队 | ensemble_blocking | seedance | dreamina | frames2video | high | native_multiframe | none | character_id_or_reference_group | required | motion_control_required | identity_drift_risk, multi_person, native_multiframe, seam_relay | Split the ensemble into establishing shot, two-character OTS pair, and crowd reaction cutaways. |
-| Clip_08 | CHAR_01, CHAR_04 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | duration_segment_relay, mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
+| Clip_08 | CHAR_01, CHAR_04 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | reference_group | none | frame_anchor_required | duration_segment_relay, mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 | Clip_09 | CHAR_01, CHAR_04 | relationship_turn | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | duration_segment_relay, identity_drift_risk, multi_person, native_multiframe, seam_relay | Switch to single-face CU, hand insert, or OTS if the two-shot overplays contact or expression. |
-| Clip_10 | CHAR_01, CHAR_04 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | character_id_or_reference_group | none | frame_anchor_required | mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
+| Clip_10 | CHAR_01, CHAR_04 | dialogue_shot_reverse | seedance | dreamina | image2video | high | native_multiframe | none | reference_group | none | frame_anchor_required | mouth_visible, native_multiframe, seam_relay | Switch to over-shoulder, side-face, hands, or reaction inserts if mouth motion fails. |
 
 ## 逐 Clip 路由理由
 
@@ -218,7 +218,7 @@
 - fallback: dreamina
 - mode: image2video
 - quality_tier: high
-- identity: character_id_or_reference_group
+- identity: reference_group
 - frame_consumption: native_multiframe (execution=dreamina, anchors=9, need_end=True)
 - motion_control: none (manifest=-)
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=9; refs_max=0; control_manifest=-
@@ -272,7 +272,7 @@
 - fallback: dreamina
 - mode: image2video
 - quality_tier: high
-- identity: character_id_or_reference_group
+- identity: reference_group
 - frame_consumption: native_multiframe (execution=dreamina, anchors=3, need_end=True)
 - motion_control: none (manifest=-)
 - execution_recipe: execution=dreamina; frames=native_multiframe anchors=3; refs_max=0; control_manifest=-

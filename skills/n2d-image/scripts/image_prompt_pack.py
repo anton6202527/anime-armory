@@ -1695,6 +1695,41 @@ def merge_unique_terms(*groups: Iterable[str]) -> List[str]:
     return out
 
 
+def existing_asset_registry_map(root: Path) -> Dict[str, Mapping[str, Any]]:
+    data = load_json(root / "出图" / "共享" / "asset_registry.json")
+    if not isinstance(data, Mapping):
+        return {}
+    out: Dict[str, Mapping[str, Any]] = {}
+    for asset in data.get("assets") or []:
+        if not isinstance(asset, Mapping):
+            continue
+        aid = str(asset.get("id") or "").strip()
+        if aid:
+            out[aid] = asset
+    return out
+
+
+def asset_hint_from_registry_asset(asset: Mapping[str, Any]) -> Dict[str, Any]:
+    if not asset:
+        return {}
+    hint: Dict[str, Any] = {}
+    for key in ("name", "type", "owner", "character_id", "current_state", "lifecycle", "scene_dna", "weapon_profile", "weapon_like_role"):
+        value = asset.get(key)
+        if value not in (None, "", [], {}):
+            hint[key] = value
+    constraints = asset.get("constraints") if isinstance(asset.get("constraints"), Mapping) else {}
+    if constraints:
+        hint["constraints"] = dict(constraints)
+        if constraints.get("structure"):
+            hint["profile"] = constraints.get("structure")
+        if isinstance(constraints.get("must_not_have"), list):
+            hint["must_not_have"] = list(constraints.get("must_not_have") or [])
+    drift = asset.get("drift_forbidden")
+    if isinstance(drift, list) and drift:
+        hint["drift"] = [str(x) for x in drift if str(x).strip()]
+    return hint
+
+
 def scene_card_map(root: Path) -> Dict[str, Tuple[str, str]]:
     out: Dict[str, Tuple[str, str]] = {}
     loc_dir = root / "设定库" / "locations"
@@ -1713,12 +1748,16 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
     reqs = asset_req_map(story)
     materials = material_asset_map(root, story)
     scenes = scene_card_map(root)
+    existing_assets = existing_asset_registry_map(root)
     defs: Dict[str, Dict[str, Any]] = {}
     vc = visual_contract(story)
     for aid in ids:
         req = reqs.get(aid, {})
         material = materials.get(aid, {})
-        hint = ASSET_ID_HINTS.get(aid, {})
+        base_hint = ASSET_ID_HINTS.get(aid, {})
+        registry_hint = asset_hint_from_registry_asset(existing_assets.get(aid, {}))
+        hint = deep_merge_mapping(base_hint, registry_hint) if registry_hint else dict(base_hint)
+        hint_constraints = hint.get("constraints") if isinstance(hint.get("constraints"), Mapping) else {}
         if aid.startswith("LOC_"):
             name, text = scenes.get(aid, (str(material.get("name") or hint.get("name") or req.get("name") or aid), ""))
             env = md_bullet(text, "建筑/环境风格")
@@ -1780,7 +1819,8 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         name = str(material.get("name") or req.get("name") or hint.get("name") or aid.replace("_", " "))
         name = clean_asset_display_name(aid, name)
         profile = str(
-            material.get("profile")
+            hint_constraints.get("structure")
+            or material.get("profile")
             or req.get("profile")
             or req.get("description")
             or hint.get("profile")
@@ -1790,10 +1830,23 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
         negative = "、".join(str(x) for x in negative_items) or "现代物件、文字水印、结构漂移"
         path_prefix = "武器" if atype == "weapon" else "特效" if atype == "vfx" else "道具"
         must_not_have = [str(x).replace("不要", "").strip() for x in negative_items if str(x).strip()]
-        hint_must_not = hint.get("must_not_have") if isinstance(hint.get("must_not_have"), list) else []
+        hint_must_not: List[str] = []
+        for source in (hint.get("must_not_have"), hint_constraints.get("must_not_have")):
+            if isinstance(source, list):
+                hint_must_not.extend(str(x).replace("不要", "").strip() for x in source if str(x).strip())
         if not must_not_have:
             if atype == "weapon":
-                must_not_have = ["变成长剑", "华丽仙剑", "现代军刀", "多把复制"]
+                must_not_have = [
+                    "变成长剑",
+                    "华丽仙剑",
+                    "现代军刀",
+                    "多把复制",
+                    "双刃",
+                    "多刃",
+                    "双向开刃",
+                    "第二把刀刃",
+                    "光效变成实体刀刃",
+                ]
             elif atype == "vfx":
                 must_not_have = ["随机改色", "遮挡主体脸", "现代科幻UI", "过度血腥猎奇"]
             else:
@@ -1804,17 +1857,24 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 must_not_have,
                 ["壶嘴", "侧嘴", "斜嘴", "喷口", "茶壶嘴", "出水口"],
             )
-        constraints = {
+        constraints = dict(hint_constraints)
+        constraints.update({
             "structure": profile,
-            "face_policy": "faceless",
+            "face_policy": constraints.get("face_policy") or "faceless",
             "must_not_have": must_not_have,
-        }
+        })
         if aid == "VFX_系统面板":
             constraints.update({
                 "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
                 "face_policy": "none",
                 "must_not_have": ["AI生成可读文字", "现代手机UI", "随机蓝色科幻屏", "乱码文字"],
             })
+        hint_drift = hint.get("drift") if isinstance(hint.get("drift"), list) else []
+        drift_terms = merge_unique_terms(
+            [f"不要让{name}结构/颜色/尺寸漂移"],
+            [f"不要{x}" for x in must_not_have],
+            [str(x) for x in hint_drift if str(x).strip()],
+        )
         defs[aid] = {
             "type": atype,
             "name": name,
@@ -1822,7 +1882,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             "positive": profile,
             "negative": negative,
             "constraints": constraints,
-            "drift": [f"不要让{name}结构/颜色/尺寸漂移", *[f"不要{x}" for x in must_not_have]],
+            "drift": drift_terms,
             "owner": req.get("owner") or hint.get("owner") or "剧情资产",
             "current_state": profile,
             "scene_dna": complete_asset_scene_dna(
@@ -1844,18 +1904,35 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             },
         }
         if atype == "weapon":
-            defs[aid]["weapon_profile"] = {
+            default_weapon_profile = {
                 "design_intent": profile,
-                "silhouette": profile,
+                "silhouette": f"{profile}；单一实体武器轮廓，不复制第二把刀刃。",
+                "blade_topology": flatten_contract_value(constraints.get("blade_topology")) or "默认按一柄一刃/单一实体处理；若剧情另有双刃武器必须在 asset_registry 显式声明。",
                 "scale": "按角色手部比例，竖屏可读但不夸张。",
                 "material": "暗银金属、低反光、战损血尘克制呈现。",
                 "palette": "暗银、黑柄、冷灰血尘",
                 "ornament_motif": "镇魔司制式，低调克制。",
                 "carry_modes": ["手持", "落地", "近景局部"],
-                "combat_usage": "本集关键动作道具；不可变成长剑/仙剑/现代军刀。",
-                "vfx_signature": "不主动发光；只继承场景光位。",
-                "forbidden_drift": negative_items or ["不要变成长剑", "不要华丽仙剑", "不要现代军刀"],
+                "combat_usage": "本集关键动作道具；实体刀刃数量和握持点必须唯一，不可变成长剑/仙剑/现代军刀，不可多把复制。",
+                "vfx_signature": flatten_contract_value(constraints.get("vfx_boundary")) or "不主动发光；只继承场景光位。刀光/爪光/VFX 只能是半透明光效，不得被渲染成第二把实体刀刃。",
+                "forbidden_drift": [
+                    "不要变成长剑",
+                    "不要华丽仙剑",
+                    "不要现代军刀",
+                    "不要双刃",
+                    "不要多刃",
+                    "不要第二把刀刃",
+                    "不要让光效变成实体刀刃",
+                ],
             }
+            if isinstance(hint.get("weapon_profile"), Mapping):
+                default_weapon_profile = deep_merge_mapping(default_weapon_profile, hint["weapon_profile"])
+            if negative_items:
+                default_weapon_profile["forbidden_drift"] = merge_unique_terms(
+                    default_weapon_profile.get("forbidden_drift", []),
+                    [str(x) for x in negative_items],
+                )
+            defs[aid]["weapon_profile"] = default_weapon_profile
         elif isinstance(hint.get("weapon_profile"), Mapping):
             defs[aid]["weapon_profile"] = dict(hint["weapon_profile"])
         if isinstance(hint.get("weapon_like_role"), str) and hint.get("weapon_like_role"):
@@ -2088,7 +2165,62 @@ def partial_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tup
     return rg, atlas
 
 
+IDENTITY_FORM_PRESERVE_KEYS = {
+    "image_adapters",
+    "reference_manifest",
+    "reference_input_mode",
+    "qc_policy",
+    "signoff",
+    "adapter_signoff",
+    "lock_signoff",
+}
+
+
+def deep_merge_mapping(base: Mapping[str, Any], override: Mapping[str, Any]) -> Dict[str, Any]:
+    merged: Dict[str, Any] = dict(base)
+    for key, value in override.items():
+        if isinstance(value, Mapping) and isinstance(merged.get(key), Mapping):
+            merged[key] = deep_merge_mapping(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def existing_identity_forms(root: Path) -> Dict[Tuple[str, str], Mapping[str, Any]]:
+    data = load_json(root / "出图" / "共享" / "identity_registry.json")
+    out: Dict[Tuple[str, str], Mapping[str, Any]] = {}
+    if not isinstance(data, Mapping):
+        return out
+    for char in data.get("characters") or []:
+        if not isinstance(char, Mapping):
+            continue
+        cid = str(char.get("id") or "").strip()
+        if not cid:
+            continue
+        for form in char.get("forms") or []:
+            if not isinstance(form, Mapping):
+                continue
+            form_name = str(form.get("form") or "").strip()
+            if form_name:
+                out[(cid, form_name)] = form
+    return out
+
+
+def preserve_existing_identity_lock_fields(form: Dict[str, Any], previous: Mapping[str, Any]) -> None:
+    """Keep manually signed execution locks when prompt pack regenerates registry."""
+    if not previous:
+        return
+    prev_adapters = previous.get("identity_adapters") if isinstance(previous.get("identity_adapters"), Mapping) else {}
+    if prev_adapters:
+        form["identity_adapters"] = deep_merge_mapping(form.get("identity_adapters") or {}, prev_adapters)
+    for key in IDENTITY_FORM_PRESERVE_KEYS:
+        value = previous.get(key)
+        if value not in (None, "", [], {}):
+            form[key] = value
+
+
 def build_identity_registry(root: Path) -> Dict[str, Any]:
+    previous_forms = existing_identity_forms(root)
     chars: List[Dict[str, Any]] = []
     for i, (cid, cfg) in enumerate(CHARACTER_DEFS.items(), start=1):
         bundle = ensure_asset_bundle(root, cid, cfg)
@@ -2155,6 +2287,7 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
             if restricted:
                 form["restricted_partial"] = True
                 form["no_full_face"] = True
+            preserve_existing_identity_lock_fields(form, previous_forms.get((cid, str(form.get("form") or ""))) or {})
             forms.append(form)
         character: Dict[str, Any] = {
             "id": cid,
@@ -2432,8 +2565,19 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
     for key in ("objects", "locations", "required_presence", "offscreen_presence"):
         for aid in asset_ids_from_value(schedule.get(key) or []):
             add_unique(ids, aid)
+    structured_ids = list(ids)
     for aid in asset_ids_from_value(clip, include_aliases=False):
-        add_unique(ids, aid)
+        # Free-text scans can see "VFX_虎山神摹影只作后段气息" or
+        # "PROP_村道血迹破布保持前集后景" when writers append prose directly
+        # after an id. If the clip has already declared a structured asset id,
+        # normalize any longer free-text token back to that id instead of
+        # minting a bogus registry entry.
+        normalized = aid
+        for known in sorted((x for x in structured_ids if x), key=len, reverse=True):
+            if aid != known and aid.startswith(known):
+                normalized = known
+                break
+        add_unique(ids, normalized)
     return ids
 
 
@@ -2556,6 +2700,38 @@ def continuity_target_paths(ep: str, idx: int, clip: Mapping[str, Any]) -> Tuple
             "尾帧",
         )
     return paths, frame_parts
+
+
+def cross_episode_handoff_prompt_lines(clip: Mapping[str, Any]) -> Tuple[str, str]:
+    """Render the cross-episode action handoff contract into prompt text."""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    handoff = cont.get("cross_episode_handoff") if isinstance(cont.get("cross_episode_handoff"), Mapping) else {}
+    if not handoff:
+        return "无跨集动作接力。", ""
+
+    def list_text(key: str) -> str:
+        value = handoff.get(key)
+        if isinstance(value, list):
+            return "；".join(str(item).strip() for item in value if str(item).strip())
+        return str(value or "").strip()
+
+    prev_tail = str(handoff.get("prev_tail_frame") or "").strip()
+    from_episode = str(handoff.get("from_episode") or "").strip()
+    from_clip = str(handoff.get("from_clip") or "").strip()
+    handoff_type = str(handoff.get("handoff_type") or "").strip()
+    must_inherit = list_text("must_inherit")
+    no_reset = list_text("no_reset") or list_text("forbid_reset")
+    line = (
+        f"`{prev_tail}`；from={from_episode}/{from_clip}；handoff_type={handoff_type or 'continuous_action'}；"
+        f"must_inherit={must_inherit or '上一集尾帧角色站位、距离、朝向、武器/爪势、光位、轴线'}；"
+        f"no_reset={no_reset or '不得重建制远景/不得重新登场/不得让已近身角色退回深景'}"
+    )
+    positive = (
+        f"跨集动作接力：必须以 `{prev_tail}` 作为 source_frame 几何底板，直接承接上一集尾帧的动作瞬间；"
+        f"继承 {must_inherit or '角色站位、距离、朝向、武器/爪势、光位和轴线'}；"
+        f"禁止 {no_reset or '重建制远景、重新从远处走来、把已开战主体退回深景'}；"
+    )
+    return line, positive
 
 
 def continuity_shot_size(clip: Mapping[str, Any]) -> str:
@@ -3234,6 +3410,8 @@ def shared_asset_positive(cfg: Mapping[str, Any]) -> str:
     parts = [
         prompt_value_text(cfg.get("positive") or cfg.get("name")),
         f"结构锁: {prompt_value_text(constraints.get('structure') or cfg.get('current_state'))}" if (constraints.get("structure") or cfg.get("current_state")) else "",
+        f"武器拓扑: {prompt_value_text(flatten_contract_value(constraints.get('blade_topology')))}" if constraints.get("blade_topology") else "",
+        f"特效边界: {prompt_value_text(flatten_contract_value(constraints.get('vfx_boundary')))}" if constraints.get("vfx_boundary") else "",
         f"归属/用途: {prompt_value_text(cfg.get('owner'))}" if cfg.get("owner") else "",
         f"当前状态: {prompt_value_text(cfg.get('current_state'))}" if cfg.get("current_state") else "",
         f"剧情生命周期: {prompt_value_text(lifecycle.get('state_order') or lifecycle.get('status'))}" if lifecycle else "",
@@ -3360,6 +3538,32 @@ def asset_forbidden_terms(asset_ids: Sequence[str]) -> List[str]:
             if text and text not in terms:
                 terms.append(text)
     return terms
+
+
+def asset_topology_lock_line(asset_ids: Sequence[str]) -> str:
+    rows: List[str] = []
+    for aid in asset_ids:
+        cfg = ASSET_DEFS.get(aid)
+        if not cfg:
+            continue
+        constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+        parts: List[str] = []
+        structure = flatten_contract_value(constraints.get("structure") or cfg.get("positive") or cfg.get("current_state"))
+        if structure:
+            parts.append(f"结构={structure}")
+        if constraints.get("blade_topology"):
+            parts.append(f"武器拓扑={flatten_contract_value(constraints.get('blade_topology'))}")
+        if constraints.get("vfx_boundary"):
+            parts.append(f"特效边界={flatten_contract_value(constraints.get('vfx_boundary'))}")
+        if cfg.get("type") == "weapon":
+            wp = cfg.get("weapon_profile") if isinstance(cfg.get("weapon_profile"), Mapping) else {}
+            for key, label in (("blade_topology", "武器拓扑"), ("vfx_signature", "VFX边界")):
+                value = flatten_contract_value(wp.get(key))
+                if value and not any(value in part for part in parts):
+                    parts.append(f"{label}={value}")
+        if parts:
+            rows.append(f"`{aid}` {cfg.get('name', aid)}：" + "；".join(parts))
+    return "；".join(rows) if rows else "无特殊资产拓扑；按 asset_registry 保持结构、数量、材质和归属。"
 
 
 def identity_lock_sentence(chars: Sequence[str], idx: Optional[int] = None, assets: Sequence[str] = ()) -> str:
@@ -3507,6 +3711,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         negative = [str(negative)]
     negative = [str(item) for item in negative]
     asset_forbidden = asset_forbidden_terms(assets)
+    asset_topology_lock = asset_topology_lock_line(assets)
     inner_focus = inner_focus_directive(clip, chars, assets)
     if inner_focus:
         negative.append("内心戏镜头不要重复上一镜群像/妖魔/道具陈列，不要让非焦点人物清晰入画，不要让系统面板/武器/VFX 抢主观情绪。")
@@ -3564,6 +3769,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     tone_line = clip_visual_tone(vc, idx)
     state_lock = state_lock_line(story, chars, idx, assets)
     target_paths, frame_parts = continuity_target_paths(ep, idx, clip)
+    cross_handoff_line, cross_handoff_positive = cross_episode_handoff_prompt_lines(clip)
     return "\n".join([
         f"## 镜头 {idx}（`{cid}` · {clip.get('label', '')} · {clip.get('template', '')}）",
         f"**剧本描述**：{desc}",
@@ -3571,6 +3777,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**时长分配合同**：pacing_role={pacing_role or '未标'}；runtime_priority={runtime_priority or '未标'}；duration={clip_duration or '-'}s；非关键桥接/解释/反应镜必须短，不得抢主看点时长。",
         f"**目标落档**：{' '.join(f'`{path}`' for path in target_paths)}",
         f"**本镜出图张数**：{frame_count} 张；{'；'.join(frame_parts)}。",
+        f"**跨集接力源帧**：{cross_handoff_line}",
         "**参考图**：",
         *refs,
         f"**角色圣经引用**：{', '.join(char_bindings) if char_bindings else '无人物/空镜'}；人物审美基线：写实国漫主流审美，五官协调清晰，角色好看但不网红化。",
@@ -3578,6 +3785,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**跨集成长阶段**：第1集锚定形态；{', '.join(char_bindings) if char_bindings else '无人物'}。",
         f"**资产身份注册层**：{', '.join(char_bindings) if char_bindings else '无人物'}；reference_group / face_anchor_refs / expressions 均从 `identity_registry.json` 读取；本镜从共享定妆 image2image / 多图参考派生，不得纯文生图。",
         f"**资产引用注册层**：{', '.join(f'`{a}`' for a in assets)}；场景/道具/VFX 均从 `asset_registry.json` 读取，关键道具结构唯一性保持。",
+        f"**资产拓扑锁**：{asset_topology_lock}",
         f"**多人同框身份槽位**：{slots}",
         f"**多人同框执行策略**：{strategy}",
         "**逐主体参考绑定**：每个清晰主体只喂自己的定妆/脸部特写/表情参考，不把多角色拼成一张不可寻址参考表。",
@@ -3611,7 +3819,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"| ④ 光色/天气 | {tone_line} |",
         f"| ⑤ 景别/镜头 | {lens} |",
         f"| ⑥ 动作/运动 | {move}；{anatomy_guard}；{hand_guard}；{body_guard} |",
-        f"| ⑦ 资产/证据 | {asset_phrase} |",
+        f"| ⑦ 资产/证据 | {asset_phrase}；{asset_topology_lock} |",
         f"| ⑧ 禁忌/QC | {style_forbidden}；{face_guard}；额外手/第三只手/多肢/六指/断手/缺肢/身体埋入/穿模/融合均禁止；{'; '.join(negative)} |",
         "",
         "### 正向 prompt（中文）",
@@ -3619,8 +3827,9 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"身份保持：{', '.join(char_bindings) if char_bindings else '无人物'}；从共享定妆 image2image / 多图参考派生，脸型、发型、服装主色和关键配饰不漂；{face_guard}；",
         f"身份锁定句：{identity_lock}；",
         f"锚点句：{char_phrase or asset_phrase}；",
+        f"资产拓扑锁：{asset_topology_lock}；",
         f"镜头构图：{lens}；{comp_guard}；{inner_focus + '；' if inner_focus else ''}视线方向={axis_line}；竖屏9:16；",
-        f"动作瞬间：{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
+        f"动作瞬间：{cross_handoff_positive}{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
         f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
         f"时长角色：{pacing_role or '按 dramatic_function 判断'}；时长优先级：{runtime_priority or '未标'}；如果是桥接/解释/反应镜，只保留完成信息传递的最短画面。",

@@ -90,6 +90,28 @@ class GateTest(unittest.TestCase):
             self.assertTrue(any(f["code"] == "image_backend_forbidden" and f["severity"] == "block"
                                 for f in payload["findings"]))
 
+    def test_image_gate_requires_signoff_for_non_codex_backend(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            self._write_json(root, "_meta.json", {"image_backend": "Dreamina/即梦官方 CLI"})
+            payload = gate.run_gate(root, "image")
+            self.assertTrue(any(f["code"] == "image_backend_non_codex_requires_signoff"
+                                and f["severity"] == "block" for f in payload["findings"]))
+
+    def test_image_gate_accepts_signed_non_codex_backend_exception(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            self._write_json(root, "_meta.json", {"image_backend": "Dreamina/即梦官方 CLI"})
+            self._write_json(root, "合规/image_backend_override.json", {
+                "approved": True,
+                "scope": "image",
+                "backend": "dreamina_official",
+                "reason": "用户明确指定的单项目例外",
+            })
+            payload = gate.run_gate(root, "image")
+            self.assertFalse(any(f["code"] == "image_backend_non_codex_requires_signoff"
+                                 for f in payload["findings"]))
+
     def test_image_gate_blocks_mixed_backend(self):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
@@ -140,6 +162,26 @@ class GateTest(unittest.TestCase):
             self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
             payload = gate.run_gate(root, "video")
             self.assertFalse(any(f["code"] == "image_frames_missing" for f in payload["findings"]))
+
+    def test_video_gate_blocks_non_codex_landed_image_backend(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- 生图AI: Codex\n")
+            os.makedirs(os.path.join(root, "出图", "分镜", "图片"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "图片", "镜头1.png"), "wb").write(b"png")
+            self._write_json(root, "出图/分镜/image_jobs_manifest.json", {
+                "jobs": [{"job_id": "shot_01_first", "status": "done", "backend": "Dreamina/即梦官方 CLI"}],
+            })
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full", "pending_product_images": 0},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            payload = gate.run_gate(root, "video")
+            self.assertTrue(any(f["code"] == "image_output_non_codex_requires_redraw" and f["severity"] == "block"
+                                for f in payload["findings"]))
 
     def test_video_gate_blocks_degraded_product_qc(self):
         with tempfile.TemporaryDirectory() as root:

@@ -3,7 +3,7 @@
   "version": 1,
   "character_id": "GROUP_飞鹰门众人",
   "name": "GROUP_飞鹰门众人",
-  "scope": "跪地求援/村口怒火群像，群像不追清晰多脸。",
+  "scope": "本集入镜角色",
   "directories": {
     "reference": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
     "prompts": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
@@ -17,5 +17,5 @@
     "character_card": "设定库/characters/GROUP_飞鹰门众人.md"
   },
   "created_by": "n2d-image image_prompt_pack.py",
-  "updated_at": "2026-07-06T02:47:14+00:00"
+  "updated_at": "2026-07-08T12:25:04+00:00"
 }

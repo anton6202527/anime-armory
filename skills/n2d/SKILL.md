@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4593 | 目录文本总行数 233305
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4599 | 目录文本总行数 235851
 
 # n2d — 主状态机调度器
 
@@ -40,7 +40,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
    ↓ P-2 导演排戏包          director beat sheet + 轴线调度 + 景别进程 + 转场图 + 竖屏构图 + 剪辑节奏（confirmed 才进阶段2）
    ↓ n2d-script  阶段2·分镜设计   主干提炼 + Clip 时长权重 → 按所选模式定稿 Clip 时长 → 分镜剧本 + 故事板 + 素材清单 + 字幕_中/英.srt + 镜头时长.json
    ↓ Animatic 粗剪验收       animatic_packet + timed HTML/JSON 预览：镜头节奏/信息可读/贵工位风险 confirmed 才进出图 prompt
-   ↓ P-3 制片拆解包          production breakdown + continuity bible + AI shooting schedule + batch seed + AI call sheet（confirmed 才进出图 prompt）
+   ↓ P-3 制片拆解包          production breakdown + continuity chain + continuity bible + AI shooting schedule + batch seed + AI call sheet（confirmed 才进出图 prompt）
    ↓ n2d-image                  出图 prompt + PNG
    ↓ n2d-video                  图生视频；说话镜是否原生台词由 route.native_audio_policy 决定；默认到 clip_delivery_complete
    ↓（可选：合成阶段=启用）
@@ -121,7 +121,7 @@ python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 check --kind animatic --json --write-missing
 ```
-> **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 确认后，`run.py next/enter` 在 `image_prompt` 前继续自动跑 `production_breakdown.py check --write-missing`。未确认则生成草稿并阻断出图 prompt，要求先补齐 `production_breakdown.json`、`continuity_breakdown.json`、`continuity_bible.json`、`ai_shooting_schedule.json`、`ai_call_sheet.md` 和 `生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`，删除待补/TODO 并全部 `status=confirmed`。其中 `continuity_bible` 是本集场记连续性真值，`ai_shooting_schedule` 是 AI 拍摄顺序与并行/依赖安排，batch seed 是可导入 `n2d-batch` 的 image/video 队列草案，避免只按镜号顺序把昂贵工位串行化。
+> **P-3 制片拆解包 gate（出图 prompt 前的一副导演/场记/制片交接层）**：Animatic 确认后，`run.py next/enter` 在 `image_prompt` 前继续自动跑 `production_breakdown.py check --write-missing`。未确认则生成草稿并阻断出图 prompt，要求先补齐 `production_breakdown.json`、`continuity_breakdown.json`、`continuity_chain.json`、`continuity_bible.json`、`ai_shooting_schedule.json`、`ai_call_sheet.md` 和 `生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`，删除待补/TODO 并全部 `status=confirmed`。其中 `continuity_chain` 是镜头间场记链：Clip N 的 `continuity.transition/need_endframe` 描述 **Clip N → Clip N+1**，接力 seam 必须声明上一镜尾帧和下一镜首帧，跨集首镜必须声明承接上一集或有意跳切理由；`continuity_bible` 是本集场记连续性真值，`ai_shooting_schedule` 是 AI 拍摄顺序与并行/依赖安排，batch seed 是可导入 `n2d-batch` 的 image/video 队列草案，避免只按镜号顺序把昂贵工位串行化。
 ```bash
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 scaffold --write
 python3 skills/n2d-script/scripts/production_breakdown.py <作品根> 第1集 check --json --write-missing
@@ -139,7 +139,7 @@ python3 skills/n2d/scripts/preventive_contracts.py <作品根> 第1集 --stage v
 python3 skills/n2d-script/scripts/source_language.py <作品根> --scaffold
 python3 skills/n2d-script/scripts/source_language.py <作品根> --json
 ```
-> 放行后流程口径是：**小说 → 源理解合同 → P-1 开发包 → 每集承诺合同 → 围读 → P-2 导演排戏 → 分镜意图合同 → executable animatic → P-3 制片拆解/场记/排期/队列种子 → 引用/动作/音频合同 → AI shooting schedule 入 batch → 生成后场记日志 → 粗剪 timeline/preview → rough cut lock → picture lock → 重大变更决策账 → pilot / mini-pilot 风险抽样 → 小批量 stop-loss → release verdict profile → creative governance → 失败归因与预防规则回写**。这条链条的目标是预防错误理解、错删伏笔、镜头无功能、引用不真实、复杂动作崩坏、音频后置救火、锁版漂移、发布证据不全和“制作没错但没人想追”，而不是等人审发现后再局部重抽。
+> 放行后流程口径是：**小说 → 源理解合同 → P-1 开发包 → 每集承诺合同 → 围读 → P-2 导演排戏 → 分镜意图合同 → executable animatic → P-3 制片拆解/场记链/场记 bible/排期/队列种子 → 引用/动作/音频合同 → AI shooting schedule 入 batch → 生成后场记日志 → 粗剪 timeline/preview → rough cut lock → picture lock → 重大变更决策账 → pilot / mini-pilot 风险抽样 → 小批量 stop-loss → release verdict profile → creative governance → 失败归因与预防规则回写**。这条链条的目标是预防错误理解、错删伏笔、镜头无功能、引用不真实、相邻/跨集镜头裸断、复杂动作崩坏、音频后置救火、锁版漂移、发布证据不全和“制作没错但没人想追”，而不是等人审发现后再局部重抽。
 
 **情境 A2 — 用户明确要从中间章节/中间集开始制作**：
 → 先让 `n2d-script` 创建并补齐中段开工前情资产包，再拆目标窗口；不要只截目标章节直接写词。

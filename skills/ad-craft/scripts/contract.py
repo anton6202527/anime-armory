@@ -69,12 +69,14 @@ TARGET_PLATFORMS = (
 )
 RELEASE_REGIONS = ("中国大陆", "港澳台", "北美", "东南亚", "全球", "自定义")
 
-# ── 生图后端治理（解除 Codex 垄断，本线自持）───────────────────────────────
-# `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；只拦 ① 项目内后端混用
+# ── 生图后端治理（Codex image2 优先，本线自持）────────────────────────────
+# `生图AI` 是真选择点，默认且优先 Codex/OpenAI；其它官方后端只作为签核例外，
+# gate 会要求 <作品根>/合规/image_backend_override.json。仍拦 ① 项目内后端混用
 # ② 逆向/未授权出图路径（安全 invariant）。AI 标识/披露义务移到工具之外，与本治理无关。
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
 # 注意：广告投放侧从严处理，Dreamina/即梦逆向或未授权路径保留在 FORBIDDEN；
-# 明确写作“官方 CLI / official CLI / official API”的本机官方工具路径可作为 approved official 后端。
+# 明确写作“官方 CLI / official CLI / official API”的本机官方工具路径只代表可识别的
+# official 后端；是否能付费出图由 gate 的非 Codex 签核闸决定。
 # 采集日期：2026-06-13  来源：各后端官方文档 + 广告投放合规口径（待复核）
 AD_IMAGE_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各后端官方文档 + 广告投放合规口径(待复核)"}
 AD_APPROVED_IMAGE_BACKENDS = {

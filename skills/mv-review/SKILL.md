@@ -7,7 +7,7 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 
 不生产内容，只**审**。是 `mv`（制MV 生产线）家族的 QA 环节。两个模式：
 
-- **模式①「作品质检」**——审**一支 MV 的产物**（`创作区/制MV/<曲名>/`）：扫问题 → 定位（Clip / 段落 / 时间码）→ 定级 → 给修法 → 出报告。出成片前 / 各阶段闸门跑。
+- **模式①「作品质检」**——审**一支 MV 的产物**（`创作区/制MV/<曲名>/`）：先汇总单曲身份/参考/出图/视频/字幕一致性 findings，再扫问题 → 定位（Clip / 段落 / 时间码）→ 定级 → 给修法 → 出报告。出成片前 / 各阶段闸门跑。
 - **模式②「流程自审」**——审**制MV 流水线本身**：联网拉市场基准，对照 `mv-*` 各 skill + references，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套流程不断自我优化"成为一条可复跑命令。
 
 > MV 三大验收维：**视觉一致性 · 卡点节奏（MV 的命）· 音画合成与合规**。clip 时长必须踩 beatgrid，不能等长。正向标尺：卡点 = `mv-beat/SKILL.md` 卡点原则；运镜 = `mv-video/references/prompt_format.md`；一致性 = `mv-image/references/prompt_format.md`；合成 = `mv-compose/references/usage.md`。
@@ -32,9 +32,11 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
   - **AI 视觉使用披露**：已有成片时检查 `合规/ai_usage.json` 是否留痕、枚举是否有效。
   - **完整性/对账**：词/歌/beatgrid/出图/clip/成片 产物快照、`_meta.has_song/has_lyrics` vs 实际文件、段落数 vs `_meta.structure`。
   ```bash
+  python3 <skill>/scripts/consistency_findings.py <制MV作品根> --write
   python3 <skill>/scripts/mv_check.py <制MV作品根>          # 人读
   python3 <skill>/scripts/mv_check.py <制MV作品根> --json   # 喂回 LLM 汇总
   ```
+  `consistency_findings.py` 写 `生产数据/consistency_findings.{json,md}`，把 `identity_registry` / `reference_plan` / `image_qc` / `inherit_contract` / `video_qc` / `alignment_report` 收成一个统一一致性证据面，供审片和返修排序使用。
   > `ffprobe` 缺失时，clip/成片 的时长·分辨率·音轨检查**显式标「跳过」**，绝不静默略过。`song.wav` 时长优先走标准库 `wave`，mp3/m4a/flac 走 ffprobe。
 
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。

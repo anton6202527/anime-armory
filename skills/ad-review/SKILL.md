@@ -7,7 +7,7 @@ description: 拍广告 质检 + 流程自审（ad 线 QA 环节，不生产内�
 
 不生产内容，只**审**。是 ad 家族的 QA 环节。两个模式：
 
-- **模式①「作品质检·M0」**——审**某条广告主片与交付包的产物**：投放前硬阻断项体检。在 `ad-compose` 出主片和交付件后跑。
+- **模式①「作品质检·M0」**——审**某条广告主片与交付包的产物**：先汇总产品/品牌/视频/合规一致性 findings，再做投放前硬阻断项体检。在 `ad-compose` 出主片和交付件后跑。
 - **模式②「流程自审」**——审**广告流水线本身**：联网拉广告市场基准（钩子/转化 · 合规 · 成本/路由），对照 ad-* 各 skill + references，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套广告产线不断自我优化"成为一条可复跑命令。
 
 > ad 线**自包含**：本 skill 只查/对照 ad-* 自己的 skill、脚本和 references。
@@ -21,23 +21,25 @@ description: 拍广告 质检 + 流程自审（ad 线 QA 环节，不生产内�
 ## 用法
 
 ```bash
-python3 skills/ad-review/scripts/review.py "<作品根>" --json "<作品根>/合规ad_review_m0.json"
+python3 skills/ad-review/scripts/consistency_findings.py "<作品根>" --write
+python3 skills/ad-review/scripts/review.py "<作品根>" --json "<作品根>/合规/ad_review_m0.json"
 ```
 
-产物：`合规ad_review_m0.json` + `合规ad_review_m0.md`。有 block 时退出码为 1。
+产物：`生产数据/consistency_findings.{json,md}` + `合规/ad_review_m0.{json,md}`。有 block 时退出码为 1。
 
 ## 检查项
 
 1. 主片 `合成/成片_主片.mp4` 存在。
 2. `脚本/广告法机检报告.json` 存在且 `summary.block=0`。
 3. `出视频/分镜/video_qc.json` 存在且 `summary.block=0`。
-4. **开篇钩子饱和度评分 (Hook Saturation Score)**：评估前 3 秒的视觉张力和音效吸引力。
-5. **万能安全区核查**：确认核心产品和 USP 落在 8x8 网格中心，无遮挡且适配裁切。
-6. **视觉虚假宣传检测**：核对产品比例与真人比例的逻辑合理性。
-7. `配音/时长清单.json.has_placeholder=false`。
-8. `合规/ai_usage.json` AI 使用披露留痕存在。（AI 标识/水印不再由本流水线把关，移到工具之外由使用方按平台/地区法规自行处理。）
-9. `_进度.md` 的交付矩阵至少有主片路径；缺回写则先跑 `ad-compose/deliver.py --mark-existing`。
-10. 产品/logo/品牌色/字幕/音画同步列为人工复核清单。
+4. `生产数据/consistency_findings.json` 汇总 product_qc / contract_inheritance / video_qc / 广告法 / AI 披露，一处看产品、品牌、视频接力和合规证据链。
+5. **开篇钩子饱和度评分 (Hook Saturation Score)**：评估前 3 秒的视觉张力和音效吸引力。
+6. **万能安全区核查**：确认核心产品和 USP 落在 8x8 网格中心，无遮挡且适配裁切。
+7. **视觉虚假宣传检测**：核对产品比例与真人比例的逻辑合理性。
+8. `配音/时长清单.json.has_placeholder=false`。
+9. `合规/ai_usage.json` AI 使用披露留痕存在。（AI 标识/水印不再由本流水线把关，移到工具之外由使用方按平台/地区法规自行处理。）
+10. `_进度.md` 的交付矩阵至少有主片路径；缺回写则先跑 `ad-compose/deliver.py --mark-existing`。
+11. 产品/logo/品牌色/字幕/音画同步列为人工复核清单。
 
 ## 常见错误
 

@@ -1,6 +1,6 @@
 # Creation Armory / 创作兵工厂
 
-Creation Armory（创作兵工厂）是 `anime-armory` 的 VS Code 制作面板，用来把作品按固定目录组织起来，并配合 AI agent 按 workflow skills 批量生产小说、漫剧、漫画、歌曲、MV 和广告。`anime-armory` 保留为仓库名和扩展内部 ID；“漫剧兵工厂”只指 n2d 这条漫剧生产线。
+Creation Armory（创作兵工厂）是 `anime-armory` 的 VS Code 制作面板，用来把作品按固定目录组织起来，并配合 AI agent 按 workflow skills 批量生产小说、漫剧、漫画、歌曲、MV 和广告。`anime-armory` 保留为仓库名和扩展内部 ID；n2d 这条漫剧生产线统一称为“制漫剧”。
 
 扩展内置六条创作线的 workflow skills，并自带一个**种子工作根**：`创作区/` 下会预置 `写小说`、`制漫剧`、`画漫画`、`写歌`、`制MV`、`拍广告` 六个目录和各系列 `使用手册.md`。VSIX release 包只保留扩展目录里自带的轻量样例，不复制桌面端各系列冠军 demo；暂时没有样例的系列也会保留目录入口。创作区（作品区）默认就用这个自带工作根。
 

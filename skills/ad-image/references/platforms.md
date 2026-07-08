@@ -1,6 +1,6 @@
 # 出图后端矩阵（ad-image · 本线自持）
 
-`生图AI` 默认 Codex；放行官方多参考一致性后端。判定逻辑 `ad-craft/scripts/contract.py` `classify_image_backend`。
+`生图AI` 默认且优先 Codex / GPT Image 2（或官方 OpenAI Images）。非 Codex/OpenAI 只作为用户明确签核的单项目例外；签核文件为 `<作品根>/合规/image_backend_override.json`。
 
 | 后端 | 多参考 | 原生主体ID | 广告适配 |
 |---|---|---|---|
@@ -9,12 +9,13 @@
 | Seedream Universal Reference | ✓ | ✓ | 免 LoRA 跨图锁主体（≤14 图），**产品/代言人一致性最稳** |
 | 可灵 Kling 主体库 / Element Library | ✓ | ✓ | 注册产品/代言人为主体，按 ID 复用 |
 | Sora Character Cameo | ✓ | ✓ | 可复用主体 ID |
-| Dreamina/即梦官方 CLI/API | ✗ | ✗ | 官方工具路径可用；产品一致性仍靠强 prompt + 参考图/后期锁字，禁止混同逆向路径 |
+| Dreamina/即梦官方 CLI/API | ✗ | ✗ | 不作默认/自动选择；仅签核例外。视频阶段走 Dreamina 不代表图片也用 Dreamina |
 
 ## 两条硬闸门
 
-1. **项目内不混用后端**——一个 `创作区/拍广告/<项目>/` 锁一个生图后端；切换记录到 `_设置.md` 并重出受影响图。
-2. **禁第三方逆向/未授权出图**——即梦/Dreamina 逆向路径 `forbidden`；明确的官方 CLI/API 路径可按 `dreamina_official` 放行并留痕。
+1. **Codex image2 优先**——无签核时只走 Codex/OpenAI 生图；非 Codex/OpenAI 必须有 `<作品根>/合规/image_backend_override.json`。
+2. **项目内不混用后端**——一个 `创作区/拍广告/<项目>/` 锁一个生图后端；切换记录到 `_设置.md` 并重出受影响图。
+3. **禁第三方逆向/未授权出图**——即梦/Dreamina 逆向路径 `forbidden`；官方 Dreamina 图片路径也只作签核例外。
 
 ## 广告一致性建议
 

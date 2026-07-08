@@ -1,0 +1,58 @@
+{
+  "checked_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock",
+    "style_identity_lock",
+    "voice_timing_lock"
+  ],
+  "episode": "第3集",
+  "findings": [
+    {
+      "code": "missing_lock_ledger",
+      "message": "缺锁版账：生产数据/production_locks_第3集.json",
+      "severity": "block"
+    },
+    {
+      "code": "missing_lock_point",
+      "lock_id": "source_lock",
+      "message": "缺锁点 source_lock",
+      "severity": "block"
+    },
+    {
+      "code": "missing_lock_point",
+      "lock_id": "script_lock",
+      "message": "缺锁点 script_lock",
+      "severity": "block"
+    },
+    {
+      "code": "missing_lock_point",
+      "lock_id": "storyboard_lock",
+      "message": "缺锁点 storyboard_lock",
+      "severity": "block"
+    },
+    {
+      "code": "missing_lock_point",
+      "lock_id": "style_identity_lock",
+      "message": "缺锁点 style_identity_lock",
+      "severity": "block"
+    },
+    {
+      "code": "missing_lock_point",
+      "lock_id": "voice_timing_lock",
+      "message": "缺锁点 voice_timing_lock",
+      "severity": "block"
+    }
+  ],
+  "generated_at": "2026-07-08T09:21:41+00:00",
+  "kind": "n2d_production_locks_check",
+  "lock_path": "生产数据/production_locks_第3集.json",
+  "stage": "video",
+  "status": "block",
+  "summary": {
+    "block": 6,
+    "locks": 0,
+    "required_locks": 5
+  },
+  "version": 1
+}

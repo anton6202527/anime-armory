@@ -317,6 +317,52 @@ def identity_forms(root: Path) -> List[Mapping[str, Any]]:
     return [f for f in forms or [] if isinstance(f, Mapping)]
 
 
+def continuity_chain(root: Path, ep: str) -> Mapping[str, Any]:
+    data = load_json(root / "脚本" / ep / "continuity_chain.json")
+    return data if isinstance(data, Mapping) else {}
+
+
+def continuity_chain_maps(chain: Mapping[str, Any]) -> Tuple[Dict[str, Mapping[str, Any]], Dict[str, Mapping[str, Any]]]:
+    incoming: Dict[str, Mapping[str, Any]] = {}
+    outgoing: Dict[str, Mapping[str, Any]] = {}
+    for seam in chain.get("seams") or []:
+        if not isinstance(seam, Mapping):
+            continue
+        to_clip = str(seam.get("to_clip") or "")
+        from_clip = str(seam.get("from_clip") or "")
+        if to_clip:
+            incoming[to_clip] = seam
+        if from_clip:
+            outgoing[from_clip] = seam
+    return incoming, outgoing
+
+
+def seam_summary_line(seam: Optional[Mapping[str, Any]], fallback: str) -> str:
+    if not isinstance(seam, Mapping):
+        return fallback
+    issues = [
+        str(item.get("code") or "")
+        for item in seam.get("issues") or []
+        if isinstance(item, Mapping) and item.get("code")
+    ]
+    bits = [
+        f"{seam.get('from_episode')}/{seam.get('from_clip')}→{seam.get('to_episode')}/{seam.get('to_clip')}",
+        f"scope={seam.get('scope')}",
+        f"policy={seam.get('policy')}",
+        f"strictness={seam.get('strictness')}",
+        f"transition={one_line(seam.get('transition'), '未声明')}",
+        f"from_end={one_line(seam.get('from_end_state'), '未声明')}",
+        f"to_start={one_line(seam.get('to_start_state'), '未声明')}",
+    ]
+    if seam.get("required_boundary_frame"):
+        bits.append(f"boundary_frame={seam.get('required_boundary_frame')}")
+    if seam.get("intentional_discontinuity_reason"):
+        bits.append(f"intentional_discontinuity={seam.get('intentional_discontinuity_reason')}")
+    if issues:
+        bits.append("issues=" + ",".join(issues))
+    return "；".join(bits)
+
+
 def form_for_char(forms: Sequence[Mapping[str, Any]], char_id: str) -> Optional[Mapping[str, Any]]:
     for form in forms:
         if str(form.get("character_id") or "") == char_id:
@@ -644,7 +690,9 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
 
 def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: Mapping[str, Any],
                 forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
-                contract_rows: Mapping[str, Mapping[str, Any]]) -> str:
+                contract_rows: Mapping[str, Mapping[str, Any]],
+                incoming_seam: Optional[Mapping[str, Any]] = None,
+                outgoing_seam: Optional[Mapping[str, Any]] = None) -> str:
     cid = clip_id(clip.get("id"), idx)
     raw_id = str(clip.get("id") or cid)
     label = str(clip.get("label") or "")
@@ -688,6 +736,8 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     mid_count = (1 if mid else 0) + len(anchors)
     handoff_line = handoff_package_line(first, endframe, mid_count, cont, frame_control, fallback)
     exec_line = execution_recipe_line(recipe, frame_control, fallback)
+    incoming_line = seam_summary_line(incoming_seam, "本镜为本集首镜且无前集边界，或 continuity_chain 未生成。")
+    outgoing_line = seam_summary_line(outgoing_seam, "本镜为本集末镜，或下一镜 seam 未登记。")
     span = str(cont.get("expression_span") or "微")
     closeup_guard = closeup_promotion_guard(clip, route, chars, start, end, lenses, camera, span)
     tail_hold_guard = ending_reaction_hold_guard(
@@ -733,6 +783,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**专项镜头模板**：template={one_line(route.get('template') or route.get('shot_type'), '无')}；blocking/continuity_must/negative 继承 storyboard，不临场改戏。",
         f"**模型路由**：{route_line}",
         f"**接缝执行包 / Handoff Package**：{handoff_line}",
+        f"**连续性链路 / Continuity Chain**：入点={incoming_line}；出点={outgoing_line}",
         f"**执行配方 / Execution Recipe**：{exec_line}",
         f"**Motion Control / 物理交互控制**：{motion_control_line(route)}",
         f"**角色身份注册层**：{identity_line(forms, chars)}；本镜绑定={one_line(chars, '无人物')}；资产引用注册层={assets or '无'}。",
@@ -776,6 +827,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"专项模板约束：template={one_line(route.get('template') or route.get('shot_type'), '无')}；按 storyboard template_contract 执行；",
         f"模型路由约束：读取 video_model_routes.json；本镜 primary_backend={one_line(route.get('primary_backend'))}，fallback={route_list(route, 'fallback_backends') or '无'}，mode={one_line(route.get('mode'))}，native_audio_policy={one_line(route.get('native_audio_policy'), 'none')}，identity_requirement={one_line(route.get('identity_requirement'))}；失败按 degrade_plan={fallback}；",
         f"接缝执行包：{handoff_line}；",
+        f"连续性链路：入点={incoming_line}；出点={outgoing_line}；若 policy=relay，必须把上一镜尾帧/尾态当作本镜起幅硬约束；若 policy=intentional_discontinuity，只按已签收理由跳切，不偷接上一镜动作；",
         f"执行配方约束：{exec_line}；真正提交给后端时必须把 frame_inputs/reference_inputs/control_inputs/audio_inputs 按该配方组织，不得只提交裸文本 prompt；",
         f"物理交互约束：读取 motion_control_manifest.json；{motion_control_line(route)}；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；",
         f"身份锁定约束：{identity_line(forms, chars)}；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；",
@@ -789,7 +841,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"镜头运动：{camera}；",
         f"情绪节奏：[0-30%] 克制承接；[30-75%] 张力推进；[75-100%] 定住，服务{one_line(clip.get('rhythm'), '本镜节奏')}；",
         "动态细节：低雾缓流、衣袂微动、火把烟或土粒细动，与人物动作产生轻微物理反馈；",
-        f"衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints 和在场链约束，避开 continuity.negative，按{one_line(cont.get('transition'), '转场')}服务下一镜；",
+        f"衔接约束：开头承接 continuity.start_state 和 continuity_chain 入点，动作只执行 continuity.action，结尾停在 continuity.end_state 并交给 continuity_chain 出点，保持 continuity.constraints 和在场链约束，避开 continuity.negative，按{one_line(cont.get('transition'), '转场')}服务下一镜；",
         "禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；内心戏镜头不得重复上一镜群像/妖魔/道具陈列；",
         "声音约束：无对白、无旁白、不要生成原生人声；声音只作为后期 n2d-compose 的剪辑意图。",
         "```",
@@ -797,6 +849,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "### 视频 prompt（英文，目标=安全兜底/Veo/海外）",
         "```",
         f"continuity: start from {start}; perform only {action}; end on {end}; preserve {constraints}; follow required_presence/offscreen_presence/forbidden_presence exactly; avoid face drift, costume changes, unregistered characters or props, text, logos, watermarks, and generated native voice.",
+        f"continuity chain: incoming seam = {incoming_line}; outgoing seam = {outgoing_line}. If policy=relay, preserve the previous shot's boundary frame/state as the hard start constraint; if intentional discontinuity, cut only for the signed reason.",
         f"inner-focus isolation: {inner_focus or 'not an inner-focus shot; follow entity schedule.'}",
         f"director intent: {dramatic}; audience effect: {audience}.",
         f"character motion: {action}; camera motion: {camera}; dynamic detail: cold moonlight, torch smoke, dust, fog, and fabric move subtly with the action.",
@@ -813,6 +866,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         "- ✅ 中文 prompt 已写首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止。",
         "- ✅ 在场链约束 required_presence/offscreen_presence/forbidden_presence 已进入中文 prompt。",
         "- ✅ 接缝执行包 / 执行配方约束已进入中文 prompt，frame_inputs/reference_inputs/control_inputs/audio_inputs 与 route 一致。",
+        "- ✅ Continuity Chain 已进入 prompt：每镜知道上一 seam 和下一 seam，跨集首镜不再裸起。",
         "- ✅ ④人物运动动作链明确，幅度与能量可控。",
         "- ✅ ②镜头运动有结构化运镜词和速度。",
         "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不乱甩。",
@@ -841,15 +895,28 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
 
 def render_clips(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapping[str, Mapping[str, Any]],
                  forms: Sequence[Mapping[str, Any]], mouths: Mapping[str, bool],
-                 contract_rows: Mapping[str, Mapping[str, Any]]) -> str:
+                 contract_rows: Mapping[str, Mapping[str, Any]],
+                 chain: Mapping[str, Any]) -> str:
     clips = [c for c in sb.get("clips") or [] if isinstance(c, Mapping)]
+    incoming_map, outgoing_map = continuity_chain_maps(chain)
     out = [f"# {ep} 视频 Clip prompt", ""]
     retention = contract_retention_lines(root, ep)
     if retention:
         out += ["## 本集留存承诺账本（script_quality_contract）", "", *retention, ""]
     for idx, clip in enumerate(clips, 1):
         cid = clip_id(clip.get("id"), idx)
-        out.append(render_clip(root, ep, idx, clip, route_rows.get(cid, {}), forms, mouths, contract_rows))
+        out.append(render_clip(
+            root,
+            ep,
+            idx,
+            clip,
+            route_rows.get(cid, {}),
+            forms,
+            mouths,
+            contract_rows,
+            incoming_map.get(cid),
+            outgoing_map.get(cid),
+        ))
     return "\n".join(out)
 
 
@@ -860,11 +927,12 @@ def build(root: Path, ep: str) -> Tuple[str, str]:
     forms = identity_forms(root)
     mouths = mouth_map(root, ep)
     contract_rows = contract_clip_map(root, ep)
+    chain = continuity_chain(root, ep)
     image_overview_path = root / "出图" / ep / "prompt" / "00_总览.md"
     image_overview = image_overview_path.read_text(encoding="utf-8") if image_overview_path.is_file() else ""
     return (
         render_overview(root, ep, sb, route_rows, image_overview, forms, mouths),
-        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows),
+        render_clips(root, ep, sb, route_rows, forms, mouths, contract_rows, chain),
     )
 
 

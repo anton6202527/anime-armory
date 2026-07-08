@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -21,8 +22,15 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import shot_risk_audit as sra  # noqa: E402
+try:
+    import story_economy_audit as sea  # type: ignore  # noqa: E402
+except Exception:  # pragma: no cover - planner still works without advisory layer
+    sea = None  # type: ignore
 
 KIND = "n2d_shot_split_decision_plan"
+VIDEO_SHOT_PLAN_THRESHOLD_SEC = 12.0
+VIDEO_SHOT_HARD_MAX_SEC = 15.0
+VIDEO_SHOT_TARGET_SEC = 6.0
 
 NARRATIVE_RE = re.compile(
     r"(选择|决定|代价|后果|真相|揭示|反转|爽点|打脸|觉醒|危机|集尾|钩|兑现|承诺|目标|动机|杀局|赴险)"
@@ -75,6 +83,53 @@ def _has_anchor(clip: Mapping[str, Any]) -> bool:
     return bool(cont.get("midframe") or cont.get("anchors") or cont.get("midframe_exempt_reason"))
 
 
+def duration_of(clip: Mapping[str, Any]) -> Optional[float]:
+    for key in ("duration", "duration_sec", "story_duration", "seconds", "时长"):
+        value = clip.get(key)
+        if isinstance(value, bool):
+            continue
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            match = re.search(r"\d+(?:\.\d+)?", value)
+            if match:
+                return float(match.group(0))
+    return None
+
+
+def _segment_id(parent: str, index: int) -> str:
+    return f"{parent}_shot{index:02d}"
+
+
+def plan_video_shot_segments(parent: str, duration: Optional[float]) -> List[Dict[str, Any]]:
+    """Split long story clips into physical video shots for generation/editing.
+
+    `story_clip` can stay as a 15-35s dramatic unit, but paid video generation
+    should work on roughly 4-8s `video_shot` units.  The returned plan is a
+    timing/editing plan, not a rewrite of storyboard.json.
+    """
+    if duration is None or duration <= VIDEO_SHOT_PLAN_THRESHOLD_SEC:
+        return []
+    count = max(2, int(math.ceil(float(duration) / VIDEO_SHOT_TARGET_SEC)))
+    seg = float(duration) / count
+    rows: List[Dict[str, Any]] = []
+    cursor = 0.0
+    for idx in range(count):
+        start = cursor
+        end = float(duration) if idx == count - 1 else round((idx + 1) * seg, 3)
+        rows.append({
+            "video_shot_id": _segment_id(parent, idx + 1),
+            "parent_story_clip": parent,
+            "index": idx + 1,
+            "start_sec": round(start, 3),
+            "end_sec": round(end, 3),
+            "duration_sec": round(end - start, 3),
+            "target_duration_sec": VIDEO_SHOT_TARGET_SEC,
+        })
+        cursor = end
+    return rows
+
+
 def narrative_weight(clip: Mapping[str, Any], idx: int) -> int:
     """0-3: how much story value would be harmed by deleting/flattening this clip."""
     blob = " ".join(str(clip.get(k) or "") for k in ("rhythm", "narrative_function", "native_speech", "visual", "label"))
@@ -120,13 +175,19 @@ def generation_risk_bucket(risk_row: Mapping[str, Any]) -> int:
     return 5
 
 
-def decide_actions(clip: Mapping[str, Any], risk_row: Mapping[str, Any], idx: int) -> List[str]:
+def decide_actions(
+    clip: Mapping[str, Any],
+    risk_row: Mapping[str, Any],
+    idx: int,
+    economy_row: Optional[Mapping[str, Any]] = None,
+) -> List[str]:
     tags = set(risk_row.get("tags") or [])
     findings = risk_row.get("findings") or []
     score = int(risk_row.get("score") or 0)
     template = str(clip.get("template") or "")
     shot_size = _shot_size(clip)
     blob = flatten(clip)
+    duration = duration_of(clip)
     actions: List[str] = []
 
     def add(action: str) -> None:
@@ -147,6 +208,16 @@ def decide_actions(clip: Mapping[str, Any], risk_row: Mapping[str, Any], idx: in
         add("defer_to_composite")
     if score >= 11 and ("vfx_or_asset" in tags or "multi_character" in tags or risk_row.get("spectacle_type")):
         add("defer_to_composite")
+    if duration is not None and duration > VIDEO_SHOT_PLAN_THRESHOLD_SEC:
+        add("split_video_shots")
+    if economy_row:
+        over_budget = economy_row.get("over_budget_sec")
+        try:
+            over = float(over_budget or 0.0)
+        except (TypeError, ValueError):
+            over = 0.0
+        if over > 0 and not economy_row.get("detail_allowed"):
+            add("compress_before_video")
     if not actions:
         add("keep_single")
     return actions
@@ -154,6 +225,8 @@ def decide_actions(clip: Mapping[str, Any], risk_row: Mapping[str, Any], idx: in
 
 def primary_action(actions: Sequence[str]) -> str:
     priority = [
+        "compress_before_video",
+        "split_video_shots",
         "template_required",
         "split_establish_detail_reaction",
         "split_reaction",
@@ -175,6 +248,8 @@ def action_note(action: str) -> str:
         "template_required": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
         "add_mid_or_multi_anchor": "高风险长镜或大表情镜补中段锚帧/多锚/豁免说明。",
         "defer_to_composite": "把文字、光效、证据标记、复杂同框等交给分层出图或后期合成，避免视频后端自由生成。",
+        "split_video_shots": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+        "compress_before_video": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
     }
     return notes.get(action, "")
 
@@ -190,6 +265,19 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     risk = sra.audit(str(root), ep)
     risk_rows = risk.get("clips") or []
     by_id = {str(row.get("id")): row for row in risk_rows if isinstance(row, Mapping)}
+    economy_report: Mapping[str, Any] = {}
+    economy_rows: Dict[str, Mapping[str, Any]] = {}
+    if sea is not None:
+        try:
+            economy_report = sea.build_report(root, ep)
+            economy_rows = {
+                str(row.get("clip")): row
+                for row in economy_report.get("clips") or []
+                if isinstance(row, Mapping)
+            }
+        except Exception:
+            economy_report = {}
+            economy_rows = {}
     decisions: List[Dict[str, Any]] = []
     for idx, clip in enumerate(clips, 1):
         cid = clip_id(clip, idx)
@@ -198,12 +286,16 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             row = risk_rows[idx - 1]
         if row is None:
             row = {}
-        actions = decide_actions(clip, row, idx)
+        economy_row = economy_rows.get(cid, {})
+        actions = decide_actions(clip, row, idx, economy_row)
         primary = primary_action(actions)
         tags = list(row.get("tags") or [])
+        duration = duration_of(clip)
+        video_segments = plan_video_shot_segments(cid, duration)
         decisions.append({
             "clip": cid,
             "label": clip.get("label", ""),
+            "duration_sec": duration,
             "primary_action": primary,
             "actions": actions,
             "narrative_weight": narrative_weight(clip, idx),
@@ -213,6 +305,21 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             "risk_tags": tags,
             "reason": action_note(primary),
             "pilot_candidate": cid in {str(p.get("id")) for p in risk.get("pilot_candidates") or [] if isinstance(p, Mapping)},
+            "story_economy": {
+                "economy_class": economy_row.get("economy_class"),
+                "detail_allowed": economy_row.get("detail_allowed"),
+                "target_story_clip_sec": economy_row.get("target_story_clip_sec"),
+                "recommended_action": economy_row.get("recommended_action"),
+                "over_budget_sec": economy_row.get("over_budget_sec"),
+                "rewrite_demo": economy_row.get("rewrite_demo"),
+            } if economy_row else {},
+            "video_shot_policy": {
+                "story_clip_plan_threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
+                "video_shot_hard_max_sec": VIDEO_SHOT_HARD_MAX_SEC,
+                "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
+                "direct_submit_allowed": not (duration is not None and duration > VIDEO_SHOT_HARD_MAX_SEC),
+            },
+            "video_shot_segments": video_segments,
         })
 
     must_findings = [
@@ -227,6 +334,10 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         "template_required": sum(1 for d in decisions if "template_required" in d["actions"]),
         "add_anchor": sum(1 for d in decisions if "add_mid_or_multi_anchor" in d["actions"]),
         "defer_to_composite": sum(1 for d in decisions if "defer_to_composite" in d["actions"]),
+        "video_shot_split": sum(1 for d in decisions if "split_video_shots" in d["actions"]),
+        "compress_before_video": sum(1 for d in decisions if "compress_before_video" in d["actions"]),
+        "direct_submit_blocked": sum(1 for d in decisions if not d["video_shot_policy"]["direct_submit_allowed"]),
+        "story_economy_over_budget": sum(1 for d in decisions if float((d.get("story_economy") or {}).get("over_budget_sec") or 0.0) > 0.0),
     }
     return {
         "kind": KIND,
@@ -238,6 +349,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         "notes": [
             "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
             "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。",
+            "compress_before_video 表示先改编剧表达，不应把啰嗦剧情直接切成多个付费视频段。",
         ],
     }
 
@@ -249,17 +361,24 @@ def render_md(plan: Mapping[str, Any]) -> str:
         f"- episode: {plan.get('episode')}",
         f"- ok: {plan.get('ok')}",
         "",
-        "| Clip | Action | N | G | R | Risk Tags | Reason |",
-        "|---|---|---:|---:|---:|---|---|",
+        "| Clip | Dur | Action | Economy | Target | Video Shots | N | G | R | Risk Tags | Reason |",
+        "|---|---:|---|---|---:|---:|---:|---:|---:|---|---|",
     ]
     for row in plan.get("decisions") or []:
+        seg_count = len(row.get("video_shot_segments") or [])
+        dur = row.get("duration_sec")
+        dur_text = f"{float(dur):.3f}s" if isinstance(dur, (int, float)) else ""
+        economy = row.get("story_economy") or {}
+        target = economy.get("target_story_clip_sec") or {}
+        target_text = f"{target.get('min', '')}-{target.get('max', '')}s" if target else ""
         lines.append(
-            f"| {row.get('clip')} | {row.get('primary_action')} | "
+            f"| {row.get('clip')} | {dur_text} | {row.get('primary_action')} | "
+            f"{economy.get('economy_class') or ''} | {target_text} | {seg_count or ''} | "
             f"{row.get('narrative_weight')} | {row.get('grammar_need')} | {row.get('generation_risk')} | "
             f"{'、'.join(row.get('risk_tags') or [])} | {row.get('reason')} |"
         )
     lines.append("")
-    lines.append("N=叙事权重，G=分镜语法拆分需求，R=生成风险桶。")
+    lines.append("N=叙事权重，G=分镜语法拆分需求，R=生成风险桶。Economy 来自 story_economy_audit；Video Shots 为建议拆出的 4-8s 物理生成/剪辑镜头数；story_clip >15s 不允许单段直提。")
     return "\n".join(lines)
 
 

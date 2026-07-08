@@ -2,7 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（创意策划→脚本→VO配音→分镜→角色/场景/产品定妆→AI出图→AI视频→剪辑包装→AI披露→质检）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + 多时长 cutdown + 多比例）。**不拆集**（一条主片是整体，可以很长）；多时长/多比例/A·B 走 cutdown 交付件矩阵。**自包含**。读 _进度.md 路由到 ad-progress(只读进度) / ad-update(更新影响计划) / ad-craft(契约/gate/AI披露) / ad-concept(创意) / ad-script(脚本+分镜+广告法机检) / ad-voice(VO配音) / ad-image(三层定妆+出图) / ad-video(图生视频) / ad-compose(剪辑包装+交付) / ad-review(M0质检)。Use when given a 客户需求/brief（**哪怕只有一句话**，缺项由 ad-concept 访谈补齐）, a product/brand to advertise, or an existing 创作区/拍广告/项目/ folder, or asked 拍广告 / 做广告片 / 广告创意 / 广告脚本 / TVC / 信息流广告 / 品牌片 / 产品demo / 带货视频. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, ad.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 862 | 目录文本总行数 15864
+> 规模统计：Skill 数 13 | SKILL.md 总行数 864 | 目录文本总行数 16350
 
 # ad — 拍广告生产线 · 总调度
 
@@ -36,7 +36,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 ├── 配音/                        line_NN.wav + vo.wav + 时长清单.json
 ├── 出图/共享/ 出图/分镜/         三层定妆库（角色/场景/产品）+ 逐镜首尾帧
 ├── 出视频/分镜/                 每 Clip MP4 + video_model_routes.json + video_qc.json
-├── 生产数据/                    producer_pack.json + platform_pack.json
+├── 生产数据/                    producer_pack.json + platform_pack.json + consistency_findings.json
 ├── 合成/                        成片_主片.mp4 + cutdown/ + 多比例/
 ├── 合规/                        AI使用说明.md（二期补 compliance_manifest.json）
 └── 成片_主片.mp4
@@ -56,7 +56,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 三层定妆库+出图 | **`ad-image`** | 角色/场景/**产品**定妆 + 逐镜首尾帧 PNG | ✅ |
 | 图生视频 | **`ad-video`** | Clip MP4 + 契约继承机检 + 模型路由 + video_qc | ✅ |
 | 剪辑包装+交付 | **`ad-compose`** | 成片 + 品牌包装 end card + cutdown + 多比例 + 交付规格 | ✅ |
-| 质检/自审(横切) | **`ad-review`** | M0 投放前硬项 QA：成片/广告法/video_qc/占位VO/AI披露/交付矩阵 + 人工复核清单 | ✅ |
+| 质检/自审(横切) | **`ad-review`** | `consistency_findings.json` + M0 投放前硬项 QA：成片/广告法/video_qc/占位VO/AI披露/交付矩阵 + 人工复核清单 | ✅ |
 | AI披露/交付 | **`ad-craft`** | `合规/AI使用说明.md` | ✅ |
 
 | 用户输入 | 路由到 |
@@ -72,7 +72,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 给了 `创作区/拍广告/<项目>/` 没说动作 / 问进度或下一步 | `ad-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
 | 问 skill 更新是否影响本广告 / 要返工计划 / 重审重评前先看范围 | `ad-update`（只写更新影响计划和基线，不改 brief/素材/进度） |
 
-> 推荐顺序：**brief → ad-concept 创意 → ad-script 脚本(过广告法机检) → ad-voice VO → ad-script 分镜 → ad-craft producer_pack 制片前控包 + platform_pack 平台交付包 → ad-score 投放前评分(出图前拦平庸·reject 回上游) → ad-image 三层定妆+出图 → ad-video 图生视频+video_qc → ad-compose 剪辑包装+cutdown+交付 → AI披露 → ad-review M0质检**。
+> 推荐顺序：**brief → ad-concept 创意 → ad-script 脚本(过广告法机检) → ad-voice VO → ad-script 分镜 → ad-craft producer_pack 制片前控包 + platform_pack 平台交付包 → ad-score 投放前评分(出图前拦平庸·reject 回上游) → ad-image 三层定妆+出图 → ad-video 图生视频+video_qc → ad-compose 剪辑包装+cutdown+交付 → AI披露 → ad-review consistency_findings + M0质检**。
 > **音频先行**：VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本→配音后分镜）。广告常是「音乐床 + VO」混合驱动，音乐床作节奏锚一并记录。
 > **立项完成判据**：`brief.json` 过 `ad-craft contract.brief_check()` 必填最小集（brand/product/usp/audience）→ 回写 `_进度.md` 客户需求立项 ✅（通常由 `ad-concept` 第0步补完 brief 时顺手回写）；可延后合规项（claims依据/rights授权/legal_lines）允许标「待补」，进花钱 gate 前必须补齐（`ad-craft/scripts/gate.py --stage image|video|compose` 会阻断）。
 > **零成本 demo 通道**（一句话用户的推荐路径）：进花钱 gate（出图）之前全程免费——brief 访谈 → ad-concept 创意 → ad-script 脚本(机检) → `ad-voice --backend say|estimate` 占位配音 → ad-script 分镜 storyboard。先看到完整镜头设计再决定是否花钱出图/出视频；占位配音正式定稿前须真 VO 复跑。

@@ -13,7 +13,7 @@
 - **内容轴 = 主（剧情驱动·平台无关·不可妥协）**：画什么 / 谁 / 什么情绪 / 景别·构图·运镜意图——由**剧情 / 角色卡 / 导演节奏**决定；换任何生图模型/渠道或生视频模型都不变。
 - **平台皮 = 可换（后期换不动内容）**：提示词写法·语言·画幅·clip时长·负面词，以及结尾那句"图像风格锚定句/视频兼容锚定句"——由生图模型/渠道与生视频模型决定；具体生视频后端未固定时先用通用兼容锚定。
 - **生视频模型只主导"皮"**：它定最终成片风格基线 + image2video 运动估计分布;但**只约束图的风格、绝不决定画什么**。`生视频渠道` 只决定实际调用哪个产品/API。
-- **生图模型 / 生图渠道**：`生图模型` 是生成者，`生图AI` 是旧字段名，按 `生图渠道` 理解为访问入口，默认 Codex CLI。**当前放行官方/已登录多参考模型/渠道**（OpenAI GPT Image 系列、Dreamina/即梦官方 CLI、Seedream / 可灵主体库 / Nano Banana；Sora Cameo 仅旧项目/manual）。两条硬规则：① **全集统一一组官方模型+渠道，不混用**（混用=跨镜漂移）；② **禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图**。每次出图前按 `cli_registry.md` 重新扫描所选渠道能力并落本次 model id 证据。
+- **生图模型 / 生图渠道**：`生图模型` 是生成者，`生图AI` 是旧字段名，按 `生图渠道` 理解为访问入口，默认 Codex CLI，默认模型归一为 GPT Image 2 / OpenAI GPT Image 系列。全项目生图优先 Codex/OpenAI；Dreamina/即梦官方 CLI、Seedream、可灵主体库、Nano Banana、Sora Cameo 等非 Codex/OpenAI 后端必须先有 `<作品根>/合规/image_backend_override.json` 签核。两条硬规则：① **全集统一一组官方模型+渠道，不混用**（混用=跨镜漂移）；② **禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图**。每次出图前按 `cli_registry.md` 重新扫描所选渠道能力并落本次 model id 证据。
 
 > **为什么锚定句绑"最终生视频模型"≠ 审美越权**：出图那张图不是成品,是喂给生视频模型做 image2video 的**中间件**;视频模型只对自己训练分布内的画风稳定做运动估计,风格差太远→运镜/人脸崩。锚定句只让"图能被那个生视频模型消化",**只调平台兼容**。
 > **护栏(冲突谁赢)**：**剧情所需的画面 / 情绪 / 构图 / 用户选择的 `基础视觉风格` > 平台锚定**;锚定句把某场戏氛围压平，或把水墨/赛璐璐/Q版强拉回写实时，以 `style_contract` 为准、锚定句删减或改写。
@@ -37,8 +37,8 @@ image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型�
 | 场景 | 组合 | 备注 |
 |---|---|---|
 | 国风短剧（默认 Codex） | Codex/官方 OpenAI 生图 + 通用国风视频兼容锚定；n2d-video 阶段再路由到 Seedance/Kling/Veo 等兼容后端 | 默认出图链路；不在首跑强迫选生视频后端 |
-| 国风短剧（即梦闭环） | Dreamina/即梦官方 CLI 出图 + Seedance via 即梦/Dreamina | 已登录会员可直调；角色镜头优先 image2image/多参考；整集统一后端 |
-| 国风短剧（多参考锁人） | Dreamina/即梦官方 CLI / Nano Banana / OpenAI 等多参考出图 + Seedance/Kling 锚定句 → 视频 | 无持久主体 ID；每镜必须喂定妆组/表情库/场景图，**整集统一这一个后端，不与 Codex 混用** |
+| 默认短剧链路 | Codex/OpenAI 调 GPT Image 2 出图 + Seedance/Kling/Veo 等视频锚定句 | 默认；每镜真实参考入参 + full QC；视频后端可另行路由 |
+| 签核例外链路 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana 等出图 + 视频锚定句 | 仅用户明确签核后使用；整集统一，不与 Codex 混用 |
 | 国风短剧（持久主体锁人） | Seedream / 可灵主体库 + Seedance/Kling 锚定句 → 视频 | 可注册主体/角色 ID 后跨集引用；核心长线角和多人同框优先用这一档；Sora Cameo 仅旧项目/manual |
 | 国风短剧（备选视频） | 官方生图模型/渠道 + Kling 锚定句 → `生视频模型=Kling 3.0` + `生视频渠道=可灵/Kling` | 生图模型+渠道整集统一一组 |
 | 海外英文短剧 | 官方生图模型/渠道（OpenAI/Codex/Seedream 等）+ Veo 锚定句 → `生视频模型=Veo 3.1` + `生视频渠道=Google Gemini API` | 全英文 prompt 优先 |
@@ -123,7 +123,7 @@ image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型�
 > 这里只列**作为生图模型/渠道时**的写法特征。生视频模型看上面档案。
 
 ### 禁止：第三方逆向 / web 自动化出图（安全 invariant）
-禁的是**未授权路径**：不要装第三方逆向 CLI，也不要进入即梦 web 自动化出图。Dreamina/即梦官方 CLI 与 ByteDance 官方 Seedream API 都是可选生图渠道。生图模型+渠道选定后整集统一一组、不与 Codex 混用。
+禁的是**未授权路径**与**未签核切换**：不要装第三方逆向 CLI，也不要进入即梦 web 自动化出图。Dreamina/即梦官方 CLI 若用于图片阶段，必须先有用户签核例外；生图模型+渠道选定后整集统一一组、不与 Codex 混用。
 
 ### Gemini-Imagen / Nano Banana (Google)\n- **提示词语言**：英文最稳，中文次之\n- **模型矩阵**：\n  - `gemini-3.1-flash-image`（Nano Banana 2）：主打高速度、高效率与大批量生产（默认 1K，额外支持 0.5K(512px)/2K/4K 分辨率与 1:4/4:1/1:8/8:1 画幅），支持“思考”模式、Google Search 与图片搜索实时增强，视频到图像（Video-to-image）能力，以及出色的文字渲染。\n  - `gemini-3-pro-image`（Nano Banana Pro）：主打专业级工作室画质。\n- **prompt 长度**：偏好"描述性英文段落"，不要短关键词列表
 - **参考图**：支持（图生图 / Multi-image input）
@@ -180,7 +180,7 @@ image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型�
 | 可灵 Kling 3.0 | **主体库 / Custom Model(10-30 段视频) / Element Library(~4 张图)** | 注册主体后按 ID 调；Custom Model 最稳但要素材，Element Library 轻量 |
 | Seedream 5.0/4.5 | **Universal Reference（免 LoRA 跨图锁人）** | 喂锁定参考即跨图保持，无需训练；4.5 最多 14 张参考 |
 | Sora 2 | **Character Cameo（可复用角色ID）** | 建角色 ID 后跨场景复用，face-shifting 最少 |
-| Dreamina/即梦官方 CLI | 多参考/参考框，无持久角色 ID | 可作生图渠道；参考框粘性强，切换角色前必须清空；无持久主体 ID 时回退第①档参考图派生 |
+| Dreamina/即梦官方 CLI | 多参考/参考框，无持久角色 ID | 仅签核例外；参考框粘性强，切换角色前必须清空；无持久主体 ID 时回退第①档参考图派生 |
 | Nano Banana / Gemini 多参考 | 多图参考，无持久角色 ID | Gemini 3 Pro Image 总参考最多 14 张、人物高保真最多 5 张；与 Seedream Universal Reference 不是同一档；不得把 `生图AI=Nano/Gemini` 归到 seedream adapter |
 | Codex/官方 OpenAI GPT Image · DALL·E · Flux | **无持久角色ID** | 回退第①档：多图参考派生 + 锚点句；full QC 仍是进入视频前硬证据 |
 

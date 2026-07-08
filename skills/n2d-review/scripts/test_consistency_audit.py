@@ -585,6 +585,27 @@ def test_scene_struct_drift_core_scene_blocks():
     assert len(rows) == 1 and rows[0]["verdict"] == "block" and "跨3集结构" in rows[0]["shot"]
 
 
+def test_scene_allowed_variations_downgrades_signed_off_scnx_block():
+    rows = [{
+        "verdict": "block",
+        "scene": "殿",
+        "dimension": "跨集场景漂移(SCNX)",
+        "msg": "结构漂移",
+    }]
+    variations = {
+        "殿": {
+            "accepted": True,
+            "reviewer": "director",
+            "reason": "合法反打换机位",
+            "expires_at": "2099-01-01T00:00:00+00:00",
+        }
+    }
+    out = ca._apply_scene_allowed_variations(rows, variations)
+    assert out[0]["verdict"] == "warn"
+    assert out[0]["signed_off"] is True
+    assert out[0]["signoff_source"] == "asset_registry.allowed_variations"
+
+
 def test_scene_struct_drift_below_warn_no_rows():
     protos = {"第1集": {"殿": [0] * 64}, "第2集": {"殿": [1] * 5 + [0] * 59}}  # 仅 5 位 < warn 18
     assert ca.scene_struct_drift_rows(protos, "第2集") == []

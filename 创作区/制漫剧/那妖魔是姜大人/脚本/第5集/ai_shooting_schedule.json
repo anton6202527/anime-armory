@@ -1,0 +1,613 @@
+{
+  "episode": "第5集",
+  "generated_at": "2026-07-08T09:57:16+00:00",
+  "inputs": {
+    "batch_queue": "生产数据/batch_queue.json",
+    "continuity_bible": "脚本/第5集/continuity_bible.json",
+    "production_breakdown": "脚本/第5集/production_breakdown.json",
+    "storyboard": "脚本/第5集/storyboard.json"
+  },
+  "kind": "n2d_ai_shooting_schedule",
+  "owner": "assistant_director",
+  "policy": {
+    "call_sheet_is_ordering_not_authorization": true,
+    "do_not_batch_past_unreviewed_high_risk_clip": true,
+    "high_risk_first": true
+  },
+  "status": "confirmed",
+  "summary": {
+    "clip_count": 9,
+    "high_risk": 9,
+    "medium_risk": 0
+  },
+  "tasks": [
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP01:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP01 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP01",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip01_first_a1.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.247s/3拍）",
+            "source_duration": 19.247,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip01_first_a2.png",
+            "at_sec": 9.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.247s/3拍）",
+            "source_duration": 19.247,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip01_first_a3.png",
+            "at_sec": 11.55,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.247s/3拍）",
+            "source_duration": 19.247,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip01_first_a4.png",
+            "at_sec": 14.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.247s/3拍）",
+            "source_duration": 19.247,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP01",
+        "endframe": "出图/第5集/图片/Clip01_end.png",
+        "firstframe": "出图/第5集/图片/Clip01_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP01",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP01"
+      },
+      "estimated_duration_sec": 19.247,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 1,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/晨雾血迹/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP02:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP02 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP02",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip02_first_a1.png",
+            "at_sec": 5.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（15.408s/4拍）",
+            "source_duration": 15.408,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip02_first_a2.png",
+            "at_sec": 7.7,
+            "reason": "auto: R1 高运动模板 fight_exchange（15.408s/4拍）",
+            "source_duration": 15.408,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip02_first_a3.png",
+            "at_sec": 11.56,
+            "reason": "auto: R1 高运动模板 fight_exchange（15.408s/4拍）",
+            "source_duration": 15.408,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP02",
+        "endframe": "出图/第5集/图片/Clip02_end.png",
+        "firstframe": "出图/第5集/图片/Clip02_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP02",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP02"
+      },
+      "estimated_duration_sec": 15.408,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 2,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/晨光刀气/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP03:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP03 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP03",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip03_first_a1.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.89s/4拍）",
+            "source_duration": 19.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip03_first_a2.png",
+            "at_sec": 6.63,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.89s/4拍）",
+            "source_duration": 19.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip03_first_a3.png",
+            "at_sec": 9.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.89s/4拍）",
+            "source_duration": 19.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip03_first_a4.png",
+            "at_sec": 13.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.89s/4拍）",
+            "source_duration": 19.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip03_first_a5.png",
+            "at_sec": 16.57,
+            "reason": "auto: R1 高运动模板 fight_exchange（19.89s/4拍）",
+            "source_duration": 19.89,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP03",
+        "endframe": "出图/第5集/图片/Clip03_end.png",
+        "firstframe": "出图/第5集/图片/Clip03_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP03",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP03"
+      },
+      "estimated_duration_sec": 19.89,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 3,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 5 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/血尘翻涌/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP04:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP04 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP04",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip04_first_a1.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.479s）",
+            "source_duration": 10.479,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip04_first_a2.png",
+            "at_sec": 6.99,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，10.479s）",
+            "source_duration": 10.479,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP04",
+        "endframe": "出图/第5集/图片/Clip04_end.png",
+        "firstframe": "出图/第5集/图片/Clip04_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP04",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP04"
+      },
+      "estimated_duration_sec": 10.479,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 4,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "dialogue_shot_reverse",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/刀尖滴血/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP05:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP05 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP05",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip05_first_a1.png",
+            "at_sec": 4.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（11.798s/3拍）",
+            "source_duration": 11.798,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip05_first_a2.png",
+            "at_sec": 8.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（11.798s/3拍）",
+            "source_duration": 11.798,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP05",
+        "endframe": "出图/第5集/图片/Clip05_end.png",
+        "firstframe": "出图/第5集/图片/Clip05_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP05",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP05"
+      },
+      "estimated_duration_sec": 11.798,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 5,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/黑煞骤起/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP06:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP06 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP06",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip06_first_a1.png",
+            "at_sec": 3.0,
+            "reason": "auto: R1 高运动模板 fight_exchange（12.093s/4拍）",
+            "source_duration": 12.093,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip06_first_a2.png",
+            "at_sec": 7.0,
+            "reason": "apex: 命中/爆发帧（强制关键帧·动作/运镜/光/表情四轴撞点）",
+            "source_duration": 12.093,
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip06_first_a3.png",
+            "at_sec": 8.06,
+            "reason": "auto: R1 高运动模板 fight_exchange（12.093s/4拍）",
+            "source_duration": 12.093,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP06",
+        "endframe": "出图/第5集/图片/Clip06_end.png",
+        "firstframe": "出图/第5集/图片/Clip06_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP06",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP06"
+      },
+      "estimated_duration_sec": 12.093,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 6,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "fight_exchange",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/黑煞血虎相撞/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP07:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP07 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP07",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a1.png",
+            "at_sec": 3.32,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a2.png",
+            "at_sec": 6.64,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a3.png",
+            "at_sec": 10.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a4.png",
+            "at_sec": 13.27,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a5.png",
+            "at_sec": 16.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a6.png",
+            "at_sec": 19.91,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip07_first_a7.png",
+            "at_sec": 23.23,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，26.545s）",
+            "source_duration": 26.545,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP07",
+        "endframe": "出图/第5集/图片/Clip07_end.png",
+        "firstframe": "出图/第5集/图片/Clip07_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP07",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP07"
+      },
+      "estimated_duration_sec": 26.545,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 7,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 7 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "multi_character_same_frame",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/撞击后尘土/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP08:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP08 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP08",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip08_first_a1.png",
+            "at_sec": 3.18,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.897s）",
+            "source_duration": 15.897,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip08_first_a2.png",
+            "at_sec": 5.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.897s）",
+            "source_duration": 15.897,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip08_first_a3.png",
+            "at_sec": 9.54,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.897s）",
+            "source_duration": 15.897,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip08_first_a4.png",
+            "at_sec": 12.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，15.897s）",
+            "source_duration": 15.897,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP08",
+        "endframe": "出图/第5集/图片/Clip08_end.png",
+        "firstframe": "出图/第5集/图片/Clip08_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP08",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP08"
+      },
+      "estimated_duration_sec": 15.897,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 8,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 4 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "ensemble_blocking",
+        "tier": "high"
+      },
+      "scene": "上盘村村道/飞鹰门护阵/外",
+      "schedule_bucket": "pilot_high_risk_first"
+    },
+    {
+      "batch_hint": {
+        "idempotency_scope": "第5集:EP05_CLIP09:image_video",
+        "rerun_scope": "只重跑 EP05_CLIP09 及其受影响接缝/后期证据"
+      },
+      "clip_id": "EP05_CLIP09",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第5集/图片/Clip09_first_a1.png",
+            "at_sec": 5.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，21.036s）",
+            "source_duration": 21.036,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip09_first_a2.png",
+            "at_sec": 7.01,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，21.036s）",
+            "source_duration": 21.036,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip09_first_a3.png",
+            "at_sec": 11.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，21.036s）",
+            "source_duration": 21.036,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip09_first_a4.png",
+            "at_sec": 14.02,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，21.036s）",
+            "source_duration": 21.036,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第5集/图片/Clip09_first_a5.png",
+            "at_sec": 18.0,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，21.036s）",
+            "source_duration": 21.036,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第5集/continuity_bible.json#EP05_CLIP09",
+        "endframe": "出图/第5集/图片/Clip09_end.png",
+        "firstframe": "出图/第5集/图片/Clip09_first.png",
+        "production_breakdown": "脚本/第5集/production_breakdown.json#EP05_CLIP09",
+        "storyboard": "脚本/第5集/storyboard.json#EP05_CLIP09"
+      },
+      "estimated_duration_sec": 21.036,
+      "fallback_route": {
+        "image": "reference_group/image2image/multi_reference；失败则降级拆镜或补参考",
+        "post": "screen_text/字幕/花字统一 compose overlay",
+        "video": "native_multiframe → split_relay → shorter_clip_degrade"
+      },
+      "priority": "high",
+      "production_order": 9,
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk": {
+        "backend_risk": "多锚帧 5 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "review_required": true,
+        "template": "system_panel",
+        "tier": "high"
+      },
+      "scene": "姜月初主观识海/百妖谱古卷/内心",
+      "schedule_bucket": "pilot_high_risk_first"
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,669 @@
+{
+  "decisions": [
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP01",
+      "duration_sec": 19.247,
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "群狼扑杀冷开：横刀出鞘",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 25,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 4.247,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.812,
+          "end_sec": 4.812,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP01",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP01_shot01"
+        },
+        {
+          "duration_sec": 4.811,
+          "end_sec": 9.623,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP01",
+          "start_sec": 4.812,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP01_shot02"
+        },
+        {
+          "duration_sec": 4.812,
+          "end_sec": 14.435,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP01",
+          "start_sec": 9.623,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP01_shot03"
+        },
+        {
+          "duration_sec": 4.812,
+          "end_sec": 19.247,
+          "index": 4,
+          "parent_story_clip": "EP05_CLIP01",
+          "start_sec": 14.435,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP01_shot04"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP02",
+      "duration_sec": 15.408,
+      "generation_risk": 5,
+      "grammar_need": 0,
+      "label": "猛虎快刀：肉盾被劈开",
+      "narrative_weight": 0,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 25,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.408,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.136,
+          "end_sec": 5.136,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP02",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP02_shot01"
+        },
+        {
+          "duration_sec": 5.136,
+          "end_sec": 10.272,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP02",
+          "start_sec": 5.136,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP02_shot02"
+        },
+        {
+          "duration_sec": 5.136,
+          "end_sec": 15.408,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP02",
+          "start_sec": 10.272,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP02_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP03",
+      "duration_sec": 19.89,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "连斩三狼：群妖胆寒",
+      "narrative_weight": 2,
+      "pilot_candidate": true,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 25,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 4.89,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.973,
+          "end_sec": 4.973,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP03",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP03_shot01"
+        },
+        {
+          "duration_sec": 4.972,
+          "end_sec": 9.945,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP03",
+          "start_sec": 4.973,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP03_shot02"
+        },
+        {
+          "duration_sec": 4.973,
+          "end_sec": 14.918,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP03",
+          "start_sec": 9.945,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP03_shot03"
+        },
+        {
+          "duration_sec": 4.972,
+          "end_sec": 19.89,
+          "index": 4,
+          "parent_story_clip": "EP05_CLIP03",
+          "start_sec": 14.918,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP03_shot04"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP05_CLIP04",
+      "duration_sec": 10.479,
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "弱肉强食反打：青面郎君破防",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 16,
+      "risk_tags": [
+        "long_clip_8s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 11.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite"
+      ],
+      "clip": "EP05_CLIP05",
+      "duration_sec": 11.798,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "青影扑面：闻弦境正主下场",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "template_required",
+      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "risk_score": 23,
+      "risk_tags": [
+        "long_clip_8s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP06",
+      "duration_sec": 12.093,
+      "generation_risk": 5,
+      "grammar_need": 0,
+      "label": "血虎跃起：刀爪正面对撞",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 22,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "multi_character",
+        "vfx_or_asset",
+        "spectacle_fight_exchange"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.031,
+          "end_sec": 4.031,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP06",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP06_shot01"
+        },
+        {
+          "duration_sec": 4.031,
+          "end_sec": 8.062,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP06",
+          "start_sec": 4.031,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP06_shot02"
+        },
+        {
+          "duration_sec": 4.031,
+          "end_sec": 12.093,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP06",
+          "start_sec": 8.062,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP06_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP07",
+      "duration_sec": 26.545,
+      "generation_risk": 5,
+      "grammar_need": 2,
+      "label": "两败俱伤：闻弦境代价",
+      "narrative_weight": 2,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 21,
+      "risk_tags": [
+        "long_clip_12s",
+        "high_motion",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 11.545,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.309,
+          "end_sec": 5.309,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP07",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP07_shot01"
+        },
+        {
+          "duration_sec": 5.309,
+          "end_sec": 10.618,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP07",
+          "start_sec": 5.309,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP07_shot02"
+        },
+        {
+          "duration_sec": 5.309,
+          "end_sec": 15.927,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP07",
+          "start_sec": 10.618,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP07_shot03"
+        },
+        {
+          "duration_sec": 5.309,
+          "end_sec": 21.236,
+          "index": 4,
+          "parent_story_clip": "EP05_CLIP07",
+          "start_sec": 15.927,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP07_shot04"
+        },
+        {
+          "duration_sec": 5.309,
+          "end_sec": 26.545,
+          "index": 5,
+          "parent_story_clip": "EP05_CLIP07",
+          "start_sec": 21.236,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP07_shot05"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP08",
+      "duration_sec": 15.897,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "飞鹰门护主：借人墙开挂",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 18,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "many_named_characters",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 18.0,
+          "min": 10.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.299,
+          "end_sec": 5.299,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP08",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP08_shot01"
+        },
+        {
+          "duration_sec": 5.299,
+          "end_sec": 10.598,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP08",
+          "start_sec": 5.299,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP08_shot02"
+        },
+        {
+          "duration_sec": 5.299,
+          "end_sec": 15.897,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP08",
+          "start_sec": 10.598,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP08_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "defer_to_composite",
+        "split_video_shots"
+      ],
+      "clip": "EP05_CLIP09",
+      "duration_sec": 21.036,
+      "generation_risk": 5,
+      "grammar_need": 1,
+      "label": "百妖谱开闸：天地黑白集尾",
+      "narrative_weight": 2,
+      "pilot_candidate": false,
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+      "risk_score": 13,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "large_expression_span",
+        "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 0.0,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 22.0,
+          "min": 16.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.259,
+          "end_sec": 5.259,
+          "index": 1,
+          "parent_story_clip": "EP05_CLIP09",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP09_shot01"
+        },
+        {
+          "duration_sec": 5.259,
+          "end_sec": 10.518,
+          "index": 2,
+          "parent_story_clip": "EP05_CLIP09",
+          "start_sec": 5.259,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP09_shot02"
+        },
+        {
+          "duration_sec": 5.259,
+          "end_sec": 15.777,
+          "index": 3,
+          "parent_story_clip": "EP05_CLIP09",
+          "start_sec": 10.518,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP09_shot03"
+        },
+        {
+          "duration_sec": 5.259,
+          "end_sec": 21.036,
+          "index": 4,
+          "parent_story_clip": "EP05_CLIP09",
+          "start_sec": 15.777,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP05_CLIP09_shot04"
+        }
+      ]
+    }
+  ],
+  "episode": "第5集",
+  "findings": [],
+  "kind": "n2d_shot_split_decision_plan",
+  "notes": [
+    "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
+    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。",
+    "compress_before_video 表示先改编剧表达，不应把啰嗦剧情直接切成多个付费视频段。"
+  ],
+  "ok": true,
+  "summary": {
+    "add_anchor": 0,
+    "clips": 9,
+    "compress_before_video": 0,
+    "defer_to_composite": 9,
+    "direct_submit_blocked": 6,
+    "keep_single": 0,
+    "split_or_template": 9,
+    "story_economy_over_budget": 4,
+    "template_required": 9,
+    "video_shot_split": 7
+  }
+}

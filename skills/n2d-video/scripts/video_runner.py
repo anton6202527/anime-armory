@@ -83,6 +83,9 @@ ZH_PROMPT_RE = re.compile(r"###\s*视频 prompt（中文[^`]*```(?:\w+)?\s*(.*?)
 FENCE_RE = re.compile(r"```(?:\w+)?\s*(.*?)```", re.DOTALL)
 DURATION_RE = re.compile(r"时长\s*([0-9]+(?:\.[0-9]+)?)\s*s", re.IGNORECASE)
 FILENAME_UNSAFE_RE = re.compile(r"[\\/:*?\"<>|\r\n\t]+")
+VIDEO_SHOT_PLAN_THRESHOLD_SEC = 12.0
+VIDEO_SHOT_HARD_MAX_SEC = 15.0
+VIDEO_SHOT_TARGET_SEC = 6.0
 
 
 def production_dir(root: Path) -> Path:
@@ -493,6 +496,57 @@ def submit_duration(story_duration: Optional[float], minimum: int = 4, maximum: 
     return max(minimum, min(maximum, int(math.ceil(story_duration))))
 
 
+def _story_duration(item: Mapping[str, Any]) -> Optional[float]:
+    value = item.get("story_duration")
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        match = re.search(r"\d+(?:\.\d+)?", value)
+        if match:
+            return float(match.group(0))
+    return None
+
+
+def needs_physical_video_shot_split(item: Mapping[str, Any]) -> bool:
+    duration = _story_duration(item)
+    return duration is not None and duration > VIDEO_SHOT_PLAN_THRESHOLD_SEC
+
+
+def direct_submit_forbidden(item: Mapping[str, Any]) -> bool:
+    duration = _story_duration(item)
+    if duration is None or duration <= VIDEO_SHOT_HARD_MAX_SEC:
+        return False
+    # Split relay / physical video-shot parts are already safe because each part
+    # carries its own short story_duration and a parent pointer.
+    if item.get("relay_parent") or item.get("split_relay_prompt_guard") or item.get("video_shot_segment"):
+        return False
+    return True
+
+
+def video_shot_split_plan(item: Mapping[str, Any]) -> Dict[str, Any]:
+    duration = _story_duration(item)
+    if duration is None:
+        return {
+            "required": False,
+            "reason": "missing_story_duration",
+            "threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
+            "hard_max_sec": VIDEO_SHOT_HARD_MAX_SEC,
+        }
+    count = max(2, int(math.ceil(duration / VIDEO_SHOT_TARGET_SEC))) if duration > VIDEO_SHOT_PLAN_THRESHOLD_SEC else 1
+    return {
+        "required": duration > VIDEO_SHOT_PLAN_THRESHOLD_SEC,
+        "story_duration_sec": round(duration, 3),
+        "threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
+        "hard_max_sec": VIDEO_SHOT_HARD_MAX_SEC,
+        "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
+        "recommended_parts": count,
+        "direct_submit_allowed": duration <= VIDEO_SHOT_HARD_MAX_SEC,
+        "policy": "story_clip may stay long, but paid video_shot generation should use 4-8s physical parts",
+    }
+
+
 def _extract_prompt(block: str) -> str:
     match = ZH_PROMPT_RE.search(block)
     if match:
@@ -695,11 +749,18 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         item["frame_control_mode"] = capability.get("mode")
         item["anchor_consumption"] = frame_plan
         item["anchor_consumption_mode"] = frame_plan.get("consumption_mode")
+        item["video_shot_split_plan"] = video_shot_split_plan(item)
+        force_physical_split = bool(item["video_shot_split_plan"].get("required"))
 
         # 尝试接入原生多帧
         attached_mf = False
-        if supports_mf and anchor_times:
+        if supports_mf and anchor_times and not force_physical_split:
             attached_mf = attach_multiframe(root, item, prompt_text, anchors_by_clip)
+        elif supports_mf and anchor_times and force_physical_split:
+            item["native_multiframe_skip"] = (
+                f"story_clip duration {item['video_shot_split_plan'].get('story_duration_sec')}s "
+                f"> {VIDEO_SHOT_PLAN_THRESHOLD_SEC:g}s; use physical video_shot split instead of one long native multiframe clip"
+            )
         
         # 如果不支持原生多帧，或者 attach 失败，但有中锚 -> 自动化拆段接力 (Split Relay)
         if not attached_mf and anchors_info and anchors_info.get("times"):
@@ -755,6 +816,17 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     part_item["story_duration"] = seg_dur
                     part_item["submit_duration"] = submit_duration(seg_dur)
                     part_item["relay_parent"] = item["clip"]
+                    part_item["story_clip"] = item["clip"]
+                    part_item["video_shot_segment"] = {
+                        "version": 1,
+                        "parent_story_clip": item["clip"],
+                        "video_shot_id": part_item["clip"],
+                        "part_index": p_idx + 1,
+                        "part_total": len(t_list) - 1,
+                        "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
+                        "parent_story_duration_sec": item["video_shot_split_plan"].get("story_duration_sec"),
+                        "reason": "story_clip_longer_than_video_shot_threshold" if force_physical_split else "backend_requires_split_relay",
+                    }
                     part_item["anchor_consumption_mode"] = "split_relay_part"
                     part_item["anchor_consumption_parent_mode"] = frame_plan.get("consumption_mode")
                     part_prompt = split_relay_prompt_text(
@@ -790,6 +862,12 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
             item["anchor_consumption_issue"] = (
                 "mid anchors declared but backend cannot consume native mid anchors"
                 if not supports_last else "mid anchors declared but end frame is missing for split relay"
+            )
+        if force_physical_split and not (anchors_info and anchors_info.get("times")):
+            item["duration_segment_issue"] = (
+                f"story_clip duration {item['video_shot_split_plan'].get('story_duration_sec')}s "
+                f"> {VIDEO_SHOT_PLAN_THRESHOLD_SEC:g}s but storyboard has no continuity.anchors[] for physical video_shot split; "
+                "run n2d-script shot_split_decision + anchor_planner before paid video generation"
             )
         refresh_item_recipe_evidence(root, episode, item)
         items.append(item)
@@ -1176,6 +1254,15 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     item = find_item(manifest, clip)
     if item.get("submit_id") and item.get("status") not in {"failed", "rejected"}:
         raise RuntimeError(f"{item['clip']} already has submit_id={item['submit_id']}; query or reject before resubmitting")
+    if direct_submit_forbidden(item):
+        duration = _story_duration(item)
+        plan = video_shot_split_plan(item)
+        raise RuntimeError(
+            f"{item['clip']} story_duration={duration:g}s exceeds hard single video_shot cap "
+            f"{VIDEO_SHOT_HARD_MAX_SEC:g}s. Do not submit a long story_clip directly. "
+            "Run n2d-script shot_split_decision/anchor_planner and video_runner prepare again so it expands "
+            f"into ~{plan.get('recommended_parts')} physical 4-8s video_shot parts, then submit those part clips."
+        )
     backend_key, adapter = resolve_video_backend(manifest)
     item["cost_provider"] = adapter["provider"]
     args = adapter["submit_args"](item, {**manifest, "_root": str(root)})

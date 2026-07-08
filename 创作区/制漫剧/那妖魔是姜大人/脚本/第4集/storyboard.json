@@ -288,7 +288,23 @@
         "template_alias_note": "原语义模板 dialogue_pressure 已映射到 gate 白名单 dialogue_shot_reverse。",
         "axis": "姜月初站画面上方/前景，陈青源和飞鹰门众人跪在下方/后景；求援者仰视，姜月初俯视，不越过官道轴线。",
         "eyeline": "陈青源抬眼看姜月初黑衣赤纹；姜月初先避开再压回视线，众人视线集中到她身上。",
-        "shot_pairing": "陈青源求援 CU -> 姜月初沉默中近景 -> 众人跪地广角 -> 姜月初内心拒绝反打。"
+        "shot_pairing": "陈青源求援 CU -> 姜月初沉默中近景 -> 众人跪地广角 -> 姜月初内心拒绝反打。",
+        "screen_sides": {
+          "screen_upper_foreground": "CHAR_01/镇魔司伪装态（姜月初）",
+          "screen_lower_background": "CHAR_04/常态（陈青源）与飞鹰门众人",
+          "locked_rule": "官道轴线不越线；反打中姜月初保持上方/前景压迫位，陈青源保持低位/后景仰视位，不左右互换。"
+        },
+        "coverage_order": [
+          "陈青源低位求援 CU / MCU",
+          "姜月初沉默中近景反应",
+          "飞鹰门众人跪地广角建立",
+          "姜月初内心拒绝的 clean single 反打",
+          "陈青源眼神暗下作为落幅"
+        ],
+        "camera_coverage": "clean single + low-angle reaction + kneeling group establishing + cutaway/reaction；清晰近景默认拆正反打，不把姜月初、陈青源和众人挤成多人特写。",
+        "lens_height_distance_match": "A/B 反打保持 50-85mm 中长焦、相近镜头距离和冷灰侧光；陈青源低机位仰视、姜月初略高机位俯压用于权力关系，但背景深度、焦段质感和官道方向连续。",
+        "crossing_axis_policy": "默认禁止越轴；若必须重新定向，只能先回到官道双人/群像建立镜或空镜确认主轴，再进入下一组反打。",
+        "buffer_or_reestablishing": "众人跪地广角、官道火把/黑衣赤纹插入、陈青源眼神 cutaway 可作为缓冲和重新定向镜；不得直接跳到反轴近景。"
       },
       "shots": [
         {
@@ -2718,7 +2734,49 @@
         "physics_guard": "狼爪只从青面郎君手部弹出，不凭空悬浮；爪尖不穿帮到姜月初身体；群狼不越过主轴。",
         "combat_micro_expression": "青面郎君怒意和被压住后的羞恼可见，姜月初保持冷脸不退。",
         "secondary_motion": "姜月初衣摆和火把轻晃，狼爪弹出时带短促寒光和尘土震动。",
-        "apex_light": "狼爪弹出瞬间给冷白爪刃高光，背景压暗，杀令后切黑。"
+        "apex_light": "狼爪弹出瞬间给冷白爪刃高光，背景压暗，杀令后切黑。",
+        "interaction_graph": [
+          {
+            "participants": [
+              "CHAR_05",
+              "CHAR_01",
+              "GROUP_狼妖群"
+            ],
+            "entities": [
+              "CHAR_05.right_hand",
+              "VFX_狼爪寒光",
+              "CHAR_01.body",
+              "GROUP_狼妖群.background_layer"
+            ],
+            "contact_points": [
+              {
+                "a": "CHAR_05.right_hand.finger_knuckles",
+                "b": "VFX_狼爪寒光.root",
+                "state": "attached_to_hand",
+                "frames": "KF1-KF2"
+              }
+            ],
+            "body_part_ownership": {
+              "wolf_claws": "CHAR_05.right_hand",
+              "no_contact_target": "CHAR_01",
+              "crowd_layer": "GROUP_狼妖群"
+            },
+            "holder_state": {
+              "CHAR_05.right_hand": "爪刃从指节弹出并停住",
+              "CHAR_01": "稳住不退，身体未被接触",
+              "GROUP_狼妖群": "压近但停在青面郎君后侧背景层"
+            },
+            "occlusion_order": [
+              "CHAR_05 foreground claw highlight",
+              "VFX_狼爪寒光",
+              "CHAR_01 separated midground",
+              "GROUP_狼妖群 background"
+            ],
+            "force_direction": "沿上盘村村道纵轴由深处青面郎君推向前景姜月初；只形成威胁压迫，不发生命中。",
+            "release_frame": "无释放/递交；集尾硬断在命令后，第5集再兑现第一击。",
+            "degrade_plan": "若同框交互不稳，拆成青面郎君手部爪刃 ECU、姜月初反打、群狼背景压近三段。"
+          }
+        ]
       },
       "shots": [
         {

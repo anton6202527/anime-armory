@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { message, open } from "@tauri-apps/plugin-dialog";
 import { Home } from "./pages/Home";
@@ -6,6 +6,7 @@ import { Line } from "./pages/Line";
 import { Operation } from "./pages/Operation";
 import { GlobalTooltip } from "./components/GlobalTooltip";
 import { TopTabs, type WorkTab } from "./components/TopTabs";
+import { Codicon } from "./components/Codicon";
 import {
   DEFAULT_REPO,
   defaultWorkspace,
@@ -45,6 +46,79 @@ function capTabsByLru(tabs: WorkTab[]): WorkTab[] {
   return tabs.filter((tab) => !drop.has(tab.id));
 }
 
+type FileStatusInfo = {
+  root: string;
+  path: string;
+  name: string;
+  kind: string;
+  ext: string;
+  size: number | null;
+  dirty: boolean;
+};
+
+function formatFileBytes(value?: number | null): string {
+  if (value == null) return "-";
+  if (value < 1024) return `${value} B`;
+  if (value < 1024 * 1024) return `${Math.round(value / 1024)} KB`;
+  return `${(value / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function fileFormatLabel(file: FileStatusInfo): string {
+  if (file.ext) return file.ext.toUpperCase();
+  if (file.kind) return file.kind.toUpperCase();
+  return "TEXT";
+}
+
+function AppStatusBar({
+  activeTab,
+  fileStatus,
+  workspaceRoot,
+}: {
+  activeTab: WorkTab | null;
+  fileStatus: FileStatusInfo | null;
+  workspaceRoot: string;
+}) {
+  const { t } = useI18n();
+  const hasFile = Boolean(fileStatus?.path);
+  const title = activeTab?.root.name ?? t("status.home");
+  const filePath = fileStatus?.path ?? "";
+  return (
+    <div className="statusbar">
+      <div className="statusbar-left">
+        <span className="statusbar-item statusbar-work" title={activeTab?.root.path ?? workspaceRoot}>
+          {title}
+        </span>
+        {hasFile ? (
+          <span className="statusbar-item statusbar-file" title={filePath}>
+            {fileStatus?.dirty ? "● " : ""}
+            {filePath}
+          </span>
+        ) : (
+          <span className="statusbar-item statusbar-muted">{t("status.noFile")}</span>
+        )}
+      </div>
+      <div className="statusbar-right">
+        {hasFile && fileStatus ? (
+          <>
+            {fileStatus.dirty && <span className="statusbar-item statusbar-warn">{t("status.unsaved")}</span>}
+            <span className="statusbar-item">{fileFormatLabel(fileStatus)}</span>
+            <span className="statusbar-item">{formatFileBytes(fileStatus.size)}</span>
+          </>
+        ) : null}
+        <button
+          type="button"
+          className="statusbar-button"
+          title={t("status.notifications")}
+          aria-label={t("status.notifications")}
+        >
+          <Codicon name="bell" />
+          <span>0</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function App() {
   const { setLanguage, t } = useI18n();
   // skills repo (runs the pipeline) — inferred live checkout on a dev machine,
@@ -63,7 +137,11 @@ export function App() {
   const [terminalVisible, setTerminalVisible] = useState(() => {
     return window.localStorage.getItem("aa.terminalVisible") !== "false";
   });
+  const [fileStatusByRoot, setFileStatusByRoot] = useState<Record<string, FileStatusInfo | null>>({});
+  const [newTerminalRequest, setNewTerminalRequest] = useState({ seq: 0, targetId: null as string | null });
+  const activeIdRef = useRef<string | null>(null);
   const tabUseSeq = useRef(0);
+  activeIdRef.current = activeId;
 
   useEffect(() => {
     installSkinPlugin();
@@ -93,16 +171,45 @@ export function App() {
         else fn();
       })
       .catch((e) => console.error("menu terminal listener failed", e));
+    const unlistenNewTerminalPromise = listen("anime-armory:new-terminal", () => {
+      window.localStorage.setItem("aa.terminalVisible", "true");
+      setTerminalVisible(true);
+      setNewTerminalRequest((request) => ({
+        seq: request.seq + 1,
+        targetId: activeIdRef.current,
+      }));
+    });
+    let unlistenNewTerminal: (() => void) | null = null;
+    unlistenNewTerminalPromise
+      .then((fn) => {
+        if (alive) unlistenNewTerminal = fn;
+        else fn();
+      })
+      .catch((e) => console.error("menu new terminal listener failed", e));
     return () => {
       alive = false;
       unlistenLanguage?.();
       unlistenTerminal?.();
+      unlistenNewTerminal?.();
     };
   }, [setLanguage]);
 
   useEffect(() => {
     setAppTerminalVisible(terminalVisible).catch((e) => console.error("terminal menu sync failed", e));
   }, [terminalVisible]);
+
+  useEffect(() => {
+    const onFileStatus = (event: Event) => {
+      const detail = (event as CustomEvent<FileStatusInfo>).detail;
+      if (!detail?.root) return;
+      setFileStatusByRoot((prev) => ({
+        ...prev,
+        [detail.root]: detail.path ? detail : null,
+      }));
+    };
+    window.addEventListener("anime-armory:file-status", onFileStatus);
+    return () => window.removeEventListener("anime-armory:file-status", onFileStatus);
+  }, []);
 
   function nextTabUse() {
     tabUseSeq.current += 1;
@@ -133,7 +240,7 @@ export function App() {
     window.dispatchEvent(new Event("resize"));
   }, [activeId, terminalVisible]);
 
-  async function pickWorkspace() {
+  const pickWorkspace = useCallback(async () => {
     const picked = await open({ directory: true, multiple: false, defaultPath: workspaceRoot });
     if (typeof picked === "string") {
       // Complete isolation: the works workspace must never overlap the project
@@ -150,7 +257,24 @@ export function App() {
       setHomeRoute({ kind: "home" });
       setActiveId(null);
     }
-  }
+  }, [repoRoot, t, workspaceRoot]);
+
+  useEffect(() => {
+    let alive = true;
+    let unlistenSwitchWorkspace: (() => void) | null = null;
+    listen("anime-armory:switch-workspace", () => {
+      void pickWorkspace();
+    })
+      .then((fn) => {
+        if (alive) unlistenSwitchWorkspace = fn;
+        else fn();
+      })
+      .catch((e) => console.error("menu switch workspace listener failed", e));
+    return () => {
+      alive = false;
+      unlistenSwitchWorkspace?.();
+    };
+  }, [pickWorkspace]);
 
   // open (or focus) a work as a top-bar tab
   function openWork(line: LineInfo, root: WorkRoot) {
@@ -202,6 +326,9 @@ export function App() {
     return <div className="home"><h1>{t("app.name")}</h1><div className="empty">{t("app.initWorkspace")}</div></div>;
   }
 
+  const activeTab = activeId ? tabs.find((tab) => tab.id === activeId) ?? null : null;
+  const activeFileStatus = activeId ? fileStatusByRoot[activeId] ?? null : null;
+
   return (
     <div className="app-shell">
       <TopTabs
@@ -247,7 +374,20 @@ export function App() {
               root={t.root}
               active={activeId === t.id}
               terminalVisible={terminalVisible}
+              newTerminalRequestSeq={newTerminalRequest.seq}
+              newTerminalRequestTargetId={newTerminalRequest.targetId}
               onRootChanged={(root) => replaceWorkRoot(t.id, t.line, root)}
+              onCloseTerminal={() => {
+                window.localStorage.setItem("aa.terminalVisible", "false");
+                setTerminalVisible(false);
+              }}
+              onToggleTerminal={() => {
+                setTerminalVisible((visible) => {
+                  const next = !visible;
+                  window.localStorage.setItem("aa.terminalVisible", String(next));
+                  return next;
+                });
+              }}
               onBack={() => {
                 setActiveId(null);
                 setHomeRoute({ kind: "line", line: t.line });
@@ -256,6 +396,8 @@ export function App() {
           </div>
         ))}
       </div>
+
+      <AppStatusBar activeTab={activeTab} fileStatus={activeFileStatus} workspaceRoot={workspaceRoot} />
 
       {skillsLine && (
         <Suspense fallback={null}>

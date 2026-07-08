@@ -167,6 +167,41 @@ def test_prop_shape_review_targets_unconfirmed_high_risk_prop_png(tmp_path: Path
     assert targets[0]["confirmed"] is False
 
 
+def test_asset_shape_review_covers_weapon_and_clip_without_underscore(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [{
+            "id": "WEAPON_01",
+            "type": "weapon",
+            "name": "横刀",
+            "reference_group": {"primary": "出图/共享/图片/定妆_武器_横刀.png"},
+            "constraints": {
+                "structure": "一柄一刃单刃横刀，刀背非刃",
+                "must_not_have": ["双刃", "多刃", "双向开刃", "第二把刀刃"],
+            },
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第5集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text(
+        "## 镜头 1（EP05_CLIP01 横刀出鞘）\n"
+        "**资产引用注册层**：`WEAPON_01`；禁形：双刃、多刃、双向开刃、第二把刀刃。\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第5集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip01_first.png").write_bytes(b"not-a-real-png")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第5集")
+
+    assert len(targets) == 1
+    assert targets[0]["asset"] == "WEAPON_01"
+    assert targets[0]["asset_type"] == "weapon"
+    assert targets[0]["png"] == "图片/Clip01_first.png"
+    assert targets[0]["confirmed"] is False
+
+
 def test_prop_shape_review_skips_declared_target_until_png_exists(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -975,6 +1010,29 @@ def test_lint_passes_tail_identity_handoff_with_target_reference() -> None:
         "以 `CHAR_03/人皮态`、`定妆_柳娘子_人皮态_脸部特写.png` 锁目标身份。"
     )
     findings = image_qc.lint_shot_block(blk, valid, _registry_forms_for_tail_handoff())
+    assert not any(f["code"].startswith("tail_identity_handoff_") for f in findings)
+
+
+def test_lint_tail_identity_handoff_ignores_vfx_weak_alias() -> None:
+    valid = {"CHAR_01", "CHAR_01/常态", "CHAR_03", "CHAR_03/诈死复苏态"}
+    forms = _registry_forms_for_tail_handoff() + [{
+        "id": "CHAR_03",
+        "form": "诈死复苏态",
+        "key": "CHAR_03/诈死复苏态",
+        "asset_key": "CHAR_03__诈死复苏态",
+        "display": "CHAR_03__诈死复苏态",
+        "strong_aliases": {"CHAR_03", "CHAR_03/诈死复苏态", "CHAR_03__诈死复苏态"},
+        "weak_aliases": {"虎山神", "虎妖"},
+    }]
+    blk = _char_block("Clip 01 接力", char_id="CHAR_01/常态")
+    blk["body"] += "\n".join([
+        "",
+        "**尾帧接力生成方式**：尾帧以本镜首帧 image2image 派生，VFX_虎山神摹影只作后段气息。",
+        "**尾帧专用重抽提示**：尾帧身份交接=`CHAR_01/常态` asset_key=`沈念_常态`。",
+    ])
+
+    findings = image_qc.lint_shot_block(blk, valid, forms)
+
     assert not any(f["code"].startswith("tail_identity_handoff_") for f in findings)
 
 

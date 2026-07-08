@@ -1,0 +1,93 @@
+{
+  "kind": "n2d_adaptation_triage",
+  "version": 1,
+  "episode": "第5集",
+  "status": "confirmed",
+  "source_raw_sha256": "059ef531fb4677dcb72d2686c4fd54c9688bd7e835a1272518db66a56ee071b1",
+  "core_adaptation_choice": "第5集完整承接第4集“杀了她”的开战命令：不再铺设定，直接用群狼扑杀、第一刀、连斩三狼、青面郎君亲自下场和百妖谱开挂硬断构成紧凑战斗集。原文中对狼妖本能、姜月初战力计算和飞鹰门反应的解释压缩进动作结果与少量旁白。",
+  "items": [
+    {
+      "id": "EP05_TRIAGE_001",
+      "source_span": "raw.txt:第4集尾钩后狼妖冲锋，陈青源心神绷紧",
+      "beat_function": ["冷开承接", "即时危机", "首屏动作钩"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "第4集已经把观众悬念挂在“杀了她”，第5集必须0-3秒兑现群狼扑杀和姜月初按刀。",
+      "delivery": "EP05_CLIP01；狼妖群低机位冲锋、飞鹰门惊惧、横刀出鞘。",
+      "risk_if_removed": "第4集尾钩失约，第5集开场会像重新起步。"
+    },
+    {
+      "id": "EP05_TRIAGE_002",
+      "source_span": "raw.txt:姜月初猛虎快刀第一刀，青面郎君抓同伴挡刀",
+      "beat_function": ["战斗爽点", "反派残忍", "主角战力兑现"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "第一刀是本集上半段核心爽点，但血腥细节必须克制；重点放在青面郎君“接不下”的惊惧和抓同伴挡刀的卑劣。",
+      "delivery": "EP05_CLIP02；刀光、青面郎君露怯、肉盾剪影/血尘遮挡。",
+      "risk_if_removed": "姜月初圆满猛虎快刀缺第一次视觉证明。"
+    },
+    {
+      "id": "EP05_TRIAGE_003",
+      "source_span": "raw.txt:三颗狼头飞起，余妖恐惧停住",
+      "beat_function": ["连斩升级", "小妖恐惧", "群战压缩"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "群狼战不展开成多轮消耗，三颗狼头作为一组视觉结果完成“对小妖碾压”的信息。",
+      "delivery": "EP05_CLIP03；飞鹰门震撼、姜月初再冲、三狼连斩、余妖刹停。",
+      "risk_if_removed": "青面郎君暴怒和亲自下场缺触发因果。"
+    },
+    {
+      "id": "EP05_TRIAGE_004",
+      "source_span": "raw.txt:姜月初用弱肉强食反讽青面郎君",
+      "beat_function": ["价值观反打", "台词爽点", "反派破防"],
+      "decision": "dramatize",
+      "change_type": "preserve",
+      "reason": "上一集反派把吃人合理化，本集必须把这套逻辑回掷给它，形成比单纯打斗更强的情绪回报。",
+      "delivery": "EP05_CLIP04；反打构图，姜月初冷声两句，青面郎君怒到失态。",
+      "risk_if_removed": "战斗会只剩动作，少了“轮到你被弱肉强食”的打脸爽点。"
+    },
+    {
+      "id": "EP05_TRIAGE_005",
+      "source_span": "raw.txt:青面郎君闻弦境爆发，姜月初血虎虚影硬接，两败俱伤",
+      "beat_function": ["主将下场", "高阶危险", "代价证明"],
+      "decision": "dramatize",
+      "change_type": "compress",
+      "reason": "必须证明闻弦境不是小妖割草；但交锋压成青影扑杀、血虎跃起、刀爪撞点、两败俱伤四拍，避免拖成长篇打斗。",
+      "delivery": "EP05_CLIP05-07；黑煞、血虎虚影、刀爪对撞、姜月初腹部爪伤。",
+      "risk_if_removed": "后续开挂会显得无必要，青面郎君压迫不足。"
+    },
+    {
+      "id": "EP05_TRIAGE_006",
+      "source_span": "raw.txt:陈青源等人护住姜月初，姜月初查看道行余额并把道行灌入虎妖画卷",
+      "beat_function": ["群像回报", "系统流兑现", "集尾钩"],
+      "decision": "dramatize",
+      "change_type": "intensify",
+      "reason": "飞鹰门护主回收姜月初救人的情绪账，百妖谱开挂回收系统设定；集尾必须卡在新力量启动前，不能提前展示结果。",
+      "delivery": "EP05_CLIP08-09；人墙成形、道行一百五十二年、道行灌虎妖画卷、天地黑白硬断。",
+      "risk_if_removed": "本集只完成战斗过程，没有系统流爽点和第6集留存钩。"
+    }
+  ],
+  "stage1_retention_curve": {
+    "cold_open": "群狼扑杀直接兑现第4集命令，姜月初横刀出鞘。",
+    "hook_1": "第一刀逼得青面郎君抓同伴挡刀，观众知道主角真的能打。",
+    "hook_2": "三狼连斩后，姜月初把“弱肉强食”反打回去，青面郎君破防。",
+    "mid_turn": "闻弦境正主下场，姜月初硬接后也付出腹部受伤代价。",
+    "ending_hook": "飞鹰门护主争取时间，百妖谱道行灌入虎妖画卷，黑白硬断。"
+  },
+  "decision_values": {
+    "dramatize": "必须成戏，进入 voiceover/storyboard",
+    "narrate": "用短旁白/独白/系统音带过",
+    "defer": "后文通过动作、道具、对白或结果带出",
+    "merge": "并入相邻强节拍，不独立成 clip",
+    "omit": "重复或非剧情必要，删掉不伤因果/动机/伏笔/状态"
+  },
+  "change_type_values": {
+    "preserve": "保留原功能和主要细节",
+    "compress": "压缩段落或信息密度",
+    "reorder": "重排揭示顺序或把解释延后",
+    "rewrite_detail": "改某个细节表达，但保留剧情功能",
+    "intensify": "强化冲突/压迫/爽点/情绪峰",
+    "add_hook": "为短剧开场/集尾补视觉或台词钩子",
+    "combine_minor_role": "合并不重要小角色或路人功能"
+  }
+}

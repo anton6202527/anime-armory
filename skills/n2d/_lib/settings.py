@@ -204,7 +204,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("中段锚帧默认", ("n2d",), ("开启", "关闭")),
     # C5 生成轴=具体模型（默认 GPT Image 2）。`生图AI` 保留为访问入口/渠道（壳）。
     SettingSpec("生图模型", ("n2d",), ("GPT Image 2", "Seedream 5.0", "Seedream 4.5", "Nano Banana Pro", "Gemini 3 Pro Image", "Flux 2 Pro", "可灵主体库模型", "自定义"), key_aliases=("生图model", "image_model"), parameterized=True),
-    SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), key_aliases=("生图渠道", "生图入口"), parameterized=True),
+    SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), key_aliases=("生图渠道", "生图入口"), parameterized=True),
     SettingSpec("生视频模型", ("n2d",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
     SettingSpec("生视频渠道", ("n2d",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.

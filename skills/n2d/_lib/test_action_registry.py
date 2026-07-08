@@ -30,6 +30,7 @@ def test_script_stage1_declares_source_comprehension_prework():
 
 def test_image_prompt_declares_production_breakdown_prework():
     spec = reg.stage_action_spec("image_prompt")
+    assert "story_economy_audit" in spec["prework_steps"]
     assert "shot_intent_gate" in spec["prework_steps"]
     assert "production_breakdown" in spec["prework_steps"]
 

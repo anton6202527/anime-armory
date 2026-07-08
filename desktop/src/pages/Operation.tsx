@@ -54,9 +54,12 @@ const OP_BOTTOM_MIN_HEIGHT = 180;
 const OP_BOTTOM_MAX_HEIGHT = 440;
 const OP_LEFT_RAIL_WIDTH = 48;
 const FILES_SIDE_DEFAULT_WIDTH = 280;
-const FILES_SPLITTER_WIDTH = 7;
 type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
 type TerminalDock = "side" | "bottom";
+
+function isMacPlatform(): boolean {
+  return /Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
+}
 
 function readFilesSideWidth(): number {
   const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
@@ -70,10 +73,26 @@ export function Operation(props: {
   root: WorkRoot;
   active: boolean;
   terminalVisible: boolean;
+  newTerminalRequestSeq: number;
+  newTerminalRequestTargetId: string | null;
   onRootChanged: (root: WorkRoot) => void;
+  onCloseTerminal: () => void;
+  onToggleTerminal: () => void;
   onBack: () => void;
 }) {
-  const { repoRoot, line, root, active, terminalVisible, onRootChanged, onBack } = props;
+  const {
+    repoRoot,
+    line,
+    root,
+    active,
+    terminalVisible,
+    newTerminalRequestSeq,
+    newTerminalRequestTargetId,
+    onRootChanged,
+    onCloseTerminal,
+    onToggleTerminal,
+    onBack,
+  } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [canvas, setCanvas] = useState<CanvasData | null>(null);
@@ -147,9 +166,23 @@ export function Operation(props: {
       setSidePanelOpen(false);
       return;
     }
+    showLeft(nextTab);
+  }
+
+  function showLeft(nextTab: LeftTab) {
     setTab(nextTab);
     setSidePanelOpen(true);
     setLeftCollapsed(false);
+  }
+
+  function openWorkFile(path: string) {
+    window.setTimeout(() => {
+      window.dispatchEvent(
+        new CustomEvent("anime-armory:open-work-file", {
+          detail: { root: root.path, path },
+        }),
+      );
+    }, 0);
   }
 
   const probeAgents = useCallback((force = false) => {
@@ -273,11 +306,26 @@ export function Operation(props: {
   }, [terminalVisible]);
 
   useEffect(() => {
+    if (
+      !active ||
+      !terminalVisible ||
+      newTerminalRequestSeq <= 0 ||
+      newTerminalRequestTargetId !== root.path
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(() => termRef.current?.newSession(), 0);
+    return () => window.clearTimeout(timer);
+  }, [active, terminalVisible, newTerminalRequestSeq, newTerminalRequestTargetId, root.path]);
+
+  useEffect(() => {
     const syncFilesSideWidth = () => setFilesSideWidth(readFilesSideWidth());
     syncFilesSideWidth();
+    window.addEventListener("anime-armory:files-side-width-changed", syncFilesSideWidth);
     window.addEventListener("resize", syncFilesSideWidth);
     window.addEventListener("storage", syncFilesSideWidth);
     return () => {
+      window.removeEventListener("anime-armory:files-side-width-changed", syncFilesSideWidth);
       window.removeEventListener("resize", syncFilesSideWidth);
       window.removeEventListener("storage", syncFilesSideWidth);
     };
@@ -354,6 +402,48 @@ export function Operation(props: {
       .then(() => mediaAllowRoot(root.path))
       .catch(() => {});
   }, [active, secondaryReady, shouldReadCanvas, root.path]);
+
+  useEffect(() => {
+    if (!active) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase();
+      const cmd = event.metaKey || event.ctrlKey;
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName.toLowerCase();
+      const editingText =
+        tag === "input" ||
+        tag === "textarea" ||
+        tag === "select" ||
+        target?.isContentEditable;
+
+      if (cmd && event.shiftKey && key === "e") {
+        event.preventDefault();
+        showLeft("files");
+      } else if (cmd && event.shiftKey && key === "f") {
+        event.preventDefault();
+        showLeft("search");
+      } else if ((cmd || event.ctrlKey) && event.shiftKey && key === "g") {
+        event.preventDefault();
+        showLeft("changes");
+      } else if (cmd && event.shiftKey && key === "x") {
+        event.preventDefault();
+        showLeft("skills");
+      } else if (cmd && !event.shiftKey && key === "b" && !editingText) {
+        event.preventDefault();
+        setLeftCollapsed((collapsed) => !collapsed);
+        setSidePanelOpen((open) => (leftCollapsed ? true : open));
+      } else if (cmd && !event.shiftKey && key === "j" && !editingText) {
+        event.preventDefault();
+        onToggleTerminal();
+      } else if (event.ctrlKey && !event.metaKey && !event.shiftKey && event.key === "`") {
+        event.preventDefault();
+        if (!terminalVisible) onToggleTerminal();
+        window.setTimeout(() => termRef.current?.focus(), 100);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [active, leftCollapsed, onToggleTerminal, terminalVisible]);
 
   // watch the work root; debounce a stream of fs events into one refresh
   const timer = useRef<number | null>(null);
@@ -501,8 +591,22 @@ export function Operation(props: {
     dockTarget === "bottom" ? t("operation.dockTerminalBottom") : t("operation.dockTerminalSide");
   const resizeTerminalAria =
     terminalDock === "bottom" ? t("operation.resizeTerminalHeightAria") : t("operation.resizeTerminalAria");
-  const resizeTerminalTitle =
-    terminalDock === "bottom" ? t("operation.resizeTerminalHeightTitle") : t("operation.resizeTerminalTitle");
+  const shortcut = isMacPlatform()
+    ? {
+        files: "⌘⇧E",
+        search: "⌘⇧F",
+        changes: "⌃⇧G",
+        skills: "⌘⇧X",
+        hidePanel: "⌘J",
+      }
+    : {
+        files: "Ctrl+Shift+E",
+        search: "Ctrl+Shift+F",
+        changes: "Ctrl+Shift+G",
+        skills: "Ctrl+Shift+X",
+        hidePanel: "Ctrl+J",
+      };
+  const shortcutTitle = (label: string, keys: string) => `${label} (${keys})`;
   const terminalPanelStyle =
     terminalDock === "bottom"
       ? undefined
@@ -512,7 +616,7 @@ export function Operation(props: {
   const tabHasFileSizedSidebar = tab === "files" || tab === "search" || tab === "changes";
   const bottomDockSidebarWidth =
     !leftCollapsed && sidePanelOpen && tabHasFileSizedSidebar
-      ? OP_LEFT_RAIL_WIDTH + filesSideWidth + FILES_SPLITTER_WIDTH
+      ? OP_LEFT_RAIL_WIDTH + filesSideWidth
       : OP_LEFT_RAIL_WIDTH;
   const opBodyStyle = {
     "--op-files-side-width": `${Math.round(filesSideWidth)}px`,
@@ -569,7 +673,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "files" ? " active" : "")}
-              data-tooltip={t("operation.filesTab")}
+              data-tooltip={shortcutTitle(t("operation.filesTab"), shortcut.files)}
               data-tooltip-placement="right"
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
@@ -579,7 +683,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "search" ? " active" : "")}
-              data-tooltip={t("operation.searchTab")}
+              data-tooltip={shortcutTitle(t("operation.searchTab"), shortcut.search)}
               data-tooltip-placement="right"
               aria-label={t("operation.searchTab")}
               onClick={() => openLeft("search")}
@@ -589,7 +693,7 @@ export function Operation(props: {
             <button
               type="button"
               className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
-              data-tooltip={t("operation.skillsTab")}
+              data-tooltip={shortcutTitle(t("operation.skillsTab"), shortcut.skills)}
               data-tooltip-placement="right"
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
@@ -637,7 +741,7 @@ export function Operation(props: {
                 (sidePanelOpen && tab === "changes" ? " active" : "") +
                 (changeCount ? " dirty" : "")
               }
-              data-tooltip={`${t("operation.changesTab")} · ${changeLabel}`}
+              data-tooltip={`${shortcutTitle(t("operation.changesTab"), shortcut.changes)} · ${changeLabel}`}
               data-tooltip-placement="right"
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
@@ -689,6 +793,7 @@ export function Operation(props: {
                             refreshKey={changeScanKey}
                             baselineVersion={baselineVersion}
                             summary={changeSummary}
+                            onOpenFile={openWorkFile}
                             onArchived={(summary) => {
                               changeSummaryEpochRef.current += 1;
                               setChangeSummary(summary);
@@ -764,7 +869,6 @@ export function Operation(props: {
             role="separator"
             aria-orientation={terminalDock === "bottom" ? "horizontal" : "vertical"}
             aria-label={resizeTerminalAria}
-            title={resizeTerminalTitle}
             onPointerDown={startTerminalResize}
             onDoubleClick={() => {
               if (terminalDock === "bottom") {
@@ -809,6 +913,15 @@ export function Operation(props: {
                   onClick={() => setTerminalDock(dockTarget)}
                 >
                   <span className="terminal-dock-icon" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  className="project-settings-btn terminal-close-btn"
+                  title={shortcutTitle(t("terminal.hidePanel"), shortcut.hidePanel)}
+                  aria-label={t("terminal.hidePanel")}
+                  onClick={onCloseTerminal}
+                >
+                  <Codicon name="close" />
                 </button>
               </>
             }

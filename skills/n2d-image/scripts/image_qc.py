@@ -1064,6 +1064,24 @@ def _matches_alias(text: str, aliases: Set[str]) -> bool:
     return any(alias and alias in text for alias in aliases)
 
 
+WEAK_ALIAS_ASSET_CONTEXT_RE = re.compile(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_?$")
+WEAK_ALIAS_ASSET_WORDS = ("摹影", "妖气", "特效", "光效", "面板", "overlay", "道具", "石碑", "血迹", "横刀", "刀光", "狼爪")
+
+
+def _matches_weak_character_alias(text: str, aliases: Set[str]) -> bool:
+    for alias in sorted((a for a in aliases if a), key=len, reverse=True):
+        for match in re.finditer(re.escape(alias), text):
+            prefix = text[max(0, match.start() - 16):match.start()]
+            if WEAK_ALIAS_ASSET_CONTEXT_RE.search(prefix) or (match.start() > 0 and text[match.start() - 1] == "_"):
+                continue
+            suffix_match = re.match(r"[\u4e00-\u9fffA-Za-z0-9_]{0,16}", text[match.end():])
+            compound = alias + (suffix_match.group(0) if suffix_match else "")
+            if any(word in compound for word in WEAK_ALIAS_ASSET_WORDS):
+                continue
+            return True
+    return False
+
+
 def _mentioned_handoff_forms(body: str, registry_forms: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
     if not registry_forms:
         return []
@@ -1084,7 +1102,7 @@ def _mentioned_handoff_forms(body: str, registry_forms: Optional[List[Dict[str, 
         if key in current_refs or cid in current_refs:
             continue
         strong_hit = _matches_alias(tail_text, form.get("strong_aliases") or set())
-        weak_hit = _matches_alias(tail_text, form.get("weak_aliases") or set())
+        weak_hit = _matches_weak_character_alias(tail_text, form.get("weak_aliases") or set())
         if not (strong_hit or weak_hit):
             continue
         # 同一角色多形态只按强别名判交接，避免"沈念"同时命中沈念所有形态。
@@ -2658,12 +2676,21 @@ def load_prop_shape_confirmations(root: Path, ep: str) -> Set[Tuple[str, str]]:
 
 
 def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optional[str] = None) -> List[str]:
-    """返回某 Clip 已落档 PNG（相对 出图/<ep>），用于道具逐图复核。"""
+    """返回某 Clip 已落档 PNG（相对 出图/<ep>），用于资产逐图复核。
+
+    兼容 `Clip_01` 与本项目常见的 `Clip01_first.png` 命名；旧实现只匹配
+    `Clip_01*.png`，会漏掉无下划线命名的正式图。
+    """
     img_dir = root / "出图" / ep / "图片"
     out: List[str] = []
     if shot and img_dir.is_dir():
-        for p in sorted(img_dir.glob(f"{shot}*.png")):
-            out.append((Path("图片") / p.name).as_posix())
+        patterns = [f"{shot}*.png"]
+        m = re.fullmatch(r"Clip_(\d{2})", str(shot))
+        if m:
+            patterns.append(f"Clip{m.group(1)}*.png")
+        for pattern in patterns:
+            for p in sorted(img_dir.glob(pattern)):
+                out.append((Path("图片") / p.name).as_posix())
     if not out and fallback:
         f = str(fallback)
         if f.startswith(f"出图/{ep}/"):
@@ -2677,13 +2704,17 @@ def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optio
     return sorted(dict.fromkeys(out))
 
 
+ASSET_SHAPE_REVIEW_TYPES = {"prop", "weapon", "outfit", "costume", "vfx", "effect"}
+
+
 def prop_shape_review_targets(root: Path, ep: str,
                               asset_index: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
-    """高风险道具（PROP + must_not_have）逐图禁形/尺寸复核目标。
+    """高风险物料（PROP/WEAPON/OUTFIT/VFX + must_not_have）逐图禁形/尺寸复核目标。
 
     文字/registry 只能防止继续把“壶嘴”写进 prompt，不能证明既有 PNG 没长出禁形。
-    同理，scale 约束只能说明设计尺寸，不能证明既有 PNG 没被画成大酒坛/大罐。
-    因此凡镜头引用了带 must_not_have 的 PROP，并且对应 PNG 已存在，就进入硬复核队列；
+    同理，scale/structure 约束只能说明设计尺寸和拓扑，不能证明既有 PNG 没把横刀画成
+    双刃/多刃、把 VFX 光效画成实体刀、把服装/道具部件增删。
+    因此凡镜头引用了带 must_not_have 的关键物料，并且对应 PNG 已存在，就进入硬复核队列；
     只有确认文件里逐图标 ok 才代表禁形和尺寸都人工/视觉模型确认通过。
     """
     idx = asset_index if asset_index is not None else load_asset_index(root)
@@ -2705,7 +2736,8 @@ def prop_shape_review_targets(root: Path, ep: str,
         fallback_png = _extract_target_png(body)
         for aid in sorted(set(ASSET_ID_RE.findall(body))):
             entry = entries.get(aid) or {}
-            if str(entry.get("type") or "").strip().lower() != "prop":
+            asset_type = str(entry.get("type") or "").strip().lower()
+            if asset_type not in ASSET_SHAPE_REVIEW_TYPES:
                 continue
             must_not = [str(t).strip() for t in (entry.get("must_not_have") or []) if str(t).strip()]
             if not must_not:
@@ -2720,6 +2752,7 @@ def prop_shape_review_targets(root: Path, ep: str,
                 out.append({
                     "asset": aid,
                     "asset_name": entry.get("name") or aid,
+                    "asset_type": asset_type,
                     "shot": shot or _shot_key(png) or label,
                     "label": label,
                     "png": png,
@@ -2729,13 +2762,13 @@ def prop_shape_review_targets(root: Path, ep: str,
                     "scale": entry.get("scale") or "",
                     "confirmed": confirmed,
                     "confirmation_path": str(_prop_shape_confirmation_path(root, ep)),
-                    "reason": "registered_prop_must_not_have",
+                    "reason": "registered_asset_must_not_have",
                 })
     return out
 
 
 def build_prop_shape_review_queue(payload: Dict[str, Any], root: Path, ep: str) -> List[Dict[str, Any]]:
-    """为高风险道具禁形/尺寸生成逐图复核队列 + 参考并排图。best-effort，never crash。"""
+    """为高风险物料禁形/尺寸/拓扑生成逐图复核队列 + 参考并排图。best-effort，never crash。"""
     targets = prop_shape_review_targets(root, ep, load_asset_index(root))
     stitch_mod = _load_review_module("face_compare_stitch")
     for t in targets:
@@ -3948,11 +3981,11 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             "block",
             "multimodal_continuity",
             t.get("png"),
-            f"高风险道具禁形/尺寸未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
-            f"（{t.get('asset_name') or ''}）登记了 must_not_have={terms}"
+            f"高风险物料禁形/尺寸/拓扑未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
+            f"（{t.get('asset_name') or ''}，type={t.get('asset_type') or 'asset'}）登记了 must_not_have={terms}"
             f"{'；scale=' + str(t.get('scale')) if t.get('scale') else ''}。"
-            f"文字约束不能证明既有 PNG 没长出禁形或尺寸没漂，需人工/视觉模型确认 `{t.get('png')}`"
-            f" 无这些禁形且大小符合道具设定，或重出该图；确认文件：{t.get('confirmation_path')}{stitch}",
+            f"文字约束不能证明既有 PNG 没长出禁形、实体数量没漂或尺寸没漂，需人工/视觉模型确认 `{t.get('png')}`"
+            f" 无这些禁形且拓扑/大小符合物料设定，或重出该图；确认文件：{t.get('confirmation_path')}{stitch}",
         ))
     reason_text = {
         "face_precision_not_full": "缺 full 精度脸部 embedding 比对",
@@ -4116,7 +4149,7 @@ def to_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("shot"), PROHIBITED_FACE_PATCH_LABEL)
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
-            add(t.get("png") or t.get("shot"), f"高风险道具禁形/尺寸未确认:{t.get('asset')}")
+            add(t.get("png") or t.get("shot"), f"高风险物料禁形/尺寸/拓扑未确认:{t.get('asset')}")
     for r in (payload.get("human_image_review") or {}).get("rejects", []):
         add(r.get("png") or r.get("shot"), f"人工拒收:{r.get('dimension') or r.get('dim') or 'image'}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])
@@ -4183,7 +4216,7 @@ def to_strict_regen_list(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
         add(s.get("png") or s.get("shot"), f"strict:{PROHIBITED_FACE_PATCH_LABEL}")
     for t in (payload.get("prop_shape_review") or {}).get("targets", []):
         if not t.get("confirmed"):
-            add(t.get("png") or t.get("shot"), f"strict:高风险道具禁形/尺寸未确认:{t.get('asset')}")
+            add(t.get("png") or t.get("shot"), f"strict:高风险物料禁形/尺寸/拓扑未确认:{t.get('asset')}")
     for r in (payload.get("human_image_review") or {}).get("rejects", []):
         add(r.get("png") or r.get("shot"), f"strict:人工拒收:{r.get('dimension') or r.get('dim') or 'image'}")
     return sorted(by_shot.values(), key=lambda d: d["shot"])

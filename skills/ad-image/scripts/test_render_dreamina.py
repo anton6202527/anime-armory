@@ -53,3 +53,26 @@ def test_run_dreamina_text2image_blocks_no_image():
             assert "no image_url" in str(exc)
         else:
             raise AssertionError("expected RuntimeError")
+
+
+def test_require_dreamina_image_signoff_blocks_by_default(tmp_path):
+    try:
+        rd.require_dreamina_image_signoff(tmp_path)
+    except RuntimeError as exc:
+        assert "Codex image2" in str(exc)
+        assert "image_backend_override.json" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")
+
+
+def test_require_dreamina_image_signoff_accepts_signed_exception(tmp_path):
+    signoff = tmp_path / "合规" / "image_backend_override.json"
+    signoff.parent.mkdir(parents=True)
+    signoff.write_text(json.dumps({
+        "approved": True,
+        "scope": "image",
+        "backend": "dreamina_official",
+        "reason": "用户明确指定",
+    }, ensure_ascii=False), encoding="utf-8")
+
+    rd.require_dreamina_image_signoff(tmp_path)

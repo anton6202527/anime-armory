@@ -76,7 +76,7 @@ function ClipEditDialog(props: {
           scene: data.scene ?? "",
           rhythm: data.rhythm ?? "",
           template: data.template ?? "",
-          prompt: data.prompt ?? "",
+          prompt: data.prompt || clip.prompt || "",
           image_prompt: data.image_prompt ?? "",
           video_prompt: data.video_prompt ?? "",
           positive_prompt: data.positive_prompt ?? "",

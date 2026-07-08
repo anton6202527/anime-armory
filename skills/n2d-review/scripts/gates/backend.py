@@ -26,6 +26,48 @@ from gate_core import (
     _validate_lora_exception_scope,
 )
 
+PREFERRED_IMAGE_BACKENDS = {"codex", "openai"}
+IMAGE_BACKEND_OVERRIDE_REL = os.path.join("合规", "image_backend_override.json")
+
+
+def _image_backend_override_allows(root: str, canonical: str) -> bool:
+    path = os.path.join(root, IMAGE_BACKEND_OVERRIDE_REL)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception:
+        return False
+    if not isinstance(payload, dict) or payload.get("approved") is not True:
+        return False
+    scope = str(payload.get("scope") or payload.get("stage") or "image").lower()
+    if "image" not in scope and "生图" not in scope:
+        return False
+    raw_backend = str(
+        payload.get("backend")
+        or payload.get("canonical")
+        or payload.get("image_backend")
+        or ""
+    ).strip()
+    if raw_backend == canonical:
+        return True
+    signed_canon, signed_kind = classify_image_backend(raw_backend)
+    return signed_kind == "approved" and signed_canon == canonical
+
+
+def _block_unsigned_non_preferred_backend(root: str, canonical: str, loc: str, raw: str) -> None:
+    if not canonical or canonical in PREFERRED_IMAGE_BACKENDS:
+        return
+    if _image_backend_override_allows(root, canonical):
+        return
+    add(
+        BLOCK,
+        "生图AI一致性",
+        loc,
+        "全项目生图优先 Codex / GPT Image 2；非 Codex/OpenAI 图片后端必须先由用户明确签核，"
+        f"并写 {IMAGE_BACKEND_OVERRIDE_REL} 后才能付费出图。当前：{raw}",
+    )
+
+
 def check_backend_reachable(root: str, ep: str) -> None:
     """付费出图前确认所选生图后端「能落 PNG」。
 
@@ -230,10 +272,11 @@ def check_skill_freshness(root: str, ep: str, stage: str) -> None:
             f"如需可跑 `{check_cmd}` 复核。{bootstrap_note}", advisory=True)
 
 def check_image_ai_policy(root: str, ep: str) -> None:
-    """阶段2：`生图模型` 是生成轴，`生图AI/生图渠道` 是访问入口，只拦混用 + 未授权出图。
+    """`生图模型` 是生成轴，`生图AI/生图渠道` 是访问入口。
 
-    跨镜一致性真正的杀手是【同项目混用多个生图模型/渠道】，不是"用了非 Codex"。本检查：
-      - 官方白名单后端（Codex/OpenAI/Dreamina/即梦官方 CLI/Seedream/可灵主体库/Nano Banana；Sora Cameo 仅 legacy/manual）：放行；
+    全项目图片阶段默认 Codex/OpenAI；非 Codex/OpenAI 官方后端只作用户签核例外。本检查：
+      - Codex/OpenAI：放行；
+      - 非 Codex/OpenAI 官方白名单后端：缺 `<作品根>/合规/image_backend_override.json` 时 BLOCK；
       - 未授权出图路径（同视频AI 含糊口径、第三方逆向 CLI/web 自动化）：BLOCK（安全 invariant）；
       - 未知后端：WARN（提示先确认是官方 API）；
       - 同项目/同集出现 ≥2 个不同官方后端：BLOCK（混用）。
@@ -262,6 +305,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
         )
     else:
         used.add(canon)
+        _block_unsigned_non_preferred_backend(root, canon, settings_loc, setting)
 
     prompt_paths = [
         os.path.join(root, "出图", ep, "prompt", "00_总览.md"),
@@ -299,6 +343,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
                 )
             elif pk == "approved":
                 used.add(pc)
+                _block_unsigned_non_preferred_backend(root, pc, path, m.group(1).strip())
 
     missing_event_providers: List[str] = []
     event_path = _production_events_path(root)
@@ -351,6 +396,7 @@ def check_image_ai_policy(root: str, ep: str) -> None:
             )
         else:
             used.add(pc)
+            _block_unsigned_non_preferred_backend(root, pc, event_path, provider)
     if missing_event_providers:
         add(
             BLOCK,

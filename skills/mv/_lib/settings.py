@@ -121,7 +121,7 @@ VIDEO_CHANNEL_CHOICES = (
 
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
-    SettingSpec("生图AI", ("mv",), ("Codex", "OpenAI", "Dreamina/即梦官方 CLI", "Dreamina", "即梦", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
+    SettingSpec("生图AI", ("mv",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
     SettingSpec("生视频模型", ("mv",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
     SettingSpec("生视频渠道", ("mv",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.

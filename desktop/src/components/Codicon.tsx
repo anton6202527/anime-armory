@@ -1,6 +1,10 @@
 const GLYPHS = {
+  add: "\uea60",
   files: "\ueaf0",
+  file: "\uea7b",
   close: "\uea76",
+  discard: "\ueae2",
+  goToFile: "\uea94",
   trash: "\uea81",
   wrench: "\ueb65",
   sourceControl: "\uea68",
@@ -26,11 +30,16 @@ const GLYPHS = {
   chevronRight: "\ueab6",
   settingsGear: "\ueb51",
   settings: "\ueb52",
+  bell: "\uea8f",
 } as const;
 
 const CLASS_NAMES = {
+  add: "add",
   files: "files",
+  file: "file",
   close: "close",
+  discard: "discard",
+  goToFile: "go-to-file",
   trash: "trash",
   wrench: "wrench",
   sourceControl: "source-control",
@@ -56,6 +65,7 @@ const CLASS_NAMES = {
   chevronRight: "chevron-right",
   settingsGear: "settings-gear",
   settings: "settings",
+  bell: "bell",
 } as const satisfies Record<keyof typeof GLYPHS, string>;
 
 export type CodiconName = keyof typeof GLYPHS;

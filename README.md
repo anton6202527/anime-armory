@@ -8,12 +8,12 @@
 
 **创作兵工厂**是一套面向 AI 内容生产的本地流水线：把一个点子、一本书、一首歌或一份客户需求，推进成可交付的小说、AI 漫剧短视频、漫画、AI 音乐 MV 或商业广告片。
 
-`anime-armory` 是仓库名、安装包与兼容性代号；顶层中文产品名统一为 **创作兵工厂**。其中 n2d 这条“小说文本 -> AI 漫剧 / 短剧”生产线可称为 **漫剧兵工厂**，但不再作为整个项目的总称。
+`anime-armory` 是仓库名、安装包与兼容性代号；顶层中文产品名统一为 **创作兵工厂**。其中 n2d 这条“小说文本 -> AI 漫剧 / 短剧”生产线统一称为 **制漫剧**。
 
 仓库的核心不是单个脚本，而是根目录 `skills/` 下的一组可复用 workflow skill。它们构成六条彼此独立、可单独分发的生产线：
 
 - **小说（novel）**：立项 / 观察素材 / 审美样本 -> 章纲 -> 写作 -> 审稿 / 评分 / 专业编辑 -> 导出
-- **漫剧兵工厂（n2d，小说文本 -> AI 漫剧 / 短剧）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
+- **制漫剧（n2d，小说文本 -> AI 漫剧 / 短剧）**：拆集 -> 配音 -> 分镜 -> 出图 -> 出视频 -> 合成
 - **漫画（comic）**：故事 / 点子 / 脚本 -> 分话大纲 -> 分格脚本 -> 页面排版 -> 出图 -> 嵌字 -> 长图导出
 - **歌曲（song）**：作词 -> 作曲 / 多版挑版 -> 翻唱 / 换声 -> 审歌
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
@@ -307,12 +307,12 @@ anime-armory/
 
 Creation Armory (`anime-armory`) is a local production pipeline for AI-assisted content creation. It helps turn an idea, a book, a song, or a client brief into deliverable novels, AI comic-drama short videos, comics, music videos, or commercial ads.
 
-`anime-armory` remains the repository name and compatibility codename. The top-level product name is Creation Armory / 创作兵工厂; the n2d line is the comic-drama armory / 漫剧兵工厂.
+`anime-armory` remains the repository name and compatibility codename. The top-level product name is Creation Armory / 创作兵工厂; the n2d line is 制漫剧.
 
 The core of this repository is not a single script. It is a set of reusable workflow skills under `skills/`, organized into six independent production lines:
 
 - **Novel (`novel`)**: project setup / observation notes / aesthetic samples -> chapter outline -> drafting -> review / scoring / professional editing -> export
-- **Comic-drama armory (`n2d`, novel text -> AI comic-drama / short drama)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
+- **制漫剧 (`n2d`, novel text -> AI comic-drama / short drama)**: episode splitting -> voice -> storyboard -> images -> videos -> final composition
 - **Comics (`comic`)**: story / idea / script -> chapter outline -> panel script -> layout -> images -> lettering -> long-scroll export
 - **Song (`song`)**: lyrics -> composition / version selection -> cover / voice conversion -> song review
 - **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition

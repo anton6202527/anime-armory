@@ -61,6 +61,10 @@ IMAGE_QC_PYTHON_CANDIDATES = (
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 SHARED_ASSET_ID_PREFIXES = ("CHAR_", "GROUP_", "LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")
 EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
+CROSS_EPISODE_SOURCE_FRAME_LINE_RE = re.compile(
+    r"(?:跨集接力源帧|上一集尾帧|前集尾帧|prev_tail_frame|cross_episode_handoff)",
+    re.I,
+)
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
 CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
@@ -195,6 +199,26 @@ def first_backticked(text: str) -> Optional[str]:
 
 def backticked(text: str) -> List[str]:
     return re.findall(r"`([^`]+)`", text)
+
+
+def cross_episode_source_frame_paths(text: str) -> List[str]:
+    paths: List[str] = []
+    seen: Set[str] = set()
+    for line in str(text or "").splitlines():
+        if not CROSS_EPISODE_SOURCE_FRAME_LINE_RE.search(line):
+            continue
+        candidates = backticked(line)
+        candidates.extend(
+            match.group(0)
+            for match in re.finditer(r"[\w./\-\u4e00-\u9fff]+?\.(?:png|jpg|jpeg|webp)", line, re.I)
+        )
+        for raw in candidates:
+            rel = str(raw or "").strip()
+            if Path(rel).suffix.lower() not in IMAGE_SUFFIXES or rel in seen:
+                continue
+            seen.add(rel)
+            paths.append(rel)
+    return paths
 
 
 def load_sections(root: Path, episode: str) -> List[ClipSection]:
@@ -1325,6 +1349,14 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             "paths": style_anchor_paths,
             "use_policy": "style_only",
         })
+    cross_episode_sources = cross_episode_source_frame_paths(body)
+    if cross_episode_sources:
+        items.append({
+            "kind": "source_frame",
+            "id": "CROSS_EPISODE_HANDOFF",
+            "paths": cross_episode_sources,
+            "use_policy": "cross_episode_geometry_handoff",
+        })
 
     # An asset that depicts a character must inherit that character's locked face
     # anchor; its own reference_group only self-references the not-yet-existing
@@ -2305,10 +2337,18 @@ def combat_spectacle_richness_for(body: str, style: str = "") -> str:
 
 
 def source_frame_geometry_guidance(target: Target) -> str:
-    if target.mode not in {"midframe", "tailframe"}:
-        return ""
     body = str(getattr(target.section, "body", "") or "")
-    role = "尾帧" if target.mode == "tailframe" else "中段/动作锚帧"
+    cross_episode = bool(CROSS_EPISODE_SOURCE_FRAME_LINE_RE.search(body))
+    if target.mode not in {"midframe", "tailframe"} and not cross_episode:
+        return ""
+    if target.mode == "tailframe":
+        role = "尾帧"
+    elif target.mode == "midframe":
+        role = "中段/动作锚帧"
+    elif cross_episode:
+        role = "跨集首帧"
+    else:
+        role = "接力帧"
     lines = [
         "- **源帧几何连续性硬锁**：本次附加的 `source_frame` 是几何底板，不是普通风格参考。"
         "必须保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和同一画面轴线；"
@@ -2317,8 +2357,14 @@ def source_frame_geometry_guidance(target: Target) -> str:
         "主检角色必须继承 `source_frame` 与角色定妆附件里的同一张脸、同一脸型比例、同一发际线、同一发髻/发束轮廓、"
         "同一衣领交叠方向、袖口卷边、腰带位置、裙摆/裤摆长度、鞋履形状和脏旧材质；"
         "只允许改变情绪落点、手臂/水桶/道具的微姿态、水滴/灰尘/光位和镜头距离。"
-        "禁止把尾帧画成陌生少年/陌生少女、换发型、换衣服、换鞋、换年龄感，禁止为了画面好看重塑五官或服装剪影。",
+        "禁止把接力帧画成陌生少年/陌生少女、换发型、换衣服、换鞋、换年龄感，禁止为了画面好看重塑五官或服装剪影。",
     ]
+    if cross_episode:
+        lines.append(
+            "- **跨集动作接力硬锁**：本次首帧必须直接承接上一集尾帧的动作几何。"
+            "禁止重新建立远景、禁止让上一集已经近身/亮爪/开战的主体退回深景，禁止把群体动作画成重新从远处走来；"
+            "只能在上一集尾帧站位、距离、朝向、光位和轴线上推进拔刀、扑杀、闪避等下一拍动作。"
+        )
     if re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body) and re.search(r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|肩|背|身体)", body):
         lines.append(
             "- **入体点硬锁**：若上一帧已有武器插入身体，本帧只能保留同一把武器、同一处入体点和同一条伤口线；"
@@ -3649,18 +3695,28 @@ def sync_image_progress(root: Path, episode: str) -> Optional[tuple[int, int]]:
 
     current_total = current_image_progress_total(root, episode)
     if current_total:
-        total = current_total
+        if episode_total and current_total == episode_total:
+            done, total = episode_done, episode_total
+        elif combined_total and current_total == combined_total:
+            done, total = combined_done, combined_total
+        else:
+            done = live_done
+            total = current_total
         preserve_stale = os.environ.get("N2D_PRESERVE_IMAGE_PROGRESS_TOTAL", "").strip().lower() in {
             "1", "true", "yes", "on",
         }
-        if live_total and live_total != current_total and not preserve_stale:
+        if (
+            live_total
+            and live_total != current_total
+            and not preserve_stale
+            and not (episode_total and current_total == episode_total)
+        ):
             print(
                 f"[progress] 出图 denominator {current_total} differs from live image-plan targets {live_total}; "
                 f"using {live_total}",
                 file=sys.stderr,
             )
             total = live_total
-        done = live_done
         done = min(done, total)
     else:
         done, total = combined_done, combined_total

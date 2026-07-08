@@ -83,6 +83,40 @@ def test_high_risk_without_anchor_adds_anchor():
     assert "add_mid_or_multi_anchor" in row["actions"]
 
 
+def test_long_story_clip_gets_video_shot_segments():
+    root = _mk_storyboard([{
+        "id": "Clip_04",
+        "duration": 33.363,
+        "visual": "看见掌心刀法，姜月初判断身份死局，官道远景落幅。",
+        "continuity": {"shot_size": "MS", "need_endframe": True},
+    }])
+
+    row = SSD.build_plan(root, "第1集")["decisions"][0]
+
+    assert row["primary_action"] == "compress_before_video"
+    assert "split_video_shots" in row["actions"]
+    assert row["video_shot_policy"]["direct_submit_allowed"] is False
+    assert len(row["video_shot_segments"]) == 6
+    assert all(seg["duration_sec"] <= 8 for seg in row["video_shot_segments"])
+    assert row["story_economy"]["detail_allowed"] is False
+
+
+def test_long_fight_clip_keeps_detail_but_splits_video_shots():
+    root = _mk_storyboard([{
+        "id": "Clip_06",
+        "duration": 18.0,
+        "template": "fight_exchange",
+        "visual": "狼妖弹爪扑杀，姜月初拔刀格挡，命中后众人反应。",
+        "continuity": {"shot_size": "MS", "need_endframe": True},
+    }])
+
+    row = SSD.build_plan(root, "第1集")["decisions"][0]
+
+    assert row["primary_action"] == "split_video_shots"
+    assert "compress_before_video" not in row["actions"]
+    assert row["story_economy"]["economy_class"] == "premium_detail"
+
+
 def test_plain_prop_does_not_force_composite():
     root = _mk_storyboard([{
         "id": "Clip_05",

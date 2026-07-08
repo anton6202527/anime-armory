@@ -921,6 +921,82 @@ fn snapshot_file_meta(p: &Path) -> Option<FileMeta> {
     Some(meta)
 }
 
+fn safe_work_write_target(base: &Path, rel: &str) -> Result<PathBuf, String> {
+    validate_rel_path(rel, false)?;
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    let target = base.join(rel);
+    let parent = target.parent().ok_or("非法文件路径")?;
+
+    let mut ancestor = parent;
+    while !ancestor.exists() {
+        ancestor = ancestor.parent().ok_or("非法文件路径")?;
+    }
+    let ancestor_canon = fs::canonicalize(ancestor).map_err(|e| e.to_string())?;
+    if ancestor_canon != base_canon && !ancestor_canon.starts_with(&base_canon) {
+        return Err("路径越界，已拒绝".into());
+    }
+
+    fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    let parent_canon = fs::canonicalize(parent).map_err(|e| e.to_string())?;
+    if parent_canon != base_canon && !parent_canon.starts_with(&base_canon) {
+        return Err("路径越界，已拒绝".into());
+    }
+    Ok(target)
+}
+
+fn safe_work_existing_parent_target(base: &Path, rel: &str) -> Result<PathBuf, String> {
+    validate_rel_path(rel, false)?;
+    let base_canon = fs::canonicalize(base).map_err(|e| e.to_string())?;
+    let target = base.join(rel);
+    let Some(parent) = target.parent() else {
+        return Err("非法文件路径".into());
+    };
+    if parent.exists() {
+        let parent_canon = fs::canonicalize(parent).map_err(|e| e.to_string())?;
+        if parent_canon != base_canon && !parent_canon.starts_with(&base_canon) {
+            return Err("路径越界，已拒绝".into());
+        }
+    }
+    Ok(target)
+}
+
+fn restore_one_work_change(base: &Path, rel: &str, bl: &mut Baseline) -> Result<(), String> {
+    let old = bl.files.get(rel).cloned();
+
+    if old.is_none() {
+        let target = safe_work_existing_parent_target(base, rel)?;
+        if target.exists() {
+            let meta = fs::symlink_metadata(&target).map_err(|e| e.to_string())?;
+            if meta.is_dir() {
+                return Err(format!("{rel}: 无法撤销目录变动"));
+            }
+            fs::remove_file(&target).map_err(|e| format!("{rel}: {e}"))?;
+        }
+        bl.files.remove(rel);
+        return Ok(());
+    }
+
+    let old = old.expect("checked old.is_none");
+    let target = safe_work_write_target(base, rel)?;
+    let text = old
+        .text
+        .ok_or_else(|| format!("{rel}: 基线没有文本快照，无法撤销"))?;
+    if target.exists() {
+        let meta = fs::symlink_metadata(&target).map_err(|e| e.to_string())?;
+        if meta.is_dir() {
+            return Err(format!("{rel}: 当前路径是目录，无法写回文件"));
+        }
+        if meta.file_type().is_symlink() {
+            fs::remove_file(&target).map_err(|e| format!("{rel}: {e}"))?;
+        }
+    }
+    fs::write(&target, text.as_bytes()).map_err(|e| format!("{rel}: {e}"))?;
+    let restored =
+        snapshot_file_meta(&target).ok_or_else(|| format!("{rel}: 无法读取恢复后的文件状态"))?;
+    bl.files.insert(rel.to_string(), restored);
+    Ok(())
+}
+
 fn content_hash(p: &Path) -> Option<u64> {
     const FNV_OFFSET: u64 = 0xcbf29ce484222325;
     const FNV_PRIME: u64 = 0x00000100000001b3;
@@ -1438,6 +1514,45 @@ pub fn archive_work_change(root: String, rel: String) -> Result<WorkChangeSummar
         bl.files.remove(&rel);
     }
     save_baseline(&root, &bl)?;
+    Ok(work_change_summary(root))
+}
+
+#[tauri::command]
+pub fn restore_work_change(root: String, rel: String) -> Result<WorkChangeSummary, String> {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    if !baseline_exists(&root) {
+        return Err("还没有可撤销的变动基线".into());
+    }
+    let mut bl = load_baseline(&root);
+    restore_one_work_change(base, &rel, &mut bl)?;
+    save_baseline(&root, &bl)?;
+    Ok(work_change_summary(root))
+}
+
+#[tauri::command]
+pub fn restore_work_changes(root: String) -> Result<WorkChangeSummary, String> {
+    let base = Path::new(&root);
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    if !baseline_exists(&root) {
+        return Err("还没有可撤销的变动基线".into());
+    }
+    let current = work_changes(root.clone()).changes;
+    let mut bl = load_baseline(&root);
+    let mut failures = Vec::new();
+    for change in current {
+        if let Err(err) = restore_one_work_change(base, &change.path, &mut bl) {
+            failures.push(err);
+        }
+    }
+    save_baseline(&root, &bl)?;
+    if !failures.is_empty() {
+        return Err(failures.join("\n"));
+    }
     Ok(work_change_summary(root))
 }
 
@@ -3066,6 +3181,74 @@ fn value_string(v: &Value, key: &str) -> String {
         .to_string()
 }
 
+fn nonempty_value_string(v: &Value, key: &str) -> Option<String> {
+    let value = value_string(v, key);
+    if value.trim().is_empty() {
+        None
+    } else {
+        Some(value)
+    }
+}
+
+fn value_string_or(v: &Value, key: &str, fallback: Option<String>) -> String {
+    nonempty_value_string(v, key)
+        .or(fallback)
+        .unwrap_or_default()
+}
+
+fn storyboard_shot_text(clip: &Value) -> Option<String> {
+    let mut parts: Vec<String> = Vec::new();
+    if let Some(shots) = clip.get("shots").and_then(|x| x.as_array()) {
+        for (idx, shot) in shots.iter().enumerate() {
+            let mut bits = Vec::new();
+            if let Some(t) = s(shot, "t") {
+                bits.push(t);
+            }
+            if let Some(lens) = s(shot, "lens") {
+                bits.push(lens);
+            }
+            if let Some(desc) = s(shot, "desc") {
+                bits.push(desc);
+            }
+            if !bits.is_empty() {
+                parts.push(format!("shot {}: {}", idx + 1, bits.join(" · ")));
+            }
+        }
+    }
+    if parts.is_empty() {
+        None
+    } else {
+        Some(parts.join("\n"))
+    }
+}
+
+fn storyboard_shot_video_prompt(clip: &Value) -> Option<String> {
+    let mut parts: Vec<String> = Vec::new();
+    if let Some(shots) = clip.get("shots").and_then(|x| x.as_array()) {
+        for (idx, shot) in shots.iter().enumerate() {
+            if let Some(prompt) = s(shot, "video_prompt") {
+                let prompt = prompt.trim();
+                if prompt.is_empty() {
+                    continue;
+                }
+                let mut label = format!("shot {}", idx + 1);
+                if let Some(t) = s(shot, "t") {
+                    label.push_str(&format!(" · {t}"));
+                }
+                if let Some(lens) = s(shot, "lens") {
+                    label.push_str(&format!(" · {lens}"));
+                }
+                parts.push(format!("{label}: {prompt}"));
+            }
+        }
+    }
+    if parts.is_empty() {
+        None
+    } else {
+        Some(parts.join("\n"))
+    }
+}
+
 fn set_string_field(
     obj: &mut serde_json::Map<String, Value>,
     key: &str,
@@ -3102,6 +3285,111 @@ fn set_string_array_field(obj: &mut serde_json::Map<String, Value>, key: &str, i
 
 fn s(v: &Value, k: &str) -> Option<String> {
     v.get(k).and_then(|x| x.as_str()).map(|x| x.to_string())
+}
+
+fn heading_matches_clip(line: &str, clip_id: &str, number: Option<i64>) -> bool {
+    if !clip_id.trim().is_empty() && line.contains(clip_id) {
+        return true;
+    }
+    if let Some(n) = number {
+        let n2 = format!("{n:02}");
+        let n3 = format!("{n:03}");
+        let candidates = [
+            format!("镜头 {n}"),
+            format!("镜头{n}"),
+            format!("Clip {n}"),
+            format!("Clip {n2}"),
+            format!("Clip{n2}"),
+            format!("Clip_{n2}"),
+            format!("CLIP{n2}"),
+            format!("P{n2}"),
+            format!("P{n3}"),
+        ];
+        return candidates.iter().any(|candidate| line.contains(candidate));
+    }
+    false
+}
+
+fn markdown_clip_section<'a>(text: &'a str, clip_id: &str, number: Option<i64>) -> Option<&'a str> {
+    let mut headings: Vec<(usize, &str)> = Vec::new();
+    let mut pos = 0usize;
+    for line in text.split_inclusive('\n') {
+        if line.starts_with("## ") && !line.starts_with("### ") {
+            headings.push((pos, line.trim_end()));
+        }
+        pos += line.len();
+    }
+    for (idx, (start, heading)) in headings.iter().enumerate() {
+        if heading_matches_clip(heading, clip_id, number) {
+            let end = headings
+                .get(idx + 1)
+                .map(|(next_start, _)| *next_start)
+                .unwrap_or(text.len());
+            return text.get(*start..end);
+        }
+    }
+    None
+}
+
+fn fenced_or_plain_after_heading(section: &str, prefixes: &[&str]) -> Option<String> {
+    let lines: Vec<&str> = section.lines().collect();
+    for idx in 0..lines.len() {
+        let heading = lines[idx].trim();
+        if !heading.starts_with("### ") || !prefixes.iter().any(|prefix| heading.contains(prefix)) {
+            continue;
+        }
+
+        let mut plain = Vec::new();
+        let mut fenced = Vec::new();
+        let mut in_fence = false;
+        let mut saw_fence = false;
+        for line in lines.iter().skip(idx + 1) {
+            let trimmed = line.trim();
+            if trimmed.starts_with("```") {
+                if in_fence {
+                    let value = fenced.join("\n").trim().to_string();
+                    if !value.is_empty() {
+                        return Some(value);
+                    }
+                    break;
+                }
+                in_fence = true;
+                saw_fence = true;
+                continue;
+            }
+            if in_fence {
+                fenced.push((*line).to_string());
+                continue;
+            }
+            if trimmed.starts_with("### ") || trimmed.starts_with("## ") {
+                break;
+            }
+            if !saw_fence {
+                plain.push((*line).to_string());
+            }
+        }
+        let value = plain.join("\n").trim().to_string();
+        if !value.is_empty() {
+            return Some(value);
+        }
+    }
+    None
+}
+
+fn read_clip_prompt_pack(
+    root: &Path,
+    rel: &[&str],
+    clip_id: &str,
+    number: Option<i64>,
+    subheading_prefixes: &[&str],
+) -> Option<String> {
+    let mut path = root.to_path_buf();
+    for part in rel {
+        path.push(part);
+    }
+    let text = fs::read_to_string(path).ok()?;
+    let section = markdown_clip_section(&text, clip_id, number)?;
+    fenced_or_plain_after_heading(section, subheading_prefixes)
 }
 
 fn n_f64(v: &Value, k: &str) -> Option<f64> {
@@ -3729,7 +4017,13 @@ fn push_insight_metric(
     });
 }
 
-fn push_insight_artifact(out: &mut QualityInsights, root: &Path, label: &str, rel: &str, kind: &str) {
+fn push_insight_artifact(
+    out: &mut QualityInsights,
+    root: &Path,
+    label: &str,
+    rel: &str,
+    kind: &str,
+) {
     if rel.trim().is_empty() {
         return;
     }
@@ -3828,7 +4122,11 @@ fn push_issue_from_value(out: &mut QualityInsights, raw: &Value) {
     {
         "block".into()
     } else {
-        severity_tone(s(raw, "severity").or_else(|| s(raw, "sev")).or_else(|| s(raw, "status")))
+        severity_tone(
+            s(raw, "severity")
+                .or_else(|| s(raw, "sev"))
+                .or_else(|| s(raw, "status")),
+        )
     };
     let title = s(raw, "problem")
         .or_else(|| s(raw, "reason"))
@@ -3864,7 +4162,11 @@ fn push_issue_from_value(out: &mut QualityInsights, raw: &Value) {
     });
 }
 
-fn push_dimensions_from_by_dim(out: &mut QualityInsights, source_label: &str, by_dim: Option<&Value>) {
+fn push_dimensions_from_by_dim(
+    out: &mut QualityInsights,
+    source_label: &str,
+    by_dim: Option<&Value>,
+) {
     let Some(obj) = by_dim.and_then(|v| v.as_object()) else {
         return;
     };
@@ -3957,7 +4259,11 @@ fn collect_novel_score(root: &Path, out: &mut QualityInsights) {
                 score,
                 value: n_f64(item, "weighted_score").map(|v| format!("加权 {v:.1}")),
                 max: Some(10.0),
-                status: status_from_counts(0, if score.unwrap_or(10.0) < 7.0 { 1 } else { 0 }, score),
+                status: status_from_counts(
+                    0,
+                    if score.unwrap_or(10.0) < 7.0 { 1 } else { 0 },
+                    score,
+                ),
                 blocks: 0,
                 warnings: if score.unwrap_or(10.0) < 7.0 { 1 } else { 0 },
                 infos: 0,
@@ -3966,10 +4272,7 @@ fn collect_novel_score(root: &Path, out: &mut QualityInsights) {
             });
         }
     }
-    for (key, label) in [
-        ("title_check", "标题侧"),
-        ("adaptation_check", "转制潜力"),
-    ] {
+    for (key, label) in [("title_check", "标题侧"), ("adaptation_check", "转制潜力")] {
         if let Some(check) = score_data.get(key).filter(|v| v.is_object()) {
             let score = n_f64(check, "total");
             let max = n_f64(check, "max_total");
@@ -4012,7 +4315,9 @@ fn collect_novel_score(root: &Path, out: &mut QualityInsights) {
             push_insight_metric(
                 out,
                 "低压缩章节",
-                summary.get("low_chapter_compression_count").and_then(value_label),
+                summary
+                    .get("low_chapter_compression_count")
+                    .and_then(value_label),
                 None,
             );
         }
@@ -4053,7 +4358,8 @@ fn collect_novel_review(root: &Path, out: &mut QualityInsights) {
             score: score_from_status(blocks, warnings, true),
             value: Some(format!("{} 项", blocks + warnings + infos)),
             max: Some(100.0),
-            status: s(summary, "verdict").or_else(|| status_from_counts(blocks, warnings, Some(100.0))),
+            status: s(summary, "verdict")
+                .or_else(|| status_from_counts(blocks, warnings, Some(100.0))),
             blocks,
             warnings,
             infos,
@@ -4072,8 +4378,18 @@ fn collect_novel_compliance(root: &Path, out: &mut QualityInsights) {
         return;
     };
     push_source_file(out, root, rel, "合规 Profile");
-    push_insight_metric(out, "合规阻断", data.get("blocking").and_then(value_label), None);
-    push_insight_metric(out, "合规提醒", data.get("warning").and_then(value_label), None);
+    push_insight_metric(
+        out,
+        "合规阻断",
+        data.get("blocking").and_then(value_label),
+        None,
+    );
+    push_insight_metric(
+        out,
+        "合规提醒",
+        data.get("warning").and_then(value_label),
+        None,
+    );
     if let Some(axes) = data.get("target_axes").and_then(|v| v.as_object()) {
         let enabled: Vec<String> = axes
             .iter()
@@ -4108,7 +4424,9 @@ fn collect_novel_compliance(root: &Path, out: &mut QualityInsights) {
             out.warnings += warnings;
             out.dimensions.push(QualityInsightDimension {
                 key: s(req, "id"),
-                label: s(req, "title").or_else(|| s(req, "id")).unwrap_or_else(|| "合规项".into()),
+                label: s(req, "title")
+                    .or_else(|| s(req, "id"))
+                    .unwrap_or_else(|| "合规项".into()),
                 score: score_from_status(blocks, warnings, true),
                 value: status.clone(),
                 max: Some(100.0),
@@ -4123,7 +4441,9 @@ fn collect_novel_compliance(root: &Path, out: &mut QualityInsights) {
                 out.issues.push(QualityInsightIssue {
                     severity: tone,
                     dimension: Some("compliance".into()),
-                    title: s(req, "title").or_else(|| s(req, "id")).unwrap_or_else(|| "合规待办".into()),
+                    title: s(req, "title")
+                        .or_else(|| s(req, "id"))
+                        .unwrap_or_else(|| "合规待办".into()),
                     message: s(req, "reason").map(|v| short_text(&v, 280)),
                     stage: Some("release".into()),
                     path: Some(rel.into()),
@@ -4156,8 +4476,18 @@ fn collect_novel_dashboard(root: &Path, out: &mut QualityInsights) {
         push_insight_metric(out, "导出阻断", Some(blockers.to_string()), None);
     }
     if let Some(revision) = data.get("revision") {
-        push_insight_metric(out, "修订任务", revision.get("task_count").and_then(value_label), None);
-        push_insight_metric(out, "修订冲突", revision.get("conflicts").and_then(value_label), None);
+        push_insight_metric(
+            out,
+            "修订任务",
+            revision.get("task_count").and_then(value_label),
+            None,
+        );
+        push_insight_metric(
+            out,
+            "修订冲突",
+            revision.get("conflicts").and_then(value_label),
+            None,
+        );
     }
     for rel in [
         "生产数据/novel_dashboard.html",
@@ -4167,7 +4497,13 @@ fn collect_novel_dashboard(root: &Path, out: &mut QualityInsights) {
         "生产数据/visuals/novel_foreshadow_ledger.html",
         "生产数据/visuals/novel_relationship_timeline.html",
     ] {
-        push_insight_artifact(out, root, rel.rsplit('/').next().unwrap_or(rel), rel, "visual");
+        push_insight_artifact(
+            out,
+            root,
+            rel.rsplit('/').next().unwrap_or(rel),
+            rel,
+            "visual",
+        );
     }
 }
 
@@ -4192,10 +4528,30 @@ fn collect_dashboard_insights(root: &Path, out: &mut QualityInsights, ep: Option
     push_source_file(out, root, rel, "生产看板");
     if let Some(ep_data) = select_dashboard_episode(&data, ep) {
         out.episode = s(ep_data, "episode").or(out.episode.take());
-        push_insight_metric(out, "成品通过率", ratio_metric(n_f64(ep_data, "final_pass_rate")), None);
-        push_insight_metric(out, "生成通过率", ratio_metric(n_f64(ep_data, "generation_pass_rate")), None);
-        push_insight_metric(out, "尝试", ep_data.get("generation_attempts").and_then(value_label), None);
-        push_insight_metric(out, "重抽", ep_data.get("redraw_count").and_then(value_label), None);
+        push_insight_metric(
+            out,
+            "成品通过率",
+            ratio_metric(n_f64(ep_data, "final_pass_rate")),
+            None,
+        );
+        push_insight_metric(
+            out,
+            "生成通过率",
+            ratio_metric(n_f64(ep_data, "generation_pass_rate")),
+            None,
+        );
+        push_insight_metric(
+            out,
+            "尝试",
+            ep_data.get("generation_attempts").and_then(value_label),
+            None,
+        );
+        push_insight_metric(
+            out,
+            "重抽",
+            ep_data.get("redraw_count").and_then(value_label),
+            None,
+        );
         push_insight_metric(out, "耗时", s(ep_data, "duration_hms"), None);
         if let Some(costs) = ep_data.get("cost_totals").and_then(|v| v.as_object()) {
             for (unit, value) in costs.iter().take(3) {
@@ -4252,8 +4608,18 @@ fn collect_dashboard_insights(root: &Path, out: &mut QualityInsights, ep: Option
         out.blocks += blocks;
         out.warnings += warnings;
         out.infos += infos;
-        push_insight_metric(out, "成品通过率", ratio_metric(n_f64(alerts, "final_pass_rate")), None);
-        push_insight_metric(out, "生成通过率", ratio_metric(n_f64(alerts, "generation_pass_rate")), None);
+        push_insight_metric(
+            out,
+            "成品通过率",
+            ratio_metric(n_f64(alerts, "final_pass_rate")),
+            None,
+        );
+        push_insight_metric(
+            out,
+            "生成通过率",
+            ratio_metric(n_f64(alerts, "generation_pass_rate")),
+            None,
+        );
         push_insight_metric(out, "下一阶段", s(alerts, "progress_next_stage"), None);
     }
 }
@@ -4264,18 +4630,45 @@ fn collect_yield_insights(root: &Path, out: &mut QualityInsights) {
         return;
     };
     push_source_file(out, root, rel, "出图产能");
-    push_insight_metric(out, "可用率", ratio_metric(n_f64(&data, "usable_yield")), None);
-    push_insight_metric(out, "重抽率", ratio_metric(n_f64(&data, "reroll_rate")), None);
-    push_insight_metric(out, "候选数", data.get("total_candidates").and_then(value_label), None);
+    push_insight_metric(
+        out,
+        "可用率",
+        ratio_metric(n_f64(&data, "usable_yield")),
+        None,
+    );
+    push_insight_metric(
+        out,
+        "重抽率",
+        ratio_metric(n_f64(&data, "reroll_rate")),
+        None,
+    );
+    push_insight_metric(
+        out,
+        "候选数",
+        data.get("total_candidates").and_then(value_label),
+        None,
+    );
     out.dimensions.push(QualityInsightDimension {
         key: Some("usable_yield".into()),
         label: "候选可用率".into(),
         score: n_f64(&data, "usable_yield").map(|v| v * 100.0),
         value: ratio_metric(n_f64(&data, "usable_yield")),
         max: Some(100.0),
-        status: status_from_counts(0, if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 { 1 } else { 0 }, Some(100.0)),
+        status: status_from_counts(
+            0,
+            if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 {
+                1
+            } else {
+                0
+            },
+            Some(100.0),
+        ),
         blocks: 0,
-        warnings: if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 { 1 } else { 0 },
+        warnings: if n_f64(&data, "usable_yield").unwrap_or(1.0) < 0.8 {
+            1
+        } else {
+            0
+        },
         infos: 0,
         detail: Some("survivors / candidates".into()),
         evidence: vec![rel.into()],
@@ -4379,7 +4772,13 @@ fn collect_generic_production(root: &Path, out: &mut QualityInsights, ep: Option
         "生产数据/board.html",
         "生产数据/dashboard.md",
     ] {
-        push_insight_artifact(out, root, rel.rsplit('/').next().unwrap_or(rel), rel, "evidence");
+        push_insight_artifact(
+            out,
+            root,
+            rel.rsplit('/').next().unwrap_or(rel),
+            rel,
+            "evidence",
+        );
     }
 }
 
@@ -5248,8 +5647,9 @@ pub fn read_clip_edit(
     clip_id: String,
     number: Option<i64>,
 ) -> Result<ClipEditData, String> {
+    let root_path = PathBuf::from(&root);
     if let Ok(path) = storyboard_path(&root, &ep) {
-        return read_storyboard_clip_edit(path, &ep, &clip_id, number);
+        return read_storyboard_clip_edit(&root_path, path, &ep, &clip_id, number);
     }
     if let Ok(path) = panel_script_path(&root, &ep) {
         return read_panel_clip_edit(path, &ep, &clip_id, number);
@@ -5258,6 +5658,7 @@ pub fn read_clip_edit(
 }
 
 fn read_storyboard_clip_edit(
+    root: &Path,
     path: PathBuf,
     ep: &str,
     clip_id: &str,
@@ -5271,20 +5672,50 @@ fn read_storyboard_clip_edit(
         .ok_or("storyboard.json 缺 clips 数组")?;
     let idx = find_clip_index(clips, clip_id, number).ok_or("找不到对应 Clip，未写入")?;
     let clip = clips.get(idx).ok_or("找不到对应 Clip，未写入")?;
+    let clip_number = clip.get("number").and_then(|v| v.as_i64()).or(number);
+    let clip_identifier = value_string(clip, "id");
+    let image_pack_rel = ["出图", ep, "prompt", "01_分镜出图.md"];
+    let video_pack_rel = ["出视频", ep, "prompt", "01_clips.md"];
+    let image_positive = read_clip_prompt_pack(
+        root,
+        &image_pack_rel,
+        &clip_identifier,
+        clip_number,
+        &["正向 prompt（中文", "正向 prompt (中文"],
+    );
+    let image_negative = read_clip_prompt_pack(
+        root,
+        &image_pack_rel,
+        &clip_identifier,
+        clip_number,
+        &["负向 prompt"],
+    );
+    let video_prompt = read_clip_prompt_pack(
+        root,
+        &video_pack_rel,
+        &clip_identifier,
+        clip_number,
+        &["视频 prompt（中文", "视频 prompt (中文"],
+    )
+    .or_else(|| storyboard_shot_video_prompt(clip));
     Ok(ClipEditData {
         source_rel: format!("脚本/{ep}/storyboard.json"),
-        id: value_string(clip, "id"),
-        number: clip.get("number").and_then(|v| v.as_i64()).or(number),
+        id: clip_identifier,
+        number: clip_number,
         label: value_string(clip, "label"),
         duration: clip.get("duration").and_then(|v| v.as_f64()),
         scene: value_string(clip, "scene"),
         rhythm: value_string(clip, "rhythm"),
         template: value_string(clip, "template"),
-        prompt: value_string(clip, "prompt"),
-        image_prompt: value_string(clip, "image_prompt"),
-        video_prompt: value_string(clip, "video_prompt"),
-        positive_prompt: value_string(clip, "positive_prompt"),
-        negative_prompt: value_string(clip, "negative_prompt"),
+        prompt: value_string_or(
+            clip,
+            "prompt",
+            clip_prompt(clip).or_else(|| storyboard_shot_text(clip)),
+        ),
+        image_prompt: value_string_or(clip, "image_prompt", image_positive.clone()),
+        video_prompt: value_string_or(clip, "video_prompt", video_prompt),
+        positive_prompt: value_string_or(clip, "positive_prompt", image_positive),
+        negative_prompt: value_string_or(clip, "negative_prompt", image_negative),
     })
 }
 

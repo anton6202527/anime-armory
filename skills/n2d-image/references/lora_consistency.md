@@ -80,7 +80,7 @@ python3 skills/n2d-image/scripts/character_span.py <原著.txt> --names 沈念,�
 | 多形态（常态/觉醒/银牌）、对脸要求高 | 参考图 + 锚点句已经够稳 |
 | 参考图/平台建角色已压不住脸 | 还没试过"平台建角色 ID"这一档（先试它，更轻） |
 
-> 比 LoRA 更轻的一档先用尽：**官方图后端的"建角色 ID / 主体库"**（可灵 Custom Model / Element Library、Seedream Universal Reference、Sora Cameo 等）——无需 GPU、平台内复用。Dreamina/即梦官方 CLI 可作为图片阶段后端，但没有持久主体 ID 时仍属于参考图派生档；LoRA 是这一档也压不住时的重武器。
+> 比 LoRA 更轻的一档先用尽：**官方图后端的"建角色 ID / 主体库"**（可灵 Custom Model / Element Library、Seedream Universal Reference、Sora Cameo 等）——无需 GPU、平台内复用。全项目生图默认 Codex/GPT Image 2；Dreamina/即梦官方 CLI 仅作为用户签核例外，且没有持久主体 ID 时仍属于参考图派生档；LoRA 是这一档也压不住时的重武器。
 
 ---
 
@@ -157,7 +157,7 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 ## Stage 4 — 接进产线（混合产线，别整集切开源）
 
 - LoRA **只用于该核心角色的 hero 镜 / 关键叙事镜**（爽点/反转/觉醒/封面候选）；其余镜头仍走 Codex/OpenAI 参考图派生。
-- **回流统一画风**：LoRA 出的图末尾仍拼视频兼容锚定句；已固定生视频模型时拼该模型的"图像风格锚定句"，未固定时拼通用视频兼容锚定，与当前项目图后端风格对齐（见 `platforms.md` + Q18）。需要轻重绘统一光感时可回到所选官方后端，包括 Dreamina/即梦官方 CLI。
+- **回流统一画风**：LoRA 出的图末尾仍拼视频兼容锚定句；已固定生视频模型时拼该模型的"图像风格锚定句"，未固定时拼通用视频兼容锚定，与当前项目图后端风格对齐（见 `platforms.md` + Q18）。需要轻重绘统一光感时回到当前已签核/已选择的官方后端；默认仍为 Codex/OpenAI。
 - **归档/进度**：LoRA 版 PNG 仍落 `出图/共享/图片/`（共享层）或 `出图/第N集/图片/`；在 `00_索引.md` 标注"LoRA 出"。出图列计数规则不变。
 - **绝不整集中途从闭源切开源**（画风跳变，违 `角色一致性checklist.md §五` 一致性税）。
 

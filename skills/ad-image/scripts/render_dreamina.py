@@ -29,6 +29,7 @@ KEY_SECTIONS = (
     "尾帧接力",
     "负向",
 )
+SIGNOFF_REL = Path("合规") / "image_backend_override.json"
 
 
 def now_iso() -> str:
@@ -51,6 +52,33 @@ def append_jsonl(path: Path, data: Mapping[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(data, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def dreamina_image_signoff_allows(root: Path) -> bool:
+    """Dreamina image spend requires an explicit per-project exception."""
+    payload = load_json(root / SIGNOFF_REL, {})
+    if not isinstance(payload, dict) or payload.get("approved") is not True:
+        return False
+    scope = str(payload.get("scope") or payload.get("stage") or "image").lower()
+    if "image" not in scope and "生图" not in scope:
+        return False
+    backend = str(
+        payload.get("backend")
+        or payload.get("canonical")
+        or payload.get("image_backend")
+        or ""
+    ).lower()
+    return "dreamina" in backend or "即梦" in backend or backend == "dreamina_official"
+
+
+def require_dreamina_image_signoff(root: Path) -> None:
+    if dreamina_image_signoff_allows(root):
+        return
+    raise RuntimeError(
+        "全项目生图优先 Codex image2；Dreamina/即梦只能作为图片阶段签核例外。"
+        f"如确需使用，请先写 {SIGNOFF_REL.as_posix()}，包含 "
+        '{"approved": true, "scope": "image", "backend": "dreamina_official", "reason": "..."}'
+    )
 
 
 def extract_sections(markdown: str, wanted: Iterable[str] = KEY_SECTIONS) -> Dict[str, str]:
@@ -137,6 +165,7 @@ def render_jobs(
     poll: int,
 ) -> Dict[str, Any]:
     root = root.resolve()
+    require_dreamina_image_signoff(root)
     manifest_path = root / "出图" / "分镜" / "image_jobs_manifest.json"
     manifest = load_json(manifest_path)
     if not isinstance(manifest, dict):

@@ -334,7 +334,7 @@ def test_sync_image_progress_refreshes_stale_existing_denominator(tmp_path: Path
     assert captured["cmd"][-1] == "2/3"
 
 
-def test_sync_image_progress_refreshes_episode_only_denominator_when_shared_exists(tmp_path: Path, monkeypatch) -> None:
+def test_sync_image_progress_keeps_episode_only_denominator_when_shared_exists(tmp_path: Path, monkeypatch) -> None:
     (tmp_path / "_进度.md").write_text(
         "| 集 | 字数 | 出图 |\n"
         "|---|---:|---|\n"
@@ -363,8 +363,8 @@ def test_sync_image_progress_refreshes_episode_only_denominator_when_shared_exis
 
     monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
 
-    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (2, 3)
-    assert captured["cmd"][-1] == "2/3"
+    assert codex_image_runner.sync_image_progress(tmp_path, "第1集") == (1, 2)
+    assert captured["cmd"][-1] == "1/2"
 
 
 def test_sync_image_progress_preserves_matching_existing_denominator(tmp_path: Path, monkeypatch) -> None:
@@ -1239,6 +1239,39 @@ def test_faceless_shared_scene_suppresses_character_refs_from_prompt_text(tmp_pa
 
     assert all(item["kind"] != "character" for item in bundle["items"])
     assert all(item["rel_path"] != face_rel for item in inputs)
+
+
+def test_cross_episode_handoff_source_frame_becomes_codex_input(tmp_path: Path) -> None:
+    source_rel = "出图/第4集/图片/Clip11_end.png"
+    write_valid_png(tmp_path / source_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "identity_registry.json").write_text('{"characters":[]}', encoding="utf-8")
+    (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip_01",
+        body=(
+            "**目标落档**：`出图/第5集/图片/Clip01_first.png`\n"
+            f"**跨集接力源帧**：`{source_rel}`；from=第4集/EP04_CLIP11；handoff_type=continuous_action_match_cut\n"
+            "跨集动作接力：必须以 source_frame 几何底板承接上一集尾帧。"
+        ),
+        target_line="`出图/第5集/图片/Clip01_first.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_01",
+        "Clip_01",
+        "firstframe",
+        "出图/第5集/图片/Clip01_first.png",
+        section,
+    )
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第5集", target)
+    inputs = codex_image_runner.codex_reference_inputs_for_target(tmp_path, "第5集", target, bundle)
+
+    assert any(item["kind"] == "source_frame" and source_rel in item["paths"] for item in bundle["items"])
+    assert inputs[0]["role"] == "source_frame"
+    assert inputs[0]["rel_path"] == source_rel
 
 
 def test_face_mood_only_form_excludes_outfit_references(tmp_path: Path) -> None:

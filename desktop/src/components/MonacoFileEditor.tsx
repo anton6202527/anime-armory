@@ -15,7 +15,6 @@ export function MonacoFileEditor({
   loadVersion,
   expectedMtime,
   onDirtyChange,
-  onReload,
   onSaved,
 }: {
   rootPath: string;
@@ -25,7 +24,6 @@ export function MonacoFileEditor({
   loadVersion: string;
   expectedMtime: number;
   onDirtyChange?: (dirty: boolean) => void;
-  onReload: () => void;
   onSaved: (result: WorkFileWriteResult, savedText: string) => void;
 }) {
   const { t } = useI18n();
@@ -40,10 +38,10 @@ export function MonacoFileEditor({
   const dirtyRef = useRef(false);
   const saveRef = useRef<() => void>(() => {});
   const [editorReady, setEditorReady] = useState(0);
-  const [dirty, setDirty] = useState(false);
+  const [, setDirty] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("clean");
   const [error, setError] = useState("");
-  const [diskChanged, setDiskChanged] = useState(false);
+  const [, setDiskChanged] = useState(false);
 
   const fileId = `${rootPath}\0${entry.path}`;
   const language = useMemo(() => languageForFile(entry.name), [entry.name]);
@@ -163,34 +161,8 @@ export function MonacoFileEditor({
     };
   }, [entry.path, onDirtyChange, onSaved, rootPath, saveState]);
 
-  const saveLabel =
-    saveState === "saving"
-      ? t("files.editorSaving")
-      : saveState === "saved"
-        ? t("files.editorSaved")
-        : t("files.editorSave");
-
   return (
     <div className="monaco-file-editor">
-      <div className="editor-toolbar">
-        <div className="editor-title" title={entry.path}>
-          <span className={"editor-dirty-dot" + (dirty ? " dirty" : "")} aria-hidden="true" />
-          <span className="editor-path">{entry.path}</span>
-        </div>
-        {diskChanged && (
-          <button type="button" className="editor-reload" onClick={onReload}>
-            {t("files.editorReload")}
-          </button>
-        )}
-        <button
-          type="button"
-          className="editor-save"
-          disabled={!dirty || saveState === "saving"}
-          onClick={() => saveRef.current()}
-        >
-          {saveLabel}
-        </button>
-      </div>
       {error && <div className="editor-error">{t("files.editorSaveFailed", { error })}</div>}
       <div className="monaco-host" ref={containerRef} />
     </div>

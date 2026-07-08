@@ -1,0 +1,35 @@
+continuity:
+  start_state: 她握住横刀后抬眼，看向官道深处。
+  action: 刀不出鞘，微光很克制，不做魔法爆炸。；人物比例小，空间压力大，官道方向锁定。；侧脸看向远处城路，不出现现代证件。
+  end_state: 官道远景，孤月下她独自走在路中。
+  constraints: required_presence=CHAR_01、WEAPON_01 横刀、LOC_02; offscreen_presence=CHAR_02; forbidden_presence=modern vehicles、phones、random readable text、watermark; eyeline=姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。
+  negative: 不要换脸、不要换衣、不要新增人物、不要改变场景/光位/发型、不要生成文字/logo/水印、不要生成原生人声、不要随表情改变脸型/五官比例/眼距/鼻梁/下颌。 不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸；缺同源近景锚帧时改 MCU/OTS/侧脸/手部/物件反应。 本镜尾端保持手部/物件/侧背/反打落幅直到剪点，不要提前把 offscreen 角色拉回清晰入画或预演下一镜构图。
+剧本可看性合同：dramatic_function=刀法记忆让她短暂稳住，但无户籍无路引的死局马上把“活得像个人”变成主线问题。; audience_effect=观众从换装爽点转到新问题：这层皮能不能让她进城活下去。; 本镜承接留存承诺和观众问题处理，运动与表演只强化不改写；
+导演意图：刀法记忆让她短暂稳住，但无户籍无路引的死局马上把“活得像个人”变成主线问题。;
+起幅：她握住横刀后抬眼，看向官道深处。;
+落幅：官道远景，孤月下她独自走在路中。;
+场面调度：CU 手握刀柄 → ELS 官道孤人 → MCU 侧脸；角色槽位=CHAR_01；资产ID=LOC_02, WEAPON_01 横刀；
+内心戏主体隔离：非内心戏/按在场链执行；
+表演节拍：[0-30%] 承接首帧；[30-75%] 刀不出鞘，微光很克制，不做魔法爆炸。；人物比例小，空间压力大，官道方向锁定。；侧脸看向远处城路，不出现现代证件。；[75-100%] 官道远景，孤月下她独自走在路中。;
+运动精修约束：幅度=小幅；高光点只给一次明确动作；能量=蓄力后定住；身体守卫=脸型五官比例发型发髻服装轮廓保持，手部归属清楚，遮挡不穿模；
+环境交互约束：冷月与火把光影轻微随动，低雾/尘土/衣袂/火把烟提供动态反馈，不改变首帧设定；
+动作编排约束：beats=按 storyboard shots 顺序执行；speed_curve=慢→稳→定；spatial_path=沿既定轴线，不重置距离；camera_path=固定/微推，服务可读性；readability_beats=起势/动作/落点都可读；degrade_plan=Use Dreamina/Seedance silent clip and add SFX/BGM in compose.；
+专项模板约束：template=none；按 storyboard template_contract 执行；
+模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；失败按 degrade_plan=Use Dreamina/Seedance silent clip and add SFX/BGM in compose.；
+接缝执行包：first_frame=出图/第3集/图片/Clip04_first.png；end_frame=出图/第3集/图片/Clip04_end.png；midframes=6；need_endframe=True；transition=j_cut；entry_exit=入画/出画按 entity_schedule 执行；关键物件不凭空出现，画外保留需写明。；anchor_consumption=backend=dreamina；execution_backend=dreamina；frame_control_mode=multi_keyframe；anchor_count=6；need_end=True；consumption_mode=native_multiframe；consumes_mid_anchors_natively=True；consumes_endframe=True；known_profile=True；supports_native_mid_anchors=True；supports_last_frame=True；auto_routable=True；action=submit first/mid/end frames in one native multi-keyframe request；fallback=Use Dreamina/Seedance silent clip and add SFX/BGM in compose.；
+执行配方约束：frame_inputs=first_frame=True；last_frame=True；mid_anchors=6；consumption_mode=native_multiframe；native_timeline_frames=8；reference_inputs=characters=character_id=CHAR_01；binding=reference_group；assets=LOC_02、LOC_01；motion_reference=library_path=生产数据/motion_reference_library.json；policy=not_supported_or_not_needed；control_inputs=gate_policy=not_required；audio_inputs=video_generation_audio_policy=无声视频流；native_audio_policy=none；speech_policy=no_native_speech；post_video_qc=identity_qc_required=True；dense_face_watch_required=True；required_reports=video_qc、temporal_consistency、video_face_drift_watch；sample_policy=start/mid/end machine QC plus dense human frame review on clear-face windows；acceptance_policy=block_clear_wrong_closeup_face; block_dense_warn_until_human_review; no VLM/signoff override for true face drift；return_to_stage=video_or_image_then_compose；fallback=fallback_backends=seedance；degrade_plan=Use Dreamina/Seedance silent clip and add SFX/BGM in compose.；anchor_consumption=backend=dreamina；execution_backend=dreamina；frame_control_mode=multi_keyframe；anchor_count=6；need_end=True；consumption_mode=native_multiframe；consumes_mid_anchors_natively=True；consumes_endframe=True；known_profile=True；supports_native_mid_anchors=True；supports_last_frame=True；auto_routable=True；action=submit first/mid/end frames in one native multi-keyframe request；真正提交给后端时必须把 frame_inputs/reference_inputs/control_inputs/audio_inputs 按该配方组织，不得只提交裸文本 prompt；
+物理交互约束：读取 motion_control_manifest.json；level=none；manifest_path=无；required_inputs=；failure_modes=；degrade_plan=Use Dreamina/Seedance silent clip and add SFX/BGM in compose.；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；
+身份锁定约束：CHAR_01/囚犯初醒态：reference_group=ready；锚点句=黑色半散长发·冷艳东方少女脸·纤细高挑身形·灰褐粗布囚服·惊惧压狠眼神·百妖谱金光能力态；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；
+近景身份锁定约束：表情锚起→止，表情幅度=中；锁脸不锁情；无原生锁时限制低幅表情和小角度转头，必要时 MCU/OTS/侧脸/手部/物件反应保真实现；
+在场链约束：required_presence=CHAR_01、WEAPON_01 横刀、LOC_02; offscreen_presence=CHAR_02; forbidden_presence=modern vehicles、phones、random readable text、watermark; eyeline=姜月初视线按 LOC_01/LOC_02 轴线锁定裴长青遗体、横刀、陈青源或官道深处；非 POV 镜不看镜头。；只允许 required_presence/entity_schedule/首帧已登记的人物、物件、场景和特效进入清晰画面；offscreen_presence 只能作为画外声音、影子、侧背/手部/物件反应承接，不得清晰入画抢动作；forbidden_presence 完全不出现；
+近景升格守卫：近景升格守卫：不得把首/中/尾锚帧里脸部很小、侧背、遮挡或非主焦点的 CHAR_01 直接推成清晰近脸；只有已落档且 full image_qc 通过的同源近景锚帧/脸部特写/表情参考可支撑 CU/MCU。缺该锚帧时，落幅停在原锚帧景别，或改 MCU/OTS/侧脸/手部/物件反应镜，禁止让视频模型补一张新脸。；
+尾端落幅保持：最后 0.5 秒必须维持 storyboard 的手部/物件/侧背/反打落幅直到剪点；offscreen_presence=CHAR_02 不得在剪点前被拉回清晰脸、全身主体或新增动作。若需要展示该角色进场或系统反应，交给下一 Clip 开始，不在本 Clip 尾段提前预演下一构图。；
+原生音画约束：默认禁止原生人声；audio_intent=none；speech_policy=no_native_speech；compose_policy=丢弃；
+首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心；不重定视觉设定；
+人物运动：刀不出鞘，微光很克制，不做魔法爆炸。；人物比例小，空间压力大，官道方向锁定。；侧脸看向远处城路，不出现现代证件。；表情只动面部肌肉，脸型五官比例不变；
+镜头运动：缓慢推近，尾端定格；
+情绪节奏：[0-30%] 克制承接；[30-75%] 张力推进；[75-100%] 定住，服务信息钩子；
+动态细节：低雾缓流、衣袂微动、火把烟或土粒细动，与人物动作产生轻微物理反馈；
+衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints 和在场链约束，避开 continuity.negative，按j_cut服务下一镜；
+禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；内心戏镜头不得重复上一镜群像/妖魔/道具陈列；
+声音约束：无对白、无旁白、不要生成原生人声；声音只作为后期 n2d-compose 的剪辑意图。

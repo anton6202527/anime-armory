@@ -1,0 +1,1982 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "clip_id": "Clip_01",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=19.247s；voiceover_indices=[1, 2, 3]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_02",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=15.408s；dialogue_indices=[5]；voiceover_indices=[4, 5, 6]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_03",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=19.89s；voiceover_indices=[7, 8, 9]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_04",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=10.479s；dialogue_indices=[10, 11, 12, 13]；voiceover_indices=[10, 11, 12, 13]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_05",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=11.798s；voiceover_indices=[14, 15]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_06",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=12.093s；voiceover_indices=[16, 17]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_07",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=26.545s；voiceover_indices=[18, 19, 20, 21]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_08",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=15.897s；dialogue_indices=[22]；voiceover_indices=[22, 23, 24]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      },
+      {
+        "clip_id": "Clip_09",
+        "mouth_policy": "video-only/无声视频流  # source=explicit_user；no_native_speech；no audio-conditioned lipsync；对口型=关闭  # source=explicit_user，口部运动不由视频后端生成人声驱动。",
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_source": "storyboard.duration=21.036s；dialogue_indices=[26]；voiceover_indices=[25, 26, 27, 28]；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
+        "voice_or_native_policy": "后配音；视频阶段 audio_intent=none；原生音轨策略=丢弃  # source=explicit_user；不得启用原生人声/旁白/哼唱。"
+      }
+    ],
+    "mode": "先出视频后配音  # source=explicit_user",
+    "native_av_policy": {
+      "lipsync_policy": "off；对口型=关闭  # source=explicit_user；非原生音画默认不走 voice_conditioned_lipsync。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。"
+    },
+    "post_dub": {
+      "fit_strategy": "先锁定无声视频流时长，再由 n2d-voice/compose 贴合对白、旁白、音效和 BGM。",
+      "overflow_policy": "配音超时回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。"
+    }
+  },
+  "episode": "第5集",
+  "episode_promise": {
+    "cliffhanger": "",
+    "obstacle": "",
+    "opening_hook": "",
+    "payoff_or_progress": "",
+    "promise": "",
+    "source_trace_ids": []
+  },
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "群狼四肢着地冲锋，尘土和晨雾被冲开",
+        "陈青源等人在后景惊惧停住",
+        "姜月初五指按住刀柄，横刀出鞘",
+        "0s 群狼冲锋；中段姜月初按刀；尾帧横刀已出鞘，刀锋指向青面郎君。",
+        "start_state: 第4集尾声后立即接：青面郎君刚下令，群狼伏身前扑，姜月初黑衣完整、横刀未出鞘。",
+        "end_state: 横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+        "entry_exit: 狼妖群从深景入画；姜月初不移动位置，只完成拔刀；青面郎君只作远景压迫。；出画/画外保留：PROP_上盘村断石碑、PROP_村道血迹破布；入画/现身：VFX_虎山神摹影",
+        "群狼扑杀冷开：横刀出鞘"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。",
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。"
+      ],
+      "degrade_plan": "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。",
+      "effect_cause": "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "上盘村村道/晨雾血迹/外；可见主体=CHAR_01、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群、CHAR_05、WEAPON_01、PROP_镇魔司黑衣赤纹、PROP_上盘村断石碑、PROP_村道血迹破布、LOC_03；狼妖群从深景入画；姜月初不移动位置，只完成拔刀；青面郎君只作远景压迫。",
+        "村道纵轴；狼妖群从深景/画面上方向前景扑来，姜月初站在中轴偏下，刀从画面下方出鞘。",
+        "狼妖群从深景入画；姜月初不移动位置，只完成拔刀；青面郎君只作远景压迫。",
+        "低机位轻微后退，保留竖屏运动余量。；中景慢推到手部与刀柄。；刀锋特写硬切到眼神 CU。"
+      ],
+      "vfx_layers": [
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "猛虎快刀自上而下直劈",
+        "青面郎君本能判断接不下",
+        "它抓同伴当肉盾",
+        "刀光闪过，肉盾狼妖被劈开，画面克制避开猎奇断面",
+        "起幅刀锋抬起；中段青面郎君惊惧抓同伴；尾帧刀光落地、妖血低饱和泼尘。",
+        "start_state: 横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+        "end_state: 一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "entry_exit: 肉盾狼妖被青面郎君推入刀线；其余狼妖在画面边缘被刀气逼退。；出画/画外保留：PROP_上盘村断石碑、PROP_村道血迹破布；入画/现身：VFX_虎山神摹影"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。",
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。"
+      ],
+      "degrade_plan": "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。",
+      "effect_cause": "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "上盘村村道/晨光刀气/外；可见主体=CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人、WEAPON_01、PROP_镇魔司黑衣赤纹、VFX_虎山神摹影、LOC_03；肉盾狼妖被青面郎君推入刀线；其余狼妖在画面边缘被刀气逼退。",
+        "姜月初从前景下方向深景正主劈出，青面郎君在深景右侧抓同伴横向丢入刀线。",
+        "肉盾狼妖被青面郎君推入刀线；其余狼妖在画面边缘被刀气逼退。",
+        "低机位仰拍，保留刀锋下劈空间。；快速反打，保持村道纵轴。；横向硬切到落点，尾帧给刀锋落地。"
+      ],
+      "vfx_layers": [
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "飞鹰门众人呆住",
+        "姜月初脚下一踏再冲",
+        "横刀横扫，三头狼妖被连斩",
+        "余妖刹停夹尾后退",
+        "起幅飞鹰门呆立；中段姜月初疾冲横扫；尾帧余妖刹停后退。",
+        "start_state: 一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "end_state: 三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "entry_exit: 姜月初向前推进半个身位；余下狼妖退出近身区域，转为画面边缘和深景。；出画/画外保留：VFX_虎山神摹影"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。",
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。"
+      ],
+      "degrade_plan": "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。",
+      "effect_cause": "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "上盘村村道/血尘翻涌/外；可见主体=CHAR_01、GROUP_狼妖群、CHAR_05、CHAR_04、GROUP_飞鹰门众人、WEAPON_01、PROP_镇魔司黑衣赤纹、VFX_虎山神摹影、LOC_03；姜月初向前推进半个身位；余下狼妖退出近身区域，转为画面边缘和深景。",
+        "姜月初沿村道向前爆冲，狼妖群左右散开，青面郎君在深景看着族群被斩。",
+        "姜月初向前推进半个身位；余下狼妖退出近身区域，转为画面边缘和深景。",
+        "从飞鹰门肩后过肩看她前冲。；跟摇横扫，保留刀弧运动余量。；低机位特写爪子刹停，硬切尾帧。"
+      ],
+      "vfx_layers": [
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "弱肉强食反打：青面郎君破防",
+        "刀尖滴下一滴妖血，落入尘土。",
+        "姜月初抬眼反讽弱肉强食，神色冷淡。",
+        "青面郎君狼首暴怒，青衫被筋肉撑裂，伏身出击。",
+        "start_state: 三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "end_state: 青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "entry_exit: 青面郎君从直立青衫姿态降到四肢伏地出击姿态；余妖保持边缘后退。；出画/画外保留：VFX_虎山神摹影；入画/现身：VFX_妖气、VFX_狼爪寒光"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "上盘村村道/刀尖滴血/外；可见主体=CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人、WEAPON_01、PROP_镇魔司黑衣赤纹、LOC_03；青面郎君从直立青衫姿态降到四肢伏地出击姿态；余妖保持边缘后退。"
+      ],
+      "vfx_layers": [
+        "VFX_妖气",
+        "VFX_狼爪寒光",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "青衫撕裂后四肢伏地",
+        "后腿发力，地面龟裂",
+        "青影裹黑煞直扑面门",
+        "起幅伏身蓄力；中段地裂爆冲；尾帧青影扑到姜月初面前。",
+        "start_state: 青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "end_state: 青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "entry_exit: 青面郎君从深景进入近前攻击距离；群狼和飞鹰门转为边缘/画外。；入画/现身：VFX_妖气、VFX_狼爪寒光；出画/画外保留：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人；入画/现身：VFX_虎山神摹影",
+        "青影扑面：闻弦境正主下场"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。",
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。"
+      ],
+      "degrade_plan": "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。",
+      "effect_cause": "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "上盘村村道/黑煞骤起/外；可见主体=CHAR_05、CHAR_01、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人、WEAPON_01、PROP_镇魔司黑衣赤纹、VFX_妖气、VFX_狼爪寒光、LOC_03；青面郎君从深景进入近前攻击距离；群狼和飞鹰门转为边缘/画外。",
+        "青面郎君从画面右深景向左前景爆冲，姜月初在左前方迎击。",
+        "青面郎君从深景进入近前攻击距离；群狼和飞鹰门转为边缘/画外。",
+        "低机位近景压迫。；快速跟摇，纵轴不越。；主观近景，尾帧停在将撞未撞。"
+      ],
+      "vfx_layers": [
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+        "VFX_妖气",
+        "VFX_狼爪寒光",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜月初高高跃起",
+        "身后凝出血色猛虎虚影",
+        "刀锋和狼爪在村道中央相撞",
+        "黑煞与血虎一触即分",
+        "起幅姜月初跃起；中段血虎虚影成形；尾帧刀爪撞点爆开。",
+        "start_state: 青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "end_state: 刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "entry_exit: 姜月初从地面跃至半空落斩；青面郎君自下而上扑击，撞点后双方分离。；出画/画外保留：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人；入画/现身：VFX_虎山神摹影；出画/画外保留：VFX_狼爪寒光、VFX_虎山神摹影；入画/现身：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。",
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。"
+      ],
+      "degrade_plan": "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。",
+      "effect_cause": "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "上盘村村道/黑煞血虎相撞/外；可见主体=CHAR_01、CHAR_05、WEAPON_01、PROP_镇魔司黑衣赤纹、VFX_虎山神摹影、VFX_妖气、VFX_狼爪寒光、LOC_03；姜月初从地面跃至半空落斩；青面郎君自下而上扑击，撞点后双方分离。",
+        "姜月初自左前方高高跃起向右下斩，青面郎君自右下扑上；撞点位于画面中轴。",
+        "姜月初从地面跃至半空落斩；青面郎君自下而上扑击，撞点后双方分离。",
+        "低机位仰拍。；中景定住身份锚，不遮脸。；动作撞点硬切，尾帧凝住。"
+      ],
+      "vfx_layers": [
+        "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。",
+        "VFX_妖气",
+        "VFX_狼爪寒光",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "刀没入青面郎君肩颈",
+        "狼爪撕裂姜月初黑衣腹部",
+        "双方倒飞落地",
+        "姜月初强咽血，意识到硬拼会重伤",
+        "start_state: 刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "end_state: 姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "entry_exit: 双方从撞点分开，分别落到村道两侧；群狼退到远景。；出画/画外保留：VFX_狼爪寒光、VFX_虎山神摹影；入画/现身：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人",
+        "两败俱伤：闻弦境代价"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "若模型血腥过度，降级为黑衣裂口、手捂腹部、尘土和暗红渗血，不展示伤口细节。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "injury_reaction",
+      "screen_positions": [
+        "上盘村村道/撞击后尘土/外；可见主体=CHAR_01、CHAR_05、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群、WEAPON_01、PROP_镇魔司黑衣赤纹、VFX_妖气、LOC_03；双方从撞点分开，分别落到村道两侧；群狼退到远景。"
+      ],
+      "vfx_layers": [
+        "VFX_妖气",
+        "VFX_狼爪寒光",
+        "VFX_虎山神摹影"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "陈青源惊醒喊护住大人",
+        "飞鹰门众人拔刀围住姜月初",
+        "余妖夹尾退远",
+        "姜月初借遮挡盘算必须开挂",
+        "start_state: 姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "end_state: 飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "entry_exit: 飞鹰门众人从后景冲到姜月初前方形成遮挡；余妖退远；青面郎君保持远景压迫。；出画/画外保留：GROUP_狼妖群、LOC_03、VFX_妖气、WEAPON_01；入画/现身：VFX_百妖谱金光、VFX_系统面板、VFX_虎山神摹影、VFX_道行计数overlay",
+        "飞鹰门护主：借人墙开挂"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "手部与 LOC_03 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "面板文字全部交 compose overlay；视频只保留人物反应和干净负空间，必要时拆为人物反应 + 面板空镜。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "group_blocking_inner_monologue",
+      "screen_positions": [
+        "飞鹰门众人形成半圆人墙，姜月初位于人墙内侧偏前；青面郎君在远处被刀剑指住。"
+      ],
+      "vfx_layers": [
+        "VFX_妖气",
+        "VFX_百妖谱金光",
+        "VFX_系统面板",
+        "VFX_虎山神摹影",
+        "VFX_道行计数overlay"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "古朴绘卷在脑海中一闪",
+        "道行余额显示一百五十二年",
+        "姜月初压低吐槽还得开挂",
+        "道行如泄洪涌入虎妖画卷",
+        "外界呼喊咆哮远去，天地黑白硬断",
+        "start_state: 飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "end_state: 一百五十二年道行涌入虎妖画卷，外界声音远去，画面抽成黑白二色硬断。",
+        "entry_exit: 外界人物退为画外/虚焦，百妖谱古卷进入主观画面；本集最终镜不交尾帧。；出画/画外保留：GROUP_狼妖群、LOC_03、VFX_妖气、WEAPON_01；入画/现身：VFX_百妖谱金光、VFX_系统面板、VFX_虎山神摹影、VFX_道行计数overlay"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "面板文字全部交 compose overlay；视频只保留人物反应和干净负空间，必要时拆为人物反应 + 面板空镜。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "system_panel",
+      "screen_positions": [
+        "姜月初主观识海/百妖谱古卷/内心；可见主体=CHAR_01、CHAR_04、GROUP_飞鹰门众人、CHAR_05、VFX_系统面板、VFX_道行计数overlay、VFX_百妖谱金光、VFX_虎山神摹影、PROP_镇魔司黑衣赤纹；外界人物退为画外/虚焦，百妖谱古卷进入主观画面；本集最终镜不交尾帧。"
+      ],
+      "vfx_layers": [
+        "VFX_系统面板/百妖谱",
+        "MOTIF_百妖谱系统面板",
+        "VFX_妖气",
+        "VFX_百妖谱金光",
+        "VFX_系统面板",
+        "VFX_虎山神摹影",
+        "VFX_道行计数overlay"
+      ]
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "id": "PROP_上盘村断石碑",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "PROP 上盘村断石碑"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/PROP_上盘村断石碑.md",
+            "sha256": "e2f3fdfb6611e3e2b2bd4aa17c389e5258df3613a367594758c01c9d0a102279",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+            "sha256": "96dc56947796e8ae3cd76a50900624616906397218d4a005bc8bd9914c0ef732",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+            "sha256": "96dc56947796e8ae3cd76a50900624616906397218d4a005bc8bd9914c0ef732",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+            "sha256": "96dc56947796e8ae3cd76a50900624616906397218d4a005bc8bd9914c0ef732",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
+            "sha256": "79a375c4584d7c54fb5984797d9b54fdda02383ad5b543feca6b1c4fb981cbc7",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑_比例.png",
+            "sha256": "79a375c4584d7c54fb5984797d9b54fdda02383ad5b543feca6b1c4fb981cbc7",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
+            "sha256": "46e37a82b111354be52f2cc5bc01d9f07391dbe1b7a1fc8d89d1a7be210202ee",
+            "slot": "in_hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_上盘村断石碑_手持.png",
+            "sha256": "46e37a82b111354be52f2cc5bc01d9f07391dbe1b7a1fc8d89d1a7be210202ee",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_村道血迹破布",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "PROP 村道血迹破布"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/PROP_村道血迹破布.md",
+            "sha256": "d404b924c61ded134bcfd315dba1144973a5915105b58597094ef7ee9baaf926",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+            "sha256": "2382ce9e90ca4c2e3cf4228d5cd56fa1d31cb3030afc64e81930ec54150cf9c7",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+            "sha256": "2382ce9e90ca4c2e3cf4228d5cd56fa1d31cb3030afc64e81930ec54150cf9c7",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+            "sha256": "2382ce9e90ca4c2e3cf4228d5cd56fa1d31cb3030afc64e81930ec54150cf9c7",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
+            "sha256": "d873ab1cbb3b5655499130e23fe783dfe5ea36b19505749c51dfd18228418b6a",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布_比例.png",
+            "sha256": "d873ab1cbb3b5655499130e23fe783dfe5ea36b19505749c51dfd18228418b6a",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+            "sha256": "2382ce9e90ca4c2e3cf4228d5cd56fa1d31cb3030afc64e81930ec54150cf9c7",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_镇魔司黑衣赤纹",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "现代物件",
+            "文字水印",
+            "结构漂移",
+            "数量漂移"
+          ],
+          "structure": "PROP 镇魔司黑衣赤纹"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/PROP_镇魔司黑衣赤纹.md",
+            "sha256": "85659f746795b3c62a1fcabd3e72f68db6f056dde638483ce1b5227e92778f4a",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+            "sha256": "5146f7384a83f38fde8e468580ab848d8c07cba243be80b2c0e0172e02937250",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+            "sha256": "5146f7384a83f38fde8e468580ab848d8c07cba243be80b2c0e0172e02937250",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+            "sha256": "5146f7384a83f38fde8e468580ab848d8c07cba243be80b2c0e0172e02937250",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
+            "sha256": "1eb7c27e1bfece934d5a87f30b55e916eec8ba7cf80b10a7134e07611882237b",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_比例.png",
+            "sha256": "1eb7c27e1bfece934d5a87f30b55e916eec8ba7cf80b10a7134e07611882237b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
+            "sha256": "21f3feeb412a0940a1e4d0bc9c8210cdce6f53fa11f229fc170a2354c19664c7",
+            "slot": "in_hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹_手持.png",
+            "sha256": "21f3feeb412a0940a1e4d0bc9c8210cdce6f53fa11f229fc170a2354c19664c7",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_妖气",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "VFX 妖气"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_妖气.md",
+            "sha256": "5e4a76f36d9eaa627e75803525354170ae384f9cbb75bbf113e854a0b2f591c6",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_妖气.png",
+            "slot": "reference_slots",
+            "status": "planned"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_妖气.png",
+            "slot": "primary",
+            "status": "planned"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_妖气.png",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_狼爪寒光",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "VFX 狼爪寒光"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_狼爪寒光.md",
+            "sha256": "e0286bac92ca7fe6dc5a5525bec574f8ce92101984ff193b166b1054be91cfb0",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+            "sha256": "5889e62e284925757018a0a209d15a55124f6c7755fc55ad6251a24a6a44f9e4",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+            "sha256": "5889e62e284925757018a0a209d15a55124f6c7755fc55ad6251a24a6a44f9e4",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+            "sha256": "5889e62e284925757018a0a209d15a55124f6c7755fc55ad6251a24a6a44f9e4",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_百妖谱金光",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "VFX 百妖谱金光"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_百妖谱金光.md",
+            "sha256": "4418896d7faadb952846757ed5095fd6ce7bc99ac6b36d6b6260270b48339e15",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金光.png",
+            "slot": "reference_slots",
+            "status": "planned"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金光.png",
+            "slot": "primary",
+            "status": "planned"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金光.png",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_系统面板",
+        "lock_strategy": {
+          "face_policy": "none",
+          "must_not_have": [
+            "AI生成可读文字",
+            "现代手机UI",
+            "随机蓝色科幻屏",
+            "乱码文字"
+          ],
+          "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_系统面板_百妖谱金色古卷面板.md",
+            "sha256": "7007df905332f221ad3e86a08cdd87932b6a145035c0790007e4ef28a1570061",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_虎山神摹影",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_虎山神摹影_虎山神摹影黑血妖气.md",
+            "sha256": "6bf875b07667318cbaf61ebc0afe7e501e2121eff12ea06fd57282609c385fc9",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
+            "sha256": "beda69b54b0d41c9ca12a2b0c283e3c80d66b08256021fe637872c0fe8c79837",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
+            "sha256": "beda69b54b0d41c9ca12a2b0c283e3c80d66b08256021fe637872c0fe8c79837",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_虎妖黑血妖气.png",
+            "sha256": "beda69b54b0d41c9ca12a2b0c283e3c80d66b08256021fe637872c0fe8c79837",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_道行计数overlay",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "随机改色",
+            "遮挡主体脸",
+            "现代科幻UI",
+            "过度血腥猎奇"
+          ],
+          "structure": "依附百妖谱面板的金色道行计数动效；底图只留空面板，数值文字由 compose overlay 后期叠加。"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/VFX_道行计数overlay_道行计数金色_overlay.md",
+            "sha256": "452cc9cbaf2961ab024f490d8b8659fac2d72a304568d2bb247cd04346fae398",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png",
+            "sha256": "46a7887d2457b562fec929e34218b3b1fae93da3914d40697f2e8e34469b5944",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "asset"
+      },
+      {
+        "id": "WEAPON_01",
+        "lock_strategy": {
+          "face_policy": "faceless",
+          "must_not_have": [
+            "变成长剑",
+            "华丽仙剑",
+            "现代军刀",
+            "多把复制"
+          ],
+          "structure": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。"
+        },
+        "reference_slots": [
+          {
+            "path": "道具卡/WEAPON_01_横刀.md",
+            "sha256": "99795acc5f5d0333ad82a16f41beb596a387540d25be80fd05423c77da1c8ac5",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+            "slot": "scale_ref",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_武器_横刀.png",
+            "sha256": "b2e85855d09ca62476e03d73f5f572ddccdcdb9a353dce0bec0d316f7e4e0a7d",
+            "slot": "in_hand",
+            "status": "ready"
+          }
+        ],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "CHAR_01",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_01_姜月初.md",
+            "sha256": "4cf16f3b42847356ef1246b321587363b6e94e718c5788e715853d8375094a15",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+            "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+            "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+            "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+            "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+            "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+            "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+            "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+            "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+            "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+            "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+            "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+            "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+            "sha256": "89c8d27b0bef7d0cc79e5283614f9dd4b174807c1a6b6c4d560af5056dd6c7b3",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png",
+            "sha256": "89c8d27b0bef7d0cc79e5283614f9dd4b174807c1a6b6c4d560af5056dd6c7b3",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+            "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+            "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+            "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+            "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+            "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+            "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+            "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
+            "sha256": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+            "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+            "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+            "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+            "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+            "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+            "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+            "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png",
+            "sha256": "35e51c8c021a056e277783401ad51c723b1834f28a6f3b68e00001a2b407b46c",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+            "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png",
+            "sha256": "eec2434b472996915404f6d388fbb0c9eb4773adcb5796a1b1148dc3bb195426",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+            "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+            "slot": "expression_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+            "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+            "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+            "slot": "expression_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+            "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_04",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_04_陈青源.md",
+            "sha256": "9318e1214e25f2cf4d64a2bab7803469f1e87a0be7cbfe9d00c36943701826e6",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+            "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+            "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+            "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+            "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+            "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+            "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+            "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+            "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+            "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
+            "sha256": "0b9dfc6c274753da5c56743ae19129a1e7b17f6629f77930d57910bfde60f69d",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_三视图.png",
+            "sha256": "0b9dfc6c274753da5c56743ae19129a1e7b17f6629f77930d57910bfde60f69d",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+            "sha256": "05f2331fd67982f059c4fdea633261a24a05b41e2bced7333fc330ede9a339fb",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+            "sha256": "05f2331fd67982f059c4fdea633261a24a05b41e2bced7333fc330ede9a339fb",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+            "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_45度.png",
+            "sha256": "14fc9179daab1e416e244534768a7e53aeb5c8cf7891622340e6c6eedbceac7d",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+            "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_侧.png",
+            "sha256": "28ccbdefc4ba93bc44fe3f833e287ce40439fc727cb9ab50d792ef730b9e9c64",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+            "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_背.png",
+            "sha256": "0a13b201084259430d0ad416e6c9a92b55aa38f3ec26288f8b9c1dde427761f5",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+            "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_半身.png",
+            "sha256": "b2c2aed1648bced114b084ce68e0333ede901173919d806d0647f272e8806d9f",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+            "sha256": "05f2331fd67982f059c4fdea633261a24a05b41e2bced7333fc330ede9a339fb",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态_脸部特写_脸锚裁切.png",
+            "sha256": "05f2331fd67982f059c4fdea633261a24a05b41e2bced7333fc330ede9a339fb",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
+            "sha256": "efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_05",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "角色卡/CHAR_05_05.md",
+            "sha256": "cf0f4af9ccc8cb7e8c56802d9865eb340ad39d574834d9f7ce8dbc0d4e84ce10",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+            "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+            "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+            "sha256": "d804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+            "sha256": "d804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+            "sha256": "642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+            "sha256": "642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+            "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+            "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+            "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
+            "sha256": "53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57",
+            "slot": "turnaround",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_三视图.png",
+            "sha256": "53d716007114b412d024b86f0cd201b21ee38133a9265b354fb7e9737ade7b57",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+            "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+            "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "expressions",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+            "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
+            "slot": "three_quarter",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_45度.png",
+            "sha256": "bcbe0bdbbfc440f301ea562d0193c41b8e8701443462379e64f62f616a149ec0",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+            "sha256": "d804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b",
+            "slot": "side",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_侧.png",
+            "sha256": "d804d2d5b950d4b581825e436dddd6c928bc32c29639f9f82eecc227a32f8b9b",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+            "sha256": "642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a",
+            "slot": "back",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_背.png",
+            "sha256": "642505be26646fcdefb2563d853d17a66b0508ac7ae4f8cf20caec830febd30a",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+            "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+            "slot": "half_body",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_半身.png",
+            "sha256": "d0199e0a781b23d99ce1f79085a63d766637eaac27795a5f6911ffaaa0d766ca",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+            "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
+            "slot": "face_anchor_refs",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+            "sha256": "493fe2fc04216775b84217f73d2fbee66a9d20c5aadf968eea7f45fe08269890",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
+            "sha256": "b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a",
+            "slot": "expression_refs",
+            "status": "ready"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "GROUP_狼妖群",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "角色卡/GROUP_狼妖群.md",
+            "sha256": "d207ca0732a0982cc17a27fbf27e48599d44b212939193686ece3e27c99c2a63",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+            "sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+            "sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+            "sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+            "sha256": "870cfdd435e0bbddd70fd39de61e351fa6f000175f03e59069ad85e9f5f92e9e",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+            "sha256": "870cfdd435e0bbddd70fd39de61e351fa6f000175f03e59069ad85e9f5f92e9e",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+            "sha256": "567d9d8326cd0ab31891f2ee17dfd8e239f56e61899a717d9e1225018839fffe",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+            "sha256": "567d9d8326cd0ab31891f2ee17dfd8e239f56e61899a717d9e1225018839fffe",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+            "sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态.png",
+            "sha256": "c979a9d509368a348a39f48cf361c705b1107bd869bfcd0068f4aea7d0f784d1",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+            "sha256": "870cfdd435e0bbddd70fd39de61e351fa6f000175f03e59069ad85e9f5f92e9e",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_手部局部.png",
+            "sha256": "870cfdd435e0bbddd70fd39de61e351fa6f000175f03e59069ad85e9f5f92e9e",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+            "sha256": "567d9d8326cd0ab31891f2ee17dfd8e239f56e61899a717d9e1225018839fffe",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_狼妖群__常态_布料局部.png",
+            "sha256": "567d9d8326cd0ab31891f2ee17dfd8e239f56e61899a717d9e1225018839fffe",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      },
+      {
+        "id": "GROUP_飞鹰门众人",
+        "identity_strategy": {
+          "image": {
+            "codex": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "dreamina": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "openai": {
+              "mode": "reference_group",
+              "status": "fallback_reference_group"
+            },
+            "seedream": {
+              "mode": "universal_reference",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            }
+          },
+          "lora": {
+            "reason": "第1集先用共享定妆参考组；跨集漂移再升级 LoRA。",
+            "status": "not_needed"
+          },
+          "video": {
+            "dreamina": {
+              "mode": "first_last_frame",
+              "status": "fallback_reference_group"
+            },
+            "kling": {
+              "mode": "character_id",
+              "status": "unregistered"
+            },
+            "seedance": {
+              "mode": "face_lock",
+              "status": "unregistered"
+            },
+            "sora": {
+              "mode": "character_cameo",
+              "status": "unregistered"
+            },
+            "veo": {
+              "mode": "reference_controls",
+              "status": "unregistered"
+            }
+          }
+        },
+        "reference_slots": [
+          {
+            "path": "角色卡/GROUP_飞鹰门众人.md",
+            "sha256": "27658415670f5109f1f81b8c794265b90d81af1f6b59ce4284d6d39533ac7225",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+            "sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+            "sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+            "sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+            "sha256": "d4e9ac2056e7f1aa55c1d194b08b6aa457db690e5deaff96d137056f12b7abcd",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+            "sha256": "d4e9ac2056e7f1aa55c1d194b08b6aa457db690e5deaff96d137056f12b7abcd",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+            "sha256": "b1fc26eef9567d03f55d43ca4e2873095cea430216a89f303b55667120d4043b",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+            "sha256": "b1fc26eef9567d03f55d43ca4e2873095cea430216a89f303b55667120d4043b",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+            "sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+            "slot": "silhouette",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态.png",
+            "sha256": "dab4725be3bb37516271d5b839cb7610fb0ba2d70a11a00c7f9d07cd3a41f7d6",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+            "sha256": "d4e9ac2056e7f1aa55c1d194b08b6aa457db690e5deaff96d137056f12b7abcd",
+            "slot": "hand",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_手部局部.png",
+            "sha256": "d4e9ac2056e7f1aa55c1d194b08b6aa457db690e5deaff96d137056f12b7abcd",
+            "slot": "reference_atlas"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+            "sha256": "b1fc26eef9567d03f55d43ca4e2873095cea430216a89f303b55667120d4043b",
+            "slot": "outfit",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_GROUP_飞鹰门众人__常态_布料局部.png",
+            "sha256": "b1fc26eef9567d03f55d43ca4e2873095cea430216a89f303b55667120d4043b",
+            "slot": "reference_atlas"
+          }
+        ],
+        "role": "core"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_03",
+        "lock_strategy": {
+          "axis_rules": "LOC_03 村口到村道深处为主轴；姜月初多在画面下/前景向深处推进，青面郎君从深景或画面右侧压来；反打不越轴。",
+          "face_policy": "faceless",
+          "layout": "保持 storyboard 场景轴线和地标。",
+          "light_anchor": "LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。",
+          "lighting_signature": {
+            "color_temperature": "cool_low_key",
+            "key_light_direction": "storyboard_defined",
+            "numeric_measurement": "pending_after_landed_frame_qc",
+            "saturation_profile": "controlled",
+            "source_text": "LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。；LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。"
+          },
+          "must_not_have": [
+            "现代物件",
+            "平台UI",
+            "水印",
+            "空间轴线随机跳变"
+          ]
+        },
+        "reference_slots": [
+          {
+            "path": "场景卡/LOC_03_上盘村村口与村道.md",
+            "sha256": "f666c3e17a668f853a03d9a2065492be70a36338f176a00911a367a764526952",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+            "sha256": "d1f414a16ed24836f9e3d72839f37f373cf30d6208302e43997072621ea56ce3",
+            "slot": "reference_slots",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+            "sha256": "d1f414a16ed24836f9e3d72839f37f373cf30d6208302e43997072621ea56ce3",
+            "slot": "primary",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+            "sha256": "d1f414a16ed24836f9e3d72839f37f373cf30d6208302e43997072621ea56ce3",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道.png",
+            "sha256": "d1f414a16ed24836f9e3d72839f37f373cf30d6208302e43997072621ea56ce3",
+            "slot": "front",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
+            "sha256": "c6591d24d38101d31fcc38afe37cd0e9048a6855006df772ee58aa4911af77a3",
+            "slot": "reverse",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_反打.png",
+            "sha256": "c6591d24d38101d31fcc38afe37cd0e9048a6855006df772ee58aa4911af77a3",
+            "slot": "reference_group"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
+            "sha256": "4e802fa1b37d3303c387d658de11564bc27d795a2c1dc50a0d861ea695daf67f",
+            "slot": "floor_plan",
+            "status": "ready"
+          },
+          {
+            "path": "出图/共享/图片/定妆_场景_上盘村村口与村道_平面图.png",
+            "sha256": "4e802fa1b37d3303c387d658de11564bc27d795a2c1dc50a0d861ea695daf67f",
+            "slot": "reference_group"
+          }
+        ],
+        "type": "scene"
+      }
+    ]
+  },
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "直接兑现第4集集尾“杀了她”，让狼妖群扑杀和横刀出鞘成为0-3秒视觉钩。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "展示圆满《猛虎快刀》的第一次正面战斗爽点，同时让青面郎君第一次露怯。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "把第一刀后的战斗优势放大成连斩，形成本集上半段的主角高光。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "把青面郎君上一集的血食暴论反打回去，完成价值观爽点并引出正主暴怒。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "把战斗从清小怪推到闻弦境正主亲自出手，建立真实危险。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "姜月初不闪不避，用血虎虚影和横刀正面接住青面郎君，完成本集最大动作撞点。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "展示硬接闻弦境的代价：青面郎君重伤，姜月初也被狼爪撕开腹部。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "陈青源带人护住姜月初，给她争取开百妖谱的时间，也把“人会克制本能”落成行动。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_09",
+      "dramatic_function": "把道行余额和虎妖画卷回收成集尾开挂，卡在新力量启动前。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

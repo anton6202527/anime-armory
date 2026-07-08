@@ -82,6 +82,75 @@ def test_weapon_refs_are_not_labeled_as_props() -> None:
     assert "道具定妆" not in refs[0]
 
 
+def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_path: Path) -> None:
+    registry_path = tmp_path / "出图" / "共享" / "asset_registry.json"
+    registry_path.parent.mkdir(parents=True)
+    registry_path.write_text(json.dumps({
+        "assets": [
+            {
+                "id": "WEAPON_TEST",
+                "type": "weapon",
+                "name": "测试横刀",
+                "constraints": {
+                    "structure": "一柄一刃单刃横刀；一侧锋刃，一侧刀背非刃。",
+                    "blade_topology": {
+                        "weapon_count": 1,
+                        "blade_count": 1,
+                        "cutting_edge_count": 1,
+                        "spine": "刀背非刃",
+                    },
+                    "vfx_boundary": "刀光只能是半透明光轨，不得变成第二把实体刀刃。",
+                    "must_not_have": ["双刃", "第二把刀刃", "刀光变成实体刀刃"],
+                },
+                "drift_forbidden": ["不要双刃"],
+                "weapon_profile": {
+                    "blade_topology": "weapon_count=1；blade_count=1；cutting_edge_count=1；刀背非刃。",
+                },
+            },
+            {
+                "id": "VFX_TEST",
+                "type": "vfx",
+                "name": "测试光轨",
+                "constraints": {
+                    "structure": "半透明五道爪形冷光轨迹，不是实体武器。",
+                    "vfx_boundary": "只能表现速度/碰撞边缘光，不具备握柄、护手或金属刀刃。",
+                    "must_not_have": ["实体刀刃", "握柄", "护手"],
+                },
+            },
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    clip = {
+        "id": "EP01_CLIP01",
+        "description": "横刀贴着冷光出鞘。",
+        "object_ids": ["WEAPON_TEST"],
+        "vfx_ids": ["VFX_TEST"],
+    }
+    story = {"clips": [clip], "visual_contract": {}, "style_contract": {}}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    assert "一柄一刃单刃横刀" in defs["WEAPON_TEST"]["positive"]
+    assert "刀背非刃" in image_prompt_pack.flatten_contract_value(defs["WEAPON_TEST"]["constraints"]["blade_topology"])
+    assert "实体刀刃" in defs["VFX_TEST"]["constraints"]["must_not_have"]
+    assert "武器拓扑" in image_prompt_pack.shared_asset_positive(defs["WEAPON_TEST"])
+    assert "特效边界" in image_prompt_pack.shared_asset_positive(defs["VFX_TEST"])
+
+    old_assets = image_prompt_pack.ASSET_DEFS
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = defs
+        image_prompt_pack.CHARACTER_DEFS = {}
+        shot_text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clip, {}, story)
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_assets
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    assert "**资产拓扑锁**" in shot_text
+    assert "weapon_count=1" in shot_text
+    assert "刀光只能是半透明光轨" in shot_text
+    assert "不是实体武器" in shot_text
+
+
 def test_shot_refs_include_ready_auxiliary_character_angles(tmp_path: Path) -> None:
     image_dir = tmp_path / "出图" / "共享" / "图片"
     image_dir.mkdir(parents=True)

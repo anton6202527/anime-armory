@@ -19,7 +19,7 @@ python3 skills/n2d/_lib/image_backend_adapter.py scan --json
 
 `scan --json` 的 `usable_backends` 是“当前可自动确认能落 PNG”的列表。若 **0 个可用**，停止并提示“当前无可用生图渠道，请准备好可以生图的官方/已登录渠道”；`needs_confirmation_backends` 只能列为检测到但需人工确认，不当作可用。若 **≥2 个可用**，必须先让用户选一组 `生图模型 + 生图AI/生图渠道`，并可按项目需求给建议（长篇/多集/核心角色/多人同框优先主体库或多参考强模型/渠道；单集 demo/快速迭代可选 Codex；文字/编辑/透明背景等能力按当天官方文档和 CLI/API help 核验；社区当前推荐需实时核验后再说）。用户选定后写 `<作品根>/_设置.md` 的 `生图模型` + `生图AI`，整集统一一组模型+渠道。
 
-所选渠道未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。**生成轴=具体模型（C5）**：`生图模型` 默认 **GPT Image 2 / OpenAI GPT Image 系列归一名**，访问入口 `生图AI`(渠道) 默认 **Codex CLI**；执行前必须以官方 docs/CLI/API 刷新实际 model id。也可选 Seedream 5.0/4.5、可灵主体库模型、Nano Banana Pro、Dreamina/即梦官方图像模型等官方/已登录模型经各自渠道（全集统一一个模型+一个渠道、不混用），Sora Cameo 仅旧项目/人工路径。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 或 `同视频模型` 时改成显式后端名。
+所选渠道未找到可自动落 PNG 的入口 → **停下报告**（见 SKILL「生图后端规则」），不偷偷换后端兜底（换后端=混用）。**生成轴=具体模型（C5）**：`生图模型` 默认 **GPT Image 2 / OpenAI GPT Image 系列归一名**，访问入口 `生图AI`(渠道) 默认 **Codex CLI**；执行前必须以官方 docs/CLI/API 刷新实际 model id。全项目生图优先 Codex/OpenAI；Seedream、可灵主体库、Nano Banana、Dreamina/即梦官方图像模型等非 Codex/OpenAI 后端只能作为用户签核例外，签核写入 `<作品根>/合规/image_backend_override.json`。上面的通用探测覆盖白名单常见 CLI 名；具体是否可用仍以本文件各后端档案和官方帮助为准。禁止第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图；`<作品根>/_设置.md` 写 `同视频AI` 或 `同视频模型` 时改成显式后端名。
 
 ## 优先级（生视频后端未固定时）
 
@@ -27,8 +27,8 @@ python3 skills/n2d/_lib/image_backend_adapter.py scan --json
 |---|---|---|
 | ① | Codex 会话内置 `image_gen` / Codex image_generation feature → 通用视频兼容锚定；若已固定生视频模型则拼对应锚定句 | 当前 Codex 能力优先；生成后必须把图从 `$CODEX_HOME/generated_images/...` 移入作品目录 |
 | ② | 官方 OpenAI Images 入口（`openai` CLI 或 Codex/OpenAI 插件）→ 通用视频兼容锚定；若已固定生视频模型则拼对应锚定句 | 可自动批量落 PNG 时优先于国内兜底；注意统一视频兼容视觉锚点 |
-| 官方备选 | Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana(Gemini) | 当前可选；选定后整集统一、不与 Codex 混用；多角色同框/跨集锁人更稳。Sora Cameo 仅旧项目/manual |
-| 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / 即梦 web 自动化出图 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 和官方 Seedream API 不在此列 |
+| 签核例外 | Seedream / 可灵主体库 / Nano Banana(Gemini) / Dreamina/即梦官方 CLI | 仅在用户明确签核并写 `<作品根>/合规/image_backend_override.json` 后可用；选定后整集统一、不与 Codex 混用。Sora Cameo 仅旧项目/manual |
+| 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / 即梦 web 自动化出图 / 未签核 Dreamina 图片跑法 | 安全 invariant：未授权路径禁用；官方 Dreamina CLI 也不能无签核用于图片阶段 |
 
 切换/固定目标生视频模型/渠道时，图片阶段仍保持所选生图模型/渠道；需要风格兼容时拼目标生视频模型的图像风格锚定句。未固定时不回到开局强问视频后端，先拼通用视频兼容锚定并由 n2d-video 后续路由。
 
@@ -84,7 +84,7 @@ openai images create \
 - **平台**：macOS / Linux / Windows（WSL）
 - **计费**：高级会员积分（按官方实时档位为准；早期试用期已结束，不再列具体日期）
 - **后端模型**：Seedance 2.0
-> 注：Dreamina/即梦官方 CLI 图片生成已放行；仅禁第三方逆向版、`同视频AI` / `同视频模型` 含糊口径和 web 自动化。
+> 注：Dreamina/即梦官方 CLI 不再作为图片阶段默认备选；只有用户明确签核并写 `<作品根>/合规/image_backend_override.json` 后才能跑本 runner。第三方逆向版、`同视频AI` / `同视频模型` 含糊口径和 web 自动化始终禁用。
 
 ### 子命令（实测）
 
@@ -98,7 +98,7 @@ openai images create \
 
 ### 图片阶段调用原则
 
-- `生图AI=Dreamina` 时，优先用 `image2image` / 多参考能力生成含角色镜头，避免纯文生图导致脸漂；共享角色第一张定妆可用 `text2image` 起稿，再用 `image2image` 派生侧/背/半身/三视图。
+- 签核例外且 `生图AI=Dreamina` 时，优先用 `image2image` / 多参考能力生成含角色镜头，避免纯文生图导致脸漂；共享角色第一张定妆可用 `text2image` 起稿，再用 `image2image` 派生侧/背/半身/三视图。
 - 输出必须落到 `出图/共享/图片/` 或 `出图/第N集/图片/`，废图进 `废料/出图/...`。
 - 不使用即梦 web 自动化；不安装第三方逆向版 CLI。
 

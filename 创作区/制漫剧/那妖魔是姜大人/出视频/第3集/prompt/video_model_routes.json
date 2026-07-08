@@ -21,7 +21,7 @@
       "post_video_qc"
     ]
   },
-  "generated_at": "2026-07-07T11:35:18+00:00",
+  "generated_at": "2026-07-08T09:21:40+00:00",
   "routes": [
     {
       "clip_id": "Clip_01",
@@ -2766,7 +2766,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "character_id_or_reference_group",
+      "identity_requirement": "reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -2983,12 +2983,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "reference_group"
             },
             {
               "character_id": "CHAR_04",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "reference_group"
             }
           ],
           "assets": [
@@ -3664,7 +3664,7 @@
       "mode": "image2video",
       "video_generation_audio_policy": "无声视频流",
       "native_audio_policy": "none",
-      "identity_requirement": "character_id_or_reference_group",
+      "identity_requirement": "reference_group",
       "clip_characters": [
         {
           "character_id": "CHAR_01"
@@ -3777,12 +3777,12 @@
             {
               "character_id": "CHAR_01",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "reference_group"
             },
             {
               "character_id": "CHAR_04",
               "form": "",
-              "binding": "character_id_or_reference_group"
+              "binding": "reference_group"
             }
           ],
           "assets": [

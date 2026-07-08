@@ -19,7 +19,7 @@ export function Home(props: {
   onShowSkills: (line: LineInfo) => void;
   onEnter: (line: LineInfo) => void;
 }) {
-  const { workspaceRoot, onPickWorkspace, onShowSkills, onEnter } = props;
+  const { workspaceRoot, onShowSkills, onEnter } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [lines, setLines] = useState<LineInfo[]>([]);
@@ -37,7 +37,6 @@ export function Home(props: {
       <h1>{t("app.name")}</h1>
       <div className="repo">
         <span>{t("home.workspace", { path: workspaceRoot })}</span>
-        <button onClick={onPickWorkspace}>{t("home.switchWorkspace")}</button>
       </div>
       {err && <div className="empty">{t("common.scanFailed", { error: err })}</div>}
 

@@ -3,7 +3,7 @@
   "version": 1,
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "episode": "第3集",
-  "generated_at": "2026-07-07T12:13:49+00:00",
+  "generated_at": "2026-07-08T09:22:06+00:00",
   "summary": {
     "by_dim": {
       "语义谱系(P0)": {
@@ -113,9 +113,9 @@
       },
       "片内时序(N2)": {
         "block": 0,
-        "warn": 2,
+        "warn": 3,
         "ok": 1,
-        "n": 3,
+        "n": 4,
         "skipped": false
       },
       "状态化表情(EXP2)": {
@@ -1297,6 +1297,28 @@
       "frames": 24,
       "sampled_target": 24,
       "duration": 25.18,
+      "closeup": true,
+      "min_id_cos": null,
+      "identity_precision": "insufficient_precision",
+      "flicker": 0.0,
+      "tci": 1.0,
+      "verdict": "warn",
+      "identity_precision_reason": "close-up clip lacks at least two measurable face embeddings; run with full InsightFace or review dense sampled frames by eye",
+      "dimension": "片内时序(N2)",
+      "return_to_stage": "video",
+      "rerun_scope": "回 n2d-image 重出脸/发型/身形/手部漂移镜头；必要时补 identity_registry.character_dna / reference_group / 身高表；视频侧主体漂移回 n2d-video 重出对应 clip。跨集体型漂移补 character_dna.身形/体型锁；外观判官(VAP)判失败按离群镜重出。表情连续(EXP1)失配回 n2d-image 补 expressions 表情参考重出情绪镜。表情过锁(EXP3·report-only)疑似 copy-paste 冻脸（高身份×零表情·IPRO）时，别只重抽单镜——解耦表情（AU/FACS 表情控件 / expressions 参考）或下调身份参考权重后整体重出情绪镜。辨识标记(MK1)漂移/丢失回 n2d-image 把 identity_registry.identity_marks 的标记锁补进出图 prompt 重出；获得型标记穿帮回 storyboard 核对获得集。",
+      "risk_score": 0.7,
+      "affected_shots": [],
+      "affected_artifacts": [
+        "出视频/第3集/视频"
+      ],
+      "severity": "warn"
+    },
+    {
+      "clip": "Clip_04_掌心刀法与身份死局.mp4",
+      "frames": 24,
+      "sampled_target": 24,
+      "duration": 35.18,
       "closeup": true,
       "min_id_cos": null,
       "identity_precision": "insufficient_precision",

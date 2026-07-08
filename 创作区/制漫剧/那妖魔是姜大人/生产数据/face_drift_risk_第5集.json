@@ -1,0 +1,262 @@
+{
+  "backend_profile": {
+    "canonical": "codex",
+    "channel": "Codex CLI",
+    "in_context_consistency": "strong",
+    "ingests_video": false,
+    "label": "GPT Image 2（渠道 Codex CLI）",
+    "max_reference_images": null,
+    "model": "GPT Image 2",
+    "multi_reference": true,
+    "native_modes": [],
+    "notes": "生成者=GPT Image 2（第一梯队·高保真多参考/编辑·强上下文一致性·4K级尺寸·非弱后端）；Codex 仅访问入口。无公开服务端持久角色 ID；当前官方文档未证实可注册 subject-id/handle，每镜走项目记忆 reference_group + 真实图片入参 + 锚点句 + full QC。",
+    "persistent_subject": false,
+    "recommended_diverse_reference_min": null,
+    "strategy": "multi_reference"
+  },
+  "block": 0,
+  "blocking": false,
+  "characters": [
+    {
+      "angle_tokens": [
+        "deep_shadow"
+      ],
+      "appears_in": [
+        "EP05_CLIP01",
+        "EP05_CLIP02",
+        "EP05_CLIP03",
+        "EP05_CLIP04",
+        "EP05_CLIP05",
+        "EP05_CLIP06",
+        "EP05_CLIP07",
+        "EP05_CLIP08",
+        "EP05_CLIP09"
+      ],
+      "band": "high",
+      "character_id": "CHAR_01",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "极端角度 3 镜",
+          "points": 18
+        },
+        {
+          "factor": "大表情 1 镜",
+          "points": 8
+        },
+        {
+          "factor": "近景占比 2/9",
+          "points": 6.7
+        },
+        {
+          "factor": "多人同框 3/9",
+          "points": 6.7
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "囚犯初醒态",
+      "name": "姜月初",
+      "predicted_block_mitigated_by": "same_source_expression_refs",
+      "reference_gaps": [],
+      "scope": "核心主角/全篇长线；二十一世纪现代人穿越者；落入大唐获罪官眷身体，开篇为贱籍囚犯；百妖谱宿主。",
+      "score": 55.4,
+      "signals": {
+        "angle": 3,
+        "appear": 9,
+        "closeup": 2,
+        "emotion": 1,
+        "multi": 3,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "已补 ready 的同源表情参考：Codex-only 仍按 high 风险进入逐镜多参考 + split_composite + full image_qc 回验，不再因预测 high 在 preflight 阶段硬阻断。",
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。",
+        "极端角度/远景/逆光：按 angle_policy.requires_extra_reference 补侧/背/全身参考，或改分镜避开极端角度。",
+        "风险 high：默认先走 image2image / 多图参考链补强（脸部特写、同源表情库、逐主体真实图片入参、full image_qc）；只有已有快速本机加速或明确云训路径时，才把 LoRA 作为可选升档，不把慢速本机训练当出图前置。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP05_CLIP01",
+        "EP05_CLIP08"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_04",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 2/2",
+          "points": 20.0
+        },
+        {
+          "factor": "近景占比 1/2",
+          "points": 15.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "常态",
+      "name": "陈青源",
+      "reference_gaps": [],
+      "scope": "飞鹰门门主，第3集求救误认线关键角色。",
+      "score": 51.0,
+      "signals": {
+        "angle": 0,
+        "appear": 2,
+        "closeup": 1,
+        "emotion": 0,
+        "multi": 2,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+        "近景占比高：补脸部特写主参考，近景镜锁脸型/五官比例/发型发饰。",
+        "多人同框多：换用支持持久主体的官方后端（Seedream/可灵/Sora）或把同框拆成正反打分别出；无论哪种都必须逐主体写画面槽位+各自参考（空间绑定硬约束，否则模型把多张脸平均成一张）。"
+      ],
+      "tier": "multi_reference"
+    },
+    {
+      "angle_tokens": [],
+      "appears_in": [
+        "EP05_CLIP09"
+      ],
+      "band": "medium",
+      "character_id": "CHAR_03",
+      "drivers": [
+        {
+          "factor": "锁脸档位=multi_reference",
+          "points": 22
+        },
+        {
+          "factor": "多人同框 1/1",
+          "points": 20.0
+        },
+        {
+          "factor": "同源场景 in-context 记功(strong·如 GPT Image 2)",
+          "points": -6
+        }
+      ],
+      "form": "诈死复苏态",
+      "name": "虎山神 / 虎妖",
+      "reference_gaps": [],
+      "scope": "虎首人身大妖，疑似半只脚踏入鸣骨境，拥有近似不死或重生的天赋神通。",
+      "score": 36.0,
+      "signals": {
+        "angle": 0,
+        "appear": 1,
+        "closeup": 0,
+        "emotion": 0,
+        "multi": 1,
+        "recurrence_gap": 0
+      },
+      "suggestions": [
+        "GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。"
+      ],
+      "tier": "multi_reference"
+    }
+  ],
+  "default_backend": "codex",
+  "episode": "第5集",
+  "high": 1,
+  "kind": "n2d_face_drift_risk",
+  "medium": 2,
+  "missing_3q_baseline": 0,
+  "notes": [],
+  "prior_drift_available": false,
+  "recurrence_reentries": 0,
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "shared_asset_face_risk": {
+    "assets": [
+      {
+        "asset_id": "LOC_03",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "scene"
+      },
+      {
+        "asset_id": "WEAPON_01",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "weapon"
+      },
+      {
+        "asset_id": "VFX_道行计数overlay",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "PROP_镇魔司黑衣赤纹",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_上盘村断石碑",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "PROP_村道血迹破布",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "prop"
+      },
+      {
+        "asset_id": "VFX_狼爪寒光",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_妖气",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_虎山神摹影",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      },
+      {
+        "asset_id": "VFX_百妖谱金光",
+        "band": "low",
+        "driver": "faceless·须背身/裁脸·落档像素验 0 清晰脸",
+        "face_policy": "faceless",
+        "type": "vfx"
+      }
+    ],
+    "available": true,
+    "high": 0,
+    "low": 10,
+    "medium": 0,
+    "notes": []
+  },
+  "version": 1
+}

@@ -43,7 +43,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 
 ## 生图后端治理
 
-`生图AI` 默认 Codex；放行官方多参考一致性后端（OpenAI/gpt-image、Seedream Universal Reference、可灵主体库、Nano Banana、Sora Cameo）和明确的官方工具路径（如 Dreamina/即梦官方 CLI/API）。两条硬闸门：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden；官方 CLI/API 需显式留痕）。判定逻辑见 `ad-craft/scripts/contract.py` `classify_image_backend`。
+`生图AI` 默认且优先 **Codex / GPT Image 2**（或官方 OpenAI Images）。非 Codex/OpenAI 的官方后端（Seedream、可灵主体库、Nano Banana、Sora Cameo，含 Dreamina/即梦官方 CLI/API）只能作为用户明确签核的单项目例外；签核写入 `<作品根>/合规/image_backend_override.json` 后，`ad-craft/scripts/gate.py --stage image` 才放行。两条永久硬闸门仍保留：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden）。不得因为本机 `dreamina` 可用、视频阶段走即梦，或为了省事而自动切到即梦生图。
 
 ## 工作流
 

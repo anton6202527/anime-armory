@@ -1,0 +1,639 @@
+{
+  "clips": [
+    {
+      "clip_id": "EP05_CLIP01",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "GROUP_狼妖群",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "现代车辆",
+          "手机",
+          "平台水印",
+          "随机可读文字",
+          "无关官兵"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布"
+        ],
+        "offscreen_presence": [
+          "VFX_虎山神摹影"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/晨雾血迹/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初视线不看近身小妖，穿过战场直锁青面郎君；飞鹰门众人看向她的刀。；转场方式：match_action_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+        "entry_exit": "狼妖群从深景入画；姜月初不移动位置，只完成拔刀；青面郎君只作远景压迫。；出画/画外保留：PROP_上盘村断石碑、PROP_村道血迹破布；入画/现身：VFX_虎山神摹影",
+        "knowledge_state": {
+          "CHAR_01": [
+            "知道群狼听青面郎君号令",
+            "决定先压正主气势"
+          ],
+          "CHAR_05": [
+            "认为群狼足以围杀姜月初"
+          ]
+        },
+        "start_state": "第4集尾声后立即接：青面郎君刚下令，群狼伏身前扑，姜月初黑衣完整、横刀未出鞘。"
+      },
+      "trace_ids": [],
+      "transition_guard": "match_action_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP02",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "血腥内脏特写",
+          "现代物件",
+          "随机文字",
+          "无关妖物"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_虎山神摹影"
+        ],
+        "offscreen_presence": [
+          "PROP_上盘村断石碑",
+          "PROP_村道血迹破布"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "WEAPON_01",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/晨光刀气/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初仍盯青面郎君；青面郎君视线从刀光转到被抓同伴。；转场方式：impact_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "entry_exit": "肉盾狼妖被青面郎君推入刀线；其余狼妖在画面边缘被刀气逼退。；出画/画外保留：PROP_上盘村断石碑、PROP_村道血迹破布；入画/现身：VFX_虎山神摹影",
+        "knowledge_state": {
+          "CHAR_01": [
+            "圆满猛虎快刀可压低阶小妖",
+            "青面郎君会牺牲同伴自保"
+          ],
+          "CHAR_05": [
+            "意识到正面接不住第一刀"
+          ]
+        },
+        "start_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。"
+      },
+      "trace_ids": [],
+      "transition_guard": "impact_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP03",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_05",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "血腥尸块特写",
+          "现代物件",
+          "新增具名角色"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_虎山神摹影"
+        ],
+        "offscreen_presence": [],
+        "required_presence": [
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "WEAPON_01",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/血尘翻涌/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初眼神掠过余妖后重新锁青面郎君；余妖视线避开刀锋。；转场方式：hard_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "entry_exit": "姜月初向前推进半个身位；余下狼妖退出近身区域，转为画面边缘和深景。；出画/画外保留：VFX_虎山神摹影",
+        "knowledge_state": {
+          "CHAR_01": [
+            "小妖已被压住，正主必然亲自出手"
+          ],
+          "CHAR_05": [
+            "意识到族群大半被杀，怒意上升"
+          ]
+        },
+        "start_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。"
+      },
+      "trace_ids": [],
+      "transition_guard": "hard_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP04",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代文字",
+          "新增武器",
+          "青面郎君人类俊脸"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [
+          "VFX_虎山神摹影",
+          "VFX_妖气",
+          "VFX_狼爪寒光"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_05",
+          "WEAPON_01",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/刀尖滴血/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初看青面郎君，青面郎君先看死去同伴再瞪她。；转场方式：match_cut_to_charge。",
+      "shot_reverse_continuity": {
+        "axis_line": "姜月初画面左前方，青面郎君画面右后方；反打不越轴。",
+        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "coverage_order": [
+          "刀尖滴血插入",
+          "姜月初反讽",
+          "青面郎君青衫被筋肉撑裂"
+        ],
+        "crossing_axis_policy": "不得交换左右；若需要动势，用青面郎君向画面左前方伏身压来作为出点。",
+        "eyeline_match": "姜月初抬眼看青面郎君；青面郎君低头看死去小妖再抬头瞪她。",
+        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "screen_sides": {
+          "CHAR_01": "screen_left_foreground",
+          "CHAR_05": "screen_right_deep"
+        },
+        "shot_pairing": "姜月初冷静 CU ↔ 青面郎君破防狼首 CU"
+      },
+      "state": {
+        "end_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "entry_exit": "青面郎君从直立青衫姿态降到四肢伏地出击姿态；余妖保持边缘后退。；出画/画外保留：VFX_虎山神摹影；入画/现身：VFX_妖气、VFX_狼爪寒光",
+        "knowledge_state": {
+          "CHAR_01": [
+            "用反派自己的弱肉强食逻辑激怒他"
+          ],
+          "CHAR_05": [
+            "族群损失导致理智断裂，准备亲自扑杀"
+          ]
+        },
+        "start_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。"
+      },
+      "trace_ids": [],
+      "transition_guard": "match_cut_to_charge"
+    },
+    {
+      "clip_id": "EP05_CLIP05",
+      "entities": {
+        "characters": [
+          "CHAR_05",
+          "CHAR_01",
+          "GROUP_狼妖群",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "forbidden_presence": [
+          "现代特效 UI",
+          "金色系统面板",
+          "血虎虚影提前完全出现"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气",
+          "VFX_狼爪寒光"
+        ],
+        "offscreen_presence": [
+          "VFX_虎山神摹影"
+        ],
+        "required_presence": [
+          "CHAR_05",
+          "CHAR_01",
+          "VFX_妖气",
+          "VFX_狼爪寒光",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/黑煞骤起/外",
+      "screen_direction": "守本场左右轴线；视线接力：青面郎君视线直扑姜月初面门；姜月初视线不躲。；转场方式：impact_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "entry_exit": "青面郎君从深景进入近前攻击距离；群狼和飞鹰门转为边缘/画外。；入画/现身：VFX_妖气、VFX_狼爪寒光；出画/画外保留：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人；入画/现身：VFX_虎山神摹影",
+        "knowledge_state": {
+          "CHAR_01": [
+            "正主速度和力量高于小妖，不能闪躲失势"
+          ],
+          "CHAR_05": [
+            "进入亲自扑杀状态"
+          ]
+        },
+        "start_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。"
+      },
+      "trace_ids": [],
+      "transition_guard": "impact_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP06",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_05"
+        ],
+        "forbidden_presence": [
+          "系统面板文字",
+          "现代光效",
+          "第三方角色插入"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_虎山神摹影",
+          "VFX_妖气",
+          "VFX_狼爪寒光"
+        ],
+        "offscreen_presence": [
+          "GROUP_狼妖群",
+          "CHAR_04",
+          "GROUP_飞鹰门众人"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_05",
+          "WEAPON_01",
+          "VFX_虎山神摹影",
+          "VFX_妖气",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/黑煞血虎相撞/外",
+      "screen_direction": "守本场左右轴线；视线接力：双方视线锁定对方撞点，不看镜头。；转场方式：impact_flash_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "entry_exit": "姜月初从地面跃至半空落斩；青面郎君自下而上扑击，撞点后双方分离。；出画/画外保留：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人；入画/现身：VFX_虎山神摹影；出画/画外保留：VFX_狼爪寒光、VFX_虎山神摹影；入画/现身：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人",
+        "knowledge_state": {
+          "CHAR_01": [
+            "选择硬接保持镇魔司压场气势"
+          ],
+          "CHAR_05": [
+            "以闻弦境妖力强行碰撞"
+          ]
+        },
+        "start_state": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。"
+      },
+      "trace_ids": [],
+      "transition_guard": "impact_flash_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP07",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_05",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "GROUP_狼妖群"
+        ],
+        "forbidden_presence": [
+          "伤口猎奇特写",
+          "系统面板",
+          "无关群众"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气"
+        ],
+        "offscreen_presence": [
+          "VFX_狼爪寒光",
+          "VFX_虎山神摹影"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_05",
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/撞击后尘土/外",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初短暂低头看伤口后抬眼看正主；青面郎君盯她不退。；转场方式：breath_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "entry_exit": "双方从撞点分开，分别落到村道两侧；群狼退到远景。；出画/画外保留：VFX_狼爪寒光、VFX_虎山神摹影；入画/现身：CHAR_04、GROUP_狼妖群、GROUP_飞鹰门众人",
+        "knowledge_state": {
+          "CHAR_01": [
+            "确认青面郎君低于虎妖但仍足以重伤自己",
+            "不能在众人面前倒下暴露虚实"
+          ],
+          "CHAR_05": [
+            "肩颈重伤但仍未失去攻击欲望"
+          ]
+        },
+        "start_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。"
+      },
+      "trace_ids": [],
+      "transition_guard": "breath_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP08",
+      "entities": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "CHAR_05",
+          "GROUP_狼妖群"
+        ],
+        "forbidden_presence": [
+          "系统面板实体化",
+          "现代队列",
+          "无关官兵",
+          "随机旗帜文字"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "WEAPON_01",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气"
+        ],
+        "offscreen_presence": [
+          "VFX_百妖谱金光",
+          "VFX_系统面板",
+          "VFX_虎山神摹影",
+          "VFX_道行计数overlay"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "CHAR_05",
+          "LOC_03"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "上盘村村道/飞鹰门护阵/外",
+      "screen_direction": "守本场左右轴线；视线接力：陈青源看姜月初伤势后转向众人；众人刀尖指向青面郎君；姜月初眼神短暂脱离外界进入内心。；转场方式：subjective_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "entry_exit": "飞鹰门众人从后景冲到姜月初前方形成遮挡；余妖退远；青面郎君保持远景压迫。；出画/画外保留：GROUP_狼妖群、LOC_03、VFX_妖气、WEAPON_01；入画/现身：VFX_百妖谱金光、VFX_系统面板、VFX_虎山神摹影、VFX_道行计数overlay",
+        "knowledge_state": {
+          "CHAR_01": [
+            "借飞鹰门遮挡争取时间",
+            "决定使用百妖谱加点"
+          ],
+          "CHAR_04": [
+            "把姜月初视为真正能救村的大人，主动护主"
+          ],
+          "CHAR_05": [
+            "被人墙暂时挡住，但仍准备再扑"
+          ]
+        },
+        "start_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。"
+      },
+      "trace_ids": [],
+      "transition_guard": "subjective_cut"
+    },
+    {
+      "clip_id": "EP05_CLIP09",
+      "entities": {
+        "characters": [
+          "CHAR_01"
+        ],
+        "forbidden_presence": [
+          "现代手机界面",
+          "随机可读汉字",
+          "完整技能结果",
+          "无关神仙"
+        ],
+        "locations": [
+          "LOC_03"
+        ],
+        "objects": [
+          "VFX_系统面板",
+          "VFX_道行计数overlay",
+          "VFX_百妖谱金光",
+          "VFX_虎山神摹影",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "offscreen_presence": [
+          "CHAR_04",
+          "GROUP_飞鹰门众人",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "VFX_妖气",
+          "WEAPON_01"
+        ],
+        "required_presence": [
+          "CHAR_01",
+          "VFX_系统面板",
+          "VFX_道行计数overlay",
+          "VFX_百妖谱金光",
+          "VFX_虎山神摹影"
+        ]
+      },
+      "location_id": "LOC_03",
+      "scene": "姜月初主观识海/百妖谱古卷/内心",
+      "screen_direction": "守本场左右轴线；视线接力：主观识海镜头，姜月初眼神内收；外界角色只作画外声/虚焦符号，不清晰抢画。；转场方式：cliffhanger_hard_cut。",
+      "shot_reverse_continuity": {},
+      "state": {
+        "end_state": "一百五十二年道行涌入虎妖画卷，外界声音远去，画面抽成黑白二色硬断。",
+        "entry_exit": "外界人物退为画外/虚焦，百妖谱古卷进入主观画面；本集最终镜不交尾帧。；出画/画外保留：GROUP_狼妖群、LOC_03、VFX_妖气、WEAPON_01；入画/现身：VFX_百妖谱金光、VFX_系统面板、VFX_虎山神摹影、VFX_道行计数overlay",
+        "knowledge_state": {
+          "CHAR_01": [
+            "确认当前道行一百五十二年",
+            "决定把全部道行投入虎妖画卷"
+          ],
+          "CHAR_04": [
+            "只看见姜月初短暂停顿，不知道百妖谱存在"
+          ],
+          "CHAR_05": [
+            "只看见姜月初被人墙护住，不知道她在开挂"
+          ]
+        },
+        "start_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。"
+      },
+      "trace_ids": [],
+      "transition_guard": "cliffhanger_hard_cut"
+    }
+  ],
+  "episode": "第5集",
+  "generated_at": "2026-07-08T09:57:16+00:00",
+  "inputs": {
+    "continuity_breakdown": "脚本/第5集/continuity_breakdown.json",
+    "source_comprehension": "设定库/source_comprehension.json",
+    "storyboard": "脚本/第5集/storyboard.json"
+  },
+  "kind": "n2d_continuity_bible",
+  "open_continuity_questions": [
+    {
+      "exists": false,
+      "name": "state_transition_manifest",
+      "path": "生产数据/state_transition_manifest_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "interaction_graph",
+      "path": "生产数据/interaction_graph_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "causal_event_graph",
+      "path": "生产数据/causal_event_graph_第5集.json",
+      "status": "missing"
+    }
+  ],
+  "owner": "script_supervisor",
+  "sidecars": [
+    {
+      "exists": false,
+      "name": "state_transition_manifest",
+      "path": "生产数据/state_transition_manifest_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "interaction_graph",
+      "path": "生产数据/interaction_graph_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "contact_graph",
+      "path": "生产数据/contact_graph_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": false,
+      "name": "causal_event_graph",
+      "path": "生产数据/causal_event_graph_第5集.json",
+      "status": "missing"
+    },
+    {
+      "exists": true,
+      "name": "story_integrity_ledger",
+      "path": "设定库/story_integrity_ledger.json",
+      "status": "present"
+    },
+    {
+      "exists": true,
+      "name": "thread_scheduler",
+      "path": "设定库/thread_scheduler.json",
+      "status": "present"
+    },
+    {
+      "exists": false,
+      "name": "contract_trace",
+      "path": "生产数据/contract_trace_第5集.json",
+      "status": "missing"
+    }
+  ],
+  "source_contract": {
+    "contract_fields": [
+      "adaptation_boundaries",
+      "causality_chain",
+      "character_motives",
+      "episode_promise_basis",
+      "episode_trace_scope",
+      "foreshadowing_ledger",
+      "modern_understanding",
+      "power_system_rules",
+      "source_register_strategy"
+    ],
+    "exists": true,
+    "path": "设定库/source_comprehension.json",
+    "status": "confirmed",
+    "trace_ids": [
+      "SRC_CAUSE_001",
+      "SRC_CAUSE_002",
+      "SRC_CAUSE_003",
+      "SRC_CAUSE_004",
+      "SRC_MOTIVE_001",
+      "SRC_MOTIVE_002",
+      "SRC_MOTIVE_003",
+      "SRC_PROMISE_001",
+      "SRC_PROMISE_002",
+      "SRC_PROMISE_003",
+      "SRC_PROMISE_004",
+      "SRC_FORESHADOW_003",
+      "SRC_FORESHADOW_001",
+      "SRC_FORESHADOW_002"
+    ]
+  },
+  "status": "confirmed",
+  "version": 1
+}

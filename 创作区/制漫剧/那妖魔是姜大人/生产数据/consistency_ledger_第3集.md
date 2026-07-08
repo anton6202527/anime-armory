@@ -8,13 +8,13 @@
 | 交付域 | 综合 | block | high | medium | 证据源 |
 |---|---|---:|---:|---:|---|
 | 剧情 | 🟡 warn | 0 | 0 | 5 | detect, gate:image_preflight, gate:image |
-| 角色 | ⛔ block | 2 | 0 | 91 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_prompt_preflight, gate:video |
+| 角色 | ⛔ block | 1 | 0 | 93 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_prompt_preflight, gate:video |
 | 资产 | 🟡 warn | 0 | 0 | 25 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
-| 镜头 | ⛔ block | 10 | 0 | 151 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
+| 镜头 | ⛔ block | 10 | 0 | 150 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 音频 | 🟡 warn | 0 | 0 | 23 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video |
 | 字幕 | 🟢 ok | 0 | 0 | 0 | — |
 | 合规 | 🟡 warn | 0 | 0 | 7 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_preflight, gate:video_prompt_preflight, gate:video, compliance |
-| 生产操作 | ⛔ block | 39 | 0 | 52 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_prompt_preflight, gate:video, score, expression_state_consistency |
+| 生产操作 | ⛔ block | 39 | 0 | 53 | detect, gate:image_preflight, gate:image_prompt_preflight, gate:image, gate:video_prompt_preflight, gate:video, score, expression_state_consistency |
 
 ### 剧情问题
 - warn [detect] 节奏密度(Rhythm):  节奏密度(Rhythm)   连续 10 个长镜聚集（EP03_CLIP01→EP03_CLIP02→EP03_CLIP03→EP03_CLIP04→EP03_CLIP05→EP03_CLIP06→EP03_CLIP07→EP03_CLIP08→EP03_CLIP09→EP03_CLIP10），疑节奏塌·掉留存 
@@ -68,19 +68,19 @@
 - warn [gate:image_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image_prompt_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:image] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
-- warn [gate:video_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
+- warn [gate:video_preflight] 合规前置 @ /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video_prompt_preflight] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 - warn [gate:video] 合规前置 @ 创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json: 合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放
 
 ### 生产操作问题
 - warn [detect] 片内时序(N2):  片内时序(N2)    
 - warn [detect] 片内时序(N2):  片内时序(N2)    
+- warn [detect] 片内时序(N2):  片内时序(N2)    
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
 - warn [detect] 风格(S1):  风格(S1)    
-- warn [detect] 声音空间(ASP):  声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。 
 
 ## 根因聚合
 
@@ -88,8 +88,6 @@
   - warn [detect] 跨集脸漂(G5): CHAR_01__囚犯初醒态 跨集脸漂(G5)    CHAR_01__囚犯初醒态 跨集脸漂：第1集(均值0.4057)→第2集(均值0.4461)，相对基线掉幅 -0.0404，且本集均值低于绝对下限——已系统性偏离定妆锚
   - block [detect] 发型(H1): CHAR_01__囚犯初醒态 发型(H1)    
   - warn [detect] 主体视频一致(S2V):  主体视频一致(S2V)   本集已有主体/角色契约和视频产物，但缺 subject_video_consistency；无法核验视频侧主体保真、多主体串脸、自然度和背景解耦。 
-- block · character:video_batch_第3集_03_03.json · 成片身份回验
-  - block [gate:video] 成片身份回验 @ 创作区/制漫剧/那妖魔是姜大人/生产数据/video_batch_第3集_03_03.json: 成片身份回验 Clip_03 已被 video_runner 标记 qc_blocked：成片身份回验 block：dense_face_watch 镜出现片内身份 warn×1；warn=粗筛交人判，不能静默 accept。重出本镜或确认误报后 --allow-qc-block 强制验收
 - block · ops:Clip01_first_a1.png · 中段锚帧
   - block [gate:video_prompt_preflight] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip01_first_a1.png: 中段锚帧 声明了锚帧 1 但锚帧 PNG 不存在
 - block · ops:Clip01_first_a2.png · 中段锚帧
@@ -110,10 +108,12 @@
   - block [gate:video_prompt_preflight] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip04_first_a1.png: 中段锚帧 声明了锚帧 1 但锚帧 PNG 不存在
 - block · ops:Clip04_first_a2.png · 中段锚帧
   - block [gate:video_prompt_preflight] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip04_first_a2.png: 中段锚帧 声明了锚帧 2 但锚帧 PNG 不存在
+- block · ops:Clip04_first_a3.png · 中段锚帧
+  - block [gate:video_prompt_preflight] 中段锚帧 @ 创作区/制漫剧/那妖魔是姜大人/出图/第3集/图片/Clip04_first_a3.png: 中段锚帧 声明了锚帧 3 但锚帧 PNG 不存在
 
 ## 依赖传播
 
-- nodes=113 · edges=166 · clips=10 · images=58 · videos=3
+- nodes=114 · edges=176 · clips=10 · images=58 · videos=4
 - graph: `创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第3集.json`
 
 ## 合法不连续签收
@@ -205,11 +205,11 @@
 ## 未归属到具体角色/资产的一致性问题
 - [warn]  片内时序(N2)    
 - [warn]  片内时序(N2)    
+- [warn]  片内时序(N2)    
 - [warn]  场景(O2)    
 - [warn]  场景(O2)    
 - [warn]  场景(O2)    
 - [warn]  场景(O2)    
-- [warn]  风格(S1)    
 - [warn]  风格(S1)    
 
 说明：本表是验收交付面。`counts.block/high` 未清零时不得回写 `验收=✅`；medium 可由人工复核决定是否签收。

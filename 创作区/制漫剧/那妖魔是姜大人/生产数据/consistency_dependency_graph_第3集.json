@@ -806,6 +806,56 @@
       "to": "video:出视频/第3集/视频/Clip_03_黑衣赤纹：借来的官威.mp4"
     },
     {
+      "from": "clip:Clip_04",
+      "relation": "renders_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "route:Clip_04",
+      "relation": "executes_route",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_end.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a1.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a2.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a3.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a4.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a5.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
+      "from": "image:出图/第3集/图片/Clip04_first_a6.png",
+      "relation": "image_to_video",
+      "to": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
+    },
+    {
       "from": "episode:第3集",
       "relation": "has_evidence",
       "to": "evidence:consistency_ledger_第3集.json"
@@ -1546,15 +1596,21 @@
       "kind": "video",
       "label": "Clip_03_黑衣赤纹：借来的官威.mp4",
       "path": "出视频/第3集/视频/Clip_03_黑衣赤纹：借来的官威.mp4"
+    },
+    {
+      "id": "video:出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4",
+      "kind": "video",
+      "label": "Clip_04_掌心刀法与身份死局.mp4",
+      "path": "出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4"
     }
   ],
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "summary": {
     "clips": 10,
-    "edges": 166,
+    "edges": 176,
     "images": 58,
-    "nodes": 113,
-    "videos": 3
+    "nodes": 114,
+    "videos": 4
   },
   "version": 1
 }

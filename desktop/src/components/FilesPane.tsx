@@ -29,9 +29,9 @@ import {
 } from "../api";
 import { buildWorkTreeDecorations, type WorkTreeDecoration } from "../explorerDecorations";
 import { useI18n } from "../i18n";
-import { activeSkin, type FileIconKind } from "../skins";
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
+import { WorkFileIcon } from "./FileIcon";
 
 const MonacoFileEditor = lazy(() =>
   import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
@@ -112,53 +112,6 @@ function previewKind(name: string): PreviewKind {
   if (MARKDOWN.has(e)) return "markdown";
   if (JSONISH.has(e)) return "json";
   return "text";
-}
-
-function FileGlyph({ kind, label }: { kind: FileIconKind; label?: string }) {
-  if (kind === "video") {
-    return (
-      <svg viewBox="0 0 18 18" className="seti-svg seti-video" aria-hidden="true">
-        <circle cx="9" cy="9" r="8" />
-        <path d="M7 5.2 12.2 9 7 12.8Z" />
-      </svg>
-    );
-  }
-  if (kind === "image") {
-    return (
-      <svg viewBox="0 0 18 18" className="seti-svg seti-image" aria-hidden="true">
-        <path className="seti-image-back" d="M2.5 4.5h11v10h-11Z" />
-        <path className="seti-image-front" d="M5 2.5h11v10H5Z" />
-        <circle cx="8" cy="5.6" r="1" />
-        <path d="M6.5 11 9.3 8.1l1.9 2 1.4-1.6L15 11Z" />
-      </svg>
-    );
-  }
-  if (kind === "generic") {
-    return (
-      <svg viewBox="0 0 18 18" className="seti-svg seti-generic" aria-hidden="true">
-        <path d="M4 2.5h6.5L14 6v9.5H4Z" />
-        <path d="M10.5 2.5V6H14" />
-      </svg>
-    );
-  }
-  return <span className="seti-text-icon">{label}</span>;
-}
-
-function TreeIcon({ entry, collapsed }: { entry: SkillTreeEntry; collapsed: boolean }) {
-  if (entry.is_dir) {
-    return (
-      <span
-        className={"tree-icon folder-icon" + (collapsed ? "" : " open")}
-        aria-hidden="true"
-      />
-    );
-  }
-  const meta = activeSkin.fileIcon(entry);
-  return (
-    <span className={`tree-icon file-icon ${meta.cls}`} aria-hidden="true">
-      <FileGlyph kind={meta.kind} label={meta.label} />
-    </span>
-  );
 }
 
 function treeGuideStyle(depth: number): CSSProperties {
@@ -328,6 +281,21 @@ export function FilesPane({
     const maxSide = Math.max(minSide, total - minPreview);
     return Math.min(maxSide, Math.max(minSide, width));
   }
+
+  useEffect(() => {
+    const syncSharedSideWidth = () => {
+      const saved = Number(window.localStorage.getItem("aa.files.sideWidth"));
+      setSideWidth(Number.isFinite(saved) && saved > 0 ? saved : null);
+    };
+    window.addEventListener("anime-armory:files-side-width-changed", syncSharedSideWidth);
+    window.addEventListener("storage", syncSharedSideWidth);
+    window.addEventListener("resize", syncSharedSideWidth);
+    return () => {
+      window.removeEventListener("anime-armory:files-side-width-changed", syncSharedSideWidth);
+      window.removeEventListener("storage", syncSharedSideWidth);
+      window.removeEventListener("resize", syncSharedSideWidth);
+    };
+  }, []);
 
   useEffect(() => {
     if (sideWidth == null) return;
@@ -595,6 +563,16 @@ export function FilesPane({
     });
   }
 
+  useEffect(() => {
+    const onOpenFile = (event: Event) => {
+      const detail = (event as CustomEvent<{ root: string; path: string }>).detail;
+      if (!detail || detail.root !== root.path || !detail.path) return;
+      openFileTab(detail.path, true);
+    };
+    window.addEventListener("anime-armory:open-work-file", onOpenFile);
+    return () => window.removeEventListener("anime-armory:open-work-file", onOpenFile);
+  }, [editorDirty, root.path, sel]);
+
   function closeEditorTab(path: string) {
     const index = tabs.findIndex((tab) => tab.path === path);
     if (index < 0) return;
@@ -770,6 +748,32 @@ export function FilesPane({
   };
 
   useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("anime-armory:file-status", {
+        detail: selEntry
+          ? {
+              root: root.path,
+              path: selEntry.path,
+              name: selEntry.name,
+              kind,
+              ext: ext(selEntry.name),
+              size: selEntry.size ?? null,
+              dirty: editorDirty,
+            }
+          : {
+              root: root.path,
+              path: "",
+              name: "",
+              kind: "",
+              ext: "",
+              size: null,
+              dirty: false,
+            },
+      }),
+    );
+  }, [editorDirty, kind, root.path, selEntry?.name, selEntry?.path, selEntry?.size]);
+
+  useEffect(() => {
     if (kind !== "img") return;
     const el = imageStageRef.current;
     if (!el) return;
@@ -924,6 +928,7 @@ export function FilesPane({
       const next = clampSideWidth(e.clientX - rect.left, rect.width);
       setSideWidth(next);
       window.localStorage.setItem("aa.files.sideWidth", String(Math.round(next)));
+      window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
       window.dispatchEvent(new Event("resize"));
     };
     const up = () => {
@@ -1054,7 +1059,7 @@ export function FilesPane({
                           }
                           aria-hidden="true"
                         />
-                        <TreeIcon entry={e} collapsed={collapsed} />
+                        <WorkFileIcon entry={e} collapsed={collapsed} />
                         <span className="tree-label">{e.name}</span>
                         {decoration && (
                           <span
@@ -1077,11 +1082,11 @@ export function FilesPane({
             role="separator"
             aria-orientation="vertical"
             aria-label={t("files.resizeAria")}
-            title={t("files.resizeTitle")}
             onPointerDown={startSideResize}
             onDoubleClick={() => {
               setSideWidth(null);
               window.localStorage.removeItem("aa.files.sideWidth");
+              window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
               window.dispatchEvent(new Event("resize"));
             }}
           />
@@ -1116,7 +1121,7 @@ export function FilesPane({
                     openFileTab(editorTab.path, editorTab.pinned);
                   }}
                 >
-                  <TreeIcon entry={tabEntry} collapsed />
+                  <WorkFileIcon entry={tabEntry} collapsed />
                   <span className="editor-tab-label">{tabEntry.name}</span>
                   {decoration && !tabEntry.is_dir && (
                     <span className="editor-tab-decoration" title={decorationTitle(t, tabEntry, decoration)}>
@@ -1138,16 +1143,6 @@ export function FilesPane({
                 </div>
               );
             })}
-          </div>
-        )}
-        {selEntry && (
-          <div className="files-editor-breadcrumb" title={selEntry.path}>
-            {selEntry.path.split("/").map((part, index, parts) => (
-              <span className="files-breadcrumb-part" key={`${part}-${index}`}>
-                {index > 0 && <span className="files-breadcrumb-separator">›</span>}
-                <span className={index === parts.length - 1 ? "current" : ""}>{part}</span>
-              </span>
-            ))}
           </div>
         )}
         <div className="files-preview-content">
@@ -1227,11 +1222,6 @@ export function FilesPane({
                 loadVersion={previewVersion}
                 expectedMtime={selEntry.mtime ?? 0}
                 onDirtyChange={setEditorDirty}
-                onReload={() => {
-                  setEditorDirty(false);
-                  previewCacheRef.current.clear();
-                  refreshFiles();
-                }}
                 onSaved={(_, savedText) => {
                   setText(savedText);
                   previewCacheRef.current.clear();

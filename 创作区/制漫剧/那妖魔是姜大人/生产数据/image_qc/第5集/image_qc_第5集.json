@@ -1,0 +1,1837 @@
+{
+  "artifact_namespace": {
+    "available": true,
+    "declared_targets": 53,
+    "notes": [],
+    "prompt": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/prompt/01_分镜出图.md",
+    "stale": []
+  },
+  "asset_face_policy": {
+    "available": true,
+    "findings": [
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      }
+    ],
+    "notes": []
+  },
+  "asset_human_review": [],
+  "asset_lifecycle": {
+    "available": true,
+    "checked": 11,
+    "findings": [],
+    "notes": [],
+    "structured": 0
+  },
+  "carried_identity_anchors": {
+    "available": true,
+    "findings": [],
+    "notes": []
+  },
+  "checks": {
+    "anchors": {
+      "anchors": [
+        {
+          "box_ratio": 0.0065,
+          "char": "CHAR_01__囚犯初醒态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0067,
+          "char": "CHAR_01__镇魔司伪装态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0074,
+          "char": "CHAR_02__濒死战损态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "anchor_policy": "non_human_creature",
+          "box_ratio": 0.0,
+          "char": "CHAR_03__诈死复苏态",
+          "faces": 0,
+          "reason": "non_human_anchor_policy",
+          "verdict": "ok"
+        },
+        {
+          "box_ratio": 0.0095,
+          "char": "CHAR_04__常态",
+          "faces": 1,
+          "verdict": "warn"
+        },
+        {
+          "box_ratio": 0.0,
+          "char": "CHAR_05__常态",
+          "faces": 0,
+          "verdict": "block"
+        }
+      ],
+      "available": true,
+      "notes": []
+    },
+    "face": {
+      "arbiter": null,
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.3034,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_01__镇魔司伪装态": {
+          "ep_mean_score": 0.6038,
+          "ep_n_shots": 3,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.4248,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "CHAR_04__常态": {
+          "floor": 0.7319,
+          "floor_calibrated": true,
+          "has_main": true,
+          "intra_pairs": 4
+        },
+        "CHAR_05__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        },
+        "GROUP_飞鹰门众人__常态": {
+          "floor": 0.5,
+          "floor_calibrated": false,
+          "has_main": false,
+          "intra_pairs": 0
+        }
+      },
+      "encoder": "arcface_fallback",
+      "fidelity_gate": "absent",
+      "margin": 0.08,
+      "mode": "insightface",
+      "notes": [
+        "请求 styleid 但 StyleID 权重缺失（设 N2D_STYLEID_MODEL）——已回退 ArcFace；风格化脸下 ArcFace 余弦偏低，按低精度看待，崩脸仍需人判兜底。",
+        "无 fidelity-gate（未跑 vlm_verify --write）——一致性均值可能被'稳定地错'的镜抬高；如需剔除崩 canonical 的镜，先跑 vlm_verify --write 落 canonical 通过表再复审。"
+      ],
+      "shots": [
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first.png",
+          "score": 0.6355,
+          "score_vs_main": 0.635,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.5946,
+          "score_vs_main": 0.5828,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.5937,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "hair": {
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.2566,
+          "intra_pairs": 6
+        },
+        "CHAR_01__镇魔司伪装态": {
+          "floor": 0.605,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.1112,
+          "intra_pairs": 6
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.2304,
+          "intra_pairs": 6
+        },
+        "CHAR_04__常态": {
+          "floor": 0.506,
+          "intra_pairs": 6
+        },
+        "CHAR_05__常态": {
+          "floor": 0.5555,
+          "intra_pairs": 6
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "GROUP_飞鹰门众人__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        }
+      },
+      "margin": 0.08,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_first.png",
+          "score": 0.0941,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.09,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.0973,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "human_anatomy": {
+      "available": true,
+      "extra_threshold": 6,
+      "locator": "肤色启发",
+      "notes": [
+        "mediapipe Hands solutions API absent; 手部定位走肤色启发粗筛，仅抓 ≥6 指尖铁证，置信偏低。"
+      ],
+      "shots": []
+    },
+    "multimodal": {
+      "asset_ref_source": "asset_registry",
+      "asset_registry_assets": [
+        {
+          "id": "LOC_03",
+          "name": "上盘村村口与村道",
+          "type": "scene"
+        },
+        {
+          "id": "PROP_上盘村断石碑",
+          "name": "上盘村断石碑",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_村道血迹破布",
+          "name": "村道血迹破布",
+          "type": "prop"
+        },
+        {
+          "id": "PROP_镇魔司黑衣赤纹",
+          "name": "镇魔司黑衣赤纹",
+          "type": "prop"
+        },
+        {
+          "id": "VFX_妖气",
+          "name": "妖气",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_狼爪寒光",
+          "name": "狼爪寒光",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_百妖谱金光",
+          "name": "百妖谱金光",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_系统面板",
+          "name": "百妖谱金色古卷面板",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_虎山神摹影",
+          "name": "虎山神摹影黑血妖气",
+          "type": "vfx"
+        },
+        {
+          "id": "VFX_道行计数overlay",
+          "name": "道行计数金色 overlay",
+          "type": "vfx"
+        },
+        {
+          "id": "WEAPON_01",
+          "name": "横刀",
+          "type": "weapon"
+        }
+      ],
+      "available": true,
+      "character_asset_source": "identity_registry",
+      "character_assets": [
+        "姜月初",
+        "CHAR_01",
+        "CHAR_01__囚犯初醒态",
+        "CHAR_01__囚犯初醒态.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态.png', 'source_sha256': '628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__囚犯初醒态_三视图.png', 'status': 'ready'}",
+        "CHAR_01__囚犯初醒态.png', 'source_sha256': '628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_01__囚犯初醒态.png', 'source_sha256': '628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "CHAR_01__镇魔司伪装态",
+        "CHAR_01__镇魔司伪装态.png', 'status': 'ready', 'human_review': {'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429748+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429834+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429849+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429859+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429869+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态_三视图.png', 'status': 'ready', 'human_review': {'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T14:20:17.429878+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_01__镇魔司伪装态.png', 'source_sha256': '49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-06T08:58:05.820075+00:00', 'reviewed_by': 'image_qc --finalize-expr', 'reviewer': 'agent_visual_review', 'status': 'pass'}, 'anchor_sha': 'ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6'}]",
+        "陈青源",
+        "CHAR_04",
+        "CHAR_04__常态",
+        "CHAR_04__常态.png', 'status': 'ready', 'human_review': {'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031300+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031396+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031413+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031429+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031452+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态_三视图.png', 'status': 'ready', 'human_review': {'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031464+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031480+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}]",
+        "CHAR_04__常态.png', 'source_sha256': 'efba48c6126aaa45a70f3f6f3281f02f39e93f08f11358e2ad28a9e2d33205b6', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'reason': 'expression anchor finalized from reference_group.expressions', 'reviewed_at': '2026-07-04T17:16:01.069070+00:00', 'reviewed_by': 'image_qc --finalize-expr', 'reviewer': 'agent.visual_review', 'status': 'pass'}, 'anchor_sha': '107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9'}]",
+        "GROUP_飞鹰门众人",
+        "GROUP_飞鹰门众人__常态",
+        "GROUP_飞鹰门众人__常态.png', 'status': 'ready', 'human_review': {'reason': 'Codex text-generated character candidate requires human approval before ready', 'status': 'pending'}}",
+        "GROUP_飞鹰门众人__常态_手部局部.png', 'status': 'ready'}",
+        "GROUP_飞鹰门众人__常态_布料局部.png', 'status': 'ready', 'human_review': {'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:30.031442+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "GROUP_狼妖群",
+        "GROUP_狼妖群__常态",
+        "GROUP_狼妖群__常态.png', 'status': 'ready', 'human_review': {'reason': 'Codex text-generated character candidate requires human approval before ready', 'reviewed_at': '2026-07-04T17:13:51.263312+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'pending'}}",
+        "GROUP_狼妖群__常态_手部局部.png', 'status': 'ready', 'human_review': {'reason': 'shared hand reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263419+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "GROUP_狼妖群__常态_布料局部.png', 'status': 'ready', 'human_review': {'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-04T17:13:51.263436+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "05",
+        "CHAR_05",
+        "CHAR_05__常态",
+        "CHAR_05__常态.png', 'status': 'ready', 'human_review': {'reason': 'shared front reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209232+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared three_quarter reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209357+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared side reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209371+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared back reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209382+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared outfit reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209392+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared half_body reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209400+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态_三视图.png', 'status': 'ready', 'human_review': {'reason': 'shared turnaround reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209409+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'human_review': {'reason': 'shared face_anchor_refs[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209419+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}]",
+        "CHAR_05__常态.png', 'source_sha256': 'b7980b60acce8ce53b28e5c7cd1213246a1f5adf03e9d8be7dde00287f55640a', 'crop_box': [0, 0, 1, 1]}, 'emotion': '基础', 'human_review': {'reason': 'shared expressions[0] reference passed finalized review', 'reviewed_at': '2026-07-06T07:22:09.209430+00:00', 'reviewer': 'image_qc.mark_finalized', 'status': 'accepted'}}]",
+        " 虎妖",
+        "CHAR_03",
+        "CHAR_03__诈死复苏态",
+        "CHAR_03__诈死复苏态.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态.png', 'source_sha256': '01f0757f41a95c47fca667f611ccef0b977ddfd46a241f3d3ab3135dcd638b29', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_03__诈死复苏态_三视图.png', 'status': 'ready'}",
+        "CHAR_03__诈死复苏态.png', 'source_sha256': '01f0757f41a95c47fca667f611ccef0b977ddfd46a241f3d3ab3135dcd638b29', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_03__诈死复苏态.png', 'source_sha256': '01f0757f41a95c47fca667f611ccef0b977ddfd46a241f3d3ab3135dcd638b29', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]",
+        "裴长青",
+        "CHAR_02",
+        "CHAR_02__濒死战损态",
+        "CHAR_02__濒死战损态.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态.png', 'source_sha256': 'f1089a30460ff6865bda78a246562447ae877058c75abd15c21c27c60243742d', 'crop_box': [0, 0, 1, 1]}}",
+        "CHAR_02__濒死战损态_三视图.png', 'status': 'ready'}",
+        "CHAR_02__濒死战损态.png', 'source_sha256': 'f1089a30460ff6865bda78a246562447ae877058c75abd15c21c27c60243742d', 'crop_box': [0, 0, 1, 1]}}]",
+        "CHAR_02__濒死战损态.png', 'source_sha256': 'f1089a30460ff6865bda78a246562447ae877058c75abd15c21c27c60243742d', 'crop_box': [0, 0, 1, 1]}, 'emotion': '震动'}]"
+      ],
+      "embedding_backend": "rgb_hist+dhash",
+      "episode": "第5集",
+      "groups": {
+        "LOC_03": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_上盘村断石碑": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_村道血迹破布": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "PROP_镇魔司黑衣赤纹": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "VFX_妖气": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "VFX_百妖谱金光": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "VFX_虎山神摹影": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        },
+        "WEAPON_01": {
+          "shots": 1,
+          "skipped": "组<3镜"
+        }
+      },
+      "kind": "n2d_multimodal_consistency_report",
+      "notes": [],
+      "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+      "shots": [],
+      "verdicts": [],
+      "version": 1
+    },
+    "outfit": {
+      "available": true,
+      "characters": {
+        "CHAR_01__囚犯初醒态": {
+          "floor": 0.293,
+          "intra_pairs": 6
+        },
+        "CHAR_01__镇魔司伪装态": {
+          "floor": 0.5027,
+          "intra_pairs": 6
+        },
+        "CHAR_02__濒死战损态": {
+          "floor": 0.0501,
+          "intra_pairs": 6
+        },
+        "CHAR_03__诈死复苏态": {
+          "floor": 0.2988,
+          "intra_pairs": 6
+        },
+        "CHAR_04__常态": {
+          "floor": 0.5027,
+          "intra_pairs": 6
+        },
+        "CHAR_05__常态": {
+          "floor": 0.8482,
+          "intra_pairs": 6
+        },
+        "GROUP_狼妖群__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        },
+        "GROUP_飞鹰门众人__常态": {
+          "floor": 1.0,
+          "intra_pairs": 1
+        }
+      },
+      "margin": 0.1,
+      "min_group": 3,
+      "notes": [],
+      "rel_margin": 0.15,
+      "shots": [
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_first.png",
+          "score": 0.0278,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_first_a1.png",
+          "score": 0.0316,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_first_a2.png",
+          "score": 0.0296,
+          "verdict": "ok"
+        }
+      ]
+    },
+    "scene": {
+      "available": true,
+      "groups": {
+        "上盘村村口与村道": {
+          "constraints": {
+            "axis_rules": "LOC_03 村口到村道深处为主轴；开场承接第4集尾帧时，青面郎君保持前景/中近景爪势压迫，姜月初在原轴线拔刀接招；后续追击仍沿村道纵轴推进，反打不越轴。",
+            "face_policy": "faceless",
+            "layout": "保持 storyboard 场景轴线和地标。",
+            "light_anchor": "LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。",
+            "lighting_signature": {
+              "color_temperature": "cool_low_key",
+              "key_light_direction": "storyboard_defined",
+              "numeric_measurement": "pending_after_landed_frame_qc",
+              "saturation_profile": "controlled",
+              "source_text": "LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。；LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。"
+            },
+            "must_not_have": [
+              "现代物件",
+              "平台UI",
+              "水印",
+              "空间轴线随机跳变"
+            ]
+          },
+          "median_dist": 15.0,
+          "registered_id": "LOC_03",
+          "shots": 3
+        }
+      },
+      "impact_physics": [],
+      "notes": [
+        "场景[上盘村村口与村道] 已注册layout：保持 storyboard 场景轴线和地标。。验收时请重点核对。",
+        "场景[上盘村村口与村道] 已注册light_anchor：LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。。验收时请重点核对。",
+        "场景[上盘村村口与村道] 已注册axis_rules：LOC_03 村口到村道深处为主轴；开场承接第4集尾帧时，青面郎君保持前景/中近景爪势压迫，姜月初在原轴线拔刀接招；后续追击仍沿村道纵轴推进，反打不越轴。。验收时请重点核对。",
+        "场景[上盘村村口与村道] 已注册face_policy：faceless。验收时请重点核对。",
+        "场景[上盘村村口与村道] 已注册must_not_have：['现代物件', '平台UI', '水印', '空间轴线随机跳变']。验收时请重点核对。",
+        "场景[上盘村村口与村道] 已注册lighting_signature：{'color_temperature': 'cool_low_key', 'saturation_profile': 'controlled', 'key_light_direction': 'storyboard_defined', 'source_text': 'LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。；LOC_03 晨雾散射冷光，村道纵轴清楚，断石碑和血迹只作背景证据，不血腥猎奇。', 'numeric_measurement': 'pending_after_landed_frame_qc'}。验收时请重点核对。"
+      ],
+      "shots": []
+    },
+    "seam": {
+      "available": true,
+      "contradictions": [],
+      "notes": [],
+      "seams": []
+    }
+  },
+  "cross_episode_face_drift": {
+    "available": true,
+    "entries": [
+      {
+        "below_abs_low": true,
+        "char": "CHAR_01__囚犯初醒态",
+        "drop": -0.0401,
+        "episode_from": "第1集",
+        "episode_to": "第2集",
+        "from_mean": 0.406,
+        "severity": "medium",
+        "to_mean": 0.4461
+      },
+      {
+        "below_abs_low": false,
+        "char": "CHAR_01__镇魔司伪装态",
+        "drop": 0.1217,
+        "episode_from": "第3集",
+        "episode_to": "第5集",
+        "from_mean": 0.7255,
+        "severity": "medium",
+        "to_mean": 0.6038
+      }
+    ],
+    "history_chars": 2
+  },
+  "episode": "第5集",
+  "face_anchor_lighting": {
+    "available": true,
+    "flagged": []
+  },
+  "face_anchor_quality": {
+    "available": true,
+    "checked": 18,
+    "findings": [
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「face_anchor」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "asset": "出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png",
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「face_anchor」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      }
+    ],
+    "notes": []
+  },
+  "face_human_review": [],
+  "face_manual_confirmations": {
+    "applied": 0,
+    "available": true,
+    "configured": 0,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/face_confirmations.json",
+    "rows": []
+  },
+  "face_reference_coverage": {
+    "available": true,
+    "covered": 6,
+    "face_mode": "insightface",
+    "missing": [],
+    "notes": [],
+    "pending": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a2.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a3.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a4.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a5.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a3.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a4.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a5.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a6.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a7.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a2.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a3.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a4.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a4.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a5.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      }
+    ],
+    "precision_level": "full",
+    "required": 6,
+    "skipped": [],
+    "unclassified": [],
+    "verdict": "ok"
+  },
+  "human_image_review": {
+    "active_rejects": 0,
+    "available": true,
+    "rejects": [],
+    "review_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/human_image_review.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "出图/共享/asset_registry.json": "ea544007af451aa6b4cf16050504f664aec660be60efc72c77aeb7ab709c16d1",
+      "出图/共享/identity_registry.json": "925fc7d88e3d38f3463f219a869243d615c247c2bafff0c818828c857bf52723",
+      "出图/共享/style_anchor_registry.json": "9b24e53c0c79902e92affd9e489bc2c2a35f9b1d76a8533edf47da6df23ee60c",
+      "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
+      "出图/第5集/prompt/00_总览.md": "1d0cc489eb7e93178184110a4a4f4ae09e9752adbeb240d45c162ccd83ffe29f",
+      "出图/第5集/prompt/01_分镜出图.md": "1860d656488175e25a8c9c4e4eca341f1d5ad9c8f1c505561184dd9c7a5786d6",
+      "出图/第5集/图片/Clip01_first.png": "2adad7878a66e0766b085135613c1282cbcfe1844524a4d1b321b92ad404bacc",
+      "出图/第5集/图片/Clip01_first_a1.png": "aadd4922e28c9ea64855f4016e62f98aa513b01379a857b7cd3ba1efd268d7f4",
+      "出图/第5集/图片/Clip01_first_a2.png": "491772f72cd2b95210f7d6cd92b1d628626a8d2d8ca613a465dd916ddb570c9d",
+      "生产数据/image_qc/第5集/face_confirmations.json": null,
+      "生产数据/image_qc/第5集/human_image_review.json": null,
+      "生产数据/image_qc/第5集/prop_shape_confirmations.json": null
+    },
+    "sha": "12ad6001ddc601b9838e73e10e59532f08cdfe2899b60617f9b632977327f73a"
+  },
+  "kind": "n2d_image_qc",
+  "lint": {
+    "available": true,
+    "character_shots": [
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_first.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_first_a1.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_first_a2.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_first_a3.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_first_a4.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip01_end.png",
+        "shot": "Clip_01"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a1.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a2.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_first_a3.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip02_end.png",
+        "shot": "Clip_02"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a1.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a2.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a3.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a4.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_first_a5.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip03_end.png",
+        "shot": "Clip_03"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first_a1.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_first_a2.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "png": "出图/第5集/图片/Clip04_end.png",
+        "shot": "Clip_04"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a1.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a2.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_05/常态"
+        ],
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_end.png",
+        "shot": "Clip_05"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a1.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a2.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_first_a3.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 6（`EP05_CLIP06` · 血虎跃起：刀爪正面对撞 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip06_end.png",
+        "shot": "Clip_06"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a1.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a2.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a3.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a4.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a5.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a6.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_first_a7.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 7（`EP05_CLIP07` · 两败俱伤：闻弦境代价 · multi_character_same_frame）",
+        "png": "出图/第5集/图片/Clip07_end.png",
+        "shot": "Clip_07"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a1.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a2.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a3.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_first_a4.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 8（`EP05_CLIP08` · 飞鹰门护主：借人墙开挂 · ensemble_blocking）",
+        "png": "出图/第5集/图片/Clip08_end.png",
+        "shot": "Clip_08"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a1.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a2.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a3.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a4.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_first_a5.png",
+        "shot": "Clip_09"
+      },
+      {
+        "face_coverage_required": true,
+        "identity_refs": [
+          "CHAR_01/镇魔司伪装态"
+        ],
+        "label": "镜头 9（`EP05_CLIP09` · 百妖谱开闸：天地黑白集尾 · system_panel）",
+        "png": "出图/第5集/图片/Clip09_end.png",
+        "shot": "Clip_09"
+      }
+    ],
+    "findings": [
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「face_anchor」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "weak_face_anchor",
+        "level": "warn",
+        "msg": "脸部锚弱信噪比 CHAR_05/常态「face_anchor」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
+      },
+      {
+        "code": "asset_faceless_unverified_degraded",
+        "level": "warn",
+        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
+      },
+      {
+        "code": "vlm_setting_check_skipped",
+        "level": "warn",
+        "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
+      }
+    ],
+    "notes": [],
+    "shots_linted": 9
+  },
+  "prohibited_face_patch": {
+    "available": true,
+    "notes": [
+      "未发现最新落档事件来自本地贴脸修复。"
+    ],
+    "outputs": [],
+    "verdict": "ok"
+  },
+  "prop_shape_review": {
+    "available": true,
+    "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+    "confirmed": 0,
+    "pending": 3,
+    "targets": [
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
+        "reason": "registered_prop_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      }
+    ],
+    "total": 3
+  },
+  "qc_environment": {
+    "face_mode": "insightface",
+    "jump_reason": "image_qc 有硬阻断，需修复/重抽受影响镜头后重跑",
+    "jump_to_stage": "image",
+    "missing_or_degraded": [],
+    "precision_level": "full",
+    "python": "/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python",
+    "recommended_install": "",
+    "user_notice": "图片质检环境：full；当前解释器：/opt/homebrew/Caskroom/miniforge/base/envs/facefusion/bin/python；建议安装：无需补装；当前应停在/回退：image；原因：image_qc 有硬阻断，需修复/重抽受影响镜头后重跑"
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "semantic_drift": {
+    "available": true,
+    "compared": 3,
+    "findings": [
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      }
+    ],
+    "floor": 0.55
+  },
+  "shot_scale_contract": {
+    "available": true,
+    "checked": 0,
+    "findings": [],
+    "notes": [
+      "storyboard 无可解析景别（CU/LS…）——跳过。"
+    ]
+  },
+  "state_ledger": {
+    "advise": true,
+    "available": true,
+    "ledger_present": false,
+    "markers": [
+      "伤口",
+      "升级",
+      "受伤",
+      "撕裂",
+      "消耗",
+      "血迹"
+    ],
+    "not_injected_markers": []
+  },
+  "style_attribution": {
+    "anchor_fingerprint": {
+      "contrast": 137.0,
+      "edge": 28.5,
+      "sat": 12.0
+    },
+    "anchor_status": "ok",
+    "available": true,
+    "checked": 3,
+    "distance": 0.927,
+    "episode_fingerprint": {
+      "contrast": 81.0,
+      "edge": 26.4,
+      "sat": 63.0
+    },
+    "findings": [],
+    "intent": {
+      "anchors": [
+        "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
+      ],
+      "style_name": "冷灰写实3D国风漫剧",
+      "taboos": [
+        "不要现代车辆/手机/水印",
+        "不要随机汉字或烤字",
+        "不要血腥猎奇断面",
+        "不要把青面郎君画成俊美人类",
+        "不要高饱和页游仙侠光效",
+        "不要让狼妖群换成普通士兵"
+      ]
+    }
+  },
+  "summary": {
+    "advisory": 10,
+    "by_check": {
+      "anchors": {
+        "block": 1,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "cross_episode_face_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 2
+      },
+      "face": {
+        "block": 0,
+        "noface": 0,
+        "ok": 3,
+        "warn": 0
+      },
+      "hair": {
+        "block": 0,
+        "noface": 0,
+        "ok": 3,
+        "warn": 0
+      },
+      "human_anatomy": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "lint": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 4
+      },
+      "multimodal": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "outfit": {
+        "block": 0,
+        "noface": 0,
+        "ok": 3,
+        "warn": 0
+      },
+      "prohibited_face_patch": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "prop_shape_review": {
+        "block": 3,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "scene": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "seam": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 0
+      },
+      "semantic_drift": {
+        "block": 0,
+        "noface": 0,
+        "ok": 0,
+        "warn": 3
+      }
+    },
+    "degraded": false,
+    "hard_blocks": 3,
+    "unavailable_visual_checks": [],
+    "verdict": "block"
+  },
+  "tone_light_contract": {
+    "available": true,
+    "checked": 3,
+    "findings": [],
+    "intent": {
+      "brightness": null,
+      "evidence": "上盘村冷灰晨雾、低饱和血尘与青黑妖气；百妖谱只在最后用金色古卷光作为信息焦点。",
+      "warmth": "cool"
+    },
+    "luma_median": 45.6,
+    "warmth_median": -0.3
+  },
+  "version": 1,
+  "vlm_consistency": {
+    "available": false,
+    "findings": [],
+    "judged": 0,
+    "notes": [
+      "VLM 后端不可用——VLM 语义判定跳过（配置 N2D_VLM_CMD 后复检；厂商无关）。"
+    ]
+  }
+}

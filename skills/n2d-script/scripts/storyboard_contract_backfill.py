@@ -12,11 +12,40 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 
 EXPRESSION_SPAN_MAP = {"高": "大", "强": "大", "低": "微"}
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if N2D_LIB.exists() and str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+try:
+    from n2d_contract import TEMPLATE_BASE_FIELDS, spectacle_required_fields  # type: ignore
+except Exception:  # pragma: no cover - local fallback keeps the script usable in partial checkouts.
+    TEMPLATE_BASE_FIELDS = ("template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative")
+
+    def spectacle_required_fields(kind: str) -> tuple[str, ...]:
+        if kind == "fight_exchange":
+            return TEMPLATE_BASE_FIELDS + (
+                "attack_path",
+                "impact_frame",
+                "action_scope",
+                "contact_points",
+                "force_direction",
+                "screen_direction",
+                "speed_curve",
+                "spatial_path",
+                "camera_path",
+                "readability_beats",
+                "recovery_beat",
+                "degrade_plan",
+                "keyframe_plan",
+                "post_cue_points",
+                "physics_guard",
+            )
+        return ()
 
 
 def episode_label(value: str) -> str:
@@ -69,6 +98,151 @@ def unique(values: Iterable[Any]) -> list[str]:
         if token and token not in out:
             out.append(token)
     return out
+
+
+def nonempty(value: Any) -> bool:
+    if value in (None, ""):
+        return False
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, (list, dict)):
+        return bool(value)
+    return True
+
+
+def first_text(*values: Any, default: str = "") -> str:
+    for value in values:
+        token = clean_token(value)
+        if token:
+            return token
+    return default
+
+
+def shot_parts(clip: Mapping[str, Any], *keys: str) -> list[str]:
+    out: list[str] = []
+    for shot in as_list(clip.get("shots")):
+        if isinstance(shot, Mapping):
+            for key in keys:
+                token = clean_token(shot.get(key))
+                if token and token not in out:
+                    out.append(token)
+        else:
+            token = clean_token(shot)
+            if token and token not in out:
+                out.append(token)
+    return out
+
+
+def concise(values: Iterable[str], fallback: str, limit: int = 4) -> list[str]:
+    out = [str(v).strip() for v in values if str(v).strip()]
+    return out[:limit] if out else [fallback]
+
+
+def derived_beats(clip: Mapping[str, Any]) -> list[str]:
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    existing = unique(as_list(contract.get("beats") if isinstance(contract, Mapping) else None))
+    if existing:
+        return existing
+    shot_desc = shot_parts(clip, "desc", "description", "action", "visual")
+    return concise(
+        [
+            first_text(clip.get("label"), clip.get("dramatic_function"), clip.get("story_function")),
+            *shot_desc,
+        ],
+        fallback="按本镜 label/continuity 完成起幅、推进、尾帧交接",
+    )
+
+
+def derived_camera_rule(clip: Mapping[str, Any], cont: Mapping[str, Any]) -> str:
+    cameras = shot_parts(clip, "camera", "lens", "composition")
+    if cameras:
+        return "；".join(cameras[:3])
+    return first_text(cont.get("shot_size"), cont.get("transition"), default="按 continuity.shot_size 控制景别，保持既定轴线与视线。")
+
+
+def derived_negative(clip: Mapping[str, Any]) -> list[str]:
+    sched = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    forbidden = unique(as_list(sched.get("forbidden_presence") if isinstance(sched, Mapping) else None))
+    negatives = [
+        "不新增未登记角色/道具",
+        "不越轴",
+        "不烤字，文字交由后期 overlay",
+        "不出现现代物件",
+        "不改变角色脸型、服装主色和武器形态",
+    ]
+    if forbidden:
+        negatives.append("禁止入画：" + "、".join(forbidden))
+    return negatives
+
+
+def fill_base_template_fields(clip: Mapping[str, Any], template: str, tc: dict[str, Any], setdefault: Any) -> None:
+    cont = continuity(clip)
+    sched = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    scene = first_text(clip.get("scene"), clip.get("location_id"), default="本场主场景")
+    visible = unique(
+        [
+            *as_list(clip.get("character_ids")),
+            *as_list(clip.get("object_ids")),
+            *as_list(sched.get("required_presence") if isinstance(sched, Mapping) else None),
+        ]
+    )
+    setdefault("template_id", template)
+    setdefault("beats", derived_beats(clip))
+    setdefault(
+        "blocking",
+        f"{scene}；可见主体={('、'.join(visible) if visible else '按 character_ids/object_ids 登记主体')}；"
+        f"{first_text(cont.get('entry_exit'), default='按 continuity.entry_exit 完成入画/出画交接')}",
+    )
+    setdefault("camera_rule", derived_camera_rule(clip, cont))
+    setdefault(
+        "continuity_must",
+        concise(
+            [
+                f"起：{cont.get('start_state')}" if nonempty(cont.get("start_state")) else "",
+                f"止：{cont.get('end_state')}" if nonempty(cont.get("end_state")) else "",
+                f"视线：{cont.get('eyeline')}" if nonempty(cont.get("eyeline")) else "",
+                f"入出画：{cont.get('entry_exit')}" if nonempty(cont.get("entry_exit")) else "",
+            ],
+            fallback="保持本镜 continuity.start_state/end_state/eyeline/entry_exit，不重置上一镜状态。",
+            limit=5,
+        ),
+    )
+    setdefault("negative", derived_negative(clip))
+
+
+def fill_fight_exchange_fields(clip: Mapping[str, Any], tc: dict[str, Any], setdefault: Any) -> None:
+    cont = continuity(clip)
+    beats = unique(as_list(tc.get("beats"))) or derived_beats(clip)
+    axis = first_text(
+        tc.get("axis"),
+        cont.get("entry_exit"),
+        cont.get("eyeline"),
+        default="按本镜起手方向推进到命中/收势方向，禁止中途反向越轴。",
+    )
+    cameras = shot_parts(clip, "camera", "lens", "composition")
+    keyframe = first_text(
+        tc.get("keyframe_plan"),
+        default="起幅锁主体位置；中段锁攻击轨迹；尾帧锁受力结果和下一镜交接。",
+    )
+    impact = first_text(
+        tc.get("impact_frame"),
+        default="命中/格挡/出招高光帧按 beats 中的撞点执行，画面克制不强化猎奇伤口。",
+    )
+    setdefault("attack_path", axis)
+    setdefault("impact_frame", impact)
+    setdefault("action_scope", "只执行本 clip 声明的起手、命中/格挡、反应/收势，不新增连招、新敌人或剧情结果。")
+    setdefault("contact_points", unique(as_list(tc.get("contact_points"))) or ["刀锋/狼爪/妖气/地面尘土按本镜 beats 发生接触或视觉撞点。"])
+    setdefault("force_direction", first_text(tc.get("force_direction"), tc.get("axis"), default=axis))
+    setdefault("screen_direction", first_text(tc.get("screen_direction"), tc.get("axis"), cont.get("eyeline"), default=axis))
+    setdefault("speed_curve", first_text(tc.get("speed_curve"), default="蓄力停顿 → 突进爆发 → 命中定格 → 余波收势"))
+    setdefault("spatial_path", first_text(tc.get("spatial_path"), cont.get("entry_exit"), default=axis))
+    setdefault("camera_path", "；".join(cameras[:3]) if cameras else derived_camera_rule(clip, cont))
+    setdefault("readability_beats", beats)
+    setdefault("recovery_beat", first_text(cont.get("end_state"), beats[-1] if beats else "", default="尾帧完成受力反应并交接下一镜。"))
+    setdefault("degrade_plan", "动作生成不稳时降级为手部/刀爪特写 + 反应镜头 + 尘土/妖气遮挡，剧情结果不变。")
+    setdefault("keyframe_plan", keyframe)
+    setdefault("post_cue_points", [impact, "尾帧按 continuity.end_state 与下一镜 start_state 对齐。"])
+    setdefault("physics_guard", "刀、爪、身体与妖气的受力方向必须与 force_direction/screen_direction 一致；伤势和站位只按 continuity 演进。")
 
 
 def entity_keys(values: Iterable[Any]) -> set[str]:
@@ -136,6 +310,8 @@ def fill_template_contract(clip: dict[str, Any]) -> int:
     scene = str(clip.get("scene") or clip.get("location_id") or "本场主场景")
     text_count = len(screen_text_lines(clip))
 
+    fill_base_template_fields(clip, template, tc, setdefault)
+
     if template == "system_panel":
         setdefault("motif_id", "MOTIF_百妖谱系统面板")
         setdefault("vfx_asset", "VFX_系统面板/百妖谱")
@@ -156,6 +332,8 @@ def fill_template_contract(clip: dict[str, Any]) -> int:
         setdefault("relationship_state", "欠命账与悼别，不是爱情亲密")
         setdefault("readability_beats", ["走回遗体", "伸手合眼", "低声记账", "握刀起身"])
         setdefault("degrade_plan", "若接触动作误判为暧昧，降级为手部特写 + 姜月初单人侧脸反应")
+    elif template == "fight_exchange":
+        fill_fight_exchange_fields(clip, tc, setdefault)
     return changed
 
 

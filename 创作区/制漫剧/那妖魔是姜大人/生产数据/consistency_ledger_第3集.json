@@ -28,10 +28,10 @@
     "path": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_dependency_graph_第3集.json",
     "summary": {
       "clips": 10,
-      "edges": 166,
+      "edges": 176,
       "images": 58,
-      "nodes": 113,
-      "videos": 3
+      "nodes": 114,
+      "videos": 4
     }
   },
   "domain_counts": {
@@ -94,9 +94,9 @@
     },
     {
       "counts": {
-        "block": 2,
+        "block": 1,
         "high": 0,
-        "medium": 91
+        "medium": 93
       },
       "findings": [
         {
@@ -249,7 +249,7 @@
       "counts": {
         "block": 10,
         "high": 0,
-        "medium": 151
+        "medium": 150
       },
       "findings": [
         {
@@ -448,7 +448,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -486,7 +486,7 @@
       "counts": {
         "block": 39,
         "high": 0,
-        "medium": 52
+        "medium": 53
       },
       "findings": [
         {
@@ -504,9 +504,9 @@
           "source": "detect"
         },
         {
-          "dimension": "风格(S1)",
+          "dimension": "片内时序(N2)",
           "loc": "",
-          "message": " 风格(S1)    ",
+          "message": " 片内时序(N2)    ",
           "severity": "warn",
           "source": "detect"
         },
@@ -539,9 +539,9 @@
           "source": "detect"
         },
         {
-          "dimension": "声音空间(ASP)",
+          "dimension": "风格(S1)",
           "loc": "",
-          "message": " 声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。 ",
+          "message": " 风格(S1)    ",
           "severity": "warn",
           "source": "detect"
         }
@@ -652,27 +652,6 @@
           "message": "image_prompt_lint VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。",
           "severity": "warn",
           "source": "gate:image"
-        }
-      ]
-    },
-    {
-      "anchor": "video_batch_第3集_03_03.json",
-      "dimensions": [
-        "成片身份回验"
-      ],
-      "domain": "character",
-      "severity": "block",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "成片身份回验",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_batch_第3集_03_03.json",
-          "message": "成片身份回验 Clip_03 已被 video_runner 标记 qc_blocked：成片身份回验 block：dense_face_watch 镜出现片内身份 warn×1；warn=粗筛交人判，不能静默 accept。重出本镜或确认误报后 --allow-qc-block 强制验收",
-          "severity": "block",
-          "source": "gate:video"
         }
       ]
     },
@@ -2752,6 +2731,27 @@
       ]
     },
     {
+      "anchor": "video_face_drift_watch_第3集_Clip_03_0_00_25_13s.json",
+      "dimensions": [
+        "成片身份回验"
+      ],
+      "domain": "character",
+      "severity": "warn",
+      "sources": [
+        "gate:video"
+      ],
+      "suggested_return_to_stage": "",
+      "symptoms": [
+        {
+          "dimension": "成片身份回验",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/video_face_drift_watch_第3集_Clip_03_0_00_25_13s.json",
+          "message": "成片身份回验 Clip_03 dense_face_watch 存在片内身份 warn/强制放行记录，但已有 human_review.identity_verdict=pass；按人工密集抽帧复核签收降级为 WARN，公开发布前仍建议重出或补重型身份一致性证据。",
+          "severity": "warn",
+          "source": "gate:video"
+        }
+      ]
+    },
+    {
       "anchor": "图片",
       "dimensions": [
         "脸(G1)",
@@ -3140,6 +3140,13 @@
           "message": "片内时序(N2) 一致性审计发现问题",
           "severity": "warn",
           "source": "gate:video"
+        },
+        {
+          "dimension": "片内时序(N2)",
+          "loc": "出视频/第3集/视频",
+          "message": "片内时序(N2) 一致性审计发现问题",
+          "severity": "warn",
+          "source": "gate:video"
         }
       ]
     },
@@ -3204,7 +3211,7 @@
         },
         {
           "dimension": "合规前置",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/合规/compliance_manifest.json",
           "message": "合规前置 distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -3332,7 +3339,7 @@
         {
           "dimension": "一致性总审",
           "loc": "创作区/制漫剧/那妖魔是姜大人/生产数据/consistency_findings_第3集.json",
-          "message": "一致性总审 另有 90 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
+          "message": "一致性总审 另有 91 条一致性 WARN 未在此展开（已超过单次 12 条上限）——完整清单见 生产数据/consistency_findings_第3集.json，勿当作已全部处理。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -3371,9 +3378,9 @@
           "source": "detect"
         },
         {
-          "dimension": "风格(S1)",
+          "dimension": "片内时序(N2)",
           "loc": null,
-          "message": " 风格(S1)    ",
+          "message": " 片内时序(N2)    ",
           "severity": "warn",
           "source": "detect"
         },
@@ -3406,9 +3413,9 @@
           "source": "detect"
         },
         {
-          "dimension": "声音空间(ASP)",
+          "dimension": "风格(S1)",
           "loc": null,
-          "message": " 声音空间(ASP)   声音空间条目 row_1 缺字段：location, room_tone/ambient_bed, reverb_profile, distance_perspective/occlusion_policy。 ",
+          "message": " 风格(S1)    ",
           "severity": "warn",
           "source": "detect"
         }
@@ -3694,7 +3701,7 @@
       "symptoms": [
         {
           "dimension": "生视频后端连通性",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
+          "loc": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生视频后端连通性 生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL",
           "severity": "warn",
           "source": "gate:video_preflight"
@@ -3710,27 +3717,6 @@
           "dimension": "生视频后端连通性",
           "loc": "创作区/制漫剧/那妖魔是姜大人/_设置.md",
           "message": "生视频后端连通性 生视频后端「Dreamina」无法自动探活：`dreamina` 无自动探针（未导出健康端点 base url）——付费出视频前请人工确认：官方 CLI 已登录 / 会员态有效 / API key·额度可用（或一次 dry-run）。内网/自定义供应商可导出 N2D_VIDEO_BACKEND_BASE_URL 或对应 *_BASE_URL",
-          "severity": "warn",
-          "source": "gate:video"
-        }
-      ]
-    },
-    {
-      "anchor": "asset_registry.json",
-      "dimensions": [
-        "跨集场景漂移(SCNX)"
-      ],
-      "domain": "shot",
-      "severity": "warn",
-      "sources": [
-        "gate:video"
-      ],
-      "suggested_return_to_stage": "",
-      "symptoms": [
-        {
-          "dimension": "跨集场景漂移(SCNX)",
-          "loc": "出图/共享/asset_registry.json",
-          "message": "跨集场景漂移(SCNX) 场景[荒野尸骸战场] 跨集色调/光位漂移 L1=0.6315（vs 前 2 集基线，阈 warn=0.45·core block=0.8）——确认是否 allowed_variations 内的合理变化，否则对齐前集场景定妆。",
           "severity": "warn",
           "source": "gate:video"
         }
@@ -3895,7 +3881,7 @@
         {
           "dimension": "物料新鲜度",
           "loc": "第3集",
-          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"创作区/制漫剧/那妖魔",
+          "message": "物料新鲜度 前期物料可能已过期：n2d, n2d-image, n2d-script, n2d-video 自上次 skill 基线后有改动，可能影响本阶段（video）的输入物料。出图/出视频是花钱且不可逆的步骤——先跑 `python3 skills/n2d-update/scripts/update_plan.py check \"/Users/wesl",
           "severity": "warn",
           "source": "gate:video_preflight"
         },
@@ -4285,6 +4271,7 @@
     }
   },
   "unattributed": [
+    "[warn]  片内时序(N2)    ",
     "[warn]  片内时序(N2)    ",
     "[warn]  片内时序(N2)    ",
     "[warn]  场景(O2)    ",

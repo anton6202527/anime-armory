@@ -1003,7 +1003,7 @@ def _run_production_breakdown_prework(p: Probes, root: str, ep: str) -> None:
         if status != "pass":
             _record_prework_block(p, "production_breakdown", (
                 "P-3 制片拆解包未确认；先补齐 脚本/{ep}/production_breakdown.json、"
-                "continuity_breakdown.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md，删除待补/TODO，"
+                "continuity_breakdown.json、continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md，删除待补/TODO，"
                 "并把每个文件 status 改为 confirmed，再进入出图 prompt/付费出图。"
             ).format(ep=ep))
     except Exception as e:  # pragma: no cover
@@ -1466,6 +1466,12 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "script_quality_gate.py"),
                 [root, ep, "--strict", "--write", "--json"],
                 "script_quality_gate 未通过；n2d-script 必须先把“好看”拆成可签收字段（核心看点、首屏钩、留存账本、逐镜戏剧功能、观众问题账本），再交给 image/video 下游。",
+            ),
+            (
+                "story_economy_audit",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "story_economy_audit.py"),
+                [root, ep, "--strict", "--write", "--json"],
+                "story_economy_audit 未通过；先回 n2d-script 压缩非战斗/非强情绪长段，把解释、行进、普通反应改成短镜/旁白/蒙太奇后再进贵工位。",
             ),
             (
                 "spectacle_contract_audit",

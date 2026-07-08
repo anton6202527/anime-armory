@@ -1,0 +1,12 @@
+{
+  "kind": "n2d.voice_manifest_meta",
+  "voiceover_fingerprint": "4e5af8f0c3ad904d21f59f74239e4981c4fc526931caf5097263a1a23a21f1e4",
+  "lines": 28,
+  "placeholder_lines": 28,
+  "provider": "say",
+  "lang": "zh",
+  "duration_sec": 152.393,
+  "expected_duration_sec": 134.149,
+  "duration_anomaly_lines": [],
+  "generated_at": "2026-07-08T09:47:29Z"
+}

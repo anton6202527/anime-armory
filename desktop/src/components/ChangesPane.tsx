@@ -1,7 +1,15 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { archiveWorkChange, archiveWorkChanges, readWorkChange, workChanges } from "../api";
+import { lazy, Suspense, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  archiveWorkChange,
+  archiveWorkChanges,
+  readWorkChange,
+  restoreWorkChange,
+  restoreWorkChanges,
+  workChanges,
+} from "../api";
 import { useI18n } from "../i18n";
 import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
+import { Codicon } from "./Codicon";
 
 const ChangesDiffEditor = lazy(() =>
   import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
@@ -25,12 +33,14 @@ export function ChangesPane({
   baselineVersion,
   summary,
   onArchived,
+  onOpenFile,
 }: {
   root: WorkRoot;
   refreshKey: number;
   baselineVersion: number;
   summary: WorkChangeSummary | null;
   onArchived: (summary: WorkChangeSummary) => void;
+  onOpenFile: (path: string) => void;
 }) {
   const { t } = useI18n();
   const [changes, setChanges] = useState<WorkChangeEntry[]>([]);
@@ -40,7 +50,10 @@ export function ChangesPane({
   const [detailError, setDetailError] = useState("");
   const [archiving, setArchiving] = useState(false);
   const [archivingPath, setArchivingPath] = useState("");
+  const [restoring, setRestoring] = useState(false);
+  const [restoringPath, setRestoringPath] = useState("");
   const [err, setErr] = useState("");
+  const paneRef = useRef<HTMLDivElement>(null);
   const scanEpochRef = useRef(0);
   const detailEpochRef = useRef(0);
 
@@ -98,6 +111,36 @@ export function ChangesPane({
     });
   }
 
+  function clampSideWidth(width: number, total: number): number {
+    const minSide = total < 500 ? 160 : 220;
+    const minPreview = Math.min(320, Math.max(180, total * 0.35));
+    const maxSide = Math.max(minSide, total - minPreview);
+    return Math.min(maxSide, Math.max(minSide, width));
+  }
+
+  function startSideResize(ev: ReactPointerEvent<HTMLDivElement>) {
+    const pane = paneRef.current;
+    if (!pane) return;
+    ev.preventDefault();
+    const rect = pane.getBoundingClientRect();
+    document.body.classList.add("resizing-changes-side");
+
+    const move = (e: PointerEvent) => {
+      const next = clampSideWidth(e.clientX - rect.left, rect.width);
+      window.localStorage.setItem("aa.files.sideWidth", String(Math.round(next)));
+      window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+      window.dispatchEvent(new Event("resize"));
+    };
+    const up = () => {
+      document.body.classList.remove("resizing-changes-side");
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      window.dispatchEvent(new Event("resize"));
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
+  }
+
   async function refreshAfterArchive(result: WorkChangeSummary, preferredSelected?: string) {
     const epoch = ++scanEpochRef.current;
     const latest = await workChanges(root.path).catch(() => null);
@@ -115,7 +158,7 @@ export function ChangesPane({
   }
 
   async function archive() {
-    if (changes.length === 0 || archiving || archivingPath) return;
+    if (changes.length === 0 || archiving || archivingPath || restoring || restoringPath) return;
     const ok = window.confirm(t("changes.archiveConfirm", { count: changes.length }));
     if (!ok) return;
     setArchiving(true);
@@ -136,7 +179,7 @@ export function ChangesPane({
   }
 
   async function archiveOne(path: string) {
-    if (!path || archiving || archivingPath) return;
+    if (!path || archiving || archivingPath || restoring || restoringPath) return;
     setArchivingPath(path);
     setErr("");
     detailEpochRef.current += 1;
@@ -154,6 +197,59 @@ export function ChangesPane({
     }
   }
 
+  async function restore() {
+    if (changes.length === 0 || archiving || archivingPath || restoring || restoringPath) return;
+    const ok = window.confirm(t("changes.restoreConfirm", { count: changes.length }));
+    if (!ok) return;
+    setRestoring(true);
+    setErr("");
+    scanEpochRef.current += 1;
+    detailEpochRef.current += 1;
+    try {
+      const result = await restoreWorkChanges(root.path);
+      setChanges([]);
+      setSelected("");
+      setDetail(null);
+      await refreshAfterArchive(result);
+    } catch (e) {
+      setErr(String(e));
+      setChangeRescan();
+    } finally {
+      setRestoring(false);
+    }
+  }
+
+  async function restoreOne(path: string) {
+    if (!path || archiving || archivingPath || restoring || restoringPath) return;
+    const ok = window.confirm(t("changes.restoreOneConfirm", { path }));
+    if (!ok) return;
+    setRestoringPath(path);
+    setErr("");
+    detailEpochRef.current += 1;
+    try {
+      const result = await restoreWorkChange(root.path, path);
+      if (selected === path) {
+        setDetail(null);
+        setDetailError("");
+      }
+      await refreshAfterArchive(result, selected === path ? undefined : selected);
+    } catch (e) {
+      setErr(String(e));
+      setChangeRescan();
+    } finally {
+      setRestoringPath("");
+    }
+  }
+
+  function setChangeRescan() {
+    const epoch = ++scanEpochRef.current;
+    workChanges(root.path)
+      .then((latest) => {
+        if (epoch === scanEpochRef.current) applyChangeList(latest.changes);
+      })
+      .catch(() => {});
+  }
+
   const selectedEntry = changes.find((change) => change.path === selected) ?? null;
   const count = summary ? summary.changed + summary.deleted : changes.length;
   const kindLabel = {
@@ -164,14 +260,32 @@ export function ChangesPane({
   };
 
   return (
-    <div className="changes-pane">
+    <div className="changes-pane" ref={paneRef}>
       <div className="changes-side">
         <div className="changes-toolbar">
+          <span className="changes-toolbar-spacer" aria-hidden="true" />
           <span className={"changes-count" + (changes.length ? " dirty" : "")}>
-            {loading ? t("common.loading") : t("changes.count", { count })}
+            {loading ? t("common.loading") : count}
           </span>
-          <button type="button" disabled={!changes.length || archiving || !!archivingPath} onClick={archive}>
-            {archiving ? t("changes.archiving") : t("changes.archive")}
+          <button
+            type="button"
+            className="changes-action"
+            disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
+            title={t("changes.restoreAllTitle")}
+            aria-label={t("changes.restoreAllTitle")}
+            onClick={restore}
+          >
+            {restoring ? "…" : <Codicon name="discard" />}
+          </button>
+          <button
+            type="button"
+            className="changes-action"
+            disabled={!changes.length || archiving || !!archivingPath || restoring || !!restoringPath}
+            title={t("changes.archiveAllTitle")}
+            aria-label={t("changes.archiveAllTitle")}
+            onClick={archive}
+          >
+            {archiving ? "…" : <Codicon name="add" />}
           </button>
         </div>
         {err && <div className="changes-error">{err}</div>}
@@ -188,26 +302,59 @@ export function ChangesPane({
                 type="button"
                 className="change-row"
                 onClick={() => setSelected(change.path)}
-                title={change.path}
+                onDoubleClick={() => onOpenFile(change.path)}
               >
                 <span className={`change-kind ${change.kind}`}>{kindLabel[change.kind]}</span>
                 <span className="change-name">{fileName(change.path)}</span>
                 <span className="change-path">{change.path}</span>
               </button>
-              <button
-                type="button"
-                className="change-row-archive"
-                disabled={archiving || !!archivingPath}
-                title={t("changes.archiveOneTitle", { path: change.path })}
-                aria-label={t("changes.archiveOneTitle", { path: change.path })}
-                onClick={() => archiveOne(change.path)}
-              >
-                {archivingPath === change.path ? "…" : t("changes.archive")}
-              </button>
+              <div className="change-row-actions">
+                <button
+                  type="button"
+                  className="change-row-action"
+                  title={t("changes.openFileTitle")}
+                  aria-label={t("changes.openFileTitle")}
+                  onClick={() => onOpenFile(change.path)}
+                >
+                  <Codicon name="goToFile" />
+                </button>
+                <button
+                  type="button"
+                  className="change-row-action"
+                  disabled={archiving || !!archivingPath || restoring || !!restoringPath}
+                  title={t("changes.restoreOneTitle", { path: change.path })}
+                  aria-label={t("changes.restoreOneTitle", { path: change.path })}
+                  onClick={() => restoreOne(change.path)}
+                >
+                  {restoringPath === change.path ? "…" : <Codicon name="discard" />}
+                </button>
+                <button
+                  type="button"
+                  className="change-row-action"
+                  disabled={archiving || !!archivingPath || restoring || !!restoringPath}
+                  title={t("changes.archiveOneTitle", { path: change.path })}
+                  aria-label={t("changes.archiveOneTitle", { path: change.path })}
+                  onClick={() => archiveOne(change.path)}
+                >
+                  {archivingPath === change.path ? "…" : <Codicon name="add" />}
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </div>
+      <div
+        className="changes-splitter"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label={t("files.resizeAria")}
+        onPointerDown={startSideResize}
+        onDoubleClick={() => {
+          window.localStorage.removeItem("aa.files.sideWidth");
+          window.dispatchEvent(new Event("anime-armory:files-side-width-changed"));
+          window.dispatchEvent(new Event("resize"));
+        }}
+      />
       <div className="changes-detail">
         {!selectedEntry ? (
           <div className="changes-empty">{t("changes.select")}</div>

@@ -1875,7 +1875,23 @@
           "A面：姜月初 MCU 冷面少语，画左偏高",
           "B面：陈青源 MCU 等待/更恭敬，画右偏低",
           "反应切回姜月初，火把光位连续"
-        ]
+        ],
+        "screen_sides": {
+          "screen_left_upper": "CHAR_01/镇魔司伪装态（姜月初）",
+          "screen_right_lower": "CHAR_04/常态（陈青源）",
+          "locked_rule": "LOC_02 官道轴线不越线；姜月初保持画左/上位压迫感，陈青源保持画右/下位仰视，不在反打中互换。"
+        },
+        "coverage_order": [
+          "官道火把/双人空间建立，确认姜月初高位与陈青源低位",
+          "姜月初 MCU 冷面少语，画左偏高",
+          "陈青源 MCU 等待回答，画右偏低",
+          "火把或黑衣赤纹插入作为缓冲",
+          "反应切回姜月初，落幅保持火把光位连续"
+        ],
+        "camera_coverage": "clean single + shot/reverse-shot + fire-torch insert/reaction；清晰近景默认拆正反打，不把姜月初、陈青源和马队挤成多人特写。",
+        "lens_height_distance_match": "A/B 反打保持 50-85mm 中长焦、相近镜头距离和冷灰火把侧光；姜月初略高机位、陈青源略低机位用于权力关系，但背景深度、焦段质感和官道方向连续。",
+        "crossing_axis_policy": "默认禁止越轴；若必须重新定向，只能先回到官道双人建立镜、火把插入或马队剪影缓冲，再进入下一组反打。",
+        "buffer_or_reestablishing": "官道火把、黑衣赤纹细节、马队远景剪影或陈青源手势 cutaway 可作为缓冲和重新定向镜；不得直接跳到反轴近景。"
       },
       "interaction_graph": [
         {
@@ -2626,7 +2642,23 @@
           "陈青源 MCU 交代折损",
           "姜月初 CU 承压沉默",
           "火把阴影/低饱和剪影暗示上盘村危机"
-        ]
+        ],
+        "screen_sides": {
+          "screen_left_lower": "CHAR_04/常态（陈青源）",
+          "screen_right_upper": "CHAR_01/镇魔司伪装态（姜月初）",
+          "locked_rule": "LOC_02 官道轴线延续；陈青源保持低位画左/下，姜月初保持高位画右/上，危机阴影不改变两人屏幕关系。"
+        },
+        "coverage_order": [
+          "陈青源 MCU 交代折损与狼妖围祠堂信息",
+          "姜月初 CU 承压沉默，吸收危机",
+          "火把阴影/低饱和剪影暗示上盘村危机",
+          "切回陈青源低位补充事实",
+          "落幅回姜月初反应，不提前进入怪物战斗"
+        ],
+        "camera_coverage": "clean single + reaction close-up + fire-shadow insert；危机信息只用火把阴影和低饱和剪影承接，不插入完整狼妖战斗或新怪物定妆。",
+        "lens_height_distance_match": "陈青源说明镜与姜月初反应镜保持 50-85mm 中长焦、相近镜头距离、同一火把侧光和官道背景深度；权力高低由机位轻微差异表达，不改变轴线。",
+        "crossing_axis_policy": "默认禁止越轴；若信息压力需要转向，只能用火把阴影、官道空镜或低饱和剪影重新定向后再回正反打。",
+        "buffer_or_reestablishing": "火把阴影、官道夜风、低饱和村口剪影或陈青源抬眼 cutaway 可作为缓冲；不得直接跳到反轴近景或完整妖怪打斗。"
       },
       "spectacle_story_function": "狼妖危机只服务救援代价和集尾选择，不在本集提前进入妖怪打斗。",
       "editing_intent": "陈青源主脸+群体跪地层级，不追多主体清脸",
@@ -3212,7 +3244,23 @@
           "画右低位陈青源求救近景",
           "画左前景姜月初眼中火把细线近景",
           "尾帧定住半拍后硬切黑，不给答案"
-        ]
+        ],
+        "screen_sides": {
+          "screen_left_foreground": "CHAR_01/镇魔司伪装态（姜月初）",
+          "screen_right_low": "CHAR_04/常态（陈青源）",
+          "locked_rule": "低位求救/高位沉默轴线延续到硬切黑；姜月初保持画左前景高位，陈青源保持画右低位仰视，不在尾钩中互换。"
+        },
+        "coverage_order": [
+          "夜风吹火把建立尾钩氛围",
+          "陈青源画右低位求救近景",
+          "姜月初画左前景眼中火把细线近景",
+          "火把摇晃/眼神 cutaway 压住答案",
+          "尾帧定住半拍后硬切黑"
+        ],
+        "camera_coverage": "low-angle clean single + foreground reaction close-up + torch insert + hard-cut hold；清晰近景拆反打，尾句后不拉入新人物或上盘村正戏。",
+        "lens_height_distance_match": "陈青源求救镜与姜月初沉默镜保持 50-85mm 中长焦、相近距离和同一火把侧光；陈青源低机位仰视、姜月初高位前景用于权力关系，背景深度和官道方向连续。",
+        "crossing_axis_policy": "默认禁止越轴；结尾若需要重建空间，只能用火把/官道空镜或双人高低位建立镜后再切黑，不直接跳反轴。",
+        "buffer_or_reestablishing": "夜风火把、姜月初眼中火线、陈青源抬头 cutaway 和半拍黑场可作为缓冲；不得提前给答案或切入上盘村正戏。"
       },
       "editing_intent": "姜月初沉默近景硬断到“唯一希望”",
       "character_slots": [

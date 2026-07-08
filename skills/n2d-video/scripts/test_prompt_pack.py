@@ -98,6 +98,29 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
             "audience_effect": "观众追问她怎么活。",
         }]}
     })
+    _write_json(root / "脚本" / ep / "continuity_chain.json", {
+        "kind": "n2d_continuity_chain",
+        "version": 1,
+        "episode": ep,
+        "status": "confirmed",
+        "summary": {"seams": 1, "block": 0, "warn": 0},
+        "seams": [{
+            "scope": "episode_boundary",
+            "from_episode": "第0集",
+            "from_clip": "Clip_09",
+            "to_episode": ep,
+            "to_clip": "Clip_01",
+            "transition": "接力",
+            "policy": "relay",
+            "strictness": "strict",
+            "from_end_state": "她倒在荒野边缘。",
+            "to_start_state": "她伏在荒野。",
+            "required_boundary_frame": "出图/第0集/图片/Clip_09_end.png",
+            "next_firstframe": "出图/第1集/图片/Clip01_first.png",
+            "issues": [],
+            "severity": "pass",
+        }],
+    })
 
     overview, clips = prompt_pack.build(root, ep)
 
@@ -112,6 +135,9 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert "**运动精修**：" in clips
     assert "原生音画策略" in clips and "mouth_visible=yes" in clips
     assert "接缝执行包 / Handoff Package" in clips
+    assert "连续性链路 / Continuity Chain" in clips
+    assert "第0集/Clip_09→第1集/Clip_01" in clips
+    assert "boundary_frame=出图/第0集/图片/Clip_09_end.png" in clips
     assert "执行配方 / Execution Recipe" in clips
     assert "执行配方约束" in clips
     assert "frame_inputs=" in clips and "reference_inputs=" in clips and "anchor_consumption=" in clips

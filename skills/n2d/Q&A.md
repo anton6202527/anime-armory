@@ -333,7 +333,7 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 ```
 
 - **生图模型** = 真正生成图片的模型（默认 OpenAI GPT Image/GPT Image 2 归一名；执行前以官方 model id 证据为准）
-- **生图渠道/生图AI** = 访问入口；当前正式产线默认 Codex，可选 OpenAI Images API、Dreamina/即梦官方 CLI 和官方多参考后端；禁止第三方逆向、`同视频AI` / `同视频模型` 含糊口径和 web 自动化
+- **生图渠道/生图AI** = 访问入口；当前正式产线默认 Codex / GPT Image 2；OpenAI Images API 可作为同系官方入口。Dreamina/即梦官方 CLI 和其它非 Codex/OpenAI 后端只作用户签核例外；禁止第三方逆向、`同视频AI` / `同视频模型` 含糊口径和 web 自动化
 - **生视频模型** = 风格基线与运动估计分布（决定图片必须长成什么样子，因为它的 image2video 只熟悉自家训练分布）
 - **生视频渠道** = 调用入口（例如即梦/Dreamina、豆包、海螺AI、可灵/Kling、Google Gemini API、Runway API）
 
@@ -354,7 +354,7 @@ Step 4 合成（配音 + BGM + 字幕 + 剪辑）
 | 所选官方生图模型/渠道 + 未固定视频后端 | ✅ 使用通用视频兼容锚定 | 默认正式链路；`n2d-video` 出视频前按 router/probe 选择兼容后端 |
 | 所选官方生图模型/渠道 + Seedance 2.0 via 即梦/Dreamina | ✅ **必须拼** Seedance/即梦分布的图像风格锚定句 | 默认正式链路 |
 | 所选官方生图模型/渠道 + Veo 3.1 via Gemini API | ✅ 必须拼 Veo 的英文锚定句 | 海外短剧 |
-| Dreamina/即梦官方 CLI + Seedance 2.0 via 即梦/Dreamina | ✅ 可用 | 需显式 `生图AI/生图渠道: Dreamina/即梦`，同集不混后端 |
+| Dreamina/即梦官方 CLI + Seedance 2.0 via 即梦/Dreamina | ⚠️ 签核例外 | 图片阶段需用户明确签核并写 `合规/image_backend_override.json`；视频阶段可独立走即梦 |
 
 ### 18.4 锚定句拼接位置
 
@@ -452,7 +452,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 1. 第N集 出料发现新角色/场景/道具
 2. 出图/共享/prompt/00_索引.md 追加 ⬜ 行
 3. 出图/共享/prompt/角色|场景|道具定妆.md 追加完整 prompt 块
-4. 跑 `生图模型 + 生图AI/生图渠道` 所选官方/已登录入口生图 → 挑图 → PNG 落 出图/共享/图片/；Dreamina/即梦官方 CLI 可用，第三方逆向/web 自动化禁用
+4. 跑 `生图模型 + 生图AI/生图渠道` 所选官方/已登录入口生图 → 挑图 → PNG 落 出图/共享/图片/；默认 Codex/OpenAI，Dreamina/即梦官方 CLI 仅签核例外，第三方逆向/web 自动化禁用
 5. 索引状态改 ✅
 6. 出图/第N集/prompt/00_总览.md 引用共享层
 7. 后续集自动复用，不再重做

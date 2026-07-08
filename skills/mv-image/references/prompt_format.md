@@ -42,7 +42,7 @@ MV 最易漏三维：**②机位**（副歌大胆机位/荷兰角）、**⑥光�
 | outro | 收束/留白/定格 | 疏 |
 
 ## 生图调用
-- **生图后端是选择点（默认 Codex）**：阶段1 放行官方多参考后端（Seedream/可灵主体库/Nano Banana/Sora Cameo）。一支 MV **统一一个官方后端、不混用**；**禁即梦/Dreamina 逆向出图**（官方 Seedream API 可用）。后端清单见 `mv-craft/scripts/contract.py`。
+- **生图后端是选择点（默认 Codex / GPT Image 2）**：非 Codex/OpenAI 官方后端（Seedream/可灵主体库/Nano Banana/Sora Cameo）只作用户签核例外。一支 MV **统一一个官方后端、不混用**；**禁即梦/Dreamina 逆向出图**（官方 Seedream API 可在签核后使用）。后端清单见 `mv-craft/scripts/contract.py`。
 - 跨段一致性靠：共享定妆参考图 + 锚点句 + 统一 global_style；选支持原生主体的后端（Seedream/可灵/Sora Cameo）可注册主体按 ID 引用更稳。
 - 用户提供参考图、主体 ID 或 LoRA 时，先写进本格式并登记资产，再生成第一批组图；不要先按默认组图，失败后才返工接入。
 - 竖屏 MV 9:16 / 横屏 16:9，与 视觉蓝图 画幅一致。

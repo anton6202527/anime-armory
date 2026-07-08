@@ -1,6 +1,6 @@
 # 道具卡 — 镇魔司黑衣赤纹（ID: PROP_镇魔司黑衣赤纹）
 
-- episode_scope: 第4集
+- episode_scope: 第5集
 - type: prop
 - target_reference: `出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png`
 - source: `出图/共享/asset_registry.json`

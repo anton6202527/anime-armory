@@ -1,6 +1,6 @@
 # 角色卡 — 虎山神 / 虎妖（ID: CHAR_03）
 
-- episode_scope: 第4集
+- episode_scope: 第5集
 - form: 诈死复苏态
 - tier: core
 - asset_key: CHAR_03__诈死复苏态

@@ -19,7 +19,7 @@ skill 改为**生图模型 + 生图渠道 + 生视频模型 + 生视频渠道**�
 image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型锚定句 或 通用视频兼容锚定句]
 ```
 
-**默认结构 = 生图模型（默认 GPT Image 2）+ 生图渠道（旧 `生图AI`，默认 Codex CLI，可选 OpenAI/Dreamina/Seedream/可灵/Nano Banana 等官方或已登录入口）+ 视频模型路由(`自动按镜头路由`) + 生视频模型/渠道（延后到 n2d-video 出视频前由 router/probe 决定；`_设置.md` 里的值只作固定模式/普通镜兜底/调用入口偏好）**。新作品首跑不问具体视频模型/渠道；固定模式、账号/交付约束、用户明说，或 n2d-video 阶段 router/probe 找不到可执行后端时才问。第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图仍禁。
+**默认结构 = 生图模型（默认 GPT Image 2）+ 生图渠道（旧 `生图AI`，默认 Codex CLI；非 Codex/OpenAI 图片后端需用户签核例外）+ 视频模型路由(`自动按镜头路由`) + 生视频模型/渠道（延后到 n2d-video 出视频前由 router/probe 决定；`_设置.md` 里的值只作固定模式/普通镜兜底/调用入口偏好）**。新作品首跑不问具体视频模型/渠道；固定模式、账号/交付约束、用户明说，或 n2d-video 阶段 router/probe 找不到可执行后端时才问。第三方逆向 CLI、`同视频AI` / `同视频模型` 含糊口径和 web 自动化出图仍禁。
 
 ### 生视频后端后移后的锚定规则
 
@@ -31,12 +31,12 @@ image prompt = [生图模型/渠道的 prompt 写法] + [固定生视频模型�
 
 ### 推荐组合速查
 
-> 与 `n2d-image/references/platforms.md` 同一张表，保持一致：**图阶段按 `生图模型 + 生图渠道/生图AI` 统一官方/已登录后端；Dreamina/即梦官方 CLI 可作为渠道调用对应官方图像模型；视频阶段默认按 `video_model_routes.json` 的逐 Clip primary/fallback 执行，`生视频模型`/`生视频渠道` 只作兜底与固定模式输入**。
+> 与 `n2d-image/references/platforms.md` 同一张表，保持一致：**图阶段按 `生图模型 + 生图渠道/生图AI` 统一官方/已登录后端，默认 Codex/OpenAI；Dreamina/即梦官方 CLI 等非 Codex/OpenAI 图片后端只作签核例外；视频阶段默认按 `video_model_routes.json` 的逐 Clip primary/fallback 执行，`生视频模型`/`生视频渠道` 只作兜底与固定模式输入**。
 
 | 场景 | 组合 | 备注 |
 |---|---|---|
 | 国风短剧（自动路由） | `生图模型 + 生图渠道/生图AI` 所选官方组合 + 通用国风视频兼容锚定 → n2d-video 阶段路由到 Seedance/Kling/Veo 等兼容后端 | 图默认 GPT Image 2/OpenAI GPT Image 系列 via Codex；生视频后端不在首跑选择；全项目统一生图模型/渠道 |
-| 国风短剧（即梦闭环） | Dreamina/即梦官方 CLI 调用官方图像模型出图 → `Seedance 2.0` via 即梦/Dreamina | 已登录会员可直调；全项目统一生图模型/渠道 |
+| 默认短剧链路 | Codex/OpenAI 调 GPT Image 2 出图 → Seedance/Kling/Veo 等视频后端 | 默认；视频后端可走即梦，但不自动改变图片后端 |
 | 国风短剧（Kling） | `生图模型 + 生图渠道/生图AI` 所选官方组合 + Kling 锚定句 → `生视频模型=Kling 3.0` + `生视频渠道=可灵/Kling` | 只换视频模型/渠道时不重写图阶段；换生图模型/渠道需整集统一 |
 | 海外英文短剧 | `生图模型 + 生图渠道/生图AI` 所选官方组合 + Veo 锚定句 → `生视频模型=Veo 3.1` + `生视频渠道=Google Gemini API` | 全英文 prompt 优先 |
 | 禁止 | 第三方逆向 CLI / `同视频AI` 或 `同视频模型` 含糊口径 / web 自动化出图 | 未授权路径禁用 |
@@ -186,7 +186,7 @@ Sora 降级依据：OpenAI Help Center `https://help.openai.com/en/articles/2000
 > 这里只列**作为生图渠道/图像入口时**的写法特征。具体生成轴仍需落到 `生图模型`；生视频模型看上面档案。
 
 ### 禁止：第三方逆向 / web 自动化出图
-图片阶段按 `生图模型 + 生图渠道/生图AI` 统一到一组官方/已登录模型与入口；Dreamina/即梦官方 CLI 可作为渠道出图。生视频模型/渠道在 n2d-video 出视频前由 router/probe + 适配层决定；图阶段用所选生图模型生成首帧，固定视频模型时拼对应模型锚定句，未固定时拼通用视频兼容锚定。
+图片阶段按 `生图模型 + 生图渠道/生图AI` 统一到一组官方/已登录模型与入口，默认 Codex/OpenAI；Dreamina/即梦官方 CLI 等非 Codex/OpenAI 图片后端只作签核例外。生视频模型/渠道在 n2d-video 出视频前由 router/probe + 适配层决定；图阶段用所选生图模型生成首帧，固定视频模型时拼对应模型锚定句，未固定时拼通用视频兼容锚定。
 
 ### Gemini-Imagen（Google）
 - **提示词语言**：英文最稳，中文次之

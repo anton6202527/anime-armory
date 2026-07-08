@@ -914,6 +914,110 @@ def _accumulate_scene_history(path: str, ep: str, cur: dict) -> dict:
     return hist
 
 
+def _load_asset_registry(root: str) -> dict:
+    path = os.path.join(root, "出图", "共享", "asset_registry.json")
+    try:
+        data = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    except Exception:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _variation_expiry_ok(value: object) -> bool:
+    if value in (None, ""):
+        return False
+    text = str(value).strip()
+    try:
+        # Accept date-only strings and ISO timestamps with Z/offset.
+        norm = text.replace("Z", "+00:00")
+        if "T" not in norm:
+            expires = dt.datetime.fromisoformat(norm).replace(tzinfo=dt.timezone.utc)
+        else:
+            expires = dt.datetime.fromisoformat(norm)
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=dt.timezone.utc)
+        return expires >= dt.datetime.now(dt.timezone.utc)
+    except Exception:
+        return False
+
+
+def _episode_in_scope(ep: str, scope: object) -> bool:
+    if scope in (None, "", [], {}):
+        return True
+    ep_text = str(ep)
+    ep_num = _episode_num(ep)
+    values = scope if isinstance(scope, list) else [scope]
+    for item in values:
+        text = str(item).strip()
+        if not text:
+            continue
+        if text in {ep_text, ep_text.replace("第", "").replace("集", "")}:
+            return True
+        if text.isdigit() and ep_num == int(text):
+            return True
+        m = re.match(r"^(\d+)\s*-\s*(\d+)$", text)
+        if m and int(m.group(1)) <= ep_num <= int(m.group(2)):
+            return True
+    return False
+
+
+def _scene_allowed_variations(root: str, ep: str) -> Dict[str, dict]:
+    registry = _load_asset_registry(root)
+    out: Dict[str, dict] = {}
+    assets = registry.get("assets") if isinstance(registry, dict) else []
+    if not isinstance(assets, list):
+        return out
+    for asset in assets:
+        if not isinstance(asset, dict):
+            continue
+        raw = asset.get("allowed_variations") or asset.get("variation_policy")
+        if not raw:
+            continue
+        variations = raw if isinstance(raw, list) else [raw]
+        for item in variations:
+            if not isinstance(item, dict):
+                continue
+            if item.get("accepted") is not True and str(item.get("status") or "").lower() not in {"accepted", "ok", "pass"}:
+                continue
+            if not str(item.get("reviewer") or "").strip() or not str(item.get("reason") or "").strip():
+                continue
+            if not _variation_expiry_ok(item.get("expires_at") or item.get("expires")):
+                continue
+            if not _episode_in_scope(ep, item.get("episodes") or item.get("episode_scope")):
+                continue
+            dim = str(item.get("dimension") or item.get("dim") or "")
+            if dim and "SCNX" not in dim and "跨集场景漂移" not in dim:
+                continue
+            scene_names = {str(asset.get("name") or "").strip(), str(asset.get("id") or "").strip()}
+            scene_names.add(str(item.get("scene") or "").strip())
+            for scene in [s for s in scene_names if s]:
+                out[scene] = item
+    return out
+
+
+def _apply_scene_allowed_variations(rows: Sequence[dict], variations: Dict[str, dict]) -> List[dict]:
+    if not rows or not variations:
+        return list(rows)
+    out: List[dict] = []
+    for row in rows:
+        scene = str(row.get("scene") or "").strip()
+        match = variations.get(scene)
+        if not match:
+            for known, item in variations.items():
+                if known and (known in scene or scene in known):
+                    match = item
+                    break
+        if match and row.get("verdict") == "block":
+            row = dict(row)
+            row["verdict"] = "warn"
+            row["signed_off"] = True
+            row["signoff_source"] = "asset_registry.allowed_variations"
+            row["signoff_reason"] = match.get("reason")
+            row["msg"] = "[allowed_variations 已签收] " + str(row.get("msg") or row.get("message") or "")
+        out.append(row)
+    return out
+
+
 def cross_episode_scene_rows(root: str, ep: str) -> List[dict]:
     """SCNX 跨集场景漂移：累计每集每场景的(色调指纹 + 结构原型 dHash)，当前集 vs 历史基线比对。
     核心场景(asset_registry 显式标 core)硬漂→block，其余→warn。镜像 G5 脸漂的自累积侧车账本。
@@ -922,6 +1026,7 @@ def cross_episode_scene_rows(root: str, ep: str) -> List[dict]:
         core = core_scene_names(root)
     except Exception:
         core = []
+    allowed_variations = _scene_allowed_variations(root, ep)
     # ① 色调指纹（既有）
     hist = _accumulate_scene_history(
         os.path.join(production_dir(root), "scene_ep_means.json"), ep, sc.scene_tone_means(root, ep))
@@ -942,7 +1047,7 @@ def cross_episode_scene_rows(root: str, ep: str) -> List[dict]:
             embed_rows = se.scene_embed_drift_rows(ehist, ep, core_scenes=core)
     except Exception:
         embed_rows = []
-    return color_rows + struct_rows + embed_rows
+    return _apply_scene_allowed_variations(color_rows + struct_rows + embed_rows, allowed_variations)
 
 
 def _clip_num(value: Any) -> int | None:

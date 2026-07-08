@@ -18,8 +18,15 @@ import hashlib
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
+
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from continuity_chain import KIND as CONTINUITY_CHAIN_KIND  # noqa: E402
+from continuity_chain import build_chain as build_continuity_chain  # noqa: E402
 
 KIND = "n2d_production_handoff_pack"
 CHECK_KIND = "n2d_production_handoff_pack_check"
@@ -30,6 +37,7 @@ CONFIRMED_RE = re.compile(r"(?im)^\s*(?:status|状态)\s*[:：]\s*(?:confirmed|�
 REQUIRED_FILES = (
     "production_breakdown.json",
     "continuity_breakdown.json",
+    "continuity_chain.json",
     "continuity_bible.json",
     "ai_shooting_schedule.json",
     "ai_call_sheet.md",
@@ -135,6 +143,19 @@ def _clips(root: Path, ep: str) -> List[Dict[str, Any]]:
         return []
     clips = data.get("clips") or data.get("shots") or []
     return [c for c in clips if isinstance(c, dict)]
+
+
+def _episode_number(ep: str) -> int | None:
+    match = re.search(r"\d+", str(ep or ""))
+    return int(match.group(0)) if match else None
+
+
+def _previous_episode(root: Path, ep: str) -> str:
+    n = _episode_number(ep)
+    if n is None or n <= 1:
+        return ""
+    prev = f"第{n - 1}集"
+    return prev if (_episode_dir(root, prev) / "storyboard.json").is_file() else ""
 
 
 def _clip_id(clip: Mapping[str, Any], idx: int) -> str:
@@ -393,6 +414,30 @@ def _continuity_breakdown(ep: str, clips: List[Dict[str, Any]], *, confirmed: bo
     }
 
 
+def _continuity_chain(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
+    prev_ep = _previous_episode(root, ep)
+    prev_clips = _clips(root, prev_ep) if prev_ep else []
+    payload = build_continuity_chain(
+        ep,
+        clips,
+        previous_episode=prev_ep,
+        previous_clips=prev_clips,
+        status="confirmed" if confirmed else "draft",
+    )
+    payload["generated_at"] = now_iso()
+    payload["owner"] = "script_supervisor"
+    payload["inputs"] = {
+        "storyboard": f"脚本/{ep}/storyboard.json",
+        "previous_storyboard": f"脚本/{prev_ep}/storyboard.json" if prev_ep else "",
+    }
+    payload["policy"] = {
+        "transition_owner": "Clip N 的 continuity.transition/need_endframe 描述 Clip N -> Clip N+1；跨集首镜必须写 continuity.episode_boundary。",
+        "relay_requires": "上一镜 need_endframe=true + endframe_png；下一镜 firstframe_png；start/end state 已确认。",
+        "design_cut_requires": "显式 transition；硬切/跳切/转场不做帧级接力，但必须保持在场链和剧情状态可解释。",
+    }
+    return payload
+
+
 def _sidecar_status(root: Path, ep: str, name: str, rel: str) -> Dict[str, Any]:
     path = root / rel
     data = load_json(path) if path.suffix == ".json" else None
@@ -431,6 +476,9 @@ def _source_contract(root: Path) -> Dict[str, Any]:
 def _continuity_bible(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
     continuity_path = _episode_dir(root, ep) / "continuity_breakdown.json"
     continuity_data = load_json(continuity_path)
+    chain_data = load_json(_episode_dir(root, ep) / "continuity_chain.json")
+    if not isinstance(chain_data, Mapping):
+        chain_data = _continuity_chain(root, ep, clips, confirmed=confirmed)
     rows_by_clip: Dict[str, Mapping[str, Any]] = {}
     if isinstance(continuity_data, Mapping):
         for row in continuity_data.get("rows") or []:
@@ -489,8 +537,14 @@ def _continuity_bible(root: Path, ep: str, clips: List[Dict[str, Any]], *, confi
             "source_comprehension": "设定库/source_comprehension.json",
             "storyboard": f"脚本/{ep}/storyboard.json",
             "continuity_breakdown": f"脚本/{ep}/continuity_breakdown.json",
+            "continuity_chain": f"脚本/{ep}/continuity_chain.json",
         },
         "source_contract": _source_contract(root),
+        "continuity_chain": {
+            "status": chain_data.get("status") if isinstance(chain_data, Mapping) else "missing",
+            "summary": chain_data.get("summary") if isinstance(chain_data, Mapping) else {},
+            "seams": chain_data.get("seams") if isinstance(chain_data, Mapping) else [],
+        },
         "sidecars": sidecars,
         "clips": clips_out,
         "open_continuity_questions": [
@@ -538,6 +592,7 @@ def _ai_shooting_schedule(root: Path, ep: str, clips: List[Dict[str, Any]], *, c
                 "storyboard": f"脚本/{ep}/storyboard.json#{cid}",
                 "production_breakdown": f"脚本/{ep}/production_breakdown.json#{cid}",
                 "continuity_bible": f"脚本/{ep}/continuity_bible.json#{cid}",
+                "continuity_chain": f"脚本/{ep}/continuity_chain.json#{cid}",
                 "firstframe": clip.get("firstframe_png") or "",
                 "endframe": clip.get("endframe_png") or continuity.get("endframe_png") or "",
                 "anchors": _as_list(continuity.get("anchors")),
@@ -765,6 +820,7 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
     payloads: Tuple[Tuple[str, Mapping[str, Any]], ...] = (
         ("production_breakdown.json", _production_breakdown(root, ep, clips, confirmed=confirmed)),
         ("continuity_breakdown.json", _continuity_breakdown(ep, clips, confirmed=confirmed)),
+        ("continuity_chain.json", _continuity_chain(root, ep, clips, confirmed=confirmed)),
         ("continuity_bible.json", _continuity_bible(root, ep, clips, confirmed=confirmed)),
         ("ai_shooting_schedule.json", schedule_payload),
     )
@@ -856,6 +912,38 @@ def _json_status(path: Path) -> Tuple[str, List[str]]:
     return ("pass" if not issues else "block"), issues
 
 
+def _continuity_chain_status(path: Path) -> Tuple[str, List[str]]:
+    data = load_json(path)
+    issues: List[str] = []
+    if not isinstance(data, dict):
+        return "block", ["JSON 无法解析或不是 object"]
+    if data.get("kind") != CONTINUITY_CHAIN_KIND:
+        issues.append(f"kind 不是 {CONTINUITY_CHAIN_KIND}")
+    if str(data.get("status") or "").strip().lower() != "confirmed":
+        issues.append("status 不是 confirmed")
+    blob = json.dumps(data, ensure_ascii=False)
+    if PLACEHOLDER_RE.search(blob):
+        issues.append("仍含待补/TODO 占位")
+    summary = data.get("summary") if isinstance(data.get("summary"), Mapping) else {}
+    block_count = int(summary.get("block") or 0)
+    if block_count:
+        examples: List[str] = []
+        for seam in data.get("seams") or []:
+            if not isinstance(seam, Mapping) or seam.get("severity") != "block":
+                continue
+            codes = [
+                str(issue.get("code") or "")
+                for issue in seam.get("issues") or []
+                if isinstance(issue, Mapping)
+            ]
+            examples.append(f"{seam.get('from_clip')}→{seam.get('to_clip')}({','.join(codes)})")
+            if len(examples) >= 3:
+                break
+        detail = "；".join(examples) if examples else f"block={block_count}"
+        issues.append(f"continuity_chain 仍有阻断 seam：{detail}")
+    return ("pass" if not issues else "block"), issues
+
+
 def _md_status(path: Path) -> Tuple[str, List[str]]:
     text = path.read_text(encoding="utf-8", errors="ignore") if path.exists() else ""
     issues: List[str] = []
@@ -880,7 +968,10 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         if not path.exists():
             rows.append({"rel": rel, "status": "missing", "issues": ["文件缺失"]})
             continue
-        status, issues = _json_status(path) if path.suffix == ".json" else _md_status(path)
+        if name == "continuity_chain.json":
+            status, issues = _continuity_chain_status(path)
+        else:
+            status, issues = _json_status(path) if path.suffix == ".json" else _md_status(path)
         rows.append({"rel": rel, "status": status, "issues": issues})
     rows.append(_handoff_manifest_status(root, ep))
     rows.append(_batch_seed_status(root, ep))
@@ -900,7 +991,7 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         "files": rows,
         "scaffold_command": f"python3 skills/n2d-script/scripts/production_breakdown.py {root} {ep} scaffold --write",
         "next_when_blocked": (
-            "补齐 P-3 制片拆解三件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
+            "补齐 P-3 制片交接包，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
             "确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。"
         ),
     }

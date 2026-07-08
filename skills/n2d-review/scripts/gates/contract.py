@@ -29,8 +29,170 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _tone_base,
 )
 import os
+import re
 import sys
 from pathlib import Path
+from typing import Mapping, Optional
+import json
+
+ACTION_HANDOFF_DIM = "跨集动作接力"
+ACTION_HANDOFF_TEMPLATES = {
+    "fight_exchange",
+    "action_chase",
+    "magic_burst",
+    "public_confrontation",
+    "relationship_turn",
+    "multi_character_same_frame",
+    "ensemble_blocking",
+}
+ACTION_HANDOFF_IMMEDIATE_RE = re.compile(
+    r"(?:第[一二三四五六七八九十\d]+集|上集|前集|尾声|集尾|上一集).{0,24}(?:立即|接|承接|接续)|"
+    r"(?:立即接|直接接|无时间跳|match_action|match-action|continuous_action|动作接力|接战|硬断后)",
+    re.I,
+)
+ACTION_HANDOFF_NEAR_ACTION_RE = re.compile(
+    r"(?:近景|前景|近距离|贴近|对峙|逼近|已进入|已经|出手|亮爪|弹爪|扑杀|扑近|接战|开战|第一击|攻击|命中|刀|爪|拳|剑|战斗)",
+    re.I,
+)
+ACTION_HANDOFF_RESET_RE = re.compile(
+    r"(?:从(?:远处|远景|深景|后景|村道深处|画面深处|远方).{0,16}(?:入画|走来|走近|冲来|扑来|出现)|"
+    r"(?:重新|再次).{0,8}(?:入画|登场|出现)|"
+    r"(?:只作|仅作).{0,8}(?:远景|深景|后景|压迫)|"
+    r"(?:退到|拉回到).{0,8}(?:远景|深景|后景)|"
+    r"(?:远景|深景|后景).{0,8}(?:压迫|观望|站定))"
+)
+ACTION_HANDOFF_NEGATED_RESET_CONTEXT_RE = re.compile(
+    r"(?:不|不得|禁止|避免|不能|不可|禁|no_reset|forbid_reset|negative|no reset|not\s+reset)",
+    re.I,
+)
+
+
+def _storyboard_episode_with_number(root: str, number: int) -> str:
+    label = f"第{number}集"
+    path = storyboard_path(root, label)
+    return label if os.path.isfile(path) else ""
+
+
+def _previous_storyboard_episode(root: str, ep: str) -> str:
+    current = _ce_episode_number(ep)
+    if current is not None and current > 1:
+        exact = _storyboard_episode_with_number(root, current - 1)
+        if exact:
+            return exact
+    base = os.path.join(root, "脚本")
+    candidates = []
+    if os.path.isdir(base):
+        for name in os.listdir(base):
+            num = _ce_episode_number(name)
+            if num is None or current is not None and num >= current:
+                continue
+            if os.path.isfile(storyboard_path(root, name)):
+                candidates.append((num, name))
+    return max(candidates)[1] if candidates else ""
+
+
+def _storyboard_clip_text(clip: Mapping[str, object]) -> str:
+    try:
+        return json.dumps(clip, ensure_ascii=False)
+    except Exception:
+        return str(clip)
+
+
+def _last_storyboard_clip(data: Mapping[str, object]) -> Optional[Mapping[str, object]]:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for clip in reversed(clips):
+        if isinstance(clip, Mapping):
+            return clip
+    return None
+
+
+def _first_storyboard_clip(data: Mapping[str, object]) -> Optional[Mapping[str, object]]:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for clip in clips:
+        if isinstance(clip, Mapping):
+            return clip
+    return None
+
+
+def _episode_clip_index(data: Mapping[str, object], clip: Mapping[str, object]) -> int:
+    clips = data.get("clips") if isinstance(data.get("clips"), list) else []
+    for idx, item in enumerate(clips, start=1):
+        if item is clip:
+            return idx
+    return 1
+
+
+def _clip_id_for_index(clip: Mapping[str, object], idx: int) -> str:
+    raw = str(clip.get("id") or clip.get("clip_id") or clip.get("shot_id") or "").strip()
+    return raw or f"Clip_{idx:02d}"
+
+
+def _default_tail_frame(ep: str, idx: int) -> str:
+    return f"出图/{ep}/图片/Clip{idx:02d}_end.png"
+
+
+def _clip_frame_path(clip: Mapping[str, object], ep: str, idx: int, kind: str) -> str:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    if kind == "end":
+        return str(clip.get("endframe_png") or cont.get("endframe_png") or _default_tail_frame(ep, idx)).strip()
+    return str(clip.get("firstframe_png") or cont.get("firstframe_png") or f"出图/{ep}/图片/Clip{idx:02d}_first.png").strip()
+
+
+def _cross_episode_handoff_dict(clip: Mapping[str, object]) -> Mapping[str, object]:
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    handoff = cont.get("cross_episode_handoff")
+    return handoff if isinstance(handoff, Mapping) else {}
+
+
+def _boolish(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value or "").strip().lower() in {"1", "true", "yes", "y", "是", "对", "confirmed", "ok"}
+
+
+def _path_exists_under_root(root: str, rel: str) -> bool:
+    text = str(rel or "").strip()
+    if not text:
+        return False
+    path = Path(text)
+    if path.is_absolute():
+        return path.is_file()
+    return (Path(root) / text).is_file()
+
+
+def _latest_firstframe_bundle_has_source(root: str, ep: str, expected_rel: str) -> bool:
+    bundle_dir = Path(root) / "生产数据" / "codex_reference_bundles" / ep
+    if not bundle_dir.is_dir():
+        return False
+    candidates = sorted(
+        [p for p in bundle_dir.glob("Clip_01*.json") if p.is_file()],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    expected = str(expected_rel or "").strip()
+    for path in candidates:
+        data = load_json(str(path))
+        if not isinstance(data, Mapping):
+            continue
+        inputs = data.get("cli_image_inputs") or data.get("reference_inputs") or []
+        for item in inputs:
+            if not isinstance(item, Mapping):
+                continue
+            if str(item.get("role") or "") != "source_frame":
+                continue
+            rel = str(item.get("rel_path") or item.get("prepared_rel_path") or "").strip()
+            if rel == expected:
+                return True
+    return False
+
+
+def _first_unguarded_reset_match(text: str) -> Optional[re.Match[str]]:
+    for match in ACTION_HANDOFF_RESET_RE.finditer(str(text or "")):
+        prefix = str(text or "")[max(0, match.start() - 32):match.start()]
+        if ACTION_HANDOFF_NEGATED_RESET_CONTEXT_RE.search(prefix):
+            continue
+        return match
+    return None
 
 def check_contract_inheritance(root: str, ep: str) -> None:
     """像素层视觉契约 出图→出视频 继承 Diff，逐字段机检（光位锚/轴线视线漂移=BLOCK）。
@@ -1496,6 +1658,160 @@ def check_cross_episode_contract(root: str, ep: str) -> None:
             rerun_scope="同地点跨集光位/轴线翻=越轴/光跳穿帮；确认是否有意（反打/换机位），否则回 n2d-image 对齐前集 00_总览 视觉契约。",
             affected_artifacts=[cur_rel, _ce_overview_rel(prev_ep), "出图/共享/asset_registry.json"])
 
+def check_cross_episode_action_handoff(root: str, ep: str) -> None:
+    """跨集动作/几何接力：上一集已进入近距行动，下一集首镜不得重置成远景重新登场。
+
+    `beat_audit --series` 能发现冷开场有没有接住同一根叙事线，但它不看图像几何：上一集尾帧青面郎君
+    已在前景亮爪，下集首镜却让他“只作远景压迫”，语义仍算接住，画面却断了。这里用 storyboard 的
+    continuity + 生成证据补上这道付费前/出图后闸门。
+    """
+    cur_path = storyboard_path(root, ep)
+    cur_story = load_json(cur_path)
+    if not isinstance(cur_story, Mapping):
+        return
+    first = _first_storyboard_clip(cur_story)
+    if not isinstance(first, Mapping):
+        return
+    prev_ep = _previous_storyboard_episode(root, ep)
+    if not prev_ep:
+        return
+    prev_path = storyboard_path(root, prev_ep)
+    prev_story = load_json(prev_path)
+    if not isinstance(prev_story, Mapping):
+        return
+    prev_last = _last_storyboard_clip(prev_story)
+    if not isinstance(prev_last, Mapping):
+        return
+
+    first_text = _storyboard_clip_text(first)
+    prev_text = _storyboard_clip_text(prev_last)
+    first_cont = first.get("continuity") if isinstance(first.get("continuity"), Mapping) else {}
+    prev_cont = prev_last.get("continuity") if isinstance(prev_last.get("continuity"), Mapping) else {}
+    first_transition = str(first_cont.get("transition") or "")
+    immediate = bool(
+        ACTION_HANDOFF_IMMEDIATE_RE.search(first_text)
+        or str(first_transition).strip() in {"match_action_cut", "match action cut", "hard_cut", "hard cut", "impact_cut"}
+    )
+    prev_action = bool(
+        str(prev_last.get("template") or "") in ACTION_HANDOFF_TEMPLATES
+        or ACTION_HANDOFF_NEAR_ACTION_RE.search(prev_text)
+    )
+    first_action = bool(
+        str(first.get("template") or "") in ACTION_HANDOFF_TEMPLATES
+        or ACTION_HANDOFF_NEAR_ACTION_RE.search(first_text)
+    )
+    if not (immediate and prev_action and first_action):
+        return
+
+    prev_idx = _episode_clip_index(prev_story, prev_last)
+    prev_clip_id = _clip_id_for_index(prev_last, prev_idx)
+    prev_tail = _clip_frame_path(prev_last, prev_ep, prev_idx, "end")
+    handoff = _cross_episode_handoff_dict(first)
+    loc = f"{cur_path}:clips[0].continuity.cross_episode_handoff"
+    intentional_jump = _boolish(handoff.get("intentional_time_jump") or handoff.get("waive_reset"))
+    waiver = str(handoff.get("reset_waiver_reason") or handoff.get("waiver_reason") or "").strip()
+
+    if not handoff and not intentional_jump:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"{prev_ep} 末镜 `{prev_clip_id}` 已进入动作/战斗近距状态，{ep} 首镜声明立即承接，但缺 "
+            "`continuity.cross_episode_handoff`。必须写 from_episode/from_clip/prev_tail_frame/handoff_type/"
+            "must_inherit/no_reset/source_frame_required，并让第5集首帧以第4集尾帧作为 source_frame 派生；"
+            "否则会把已开战画面重置成新的远景建制。",
+            return_to_stage="script_stage2",
+            rerun_scope="回 n2d-script 修首镜接力合同，再重跑 n2d-image prompt 和受影响首帧/锚帧。",
+            affected_artifacts=[cur_path, prev_path, prev_tail],
+            code="cross_episode_handoff_missing",
+        )
+        return
+
+    if intentional_jump and waiver:
+        add(
+            INFO,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"首镜声明跨集时间/空间跳切豁免：{waiver}",
+            return_to_stage="script_stage2",
+        )
+        return
+
+    missing = []
+    expected = {
+        "from_episode": prev_ep,
+        "from_clip": prev_clip_id,
+        "prev_tail_frame": prev_tail,
+    }
+    for key, expected_value in expected.items():
+        value = str(handoff.get(key) or "").strip()
+        if value != expected_value:
+            missing.append(f"{key}={expected_value}")
+    if not str(handoff.get("handoff_type") or "").strip():
+        missing.append("handoff_type")
+    must_inherit = handoff.get("must_inherit")
+    if not isinstance(must_inherit, list) or len([x for x in must_inherit if str(x).strip()]) < 3:
+        missing.append("must_inherit>=3")
+    no_reset = handoff.get("no_reset") or handoff.get("forbid_reset")
+    if not isinstance(no_reset, list) or not any(str(x).strip() for x in no_reset):
+        missing.append("no_reset")
+    if handoff.get("source_frame_required") is False:
+        missing.append("source_frame_required=true")
+    if missing:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            "跨集动作接力字段不完整或未对准前集尾镜：" + "、".join(missing) +
+            "。下集首帧必须继承上一集尾帧的角色站位、距离、朝向、武器/爪势、光位和轴线。",
+            return_to_stage="script_stage2",
+            rerun_scope="补齐 cross_episode_handoff 后重跑 image_prompt / image_preflight。",
+            affected_artifacts=[cur_path, prev_path, prev_tail],
+            code="cross_episode_handoff_incomplete",
+        )
+
+    if not _path_exists_under_root(root, prev_tail):
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            prev_tail,
+            "跨集接力要求的前集尾帧不存在；先补前集尾帧，或明确改成非连续跳切并写 reset_waiver_reason。",
+            return_to_stage="image",
+            affected_artifacts=[prev_tail],
+            code="cross_episode_handoff_source_missing",
+        )
+
+    reset_match = _first_unguarded_reset_match(first_text)
+    if reset_match and not waiver:
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            loc,
+            f"首镜立即承接上一集动作，却出现重置远景/重新登场语义「{reset_match.group(0)}」。"
+            "这会让上一集已开战的青面郎君/狼妖群退回远处重新走位；应改成沿第4集尾帧爪势直接扑杀/拔刀接招，"
+            "或明确声明时间/空间跳切豁免。",
+            return_to_stage="script_stage2",
+            rerun_scope="修第5集首镜 start_state/entry_exit/shots/prompt，移除远景重置，再重出首帧及其派生锚帧。",
+            affected_artifacts=[cur_path, prev_path],
+            code="cross_episode_handoff_reset",
+        )
+
+    first_idx = _episode_clip_index(cur_story, first)
+    first_frame = _clip_frame_path(first, ep, first_idx, "first")
+    if _path_exists_under_root(root, first_frame) and not _latest_firstframe_bundle_has_source(root, ep, prev_tail):
+        add(
+            BLOCK,
+            ACTION_HANDOFF_DIM,
+            first_frame,
+            f"首帧已落盘，但最近的 Codex reference bundle 未把 `{prev_tail}` 作为 source_frame。"
+            "这是纯参考/文字重抽，不是跨集几何接力；必须归档当前首帧和其 a1/a2/aK 派生帧，"
+            "用前集尾帧作为 source_frame 重出。",
+            return_to_stage="image",
+            rerun_scope="重出本集 Clip_01 首帧及所有由旧首帧派生的中段锚帧/尾帧。",
+            affected_artifacts=[first_frame, prev_tail, f"生产数据/codex_reference_bundles/{ep}/Clip_01.json"],
+            code="cross_episode_handoff_source_not_used",
+        )
+
 __all__ = [
     'check_contract_inheritance',
     'check_asset_handoff_inheritance',
@@ -1512,4 +1828,5 @@ __all__ = [
     'check_cross_episode_style',
     'check_cross_episode_character_definition',
     'check_cross_episode_contract',
+    'check_cross_episode_action_handoff',
 ]

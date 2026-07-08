@@ -4,16 +4,18 @@
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "defer_to_composite",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP01",
+      "duration_sec": 10.88,
       "generation_risk": 5,
       "grammar_need": 3,
       "label": "埋尸冷开：欠命账落地",
       "narrative_weight": 2,
       "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 13,
       "risk_tags": [
         "long_clip_8s",
@@ -22,21 +24,41 @@
         "large_expression_span",
         "multi_character",
         "vfx_or_asset"
-      ]
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 2.88,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
     },
     {
       "actions": [
         "template_required",
-        "defer_to_composite"
+        "defer_to_composite",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP02",
+      "duration_sec": 11.778,
       "generation_risk": 4,
       "grammar_need": 0,
       "label": "搜尸求生：生存物资",
       "narrative_weight": 0,
       "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 11,
       "risk_tags": [
         "long_clip_8s",
@@ -44,21 +66,42 @@
         "closeup",
         "vfx_or_asset",
         "spectacle_large_establishing"
-      ]
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "compact_story",
+        "over_budget_sec": 5.778,
+        "recommended_action": "compress_or_narrate_before_video",
+        "rewrite_demo": "改成 3-6s：一句旁白承载信息，画面只拍能改变局势的物件/表情/动作。",
+        "target_story_clip_sec": {
+          "max": 6.0,
+          "min": 3.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": []
     },
     {
       "actions": [
         "template_required",
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP03",
+      "duration_sec": 24.832,
       "generation_risk": 5,
       "grammar_need": 1,
       "label": "黑衣赤纹：借来的官威",
       "narrative_weight": 0,
       "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 13,
       "risk_tags": [
         "long_clip_12s",
@@ -66,20 +109,87 @@
         "closeup",
         "vfx_or_asset",
         "spectacle_large_establishing"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 16.832,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.966,
+          "end_sec": 4.966,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP03",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP03_shot01"
+        },
+        {
+          "duration_sec": 4.967,
+          "end_sec": 9.933,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP03",
+          "start_sec": 4.966,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP03_shot02"
+        },
+        {
+          "duration_sec": 4.966,
+          "end_sec": 14.899,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP03",
+          "start_sec": 9.933,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP03_shot03"
+        },
+        {
+          "duration_sec": 4.967,
+          "end_sec": 19.866,
+          "index": 4,
+          "parent_story_clip": "EP03_CLIP03",
+          "start_sec": 14.899,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP03_shot04"
+        },
+        {
+          "duration_sec": 4.966,
+          "end_sec": 24.832,
+          "index": 5,
+          "parent_story_clip": "EP03_CLIP03",
+          "start_sec": 19.866,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP03_shot05"
+        }
       ]
     },
     {
       "actions": [
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP04",
+      "duration_sec": 33.363,
       "generation_risk": 5,
       "grammar_need": 2,
       "label": "掌心刀法与身份死局",
       "narrative_weight": 1,
       "pilot_candidate": false,
-      "primary_action": "defer_to_composite",
-      "reason": "把文字、光效、证据标记、复杂同框等交给分层出图或后期合成，避免视频后端自由生成。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 13,
       "risk_tags": [
         "long_clip_12s",
@@ -87,47 +197,180 @@
         "mouth_visible",
         "closeup",
         "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 25.363,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.561,
+          "end_sec": 5.561,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot01"
+        },
+        {
+          "duration_sec": 5.56,
+          "end_sec": 11.121,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 5.561,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot02"
+        },
+        {
+          "duration_sec": 5.56,
+          "end_sec": 16.681,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 11.121,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot03"
+        },
+        {
+          "duration_sec": 5.561,
+          "end_sec": 22.242,
+          "index": 4,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 16.681,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot04"
+        },
+        {
+          "duration_sec": 5.561,
+          "end_sec": 27.803,
+          "index": 5,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 22.242,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot05"
+        },
+        {
+          "duration_sec": 5.56,
+          "end_sec": 33.363,
+          "index": 6,
+          "parent_story_clip": "EP03_CLIP04",
+          "start_sec": 27.803,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP04_shot06"
+        }
       ]
     },
     {
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP05",
+      "duration_sec": 23.557,
       "generation_risk": 5,
       "grammar_need": 1,
       "label": "马队火把齐停",
       "narrative_weight": 0,
       "pilot_candidate": true,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
-      "risk_score": 20,
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "risk_score": 17,
       "risk_tags": [
         "long_clip_12s",
         "high_motion",
         "mouth_visible",
-        "large_expression_span",
         "multi_character",
         "vfx_or_asset",
         "spectacle_mount_ride"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 15.557,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.889,
+          "end_sec": 5.889,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP05",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP05_shot01"
+        },
+        {
+          "duration_sec": 5.889,
+          "end_sec": 11.778,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP05",
+          "start_sec": 5.889,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP05_shot02"
+        },
+        {
+          "duration_sec": 5.89,
+          "end_sec": 17.668,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP05",
+          "start_sec": 11.778,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP05_shot03"
+        },
+        {
+          "duration_sec": 5.889,
+          "end_sec": 23.557,
+          "index": 4,
+          "parent_story_clip": "EP03_CLIP05",
+          "start_sec": 17.668,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP05_shot04"
+        }
       ]
     },
     {
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP06",
+      "duration_sec": 20.955,
       "generation_risk": 5,
       "grammar_need": 2,
       "label": "少说话的冷面官威",
       "narrative_weight": 2,
       "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 12,
       "risk_tags": [
         "long_clip_12s",
@@ -135,43 +378,150 @@
         "closeup",
         "multi_character",
         "vfx_or_asset"
-      ]
-    },
-    {
-      "actions": [
-        "template_required",
-        "split_reaction"
       ],
-      "clip": "EP03_CLIP07",
-      "generation_risk": 4,
-      "grammar_need": 2,
-      "label": "陈青源跪求出手",
-      "narrative_weight": 0,
-      "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
-      "risk_score": 10,
-      "risk_tags": [
-        "long_clip_12s",
-        "mouth_visible",
-        "closeup",
-        "multi_character"
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 12.955,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.239,
+          "end_sec": 5.239,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP06",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot01"
+        },
+        {
+          "duration_sec": 5.238,
+          "end_sec": 10.477,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP06",
+          "start_sec": 5.239,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot02"
+        },
+        {
+          "duration_sec": 5.239,
+          "end_sec": 15.716,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP06",
+          "start_sec": 10.477,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot03"
+        },
+        {
+          "duration_sec": 5.239,
+          "end_sec": 20.955,
+          "index": 4,
+          "parent_story_clip": "EP03_CLIP06",
+          "start_sec": 15.716,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP06_shot04"
+        }
       ]
     },
     {
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "split_video_shots",
+        "compress_before_video"
+      ],
+      "clip": "EP03_CLIP07",
+      "duration_sec": 13.998,
+      "generation_risk": 4,
+      "grammar_need": 2,
+      "label": "陈青源跪求出手",
+      "narrative_weight": 0,
+      "pilot_candidate": false,
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
+      "risk_score": 10,
+      "risk_tags": [
+        "long_clip_12s",
+        "mouth_visible",
+        "closeup",
+        "multi_character"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 5.998,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.666,
+          "end_sec": 4.666,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP07",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot01"
+        },
+        {
+          "duration_sec": 4.666,
+          "end_sec": 9.332,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP07",
+          "start_sec": 4.666,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot02"
+        },
+        {
+          "duration_sec": 4.666,
+          "end_sec": 13.998,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP07",
+          "start_sec": 9.332,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP07_shot03"
+        }
+      ]
+    },
+    {
+      "actions": [
+        "template_required",
+        "split_reaction",
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP08",
+      "duration_sec": 34.492,
       "generation_risk": 5,
       "grammar_need": 2,
       "label": "上盘村狼妖危机",
       "narrative_weight": 2,
       "pilot_candidate": true,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 16,
       "risk_tags": [
         "long_clip_12s",
@@ -180,22 +530,97 @@
         "closeup",
         "large_expression_span",
         "multi_character"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 26.492,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.749,
+          "end_sec": 5.749,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot01"
+        },
+        {
+          "duration_sec": 5.748,
+          "end_sec": 11.497,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 5.749,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot02"
+        },
+        {
+          "duration_sec": 5.749,
+          "end_sec": 17.246,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 11.497,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot03"
+        },
+        {
+          "duration_sec": 5.749,
+          "end_sec": 22.995,
+          "index": 4,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 17.246,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot04"
+        },
+        {
+          "duration_sec": 5.748,
+          "end_sec": 28.743,
+          "index": 5,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 22.995,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot05"
+        },
+        {
+          "duration_sec": 5.749,
+          "end_sec": 34.492,
+          "index": 6,
+          "parent_story_clip": "EP03_CLIP08",
+          "start_sec": 28.743,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP08_shot06"
+        }
       ]
     },
     {
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots"
       ],
       "clip": "EP03_CLIP09",
+      "duration_sec": 16.842,
       "generation_risk": 5,
       "grammar_need": 1,
       "label": "黑衣绑身：拒绝最安全",
       "narrative_weight": 1,
       "pilot_candidate": true,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "split_video_shots",
+      "reason": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
       "risk_score": 15,
       "risk_tags": [
         "long_clip_12s",
@@ -204,22 +629,71 @@
         "large_expression_span",
         "multi_character",
         "vfx_or_asset"
+      ],
+      "story_economy": {
+        "detail_allowed": true,
+        "economy_class": "premium_detail",
+        "over_budget_sec": 1.842,
+        "recommended_action": "keep_detail_but_split_video_shots",
+        "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。",
+        "target_story_clip_sec": {
+          "max": 15.0,
+          "min": 8.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": false,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 5.614,
+          "end_sec": 5.614,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP09",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP09_shot01"
+        },
+        {
+          "duration_sec": 5.614,
+          "end_sec": 11.228,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP09",
+          "start_sec": 5.614,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP09_shot02"
+        },
+        {
+          "duration_sec": 5.614,
+          "end_sec": 16.842,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP09",
+          "start_sec": 11.228,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP09_shot03"
+        }
       ]
     },
     {
       "actions": [
         "template_required",
         "split_reaction",
-        "defer_to_composite"
+        "defer_to_composite",
+        "split_video_shots",
+        "compress_before_video"
       ],
       "clip": "EP03_CLIP10",
+      "duration_sec": 13.06,
       "generation_risk": 5,
       "grammar_need": 2,
       "label": "唯一希望：集尾硬断",
       "narrative_weight": 2,
       "pilot_candidate": false,
-      "primary_action": "template_required",
-      "reason": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
+      "primary_action": "compress_before_video",
+      "reason": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
       "risk_score": 13,
       "risk_tags": [
         "long_clip_12s",
@@ -227,6 +701,52 @@
         "closeup",
         "large_expression_span",
         "multi_character"
+      ],
+      "story_economy": {
+        "detail_allowed": false,
+        "economy_class": "selective_detail",
+        "over_budget_sec": 5.06,
+        "recommended_action": "trim_to_selective_detail",
+        "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+        "target_story_clip_sec": {
+          "max": 8.0,
+          "min": 5.0
+        }
+      },
+      "video_shot_policy": {
+        "direct_submit_allowed": true,
+        "story_clip_plan_threshold_sec": 12.0,
+        "target_video_shot_sec": 6.0,
+        "video_shot_hard_max_sec": 15.0
+      },
+      "video_shot_segments": [
+        {
+          "duration_sec": 4.353,
+          "end_sec": 4.353,
+          "index": 1,
+          "parent_story_clip": "EP03_CLIP10",
+          "start_sec": 0.0,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP10_shot01"
+        },
+        {
+          "duration_sec": 4.354,
+          "end_sec": 8.707,
+          "index": 2,
+          "parent_story_clip": "EP03_CLIP10",
+          "start_sec": 4.353,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP10_shot02"
+        },
+        {
+          "duration_sec": 4.353,
+          "end_sec": 13.06,
+          "index": 3,
+          "parent_story_clip": "EP03_CLIP10",
+          "start_sec": 8.707,
+          "target_duration_sec": 6.0,
+          "video_shot_id": "EP03_CLIP10_shot03"
+        }
       ]
     }
   ],
@@ -235,15 +755,20 @@
   "kind": "n2d_shot_split_decision_plan",
   "notes": [
     "report-first；真正硬阻塞仍由 validate_storyboard_contract / shot_risk_audit / spectacle_contract_audit 执行。",
-    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。"
+    "本计划用于把拆镜理由提前落盘，避免出图/出视频阶段临场重判。",
+    "compress_before_video 表示先改编剧表达，不应把啰嗦剧情直接切成多个付费视频段。"
   ],
   "ok": true,
   "summary": {
     "add_anchor": 0,
     "clips": 10,
+    "compress_before_video": 9,
     "defer_to_composite": 9,
+    "direct_submit_blocked": 6,
     "keep_single": 0,
     "split_or_template": 10,
-    "template_required": 9
+    "story_economy_over_budget": 10,
+    "template_required": 9,
+    "video_shot_split": 8
   }
 }

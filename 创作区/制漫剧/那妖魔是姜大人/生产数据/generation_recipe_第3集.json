@@ -1,6 +1,6 @@
 {
   "episode": "第3集",
-  "generated_at": "2026-07-07T12:13:49+00:00",
+  "generated_at": "2026-07-08T09:22:06+00:00",
   "kind": "n2d_generation_recipe_ledger",
   "root": "创作区/制漫剧/那妖魔是姜大人",
   "rows": [
@@ -3663,11 +3663,41 @@
       "settings_sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585",
       "stage": "video",
       "status": "pass"
+    },
+    {
+      "adapter_version": "n2d-video.video_runner.acceptance_recipe.v2",
+      "artifact_sha256": "9835ca0bedeac584526f4fd11863c530fab623e1ff4fef67eb283d2d07de21a8",
+      "asset": "出视频/第3集/视频/Clip_04_掌心刀法与身份死局.mp4",
+      "asset_registry_sha256": "0d234a542076b35479c2641ecffe36dcf8bc55d538dd15275cc443c3ff4eaecd",
+      "backend": "dreamina",
+      "backend_version": "seedance2.0_vip",
+      "declared_recipe_hash": true,
+      "event": "generation",
+      "identity_registry_sha256": "759707a4e2e34610c65eee92bcfba2a590243faacaa52448375250fcc336705f",
+      "input_fingerprint": "38fed36efcf3564caace5016ae4bdd8fc4c4af82317953f97f6d57a197012d58",
+      "mode": "image2video",
+      "model_version": "dreamina:seedance2.0_vip",
+      "prompt_sha256": "528d8a1ae665b319888b9ca3bfe205de9d0b2504b2a99102996f49ca694e939c",
+      "provider": "dreamina",
+      "qc_version": "n2d-video.video_qc.v1",
+      "recipe_hash": "16865126aa992ae458cf8504d4cc0325d93a06862b147affe1cfa7d3a183335d",
+      "redraw_reason": "",
+      "reference_bundle_sha256": "248d3728d7290f1c4009253b55aa34949a2441816e0617c50170cec4fb86b3b0",
+      "reference_manifest": "",
+      "retry_attempt": "",
+      "route_hash": "f9b887a8f25455681eaaaab9718c917845e5469a832b2cd30d1aba39eb0449e1",
+      "seed": "none",
+      "seed_effective": false,
+      "seed_strategy": "",
+      "seed_support": "unsupported_or_unknown",
+      "settings_sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585",
+      "stage": "video",
+      "status": "pass"
     }
   ],
   "summary": {
-    "count": 122,
-    "declared_hash": 120
+    "count": 123,
+    "declared_hash": 121
   },
   "version": 1
 }

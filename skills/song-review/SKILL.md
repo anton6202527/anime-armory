@@ -9,6 +9,7 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
 
 - **模式①「作品质检」**——审**一首歌的产物**（`词/lyrics.md` + `歌/song.wav` + 蓝图/meta）：扫问题 → 定位（段落 / 行号 / 时间码）→ 定级 → 给修法 → 出报告。发布或交付前 / 各阶段闸门跑。
 - **模式①b「母带/交付检查」**——跑 `master_check.py`，对 `歌/song.wav` 做采样率、位深、声道、时长、静音、削波、peak/RMS proxy、头尾静音检查，写 `混音/master_check.{json,md}`。它不是 LUFS 专业母带表，但能拦截发布前确定性硬伤。
+- **模式①c「一致性 findings」**——跑 `consistency_findings.py`，把歌词 prosody、曲式/和声草图、多版挑版、母带、AI 使用披露和权益元数据收成 `评审/consistency_findings.{json,md}`，避免审歌时散看多份 JSON。
 - **模式②「流程自审」**——审**写歌流水线本身**：联网拉市场基准，对照 `song-*` 各 skill + references，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套流程不断自我优化"成为一条可复跑命令。
 
 > 写歌的三大验收维：**可唱性（词）· 听感（曲+演唱）· 合规**。本 skill 把这套体检在 song 产线里落成可跑流程。词的工艺标尺 = `song-lyrics/references/songcraft.md`；出歌后端能力 = `song-compose/references/backends.md`。
@@ -30,6 +31,7 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
   ```
   发布/交付前另跑：
   ```bash
+  python3 skills/song-review/scripts/consistency_findings.py <写歌作品根> --write
   python3 skills/song-review/scripts/master_check.py <写歌作品根> --platform streaming --write
   ```
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。

@@ -309,6 +309,94 @@ def test_attach_multiframe_submit_duration_uses_native_timeline(tmp_path: Path) 
     assert item["submit_duration"] == 24.832
 
 
+def test_submit_blocks_unsplit_story_clip_over_hard_cap(tmp_path: Path) -> None:
+    import pytest
+
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("人物运动：缓慢走过官道；", encoding="utf-8")
+    manifest = tmp_path / "video_batch_第1集_01_01.json"
+    manifest.write_text(json.dumps({
+        "episode": "第1集",
+        "backend": "dreamina",
+        "items": [{
+            "clip": "Clip_01",
+            "target": "Clip_01.mp4",
+            "image": str(tmp_path / "first.png"),
+            "prompt_file": str(prompt),
+            "story_duration": 33.0,
+            "submit_duration": 15,
+            "status": "prepared",
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    with pytest.raises(RuntimeError) as exc:
+        video_runner.submit_clip(tmp_path, manifest, "Clip_01", dry_run=True)
+
+    assert "exceeds hard single video_shot cap" in str(exc.value)
+    assert "physical 4-8s video_shot parts" in str(exc.value)
+
+
+def test_prepare_splits_long_story_clip_into_physical_parts(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(video_runner, "video_backend_frame_control", lambda *_a, **_k: {
+        "mode": "multi_keyframe",
+        "supports_last_frame": True,
+        "supports_native_mid_anchors": True,
+    })
+    monkeypatch.setattr(video_runner, "anchor_consumption_plan", lambda *_a, **_k: {
+        "consumption_mode": "native_multiframe",
+        "supports_last_frame": True,
+        "supports_native_mid_anchors": True,
+        "consumes_endframe": True,
+        "consumes_mid_anchors_natively": True,
+    })
+
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    prompt_dir.joinpath("01_clips.md").write_text(
+        """## Clip 01（时长 18.000s · 长剧情段）
+
+**首帧**：`出图/第1集/图片/Clip01_first.png`
+**尾帧**：`出图/第1集/图片/Clip01_end.png`
+
+### 视频 prompt（中文，目标=即梦）
+```
+人物运动：从首帧动作接到尾帧落幅。
+```
+""",
+        encoding="utf-8",
+    )
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    for name in ("Clip01_first.png", "Clip01_a1.png", "Clip01_a2.png", "Clip01_end.png"):
+        (image_dir / name).write_bytes(b"png")
+    sb_dir = tmp_path / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    sb_dir.joinpath("storyboard.json").write_text(json.dumps({
+        "clips": [{
+            "id": "Clip_01",
+            "duration": 18.0,
+            "template_contract": {"beats": ["起", "承", "落"]},
+            "continuity": {
+                "end_state": "停在尾帧",
+                "anchors": [
+                    {"at_sec": 6.0, "anchor_png": "出图/第1集/图片/Clip01_a1.png"},
+                    {"at_sec": 12.0, "anchor_png": "出图/第1集/图片/Clip01_a2.png"},
+                ],
+            },
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    manifest = video_runner.prepare_manifest(
+        tmp_path, "第1集", 1, 1, backend="dreamina",
+        resolution="auto", model_version="auto", force=True,
+    )
+
+    clips = [item["clip"] for item in manifest["items"]]
+    assert clips == ["Clip_01_part1", "Clip_01_part2", "Clip_01_part3"]
+    assert all(item["story_duration"] == 6.0 for item in manifest["items"])
+    assert all(item["video_shot_segment"]["parent_story_clip"] == "Clip_01" for item in manifest["items"])
+
+
 def test_dreamina_args_appends_dialogue_fact_contract(tmp_path: Path) -> None:
     prompt = tmp_path / "prompt.txt"
     prompt.write_text("人物运动：张老大追问；\n声音约束：native_speech；", encoding="utf-8")

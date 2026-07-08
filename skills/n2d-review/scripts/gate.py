@@ -3043,6 +3043,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_drift_risk_advisories(root, ep)
         check_drift_report_freshness(root, ep)  # measured-drift BLOCK 环的报告新鲜度闸（堵静默退化）
         check_cross_episode_character_definition(root, ep)
+        check_cross_episode_action_handoff(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=False)
         check_storyboard_possession_gate(root, ep)
         check_storyboard_visual_contract(root, ep)
@@ -3114,6 +3115,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_storyboard_style_contract(root, ep)
         check_cross_episode_style(root, ep)
         check_cross_episode_contract(root, ep)
+        check_cross_episode_action_handoff(root, ep)
         check_storyboard_special_templates(root, ep)
         check_script_quality_contract(root, ep)
         check_image_prompt_overview(root, ep)

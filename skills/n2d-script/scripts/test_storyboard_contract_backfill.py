@@ -57,3 +57,42 @@ def test_write_json_atomic_roundtrip(tmp_path):
     payload = {"clips": []}
     bf.write_json_atomic(path, payload)
     assert json.loads(path.read_text(encoding="utf-8")) == payload
+
+
+def test_fight_exchange_contract_backfills_required_fields():
+    data = {
+        "clips": [
+            {
+                "id": "C_FIGHT",
+                "label": "横刀反打",
+                "template": "fight_exchange",
+                "template_contract": {
+                    "axis": "姜月初由画面左下向右上斩出，狼妖从深景扑来。",
+                    "beats": ["起手拔刀", "刀爪撞点", "狼妖后撤"],
+                },
+                "character_ids": ["CHAR_姜月初", "GROUP_狼妖"],
+                "object_ids": ["PROP_横刀"],
+                "entity_schedule": {"required_presence": ["CHAR_姜月初", "GROUP_狼妖"]},
+                "continuity": {
+                    "start_state": "横刀未完全出鞘，狼妖扑近。",
+                    "end_state": "刀爪撞开，狼妖被逼退。",
+                    "eyeline": "姜月初锁狼妖首领，狼妖看刀锋。",
+                    "shot_size": "MS 起手 → CU 撞点 → WS 后撤",
+                    "need_endframe": True,
+                    "transition": "impact_cut",
+                    "entry_exit": "狼妖从深景入画，尾帧向画面右侧退开。",
+                },
+                "shots": [
+                    {"desc": "姜月初横刀出鞘。", "camera": "低机位侧前方跟刀。"},
+                    {"desc": "刀爪撞出火星。", "camera": "撞点特写后快速拉开。"},
+                ],
+            }
+        ]
+    }
+
+    bf.backfill(data)
+
+    contract = data["clips"][0]["template_contract"]
+    assert contract["template_id"] == "fight_exchange"
+    for field in bf.spectacle_required_fields("fight_exchange"):
+        assert contract.get(field), field

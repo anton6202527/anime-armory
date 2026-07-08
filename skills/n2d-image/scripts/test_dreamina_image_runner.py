@@ -67,6 +67,26 @@ def test_dreamina_merges_carried_face_anchor_despite_prose_placeholder(tmp_path:
     assert names.index("定妆_沈念_脸部特写.png") < names.index("占位图.png")
 
 
+def test_dreamina_image_runner_requires_signed_exception(tmp_path: Path) -> None:
+    try:
+        dreamina.require_dreamina_image_signoff(tmp_path)
+    except RuntimeError as exc:
+        assert "Codex image2" in str(exc)
+        assert "image_backend_override.json" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")
+
+    signoff = tmp_path / "合规" / "image_backend_override.json"
+    signoff.parent.mkdir(parents=True)
+    signoff.write_text(json.dumps({
+        "approved": True,
+        "scope": "image",
+        "backend": "dreamina_official",
+        "reason": "用户明确指定",
+    }, ensure_ascii=False), encoding="utf-8")
+    dreamina.require_dreamina_image_signoff(tmp_path)
+
+
 def _combat_target(body: str) -> "base.Target":
     section = base.ClipSection(
         clip="Clip_07", title="## 镜头 7", body=body, target_line="`出图/第1集/图片/镜头7.png`")

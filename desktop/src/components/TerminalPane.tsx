@@ -600,7 +600,6 @@ export const TerminalPane = forwardRef<TerminalHandle, TerminalPaneProps>(
           role="separator"
           aria-orientation="vertical"
           aria-label={t("operation.resizeTerminalAria")}
-          title={t("operation.resizeTerminalTitle")}
           onPointerDown={startRailResize}
           onDoubleClick={() => {
             setRailWidth(DEFAULT_RAIL_WIDTH);

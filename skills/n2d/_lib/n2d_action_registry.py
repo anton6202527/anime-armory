@@ -114,6 +114,7 @@ STAGE_ACTIONS: Dict[str, Dict[str, Any]] = {
         prework=[
             "source_adaptation_audit",
             "beat_audit",
+            "story_economy_audit",
             "spectacle_contract_audit",
             "setup_payoff_gate",
             "series_retention_gate",

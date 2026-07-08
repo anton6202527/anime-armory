@@ -207,6 +207,131 @@ def setup_function():
     gate.findings.clear()
 
 
+def _write_episode_storyboard(root: Path, ep: str, clips):
+    sb_dir = root / "脚本" / ep
+    sb_dir.mkdir(parents=True, exist_ok=True)
+    number = int("".join(ch for ch in ep if ch.isdigit()) or "1")
+    (sb_dir / "storyboard.json").write_text(
+        json.dumps({"episode": number, "policy": {"tailframe_default": True}, "clips": clips}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def _cross_episode_action_fixture(tmp_path, *, current_clip):
+    root = tmp_path / "制漫剧" / "测试剧"
+    prev_tail = "出图/第1集/图片/Clip03_end.png"
+    prev_clip = {
+        "id": "EP01_CLIP03",
+        "label": "青面郎君亮爪开战",
+        "template": "fight_exchange",
+        "duration": 3.0,
+        "endframe_png": prev_tail,
+        "shots": [{"desc": "青面郎君已在前景近距离亮出狼爪，战斗在第一击前硬断。"}],
+        "continuity": {"end_state": "青面郎君前景亮爪，群狼已压近，姜月初原位接战。"},
+    }
+    _write_episode_storyboard(root, "第1集", [prev_clip])
+    _write_episode_storyboard(root, "第2集", [current_clip])
+    tail_path = root / prev_tail
+    tail_path.parent.mkdir(parents=True, exist_ok=True)
+    tail_path.write_bytes(_TEST_PNG_BYTES)
+    return root, prev_tail
+
+
+def test_cross_episode_action_handoff_requires_contract_for_immediate_action(tmp_path):
+    current_clip = {
+        "id": "EP02_CLIP01",
+        "label": "群狼扑杀冷开",
+        "template": "fight_exchange",
+        "duration": 3.0,
+        "shots": [{"desc": "第1集尾声后立即接：群狼扑杀，姜月初拔刀接招。"}],
+        "continuity": {
+            "start_state": "第1集尾声后立即接：青面郎君刚下令，群狼伏身前扑。",
+            "end_state": "横刀已出鞘。",
+        },
+    }
+    root, _ = _cross_episode_action_fixture(tmp_path, current_clip=current_clip)
+
+    gate.check_cross_episode_action_handoff(str(root), "第2集")
+
+    assert any(
+        f["dim"] == "跨集动作接力"
+        and f["sev"] == gate.BLOCK
+        and f.get("code") == "cross_episode_handoff_missing"
+        for f in gate.findings
+    )
+
+
+def test_cross_episode_action_handoff_blocks_reset_and_source_not_used(tmp_path):
+    prev_tail = "出图/第1集/图片/Clip03_end.png"
+    current_clip = {
+        "id": "EP02_CLIP01",
+        "label": "群狼扑杀冷开",
+        "template": "fight_exchange",
+        "duration": 3.0,
+        "firstframe_png": "出图/第2集/图片/Clip01_first.png",
+        "shots": [{"desc": "第1集尾声后立即接：狼妖群从深景入画，青面郎君只作远景压迫。"}],
+        "continuity": {
+            "start_state": "第1集尾声后立即接：青面郎君刚下令。",
+            "entry_exit": "狼妖群从深景入画；青面郎君只作远景压迫。",
+            "end_state": "横刀已出鞘。",
+            "cross_episode_handoff": {
+                "from_episode": "第1集",
+                "from_clip": "EP01_CLIP03",
+                "prev_tail_frame": prev_tail,
+                "handoff_type": "continuous_action_match_cut",
+                "source_frame_required": True,
+                "must_inherit": ["前景亮爪", "角色距离", "村道轴线"],
+                "no_reset": ["不得退回远景", "不得重新登场"],
+            },
+        },
+    }
+    root, _ = _cross_episode_action_fixture(tmp_path, current_clip=current_clip)
+    firstframe = root / "出图/第2集/图片/Clip01_first.png"
+    firstframe.parent.mkdir(parents=True, exist_ok=True)
+    firstframe.write_bytes(_TEST_PNG_BYTES)
+    bundle = root / "生产数据/codex_reference_bundles/第2集/Clip_01.json"
+    bundle.parent.mkdir(parents=True, exist_ok=True)
+    bundle.write_text(
+        json.dumps({"cli_image_inputs": [{"role": "style", "rel_path": "出图/共享/图片/style.png"}]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    gate.check_cross_episode_action_handoff(str(root), "第2集")
+
+    assert any(f.get("code") == "cross_episode_handoff_reset" for f in gate.findings)
+    assert any(f.get("code") == "cross_episode_handoff_source_not_used" for f in gate.findings)
+
+
+def test_cross_episode_action_handoff_passes_with_handoff_contract(tmp_path):
+    prev_tail = "出图/第1集/图片/Clip03_end.png"
+    current_clip = {
+        "id": "EP02_CLIP01",
+        "label": "群狼扑杀冷开",
+        "template": "fight_exchange",
+        "duration": 3.0,
+        "shots": [{"desc": "第1集尾声后立即接：青面郎君沿前集爪势保持前景压迫，姜月初原位拔刀接招。"}],
+        "continuity": {
+            "start_state": "第1集尾声后立即接：青面郎君前景亮爪，群狼已压近。",
+            "entry_exit": "青面郎君沿前集爪势保持前景/中近景压迫；狼妖群从两侧直接扑入，不重新登场。",
+            "end_state": "横刀贴着狼爪冷光出鞘。",
+            "cross_episode_handoff": {
+                "from_episode": "第1集",
+                "from_clip": "EP01_CLIP03",
+                "prev_tail_frame": prev_tail,
+                "handoff_type": "continuous_action_match_cut",
+                "source_frame_required": True,
+                "must_inherit": ["前景亮爪", "角色距离", "村道轴线", "冷灰晨雾光位"],
+                "no_reset": ["不得退回远景", "不得重新登场"],
+            },
+        },
+    }
+    root, _ = _cross_episode_action_fixture(tmp_path, current_clip=current_clip)
+
+    gate.check_cross_episode_action_handoff(str(root), "第2集")
+
+    assert not gate.findings
+
+
 def test_route_frame_capability_warns_for_mid_anchor_on_first_last_backend(tmp_path):
     route = {"clip_id": "Clip_01", "primary_backend": "kling"}
     requirements = {1: {"need_end": True, "anchor_count": 1, "total_timeline_frames": 3}}
@@ -3943,11 +4068,33 @@ def test_native_av_subtitle_alignment_valid_sidecar_passes_review(tmp_path):
     assert not any(f["dim"] == "原生音画字幕对齐" for f in gate.findings)
 
 
-def test_image_ai_setting_dreamina_official_cli_passes(tmp_path):
-    # 阶段2：Dreamina/即梦官方 CLI 是可选生图后端，不再按名称一律阻断。
+def _write_image_backend_signoff(root: Path, backend: str = "dreamina") -> None:
+    signoff = root / "合规" / "image_backend_override.json"
+    signoff.parent.mkdir(parents=True, exist_ok=True)
+    signoff.write_text(json.dumps({
+        "approved": True,
+        "scope": "image",
+        "backend": backend,
+        "reason": "用户明确指定的单项目例外",
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_image_ai_setting_dreamina_requires_signoff(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: 即梦\n", encoding="utf-8")
+
+    gate.check_image_ai_policy(str(root), "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "生图AI一致性" and "签核" in f["msg"]
+               for f in gate.findings)
+
+
+def test_image_ai_setting_dreamina_official_cli_passes_with_signoff(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: 即梦\n", encoding="utf-8")
+    _write_image_backend_signoff(root, "dreamina")
 
     gate.check_image_ai_policy(str(root), "第1集")
 
@@ -3960,6 +4107,7 @@ def test_image_ai_prompt_can_name_dreamina_backend(tmp_path):
     prompt_dir.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
     (prompt_dir / "00_总览.md").write_text("生图AI: Dreamina\n本集计划用 dreamina 生图。", encoding="utf-8")
+    _write_image_backend_signoff(root, "dreamina")
 
     gate.check_image_ai_policy(str(root), "第1集")
 
@@ -3977,12 +4125,13 @@ def test_image_ai_same_video_ai_shorthand_is_blocked(tmp_path):
 
 
 def test_image_ai_approved_alternate_backend_passes(tmp_path):
-    # 阶段1：官方多参考后端（Seedream）放行，不再因"非 Codex"阻断。
+    # 官方多参考后端（Seedream）必须有用户签核例外。
     root = tmp_path / "制漫剧" / "测试剧"
     prompt_dir = root / "出图" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Seedream\n", encoding="utf-8")
     (prompt_dir / "00_总览.md").write_text("生图AI: Seedream\n本集用 Seedream Universal Reference 锁人。", encoding="utf-8")
+    _write_image_backend_signoff(root, "seedream")
 
     gate.check_image_ai_policy(str(root), "第1集")
 
@@ -4049,6 +4198,7 @@ def test_image_ai_backend_migration_uses_latest_event_per_asset(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n- 生图AI: Dreamina\n", encoding="utf-8")
+    _write_image_backend_signoff(root, "dreamina")
     _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Codex")
     _append_image_event(root, "出图/第1集/图片/Clip_01.png", "Dreamina", event="redraw")
 

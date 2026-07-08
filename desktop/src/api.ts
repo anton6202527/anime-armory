@@ -131,6 +131,16 @@ export async function archiveWorkChange(root: string, rel: string): Promise<Work
   return invoke<WorkChangeSummary>("archive_work_change", { root, rel });
 }
 
+/** Restore all current changed/deleted/added files back to the local clean baseline. */
+export async function restoreWorkChanges(root: string): Promise<WorkChangeSummary> {
+  return invoke<WorkChangeSummary>("restore_work_changes", { root });
+}
+
+/** Restore one changed/deleted/added file back to the local clean baseline. */
+export async function restoreWorkChange(root: string, rel: string): Promise<WorkChangeSummary> {
+  return invoke<WorkChangeSummary>("restore_work_change", { root, rel });
+}
+
 /** Read one text file inside a work root (<root>/<rel>) for the file preview. */
 export async function readWorkFile(root: string, rel: string): Promise<string> {
   return invoke<string>("read_work_file", { root, rel });

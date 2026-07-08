@@ -43,7 +43,7 @@ def _write_storyboard(root: Path, ep: str = "第1集") -> None:
 def _confirm_pack(root: Path, ep: str = "第1集") -> None:
     pb.scaffold(root, ep)
     ep_dir = root / "脚本" / ep
-    for name in ("production_breakdown.json", "continuity_breakdown.json", "continuity_bible.json", "ai_shooting_schedule.json"):
+    for name in [n for n in pb.REQUIRED_FILES if n.endswith(".json")]:
         path = ep_dir / name
         data = json.loads(path.read_text(encoding="utf-8"))
         data["status"] = "confirmed"
@@ -192,3 +192,68 @@ def test_check_blocks_stale_handoff_after_storyboard_change(tmp_path: Path) -> N
     assert report["status"] == "block"
     manifest = next(row for row in report["files"] if row["rel"].endswith("production_handoff_pack.json"))
     assert any("inputs_fingerprint" in issue for issue in manifest["issues"])
+
+
+def test_continuity_chain_blocks_relay_without_endframe(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"].append({
+        "id": "EP01_CLIP02",
+        "label": "接动作反打",
+        "duration": 4,
+        "scene": "正堂/夜/内",
+        "location_id": "LOC_HALL",
+        "character_ids": ["CHAR_A", "CHAR_B"],
+        "firstframe_png": "出图/第1集/图片/Clip_02.png",
+        "continuity": {
+            "start_state": "B 后退半步",
+            "end_state": "A 举令牌逼问",
+            "eyeline": "B 看向 A",
+            "transition": "硬切",
+        },
+        "entity_schedule": {"required_presence": ["CHAR_A", "CHAR_B"]},
+    })
+    data["clips"][0]["continuity"]["transition"] = "接力"
+    data["clips"][0]["continuity"]["need_endframe"] = False
+    data["clips"][0]["continuity"].pop("endframe_png", None)
+    data["clips"][0].pop("endframe_png", None)
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+    report = pb.check(tmp_path, "第1集")
+
+    assert report["status"] == "block"
+    row = next(r for r in report["files"] if r["rel"].endswith("continuity_chain.json"))
+    assert any("relay_without_endframe_flag" in issue for issue in row["issues"])
+
+
+def test_cross_episode_boundary_requires_explicit_contract(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path, "第1集")
+    _write_storyboard(tmp_path, "第2集")
+
+    pb.scaffold(tmp_path, "第2集", confirmed=True)
+    report = pb.check(tmp_path, "第2集")
+
+    assert report["status"] == "block"
+    row = next(r for r in report["files"] if r["rel"].endswith("continuity_chain.json"))
+    assert any("missing_episode_boundary_contract" in issue for issue in row["issues"])
+
+
+def test_cross_episode_intentional_discontinuity_passes(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path, "第1集")
+    _write_storyboard(tmp_path, "第2集")
+    sb_path = tmp_path / "脚本" / "第2集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"][0]["continuity"]["episode_boundary"] = {
+        "intentional_discontinuity_reason": "第2集冷开先切到三日后官道，后续对白补上一集尾钩。",
+        "transition_from_previous": "硬切",
+    }
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第2集", confirmed=True)
+    report = pb.check(tmp_path, "第2集")
+
+    assert report["status"] == "pass"
+    chain = json.loads((tmp_path / "脚本" / "第2集" / "continuity_chain.json").read_text(encoding="utf-8"))
+    assert chain["seams"][0]["policy"] == "intentional_discontinuity"

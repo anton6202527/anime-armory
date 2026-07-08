@@ -1,11 +1,11 @@
 ---
 name: mv-image
-description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identity/asset/reference 注册表，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。生图AI 是选择点（默认 Codex），MV一致性增强会在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；阶段1 放行官方多参考后端（Seedream / 可灵主体库 / Nano Banana / Sora Cameo），只拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
+description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identity/asset/reference 注册表，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。生图AI 是选择点（默认 Codex / GPT Image 2），MV一致性增强会在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；非 Codex/OpenAI 生图后端只作签核例外，仍拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
 ---
 
 # mv-image — 制MV 出图（mv 系列自建）
 
-按 `创作区/制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。`生图AI` 是选择点（默认 Codex），`MV一致性增强` 在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；**阶段1 起放行官方多参考一致性后端**（Seedream / 可灵主体库 / Nano Banana / Sora Cameo）；硬闸门只剩「不混用后端」+「禁即梦/Dreamina 逆向出图」（官方 Seedream API 可用）。后端清单见 `mv-craft/scripts/contract.py` `MV_APPROVED_IMAGE_BACKENDS`。
+按 `创作区/制MV/<曲名>/视觉蓝图.md` + `分镜/clip_plan.json`，生成 MV 的画面。**两层架构**：共享层（主角/场景定妆，全曲复用锁一致性）+ Clip 层（每个 clip 的首帧/按需尾帧 PNG）。`生图AI` 是选择点（默认 Codex / GPT Image 2），`MV一致性增强` 在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；非 Codex/OpenAI 生图后端只作用户签核例外；硬闸门仍是「不混用后端」+「禁即梦/Dreamina 逆向出图」（官方 Seedream API 可在签核后使用）。后端清单见 `mv-craft/scripts/contract.py`。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
@@ -52,7 +52,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identit
   | **预算一般** | **只关键图片严格自检**；主角/副歌高光/封面候选不满意就继续重抽/改 prompt/换参考，直到满意落档 | 普通段镜走筛选宽容：无核心错位、无主角身份漂移、无硬性禁忌即可落档，不追小瑕疵 | 关键图满意；普通图可用 |
 
   **关键图片判定**：主角/主唱 CU/ECU/情绪特写、副歌高光、卡点爽点、反转、封面候选、首尾镜、需要尾帧接力的连续动作镜、会被 mv-video 强引用的关键帧。`预算一般` 下非关键普通段镜仍要过硬伤自检，但不因为轻微构图、表情、环境细节偏差反复消耗。
-- **生图后端规则（阶段1 · mv 线自持于 `mv-craft/scripts/contract.py`）**：`生图AI` 是**选择点**，默认 Codex；**放行官方多参考一致性后端**（Seedream Universal Reference / 可灵 Kling 主体库 / Nano Banana / Sora Character Cameo，市场验证过的 95% 跨集一致性方案）。唯二硬闸门：① **同一支 MV 不混用多个生图后端**（混用=跨 clip 漂移）；② **禁逆向/未授权出图路径**（即梦/Dreamina 非官方 CLI 或 web 自动化——安全 invariant；ByteDance **官方 Seedream API** ≠ 即梦逆向出图，可用）。所选后端无法落 PNG 就停下报告，不偷偷换后端兜底。即梦/Seedance 仍可作后续 mv-video 图生视频后端.
+- **生图后端规则（阶段1 · mv 线自持于 `mv-craft/scripts/contract.py`）**：`生图AI` 是**选择点**，默认且优先 Codex / GPT Image 2；非 Codex/OpenAI 后端（Seedream Universal Reference / 可灵 Kling 主体库 / Nano Banana / Sora Character Cameo 等）只能作为签核例外。唯二硬闸门：① **同一支 MV 不混用多个生图后端**（混用=跨 clip 漂移）；② **禁逆向/未授权出图路径**（即梦/Dreamina 非官方 CLI 或 web 自动化——安全 invariant；ByteDance **官方 Seedream API** ≠ 即梦逆向出图，但也需签核）。所选后端无法落 PNG 就停下报告，不偷偷换后端兜底。即梦/Seedance 仍可作后续 mv-video 图生视频后端.
 
 ## 一致性增强菜单（出图前提示）
 

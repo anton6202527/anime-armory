@@ -29,6 +29,8 @@ except Exception:  # pragma: no cover - settings helper optional
 STAGES = contract.GATE_STAGES
 
 _PENDING_TOKENS = {"", "未记录", "待补", "待填写", "tbd", "未填", "未定"}
+PREFERRED_IMAGE_BACKENDS = {"codex", "openai"}
+IMAGE_BACKEND_OVERRIDE_REL = os.path.join("合规", "image_backend_override.json")
 
 
 def _load_sibling_module(name):
@@ -124,8 +126,33 @@ def _resolve_image_backend(root):
     return val
 
 
+def _image_backend_override_allows(root, canonical):
+    """Return (ok, path) for a signed non-Codex image backend exception."""
+    path = os.path.join(root, IMAGE_BACKEND_OVERRIDE_REL)
+    payload = load_json(path)
+    if not isinstance(payload, dict):
+        return False, path
+    if payload.get("approved") is not True:
+        return False, path
+    scope = str(payload.get("scope") or payload.get("stage") or "image").lower()
+    if "image" not in scope and "生图" not in scope:
+        return False, path
+    raw_backend = str(
+        payload.get("backend")
+        or payload.get("canonical")
+        or payload.get("image_backend")
+        or ""
+    ).strip()
+    if raw_backend == canonical:
+        return True, path
+    signed_canon, signed_kind = contract.classify_image_backend(raw_backend)
+    if signed_kind == "approved" and signed_canon == canonical:
+        return True, path
+    return False, path
+
+
 def image_backend_findings(root):
-    """生图后端治理（安全 invariant）：拦 ① 禁用/逆向后端 ② 项目内后端混用。"""
+    """生图后端治理：Codex image2 优先；非 Codex/OpenAI 需签核；项目内不混用。"""
     out = []
     setting_val = _resolve_image_backend(root)
     if not setting_val:
@@ -138,6 +165,16 @@ def image_backend_findings(root):
     elif kind == "unknown":
         out.append(finding("block", "image_backend_unknown",
                             f"生图AI『{setting_val}』不在 ad 放行白名单内；请改用官方后端或先登记核验"))
+    elif canon and canon not in PREFERRED_IMAGE_BACKENDS:
+        allowed, signoff_path = _image_backend_override_allows(root, canon)
+        if not allowed:
+            out.append(finding(
+                "block",
+                "image_backend_non_codex_requires_signoff",
+                "全项目生图优先 Codex image2；非 Codex/OpenAI 生图后端必须先由用户明确签核，"
+                f"再写 {IMAGE_BACKEND_OVERRIDE_REL} 后才能进入付费出图。当前：{setting_val}",
+                signoff_path,
+            ))
     # 后端混用：_设置.md 与 _meta.json 指向不同 canonical 后端 = block。
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     meta_val = (meta.get("image_backend") or "").strip()
@@ -146,6 +183,62 @@ def image_backend_findings(root):
         if canon and meta_canon and meta_canon != canon:
             out.append(finding("block", "image_backend_mixed",
                                 f"项目内后端混用：_设置.md『{setting_val}』≠ _meta.json『{meta_val}』，一个项目只允许一个生图后端"))
+    return out
+
+
+def image_output_backend_findings(root):
+    """已落图 provenance 对账：不能用 Dreamina 图片伪装成 Codex 项目继续出视频。"""
+    manifest_path = os.path.join(root, "出图", "分镜", "image_jobs_manifest.json")
+    manifest = load_json(manifest_path)
+    if not isinstance(manifest, dict):
+        return []
+    jobs = manifest.get("jobs")
+    if not isinstance(jobs, list):
+        return []
+    setting_val = _resolve_image_backend(root)
+    setting_canon, setting_kind = contract.classify_image_backend(setting_val)
+    out = []
+    seen = set()
+    for job in jobs:
+        if not isinstance(job, dict):
+            continue
+        status = str(job.get("status") or "").strip().lower()
+        if status not in {"done", "pass", "accepted", "ok"}:
+            continue
+        backend = str(job.get("backend") or "").strip()
+        if not backend:
+            out.append(finding("block", "image_output_backend_missing",
+                               f"已落图 job {job.get('job_id') or job.get('shot') or '?'} 缺 backend provenance",
+                               manifest_path))
+            continue
+        canon, kind = contract.classify_image_backend(backend)
+        seen.add(canon or backend)
+        if kind == "forbidden":
+            out.append(finding("block", "image_output_backend_forbidden",
+                               f"已落图 job {job.get('job_id') or '?'} 使用禁用/逆向后端：{backend}",
+                               manifest_path))
+        elif kind == "unknown":
+            out.append(finding("block", "image_output_backend_unknown",
+                               f"已落图 job {job.get('job_id') or '?'} 的后端无法核验：{backend}",
+                               manifest_path))
+        elif canon and canon not in PREFERRED_IMAGE_BACKENDS:
+            allowed, signoff_path = _image_backend_override_allows(root, canon)
+            if not allowed:
+                out.append(finding(
+                    "block",
+                    "image_output_non_codex_requires_redraw",
+                    "已落图来自非 Codex/OpenAI 后端，且无用户签核例外；正式出视频前必须用 Codex image2 重出。"
+                    f"当前 job {job.get('job_id') or '?'} backend={backend}",
+                    signoff_path,
+                ))
+        if setting_kind == "approved" and canon and setting_canon and canon != setting_canon:
+            out.append(finding("block", "image_output_backend_mismatch",
+                               f"已落图后端 {backend} 与当前 生图AI『{setting_val}』不一致；必须重出受影响图",
+                               manifest_path))
+    if len({x for x in seen if x}) >= 2:
+        out.append(finding("block", "image_output_backend_mixed",
+                           "已落图 manifest 内混用多个生图后端：" + "、".join(sorted(str(x) for x in seen if x)),
+                           manifest_path))
     return out
 
 
@@ -297,6 +390,8 @@ def run_gate(root, stage, allow_placeholder=False):
         findings.extend(image_backend_findings(root))
     if stage in ("video", "compose"):
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。
+        findings.extend(image_backend_findings(root))
+        findings.extend(image_output_backend_findings(root))
         findings.extend(image_findings(root))
         findings.extend(product_qc_findings(root))
         findings.extend(video_contract_findings(root))

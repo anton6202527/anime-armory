@@ -574,6 +574,9 @@ prune_creation_to_demo_works() {
   for line_path in "$dir/创作区"/*; do
     [[ -e "$line_path" ]] || continue
     line="$(basename "$line_path")"
+    if [[ "$line" == "使用手册.md" ]]; then
+      continue
+    fi
     if [[ ! -d "$line_path" ]] || ! demo_line_selected "$line"; then
       if [[ -d "$line_path" ]] && line_kept_as_reference "$line"; then
         continue
@@ -587,6 +590,9 @@ prune_creation_to_demo_works() {
     for work_path in "$line_path"/*; do
       [[ -e "$work_path" ]] || continue
       work="$(basename "$work_path")"
+      if [[ "$work" == "使用手册.md" ]]; then
+        continue
+      fi
       rel="创作区/$line/$work"
       demo_work_selected "$rel" || rm -rf "$work_path"
     done

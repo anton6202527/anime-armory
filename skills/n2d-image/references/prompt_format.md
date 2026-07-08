@@ -1,6 +1,6 @@
 # 出图 prompt 两层架构 — 标准格式
 
-把要出的图展开成**开箱即用**的 prompt 块——出图阶段可喂给 `生图模型 + 生图AI/生图渠道` 所选官方/已登录图后端（默认 OpenAI GPT Image 系列 via Codex，可选 Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana / Sora Cameo 等）。**分两层**：复用资产（定妆 = 角色/场景/反复入镜道具）放共享，单次资产（分镜）放本集。
+把要出的图展开成**开箱即用**的 prompt 块——出图阶段可喂给 `生图模型 + 生图AI/生图渠道` 所选官方/已登录图后端（默认 OpenAI GPT Image 系列 via Codex；非 Codex/OpenAI 后端含 Dreamina/即梦官方 CLI / Seedream / 可灵主体库 / Nano Banana / Sora Cameo 等，必须先有项目签核例外）。**分两层**：复用资产（定妆 = 角色/场景/反复入镜道具）放共享，单次资产（分镜）放本集。
 
 > **提交口径**：图片 prompt 也不是越多越好。图片阶段负责把视觉变量锁成像素，所以可以比视频 prompt 更细；但必须结构化，不能把角色卡全文、世界观、剧情解释和路由理由整段塞进单条 prompt。定妆图锁档案稳定，分镜图锁这一帧怎么拍。
 
@@ -397,7 +397,7 @@
 ③ 出图/共享/prompt/角色定妆.md 追加完整 prompt 块（本文 §1.2 格式）
    （来源 = characters/X.md 的 ① 定妆 prompt + Stage 4 的实战包装：生图模型/渠道设置 + 检查清单）
   ↓
-④ 按 `cli_registry.md` 重新扫描后只用 `生图模型 + 生图AI/生图渠道` 所选官方/已登录后端；Dreamina/即梦官方 CLI 可用于图片生成，第三方逆向/web 自动化禁用 → 挑图 → PNG 落到 出图/共享/图片/
+④ 按 `cli_registry.md` 重新扫描后只用 `生图模型 + 生图AI/生图渠道` 所选官方/已登录后端；默认 Codex/OpenAI，Dreamina/即梦官方 CLI 仅签核例外，第三方逆向/web 自动化禁用 → 挑图 → PNG 落到 出图/共享/图片/
   ↓
 ⑤ 索引状态改 ✅，填 PNG 路径；registry 的 reference_group 路径也必须指向实际 PNG
   ↓

@@ -27,6 +27,37 @@ import codex_image_runner as base
 SOURCE = "skills/n2d-image/scripts/dreamina_image_runner.py"
 LOG_REL = Path("生产数据") / "dreamina_image_runner.jsonl"
 MAX_REFERENCES = 10
+SIGNOFF_REL = Path("合规") / "image_backend_override.json"
+
+
+def dreamina_image_signoff_allows(root: Path) -> bool:
+    """Dreamina image spend is a signed exception; Codex image2 remains default."""
+    try:
+        payload = json.loads((root / SIGNOFF_REL).read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    if not isinstance(payload, dict) or payload.get("approved") is not True:
+        return False
+    scope = str(payload.get("scope") or payload.get("stage") or "image").lower()
+    if "image" not in scope and "生图" not in scope:
+        return False
+    backend = str(
+        payload.get("backend")
+        or payload.get("canonical")
+        or payload.get("image_backend")
+        or ""
+    ).lower()
+    return "dreamina" in backend or "即梦" in backend or backend == "dreamina_official"
+
+
+def require_dreamina_image_signoff(root: Path) -> None:
+    if dreamina_image_signoff_allows(root):
+        return
+    raise RuntimeError(
+        "全项目生图优先 Codex image2；n2d 的 Dreamina/即梦图片 runner 只能作为签核例外。"
+        f"如确需使用，请先写 {SIGNOFF_REL.as_posix()}，包含 "
+        '{"approved": true, "scope": "image", "backend": "dreamina_official", "reason": "..."}'
+    )
 
 
 def _field(body: str, label: str) -> str:
@@ -515,6 +546,12 @@ def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
     root = Path(ns.root).resolve()
     episode = base.normalize_episode(ns.episode)
+    if not ns.dry_run:
+        try:
+            require_dreamina_image_signoff(root)
+        except RuntimeError as exc:
+            print(f"[block] {exc}", file=sys.stderr)
+            return 1
     shots = base.split_csv(ns.shots)
     if not shots:
         raise SystemExit("--shots or N2D_AFFECTED_SHOTS is required")

@@ -2,7 +2,7 @@
 
 所有每集脚本素材按本文档模板填写。**提示词一律中文为主 + 英文备用**。
 
-> 下文 prompt 示例以**生图模型 = `生图模型` 所选具体模型（默认 GPT Image 2），经 `生图AI/生图渠道` 所选官方/已登录入口访问（默认 Codex CLI，可选 Dreamina/即梦官方 CLI 等），生视频模型/渠道后移到 n2d-video 出视频前由 router/probe 决定** 的写法为准。若用户已固定生视频模型，image prompt 末尾拼对应模型的图像风格锚定句；未固定时拼通用视频兼容锚定（核心分镜/卡片不变）。
+> 下文 prompt 示例以**生图模型 = `生图模型` 所选具体模型（默认 GPT Image 2），经 `生图AI/生图渠道` 所选官方/已登录入口访问（默认 Codex CLI；非 Codex/OpenAI 后端需用户签核例外），生视频模型/渠道后移到 n2d-video 出视频前由 router/probe 决定** 的写法为准。若用户已固定生视频模型，image prompt 末尾拼对应模型的图像风格锚定句；未固定时拼通用视频兼容锚定（核心分镜/卡片不变）。
 
 > **视频兼容锚定规则**：出图阶段不强迫用户先选生视频后端。已固定模型时拼目标生视频模型的"图像风格锚定句"；未固定时拼通用视频兼容锚定并记录 `video_backend_decision=deferred`，由 n2d-video 选择能消化现有首帧的后端（见 `platforms.md` 各档案）。
 
@@ -246,6 +246,7 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 - `pacing_allocation` 必须说明主时长给哪些核心/高光 Clip，哪些桥接、解释、反应或气氛 Clip 一笔带过；缺该字段会阻断出图前合同。
 - 每个 Clip 建议写 `pacing_role` + `runtime_priority`。长 Clip 必须说明它为什么值得长；低优先级/解释/桥接 Clip 超过轻量时长时，不能继续按低优先级放行。
 - 标为低优先级、解释、桥接、普通反应、一笔带过的 Clip 必须保持短；超过轻量时长时不能靠 `compression_plan` 放行，必须缩短，或重定级为 `primary/highlight` 并写明它承载的主干/反转/打斗/兑现功能。
+- 剧情经济性字段建议：每个 Clip 同步写 `economy_intent`（`premium_detail`/`selective_detail`/`compact_story`/`montage_bridge`/`micro_reaction`）和 `target_story_clip_sec`。默认解释、情报、赶路、普通反应只给 2-6s；揭示/对质/反派登场 5-8s；战斗/动作、男女主或核心人物强情绪交流才给 8-15s 详拍。`story_economy_audit.py --strict` 会把非详拍超长段挡回编剧阶段，`shot_split_decision.py` 会将其标成 `compress_before_video`。
 - 每个 Clip 必须有 `dramatic_function`；首镜、尾镜、爽点、反转、高潮、真相揭示等关键镜必须有 `audience_effect`。
 - 打斗、追逐、飞行、大场景、法术爆发等奇观镜必须写 `spectacle_story_function`：奇观服务哪个剧情/情绪/信息回报，不能只写“酷炫”。
 - 下游消费必须写 `生产数据/script_contract_applied_第N集.json`，按 `出图` / `出视频` scope 分别绑定 prompt SHA 与 contract SHA。`n2d-image` 自动写 `出图` scope；视频 prompt 写好后跑：

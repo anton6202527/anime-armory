@@ -88,7 +88,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 - 源本可选，故事蓝图和分格脚本必需。
 - 外语、文言/古汉语和混合源本可以继续改漫画，但必须先归一到源语言、目标嵌字语言、专名表、白话/译文、歧义和改编取舍账，再让逐格脚本保留语义追溯字段。
 - 面板图尽量不直接生成台词；台词、旁白、拟声词通过 `lettering.json` 后期嵌字，`文字语言` 默认中文，可选英文或中英双语上下排版，保证清晰、可改、可审。
-- **漫画一致性不降级铁律**：漫画不是“草图版 n2d”，不能因为是分格静态图就降低角色脸、人物完整性、眼神、场景、光位和轴线标准。正式出图前，`panel_script.json` 顶层必须有 `visual_contract`，逐格必须写清 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline / gaze_target / eyeline_direction / character_integrity`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`；`gaze_target` 不能写成“坚定眼神/看前方/看镜头”（除非 `camera_role=POV/破第四墙`）；多人同格必须写站位/遮挡/接触点。`comic-review gate --stage image_preflight` 缺字段或字段不可执行即阻断，回 `comic-script` 补契约，不允许靠宽泛 prompt 或后期合成蒙混。
+- **漫画一致性不降级铁律**：漫画不是“粗略草图”，不能因为是分格静态图就降低角色脸、人物完整性、眼神、场景、光位和轴线标准。正式出图前，`panel_script.json` 顶层必须有 `visual_contract`，逐格必须写清 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline / gaze_target / eyeline_direction / character_integrity`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`；`gaze_target` 不能写成“坚定眼神/看前方/看镜头”（除非 `camera_role=POV/破第四墙`）；多人同格必须写站位/遮挡/接触点。`comic-review gate --stage image_preflight` 缺字段或字段不可执行即阻断，回 `comic-script` 补契约，不允许靠宽泛 prompt 或后期合成蒙混。
 - 默认按长线连载口径做角色定妆：常驻角色进入批量生产前补专门定妆和多视图；短 demo 才显式改成锚点过渡。
 - 用户提供的定型图必须写入 `identity_registry.json` 的角色 DNA / 禁漂移项；同一角色的少年、成年、受伤、觉醒、换装等形态只允许继承性变化，不得换脸或换画风。需要高一致性长线口径时，`comic-review` 把风格锚、年龄形态继承和多视图缺口作为硬闸。
 - 长图默认导出单张和 manifest；发布平台要求固定高度、固定宽度、格式或文件大小时，按 `目标平台` profile 与 `单话分段高度` 校验/切分，不能把未核验平台规格当可发布。

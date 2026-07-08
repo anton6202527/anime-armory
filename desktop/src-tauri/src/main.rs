@@ -16,14 +16,21 @@ use tauri::{
 const MENU_SET_LANGUAGE_ZH: &str = "anime-armory:set-language-zh";
 const MENU_SET_LANGUAGE_EN: &str = "anime-armory:set-language-en";
 const MENU_DOWNLOAD_LATEST: &str = "anime-armory:download-latest";
+const MENU_SWITCH_WORKSPACE: &str = "anime-armory:switch-workspace";
+const MENU_NEW_TERMINAL: &str = "anime-armory:new-terminal";
 const MENU_TOGGLE_TERMINAL: &str = "anime-armory:toggle-terminal";
 const EVENT_SET_LANGUAGE: &str = "anime-armory:set-language";
+const EVENT_SWITCH_WORKSPACE: &str = "anime-armory:switch-workspace";
+const EVENT_NEW_TERMINAL: &str = "anime-armory:new-terminal";
 const EVENT_TOGGLE_TERMINAL: &str = "anime-armory:toggle-terminal";
 
 #[cfg(target_os = "macos")]
 struct AppMenuLabels {
     language: &'static str,
     download_latest: &'static str,
+    switch_workspace: &'static str,
+    terminal: &'static str,
+    new_terminal: &'static str,
     show_terminal: &'static str,
     hide_terminal: &'static str,
 }
@@ -34,6 +41,9 @@ fn app_menu_labels(language: &str) -> AppMenuLabels {
         AppMenuLabels {
             language: "Language",
             download_latest: "Download Latest App",
+            switch_workspace: "Switch Workspace…",
+            terminal: "Terminal",
+            new_terminal: "New Terminal",
             show_terminal: "Show Terminal",
             hide_terminal: "Hide Terminal",
         }
@@ -41,8 +51,11 @@ fn app_menu_labels(language: &str) -> AppMenuLabels {
         AppMenuLabels {
             language: "语言",
             download_latest: "下载最新App",
-            show_terminal: "显示Terminal",
-            hide_terminal: "隐藏Terminal",
+            switch_workspace: "切换工作区…",
+            terminal: "Terminal",
+            new_terminal: "新建终端",
+            show_terminal: "显示终端面板",
+            hide_terminal: "隐藏终端面板",
         }
     }
 }
@@ -99,6 +112,33 @@ fn build_app_menu(
             &PredefinedMenuItem::close_window(app_handle, None)?,
         ],
     )?;
+    let terminal_menu = Submenu::with_id_and_items(
+        app_handle,
+        "Terminal",
+        labels.terminal,
+        true,
+        &[
+            &MenuItem::with_id(
+                app_handle,
+                MENU_NEW_TERMINAL,
+                labels.new_terminal,
+                true,
+                None::<&str>,
+            )?,
+            &PredefinedMenuItem::separator(app_handle)?,
+            &MenuItem::with_id(
+                app_handle,
+                MENU_TOGGLE_TERMINAL,
+                if terminal_visible {
+                    labels.hide_terminal
+                } else {
+                    labels.show_terminal
+                },
+                true,
+                None::<&str>,
+            )?,
+        ],
+    )?;
     let help_menu = Submenu::with_id_and_items(app_handle, "Help", "Help", true, &[])?;
 
     Menu::with_items(
@@ -119,17 +159,6 @@ fn build_app_menu(
                         true,
                         None::<&str>,
                     )?,
-                    &MenuItem::with_id(
-                        app_handle,
-                        MENU_TOGGLE_TERMINAL,
-                        if terminal_visible {
-                            labels.hide_terminal
-                        } else {
-                            labels.show_terminal
-                        },
-                        true,
-                        None::<&str>,
-                    )?,
                     &PredefinedMenuItem::separator(app_handle)?,
                     &PredefinedMenuItem::services(app_handle, None)?,
                     &PredefinedMenuItem::separator(app_handle)?,
@@ -143,7 +172,17 @@ fn build_app_menu(
                 app_handle,
                 "File",
                 true,
-                &[&PredefinedMenuItem::close_window(app_handle, None)?],
+                &[
+                    &MenuItem::with_id(
+                        app_handle,
+                        MENU_SWITCH_WORKSPACE,
+                        labels.switch_workspace,
+                        true,
+                        Some("CmdOrCtrl+O"),
+                    )?,
+                    &PredefinedMenuItem::separator(app_handle)?,
+                    &PredefinedMenuItem::close_window(app_handle, None)?,
+                ],
             )?,
             &Submenu::with_items(
                 app_handle,
@@ -165,6 +204,7 @@ fn build_app_menu(
                 true,
                 &[&PredefinedMenuItem::fullscreen(app_handle, None)?],
             )?,
+            &terminal_menu,
             &window_menu,
             &help_menu,
         ],
@@ -283,6 +323,12 @@ fn main() {
                 let _ = app.emit(EVENT_SET_LANGUAGE, "en");
             } else if event.id() == MENU_DOWNLOAD_LATEST {
                 let _ = commands::open_source_repo();
+            } else if event.id() == MENU_SWITCH_WORKSPACE {
+                let _ = app.emit(EVENT_SWITCH_WORKSPACE, ());
+            } else if event.id() == MENU_NEW_TERMINAL {
+                let _ = update_app_terminal_visible(app, true);
+                let _ = app.emit(EVENT_NEW_TERMINAL, ());
+                let _ = app.emit(EVENT_TOGGLE_TERMINAL, true);
             } else if event.id() == MENU_TOGGLE_TERMINAL {
                 if let Ok(visible) = toggle_app_terminal_visible(app) {
                     let _ = app.emit(EVENT_TOGGLE_TERMINAL, visible);
@@ -314,6 +360,8 @@ fn main() {
             commands::read_work_change,
             commands::archive_work_changes,
             commands::archive_work_change,
+            commands::restore_work_changes,
+            commands::restore_work_change,
             commands::work_deleted,
             commands::search_work_files,
             commands::read_work_file,
