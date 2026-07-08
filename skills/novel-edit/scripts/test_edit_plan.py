@@ -63,3 +63,78 @@ def test_edit_plan_consumes_revision_balance_and_simulate_inputs():
         assert any("伏笔回收编辑排程" in title for title in titles)
         assert "模拟读者信号仅作低权重留存先验" in titles
         assert any("模拟留存先验偏低" in title for title in titles)
+
+
+def test_edit_plan_writes_editorial_deliverables():
+    with tempfile.TemporaryDirectory() as root:
+        write_json(os.path.join(root, "审稿", "review_report.json"), {
+            "findings": [{
+                "severity": "blocking",
+                "chapter": 1,
+                "dimension": "plot",
+                "problem": "主线冲突未成立",
+                "fix_hint": "重写第一章目标和阻碍。",
+            }],
+        })
+        plan = edit_plan.build_plan(root)
+        edit_plan.write_editorial_letter(os.path.join(root, "修订", "editorial_letter.md"), plan)
+        edit_plan.write_style_sheet(os.path.join(root, "修订", "style_sheet.md"), root)
+        edit_plan.write_proof_checklist(os.path.join(root, "修订", "proof_checklist.md"), plan)
+
+        for rel in ("修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md"):
+            assert os.path.exists(os.path.join(root, rel))
+
+
+def test_close_edit_task_updates_plan_and_closure_log():
+    with tempfile.TemporaryDirectory() as root:
+        write_json(os.path.join(root, "修订", "edit_plan.json"), {
+            "kind": "novel_edit_plan",
+            "generated_at": "2026-07-08",
+            "tasks": [{
+                "id": "EDIT-001",
+                "phase": "developmental_edit",
+                "priority": "P0",
+                "title": "主线冲突未成立",
+                "status": "open",
+            }],
+        })
+
+        task = edit_plan.close_edit_task(
+            root,
+            "EDIT-001",
+            status="fixed",
+            actor="editor-a",
+            note="已重写第一章目标与阻碍。",
+        )
+        assert task["status"] == "fixed"
+        assert task["closed_by"] == "editor-a"
+        with open(os.path.join(root, "修订", "edit_plan.json"), encoding="utf-8") as f:
+            payload = json.load(f)
+        assert payload["tasks"][0]["closure_note"] == "已重写第一章目标与阻碍。"
+        assert os.path.exists(os.path.join(root, "修订", "edit_task_closure.jsonl"))
+
+
+def test_editor_query_log_can_be_answered():
+    with tempfile.TemporaryDirectory() as root:
+        query = edit_plan.add_editor_query(
+            root,
+            task_id="EDIT-001",
+            question="这里是否必须保留悲剧结局？",
+            severity="P1",
+            asker="editor-a",
+        )
+        assert query["query_id"] == "EQ-001"
+        assert edit_plan.open_editor_query_count(root) == 1
+
+        answered = edit_plan.answer_editor_query(
+            root,
+            "EQ-001",
+            answer="必须保留，但可以降低误伤读者的表达。",
+            actor="author",
+            status="answered",
+        )
+        assert answered["status"] == "answered"
+        assert edit_plan.open_editor_query_count(root) == 0
+        with open(os.path.join(root, "修订", "editor_queries.jsonl"), encoding="utf-8") as f:
+            lines = [json.loads(line) for line in f if line.strip()]
+        assert lines[0]["answer_by"] == "author"

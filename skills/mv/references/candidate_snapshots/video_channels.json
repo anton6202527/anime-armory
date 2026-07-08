@@ -1,0 +1,55 @@
+{
+  "kind": "mv_candidate_snapshot",
+  "key": "video_channels",
+  "collected_at": "2026-07-08",
+  "description": "MV video generation channels and integration modes",
+  "source_urls": [
+    "https://ai.google.dev/gemini-api/docs/veo",
+    "https://docs.dev.runwayml.com/",
+    "https://klingai.kuaishou.com/",
+    "https://lumalabs.ai/"
+  ],
+  "url_checks": [],
+  "verification_mode": "declared_sources_only",
+  "items": [
+    {
+      "name": "Google Gemini API",
+      "integration": "api",
+      "official_api": true
+    },
+    {
+      "name": "Runway API",
+      "integration": "api",
+      "official_api": true
+    },
+    {
+      "name": "可灵/Kling",
+      "integration": "api_or_web",
+      "official_api": true
+    },
+    {
+      "name": "Luma Dream Machine",
+      "integration": "api_or_web",
+      "official_api": true
+    },
+    {
+      "name": "即梦/Dreamina",
+      "integration": "manual_web",
+      "official_api": false
+    },
+    {
+      "name": "本地/开源",
+      "integration": "local",
+      "official_api": false
+    },
+    {
+      "name": "manual",
+      "integration": "manual",
+      "official_api": false
+    }
+  ],
+  "notes": [
+    "候选清单只是带日期的能力快照，不是唯一真理。",
+    "正式花钱/不可逆步骤前按所选模型和渠道再次核验官方文档、价格、地区和 API 限制。"
+  ]
+}

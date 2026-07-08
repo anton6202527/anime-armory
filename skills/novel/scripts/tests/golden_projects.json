@@ -7,7 +7,7 @@
       "_进度.md": "# 进度\n"
     },
     "expected": {
-      "next_stage": "blueprint",
+      "next_stage": "author_workflow",
       "done_stages": ["setup"]
     }
   },
@@ -21,7 +21,7 @@
       "小说/source_manifest.json": {"kind": "novel_source_manifest", "rights_status": "user-declared"}
     },
     "expected": {
-      "next_stage": "blueprint",
+      "next_stage": "author_workflow",
       "done_stages": ["setup", "source_import"]
     }
   },
@@ -53,7 +53,7 @@
       }
     },
     "expected": {
-      "next_stage": "blueprint",
+      "next_stage": "author_workflow",
       "retrieval_passed": true,
       "retrieval_top_k": 1,
       "score_total": 82,

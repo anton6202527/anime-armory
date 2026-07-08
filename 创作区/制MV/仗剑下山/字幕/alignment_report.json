@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "mv_alignment_report",
+  "generated_at": "2026-07-08",
+  "scope": "demo_excerpt",
+  "method": "manual_whisper_correction_for_20s_demo",
+  "lyric_lines": 45,
+  "aligned_lines": 6,
+  "subtitle_files": [
+    "字幕/lyrics.lrc",
+    "字幕/karaoke.ass"
+  ],
+  "song_path": "歌/song.wav",
+  "song_duration_sec": 19.969,
+  "coverage_note": "当前 song.wav 是 20s 副歌 demo excerpt；正式整首歌替换后需重新跑 mv-lyric-sync 并覆盖全歌词。",
+  "warnings": [],
+  "unused_word_segments": 0,
+  "notes": [
+    "demo excerpt only; not full-length alignment",
+    "当前 song.wav 是 20s 副歌 demo excerpt；正式整首歌替换后需重新跑 mv-lyric-sync 并覆盖全歌词。"
+  ]
+}

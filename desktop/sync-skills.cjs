@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools) from the repo
-// into ./src-tauri/resources/ so they ship INSIDE the packaged .app/.dmg, making
-// the desktop app self-contained (install on any machine; no anime-armory
-// source checkout needed). Demo works are no longer bundled into the app; this
-// script only writes a catalog that points the app to GitHub Release zip assets.
+// desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools)
+// and 创作区 usage manuals from the repo into ./src-tauri/resources/ so they ship
+// INSIDE the packaged .app/.dmg, making the desktop app self-contained (install
+// on any machine; no anime-armory source checkout needed). Demo works are no
+// longer bundled into the app; this script only writes a catalog that points the
+// app to GitHub Release zip assets.
 //
 // Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
 // (beforeDevCommand / beforeBuildCommand).
@@ -30,6 +31,15 @@ const demoWorksConfigPath = path.join(__dirname, 'demo-works.json');
 // the 6 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
+const MANUAL_RELS = [
+  `${CREATION_ROOT}/使用手册.md`,
+  `${CREATION_ROOT}/写小说/使用手册.md`,
+  `${CREATION_ROOT}/制漫剧/使用手册.md`,
+  `${CREATION_ROOT}/画漫画/使用手册.md`,
+  `${CREATION_ROOT}/写歌/使用手册.md`,
+  `${CREATION_ROOT}/制MV/使用手册.md`,
+  `${CREATION_ROOT}/拍广告/使用手册.md`,
+];
 const FALLBACK_PINNED_WORKS = ['创作区/制漫剧/那妖魔是姜大人'];
 const OUTER_SKILL_LINES = new Map([
   ['n2d', '制漫剧'],
@@ -155,6 +165,22 @@ const count = (dir) => {
   }
   return n;
 };
+
+function copyManuals(destRoot) {
+  let copied = 0;
+  for (const rel of MANUAL_RELS) {
+    const src = path.join(repo, rel);
+    if (!fs.existsSync(src)) {
+      console.error(`[desktop-bundle] 缺少创作区使用手册，无法打包: ${rel}`);
+      process.exit(1);
+    }
+    const dst = path.join(destRoot, rel);
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.copyFileSync(src, dst);
+    copied += 1;
+  }
+  return copied;
+}
 
 // each line's champion = the work dir whose _进度.md has the most ✅ (done stages)
 function champions() {
@@ -372,7 +398,11 @@ function main() {
     toolFiles = count(path.join(bundle, 'tools', 'shared-cleanup'));
   }
 
-  // 3) sample works. Only metadata is bundled. Full demos live in GitHub
+  // 3) 创作区 usage manuals. These are docs only, not demo payloads.
+  fs.rmSync(path.join(bundle, CREATION_ROOT), { recursive: true, force: true });
+  const manualFiles = copyManuals(bundle);
+
+  // 4) sample works. Only metadata is bundled. Full demos live in GitHub
   //    Release assets and are downloaded into the workspace when the user asks.
   const demosDir = path.join(bundle, 'demos');
   const seedDir = path.join(bundle, 'seed');
@@ -436,12 +466,16 @@ function main() {
   const demoCatalog = [...catalog.values()].sort((a, b) => a.rel.localeCompare(b.rel));
   fs.writeFileSync(path.join(bundle, 'demo_catalog.json'), JSON.stringify(demoCatalog, null, 2) + '\n');
 
-  // 4) manifest for the desktop app. scan_workspace only uses demo_catalog.json
+  // 5) manifest for the desktop app. scan_workspace only uses demo_catalog.json
   //    to tag real on-disk works as demos when origins metadata is absent.
   const manifest = {
     synced_at: new Date().toISOString(),
     skills: count(path.join(bundle, 'skills')),
     tools: toolFiles,
+    manuals: {
+      root: CREATION_ROOT,
+      files: manualFiles,
+    },
     featured_work: requiredWorks[0] || null,
     featured_works: requiredWorks,
     demos: demoPicks.map((p) => ({ root: CREATION_ROOT, line: p.line, name: p.name, done: p.done })),
@@ -466,7 +500,7 @@ function main() {
   const seedLine = withDemos
     ? `+ 非 demo 作品引用: ${seedReferences.map((w) => `${w.line}/${w.name}`).join(', ') || '（无）'}`
     : '+ 非 demo 作品引用: 关闭';
-  console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files → src-tauri/resources/`);
+  console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files + ${manualFiles} manuals → src-tauri/resources/`);
   console.log(`[desktop-bundle] demo catalog entries: ${demoCatalog.length} → src-tauri/resources/demo_catalog.json`);
   console.log(`[desktop-bundle] full demo payloads are release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line>.zip`);
   console.log(`[desktop-bundle] ${featuredLine}`);

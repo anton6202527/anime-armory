@@ -21,6 +21,11 @@ SCHEMA_VERSION = 1
 INDEX_KIND = "novel_research_sources"
 REPORT_KIND = "novel_research_fact_support"
 REFRESH_PLAN_KIND = "novel_research_refresh_audit"
+NEEDS_KIND = "novel_research_needs"
+RESEARCH_JOBS_KIND = "novel_research_jobs"
+RESEARCH_SCENE_USAGE_KIND = "novel_research_scene_usage"
+
+SOURCE_EVALUATION_AXES = ("currency", "relevance", "authority", "accuracy", "purpose")
 
 HIGH_RISK_DOMAINS = {
     "medical",
@@ -153,6 +158,30 @@ def refresh_plan_path(root: Path) -> Path:
     return root / "资料" / "research_refresh_plan.md"
 
 
+def needs_json_path(root: Path) -> Path:
+    return root / "资料" / "research_needs.json"
+
+
+def needs_md_path(root: Path) -> Path:
+    return root / "资料" / "research_needs.md"
+
+
+def jobs_json_path(root: Path) -> Path:
+    return root / "资料" / "research_jobs.json"
+
+
+def jobs_md_path(root: Path) -> Path:
+    return root / "资料" / "research_jobs.md"
+
+
+def scene_usage_json_path(root: Path) -> Path:
+    return root / "资料" / "research_scene_usage.json"
+
+
+def scene_usage_md_path(root: Path) -> Path:
+    return root / "资料" / "research_scene_usage.md"
+
+
 def load_index(root: Path) -> dict[str, Any]:
     payload = load_json(index_path(root), None)
     if isinstance(payload, dict):
@@ -217,20 +246,56 @@ def chapter_applies(spec: Any, chapter: int | None) -> bool:
     return False
 
 
+def parse_source_evaluation(raw: str, *, source_type: str, reliability: str, has_date: bool) -> dict[str, str]:
+    evaluation = {
+        "currency": "date_recorded" if has_date else "missing_date",
+        "relevance": "direct_topic",
+        "authority": "high_authority" if reliability == "high" or source_type in {"official", "regulation", "law", "paper", "academic", "textbook"} else ("low_authority" if reliability == "low" else "medium_authority"),
+        "accuracy": "source_bound_claims",
+        "purpose": "informational" if source_type in {"official", "regulation", "law", "paper", "academic", "textbook"} else "purpose_checked",
+    }
+    text = str(raw or "").strip()
+    if not text:
+        return evaluation
+    for part in re.split(r"[;；]", text):
+        if not part.strip():
+            continue
+        if "=" in part:
+            key, value = part.split("=", 1)
+        elif "：" in part:
+            key, value = part.split("：", 1)
+        elif ":" in part:
+            key, value = part.split(":", 1)
+        else:
+            continue
+        key = key.strip().lower()
+        if key in SOURCE_EVALUATION_AXES:
+            evaluation[key] = value.strip()
+    return evaluation
+
+
 def parse_source(spec: str, idx: int) -> dict[str, Any]:
     parts = [p.strip() for p in spec.split("|")]
-    while len(parts) < 6:
+    while len(parts) < 7:
         parts.append("")
-    title, published_date, source_type, reliability, url, notes = parts[:6]
+    title, published_date, source_type, reliability, url, notes, evaluation_spec = parts[:7]
+    source_type = source_type or "other"
+    reliability = reliability or "medium"
     return {
         "id": f"SRC-{idx:03d}",
         "title": title,
         "url": url,
-        "source_type": source_type or "other",
+        "source_type": source_type,
         "published_date": published_date,
         "accessed_date": today(),
-        "reliability": reliability or "medium",
+        "reliability": reliability,
         "notes": notes,
+        "evaluation": parse_source_evaluation(
+            evaluation_spec,
+            source_type=source_type,
+            reliability=reliability,
+            has_date=bool(published_date),
+        ),
     }
 
 
@@ -289,6 +354,22 @@ def render_markdown(pack: dict[str, Any]) -> str:
         )
     if not pack.get("sources"):
         lines.append("| TODO | 待补来源 |  |  |  |  |  |")
+    lines.extend([
+        "",
+        "## 来源五轴评估",
+        "",
+        "| id | 时效 currency | 相关 relevance | 权威 authority | 准确 accuracy | 目的 purpose |",
+        "|---|---|---|---|---|---|",
+    ])
+    for src in pack.get("sources", []):
+        evaluation = src.get("evaluation") if isinstance(src.get("evaluation"), dict) else {}
+        lines.append(
+            f"| {src.get('id','')} | {evaluation.get('currency','未评估')} | "
+            f"{evaluation.get('relevance','未评估')} | {evaluation.get('authority','未评估')} | "
+            f"{evaluation.get('accuracy','未评估')} | {evaluation.get('purpose','未评估')} |"
+        )
+    if not pack.get("sources"):
+        lines.append("| TODO | 待补来源评估 |  |  |  |  |")
     lines.extend([
         "",
         "## 证据支持事实",
@@ -560,6 +641,17 @@ def validate_pack(root: Path, pack: dict[str, Any], chapter: int | None = None) 
             out.append(finding("阻断级", "source_missing_date", f"{sid} 缺发布日期或访问日期", pack=topic))
         if src.get("reliability") not in {"high", "medium", "low"}:
             out.append(finding("阻断级", "source_missing_reliability", f"{sid} 可信度必须是 high/medium/low", pack=topic))
+        evaluation = src.get("evaluation") if isinstance(src.get("evaluation"), dict) else {}
+        missing_axes = [axis for axis in SOURCE_EVALUATION_AXES if not str(evaluation.get(axis) or "").strip()]
+        if missing_axes:
+            out.append(finding("建议级", "source_evaluation_missing", f"{sid} 缺来源五轴评估：{', '.join(missing_axes)}", pack=topic))
+        weak_values = {"unchecked", "unknown", "未知", "未评估", "missing_date", "low_authority", "unknown_purpose"}
+        weak_axes = [
+            axis for axis in SOURCE_EVALUATION_AXES
+            if str(evaluation.get(axis) or "").strip().lower() in weak_values
+        ]
+        if weak_axes:
+            out.append(finding("建议级", "source_evaluation_weak", f"{sid} 来源评估偏弱：{', '.join(weak_axes)}", pack=topic))
     for claim in claims:
         cid = claim.get("id") or "FACT-?"
         ids = set(claim.get("source_ids") or [])
@@ -664,6 +756,468 @@ def check_project(root: str | Path, chapter: int | None = None, *, write: bool =
     if write:
         write_json(report_path(root), report)
     return report
+
+
+def _domain_need_topic(domain: str, hits: list[str], commercial: list[str]) -> str:
+    labels = {
+        "medical": "医疗流程与风险边界",
+        "legal": "法律流程与证据边界",
+        "crime": "刑侦/法医流程",
+        "finance": "金融规则与行业流程",
+        "military": "军事制度与战术边界",
+        "history": "历史制度与时代细节",
+        "religion": "宗教仪式与禁忌",
+        "overseas": "出海/本地化规则",
+        "technology": "技术原理与行业实践",
+        "career": "职业流程与行业质感",
+        "platform": "平台规则与商业连载证据",
+    }
+    if domain in labels:
+        return labels[domain]
+    if hits:
+        return f"{hits[0]}相关专业资料"
+    if commercial:
+        return "商业发布与平台规则资料"
+    return f"{domain} 专业资料"
+
+
+def _research_command(root: Path, domain: str, topic: str, chapter: int | None, hits: list[str]) -> str:
+    chapters = str(chapter) if chapter is not None else "all"
+    risk = "high" if domain in HIGH_RISK_DOMAINS else "medium"
+    keyword = hits[0] if hits else topic
+    return (
+        f'python3 skills/novel-research/scripts/research_pack.py scaffold "{root}" '
+        f'--topic "{topic}" --domain {domain} --chapters {chapters} --risk {risk} '
+        f'--keyword "{keyword}" --source "<标题>|<日期>|official|high|<URL>|<说明>" '
+        f'--claim "<可写事实>|SRC-001|high|{chapters}|<写作用法>|<不确定项>|<禁用写法>"'
+    )
+
+
+def build_research_needs(root: str | Path, chapter: int | None = None, *, write: bool = False) -> dict[str, Any]:
+    root = Path(root)
+    idx = load_index(root)
+    has_index = index_path(root).exists()
+    project_text = read_project_text(root)
+    chapter_text = read_chapter_text(root, chapter)
+    text = "\n".join([project_text, chapter_text])
+    detected = detect_domains(text)
+    required = read_required_domains(root)
+    commercial = commercial_signal(text)
+    packs = idx.get("packs", []) if has_index else []
+    domains: list[str] = []
+    for domain in [*required, *detected.keys()]:
+        if domain not in domains:
+            domains.append(domain)
+    if commercial and "platform" not in domains:
+        domains.append("platform")
+
+    needs: list[dict[str, Any]] = []
+    ready_domains: list[str] = []
+    for domain in domains:
+        hits = detected.get(domain, [])
+        matched = [
+            p for p in packs
+            if pack_matches_domain(p, domain, chapter, text)
+            or (p.get("domain") == domain and chapter_applies(p.get("applicable_chapters"), chapter))
+        ]
+        ready = [p for p in matched if p.get("status") == "ready"]
+        draft = [p for p in matched if p.get("status") != "ready"]
+        required_domain = domain in required
+        detected_high_risk = domain in detected and domain in HIGH_RISK_DOMAINS
+        commercial_platform = domain == "platform" and bool(commercial)
+        severity = "ready" if ready else ("blocking" if required_domain or detected_high_risk else "warning")
+        if ready:
+            ready_domains.append(domain)
+        topic = _domain_need_topic(domain, hits, commercial)
+        needs.append({
+            "domain": domain,
+            "topic": topic,
+            "severity": severity,
+            "required": required_domain,
+            "detected_keywords": hits,
+            "commercial_signals": commercial if commercial_platform else [],
+            "ready_packs": [
+                {"topic": p.get("topic"), "pack_path": p.get("pack_path"), "updated_at": p.get("updated_at")}
+                for p in ready
+            ],
+            "draft_or_stale_packs": [
+                {"topic": p.get("topic"), "status": p.get("status"), "pack_path": p.get("pack_path")}
+                for p in draft
+            ],
+            "suggested_query": " ".join(part for part in [topic, domain, "官方 最新 规则 指南", today()[:4]] if part),
+            "suggested_command": "" if ready else _research_command(root, domain, topic, chapter, hits),
+        })
+
+    open_market_tasks = []
+    task_path = root / "评分" / "market_evidence_tasks.json"
+    if task_path.exists():
+        payload = load_json(task_path, {}) or {}
+        raw_tasks = payload.get("tasks") if isinstance(payload, dict) else payload
+        if isinstance(raw_tasks, list):
+            open_market_tasks = [
+                item for item in raw_tasks
+                if isinstance(item, dict) and str(item.get("status") or "open") in {"open", "todo", "pending"}
+            ]
+
+    missing = [item for item in needs if item["severity"] in {"blocking", "warning"}]
+    report = {
+        "schema_version": SCHEMA_VERSION,
+        "kind": NEEDS_KIND,
+        "generated_at": today(),
+        "project_root": str(root.resolve()),
+        "chapter": chapter,
+        "has_research_index": has_index,
+        "detected_domains": detected,
+        "required_domains": required,
+        "commercial_signals": commercial,
+        "ready_domains": ready_domains,
+        "missing_count": len(missing),
+        "blocking_count": sum(1 for item in missing if item["severity"] == "blocking"),
+        "warning_count": sum(1 for item in missing if item["severity"] == "warning"),
+        "needs": needs,
+        "open_market_evidence_tasks": open_market_tasks,
+    }
+    if write:
+        write_json(needs_json_path(root), report)
+        write_text(needs_md_path(root), render_research_needs(report))
+    return report
+
+
+def render_research_needs(report: dict[str, Any]) -> str:
+    lines = [
+        "# 专业资料需求清单",
+        "",
+        f"- 生成日期：{report.get('generated_at')}",
+        f"- 作品根：{report.get('project_root')}",
+        f"- 章节：{report.get('chapter') if report.get('chapter') is not None else '全书/蓝图'}",
+        f"- 阻断：{report.get('blocking_count', 0)}",
+        f"- 建议：{report.get('warning_count', 0)}",
+        "",
+        "## 需求",
+        "",
+        "| 状态 | 领域 | 主题 | 命中/商业信号 | ready 包 | 下一步 |",
+        "|---|---|---|---|---|---|",
+    ]
+    for item in report.get("needs", []):
+        ready = "、".join(str(p.get("topic") or p.get("pack_path")) for p in item.get("ready_packs") or [])
+        signals = "、".join([*(item.get("detected_keywords") or []), *(item.get("commercial_signals") or [])])
+        next_step = "已覆盖" if item.get("severity") == "ready" else item.get("suggested_query")
+        lines.append(
+            "| "
+            + " | ".join([
+                md_cell(item.get("severity")),
+                md_cell(item.get("domain")),
+                md_cell(item.get("topic")),
+                md_cell(signals),
+                md_cell(ready or "无"),
+                md_cell(next_step),
+            ])
+            + " |"
+        )
+    if not report.get("needs"):
+        lines.append("| ready | 无命中专业领域 |  |  |  | 暂无需专业资料包；商业发布前仍建议跑一次 check |")
+    missing = [item for item in report.get("needs", []) if item.get("suggested_command")]
+    if missing:
+        lines.extend(["", "## 推荐命令", ""])
+        for item in missing:
+            lines.extend([
+                f"### {item.get('domain')} · {item.get('topic')}",
+                "",
+                "```bash",
+                str(item.get("suggested_command")),
+                "```",
+                "",
+            ])
+    tasks = report.get("open_market_evidence_tasks") or []
+    if tasks:
+        lines.extend(["", "## 未完成市场证据任务", ""])
+        for item in tasks[:20]:
+            lines.append(f"- {item.get('topic') or item.get('id') or 'market evidence'}：{item.get('reason') or item.get('query') or ''}")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def build_research_jobs(root: str | Path, chapter: int | None = None, *, write: bool = False) -> dict[str, Any]:
+    root = Path(root)
+    needs = build_research_needs(root, chapter=chapter, write=write)
+    existing = load_json(jobs_json_path(root), {}) or {}
+    existing_by_key = {}
+    if isinstance(existing, dict):
+        for job in existing.get("jobs") or []:
+            if not isinstance(job, dict):
+                continue
+            key = (str(job.get("domain") or ""), str(job.get("topic") or ""))
+            existing_by_key[key] = job
+    jobs: list[dict[str, Any]] = []
+    for idx, item in enumerate(needs.get("needs") or [], 1):
+        if item.get("severity") not in {"blocking", "warning"}:
+            continue
+        domain = str(item.get("domain") or "other")
+        severity = str(item.get("severity") or "warning")
+        topic = item.get("topic") or domain
+        previous = existing_by_key.get((domain, str(topic))) or {}
+        job = {
+            "id": f"RJ-{idx:03d}-{domain.upper()}",
+            "topic": topic,
+            "domain": domain,
+            "severity": severity,
+            "priority": "P0" if severity == "blocking" else "P1",
+            "required": bool(item.get("required")),
+            "detected_keywords": item.get("detected_keywords") or [],
+            "commercial_signals": item.get("commercial_signals") or [],
+            "suggested_query": item.get("suggested_query") or "",
+            "suggested_command": item.get("suggested_command") or "",
+            "source_count": int(previous.get("source_count") or 0),
+            "status": previous.get("status") or "open",
+            "assignee": previous.get("assignee") or "",
+            "notes": previous.get("notes") or "",
+            "created_at": previous.get("created_at") or today(),
+            "updated_at": previous.get("updated_at") or "",
+            "verified_at": previous.get("verified_at") or "",
+            "needs_ref": {
+                "path": "资料/research_needs.json",
+                "domain": domain,
+                "topic": topic,
+            },
+        }
+        if job["status"] in {"done", "waived"} and severity == "blocking":
+            job["priority"] = "P0"
+        jobs.append(job)
+    report = {
+        "schema_version": SCHEMA_VERSION,
+        "kind": RESEARCH_JOBS_KIND,
+        "generated_at": today(),
+        "project_root": str(root.resolve()),
+        "chapter": chapter,
+        "needs_path": str(needs_json_path(root).resolve()),
+        "job_count": len(jobs),
+        "blocking_count": sum(1 for item in jobs if item.get("severity") == "blocking"),
+        "warning_count": sum(1 for item in jobs if item.get("severity") == "warning"),
+        "jobs": jobs,
+    }
+    if write:
+        write_json(jobs_json_path(root), report)
+        write_text(jobs_md_path(root), render_research_jobs(report))
+    return report
+
+
+def update_research_job(
+    root: str | Path,
+    job_id: str,
+    *,
+    status: str | None = None,
+    assignee: str | None = None,
+    source_count: int | None = None,
+    notes: str | None = None,
+) -> dict[str, Any]:
+    root = Path(root)
+    payload = load_json(jobs_json_path(root), {}) or {}
+    if not isinstance(payload, dict) or payload.get("kind") != RESEARCH_JOBS_KIND:
+        payload = build_research_jobs(root, write=True)
+    jobs = payload.get("jobs") or []
+    matched = None
+    for job in jobs:
+        if isinstance(job, dict) and job.get("id") == job_id:
+            matched = job
+            break
+    if matched is None:
+        raise ValueError(f"unknown research job id: {job_id}")
+    if status is not None:
+        matched["status"] = status
+        if status in {"done", "verified"} and not matched.get("verified_at"):
+            matched["verified_at"] = today()
+    if assignee is not None:
+        matched["assignee"] = assignee
+    if source_count is not None:
+        matched["source_count"] = max(0, int(source_count))
+    if notes is not None:
+        matched["notes"] = notes
+    matched["updated_at"] = today()
+    payload["job_count"] = len(jobs)
+    payload["blocking_count"] = sum(1 for item in jobs if item.get("severity") == "blocking" and item.get("status") not in {"done", "verified", "waived"})
+    payload["warning_count"] = sum(1 for item in jobs if item.get("severity") == "warning" and item.get("status") not in {"done", "verified", "waived"})
+    write_json(jobs_json_path(root), payload)
+    write_text(jobs_md_path(root), render_research_jobs(payload))
+    return matched
+
+
+def render_research_jobs(report: dict[str, Any]) -> str:
+    lines = [
+        "# 专业资料深搜任务",
+        "",
+        f"- 生成日期：{report.get('generated_at')}",
+        f"- 作品根：{report.get('project_root')}",
+        f"- 章节：{report.get('chapter') if report.get('chapter') is not None else '全书/蓝图'}",
+        f"- 任务数：{report.get('job_count', 0)}",
+        f"- 阻断：{report.get('blocking_count', 0)}",
+        f"- 建议：{report.get('warning_count', 0)}",
+        "",
+        "## 任务表",
+        "",
+        "| ID | 优先级 | 领域 | 主题 | 建议检索式 | 状态 | 负责人 | 来源数 |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for job in report.get("jobs") or []:
+        lines.append(
+            "| "
+            + " | ".join([
+                md_cell(job.get("id")),
+                md_cell(job.get("priority")),
+                md_cell(job.get("domain")),
+                md_cell(job.get("topic")),
+                md_cell(job.get("suggested_query")),
+                md_cell(job.get("status")),
+                md_cell(job.get("assignee")),
+                md_cell(job.get("source_count")),
+            ])
+            + " |"
+        )
+    if not report.get("jobs"):
+        lines.append("| 无 |  |  |  | 暂无待补专业资料任务 | done |")
+    commands = [job for job in report.get("jobs") or [] if job.get("suggested_command")]
+    if commands:
+        lines.extend(["", "## 推荐 scaffold 命令", ""])
+        for job in commands:
+            lines.extend([
+                f"### {job.get('id')} · {job.get('topic')}",
+                "",
+                "```bash",
+                str(job.get("suggested_command")),
+                "```",
+                "",
+            ])
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _chapter_values(value: Any) -> list[int | str]:
+    if value in (None, "", []):
+        return []
+    values = value if isinstance(value, list) else [value]
+    out: list[int | str] = []
+    for item in values:
+        if item == "all":
+            out.append("all")
+            continue
+        if isinstance(item, int):
+            out.append(item)
+            continue
+        text = str(item).strip()
+        if text.isdigit():
+            out.append(int(text))
+            continue
+        m = re.match(r"^0*(\d+)\s*[-~至]\s*0*(\d+)$", text)
+        if m:
+            start, end = int(m.group(1)), int(m.group(2))
+            if start > end:
+                start, end = end, start
+            out.extend(range(start, end + 1))
+        elif text:
+            out.append(text)
+    dedup: list[int | str] = []
+    for item in out:
+        if item not in dedup:
+            dedup.append(item)
+    return dedup
+
+
+def _scene_index(root: Path) -> dict[int, list[dict[str, Any]]]:
+    payload = load_json(root / "设定" / "scene_cards.json", {}) or {}
+    out: dict[int, list[dict[str, Any]]] = {}
+    for scene in payload.get("scenes") or []:
+        if not isinstance(scene, dict):
+            continue
+        try:
+            chapter = int(scene.get("chapter") or 0)
+        except (TypeError, ValueError):
+            continue
+        if chapter:
+            out.setdefault(chapter, []).append(scene)
+    return out
+
+
+def build_scene_usage(root: str | Path, chapter: int | None = None, *, write: bool = False) -> dict[str, Any]:
+    root = Path(root)
+    idx = load_index(root)
+    scenes_by_chapter = _scene_index(root)
+    usages: list[dict[str, Any]] = []
+    for pack in idx.get("packs") or []:
+        if not isinstance(pack, dict):
+            continue
+        pack_chapters = _chapter_values(pack.get("applicable_chapters")) or ["all"]
+        for claim in pack.get("claims") or []:
+            if not isinstance(claim, dict):
+                continue
+            claim_chapters = _chapter_values(claim.get("applicable_chapters")) or pack_chapters
+            if chapter is not None:
+                if not chapter_applies(claim_chapters, chapter):
+                    continue
+                target_chapters: list[int | str] = [chapter]
+            else:
+                target_chapters = claim_chapters
+            for ch in target_chapters:
+                if ch == "all":
+                    scene_ids: list[str] = []
+                elif isinstance(ch, int):
+                    scene_ids = [str(scene.get("id")) for scene in scenes_by_chapter.get(ch, []) if scene.get("id")]
+                else:
+                    scene_ids = []
+                usages.append({
+                    "pack_topic": pack.get("topic") or pack.get("topic_slug"),
+                    "pack_path": pack.get("pack_path"),
+                    "domain": pack.get("domain"),
+                    "claim_id": claim.get("id"),
+                    "claim": claim.get("claim"),
+                    "source_ids": claim.get("source_ids") or [],
+                    "chapter": ch,
+                    "scene_ids": scene_ids,
+                    "dramatic_use": claim.get("usage") or "待填写：这条事实如何转化为场景行动、阻碍、道具、台词或误判。",
+                    "uncertainty": claim.get("uncertainty") or "",
+                    "forbidden_use": claim.get("forbidden_use") or "",
+                })
+    report = {
+        "schema_version": SCHEMA_VERSION,
+        "kind": RESEARCH_SCENE_USAGE_KIND,
+        "generated_at": today(),
+        "project_root": str(root.resolve()),
+        "chapter": chapter,
+        "usage_count": len(usages),
+        "has_scene_cards": bool(scenes_by_chapter),
+        "usages": usages,
+    }
+    if write:
+        write_json(scene_usage_json_path(root), report)
+        write_text(scene_usage_md_path(root), render_scene_usage(report))
+    return report
+
+
+def render_scene_usage(report: dict[str, Any]) -> str:
+    lines = [
+        "# 专业资料场景使用图",
+        "",
+        f"- 生成日期：{report.get('generated_at')}",
+        f"- 章节：{report.get('chapter') if report.get('chapter') is not None else '全书'}",
+        f"- 使用项：{report.get('usage_count', 0)}",
+        f"- scene_cards：{report.get('has_scene_cards')}",
+        "",
+        "| 章节 | scene | 资料包 | fact | 来源 | 戏剧化用法 | 禁用写法 |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for item in report.get("usages") or []:
+        lines.append(
+            "| "
+            + " | ".join([
+                md_cell(item.get("chapter")),
+                md_cell("、".join(item.get("scene_ids") or [])),
+                md_cell(item.get("pack_topic")),
+                md_cell(item.get("claim")),
+                md_cell(",".join(item.get("source_ids") or [])),
+                md_cell(item.get("dramatic_use")),
+                md_cell(item.get("forbidden_use")),
+            ])
+            + " |"
+        )
+    if not report.get("usages"):
+        lines.append("| 无 |  |  |  |  | 暂无可映射 claims；先补 research_sources.json claims |  |")
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def md_cell(value: Any) -> str:
@@ -997,6 +1551,84 @@ def cmd_check(args: argparse.Namespace) -> int:
     return 1 if report["blocking"] else 0
 
 
+def cmd_needs(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    if not root.is_dir():
+        print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        return 2
+    report = build_research_needs(root, chapter=args.chapter, write=not args.no_write)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        if not args.no_write:
+            print(f"[ok] 专业资料需求 JSON → {needs_json_path(root)}")
+            print(f"[ok] 专业资料需求 MD   → {needs_md_path(root)}")
+        print(f"     阻断：{report['blocking_count']} | 建议：{report['warning_count']} | 缺口：{report['missing_count']}")
+        for item in report.get("needs", [])[:10]:
+            print(f"  - [{item['severity']}] {item['domain']}: {item['topic']}")
+    return 0
+
+
+def cmd_jobs(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    if not root.is_dir():
+        print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        return 2
+    report = build_research_jobs(root, chapter=args.chapter, write=not args.no_write)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        if not args.no_write:
+            print(f"[ok] 专业资料任务 JSON → {jobs_json_path(root)}")
+            print(f"[ok] 专业资料任务 MD   → {jobs_md_path(root)}")
+        print(f"     阻断：{report['blocking_count']} | 建议：{report['warning_count']} | 任务：{report['job_count']}")
+        for item in report.get("jobs", [])[:10]:
+            print(f"  - [{item['priority']}] {item['domain']}: {item['topic']}")
+    return 0
+
+
+def cmd_job_update(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    if not root.is_dir():
+        print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        return 2
+    try:
+        job = update_research_job(
+            root,
+            args.job_id,
+            status=args.status,
+            assignee=args.assignee,
+            source_count=args.source_count,
+            notes=args.notes,
+        )
+    except ValueError as exc:
+        print(f"[err] {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(job, ensure_ascii=False, indent=2))
+    else:
+        print(f"[ok] research job updated: {job['id']} status={job.get('status')} assignee={job.get('assignee') or '-'} sources={job.get('source_count', 0)}")
+        print(f"[ok] 专业资料任务 JSON → {jobs_json_path(root)}")
+        print(f"[ok] 专业资料任务 MD   → {jobs_md_path(root)}")
+    return 0
+
+
+def cmd_scene_usage(args: argparse.Namespace) -> int:
+    root = Path(args.project_root)
+    if not root.is_dir():
+        print(f"[err] 找不到作品根：{root}", file=sys.stderr)
+        return 2
+    report = build_scene_usage(root, chapter=args.chapter, write=not args.no_write)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        if not args.no_write:
+            print(f"[ok] research scene usage JSON → {scene_usage_json_path(root)}")
+            print(f"[ok] research scene usage MD   → {scene_usage_md_path(root)}")
+        print(f"     使用项：{report['usage_count']} | scene_cards={report['has_scene_cards']}")
+    return 0
+
+
 def cmd_refresh_audit(args: argparse.Namespace) -> int:
     root = Path(args.scan_root)
     if not root.exists():
@@ -1041,6 +1673,37 @@ def main(argv: list[str] | None = None) -> int:
     ck.add_argument("--chapter", type=int, default=None)
     ck.add_argument("--json", action="store_true")
     ck.set_defaults(func=cmd_check)
+
+    nd = sub.add_parser("needs", help="detect missing specialist research packets before drafting")
+    nd.add_argument("project_root")
+    nd.add_argument("--chapter", type=int, default=None)
+    nd.add_argument("--json", action="store_true")
+    nd.add_argument("--no-write", action="store_true")
+    nd.set_defaults(func=cmd_needs)
+
+    jobs = sub.add_parser("jobs", help="turn missing specialist research needs into actionable search jobs")
+    jobs.add_argument("project_root")
+    jobs.add_argument("--chapter", type=int, default=None)
+    jobs.add_argument("--json", action="store_true")
+    jobs.add_argument("--no-write", action="store_true")
+    jobs.set_defaults(func=cmd_jobs)
+
+    ju = sub.add_parser("job-update", help="update a research job status/assignee/source count")
+    ju.add_argument("project_root")
+    ju.add_argument("job_id")
+    ju.add_argument("--status", choices=["open", "in_progress", "done", "verified", "waived", "blocked"], default=None)
+    ju.add_argument("--assignee", default=None)
+    ju.add_argument("--source-count", type=int, default=None)
+    ju.add_argument("--notes", default=None)
+    ju.add_argument("--json", action="store_true")
+    ju.set_defaults(func=cmd_job_update)
+
+    su = sub.add_parser("scene-usage", help="map research claims to chapters/scenes for drafting and review")
+    su.add_argument("project_root")
+    su.add_argument("--chapter", type=int, default=None)
+    su.add_argument("--json", action="store_true")
+    su.add_argument("--no-write", action="store_true")
+    su.set_defaults(func=cmd_scene_usage)
 
     ra = sub.add_parser("refresh-audit", help="scan research_sources.json files and write refresh plans")
     ra.add_argument("scan_root", nargs="?", default=".")

@@ -46,10 +46,12 @@ def test_dry_run_writes_plan_and_provenance():
             f.write("# 进度\n")
 
         plan = dry_run_plan(root)
-        assert plan["next_stage"] == "blueprint"
+        assert plan["next_stage"] == "author_workflow"
         by_key = {stage["key"]: stage for stage in plan["stages"]}
         assert by_key["setup"]["status"] == "done"
-        assert by_key["blueprint"]["status"] == "ready"
+        assert by_key["author_workflow"]["status"] == "ready"
+        assert by_key["author_intent"]["status"] == "ready"
+        assert by_key["blueprint"]["status"] == "blocked"
 
         json_path, md_path = pipeline_runner.write_plan(root, plan)
         assert os.path.exists(json_path)
@@ -74,7 +76,7 @@ def test_missing_project_kind_defaults_to_create_without_source_import():
         keys = [stage["key"] for stage in plan["stages"]]
         assert plan["project_kind"] == "create"
         assert "source_import" not in keys
-        assert plan["next_stage"] == "blueprint"
+        assert plan["next_stage"] == "author_workflow"
 
 
 def test_legacy_source_artifacts_keep_source_import_stage():
@@ -107,22 +109,24 @@ def test_pipeline_run_state_machine_claims_and_completes_stage():
                 f.write("# ok\n")
 
         run = pipeline_runner.create_run(root, actor="orchestrator")
-        assert run["next_stage"] == "blueprint"
+        assert run["next_stage"] == "author_workflow"
         by_key = {stage["key"]: stage for stage in run["stages"]}
         assert by_key["setup"]["status"] == "completed"
-        assert by_key["blueprint"]["status"] == "pending"
+        assert by_key["author_workflow"]["status"] == "pending"
+        assert by_key["author_intent"]["status"] == "pending"
+        assert by_key["blueprint"]["status"] == "blocked"
 
         claimed = pipeline_runner.update_run_stage(
-            root, run["run_id"], "blueprint", "claimed", actor="writer-agent"
+            root, run["run_id"], "author_workflow", "claimed", actor="orchestrator"
         )
         by_key = {stage["key"]: stage for stage in claimed["stages"]}
-        assert by_key["blueprint"]["status"] == "running"
-        assert by_key["blueprint"]["attempts"] == 1
-        assert by_key["blueprint"]["claimed_by"] == "writer-agent"
+        assert by_key["author_workflow"]["status"] == "running"
+        assert by_key["author_workflow"]["attempts"] == 1
+        assert by_key["author_workflow"]["claimed_by"] == "orchestrator"
 
-        completed = pipeline_runner.update_run_stage(root, run["run_id"], "blueprint", "completed")
+        completed = pipeline_runner.update_run_stage(root, run["run_id"], "author_workflow", "completed")
         by_key = {stage["key"]: stage for stage in completed["stages"]}
-        assert by_key["blueprint"]["status"] == "completed"
+        assert by_key["author_workflow"]["status"] == "completed"
 
 
 def test_artifact_graph_marks_changed_outputs_stale():

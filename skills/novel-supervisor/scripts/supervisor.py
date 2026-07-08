@@ -384,6 +384,32 @@ def record_execution_event(
 
 def command_for_stage(root: str, stage: dict[str, Any]) -> list[str]:
     key = stage.get("key")
+    if key == "author_workflow":
+        return [f'python3 skills/novel-craft/scripts/author_workflow.py "{root}" --write']
+    if key == "author_intent":
+        return [f'python3 skills/novel-craft/scripts/author_intent.py scaffold "{root}"']
+    if key == "evidence_prep":
+        return [
+            f'python3 skills/novel-research/scripts/research_pack.py jobs "{root}"',
+            f'python3 skills/novel-research/scripts/research_pack.py scene-usage "{root}"',
+            f'python3 skills/novel-observe/scripts/observe.py scaffold "{root}"',
+            f'python3 skills/novel-aesthetic/scripts/aesthetic_bank.py scaffold "{root}"',
+        ]
+    if key == "manuscript_map":
+        return [f'python3 skills/novel-craft/scripts/manuscript_map.py "{root}" --write']
+    if key == "demo_readiness":
+        return [f'python3 skills/novel-craft/scripts/demo_readiness.py "{root}" --write']
+    if key == "reader_validation":
+        return [f'python3 skills/novel-feedback/scripts/reader_test_plan.py "{root}" --scope opening:1-3']
+    if key == "edit":
+        return [f'python3 skills/novel-edit/scripts/edit_plan.py "{root}"']
+    if key == "ai_compliance":
+        return [
+            f'python3 skills/novel-craft/scripts/ai_usage.py "{root}"',
+            f'python3 skills/novel-craft/scripts/compliance_profile.py "{root}" --write',
+        ]
+    if key == "metadata_pack":
+        return [f'python3 skills/novel-craft/scripts/metadata_pack.py "{root}" --write']
     if key == "revision":
         return [f'python3 skills/novel-craft/scripts/revision_planner.py "{root}"']
     if key == "score":

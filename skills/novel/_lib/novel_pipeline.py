@@ -55,10 +55,36 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "agent_role": "workflow_orchestrator",
     },
     {
+        "key": "author_workflow",
+        "label": "作者成书默认工作流",
+        "owner": "novel-craft/scripts/author_workflow.py",
+        "inputs": ["_meta.json", "_设置.md", "_进度.md"],
+        "outputs": ["生产数据/author_workflow.json", "生产数据/作者成书流程.md"],
+        "gate": "deterministic workflow status",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "重跑 author_workflow.py；不修改正文或进度。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
+        "key": "author_intent",
+        "label": "作者意图档案",
+        "owner": "novel-craft/scripts/author_intent.py",
+        "inputs": ["_meta.json", "_设置.md"],
+        "outputs": ["设定/author_intent.json", "设定/作者意图.md"],
+        "gate": "author intent completeness",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "修订 author_intent.json / 作者意图.md；后续蓝图与读者契约需对齐。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
         "key": "blueprint",
         "label": "蓝图/方向规格",
         "owner": "novel-create / novel-rewrite / derive skill",
-        "inputs": ["_meta.json"],
+        "inputs": ["_meta.json", "设定/author_intent.json"],
         "outputs": ["设定/蓝图.md", "设定/改动spec.md", "设定/方向spec.md"],
         "output_policy": "any",
         "gate": "human-choice",
@@ -97,6 +123,35 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "agent_role": "workflow_orchestrator",
     },
     {
+        "key": "evidence_prep",
+        "label": "资料/观察/审美准备",
+        "owner": "novel-research / novel-observe / novel-aesthetic",
+        "inputs": ["设定/读者契约.md", "设定/章纲.md"],
+        "input_policy": "any",
+        "outputs": ["资料/research_jobs.json", "资料/research_sources.json", "资料/research_scene_usage.json", "素材/观察素材库.md", "设定/aesthetic_bank.json"],
+        "output_policy": "any",
+        "gate": "research/observation/aesthetic readiness",
+        "cost_level": "search+free",
+        "semantic_required": False,
+        "can_parallel": True,
+        "rollback": "更新资料包、观察素材或审美样本；已生成写章包需刷新。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
+        "key": "manuscript_map",
+        "label": "结构地图",
+        "owner": "novel-craft/scripts/manuscript_map.py",
+        "inputs": ["设定/章纲.md", "设定/scene_cards.json"],
+        "input_policy": "any",
+        "outputs": ["设定/manuscript_map.json", "设定/manuscript_map.md"],
+        "gate": "manuscript map completeness",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "修订章纲/scene_cards 后重跑 manuscript_map.py。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
         "key": "demo",
         "label": "Demo 章与 Demo Gate",
         "owner": "novel-review",
@@ -108,6 +163,19 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "can_parallel": False,
         "rollback": "回蓝图/设定/开篇章重写后重跑 demo gate。",
         "agent_role": "specialist_reviewer",
+    },
+    {
+        "key": "demo_readiness",
+        "label": "Demo 双评分放量闸门",
+        "owner": "novel-craft/scripts/demo_readiness.py",
+        "inputs": ["审稿/demo_gate.json", "章节/第*.md"],
+        "outputs": ["审稿/demo_readiness.json", "审稿/demo_readiness.md"],
+        "gate": "commercial + literary demo readiness",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "回开篇/score/aesthetic 修正后重跑 demo_readiness。",
+        "agent_role": "workflow_orchestrator",
     },
     {
         "key": "draft",
@@ -181,6 +249,62 @@ PIPELINE_REGISTRY: list[dict[str, Any]] = [
         "semantic_required": False,
         "can_parallel": False,
         "rollback": "删除/重出 revision_plan；不直接改正文。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
+        "key": "reader_validation",
+        "label": "读者测试计划/反馈归因",
+        "owner": "novel-feedback",
+        "inputs": ["评分/score_report.json", "审稿/review_report.json"],
+        "input_policy": "any",
+        "outputs": ["评分/reader_test_plan.json", "评分/reader_telemetry_summary.json"],
+        "output_policy": "any",
+        "gate": "reader test plan before release",
+        "cost_level": "free+external",
+        "semantic_required": False,
+        "can_parallel": True,
+        "rollback": "补 take_id/variant_id 后重导入读者反馈或记录 scoped waiver。",
+        "agent_role": "specialist_score",
+    },
+    {
+        "key": "edit",
+        "label": "分层专业编辑",
+        "owner": "novel-edit/scripts/edit_plan.py",
+        "inputs": ["修订/revision_plan.json", "审稿/review_report.json", "评分/score_report.json"],
+        "input_policy": "any",
+        "outputs": ["修订/edit_plan.json", "修订/editorial_letter.md", "修订/style_sheet.md", "修订/proof_checklist.md"],
+        "gate": "P0/P1 edit task closure",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "关闭或重开编辑任务；结构未定不进入 proofread。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
+        "key": "ai_compliance",
+        "label": "AI 使用与平台合规",
+        "owner": "novel-craft/scripts/ai_usage.py + compliance_profile.py",
+        "inputs": ["章节/第*.md", "_meta.json", "_设置.md"],
+        "outputs": ["合规/ai_usage.json", "合规/compliance_profile.json"],
+        "gate": "AI disclosure + jurisdiction/platform profile",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "更新 AI 使用说明或合规确认后重跑 release manifest。",
+        "agent_role": "workflow_orchestrator",
+    },
+    {
+        "key": "metadata_pack",
+        "label": "发布元数据包",
+        "owner": "novel-craft/scripts/metadata_pack.py",
+        "inputs": ["_meta.json", "_设置.md", "合规/ai_usage.json"],
+        "input_policy": "any",
+        "outputs": ["导出/metadata_pack.json", "导出/metadata_pack.md"],
+        "gate": "publish metadata readiness",
+        "cost_level": "free",
+        "semantic_required": False,
+        "can_parallel": False,
+        "rollback": "更新简介、关键词、分类、权利/AI 摘要后重跑 metadata_pack.py。",
         "agent_role": "workflow_orchestrator",
     },
     {
@@ -447,6 +571,66 @@ def evaluate_stage(root: str, stage: dict[str, Any],
         if manifest.get("release_ready") is not True:
             status = "blocked"
             gate_blockers.append("导出/release_manifest.json: release_ready is not true")
+    if stage.get("key") == "evidence_prep" and outputs_ok:
+        jobs = load_json(os.path.join(root, "资料", "research_jobs.json"), {}) or {}
+        open_blocking = [
+            job for job in (jobs.get("jobs") or [])
+            if isinstance(job, dict)
+            and job.get("severity") == "blocking"
+            and job.get("status") not in {"done", "verified", "waived"}
+        ] if isinstance(jobs, dict) else []
+        if open_blocking:
+            status = "blocked"
+            gate_blockers.append(f"资料/research_jobs.json: {len(open_blocking)} 个 P0 专业资料任务未关闭")
+    if stage.get("key") == "author_intent" and outputs_ok:
+        intent = load_json(os.path.join(root, "设定", "author_intent.json"), {}) or {}
+        missing = []
+        if not intent.get("core_theme") or "待填写" in str(intent.get("core_theme")):
+            missing.append("core_theme")
+        if not intent.get("non_negotiables") or "待填写" in str(intent.get("non_negotiables")):
+            missing.append("non_negotiables")
+        if missing:
+            status = "blocked"
+            gate_blockers.append("设定/author_intent.json: 未完成 " + ", ".join(missing))
+    if stage.get("key") == "manuscript_map" and outputs_ok:
+        check = load_json(os.path.join(root, "设定", "manuscript_map_check.json"), {}) or {}
+        if check.get("blocking"):
+            status = "blocked"
+            gate_blockers.append(f"设定/manuscript_map_check.json: {check.get('blocking')} 个结构地图阻断")
+    if stage.get("key") == "demo_readiness" and outputs_ok:
+        readiness = load_json(os.path.join(root, "审稿", "demo_readiness.json"), {}) or {}
+        if readiness.get("ready_for_batch") is not True:
+            status = "blocked"
+            gate_blockers.append("审稿/demo_readiness.json: ready_for_batch is not true")
+    if stage.get("key") == "edit" and outputs_ok:
+        edit_plan = load_json(os.path.join(root, "修订", "edit_plan.json"), {}) or {}
+        closed = {"fixed", "accepted", "waived", "closed", "done", "resolved"}
+        open_p0_p1 = [
+            task for task in (edit_plan.get("tasks") or [])
+            if isinstance(task, dict)
+            and str(task.get("priority") or "").upper() in {"P0", "P1"}
+            and str(task.get("status") or "open").lower() not in closed
+        ] if isinstance(edit_plan, dict) else []
+        if open_p0_p1:
+            status = "blocked"
+            gate_blockers.append(f"修订/edit_plan.json: {len(open_p0_p1)} 个 P0/P1 编辑任务未关闭")
+        open_queries = [
+            query for query in _load_jsonl(os.path.join(root, "修订", "editor_queries.jsonl"))
+            if str(query.get("status") or "open").lower() not in {"answered", "accepted", "rejected", "resolved", "waived", "closed"}
+        ]
+        if open_queries:
+            status = "blocked"
+            gate_blockers.append(f"修订/editor_queries.jsonl: {len(open_queries)} 个 editor query 未关闭")
+    if stage.get("key") == "ai_compliance" and outputs_ok:
+        ai_usage = load_json(os.path.join(root, "合规", "ai_usage.json"), {}) or {}
+        if ai_usage.get("text_mode") in {"AI-generated", "AI-assisted"} and not ai_usage.get("chapter_usage"):
+            status = "blocked"
+            gate_blockers.append("合规/ai_usage.json: 缺 chapter_usage 逐章 AI 使用记录")
+    if stage.get("key") == "metadata_pack" and outputs_ok:
+        check = load_json(os.path.join(root, "导出", "metadata_pack_check.json"), {}) or {}
+        if check.get("blocking"):
+            status = "blocked"
+            gate_blockers.append(f"导出/metadata_pack_check.json: {check.get('blocking')} 个发布元数据阻断")
     if stage.get("key") == "draft" and outputs_ok:
         # output_policy="any" 下，写出 1 章就会判 draft「done」，macro-plan 会带着 1/N 章冲进 review/score。
         # 按 _meta.target_chapters 计数把关：未达目标章数则保持 ready（仍停在 draft），不算完成。
@@ -577,7 +761,7 @@ def _reconcile_progress(root: str, stages: list[dict[str, Any]], next_stage_key:
                       "可能部分章节产物存在但章未真正写完（或勾选表滞后）。以 _进度.md 为准复核。",
             "next_pending_label": str((summary.get("first") or {}).get("label") or ""),
         })
-    post_draft = {"post_write", "review", "score", "revision", "export", "release_manifest", "screen_ready"}
+    post_draft = {"post_write", "review", "score", "revision", "reader_validation", "edit", "ai_compliance", "export", "release_manifest", "screen_ready"}
     if next_stage_key in post_draft and progress_pending:
         out.append({
             "type": "progress_disagreement",

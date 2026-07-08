@@ -120,9 +120,19 @@ NOVEL_SKILLS = [
         "summary": "overseas localization: glossary-locked translation + cultural adaptation",
     },
     {
+        "name": "novel-settings",
+        "role": "settings",
+        "summary": "audit and update private project settings for novel choice points",
+    },
+    {
         "name": "novel-progress",
         "role": "progress",
         "summary": "read-only progress dashboard for novel projects",
+    },
+    {
+        "name": "novel-update",
+        "role": "maintenance",
+        "summary": "skill content snapshot diff and minimal rework plan for novel projects",
     },
     {
         "name": "novel-dashboard",

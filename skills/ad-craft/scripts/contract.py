@@ -73,7 +73,8 @@ RELEASE_REGIONS = ("中国大陆", "港澳台", "北美", "东南亚", "全球",
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；只拦 ① 项目内后端混用
 # ② 逆向/未授权出图路径（安全 invariant）。AI 标识/披露义务移到工具之外，与本治理无关。
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
-# 注意：广告投放侧从严处理，dreamina/即梦保留在 FORBIDDEN，不并入官方放行白名单。
+# 注意：广告投放侧从严处理，Dreamina/即梦逆向或未授权路径保留在 FORBIDDEN；
+# 明确写作“官方 CLI / official CLI / official API”的本机官方工具路径可作为 approved official 后端。
 # 采集日期：2026-06-13  来源：各后端官方文档 + 广告投放合规口径（待复核）
 AD_IMAGE_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各后端官方文档 + 广告投放合规口径(待复核)"}
 AD_APPROVED_IMAGE_BACKENDS = {
@@ -83,6 +84,7 @@ AD_APPROVED_IMAGE_BACKENDS = {
     "seedream": {"label": "Seedream Universal Reference（官方 API·免 LoRA 跨图锁主体·≤14 图）", "multi_reference": True, "native_subject": True},
     "kling":    {"label": "可灵 Kling 主体库 / Element Library", "multi_reference": True, "native_subject": True},
     "sora":     {"label": "Sora Character Cameo（可复用主体ID）", "multi_reference": True, "native_subject": True},
+    "dreamina_official": {"label": "Dreamina/即梦官方 CLI/API（非逆向路径）", "multi_reference": False, "native_subject": False},
 }
 _AD_IMAGE_BACKEND_ALIASES = {
     "codex only": "codex", "codexonly": "codex", "codex": "codex",
@@ -92,6 +94,10 @@ _AD_IMAGE_BACKEND_ALIASES = {
     "seedream": "seedream", "universal reference": "seedream",
     "kling": "kling", "可灵": "kling", "主体库": "kling",
     "sora": "sora", "character cameo": "sora", "cameo": "sora",
+    "dreamina/即梦官方 cli": "dreamina_official", "即梦/dreamina官方 cli": "dreamina_official",
+    "dreamina official cli": "dreamina_official", "jimeng official cli": "dreamina_official",
+    "即梦官方 cli": "dreamina_official", "dreamina official api": "dreamina_official",
+    "即梦官方 api": "dreamina_official",
 }
 # 逆向/未授权出图路径——安全 invariant，永远 forbidden（官方 Seedream API 不在此列）。
 AD_FORBIDDEN_IMAGE_BACKENDS = ("dreamina", "即梦", "同视频ai")
@@ -102,6 +108,10 @@ def classify_image_backend(raw):
     text = (raw or "").strip().lower()
     if not text:
         return ("", "unknown")
+    # 明确官方 CLI/API 的 Dreamina/即梦不走逆向 forbidden 口径。
+    for alias, canonical in _AD_IMAGE_BACKEND_ALIASES.items():
+        if canonical == "dreamina_official" and alias in text:
+            return (canonical, "approved")
     for bad in AD_FORBIDDEN_IMAGE_BACKENDS:
         if bad in text:
             return ("", "forbidden")

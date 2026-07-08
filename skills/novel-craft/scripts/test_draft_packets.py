@@ -335,6 +335,54 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("急诊抢救", text)
             self.assertIn("不要写成无人分诊直接开刀", text)
 
+    def test_observation_packet_is_injected_for_chapter(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.makedirs(os.path.join(tmp, "写作任务"), exist_ok=True)
+            with open(os.path.join(tmp, "写作任务", "观察素材_第03章.md"), "w", encoding="utf-8") as f:
+                f.write("# 观察素材\n- 老旧楼道里，声控灯慢半拍亮起，灰尘在光柱里浮动。\n")
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("`写作任务/观察素材_第03章.md`", text)
+            self.assertIn("生活观察素材（逐章精选）", text)
+            self.assertIn("声控灯慢半拍亮起", text)
+
+    def test_aesthetic_bank_is_injected_as_transfer_rules(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "设定", "aesthetic_bank.json"), "w", encoding="utf-8") as f:
+                json.dump({
+                    "schema_version": 1,
+                    "kind": "novel_aesthetic_bank",
+                    "samples": [{
+                        "sample_id": "AES-001",
+                        "source_title": "项目Demo第1章",
+                        "source_rights": "project-demo",
+                        "dimensions": ["opening", "prose"],
+                        "why_it_works": "用一个带羞耻感的动作先立人物困境。",
+                        "transfer_rule": "先写行动中的人，再让环境细节折射处境。",
+                        "anti_copy_note": "只迁移机制，不复用原句。",
+                    }],
+                }, f, ensure_ascii=False)
+
+            subprocess.run(
+                [sys.executable, DRAFT_PACKETS, tmp, "--chapter", "3"],
+                capture_output=True, text=True, check=True,
+            )
+            packet = os.path.join(tmp, "写作任务", "第03章.md")
+            with open(packet, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("`设定/aesthetic_bank.json`", text)
+            self.assertIn("正向审美样本（迁移规则）", text)
+            self.assertIn("先写行动中的人", text)
+            self.assertIn("用一个带羞耻感的动作", text)
+
     def test_reveal_confrontation_relationship_checklists_are_injected(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)

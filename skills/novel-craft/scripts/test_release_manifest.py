@@ -95,6 +95,76 @@ def write_ready_evidence(root: str) -> None:
             "direct_incorporation": "minor_phrases",
             "review_steps": ["人工通读", "设定一致性审稿"],
         },
+        "chapter_usage": [{
+            "chapter": 1,
+            "path": "章节/第01章.md",
+            "usage_mode": "AI-assisted",
+            "human_review_required": True,
+            "note": "",
+        }],
+    })
+    write_json(os.path.join(root, "评分", "reader_test_plan.json"), {
+        "schema_version": 1,
+        "kind": "novel_reader_test_plan",
+        "project_root": root,
+        "generated_at": "2026-06-26",
+        "platform": "内测",
+        "source_name": "开篇测试",
+        "scope": "opening:1-3",
+        "target_reader": "测试平台核心读者",
+        "min_sample": 30,
+        "cohorts": [{
+            "cohort_id": "C01",
+            "description": "测试平台核心读者",
+            "sample_source": "内测读者",
+            "inclusion_criteria": "目标题材读者",
+        }],
+        "variants": [{
+            "variant_id": "A",
+            "take_id": "opening-v1",
+            "hypothesis": "验证前三章钩子是否成立",
+        }],
+        "experiment_design": {
+            "ab_test_id": "opening-test",
+            "assignment": "随机分发",
+            "comparison_unit": "variant_id/take_id within same scope",
+            "randomization_note": "同一渠道同一日期",
+        },
+        "data_collection_fields": ["reader_id", "chapter", "event", "count", "timestamp", "ab_test_id", "variant_id", "take_id", "comment", "sentiment"],
+        "privacy_note": "匿名化后导入。",
+        "attribution_required_fields": ["ab_test_id", "variant_id", "take_id"],
+        "metrics": [{
+            "name": "completion_rate",
+            "target": 0.65,
+            "direction": "higher_is_better",
+        }],
+    })
+    write_json(os.path.join(root, "评分", "reader_telemetry_summary.json"), {
+        "schema_version": 1,
+        "kind": "novel_reader_telemetry_summary",
+        "project_root": root,
+        "generated_at": "2026-06-27",
+        "reader_test_plan": {"present": True, "path": "评分/reader_test_plan.json"},
+        "aggregate": {
+            "total_starts": 30,
+            "total_completes": 21,
+            "completion_rate": 0.7,
+        },
+        "weakest_chapters": [],
+        "flags": [],
+    })
+    write_json(os.path.join(root, "导出", "metadata_pack.json"), {
+        "schema_version": 1,
+        "kind": "novel_metadata_pack",
+        "generated_at": "2026-06-27",
+        "project_root": root,
+        "title": "测试书",
+        "short_blurb": "主角在第一章面对选择并付出代价。",
+        "long_description": "长简介。",
+        "keywords": ["测试", "成长", "幻想"],
+        "categories": ["Fantasy"],
+        "age_rating": "16+",
+        "rights_summary": {"rights_status": "original"},
     })
     compliance_lib = release_manifest._load_compliance_lib()
     write_json(os.path.join(root, "合规", "compliance_profile.json"), compliance_lib.build_profile(root))
@@ -129,6 +199,35 @@ def test_release_manifest_ready_when_required_evidence_is_current():
         assert manifest["release_profile"] == "platform_publish"
         assert manifest["release_readiness"]["blocker_count"] == 0
         assert manifest["chapter_source_snapshot"]["aggregate_hash"] == manifest["chapter_aggregate_hash"]
+
+
+def test_platform_publish_requires_reader_telemetry_or_scoped_waiver():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        write_ready_evidence(root)
+        os.remove(os.path.join(root, "评分", "reader_telemetry_summary.json"))
+
+        blocked = release_manifest.build_manifest(root, release_name="v1")
+        blocker_ids = [item["id"] for item in blocked["release_readiness"]["blockers"]]
+        assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" in blocker_ids
+        assert blocked["release_ready"] is False
+
+        with open(os.path.join(root, "审稿", "waiver_log.jsonl"), "w", encoding="utf-8") as f:
+            f.write(json.dumps({
+                "id": "WAIVER-READER-DATA-001",
+                "type": "reader_data_missing",
+                "reason": "封闭评审项目，无公开平台读者数据。",
+                "affected_gate": "release_manifest",
+                "source": "human",
+                "scope": {"release_profile": "platform_publish"},
+            }, ensure_ascii=False) + "\n")
+
+        waived = release_manifest.build_manifest(root, release_name="v1")
+        waived_ids = [item["id"] for item in waived["release_readiness"]["blockers"]]
+        warning_ids = [item["id"] for item in waived["release_readiness"]["warnings"]]
+        assert "RELEASE-READER-TELEMETRY-NOT-DECLARED" not in waived_ids
+        assert "RELEASE-READER-TELEMETRY-WAIVED" in warning_ids
+        assert waived["release_ready"] is True, waived["release_readiness"]
 
 
 def test_release_manifest_builds_evidence_index_for_release_audit():

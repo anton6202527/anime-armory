@@ -19,14 +19,20 @@ description: 拍广告 第3阶段·VO配音 — 把 脚本/voiceover.txt（旁�
 |---|---|
 | `say` | macOS 内置 TTS 占位（中文可能空音频→自动降级静音占位并告警）|
 | `estimate` | 跨平台静音占位，按字数估时（无任何 TTS 也能把时长跑出来）|
-| CosyVoice / GPT-SoVITS / MiniMax / 火山 | 真后端，各自 CLI 产 wav 后登记（见 `references/backends.md`）|
+| CosyVoice / GPT-SoVITS / MiniMax / 火山 | 真后端，各自 CLI/API 产 `line_01.wav..line_NN.wav` 后用 `--from-dir` 登记（见 `references/backends.md`）|
+| EdgeTTS 自定义 | `render_edgetts.py` 生成非克隆合成音色逐句 WAV，再用 `--from-dir` 登记；网络可用时适合无授权参考音的 demo/样片 |
 
 ```bash
 python3 skills/ad-voice/render_voice.py "<作品根>" --backend say        # 占位
 python3 skills/ad-voice/render_voice.py "<作品根>" --backend estimate    # 跨平台占位
+python3 skills/ad-voice/render_voice.py "<作品根>" --backend CosyVoice --from-dir "<真实逐句wav目录>"
+python3 skills/ad-voice/render_edgetts.py "<作品根>" --voice zh-CN-XiaoxiaoNeural
+python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-dir "<作品根>/配音/edgetts_lines"
 ```
 
 产物：`配音/line_NN.wav` + `配音/vo.wav` + `配音/时长清单.json`。
+
+真后端不能静默降级：选择 `CosyVoice/GPT-SoVITS/MiniMax/火山/自定义` 但没有 `--from-dir` 时必须阻断，不能自动写静音占位并假装跑过正式配音。`--from-dir` 目录必须包含和 `voiceover.txt` 行数一致的 `line_01.wav..line_NN.wav`，且每条能被 `ffprobe` 读出有效时长；登记后 `has_placeholder=false`。
 
 **收尾**：回写 `_进度.md` VO配音 ✅（占位后端 say/estimate 标 ⏳rough），提示下一步 `ad-script` **分镜 pass**（用实测时长定镜头长度）。
 

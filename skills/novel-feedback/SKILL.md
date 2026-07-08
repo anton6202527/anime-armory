@@ -25,6 +25,10 @@ python3 skills/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
   --source-name "开篇A/B小样本" \
   --scope "opening:1-3" \
   --target-reader "红果爽文读者" \
+  --cohort "核心读者|来自同题材书单/社群|近30天读过同题材" \
+  --ab-test-id "opening-ab-001" \
+  --assignment "randomized" \
+  --privacy-note "只保存匿名读端指标和必要评论，不收集真实姓名/联系方式" \
   --take "opening-v1" --hypothesis "第1章前300字提前抛羞辱冲突，预期提升完读" \
   --take "opening-v2" --hypothesis "保留原开头但加强章末钩子，检验追读欲"
 ```
@@ -34,7 +38,7 @@ python3 skills/novel-feedback/scripts/reader_test_plan.py "<作品根>" \
 - `评分/reader_test_plan.json`
 - `评分/读者测试计划.md`
 
-计划只规定怎么测，不替代真实数据。每个版本必须写清假设、最小样本量和最小效果差；后续 CSV/JSONL 导入时尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。改稿后必须同范围复测或说明不可比，否则只做方向性解释。
+计划只规定怎么测，不替代真实数据。每个版本必须写清假设、最小样本量和最小效果差；正式计划还应写 `cohorts`、`experiment_design`、`data_collection_fields`、`privacy_note`，后续 CSV/JSONL 导入必须尽量带 `ab_test_id`、`variant_id`、`take_id`，才能把结果归因到具体稿件版本。改稿后必须同范围复测或说明不可比，否则只做方向性解释。`novel-craft/scripts/release_manifest.py --release-profile beta_read|platform_publish|kdp_publish` 会要求 `reader_test_plan.json` 存在；`beta_read` 缺真实 `reader_telemetry_summary.json` 只 warning，`platform_publish` / `kdp_publish` 缺真实数据会阻断，除非 `审稿/waiver_log.jsonl` 有 `type=reader_data_missing` 或 `reader_telemetry_missing` 且 `scope.release_profile` 匹配的显式 waiver。
 
 ### 1. 导入真实反馈
 
@@ -70,6 +74,7 @@ python3 skills/novel-feedback/scripts/ingest_reader_events.py "<作品根>" \
 ## 判读铁律
 
 - 先有测试计划，再导入反馈；没有计划时也能导入，但报告只能做事后解释，A/B 归因可信度更低。
+- 测试计划要写清 cohort 来源/纳入标准、A/B 分配方式和隐私说明；不要把混合人群的小样本当作全平台结论。
 - 权重序：真实读者反馈 > 自有投放战绩 > `novel-simulate` 虚拟试读 > 外部公榜泛化。
 - 单章低完读、弃读高、负面评论集中，只说明“这一章读端有伤口”，不自动证明设定或文学性错误；需要回 `novel-review` / `novel-balance` 定因。
 - 样本量低时报告会标 `low_sample`，不得把小样本波动当硬结论。

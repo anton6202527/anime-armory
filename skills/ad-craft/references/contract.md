@@ -10,6 +10,10 @@
 ├── 需求/
 │   ├── brief.md            客户需求（人读）
 │   └── brief.json          客户需求（结构化：品牌/产品/USP/受众/调性/强制项/交付规格）
+├── 生产数据/
+│   ├── producer_pack.json   制片前控包（PPM/producer packet 机器版）
+│   ├── producer_pack.md     制片前控包（人读审批版）
+│   └── platform_pack.json   平台交付包（平台安全区/分辨率/cutdown矩阵）
 ├── 创意/
 │   ├── concept.md          big idea / 主张 / mood&reference / KV方向
 │   └── 创意脚本.md          creative treatment（故事线/节奏）
@@ -24,7 +28,7 @@
 ├── 设定库/                  global_style + 角色卡 + 场景卡 + 产品卡 + voicemap.json
 ├── 配音/                    line_NN.wav + vo.wav + 时长清单.json + _voicecache/
 ├── 出图/共享/ 出图/分镜/     prompt/ + 图片/（三层定妆库 + 逐镜首尾帧）
-├── 出视频/分镜/             prompt/ + 视频/（每 Clip MP4 + video_model_routes.json）
+├── 出视频/分镜/             prompt/ + 视频/（每 Clip MP4 + video_model_routes.json + video_qc.json）
 ├── 合成/                    _work/ + 成片_主片.mp4 + cutdown/ + 多比例/
 ├── 合规/                    ai_usage.json + AI使用说明.md（二期补 compliance_manifest.json）
 └── 成片_主片.mp4
@@ -49,10 +53,10 @@
 | `script` | 广告脚本+VO+时间轴 | `ad-script` | 广告法机检 + voiceover.txt |
 | `voice` | VO配音 | `ad-voice` | 时长清单.json |
 | `storyboard` | 分镜（实测时长驱动） | `ad-script` | storyboard.json + 镜头时长 |
-| `image` | 定妆库+出图 | `ad-image` | visual identity + 首尾帧（高风险闸门）|
-| `video` | 图生视频 | `ad-video` | 契约继承 + clip videos（高风险闸门）|
-| `compose` | 剪辑包装+交付 | `ad-compose` | 成片 + cutdown + 交付规格（高风险闸门）|
-| `review` | 质检自审 | `ad-review` | M0 delivery review + human review |
+| `image` | 定妆库+出图 | `ad-image` | visual identity + 首尾帧 + product_qc（高风险闸门）|
+| `video` | 图生视频 | `ad-video` | 契约继承 + clip videos + video_qc（高风险闸门）|
+| `compose` | 剪辑包装+交付 | `ad-compose` | 成片 + cutdown + 交付规格 + video_qc 0 block（高风险闸门）|
+| `review` | 质检自审 | `ad-review` | M0 delivery review + video_qc 0 block + human review |
 | `handoff` | AI披露/交付 | `ad-craft/scripts/ai_usage.py` | AI usage disclosure |
 
 > **不拆集**：一条主片是整体；`_进度.md` 用「阶段进度表」而非逐集矩阵。
@@ -76,9 +80,42 @@
 ## 核心资产深层身份 (Hero Asset Deep Identity)
 
 Hero Product (`PROD_xx`) 需在 `asset_registry.json` 中额外锁定以下字段：
+- **资产 ID 强绑定**：产品/App/UI/片尾 end card 这类语义产品镜头，分镜或 prompt 必须显式引用 `PROD_*`；品牌/logo/CTA 镜头必须显式引用 `BRAND_*`。
 - **Logo 保护区 (Logo Mask)**：定义 Logo 的精确 HEX 色值、最小留白比例及在包装上的网格坐标。
 - **品牌色色度锁 (Hex-Lock)**：不仅文字描述，Prompt 中需显式包含品牌色 HEX 代码。
 - **状态追踪 (Interaction States)**：记录产品的物理状态（满瓶/倾倒/冷凝水/爆裂）。
+- **App/UI 状态锁**：App 广告需记录屏幕状态、关键 UI 文案、按钮/CTA 文案和不可漂移区域；图生视频 prompt 继承同一 `PROD_*`。
+
+## 制片前控包 (Producer Pack)
+
+进入付费出图前跑：
+
+```bash
+python3 skills/ad-craft/scripts/producer_pack.py "<拍广告作品根>"
+```
+
+`producer_pack` 是传统广告 PPM/producer packet 的机器版，输出 `生产数据/producer_pack.json/md`。它把 brief、concept、storyboard 和 `_设置.md` 合并成一份制片对账表：
+
+- shot list：每镜时长、画面、VO、产品/品牌资产 ID、交付比例和安全区。
+- rights/claims/legal：授权、数据依据、法律声明和未补缺口。
+- asset gaps：缺 `PROD_*` 是 block；缺 `BRAND_*` 是 warn。
+- approval checklist：付费生成前必须审批的产品、logo、包装、UI、CTA、法律声明和交付规格。
+
+有 `approval_blocks>0` 时不得进入 image/video 花钱 gate。
+
+## 平台交付包 (Platform Pack)
+
+进入出视频/合成前跑：
+
+```bash
+python3 skills/ad-craft/scripts/platform_pack.py "<拍广告作品根>"
+```
+
+`platform_pack` 把 brief 里的 `platforms`、`deliverables` 和 `_设置.md` 里的目标平台/交付比例合并成 `生产数据/platform_pack.json`：
+
+- specs：抖音/小红书/TikTok 的 9:16、最低分辨率、安全区、文字/CTA/法律声明避让提示。
+- deliverables：主片 + cutdown（如 30s/15s/6s）的机器行，供 `_进度.md` 和合成交付矩阵对齐。
+- findings：未知平台按 manual warn，要求投放前人工复核官方规格。
 
 ## 万能安全区 (Universal Safe Area)
 

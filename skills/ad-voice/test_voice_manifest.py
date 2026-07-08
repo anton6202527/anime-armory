@@ -6,10 +6,16 @@
 """
 import argparse
 import os
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
+from unittest import mock
 
 import voice_manifest as vm
 import render_voice as rv
+import render_edgetts as rets
 
 
 class VoiceManifestTest(unittest.TestCase):
@@ -149,6 +155,78 @@ class CloneGateTest(unittest.TestCase):
     def test_norm_backend(self):
         self.assertEqual(rv.norm_backend("Cosy_Voice-v2"), "cosyvoicev2")
         self.assertEqual(rv.norm_backend("XTTS"), "xtts")
+
+
+class RealBackendRegistrationTest(unittest.TestCase):
+    def test_is_placeholder_backend_normalizes(self):
+        self.assertTrue(rv.is_placeholder_backend("Say"))
+        self.assertTrue(rv.is_placeholder_backend("estimate"))
+        self.assertFalse(rv.is_placeholder_backend("CosyVoice"))
+
+    def test_external_line_wavs_collects_complete_sequence(self):
+        with tempfile.TemporaryDirectory() as td:
+            for name in ("line_01.wav", "line_02.wav"):
+                open(os.path.join(td, name), "wb").close()
+            with mock.patch.object(rv, "probe_duration", side_effect=[1.2, 1.5]):
+                wavs = rv.external_line_wavs(td, 2)
+        self.assertEqual(len(wavs), 2)
+        self.assertEqual(wavs[0][1], 1.2)
+        self.assertEqual(wavs[1][1], 1.5)
+
+    def test_external_line_wavs_requires_complete_sequence(self):
+        with tempfile.TemporaryDirectory() as td:
+            open(os.path.join(td, "line_01.wav"), "wb").close()
+            with mock.patch.object(rv, "probe_duration", return_value=1.2):
+                with self.assertRaises(ValueError):
+                    rv.external_line_wavs(td, 2)
+
+    def test_external_line_wavs_rejects_unreadable_audio(self):
+        with tempfile.TemporaryDirectory() as td:
+            open(os.path.join(td, "line_01.wav"), "wb").close()
+            with mock.patch.object(rv, "probe_duration", return_value=None):
+                with self.assertRaises(ValueError):
+                    rv.external_line_wavs(td, 1)
+
+    def test_real_backend_without_from_dir_exits_before_manifest(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = os.path.join(td, "ad")
+            os.makedirs(os.path.join(root, "脚本"))
+            with open(os.path.join(root, "脚本", "voiceover.txt"), "w", encoding="utf-8") as f:
+                f.write("旁白：你好\n")
+            proc = subprocess.run(
+                [sys.executable, os.path.join(os.path.dirname(__file__), "render_voice.py"),
+                 root, "--backend", "cosyvoice"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(proc.returncode, 4)
+            self.assertIn("真 VO 后端不能静默降级", proc.stderr)
+            self.assertFalse(os.path.exists(os.path.join(root, "配音", "时长清单.json")))
+
+
+class EdgeTTSAdapterTest(unittest.TestCase):
+    def test_require_tools_reports_missing(self):
+        with mock.patch("render_edgetts.shutil.which", side_effect=lambda name: None if name == "uvx" else f"/bin/{name}"):
+            with self.assertRaises(RuntimeError) as ctx:
+                rets.require_tools()
+        self.assertIn("uvx", str(ctx.exception))
+
+    def test_render_edgetts_writes_manifest(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = os.path.join(td, "ad")
+            os.makedirs(os.path.join(root, "脚本"))
+            with open(os.path.join(root, "脚本", "voiceover.txt"), "w", encoding="utf-8") as f:
+                f.write("旁白：第一句\n旁白：第二句\n")
+            out_dir = os.path.join(td, "lines")
+            with mock.patch("render_edgetts.synth_line", side_effect=[1.1, 1.2]):
+                payload = rets.render(
+                    project_root=Path(root),
+                    out_dir=Path(out_dir),
+                    voice="zh-CN-XiaoxiaoNeural",
+                    rate="+0%",
+                )
+            self.assertEqual(payload["provider"], "edge-tts")
+            self.assertEqual(len(payload["lines"]), 2)
+            self.assertTrue(os.path.exists(os.path.join(out_dir, "manifest.json")))
 
 
 if __name__ == "__main__":

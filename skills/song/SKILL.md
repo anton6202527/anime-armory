@@ -2,13 +2,13 @@
 name: song
 description: 写歌总调度 — 直接创作或编辑一首带人声的歌（词 + 曲 + 演唱）。支持从主题/几个字/曲风想法从零创作，也支持在已有 `创作区/写歌/<曲名>/`、歌词、曲风、半成品音频基础上改词、改结构、改曲风、重生成、多版挑版、换声、质检、进度查询和 skill 更新影响检查。产物落 创作区/写歌/<曲名>/(词/lyrics.md + 歌/song.wav)。创作过程中可按需调用 song-progress(只读进度) / song-update(更新影响计划) / song-lyrics(作词/改词) / song-score(歌词体检) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱/换声) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 创作歌曲 / 改这首歌 / 改词 / 改曲风 / 重生成 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 创作曲, 创作歌曲, 改歌, 改词, 改曲风, 重做这首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
 ---
-> 规模统计：Skill 数 10 | SKILL.md 总行数 534 | 目录文本总行数 4851
+> 规模统计：Skill 数 11 | SKILL.md 总行数 616 | 目录文本总行数 7416
 
 # song — 写歌创作线 · 总调度
 
 把"主题 / 几个字 / 曲风想法"直接创作成**一首成品歌**（词 + 曲 + 演唱），也可以对已有歌词、曲风、半成品音频或 `创作区/写歌/<曲名>/` 项目做编辑迭代。**完全独立、自包含**，只用通用工具（Suno / ACE-Step / RVC 等不是 skill）。
 
-总调度不是一次性黑盒：创作过程中可以按实际需要调用 `song-lyrics` 改词/补 hook，调用 `song-score` 做歌词体检，调用 `song-compose` 生成或重生成多版歌曲，调用 `song-cover` 换合法音色，调用 `song-review` 做成品质检，调用 `song-craft` 写合规留痕。
+总调度不是一次性黑盒：创作过程中可以按实际需要调用 `song-craft` 做 A&R 简报、参考边界、旋律/和声草图、权益元数据、发布包和合规留痕，调用 `song-lyrics` 改词/补 hook，调用 `song-score` 做歌词体检，调用 `song-compose` 生成或重生成多版歌曲并结构化试听挑版，调用 `song-cover` 换合法音色，调用 `song-review` 做成品质检/母带检查，发布后调用 `song-feedback` 回灌真实数据。
 
 产物落 **`创作区/写歌/<曲名>/`**（`词/lyrics.md` + `歌/song.wav`）。
 
@@ -24,9 +24,12 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 创作区/写歌/<曲名>/
 ├── _设置.md / _进度.md / _meta.json
 ├── 创作蓝图.md      主题/曲风/情绪/平台/演唱音色
+├── 创作/            song_brief.json（A&R 简报）
 ├── 词/lyrics.md     结构化歌词（[verse]/[chorus]/[bridge]…）
-├── 歌/              compose_task.md + takes_manifest.json + takes/ + song.wav
-├── 合规/            AI使用说明.md / ai_usage.json
+├── 歌/              song_form.json + chord_sheet.md + topline_notes.md + compose_task.md + takes_manifest.json + take_review.json + takes/ + song.wav
+├── 混音/            master_check.json / master_check.md
+├── 合规/            AI使用说明.md / ai_usage.json / rights_metadata.json / split_sheet.md
+├── 发行/            feedback_summary.json / feedback_report.md
 ├── 素材/            参考曲/风格样本/已有半成品
 └── 导出/
 ```
@@ -35,12 +38,15 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 
 | 阶段 | skill | 产物 | 状态 |
 |---|---|---|---|
+| A&R 简报 + 参考边界 | **`song-craft`** | `创作/song_brief.json` + `素材/reference_pack.json` | ✅ 已建（目标听众、核心承诺、参考曲边界） |
 | 立项 + 词 | **`song-lyrics`** | 创作蓝图 + `词/lyrics.md`（结构化、可唱、押韵） | ✅ 已建（零依赖） |
 | 歌词体检(可选) | **`song-score`** | 结构与押韵分析报告 | ✅ 已建（音频生成前拦截平庸词） |
-| 作曲任务包 + 多版挑版 | **`song-compose`** | `歌/compose_task.md` + `歌/takes_manifest.json` + `歌/song.wav` | ✅ 已建（Suno/Udio/ACE-Step/DiffRhythm，多版登记/评分/ 定稿） |
+| 旋律/和声草图 | **`song-craft`** | `歌/song_form.json` + `chord_sheet.md` + `topline_notes.md` | ✅ 已建（作曲前控制曲式与 topline 方向） |
+| 作曲任务包 + 多版挑版 | **`song-compose`** | `歌/compose_task.md` + `歌/takes_manifest.json` + `歌/take_review.json` + `歌/song.wav` | ✅ 已建（Suno/Udio/ACE-Step/DiffRhythm，多版登记/评分/ 定稿） |
 | 翻唱 / 换声(可选) | **`song-cover`** | 换音色人声 | ✅ 已建（RVC，带合规闸门） |
-| 质检 / 自审(横切) | **`song-review`** | 双模 QA：作品质检（词可唱性/曲演唱试听/音频客观指标/合规）+ 流程自审 | ✅ 已建（机检+人判，不生产只审） |
-| 合约 / 合规留痕(横切) | **`song-craft`** | `_设置/_meta` 字段契约 + `合规/AI使用 说明.md` | ✅ 已建（不生产，只提供共享契约与脚本） |
+| 质检 / 母带检查 / 自审(横切) | **`song-review`** | 作品质检 + `混音/master_check.json` + 流程自审 | ✅ 已建（机检+人判，不生产只审） |
+| 合约 / 合规 / 发布包(横切) | **`song-craft`** | `_设置/_meta` 字段契约 + AI 披露 + `rights_metadata` + `release_pack` | ✅ 已建（不生产，只提供共享契约与脚本） |
+| 发行反馈(可选) | **`song-feedback`** | `发行/feedback_summary.json` + 回测报告 | ✅ 已建（真实播放/完播/收藏/分享/评论回灌） |
 
 | 用户输入 | 路由到 |
 |---|---|
@@ -52,11 +58,13 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 | 已有歌但不满意，要改曲风/重生成/挑新版 | `song-compose`（保留 take manifest，多版登记评分后重选） |
 | 已有歌，要换音色/翻唱 | `song-cover` |
 | 要发布/交平台前补 AI 使用留痕 | `song-craft/scripts/ai_usage.py` |
+| 要正式发行/交付前补权益、split、ISRC/ISWC、发布包 | `song-craft/scripts/rights_metadata.py` + `release_pack.py` |
 | 审歌 / 查词 / 可唱性·出歌·合规体检 / 流程自审 | `song-review`（成品后审，出定位报告） |
+| 已发布或小流量测试后，要导入播放/完播/收藏/分享/评论数据 | `song-feedback` |
 | 给了 `创作区/写歌/<曲名>/` 没说动作 / 问进度或下一步 | `song-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
 | 问 skill 更新是否影响本曲 / 要返工计划 / 重审重评前先看范围 | `song-update`（只写更新影响计划和基线，不改歌词/音频/进度） |
 
-> 推荐顺序：**词 → 歌词体检(song-score) → 作曲任务包 → 多版生成/登记 → 试听挑版 →（可选 翻唱）→ 质检/AI 使用披露**。先云后本地。
+> 推荐顺序：**A&R 简报/参考边界 → 词 → 歌词 prosody/体检(song-score) → 旋律/和声草图 → 作曲任务包 → 多版生成/登记 → 试听挑版(take_review) →（可选 翻唱）→ 作品质检 + 母带检查 → AI 使用披露 + 权益元数据 → 发布交付包 → 真实反馈回灌**。先云后本地。
 
 ## 后端选型（song-compose 唱歌的声音 —— 装什么）
 > **TTS（CosyVoice/FishSpeech）是说话，不能唱歌。** 唱歌走音乐生成模型或歌声转换。

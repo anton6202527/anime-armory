@@ -1,0 +1,44 @@
+{
+  "kind": "mv_candidate_snapshot",
+  "key": "image_backends",
+  "collected_at": "2026-07-08",
+  "description": "MV image generation backends and consistency capabilities",
+  "source_urls": [
+    "https://platform.openai.com/docs",
+    "https://ai.google.dev/",
+    "https://klingai.kuaishou.com/"
+  ],
+  "url_checks": [],
+  "verification_mode": "declared_sources_only",
+  "items": [
+    {
+      "name": "Codex / OpenAI gpt-image",
+      "multi_reference": false,
+      "native_subject": false
+    },
+    {
+      "name": "Seedream Universal Reference",
+      "multi_reference": true,
+      "native_subject": true
+    },
+    {
+      "name": "可灵主体库",
+      "multi_reference": true,
+      "native_subject": true
+    },
+    {
+      "name": "Nano Banana / Gemini",
+      "multi_reference": true,
+      "native_subject": false
+    },
+    {
+      "name": "Sora Cameo",
+      "multi_reference": true,
+      "native_subject": true
+    }
+  ],
+  "notes": [
+    "候选清单只是带日期的能力快照，不是唯一真理。",
+    "正式花钱/不可逆步骤前按所选模型和渠道再次核验官方文档、价格、地区和 API 限制。"
+  ]
+}

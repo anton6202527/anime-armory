@@ -23,6 +23,19 @@ NOTES = [
 ]
 
 
+def parse_component(value):
+    """Parse COMPONENT|MODE|HUMAN_CONTRIBUTION|TOOL_OR_MODEL."""
+    parts = [p.strip() for p in str(value).split("|")]
+    while len(parts) < 4:
+        parts.append("")
+    return {
+        "component": parts[0],
+        "usage_mode": parts[1] or "AI-assisted",
+        "human_contribution": parts[2],
+        "tool_or_model": parts[3],
+    }
+
+
 def main():
     ap = argparse.ArgumentParser(description="写入 song 项目的 AI 音频使用披露元数据")
     ap.add_argument("project_root")
@@ -30,6 +43,12 @@ def main():
     ap.add_argument("--lyrics-mode", default="AI-generated", choices=AI_LYRICS_USAGE_MODES)
     ap.add_argument("--publish-target", default="未定")
     ap.add_argument("--human-contribution", default="")
+    ap.add_argument(
+        "--component",
+        action="append",
+        default=[],
+        help="COMPONENT|MODE|HUMAN_CONTRIBUTION|TOOL_OR_MODEL，例如 lyrics|AI-assisted|人工改词|GPT",
+    )
     args = ap.parse_args()
 
     root = disclosure.resolve_root_or_exit(args.project_root)
@@ -45,6 +64,10 @@ def main():
         "compose_backend": meta.get("song_backend") or meta.get("compose_backend") or "未记录",
         "lyrics_mode": args.lyrics_mode,
         "audio_mode": args.audio_mode,
+        "components": [parse_component(item) for item in args.component] or [
+            {"component": "lyrics", "usage_mode": args.lyrics_mode, "human_contribution": "", "tool_or_model": ""},
+            {"component": "composition_arrangement_vocal", "usage_mode": args.audio_mode, "human_contribution": "", "tool_or_model": payload.get("compose_backend", "")},
+        ],
     })
     field_lines = [
         f"- 歌词使用类型：{payload['lyrics_mode']}",
@@ -54,6 +77,10 @@ def main():
         f"- 词曲权利状态：{payload['rights_status']}",
         f"- 发布平台/用途：{payload['publish_target']}",
     ]
+    if payload["components"]:
+        field_lines.append("- 组件级披露：" + "；".join(
+            f"{item['component']}={item['usage_mode']}" for item in payload["components"]
+        ))
     _, md_path = disclosure.write(
         root, payload,
         md_title=f"AI 使用说明 — {payload['title']}",

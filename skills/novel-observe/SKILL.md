@@ -11,6 +11,7 @@ description: Living-material and field-observation layer for novel projects. Use
 
 - `素材/观察札记.jsonl`：结构化素材条目。
 - `素材/观察素材库.md`：给人读的索引。
+- `写作任务/观察素材_第NN章.md`：按章节筛选出的可注入写章素材包。
 
 ## 何时使用
 
@@ -53,7 +54,14 @@ python3 skills/novel-observe/scripts/observe.py select "<作品根>" \
   --tag 医院 --dramatic-use pressure --limit 5
 ```
 
-把输出粘进写作任务包的“生活观察素材”小节；`draft_packets.py` 暂不自动生成观察，素材选择由 agent/作者按章节需要决定。
+需要稳定落文件时：
+
+```bash
+python3 skills/novel-observe/scripts/observe.py select "<作品根>" \
+  --tag 医院 --dramatic-use pressure --limit 5 --chapter 3 --write-packet
+```
+
+产物写到 `写作任务/观察素材_第03章.md`。`draft_packets.py` 暂不自动生成观察，素材选择由 agent/作者按章节需要决定；落文件后可把该文件作为章节任务包的补充必读材料。
 
 ## 条目标准
 

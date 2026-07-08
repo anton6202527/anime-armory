@@ -1,0 +1,76 @@
+{
+  "kind": "mv_candidate_snapshot",
+  "key": "video_models",
+  "collected_at": "2026-07-08",
+  "description": "MV image-to-video / text-to-video model capability candidates",
+  "source_urls": [
+    "https://ai.google.dev/gemini-api/docs/veo",
+    "https://runwayml.com/research/introducing-runway-gen-4",
+    "https://kling.ai/quickstart/ai-video-start-end-frames",
+    "https://kling.ai/blog/kling-video-3-omni-native-lip-sync-audio-guide",
+    "https://lumalabs.ai/ray3"
+  ],
+  "url_checks": [],
+  "verification_mode": "declared_sources_only",
+  "items": [
+    {
+      "name": "Veo 3.1",
+      "capabilities": [
+        "reference_images",
+        "start_end_frames",
+        "native_audio"
+      ],
+      "notes": "适合电影感关键镜；正式使用前确认地区/API配额/价格。"
+    },
+    {
+      "name": "Runway Gen-4",
+      "capabilities": [
+        "reference_images",
+        "start_end_frames",
+        "character_consistency"
+      ],
+      "notes": "适合单参考角色一致性和质感关键镜。"
+    },
+    {
+      "name": "Kling 3.0",
+      "capabilities": [
+        "reference_images",
+        "start_end_frames",
+        "reference_video_motion",
+        "native_audio",
+        "lip_sync"
+      ],
+      "notes": "适合动作镜、首尾帧控制和演唱口型候选。"
+    },
+    {
+      "name": "Luma Ray3 / Ray3.14",
+      "capabilities": [
+        "reference_images",
+        "keyframes",
+        "start_end_frames",
+        "hdr_export"
+      ],
+      "notes": "适合 keyframe/角色参考/调色链路。"
+    },
+    {
+      "name": "Seedance 2.0",
+      "capabilities": [
+        "reference_images",
+        "start_end_frames",
+        "reference_video_motion"
+      ],
+      "notes": "适合快节奏短视频和批量镜头；以所用渠道官方说明为准。"
+    },
+    {
+      "name": "manual",
+      "capabilities": [
+        "human_registered"
+      ],
+      "notes": "人工/网页/外包登记路径，必须留来源、参数和挑版理由。"
+    }
+  ],
+  "notes": [
+    "候选清单只是带日期的能力快照，不是唯一真理。",
+    "正式花钱/不可逆步骤前按所选模型和渠道再次核验官方文档、价格、地区和 API 限制。"
+  ]
+}

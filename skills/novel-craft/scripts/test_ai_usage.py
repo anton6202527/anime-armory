@@ -26,6 +26,9 @@ class AiUsageTest(unittest.TestCase):
                     "kind": "create",
                     "rights_status": "original",
                 }, f, ensure_ascii=False)
+            os.makedirs(os.path.join(tmp, "章节"), exist_ok=True)
+            with open(os.path.join(tmp, "章节", "第01章.md"), "w", encoding="utf-8") as f:
+                f.write("正文\n")
             subprocess.run(
                 [
                     sys.executable, AI_USAGE, tmp,
@@ -36,6 +39,7 @@ class AiUsageTest(unittest.TestCase):
                     "--human-steering", "人工指定大纲、角色弧和终稿取舍。",
                     "--replaceability", "assistive_non_replaceable",
                     "--direct-incorporation", "substantial_passages",
+                    "--default-chapter-mode", "human_revised_ai_draft",
                     "--review-step", "人工通读",
                     "--review-step", "设定一致性审稿",
                 ],
@@ -52,6 +56,8 @@ class AiUsageTest(unittest.TestCase):
             self.assertEqual(payload["publish_target"], "KDP")
             self.assertEqual(payload["disclosure_detail"]["text_directness"], "outline_to_draft")
             self.assertEqual(payload["disclosure_detail"]["review_steps"], ["人工通读", "设定一致性审稿"])
+            self.assertEqual(payload["chapter_usage"][0]["chapter"], 1)
+            self.assertEqual(payload["chapter_usage"][0]["usage_mode"], "human_revised_ai_draft")
             with open(md_path, encoding="utf-8") as f:
                 md = f.read()
             self.assertIn("AI 使用说明", md)

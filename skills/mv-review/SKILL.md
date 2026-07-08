@@ -1,6 +1,6 @@
 ---
 name: mv-review
-description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对一支 MV 的产物做体检（规划：clip_plan/timeline/jobs 对账；视觉一致性：主角崩脸/场景漂移/画风跳变；卡点节奏：clip 时长对齐 beatgrid downbeats·不等长·副歌密 verse 疏·爽点对鼓点·clip 总时长≈歌长；卡拉OK字幕：占位未精修/时间越界/重叠/行数对账/对齐报告；音画合成：成片时长≈歌长·画幅符 _meta.aspect·有音轨；AI 视觉使用披露；运镜服务节奏），机检+人判，出严重度分级·定位到 Clip/段落/时间码的报告。模式②「流程自审」：联网拉当前 AI MV/音乐视频市场基准，对照 mv 各 skill + references，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Use when asked to MV质检, 审MV, 查崩脸, 卡点对账, 卡拉OK字幕检查, MV成片体检, 验收MV, 流程自审, mv 还能优化啥, mv-review. Triggers MV质检, 审MV, MV审片, 崩脸, 卡点对账, 卡点检查, 卡拉OK检查, 字幕越界, MV成片体检, MV验收, 流程自审, 流程优化, 自我优化, mv-review, QA.
+description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产内容只审）。双模——模式①「作品质检」：对一支 MV 的产物做体检（规划：clip_plan/timeline/jobs 对账；一致性：identity/asset/reference 注册、图生视频继承合约、主角崩脸/场景漂移/画风跳变；卡点节奏：clip 时长对齐 beatgrid downbeats·不等长·副歌密 verse 疏·爽点对鼓点·clip 总时长≈歌长；视频QC：selected clip 时长/画幅/音轨；卡拉OK字幕：占位未精修/时间越界/重叠/行数对账/对齐报告；音画合成：成片时长≈歌长·画幅符 _meta.aspect·有音轨；AI 视觉使用披露；运镜服务节奏），机检+人判，出严重度分级·定位到 Clip/段落/时间码的报告。模式②「流程自审」：联网拉当前 AI MV/音乐视频市场基准，对照 mv 各 skill + references，产出"差距清单 + 该改哪个 skill 哪段"的优化建议。Use when asked to MV质检, 审MV, 查崩脸, 卡点对账, 卡拉OK字幕检查, MV成片体检, 验收MV, 流程自审, mv 还能优化啥, mv-review. Triggers MV质检, 审MV, MV审片, 崩脸, 卡点对账, 卡点检查, 卡拉OK检查, 字幕越界, MV成片体检, MV验收, 流程自审, 流程优化, 自我优化, mv-review, QA.
 ---
 
 # mv-review — 制MV 质检 + 流程自审
@@ -20,9 +20,13 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 
 - **机检（确定性，先跑）**：`scripts/mv_check.py <制MV作品根>` —— 秒级出确定性问题：
   - **卡点**：`节拍/beatgrid.json` 存在/可解析、BPM 合理（半速/倍速嫌疑）、beats/downbeats 单调递增、`歌/song.*` 时长 vs beatgrid.duration 一致。
-  - **规划**：`分镜/clip_plan.json` / `timeline_manifest.json` 存在可解析、clip_id 不重复、timeline 与 plan 对账、timeline selected video 是否存在。
-  - **视频任务**：`出视频/jobs_manifest.json` 存在可解析、已选 take 是否真的落到 `出视频/视频/Clip_XXX.mp4`。
-  - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
+	  - **规划**：`分镜/clip_plan.json` / `timeline_manifest.json` 存在可解析、clip_id 不重复、timeline 与 plan 对账、timeline selected video 是否存在。
+	  - **一致性注册**：`设定/identity_registry.json` / `asset_registry.json` / `分镜/reference_plan.json` / `设定/reference_requirements.json` 存在可解析，参考组与正式参考图覆盖度有快照。
+	  - **传统制片包**：`分镜/animatic_manifest.json`、`制片/shot_list.json`、setup schedule、take log、picture lock/color checklist 是否齐。
+	  - **视频任务**：`出视频/jobs_manifest.json` 存在可解析、已选 take 是否真的落到 `出视频/视频/Clip_XXX.mp4`。
+	  - **图生视频继承 / 视频QC**：`生产数据/video_inherit_contract/inherit_contract.json` 与 `生产数据/video_qc/video_qc.json` 存在可解析，hard block 会阻断，warnings 进入建议级。
+	  - **正式版 readiness**：`生产数据/formal_readiness/formal_readiness.json` 存在时读取状态；demo 项目只作为信息提示，正式项目 blocked/review 会暴露。
+	  - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
   - **卡拉OK字幕**：`字幕/lyrics.lrc` / `karaoke.ass` 解析、占位未精修、时间单调/不重叠、**时间戳越界（超歌长）**、字幕行数对账、`alignment_report.json` warnings。
   - **音画合成**（需 `ffprobe`）：`成片_MV.mp4` 存在、时长 ≈ 歌长、分辨率符 `_meta.aspect`、**有音轨**（MV 没声音=废）。
   - **AI 视觉使用披露**：已有成片时检查 `合规/ai_usage.json` 是否留痕、枚举是否有效。
@@ -37,7 +41,7 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
   - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/图片/镜头*.png` 与 `出图/共享/图片/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
   - **接缝跳切用图判（逐接缝过）**：取相邻 clip 的 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 `分镜/clip_plan.json` + `timeline_manifest.json` 的接缝契约：① 标 `need_end_frame=true`/连续硬切但两帧姿态/站位/视线/光线明显对不上 → 跳切/闪烁；② 标 `need_end_frame=true` 却没出 `_end.png`（mv-image 漏做）→ 接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。**注意 MV 容差更宽**：副歌卡点硬切处的视觉跳变若踩准鼓点、是有意冲击，**不算问题**（卡点切本就允许画面跳）；只标"非卡点切又接不住"的接缝。修法：回 mv-image 补尾帧 / 回 mv-video 用首尾双帧重出该 clip。
   - **运镜与动作服务节奏**：副歌快推/环绕、verse 缓推/跟、bridge 换机位、爽点对 downbeat 同帧砸下；动作家族、动作峰值、转场母题对 `mv-video/references/action_knowledge.md` + `prompt_format.md`。只写“炫酷动作”但没有可执行动作链，标为建议级。
-  - **单曲视觉一致性**：审 `mv-image/references/visual_consistency.md` 的身份锚点、主色、段落 look、母题、`reference_inputs` 是否贯穿；若 `_设置.md` 启用了指定参考图、后端主体库或 `+LoRA`，prompt 必须登记路径/主体 ID/LoRA trigger+底模+授权说明。MV 不要求跨集状态，但一支歌内不能换脸换主画风。
+	  - **单曲视觉一致性**：审 `mv-image/references/visual_consistency.md` 的身份锚点、主色、段落 look、母题、`reference_inputs` 是否贯穿；优先看 `identity_registry.json` / `asset_registry.json` / `reference_plan.json` 是否与 prompt 和视频任务一致。若 `_设置.md` 启用了指定参考图、后端主体库或 `+LoRA`，prompt 必须登记路径/主体 ID/LoRA trigger+底模+授权说明。MV 不要求跨集状态，但一支歌内不能换脸换主画风。
   - **卡点体感**：机检给"clip 是否对齐 downbeat"的客观判断，**踩得爽不爽**由人判（看成片副歌切点是否砸在鼓点）。
 
 ## 工作流（模式①）

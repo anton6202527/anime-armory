@@ -16,6 +16,7 @@ import sys
 CREATION_ROOT_DIR = "创作区"
 LINE_DIR = "拍广告"
 DONE = "done"
+BLOCK = "block"
 PARTIAL = "partial"
 TODO = "todo"
 
@@ -87,6 +88,14 @@ def read_text(path: str) -> str:
         return fh.read()
 
 
+def load_json(path: str, default=None):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        return default
+
+
 def parse_stage_rows(progress_md, text: str) -> list[dict[str, str]]:
     return progress_md.parse_stage_rows(
         text,
@@ -98,13 +107,14 @@ def parse_stage_rows(progress_md, text: str) -> list[dict[str, str]]:
 
 
 def parse_deliverables(progress_md, text: str) -> list[dict[str, str]]:
-    return progress_md.parse_stage_rows(
+    rows = progress_md.parse_stage_rows(
         text,
         section_keywords=("交付版本矩阵",),
         min_cols=7,
         label_col=0,
         status_col=5,
     )
+    return [row for row in rows if row.get("label") not in ("交付件", "---")]
 
 
 def state_of(status: str) -> str:
@@ -120,13 +130,15 @@ def state_of(status: str) -> str:
             return DONE
         if current > 0:
             return PARTIAL
-    if "🔴" in raw or "⏳" in raw or "rough" in low or "block" in low or raw not in ("", "⬜", "[ ]"):
+    if "🔴" in raw or "block" in low:
+        return BLOCK
+    if "⏳" in raw or "rough" in low or raw not in ("", "⬜", "[ ]"):
         return PARTIAL
     return TODO
 
 
 def marker(state: str) -> str:
-    return {DONE: "✅", PARTIAL: "⏳", TODO: "⬜"}.get(state, "⬜")
+    return {DONE: "✅", BLOCK: "🔴", PARTIAL: "⏳", TODO: "⬜"}.get(state, "⬜")
 
 
 def brief_hint(contract, root: str) -> str:
@@ -151,6 +163,87 @@ def brief_hint(contract, root: str) -> str:
             + "，不阻塞创意/脚本，但进出图/出视频/合成 gate 前必须补齐"
         )
     return ""
+
+
+def _summary_counts(report: dict) -> tuple[int, int]:
+    summary = report.get("summary") if isinstance(report, dict) else {}
+    if not isinstance(summary, dict):
+        return 0, 0
+    try:
+        return int(summary.get("block") or summary.get("approval_blocks") or 0), int(summary.get("warn") or 0)
+    except (TypeError, ValueError):
+        return 0, 0
+
+
+def production_control_hints(root: str) -> list[str]:
+    """横切产物摘要：producer_pack/ad_score/product_qc/video_qc。只读，不要求全存在。"""
+    hints: list[str] = []
+    storyboard_exists = os.path.isfile(os.path.join(root, "脚本", "storyboard.json"))
+    image_exists = has_media(os.path.join(root, "出图", "分镜"), (".png", ".jpg", ".jpeg", ".webp"))
+    video_exists = has_media(os.path.join(root, "出视频", "分镜", "视频"), (".mp4", ".mov", ".m4v"))
+
+    producer = load_json(os.path.join(root, "生产数据", "producer_pack.json"))
+    if producer:
+        summary = producer.get("summary") or {}
+        hints.append(
+            "producer_pack: "
+            f"shots={summary.get('shots', 0)} "
+            f"approval_blocks={summary.get('approval_blocks', 0)} "
+            f"asset_blocks={summary.get('asset_blocks', 0)}"
+        )
+    elif storyboard_exists:
+        hints.append("producer_pack: 未生成；出图前建议先跑 ad-craft producer_pack 做制片前控")
+
+    score = load_json(os.path.join(root, "评分", "ad_score.json"))
+    if score:
+        hints.append(
+            "ad_score: "
+            f"total={score.get('total_score')} tier={score.get('tier')} "
+            f"first3={((score.get('dims') or {}).get('first_3s_brand_product', '-'))}"
+        )
+    elif storyboard_exists:
+        hints.append("ad_score: 未生成；出图前建议先跑 ad-score 评前三秒/品牌/CTA")
+
+    image_plan = load_json(os.path.join(root, "出图", "分镜", "image_jobs_manifest.json"))
+    if image_plan:
+        summary = image_plan.get("summary") or {}
+        jobs = image_plan.get("jobs") if isinstance(image_plan.get("jobs"), list) else []
+        done = 0
+        for job in jobs:
+            if not isinstance(job, dict):
+                continue
+            rel = str(job.get("expected_output") or "")
+            if rel and os.path.isfile(os.path.join(root, rel)):
+                done += 1
+        hints.append(
+            "image_jobs: "
+            f"planned={summary.get('planned', len(jobs))} "
+            f"first={summary.get('first_frames', '-')} "
+            f"end={summary.get('end_frames', '-')} "
+            f"png_done={done}/{len(jobs)}"
+        )
+
+    product_qc = load_json(os.path.join(root, "出图", "分镜", "product_qc.json"))
+    if product_qc:
+        block, warn = _summary_counts(product_qc)
+        hints.append(f"product_qc: block={block} warn={warn}")
+    elif image_exists:
+        hints.append("product_qc: 已有出图但缺报告；出视频前先跑 ad-image product_qc")
+
+    video_qc = load_json(os.path.join(root, "出视频", "分镜", "video_qc.json"))
+    if video_qc:
+        block, warn = _summary_counts(video_qc)
+        hints.append(f"video_qc: block={block} warn={warn}")
+    elif video_exists:
+        hints.append("video_qc: 已有视频 clip 但缺报告；合成前先跑 ad-video video_qc")
+
+    return hints
+
+
+def has_media(folder: str, suffixes: tuple[str, ...]) -> bool:
+    if not os.path.isdir(folder):
+        return False
+    return any(name.lower().endswith(suffixes) for name in os.listdir(folder))
 
 
 def report(contract, progress_md, root: str, rel: str, limit: int) -> str:
@@ -188,6 +281,7 @@ def report(contract, progress_md, root: str, rel: str, limit: int) -> str:
     hint = brief_hint(contract, root)
     if hint:
         out.append(hint)
+    out.extend(production_control_hints(root))
 
     frontier_index = next((i for i, (_, state) in enumerate(states) if state != DONE), None)
     if frontier_index is None:

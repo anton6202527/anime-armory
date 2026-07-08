@@ -24,7 +24,7 @@
 | 把小说做成 AI 漫剧/短剧（分镜/配音/出图/出视频/合成） | **`n2d`**（分诊到 n2d-script/voice/image/video/compose） |
 | 用 agent 方式总控 n2d、自动跑前置、生成 context pack/creative loop、派发少量专家 | **`n2d-supervisor`**（消费 `n2d/run.py next --json`；不替代 n2d 状态机/gate/skill） |
 | 画漫画、条漫/页漫、写分格脚本、页面排版、漫画出图、嵌字和长图导出 | **`comic`**（分诊到 comic-script/layout/image/compose/review） |
-| 写歌、改词、作曲、多版挑版、翻唱/换声、审歌 | **`song`**（分诊到 song-lyrics/compose/cover/review 等） |
+| 写歌、改词、作曲、多版挑版、翻唱/换声、审歌、发布交付和真实反馈回灌 | **`song`**（分诊到 song-craft/lyrics/compose/cover/review/feedback 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |
 | 检查各系列 skill 更新是否影响项目、生成最小返工/重审/重评计划 | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`**（按作品线选择；内容快照比对 + 最小返工/重制计划；只写计划/基线，不改正文、媒体或 `_进度.md`） |

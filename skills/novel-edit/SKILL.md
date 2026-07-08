@@ -11,6 +11,12 @@ description: Professional editing workflow for completed or in-progress novel dr
 
 - `修订/edit_plan.json`
 - `修订/编辑计划.md`
+- `修订/editorial_letter.md`：主编信，先裁决方向、结构、人物弧和读者承诺。
+- `修订/style_sheet.md`：术语、称谓、格式、设定和 AI/平台口径一致性表。
+- `修订/proof_checklist.md`：投稿/导出前终校清单。
+- `修订/edit_task_closure.jsonl`：P0/P1 编辑任务关闭记录。
+- `修订/editor_queries.jsonl`：编辑/作者问答记录；未回答 query 会阻断专业编辑阶段进入发布。
+- `修订/style_sheet_check.json` / `.md`：术语、称谓、格式、章节口径终校准备度检查。
 - 可选：`修订/第NN章_line_edit_packet.md`
 
 ## 四层编辑
@@ -40,9 +46,31 @@ python3 skills/novel-edit/scripts/edit_plan.py "<作品根>" --line-packet 4
 ```
 
 `第NN章_line_edit_packet.md` 会汇总本章编辑任务、scene cards、人物内驱字段、`novel-observe` 观察素材和 `novel-aesthetic` 正向审美样本。改稿时在包内记录 before/after 与改动理由，避免“润色了一遍但不知道提升了什么”。
+同一次运行也会写 `editorial_letter.md`、`style_sheet.md` 和 `proof_checklist.md`，把专业编辑的三类交付物落盘，避免只有任务 JSON 没有人类可执行的主编意见、统一表和终校表。
 
-6. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。
-7. 结构改完回跑 `novel-review` / `novel-score`；行文改完回跑 `mechanical_check.py`、文风漂移检查和必要的读者反馈复测；终稿前再跑 export gate。
+6. 按 `修订/编辑计划.md` 从上到下处理。结构级任务先于行文级任务；结构没定稿前不要花大量精力润句子。每处理完一条 P0/P1，关闭任务并留 before/after 或接受风险原因：
+
+```bash
+python3 skills/novel-edit/scripts/edit_plan.py "<作品根>" \
+  --close-task EDIT-001 --status fixed --actor "<编辑/作者>" --note "<改法与回测>"
+```
+
+需要作者裁决的问题不要停在聊天里，登记为 editor query；回答后再关闭。未回答 query 会被 `author_workflow.py` 和 pipeline edit gate 当作阻断：
+
+```bash
+python3 skills/novel-edit/scripts/edit_plan.py "<作品根>" \
+  --query-task EDIT-001 --query "结局是否允许主角牺牲师门名誉换取真相公开？" --query-severity P0 --asker "主编"
+python3 skills/novel-edit/scripts/edit_plan.py "<作品根>" \
+  --answer-query QUERY-001 --answer "允许，但必须保留主角承担后果的尾声。" --query-status answered
+```
+
+7. 终校前跑 style sheet 检查：
+
+```bash
+python3 skills/novel-edit/scripts/style_sheet_check.py "<作品根>" --write
+```
+
+8. 结构改完回跑 `novel-review` / `novel-score`；行文改完回跑 `mechanical_check.py`、文风漂移检查和必要的读者反馈复测；终稿前再跑 export gate。
 
 ## 人类主创模式
 

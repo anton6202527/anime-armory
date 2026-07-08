@@ -66,6 +66,7 @@ class AdContractTest(unittest.TestCase):
         self.assertEqual(contract.classify_image_backend("Codex"), ("codex", "approved"))
         self.assertEqual(contract.classify_image_backend("Seedream"), ("seedream", "approved"))
         self.assertEqual(contract.classify_image_backend("可灵主体库"), ("kling", "approved"))
+        self.assertEqual(contract.classify_image_backend("Dreamina/即梦官方 CLI"), ("dreamina_official", "approved"))
         self.assertEqual(contract.classify_image_backend("即梦")[1], "forbidden")
         self.assertEqual(contract.classify_image_backend("某小众生图器")[1], "unknown")
         self.assertEqual(contract.DEFAULT_SETTINGS["生图AI"], "Codex")

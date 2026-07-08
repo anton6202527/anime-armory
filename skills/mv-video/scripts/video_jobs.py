@@ -78,10 +78,21 @@ def normalize_take_id(value):
 
 def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", quality_tier=None, motion_reference=None):
     c = clip.get("continuity", {})
+    shot = clip.get("shot_design") or {}
+    ident = clip.get("identity_contract") or {}
+    reference_inputs = clip.get("reference_inputs") or []
     if quality_tier is None:
         quality_tier = motion_axes.quality_tier_for_clip(clip, backend)
     if motion_reference is None:
         motion_reference = motion_axes.motion_reference_plan(clip, backend)
+    try:
+        model_profile = contract.video_model_profile(video_model)
+    except KeyError:
+        model_profile = {}
+    try:
+        channel_profile = contract.video_channel_profile(backend)
+    except KeyError:
+        channel_profile = {}
     lines = [
         f"# {clip['clip_id']} {take_id} 视频生成任务",
         "",
@@ -92,12 +103,25 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", qualit
         f"- 质量档：{spec_profile['quality']}",
         f"- 本镜质量档意图(quality_tier)：{quality_tier}  # high→后端 pro/高质量档，fast→量产省档，n/a→该后端无档（不改后端，仅意图）",
         f"- 运动参考(motion_reference)：{'适用·' + motion_reference.get('note', '') if motion_reference.get('applicable') else '不适用（非舞蹈/环绕镜或后端不支持视频参考）'}",
+        f"- 模型能力：reference_images={model_profile.get('reference_images')} start_end_frames={model_profile.get('start_end_frames')} native_audio={model_profile.get('native_audio')}",
+        f"- 渠道类型：{channel_profile.get('type', 'unknown')}；官方API={channel_profile.get('official_api', False)}",
         f"- 首帧：`{clip.get('image_path')}`",
+        f"- 尾帧：`{clip.get('end_frame_path')}`" if clip.get("need_end_frame") else "- 尾帧：不使用",
         f"- 时长：{clip.get('duration')}s",
         f"- 转场：{clip.get('transition')}",
         f"- 动作家族：{clip.get('action_family', '')}",
         f"- 动作峰值：{clip.get('action_peak', clip.get('end'))}s",
         f"- 转场母题：{clip.get('transition_motif', '')}",
+        f"- 景别：{shot.get('shot_size', '')}",
+        f"- 运镜：{shot.get('camera_movement', '')}",
+        f"- 光影：{shot.get('lighting', '')}",
+        f"- 参考输入：{', '.join(str(x.get('path') or x.get('asset_id')) for x in reference_inputs)}",
+        "",
+        "## inherited_contract",
+        f"- lead_id：{ident.get('lead_id', '')}",
+        f"- lead_identity_anchor：{ident.get('lead_identity_anchor', '')}",
+        f"- reference_group：{ident.get('reference_group', '')}",
+        f"- forbidden_drift：{', '.join(ident.get('forbidden_drift') or [])}",
         "",
         "## continuity",
         f"- start_state：{c.get('start_state', '')}",
@@ -107,7 +131,7 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", qualit
         f"- negative：{c.get('negative', '')}",
         "",
         "## Prompt",
-        f"人物运动：{c.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：服务 {clip.get('section')} 段落张力；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声。",
+        f"人物运动：{c.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：{shot.get('camera_movement') or '服务 ' + str(clip.get('section')) + ' 段落张力'}；光影继承：{shot.get('lighting', '')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定脸、服装、长剑、场景 setup、光色基调；声音约束：无对白、无旁白、不要生成原生人声。",
     ]
     return "\n".join(lines) + "\n"
 
@@ -128,7 +152,11 @@ def create_jobs(root, args):
     spec = args.video_spec or settings.get("出视频规格") or "预算一般"
     if backend not in contract.MV_VIDEO_CHANNELS:
         raise SystemExit(f"[err] 不支持的生视频渠道：{backend}")
+    if video_model not in contract.MV_VIDEO_MODELS:
+        raise SystemExit(f"[err] 不支持的生视频模型：{video_model}")
     profile = contract.video_spec_profile(spec)
+    model_profile = contract.video_model_profile(video_model)
+    channel_profile = contract.video_channel_profile(backend)
     jobs = []
     for clip in plan.get("clips", []):
         image_path = clip.get("image_path")
@@ -164,9 +192,20 @@ def create_jobs(root, args):
             "duration": clip["duration"],
             "beat_role": clip.get("beat_role", "normal"),
             "backend": backend,
+            "video_model": video_model,
             "video_spec": spec,
+            "model_profile": model_profile,
+            "channel_profile": channel_profile,
             "quality_tier": quality_tier,
             "motion_reference": motion_reference,
+            "reference_inputs": clip.get("reference_inputs") or [],
+            "inherited_contract": {
+                "image_path": clip.get("image_path"),
+                "end_frame_path": clip.get("end_frame_path") if clip.get("need_end_frame") else "",
+                "identity_contract": clip.get("identity_contract") or {},
+                "shot_design": clip.get("shot_design") or {},
+                "continuity": clip.get("continuity") or {},
+            },
             "requested_takes": requested,
             "selected_take": None,
             "selected_video_path": clip.get("selected_video_path") or os.path.join("出视频", "视频", f"{clip['clip_id']}.mp4"),
@@ -183,6 +222,8 @@ def create_jobs(root, args):
         "backend": backend,
         "video_spec": spec,
         "spec_profile": profile,
+        "model_profile": model_profile,
+        "channel_profile": channel_profile,
         "clip_plan_path": "分镜/clip_plan.json",
         "jobs": jobs,
     }

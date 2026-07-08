@@ -20,6 +20,8 @@ description: Shared machine contracts and deterministic helpers for the ad-* (�
 | 主题 | 参考 / 脚本 | 何时用 |
 |---|---|---|
 | 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md`/`_进度.md`/`_meta.json`、派生 cutdown 交付件、查阶段表/选择点/交付规格时；含 **brief 必填分层** `brief_check()`（必问最小集 brand/product/usp/audience；claims/rights/legal_lines 可标「待补」延后到花钱 gate 前） |
+| 制片前控包 | `scripts/producer_pack.py` | 传统广告 pre-production/PPM 的机器版：汇总 brief/concept/storyboard/settings，产 `生产数据/producer_pack.json/md`，列 shot list、rights/claims/legal、交付矩阵、`PROD_*`/`BRAND_*` 资产绑定缺口和审批阻断项 |
+| 平台交付包 | `scripts/platform_pack.py` | 把目标平台 + deliverables 落成 `生产数据/platform_pack.json`：抖音/小红书/TikTok 的 9:16、最低分辨率、安全区、cutdown 交付矩阵和人工复核提示 |
 | 只读进度 | `scripts/progress.py` | 查项目当前前沿 + 下一步该跑哪个 ad-* skill（公共 `progress` 分发路由到此，与 novel/song/mv 各 craft 同构） |
 | 状态回写 | `scripts/progress_set.py` | 阶段完成后回写 `_进度.md` 阶段进度；交付件存在后回写交付版本矩阵状态/路径 |
 | 花钱 gate | `scripts/gate.py` | image/video/compose 正式生产入口统一阻断：brief 合规项、广告法报告、分镜时长、占位 VO、上游产物 |
@@ -33,6 +35,12 @@ cd skills/ad-craft/scripts && python3 -c "import contract; print(contract.progre
 
 # 只读进度：当前前沿 + 下一步建议（公共 progress 分发也走这里）
 python3 skills/ad-craft/scripts/progress.py "<拍广告作品根>"
+
+# 制片前控包：出图前/客户审片前建议跑，先把审批与资产缺口摊开
+python3 skills/ad-craft/scripts/producer_pack.py "<拍广告作品根>"
+
+# 平台交付包：出视频/合成前把平台安全区和 cutdown 矩阵落档
+python3 skills/ad-craft/scripts/platform_pack.py "<拍广告作品根>"
 
 # 花钱/不可逆阶段 gate
 python3 skills/ad-craft/scripts/gate.py "<拍广告作品根>" --stage image
@@ -61,7 +69,7 @@ python3 skills/ad-craft/scripts/ai_usage.py "<拍广告作品根>" \
 ## 测试
 
 ```bash
-cd skills/ad-craft/scripts && python -m pytest test_contract.py test_progress_set_gate.py
+cd skills/ad-craft/scripts && python -m pytest test_contract.py test_progress_set_gate.py test_producer_pack.py test_platform_pack.py
 ```
 
 ## 常见错误

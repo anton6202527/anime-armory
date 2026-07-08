@@ -3,7 +3,7 @@
 """拍广告 VO 配音：voiceover.txt → 逐句音频 + 整轨 vo.wav + 时长清单.json（实测时长驱动镜头）。
 
 多后端可插拔；本脚本内置 **macOS say 占位** 与 **estimate 静音占位**（无凭证时也能把时长跑出来）。
-真后端（CosyVoice / MiniMax / 火山 / 克隆）由各自 CLI 产 wav 后用 --from-dir 登记。
+真后端（CosyVoice / MiniMax / 火山 / 克隆）必须先由各自 CLI/API 产 wav，再用 --from-dir 登记。
 
 克隆真人嗓 = 合规硬闸门：需 VOICE_CLONE_AUTHORIZED=1，否则拒做（2026 opt-in）。
 
@@ -124,6 +124,54 @@ def est_seconds(text):
     return max(0.6, len(text.strip()) / CN_CHARS_PER_SEC)
 
 
+def is_placeholder_backend(backend):
+    """True when this script is allowed to synthesize placeholder audio itself."""
+    return norm_backend(backend) in PLACEHOLDER_BACKENDS
+
+
+def external_line_wavs(from_dir, count):
+    """Collect line_01.wav..line_NN.wav from an external real-VO render directory.
+
+    The sequence must be complete and ffprobe-readable before registration; otherwise
+    real VO timing would silently fall back to estimates, which is exactly what this
+    stage is meant to avoid.
+    """
+    src_dir = os.path.abspath(from_dir)
+    if not os.path.isdir(src_dir):
+        raise ValueError(f"--from-dir 不存在或不是目录: {src_dir}")
+    wavs = []
+    for idx in range(1, count + 1):
+        path = os.path.join(src_dir, f"line_{idx:02d}.wav")
+        if not os.path.isfile(path):
+            raise ValueError(f"--from-dir 缺逐句音频: {path}")
+        dur = probe_duration(path)
+        if dur is None or dur <= 0.05:
+            raise ValueError(f"--from-dir 音频无法读取有效时长: {path}")
+        wavs.append((path, dur))
+    return wavs
+
+
+def stitch_track(wavs, vo_wav, gap):
+    """Stitch line wavs into vo.wav with a fixed gap. Return True on success."""
+    if not (shutil.which("ffmpeg") and wavs):
+        return False
+    out_dir = os.path.dirname(os.path.abspath(vo_wav))
+    concat_list = os.path.join(out_dir, "_concat.txt")
+    silence = os.path.join(out_dir, "_gap.wav")
+    if not synth_silence(silence, gap):
+        return False
+    with open(concat_list, "w", encoding="utf-8") as f:
+        for i, w in enumerate(wavs):
+            f.write(f"file '{w}'\n")
+            if i < len(wavs) - 1:
+                f.write(f"file '{silence}'\n")
+    ok = run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", vo_wav]).returncode == 0
+    for tmp in (concat_list, silence):
+        if os.path.exists(tmp):
+            os.remove(tmp)
+    return ok
+
+
 def main():
     ap = argparse.ArgumentParser(description="拍广告 VO 配音 + 时长清单")
     ap.add_argument("project_root")
@@ -134,6 +182,7 @@ def main():
     ap.add_argument("--clone", action="store_true", help="显式克隆开关——触发授权闸门")
     ap.add_argument("--ref-prefix", help="参考音 env 前缀（默认=归一后端名大写，如 COSYVOICE_REF_*）")
     ap.add_argument("--voice-id", help="指定代言人/名人 voice_id（仿真人音色）——触发授权闸门")
+    ap.add_argument("--from-dir", help="登记外部真后端已生成的 line_01.wav..line_NN.wav；真后端必填")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -142,7 +191,8 @@ def main():
         print(f"[err] 缺 {vo_txt}（先跑 ad-script 脚本 pass）", file=sys.stderr)
         sys.exit(2)
 
-    backend = args.backend.strip().lower()
+    backend = args.backend.strip()
+    backend_norm = norm_backend(backend)
     # 克隆/仿真人音色授权硬闸门：按"实际是否在克隆"判定，不按后端名固定集合（详见 clone_authorization_check）。
     clone_reasons = clone_authorization_check(backend, args)
     if clone_reasons and os.environ.get("VOICE_CLONE_AUTHORIZED") != "1":
@@ -164,18 +214,39 @@ def main():
     with open(vo_txt, encoding="utf-8") as f:
         lines = vm.parse_voiceover(f.read())
 
-    real_backend = backend not in ("say", "estimate")
+    real_backend = not is_placeholder_backend(backend)
+    external_wavs = []
+    if real_backend:
+        if not args.from_dir:
+            print("[block] 真 VO 后端不能静默降级为占位。"
+                  f"当前后端={backend}，但 ad-voice 尚未内置该后端的直接合成器；"
+                  "请先用对应 CLI/API 生成逐句 line_01.wav..line_NN.wav，"
+                  "再用 --from-dir 登记，或临时改用 --backend say/estimate 只做 rough preview。",
+                  file=sys.stderr)
+            sys.exit(4)
+        try:
+            external_wavs = external_line_wavs(args.from_dir, len(lines))
+        except ValueError as exc:
+            print(f"[block] {exc}", file=sys.stderr)
+            sys.exit(5)
+
     entries, wavs, cursor = [], [], 0.0
     for idx, (role, text) in enumerate(lines, 1):
         line_wav = os.path.join(out_dir, f"line_{idx:02d}.wav")
-        placeholder = backend in ("say", "estimate")
+        placeholder = not real_backend
         ok = False
-        if backend == "say":
+        dur = None
+        if real_backend:
+            src, dur = external_wavs[idx - 1]
+            if os.path.abspath(src) != os.path.abspath(line_wav):
+                shutil.copyfile(src, line_wav)
+            ok = True
+        elif backend_norm == "say":
             ok = synth_say(text, line_wav, args.placeholder_voice)
-        if not ok:  # estimate 后端 / say 降级
+        if not ok and not real_backend:  # estimate 后端 / say 降级
             placeholder = True
             ok = synth_silence(line_wav, est_seconds(text))
-        dur = probe_duration(line_wav) or est_seconds(text)
+        dur = dur if dur is not None else (probe_duration(line_wav) or est_seconds(text))
         start, end = cursor, cursor + dur
         entries.append(vm.manifest_entry(
             idx, role, text, dur, start, end, args.gap, os.path.basename(line_wav),
@@ -185,23 +256,16 @@ def main():
 
     # 拼整轨 vo.wav（句间补静音 gap）
     vo_wav = os.path.join(out_dir, "vo.wav")
-    if shutil.which("ffmpeg") and wavs:
-        concat_list = os.path.join(out_dir, "_concat.txt")
-        silence = os.path.join(out_dir, "_gap.wav")
-        synth_silence(silence, args.gap)
-        with open(concat_list, "w", encoding="utf-8") as f:
-            for i, w in enumerate(wavs):
-                f.write(f"file '{w}'\n")
-                if i < len(wavs) - 1:
-                    f.write(f"file '{silence}'\n")
-        run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", vo_wav])
-        for tmp in (concat_list, silence):
-            if os.path.exists(tmp):
-                os.remove(tmp)
+    if not stitch_track(wavs, vo_wav, args.gap) and real_backend:
+        print("[block] 真 VO 逐句音频已登记，但 vo.wav 整轨拼接失败；请检查 ffmpeg/源 wav 后重跑。",
+              file=sys.stderr)
+        sys.exit(6)
 
     manifest = {"schema_version": 1, "kind": "ad_voice_manifest",
-                "backend": backend, "total_seconds": round(cursor, 3),
+                "backend": backend.lower(), "total_seconds": round(cursor, 3),
                 "has_placeholder": any(e.get("占位") for e in entries), "lines": entries}
+    if args.from_dir:
+        manifest["source"] = {"type": "external_line_wavs", "from_dir": os.path.abspath(args.from_dir)}
     with open(os.path.join(out_dir, "时长清单.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
 

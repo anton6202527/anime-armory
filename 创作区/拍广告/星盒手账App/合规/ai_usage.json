@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "kind": "ad_ai_usage",
+  "generated_at": "2026-07-08",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/拍广告/星盒手账App",
+  "title": "星盒手账App首发短片",
+  "publish_target": "中国大陆/跨平台信息流样片",
+  "human_contribution": "AI 辅助生成创意、脚本、分镜、定妆 prompt 与合成音色 VO；人工进行合规筛查、时长重分配、gate 复核与产物选择。",
+  "brand": "星盒",
+  "visual_mode": "AI-generated",
+  "video_mode": "AI-generated",
+  "image_backend": "Codex",
+  "video_model": "Seedance 2.0",
+  "video_channel": "即梦/Dreamina",
+  "video_backend": "即梦/Dreamina",
+  "voice_status": "EdgeTTS 非克隆合成音色 zh-CN-XiaoxiaoNeural；未使用真人参考音；正式投放前需确认服务/平台授权",
+  "music_status": "占位，正式合成前需替换授权音乐或原创音乐",
+  "talent_status": "未使用真人代言/真人参考音",
+  "asset_status": "demo 品牌/产品资产为虚构占位，正式投放前替换广告主授权素材",
+  "adlaw_region": "中国大陆"
+}

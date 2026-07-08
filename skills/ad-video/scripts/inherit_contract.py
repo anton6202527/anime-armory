@@ -47,7 +47,7 @@ _FIELD_ALIASES = {
 }
 
 # 产品资产 id（逐镜绑定，出图/视频两侧文本里出现）。
-PROD_ID_RE = re.compile(r"PROD_[A-Za-z0-9]+")
+PROD_ID_RE = re.compile(r"PROD_[A-Za-z0-9_]+")
 # 产品身份锁定句标记（视频侧可以写 PROD_xx，也可以写下面的锁定语句任一个）。
 PRODUCT_LOCK_MARKERS = (
     "身份锁定", "资产引用", "同一包装", "同一款包装", "同一 logo", "同一logo",
@@ -179,7 +179,8 @@ def _extract_section(text, title=CONTRACT_SECTION_TITLE):
     start = level = None
     for i, ln in enumerate(lines):
         m = _HEAD_RE.match(ln)
-        if m and title in ln:
+        heading = ln[len(m.group(1)):].strip() if m else ""
+        if m and _norm(heading) == _norm(title):
             start, level = i + 1, len(m.group(1))
             break
     if start is None:
@@ -211,7 +212,15 @@ def parse_overview_contract(overview_text):
             canon = _ALIAS_LOOKUP.get(_norm(re.sub(r"\*+", "", label)))
             if canon:
                 current = canon
-                fields.setdefault(canon, value.strip())
+                label_norm = _norm(re.sub(r"\*+", "", label))
+                old = fields.get(canon, "")
+                new = value.strip()
+                if (
+                    not old
+                    or (canon == "品牌色" and label_norm == _norm("品牌色"))
+                    or (canon == "品牌色" and _hex_tokens(new) and not _hex_tokens(old))
+                ):
+                    fields[canon] = new
             else:
                 current = None
         elif current and ln.strip():

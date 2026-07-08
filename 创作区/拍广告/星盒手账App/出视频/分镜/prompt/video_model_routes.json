@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "kind": "ad_video_model_routes",
+  "default_backend": "dreamina",
+  "asset_registry_path": "/Users/wesley/learn/anime-armory/创作区/拍广告/星盒手账App/设定库/asset_registry.json",
+  "platforms": [
+    "抖音",
+    "小红书"
+  ],
+  "platform_specs": {
+    "抖音": {
+      "aspect": "9:16",
+      "min_resolution": "720x1280",
+      "safe_area": "center_6x6",
+      "notes": [
+        "字幕、CTA、Logo 避开右侧互动栏和底部标题区",
+        "主文案建议前 3 秒出现产品/品牌"
+      ]
+    },
+    "小红书": {
+      "aspect": "9:16",
+      "min_resolution": "720x1280",
+      "safe_area": "center_6x6",
+      "notes": [
+        "封面/首帧要能独立说明卖点",
+        "标题区和底部交互区避免放关键法律声明"
+      ]
+    }
+  },
+  "routes": [
+    {
+      "clip": "镜头01",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 3.8,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_01",
+        "members": [
+          "镜头01",
+          "镜头02"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    },
+    {
+      "clip": "镜头02",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 4.8,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_01",
+        "members": [
+          "镜头01",
+          "镜头02"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    },
+    {
+      "clip": "镜头03",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 6.7,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_02",
+        "members": [
+          "镜头03",
+          "镜头04"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    },
+    {
+      "clip": "镜头04",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 5.8,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_02",
+        "members": [
+          "镜头03",
+          "镜头04"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    },
+    {
+      "clip": "镜头05",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 5.9,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_03",
+        "members": [
+          "镜头05",
+          "镜头06"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    },
+    {
+      "clip": "镜头06",
+      "shot_type": "product_hero",
+      "capability": "subject_consistency",
+      "primary": "seedance",
+      "fallback": [
+        "kling",
+        "dreamina"
+      ],
+      "max_clip_seconds": 15.0,
+      "duration": 3.0,
+      "quality_tier": "high",
+      "motion_reference": {
+        "applicable": true,
+        "use": "prior_approved_clip_as_video_reference",
+        "note": "Seedance 支持视频片段参考：把同段前一条已通过 clip 作运动/风格参考喂进去，锁运镜节奏（产品环绕/demo 连续动作连贯）。"
+      },
+      "reason": "产品/包装/logo 不能抖花——路由主体一致性最强后端，首尾双帧锁形态。",
+      "prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "registered_prod_assets": [
+        "PROD_STARBOX_APP"
+      ],
+      "registered_brand_assets": [
+        "BRAND_STARBOX"
+      ],
+      "findings": [],
+      "multishot_candidate": {
+        "group_id": "MSG_03",
+        "members": [
+          "镜头05",
+          "镜头06"
+        ],
+        "note": "连续同型镜可一次出多镜消缝（advisory，不合并、逐镜仍可独立重跑）。"
+      }
+    }
+  ],
+  "summary": {
+    "block": 0,
+    "warn": 0,
+    "multishot_groups": [
+      {
+        "group_id": "MSG_01",
+        "members": [
+          "镜头01",
+          "镜头02"
+        ],
+        "backend": "seedance",
+        "approx_seconds": 8.6
+      },
+      {
+        "group_id": "MSG_02",
+        "members": [
+          "镜头03",
+          "镜头04"
+        ],
+        "backend": "seedance",
+        "approx_seconds": 12.5
+      },
+      {
+        "group_id": "MSG_03",
+        "members": [
+          "镜头05",
+          "镜头06"
+        ],
+        "backend": "seedance",
+        "approx_seconds": 8.9
+      }
+    ]
+  }
+}

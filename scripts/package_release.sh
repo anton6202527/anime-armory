@@ -7,6 +7,7 @@ PACKAGE="anime-armory-starter-${VERSION}"
 DIST="${ROOT}/dist"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/anime-armory-package.XXXXXX")"
 PKG="${WORK}/${PACKAGE}"
+CREATIVE_LINES=("制漫剧" "画漫画" "写小说" "写歌" "制MV" "拍广告")
 
 trap 'rm -rf "$WORK"' EXIT
 
@@ -38,6 +39,23 @@ copy_dir() {
   fi
 }
 
+copy_creation_manuals() {
+  local rel
+  local manuals=("创作区/使用手册.md")
+  local dir
+  for dir in "${CREATIVE_LINES[@]}"; do
+    manuals+=("创作区/${dir}/使用手册.md")
+  done
+  for rel in "${manuals[@]}"; do
+    if [ ! -f "${ROOT}/${rel}" ]; then
+      echo "Missing creation manual: ${rel}" >&2
+      exit 1
+    fi
+    mkdir -p "${PKG}/$(dirname "$rel")"
+    cp -p "${ROOT}/${rel}" "${PKG}/${rel}"
+  done
+}
+
 mkdir -p "$DIST" "$PKG"
 
 copy_file README.md
@@ -57,7 +75,7 @@ copy_file desktop/package-lock.json
 copy_file 资产库/README.md
 copy_file scripts/package_release.sh
 
-for dir in 制漫剧 画漫画 写小说 写歌 制MV 拍广告; do
+for dir in "${CREATIVE_LINES[@]}"; do
   mkdir -p "${PKG}/创作区/${dir}"
   cat > "${PKG}/创作区/${dir}/README.md" <<EOF
 # 创作区/${dir}
@@ -67,6 +85,7 @@ for dir in 制漫剧 画漫画 写小说 写歌 制MV 拍广告; do
 需要参考 demo 时，请回到完整仓库查看同名创作区目录。
 EOF
 done
+copy_creation_manuals
 
 cat > "${PKG}/版本说明.md" <<EOF
 # ${PACKAGE}
@@ -79,7 +98,7 @@ cat > "${PKG}/版本说明.md" <<EOF
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
 - desktop/ 桌面端源码，不含 node_modules 和构建产物
-- 创作区/ 六条空作品线目录
+- 创作区/ 六条空作品线目录与各系列使用手册
 - 资产库/README.md
 
 不包含：

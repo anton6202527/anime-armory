@@ -72,6 +72,9 @@ class InheritContractTest(unittest.TestCase):
     def test_product_handoff_ok_with_asset_ref(self):
         self.assertEqual(ic.check_product_handoff({"PROD_main"}, "资产引用：PROD_main 环绕推近"), [])
 
+    def test_product_handoff_ok_with_multi_underscore_asset_ref(self):
+        self.assertEqual(ic.check_product_handoff({"PROD_STARBOX_APP"}, "资产引用：PROD_STARBOX_APP 环绕推近"), [])
+
     def test_product_handoff_ok_with_lock_sentence(self):
         self.assertEqual(
             ic.check_product_handoff({"PROD_main"}, "推近，与产品参考图①同一包装、同一 logo、同一品牌色"), [])
@@ -96,6 +99,29 @@ class InheritContractTest(unittest.TestCase):
         self.assertEqual(c["画风"], "写实电影感")
         self.assertIn("E60012", c["品牌色"])
         self.assertNotIn("构图", c)
+
+    def test_parse_overview_contract_ignores_summary_heading_and_scans_full_text(self):
+        md = (
+            "# ad-image 视觉一致性契约总览\n\n"
+            "项目：星盒\n\n"
+            "## 全局风格\n\n"
+            "# Global Style\n\n"
+            "- 品牌色：星盒青 `#2E9E97`；辅助暖黄 `#F6C85F`\n"
+            "- 风格：写实电影感\n"
+        )
+        c = ic.parse_overview_contract(md)
+        self.assertIn("#2E9E97", c["品牌色"])
+        self.assertEqual(c["画风"], "写实电影感")
+
+    def test_explicit_brand_color_overrides_generic_main_color(self):
+        md = (
+            "## 全局风格\n"
+            "- 主色：暖白、浅木色、低饱和青绿色\n"
+            "- 品牌色：星盒青 `#2E9E97`；辅助暖黄 `#F6C85F`\n"
+        )
+        c = ic.parse_overview_contract(md)
+        self.assertIn("#2E9E97", c["品牌色"])
+        self.assertNotIn("暖白", c["品牌色"])
 
     def test_storyboard_prod_by_index(self):
         sb = {"shots": [

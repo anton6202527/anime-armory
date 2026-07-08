@@ -8,7 +8,9 @@ but every publish/export decision should leave a clear disclosure note.
 写盘/骨架统一走本线 novel/_lib/disclosure.py（vendored，本线自包含）；本线只保留专属字段与文案。
 """
 import argparse
+import glob
 import os
+import re
 import sys
 
 _COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "novel", "_lib"))
@@ -37,6 +39,13 @@ DIRECT_INCORPORATION_MODES = (
     "substantial_passages",
     "full_draft",
 )
+CHAPTER_USAGE_MODES = (
+    "human_written",
+    "AI-assisted",
+    "AI-generated",
+    "human_revised_ai_draft",
+    "unknown",
+)
 
 NOTES = [
     "- `text_authorship_mode` 记录正文主创责任：人类主创 / AI辅助 / AI生成。它比 text_mode 更贴近投稿风险判断。",
@@ -63,6 +72,54 @@ def default_authorship_mode(text_mode):
     return "人类主创"
 
 
+def chapter_number_from_path(path):
+    match = re.search(r"第0*(\d+)章", os.path.basename(path))
+    return int(match.group(1)) if match else None
+
+
+def parse_chapter_mode(spec):
+    if ":" not in spec:
+        raise argparse.ArgumentTypeError("--chapter-mode 格式应为 NN:mode")
+    raw_chapter, mode = spec.split(":", 1)
+    try:
+        chapter = int(raw_chapter)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("--chapter-mode 章节必须是数字") from exc
+    if mode not in CHAPTER_USAGE_MODES:
+        raise argparse.ArgumentTypeError(f"unsupported chapter usage mode: {mode}")
+    return chapter, mode
+
+
+def build_chapter_usage(root, *, default_mode="", chapter_modes=None):
+    explicit = dict(chapter_modes or [])
+    rows = []
+    for path in sorted(glob.glob(os.path.join(root, "章节", "第*.md"))):
+        chapter = chapter_number_from_path(path)
+        if chapter is None:
+            continue
+        mode = explicit.get(chapter) or default_mode
+        if not mode:
+            continue
+        rows.append({
+            "chapter": chapter,
+            "path": os.path.relpath(path, root).replace(os.sep, "/"),
+            "usage_mode": mode,
+            "human_review_required": mode in {"AI-assisted", "AI-generated", "human_revised_ai_draft"},
+            "note": "",
+        })
+    for chapter, mode in explicit.items():
+        if not any(row["chapter"] == chapter for row in rows):
+            rows.append({
+                "chapter": chapter,
+                "path": "",
+                "usage_mode": mode,
+                "human_review_required": mode in {"AI-assisted", "AI-generated", "human_revised_ai_draft"},
+                "note": "章节文件未找到，作为计划/补录记录保留。",
+            })
+    rows.sort(key=lambda item: item["chapter"])
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser(description="写入 novel 项目的 AI 使用披露元数据")
     ap.add_argument("project_root")
@@ -83,6 +140,10 @@ def main():
                     default="none", help="AI 输出被直接纳入成品文本的程度")
     ap.add_argument("--review-step", action="append", default=[],
                     help="复核步骤，可重复，如 人工通读/设定一致性审稿/平台合规复核")
+    ap.add_argument("--default-chapter-mode", choices=CHAPTER_USAGE_MODES, default="",
+                    help="给当前 章节/第*.md 默认写入逐章 AI 使用模式")
+    ap.add_argument("--chapter-mode", type=parse_chapter_mode, action="append", default=[],
+                    help="逐章覆盖 AI 使用模式，格式 NN:mode，例如 1:human_written")
     args = ap.parse_args()
 
     root = disclosure.resolve_root_or_exit(args.project_root)
@@ -105,6 +166,11 @@ def main():
             "direct_incorporation": args.direct_incorporation,
             "review_steps": args.review_step,
         },
+        "chapter_usage": build_chapter_usage(
+            root,
+            default_mode=args.default_chapter_mode,
+            chapter_modes=args.chapter_mode,
+        ),
     })
     field_lines = [
         f"- 文本使用类型：{payload['text_mode']}",
@@ -120,6 +186,8 @@ def main():
         field_lines.append(f"- 人工 steering：{payload['disclosure_detail']['human_steering']}")
     if payload["disclosure_detail"].get("review_steps"):
         field_lines.append("- 复核步骤：" + "、".join(payload["disclosure_detail"]["review_steps"]))
+    if payload.get("chapter_usage"):
+        field_lines.append(f"- 逐章 AI 使用记录：{len(payload['chapter_usage'])} 章")
     _, md_path = disclosure.write(
         root, payload,
         md_title=f"AI 使用说明 — {payload['title']}",

@@ -41,9 +41,10 @@ REVISE_BAND = 20  # [threshold-REVISE_BAND, threshold) = revise；其下 = rejec
 
 # 确定性维度权重（和为 1.0）。LLM 维度另算，二者按 DET_WEIGHT/LLM_WEIGHT 合成总分。
 DET_DIM_WEIGHTS = {
-    "adlaw": 0.30,          # 广告法风险（block 直接硬地板，这里的分只反映 warn 扣分）
-    "brand_exposure": 0.25,  # 品牌/产品/logo 露出充分度
-    "duration_fit": 0.20,    # 总时长贴合主片目标
+    "adlaw": 0.25,          # 广告法风险（block 直接硬地板，这里的分只反映 warn 扣分）
+    "brand_exposure": 0.20,  # 品牌/产品/logo 露出充分度
+    "first_3s_brand_product": 0.15,  # 信息流前三秒是否已出现品牌/产品
+    "duration_fit": 0.15,    # 总时长贴合主片目标
     "cta_present": 0.15,     # CTA/end card 落镜
     "hook": 0.10,            # 钩子前 3s（半确定性）
 }
@@ -91,7 +92,8 @@ def _shot_text(shot):
     if not isinstance(shot, dict):
         return ""
     parts = []
-    for k in ("section", "frame", "label", "title", "desc", "description", "camera",
+    for k in ("section", "scene", "frame", "label", "title", "shot", "prompt",
+              "product_lock", "desc", "description", "camera", "镜头",
               "字幕", "subtitle", "vo", "旁白"):
         v = shot.get(k)
         if isinstance(v, str):
@@ -99,6 +101,9 @@ def _shot_text(shot):
     legal = shot.get("legal_lines")
     if isinstance(legal, list):
         parts.extend(str(x) for x in legal)
+    assets = shot.get("assets")
+    if isinstance(assets, dict):
+        parts.extend(str(k) for k, v in assets.items() if v)
     return " ".join(parts).lower()
 
 
@@ -107,6 +112,13 @@ def _shot_has_prod_asset(shot):
     if not isinstance(assets, dict):
         return False
     return any(k.startswith("PROD_") and v for k, v in assets.items())
+
+
+def _shot_has_brand_asset(shot):
+    assets = shot.get("assets") if isinstance(shot, dict) else None
+    if not isinstance(assets, dict):
+        return False
+    return any(k.startswith("BRAND_") and v for k, v in assets.items())
 
 
 # ── 确定性子维度（纯函数·可测）────────────────────────────────────────────────
@@ -134,15 +146,15 @@ def brand_exposure_score(storyboard):
         return 0.0, 0, 0
     brand_shots = 0
     for s in shots:
-        if _shot_has_prod_asset(s) or any(t in _shot_text(s) for t in BRAND_TOKENS):
+        if _shot_has_prod_asset(s) or _shot_has_brand_asset(s) or any(t in _shot_text(s) for t in BRAND_TOKENS):
             brand_shots += 1
     ratio = brand_shots / len(shots)
     if 0.25 <= ratio <= 0.70:
         score = 100.0
     elif ratio < 0.25:
         score = max(0.0, ratio / 0.25 * 100.0)
-    else:  # 露出过载
-        score = max(40.0, 100.0 - (ratio - 0.70) / 0.30 * 60.0)
+    else:  # 露出过载；产品 demo/App 首发常需持续露出，缓扣不打成低分。
+        score = max(70.0, 100.0 - (ratio - 0.70) / 0.30 * 30.0)
     return round(score, 1), brand_shots, len(shots)
 
 
@@ -161,15 +173,59 @@ def duration_fit_score(actual_sec, target_sec):
     return round(score, 1), round(dev, 3)
 
 
+def _mandatory_texts(mandatories):
+    if isinstance(mandatories, dict):
+        out = []
+        for key, value in mandatories.items():
+            out.append(str(key))
+            if isinstance(value, (list, tuple)):
+                out.extend(str(v) for v in value)
+            else:
+                out.append(str(value))
+        return out
+    if isinstance(mandatories, (list, tuple)):
+        return [str(v) for v in mandatories]
+    return [str(mandatories)] if mandatories else []
+
+
 def cta_score(storyboard, mandatories):
     """有无 CTA/end card 镜 + brief CTA mandatory 落镜 → 0-100。纯函数。"""
     shots = _shots(storyboard)
     has_cta_shot = any(any(t in _shot_text(s) for t in CTA_TOKENS) for s in shots)
-    wants_cta = bool(mandatories) and any(
-        any(t in str(m).lower() for t in ("cta", "行动", "号召", "购买", "下单", "关注")) for m in mandatories)
+    mandatory_text = " ".join(_mandatory_texts(mandatories)).lower()
+    wants_cta = bool(mandatory_text) and any(
+        t in mandatory_text for t in ("cta", "行动", "号召", "购买", "下单", "关注", "预约", "endcard_cta"))
     if not wants_cta:
         return (100.0 if has_cta_shot else 70.0)  # brief 没强制 CTA：有更好，无不重罚
     return 100.0 if has_cta_shot else 0.0          # brief 强制 CTA 却没落镜 = 0
+
+
+def first_3s_brand_product_score(storyboard):
+    """前三秒是否出现品牌/产品/CTA。信息流广告不能把产品藏到后面。纯函数。"""
+    shots = _shots(storyboard)
+    if not shots:
+        return 0.0, []
+    elapsed = 0.0
+    checked = []
+    for idx, shot in enumerate(shots, 1):
+        text = _shot_text(shot)
+        has_identity = (
+            _shot_has_prod_asset(shot)
+            or _shot_has_brand_asset(shot)
+            or any(t in text for t in BRAND_TOKENS)
+        )
+        checked.append({"index": idx, "has_identity": has_identity})
+        if has_identity:
+            return 100.0, checked
+        dur = 0.0
+        for key in ("duration", "时长", "duration_sec", "seconds"):
+            if isinstance(shot, dict) and shot.get(key) is not None:
+                dur = parse_seconds(shot.get(key))
+                break
+        elapsed += dur or 3.0
+        if elapsed >= 3.0:
+            break
+    return 0.0, checked
 
 
 def hook_score(storyboard):
@@ -190,16 +246,17 @@ def compute_prescore(brief, adlaw_report, storyboard, duration_report, target_se
     mandatories = []
     if isinstance(brief, dict):
         m = brief.get("mandatories") or brief.get("强制项") or []
-        if isinstance(m, list):
+        if isinstance(m, (list, dict)):
             mandatories = m
     adlaw, block, warn, hard_block = adlaw_score(adlaw_report)
     brand, brand_shots, total_shots = brand_exposure_score(storyboard)
+    first3, first3_checked = first_3s_brand_product_score(storyboard)
     actual_sec = parse_seconds((duration_report or {}).get("total_seconds") if isinstance(duration_report, dict) else 0) \
         or _sum_shot_durations(storyboard)
     dur, dev = duration_fit_score(actual_sec, target_sec)
     cta = cta_score(storyboard, mandatories)
     hook = hook_score(storyboard)
-    dims = {"adlaw": adlaw, "brand_exposure": brand, "duration_fit": dur,
+    dims = {"adlaw": adlaw, "brand_exposure": brand, "first_3s_brand_product": first3, "duration_fit": dur,
             "cta_present": cta, "hook": hook}
     det_score = round(sum(dims[k] * DET_DIM_WEIGHTS[k] for k in DET_DIM_WEIGHTS), 1)
     return {
@@ -208,7 +265,8 @@ def compute_prescore(brief, adlaw_report, storyboard, duration_report, target_se
         "hard_block": hard_block,
         "facts": {"adlaw_block": block, "adlaw_warn": warn, "brand_shots": brand_shots,
                   "total_shots": total_shots, "actual_seconds": round(actual_sec, 2),
-                  "target_seconds": target_sec, "duration_deviation": dev},
+                  "target_seconds": target_sec, "duration_deviation": dev,
+                  "first_3s_identity_checked": first3_checked},
     }
 
 
@@ -263,6 +321,7 @@ def decide_tier(total, hard_block, threshold):
 DET_DIM_STAGE = {
     "adlaw": "ad-script",
     "brand_exposure": "ad-script",   # 露出不足/过载：改分镜/脚本镜头分配（缺产品镜也回 ad-image 补图，见下）
+    "first_3s_brand_product": "ad-script",
     "duration_fit": "ad-script",     # 总时长超标：回 finalize_storyboard 重切镜头时长
     "cta_present": "ad-concept",     # CTA 缺失：创意层补 end card/行动号召
     "hook": "ad-concept",            # 钩子弱：创意层重设开场
@@ -307,7 +366,12 @@ def build_payload(root, master, threshold, llm_dims):
     duration_report = load_json(os.path.join(root, "脚本", "镜头时长.json")) or {}
     # 主片目标：CLI --master 优先，否则 brief.master_duration
     if not target_sec and isinstance(brief, dict):
-        target_sec = parse_seconds(brief.get("master_duration") or brief.get("主片时长"))
+        deliverables = brief.get("deliverables") if isinstance(brief.get("deliverables"), dict) else {}
+        target_sec = parse_seconds(
+            brief.get("master_duration")
+            or brief.get("主片时长")
+            or deliverables.get("master_duration")
+        )
     prescore = compute_prescore(brief, adlaw_report, storyboard, duration_report, target_sec)
     total = combine_score(prescore["det_score"], llm_dims)
     tier, blocked, reasons = decide_tier(total, prescore["hard_block"], threshold)

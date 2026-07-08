@@ -15,6 +15,13 @@ class ClassifyTest(unittest.TestCase):
     def test_classify_product_hero(self):
         self.assertEqual(rt.classify_shot({"frame": "产品 hero shot，包装正面"}), "product_hero")
 
+    def test_classify_product_from_scene_shot_prompt(self):
+        self.assertEqual(rt.classify_shot({
+            "scene": "星盒界面",
+            "shot": "手机特写",
+            "prompt": "clean app UI",
+        }), "product_hero")
+
     def test_classify_emotion(self):
         self.assertEqual(rt.classify_shot({"section": "痛点", "frame": "人物特写·情绪"}), "emotion_closeup")
 
@@ -107,6 +114,23 @@ class BuildRoutesTest(unittest.TestCase):
         # 产品镜路由到 Seedance(15s)/可灵(10s) 系——primary 应能容 12s 或仅 warn，不 block
         self.assertEqual(summary["block"], 0)
 
+    def test_semantic_product_without_prod_asset_blocks(self):
+        sb = {"shots": [{"shot_id": "S1", "scene": "App 界面", "shot": "手机特写", "duration": 4.0}]}
+        routes, summary = rt.build_routes(sb)
+        self.assertEqual(summary["block"], 1)
+        self.assertTrue(any(f["code"] == "missing_prod_asset_binding" for f in routes[0]["findings"]))
+
+    def test_asset_registry_ids_are_recorded(self):
+        sb = {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0,
+                         "assets": {"PROD_APP": True, "BRAND_APP": True}}]}
+        routes, summary = rt.build_routes(sb, asset_registry={
+            "brand": {"id": "BRAND_APP"},
+            "products": [{"id": "PROD_APP"}],
+        })
+        self.assertEqual(summary["warn"], 0)
+        self.assertEqual(routes[0]["registered_prod_assets"], ["PROD_APP"])
+        self.assertEqual(routes[0]["registered_brand_assets"], ["BRAND_APP"])
+
 
 class EndToEndTest(unittest.TestCase):
     def _project(self, td, storyboard, settings=None):
@@ -119,7 +143,8 @@ class EndToEndTest(unittest.TestCase):
 
     def test_run_writes_routes_json(self):
         with tempfile.TemporaryDirectory() as td:
-            self._project(td, {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0}]})
+            self._project(td, {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0,
+                                          "assets": {"PROD_main": True}}]})
             payload = rt.run(td)
             out = os.path.join(td, "出视频", "分镜", "prompt", "video_model_routes.json")
             self.assertTrue(os.path.isfile(out))
@@ -138,7 +163,8 @@ class EndToEndTest(unittest.TestCase):
 
     def test_main_exit_code_pass(self):
         with tempfile.TemporaryDirectory() as td:
-            self._project(td, {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0}]})
+            self._project(td, {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0,
+                                          "assets": {"PROD_main": True}}]})
             with self.assertRaises(SystemExit) as cm:
                 rt.main([td])
             self.assertEqual(cm.exception.code, 0)
@@ -150,6 +176,21 @@ class EndToEndTest(unittest.TestCase):
             payload = rt.run(td)
             self.assertEqual(payload["default_backend"], "seedance")
             self.assertEqual(payload["routes"][0]["primary"], "seedance")
+
+    def test_run_reads_asset_registry_and_platform_specs(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._project(td, {"shots": [{"shot_id": "S1", "frame": "产品 hero", "duration": 4.0,
+                                          "assets": {"PROD_APP": True, "BRAND_APP": True}}]})
+            os.makedirs(os.path.join(td, "设定库"), exist_ok=True)
+            os.makedirs(os.path.join(td, "需求"), exist_ok=True)
+            with open(os.path.join(td, "设定库", "asset_registry.json"), "w", encoding="utf-8") as f:
+                json.dump({"brand": {"id": "BRAND_APP"}, "products": [{"id": "PROD_APP"}]}, f)
+            with open(os.path.join(td, "需求", "brief.json"), "w", encoding="utf-8") as f:
+                json.dump({"platforms": ["抖音", "小红书"]}, f, ensure_ascii=False)
+            payload = rt.run(td)
+            self.assertIn("抖音", payload["platform_specs"])
+            self.assertIn("小红书", payload["platform_specs"])
+            self.assertTrue(payload["asset_registry_path"].endswith("asset_registry.json"))
 
 
 class ThreeAxisTest(unittest.TestCase):

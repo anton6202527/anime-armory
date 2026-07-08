@@ -59,8 +59,9 @@ def test_product_shots_detects_prod_asset():
         {"shot_id": "镜头1", "assets": {"PROD_main": True}},
         {"shot_id": "镜头2", "assets": {"CHAR_a": True}},
         {"shot_id": "镜头3", "assets": {"PROD_hero": False}},
+        {"shot_id": "镜头4", "product_lock": "手机屏幕显示 App 界面"},
     ]}
-    assert pq.product_shots(sb) == ["镜头1"]
+    assert pq.product_shots(sb) == ["镜头1", "镜头4"]
 
 
 def test_brand_color_from_contract_and_overview():
@@ -113,7 +114,10 @@ def test_run_qc_writes_authoritative_json_and_block_exit(tmp_path):
     for f in payload["findings"]:
         assert set(["severity", "shot", "check", "reason", "detail"]).issubset(f.keys())
         assert f["severity"] in ("block", "warn", "info")
-        assert f["check"] in ("brand_color", "product_dhash", "logo", "prompt_lint")
+        assert f["check"] in (
+            "brand_color", "product_dhash", "logo", "prompt_lint", "local_patch_prohibited",
+            "asset_binding", "text_legibility", "safe_area",
+        )
 
 
 def test_run_qc_all_good_prompts_no_prompt_block(tmp_path):
@@ -185,6 +189,26 @@ def test_brand_color_block_vs_pass(tmp_path):
     assert payload["summary"]["block"] >= 1
 
 
+def test_brand_color_presence_prevents_full_frame_false_block(tmp_path):
+    Image = pytest.importorskip("PIL.Image")
+    pytest.importorskip("numpy")
+
+    root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT})
+    imgdir = stage / "图片"
+    imgdir.mkdir()
+    im = Image.new("RGB", (128, 128), (80, 48, 24))
+    for y in range(40, 88):
+        for x in range(40, 88):
+            im.putpixel((x, y), (0xE6, 0x00, 0x12))
+    im.save(str(imgdir / "镜头1.png"))
+
+    payload = pq.run_qc(stage)
+    brand_findings = [f for f in payload["findings"] if f["check"] == "brand_color"]
+    assert brand_findings
+    assert all(f["severity"] != "block" for f in brand_findings)
+    assert brand_findings[0]["detail"]["presence"]["ratio_delta_e12"] > 0
+
+
 def test_dhash_outlier_block(tmp_path):
     Image = pytest.importorskip("PIL.Image")
     pytest.importorskip("numpy")
@@ -220,3 +244,59 @@ def test_no_product_shots_emits_info_and_zero_exit(tmp_path):
     payload = json.loads((root / "出图" / "分镜" / "product_qc.json").read_text(encoding="utf-8"))
     assert payload["summary"]["block"] == 0
     assert any("无产品镜" in f["reason"] for f in payload["findings"])
+
+
+def test_semantic_product_shot_without_prod_id_blocks(tmp_path):
+    sb = {"visual_contract": {"品牌色": "#E60012"},
+          "shots": [{"shot_id": "镜头1", "product_lock": "手机屏幕显示星盒 App 界面"}]}
+    root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT.replace("PROD_main", "CHAR_user")}, storyboard=sb)
+    payload = pq.run_qc(stage)
+    assert any(f["check"] == "asset_binding" and f["severity"] == "block" and f["detail"].get("missing") == "PROD_*"
+               for f in payload["findings"])
+
+
+def test_asset_registry_known_product_avoids_registry_degraded_warn(tmp_path):
+    sb = {"visual_contract": {"品牌色": "#E60012"},
+          "shots": [{"shot_id": "镜头1", "assets": {"PROD_STARBOX_APP": True, "BRAND_STARBOX": True},
+                     "product_lock": "手机屏幕显示星盒 App 界面",
+                     "safe_area": {"core_in_center_4x4": True}}]}
+    prompt = GOOD_PROMPT.replace("PROD_main", "PROD_STARBOX_APP")
+    root, stage = _make_project(tmp_path, {"镜头1.md": prompt}, storyboard=sb)
+    reg = root / "出图" / "共享" / "asset_registry.json"
+    reg.parent.mkdir(parents=True)
+    reg.write_text(json.dumps({"assets": [{"id": "PROD_STARBOX_APP"}, {"id": "BRAND_STARBOX"}]}, ensure_ascii=False),
+                   encoding="utf-8")
+    payload = pq.run_qc(stage)
+    assert not [f for f in payload["findings"] if f["check"] == "asset_binding" and f["severity"] == "block"]
+    assert not [f for f in payload["findings"] if f["detail"].get("degraded") == "no_asset_registry"]
+
+
+def test_safe_area_false_blocks(tmp_path):
+    sb = {"visual_contract": {"品牌色": "#E60012"},
+          "shots": [{"shot_id": "镜头1", "assets": {"PROD_main": True},
+                     "product_lock": "产品 logo 和 CTA",
+                     "safe_area": {"core_in_center_4x4": False}}]}
+    root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT}, storyboard=sb)
+    payload = pq.run_qc(stage)
+    assert any(f["check"] == "safe_area" and f["severity"] == "block" for f in payload["findings"])
+
+
+def test_asset_id_regex_does_not_match_plain_product_or_brand_words():
+    shot = {"prompt": "product shot with brand color, but no structured asset id"}
+
+    assert pq.product_asset_ids(shot) == []
+    assert pq.brand_asset_ids(shot) == []
+
+
+def test_brand_color_reports_no_image_before_no_pillow():
+    findings = pq.check_brand_color("镜头1", None, "#E60012", None, None)
+
+    assert findings[0]["check"] == "brand_color"
+    assert findings[0]["detail"]["degraded"] == "no_image"
+
+
+def test_logo_reports_no_image_before_no_pillow(tmp_path):
+    findings = pq.check_logo("镜头1", None, tmp_path / "logo.png", None, None)
+
+    assert findings[0]["check"] == "logo"
+    assert findings[0]["detail"]["degraded"] == "no_image"

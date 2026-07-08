@@ -154,7 +154,21 @@ def backend_hint(backend):
     return hints.get(backend, hints["manual"])
 
 
-def build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta):
+def read_context_blocks(root):
+    blocks = []
+    for heading, relpath in (
+        ("Song Brief", os.path.join("创作", "song_brief.md")),
+        ("Reference Boundaries", os.path.join("素材", "reference_pack.md")),
+        ("Chord Sheet", os.path.join("歌", "chord_sheet.md")),
+        ("Topline Notes", os.path.join("歌", "topline_notes.md")),
+    ):
+        text = read_text(os.path.join(root, relpath), "").strip()
+        if text:
+            blocks.append((heading, text))
+    return blocks
+
+
+def build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks=None):
     duration_line = f"{duration}s" if duration else settings.get("目标时长", "未定")
     lines = [
         f"# 作曲任务 — 《{title}》 {take_id}",
@@ -170,6 +184,14 @@ def build_prompt(title, take_id, backend, style, lyrics, duration, settings, met
         "## Style Prompt",
         style,
         "",
+    ]
+    for heading, text in context_blocks or []:
+        lines.extend([
+            f"## {heading}",
+            text,
+            "",
+        ])
+    lines.extend([
         "## 操作提示",
         backend_hint(backend),
         "",
@@ -182,7 +204,7 @@ def build_prompt(title, take_id, backend, style, lyrics, duration, settings, met
         lyrics.strip(),
         "```",
         "",
-    ]
+    ])
     return "\n".join(lines)
 
 
@@ -204,6 +226,7 @@ def prompt_plan(root, args):
         raise SystemExit("[err] --takes 必须 >= 1")
     duration = args.duration or parse_seconds(meta.get("target_duration_seconds")) or parse_seconds(settings.get("目标时长"))
     style = make_style(meta, settings, args)
+    context_blocks = read_context_blocks(root)
 
     song_dir = os.path.join(root, "歌")
     prompt_dir = os.path.join(song_dir, "compose_prompts")
@@ -218,7 +241,7 @@ def prompt_plan(root, args):
     for i in range(1, takes + 1):
         take_id = f"take_{i:02d}"
         prompt_path = os.path.join(prompt_dir, f"{take_id}.md")
-        write_text(prompt_path, build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta))
+        write_text(prompt_path, build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks))
         previous = old_takes.get(take_id, {})
         take_rows.append({
             "take_id": take_id,
@@ -241,6 +264,7 @@ def prompt_plan(root, args):
         "requested_takes": takes,
         "target_duration_seconds": duration,
         "style_prompt": style,
+        "context_sources": [heading for heading, _ in context_blocks],
         "lyrics_path": "词/lyrics.md",
         "selected_take": old.get("selected_take"),
         "takes": take_rows,
@@ -254,6 +278,7 @@ def prompt_plan(root, args):
         "requested_takes": takes,
         "target_duration_seconds": duration,
         "style_prompt": style,
+        "context_sources": [heading for heading, _ in context_blocks],
         "prompt_dir": "歌/compose_prompts",
         "manifest_path": "歌/takes_manifest.json",
     })
@@ -269,6 +294,7 @@ def build_task_markdown(manifest):
         f"- 生成版数：{manifest['requested_takes']}",
         f"- 目标时长：{manifest.get('target_duration_seconds') or '未定'}s",
         f"- take manifest：`歌/takes_manifest.json`",
+        f"- 上下文证据：{', '.join(manifest.get('context_sources') or []) or '无'}",
         "",
         "## Style Prompt",
         manifest["style_prompt"],

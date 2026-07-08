@@ -51,6 +51,20 @@ BACKEND_PROFILES = {
                  "supports_quality_tier": True, "default_quality_tier": "fast"},
 }
 DEFAULT_GENERAL_BACKEND = "dreamina"  # 普通镜/兜底默认（platforms.md：模型只作默认/普通镜兜底）
+PLATFORM_SPECS = {
+    "抖音": {
+        "aspect": "9:16",
+        "min_resolution": "720x1280",
+        "safe_area": "center_6x6",
+        "notes": ["字幕、CTA、Logo 避开右侧互动栏和底部标题区", "主文案建议前 3 秒出现产品/品牌"],
+    },
+    "小红书": {
+        "aspect": "9:16",
+        "min_resolution": "720x1280",
+        "safe_area": "center_6x6",
+        "notes": ["封面/首帧要能独立说明卖点", "标题区和底部交互区避免放关键法律声明"],
+    },
+}
 
 # 后端名归一（中英别名 → key），换厂只改这里 + BACKEND_PROFILES。
 _BACKEND_ALIASES = {
@@ -81,7 +95,8 @@ def backends_with_cap(cap):
 # 镜型 → 需要的主能力 + reason；判型用关键词，但路由的是能力不是品牌。
 SHOT_TYPE_KEYWORDS = [
     ("endcard", ("end card", "endcard", "片尾", "包装定格", "logo+slogan", "logo + slogan", "cta")),
-    ("product_hero", ("产品展示", "hero", "环绕", "包装正面", "产品特写", "卖点特写", "product")),
+    ("product_hero", ("产品展示", "hero", "环绕", "包装正面", "产品特写", "卖点特写", "product",
+                      "app", "ui", "界面", "手机特写", "产品界面")),
     ("emotion_closeup", ("情绪", "人物特写", "代言人", "表情", "近景特写", "closeup", "close-up")),
     ("demo_handheld", ("demo", "手持", "实拍", "拟真", "开箱", "试用", "handheld")),
     ("empty_transition", ("空镜", "转场", "氛围", "establishing", "transition")),
@@ -109,7 +124,8 @@ SHOT_TYPE_REASON = {
 
 def _shot_text(shot):
     parts = []
-    for k in ("section", "frame", "label", "title", "shot_id", "desc", "description", "camera", "镜头"):
+    for k in ("section", "scene", "frame", "label", "title", "shot_id", "shot", "prompt",
+              "product_lock", "desc", "description", "camera", "镜头"):
         v = shot.get(k) if isinstance(shot, dict) else None
         if isinstance(v, str):
             parts.append(v)
@@ -132,6 +148,20 @@ def shot_prod_ids(shot):
     return {k for k, v in assets.items() if k.startswith("PROD_") and v}
 
 
+def shot_brand_ids(shot):
+    assets = shot.get("assets") if isinstance(shot, dict) else None
+    if not isinstance(assets, dict):
+        return set()
+    return {k for k, v in assets.items() if k.startswith("BRAND_") and v}
+
+
+def _semantic_product_shot(shot):
+    text = _shot_text(shot).lower()
+    return any(token in text for token in (
+        "product", "产品", "app", "ui", "界面", "手机特写", "手机屏幕", "cta", "end card", "endcard", "片尾"
+    ))
+
+
 def shot_duration(shot):
     for key in ("duration", "时长", "duration_sec", "seconds"):
         raw = shot.get(key) if isinstance(shot, dict) else None
@@ -141,6 +171,74 @@ def shot_duration(shot):
         if m:
             return float(m.group(0))
     return 0.0
+
+
+def _flatten_registry_ids(registry):
+    ids = {"product": set(), "brand": set()}
+
+    def walk(node):
+        if isinstance(node, dict):
+            raw_id = node.get("id") or node.get("asset_id")
+            if isinstance(raw_id, str):
+                if raw_id.startswith("PROD_"):
+                    ids["product"].add(raw_id)
+                elif raw_id.startswith("BRAND_"):
+                    ids["brand"].add(raw_id)
+            for key, value in node.items():
+                if isinstance(key, str):
+                    if key.startswith("PROD_"):
+                        ids["product"].add(key)
+                    elif key.startswith("BRAND_"):
+                        ids["brand"].add(key)
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(registry or {})
+    return ids
+
+
+def load_asset_registry(root):
+    for rel in ("设定库/asset_registry.json", "出图/共享/asset_registry.json", "设定库/assets.json"):
+        path = os.path.join(root, rel)
+        data = load_json(path)
+        if isinstance(data, dict):
+            data["_registry_path"] = path
+            return data
+    return {}
+
+
+def asset_binding_findings(clip_id, shot, registry_ids):
+    findings = []
+    prod_ids = shot_prod_ids(shot)
+    brand_ids = shot_brand_ids(shot)
+    if _semantic_product_shot(shot) and not prod_ids:
+        findings.append({
+            "severity": "block",
+            "code": "missing_prod_asset_binding",
+            "clip": clip_id,
+            "msg": "产品/App/UI/片尾语义镜缺 PROD_* 绑定，图生视频无法继承产品身份锁。",
+        })
+    known_products = registry_ids.get("product") or set()
+    known_brands = registry_ids.get("brand") or set()
+    missing_products = sorted(pid for pid in prod_ids if known_products and pid not in known_products)
+    missing_brands = sorted(bid for bid in brand_ids if known_brands and bid not in known_brands)
+    if missing_products:
+        findings.append({
+            "severity": "warn",
+            "code": "prod_asset_not_in_registry",
+            "clip": clip_id,
+            "msg": "镜头引用的 PROD_* 未出现在 asset_registry.json：" + "、".join(missing_products),
+        })
+    if missing_brands:
+        findings.append({
+            "severity": "warn",
+            "code": "brand_asset_not_in_registry",
+            "clip": clip_id,
+            "msg": "镜头引用的 BRAND_* 未出现在 asset_registry.json：" + "、".join(missing_brands),
+        })
+    return findings
 
 
 def choose_route(shot, default_backend=DEFAULT_GENERAL_BACKEND):
@@ -302,15 +400,16 @@ def _project_default_backend(root):
     return DEFAULT_GENERAL_BACKEND
 
 
-def build_routes(storyboard, default_backend=DEFAULT_GENERAL_BACKEND):
+def build_routes(storyboard, default_backend=DEFAULT_GENERAL_BACKEND, asset_registry=None):
     """storyboard dict → routes 列表 + summary。纯函数·可测。"""
     shots = storyboard.get("shots") or storyboard.get("clips") or []
     routes = []
+    registry_ids = _flatten_registry_ids(asset_registry or {})
     for i, shot in enumerate(shots, 1):
         r = choose_route(shot, default_backend)
         duration = shot_duration(shot)
         clip_id = _shot_id(shot, i)
-        findings = []
+        findings = asset_binding_findings(clip_id, shot, registry_ids)
         cap_check = clip_length_cap_check(r["primary"], duration)
         if cap_check:
             cap_check = dict(cap_check, clip=clip_id)
@@ -327,6 +426,9 @@ def build_routes(storyboard, default_backend=DEFAULT_GENERAL_BACKEND):
             "motion_reference": motion_reference_plan(r["shot_type"], r["primary"]),
             "reason": r["reason"],
             "prod_assets": sorted(shot_prod_ids(shot)),
+            "brand_assets": sorted(shot_brand_ids(shot)),
+            "registered_prod_assets": sorted(registry_ids.get("product") or []),
+            "registered_brand_assets": sorted(registry_ids.get("brand") or []),
             "findings": findings,
         })
     multishot_groups = annotate_multishot_groups(routes)  # advisory：连续同型镜可一次出多镜消缝
@@ -335,13 +437,53 @@ def build_routes(storyboard, default_backend=DEFAULT_GENERAL_BACKEND):
     return routes, {"block": block, "warn": warn, "multishot_groups": multishot_groups}
 
 
+def _brief_platforms(root):
+    brief = load_json(os.path.join(root, "需求", "brief.json"), {}) or {}
+    platforms = []
+    raw = brief.get("platforms") if isinstance(brief, dict) else []
+    if isinstance(raw, list):
+        platforms.extend(str(v) for v in raw if v)
+    elif raw:
+        platforms.append(str(raw))
+    settings = ""
+    path = os.path.join(root, "_设置.md")
+    if os.path.isfile(path):
+        with open(path, encoding="utf-8", errors="replace") as f:
+            settings = f.read()
+    m = re.search(r"目标平台\s*[:：]\s*(.+)", settings)
+    if m:
+        val = m.group(1).split("#", 1)[0].strip()
+        if val and val not in ("未定", "跨平台"):
+            platforms.append(val)
+    dedup = []
+    for p in platforms:
+        if p not in dedup:
+            dedup.append(p)
+    return dedup
+
+
+def selected_platform_specs(platforms):
+    out = {}
+    for platform in platforms:
+        for key, spec in PLATFORM_SPECS.items():
+            if key in platform:
+                out[key] = spec
+    return out
+
+
 def run(root, out_json=None):
     root = os.path.abspath(root)
     sb = load_json(os.path.join(root, "脚本", "storyboard.json"), {}) or {}
     default_backend = _project_default_backend(root)
-    routes, summary = build_routes(sb, default_backend)
+    registry = load_asset_registry(root)
+    platforms = _brief_platforms(root)
+    routes, summary = build_routes(sb, default_backend, registry)
     payload = {"schema_version": 1, "kind": VIDEO_MODEL_ROUTES_KIND,
-               "default_backend": default_backend, "routes": routes, "summary": summary}
+               "default_backend": default_backend,
+               "asset_registry_path": registry.get("_registry_path", ""),
+               "platforms": platforms,
+               "platform_specs": selected_platform_specs(platforms),
+               "routes": routes, "summary": summary}
     if out_json is None:
         out_json = os.path.join(root, "出视频", "分镜", "prompt", "video_model_routes.json")
     os.makedirs(os.path.dirname(os.path.abspath(out_json)), exist_ok=True)

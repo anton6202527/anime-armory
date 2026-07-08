@@ -4,10 +4,16 @@ import json
 import os
 import tempfile
 import importlib.util
+import sys
+
+
+THIS_DIR = os.path.dirname(__file__)
+while THIS_DIR in sys.path:
+    sys.path.remove(THIS_DIR)
 
 
 def load_queue_module():
-    path = os.path.join(os.path.dirname(__file__), "queue.py")
+    path = os.path.join(THIS_DIR, "queue.py")
     spec = importlib.util.spec_from_file_location("novel_batch_queue_test", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

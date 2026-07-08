@@ -20,6 +20,7 @@ if NOVEL_LIB not in sys.path:
 
 from qa_gate import collect_gate_status  # noqa: E402
 from report_snapshot import snapshot_chapters, validate_snapshot  # noqa: E402
+from waivers import has_waiver, load_waivers  # noqa: E402
 try:
     from provenance import append_event  # noqa: E402
 except Exception:  # pragma: no cover - provenance is additive
@@ -49,39 +50,47 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "compliance_fingerprint_block": False,
         "qa_gate": None,
         "research_missing": "ignore",
+        "reader_plan_required": False,
+        "reader_telemetry_missing": "ignore",
     },
     "beta_read": {
         "label": "Beta reader package",
         "require_exports": True,
-        "mandatory_evidence": ("review_report", "ai_usage"),
+        "mandatory_evidence": ("review_report", "ai_usage", "reader_test_plan"),
         "snapshot_block": ("review_report",),
         "snapshot_warn": ("score_report",),
         "ai_usage_block": True,
         "compliance_fingerprint_block": False,
         "qa_gate": {"require_review_report": True, "require_score_report": False, "require_state_closure": False},
         "research_missing": "warn",
+        "reader_plan_required": True,
+        "reader_telemetry_missing": "warn",
     },
     "platform_publish": {
         "label": "Platform publish",
         "require_exports": True,
-        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile"),
+        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile", "reader_test_plan", "metadata_pack"),
         "snapshot_block": ("review_report", "score_report"),
         "snapshot_warn": (),
         "ai_usage_block": True,
         "compliance_fingerprint_block": True,
         "qa_gate": {"require_review_report": True, "require_score_report": True, "require_state_closure": True},
         "research_missing": "warn",
+        "reader_plan_required": True,
+        "reader_telemetry_missing": "block",
     },
     "kdp_publish": {
         "label": "Amazon KDP publish",
         "require_exports": True,
-        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile"),
+        "mandatory_evidence": ("review_report", "score_report", "ai_usage", "compliance_profile", "reader_test_plan", "metadata_pack"),
         "snapshot_block": ("review_report", "score_report"),
         "snapshot_warn": (),
         "ai_usage_block": True,
         "compliance_fingerprint_block": True,
         "qa_gate": {"require_review_report": True, "require_score_report": True, "require_state_closure": True},
         "research_missing": "warn",
+        "reader_plan_required": True,
+        "reader_telemetry_missing": "block",
         "kdp": True,
     },
     "archive": {
@@ -94,6 +103,8 @@ RELEASE_PROFILES: dict[str, dict[str, Any]] = {
         "compliance_fingerprint_block": False,
         "qa_gate": None,
         "research_missing": "ignore",
+        "reader_plan_required": False,
+        "reader_telemetry_missing": "ignore",
     },
 }
 
@@ -171,6 +182,9 @@ def build_evidence_index(
         "research_sources": "research source ledger for specialist factual claims",
         "revision_plan": "editorial revision task ledger",
         "waiver_log": "explicit waiver audit trail",
+        "reader_test_plan": "reader validation plan for beta or publish decisions",
+        "reader_telemetry_summary": "real reader telemetry summary and drop-off evidence",
+        "metadata_pack": "publishing metadata: blurb, categories, keywords, age/content notes",
     }
     for key, record in evidence.items():
         if isinstance(record, dict) and record.get("exists"):
@@ -179,6 +193,9 @@ def build_evidence_index(
         ("评分/market_baseline_*.json", "market_baseline", "current market baseline JSON used by score"),
         ("评分/题材热榜_*.md", "market_baseline", "human-readable market baseline/rank evidence"),
         ("评分/market_evidence_jobs.json", "market_evidence_jobs", "pending market evidence search jobs"),
+        ("评分/读者测试计划.md", "reader_test_plan", "human-readable reader validation plan"),
+        ("评分/真实读者反馈_*.md", "reader_telemetry_summary", "human-readable reader feedback report"),
+        ("导出/metadata_pack.md", "metadata_pack", "human-readable publishing metadata"),
         ("资料/专业资料包_*.md", "research_pack", "specialist research packet"),
         ("资料/research_sources.json", "research_sources", "research source ledger for specialist factual claims"),
         ("审稿/review_board.json", "review_board", "editorial arbitration board"),
@@ -239,6 +256,17 @@ def ai_usage_check(root: str) -> dict[str, Any]:
         detail = payload.get("disclosure_detail") if isinstance(payload.get("disclosure_detail"), dict) else {}
         if not detail.get("review_steps"):
             issues.append("AI usage disclosure should record review_steps before release")
+        chapter_usage = payload.get("chapter_usage") if isinstance(payload.get("chapter_usage"), list) else []
+        if not chapter_usage:
+            issues.append("AI usage disclosure should record chapter_usage for each released chapter")
+        else:
+            for row in chapter_usage:
+                if not isinstance(row, dict):
+                    issues.append("AI usage chapter_usage contains invalid row")
+                    continue
+                if not row.get("chapter") or not row.get("usage_mode"):
+                    issues.append("AI usage chapter_usage rows require chapter and usage_mode")
+                    break
     return {
         "id": "ai_usage_release_disclosure",
         "evidence": "ai_usage",
@@ -297,6 +325,113 @@ def compliance_fingerprint_check(root: str) -> dict[str, Any]:
         "stored_components": stored.get("input_fingerprint_components") if isinstance(stored.get("input_fingerprint_components"), dict) else {},
         "current_components": current.get("input_fingerprint_components") if isinstance(current.get("input_fingerprint_components"), dict) else {},
     }
+
+
+def reader_plan_check(root: str) -> dict[str, Any]:
+    relpath = "评分/reader_test_plan.json"
+    payload = load_json(os.path.join(root, relpath), {}) or {}
+    issues = []
+    if not isinstance(payload, dict) or not payload:
+        issues.append("reader_test_plan.json is missing or invalid")
+    else:
+        if payload.get("kind") != "novel_reader_test_plan":
+            issues.append("reader_test_plan kind should be novel_reader_test_plan")
+        if not payload.get("scope"):
+            issues.append("reader test plan lacks scope")
+        if not payload.get("target_reader"):
+            issues.append("reader test plan lacks target_reader")
+        if not payload.get("variants"):
+            issues.append("reader test plan lacks variants/takes")
+        if not payload.get("cohorts"):
+            issues.append("reader test plan lacks cohorts/sample definition")
+        if not payload.get("experiment_design"):
+            issues.append("reader test plan lacks experiment_design")
+        if not payload.get("data_collection_fields"):
+            issues.append("reader test plan lacks data_collection_fields")
+        if not payload.get("privacy_note"):
+            issues.append("reader test plan lacks privacy_note")
+        required_attribution = set(payload.get("attribution_required_fields") or [])
+        if not {"ab_test_id", "variant_id", "take_id"} <= required_attribution:
+            issues.append("reader test plan lacks required attribution fields ab_test_id/variant_id/take_id")
+        if not payload.get("metrics"):
+            issues.append("reader test plan lacks metrics")
+        min_sample = payload.get("min_sample")
+        try:
+            if int(min_sample) < 10:
+                issues.append("reader test min_sample is below 10; publish decisions need a meaningful sample")
+        except (TypeError, ValueError):
+            issues.append("reader test plan lacks numeric min_sample")
+    return {
+        "id": "reader_test_plan_quality",
+        "evidence": "reader_test_plan",
+        "path": relpath,
+        "passed": not issues,
+        "message": "; ".join(issues) if issues else "reader test plan is usable",
+    }
+
+
+def reader_telemetry_check(root: str) -> dict[str, Any]:
+    relpath = "评分/reader_telemetry_summary.json"
+    payload = load_json(os.path.join(root, relpath), {}) or {}
+    issues = []
+    if not isinstance(payload, dict) or not payload:
+        issues.append("reader_telemetry_summary.json is missing")
+    else:
+        if payload.get("kind") != "novel_reader_telemetry_summary":
+            issues.append("reader telemetry summary kind should be novel_reader_telemetry_summary")
+        aggregate = payload.get("aggregate") if isinstance(payload.get("aggregate"), dict) else {}
+        if not aggregate.get("total_starts"):
+            issues.append("reader telemetry has no starts/views; use as qualitative evidence only")
+        if (payload.get("reader_test_plan") or {}).get("present") is False:
+            issues.append("reader telemetry was ingested without a matching reader_test_plan")
+        experiments = payload.get("experiments") if isinstance(payload.get("experiments"), dict) else {}
+        has_group_attribution = bool(experiments.get("groups") or experiments.get("best_by_ab_test"))
+        has_take_hint = bool(payload.get("take_id") or payload.get("variant_id") or payload.get("ab_test_id"))
+        if not has_group_attribution and not has_take_hint:
+            issues.append("reader telemetry lacks take_id/variant_id/ab_test_id attribution; use for drop-off observation, not version-level causality")
+    return {
+        "id": "reader_telemetry_summary_quality",
+        "evidence": "reader_telemetry_summary",
+        "path": relpath,
+        "passed": not issues,
+        "message": "; ".join(issues) if issues else "reader telemetry summary is usable",
+    }
+
+
+def metadata_pack_check(root: str) -> dict[str, Any]:
+    relpath = "导出/metadata_pack.json"
+    payload = load_json(os.path.join(root, relpath), {}) or {}
+    issues = []
+    if not isinstance(payload, dict) or payload.get("kind") != "novel_metadata_pack":
+        issues.append("metadata_pack.json is missing or kind should be novel_metadata_pack")
+    else:
+        if not str(payload.get("title") or "").strip():
+            issues.append("metadata pack lacks title")
+        if not str(payload.get("short_blurb") or "").strip():
+            issues.append("metadata pack lacks short_blurb")
+        if not payload.get("categories"):
+            issues.append("metadata pack lacks categories")
+        if len(payload.get("keywords") or []) < 3:
+            issues.append("metadata pack should contain at least 3 keywords")
+        rights = payload.get("rights_summary") if isinstance(payload.get("rights_summary"), dict) else {}
+        if rights.get("rights_status") in {"unknown", "", None}:
+            issues.append("metadata pack rights_status is unknown")
+    return {
+        "id": "metadata_pack_quality",
+        "evidence": "metadata_pack",
+        "path": relpath,
+        "passed": not issues,
+        "message": "; ".join(issues) if issues else "metadata pack is publish-ready",
+    }
+
+
+def has_reader_telemetry_waiver(root: str, release_profile: str) -> bool:
+    waivers = load_waivers(root)
+    scope = {"release_profile": release_profile}
+    return (
+        has_waiver(waivers, "reader_telemetry_missing", scope)
+        or has_waiver(waivers, "reader_data_missing", scope)
+    )
 
 
 def _is_kdp_declared(root: str, ai_usage: dict[str, Any], compliance: dict[str, Any]) -> bool:
@@ -379,6 +514,48 @@ def release_readiness(
         elif not check["passed"]:
             warn("RELEASE-COMPLIANCE-FINGERPRINT-STALE", check["message"], path=check["path"])
 
+    if (evidence.get("reader_test_plan") or {}).get("exists"):
+        check = reader_plan_check(root)
+        checks.append(check)
+        if not check["passed"] and config.get("reader_plan_required"):
+            block("RELEASE-READER-TEST-PLAN-QUALITY", check["message"], path=check["path"])
+        elif not check["passed"]:
+            warn("RELEASE-READER-TEST-PLAN-QUALITY", check["message"], path=check["path"])
+    if (evidence.get("reader_telemetry_summary") or {}).get("exists"):
+        check = reader_telemetry_check(root)
+        checks.append(check)
+        if not check["passed"]:
+            warn("RELEASE-READER-TELEMETRY-QUALITY", check["message"], path=check["path"])
+    else:
+        telemetry_policy = config.get("reader_telemetry_missing")
+        if telemetry_policy in {"warn", "block"}:
+            if has_reader_telemetry_waiver(root, release_profile):
+                warn(
+                    "RELEASE-READER-TELEMETRY-WAIVED",
+                    "reader telemetry is missing, but a scoped reader-data waiver is recorded for this release profile",
+                    path="审稿/waiver_log.jsonl",
+                )
+            elif telemetry_policy == "block":
+                block(
+                    "RELEASE-READER-TELEMETRY-NOT-DECLARED",
+                    "no reader_telemetry_summary.json found; platform/KDP publish requires real reader data or a scoped reader-data waiver",
+                    path="评分/reader_telemetry_summary.json",
+                )
+            else:
+                warn(
+                    "RELEASE-READER-TELEMETRY-NOT-DECLARED",
+                    "no reader_telemetry_summary.json found; publish decision should record a reader-data waiver or run novel-feedback after test reading",
+                    path="评分/reader_telemetry_summary.json",
+                )
+
+    if (evidence.get("metadata_pack") or {}).get("exists"):
+        check = metadata_pack_check(root)
+        checks.append(check)
+        if not check["passed"] and release_profile in {"platform_publish", "kdp_publish"}:
+            block("RELEASE-METADATA-PACK-QUALITY", check["message"], path=check["path"])
+        elif not check["passed"]:
+            warn("RELEASE-METADATA-PACK-QUALITY", check["message"], path=check["path"])
+
     gate_payload: dict[str, Any] = {"blocking": False, "blocker_count": 0, "warning_count": 0, "profile_skipped": True}
     if config.get("qa_gate"):
         formats = export_formats(exports) or ["txt"]
@@ -440,6 +617,9 @@ def build_manifest(root: str, *, release_name: str = "", release_profile: str = 
         "research_sources": optional_record(root, "资料/research_sources.json"),
         "revision_plan": optional_record(root, "修订/revision_plan.json"),
         "waiver_log": optional_record(root, "审稿/waiver_log.jsonl"),
+        "reader_test_plan": optional_record(root, "评分/reader_test_plan.json"),
+        "reader_telemetry_summary": optional_record(root, "评分/reader_telemetry_summary.json"),
+        "metadata_pack": optional_record(root, "导出/metadata_pack.json"),
     }
     missing_evidence = [key for key, record in evidence.items() if not record.get("exists")]
     chapter_snapshot = snapshot_chapters(root, mode="release:chapters")

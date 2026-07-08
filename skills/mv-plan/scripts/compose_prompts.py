@@ -12,6 +12,20 @@ import re
 import sys
 from datetime import date
 
+REQUIRED_SEMANTIC_FIELDS = (
+    "clip_id",
+    "start_state",
+    "action_family",
+    "energy_level",
+    "action",
+    "action_peak_relative",
+    "end_state",
+    "camera",
+    "lighting",
+    "visual_motif",
+    "transition_motif",
+)
+
 
 def load_json(path, default=None):
     if not os.path.exists(path):
@@ -44,7 +58,7 @@ def build_composer_prompt(clips, blueprint, lyrics):
     for c in clips:
         lyric = c.get('lyric_hint') or '无'
         clip_summaries.append(
-            f"Clip ID: {c['clip_id']} | 时间: {c['start']}-{c['end']}s | 时长: {c['duration']}s | 段落: {c['section']} | 动作家族建议: {c.get('action_family', '')} | 能量等级: {c.get('energy_level', '')} | 歌词参考: {lyric}"
+            f"Clip ID: {c['clip_id']} | 时间: {c['start']}-{c['end']}s | 时长: {c['duration']}s | 段落: {c['section']} | 动作家族建议: {c.get('action_family', '')} | 能量等级: {c.get('energy_level', '')} | 景别: {(c.get('shot_design') or {}).get('shot_size', '')} | 运镜: {(c.get('shot_design') or {}).get('camera_movement', '')} | 歌词参考: {lyric}"
         )
         
     return f"""# MV 分镜语义补全任务
@@ -79,18 +93,73 @@ def build_composer_prompt(clips, blueprint, lyrics):
       "action": "人物在此期间的具体动作。若是演唱，格式为：[演唱神态]并演唱歌词“[具体歌词片段]”",
       "vocal_lyrics": "具体演唱的歌词片段 (仅当 action_family 为 performance_vocal 时填写)",
       "action_peak_relative": "动作峰值相对于本 clip 开始的秒点（如 0.8s），应严格对齐音乐重拍",
-      "end_state": "动作结束时的状态",
-      "camera": "运镜方式（如：缓慢推进、跟随镜头、固定特写）",
-      "lighting": "光影氛围（如：逆光剪影、红蓝霓虹律动），需符合色彩剧本",
-      "visual_motif": "本 clip 继承或强化的视觉母题",
-      "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切"
+	      "end_state": "动作结束时的状态",
+	      "shot_size": "景别，如远景/中景/特写/大特写",
+	      "angle": "机位角度，如低角度/平视/荷兰角",
+	      "camera": "运镜方式（如：缓慢推进、跟随镜头、固定特写）",
+	      "lens_feel": "焦段感，如 35mm 自然透视 / 70mm 压缩背景",
+	      "blocking": "主体走位和画面重心",
+	      "lighting": "光影氛围（如：逆光剪影、红蓝霓虹律动），需符合色彩剧本",
+	      "visual_motif": "本 clip 继承或强化的视觉母题",
+	      "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切"
     }}
   ]
 }}
-"""
+	"""
 
 
-def apply_prompts(root, plan, semantic_data):
+def parse_seconds(value):
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value or "").strip().lower().replace("seconds", "").replace("second", "").replace("s", "")
+    return float(text)
+
+
+def validate_semantic_data(plan, semantic_data, allow_partial=False):
+    if not isinstance(semantic_data, dict) or not isinstance(semantic_data.get("clips"), list):
+        return ["语义 JSON 必须是对象，且包含 clips 数组"]
+    plan_clips = plan.get("clips") or []
+    plan_ids = [c.get("clip_id") for c in plan_clips]
+    sem_clips = semantic_data.get("clips") or []
+    sem_ids = [c.get("clip_id") for c in sem_clips if isinstance(c, dict)]
+    errors = []
+    missing = [cid for cid in plan_ids if cid not in sem_ids]
+    extra = [cid for cid in sem_ids if cid not in plan_ids]
+    if missing and not allow_partial:
+        errors.append(f"语义 JSON 缺 {len(missing)} 个 clip：{missing[:5]}")
+    if extra:
+        errors.append(f"语义 JSON 含 clip_plan 之外的 clip：{extra[:5]}")
+    plan_by_id = {c.get("clip_id"): c for c in plan_clips}
+    for row in sem_clips:
+        if not isinstance(row, dict):
+            errors.append("clips[] 必须是对象")
+            continue
+        cid = row.get("clip_id")
+        if cid not in plan_by_id:
+            continue
+        missing_fields = [k for k in REQUIRED_SEMANTIC_FIELDS if row.get(k) in (None, "")]
+        if missing_fields:
+            errors.append(f"{cid} 缺字段：{', '.join(missing_fields)}")
+        try:
+            peak = parse_seconds(row.get("action_peak_relative"))
+            dur = float(plan_by_id[cid].get("duration") or 0)
+            if peak < 0 or (dur and peak > dur + 0.05):
+                errors.append(f"{cid} action_peak_relative={peak} 超出 clip 时长 {dur}")
+        except (TypeError, ValueError):
+            errors.append(f"{cid} action_peak_relative 不是秒数：{row.get('action_peak_relative')}")
+    return errors
+
+
+def ensure_shot_design(clip):
+    if not isinstance(clip.get("shot_design"), dict):
+        clip["shot_design"] = {}
+    return clip["shot_design"]
+
+
+def apply_prompts(root, plan, semantic_data, allow_partial=False):
+    validation_errors = validate_semantic_data(plan, semantic_data, allow_partial=allow_partial)
+    if validation_errors:
+        raise ValueError("\n".join(validation_errors))
     clip_map = {c["clip_id"]: c for c in semantic_data.get("clips", [])}
     updated_count = 0
     
@@ -122,6 +191,17 @@ def apply_prompts(root, plan, semantic_data):
             clip["visual_motif"] = sem.get("visual_motif")
         if sem.get("transition_motif"):
             clip["transition_motif"] = sem.get("transition_motif")
+        shot = ensure_shot_design(clip)
+        for sem_key, target_key in (
+            ("shot_size", "shot_size"),
+            ("angle", "angle"),
+            ("camera", "camera_movement"),
+            ("lens_feel", "lens_feel"),
+            ("blocking", "blocking"),
+            ("lighting", "lighting"),
+        ):
+            if sem.get(sem_key):
+                shot[target_key] = sem.get(sem_key)
         
         # Apply to Markdown files
         img_prompt_path = os.path.join(root, clip.get("image_prompt_path", f"出图/段落/prompt/{cid}.md"))
@@ -135,6 +215,10 @@ def apply_prompts(root, plan, semantic_data):
                 sem.get("action", ""), 
                 img_content
             )
+            img_content = re.sub(r"- 景别：.*", f"- 景别：{shot.get('shot_size', '')}", img_content)
+            img_content = re.sub(r"- 机位：.*", f"- 机位：{shot.get('angle', '')}", img_content)
+            img_content = re.sub(r"- 运镜：.*", f"- 运镜：{shot.get('camera_movement', '')}", img_content)
+            img_content = re.sub(r"- 光影：.*", f"- 光影：{shot.get('lighting', '')}", img_content)
             write_text(img_prompt_path, img_content)
             
         # Rewrite Video Prompt
@@ -151,11 +235,14 @@ def apply_prompts(root, plan, semantic_data):
                 vid_content = re.sub(r"- 力量等级：.*", f"- 力量等级：{sem.get('energy_level', '')}", vid_content)
             if sem.get("transition_motif"):
                 vid_content = re.sub(r"- 转场母题：.*", f"- 转场母题：{sem.get('transition_motif', '')}", vid_content)
+            vid_content = re.sub(r"- 景别：.*", f"- 景别：{shot.get('shot_size', '')}", vid_content)
+            vid_content = re.sub(r"- 运镜：.*", f"- 运镜：{shot.get('camera_movement', '')}", vid_content)
+            vid_content = re.sub(r"- 光影：.*", f"- 光影：{shot.get('lighting', '')}", vid_content)
             
             # Update video prompt section
             peak_rel = clip.get("action_peak_relative", "0.8s")
             try:
-                peak_text = f"{float(peak_rel):.2f}s (relative)"
+                peak_text = f"{parse_seconds(peak_rel):.2f}s (relative)"
             except (TypeError, ValueError):
                 peak_text = str(peak_rel)
                 
@@ -164,7 +251,7 @@ def apply_prompts(root, plan, semantic_data):
             if vocal_lyrics and sem.get("action_family") == "performance_vocal":
                 action_desc = f"{action_desc}；对口型约束：人物正在演唱歌词“{vocal_lyrics}”，口型必须完全对齐"
 
-            prompt_replacement = f"人物运动：{action_desc}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{sem.get('camera', '按段落张力')}；光影：{sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {peak_text}；转场母题：{clip.get('transition_motif', '')}；"
+            prompt_replacement = f"人物运动：{action_desc}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{shot.get('camera_movement') or sem.get('camera', '按段落张力')}；光影：{shot.get('lighting') or sem.get('lighting', '按视觉蓝图')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {peak_text}；转场母题：{clip.get('transition_motif', '')}；"
             vid_content = re.sub(r"人物运动：.*?(?:卡点约束：.*?s；|声音约束：)", prompt_replacement + "声音约束：", vid_content, flags=re.DOTALL)
             
             write_text(vid_prompt_path, vid_content)
@@ -190,6 +277,7 @@ def main():
     ap = argparse.ArgumentParser(description="语义分镜引擎：基于歌词和蓝图自动补全画面提示词")
     ap.add_argument("project_root")
     ap.add_argument("--mock-assessment", help="提供模拟评估 JSON 的路径，用于测试或手动注入")
+    ap.add_argument("--allow-partial", action="store_true", help="允许只注入部分 clip；默认要求覆盖全部 clip")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -219,7 +307,11 @@ def main():
         print(f"[err] 无法读取注入的 JSON: {args.mock_assessment}", file=sys.stderr)
         sys.exit(2)
         
-    count = apply_prompts(root, plan, semantic_data)
+    try:
+        count = apply_prompts(root, plan, semantic_data, allow_partial=args.allow_partial)
+    except ValueError as exc:
+        print(f"[err] 语义 JSON 校验失败：\n{exc}", file=sys.stderr)
+        sys.exit(2)
     print(f"[ok] 已成功将语义信息注入到 {count} 个 Clip 的 prompt 文件及 clip_plan.json 中。")
 
 

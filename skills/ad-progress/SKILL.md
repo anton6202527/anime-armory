@@ -1,6 +1,6 @@
 ---
 name: ad-progress
-description: 拍广告(ad)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。扫描 `创作区/拍广告/` 下广告项目的 `_进度.md` 阶段进度表和交付版本矩阵，汇总每条广告的完成度、当前前沿、brief 缺口、交付件状态，并给出下一步该跑哪个 ad skill。不改任何文件。Use when the user wants an ad project status overview or asks "what's next" for a 拍广告 project. Triggers ad-progress, 广告进度, 拍广告进度, TVC进度, 交付进度, 下一步, 下一步做什么, 查进度, 看进度.
+description: 拍广告(ad)「当前进度仪表盘 + 下一步建议」（只读 QA，不生产内容）。扫描 `创作区/拍广告/` 下广告项目的 `_进度.md` 阶段进度表、交付版本矩阵、brief 缺口，以及 producer_pack/ad_score/product_qc/video_qc 等横切门禁摘要，汇总每条广告的完成度、当前前沿、交付件状态，并给出下一步该跑哪个 ad skill。不改任何文件。Use when the user wants an ad project status overview or asks "what's next" for a 拍广告 project. Triggers ad-progress, 广告进度, 拍广告进度, TVC进度, 交付进度, 下一步, 下一步做什么, 查进度, 看进度.
 ---
 
 # ad-progress — 拍广告进度仪表盘 + 下一步建议
@@ -11,8 +11,8 @@ description: 拍广告(ad)「当前进度仪表盘 + 下一步建议」（只读
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`创作区/拍广告/<项目>/_进度.md` 和可选 `需求/brief.json`。
-- **输出**：终端摘要：阶段完成度、交付件完成度、brief gate 提示、当前前沿、后续待办。
+- **输入**：`创作区/拍广告/<项目>/_进度.md`、`需求/brief.json`，以及可选 `生产数据/producer_pack.json`、`评分/ad_score.json`、`出图/分镜/image_jobs_manifest.json`、`出图/分镜/product_qc.json`、`出视频/分镜/video_qc.json`。
+- **输出**：终端摘要：阶段完成度、交付件完成度、brief gate 提示、横切门禁摘要、当前前沿、后续待办。
 - **读写边界**：严格只读；不写 `_进度.md`、不写生产数据、不启动花钱或不可逆阶段。
 - **契约关系**：解析只引用广告线自己的 `ad-craft/scripts/contract.py` 和 `ad/_lib/progress_md.py`；不引用其它系列实现。
 
@@ -29,7 +29,7 @@ python3 skills/ad-progress/scan.py --root <仓库根>      # 从其它目录调�
 
 ## 输出怎么转述
 
-优先转述当前前沿和阻断。若下一步是 `ad-image`、`ad-video`、`ad-compose`，提醒这是高风险阶段：会花钱/不可逆，进入前要确认后端、交付规格，并先过广告线 gate；brief 的必填项缺失时，先回 `ad-concept` 访谈补齐。
+优先转述当前前沿和阻断。若 `producer_pack` / `ad_score` / `product_qc` / `video_qc` 有 block，先转述这些横切门禁；若下一步是 `ad-image`、`ad-video`、`ad-compose`，提醒这是高风险阶段：会花钱/不可逆，进入前要确认后端、交付规格，并先过广告线 gate；brief 的必填项缺失时，先回 `ad-concept` 访谈补齐。
 
 ## 不做什么
 

@@ -10,16 +10,28 @@
 ├── _meta.json
 ├── _进度.md
 ├── 创作蓝图.md
+├── 创作/song_brief.json
+├── 素材/reference_pack.json
 ├── 词/lyrics.md
 ├── 歌/
+│   ├── song_form.json
+│   ├── chord_sheet.md
+│   ├── topline_notes.md
 │   ├── compose_task.md
 │   ├── compose_task.json
 │   ├── compose_prompts/
 │   ├── takes/
 │   ├── takes_manifest.json
+│   ├── take_review.json
 │   └── song.wav
-├── 合规/AI使用说明.md
-└── 导出/
+├── 混音/master_check.json
+├── 合规/
+│   ├── AI使用说明.md
+│   └── rights_metadata.json
+├── 导出/
+│   └── release_pack.json
+└── 发行/
+    └── feedback_summary.json
 ```
 
 ## 关键选择点
@@ -31,6 +43,8 @@
 | `语言` | 决定歌词与演唱语言 |
 | `BPM/速度` | 给作词行长、作曲 prompt、MV 卡点提供锚点 |
 | `调性` | 给作曲 prompt 和后续编曲沟通提供锚点 |
+| `乐器编制` | 给 style prompt / 编曲方向提供明确配器 |
+| `人声类型` | 给 style prompt / 合规音色选择提供方向 |
 | `作曲后端` | Suno / Udio / ACE-Step / DiffRhythm / 手工外部 |
 | `生成版数` | 默认多版挑版，不一版定稿 |
 | `挑版策略` | hook、人声、蓝图贴合、MV 适配等优先级 |
@@ -42,13 +56,18 @@
 | key | 阶段 | owner | gate |
 |---|---|---|---|
 | `setup` | 项目骨架 | `song-craft/scripts/init_project.py` | deterministic |
+| `brief` | A&R 简报 / 参考边界 | `song-craft/scripts/song_brief.py + reference_pack.py` | target listener + reference boundary |
 | `lyrics` | 立项 + 词 | `song-lyrics` | user-review + singability check |
+| `song_form` | 旋律/和声/曲式草图 | `song-craft/scripts/melody_chord_packet.py` | chord sheet + topline notes |
 | `compose_plan` | 作曲任务包 | `song-compose/scripts/compose_song.py` | settings + lyrics |
 | `takes` | 多版生成 / 注册 | backend + `compose_song.py register` | take manifest |
 | `selection` | 挑版定稿 | `compose_song.py score/select` | user-listening |
 | `cover` | 翻唱/换声 | `song-cover` | voice authorization |
 | `review` | 质检 | `song-review` | machine + listening checklist |
-| `handoff` | 发布 / 对外交付 | platform | ai usage disclosure |
+| `master_qc` | 混音/母带检查 | `song-review/scripts/master_check.py` | audio delivery quality |
+| `rights` | 权益元数据 | `song-craft/scripts/rights_metadata.py` | split sheet + rights metadata |
+| `handoff` | 发布交付包 | `song-craft/scripts/release_pack.py` | release pack evidence |
+| `feedback` | 发行数据回测 | `song-feedback/scripts/feedback_ingest.py` | real listener/platform data |
 
 ## take manifest
 

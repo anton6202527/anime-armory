@@ -16,6 +16,7 @@ description: Read-only production control dashboard for novel projects. Use when
 ## 汇总内容
 
 - `pipeline_runner` dry-run：下一阶段、每阶段 done/ready/blocked。
+- `author_workflow`：作者视角当前成书步骤、下一步命令、当前 blocker/warning；没有落盘时只读计算，不改文件。
 - artifact graph：stale artifacts 与受影响消费者。
 - `语义任务/*.json`：未完成语义任务。
 - `修订/revision_plan.json`：P0/P1/P2 任务与冲突。

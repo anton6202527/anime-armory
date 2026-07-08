@@ -9,11 +9,12 @@
 | Seedream Universal Reference | ✓ | ✓ | 免 LoRA 跨图锁主体（≤14 图），**产品/代言人一致性最稳** |
 | 可灵 Kling 主体库 / Element Library | ✓ | ✓ | 注册产品/代言人为主体，按 ID 复用 |
 | Sora Character Cameo | ✓ | ✓ | 可复用主体 ID |
+| Dreamina/即梦官方 CLI/API | ✗ | ✗ | 官方工具路径可用；产品一致性仍靠强 prompt + 参考图/后期锁字，禁止混同逆向路径 |
 
 ## 两条硬闸门
 
 1. **项目内不混用后端**——一个 `创作区/拍广告/<项目>/` 锁一个生图后端；切换记录到 `_设置.md` 并重出受影响图。
-2. **禁第三方逆向/未授权出图**——即梦/Dreamina 逆向路径 `forbidden`（官方 API 不在此列）。
+2. **禁第三方逆向/未授权出图**——即梦/Dreamina 逆向路径 `forbidden`；明确的官方 CLI/API 路径可按 `dreamina_official` 放行并留痕。
 
 ## 广告一致性建议
 

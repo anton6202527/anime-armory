@@ -7,51 +7,144 @@
   "clips": [
     {
       "id": "C01",
-      "duration": 4,
-      "scene": "夜晚桌面",
-      "shot": "俯拍推近，桌面物件形成轻微压迫感",
-      "prompt": "realistic cinematic vertical ad, warm night desk, laptop edge, sticky notes, ceramic cup, smartphone notifications, no real brand UI, soft city bokeh outside window",
-      "product_lock": "手机屏幕只显示抽象通知和星盒文字占位"
+      "shot_id": "镜头01",
+      "duration": 3.8,
+      "scene": "痛点钩子：夜晚桌面与星盒首页",
+      "shot": "手机亮起，星盒 App 页面和凌乱通知同框，照片、语音、待办散在屏幕边缘",
+      "prompt": "realistic cinematic vertical ad, close-up smartphone on warm night desk, Starbox app concept home screen, Chinese text 星盒, 今日手账, 照片, 语音, 待办, scattered notification cards around the phone, no third-party brand UI, teal #2E9E97 and warm yellow #F6C85F accents, text must be clear and readable, product identity locked to PROD_STARBOX_APP and BRAND_STARBOX",
+      "vo_lines": [1],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "PROD_STARBOX_APP：手机屏幕必须显示星盒概念首页，同一品牌色 #2E9E97，同一文字标识“星盒”，不展示第三方真实 UI。",
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": true,
+        "transition": "手机屏幕亮度作为下一镜切点"
+      }
     },
     {
       "id": "C02",
-      "duration": 5,
+      "shot_id": "镜头02",
+      "duration": 4.8,
       "scene": "书桌前",
-      "shot": "中近景，主角坐下，手停在空白页面上",
-      "prompt": "young female freelancer in casual homewear, tired but calm, blank journal page, warm desk lamp, realistic film look, no celebrity likeness",
-      "product_lock": "不展示真实第三方软件界面"
+      "shot": "中近景，主角坐下，手停在空白页面上，手机角标保留星盒",
+      "prompt": "young female freelancer in casual homewear, tired but calm, blank journal page, smartphone corner shows Starbox logo text 星盒 and teal accent, warm desk lamp, realistic film look, no celebrity likeness, text readable",
+      "vo_lines": [2],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "手机角标保留 BRAND_STARBOX，不出现其他 App 或真实第三方界面。",
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": true,
+        "transition": "主角手指靠近手机屏幕，切入界面特写"
+      }
     },
     {
       "id": "C03",
-      "duration": 7,
+      "shot_id": "镜头03",
+      "duration": 6.7,
       "scene": "星盒界面抽象演示",
-      "shot": "手机特写，卡片式信息归位",
-      "prompt": "close-up smartphone, abstract app interface cards labeled photo voice todo moving into daily journal draft, clean minimal UI, Chinese placeholder text, brand color teal and warm yellow",
-      "product_lock": "功能为概念动效，避免承诺自动生成结果"
+      "shot": "手机特写，照片、语音、待办以卡片形式归入今日手账草稿",
+      "prompt": "close-up smartphone, Starbox app concept interface, cards labeled 照片, 语音, 待办 gently moving into 今日手账草稿, clean minimal UI, teal #2E9E97 brand color, warm yellow #F6C85F highlight, Chinese UI text clear and readable, same PROD_STARBOX_APP layout, no third-party app UI",
+      "vo_lines": [3],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "功能为概念动效，避免承诺自动生成结果；UI 状态必须继承 PROD_STARBOX_APP 的卡片式布局。",
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": true,
+        "transition": "最后一张卡片落入页面后转到明日清单"
+      }
     },
     {
       "id": "C04",
-      "duration": 6,
+      "shot_id": "镜头04",
+      "duration": 5.8,
       "scene": "明日清单",
-      "shot": "界面动效转场到明日清单",
-      "prompt": "unfinished checklist items fold gently into tomorrow list, calm organized mobile interface, warm realistic reflection on phone glass",
-      "product_lock": "保留“明日清单”文字"
+      "shot": "界面动效转场到明日清单，CTA 按钮轻露出",
+      "prompt": "Starbox app concept UI, unfinished checklist items fold gently into 明日清单, small CTA button 立即预约内测 appears below the list, calm organized mobile interface, warm realistic reflection on phone glass, Chinese UI text clear and readable, same PROD_STARBOX_APP and BRAND_STARBOX",
+      "vo_lines": [4],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "保留“明日清单”和“立即预约内测”文字，CTA 不贴边。",
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": true,
+        "transition": "CTA 轻微高亮后切到主角确认保存"
+      }
     },
     {
       "id": "C05",
-      "duration": 5,
+      "shot_id": "镜头05",
+      "duration": 5.9,
       "scene": "情绪落点",
-      "shot": "近景，主角保存后放松，灯光稳定",
-      "prompt": "young creator softly smiles after saving journal, warm lamp, quiet room, cinematic close-up, natural face, no glamour styling",
-      "product_lock": "手机可见星盒抽象页面"
+      "shot": "近景，主角确认保存后放松，手机仍显示星盒今日手账页面",
+      "prompt": "young creator softly smiles after confirming save, warm lamp, quiet room, cinematic close-up, natural face, no glamour styling, phone screen visible with 星盒 今日手账 concept page, brand color #2E9E97, text readable",
+      "vo_lines": [5],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "手机可见同一星盒抽象页面；人物为虚构演员，禁止明星脸。",
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": true,
+        "transition": "暖光稳定后淡入片尾卡"
+      }
     },
     {
       "id": "C06",
+      "shot_id": "镜头06",
       "duration": 3,
       "scene": "片尾",
-      "shot": "静态 end card",
-      "prompt": "minimal vertical end card, text logo 星盒, slogan 把今天稳稳收好, CTA 立即预约内测, warm off-white background, teal accent",
-      "product_lock": "必须清晰展示品牌、slogan、CTA"
+      "shot": "静态 end card，品牌、slogan、CTA、法律声明清晰可读",
+      "prompt": "minimal vertical end card, text logo 星盒, slogan 把今天稳稳收好, CTA 立即预约内测, legal line 产品功能以实际上线版本为准，内测名额及功能开放范围以页面说明为准。, warm off-white background, teal #2E9E97 accent, text clear and readable, keep all text inside safe area",
+      "vo_lines": [6],
+      "assets": {
+        "PROD_STARBOX_APP": true,
+        "BRAND_STARBOX": true
+      },
+      "product_lock": "必须清晰展示 BRAND_STARBOX、slogan、CTA 与法律声明；建议最终由 ad-compose 后期叠字锁定。",
+      "legal_lines": [
+        "产品功能以实际上线版本为准，内测名额及功能开放范围以页面说明为准。"
+      ],
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      },
+      "continuity": {
+        "need_end_frame": false,
+        "transition": "静态收尾"
+      }
     }
   ]
 }

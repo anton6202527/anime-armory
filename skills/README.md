@@ -24,12 +24,12 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
 | n2d | `n2d` + `n2d-*` | 21 | 4593 | 233305 |
-| novel | `novel` + `novel-*` | 29 | 3040 | 61473 |
+| novel | `novel` + `novel-*` | 29 | 3132 | 66142 |
 | comic | `comic` + `comic-*` | 10 | 800 | 12124 |
-| song | `song` + `song-*` | 10 | 534 | 4851 |
-| mv | `mv` + `mv-*` | 14 | 992 | 10590 |
-| ad | `ad` + `ad-*` | 13 | 822 | 11873 |
-| **合计** | `skills/*/SKILL.md` | **97** | 10781 | 334216 |
+| song | `song` + `song-*` | 11 | 616 | 7416 |
+| mv | `mv` + `mv-*` | 14 | 1039 | 13051 |
+| ad | `ad` + `ad-*` | 13 | 862 | 15864 |
+| **合计** | `skills/*/SKILL.md` | **98** | 11042 | 347902 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -136,8 +136,8 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 原创新书 | `novel-create` | 访谈 → 创作蓝图 → 设定圣经 → 章纲 → Demo gate → 逐章写作 → 导出 |
 | 书名 | `novel-title` | 标题候选、平台适配、撞名风险初判 |
 | 公版/源书 | `novel-fetch` | 获取公版或授权源书（如红楼梦、西游记、三国演义、金瓶梅等，默认可走 generic 加 --i-have-rights 兜底解析维基文库繁体回目）并落 manifest |
-| 写作 primitives | `novel-craft` | contract、draft packets、arc packets、queue、progress、QA gate、export、AI 使用披露、compliance profile、统一修订计划、state_delta 草案等家族共享工具 |
-| 生活观察 | `novel-observe` | 生活观察、采访纪要、人物行为、五感和场景烟火气素材库；产 `素材/观察札记.jsonl` + `素材/观察素材库.md` |
+| 写作 primitives | `novel-craft` | 作者成书通用流程、作者意图档案、结构地图、发布元数据包、contract、draft packets、arc packets、queue、progress、QA gate、export、AI 使用披露、compliance profile、统一修订计划、state_delta 草案等家族共享工具 |
+| 生活观察 | `novel-observe` | 生活观察、采访纪要、人物行为、五感和场景烟火气素材库；产 `素材/观察札记.jsonl` + `素材/观察素材库.md`，可按章节落 `写作任务/观察素材_第NN章.md` |
 | 正向审美 | `novel-aesthetic` | 授权/自有/公版/项目 Demo 的高光样本拆解，沉淀“为什么有效”和可迁移规则；产 `设定/aesthetic_bank.json` |
 | 扩写 | `novel-expand` | 把短文本扩成章节内细节，时间不推进 |
 | 精简 | `novel-condense` | 长篇压缩成短版 |
@@ -145,13 +145,13 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 改写 | `novel-rewrite` | 改主线、换设定、重构派生作品 |
 | 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
 | 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审 |
-| 专业编辑 | `novel-edit` | 发展性编辑、行文编辑、拷贝编辑、校样四层编辑计划；把 review/score/balance/feedback/scene cards 汇总成投稿前修订轮次 |
+| 专业编辑 | `novel-edit` | 发展性编辑、行文编辑、拷贝编辑、校样四层编辑计划；把 review/score/balance/feedback/scene cards 汇总成投稿前修订轮次，并产 editorial letter / style sheet / proof checklist |
 | 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，输出 go/revise/kill 决策 |
-| 专业资料包 | `novel-research` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景的证据层：产 `资料/专业资料包_<主题>.md` + `research_sources.json`，支持 `research_required_domains` 必需领域，刷新审计产 `research_refresh_plan.md`，写章包自动引用，review/export 阻断缺失或过期高风险资料包 |
+| 专业资料包 | `novel-research` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景的证据层：产 `research_needs` / `research_jobs`、`资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`，来源含五轴评估并把事实映射到章节/场景，支持 `research_required_domains` 必需领域，刷新审计产 `research_refresh_plan.md`，写章包自动引用，review/export 阻断缺失或过期高风险资料包 |
 | 文风 | `novel-style` | 文风指纹、样本授权、漂移检查 |
 | 动态百科 | `novel-wiki` | 人物状态、伏笔、关系温度、设定一致性维护 |
 | 模拟读者 | `novel-simulate` | 虚拟试读、留存先验、弃书点和套路密度；默认 signal-only，QA gate 会提示只能低权重参考 |
-| 真实反馈 | `novel-feedback` | 导入平台后台/测试读者 CSV·JSONL，聚合章节完读率、弃读率、评论情绪、掉点和 A/B/take 归因 |
+| 真实反馈 | `novel-feedback` | 生成读者测试计划，导入平台后台/测试读者 CSV·JSONL，聚合章节完读率、弃读率、评论情绪、掉点和 A/B/take 归因；beta/发布版 release manifest 要求先有 reader test plan，platform/KDP 发布缺真实数据需 scoped waiver |
 | 节奏平衡 | `novel-balance` | 情节热力图、注水、断章、爽点节奏 |
 | 宣发 | `novel-promote` | 爆点提取、短视频脚本底稿、视频 brief |
 | 出海/本地化 | `novel-localize` | 术语锁（专名跨章 canonical 译名）+ 文化适配逐章翻译 + 未译残留/术语/覆盖/manifest 元数据机检；翻译后端选择点；源书权利/目标辖区/AI 标识三连合规 |
@@ -162,7 +162,7 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | Agent 总控（上层） | `novel-supervisor` | novel 线 agent 编排层：消费 pipeline runner 计划、语义任务、revision plan 与 batch 状态，输出 next action；不绕过蓝图/设定/Demo 等人工审批 |
 | 并发调度（横切）| `novel-batch` | 纯本地单机多 worker 原子锁排队，支持 claim、lease、renew、reclaim、retry、dead-letter 和幂等 plan，提供多章节审稿/评分/dashboard 刷新任务队列 |
 
-**默认产品路径**：`novel-create` / 派生 skill 产文本 → 必要时 `novel-research` 补专业资料包、`novel-observe` 补生活观察素材、`novel-aesthetic` 建正向审美样本 → `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-edit` 生成分层编辑计划与 line edit packet → `novel-craft` 用 `revision_planner.py` 合并修订任务并导出 txt/docx/outline → `release_manifest.py` 固化交付版本。运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。项目设置入口走 `novel-settings`，底层仍是本线 `skills/novel/_lib/settings.py`。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
+**默认产品路径**：先跑 `novel-craft/scripts/author_workflow.py "<作品根>" --write` 得到作者视角成书流程、真实 blocker/warning 与下一步 → `author_intent.py scaffold/check` 固化主题、余味、不可妥协项和审美/伦理边界 → `novel-create` / 派生 skill 产文本 → `novel-research jobs` 反推资料缺口并转成深搜任务（`job-update` 领取/关闭），资料包补好后跑 `research_pack.py scene-usage` 把事实绑定章节/场景；`novel-observe` 补生活观察素材，`novel-aesthetic` 建正向审美样本 → `scene_cards.py` + `manuscript_map.py --write` 建场景卡和全稿结构地图 → Demo gate → `demo_readiness.py --write` 做商业放量 + 文学/审美锚点双闸门 → 逐章写作/小批回扫（写章包会自动注入专业资料包、逐章观察素材和审美迁移规则）→ `novel-score` 给生产决策 → `novel-review` 回扫 → `novel-feedback` 建含 cohort/A-B/隐私说明的读者测试计划并在有数据时回灌，缺 take/variant/experiment 归因只能当观察 → `novel-edit` 生成分层编辑计划、editorial letter、style sheet、proof checklist 与 line edit packet，用 `--query/--answer-query` 关闭 editor query，用 `--close-task` 关闭 P0/P1，并用 `style_sheet_check.py` 终校 → `novel-craft` 用 `revision_planner.py` 合并修订任务，补带逐章 `chapter_usage` 的 `ai_usage.py`、`compliance_profile.py`、`metadata_pack.py --write` 后导出 txt/docx/outline → `release_manifest.py` 固化交付版本；platform/KDP 发布缺真实读者数据或发布元数据包会阻断，除非有 scoped reader-data waiver。`novel_pipeline.py` registry 已把 `author_workflow / author_intent / evidence_prep / manuscript_map / demo_readiness / reader_validation / edit / ai_compliance / metadata_pack` 纳入默认阶段；运营层用 `novel-dashboard` 看全局状态，放量任务用 `novel-batch` 排队，长流程 agent 派发用 `novel-supervisor` 输出 next action；skill 升级后用 `novel-update` 做内容快照比对与最小文本返工计划。项目设置入口走 `novel-settings`，底层仍是本线 `skills/novel/_lib/settings.py`。`小说生成工作流` 选择点支持 `默认单步` / `三步迭代` / `边写边自检`；长篇/商业连载/漫剧源书默认三步迭代，除非项目显式写 `默认单步`。`边写边自检` 会把每章正文 + state_delta + `post_write.py` 自检闭环写进任务包和 flow 下一步提示，写后可先用 `propose_state_delta.py` 生成 delta 草案，`post_write.py` 先过读者契约 sentry，再过账本/百科/逻辑/力量体系自检；每 3-5 章可用 `arc_packets.py` + `arc_gate.py` 做长篇弧段压力测试；发布/出海/KDP/中国公开发布等目标用 `compliance_profile.py` 生成平台/辖区合规清单，QA gate 统一读取。
 
 > **力量体系自检（穿越/系统流/修仙·等级·成长值·战力严丝合缝·实时监控）**：网文力量体系是命门——等级跳变、战力前后矛盾、属性突变、升级节奏崩（数值膨胀/越级无代价）是高发穿帮，人脑记不住几百章。落地：① `novel-create` 立项按题材自动脚手架 `设定/power_system_registry.json`（研究落地的等级体系模板 + 系统面板字段[属性≤7] + 升级节奏[每章小奖/每5章中奖/每20章大奖] + 逐章成长 progression），见 `novel-craft/references/力量体系设计.md`；② 引擎 `novel-wiki/scripts/power_system.py` 确定性机检：等级/境界/战力**只增不减**（退档=阻断·除非标跌境/废修豁免）、未知境界=阻断、越级过快/面板属性超7/系统流久无升级桥段=建议；③ **实时监控**：`novel/scripts/post_write.py` 每章写后自动跑（受 `力量体系自检` 选择点控制），`context_loader` 写章前把"主角现状(Lv/境界/属性/战力)"喂给上下文让 AI 按现状推进；④ 审稿 `novel-review/consistency_audit.py` 含 `power_system` 子runner。真值/默认在 `novel/_lib/power_system_defs.py`。
 
@@ -178,14 +178,17 @@ song 负责从点子、歌词草稿或半成品音频生产可审计歌曲资产
 | 进度·下一步（只读） | `song-progress` | 扫 `创作区/写歌/<项目>/_进度.md` 阶段表 → 汇总完成度 + 当前前沿 + 后续待办；只读不改文件 |
 | 更新影响（只写计划） | `song-update` | 本线 skill 内容快照比对 + 最小歌词/作曲/换声/质检返工计划；只写计划/基线，不改歌词、音频或 `_进度.md` |
 | 设置管理 | `song-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/song/_lib/settings.py` |
-| 合约/骨架 | `song-craft` | 项目骨架、契约、进度、AI 使用披露 |
+| 合约/骨架 | `song-craft` | 项目骨架、默认工作流、A&R 简报、参考边界、曲式/和声草图、权益元数据、AI 使用披露、发布交付包 |
 | 作词 | `song-lyrics` | 创作蓝图、歌词结构、押韵与可唱性 |
-| 歌词评分 | `song-score` | 结构、押韵、hook、可唱性前置体检 |
-| 作曲/演唱 | `song-compose` | 生成任务包、多版登记、挑版、定稿 |
+| 歌词评分 | `song-score` | 结构、押韵、hook、可唱性和可唱行长前置体检 |
+| 作曲/演唱 | `song-compose` | 读取 brief/reference/chord/topline 上下文生成任务包，多版登记、试听评审、挑版、定稿 |
 | 翻唱/换声 | `song-cover` | RVC / SVC 换声，含授权闸门 |
-| 质检 | `song-review` | 歌词、音频、合规和流程自审 |
+| 质检 | `song-review` | 歌词、音频、母带交付、合规和流程自审 |
+| 真实反馈 | `song-feedback` | 导入平台/听众 CSV·JSONL，聚合完播、跳出、收藏、分享、复用和评论信号，形成下一轮改词/改曲/改混建议 |
 
 **允许的跨线交接**：成品 `歌/song.*` 与 `词/lyrics.md` 可作为 mv 输入；song 不 import mv 实现。
+
+**默认产品路径**：先跑 `song-craft/scripts/song_workflow.py "<作品根>" --write` 得到作者/制作人视角的成歌流程、真实 blocker/warning 与下一步 → `song-craft/scripts/song_brief.py "<作品根>" --write` 固化目标听众、核心承诺、情绪弧、声音身份和 hook 截止时间 → `song-craft/scripts/reference_pack.py "<作品根>" --write` 建参考歌边界，只借鉴可描述元素并明确不复制的旋律/歌词/编曲特征 → `song-lyrics` 写词，随后用 `song-score/scripts/analyze_lyrics.py` 与 `song-craft/scripts/lyric_prosody_check.py --write` 做 hook、结构、押韵和可唱行长体检 → `song-craft/scripts/melody_chord_packet.py --write` 生成曲式、和弦和 topline 备注 → `song-compose/scripts/compose_song.py build` 读取 brief/reference/chord/topline 生成作曲任务包 → 多版生成后用 `compose_song.py register` 登记 take，用 `song-compose/scripts/take_review.py --write` 做试听评审和推荐，再由 `compose_song.py select` 定稿 → 需要换声时进 `song-cover` 且必须过真人音色授权闸门 → `song-review` 审歌，并用 `song-review/scripts/master_check.py --platform streaming --write` 做母带/交付检查 → `song-craft/scripts/ai_usage.py --write` 记录歌词、作曲、编曲、人声等组件级 AI 使用与人工贡献 → `song-craft/scripts/rights_metadata.py --write` 写贡献者、split sheet、权利状态、ISRC/ISWC/表演者信息 → `song-craft/scripts/release_pack.py --target distribution --write` 汇总音频、歌词、take、母带、权益和 AI 披露证据生成发布交付包 → 发布或小样测试后用 `song-feedback/scripts/feedback_ingest.py --input <数据.csv|jsonl> --write` 回灌真实听众/平台数据；数据只作为下一轮改词、改曲、改编曲或改混的信号，不替代人工听感判断。项目选择点走 `song-settings` / `_设置.md` 沉默沿用，默认不一版定稿。
 
 ---
 

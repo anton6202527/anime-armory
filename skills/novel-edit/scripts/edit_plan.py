@@ -37,6 +37,30 @@ def write_json(path, payload):
     os.replace(tmp, path)
 
 
+def append_jsonl(path, payload):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def read_jsonl(path):
+    out = []
+    if not os.path.isfile(path):
+        return out
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                payload = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(payload, dict):
+                out.append(payload)
+    return out
+
+
 def severity_priority(value):
     text = str(value or "").lower()
     if text in {"p0", "p1", "p2", "p3"}:
@@ -362,7 +386,7 @@ def write_markdown(path, plan):
             lines.append(f"- [{t['priority']}] {t['id']} {chapter}{t['title']}")
             if t.get("reason"):
                 lines.append(f"  - 原因：{t['reason']}")
-            lines.append(f"  - 来源：{t['source']}；回流：{t['recommended_skill']} / {t['return_to_stage'] or 'edit'}")
+            lines.append(f"  - 来源：{t.get('source') or 'edit_plan'}；回流：{t.get('recommended_skill') or 'novel-edit'} / {t.get('return_to_stage') or 'edit'}")
         lines.append("")
     lines.extend([
         "## 执行顺序",
@@ -371,6 +395,187 @@ def write_markdown(path, plan):
         "- 改完一章后记录 before/after 与改动理由，再回跑 `novel-review` 或对应机检。",
         "",
     ])
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines).rstrip() + "\n")
+
+
+def _phase_counts(plan):
+    counts = {phase: 0 for phase in plan["phases"]}
+    for task in plan["tasks"]:
+        counts[task["phase"]] = counts.get(task["phase"], 0) + 1
+    return counts
+
+
+def write_editorial_letter(path, plan):
+    counts = _phase_counts(plan)
+    top_tasks = [t for t in plan["tasks"] if t["priority"] in {"P0", "P1"}][:12]
+    lines = [
+        "# Editorial Letter",
+        "",
+        f"- 生成日期：{plan['generated_at']}",
+        f"- 项目：{plan['project_root']}",
+        "",
+        "## 总体判断",
+        "",
+        "这封主编信只基于已落盘的 review / score / pacing / reader / scene-card 证据生成。它不替作者做文学取舍，作用是把当前稿件需要先解决的结构、人物、节奏和读者承诺问题排成编辑顺序。",
+        "",
+        "## 编辑轮次概览",
+        "",
+    ]
+    for phase in plan["phases"]:
+        lines.append(f"- `{phase}`：{counts.get(phase, 0)} 项")
+    lines.extend(["", "## P0/P1 优先处理项", ""])
+    if top_tasks:
+        for task in top_tasks:
+            chapter = f"第{task['chapter']}章 · " if task.get("chapter") else ""
+            lines.append(f"- [{task['priority']}] {task['id']} {chapter}{task['title']}（来源：{task['source']}）")
+            if task.get("reason"):
+                lines.append(f"  - 编辑理由：{task['reason']}")
+    else:
+        lines.append("- 暂无 P0/P1 编辑任务；可进入 line edit / proofread。")
+    lines.extend([
+        "",
+        "## 建议处理顺序",
+        "",
+        "1. 先裁决 `editorial_assessment`：是否继续、重开、换定位或重排读者契约。",
+        "2. 再执行 `developmental_edit`：主线、人物动机、场景顺序、伏笔回收和节奏。",
+        "3. 结构稳定后进入 `line_edit`：对白、五感、句式、文风、去机械感。",
+        "4. 最后做 `copyedit_proofread`：错字、标点、术语、称谓、格式和导出检查。",
+        "",
+        "## 回测要求",
+        "",
+        "- 结构级改动后回跑 `novel-review` / `novel-score`。",
+        "- 行文级改动后回跑 `mechanical_check.py`、文风漂移检查和必要的读者复测。",
+        "- 发布前重新生成 release manifest，确保所有报告绑定当前正文 hash。",
+    ])
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines).rstrip() + "\n")
+
+
+def _extract_markdown_terms(path):
+    if not os.path.exists(path):
+        return []
+    terms = []
+    with open(path, encoding="utf-8", errors="replace") as f:
+        for raw in f:
+            line = raw.strip()
+            if not line:
+                continue
+            if line.startswith("#"):
+                term = line.lstrip("#").strip()
+                if term and len(term) <= 40:
+                    terms.append(term)
+            elif line.startswith(("-", "*")) and ("：" in line or ":" in line):
+                term = re.split(r"[:：]", line.lstrip("-* ").strip(), maxsplit=1)[0].strip()
+                if term and 1 <= len(term) <= 20:
+                    terms.append(term)
+    out = []
+    for term in terms:
+        if term not in out:
+            out.append(term)
+    return out[:80]
+
+
+def write_style_sheet(path, root):
+    alias = load_json(os.path.join(root, "设定", "角色别名.json"), {}) or {}
+    aliases = []
+    if isinstance(alias, dict):
+        for key in ("aliases", "character_aliases", "confirmed_aliases"):
+            value = alias.get(key)
+            if isinstance(value, dict):
+                for canonical, vals in value.items():
+                    aliases.append((canonical, vals if isinstance(vals, list) else [vals]))
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict):
+                        aliases.append((item.get("canonical") or item.get("name") or "", item.get("aliases") or []))
+    terms = []
+    for rel in ("设定/角色卡.md", "设定/世界观.md", "设定/设定圣经.md", "设定/章纲.md"):
+        terms.extend(_extract_markdown_terms(os.path.join(root, rel)))
+    unique_terms = []
+    for term in terms:
+        if term and term not in unique_terms:
+            unique_terms.append(term)
+    settings_text = ""
+    settings_path = os.path.join(root, "_设置.md")
+    if os.path.exists(settings_path):
+        settings_text = open(settings_path, encoding="utf-8", errors="replace").read()
+    lines = [
+        "# Style Sheet",
+        "",
+        f"- 生成日期：{date.today().isoformat()}",
+        "",
+        "## 项目口径",
+        "",
+        "- 文本主创模式：见 `_设置.md`；若目标平台对 AI 正文敏感，终稿需保持人类主创或 AI 辅助留痕。",
+        "- 平台/用途：以 `_设置.md` 与 `_meta.json` 为准；所有术语、称谓、章节标题和敏感表达按该口径统一。",
+        "",
+        "## 设置摘录",
+        "",
+    ]
+    if settings_text.strip():
+        for line in settings_text.splitlines()[:40]:
+            if line.strip():
+                lines.append(f"- {line.strip()}")
+    else:
+        lines.append("- 未找到 `_设置.md` 或内容为空。")
+    lines.extend(["", "## 角色称谓与别名", ""])
+    if aliases:
+        for canonical, vals in aliases:
+            vals = [str(v) for v in vals if str(v).strip()]
+            lines.append(f"- {canonical}：{', '.join(vals) if vals else '待补'}")
+    else:
+        lines.append("- 未找到 confirmed 角色别名表；建议先跑 `novel-wiki/scripts/alias_scaffold.py` 并人工确认。")
+    lines.extend(["", "## 术语与专名候选", ""])
+    if unique_terms:
+        for term in unique_terms[:60]:
+            lines.append(f"- {term}")
+    else:
+        lines.append("- 待补：从角色卡、世界观、设定圣经、章纲中确认专名和术语。")
+    lines.extend([
+        "",
+        "## Copyedit 统一规则",
+        "",
+        "- 同一人物在同一叙述距离下称谓保持一致；切换称谓必须服务关系变化或 POV。",
+        "- 数字、日期、货币、境界、等级、系统面板字段按设定圣经统一。",
+        "- 章节标题、标点、引号和空行按导出目标统一。",
+        "- 不把未核验证据写成旁白确定事实；专业事实必须回查 `资料/research_sources.json`。",
+        "",
+        "## Proofread 最后核对",
+        "",
+        "- 逐章标题与目录一致。",
+        "- 术语、称谓、时间线、伏笔状态和 AI 使用披露与 release manifest 同版。",
+    ])
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines).rstrip() + "\n")
+
+
+def write_proof_checklist(path, plan):
+    lines = [
+        "# Proof Checklist",
+        "",
+        f"- 生成日期：{plan['generated_at']}",
+        "",
+        "| 项 | 状态 | 证据/命令 | 备注 |",
+        "|---|---|---|---|",
+        "| 章节标题与导出目录一致 | ⬜ | `python3 skills/novel-craft/scripts/export.py <作品根> --formats txt,docx,outline` |  |",
+        "| review report 绑定当前正文 hash | ⬜ | `python3 skills/novel-craft/scripts/report_gate.py <作品根>` |  |",
+        "| score report 绑定当前正文 hash | ⬜ | `python3 skills/novel-score/scripts/score.py <作品根> --scope full` | 商业/平台项目必做 |",
+        "| 专业资料包未过期 | ⬜ | `python3 skills/novel-research/scripts/research_pack.py check <作品根>` | 高风险过期阻断 |",
+        "| P0/P1 编辑任务已关闭 | ⬜ | `修订/edit_plan.json` | open P0/P1 会阻断作者成书流程进入 release |",
+        "| 术语/称谓/style sheet 已核对 | ⬜ | `python3 skills/novel-edit/scripts/style_sheet_check.py <作品根> --write` |  |",
+        "| AI 使用披露完整 | ⬜ | `python3 skills/novel-craft/scripts/ai_usage.py <作品根> ...` | 发布/平台/出海必做 |",
+        "| 合规 profile 最新 | ⬜ | `python3 skills/novel-craft/scripts/compliance_profile.py <作品根> --write` | KDP/中国公开发布/微短剧/出海必做 |",
+        "| reader test plan / 真实反馈已处理 | ⬜ | `评分/reader_test_plan.json` / `评分/reader_telemetry_summary.json` | platform/KDP 发布缺真实反馈需 scoped waiver |",
+        "| release manifest 就绪 | ⬜ | `python3 skills/novel-craft/scripts/release_manifest.py <作品根> --release-name v1` |  |",
+        "",
+        "## 校样原则",
+        "- Proofread 是最后阶段；结构或行文仍会大改时不要提前做终校。",
+        "- 任何正文改动后，旧 review/score/release manifest 都可能 stale，必须重跑对应检查。",
+    ]
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines).rstrip() + "\n")
@@ -460,18 +665,158 @@ def write_line_edit_packet(root, plan, chapter):
     return out
 
 
+def close_edit_task(root, task_id, *, status="fixed", note="", actor="editor"):
+    path = os.path.join(root, "修订", "edit_plan.json")
+    plan = load_json(path, {}) or {}
+    if not isinstance(plan, dict) or not isinstance(plan.get("tasks"), list):
+        raise ValueError("缺少 修订/edit_plan.json 或 tasks 格式无效；先跑 edit_plan.py 生成编辑计划。")
+    plan.setdefault("generated_at", date.today().isoformat())
+    plan.setdefault("project_root", os.path.abspath(root))
+    plan.setdefault("phases", list(PHASE_ORDER))
+    target = None
+    for task in plan["tasks"]:
+        if isinstance(task, dict) and task.get("id") == task_id:
+            target = task
+            break
+    if target is None:
+        raise ValueError(f"unknown edit task id: {task_id}")
+    target["status"] = status
+    target["closed_at"] = date.today().isoformat() if status in {"fixed", "accepted", "waived", "closed", "done", "resolved"} else ""
+    target["closed_by"] = actor
+    target["closure_note"] = note
+    plan["updated_at"] = date.today().isoformat()
+    write_json(path, plan)
+    write_markdown(os.path.join(root, "修订", "编辑计划.md"), plan)
+    append_jsonl(os.path.join(root, "修订", "edit_task_closure.jsonl"), {
+        "task_id": task_id,
+        "status": status,
+        "actor": actor,
+        "note": note,
+        "closed_at": target.get("closed_at") or date.today().isoformat(),
+        "source": "novel-edit/scripts/edit_plan.py",
+    })
+    return target
+
+
+def editor_queries_path(root):
+    return os.path.join(root, "修订", "editor_queries.jsonl")
+
+
+def next_query_id(root):
+    records = read_jsonl(editor_queries_path(root))
+    max_id = 0
+    for record in records:
+        raw = str(record.get("query_id") or "")
+        m = re.search(r"EQ-(\d+)", raw)
+        if m:
+            max_id = max(max_id, int(m.group(1)))
+    return f"EQ-{max_id + 1:03d}"
+
+
+def add_editor_query(root, *, task_id="", question="", severity="P1", asker="editor"):
+    if not question.strip():
+        raise ValueError("--query 不能为空")
+    payload = {
+        "schema_version": 1,
+        "kind": "novel_editor_query",
+        "query_id": next_query_id(root),
+        "task_id": task_id,
+        "severity": severity,
+        "question": question,
+        "asker": asker,
+        "status": "open",
+        "created_at": date.today().isoformat(),
+        "answered_at": "",
+        "answer": "",
+        "answer_by": "",
+    }
+    append_jsonl(editor_queries_path(root), payload)
+    return payload
+
+
+def answer_editor_query(root, query_id, *, answer="", actor="author", status="answered"):
+    if not answer.strip():
+        raise ValueError("--answer 不能为空")
+    records = read_jsonl(editor_queries_path(root))
+    found = False
+    for record in records:
+        if record.get("query_id") == query_id:
+            record["answer"] = answer
+            record["answer_by"] = actor
+            record["status"] = status
+            record["answered_at"] = date.today().isoformat()
+            found = True
+    if not found:
+        raise ValueError(f"unknown editor query id: {query_id}")
+    path = editor_queries_path(root)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        for record in records:
+            f.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+    return next(record for record in records if record.get("query_id") == query_id)
+
+
+def open_editor_query_count(root):
+    closed = {"answered", "accepted", "rejected", "resolved", "waived", "closed"}
+    return sum(
+        1 for record in read_jsonl(editor_queries_path(root))
+        if str(record.get("status") or "open").lower() not in closed
+    )
+
+
 def main():
     ap = argparse.ArgumentParser(description="生成 novel 分层编辑计划")
     ap.add_argument("project_root")
     ap.add_argument("--line-packet", type=int, help="同时生成指定章节的 line edit packet")
+    ap.add_argument("--close-task", default="", help="关闭/更新 edit_plan.json 中的任务 ID，如 EDIT-001")
+    ap.add_argument("--status", choices=["open", "in_progress", "fixed", "accepted", "waived", "closed", "done", "resolved"], default="fixed")
+    ap.add_argument("--note", default="", help="关闭任务时记录处理说明、before/after 或接受风险原因")
+    ap.add_argument("--actor", default="editor")
+    ap.add_argument("--query-task", default="", help="为某个 edit task 增加 editor query")
+    ap.add_argument("--query", default="", help="editor query 问题正文")
+    ap.add_argument("--query-severity", choices=["P0", "P1", "P2", "P3"], default="P1")
+    ap.add_argument("--asker", default="editor")
+    ap.add_argument("--answer-query", default="", help="回答 editor query ID，如 EQ-001")
+    ap.add_argument("--answer", default="")
+    ap.add_argument("--query-status", choices=["answered", "accepted", "rejected", "follow_up", "resolved", "closed"], default="answered")
     args = ap.parse_args()
     root = os.path.abspath(args.project_root)
+    if args.query_task or args.query:
+        try:
+            query = add_editor_query(root, task_id=args.query_task, question=args.query, severity=args.query_severity, asker=args.asker)
+        except ValueError as exc:
+            raise SystemExit(f"[err] {exc}")
+        print(f"[ok] editor query added: {query['query_id']} status={query['status']}")
+        print(f"[ok] query log: {editor_queries_path(root)}")
+        return
+    if args.answer_query:
+        try:
+            query = answer_editor_query(root, args.answer_query, answer=args.answer, actor=args.actor, status=args.query_status)
+        except ValueError as exc:
+            raise SystemExit(f"[err] {exc}")
+        print(f"[ok] editor query updated: {query['query_id']} status={query.get('status')}")
+        print(f"[ok] query log: {editor_queries_path(root)}")
+        return
+    if args.close_task:
+        try:
+            task = close_edit_task(root, args.close_task, status=args.status, note=args.note, actor=args.actor)
+        except ValueError as exc:
+            raise SystemExit(f"[err] {exc}")
+        print(f"[ok] edit task updated: {task['id']} status={task.get('status')}")
+        print(f"[ok] closure log: {os.path.join(root, '修订', 'edit_task_closure.jsonl')}")
+        return
     plan = build_plan(root)
     out_json = os.path.join(root, "修订", "edit_plan.json")
     out_md = os.path.join(root, "修订", "编辑计划.md")
     write_json(out_json, plan)
     write_markdown(out_md, plan)
+    write_editorial_letter(os.path.join(root, "修订", "editorial_letter.md"), plan)
+    write_style_sheet(os.path.join(root, "修订", "style_sheet.md"), root)
+    write_proof_checklist(os.path.join(root, "修订", "proof_checklist.md"), plan)
     print(f"[ok] edit plan: {out_md}")
+    print(f"[ok] editorial letter: {os.path.join(root, '修订', 'editorial_letter.md')}")
+    print(f"[ok] style sheet: {os.path.join(root, '修订', 'style_sheet.md')}")
+    print(f"[ok] proof checklist: {os.path.join(root, '修订', 'proof_checklist.md')}")
     if args.line_packet:
         packet = write_line_edit_packet(root, plan, args.line_packet)
         print(f"[ok] line edit packet: {packet}")

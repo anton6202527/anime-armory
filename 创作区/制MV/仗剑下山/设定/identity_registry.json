@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "kind": "mv_identity_registry",
+  "generated_at": "2026-07-08",
+  "title": "仗剑下山",
+  "lead_id": "CHAR_LEAD_YOUNG",
+  "identities": [
+    {
+      "id": "CHAR_LEAD_YOUNG",
+      "role": "lead_performer",
+      "display_name": "仗剑少年",
+      "anchor": "白衣束发玄发带·眉目清俊倔强眼·背青锋墨鞘长剑·玄色腰穗",
+      "reference_group": "REF_LEAD_YOUNG",
+      "reference_images": [
+        "出图/共享/图片/定妆_少年_常态.png"
+      ],
+      "allowed_variants": [
+        "少年态",
+        "风雪/战斗尘土",
+        "表演特写"
+      ],
+      "forbidden_drift": [
+        "换脸",
+        "换发型",
+        "换主服装",
+        "新增无关人物",
+        "现代服饰",
+        "文字/logo/水印"
+      ]
+    },
+    {
+      "id": "CHAR_LEAD_ADULT",
+      "role": "bridge_variant",
+      "display_name": "多年后剑客",
+      "anchor": "鬓染霜、白袍泛旧、眼神沉静，仍背同一柄青锋长剑",
+      "reference_group": "REF_LEAD_ADULT",
+      "reference_images": [],
+      "allowed_variants": [
+        "bridge/多年后"
+      ],
+      "forbidden_drift": [
+        "改成不同人物",
+        "丢失青锋长剑",
+        "现代服饰"
+      ]
+    }
+  ],
+  "global_style": "国风武侠 · 水墨意境 + 电影级光影",
+  "palette_anchor": [
+    "白",
+    "月白",
+    "墨",
+    "青",
+    "冷蓝",
+    "暖灯"
+  ],
+  "reference_groups": [
+    {
+      "id": "REF_LEAD_YOUNG",
+      "status": "partial",
+      "purpose": "主角脸、服装、长剑、整体比例",
+      "paths": [
+        "出图/共享/图片/定妆_少年_常态.png"
+      ],
+      "coverage_note": "正式包需多角度定妆；单张 demo 定妆只算 partial。"
+    },
+    {
+      "id": "REF_LEAD_ADULT",
+      "status": "planned",
+      "purpose": "bridge 成年态，只在多年后段落使用",
+      "paths": []
+    }
+  ]
+}

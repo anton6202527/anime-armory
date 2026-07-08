@@ -16,7 +16,7 @@ MV_PLAN_GRANULARITY = ("粗略", "标准", "精细", "自定义")
 MV_BEAT_STRATEGIES = ("副歌强卡点", "全程强卡点", "叙事优先", "歌词叙事优先", "人工指定", "自定义")
 MV_VIDEO_MODELS = (
     "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
-    "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
+    "Runway Gen-4", "Luma Ray3 / Ray3.14", "Pika 2.5",
     "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
 )
 MV_VIDEO_CHANNELS = (
@@ -37,7 +37,83 @@ MV_IMAGE_BACKENDS = ("Codex", "Seedream", "可灵主体库", "Nano Banana", "Sor
 MV_CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
 MV_VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
 MV_ASPECTS = ("16:9", "9:16", "1:1")
+MV_LIPSYNC_MODES = ("关闭", "仅正面演唱镜", "全演唱镜", "后期口型修复", "自定义")
 AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
+
+MV_VIDEO_MODEL_PROFILES = {
+    "Seedance 2.0": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": True,
+        "native_audio": False, "best_for": "快节奏短视频、舞蹈/运镜参考、批量镜头",
+    },
+    "Veo 3.1": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": True, "best_for": "电影感、首尾帧桥接、少量关键镜",
+    },
+    "Kling 3.0": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": True,
+        "native_audio": True, "best_for": "首尾帧控制、动作镜、演唱口型/原生音频候选",
+    },
+    "Hailuo 02": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "人物表演、短镜头补片",
+    },
+    "Hailuo 2.3": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "人物表演、短镜头补片",
+    },
+    "Runway Gen-4": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "单参考角色一致性、广告/时尚质感关键镜",
+    },
+    "Luma Ray3 / Ray3.14": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "角色参考、keyframe、HDR/调色链路",
+    },
+    "Pika 2.5": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "风格化短镜和补片",
+    },
+    "HunyuanVideo 1.5": {
+        "reference_images": False, "start_end_frames": False, "reference_video_motion": False,
+        "native_audio": False, "best_for": "本地/开源预算路径",
+    },
+    "Wan 2.2": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "本地/开源图生视频路径",
+    },
+    "LTX-2.3": {
+        "reference_images": False, "start_end_frames": False, "reference_video_motion": False,
+        "native_audio": False, "best_for": "本地快速预演",
+    },
+    "Sora": {
+        "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
+        "native_audio": False, "best_for": "高质量关键镜与角色 cameo 路径",
+    },
+    "manual": {
+        "reference_images": False, "start_end_frames": False, "reference_video_motion": False,
+        "native_audio": False, "best_for": "人工网页/外包登记",
+    },
+}
+
+MV_VIDEO_CHANNEL_PROFILES = {
+    "即梦/Dreamina": {"type": "web_or_app", "official_api": False, "notes": "仅登记人工/网页产物；不要伪装自动化"},
+    "即梦": {"type": "web_or_app", "official_api": False, "notes": "同 即梦/Dreamina"},
+    "Dreamina": {"type": "web_or_app", "official_api": False, "notes": "同 即梦/Dreamina"},
+    "豆包": {"type": "web_or_app", "official_api": False, "notes": "仅登记人工/网页产物"},
+    "海螺AI": {"type": "web_or_app", "official_api": False, "notes": "仅登记人工/网页产物"},
+    "Hailuo": {"type": "web_or_app", "official_api": False, "notes": "同 海螺AI"},
+    "可灵/Kling": {"type": "api_or_web", "official_api": True, "notes": "优先记录 start/end frame 与主体参考输入"},
+    "可灵": {"type": "api_or_web", "official_api": True, "notes": "同 可灵/Kling"},
+    "Kling": {"type": "api_or_web", "official_api": True, "notes": "同 可灵/Kling"},
+    "Google Gemini API": {"type": "api", "official_api": True, "notes": "记录参考图数量、首尾帧和音频能力"},
+    "Runway API": {"type": "api", "official_api": True, "notes": "记录角色参考、首尾帧和版本"},
+    "Runway": {"type": "api_or_web", "official_api": True, "notes": "同 Runway API"},
+    "Luma Dream Machine": {"type": "api_or_web", "official_api": True, "notes": "记录 keyframe/character reference/HDR"},
+    "Luma": {"type": "api_or_web", "official_api": True, "notes": "同 Luma Dream Machine"},
+    "Pika": {"type": "api_or_web", "official_api": True, "notes": "记录版本和参考输入"},
+    "本地/开源": {"type": "local", "official_api": False, "notes": "记录模型权重、commit/版本、参数"},
+    "manual": {"type": "manual", "official_api": False, "notes": "人工登记；必须留来源和挑版理由"},
+}
 
 # ── 生图后端治理：阶段1（解除 Codex 垄断，本线自持）──────────────────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；mv-image / mv-review
@@ -89,6 +165,7 @@ DEFAULT_SETTINGS = {
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
     "出视频规格": "预算一般",
+    "演唱口型": "仅正面演唱镜",
     "合成画幅": "16:9",
     "AI视觉使用披露": "AI-generated",
     "发行目标平台": "未定",
@@ -105,6 +182,7 @@ CHOICE_POINTS = {
     "生视频模型": MV_VIDEO_MODELS,
     "生视频渠道": MV_VIDEO_CHANNELS,
     "出视频规格": MV_VIDEO_SPECS,
+    "演唱口型": MV_LIPSYNC_MODES,
     "合成画幅": MV_ASPECTS,
     "AI视觉使用披露": AI_VISUAL_USAGE_MODES,
     "发行目标平台": ("抖音", "B站", "小红书", "YouTube", "Spotify", "网易云", "QQ音乐", "跨平台", "未定"),
@@ -169,6 +247,18 @@ def video_spec_profile(spec):
     if spec not in VIDEO_SPEC_PROFILE:
         raise KeyError(f"unknown video spec: {spec}")
     return deepcopy(VIDEO_SPEC_PROFILE[spec])
+
+
+def video_model_profile(model):
+    if model not in MV_VIDEO_MODEL_PROFILES:
+        raise KeyError(f"unknown video model: {model}")
+    return deepcopy(MV_VIDEO_MODEL_PROFILES[model])
+
+
+def video_channel_profile(channel):
+    if channel not in MV_VIDEO_CHANNEL_PROFILES:
+        raise KeyError(f"unknown video channel: {channel}")
+    return deepcopy(MV_VIDEO_CHANNEL_PROFILES[channel])
 
 
 def plan_granularity_profile(granularity):

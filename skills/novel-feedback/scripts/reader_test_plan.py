@@ -44,6 +44,14 @@ def build_plan(args):
             "take_id": take,
             "hypothesis": hypothesis,
         })
+    cohorts = []
+    for idx, cohort in enumerate(args.cohort or [args.target_reader], 1):
+        cohorts.append({
+            "cohort_id": f"C{idx:02d}",
+            "description": cohort,
+            "sample_source": args.sample_source,
+            "inclusion_criteria": args.inclusion_criteria,
+        })
     return {
         "schema_version": 1,
         "kind": "novel_reader_test_plan",
@@ -54,7 +62,28 @@ def build_plan(args):
         "scope": args.scope,
         "target_reader": args.target_reader,
         "min_sample": args.min_sample,
+        "cohorts": cohorts,
         "variants": variants,
+        "experiment_design": {
+            "ab_test_id": args.ab_test_id,
+            "assignment": args.assignment,
+            "comparison_unit": "variant_id/take_id within same scope",
+            "randomization_note": args.randomization_note,
+        },
+        "data_collection_fields": [
+            "reader_id",
+            "chapter",
+            "event",
+            "count",
+            "timestamp",
+            "ab_test_id",
+            "variant_id",
+            "take_id",
+            "comment",
+            "sentiment",
+        ],
+        "privacy_note": args.privacy_note,
+        "attribution_required_fields": ["ab_test_id", "variant_id", "take_id"],
         "metrics": metrics,
         "questions": args.question or default_questions(),
         "retest_policy": {
@@ -68,6 +97,7 @@ def build_plan(args):
             f"A/B 完读率差异低于 {args.min_completion_delta} 时不判胜负，只记为 inconclusive。",
             "真实反馈优先于模拟读者；若与 novel-simulate 冲突，以真实完读/弃读为准。",
             "A/B 只在同一 ab_test_id 内比较，必须带 take_id 才能归因到具体稿件版本。",
+            "缺少 cohort 或版本归因字段时，只能判读掉点观察，不能判定版本优劣。",
         ],
     }
 
@@ -85,6 +115,15 @@ def write_markdown(path, plan):
     ]
     for item in plan["variants"]:
         lines.append(f"- {item['variant_id']}：{item['take_id']} — {item['hypothesis']}")
+    lines.extend(["", "## Cohorts"])
+    for item in plan.get("cohorts") or []:
+        lines.append(f"- {item['cohort_id']}：{item['description']}（来源：{item['sample_source']}；纳入：{item['inclusion_criteria']}）")
+    lines.extend(["", "## 实验设计"])
+    design = plan.get("experiment_design") or {}
+    lines.append(f"- ab_test_id：{design.get('ab_test_id')}")
+    lines.append(f"- 分配方式：{design.get('assignment')}")
+    lines.append(f"- 随机/分流说明：{design.get('randomization_note')}")
+    lines.append(f"- 隐私说明：{plan.get('privacy_note')}")
     lines.extend(["", "## 指标"])
     for item in plan["metrics"]:
         lines.append(f"- {item['name']}：目标 {item['target']} ({item['direction']})")
@@ -115,6 +154,13 @@ def main():
     ap.add_argument("--min-completion-delta", type=float, default=0.05)
     ap.add_argument("--take", action="append", help="测试版本 take_id，可重复")
     ap.add_argument("--hypothesis", action="append", help="与 --take 顺序对应的测试假设，可重复")
+    ap.add_argument("--cohort", action="append", help="读者 cohort 描述，可重复")
+    ap.add_argument("--sample-source", default="内测读者/平台小流量")
+    ap.add_argument("--inclusion-criteria", default="目标题材读者，非项目主创或编辑")
+    ap.add_argument("--ab-test-id", default="opening-test")
+    ap.add_argument("--assignment", default="随机或分批等量分发；若无法随机，必须记录来源差异")
+    ap.add_argument("--randomization-note", default="同一 scope 内比较；不同渠道/日期的样本不得直接判胜负")
+    ap.add_argument("--privacy-note", default="只采集最小必要阅读行为与匿名反馈；导入前去除手机号、邮箱等直接身份信息。")
     ap.add_argument("--question", action="append", help="追加/覆盖测试问题，可重复")
     args = ap.parse_args()
     plan = build_plan(args)

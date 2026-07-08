@@ -158,6 +158,73 @@ def select_records(root: str, *, tag: str = "", domain: str = "", dramatic_use: 
     return records[: max(1, limit)]
 
 
+def selection_packet_path(root: str, chapter: int | None = None) -> str:
+    if chapter is None:
+        return os.path.join(root, "写作任务", "观察素材.md")
+    return os.path.join(root, "写作任务", f"观察素材_第{chapter:02d}章.md")
+
+
+def render_selection_packet(
+    records: list[dict],
+    *,
+    tag: str = "",
+    domain: str = "",
+    dramatic_use: str = "",
+    chapter: int | None = None,
+) -> str:
+    title = f"第{chapter:02d}章观察素材" if chapter is not None else "观察素材任务包"
+    lines = [
+        f"# {title}",
+        "",
+        f"- 生成日期：{date.today().isoformat()}",
+        f"- 筛选：tag={tag or '不限'}；domain={domain or '不限'}；dramatic_use={dramatic_use or '不限'}",
+        f"- 条目数：{len(records)}",
+        "",
+        "## 使用规则",
+        "",
+        "- 只借行为、五感、空间压力和情绪机制，不照搬真实隐私。",
+        "- 每条素材必须服务本章目标、人物选择、潜台词或节奏。",
+        "- 若素材与专业事实冲突，以 `novel-research` 的 ready 资料包为准。",
+        "",
+        "## 可注入素材",
+        "",
+    ]
+    for rec in records:
+        uses = ", ".join(rec.get("dramatic_use") or [])
+        tags = ", ".join(rec.get("tags") or [])
+        lines.extend([
+            f"### {rec.get('id')} · {rec.get('domain') or '未分类'}",
+            f"- 用途：{uses or '待补'}；标签：{tags or '待补'}",
+            f"- 观察：{rec.get('text') or ''}",
+            f"- 五感：{rec.get('sensory') or '待补'}",
+            f"- 行为：{rec.get('behavior') or '待补'}",
+            f"- 转写：{rec.get('transfer_rule') or '提取机制，不照搬真人隐私。'}",
+            "",
+        ])
+    if not records:
+        lines.append("- 未选中素材；请放宽筛选或先 `observe.py add` 补素材。")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def write_selection_packet(
+    root: str,
+    records: list[dict],
+    *,
+    out: str = "",
+    tag: str = "",
+    domain: str = "",
+    dramatic_use: str = "",
+    chapter: int | None = None,
+) -> str:
+    path = out or selection_packet_path(root, chapter)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(render_selection_packet(records, tag=tag, domain=domain, dramatic_use=dramatic_use, chapter=chapter))
+    os.replace(tmp, path)
+    return path
+
+
 def write_markdown(root: str, records: list[dict]) -> None:
     lines = [
         "# 观察素材库",
@@ -217,6 +284,9 @@ def main() -> int:
     sel.add_argument("--domain", default="")
     sel.add_argument("--dramatic-use", default="")
     sel.add_argument("--limit", type=int, default=8)
+    sel.add_argument("--chapter", type=int, default=None)
+    sel.add_argument("--write-packet", action="store_true", help="write selected observations into 写作任务/观察素材_第NN章.md")
+    sel.add_argument("--out", default="", help="custom packet output path; implies --write-packet")
     args = ap.parse_args()
     root = os.path.abspath(args.project_root)
     if args.cmd == "scaffold":
@@ -236,6 +306,17 @@ def main() -> int:
                 print(f"- {item['severity']} {item['record_id']}: {item['reason']}")
         return 1 if result["blocking"] else 0
     records = select_records(root, tag=args.tag, domain=args.domain, dramatic_use=args.dramatic_use, limit=args.limit)
+    if args.write_packet or args.out:
+        out_path = write_selection_packet(
+            root,
+            records,
+            out=args.out,
+            tag=args.tag,
+            domain=args.domain,
+            dramatic_use=args.dramatic_use,
+            chapter=args.chapter,
+        )
+        print(f"[ok] observation packet: {out_path}")
     print("# 可注入写章任务包的观察素材")
     for rec in records:
         print(f"- {rec['id']} [{rec.get('domain')}] {rec.get('text')}")

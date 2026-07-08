@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3040 | 目录文本总行数 61473
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3132 | 目录文本总行数 66142
 
 # novel — 小说工坊调度入口
 
@@ -11,6 +11,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 本线只管纯文本小说生产，**产物统一落 `创作区/写小说/<项目>/`**（如 `创作区/写小说/仙界闭关小能手-王敦外传/`）。
 
 **当前默认口径保持不变**：`写小说` 默认进入 novel 纯文本小说生产线，但不默认等于“专门制作漫剧的小说”。新建原创项目时先定 `小说用途`，且该选择点**无默认值**；用户可选 `传统小说 / 漫剧源书 / 微短剧源书 / 短读/短篇 / 出海译制底稿 / 自定义`。只有用户明确选择 `漫剧源书` 或 `微短剧源书`，才启用对应的短章、强钩子、市场基准和后续转制检查；否则按普通小说/网文项目推进。
+
+**默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 设定/场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑与 editor query → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
 
 **本系列成员**见下方"路由规则"表（家族唯一权威名册；新增/移除子 skill 只改那张表）。
 
@@ -41,6 +43,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 要补**生活观察 / 采访纪要 / 人物行为 / 场景五感 / 烟火气素材库** | `novel-observe` |
 | 要建**正向审美样本库 / 拆解为什么这段好 / 高光场景标尺 / 精品化审美对照** | `novel-aesthetic` |
 | 已有在建项目，要看**当前进度 / 全线看板 / 下一步该跑哪个 skill** | `novel-progress` |
+| 已有在建项目，要**查看 / 修改 / 审计 `_设置.md` 选择点**（用途、平台、生成模式、AI 使用披露等） | `novel-settings` |
+| 已有在建项目，novel skill 改版后要**判断是否需要返工 / 重审 / 重评** | `novel-update` |
 | 已有在建项目，要**消除操作摩擦 / 找精准下一步指令 / 检查状态缺失** | `python3 skills/novel/scripts/flow.py "<作品根>"` |
 | 已有在建项目，要**按 registry 做 workflow dry-run / 生成 runner 计划 / 判断 optional specialist agent 该接哪一步** | `python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan`；长流程执行态用 `--start-run` / `--claim-stage` / `--complete-stage` |
 | 要把生产线跑成**无人值守的全自动代理闭环 / 自愈修稿（QA gate findings 自动回流重写）/ 派发 writer·reviewer·researcher specialist** | `novel-supervisor`（上层 agent 编排，消费 pipeline_runner 计划，不绕过蓝图/设定圣经等人工审批） |
@@ -50,7 +54,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 | 已写好若干章，要**质检 / 审稿 / 查问题**（人设崩 / 视角穿帮 / 设定矛盾 / 锚点漂移 / 题旨偏移 / 读者承诺违约 / 文学性变薄 / 节奏 / 原文照搬 / **五感缺失 / 伏笔逾期**） | `novel-review` |
 | 已有审稿/评分/读者反馈后，要做**专业编辑 / 发展性编辑 / 行文编辑 / 拷贝编辑 / 校样 / 主编轮次 / 投稿前精修计划** | `novel-edit`（分层编辑计划：editorial assessment → developmental edit → line edit → copyedit/proofread） |
 | 已写好若干章，要**打分 / 评分 / 市场体检**（题材够不够热、能不能火、值不值得继续写/改、要不要弃稿重立） | `novel-score` |
-| 要写或审**专业、真实、行业感、别外行**的场景（医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文），或商业投稿/出海/改编前要事实证据层 | `novel-research`（产 `资料/专业资料包_<主题>.md` + `research_sources.json`；写章包自动引用，review 查证据缺口） |
+| 要写或审**专业、真实、行业感、别外行**的场景（医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文），或商业投稿/出海/改编前要事实证据层 | `novel-research`（产 `资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`；写章包自动引用，review 查证据缺口） |
 | **跑过 score、想据评分弱项直接开改写**（评分→改写串法） | `novel-rewrite --score-source 评分/score_report.json`（读 scores/verdict/deductions 预填 改动spec②，建议·待与用户要求对账） |
 | 已写好若干章，要**查逻辑硬伤 / 维护设定百科 / 角色生死状态 / 伏笔回收 / 关系温度** | `novel-wiki` |
 | 已写好若干章，要**模拟读者反馈 / 测留存 / 找弃书点** | `novel-simulate` |
@@ -93,6 +97,7 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 ## 决策树
 
 0. **先看有没有在建项目**：用户指向（或当前正处于）某个 `创作区/写小说/<项目>/`，且其下有 `_进度.md` → **先读进度**：
+   - **默认成书工作流**：先跑 `python3 skills/novel-craft/scripts/author_workflow.py "<作品根>" --write`，拿到作者视角当前步骤、阻断项、警告和下一步命令；它不写正文、不改 `_进度.md`。
    - **进度路由**：跑 `python3 skills/novel/progress.py "<作品根>"` 找第一条未完成项（基于章节矩阵表）；也可调 `novel-progress` 查看全线看板。
    - **操作指挥 (Flow)**：若对下一步命令有疑虑、或想检查状态对账/就绪度，跑 `python3 skills/novel/scripts/flow.py "<作品根>"` 获取精准下一步指令。
    - **生产控制台 (Dashboard)**：若想汇总 pipeline/gate/语义任务/修订/队列/release 状态，跑 `python3 skills/novel-dashboard/scripts/dashboard.py "<作品根>" --write --html`。

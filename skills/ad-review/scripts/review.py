@@ -87,6 +87,20 @@ def review(root):
     elif voice_manifest.get("has_placeholder"):
         findings.append(finding("block", "voice_placeholder", "VO 仍是占位，不能作为正式投放成片", voice))
 
+    video_qc = os.path.join(root, "出视频", "分镜", "video_qc.json")
+    vq = load_json(video_qc)
+    if vq is None:
+        findings.append(finding("block", "video_qc_missing", "缺出视频落档 QC 报告", video_qc))
+    else:
+        blocks, warns = _summary_block(vq)
+        if blocks is None:
+            findings.append(finding("block", "video_qc_malformed", "出视频 QC 报告缺 summary.block 整数字段（格式异常）", video_qc))
+        else:
+            if blocks:
+                findings.append(finding("block", "video_qc_block", f"出视频落档 QC 仍有 block={blocks}", video_qc))
+            if warns:
+                findings.append(finding("warn", "video_qc_warn", f"出视频落档 QC warn={warns}，需人工确认", video_qc))
+
     # AI 使用/授权披露：不仅查文件存在，还要查内容与 brief 授权信息不矛盾（空壳披露应拦）。
     ai_usage = os.path.join(root, "合规", "ai_usage.json")
     usage = load_json(ai_usage)

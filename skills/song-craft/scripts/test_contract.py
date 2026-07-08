@@ -25,15 +25,16 @@ contract = load_local_contract()
 class SongContractTest(unittest.TestCase):
     def test_choice_points_include_generation_controls(self):
         points = contract.choice_points()
-        for key in ("歌曲用途", "目标时长", "语言", "BPM/速度", "调性", "生成版数", "挑版策略", "AI音频使用披露"):
+        for key in ("歌曲用途", "目标时长", "语言", "BPM/速度", "调性", "乐器编制", "人声类型", "生成版数", "挑版策略", "AI音频使用披露"):
             self.assertIn(key, points)
         self.assertIn("ACE-Step", points["作曲后端"])
 
     def test_stage_table_has_take_loop(self):
         keys = [stage["key"] for stage in contract.stage_table()]
-        self.assertEqual(keys[:3], ["setup", "lyrics", "compose_plan"])
+        self.assertEqual(keys[:4], ["setup", "brief", "lyrics", "song_form"])
         self.assertIn("takes", keys)
         self.assertIn("selection", keys)
+        self.assertIn("feedback", keys)
 
     def test_settings_markdown_lists_choices(self):
         md = contract.settings_markdown("测试歌", {"生成版数": "6"})

@@ -307,6 +307,10 @@ FEMALE_FICTION_CHECKLIST = (
 )
 
 RESEARCH_INDEX_REL = "资料/research_sources.json"
+OBSERVATION_PACKET_REL_FMT = "写作任务/观察素材_第{chapter:02d}章.md"
+OBSERVATION_BANK_REL = "素材/观察素材库.md"
+AESTHETIC_BANK_REL = "设定/aesthetic_bank.json"
+AESTHETIC_BANK_MD_REL = "设定/审美样本库.md"
 SCENE_CARDS_REL = "设定/scene_cards.json"
 SCENE_CARDS_REFERENCE = "skills/novel-craft/references/scene-cards.md"
 ARC_SUMMARIES_REL = "设定/arc_summaries.json"
@@ -810,6 +814,75 @@ def research_pack_section(packs):
     return "\n".join(lines) + "\n"
 
 
+def observation_packet_section(root, chapter):
+    """Return selected life-observation material for this chapter."""
+    packet_rel = OBSERVATION_PACKET_REL_FMT.format(chapter=chapter)
+    packet_path = os.path.join(root, packet_rel)
+    if os.path.exists(packet_path):
+        text = read_text(packet_path)
+        return (
+            "\n## 生活观察素材（逐章精选）\n"
+            f"- 来源：`{packet_rel}`\n"
+            "- 用法：把动作、五感、职业细节和生活逻辑转写进场景，不要原样堆资料。\n\n"
+            f"{clip(text, 1800)}\n",
+            [packet_rel],
+        )
+    bank_path = os.path.join(root, OBSERVATION_BANK_REL)
+    if os.path.exists(bank_path):
+        return (
+            "\n## 生活观察素材（待选择）\n"
+            f"- 已存在 `{OBSERVATION_BANK_REL}`，但本章没有精选包 `{packet_rel}`。\n"
+            "- 建议先跑 `python3 skills/novel-observe/scripts/observe.py select \"<作品根>\" --chapter "
+            f"{chapter} --write-packet`，再生成写章包。\n",
+            [OBSERVATION_BANK_REL],
+        )
+    return "", []
+
+
+def aesthetic_bank_section(root):
+    """Return transferable positive craft rules from the aesthetic bank."""
+    refs: list[str] = []
+    bank_path = os.path.join(root, AESTHETIC_BANK_REL)
+    md_path = os.path.join(root, AESTHETIC_BANK_MD_REL)
+    if os.path.exists(bank_path):
+        refs.append(AESTHETIC_BANK_REL)
+        payload = load_json(bank_path, {}) or {}
+        samples = payload.get("samples") if isinstance(payload, dict) else []
+        if isinstance(samples, list) and samples:
+            lines = [
+                "\n## 正向审美样本（迁移规则）",
+                "- 只迁移机制，不复制样本文句、专名或在世作者风格。",
+            ]
+            for sample in samples[:3]:
+                if not isinstance(sample, dict):
+                    continue
+                lines.append(f"\n### {sample.get('sample_id') or 'AES'} · {sample.get('source_title') or '未命名样本'}")
+                lines.append(f"- 维度：{fmt_list(sample.get('dimensions'))}")
+                lines.append(f"- 为什么有效：{sample.get('why_it_works') or '未填写'}")
+                lines.append(f"- 可迁移规则：{sample.get('transfer_rule') or '未填写'}")
+                if sample.get("anti_copy_note"):
+                    lines.append(f"- 禁抄说明：{sample.get('anti_copy_note')}")
+                if sample.get("applicable_when"):
+                    lines.append(f"- 适用：{sample.get('applicable_when')}")
+            return "\n".join(lines).rstrip() + "\n", refs
+        raw = json.dumps(payload, ensure_ascii=False, indent=2) if isinstance(payload, dict) else read_text(bank_path)
+        return (
+            "\n## 正向审美样本（待补全）\n"
+            f"- 来源：`{AESTHETIC_BANK_REL}`；样本库为空或 schema 不完整，line edit 前先补 `why_it_works` / `transfer_rule`。\n\n"
+            f"```json\n{clip(raw, 1200)}\n```\n",
+            refs,
+        )
+    if os.path.exists(md_path):
+        refs.append(AESTHETIC_BANK_MD_REL)
+        return (
+            "\n## 正向审美样本（人工库）\n"
+            f"- 来源：`{AESTHETIC_BANK_MD_REL}`；优先迁移“为什么有效/可迁移规则”，不要复刻样本文句。\n\n"
+            f"{clip(read_text(md_path), 1400)}\n",
+            refs,
+        )
+    return "", refs
+
+
 def scene_cards_for_chapter(root, chapter):
     """Return scene cards for this chapter if the project has scene_cards.json."""
     payload = load_json(os.path.join(root, SCENE_CARDS_REL), {}) or {}
@@ -1185,6 +1258,11 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         rel = pack.get("pack_path")
         if rel and rel not in source_paths:
             source_paths.append(rel)
+    observation_section_text, observation_refs = observation_packet_section(root, chapter)
+    aesthetic_section_text, aesthetic_refs = aesthetic_bank_section(root)
+    for rel in [*observation_refs, *aesthetic_refs]:
+        if rel and rel not in source_paths:
+            source_paths.append(rel)
     # 在分支前先算好：editor 子任务的 step_note（下方）也要引用它，否则 editor 步会
     # 触发 "cannot access local variable 'delta_path'"。
     delta_path = f"审稿/state_delta_第{chapter:02d}章.json"
@@ -1408,6 +1486,8 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {scene_card_section}
 {special_scene_sections}
 {event_cooling_section}
+{observation_section_text}
+{aesthetic_section_text}
 {research_section}
 {live_check_section}
 {batch_section}

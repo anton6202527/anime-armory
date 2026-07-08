@@ -114,6 +114,85 @@ def get_energy_at(t, energy_map):
     return energy_map[idx]
 
 
+def nearest_downbeat(t, downbeats):
+    if not downbeats:
+        return None
+    return min((float(x) for x in downbeats), key=lambda x: abs(x - t))
+
+
+def section_location(section, lyric_hint=""):
+    blob = f"{section} {lyric_hint}".lower()
+    if any(k in blob for k in ("intro", "山门", "石阶", "pre")):
+        return ("LOC_MOUNTAIN_GATE", "山门石阶")
+    if any(k in blob for k in ("chorus", "副歌", "仗剑", "山高", "水远")):
+        return ("LOC_CLOUD_SEA", "云海/山巅")
+    if any(k in blob for k in ("verse2", "客栈", "灯", "酒")):
+        return ("LOC_INN", "江湖客栈")
+    if any(k in blob for k in ("bridge", "竹林", "多年")):
+        return ("LOC_BAMBOO_FOREST", "竹林")
+    if any(k in blob for k in ("月", "伤", "雪", "荒野")):
+        return ("LOC_SNOWFIELD", "雪原/月下荒野")
+    return ("LOC_MOUNTAIN_GATE", "山门石阶")
+
+
+def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint):
+    loc_id, loc_name = section_location(section, lyric_hint)
+    if key:
+        shot_size = "中近景/特写交替"
+        angle = "低角度或荷兰角，服务副歌爆点"
+        camera = "快推、轻甩或半环绕，动作峰值压在重拍"
+        lens = "35mm-50mm 电影感，近景可用 70mm 压缩背景"
+        lighting = "逆光+冷青剑光，副歌光效随鼓点脉冲"
+        blocking = "主角占画面中轴，剑/衣袂形成对角线，留出转场遮挡物"
+        setup_group = f"{section}/high_energy/{loc_id}"
+    else:
+        shot_size = "远景/中景/近景按叙事推进"
+        angle = "平视或轻低角度，保持人物稳定可认"
+        camera = "缓推、横移或跟拍，避免无意义绕圈"
+        lens = "35mm-50mm 自然透视"
+        lighting = "段落主色的戏剧光，保留脸部可读性"
+        blocking = "人物动线从画面一侧进入或离开，接下一镜视线/动作方向"
+        setup_group = f"{section}/story/{loc_id}"
+    return {
+        "shot_size": shot_size,
+        "angle": angle,
+        "camera_movement": camera,
+        "lens_feel": lens,
+        "blocking": blocking,
+        "lighting": lighting,
+        "location_id": loc_id,
+        "location_name": loc_name,
+        "setup_group": setup_group,
+        "floorplan_hint": "竖屏 9:16：主体头部不贴边，字幕安全区留在下 18%，剑尖/手部不出框",
+        "production_design": "服装、长剑、场景陈设沿同段 setup_group 连续；同一场景不换时代质感",
+        "take_intent": "关键镜至少两版挑动作/脸；叙事镜优先稳定和可剪",
+        "color_grade": "青白墨为底，按段落加暖灯/冷蓝；相邻镜过渡不突变",
+        "qc_notes": "检查脸、手、剑、衣服、字幕安全区、动作峰值与重拍",
+    }
+
+
+def identity_contract_for(section):
+    adult = "bridge" in str(section).lower() or "桥" in str(section)
+    return {
+        "lead_id": "CHAR_LEAD_ADULT" if adult else "CHAR_LEAD_YOUNG",
+        "lead_identity_anchor": "鬓染霜、白袍泛旧、眼神沉静，仍背同一柄青锋长剑" if adult else "白衣束发玄发带·眉目清俊倔强眼·背青锋墨鞘长剑·玄色腰穗",
+        "reference_group": "REF_LEAD_ADULT" if adult else "REF_LEAD_YOUNG",
+        "wardrobe_props": ["月白/白色武袍", "玄色腰穗", "青锋长剑"],
+        "forbidden_drift": ["换脸", "换发型", "换主服装", "新增无关人物", "文字/logo/水印", "现代物件"],
+    }
+
+
+def reference_inputs_for(section, location_id):
+    refs = [
+        {"path": "出图/共享/图片/定妆_少年_常态.png", "use": "lead_identity"},
+        {"asset_id": location_id, "use": "scene_anchor"},
+        {"asset_id": "PROP_QINGFENG_SWORD", "use": "prop_anchor"},
+    ]
+    if "bridge" in str(section).lower():
+        refs[0] = {"asset_id": "CHAR_LEAD_ADULT", "use": "adult_variant_planned"}
+    return refs
+
+
 def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
     start, end = sec["start"], sec["end"]
     
@@ -236,6 +315,7 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         # Action Peak logic: Try to find a beat within the second half of the clip
         # Fallback to 80% through the clip
         action_peak_abs = round(end - min(0.2, max(0.05, (end - start) * 0.2)), 3)
+        beat_anchor = nearest_downbeat(action_peak_abs, downbeats)
         action_peak_relative = round(action_peak_abs - start, 3)
         
         action_family = "dance_hit/vfx_burst" if key else "performance_pose/expressive_walk"
@@ -245,6 +325,9 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         end_state = f"{section} 段 {clip_id} 结束姿态，画面重心留给下一刀"
         start_state = previous_end_state or f"{section} 段首帧，继承视觉蓝图和定妆锚点"
         previous_end_state = end_state
+        shot_design = shot_design_for(section, clip_id, key, energy_level, transition, clip.get("lyric_hint", ""))
+        identity_contract = identity_contract_for(section)
+        reference_inputs = reference_inputs_for(section, shot_design["location_id"])
         image_prompt = f"出图/段落/prompt/{clip_id}.md"
         video_prompt = f"出视频/prompt/{clip_id}.md"
         clips.append({
@@ -259,9 +342,14 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "action_family": action_family,
             "action_peak": action_peak_abs,
             "action_peak_relative": action_peak_relative,
+            "action_peak_downbeat": beat_anchor,
             "transition_motif": transition_motif,
             "visual_motif": visual_motif,
             "lyric_hint": clip.get("lyric_hint", ""),
+            "shot_design": shot_design,
+            "identity_contract": identity_contract,
+            "reference_inputs": reference_inputs,
+            "asset_ids": [shot_design["location_id"], "PROP_QINGFENG_SWORD", "VFX_SWORD_LIGHT"],
             "image_prompt_path": image_prompt,
             "video_prompt_path": video_prompt,
             "image_path": f"出图/段落/图片/{clip_id}.png",
@@ -296,6 +384,22 @@ def write_prompt_files(root, clips, blueprint):
             f"动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；动作峰值：{clip.get('action_peak_relative', 0.8):.2f}s (relative)。",
             f"视觉母题：{clip.get('visual_motif', '')}。",
             "",
+            "## 导演合约",
+            f"- 景别：{clip['shot_design']['shot_size']}",
+            f"- 机位：{clip['shot_design']['angle']}",
+            f"- 运镜：{clip['shot_design']['camera_movement']}",
+            f"- 焦段感：{clip['shot_design']['lens_feel']}",
+            f"- 走位/构图：{clip['shot_design']['blocking']}",
+            f"- 光影：{clip['shot_design']['lighting']}",
+            f"- 场景 setup：{clip['shot_design']['setup_group']}",
+            f"- 字幕安全区：{clip['shot_design']['floorplan_hint']}",
+            "",
+            "## 一致性锚点",
+            f"- 身份锚点(lead_identity_anchor)：{clip['identity_contract']['lead_identity_anchor']}",
+            f"- 参考输入(reference_inputs)：{', '.join(str(x.get('path') or x.get('asset_id')) for x in clip.get('reference_inputs', []))}",
+            f"- 视觉锚点(global_style/palette_anchor)：{clip['visual_style']}；青、白、墨为底，按段落光色变化",
+            f"- 禁止漂移(forbidden_drift)：{', '.join(clip['identity_contract']['forbidden_drift'])}",
+            "",
             "## 继承",
             clip["continuity"]["constraints"],
             "",
@@ -313,7 +417,12 @@ def write_prompt_files(root, clips, blueprint):
             f"- 动作家族：{clip.get('action_family', '')}",
             f"- 力量等级：{clip.get('energy_level', 'Level 5')}",
             f"- 动作峰值：{clip.get('action_peak_relative', 0.8):.2f}s (relative)",
+            f"- 动作峰值重拍：{clip.get('action_peak_downbeat')}",
             f"- 转场母题：{clip.get('transition_motif', '')}",
+            f"- 景别：{clip['shot_design']['shot_size']}",
+            f"- 运镜：{clip['shot_design']['camera_movement']}",
+            f"- 光影：{clip['shot_design']['lighting']}",
+            f"- 参考输入：{', '.join(str(x.get('path') or x.get('asset_id')) for x in clip.get('reference_inputs', []))}",
             "",
             "## continuity",
             f"- start_state：{clip['continuity']['start_state']}",
@@ -323,15 +432,16 @@ def write_prompt_files(root, clips, blueprint):
             f"- negative：{clip['continuity']['negative']}",
             "",
             "## 视频 prompt",
-            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：按段落张力执行；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
+            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{clip['shot_design']['camera_movement']}；光影继承：{clip['shot_design']['lighting']}；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定脸、服装、长剑、场景 setup、光色基调；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
         mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 
 
 def build_markdown(title, clips):
-    lines = [f"# MV clip plan — {title}", "", "| Clip | 段落 | 时间 | 时长 | 转场 | 歌词钩子 |", "|---|---|---:|---:|---|---|"]
+    lines = [f"# MV clip plan — {title}", "", "| Clip | 段落 | 时间 | 时长 | 景别/运镜 | 转场 | 歌词钩子 |", "|---|---|---:|---:|---|---|---|"]
     for c in clips:
-        lines.append(f"| {c['clip_id']} | {c['section']} | {c['start']:.2f}-{c['end']:.2f}s | {c['duration']:.2f}s | {c['transition']} | {c.get('lyric_hint','')} |")
+        shot = c.get("shot_design", {})
+        lines.append(f"| {c['clip_id']} | {c['section']} | {c['start']:.2f}-{c['end']:.2f}s | {c['duration']:.2f}s | {shot.get('shot_size','')} / {shot.get('camera_movement','')} | {c['transition']} | {c.get('lyric_hint','')} |")
     lines.extend(["", "## 下一步", "1. mv-image 按 image_prompt_path 出首帧。", "2. mv-video/scripts/video_jobs.py 生成视频任务包。", "3. mv-compose 按 timeline_manifest.json 合成。"])
     return "\n".join(lines) + "\n"
 
@@ -382,6 +492,16 @@ def main():
         "granularity": granularity,
         "strategy": strategy,
         "visual_style": visual_style,
+        "production_bible": {
+            "identity_registry": "设定/identity_registry.json",
+            "asset_registry": "设定/asset_registry.json",
+            "reference_plan": "分镜/reference_plan.json",
+            "director_contract_fields": [
+                "shot_size", "angle", "camera_movement", "lens_feel", "blocking",
+                "lighting", "setup_group", "floorplan_hint", "production_design",
+            ],
+            "consistency_rule": "首帧锁身份/场景/光色；视频阶段只升级动作、运镜、张力，不重定脸和服化道",
+        },
         "beatgrid_path": "节拍/beatgrid.json",
         # 内容快照：下游 gate 用它判定换歌/重算 beatgrid 后 clip_plan 是否过期（git-free 失效检测）。
         "beatgrid_hash": mv_utils.content_hash(bg_path),

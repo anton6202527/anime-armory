@@ -28,31 +28,40 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 
 **逐图即时 QC（ad 线自维护）**：每生成并落档 1 张定妆、首帧或尾帧 PNG，先跑广告线自己的最小 QC，再继续下一张。产品/KV/品牌露出/代言人关键镜必须立即跑 `product_qc.py`（当前脚本以阶段目录全量扫描为主，就全量跑一次并重点处理新图 finding）；普通痛点/空镜也要做 ad-image 本线落档自检（PNG 有效、主比例/安全框、是否有不该出现的 logo/文字/产品变形、是否符合 storyboard 资产声明），并在生产事件或返修记录中留痕。`summary.block>0` 或关键镜未能确认时先重抽/改 prompt/补产品参考，不把坏图传给 `ad-video`。不得抽成公共实现，也不得复用其它系列的 QC 脚本。
 
-五项检（自包含；缺 Pillow/numpy 优雅降级，只跑 prompt-lint 并在报告标降级）：
-1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
-2. **brand-color ΔE**：产品镜主色 vs `visual_contract.品牌色` HEX（CIE76 Lab）。超阈 → block，临界 → warn；无区域信息取整图主色并降级 warn。
-3. **product dHash 离群**：产品镜组内 dHash 最近邻 Hamming 距离离群 → 漂移 warn/block。
-4. **logo 模板匹配**：仅当注册了 `出图/共享/定妆库/产品/logo.png` 时做 NCC 粗匹配；缺失/形变 → flag。无模板干净跳过。
-5. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
+增强后的落档检（自包含；缺 Pillow/numpy 优雅降级，只跑结构化/prompt-lint 并在报告标降级）：
+1. **prompt-lint（HARD BLOCK，无 Pillow 也跑）**：每个产品镜（`storyboard.assets` 标 `PROD_*: true`，或镜头语义含 App/UI/包装/logo/品牌/CTA/end card）的 `出图/分镜/prompt/镜头N.md` 必须有 参考图/资产引用块 + 结构化 `PROD_*` 资产 ID + 身份锁定句 + 负向(不要改包装文字 / 不要变形 logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检硬约束。
+2. **产品语义镜逃逸拦截**：即使 storyboard 忘了写 assets，只要镜头语义含 App/UI/包装/logo/品牌/CTA/end card，也纳入产品 QC；缺 `PROD_*` 资产 ID → block。
+3. **asset_registry 对账**：优先读 `出图/共享/asset_registry.json` / `设定库/asset_registry.json`。产品镜建议同时绑定 `PROD_*` 与 `BRAND_*`；缺 registry 或缺品牌资产先 warn，避免出图前没有 logo mask/品牌色/包装禁漂项。
+4. **文字可读性**：品牌/UI/CTA/法律文字镜必须在 prompt 写清“文字清晰可读/不乱码/保留原文”；缺锁定句 → warn，缺 prompt → block。
+5. **万能安全区**：产品/logo/UI/CTA 镜应写 `safe_area.core_in_center_4x4=true`；显式 false → block，缺声明 → warn。
+6. **brand-color ΔE**：产品镜主色 vs `visual_contract.品牌色` HEX（CIE76 Lab）。超阈 → block，临界 → warn；无区域信息取整图主色并降级 warn。
+7. **product dHash 离群**：产品镜组内 dHash 最近邻 Hamming 距离离群 → 漂移 warn/block。
+8. **logo 模板匹配**：仅当注册了 `出图/共享/定妆库/产品/logo.png` 时做 NCC 粗匹配；缺失/形变 → flag。无模板干净跳过。
+9. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
 
-报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_product_qc.py`。
+报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_plan_prompts.py test_product_qc.py`。
 
 ## 生图后端治理
 
-`生图AI` 默认 Codex；放行官方多参考一致性后端（OpenAI/gpt-image、Seedream Universal Reference、可灵主体库、Nano Banana、Sora Cameo）。两条硬闸门：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden）。判定逻辑见 `ad-craft/scripts/contract.py` `classify_image_backend`。
+`生图AI` 默认 Codex；放行官方多参考一致性后端（OpenAI/gpt-image、Seedream Universal Reference、可灵主体库、Nano Banana、Sora Cameo）和明确的官方工具路径（如 Dreamina/即梦官方 CLI/API）。两条硬闸门：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden；官方 CLI/API 需显式留痕）。判定逻辑见 `ad-craft/scripts/contract.py` `classify_image_backend`。
 
 ## 工作流
 
+0. **生成出图 prompt 包**（付费生图前的可复跑计划）：
+   ```bash
+   python3 skills/ad-image/scripts/plan_prompts.py "<作品根>"
+   ```
+   产物：`出图/共享/asset_registry.json`、`出图/共享/prompt/品牌_*.md`、`出图/共享/prompt/产品_*.md`、`出图/分镜/prompt/00_总览.md`、逐镜 `镜头NN.md` / `镜头NN_end.md`、`出图/分镜/image_jobs_manifest.json`。此脚本只做 prompt 计划和 jobs manifest，不调用生图后端，不伪造 PNG。
 1. **建三层定妆库**（`出图/共享/`）：
    - 角色：每个出正/侧/背三视图 → `定妆_<角色>_三视图.png`。
    - 场景：关键场景四视图。
-   3. **产品**：包装正/侧/背 + 关键细节（logo 特写、材质）→ `定妆_<产品>.png`。
+   3. **产品**：包装正/侧/背 + 关键细节（logo 特写、材质）→ `定妆_<产品>.png`，并在 `出图/共享/asset_registry.json` 登记 `PROD_*`/`BRAND_*`、品牌 HEX、logo mask/保护区、包装文字禁改项、UI 状态。
       - **品牌色锁 (Hex-Lock)**：显式声明品牌 HEX 值，并在 Prompt 末尾追加 `color consistency: strict HEX #[value]`。
       - **Logo 保护区**：标记 Logo 坐标，禁止 AI 在 Logo 区域生成环境干扰（如遮挡、强反光）。
    2. **写视觉契约总览**（`出图/分镜/prompt/00_总览.md`）：继承 `storyboard.json.visual_contract`（品牌色/光位锚/画风/构图），逐镜带视线方向/光位/起幅余量。
    3. **万能安全区对账**：出图时，确保核心资产位于 8x8 网格中心，为多画幅裁切预留边缘。
 
-4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。
+4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。只有 prompt 包而无 PNG 时，`product_qc.py` 只能证明 prompt-lint 通过，不能放行出视频。
 5. **批次/全片收尾 QC**：一批或全部分镜出完后再跑一次 `product_qc.py`，确认报告时间晚于所有关键 PNG，`summary.block==0` 且无待确认关键镜后才进入 `ad-video`。
 6. 回写 `_进度.md` 出图 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" image --status ✅ --artifact 出图/分镜`，提示 `ad-video`。
 

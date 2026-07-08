@@ -15,8 +15,16 @@
     "chorus",
     "outro"
   ],
-  "source_song": null,
-  "has_song": false,
-  "has_lyrics": false,
-  "created_at": "2026-06-03"
+  "source_song": "写歌/仗剑下山",
+  "has_song": true,
+  "has_lyrics": true,
+  "song_timing": "先传音乐",
+  "song_rights_status": "owned",
+  "image_backend": "Codex/manual demo assets",
+  "video_model": "manual",
+  "video_channel": "manual",
+  "is_demo": true,
+  "demo_scope": "20s excerpt",
+  "created_at": "2026-06-03",
+  "updated_at": "2026-07-08"
 }

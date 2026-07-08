@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "mv_video_inherit_contract",
+  "generated_at": "2026-07-08",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山",
+  "inputs": {
+    "clip_plan": "分镜/clip_plan.json",
+    "jobs_manifest": "出视频/jobs_manifest.json",
+    "identity_registry": "设定/identity_registry.json",
+    "reference_plan": "分镜/reference_plan.json"
+  },
+  "summary": {
+    "clips": 5,
+    "hard_blocks": 0,
+    "warnings": 0,
+    "verdict": "ok"
+  },
+  "clips": [
+    {
+      "clip_id": "Clip_001",
+      "findings": [],
+      "verdict": "ok"
+    },
+    {
+      "clip_id": "Clip_002",
+      "findings": [],
+      "verdict": "ok"
+    },
+    {
+      "clip_id": "Clip_003",
+      "findings": [],
+      "verdict": "ok"
+    },
+    {
+      "clip_id": "Clip_004",
+      "findings": [],
+      "verdict": "ok"
+    },
+    {
+      "clip_id": "Clip_005",
+      "findings": [],
+      "verdict": "ok"
+    }
+  ]
+}

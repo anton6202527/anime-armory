@@ -15,8 +15,18 @@ ad-voice 自带 `say`（macOS 占位）与 `estimate`（跨平台静音占位）
 | CosyVoice | `cosyvoice` | 零样本/指令 TTS，中文强 | 喂参考音克隆需授权 |
 | GPT-SoVITS | 自建 | 本地少样本克隆 | 需授权 |
 | MiniMax / 火山 | 云 API | 商用音色、稳定 | 仿真人音色需授权 |
+| EdgeTTS 自定义 | `uvx edge-tts` | 无 key 的合成音色逐句 WAV；适合无授权参考音时先出非克隆 VO 样片 | 非克隆；正式投放前仍需确认服务/平台授权 |
 
-接入方式：用各自 CLI 把 `脚本/voiceover.txt` 逐句产到 `配音/line_NN.wav`，再用 ffprobe 实测时长写 `时长清单.json`（字段形状见 `voice_manifest.py`）。VO 旁白建议固定一个音色键（如 `VO`），代言人/对白各自一色，跨镜稳定。
+接入方式：用各自 CLI/API 把 `脚本/voiceover.txt` 逐句产成 `line_01.wav..line_NN.wav`，再用 `render_voice.py --backend <真后端> --from-dir <目录>` 登记到项目 `配音/`，由 ad-voice 统一 ffprobe 实测时长、拼 `vo.wav`、写 `时长清单.json`（字段形状见 `voice_manifest.py`）。VO 旁白建议固定一个音色键（如 `VO`），代言人/对白各自一色，跨镜稳定。
+
+真后端缺 `--from-dir` 时必须硬退出，不允许静默回退到静音/估算占位；否则 `finalize_storyboard` 会把占位时长误当成正式时长焊进镜头。
+
+无授权参考音但需要先跑通真 VO 时，可用：
+
+```bash
+python3 skills/ad-voice/render_edgetts.py "<作品根>" --voice zh-CN-XiaoxiaoNeural
+python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-dir "<作品根>/配音/edgetts_lines"
+```
 
 ## 合规
 

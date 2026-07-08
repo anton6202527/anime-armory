@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "kind": "ad_voice_manifest",
+  "backend": "edgetts",
+  "total_seconds": 20.388,
+  "has_placeholder": false,
+  "lines": [
+    {
+      "idx": 1,
+      "role": "旁白",
+      "text": "照片、语音、待办，又散了。",
+      "seconds": 3.456,
+      "start": 0.0,
+      "end": 3.456,
+      "gap_after": 0.25,
+      "line_wav": "line_01.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    },
+    {
+      "idx": 2,
+      "role": "旁白",
+      "text": "不用把今天重新排一遍。",
+      "seconds": 2.496,
+      "start": 3.706,
+      "end": 6.202,
+      "gap_after": 0.25,
+      "line_wav": "line_02.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    },
+    {
+      "idx": 3,
+      "role": "旁白",
+      "text": "打开星盒，把碎片收成一页手账草稿。",
+      "seconds": 4.08,
+      "start": 6.452,
+      "end": 10.532,
+      "gap_after": 0.25,
+      "line_wav": "line_03.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    },
+    {
+      "idx": 4,
+      "role": "旁白",
+      "text": "没完成的事，也能留到明日清单。",
+      "seconds": 3.336,
+      "start": 10.782,
+      "end": 14.118,
+      "gap_after": 0.25,
+      "line_wav": "line_04.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    },
+    {
+      "idx": 5,
+      "role": "旁白",
+      "text": "星盒手账 App，把今天稳稳收好。",
+      "seconds": 3.528,
+      "start": 14.368,
+      "end": 17.896,
+      "gap_after": 0.25,
+      "line_wav": "line_05.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    },
+    {
+      "idx": 6,
+      "role": "旁白",
+      "text": "立即预约内测。",
+      "seconds": 1.992,
+      "start": 18.146,
+      "end": 20.138,
+      "gap_after": 0.25,
+      "line_wav": "line_06.wav",
+      "音色键": "VO",
+      "voice_key": "VO",
+      "占位": false
+    }
+  ],
+  "source": {
+    "type": "external_line_wavs",
+    "from_dir": "/Users/wesley/learn/anime-armory/创作区/拍广告/星盒手账App/配音/edgetts_lines"
+  }
+}

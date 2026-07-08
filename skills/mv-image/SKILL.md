@@ -1,6 +1,6 @@
 ---
 name: mv-image
-description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。生图AI 是选择点（默认 Codex），MV一致性增强会在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；阶段1 放行官方多参考后端（Seedream / 可灵主体库 / Nano Banana / Sora Cameo），只拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
+description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json + identity/asset/reference 注册表，为 MV 生成两层图（共享定妆库[主角/场景] + Clip 首帧/尾帧 PNG）。生图AI 是选择点（默认 Codex），MV一致性增强会在组图前提示用户可用指定参考图 / 后端主体库 / +LoRA；阶段1 放行官方多参考后端（Seedream / 可灵主体库 / Nano Banana / Sora Cameo），只拦项目内后端混用 + 即梦/Dreamina 逆向出图. Use when asked to MV出图 / 生成MV画面 / MV分镜图 / MV定妆 / clip首帧. Triggers MV出图, MV画面, MV分镜图, MV定妆, clip首帧, mv-image.
 ---
 
 # mv-image — 制MV 出图（mv 系列自建）
@@ -18,6 +18,8 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 创作区/制MV/<曲名>/
 ├── 视觉蓝图.md         主角/场景/画风 + 段落↔画面映射
 ├── 分镜/clip_plan.json Clip 首帧/尾帧/prompt 真值源（来自 mv-plan）
+├── 分镜/reference_plan.json  每个 clip 的参考输入计划（来自 mv-craft identity_registry.py）
+├── 设定/identity_registry.json, asset_registry.json  主角/道具/场景/VFX ID
 ├── 设定/characters,locations  角色/场景卡（含锚点句）
 ├── 节拍/beatgrid.json  段落+卡点（来自 mv-beat）
 └── 出图/
@@ -33,6 +35,7 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 - **导演视角八维（分镜图）**：每张分镜 prompt 按导演视角八维装配（**镜头·机位·人物·动作·场景·光影·情绪·画质**），不是画师视角的"好看主角图"——必读 `mv/references/导演视角prompt.md`。MV 最易漏也最关键三维：**②机位**（副歌用大胆机位/荷兰角，别全程正面平视）、**⑥光影**（演出光/色胶/逆光剪影——MV 就活在戏剧光里，别均匀打亮）、**⑦张力**（对齐 beatgrid 段落）。**定妆图是中性档案**（正面/均匀光/无戏），戏剧光只上分镜图。
 - **两层 + 锚点一致性**：先出主角/场景**定妆**（共享层），每张分镜 prompt 末尾拼角色卡**锚点句**锁脸锁画风（跨段不漂）。
 - **MV 单曲视觉一致性包**：只锁本曲内部的 `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger / forbidden_drift`。主角/主唱最严；段落场景可随段落换，但同段落继承光色和场景定妆；特效/转场只锁颜色和形状方向。详细做法见 `references/visual_consistency.md`。
+- **身份/资产注册优先**：若存在 `设定/identity_registry.json`、`asset_registry.json`、`分镜/reference_plan.json`，每张图必须按其中的 `lead_id / asset_ids / reference_inputs` 组装 prompt；缺 registry 时先跑 `python3 skills/mv-craft/scripts/identity_registry.py <作品根>`。
 - **出图前一致性增强提示**：进入共享定妆或分段组图前，必须提示用户可选 `MV一致性增强=共享定妆+锚点 / 指定参考图 / 后端主体库 / +LoRA`。默认轻量；若用户已有主角/服装/场景参考图或已授权 LoRA，应先登记再生成，不要先批量出图再返工。
 - **clip_plan 驱动画面**：按 `分镜/clip_plan.json` 的 `image_prompt_path` / `image_path` / `need_end_frame` 出图；`视觉蓝图` 只提供风格和段落映射，不再让出图阶段临时猜 clip。
 - **动作首帧服务 video**：读取 `action_family/action_peak/visual_motif/transition_motif`，首帧要抓动作起幅或关键姿态，不要只做静态美图；副歌高光镜可用更强机位/演出光，但身份锚点不变。
@@ -66,12 +69,13 @@ description: 制MV 出图 — 按 视觉蓝图 + 分镜/clip_plan.json，为 MV 
 
 ## 工作流
 1. 读 `视觉蓝图.md` + `分镜/clip_plan.json`。缺 `clip_plan.json` 时先跑 `mv-plan`，不要在出图阶段临时拆时间线。若项目是 `歌曲输入时序=后配歌曲` 且还没最终 `歌/song.*` / `节拍/beatgrid.json`，只能停在 rough 蓝图，不能正式出图。
-2. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
-3. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
-4. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
-5. **逐图落档机检**：每张 PNG 落档后立即跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`；当前脚本会写全曲报告，执行者必须重点看新落档 PNG 的 face/palette/lint/local-patch finding。该张未过时先处理，不把坏首帧传给 mv-video。
-6. **批次/全曲收尾机检**：一批或全曲图出完后再跑一次同命令，确认报告时间晚于所有 PNG，按 `verdict` 决定是否要重抽（见下节）。
-7. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
+2. 跑/读取 `mv-craft/scripts/identity_registry.py` 产物：`设定/identity_registry.json`、`设定/asset_registry.json`、`分镜/reference_plan.json`。prompt 里的身份/道具/场景/参考输入以 registry 为准。
+3. 出共享定妆（主角/场景）→ `出图/共享/图片/`，建/复用 `设定/characters|locations` 卡 + 锚点句。若 `MV一致性增强=指定参考图/后端主体库/+LoRA`，先登记参考图、主体 ID 或 LoRA 卡，再生成第一组图。
+4. 按 `clip_plan.json` 出首帧 → `出图/段落/图片/Clip_XXX.png`，每张拼锚点句与 `image_prompt_path`。**接力补尾帧**：`need_end_frame=true` 的 clip，额外出 `图片/Clip_XXX_end.png`（=下一 clip 首帧构图）。
+5. 筛选（脸/画风一致优先）：每张按 `references/prompt_format.md` 自检栏过——轻微偏差放行，命中硬伤才按 `重抽预算策略` 档位重抽，废图归 `common/废料/`。
+6. **逐图落档机检**：每张 PNG 落档后立即跑 `python3 skills/mv-image/scripts/image_qc.py <作品根>`；当前脚本会写全曲报告，执行者必须重点看新落档 PNG 的 face/palette/lint/local-patch finding。该张未过时先处理，不把坏首帧传给 mv-video。
+7. **批次/全曲收尾机检**：一批或全曲图出完后再跑一次同命令，确认报告时间晚于所有 PNG，按 `verdict` 决定是否要重抽（见下节）。
+8. 回写 `_进度.md` 出图行. 下一步 mv-video（图生视频）.
 
 ## 出图落档机检（image_qc · MV 版）
 

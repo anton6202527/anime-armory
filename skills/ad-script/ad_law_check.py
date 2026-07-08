@@ -155,7 +155,7 @@ REGION_OVERRIDES = {
 DEFAULT_SCAN_FILES = [
     "脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/字幕_zh.srt",
     "脚本/字幕_英文.srt", "脚本/storyboard.json",
-    "创意/创意脚本.md", "创意/concept.md",
+    "创意/创意脚本.md", "创意/concept.md", "创意/投放变体.json",
 ]
 
 _ZERO_WIDTH = "​‌‍﻿"

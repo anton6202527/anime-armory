@@ -1,6 +1,6 @@
 [
   {
-    "name": "original_setup_only",
+    "name": "original_setup_only_defaults_to_author_workflow",
     "files": {
       "_meta.json": {
         "title": "原创金样例",
@@ -9,13 +9,13 @@
       "_设置.md": "# 设置\n",
       "_进度.md": "# 进度\n"
     },
-    "expected_next_stage": "blueprint",
+    "expected_next_stage": "author_workflow",
     "expected_done": [
       "setup"
     ]
   },
   {
-    "name": "original_outline_ready_for_demo",
+    "name": "original_outline_ready_for_demo_after_evidence",
     "files": {
       "_meta.json": {
         "title": "原创金样例",
@@ -23,22 +23,47 @@
       },
       "_设置.md": "# 设置\n",
       "_进度.md": "# 进度\n",
+      "生产数据/author_workflow.json": {
+        "kind": "novel_author_workflow"
+      },
+      "生产数据/作者成书流程.md": "# 作者成书流程状态\n",
+      "设定/author_intent.json": {
+        "kind": "novel_author_intent",
+        "core_theme": "信任需要承担代价",
+        "non_negotiables": [
+          "主角不牺牲无辜者换胜利"
+        ]
+      },
+      "设定/作者意图.md": "# 作者意图\n",
       "设定/蓝图.md": "# 蓝图\n",
       "设定/角色卡.md": "# 角色\n",
       "设定/世界观.md": "# 世界\n",
       "设定/读者契约.md": "# 契约\n",
-      "设定/章纲.md": "# 章纲\n"
+      "设定/章纲.md": "# 章纲\n",
+      "设定/manuscript_map.json": {
+        "kind": "novel_manuscript_map",
+        "chapters": []
+      },
+      "设定/manuscript_map.md": "# Manuscript Map\n",
+      "资料/research_jobs.json": {
+        "kind": "novel_research_jobs",
+        "jobs": []
+      }
     },
     "expected_next_stage": "demo",
     "expected_done": [
       "setup",
+      "author_workflow",
+      "author_intent",
       "blueprint",
       "setting",
-      "outline"
+      "outline",
+      "evidence_prep",
+      "manuscript_map"
     ]
   },
   {
-    "name": "import_project_needs_blueprint_after_source",
+    "name": "import_project_needs_author_intent_after_source",
     "files": {
       "_meta.json": {
         "title": "导入金样例",
@@ -46,15 +71,20 @@
       },
       "_设置.md": "# 设置\n",
       "_进度.md": "# 进度\n",
+      "生产数据/author_workflow.json": {
+        "kind": "novel_author_workflow"
+      },
+      "生产数据/作者成书流程.md": "# 作者成书流程状态\n",
       "原作.txt": "第一章\n",
       "小说/source_manifest.json": {
         "rights_status": "user-declared"
       }
     },
-    "expected_next_stage": "blueprint",
+    "expected_next_stage": "author_intent",
     "expected_done": [
       "setup",
-      "source_import"
+      "source_import",
+      "author_workflow"
     ]
   },
   {
@@ -66,16 +96,42 @@
       },
       "_设置.md": "# 设置\n",
       "_进度.md": "# 进度\n",
+      "生产数据/author_workflow.json": {
+        "kind": "novel_author_workflow"
+      },
+      "生产数据/作者成书流程.md": "# 作者成书流程状态\n",
+      "设定/author_intent.json": {
+        "kind": "novel_author_intent",
+        "core_theme": "信任需要承担代价",
+        "non_negotiables": [
+          "主角不牺牲无辜者换胜利"
+        ]
+      },
+      "设定/作者意图.md": "# 作者意图\n",
       "设定/蓝图.md": "# 蓝图\n",
       "设定/角色卡.md": "# 角色\n",
       "设定/世界观.md": "# 世界\n",
       "设定/读者契约.md": "# 契约\n",
       "设定/章纲.md": "# 章纲\n",
+      "设定/manuscript_map.json": {
+        "kind": "novel_manuscript_map",
+        "chapters": []
+      },
+      "设定/manuscript_map.md": "# Manuscript Map\n",
+      "资料/research_jobs.json": {
+        "kind": "novel_research_jobs",
+        "jobs": []
+      },
       "章节/第01章.md": "# 第1章\n正文\n",
       "写作任务/第01章.md": "# 任务\n",
       "审稿/demo_gate.json": {
         "status": "passed"
       },
+      "审稿/demo_readiness.json": {
+        "kind": "novel_demo_readiness",
+        "ready_for_batch": true
+      },
+      "审稿/demo_readiness.md": "# Demo Readiness\n",
       "审稿/state_ledger.json": {
         "chapter_deltas": {}
       },
@@ -91,6 +147,36 @@
       "修订/revision_plan.json": {
         "tasks": []
       },
+      "评分/reader_test_plan.json": {
+        "kind": "novel_reader_test_plan"
+      },
+      "修订/edit_plan.json": {
+        "tasks": []
+      },
+      "修订/editorial_letter.md": "# Editorial Letter\n",
+      "修订/style_sheet.md": "# Style Sheet\n",
+      "修订/proof_checklist.md": "# Proof Checklist\n",
+      "合规/ai_usage.json": {
+        "kind": "novel_ai_usage"
+      },
+      "合规/compliance_profile.json": {
+        "kind": "novel_compliance_profile"
+      },
+      "导出/metadata_pack.json": {
+        "kind": "novel_metadata_pack",
+        "title": "发布金样例",
+        "short_blurb": "一句话卖点",
+        "categories": [
+          "Fantasy"
+        ],
+        "keywords": [
+          "修仙",
+          "成长",
+          "群像"
+        ],
+        "rights_status": "owned"
+      },
+      "导出/metadata_pack.md": "# Metadata Pack\n",
       "导出/发布金样例.txt": "正文\n",
       "导出/release_manifest.json": {
         "kind": "novel_release_manifest",
@@ -101,15 +187,24 @@
     "expected_next_stage": "release_manifest",
     "expected_done": [
       "setup",
+      "author_workflow",
+      "author_intent",
       "blueprint",
       "setting",
       "outline",
+      "evidence_prep",
+      "manuscript_map",
       "demo",
+      "demo_readiness",
       "draft",
       "post_write",
       "review",
       "score",
       "revision",
+      "reader_validation",
+      "edit",
+      "ai_compliance",
+      "metadata_pack",
       "export"
     ]
   },
@@ -123,24 +218,55 @@
       },
       "_设置.md": "# 设置\n",
       "_进度.md": "# 进度\n",
+      "生产数据/author_workflow.json": {
+        "kind": "novel_author_workflow"
+      },
+      "生产数据/作者成书流程.md": "# 作者成书流程状态\n",
+      "设定/author_intent.json": {
+        "kind": "novel_author_intent",
+        "core_theme": "信任需要承担代价",
+        "non_negotiables": [
+          "主角不牺牲无辜者换胜利"
+        ]
+      },
+      "设定/作者意图.md": "# 作者意图\n",
       "设定/蓝图.md": "# 蓝图\n",
       "设定/角色卡.md": "# 角色\n",
       "设定/世界观.md": "# 世界\n",
       "设定/读者契约.md": "# 契约\n",
       "设定/章纲.md": "# 章纲\n",
-      "审稿/demo_gate.json": {
-        "passed": true
+      "设定/manuscript_map.json": {
+        "kind": "novel_manuscript_map",
+        "chapters": []
       },
+      "设定/manuscript_map.md": "# Manuscript Map\n",
+      "资料/research_jobs.json": {
+        "kind": "novel_research_jobs",
+        "jobs": []
+      },
+      "审稿/demo_gate.json": {
+        "status": "passed"
+      },
+      "审稿/demo_readiness.json": {
+        "kind": "novel_demo_readiness",
+        "ready_for_batch": true
+      },
+      "审稿/demo_readiness.md": "# Demo Readiness\n",
       "写作任务/第01章.md": "# 任务\n",
       "章节/第01章.md": "# 第1章\n"
     },
     "expected_next_stage": "draft",
     "expected_done": [
       "setup",
+      "author_workflow",
+      "author_intent",
       "blueprint",
       "setting",
       "outline",
-      "demo"
+      "evidence_prep",
+      "manuscript_map",
+      "demo",
+      "demo_readiness"
     ]
   }
 ]

@@ -1,16 +1,29 @@
 #!/usr/bin/env node
-// Copy the REAL skills/ + tools/ + entry docs from the repo into ./assets so they ship
-// INSIDE the .vsix — making the extension self-contained (install on any VS Code,
-// no anime-armory source checkout needed). Run automatically on `vsce package` via
-// the `vscode:prepublish` hook; run manually with `npm run sync-assets`.
+// Copy the REAL skills/ + tools/ + entry docs + creation manuals from the repo
+// into ./assets so they ship INSIDE the .vsix — making the extension
+// self-contained (install on any VS Code, no anime-armory source checkout
+// needed). Run automatically on `vsce package` via the `vscode:prepublish`
+// hook; run manually with `npm run sync-assets`.
 //
 // Works/创作区 live next to the extension source, not under assets/. Release
-// packaging may seed each creative line's champion demo under that work root.
+// packaging may seed each creative line's champion demo under that work root;
+// this script also refreshes the lightweight 使用手册.md files there so the
+// extension panel can show them inside the bundled seed work root.
 const fs = require('fs');
 const path = require('path');
 
 const repo = path.resolve(__dirname, '..');
 const assets = path.join(__dirname, 'assets');
+const CREATION_ROOT = '创作区';
+const MANUAL_RELS = [
+  `${CREATION_ROOT}/使用手册.md`,
+  `${CREATION_ROOT}/写小说/使用手册.md`,
+  `${CREATION_ROOT}/制漫剧/使用手册.md`,
+  `${CREATION_ROOT}/画漫画/使用手册.md`,
+  `${CREATION_ROOT}/写歌/使用手册.md`,
+  `${CREATION_ROOT}/制MV/使用手册.md`,
+  `${CREATION_ROOT}/拍广告/使用手册.md`,
+];
 
 const SKIP_NAMES = new Set(['__pycache__', 'node_modules', '.git', '.DS_Store']);
 const filter = (src) => {
@@ -29,6 +42,23 @@ const count = (dir) => {
   }
   return n;
 };
+
+function copyManuals(destRoot, label) {
+  let copied = 0;
+  for (const rel of MANUAL_RELS) {
+    const src = path.join(repo, rel);
+    if (!fs.existsSync(src)) {
+      console.error(`[sync-assets] 缺少创作区使用手册，无法打包: ${rel}`);
+      process.exit(1);
+    }
+    const dst = path.join(destRoot, rel);
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
+    fs.copyFileSync(src, dst);
+    copied += 1;
+  }
+  console.log(`[sync-assets] synced ${copied} creation manuals → ${label}`);
+  return copied;
+}
 
 function main() {
   if (!fs.existsSync(path.join(repo, 'skills'))) {
@@ -54,12 +84,17 @@ function main() {
   // the repo overview, so the sidebar stays focused on using the workflow.
   fs.copyFileSync(path.join(__dirname, 'README.md'), path.join(assets, 'README.md'));
 
+  // 4) creation manuals. assets/ keeps a read-only canonical copy; the extension
+  // seed 创作区 keeps the same files visible in the work tree.
+  const manualFiles = copyManuals(assets, 'assets/创作区');
+  copyManuals(__dirname, 'vscode-extension/创作区');
+
   // stamp the snapshot date for display/debugging
   fs.writeFileSync(
     path.join(assets, '_synced_at.txt'),
     new Date().toISOString() + '\n', 'utf8');
 
-  console.log(`[sync-assets] bundled ${count(path.join(assets, 'skills'))} skill files + ${toolFiles} tool files + docs → assets/`);
+  console.log(`[sync-assets] bundled ${count(path.join(assets, 'skills'))} skill files + ${toolFiles} tool files + ${manualFiles} manuals + docs → assets/`);
 }
 
 main();

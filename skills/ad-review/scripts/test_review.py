@@ -20,6 +20,7 @@ class ReviewTest(unittest.TestCase):
         open(os.path.join(root, "合成", "成片_主片.mp4"), "wb").close()
         self._write_json(root, "脚本/广告法机检报告.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "配音/时长清单.json", {"has_placeholder": False})
+        self._write_json(root, "出视频/分镜/video_qc.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合规/ai_usage.json", {"visual_mode": "AI-generated"})
         with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
             f.write("""## 交付版本矩阵
@@ -47,6 +48,13 @@ class ReviewTest(unittest.TestCase):
             os.remove(os.path.join(root, "合规", "ai_usage.json"))
             payload = review.review(root)
             self.assertTrue(any(f["code"] == "ai_usage_missing" for f in payload["findings"]))
+
+    def test_review_blocks_missing_video_qc(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base(root)
+            os.remove(os.path.join(root, "出视频", "分镜", "video_qc.json"))
+            payload = review.review(root)
+            self.assertTrue(any(f["code"] == "video_qc_missing" for f in payload["findings"]))
 
     def test_ad_law_malformed_blocks(self):
         with tempfile.TemporaryDirectory() as root:

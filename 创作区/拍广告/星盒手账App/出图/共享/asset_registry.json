@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "ad_asset_registry",
+  "brand": {
+    "id": "BRAND_STARBOX",
+    "name": "星盒",
+    "text_logo": "星盒",
+    "slogan": "把今天稳稳收好",
+    "primary_hex": "#2E9E97",
+    "accent_hex": "#F6C85F",
+    "background_hex": "#F8F4EA",
+    "logo_safe_area": {
+      "min_clear_space_ratio": 0.12,
+      "keep_inside_center_6x6": true
+    }
+  },
+  "products": [
+    {
+      "id": "PROD_STARBOX_APP",
+      "name": "星盒手账 App",
+      "type": "mobile_app",
+      "brand_id": "BRAND_STARBOX",
+      "hero_surfaces": [
+        "手机界面",
+        "今日手账草稿",
+        "明日清单",
+        "片尾 end card"
+      ],
+      "ui_states": [
+        {
+          "state_id": "HOME_SCATTERED",
+          "screen_title": "星盒",
+          "locked_text": [
+            "照片",
+            "语音",
+            "待办"
+          ],
+          "usage": "镜头01：痛点钩子，通知和碎片信息散落"
+        },
+        {
+          "state_id": "JOURNAL_DRAFT",
+          "screen_title": "今日手账",
+          "locked_text": [
+            "照片",
+            "语音",
+            "待办",
+            "今日手账草稿"
+          ],
+          "usage": "镜头03：卡片归入今日页面"
+        },
+        {
+          "state_id": "TOMORROW_LIST",
+          "screen_title": "明日清单",
+          "locked_text": [
+            "明日清单",
+            "立即预约内测"
+          ],
+          "usage": "镜头04：待办折叠到明日清单，轻露出 CTA"
+        },
+        {
+          "state_id": "ENDCARD",
+          "screen_title": "星盒",
+          "locked_text": [
+            "星盒",
+            "把今天稳稳收好",
+            "立即预约内测"
+          ],
+          "usage": "镜头06：片尾品牌收束"
+        }
+      ],
+      "prompt_locks": [
+        "same PROD_STARBOX_APP mobile app interface",
+        "same BRAND_STARBOX text logo 星盒",
+        "brand color #2E9E97",
+        "accent color #F6C85F",
+        "Chinese UI text clear and readable",
+        "no third-party real app UI"
+      ],
+      "safe_area": {
+        "grid": "8x8",
+        "core_in_center_4x4": true,
+        "keep_text_inside_center_6x6": true
+      }
+    }
+  ],
+  "cta": {
+    "id": "CTA_STARBOX_BETA",
+    "text": "立即预约内测",
+    "placement": "镜头04轻露出，镜头06主 CTA",
+    "safe_area": "center_6x6"
+  },
+  "legal_lines": [
+    "产品功能以实际上线版本为准，内测名额及功能开放范围以页面说明为准。"
+  ],
+  "manual_review_checklist": [
+    "星盒文字标识是否跨镜一致",
+    "品牌色 #2E9E97 是否漂移",
+    "UI 文案是否清晰可读且不乱码",
+    "CTA 和法律声明是否在 9:16 安全区内",
+    "是否避免第三方真实 UI、明星脸和疗效/效率承诺"
+  ]
+}

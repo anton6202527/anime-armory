@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "mv_asset_registry",
+  "generated_at": "2026-07-08",
+  "assets": [
+    {
+      "id": "PROP_QINGFENG_SWORD",
+      "type": "prop",
+      "name": "青锋长剑",
+      "anchor": "墨色剑鞘缠青绳，青锋寒光",
+      "status": "planned"
+    },
+    {
+      "id": "LOC_MOUNTAIN_GATE",
+      "type": "location",
+      "name": "山门石阶",
+      "anchor": "青灰石阶、晨雾、古朴山门、松柏挂霜",
+      "status": "ready"
+    },
+    {
+      "id": "LOC_CLOUD_SEA",
+      "type": "location",
+      "name": "云海崖边",
+      "anchor": "云海翻涌、逆光、崖边剪影",
+      "status": "ready"
+    },
+    {
+      "id": "LOC_INN",
+      "type": "location",
+      "name": "江湖客栈",
+      "anchor": "昏黄油灯、木质客栈、江湖客、烟火气",
+      "status": "ready"
+    },
+    {
+      "id": "LOC_BAMBOO_FOREST",
+      "type": "location",
+      "name": "竹林",
+      "anchor": "青翠竹林、光斑、薄雾",
+      "status": "ready"
+    },
+    {
+      "id": "LOC_SNOWFIELD",
+      "type": "location",
+      "name": "雪原/月下荒野",
+      "anchor": "苍茫雪原、冷月、孤树残碑、冷蓝调",
+      "status": "ready"
+    },
+    {
+      "id": "VFX_SWORD_LIGHT",
+      "type": "vfx",
+      "name": "剑光/刀光",
+      "anchor": "青白冷光，形状干净，不生成文字",
+      "status": "planned"
+    }
+  ]
+}

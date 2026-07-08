@@ -215,9 +215,15 @@ def check_subtitles(root, songlen, lyric_lines):
         for i, (st, en, _t) in enumerate(lines, 1):
             if st > songlen + 0.5 or (en and en > songlen + 0.5):
                 add(WARN, "字幕", f"{src} 第{i}行", f"时间戳 {st:.1f}s 越界（超歌长 {songlen:.1f}s）")
-    # 行数对账
+    # 行数对账。demo/excerpt 可由 alignment_report 显式声明范围，避免 20s 样片被当作全曲漏行。
+    report = mv_utils.load_json(os.path.join(root, "字幕", "alignment_report.json"), {}) or {}
+    scope = str(report.get("scope") or "").lower()
+    is_excerpt = scope in {"demo_excerpt", "excerpt", "sample"}
     if lyric_lines and abs(len(lines) - lyric_lines) > max(2, 0.3 * lyric_lines):
-        add(WARN, "字幕", src, f"字幕行数({len(lines)}) 与 词行数({lyric_lines}) 差大——对齐可能漏/串行")
+        if is_excerpt:
+            add(INFO, "字幕", src, f"字幕行数({len(lines)}) 覆盖片段版；alignment_report.scope={scope}")
+        else:
+            add(WARN, "字幕", src, f"字幕行数({len(lines)}) 与 词行数({lyric_lines}) 差大——对齐可能漏/串行")
     add(INFO, "字幕", src, f"快照：{len(lines)} 行")
 
 
@@ -293,6 +299,124 @@ def check_video_jobs(root):
         p = job.get("selected_video_path")
         if p and not os.path.exists(os.path.join(root, p)):
             add(BLOCK, "规划", p, f"{job.get('clip_id')} selected_take 已选但成品 clip 不存在")
+
+
+def check_consistency_artifacts(root, meta=None):
+    identity_path = os.path.join(root, "设定", "identity_registry.json")
+    asset_path = os.path.join(root, "设定", "asset_registry.json")
+    reference_path = os.path.join(root, "分镜", "reference_plan.json")
+    requirements_path = os.path.join(root, "设定", "reference_requirements.json")
+    plan_exists = os.path.exists(os.path.join(root, "分镜", "clip_plan.json"))
+    if plan_exists:
+        for path, label in (
+            (identity_path, "设定/identity_registry.json"),
+            (asset_path, "设定/asset_registry.json"),
+            (reference_path, "分镜/reference_plan.json"),
+            (requirements_path, "设定/reference_requirements.json"),
+        ):
+            if not os.path.exists(path):
+                add(WARN, "一致性", label, "缺身份/资产/参考注册产物——建议跑 mv-craft/scripts/identity_registry.py")
+                continue
+            payload = load_json_safe(path)
+            if payload is None:
+                add(BLOCK, "一致性", label, "JSON 损坏不可解析")
+        identity = mv_utils.load_json(identity_path, {}) or {}
+        refs = mv_utils.load_json(reference_path, {}) or {}
+        if identity:
+            groups = identity.get("reference_groups") or []
+            ready = sum(1 for g in groups if g.get("status") == "ready")
+            add(INFO, "一致性", "identity_registry.json", f"身份参考组：{ready}/{len(groups)} ready")
+        if refs:
+            rows = refs.get("clips") or []
+            ready = sum(1 for r in rows if r.get("status") == "ready")
+            add(INFO, "一致性", "reference_plan.json", f"clip 参考计划：{ready}/{len(rows)} ready")
+        requirements = mv_utils.load_json(requirements_path, {}) or {}
+        if requirements:
+            rows = requirements.get("requirements") or []
+            ready = sum(1 for r in rows if r.get("status") == "ready")
+            partial = sum(1 for r in rows if r.get("status") == "partial")
+            text_only = sum(1 for r in rows if r.get("status") == "text_only")
+            planned = sum(1 for r in rows if r.get("status") == "planned")
+            missing = [r for r in rows if r.get("status") != "ready"]
+            critical_missing = [r for r in missing if r.get("type") in {"identity", "prop", "vfx"}]
+            add(INFO, "一致性", "reference_requirements.json",
+                f"正式参考图覆盖：ready={ready}/{len(rows)} · partial={partial} · text_only={text_only} · planned={planned}")
+            if critical_missing and not (meta or {}).get("is_demo"):
+                names = ", ".join(str(r.get("target_id")) for r in critical_missing[:6])
+                add(WARN, "一致性", "reference_requirements.json", f"正式项目关键参考图未齐：{names}")
+
+    inherit_path = os.path.join(root, "生产数据", "video_inherit_contract", "inherit_contract.json")
+    video_qc_path = os.path.join(root, "生产数据", "video_qc", "video_qc.json")
+    videos_exist = bool(glob.glob(os.path.join(root, "出视频", "视频", "*.mp4")))
+    if videos_exist or os.path.exists(os.path.join(root, "出视频", "jobs_manifest.json")):
+        for path, label, kind in (
+            (inherit_path, "生产数据/video_inherit_contract/inherit_contract.json", "继承合约"),
+            (video_qc_path, "生产数据/video_qc/video_qc.json", "视频QC"),
+        ):
+            if not os.path.exists(path):
+                add(WARN, "一致性", label, f"缺 {kind} 报告——建议跑 mv-video/scripts/{'inherit_contract.py' if 'inherit' in label else 'video_qc.py'}")
+                continue
+            payload = load_json_safe(path)
+            if payload is None:
+                add(BLOCK, "一致性", label, f"{kind} JSON 损坏不可解析")
+                continue
+            summary = payload.get("summary") or {}
+            verdict = summary.get("verdict")
+            hard = int(summary.get("hard_blocks") or 0)
+            warn = int(summary.get("warnings") or 0)
+            if hard:
+                add(BLOCK, "一致性", label, f"{kind} hard_blocks={hard}")
+            elif warn:
+                add(WARN, "一致性", label, f"{kind} verdict={verdict} warnings={warn}")
+            else:
+                add(INFO, "一致性", label, f"{kind} verdict={verdict}")
+
+
+def check_production_pack(root, meta):
+    plan_exists = os.path.exists(os.path.join(root, "分镜", "clip_plan.json"))
+    if not plan_exists:
+        return
+    expected = [
+        ("分镜/animatic_manifest.json", "animatic manifest"),
+        ("制片/shot_list.json", "shot list"),
+        ("制片/setup_schedule.md", "setup schedule"),
+        ("制片/take_log.csv", "take log"),
+        ("制片/picture_lock_color_checklist.md", "picture lock/color checklist"),
+    ]
+    missing = [rel for rel, _label in expected if not os.path.exists(os.path.join(root, rel))]
+    if missing:
+        sev = INFO if (meta or {}).get("is_demo") else WARN
+        add(sev, "制片", "production_pack", f"传统制片包缺 {len(missing)} 项：{', '.join(missing)}")
+        return
+    shot_list = load_json_safe(os.path.join(root, "制片", "shot_list.json"))
+    animatic = load_json_safe(os.path.join(root, "分镜", "animatic_manifest.json"))
+    if shot_list is None or animatic is None:
+        return
+    shots = shot_list.get("shots") if isinstance(shot_list, dict) else shot_list
+    anim_clips = animatic.get("clips") if isinstance(animatic, dict) else []
+    add(INFO, "制片", "production_pack",
+        f"传统制片包已齐：shot_list={len(shots or [])} · animatic={len(anim_clips or [])} clips")
+
+
+def check_formal_readiness(root, meta):
+    path = os.path.join(root, "生产数据", "formal_readiness", "formal_readiness.json")
+    if not os.path.exists(path):
+        if meta and meta.get("is_demo"):
+            add(INFO, "正式版", "formal_readiness.json", "当前为 demo；可跑 mv-craft/scripts/formal_readiness.py 生成正式版缺口清单")
+        return
+    payload = load_json_safe(path)
+    if payload is None:
+        add(BLOCK, "正式版", "formal_readiness.json", "正式版 readiness JSON 损坏不可解析")
+        return
+    summary = payload.get("summary") or {}
+    status = summary.get("status")
+    blockers = int(summary.get("blockers") or 0)
+    warnings = int(summary.get("warnings") or 0)
+    msg = f"formal readiness status={status} · blockers={blockers} · warnings={warnings}"
+    if status == "blocked" and not (meta or {}).get("is_demo"):
+        add(WARN, "正式版", "formal_readiness.json", msg)
+    else:
+        add(INFO, "正式版", "formal_readiness.json", msg)
 
 
 def check_final(root, meta, songlen):
@@ -401,6 +525,9 @@ def main():
     check_beatgrid(root, songlen)
     check_plan_manifests(root, songlen)
     check_video_jobs(root)
+    check_consistency_artifacts(root, meta)
+    check_production_pack(root, meta)
+    check_formal_readiness(root, meta)
     check_clips(root, songlen)
     check_subtitles(root, songlen, lyric_lines)
     check_alignment_report(root)

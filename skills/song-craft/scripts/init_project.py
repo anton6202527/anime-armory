@@ -63,6 +63,8 @@ def build_blueprint(title, meta):
 - 语言：{meta['language']}
 - BPM/速度：{meta['bpm']}
 - 调性：{meta['key']}
+- 乐器编制：{meta['instrumentation']}
+- 人声类型：{meta['vocal_type']}
 
 ## 歌曲结构（段落骨架）
 {secs}
@@ -98,13 +100,21 @@ def build_progress(title, meta):
 ## 写歌阶段
 | 阶段 | skill | 状态 |
 |---|---|---|
+| A&R 简报 / 参考边界 | song-craft/scripts/song_brief.py + reference_pack.py | [ ] |
 | 立项 + 词 | song-lyrics | [ ] |
+| 歌词可唱性检查 | song-craft/scripts/lyric_prosody_check.py | [ ] |
+| 旋律/和声/曲式草图 | song-craft/scripts/melody_chord_packet.py | [ ] |
 | 作曲任务包 | song-compose/scripts/compose_song.py | [ ] |
 | 多版生成 / 注册 | song-compose + 后端 | [ ] |
 | 挑版定稿 | song-compose/scripts/compose_song.py | [ ] |
+| 多版试听评审 | song-compose/scripts/take_review.py | [ ] |
 | （可选）翻唱/换声 | song-cover | [ ] |
 | 质检 | song-review | [ ] |
+| 混音/母带检查 | song-review/scripts/master_check.py | [ ] |
 | AI 使用披露 | song-craft/scripts/ai_usage.py | [ ] |
+| 权益元数据 | song-craft/scripts/rights_metadata.py | [ ] |
+| 发布交付包 | song-craft/scripts/release_pack.py | [ ] |
+| （可选）发行数据回测 | song-feedback | [ ] |
 
 ## 产物
 - [ ] 词/lyrics.md（定稿）
@@ -112,6 +122,8 @@ def build_progress(title, meta):
 - [ ] 歌/takes_manifest.json（多版记录）
 - [ ] 歌/song.wav（成品歌）
 - [ ] 合规/AI使用说明.md（发布/交平台前）
+- [ ] 合规/rights_metadata.json（权益/版税元数据）
+- [ ] 导出/release_pack.json（发布交付证据）
 
 """
 
@@ -135,6 +147,8 @@ def main():
     ap.add_argument("--language", default=contract.DEFAULT_SETTINGS["语言"], choices=contract.SONG_LANGUAGES)
     ap.add_argument("--bpm", default=contract.DEFAULT_SETTINGS["BPM/速度"], help="慢速/中速/快速/自定义BPM 或具体数值")
     ap.add_argument("--key", default=contract.DEFAULT_SETTINGS["调性"], help="调性，如 Am/C/未定")
+    ap.add_argument("--instrumentation", default=contract.DEFAULT_SETTINGS["乐器编制"], help="乐器编制，如 piano and strings")
+    ap.add_argument("--vocal-type", default=contract.DEFAULT_SETTINGS["人声类型"], help="人声类型，如 合成女声/合成男声/男女对唱")
     ap.add_argument("--takes", type=int, default=int(contract.DEFAULT_SETTINGS["生成版数"]))
     ap.add_argument("--compose-backend", default=contract.DEFAULT_SETTINGS["作曲后端"], choices=contract.COMPOSE_BACKENDS)
     ap.add_argument("--take-selection", default=contract.DEFAULT_SETTINGS["挑版策略"], choices=contract.TAKE_SELECTION_STRATEGIES)
@@ -174,6 +188,8 @@ def main():
         "language": args.language,
         "bpm": args.bpm,
         "key": args.key,
+        "instrumentation": args.instrumentation,
+        "vocal_type": args.vocal_type,
         "structure": structure,
         "song_backend": args.compose_backend,
         "compose_backend": args.compose_backend,
@@ -190,6 +206,8 @@ def main():
         "语言": args.language,
         "BPM/速度": args.bpm,
         "调性": args.key,
+        "乐器编制": args.instrumentation,
+        "人声类型": args.vocal_type,
         "作曲后端": args.compose_backend,
         "生成版数": str(args.takes),
         "挑版策略": args.take_selection,

@@ -1,6 +1,6 @@
 ---
 name: mv-plan
-description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid 生成 分镜/clip_plan.json、clip_plan.md、timeline_manifest.json，并为 mv-image/mv-video 生成逐 clip prompt 包。Use when asked to MV分镜规划 / 自动拆clip / timeline_manifest / clip_plan / 按beatgrid规划MV. Triggers MV分镜规划, 自动拆clip, clip_plan, timeline_manifest, MV时间线, mv-plan.
+description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid 生成 分镜/clip_plan.json、clip_plan.md、timeline_manifest.json，并为 mv-image/mv-video 生成逐 clip prompt 包、导演合约、身份继承和参考输入。Use when asked to MV分镜规划 / 自动拆clip / timeline_manifest / clip_plan / 按beatgrid规划MV. Triggers MV分镜规划, 自动拆clip, clip_plan, timeline_manifest, MV时间线, mv-plan.
 ---
 
 # mv-plan — clip/timeline 规划
@@ -22,7 +22,7 @@ description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid
 - `出视频/prompt/Clip_XXX.md`：视频 motion prompt 任务。
 - `分镜/semantic_prompts.json`：语义分镜引擎补写后的结构化留痕。
 
-`clip_plan.json` 除时间线外还要沉淀 MV 的动作与一致性字段：`action_family`、`action_peak`、`visual_motif`、`transition_motif`。这些字段由本阶段初填，语义分镜引擎可精修，后续 `mv-image` / `mv-video` / `mv-score` / `mv-review` 直接消费，不再临场猜“炫酷动作”。
+`clip_plan.json` 除时间线外还要沉淀 MV 的导演和一致性字段：`action_family`、`action_peak`、`visual_motif`、`transition_motif`、`shot_design`、`identity_contract`、`reference_inputs`、`asset_ids`。这些字段由本阶段初填，语义分镜引擎可精修，后续 `mv-image` / `mv-video` / `mv-score` / `mv-review` 直接消费，不再临场猜“炫酷动作”或主角锚点。
 
 ## 用法
 
@@ -37,10 +37,11 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
 2. 跑本脚本 `plan_clips.py`。脚本入口会先过 `mv-craft/scripts/gate.py plan`：缺 `歌/song.*`、`词/lyrics.md`、`beatgrid.json`、`视觉蓝图.md` 或后配歌曲仍是 rough 蓝图时直接阻断；成功后生成 clip/timeline 框架并回写 `_进度.md` 的 `plan` 行。
 3. **【AI 代理交互节点】**：跑完 `plan_clips.py` 后，AI 代理**必须**主动向用户提问（使用 `ask_user` 或直接对话）：“是否需要开启「语义分镜引擎」为你自动规划每个镜头的具体画面和动作？”
    - 如果用户同意，AI 代理负责执行 `python3 skills/mv-plan/scripts/compose_prompts.py <作品根>`，读取输出的 prompt 并利用自身的 LLM 能力生成包含画面语义的 JSON，然后通过 `--mock-assessment` 注写入项目。
-   - 语义补全时读取 `mv-video/references/action_knowledge.md`（动作家族/动作峰值/转场母题）和 `mv-image/references/visual_consistency.md`（身份锚点/主色/母题），优先补 `action_family/action_peak/visual_motif/transition_motif`，再补 continuity；写回时同步落 `分镜/semantic_prompts.json`，便于复查和重跑。
-4. `mv-image` 按 `clip_plan.json` 出首帧和需要的尾帧。
-5. `mv-video/scripts/video_jobs.py` 按 `clip_plan.json` 生成视频任务包。
-6. `mv-compose` 按 `timeline_manifest.json` 合成。
+   - 语义补全时读取 `mv-video/references/action_knowledge.md`（动作家族/动作峰值/转场母题）和 `mv-image/references/visual_consistency.md`（身份锚点/主色/母题），优先补 `action_family/action_peak/visual_motif/transition_motif/shot_design`，再补 continuity；写回时同步落 `分镜/semantic_prompts.json`，便于复查和重跑。`compose_prompts.py` 默认要求覆盖全部 clip，缺字段会报错；临时局部注入才用 `--allow-partial`。
+4. 跑 `mv-craft/scripts/identity_registry.py <作品根>`，生成身份/资产/参考注册表。
+5. `mv-image` 按 `clip_plan.json` 出首帧和需要的尾帧。
+6. `mv-video/scripts/video_jobs.py` 按 `clip_plan.json` 生成视频任务包。
+7. `mv-compose` 按 `timeline_manifest.json` 合成。
 
 ## 原则
 
@@ -48,6 +49,7 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
 - 副歌/高潮按 downbeat 密切，verse 按多小节缓切。
 - `timeline_manifest.json` 是合成真值源；不要让 `mv-compose` 再凭文件名猜顺序。
 - MV 不做跨集强一致，但同一首歌内必须继承视觉一致性包；动作知识库只提供可选动作家族，不覆盖歌曲情绪。
+- 每个 clip 必须像传统 MV shot list 一样写清景别、机位、运镜、焦段感、走位、光影、场景 setup、首尾状态和参考输入；不要只写“好看/炫酷”。
 
 ## 常见错误
 

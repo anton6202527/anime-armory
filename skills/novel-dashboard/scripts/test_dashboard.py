@@ -62,6 +62,15 @@ def test_dashboard_collects_core_signals_and_writes_outputs():
                 }
             },
         })
+        write_json(os.path.join(root, "生产数据", "author_workflow.json"), {
+            "kind": "novel_author_workflow",
+            "current_step": "demo",
+            "next_action": "python3 skills/novel-craft/scripts/demo_readiness.py",
+            "steps": [
+                {"key": "setup", "label": "入口", "status": "done", "blockers": [], "warnings": []},
+                {"key": "demo", "label": "Demo", "status": "pending", "blockers": ["demo gate"], "warnings": []},
+            ],
+        })
         from importlib.util import spec_from_file_location, module_from_spec
         queue_path = os.path.join(os.path.dirname(__file__), "..", "..", "novel-batch", "scripts", "queue.py")
         spec = spec_from_file_location("novel_batch_queue_test", os.path.abspath(queue_path))
@@ -94,9 +103,13 @@ def test_dashboard_collects_core_signals_and_writes_outputs():
         assert payload["vector_eval"]["recall_at_k"] == 0.9
         assert payload["supervisor"]["rolling_tripped_count"] == 1
         assert payload["ops_slo"]["retrieval_recall_at_k"] == 0.9
+        assert payload["author_workflow"]["current_step"] == "demo"
+        assert payload["author_workflow"]["active_blockers"] == ["demo gate"]
 
         json_path, md_path, html_path = dashboard.write_outputs(root, payload, html_out=True)
         assert os.path.exists(json_path)
         assert os.path.exists(md_path)
         assert os.path.exists(html_path)
         assert os.path.exists(os.path.join(root, "生产数据", "novel_dashboard_history.jsonl"))
+        with open(md_path, encoding="utf-8") as f:
+            assert "author workflow" in f.read()

@@ -5,7 +5,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
 
 # ad-video — 拍广告 · 图生视频
 
-把 `ad-image` 的首帧 PNG 按 `storyboard.json` 逐镜**图生视频**：写 Clip 视频 prompt（运镜+表演+节奏），机检视觉契约继承，按镜头类型路由后端，首尾双帧接力。
+把 `ad-image` 的首帧 PNG 按 `storyboard.json` 逐镜**图生视频**：写 Clip 视频 prompt（运镜+表演+节奏），机检视觉契约继承，按镜头类型、`asset_registry.json` 和平台规格路由后端，首尾双帧接力；Clip 生成后跑 `video_qc.py` 做出视频落档 QC，未过不得进入 `ad-compose`。
 
 用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。
 
@@ -35,6 +35,8 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
    - 空镜/痛点/普通镜 → 通用后端（`_设置.md` 的 `生视频模型`/`生视频渠道`，旧 `生视频AI` 兼容）
    - end card/包装定格 → 静帧或极慢运镜
    - 镜头时长超 primary 后端单 Clip 上限 = 🔴 block（改用更长后端或拆镜）。
+   - 语义产品/App/UI/片尾镜缺 `PROD_*` = 🔴 block；引用的 `PROD_*`/`BRAND_*` 若不在 `设定库/asset_registry.json` 或 `出图/共享/asset_registry.json` = warn。
+   - 读取 brief/platform pack 的抖音/小红书/TikTok 规格，落 `platform_specs`，提醒 9:16、720x1280、安全区和首帧/前三秒产品品牌要求。
    - **三轴增量字段**，逐镜写进 `video_model_routes.json`：
      - **`quality_tier` 质量档（成本×质量）**：产品 hero/代言人特写/end card 品牌定格 → `high`（值后端 pro 档把脸·包装·logo·品牌色钉稳）；空镜/痛点/普通镜 → `fast`（量产省成本）；后端无 fast/pro 档 → `n/a`。只表达意图，落档侧把 `high→pro`、`fast→fast` 解析成实际档位，不写死 model_version。
      - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 支持 `reference_video_motion`（Seedance/可灵）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。
@@ -46,12 +48,19 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 的首帧 PNG �
    ```
    品牌色/光位锚/轴线未继承、产品镜丢产品身份锁定 = 🔴 block（广告产品色/形态一漂就废）。0 block 才生成。
 4. **图生视频**：调生视频 CLI，标 `need_end_frame` 的用首+尾双帧引导焊接点。
-5. 回写 `_进度.md` 视频 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
+5. **出视频落档 QC（post-video gate）**：
+   ```bash
+   python3 skills/ad-video/scripts/video_qc.py "<作品根>"
+   ```
+   结构化检查每个 Clip 文件、产品镜是否路由到主体一致性后端、视频 prompt 是否继承 `PROD_*`/「同一包装/同一 logo/同一品牌色」锁定句、品牌/UI/CTA/法律文字是否声明清晰可读、安全区/接缝是否有契约。报告写 `出视频/分镜/video_qc.json`；`summary.block>0` 不得进入合成，`ad-craft gate --stage compose` 会读取它。
+6. 回写 `_进度.md` 视频 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
 
 ## 广告专有强化
 
 - **品牌色 + 产品形态继承是硬闸门**：`inherit_contract.py` 把品牌色/光位/轴线漂移、产品镜丢产品身份锁定句拦在生成前。
 - **产品镜稳定优先**：产品 hero 镜路由到主体一致性最强的后端，避免 image2video 把包装/logo 抖花。
+- **资产注册表驱动**：`route.py` 消费 `asset_registry.json`，让 App/UI/end card 的 `PROD_*`、`BRAND_*` 和平台安全区一起进入视频路由产物。
+- **生成后也要验收**：`inherit_contract.py` 只管生成前 prompt 继承；`video_qc.py` 负责生成后的 Clip 文件、产品锁、文字可读、安全区、接缝声明，不允许坏 Clip 进入剪辑。
 - **运镜服务节奏**：广告节奏紧，一镜一个主运镜，动作峰值对 VO/音乐床节奏点（`ad-script` 时间轴标）。
 - **多比例**：按主比例出视频，其它比例 `ad-compose` reframe；运镜别让主体/产品冲出 action-safe。
 
@@ -69,6 +78,7 @@ cd skills/ad-video/scripts && python3 -m pytest
 | 品牌色 HEX 与 rgb()/别名写法不同被误判漂移 | `inherit_contract.py` 归一化 HEX 比对，同色不同写法不 block |
 | 产品镜 prompt 丢了产品身份锁定句 | `inherit_contract.py` 产品形态 block；重写 `PROD_xx`/「同一包装/同一 logo/同一品牌色」 |
 | 产品镜用普通后端抖花包装 | `route.py` 按能力把产品镜路由主体一致后端 + 首尾双帧 |
+| 生成了 MP4 就直接合成 | 先跑 `video_qc.py`；compose gate 缺 `出视频/分镜/video_qc.json` 或 block 会拦 |
 | 镜头比后端单 Clip 上限还长 | `route.py` 时长上限 block；换更长后端（Seedance≤15s）或拆镜 |
 | 项目内混用视频后端当默认 | 路由按能力选 primary/fallback 落 `video_model_routes.json`，不是随意混 |
 | 运镜让产品/主体冲出安全框 | 留 action-safe 余量，多比例 reframe 才不裁掉主体 |

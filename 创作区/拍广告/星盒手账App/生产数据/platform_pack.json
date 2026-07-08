@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "ad_platform_pack",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/拍广告/星盒手账App",
+  "platforms": [
+    "抖音",
+    "小红书"
+  ],
+  "specs": {
+    "抖音": {
+      "aspect": "9:16",
+      "min_resolution": "720x1280",
+      "safe_area": "center_6x6",
+      "text_rules": [
+        "Logo、CTA、法律声明避开右侧互动栏与底部标题区",
+        "首帧/前三秒出现产品或品牌"
+      ],
+      "platform_key": "抖音"
+    },
+    "小红书": {
+      "aspect": "9:16",
+      "min_resolution": "720x1280",
+      "safe_area": "center_6x6",
+      "text_rules": [
+        "封面/首帧要能独立说明卖点",
+        "底部交互区不放关键法律声明"
+      ],
+      "platform_key": "小红书"
+    }
+  },
+  "deliverables": [
+    {
+      "deliverable_id": "master",
+      "label": "主片",
+      "duration": "30s",
+      "aspect": "9:16",
+      "kind": "master",
+      "status": "todo",
+      "path": ""
+    },
+    {
+      "deliverable_id": "cut_15s",
+      "label": "15s cutdown",
+      "duration": "15s",
+      "aspect": "9:16",
+      "kind": "cutdown",
+      "status": "todo",
+      "path": ""
+    },
+    {
+      "deliverable_id": "cut_6s",
+      "label": "6s cutdown",
+      "duration": "6s",
+      "aspect": "9:16",
+      "kind": "cutdown",
+      "status": "todo",
+      "path": ""
+    }
+  ],
+  "summary": {
+    "platform_count": 2,
+    "deliverable_count": 3,
+    "block": 0,
+    "warn": 0
+  },
+  "findings": []
+}

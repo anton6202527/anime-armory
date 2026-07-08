@@ -1,6 +1,6 @@
 ---
 name: ad-score
-description: 拍广告 投放前 pre-spend 评分闸门——正式出图/出视频烧积分前，对广告脚本+分镜按「钩子前3秒 / 卖点清晰度 / CTA 强度 / 品牌露出充分度 / 广告法风险 / 时长贴合」打分体检，拦平庸 ROI。混合模型：确定性 prescore（读 ad-script 已有产物，广告法 block=硬地板）+ LLM 语义分 → 阈值三档（go/revise/reject）+ 低分维度按成因回流 ad-concept、ad-script、ad-image。Use when asked 广告评分, 投放前评分, 广告分镜打分, 这广告行不行, 出图前体检, ad-score for a 拍广告 project. Triggers 广告评分, 投放前评分, 广告体检, 广告分镜打分, 钩子评分, 卖点评分, CTA评分, 广告能不能行, ad-score.
+description: 拍广告 投放前 pre-spend 评分闸门——正式出图/出视频烧积分前，对广告脚本+分镜按「钩子前3秒 / 前3秒品牌产品出现 / 卖点清晰度 / CTA 强度 / 品牌露出充分度 / 广告法风险 / 时长贴合」打分体检，拦平庸 ROI。混合模型：确定性 prescore（读 ad-script 已有产物，广告法 block=硬地板）+ LLM 语义分 → 阈值三档（go/revise/reject）+ 低分维度按成因回流 ad-concept、ad-script、ad-image。Use when asked 广告评分, 投放前评分, 广告分镜打分, 这广告行不行, 出图前体检, ad-score for a 拍广告 project. Triggers 广告评分, 投放前评分, 广告体检, 广告分镜打分, 钩子评分, 卖点评分, CTA评分, 广告能不能行, ad-score.
 ---
 
 # ad-score — 拍广告 投放前 pre-spend 评分闸门
@@ -28,9 +28,10 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 
 | 维度 | 权重 | 判据 |
 |---|---|---|
-| `adlaw` 广告法风险 | 0.30 | 机检报告 block/warn 数。**任一 block = 硬地板，强制 reject**（违禁词不可投放，与总分无关）；warn 按条扣分 |
-| `brand_exposure` 品牌露出充分度 | 0.25 | 带产品(`PROD_*`)/logo/品牌/CTA 的镜数占比；甜点 25%~70%（太少记不住、太多像产品说明书） |
-| `duration_fit` 时长贴合 | 0.20 | 实测总时长 vs 主片目标偏差（广告总时长是硬约束，超 25% 记 0） |
+| `adlaw` 广告法风险 | 0.25 | 机检报告 block/warn 数。**任一 block = 硬地板，强制 reject**（违禁词不可投放，与总分无关）；warn 按条扣分 |
+| `brand_exposure` 品牌露出充分度 | 0.20 | 带产品(`PROD_*`)/logo/品牌/CTA 的镜数占比；甜点 25%~70%（太少记不住、太多像产品说明书） |
+| `first_3s_brand_product` 前3秒品牌/产品 | 0.15 | 信息流前三秒是否已经出现产品、品牌、logo 或 CTA；不能把产品藏到后半段 |
+| `duration_fit` 时长贴合 | 0.15 | 实测总时长 vs 主片目标偏差（广告总时长是硬约束，超 25% 记 0） |
 | `cta_present` CTA 落镜 | 0.15 | 有无 end card/CTA 镜；brief 强制 CTA 却没落镜 = 0 |
 | `hook` 钩子前 3s | 0.10 | 首镜是否钩子镜（痛点/悬念/数字/对比）vs 缓起势空镜（信息流前 3s 易被划走）——半确定性初筛，LLM 维度再细判 |
 
@@ -45,7 +46,7 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 | 低分维度 | 回流 stage |
 |---|---|
 | 钩子弱 / CTA 缺失 | `ad-concept`（创意层重设开场/补行动号召） |
-| 卖点不清 / 广告法 block / 总时长超标 / 露出分配 | `ad-script`（脚本/分镜/finalize 重切） |
+| 卖点不清 / 广告法 block / 总时长超标 / 露出分配 / 前3秒未露产品品牌 | `ad-script`（脚本/分镜/finalize 重切） |
 | 无任何产品/品牌露出镜 | `ad-image`（补 hero/品牌镜）+ `ad-script` 落镜 |
 
 `--enqueue` 落 `评分/回流清单.json`（`kind=ad_score_rework_queue`，按 `return_to_stage` 分组，ad 自有格式，不引用别线 batch）。退出码：0=go/建议性；1=reject/低于阈值（pre-spend 拦截）；2=输入缺失。

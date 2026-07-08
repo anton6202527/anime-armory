@@ -33,6 +33,10 @@ ASSETS=()
 DEMO_WORKS=()
 CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
 FULL_REFERENCE_LINES=()
+CREATION_MANUALS=("创作区/使用手册.md")
+for line in "${CREATIVE_LINES[@]}"; do
+  CREATION_MANUALS+=("创作区/$line/使用手册.md")
+done
 
 full_reference_lines() {
   local line
@@ -350,6 +354,21 @@ copy_full_reference_lines() {
   done < <(full_reference_lines)
 }
 
+copy_creation_manuals() {
+  local src_root="$1"
+  local dst_root="$2"
+  local rel
+  for rel in "${CREATION_MANUALS[@]}"; do
+    if [[ ! -f "$src_root/$rel" ]]; then
+      echo "[r2a] missing creation manual: $rel" >&2
+      exit 1
+    fi
+    mkdir -p "$dst_root/$(dirname "$rel")"
+    cp -p "$src_root/$rel" "$dst_root/$rel"
+  done
+  echo "[r2a] copied ${#CREATION_MANUALS[@]} creation manuals into source snapshot"
+}
+
 snapshot_local_source() {
   require_cmd git
   require_cmd rsync
@@ -362,6 +381,7 @@ snapshot_local_source() {
 
   echo "[r2a] snapshotting local checkout: $ROOT"
   rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
+  copy_creation_manuals "$ROOT" "$SOURCE_DIR"
   copy_selected_demo_source "$ROOT" "$SOURCE_DIR"
   copy_full_reference_lines "$ROOT" "$SOURCE_DIR"
 

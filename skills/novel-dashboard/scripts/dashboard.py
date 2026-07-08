@@ -19,6 +19,7 @@ SKILLS = os.path.abspath(os.path.join(HERE, "..", ".."))
 NOVEL_LIB = os.path.join(SKILLS, "novel", "_lib")
 NOVEL_BATCH = os.path.join(SKILLS, "novel-batch", "scripts")
 NOVEL_SUPERVISOR = os.path.join(SKILLS, "novel-supervisor", "scripts")
+NOVEL_CRAFT = os.path.join(SKILLS, "novel-craft", "scripts")
 if NOVEL_LIB not in sys.path:
     sys.path.insert(0, NOVEL_LIB)
 
@@ -53,10 +54,26 @@ def _load_batch_queue_module():
     return module
 
 
+def _load_author_workflow_module():
+    path = os.path.join(NOVEL_CRAFT, "author_workflow.py")
+    if not os.path.exists(path):
+        return None
+    spec = importlib.util.spec_from_file_location("novel_author_workflow", path)
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 try:
     batch_queue = _load_batch_queue_module()
 except Exception:  # pragma: no cover - dashboard degrades if queue is unavailable
     batch_queue = None
+try:
+    author_workflow_mod = _load_author_workflow_module()
+except Exception:  # pragma: no cover - dashboard degrades if workflow is unavailable
+    author_workflow_mod = None
 
 
 DASHBOARD_KIND = "novel_dashboard"
@@ -184,6 +201,35 @@ def release_summary(root: str) -> dict[str, Any]:
         "release_ready": bool(payload.get("release_ready")) if isinstance(payload, dict) else False,
         "blocker_count": (readiness or {}).get("blocker_count", 0) if isinstance(readiness, dict) else 0,
         "exported_files": [rel(root, path) for path in exported if os.path.isfile(path)],
+    }
+
+
+def author_workflow_summary(root: str) -> dict[str, Any]:
+    path = os.path.join(root, "生产数据", "author_workflow.json")
+    payload = load_json(path, {}) or {}
+    source = "file" if isinstance(payload, dict) and payload else ""
+    if (not payload or not isinstance(payload, dict)) and author_workflow_mod is not None:
+        try:
+            payload = author_workflow_mod.build_workflow(root)
+            source = "computed"
+        except Exception as exc:  # pragma: no cover - dashboard must degrade
+            return {"path": rel(root, path), "exists": os.path.exists(path), "error": str(exc)}
+    steps = payload.get("steps") if isinstance(payload, dict) else []
+    steps = steps if isinstance(steps, list) else []
+    active = next((step for step in steps if isinstance(step, dict) and step.get("key") == payload.get("current_step")), None)
+    return {
+        "path": rel(root, path),
+        "exists": os.path.exists(path),
+        "source": source,
+        "current_step": payload.get("current_step") if isinstance(payload, dict) else "",
+        "next_action": payload.get("next_action") if isinstance(payload, dict) else "",
+        "step_count": len(steps),
+        "done_count": sum(1 for step in steps if isinstance(step, dict) and step.get("status") == "done"),
+        "warning_count": sum(1 for step in steps if isinstance(step, dict) and step.get("status") == "warning"),
+        "pending_count": sum(1 for step in steps if isinstance(step, dict) and step.get("status") == "pending"),
+        "active_label": active.get("label") if isinstance(active, dict) else "",
+        "active_blockers": active.get("blockers") if isinstance(active, dict) else [],
+        "active_warnings": active.get("warnings") if isinstance(active, dict) else [],
     }
 
 
@@ -345,6 +391,7 @@ def build_dashboard(root: str) -> dict[str, Any]:
     prompt_cache = prompt_cache_summary(root)
     vector_eval = vector_eval_summary(root)
     supervisor = supervisor_summary(root)
+    author_flow = author_workflow_summary(root)
     run_artifacts = batch.get("run_artifacts") or {}
     return {
         "schema_version": 1,
@@ -353,6 +400,7 @@ def build_dashboard(root: str) -> dict[str, Any]:
         "project_root": root,
         "title": plan.get("title"),
         "next_stage": plan.get("next_stage"),
+        "author_workflow": author_flow,
         "stage_counts": stage_counts,
         "blocked_stages": [
             {
@@ -420,9 +468,18 @@ def render_markdown(dashboard: dict[str, Any]) -> str:
     cache = dashboard.get("prompt_cache") or {}
     vector_eval = dashboard.get("vector_eval") or {}
     supervisor = dashboard.get("supervisor") or {}
+    author_flow = dashboard.get("author_workflow") or {}
     ops_slo = dashboard.get("ops_slo") or {}
     trends = dashboard.get("trends") or {}
     lines.append(f"- review blockers：{review.get('blocking_count', 0)} / findings={review.get('finding_count', 0)}")
+    lines.append(
+        f"- author workflow：{author_flow.get('current_step') or 'unknown'} "
+        f"done={author_flow.get('done_count', 0)}/{author_flow.get('step_count', 0)} source={author_flow.get('source') or '-'}"
+    )
+    if author_flow.get("active_blockers"):
+        lines.append(f"- author blockers：{author_flow.get('active_blockers')}")
+    if author_flow.get("next_action"):
+        lines.append(f"- author next_action：`{author_flow.get('next_action')}`")
     lines.append(f"- score：{score.get('total_score')} verdict={score.get('verdict') or ''} decision={score.get('production_decision') or ''}")
     lines.append(f"- revision tasks：{revision.get('task_count', 0)} by_priority={revision.get('by_priority') or {}} conflicts={revision.get('conflicts', 0)}")
     lines.append(f"- semantic jobs：{len(dashboard.get('open_semantic_jobs') or [])}")

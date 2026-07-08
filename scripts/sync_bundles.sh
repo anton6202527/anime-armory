@@ -10,11 +10,12 @@ usage() {
   cat <<'EOF'
 Usage: scripts/sync_bundles.sh [--desktop-only|--vscode-only] [--demo|--demos]
 
-Synchronize bundled skill snapshots from the repo's canonical skills/ tree into:
+Synchronize bundled skill snapshots and 创作区 usage manuals into:
   - vscode-extension/assets/
   - desktop/src-tauri/resources/
 
 The destination directories are generated artifacts and are intentionally gitignored.
+VS Code also refreshes vscode-extension/创作区/使用手册.md files for the bundled seed work root.
 --demo adds lightweight desktop sample references only; it does not bundle full demo payloads.
 EOF
 }

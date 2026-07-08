@@ -95,7 +95,14 @@ const WORK_LINES = [
   { label: '📣 拍广告', dir: path.join('创作区', '拍广告') },
 ];
 const DOCS = [
-  { rel: 'README.md', desc: '使用说明 · 工作流与批量生产' },
+  { rel: 'README.md', label: 'README.md', desc: '使用说明 · 工作流与批量生产' },
+  { rel: '创作区/使用手册.md', label: '创作区使用手册', desc: '六条创作线总览与 demo' },
+  { rel: '创作区/写小说/使用手册.md', label: '写小说使用手册', desc: 'novel 项目开局、续写、审稿' },
+  { rel: '创作区/制漫剧/使用手册.md', label: '制漫剧使用手册', desc: 'n2d 从小说到短剧成片' },
+  { rel: '创作区/画漫画/使用手册.md', label: '画漫画使用手册', desc: 'comic 分格、排版、嵌字' },
+  { rel: '创作区/写歌/使用手册.md', label: '写歌使用手册', desc: 'song 作词、作曲、翻唱、审歌' },
+  { rel: '创作区/制MV/使用手册.md', label: '制MV使用手册', desc: 'mv 卡点、出图出视频、合成' },
+  { rel: '创作区/拍广告/使用手册.md', label: '拍广告使用手册', desc: 'ad brief 到投放素材' },
 ];
 const FIRST_OPEN_TERMINAL_MESSAGE = '进入AI，输入‘/创作区/制漫剧/本宫才是这皇宫最大的妖 开始制作漫剧’';
 
@@ -285,7 +292,7 @@ class FactoryProvider {
     for (const d of DOCS) {
       const p = path.join(this.assetsRoot, d.rel);
       if (!exists(p)) continue;
-      const t = new vscode.TreeItem(path.basename(d.rel), vscode.TreeItemCollapsibleState.None);
+      const t = new vscode.TreeItem(d.label || path.basename(d.rel), vscode.TreeItemCollapsibleState.None);
       t.kind = 'doc'; t.description = d.desc; t.tooltip = d.desc;
       t.iconPath = new vscode.ThemeIcon('markdown');
       t.command = { command: 'vscode.open', title: 'Open', arguments: [vscode.Uri.file(p)] };

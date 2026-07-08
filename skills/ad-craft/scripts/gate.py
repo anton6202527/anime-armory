@@ -217,9 +217,12 @@ def voice_findings(root, stage, allow_placeholder=False):
 
 def image_findings(root):
     folder = os.path.join(root, "出图", "分镜")
+    image_folder = os.path.join(folder, "图片")
+    if has_files(image_folder, (".png", ".jpg", ".jpeg", ".webp")):
+        return []
     if has_files(folder, (".png", ".jpg", ".jpeg", ".webp")):
         return []
-    return [finding("block", "image_frames_missing", "缺逐镜首帧/尾帧图片", folder)]
+    return [finding("block", "image_frames_missing", "缺逐镜首帧/尾帧图片", image_folder)]
 
 
 def video_contract_findings(root):
@@ -241,7 +244,36 @@ def video_clip_findings(root):
     folder = os.path.join(root, "出视频", "分镜", "视频")
     if has_files(folder, (".mp4", ".mov", ".m4v")):
         return []
+    manifest = load_json(os.path.join(root, "出视频", "分镜", "video_jobs_manifest.json"), {}) or {}
+    jobs = manifest.get("jobs") if isinstance(manifest, dict) else []
+    if isinstance(jobs, list):
+        submitted = [
+            str(j.get("clip") or j.get("job_id") or "")
+            for j in jobs
+            if isinstance(j, dict) and j.get("submit_id") and not j.get("output")
+        ]
+        if submitted:
+            return [finding("block", "video_clips_pending",
+                            "出视频 Clip 已提交远端但尚未回收下载：" + "、".join(x for x in submitted if x), folder)]
     return [finding("block", "video_clips_missing", "缺出视频 Clip 文件", folder)]
+
+
+def video_qc_findings(root):
+    path = os.path.join(root, "出视频", "分镜", "video_qc.json")
+    report = load_json(path)
+    if report is None:
+        return [finding("block", "video_qc_missing",
+                        "缺出视频落档 QC 报告，请先跑 ad-video/scripts/video_qc.py", path)]
+    blocks, warns = _summary_counts(report)
+    if blocks is None:
+        return [finding("block", "video_qc_malformed", "出视频 QC 报告缺 summary.block（格式异常）", path)]
+    out = []
+    if blocks:
+        out.append(finding("block", "video_qc_block",
+                           f"出视频落档 QC 仍有 block={blocks}（产品/品牌/接缝/clip 文件需修）", path))
+    if warns:
+        out.append(finding("warn", "video_qc_warn", f"出视频落档 QC warn={warns}，需人工确认", path))
+    return out
 
 
 def compose_output_findings(root):
@@ -270,6 +302,7 @@ def run_gate(root, stage, allow_placeholder=False):
         findings.extend(video_contract_findings(root))
     if stage == "compose":
         findings.extend(video_clip_findings(root))
+        findings.extend(video_qc_findings(root))
         findings.extend(compose_output_findings(root))
     summary = {
         "block": sum(1 for f in findings if f["severity"] == "block"),

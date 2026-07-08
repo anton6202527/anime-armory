@@ -1,6 +1,6 @@
 ---
 name: mv-video
-description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，clip 时长对齐 mv-plan/beatgrid 卡点（副歌踩鼓点切），用 jobs_manifest 跟踪多版生成、评分和挑版，运镜服务节奏。用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。Use when asked to MV出视频 / 生成MV视频 / MV图生视频 / 卡点剪辑素材 / 登记视频take / 挑版. Triggers MV出视频, MV视频, MV图生视频, MV运镜, 视频take, 挑版, mv-video.
+description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，clip 时长对齐 mv-plan/beatgrid 卡点（副歌踩鼓点切），用 jobs_manifest 跟踪多版生成、评分和挑版，并用 inherit_contract/video_qc 检查身份、参考输入、首尾帧、时长、画幅和音轨。用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。Use when asked to MV出视频 / 生成MV视频 / MV图生视频 / 卡点剪辑素材 / 登记视频take / 挑版. Triggers MV出视频, MV视频, MV图生视频, MV运镜, 视频take, 挑版, mv-video.
 ---
 
 # mv-video — 制MV 出视频（mv 系列自建）
@@ -23,6 +23,8 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
   - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：`clip_plan.json` 标 `need_end_frame=true`，mv-image 出 `出图/段落/图片/Clip_XXX_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
 - **导演视角八维（视频版）**：①镜头/③人物/⑤场景/⑥光影/⑧画风**已由首帧 PNG 锁死**（出图阶段做完），视频阶段**只升级 ④动作→人物运动+表情(踩段落)、②机位→运镜(对齐 downbeat)、⑦张力**，其余严禁重定（改了=与首帧打架=闪烁）。详见 `mv/references/导演视角prompt.md §四`。
 - **MV 单曲一致性继承**：`mv-image` 已锁主角身份、主色、母题和段落 look；视频 prompt 只让它动起来，不改脸、不换衣型、不换场景风格。副歌可以让光效和相机更猛，但不能换成另一套视觉语言。
+- **继承合约必跑**：`scripts/inherit_contract.py` 检查 `clip_plan` 的身份锚点、参考输入、首帧/尾帧、shot_design 和 continuity 是否进入 `jobs_manifest` 与逐 take prompt；缺失先修 prompt/job，不要带病出视频。
+- **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
 - **视频任务 manifest**：先用 `scripts/video_jobs.py` 从 `分镜/clip_plan.json` 生成 `出视频/jobs_manifest.json` 和逐 take prompt；AI/网页/人工生成的视频先登记到 `takes/`，评分后挑版复制到 `出视频/视频/Clip_XXX.mp4` 并同步 `分镜/timeline_manifest.json`。不要只把 mp4 扔进目录让下游猜来源。
 - **生视频 CLI**：本机官方 CLI（dreamina/kling/veo/seedance）直调；没有则生成 job 包并指导 web/manual 登记。若 `_设置.md` 未显式固定模型/渠道，先按可用 CLI/API 与 `生视频渠道` 偏好决定入口；探测不到可执行入口时再问用户选渠道或 `manual`。**不装第三方逆向 CLI**。
@@ -88,13 +90,20 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --select Clip_001 --take 1
    ```
    `--select` 会复制到 `出视频/视频/Clip_001.mp4`，并同步 `分镜/timeline_manifest.json`；全部 clip 都选中后脚本自动回写 `_进度.md` 的 `video` 行。
-5. 校验：clip 总时长 ≈ 歌长（差太多回头调 clip/补空镜）。
+5. 跑继承合约和视频 QC：
+   ```bash
+   python3 skills/mv-video/scripts/inherit_contract.py "<制MV作品根>"
+   python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>"
+   ```
+   有 hard block 先回 mv-plan/mv-image/mv-video 修；demo 或人工外部产物可用 `--no-fail` 落报告，但交付说明必须标注。报告会写 `生产数据/video_qc/frames/<clip>/start|mid|end.jpg` 供并排审片。
 6. 下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 timeline 拼）。
 
 ## 详细参考
 - 导演视角八维（视频版·只调动作/运镜/张力，其余继承首帧）：`mv/references/导演视角prompt.md §四`
 - jobs manifest 格式 + 卡点定时长 + 运镜映射：`references/prompt_format.md`
 - MV 动作知识库（动作家族/动作峰值/炫酷转场母题）：`references/action_knowledge.md`
+- 图生视频继承检查：`scripts/inherit_contract.py`
+- 机械视频 QC：`scripts/video_qc.py`
 
 ## 常见错误
 | 错误 | 纠正 |
@@ -104,6 +113,9 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
 | 不告知规格就闷头调 AI 出视频 | 违反 `出视频规格` 选择点——调 AI 前先念三档话术告知当前规格档（分辨率/帧率/跑几版/质量档），用户可改 |
 | 外部生成后只丢 mp4 | 用 `video_jobs.py --register/--score/--select` 登记 take、挑版并同步 timeline |
 | 首帧还没出就生成视频任务 | `video_jobs.py` 会 gate 阻断；先跑 mv-image 产出 `clip.image_path` 指向的 PNG |
+| 图像 prompt 写了身份锚点但视频 prompt 没继承 | 跑 `inherit_contract.py`，按报告补 `jobs_manifest`/take prompt |
+| clip 能播但时长/画幅/音轨乱 | 跑 `video_qc.py`，修 selected 视频或 timeline |
+| 接缝只靠肉眼临场看 | 用 `video_qc.py` 生成 start/mid/end 帧和接缝 end→start 指标，再做人判 |
 | 只写画面不写运动 | 人物运动+镜头运动+动态细节三件套 |
 | 每条都写“炫酷动作/酷炫运镜” | 从动作知识库选 `action_family`，写一个主动作链和动作峰值 |
 | 一个短 clip 塞太多动作 | 一 clip 一个主动作；副歌短 clip 尤其要克制 |

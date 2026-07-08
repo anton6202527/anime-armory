@@ -10,6 +10,7 @@ import sys
 import json
 import re
 import subprocess
+import importlib.util
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _SKILLS = os.path.abspath(os.path.join(_HERE, "..", ".."))
@@ -85,6 +86,19 @@ REVISION_SIGNAL_RELS = (
 )
 
 
+def load_author_workflow(root):
+    script = os.path.join(_SKILLS, "novel-craft", "scripts", "author_workflow.py")
+    if not os.path.exists(script):
+        return {}
+    try:
+        spec = importlib.util.spec_from_file_location("novel_author_workflow_for_flow", script)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.build_workflow(root)
+    except Exception:
+        return {}
+
+
 def revision_plan_hint(root):
     sources = [os.path.join(root, rel) for rel in REVISION_SIGNAL_RELS if os.path.exists(os.path.join(root, rel))]
     if not sources:
@@ -149,6 +163,13 @@ def main():
     
     print(f"📍 当前进度焦点：{ch_text}「{stage_label}」")
     print(f"⚙️ 小说生成工作流：{draft_workflow}")
+    author_flow = load_author_workflow(root)
+    if author_flow:
+        print(f"🧭 默认作者工作流：{author_flow.get('current_step')} / 下一步：{author_flow.get('next_action') or 'complete'}")
+        active = next((step for step in author_flow.get("steps", []) if step.get("key") == author_flow.get("current_step")), None)
+        if active and active.get("blockers"):
+            print(f"   作者流程阻断：{'；'.join(str(item) for item in active.get('blockers') or [])}")
+    print(f"🧭 刷新作者成书状态：python3 skills/novel-craft/scripts/author_workflow.py \"{root}\" --write")
     
     # 状态哨兵
     advice = []

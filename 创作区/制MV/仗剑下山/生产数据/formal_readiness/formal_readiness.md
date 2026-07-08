@@ -1,0 +1,64 @@
+# formal readiness
+
+- status: blocked
+- blockers: 4
+- warnings: 2
+- song_duration_sec: 19.969166666666666
+- clips: 5
+- selected_jobs: 5
+- lyric_lines: 45
+- reference_groups_ready: 0/2
+- reference_requirements_ready: 0/9
+
+## Blockers
+- 当前项目标记为 demo_excerpt，不能作为正式整首 MV 发布。
+- 当前歌长 19.97s，明显不是完整 MV 歌曲。
+- clip_plan 只有 5 个 clip，正式 MV 通常需要更多镜头覆盖完整结构。
+- 关键身份/道具/VFX 参考图未齐：CHAR_LEAD_YOUNG(partial,1/5)、CHAR_LEAD_ADULT(text_only,0/3)、PROP_QINGFENG_SWORD(partial,2/3)、VFX_SWORD_LIGHT(text_only,0/3)。
+
+## Warnings
+- 身份参考组未全部 ready：0/2。
+- 正式 reference pack 未齐：ready 0/9；未 ready：CHAR_LEAD_YOUNG(partial,1/5)、CHAR_LEAD_ADULT(text_only,0/3)、PROP_QINGFENG_SWORD(partial,2/3)、LOC_MOUNTAIN_GATE(partial,1/3)、LOC_CLOUD_SEA(partial,1/3)、LOC_INN(text_only,0/3)、LOC_BAMBOO_FOREST(text_only,0/3)、LOC_SNOWFIELD(text_only,0/3)。
+
+## Next Actions
+- 替换/确认正式整首歌后，清除 _meta.is_demo 或改为 false，并重跑 mv-beat + mv-plan。
+- 放入正式整首歌，保留 demo 成片作参考，不要直接扩剪。
+- 正式歌入库后用精细/标准粒度重新生成 clip_plan。
+- 补成年态、手部/剑、关键场景多角度参考包。
+- 先按 设定/reference_requirements.md 补齐关键参考图，再正式批量出图/图生视频。
+
+## Reference Requirements
+- ready: 0/9
+- partial: 4
+- text_only: 5
+- planned: 0
+- missing:
+  - CHAR_LEAD_YOUNG(partial,1/5)
+  - CHAR_LEAD_ADULT(text_only,0/3)
+  - PROP_QINGFENG_SWORD(partial,2/3)
+  - LOC_MOUNTAIN_GATE(partial,1/3)
+  - LOC_CLOUD_SEA(partial,1/3)
+  - LOC_INN(text_only,0/3)
+  - LOC_BAMBOO_FOREST(text_only,0/3)
+  - LOC_SNOWFIELD(text_only,0/3)
+  - VFX_SWORD_LIGHT(text_only,0/3)
+
+## Formal Upgrade Plan
+- 1. 正式歌入库：替换 `歌/song.wav` 为完整定稿歌曲，并确认 `_meta.is_demo=false`、`分镜/clip_plan.json` 不再是 demo_excerpt。
+- 2. 重跑真实卡点：用正式整首歌重算 BPM、beats/downbeats 与段落能量。
+  - `conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山"`
+- 3. 重拆正式 timeline：按正式歌结构重拆 clip/timeline，不沿用 20s demo 的 5 镜头。
+  - `python3 skills/mv-plan/scripts/plan_clips.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山" --granularity 标准 --strategy 副歌强卡点 --visual-style 国风写意`
+- 4. 补语义镜头设计：让每个 clip 都有动作、景别、运镜、身份合约和参考输入。
+  - `python3 skills/mv-plan/scripts/compose_prompts.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山"`
+- 5. 刷新身份/资产/参考需求：重建 reference pack 缺口；当前未 ready：9/9。
+  - `python3 skills/mv-craft/scripts/identity_registry.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山"`
+- 6. 补正式 reference pack：按 `设定/reference_requirements.md` 补主角多角度、成年态、青锋剑、关键场景和剑光/VFX 参考图；补完后重跑第 5 步确认 ready。
+- 7. 出图后立即 QC：正式首帧/尾帧落档后先过 image_qc，再进入图生视频。
+  - `python3 skills/mv-image/scripts/image_qc.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山" --strict`
+- 8. 视频登记与挑版：为每个 clip 登记图生视频 take，按动作/身份/卡点/清晰度评分并 selected。
+  - `python3 skills/mv-video/scripts/video_jobs.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山"`
+- 9. 继承合约与视频 QC：检查首帧到视频是否继承身份/场景/道具，并抽 start/mid/end 帧看接缝与崩坏。
+  - `python3 skills/mv-video/scripts/inherit_contract.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山" --no-fail && python3 skills/mv-video/scripts/video_qc.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山" --no-fail`
+- 10. 字幕、合成、总审：重做全曲卡拉 OK 字幕，合成正式成片，再跑 mv-review。
+  - `bash skills/mv-compose/mv_compose.sh "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山" 9:16 && python3 skills/mv-review/scripts/mv_check.py "/Users/wesley/learn/anime-armory/创作区/制MV/仗剑下山"`

@@ -17,7 +17,7 @@ description: 在投入资源进行音频生成之前，对歌词和创作蓝图�
 4. **情感共鸣**：词意是否贴合蓝图设定的情绪基调？能否打动目标受众？
 
 ## 工作流
-1. **自动化机检**：执行 `python3 skills/song-craft/scripts/analyze_lyrics.py <作品根>`，提取结构对称性和韵脚硬伤（如 Verse 1 和 Verse 2 行数不一致）。
+1. **自动化机检**：执行 `python3 skills/song-craft/scripts/analyze_lyrics.py <作品根>` 与 `python3 skills/song-craft/scripts/lyric_prosody_check.py <作品根> --write`，提取结构对称性、韵脚硬伤、hook 重复、标题/副歌关系、字密度和乐句对称问题。
 2. **LLM 语义评分**：结合机检结果和 `词/lyrics.md` 的内容，让 LLM 按照上述四个维度打分。
 3. **决策与回流**：
    - **高分 (≥80)**：可以放心推进到 `song-compose`。
@@ -29,6 +29,7 @@ description: 在投入资源进行音频生成之前，对歌词和创作蓝图�
 
 ```bash
 python3 skills/song-craft/scripts/analyze_lyrics.py <作品根>
+python3 skills/song-craft/scripts/lyric_prosody_check.py <作品根> --write
 ```
 然后让 LLM 阅读输出和歌词文件，给出评分与修改建议。
 

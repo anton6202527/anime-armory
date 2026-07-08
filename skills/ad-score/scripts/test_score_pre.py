@@ -44,6 +44,14 @@ class DeterministicDimTest(unittest.TestCase):
         _, brand, total = sp.brand_exposure_score(sb)
         self.assertEqual((brand, total), (1, 2))
 
+    def test_brand_exposure_reads_storyboard_scene_shot_prompt_and_brand_asset(self):
+        sb = {"clips": [
+            {"scene": "星盒界面", "shot": "手机特写", "prompt": "星盒 App", "assets": {"BRAND_01": True}},
+            {"scene": "空镜"},
+        ]}
+        _, brand, total = sp.brand_exposure_score(sb)
+        self.assertEqual((brand, total), (1, 2))
+
     def test_duration_fit_on_target(self):
         score, dev = sp.duration_fit_score(30.0, 30.0)
         self.assertEqual(score, 100.0)
@@ -63,6 +71,21 @@ class DeterministicDimTest(unittest.TestCase):
     def test_cta_mandatory_and_present(self):
         sb = {"shots": [{"frame": "end card: 立即下单"}]}
         self.assertEqual(sp.cta_score(sb, ["CTA"]), 100.0)
+
+    def test_cta_mandatory_dict_and_present(self):
+        sb = {"shots": [{"shot": "片尾 end card", "product_lock": "CTA 立即预约"}]}
+        self.assertEqual(sp.cta_score(sb, {"endcard_cta": "立即预约"}), 100.0)
+
+    def test_first_3s_identity_present(self):
+        sb = {"shots": [{"duration": 3, "shot": "产品 hero", "assets": {"PROD_APP": True}}]}
+        score, checked = sp.first_3s_brand_product_score(sb)
+        self.assertEqual(score, 100.0)
+        self.assertTrue(checked[0]["has_identity"])
+
+    def test_first_3s_identity_missing(self):
+        sb = {"shots": [{"duration": 3, "shot": "空镜"}]}
+        score, checked = sp.first_3s_brand_product_score(sb)
+        self.assertEqual(score, 0.0)
 
     def test_hook_strong_first_shot(self):
         self.assertEqual(sp.hook_score({"shots": [{"frame": "痛点：你还在为X烦恼？"}]}), 100.0)
@@ -117,14 +140,14 @@ class DecisionTest(unittest.TestCase):
 class AffectedItemsTest(unittest.TestCase):
     def test_hard_block_yields_adscript_item(self):
         pre = {"hard_block": True, "dims": {"adlaw": 0, "brand_exposure": 100, "duration_fit": 100,
-                                            "cta_present": 100, "hook": 100},
+                                            "first_3s_brand_product": 100, "cta_present": 100, "hook": 100},
                "facts": {"adlaw_block": 2}}
         items = sp.affected_items(pre, {}, 80)
         self.assertTrue(any(i["item"] == "广告法机检" and i["return_to_stage"] == "ad-script" for i in items))
 
     def test_no_brand_routes_to_image(self):
         pre = {"hard_block": False, "dims": {"adlaw": 100, "brand_exposure": 0, "duration_fit": 100,
-                                             "cta_present": 100, "hook": 100},
+                                             "first_3s_brand_product": 100, "cta_present": 100, "hook": 100},
                "facts": {"brand_shots": 0}}
         items = sp.affected_items(pre, {}, 80)
         self.assertTrue(any(i["item"] == "brand_exposure" and i["return_to_stage"] == "ad-image" for i in items))
@@ -153,6 +176,16 @@ class EndToEndTest(unittest.TestCase):
             payload = sp.build_payload(td, "30s", 70, {})
             self.assertEqual(payload["tier"], "go")
             self.assertFalse(payload["blocked"])
+
+    def test_build_payload_reads_nested_deliverables_master_duration(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._project(td)
+            with open(os.path.join(td, "需求", "brief.json"), "w", encoding="utf-8") as f:
+                json.dump({"deliverables": {"master_duration": "30s"},
+                           "mandatories": {"endcard_cta": "立即下单"}}, f, ensure_ascii=False)
+            payload = sp.build_payload(td, None, None, {})
+            self.assertEqual(payload["master_target_seconds"], 30.0)
+            self.assertEqual(payload["dims"]["duration_fit"], 100.0)
 
     def test_adlaw_block_rejects_end_to_end(self):
         with tempfile.TemporaryDirectory() as td:

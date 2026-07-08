@@ -39,10 +39,10 @@ def test_supervisor_dispatches_next_stage_with_handoff_shape():
             f.write("契约\n")
 
         action = supervisor.decide_next_action(root)
-        assert action["next_stage"] in {"blueprint", "outline"}
-        assert action["status"] in {"needs_human", "dispatch"}
-        if action["status"] == "dispatch":
-            assert action["handoff"]["kind"] == "novel_specialist_handoff_contract"
+        assert action["next_stage"] == "author_workflow"
+        assert action["status"] == "dispatch"
+        assert "author_workflow.py" in action["recommended_commands"][0]
+        assert action["handoff"]["kind"] == "novel_specialist_handoff_contract"
 
 
 def test_read_only_decisions_do_not_increment_circuit_ledger():

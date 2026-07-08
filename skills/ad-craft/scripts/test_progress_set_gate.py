@@ -127,6 +127,20 @@ class GateTest(unittest.TestCase):
             self.assertTrue(any(f["code"] == "product_qc_block" and f["severity"] == "block"
                                 for f in payload["findings"]))
 
+    def test_video_gate_accepts_nested_image_frame_folder(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜", "图片"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "图片", "镜头1.png"), "wb").write(b"png")
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full", "pending_product_images": 0},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            payload = gate.run_gate(root, "video")
+            self.assertFalse(any(f["code"] == "image_frames_missing" for f in payload["findings"]))
+
     def test_video_gate_blocks_degraded_product_qc(self):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
@@ -155,6 +169,60 @@ class GateTest(unittest.TestCase):
             self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
             payload = gate.run_gate(root, "video")
             self.assertTrue(any(f["code"] == "product_qc_pending_images" and f["severity"] == "block"
+                                for f in payload["findings"]))
+
+    def test_compose_gate_blocks_missing_video_qc(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "镜头1.png"), "wb").write(b"png")
+            os.makedirs(os.path.join(root, "出视频", "分镜", "视频"), exist_ok=True)
+            open(os.path.join(root, "出视频", "分镜", "视频", "镜头01.mp4"), "wb").write(b"mp4")
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full"},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            payload = gate.run_gate(root, "compose")
+            self.assertTrue(any(f["code"] == "video_qc_missing" and f["severity"] == "block"
+                                for f in payload["findings"]))
+
+    def test_compose_gate_reports_pending_video_submit_ids(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜", "图片"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "图片", "镜头1.png"), "wb").write(b"png")
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full"},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            self._write_json(root, "出视频/分镜/video_jobs_manifest.json", {
+                "jobs": [{"clip": "镜头01", "submit_id": "sub_123", "status": "submitted"}],
+            })
+            self._write_json(root, "出视频/分镜/video_qc.json", {"summary": {"block": 1, "warn": 0}})
+            payload = gate.run_gate(root, "compose")
+            self.assertTrue(any(f["code"] == "video_clips_pending" and f["severity"] == "block"
+                                for f in payload["findings"]))
+
+    def test_compose_gate_blocks_video_qc_block(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base_project(root)
+            os.makedirs(os.path.join(root, "出图", "分镜"), exist_ok=True)
+            open(os.path.join(root, "出图", "分镜", "镜头1.png"), "wb").write(b"png")
+            os.makedirs(os.path.join(root, "出视频", "分镜", "视频"), exist_ok=True)
+            open(os.path.join(root, "出视频", "分镜", "视频", "镜头01.mp4"), "wb").write(b"mp4")
+            self._write_json(root, "出图/分镜/product_qc.json", {
+                "summary": {"block": 0, "warn": 0},
+                "qc_environment": {"precision_level": "full"},
+                "findings": [],
+            })
+            self._write_json(root, "出视频/分镜/contract_inheritance.json", {"summary": {"block": 0, "warn": 0}})
+            self._write_json(root, "出视频/分镜/video_qc.json", {"summary": {"block": 1, "warn": 0}})
+            payload = gate.run_gate(root, "compose")
+            self.assertTrue(any(f["code"] == "video_qc_block" and f["severity"] == "block"
                                 for f in payload["findings"]))
 
 

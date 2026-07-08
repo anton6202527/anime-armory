@@ -13,9 +13,10 @@ Pillow-or-graceful-fallback、prompt-lint、summary/findings JSON、hard-block �
    的 `出图/分镜/prompt/镜头N.md` 必须含 参考图/资产引用块 + 身份锁定句 +
    负向约束(不要改包装文字/不要变形logo)。缺任一 → block。把"绝不文生图产品"从散文落成机检。
 2. brand-color ΔE（需 Pillow+numpy）：产品镜取产品区域主色 vs `visual_contract.品牌色` HEX，
-   CIE76 Lab ΔE 超阈值 → block，临界 → warn。无区域信息时取整图主色并降级 warn。
+   CIE76 Lab ΔE 超阈值 → block，临界 → warn。无区域信息时同时查品牌色像素证据，
+   能证明品牌色在画面中存在则降级 warn，完全找不到品牌色证据才 block。
 3. product dHash 离群（需 Pillow）：产品镜组内算 dHash，某图对组的最小 Hamming 距离离群
-   (> 阈值) → 漂移 warn/block。
+   (> 阈值) → 漂移 warn/block；没有产品 bbox/裁剪时只作复核 warn，不用整张广告画面硬挡。
 4. logo 模板匹配（需 Pillow+numpy，且注册了 logo 模板时才跑）：定妆库/产品/logo.png 在产品镜中
    做归一化互相关粗匹配；明显缺失/形变 → flag。无模板则干净跳过。
 
@@ -50,6 +51,11 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 # 品牌色 ΔE（CIE76，Lab 欧氏距离）：人眼"刚好可辨"≈2.3；广告品牌色容忍很窄。
 BRAND_COLOR_DE_WARN = 6.0    # ΔE > 6：肉眼明显偏色，疑环境光染偏 → warn（临界）。
 BRAND_COLOR_DE_BLOCK = 12.0  # ΔE > 12：严重偏色（换了一个颜色档）→ block，必须重抽。
+# 无产品 bbox 时，不能用整张广告图的均值硬挡；改用品牌色像素证据兜底。
+BRAND_COLOR_PRESENCE_DE_STRICT = 12.0
+BRAND_COLOR_PRESENCE_DE_LOOSE = 20.0
+BRAND_COLOR_PRESENCE_RATIO_BLOCK = 0.0005  # <0.05% 且找不到接近品牌色 → 视为基本缺品牌色。
+BRAND_COLOR_PRESENCE_RATIO_WARN = 0.0020   # <0.20% → 品牌色露出偏弱，人工复核。
 # product dHash（8x8=64bit）组内离群：广告同款产品跨镜应高度一致。
 DHASH_OUTLIER_WARN = 12      # 与组内最近邻的 Hamming 距离 > 12（约 19%）→ 疑漂移 warn。
 DHASH_OUTLIER_BLOCK = 22     # > 22（约 34%）→ 明显异图（换了包装/角度全变）→ block。
@@ -61,9 +67,20 @@ LOGO_NCC_BLOCK = 0.25        # 峰值 < 0.25：基本看不到模板 logo → bl
 # 产品区域采样：若 prompt 未给区域，取整图但只采"较饱和"像素近似产品主色（避开纯背景）。
 SATURATION_MIN = 0.18        # HSV 饱和度下限，低于此视为背景/灰场，剔除后再取主色。
 
-PROD_ASSET_RE = re.compile(r"PROD[_A-Za-z0-9]*", re.I)
+PROD_ASSET_RE = re.compile(r"\bPROD_[A-Za-z0-9_]*\b")
+BRAND_ASSET_RE = re.compile(r"\bBRAND_[A-Za-z0-9_]*\b")
 HEX_RE = re.compile(r"#([0-9a-fA-F]{6})\b")
 SHOT_NUM_RE = re.compile(r"镜头\s*0*(\d+)|shot\s*0*(\d+)|镜头N0*(\d+)", re.I)
+PRODUCT_SEMANTIC_MARKERS = (
+    "产品", "包装", "logo", "品牌", "app", "应用", "界面", "手机", "屏幕",
+    "cta", "end card", "endcard", "片尾", "预约", "购买", "下载", "扫码",
+)
+TEXT_LEGIBILITY_MARKERS = (
+    "文字", "文案", "slogan", "cta", "legal", "法律声明", "字幕", "明日清单", "星盒", "立即", "预约",
+)
+TEXT_LOCK_MARKERS = (
+    "清晰", "可读", "不乱码", "不要乱码", "不改文字", "不要改文字", "保留", "准确显示",
+)
 
 # prompt-lint 必备块的判定关键词（任一命中即视为"有该块"）。
 REFERENCE_MARKERS = ("参考图", "资产引用", "资产身份注册", "定妆_", "image2image", "图生图", "i2i", "母图")
@@ -155,7 +172,12 @@ def _shot_label(shot: Dict[str, Any], idx: int) -> str:
 
 
 def product_shots(storyboard: Dict[str, Any]) -> List[str]:
-    """storyboard.json → 产品镜标签集（assets 里有 `PROD_*: true` 的镜）。纯函数·可测。"""
+    """storyboard.json → 产品/品牌/UI 镜标签集。
+
+    强规则：assets 里有 `PROD_*: true`。
+    兜底规则：App/UI/包装/logo/CTA/end-card 语义镜也纳入 QC，防止未结构化绑定的产品镜逃逸。
+    纯函数·可测。
+    """
     shots = storyboard.get("shots") or storyboard.get("clips") or []
     out: List[str] = []
     for i, sh in enumerate(shots, 1):
@@ -170,9 +192,145 @@ def product_shots(storyboard: Dict[str, Any]) -> List[str]:
                     break
         elif isinstance(assets, (list, tuple)):
             is_prod = any(PROD_ASSET_RE.fullmatch(str(a)) for a in assets)
+        text = " ".join(str(sh.get(k) or "") for k in (
+            "scene", "shot", "frame", "prompt", "desc", "description", "product_lock", "subtitle", "vo"
+        )).lower()
+        if not is_prod and any(marker in text for marker in PRODUCT_SEMANTIC_MARKERS):
+            is_prod = True
         if is_prod:
             out.append(_shot_label(sh, i))
     return out
+
+
+def storyboard_shot_by_label(storyboard: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """`镜头N` → storyboard shot。"""
+    shots = storyboard.get("shots") or storyboard.get("clips") or []
+    out: Dict[str, Dict[str, Any]] = {}
+    for i, sh in enumerate(shots, 1):
+        if isinstance(sh, dict):
+            out[_shot_label(sh, i)] = sh
+    return out
+
+
+def product_asset_ids(shot: Dict[str, Any]) -> List[str]:
+    assets = shot.get("assets") if isinstance(shot, dict) else None
+    ids = set()
+    if isinstance(assets, dict):
+        ids.update(str(k) for k, v in assets.items() if v and PROD_ASSET_RE.fullmatch(str(k)))
+    elif isinstance(assets, (list, tuple)):
+        ids.update(str(x) for x in assets if PROD_ASSET_RE.fullmatch(str(x)))
+    text = " ".join(str(shot.get(k) or "") for k in ("prompt", "product_lock", "desc", "description", "shot", "scene"))
+    ids.update(PROD_ASSET_RE.findall(text))
+    return sorted(ids)
+
+
+def brand_asset_ids(shot: Dict[str, Any]) -> List[str]:
+    assets = shot.get("assets") if isinstance(shot, dict) else None
+    ids = set()
+    if isinstance(assets, dict):
+        ids.update(str(k) for k, v in assets.items() if v and BRAND_ASSET_RE.fullmatch(str(k)))
+    elif isinstance(assets, (list, tuple)):
+        ids.update(str(x) for x in assets if BRAND_ASSET_RE.fullmatch(str(x)))
+    text = " ".join(str(shot.get(k) or "") for k in ("prompt", "product_lock", "desc", "description", "shot", "scene"))
+    ids.update(BRAND_ASSET_RE.findall(text))
+    return sorted(ids)
+
+
+def _flatten_registry_ids(value: Any) -> set:
+    ids = set()
+    if isinstance(value, dict):
+        rid = str(value.get("id") or value.get("asset_id") or "").strip()
+        if rid:
+            ids.add(rid)
+        for key, item in value.items():
+            if isinstance(key, str) and (key.startswith("PROD_") or key.startswith("BRAND_")):
+                ids.add(key)
+            if isinstance(item, dict):
+                rid = str(item.get("id") or item.get("asset_id") or "").strip()
+                if rid:
+                    ids.add(rid)
+                ids.update(_flatten_registry_ids(item))
+            elif isinstance(item, list):
+                ids.update(_flatten_registry_ids(item))
+    elif isinstance(value, list):
+        for item in value:
+            ids.update(_flatten_registry_ids(item))
+    return ids
+
+
+def load_asset_registry_ids(root: Path) -> set:
+    """读取广告线资产 registry 中已登记的 PROD_/BRAND_ id。缺失返回空集合。"""
+    candidates = [
+        root / "出图" / "共享" / "asset_registry.json",
+        root / "设定库" / "asset_registry.json",
+        root / "设定库" / "assets.json",
+    ]
+    ids = set()
+    for path in candidates:
+        data = load_json(path)
+        if data:
+            ids.update(_flatten_registry_ids(data))
+    return ids
+
+
+def check_asset_bindings(label: str, shot: Dict[str, Any], registry_ids: set) -> List[Dict[str, Any]]:
+    findings: List[Dict[str, Any]] = []
+    prod_ids = product_asset_ids(shot)
+    brand_ids = brand_asset_ids(shot)
+    if not prod_ids:
+        findings.append(_finding(
+            "block", label, "asset_binding",
+            "产品/界面/品牌镜缺结构化 `PROD_*` 资产 ID；必须先把 hero product/App/UI 包装写入 storyboard.assets 并登记定妆。",
+            {"missing": "PROD_*"},
+        ))
+    for pid in prod_ids:
+        if registry_ids and pid not in registry_ids:
+            findings.append(_finding("warn", label, "asset_binding",
+                                     f"产品资产 {pid} 未在 asset_registry 中找到，建议先登记 logo/品牌色/包装禁漂项。",
+                                     {"asset_id": pid}))
+        elif not registry_ids:
+            findings.append(_finding("warn", label, "asset_binding",
+                                     "未找到广告 asset_registry，产品/logo/品牌色禁漂项只能从 prompt 推断，建议先建 registry。",
+                                     {"asset_id": pid, "degraded": "no_asset_registry"}))
+    if not brand_ids:
+        findings.append(_finding("warn", label, "asset_binding",
+                                 "未绑定 `BRAND_*` 品牌资产；片尾/品牌露出建议结构化锁 logo、slogan、品牌色。",
+                                 {"missing": "BRAND_*"}))
+    return findings
+
+
+def check_text_legibility(label: str, shot: Dict[str, Any], prompt_text: Optional[str]) -> List[Dict[str, Any]]:
+    text = " ".join(str(shot.get(k) or "") for k in ("prompt", "product_lock", "shot", "scene")).lower()
+    requires_text = any(marker.lower() in text for marker in TEXT_LEGIBILITY_MARKERS)
+    if not requires_text:
+        return []
+    if prompt_text is None:
+        return [_finding("block", label, "text_legibility",
+                         "本镜声明品牌/UI/CTA/法律文字，但逐镜 prompt 缺失，无法锁文字可读性。",
+                         {"missing_prompt": True})]
+    if not any(marker in prompt_text for marker in TEXT_LOCK_MARKERS):
+        return [_finding("warn", label, "text_legibility",
+                         "本镜含品牌/UI/CTA/法律文字，但 prompt 未明确“文字清晰可读/不乱码/保留原文”，需补文字锁定句。",
+                         {"requires_text_lock": True})]
+    return []
+
+
+def check_safe_area(label: str, shot: Dict[str, Any]) -> List[Dict[str, Any]]:
+    safe = shot.get("safe_area") or shot.get("安全区") or {}
+    text = " ".join(str(shot.get(k) or "") for k in ("prompt", "product_lock", "shot", "scene")).lower()
+    high_risk = any(marker in text for marker in ("logo", "cta", "片尾", "end card", "endcard", "产品", "界面", "手机", "屏幕"))
+    if not high_risk:
+        return []
+    if not isinstance(safe, dict) or not safe:
+        return [_finding("warn", label, "safe_area",
+                         "产品/logo/UI/CTA 镜缺 8x8 万能安全区声明；多比例 reframe 可能裁掉核心资产。",
+                         {"missing": "safe_area"})]
+    center = safe.get("core_in_center_4x4")
+    if center is False:
+        return [_finding("block", label, "safe_area",
+                         "safe_area.core_in_center_4x4=false，核心产品/logo/CTA 不在中心安全区，必须重构图。",
+                         {"core_in_center_4x4": False})]
+    return []
 
 
 def brand_color_hex(storyboard: Dict[str, Any], overview_text: str = "") -> Optional[str]:
@@ -271,6 +429,27 @@ def delta_e_cie76(rgb1: Sequence[float], rgb2: Sequence[float]) -> float:
     return math.sqrt(sum((a - b) ** 2 for a, b in zip(l1, l2)))
 
 
+def _srgb_array_to_lab(arr: Any, np: Any) -> Any:
+    """Vectorized sRGB array (N,3, 0-255) → CIELAB (D65)."""
+    rgb = arr.astype(np.float64) / 255.0
+    lin = np.where(rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055) ** 2.4)
+    r, g, b = lin[:, 0], lin[:, 1], lin[:, 2]
+    x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047
+    y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0
+    z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883
+    fx = np.where(x > 0.008856, np.cbrt(x), 7.787 * x + 16.0 / 116.0)
+    fy = np.where(y > 0.008856, np.cbrt(y), 7.787 * y + 16.0 / 116.0)
+    fz = np.where(z > 0.008856, np.cbrt(z), 7.787 * z + 16.0 / 116.0)
+    return np.stack((116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz)), axis=1)
+
+
+def _delta_e_array(arr: Any, target_rgb: Sequence[float], np: Any) -> Any:
+    target = np.asarray(target_rgb, dtype=np.float64).reshape(1, 3)
+    lab = _srgb_array_to_lab(arr, np)
+    target_lab = _srgb_array_to_lab(target, np)[0]
+    return np.sqrt(((lab - target_lab) ** 2).sum(axis=1))
+
+
 # ── 2) brand-color ΔE（需 Pillow+numpy） ─────────────────────────────────────────
 
 def dominant_color(img_path: Path, Image: Any, np: Any,
@@ -300,6 +479,39 @@ def dominant_color(img_path: Path, Image: Any, np: Any,
     return float(mean[0]), float(mean[1]), float(mean[2])
 
 
+def brand_color_presence(img_path: Path, Image: Any, np: Any, brand_hex: str) -> Optional[Dict[str, Any]]:
+    """Check whether the declared brand color exists in a full ad frame.
+
+    This is intentionally different from dominant color. Lifestyle ads often have warm desks,
+    hands, faces, or room light as the image dominant color while the brand/UI color occupies
+    a smaller but still meaningful product region.
+    """
+    try:
+        im = Image.open(str(img_path)).convert("RGB")
+    except Exception:
+        return None
+    max_edge = max(im.size)
+    if max_edge > 540:
+        scale = 540.0 / float(max_edge)
+        im = im.resize((max(1, int(im.size[0] * scale)), max(1, int(im.size[1] * scale))), Image.BILINEAR)
+    arr = np.asarray(im, dtype=np.float64).reshape(-1, 3)
+    if arr.size == 0:
+        return None
+    des = _delta_e_array(arr, hex_to_rgb(brand_hex), np)
+    strict = des <= BRAND_COLOR_PRESENCE_DE_STRICT
+    loose = des <= BRAND_COLOR_PRESENCE_DE_LOOSE
+    min_idx = int(des.argmin())
+    return {
+        "pixel_count": int(arr.shape[0]),
+        "min_delta_e": round(float(des[min_idx]), 2),
+        "nearest_rgb": [int(c) for c in arr[min_idx].tolist()],
+        "ratio_delta_e12": round(float(strict.mean()), 6),
+        "ratio_delta_e20": round(float(loose.mean()), 6),
+        "threshold_ratio_block": BRAND_COLOR_PRESENCE_RATIO_BLOCK,
+        "threshold_ratio_warn": BRAND_COLOR_PRESENCE_RATIO_WARN,
+    }
+
+
 def check_brand_color(shot_label: str, img_path: Optional[Path], brand_hex: Optional[str],
                       Image: Any, np: Any,
                       bbox: Optional[Tuple[int, int, int, int]] = None) -> List[Dict[str, Any]]:
@@ -308,13 +520,13 @@ def check_brand_color(shot_label: str, img_path: Optional[Path], brand_hex: Opti
         return [_finding("info", shot_label, "brand_color",
                          "未声明品牌色 HEX（storyboard.visual_contract.品牌色 / 00_总览.md），跳过偏色检",
                          {"degraded": "no_brand_hex"})]
+    if img_path is None or not Path(img_path).exists():
+        return [_finding("info", shot_label, "brand_color",
+                         "产品镜图未落档，品牌色检 pending", {"degraded": "no_image"})]
     if Image is None or np is None:
         return [_finding("info", shot_label, "brand_color",
                          "缺 Pillow/numpy，品牌色 ΔE 降级跳过（装 pillow+numpy 后重跑）",
                          {"degraded": "no_pillow"})]
-    if img_path is None or not Path(img_path).exists():
-        return [_finding("info", shot_label, "brand_color",
-                         "产品镜图未落档，品牌色检 pending", {"degraded": "no_image"})]
     dom = dominant_color(Path(img_path), Image, np, bbox)
     if dom is None:
         return [_finding("info", shot_label, "brand_color",
@@ -324,6 +536,34 @@ def check_brand_color(shot_label: str, img_path: Optional[Path], brand_hex: Opti
     detail = {"brand_hex": brand_hex, "sampled_rgb": [round(c, 1) for c in dom],
               "delta_e": round(de, 2), "region": "bbox" if bbox else "whole_image",
               "threshold_warn": BRAND_COLOR_DE_WARN, "threshold_block": BRAND_COLOR_DE_BLOCK}
+    if bbox is None:
+        presence = brand_color_presence(Path(img_path), Image, np, brand_hex)
+        if presence:
+            detail["presence"] = presence
+            strict_ratio = float(presence.get("ratio_delta_e12") or 0.0)
+            loose_ratio = float(presence.get("ratio_delta_e20") or 0.0)
+            min_de = float(presence.get("min_delta_e") or 999.0)
+            has_brand_evidence = (
+                strict_ratio >= BRAND_COLOR_PRESENCE_RATIO_BLOCK
+                or loose_ratio >= BRAND_COLOR_PRESENCE_RATIO_WARN
+            )
+            weak_brand_evidence = min_de <= BRAND_COLOR_PRESENCE_DE_LOOSE
+            if not has_brand_evidence:
+                if weak_brand_evidence:
+                    return [_finding("warn", shot_label, "brand_color",
+                                     f"品牌色 {brand_hex} 像素证据偏少（ΔE≤12 占比 {strict_ratio:.3%}），"
+                                     "缺产品区域信息，需人工复核品牌露出是否足够", detail)]
+                return [_finding("block", shot_label, "brand_color",
+                                 f"画面中基本检不到品牌色 {brand_hex}（最小 ΔE={min_de:.1f}，"
+                                 f"ΔE≤12 占比 {strict_ratio:.3%}），疑品牌色丢失，必重抽", detail)]
+            if de > BRAND_COLOR_DE_WARN:
+                return [_finding("warn", shot_label, "brand_color",
+                                 f"整图主色偏离 {brand_hex}（ΔE={de:.1f}），但检测到品牌色像素证据；"
+                                 "缺产品区域信息，按广告全图降级复核，不硬挡", detail)]
+        elif de > BRAND_COLOR_DE_BLOCK:
+            return [_finding("warn", shot_label, "brand_color",
+                             f"整图主色偏离 {brand_hex}（ΔE={de:.1f}），但品牌色像素证据检测失败；"
+                             "缺产品区域信息，降级人工复核", detail)]
     if de > BRAND_COLOR_DE_BLOCK:
         return [_finding("block", shot_label, "brand_color",
                          f"品牌色严重偏离 {brand_hex}（ΔE={de:.1f}>{BRAND_COLOR_DE_BLOCK}），整片品牌色报废，必重抽", detail)]
@@ -365,7 +605,8 @@ def hamming(a: int, b: int) -> int:
     return bin(a ^ b).count("1")
 
 
-def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any) -> List[Dict[str, Any]]:
+def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any, *,
+                      product_region_known: bool = False) -> List[Dict[str, Any]]:
     """产品镜组内 dHash 离群：每图取与组内其它图的最小 Hamming 距离，超阈值即漂移。
     组 < DHASH_MIN_GROUP 张 → info（样本不足，不下 warn/block）。纯逻辑可测（Image 可注入）。"""
     if Image is None:
@@ -387,10 +628,16 @@ def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any
             continue
         nn = min(dists)
         detail = {"min_hamming": nn, "group_size": len(valid),
-                  "threshold_warn": DHASH_OUTLIER_WARN, "threshold_block": DHASH_OUTLIER_BLOCK}
+                  "threshold_warn": DHASH_OUTLIER_WARN, "threshold_block": DHASH_OUTLIER_BLOCK,
+                  "region": "product_bbox" if product_region_known else "whole_image"}
         if nn > DHASH_OUTLIER_BLOCK:
-            findings.append(_finding("block", lb, "product_dhash",
-                                     f"产品图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})，疑换包装/角度全变，必重抽", detail))
+            if product_region_known:
+                findings.append(_finding("block", lb, "product_dhash",
+                                         f"产品图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})，疑换包装/角度全变，必重抽", detail))
+            else:
+                findings.append(_finding("warn", lb, "product_dhash",
+                                         f"整张广告图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})；"
+                                         "缺产品区域裁剪，不能据此判定产品漂移，降级人工复核", detail))
         elif nn > DHASH_OUTLIER_WARN:
             findings.append(_finding("warn", lb, "product_dhash",
                                      f"产品图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_WARN})，疑产品漂移，人工复核", detail))
@@ -423,12 +670,12 @@ def _ncc_peak(template: Any, image: Any, np: Any) -> float:
 def check_logo(shot_label: str, img_path: Optional[Path], logo_template: Path,
                Image: Any, np: Any) -> List[Dict[str, Any]]:
     """单产品镜的 logo 存在/形变粗检。仅当 logo 模板存在时调用（无模板由 caller 跳过）。"""
-    if Image is None or np is None:
-        return [_finding("info", shot_label, "logo",
-                         "缺 Pillow/numpy，logo 模板匹配降级跳过", {"degraded": "no_pillow"})]
     if img_path is None or not Path(img_path).exists():
         return [_finding("info", shot_label, "logo",
                          "产品镜图未落档，logo 检 pending", {"degraded": "no_image"})]
+    if Image is None or np is None:
+        return [_finding("info", shot_label, "logo",
+                         "缺 Pillow/numpy，logo 模板匹配降级跳过", {"degraded": "no_pillow"})]
     try:
         tmpl = Image.open(str(logo_template)).convert("L")
         # 模板缩到 ≤96px 边，控制粗匹配开销
@@ -625,6 +872,8 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
         pass
 
     prod = product_shots(sb)
+    shot_map = storyboard_shot_by_label(sb)
+    registry_ids = load_asset_registry_ids(paths["root"])
     brand_hex = brand_color_hex(sb, overview_text)
     findings: List[Dict[str, Any]] = []
 
@@ -639,6 +888,7 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
                                  {"product_shots": 0}))
 
     # 1) PROMPT-LINT（HARD，无 Pillow 也跑）
+    prompt_text_by_label: Dict[str, Optional[str]] = {}
     for label in prod:
         ppath = _shot_prompt_path(paths["prompt_dir"], label)
         text = None
@@ -647,7 +897,12 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
                 text = ppath.read_text(encoding="utf-8")
             except Exception:
                 text = None
+        prompt_text_by_label[label] = text
         findings.extend(lint_product_prompt(label, text))
+        shot = shot_map.get(label, {})
+        findings.extend(check_asset_bindings(label, shot, registry_ids))
+        findings.extend(check_text_legibility(label, shot, text))
+        findings.extend(check_safe_area(label, shot))
 
     # 像素三项仅在产品镜存在时跑
     if prod:
@@ -692,6 +947,7 @@ def run_qc(stage_dir: Path, storyboard_arg: Optional[str] = None, strict: bool =
             "missing_or_degraded": [] if precision == "full" else ["Pillow/numpy pixel checks"],
             "pending_product_images": len(pending_images),
             "manual_review_accepted": False,
+            "asset_registry_ids": sorted(registry_ids),
         },
     }
     # 落档到权威路径 出图/分镜/product_qc.json
