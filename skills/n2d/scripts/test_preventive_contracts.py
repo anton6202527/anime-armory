@@ -202,6 +202,69 @@ def test_reference_gate_uses_registry_when_confirmed_contract_rows_have_empty_sl
     assert report["status"] == "pass"
 
 
+def test_reference_gate_prefers_current_registry_hash_over_stale_contract_slot(tmp_path: Path) -> None:
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
+        "clips": [{
+            "clip_id": "Clip_01",
+            "description": "CHAR_A 握住 WEAPON_01 横刀。",
+            "character_ids": ["CHAR_A"],
+            "prop_ids": ["WEAPON_01"],
+        }],
+    })
+    char_hash = _write_bytes(tmp_path / "出图" / "共享" / "CHAR_A_front.png", b"current char")
+    weapon_hash = _write_bytes(tmp_path / "出图" / "共享" / "WEAPON_01_card.md", b"current weapon card")
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {
+        "characters": [{
+            "id": "CHAR_A",
+            "forms": [{
+                "form": "常态",
+                "reference_group": {"front": {"path": "出图/共享/CHAR_A_front.png"}},
+                "identity_adapters": {"image": {"codex": {"mode": "reference_group"}}},
+            }],
+        }],
+    })
+    _write_json(tmp_path / "出图" / "共享" / "asset_registry.json", {
+        "assets": [{
+            "id": "WEAPON_01",
+            "type": "weapon",
+            "reference_slots": [{"slot": "asset_card", "path": "出图/共享/WEAPON_01_card.md"}],
+            "constraints": {"structure": "single blade"},
+        }],
+    })
+    _write_json(tmp_path / "脚本" / "第1集" / "preventive_contracts.json", {
+        "kind": "n2d_preventive_contracts",
+        "version": 1,
+        "episode": "第1集",
+        "status": "confirmed",
+        "reference_slots": {
+            "characters": [{
+                "id": "CHAR_A",
+                "reference_slots": [{"slot": "front", "path": "出图/共享/CHAR_A_front.png", "sha256": "0" * 64}],
+                "identity_strategy": "same-source lock",
+            }],
+            "assets": [{
+                "id": "WEAPON_01",
+                "reference_slots": [{"slot": "asset_card", "path": "出图/共享/WEAPON_01_card.md", "sha256": "1" * 64}],
+                "lock_strategy": "shape lock",
+            }],
+            "scenes": [],
+        },
+    })
+
+    row = preventive_contracts._reference_gate_row(
+        tmp_path,
+        {"id": "WEAPON_01", "reference_slots": [{"path": "出图/共享/WEAPON_01_card.md", "sha256": "1" * 64}], "lock_strategy": "shape lock"},
+        {"id": "WEAPON_01", "reference_slots": [{"path": "出图/共享/WEAPON_01_card.md"}], "constraints": {"structure": "single blade"}},
+    )
+    report = preventive_contracts.build_report(tmp_path, "第1集", stage="image")
+
+    assert row is not None
+    assert row["reference_slots"][0]["sha256"] == weapon_hash
+    assert row["lock_strategy"] == "shape lock"
+    assert report["status"] == "pass"
+    assert char_hash
+
+
 def test_reference_gate_resolves_slash_form_ids_from_registry(tmp_path: Path) -> None:
     _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {
         "clips": [{

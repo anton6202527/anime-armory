@@ -970,13 +970,28 @@ def _row_strategy(row: Mapping[str, Any]) -> Any:
     return row.get("identity_strategy") or row.get("lock_strategy") or row.get("identity_adapters") or row.get("constraints") or row.get("drift_forbidden")
 
 
-def _reference_gate_row(contract_row: Optional[Mapping[str, Any]], registry_row: Optional[Mapping[str, Any]]) -> Optional[Mapping[str, Any]]:
+def _registry_row_with_current_slots(root: Path, registry_row: Mapping[str, Any]) -> Dict[str, Any]:
+    row = dict(registry_row)
+    current_slots = _registry_reference_slots(root, registry_row)
+    if current_slots:
+        row["reference_slots"] = current_slots
+    return row
+
+
+def _reference_gate_row(root: Path, contract_row: Optional[Mapping[str, Any]], registry_row: Optional[Mapping[str, Any]]) -> Optional[Mapping[str, Any]]:
     if isinstance(contract_row, Mapping) and isinstance(registry_row, Mapping):
-        return _merge_missing(contract_row, registry_row)
+        registry = _registry_row_with_current_slots(root, registry_row)
+        row = dict(_merge_missing(contract_row, registry))
+        if registry.get("reference_slots"):
+            # Signed contracts can lag behind regenerated makeup/reference cards.
+            # The registry is the durable visual evidence source, so keep the
+            # contract strategy but validate against current file hashes.
+            row["reference_slots"] = registry["reference_slots"]
+        return row
     if isinstance(contract_row, Mapping):
         return contract_row
     if isinstance(registry_row, Mapping):
-        return registry_row
+        return _registry_row_with_current_slots(root, registry_row)
     return None
 
 
@@ -1009,7 +1024,7 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
     if not status_confirmed(contract):
         add_finding(findings, gate, "block", relpath(root, contract_path(root, episode)), "preventive_contracts.status 不是 confirmed；引用槽位合同未签收。", return_to_stage="image_prompt")
     for cid in char_ids:
-        row = _reference_gate_row(contract_chars.get(cid), _lookup_registry_row(identity_rows, cid))
+        row = _reference_gate_row(root, contract_chars.get(cid), _lookup_registry_row(identity_rows, cid))
         if not row or not filled(_row_reference_slots(row)):
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 缺 reference_slots/reference_group。", return_to_stage="image_prompt")
             continue
@@ -1019,7 +1034,7 @@ def check_reference_slots(root: Path, episode: str, contract: Optional[Mapping[s
         if slot_issues:
             add_finding(findings, gate, "block", cid, f"核心/出场角色 {cid} 引用槽位未绑定真实产物：" + "；".join(slot_issues[:3]), return_to_stage="image_prompt")
     for aid in asset_ids:
-        row = _reference_gate_row(contract_assets.get(aid), asset_rows.get(aid))
+        row = _reference_gate_row(root, contract_assets.get(aid), asset_rows.get(aid))
         if not row or not filled(_row_reference_slots(row)):
             add_finding(findings, gate, "block", aid, f"道具/场景 {aid} 缺 reference_slots/reference_group。", return_to_stage="image_prompt")
             continue
