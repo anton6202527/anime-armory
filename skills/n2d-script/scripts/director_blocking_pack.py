@@ -34,6 +34,20 @@ REQUIRED_FILES = (
     "vertical_composition_plan.json",
     "edit_rhythm_map.json",
 )
+SHOT_REVERSE_PATTERN_FIELDS = (
+    "pattern_id",
+    "applies_to",
+    "axis_line",
+    "screen_sides",
+    "eyeline_match",
+    "shot_pairing",
+    "coverage_order",
+    "camera_coverage",
+    "lens_height_distance_match",
+    "crossing_axis_policy",
+    "buffer_or_reestablishing",
+    "continuity_must",
+)
 
 
 def now_iso() -> str:
@@ -114,6 +128,10 @@ def _storyboard_ids(clips: List[Mapping[str, Any]]) -> List[str]:
         cid = str(clip.get("id") or "").strip() or f"Clip_{idx:02d}"
         ids.append(cid)
     return ids
+
+
+def _clip_id(clip: Mapping[str, Any], idx: int) -> str:
+    return str(clip.get("id") or clip.get("clip_id") or f"Clip_{idx:02d}").strip()
 
 
 def _planning_ids(root: Path, ep: str, lines: List[str]) -> List[str]:
@@ -217,6 +235,96 @@ def _clip_location(clip: Mapping[str, Any]) -> str:
     return str(clip.get("location_id") or clip.get("scene_id") or clip.get("scene") or "LOC_01").strip()
 
 
+def _screen_sides_from_clip(clip: Mapping[str, Any]) -> Dict[str, str]:
+    sides: Dict[str, str] = {}
+    slots = clip.get("character_slots") if isinstance(clip.get("character_slots"), list) else []
+    for slot in slots:
+        if not isinstance(slot, Mapping):
+            continue
+        cid = str(slot.get("character_id") or slot.get("id") or "").strip()
+        pos = str(slot.get("screen_position") or slot.get("zone") or slot.get("slot") or "").strip()
+        if not cid:
+            continue
+        if "左" in pos or "left" in pos.lower():
+            sides["left"] = cid
+        elif "右" in pos or "right" in pos.lower():
+            sides["right"] = cid
+    if not sides:
+        chars = [str(x).strip() for x in clip.get("character_ids") or [] if str(x).strip()]
+        if len(chars) >= 2:
+            sides = {"left": chars[0], "right": chars[1]}
+    return sides
+
+
+def _is_shot_reverse_clip(clip: Mapping[str, Any]) -> bool:
+    contract = _clip_contract(clip)
+    hay = " ".join(
+        str(value)
+        for value in (
+            clip.get("template"),
+            clip.get("label"),
+            clip.get("scene"),
+            clip.get("rhythm"),
+            contract.get("template_id"),
+            contract.get("camera_rule"),
+            contract.get("shot_pairing"),
+        )
+        if value
+    ).lower()
+    return any(token in hay for token in (
+        "dialogue_shot_reverse",
+        "shot_reverse",
+        "正反打",
+        "反打",
+        "过肩",
+        "ots",
+        "over-the-shoulder",
+        "over the shoulder",
+    ))
+
+
+def _shot_reverse_pattern(clip: Mapping[str, Any], idx: int, axis_text: str) -> Dict[str, Any]:
+    contract = _clip_contract(clip)
+    continuity = _clip_continuity(clip)
+    cid = _clip_id(clip, idx)
+    sides = contract.get("screen_sides") if _pattern_value_filled(contract.get("screen_sides")) else _screen_sides_from_clip(clip)
+    return {
+        "pattern_id": f"SR_{cid}",
+        "applies_to": [cid],
+        "mode": "dialogue_shot_reverse",
+        "axis_line": _clean_text(contract.get("axis"), axis_text),
+        "screen_sides": sides or "A 方固定画左，B 方固定画右；正式分镜需用 CHAR_id 填实。",
+        "eyeline_match": _clean_text(contract.get("eyeline") or continuity.get("eyeline"), "画左角色看画右；画右角色看画左；除 POV/破第四墙外不看镜头"),
+        "shot_pairing": _clean_text(contract.get("shot_pairing"), "A 面 clean single/OTS → B 面 reverse clean single/OTS → 必要插入物/反应镜"),
+        "coverage_order": _clean_text(contract.get("coverage_order"), "先双人建立/空间锚 → A 面说话/动作 → B 面反应反打 → 插入物或手部缓冲 → 落在眼神/反应"),
+        "camera_coverage": _clean_text(contract.get("camera_coverage"), "clean single + over-the-shoulder + insert/reaction；近景优先单人锁脸，避免多人近景同框串脸"),
+        "lens_height_distance_match": _clean_text(contract.get("lens_height_distance_match"), "A/B 反打使用相近景别、镜头高度、距离和焦段；只因权力关系有计划地改变高度/距离"),
+        "crossing_axis_policy": _clean_text(contract.get("crossing_axis_policy"), "默认禁止越轴；如必须越轴，先用双人建立/中线镜/运动弧线/空镜缓冲重新定向"),
+        "buffer_or_reestablishing": _clean_text(contract.get("buffer_or_reestablishing"), "越轴、换侧或强情绪转折前插入双人建立、道具特写、手部动作或空镜缓冲"),
+        "continuity_must": contract.get("continuity_must") or ["屏幕左右关系不交换", "视线互补", "主光方向和背景深度不跳", "脸型/发型/服装身份不漂"],
+        "negative": contract.get("negative") or ["不要跳轴", "不要交换左右站位", "不要无理由看镜头", "不要多人近景同框串脸"],
+    }
+
+
+def _default_shot_reverse_pattern(axis_text: str) -> Dict[str, Any]:
+    return {
+        "pattern_id": "SR_DEFAULT",
+        "applies_to": ["all_dialogue_or_confrontation_beats"],
+        "mode": "none_until_storyboard_uses_dialogue_shot_reverse",
+        "axis_line": axis_text,
+        "screen_sides": "正式正反打出现时，先把 A/B 角色固定为画左/画右并写 CHAR_id。",
+        "eyeline_match": "画左角色看画右；画右角色看画左；除 POV/破第四墙外不看镜头。",
+        "shot_pairing": "双人建立或空间锚 → A 面 clean single/OTS → B 面 reverse clean single/OTS → 插入物/反应缓冲。",
+        "coverage_order": "先建立空间，再交替说话/反应；不在未重建空间时交换左右关系。",
+        "camera_coverage": "clean singles / OTS / insert / reaction；多人近景优先拆正反打或分层合成。",
+        "lens_height_distance_match": "A/B 反打保持相近镜头高度、距离、景别和焦段；变化必须服务权力关系。",
+        "crossing_axis_policy": "默认禁止越轴；越轴必须有双人建立、中线镜、运动弧线或空镜缓冲。",
+        "buffer_or_reestablishing": "用双人建立、道具特写、手部动作、眼神 cutaway 或空镜重新定向。",
+        "continuity_must": ["屏幕左右关系不交换", "视线互补", "主光方向不跳", "背景深度关系不跳"],
+        "negative": ["不要跳轴", "不要交换左右站位", "不要无理由看镜头", "不要把反打拍成随机角度"],
+    }
+
+
 def _clip_depth(clip: Mapping[str, Any]) -> str:
     slots = clip.get("character_slots") if isinstance(clip.get("character_slots"), list) else []
     rows = []
@@ -306,6 +414,11 @@ def _axis_blocking_map(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str
     primary_location = "、".join(locations[:4]) or "LOC_01"
     beat_ids = list(beat_ids)
     clip_by_beat = clips[: len(beat_ids)]
+    shot_reverse_patterns = [
+        _shot_reverse_pattern(clip, idx, axis_text)
+        for idx, clip in enumerate(clips, start=1)
+        if _is_shot_reverse_clip(clip)
+    ] or [_default_shot_reverse_pattern(axis_text)]
     return {
         "kind": "n2d_axis_blocking_map",
         "version": VERSION,
@@ -333,6 +446,7 @@ def _axis_blocking_map(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str
             }
             for idx, beat_id in enumerate(beat_ids)
         ],
+        "shot_reverse_patterns": shot_reverse_patterns,
     }
 
 
@@ -642,6 +756,58 @@ def _json_status(path: Path) -> Tuple[str, List[str]]:
     return ("pass" if not issues else "block"), issues
 
 
+def _storyboard_shot_reverse_clip_ids(root: Path, ep: str) -> List[str]:
+    ids: List[str] = []
+    for idx, clip in enumerate(_storyboard_clips(root, ep), start=1):
+        if _is_shot_reverse_clip(clip):
+            ids.append(_clip_id(clip, idx))
+    return ids
+
+
+def _pattern_value_filled(value: Any) -> bool:
+    if value is None:
+        return False
+    if isinstance(value, str):
+        return bool(value.strip()) and not PLACEHOLDER_RE.search(value)
+    if isinstance(value, list):
+        return any(_pattern_value_filled(item) for item in value)
+    if isinstance(value, Mapping):
+        return any(_pattern_value_filled(item) for item in value.values())
+    return True
+
+
+def _axis_blocking_contract_issues(data: Mapping[str, Any], required_clip_ids: Iterable[str]) -> List[str]:
+    issues: List[str] = []
+    patterns = data.get("shot_reverse_patterns")
+    if not isinstance(patterns, list) or not patterns:
+        return ["缺 shot_reverse_patterns：正反打必须在 P-2 锁轴线、左右侧、互补视线和越轴策略"]
+    applied: set[str] = set()
+    for idx, pattern in enumerate(patterns, start=1):
+        if not isinstance(pattern, Mapping):
+            issues.append(f"shot_reverse_patterns[{idx}] 不是 object")
+            continue
+        mode = str(pattern.get("mode") or "").strip()
+        applies = [str(item).strip() for item in _as_iter(pattern.get("applies_to")) if str(item).strip()]
+        applied.update(applies)
+        if mode == "none_until_storyboard_uses_dialogue_shot_reverse":
+            continue
+        for key in SHOT_REVERSE_PATTERN_FIELDS:
+            if not _pattern_value_filled(pattern.get(key)):
+                issues.append(f"{pattern.get('pattern_id') or f'shot_reverse_patterns[{idx}]'} 缺正反打字段：{key}")
+    for clip_id in required_clip_ids:
+        if clip_id not in applied:
+            issues.append(f"{clip_id} 是 dialogue_shot_reverse/反打镜，但 axis_blocking_map 未登记对应 shot_reverse_patterns")
+    return issues
+
+
+def _as_iter(value: Any) -> List[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
 def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]:
     ep = episode_label(ep)
     if write_missing:
@@ -655,6 +821,11 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
             rows.append({"rel": rel, "status": "missing", "issues": ["文件缺失"]})
             continue
         status, issues = _json_status(path)
+        if name == "axis_blocking_map.json" and status == "pass":
+            data = load_json(path)
+            if isinstance(data, Mapping):
+                issues.extend(_axis_blocking_contract_issues(data, _storyboard_shot_reverse_clip_ids(root, ep)))
+                status = "pass" if not issues else "block"
         rows.append({"rel": rel, "status": status, "issues": issues})
     blockers = [row for row in rows if row["status"] != "pass"]
     payload = {

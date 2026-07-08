@@ -3122,11 +3122,48 @@ def test_storyboard_special_template_full_contract_passes(tmp_path):
                 "axis": "洞口→石壁横轴",
                 "eyeline": "王敦看画右洞口，婷婷看画左石壁",
                 "shot_pairing": "A 王敦 CU / B 婷婷 OTS 反打",
+                "screen_sides": {"left": "CHAR_WANG", "right": "CHAR_TING"},
+                "coverage_order": "双人建立洞口/石壁关系 → 王敦 clean CU → 婷婷 OTS reverse CU → 豆油灯插入缓冲",
+                "camera_coverage": "clean single + OTS reverse + insert；近景不做多人同框串脸",
+                "lens_height_distance_match": "A/B 反打保持相近镜头高度、距离和景别，只用微低角度表现压迫",
+                "crossing_axis_policy": "禁止越轴；若要换侧，先插双人建立或中线豆油灯特写重新定向",
+                "buffer_or_reestablishing": "用豆油灯、手指敲桌或双人建立镜缓冲任何换侧/越轴",
             },
         }],
     )
     gate.check_storyboard_special_templates(root, "第1集")
     assert not any(f["dim"] == "专项镜头模板" for f in gate.findings)
+
+
+def test_storyboard_dialogue_shot_reverse_requires_film_grammar_contract(tmp_path):
+    root = _write_storyboard_with_clips(
+        tmp_path,
+        [{
+            "id": "EP01_CLIP02",
+            "label": "对话反打",
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+                "template_id": "dialogue_shot_reverse",
+                "beats": ["王敦抬眼", "婷婷追问"],
+                "blocking": "王敦画左靠石壁，婷婷画右洞口",
+                "camera_rule": "守洞口到石壁横轴",
+                "continuity_must": ["王敦始终画左", "冷青光位不跳"],
+                "negative": ["不要跳轴"],
+                "axis": "洞口→石壁横轴",
+                "eyeline": "王敦看画右洞口，婷婷看画左石壁",
+                "shot_pairing": "A 王敦 CU / B 婷婷 OTS 反打",
+            },
+        }],
+    )
+
+    gate.check_storyboard_special_templates(root, "第1集")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "专项镜头模板"
+        and "screen_sides" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_storyboard_system_panel_contract_passes(tmp_path):

@@ -275,6 +275,24 @@ def _screen_direction(clip: Mapping[str, Any]) -> str:
     return f"守本场左右轴线；视线接力：{eyeline or '按角色对手/目标方向'}；转场方式：{transition}。"
 
 
+def _shot_reverse_contract(clip: Mapping[str, Any]) -> Dict[str, Any]:
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    template = str(clip.get("template") or contract.get("template_id") or "").strip()
+    if template != "dialogue_shot_reverse":
+        return {}
+    return {
+        "axis_line": contract.get("axis") or "按本场 180° 行动轴线",
+        "screen_sides": contract.get("screen_sides") or "A/B 屏幕左右关系按 storyboard 锁定",
+        "eyeline_match": contract.get("eyeline") or _clip_continuity(clip).get("eyeline") or "反打互看戏内对象，不看镜头",
+        "shot_pairing": contract.get("shot_pairing") or "A 面 clean single/OTS ↔ B 面 reverse clean single/OTS",
+        "coverage_order": contract.get("coverage_order") or "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+        "camera_coverage": contract.get("camera_coverage") or "clean singles / OTS / insert / reaction",
+        "lens_height_distance_match": contract.get("lens_height_distance_match") or "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "crossing_axis_policy": contract.get("crossing_axis_policy") or "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "buffer_or_reestablishing": contract.get("buffer_or_reestablishing") or "道具特写、手部动作、双人建立或空镜负责重新定向",
+    }
+
+
 def _production_breakdown(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
     scenes = []
     for idx, clip in enumerate(clips, start=1):
@@ -351,6 +369,7 @@ def _continuity_breakdown(ep: str, clips: List[Dict[str, Any]], *, confirmed: bo
             "end_state": continuity.get("end_state") or "待补：出点人物/道具/空间状态",
             "eyeline": continuity.get("eyeline") or "按本场轴线/主体目标方向接力",
             "screen_direction": _screen_direction(clip),
+            "shot_reverse_continuity": _shot_reverse_contract(clip),
             "wardrobe_makeup_continuity": _wardrobe_state(clip),
             "props_continuity": _props_continuity(clip),
             "knowledge_state": _knowledge_state(clip, confirmed=confirmed),
@@ -445,6 +464,7 @@ def _continuity_bible(root: Path, ep: str, clips: List[Dict[str, Any]], *, confi
                 "knowledge_state": entity.get("knowledge_state") or row.get("knowledge_state") or {},
             },
             "screen_direction": row.get("screen_direction") or _screen_direction(clip),
+            "shot_reverse_continuity": row.get("shot_reverse_continuity") or _shot_reverse_contract(clip),
             "transition_guard": continuity.get("transition") or row.get("transition_guard") or "cut",
             "trace_ids": _as_list(clip.get("trace_ids") or clip.get("source_trace_ids") or clip.get("contract_trace_ids")),
         })

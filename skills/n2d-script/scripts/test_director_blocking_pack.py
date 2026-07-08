@@ -80,6 +80,60 @@ def test_scaffold_axis_map_uses_storyboard_ids_not_placeholders(tmp_path: Path) 
     assert data["status"] == "confirmed"
 
 
+def test_scaffold_axis_map_adds_shot_reverse_pattern(tmp_path: Path) -> None:
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "voiceover.txt").write_text("你终于来了。\n我一直在等。\n", encoding="utf-8")
+    (ep_dir / "storyboard.json").write_text(json.dumps({
+        "visual_contract": {"场景轴线视线": {"main_axis": "CHAR_A 画左，CHAR_B 画右"}},
+        "clips": [{
+            "id": "EP01_CLIP02",
+            "label": "对话正反打",
+            "template": "dialogue_shot_reverse",
+            "character_ids": ["CHAR_A", "CHAR_B"],
+            "location_id": "LOC_HALL",
+            "character_slots": [
+                {"character_id": "CHAR_A", "screen_position": "画左"},
+                {"character_id": "CHAR_B", "screen_position": "画右"},
+            ],
+            "continuity": {"eyeline": "CHAR_A 看画右，CHAR_B 看画左"},
+            "template_contract": {
+                "template_id": "dialogue_shot_reverse",
+                "axis": "CHAR_A 与 CHAR_B 连线，摄影机守廊柱一侧",
+                "eyeline": "CHAR_A 看画右，CHAR_B 看画左",
+                "shot_pairing": "A: CHAR_A clean CU / B: CHAR_B OTS reverse CU",
+                "blocking": "CHAR_A 画左，CHAR_B 画右",
+            },
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    dbp.scaffold(tmp_path, "第1集")
+    data = json.loads((ep_dir / "axis_blocking_map.json").read_text(encoding="utf-8"))
+    pattern = data["shot_reverse_patterns"][0]
+
+    assert pattern["applies_to"] == ["EP01_CLIP02"]
+    assert pattern["screen_sides"]["left"] == "CHAR_A"
+    assert "越轴" in pattern["crossing_axis_policy"]
+    report = dbp.check(tmp_path, "第1集")
+    axis_row = next(row for row in report["files"] if row["rel"].endswith("axis_blocking_map.json"))
+    assert axis_row["status"] == "pass"
+    assert axis_row["issues"] == []
+
+
+def test_check_blocks_confirmed_axis_map_missing_shot_reverse_pattern(tmp_path: Path) -> None:
+    test_scaffold_axis_map_adds_shot_reverse_pattern(tmp_path)
+    path = tmp_path / "脚本" / "第1集" / "axis_blocking_map.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["shot_reverse_patterns"] = []
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    report = dbp.check(tmp_path, "第1集")
+    axis_row = next(row for row in report["files"] if row["rel"].endswith("axis_blocking_map.json"))
+
+    assert report["status"] == "block"
+    assert any("shot_reverse_patterns" in issue for issue in axis_row["issues"])
+
+
 def test_scaffold_from_storyboard_confirms_pack_without_placeholders(tmp_path: Path) -> None:
     ep_dir = tmp_path / "脚本" / "第1集"
     ep_dir.mkdir(parents=True)

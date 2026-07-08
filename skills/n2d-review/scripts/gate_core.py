@@ -301,7 +301,9 @@ SPECIAL_SHOT_TEMPLATE_FIELDS: Dict[str, Tuple[str, ...]] = {
     **COMPACT_NARRATIVE_TEMPLATE_FIELDS,
     "dialogue_shot_reverse": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",
-        "axis", "eyeline", "shot_pairing",
+        "axis", "eyeline", "shot_pairing", "screen_sides", "coverage_order",
+        "camera_coverage", "lens_height_distance_match", "crossing_axis_policy",
+        "buffer_or_reestablishing",
     ),
     "reveal_reaction_chain": (
         "template_id", "beats", "blocking", "camera_rule", "continuity_must", "negative",

@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4589 | 目录文本总行数 232978
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4593 | 目录文本总行数 233305
 
 # n2d — 主状态机调度器
 
@@ -115,6 +115,7 @@ python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1�
 python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 scaffold --write
 python3 skills/n2d-script/scripts/director_blocking_pack.py <作品根> 第1集 check --json --write-missing
 ```
+> **正反打连续性合同（传统影视语法 → AI 生产）**：P-2 的 `axis_blocking_map.json` 不只写“守轴线”，还必须在 `shot_reverse_patterns[]` 锁 180° 行动轴线、A/B 屏幕左右、互补视线、OTS/clean single/insert coverage、镜头高度/距离匹配、越轴策略和缓冲/重建空间镜。凡 `storyboard.json` 用 `dialogue_shot_reverse`，该 Clip 必须在 `shot_reverse_patterns` 登记；P-3 会把它继承进 `continuity_bible.json#shot_reverse_continuity`，供出图、出视频和 review gate 消费。无理由越轴、左右互换、看镜头替代看戏内对象，视为连续性硬伤，不靠后期补救。
 > **Animatic 粗剪 gate（出图 prompt 前的导演预演验收层）**：每集完成 Stage 2 storyboard 后，`run.py next/enter` 在 `image_prompt` 前先跑 `story_acceptance_packets.py check --kind animatic --write-missing`。未确认则生成 `animatic_packet.json/md` 并阻断，同时从 `storyboard.json` + `镜头时长.json` 物化 `生产数据/animatic_第N集.json/html`。HTML 是可播放/可浏览的 timed rough preview：有图则嵌入 storyboard/产物图，没有图则用 timed slate 承接节奏。放行要同时满足预览可生成、packet `status=confirmed`，并写清 0-3 秒钩子、节奏曲线、信息可读、镜头连续和贵工位风险。
 ```bash
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第1集 scaffold --kind animatic

@@ -73,6 +73,33 @@ def test_scaffold_creates_production_handoff_files(tmp_path: Path) -> None:
     assert bible["clips"][0]["state"]["start_state"] == "A 持令牌入画"
 
 
+def test_scaffold_carries_shot_reverse_continuity_to_bible(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    data["clips"][0]["template"] = "dialogue_shot_reverse"
+    data["clips"][0]["template_contract"] = {
+        "template_id": "dialogue_shot_reverse",
+        "axis": "A 与 B 连线，摄影机守门口一侧",
+        "screen_sides": {"left": "CHAR_A", "right": "CHAR_B"},
+        "eyeline": "CHAR_A 看画右，CHAR_B 看画左",
+        "shot_pairing": "A clean CU / B OTS reverse CU",
+        "coverage_order": "双人建立 → A 面 → B 面反打 → 令牌特写",
+        "camera_coverage": "clean single + OTS + insert",
+        "lens_height_distance_match": "两侧反打保持相近高度、距离和景别",
+        "crossing_axis_policy": "禁止越轴；需要换侧时用令牌特写缓冲",
+        "buffer_or_reestablishing": "令牌特写或双人建立镜负责重新定向",
+    }
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+    bible = json.loads((tmp_path / "脚本" / "第1集" / "continuity_bible.json").read_text(encoding="utf-8"))
+    contract = bible["clips"][0]["shot_reverse_continuity"]
+
+    assert contract["screen_sides"]["left"] == "CHAR_A"
+    assert "禁止越轴" in contract["crossing_axis_policy"]
+
+
 def test_check_blocks_draft_pack(tmp_path: Path) -> None:
     _write_storyboard(tmp_path)
     pb.scaffold(tmp_path, "第1集")
