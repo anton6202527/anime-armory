@@ -1,7 +1,7 @@
 {
   "kind": "n2d_identity_registry",
   "version": 1,
-  "generated_at": "2026-07-08T12:25:04+00:00",
+  "generated_at": "2026-07-08T12:27:25+00:00",
   "characters": [
     {
       "id": "CHAR_01",
@@ -456,15 +456,15 @@
           ],
           "self_check_passed": true,
           "self_check_note": "existing shared PNG reused by prompt pack",
-          "reference_manifest": "生产数据/reference_plan_第5集.json",
-          "reference_input_mode": "codex_exec_image_flags",
           "signoff": {
             "accepted": true,
             "reviewer": "codex",
             "reason": "Codex image2 uses real shared makeup/reference image inputs plus reference_plan manifest and full image QC for long-running core character continuity.",
             "date": "2026-07-08"
           },
+          "reference_manifest": "生产数据/reference_plan_第5集.json",
           "qc_policy": "full_image_qc",
+          "reference_input_mode": "codex_exec_image_flags",
           "anchor_sha": "628fa3a8e0ca3ab4f6e16da98fb1eb54bb255e2f3a7e772120219573c6f6a9bb"
         },
         {
@@ -657,14 +657,14 @@
                   ]
                 },
                 "emotion": "基础",
+                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
                 "human_review": {
                   "reason": "expression anchor finalized from reference_group.expressions",
                   "reviewed_at": "2026-07-06T08:58:05.820075+00:00",
                   "reviewed_by": "image_qc --finalize-expr",
                   "reviewer": "agent_visual_review",
                   "status": "pass"
-                },
-                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6"
+                }
               }
             ]
           },
@@ -799,14 +799,14 @@
                   ]
                 },
                 "emotion": "基础",
+                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
                 "human_review": {
                   "reason": "expression anchor finalized from reference_group.expressions",
                   "reviewed_at": "2026-07-06T08:58:05.820177+00:00",
                   "reviewed_by": "image_qc --finalize-expr",
                   "reviewer": "agent_visual_review",
                   "status": "pass"
-                },
-                "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6"
+                }
               }
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"
@@ -977,15 +977,15 @@
           ],
           "self_check_passed": true,
           "self_check_note": "existing shared PNG reused by prompt pack",
-          "reference_manifest": "生产数据/reference_plan_第5集.json",
-          "reference_input_mode": "codex_exec_image_flags",
           "signoff": {
             "accepted": true,
             "reviewer": "codex",
             "reason": "Codex image2 uses real shared makeup/reference image inputs plus reference_plan manifest and full image QC for long-running core character continuity.",
             "date": "2026-07-08"
           },
+          "reference_manifest": "生产数据/reference_plan_第5集.json",
           "qc_policy": "full_image_qc",
+          "reference_input_mode": "codex_exec_image_flags",
           "anchor_sha": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
         }
       ],
@@ -1214,14 +1214,14 @@
                   ]
                 },
                 "emotion": "基础",
+                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9",
                 "human_review": {
                   "reason": "expression anchor finalized from reference_group.expressions",
                   "reviewed_at": "2026-07-04T17:16:01.069070+00:00",
                   "reviewed_by": "image_qc --finalize-expr",
                   "reviewer": "agent.visual_review",
                   "status": "pass"
-                },
-                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
+                }
               }
             ]
           },
@@ -1362,14 +1362,14 @@
                   ]
                 },
                 "emotion": "基础",
+                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9",
                 "human_review": {
                   "reason": "expression anchor finalized from reference_group.expressions",
                   "reviewed_at": "2026-07-04T17:16:01.069176+00:00",
                   "reviewed_by": "image_qc --finalize-expr",
                   "reviewer": "agent.visual_review",
                   "status": "pass"
-                },
-                "anchor_sha": "107da78ef2e0838cb920e6d9f8b5f85d345dcbb77826a250abef364cb14f49e9"
+                }
               }
             ],
             "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。"

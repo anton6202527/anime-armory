@@ -3547,6 +3547,16 @@ def asset_topology_lock_line(asset_ids: Sequence[str]) -> str:
         if not cfg:
             continue
         constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+        asset_type = str(cfg.get("type") or "")
+        structural_terms = " ".join(str(x) for x in constraints.get("must_not_have") or [])
+        has_topology = bool(constraints.get("blade_topology") or constraints.get("vfx_boundary") or cfg.get("weapon_profile"))
+        has_structural_guard = any(term in structural_terms for term in ("双刃", "多刃", "实体", "握柄", "护手", "壶嘴", "喷口", "侧嘴", "斜嘴", "出水口", "多把", "两侧"))
+        if asset_type in {"scene", "location"} and not has_topology:
+            continue
+        if asset_type not in {"weapon", "vfx", "prop", "effect"} and not has_topology:
+            continue
+        if asset_type == "prop" and not has_structural_guard:
+            continue
         parts: List[str] = []
         structure = flatten_contract_value(constraints.get("structure") or cfg.get("positive") or cfg.get("current_state"))
         if structure:

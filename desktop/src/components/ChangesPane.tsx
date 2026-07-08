@@ -10,6 +10,7 @@ import {
 import { useI18n } from "../i18n";
 import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
+import { WorkFileIcon } from "./FileIcon";
 
 const ChangesDiffEditor = lazy(() =>
   import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
@@ -304,8 +305,9 @@ export function ChangesPane({
                 onClick={() => setSelected(change.path)}
                 onDoubleClick={() => onOpenFile(change.path)}
               >
-                <span className={`change-kind ${change.kind}`}>{kindLabel[change.kind]}</span>
+                <WorkFileIcon entry={{ name: fileName(change.path), is_dir: false }} />
                 <span className="change-name">{fileName(change.path)}</span>
+                <span className={`change-status ${change.kind}`}>{kindLabel[change.kind]}</span>
                 <span className="change-path">{change.path}</span>
               </button>
               <div className="change-row-actions">

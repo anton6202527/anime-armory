@@ -1,6 +1,6 @@
 import type { SkillTreeEntry } from "../types";
 
-export type FileIconKind = "image" | "video" | "audio" | "markdown" | "json" | "code" | "generic";
+export type FileIconKind = "image" | "video" | "audio" | "markdown" | "json" | "python" | "code" | "generic";
 
 export type SkinFileIcon = {
   cls: string;
@@ -46,7 +46,7 @@ const fileIconByExt: Record<string, Omit<SkinFileIcon, "kind"> & { kind?: FileIc
   mjs: { cls: "file-js", label: "JS" },
   pdf: { cls: "file-text", label: "PDF" },
   pptx: { cls: "file-text", label: "P" },
-  py: { cls: "file-py", label: "PY" },
+  py: { cls: "file-py", kind: "python" },
   rs: { cls: "file-rs", label: "RS" },
   scss: { cls: "file-css", label: "S" },
   sh: { cls: "file-shell", label: "$" },
