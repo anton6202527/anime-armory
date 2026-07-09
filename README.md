@@ -30,7 +30,7 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg) |
 | 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
@@ -141,7 +141,7 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 - `/r2a --demo-assets`：只打包并上传各线 demo zip assets：`AnimeArmory_demo_novel.zip`、`AnimeArmory_demo_n2d.zip`、`AnimeArmory_demo_comic.zip`、`AnimeArmory_demo_song.zip`、`AnimeArmory_demo_mv.zip`、`AnimeArmory_demo_ad.zip`；不打 app、不更新 README app 链接、不覆盖已有 release notes、不标 latest。demo 内容没变时不需要跑。
 - `/r2a --all --with-demo-assets`：旧式合并路径，一次性打 app + demo zip；大 demo 会显著拖慢发布，只在确实要同批重发 demo 时用。
 - release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `R2A_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
-- README 下载链接策略：如果希望链接永久可复现，用固定 tag 链接，例如 `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`；如果希望 README 永远指向最新包，用 `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`。可用 `--readme-link-mode tag|latest|auto` 显式指定。
+- README 下载链接策略：如果希望链接永久可复现，用固定 tag 链接，例如 `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`；如果希望 README 永远指向最新包，用 `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`。可用 `--readme-link-mode tag|latest|auto` 显式指定。
 - 如需旧行为从远程分支/标签打包，可加 `--remote-source --source-ref <ref>`。
 
 只需要把当前 checkout 的 `skills/` 与 `创作区/` 使用手册同步进桌面端和 VS Code 插件的内置资源时，跑：
@@ -329,7 +329,7 @@ Ready-to-use packages are available from the latest release:
 
 | Package | Platform | Download |
 |---|---|---|
-| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg) |
+| Desktop App | macOS Apple Silicon (`.dmg`) | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg) |
 | Desktop App | Windows (`.exe` installer) | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
 | VS Code Extension | Cross-platform `.vsix` | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
@@ -402,7 +402,7 @@ Published packages use the stable filenames listed above when uploaded to the `a
 - `/r2a --demo-assets`: builds and uploads only the per-line demo zip assets: `AnimeArmory_demo_novel.zip`, `AnimeArmory_demo_n2d.zip`, `AnimeArmory_demo_comic.zip`, `AnimeArmory_demo_song.zip`, `AnimeArmory_demo_mv.zip`, and `AnimeArmory_demo_ad.zip`. It does not build app installers, update README app links, overwrite existing release notes, or mark the release latest. Skip this when demo payloads have not changed.
 - `/r2a --all --with-demo-assets`: legacy combined path that builds app installers and demo zips in one run. This is slower because large demo zips are packaged and uploaded too.
 - Before upload, `r2a` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `R2A_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
-- README link policy: use a fixed tag URL for reproducible downloads, for example `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`; use `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg` when the README should always point to the newest package. Override with `--readme-link-mode tag|latest|auto`.
+- README link policy: use a fixed tag URL for reproducible downloads, for example `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg`; use `https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_macos_arm64.dmg` when the README should always point to the newest package. Override with `--readme-link-mode tag|latest|auto`.
 - To build from a remote branch or tag instead of the local checkout, use `--remote-source --source-ref <ref>`.
 
 To sync the current checkout's `skills/` and `创作区/` usage manuals into the bundled desktop and VS Code resources without a full release, run:
