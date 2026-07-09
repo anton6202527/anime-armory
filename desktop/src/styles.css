@@ -1441,12 +1441,17 @@ body.resizing-changes-side { cursor: col-resize; user-select: none; }
 }
 .next-strip-disabled .next-progress-value { color: var(--muted); }
 .project-settings-btn {
-  width: 20px; height: 20px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
-  align-self: center; color: var(--muted); background: var(--editor-bg); border-color: var(--border);
+  width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  align-self: center; color: var(--muted); background: transparent; border: 1px solid transparent;
   border-radius: 4px; font-size: 13px; line-height: 1; cursor: pointer;
 }
 .project-settings-btn:hover {
-  color: var(--text); background: rgba(255, 255, 255, .045); border-color: var(--accent);
+  color: var(--text); background: rgba(255, 255, 255, .08); border-color: transparent;
+}
+.project-settings-btn:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, .28);
+  outline-offset: -1px;
+  border-color: transparent;
 }
 .project-settings-btn .aa-codicon {
   width: 15px; height: 15px; display: inline-flex; align-items: center; justify-content: center;
@@ -1456,31 +1461,15 @@ body.resizing-changes-side { cursor: col-resize; user-select: none; }
   display: inline-flex; align-items: center; justify-content: flex-end; gap: 4px;
 }
 .terminal-new-btn {
-  font-size: 15px; font-weight: 650; line-height: 1;
+  line-height: 1;
 }
 .terminal-dock-btn {
-  font-size: 0;
-}
-.terminal-dock-icon {
-  position: relative; width: 14px; height: 14px; display: block;
-  border: 1.7px solid currentColor; border-radius: 3px; opacity: .9;
-}
-.terminal-dock-icon::before {
-  content: ""; position: absolute; border-radius: 1px; background: currentColor;
-}
-.terminal-dock-btn-bottom .terminal-dock-icon::before {
-  left: 2px; right: 2px; bottom: 2px; height: 4px;
-}
-.terminal-dock-btn-side .terminal-dock-icon::before {
-  top: 2px; right: 2px; bottom: 2px; width: 4px;
-}
-.terminal-dock-btn:hover .terminal-dock-icon {
-  opacity: 1;
+  line-height: 1;
 }
 .terminal-close-btn:hover {
-  color: var(--block);
-  background: rgba(255, 107, 107, .10);
-  border-color: rgba(255, 107, 107, .42);
+  color: var(--text);
+  background: rgba(255, 255, 255, .08);
+  border-color: transparent;
 }
 .project-settings-backdrop { z-index: var(--z-modal); }
 .project-settings-modal {

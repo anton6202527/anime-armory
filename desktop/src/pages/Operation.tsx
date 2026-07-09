@@ -1003,7 +1003,7 @@ export function Operation(props: {
                   aria-label={t("terminal.newSession")}
                   onClick={() => termRef.current?.newSession()}
                 >
-                  +
+                  <Codicon name="add" />
                 </button>
                 <button
                   type="button"
@@ -1012,7 +1012,7 @@ export function Operation(props: {
                   aria-label={dockTitle}
                   onClick={() => setTerminalDock(dockTarget)}
                 >
-                  <span className="terminal-dock-icon" aria-hidden="true" />
+                  <Codicon name="layout" />
                 </button>
                 <button
                   type="button"
