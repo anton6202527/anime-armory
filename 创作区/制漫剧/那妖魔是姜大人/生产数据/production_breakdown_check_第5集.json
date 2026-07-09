@@ -12,12 +12,9 @@
       "status": "pass"
     },
     {
-      "issues": [
-        "status 不是 confirmed",
-        "continuity_chain 仍有阻断 seam：Clip_04→Clip_05(missing_episode_boundary_contract)"
-      ],
+      "issues": [],
       "rel": "脚本/第5集/continuity_chain.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "issues": [],
@@ -35,11 +32,9 @@
       "status": "pass"
     },
     {
-      "issues": [
-        "status 不是 confirmed"
-      ],
+      "issues": [],
       "rel": "脚本/第5集/production_handoff_pack.json",
-      "status": "block"
+      "status": "pass"
     },
     {
       "issues": [],
@@ -47,15 +42,15 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-08T15:29:21+00:00",
+  "generated_at": "2026-07-09T12:17:34+00:00",
   "kind": "n2d_production_handoff_pack_check",
   "next_when_blocked": "补齐 P-3 制片交接包，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。",
-  "root": "创作区/制漫剧/那妖魔是姜大人",
-  "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py 创作区/制漫剧/那妖魔是姜大人 第5集 scaffold --write",
-  "status": "block",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
+  "scaffold_command": "python3 skills/n2d-script/scripts/production_breakdown.py /Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人 第5集 scaffold --write",
+  "status": "pass",
   "summary": {
-    "block": 2,
-    "pass": 6,
+    "block": 0,
+    "pass": 8,
     "required": 8
   },
   "version": 1

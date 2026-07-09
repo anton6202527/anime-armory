@@ -202,6 +202,44 @@ def test_asset_shape_review_covers_weapon_and_clip_without_underscore(tmp_path: 
     assert targets[0]["confirmed"] is False
 
 
+def test_prop_shape_review_ignores_future_asset_guard_ids(tmp_path: Path) -> None:
+    reg = tmp_path / "出图" / "共享"
+    reg.mkdir(parents=True)
+    (reg / "asset_registry.json").write_text(json.dumps({
+        "assets": [
+            {
+                "id": "WEAPON_01",
+                "type": "weapon",
+                "name": "横刀",
+                "constraints": {"must_not_have": ["第二把刀刃"]},
+            },
+            {
+                "id": "VFX_虎山神摹影",
+                "type": "vfx",
+                "name": "虎山神摹影黑血妖气",
+                "constraints": {"must_not_have": ["过度血腥猎奇"]},
+            },
+        ],
+    }, ensure_ascii=False), encoding="utf-8")
+    pr = tmp_path / "出图" / "第5集" / "prompt"
+    pr.mkdir(parents=True)
+    (pr / "01_分镜出图.md").write_text(
+        "## 镜头 2（EP05_CLIP02 猛虎快刀）\n"
+        "**资产引用注册层**：`WEAPON_01`；禁形：第二把刀刃。\n"
+        "**资产显现时机防呆**：Clip02 禁用 `VFX_虎山神摹影`，直到 Clip06 才允许显现；"
+        "资产禁项：过度血腥猎奇。\n",
+        encoding="utf-8",
+    )
+    img = tmp_path / "出图" / "第5集" / "图片"
+    img.mkdir(parents=True)
+    (img / "Clip02_first.png").write_bytes(b"not-a-real-png")
+
+    targets = image_qc.prop_shape_review_targets(tmp_path, "第5集")
+
+    assert [t["asset"] for t in targets] == ["WEAPON_01"]
+    assert targets[0]["png"] == "图片/Clip02_first.png"
+
+
 def test_prop_shape_review_skips_declared_target_until_png_exists(tmp_path: Path) -> None:
     reg = tmp_path / "出图" / "共享"
     reg.mkdir(parents=True)
@@ -754,6 +792,44 @@ def test_character_shot_manifests_support_per_target_faceless_reaction_anchor() 
 
     assert [m["face_coverage_required"] for m in manifests] == [True, False, True]
     assert manifests[1]["face_check_policy"] == "faceless_reaction_anchor"
+
+
+def test_character_shot_manifest_skips_non_human_primary_anchor() -> None:
+    blk = {
+        "label": "Clip 05 狼首正主",
+        "body": "\n".join([
+            "**目标落档**：`出图/第1集/图片/Clip05_first.png`",
+            "**资产身份注册层**：`CHAR_05/常态`, `CHAR_01/常态`；二人都登记。",
+            "**多人同框身份槽位**：SLOT_1: `CHAR_05/常态` -> 画右前景，primary 星标；"
+            "SLOT_2: `CHAR_01/常态` -> 画左反应。",
+            "**本镜状态锁**：`CHAR_05`: 青面郎君从青衫狼首常态伏地爆冲，妖物视觉特征必须保留。",
+        ]),
+    }
+
+    manifest = image_qc.character_shot_manifest(blk)
+
+    assert manifest["identity_refs"] == ["CHAR_05/常态"]
+    assert manifest["face_coverage_required"] is False
+    assert manifest["face_check_policy"] == "non_human_anchor_policy"
+
+
+def test_character_shot_manifest_keeps_human_primary_face_required_with_creature_in_scene() -> None:
+    blk = {
+        "label": "Clip 06 人类主检",
+        "body": "\n".join([
+            "**目标落档**：`出图/第1集/图片/Clip06_first.png`",
+            "**资产身份注册层**：`CHAR_01/常态`, `CHAR_05/常态`；二人都登记。",
+            "**多人同框身份槽位**：SLOT_1: `CHAR_01/常态` -> 画左前景，primary 星标；"
+            "SLOT_2: `CHAR_05/常态` -> 画右冲刺。",
+            "**本镜状态锁**：`CHAR_05`: 青面郎君从青衫狼首常态伏地爆冲，妖物视觉特征必须保留。",
+        ]),
+    }
+
+    manifest = image_qc.character_shot_manifest(blk)
+
+    assert manifest["identity_refs"] == ["CHAR_01/常态"]
+    assert manifest["face_coverage_required"] is True
+    assert "face_check_policy" not in manifest
 
 
 def test_character_shot_manifest_uses_primary_slot_identity_refs() -> None:

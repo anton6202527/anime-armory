@@ -1,5 +1,6 @@
 import type { LineInfo, WorkRoot } from "../types";
 import { useI18n } from "../i18n";
+import { Codicon } from "./Codicon";
 
 export interface WorkTab {
   id: string; // = root.path (unique)
@@ -53,9 +54,7 @@ export function TopTabs(props: {
                 onClose(tab.id);
               }}
             >
-              <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false">
-                <path d="M3 3l6 6M9 3L3 9" />
-              </svg>
+              <Codicon name="close" />
             </button>
           </div>
         ))}

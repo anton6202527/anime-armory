@@ -15,11 +15,14 @@ ROUTE = {
     "缩略分镜": "comic-name",
     "页面排版": "comic-layout",
     "原稿收尾": "comic-finishing",
-    "传统收尾": "comic-finishing",
     "出图包": "comic-image",
     "出图": "comic-image",
     "嵌字合成": "comic-compose",
     "审查": "comic-review",
+}
+
+STAGE_ALIASES = {
+    "原稿收尾": ("原稿收尾", "传统收尾"),
 }
 
 DONE = {"✅", "[x]", "完成", "done", "pass"}
@@ -70,6 +73,14 @@ def parse_progress(path: Path) -> dict:
 
 def is_done(value: str) -> bool:
     return value.strip() in DONE or value.strip().startswith("✅")
+
+
+def row_stage_done(row: dict[str, str], stage: str) -> bool:
+    aliases = STAGE_ALIASES.get(stage, (stage,))
+    present = [alias for alias in aliases if alias in row]
+    if not present:
+        return False
+    return any(is_done(row.get(alias, "")) for alias in present)
 
 
 def has_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
@@ -198,7 +209,7 @@ def summarize_project(root: Path) -> dict:
         next_stage = None
         next_skill = None
         for stage in ROUTE:
-            if not is_done(row.get(stage, "")):
+            if not row_stage_done(row, stage):
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break

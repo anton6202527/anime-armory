@@ -71,132 +71,130 @@
   "backend": "codex",
   "capability_assertions": {
     "auto_runnable": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": true
     },
     "channel": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": "Codex CLI"
     },
     "exact_model_evidence_required": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
-      "value": false
+      "value": true
     },
     "exact_model_id": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
-      "value": "GPT Image 2 via Codex image_generation"
+      "value": ""
     },
     "max_reference_images": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": 24
     },
     "model": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": "GPT Image 2"
     },
     "model_precision": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
-      "value": "provider_model"
+      "value": "normalized_family"
     },
     "official": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": true
     },
     "output": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": "png_file"
     },
     "persistent_subject": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": false
     },
     "reference_mode": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": "multi_image_flags"
     },
     "supports_edit": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": false
     },
     "supports_high_fidelity_reference": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": true
     },
     "supports_image_reference": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": true
     },
     "supports_mask": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": false
     },
     "supports_text2image": {
-      "evidence_kind": "official_cli",
-      "observed_text": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-      "source": "local Codex CLI 0.142.5: codex exec --help + codex features list",
+      "evidence_kind": "cli_help",
+      "observed_text": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+      "source": "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true",
       "source_url": "",
       "value": true
     }
   },
-  "evidence_kind": "official_cli",
+  "evidence_kind": "cli_help",
   "kind": "n2d_image_backend_refresh_evidence",
   "model_evidence": {
-    "exact_model_id": "GPT Image 2 via Codex image_generation",
+    "exact_model_id": "",
     "normalized_model_label": "GPT Image 2",
     "policy": "Do not log final generation events as exact provider model id unless this field is populated from per-run evidence.",
-    "precision": "provider_model"
+    "precision": "normalized_family"
   },
-  "note": "2026-07-08 preflight refresh: codex exec exposes --image FILE... for multi-reference attachments, --json JSONL event output, --enable image_generation; features list marks image_generation stable=true. Runner will use Codex/GPT Image 2 only; no Dreamina image fallback; no persistent subject ID or mask API exposed through CLI, so use reference_group/image attachments plus full image_qc.",
-  "source_urls": [
-    ""
-  ],
+  "note": "2026-07-09 local CLI evidence. Project locked model is GPT Image 2 via Codex access path; exact provider model id is not exposed by local Codex CLI. OpenAI API key is not configured, so use Codex CLI project-memory reference route with real --image inputs.",
+  "source_urls": [],
   "sources": [
-    "local Codex CLI 0.142.5: codex exec --help + codex features list"
+    "local Codex CLI feature probe: codex features list shows image_generation stable=true; codex exec --help exposes -i/--image <FILE> attachments; image_backend_adapter scan found Codex auto_usable=true"
   ],
-  "verified_at": "2026-07-08"
+  "verified_at": "2026-07-09"
 }

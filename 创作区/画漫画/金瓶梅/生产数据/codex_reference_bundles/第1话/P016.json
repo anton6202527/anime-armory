@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P016",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "sha256": "1f63a88bf6f725380118806c84382a825d205152dc218bfcedf35d89124fa5d2"
+    },
+    {
+      "id": "CHAR_WUDA",
+      "path": "出图/共享/图片/CHAR_WUDA__front.png",
+      "sha256": "4fec2cc47cdebca084c0ad1fdbaf034b478d83dee82c39deac3ef3b4752bcee6"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__front.png",
+      "sha256": "4ba3f23e04525ebde7e3b067a4c9f262345694d6dee03b1dd1a888d7cc462dc4"
+    },
+    {
+      "id": "LOC_WUDA_HOUSE",
+      "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+      "sha256": "bb227819e9c39d7be9eb08430b91c3ba702050209a73e042644ee1114199646b"
+    },
+    {
+      "id": "PROP_RED_CURTAIN",
+      "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "efe67b1a3c6c9bd3a688649eb47b805c8025f170dc8d7312fdc72de8ef293400"
+    }
+  ],
+  "created_at": "2026-07-09T18:05:26"
+}

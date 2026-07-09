@@ -1,0 +1,96 @@
+{
+  "episode": "第5集",
+  "generated_at": "2026-07-09T02:23:34+00:00",
+  "kind": "n2d_shot_progression_plan",
+  "progressions": [
+    {
+      "beat_id": "EP05_CLIP01",
+      "camera_motivation": "直接兑现第4集集尾“杀了她”，让狼妖群扑杀和横刀出鞘成为0-3秒视觉钩。",
+      "camera_move": "中近景接力硬切，轻微后退只给扑杀运动余量，不拉回远景。；中景慢推到手部与刀柄。；刀锋特写硬切到眼神 CU。",
+      "must_have_insert_or_reaction": "观众立刻进入战斗，不再等待解释，追问第一刀如何接。；保留CHAR_01、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群、CHAR_05反应或道具/VFX落点。",
+      "peak_shot_size": "MS 近距接战承接前集尾帧 → CU 横刀出鞘 → CU 眼神锁正主",
+      "release_shot_size": "match_action_cut",
+      "start_shot_size": "MS 近距接战承接前集尾帧"
+    },
+    {
+      "beat_id": "EP05_CLIP02",
+      "camera_motivation": "展示圆满《猛虎快刀》的第一次正面战斗爽点，同时让青面郎君第一次露怯。",
+      "camera_move": "低机位仰拍，保留刀锋下劈空间。；快速反打，保持村道纵轴。；横向硬切到落点，尾帧给刀锋落地。",
+      "must_have_insert_or_reaction": "观众得到第一刀爽点，并看见反派用同伴挡刀的残忍。；保留CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人反应或道具/VFX落点。",
+      "peak_shot_size": "MS 起刀 → OTS 反派惊惧 → WS 刀光落点",
+      "release_shot_size": "impact_cut",
+      "start_shot_size": "MS 起刀"
+    },
+    {
+      "beat_id": "EP05_CLIP03",
+      "camera_motivation": "把第一刀后的战斗优势放大成连斩，形成本集上半段的主角高光。",
+      "camera_move": "从飞鹰门肩后过肩看她前冲。；跟摇横扫，保留刀弧运动余量。；低机位特写爪子刹停，硬切尾帧。",
+      "must_have_insert_or_reaction": "观众看到群狼从扑杀变成恐惧刹停，爽点清晰。；保留CHAR_01、GROUP_狼妖群、CHAR_05、CHAR_04、GROUP_飞鹰门众人反应或道具/VFX落点。",
+      "peak_shot_size": "MS 再冲 → WS 横扫刀弧 → CU 狼妖爪刹住尘土",
+      "release_shot_size": "hard_cut",
+      "start_shot_size": "MS 再冲"
+    },
+    {
+      "beat_id": "EP05_CLIP04",
+      "camera_motivation": "把青面郎君上一集的血食暴论反打回去，完成价值观爽点并引出正主暴怒。",
+      "camera_move": "刀尖 ECU，浅景深。；85mm CU 慢推。；反打 CU 到低机位 MS。",
+      "must_have_insert_or_reaction": "观众获得台词反杀快感，反派从掌控者变成破防者。；保留CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人反应或道具/VFX落点。",
+      "peak_shot_size": "ECU 刀尖滴血 → CU 姜月初 → CU 青面郎君狼首破防",
+      "release_shot_size": "match_cut_to_charge",
+      "start_shot_size": "ECU 刀尖滴血"
+    },
+    {
+      "beat_id": "EP05_CLIP05",
+      "camera_motivation": "把战斗从清小怪推到闻弦境正主亲自出手，建立真实危险。",
+      "camera_move": "低机位近景压迫。；快速跟摇，纵轴不越。；主观近景，尾帧停在将撞未撞。",
+      "must_have_insert_or_reaction": "观众从上半段爽点转入紧张，意识到这不是无伤割草。；保留CHAR_05、CHAR_01、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人反应或道具/VFX落点。",
+      "peak_shot_size": "Low MS 蓄力 → WS 爆冲 → CU 黑煞扑面",
+      "release_shot_size": "impact_cut",
+      "start_shot_size": "Low MS 蓄力"
+    },
+    {
+      "beat_id": "EP05_CLIP06",
+      "camera_motivation": "姜月初不闪不避，用血虎虚影和横刀正面接住青面郎君，完成本集最大动作撞点。",
+      "camera_move": "低机位仰拍。；中景定住身份锚，不遮脸。；动作撞点硬切，尾帧凝住。",
+      "must_have_insert_or_reaction": "观众看到主角敢硬接，但也为代价埋下悬念。；保留CHAR_01、CHAR_05反应或道具/VFX落点。",
+      "peak_shot_size": "WS 跃起对冲 → MS 血虎虚影 → CU 刀爪撞点",
+      "release_shot_size": "impact_flash_cut",
+      "start_shot_size": "WS 跃起对冲"
+    },
+    {
+      "beat_id": "EP05_CLIP07",
+      "camera_motivation": "展示硬接闻弦境的代价：青面郎君重伤，姜月初也被狼爪撕开腹部。",
+      "camera_move": "近景快速切两处伤点，克制不猎奇。；横向 WS，保持两侧空间关系。；双反打 MCU，尾帧锁双方状态。",
+      "must_have_insert_or_reaction": "观众从爽点回到危险，知道她不能靠硬拼解决正主。；保留CHAR_01、CHAR_05、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群反应或道具/VFX落点。",
+      "peak_shot_size": "CU 刀爪伤势 → WS 双方倒飞 → MCU 姜月初强咽血",
+      "release_shot_size": "breath_cut",
+      "start_shot_size": "CU 刀爪伤势"
+    },
+    {
+      "beat_id": "EP05_CLIP08",
+      "camera_motivation": "陈青源带人护住姜月初，给她争取开百妖谱的时间，也把“人会克制本能”落成行动。",
+      "camera_move": "中景快速推。；横向跟拍，形成半圆人墙。；从刀剑缝隙推到她的眼神 CU。",
+      "must_have_insert_or_reaction": "观众看到她救下的人反过来护她，情绪从单人爽点转为群像回报。；保留CHAR_01、CHAR_04、GROUP_飞鹰门众人、CHAR_05、GROUP_狼妖群反应或道具/VFX落点。",
+      "peak_shot_size": "MS 陈青源喊 → WS 人墙形成 → CU 姜月初眼神内收",
+      "release_shot_size": "subjective_cut",
+      "start_shot_size": "MS 陈青源喊"
+    },
+    {
+      "beat_id": "EP05_CLIP09",
+      "camera_motivation": "把道行余额和虎妖画卷回收成集尾开挂，卡在新力量启动前。",
+      "camera_move": "从眼神 CU 溶到古卷主观插入。；静止插入，留文字安全区。；主观抽离，最后硬切黑白。",
+      "must_have_insert_or_reaction": "观众得到“她还有挂”的反转，但结果延迟到下一集。；保留CHAR_01反应或道具/VFX落点。",
+      "peak_shot_size": "CU 姜月初眼神 → Insert 空古卷面板 → Subjective 黑白世界",
+      "release_shot_size": "cliffhanger_hard_cut",
+      "start_shot_size": "CU 姜月初眼神"
+    }
+  ],
+  "rules": {
+    "establishing": "每个场面先交代角色、压迫源和关键道具/VFX，竖屏里脸部仍可辨。",
+    "movement_motivation": "所有推拉跟移都绑定求生压力、系统信息或动作力线，不做无动机炫技。",
+    "peak_closeup": "系统到账、赌刀、斩妖、官道来人等爆点必须有近景或明确反应镜签收。",
+    "scale_ladder": "按 storyboard 的 shot_size 从信息交代推进到反应/动作峰值，避免连续同景别失去节奏。"
+  },
+  "status": "confirmed",
+  "version": 1
+}

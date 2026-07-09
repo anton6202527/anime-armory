@@ -116,6 +116,15 @@ fn parse_range(headers: &[Header], len: u64) -> Option<(u64, u64)> {
     None
 }
 
+fn media_headers(path: &str) -> Vec<Header> {
+    vec![
+        Header::from_bytes("Content-Type", content_type(path)).unwrap(),
+        Header::from_bytes("Accept-Ranges", "bytes").unwrap(),
+        Header::from_bytes("Access-Control-Allow-Origin", "*").unwrap(),
+        Header::from_bytes("Access-Control-Allow-Headers", "Range").unwrap(),
+    ]
+}
+
 fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
     let abs = match query_path(req.url()) {
         Some(p) => p,
@@ -146,8 +155,6 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
         }
     };
     let len = file.metadata().map(|m| m.len()).unwrap_or(0);
-    let ct = Header::from_bytes("Content-Type", content_type(&path_str)).unwrap();
-    let accept = Header::from_bytes("Accept-Ranges", "bytes").unwrap();
 
     match parse_range(req.headers(), len) {
         Some((start, end)) => {
@@ -159,9 +166,11 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
             let reader = file.take(chunk);
             let cr =
                 Header::from_bytes("Content-Range", format!("bytes {start}-{end}/{len}")).unwrap();
+            let mut headers = media_headers(&path_str);
+            headers.push(cr);
             let resp = Response::new(
                 StatusCode(206),
-                vec![ct, accept, cr],
+                headers,
                 reader,
                 Some(chunk as usize),
                 None,
@@ -171,7 +180,7 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
         None => {
             let resp = Response::new(
                 StatusCode(200),
-                vec![ct, accept],
+                media_headers(&path_str),
                 file,
                 Some(len as usize),
                 None,

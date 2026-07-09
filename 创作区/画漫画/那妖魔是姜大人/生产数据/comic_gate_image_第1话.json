@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "kind": "comic_gate",
-  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
   "stage": "image",
-  "created_at": "2026-07-08T22:53:00",
+  "created_at": "2026-07-09T10:58:10",
   "verdict": "pass",
   "summary": {
-    "finding_count": 5,
+    "finding_count": 4,
     "block_count": 0,
     "warn_count": 0,
-    "info_count": 5
+    "info_count": 4
   },
   "findings": [
     {
@@ -18,7 +18,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第1话/panels/P001.png",
-      "reason": "风格指纹内聚度 0.7469 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7478 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding"
@@ -28,17 +28,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第1话/panels/P002.png",
-      "reason": "风格指纹内聚度 0.7122 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
-      "return_to_stage": "review",
-      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
-      "evidence_family": "appearance_embedding"
-    },
-    {
-      "severity": "info",
-      "dimension": "comic_gate",
-      "code": "panel_style_outlier",
-      "artifact": "出图/第1话/panels/P003.png",
-      "reason": "风格指纹内聚度 0.8420 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7114 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding"
@@ -48,7 +38,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第1话/panels/P010.png",
-      "reason": "风格指纹内聚度 0.8389 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.8389 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding"
@@ -58,7 +48,7 @@
       "dimension": "comic_gate",
       "code": "panel_style_outlier",
       "artifact": "出图/第1话/panels/P013.png",
-      "reason": "风格指纹内聚度 0.8360 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.8346 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to_stage": "review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
       "evidence_family": "appearance_embedding"

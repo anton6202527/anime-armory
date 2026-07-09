@@ -1,0 +1,2363 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_jobs",
+  "chapter": "第2话",
+  "model": "GPT Image 2",
+  "channel": "Codex CLI",
+  "backend_capabilities": {
+    "adapter_id": "openai_gpt_image_project_memory",
+    "model": "GPT Image 2",
+    "channel": "Codex CLI",
+    "supports_image_inputs": true,
+    "persistent_subject": false,
+    "reference_image_limit": 16,
+    "single_character_reference_limit": 5,
+    "multi_character_reference_limit": 3,
+    "non_character_reference_limit": 2,
+    "style_reference_limit": 2,
+    "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+  },
+  "text_language": "中文",
+  "render_stage": "完成稿",
+  "finishing_plan": "出图/第2话/finishing/finishing_plan.json",
+  "jobs": [
+    {
+      "panel_id": "P001",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：武大家临街小楼傍晚，武松带着铺盖行李和差役灰影站在楼梯口，潘金莲从红帘后提灯出来，武大在旁搓手笑；楼内逼仄，行李放在地上。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_WUDA、CHAR_PAN；场景：武大家楼房；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:楼梯在画左下通向楼上，武松画左中景持行李，武大低位在画中，潘金莲画右红帘后伸灯，差役只作灰影不抢主体。；光位/光色:傍晚窗外冷灰光，潘金莲手中油灯和红帘给画右弱暖光。；轴线/视线:武松看向房内铺盖位置，潘金莲看向武松行李，武大看武松；三人不看镜头。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:第1话P018；人物站位/前后景:红帘位于潘金莲与武松之间；武大站在两人之间偏低位；行李铺盖不遮挡脚。；视线/眼神契约：目标=武松看房内铺盖位置；潘金莲看武松手里的行李；武大看武松脸；方向=武松画右内侧，潘金莲画左下，武大画左上；人物完整性契约：武松都头态高大肩背和腰牌/佩刀可读，头脸手脚完整；武大矮小旧布衣和炊饼担靠墙可读；潘金莲鹅蛋脸、细眉、发髻和保守衫裙完整可读。；构图与表演：开场中景，绛红帘点染；避免温馨过度，留一点压迫阴影。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物轮廓清线，楼梯和红帘用细密线表现逼仄。；黑场计划:楼梯深处和帘后压暗。；网点/灰阶计划:室内中灰，红帘低饱和点染。；黑白灰可读性:灯光亮、帘后暗、人物中灰分层。；效果线/漫符计划:无速度线，红帘边缘可用细风线。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。 || PROP_TRAVEL_BUNDLE=武松行李铺盖；道具契约:都头短住客店用行李：布包、卷起铺盖、扁担可挑，朴素耐用，和武松搬入/搬出动作绑定。；禁继承:不要现代行李箱、背包、军包、旅行箱轮子或现代扣件。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "楼梯在画左下通向楼上，武松画左中景持行李，武大低位在画中，潘金莲画右红帘后伸灯，差役只作灰影不抢主体。",
+        "lighting_anchor": "傍晚窗外冷灰光，潘金莲手中油灯和红帘给画右弱暖光。",
+        "axis_eyeline": "武松看向房内铺盖位置，潘金莲看向武松行李，武大看武松；三人不看镜头。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武松看房内铺盖位置；潘金莲看武松手里的行李；武大看武松脸",
+        "eyeline_direction": "武松画右内侧，潘金莲画左下，武大画左上",
+        "continuity_from": "第1话P018",
+        "character_integrity": "武松都头态高大肩背和腰牌/佩刀可读，头脸手脚完整；武大矮小旧布衣和炊饼担靠墙可读；潘金莲鹅蛋脸、细眉、发髻和保守衫裙完整可读。",
+        "spatial_relationships": "红帘位于潘金莲与武松之间；武大站在两人之间偏低位；行李铺盖不遮挡脚。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P001",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "人物轮廓清线，楼梯和红帘用细密线表现逼仄。",
+        "black_fill_plan": "楼梯深处和帘后压暗。",
+        "tone_plan": "室内中灰，红帘低饱和点染。",
+        "value_plan": "灯光亮、帘后暗、人物中灰分层。",
+        "effects_plan": "无速度线，红帘边缘可用细风线。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_TRAVEL_BUNDLE",
+          "path": "出图/共享/图片/PROP_TRAVEL_BUNDLE__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P002",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 840
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：清晨楼上小桌，潘金莲双手递茶，武松坐姿端正却后撤半步，桌上洗面铜盆冒热气；红帘阴影切过两人之间。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武大家楼房；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:小桌居中，铜盆在画下前景，潘金莲画右递茶，武松画左坐在桌边但身体后撤，楼梯口留空。；光位/光色:清晨冷窗光从画左上入，茶盏和盆中蒸汽有淡白留光，室内油灯弱。；轴线/视线:潘金莲视线落在茶盏和武松手上，武松视线看茶盏不看潘金莲脸。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P001；人物站位/前后景:茶盏在两人中间形成距离，武松手未触潘金莲手；桌沿不遮挡脸。；视线/眼神契约：目标=潘金莲看茶盏与武松手；武松看茶盏边缘；方向=潘金莲画左下，武松画右下；人物完整性契约：潘金莲发髻、细眉、保守窄袖衫裙完整；武松脸型、眉眼、都头服和双手完整，脚不裁掉。；构图与表演：不要画成暧昧触手；茶盏和蒸汽预留文字区在上方。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:茶盏、手指、蒸汽线要清楚。；黑场计划:红帘影压在桌面，不遮挡手。；网点/灰阶计划:室内轻灰，蒸汽留白。；黑白灰可读性:茶盏亮，人物脸中亮，帘后暗。；效果线/漫符计划:蒸汽细线。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "小桌居中，铜盆在画下前景，潘金莲画右递茶，武松画左坐在桌边但身体后撤，楼梯口留空。",
+        "lighting_anchor": "清晨冷窗光从画左上入，茶盏和盆中蒸汽有淡白留光，室内油灯弱。",
+        "axis_eyeline": "潘金莲视线落在茶盏和武松手上，武松视线看茶盏不看潘金莲脸。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看茶盏与武松手；武松看茶盏边缘",
+        "eyeline_direction": "潘金莲画左下，武松画右下",
+        "continuity_from": "P001",
+        "character_integrity": "潘金莲发髻、细眉、保守窄袖衫裙完整；武松脸型、眉眼、都头服和双手完整，脚不裁掉。",
+        "spatial_relationships": "茶盏在两人中间形成距离，武松手未触潘金莲手；桌沿不遮挡脸。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P002",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "茶盏、手指、蒸汽线要清楚。",
+        "black_fill_plan": "红帘影压在桌面，不遮挡手。",
+        "tone_plan": "室内轻灰，蒸汽留白。",
+        "value_plan": "茶盏亮，人物脸中亮，帘后暗。",
+        "effects_plan": "蒸汽细线。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P003",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 920
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：小楼桌边蒙太奇式画面：武大端着炊饼担招呼邻舍灰影，武松把一匹低饱和彩色缎子放在桌上，潘金莲低头接过，眼尾却看向武松。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_WUDA、CHAR_PAN；场景：武大家楼房；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:桌在画中，布匹横放前景，武松画左站直，潘金莲画右收布，武大画后景低位招呼邻舍灰影。；光位/光色:日间灰暖窗光，红帘作右侧暗红影，布匹有低饱和绛红/青绿点染。；轴线/视线:潘金莲眼尾看武松，武松看布匹和武大，武大看邻舍。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P002；人物站位/前后景:布匹在武松和潘金莲之间，武大后景忙碌与两人形成错位。；视线/眼神契约：目标=潘金莲看武松手边布匹，武松看桌上布匹，武大看邻舍灰影；方向=潘金莲画左，武松画右下，武大画左右摆动；人物完整性契约：三人脸、手、服装主色完整；潘金莲不露骨，武大矮小比例不畸形，武松腰牌和佩刀不丢。；构图与表演：蒙太奇但不要分栏拼贴；用同一室内空间叠影表现时间流逝。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:布纹和人物手部细线。；黑场计划:邻舍灰影可压暗。；网点/灰阶计划:布匹轻点染，其余灰阶。；黑白灰可读性:布匹亮，背景邻舍暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_CAKE_BASKET=炊饼担；道具契约:木担、竹屉、蒸布，是武大郎标志道具；手握、肩挑、落地关系必须清楚。 || PROP_CLOTH_BOLT=彩色缎子布匹；道具契约:一匹低饱和彩色缎子/布料，绛红或青绿暗纹，可作为武松赠嫂衣料的礼物道具，卷轴状或折叠状。；禁继承:不要现代塑料包装、服装店吊牌、过度华丽宫廷纹样或可读品牌。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "桌在画中，布匹横放前景，武松画左站直，潘金莲画右收布，武大画后景低位招呼邻舍灰影。",
+        "lighting_anchor": "日间灰暖窗光，红帘作右侧暗红影，布匹有低饱和绛红/青绿点染。",
+        "axis_eyeline": "潘金莲眼尾看武松，武松看布匹和武大，武大看邻舍。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松手边布匹，武松看桌上布匹，武大看邻舍灰影",
+        "eyeline_direction": "潘金莲画左，武松画右下，武大画左右摆动",
+        "continuity_from": "P002",
+        "character_integrity": "三人脸、手、服装主色完整；潘金莲不露骨，武大矮小比例不畸形，武松腰牌和佩刀不丢。",
+        "spatial_relationships": "布匹在武松和潘金莲之间，武大后景忙碌与两人形成错位。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P003",
+        "layout_weight": "compact",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "布纹和人物手部细线。",
+        "black_fill_plan": "邻舍灰影可压暗。",
+        "tone_plan": "布匹轻点染，其余灰阶。",
+        "value_plan": "布匹亮，背景邻舍暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_CAKE_BASKET",
+          "path": "出图/共享/图片/PROP_CAKE_BASKET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_CLOTH_BOLT",
+          "path": "出图/共享/图片/PROP_CLOTH_BOLT__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P004",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：大格：武大家小楼外雪压屋檐，画面切入楼上房，潘金莲在火盆前俯身添炭，桌上酒壶和菜盘已摆好；窗外紫石街一片冷白。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_PAN；场景：武大家楼房 / 紫石街雪景；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:画面上半是雪压屋檐和街口，下半切入楼上房，火盆在画下中央，潘金莲画右俯身，酒具在桌上画左。；光位/光色:窗外冷白雪光从画左上入，火盆暗红从画下照脸，室内四角压暗。；轴线/视线:潘金莲看火盆和酒具，不看镜头；外部街巷无主要对视。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P003；人物站位/前后景:火盆在潘金莲和空座之间，酒具在桌上，窗与红帘标定同一房间。；视线/眼神契约：目标=潘金莲看火盆炭火；方向=画下中央；人物完整性契约：潘金莲脸、发髻、手臂、衣袖和脚完整可读；俯身但不露胸、不色情化。；构图与表演：本话视觉转折大格；雪留白多但不能像空白气泡。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:雪线、檐线、火盆炭粒清楚。；黑场计划:室内四角黑场压迫。；网点/灰阶计划:雪地留白，室内30-50%灰阶。；黑白灰可读性:雪亮、火盆暗红亮、室内深灰。；效果线/漫符计划:雪点和火星细线。；拟声词画法:mode:drawn_sfx；text_hint:簇；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || LOC_ZISHI_STREET=紫石街 / 清河县街巷；禁继承:不要现代招牌、车辆、电线、随机文字或宫城化。；风格契约:狭窄青石街，低矮店铺，门帘，檐下阴影，炊饼担，街坊侧目。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "画面上半是雪压屋檐和街口，下半切入楼上房，火盆在画下中央，潘金莲画右俯身，酒具在桌上画左。",
+        "lighting_anchor": "窗外冷白雪光从画左上入，火盆暗红从画下照脸，室内四角压暗。",
+        "axis_eyeline": "潘金莲看火盆和酒具，不看镜头；外部街巷无主要对视。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看火盆炭火",
+        "eyeline_direction": "画下中央",
+        "continuity_from": "P003",
+        "character_integrity": "潘金莲脸、发髻、手臂、衣袖和脚完整可读；俯身但不露胸、不色情化。",
+        "spatial_relationships": "火盆在潘金莲和空座之间，酒具在桌上，窗与红帘标定同一房间。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P004",
+        "layout_weight": "heavy",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "雪线、檐线、火盆炭粒清楚。",
+        "black_fill_plan": "室内四角黑场压迫。",
+        "tone_plan": "雪地留白，室内30-50%灰阶。",
+        "value_plan": "雪亮、火盆暗红亮、室内深灰。",
+        "effects_plan": "雪点和火星细线。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "簇",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "LOC_ZISHI_STREET",
+          "path": "出图/共享/图片/LOC_ZISHI_STREET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P005",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：门帘被推起，武松披雪站在门口摘毡笠，潘金莲伸手要接但停在半空；武松另一手自己拂去肩上雪，脚边有雪水。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武大家门口；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:门口在画左，红帘从画上垂下，武松画左前景入门，潘金莲画右门内，二人之间保留一掌以上空隙。；光位/光色:门外冷雪光勾武松轮廓，室内火盆暖光从画右下反照潘金莲。；轴线/视线:潘金莲看武松毡笠和肩雪，武松看自己肩上雪和墙钉。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P004；人物站位/前后景:门槛和红帘隔开内外，潘金莲手停在武松衣帽外侧，武松身体偏后撤。；视线/眼神契约：目标=潘金莲看武松肩上雪；武松看自己将要挂衣的墙钉；方向=潘金莲画左上，武松画右内侧；人物完整性契约：武松脸、手、毡笠、靴和都头外衣完整；潘金莲脸、手、发髻和保守衣袖完整；两人手不接触。；构图与表演：雪粉可飞，但不要遮挡脸和手；手距是关键。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手部和毡笠清线。；黑场计划:门内红帘深灰暗面。；网点/灰阶计划:雪粉留白，人物中灰。；黑白灰可读性:外雪亮，室内暗，手部亮。；效果线/漫符计划:雪粉细线。；拟声词画法:mode:drawn_sfx；text_hint:簌；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "门口在画左，红帘从画上垂下，武松画左前景入门，潘金莲画右门内，二人之间保留一掌以上空隙。",
+        "lighting_anchor": "门外冷雪光勾武松轮廓，室内火盆暖光从画右下反照潘金莲。",
+        "axis_eyeline": "潘金莲看武松毡笠和肩雪，武松看自己肩上雪和墙钉。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松肩上雪；武松看自己将要挂衣的墙钉",
+        "eyeline_direction": "潘金莲画左上，武松画右内侧",
+        "continuity_from": "P004",
+        "character_integrity": "武松脸、手、毡笠、靴和都头外衣完整；潘金莲脸、手、发髻和保守衣袖完整；两人手不接触。",
+        "spatial_relationships": "门槛和红帘隔开内外，潘金莲手停在武松衣帽外侧，武松身体偏后撤。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P005",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "手部和毡笠清线。",
+        "black_fill_plan": "门内红帘深灰暗面。",
+        "tone_plan": "雪粉留白，人物中灰。",
+        "value_plan": "外雪亮，室内暗，手部亮。",
+        "effects_plan": "雪粉细线。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "簌",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P006",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：迎儿在画左低位踮脚插上门闩，火盆在画下发暗红光，潘金莲把温酒注子放到桌上，武松站在门边回头问哥哥去处。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN、CHAR_YINGER；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:门闩在画左前景，迎儿低位靠门；桌在画中，潘金莲画右放酒具；武松画后景靠门和火盆之间。；光位/光色:火盆下方暖光照迎儿手和酒具，窗外冷雪光从画后入。；轴线/视线:迎儿看门闩，潘金莲看酒具，武松看画外楼梯方向寻找武大。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P005；人物站位/前后景:迎儿与成人保持距离；潘金莲在桌右，武松在门边，不形成身体贴近。；视线/眼神契约：目标=迎儿看门闩；潘金莲看酒壶；武松看楼梯口；方向=迎儿画左上，潘金莲画下，武松画左后；人物完整性契约：迎儿儿童比例、双髻/低髻、朴素衣装和双手完整；潘金莲不成人化露骨；武松头脸、手脚和佩刀完整。；构图与表演：门闩和迎儿手是重点；儿童不可被画成成年人。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:门闩、火盆、酒壶线条清楚。；黑场计划:门后暗面压黑。；网点/灰阶计划:火盆暖点染，室内深灰。；黑白灰可读性:门闩亮点，火盆亮点，人物脸中亮。；效果线/漫符计划:门闩小拟声。；拟声词画法:mode:drawn_sfx；text_hint:咔；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGER=迎儿；角色DNA:十二岁左右的朴素小女孩，身形瘦小，圆脸偏尖，下垂眉眼，神情怯生谨慎；黑发简单双髻或低髻，粗布短袄和窄裤/裙，手常端茶盘、酒壶或碗盏。；定妆契约:所有出场保持未成年儿童比例、怯生眼神、朴素粗布衣和家中小女使唤状态；不得成人化、艳俗化或变成路人丫鬟脸。；年龄/形态继承:武家楼房常态、雪日温酒旁观态只改表情、手中器皿和光线，不改变年龄、脸型、发髻和朴素衣装。；禁继承:不得画成成年人、性感化角色、现代学生、华服小姐、Q版萌宠或恐怖小孩；不得参与成人欲望线，只作为旁观/家务动作存在。；备注:迎儿是武大郎女儿，负责端茶、温酒、关门和收拾碟盏；画面中应保持儿童旁观者的紧张和无力感。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "门闩在画左前景，迎儿低位靠门；桌在画中，潘金莲画右放酒具；武松画后景靠门和火盆之间。",
+        "lighting_anchor": "火盆下方暖光照迎儿手和酒具，窗外冷雪光从画后入。",
+        "axis_eyeline": "迎儿看门闩，潘金莲看酒具，武松看画外楼梯方向寻找武大。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "迎儿看门闩；潘金莲看酒壶；武松看楼梯口",
+        "eyeline_direction": "迎儿画左上，潘金莲画下，武松画左后",
+        "continuity_from": "P005",
+        "character_integrity": "迎儿儿童比例、双髻/低髻、朴素衣装和双手完整；潘金莲不成人化露骨；武松头脸、手脚和佩刀完整。",
+        "spatial_relationships": "迎儿与成人保持距离；潘金莲在桌右，武松在门边，不形成身体贴近。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P006",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "门闩、火盆、酒壶线条清楚。",
+        "black_fill_plan": "门后暗面压黑。",
+        "tone_plan": "火盆暖点染，室内深灰。",
+        "value_plan": "门闩亮点，火盆亮点，人物脸中亮。",
+        "effects_plan": "门闩小拟声。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "咔",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_YINGER",
+          "path": "出图/共享/图片/CHAR_YINGER__front.png"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P007",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 960
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：火盆旁小桌，潘金莲举盏递向武松，武松隔桌坐直，手掌挡在酒盏前方；桌边空着武大的位置，火盆在两人下方。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:桌横在两人之间，潘金莲画右前景持酒盏，武松画左中景端坐，空凳在画后表示武大缺席。；光位/光色:火盆暖光从画下照酒盏，冷窗光压低背景。；轴线/视线:潘金莲看武松手和酒盏，武松看空凳/楼梯方向。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P006；人物站位/前后景:小桌和空凳隔开两人，酒盏不越过武松胸前。；视线/眼神契约：目标=潘金莲看武松手边酒盏；武松看武大空座；方向=潘金莲画左下，武松画右后；人物完整性契约：武松脸、手、膝、靴完整；潘金莲脸、手、袖和发髻完整，衣领保守。；构图与表演：对白槽在上方，不遮挡酒盏和手。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:酒盏、手掌、空凳清楚。；黑场计划:背景门帘压黑。；网点/灰阶计划:火盆暖点染，其余中灰。；黑白灰可读性:酒盏亮，空凳暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "桌横在两人之间，潘金莲画右前景持酒盏，武松画左中景端坐，空凳在画后表示武大缺席。",
+        "lighting_anchor": "火盆暖光从画下照酒盏，冷窗光压低背景。",
+        "axis_eyeline": "潘金莲看武松手和酒盏，武松看空凳/楼梯方向。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松手边酒盏；武松看武大空座",
+        "eyeline_direction": "潘金莲画左下，武松画右后",
+        "continuity_from": "P006",
+        "character_integrity": "武松脸、手、膝、靴完整；潘金莲脸、手、袖和发髻完整，衣领保守。",
+        "spatial_relationships": "小桌和空凳隔开两人，酒盏不越过武松胸前。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P007",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "酒盏、手掌、空凳清楚。",
+        "black_fill_plan": "背景门帘压黑。",
+        "tone_plan": "火盆暖点染，其余中灰。",
+        "value_plan": "酒盏亮，空凳暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P008",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 960
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：近中景，潘金莲隔着酒壶侧身发问，眼神从杯沿探向武松；武松低头看自己面前的空盏，眉头压低，火盆光照出脸部硬线。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:酒壶在画中前景，潘金莲画右靠桌，武松画左靠火盆，二人仍隔桌。；光位/光色:火盆暖光从画下照脸，潘金莲半脸在红帘阴影里，武松脸较亮。；轴线/视线:潘金莲眼神斜向武松脸，武松视线压向自己酒盏，不迎视。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P007；人物站位/前后景:酒壶和桌沿作为中线，潘金莲不越桌。；视线/眼神契约：目标=潘金莲看武松脸；武松看自己面前空酒盏；方向=潘金莲画左，武松画下；人物完整性契约：两人脸型、眉眼、发际线清楚；潘金莲手持酒壶不遮脸；武松双手和肩背完整。；构图与表演：不要画青楼想象画面；只留话语试探。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:脸部表情和杯沿清线。；黑场计划:潘金莲半脸帘影。；网点/灰阶计划:背景深灰，脸和杯留亮。；黑白灰可读性:武松脸亮，潘金莲半暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "酒壶在画中前景，潘金莲画右靠桌，武松画左靠火盆，二人仍隔桌。",
+        "lighting_anchor": "火盆暖光从画下照脸，潘金莲半脸在红帘阴影里，武松脸较亮。",
+        "axis_eyeline": "潘金莲眼神斜向武松脸，武松视线压向自己酒盏，不迎视。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松脸；武松看自己面前空酒盏",
+        "eyeline_direction": "潘金莲画左，武松画下",
+        "continuity_from": "P007",
+        "character_integrity": "两人脸型、眉眼、发际线清楚；潘金莲手持酒壶不遮脸；武松双手和肩背完整。",
+        "spatial_relationships": "酒壶和桌沿作为中线，潘金莲不越桌。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P008",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "脸部表情和杯沿清线。",
+        "black_fill_plan": "潘金莲半脸帘影。",
+        "tone_plan": "背景深灰，脸和杯留亮。",
+        "value_plan": "武松脸亮，潘金莲半暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P009",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 780
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：潘金莲又斟一杯，嘴角含笑却眼神逼近；武松低头不接话，手指按在膝上，火箸在火盆边斜放。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:潘金莲画右上斟酒，武松画左下坐在火盆旁，火箸位于两人中间的地面。；光位/光色:火盆暖光增强，背景冷雪光减弱，人物脸下方有硬阴影。；轴线/视线:潘金莲看武松膝上的手，武松看火盆边火箸。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P008；人物站位/前后景:火盆和火箸在两人之间，潘金莲尚未触碰武松。；视线/眼神契约：目标=潘金莲看武松手；武松看火箸；方向=潘金莲画左下，武松画下中央；人物完整性契约：武松脸和手完整，佩刀不被桌子遮断；潘金莲发髻、脸、手和衣袖完整保守。；构图与表演：火盆边界要明确；潘金莲衣领不要裸露。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:火箸和手指为关键线条。；黑场计划:背景黑场收窄空间。；网点/灰阶计划:火盆附近高对比。；黑白灰可读性:火盆亮点，武松低头暗面。；效果线/漫符计划:酒水小拟声。；拟声词画法:mode:drawn_sfx；text_hint:咕；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "潘金莲画右上斟酒，武松画左下坐在火盆旁，火箸位于两人中间的地面。",
+        "lighting_anchor": "火盆暖光增强，背景冷雪光减弱，人物脸下方有硬阴影。",
+        "axis_eyeline": "潘金莲看武松膝上的手，武松看火盆边火箸。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松手；武松看火箸",
+        "eyeline_direction": "潘金莲画左下，武松画下中央",
+        "continuity_from": "P008",
+        "character_integrity": "武松脸和手完整，佩刀不被桌子遮断；潘金莲发髻、脸、手和衣袖完整保守。",
+        "spatial_relationships": "火盆和火箸在两人之间，潘金莲尚未触碰武松。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P009",
+        "layout_weight": "compact",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "火箸和手指为关键线条。",
+        "black_fill_plan": "背景黑场收窄空间。",
+        "tone_plan": "火盆附近高对比。",
+        "value_plan": "火盆亮点，武松低头暗面。",
+        "effects_plan": "酒水小拟声。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "咕",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P010",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 960
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：重压近景：潘金莲一手握温酒注子，一手越过画面放到武松肩侧，半盏酒悬在画中；武松皱眉，右手握住火箸但未动作，身体绷紧。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:武松画左前景坐在火盆旁，潘金莲画右前景越过桌角，酒盏在两人中线，火箸在武松右手。；光位/光色:火盆暗红强光从下方照手和酒盏，背景压黑，窗外冷光只留边缘。；轴线/视线:潘金莲看武松嘴边/酒盏，武松看潘金莲越界的手和酒盏。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P009；人物站位/前后景:潘金莲首次越过桌线触到武松肩侧；武松身体后绷，火箸和酒盏形成三角张力。；视线/眼神契约：目标=潘金莲看武松与酒盏之间；武松看肩侧越界的手；方向=潘金莲画左下，武松画右肩侧；人物完整性契约：武松脸、眼型、肩背、握火箸手完整；潘金莲脸、手、发髻和衣袖完整，衣领保守不露胸；手的位置清楚但不色情化。；构图与表演：高风险格：严禁裸露、床笫、身体色情特写；只画肩侧手和酒盏。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手、酒盏、火箸必须精细。；黑场计划:背景大黑场压迫，不遮挡五官。；网点/灰阶计划:火盆暖点染，人物中高对比。；黑白灰可读性:酒盏最亮，武松眼下暗，潘金莲半脸暗。；效果线/漫符计划:火星细点，手边压力线极少。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "武松画左前景坐在火盆旁，潘金莲画右前景越过桌角，酒盏在两人中线，火箸在武松右手。",
+        "lighting_anchor": "火盆暗红强光从下方照手和酒盏，背景压黑，窗外冷光只留边缘。",
+        "axis_eyeline": "潘金莲看武松嘴边/酒盏，武松看潘金莲越界的手和酒盏。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "潘金莲看武松与酒盏之间；武松看肩侧越界的手",
+        "eyeline_direction": "潘金莲画左下，武松画右肩侧",
+        "continuity_from": "P009",
+        "character_integrity": "武松脸、眼型、肩背、握火箸手完整；潘金莲脸、手、发髻和衣袖完整，衣领保守不露胸；手的位置清楚但不色情化。",
+        "spatial_relationships": "潘金莲首次越过桌线触到武松肩侧；武松身体后绷，火箸和酒盏形成三角张力。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P010",
+        "layout_weight": "heavy",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "手、酒盏、火箸必须精细。",
+        "black_fill_plan": "背景大黑场压迫，不遮挡五官。",
+        "tone_plan": "火盆暖点染，人物中高对比。",
+        "value_plan": "酒盏最亮，武松眼下暗，潘金莲半脸暗。",
+        "effects_plan": "火星细点，手边压力线极少。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P011",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：大格：武松猛地站起，手中酒盏向地面泼出弧线，酒水洒在火盆旁青砖上；潘金莲被迫后退半步，红帘在她身后抖动。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:武松画左站起形成高大垂直线，潘金莲画右后退，火盆画下中央，酒水弧线落在两人之间。；光位/光色:火盆暖光被泼酒反光打亮地面，背景红帘暗红，窗外冷光弱。；轴线/视线:武松看潘金莲越界的手/脸，潘金莲看地上酒水和武松手。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P010；人物站位/前后景:酒水落在两人之间形成断线；武松没有击打潘金莲，只用站姿和泼酒拉开距离。；视线/眼神契约：目标=武松看潘金莲脸；潘金莲看泼落的酒水；方向=武松画右，潘金莲画左下；人物完整性契约：武松脸、眼、手、腿、靴完整，力量来自站起不是挥拳；潘金莲脸和手完整，后退不摔倒不露骨。；构图与表演：本话动作峰值；不要把推拒画成殴打。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:酒水弧线、站起衣褶、手部要清晰。；黑场计划:红帘背后黑场压迫。；网点/灰阶计划:地面酒水留白，高对比。；黑白灰可读性:酒水亮、火盆亮、人物脸中亮。；效果线/漫符计划:泼酒弧线和小拟声，不用夸张爆炸线。；拟声词画法:mode:drawn_sfx；text_hint:哗；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "武松画左站起形成高大垂直线，潘金莲画右后退，火盆画下中央，酒水弧线落在两人之间。",
+        "lighting_anchor": "火盆暖光被泼酒反光打亮地面，背景红帘暗红，窗外冷光弱。",
+        "axis_eyeline": "武松看潘金莲越界的手/脸，潘金莲看地上酒水和武松手。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武松看潘金莲脸；潘金莲看泼落的酒水",
+        "eyeline_direction": "武松画右，潘金莲画左下",
+        "continuity_from": "P010",
+        "character_integrity": "武松脸、眼、手、腿、靴完整，力量来自站起不是挥拳；潘金莲脸和手完整，后退不摔倒不露骨。",
+        "spatial_relationships": "酒水落在两人之间形成断线；武松没有击打潘金莲，只用站姿和泼酒拉开距离。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P011",
+        "layout_weight": "heavy",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "酒水弧线、站起衣褶、手部要清晰。",
+        "black_fill_plan": "红帘背后黑场压迫。",
+        "tone_plan": "地面酒水留白，高对比。",
+        "value_plan": "酒水亮、火盆亮、人物脸中亮。",
+        "effects_plan": "泼酒弧线和小拟声，不用夸张爆炸线。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "哗",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P012",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 920
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：武松站在火盆旁正面偏侧，眼神严厉看向潘金莲；潘金莲退到红帘前，脸红转冷，手收回袖中。火光在两人之间形成一道亮线。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:武松画左中景站立，潘金莲画右靠红帘，火盆与桌角在中线，地面酒迹延续P011。；光位/光色:火盆下光照武松下颌和潘金莲手，红帘暗红压在潘金莲背后。；轴线/视线:武松看潘金莲脸，潘金莲避向地面酒迹。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P011；人物站位/前后景:两人间距拉大，火盆和酒迹作为不可跨越的边界。；视线/眼神契约：目标=武松看潘金莲脸；潘金莲看地面酒迹；方向=武松画右，潘金莲画左下；人物完整性契约：两人脸、眼神、发型、双手、脚下站位完整；武松拳头可握紧但不挥出。；构图与表演：严厉但克制；不得画成暴力击打。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:眼神和手部张力清线。；黑场计划:潘金莲背后帘影压暗。；网点/灰阶计划:中高对比。；黑白灰可读性:武松脸亮，潘金莲半暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "武松画左中景站立，潘金莲画右靠红帘，火盆与桌角在中线，地面酒迹延续P011。",
+        "lighting_anchor": "火盆下光照武松下颌和潘金莲手，红帘暗红压在潘金莲背后。",
+        "axis_eyeline": "武松看潘金莲脸，潘金莲避向地面酒迹。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武松看潘金莲脸；潘金莲看地面酒迹",
+        "eyeline_direction": "武松画右，潘金莲画左下",
+        "continuity_from": "P011",
+        "character_integrity": "两人脸、眼神、发型、双手、脚下站位完整；武松拳头可握紧但不挥出。",
+        "spatial_relationships": "两人间距拉大，火盆和酒迹作为不可跨越的边界。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P012",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "眼神和手部张力清线。",
+        "black_fill_plan": "潘金莲背后帘影压暗。",
+        "tone_plan": "中高对比。",
+        "value_plan": "武松脸亮，潘金莲半暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P013",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 780
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：冷场小格：迎儿低头收拾倒伏酒盏和盘子，潘金莲背身往厨房方向走，袖子收紧；武松坐回火盆旁，脸藏在阴影里。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_PAN、CHAR_YINGER；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:迎儿画下前景收盘，潘金莲画右背身离开，武松画左后景靠火盆坐下。；光位/光色:火盆余光变弱，冷窗光压入，室内整体转灰。；轴线/视线:迎儿看盘盏，潘金莲看厨房方向，武松看火盆。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P012；人物站位/前后景:迎儿在成人冲突下方低位，潘金莲与武松背向，空间冷掉。；视线/眼神契约：目标=迎儿看盘盏；潘金莲看厨房门；武松看火盆灰烬；方向=迎儿画下，潘金莲画右，武松画下；人物完整性契约：迎儿儿童手脚和发髻完整；潘金莲背影发髻和衣裙完整；武松坐姿脸部可读不换脸。；构图与表演：收拾碗盏不要画成滑稽；迎儿紧张。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:碗盏和迎儿手清楚。；黑场计划:厨房门口暗。；网点/灰阶计划:整体低饱和灰。；黑白灰可读性:火盆微亮，人物转暗。；效果线/漫符计划:碗盏小拟声。；拟声词画法:mode:drawn_sfx；text_hint:叮；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGER=迎儿；角色DNA:十二岁左右的朴素小女孩，身形瘦小，圆脸偏尖，下垂眉眼，神情怯生谨慎；黑发简单双髻或低髻，粗布短袄和窄裤/裙，手常端茶盘、酒壶或碗盏。；定妆契约:所有出场保持未成年儿童比例、怯生眼神、朴素粗布衣和家中小女使唤状态；不得成人化、艳俗化或变成路人丫鬟脸。；年龄/形态继承:武家楼房常态、雪日温酒旁观态只改表情、手中器皿和光线，不改变年龄、脸型、发髻和朴素衣装。；禁继承:不得画成成年人、性感化角色、现代学生、华服小姐、Q版萌宠或恐怖小孩；不得参与成人欲望线，只作为旁观/家务动作存在。；备注:迎儿是武大郎女儿，负责端茶、温酒、关门和收拾碟盏；画面中应保持儿童旁观者的紧张和无力感。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_WINE_SET=温酒注子与酒盏；道具契约:宋代市井小楼里的温酒器具：小酒壶/注子、浅盏、盘中酒菜，陶瓷或朴素金属，比例克制；用于潘金莲试探与武松拒绝。；禁继承:不要现代酒瓶、玻璃杯、酒吧器具、奢华宫廷酒器或可读商标。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "迎儿画下前景收盘，潘金莲画右背身离开，武松画左后景靠火盆坐下。",
+        "lighting_anchor": "火盆余光变弱，冷窗光压入，室内整体转灰。",
+        "axis_eyeline": "迎儿看盘盏，潘金莲看厨房方向，武松看火盆。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "迎儿看盘盏；潘金莲看厨房门；武松看火盆灰烬",
+        "eyeline_direction": "迎儿画下，潘金莲画右，武松画下",
+        "continuity_from": "P012",
+        "character_integrity": "迎儿儿童手脚和发髻完整；潘金莲背影发髻和衣裙完整；武松坐姿脸部可读不换脸。",
+        "spatial_relationships": "迎儿在成人冲突下方低位，潘金莲与武松背向，空间冷掉。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P013",
+        "layout_weight": "compact",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "碗盏和迎儿手清楚。",
+        "black_fill_plan": "厨房门口暗。",
+        "tone_plan": "整体低饱和灰。",
+        "value_plan": "火盆微亮，人物转暗。",
+        "effects_plan": "碗盏小拟声。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "叮",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_YINGER",
+          "path": "出图/共享/图片/CHAR_YINGER__front.png"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_WINE_SET",
+          "path": "出图/共享/图片/PROP_WINE_SET__anchor.png"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P014",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：紫石街门口，武大挑着炊饼担从雪里回来，脚印凌乱；门内潘金莲侧身坐在阴影里抹眼，红帘半挡她的脸。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUDA、CHAR_PAN；场景：武大家门口 / 紫石街；场景一致性契约：场景锚:LOC_ZISHI_STREET；空间布局:街道纵深在画左，武大画左前景挑担进门，潘金莲画右门内阴影，红帘在两人之间。；光位/光色:冷雪光照武大和担子，门内暖暗光照潘金莲眼角。；轴线/视线:武大看潘金莲红眼，潘金莲避看地面或帘影。；常驻物件:青石街；低檐；红帘；炊饼担；雪地脚印；承接上一格:P013；人物站位/前后景:门槛隔开街雪和室内哭诉，武大仍在低位。；视线/眼神契约：目标=武大看潘金莲脸；潘金莲看地面帘影；方向=武大画右，潘金莲画下；人物完整性契约：武大矮小体态、旧布衣、炊饼担、双手脚完整；潘金莲脸和手可读，非露骨。；构图与表演：雪地脚印和炊饼担是重点；不要让潘金莲看镜头。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:雪地脚印、担子、红眼表情清楚。；黑场计划:门内阴影压暗。；网点/灰阶计划:雪留白，门内深灰。；黑白灰可读性:武大在雪光中亮，潘金莲半暗。；效果线/漫符计划:雪地脚步拟声。；拟声词画法:mode:drawn_sfx；text_hint:咯吱；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_ZISHI_STREET=紫石街 / 清河县街巷；禁继承:不要现代招牌、车辆、电线、随机文字或宫城化。；风格契约:狭窄青石街，低矮店铺，门帘，檐下阴影，炊饼担，街坊侧目。 || PROP_CAKE_BASKET=炊饼担；道具契约:木担、竹屉、蒸布，是武大郎标志道具；手握、肩挑、落地关系必须清楚。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_ZISHI_STREET",
+        "spatial_layout": "街道纵深在画左，武大画左前景挑担进门，潘金莲画右门内阴影，红帘在两人之间。",
+        "lighting_anchor": "冷雪光照武大和担子，门内暖暗光照潘金莲眼角。",
+        "axis_eyeline": "武大看潘金莲红眼，潘金莲避看地面或帘影。",
+        "resident_assets": "青石街；低檐；红帘；炊饼担；雪地脚印",
+        "gaze_target": "武大看潘金莲脸；潘金莲看地面帘影",
+        "eyeline_direction": "武大画右，潘金莲画下",
+        "continuity_from": "P013",
+        "character_integrity": "武大矮小体态、旧布衣、炊饼担、双手脚完整；潘金莲脸和手可读，非露骨。",
+        "spatial_relationships": "门槛隔开街雪和室内哭诉，武大仍在低位。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P014",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "雪地脚印、担子、红眼表情清楚。",
+        "black_fill_plan": "门内阴影压暗。",
+        "tone_plan": "雪留白，门内深灰。",
+        "value_plan": "武大在雪光中亮，潘金莲半暗。",
+        "effects_plan": "雪地脚步拟声。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "咯吱",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_ZISHI_STREET",
+          "path": "出图/共享/图片/LOC_ZISHI_STREET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_CAKE_BASKET",
+          "path": "出图/共享/图片/PROP_CAKE_BASKET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P015",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1040
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：楼上小室，潘金莲背对武大坐在床边或帘下，抬袖抹眼，武大站在门边怯怯张口；红帘影在墙上像一道裂缝。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUDA、CHAR_PAN；场景：武大家楼房；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:潘金莲画右前景背身，武大画左门边低位，红帘影横在墙面，火盆已弱。；光位/光色:室内弱暖灯，窗外冷雪光淡入，红帘影压墙。；轴线/视线:武大看潘金莲背影，潘金莲看自己袖口/地面。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P014；人物站位/前后景:武大停在门边不敢靠近，潘金莲背身控制话语。；视线/眼神契约：目标=武大看潘金莲背影；潘金莲看袖口；方向=武大画右，潘金莲画下；人物完整性契约：武大脸和双手完整，怯弱但不畸形；潘金莲脸侧、手、发髻和衣裙可读。；构图与表演：压抑室内戏，不画夸张恶毒脸。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:表情和红帘影清楚。；黑场计划:墙面帘影黑场像裂缝。；网点/灰阶计划:室内深灰。；黑白灰可读性:袖口和眼角亮，墙影暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "潘金莲画右前景背身，武大画左门边低位，红帘影横在墙面，火盆已弱。",
+        "lighting_anchor": "室内弱暖灯，窗外冷雪光淡入，红帘影压墙。",
+        "axis_eyeline": "武大看潘金莲背影，潘金莲看自己袖口/地面。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武大看潘金莲背影；潘金莲看袖口",
+        "eyeline_direction": "武大画右，潘金莲画下",
+        "continuity_from": "P014",
+        "character_integrity": "武大脸和双手完整，怯弱但不畸形；潘金莲脸侧、手、发髻和衣裙可读。",
+        "spatial_relationships": "武大停在门边不敢靠近，潘金莲背身控制话语。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P015",
+        "layout_weight": "medium",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "表情和红帘影清楚。",
+        "black_fill_plan": "墙面帘影黑场像裂缝。",
+        "tone_plan": "室内深灰。",
+        "value_plan": "袖口和眼角亮，墙影暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P016",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 700
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：武松房内，武松坐在床边穿回油靴，毡笠在手，面色沉；武大站在门口小心叫他，火盆只剩灰光。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_WUDA；场景：武松房内；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:武松画右坐在床边穿靴，武大画左门口低位，铺盖和行李在后景。；光位/光色:火盆余灰弱光，窗外雪光从画左照武大，武松脸半暗。；轴线/视线:武大看武松脸，武松看自己靴带和门外方向。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P015；人物站位/前后景:武大停在门边不敢进，武松背向他穿靴，距离产生裂缝。；视线/眼神契约：目标=武大看武松脸；武松看靴带；方向=武大画右，武松画下；人物完整性契约：武松脸、手、靴、佩刀和行李完整；武大脸、手、旧布衣完整。；构图与表演：靴带和毡笠是行动信号；不要夸张怒吼。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:靴、毡笠、行李清楚。；黑场计划:床下和门后暗。；网点/灰阶计划:低灰。；黑白灰可读性:靴带亮，脸半暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_TRAVEL_BUNDLE=武松行李铺盖；道具契约:都头短住客店用行李：布包、卷起铺盖、扁担可挑，朴素耐用，和武松搬入/搬出动作绑定。；禁继承:不要现代行李箱、背包、军包、旅行箱轮子或现代扣件。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。 || PROP_FIRE_BRAZIER=炭火盆；道具契约:宋代室内取暖炭火盆，低矮圆盆或方盆，黑铁/陶质，炭火暗红，火箸放在旁边；用于雪日室内光源和心理压迫。；禁继承:不要现代暖炉、煤气炉、电暖器、壁炉或高饱和火焰；不要生成可读文字。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "武松画右坐在床边穿靴，武大画左门口低位，铺盖和行李在后景。",
+        "lighting_anchor": "火盆余灰弱光，窗外雪光从画左照武大，武松脸半暗。",
+        "axis_eyeline": "武大看武松脸，武松看自己靴带和门外方向。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武大看武松脸；武松看靴带",
+        "eyeline_direction": "武大画右，武松画下",
+        "continuity_from": "P015",
+        "character_integrity": "武松脸、手、靴、佩刀和行李完整；武大脸、手、旧布衣完整。",
+        "spatial_relationships": "武大停在门边不敢进，武松背向他穿靴，距离产生裂缝。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P016",
+        "layout_weight": "compact",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "靴、毡笠、行李清楚。",
+        "black_fill_plan": "床下和门后暗。",
+        "tone_plan": "低灰。",
+        "value_plan": "靴带亮，脸半暗。",
+        "effects_plan": "无。",
+        "lettering_sfx_plan": {
+          "mode": "none",
+          "integration": "no drawn SFX",
+          "shape": ""
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_TRAVEL_BUNDLE",
+          "path": "出图/共享/图片/PROP_TRAVEL_BUNDLE__anchor.png"
+        },
+        {
+          "id": "PROP_FIRE_BRAZIER",
+          "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P017",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1160
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：大格：窄楼梯上，武松带着铺盖行李下楼，差役灰影扛扁担在后；武大在楼梯口伸手相问，潘金莲只露半个身影在红帘后。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_WUDA、CHAR_PAN；场景：武大家楼梯；场景一致性契约：场景锚:LOC_WUDA_HOUSE；空间布局:楼梯斜向从画右上到画左下，武松画中向下走，武大画左门口伸手，潘金莲画右红帘后半遮。；光位/光色:门外雪光从楼梯下方照上来，室内红帘后暗暖光，武松背影边缘亮。；轴线/视线:武大看武松背影，武松看楼梯下方出口，潘金莲看武大和武松之间的空隙。；常驻物件:红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李；承接上一格:P016；人物站位/前后景:楼梯斜线把兄弟隔开，潘金莲红帘后不直接接触任何人，差役为无脸灰影。；视线/眼神契约：目标=武大看武松背影；武松看门外出口；潘金莲看武大伸出的手；方向=武大画右下，武松画左下，潘金莲画左；人物完整性契约：武松背影、肩背、行李、靴和佩刀完整；武大脸和伸手完整；潘金莲半身可读但不露骨。；构图与表演：搬离大格，楼梯纵深清楚；差役不需定妆，灰影即可。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:楼梯、行李、手势清线。；黑场计划:红帘后潘金莲压暗。；网点/灰阶计划:楼梯中灰，门外雪亮。；黑白灰可读性:出口亮，楼内暗，行李轮廓亮。；效果线/漫符计划:脚步拟声。；拟声词画法:mode:drawn_sfx；text_hint:笃；笃；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_WUDA_HOUSE=武大家临街小楼；禁继承:不要豪宅化，不要露骨暧昧肢体接触。；风格契约:逼仄临街小楼，窄楼梯、小桌、红帘、炊饼担、茶碗；窗外灰光和室内暖暗混合。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。 || PROP_TRAVEL_BUNDLE=武松行李铺盖；道具契约:都头短住客店用行李：布包、卷起铺盖、扁担可挑，朴素耐用，和武松搬入/搬出动作绑定。；禁继承:不要现代行李箱、背包、军包、旅行箱轮子或现代扣件。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_WUDA_HOUSE",
+        "spatial_layout": "楼梯斜向从画右上到画左下，武松画中向下走，武大画左门口伸手，潘金莲画右红帘后半遮。",
+        "lighting_anchor": "门外雪光从楼梯下方照上来，室内红帘后暗暖光，武松背影边缘亮。",
+        "axis_eyeline": "武大看武松背影，武松看楼梯下方出口，潘金莲看武大和武松之间的空隙。",
+        "resident_assets": "红帘；窄楼梯；小桌；茶碗；火盆；炊饼担；铺盖行李",
+        "gaze_target": "武大看武松背影；武松看门外出口；潘金莲看武大伸出的手",
+        "eyeline_direction": "武大画右下，武松画左下，潘金莲画左",
+        "continuity_from": "P016",
+        "character_integrity": "武松背影、肩背、行李、靴和佩刀完整；武大脸和伸手完整；潘金莲半身可读但不露骨。",
+        "spatial_relationships": "楼梯斜线把兄弟隔开，潘金莲红帘后不直接接触任何人，差役为无脸灰影。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P017",
+        "layout_weight": "heavy",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "楼梯、行李、手势清线。",
+        "black_fill_plan": "红帘后潘金莲压暗。",
+        "tone_plan": "楼梯中灰，门外雪亮。",
+        "value_plan": "出口亮，楼内暗，行李轮廓亮。",
+        "effects_plan": "脚步拟声。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "笃；笃",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_WUDA_HOUSE",
+          "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_TRAVEL_BUNDLE",
+          "path": "出图/共享/图片/PROP_TRAVEL_BUNDLE__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+          "view": "back"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    },
+    {
+      "panel_id": "P018",
+      "status": "planned",
+      "size": {
+        "width": 1296,
+        "height": 1120
+      },
+      "prompt": "无字漫画分格画面，自定义(古典世情水墨写实条漫；北宋市井烟火；黑白灰与绛红点染；人物精细线稿；非露骨情色；讽刺冷峻；电影式明暗)；画面事实：长竖结尾：雪后紫石街空冷，武松背影远去县前方向，武大站在门口扶着炊饼担低头，红帘在门内风中翻起一角，潘金莲只成帘后暗影。；项目风格锚与一致性契约：style_contract:古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，绛红只作门帘、血点、官符和衣饰点染；北宋市井烟火真实可感；人物脸部精细但不网红化；不画露骨情色。；consistency_policy:长线高一致性：常驻人物需 front / three_quarter / side / back / face 五视图；场景和道具需独立锚点；每格真实传入参考图，不靠口头路径。无持久主体 ID 的 OpenAI/Codex 路线必须用 reference group + 逐格 reference manifest + gate 人审闭环补足。；forbidden_inheritance:不得继承任何现代摄影、现代服饰、平台 UI、水印、可读随机文字或现代物件。；不得把世情情色改成露骨裸露、性行为或色情化身体特写。；不得把北宋市井改成仙侠宫殿、现代街区或高饱和游戏风。；影视资料只用于服制、阶层、场景和叙事功能参考，不复刻演员脸、剧照构图、镜头调度或成人片尺度。；角色：CHAR_WUSONG、CHAR_WUDA、CHAR_PAN；场景：紫石街 / 武大家门口；场景一致性契约：场景锚:LOC_ZISHI_STREET；空间布局:街道纵深居中，武松背影在远处画上方，武大画下门口，红帘画右内侧翻动，潘金莲暗影在帘后。；光位/光色:雪后冷灰天光，屋内弱暖光从门缝透出，红帘绛红点染。；轴线/视线:武大低头看地面脚印，潘金莲暗影看远去背影，武松背向众人。；常驻物件:青石街；低檐；红帘；炊饼担；雪地脚印；承接上一格:P017；人物站位/前后景:武松远去，武大门口低位，潘金莲在门内不出门；红帘成为下一话钩子。；视线/眼神契约：目标=武大看雪地脚印；潘金莲看武松远去背影；武松看县前街口；方向=武大画下，潘金莲画左上，武松画上远处；人物完整性契约：武松背影肩背和行李轮廓完整；武大脸、担子和手完整；潘金莲只做暗影但发髻轮廓和帘后位置可读。；构图与表演：结尾留白，不能出现西门庆正脸；可只给街角模糊空位预示下一话。；传统漫画原稿收尾契约（目标稿层=完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:雪地脚印、红帘边缘和远去背影清楚。；黑场计划:门内黑场包住潘金莲暗影。；网点/灰阶计划:雪地留白，街檐中灰，门内深灰。；黑白灰可读性:雪亮，红帘低饱和，远处背影暗。；效果线/漫符计划:风线轻带红帘。；拟声词画法:mode:drawn_sfx；text_hint:呼；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：CHAR_WUSONG=武松；角色DNA:高大健壮，宽肩厚背，方正硬朗脸型，眉骨硬，眼神正直锐利，黑发束起，短须或青茬克制；气质刚烈、守礼、行动果断。；定妆契约:所有形态继承同一脸型、眉眼、发际线、发量、肩背比例和刚烈眼神。行旅态穿粗布短打、护腕、绑腿、布靴、持梢棒；都头态换深色公服、腰牌、佩刀，但不换脸。；年龄/形态继承:行旅打虎态、打虎后尘血态、都头公服态只改变服装、尘血和官身标志，不改变脸、身高体量和眼神气质。；禁继承:不得画成俊美小生、仙侠侠客、现代武士、盔甲将军或网红脸；不得丢失高大强壮体态。；备注:视觉参考可吸收传统戏曲/民间工艺里的武生轮廓：罗帽或头巾、窄袖短衣、颈间领巾、护腕、绑腿、布靴、梢棒。不得像任何影视演员，不复刻具体剧照。；已定义年龄形态:行旅打虎态,都头公服态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_WUDA=武大郎；角色DNA:矮小瘦弱，短颈，窄脸，眼神怯懦但可共情；旧布衣，小贩气，动作常护着担子或衣襟。；定妆契约:所有出场保持矮小比例、怯弱眼神、旧布短衫和炊饼担标志；不做猎奇畸形，不丢失普通人的可怜处境。；年龄/形态继承:小贩常态、兄弟相认惊喜态只改表情和姿态，不改脸和体态。；禁继承:不得画成怪物、侏儒猎奇形象、纯喜剧丑角或现代小贩。；备注:炊饼担、旧布衣和街坊目光是身份证据；矮小弱势要可共情，不用畸形化取笑。；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_PAN=潘金莲；角色DNA:二十岁上下，精致鹅蛋脸，细弯眉，眼神机敏、怨愤与试探并存；黑发盘髻，宋式窄袖衫裙，绛红/暗金发簪点缀。；定妆契约:所有形态继承同一脸型、细眉、眼型、发际线、发髻轮廓和机敏眼神。使女回忆态、武家新妇态、帘下试探态只改服装层、表情和光影，不色情化。；年龄/形态继承:使女回忆态低头避权势；武家新妇态衣饰整洁但不奢华；帘下试探态以眼神和门帘构图表现，不露骨。；禁继承:不得画成现代性感写真、暴露衣装、纯网红脸、Q版萌化或色情挑逗姿势。；备注:第1话是使女出身/武家新妇阶段，不是西门府华服阶段。服装保守克制，允许绛红/青绿/暗金小面积点染；眼神表现压抑、机敏、怨意和试探。不像任何影视演员，不借成人片造型。；已定义年龄形态:使女回忆态,武家新妇态,帘下试探态；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || LOC_ZISHI_STREET=紫石街 / 清河县街巷；禁继承:不要现代招牌、车辆、电线、随机文字或宫城化。；风格契约:狭窄青石街，低矮店铺，门帘，檐下阴影，炊饼担，街坊侧目。 || PROP_CAKE_BASKET=炊饼担；道具契约:木担、竹屉、蒸布，是武大郎标志道具；手握、肩挑、落地关系必须清楚。 || PROP_RED_CURTAIN=绛红门帘；道具契约:低饱和绛红布帘，象征遮掩、窥视和欲望；边缘磨旧，非现代艳红布景。 || PROP_TRAVEL_BUNDLE=武松行李铺盖；道具契约:都头短住客店用行李：布包、卷起铺盖、扁担可挑，朴素耐用，和武松搬入/搬出动作绑定。；禁继承:不要现代行李箱、背包、军包、旅行箱轮子或现代扣件。；风格契约:古典世情水墨写实条漫共享道具锚点；灰阶线稿为主，必要时只保留低饱和绛红/青绿点染。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
+      "continuity_contract": {
+        "scene_anchor_id": "LOC_ZISHI_STREET",
+        "spatial_layout": "街道纵深居中，武松背影在远处画上方，武大画下门口，红帘画右内侧翻动，潘金莲暗影在帘后。",
+        "lighting_anchor": "雪后冷灰天光，屋内弱暖光从门缝透出，红帘绛红点染。",
+        "axis_eyeline": "武大低头看地面脚印，潘金莲暗影看远去背影，武松背向众人。",
+        "resident_assets": "青石街；低檐；红帘；炊饼担；雪地脚印",
+        "gaze_target": "武大看雪地脚印；潘金莲看武松远去背影；武松看县前街口",
+        "eyeline_direction": "武大画下，潘金莲画左上，武松画上远处",
+        "continuity_from": "P017",
+        "character_integrity": "武松背影肩背和行李轮廓完整；武大脸、担子和手完整；潘金莲只做暗影但发髻轮廓和帘后位置可读。",
+        "spatial_relationships": "武松远去，武大门口低位，潘金莲在门内不出门；红帘成为下一话钩子。"
+      },
+      "traditional_finish_contract": {
+        "panel_id": "P018",
+        "layout_weight": "heavy",
+        "art_stage_sequence": [
+          "rough",
+          "pencil",
+          "lineart",
+          "ink_blacks",
+          "tone_or_color",
+          "effects",
+          "lettering_sfx"
+        ],
+        "ink_plan": "雪地脚印、红帘边缘和远去背影清楚。",
+        "black_fill_plan": "门内黑场包住潘金莲暗影。",
+        "tone_plan": "雪地留白，街檐中灰，门内深灰。",
+        "value_plan": "雪亮，红帘低饱和，远处背影暗。",
+        "effects_plan": "风线轻带红帘。",
+        "lettering_sfx_plan": {
+          "mode": "drawn_sfx",
+          "text_hint": "呼",
+          "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+          "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+        },
+        "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+      },
+      "references": [
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__face.png",
+          "view": "face"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__front.png",
+          "view": "front"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+          "view": "three_quarter"
+        },
+        {
+          "id": "LOC_ZISHI_STREET",
+          "path": "出图/共享/图片/LOC_ZISHI_STREET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_CAKE_BASKET",
+          "path": "出图/共享/图片/PROP_CAKE_BASKET__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_RED_CURTAIN",
+          "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+          "view": "anchor_path"
+        },
+        {
+          "id": "PROP_TRAVEL_BUNDLE",
+          "path": "出图/共享/图片/PROP_TRAVEL_BUNDLE__anchor.png"
+        },
+        {
+          "id": "CHAR_WUSONG",
+          "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_WUDA",
+          "path": "出图/共享/图片/CHAR_WUDA__side.png",
+          "view": "side"
+        },
+        {
+          "id": "CHAR_PAN",
+          "path": "出图/共享/图片/CHAR_PAN__side.png",
+          "view": "side"
+        }
+      ],
+      "reference_budget": {
+        "adapter_id": "openai_gpt_image_project_memory",
+        "model": "GPT Image 2",
+        "channel": "Codex CLI",
+        "supports_image_inputs": true,
+        "persistent_subject": false,
+        "reference_image_limit": 16,
+        "single_character_reference_limit": 5,
+        "multi_character_reference_limit": 3,
+        "non_character_reference_limit": 2,
+        "style_reference_limit": 2,
+        "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
+      },
+      "result_path": "",
+      "source": "Codex CLI"
+    }
+  ]
+}

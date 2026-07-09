@@ -25,6 +25,11 @@ from text_metadata import infer_language_metadata
 
 
 TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".json"}
+DEFAULT_SOURCE_SKIP_NAMES = {
+    "source_manifest.json",
+    "_源指纹.json",
+    "_source_fingerprint.json",
+}
 TARGET_LANGUAGE_ALIASES = {
     "zh": "中文",
     "chinese": "中文",
@@ -150,7 +155,93 @@ def candidate_source_paths(root: Path, raw_paths: list[str]) -> list[Path]:
     source_dir = root / "源本"
     if not source_dir.is_dir():
         return []
-    return sorted(path for path in source_dir.rglob("*") if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES)
+    return sorted(
+        path
+        for path in source_dir.rglob("*")
+        if path.is_file()
+        and path.suffix.lower() in TEXT_SUFFIXES
+        and path.name not in DEFAULT_SOURCE_SKIP_NAMES
+    )
+
+
+def chinese_number_to_int(value: str) -> int | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    if raw.isdigit():
+        return int(raw)
+    digits = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
+    units = {"十": 10, "百": 100}
+    total = 0
+    current = 0
+    for ch in raw:
+        if ch in digits:
+            current = digits[ch]
+        elif ch in units:
+            unit = units[ch]
+            total += (current or 1) * unit
+            current = 0
+        else:
+            return None
+    return total + current if total or current else None
+
+
+def chapter_number(value: str) -> int | None:
+    match = re.search(r"第\s*([0-9]+|[零〇一二两三四五六七八九十百]+)\s*[话話章节回]", str(value or ""))
+    if not match:
+        return None
+    return chinese_number_to_int(match.group(1))
+
+
+def strip_source_provenance(text: str) -> str:
+    lines = []
+    in_provenance = False
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("# === 抓取来源信息"):
+            in_provenance = True
+            continue
+        if in_provenance:
+            if stripped.startswith("# ==="):
+                in_provenance = False
+            continue
+        if stripped.startswith("# source_url:") or stripped.startswith("# fetched:") or stripped.startswith("# chapters:"):
+            continue
+        if stripped.startswith("# chars:") or stripped.startswith("# copyright:"):
+            continue
+        lines.append(line)
+    cleaned = "\n".join(lines)
+    cleaned = re.sub(r"\[编辑\]", "", cleaned)
+    return cleaned.strip()
+
+
+def slice_source_for_chapter(text: str, chapter: str) -> str:
+    number = chapter_number(chapter)
+    cleaned = strip_source_provenance(text)
+    if number is None:
+        return cleaned
+    patterns = [
+        rf"(?m)^第\s*{number}\s*章\b",
+        rf"(?m)^第\s*{number}\s*[话話]\b",
+    ]
+    start_match = None
+    for pattern in patterns:
+        start_match = re.search(pattern, cleaned)
+        if start_match:
+            break
+    if not start_match:
+        return cleaned
+    next_patterns = [
+        rf"(?m)^第\s*{number + 1}\s*章\b",
+        rf"(?m)^第\s*{number + 1}\s*[话話]\b",
+    ]
+    next_start = len(cleaned)
+    for pattern in next_patterns:
+        match = re.search(pattern, cleaned[start_match.end() :])
+        if match:
+            next_start = start_match.end() + match.start()
+            break
+    return cleaned[start_match.start() : next_start].strip()
 
 
 def load_source_texts(root: Path, paths: list[Path]) -> tuple[list[dict[str, Any]], str]:
@@ -251,7 +342,8 @@ def scaffold_report(
     max_segments: int,
 ) -> dict[str, Any]:
     must_normalize = requires_normalization(source_language, source_records, force_normalization)
-    segment_texts = split_segments(source_text, max_segments) if must_normalize else []
+    normalized_source_text = slice_source_for_chapter(source_text, chapter)
+    segment_texts = split_segments(normalized_source_text, max_segments) if must_normalize else []
     return {
         "schema_version": 1,
         "kind": "comic_source_semantics",
@@ -264,6 +356,11 @@ def scaffold_report(
         "requires_normalization": must_normalize,
         "normalization_reason": detection_reasons,
         "source_files": source_records,
+        "source_slice": {
+            "chapter": chapter,
+            "chars": len(normalized_source_text),
+            "strategy": "chapter_heading_or_cleaned_source",
+        },
         "glossary_reviewed": False if must_normalize else True,
         "ambiguity_reviewed": False if must_normalize else True,
         "proper_noun_glossary": [],

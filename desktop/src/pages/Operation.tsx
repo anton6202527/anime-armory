@@ -26,6 +26,7 @@ import type { AgentInfo, CanvasData, LineInfo, WorkChangeSummary, WorkRoot } fro
 import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { Codicon } from "../components/Codicon";
+import { RailIcon } from "../components/RailIcon";
 import { useI18n, useLineLabel } from "../i18n";
 import {
   COLLAPSE_LEFT_SIDEBAR_EVENT,
@@ -75,8 +76,8 @@ const OP_RIGHT_MAX_WIDTH = 340;
 const OP_BOTTOM_MIN_HEIGHT = 82;
 const OP_BOTTOM_MAX_HEIGHT = 440;
 const OP_LEFT_RAIL_WIDTH = 48;
-const TERMINAL_SIDE_COLLAPSE_WIDTH = 56;
-const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = 48;
+const TERMINAL_SIDE_COLLAPSE_WIDTH = OP_RIGHT_MIN_WIDTH;
+const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = OP_BOTTOM_MIN_HEIGHT;
 type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
 type TerminalDock = "side" | "bottom";
 
@@ -144,12 +145,12 @@ export function Operation(props: {
   const bodyRef = useRef<HTMLDivElement>(null);
   const [rightWidth, setRightWidth] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.rightWidth"));
-    if (!Number.isFinite(saved) || saved <= 0) return null;
+    if (!Number.isFinite(saved) || saved <= TERMINAL_SIDE_COLLAPSE_WIDTH) return null;
     return Math.min(OP_RIGHT_MAX_WIDTH, Math.max(OP_RIGHT_MIN_WIDTH, saved));
   });
   const [bottomHeight, setBottomHeight] = useState<number | null>(() => {
     const saved = Number(window.localStorage.getItem("aa.op.bottomHeight"));
-    if (!Number.isFinite(saved) || saved <= 0) return null;
+    if (!Number.isFinite(saved) || saved <= TERMINAL_BOTTOM_COLLAPSE_HEIGHT) return null;
     return Math.min(OP_BOTTOM_MAX_HEIGHT, Math.max(OP_BOTTOM_MIN_HEIGHT, saved));
   });
   const [filesSideWidth, setFilesSideWidth] = useState(readStoredFilesSideWidth);
@@ -190,16 +191,6 @@ export function Operation(props: {
     setSidePanelOpen(true);
     setLeftCollapsed(false);
     setFilesSideWidth(readStoredFilesSideWidth());
-  }
-
-  function openWorkFile(path: string) {
-    window.setTimeout(() => {
-      window.dispatchEvent(
-        new CustomEvent("anime-armory:open-work-file", {
-          detail: { root: root.path, path },
-        }),
-      );
-    }, 0);
   }
 
   const probeAgents = useCallback((force = false) => {
@@ -669,6 +660,61 @@ export function Operation(props: {
     document.addEventListener("pointerup", up);
   }
 
+  function startHiddenTerminalResize(ev: ReactPointerEvent<HTMLDivElement>) {
+    const body = bodyRef.current;
+    if (!body) return;
+    ev.preventDefault();
+    const splitter = ev.currentTarget;
+    const rect = body.getBoundingClientRect();
+    const resizingClass = terminalDock === "bottom" ? "resizing-op-terminal-bottom" : "resizing-op-terminal-restore";
+    document.body.classList.add(resizingClass);
+    splitter.classList.add("resizing");
+    let latestSize = 0;
+    let opened = false;
+
+    const move = (e: PointerEvent) => {
+      const rawSize = terminalDock === "bottom" ? rect.bottom - e.clientY : rect.right - e.clientX;
+      latestSize = rawSize;
+      const collapseSize = terminalDock === "bottom" ? TERMINAL_BOTTOM_COLLAPSE_HEIGHT : TERMINAL_SIDE_COLLAPSE_WIDTH;
+      if (rawSize > collapseSize) {
+        if (!opened) {
+          opened = true;
+          onToggleTerminal();
+        }
+        if (terminalDock === "bottom") {
+          const next = clampBottomHeight(rawSize, rect.height);
+          setBottomHeight(next);
+          window.localStorage.setItem("aa.op.bottomHeight", String(Math.round(next)));
+        } else {
+          const next = clampRightWidth(rawSize, rect.width);
+          setRightWidth(next);
+          window.localStorage.setItem("aa.op.rightWidth", String(Math.round(next)));
+        }
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+    const up = () => {
+      document.body.classList.remove(resizingClass);
+      splitter.classList.remove("resizing");
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      const collapseSize = terminalDock === "bottom" ? TERMINAL_BOTTOM_COLLAPSE_HEIGHT : TERMINAL_SIDE_COLLAPSE_WIDTH;
+      if (latestSize <= collapseSize) {
+        if (terminalDock === "bottom") {
+          setBottomHeight(null);
+          window.localStorage.removeItem("aa.op.bottomHeight");
+        } else {
+          setRightWidth(null);
+          window.localStorage.removeItem("aa.op.rightWidth");
+        }
+        if (opened) onCloseTerminal();
+      }
+      window.dispatchEvent(new Event("resize"));
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
+  }
+
   const dockTarget: TerminalDock = terminalDock === "side" ? "bottom" : "side";
   const dockTitle =
     dockTarget === "bottom" ? t("operation.dockTerminalBottom") : t("operation.dockTerminalSide");
@@ -703,10 +749,12 @@ export function Operation(props: {
       : OP_LEFT_RAIL_WIDTH;
   const opBodyStyle = {
     "--op-files-side-width": `${Math.round(filesSideWidth)}px`,
-    ...(terminalVisible && terminalDock === "bottom"
+    ...(terminalDock === "bottom"
       ? {
           "--op-bottom-sidebar-width": `${Math.round(bottomDockSidebarWidth)}px`,
-          ...(bottomHeight ? { "--op-terminal-bottom-height": `${Math.round(bottomHeight)}px` } : {}),
+          ...(terminalVisible && bottomHeight
+            ? { "--op-terminal-bottom-height": `${Math.round(bottomHeight)}px` }
+            : {}),
         }
       : {}),
   } as CSSProperties;
@@ -733,12 +781,18 @@ export function Operation(props: {
                 </option>
               ))}
             </select>
+            {canvasSourceHint && (
+              <button
+                type="button"
+                className="ep-source-info"
+                data-tooltip={canvasSourceHint}
+                data-tooltip-placement="bottom"
+                aria-label={canvasSourceHint}
+              >
+                <Codicon name="info" />
+              </button>
+            )}
           </div>
-        )}
-        {isCanvasLine && shouldReadCanvas && canvasSourceHint && (
-          <span className="reason" style={{ color: "var(--warn)" }}>
-            {canvasSourceHint}
-          </span>
         )}
       </div>
 
@@ -761,7 +815,7 @@ export function Operation(props: {
               aria-label={t("operation.filesTab")}
               onClick={() => openLeft("files")}
             >
-              <Codicon name="files" />
+              <RailIcon name="files" />
             </button>
             <button
               type="button"
@@ -771,7 +825,7 @@ export function Operation(props: {
               aria-label={t("operation.searchTab")}
               onClick={() => openLeft("search")}
             >
-              <Codicon name="search" />
+              <RailIcon name="search" />
             </button>
             <button
               type="button"
@@ -785,7 +839,7 @@ export function Operation(props: {
               aria-label={`${t("operation.changesTab")} · ${changeLabel}`}
               onClick={() => openLeft("changes")}
             >
-              <Codicon name="sourceControl" />
+              <RailIcon name="changes" />
               {changeSummary == null ? (
                 <span className="rail-badge loading">…</span>
               ) : changeCount > 0 ? (
@@ -800,7 +854,7 @@ export function Operation(props: {
               aria-label={t("operation.skillsTab")}
               onClick={() => openLeft("skills")}
             >
-              <Codicon name="wrench" />
+              <RailIcon name="skills" />
             </button>
             {isCanvasLine && (
               <button
@@ -811,7 +865,7 @@ export function Operation(props: {
                 aria-label={t("operation.canvasTab")}
                 onClick={() => openLeft("canvas")}
               >
-                <Codicon name="layout" />
+                <RailIcon name="canvas" />
               </button>
             )}
             {isCanvasLine && (
@@ -823,7 +877,7 @@ export function Operation(props: {
                 aria-label={t("operation.boardTab")}
                 onClick={() => openLeft("kanban")}
               >
-                <Codicon name="project" />
+                <RailIcon name="kanban" />
               </button>
             )}
             <button
@@ -834,7 +888,7 @@ export function Operation(props: {
               aria-label={t("operation.reviewTab")}
               onClick={() => openLeft("review")}
             >
-              <Codicon name="beaker" />
+              <RailIcon name="review" />
             </button>
           </div>
           {!leftCollapsed && !sidePanelOpen && tabHasFileSizedSidebar && (
@@ -885,7 +939,6 @@ export function Operation(props: {
                             refreshKey={changeScanKey}
                             baselineVersion={baselineVersion}
                             summary={changeSummary}
-                            onOpenFile={openWorkFile}
                             onArchived={(summary) => {
                               changeSummaryEpochRef.current += 1;
                               setChangeSummary(summary);
@@ -982,6 +1035,19 @@ export function Operation(props: {
             }}
           />
         )}
+        {!terminalVisible && (
+          <div
+            className={`op-terminal-restore-splitter op-terminal-restore-${terminalDock}`}
+            role="separator"
+            aria-orientation={terminalDock === "bottom" ? "horizontal" : "vertical"}
+            aria-label={resizeTerminalAria}
+            onPointerDown={startHiddenTerminalResize}
+            onDoubleClick={() => {
+              onToggleTerminal();
+              window.dispatchEvent(new Event("resize"));
+            }}
+          />
+        )}
         <div className="op-right" style={terminalPanelStyle}>
           <NextActionStrip
             repoRoot={repoRoot}
@@ -1012,12 +1078,13 @@ export function Operation(props: {
                   aria-label={dockTitle}
                   onClick={() => setTerminalDock(dockTarget)}
                 >
-                  <Codicon name="layout" />
+                  <Codicon name={dockTarget === "bottom" ? "layoutPanel" : "layoutSidebarRight"} />
                 </button>
                 <button
                   type="button"
                   className="project-settings-btn terminal-close-btn"
-                  aria-label={t("terminal.hidePanel")}
+                  title={`${t("terminal.hidePanel")} (${shortcut.hidePanel})`}
+                  aria-label={`${t("terminal.hidePanel")} (${shortcut.hidePanel})`}
                   onClick={onCloseTerminal}
                 >
                   <Codicon name="close" />

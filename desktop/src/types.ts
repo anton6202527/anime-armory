@@ -271,6 +271,7 @@ export interface CanvasData {
   title?: string;
   total_duration?: number;
   episodes: string[]; // all episodes discovered for the switcher
+  shared_assets?: CanvasFrame[];
   clips: CanvasClip[];
   seams: CanvasSeam[];
   quality?: CanvasQualitySummary;

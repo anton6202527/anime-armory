@@ -113,44 +113,51 @@
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/director_beat_sheet.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "fc6e419071e05b0f5f3deac9572f424be6b9fe0dacf9bcae10d44718f15967ff"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/axis_blocking_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "15717cf35014f16463e9fb6b918dbf5ea02795514ab0c74b83b66e57156e86ac"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/shot_progression_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "5483ca1ba5a42853e2af3412c8d0c4f754bb32b02561b92cceff528576be3b22"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/transition_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "acd98e8782580f8f5bb06d6b11a888725c60bae8493276f7da9919fe089fad42"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/vertical_composition_plan.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "7cedbbca3a8f6a847729b72e1606829b0f35ed79700bfbff9407442fdc91e761"
     },
     {
       "stage": "script_stage2",
       "path": "脚本/第5集/edit_rhythm_map.json",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "0d3a1c358322137f31752d8050d95c388909b03ca1c067d10e6ff01aa62d1ea9"
     },
     {
       "stage": "script_stage2",
       "path": "生产数据/director_blocking_pack_第5集.md",
-      "exists": false,
-      "kind": "missing"
+      "exists": true,
+      "kind": "file",
+      "sha256": "eebb06a5ff955699a17b8c98e8d285b65e5ca9b5558b27f041b8530a20d0e045"
     },
     {
       "stage": "script_stage2",
@@ -212,14 +219,14 @@
       "path": "出图/第5集/prompt/00_总览.md",
       "exists": true,
       "kind": "file",
-      "sha256": "1d0cc489eb7e93178184110a4a4f4ae09e9752adbeb240d45c162ccd83ffe29f"
+      "sha256": "cad7375a7500be0cb781f45ac771abe4f2e11e0d95270904233b9045745af8cb"
     },
     {
       "stage": "image_prompt",
       "path": "出图/第5集/prompt/01_分镜出图.md",
       "exists": true,
       "kind": "file",
-      "sha256": "1860d656488175e25a8c9c4e4eca341f1d5ad9c8f1c505561184dd9c7a5786d6"
+      "sha256": "923db4b330262aa515ddc8c86dc1e5d430c06cc3f50b8dc22b13789e94ac5f0c"
     },
     {
       "stage": "image",
@@ -233,7 +240,7 @@
       "path": "出图/第5集/图片",
       "exists": true,
       "kind": "dir",
-      "file_count": 0
+      "file_count": 22
     },
     {
       "stage": "video_prompt",
@@ -303,6 +310,6 @@
     }
   ],
   "last_progress_column": "出图",
-  "last_progress_value": "72/125",
+  "last_progress_value": "94/125",
   "last_progress_state": "partial"
 }

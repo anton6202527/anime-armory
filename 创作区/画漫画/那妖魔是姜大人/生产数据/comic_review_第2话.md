@@ -1,9 +1,9 @@
 # 漫画审查报告 — 第2话
 
-- 生成时间：2026-07-07T20:01:19
+- 生成时间：2026-07-09T11:05:21
 - 结论：pass
 - panel 数：14
-- block/warn/info：0 / 0 / 8
+- block/warn/info：0 / 0 / 10
 
 ## 设置
 
@@ -18,6 +18,7 @@
 ## 记录
 
 - 已刷新风格一致性报告：生产数据/comic_style_consistency_第2话.md
+- 已刷新角色一致性报告：生产数据/comic_character_consistency_第2话.md
 - demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。
 - demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。
 - demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。
@@ -36,6 +37,8 @@
 | info | style | 出图/第2话/panels/P010.png | 风格指纹内聚度 0.7788 明显低于本话中位 0.9152，疑似画风、细节密度或照片感跳变。 | comic-review | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
 | info | style | 出图/第2话/panels/P011.png | 风格指纹内聚度 0.8467 明显低于本话中位 0.9152，疑似画风、细节密度或照片感跳变。 | comic-review | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
 | info | style | 出图/第2话/panels/P010.png | 同场景“LOC_WASTELAND”内调色代理偏离组中位：warmth_dev=0.254, tint_dev=0.020。 | comic-review | 已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。 |
+| info | character | 出图/第2话/panels/P010.png | CHAR_JYC face 指纹与参考图相似度偏低：score=0.408。这是启发式提示，需并排人审。 | comic-review | 若 P010 后续重抽或改构图，重新运行 character_consistency.py 并重新签收。 |
+| info | character | 出图/第2话/panels/P010.png | CHAR_JYC outfit 指纹与参考图相似度偏低：score=0.298。这是启发式提示，需并排人审。 | comic-review | 若 P010 后续重抽或改服装状态，重新运行 character_consistency.py 并重新签收。 |
 
 ## 疑似烘焙气泡
 
@@ -46,3 +49,9 @@
 
 - 结论：pass
 - 摘要：{"panel_count": 14, "finding_count": 6, "block_count": 0, "warn_count": 0, "info_count": 6}
+
+## 角色一致性
+
+- 结论：pass
+- 摘要：{"character_count": 2, "panel_binding_count": 19, "finding_count": 2, "block_count": 0, "warn_count": 0, "info_count": 2}
+- 并排复核图：`生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg`

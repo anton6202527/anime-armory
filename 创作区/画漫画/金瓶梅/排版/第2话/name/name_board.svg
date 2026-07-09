@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="486" viewBox="0 0 1012 486">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="57" y="62" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="77">P001</text>
+<text class="note" x="62" y="92">开场中景，绛红帘点染；避免温馨过度，留一点压迫阴影。</text>
+<rect x="57" y="124" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="139">P002</text>
+<text class="note" x="62" y="154">不要画成暧昧触手；茶盏和蒸汽预留文字区在上方。</text>
+<rect x="68" y="186" width="220" height="28" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="73" y="201">P003</text>
+<text class="note" x="73" y="207">蒙太奇但不要分栏拼贴；用同一室内空间叠影表现时间流逝。</text>
+<rect x="46" y="220" width="264" height="84" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="235">P004</text>
+<text class="note" x="51" y="250">本话视觉转折大格；雪留白多但不能像空白气泡。</text>
+<rect x="57" y="310" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="325">P005</text>
+<text class="note" x="62" y="340">雪粉可飞，但不要遮挡脸和手；手距是关键。</text>
+<rect x="57" y="373" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="388">P006</text>
+<text class="note" x="62" y="403">门闩和迎儿手是重点；儿童不可被画成成年人。</text>
+<text class="note" x="38" y="448">hook: P004 seasonal_turning_point</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="385" y="62" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="77">P007</text>
+<text class="note" x="390" y="92">对白槽在上方，不遮挡酒盏和手。</text>
+<rect x="385" y="120" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="135">P008</text>
+<text class="note" x="390" y="150">不要画青楼想象画面；只留话语试探。</text>
+<rect x="396" y="178" width="220" height="26" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="193">P009</text>
+<text class="note" x="401" y="197">火盆边界要明确；潘金莲衣领不要裸露。</text>
+<rect x="374" y="210" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="225">P010</text>
+<text class="note" x="379" y="240">高风险格：严禁裸露、床笫、身体色情特写；只画肩侧手和酒盏。</text>
+<rect x="374" y="294" width="264" height="78" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="309">P011</text>
+<text class="note" x="379" y="324">本话动作峰值；不要把推拒画成殴打。</text>
+<rect x="385" y="378" width="242" height="51" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="393">P012</text>
+<text class="note" x="390" y="408">严厉但克制；不得画成暴力击打。</text>
+<text class="note" x="366" y="448">hook: P010 temptation_peak</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="724" y="62" width="220" height="28" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="77">P013</text>
+<text class="note" x="729" y="83">收拾碗盏不要画成滑稽；迎儿紧张。</text>
+<rect x="713" y="96" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="111">P014</text>
+<text class="note" x="718" y="126">雪地脚印和炊饼担是重点；不要让潘金莲看镜头。</text>
+<rect x="713" y="158" width="242" height="56" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="173">P015</text>
+<text class="note" x="718" y="188">压抑室内戏，不画夸张恶毒脸。</text>
+<rect x="724" y="220" width="220" height="28" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="729" y="235">P016</text>
+<text class="note" x="729" y="241">靴带和毡笠是行动信号；不要夸张怒吼。</text>
+<rect x="702" y="254" width="264" height="84" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="269">P017</text>
+<text class="note" x="707" y="284">搬离大格，楼梯纵深清楚；差役不需定妆，灰影即可。</text>
+<rect x="702" y="344" width="264" height="85" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="359">P018</text>
+<text class="note" x="707" y="374">结尾留白，不能出现西门庆正脸；可只给街角模糊空位预示下一话。</text>
+<text class="note" x="694" y="448">hook: P018 cliffhanger</text>
+</svg>

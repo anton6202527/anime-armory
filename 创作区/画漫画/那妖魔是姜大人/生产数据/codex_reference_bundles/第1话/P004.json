@@ -4,7 +4,43 @@
   "chapter": "第1话",
   "panel_id": "P004",
   "reference_input_mode": "codex_exec_image_flags",
-  "cli_image_input_count": 0,
-  "references": [],
-  "created_at": "2026-07-07T10:41:17"
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+      "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__face.png",
+      "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__front.png",
+      "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+      "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__side.png",
+      "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+    },
+    {
+      "id": "PROP_HENGDAO",
+      "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+      "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+    },
+    {
+      "id": "CHAR_PEI",
+      "path": "出图/共享/图片/CHAR_PEI__back.png",
+      "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
+    }
+  ],
+  "created_at": "2026-07-09T10:52:44"
 }

@@ -996,6 +996,81 @@ def _coverage_identity_refs(body: str, raw_refs: Sequence[str]) -> List[str]:
     return [normalize_identity_ref(ref) for ref in raw_refs]
 
 
+NON_HUMAN_FACE_ANCHOR_TERMS = (
+    "non_human_anchor_policy",
+    "non_human_creature",
+    "非人",
+    "妖物",
+    "妖兽",
+    "魔物",
+    "兽首",
+    "兽头",
+    "兽脸",
+    "兽面",
+    "狼首",
+    "狼头",
+    "虎首",
+    "虎头",
+    "蛇首",
+    "蛇头",
+    "狐首",
+    "狐头",
+    "犬首",
+    "犬头",
+    "不要把",
+)
+
+
+def _snippets_for_identity_ref(body: str, identity_ref: str, *, max_len: int = 260) -> List[str]:
+    text = str(body or "")
+    norm = normalize_identity_ref(identity_ref)
+    if not norm:
+        return []
+    char_id = norm.split("/", 1)[0]
+    needles = [norm, char_id, norm.replace("/", "__")]
+    snippets: List[str] = []
+    for needle in needles:
+        if not needle:
+            continue
+        start = 0
+        while True:
+            pos = text.find(needle, start)
+            if pos < 0:
+                break
+            line_end = text.find("\n", pos)
+            if line_end < 0:
+                line_end = len(text)
+            next_owner = re.search(r"`(?:CHAR|GROUP|CROWD)_[^`]+`|SLOT_\d+\s*[:：]", text[pos + len(needle):line_end])
+            segment_end = line_end
+            if next_owner:
+                segment_end = min(segment_end, pos + len(needle) + next_owner.start())
+            segment_end = min(segment_end, pos + len(needle) + max_len)
+            snippets.append(text[pos:segment_end])
+            start = pos + len(needle)
+    return snippets
+
+
+def _identity_ref_uses_non_human_anchor(body: str, identity_ref: str) -> bool:
+    """Whether this coverage target should be checked as a creature anchor.
+
+    Face embedding is for human faces. Wolf/tiger/other creature heads should
+    still be QC'd through the existing hair/outfit/prop-shape evidence, but they
+    should not create impossible `no_face_comparison` hard blocks.
+    """
+    norm = normalize_identity_ref(identity_ref)
+    if not norm:
+        return False
+    if any(token in norm for token in ("狼妖", "虎妖", "妖兽", "妖物")):
+        return True
+    snippets = _snippets_for_identity_ref(body, norm)
+    for snippet in snippets:
+        if "不要把" in snippet and "人类" in snippet:
+            return True
+        if any(term != "不要把" and term in snippet for term in NON_HUMAN_FACE_ANCHOR_TERMS):
+            return True
+    return False
+
+
 def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     """逐镜 prompt → 角色镜覆盖清单项。
 
@@ -1010,18 +1085,24 @@ def character_shot_manifests(block: Dict[str, str]) -> List[Dict[str, Any]]:
     id_refs = _coverage_identity_refs(body, raw_refs)
     targets = _extract_target_pngs(body) or [None]
     face_exempt = _face_coverage_exempt_pngs(body)
+    non_human_anchor = bool(id_refs) and all(_identity_ref_uses_non_human_anchor(body, ref) for ref in id_refs)
     out: List[Dict[str, Any]] = []
     for png in targets:
         shot = _shot_key(png) or _shot_key(label) or label
         png_key = _coverage_png_key(png)
-        face_required = not (png_key and png_key in face_exempt)
+        face_required = not (non_human_anchor or (png_key and png_key in face_exempt))
+        face_policy = ""
+        if non_human_anchor:
+            face_policy = "non_human_anchor_policy"
+        elif not face_required:
+            face_policy = "faceless_reaction_anchor"
         out.append({
             "label": label,
             "shot": shot,
             "png": png,
             "identity_refs": sorted(set(id_refs)),
             "face_coverage_required": face_required,
-            **({"face_check_policy": "faceless_reaction_anchor"} if not face_required else {}),
+            **({"face_check_policy": face_policy} if face_policy else {}),
         })
     return out
 
@@ -2707,6 +2788,23 @@ def _clip_pngs_on_disk(root: Path, ep: str, shot: Optional[str], fallback: Optio
 ASSET_SHAPE_REVIEW_TYPES = {"prop", "weapon", "outfit", "costume", "vfx", "effect"}
 
 
+def _prop_shape_asset_ids_from_block(body: str) -> List[str]:
+    """Return current visible/carrying asset ids for prop-shape review.
+
+    Prompt bodies also contain negative guards, reveal-timing guards, and tail-frame
+    notes. Those lines may intentionally mention future/offscreen assets, so the
+    hard per-PNG review queue should prefer the active registration layer and only
+    fall back to a whole-block scan for legacy prompts that do not have it.
+    """
+    text = str(body or "")
+    registry_lines = [
+        line for line in text.splitlines()
+        if "资产引用注册层" in line
+    ]
+    source = "\n".join(registry_lines) if registry_lines else text
+    return sorted(set(ASSET_ID_RE.findall(source)))
+
+
 def prop_shape_review_targets(root: Path, ep: str,
                               asset_index: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """高风险物料（PROP/WEAPON/OUTFIT/VFX + must_not_have）逐图禁形/尺寸复核目标。
@@ -2734,7 +2832,7 @@ def prop_shape_review_targets(root: Path, ep: str,
         label = str(blk.get("label") or "")
         shot = _shot_key(label)
         fallback_png = _extract_target_png(body)
-        for aid in sorted(set(ASSET_ID_RE.findall(body))):
+        for aid in _prop_shape_asset_ids_from_block(body):
             entry = entries.get(aid) or {}
             asset_type = str(entry.get("type") or "").strip().lower()
             if asset_type not in ASSET_SHAPE_REVIEW_TYPES:
@@ -3981,7 +4079,7 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
             "block",
             "multimodal_continuity",
             t.get("png"),
-            f"高风险物料禁形/尺寸/拓扑未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
+            f"高风险道具禁形/尺寸/物料拓扑未逐图确认：{t.get('label') or t.get('shot')} 的 `{t.get('asset')}`"
             f"（{t.get('asset_name') or ''}，type={t.get('asset_type') or 'asset'}）登记了 must_not_have={terms}"
             f"{'；scale=' + str(t.get('scale')) if t.get('scale') else ''}。"
             f"文字约束不能证明既有 PNG 没长出禁形、实体数量没漂或尺寸没漂，需人工/视觉模型确认 `{t.get('png')}`"

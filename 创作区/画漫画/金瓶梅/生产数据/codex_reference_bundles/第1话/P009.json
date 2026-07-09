@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P009",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 3,
+  "references": [
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "sha256": "1f63a88bf6f725380118806c84382a825d205152dc218bfcedf35d89124fa5d2"
+    },
+    {
+      "id": "MON_TIGER",
+      "path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "sha256": "a4d64c8755c81e7209ab74fa83596adc10a08df31824c104e1da3282b6168505"
+    },
+    {
+      "id": "LOC_JINGYANG_RIDGE",
+      "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "sha256": "488b8414b880dfd873d6f480f3a6f68214e135406f0306646e39102482274102"
+    }
+  ],
+  "created_at": "2026-07-09T17:34:27"
+}

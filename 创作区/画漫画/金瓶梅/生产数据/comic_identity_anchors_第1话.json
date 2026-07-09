@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_generation",
+  "chapter": "第1话",
+  "created_at": "2026-07-09T16:46:17",
+  "refs": [
+    "MON_TIGER",
+    "LOC_JINGYANG_RIDGE",
+    "LOC_QINGHE_YAMEN",
+    "LOC_ZISHI_STREET",
+    "LOC_ZHANG_HOUSE",
+    "LOC_WUDA_HOUSE",
+    "PROP_SHAOBANG",
+    "PROP_TIGER_NOTICE",
+    "PROP_CAKE_BASKET",
+    "PROP_REWARD_SILVER",
+    "PROP_RED_CURTAIN"
+  ],
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "generated": 11,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-09T16:29:32",
+      "status": "reference_anchor_ready",
+      "ref_id": "MON_TIGER",
+      "path": "出图/共享/图片/MON_TIGER__anchor.png",
+      "sha256": "a4d64c8755c81e7209ab74fa83596adc10a08df31824c104e1da3282b6168505",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:31:14",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_JINGYANG_RIDGE",
+      "path": "出图/共享/图片/LOC_JINGYANG_RIDGE__anchor.png",
+      "sha256": "488b8414b880dfd873d6f480f3a6f68214e135406f0306646e39102482274102",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:33:02",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_QINGHE_YAMEN",
+      "path": "出图/共享/图片/LOC_QINGHE_YAMEN__anchor.png",
+      "sha256": "fff251ce79ab1ef0ba1afe1672c8ba1077fc2f902a6fc56544f7429690fad6d0",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:34:50",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_ZISHI_STREET",
+      "path": "出图/共享/图片/LOC_ZISHI_STREET__anchor.png",
+      "sha256": "598f964ce1702d9b91aa7d3318c41e344ca42888be929dec7d75b24a8e4b5936",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:36:38",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_ZHANG_HOUSE",
+      "path": "出图/共享/图片/LOC_ZHANG_HOUSE__anchor.png",
+      "sha256": "c4aae72b6b0430916b6e2a2cfa1801c281e04808cf8d5805c18b3d8dfc917969",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:38:20",
+      "status": "reference_anchor_ready",
+      "ref_id": "LOC_WUDA_HOUSE",
+      "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+      "sha256": "bb227819e9c39d7be9eb08430b91c3ba702050209a73e042644ee1114199646b",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:39:44",
+      "status": "reference_anchor_ready",
+      "ref_id": "PROP_SHAOBANG",
+      "path": "出图/共享/图片/PROP_SHAOBANG__anchor.png",
+      "sha256": "b1b928d57a63034da207be951fddeb8f2cef7c8b5ec661ebda05054e35dfca33",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:41:25",
+      "status": "reference_anchor_ready",
+      "ref_id": "PROP_TIGER_NOTICE",
+      "path": "出图/共享/图片/PROP_TIGER_NOTICE__anchor.png",
+      "sha256": "f236512ed20204206de05df0a18a585b04b52d741b75aa6798962d4fcbedc8ab",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:43:09",
+      "status": "reference_anchor_ready",
+      "ref_id": "PROP_CAKE_BASKET",
+      "path": "出图/共享/图片/PROP_CAKE_BASKET__anchor.png",
+      "sha256": "20d24ac3c98b74e4408608bb5ddda5491c152ec4ac24da8db982e83f65366281",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:44:46",
+      "status": "reference_anchor_ready",
+      "ref_id": "PROP_REWARD_SILVER",
+      "path": "出图/共享/图片/PROP_REWARD_SILVER__anchor.png",
+      "sha256": "38ec6f4b4bccc593acf5a7ab50bf633230ef77384dd93fc26f86c5922e0794bb",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    },
+    {
+      "ts": "2026-07-09T16:46:17",
+      "status": "reference_anchor_ready",
+      "ref_id": "PROP_RED_CURTAIN",
+      "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "efe67b1a3c6c9bd3a688649eb47b805c8025f170dc8d7312fdc72de8ef293400",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.143.0",
+      "attempt": 1
+    }
+  ]
+}

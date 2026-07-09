@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "comic_style_consistency_acceptance",
+  "chapter": "第1话",
+  "accepted_by": "codex_visual_qc",
+  "accepted_at": "2026-07-09T18:21:46+0800",
+  "evidence": [
+    "生产数据/qa_previews/第1话_panels_contact_sheet.jpg",
+    "生产数据/qa_previews/第1话_style_outliers_detail.jpg",
+    "生产数据/comic_style_consistency_第1话.md"
+  ],
+  "accepted_findings": [
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P001",
+      "reason": "计划内象征序幕：绛红门帘、刀光和烟雾留白形成主题视觉，不是画风漂移；与全话黑白灰水墨线稿和绛红点染一致。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P002",
+      "reason": "计划内外景/街影蒙太奇：远景山路、街巷与兄弟命运对照导致亮度和细节密度不同，仍保持同一灰阶水墨风格。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P006",
+      "reason": "计划内动作速度弧光：虎扑与武松闪身的白色运动弧造成风格指纹偏离，但人物、虎、景阳冈材质与前后格一致。",
+      "evidence": "生产数据/qa_previews/第1话_style_outliers_detail.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P012",
+      "reason": "计划内张大户宅室内压迫光：暗红帘幕、油灯和深宅阴影使饱和度/亮度偏离，全话只在潘金莲线使用绛红压迫符号。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P013",
+      "reason": "计划内帘下登场：街巷灰光与绛红门帘形成潘金莲线视觉锚，未出现现代化或高饱和漂移。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P014",
+      "reason": "计划内街巷长景：武松归街、街坊和炊饼担需要更高空间深度；人物和场景仍与定妆/街巷锚一致。",
+      "evidence": "生产数据/qa_previews/第1话_panels_contact_sheet.jpg"
+    }
+  ]
+}

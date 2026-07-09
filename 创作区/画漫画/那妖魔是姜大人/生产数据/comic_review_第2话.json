@@ -3,7 +3,7 @@
   "kind": "comic_review",
   "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第2话",
-  "created_at": "2026-07-07T20:01:19",
+  "created_at": "2026-07-09T11:05:21",
   "verdict": "pass",
   "settings": {
     "定妆级别": "长线专门定妆",
@@ -16,18 +16,20 @@
   },
   "summary": {
     "panel_count": 14,
-    "issue_count": 8,
+    "issue_count": 10,
     "block_count": 0,
     "warn_count": 0,
-    "info_count": 8
+    "info_count": 10
   },
   "artifacts": {
     "panel_script": "脚本/第2话/panel_script.json",
+    "source_semantics": "脚本/第2话/source_semantics.json",
     "layout": "排版/第2话/layout.json",
     "lettering": "排版/第2话/lettering.json",
     "manifest": "排版/第2话/export_manifest.json",
     "identity_report": "生产数据/comic_identity_report_第2话.json",
     "style_report": "生产数据/comic_style_consistency_第2话.json",
+    "character_report": "生产数据/comic_character_consistency_第2话.json",
     "rendered": [
       {
         "path": "排版/第2话/长图/longstrip.webp",
@@ -49,7 +51,7 @@
         ],
         "size": {
           "width": 1440,
-          "height": 14180
+          "height": 14260
         },
         "format": "webp"
       }
@@ -128,6 +130,18 @@
       "info_count": 6
     }
   },
+  "character_consistency": {
+    "verdict": "pass",
+    "summary": {
+      "character_count": 2,
+      "panel_binding_count": 19,
+      "finding_count": 2,
+      "block_count": 0,
+      "warn_count": 0,
+      "info_count": 2
+    },
+    "contact_sheet": "生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg"
+  },
   "issues": [
     {
       "severity": "info",
@@ -192,10 +206,27 @@
       "reason": "同场景“LOC_WASTELAND”内调色代理偏离组中位：warmth_dev=0.254, tint_dev=0.020。",
       "return_to": "comic-review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
+    },
+    {
+      "severity": "info",
+      "category": "character",
+      "artifact": "出图/第2话/panels/P010.png",
+      "reason": "CHAR_JYC face 指纹与参考图相似度偏低：score=0.408。这是启发式提示，需并排人审。",
+      "return_to": "comic-review",
+      "suggested_fix": "若 P010 后续重抽或改构图，重新运行 character_consistency.py 并重新签收。"
+    },
+    {
+      "severity": "info",
+      "category": "character",
+      "artifact": "出图/第2话/panels/P010.png",
+      "reason": "CHAR_JYC outfit 指纹与参考图相似度偏低：score=0.298。这是启发式提示，需并排人审。",
+      "return_to": "comic-review",
+      "suggested_fix": "若 P010 后续重抽或改服装状态，重新运行 character_consistency.py 并重新签收。"
     }
   ],
   "notes": [
     "已刷新风格一致性报告：生产数据/comic_style_consistency_第2话.md",
+    "已刷新角色一致性报告：生产数据/comic_character_consistency_第2话.md",
     "demo学习 用途：字体权利=pending_before_publish，仅记录，不进入发布授权流程。",
     "demo学习 用途：素材权利=pending_before_publish，仅记录，不进入发布授权流程。",
     "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",

@@ -49,6 +49,7 @@ LOCK_POINTS: Tuple[Tuple[str, str, Tuple[str, ...], Tuple[str, ...]], ...] = (
 )
 
 LOCK_POINT_IDS = tuple(row[0] for row in LOCK_POINTS)
+LOCK_POINT_BY_ID = {row[0]: row for row in LOCK_POINTS}
 
 # Stage-scoped checks keep lock enforcement near the work it protects.  The full
 # ledger still records every lock point; production entrypoints ask only for the
@@ -216,6 +217,81 @@ def scaffold(root: Path, ep: str, *, confirmed: bool = False, reviewer: str = ""
     return {"kind": KIND, "episode": normalize_episode(ep), "status": "written", "path": str(path)}
 
 
+def _selected_lock_ids(stage: str | None = None, lock_ids: Sequence[str] | None = None) -> Tuple[str, ...]:
+    explicit = [str(x or "").strip() for x in (lock_ids or []) if str(x or "").strip()]
+    if any(x == "all" for x in explicit):
+        return LOCK_POINT_IDS
+    selected: List[str] = []
+    if stage:
+        scoped = stage_lock_ids(stage)
+        if not scoped:
+            raise ValueError(f"未知锁版阶段：{stage}")
+        selected.extend(scoped)
+    selected.extend(explicit)
+    if not selected:
+        selected.extend(LOCK_POINT_IDS)
+    unknown = [x for x in selected if x not in LOCK_POINT_BY_ID]
+    if unknown:
+        raise ValueError(f"未知锁点：{', '.join(unknown)}")
+    return tuple(dict.fromkeys(selected))
+
+
+def confirm_locks(root: Path, ep: str, *, stage: str | None = None, lock_ids: Sequence[str] | None = None,
+                  reviewer: str = "", write_check: bool = False) -> Dict[str, Any]:
+    ep = normalize_episode(ep)
+    stage_key = normalize_stage(stage)
+    selected_ids = _selected_lock_ids(stage_key, lock_ids)
+    existing = load_json(lock_path(root, ep))
+    if not isinstance(existing, Mapping):
+        existing = build_ledger(root, ep)
+    current_confirmed = build_ledger(root, ep, confirmed=True, reviewer=reviewer or "codex")
+    current_draft = build_ledger(root, ep)
+    confirmed_by_id = {
+        str(lock.get("lock_id")): lock
+        for lock in current_confirmed.get("locks", [])
+        if isinstance(lock, Mapping)
+    }
+    draft_by_id = {
+        str(lock.get("lock_id")): lock
+        for lock in current_draft.get("locks", [])
+        if isinstance(lock, Mapping)
+    }
+    old_by_id = {
+        str(lock.get("lock_id")): lock
+        for lock in existing.get("locks", [])
+        if isinstance(lock, Mapping)
+    }
+    locks: List[Dict[str, Any]] = []
+    for lock_id in LOCK_POINT_IDS:
+        if lock_id in selected_ids:
+            locks.append(dict(confirmed_by_id[lock_id]))
+        else:
+            locks.append(dict(old_by_id.get(lock_id) or draft_by_id[lock_id]))
+    all_confirmed = all(str(lock.get("status") or "").lower() == "confirmed" for lock in locks)
+    payload = dict(existing)
+    payload.update({
+        "kind": KIND,
+        "version": VERSION,
+        "episode": ep,
+        "status": "confirmed" if all_confirmed else "draft",
+        "updated_at": now_iso(),
+        "last_confirmed_at": now_iso(),
+        "last_confirmed_by": reviewer or "codex",
+        "last_confirmed_lock_ids": list(selected_ids),
+        "locks": locks,
+    })
+    path = write_ledger(root, ep, payload)
+    check = check_ledger(root, ep, stage=stage_key, write_check=write_check)
+    return {
+        "kind": KIND,
+        "episode": ep,
+        "status": check.get("status"),
+        "path": str(path),
+        "confirmed_lock_ids": list(selected_ids),
+        "check": check,
+    }
+
+
 def check_ledger(root: Path, ep: str, *, write_missing: bool = False, stage: str | None = None,
                  write_check: bool = False) -> Dict[str, Any]:
     ep = normalize_episode(ep)
@@ -295,6 +371,12 @@ def main(argv: List[str] | None = None) -> int:
     p_scaffold.add_argument("--confirm", action="store_true")
     p_scaffold.add_argument("--reviewer", default="")
     p_scaffold.add_argument("--force", action="store_true")
+    p_confirm = sub.add_parser("confirm")
+    p_confirm.add_argument("--stage", default="", help="confirm lock points required by this stage")
+    p_confirm.add_argument("--lock-id", action="append", default=[], help="lock_id to confirm; repeatable, or use all")
+    p_confirm.add_argument("--reviewer", default="codex")
+    p_confirm.add_argument("--write-check", action="store_true", help="write production_locks_check_<stage>_<episode>.json")
+    p_confirm.add_argument("--json", action="store_true")
     p_check = sub.add_parser("check")
     p_check.add_argument("--write-missing", action="store_true")
     p_check.add_argument("--write-check", action="store_true", help="write production_locks_check_<stage>_<episode>.json")
@@ -307,6 +389,15 @@ def main(argv: List[str] | None = None) -> int:
         payload = scaffold(root, ns.episode, confirmed=ns.confirm, reviewer=ns.reviewer, force=ns.force)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
+    if ns.command == "confirm":
+        try:
+            payload = confirm_locks(root, ns.episode, stage=ns.stage, lock_ids=ns.lock_id,
+                                    reviewer=ns.reviewer, write_check=ns.write_check)
+        except ValueError as exc:
+            print(json.dumps({"kind": KIND, "episode": normalize_episode(ns.episode), "status": "block", "error": str(exc)}, ensure_ascii=False, indent=2))
+            return 1
+        print(json.dumps(payload, ensure_ascii=False, indent=2) if ns.json else f"production locks confirm: {payload['status']}")
+        return 0 if payload["status"] == "pass" else 1
     payload = check_ledger(root, ns.episode, write_missing=ns.write_missing, stage=ns.stage,
                            write_check=ns.write_check or ns.write_missing)
     print(json.dumps(payload, ensure_ascii=False, indent=2) if ns.json else f"production locks: {payload['status']}")

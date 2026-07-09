@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第3话",
+  "panel_id": "P004",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 7,
+  "references": [
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__anchor.png",
+      "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__face.png",
+      "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__front.png",
+      "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+      "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__side.png",
+      "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+    },
+    {
+      "id": "PROP_HENGDAO",
+      "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+      "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+    },
+    {
+      "id": "CHAR_JYC",
+      "path": "出图/共享/图片/CHAR_JYC__back.png",
+      "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+    }
+  ],
+  "created_at": "2026-07-09T11:52:59"
+}

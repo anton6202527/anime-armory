@@ -8,13 +8,7 @@
   },
   "asset_face_policy": {
     "available": true,
-    "findings": [
-      {
-        "code": "asset_faceless_unverified_degraded",
-        "level": "warn",
-        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
-      }
-    ],
+    "findings": [],
     "notes": []
   },
   "asset_human_review": [],
@@ -86,8 +80,8 @@
           "intra_pairs": 4
         },
         "CHAR_01__镇魔司伪装态": {
-          "ep_mean_score": 0.6038,
-          "ep_n_shots": 3,
+          "ep_mean_score": 0.7169,
+          "ep_n_shots": 22,
           "floor": 0.5736,
           "floor_calibrated": true,
           "has_main": true,
@@ -145,9 +139,18 @@
           "face_idx": 0,
           "floor": 0.5736,
           "floor_calibrated": true,
+          "png": "图片/Clip01_end.png",
+          "score": 0.615,
+          "score_vs_main": 0.6028,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
           "png": "图片/Clip01_first.png",
-          "score": 0.6355,
-          "score_vs_main": 0.635,
+          "score": 0.6963,
           "verdict": "ok"
         },
         {
@@ -157,8 +160,8 @@
           "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip01_first_a1.png",
-          "score": 0.5946,
-          "score_vs_main": 0.5828,
+          "score": 0.6818,
+          "score_vs_main": 0.6783,
           "verdict": "ok"
         },
         {
@@ -167,7 +170,197 @@
           "floor": 0.5736,
           "floor_calibrated": true,
           "png": "图片/Clip01_first_a2.png",
-          "score": 0.5937,
+          "score": 0.6646,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.6231,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip01_first_a4.png",
+          "score": 0.6869,
+          "score_vs_main": 0.6833,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_end.png",
+          "score": 0.6261,
+          "score_vs_main": 0.5986,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_first.png",
+          "score": 0.5989,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_first_a1.png",
+          "score": 0.5743,
+          "score_vs_main": 0.567,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_first_a2.png",
+          "score": 0.5857,
+          "score_vs_main": 0.5369,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip02_first_a3.png",
+          "score": 0.6382,
+          "score_vs_main": 0.6238,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_end.png",
+          "score": 0.6432,
+          "score_vs_main": 0.6243,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first.png",
+          "score": 0.8408,
+          "score_vs_main": 0.8325,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.8044,
+          "score_vs_main": 0.7707,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.8216,
+          "score_vs_main": 0.7915,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.7648,
+          "score_vs_main": 0.7367,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.8063,
+          "score_vs_main": 0.7855,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip03_first_a5.png",
+          "score": 0.8118,
+          "score_vs_main": 0.7816,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_end.png",
+          "score": 0.8721,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first.png",
+          "score": 0.9109,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.9095,
+          "score_vs_main": 0.9037,
+          "verdict": "ok"
+        },
+        {
+          "anchor": "best_of_variants",
+          "char": "CHAR_01__镇魔司伪装态",
+          "face_idx": 0,
+          "floor": 0.5736,
+          "floor_calibrated": true,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.892,
+          "score_vs_main": 0.89,
           "verdict": "ok"
         }
       ]
@@ -217,8 +410,16 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
+          "png": "图片/Clip01_end.png",
+          "score": 0.0952,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
           "png": "图片/Clip01_first.png",
-          "score": 0.0941,
+          "score": 0.0945,
           "verdict": "ok"
         },
         {
@@ -226,7 +427,7 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
           "png": "图片/Clip01_first_a1.png",
-          "score": 0.09,
+          "score": 0.094,
           "verdict": "ok"
         },
         {
@@ -234,7 +435,158 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.605,
           "png": "图片/Clip01_first_a2.png",
-          "score": 0.0973,
+          "score": 0.1006,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.1069,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip01_first_a4.png",
+          "score": 0.0891,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_end.png",
+          "score": 0.1191,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_first.png",
+          "score": 0.0944,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_first_a1.png",
+          "score": 0.1142,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_first_a2.png",
+          "score": 0.1348,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip02_first_a3.png",
+          "score": 0.1212,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_end.png",
+          "score": 0.231,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first.png",
+          "score": 0.2247,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.245,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.1913,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.1852,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.2362,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip03_first_a5.png",
+          "score": 0.2302,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_end.png",
+          "score": 0.2113,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first.png",
+          "score": 0.1802,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.1423,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.605,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.1496,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_05__常态",
+          "floor": 0.5555,
+          "png": "图片/Clip05_first.png",
+          "score": 0.7356,
           "verdict": "ok"
         }
       ]
@@ -383,8 +735,8 @@
       "episode": "第5集",
       "groups": {
         "LOC_03": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.378,
+          "shots": 5
         },
         "PROP_上盘村断石碑": {
           "shots": 1,
@@ -395,24 +747,28 @@
           "skipped": "组<3镜"
         },
         "PROP_镇魔司黑衣赤纹": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.378,
+          "shots": 5
         },
         "VFX_妖气": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.378,
+          "shots": 5
+        },
+        "VFX_狼爪寒光": {
+          "median_dist": 0.378,
+          "shots": 5
         },
         "VFX_百妖谱金光": {
-          "shots": 1,
+          "shots": 2,
           "skipped": "组<3镜"
         },
         "VFX_虎山神摹影": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.378,
+          "shots": 5
         },
         "WEAPON_01": {
-          "shots": 1,
-          "skipped": "组<3镜"
+          "median_dist": 0.378,
+          "shots": 5
         }
       },
       "kind": "n2d_multimodal_consistency_report",
@@ -467,8 +823,16 @@
           "abs_verdict": "block",
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
+          "png": "图片/Clip01_end.png",
+          "score": 0.0358,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
           "png": "图片/Clip01_first.png",
-          "score": 0.0278,
+          "score": 0.0305,
           "verdict": "ok"
         },
         {
@@ -476,7 +840,7 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
           "png": "图片/Clip01_first_a1.png",
-          "score": 0.0316,
+          "score": 0.0319,
           "verdict": "ok"
         },
         {
@@ -484,7 +848,159 @@
           "char": "CHAR_01__镇魔司伪装态",
           "floor": 0.5027,
           "png": "图片/Clip01_first_a2.png",
-          "score": 0.0296,
+          "score": 0.0373,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_first_a3.png",
+          "score": 0.0323,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip01_first_a4.png",
+          "score": 0.0248,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_end.png",
+          "score": 0.1397,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_first.png",
+          "score": 0.067,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_first_a1.png",
+          "score": 0.0823,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_first_a2.png",
+          "score": 0.2115,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip02_first_a3.png",
+          "score": 0.1019,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_end.png",
+          "score": 0.2548,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first.png",
+          "score": 0.2266,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a1.png",
+          "score": 0.2624,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a2.png",
+          "score": 0.2329,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a3.png",
+          "score": 0.2217,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a4.png",
+          "score": 0.2549,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip03_first_a5.png",
+          "score": 0.2471,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_end.png",
+          "score": 0.2004,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first.png",
+          "score": 0.2001,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a1.png",
+          "score": 0.1391,
+          "verdict": "ok"
+        },
+        {
+          "abs_verdict": "block",
+          "char": "CHAR_01__镇魔司伪装态",
+          "floor": 0.5027,
+          "png": "图片/Clip04_first_a2.png",
+          "score": 0.2166,
+          "verdict": "ok"
+        },
+        {
+          "char": "CHAR_05__常态",
+          "costume_change_expected": "青面郎君从青衫狼首常态，演进为青衫撕裂、筋肉贲起、左肩肩颈被横刀劈伤。",
+          "floor": 0.8482,
+          "png": "图片/Clip05_first.png",
+          "score": 0.9231,
           "verdict": "ok"
         }
       ]
@@ -512,9 +1028,9 @@
               "空间轴线随机跳变"
             ]
           },
-          "median_dist": 15.0,
+          "median_dist": 25.5,
           "registered_id": "LOC_03",
-          "shots": 3
+          "shots": 23
         }
       },
       "impact_physics": [],
@@ -530,9 +1046,100 @@
     },
     "seam": {
       "available": true,
-      "contradictions": [],
+      "contradictions": [
+        {
+          "msg": "镜头1 存在接力尾帧 _end.png，但 storyboard 声明 match_action_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 1,
+          "tail": "Clip01_end.png",
+          "transition": "match_action_cut"
+        },
+        {
+          "msg": "镜头2 存在接力尾帧 _end.png，但 storyboard 声明 impact_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 2,
+          "tail": "Clip02_end.png",
+          "transition": "impact_cut"
+        },
+        {
+          "msg": "镜头3 存在接力尾帧 _end.png，但 storyboard 声明 hard_cut（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 3,
+          "tail": "Clip03_end.png",
+          "transition": "hard_cut"
+        },
+        {
+          "msg": "镜头4 存在接力尾帧 _end.png，但 storyboard 声明 match_cut_to_charge（非接力）——真值源矛盾，以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
+          "shot": 4,
+          "tail": "Clip04_end.png",
+          "transition": "match_cut_to_charge"
+        }
+      ],
       "notes": [],
-      "seams": []
+      "relative_floor": 31.0,
+      "seams": [
+        {
+          "action_shift": 0.027,
+          "action_verdict": null,
+          "color_dist": 0.0757,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 29,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip02_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip01_end.png",
+          "transition": "match_action_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.054,
+          "action_verdict": null,
+          "color_dist": 0.1517,
+          "color_verdict": "warn",
+          "cross_face_cos": null,
+          "dist": 27,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip03_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip02_end.png",
+          "transition": "impact_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.056,
+          "action_verdict": null,
+          "color_dist": 0.0221,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 27,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip04_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip03_end.png",
+          "transition": "hard_cut",
+          "verdict": "info"
+        },
+        {
+          "action_shift": 0.056,
+          "action_verdict": null,
+          "color_dist": 0.0608,
+          "color_verdict": "ok",
+          "cross_face_cos": null,
+          "dist": 24,
+          "face_verdict": null,
+          "intra_face_cos": null,
+          "next_first": "Clip05_first.png",
+          "relative_outlier": false,
+          "struct_verdict": "warn",
+          "tail": "Clip04_end.png",
+          "transition": "match_cut_to_charge",
+          "verdict": "info"
+        }
+      ]
     }
   },
   "cross_episode_face_drift": {
@@ -547,16 +1154,6 @@
         "from_mean": 0.406,
         "severity": "medium",
         "to_mean": 0.4461
-      },
-      {
-        "below_abs_low": false,
-        "char": "CHAR_01__镇魔司伪装态",
-        "drop": 0.1217,
-        "episode_from": "第3集",
-        "episode_to": "第5集",
-        "from_mean": 0.7255,
-        "severity": "medium",
-        "to_mean": 0.6038
       }
     ],
     "history_chars": 2
@@ -595,191 +1192,11 @@
   },
   "face_reference_coverage": {
     "available": true,
-    "covered": 6,
+    "covered": 22,
     "face_mode": "insightface",
     "missing": [],
     "notes": [],
     "pending": [
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip02_first.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip02_first_a1.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip02_first_a2.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip02_first_a3.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip02_end.png",
-        "shot": "Clip_02"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first_a1.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first_a2.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first_a3.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first_a4.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_first_a5.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip03_end.png",
-        "shot": "Clip_03"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
-        "png": "出图/第5集/图片/Clip04_first.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
-        "png": "出图/第5集/图片/Clip04_first_a1.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
-        "png": "出图/第5集/图片/Clip04_first_a2.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_01/镇魔司伪装态"
-        ],
-        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
-        "png": "出图/第5集/图片/Clip04_end.png",
-        "shot": "Clip_04"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_05/常态"
-        ],
-        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip05_first.png",
-        "shot": "Clip_05"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_05/常态"
-        ],
-        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip05_first_a1.png",
-        "shot": "Clip_05"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_05/常态"
-        ],
-        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip05_first_a2.png",
-        "shot": "Clip_05"
-      },
-      {
-        "face_coverage_required": true,
-        "identity_refs": [
-          "CHAR_05/常态"
-        ],
-        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
-        "png": "出图/第5集/图片/Clip05_end.png",
-        "shot": "Clip_05"
-      },
       {
         "face_coverage_required": true,
         "identity_refs": [
@@ -1025,8 +1442,33 @@
       }
     ],
     "precision_level": "full",
-    "required": 6,
-    "skipped": [],
+    "required": 22,
+    "skipped": [
+      {
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_05"
+      },
+      {
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a1.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_05"
+      },
+      {
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_first_a2.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_05"
+      },
+      {
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "png": "出图/第5集/图片/Clip05_end.png",
+        "reason": "non_human_anchor_policy",
+        "shot": "Clip_05"
+      }
+    ],
     "unclassified": [],
     "verdict": "ok"
   },
@@ -1038,20 +1480,40 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "出图/共享/asset_registry.json": "ea544007af451aa6b4cf16050504f664aec660be60efc72c77aeb7ab709c16d1",
-      "出图/共享/identity_registry.json": "925fc7d88e3d38f3463f219a869243d615c247c2bafff0c818828c857bf52723",
-      "出图/共享/style_anchor_registry.json": "9b24e53c0c79902e92affd9e489bc2c2a35f9b1d76a8533edf47da6df23ee60c",
+      "出图/共享/asset_registry.json": "10828465558347831b8b16c200a103717f897eee010ca32c5ebb38b99f91178a",
+      "出图/共享/identity_registry.json": "d3e331b2de614492d52cdbc79f93b2c7a4ec54b1aa7d4a26e483229fa892eb1d",
+      "出图/共享/style_anchor_registry.json": "e79e254bbc55054790e2ab3423b2cf39be179a278b9f8d93752b6385e681cfe7",
       "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png": "ecc81561f58521261fa239d448f0412ad7935c2f16c2e85d1956ae5cb4fd9531",
-      "出图/第5集/prompt/00_总览.md": "1d0cc489eb7e93178184110a4a4f4ae09e9752adbeb240d45c162ccd83ffe29f",
-      "出图/第5集/prompt/01_分镜出图.md": "1860d656488175e25a8c9c4e4eca341f1d5ad9c8f1c505561184dd9c7a5786d6",
-      "出图/第5集/图片/Clip01_first.png": "2adad7878a66e0766b085135613c1282cbcfe1844524a4d1b321b92ad404bacc",
-      "出图/第5集/图片/Clip01_first_a1.png": "aadd4922e28c9ea64855f4016e62f98aa513b01379a857b7cd3ba1efd268d7f4",
-      "出图/第5集/图片/Clip01_first_a2.png": "491772f72cd2b95210f7d6cd92b1d628626a8d2d8ca613a465dd916ddb570c9d",
+      "出图/第5集/prompt/00_总览.md": "cad7375a7500be0cb781f45ac771abe4f2e11e0d95270904233b9045745af8cb",
+      "出图/第5集/prompt/01_分镜出图.md": "923db4b330262aa515ddc8c86dc1e5d430c06cc3f50b8dc22b13789e94ac5f0c",
+      "出图/第5集/图片/Clip01_end.png": "3d3bb8cdb34b481798b5537ccf336793dd95b8f2394013a5ae1ce59462d30d12",
+      "出图/第5集/图片/Clip01_first.png": "b0703434881c4c82ce57854931d8c78889639f5f9dc366e853f34f4980a02432",
+      "出图/第5集/图片/Clip01_first_a1.png": "3ec5a94b1935cf3dcf5004b07d473a92be56e36e9048fcfe19e64f135661c1ec",
+      "出图/第5集/图片/Clip01_first_a2.png": "0bf576d887f0825da0be5c4c3d45b8861ef26c7c5e8eb7f9883d5d5cf4a8f304",
+      "出图/第5集/图片/Clip01_first_a3.png": "30b8c35d5ceeb7cda2e80ebc8ae66465b18147d911d125f2b79fca3992491335",
+      "出图/第5集/图片/Clip01_first_a4.png": "76e34f6eb76e90f328b03adfc6c50745aed79f2d208f28f7e7df7659eae96950",
+      "出图/第5集/图片/Clip02_end.png": "88cb6dc88fcda79673834a3553125861e4e9ef911705ca70d8a41498fdd262b5",
+      "出图/第5集/图片/Clip02_first.png": "6ec25c7c51ac74d934eda7c3441000b951abec85756d3bb709dbf302f22de4e5",
+      "出图/第5集/图片/Clip02_first_a1.png": "0d3fd675023ddee2b66639217c811a90da88ed1b7426df6d44dda65bbd60c421",
+      "出图/第5集/图片/Clip02_first_a2.png": "1e018d8ba0598790d800e76d58de8f71260d2210966d131f6fd272e70dcba617",
+      "出图/第5集/图片/Clip02_first_a3.png": "4f3c54fba8a9bbde7e86b7cd658560ac9e83d1969eb117a012d5d450510efa3e",
+      "出图/第5集/图片/Clip03_end.png": "5bd7db0fe19b73aa438409153a5efce0bd5f90d1d10d6f3cb3d3bb3021e0408b",
+      "出图/第5集/图片/Clip03_first.png": "8d30e73883e92aba36441ab26e9bf5334178e0059f679fe97e2d7a2a99112d38",
+      "出图/第5集/图片/Clip03_first_a1.png": "0e8c345d572926e7a52a3eae75f470d7da2cd5f022b049f97c97df2c0a8f8cb7",
+      "出图/第5集/图片/Clip03_first_a2.png": "033263822993af0833e78b96a6924becf8cf3f87cb8aa38964b0153297fc4f04",
+      "出图/第5集/图片/Clip03_first_a3.png": "5abd9d3ae584368ccb2e60f3f8ff9b44c8fdb1c8c4393a190a74fdfa6c13cf77",
+      "出图/第5集/图片/Clip03_first_a4.png": "5bc93f45c7826efe51ac44db7269bc1ac62bac87398cb5669f07559eabb93e91",
+      "出图/第5集/图片/Clip03_first_a5.png": "7e263a9297b77ca1d43cecc5b5a4ea32baa3b032c3264a93a823483582b32c1a",
+      "出图/第5集/图片/Clip04_end.png": "3eeb863969b7e8158c5c4471988fcf7d142dc0da1788adc14bca7024ae585a2f",
+      "出图/第5集/图片/Clip04_first.png": "64d3529ea083b2a8f86a738fe9d4d88be0800c6bae83f72113551fff0f22a697",
+      "出图/第5集/图片/Clip04_first_a1.png": "baeeeb42bf70c0e9d4303ecd35feaa3b355cbe99a2d421420cbfb804229f31f4",
+      "出图/第5集/图片/Clip04_first_a2.png": "79712ec8850863283271273fd0614bff945092eed37b6ce119123f522f1ce948",
+      "出图/第5集/图片/Clip05_first.png": "629b5189dad01d60291ad8eace3053b5d56b320b9f553a4640dcefd5d3c66f2f",
       "生产数据/image_qc/第5集/face_confirmations.json": null,
       "生产数据/image_qc/第5集/human_image_review.json": null,
-      "生产数据/image_qc/第5集/prop_shape_confirmations.json": null
+      "生产数据/image_qc/第5集/prop_shape_confirmations.json": "c489e931dd8ae5083a2791ab7d7e6cc9a2d8f93b0d5df6e5e9f7b6d6f80527e3"
     },
-    "sha": "12ad6001ddc601b9838e73e10e59532f08cdfe2899b60617f9b632977327f73a"
+    "sha": "169962386c6a0c41f847a184639db2bdda05c76789f14213345568ce1a06db58"
   },
   "kind": "n2d_image_qc",
   "lint": {
@@ -1256,7 +1718,8 @@
         "shot": "Clip_04"
       },
       {
-        "face_coverage_required": true,
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
         "identity_refs": [
           "CHAR_05/常态"
         ],
@@ -1265,7 +1728,8 @@
         "shot": "Clip_05"
       },
       {
-        "face_coverage_required": true,
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
         "identity_refs": [
           "CHAR_05/常态"
         ],
@@ -1274,7 +1738,8 @@
         "shot": "Clip_05"
       },
       {
-        "face_coverage_required": true,
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
         "identity_refs": [
           "CHAR_05/常态"
         ],
@@ -1283,7 +1748,8 @@
         "shot": "Clip_05"
       },
       {
-        "face_coverage_required": true,
+        "face_check_policy": "non_human_anchor_policy",
+        "face_coverage_required": false,
         "identity_refs": [
           "CHAR_05/常态"
         ],
@@ -1547,11 +2013,6 @@
         "msg": "脸部锚弱信噪比 CHAR_05/常态「face_anchor」（出图/共享/图片/定妆_CHAR_05__常态_脸部特写_脸锚裁切.png）：脸占画面仅 0%（建议 ≥30%，至少 ≥12%）——弱脸锚会把脸漂带进下游每一镜；核心/长线角色必须重出更紧的脸部特写（脸占 30–50%、≥1024px）后再放行。"
       },
       {
-        "code": "asset_faceless_unverified_degraded",
-        "level": "warn",
-        "msg": "资产 PROP_村道血迹破布：出图/共享/图片/定妆_道具_村道血迹破布_比例.png faceless 像素核验降级（未装 insightface/cv2——faceless 像素核验跳过，交人审）——跑 `image_qc --record-faceless` 在有 insightface 处登记机器证据，或人审确认无清晰脸。"
-      },
-      {
         "code": "vlm_setting_check_skipped",
         "level": "warn",
         "msg": "VLM 设定核验未运行（未配置 N2D_VLM_CMD）——服装剪裁/配饰/识别特征是否违反 canonical 设定未机检，缺左腕疤、月白窄袖画成交领这类设定漂移可能漏过；正式定稿前在 full+VLM 环境复跑。"
@@ -1571,12 +2032,35 @@
   "prop_shape_review": {
     "available": true,
     "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
-    "confirmed": 0,
-    "pending": 3,
+    "confirmed": 38,
+    "pending": 22,
     "targets": [
       {
         "asset": "PROP_上盘村断石碑",
         "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
@@ -1588,7 +2072,7 @@
         ],
         "png": "图片/Clip01_first.png",
         "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
-        "reason": "registered_prop_must_not_have",
+        "reason": "registered_asset_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
         "scale": "None",
         "shot": "Clip_01",
@@ -1596,8 +2080,119 @@
         "stitched": true
       },
       {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_上盘村断石碑",
+        "asset_name": "上盘村断石碑",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_上盘村断石碑.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_上盘村断石碑_Clip_01_Clip01_first_a4_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_村道血迹破布",
         "asset_name": "村道血迹破布",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "asset_type": "prop",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
@@ -1609,7 +2204,7 @@
         ],
         "png": "图片/Clip01_first.png",
         "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
-        "reason": "registered_prop_must_not_have",
+        "reason": "registered_asset_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
         "scale": "None",
         "shot": "Clip_01",
@@ -1617,8 +2212,119 @@
         "stitched": true
       },
       {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_村道血迹破布",
+        "asset_name": "村道血迹破布",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_村道血迹破布.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_村道血迹破布_Clip_01_Clip01_first_a4_compare.png",
+        "stitched": true
+      },
+      {
         "asset": "PROP_镇魔司黑衣赤纹",
         "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
         "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
         "confirmed": false,
         "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
@@ -1630,15 +2336,1401 @@
         ],
         "png": "图片/Clip01_first.png",
         "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
-        "reason": "registered_prop_must_not_have",
+        "reason": "registered_asset_must_not_have",
         "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
         "scale": "None",
         "shot": "Clip_01",
         "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_compare.png",
         "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip01_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_01_Clip01_first_a4_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 1（`EP05_CLIP01` · 群狼扑杀冷开：横刀出鞘 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip01_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip01_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_01",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_01_Clip01_first_a4_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip02_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_02_Clip02_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip02_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_02_Clip02_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip02_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip02_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip02_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 2（`EP05_CLIP02` · 猛虎快刀：肉盾被劈开 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip02_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip02_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_02",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_02_Clip02_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_a4_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip03_first_a5.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a5.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_03_Clip03_first_a5_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first_a3.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a3.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_a3_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first_a4.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a4.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_a4_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 3（`EP05_CLIP03` · 连斩三狼：群妖胆寒 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip03_first_a5.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip03_first_a5.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_03",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_03_Clip03_first_a5_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_04_Clip04_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_04_Clip04_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip04_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_04_Clip04_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip04_end.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_end.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_04_Clip04_end_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip04_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_04_Clip04_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip04_first_a1.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first_a1.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_04_Clip04_first_a1_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": true,
+        "label": "镜头 4（`EP05_CLIP04` · 弱肉强食反打：青面郎君破防 · dialogue_shot_reverse）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip04_first_a2.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip04_first_a2.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_04",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_04_Clip04_first_a2_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "PROP_镇魔司黑衣赤纹",
+        "asset_name": "镇魔司黑衣赤纹",
+        "asset_type": "prop",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip05_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_道具_镇魔司黑衣赤纹.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/PROP_镇魔司黑衣赤纹_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_妖气",
+        "asset_name": "妖气",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip05_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_妖气.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/VFX_妖气_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "VFX_狼爪寒光",
+        "asset_name": "狼爪寒光",
+        "asset_type": "vfx",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "must_not_have": [
+          "随机改色",
+          "遮挡主体脸",
+          "现代科幻UI",
+          "过度血腥猎奇",
+          "实体刀刃",
+          "第二把刀刃",
+          "金属刀刃",
+          "握柄",
+          "护手",
+          "双向开刃"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip05_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_特效_狼爪寒光.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/VFX_狼爪寒光_Clip_05_Clip05_first_compare.png",
+        "stitched": true
+      },
+      {
+        "asset": "WEAPON_01",
+        "asset_name": "横刀",
+        "asset_type": "weapon",
+        "confirmation_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_confirmations.json",
+        "confirmed": false,
+        "label": "镜头 5（`EP05_CLIP05` · 青影扑面：闻弦境正主下场 · fight_exchange）",
+        "must_not_have": [
+          "变成长剑",
+          "华丽仙剑",
+          "现代军刀",
+          "多把复制",
+          "副刀",
+          "短刃",
+          "匕首",
+          "右手第二把刀",
+          "副手持刀",
+          "后手短刀",
+          "双持",
+          "刀鞘变成刀刃",
+          "双刃",
+          "多刃",
+          "双向开刃",
+          "第二把刀刃",
+          "光效变成实体刀刃",
+          "两侧都有刀刃",
+          "刀光变成实体刀刃",
+          "狼爪寒光变成实体刀刃"
+        ],
+        "png": "图片/Clip05_first.png",
+        "png_abs": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/出图/第5集/图片/Clip05_first.png",
+        "reason": "registered_asset_must_not_have",
+        "ref": "出图/共享/图片/定妆_武器_横刀.png",
+        "scale": "None",
+        "shot": "Clip_05",
+        "stitch": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/生产数据/image_qc/第5集/prop_shape_review/WEAPON_01_Clip_05_Clip05_first_compare.png",
+        "stitched": true
       }
     ],
-    "total": 3
+    "total": 60
   },
   "qc_environment": {
     "face_mode": "insightface",
@@ -1653,22 +3745,122 @@
   "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人",
   "semantic_drift": {
     "available": true,
-    "compared": 3,
+    "compared": 23,
     "findings": [
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_end.png DINO/CLIP cosine=0.17 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.15 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first.png DINO/CLIP cosine=0.18 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       },
       {
         "code": "semantic_drift_low",
         "level": "warn",
-        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a2.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a1.png DINO/CLIP cosine=0.27 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a2.png DINO/CLIP cosine=0.20 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a3.png DINO/CLIP cosine=0.16 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip01_first_a4.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip02_end.png DINO/CLIP cosine=0.21 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip02_first.png DINO/CLIP cosine=0.22 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip02_first_a1.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip02_first_a2.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip02_first_a3.png DINO/CLIP cosine=0.26 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_end.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a1.png DINO/CLIP cosine=0.32 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a2.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a3.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a4.png DINO/CLIP cosine=0.24 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip03_first_a5.png DINO/CLIP cosine=0.28 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_end.png DINO/CLIP cosine=0.31 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first.png DINO/CLIP cosine=0.47 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a1.png DINO/CLIP cosine=0.29 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_01__镇魔司伪装态」↔ 本镜 图片/Clip04_first_a2.png DINO/CLIP cosine=0.38 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
+      },
+      {
+        "code": "semantic_drift_low",
+        "level": "warn",
+        "msg": "outfit 语义漂移疑似（调色板未报）：参考「CHAR_05__常态」↔ 本镜 图片/Clip05_first.png DINO/CLIP cosine=0.42 < 0.55——同色但剪裁/结构/布局可能变了（palette/dHash 抓不到），人判。"
       }
     ],
     "floor": 0.55
@@ -1703,12 +3895,12 @@
     },
     "anchor_status": "ok",
     "available": true,
-    "checked": 3,
-    "distance": 0.927,
+    "checked": 23,
+    "distance": 0.615,
     "episode_fingerprint": {
-      "contrast": 81.0,
-      "edge": 26.4,
-      "sat": 63.0
+      "contrast": 97.0,
+      "edge": 27.0,
+      "sat": 32.0
     },
     "findings": [],
     "intent": {
@@ -1727,7 +3919,7 @@
     }
   },
   "summary": {
-    "advisory": 10,
+    "advisory": 28,
     "by_check": {
       "anchors": {
         "block": 1,
@@ -1739,18 +3931,18 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 2
+        "warn": 1
       },
       "face": {
         "block": 0,
         "noface": 0,
-        "ok": 3,
+        "ok": 22,
         "warn": 0
       },
       "hair": {
         "block": 0,
         "noface": 0,
-        "ok": 3,
+        "ok": 23,
         "warn": 0
       },
       "human_anatomy": {
@@ -1763,7 +3955,7 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 4
+        "warn": 3
       },
       "multimodal": {
         "block": 0,
@@ -1774,7 +3966,7 @@
       "outfit": {
         "block": 0,
         "noface": 0,
-        "ok": 3,
+        "ok": 23,
         "warn": 0
       },
       "prohibited_face_patch": {
@@ -1784,7 +3976,7 @@
         "warn": 0
       },
       "prop_shape_review": {
-        "block": 3,
+        "block": 22,
         "noface": 0,
         "ok": 0,
         "warn": 0
@@ -1805,25 +3997,25 @@
         "block": 0,
         "noface": 0,
         "ok": 0,
-        "warn": 3
+        "warn": 23
       }
     },
     "degraded": false,
-    "hard_blocks": 3,
+    "hard_blocks": 22,
     "unavailable_visual_checks": [],
     "verdict": "block"
   },
   "tone_light_contract": {
     "available": true,
-    "checked": 3,
+    "checked": 23,
     "findings": [],
     "intent": {
       "brightness": null,
       "evidence": "上盘村冷灰晨雾、低饱和血尘与青黑妖气；百妖谱只在最后用金色古卷光作为信息焦点。",
       "warmth": "cool"
     },
-    "luma_median": 45.6,
-    "warmth_median": -0.3
+    "luma_median": 49.1,
+    "warmth_median": -0.1
   },
   "version": 1,
   "vlm_consistency": {

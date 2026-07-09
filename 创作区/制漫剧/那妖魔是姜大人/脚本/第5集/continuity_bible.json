@@ -39,11 +39,11 @@
       },
       "location_id": "LOC_03",
       "scene": "上盘村村道/晨雾血迹/外",
-      "screen_direction": "守本场左右轴线；视线接力：姜月初视线不看近身小妖，穿过战场直锁青面郎君；飞鹰门众人看向她的刀。；转场方式：match_action_cut。",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初沿第4集村道主轴直锁前景/中近景的青面郎君；飞鹰门众人看向她的刀，不重建新轴线。；转场方式：match_action_cut。",
       "shot_reverse_continuity": {},
       "state": {
-        "end_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
-        "entry_exit": "狼妖群从深景入画；姜月初不移动位置，只完成拔刀；青面郎君只作远景压迫。；出画/画外保留：PROP_上盘村断石碑、PROP_村道血迹破布；入画/现身：VFX_虎山神摹影",
+        "end_state": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
+        "entry_exit": "青面郎君沿第4集尾帧爪势保持前景/中近景压迫；狼妖群从他身后和画面两侧直接扑入，不重新登场；姜月初不移动位置，只完成拔刀接招；断石碑和村道血迹破布保持前集后景/地面关系；虎山神摹影只作后段气息，不抢首帧接力。",
         "knowledge_state": {
           "CHAR_01": [
             "知道群狼听青面郎君号令",
@@ -53,7 +53,7 @@
             "认为群狼足以围杀姜月初"
           ]
         },
-        "start_state": "第4集尾声后立即接：青面郎君刚下令，群狼伏身前扑，姜月初黑衣完整、横刀未出鞘。"
+        "start_state": "第4集尾帧后立即接：青面郎君已在前景/中近景亮出五道狼爪并喊出“杀了她”，姜月初保持前集站位，黑衣完整，右手压住横刀刀柄；狼妖群已在两侧和后景压近，不是重新从远处走来。"
       },
       "trace_ids": [],
       "transition_guard": "match_action_cut"
@@ -205,8 +205,8 @@
       "screen_direction": "守本场左右轴线；视线接力：姜月初看青面郎君，青面郎君先看死去同伴再瞪她。；转场方式：match_cut_to_charge。",
       "shot_reverse_continuity": {
         "axis_line": "姜月初画面左前方，青面郎君画面右后方；反打不越轴。",
-        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
-        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "buffer_or_reestablishing": "刀尖滴血插入和村道双人建立镜负责重新定向，禁止无缓冲越轴。",
+        "camera_coverage": "clean single + insert + reaction；刀尖 ECU 负责缓冲，姜月初/青面郎君近景拆正反打，不做双清晰脸同框。",
         "coverage_order": [
           "刀尖滴血插入",
           "姜月初反讽",
@@ -214,7 +214,7 @@
         ],
         "crossing_axis_policy": "不得交换左右；若需要动势，用青面郎君向画面左前方伏身压来作为出点。",
         "eyeline_match": "姜月初抬眼看青面郎君；青面郎君低头看死去小妖再抬头瞪她。",
-        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "lens_height_distance_match": "A/B 反打保持相近镜头高度、距离、景别和焦段；青面郎君破防时只允许轻微低机位增强压迫。",
         "screen_sides": {
           "CHAR_01": "screen_left_foreground",
           "CHAR_05": "screen_right_deep"
@@ -529,10 +529,274 @@
       "transition_guard": "cliffhanger_hard_cut"
     }
   ],
+  "continuity_chain": {
+    "seams": [
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_11",
+        "from_end_state": "青面郎君句子落点：杀了她！",
+        "from_episode": "第4集",
+        "intentional_discontinuity_reason": "",
+        "issues": [
+          {
+            "code": "missing_episode_boundary_contract",
+            "message": "跨集首镜缺 continuity.episode_boundary：必须声明承接上一集，或写有意跳切理由。",
+            "severity": "block"
+          }
+        ],
+        "next_firstframe": "出图/第5集/图片/Clip01_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第4集/图片/Clip11_end.png",
+        "same_location": true,
+        "scope": "episode_boundary",
+        "severity": "block",
+        "strictness": "strict",
+        "to_clip": "Clip_01",
+        "to_episode": "第5集",
+        "to_start_state": "第4集尾帧后立即接：青面郎君已在前景/中近景亮出五道狼爪并喊出“杀了她”，姜月初保持前集站位，黑衣完整，右手压住横刀刀柄；狼妖群已在两侧和后景压近，不是重新从远处走来。",
+        "transition": "hard_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_01",
+        "from_end_state": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip02_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip01_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_02",
+        "to_episode": "第5集",
+        "to_start_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+        "transition": "match_action_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_虎山神摹影",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_02",
+        "from_end_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip03_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip02_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_03",
+        "to_episode": "第5集",
+        "to_start_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "transition": "impact_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_03",
+        "from_end_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip04_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip03_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_04",
+        "to_episode": "第5集",
+        "to_start_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "transition": "hard_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_04",
+        "from_end_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip05_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip04_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_05",
+        "to_episode": "第5集",
+        "to_start_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "transition": "match_cut_to_charge"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气",
+          "VFX_狼爪寒光",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_05",
+        "from_end_state": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip06_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip05_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_06",
+        "to_episode": "第5集",
+        "to_start_state": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "transition": "impact_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_05",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_06",
+        "from_end_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip07_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip06_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_07",
+        "to_episode": "第5集",
+        "to_start_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "transition": "impact_flash_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "CHAR_04",
+          "CHAR_05",
+          "GROUP_狼妖群",
+          "GROUP_飞鹰门众人",
+          "LOC_03",
+          "PROP_镇魔司黑衣赤纹",
+          "VFX_妖气",
+          "WEAPON_01"
+        ],
+        "from_clip": "Clip_07",
+        "from_end_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip08_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip07_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_08",
+        "to_episode": "第5集",
+        "to_start_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "transition": "breath_cut"
+      },
+      {
+        "common_entities": [
+          "CHAR_01",
+          "PROP_镇魔司黑衣赤纹"
+        ],
+        "from_clip": "Clip_08",
+        "from_end_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "from_episode": "第5集",
+        "intentional_discontinuity_reason": "",
+        "issues": [],
+        "next_firstframe": "出图/第5集/图片/Clip09_first.png",
+        "policy": "relay",
+        "required_boundary_frame": "出图/第5集/图片/Clip08_end.png",
+        "same_location": true,
+        "scope": "intra_episode",
+        "severity": "pass",
+        "strictness": "strict",
+        "to_clip": "Clip_09",
+        "to_episode": "第5集",
+        "to_start_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "transition": "subjective_cut"
+      }
+    ],
+    "status": "confirmed",
+    "summary": {
+      "block": 1,
+      "clips": 9,
+      "design_cuts": 0,
+      "episode_boundaries": 1,
+      "intentional_discontinuities": 0,
+      "relays": 9,
+      "seams": 9,
+      "warn": 0
+    }
+  },
   "episode": "第5集",
-  "generated_at": "2026-07-08T09:57:16+00:00",
+  "generated_at": "2026-07-09T02:27:07+00:00",
   "inputs": {
     "continuity_breakdown": "脚本/第5集/continuity_breakdown.json",
+    "continuity_chain": "脚本/第5集/continuity_chain.json",
     "source_comprehension": "设定库/source_comprehension.json",
     "storyboard": "脚本/第5集/storyboard.json"
   },

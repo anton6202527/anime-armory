@@ -27,7 +27,7 @@
 | 写歌、改词、作曲、多版挑版、翻唱/换声、审歌、发布交付和真实反馈回灌 | **`song`**（分诊到 song-craft/lyrics/compose/cover/review/feedback 等） |
 | 给歌曲做 MV、卡点、出图出视频、卡拉 OK 字幕、合成 | **`mv`**（分诊到 mv-script/beat/plan/image/video/compose 等） |
 | 做广告片、TVC、信息流广告、产品 demo、带货视频、投放前广告评分 | **`ad`**（分诊到 ad-concept/script/voice/image/video/compose/score/review） |
-| 检查各系列 skill 更新是否影响项目、生成最小返工/重审/重评计划 | **`novel-update` / `n2d-update` / `song-update` / `mv-update` / `ad-update`**（按作品线选择；内容快照比对 + 最小返工/重制计划；只写计划/基线，不改正文、媒体或 `_进度.md`） |
+| 检查各系列 skill 更新是否影响项目、生成最小返工/重审/重评计划 | **`novel-update` / `n2d-update` / `comic-update` / `song-update` / `mv-update` / `ad-update`**（按作品线选择；内容快照比对 + 最小返工/重制计划；只写计划/基线，不改正文、媒体或 `_进度.md`） |
 | 查看项目进度/下一步，或在仓库根汇总某条线项目 | **`novel-progress` / `n2d-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress`**（按作品线选择；只读扫描，不回写 `_进度.md`） |
 | 修改/审计项目设置、选择点或全局默认 | **`novel-settings` / `n2d-settings` / `comic-settings` / `song-settings` / `mv-settings` / `ad-settings`**（按作品线选择；包住本线 `_设置.md` 读写/校验/重置/同步全局默认） |
 | 制漫剧少量图片/视频选择性刷新计划 | **`n2d-update`**（`media` 子命令做指定图片/视频的证据驱动刷新计划） |

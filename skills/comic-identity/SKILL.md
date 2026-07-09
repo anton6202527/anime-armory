@@ -21,6 +21,7 @@ description: 画漫画角色/场景/道具一致性流程。Use when comic panel
 - `出图/共享/identity_registry.json`：`CHAR_`、`MON_`、`LOC_`、`PROP_`、`SYS_` 等参考资产登记。
 - `出图/共享/图片/<REF_ID>__anchor.png`：可传给生图后端的锚点图。
 - `出图/共享/图片/<CHAR_ID>__front.png` / `__three_quarter.png` / `__side.png` / `__back.png` / `__face.png`：人物标准多视图包。项目 `_设置.md` 的 `定妆级别` 默认是 `长线专门定妆`，常驻角色进入批量生产前必须补齐。
+- `生产数据/comic_identity_anchors_第N话.json`：非人物共享锚点生成记录。
 - `生产数据/comic_identity_views_第N话_contact_sheet.jpg`：人物多视图 QA 拼图，用于快速检查是否缺图、串脸或视图不对。
 - `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标。
 - 更新 `panel_jobs.json` 中每个 reference 的真实 `path`。
@@ -47,6 +48,20 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --backend auto --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face
 ```
 
+从小说/剧本直接开画、还没有任何角色锚点时，先显式允许用文字设定生成首张 `front`，再用这张 front 派生其它视图：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
+  --backend codex --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face --allow-text-anchor
+```
+
+生成妖物、场景、道具等非人物共享锚点：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
+  --refs MON_TIGER,LOC_STREET,PROP_SWORD
+```
+
 Codex 图像通道不可用或需要真实图生图后端时，可显式走即梦官方 CLI：
 
 ```bash
@@ -66,7 +81,10 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 1. 若本话还没有 `出图/第N话/prompt/panel_jobs.json`，先用 `comic-image` 的 `build_panel_jobs.py` 生成；再跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
 2. 对常驻角色和关键资产建立锚点。短 demo 可从已采纳面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 子命令从当前 anchor 生成并登记多视图；`--backend auto` 会优先用可用后端，必要时可显式指定 `dreamina`。
+   - 从源小说、源剧本或古文直接开画时，若还没有任何可采纳角色图，只能在用户确认图像生成成本后显式传 `--allow-text-anchor`，让 Codex 根据 `story_bible.md` 和 `identity_registry.json` 生成第一张 `front` 定妆；后续视图再以这张 front 为参考锚点。
+   - 对公版经典、历史题材或已有多版影视改编的项目，首张文字定妆前先做轻量视觉研究并落到项目 `设定库/视觉参考研究.md` 或 registry `notes`：优先源本、学术/博物馆/权威资料、官方/资料库式影视条目；只抽取服制、阶层、场景、道具和叙事功能。不要上传或复刻影视剧照，不要求画成某演员，不复制具体构图、镜头、服饰组合或露骨尺度。
    - `views` 默认对非 `front` 视图优先使用已存在的 `front` 定妆图作为参考锚点，避免原剧情格的坐跪、挥砍、裁切等动作姿态污染多视图；需要强制用原始锚点时传 `--no-prefer-front-anchor`。
+   - `MON_`、`LOC_`、`PROP_` 等非人物资产用 `anchors` 生成 `__anchor.png` 并回写 registry；这些锚点必须先通过 `report --write` 绑定到 `panel_jobs.json`，再进入逐格出图。
 3. 重新跑 `report --write`，确认每个带 reference 的格子都有真实图片路径。
 4. 对 `rerun_targets` 用 `comic-image` 的 `--force --targets ...` 重抽。runner 会把参考图作为 `codex exec --image` 真实附件传入，并写 `生产数据/codex_reference_bundles/`。
 5. 重抽后再跑一次 `report --write`。`missing_refs=[]` 且 `rerun_targets=[]` 后，才进入 `comic-compose`。

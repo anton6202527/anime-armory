@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "comic_identity_report",
-  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-08T22:49:12",
+  "created_at": "2026-07-09T11:05:11",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
@@ -49,85 +49,213 @@
       "generated_reference_input_count": 0,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
     },
     {
       "panel_id": "P002",
       "status": "ready",
-      "valid_reference_count": 1,
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png",
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 5
     },
     {
       "panel_id": "P003",
       "status": "ready",
-      "valid_reference_count": 0,
-      "valid_references": [],
+      "valid_reference_count": 1,
+      "valid_references": [
+        {
+          "id": "MON_TIGER",
+          "path": "出图/共享/图片/MON_TIGER__anchor.png",
+          "sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80"
+        }
+      ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
+      "generated_reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
     },
     {
       "panel_id": "P004",
       "status": "ready",
-      "valid_reference_count": 0,
-      "valid_references": [],
+      "valid_reference_count": 7,
+      "valid_references": [
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__anchor.png",
+          "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
+        }
+      ],
       "missing_refs": [],
-      "generated_reference_input_count": 0,
+      "generated_reference_input_count": 7,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 0
     },
     {
       "panel_id": "P005",
       "status": "ready",
-      "valid_reference_count": 1,
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png",
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 5
     },
     {
       "panel_id": "P006",
       "status": "ready",
-      "valid_reference_count": 1,
+      "valid_reference_count": 7,
       "valid_references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png",
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "PROP_HENGDAO",
+          "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
+          "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 6
     },
     {
       "panel_id": "P007",
       "status": "ready",
-      "valid_reference_count": 3,
+      "valid_reference_count": 13,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -135,26 +263,77 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
         },
         {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
           "id": "PROP_HENGDAO",
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
           "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P008",
       "status": "ready",
-      "valid_reference_count": 2,
+      "valid_reference_count": 12,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -162,21 +341,72 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 2,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P009",
       "status": "ready",
-      "valid_reference_count": 3,
+      "valid_reference_count": 13,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -184,26 +414,77 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
         },
         {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
           "id": "MON_TIGER",
           "path": "出图/共享/图片/MON_TIGER__anchor.png",
           "sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P010",
       "status": "ready",
-      "valid_reference_count": 3,
+      "valid_reference_count": 13,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -211,26 +492,77 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
         },
         {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
           "id": "MON_TIGER",
           "path": "出图/共享/图片/MON_TIGER__anchor.png",
           "sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P011",
       "status": "ready",
-      "valid_reference_count": 3,
+      "valid_reference_count": 13,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -238,26 +570,77 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
         },
         {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
           "id": "MON_TIGER",
           "path": "出图/共享/图片/MON_TIGER__anchor.png",
           "sha256": "4efc28646aa7cc720be737288591de6934430e07888adca6814c24bd5a86bc80"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P012",
       "status": "ready",
-      "valid_reference_count": 4,
+      "valid_reference_count": 14,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -265,9 +648,29 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
         },
         {
           "id": "MON_TIGER",
@@ -278,35 +681,92 @@
           "id": "PROP_HENGDAO",
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
           "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 4,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P013",
       "status": "ready",
-      "valid_reference_count": 1,
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png",
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 1,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 5
     },
     {
       "panel_id": "P014",
       "status": "ready",
-      "valid_reference_count": 2,
+      "valid_reference_count": 12,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -314,21 +774,72 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
           "id": "CHAR_PEI",
           "path": "出图/共享/图片/CHAR_PEI__anchor.png",
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 2,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     },
     {
       "panel_id": "P015",
       "status": "ready",
-      "valid_reference_count": 2,
+      "valid_reference_count": 7,
       "valid_references": [
         {
           "id": "CHAR_JYC",
@@ -336,26 +847,62 @@
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
         },
         {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
           "id": "PROP_HENGDAO",
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
           "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 2,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 5
     },
     {
       "panel_id": "P016",
       "status": "ready",
-      "valid_reference_count": 3,
+      "valid_reference_count": 13,
       "valid_references": [
         {
           "id": "CHAR_JYC",
           "path": "出图/共享/图片/CHAR_JYC__anchor.png",
           "sha256": "bec9e78661415d206d262b3463e3494fa834cbb868e12ec9e9daf808956e6235"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__face.png",
+          "sha256": "601f750e730c03aae8708e79b0992c5b72684c7e1803042ddb21de8a56e09550"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__front.png",
+          "sha256": "5328afce50f98056cb91953cec43c27e5859c5688e38484187488efd59562e43"
         },
         {
           "id": "CHAR_PEI",
@@ -363,16 +910,57 @@
           "sha256": "b78c46aa66b087088b9a96f0df55066bc8ac058e30ce0641a843ad5d10734eaf"
         },
         {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__face.png",
+          "sha256": "b9a08ad620ed6141a2ff939984cca23308b908e71ea3f2a5c5d6de9dbdf60a24"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__front.png",
+          "sha256": "724c69ac051db495d254eb6b4d4940736aa30f17b52125ac76961353ce5cbd76"
+        },
+        {
           "id": "PROP_HENGDAO",
           "path": "出图/共享/图片/PROP_HENGDAO__anchor.png",
           "sha256": "d98c3b6540acb31eacd606af55b103d08e43c211017ca1db79a7ecd0d70da5aa"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__three_quarter.png",
+          "sha256": "291a5f17e60d4f19176b91f48d0d5a25bdbf043e5c4829a3d4deb649a2e02ac6"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+          "sha256": "95a42ba953ec631ecf2e82e8e9a890759c5dd097e7a536f326242517bcd99fb9"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__side.png",
+          "sha256": "ced6b73f5970bb1aa3cc9361a17a4e0a4f901fa2017bf54e3cffcc604cfe61f9"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__side.png",
+          "sha256": "4e448d2635ac334be39cb98ae2cece38ee9c725b7f1511520d15e563e5ac3ed8"
+        },
+        {
+          "id": "CHAR_JYC",
+          "path": "出图/共享/图片/CHAR_JYC__back.png",
+          "sha256": "0e38fdb8f215b4249d28f6d83017ff99abb24a5d0cecd43220307547393b3696"
+        },
+        {
+          "id": "CHAR_PEI",
+          "path": "出图/共享/图片/CHAR_PEI__back.png",
+          "sha256": "1438c52a8be53105e2682e47999c65e162a4e4870fdab9a3ead0746f8528a064"
         }
       ],
       "missing_refs": [],
       "generated_reference_input_count": 3,
       "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
       "needs_rerun": false,
-      "rerun_reason": ""
+      "rerun_reason": "",
+      "reference_delta_after_rebind": 10
     }
   ]
 }

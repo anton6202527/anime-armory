@@ -1,0 +1,689 @@
+{
+  "schema_version": 1,
+  "kind": "comic_layout",
+  "chapter": "第2话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第2话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "S001",
+      "width": 1440,
+      "height": 18152,
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "承接第1话钩子",
+          "bubble_first": "top",
+          "effects_hint": "无速度线，红帘边缘可用细风线。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N",
+              "type": "narration",
+              "x": 120,
+              "y": 72,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P002",
+          "x": 72,
+          "y": 1096,
+          "w": 1296,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "礼法边界第一次明示",
+          "bubble_first": "top",
+          "effects_hint": "蒸汽细线。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B002D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 1140,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P003",
+          "x": 72,
+          "y": 1964,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "时间压缩",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B003N",
+              "type": "narration",
+              "x": 120,
+              "y": 2008,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 2912,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "寒暖对冲，进入试探场",
+          "bubble_first": "top",
+          "effects_hint": "雪点和火星细线。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B004N",
+              "type": "narration",
+              "x": 120,
+              "y": 2956,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B004S",
+              "type": "sfx",
+              "x": 540,
+              "y": 3392,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P005",
+          "x": 72,
+          "y": 4060,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "第一次门槛试探",
+          "bubble_first": "top",
+          "effects_hint": "雪粉细线。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B005D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 4104,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B005D2",
+              "type": "dialogue",
+              "x": 128,
+              "y": 4258,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B005S",
+              "type": "sfx",
+              "x": 540,
+              "y": 4500,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P006",
+          "x": 72,
+          "y": 5128,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "空间封闭",
+          "bubble_first": "top",
+          "effects_hint": "门闩小拟声。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P004 seasonal_turning_point",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N",
+              "type": "narration",
+              "x": 120,
+              "y": 5172,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B006D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 5310,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B006S",
+              "type": "sfx",
+              "x": 540,
+              "y": 5608,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P007",
+          "x": 72,
+          "y": 6276,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "试探升温",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B007D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 6320,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B007D2",
+              "type": "dialogue",
+              "x": 128,
+              "y": 6474,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P008",
+          "x": 72,
+          "y": 7264,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "语言试探",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B008D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 7308,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B008D2",
+              "type": "dialogue",
+              "x": 128,
+              "y": 7462,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P009",
+          "x": 72,
+          "y": 8252,
+          "w": 1296,
+          "h": 780,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "压力升级",
+          "bubble_first": "top",
+          "effects_hint": "酒水小拟声。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B009N",
+              "type": "narration",
+              "x": 120,
+              "y": 8296,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B009D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 8434,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B009S",
+              "type": "sfx",
+              "x": 540,
+              "y": 8562,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P010",
+          "x": 72,
+          "y": 9060,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "越界峰值",
+          "bubble_first": "top",
+          "effects_hint": "火星细点，手边压力线极少。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B010D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 9104,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P011",
+          "x": 72,
+          "y": 10048,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "道德反转",
+          "bubble_first": "top",
+          "effects_hint": "泼酒弧线和小拟声，不用夸张爆炸线。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 10092,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B011S",
+              "type": "sfx",
+              "x": 540,
+              "y": 10488,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P012",
+          "x": 72,
+          "y": 11116,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "斥责落点",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 temptation_peak",
+          "bubble_slots": [
+            {
+              "slot_id": "B012N",
+              "type": "narration",
+              "x": 120,
+              "y": 11160,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B012D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 11298,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P013",
+          "x": 72,
+          "y": 12064,
+          "w": 1296,
+          "h": 780,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "冷场",
+          "bubble_first": "top",
+          "effects_hint": "碗盏小拟声。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B013N",
+              "type": "narration",
+              "x": 120,
+              "y": 12108,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B013S",
+              "type": "sfx",
+              "x": 540,
+              "y": 12374,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 12872,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "后果进入",
+          "bubble_first": "top",
+          "effects_hint": "雪地脚步拟声。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B014N",
+              "type": "narration",
+              "x": 120,
+              "y": 12916,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B014D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 13054,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B014S",
+              "type": "sfx",
+              "x": 540,
+              "y": 13352,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P015",
+          "x": 72,
+          "y": 14020,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "误解制造",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B015N",
+              "type": "narration",
+              "x": 120,
+              "y": 14064,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B015D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 14202,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B015D2",
+              "type": "dialogue",
+              "x": 128,
+              "y": 14356,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 15088,
+          "w": 1296,
+          "h": 700,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "沉默决定",
+          "bubble_first": "top",
+          "effects_hint": "无。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B016N",
+              "type": "narration",
+              "x": 120,
+              "y": 15132,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 15270,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P017",
+          "x": 72,
+          "y": 15816,
+          "w": 1296,
+          "h": 1160,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "后果峰值",
+          "bubble_first": "top",
+          "effects_hint": "脚步拟声。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B017D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 15860,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B017D2",
+              "type": "dialogue",
+              "x": 128,
+              "y": 16014,
+              "w": 430,
+              "h": 136
+            },
+            {
+              "slot_id": "B017S",
+              "type": "sfx",
+              "x": 540,
+              "y": 16316,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P018",
+          "x": 72,
+          "y": 17004,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "borderless",
+          "gutter_intent": "下一话帘下相遇钩子",
+          "bubble_first": "top",
+          "effects_hint": "风线轻带红帘。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B018N",
+              "type": "narration",
+              "x": 120,
+              "y": 17048,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B018S",
+              "type": "sfx",
+              "x": 540,
+              "y": 17484,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

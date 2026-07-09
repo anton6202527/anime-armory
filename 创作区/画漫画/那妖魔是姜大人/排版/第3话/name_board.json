@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "kind": "comic_name_board",
+  "chapter": "第3话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P005 disguise_reveal",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "gutter_intent": "P001:long pause；P002:standard beat；P003:standard beat；P004:standard beat；P005:long pause；P006:standard beat",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "竖向开场大格；安静、冷、愧疚；不要血腥特写，不画可读文字或空白气泡。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无速度线，只用风线和薄雾引导视线。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 424,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "中大格；留一块安静黑白灰空间给旁白，情绪克制。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无动作效果，仅薄雾和风线。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 668,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "中格；求生现实感，不要过度 gore；补给物要清楚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无动作效果。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 912,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "中格；制服赤纹要成为视觉焦点，避免剥衣猎奇。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "无动作效果。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1156,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "本话造型揭示大格；黑衣赤纹是重点，但脸必须继承 CHAR_JYC；不要出现头冠、伞、礼服。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "轻微风线吹动马尾和衣摆。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1508,
+            "w": 1188,
+            "h": 220
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "窄长过渡格；留旁白；孤独和冷。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "薄雾和轻风线。"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 bluff_strategy",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "gutter_intent": "P007:standard beat；P008:standard beat；P009:long pause；P010:long pause；P011:standard beat；P012:standard beat",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "信息格；用图形符号表现户籍/路引压力，禁止画可读文书正文。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "压力线从符号向人物背后收束。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 316,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "安静中格；给下一格马蹄打断做节奏停顿。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "轻微风线。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 560,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "动作大格；强速度线和尘土，但不要遮住火把方向。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "速度线沿官道纵深向下，尘土拖尾。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 912,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "中大格；陈青源首次出场：国字脸、虬髯、中年江湖武人，不是官军。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "马蹄急停尘线，缰绳拉紧线。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1264,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "误认关键格；姜月初内心慌但表情要压住。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "无速度线，火把微光边。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1508,
+            "w": 1188,
+            "h": 220
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "反差格；脸必须精致稳定，表面冷、内心崩。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "内心压迫小黑线，但不遮脸。"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P016 cliffhanger",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "gutter_intent": "P013:standard beat；P014:long pause；P015:long pause；P016:long pause",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 286
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "信息格；对白可分两个气泡，火把和马队保持低细节。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "火把烟线和马匹呼吸雾。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 385,
+            "w": 1296,
+            "h": 429
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "闪回大格；狼妖压迫感强，但避免详细残害、内脏、儿童猎奇；不出现可读文字。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "火光烟线和压迫集中线从狼妖指向村民。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 841,
+            "w": 1296,
+            "h": 429
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "群像压迫大格；姜月初背影小而硬，众人跪请形成巨大的误认压力。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "齐声对白可配轻微震动线，但不画空白气泡。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1297,
+            "w": 1296,
+            "h": 431
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "结尾大格；表面镇魔司冷脸，内心崩溃吐槽。不要直视读者；底部留黑场接第4话。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "内心崩溃可用细小裂纹/冷汗线，但不夸张 Q 版。"
+        }
+      ]
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: screentone hierarchy for skin, cloth, background depth, and mood blacks",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  }
+}

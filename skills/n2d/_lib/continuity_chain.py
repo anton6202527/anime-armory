@@ -14,7 +14,8 @@ KIND = "n2d_continuity_chain"
 VERSION = 1
 
 PLACEHOLDER_RE = re.compile(r"(待补|待填写|TODO|TBD|__.+?__|<[^>]+>)", re.I)
-CLIP_NUM_RE = re.compile(r"(?:Clip|CLIP|镜头|_CLIP)[_\s-]?(\d+)|(\d+)")
+EXPLICIT_CLIP_NUM_RE = re.compile(r"(?:clip|镜头)[_\s-]?(\d+)", re.I)
+GENERIC_NUM_RE = re.compile(r"(\d+)")
 
 STRICT_TRANSITION_RE = re.compile(
     r"接力|连续|延续|承接|seamless|relay|continuous|continuation|match[_\s-]?cut|"
@@ -30,9 +31,13 @@ DESIGN_CUT_RE = re.compile(
 
 def normalize_clip_id(value: Any, fallback: int = 0) -> str:
     text = str(value or "").strip()
-    match = CLIP_NUM_RE.search(text)
+    match = EXPLICIT_CLIP_NUM_RE.search(text)
     if match:
-        num = match.group(1) or match.group(2)
+        num = match.group(1)
+        return f"Clip_{int(num):02d}"
+    match = GENERIC_NUM_RE.search(text)
+    if match:
+        num = match.group(1)
         return f"Clip_{int(num):02d}"
     return f"Clip_{fallback:02d}" if fallback else text
 
@@ -70,6 +75,9 @@ def _clip_summary(clip: Mapping[str, Any], idx: int, episode: str) -> Dict[str, 
     cont = _cont(clip)
     entity = _entity(clip)
     cid = normalize_clip_id(clip.get("clip_id") or clip.get("id") or clip.get("label"), idx)
+    episode_boundary = cont.get("episode_boundary")
+    if not isinstance(episode_boundary, Mapping):
+        episode_boundary = cont.get("cross_episode_handoff")
     return {
         "episode": episode,
         "clip_id": cid,
@@ -88,7 +96,7 @@ def _clip_summary(clip: Mapping[str, Any], idx: int, episode: str) -> Dict[str, 
         "start_state": str(cont.get("start_state") or ""),
         "end_state": str(cont.get("end_state") or ""),
         "transition_to_next": str(cont.get("transition") or "").strip(),
-        "episode_boundary": cont.get("episode_boundary") if isinstance(cont.get("episode_boundary"), Mapping) else {},
+        "episode_boundary": episode_boundary if isinstance(episode_boundary, Mapping) else {},
     }
 
 
@@ -108,8 +116,14 @@ def _boundary_override(to_clip: Mapping[str, Any]) -> Dict[str, Any]:
     if not isinstance(boundary, Mapping) or not boundary:
         return {"declared": False}
     reason = str(boundary.get("intentional_discontinuity_reason") or boundary.get("reason") or "").strip()
-    continues = bool(boundary.get("continues_from_previous_episode") or boundary.get("continue_from_previous_episode"))
-    transition = str(boundary.get("transition_from_previous") or boundary.get("transition") or "").strip()
+    handoff_type = str(boundary.get("handoff_type") or "").strip()
+    continues = bool(
+        boundary.get("continues_from_previous_episode")
+        or boundary.get("continue_from_previous_episode")
+        or boundary.get("source_frame_required")
+        or STRICT_TRANSITION_RE.search(handoff_type)
+    )
+    transition = str(boundary.get("transition_from_previous") or boundary.get("transition") or handoff_type).strip()
     return {
         "declared": True,
         "continues": continues,

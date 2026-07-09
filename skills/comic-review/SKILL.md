@@ -71,7 +71,11 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 
 若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。
 
+若 face/hair/outfit 指纹低分来自低机位、遮挡、泥污、强光、动作变形或剧情换装等计划内角色状态，可写 `生产数据/character_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `character_consistency.py` 或 gate。签收记录至少匹配 `code + panel_id` 或 `code + artifact`，可选再加 `character_id`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。签收不能替代缺定妆图、缺角色 DNA、明显换脸或主服装设定错误的返修。
+
 若“疑似烘焙空白气泡”其实是天空、雾光、宣纸留白或系统绘卷等计划内亮部，可写 `生产数据/raw_bubble_acceptance_第N话.json` 做人审签收。`accepted_findings[]` 至少包含 `{"code":"raw_bubble_candidate","panel_id":"Pxxx","reason":"...","evidence":"..."}`；重跑 `comic-review` 后对应项会降为 `info`，但该格重抽后必须重新复核。
+
+若 `panel_qc` 已带 `manual_review.verdict=pass`，gate 会把该格落盘 `post_qc=warn` 作为已签收误报降为 `info`；没有 panel_qc 人审记录时，仍需 `raw_bubble_acceptance_第N话.json` 或重抽该格。
 
 ## 审查维度
 

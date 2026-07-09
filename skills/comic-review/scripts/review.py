@@ -584,19 +584,58 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
     path = root / "生产数据" / f"raw_bubble_acceptance_{chapter}.json"
     data = load_json(path, {})
     accepted: dict[str, dict[str, Any]] = {}
-    if not isinstance(data, dict):
+    if isinstance(data, dict):
+        for item in data.get("accepted_findings") or []:
+            if not isinstance(item, dict):
+                continue
+            panel_id = str(item.get("panel_id") or "").strip()
+            code = str(item.get("code") or "raw_bubble_candidate").strip()
+            if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
+                accepted[panel_id] = {
+                    "panel_id": panel_id,
+                    "code": code,
+                    "status": "accepted",
+                    "accepted_by": str(item.get("accepted_by") or data.get("accepted_by") or "manual_review"),
+                    "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
+                    "reason": str(item.get("reason") or ""),
+                    "evidence": str(item.get("evidence") or ""),
+                    "source": display_path(root, path),
+                }
+        for panel_id in data.get("accepted_panels") or []:
+            pid = str(panel_id).strip()
+            if pid and pid not in accepted:
+                accepted[pid] = {
+                    "panel_id": pid,
+                    "code": "raw_bubble_candidate",
+                    "status": "accepted",
+                    "accepted_by": str(data.get("accepted_by") or "manual_review"),
+                    "accepted_at": str(data.get("accepted_at") or ""),
+                    "reason": "accepted by panel list",
+                    "evidence": "",
+                    "source": display_path(root, path),
+                }
+    qc_dir = root / "生产数据" / "panel_qc" / chapter
+    if not qc_dir.is_dir():
         return accepted
-    for item in data.get("accepted_findings") or []:
-        if not isinstance(item, dict):
+    for qc_path in sorted(qc_dir.glob("*.json")):
+        qc = load_json(qc_path, {})
+        if not isinstance(qc, dict):
             continue
-        panel_id = str(item.get("panel_id") or "").strip()
-        code = str(item.get("code") or "raw_bubble_candidate").strip()
-        if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
-            accepted[panel_id] = item
-    for panel_id in data.get("accepted_panels") or []:
-        pid = str(panel_id).strip()
-        if pid and pid not in accepted:
-            accepted[pid] = {"panel_id": pid, "code": "raw_bubble_candidate", "reason": "accepted by panel list"}
+        panel_id = str(qc.get("panel_id") or qc_path.stem).strip()
+        manual = qc.get("manual_review") if isinstance(qc.get("manual_review"), dict) else {}
+        verdict = str(manual.get("verdict") or "").strip().lower()
+        if not panel_id or verdict not in {"pass", "accepted", "accept"}:
+            continue
+        accepted[panel_id] = {
+            "panel_id": panel_id,
+            "code": "raw_bubble_candidate",
+            "status": "accepted",
+            "accepted_by": str(manual.get("reviewed_by") or manual.get("accepted_by") or "manual_review"),
+            "accepted_at": str(manual.get("reviewed_at") or manual.get("accepted_at") or ""),
+            "reason": str(manual.get("reason") or ""),
+            "evidence": display_path(root, qc_path),
+            "source": display_path(root, qc_path),
+        }
     return accepted
 
 

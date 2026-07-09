@@ -1,13 +1,13 @@
 {
   "continuity_owner": "script_supervisor",
   "episode": "第5集",
-  "generated_at": "2026-07-08T09:57:16+00:00",
+  "generated_at": "2026-07-09T02:27:07+00:00",
   "kind": "n2d_continuity_breakdown",
   "rows": [
     {
       "clip_id": "EP05_CLIP01",
-      "end_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
-      "eyeline": "姜月初视线不看近身小妖，穿过战场直锁青面郎君；飞鹰门众人看向她的刀。",
+      "end_state": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
+      "eyeline": "姜月初沿第4集村道主轴直锁前景/中近景的青面郎君；飞鹰门众人看向她的刀，不重建新轴线。",
       "knowledge_state": {
         "CHAR_01": [
           "知道群狼听青面郎君号令",
@@ -26,9 +26,9 @@
         "PROP_镇魔司黑衣赤纹",
         "LOC_03"
       ],
-      "screen_direction": "守本场左右轴线；视线接力：姜月初视线不看近身小妖，穿过战场直锁青面郎君；飞鹰门众人看向她的刀。；转场方式：match_action_cut。",
+      "screen_direction": "守本场左右轴线；视线接力：姜月初沿第4集村道主轴直锁前景/中近景的青面郎君；飞鹰门众人看向她的刀，不重建新轴线。；转场方式：match_action_cut。",
       "shot_reverse_continuity": {},
-      "start_state": "第4集尾声后立即接：青面郎君刚下令，群狼伏身前扑，姜月初黑衣完整、横刀未出鞘。",
+      "start_state": "第4集尾帧后立即接：青面郎君已在前景/中近景亮出五道狼爪并喊出“杀了她”，姜月初保持前集站位，黑衣完整，右手压住横刀刀柄；狼妖群已在两侧和后景压近，不是重新从远处走来。",
       "transition_guard": "match_action_cut",
       "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、GROUP_狼妖群、WEAPON_01、PROP_镇魔司黑衣赤纹、LOC_03；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
     },

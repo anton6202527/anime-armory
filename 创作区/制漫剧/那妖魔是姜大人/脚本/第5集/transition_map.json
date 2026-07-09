@@ -1,0 +1,97 @@
+{
+  "episode": "第5集",
+  "generated_at": "2026-07-09T02:23:34+00:00",
+  "kind": "n2d_transition_map",
+  "seams": [
+    {
+      "continuity_guard": "姜月初仍盯青面郎君；青面郎君视线从刀光转到被抓同伴。",
+      "from_beat": "EP05_CLIP01",
+      "in_point": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+      "need_endframe": true,
+      "out_point": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
+      "seam_id": "Seam_01",
+      "sound_bridge": "横刀出鞘的金属闪光是本镜撞点，不出现斩杀。；尾帧按 continuity.end_state 与下一镜 start_state 对齐。",
+      "to_beat": "EP05_CLIP02",
+      "transition_type": "impact_cut"
+    },
+    {
+      "continuity_guard": "姜月初眼神掠过余妖后重新锁青面郎君；余妖视线避开刀锋。",
+      "from_beat": "EP05_CLIP02",
+      "in_point": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+      "need_endframe": true,
+      "out_point": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+      "seam_id": "Seam_02",
+      "sound_bridge": "12s 刀光劈开肉盾狼妖，使用剪影/血尘遮挡，不给血腥剖面。；尾帧按 continuity.end_state 与下一镜 start_state 对齐。",
+      "to_beat": "EP05_CLIP03",
+      "transition_type": "hard_cut"
+    },
+    {
+      "continuity_guard": "姜月初看青面郎君，青面郎君先看死去同伴再瞪她。",
+      "from_beat": "EP05_CLIP03",
+      "in_point": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+      "need_endframe": true,
+      "out_point": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+      "seam_id": "Seam_03",
+      "sound_bridge": "8s 横扫连斩三狼，刀线带起冷光弧。；尾帧按 continuity.end_state 与下一镜 start_state 对齐。",
+      "to_beat": "EP05_CLIP04",
+      "transition_type": "match_cut_to_charge"
+    },
+    {
+      "continuity_guard": "青面郎君视线直扑姜月初面门；姜月初视线不躲。",
+      "from_beat": "EP05_CLIP04",
+      "in_point": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+      "need_endframe": true,
+      "out_point": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+      "seam_id": "Seam_04",
+      "sound_bridge": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "to_beat": "EP05_CLIP05",
+      "transition_type": "impact_cut"
+    },
+    {
+      "continuity_guard": "双方视线锁定对方撞点，不看镜头。",
+      "from_beat": "EP05_CLIP05",
+      "in_point": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+      "need_endframe": true,
+      "out_point": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+      "seam_id": "Seam_05",
+      "sound_bridge": "9s 黑煞青影逼近面门，尚未撞上。；尾帧按 continuity.end_state 与下一镜 start_state 对齐。",
+      "to_beat": "EP05_CLIP06",
+      "transition_type": "impact_flash_cut"
+    },
+    {
+      "continuity_guard": "姜月初短暂低头看伤口后抬眼看正主；青面郎君盯她不退。",
+      "from_beat": "EP05_CLIP06",
+      "in_point": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+      "need_endframe": true,
+      "out_point": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+      "seam_id": "Seam_06",
+      "sound_bridge": "7s 刀锋没入肩颈、狼爪撕裂黑衣前一瞬，能量撞点明确。；尾帧按 continuity.end_state 与下一镜 start_state 对齐。",
+      "to_beat": "EP05_CLIP07",
+      "transition_type": "breath_cut"
+    },
+    {
+      "continuity_guard": "陈青源看姜月初伤势后转向众人；众人刀尖指向青面郎君；姜月初眼神短暂脱离外界进入内心。",
+      "from_beat": "EP05_CLIP07",
+      "in_point": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+      "need_endframe": true,
+      "out_point": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+      "seam_id": "Seam_07",
+      "sound_bridge": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "to_beat": "EP05_CLIP08",
+      "transition_type": "subjective_cut"
+    },
+    {
+      "continuity_guard": "主观识海镜头，姜月初眼神内收；外界角色只作画外声/虚焦符号，不清晰抢画。",
+      "from_beat": "EP05_CLIP08",
+      "in_point": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+      "need_endframe": true,
+      "out_point": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+      "seam_id": "Seam_08",
+      "sound_bridge": "环境声先稳住空间，剪点处用短促音效托住信息落点",
+      "to_beat": "EP05_CLIP09",
+      "transition_type": "cliffhanger_hard_cut"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

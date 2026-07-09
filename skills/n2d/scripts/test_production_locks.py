@@ -129,3 +129,19 @@ def test_check_ledger_does_not_write_check_report_unless_requested(tmp_path: Pat
     written = locks.check_ledger(tmp_path, "第1集", stage="image_preflight", write_check=True)
     assert written["check_path"] == str(expected)
     assert expected.is_file()
+
+
+def test_confirm_locks_confirms_stage_scope_without_touching_later_locks(tmp_path: Path) -> None:
+    _write_release_inputs(tmp_path)
+    locks.scaffold(tmp_path, "第1集")
+
+    result = locks.confirm_locks(tmp_path, "第1集", stage="image_preflight", reviewer="qa", write_check=True)
+
+    assert result["status"] == "pass"
+    assert result["confirmed_lock_ids"] == list(locks.stage_lock_ids("image_preflight"))
+    data = json.loads(locks.lock_path(tmp_path, "第1集").read_text(encoding="utf-8"))
+    by_id = {lock["lock_id"]: lock for lock in data["locks"]}
+    assert by_id["source_lock"]["status"] == "confirmed"
+    assert by_id["style_identity_lock"]["approver"] == "qa"
+    assert by_id["voice_timing_lock"]["status"] == "draft"
+    assert (tmp_path / "生产数据" / "production_locks_check_image_第1集.json").is_file()

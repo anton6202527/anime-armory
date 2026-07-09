@@ -117,6 +117,65 @@ def find_panel_image(root: Path, chapter: str, panel_id: str) -> Path | None:
     return next((item for item in matches if item.suffix.lower() in IMAGE_EXTS), None)
 
 
+def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
+    path = root / "生产数据" / f"raw_bubble_acceptance_{chapter}.json"
+    data = load_json(path, {})
+    accepted: dict[str, dict[str, Any]] = {}
+    if not isinstance(data, dict):
+        return accepted
+    for item in data.get("accepted_findings") or []:
+        if not isinstance(item, dict):
+            continue
+        panel_id = str(item.get("panel_id") or "").strip()
+        code = str(item.get("code") or "raw_bubble_candidate").strip()
+        if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
+            accepted[panel_id] = {
+                "status": "accepted",
+                "accepted_by": str(item.get("accepted_by") or data.get("accepted_by") or "manual_review"),
+                "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
+                "reason": str(item.get("reason") or ""),
+                "evidence": str(item.get("evidence") or ""),
+                "source": rel(root, path),
+            }
+    for panel_id in data.get("accepted_panels") or []:
+        pid = str(panel_id).strip()
+        if pid and pid not in accepted:
+            accepted[pid] = {
+                "status": "accepted",
+                "accepted_by": str(data.get("accepted_by") or "manual_review"),
+                "accepted_at": str(data.get("accepted_at") or ""),
+                "reason": "accepted by panel list",
+                "evidence": "",
+                "source": rel(root, path),
+            }
+    return accepted
+
+
+def load_panel_post_qc_acceptance(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
+    accepted = load_raw_bubble_acceptance(root, chapter)
+    qc_dir = root / "生产数据" / "panel_qc" / chapter
+    if not qc_dir.is_dir():
+        return accepted
+    for path in sorted(qc_dir.glob("*.json")):
+        data = load_json(path, {})
+        if not isinstance(data, dict):
+            continue
+        panel_id = str(data.get("panel_id") or path.stem).strip()
+        manual = data.get("manual_review") if isinstance(data.get("manual_review"), dict) else {}
+        verdict = str(manual.get("verdict") or "").strip().lower()
+        if not panel_id or verdict not in {"pass", "accepted", "accept"}:
+            continue
+        accepted[panel_id] = {
+            "status": "accepted",
+            "accepted_by": str(manual.get("reviewed_by") or manual.get("accepted_by") or "manual_review"),
+            "accepted_at": str(manual.get("reviewed_at") or manual.get("accepted_at") or ""),
+            "reason": str(manual.get("reason") or ""),
+            "evidence": rel(root, path),
+            "source": rel(root, path),
+        }
+    return accepted
+
+
 def refresh_identity_report(root: Path, chapter: str, findings: list[dict[str, Any]], *, no_refresh: bool) -> dict[str, Any]:
     report_path = root / "生产数据" / f"comic_identity_report_{chapter}.json"
     if not no_refresh:
@@ -682,6 +741,7 @@ def check_backend(root: Path, jobs: dict[str, Any], findings: list[dict[str, Any
 
 
 def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    post_qc_acceptance = load_panel_post_qc_acceptance(root, chapter)
     for job in jobs.get("jobs") or []:
         if not isinstance(job, dict):
             continue
@@ -712,16 +772,31 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
                 "补齐该 panel 图并确保 job.status=ready。",
             )
         elif post_verdict == "warn":
-            add(
-                findings,
-                "warn",
-                "panel_post_qc_warn",
-                str(job.get("result_path") or rel(root, panel_path)),
-                f"{pid} 的落盘 post_qc=warn，需要人审签收或重抽。",
-                "image",
-                "放大查看 panel_qc 与原图；确认误报时在审查报告保留签收证据。",
-                evidence_family="heuristic",
-            )
+            acceptance = post_qc_acceptance.get(pid)
+            if acceptance:
+                add(
+                    findings,
+                    "info",
+                    "panel_post_qc_warn",
+                    str(job.get("result_path") or rel(root, panel_path)),
+                    f"{pid} 的落盘 post_qc=warn 已人审签收为误报：" + str(acceptance.get("reason") or "计划内亮部/雾面/叙事道具"),
+                    "review",
+                    "若该格重抽或构图变化，需要重新复核 panel_qc。",
+                    evidence_family="human_acceptance",
+                )
+                findings[-1]["machine_severity"] = "warn"
+                findings[-1]["manual_acceptance"] = acceptance
+            else:
+                add(
+                    findings,
+                    "warn",
+                    "panel_post_qc_warn",
+                    str(job.get("result_path") or rel(root, panel_path)),
+                    f"{pid} 的落盘 post_qc=warn，需要人审签收或重抽。",
+                    "image",
+                    "放大查看 panel_qc 与原图；确认误报时在审查报告保留签收证据。",
+                    evidence_family="heuristic",
+                )
 
 
 def merge_consistency_report(report: dict[str, Any], findings: list[dict[str, Any]], *, category: str) -> None:

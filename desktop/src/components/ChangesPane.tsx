@@ -1,10 +1,17 @@
-import { lazy, Suspense, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
 import {
   archiveWorkChange,
   archiveWorkChanges,
+  ensureMedia,
+  getMediaPort,
+  mediaAllowRoot,
+  mediaUrl,
+  readWorkDocx,
   readWorkChange,
+  readWorkFile,
   restoreWorkChange,
   restoreWorkChanges,
+  subscribeMediaPort,
   workChanges,
 } from "../api";
 import { useI18n } from "../i18n";
@@ -17,17 +24,31 @@ import {
   draftFilesSideWidth,
   readCurrentFilesSideWidth,
 } from "../paneLayout";
-import type { WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
+import type { SkillTreeEntry, WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
 
 const ChangesDiffEditor = lazy(() =>
   import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
 );
+const MonacoFileEditor = lazy(() =>
+  import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
+);
+
+const IMG = new Set(["png", "jpg", "jpeg", "webp", "gif", "bmp", "svg"]);
+const VIDEO = new Set(["mp4", "mov", "webm", "m4v"]);
+const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
+type OpenedPreviewKind = "img" | "video" | "audio" | "docx" | "text";
 
 function fileName(path: string): string {
   const i = path.lastIndexOf("/");
   return i < 0 ? path : path.slice(i + 1);
+}
+
+function ext(path: string): string {
+  const name = fileName(path);
+  const i = name.lastIndexOf(".");
+  return i < 0 ? "" : name.slice(i + 1).toLowerCase();
 }
 
 function formatBytes(value?: number | null): string {
@@ -37,20 +58,27 @@ function formatBytes(value?: number | null): string {
   return `${(value / 1024 / 1024).toFixed(1)} MB`;
 }
 
+function openedPreviewKind(path: string): OpenedPreviewKind {
+  const e = ext(path);
+  if (IMG.has(e)) return "img";
+  if (VIDEO.has(e)) return "video";
+  if (AUDIO.has(e)) return "audio";
+  if (e === "docx") return "docx";
+  return "text";
+}
+
 export function ChangesPane({
   root,
   refreshKey,
   baselineVersion,
   summary,
   onArchived,
-  onOpenFile,
 }: {
   root: WorkRoot;
   refreshKey: number;
   baselineVersion: number;
   summary: WorkChangeSummary | null;
   onArchived: (summary: WorkChangeSummary) => void;
-  onOpenFile: (path: string) => void;
 }) {
   const { t } = useI18n();
   const [changes, setChanges] = useState<WorkChangeEntry[]>([]);
@@ -63,9 +91,18 @@ export function ChangesPane({
   const [restoring, setRestoring] = useState(false);
   const [restoringPath, setRestoringPath] = useState("");
   const [err, setErr] = useState("");
+  const [openedPath, setOpenedPath] = useState("");
+  const [openedText, setOpenedText] = useState("");
+  const [openedError, setOpenedError] = useState("");
+  const [openedLoading, setOpenedLoading] = useState(false);
+  const [openedDirty, setOpenedDirty] = useState(false);
+  const [openedReloadKey, setOpenedReloadKey] = useState(0);
   const paneRef = useRef<HTMLDivElement>(null);
   const scanEpochRef = useRef(0);
   const detailEpochRef = useRef(0);
+  const openedEpochRef = useRef(0);
+  useSyncExternalStore(subscribeMediaPort, getMediaPort);
+  const openedKind = openedPath ? openedPreviewKind(openedPath) : "";
 
   useEffect(() => {
     let alive = true;
@@ -76,6 +113,7 @@ export function ChangesPane({
       .then((result) => {
         if (!alive || epoch !== scanEpochRef.current) return;
         setChanges(result.changes);
+        setOpenedPath((prev) => (prev && result.changes.some((change) => change.path === prev && change.kind !== "deleted") ? prev : ""));
         setSelected((prev) => {
           if (prev && result.changes.some((change) => change.path === prev)) return prev;
           return result.changes[0]?.path ?? "";
@@ -109,6 +147,69 @@ export function ChangesPane({
       alive = false;
     };
   }, [root.path, selected]);
+
+  useEffect(() => {
+    const epoch = ++openedEpochRef.current;
+    setOpenedText("");
+    setOpenedError("");
+    setOpenedDirty(false);
+    if (!openedPath) {
+      setOpenedLoading(false);
+      return;
+    }
+    if (openedKind === "img" || openedKind === "video" || openedKind === "audio") {
+      setOpenedLoading(false);
+      return;
+    }
+    let alive = true;
+    setOpenedLoading(true);
+    const reader = openedKind === "docx" ? readWorkDocx : readWorkFile;
+    reader(root.path, openedPath)
+      .then((text) => {
+        if (alive && epoch === openedEpochRef.current) setOpenedText(text);
+      })
+      .catch((e) => {
+        if (alive && epoch === openedEpochRef.current) setOpenedError(String(e));
+      })
+      .finally(() => {
+        if (alive && epoch === openedEpochRef.current) setOpenedLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [openedKind, openedPath, openedReloadKey, root.path]);
+
+  useEffect(() => {
+    if (openedKind !== "img" && openedKind !== "video" && openedKind !== "audio") return;
+    ensureMedia()
+      .then(() => mediaAllowRoot(root.path))
+      .catch((e) => setOpenedError(String(e)));
+  }, [openedKind, root.path]);
+
+  function confirmCloseOpened(nextPath?: string): boolean {
+    if (!openedDirty || nextPath === openedPath) return true;
+    return window.confirm(t("files.discardUnsavedConfirm", { path: openedPath }));
+  }
+
+  function selectChange(path: string) {
+    if (!confirmCloseOpened("")) return;
+    setOpenedPath("");
+    setSelected(path);
+  }
+
+  function openChangedFile(change: WorkChangeEntry) {
+    if (change.kind === "deleted") return;
+    if (!confirmCloseOpened(change.path)) return;
+    const kind = openedPreviewKind(change.path);
+    setSelected(change.path);
+    setOpenedText("");
+    setOpenedError("");
+    setOpenedDirty(false);
+    setOpenedLoading(kind !== "img" && kind !== "video" && kind !== "audio");
+    setOpenedPath(change.path);
+    setOpenedReloadKey((key) => key + 1);
+    window.setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
+  }
 
   function applyChangeList(nextChanges: WorkChangeEntry[], preferredSelected?: string) {
     setChanges(nextChanges);
@@ -183,6 +284,7 @@ export function ChangesPane({
       setChanges([]);
       setSelected("");
       setDetail(null);
+      setOpenedPath("");
       await refreshAfterArchive(result);
     } catch (e) {
       setErr(String(e));
@@ -202,6 +304,7 @@ export function ChangesPane({
         setDetail(null);
         setDetailError("");
       }
+      if (openedPath === path) setOpenedPath("");
       await refreshAfterArchive(result, selected === path ? undefined : selected);
     } catch (e) {
       setErr(String(e));
@@ -223,6 +326,7 @@ export function ChangesPane({
       setChanges([]);
       setSelected("");
       setDetail(null);
+      setOpenedPath("");
       await refreshAfterArchive(result);
     } catch (e) {
       setErr(String(e));
@@ -245,6 +349,7 @@ export function ChangesPane({
         setDetail(null);
         setDetailError("");
       }
+      if (openedPath === path) setOpenedPath("");
       await refreshAfterArchive(result, selected === path ? undefined : selected);
     } catch (e) {
       setErr(String(e));
@@ -264,6 +369,19 @@ export function ChangesPane({
   }
 
   const selectedEntry = changes.find((change) => change.path === selected) ?? null;
+  const openedEntry = changes.find((change) => change.path === openedPath && change.kind !== "deleted") ?? null;
+  const openedAbs = openedEntry ? `${root.path}/${openedEntry.path}` : "";
+  const openedMediaUrl = openedAbs ? mediaUrl(openedAbs) : "";
+  const openedMediaSrc = openedMediaUrl ? `${openedMediaUrl}&v=${openedEntry?.new_mtime ?? 0}` : "";
+  const openedEditorEntry: SkillTreeEntry | null = openedEntry ? {
+    name: fileName(openedEntry.path),
+    path: openedEntry.path,
+    depth: 0,
+    is_dir: false,
+    size: openedEntry.new_size ?? undefined,
+    mtime: openedEntry.new_mtime ?? undefined,
+    status: openedEntry.kind,
+  } : null;
   const count = summary ? summary.changed + summary.deleted : changes.length;
   const showToolbar = loading || changes.length > 0 || archiving || restoring || Boolean(archivingPath || restoringPath);
   const kindLabel = {
@@ -317,8 +435,8 @@ export function ChangesPane({
               <button
                 type="button"
                 className="change-row"
-                onClick={() => setSelected(change.path)}
-                onDoubleClick={() => onOpenFile(change.path)}
+                onClick={() => selectChange(change.path)}
+                onDoubleClick={() => openChangedFile(change)}
               >
                 <WorkFileIcon entry={{ name: fileName(change.path), is_dir: false }} />
                 <span className="change-name">{fileName(change.path)}</span>
@@ -329,9 +447,14 @@ export function ChangesPane({
                 <button
                   type="button"
                   className="change-row-action"
+                  disabled={change.kind === "deleted"}
                   title={t("changes.openFileTitle")}
                   aria-label={t("changes.openFileTitle")}
-                  onClick={() => onOpenFile(change.path)}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openChangedFile(change);
+                  }}
                 >
                   <Codicon name="goToFile" />
                 </button>
@@ -341,7 +464,11 @@ export function ChangesPane({
                   disabled={archiving || !!archivingPath || restoring || !!restoringPath}
                   title={t("changes.restoreOneTitle", { path: change.path })}
                   aria-label={t("changes.restoreOneTitle", { path: change.path })}
-                  onClick={() => restoreOne(change.path)}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    restoreOne(change.path);
+                  }}
                 >
                   {restoringPath === change.path ? "…" : <Codicon name="discard" />}
                 </button>
@@ -351,7 +478,11 @@ export function ChangesPane({
                   disabled={archiving || !!archivingPath || restoring || !!restoringPath}
                   title={t("changes.archiveOneTitle", { path: change.path })}
                   aria-label={t("changes.archiveOneTitle", { path: change.path })}
-                  onClick={() => archiveOne(change.path)}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    archiveOne(change.path);
+                  }}
                 >
                   {archivingPath === change.path ? "…" : <Codicon name="add" />}
                 </button>
@@ -372,7 +503,75 @@ export function ChangesPane({
         }}
       />
       <div className="changes-detail">
-        {!selectedEntry ? (
+        {openedEntry && openedEditorEntry ? (
+          <div className="changes-file-view">
+            <div className="files-document-toolbar">
+              <WorkFileIcon entry={{ name: fileName(openedEntry.path), is_dir: false }} />
+              <span className="files-document-title" title={openedEntry.path}>{fileName(openedEntry.path)}</span>
+              {openedKind === "docx" && <span className="files-document-badge">{t("files.docxReadonly")}</span>}
+              <button
+                type="button"
+                className="changes-detail-close"
+                title={t("common.close")}
+                aria-label={t("common.close")}
+                onClick={() => {
+                  if (confirmCloseOpened("")) setOpenedPath("");
+                }}
+              >
+                <Codicon name="close" />
+              </button>
+            </div>
+            <div className="changes-file-body">
+              {openedError ? (
+                <div className="changes-empty">{t("files.previewFailed", { error: openedError })}</div>
+              ) : openedKind === "img" ? (
+                openedMediaSrc ? (
+                  <div className="files-media"><img src={openedMediaSrc} alt={fileName(openedEntry.path)} /></div>
+                ) : (
+                  <div className="changes-empty">{t("common.loading")}</div>
+                )
+              ) : openedKind === "video" ? (
+                openedMediaSrc ? (
+                  <div className="files-media"><video src={openedMediaSrc} controls preload="metadata" /></div>
+                ) : (
+                  <div className="changes-empty">{t("common.loading")}</div>
+                )
+              ) : openedKind === "audio" ? (
+                openedMediaSrc ? (
+                  <div className="files-media"><audio src={openedMediaSrc} controls /></div>
+                ) : (
+                  <div className="changes-empty">{t("common.loading")}</div>
+                )
+              ) : openedKind === "docx" ? (
+                openedLoading ? (
+                  <div className="changes-empty">{t("common.loading")}</div>
+                ) : (
+                  <pre className="files-document-text">{openedText}</pre>
+                )
+              ) : openedLoading ? (
+                <div className="changes-empty">{t("common.loading")}</div>
+              ) : (
+                <Suspense fallback={<div className="changes-empty">{t("common.loading")}</div>}>
+                  <MonacoFileEditor
+                    key={`changes:${openedEntry.path}:${openedEntry.new_mtime ?? 0}:${openedReloadKey}:${openedText.length}`}
+                    rootPath={root.path}
+                    entry={openedEditorEntry}
+                    absPath={openedAbs}
+                    text={openedText}
+                    loadVersion={`${openedEntry.path}:${openedEntry.new_size ?? "unknown"}:${openedEntry.new_mtime ?? "unknown"}:${openedReloadKey}`}
+                    expectedMtime={openedEntry.new_mtime ?? 0}
+                    onDirtyChange={setOpenedDirty}
+                    onSaved={(_, savedText) => {
+                      setOpenedText(savedText);
+                      setOpenedDirty(false);
+                      setChangeRescan();
+                    }}
+                  />
+                </Suspense>
+              )}
+            </div>
+          </div>
+        ) : !selectedEntry ? (
           <div className="changes-empty">{t("changes.select")}</div>
         ) : detailError ? (
           <div className="changes-empty">{t("common.readFailed", { error: detailError })}</div>

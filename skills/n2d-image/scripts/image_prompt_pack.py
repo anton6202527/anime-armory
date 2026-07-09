@@ -230,7 +230,19 @@ ASSET_ID_HINTS.update({
     "WEAPON_01": {
         "name": "横刀",
         "path_name": "定妆_武器_横刀",
-        "profile": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制。",
+        "profile": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
+        "must_not_have": ["副刀", "短刃", "匕首", "右手第二把刀", "副手持刀", "后手短刀", "双持", "刀鞘变成刀刃", "光效变成实体刀刃"],
+        "constraints": {
+            "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。",
+            "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。",
+            "must_not_have": ["副刀", "短刃", "匕首", "右手第二把刀", "副手持刀", "后手短刀", "双持", "刀鞘变成刀刃", "光效变成实体刀刃"],
+        },
+        "weapon_profile": {
+            "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；只允许一把实体横刀入画；副手/后手不得出现短刃、匕首、副刀或第二把刀。",
+            "combat_usage": "单武器动作道具；可双手配合一把横刀或一手持刀一手空手/护身，但不得双持，不得补出副手短刃。",
+            "vfx_signature": "刀光/光轨/残影为半透明运动轨迹，不是实体武器，不可画成第二把刀刃。",
+            "forbidden_drift": ["不要副刀", "不要短刃", "不要匕首", "不要右手第二把刀", "不要副手持刀", "不要后手短刀", "不要双持", "不要刀鞘变成刀刃"],
+        },
     },
     "VFX_系统面板": {
         "name": "百妖谱金色古卷面板",
@@ -241,6 +253,11 @@ ASSET_ID_HINTS.update({
         "name": "虎山神摹影黑血妖气",
         "path_name": "定妆_特效_虎妖黑血妖气",
         "profile": "虎山神被百妖谱收录时的黑灰虎形摹影和黑血妖气，半透明、克制，不遮挡主角脸。",
+        "constraints": {
+            "reveal_min_clip": 6,
+            "pre_reveal_policy": "第5集 Clip06 前只可作为画外伏笔/气息描述，不得渲染出虎形、血虎、红虎或虎妖画卷。",
+            "reveal_terms": ["暗红虎形杀伐气", "虎形摹影", "血虎", "红虎", "黑血虎", "虎妖画卷", "虎影"],
+        },
     },
     "VFX_道行计数overlay": {
         "name": "道行计数金色 overlay",
@@ -1880,6 +1897,14 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     "华丽仙剑",
                     "现代军刀",
                     "多把复制",
+                    "副刀",
+                    "短刃",
+                    "匕首",
+                    "右手第二把刀",
+                    "副手持刀",
+                    "后手短刀",
+                    "双持",
+                    "刀鞘变成刀刃",
                     "双刃",
                     "多刃",
                     "双向开刃",
@@ -1952,12 +1977,20 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 "palette": "暗银、黑柄、冷灰血尘",
                 "ornament_motif": "镇魔司制式，低调克制。",
                 "carry_modes": ["手持", "落地", "近景局部"],
-                "combat_usage": "本集关键动作道具；实体刀刃数量和握持点必须唯一，不可变成长剑/仙剑/现代军刀，不可多把复制。",
+                "combat_usage": "本集关键动作道具；实体刀刃数量和握持点必须唯一，只允许一把实体武器；副手/后手不得补出短刃、匕首、副刀或第二把刀，不可变成长剑/仙剑/现代军刀，不可多把复制。",
                 "vfx_signature": flatten_contract_value(constraints.get("vfx_boundary")) or "不主动发光；只继承场景光位。刀光/爪光/VFX 只能是半透明光效，不得被渲染成第二把实体刀刃。",
                 "forbidden_drift": [
                     "不要变成长剑",
                     "不要华丽仙剑",
                     "不要现代军刀",
+                    "不要副刀",
+                    "不要短刃",
+                    "不要匕首",
+                    "不要右手第二把刀",
+                    "不要副手持刀",
+                    "不要后手短刀",
+                    "不要双持",
+                    "不要刀鞘变成刀刃",
                     "不要双刃",
                     "不要多刃",
                     "不要第二把刀刃",
@@ -2601,7 +2634,8 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
         for aid in asset_ids_from_value(clip.get(key) or []):
             add_unique(ids, aid)
     schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
-    for key in ("objects", "locations", "required_presence", "offscreen_presence"):
+    offscreen_ids = set(asset_ids_from_value(schedule.get("offscreen_presence") or []))
+    for key in ("objects", "locations", "required_presence"):
         for aid in asset_ids_from_value(schedule.get(key) or []):
             add_unique(ids, aid)
     structured_ids = list(ids)
@@ -2616,8 +2650,145 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
             if aid != known and aid.startswith(known):
                 normalized = known
                 break
+        if normalized in offscreen_ids and normalized not in structured_ids:
+            continue
         add_unique(ids, normalized)
-    return ids
+    return [aid for aid in ids if aid not in offscreen_ids or aid in structured_ids]
+
+
+def clip_offscreen_assets(clip: Mapping[str, Any]) -> List[str]:
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    return list(dict.fromkeys(asset_ids_from_value(schedule.get("offscreen_presence") or [])))
+
+
+def _clip_index_from_value(value: Any) -> Optional[int]:
+    if isinstance(value, int):
+        return value
+    text = str(value or "").strip()
+    if not text:
+        return None
+    match = re.search(r"(?:Clip|CLIP|镜头)?\s*0*([1-9][0-9]*)", text)
+    if not match:
+        return None
+    try:
+        return int(match.group(1))
+    except ValueError:
+        return None
+
+
+def asset_reveal_min_clip(asset_id: str) -> Optional[int]:
+    cfg = ASSET_DEFS.get(asset_id) or {}
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    for key in ("reveal_min_clip", "visible_from_clip", "first_visible_clip", "min_visible_clip"):
+        value = constraints.get(key) if key in constraints else cfg.get(key)
+        parsed = _clip_index_from_value(value)
+        if parsed is not None:
+            return parsed
+    lifecycle = cfg.get("lifecycle") if isinstance(cfg.get("lifecycle"), Mapping) else {}
+    for key in ("first_visible_clip", "visible_from_clip", "reveal_min_clip"):
+        parsed = _clip_index_from_value(lifecycle.get(key))
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def future_hidden_assets(asset_ids: Sequence[str], idx: int) -> List[str]:
+    out: List[str] = []
+    for aid in asset_ids:
+        min_clip = asset_reveal_min_clip(aid)
+        if min_clip is not None and idx < min_clip:
+            out.append(aid)
+    return out
+
+
+def active_assets_for_clip(asset_ids: Sequence[str], idx: int) -> Tuple[List[str], List[str]]:
+    hidden = set(future_hidden_assets(asset_ids, idx))
+    return [aid for aid in asset_ids if aid not in hidden], [aid for aid in asset_ids if aid in hidden]
+
+
+def future_asset_terms(asset_id: str) -> Tuple[List[str], List[str]]:
+    cfg = ASSET_DEFS.get(asset_id) or {}
+    constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+    list_terms = [asset_id]
+    name = str(cfg.get("name") or "").strip()
+    if name:
+        list_terms.append(name)
+    reveal_terms = [str(x).strip() for x in (constraints.get("reveal_terms") or []) if str(x).strip()]
+    return list(dict.fromkeys(list_terms)), list(dict.fromkeys(reveal_terms))
+
+
+def _drop_list_term(text: str, term: str) -> str:
+    if not term:
+        return text
+    escaped = re.escape(term)
+    patterns = [
+        rf"`{escaped}`\s*[、,，]?\s*",
+        rf"[、,，]\s*{escaped}",
+        rf"{escaped}\s*[、,，]\s*",
+        escaped,
+    ]
+    for pattern in patterns:
+        text = re.sub(pattern, "", text)
+    return text
+
+
+def _drop_clauses_with_terms(text: str, terms: Sequence[str]) -> str:
+    if not text or not terms:
+        return text
+    parts = re.split(r"([。；;，,\n])", text)
+    kept: List[str] = []
+    for i in range(0, len(parts), 2):
+        clause = parts[i]
+        sep = parts[i + 1] if i + 1 < len(parts) else ""
+        if clause and any(term and term in clause for term in terms):
+            continue
+        kept.append(clause + sep)
+    return "".join(kept)
+
+
+def sanitize_future_asset_text(value: Any, hidden_assets: Sequence[str]) -> Any:
+    if not hidden_assets:
+        return value
+    if isinstance(value, Mapping):
+        return {k: sanitize_future_asset_text(v, hidden_assets) for k, v in value.items()}
+    if isinstance(value, list):
+        return [sanitize_future_asset_text(v, hidden_assets) for v in value]
+    if not isinstance(value, str):
+        return value
+    text = value
+    for aid in hidden_assets:
+        list_terms, reveal_terms = future_asset_terms(aid)
+        for term in list_terms:
+            text = _drop_list_term(text, term)
+        text = _drop_clauses_with_terms(text, reveal_terms)
+    text = re.sub(r"[、,，]\s*([；;。])", r"\1", text)
+    text = re.sub(r"=\s*[、,，；;]+", "=", text)
+    text = re.sub(r"：\s*[、,，；;]+", "：", text)
+    text = re.sub(r"\s{2,}", " ", text)
+    return text.strip("、,，；; ")
+
+
+def future_asset_guard_line(hidden_assets: Sequence[str], idx: int) -> str:
+    rows: List[str] = []
+    for aid in hidden_assets:
+        cfg = ASSET_DEFS.get(aid) or {}
+        constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
+        min_clip = asset_reveal_min_clip(aid)
+        terms = [str(x) for x in (constraints.get("reveal_terms") or []) if str(x).strip()]
+        policy = str(constraints.get("pre_reveal_policy") or "").strip()
+        name = str(cfg.get("name") or aid)
+        row = f"`{aid}`/{name} 最早显现镜头=Clip{min_clip:02d}" if min_clip else f"`{aid}`/{name} 当前镜头未到显现时机"
+        if policy:
+            row += f"；{policy}"
+        if terms:
+            row += "；本镜不得出现：" + "、".join(terms)
+        forbidden = asset_forbidden_terms([aid])
+        if forbidden:
+            row += "；资产禁项：" + "、".join(forbidden)
+        rows.append(row)
+    if not rows:
+        return ""
+    return f"本镜 Clip{idx:02d} 禁用未到显现时机资产：" + "；".join(rows)
 
 
 def clip_text_blob(clip: Mapping[str, Any], keys: Sequence[str]) -> str:
@@ -2863,10 +3034,17 @@ def hand_ownership_directive(chars: Sequence[str], assets: Sequence[str], desc: 
         return "无具名角色手部；若临时出现手或武器操作，必须降为无脸/无手剪影或补角色 ID 后再画。"
     owners = "、".join(char_form_ref(c, idx, assets) for c in chars)
     asset_text = "、".join(assets) if assets else "本镜道具/武器/对方身体接触点"
+    has_weapon = any(str(a).startswith("WEAPON_") or ASSET_DEFS.get(str(a), {}).get("type") == "weapon" for a in assets)
+    weapon_guard = (
+        "若本镜包含武器，只允许握持资产注册层里的实体武器；未握主武器的副手/后手必须空手、护身或执行剧本指定接触动作，"
+        "不得生成副刀、短刃、匕首、第二把实体武器或把刀鞘/袖口/腰带画成刀刃；"
+        if has_weapon else ""
+    )
     return (
         f"手部归属合约：每只可见手必须明确属于 {owners} 中的某一名角色，标清左手/右手；"
         "每只手必须自然连接同侧手腕、同侧前臂、肘部连接和肩线连接；"
         f"握持点/接触点只允许落在 {asset_text} 或剧本指定动作上，接触点必须清楚；"
+        f"{weapon_guard}"
         "禁止额外手、第三只手、重复手、漂浮断手、手从卷轴/刀柄/光效/地面里长出、左右手归属互换、多指或粘连。"
     )
 
@@ -2875,13 +3053,19 @@ def face_visibility_directive(chars: Sequence[str], lens: str, desc: str) -> str
     if not chars:
         return "无清晰具名角色脸；若临时出现人物脸，必须先绑定角色 ID 与脸部参考，否则保持背身/侧后剪影。"
     context = f"{lens} {desc}"
-    if any(token in context for token in ("ELS", "远景", "背影", "侧后", "剪影", "无脸", "不正面")):
+    face_coverage = re.search(r"\b(?:CU|MCU|MS|OTS)\b|近景|中景|半身|反打|过肩", context, re.I)
+    noface_context = any(token in context for token in ("ELS", "远景", "背影", "侧后", "剪影", "无脸", "不正面"))
+    if noface_context and not face_coverage:
         return (
             "本镜人物只允许背身、侧后轮廓或远景小比例；不看镜头，不做正面肖像，"
             "不解析五官；若需要身份可读，只保留服装轮廓、发型轮廓和体态比例。"
         )
+    focus_note = (
+        "非焦点群演、肉盾、远景剪影可无脸处理，但主检角色不能用背影、暗影、发丝或特效规避身份核验；"
+        if noface_context else ""
+    )
     return (
-        "眼鼻嘴三角区清晰，主检角色至少保留可比对的脸部轮廓与五官比例；"
+        f"{focus_note}眼鼻嘴三角区清晰，主检角色至少保留可比对的脸部轮廓与五官比例；"
         "黑烟、烟雾、法术特效、血光或金光只允许在脸外侧、身后或前景边缘，"
         "不得遮住眼鼻嘴，不得遮住五官，不得重画脸；"
         "动作镜可用三分之二侧脸、45°侧脸或过肩露脸，但不能用暗影、发丝、特效或极小脸规避身份核验。"
@@ -3610,6 +3794,10 @@ def asset_topology_lock_line(asset_ids: Sequence[str]) -> str:
                 value = flatten_contract_value(wp.get(key))
                 if value and not any(value in part for part in parts):
                     parts.append(f"{label}={value}")
+            parts.append(
+                "单武器握持防呆=只允许一把实体武器；副手/后手不得出现短刃、匕首、副刀或第二把刀；"
+                "刀鞘/袖口/腰带不得画成刀刃；刀光/光轨/残影只能是半透明运动轨迹，不得变成实体刀刃"
+            )
         if parts:
             rows.append(f"`{aid}` {cfg.get('name', aid)}：" + "；".join(parts))
     return "；".join(rows) if rows else "无特殊资产拓扑；按 asset_registry 保持结构、数量、材质和归属。"
@@ -3724,7 +3912,10 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     )
     clip_duration = script_row.get("duration") if script_row.get("duration") is not None else clip.get("duration")
     chars = clip_chars(clip)
-    assets = clip_assets(clip)
+    raw_assets = clip_assets(clip)
+    guard_asset_candidates = list(dict.fromkeys([*raw_assets, *clip_offscreen_assets(clip)]))
+    assets, hidden_assets = active_assets_for_clip(raw_assets, idx)
+    hidden_assets = list(dict.fromkeys([*hidden_assets, *future_hidden_assets(guard_asset_candidates, idx)]))
     frame_count, has_mid, need_end = continuity_frame_count(clip)
     refs = shot_refs(chars, assets, root=root, idx=idx)
     primary = chars[0] if chars else ""
@@ -3741,24 +3932,33 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         inj.get("构图防呆") or "角色视线锁戏内目标；非 POV 镜不看镜头；只继承本镜已发生的光位、轴线和状态增量。",
         idx,
     )
+    comp_guard = str(sanitize_future_asset_text(comp_guard, hidden_assets))
     desc = ""
     shots = clip.get("shots")
     if isinstance(shots, list) and shots:
         desc = " ".join(str(s.get("desc") or "") for s in shots if isinstance(s, Mapping))
     desc = desc or str(clip.get("description") or clip.get("label") or "")
     desc = str(sanitize_future_state_text(desc, idx))
+    desc = str(sanitize_future_asset_text(desc, hidden_assets))
     move, intent = sanitize_director_image_injection(clip, assets, desc, str(move), str(intent))
+    move = str(sanitize_future_asset_text(move, hidden_assets))
+    intent = str(sanitize_future_asset_text(intent, hidden_assets))
     lens = lens_with_physical_defaults(raw_lens, desc)
+    lens = str(sanitize_future_asset_text(lens, hidden_assets))
     body_guard = body_grounding_directive(clip, str(lens), desc)
     anatomy_guard = anatomy_integrity_directive(chars, str(lens))
     hand_guard = hand_ownership_directive(chars, assets, desc, idx)
     face_guard = face_visibility_directive(chars, str(lens), desc)
     raw_template_contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
     template_contract = sanitize_future_state_text(raw_template_contract, idx)
+    template_contract = sanitize_future_asset_text(template_contract, hidden_assets)
     negative = template_contract.get("negative") or []
     if not isinstance(negative, list):
         negative = [str(negative)]
     negative = [str(item) for item in negative]
+    future_asset_guard = future_asset_guard_line(hidden_assets, idx)
+    if future_asset_guard:
+        negative.append(future_asset_guard)
     asset_forbidden = asset_forbidden_terms(assets)
     asset_topology_lock = asset_topology_lock_line(assets)
     inner_focus = inner_focus_directive(clip, chars, assets)
@@ -3812,13 +4012,15 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     asset_phrase = "；".join(str(ASSET_DEFS[a]["name"]) for a in assets if a in ASSET_DEFS)
     vc = visual_contract(story)
     sc = style_contract(story)
-    style_name = style_name_from_contract(sc)
-    style_forbidden = prompt_safe_forbidden(sc.get("风格禁忌", ""))
+    style_name = str(sanitize_future_asset_text(style_name_from_contract(sc), hidden_assets))
+    style_forbidden = prompt_safe_forbidden(sanitize_future_asset_text(sc.get("风格禁忌", ""), hidden_assets))
     axis_line = flatten(vc.get("场景轴线视线", {})) or "继承 storyboard 场景轴线和角色视线；非 POV 镜不看镜头。"
     shot_reverse_line = shot_reverse_prompt_line(root, ep, clip, idx)
     shot_reverse_lines = [f"**正反打合同**：{shot_reverse_line}"] if shot_reverse_line else []
     shot_reverse_positive = f"正反打合同：{shot_reverse_line}；" if shot_reverse_line else ""
-    tone_line = clip_visual_tone(vc, idx)
+    tone_line = str(sanitize_future_asset_text(clip_visual_tone(vc, idx), hidden_assets))
+    visual_tone_line = str(sanitize_future_asset_text(sc.get("视觉基调", ""), hidden_assets))
+    light_anchor_line = str(sanitize_future_asset_text(flatten(vc.get("场景光位锚", {})), hidden_assets))
     state_lock = state_lock_line(story, chars, idx, assets)
     target_paths, frame_parts = continuity_target_paths(ep, idx, clip)
     cross_handoff_line, cross_handoff_positive = cross_episode_handoff_prompt_lines(clip)
@@ -3851,6 +4053,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**手部归属合约**：{hand_guard}",
         f"**身体接地/裁切防呆**：{body_guard}",
         f"**构图防呆**：{comp_guard}",
+        f"**资产显现时机防呆**：{future_asset_guard or '本镜无未到显现时机资产'}",
         f"**内心戏主体隔离**：{inner_focus or '非内心戏/按 entity_schedule 在场链执行'}",
         f"**本镜状态锁**：{state_lock}",
         f"**导演意图**：{intent}；必须服务剧本可看性合同：{dramatic_function or '先补戏剧功能'}。",
@@ -3881,12 +4084,12 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"身份锁定句：{identity_lock}；",
         f"锚点句：{char_phrase or asset_phrase}；",
         f"资产拓扑锁：{asset_topology_lock}；",
-        f"镜头构图：{lens}；{comp_guard}；{inner_focus + '；' if inner_focus else ''}{shot_reverse_positive}视线方向={axis_line}；竖屏9:16；",
+        f"镜头构图：{lens}；{comp_guard}；{future_asset_guard + '；' if future_asset_guard else ''}{inner_focus + '；' if inner_focus else ''}{shot_reverse_positive}视线方向={axis_line}；竖屏9:16；",
         f"动作瞬间：{cross_handoff_positive}{desc}；{move}；{anatomy_guard}；{hand_guard}；{body_guard}；本镜状态锁={state_lock}；",
-        f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={flatten(vc.get('场景光位锚', {})) or '继承本场光位锚'}；",
+        f"场景光影：{asset_phrase or '继承本镜场景'}；{tone_line}；光位锚={light_anchor_line or '继承本场光位锚'}；",
         f"情绪张力：剧本可看性合同：本镜戏剧功能是{dramatic_function or '待补'}，观众应获得{audience_effect or '明确情绪/信息回报'}；",
         f"时长角色：{pacing_role or '按 dramatic_function 判断'}；时长优先级：{runtime_priority or '未标'}；如果是桥接/解释/反应镜，只保留完成信息传递的最短画面。",
-        f"画风规格：{sc.get('视觉基调', '')}；{style_name}；9:16；视频兼容首帧；写实国漫 / 影视级写实短剧质感，真实光影、自然皮肤、真实材质和电影感必须统一到 style_anchor，不得低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠；风格禁忌={style_forbidden}；",
+        f"画风规格：{visual_tone_line}；{style_name}；9:16；视频兼容首帧；写实国漫 / 影视级写实短剧质感，真实光影、自然皮肤、真实材质和电影感必须统一到 style_anchor，不得低幼Q版、欧美卡通、塑料3D或页游高饱和仙侠；风格禁忌={style_forbidden}；",
         f"禁止：不要换脸、不要改年龄、不要改服装、不要改场景/光位、不要新增人物/道具、不要直视镜头/looking at viewer、不要文字/logo/水印、不要风格漂移、不要脱离项目写实风格锚；不得遮住眼鼻嘴、不得遮住五官、不得重画脸；额外手、第三只手、多肢、六指、断手、缺肢、身体埋入、穿模、融合都禁止；{'; '.join(negative)}；",
         "```",
         "### 正向 prompt（英文）",

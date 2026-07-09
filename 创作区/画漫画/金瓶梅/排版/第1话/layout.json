@@ -1,0 +1,569 @@
+{
+  "schema_version": 1,
+  "kind": "comic_layout",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第1话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "S001",
+      "width": 1440,
+      "height": 18032,
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "gutter_intent": "开场停顿",
+          "bubble_first": "top",
+          "effects_hint": "轻微雾线沿刀影流动。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N",
+              "type": "narration",
+              "x": 120,
+              "y": 72,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P002",
+          "x": 72,
+          "y": 1096,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "从主题进入正片",
+          "bubble_first": "top",
+          "effects_hint": "远烟斜向引导到山路。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B002N",
+              "type": "narration",
+              "x": 120,
+              "y": 1140,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P003",
+          "x": 72,
+          "y": 2044,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "危险提示",
+          "bubble_first": "top",
+          "effects_hint": "风线轻扫榜角。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B003N",
+              "type": "narration",
+              "x": 120,
+              "y": 2088,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 2992,
+          "w": 1296,
+          "h": 620,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "进入动作段",
+          "bubble_first": "top",
+          "effects_hint": "黄叶风线指向山路深处。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B004D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 3036,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P005",
+          "x": 72,
+          "y": 3640,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "gutter_intent": "首次冲击",
+          "bubble_first": "top",
+          "effects_hint": "集中风线从林后爆开，拟声可后期手绘。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N",
+              "type": "narration",
+              "x": 120,
+              "y": 3684,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B005S",
+              "type": "sfx",
+              "x": 540,
+              "y": 4120,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P006",
+          "x": 72,
+          "y": 4788,
+          "w": 1296,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "快速连击",
+          "bubble_first": "top",
+          "effects_hint": "三条速度弧线标出扑、掀、剪。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P005 monster_reveal",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N",
+              "type": "narration",
+              "x": 120,
+              "y": 4832,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B006S",
+              "type": "sfx",
+              "x": 540,
+              "y": 5208,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P007",
+          "x": 72,
+          "y": 5816,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "危机停顿",
+          "bubble_first": "top",
+          "effects_hint": "木刺飞散短线。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B007N",
+              "type": "narration",
+              "x": 120,
+              "y": 5860,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B007S",
+              "type": "sfx",
+              "x": 540,
+              "y": 6296,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P008",
+          "x": 72,
+          "y": 6964,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "gutter_intent": "动作高潮",
+          "bubble_first": "top",
+          "effects_hint": "拳势集中线向虎头收束。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B008N",
+              "type": "narration",
+              "x": 120,
+              "y": 7008,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B008S",
+              "type": "sfx",
+              "x": 540,
+              "y": 7444,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P009",
+          "x": 72,
+          "y": 8112,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "动作后呼吸",
+          "bubble_first": "top",
+          "effects_hint": "余尘轻线，不再强速度线。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B009N",
+              "type": "narration",
+              "x": 120,
+              "y": 8156,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P010",
+          "x": 72,
+          "y": 9060,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "gutter_intent": "身份转折",
+          "bubble_first": "top",
+          "effects_hint": "无强特效，庄重静止。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B010N",
+              "type": "narration",
+              "x": 120,
+              "y": 9104,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P011",
+          "x": 72,
+          "y": 10128,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "叙事转场",
+          "bubble_first": "top",
+          "effects_hint": "细小闲言碎线环绕但不画文字。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B011N",
+              "type": "narration",
+              "x": 120,
+              "y": 10172,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P012",
+          "x": 72,
+          "y": 11196,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "黑暗因果揭示",
+          "bubble_first": "top",
+          "effects_hint": "帘影斜线压迫人物。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P010 status_turn",
+          "bubble_slots": [
+            {
+              "slot_id": "B012N",
+              "type": "narration",
+              "x": 120,
+              "y": 11240,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P013",
+          "x": 72,
+          "y": 12264,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "世情线浮出",
+          "bubble_first": "top",
+          "effects_hint": "目光线隐约指向帘后，不画文字。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B013N",
+              "type": "narration",
+              "x": 120,
+              "y": 12308,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P014",
+          "x": 72,
+          "y": 13212,
+          "w": 1296,
+          "h": 1000,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "兄弟相认前推近",
+          "bubble_first": "top",
+          "effects_hint": "锣鼓声可后期拟声。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B014N",
+              "type": "narration",
+              "x": 120,
+              "y": 13256,
+              "w": 560,
+              "h": 118
+            },
+            {
+              "slot_id": "B014S",
+              "type": "sfx",
+              "x": 540,
+              "y": 13632,
+              "w": 360,
+              "h": 150
+            }
+          ]
+        },
+        {
+          "panel_id": "P015",
+          "x": 72,
+          "y": 14240,
+          "w": 1296,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "情绪转暖",
+          "bubble_first": "top",
+          "effects_hint": "无强特效。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B015D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 14284,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 15108,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "gutter_intent": "关键初见",
+          "bubble_first": "top",
+          "effects_hint": "无拟声；红帘竖线制造张力。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 15152,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        },
+        {
+          "panel_id": "P017",
+          "x": 72,
+          "y": 16096,
+          "w": 1296,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "心理种子",
+          "bubble_first": "top",
+          "effects_hint": "轻微目光线，不画文字。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B017N",
+              "type": "narration",
+              "x": 120,
+              "y": 16140,
+              "w": 560,
+              "h": 118
+            }
+          ]
+        },
+        {
+          "panel_id": "P018",
+          "x": 72,
+          "y": 17044,
+          "w": 1296,
+          "h": 960,
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "borderless",
+          "gutter_intent": "话末钩子",
+          "bubble_first": "top",
+          "effects_hint": "门帘风线轻动。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 cliffhanger",
+          "bubble_slots": [
+            {
+              "slot_id": "B018D1",
+              "type": "dialogue",
+              "x": 882,
+              "y": 17088,
+              "w": 430,
+              "h": 136
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

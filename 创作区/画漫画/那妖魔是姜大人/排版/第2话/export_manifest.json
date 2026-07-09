@@ -145,7 +145,7 @@
       },
       "size": {
         "width": 1296,
-        "height": 760
+        "height": 840
       }
     },
     {
@@ -208,7 +208,7 @@
       ],
       "size": {
         "width": 1440,
-        "height": 14180
+        "height": 14260
       },
       "format": "webp"
     }
@@ -234,12 +234,37 @@
       ],
       "size": {
         "width": 1440,
-        "height": 14180
+        "height": 14260
       },
       "format": "webp"
     }
   ],
   "text_language": "中文",
+  "target_platform": "通用",
+  "platform_profile": {
+    "platform_id": "generic",
+    "display_name": "通用",
+    "verified": true,
+    "collected_at": "2026-07-07",
+    "source_urls": [],
+    "page_width_px": null,
+    "max_image_height_px": null,
+    "max_file_bytes": null,
+    "allowed_formats": [
+      "webp",
+      "png",
+      "jpg"
+    ],
+    "thumbnail": null,
+    "notes": [
+      "No platform-specific hard limits are applied."
+    ]
+  },
+  "text_layout_qc": {
+    "renderer": "pillow_draft",
+    "unsupported_items": [],
+    "verdict": "pass"
+  },
   "lettering_rendered": true,
   "bilingual_lettering": false,
   "lettering_stats": {
@@ -247,6 +272,7 @@
     "skipped_empty_items": [],
     "empty_slots_removed": []
   },
+  "platform_findings": [],
   "lettering_slot_qc": {
     "path": "生产数据/qa_previews/第2话_lettering_slots.jpg",
     "items": 23,

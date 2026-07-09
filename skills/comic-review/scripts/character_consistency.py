@@ -233,6 +233,72 @@ def add_finding(
     )
 
 
+def acceptance_records(root: Path, chapter: str) -> tuple[Path, list[dict[str, Any]]]:
+    path = root / "生产数据" / f"character_consistency_acceptance_{chapter}.json"
+    payload = load_json(path, {})
+    if not isinstance(payload, dict):
+        return path, []
+    records = payload.get("accepted_findings")
+    if not isinstance(records, list):
+        records = payload.get("acceptances")
+    if not isinstance(records, list):
+        return path, []
+    return path, [item for item in records if isinstance(item, dict)]
+
+
+def matching_acceptance(finding: dict[str, Any], records: list[dict[str, Any]]) -> dict[str, Any] | None:
+    code = str(finding.get("code") or "").strip()
+    panel_id = str(finding.get("panel_id") or "").strip()
+    character_id = str(finding.get("character_id") or "").strip()
+    artifact = str(finding.get("artifact") or "").strip()
+    for record in records:
+        accepted_code = str(record.get("code") or "").strip()
+        accepted_panel = str(record.get("panel_id") or "").strip()
+        accepted_character = str(record.get("character_id") or "").strip()
+        accepted_artifact = str(record.get("artifact") or "").strip()
+        if accepted_code and accepted_code != code:
+            continue
+        if accepted_character and accepted_character != character_id:
+            continue
+        panel_matches = accepted_panel and accepted_panel == panel_id
+        artifact_matches = accepted_artifact and accepted_artifact == artifact
+        if panel_matches or artifact_matches:
+            return record
+    return None
+
+
+def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    path, records = acceptance_records(root, chapter)
+    if not records:
+        return
+    accepted_count = 0
+    for finding in findings:
+        if finding.get("severity") not in {"block", "warn"}:
+            continue
+        record = matching_acceptance(finding, records)
+        if not record:
+            continue
+        machine_severity = str(finding.get("severity") or "")
+        finding["machine_severity"] = machine_severity
+        finding["severity"] = "info"
+        finding["return_to_stage"] = "review"
+        finding["manual_acceptance"] = {
+            "status": "accepted",
+            "accepted_by": str(record.get("accepted_by") or "manual_review"),
+            "accepted_at": str(record.get("accepted_at") or ""),
+            "reason": str(record.get("reason") or ""),
+            "evidence": str(record.get("evidence") or ""),
+            "source": rel(root, path),
+        }
+        if record.get("suggested_followup"):
+            finding["suggested_fix"] = str(record["suggested_followup"])
+        else:
+            finding["suggested_fix"] = "已人审签收为计划内角色状态差异；若后续重抽该格需重新运行角色一致性机检。"
+        accepted_count += 1
+    if accepted_count:
+        notes.append(f"已按 {rel(root, path)} 人审签收 {accepted_count} 条角色一致性 finding；原始机器 severity 保留在 machine_severity。")
+
+
 def render_contact_sheet(root: Path, chapter: str, rows: list[dict[str, Any]], out: Path) -> str:
     try:
         from PIL import Image, ImageDraw, ImageFont
@@ -359,6 +425,8 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
     )
     if contact:
         notes.append(f"已生成角色一致性并排复核图：{contact}")
+
+    apply_manual_acceptances(root, chapter, findings, notes)
 
     block_count = sum(1 for item in findings if item.get("severity") == "block")
     warn_count = sum(1 for item in findings if item.get("severity") == "warn")

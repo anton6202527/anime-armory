@@ -23,13 +23,13 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4614 | 238934 |
+| n2d | `n2d` + `n2d-*` | 21 | 4614 | 239684 |
 | novel | `novel` + `novel-*` | 29 | 3132 | 66142 |
-| comic | `comic` + `comic-*` | 12 | 920 | 13703 |
+| comic | `comic` + `comic-*` | 13 | 988 | 15754 |
 | song | `song` + `song-*` | 11 | 619 | 7719 |
 | mv | `mv` + `mv-*` | 14 | 1042 | 13342 |
 | ad | `ad` + `ad-*` | 13 | 864 | 16350 |
-| **合计** | `skills/*/SKILL.md` | **100** | 11191 | 356190 |
+| **合计** | `skills/*/SKILL.md` | **101** | 11259 | 358991 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -116,7 +116,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 |---|---|
 | `n2d-progress` | n2d **只读进度扫描**：识别 `创作区/制漫剧/` 作品根或仓库根，输出当前前沿/下一步；不回写 `_进度.md` |
 | `novel-progress` / `comic-progress` / `song-progress` / `mv-progress` / `ad-progress` | 其它生产线的**只读进度扫描**：分别扫描 `创作区/写小说/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`，输出当前前沿/下一步；不回写 `_进度.md` |
-| `novel-update` / `song-update` / `mv-update` / `ad-update` | 其它生产线的 **skill 更新影响扫描**：按本线 `_进度.md` 当前阶段 + 本线 skill 内容快照，生成最小返工/重审/重评计划；只写 `生产数据/*_skill_update_plan.*` 和快照，不改正文、媒体或 `_进度.md` |
+| `novel-update` / `comic-update` / `song-update` / `mv-update` / `ad-update` | 其它生产线的 **skill 更新影响扫描**：按本线 `_进度.md` 当前阶段 + 本线 skill 内容快照，生成最小返工/重审/重评计划；只写 `生产数据/*_skill_update_plan.*` 和快照，不改正文、媒体或 `_进度.md` |
 | `novel-settings` / `n2d-settings` / `comic-settings` / `song-settings` / `mv-settings` / `ad-settings` | 各线 **设置管理**：设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；只包本线 `_lib/settings.py`，不跨线复用实现 |
 | `tools/shared-cleanup` | 通用**瘦身清理**（仓库级 dev 工具）：默认扫描/删除 `skills/` 下低风险生成垃圾，也可 `--repo` 检查整个仓库；自动删除仅限 `__pycache__`、pytest/mypy/ruff 缓存、`.DS_Store`、临时/备份文件等 allowlist 项，并输出 deleted bytes / saved space。placeholder skill / 大目录只报告不自动删 |
 | `tools/independence-audit` | 系列独立性静态审计：阻断活动的 `skills/common` / `common/*.py` 路径引用和未允许的代码级跨线依赖 |
@@ -224,6 +224,7 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 |---|---|---|
 | 调度 | `comic` | 路由画漫画请求、初始化项目、读取 `_进度.md` 并分诊到阶段 skill |
 | 进度·下一步（只读） | `comic-progress` | 扫 `创作区/画漫画/<项目>/_进度.md` 阶段表 → 汇总每话前沿；只读不改文件；出图后会检查共享参考、长线多视图和风格一致性报告是否阻断合成 |
+| 更新影响（只写计划） | `comic-update` | 本线 skill 内容快照比对 + 旧流程结构缺口扫描，生成最小脚本/name/layout/finishing/出图/合成/审查重制计划；只写计划/基线，不改脚本、媒体或 `_进度.md` |
 | 设置管理 | `comic-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/comic/_lib/settings.py` |
 | 流程批跑 | `comic-batch` | 读取当前前沿，批量推进一话；出图前后自动跑 comic gate；出图阶段可按确认预算多抽、重抽指定格并归档候选 |
 | 漫画脚本 | `comic-script` | 源本/点子/脚本 → 故事圣经、分话大纲、`panel_script.json` |

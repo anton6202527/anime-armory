@@ -119,3 +119,44 @@ def test_traditional_contract_missing_warns_not_blocks(tmp_path: Path) -> None:
     assert "name_board_missing" in codes(findings)
     assert "finishing_plan_missing" in codes(findings)
     assert {item["severity"] for item in findings} == {"warn"}
+
+
+def test_panel_post_qc_warn_acceptance_downgrades_to_info(tmp_path: Path) -> None:
+    root = tmp_path
+    chapter = "第1话"
+    panel_dir = root / "出图" / chapter / "panels"
+    panel_dir.mkdir(parents=True)
+    (panel_dir / "P001.png").write_bytes(b"placeholder")
+    acceptance_dir = root / "生产数据" / "panel_qc" / chapter
+    acceptance_dir.mkdir(parents=True)
+    (acceptance_dir / "P001.json").write_text(
+        """{
+          "panel_id": "P001",
+          "verdict": "warn",
+          "manual_review": {
+            "reviewed_at": "2026-07-09T12:00:00",
+            "verdict": "pass",
+            "reason": "亮部是计划内雾光，不是空白气泡。"
+          }
+        }""",
+        encoding="utf-8",
+    )
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "status": "ready",
+                "result_path": f"出图/{chapter}/panels/P001.png",
+                "post_qc": {"verdict": "warn"},
+            }
+        ]
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(root, chapter, jobs, findings)
+
+    assert len(findings) == 1
+    assert findings[0]["code"] == "panel_post_qc_warn"
+    assert findings[0]["severity"] == "info"
+    assert findings[0]["machine_severity"] == "warn"
+    assert findings[0]["manual_acceptance"]["status"] == "accepted"

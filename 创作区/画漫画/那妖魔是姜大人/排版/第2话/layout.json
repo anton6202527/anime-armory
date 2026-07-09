@@ -4,6 +4,29 @@
   "chapter": "第2话",
   "format": "条漫",
   "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第2话/name_board.json",
   "canvas": {
     "width": 1440,
     "height": "auto"
@@ -12,7 +35,7 @@
     {
       "segment_id": "S001",
       "width": 1440,
-      "height": 14180,
+      "height": 14260,
       "panels": [
         {
           "panel_id": "P001",
@@ -20,6 +43,16 @@
           "y": 28,
           "w": 1296,
           "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B001N",
@@ -45,6 +78,16 @@
           "y": 1096,
           "w": 1296,
           "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B002N",
@@ -62,6 +105,16 @@
           "y": 1964,
           "w": 1296,
           "h": 1080,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B003D1",
@@ -87,6 +140,16 @@
           "y": 3072,
           "w": 1296,
           "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B004N",
@@ -104,6 +167,16 @@
           "y": 3940,
           "w": 1296,
           "h": 920,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "噗",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B005N",
@@ -129,6 +202,16 @@
           "y": 4888,
           "w": 1296,
           "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P001 consequence_hook",
           "bubble_slots": [
             {
               "slot_id": "B006N",
@@ -146,6 +229,16 @@
           "y": 5956,
           "w": 1296,
           "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "none",
+          "effects_hint": "吼——",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B007S",
@@ -163,6 +256,16 @@
           "y": 7024,
           "w": 1296,
           "h": 840,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "none",
+          "effects_hint": "铮",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B008S",
@@ -180,6 +283,16 @@
           "y": 7892,
           "w": 1296,
           "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "噗",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B009N",
@@ -205,6 +318,16 @@
           "y": 9040,
           "w": 1296,
           "h": 920,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "喝……喝……",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B010N",
@@ -229,7 +352,17 @@
           "x": 72,
           "y": 9988,
           "w": 1296,
-          "h": 760,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B011D1",
@@ -244,15 +377,25 @@
         {
           "panel_id": "P012",
           "x": 72,
-          "y": 10776,
+          "y": 10856,
           "w": 1296,
           "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "轰——",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P009 kill_reveal",
           "bubble_slots": [
             {
               "slot_id": "B012N",
               "type": "narration",
               "x": 120,
-              "y": 10820,
+              "y": 10900,
               "w": 560,
               "h": 118
             },
@@ -260,7 +403,7 @@
               "slot_id": "B012S",
               "type": "sfx",
               "x": 540,
-              "y": 11256,
+              "y": 11336,
               "w": 360,
               "h": 150
             }
@@ -269,15 +412,25 @@
         {
           "panel_id": "P013",
           "x": 72,
-          "y": 11924,
+          "y": 12004,
           "w": 1296,
           "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "focus lines or black-field contrast toward reveal object",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P014 quiet_cliffhanger",
           "bubble_slots": [
             {
               "slot_id": "B013N",
               "type": "narration",
               "x": 120,
-              "y": 11968,
+              "y": 12048,
               "w": 560,
               "h": 118
             },
@@ -285,7 +438,7 @@
               "slot_id": "B013D1",
               "type": "dialogue",
               "x": 882,
-              "y": 12106,
+              "y": 12186,
               "w": 430,
               "h": 136
             }
@@ -294,15 +447,25 @@
         {
           "panel_id": "P014",
           "x": 72,
-          "y": 12992,
+          "y": 13072,
           "w": 1296,
           "h": 1160,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "",
+          "bubble_first": "top",
+          "effects_hint": "none",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P014 quiet_cliffhanger",
           "bubble_slots": [
             {
               "slot_id": "B014N",
               "type": "narration",
               "x": 120,
-              "y": 13036,
+              "y": 13116,
               "w": 560,
               "h": 118
             },
@@ -310,7 +473,7 @@
               "slot_id": "B014D1",
               "type": "dialogue",
               "x": 882,
-              "y": 13174,
+              "y": 13254,
               "w": 430,
               "h": 136
             },
@@ -318,7 +481,7 @@
               "slot_id": "B014D2",
               "type": "dialogue",
               "x": 128,
-              "y": 13328,
+              "y": 13408,
               "w": 430,
               "h": 136
             }

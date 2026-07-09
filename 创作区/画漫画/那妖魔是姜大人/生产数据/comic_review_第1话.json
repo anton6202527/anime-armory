@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "comic_review",
-  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-08T22:49:01",
+  "created_at": "2026-07-09T11:05:22",
   "verdict": "pass",
   "settings": {
     "定妆级别": "长线专门定妆",
@@ -16,10 +16,10 @@
   },
   "summary": {
     "panel_count": 16,
-    "issue_count": 8,
+    "issue_count": 6,
     "block_count": 0,
     "warn_count": 0,
-    "info_count": 8
+    "info_count": 6
   },
   "artifacts": {
     "panel_script": "脚本/第1话/panel_script.json",
@@ -53,7 +53,7 @@
         ],
         "size": {
           "width": 1440,
-          "height": 15456
+          "height": 15536
         },
         "format": "webp"
       }
@@ -67,19 +67,6 @@
     "contact_sheet": "生产数据/panel_contact_sheet_第1话.jpg"
   },
   "raw_bubble_candidates": [
-    {
-      "panel_id": "P004",
-      "path": "出图/第1话/panels/P004.png",
-      "components": [
-        {
-          "x": 909,
-          "y": 337,
-          "w": 143,
-          "h": 97,
-          "area": 4738
-        }
-      ]
-    },
     {
       "panel_id": "P008",
       "path": "出图/第1话/panels/P008.png",
@@ -108,19 +95,6 @@
     }
   ],
   "accepted_raw_bubble_candidates": [
-    {
-      "panel_id": "P004",
-      "path": "出图/第1话/panels/P004.png",
-      "components": [
-        {
-          "x": 909,
-          "y": 337,
-          "w": 143,
-          "h": 97,
-          "area": 4738
-        }
-      ]
-    },
     {
       "panel_id": "P008",
       "path": "出图/第1话/panels/P008.png",
@@ -152,10 +126,10 @@
     "verdict": "pass",
     "summary": {
       "panel_count": 16,
-      "finding_count": 5,
+      "finding_count": 4,
       "block_count": 0,
       "warn_count": 0,
-      "info_count": 5
+      "info_count": 4
     }
   },
   "character_consistency": {
@@ -171,14 +145,6 @@
     "contact_sheet": "生产数据/qa_previews/第1话_character_consistency_contact_sheet.jpg"
   },
   "issues": [
-    {
-      "severity": "info",
-      "category": "image",
-      "artifact": "出图/第1话/panels/P004.png",
-      "reason": "疑似烘焙空白气泡已人审签收为误报：候选区域位于右侧天空和荒野雾面，是预留对白位置附近的自然亮部，不是模型烘焙的空白气泡或文字框。",
-      "return_to": "comic-review",
-      "suggested_fix": "若该格重抽或构图变化，需要重新复核原始图空白气泡机检"
-    },
     {
       "severity": "info",
       "category": "image",
@@ -199,7 +165,7 @@
       "severity": "info",
       "category": "style",
       "artifact": "出图/第1话/panels/P001.png",
-      "reason": "风格指纹内聚度 0.7469 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7478 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
     },
@@ -207,15 +173,7 @@
       "severity": "info",
       "category": "style",
       "artifact": "出图/第1话/panels/P002.png",
-      "reason": "风格指纹内聚度 0.7122 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
-      "return_to": "comic-review",
-      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
-    },
-    {
-      "severity": "info",
-      "category": "style",
-      "artifact": "出图/第1话/panels/P003.png",
-      "reason": "风格指纹内聚度 0.8420 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.7114 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
     },
@@ -223,7 +181,7 @@
       "severity": "info",
       "category": "style",
       "artifact": "出图/第1话/panels/P010.png",
-      "reason": "风格指纹内聚度 0.8389 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.8389 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
     },
@@ -231,7 +189,7 @@
       "severity": "info",
       "category": "style",
       "artifact": "出图/第1话/panels/P013.png",
-      "reason": "风格指纹内聚度 0.8360 明显低于本话中位 0.8843，疑似画风、细节密度或照片感跳变。",
+      "reason": "风格指纹内聚度 0.8346 明显低于本话中位 0.8876，疑似画风、细节密度或照片感跳变。",
       "return_to": "comic-review",
       "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。"
     }
@@ -244,5 +202,6 @@
     "demo学习 用途：system_font_draft 仅作草稿嵌字字体记录，不进入发布授权流程。",
     "已刷新 QA 长图预览：生产数据/qa_previews/第1话_longstrip_preview.webp",
     "已刷新 panel contact sheet：生产数据/panel_contact_sheet_第1话.jpg"
-  ]
+  ],
+  "progress_written": true
 }

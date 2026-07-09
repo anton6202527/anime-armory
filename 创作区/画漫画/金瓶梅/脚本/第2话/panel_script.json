@@ -1,0 +1,1128 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_script",
+  "title": "金瓶梅",
+  "chapter": "第2话",
+  "status": "ready",
+  "source_semantics": {
+    "path": "脚本/第2话/source_semantics.json",
+    "requires_normalization": true,
+    "source_language": "古白话",
+    "target_text_language": "中文",
+    "target_text_metadata": {
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk"
+    },
+    "status": "pass"
+  },
+  "visual_contract": {
+    "style_baseline": "古典世情水墨写实条漫；黑白灰水墨线稿和灰阶体积为主，雪景留白、火盆暗红、门帘绛红作为有限点染；北宋市井小楼逼仄真实；不画露骨情色、裸露或床笫动作。",
+    "character_integrity_policy": "含角色格必须锁定角色 DNA：武松高大刚硬、都头公服和守礼姿态；武大矮小怯弱但不猎奇；潘金莲精致机敏、武家新妇/帘下试探态但服装保守；迎儿为十二岁儿童旁观者。脸型、眼型、发际线、发型轮廓、服装主色、标志道具和手脚完整性不得漂移。成人试探格只用酒盏、火箸、手距、门闩和眼神表现，不画露骨身体特写。",
+    "scene_anchors": {
+      "LOC_WUDA_HOUSE": {
+        "spatial_layout": "临街小楼，窄楼梯从画下/画侧通向楼上房，楼上小桌靠窗，红帘半垂，炊饼担靠墙；武松房内有火盆、床铺/铺盖、墙钉挂帽衣。室内人物距离近但保留桌案和火盆作为礼法边界。",
+        "lighting_anchor": "日常为窗外灰日光加弱暖油灯；雪日试探场以窗外冷雪光和火盆暗红暖光对冲，火光从画下方照脸，红帘投影切在人物之间。",
+        "axis_eyeline": "楼上房内默认轴线：武松在画左/后侧靠火盆或门，潘金莲在画右/前侧靠桌与红帘，武大从楼梯/门口进入；迎儿贴近门闩或桌边低位。正反打不越轴。",
+        "resident_assets": [
+          "红帘",
+          "窄楼梯",
+          "小桌",
+          "茶碗",
+          "火盆",
+          "炊饼担",
+          "铺盖行李"
+        ],
+        "forbidden_drift": [
+          "不要豪宅化或宫殿化",
+          "不要现代家具、电灯、玻璃窗或现代酒具",
+          "不要露骨暧昧肢体接触",
+          "不要让武松无理由看读者镜头"
+        ]
+      },
+      "LOC_ZISHI_STREET": {
+        "spatial_layout": "武大家临街门外的紫石街，青石路、低矮店铺、檐下阴影、门帘和街坊灰影；雪日地面覆白，炊饼担和脚印清楚。",
+        "lighting_anchor": "雪日冷灰天光为主，屋内门缝有弱暖光，红帘为局部绛红色点。",
+        "axis_eyeline": "街道纵深从画下通向画上；武松离开时背影沿街纵轴向县前方向走，武大在门口低位看向他。",
+        "resident_assets": [
+          "青石街",
+          "低檐",
+          "红帘",
+          "炊饼担",
+          "雪地脚印"
+        ],
+        "forbidden_drift": [
+          "不要现代招牌车辆电线",
+          "不要可读随机文字",
+          "不要把雪景画成仙侠雪山"
+        ]
+      }
+    },
+    "character_state_timeline": {
+      "CHAR_WUSONG": [
+        {
+          "from_panel": "P001",
+          "state": "都头公服态搬入，带行李铺盖，姿态守礼。"
+        },
+        {
+          "from_panel": "P005",
+          "state": "雪中归来，外衣、毡笠和靴上有雪，仍保持端正。"
+        },
+        {
+          "from_panel": "P011",
+          "state": "怒斥后刚烈严厉，但不殴打潘金莲。"
+        },
+        {
+          "from_panel": "P017",
+          "state": "收拾行李搬离武家，表情压住怒意。"
+        }
+      ],
+      "CHAR_PAN": [
+        {
+          "from_panel": "P001",
+          "state": "武家新妇态，殷勤打扫，眼神藏喜。"
+        },
+        {
+          "from_panel": "P006",
+          "state": "雪日试探态，发髻和衣袖可微乱但服装保守不裸露。"
+        },
+        {
+          "from_panel": "P012",
+          "state": "被斥后羞恼，脸红转冷。"
+        },
+        {
+          "from_panel": "P015",
+          "state": "哭诉反咬，表情委屈与恼怒并存。"
+        }
+      ],
+      "CHAR_WUDA": [
+        {
+          "from_panel": "P003",
+          "state": "小贩常态，请邻舍、挑炊饼担。"
+        },
+        {
+          "from_panel": "P014",
+          "state": "雪中归来，疲惫困惑。"
+        }
+      ],
+      "CHAR_YINGER": [
+        {
+          "from_panel": "P006",
+          "state": "儿童旁观者，关门、温酒、收拾碗盏，紧张低位。"
+        }
+      ]
+    }
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "episode_recap_opening",
+      "source_excerpt": "S001：武松收拾行李铺盖，引到哥家；潘金莲强如拾了金宝一般欢喜。",
+      "meaning_zh": "武松搬入武大家，潘金莲表面殷勤，内心欢喜。",
+      "text_target": "武松搬进来的那晚，金莲像拾了金宝。",
+      "adaptation_note": "以行李、红帘和打扫房间表现搬入，不画亲密接触。",
+      "description": "武大家临街小楼傍晚，武松带着铺盖行李和差役灰影站在楼梯口，潘金莲从红帘后提灯出来，武大在旁搓手笑；楼内逼仄，行李放在地上。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼房",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "楼梯在画左下通向楼上，武松画左中景持行李，武大低位在画中，潘金莲画右红帘后伸灯，差役只作灰影不抢主体。",
+      "lighting_anchor": "傍晚窗外冷灰光，潘金莲手中油灯和红帘给画右弱暖光。",
+      "axis_eyeline": "武松看向房内铺盖位置，潘金莲看向武松行李，武大看武松；三人不看镜头。",
+      "gaze_target": "武松看房内铺盖位置；潘金莲看武松手里的行李；武大看武松脸",
+      "eyeline_direction": "武松画右内侧，潘金莲画左下，武大画左上",
+      "character_integrity": "武松都头态高大肩背和腰牌/佩刀可读，头脸手脚完整；武大矮小旧布衣和炊饼担靠墙可读；潘金莲鹅蛋脸、细眉、发髻和保守衫裙完整可读。",
+      "continuity_from": "第1话P018",
+      "spatial_relationships": "红帘位于潘金莲与武松之间；武大站在两人之间偏低位；行李铺盖不遮挡脚。",
+      "dialogue": [],
+      "narration": "武松搬进来的那晚，金莲像拾了金宝。",
+      "narration_target": "武松搬进来的那晚，金莲像拾了金宝。",
+      "sfx": [],
+      "art_notes": "开场中景，绛红帘点染；避免温馨过度，留一点压迫阴影。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "承接第1话钩子",
+      "ink_plan": "人物轮廓清线，楼梯和红帘用细密线表现逼仄。",
+      "black_fill_plan": "楼梯深处和帘后压暗。",
+      "tone_plan": "室内中灰，红帘低饱和点染。",
+      "value_plan": "灯光亮、帘后暗、人物中灰分层。",
+      "effects_plan": "无速度线，红帘边缘可用细风线。",
+      "style_bucket": "interior_wuda_house",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_RED_CURTAIN",
+        "PROP_TRAVEL_BUNDLE"
+      ]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "boundary_established",
+      "source_excerpt": "S002：妇人烧汤净面、捧茶；武松道教嫂嫂生受，寝食不安。",
+      "meaning_zh": "潘金莲越殷勤，武松越觉得叔嫂界限不妥。",
+      "text_target": "她越殷勤，武松越坐不安。",
+      "adaptation_note": "茶盏和洗面水作为礼法边界道具。",
+      "description": "清晨楼上小桌，潘金莲双手递茶，武松坐姿端正却后撤半步，桌上洗面铜盆冒热气；红帘阴影切过两人之间。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼房",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "小桌居中，铜盆在画下前景，潘金莲画右递茶，武松画左坐在桌边但身体后撤，楼梯口留空。",
+      "lighting_anchor": "清晨冷窗光从画左上入，茶盏和盆中蒸汽有淡白留光，室内油灯弱。",
+      "axis_eyeline": "潘金莲视线落在茶盏和武松手上，武松视线看茶盏不看潘金莲脸。",
+      "gaze_target": "潘金莲看茶盏与武松手；武松看茶盏边缘",
+      "eyeline_direction": "潘金莲画左下，武松画右下",
+      "character_integrity": "潘金莲发髻、细眉、保守窄袖衫裙完整；武松脸型、眉眼、都头服和双手完整，脚不裁掉。",
+      "continuity_from": "P001",
+      "spatial_relationships": "茶盏在两人中间形成距离，武松手未触潘金莲手；桌沿不遮挡脸。",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "教嫂嫂生受，武松寝食不安。",
+          "text_target": "教嫂嫂生受，武松寝食不安。",
+          "source_text": "教嫂嫂生受，武松寢食不安！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "礼貌疏离"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "不要画成暧昧触手；茶盏和蒸汽预留文字区在上方。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "礼法边界第一次明示",
+      "ink_plan": "茶盏、手指、蒸汽线要清楚。",
+      "black_fill_plan": "红帘影压在桌面，不遮挡手。",
+      "tone_plan": "室内轻灰，蒸汽留白。",
+      "value_plan": "茶盏亮，人物脸中亮，帘后暗。",
+      "effects_plan": "蒸汽细线。",
+      "style_bucket": "interior_wuda_house",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "domestic_montage",
+      "source_excerpt": "S003：武松出钱请邻舍，又取彩色缎子与嫂嫂做衣服。",
+      "meaning_zh": "亲族礼数越周全，潘金莲越把它误读成念想。",
+      "text_target": "礼数越周全，旁人的心越不安分。",
+      "adaptation_note": "邻舍宴压缩为布匹、邻人影子和武大忙碌。",
+      "description": "小楼桌边蒙太奇式画面：武大端着炊饼担招呼邻舍灰影，武松把一匹低饱和彩色缎子放在桌上，潘金莲低头接过，眼尾却看向武松。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼房",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "桌在画中，布匹横放前景，武松画左站直，潘金莲画右收布，武大画后景低位招呼邻舍灰影。",
+      "lighting_anchor": "日间灰暖窗光，红帘作右侧暗红影，布匹有低饱和绛红/青绿点染。",
+      "axis_eyeline": "潘金莲眼尾看武松，武松看布匹和武大，武大看邻舍。",
+      "gaze_target": "潘金莲看武松手边布匹，武松看桌上布匹，武大看邻舍灰影",
+      "eyeline_direction": "潘金莲画左，武松画右下，武大画左右摆动",
+      "character_integrity": "三人脸、手、服装主色完整；潘金莲不露骨，武大矮小比例不畸形，武松腰牌和佩刀不丢。",
+      "continuity_from": "P002",
+      "spatial_relationships": "布匹在武松和潘金莲之间，武大后景忙碌与两人形成错位。",
+      "dialogue": [],
+      "narration": "礼数越周全，旁人的心越不安分。",
+      "narration_target": "礼数越周全，旁人的心越不安分。",
+      "sfx": [],
+      "art_notes": "蒙太奇但不要分栏拼贴；用同一室内空间叠影表现时间流逝。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "时间压缩",
+      "ink_plan": "布纹和人物手部细线。",
+      "black_fill_plan": "邻舍灰影可压暗。",
+      "tone_plan": "布匹轻点染，其余灰阶。",
+      "value_plan": "布匹亮，背景邻舍暗。",
+      "effects_plan": "无。",
+      "style_bucket": "interior_wuda_house",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_CAKE_BASKET",
+        "PROP_CLOTH_BOLT"
+      ]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "seasonal_turning_point",
+      "source_excerpt": "S004：十一月朔风紧起，大雪；潘金莲买酒肉，去武松房里簇了一盆炭火。",
+      "meaning_zh": "雪日把家庭空间封成一间密室，潘金莲开始布置试探。",
+      "text_target": "雪落了一夜。火盆，是她先点起来的。",
+      "adaptation_note": "雪、火盆、关门形成强对比和压迫感。",
+      "description": "大格：武大家小楼外雪压屋檐，画面切入楼上房，潘金莲在火盆前俯身添炭，桌上酒壶和菜盘已摆好；窗外紫石街一片冷白。",
+      "characters": [
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼房 / 紫石街雪景",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "画面上半是雪压屋檐和街口，下半切入楼上房，火盆在画下中央，潘金莲画右俯身，酒具在桌上画左。",
+      "lighting_anchor": "窗外冷白雪光从画左上入，火盆暗红从画下照脸，室内四角压暗。",
+      "axis_eyeline": "潘金莲看火盆和酒具，不看镜头；外部街巷无主要对视。",
+      "gaze_target": "潘金莲看火盆炭火",
+      "eyeline_direction": "画下中央",
+      "character_integrity": "潘金莲脸、发髻、手臂、衣袖和脚完整可读；俯身但不露胸、不色情化。",
+      "continuity_from": "P003",
+      "spatial_relationships": "火盆在潘金莲和空座之间，酒具在桌上，窗与红帘标定同一房间。",
+      "dialogue": [],
+      "narration": "雪落了一夜。火盆，是她先点起来的。",
+      "narration_target": "雪落了一夜。火盆，是她先点起来的。",
+      "sfx": [
+        "簇"
+      ],
+      "art_notes": "本话视觉转折大格；雪留白多但不能像空白气泡。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "寒暖对冲，进入试探场",
+      "ink_plan": "雪线、檐线、火盆炭粒清楚。",
+      "black_fill_plan": "室内四角黑场压迫。",
+      "tone_plan": "雪地留白，室内30-50%灰阶。",
+      "value_plan": "雪亮、火盆暗红亮、室内深灰。",
+      "effects_plan": "雪点和火星细线。",
+      "style_bucket": "winter_interior_firelight",
+      "references": [
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "LOC_ZISHI_STREET",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "threshold_test",
+      "source_excerpt": "S005：妇人推起帘子迎着笑道叔叔寒冷；武松自把雪拂了。",
+      "meaning_zh": "潘金莲借迎雪伸手靠近，武松礼貌拒绝触碰。",
+      "text_target": "她伸手去接，武松把雪自己拂了。",
+      "adaptation_note": "以手未触到衣帽的距离表现拒绝。",
+      "description": "门帘被推起，武松披雪站在门口摘毡笠，潘金莲伸手要接但停在半空；武松另一手自己拂去肩上雪，脚边有雪水。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武大家门口",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "门口在画左，红帘从画上垂下，武松画左前景入门，潘金莲画右门内，二人之间保留一掌以上空隙。",
+      "lighting_anchor": "门外冷雪光勾武松轮廓，室内火盆暖光从画右下反照潘金莲。",
+      "axis_eyeline": "潘金莲看武松毡笠和肩雪，武松看自己肩上雪和墙钉。",
+      "gaze_target": "潘金莲看武松肩上雪；武松看自己将要挂衣的墙钉",
+      "eyeline_direction": "潘金莲画左上，武松画右内侧",
+      "character_integrity": "武松脸、手、毡笠、靴和都头外衣完整；潘金莲脸、手、发髻和保守衣袖完整；两人手不接触。",
+      "continuity_from": "P004",
+      "spatial_relationships": "门槛和红帘隔开内外，潘金莲手停在武松衣帽外侧，武松身体偏后撤。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "叔叔寒冷。",
+          "text_target": "叔叔寒冷。",
+          "source_text": "叔叔寒冷。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "柔声迎接"
+        },
+        {
+          "speaker": "武松",
+          "text": "不劳嫂嫂。",
+          "text_target": "不劳嫂嫂。",
+          "source_text": "不勞嫂嫂，生受！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "礼貌拒绝"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "簌"
+      ],
+      "art_notes": "雪粉可飞，但不要遮挡脸和手；手距是关键。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "第一次门槛试探",
+      "ink_plan": "手部和毡笠清线。",
+      "black_fill_plan": "门内红帘深灰暗面。",
+      "tone_plan": "雪粉留白，人物中灰。",
+      "value_plan": "外雪亮，室内暗，手部亮。",
+      "effects_plan": "雪粉细线。",
+      "style_bucket": "winter_threshold",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "locked_room_setup",
+      "source_excerpt": "S006：妇人令迎儿把前门上闩，后门也关了；搬酒菜入房。",
+      "meaning_zh": "潘金莲关上前后门，把武松引入封闭酒席。",
+      "text_target": "前门上了闩，后门也关了。",
+      "adaptation_note": "迎儿作为儿童旁观者出现，保持紧张低位。",
+      "description": "迎儿在画左低位踮脚插上门闩，火盆在画下发暗红光，潘金莲把温酒注子放到桌上，武松站在门边回头问哥哥去处。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "CHAR_YINGER"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "门闩在画左前景，迎儿低位靠门；桌在画中，潘金莲画右放酒具；武松画后景靠门和火盆之间。",
+      "lighting_anchor": "火盆下方暖光照迎儿手和酒具，窗外冷雪光从画后入。",
+      "axis_eyeline": "迎儿看门闩，潘金莲看酒具，武松看画外楼梯方向寻找武大。",
+      "gaze_target": "迎儿看门闩；潘金莲看酒壶；武松看楼梯口",
+      "eyeline_direction": "迎儿画左上，潘金莲画下，武松画左后",
+      "character_integrity": "迎儿儿童比例、双髻/低髻、朴素衣装和双手完整；潘金莲不成人化露骨；武松头脸、手脚和佩刀完整。",
+      "continuity_from": "P005",
+      "spatial_relationships": "迎儿与成人保持距离；潘金莲在桌右，武松在门边，不形成身体贴近。",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "哥哥哪里去了？",
+          "text_target": "哥哥哪里去了？",
+          "source_text": "哥哥那裏去了？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "警觉"
+        }
+      ],
+      "narration": "前门上了闩，后门也关了。",
+      "narration_target": "前门上了闩，后门也关了。",
+      "sfx": [
+        "咔"
+      ],
+      "art_notes": "门闩和迎儿手是重点；儿童不可被画成成年人。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "空间封闭",
+      "ink_plan": "门闩、火盆、酒壶线条清楚。",
+      "black_fill_plan": "门后暗面压黑。",
+      "tone_plan": "火盆暖点染，室内深灰。",
+      "value_plan": "门闩亮点，火盆亮点，人物脸中亮。",
+      "effects_plan": "门闩小拟声。",
+      "style_bucket": "winter_interior_firelight",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "CHAR_YINGER",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET"
+      ]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "wine_invitation",
+      "source_excerpt": "S006：我和叔叔自吃三杯；叔叔满饮此杯。",
+      "meaning_zh": "潘金莲主动劝酒，武松想等哥哥回来。",
+      "text_target": "一发等哥来家，吃也不迟。",
+      "adaptation_note": "越界试探台词保留，但画面保持桌案距离。",
+      "description": "火盆旁小桌，潘金莲举盏递向武松，武松隔桌坐直，手掌挡在酒盏前方；桌边空着武大的位置，火盆在两人下方。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "桌横在两人之间，潘金莲画右前景持酒盏，武松画左中景端坐，空凳在画后表示武大缺席。",
+      "lighting_anchor": "火盆暖光从画下照酒盏，冷窗光压低背景。",
+      "axis_eyeline": "潘金莲看武松手和酒盏，武松看空凳/楼梯方向。",
+      "gaze_target": "潘金莲看武松手边酒盏；武松看武大空座",
+      "eyeline_direction": "潘金莲画左下，武松画右后",
+      "character_integrity": "武松脸、手、膝、靴完整；潘金莲脸、手、袖和发髻完整，衣领保守。",
+      "continuity_from": "P006",
+      "spatial_relationships": "小桌和空凳隔开两人，酒盏不越过武松胸前。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "叔叔满饮此杯。",
+          "text_target": "叔叔满饮此杯。",
+          "source_text": "叔叔滿飲此盃！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "殷勤劝酒"
+        },
+        {
+          "speaker": "武松",
+          "text": "等哥来家，吃也不迟。",
+          "text_target": "等哥来家，吃也不迟。",
+          "source_text": "一發等哥來家，喫也不遲。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "克制"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "对白槽在上方，不遮挡酒盏和手。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "试探升温",
+      "ink_plan": "酒盏、手掌、空凳清楚。",
+      "black_fill_plan": "背景门帘压黑。",
+      "tone_plan": "火盆暖点染，其余中灰。",
+      "value_plan": "酒盏亮，空凳暗。",
+      "effects_plan": "无。",
+      "style_bucket": "winter_interior_firelight",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET"
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "verbal_probe",
+      "source_excerpt": "S007：我听得人说，叔叔在县前街上养着个唱的；武松道嫂嫂休听胡说。",
+      "meaning_zh": "潘金莲用风流传言试探武松，武松否认。",
+      "text_target": "嫂嫂休听胡说，我武二不是这等人。",
+      "adaptation_note": "对话短化，画面重点是酒盏和避视。",
+      "description": "近中景，潘金莲隔着酒壶侧身发问，眼神从杯沿探向武松；武松低头看自己面前的空盏，眉头压低，火盆光照出脸部硬线。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "酒壶在画中前景，潘金莲画右靠桌，武松画左靠火盆，二人仍隔桌。",
+      "lighting_anchor": "火盆暖光从画下照脸，潘金莲半脸在红帘阴影里，武松脸较亮。",
+      "axis_eyeline": "潘金莲眼神斜向武松脸，武松视线压向自己酒盏，不迎视。",
+      "gaze_target": "潘金莲看武松脸；武松看自己面前空酒盏",
+      "eyeline_direction": "潘金莲画左，武松画下",
+      "character_integrity": "两人脸型、眉眼、发际线清楚；潘金莲手持酒壶不遮脸；武松双手和肩背完整。",
+      "continuity_from": "P007",
+      "spatial_relationships": "酒壶和桌沿作为中线，潘金莲不越桌。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "听说叔叔在县前养着唱的？",
+          "text_target": "听说叔叔在县前养着唱的？",
+          "source_text": "我聽得人說，叔叔在縣前街上養著個唱的，有這話麼？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "试探"
+        },
+        {
+          "speaker": "武松",
+          "text": "嫂嫂休听胡说，我武二不是这等人。",
+          "text_target": "嫂嫂休听胡说，我武二不是这等人。",
+          "source_text": "嫂嫂休聽別人胡說，我武二從來不是這等人！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "正色"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "不要画青楼想象画面；只留话语试探。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "语言试探",
+      "ink_plan": "脸部表情和杯沿清线。",
+      "black_fill_plan": "潘金莲半脸帘影。",
+      "tone_plan": "背景深灰，脸和杯留亮。",
+      "value_plan": "武松脸亮，潘金莲半暗。",
+      "effects_plan": "无。",
+      "style_bucket": "winter_interior_firelight",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_WINE_SET",
+        "PROP_FIRE_BRAZIER",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "pressure_increase",
+      "source_excerpt": "S007：他那里晓得甚么？如在醉生梦死一般；叔叔且请一杯。",
+      "meaning_zh": "潘金莲贬低武大，逼近武松的心理防线。",
+      "text_target": "他哪里晓得什么？叔叔且请一杯。",
+      "adaptation_note": "保留言语越界，动作仍保持非露骨。",
+      "description": "潘金莲又斟一杯，嘴角含笑却眼神逼近；武松低头不接话，手指按在膝上，火箸在火盆边斜放。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "潘金莲画右上斟酒，武松画左下坐在火盆旁，火箸位于两人中间的地面。",
+      "lighting_anchor": "火盆暖光增强，背景冷雪光减弱，人物脸下方有硬阴影。",
+      "axis_eyeline": "潘金莲看武松膝上的手，武松看火盆边火箸。",
+      "gaze_target": "潘金莲看武松手；武松看火箸",
+      "eyeline_direction": "潘金莲画左下，武松画下中央",
+      "character_integrity": "武松脸和手完整，佩刀不被桌子遮断；潘金莲发髻、脸、手和衣袖完整保守。",
+      "continuity_from": "P008",
+      "spatial_relationships": "火盆和火箸在两人之间，潘金莲尚未触碰武松。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "他哪里晓得什么？叔叔且请一杯。",
+          "text_target": "他哪里晓得什么？叔叔且请一杯。",
+          "source_text": "呵呀，你休說，他那裏曉得甚麼？叔叔且請一盃！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "挑拨"
+        }
+      ],
+      "narration": "武松只把头低了。",
+      "narration_target": "武松只把头低了。",
+      "sfx": [
+        "咕"
+      ],
+      "art_notes": "火盆边界要明确；潘金莲衣领不要裸露。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "压力升级",
+      "ink_plan": "火箸和手指为关键线条。",
+      "black_fill_plan": "背景黑场收窄空间。",
+      "tone_plan": "火盆附近高对比。",
+      "value_plan": "火盆亮点，武松低头暗面。",
+      "effects_plan": "酒水小拟声。",
+      "style_bucket": "winter_interior_firelight",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET"
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "temptation_peak",
+      "source_excerpt": "S008：一只手拿着注子，一只手便去武松肩上只一捏；你若有心，吃我这半杯儿残酒。",
+      "meaning_zh": "潘金莲以肩上手和半盏残酒越过礼法界线。",
+      "text_target": "你若有心，吃我这半盏酒。",
+      "adaptation_note": "不画露胸或身体特写；只用肩上手、火箸、残酒与武松皱眉表现越界。",
+      "description": "重压近景：潘金莲一手握温酒注子，一手越过画面放到武松肩侧，半盏酒悬在画中；武松皱眉，右手握住火箸但未动作，身体绷紧。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "武松画左前景坐在火盆旁，潘金莲画右前景越过桌角，酒盏在两人中线，火箸在武松右手。",
+      "lighting_anchor": "火盆暗红强光从下方照手和酒盏，背景压黑，窗外冷光只留边缘。",
+      "axis_eyeline": "潘金莲看武松嘴边/酒盏，武松看潘金莲越界的手和酒盏。",
+      "gaze_target": "潘金莲看武松与酒盏之间；武松看肩侧越界的手",
+      "eyeline_direction": "潘金莲画左下，武松画右肩侧",
+      "character_integrity": "武松脸、眼型、肩背、握火箸手完整；潘金莲脸、手、发髻和衣袖完整，衣领保守不露胸；手的位置清楚但不色情化。",
+      "continuity_from": "P009",
+      "spatial_relationships": "潘金莲首次越过桌线触到武松肩侧；武松身体后绷，火箸和酒盏形成三角张力。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "你若有心，吃我这半盏酒。",
+          "text_target": "你若有心，吃我这半盏酒。",
+          "source_text": "你若有心，喫我這半盃兒殘酒。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "低声越界"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "art_notes": "高风险格：严禁裸露、床笫、身体色情特写；只画肩侧手和酒盏。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "越界峰值",
+      "ink_plan": "手、酒盏、火箸必须精细。",
+      "black_fill_plan": "背景大黑场压迫，不遮挡五官。",
+      "tone_plan": "火盆暖点染，人物中高对比。",
+      "value_plan": "酒盏最亮，武松眼下暗，潘金莲半脸暗。",
+      "effects_plan": "火星细点，手边压力线极少。",
+      "style_bucket": "winter_interior_firelight_peak",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET"
+      ]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "moral_reversal",
+      "source_excerpt": "S009：武松劈手夺过来，泼在地下，说嫂嫂不要这般不识羞耻。",
+      "meaning_zh": "武松夺过残酒泼地，明确拒绝潘金莲。",
+      "text_target": "嫂嫂，不要这般不识羞耻。",
+      "adaptation_note": "动作峰值：酒泼地、火光压暗、距离拉开。",
+      "description": "大格：武松猛地站起，手中酒盏向地面泼出弧线，酒水洒在火盆旁青砖上；潘金莲被迫后退半步，红帘在她身后抖动。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "武松画左站起形成高大垂直线，潘金莲画右后退，火盆画下中央，酒水弧线落在两人之间。",
+      "lighting_anchor": "火盆暖光被泼酒反光打亮地面，背景红帘暗红，窗外冷光弱。",
+      "axis_eyeline": "武松看潘金莲越界的手/脸，潘金莲看地上酒水和武松手。",
+      "gaze_target": "武松看潘金莲脸；潘金莲看泼落的酒水",
+      "eyeline_direction": "武松画右，潘金莲画左下",
+      "character_integrity": "武松脸、眼、手、腿、靴完整，力量来自站起不是挥拳；潘金莲脸和手完整，后退不摔倒不露骨。",
+      "continuity_from": "P010",
+      "spatial_relationships": "酒水落在两人之间形成断线；武松没有击打潘金莲，只用站姿和泼酒拉开距离。",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "嫂嫂，不要这般不识羞耻。",
+          "text_target": "嫂嫂，不要这般不识羞耻。",
+          "source_text": "嫂嫂，不要恁的不識羞恥！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "厉声"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "哗"
+      ],
+      "art_notes": "本话动作峰值；不要把推拒画成殴打。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "道德反转",
+      "ink_plan": "酒水弧线、站起衣褶、手部要清晰。",
+      "black_fill_plan": "红帘背后黑场压迫。",
+      "tone_plan": "地面酒水留白，高对比。",
+      "value_plan": "酒水亮、火盆亮、人物脸中亮。",
+      "effects_plan": "泼酒弧线和小拟声，不用夸张爆炸线。",
+      "style_bucket": "winter_interior_firelight_peak",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_WINE_SET",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "warning",
+      "source_excerpt": "S009：武二是个顶天立地的男子汉；再来休要如此所为。",
+      "meaning_zh": "武松严厉警告潘金莲，守礼但不纵容。",
+      "text_target": "再来休要如此。",
+      "adaptation_note": "保留严厉警告，不画实际暴力。",
+      "description": "武松站在火盆旁正面偏侧，眼神严厉看向潘金莲；潘金莲退到红帘前，脸红转冷，手收回袖中。火光在两人之间形成一道亮线。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "武松画左中景站立，潘金莲画右靠红帘，火盆与桌角在中线，地面酒迹延续P011。",
+      "lighting_anchor": "火盆下光照武松下颌和潘金莲手，红帘暗红压在潘金莲背后。",
+      "axis_eyeline": "武松看潘金莲脸，潘金莲避向地面酒迹。",
+      "gaze_target": "武松看潘金莲脸；潘金莲看地面酒迹",
+      "eyeline_direction": "武松画右，潘金莲画左下",
+      "character_integrity": "两人脸、眼神、发型、双手、脚下站位完整；武松拳头可握紧但不挥出。",
+      "continuity_from": "P011",
+      "spatial_relationships": "两人间距拉大，火盆和酒迹作为不可跨越的边界。",
+      "dialogue": [
+        {
+          "speaker": "武松",
+          "text": "再来休要如此。",
+          "text_target": "再来休要如此。",
+          "source_text": "再來休要如此所為。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "压低怒意"
+        }
+      ],
+      "narration": "武松眼里认的是嫂嫂，拳头却不认这等事。",
+      "narration_target": "武松眼里认的是嫂嫂，拳头却不认这等事。",
+      "sfx": [],
+      "art_notes": "严厉但克制；不得画成暴力击打。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "斥责落点",
+      "ink_plan": "眼神和手部张力清线。",
+      "black_fill_plan": "潘金莲背后帘影压暗。",
+      "tone_plan": "中高对比。",
+      "value_plan": "武松脸亮，潘金莲半暗。",
+      "effects_plan": "无。",
+      "style_bucket": "winter_interior_firelight_peak",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_FIRE_BRAZIER",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "aftermath_silence",
+      "source_excerpt": "S010：妇人吃他几句，红了面皮，叫迎儿收拾碟盏，自往厨下去了。",
+      "meaning_zh": "潘金莲被斥后羞恼退开，迎儿紧张收拾器皿。",
+      "text_target": "她收了笑，也收了酒。",
+      "adaptation_note": "从越界转成冷场和儿童旁观。",
+      "description": "冷场小格：迎儿低头收拾倒伏酒盏和盘子，潘金莲背身往厨房方向走，袖子收紧；武松坐回火盆旁，脸藏在阴影里。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "CHAR_YINGER"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "迎儿画下前景收盘，潘金莲画右背身离开，武松画左后景靠火盆坐下。",
+      "lighting_anchor": "火盆余光变弱，冷窗光压入，室内整体转灰。",
+      "axis_eyeline": "迎儿看盘盏，潘金莲看厨房方向，武松看火盆。",
+      "gaze_target": "迎儿看盘盏；潘金莲看厨房门；武松看火盆灰烬",
+      "eyeline_direction": "迎儿画下，潘金莲画右，武松画下",
+      "character_integrity": "迎儿儿童手脚和发髻完整；潘金莲背影发髻和衣裙完整；武松坐姿脸部可读不换脸。",
+      "continuity_from": "P012",
+      "spatial_relationships": "迎儿在成人冲突下方低位，潘金莲与武松背向，空间冷掉。",
+      "dialogue": [],
+      "narration": "她收了笑，也收了酒。",
+      "narration_target": "她收了笑，也收了酒。",
+      "sfx": [
+        "叮"
+      ],
+      "art_notes": "收拾碗盏不要画成滑稽；迎儿紧张。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "冷场",
+      "ink_plan": "碗盏和迎儿手清楚。",
+      "black_fill_plan": "厨房门口暗。",
+      "tone_plan": "整体低饱和灰。",
+      "value_plan": "火盆微亮，人物转暗。",
+      "effects_plan": "碗盏小拟声。",
+      "style_bucket": "winter_interior_aftermath",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_PAN",
+        "CHAR_YINGER",
+        "LOC_WUDA_HOUSE",
+        "PROP_WINE_SET",
+        "PROP_FIRE_BRAZIER"
+      ]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "wuda_returns",
+      "source_excerpt": "S010：武大挑着担儿大雪里归来，见妇人一双眼哭得红红的。",
+      "meaning_zh": "武大雪中归家，看到潘金莲哭红眼，完全不知发生了什么。",
+      "text_target": "武大回来时，雪还没化。",
+      "adaptation_note": "把成人冲突后果落到武大困惑。",
+      "description": "紫石街门口，武大挑着炊饼担从雪里回来，脚印凌乱；门内潘金莲侧身坐在阴影里抹眼，红帘半挡她的脸。",
+      "characters": [
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "武大家门口 / 紫石街",
+      "scene_anchor_id": "LOC_ZISHI_STREET",
+      "spatial_layout": "街道纵深在画左，武大画左前景挑担进门，潘金莲画右门内阴影，红帘在两人之间。",
+      "lighting_anchor": "冷雪光照武大和担子，门内暖暗光照潘金莲眼角。",
+      "axis_eyeline": "武大看潘金莲红眼，潘金莲避看地面或帘影。",
+      "gaze_target": "武大看潘金莲脸；潘金莲看地面帘影",
+      "eyeline_direction": "武大画右，潘金莲画下",
+      "character_integrity": "武大矮小体态、旧布衣、炊饼担、双手脚完整；潘金莲脸和手可读，非露骨。",
+      "continuity_from": "P013",
+      "spatial_relationships": "门槛隔开街雪和室内哭诉，武大仍在低位。",
+      "dialogue": [
+        {
+          "speaker": "武大",
+          "text": "你和谁闹来？",
+          "text_target": "你和谁闹来？",
+          "source_text": "你和誰鬧來？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "困惑"
+        }
+      ],
+      "narration": "武大回来时，雪还没化。",
+      "narration_target": "武大回来时，雪还没化。",
+      "sfx": [
+        "咯吱"
+      ],
+      "art_notes": "雪地脚印和炊饼担是重点；不要让潘金莲看镜头。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "后果进入",
+      "ink_plan": "雪地脚印、担子、红眼表情清楚。",
+      "black_fill_plan": "门内阴影压暗。",
+      "tone_plan": "雪留白，门内深灰。",
+      "value_plan": "武大在雪光中亮，潘金莲半暗。",
+      "effects_plan": "雪地脚步拟声。",
+      "style_bucket": "snow_street_wuda_house",
+      "references": [
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_ZISHI_STREET",
+        "PROP_CAKE_BASKET",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "false_accusation",
+      "source_excerpt": "S010：妇人道都是你这不争气的，教外人来欺负我；武大道我兄弟不是这等人。",
+      "meaning_zh": "潘金莲反咬武松，武大本能不信却不敢声张。",
+      "text_target": "她哭红了眼，把话倒了过来。",
+      "adaptation_note": "用哭眼、背影和武大的迟疑表现，不把潘金莲简化成单一恶脸。",
+      "description": "楼上小室，潘金莲背对武大坐在床边或帘下，抬袖抹眼，武大站在门边怯怯张口；红帘影在墙上像一道裂缝。",
+      "characters": [
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼房",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "潘金莲画右前景背身，武大画左门边低位，红帘影横在墙面，火盆已弱。",
+      "lighting_anchor": "室内弱暖灯，窗外冷雪光淡入，红帘影压墙。",
+      "axis_eyeline": "武大看潘金莲背影，潘金莲看自己袖口/地面。",
+      "gaze_target": "武大看潘金莲背影；潘金莲看袖口",
+      "eyeline_direction": "武大画右，潘金莲画下",
+      "character_integrity": "武大脸和双手完整，怯弱但不畸形；潘金莲脸侧、手、发髻和衣裙可读。",
+      "continuity_from": "P014",
+      "spatial_relationships": "武大停在门边不敢靠近，潘金莲背身控制话语。",
+      "dialogue": [
+        {
+          "speaker": "潘金莲",
+          "text": "都是你那兄弟欺负我。",
+          "text_target": "都是你那兄弟欺负我。",
+          "source_text": "爭奈武二那廝……便把言語來調戲我。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "哭诉反咬"
+        },
+        {
+          "speaker": "武大",
+          "text": "我兄弟不是这等人。",
+          "text_target": "我兄弟不是这等人。",
+          "source_text": "我兄弟不是這等人，從來老實。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "低声辩护"
+        }
+      ],
+      "narration": "她哭红了眼，把话倒了过来。",
+      "narration_target": "她哭红了眼，把话倒了过来。",
+      "sfx": [],
+      "art_notes": "压抑室内戏，不画夸张恶毒脸。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "误解制造",
+      "ink_plan": "表情和红帘影清楚。",
+      "black_fill_plan": "墙面帘影黑场像裂缝。",
+      "tone_plan": "室内深灰。",
+      "value_plan": "袖口和眼角亮，墙影暗。",
+      "effects_plan": "无。",
+      "style_bucket": "interior_wuda_house_aftermath",
+      "references": [
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_RED_CURTAIN"
+      ]
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "silent_decision",
+      "source_excerpt": "S010：武大来叫二哥，武松只不做声；穿上靴，戴上毡笠，一直去了。",
+      "meaning_zh": "武松不愿当面争辩，沉默决定离开。",
+      "text_target": "武松只不做声。",
+      "adaptation_note": "用穿靴、戴笠和背影表现压住怒意。",
+      "description": "武松房内，武松坐在床边穿回油靴，毡笠在手，面色沉；武大站在门口小心叫他，火盆只剩灰光。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA"
+      ],
+      "location": "武松房内",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "武松画右坐在床边穿靴，武大画左门口低位，铺盖和行李在后景。",
+      "lighting_anchor": "火盆余灰弱光，窗外雪光从画左照武大，武松脸半暗。",
+      "axis_eyeline": "武大看武松脸，武松看自己靴带和门外方向。",
+      "gaze_target": "武大看武松脸；武松看靴带",
+      "eyeline_direction": "武大画右，武松画下",
+      "character_integrity": "武松脸、手、靴、佩刀和行李完整；武大脸、手、旧布衣完整。",
+      "continuity_from": "P015",
+      "spatial_relationships": "武大停在门边不敢进，武松背向他穿靴，距离产生裂缝。",
+      "dialogue": [
+        {
+          "speaker": "武大",
+          "text": "二哥，你不曾吃点心。",
+          "text_target": "二哥，你不曾吃点心。",
+          "source_text": "二哥，你不曾喫點心，我和你喫些個。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "小心缓和"
+        }
+      ],
+      "narration": "武松只不做声。",
+      "narration_target": "武松只不做声。",
+      "sfx": [],
+      "art_notes": "靴带和毡笠是行动信号；不要夸张怒吼。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "沉默决定",
+      "ink_plan": "靴、毡笠、行李清楚。",
+      "black_fill_plan": "床下和门后暗。",
+      "tone_plan": "低灰。",
+      "value_plan": "靴带亮，脸半暗。",
+      "effects_plan": "无。",
+      "style_bucket": "interior_wuda_house_aftermath",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "LOC_WUDA_HOUSE",
+        "PROP_TRAVEL_BUNDLE",
+        "PROP_FIRE_BRAZIER"
+      ]
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "departure",
+      "source_excerpt": "S011：武松引了个土兵，拿着扁担，收拾行李便出门；哥哥不要问，只由我自去。",
+      "meaning_zh": "武松搬离武家，不愿揭破哥哥体面。",
+      "text_target": "哥哥不要问，只由我自去。",
+      "adaptation_note": "用搬行李和楼梯纵深表现兄弟被迫疏远。",
+      "description": "大格：窄楼梯上，武松带着铺盖行李下楼，差役灰影扛扁担在后；武大在楼梯口伸手相问，潘金莲只露半个身影在红帘后。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "武大家楼梯",
+      "scene_anchor_id": "LOC_WUDA_HOUSE",
+      "spatial_layout": "楼梯斜向从画右上到画左下，武松画中向下走，武大画左门口伸手，潘金莲画右红帘后半遮。",
+      "lighting_anchor": "门外雪光从楼梯下方照上来，室内红帘后暗暖光，武松背影边缘亮。",
+      "axis_eyeline": "武大看武松背影，武松看楼梯下方出口，潘金莲看武大和武松之间的空隙。",
+      "gaze_target": "武大看武松背影；武松看门外出口；潘金莲看武大伸出的手",
+      "eyeline_direction": "武大画右下，武松画左下，潘金莲画左",
+      "character_integrity": "武松背影、肩背、行李、靴和佩刀完整；武大脸和伸手完整；潘金莲半身可读但不露骨。",
+      "continuity_from": "P016",
+      "spatial_relationships": "楼梯斜线把兄弟隔开，潘金莲红帘后不直接接触任何人，差役为无脸灰影。",
+      "dialogue": [
+        {
+          "speaker": "武大",
+          "text": "二哥，做甚么便搬了去？",
+          "text_target": "二哥，做甚么便搬了去？",
+          "source_text": "二哥，做甚麼便搬了去？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "慌乱"
+        },
+        {
+          "speaker": "武松",
+          "text": "哥哥不要问，只由我自去。",
+          "text_target": "哥哥不要问，只由我自去。",
+          "source_text": "哥哥不要問，說起來裝你的幌子。只由我自去便了！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "压住怒意"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "笃",
+        "笃"
+      ],
+      "art_notes": "搬离大格，楼梯纵深清楚；差役不需定妆，灰影即可。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "后果峰值",
+      "ink_plan": "楼梯、行李、手势清线。",
+      "black_fill_plan": "红帘后潘金莲压暗。",
+      "tone_plan": "楼梯中灰，门外雪亮。",
+      "value_plan": "出口亮，楼内暗，行李轮廓亮。",
+      "effects_plan": "脚步拟声。",
+      "style_bucket": "departure_stair_wuda_house",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_WUDA_HOUSE",
+        "PROP_RED_CURTAIN",
+        "PROP_TRAVEL_BUNDLE"
+      ]
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "cliffhanger",
+      "source_excerpt": "S012：武松搬去县前客店，武大不敢寻武松；生将武二搬离去，骨肉翻令作寇仇。",
+      "meaning_zh": "武松搬走，武大与兄弟隔开；门帘还在，下一段祸根仍在街上。",
+      "text_target": "雪停了，门帘还在风里动。",
+      "adaptation_note": "作为第2话结尾钩子，不提前画西门庆露脸。",
+      "description": "长竖结尾：雪后紫石街空冷，武松背影远去县前方向，武大站在门口扶着炊饼担低头，红帘在门内风中翻起一角，潘金莲只成帘后暗影。",
+      "characters": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN"
+      ],
+      "location": "紫石街 / 武大家门口",
+      "scene_anchor_id": "LOC_ZISHI_STREET",
+      "spatial_layout": "街道纵深居中，武松背影在远处画上方，武大画下门口，红帘画右内侧翻动，潘金莲暗影在帘后。",
+      "lighting_anchor": "雪后冷灰天光，屋内弱暖光从门缝透出，红帘绛红点染。",
+      "axis_eyeline": "武大低头看地面脚印，潘金莲暗影看远去背影，武松背向众人。",
+      "gaze_target": "武大看雪地脚印；潘金莲看武松远去背影；武松看县前街口",
+      "eyeline_direction": "武大画下，潘金莲画左上，武松画上远处",
+      "character_integrity": "武松背影肩背和行李轮廓完整；武大脸、担子和手完整；潘金莲只做暗影但发髻轮廓和帘后位置可读。",
+      "continuity_from": "P017",
+      "spatial_relationships": "武松远去，武大门口低位，潘金莲在门内不出门；红帘成为下一话钩子。",
+      "dialogue": [],
+      "narration": "雪停了，门帘还在风里动。",
+      "narration_target": "雪停了，门帘还在风里动。",
+      "sfx": [
+        "呼"
+      ],
+      "art_notes": "结尾留白，不能出现西门庆正脸；可只给街角模糊空位预示下一话。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "下一话帘下相遇钩子",
+      "ink_plan": "雪地脚印、红帘边缘和远去背影清楚。",
+      "black_fill_plan": "门内黑场包住潘金莲暗影。",
+      "tone_plan": "雪地留白，街檐中灰，门内深灰。",
+      "value_plan": "雪亮，红帘低饱和，远处背影暗。",
+      "effects_plan": "风线轻带红帘。",
+      "style_bucket": "snow_street_cliffhanger",
+      "references": [
+        "CHAR_WUSONG",
+        "CHAR_WUDA",
+        "CHAR_PAN",
+        "LOC_ZISHI_STREET",
+        "PROP_CAKE_BASKET",
+        "PROP_RED_CURTAIN",
+        "PROP_TRAVEL_BUNDLE"
+      ]
+    }
+  ]
+}

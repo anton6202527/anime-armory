@@ -2,6 +2,14 @@
   "episode": "第5集",
   "generated_at": "2026-07-08T14:18:18+00:00",
   "kind": "n2d_production_locks",
+  "last_confirmed_at": "2026-07-09T08:40:31+00:00",
+  "last_confirmed_by": "codex",
+  "last_confirmed_lock_ids": [
+    "source_lock",
+    "script_lock",
+    "storyboard_lock",
+    "style_identity_lock"
+  ],
   "locks": [
     {
       "affected_departments": [
@@ -10,19 +18,19 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "",
-      "approver": "",
+      "approved_at": "2026-07-09T08:40:31+00:00",
+      "approver": "codex",
       "artifact_count": 2,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-07T13:21:53+00:00",
+          "mtime": "2026-07-07T09:30:31+00:00",
           "path": "设定库/source_comprehension.json",
           "sha256": "f5eccc3c10118d0cfb834c6b604c3dda3388062ac20f20cb71ef9b9d159bf052"
         },
         {
           "exists": true,
-          "mtime": "2026-07-03T11:16:50+00:00",
+          "mtime": "2026-07-03T03:22:03+00:00",
           "path": "小说/_源指纹.json",
           "sha256": "7b94a385df8d9d0ace44d30c52006c39873112348930ad213f1901919c39ca5a"
         }
@@ -35,7 +43,7 @@
         "writer",
         "producer"
       ],
-      "status": "draft",
+      "status": "confirmed",
       "unlock_protocol": {
         "record_in": "生产数据/creative_decisions.jsonl",
         "requires_affected_stage_list": true,
@@ -51,25 +59,25 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "",
-      "approver": "",
+      "approved_at": "2026-07-09T08:40:31+00:00",
+      "approver": "codex",
       "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-08T12:50:58+00:00",
+          "mtime": "2026-07-08T12:25:28+00:00",
           "path": "脚本/第5集/voiceover.txt",
           "sha256": "f3c5e81e33e97922cd29672b559d55d81f521b7d484229ee71ed591dad5b5120"
         },
         {
           "exists": true,
-          "mtime": "2026-07-08T12:50:58+00:00",
+          "mtime": "2026-07-08T12:25:28+00:00",
           "path": "脚本/第5集/bgm.txt",
           "sha256": "9a64ad799a2132bd98cd0329c0c59a0018e88633c37b3ce9e534e8bcc93a19f2"
         },
         {
           "exists": true,
-          "mtime": "2026-07-08T12:50:58+00:00",
+          "mtime": "2026-07-08T12:25:28+00:00",
           "path": "生产数据/script_quality_contract_第5集.json",
           "sha256": "005bb4701448acaae1d3981f5d526bfafd26fcd7ce2cd249b1c177eeb5f2f554"
         }
@@ -83,7 +91,7 @@
         "director",
         "producer"
       ],
-      "status": "draft",
+      "status": "confirmed",
       "unlock_protocol": {
         "record_in": "生产数据/creative_decisions.jsonl",
         "requires_affected_stage_list": true,
@@ -99,40 +107,39 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "",
-      "approver": "",
-      "artifact_count": 2,
+      "approved_at": "2026-07-09T08:40:31+00:00",
+      "approver": "codex",
+      "artifact_count": 3,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-08T12:50:58+00:00",
+          "mtime": "2026-07-08T12:25:28+00:00",
           "path": "脚本/第5集/storyboard.json",
           "sha256": "3fbb67f0c40cfd148247997f508e773d6bf5e7e374e3f21ad9ed2aba540004fc"
         },
         {
           "exists": true,
-          "mtime": "2026-07-08T12:50:58+00:00",
+          "mtime": "2026-07-08T12:25:28+00:00",
           "path": "脚本/第5集/镜头时长.json",
           "sha256": "56049500b6bc861fa4c0ec252d9d8ae4e03eef4ec9a041a6c44a6f867acce592"
         },
         {
-          "exists": false,
+          "exists": true,
+          "mtime": "2026-07-09T02:23:34+00:00",
           "path": "脚本/第5集/director_blocking_pack.json",
-          "sha256": ""
+          "sha256": "4f473e22ce3be318cc52559281aec2c980d463b33816829cd578ac8a98f75da8"
         }
       ],
       "episode": "第5集",
       "label": "分镜锁",
       "lock_id": "storyboard_lock",
-      "missing_artifacts": [
-        "脚本/第5集/director_blocking_pack.json"
-      ],
+      "missing_artifacts": [],
       "required_approver_roles": [
         "director",
         "script_supervisor",
         "producer"
       ],
-      "status": "draft",
+      "status": "confirmed",
       "unlock_protocol": {
         "record_in": "生产数据/creative_decisions.jsonl",
         "requires_affected_stage_list": true,
@@ -148,46 +155,45 @@
         "batch",
         "dashboard"
       ],
-      "approved_at": "",
-      "approver": "",
-      "artifact_count": 3,
+      "approved_at": "2026-07-09T08:40:31+00:00",
+      "approver": "codex",
+      "artifact_count": 4,
       "artifacts": [
         {
           "exists": true,
-          "mtime": "2026-07-07T13:21:49+00:00",
+          "mtime": "2026-07-07T09:30:33+00:00",
           "path": "_设置.md",
           "sha256": "91b4164cebc0ee1aea2ab76fccdabfa48437ac2f663093240a188c20c08c7585"
         },
         {
           "exists": true,
-          "mtime": "2026-07-03T11:16:50+00:00",
+          "mtime": "2026-07-03T03:22:03+00:00",
           "path": "设定库/global_style.md",
           "sha256": "c969f4802ac0b095cc1264a62f2c43295493f7b979227255017a35759cd08b4e"
         },
         {
-          "exists": false,
-          "path": "设定库/identity_registry.json",
-          "sha256": ""
+          "exists": true,
+          "mtime": "2026-07-09T08:38:59+00:00",
+          "path": "出图/共享/identity_registry.json",
+          "sha256": "d3e331b2de614492d52cdbc79f93b2c7a4ec54b1aa7d4a26e483229fa892eb1d"
         },
         {
           "exists": true,
-          "mtime": "2026-07-08T13:23:19+00:00",
+          "mtime": "2026-07-09T01:41:26+00:00",
           "path": "生产数据/identity_adapter_matrix.json",
-          "sha256": "c36ea4bcedc738a1db5eb77c48a05488a2d188c7e4a084ff16ed975fc9034096"
+          "sha256": "7e1a0295e1cfb4bc170e3d62b64b7fc507bb58b0f6aad6b106a35db1d6387879"
         }
       ],
       "episode": "第5集",
       "label": "风格身份锁",
       "lock_id": "style_identity_lock",
-      "missing_artifacts": [
-        "设定库/identity_registry.json"
-      ],
+      "missing_artifacts": [],
       "required_approver_roles": [
         "director",
         "art_director",
         "identity_supervisor"
       ],
-      "status": "draft",
+      "status": "confirmed",
       "unlock_protocol": {
         "record_in": "生产数据/creative_decisions.jsonl",
         "requires_affected_stage_list": true,
@@ -635,5 +641,6 @@
     "解锁必须写 creative_decisions.jsonl，并列出最小返工范围。"
   ],
   "status": "draft",
+  "updated_at": "2026-07-09T08:40:31+00:00",
   "version": 1
 }

@@ -8,11 +8,29 @@
         "GROUP_狼妖群",
         "CHAR_05"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_01",
       "end_state": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
       "endframe_png": "出图/第5集/图片/Clip01_end.png",
       "episode": "第5集",
-      "episode_boundary": {},
+      "episode_boundary": {
+        "from_clip": "EP04_CLIP11",
+        "from_episode": "第4集",
+        "handoff_type": "continuous_action_match_cut",
+        "must_inherit": [
+          "青面郎君前景/中近景亮出五道狼爪的压迫位置",
+          "姜月初与青面郎君的左右/前后距离关系和村道主轴",
+          "上盘村断石碑、血迹破布、冷灰晨雾的光位与空间层次",
+          "狼妖群已在后景/两侧压近的包围态势"
+        ],
+        "no_reset": [
+          "青面郎君不得回到远景起点",
+          "狼妖群不得重做登场",
+          "不得重建制成新的开场全景",
+          "不得改变前集爪势方向、视线轴线和晨雾光位"
+        ],
+        "prev_tail_frame": "出图/第4集/图片/Clip11_end.png",
+        "source_frame_required": true
+      },
       "firstframe_png": "出图/第5集/图片/Clip01_first.png",
       "forbidden_presence": [
         "现代车辆",
@@ -53,7 +71,7 @@
         "CHAR_04",
         "GROUP_飞鹰门众人"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_02",
       "end_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
       "endframe_png": "出图/第5集/图片/Clip02_end.png",
       "episode": "第5集",
@@ -97,7 +115,7 @@
         "CHAR_04",
         "GROUP_飞鹰门众人"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_03",
       "end_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
       "endframe_png": "出图/第5集/图片/Clip03_end.png",
       "episode": "第5集",
@@ -136,7 +154,7 @@
         "CHAR_04",
         "GROUP_飞鹰门众人"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_04",
       "end_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
       "endframe_png": "出图/第5集/图片/Clip04_end.png",
       "episode": "第5集",
@@ -218,7 +236,7 @@
         "CHAR_01",
         "CHAR_05"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_06",
       "end_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
       "endframe_png": "出图/第5集/图片/Clip06_end.png",
       "episode": "第5集",
@@ -265,7 +283,7 @@
         "GROUP_飞鹰门众人",
         "GROUP_狼妖群"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_07",
       "end_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
       "endframe_png": "出图/第5集/图片/Clip07_end.png",
       "episode": "第5集",
@@ -308,7 +326,7 @@
         "CHAR_05",
         "GROUP_狼妖群"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_08",
       "end_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
       "endframe_png": "出图/第5集/图片/Clip08_end.png",
       "episode": "第5集",
@@ -350,7 +368,7 @@
       "characters": [
         "CHAR_01"
       ],
-      "clip_id": "Clip_05",
+      "clip_id": "Clip_09",
       "end_state": "一百五十二年道行涌入虎妖画卷，外界声音远去，画面抽成黑白二色硬断。",
       "endframe_png": "出图/第5集/图片/Clip09_end.png",
       "episode": "第5集",
@@ -394,7 +412,7 @@
     }
   ],
   "episode": "第5集",
-  "generated_at": "2026-07-08T13:23:17+00:00",
+  "generated_at": "2026-07-09T02:27:07+00:00",
   "inputs": {
     "previous_storyboard": "脚本/第4集/storyboard.json",
     "storyboard": "脚本/第5集/storyboard.json"
@@ -416,28 +434,22 @@
         "LOC_03",
         "PROP_镇魔司黑衣赤纹"
       ],
-      "from_clip": "Clip_04",
+      "from_clip": "Clip_11",
       "from_end_state": "青面郎君句子落点：杀了她！",
       "from_episode": "第4集",
       "intentional_discontinuity_reason": "",
-      "issues": [
-        {
-          "code": "missing_episode_boundary_contract",
-          "message": "跨集首镜缺 continuity.episode_boundary：必须声明承接上一集，或写有意跳切理由。",
-          "severity": "block"
-        }
-      ],
+      "issues": [],
       "next_firstframe": "出图/第5集/图片/Clip01_first.png",
       "policy": "relay",
       "required_boundary_frame": "出图/第4集/图片/Clip11_end.png",
       "same_location": true,
       "scope": "episode_boundary",
-      "severity": "block",
+      "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_01",
       "to_episode": "第5集",
       "to_start_state": "第4集尾帧后立即接：青面郎君已在前景/中近景亮出五道狼爪并喊出“杀了她”，姜月初保持前集站位，黑衣完整，右手压住横刀刀柄；狼妖群已在两侧和后景压近，不是重新从远处走来。",
-      "transition": "hard_cut"
+      "transition": "continuous_action_match_cut"
     },
     {
       "common_entities": [
@@ -450,7 +462,7 @@
         "PROP_镇魔司黑衣赤纹",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_01",
       "from_end_state": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -462,7 +474,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_02",
       "to_episode": "第5集",
       "to_start_state": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
       "transition": "match_action_cut"
@@ -479,7 +491,7 @@
         "VFX_虎山神摹影",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_02",
       "from_end_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -491,7 +503,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_03",
       "to_episode": "第5集",
       "to_start_state": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
       "transition": "impact_cut"
@@ -507,7 +519,7 @@
         "PROP_镇魔司黑衣赤纹",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_03",
       "from_end_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -519,7 +531,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_04",
       "to_episode": "第5集",
       "to_start_state": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
       "transition": "hard_cut"
@@ -535,7 +547,7 @@
         "PROP_镇魔司黑衣赤纹",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_04",
       "from_end_state": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -574,7 +586,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_06",
       "to_episode": "第5集",
       "to_start_state": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
       "transition": "impact_cut"
@@ -588,7 +600,7 @@
         "VFX_妖气",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_06",
       "from_end_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -600,7 +612,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_07",
       "to_episode": "第5集",
       "to_start_state": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
       "transition": "impact_flash_cut"
@@ -617,7 +629,7 @@
         "VFX_妖气",
         "WEAPON_01"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_07",
       "from_end_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -629,7 +641,7 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_08",
       "to_episode": "第5集",
       "to_start_state": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
       "transition": "breath_cut"
@@ -639,7 +651,7 @@
         "CHAR_01",
         "PROP_镇魔司黑衣赤纹"
       ],
-      "from_clip": "Clip_05",
+      "from_clip": "Clip_08",
       "from_end_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
       "from_episode": "第5集",
       "intentional_discontinuity_reason": "",
@@ -651,15 +663,15 @@
       "scope": "intra_episode",
       "severity": "pass",
       "strictness": "strict",
-      "to_clip": "Clip_05",
+      "to_clip": "Clip_09",
       "to_episode": "第5集",
       "to_start_state": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
       "transition": "subjective_cut"
     }
   ],
-  "status": "draft",
+  "status": "confirmed",
   "summary": {
-    "block": 1,
+    "block": 0,
     "clips": 9,
     "design_cuts": 0,
     "episode_boundaries": 1,

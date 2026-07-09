@@ -151,6 +151,113 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "不是实体武器" in shot_text
 
 
+def test_clip_assets_do_not_promote_offscreen_presence() -> None:
+    clip = {
+        "object_ids": ["WEAPON_TEST"],
+        "entity_schedule": {
+            "offscreen_presence": ["VFX_FUTURE_REVEAL"],
+        },
+        "continuity": {
+            "entry_exit": "VFX_FUTURE_REVEAL 只作后段气息，不抢首帧接力。",
+        },
+    }
+
+    assets = image_prompt_pack.clip_assets(clip)
+
+    assert "WEAPON_TEST" in assets
+    assert "VFX_FUTURE_REVEAL" not in assets
+
+
+def test_pre_reveal_vfx_is_removed_from_shot_prompt(tmp_path: Path) -> None:
+    old_assets = image_prompt_pack.ASSET_DEFS
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "VFX_FUTURE_REVEAL": {
+                "type": "vfx",
+                "name": "血虎摹影",
+                "path_name": "定妆_特效_血虎摹影",
+                "positive": "半透明血虎摹影",
+                "constraints": {
+                    "reveal_min_clip": 6,
+                    "pre_reveal_policy": "Clip06 前不得渲染虎形摹影。",
+                    "reveal_terms": ["暗红虎形杀伐气", "血虎", "虎形摹影"],
+                },
+                "drift": [],
+            }
+        }
+        image_prompt_pack.CHARACTER_DEFS = {}
+        clip = {
+            "id": "EP01_CLIP02",
+            "label": "早段动作",
+            "template": "fight_exchange",
+            "object_ids": ["VFX_FUTURE_REVEAL"],
+            "shots": [{"desc": "姜月初起刀，身后暗红虎形杀伐气短促显现。"}],
+            "template_contract": {
+                "blocking": "可见主体=CHAR_01、VFX_FUTURE_REVEAL、LOC_01；",
+                "beats": ["起刀", "血虎显现"],
+            },
+        }
+
+        shot_text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 2, clip, {}, {"clips": [clip]})
+        reveal_text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 6, clip, {}, {"clips": [clip] * 6})
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_assets
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    assert "特效定妆" not in shot_text
+    assert "身后暗红虎形杀伐气短促显现" not in shot_text
+    assert "绑定 `VFX_FUTURE_REVEAL`" not in shot_text
+    assert "本镜 Clip02 禁用未到显现时机资产" in shot_text
+    assert "不得出现：暗红虎形杀伐气、血虎、虎形摹影" in shot_text
+    assert "绑定 `VFX_FUTURE_REVEAL`" in reveal_text
+
+
+def test_offscreen_future_vfx_adds_guard_but_not_reference(tmp_path: Path) -> None:
+    old_assets = image_prompt_pack.ASSET_DEFS
+    old_chars = image_prompt_pack.CHARACTER_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "VFX_FUTURE_REVEAL": {
+                "type": "vfx",
+                "name": "未来虎影",
+                "constraints": {
+                    "reveal_min_clip": 6,
+                    "pre_reveal_policy": "Clip06 前只可画外伏笔。",
+                    "reveal_terms": ["血虎", "虎影"],
+                },
+                "drift": [],
+            }
+        }
+        image_prompt_pack.CHARACTER_DEFS = {}
+        clip = {
+            "id": "EP01_CLIP04",
+            "label": "反打桥接",
+            "shots": [{"desc": "反派伏身出击，前景尘土压低。"}],
+            "entity_schedule": {
+                "offscreen_presence": ["VFX_FUTURE_REVEAL"],
+            },
+        }
+        story = {
+            "clips": [clip],
+            "style_contract": {
+                "风格名": "冷灰写实3D国风漫剧",
+                "视觉基调": "战斗真实有重量，妖气与血虎虚影克制，不做高饱和页游光效。",
+            },
+        }
+
+        shot_text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 4, clip, {}, story)
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_assets
+        image_prompt_pack.CHARACTER_DEFS = old_chars
+
+    assert "特效定妆" not in shot_text
+    assert "绑定 `VFX_FUTURE_REVEAL`" not in shot_text
+    assert "本镜 Clip04 禁用未到显现时机资产" in shot_text
+    assert "不得出现：血虎、虎影" in shot_text
+    assert "妖气与血虎虚影克制" not in shot_text
+
+
 def test_shot_prompt_consumes_shot_reverse_contract(tmp_path: Path) -> None:
     ep = "第1集"
     (tmp_path / "脚本" / ep).mkdir(parents=True)
@@ -690,6 +797,36 @@ def test_hand_ownership_directive_supplies_lint_contract() -> None:
     assert "同侧前臂" in directive
     assert "接触点" in directive
     assert "CHAR_01" in directive
+    assert "副手/后手必须空手" in directive
+    assert "不得生成副刀、短刃、匕首、第二把实体武器" in directive
+
+
+def test_weapon01_contract_forbids_offhand_secondary_blade(tmp_path: Path) -> None:
+    clip = {
+        "id": "EP05_CLIP03",
+        "description": "姜月初横刀前压，后手护身。",
+        "object_ids": ["WEAPON_01"],
+    }
+    story = {"clips": [clip], "visual_contract": {}, "style_contract": {}}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+    terms = defs["WEAPON_01"]["constraints"]["must_not_have"]
+
+    assert "副刀" in terms
+    assert "短刃" in terms
+    assert "匕首" in terms
+    assert "副手持刀" in terms
+
+    old_assets = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = defs
+        lock_line = image_prompt_pack.asset_topology_lock_line(["WEAPON_01"])
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_assets
+
+    assert "weapon_count=1" in lock_line
+    assert "副手/后手不得出现短刃、匕首、副刀或第二把刀" in lock_line
+    assert "刀光/光轨/残影只能是半透明运动轨迹" in lock_line
 
 
 def test_face_visibility_directive_supplies_codex_dark_vfx_guard() -> None:
@@ -703,6 +840,18 @@ def test_face_visibility_directive_supplies_codex_dark_vfx_guard() -> None:
     assert "不得遮住眼鼻嘴" in directive
     assert "不得遮住五官" in directive
     assert "不得重画脸" in directive
+
+
+def test_face_visibility_keeps_main_face_when_only_nonfocus_target_is_silhouette() -> None:
+    directive = image_prompt_pack.face_visibility_directive(
+        ["CHAR_01", "CHAR_05"],
+        "MS 起刀 → OTS 反派惊惧 → WS 刀光落点",
+        "肉盾狼妖以剪影/血尘被劈开。",
+    )
+
+    assert "眼鼻嘴三角区清晰" in directive
+    assert "非焦点群演、肉盾、远景剪影可无脸处理" in directive
+    assert "本镜人物只允许背身" not in directive
 
 
 def test_existing_asset_bundle_creates_missing_sections(tmp_path: Path) -> None:
@@ -935,3 +1084,31 @@ def test_write_consumed_contracts_receipt_records_image_prompt_inputs(tmp_path: 
     }
     assert all(row["exists"] and row["sha256"] for row in data["contracts"])
     assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])
+
+
+def test_future_asset_guard_inherits_hidden_asset_forbidden_terms() -> None:
+    original_assets = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "VFX_FUTURE": {
+                "type": "vfx",
+                "name": "未来虎影",
+                "constraints": {
+                    "reveal_min_clip": 6,
+                    "pre_reveal_policy": "Clip06 前只能画外伏笔。",
+                    "reveal_terms": ["血虎", "虎影"],
+                    "must_not_have": ["随机改色", "遮挡主体脸"],
+                },
+                "drift": ["不要现代科幻UI"],
+            }
+        }
+
+        line = image_prompt_pack.future_asset_guard_line(["VFX_FUTURE"], 2)
+    finally:
+        image_prompt_pack.ASSET_DEFS = original_assets
+
+    assert "Clip02 禁用未到显现时机资产" in line
+    assert "血虎" in line
+    assert "随机改色" in line
+    assert "遮挡主体脸" in line
+    assert "不要现代科幻UI" in line

@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "kind": "comic_name_board",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P005 monster_reveal",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "gutter_intent": "P001:开场停顿；P002:从主题进入正片；P003:危险提示；P004:进入动作段；P005:首次冲击；P006:快速连击",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "borderless",
+          "camera_hint": "无字原图只留低细节雾面给旁白；不要画人、床或裸露。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "轻微雾线沿刀影流动。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 450,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "不要展开历史人物；只画乱世气氛和兄弟反差。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "远烟斜向引导到山路。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 711,
+            "w": 1188,
+            "h": 234
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "榜文不生成可读长字，只画官府告示块。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "风线轻扫榜角。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 972,
+            "w": 1080,
+            "h": 120
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "武松不看镜头，动作是迈步离开。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "黄叶风线指向山路深处。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1119,
+            "w": 1296,
+            "h": 351
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "大格，虎不要魔化；不画过度血腥。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "集中风线从林后爆开，拟声可后期手绘。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1497,
+            "w": 1188,
+            "h": 231
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "动作分层但不是拼贴多格；用速度线解释三招。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "三条速度弧线标出扑、掀、剪。"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P010 status_turn",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "gutter_intent": "P007:危机停顿；P008:动作高潮；P009:动作后呼吸；P010:身份转折；P011:叙事转场；P012:黑暗因果揭示",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "不要把断棒画成刀剑；木质断口清楚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "木刺飞散短线。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 301,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "动作有重量，不画内脏；血只少量泥血点。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "拳势集中线向虎头收束。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 632,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "群像不要生成现代猎装；火把少量暖光。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "余尘轻线，不再强速度线。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 861,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "不要把县衙画成皇宫；官牌/银两清楚。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无强特效，庄重静止。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "不要过度丑化武大；重点是街巷压力。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "细小闲言碎线环绕但不画文字。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1421,
+            "w": 1296,
+            "h": 307
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "禁止裸露、床、性行为；以门帘和影子表现压迫。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "帘影斜线压迫人物。"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 cliffhanger",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "gutter_intent": "P013:世情线浮出；P014:兄弟相认前推近；P015:情绪转暖；P016:关键初见；P017:心理种子；P018:话末钩子",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "不画裸露，不突出身体部位；表情和环境承担欲望线。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "目光线隐约指向帘后，不画文字。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 316,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "仪仗不画成皇家队伍；武松是地方都头。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "锣鼓声可后期拟声。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 560,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "兄弟情要真，不把武大画成笑料。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无强特效。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 804,
+            "w": 1296,
+            "h": 325
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "standard",
+          "camera_hint": "潘金莲不露骨；武松不看读者也不直勾勾看潘金莲。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "无拟声；红帘竖线制造张力。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1156,
+            "w": 1188,
+            "h": 217
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "眼神张力，不画身体挑逗；武松守礼。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "轻微目光线，不画文字。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1400,
+            "w": 1296,
+            "h": 328
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "full_width",
+          "border_style": "borderless",
+          "camera_hint": "收在红帘和背影，不画直白欲望动作。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "门帘风线轻动。"
+        }
+      ]
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: screentone hierarchy for skin, cloth, background depth, and mood blacks",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "kind": "comic_name_board",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P004 secondary_character_reveal",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "gutter_intent": "P001:long pause；P002:long pause；P003:long pause；P004:long pause；P005:quick cut；P006:long pause",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "竖向大格；俯视压迫构图；黑白灰水墨荒野，尸骸只做轮廓和血迹，不做过度 gore 特写；下方预留旁白位。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 384,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "中近景；必须继承 CHAR_JYC 的脸型、眼型、黑长发和清冷气质；服装改成囚服，不要头冠、伞和礼服；预留旁白留白。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "focus lines or black-field contrast toward reveal object"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 696,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "低机位仰拍；虎妖遮住半个画面，姜月初只做前景小剪影；血洞表现为黑色妖血和破衣，不做内脏细节。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "focus lines or black-field contrast toward reveal object"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1008,
+            "w": 1296,
+            "h": 285
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "中景；裴长青不要画得完全英武，必须重伤濒死；赤色云纹只做局部点色；右上预留对白。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "focus lines or black-field contrast toward reveal object"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 1320,
+            "w": 1080,
+            "h": 120
+          },
+          "layout_weight": "compact",
+          "panel_shape": "small",
+          "border_style": "standard",
+          "camera_hint": "半身反应格；继承 CHAR_JYC 脸；表情是紧张中带现代人吐槽感；脚尖后撤要清楚，禁止把脚画成手。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1467,
+            "w": 1296,
+            "h": 261
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "脚部和刀的特写；姜月初囚鞋/脚尖僵住，刀锋落点必须清楚；不出现额外手掌。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "咻"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P010 turning_point",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "gutter_intent": "P007:standard beat；P008:standard beat；P009:long pause；P010:long pause；P011:long pause；P012:standard beat",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "横向张力构图但输出为竖格；姜月初脸保持 CHAR_JYC；对白区放在两人头顶空雾处，不挡脸。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 301,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "身体受力要清楚；姜月初瘦弱但不是 Q 版；裴长青右臂搭肩、双脚拖地；不要身体融合或多手。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 530,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "恐怖停顿格；后景虎妖轮廓开始抬起；姜月初侧脸继承 CHAR_JYC，表情瞬间空白；对白在高处雾中。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "咳……"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 861,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "重点大格；虎妖占画面上三分之二，姜月初和裴长青在下方很小；压迫感强，避免过度血腥特写。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "effects_hint": "咔；咔"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1192,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "动作格可用对角线速度线；脚踢接触点清楚，虎妖腿脚不能画成手；姜月初作为前景惊惧小身影。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "砰"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "俯视构图；姜月初脸部继承 CHAR_JYC，但眼神从恐惧转向急速思考；横刀必须在她脚边可见。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        }
+      ]
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P016 cliffhanger",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "gutter_intent": "P013:long pause；P014:standard beat；P015:standard beat；P016:long pause",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 472
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "重点大格；系统文字不要直接生成可读内容，只画金色文字光点和卷轴；姜月初正脸必须严格继承 CHAR_JYC；预留后期系统提示区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "focus lines or black-field contrast toward reveal object"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 571,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "心理转折格；女主半脸特写与地上裴长青虚焦同框；继承 CHAR_JYC，表情不是邪笑，而是被逼到极限的空冷。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 913,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "standard",
+          "border_style": "standard",
+          "camera_hint": "手和刀柄特写结合女主低头剪影；手腕、刀柄、刀刃关系清楚；不能多手或刀柄融合；保留 CHAR_JYC 的黑长发轮廓。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "none"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1255,
+            "w": 1296,
+            "h": 473
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "结尾大格；不要内脏和过度血腥，刀入胸用前景衣料和黑影遮挡；姜月初脸必须继承 CHAR_JYC，眼神是恐惧、决断和自我厌恶混合；底部留黑场给下话钩子。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "effects_hint": "噗嗤"
+        }
+      ]
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: screentone hierarchy for skin, cloth, background depth, and mood blacks",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  }
+}

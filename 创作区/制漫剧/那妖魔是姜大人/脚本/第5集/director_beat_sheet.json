@@ -1,0 +1,121 @@
+{
+  "beats": [
+    {
+      "audience_question": "观众立刻进入战斗，不再等待解释，追问第一刀如何接。",
+      "beat_id": "EP05_CLIP01",
+      "director_intent": "把“直接兑现第4集集尾“杀了她”，让狼妖群扑杀和横刀出鞘成为0-3秒视觉钩。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "直接兑现第4集集尾“杀了她”，让狼妖群扑杀和横刀出鞘成为0-3秒视觉钩。",
+      "emotional_value_shift": {
+        "from": "第4集尾帧后立即接：青面郎君已在前景/中近景亮出五道狼爪并喊出“杀了她”，姜月初保持前集站位，黑衣完整，右手压住横刀刀柄；狼妖群已在两侧和后景压近，不是重新从远处走来。",
+        "to": "横刀贴着狼爪冷光出鞘，姜月初视线越过近处狼爪锁住青面郎君，群狼仍在前扑未被斩。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群、CHAR_05的关键反应；观众立刻进入战斗，不再等待解释，追问第一刀如何接。。",
+      "source_voiceover_hint": "青面郎君一声令下，几头狼妖四肢着地，踩碎晨雾扑向姜月初。"
+    },
+    {
+      "audience_question": "观众得到第一刀爽点，并看见反派用同伴挡刀的残忍。",
+      "beat_id": "EP05_CLIP02",
+      "director_intent": "把“展示圆满《猛虎快刀》的第一次正面战斗爽点，同时让青面郎君第一次露怯。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "展示圆满《猛虎快刀》的第一次正面战斗爽点，同时让青面郎君第一次露怯。",
+      "emotional_value_shift": {
+        "from": "横刀已出鞘，姜月初视线越过群狼锁住青面郎君，群狼仍在前扑未被斩。",
+        "to": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人的关键反应；观众得到第一刀爽点，并看见反派用同伴挡刀的残忍。。",
+      "source_voiceover_hint": "《猛虎快刀》圆满之意，尽数压进这一刀。刀锋起于晨光，落于尘埃。"
+    },
+    {
+      "audience_question": "观众看到群狼从扑杀变成恐惧刹停，爽点清晰。",
+      "beat_id": "EP05_CLIP03",
+      "director_intent": "把“把第一刀后的战斗优势放大成连斩，形成本集上半段的主角高光。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "把第一刀后的战斗优势放大成连斩，形成本集上半段的主角高光。",
+      "emotional_value_shift": {
+        "from": "一头狼妖作为肉盾被刀光劈开，画面以剪影/血尘克制处理；青面郎君退半步露惊惧。",
+        "to": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。"
+      },
+      "must_keep_reaction": "保留CHAR_01、GROUP_狼妖群、CHAR_05、CHAR_04、GROUP_飞鹰门众人的关键反应；观众看到群狼从扑杀变成恐惧刹停，爽点清晰。。",
+      "source_voiceover_hint": "飞鹰门众人呆在原地。好凶的刀，好快的刀，好一个镇魔司。"
+    },
+    {
+      "audience_question": "观众获得台词反杀快感，反派从掌控者变成破防者。",
+      "beat_id": "EP05_CLIP04",
+      "director_intent": "把“把青面郎君上一集的血食暴论反打回去，完成价值观爽点并引出正主暴怒。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "把青面郎君上一集的血食暴论反打回去，完成价值观爽点并引出正主暴怒。",
+      "emotional_value_shift": {
+        "from": "三头狼妖被连斩成剪影式落点，余妖刹停夹尾后退，姜月初横刀收势。",
+        "to": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_05、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人的关键反应；观众获得台词反杀快感，反派从掌控者变成破防者。。",
+      "source_voiceover_hint": "给我住手！！！"
+    },
+    {
+      "audience_question": "观众从上半段爽点转入紧张，意识到这不是无伤割草。",
+      "beat_id": "EP05_CLIP05",
+      "director_intent": "把“把战斗从清小怪推到闻弦境正主亲自出手，建立真实危险。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "把战斗从清小怪推到闻弦境正主亲自出手，建立真实危险。",
+      "emotional_value_shift": {
+        "from": "青面郎君青衫被贲起筋肉撑裂，伏身四肢着地，准备爆冲。",
+        "to": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。"
+      },
+      "must_keep_reaction": "保留CHAR_05、CHAR_01、GROUP_狼妖群、CHAR_04、GROUP_飞鹰门众人的关键反应；观众从上半段爽点转入紧张，意识到这不是无伤割草。。",
+      "source_voiceover_hint": "青衫被筋肉撑裂。狼妖四肢伏地，后腿一蹬，村道地面寸寸开裂。"
+    },
+    {
+      "audience_question": "观众看到主角敢硬接，但也为代价埋下悬念。",
+      "beat_id": "EP05_CLIP06",
+      "director_intent": "把“姜月初不闪不避，用血虎虚影和横刀正面接住青面郎君，完成本集最大动作撞点。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "姜月初不闪不避，用血虎虚影和横刀正面接住青面郎君，完成本集最大动作撞点。",
+      "emotional_value_shift": {
+        "from": "青面郎君化青影带黑煞扑到姜月初近前，狼爪寒光将触未触。",
+        "to": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_05的关键反应；观众看到主角敢硬接，但也为代价埋下悬念。。",
+      "source_voiceover_hint": "少女不闪不避，高高跃起。她身后，竟凝出一头血色猛虎虚影。"
+    },
+    {
+      "audience_question": "观众从爽点回到危险，知道她不能靠硬拼解决正主。",
+      "beat_id": "EP05_CLIP07",
+      "director_intent": "把“展示硬接闻弦境的代价：青面郎君重伤，姜月初也被狼爪撕开腹部。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "展示硬接闻弦境的代价：青面郎君重伤，姜月初也被狼爪撕开腹部。",
+      "emotional_value_shift": {
+        "from": "刀爪在村道中央撞开，黑煞和血虎虚影一触即分，双方即将倒飞。",
+        "to": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_05、CHAR_04、GROUP_飞鹰门众人、GROUP_狼妖群的关键反应；观众从爽点回到危险，知道她不能靠硬拼解决正主。。",
+      "source_voiceover_hint": "刀没入肩颈，狼爪撕开黑衣。黑煞与血虎虚影一触即分。"
+    },
+    {
+      "audience_question": "观众看到她救下的人反过来护她，情绪从单人爽点转为群像回报。",
+      "beat_id": "EP05_CLIP08",
+      "director_intent": "把“陈青源带人护住姜月初，给她争取开百妖谱的时间，也把“人会克制本能”落成行动。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "陈青源带人护住姜月初，给她争取开百妖谱的时间，也把“人会克制本能”落成行动。",
+      "emotional_value_shift": {
+        "from": "姜月初落地半跪后强撑站稳，腹部三道爪痕；青面郎君踉跄起身，左肩重伤。",
+        "to": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。"
+      },
+      "must_keep_reaction": "保留CHAR_01、CHAR_04、GROUP_飞鹰门众人、CHAR_05、GROUP_狼妖群的关键反应；观众看到她救下的人反过来护她，情绪从单人爽点转为群像回报。。",
+      "source_voiceover_hint": "护住大人！"
+    },
+    {
+      "audience_question": "观众得到“她还有挂”的反转，但结果延迟到下一集。",
+      "beat_id": "EP05_CLIP09",
+      "director_intent": "把“把道行余额和虎妖画卷回收成集尾开挂，卡在新力量启动前。”落实为可见调度，先让观众看懂再加节奏。",
+      "dramatic_function": "把道行余额和虎妖画卷回收成集尾开挂，卡在新力量启动前。",
+      "emotional_value_shift": {
+        "from": "飞鹰门半圆人墙已成，姜月初被护在中央，眼神内收准备开启百妖谱。",
+        "to": "一百五十二年道行涌入虎妖画卷，外界声音远去，画面抽成黑白二色硬断。"
+      },
+      "must_keep_reaction": "保留CHAR_01的关键反应；观众得到“她还有挂”的反转，但结果延迟到下一集。。",
+      "source_voiceover_hint": "古朴绘卷在脑海中一闪而逝。道行，一百五十二年。"
+    }
+  ],
+  "episode": "第5集",
+  "generated_at": "2026-07-09T02:23:34+00:00",
+  "inputs": {
+    "storyboard": "脚本/第5集/storyboard.json",
+    "voiceover": "脚本/第5集/voiceover.txt"
+  },
+  "kind": "n2d_director_beat_sheet",
+  "status": "confirmed",
+  "version": 1
+}

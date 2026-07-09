@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "kind": "comic_character_consistency",
-  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/画漫画/那妖魔是姜大人",
   "chapter": "第1话",
-  "created_at": "2026-07-08T22:53:46",
+  "created_at": "2026-07-09T11:05:29",
   "available": true,
   "verdict": "pass",
   "summary": {
@@ -429,18 +429,18 @@
         {
           "panel_id": "P004",
           "face": {
-            "score": 0.7804,
+            "score": 0.7682,
             "reference": "出图/共享/图片/CHAR_PEI__three_quarter.png",
             "available": true
           },
           "hair": {
-            "score": 0.7813,
+            "score": 0.7177,
             "reference": "出图/共享/图片/CHAR_PEI__face.png",
             "available": true
           },
           "outfit": {
-            "score": 0.7705,
-            "reference": "出图/共享/图片/CHAR_PEI__three_quarter.png",
+            "score": 0.8575,
+            "reference": "出图/共享/图片/CHAR_PEI__front.png",
             "available": true
           }
         },

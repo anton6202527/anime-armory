@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_consistency_acceptance",
+  "chapter": "第2话",
+  "accepted_at": "2026-07-09T00:00:00+0800",
+  "accepted_by": "codex_visual_qc",
+  "accepted_findings": [
+    {
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_JYC",
+      "panel_id": "P010",
+      "artifact": "出图/第2话/panels/P010.png",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-09T00:00:00+0800",
+      "reason": "P010 是低机位、泥污遮挡和百妖谱金光下的濒死匍匐表演，启发式裁脸相似度被构图/光效压低；人审对照角色并排图确认脸型、发际线、黑发轮廓和姜月初少年体态仍可读。",
+      "evidence": "生产数据/qa_previews/第2话_P010_P014_refs_check.jpg；生产数据/qa_previews/第2话_character_consistency_contact_sheet.jpg",
+      "suggested_followup": "若 P010 后续重抽或改构图，重新运行 character_consistency.py 并重新签收。"
+    },
+    {
+      "code": "outfit_fingerprint_low",
+      "character_id": "CHAR_JYC",
+      "panel_id": "P010",
+      "artifact": "出图/第2话/panels/P010.png",
+      "accepted_by": "codex_visual_qc",
+      "accepted_at": "2026-07-09T00:00:00+0800",
+      "reason": "P010 的衣装是剧情中的泥污囚服/破损状态，不应按干净长衫参考做硬一致性；人审确认衣领、破布、脏污和动作状态符合脚本，不构成换装错误。",
+      "evidence": "生产数据/qa_previews/第2话_P010_P014_refs_check.jpg；脚本/第2话/panel_script.json",
+      "suggested_followup": "若 P010 后续重抽或改服装状态，重新运行 character_consistency.py 并重新签收。"
+    }
+  ]
+}

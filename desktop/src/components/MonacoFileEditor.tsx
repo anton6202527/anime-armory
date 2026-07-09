@@ -33,6 +33,7 @@ export function MonacoFileEditor({
   const changeDisposableRef = useRef<monaco.IDisposable | null>(null);
   const currentFileIdRef = useRef("");
   const currentLoadVersionRef = useRef("");
+  const editorInstanceIdRef = useRef(Math.random().toString(36).slice(2));
   const cleanTextRef = useRef(text);
   const expectedMtimeRef = useRef(expectedMtime);
   const dirtyRef = useRef(false);
@@ -91,7 +92,7 @@ export function MonacoFileEditor({
     if (currentFileIdRef.current !== fileId) {
       changeDisposableRef.current?.dispose();
       modelRef.current?.dispose();
-      const uri = monaco.Uri.file(absPath);
+      const uri = monaco.Uri.file(absPath).with({ query: editorInstanceIdRef.current });
       const model = monaco.editor.createModel(text, language, uri);
       cleanTextRef.current = text;
       expectedMtimeRef.current = expectedMtime;
@@ -132,8 +133,31 @@ export function MonacoFileEditor({
       setError("");
       setSaveState("clean");
       onDirtyChange?.(false);
+      return;
     }
+
+    const model = modelRef.current;
+    if (!model || dirtyRef.current || text === cleanTextRef.current) return;
+    cleanTextRef.current = text;
+    model.setValue(text);
+    monaco.editor.setModelLanguage(model, language);
+    setDirty(false);
+    setDiskChanged(false);
+    setError("");
+    setSaveState("clean");
+    onDirtyChange?.(false);
   }, [absPath, editorReady, expectedMtime, fileId, language, loadVersion, onDirtyChange, text]);
+
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    const frame = window.requestAnimationFrame(() => editor.layout());
+    const timer = window.setTimeout(() => editor.layout(), 80);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [editorReady, fileId, loadVersion, text]);
 
   useEffect(() => {
     saveRef.current = () => {

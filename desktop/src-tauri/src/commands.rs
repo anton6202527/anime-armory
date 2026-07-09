@@ -9,6 +9,8 @@ use std::process::{Command, Stdio};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+use base64::Engine;
+use encoding_rs::GB18030;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -44,6 +46,8 @@ const CHANGE_SUMMARY_FILE_LIMIT: usize = 30_000;
 const HASH_COMPARE_LIMIT: u64 = 1024 * 1024;
 const TEXT_SNAPSHOT_LIMIT: u64 = 2 * 1024 * 1024;
 const TEXT_EDIT_LIMIT: u64 = 20 * 1024 * 1024;
+const DOCX_PREVIEW_LIMIT: u64 = 80 * 1024 * 1024;
+const DOCX_TEXT_PREVIEW_LIMIT: usize = 2 * 1024 * 1024;
 const WORK_SEARCH_FILE_LIMIT: usize = 30_000;
 const WORK_SEARCH_RESULT_LIMIT: usize = 300;
 const WORK_SEARCH_MATCH_LIMIT_PER_FILE: usize = 12;
@@ -347,6 +351,12 @@ pub struct WorkChangeSummary {
 pub struct WorkFileWriteResult {
     size: u64,
     mtime: u64,
+}
+
+#[derive(Serialize)]
+pub struct CanvasCaptureSaveResult {
+    rel: String,
+    path: String,
 }
 
 #[derive(Serialize)]
@@ -1573,10 +1583,238 @@ pub fn read_work_file(root: String, rel: String) -> Result<String, String> {
         ));
     }
     let bytes = fs::read(&target_canon).map_err(|e| e.to_string())?;
+    decode_text_bytes(&bytes)
+}
+
+fn decode_utf16(bytes: &[u8], little_endian: bool) -> Option<String> {
+    if bytes.len() % 2 != 0 {
+        return None;
+    }
+    let units: Vec<u16> = bytes
+        .chunks_exact(2)
+        .map(|chunk| {
+            if little_endian {
+                u16::from_le_bytes([chunk[0], chunk[1]])
+            } else {
+                u16::from_be_bytes([chunk[0], chunk[1]])
+            }
+        })
+        .collect();
+    String::from_utf16(&units).ok()
+}
+
+fn looks_like_utf16(bytes: &[u8], little_endian: bool) -> bool {
+    if bytes.len() < 8 || bytes.len() % 2 != 0 {
+        return false;
+    }
+    let sample_len = bytes.len().min(4096);
+    let pairs = sample_len / 2;
+    if pairs == 0 {
+        return false;
+    }
+    let zeroes = bytes[..sample_len]
+        .chunks_exact(2)
+        .filter(|chunk| {
+            if little_endian {
+                chunk[1] == 0
+            } else {
+                chunk[0] == 0
+            }
+        })
+        .count();
+    zeroes * 100 / pairs >= 55
+}
+
+fn decode_text_bytes(bytes: &[u8]) -> Result<String, String> {
+    if bytes.is_empty() {
+        return Ok(String::new());
+    }
+    if bytes.starts_with(&[0xef, 0xbb, 0xbf]) {
+        return Ok(String::from_utf8_lossy(&bytes[3..]).into_owned());
+    }
+    if bytes.starts_with(&[0xff, 0xfe]) {
+        return decode_utf16(&bytes[2..], true).ok_or_else(|| "无法解码 UTF-16 LE 文本".into());
+    }
+    if bytes.starts_with(&[0xfe, 0xff]) {
+        return decode_utf16(&bytes[2..], false).ok_or_else(|| "无法解码 UTF-16 BE 文本".into());
+    }
+    if let Ok(text) = std::str::from_utf8(bytes) {
+        return Ok(text.to_string());
+    }
+    if looks_like_utf16(bytes, true) {
+        if let Some(text) = decode_utf16(bytes, true) {
+            return Ok(text);
+        }
+    }
+    if looks_like_utf16(bytes, false) {
+        if let Some(text) = decode_utf16(bytes, false) {
+            return Ok(text);
+        }
+    }
     if bytes.contains(&0) {
         return Err("二进制文件，不预览".into());
     }
-    Ok(String::from_utf8_lossy(&bytes).into_owned())
+    let (text, _, _) = GB18030.decode(bytes);
+    Ok(text.into_owned())
+}
+
+#[tauri::command]
+pub async fn read_work_docx(root: String, rel: String) -> Result<String, String> {
+    tauri::async_runtime::spawn_blocking(move || read_work_docx_blocking(root, rel))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+fn read_work_docx_blocking(root: String, rel: String) -> Result<String, String> {
+    let target_canon = existing_work_path(&root, &rel, false)?;
+    let meta = fs::metadata(&target_canon).map_err(|e| e.to_string())?;
+    if meta.is_dir() {
+        return Err("这是一个目录".into());
+    }
+    if meta.len() > DOCX_PREVIEW_LIMIT {
+        return Err(format!(
+            "docx 文件过大（{} MB），不在内置预览中解析",
+            meta.len() / 1024 / 1024
+        ));
+    }
+    let ext = target_canon
+        .extension()
+        .and_then(|s| s.to_str())
+        .unwrap_or_default()
+        .to_ascii_lowercase();
+    if ext != "docx" {
+        return Err("只支持预览 .docx 文件".into());
+    }
+    let file = fs::File::open(&target_canon).map_err(|e| e.to_string())?;
+    let mut archive = zip::ZipArchive::new(file).map_err(|e| format!("无法读取 docx：{e}"))?;
+    let mut names: Vec<String> = (0..archive.len())
+        .filter_map(|i| archive.by_index(i).ok().map(|file| file.name().to_string()))
+        .filter(|name| {
+            name == "word/document.xml"
+                || (name.starts_with("word/header") && name.ends_with(".xml"))
+                || (name.starts_with("word/footer") && name.ends_with(".xml"))
+                || name == "word/footnotes.xml"
+                || name == "word/endnotes.xml"
+        })
+        .collect();
+    names.sort_by_key(|name| if name == "word/document.xml" { 0 } else { 1 });
+
+    let mut out = String::new();
+    for name in names {
+        let mut part = archive.by_name(&name).map_err(|e| e.to_string())?;
+        let mut xml = String::new();
+        part.read_to_string(&mut xml).map_err(|e| e.to_string())?;
+        let extracted = extract_docx_xml_text(&xml);
+        if extracted.trim().is_empty() {
+            continue;
+        }
+        if !out.is_empty() && !out.ends_with("\n\n") {
+            out.push('\n');
+        }
+        out.push_str(extracted.trim());
+        out.push('\n');
+        if out.len() > DOCX_TEXT_PREVIEW_LIMIT {
+            out.truncate(DOCX_TEXT_PREVIEW_LIMIT);
+            out.push_str("\n\n…");
+            break;
+        }
+    }
+    let text = out.trim().to_string();
+    if text.is_empty() {
+        Err("docx 没有可预览正文".into())
+    } else {
+        Ok(text)
+    }
+}
+
+fn push_docx_break(out: &mut String) {
+    while out.ends_with(' ') || out.ends_with('\t') {
+        out.pop();
+    }
+    if !out.ends_with('\n') {
+        out.push('\n');
+    }
+}
+
+fn decode_xml_entities(input: &str) -> String {
+    let mut out = String::with_capacity(input.len());
+    let mut rest = input;
+    while let Some(idx) = rest.find('&') {
+        out.push_str(&rest[..idx]);
+        rest = &rest[idx + 1..];
+        let Some(end) = rest.find(';') else {
+            out.push('&');
+            out.push_str(rest);
+            return out;
+        };
+        let entity = &rest[..end];
+        match entity {
+            "amp" => out.push('&'),
+            "lt" => out.push('<'),
+            "gt" => out.push('>'),
+            "quot" => out.push('"'),
+            "apos" => out.push('\''),
+            _ if entity.starts_with("#x") => {
+                if let Ok(value) = u32::from_str_radix(&entity[2..], 16) {
+                    if let Some(ch) = char::from_u32(value) {
+                        out.push(ch);
+                    }
+                }
+            }
+            _ if entity.starts_with('#') => {
+                if let Ok(value) = entity[1..].parse::<u32>() {
+                    if let Some(ch) = char::from_u32(value) {
+                        out.push(ch);
+                    }
+                }
+            }
+            _ => {
+                out.push('&');
+                out.push_str(entity);
+                out.push(';');
+            }
+        }
+        rest = &rest[end + 1..];
+    }
+    out.push_str(rest);
+    out
+}
+
+fn extract_docx_xml_text(xml: &str) -> String {
+    let mut out = String::new();
+    let mut pos = 0;
+    while let Some(start_rel) = xml[pos..].find('<') {
+        let start = pos + start_rel;
+        let Some(end_rel) = xml[start..].find('>') else {
+            break;
+        };
+        let end = start + end_rel;
+        let tag = xml[start + 1..end].trim();
+        let normalized = tag.trim_start_matches('/').trim_end_matches('/').trim();
+        let name = normalized.split_whitespace().next().unwrap_or_default();
+        if matches!(name, "w:t" | "a:t" | "m:t") && !tag.starts_with('/') {
+            let close_tag = format!("</{name}>");
+            let content_start = end + 1;
+            if let Some(close_rel) = xml[content_start..].find(&close_tag) {
+                let close = content_start + close_rel;
+                out.push_str(&decode_xml_entities(&xml[content_start..close]));
+                pos = close + close_tag.len();
+                continue;
+            }
+        } else if name == "w:tab" && !tag.starts_with('/') {
+            out.push('\t');
+        } else if matches!(name, "w:br" | "w:cr") && !tag.starts_with('/') {
+            push_docx_break(&mut out);
+        } else if matches!(name, "w:p" | "w:tr") && tag.starts_with('/') {
+            push_docx_break(&mut out);
+        }
+        pos = end + 1;
+    }
+    out.lines()
+        .map(str::trim_end)
+        .collect::<Vec<_>>()
+        .join("\n")
+        .replace("\n\n\n", "\n\n")
 }
 
 fn is_search_text_file(path: &Path) -> bool {
@@ -1787,6 +2025,69 @@ pub fn write_work_file(
     Ok(WorkFileWriteResult {
         size: next.len(),
         mtime: metadata_mtime(&next).unwrap_or(0),
+    })
+}
+
+fn sanitize_capture_label(label: &str) -> String {
+    let mut out = String::new();
+    let mut last_was_sep = false;
+    for ch in label.trim().chars() {
+        let illegal = ch.is_control() || matches!(ch, '/' | '\\' | ':' | '*' | '?' | '"' | '<' | '>' | '|');
+        if illegal || ch.is_whitespace() {
+            if !last_was_sep && !out.is_empty() {
+                out.push('_');
+                last_was_sep = true;
+            }
+            continue;
+        }
+        out.push(ch);
+        last_was_sep = false;
+        if out.chars().count() >= 48 {
+            break;
+        }
+    }
+    let clean = out.trim_matches('_').to_string();
+    if clean.is_empty() {
+        "canvas_capture".into()
+    } else {
+        clean
+    }
+}
+
+#[tauri::command]
+pub fn save_canvas_capture(
+    root: String,
+    image_data: String,
+    label: String,
+) -> Result<CanvasCaptureSaveResult, String> {
+    let base = existing_work_path(&root, "", true)?;
+    if !base.is_dir() {
+        return Err("作品目录不存在".into());
+    }
+    let encoded = image_data
+        .strip_prefix("data:image/png;base64,")
+        .ok_or("仅支持 PNG 截图")?;
+    let bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|e| format!("截图数据无效：{e}"))?;
+    if bytes.is_empty() {
+        return Err("截图数据为空".into());
+    }
+    if bytes.len() > 32 * 1024 * 1024 {
+        return Err("截图过大，已拒绝保存".into());
+    }
+    let dir = base.join("画布");
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    let ms = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|e| e.to_string())?
+        .as_millis();
+    let filename = format!("{}_{}.png", sanitize_capture_label(&label), ms);
+    let target = dir.join(&filename);
+    fs::write(&target, bytes).map_err(|e| e.to_string())?;
+    Ok(CanvasCaptureSaveResult {
+        rel: format!("画布/{filename}"),
+        path: target.to_string_lossy().to_string(),
     })
 }
 
@@ -3010,6 +3311,7 @@ pub struct CanvasData {
     title: Option<String>,
     total_duration: Option<f64>,
     episodes: Vec<String>,
+    shared_assets: Vec<CanvasFrame>,
     clips: Vec<CanvasClip>,
     seams: Vec<CanvasSeam>,
     quality: Option<CanvasQualitySummary>,
@@ -5041,6 +5343,191 @@ fn sequential_seams(clips: &[CanvasClip], transition: Option<&str>) -> Vec<Canva
     seams
 }
 
+fn is_shared_asset_rel(rel: &str) -> bool {
+    let rel = rel.replace('\\', "/").to_lowercase();
+    rel.contains("出图/共享/") || rel.contains("/shared/")
+}
+
+fn is_canvas_image_path(path: &Path) -> bool {
+    matches!(
+        path.extension()
+            .and_then(|ext| ext.to_str())
+            .map(|ext| ext.to_ascii_lowercase())
+            .as_deref(),
+        Some("png" | "jpg" | "jpeg" | "webp" | "gif")
+    )
+}
+
+fn push_shared_asset_files(root: &Path, dir: &Path, depth: usize, out: &mut Vec<CanvasFrame>) {
+    if depth > 4 || out.len() >= 160 {
+        return;
+    }
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
+    };
+    let mut paths: Vec<PathBuf> = entries.flatten().map(|entry| entry.path()).collect();
+    paths.sort();
+    for path in paths {
+        if out.len() >= 160 {
+            break;
+        }
+        if path.is_dir() {
+            push_shared_asset_files(root, &path, depth + 1, out);
+            continue;
+        }
+        if !path.is_file() || !is_canvas_image_path(&path) {
+            continue;
+        }
+        let rel = path
+            .strip_prefix(root)
+            .ok()
+            .and_then(|p| p.to_str())
+            .map(|p| p.replace('\\', "/"))
+            .unwrap_or_else(|| path.to_string_lossy().replace('\\', "/"));
+        if !is_shared_asset_rel(&rel) {
+            continue;
+        }
+        let label = path
+            .file_stem()
+            .and_then(|v| v.to_str())
+            .unwrap_or("共享资产")
+            .to_string();
+        out.push(CanvasFrame {
+            role: "shared_asset".into(),
+            label,
+            abs: Some(path.to_string_lossy().to_string()),
+            exists: true,
+            at_sec: None,
+            prompt: Some(rel),
+        });
+    }
+}
+
+fn shared_asset_frames(root: &Path) -> Vec<CanvasFrame> {
+    let shared = root.join("出图").join("共享");
+    let mut out = Vec::new();
+    for dir in [shared.join("图片"), shared.join("用户参考"), shared.clone()] {
+        push_shared_asset_files(root, &dir, 0, &mut out);
+    }
+    let mut seen = HashSet::new();
+    out.retain(|frame| {
+        frame
+            .abs
+            .as_ref()
+            .map(|abs| seen.insert(abs.clone()))
+            .unwrap_or(false)
+    });
+    out.sort_by(|a, b| a.label.cmp(&b.label));
+    out
+}
+
+fn comic_reference_label(raw: &Value) -> String {
+    let id = s(raw, "id").unwrap_or_else(|| "共享资产".into());
+    let view = s(raw, "view")
+        .map(|v| v.trim_end_matches("_path").to_string())
+        .filter(|v| !v.trim().is_empty());
+    match view {
+        Some(view) => format!("{id} / {view}"),
+        None => id,
+    }
+}
+
+fn push_comic_shared_asset_frame(
+    frames: &mut Vec<CanvasFrame>,
+    seen: &mut HashSet<String>,
+    root: &Path,
+    id: &str,
+    view: &str,
+    rel: String,
+) {
+    if !is_shared_asset_rel(&rel) || !seen.insert(rel.clone()) {
+        return;
+    }
+    let (abs, exists) = rel_abs(root, Some(rel.clone()));
+    if !exists {
+        return;
+    }
+    let view_label = view.trim_end_matches("_path");
+    frames.push(CanvasFrame {
+        role: "shared_asset".into(),
+        label: if view_label.is_empty() {
+            id.to_string()
+        } else {
+            format!("{id} / {view_label}")
+        },
+        abs,
+        exists,
+        at_sec: None,
+        prompt: Some(format!("id: {id}\nview: {view}\n{rel}")),
+    });
+}
+
+fn comic_reference_frames(root: &Path, panel: &Value, job: Option<&Value>) -> Vec<CanvasFrame> {
+    let mut frames = Vec::new();
+    let mut seen = HashSet::new();
+    let refs = job
+        .and_then(|j| j.get("references"))
+        .and_then(|refs| refs.as_array());
+    if let Some(refs) = refs {
+        for raw in refs {
+            let rel = match s(raw, "path") {
+                Some(rel) if is_shared_asset_rel(&rel) => rel,
+                _ => continue,
+            };
+            if !seen.insert(rel.clone()) {
+                continue;
+            }
+            let label = comic_reference_label(raw);
+            let (abs, exists) = rel_abs(root, Some(rel.clone()));
+            let prompt = Some(
+                [
+                    s(raw, "id").map(|id| format!("id: {id}")),
+                    s(raw, "view").map(|view| format!("view: {view}")),
+                    Some(rel),
+                ]
+                .into_iter()
+                .flatten()
+                .collect::<Vec<_>>()
+                .join("\n"),
+            );
+            frames.push(CanvasFrame {
+                role: "shared_asset".into(),
+                label,
+                abs,
+                exists,
+                at_sec: None,
+                prompt,
+            });
+        }
+    }
+
+    if let Some(scene_id) = s(panel, "scene_anchor_id").or_else(|| s(panel, "location")) {
+        push_comic_shared_asset_frame(
+            &mut frames,
+            &mut seen,
+            root,
+            &scene_id,
+            "anchor",
+            format!("出图/共享/图片/{scene_id}__anchor.png"),
+        );
+    }
+    if let Some(refs) = panel.get("references").and_then(|refs| refs.as_array()) {
+        for raw in refs {
+            if let Some(id) = raw.as_str().filter(|id| !id.trim().is_empty()) {
+                push_comic_shared_asset_frame(
+                    &mut frames,
+                    &mut seen,
+                    root,
+                    id,
+                    "anchor",
+                    format!("出图/共享/图片/{id}__anchor.png"),
+                );
+            }
+        }
+    }
+    frames
+}
+
 fn comic_panel_jobs(root: &Path, ep: &str) -> BTreeMap<String, Value> {
     read_json(
         &root
@@ -5303,7 +5790,7 @@ fn from_comic_panel_script(root: &Path, ep: &str, data: &Value) -> Vec<CanvasCli
                 .or_else(|| qc.as_ref().and_then(|q| s(q, "path")))
                 .or_else(|| Some(format!("出图/{ep}/panels/{panel_id}.png")));
             let (image_abs, image_exists) = rel_abs(root, image_rel);
-            let frames = vec![CanvasFrame {
+            let mut frames = vec![CanvasFrame {
                 role: "panel".into(),
                 label: "成图".into(),
                 abs: image_abs.clone(),
@@ -5311,6 +5798,7 @@ fn from_comic_panel_script(root: &Path, ep: &str, data: &Value) -> Vec<CanvasCli
                 at_sec: None,
                 prompt: prompt.clone(),
             }];
+            frames.extend(comic_reference_frames(root, panel, job));
             let mut qa = Vec::new();
             push_comic_qc_flags(&mut qa, qc.as_ref());
             push_comic_finding_flags(&mut qa, findings.get(&panel_id));
@@ -5523,6 +6011,7 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
         source: "none".into(),
         episode: ep.clone(),
         episodes,
+        shared_assets: shared_asset_frames(root_p),
         ..Default::default()
     };
 

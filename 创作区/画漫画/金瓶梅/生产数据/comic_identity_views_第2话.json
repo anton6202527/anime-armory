@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_view_generation",
+  "chapter": "第2话",
+  "created_at": "2026-07-09T19:54:43",
+  "characters": [
+    "CHAR_YINGER"
+  ],
+  "views": [
+    "front",
+    "three_quarter",
+    "side",
+    "back",
+    "face"
+  ],
+  "backend": "codex",
+  "attempted_backends": [
+    "codex"
+  ],
+  "contact_sheet": "生产数据/comic_identity_views_第2话_contact_sheet.jpg",
+  "generated": 5,
+  "skipped": 0,
+  "failed": 0,
+  "items": [
+    {
+      "ts": "2026-07-09T19:46:46",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_YINGER",
+      "view": "front",
+      "path": "出图/共享/图片/CHAR_YINGER__front.png",
+      "sha256": "5f54f4830a81407ac41341a955290f6ccc19ee19b7c45c1d669ee74fd641b211",
+      "anchor_path": "",
+      "anchor_kind": "text_prompt_seed",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempt": 1,
+      "backend_version": "codex-cli 0.143.0"
+    },
+    {
+      "ts": "2026-07-09T19:48:37",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_YINGER",
+      "view": "three_quarter",
+      "path": "出图/共享/图片/CHAR_YINGER__three_quarter.png",
+      "sha256": "874ffcff39c6725bf10bbaad684558288733f2c9f6881e1239411afa828dde9e",
+      "anchor_path": "出图/共享/图片/CHAR_YINGER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempt": 1,
+      "backend_version": "codex-cli 0.143.0"
+    },
+    {
+      "ts": "2026-07-09T19:50:21",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_YINGER",
+      "view": "side",
+      "path": "出图/共享/图片/CHAR_YINGER__side.png",
+      "sha256": "37de2b60c19f04424f85d48a5702f553eccfd1f6bc43b8a0d338bcb2ac5f26ae",
+      "anchor_path": "出图/共享/图片/CHAR_YINGER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempt": 1,
+      "backend_version": "codex-cli 0.143.0"
+    },
+    {
+      "ts": "2026-07-09T19:52:29",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_YINGER",
+      "view": "back",
+      "path": "出图/共享/图片/CHAR_YINGER__back.png",
+      "sha256": "d1246da5085147f741cd5dc04ba9e5733cabc2f6f311a764e8dda46f70d4ae7b",
+      "anchor_path": "出图/共享/图片/CHAR_YINGER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempt": 1,
+      "backend_version": "codex-cli 0.143.0"
+    },
+    {
+      "ts": "2026-07-09T19:54:43",
+      "status": "character_view_ready",
+      "ref_id": "CHAR_YINGER",
+      "view": "face",
+      "path": "出图/共享/图片/CHAR_YINGER__face.png",
+      "sha256": "e836e26ad42115e37a80a85b0fb65e5651143bb5f24d921db84ca4b810c6a138",
+      "anchor_path": "出图/共享/图片/CHAR_YINGER__front.png",
+      "anchor_kind": "front_view_anchor",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "attempt": 1,
+      "backend_version": "codex-cli 0.143.0"
+    }
+  ]
+}

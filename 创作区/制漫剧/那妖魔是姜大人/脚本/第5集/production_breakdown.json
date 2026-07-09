@@ -1,6 +1,6 @@
 {
   "episode": "第5集",
-  "generated_at": "2026-07-08T09:57:16+00:00",
+  "generated_at": "2026-07-09T02:27:07+00:00",
   "inputs": {
     "director_blocking_pack": "脚本/第5集/director_blocking_pack.json",
     "script_quality_contract": "生产数据/script_quality_contract_第5集.json",
@@ -19,7 +19,7 @@
       "clip_id": "EP05_CLIP01",
       "department_notes": {
         "art": "场景 LOC_03；入画角色 CHAR_01, CHAR_04, GROUP_飞鹰门众人, GROUP_狼妖群, CHAR_05；关键物件 WEAPON_01, PROP_镇魔司黑衣赤纹, PROP_上盘村断石碑, PROP_村道血迹破布。",
-        "camera": "景别/机位：LS 建群狼扑杀 → MS 姜月初按刀 → CU 横刀出鞘；视线/轴线：姜月初视线不看近身小妖，穿过战场直锁青面郎君；飞鹰门众人看向她的刀。；模板：fight_exchange。",
+        "camera": "景别/机位：MS 近距接战承接前集尾帧 → CU 横刀出鞘 → CU 眼神锁正主；视线/轴线：姜月初沿第4集村道主轴直锁前景/中近景的青面郎君；飞鹰门众人看向她的刀，不重建新轴线。；模板：fight_exchange。",
         "post": "转场 match_action_cut；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
       },
       "image_video_requirements": {

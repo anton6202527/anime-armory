@@ -21,6 +21,7 @@ import {
   mediaAllowRoot,
   mediaUrl,
   openWorkEntry,
+  readWorkDocx,
   readWorkFile,
   renameWorkEntry,
   revealWorkEntry,
@@ -57,6 +58,8 @@ const VIDEO = new Set(["mp4", "mov", "webm", "m4v"]);
 const AUDIO = new Set(["wav", "mp3", "m4a", "aac", "flac", "ogg"]);
 const MARKDOWN = new Set(["md", "markdown", "mdx"]);
 const JSONISH = new Set(["json", "jsonl"]);
+const DOCX = new Set(["docx"]);
+const TEXT = new Set(["txt", "text", "log", "srt", "csv"]);
 const TREE_ROW_HEIGHT = 22;
 const TREE_BASE_PADDING = 4;
 const TREE_INDENT = 12;
@@ -70,7 +73,7 @@ const IMAGE_STAGE_PADDING = 32;
 const NOVEL_IMPORT_EXTENSIONS = ["txt", "md", "markdown", "mdx", "docx", "pdf"];
 const NOVEL_IMPORT_EXTENSIONS_SET = new Set(NOVEL_IMPORT_EXTENSIONS);
 
-type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "text";
+type PreviewKind = "img" | "video" | "audio" | "markdown" | "json" | "docx" | "text";
 type ContextMenuState = { x: number; y: number; entry: SkillTreeEntry | null };
 type DirPageState = { loaded: number; total: number; hasMore: boolean; loading?: boolean };
 type Size = { width: number; height: number };
@@ -122,6 +125,8 @@ function previewKind(name: string): PreviewKind {
   if (AUDIO.has(e)) return "audio";
   if (MARKDOWN.has(e)) return "markdown";
   if (JSONISH.has(e)) return "json";
+  if (DOCX.has(e)) return "docx";
+  if (TEXT.has(e)) return "text";
   return "text";
 }
 
@@ -840,7 +845,8 @@ export function FilesPane({
       .catch(() => {});
   }, [kind, root.path]);
 
-  // load text into Monaco; image/video/audio stream straight from the media server
+  // Load text-like files into Monaco; docx uses a backend document parser.
+  // Media files stream straight from the media server.
   useEffect(() => {
     setErr("");
     setText("");
@@ -854,7 +860,8 @@ export function FilesPane({
       return;
     }
     let alive = true;
-    readWorkFile(root.path, selEntry.path)
+    const reader = kind === "docx" ? readWorkDocx : readWorkFile;
+    reader(root.path, selEntry.path)
       .then((s) => {
         if (!alive) return;
         setText(s);
@@ -1217,6 +1224,19 @@ export function FilesPane({
             <div className="files-media"><audio src={mediaSrc(abs)} controls /></div>
           ) : err ? (
             <div className="files-empty">{t("files.previewFailed", { error: err })}</div>
+          ) : kind === "docx" ? (
+            <div className="files-document-preview">
+              <div className="files-document-toolbar">
+                <WorkFileIcon entry={selEntry} collapsed />
+                <span className="files-document-title" title={selEntry.path}>{selEntry.name}</span>
+                <span className="files-document-badge">{t("files.docxReadonly")}</span>
+              </div>
+              {text ? (
+                <pre className="files-document-text">{text}</pre>
+              ) : (
+                <div className="files-empty">{t("common.loading")}</div>
+              )}
+            </div>
           ) : (
             <Suspense fallback={<div className="files-empty">{t("common.loading")}</div>}>
               <MonacoFileEditor

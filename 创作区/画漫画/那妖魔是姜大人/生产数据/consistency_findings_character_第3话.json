@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "comic_consistency_findings",
+  "dimension": "character_consistency",
+  "chapter": "第3话",
+  "created_at": "2026-07-09T14:31:46",
+  "summary": {
+    "character_count": 2,
+    "panel_binding_count": 15,
+    "finding_count": 1,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 1
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "dimension": "character_consistency",
+      "code": "face_fingerprint_low",
+      "character_id": "CHAR_JYC",
+      "panel_id": "P010",
+      "artifact": "出图/第3话/panels/P010.png",
+      "reason": "CHAR_JYC face 指纹与参考图相似度偏低：score=0.491。这是启发式提示，需并排人审。",
+      "return_to_stage": "review",
+      "suggested_fix": "若 P010 后续重抽或改构图，重新运行 character_consistency.py 并重新签收。",
+      "machine_severity": "warn",
+      "manual_acceptance": {
+        "status": "accepted",
+        "accepted_by": "codex_visual_qc",
+        "accepted_at": "2026-07-09T14:27:13+0800",
+        "reason": "P010 是姜月初背身面对骑队的调度格，脚本功能是展示飞鹰门骑队压近而非正脸表演；启发式脸指纹被背身、远景和火把烟尘压低。人审对照确认黑长发轮廓、黑衣赤纹、横刀位置和体态与 P005-P009 连续。",
+        "evidence": "脚本/第3话/panel_script.json::P010；出图/第3话/panels/P010.png；生产数据/qa_previews/第3话_character_consistency_contact_sheet.jpg",
+        "source": "生产数据/character_consistency_acceptance_第3话.json"
+      }
+    }
+  ]
+}
