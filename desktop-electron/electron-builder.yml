@@ -1,0 +1,16 @@
+appId: com.animearmory.desktop
+productName: AnimeArmory
+directories:
+  output: release
+files:
+  - out/**
+  - package.json
+asarUnpack:
+  - "**/node_modules/node-pty/**"
+mac:
+  category: public.app-category.productivity
+  target:
+    - dmg
+win:
+  target:
+    - nsis
