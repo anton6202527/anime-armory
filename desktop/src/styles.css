@@ -2941,3 +2941,27 @@ canvas.decoded-image[data-ready="false"] {
 .stub-view { padding: 30px; color: var(--muted); background: var(--editor-bg); }
 .stub-view h3 { color: var(--text); }
 .tree { font-family: Menlo, monospace; font-size: 12px; line-height: 1.7; }
+.crumb-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  font-weight: normal;
+  cursor: pointer;
+  line-height: inherit;
+  font-size: inherit;
+}
+.crumb-btn:hover {
+  color: var(--text);
+  background: transparent;
+  border: none;
+}
+.crumb-btn:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 2px;
+  border: none;
+}
+.crumb-sep {
+  color: var(--muted);
+  margin: 0 4px;
+}

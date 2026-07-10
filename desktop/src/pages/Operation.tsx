@@ -755,9 +755,12 @@ export function Operation(props: {
   return (
     <div className="op">
       <div className="op-top work-nav">
-        <button onClick={onBack}>{t("operation.backSeries")}</button>
+        <button onClick={onBack} className="crumb-btn">
+          {lineLabel(line)}
+        </button>
+        <span className="crumb-sep">/</span>
         <div className="crumb">
-          {lineLabel(line)} / <b>{root.name}</b>
+          <b>{root.name}</b>
         </div>
         {isCanvasLine && shouldReadCanvas && episodes.length > 0 && (
           <div className="ep-switch">
