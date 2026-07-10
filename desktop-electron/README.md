@@ -1,8 +1,8 @@
 # AnimeArmory Desktop (Electron)
 
-Creation Armory(创作兵工厂)桌面 IDE 的 **Electron 重构版**,功能对齐 `desktop/`(Tauri 版)
-并在底层架构上重新设计。长期重度使用定位:类 VSCode 的多进程结构、类型化 IPC 契约、
-worker 化媒体解码、虚拟化文件树、按 chunk 拆分的懒加载面板。
+Creation Armory(创作兵工厂)桌面 IDE 的 **Electron 版**(自原 Tauri 版重构而来,
+Tauri 版已于 2026-07 退役删除)。长期重度使用定位:类 VSCode 的多进程结构、类型化
+IPC 契约、worker 化媒体解码、虚拟化文件树、按 chunk 拆分的懒加载面板。
 
 ## 运行
 
@@ -75,8 +75,14 @@ npm run build
 SMOKE_DRIVE=1 SMOKE_SHOT=/tmp/smoke.png npx electron .
 ```
 
+## 打包发布
+
+发布走 `tools/e2a`(`bash tools/e2a/scripts/e2a_release.sh`,契约见其 SKILL.md):
+自动把技能仓库 + demo 目录经 `tools/e2a/scripts/sync_bundle.cjs` 内置进
+`resources/`(electron-builder `extraResources`),出 DMG 并连同各线 demo zip
+上传 Release。
+
 ## 已知边界
 
-- 打包版需要把技能仓库同步进 `resources/`(参照 `desktop/sync-skills.cjs`),尚未接入。
 - `demos.seed` 为遗留 no-op(演示包统一走 Release 下载安装)。
-- PDF 导入仅复制文件,不做文本抽取(与 Tauri 版一致)。
+- PDF 导入仅复制文件,不做文本抽取(与原 Tauri 版一致)。

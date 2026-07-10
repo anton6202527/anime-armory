@@ -4,7 +4,7 @@ const path = require('path');
 
 const CREATION_ROOT = '创作区';
 const CREATIVE_LINES = ['写小说', '制漫剧', '画漫画', '写歌', '制MV', '拍广告'];
-const CONFIG_REL = path.join('desktop', 'demo-works.json');
+const CONFIG_REL = path.join('tools', 'e2a', 'demo-works.json');
 
 function parseWorkRel(rel) {
   const parts = String(rel || '').split('/');
@@ -35,7 +35,7 @@ function fixedWork(root, rel) {
     if (fs.statSync(abs).isDirectory()) {
       const progress = path.join(abs, '_进度.md');
       if (!fs.existsSync(progress)) {
-        console.warn(`[r2a] skip demo without _进度.md: ${rel}`);
+        console.warn(`[e2a] skip demo without _进度.md: ${rel}`);
         return null;
       }
       return rel;
@@ -43,7 +43,7 @@ function fixedWork(root, rel) {
   } catch (_e) {
     // fall through to the skip below
   }
-  console.warn(`[r2a] skip missing demo work: ${rel}`);
+  console.warn(`[e2a] skip missing demo work: ${rel}`);
   return null;
 }
 

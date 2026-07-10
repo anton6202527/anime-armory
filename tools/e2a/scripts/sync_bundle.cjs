@@ -1,34 +1,35 @@
 #!/usr/bin/env node
-// desktop-bundle engine (driven by `r2a`) — copy the REAL skills/ (+ repo maintenance tools)
-// and 创作区 usage manuals from the repo into ./src-tauri/resources/ so they ship
-// INSIDE the packaged .app/.dmg, making the desktop app self-contained (install
-// on any machine; no anime-armory source checkout needed). Demo works are no
-// longer bundled into the app; this script only writes a catalog that points the
-// app to GitHub Release zip assets.
+// e2a bundle engine — copy the REAL skills/ (+ repo maintenance tools) and
+// 创作区 usage manuals from the repo into desktop-electron/resources/ so they
+// ship INSIDE the packaged Electron app (electron-builder extraResources),
+// making it self-contained (install on any machine; no anime-armory source
+// checkout needed). Demo works are not bundled; this script only writes a
+// catalog that points the app to GitHub Release zip assets.
 //
-// Runs automatically before BOTH `tauri dev` and `tauri build` via tauri.conf.json
-// (beforeDevCommand / beforeBuildCommand).
-// Extra auto-picked champion seeds are OFF BY DEFAULT. Enable them with --demo / --demos,
-// R2A_INCLUDE_DEMOS=1, or desktop/bundle-demos.json { "include_demos": true }.
-// Run manually via `node sync-skills.cjs [--demo]`.
+// Driven by tools/e2a/scripts/e2a_release.sh; run manually via
+// `node tools/e2a/scripts/sync_bundle.cjs [--demo]`. Output dir override:
+// E2A_BUNDLE_DIR. Extra auto-picked champion seeds are OFF BY DEFAULT
+// (--demo / E2A_INCLUDE_DEMOS=1 / tools/e2a/bundle-demos.json).
 //
-// Consumption (wired in src-tauri): a packaged app whose live checkout is absent
-// falls back to <resourceDir>/resources as its skills repo (Rust
-// `resolve_repo`). Demo download buttons use demo_catalog.json and pull zip
-// assets from Releases on demand. In dev the live checkout always wins for skills.
+// Consumption: a packaged app whose live checkout is absent falls back to
+// <process.resourcesPath>/resources as its skills repo (resolveRepo in
+// desktop-electron/src/main/services/workspace.ts). Demo download buttons use
+// demo_catalog.json and pull zip assets from Releases on demand. In dev the
+// live checkout always wins for skills.
 const fs = require('fs');
 const path = require('path');
 const {
   copyDirSafe,
   shouldBundlePath,
-} = require('../tools/release-safety/demo_safety.cjs');
+} = require('../../release-safety/demo_safety.cjs');
 
-const repo = path.resolve(__dirname, '..');
-const bundle = path.join(__dirname, 'src-tauri', 'resources');
-const demoConfigPath = path.join(__dirname, 'bundle-demos.json');
-const demoWorksConfigPath = path.join(__dirname, 'demo-works.json');
+const repo = path.resolve(__dirname, '..', '..', '..');
+const bundle = process.env.E2A_BUNDLE_DIR
+  || path.join(repo, 'desktop-electron', 'resources');
+const demoConfigPath = path.join(__dirname, '..', 'bundle-demos.json');
+const demoWorksConfigPath = path.join(__dirname, '..', 'demo-works.json');
 
-// the 6 creative lines, by product dir under 创作区 (mirror src-tauri/src/commands.rs LINES)
+// the 6 creative lines, by product dir under 创作区 (mirror desktop-electron workspace.ts LINES)
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
 const MANUAL_RELS = [
@@ -50,7 +51,8 @@ const OUTER_SKILL_LINES = new Map([
   ['novel', '写小说'],
 ]);
 const PRODUCT_LINE_KEYS = new Map([...OUTER_SKILL_LINES.entries()].map(([key, product]) => [product, key]));
-const RELEASE_REPO = process.env.R2A_TARGET_REPO
+const RELEASE_REPO = process.env.E2A_TARGET_REPO
+  || process.env.R2A_TARGET_REPO
   || process.env.ANIME_ARMORY_RELEASE_REPO
   || 'anton6202527/anime-armory';
 const RELEASE_DOWNLOAD_BASE = `https://github.com/${RELEASE_REPO}/releases/latest/download`;
@@ -95,7 +97,7 @@ function loadPinnedWorks() {
     if (!known.has(parsed.line)) throw new Error(`unknown demo line in work path: ${rel}`);
     const src = path.join(repo, rel);
     if (!workHasProgress(src)) {
-      console.warn(`[desktop-bundle] 跳过缺失或无 _进度.md 的配置示例: ${rel}`);
+      console.warn(`[e2a-bundle] 跳过缺失或无 _进度.md 的配置示例: ${rel}`);
       continue;
     }
     if (!seen.has(rel)) {
@@ -110,7 +112,7 @@ let PINNED_WORKS;
 try {
   PINNED_WORKS = loadPinnedWorks();
 } catch (e) {
-  console.error(`[desktop-bundle] ${e.message}`);
+  console.error(`[e2a-bundle] ${e.message}`);
   process.exit(1);
 }
 const PINNED_LINES = new Set(PINNED_WORKS.map((rel) => rel.split('/')[1]).filter(Boolean));
@@ -128,6 +130,7 @@ const REQUIRED_WORKS = (() => {
   const works = [];
   for (const rel of [
     ...PINNED_WORKS,
+    ...parseWorkList(process.env.E2A_FEATURED_WORKS),
     ...parseWorkList(process.env.R2A_FEATURED_WORKS),
     ...parseWorkList(process.env.R2A_FEATURED_WORK),
   ]) {
@@ -171,7 +174,7 @@ function copyManuals(destRoot) {
   for (const rel of MANUAL_RELS) {
     const src = path.join(repo, rel);
     if (!fs.existsSync(src)) {
-      console.error(`[desktop-bundle] 缺少创作区使用手册，无法打包: ${rel}`);
+      console.error(`[e2a-bundle] 缺少创作区使用手册，无法打包: ${rel}`);
       process.exit(1);
     }
     const dst = path.join(destRoot, rel);
@@ -222,13 +225,13 @@ function configEnablesDemos() {
     const cfg = JSON.parse(fs.readFileSync(demoConfigPath, 'utf8'));
     return cfg && cfg.include_demos === true;
   } catch (e) {
-    console.warn(`[desktop-bundle] 忽略无效 demo 配置 ${demoConfigPath}: ${e.message}`);
+    console.warn(`[e2a-bundle] 忽略无效 demo 配置 ${demoConfigPath}: ${e.message}`);
     return false;
   }
 }
 
 function envEnablesDemos() {
-  const raw = String(process.env.R2A_INCLUDE_DEMOS || '').trim().toLowerCase();
+  const raw = String(process.env.E2A_INCLUDE_DEMOS || process.env.R2A_INCLUDE_DEMOS || '').trim().toLowerCase();
   return ['1', 'true', 'yes', 'y', 'on'].includes(raw);
 }
 
@@ -325,17 +328,17 @@ function outerSkillDemoWorks() {
 function addCatalogEntry(catalog, relWork, label, opts = {}) {
   const src = opts.src || path.join(repo, relWork);
   if (!fs.existsSync(src)) {
-    const msg = `[desktop-bundle] 缺失${label}: ${relWork}`;
+    const msg = `[e2a-bundle] 缺失${label}: ${relWork}`;
     if (opts.mandatory) {
       console.error(msg);
       process.exit(1);
     }
-    console.warn(`[desktop-bundle] 跳过${msg.replace('[desktop-bundle] ', '')}`);
+    console.warn(`[e2a-bundle] 跳过${msg.replace('[e2a-bundle] ', '')}`);
     return null;
   }
   const parsed = parseWorkRel(relWork);
   if (!parsed) {
-    console.warn(`[desktop-bundle] 跳过无效作品路径: ${relWork}`);
+    console.warn(`[e2a-bundle] 跳过无效作品路径: ${relWork}`);
     return null;
   }
   if (catalog.has(relWork)) {
@@ -372,14 +375,14 @@ function copyDemoWorkFrom(src, relWork, sourceLabel) {
   const dst = path.join(bundle, 'demos', relWork);
   fs.mkdirSync(path.dirname(dst), { recursive: true });
   copyDirSafe(src, dst);
-  console.log(`[desktop-bundle] bundled full ${sourceLabel}: ${relWork}`);
+  console.log(`[e2a-bundle] bundled full ${sourceLabel}: ${relWork}`);
 }
 
 function main() {
   const withDemos = wantsChampionDemos();
 
   if (!fs.existsSync(path.join(repo, 'skills'))) {
-    console.error('[desktop-bundle] 找不到 ../skills —— 必须在 anime-armory 仓库内运行');
+    console.error('[e2a-bundle] 找不到 skills/ —— 必须在 anime-armory 仓库内运行');
     process.exit(1);
   }
   fs.mkdirSync(bundle, { recursive: true });
@@ -461,7 +464,7 @@ function main() {
       }
     }
   } else {
-    console.log('[desktop-bundle] 额外 demo 种子未启用（默认只带配置示例种子；加 --demo / R2A_INCLUDE_DEMOS=1 启用其它线冠军种子）');
+    console.log('[e2a-bundle] 额外 demo 种子未启用（默认只带配置示例种子；加 --demo / E2A_INCLUDE_DEMOS=1 启用其它线冠军种子）');
   }
   const demoCatalog = [...catalog.values()].sort((a, b) => a.rel.localeCompare(b.rel));
   fs.writeFileSync(path.join(bundle, 'demo_catalog.json'), JSON.stringify(demoCatalog, null, 2) + '\n');
@@ -500,13 +503,13 @@ function main() {
   const seedLine = withDemos
     ? `+ 非 demo 作品引用: ${seedReferences.map((w) => `${w.line}/${w.name}`).join(', ') || '（无）'}`
     : '+ 非 demo 作品引用: 关闭';
-  console.log(`[desktop-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files + ${manualFiles} manuals → src-tauri/resources/`);
-  console.log(`[desktop-bundle] demo catalog entries: ${demoCatalog.length} → src-tauri/resources/demo_catalog.json`);
-  console.log(`[desktop-bundle] full demo payloads are release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line>.zip`);
-  console.log(`[desktop-bundle] ${featuredLine}`);
-  console.log(`[desktop-bundle] ${skillDemoLine}`);
-  console.log(`[desktop-bundle] ${demoLine}`);
-  console.log(`[desktop-bundle] ${seedLine}`);
+  console.log(`[e2a-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files + ${manualFiles} manuals → ${path.relative(repo, bundle) || bundle}/`);
+  console.log(`[e2a-bundle] demo catalog entries: ${demoCatalog.length} → ${path.relative(repo, bundle) || bundle}/demo_catalog.json`);
+  console.log(`[e2a-bundle] full demo payloads are release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line>.zip`);
+  console.log(`[e2a-bundle] ${featuredLine}`);
+  console.log(`[e2a-bundle] ${skillDemoLine}`);
+  console.log(`[e2a-bundle] ${demoLine}`);
+  console.log(`[e2a-bundle] ${seedLine}`);
 }
 
 main();

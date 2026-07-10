@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # e2a — build the Electron desktop app (desktop-electron/) as release installers
 # plus the per-line demo zip assets, and upload them to GitHub Release assets.
-# Modeled on scripts/r2a_release.sh (Tauri), reusing the same demo selection
-# (scripts/r2a_select_demo.cjs), safe payload copier (tools/release-safety)
-# and skills bundler (desktop/sync-skills.cjs).
+# Successor of the retired Tauri /r2a flow. Self-contained: demo selection
+# (scripts/select_demo.cjs), skills bundler (scripts/sync_bundle.cjs) and the
+# demo-works config live in tools/e2a/; the safe payload copier is the shared
+# tools/release-safety/demo_safety.cjs.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -126,8 +127,6 @@ rsync_common_excludes=(
   --exclude='.ruff_cache/'
   --exclude='node_modules/'
   --exclude='dist/'
-  --exclude='desktop/dist/'
-  --exclude='desktop/src-tauri/target/'
   --exclude='desktop-electron/out/'
   --exclude='desktop-electron/release/'
   --exclude='desktop-electron/resources/'
@@ -149,7 +148,7 @@ select_demo_works() {
       exit 1
     fi
     DEMO_WORKS+=("$demo")
-  done < <(node "$ROOT/scripts/r2a_select_demo.cjs" "$source_root")
+  done < <(node "$ROOT/tools/e2a/scripts/select_demo.cjs" "$source_root")
 
   echo "[e2a] demo works:"
   for demo in ${DEMO_WORKS+"${DEMO_WORKS[@]}"}; do
@@ -209,21 +208,18 @@ snapshot_local_source() {
 # --- electron app build ------------------------------------------------------
 
 stage_bundled_resources() {
-  # sync-skills.cjs bundles skills/tools/manuals + demo_catalog.json into
-  # desktop/src-tauri/resources; the Electron app reads the same layout from
+  # sync_bundle.cjs bundles skills/tools/manuals + demo_catalog.json into
+  # desktop-electron/resources; the packaged app reads the same layout from
   # process.resourcesPath/resources (electron-builder extraResources).
   local featured_works
   featured_works="$(printf '%s\n' ${DEMO_WORKS+"${DEMO_WORKS[@]}"})"
   echo "[e2a] bundling skills repo + demo catalog"
-  (
-    cd "$SOURCE_DIR/desktop"
-    R2A_INCLUDE_DEMOS=0 \
-    R2A_FEATURED_WORKS="$featured_works" \
-    R2A_TARGET_REPO="$TARGET_REPO" \
-      node sync-skills.cjs
-  )
   rm -rf "$SOURCE_DIR/desktop-electron/resources"
-  cp -R "$SOURCE_DIR/desktop/src-tauri/resources" "$SOURCE_DIR/desktop-electron/resources"
+  E2A_INCLUDE_DEMOS=0 \
+  E2A_FEATURED_WORKS="$featured_works" \
+  E2A_TARGET_REPO="$TARGET_REPO" \
+  E2A_BUNDLE_DIR="$SOURCE_DIR/desktop-electron/resources" \
+    node "$SOURCE_DIR/tools/e2a/scripts/sync_bundle.cjs"
   if [[ ! -f "$SOURCE_DIR/desktop-electron/resources/demo_catalog.json" ]]; then
     echo "Bundled resources are missing demo_catalog.json" >&2
     exit 1

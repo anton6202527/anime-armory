@@ -30,14 +30,14 @@
 
 | 安装包 | 平台 | 下载 |
 |---|---|---|
-| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg) |
+| 🖥️ 桌面端 App | macOS Apple Silicon（M 系列，`.dmg`） | [**AnimeArmory_electron_macos_arm64.dmg**](https://github.com/anton6202527/anime-armory/releases/download/electron-v0.1.0/AnimeArmory_electron_macos_arm64.dmg) |
 | 🖥️ 桌面端 App | Windows（`.exe` 安装程序） | [**AnimeArmory_windows.exe**](https://github.com/anton6202527/anime-armory/releases/latest/download/AnimeArmory_windows.exe) |
 | 🧩 VS Code 插件 | 跨平台（`.vsix`） | [**anime-armory.vsix**](https://github.com/anton6202527/anime-armory/releases/latest/download/anime-armory.vsix) |
 
 - **桌面端 App**：macOS Apple Silicon（M 系列）下载 `.dmg` 拖入 `/Applications`；Windows 下载 `.exe` 安装程序。打开即用，内置全部 skill。macOS 隐私权限不会在安装阶段预授权，访问受保护目录时由系统按需提示。
 - **VS Code 插件**：下载 `.vsix` 后，在 VS Code 命令面板执行 `Extensions: Install from VSIX…` 选中该文件安装。
 
-> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。维护者出新版见下方“自行打包发布”（推荐执行 `/r2a` 或 `/r2a --all`）。
+> 下载链接由维护者发布时更新，指向 anime-armory Release 中对应安装包；桌面端 App 内置当前全部 skill。历史版本与校验和见 [Releases 页](https://github.com/anton6202527/anime-armory/releases)。macOS 桌面端现为 Electron 版（`tools/e2a` 打包）；Windows `.exe` 为旧版 Tauri 构建产物，Electron 版 Windows 包待发布。维护者出新版见下方“自行打包发布”。
 
 ## 桌面端 App 能做什么
 
@@ -132,49 +132,40 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 上面“下载安装”里的安装包发布到 anime-armory GitHub Release 时使用本节的稳定文件名。自己分发或出新版时按下面流程重新打包即可。
 
-**桌面端 App / VS Code 插件发布（推荐走 `r2a`）**：
+**桌面端 App（Electron）发布（走 `tools/e2a`）**：
 
-当前 `r2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建 target；桌面端内置当前全部 skill、`创作区/` 各系列使用手册，只带 demo 下载目录，不内置完整 demo payload。
+`e2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成 Electron 安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets（tag 默认 `electron-v<版本>`）；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建产物；桌面端内置当前全部 skill、`创作区/` 各系列使用手册和 demo 下载目录，不内置完整 demo payload（demo zip 是独立 Release 资产，App 内按需下载）。
 
-- `/r2a`：Codex slash command，本地构建 macOS Apple Silicon `.dmg`，上传到 `anime-armory` Release assets，并更新 README 里这个 DMG 的下载链接；不重打 demo zip；单包 release 默认不标为 latest，README 默认使用固定 tag 链接。
-- `/r2a --all`：本地构建并上传“下载安装”表里的全部 app 安装包：macOS Apple Silicon `.dmg`、Windows `.exe`、VS Code `.vsix`，更新 README 对应下载链接，并把该 release 标为 latest；不重打 demo zip；桌面端安装包只带 demo 下载目录，VS Code `.vsix` 只保留扩展目录里自带的轻量种子创作区。`--all` 的 README 链接默认使用 `releases/latest/download/...`。
-- `/r2a --demo-assets`：只打包并上传各线 demo zip assets：`AnimeArmory_demo_novel.zip`、`AnimeArmory_demo_n2d.zip`、`AnimeArmory_demo_comic.zip`、`AnimeArmory_demo_song.zip`、`AnimeArmory_demo_mv.zip`、`AnimeArmory_demo_ad.zip`；不打 app、不更新 README app 链接、不覆盖已有 release notes、不标 latest。demo 内容没变时不需要跑。
-- `/r2a --all --with-demo-assets`：旧式合并路径，一次性打 app + demo zip；大 demo 会显著拖慢发布，只在确实要同批重发 demo 时用。
-- release 发布前会验证 DMG：`hdiutil verify`、挂载检查、以及 `.app` 的严格 `codesign --verify --deep --strict`。若配置 `R2A_NOTARY_KEYCHAIN_PROFILE`，还会走 Apple notarization/staple。
-- README 下载链接策略：如果希望链接永久可复现，用固定 tag 链接，例如 `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`；如果希望 README 永远指向最新包，用 `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`。可用 `--readme-link-mode tag|latest|auto` 显式指定。
-- 如需旧行为从远程分支/标签打包，可加 `--remote-source --source-ref <ref>`。
+```bash
+bash tools/e2a/scripts/e2a_release.sh                # 默认：Electron DMG + 各线 demo zip，一起上传
+bash tools/e2a/scripts/e2a_release.sh --apps-only    # 只打 DMG
+bash tools/e2a/scripts/e2a_release.sh --demo-assets  # 只重打各线 demo zip（保留已有 release notes）
+bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物在 dist/e2a-release-<tag>/
+```
+
+- 发布前会验证 DMG：`hdiutil verify`、挂载检查（含内置技能仓库与 `demo_catalog.json`）。默认 ad-hoc 签名；配置 `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` 可出可分发的签名+公证包。
+- demo zip 资产名：`AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`；n2d 会瘦身到第 1 集媒体。
+- release 默认不标 latest、不改 README 下载链接——发布对用户可见的新版时手动更新上表链接（固定 tag 链接可复现，`releases/latest/download/...` 永远指向最新）。
+- 完整契约见 `tools/e2a/SKILL.md`。
+
+**VS Code 插件发布**：在 `vscode-extension/` 里 `npx @vscode/vsce package` 打出 `anime-armory.vsix`，手动上传 Release 并按需更新 README 链接。
 
 只需要把当前 checkout 的 `skills/` 与 `创作区/` 使用手册同步进桌面端和 VS Code 插件的内置资源时，跑：
 
 ```bash
-scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、desktop/src-tauri/resources/
-scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo；默认只带固定完整示例
+scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、desktop-electron/resources/
+scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo 种子目录；默认只带固定完整示例
 ```
 
-这两个目标目录是生成快照，默认不进 git；VS Code 的种子 `创作区/` 会刷新各系列 `使用手册.md`。`npm run app:dev` / `npm run app:build` 会通过 Tauri 自动同步 desktop 资源；VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展会直接读取旁边 checkout 的 `skills/`。
+这两个目标目录是生成快照，默认不进 git；VS Code 的种子 `创作区/` 会刷新各系列 `使用手册.md`。VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展会直接读取旁边 checkout 的 `skills/`。
 
-上传时使用“下载安装”表里的**稳定文件名**：
-
-- `AnimeArmory_macos_arm64.dmg`
-- `AnimeArmory_windows.exe`
-- `anime-armory.vsix`
-
-`r2a` 只需要 `aarch64-apple-darwin` Rust target。`r2a --all` 额外需要 `x86_64-pc-windows-gnu`、`mingw-w64`、NSIS（`makensis`）和 VSIX 打包工具链。Windows 包是交叉构建，未签名。
-
-本地手动打包（不走 `r2a` 时）：
+本地手动打包（不走 `e2a` 时）：
 
 ```bash
-# 桌面端：Mac Apple Silicon
-cd desktop && npm install
-npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
-
-# Swift 原生 macOS 客户端（开发预览，不参与当前 Release 产物）
-cd ../desktop-mac && swift run AnimeArmoryMac
-
-# 桌面端：Windows x64 NSIS（macOS 交叉构建）
-rustup target add x86_64-pc-windows-gnu
-brew install mingw-w64 makensis
-cd desktop && npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
+# 桌面端（Electron）：Mac Apple Silicon
+cd desktop-electron && npm install
+node ../tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库 + demo 目录 → desktop-electron/resources/
+npm run build && npx electron-builder --mac --arm64
 
 # VS Code 插件：在 vscode-extension/ 里打 .vsix
 cd vscode-extension && npx @vscode/vsce package
@@ -393,43 +384,43 @@ Ad: ad -> ad-concept -> ad-script -> ad-voice -> ad-script(storyboard) -> ad-ima
 
 Published packages use the stable filenames listed above when uploaded to the `anime-armory` GitHub Release.
 
-**Desktop App / VS Code extension release, recommended `r2a` flow:**
+**Desktop App (Electron) release, via `tools/e2a`:**
 
-`r2a` now builds from a clean snapshot of the local checkout, produces installers locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory`. Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build targets. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a demo download catalog, not full demo payloads.
+`e2a` builds from a clean snapshot of the local checkout, produces the Electron installer locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory` (default tag `electron-v<version>`). Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build output. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a demo download catalog, not full demo payloads (demo zips are separate Release assets the app downloads on demand).
 
-- `/r2a`: Codex slash command that builds the macOS Apple Silicon `.dmg` locally, uploads it to `anime-armory` Release assets, and updates the matching README download link. It does not rebuild demo zips. Single-asset releases are not marked as latest by default, so README uses a fixed tag URL by default.
-- `/r2a --all`: builds and uploads every app installer in the download table: macOS Apple Silicon `.dmg`, Windows `.exe`, and VS Code `.vsix`, then updates README download links and marks the release as latest. It does not rebuild demo zips. Desktop packages include release-download demo catalog entries; the VSIX keeps only its own lightweight bundled seed work root. For `--all`, README uses `releases/latest/download/...` by default.
-- `/r2a --demo-assets`: builds and uploads only the per-line demo zip assets: `AnimeArmory_demo_novel.zip`, `AnimeArmory_demo_n2d.zip`, `AnimeArmory_demo_comic.zip`, `AnimeArmory_demo_song.zip`, `AnimeArmory_demo_mv.zip`, and `AnimeArmory_demo_ad.zip`. It does not build app installers, update README app links, overwrite existing release notes, or mark the release latest. Skip this when demo payloads have not changed.
-- `/r2a --all --with-demo-assets`: legacy combined path that builds app installers and demo zips in one run. This is slower because large demo zips are packaged and uploaded too.
-- Before upload, `r2a` validates the DMG with `hdiutil verify`, mounts it, and runs strict `.app` `codesign --verify --deep --strict`. If `R2A_NOTARY_KEYCHAIN_PROFILE` is configured, it also runs Apple notarization/stapling.
-- README link policy: use a fixed tag URL for reproducible downloads, for example `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg`; use `https://github.com/anton6202527/anime-armory/releases/download/v0.1.39/AnimeArmory_macos_arm64.dmg` when the README should always point to the newest package. Override with `--readme-link-mode tag|latest|auto`.
-- To build from a remote branch or tag instead of the local checkout, use `--remote-source --source-ref <ref>`.
+```bash
+bash tools/e2a/scripts/e2a_release.sh                # default: Electron DMG + per-line demo zips, uploaded together
+bash tools/e2a/scripts/e2a_release.sh --apps-only    # DMG only
+bash tools/e2a/scripts/e2a_release.sh --demo-assets  # rebuild demo zips only (keeps existing release notes)
+bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifacts in dist/e2a-release-<tag>/
+```
+
+- Before upload, `e2a` validates the DMG with `hdiutil verify` plus a mount check (bundled skills repo and `demo_catalog.json`). Builds are ad-hoc signed by default; set `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` for distributable signed + notarized builds.
+- Demo zip asset names: `AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`; the n2d zip is slimmed to first-episode media.
+- Releases are not marked latest and README download links are not rewritten by the tool — update the download table manually when publishing a user-facing release. Full contract: `tools/e2a/SKILL.md`.
+
+**VS Code extension release**: run `npx @vscode/vsce package` inside `vscode-extension/` to produce `anime-armory.vsix`, upload it to the Release manually, and update the README link as needed.
 
 To sync the current checkout's `skills/` and `创作区/` usage manuals into the bundled desktop and VS Code resources without a full release, run:
 
 ```bash
-scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and desktop/src-tauri/resources/
-scripts/sync_bundles.sh --demo   # include extra line champion demos; default bundles only the fixed full sample
+scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and desktop-electron/resources/
+scripts/sync_bundles.sh --demo   # include extra line champion demo seeds; default bundles only the fixed full sample
 ```
 
-Both destinations are generated snapshots and are gitignored; the VS Code seed `创作区/` also receives the per-line `使用手册.md` files. `npm run app:dev` / `npm run app:build` sync desktop resources through Tauri automatically; `.vsix` packaging syncs extension resources through `vscode:prepublish`. During local VS Code extension debugging, if `assets/` has not been generated yet, the extension reads `skills/` from the adjacent checkout.
+Both destinations are generated snapshots and are gitignored; the VS Code seed `创作区/` also receives the per-line `使用手册.md` files. `.vsix` packaging syncs extension resources through `vscode:prepublish`. During local VS Code extension debugging, if `assets/` has not been generated yet, the extension reads `skills/` from the adjacent checkout.
 
 Uploaded assets use these stable filenames:
 
-- `AnimeArmory_macos_arm64.dmg`
-- `AnimeArmory_windows.exe`
+- `AnimeArmory_electron_macos_arm64.dmg`
 - `anime-armory.vsix`
 
-`r2a` only needs the `aarch64-apple-darwin` Rust target. `r2a --all` additionally needs `x86_64-pc-windows-gnu`, `mingw-w64`, NSIS (`makensis`), and VSIX packaging. The Windows package is cross-built and unsigned.
-
-Manual packaging without `r2a`:
+Manual packaging without `e2a`:
 
 ```bash
-cd desktop && npm install
-npm run tauri -- build --target aarch64-apple-darwin --bundles app,dmg --ci
-rustup target add x86_64-pc-windows-gnu
-brew install mingw-w64 makensis
-npm run tauri -- build --target x86_64-pc-windows-gnu --bundles nsis --ci
+cd desktop-electron && npm install
+node ../tools/e2a/scripts/sync_bundle.cjs   # stage bundled skills repo + demo catalog into desktop-electron/resources/
+npm run build && npx electron-builder --mac --arm64
 cd ../vscode-extension && npx @vscode/vsce package
 ```
 

@@ -12,7 +12,7 @@ Usage: scripts/sync_bundles.sh [--desktop-only|--vscode-only] [--demo|--demos]
 
 Synchronize bundled skill snapshots and 创作区 usage manuals into:
   - vscode-extension/assets/
-  - desktop/src-tauri/resources/
+  - desktop-electron/resources/   (via tools/e2a/scripts/sync_bundle.cjs)
 
 The destination directories are generated artifacts and are intentionally gitignored.
 VS Code also refreshes vscode-extension/创作区/使用手册.md files for the bundled seed work root.
@@ -49,9 +49,5 @@ if [[ "$RUN_VSCODE" == "1" ]]; then
 fi
 
 if [[ "$RUN_DESKTOP" == "1" ]]; then
-  if [[ "${#DESKTOP_ARGS[@]}" -gt 0 ]]; then
-    (cd "$ROOT/desktop" && npm run sync-skills -- "${DESKTOP_ARGS[@]}")
-  else
-    (cd "$ROOT/desktop" && npm run sync-skills)
-  fi
+  node "$ROOT/tools/e2a/scripts/sync_bundle.cjs" ${DESKTOP_ARGS+"${DESKTOP_ARGS[@]}"}
 fi

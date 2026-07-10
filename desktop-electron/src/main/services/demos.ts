@@ -50,7 +50,7 @@ async function readCatalog(): Promise<CatalogEntry[]> {
   const candidates = [
     path.join(process.resourcesPath ?? '', 'resources', 'demo_catalog.json'),
     path.join(app.getAppPath(), 'resources', 'demo_catalog.json'),
-    path.join(app.getAppPath(), '..', 'desktop', 'resources', 'demo_catalog.json'),
+    path.join(app.getAppPath(), 'resources', 'demo_catalog.json'),
   ]
   for (const p of candidates) {
     try {

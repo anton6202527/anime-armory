@@ -66,11 +66,15 @@ copy_file conftest.py
 copy_dir skills
 copy_dir tools
 copy_dir docs
-copy_dir desktop/src
-copy_file desktop/README.md
-copy_file desktop/.gitignore
-copy_file desktop/package.json
-copy_file desktop/package-lock.json
+copy_dir desktop-electron/src
+copy_file desktop-electron/README.md
+copy_file desktop-electron/.gitignore
+copy_file desktop-electron/package.json
+copy_file desktop-electron/package-lock.json
+copy_file desktop-electron/electron-builder.yml
+copy_file desktop-electron/electron.vite.config.ts
+copy_file desktop-electron/tsconfig.node.json
+copy_file desktop-electron/tsconfig.web.json
 
 copy_file scripts/package_release.sh
 
@@ -101,7 +105,7 @@ cat > "${PKG}/版本说明.md" <<EOF
 - skills/ 全部 workflow skill
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
-- desktop/ 桌面端源码，不含 node_modules 和构建产物
+- desktop-electron/ 桌面端(Electron)源码，不含 node_modules 和构建产物
 - 创作区/ 六条空作品线目录、各系列使用手册与各自的 _资产库/ 说明
 
 不包含：
