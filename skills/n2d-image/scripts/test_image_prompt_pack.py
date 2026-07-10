@@ -27,6 +27,48 @@ def test_character_makeup_prompt_requires_neutral_gray_backdrop() -> None:
     assert "设定库/character_assets" not in prompt
 
 
+def test_compiler_injection_uses_project_aspect_style_and_backend(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "画幅：16:9\n生图AI：Codex\n生图模型：GPT Image 2\n",
+        encoding="utf-8",
+    )
+    story = {
+        "style_contract": {
+            "风格名": "二维剪纸动画",
+            "视觉基调": "纸张纤维与平面层叠",
+            "光色策略": "暖金侧光",
+        }
+    }
+    source = """# 分镜
+
+## 镜头 1
+**目标落档**：`出图/第1集/图片/Clip01_first.png`
+**导演意图**：角色发现追兵。
+**剧本描述**：`CHAR_01/常态` 回头握刀。
+### 正向 prompt（中文）
+```text
+锚点句：CHAR_01 黑发女剑客；
+镜头构图：低机位中景；
+动作瞬间：回头握刀；
+场景光影：雨夜屋脊；
+情绪张力：警觉；
+画风规格：继承项目风格；
+禁止：文字、水印；
+```
+"""
+
+    rendered = image_prompt_pack.inject_compiled_image_prompts(
+        tmp_path, story, source, default_mode="firstframe"
+    )
+
+    assert "### 后端编译提交 image prompt" in rendered
+    assert "profile=codex_gpt_image_agent_brief" in rendered
+    assert "二维剪纸动画" in rendered
+    assert "画幅：16:9" in rendered
+    assert "9:16" not in rendered
+    assert "写实国漫" not in rendered
+
+
 def test_character_library_tiers_use_story_weight_and_ten_episode_threshold() -> None:
     tier = image_prompt_pack.character_library_tier
 
