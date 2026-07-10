@@ -5,12 +5,22 @@ directories:
 files:
   - out/**
   - package.json
+# Bundled skills repo + demo catalog, staged by tools/e2a (or manually copying
+# desktop/src-tauri/resources → ./resources). The app resolves it via
+# process.resourcesPath/resources (see src/main/services/workspace.ts, demos.ts).
+extraResources:
+  - from: resources
+    to: resources
 asarUnpack:
   - "**/node_modules/node-pty/**"
 mac:
   category: public.app-category.productivity
+  artifactName: AnimeArmory_electron_macos_${arch}.${ext}
   target:
-    - dmg
+    - target: dmg
+      arch:
+        - arm64
 win:
+  artifactName: AnimeArmory_electron_windows.${ext}
   target:
     - nsis
