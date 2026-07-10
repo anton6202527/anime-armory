@@ -2012,7 +2012,7 @@ body:is(
 }
 .canvas-zoom-menu {
   position: absolute; left: 0; bottom: 48px; z-index: 20;
-  width: 182px; padding: 8px;
+  width: 164px; padding: 7px;
   display: grid; gap: 2px;
   color: var(--text); background: rgba(34, 34, 35, .98);
   border: 0; border-radius: 11px;
@@ -2020,7 +2020,7 @@ body:is(
   backdrop-filter: blur(18px);
 }
 .canvas-zoom-input-wrap {
-  height: 32px; margin-bottom: 6px; padding: 0 8px 0 10px;
+  height: 31px; margin-bottom: 5px; padding: 0 8px 0 9px;
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px;
   color: var(--muted); background: rgba(255, 255, 255, .10);
   border-radius: 8px;
@@ -2034,8 +2034,8 @@ body:is(
   color: var(--muted); font-size: 12px; font-weight: 350; line-height: 1;
 }
 .canvas-zoom-menu-item {
-  min-height: 28px; padding: 0 8px; display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; align-items: center;
+  min-height: 27px; padding: 0 7px; display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; align-items: center;
   color: var(--text); background: transparent; border: 0; border-radius: 6px;
   text-align: left; font-size: 11px; font-weight: 350; line-height: 1.2;
 }

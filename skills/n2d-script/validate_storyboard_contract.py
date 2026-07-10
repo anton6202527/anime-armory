@@ -395,7 +395,7 @@ def check_anchor_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc:
     mid = cont.get("midframe")
     anchors = cont.get("anchors")
     if enforce_midframe and mid is None and anchors is None and not cont.get("midframe_exempt_reason"):
-        add(rows, "block", "中段锚帧", loc, "三帧契约默认强制：每镜必须有 continuity.midframe/anchors 或 midframe_exempt_reason；请跑 anchor_planner.py --write。")
+        add(rows, "block", "中段锚帧", loc, "项目已显式开启普通镜原生中段锚帧：本镜必须有 continuity.midframe/anchors 或 midframe_exempt_reason；请跑 anchor_planner.py --write。")
     if mid is not None and anchors is not None:
         add(rows, "block", "中段锚帧", loc, "continuity.midframe 与 continuity.anchors 不能同时声明。")
         return
@@ -509,7 +509,11 @@ def validate(root: str, ep: str) -> Dict[str, Any]:
     dict_clips = [clip for clip in clips if isinstance(clip, dict)]
     check_timeline(rows, dict_clips, path)
     policy = data.get("policy") if isinstance(data.get("policy"), dict) else {}
-    enforce_midframe = backend_supports_three_plus_frames(policy.get("video_backend"))
+    enforce_midframe = bool(
+        policy.get("midframe_default") is True
+        and policy.get("midframe_default_mode") == "explicit_opt_in"
+        and backend_supports_three_plus_frames(policy.get("video_backend"))
+    )
     for index, clip in enumerate(clips, 1):
         if not isinstance(clip, dict):
             add(rows, "block", "故事板", f"{path} clip#{index}", "clip 必须是对象。")
