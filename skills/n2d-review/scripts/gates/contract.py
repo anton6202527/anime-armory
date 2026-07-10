@@ -1286,34 +1286,24 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
         # midframe = 单锚帧手写糖（_mid）；anchors = 通用 N 锚帧链（_a1.._aN，anchor_planner 写）。
         mid = cont.get("midframe")
         anchors = cont.get("anchors")
-        # 缺中段锚帧的 severity 按"路由后端能否真正消费中帧"分级
-        # （charter ENFORCEMENT_DECISIONS: three_frame_graduated_severity·2026-06-27，取代 44af5704 的
-        # 对所有后端无条件 BLOCK）：
-        #   · 后端能消费中帧（原生多帧/首尾拆段接力·backend_supports_three_plus_frames=True，如即梦智能
-        #     多帧/可灵首尾档）→ BLOCK：缺中帧=成片直接退化。
-        #   · 真 first-frame-only，或后端未选/未知（中帧消费不了、仅作 QC/参考）→ WARN：中帧仍是默认应产
-        #     图片资产（WARN≠豁免，anchor_planner 照样默认补齐），但「是否为不可消费的中帧花这笔出图钱」
-        #     交作者按 cost 决定，不硬拦无谓花钱。SOTA(2026)：原生 3 关键帧极罕见（仅即梦智能多帧/Pika）。
-        # severity **纯按后端能力**，不看 policy.midframe_default——后者是 anchor_planner 默认流程写的
-        # "中帧已规划"标记（正常流程恒 true），不是"在弱后端也强制 BLOCK"的作者意图；用它当闸会让 WARN
-        # 路径在正常流程里永不触发（回退成 44af5704 的一刀切）。
+        # 普通镜不再按“至少三帧”收费：只有显式 opt-in 且后端能在一次请求中原生消费中帧时才强制。
+        # 高运动镜仍走原有动作锚帧硬保护；首尾帧后端的 split relay 不冒充原生三帧能力。
         if mid is None and anchors is None and not cont.get("midframe_exempt_reason"):
+            explicit_mid_opt_in = bool(
+                (policy or {}).get("midframe_default") is True
+                and (policy or {}).get("midframe_default_mode") == "explicit_opt_in"
+            )
             mid_consumable = backend_supports_three_plus_frames((policy or {}).get("video_backend"))
             production = consistency_release_profile(root, "video_preflight", ep) == "production"
             production_action_block = production and is_high_motion
-            sev = BLOCK if (mid_consumable or production_action_block) else WARN
-            backend_note = (
-                "路由后端可原生多帧/首尾拆段接力消费中帧，缺中帧=成片退化，必须补"
-                if mid_consumable else
-                "production 高运动镜必须补中段锚帧/锚点；动作镜没有中段姿态锚，肢体、受击点和道具轨迹会跨帧漂移"
-                if production_action_block else
-                "路由后端 first-frame-only 或未选定，中帧此时消费不了、仅作 QC/参考——"
-                "是否为此出图由作者按 cost 决定（WARN 不豁免：中帧仍是默认图片资产）"
-            )
-            add(sev, "中段锚帧", loc,
-                "三帧契约（首帧+中段锚帧+尾帧）：每镜应声明 continuity.midframe/anchors，"
-                "或写 midframe_exempt_reason（极短镜<3s豁免）；"
-                f"跑 anchor_planner.py --default-midframe --write 自动补齐。{backend_note}。")
+            if explicit_mid_opt_in and mid_consumable:
+                add(BLOCK, "中段锚帧", loc,
+                    "项目已显式开启普通镜原生中段锚帧，且路由后端可在一次请求中消费；"
+                    "请补 continuity.midframe/anchors，或关闭该 opt-in 后重建故事板策略。")
+            elif production_action_block:
+                add(BLOCK, "中段锚帧", loc,
+                    "production 高运动镜必须补 continuity.anchors[]；动作镜没有中段姿态/命中锚，"
+                    "肢体、受击点和道具轨迹会跨帧漂移。")
         if mid is not None and anchors is not None:
             add(BLOCK, "中段锚帧", loc, "continuity.midframe 与 continuity.anchors 不能同时声明（语义歧义）；单锚帧用 midframe 或一项 anchors，二选一")
             continue
