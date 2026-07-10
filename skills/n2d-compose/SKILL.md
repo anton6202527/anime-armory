@@ -9,6 +9,8 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
 
 > **可选尾段**：n2d 默认在 `视频` 列完成后收为 `clip_delivery_complete`；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。`master_delivery_complete` 还需要后续 release/readiness、production locks、creative governance 和人工验收通过，不能把单个 MP4 存在误当可发布。
 
+> **视频阶段后的真实粗剪代理**：即使合成尾段保持跳过，视频齐片后也可运行 `python3 skills/n2d-compose/scripts/post_video_proxy.py <作品根> 第N集 --render --json`。它只用真实已生成 Clip + `edit_target_sec` 产 `合成/<集>/_proxy/actual_rough_cut.mp4`，用于尽早检查节奏、镜序和多余尾巴；不加配音/BGM/字幕/调色，既不回写成片列，也不等于 `master_delivery_complete`。正式 compose 应复用同一 edit target 语义，而不是继承后端原片的离散时长。
+
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）

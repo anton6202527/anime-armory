@@ -12,6 +12,7 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 3. 按 stage 派发少量 specialist：`n2d-script-agent`、`n2d-visual-agent`、`n2d-qc-agent`、`n2d-producer-agent`。
 4. 遇到 `needs_choice` / `needs_payment_confirm` / `needs_compliance` / gate block 时停下交给用户或原 stage skill。
 5. 绝不自行花钱、绝不绕过 gate、绝不直接改 `_进度.md`、绝不自作主张换后端。
+6. 读取 `episode_graph_<集>.json` 追踪 storyboard→route→job→media→粗剪→母版→发布裁决，并读取 `blocking_bundles/latest_<集>.json` 判断当前停因；两者都是派生视图，不能覆盖状态机或 gate。
 
 ## 边界
 
@@ -20,6 +21,8 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 - `n2d-batch` 仍是多集队列/重试/预算真值。
 - `n2d-dashboard` / `production_events.jsonl` 仍是生产事件和成本真值。
 - supervisor 只输出/写入 `生产数据/supervisor/` 下的计划，不代替阶段产物。
+- `生产数据/flow_events.jsonl` / `flow_telemetry.json` 只记控制面阶段、停因、缓存命中、adapter 里程碑与耗时；不记 prompt、密钥或供应商原始响应。它与 dashboard 的成本/QA 账本互补，不取代 `production_events.jsonl`。
+- `run.py next --preview` 不写 episode graph、blocking bundle 或 flow telemetry；正式 `next` 才原子落盘。
 
 ## 命令
 

@@ -657,13 +657,15 @@ def _touch_frame(root: Path, rel: str = "x.png"):
     return p
 
 
-def test_three_frame_violation_on_capable_backend(tmp_path):
+def test_risk_only_ignores_ordinary_clips_but_validates_declared_anchor(tmp_path):
     root = make_project(tmp_path)
+    _touch_frame(root, "x.png")
     _write_storyboard(Path(root), "第1集",
                       [_clip("C1"), _clip("C2", mid=True), _clip("C3")], video_backend="即梦")
     r = up.check_three_frame_compliance(root, "第1集")
-    assert r["enforced"] is True and r["compliant"] is False
-    assert r["violating_clips"] == ["C1", "C3"]
+    assert r["enforced"] is True and r["compliant"] is True
+    assert r["required_anchor_clips"] == ["C2"]
+    assert r["violating_clips"] == []
 
 
 def test_three_frame_empty_anchor_structures_are_not_compliant(tmp_path):
@@ -750,11 +752,13 @@ def test_summarize_image_consistency_flags_hard_blocks():
 
 def test_build_plan_surfaces_three_frame_violation(tmp_path):
     root = make_project(tmp_path)
-    _write_storyboard(Path(root), "第1集", [_clip("C1"), _clip("C2")], video_backend="即梦")
+    clip = _clip("C1")
+    clip["template"] = "fight_exchange"
+    _write_storyboard(Path(root), "第1集", [clip, _clip("C2")], video_backend="即梦")
     plan = up.build_plan(root, "第1集")
     tf = plan["three_frame_compliance"]
     assert tf and tf["compliant"] is False
-    assert any("三帧契约未达标" in n for n in plan["notes"])
+    assert any("帧策略合同未达标" in n for n in plan["notes"])
 
 
 def test_invalid_image_qc_report_is_visible_not_clean(tmp_path):

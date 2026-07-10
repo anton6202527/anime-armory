@@ -895,18 +895,19 @@ def render_markdown(plan: Dict[str, Any]) -> str:
             chs = sd.get("changed_chapters") or sd.get("changed") or []
             lines.append(f"- **源小说**：{mark}" + (f"（变动 {len(chs)} 章）" if chs else ""))
         if tf:
-            if not tf.get("enforced"):
-                lines.append(f"- **三帧契约**：豁免（后端 `{tf.get('backend')}` 不支持≥3帧·能力门控）")
-            elif tf.get("compliant"):
-                lines.append(f"- **三帧契约**：✅ 达标（{tf.get('total_clips')} Clip 全有锚帧/尾帧文件或豁免）")
+            if tf.get("compliant"):
+                lines.append(
+                    f"- **帧策略合同**：✅ 达标（需执行锚 {len(tf.get('required_anchor_clips') or [])} Clip；"
+                    f"普通镜模式={tf.get('policy_mode') or 'risk_only'}）"
+                )
             else:
                 vc = tf.get("violating_clips") or []
                 me = tf.get("missing_endframe_clips") or []
                 mf = tf.get("missing_frame_files") or []
                 lines.append(
-                    f"- **三帧契约**：⚠️ 缺锚帧 {len(vc)}/{tf.get('total_clips')} Clip"
+                    f"- **帧策略合同**：⚠️ 必需执行锚缺失 {len(vc)}/{len(tf.get('required_anchor_clips') or [])} Clip"
                     f"；缺尾帧声明 {len(me)} Clip；缺 PNG 文件 {len(mf)} 个"
-                    f"（后端 `{tf.get('backend')}` 强制）"
+                    f"（普通镜不设默认三帧；backend=`{tf.get('backend')}`）"
                     + (f"；缺锚帧：{', '.join(vc[:8])}" + (" 等" if len(vc) > 8 else "") if vc else "")
                 )
         if ic:
@@ -999,11 +1000,7 @@ def storyboard_path_for(root: str, ep: str) -> str:
 
 
 def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]:
-    """检测本集 clip 是否遵循「至少三帧契约」（能力门控）。
-
-    读 storyboard.json：按 policy.video_backend 的后端能力判定是否强制；列出缺
-    midframe/anchors 且无豁免理由的违规 Clip。storyboard 未定稿则返回 None（无可检对象）。
-    """
+    """Audit required frame strategies without inventing a universal 3-frame floor."""
     path = storyboard_path_for(root, ep)
     if not os.path.isfile(path):
         return None
@@ -1017,23 +1014,48 @@ def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]
         return None
     policy = sb.get("policy") if isinstance(sb.get("policy"), dict) else {}
     backend = policy.get("video_backend")
-    enforced = backend_supports_three_plus_frames(backend)
+    explicit_opt_in = bool(
+        policy.get("midframe_default") is True
+        and policy.get("midframe_default_mode") == "explicit_opt_in"
+        and backend_supports_three_plus_frames(backend)
+    )
     violating: List[str] = []
+    required_anchor_clips: List[str] = []
     missing_frame_files: List[Dict[str, str]] = []
     missing_endframes: List[str] = []
     exempt = 0
     for i, clip in enumerate(clips, 1):
         clip_id = str((clip.get("id") if isinstance(clip, dict) else None) or f"clip#{i}")
         cont = (clip.get("continuity") or {}) if isinstance(clip, dict) else {}
+        strategy_value = cont.get("frame_strategy")
+        if isinstance(strategy_value, dict):
+            strategy_value = strategy_value.get("strategy")
+        strategy = str(strategy_value or "").strip().lower()
+        shots = clip.get("shots") if isinstance(clip, dict) and isinstance(clip.get("shots"), list) else []
+        editorial_cut = len(shots) > 1 and any(
+            isinstance(row, dict) and any(row.get(key) for key in ("lens", "camera", "shot_size"))
+            for row in shots
+        )
+        template = str(clip.get("template") or "") if isinstance(clip, dict) else ""
+        high_risk = template in {
+            "fight_exchange", "chase", "magic_burst", "flight", "hug_or_pull",
+            "intimate_interaction", "mount_ride", "road_vehicle", "vessel_flight",
+        }
+        declared_anchor_contract = cont.get("midframe") is not None or cont.get("anchors") is not None
+        requires_anchor = explicit_opt_in or editorial_cut or high_risk or declared_anchor_contract or strategy in {
+            "native_multiframe", "split_relay", "edit_cut", "edit_cut_pending_assets", "reroute_required",
+        }
+        if requires_anchor:
+            required_anchor_clips.append(clip_id)
         mid_paths = frame_ref_paths(cont.get("midframe"), ("midframe_png", "anchor_png", "png", "path", "image"))
         mid_paths.extend(frame_ref_paths(cont.get("anchors"), ("anchor_png", "midframe_png", "png", "path", "image")))
         if mid_paths:
             for path_ref in mid_paths:
                 if not artifact_exists(root, path_ref):
                     missing_frame_files.append({"clip_id": clip_id, "role": "midframe", "path": path_ref})
-        elif cont.get("midframe_exempt_reason"):
+        elif cont.get("midframe_exempt_reason") and not requires_anchor:
             exempt += 1
-        else:
+        elif requires_anchor:
             violating.append(clip_id)
 
         if cont.get("need_endframe") is True:
@@ -1049,14 +1071,15 @@ def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]
                 missing_frame_files.append({"clip_id": clip_id, "role": "endframe", "path": str(end_ref)})
     return {
         "backend": backend,
-        "enforced": enforced,
+        "enforced": bool(required_anchor_clips),
+        "policy_mode": policy.get("midframe_default_mode") or "risk_only",
+        "required_anchor_clips": required_anchor_clips,
         "total_clips": len(clips),
         "exempt_clips": exempt,
         "violating_clips": violating,
         "missing_endframe_clips": missing_endframes,
         "missing_frame_files": missing_frame_files,
-        # 后端不支持≥3帧（唯一豁免）时不算违规；强制时缺锚帧才违规。
-        "compliant": (not enforced) or (not violating and not missing_endframes and not missing_frame_files),
+        "compliant": not violating and not missing_endframes and not missing_frame_files,
     }
 
 
@@ -1303,7 +1326,7 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
     else:
         execution_steps = []
     commands = commands_from_steps(execution_steps)
-    # 四项健康检测（除 skill 变更外）：源小说漂移 / 三帧契约遵循 / 图片一致性 / 出图→出视频契约继承。
+    # 四项健康检测（除 skill 变更外）：源小说漂移 / 帧策略合同 / 图片一致性 / 出图→出视频契约继承。
     source_drift = detect_source_drift(root)
     three_frame = check_three_frame_compliance(root, ep)
     image_consistency = summarize_image_consistency(image_qc_context)
@@ -1324,22 +1347,20 @@ def build_plan(root: str, ep: str, *, regen_mode: Optional[str] = None) -> Dict[
             f"源小说漂移检测不可用（status={source_drift.get('status')}，reason={source_drift.get('reason')}）；"
             "这不是源未变动，需先修复检测再判断是否重切。"
         )
-    if three_frame and three_frame.get("enforced") and not three_frame.get("compliant"):
+    if three_frame and not three_frame.get("compliant"):
         vc = three_frame.get("violating_clips") or []
         me = three_frame.get("missing_endframe_clips") or []
         mf = three_frame.get("missing_frame_files") or []
         notes.append(
-            f"三帧契约未达标：缺中段锚帧 {len(vc)} 个 Clip，缺尾帧声明 {len(me)} 个 Clip，"
-            f"已声明但 PNG 不存在 {len(mf)} 个（后端 {three_frame.get('backend')} 支持≥3帧·强制）。"
+            f"帧策略合同未达标：必需执行锚缺失 {len(vc)} 个 Clip，缺尾帧声明 {len(me)} 个 Clip，"
+            f"已声明但 PNG 不存在 {len(mf)} 个。普通镜不设默认三帧；这里只报告 E1/R1-R3/显式 opt-in 或尾帧真缺口。"
             "回 n2d-script 跑 `anchor_planner.py <作品根> "
             f"{ep} --write` 补齐声明，再回 n2d-image 出 `_mid/_aK/_end` 帧。"
             + (f" 缺锚帧：{', '.join(vc[:6])}" + (f" 等 {len(vc)} 个" if len(vc) > 6 else "") if vc else "")
             + (f"；缺文件样例：{', '.join(str(x.get('path')) for x in mf[:4])}" if mf else "")
         )
     elif three_frame and not three_frame.get("enforced"):
-        notes.append(
-            f"三帧契约豁免：路由后端 {three_frame.get('backend')} 不支持≥3帧（能力门控自动豁免），本集不强制中段锚帧。"
-        )
+        notes.append("帧策略合同：risk-only 普通镜无需中段锚；本集无 E1/R1-R3/显式 opt-in 执行锚缺口。")
     if image_consistency and not image_consistency.get("consistent"):
         if image_consistency.get("status") in {"error", "unavailable"}:
             notes.append(

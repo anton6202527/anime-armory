@@ -22,6 +22,11 @@ if str(N2D_LIB) not in sys.path:
 
 from n2d_action_registry import specialist_for_stage, stage_action_spec  # noqa: E402
 
+try:
+    from flow_telemetry import record_milestone as _record_flow_milestone  # noqa: E402
+except Exception:  # pragma: no cover
+    _record_flow_milestone = None
+
 
 KIND = "n2d_supervisor_plan"
 VERSION = 1
@@ -182,7 +187,7 @@ def build_plan(root: str, ep: Optional[str] = None, *, auto: bool = False,
             f"回带约束指纹 {echo_fingerprint} ≠ 当前 {guardrails['constraints_fingerprint']}："
             "消费 agent 可能已丢失/篡改 forbidden 或 human_gate 约束 → 停止自动派发，重新同步约束后再继续。")
     dispatch["runtime_guardrails"] = guardrails
-    return {
+    payload = {
         "kind": KIND,
         "version": VERSION,
         "root": root,
@@ -200,6 +205,19 @@ def build_plan(root: str, ep: Optional[str] = None, *, auto: bool = False,
             "constraints_drift": bool(dispatch.get("constraints_drift")),
         },
     }
+    if _record_flow_milestone is not None:
+        try:
+            _record_flow_milestone(
+                root, "supervisor_dispatch_planned", episode=str(episode), stage=str(dispatch.get("stage_key") or ""),
+                extra={
+                    "status": "call_specialist" if dispatch.get("should_call_specialist") else "human_or_idle",
+                    "round_index": effective_round,
+                    "stop_reason": next_action.get("stop_reason"),
+                },
+            )
+        except Exception:
+            pass
+    return payload
 
 
 def render_markdown(plan: Dict[str, Any]) -> str:

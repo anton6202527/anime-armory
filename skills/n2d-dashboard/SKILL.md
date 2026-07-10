@@ -17,6 +17,7 @@ description: "P0 横切 skill for novel2drama/n2d production metrics, ROI dashbo
 ## 核心原则
 
 - **事件日志是机器真值**：所有生产数据先追加到 `创作区/制漫剧/<剧名>/生产数据/production_events.jsonl`，再由脚本汇总成 `dashboard.json` + `dashboard.md`。不要把成本/重抽原因塞进 `_进度.md`。
+- **控制面遥测与成本账分开**：`n2d/run.py next`、adapter v2、多镜 runner、逐镜验收和实际粗剪会追加 `生产数据/flow_events.jsonl` 并汇总 `flow_telemetry.json`，统计 stage/stop reason/缓存命中/编排延迟/执行里程碑；它不含 prompt、凭据或供应商原始响应。查看：`python3 skills/n2d/_lib/flow_telemetry.py <作品根> --json`。成本、重抽、QA、ROI 仍只认本 skill 的 `production_events.jsonl`，两份账不得混为一份。
 - **事件读写带本地锁**：`record` / `gate` / `build` / `watch` 对 `production_events.jsonl` 和 dashboard 输出统一走 `production_events.lock`；JSON/MD/HTML 用临时文件原子替换，避免多 worker 同时记账时读半截或互相覆盖。
 - **账本必须可审计、可重放**：`event_ledger.py audit|doctor` 校验 JSONL 字段、缺 trace、解析错误，并生成不可改历史行的 hash chain；`replay` 只从事件日志重算 dashboard，和当前 `dashboard.json` 比 hash，用来证明“看板不是手改出来的”。发布前、批量停线后、交接给运营前都应跑一次。
 - **trace 放量前可升硬闸**：默认缺 `trace_id/task_id/idempotency_key` 仍是 warn，兼容旧项目；放量、外部 job 对账或发布前跑 `event_ledger.py audit <作品根> --strict-trace --write`，缺 `trace_id` 直接 fail，避免成本、死信、成片找不回同一次生产尝试。

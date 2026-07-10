@@ -23,13 +23,13 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4606 | 242563 |
+| n2d | `n2d` + `n2d-*` | 21 | 4637 | 247474 |
 | novel | `novel` + `novel-*` | 29 | 3134 | 66144 |
 | comic | `comic` + `comic-*` | 13 | 992 | 17591 |
 | song | `song` + `song-*` | 11 | 622 | 8043 |
 | mv | `mv` + `mv-*` | 14 | 1046 | 15114 |
 | ad | `ad` + `ad-*` | 13 | 869 | 18131 |
-| **合计** | `skills/*/SKILL.md` | **101** | 11269 | 367586 |
+| **合计** | `skills/*/SKILL.md` | **101** | 11300 | 372497 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -44,6 +44,8 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 ## 一、n2d ——「小说 → AI 漫剧/短剧」生产管线
 
 `n2d` 是总调度，按 `_进度.md` 把用户路由到对应阶段 skill。阶段顺序（**默认 `制作模式=先出视频后配音`；强配音控制/少返工时改 `配音先行`；特殊同步音画后端才选 `原生音画`**）：`视频` 列完成表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览），不是可发布母版；`合成/验收` 是用户可选尾段，只有 `_设置.md` 写 `合成阶段: 启用` 或本集已经开始 `成片/验收` 时才进入。发布/母版口径还要过 compose、release/readiness、production locks、creative governance 和人工签收，才算 `master_delivery_complete`。新项目视频默认口径：`出视频规格=预算充足`、`视频分辨率=720p`、`视频生成音频策略=无声视频流`、`视频原生音轨=丢弃`、`对口型=关闭`、`合成阶段=跳过`。
+
+> **n2d 运行时 v2（2026-07）**：模型能力路由与本机执行已拆开——每条视频 route 带 adapter v2 状态，只有 `automated_ready` 才自动 submit；其它渠道用作品内 wrapper 注册，不静默换厂。视频齐片后用真实 Clip + `edit_target_sec` 产 `actual_rough_cut.mp4`；支持用户 opt-in 的原生多镜单次生成，母片会确定性拆回原 Clip 继续逐镜 QC/重跑。`run.py next` 物化 episode graph、归一化 blocking bundle 和隐私最小化 flow telemetry，但不新增状态机。QA 对 VLM verdict 封顶 WARN，数值检测器须生产规模金标校准才可自动 BLOCK；A/B 按每变体样本量 + Wilson 区间 + 显著性/多重比较给结论。`release_verdict` 分开报告 clip/master/production 完成与 CN/海外/商业发布就绪。完整合同见 `docs/n2d-adapter-v2-多镜执行与交付状态.md`。
 
 | 阶段 | Skill | 职责 |
 |---|---|---|

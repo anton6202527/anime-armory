@@ -64,6 +64,7 @@ from n2d_const import (  # noqa: E402  打斗镜判定 + 风格自适应视觉�
     combat_spectacle_guidance_for_style,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
+from video_execution_adapter import execution_status as video_execution_status  # noqa: E402
 try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
     from n2d_registry import load_identity_registry as _load_identity_registry  # noqa: E402
 except Exception:  # pragma: no cover - 布局兜底
@@ -3143,6 +3144,7 @@ def refresh_execution_contracts(
     routes: List[Dict[str, Any]],
     clips: Sequence[Any],
     *,
+    root: Optional[Path] = None,
     episode: str,
     video_channel: str,
     urgency_tier: str,
@@ -3250,6 +3252,20 @@ def refresh_execution_contracts(
         else:
             route.pop("identity_preservation_plan", None)
         route["execution_recipe"] = execution_recipe_for_route(route, clip, video_channel=video_channel)
+        # Capability routing and local executability are deliberately separate facts.
+        # A model may be the right creative primary while this machine still needs a
+        # manual handoff or a project-registered v2 wrapper.  Never claim automation
+        # merely because the static model profile knows the capability.
+        route["execution_adapter"] = video_execution_status(
+            root or Path("."),
+            route.get("primary_backend"),
+            video_channel,
+        )
+        route["fallback_execution_adapters"] = [
+            video_execution_status(root or Path("."), backend, video_channel)
+            for backend in route.get("fallback_backends") or []
+        ]
+        route["route_executable"] = bool((route.get("execution_adapter") or {}).get("route_executable"))
 
 
 def route_episode(
@@ -3387,6 +3403,7 @@ def route_episode(
     refresh_execution_contracts(
         plan["routes"],
         clips,
+        root=root,
         episode=episode,
         video_channel=video_channel,
         urgency_tier=urgency_tier,
@@ -3403,6 +3420,17 @@ def route_episode(
     # 仍给规范候选但标 roster_switch_required（换后端须整项目统一·勿混用，由用户定夺）。
     roster = [default_backend, *(fixed_fallback_backends or [])]
     plan["multishot_reroute_recommendations"] = recommend_multishot_reroute(plan["routes"], roster)
+    execution_states: Dict[str, int] = {}
+    for _route in plan["routes"]:
+        _state = str((_route.get("execution_adapter") or {}).get("state") or "unknown")
+        execution_states[_state] = execution_states.get(_state, 0) + 1
+    plan["execution_summary"] = {
+        "adapter_version": 2,
+        "states": execution_states,
+        "automated_ready": sum(1 for _route in plan["routes"] if (_route.get("execution_adapter") or {}).get("automated")),
+        "manual_or_unavailable": sum(1 for _route in plan["routes"] if not (_route.get("execution_adapter") or {}).get("automated")),
+        "rule": "model capability does not imply local automation; use the per-route execution_adapter state",
+    }
     plan["policy_lattice"] = policy_lattice_document()
     for _entry in plan["routes"]:
         _entry["policy_resolution"] = route_policy_resolution(
@@ -3426,6 +3454,7 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         f"- routing_mode: {plan.get('routing_mode')}",
         f"- production_mode: {plan.get('production_mode')} (av_mode={plan.get('av_mode')})",
         f"- default_backend: {plan.get('default_backend')}",
+        f"- execution_adapter_v2: {(plan.get('execution_summary') or {}).get('states', {})}",
         f"- generated_at: {plan.get('generated_at')}",
         "",
         "## 本集模型路由表",
@@ -3483,6 +3512,12 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         lines.append(f"- fallback: {', '.join(route.get('fallback_backends', []))}")
         lines.append(f"- mode: {route.get('mode')}")
         lines.append(f"- quality_tier: {route.get('quality_tier', '-')}")
+        execution = route.get("execution_adapter") if isinstance(route.get("execution_adapter"), Mapping) else {}
+        if execution:
+            lines.append(
+                f"- execution_adapter_v2: state={execution.get('state')} "
+                f"adapter={execution.get('adapter_id') or '-'} automated={execution.get('automated')}"
+            )
         mref = route.get("motion_reference") or {}
         if isinstance(mref, Mapping) and mref.get("applicable"):
             lines.append("- motion_reference: 用前序已通过 clip 作运动/风格参考(reference_video_motion)")
