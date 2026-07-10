@@ -63,6 +63,9 @@ src/                         React frontend
   components/TerminalPane.tsx xterm.js ↔ PTY events
   components/MonacoFileEditor.tsx Monaco text model + viewport editor + save command
   components/NextActionStrip  run.py next --json → headline + copyable command
+  mediaPreview/               preview plugin registry + cancellable decode runtime
+    imageDecode.worker.ts     off-main-thread WebP/PNG/JPEG decode + thumbnail resize
+    DecodedImage.tsx          lazy canvas renderer with animated/vector fallback
   skins/                       plugin-shaped UI skin + file icon mapping + Monaco theme
   api.ts / types.ts          Tauri invoke wrappers + media-URL helper + shared types
 src-tauri/src/
@@ -71,6 +74,17 @@ src-tauri/src/
   commands.rs                scan_workspace · read_canvas (review_ui→storyboard→panel_script fallback) · read_next_action
   main.rs                    Tauri builder, command registry, state, dialog plugin
 ```
+
+### Media and canvas performance boundaries
+
+- Image rendering goes through the `mediaPreview` registry. Static WebP/PNG/JPEG files use a one-or-two-worker decode pool, request deduplication, cancellation, and a 96 MB decoded-bitmap LRU. GIF, SVG, and animated WebP stay on the native image path so animation/vector behavior is preserved.
+- Canvas and list thumbnails request bounded decode sizes. The full file preview can request original dimensions, while decode still happens outside the UI thread.
+- Rust adds a per-file size/mtime revision to canvas media contracts. Unrelated filesystem events no longer invalidate every image URL or decoded thumbnail.
+- The localhost media server has four bounded request workers, so a large image or range-streaming video cannot serialize the entire image grid.
+- React Flow nodes are reconciled by a render key. Drag-stop persists positions without rebuilding every node, pending edges are static rather than continuously animated, and video nodes mount a real `<video>` only after activation.
+- Filesystem traversal for canvas and quality views runs on blocking-worker tasks instead of occupying the Tauri command runtime.
+
+New image formats can be added by registering an `ImagePreviewPlugin`; decoding policy stays out of `FilesPane`, `SkillsBrowser`, and canvas node components.
 
 ### Backend contracts reused (never reparses markdown)
 - `read_canvas` → `review_ui_第N集.json` (`clips[]`/`seams[]`/`qa_flags[]`) → fallback `storyboard.json` (`clips[].id/label/duration/scene/rhythm/template/continuity.transition/firstframe_png`) → comic fallback `panel_script.json` (`panels[]`) with `panel_jobs.json`, `panel_qc`, and comic consistency findings.

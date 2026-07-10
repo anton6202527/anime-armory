@@ -311,9 +311,8 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
     return (
       <button
         type="button"
-        className="canvas-video-player dormant nodrag"
+        className="canvas-video-player dormant"
         aria-label={t("canvas.playVideo")}
-        onPointerDown={(event) => event.stopPropagation()}
         onClick={(event) => {
           event.stopPropagation();
           setActivated(true);

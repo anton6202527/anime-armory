@@ -811,7 +811,7 @@ fn snapshot_signature(
         Ok(rd) => rd.flatten().collect(),
         Err(_) => return false,
     };
-    entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
+    entries.sort_by_key(|a| a.file_name());
     for e in entries {
         if (*file_count).saturating_add(*dir_count) >= WORK_SNAPSHOT_ENTRY_LIMIT {
             return true;
@@ -1803,9 +1803,9 @@ fn extract_docx_xml_text(xml: &str) -> String {
             }
         } else if name == "w:tab" && !tag.starts_with('/') {
             out.push('\t');
-        } else if matches!(name, "w:br" | "w:cr") && !tag.starts_with('/') {
-            push_docx_break(&mut out);
-        } else if matches!(name, "w:p" | "w:tr") && tag.starts_with('/') {
+        } else if (matches!(name, "w:br" | "w:cr") && !tag.starts_with('/'))
+            || (matches!(name, "w:p" | "w:tr") && tag.starts_with('/'))
+        {
             push_docx_break(&mut out);
         }
         pos = end + 1;
@@ -1911,7 +1911,7 @@ fn search_work_dir(
         Ok(rd) => rd.flatten().collect(),
         Err(_) => return false,
     };
-    entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
+    entries.sort_by_key(|a| a.file_name());
     for e in entries {
         if *scanned >= WORK_SEARCH_FILE_LIMIT || results.len() >= WORK_SEARCH_RESULT_LIMIT {
             return true;
@@ -2000,10 +2000,10 @@ pub fn write_work_file(
     text: String,
     expected_mtime: Option<u64>,
 ) -> Result<WorkFileWriteResult, String> {
-    if text.as_bytes().len() as u64 > TEXT_EDIT_LIMIT {
+    if text.len() as u64 > TEXT_EDIT_LIMIT {
         return Err(format!(
             "文件过大（{} MB），不在内置编辑器保存",
-            text.as_bytes().len() / 1024 / 1024
+            text.len() / 1024 / 1024
         ));
     }
     if text.as_bytes().contains(&0) {
@@ -2032,7 +2032,8 @@ fn sanitize_capture_label(label: &str) -> String {
     let mut out = String::new();
     let mut last_was_sep = false;
     for ch in label.trim().chars() {
-        let illegal = ch.is_control() || matches!(ch, '/' | '\\' | ':' | '*' | '?' | '"' | '<' | '>' | '|');
+        let illegal =
+            ch.is_control() || matches!(ch, '/' | '\\' | ':' | '*' | '?' | '"' | '<' | '>' | '|');
         if illegal || ch.is_whitespace() {
             if !last_was_sep && !out.is_empty() {
                 out.push('_');
@@ -2391,19 +2392,19 @@ fn spawn_os_open(program: &str, args: &[&str]) -> Result<(), String> {
 fn open_url_in_os(url: &str) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
-        return spawn_os_open("open", &[url]);
+        spawn_os_open("open", &[url])
     }
     #[cfg(target_os = "windows")]
     {
-        return Command::new("cmd")
+        Command::new("cmd")
             .args(["/C", "start", "", url])
             .spawn()
             .map(|_| ())
-            .map_err(|e| e.to_string());
+            .map_err(|e| e.to_string())
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
-        return spawn_os_open("xdg-open", &[url]);
+        spawn_os_open("xdg-open", &[url])
     }
 }
 
@@ -2414,7 +2415,7 @@ pub fn reveal_work_entry(root: String, rel: String) -> Result<(), String> {
 
     #[cfg(target_os = "macos")]
     {
-        return spawn_os_open("open", &["-R", &target_s]);
+        spawn_os_open("open", &["-R", &target_s])
     }
     #[cfg(target_os = "windows")]
     {
@@ -2422,7 +2423,7 @@ pub fn reveal_work_entry(root: String, rel: String) -> Result<(), String> {
             return spawn_os_open("explorer", &[&target_s]);
         }
         let select_arg = format!("/select,{target_s}");
-        return spawn_os_open("explorer", &[&select_arg]);
+        spawn_os_open("explorer", &[&select_arg])
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
@@ -2435,7 +2436,7 @@ pub fn reveal_work_entry(root: String, rel: String) -> Result<(), String> {
                 .ok_or("无法定位父目录")?
         };
         let dir_s = dir.to_string_lossy().to_string();
-        return spawn_os_open("xdg-open", &[&dir_s]);
+        spawn_os_open("xdg-open", &[&dir_s])
     }
 }
 
@@ -2446,19 +2447,19 @@ pub fn open_work_entry(root: String, rel: String) -> Result<(), String> {
 
     #[cfg(target_os = "macos")]
     {
-        return spawn_os_open("open", &[&target_s]);
+        spawn_os_open("open", &[&target_s])
     }
     #[cfg(target_os = "windows")]
     {
-        return Command::new("cmd")
+        Command::new("cmd")
             .args(["/C", "start", "", &target_s])
             .spawn()
             .map(|_| ())
-            .map_err(|e| e.to_string());
+            .map_err(|e| e.to_string())
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
-        return spawn_os_open("xdg-open", &[&target_s]);
+        spawn_os_open("xdg-open", &[&target_s])
     }
 }
 
@@ -3005,7 +3006,7 @@ pub fn install_demo(
     download_file(&info.download_url, &zip_path)?;
     if let Some(expected) = info.sha256.as_ref().filter(|s| !s.trim().is_empty()) {
         let actual = sha256_file(&zip_path)?;
-        if actual.to_ascii_lowercase() != expected.trim().to_ascii_lowercase() {
+        if !actual.eq_ignore_ascii_case(expected.trim()) {
             let _ = fs::remove_dir_all(&temp_dir);
             return Err("示例包校验失败，已拒绝安装".into());
         }
@@ -3568,7 +3569,7 @@ fn set_string_field(
 
 fn split_list_text(input: &str) -> Vec<String> {
     input
-        .split(|c| matches!(c, '\n' | ',' | '，' | '、' | ';' | '；'))
+        .split(['\n', ',', '，', '、', ';', '；'])
         .map(|part| part.trim())
         .filter(|part| !part.is_empty())
         .map(|part| part.to_string())

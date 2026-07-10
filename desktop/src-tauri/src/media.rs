@@ -172,13 +172,7 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
                 Header::from_bytes("Content-Range", format!("bytes {start}-{end}/{len}")).unwrap();
             let mut headers = media_headers(&path_str);
             headers.push(cr);
-            let resp = Response::new(
-                StatusCode(206),
-                headers,
-                reader,
-                Some(chunk as usize),
-                None,
-            );
+            let resp = Response::new(StatusCode(206), headers, reader, Some(chunk as usize), None);
             let _ = req.respond(resp);
         }
         None => {
@@ -241,4 +235,31 @@ pub fn start_media(state: State<MediaState>) -> Result<u16, String> {
 #[tauri::command]
 pub fn media_allow_root(state: State<MediaState>, root: String) {
     state.allow_root(root);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn decodes_media_path_and_ignores_revision_query() {
+        assert_eq!(
+            query_path("/media?path=%2Ftmp%2F%E9%95%9C%E5%A4%B4.webp&v=abc"),
+            Some("/tmp/镜头.webp".to_string())
+        );
+    }
+
+    #[test]
+    fn parses_bounded_and_open_ended_ranges() {
+        let bounded = Header::from_bytes("Range", "bytes=5-9").unwrap();
+        let open = Header::from_bytes("Range", "bytes=7-").unwrap();
+        assert_eq!(parse_range(&[bounded], 20), Some((5, 9)));
+        assert_eq!(parse_range(&[open], 20), Some((7, 19)));
+        assert_eq!(parse_range(&[], 0), None);
+    }
+
+    #[test]
+    fn reports_webp_content_type() {
+        assert_eq!(content_type("/tmp/a.WEBP"), "image/webp");
+    }
 }

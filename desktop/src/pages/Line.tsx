@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createWork, deleteWork, installDemo, listDemoDownloads, scanWorkspace } from "../api";
 import { Codicon } from "../components/Codicon";
-import { useI18n, useLineLabel } from "../i18n";
+import { useI18n } from "../i18n";
 import type { DemoDownloadInfo, LineInfo, WorkRoot } from "../types";
 
 /** A line's 创作区: its existing works + a 新建作品 entry. Works live in the
@@ -10,14 +10,11 @@ export function Line(props: {
   workspaceRoot: string;
   repoRoot: string;
   line: LineInfo;
-  onBack: () => void;
-  onShowSkills: (line: LineInfo) => void;
   onOpen: (root: WorkRoot) => void;
   onDeleted: (root: WorkRoot) => void;
 }) {
-  const { workspaceRoot, repoRoot, line, onBack, onShowSkills, onOpen, onDeleted } = props;
+  const { workspaceRoot, repoRoot, line, onOpen, onDeleted } = props;
   const { t } = useI18n();
-  const lineLabel = useLineLabel();
   const [roots, setRoots] = useState<WorkRoot[]>(line.roots);
   const [err, setErr] = useState<string>("");
   const [creating, setCreating] = useState(false);
@@ -102,21 +99,6 @@ export function Line(props: {
 
   return (
     <div className="line-page">
-      <div className="line-page-top work-nav">
-        <button onClick={onBack}>{t("line.backHome")}</button>
-        <div className="crumb">
-          {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
-        </div>
-        <button
-          className="work-nav-skill-btn"
-          title={t("line.skillsButton")}
-          aria-label={t("line.skillsButton")}
-          onClick={() => onShowSkills(line)}
-        >
-          <Codicon name="wrench" />
-        </button>
-      </div>
-
       {err && <div className="empty">{err}</div>}
 
       <div className="roots">

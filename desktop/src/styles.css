@@ -54,6 +54,8 @@
   --op-files-side-width: 280px;
   --op-side-min-width: 72px;
   --op-left-rail-width: 48px;
+  --work-nav-height: 30px;
+  --work-nav-inline-padding: 8px;
   --z-context-menu: 1400;
   --z-modal: 1500;
   --z-modal-raised: 1600;
@@ -333,16 +335,15 @@ button:hover { border-color: var(--accent); }
 /* ---- Line page (创作区) ---- */
 .line-page { padding: 0; height: 100%; overflow: auto; background: var(--editor-bg); }
 .work-nav {
-  min-height: 36px; box-sizing: border-box;
-  display: flex; align-items: center; gap: 8px; padding: 3px 8px;
+  height: var(--work-nav-height); min-height: var(--work-nav-height); box-sizing: border-box;
+  display: flex; align-items: center; gap: 8px; padding: 2px var(--work-nav-inline-padding);
   border-bottom: 1px solid var(--border); background: var(--sidebar-bg);
 }
-.line-page-top {
-  position: sticky; top: 0; z-index: 1;
+.work-nav .crumb-btn {
+  height: 24px; display: inline-flex; align-items: center; flex: 0 0 auto;
 }
-.line-page-top .crumb { font-weight: 600; }
 .work-nav-skill-btn {
-  margin-left: auto; width: 28px; height: 28px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  margin-left: auto; width: 24px; height: 24px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
   color: var(--muted); background: transparent; border-color: transparent; border-radius: 6px;
 }
 .work-nav-skill-btn:hover { color: var(--text); background: rgba(255, 255, 255, .055); border-color: transparent; }

@@ -349,8 +349,6 @@ export function App() {
               workspaceRoot={workspaceRoot}
               repoRoot={repoRoot}
               line={homeRoute.line}
-              onBack={() => setHomeRoute({ kind: "home" })}
-              onShowSkills={(line) => setSkillsLine(line)}
               onOpen={(root) => openWork(homeRoute.line, root)}
               onDeleted={(root) => closeTab(root.path)}
             />
