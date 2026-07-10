@@ -462,11 +462,11 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
                 continue
         if not default_midframe:
             continue
-        # 三帧契约默认中锚：未命中规则的普通镜也出一张 _mid
+        # 显式 D0 opt-in：未命中规则的普通镜额外出一张 _mid
         if not isinstance(duration, (int, float)) or duration < midframe_exempt_below:
             exempted.append({
                 "clip_index": i, "clip": cid, "duration": duration,
-                "reason": f"极短镜 <{midframe_exempt_below}s，中帧与首尾几乎重合（三帧契约豁免）",
+                "reason": f"显式 D0 opt-in 下极短镜 <{midframe_exempt_below}s，中帧与首尾几乎重合",
             })
             continue
         use = "split" if duration >= 2 * min_seg else "qc"
@@ -477,12 +477,12 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
         hint = middle_beat_hint(clip)
         planned.append({
             "clip_index": i, "clip_id": cid, "duration": duration,
-            "rule": f"D0 三帧契约默认中锚（use={use}）",
+            "rule": f"D0 显式 opt-in 中锚（use={use}）",
             "anchors": [{
                 "anchor_png": midframe_png_name(clip, ep, i),
                 "at_sec": at,
                 "use": use,
-                "reason": f"default: 三帧契约（use={use}" + (f"；中间拍：{hint}" if hint else "") + "）",
+                "reason": f"default: explicit D0 midframe（use={use}" + (f"；中间拍：{hint}" if hint else "") + "）",
                 "source_duration": round(float(duration), 3),
             }],
             "added_cost": {"images": 1, "video_segments": 1 if use == "split" else 0},
@@ -623,7 +623,7 @@ def render_md(plan: Dict[str, Any]) -> str:
         lines.append(f"- 锚点：{anchors}")
         lines.append("")
     if plan.get("exempted"):
-        lines.append("## 三帧契约豁免（极短镜）")
+        lines.append("## 显式 D0 中锚豁免（极短镜）")
         for item in plan["exempted"]:
             lines.append(f"- {item['clip']}（{item['duration']}s）：{item['reason']}")
         lines.append("")
@@ -676,9 +676,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("episode")
     ap.add_argument("--write", action="store_true", help="把规划注回 storyboard.json（默认只出报告）")
     ap.add_argument("--default-midframe", action="store_true",
-                    help="强制开启三帧契约（覆盖选择点）：普通镜也规划中段锚帧，极短镜豁免")
+                    help="强制开启普通镜 D0 中锚（覆盖选择点）：仅用于显式试验/迁移，极短镜豁免")
     ap.add_argument("--no-default-midframe", action="store_true",
-                    help="强制关闭三帧契约（覆盖选择点），回到只对 R1/R2/R3 命中镜加锚的 opt-in")
+                    help="强制关闭普通镜 D0 中锚（覆盖选择点），仍保留 E1/R1/R2/R3 必需锚")
     ap.add_argument("--min-segment", type=float, default=4.0,
                     help="relay 拆段地板(独立 frames2video 段下限)；管 R1/R3 触发门槛与 D0 use 判定")
     ap.add_argument("--multiframe-min-segment", type=float, default=1.5,

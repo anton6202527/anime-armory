@@ -42,9 +42,28 @@ except Exception:  # pragma: no cover
     parse_progress = None  # type: ignore[assignment]
 
 from n2d_handoff import check_identity_handoff
-from video_prompt_compiler import normalize_backend as normalize_prompt_backend, parse_compiled_markdown
+from video_prompt_compiler import (
+    compile_video_prompt,
+    normalize_backend as normalize_prompt_backend,
+    parse_compiled_markdown,
+)
+import video_execution_adapter as execution_adapter_v2
 import native_av_sidecar
 import video_qc
+
+try:
+    from flow_telemetry import record_milestone as _record_flow_milestone_impl
+except Exception:  # pragma: no cover - observability never blocks production
+    _record_flow_milestone_impl = None
+
+
+def _record_flow_milestone(root: Path, episode: str, milestone: str, **extra: Any) -> None:
+    if _record_flow_milestone_impl is None:
+        return
+    try:
+        _record_flow_milestone_impl(root, milestone, episode=episode, stage="video", extra=extra)
+    except Exception:
+        pass
 
 try:
     from n2d_platform_profiles import (
@@ -746,7 +765,7 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
 def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str, *,
                             part_index: int, part_total: int, start_rel: str, end_rel: str,
                             start_sec: float, end_sec: float, end_hint: str = "",
-                            shot_description: str = "") -> str:
+                            shot_description: str = "", compiled_segment_prompt: str = "") -> str:
     """Wrap a parent clip prompt with a hard segment contract for split relay.
 
     Split relay feeds one physical first/end pair per paid submit.  The parent
@@ -760,7 +779,6 @@ def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str
         boundary = "本段为最后一段；可以抵达父镜头最终 end_state，但必须以本段尾帧为唯一落幅。"
     hint_line = f"段落目标：{end_hint.strip()}" if end_hint and end_hint.strip() else "段落目标：以尾帧构图、主体姿态、道具/面板位置为准。"
     shot_line = f"本段镜位/动作：{shot_description.strip()}" if shot_description and shot_description.strip() else ""
-    parent = parent_prompt.strip()
     guard = "\n".join([
         "【Split Relay Segment Contract】",
         f"父镜头：{parent_clip}",
@@ -773,7 +791,51 @@ def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str
         boundary,
         "执行要求：从首帧状态开始，运动连续自然，在尾帧附近稳定结束；父镜头参考提示词只用于风格、主体和镜头语气，不得覆盖本段首尾帧约束。",
     ]).replace("\n\n", "\n")
+    if compiled_segment_prompt.strip():
+        return f"{guard}\n\n【Compiled Segment Submit Prompt】\n{compiled_segment_prompt.strip()}".rstrip()
+    parent = parent_prompt.strip()
     return f"{guard}\n\n【Parent Clip Reference Prompt】\n{parent}".rstrip()
+
+
+def compile_relay_segment_prompt(
+    *,
+    backend: str,
+    parent_item: Mapping[str, Any],
+    part_clip: str,
+    duration_sec: float,
+    start_rel: str,
+    end_rel: str,
+    end_hint: str,
+    shot_description: str,
+) -> Dict[str, Any]:
+    """Recompile one physical take instead of copying the full parent prompt.
+
+    Editorial cuts are distinct camera/action contracts.  Reusing the parent
+    prompt makes every child try to perform the whole story clip, which is the
+    exact failure split relay is intended to prevent.
+    """
+    action = shot_description.strip() or end_hint.strip() or "从首帧状态连续完成本段动作并在尾帧姿态停稳"
+    camera = shot_description.strip() or "保持本段单一连续机位，运动克制，尾端固定"
+    contract = {
+        "clip_id": part_clip,
+        "backend": backend,
+        "mode": "frames2video",
+        "native_audio_policy": str((parent_item.get("prompt_compiler") or {}).get("native_audio_policy") or "none"),
+        "story_span_sec": float(duration_sec),
+        "edit_target_sec": float(duration_sec),
+        "frame_strategy": "first_last",
+        "primary_action": action,
+        "camera_motion": camera,
+        "environment_motion": "环境只响应本段主动作，不引入下一段事件",
+        "rhythm": "本段动作完整，尾端保留稳定落幅",
+        "end_state": end_hint.strip() or "与提交尾帧完全对齐并保持",
+        "must_avoid": ["提前演到下一段", "新增人物", "身份漂移", "文字", "水印"],
+        "frame_inputs": [start_rel, end_rel],
+        "reference_inputs": list(parent_item.get("reference_inputs") or []),
+        "control_inputs": list(parent_item.get("control_inputs") or []),
+        "audio_inputs": list(parent_item.get("audio_inputs") or []),
+    }
+    return compile_video_prompt(contract, backend)
 
 
 def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend: str, resolution: Optional[str],
@@ -966,6 +1028,23 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     part_item["frame_strategy"] = "edit_cut_part" if requested_strategy == "edit_cut" else "split_relay_part"
                     part_item["anchor_consumption_mode"] = part_item["frame_strategy"]
                     part_item["anchor_consumption_parent_mode"] = frame_plan.get("consumption_mode")
+                    segment_shot_description = (
+                        "；".join(filter(None, (
+                            str(shots[p_idx].get("lens") or "") if p_idx < len(shots) else "",
+                            str(shots[p_idx].get("description") or "") if p_idx < len(shots) else "",
+                        )))
+                        if requested_strategy == "edit_cut" else ""
+                    )
+                    compiled_segment = compile_relay_segment_prompt(
+                        backend=backend,
+                        parent_item=item,
+                        part_clip=part_item["clip"],
+                        duration_sec=seg_dur,
+                        start_rel=part_item["image_rel"],
+                        end_rel=part_item["end_image_rel"],
+                        end_hint=segment_end_hints[p_idx] if p_idx < len(segment_end_hints) else "",
+                        shot_description=segment_shot_description,
+                    )
                     part_prompt = split_relay_prompt_text(
                         prompt_text,
                         item["clip"],
@@ -977,17 +1056,23 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         start_sec=float(t_list[p_idx]),
                         end_sec=float(t_list[p_idx + 1]),
                         end_hint=segment_end_hints[p_idx] if p_idx < len(segment_end_hints) else "",
-                        shot_description=(
-                            "；".join(filter(None, (
-                                str(shots[p_idx].get("lens") or "") if p_idx < len(shots) else "",
-                                str(shots[p_idx].get("description") or "") if p_idx < len(shots) else "",
-                            )))
-                            if requested_strategy == "edit_cut" else ""
-                        ),
+                        shot_description=segment_shot_description,
+                        compiled_segment_prompt=str(compiled_segment.get("prompt") or ""),
                     )
                     part_prompt_file = prompts_dir / f"{part_item['target'][:-4]}.prompt.txt"
                     part_prompt_file.write_text(part_prompt + "\n", encoding="utf-8")
                     part_item["prompt_file"] = str(part_prompt_file)
+                    part_item["prompt_source_kind"] = "compiled_segment_submit_prompt"
+                    part_item["prompt_compiler"] = {
+                        key: compiled_segment.get(key)
+                        for key in (
+                            "kind", "version", "profile_version", "profile", "backend", "mode",
+                            "language", "native_audio_policy", "source_contract_sha256", "frame_strategy",
+                        )
+                    }
+                    part_item["negative_prompt"] = str(compiled_segment.get("negative_prompt") or "")
+                    part_item["prepared_prompt_sha256"] = hashlib.sha256(part_prompt.encode("utf-8")).hexdigest()
+                    part_item["prepared_prompt_chars"] = len(part_prompt)
                     part_item["split_relay_prompt_guard"] = {
                         "version": 1,
                         "parent_clip": item["clip"],
@@ -1033,7 +1118,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     
     payload = {
         "kind": "n2d_video_batch",
-        "version": 1,
+        "version": 2,
         "episode": episode,
         "batch": f"{start:02d}-{end:02d}",
         "batch_id": batch_id(start, end),
@@ -1044,6 +1129,7 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         "video_resolution": resolved_resolution,
         "requested_video_resolution": str(resolution or "auto"),
         "ratio": aspect_ratio(root),
+        "execution_adapter": execution_adapter_v2.execution_status(root, backend, ""),
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "items": items,
     }
@@ -1368,7 +1454,20 @@ def _dreamina_query_args(submit_id: str, download_dir: Path) -> List[str]:
 # （submit_args/query_args/provider），submit/query 调用点不动。
 VIDEO_BACKEND_ADAPTERS: Dict[str, Dict[str, Any]] = {
     "dreamina": {
+        "kind": execution_adapter_v2.ADAPTER_KIND,
+        "version": execution_adapter_v2.ADAPTER_VERSION,
+        "adapter_id": "dreamina_cli_v2",
+        "execution_backend": "dreamina",
         "provider": "dreamina",
+        "implementation": "embedded",
+        "command": ["dreamina"],
+        "operations": ["submit", "query"],
+        "capabilities": {
+            "idempotency": "runner_guarded",
+            "async_query": True,
+            "cancel": False,
+            "multishot": False,
+        },
         "submit_args": _dreamina_args,
         "query_args": _dreamina_query_args,
     },
@@ -1380,7 +1479,7 @@ _BACKEND_ALIASES = {"即梦": "dreamina", "jimeng": "dreamina", "dreamina": "dre
 
 
 def resolve_video_backend(manifest: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
-    """manifest backend → (规范名, adapter)。无内置自动化 adapter 时停下报缺口，绝不顶替换路。"""
+    """manifest backend → executable adapter v2; never silently switch providers."""
     raw = str(manifest.get("backend") or "dreamina").strip()
     low = raw.lower()
     if low in _MANUAL_BACKENDS:
@@ -1390,12 +1489,19 @@ def resolve_video_backend(manifest: Dict[str, Any]) -> Tuple[str, Dict[str, Any]
     key = _BACKEND_ALIASES.get(low, low)
     adapter = VIDEO_BACKEND_ADAPTERS.get(key)
     if not adapter:
+        root = manifest.get("_root")
+        channel = manifest.get("channel") or ""
+        project_adapter = execution_adapter_v2.adapter_for(root, raw, channel) if root else None
+        if project_adapter:
+            key = str(project_adapter.get("execution_backend") or key)
+            adapter = project_adapter
+    if not adapter:
         supported = ", ".join(sorted(VIDEO_BACKEND_ADAPTERS))
         raise RuntimeError(
             f"后端 '{raw}' 没有内置自动化 runner（当前仅 {supported} 有 CLI 契约）。"
             "不会静默改用其它后端顶替（C2：适配不了就停下报缺口，不偷偷换路）。"
-            "→ 改用 manual 出视频后用 `accept` 登记，或在 video_runner.py 的 "
-            "VIDEO_BACKEND_ADAPTERS 为该后端注册 adapter（submit_args/query_args/provider）。")
+            "→ 改用 manual 出视频后用 `accept` 登记，或在 "
+            "生产数据/video_execution_adapters.json 注册 adapter v2 wrapper。")
     return key, adapter
 
 
@@ -1461,6 +1567,83 @@ def run_identity_handoff_guard(root: Path, episode: str) -> None:
         )
 
 
+def _adapter_invocation(
+    root: Path,
+    manifest: Dict[str, Any],
+    item: Dict[str, Any],
+    adapter: Mapping[str, Any],
+    operation: str,
+) -> Tuple[List[str], Optional[Path]]:
+    """Build an embedded or wrapper-command adapter invocation.
+
+    Wrapper adapters receive only a stable request JSON path on argv; prompts,
+    credentials and vendor-specific fields stay outside shell interpolation.
+    """
+    implementation = str(adapter.get("implementation") or "embedded")
+    if implementation == "embedded":
+        builder_key = "submit_args" if operation == "submit" else "query_args"
+        builder = adapter.get(builder_key)
+        if not callable(builder):
+            raise RuntimeError(f"adapter {adapter.get('adapter_id') or adapter.get('provider')} missing {builder_key}")
+        if operation == "submit":
+            return list(builder(item, {**manifest, "_root": str(root)})), None
+        download_dir = formal_video_dir(root, str(manifest.get("episode") or "")) / "_downloads"
+        return list(builder(str(item.get("submit_id") or ""), download_dir)), None
+
+    request = execution_adapter_v2.build_request(
+        operation=operation,
+        root=root,
+        manifest=manifest,
+        item=item,
+        adapter=adapter,
+    )
+    request_path = execution_adapter_v2.write_request(
+        root,
+        str(manifest.get("episode") or ""),
+        request,
+    )
+    item["execution_request"] = {
+        "path": str(request_path),
+        "sha256": request.get("request_sha256"),
+        "idempotency_key": request.get("idempotency_key"),
+        "operation": operation,
+        "adapter_id": adapter.get("adapter_id"),
+    }
+    item["idempotency_key"] = request.get("idempotency_key")
+    return execution_adapter_v2.wrapper_args(adapter, operation, request_path), request_path
+
+
+def _normalized_adapter_result(adapter: Mapping[str, Any], stdout: str, stderr: str) -> Dict[str, Any]:
+    raw = execution_adapter_v2.parse_result(stdout, stderr)
+    if str(adapter.get("implementation") or "embedded") == "embedded":
+        return {
+            "submit_id": raw.get("submit_id") or "",
+            "status": raw.get("gen_status") or raw.get("status") or "",
+            "output_path": raw.get("output_path") or "",
+            "error": raw.get("fail_reason") or raw.get("error") or "",
+            "raw": raw,
+        }
+    return execution_adapter_v2.normalize_result(adapter, raw)
+
+
+def _ensure_adapter_command_ready(adapter: Mapping[str, Any], args: Sequence[str]) -> None:
+    if str(adapter.get("implementation") or "embedded") == "embedded":
+        return  # embedded adapters retain their own live CLI-contract probe
+    if not args:
+        raise RuntimeError(f"adapter {adapter.get('adapter_id')} produced an empty command")
+    binary = str(args[0])
+    ready = (
+        Path(binary).is_file() and os.access(binary, os.X_OK)
+        if os.path.isabs(binary) or "/" in binary
+        else shutil.which(binary) is not None
+    )
+    if not ready:
+        raise RuntimeError(
+            f"adapter v2 {adapter.get('adapter_id') or adapter.get('provider')} is registered but command "
+            f"'{binary}' is unavailable; install/configure the wrapper or use manual delivery"
+        )
+
+
 def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False,
                 skip_preflight: bool = False) -> Dict[str, Any]:
     manifest = load_json(manifest_file)
@@ -1489,17 +1672,24 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
             "Run n2d-script shot_split_decision/anchor_planner and video_runner prepare again so it expands "
             f"into ~{plan.get('recommended_parts')} explicit physical takes within the backend window, then submit those part clips."
         )
-    backend_key, adapter = resolve_video_backend(manifest)
+    backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
     item["cost_provider"] = adapter["provider"]
-    args = adapter["submit_args"](item, {**manifest, "_root": str(root)})
-    command = args[1] if len(args) > 1 else args[0]
-    safe_args = [args[0], command, "…(args elided)…"]
+    args, request_path = _adapter_invocation(root, manifest, item, adapter, "submit")
+    command = args[1] if len(args) > 1 else "submit"
+    safe_args = (
+        [args[0], command, "--request", str(request_path)]
+        if request_path else [args[0], command, "…(args elided)…"]
+    )
     if dry_run:
         return {"dry_run": True, "cmd_argv": safe_args, "clip": item["clip"],
-                "backend": backend_key, "backend_command": command}
+                "backend": backend_key, "backend_command": command,
+                "adapter_id": adapter.get("adapter_id"), "adapter_version": adapter.get("version", 2),
+                "execution_request": str(request_path) if request_path else "embedded"}
+    _ensure_adapter_command_ready(adapter, args)
     # "每次都跑一遍": cheap live --help check before spending credits — fail fast if the CLI
     # contract drifted out from under the arg builder (no-op/skip if probe unavailable).
-    verify_cli_contract(args[0], command)
+    if str(adapter.get("implementation") or "embedded") == "embedded":
+        verify_cli_contract(args[0], command)
     run_identity_handoff_guard(root, episode)
     if not skip_preflight:
         run_preflight_gate(root, episode)
@@ -1514,11 +1704,9 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     started = time.time()
     proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     elapsed = time.time() - started
-    parsed: Dict[str, Any] = {}
-    try:
-        parsed = json.loads(proc.stdout or "{}")
-    except json.JSONDecodeError:
-        parsed = {"raw_stdout": proc.stdout}
+    normalized = _normalized_adapter_result(adapter, proc.stdout or "", proc.stderr or "")
+    parsed = normalized.get("raw") if isinstance(normalized.get("raw"), dict) else {}
+    failure = execution_adapter_v2.classify_failure(proc.returncode, normalized, proc.stderr or "")
     row = {
         "clip": item["clip"],
         "cmd_argv": safe_args,
@@ -1528,27 +1716,40 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
         "elapsed_sec": elapsed,
         "stdout": proc.stdout,
         "stderr": proc.stderr,
+        "adapter_id": adapter.get("adapter_id"),
+        "adapter_version": adapter.get("version", 2),
+        "request_path": str(request_path) if request_path else "",
+        "failure": failure,
         "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
     }
     append_submission_log(root, episode, row)
     item["last_submit_returncode"] = proc.returncode
     item["last_submit_elapsed_sec"] = elapsed
+    item["last_submit_failure"] = failure
     item["last_submit_stdout_path"] = str(production_dir(root) / f"video_submissions_{episode}.jsonl")
     if proc.returncode != 0:
         item["status"] = "submit_failed"
         item["fail_reason"] = proc.stderr.strip() or f"exit {proc.returncode}"
     else:
-        item["submit_id"] = parsed.get("submit_id") or item.get("submit_id")
-        item["gen_status"] = parsed.get("gen_status")
+        item["submit_id"] = normalized.get("submit_id") or item.get("submit_id")
+        item["gen_status"] = normalized.get("status") or parsed.get("gen_status")
         item["credit_count"] = parsed.get("credit_count")
         item["logid"] = parsed.get("logid")
-        if parsed.get("gen_status") == "fail":
+        if str(normalized.get("status") or "").lower() in {"fail", "failed", "error", "rejected"}:
             item["status"] = "failed"
-            item["fail_reason"] = parsed.get("fail_reason") or "generation failed"
+            item["fail_reason"] = normalized.get("error") or parsed.get("fail_reason") or "generation failed"
         else:
             item["status"] = "submitted" if item.get("submit_id") else "submitted_unknown_id"
             item.pop("fail_reason", None)
     update_manifest(manifest_file, manifest)
+    _record_flow_milestone(
+        root, episode,
+        "video_submitted" if item.get("status") in {"submitted", "submitted_unknown_id"} else "video_submit_failed",
+        clip=item.get("clip"), adapter_id=adapter.get("adapter_id"), provider=adapter.get("provider"),
+        status=item.get("status"), returncode=proc.returncode, elapsed_sec=elapsed,
+        failure_class=failure.get("class"), retryable=failure.get("retryable"),
+        paid_state_uncertain=failure.get("paid_state_uncertain"),
+    )
     return item
 
 
@@ -1788,46 +1989,117 @@ def query_clip(root: Path, manifest_file: Path, clip: str, *, download: bool = T
     submit_id = item.get("submit_id")
     if not submit_id:
         raise RuntimeError(f"{item['clip']} has no submit_id")
-    _backend_key, adapter = resolve_video_backend(manifest)
+    _backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
     download_dir = formal_video_dir(root, episode) / "_downloads"
     before = _mp4_set(download_dir)
-    args = adapter["query_args"](submit_id, download_dir)
+    args, request_path = _adapter_invocation(root, manifest, item, adapter, "query")
+    _ensure_adapter_command_ready(adapter, args)
     query_started_at = time.time()
     proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    normalized = _normalized_adapter_result(adapter, proc.stdout or "", proc.stderr or "")
     item["last_query_returncode"] = proc.returncode
     item["last_query_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
-    try:
-        item["last_query"] = json.loads(proc.stdout or "{}")
-    except json.JSONDecodeError:
-        item["last_query"] = {"raw_stdout": proc.stdout}
+    item["last_query"] = normalized.get("raw") or {"raw_stdout": proc.stdout}
+    item["last_query_adapter"] = {
+        "adapter_id": adapter.get("adapter_id"),
+        "version": adapter.get("version", 2),
+        "request_path": str(request_path) if request_path else "",
+        "failure": execution_adapter_v2.classify_failure(proc.returncode, normalized, proc.stderr or ""),
+    }
     if proc.returncode != 0:
         found = _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at) if download else None
         if found and _record_downloaded_file(root, episode, item, found, force=force):
             item["query_warning"] = proc.stderr.strip() or f"query_result exit {proc.returncode}"
             item.pop("fail_reason", None)
             update_manifest(manifest_file, manifest)
+            _record_flow_milestone(root, episode, "video_downloaded", clip=item.get("clip"),
+                                   adapter_id=adapter.get("adapter_id"), status=item.get("status"))
             return item
         item["status"] = "query_failed"
         item["fail_reason"] = proc.stderr.strip() or f"query_result exit {proc.returncode}"
         update_manifest(manifest_file, manifest)
+        _record_flow_milestone(root, episode, "video_query_failed", clip=item.get("clip"),
+                               adapter_id=adapter.get("adapter_id"), status=item.get("status"),
+                               returncode=proc.returncode,
+                               failure_class=(item.get("last_query_adapter") or {}).get("failure", {}).get("class"))
         return item
     item.pop("fail_reason", None)
-    query_status = str((item.get("last_query") or {}).get("gen_status") or "").lower()
-    if query_status == "success":
+    query_status = str(normalized.get("status") or (item.get("last_query") or {}).get("gen_status") or "").lower()
+    success_statuses = {"success", "succeeded", "completed", "done", "ready"}
+    if query_status in success_statuses:
         item.pop("query_warning", None)
-    found = (
-        _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at)
-        if download and query_status == "success" else None
-    )
+    wrapper_output = Path(str(normalized.get("output_path") or ""))
+    if download and wrapper_output.is_file() and wrapper_output.suffix.lower() == ".mp4":
+        found = wrapper_output
+    else:
+        found = (
+            _newest_mp4(download_dir, before, submit_id=str(submit_id), since=query_started_at)
+            if download and query_status in success_statuses else None
+        )
     if found:
         if not _record_downloaded_file(root, episode, item, found, force=force):
             item["status"] = "query_failed"
             item["fail_reason"] = f"downloaded mp4 is invalid or incomplete: {found}"
-    elif download and query_status == "success" and _record_existing_target_if_valid(root, episode, item):
+    elif download and query_status in success_statuses and _record_existing_target_if_valid(root, episode, item):
         item.pop("fail_reason", None)
     else:
         item["status"] = "queried"
     update_manifest(manifest_file, manifest)
+    _record_flow_milestone(
+        root, episode,
+        "video_downloaded" if item.get("status") in {"downloaded", "downloaded_existing_target"} else "video_queried",
+        clip=item.get("clip"), adapter_id=adapter.get("adapter_id"), status=item.get("status"),
+        returncode=proc.returncode,
+    )
+    return item
+
+
+def cancel_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = False) -> Dict[str, Any]:
+    """Cancel a submitted job when the selected adapter v2 exposes cancel.
+
+    Cancellation is never emulated: if the provider wrapper does not expose it,
+    the runner reports the missing operation and leaves paid state untouched.
+    """
+    manifest = load_json(manifest_file)
+    item = find_item(manifest, clip)
+    if not item.get("submit_id"):
+        raise RuntimeError(f"{item.get('clip')} has no submit_id to cancel")
+    _backend_key, adapter = resolve_video_backend({**manifest, "_root": str(root)})
+    if "cancel" not in set(adapter.get("operations") or []):
+        raise RuntimeError(
+            f"adapter {adapter.get('adapter_id') or adapter.get('provider')} does not expose cancel; "
+            "do not mark the paid task cancelled until the provider state is verified manually"
+        )
+    args, request_path = _adapter_invocation(root, manifest, item, adapter, "cancel")
+    if dry_run:
+        return {
+            "dry_run": True,
+            "clip": item.get("clip"),
+            "adapter_id": adapter.get("adapter_id"),
+            "request_path": str(request_path) if request_path else "",
+            "cmd_argv": [args[0], "cancel", "--request", str(request_path or "embedded")],
+        }
+    _ensure_adapter_command_ready(adapter, args)
+    proc = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    normalized = _normalized_adapter_result(adapter, proc.stdout or "", proc.stderr or "")
+    item["last_cancel_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    item["last_cancel_returncode"] = proc.returncode
+    item["last_cancel"] = normalized
+    if proc.returncode == 0 and str(normalized.get("status") or "").lower() in {
+        "cancelled", "canceled", "success", "done",
+    }:
+        item["status"] = "cancelled"
+        item.pop("fail_reason", None)
+    else:
+        item["status"] = "cancel_unknown"
+        item["fail_reason"] = str(normalized.get("error") or proc.stderr or "provider cancellation state is unknown").strip()
+    update_manifest(manifest_file, manifest)
+    _record_flow_milestone(
+        root, str(manifest.get("episode") or ""),
+        "video_cancelled" if item.get("status") == "cancelled" else "video_cancel_unknown",
+        clip=item.get("clip"), adapter_id=adapter.get("adapter_id"), status=item.get("status"),
+        returncode=proc.returncode,
+    )
     return item
 
 
@@ -2285,6 +2557,39 @@ def update_progress(root: Path, episode: str) -> None:
     subprocess.run([sys.executable, str(progress_py), "set", str(root), episode, "视频", f"{count}/{total}"], check=False)
 
 
+def maybe_build_post_video_proxy(root: Path, episode: str) -> Dict[str, Any]:
+    """Render the actual rough-cut proxy once all logical clips are present.
+
+    Best-effort by design: clip delivery remains valid on a clean machine without
+    ffmpeg, while the proxy script records a resumable ``planned_ffmpeg_missing``
+    state instead of fabricating a playable asset.
+    """
+    total = progress_denominator(root, episode)
+    count = count_formal_clips(root, episode)
+    if total <= 0 or count < total:
+        return {"status": "waiting_for_clips", "count": count, "total": total}
+    script = SKILLS_DIR / "n2d-compose" / "scripts" / "post_video_proxy.py"
+    if not script.is_file():
+        return {"status": "script_missing", "path": str(script)}
+    proc = subprocess.run(
+        [sys.executable, str(script), str(root), episode, "--render", "--json"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {"status": "error", "stdout": proc.stdout}
+    if not isinstance(payload, dict):
+        payload = {"status": "error", "stdout": proc.stdout}
+    payload["returncode"] = proc.returncode
+    if proc.stderr.strip():
+        payload["stderr"] = proc.stderr.strip()[-800:]
+    return payload
+
+
 def _post_video_qc_block_reasons(policy: Mapping[str, Any], machine: Mapping[str, Any]) -> List[str]:
     if not policy or policy.get("identity_qc_required") is not True:
         return []
@@ -2375,6 +2680,8 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         update_manifest(manifest_file, manifest)
         if not no_record:
             record_qc_block(root, episode, item)
+        _record_flow_milestone(root, episode, "video_qc_blocked", clip=item.get("clip"),
+                               status=item.get("status"), artifact=str(target))
         raise RuntimeError(f"{item['clip']} {item['fail_reason']}（详见 {qc.get('markdown_path')}）")
     overridden = bool(qc_blocks) and allow_qc_block
     item["status"] = "accepted"
@@ -2396,6 +2703,13 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         record_acceptance(root, episode, item, qc_clip, manifest)
     if not no_progress:
         update_progress(root, episode)
+        item["post_video_proxy"] = maybe_build_post_video_proxy(root, episode)
+        update_manifest(manifest_file, manifest)
+    _record_flow_milestone(
+        root, episode, "video_accepted", clip=item.get("clip"), status=item.get("status"),
+        provider=item.get("cost_provider"), artifact=str(target),
+        artifact_sha256=item.get("artifact_sha256"),
+    )
     return item
 
 
@@ -2440,7 +2754,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                    help="auto reads _设置.md: ordinary=seedance2.0fast, high/budget-sufficient=seedance2.0_vip")
     p.add_argument("--force", action="store_true")
 
-    for name in ("submit", "query", "accept"):
+    for name in ("submit", "query", "cancel", "accept"):
         p = sub.add_parser(name)
         p.add_argument("root")
         p.add_argument("manifest")
@@ -2452,6 +2766,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if name == "query":
             p.add_argument("--no-download", action="store_true")
             p.add_argument("--force", action="store_true")
+        if name == "cancel":
+            p.add_argument("--dry-run", action="store_true")
         if name == "accept":
             p.add_argument("--no-record", action="store_true")
             p.add_argument("--no-progress", action="store_true")
@@ -2493,6 +2809,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     if ns.cmd == "query":
         print(json.dumps(query_clip(root, manifest_file, ns.clip, download=not ns.no_download, force=ns.force), ensure_ascii=False, indent=2, sort_keys=True))
+        return 0
+    if ns.cmd == "cancel":
+        print(json.dumps(cancel_clip(root, manifest_file, ns.clip, dry_run=ns.dry_run), ensure_ascii=False, indent=2, sort_keys=True))
         return 0
     if ns.cmd == "accept":
         print(json.dumps(accept_clip(root, manifest_file, ns.clip, no_record=ns.no_record, no_progress=ns.no_progress,

@@ -28,6 +28,35 @@ done
 
 生图模型/渠道与视频模型/渠道的风格兼容不在本表 — 那是 Stage 4 出图锚定句（固定模型锚定/通用视频兼容锚定）的事；Stage 5 同时看 `生视频模型`（prompt/能力）和 `生视频渠道`（执行入口）。
 
+## adapter v2 项目注册合同
+
+模型能力档只回答“理论能做什么”；本机执行统一由 `skills/n2d/_lib/video_execution_adapter.py` 判断。Dreamina 是仓内 embedded adapter，其它渠道在作品根登记 `生产数据/video_execution_adapters.json`，不把供应商 SDK、凭据或机器私有路径写进 skill：
+
+```json
+{
+  "kind": "n2d_video_execution_adapter_registry",
+  "version": 2,
+  "adapters": {
+    "seedance": {
+      "adapter_id": "seedance_direct_v2",
+      "execution_backend": "seedance",
+      "provider": "official-api-wrapper",
+      "command": ["seedance-wrapper"],
+      "operations": ["submit", "query", "cancel", "multishot_submit", "multishot_query", "multishot_cancel"],
+      "capabilities": {"idempotency": "provider", "multishot": true},
+      "result_contract": {
+        "submit_id": "task.id",
+        "status": "task.status",
+        "output_path": "task.output",
+        "error": "task.error"
+      }
+    }
+  }
+}
+```
+
+wrapper 调用固定为 `<command...> <operation> --request <stable-json>`；stdout 输出一个 JSON object。请求文件包含 prompt、帧/参考/控制/音频输入、时长、目标、trace、稳定 `idempotency_key`，但不包含凭据。状态只有 `automated_ready` 才允许自动 submit；`registered_missing_command / registered_incomplete / unregistered` 只能修环境、登记人工交付或导出 job package，禁止静默切换后端。未知付费状态不得自动重试，先到供应商任务列表对账。
+
 ---
 
 ## 档案：dreamina（即梦官方）

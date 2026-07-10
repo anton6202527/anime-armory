@@ -19,7 +19,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import Iterable, List, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 import codex_image_runner as base
 
@@ -67,52 +67,100 @@ def _field(body: str, label: str) -> str:
     return m.group(1).strip() if m else ""
 
 
-def build_dreamina_prompt(root: Path, episode: str, target: base.Target) -> str:
-    body = target.section.body
-    # 画幅与风格都不写死：画幅走 _设置.md「画幅」选择点；风格继承 storyboard.json 的 style_contract，
-    # 与 Codex 后端同一真值源——避免「同一部剧换渠道就换画风」（宪法 C4「标准不绑后端」）。
-    style = base.style_contract_phrase(root, episode)
-    parts = [
-        f"{base.aspect_phrase(base.aspect_ratio(root))}，电影级光影。",
-        style,
-        _field(body, "正向 prompt（中文）"),
-        _field(body, "锚点句"),
-        _field(body, "状态锁"),
-        _field(body, "近景/反打身份锁定"),
-        _field(body, "视线方向"),
-        _field(body, "光位锚"),
-        _field(body, "关键道具结构唯一性闸门"),
-    ]
-    # 视线防呆 + 对撞构图：与 Codex 后端同源注入（单一真值源 codex_image_runner→n2d_const）。
-    # 此前即梦后端只誊抄作者手写字段——作者漏写视线防呆，打斗镜就被渲染成正对镜头/肖像摆拍/自拍
-    # （正脸定妆锚又把脸怼向镜头）。非 POV 镜统一补旁观者视线锁；POV/破第四墙/对观众压迫特写自动豁免。
-    gaze_neg = base.camera_gaze_negatives_for(body)
-    if gaze_neg:
-        parts.append(
-            "镜头为旁观者视角：角色不看镜头、不与镜头对视/eye contact，视线锁场内目标"
-            "（对手 / 武器来路 / 命中点 / 对话对象 / 所视之物）；身份可辨用三分之二侧脸 / 侧脸 / 过肩 / 45°回头，"
-            "不正对镜头肖像摆拍。打斗动作镜动作优先于脸。"
+def dreamina_reference_inputs(
+    root: Path,
+    target: base.Target,
+    refs: Sequence[Path],
+    episode: str,
+) -> List[Dict[str, Any]]:
+    """Describe the exact Dreamina attachments, including complete hashes."""
+    role_by_path: Dict[str, tuple[str, str]] = {}
+    try:
+        bundle = base.reference_bundle_for_target(root, episode, target)
+    except Exception:
+        bundle = {}
+    for item in bundle.get("items") or []:
+        if not isinstance(item, Mapping):
+            continue
+        role = str(item.get("kind") or item.get("role") or "reference")
+        owner = str(
+            item.get("owner") or item.get("character") or item.get("asset_id") or
+            item.get("id") or item.get("ref") or ""
         )
-    clash = base.weapon_clash_compose_for(body)
-    if clash:
-        parts.append(clash)
-    # 打斗/法术/动作高潮镜：注入「经费在燃烧」视觉盛宴保底层（与 Codex 后端同源·单一真值源 n2d_const）。
-    # 传本剧风格句 → cel/ink/flat 风格自动换变体，避免给赛璐璐/水墨/Q版剧硬塞写实体积光与 motion blur。
-    richness = base.combat_spectacle_richness_for(body, style)
-    if richness:
-        parts.append(richness)
-    anatomy = base.hand_limb_anatomy_guidance(target)
-    if anatomy:
-        parts.append(anatomy)
-    parts.append(_field(body, "负向 prompt"))
-    if gaze_neg:
-        parts.append("负向：" + gaze_neg + "——不得直视镜头 / 正对镜头摆拍 / 自拍感。")
-    parts.append("只输出一张正式剧情帧；禁止文字、水印、logo、漫画分格、UI边框；角色脸/妆造不得漂移，服装配色一致。")
-    if target.mode == "midframe":
-        parts.append("这是同 Clip 中段锚帧：以上一张首帧图生图为母图，只改中段动作/表情，不重画脸。")
-    elif target.mode == "tailframe":
-        parts.append("这是同 Clip 尾帧：以上一张首帧或中段锚帧图生图为母图，只改尾态动作/表情，不重画脸。")
-    return "\n".join(p for p in parts if p)
+        for raw in item.get("paths") or []:
+            role_by_path[str(raw)] = (role, owner)
+
+    inputs: List[Dict[str, Any]] = []
+    for index, path in enumerate(refs, 1):
+        try:
+            rel = path.relative_to(root).as_posix()
+        except ValueError:
+            rel = str(path)
+        role, owner = role_by_path.get(rel, ("reference", path.stem))
+        if index == 1 and target.mode in {"midframe", "tailframe"}:
+            role = "source_frame"
+            owner = target.clip
+        inputs.append({
+            "index": index,
+            "role": role,
+            "owner": owner,
+            "actual_path": str(path),
+            "rel_path": rel,
+            "sha256": base.file_sha256(path),
+        })
+    return inputs
+
+
+def build_dreamina_compiled_request(
+    root: Path,
+    episode: str,
+    target: base.Target,
+    reference_inputs: Sequence[Mapping[str, Any]],
+    *,
+    model_version: str = "",
+    resolution_type: str = "",
+) -> Dict[str, Any]:
+    params: Dict[str, Any] = {}
+    if model_version:
+        params["model_version"] = model_version
+    if resolution_type:
+        params["resolution_type"] = resolution_type
+    compiled = base.compile_target_image_request(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        backend="dreamina",
+        model=model_version,
+        channel="official_cli",
+        request_params_override=params,
+    )
+    lint = base.lint_compiled_image_prompt(compiled)
+    if lint.get("errors"):
+        raise ValueError("compiled Dreamina image request invalid: " + ", ".join(lint["errors"]))
+    return compiled
+
+
+def build_dreamina_prompt(
+    root: Path,
+    episode: str,
+    target: base.Target,
+    reference_inputs: Sequence[Mapping[str, Any]] = (),
+    *,
+    model_version: str = "",
+    resolution_type: str = "",
+    compiled_request: Optional[Mapping[str, Any]] = None,
+) -> str:
+    """Return exactly the compiler text submitted to Dreamina."""
+    compiled = dict(compiled_request or build_dreamina_compiled_request(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        model_version=model_version,
+        resolution_type=resolution_type,
+    ))
+    return str(compiled.get("prompt") or "").strip()
 
 
 def _reference_block(body: str) -> str:
@@ -221,11 +269,30 @@ def run_dreamina(
     poll_sec: int,
     model_version: str,
     resolution_type: str,
+    refs: Optional[Sequence[Path]] = None,
+    compiled_request: Optional[Mapping[str, Any]] = None,
 ) -> tuple[bool, str, str, List[Path]]:
-    refs = prompt_reference_paths(root, target, episode)
-    if not refs:
-        return False, "", "no ready reference images resolved for Dreamina image2image", refs
-    prompt = build_dreamina_prompt(root, episode, target)
+    resolved_refs = list(refs) if refs is not None else prompt_reference_paths(root, target, episode)
+    if not resolved_refs:
+        return False, "", "no ready reference images resolved for Dreamina image2image", resolved_refs
+    reference_inputs = dreamina_reference_inputs(root, target, resolved_refs, episode)
+    compiled = dict(compiled_request or build_dreamina_compiled_request(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        model_version=model_version,
+        resolution_type=resolution_type,
+    ))
+    prompt = build_dreamina_prompt(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        model_version=model_version,
+        resolution_type=resolution_type,
+        compiled_request=compiled,
+    )
     ratio = base.aspect_ratio(root)
     download_dir = temp_path.parent / f"{temp_path.stem}_download"
     if download_dir.exists():
@@ -235,7 +302,7 @@ def run_dreamina(
         "dreamina",
         "image2image",
         "--images",
-        ",".join(str(p) for p in refs),
+        ",".join(str(p) for p in resolved_refs),
         "--prompt",
         prompt,
         "--ratio",
@@ -258,10 +325,10 @@ def run_dreamina(
     )
     combined = "\n".join(p for p in (proc.stdout, proc.stderr) if p)
     if proc.returncode != 0:
-        return False, "", f"dreamina image2image exit {proc.returncode}: {combined}", refs
+        return False, "", f"dreamina image2image exit {proc.returncode}: {combined}", resolved_refs
     sid = submit_id_from(combined)
     if not sid:
-        return False, "", f"dreamina output did not include submit_id: {combined[:1000]}", refs
+        return False, "", f"dreamina output did not include submit_id: {combined[:1000]}", resolved_refs
     query = subprocess.run(
         ["dreamina", "query_result", "--submit_id", sid, "--download_dir", str(download_dir)],
         stdin=subprocess.DEVNULL,
@@ -273,13 +340,13 @@ def run_dreamina(
     )
     qout = "\n".join(p for p in (query.stdout, query.stderr) if p)
     if query.returncode != 0:
-        return False, sid, f"dreamina query_result exit {query.returncode}: {qout}", refs
+        return False, sid, f"dreamina query_result exit {query.returncode}: {qout}", resolved_refs
     candidates = image_candidates(download_dir)
     if not candidates:
-        return False, sid, f"dreamina query_result downloaded no image files: {qout[:1000]}", refs
+        return False, sid, f"dreamina query_result downloaded no image files: {qout[:1000]}", resolved_refs
     if not materialize_png(candidates[0], temp_path):
-        return False, sid, f"downloaded result is not a valid PNG and conversion failed: {candidates[0]}", refs
-    return True, sid, "", refs
+        return False, sid, f"downloaded result is not a valid PNG and conversion failed: {candidates[0]}", resolved_refs
+    return True, sid, "", resolved_refs
 
 
 def archive_existing(root: Path, rel_path: str, task_id: str) -> Optional[Path]:
@@ -314,8 +381,15 @@ def record_event(
     submit_id: str,
     refs: List[Path],
     archive_path: Optional[Path],
+    compiled_request: Optional[Mapping[str, Any]] = None,
+    submitted_prompt: str = "",
+    compiled_receipt: Optional[Path] = None,
     error: str = "",
 ) -> None:
+    compiled = dict(compiled_request or {})
+    metrics = compiled.get("metrics") if isinstance(compiled.get("metrics"), Mapping) else {}
+    experiment = compiled.get("experiment") if isinstance(compiled.get("experiment"), Mapping) else {}
+    prompt_sha = base.sha256_text(submitted_prompt)
     event = "redraw" if archive_path or os.environ.get("N2D_REASON") == "rerun" else "generation"
     cmd = [
         sys.executable,
@@ -359,6 +433,36 @@ def record_event(
         "--meta",
         f"reference_count={len(refs)}",
         "--meta",
+        f"actual_submit_prompt_sha256={prompt_sha}",
+        "--meta",
+        f"prompt_compiler_kind={compiled.get('kind') or ''}",
+        "--meta",
+        f"prompt_compiler_version={compiled.get('version') or ''}",
+        "--meta",
+        f"prompt_profile_version={compiled.get('profile_version') or ''}",
+        "--meta",
+        f"prompt_profile={compiled.get('profile') or ''}",
+        "--meta",
+        f"prompt_task_type={compiled.get('task_type') or ''}",
+        "--meta",
+        f"source_contract_sha256={compiled.get('source_contract_sha256') or ''}",
+        "--meta",
+        f"source_contract_text_sha256={compiled.get('source_contract_text_sha256') or ''}",
+        "--meta",
+        f"execution_context_sha256={compiled.get('execution_context_sha256') or ''}",
+        "--meta",
+        f"compiled_request_sha256={compiled.get('compiled_request_sha256') or ''}",
+        "--meta",
+        f"compiled_prompt_chars={metrics.get('prompt_chars') or 0}",
+        "--meta",
+        f"compiled_estimated_text_tokens={metrics.get('estimated_text_tokens') or 0}",
+        "--meta",
+        f"image_prompt_experiment_id={experiment.get('experiment_id') or ''}",
+        "--meta",
+        f"image_prompt_variant={experiment.get('variant') or ''}",
+        "--meta",
+        "compiled_request_params=" + json.dumps(compiled.get("request_params") or {}, ensure_ascii=False, sort_keys=True),
+        "--meta",
         f"temp_output={temp_path}",
         "--meta",
         f"source={SOURCE}",
@@ -369,6 +473,10 @@ def record_event(
         except ValueError:
             rel = ref
         cmd.extend(["--meta", f"reference={rel}"])
+        if ref.is_file():
+            cmd.extend(["--meta", f"reference_sha256={rel}#{base.file_sha256(ref)}"])
+    if compiled_receipt:
+        cmd.extend(["--meta", f"compiled_request_receipt={compiled_receipt}"])
     if archive_path:
         cmd.extend(["--redraw-reason", f"{task_id} Dreamina image2image 真实参考图重出 {target.shot}", "--redraw-category", "backend_migration"])
         cmd.extend(["--meta", f"archived_previous={archive_path}"])
@@ -419,6 +527,28 @@ def process_target(
     temp_path = temp_dir / f"{episode}_{base.temp_token(target.shot)}_{Path(target.rel_path).stem}.png"
     previous_status = latest_recorded_status(root, task_id, target.rel_path)
     refs = prompt_reference_paths(root, target, episode)
+    reference_inputs = dreamina_reference_inputs(root, target, refs, episode)
+    try:
+        compiled_request = build_dreamina_compiled_request(
+            root,
+            episode,
+            target,
+            reference_inputs,
+            model_version=model_version,
+            resolution_type=resolution_type,
+        )
+    except ValueError as exc:
+        print(f"[fail] {target.shot}: {exc}", file=sys.stderr)
+        return False
+    submitted_prompt = build_dreamina_prompt(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        model_version=model_version,
+        resolution_type=resolution_type,
+        compiled_request=compiled_request,
+    )
     if dry_run:
         print(json.dumps({
             "shot": target.shot,
@@ -428,6 +558,15 @@ def process_target(
             "reference_count": len(refs),
             "logical_seed": seed,
             "skip_existing_pass": (not force and previous_status == "pass" and base.png_valid(final)),
+            "prompt_compiler": {
+                "profile_version": compiled_request.get("profile_version"),
+                "profile": compiled_request.get("profile"),
+                "task_type": compiled_request.get("task_type"),
+                "compiled_request_sha256": compiled_request.get("compiled_request_sha256"),
+                "actual_submit_prompt_sha256": base.sha256_text(submitted_prompt),
+                "metrics": compiled_request.get("metrics"),
+                "lint": compiled_request.get("lint"),
+            },
         }, ensure_ascii=False))
         return True
     if not force and previous_status == "pass" and base.png_valid(final):
@@ -462,9 +601,17 @@ def process_target(
     submit_id = ""
     error = ""
     ok = False
+    compiled_receipt: Optional[Path] = None
     try:
         if temp_path.exists():
             temp_path.unlink()
+        compiled_receipt = base.write_compiled_request_receipt(
+            root,
+            episode,
+            target,
+            compiled_request,
+            submitted_prompt,
+        )
         ok, submit_id, error, refs = run_dreamina(
             target,
             root=root,
@@ -474,6 +621,8 @@ def process_target(
             poll_sec=poll_sec,
             model_version=model_version,
             resolution_type=resolution_type,
+            refs=refs,
+            compiled_request=compiled_request,
         )
         if ok:
             archive_path = archive_existing(root, target.rel_path, task_id)
@@ -500,6 +649,9 @@ def process_target(
         submit_id=submit_id,
         refs=refs,
         archive_path=archive_path,
+        compiled_request=compiled_request,
+        submitted_prompt=submitted_prompt,
+        compiled_receipt=compiled_receipt,
         error=error,
     )
     append_log(root, {
@@ -512,8 +664,23 @@ def process_target(
         "duration_sec": round(duration, 3),
         "submit_id": submit_id,
         "reference_count": len(refs),
+        "reference_sha256": [base.file_sha256(path) for path in refs if path.is_file()],
         "logical_seed": seed,
         "seed_effective": False,
+        "prompt_compiler_kind": compiled_request.get("kind"),
+        "prompt_compiler_version": compiled_request.get("version"),
+        "prompt_profile_version": compiled_request.get("profile_version"),
+        "prompt_profile": compiled_request.get("profile"),
+        "prompt_task_type": compiled_request.get("task_type"),
+        "source_contract_sha256": compiled_request.get("source_contract_sha256"),
+        "execution_context_sha256": compiled_request.get("execution_context_sha256"),
+        "compiled_request_sha256": compiled_request.get("compiled_request_sha256"),
+        "actual_submit_prompt_sha256": base.sha256_text(submitted_prompt),
+        "compiled_request_receipt": str(compiled_receipt or ""),
+        "request_params": compiled_request.get("request_params") or {},
+        "prompt_metrics": compiled_request.get("metrics") or {},
+        "image_prompt_experiment_id": (compiled_request.get("experiment") or {}).get("experiment_id"),
+        "image_prompt_variant": (compiled_request.get("experiment") or {}).get("variant"),
         "error": error[:1000],
     })
     if ok:

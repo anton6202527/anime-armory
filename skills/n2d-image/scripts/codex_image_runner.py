@@ -37,6 +37,19 @@ except Exception:  # pragma: no cover - Pillow-less runner falls back to raw ref
     ImageFilter = None  # type: ignore[assignment]
     ImageOps = None  # type: ignore[assignment]
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+
+from image_backend_adapter import current_image_backend_selection  # noqa: E402
+from image_prompt_compiler import (  # noqa: E402
+    compile_image_prompt,
+    contract_from_section,
+    infer_task_type as infer_image_task_type,
+    lint_compiled_prompt as lint_compiled_image_prompt,
+    normalize_exclusions,
+)
+
 
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
@@ -73,9 +86,9 @@ CHARACTER_SHARED_MINIMAL_FIELDS = ("front",)
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
 REALISTIC_RENDERING_STYLE_GUIDANCE = (
-    "项目基础视觉风格是写实国漫 / 影视级写实短剧质感，不是低幼 Q 版、欧美卡通、塑料 3D 或页游高饱和仙侠。"
-    "输出应保留真实光影、自然皮肤、真实材质和电影感，但必须统一到项目 style_anchor 的色彩、材质、镜头语言和完成度；"
-    "不要把“写实”跑成无风格归属的随机真人剧照，也不要被单张参考图带偏到别的项目风格。参考图只锁身份、服装和道具结构。"
+    "项目基础视觉风格只由 _设置.md、storyboard.style_contract 与 style_anchor 决定。"
+    "严格继承其线条或材质语言、色彩分级、镜头语言和完成度，不得擅自替换成写实、3D、赛璐璐、水墨、Q版或其它未选择风格；"
+    "单张人物参考图只锁身份、服装和道具结构，不覆盖项目风格。"
 )
 EXTERNAL_CHARACTER_REFERENCE_GUIDANCE = (
     "用户提供的人物/主角参考图默认只作身份与身形锚：只提取基础身高、体型/身材比例、体态、脸型、五官比例、"
@@ -94,14 +107,14 @@ FULL_BODY_SHOES_GUIDANCE = (
     "不得裁掉脚、被衣摆/烟雾完全遮住鞋、或用半身构图冒充全身。半身/脸部特写目标按其命名豁免。"
 )
 STYLE_ONLY_REFERENCE_GUIDANCE = (
-    "项目统一风格锚只用于学习渲染语言、材质质感、色彩分级、镜头焦段和半写实 3D 国漫写实完成度；"
+    "项目统一风格锚只用于学习当前 style_contract 的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；"
     "不得继承风格锚里的具体人物身份、五官、服装、动作、剧情状态、背景场景或构图。"
 )
 SHARED_MAKEUP_BOARD_GUIDANCE = (
     "共享角色定妆必须是统一规格的定妆参考板，不是剧情剧照：统一中性灰白/18%灰棚拍背景，"
     "背景干净无窗、无房间、无家具、无剧情道具、无环境叙事；同一胸口高度机位、"
-    "同一 70mm 左右等效镜头、同一柔和均匀棚拍光、同一半写实 3D 国漫写实材质；"
-    "不要页游/仙侠游戏概念立绘，不要剧情动作、台词表演、复杂场面调度。"
+    "同一 70mm 左右等效镜头、同一柔和均匀棚拍光，并继承项目已选 style_contract；"
+    "不得擅自切换风格，不要剧情动作、台词表演、复杂场面调度。"
 )
 RESTRICTED_PARTIAL_BOARD_GUIDANCE = (
     "restricted_partial 局部角色只出手部、肩背、布料或侧后剪影参考板；不建立完整正脸，不生成可识别主角脸，"
@@ -2460,6 +2473,285 @@ def hand_limb_anatomy_guidance(target: Target) -> str:
     )
 
 
+def image_style_brief(root: Path, episode: str) -> str:
+    try:
+        data = load_json_file(root / "脚本" / episode / "storyboard.json")
+        style = data.get("style_contract") if isinstance(data.get("style_contract"), Mapping) else {}
+    except Exception:
+        style = {}
+    parts: List[str] = []
+    for key in ("风格名", "style_name", "视觉基调", "光色策略"):
+        value = style.get(key) if isinstance(style, Mapping) else None
+        text = re.sub(r"\s+", " ", str(value or "")).strip(" ；;,，。")
+        if text and text not in parts:
+            parts.append(text)
+    if parts:
+        return "；".join(parts)
+    try:
+        text = (root / "_设置.md").read_text(encoding="utf-8")
+    except Exception:
+        text = ""
+    match = re.search(r"基础视觉风格\s*[：:]\s*(.+)$", text, re.M)
+    return match.group(1).strip() if match else "继承项目基础视觉风格与 style_anchor"
+
+
+def image_request_params(root: Path) -> Dict[str, Any]:
+    params: Dict[str, Any] = {
+        "aspect_ratio": aspect_ratio(root),
+        "output_format": "png",
+    }
+    try:
+        text = (root / "_设置.md").read_text(encoding="utf-8")
+    except Exception:
+        text = ""
+    for label, key in (("生图分辨率", "size"), ("图片分辨率", "size"), ("生图质量", "quality"), ("图片质量", "quality")):
+        match = re.search(rf"(?m)^\s*(?:[-*]\s*)?{re.escape(label)}\s*[：:]\s*(.+?)\s*$", text)
+        if match and key not in params:
+            params[key] = match.group(1).strip().strip("`|")
+    return params
+
+
+def image_prompt_experiment_context() -> Dict[str, str]:
+    experiment_id = os.environ.get("N2D_IMAGE_PROMPT_EXPERIMENT_ID", "").strip()
+    variant = os.environ.get("N2D_IMAGE_PROMPT_VARIANT", "").strip()
+    if bool(experiment_id) != bool(variant):
+        raise ValueError(
+            "image prompt A/B requires both N2D_IMAGE_PROMPT_EXPERIMENT_ID and N2D_IMAGE_PROMPT_VARIANT"
+        )
+    return {"experiment_id": experiment_id, "variant": variant} if experiment_id else {}
+
+
+def model_facing_policy_guards(
+    target: Target,
+    reference_inputs: Sequence[Mapping[str, Any]],
+) -> List[str]:
+    """Return only pixel-relevant target constraints for the compiled request.
+
+    Operational details such as internal registry paths, preprocessing commands,
+    retry budgets and QC routing stay in the complete production contract and
+    receipts.  This function preserves the few high-risk visual invariants that
+    used to live in the oversized Codex wrapper.
+    """
+    body = str(getattr(target.section, "body", "") or "")
+    guards: List[str] = []
+
+    gaze_lock = bool(re.search(
+        r"CHAR_|人物|角色|少年|少女|男人|女人|男子|女子|主角|对手|打斗|格挡|挥剑|劈砍|出拳|对话",
+        body,
+    )) and bool(camera_gaze_negatives_for(body))
+    if gaze_lock:
+        guards.append(
+            "镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；"
+            "身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍"
+        )
+
+    if re.search(r"用户(?:提供的)?(?:人物|主角)?参考图|外部参考图", body):
+        guards.extend([
+            "用户提供的人物/主角参考图默认只作身份与身形锚：提取基础身高、体型/身材比例、体态、脸型、五官比例和年龄感；"
+            "外部参考图的风格权重视为 0，不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜、光影、构图、衣装或背景",
+            "附件是真实视觉证据；每个角色只使用自己的身份附件，禁止把 A 的脸、发型、衣服或配饰套给 B；身份、发型、服装与道具结构以对应附件为准",
+            "低清或截图参考只锁身份与结构；不得继承低清、像素化、模糊、压缩块、屏幕截图质感、播放按钮、平台 UI、字幕或水印，输出保持清晰干净",
+        ])
+
+    group_guard = shared_group_member_variant_guidance(target)
+    if group_guard:
+        guards.append(
+            "共享群像角色角度资产硬约束：本目标只画一名普通代表成员；各角度必须是同一名成员，"
+            "不得画成多人队列、三名军士并排、重复复制人、关系图或小队合影"
+        )
+
+    if target.mode in {"midframe", "tailframe"} or CROSS_EPISODE_SOURCE_FRAME_LINE_RE.search(body):
+        guards.extend([
+            "源帧几何连续性硬锁：保持同一角色站位、同一武器/道具接触点、同一伤口位置、同一手握位置、同一入射角/刀柄角度和画面轴线；只推进表情、光效、烟尘、身体微姿态或镜头距离",
+            "源帧主体身份连续硬锁：这是同一 Clip 接力，不是重新选角/重新换装；保持同一脸型比例、同一发际线、同一发髻/发束轮廓，以及同一衣领交叠方向、袖口卷边、腰带位置、衣摆、鞋履和材质",
+        ])
+        if re.search(r"(插|刺|贯|穿|入|捅|扎|钉|没入|贯入|刺入)", body) and re.search(
+            r"(刀|剑|枪|矛|匕首|刃|武器|胸口|腹|肩|背|身体)", body
+        ):
+            guards.append(
+                "入体点硬锁：保留同一把武器、同一处入体点和同一条伤口线；"
+                "禁止新增第二处伤口，禁止把胸口伤改成腹部/腰部/肩部伤"
+            )
+
+    if weapon_body_contact_guidance(target):
+        guards.append(
+            "武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；"
+            "禁止同一把武器像插了多刀或出现互相矛盾的伤口位置"
+        )
+        if re.search(r"(胸口|胸膛|胸前|心口)", body):
+            guards.append(
+                "本镜已指定胸口/胸前：入体点在上胸/胸口，不得画成腹部、腰部、肩部或大腿入刀"
+            )
+
+    if target.mode != "shared" and face_qc_visibility_guidance(target):
+        guards.append(
+            "脸部机检可核验铁律：主检角色保留清楚的眼鼻嘴三角区与脸部轮廓；动作镜可用三分之二、45°、过肩或侧前脸，"
+            "不得被头发/暗影/火花/刀光完全遮住，也不转成看镜头肖像"
+        )
+    if target.mode != "shared" and hand_limb_anatomy_guidance(target):
+        guards.extend([
+            "手部/肢体归属铁律：每只可见手明确归属角色和左右手臂，单个人形角色最多两条手臂两只手；"
+            "禁止额外手掌、镜像右手/镜像左手、漂浮断手或重复手",
+            "若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
+        ])
+
+    if target.mode == "shared" and _target_has_character_alias(target):
+        guards.append(
+            "共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；"
+            "全身、角度和三视图从头到鞋靴完整可见"
+        )
+    if target.mode == "shared" and _target_has_prop_alias(target):
+        stem = Path(target.rel_path).stem
+        if any(token in stem for token in ("_手持", "_比例", "_in_hand", "_scale")):
+            guards.append("道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份")
+        else:
+            guards.append("道具主参考板只画干净物件本体和中性背景；不出现人物、手、脸、身体残片、持握动作或剧情动作")
+
+    if any(
+        str(item.get("role") or item.get("kind") or "").lower() == "style"
+        for item in reference_inputs
+        if isinstance(item, Mapping)
+    ):
+        guards.append(
+            "风格附件只提供线条、材质、色彩分级、镜头语言和完成度；不得继承风格锚里的具体人物身份、五官、服装、动作、背景场景或构图"
+        )
+    return list(dict.fromkeys(item.strip(" ；。") for item in guards if item.strip()))
+
+
+def compile_target_image_request(
+    root: Path,
+    episode: str,
+    target: Target,
+    reference_inputs: Sequence[Mapping[str, Any]],
+    *,
+    backend: str = "codex",
+    model: str = "",
+    channel: str = "",
+    retry_guidance: str = "",
+    request_params_override: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    selection = current_image_backend_selection(str(root))
+    actual_model = model or os.environ.get("N2D_IMAGE_MODEL") or str(selection.get("image_model") or "")
+    actual_channel = channel or str(selection.get("channel") or selection.get("access") or "")
+    task = infer_image_task_type(target.section.body, mode=target.mode, target_path=target.rel_path)
+    params = image_request_params(root)
+    params.update(dict(request_params_override or {}))
+    policy_guards = model_facing_policy_guards(target, reference_inputs)
+    body = str(target.section.body or "")
+    clash = weapon_clash_compose_for(body)
+    if clash:
+        policy_guards.append(re.sub(r"\s+", " ", clash).strip(" -；。"))
+    selected_style = image_style_brief(root, episode)
+    spectacle = combat_spectacle_richness_for(body, selected_style)
+    if spectacle:
+        if re.search(r"赛璐璐|二次元|anime|cel(?:[- ]?shad)", selected_style, re.I):
+            policy_guards.append(
+                "动作高潮按赛璐璐视觉语法呈现：清晰轮廓、分层色块、图形化冲击形、方向明确的速度线和短促残影；"
+                "环境同步受力，动作与身份始终清楚，不混入写实体积光或长拖影 motion blur"
+            )
+        elif re.search(r"水墨|国画|ink wash|sumi", selected_style, re.I):
+            policy_guards.append(
+                "动作高潮按水墨视觉语法呈现：飞白与泼墨气劲沿攻击方向展开，以浓淡、留白和墨雾建立纵深；"
+                "环境同步受力，动作与身份清楚，不混入写实体积光或写实景深"
+            )
+        else:
+            policy_guards.append(
+                "动作高潮呈现经费在燃烧的完成度：丁达尔体积光勾勒主体，大气透视分离前中后景，"
+                "碎屑、烟尘和衣摆体现环境受力，速度线与短促运动残影强化方向；脸和命中点保持清楚"
+            )
+    contract = contract_from_section(
+        target.section.body,
+        backend=backend,
+        model=actual_model,
+        channel=actual_channel,
+        mode=target.mode,
+        task_type=task,
+        target_path=target.rel_path,
+        style=image_style_brief(root, episode),
+        aspect_ratio=str(params.get("aspect_ratio") or ""),
+        reference_inputs=reference_inputs,
+        request_params=params,
+        policy_guards=policy_guards,
+    )
+    gaze_exclusions = camera_gaze_negatives_for(body) if any(
+        "镜头为旁观者视角" in item for item in policy_guards
+    ) else ""
+    if gaze_exclusions:
+        contract["exclude"] = list(dict.fromkeys([
+            *(contract.get("exclude") or []),
+            *normalize_exclusions(gaze_exclusions),
+        ]))
+    if target.variant_note:
+        contract["objective"] = "；".join(filter(None, (
+            str(contract.get("objective") or ""),
+            str(target.variant_note),
+        )))
+    if target.mode in {"midframe", "tailframe"}:
+        preserve = list(contract.get("preserve") or [])
+        preserve.append("源帧的角色身份、服装、站位、场景几何、光位、轴线、手握/道具接触点和伤口位置")
+        contract["preserve"] = preserve
+        role = "中段动作增量" if target.mode == "midframe" else "尾态动作/表情增量"
+        contract["action"] = "；".join(filter(None, (str(contract.get("action") or ""), role)))
+    if retry_guidance:
+        contract["objective"] = "；".join(filter(None, (
+            str(contract.get("objective") or ""),
+            "返工修复：" + re.sub(r"\s+", " ", retry_guidance).strip(),
+        )))
+    payload = compile_image_prompt(contract, backend)
+    experiment = image_prompt_experiment_context()
+    if experiment:
+        payload["experiment"] = experiment
+    return payload
+
+
+def compiled_request_receipt_path(root: Path, episode: str, target: Target) -> Path:
+    safe = re.sub(r"[^A-Za-z0-9_.\-\u4e00-\u9fff]+", "_", f"{target.shot}_{Path(target.rel_path).stem}").strip("_")
+    return root / "生产数据" / "compiled_image_requests" / episode / f"{safe}.json"
+
+
+def write_compiled_request_receipt(
+    root: Path,
+    episode: str,
+    target: Target,
+    compiled: Mapping[str, Any],
+    submitted_prompt: str,
+) -> Path:
+    latest_path = compiled_request_receipt_path(root, episode, target)
+    latest_path.parent.mkdir(parents=True, exist_ok=True)
+    references = list(compiled.get("reference_inputs") or [])
+    params = dict(compiled.get("request_params") or {})
+    compiled_sha = str(compiled.get("compiled_request_sha256") or sha256_text(submitted_prompt))
+    payload = {
+        "kind": "n2d_compiled_image_request_receipt",
+        "version": 1,
+        "created_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        "episode": episode,
+        "shot": target.shot,
+        "target": target.rel_path,
+        "compiler": dict(compiled),
+        "actual_submit_prompt": submitted_prompt,
+        "actual_submit_prompt_sha256": sha256_text(submitted_prompt),
+        "actual_submit_prompt_chars": len(submitted_prompt),
+        "actual_submit_request": {
+            "prompt": submitted_prompt,
+            "negative_prompt": str(compiled.get("negative_prompt") or ""),
+            "request_params": params,
+            "reference_inputs": references,
+        },
+        "request_params_sha256": sha256_text(json.dumps(params, ensure_ascii=False, sort_keys=True, separators=(",", ":"))),
+        "reference_inputs_sha256": sha256_text(json.dumps(references, ensure_ascii=False, sort_keys=True, separators=(",", ":"))),
+    }
+    backend = re.sub(r"[^A-Za-z0-9_.-]+", "_", str(compiled.get("backend") or "image")).strip("_")
+    immutable = latest_path.parent / "history" / f"{latest_path.stem}_{backend}_{compiled_sha[:16]}.json"
+    immutable.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    for path in (immutable, latest_path):
+        tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
+        tmp.write_text(text, encoding="utf-8")
+        os.replace(tmp, path)
+    return immutable
+
+
 def build_codex_prompt(
     root: Path,
     episode: str,
@@ -2469,100 +2761,38 @@ def build_codex_prompt(
     reference_bundle: Optional[Dict[str, Any]] = None,
     reference_manifest: Optional[Path] = None,
     retry_guidance: str = "",
+    compiled_request: Optional[Mapping[str, Any]] = None,
 ) -> str:
-    aspect = aspect_phrase(aspect_ratio(root))
-    overview = brief_context(root / "出图" / episode / "prompt" / "00_总览.md")
-    registry = root / "出图" / "共享" / "identity_registry.json"
-    assets = root / "出图" / "共享" / "asset_registry.json"
-    state = root / "出图" / "共享" / "visual_state_ledger.json"
-    final_path = root / target.rel_path
-    source_for_tail = root / target.rel_path
-    if target.mode not in {"firstframe", "shared"}:
-        source_for_tail = root / target_for_shot(target.clip, target.section, episode).rel_path
-
-    # 镜头不是对视对象铁律：非 POV 镜注入「禁止看镜头/肖像摆拍/自拍」全局负面（POV/破第四墙/对观众特写豁免）。
-    # 视线防呆 + 对撞构图统一走两后端共用的 helper（单一真值源 n2d_const），即梦后端同源注入、不再各写一套。
-    _cgn = camera_gaze_negatives_for(str(getattr(target.section, "body", "") or ""))
-    camera_gaze_neg = (
-        "- 负面（本镜非 POV·镜头是旁观者）：" + _cgn
-        + "——角色不得直视镜头/正对镜头摆拍/自拍感，视线锁场内目标。"
-    ) if _cgn else ""
-
-    # 武器/武技对撞镜：注入「两兵器在接触点硬碰硬相交」构图（治打斗被拆成单人正反打/单向命中、
-    # 很少出现双方兵器相击撞点）。clash 是 face-safe（接触点为焦点·脸 ¾/侧非主体），与脸铁律协同。
-    _ccg = weapon_clash_compose_for(str(getattr(target.section, "body", "") or ""))
-    clash_compose = ("- " + _ccg) if _ccg else ""
-
-    # 打斗/法术/动作高潮镜：注入「经费在燃烧」视觉盛宴保底层（体积光/大气纵深/环境受力/运动能量四层）。
-    # 传本剧风格句 → cel/ink/flat 风格自动换变体，避免给赛璐璐/水墨/Q版剧硬塞写实体积光与 motion blur。
-    _csr = combat_spectacle_richness_for(
-        str(getattr(target.section, "body", "") or ""),
-        style_contract_phrase(root, episode),
+    fallback_references: Sequence[Mapping[str, Any]] = list(
+        (reference_bundle or {}).get("cli_image_inputs") or
+        (reference_bundle or {}).get("items") or []
     )
-    spectacle_richness = ("- " + _csr) if _csr else ""
-    frame_geometry = source_frame_geometry_guidance(target)
-    weapon_contact = weapon_body_contact_guidance(target)
-    face_qc_visibility = face_qc_visibility_guidance(target)
-    hand_limb_anatomy = hand_limb_anatomy_guidance(target)
+    compiled = dict(compiled_request or compile_target_image_request(
+        root,
+        episode,
+        target,
+        fallback_references,
+        backend="codex",
+        retry_guidance=retry_guidance,
+    ))
+    lint = lint_compiled_image_prompt(compiled)
+    if lint.get("errors"):
+        raise ValueError("compiled image prompt invalid: " + ", ".join(lint["errors"]))
+    params = json.dumps(compiled.get("request_params") or {}, ensure_ascii=False, sort_keys=True)
+    negative = str(compiled.get("negative_prompt") or "").strip()
+    negative_block = f"\n独立负向字段（仅后端支持时提交）：\n{negative}\n" if negative else ""
+    return f"""为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。
 
-    return f"""你正在为 N2D 项目生成正式分镜 PNG。必须使用内置 AI 生图能力（imagegen/image_generation），不要用 Python/SVG/canvas/纯色图/占位图伪造。
+执行参数：
+- task_type={compiled.get('task_type')}; mode={compiled.get('mode')}; model={compiled.get('model') or '本次已选图片模型'}
+- request_params={params}
+- 输出由外层 runner 从事件流解码到：{temp_path}
+- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。
 
-输出要求：
-- 只生成 1 张 {aspect} 电影感 PNG。
-- 使用内置 image_generation/image_gen 生成真实位图；不要自己写本地文件，外层 runner 会从事件流解码图片并落到：{temp_path}
-- 禁止水印、字幕、logo、文字、漫画分格、UI 边框。
-
-一致性硬约束：
-- {REALISTIC_RENDERING_STYLE_GUIDANCE}
-- {EXTERNAL_CHARACTER_REFERENCE_GUIDANCE}
-- {NON_CHARACTER_FACE_POLICY_GUIDANCE}
-- {FULL_BODY_SHOES_GUIDANCE}
-- {REFERENCE_ATTACHMENT_PRIORITY_GUIDANCE}
-- {REFERENCE_QUALITY_GUIDANCE}
-- 角色定妆/共享角色参考板必须使用统一中性灰白/18%灰棚拍背景，柔和均匀棚拍光；无窗、无房间、无家具、无剧情道具、无环境叙事。style_anchor 只影响材质/渲染/色彩倾向，不继承背景场景。
-- 角色 DNA = 脸 + 发型 + 服装 + 配饰 + 质感。不要只锁脸；服装按 registry 的 wardrobe_profile 锁剪影、领袖腰摆、材质、纹样和色卡。
-- 近景优先参考“脸部特写 + 半身”，全身/三视图只作服装结构辅助；脸部特写仅用于**身份比对**，不据此把人物摆成正对镜头的肖像/摆拍/自拍姿态。
-- 多人同框必须按 prompt 的 blocking 分层理解，避免串脸。
-- **镜头是旁观者，不是对手 POV / 对视对象（铁律）**：除非本镜 prompt 显式声明 POV / 破第四墙 / 对观众压迫感特写，否则角色**绝不与镜头对视**——视线锁在**场内目标**（对手眼/胸/腕、武器来路、攻击落点、破绽方向、被击撞点、对话对象、所视之物），不看镜头、不看观众。
-- 若本镜有“资产身份注册层”且某角色带 *，该角色是主检身份：让其身份**可清楚比对**（眼鼻嘴三角区可辨即满足），但**身份可辨 ≠ 正对镜头**——三分之二侧脸 / 侧脸 / 过肩 / 45°回头 / 背侧轮廓都可满足主检；追身/背身/动作镜用 45°回头、过肩露脸或清楚侧脸即可，只需避免脸太小或被头发/暗影**完全**遮挡，**不必也不应把脸转正对镜头**。打斗/动作镜**动作优先于脸**：肩线、髋部、脚步、武器弧线、撞点、受力方向必须清楚，脸服务于动作而非取代动作。
-- 多人镜中次要角色可以较小或后景，但不得让次要角色的大脸压过带 * 的主检角色，除非 prompt 明确声明主检身份切换。
-{camera_gaze_neg}
-{clash_compose}
-{spectacle_richness}
-{frame_geometry}
-{weapon_contact}
-{face_qc_visibility}
-{hand_limb_anatomy}
-{retry_guidance}
-- 这是 Codex 后端：没有公开 seed API。逻辑 seed/连续性 token 仅用于追踪：{seed}，不要声称这是可复现 seed。
-
-项目根：{root}
-集数：{episode}
-shot：{target.shot}
-生成模式：{target.mode}
-帧角色：{frame_role_note(target) or "常规定妆/共享资产目标。"}
-{shared_style_guidance(target, reference_bundle)}
-正式目标：{final_path}
-{"共享定妆变体要求：" + target.variant_note if target.variant_note else ""}
-{shared_group_member_variant_guidance(target)}
-可读注册表：
-- identity_registry: {registry}
-- asset_registry: {assets}
-- visual_state_ledger: {state}
-{"尾帧/中段可参考已有源图：" + str(source_for_tail) if target.mode not in {"firstframe", "shared"} else ""}
-{reference_bundle_prompt_text(root, reference_bundle, reference_manifest) if reference_bundle else ""}
-
-本集总览节选：
-{overview}
-
-本次完整 prompt 区块：
-{target.section.body}
-
-执行方式：
-1. 优先使用本次 CLI 已通过 `codex exec --image` 附加的参考图；如果同一角色有脸部特写和半身，优先使用它们。
-2. 根据本镜中文正向 prompt 与负向 prompt 生成画面。
-3. 生成完成后只用一句话说明完成；不要搜索文件系统，不要创建替代文件。
-4. 只要无法生成真实 PNG，就直接说明失败。
+模型实际执行 prompt：
+{compiled.get('prompt') or ''}
+{negative_block}
+完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。
 """
 
 
@@ -2741,6 +2971,9 @@ def record_event(
     archive_path: Optional[Path] = None,
     reference_manifest: Optional[Path] = None,
     reference_inputs: Optional[Sequence[Dict[str, Any]]] = None,
+    submitted_prompt: str = "",
+    compiled_request: Optional[Mapping[str, Any]] = None,
+    compiled_receipt: Optional[Path] = None,
     error: str = "",
 ) -> None:
     event = "redraw" if os.environ.get("N2D_REASON") == "rerun" else "generation"
@@ -2787,9 +3020,13 @@ def record_event(
         f"source={SOURCE}",
     ]
     reference_inputs = list(reference_inputs or [])
-    image_model = os.environ.get("N2D_IMAGE_MODEL") or "GPT Image 2"
-    channel = "Codex CLI"
-    prompt_sha = sha256_text(target.section.body)
+    compiled_request = dict(compiled_request or {})
+    experiment = compiled_request.get("experiment") if isinstance(compiled_request.get("experiment"), Mapping) else {}
+    image_model = str(compiled_request.get("model") or os.environ.get("N2D_IMAGE_MODEL") or "GPT Image 2")
+    channel = str(compiled_request.get("channel") or "Codex CLI")
+    prompt_sha = sha256_text(submitted_prompt) if submitted_prompt else sha256_text(str(compiled_request.get("prompt") or ""))
+    source_prompt_sha = sha256_text(target.section.body)
+    compiled_sha = str(compiled_request.get("compiled_request_sha256") or "")
     ref_sha = reference_bundle_hash(reference_manifest, reference_inputs)
     route_hash = sha256_text(f"codex|{image_model}|{channel}|{target.mode}|{target.shot}|{target.rel_path}")
     settings_sha = optional_file_sha256(root / "_设置.md")
@@ -2804,6 +3041,8 @@ def record_event(
         "asset": target.rel_path,
         "mode": target.mode,
         "prompt_sha256": prompt_sha,
+        "source_prompt_section_sha256": source_prompt_sha,
+        "compiled_request_sha256": compiled_sha,
         "reference_bundle_sha256": ref_sha,
         "route_hash": route_hash,
         "settings_sha256": settings_sha,
@@ -2828,6 +3067,21 @@ def record_event(
         "--meta", f"capability_evidence_id={capability_id}",
         "--meta", f"recipe_hash={recipe_hash}",
         "--meta", f"prompt_sha256={prompt_sha}",
+        "--meta", f"actual_submit_prompt_sha256={prompt_sha}",
+        "--meta", f"source_prompt_section_sha256={source_prompt_sha}",
+        "--meta", f"prompt_compiler_kind={compiled_request.get('kind') or ''}",
+        "--meta", f"prompt_compiler_version={compiled_request.get('version') or ''}",
+        "--meta", f"prompt_profile_version={compiled_request.get('profile_version') or ''}",
+        "--meta", f"prompt_profile={compiled_request.get('profile') or ''}",
+        "--meta", f"prompt_task_type={compiled_request.get('task_type') or ''}",
+        "--meta", f"negative_strategy={compiled_request.get('negative_strategy') or ''}",
+        "--meta", f"source_contract_sha256={compiled_request.get('source_contract_sha256') or ''}",
+        "--meta", f"execution_context_sha256={compiled_request.get('execution_context_sha256') or ''}",
+        "--meta", f"compiled_request_sha256={compiled_sha}",
+        "--meta", f"compiled_prompt_chars={(compiled_request.get('metrics') or {}).get('prompt_chars') or 0}",
+        "--meta", f"compiled_estimated_text_tokens={(compiled_request.get('metrics') or {}).get('estimated_text_tokens') or 0}",
+        "--meta", f"image_prompt_experiment_id={experiment.get('experiment_id') or ''}",
+        "--meta", f"image_prompt_variant={experiment.get('variant') or ''}",
         "--meta", f"reference_bundle_sha256={ref_sha}",
         "--meta", f"backend_version={backend_version}",
         "--meta", f"input_fingerprint={input_fingerprint}",
@@ -2845,6 +3099,12 @@ def record_event(
     if reference_manifest:
         cmd.extend(["--meta", f"reference_bundle={reference_manifest}"])
         cmd.extend(["--meta", f"reference_manifest={reference_manifest}"])
+    if compiled_receipt:
+        try:
+            receipt_rel = compiled_receipt.relative_to(root)
+        except ValueError:
+            receipt_rel = compiled_receipt
+        cmd.extend(["--meta", f"compiled_request_receipt={receipt_rel}"])
     cmd.extend(["--meta", "reference_input_mode=codex_exec_image_flags"])
     cmd.extend(["--meta", f"reference_input_count={len(reference_inputs)}"])
     if reference_inputs:
@@ -3384,6 +3644,22 @@ def process_target(
     reference_inputs = codex_reference_inputs_for_target(root, episode, target, reference_bundle)
     reference_inputs = prepare_reference_inputs(root, episode, reference_inputs, write=not dry_run)
     attach_reference_inputs(reference_bundle, reference_inputs)
+    retry_guidance = target_qc_retry_guidance(root, episode, target) if force and png_valid(final) else ""
+    compiled_request = compile_target_image_request(
+        root,
+        episode,
+        target,
+        reference_inputs,
+        backend="codex",
+        retry_guidance=retry_guidance,
+    )
+    compiler_errors = list((compiled_request.get("lint") or {}).get("errors") or [])
+    if compiler_errors:
+        print(
+            f"[fail] {target.shot}: compiled image request invalid: {', '.join(compiler_errors)}",
+            file=sys.stderr,
+        )
+        return False
 
     if dry_run:
         print(json.dumps({
@@ -3396,6 +3672,14 @@ def process_target(
             "reference_input_count": len(reference_inputs),
             "reference_input_paths": [reference_input_actual_path(item) for item in reference_inputs],
             "reference_input_quality": [item.get("reference_quality") for item in reference_inputs],
+            "prompt_compiler": {
+                key: compiled_request.get(key)
+                for key in (
+                    "kind", "version", "profile_version", "profile", "backend", "model", "mode",
+                    "task_type", "negative_strategy", "source_contract_sha256", "compiled_request_sha256",
+                )
+            },
+            "compiled_prompt_chars": (compiled_request.get("metrics") or {}).get("prompt_chars"),
             "skip_existing_pass": (not force and previous_status == "pass" and png_valid(final)),
             "skip_existing_file": (not force and existing_shared_image),
         }, ensure_ascii=False))
@@ -3485,7 +3769,6 @@ def process_target(
         )
         return False
 
-    retry_guidance = target_qc_retry_guidance(root, episode, target) if force and png_valid(final) else ""
     prompt = build_codex_prompt(
         root,
         episode,
@@ -3495,7 +3778,9 @@ def process_target(
         reference_bundle,
         reference_manifest,
         retry_guidance=retry_guidance,
+        compiled_request=compiled_request,
     )
+    compiled_receipt = write_compiled_request_receipt(root, episode, target, compiled_request, prompt)
     started = time.monotonic()
     error = ""
     archive_path: Optional[Path] = None
@@ -3541,6 +3826,9 @@ def process_target(
         archive_path=archive_path,
         reference_manifest=reference_manifest,
         reference_inputs=reference_inputs,
+        submitted_prompt=prompt,
+        compiled_request=compiled_request,
+        compiled_receipt=compiled_receipt,
         error=error,
     )
     append_log(root, {
@@ -3557,6 +3845,15 @@ def process_target(
         "reference_input_count": len(reference_inputs),
         "reference_input_paths": [reference_input_actual_path(item) for item in reference_inputs],
         "reference_manifest": str(reference_manifest),
+        "compiled_request": str(compiled_receipt),
+        "compiled_request_sha256": compiled_request.get("compiled_request_sha256"),
+        "prompt_profile_version": compiled_request.get("profile_version"),
+        "prompt_profile": compiled_request.get("profile"),
+        "prompt_task_type": compiled_request.get("task_type"),
+        "compiled_estimated_text_tokens": (compiled_request.get("metrics") or {}).get("estimated_text_tokens"),
+        "image_prompt_experiment_id": (compiled_request.get("experiment") or {}).get("experiment_id"),
+        "image_prompt_variant": (compiled_request.get("experiment") or {}).get("variant"),
+        "actual_submit_prompt_sha256": sha256_text(prompt),
         "archive": str(archive_path) if archive_path else "",
         "error": error[:1000],
     })

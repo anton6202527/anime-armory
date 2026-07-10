@@ -147,11 +147,32 @@ def build(root: str, ep: str) -> Dict[str, Any]:
     elif not setting_on:
         notes.append("选择点『原生多镜生成』未开启（默认逐镜独立出）；开启后支持多镜的后端可一次 co-generate 接力组。")
     plan = resolve_plan(routes or {}, active=active)
+    try:
+        from video_execution_adapter import execution_status
+    except Exception:
+        execution_status = None  # type: ignore
+    ready_groups = 0
+    for group in plan.get("groups") or []:
+        status = execution_status(
+            root, group.get("backend"), "",
+            required_operations=("multishot_submit", "multishot_query"),
+        ) if execution_status else {
+            "state": "adapter_module_unavailable", "automated": False, "supports_multishot": False,
+        }
+        group["execution_adapter"] = status
+        group["execution_ready"] = bool(status.get("automated") and status.get("supports_multishot"))
+        group["execution_status"] = "ready" if group["execution_ready"] else "job_package_only"
+        ready_groups += int(group["execution_ready"])
     plan.update({
-        "kind": KIND, "version": 1, "root": root, "episode": ep,
+        "kind": KIND, "version": 2, "root": root, "episode": ep,
         "setting_on": setting_on, "backend_multishot_native": backend_ok,
-        "summary": summarize(plan), "notes": notes,
+        "summary": {**summarize(plan), "execution_ready_groups": ready_groups}, "notes": notes,
     })
+    if active and plan.get("groups") and not ready_groups:
+        notes.append(
+            "原生多镜能力已激活，但本机没有同时支持 multishot_submit/query 的 adapter v2；"
+            "可先生成自包含 job package，实际提交需登记 wrapper 或转人工。"
+        )
     return plan
 
 
@@ -160,11 +181,11 @@ def render_md(plan: Mapping[str, Any]) -> str:
     lines = [
         f"# 原生多镜执行计划 · {plan.get('episode')}",
         f"- 激活：{'是' if plan.get('active') else '否'}（选择点={plan.get('setting_on')} · 后端支持={plan.get('backend_multishot_native')}）",
-        f"- 激活组：{s.get('group_count', 0)} · 一次 co-generate 镜数：{s.get('co_generated_clips', 0)} · 模型消缝接缝：{s.get('model_handled_seam_count', 0)}",
+        f"- 激活组：{s.get('group_count', 0)} · 可自动执行组：{s.get('execution_ready_groups', 0)} · 一次 co-generate 镜数：{s.get('co_generated_clips', 0)} · 模型消缝接缝：{s.get('model_handled_seam_count', 0)}",
         "",
     ]
     for g in plan.get("groups") or []:
-        lines.append(f"- **{g['group_id']}**（{g.get('backend')}·≈{g.get('approx_seconds')}s）：{' → '.join(g['members'])}")
+        lines.append(f"- **{g['group_id']}**（{g.get('backend')}·≈{g.get('approx_seconds')}s·{g.get('execution_status', 'unknown')}）：{' → '.join(g['members'])}")
     for n in plan.get("notes") or []:
         lines.append(f"> {n}")
     return "\n".join(lines) + "\n"

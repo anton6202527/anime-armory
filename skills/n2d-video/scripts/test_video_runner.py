@@ -344,6 +344,44 @@ def test_submit_duration_has_dreamina_floor() -> None:
     assert video_runner.submit_duration(4.1) == 5
 
 
+def test_edit_cut_part_is_recompiled_as_its_own_take() -> None:
+    parent = {
+        "prompt_compiler": {"native_audio_policy": "none"},
+        "reference_inputs": ["CHAR_01/reference_group"],
+    }
+
+    compiled = video_runner.compile_relay_segment_prompt(
+        backend="dreamina",
+        parent_item=parent,
+        part_clip="Clip_01_part2",
+        duration_sec=2.5,
+        start_rel="a.png",
+        end_rel="b.png",
+        end_hint="她把刀停在门前",
+        shot_description="MCU 50mm；她抬刀但不劈下",
+    )
+    text = video_runner.split_relay_prompt_text(
+        "父镜头还包含开门、冲入院中和下一句对白",
+        "Clip_01",
+        "Clip_01_part2",
+        part_index=2,
+        part_total=3,
+        start_rel="a.png",
+        end_rel="b.png",
+        start_sec=2.5,
+        end_sec=5.0,
+        end_hint="她把刀停在门前",
+        shot_description="MCU 50mm；她抬刀但不劈下",
+        compiled_segment_prompt=compiled["prompt"],
+    )
+
+    assert compiled["lint"]["errors"] == []
+    assert compiled["duration_plan"]["edit_target_sec"] == 2.5
+    assert "Compiled Segment Submit Prompt" in text
+    assert "父镜头还包含开门" not in text
+    assert "不得提前进入下一段" in text
+
+
 def test_attach_multiframe_submit_duration_uses_native_timeline(tmp_path: Path) -> None:
     image_dir = tmp_path / "出图" / "第1集" / "图片"
     image_dir.mkdir(parents=True)

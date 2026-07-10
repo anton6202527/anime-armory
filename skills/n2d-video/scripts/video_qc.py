@@ -75,6 +75,8 @@ def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
     无 storyboard 意图 → strict（宁可误报交人判，不静默放过）。"""
     if intent is None:
         return "strict"
+    if intent.get("model_handled"):
+        return "model_handled"
     if intent.get("relay") or str(intent.get("transition") or "").strip().lower() in RELAY_TRANSITIONS:
         return "strict"
     if str(intent.get("transition") or "").strip():
@@ -106,6 +108,19 @@ def load_seam_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
         out[idx] = {"transition": cont.get("transition"),
                     # 规范字段 need_endframe（无下划线）；need_end_frame 仅旧别名兜底。
                     "relay": _declared_relay(transition, need_end)}
+    # Native multi-shot co-generation owns seams inside an activated group.  The
+    # seam is still measured, but a large frame distance is informational rather
+    # than proof that a first/last-frame relay failed (there was no relay).
+    plan_path = root / "出视频" / episode / "prompt" / "multishot_plan.json"
+    try:
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    except Exception:
+        plan = {}
+    handled = {str(x) for x in (plan.get("model_handled_seams") or [])} if plan.get("active") else set()
+    handled_numbers = {clip_index(value) for value in handled}
+    for idx, intent in out.items():
+        if idx + 1 in handled_numbers:
+            intent["model_handled"] = True
     return out
 
 
@@ -147,7 +162,7 @@ def machine_check(payload: Dict[str, Any], context_frames: Optional[Dict[int, Di
         strictness = seam_strictness(intent)
         chk.update({"from_clip": f"Clip_{n:02d}", "to_clip": f"Clip_{m:02d}",
                     "transition": (intent or {}).get("transition"), "strictness": strictness})
-        if strictness == "info" and chk["verdict"] != "ok":
+        if strictness in {"info", "model_handled"} and chk["verdict"] != "ok":
             # storyboard 声明的设计切镜（match/hard/action cut）——构图必然变，距离只记录不拦。
             chk["verdict_if_relay"] = chk["verdict"]
             chk["verdict"] = "info"

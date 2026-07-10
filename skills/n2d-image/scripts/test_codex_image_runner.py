@@ -673,18 +673,16 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "基础身高、体型/身材比例、体态、脸型、五官比例" in prompt
     assert "不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜" in prompt
     assert "外部参考图的风格权重视为 0" in prompt
-    assert "项目风格必须以 _设置.md 的基础视觉风格" in prompt
-    assert "非角色资产/VFX/道具/武器/场景若未在 registry 显式声明" in prompt
-    assert "不得生成清晰可辨的人物脸、角色立绘" in prompt
-    assert "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround" in prompt
-    assert "鞋靴/脚部清楚可见" in prompt
-    assert "附加的参考图是真实视觉证据" in prompt
+    assert "附件是真实视觉证据" in prompt
     assert "禁止把 A 的脸、发型、衣服或配饰套给 B" in prompt
-    assert "身份、发型、服装、道具外形以附件和 registry 为准" in prompt
-    assert "短边低于 1024px 的参考图升采样为增强入参" in prompt
+    assert "身份、发型、服装与道具结构以对应附件为准" in prompt
     assert "不得继承低清、像素化、模糊、压缩块、屏幕截图质感" in prompt
-    assert "统一中性灰白/18%灰棚拍背景" in prompt
-    assert "无窗、无房间、无家具、无剧情道具" in prompt
+    # Internal sources and preprocessing stay in the full contract/receipt,
+    # never in the text actually submitted to the image model.
+    assert "_设置.md" not in prompt
+    assert "registry" not in prompt
+    assert "1024px" not in prompt
+    assert "统一中性灰白/18%灰棚拍背景" not in prompt
     assert "同一深灰/雨窗影棚背景" not in prompt
     assert "same studio/rain-window background" not in prompt
 

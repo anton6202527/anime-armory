@@ -172,28 +172,27 @@ def test_attach_multiframe_builds_three_keyframes(tmp_path):
     assert argv[1] == "multiframe2video" and argv.count("--transition-prompt") == 2
 
 
-def test_attach_multiframe_uses_qc_anchors_too(tmp_path):
-    # capability-driven: a use=qc anchor still becomes a real keyframe for multiframe2video
-    # (segments only need ≥0.5s; the old ≥4s relay floor no longer applies)
+def test_attach_multiframe_excludes_qc_only_anchors(tmp_path):
+    # QC/reference images are review evidence, not hidden timeline controls.
     root = _make_clip_project(tmp_path, duration=6.0, anchors=[
         {"anchor_png": "出图/第1集/图片/Clip_01_mid.png", "at_sec": 3.0, "use": "qc", "reason": "qc 基准"}])
     idx = vr.clip_anchor_index(root, "第1集")
     item = _item(root)
-    vr.attach_multiframe(root, item, "prompt", idx)
-    assert item.get("mode_backend") == "multiframe2video"
-    assert len(item["multiframe_images"]) == 3  # first + mid + end
+    assert vr.attach_multiframe(root, item, "prompt", idx) is False
+    assert item.get("mode_backend") is None
 
 
-def test_prepare_manifest_uses_native_multiframe_capability_not_mode_string(tmp_path):
+def test_prepare_manifest_does_not_promote_qc_anchor_to_native_multiframe(tmp_path):
     root = _make_clip_project(tmp_path, duration=6.0, anchors=[
         {"anchor_png": "出图/第1集/图片/Clip_01_mid.png", "at_sec": 3.0, "use": "qc", "reason": "qc 基准"}])
     _write_video_prompt_pack(root)
     payload = vr.prepare_manifest(root, "第1集", 1, 1, backend="dreamina", resolution="720p",
                                   model_version="3.0", force=True)
+    assert len(payload["items"]) == 1
     item = payload["items"][0]
-    assert item["mode_backend"] == "multiframe2video"
-    assert item["anchor_consumption_mode"] == "native_multiframe"
-    assert len(item["multiframe_images"]) == 3
+    assert item.get("mode_backend") is None
+    assert item["frame_strategy"] == "first_last"
+    assert item["anchor_consumption_mode"] == "first_last"
 
 
 def test_prepare_manifest_splits_mid_anchor_only_when_backend_supports_last_frame(tmp_path):

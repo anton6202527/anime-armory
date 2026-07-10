@@ -135,6 +135,30 @@ def test_load_seam_intents_does_not_treat_hard_cut_endframe_as_relay(tmp_path: P
     assert intents[3]["transition"] is None and intents[3]["relay"] is True
 
 
+def test_load_seam_intents_marks_native_multishot_internal_seam_informational(tmp_path: Path) -> None:
+    import json
+
+    sb = tmp_path / "脚本" / "第1集"
+    sb.mkdir(parents=True)
+    (sb / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_01", "continuity": {"transition": "relay"}},
+        {"id": "Clip_02", "continuity": {"transition": "relay"}},
+        {"id": "Clip_03", "continuity": {"transition": "relay"}},
+    ]}), encoding="utf-8")
+    plan_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    plan_dir.mkdir(parents=True)
+    (plan_dir / "multishot_plan.json").write_text(json.dumps({
+        "active": True,
+        "model_handled_seams": ["Clip_02"],
+    }), encoding="utf-8")
+
+    intents = video_qc.load_seam_intents(tmp_path, "第1集")
+
+    assert intents[1]["model_handled"] is True
+    assert video_qc.seam_strictness(intents[1]) == "model_handled"
+    assert "model_handled" not in intents[2]
+
+
 def test_is_closeup_lens_markers() -> None:
     assert video_qc.is_closeup_lens("CU 50mm 缓推")
     assert video_qc.is_closeup_lens("ECU")

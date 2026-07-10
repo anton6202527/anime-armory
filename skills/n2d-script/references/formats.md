@@ -584,16 +584,16 @@ character design / reference sheet: {name}, minimum named-character set with fro
         "midframe": {                                   // ← 中段锚帧·单锚帧手写糖（默认规划；执行成本按后端能力：native multiframe / split / qc）
           "midframe_png": "出图/第1集/图片/镜头01_mid.png",   // 命名=首帧名+`_mid`；由 n2d-image 落档后回填
           "split_at_sec": 4.0,                          // 建议锚点秒数；native multiframe 为时间轴约束，split 时为 A 段时长
-          "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么需要中锚（漂移风险/重抽记录/三帧契约默认）
+          "reason": "9s 三拍动作，redraw×2 中段动作漂移"      // 必填：为什么需要中锚（编辑切点/高风险连续动作/漂移实证/显式 opt-in）
         },
         "anchors": [                                    // ← 可选·N 锚帧链通用形（与 midframe 二选一，同时声明 gate 阻断；重动作长镜/动作链必填）
           // 由 scripts/anchor_planner.py 自动识别+规划写入（打斗等高运动模板/≥8s 长镜/起手-命中-收势链/漂移重抽实证），也可手写
-          { "anchor_png": "出图/第1集/图片/镜头01_x_a1.png",  // 命名=首帧名+`_aK`（三帧契约默认中锚=首帧名+`_mid`）；n2d-image 落档后回填
+          { "anchor_png": "出图/第1集/图片/镜头01_x_a1.png",  // 执行锚/编辑切点命名=首帧名+`_aK`；显式 D0 单中锚可用 `_mid`；n2d-image 落档后回填
             "at_sec": 4.0,                              // 焊点秒数，严格递增；use=split 时各段 ≥ 目标后端最短时长
             "use": "split",                             // split=拆段接力 | qc=不拆段·视频验收中段基准/多参考 | reference=多参考输入
             "reason": "auto: R1 高运动模板 fight_exchange（10s/3拍）" }
         ],
-        "midframe_exempt_reason": "极短镜 <3s，中帧与首尾几乎重合（三帧契约豁免）"  // 仅 policy.midframe_default=true 且本镜无锚帧时必填
+        "midframe_exempt_reason": "显式 D0 opt-in 下极短镜 <3s，中帧与首尾几乎重合"  // 仅 explicit_opt_in 且本镜无锚帧时需要
       },
       "shots": [ { "t": "0-4s", "lens": "全景·推镜", "desc": "...", "video_prompt": "...",
                    "entity_schedule": { "characters": ["CHAR_01/常态"], "objects": ["PROP_玉佩"], "locations": ["LOC_冷宫寝殿"] } } ] }
