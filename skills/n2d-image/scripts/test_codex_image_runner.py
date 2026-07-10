@@ -687,6 +687,56 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "same studio/rain-window background" not in prompt
 
 
+def test_compiled_request_receipt_keeps_actual_text_params_attachment_hashes_and_history(tmp_path: Path) -> None:
+    section = codex_image_runner.ClipSection(
+        clip="Clip_01",
+        title="## Clip_01",
+        body="角色回头。",
+        target_line="`出图/第1集/图片/Clip_01.png`",
+    )
+    target = codex_image_runner.Target(
+        "Clip_01", "Clip_01", "firstframe", "出图/第1集/图片/Clip_01.png", section
+    )
+    compiled = {
+        "backend": "codex",
+        "compiled_request_sha256": "a" * 64,
+        "negative_prompt": "文字",
+        "request_params": {"aspect_ratio": "16:9"},
+        "reference_inputs": [{"path": "face.png", "sha256": "b" * 64}],
+    }
+
+    receipt = codex_image_runner.write_compiled_request_receipt(
+        tmp_path, "第1集", target, compiled, "actual submitted prompt"
+    )
+    latest = codex_image_runner.compiled_request_receipt_path(tmp_path, "第1集", target)
+    data = json.loads(receipt.read_text(encoding="utf-8"))
+
+    assert receipt.parent.name == "history" and receipt.is_file()
+    assert latest.is_file()
+    assert data["actual_submit_prompt"] == "actual submitted prompt"
+    assert data["actual_submit_request"]["request_params"] == {"aspect_ratio": "16:9"}
+    assert data["actual_submit_request"]["reference_inputs"][0]["sha256"] == "b" * 64
+    assert len(data["request_params_sha256"]) == 64
+    assert len(data["reference_inputs_sha256"]) == 64
+
+
+def test_image_prompt_experiment_tag_requires_complete_pair(monkeypatch) -> None:
+    monkeypatch.setenv("N2D_IMAGE_PROMPT_EXPERIMENT_ID", "EXP_compact")
+    monkeypatch.delenv("N2D_IMAGE_PROMPT_VARIANT", raising=False)
+    try:
+        codex_image_runner.image_prompt_experiment_context()
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("partial A/B tag must fail closed")
+
+    monkeypatch.setenv("N2D_IMAGE_PROMPT_VARIANT", "B")
+    assert codex_image_runner.image_prompt_experiment_context() == {
+        "experiment_id": "EXP_compact",
+        "variant": "B",
+    }
+
+
 def test_target_qc_retry_guidance_converts_face_block_to_force_rerun_prompt(tmp_path: Path) -> None:
     report = tmp_path / "生产数据" / "image_qc" / "第4集" / "image_qc_第4集.json"
     report.parent.mkdir(parents=True)
