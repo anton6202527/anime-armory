@@ -140,7 +140,7 @@ def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint)
     if key:
         shot_size = "中近景/特写交替"
         angle = "低角度或荷兰角，服务副歌爆点"
-        camera = "快推、轻甩或半环绕，动作峰值压在重拍"
+        camera = "快速推镜头、甩镜或半环绕，动作峰值压在重拍"
         lens = "35mm-50mm 电影感，近景可用 70mm 压缩背景"
         lighting = "逆光+冷青剑光，副歌光效随鼓点脉冲"
         blocking = "主角占画面中轴，剑/衣袂形成对角线，留出转场遮挡物"
@@ -148,7 +148,7 @@ def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint)
     else:
         shot_size = "远景/中景/近景按叙事推进"
         angle = "平视或轻低角度，保持人物稳定可认"
-        camera = "缓推、横移或跟拍，避免无意义绕圈"
+        camera = "缓慢推镜头、移镜头或稳定器跟拍，避免无意义绕圈"
         lens = "35mm-50mm 自然透视"
         lighting = "段落主色的戏剧光，保留脸部可读性"
         blocking = "人物动线从画面一侧进入或离开，接下一镜视线/动作方向"

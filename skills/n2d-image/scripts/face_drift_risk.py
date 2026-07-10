@@ -63,8 +63,7 @@ CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景
 # STRONG_EMOTION_MARKERS 已上提 n2d_const 单一真值源（见文件顶部 import）。
 READY_STATUSES = {"registered", "ready"}
 CORE_SCOPE_MARKERS = ("核心", "长线", "全篇", "主角", "女主", "男主", "主反派", "贯穿")
-# 2026 公认正面+3/4+侧面是身份核心集，纯 90° 正侧是较弱的重投影锚。
-# 现在 three_quarter 是所有人物/形态的基础硬包；近景比例只影响完整表情库/动作参考等增强项。
+# 3/4 是高价值身份锚：core_full/recurring_standard 基础必需；named_minimal 在近景/高危角度时再补。
 CU_HEAVY_RATIO = 0.4
 
 WEIGHTS = {"base_reference_group": 28, "base_multi_reference": 22, "base_face_embedding": 14,
@@ -248,9 +247,17 @@ def project_memory_mitigation(root: Path, ep: str, backend: str, profile: Mappin
     }
 
 
-def missing_3q_baseline(appear: int, tq_ready: bool) -> bool:
-    """任一入镜人物缺 ready 的 3/4 侧脸 → True。纯函数·可测。"""
-    return int(appear) > 0 and not tq_ready
+def missing_3q_baseline(
+    appear: int,
+    tq_ready: bool,
+    library_tier: str = "core_full",
+    shot_requires: bool = False,
+) -> bool:
+    """Whether this role tier/episode actually requires a ready 3/4 anchor."""
+    required = library_tier in {"core_full", "recurring_standard"} or (
+        library_tier == "named_minimal" and shot_requires
+    )
+    return int(appear) > 0 and required and not tq_ready
 
 
 def is_core_scope(scope: str, name: str = "") -> bool:
@@ -524,6 +531,10 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
         for f in forms:
             aliases |= _split_aliases(f.get("asset_key") or "")
         f0 = forms[0]
+        atlas = f0.get("reference_atlas") if isinstance(f0.get("reference_atlas"), Mapping) else {}
+        library_tier = str(ch.get("library_tier") or atlas.get("build_tier") or "core_full").strip()
+        if library_tier not in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
+            library_tier = "core_full"
         adapters = f0.get("identity_adapters") or {}
         expression_ready = any(same_source_expression_ready(f) for f in forms)
         # lora ready on ANY form 算已上档
@@ -542,6 +553,7 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
             "angle_policy": f0.get("angle_policy") or {},
             "image_adapters": adapters.get("image") or {},
             "lora": lora,
+            "library_tier": library_tier,
             "tq_ready": three_quarter_ready(f0),
             "expression_ready": expression_ready,
         })
@@ -689,16 +701,22 @@ def analyze(root: Path, ep: str) -> Dict[str, Any]:
                 "核心角考虑升原生主体或 LoRA），别让模型「凭印象」重画。"
             ] + sug
         reference_gaps: List[str] = []
-        # ③ 基础包缺 ready 的 3/4 侧脸：45° 不再是近景重角增强项，而是所有人物/形态基础角。
-        if missing_3q_baseline(signals["appear"], bool(c.get("tq_ready"))):
+        shot_requires_3q = bool(signals["closeup"] or signals["emotion"] or signals["angle"])
+        library_tier = str(c.get("library_tier") or "core_full")
+        if missing_3q_baseline(
+            signals["appear"],
+            bool(c.get("tq_ready")),
+            library_tier,
+            shot_requires_3q,
+        ):
             reference_gaps.append("missing_3q_baseline")
             sug = sug + [
-                "基础定妆包缺 ready 的 3/4 侧脸参考：补 `reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）"
-                "并出图标 ready——45° 是全员基础角，不再按近景占比或角色体量延后。"
+                f"当前角色库档位={library_tier} 且本档/本集镜头需要 3/4 侧脸：补 "
+                "`reference_atlas.base_views.three_quarter`（45°/三分之二侧脸）并出图标 ready。"
             ]
         rec = {
             "character_id": cid, "name": c["name"], "form": c["form"],
-            "scope": c.get("scope") or "",
+            "scope": c.get("scope") or "", "library_tier": library_tier,
             "signals": signals, "angle_tokens": sorted(agg["angle_tokens"]),
             "appears_in": agg["clips"], **scored, "suggestions": sug,
             "reference_gaps": reference_gaps,

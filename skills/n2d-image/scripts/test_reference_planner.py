@@ -87,6 +87,36 @@ def test_non_action_shot_no_directive() -> None:
     assert p["pose_gaze_directive"] is None and p["prompt_required"] == []
 
 
+def test_named_minimal_only_requires_threequarter_when_shot_needs_it() -> None:
+    rg = {
+        "front": _RG["front"],
+        "outfit": _RG["outfit"],
+        "face_anchor_refs": _RG["face_anchor_refs"],
+        "expressions": _RG["expressions"],
+    }
+    char = {
+        **_char(rg=rg, ap={"risky": [], "requires_extra_reference": []}),
+        "reference_atlas": {
+            "build_tier": "named_minimal",
+            "base_views": {"front": {"path": _RG["front"], "status": "ready"}},
+            "face_anchor_refs": [{"path": _RG["face_anchor_refs"][0], "status": "ready"}],
+        },
+    }
+    ordinary = rp.plan_character_in_clip(
+        char, deltas=[], multi=False, profile=_MULTI_REF,
+        tier="multi_reference", scope_is_core=False,
+    )
+    assert ordinary["library_tier"] == "named_minimal"
+    assert not any("three_quarter" in m or "45°" in m for m in ordinary["missing_references"])
+    assert "three_quarter" not in {r["role"] for r in ordinary["recommended_references"]}
+
+    closeup = rp.plan_character_in_clip(
+        char, deltas=["closeup"], multi=False, profile=_MULTI_REF,
+        tier="multi_reference", scope_is_core=False,
+    )
+    assert any("three_quarter" in m or "45°" in m for m in closeup["missing_references"])
+
+
 def test_parse_clip_new_schema() -> None:
     clip = {
         "id": "Clip_02", "description": "枯枝指阴狠开口威胁",

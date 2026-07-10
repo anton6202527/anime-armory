@@ -19,7 +19,7 @@
 - **音乐 MV（mv）**：歌曲入库 -> beatgrid -> 视觉蓝图 -> clip 规划 -> 出图 / 出视频 -> 卡拉 OK 字幕 -> 合成
 - **广告片（ad）**：brief -> 创意 -> 脚本 / VO -> 分镜 -> 产品 / 场景 / 角色定妆 -> 出图 / 出视频 -> 交付件
 
-产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`（跨项目可复用资产在 `资产库/`）。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
+产物统一落在 `创作区/` 下：`创作区/写小说/`、`创作区/制漫剧/`、`创作区/画漫画/`、`创作区/写歌/`、`创作区/制MV/`、`创作区/拍广告/`。每条生产线都有自己的 `_资产库/`，只在本系列作品间复用；跨系列、跨仓库或跨机器只显式交付自包含的单个 asset pack，不建立目录级共享依赖。每个作品一个子目录，通常都有 `_进度.md` 和 `_设置.md` 来记录状态与选择。
 
 > 给 AI agent 或人快速进仓库：先读 [AGENTS.md](AGENTS.md)。
 > skill 完整索引与职责边界：读 [skills/README.md](skills/README.md)。
@@ -289,7 +289,7 @@ anime-armory/
 │   ├── 写歌/<项目>/               歌曲工程与成品歌
 │   ├── 制MV/<项目>/               MV 工程与成片
 │   └── 拍广告/<项目>/             广告工程与交付件
-├── 资产库/                    跨项目复用资产
+│   （上述每条生产线根均有 `_资产库/`，只供本系列跨作品复用）
 └── docs/images/              文档截图
 ```
 
@@ -318,7 +318,7 @@ The core of this repository is not a single script. It is a set of reusable work
 - **Music video (`mv`)**: song ingest -> beatgrid -> visual blueprint -> clip plan -> images / videos -> karaoke subtitles -> composition
 - **Ads (`ad`)**: brief -> concept -> script / VO -> storyboard -> product / scene / character references -> images / videos -> deliverables
 
-Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/画漫画/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Reusable cross-project assets live in `资产库/`. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
+Generated work lives under `创作区/`: `创作区/写小说/`, `创作区/制漫剧/`, `创作区/画漫画/`, `创作区/写歌/`, `创作区/制MV/`, and `创作区/拍广告/`. Each production line owns its own `_资产库/` for reuse within that series. Cross-series, cross-repository, or cross-machine reuse transfers one self-contained asset pack explicitly and never creates a live directory dependency. Each project usually contains `_进度.md` for status and `_设置.md` for persistent choices.
 
 > For AI agents or humans entering the repo, read [AGENTS.md](AGENTS.md) first.
 > For the full skill index and responsibility boundaries, read [skills/README.md](skills/README.md).
@@ -536,7 +536,7 @@ anime-armory/
 │   ├── 写歌/<project>/            Song projects and finished songs
 │   ├── 制MV/<project>/            MV projects and finished videos
 │   └── 拍广告/<project>/          Ad projects and deliverables
-├── 资产库/                    Cross-project reusable assets
+│   (each production-line root also owns `_资产库/` for same-series reuse)
 └── docs/images/              Documentation screenshots
 ```
 

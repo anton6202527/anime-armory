@@ -5,7 +5,7 @@
   - E1  交付端 VCS-free：skill 不得用 git 做本仓状态/基线/变更检测（内容快照除外）。
   - B2  推荐 skill 写裸名：skill 的 SKILL.md/.sh/.py 不得把 skill 当斜杠命令写成 /skillname
          （含脚本里打印给用户看的 echo —— agent 可能把 /name 当内置斜杠命令）。
-  - B7  n2d 人物定妆基础包与 Clip 前共享资产基础包不可缺失：
+  - B7  n2d 分档人物定妆包与 Clip 前共享资产基础包不可缺失：
          宪法、n2d-image 铁律、prompt 模板、gate 常量和回归测试必须同时存在。
   - B9  n2d 无持久主体 ID 与项目记忆分层：Codex/OpenAI 无公开 subject_id 不得等同不能锁角色。
   - N1  novel runtime 不得裸 import contract：避免 shim 被 sys.path 顺序误解析。
@@ -132,23 +132,26 @@ TEST_SOURCE_ROOTS = (REPO / "tools", REPO / "skills", REPO / "tests")
 
 B7_REQUIRED_SNIPPETS = {
     "docs/skill-design-principles.md": (
-        "B7 人物定妆基础包不可缺失铁律",
-        "Clip 图前完整资产基础包铁律",
-        "七类基础定妆包",
-        "三视图不能替代拆分 PNG",
-        "同源母本派生",
+        "B7 分档人物定妆基础包不可缺失铁律",
+        "Clip 图前分档资产基础包铁律",
+        "core_full",
+        "recurring_standard",
+        "named_minimal",
+        "restricted_partial",
         "derivation.method/source_path/source_sha256/crop_box",
         "planned",
-        "共享资产必须先完成可传给模型的基础包",
+        "所属档位 + 当前镜头实际需求",
         "不得生成 Clip 分镜图",
-        "共享库先行顺序不可被",
         "enforce_shared_first_interlock",
     ),
     "skills/n2d-image/SKILL.md": (
-        "角色定妆基础包铁律",
-        "Clip 图前完整资产基础包铁律",
-        "基础包至少七类",
-        "不能替代正/45°/侧/背/半身/脸锚任一拆图",
+        "角色定妆基础包铁律（分档生产",
+        "Clip 图前分档资产基础包铁律",
+        "core_full",
+        "recurring_standard",
+        "named_minimal",
+        "restricted_partial",
+        "所属角色库档位 + 当前镜头实际需求",
         "同源母本派生铁律",
         "derive_makeup_pack.py",
         "derivation.method/source_path/source_sha256/crop_box",
@@ -161,17 +164,20 @@ B7_REQUIRED_SNIPPETS = {
         "enforce_shared_first_interlock",
     ),
     "skills/n2d-image/references/prompt_format.md": (
-        "Clip 图前完整资产基础包铁律",
+        "Clip 图前分档资产基础包铁律",
+        "library_tier",
         "不得进入 `出图/第N集/图片/` 分镜生成",
         "`asset_registry` ID",
         "`weapon_profile`",
     ),
     "skills/n2d-image/references/角色一致性checklist.md": (
-        "Clip 图前完整资产基础包",
+        "Clip 图前分档资产基础包",
+        "named_minimal",
         "不许先生成 `Clip_*` / `镜头*` 分镜 PNG",
     ),
     "skills/n2d-image/QUICKSTART.md": (
-        "Shared reference assets must be complete before episode shot PNGs",
+        "Shared reference assets must satisfy each character's `library_tier` plus the actual shot needs",
+        "named_minimal",
         "shared-first order is non-waivable",
         "post-generation self-check",
         "preflight block",
@@ -205,6 +211,10 @@ B7_REQUIRED_SNIPPETS = {
     "skills/n2d-review/scripts/gate.py": (
         "REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS",
         "REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS",
+        "_required_character_makeup_views",
+        "_required_character_reference_group_fields",
+        "recurring_standard",
+        "named_minimal",
         "CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS",
         "DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS",
         "derivation.method/source_path/source_sha256/crop_box",
@@ -215,6 +225,8 @@ B7_REQUIRED_SNIPPETS = {
         "test_identity_registry_planned_makeup_reference_is_blocked",
         "test_identity_registry_ready_split_reference_requires_same_source_derivation",
         "test_identity_registry_turnaround_cannot_replace_split_makeup_refs",
+        "test_identity_registry_recurring_standard_does_not_prebuild_side_or_back",
+        "test_identity_registry_named_minimal_keeps_front_body_and_face_only",
         "test_image_shot_prompt_missing_post_generation_self_check_blocks",
         "缺生成后逐张自检段",
     ),
@@ -376,7 +388,7 @@ def _gate_layer_text(p) -> str:
 
 
 def check_n2d_character_makeup_constitution() -> list[str]:
-    """B7: n2d 定妆/Clip 前基础包铁律不能只剩口号，必须有文档、gate 和测试锚点。"""
+    """B7: tier-aware n2d 定妆/Clip 前基础包必须有文档、gate 和测试锚点。"""
     bad: list[str] = []
     for rel, snippets in B7_REQUIRED_SNIPPETS.items():
         p = REPO / rel
@@ -530,7 +542,7 @@ def check_tests_do_not_reference_real_workspace_projects() -> list[str]:
 CHECKS = {
     "E1": ("交付端 VCS-free（无 git 调用）", check_no_git_calls),
     "B2": ("推荐 skill 写裸名（无 /skillname）", check_bare_skill_refs),
-    "B7": ("n2d 人物定妆与 Clip 前共享资产基础包不可缺失", check_n2d_character_makeup_constitution),
+    "B7": ("n2d 分档人物定妆与 Clip 前共享资产基础包不可缺失", check_n2d_character_makeup_constitution),
     "B9": ("n2d 无持久主体 ID 与项目记忆分层", check_n2d_project_memory_constitution),
     "N1": ("novel runtime 无 contract 裸导入", check_novel_import_shadowing),
     "N2": ("novel 市场断言必须绑定证据", check_novel_market_claims),

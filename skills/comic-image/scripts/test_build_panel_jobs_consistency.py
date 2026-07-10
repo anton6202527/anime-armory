@@ -11,6 +11,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 import build_panel_jobs
+import codex_panel_runner
 
 
 def write_json(path: Path, data: dict) -> None:
@@ -23,7 +24,7 @@ def test_panel_job_carries_visual_continuity_contract(tmp_path: Path) -> None:
     chapter = "第1话"
     root.mkdir()
     (root / "_设置.md").write_text(
-        "- 生图模型：自定义\n- 生图渠道：manual\n- 基础视觉风格：彩色国漫条漫\n- 文字语言：中文\n",
+        "- 生图模型：GPT Image 2\n- 生图渠道：Codex CLI\n- 基础视觉风格：彩色国漫条漫\n- 文字语言：中文\n",
         encoding="utf-8",
     )
     write_json(
@@ -81,12 +82,23 @@ def test_panel_job_carries_visual_continuity_contract(tmp_path: Path) -> None:
     job = jobs["jobs"][0]
 
     assert jobs["render_stage"] == "完成稿"
+    assert jobs["schema_version"] == 2
     assert jobs["finishing_plan"] == "出图/第1话/finishing/finishing_plan.json"
     assert job["continuity_contract"]["scene_anchor_id"] == "LOC_HALL"
     assert job["traditional_finish_contract"]["tone_plan"] == "背景 20% 网点，衣服 40% 网点。"
     assert job["continuity_contract"]["gaze_target"] == "画右下方的匕首反光"
-    assert "传统漫画原稿收尾契约" in job["prompt"]
-    assert "网点/灰阶计划" in job["prompt"]
-    assert "视线/眼神契约" in job["prompt"]
-    assert "场景一致性契约" in job["prompt"]
-    assert "looking at viewer" in job["negative_prompt"]
+    assert "传统漫画原稿收尾契约" in job["production_contract_prompt"]
+    assert "网点/灰阶计划" in job["production_contract_prompt"]
+    assert "视线/眼神契约" in job["production_contract_prompt"]
+    assert "场景一致性契约" in job["production_contract_prompt"]
+    assert "looking at viewer" in job["production_negative_contract"]
+    assert job["prompt_source_kind"] == "compiled_submit_prompt"
+    assert job["prompt"] == job["submit_prompt"]
+    assert job["prompt_compiler"]["kind"] == "comic_compiled_image_prompt"
+    assert "匕首反光" in job["submit_prompt"]
+    assert "CHAR_MAIN" not in job["submit_prompt"]
+    assert "LOC_HALL" not in job["submit_prompt"]
+    actual = codex_panel_runner.build_prompt(job, "work", chapter, [])
+    assert job["submit_prompt"] in actual
+    assert "传统漫画原稿收尾契约" not in actual
+    assert "CHAR_MAIN" not in actual

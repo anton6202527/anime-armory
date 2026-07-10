@@ -179,7 +179,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态.png",
@@ -669,7 +669,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
@@ -990,17 +990,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_01__姜月初/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_01__姜月初",
-        "base_dir": "设定库/character_assets/CHAR_01__姜月初",
+        "manifest": "角色库/CHAR_01__姜月初/manifest.json",
+        "package_dir": "角色库/CHAR_01__姜月初",
+        "base_dir": "角色库/CHAR_01__姜月初",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_01__姜月初/reference",
-          "prompts": "设定库/character_assets/CHAR_01__姜月初/prompts",
-          "lora": "设定库/character_assets/CHAR_01__姜月初/lora",
-          "voice": "设定库/character_assets/CHAR_01__姜月初/voice",
-          "adapters": "设定库/character_assets/CHAR_01__姜月初/adapters",
-          "qc": "设定库/character_assets/CHAR_01__姜月初/qc"
-        }
+          "reference": "角色库/CHAR_01__姜月初/reference",
+          "prompts": "角色库/CHAR_01__姜月初/prompts",
+          "lora": "角色库/CHAR_01__姜月初/lora",
+          "voice": "角色库/CHAR_01__姜月初/voice",
+          "adapters": "角色库/CHAR_01__姜月初/adapters",
+          "qc": "角色库/CHAR_01__姜月初/qc"
+        },
+        "tier": "core_full"
       },
       "evolution_profile": {
         "mode": "multi_form",
@@ -1009,7 +1010,9 @@
           "囚犯初醒态",
           "镇魔司伪装态"
         ]
-      }
+      },
+      "library_tier": "core_full",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_04",
@@ -1226,7 +1229,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_04__常态.png",
@@ -1518,17 +1521,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_04__陈青源/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_04__陈青源",
-        "base_dir": "设定库/character_assets/CHAR_04__陈青源",
+        "manifest": "角色库/CHAR_04__陈青源/manifest.json",
+        "package_dir": "角色库/CHAR_04__陈青源",
+        "base_dir": "角色库/CHAR_04__陈青源",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_04__陈青源/reference",
-          "prompts": "设定库/character_assets/CHAR_04__陈青源/prompts",
-          "lora": "设定库/character_assets/CHAR_04__陈青源/lora",
-          "voice": "设定库/character_assets/CHAR_04__陈青源/voice",
-          "adapters": "设定库/character_assets/CHAR_04__陈青源/adapters",
-          "qc": "设定库/character_assets/CHAR_04__陈青源/qc"
-        }
+          "reference": "角色库/CHAR_04__陈青源/reference",
+          "prompts": "角色库/CHAR_04__陈青源/prompts",
+          "lora": "角色库/CHAR_04__陈青源/lora",
+          "voice": "角色库/CHAR_04__陈青源/voice",
+          "adapters": "角色库/CHAR_04__陈青源/adapters",
+          "qc": "角色库/CHAR_04__陈青源/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1536,7 +1540,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "GROUP_飞鹰门众人",
@@ -1777,17 +1783,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/manifest.json",
-        "package_dir": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
-        "base_dir": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
+        "manifest": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/manifest.json",
+        "package_dir": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
+        "base_dir": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人",
         "sections": {
-          "reference": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
-          "prompts": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
-          "lora": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/lora",
-          "voice": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/voice",
-          "adapters": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/adapters",
-          "qc": "设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/qc"
-        }
+          "reference": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
+          "prompts": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
+          "lora": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/lora",
+          "voice": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/voice",
+          "adapters": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/adapters",
+          "qc": "角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/qc"
+        },
+        "tier": "restricted_partial"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1795,7 +1802,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0
     },
     {
       "id": "GROUP_狼妖群",
@@ -2052,17 +2061,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/manifest.json",
-        "package_dir": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群",
-        "base_dir": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群",
+        "manifest": "角色库/GROUP_狼妖群__GROUP_狼妖群/manifest.json",
+        "package_dir": "角色库/GROUP_狼妖群__GROUP_狼妖群",
+        "base_dir": "角色库/GROUP_狼妖群__GROUP_狼妖群",
         "sections": {
-          "reference": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/reference",
-          "prompts": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/prompts",
-          "lora": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/lora",
-          "voice": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/voice",
-          "adapters": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/adapters",
-          "qc": "设定库/character_assets/GROUP_狼妖群__GROUP_狼妖群/qc"
-        }
+          "reference": "角色库/GROUP_狼妖群__GROUP_狼妖群/reference",
+          "prompts": "角色库/GROUP_狼妖群__GROUP_狼妖群/prompts",
+          "lora": "角色库/GROUP_狼妖群__GROUP_狼妖群/lora",
+          "voice": "角色库/GROUP_狼妖群__GROUP_狼妖群/voice",
+          "adapters": "角色库/GROUP_狼妖群__GROUP_狼妖群/adapters",
+          "qc": "角色库/GROUP_狼妖群__GROUP_狼妖群/qc"
+        },
+        "tier": "restricted_partial"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -2070,7 +2080,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_05",
@@ -2285,7 +2297,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_05__常态.png",
@@ -2579,17 +2591,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_05__05/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_05__05",
-        "base_dir": "设定库/character_assets/CHAR_05__05",
+        "manifest": "角色库/CHAR_05__05/manifest.json",
+        "package_dir": "角色库/CHAR_05__05",
+        "base_dir": "角色库/CHAR_05__05",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_05__05/reference",
-          "prompts": "设定库/character_assets/CHAR_05__05/prompts",
-          "lora": "设定库/character_assets/CHAR_05__05/lora",
-          "voice": "设定库/character_assets/CHAR_05__05/voice",
-          "adapters": "设定库/character_assets/CHAR_05__05/adapters",
-          "qc": "设定库/character_assets/CHAR_05__05/qc"
-        }
+          "reference": "角色库/CHAR_05__05/reference",
+          "prompts": "角色库/CHAR_05__05/prompts",
+          "lora": "角色库/CHAR_05__05/lora",
+          "voice": "角色库/CHAR_05__05/voice",
+          "adapters": "角色库/CHAR_05__05/adapters",
+          "qc": "角色库/CHAR_05__05/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -2597,7 +2610,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_03",
@@ -2773,7 +2788,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_03__诈死复苏态.png",
@@ -3034,17 +3049,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_03__虎山神_虎妖/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_03__虎山神_虎妖",
-        "base_dir": "设定库/character_assets/CHAR_03__虎山神_虎妖",
+        "manifest": "角色库/CHAR_03__虎山神_虎妖/manifest.json",
+        "package_dir": "角色库/CHAR_03__虎山神_虎妖",
+        "base_dir": "角色库/CHAR_03__虎山神_虎妖",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_03__虎山神_虎妖/reference",
-          "prompts": "设定库/character_assets/CHAR_03__虎山神_虎妖/prompts",
-          "lora": "设定库/character_assets/CHAR_03__虎山神_虎妖/lora",
-          "voice": "设定库/character_assets/CHAR_03__虎山神_虎妖/voice",
-          "adapters": "设定库/character_assets/CHAR_03__虎山神_虎妖/adapters",
-          "qc": "设定库/character_assets/CHAR_03__虎山神_虎妖/qc"
-        }
+          "reference": "角色库/CHAR_03__虎山神_虎妖/reference",
+          "prompts": "角色库/CHAR_03__虎山神_虎妖/prompts",
+          "lora": "角色库/CHAR_03__虎山神_虎妖/lora",
+          "voice": "角色库/CHAR_03__虎山神_虎妖/voice",
+          "adapters": "角色库/CHAR_03__虎山神_虎妖/adapters",
+          "qc": "角色库/CHAR_03__虎山神_虎妖/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -3052,7 +3068,9 @@
         "forms": [
           "诈死复苏态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_02",
@@ -3230,7 +3248,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_02__濒死战损态.png",
@@ -3490,17 +3508,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_02__裴长青/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_02__裴长青",
-        "base_dir": "设定库/character_assets/CHAR_02__裴长青",
+        "manifest": "角色库/CHAR_02__裴长青/manifest.json",
+        "package_dir": "角色库/CHAR_02__裴长青",
+        "base_dir": "角色库/CHAR_02__裴长青",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_02__裴长青/reference",
-          "prompts": "设定库/character_assets/CHAR_02__裴长青/prompts",
-          "lora": "设定库/character_assets/CHAR_02__裴长青/lora",
-          "voice": "设定库/character_assets/CHAR_02__裴长青/voice",
-          "adapters": "设定库/character_assets/CHAR_02__裴长青/adapters",
-          "qc": "设定库/character_assets/CHAR_02__裴长青/qc"
-        }
+          "reference": "角色库/CHAR_02__裴长青/reference",
+          "prompts": "角色库/CHAR_02__裴长青/prompts",
+          "lora": "角色库/CHAR_02__裴长青/lora",
+          "voice": "角色库/CHAR_02__裴长青/voice",
+          "adapters": "角色库/CHAR_02__裴长青/adapters",
+          "qc": "角色库/CHAR_02__裴长青/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -3508,7 +3527,9 @@
         "forms": [
           "濒死战损态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     }
   ],
   "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"

@@ -782,8 +782,7 @@ export function ClipNode({ data, selected }: NodeProps) {
           <Handle type="target" position={Position.Left} />
           <button
             type="button"
-            className={"frame-single-thumb nodrag" + (url ? "" : " missing")}
-            onPointerDown={(event) => event.stopPropagation()}
+            className={"frame-single-thumb" + (url ? "" : " missing")}
             onClick={(event) => {
               event.stopPropagation();
               openFrameDetail(frame, event);
@@ -822,7 +821,6 @@ export function ClipNode({ data, selected }: NodeProps) {
                 key={`${frame.role}-${frame.abs || idx}`}
                 type="button"
                 className={"frame-thumb" + (url ? "" : " missing")}
-                onPointerDown={(event) => event.stopPropagation()}
                 onClick={(event) => {
                   event.stopPropagation();
                   openFrameDetail(frame, event);

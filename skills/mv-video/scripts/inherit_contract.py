@@ -10,12 +10,23 @@ import argparse
 import importlib.util
 import json
 import os
+import re
 import sys
 from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+MV_LIB = os.path.join(REPO, "skills", "mv", "_lib")
+if MV_LIB not in sys.path:
+    sys.path.insert(0, MV_LIB)
+from mv_video_prompt_compiler import (  # noqa: E402
+    KIND as COMPILER_KIND,
+    VERSION as COMPILER_VERSION,
+    lint as lint_compiled_prompt,
+    normalize_backend,
+    parse_markdown,
+)
 
 
 def load_mv_utils():
@@ -52,6 +63,40 @@ def prompt_text(root, rel):
     if not rel:
         return ""
     return mv_utils.read_text(os.path.join(root, rel))
+
+
+def check_compiled_prompt(text, take, expected_backend):
+    parsed = parse_markdown(text or "")
+    if not parsed:
+        return [{
+            "level": "block", "code": "missing_compiled_submit_prompt",
+            "message": "完整 MV 合同不得直接作为模型 prompt",
+        }]
+    findings = []
+    if parsed.get("kind") != COMPILER_KIND or parsed.get("version") != COMPILER_VERSION:
+        findings.append({
+            "level": "block", "code": "incompatible_prompt_compiler",
+            "actual": {"kind": parsed.get("kind"), "version": parsed.get("version")},
+        })
+    source_hash = str(parsed.get("source_contract_sha256") or "")
+    if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
+        findings.append({"level": "block", "code": "invalid_prompt_source_hash"})
+    if expected_backend and normalize_backend(parsed.get("backend")) != normalize_backend(expected_backend):
+        findings.append({
+            "level": "block", "code": "prompt_backend_mismatch",
+            "compiled": parsed.get("backend"), "expected": expected_backend,
+        })
+    for code in lint_compiled_prompt(parsed)["errors"]:
+        findings.append({"level": "block", "code": "compiled_prompt_lint", "lint_code": code})
+    for code in lint_compiled_prompt(parsed)["warnings"]:
+        findings.append({"level": "warn", "code": "compiled_prompt_lint", "lint_code": code})
+    if take.get("prompt_source_kind") != "compiled_submit_prompt":
+        findings.append({"level": "block", "code": "manifest_prompt_source_kind_invalid"})
+    if str(take.get("submit_prompt") or "") != str(parsed.get("prompt") or ""):
+        findings.append({"level": "block", "code": "manifest_submit_prompt_mismatch"})
+    if str(take.get("source_contract_sha256") or "") != source_hash:
+        findings.append({"level": "block", "code": "manifest_source_contract_hash_mismatch"})
+    return findings
 
 
 def check_clip(root, clip, job, ref_row, identity_registry):
@@ -120,6 +165,11 @@ def check_clip(root, clip, job, ref_row, identity_registry):
         for marker in ("首帧", "continuity", "声音约束"):
             if marker not in text:
                 findings.append({"level": "warn", "code": "prompt_missing_marker", "take_id": take_id, "marker": marker})
+        take = next((row for row in job.get("takes", []) if row.get("take_id") == take_id), {})
+        for finding in check_compiled_prompt(text, take, job.get("video_model") or job.get("backend")):
+            finding.setdefault("take_id", take_id)
+            finding.setdefault("path", rel)
+            findings.append(finding)
 
     if ref_row:
         planned_refs = ref_row.get("reference_inputs") or []
@@ -146,7 +196,7 @@ def build_report(root):
         warnings += sum(1 for f in findings if f.get("level") == "warn")
         rows.append({"clip_id": cid, "findings": findings, "verdict": "block" if any(f.get("level") == "block" for f in findings) else ("review" if findings else "ok")})
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_video_inherit_contract",
         "generated_at": date.today().isoformat(),
         "root": root,

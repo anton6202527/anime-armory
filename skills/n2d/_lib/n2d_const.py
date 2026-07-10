@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 # ── identity_registry 共享字段 ──────────────────────────────────────────────
 # reference_group 的标准参考视图键
 IDENTITY_REFERENCE_KEYS = ("front", "side", "back", "outfit", "turnaround")
@@ -236,20 +239,29 @@ FACS_AU_REGIONS = {
 # + triggers（自由文本里的同义触发子串，让分镜散文「推近/拉远/横摇」也能归一到本词典）。
 # 动作镜 prompt 应从这里取词并填槽（Veo/即梦运镜段是传达情绪与速度感最强的工具），而非自由散文。
 # 消费方：n2d_logic.normalize_camera_move() → gate.check_video_clip_prompt_section ⑤运镜结构化（WARN）。
+# 视觉参考图/结构化 manifest：skills/n2d/references/运镜/manifest.json（用户提供 WebP + 机器可读补充项）。
 CAMERA_MOVE_LEXICON = {
-    "推镜头": {"en": "dolly in", "slots": ("speed", "end_size"), "triggers": ("推镜", "推近", "前推", "推进", "dolly in", "push in")},
-    "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size"), "triggers": ("拉镜", "拉远", "后拉", "dolly out", "pull back")},
-    "摇镜头": {"en": "pan", "slots": ("speed", "direction"), "triggers": ("摇镜", "横摇", "上摇", "下摇", "左摇", "右摇", "pan", "tilt")},
-    "移镜头": {"en": "tracking", "slots": ("speed", "direction"), "triggers": ("移镜", "平移", "横移", "侧移", "tracking", "truck")},
-    "升降": {"en": "crane", "slots": ("speed", "direction", "end_height"), "triggers": ("升降", "升镜", "降镜", "crane", "pedestal", "jib")},
+    "推镜头": {"en": "dolly in", "slots": ("speed", "end_size"), "triggers": ("推镜", "推近", "前推", "镜头前推", "推进", "dolly in", "push in")},
+    "拉镜头": {"en": "dolly out", "slots": ("speed", "end_size"), "triggers": ("拉镜", "拉远", "后拉", "后移", "镜头后移", "dolly out", "pull back")},
+    "摇镜头": {"en": "pan / tilt", "slots": ("speed", "direction"), "triggers": ("摇镜", "横摇", "上摇", "下摇", "左摇", "右摇", "镜头上摇", "镜头下摇", "镜头左摇", "镜头右摇", "pan", "tilt")},
+    "移镜头": {"en": "tracking / truck", "slots": ("speed", "direction"), "triggers": ("移镜", "平移", "横移", "侧移", "左移", "右移", "镜头左移", "镜头右移", "tracking", "truck")},
+    "升降": {"en": "crane / pedestal", "slots": ("speed", "direction", "end_height"), "triggers": ("升降", "升镜", "降镜", "上升", "下降", "镜头上升", "镜头下降", "crane", "pedestal", "jib")},
     "变焦": {"en": "zoom", "slots": ("speed", "end_size"), "triggers": ("变焦", "zoom")},
-    "环绕": {"en": "orbit / circular (360°)", "slots": ("speed", "direction", "arc"), "triggers": ("环绕", "绕拍", "360", "orbit", "circular")},
-    "跟拍": {"en": "following / FPV", "slots": ("speed", "direction"), "triggers": ("跟拍", "跟随", "跟移", "following", "fpv")},
+    "变焦推进": {"en": "zoom in", "slots": ("speed", "end_size"), "triggers": ("变焦推进", "zoom in")},
+    "变焦拉远": {"en": "zoom out", "slots": ("speed", "end_size"), "triggers": ("变焦拉远", "zoom out")},
+    "柯克变焦": {"en": "dolly zoom / vertigo effect", "slots": ("speed", "end_size", "background_scale"), "triggers": ("柯克变焦", "滑动变焦", "希区柯克变焦", "dolly zoom", "vertigo effect")},
+    "环绕": {"en": "orbit / circular (360°)", "slots": ("speed", "direction", "arc"), "triggers": ("环绕", "环绕拍摄", "绕拍", "360", "orbit", "circular")},
+    "跟拍": {"en": "following / tracking follow", "slots": ("speed", "direction"), "triggers": ("跟拍", "跟随", "跟随拍摄", "跟移", "following", "follow shot")},
+    "第一视角": {"en": "first-person POV", "slots": ("speed", "direction"), "triggers": ("第一视角", "主观视角", "POV", "fpv", "first-person")},
     "甩镜": {"en": "whip pan", "slots": ("direction",), "triggers": ("甩镜", "甩动", "whip")},
-    "冲击变焦": {"en": "crash zoom", "slots": ("end_size",), "triggers": ("冲击变焦", "急推急拉", "滑动变焦", "crash zoom", "dolly zoom")},
-    "手持晃动": {"en": "handheld shake", "slots": ("strength",), "triggers": ("手持", "晃动", "晃镜", "handheld", "shaky")},
+    "冲击变焦": {"en": "crash zoom", "slots": ("end_size",), "triggers": ("冲击变焦", "急推急拉", "crash zoom")},
+    "手持晃动": {"en": "handheld shake", "slots": ("strength",), "triggers": ("手持", "手持拍摄", "晃动", "晃镜", "handheld", "shaky")},
     "弧线运镜": {"en": "180-degree arc shot", "slots": ("direction", "start_subject", "end_subject"), "triggers": ("弧线", "弧形", "arc shot", "arc move")},
-    "无人机升起": {"en": "aerial drone ascend", "slots": ("speed", "end_height"), "triggers": ("无人机", "航拍", "drone", "aerial")},
+    "无人机航拍": {"en": "aerial drone shot", "slots": ("speed", "direction", "end_height"), "triggers": ("无人机", "高空航拍", "航拍", "drone", "aerial")},
+    "无人机升起": {"en": "aerial drone ascend", "slots": ("speed", "end_height"), "triggers": ("无人机升起", "drone ascend", "aerial ascend")},
+    "盘旋抬升": {"en": "spiral crane up", "slots": ("speed", "direction", "arc", "end_height"), "triggers": ("盘旋抬升", "螺旋上升", "spiral up", "spiral crane up")},
+    "盘旋下降": {"en": "spiral crane down", "slots": ("speed", "direction", "arc", "end_height"), "triggers": ("盘旋下降", "螺旋下降", "spiral down", "spiral crane down")},
+    "滚筒旋转": {"en": "barrel roll / camera roll", "slots": ("speed", "direction", "roll_angle"), "triggers": ("滚筒旋转", "镜头滚转", "滚转", "翻滚镜头", "barrel roll", "camera roll")},
 }
 # 速度词槽候选（填进 slots.speed），中→英；含口语别名（normalize_camera_move 按子串匹配）。
 CAMERA_SPEED_WORDS = {
@@ -258,6 +270,101 @@ CAMERA_SPEED_WORDS = {
 }
 # 静止机位词（不属运动，但属合法的"已声明运镜"，不该被判"未用结构化运镜"）。
 STATIC_CAMERA_WORDS = ("固定", "静止", "不动", "锁定机位", "定镜", "无运镜", "static", "fixed", "locked")
+
+CAMERA_MOVE_MANIFEST_PATH = Path(__file__).resolve().parents[1] / "references" / "运镜" / "manifest.json"
+
+
+def _unique_str_tuple(values):
+    out = []
+    seen = set()
+    for value in values or ():
+        text = str(value or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        out.append(text)
+    return tuple(out)
+
+
+def _load_camera_move_manifest():
+    try:
+        return json.loads(CAMERA_MOVE_MANIFEST_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {"schema_version": 0, "moves": []}
+
+
+def _manifest_media_ref(entry):
+    media = entry.get("media")
+    if not isinstance(media, dict):
+        return None
+    ref = {
+        "id": str(entry.get("id") or "").strip(),
+        "webp": str(media.get("webp") or "").strip(),
+        "preview": str(media.get("preview") or "").strip(),
+        "source": str(media.get("source") or "").strip(),
+    }
+    return {k: v for k, v in ref.items() if v}
+
+
+def _extend_static_camera_words_from_manifest(words):
+    extra = []
+    for entry in CAMERA_MOVE_MANIFEST.get("moves") or []:
+        if not isinstance(entry, dict) or str(entry.get("lexicon_kind") or "") != "static":
+            continue
+        extra.extend(entry.get("aliases_zh") or ())
+        extra.extend(entry.get("aliases_en") or ())
+        extra.append(entry.get("name_zh") or "")
+        extra.append(entry.get("name_en") or "")
+    return _unique_str_tuple(tuple(words) + tuple(extra))
+
+
+def _apply_camera_move_manifest():
+    for entry in CAMERA_MOVE_MANIFEST.get("moves") or []:
+        if not isinstance(entry, dict):
+            continue
+        if str(entry.get("lexicon_kind") or "") == "static":
+            continue
+        key = str(entry.get("lexicon_key") or entry.get("name_zh") or "").strip()
+        if not key:
+            continue
+        trigger_values = [
+            key,
+            entry.get("name_zh"),
+            entry.get("name_en"),
+            *(entry.get("aliases_zh") or ()),
+            *(entry.get("aliases_en") or ()),
+        ]
+        slots = _unique_str_tuple(entry.get("slots") or ())
+        triggers = _unique_str_tuple(trigger_values)
+        media_ref = _manifest_media_ref(entry)
+        existing = CAMERA_MOVE_LEXICON.get(key)
+        if existing:
+            merged = dict(existing)
+            merged["slots"] = _unique_str_tuple(tuple(existing.get("slots") or ()) + slots)
+            merged["triggers"] = _unique_str_tuple(tuple(existing.get("triggers") or ()) + triggers)
+            if media_ref:
+                merged["media_refs"] = list(existing.get("media_refs") or []) + [media_ref]
+            for field in ("category", "risk_level"):
+                if field not in merged and entry.get(field):
+                    merged[field] = entry.get(field)
+            CAMERA_MOVE_LEXICON[key] = merged
+            continue
+        spec = {
+            "en": str(entry.get("name_en") or key),
+            "slots": slots,
+            "triggers": triggers,
+        }
+        for field in ("category", "risk_level", "prompt_template"):
+            if entry.get(field):
+                spec[field] = entry.get(field)
+        if media_ref:
+            spec["media_refs"] = [media_ref]
+        CAMERA_MOVE_LEXICON[key] = spec
+
+
+CAMERA_MOVE_MANIFEST = _load_camera_move_manifest()
+STATIC_CAMERA_WORDS = _extend_static_camera_words_from_manifest(STATIC_CAMERA_WORDS)
+_apply_camera_move_manifest()
 
 # ── 运动强度连续档（替代 HIGH_MOTION_TEMPLATES 二分的细粒度补充）──────────────────────────────
 # HIGH_MOTION_TEMPLATES 是「是否高风险」的二分闸；这里给 0–3 连续档，供 prompt 调 motion strength/

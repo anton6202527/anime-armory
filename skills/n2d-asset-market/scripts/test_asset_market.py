@@ -53,8 +53,27 @@ def _registry():
 def _source_project(tmp_path: Path):
     root = tmp_path / "制漫剧" / "源剧"
     registry = _registry()
+    char = registry["characters"][0]
+    char["library_tier"] = "core_full"
+    char["asset_bundle"] = {
+        "manifest": "角色库/CHAR_SHEN__沈念/manifest.json",
+        "package_dir": "角色库/CHAR_SHEN__沈念",
+        "tier": "core_full",
+    }
     for rel in registry["characters"][0]["forms"][0]["reference_group"].values():
         _write_png(root / rel)
+    bundle = root / "角色库" / "CHAR_SHEN__沈念"
+    for section in market.CHARACTER_BUNDLE_SECTIONS:
+        (bundle / section).mkdir(parents=True, exist_ok=True)
+    market.write_json(bundle / "manifest.json", {
+        "kind": "n2d_project_character_asset_bundle",
+        "character_id": "CHAR_SHEN",
+        "name": "沈念",
+        "library_tier": "core_full",
+    })
+    (bundle / "prompts" / "角色锚点.md").write_text("CHAR_SHEN 沈念的角色锚点\n", encoding="utf-8")
+    (bundle / "voice" / "voice_note.txt").write_text("沈念声线说明\n", encoding="utf-8")
+    (bundle / "lora" / "old.safetensors").write_bytes(b"model-weight-must-not-travel")
     market.write_json(root / "出图/共享/identity_registry.json", registry)
     return root
 
@@ -166,6 +185,13 @@ def test_export_and_import_character_pack_resets_native_adapters(tmp_path):
     data = json.loads(pack.read_text(encoding="utf-8"))
     assert data["asset_type"] == "character"
     assert data["files"][0]["exists"] is True
+    assert data["portability"]["self_contained"] is True
+    assert data["portability"]["requires_source_library"] is False
+    assert data["character_template"]["source_asset_bundle"]["included"] is True
+    assert "lora/old.safetensors" in data["character_template"]["source_asset_bundle"]["excluded_model_files"]
+    assert any(row.get("bundle_rel") == "prompts/角色锚点.md" for row in data["files"])
+    assert not (pack.parent / "files" / "character_bundle" / "lora" / "old.safetensors").exists()
+    assert market.main(["verify-pack", str(pack.parent)]) == 0
 
     target = tmp_path / "制漫剧" / "新剧"
     rc = market.main([
@@ -188,6 +214,13 @@ def test_export_and_import_character_pack_resets_native_adapters(tmp_path):
     assert (target / "出图/共享/图片/定妆_新女主.png").is_file()
     assert form["identity_adapters"]["video"]["kling"]["status"] == "unregistered"
     assert form["identity_adapters"]["image"]["codex"]["status"] == "fallback_reference_group"
+    assert char["library_tier"] == "core_full"
+    assert char["asset_bundle"]["manifest"] == "角色库/CHAR_NEW__新女主/manifest.json"
+    target_manifest = json.loads((target / char["asset_bundle"]["manifest"]).read_text(encoding="utf-8"))
+    assert target_manifest["character_id"] == "CHAR_NEW"
+    assert target_manifest["library_tier"] == "core_full"
+    assert "CHAR_NEW 新女主" in (target / "角色库/CHAR_NEW__新女主/prompts/角色锚点.md").read_text(encoding="utf-8")
+    assert not (target / "角色库/CHAR_NEW__新女主/lora/old.safetensors").exists()
 
 
 def test_import_character_preserve_adapters_demotes_ready_handles(tmp_path):
@@ -621,3 +654,31 @@ def test_import_combat_duplicate_id_requires_replace(tmp_path):
     # 同 combat_id 再导入应被拒（除非 --replace）
     assert market.main(["import-combat", str(target), str(pack)]) == 2
     assert market.main(["import-combat", str(target), str(pack), "--replace"]) == 0
+
+
+def test_default_export_library_is_owned_by_project_series(tmp_path):
+    source = _source_project(tmp_path)
+    assert market.main([
+        "export-character",
+        str(source),
+        "--character-id",
+        "CHAR_SHEN",
+        "--slug",
+        "系列内角色",
+    ]) == 0
+    pack = source.parent / "_资产库" / "characters" / "系列内角色" / "asset_pack.json"
+    assert pack.is_file()
+    assert not (tmp_path / "资产库").exists()
+
+
+def test_verify_pack_rejects_missing_copied_file(tmp_path):
+    source = _source_project(tmp_path)
+    library = tmp_path / "制漫剧" / "_资产库"
+    assert market.main([
+        "export-character", str(source), "--character-id", "CHAR_SHEN",
+        "--library", str(library), "--slug", "缺文件角色",
+    ]) == 0
+    pack_dir = library / "characters" / "缺文件角色"
+    copied = next((pack_dir / "files").iterdir())
+    copied.unlink()
+    assert market.main(["verify-pack", str(pack_dir)]) == 1

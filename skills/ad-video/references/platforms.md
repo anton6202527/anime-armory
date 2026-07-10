@@ -40,6 +40,16 @@
 
 与 `ad-video/SKILL.md` 同口径。品牌色按 HEX 归一比对（`#E60012` 与 `rgb(230,0,18)` 视为同色，不误判漂移）。
 
+## 后端感知 prompt compiler
+
+广告使用“完整生产合同 → 本线 compiler → 模型提交 prompt”的单向边界：
+
+- 完整合同保留品牌资产、产品锁、精确文案、平台安全区、广告合规、路由和 provenance；这些字段继续由 `inherit_contract.py` / gate 严格检查。
+- `skills/ad/_lib/ad_video_prompt_compiler.py` 只抽取可见产品动作、单一主运镜、明确环境响应、结尾落幅、产品保持、文字策略和少量负向，按 primary 后端选 profile。
+- Runway profile 使用肯定式主 prompt，不提交负向字段；支持独立负向字段的 profile 把负向与主 prompt 分离；仅能内联负向的中文后端使用一条精简“避免”约束。
+- `render_dreamina.py` 只读取编译块。旧 Markdown 仅保留迁移期 fallback；新 prompt 缺编译块会被 `inherit_contract.py` block，不能进入付费生成。
+- 精确 CTA、slogan、价格、法律声明和 UI 文案不由视频模型重绘，在 `ad-compose` 以可控文字层完成。
+
 ## 出视频规格（`出视频规格`）
 
 - 预算充足：1080p30fps，关键镜多跑挑稳。

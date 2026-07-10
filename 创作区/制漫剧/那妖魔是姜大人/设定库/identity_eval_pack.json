@@ -2,16 +2,16 @@
   "characters": [
     {
       "asset_bundle": {
-        "base_dir": "设定库/character_assets/CHAR_01__姜月初",
-        "manifest": "设定库/character_assets/CHAR_01__姜月初/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_01__姜月初",
+        "base_dir": "角色库/CHAR_01__姜月初",
+        "manifest": "角色库/CHAR_01__姜月初/manifest.json",
+        "package_dir": "角色库/CHAR_01__姜月初",
         "sections": {
-          "adapters": "设定库/character_assets/CHAR_01__姜月初/adapters",
-          "lora": "设定库/character_assets/CHAR_01__姜月初/lora",
-          "prompts": "设定库/character_assets/CHAR_01__姜月初/prompts",
-          "qc": "设定库/character_assets/CHAR_01__姜月初/qc",
-          "reference": "设定库/character_assets/CHAR_01__姜月初/reference",
-          "voice": "设定库/character_assets/CHAR_01__姜月初/voice"
+          "adapters": "角色库/CHAR_01__姜月初/adapters",
+          "lora": "角色库/CHAR_01__姜月初/lora",
+          "prompts": "角色库/CHAR_01__姜月初/prompts",
+          "qc": "角色库/CHAR_01__姜月初/qc",
+          "reference": "角色库/CHAR_01__姜月初/reference",
+          "voice": "角色库/CHAR_01__姜月初/voice"
         }
       },
       "buckets": {

@@ -84,12 +84,17 @@ def test_same_source_expression_ready_requires_non_neutral_ready_expression() ->
 
 
 def test_missing_3q_baseline() -> None:
-    # 任一入镜人物缺 ready 的 3/4 侧脸 → 基础包缺口
+    # core_full / recurring_standard 入镜即需要 3/4。
     assert fdr.missing_3q_baseline(appear=1, tq_ready=False)
     # 已备 ready → 不报
     assert not fdr.missing_3q_baseline(appear=6, tq_ready=True)
     # 未入镜 → 不报
     assert not fdr.missing_3q_baseline(appear=0, tq_ready=False)
+    # named_minimal 普通镜不前置烧 3/4；近景/高危角度真正需要时才报。
+    assert not fdr.missing_3q_baseline(appear=1, tq_ready=False, library_tier="named_minimal")
+    assert fdr.missing_3q_baseline(
+        appear=1, tq_ready=False, library_tier="named_minimal", shot_requires=True
+    )
 
 
 def test_analyze_flags_missing_3q_baseline(tmp_path: Path) -> None:
@@ -113,7 +118,7 @@ def test_analyze_flags_missing_3q_baseline(tmp_path: Path) -> None:
     shen = next(r for r in report["characters"] if r["character_id"] == "CHAR_01")
     assert "missing_3q_baseline" in shen["reference_gaps"]
     assert report["missing_3q_baseline"] == 1
-    assert any("3/4 侧脸" in s and "基础定妆包" in s for s in shen["suggestions"])
+    assert any("3/4 侧脸" in s and "角色库档位" in s for s in shen["suggestions"])
 
 
 def test_score_reference_group_closeup_emotion_is_high() -> None:

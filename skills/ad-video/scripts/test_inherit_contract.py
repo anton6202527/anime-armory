@@ -9,6 +9,20 @@ import tempfile
 import unittest
 
 import inherit_contract as ic
+from ad_video_prompt_compiler import compile_prompt, render_markdown
+
+
+def compiled_md(body, backend="seedance"):
+    payload = compile_prompt({
+        "clip_id": "镜头01",
+        "backend": backend,
+        "mode": "image2video",
+        "product_action": "产品卡片顺势归位",
+        "camera_motion": "缓慢推近产品正面",
+        "end_state": "产品主视觉稳定落幅",
+        "product_hold": "同一包装结构、Logo 位置与品牌色",
+    })
+    return body + "\n\n" + render_markdown(payload)
 
 
 class InheritContractTest(unittest.TestCase):
@@ -81,6 +95,14 @@ class InheritContractTest(unittest.TestCase):
 
     def test_product_handoff_no_prod_no_check(self):
         self.assertEqual(ic.check_product_handoff(set(), "随便拍"), [])
+
+    def test_compiler_missing_blocks(self):
+        f = ic.check_compiled_prompt("完整合同但没有编译块")
+        self.assertTrue(any(x["severity"] == "block" for x in f))
+
+    def test_compiler_backend_mismatch_blocks(self):
+        f = ic.check_compiled_prompt(compiled_md("合同", "seedance"), "runway")
+        self.assertTrue(any("与路由" in x["msg"] for x in f))
 
     # ── 新增：overview 解析（HEX + 别名标签） ──────────────────────────────
     def test_parse_overview_contract(self):
@@ -157,7 +179,7 @@ class EndToEndTest(unittest.TestCase):
                 overview="## 视觉一致性契约\n- 品牌色：#E60012\n- 光位锚：45°主光\n",
                 # storyboard 故意给冲突的旧种子，验证优先读 overview
                 storyboard={"visual_contract": {"品牌色": "#000000"}, "shots": []},
-                prompts={"镜头01.md": "推近，品牌色 #E60012，45°主光"},
+                prompts={"镜头01.md": compiled_md("推近，品牌色 #E60012，45°主光")},
             )
             payload = ic.run(td)
             self.assertEqual(payload["contract_source"],
@@ -212,7 +234,9 @@ class EndToEndTest(unittest.TestCase):
                 td,
                 overview="## 视觉一致性契约\n- 品牌色：#E60012\n- 光位锚：45°主光\n- 轴线：左到右\n",
                 storyboard={"shots": [{"shot_id": "S1", "assets": {"PROD_main": True}}]},
-                prompts={"镜头01.md": "推近，品牌色 #E60012，45°主光，左到右轴线，资产引用：PROD_main"},
+                prompts={"镜头01.md": compiled_md(
+                    "推近，品牌色 #E60012，45°主光，左到右轴线，资产引用：PROD_main"
+                )},
             )
             with self.assertRaises(SystemExit) as cm:
                 ic.main([td])

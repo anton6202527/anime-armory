@@ -47,6 +47,58 @@ continuity:
 """
 
 
+COMPILED_PROMPT_PACK = """# clips
+
+## Clip 01（时长 4.0s · EP01_CLIP01 · 冷开）
+
+**首帧**：`出图/第1集/图片/Clip_01.png`
+
+### 视频 prompt（中文，旧包兼容块，不得优先提交）
+```text
+这是旧的冗长 prompt，包含路由、审计和执行配方。
+```
+
+### 后端编译提交 prompt
+**编译元数据**：kind=n2d_compiled_video_prompt; version=1; profile_version=2026-07-10.1; profile=zh_motion_first; backend=dreamina; mode=image2video; language=zh; native_audio_policy=none; source_contract_sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```text
+以已提交首帧为视觉真值。主动作：她缓慢抬眼。镜头：极缓推近，尾端固定。
+```
+"""
+
+
+def test_parse_prompt_pack_prefers_compiled_submit_prompt(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(COMPILED_PROMPT_PACK, encoding="utf-8")
+
+    items = video_runner.parse_prompt_pack(tmp_path, "第1集", 1, 1)
+
+    assert items[0]["prompt_source_kind"] == "compiled_submit_prompt"
+    assert items[0]["prompt_compiler"]["backend"] == "dreamina"
+    assert items[0]["prompt_text"].startswith("以已提交首帧为视觉真值")
+    assert "旧的冗长" not in items[0]["prompt_text"]
+
+
+def test_prepare_manifest_rejects_compiled_prompt_for_different_backend(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(COMPILED_PROMPT_PACK, encoding="utf-8")
+    image_dir = tmp_path / "出图" / "第1集" / "图片"
+    image_dir.mkdir(parents=True)
+    (image_dir / "Clip_01.png").write_bytes(b"png")
+
+    with pytest.raises(ValueError, match="compiled prompt backend=dreamina"):
+        video_runner.prepare_manifest(
+            tmp_path,
+            "第1集",
+            1,
+            1,
+            backend="veo",
+            resolution="720p",
+            model_version="auto",
+        )
+
+
 def test_prepare_manifest_uses_stable_prompt_files(tmp_path: Path) -> None:
     prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)

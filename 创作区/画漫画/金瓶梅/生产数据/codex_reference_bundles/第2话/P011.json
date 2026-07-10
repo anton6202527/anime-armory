@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第2话",
+  "panel_id": "P011",
+  "reference_input_mode": "codex_exec_image_flags",
+  "cli_image_input_count": 14,
+  "references": [
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__face.png",
+      "sha256": "48624b405b95a2e11b411c255165c8eb50ca26939dabc5dab8b8a25e0be555ad"
+    },
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__front.png",
+      "sha256": "1f63a88bf6f725380118806c84382a825d205152dc218bfcedf35d89124fa5d2"
+    },
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__three_quarter.png",
+      "sha256": "46ef196a40d7269d8ce7f36c6a22e98d62ed19b18382a5d26277e8c62006ab99"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__face.png",
+      "sha256": "b29126246bb814357f7ecea61fe056f92c0920b88252d62108916306feea330c"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__front.png",
+      "sha256": "4ba3f23e04525ebde7e3b067a4c9f262345694d6dee03b1dd1a888d7cc462dc4"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__three_quarter.png",
+      "sha256": "baaeb6c3736b84313245938d6220f775903c09c26b0992fd1d784d6753001434"
+    },
+    {
+      "id": "LOC_WUDA_HOUSE",
+      "path": "出图/共享/图片/LOC_WUDA_HOUSE__anchor.png",
+      "sha256": "bb227819e9c39d7be9eb08430b91c3ba702050209a73e042644ee1114199646b"
+    },
+    {
+      "id": "PROP_FIRE_BRAZIER",
+      "path": "出图/共享/图片/PROP_FIRE_BRAZIER__anchor.png",
+      "sha256": "b91348480b360c32090f3089af053764d1c9109524304871fb2b1a1ec7a2372e"
+    },
+    {
+      "id": "PROP_WINE_SET",
+      "path": "出图/共享/图片/PROP_WINE_SET__anchor.png",
+      "sha256": "208bdd586f7b0ea2c6eb25208ac7d218a4287f94ab581bb7818df26cbff01dd6"
+    },
+    {
+      "id": "PROP_RED_CURTAIN",
+      "path": "出图/共享/图片/PROP_RED_CURTAIN__anchor.png",
+      "sha256": "efe67b1a3c6c9bd3a688649eb47b805c8025f170dc8d7312fdc72de8ef293400"
+    },
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__side.png",
+      "sha256": "de3b8a84ef6175f6327146532a5d5ef64f4855a3bf597c4f53906bf4bef3d18f"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__side.png",
+      "sha256": "be7aca0539030f4ef45ef6d877d9e41c43131c1a8579af2271c02fb2cbbe753c"
+    },
+    {
+      "id": "CHAR_WUSONG",
+      "path": "出图/共享/图片/CHAR_WUSONG__back.png",
+      "sha256": "79da7be3c00cb3b04d0d3f854b04f2176c4ee3a246726f36fd7e0d02b405f86f"
+    },
+    {
+      "id": "CHAR_PAN",
+      "path": "出图/共享/图片/CHAR_PAN__back.png",
+      "sha256": "f5345a96c1c24bc389b11a25ed7c0157f67e30aa2e2173587758d5ac312282e6"
+    }
+  ],
+  "created_at": "2026-07-10T01:11:12"
+}

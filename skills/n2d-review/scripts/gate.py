@@ -309,6 +309,13 @@ from gate_core import (  # 显式带上 import* 默认会漏的下划线私有�
     _finding_sort_key,
 )
 
+from video_prompt_compiler import (  # noqa: E402  完整合同 → 后端提交 prompt 的单一编译边界
+    KIND as COMPILED_VIDEO_PROMPT_KIND,
+    lint_compiled_prompt,
+    normalize_backend as normalize_video_prompt_backend,
+    parse_compiled_markdown,
+)
+
 def check_gate_policy_matrix(stage: str) -> None:
     for err in validate_gate_policy_matrix():
         add(BLOCK, "Gate Policy Matrix", stage, f"gate_policy_matrix.json 无效：{err}", return_to_stage="review")
@@ -1960,37 +1967,66 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
         if key not in section:
             add(BLOCK, "导演调度", loc, f"continuity 缺字段：{key}")
 
-    if "视频 prompt（中文" not in section:
-        add(BLOCK, "prompt", loc, "缺视频 prompt（中文）")
-    if "视频 prompt（英文" not in section:
-        add(BLOCK, "prompt", loc, "缺视频 prompt（英文）兜底")
-    compact_prompt_fields = (
-        "运动精修约束",
-        "环境交互约束",
-        "首帧保持",
-        "在场链约束",
-        "接缝执行包",
-        "执行配方约束",
-        "人物运动",
-        "镜头运动",
-        "情绪节奏",
-        "动态细节",
-        "衔接约束",
-        "禁止",
-        "声音约束",
-    )
-    for key in compact_prompt_fields:
-        if not _has_line_field(section, key):
-            add(BLOCK, "prompt", loc, f"中文视频 prompt 缺字段：{key}")
-    if _has_line_field(section, "在场链约束"):
-        for key in ("required_presence", "offscreen_presence", "forbidden_presence"):
-            if key not in section:
-                add(
-                    BLOCK,
-                    "人物在场链",
-                    loc,
-                    f"在场链约束缺 {key}；每条视频 prompt 必须把 storyboard.entity_schedule 的必在/画外/禁入真值传到执行端，不能只写泛化的“不要新增”。",
-                )
+    compiled_prompt = parse_compiled_markdown(section)
+    if compiled_prompt is None:
+        add(
+            BLOCK,
+            "prompt compiler",
+            loc,
+            "缺「后端编译提交 prompt」；完整生产合同不能直接当模型 prompt。重新运行 n2d-video prompt_pack.py，按 primary_backend 编译唯一提交指令。",
+        )
+    else:
+        for key in (
+            "kind", "version", "profile_version", "profile", "backend", "mode",
+            "language", "native_audio_policy", "source_contract_sha256",
+        ):
+            if not str(compiled_prompt.get(key) or "").strip():
+                add(BLOCK, "prompt compiler", loc, f"编译元数据缺字段：{key}")
+        if compiled_prompt.get("kind") != COMPILED_VIDEO_PROMPT_KIND:
+            add(BLOCK, "prompt compiler", loc, f"编译产物 kind 错误：{compiled_prompt.get('kind')}")
+        if compiled_prompt.get("version") != 1:
+            add(BLOCK, "prompt compiler", loc, f"不支持的编译产物 version={compiled_prompt.get('version')}")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(compiled_prompt.get("source_contract_sha256") or "")):
+            add(BLOCK, "prompt compiler", loc, "编译元数据 source_contract_sha256 非 64 位 SHA-256；无法追溯来源合同")
+        expected_backend = normalize_video_prompt_backend((route or {}).get("primary_backend")) if route else ""
+        actual_backend = normalize_video_prompt_backend(compiled_prompt.get("backend"))
+        if expected_backend and actual_backend != expected_backend:
+            add(
+                BLOCK,
+                "prompt compiler",
+                loc,
+                f"编译 backend={actual_backend} 与 route.primary_backend={expected_backend} 不一致；不得拿别的后端口径提交。",
+            )
+        expected_mode = str((route or {}).get("mode") or "").strip().lower()
+        actual_mode = str(compiled_prompt.get("mode") or "").strip().lower()
+        if expected_mode and actual_mode != expected_mode:
+            add(BLOCK, "prompt compiler", loc, f"编译 mode={actual_mode} 与 route.mode={expected_mode} 不一致")
+        route_policy = str((route or {}).get("native_audio_policy") or "none").strip().lower()
+        if expected_mode == "native_av" or route_policy == "native_speech":
+            route_policy = "native_speech"
+        actual_policy = str(compiled_prompt.get("native_audio_policy") or "").strip().lower()
+        if route and actual_policy != route_policy:
+            add(
+                BLOCK,
+                "prompt compiler",
+                loc,
+                f"编译 native_audio_policy={actual_policy} 与 route 真值 {route_policy} 不一致",
+            )
+        lint = lint_compiled_prompt(compiled_prompt)
+        for code in lint.get("errors", []):
+            add(BLOCK, "prompt compiler", loc, f"提交 prompt 结构错误：{code}")
+        for code in lint.get("warnings", []):
+            add(WARN, "prompt compiler", loc, f"提交 prompt 可进一步精简：{code}")
+
+    # 在场链属于严格生产合同与真实输入层，不要求重复塞进模型文本。
+    for key in ("required_presence", "offscreen_presence", "forbidden_presence"):
+        if key not in section:
+            add(
+                BLOCK,
+                "人物在场链",
+                loc,
+                f"完整合同缺 {key}；必须把 storyboard.entity_schedule 的必在/画外/禁入真值传到执行配方与 QC。",
+            )
     if not (_has_field(section, "接缝执行包") or _has_field(section, "Handoff Package")):
         add(
             BLOCK,
@@ -2015,8 +2051,6 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 add(BLOCK, "执行配方", loc, f"执行配方缺字段：{key}")
     if "角色身份注册层" not in section:
         add(BLOCK, "资产身份注册层", loc, "缺角色身份注册层字段；含角色镜必须继承 identity_registry.json，无人物镜写“无”")
-    if not _has_line_field(section, "身份锁定约束"):
-        add(BLOCK, "资产身份注册层", loc, "中文视频 prompt 缺身份锁定约束；必须写明 Character ID/Face Lock/reference controls 或 fallback reference_group")
     closeup_identity_risk = (
         "角色身份注册层" in section
         and not _has_any(section, ("角色身份注册层**：无", "角色身份注册层**： 无", "无人物", "空镜"))
@@ -2030,8 +2064,6 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 loc,
                 "近景/反打/说话镜缺细粒度身份锁定；必须写脸型、五官比例、发型发髻、标志配饰、服装配色和脸部特写/表情参考或回退/保真实现方案",
             )
-        if "近景身份锁定约束" not in section:
-            add(BLOCK, "资产身份注册层", loc, "中文视频 prompt 缺近景身份锁定约束；配角近景需限制低幅度表情/转头，必要时用 MCU/OTS/侧脸保真实现")
         if not _has_any(section, ("脸型", "五官", "发型", "发髻")):
             add(BLOCK, "资产身份注册层", loc, "近景身份锁定未写脸型/五官/发型发髻等不可漂项")
         if not _has_any(section, ("脸部特写", "表情参考", "expressions", "正脸", "front", "reference_group")):
@@ -2075,8 +2107,6 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 loc,
                 f"路由 identity_requirement={identity_req_value} 且本 Clip 含角色身份层，但执行配方 reference_inputs 为空；这会让后端只按首帧猜脸，必须传 reference_group/Character ID/Face Lock 或明确降级保真拍法。",
             )
-    if "模型路由约束" not in section:
-        add(BLOCK, "模型路由", loc, "中文视频 prompt 缺模型路由约束；必须说明按 primary_backend 写平台参数，失败才切 fallback/degrade_plan")
     shot_type = _section_shot_type(section, route)
     if shot_type in ACTION_CHOREOGRAPHY_SHOT_TYPES:
         if not (_has_field(section, "动作编排契约") or _has_field(section, "Action Choreography")):
@@ -2090,8 +2120,6 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
             missing = _missing_contract_fields(section, _action_choreography_required_fields(shot_type))
             if missing:
                 add(BLOCK, "动作编排", loc, "动作编排契约缺字段：" + ", ".join(missing))
-        if "动作编排约束" not in section:
-            add(BLOCK, "动作编排", loc, "中文视频 prompt 缺动作编排约束；必须说明速度曲线、空间路径、镜头路径、可读性节拍和失败降级。")
         if not _has_any(section, ("动作编排", "Action Choreography", "readability_beats")):
             add(BLOCK, "动作编排", loc, "生成后自检必须包含动作编排/可读性检查项，确认动作方向、速度曲线、空间路径和命中/距离/高度落点。")
     if _section_requires_motion_control(section):
@@ -2101,8 +2129,6 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
             for key in ("level", "manifest_path", "required_inputs", "failure_modes"):
                 if key not in section:
                     add(BLOCK, "Motion Control", loc, f"物理交互控制字段缺：{key}")
-        if "物理交互约束" not in section:
-            add(BLOCK, "Motion Control", loc, "中文视频 prompt 缺物理交互约束；必须说明姿态/深度/实例遮挡或按 degrade_plan 拆镜")
         if not _has_any(section, ("FeatureMelting", "feature_melting", "特征融化")):
             add(BLOCK, "Motion Control", loc, "生成后自检必须包含 FeatureMelting/特征融化检查项")
     if "原生音画策略" not in section:
@@ -2135,17 +2161,8 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 add(BLOCK, "原生音画", loc, "原生环境声/音效 opt-in 必须确认无口型或嘴部不可见")
             if not _native_audio_contract_ok(section):
                 add(BLOCK, "原生音画", loc, "原生环境声/音效 opt-in 必须明确 no_native_speech / 禁止原生人声")
-    if "原生音画约束" not in section:
-        add(BLOCK, "原生音画", loc, "中文视频 prompt 缺原生音画约束；必须说明默认禁止原生人声，或仅允许低风险环境声/动作音效")
-    elif route and (
-        str(route.get("native_audio_policy") or "").strip() == "native_speech"
-        or str(route.get("mode") or "").strip() == "native_av"
-    ):
-        if not _has_any(section, ("台词", "口型", "native_speech", "保留原片音轨")):
-            add(BLOCK, "原生音画", loc, "native_speech 镜的中文原生音画约束必须说明台词、口型和保留原片音轨")
-
     # ④ 运镜越界 trip-wire：镜头运动含"廉价漂浮/旋转飞行/急速"类运镜 → 疑越 style_contract.运动边界
-    m_cam = re.search(r"镜头运动[：:]([^\n；;]*)", section)
+    m_cam = re.search(r"(?:镜头运动|镜头)[：:]([^\n；;。]*)", section)
     cam = m_cam.group(1) if m_cam else ""
     SUSPECT_MOVES = ("旋转", "360", "环绕飞", "飞行", "急速", "极速", "快速拉近", "急推", "急拉", "乱甩", "甩镜", "螺旋", "翻滚")
     hit = [w for w in SUSPECT_MOVES if w in cam]

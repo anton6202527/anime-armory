@@ -6,6 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import plan_prompts as pp  # noqa: E402
+from ad_video_prompt_compiler import parse_markdown  # noqa: E402
 
 
 def test_plan_writes_video_prompts_and_manifest(tmp_path):
@@ -51,6 +52,16 @@ def test_plan_writes_video_prompts_and_manifest(tmp_path):
     assert "PROD_STARBOX_APP" in prompt
     assert "身份锁定句" in prompt
     assert "镜头01_end.png" in prompt
+    compiled = parse_markdown(prompt)
+    assert compiled is not None
+    assert compiled["kind"] == "ad_compiled_video_prompt"
+    assert "产品主动作" in compiled["prompt"]
+    assert "route_reason" not in compiled["prompt"]
+    assert "PROD_STARBOX_APP" not in compiled["prompt"]
+    assert len(compiled["prompt"]) < 650
     assert manifest["summary"] == {"clips": 1, "frames2video": 1, "image2video": 0}
+    assert manifest["schema_version"] == 2
     assert manifest["jobs"][0]["mode"] == "frames2video"
+    assert manifest["jobs"][0]["prompt_source_kind"] == "compiled_submit_prompt"
+    assert manifest["jobs"][0]["submit_prompt"] == compiled["prompt"]
     assert manifest["jobs"][0]["expected_output"] == "出视频/分镜/视频/镜头01.mp4"

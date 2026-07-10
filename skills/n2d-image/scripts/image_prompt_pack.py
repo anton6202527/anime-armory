@@ -288,9 +288,28 @@ FULL_CHARACTER_BOARD_RULES = (
     "柔和均匀棚拍光，轻微冷灰色彩管理，同一半写实 3D 国漫写实材质；"
     "不要页游/仙侠游戏概念立绘，不要复杂剧情调度。"
 )
+STANDARD_CHARACTER_BOARD_RULES = (
+    "复现角色标准参考板，不是剧情剧照：至少中性正面、45°、半身或全身服装锚、脸部特写；"
+    "侧面/背面仅在实际分镜需要时补齐；统一中性灰白/18%灰棚拍背景、柔和均匀棚拍光，无剧情动作。"
+)
+MINIMAL_CHARACTER_BOARD_RULES = (
+    "具名短线角色最小参考板，不是完整主角设定表：中性正面、半身或全身服装锚、同源脸部特写；"
+    "不前置表情九宫格、完整三视图或动作库，实际分镜出现近景/侧背/多集复用时再升档补齐。"
+)
 PARTIAL_CHARACTER_BOARD_RULES = (
     "restricted_partial 局部参考板，不是剧情剧照：只画手部、肩背、布料或侧后剪影；不建立完整正脸，"
     "不出现清晰五官，不画跪哭/递笔录等剧情动作；统一中性灰白/18%灰棚拍背景，无窗、无房间、无剧情道具。"
+)
+
+CHARACTER_LIBRARY_ROOT = "角色库"
+LEGACY_CHARACTER_LIBRARY_ROOT = "设定库/character_assets"
+FULL_LIBRARY_TIER = "core_full"
+STANDARD_LIBRARY_TIER = "recurring_standard"
+MINIMAL_LIBRARY_TIER = "named_minimal"
+PARTIAL_LIBRARY_TIER = "restricted_partial"
+RECURRING_SCOPE_RE = re.compile(r"常驻|多集|中长线|反复|复现|主要配角|男二|女二|主反派|贯穿")
+PLANNED_EPISODE_RE = re.compile(
+    r"(?:预计出场集数|计划出场集数|planned_episode_count)\s*[：:=]\s*(\d+)"
 )
 
 EP_RE = re.compile(r"\d+")
@@ -843,7 +862,7 @@ def parse_character_card_identity(text: str, fallback_name: str = "") -> Tuple[s
 
 
 def character_asset_index(root: Path) -> Dict[str, Dict[str, Any]]:
-    data = load_json(root / "设定库" / "character_assets" / "_index.json")
+    data = load_json(character_library_root(root) / "_index.json")
     out: Dict[str, Dict[str, Any]] = {}
     if not isinstance(data, Mapping):
         return out
@@ -1368,6 +1387,72 @@ def narrative_scope_for(cid: str, base_scope: str, visual_tier: str) -> Tuple[st
     return scope, narrative_tier
 
 
+def planned_episode_count(text: str, manifest: Mapping[str, Any], scope: str) -> int:
+    for value in (
+        manifest.get("planned_episode_count"),
+        manifest.get("预计出场集数"),
+    ):
+        try:
+            if value not in (None, ""):
+                return max(0, int(value))
+        except (TypeError, ValueError):
+            pass
+    match = PLANNED_EPISODE_RE.search(f"{text}\n{scope}")
+    return int(match.group(1)) if match else 0
+
+
+def character_library_tier(*, scope: str, narrative_tier: str, episode_count: int,
+                           restricted: bool = False) -> str:
+    """Choose project-local character-library depth.
+
+    Ten planned episodes is the default full-library trigger requested by the
+    production policy.  Story importance and recognisable recurring use may
+    upgrade earlier; unnamed/partial crowds stay restricted.  The value is a
+    planning tier, not a backend identity-lock tier.
+    """
+    if restricted:
+        return PARTIAL_LIBRARY_TIER
+    if narrative_tier == "核心长线" or episode_count >= 10:
+        return FULL_LIBRARY_TIER
+    if episode_count >= 3 or RECURRING_SCOPE_RE.search(scope):
+        return STANDARD_LIBRARY_TIER
+    return MINIMAL_LIBRARY_TIER
+
+
+def character_library_tier_for_cfg(cfg: Mapping[str, Any]) -> str:
+    explicit = str(cfg.get("library_tier") or "").strip()
+    if explicit in {
+        FULL_LIBRARY_TIER,
+        STANDARD_LIBRARY_TIER,
+        MINIMAL_LIBRARY_TIER,
+        PARTIAL_LIBRARY_TIER,
+    }:
+        return explicit
+    visual_tier = str(cfg.get("tier") or "").strip()
+    scope = str(cfg.get("scope") or "").strip()
+    narrative_tier = str(cfg.get("narrative_tier") or "").strip()
+    if not narrative_tier:
+        narrative_tier = "核心长线" if CORE_SCOPE_RE.search(scope) else "单集角色"
+    try:
+        episode_count = int(cfg.get("planned_episode_count") or 0)
+    except (TypeError, ValueError):
+        episode_count = 0
+    return character_library_tier(
+        scope=scope,
+        narrative_tier=narrative_tier,
+        episode_count=episode_count,
+        restricted=visual_tier == PARTIAL_LIBRARY_TIER,
+    )
+
+
+def character_library_root(root: Path, *, prefer_existing: bool = True) -> Path:
+    current = root / CHARACTER_LIBRARY_ROOT
+    legacy = root / LEGACY_CHARACTER_LIBRARY_ROOT
+    if prefer_existing and not current.exists() and legacy.exists():
+        return legacy
+    return current
+
+
 SCOPE_VISUAL_HINT_RE = re.compile(
     r"(青皮|绿眼|兽瞳|狼妖|巨狼|虎妖|狐妖|半妖|妖化|兽化|犬齿|獠牙|爪|角|鳞|羽|疤|独眼|红纹|禁止画成|不是俊美|非人)",
     re.I,
@@ -1519,6 +1604,13 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             bundle_manifest = None
         raw_scope = identity or material_profile or fallback_character_visual(cid, name, "scope")
         scope, narrative_tier = narrative_scope_for(cid, raw_scope, tier)
+        episode_count = planned_episode_count(text, manifest, scope)
+        library_tier = character_library_tier(
+            scope=scope,
+            narrative_tier=narrative_tier,
+            episode_count=episode_count,
+            restricted=tier == "restricted_partial",
+        )
         face, hair, outfit, accessory, drift = apply_scope_visual_hints(
             name=name or cid,
             scope=scope,
@@ -1532,6 +1624,8 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             "name": name or cid,
             "scope": scope,
             "narrative_tier": narrative_tier,
+            "library_tier": library_tier,
+            "planned_episode_count": episode_count,
             "form": form,
             "asset_key": character_asset_stem(root, cid, name or cid, form),
             "tier": tier,
@@ -2061,10 +2155,27 @@ def ref_item(root: Path, path: str, *, key: str = "", source: str = "出图/共�
 
 def char_asset_base(root: Path, cid: str, name: str) -> Path:
     safe = re.sub(r"[^A-Za-z0-9_\u4e00-\u9fff]+", "_", name).strip("_") or cid
-    return root / "设定库" / "character_assets" / f"{cid}__{safe}"
+    return root / CHARACTER_LIBRARY_ROOT / f"{cid}__{safe}"
+
+
+def ensure_character_library_readme(root: Path) -> None:
+    readme = root / CHARACTER_LIBRARY_ROOT / "README.md"
+    if readme.exists():
+        return
+    write_text(readme, "\n".join([
+        "# 角色库",
+        "",
+        "本目录存放本作品可迁移的角色生产资产包；`设定库/` 仍是人物语义、世界观和角色圣经真值层。",
+        "每个入镜具名角色至少一个自包含目录；主角/核心长线/预计出场 10 集及以上使用 `core_full`，",
+        "复现配角使用 `recurring_standard`，具名短线角色使用 `named_minimal`，局部群像使用 `restricted_partial`。",
+        "需要跨作品复用时，显式导出单个 asset pack 到本系列 `_资产库/`；不要让另一作品直接依赖这里的路径。",
+        "",
+    ]))
 
 
 def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[str, Any]:
+    ensure_character_library_readme(root)
+    library_tier = character_library_tier_for_cfg(cfg)
     existing = cfg.get("asset_bundle") if isinstance(cfg.get("asset_bundle"), Mapping) else None
     if existing and existing.get("manifest") and existing.get("package_dir"):
         bundle = dict(existing)
@@ -2075,6 +2186,8 @@ def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[st
             d.mkdir(parents=True, exist_ok=True)
             sections[sec] = str(d.relative_to(root))
         bundle["sections"] = sections
+        bundle.setdefault("tier", library_tier)
+        bundle.setdefault("planned_episode_count", int(cfg.get("planned_episode_count") or 0))
         return bundle
     base = char_asset_base(root, cid, str(cfg["name"]))
     sections = {}
@@ -2088,6 +2201,8 @@ def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[st
         "character_id": cid,
         "name": cfg["name"],
         "scope": cfg["scope"],
+        "library_tier": library_tier,
+        "planned_episode_count": int(cfg.get("planned_episode_count") or 0),
         "directories": sections,
         "truth_sources": {
             "identity_registry": "出图/共享/identity_registry.json",
@@ -2102,6 +2217,8 @@ def ensure_asset_bundle(root: Path, cid: str, cfg: Mapping[str, Any]) -> Dict[st
         "package_dir": str(base.relative_to(root)),
         "base_dir": str(base.relative_to(root)),
         "sections": sections,
+        "tier": library_tier,
+        "planned_episode_count": int(cfg.get("planned_episode_count") or 0),
     }
 
 
@@ -2164,19 +2281,21 @@ def reference_slot(root: Path, rel: str, slot: str) -> Dict[str, Any]:
 
 def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     ak = str(cfg["asset_key"])
+    library_tier = character_library_tier_for_cfg(cfg)
     source = pick_existing_ref(root, [
         shared_rel(ak),
         shared_rel(ak, "_正面"),
         shared_rel(ak, "_front"),
     ])["path"]
+    three_quarter = pick_existing_ref(root, [shared_rel(ak, "_45度"), shared_rel(ak, "_三分之二")], key="three_quarter", source=source)
+    side = pick_existing_ref(root, [shared_rel(ak, "_侧"), shared_rel(ak, "_侧面"), shared_rel(ak, "_侧背")], key="side", source=source)
+    back = pick_existing_ref(root, [shared_rel(ak, "_背"), shared_rel(ak, "_背面"), shared_rel(ak, "_侧背")], key="back", source=source)
+    outfit = pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source)
+    turnaround = pick_existing_ref(root, [shared_rel(ak, "_三视图"), shared_rel(ak, "_turnaround")])
     rg = {
         "front": ref_item(root, source),
-        "three_quarter": pick_existing_ref(root, [shared_rel(ak, "_45度"), shared_rel(ak, "_三分之二")], key="three_quarter", source=source),
-        "side": pick_existing_ref(root, [shared_rel(ak, "_侧"), shared_rel(ak, "_侧面"), shared_rel(ak, "_侧背")], key="side", source=source),
-        "back": pick_existing_ref(root, [shared_rel(ak, "_背"), shared_rel(ak, "_背面"), shared_rel(ak, "_侧背")], key="back", source=source),
-        "outfit": pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source),
-        "half_body": pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source),
-        "turnaround": pick_existing_ref(root, [shared_rel(ak, "_三视图"), shared_rel(ak, "_turnaround")]),
+        "outfit": outfit,
+        "half_body": outfit,
         "face_anchor_refs": [
             pick_existing_ref(
                 root,
@@ -2193,6 +2312,14 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         ],
         "expressions": [],
     }
+    if library_tier in {FULL_LIBRARY_TIER, STANDARD_LIBRARY_TIER} or three_quarter.get("status") == "ready":
+        rg["three_quarter"] = three_quarter
+    if library_tier == FULL_LIBRARY_TIER or side.get("status") == "ready":
+        rg["side"] = side
+    if library_tier == FULL_LIBRARY_TIER or back.get("status") == "ready":
+        rg["back"] = back
+    if library_tier == FULL_LIBRARY_TIER or turnaround.get("status") == "ready":
+        rg["turnaround"] = turnaround
     for emotion in ("克制", "疲惫隐忍", "警觉", "震动"):
         ref = pick_existing_ref(
             root,
@@ -2204,18 +2331,13 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
             rg["expressions"].append({**ref, "emotion": emotion})
     if not rg["expressions"]:
         rg["expressions"].append({**ref_item(root, source, key="face_anchor_refs", source=source), "emotion": "基础"})
+    base_views = {key: rg[key] for key in ("front", "three_quarter", "side", "back", "half_body") if key in rg}
     atlas = {
-        "build_tier": "full_makeup_pack",
-        "base_views": {
-            "front": rg["front"],
-            "three_quarter": rg["three_quarter"],
-            "side": rg["side"],
-            "back": rg["back"],
-            "half_body": rg["half_body"],
-        },
+        "build_tier": library_tier,
+        "base_views": base_views,
         "face_anchor_refs": rg["face_anchor_refs"],
         "expression_refs": rg["expressions"],
-        "notes": "所有拆分角度以正面主参考/三视图为母本，同源派生，避免逐张文生图补角度造成脸漂。",
+        "notes": "按角色库 tier 建参考；已登记拆分角度均从同源母本派生，短线角色缺口按真实镜头需要升档补齐。",
     }
     return rg, atlas
 
@@ -2306,6 +2428,7 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 **cfg,
                 **dict(form_cfg),
                 "tier": cfg.get("tier", "core"),
+                "library_tier": character_library_tier_for_cfg(cfg),
                 "name": cfg.get("name", cid),
                 "scope": cfg.get("scope", ""),
             }
@@ -2366,6 +2489,8 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
             "name": cfg["name"],
             "scope": cfg["scope"],
             "tier": cfg.get("narrative_tier") or ("局部参考" if cfg.get("tier") == "restricted_partial" else "单集角色"),
+            "library_tier": character_library_tier_for_cfg(cfg),
+            "planned_episode_count": int(cfg.get("planned_episode_count") or 0),
             "forms": forms,
             "asset_bundle": bundle,
             "evolution_profile": {
@@ -3372,20 +3497,50 @@ def make_shared_index(root: Path, story: Optional[Mapping[str, Any]] = None) -> 
         forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
         for form_cfg in forms:
             merged = {**cfg, **dict(form_cfg)}
-            rows.append(f"| 角色 | `{cid}/{merged['form']}` | `{shared_rel(str(merged['asset_key']))}` | ⏳prompt ready | {merged['anchor']} |")
+            rows.append(
+                f"| 角色 | `{cid}/{merged['form']}` | `{character_library_tier_for_cfg(merged)}` | "
+                f"`{shared_rel(str(merged['asset_key']))}` | ⏳prompt ready | {merged['anchor']} |"
+            )
     for aid, cfg in ASSET_DEFS.items():
-        rows.append(f"| {cfg['type']} | `{aid}` | `出图/共享/图片/{cfg['path_name']}.png` | ⏳prompt ready | {cfg['name']} |")
+        rows.append(f"| {cfg['type']} | `{aid}` | — | `出图/共享/图片/{cfg['path_name']}.png` | ⏳prompt ready | {cfg['name']} |")
     return "\n".join([
         "# 共享定妆索引",
         "",
         "本索引只登记 prompt 阶段的共享定妆位；未实际产出 PNG 前不标 ✅。",
         f"统一风格锚：`{style_anchor_rel}`；机器登记：`{STYLE_ANCHOR_REGISTRY_REL}`。共享角色定妆必须先继承该锚的渲染语言，再锁各自身份。",
         "",
-        "| 类型 | ID | 目标存档 | 状态 | 锚点 |",
-        "|---|---|---|---|---|",
+        "| 类型 | ID | 角色库档位 | 目标存档 | 状态 | 锚点 |",
+        "|---|---|---|---|---|---|",
         *rows,
         "",
     ])
+
+
+def character_board_spec(library_tier: str, restricted: bool) -> Tuple[str, str, str]:
+    """Return board rule, deliverables and checklist for one character tier."""
+    if restricted or library_tier == PARTIAL_LIBRARY_TIER:
+        return (
+            PARTIAL_CHARACTER_BOARD_RULES,
+            "手部/肩背/布料/侧后剪影局部；不建完整正脸。",
+            "局部参考是否始终无清晰正脸，且只覆盖真实入镜需要。",
+        )
+    if library_tier == FULL_LIBRARY_TIER:
+        return (
+            FULL_CHARACTER_BOARD_RULES,
+            "正面、45°、侧面、背面、半身/全身服装、脸部特写、标准三视图；表情与动作按剧本扩展。",
+            "正面/45°/侧面/背面/半身或全身/脸部特写是否同源，三视图仅作人审总览。",
+        )
+    if library_tier == STANDARD_LIBRARY_TIER:
+        return (
+            STANDARD_CHARACTER_BOARD_RULES,
+            "正面、45°、半身或全身服装、脸部特写；侧面/背面按实际分镜补齐。",
+            "正面/45°/半身或全身/脸部特写是否同源；缺少的侧背角度是否只在镜头需要时补。",
+        )
+    return (
+        MINIMAL_CHARACTER_BOARD_RULES,
+        "正面、半身或全身服装、脸部特写；近景、45°、侧背或多集复用出现时再升档。",
+        "正面/半身或全身/脸部特写是否同源；是否避免为一次性短线角色过度生产完整三视图与表情库。",
+    )
 
 
 def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
@@ -3402,8 +3557,9 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
     for cid, cfg in CHARACTER_DEFS.items():
         ak = cfg["asset_key"]
         restricted = cfg["tier"] == "restricted_partial"
+        library_tier = character_library_tier_for_cfg(cfg)
         target = shared_rel(str(ak))
-        board_rule = PARTIAL_CHARACTER_BOARD_RULES if restricted else FULL_CHARACTER_BOARD_RULES
+        board_rule, board_deliverables, board_check = character_board_spec(library_tier, restricted)
         age_context = str(cfg.get("age_context") or "").strip()
         age_prompt = f"{age_context}；" if age_context and age_context not in str(cfg.get("face") or "") else ""
         if not age_context:
@@ -3429,8 +3585,9 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
             "",
             f"## {cfg['name']}（`{cid}/{cfg['form']}`）",
             f"**目标存档**：`{target}`",
-            f"**身份注册**：`identity_registry.json` -> `{cid}/{cfg['form']}`；资产包 `设定库/character_assets/{cid}__*`。",
-            f"**角色定妆组**：正面 `_正面`、45° `_45度`、侧面 `_侧面`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、标准三视图 `_三视图`；局部角色为 `restricted_partial/no_full_face`，只手部/剪影/布料局部，绝不正脸。",
+            f"**身份注册**：`identity_registry.json` -> `{cid}/{cfg['form']}`；资产包 `角色库/{cid}__*`。",
+            f"**角色库档位**：`{library_tier}`；预计出场集数：{int(cfg.get('planned_episode_count') or 0) or '未显式登记'}。",
+            f"**本档交付**：{board_deliverables}",
             f"**年龄/年龄档**：{age_context or '未抽取；回角色卡补齐后再定妆'}",
             f"**锚点句:** {cfg['anchor']}",
             f"**定妆参考板规格**：{board_rule}",
@@ -3452,10 +3609,10 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None) -> str:
             "### 负向 prompt",
             "风格禁忌：禁Q版、禁现代服饰、禁高饱和页游光效、禁图中烤入文字、禁水印logo、禁真人摄影剧照质感、禁页游/仙侠游戏概念立绘、禁剧情动作剧照；身份禁漂：" + "、".join(cfg["drift"]),
             "### 检查清单（定妆自查）",
-            "- 正面/45度/侧面/背面/半身/脸部特写/三视图是否同源，不逐张文生图补角度。",
+            f"- {board_check}",
             "- 脸型、发型、服装主色、关键配饰是否可被逐镜复用。",
             "- 是否继承统一风格锚的渲染语言，但没有继承风格锚里的具体人脸/服装/动作。",
-            "- restricted_partial 角色是否没有完整正脸。",
+            "- `restricted_partial` 角色是否没有完整正脸；其它角色是否按真实复现需求升档而非一刀切。",
             "**自检（生成后逐张过）**：通过后回填 identity_registry 的 `self_check_passed=true`、`anchor_sha` 和真实图片路径。",
         ]
         for extra in cfg.get("extra_forms") or []:
@@ -4035,7 +4192,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         "**参考图**：",
         *refs,
         f"**角色圣经引用**：{', '.join(char_bindings) if char_bindings else '无人物/空镜'}；人物审美基线：写实国漫主流审美，五官协调清晰，角色好看但不网红化。",
-        f"**角色资产包引用**：{', '.join(f'`设定库/character_assets/{c}__*/manifest.json`' for c in chars) if chars else '无'}。",
+        f"**角色资产包引用**：{', '.join(f'`角色库/{c}__*/manifest.json`' for c in chars) if chars else '无'}。",
         f"**跨集成长阶段**：第1集锚定形态；{', '.join(char_bindings) if char_bindings else '无人物'}。",
         f"**资产身份注册层**：{', '.join(char_bindings) if char_bindings else '无人物'}；reference_group / face_anchor_refs / expressions 均从 `identity_registry.json` 读取；本镜从共享定妆 image2image / 多图参考派生，不得纯文生图。",
         f"**资产引用注册层**：{', '.join(f'`{a}`' for a in assets)}；场景/道具/VFX 均从 `asset_registry.json` 读取，关键道具结构唯一性保持。",
@@ -4330,6 +4487,7 @@ def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
         forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
         for form_cfg in forms:
             merged = {**cfg, **dict(form_cfg)}
+            library_tier = character_library_tier_for_cfg(merged)
             rel = character_reference_card_rel(cid, cfg, form_cfg)
             target = shared_rel(str(merged["asset_key"]))
             text = "\n".join([
@@ -4338,6 +4496,9 @@ def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
                 f"- episode_scope: {ep}",
                 f"- form: {merged['form']}",
                 f"- tier: {cfg['tier']}",
+                f"- library_tier: {library_tier}",
+                f"- planned_episode_count: {int(merged.get('planned_episode_count') or 0)}",
+                f"- asset_bundle: `角色库/{cid}__*/manifest.json`",
                 f"- asset_key: {merged['asset_key']}",
                 f"- target_reference: `{target}`",
                 f"- source: `出图/共享/identity_registry.json`",

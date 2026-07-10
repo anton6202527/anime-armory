@@ -160,7 +160,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
         onClick={() => setPreviewFrame(null)}
       >
         <div className="media-preview" onClick={(event) => event.stopPropagation()}>
-          <button type="button" className="media-preview-close" onClick={() => setPreviewFrame(null)}>×</button>
+          <button type="button" className="media-preview-close" aria-label={t("common.close")} onClick={() => setPreviewFrame(null)}>×</button>
           <img src={previewUrl} alt={`${clip.label} ${previewFrame.label}`} />
           <div className="media-preview-meta">
             <strong>{clip.number != null ? `${clip.number}. ` : ""}{clip.label} · {previewFrame.label}</strong>
@@ -179,7 +179,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
         onClick={() => setPreviewVideo(false)}
       >
         <div className="media-preview video" onClick={(event) => event.stopPropagation()}>
-          <button type="button" className="media-preview-close" onClick={() => setPreviewVideo(false)}>×</button>
+          <button type="button" className="media-preview-close" aria-label={t("common.close")} onClick={() => setPreviewVideo(false)}>×</button>
           <video src={videoUrl} poster={poster || undefined} controls autoPlay playsInline preload="metadata" />
           <div className="media-preview-meta">
             <strong>{clip.number != null ? `${clip.number}. ` : ""}{clip.label} · {t("canvas.video")}</strong>

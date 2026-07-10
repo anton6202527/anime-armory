@@ -102,13 +102,13 @@ export function Line(props: {
 
   return (
     <div className="line-page">
-      <div className="line-page-top">
+      <div className="line-page-top work-nav">
         <button onClick={onBack}>{t("line.backHome")}</button>
         <div className="crumb">
           {lineLabel(line)} <span style={{ color: "var(--muted)" }}>· {line.dir.split("/").pop()}/</span>
         </div>
         <button
-          className="line-skills-btn"
+          className="work-nav-skill-btn"
           title={t("line.skillsButton")}
           aria-label={t("line.skillsButton")}
           onClick={() => onShowSkills(line)}

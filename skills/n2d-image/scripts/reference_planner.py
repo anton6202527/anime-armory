@@ -174,6 +174,20 @@ def _face_anchor_paths(reference_group: Mapping[str, Any], reference_atlas: Mapp
     return uniq or _expr_paths(reference_group)
 
 
+def _character_library_tier(char: Mapping[str, Any], atlas: Mapping[str, Any]) -> str:
+    value = str(
+        atlas.get("build_tier")
+        or char.get("library_tier")
+        or "core_full"
+    ).strip()
+    if value in {"recurring_standard", "named_minimal", "restricted_partial", "core_full"}:
+        return value
+    if value.startswith("restricted_partial"):
+        return "restricted_partial"
+    # `standard_full` and missing/unknown legacy values retain the old strict contract.
+    return "core_full"
+
+
 def _is_emotion_bank(expr_paths: Sequence[str]) -> bool:
     """是否是真·情绪表情库（≥2 张或含情绪命名），而非只有一张中性脸部特写。"""
     if len(expr_paths) >= 2:
@@ -206,6 +220,7 @@ def plan_character_in_clip(
     closeup = "closeup" in deltas
     strong_emotion = "strong_emotion" in deltas
     extreme = [d.split(":", 1)[1] for d in deltas if d.startswith("extreme_angle:")]
+    library_tier = _character_library_tier(char, atlas)
 
     refs: List[Dict[str, Any]] = []
     missing: List[str] = []
@@ -213,15 +228,23 @@ def plan_character_in_clip(
 
     def add_ref(role: str, key: Optional[str] = None) -> None:
         if role == "three_quarter":
-            path = _base_view_path(atlas, "three_quarter") or str(rg.get(key or role) or "").strip()
+            path = _base_view_path(atlas, "three_quarter") or _ref_item_path(rg.get(key or role), require_ready=True)
         else:
-            path = str(rg.get(key or role) or "").strip()
+            path = _ref_item_path(rg.get(key or role), require_ready=True)
         if path:
             refs.append({"role": role, "path": path, "strength_hint": STRENGTH.get(role, 0.5)})
 
-    # 身份核心集（每镜底座）：正面 + 45° + 基础脸锚 + 服装体态锚。
+    # 身份核心集：所有具名角色要正面 + 脸锚 + 服装体态锚；45° 由角色库档位和镜头需要决定。
+    needs_three_quarter = (
+        library_tier != "named_minimal"
+        or closeup
+        or strong_emotion
+        or bool(extreme)
+        or "action_eyeline_lock" in deltas
+    )
     add_ref("front")
-    add_ref("three_quarter")
+    if needs_three_quarter:
+        add_ref("three_quarter")
     face_anchor_paths = _face_anchor_paths(rg, atlas)
     for p in face_anchor_paths[:1]:
         refs.append({"role": "face_anchor", "path": p, "strength_hint": STRENGTH["face_anchor"]})
@@ -238,8 +261,8 @@ def plan_character_in_clip(
             _have.add(mp)
     if memory_injected:
         refs = memory_injected + refs
-    if not _base_view_path(atlas, "three_quarter") and not str(rg.get("three_quarter") or "").strip():
-        missing.append("45°/three_quarter 基础角度参考（所有角色/形态强制 ready）")
+    if needs_three_quarter and not _base_view_path(atlas, "three_quarter") and not _ref_item_path(rg.get("three_quarter"), require_ready=True):
+        missing.append(f"45°/three_quarter 角度参考（当前角色库档位={library_tier}，本镜实际需要）")
     if not face_anchor_paths:
         missing.append("脸部特写基础锚（所有角色/形态强制 ready）")
 
@@ -378,6 +401,7 @@ def plan_character_in_clip(
         "name": char.get("name"),
         "form": form,
         "tier": tier,
+        "library_tier": library_tier,
         "variation_delta": deltas + (["multi_character"] if multi else []),
         "recommended_references": refs,
         "reference_budget": reference_budget,

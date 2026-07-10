@@ -19,17 +19,17 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-07-09。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-07-10。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4614 | 239684 |
-| novel | `novel` + `novel-*` | 29 | 3132 | 66142 |
-| comic | `comic` + `comic-*` | 13 | 988 | 15754 |
-| song | `song` + `song-*` | 11 | 619 | 7719 |
-| mv | `mv` + `mv-*` | 14 | 1042 | 13342 |
-| ad | `ad` + `ad-*` | 13 | 864 | 16350 |
-| **合计** | `skills/*/SKILL.md` | **101** | 11259 | 358991 |
+| n2d | `n2d` + `n2d-*` | 21 | 4606 | 242563 |
+| novel | `novel` + `novel-*` | 29 | 3134 | 66144 |
+| comic | `comic` + `comic-*` | 13 | 992 | 17591 |
+| song | `song` + `song-*` | 11 | 622 | 8043 |
+| mv | `mv` + `mv-*` | 14 | 1046 | 15114 |
+| ad | `ad` + `ad-*` | 13 | 869 | 18131 |
+| **合计** | `skills/*/SKILL.md` | **101** | 11269 | 367586 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -56,7 +56,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 | 5 出视频 | `n2d-video` | 由故事板生成每 Clip 视频 prompt → 即梦/可灵/Veo/Seedance 图生视频；视频 prompt 必须消费 `script_quality_contract` 并跑 `script_contract_receipt.py --scope 出视频`，写 `script_contract_applied_第N集.json` 的 `出视频` scope，同时写 `consumed_contracts_video_prompt_第N集.json` 绑定当前上游合同和 prompt SHA，证明逐镜运动/表演继承 dramatic_function/audience_effect/retention promise。**支持能力报盘（backend_status）与自动化拆段接力（Split Relay）**。正式调用视频后端前默认跑 `dashboard gate --stage video_preflight`，`video_runner.py submit` 也默认先跑该 gate；`scripts/inherit_contract.py` 机检出图→出视频视觉契约继承（光位锚/轴线漂移=block，报告落 `生产数据/contract_inheritance_第N集.json/md`）+ **身份交接契约**（读 `video_model_routes.json` 命名角色镜，核验逐镜 prompt 真锁了身份=声明+具体锚 `CHAR_xx/定妆_/reference_group/character_id/face_lock`，缺=block，治首帧脸→视频脸无契约锚的脸漂）+ **物料约束继承**（C：出图逐镜绑定的 `LOC/PROP/OUTFIT/VFX_xx` 资产在出视频对应 Clip 不得丢失——整块缺=block、id 丢=warn，治场景/道具/特效跨镜无锚漂移）+ **在场链继承**（读取 required/offscreen/forbidden/entry_exit，禁止未登记人物/道具随机出现或消失）；`video_qc.py` 验收/批次 QC 内置**接缝机检**（前镜 end 帧 vs 后镜 start 帧 dHash+色距，阈值复用 n2d-review/temporal_consistency）+ **近景片内身份采样**（CU/MCU/反打镜抽 start/mid/end 帧查表情变化时脸被重画，未到重画阈值或景别不确定时 warn，已知近景非双帧且远超重画阈值时 block；精确同人判定走 n2d-review/temporal_consistency.analyze），`video_runner accept` 遇接缝 block **拒绝验收**（`--allow-qc-block` 确认误报后放行），qc 结果记 manifest+dashboard，并自动写/更新 `native_av_physics_第N集.json`，native_speech 且有音轨时抽取 `native_voice_identity_第N集.json` 声纹片段。`--allow-qc-block` 放行即记一条**机检误报样本**进 dashboard 事件流，供阈值校准。近景 prompt 含**表情锚/表情幅度/锁脸不锁情**三件套，大表情近景强制首尾双帧或 MCU 保真实现 |
 | 模型适配层（横切） | `n2d-model-router` | P1 视频模型路由层：按镜头类型/专项模板/身份注册层/原生音画/时长上限，为打斗、追逐、对话、飞行、空镜、法术爆发、亲密互动、拥抱拉扯、多人同框、群像站位选择 primary/fallback；每条 route 写 `execution_recipe`，把后端能力落成调用层可消费的 frame/reference/control/audio/fallback 配方，并写 `policy_resolution`；顶层同步 `policy_lattice` + `生产数据/consistency_policy_lattice.json`，按 fixed mode / 合规硬能力 / native voice fallback / 身份亲和 / motion control / 跨集 baseline / benchmark / prior / 成本档裁决冲突，低优先级只可 deferred 或显式 override。**接力镜走 `seam_relay` 轴**——`need_endframe` 镜优先路由到有双关键帧（首尾硬约束插值）能力的后端，`seam_guaranteed` 时边界帧两镜复用省一次出图；`生视频模型` 只做默认/兜底，`生视频渠道` 只决定实际调用产品/API。三条音画路线：默认 `先出视频后配音`，说话镜先按无声 Image2Video 出画面，真实对白在出视频后拟合；`原生音画` 才把说话镜路由到原生同步音画后端（`mode=native_av`、`native_speech`）；**`配音先行`+`对口型≠关闭`** 说话镜路由 `mode=voice_conditioned_lipsync`（把克隆配音当口型条件喂进 Seedance 2.0/可灵 Omni，音轨仍走配音轨·不双人声·省后期对口型 pass）。`scripts/motion_control.py scaffold/check/generate` 为 `level=required` 镜头生成 gate 兼容的控制资产骨架 manifest + 待补清单（补"只 gate 不生成"的摩擦），可选 DWPose/depth 种子帧；`trajectory_controller_plan.py` 只在本机已准备 MotionCtrl/CameraCtrl/DragNUWA 环境时标 ready，否则留增强计划；`scripts/mouth_detect.py` 按首帧 PNG（装 insightface 时）+ 分镜文本预填/复核每 Clip `mouth_visible`（决定原生音画 opt-in/口型），图↔文本/prompt 冲突标 warn |
 | 角色身份闭环（横切） | `n2d-identity` | P0/P1 身份资产执行层：把 `identity_registry.json` 与 reference group、Face Lock、Character ID、reference controls、LoRA 打通，生成 `identity_adapter_matrix` 和跨集 `identity_drift_report`（含 LoRA 升档自动建议 `recommendations` + `characters_needing_lora_upgrade`）；`voice_consistency.py` 对账配音时长清单×voicemap，`voice_print_consistency.py` 量真实声纹漂移并外发 `voice_consistency` 一致性 findings |
-| 跨项目资产库（横切） | `n2d-asset-market` | P1 成本摊薄层：把角色原型/定妆组/`identity_registry` 片段、场景 `LOC_`、道具 `PROP_`、武器 `WEAPON_`、独立服装 `OUTFIT_`、特效 `VFX_`、视频模型路由经验、题材母题、招式/打斗套路(`combat_registry` 五帧拆招+动作编排+绑定 `WEAPON_`/`VFX_`)导出成本地资产包，开新剧/新增角色/场景/道具/武器/服装/VFX/设计打斗前先查 `资产库/`；角色导入即 fork 新身份（写 `fork_history[]` 多级溯源链），默认重置 Character ID / Face Lock / LoRA ready 状态并把被重置后端记入 `preserve_review` 审计留痕，再跑 `n2d-identity`；非角色资产导入合并到 `asset_registry.json` 并复制参考图；打斗导入 reskin 重置关键帧（须新剧重出图）。另有项目内内容哈希账本 `asset_registry.py scan/verify`，产 `生产数据/asset_registry.jsonl` / `asset_registry_summary.*`，用于发布资产追溯，不等同跨项目模板 export |
+| 制漫剧系列资产库（横切） | `n2d-asset-market` | P1 成本摊薄层：把角色原型/定妆组/`identity_registry` 片段、场景 `LOC_`、道具 `PROP_`、武器 `WEAPON_`、独立服装 `OUTFIT_`、特效 `VFX_`、路由经验、母题与打斗套路导出到 `创作区/制漫剧/_资产库/` 的自包含单包。开新剧/新增资产前先查本系列库；角色导入即 fork 新身份并重置账号/项目绑定的 Character ID / Face Lock / LoRA ready。跨系列/机器只传经 `verify-pack` 的单个包，目标侧复制适配，不回指来源目录。项目内内容哈希账本仍用于发布追溯，不等同模板 export |
 | LoRA 生命周期（横切） | `n2d-lora` | P2/P1 一致性重武器：只给核心长线角色管理 LoRA 数据集、训练任务、验证报告和 registry ready 回写；运行时先检测本机 SDXL/ComfyUI/LoRA 训练链，完整则优先本机 LoRA 训练，不完整则回落项目主/云端生图后端；先把 `.safetensors` 从散文件变成可审计资产；提供本机 SDXL/ComfyUI sidechain 的安装、doctor、route、workflow、production event 记录入口；`suggest` 子命令读 identity 漂移报表打印升档建议（升档触发已工程化）；少量 hero 镜使用非主生图链路 LoRA 时必须写 `生产数据/lora_exception_scope_第N集.json`，声明 clips/reason/style_bridge/QC，避免和项目内生图模型统一规则互相打架 |
 | 合规与版权前置（横切） | `n2d-compliance` | P0 合规包：生成/检查 `合规/compliance_manifest.json`，把源文本/改编权、角色肖像授权、声音克隆授权、平台审核、出海本地化和广电备案前置到 gate；`distribution_intent=internal_only` 时平台投放/出海/备案域降 INFO 免检（授权照常 BLOCK）。AI 标识/披露/水印只做非阻断发布待办，compose 可 best-effort 辅助 |
 | 6 合成（可选） | `n2d-compose` | 用户启用 `合成阶段` 后，拼 视频 clips + 配音 + BGM + 烧双语字幕 → 成片；**支持子段无缝拼接与 storyboard 转场感知**。默认不阻塞 `clip_delivery_complete`；母版/发布包必须继续过 release/readiness、锁版和人工验收。`tension_mix.py` 按 storyboard 每 Clip `rhythm` 出张力感知 BGM 增益包络（爽点抬/细节压，喂 `BGM_GAIN_EXPR`，不传则原固定行为） |
@@ -105,10 +105,14 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 > **定妆变更影响扫描 + 连锁更新自动化**：改了共享定妆资产后，`n2d-image/scripts/asset_impact.py <作品根> <资产名>` 列出引用它的下游镜头（已出图的需重出），属 `n2d-review` 机检家族；兼容两种 prompt schema。加 `--rerun-plan` 直接出**连锁重跑计划**（受影响集 → 重出图 → 刷新身份 → 重出视频 → 重合成 → 每集一条最小范围 `n2d-batch --rerun-from image --affected-artifact/--affected-shot` 命令），把"改一个定妆要回头排查哪些集/镜头/clip"的人工活自动化。除文本「参考图」行外**同时读 registry 结构化绑定**（prompt 只写 `CHAR_xx` ID、靠 registry 自动取参考的镜头不再漏）；`--include-video` 加「已出视频需重生」清单、`--check-native-adapters` 列「后端身份注册基于旧定妆需重注册」、`--output-batch-tasks 计划.json` 输出 batch 直接可吃的任务 JSON（`queue.py plan <作品根> --from-asset-impact 计划.json` 自动排队，免手抄命令）。
 > **接缝自动化（n2d-compose 已落地）**：`n2d-compose/seam_concat.py` 按 `storyboard.json` 每接缝 `continuity.transition` 自动接 clip——硬切裸拼 / 跳变·未焊→局部 `xfade` 微溶解 / 缺空镜→报警；硬切相连段先 `concat -c copy`、只在溶解接缝重编码，无溶解时等价旧行为，ffmpeg 失败自动回退裸拼。`compose.sh` 拼接步已接入（`SEAM_FALLBACK`/`SEAM_DISSOLVE_SEC` 可覆盖）。
 > **角色身份闭环（P0/P1）**：`identity_registry.json` 是真值，`n2d-identity` 把它展开成 `identity_adapter_matrix.json/md` 和 `identity_drift_report.json/md`。reference group、Face Lock、Character ID、reference controls、LoRA 都必须进同一矩阵；`registered/ready` 空句柄、后端 mode 不匹配、LoRA ready 缺 `base_model/model_path/trigger` 都由 gate 阻断。跨集脸漂不再只靠人记，报表会给出角色级 `first_bad_episode`，供 `n2d-batch` 只重跑受影响集/镜头。
-> **跨项目资产库提示（让用户不用记 CLI）**：开新剧、建角色卡、出图新增共享定妆/场景/道具/武器/服装/VFX，或某类路由/打斗经验值得沉淀时，agent 先提醒“我会查资产库，有可复用模板就问你是否导入”，再后台跑 `python3 skills/n2d-asset-market/scripts/market.py list`。制作过程会先自动沉淀到本项目 `identity_registry` / `asset_registry` / `character_assets`，但不会自动外溢到跨项目 `资产库/`；只有用户或 agent 判断资产稳定、审过、授权清楚、值得复用后，才主动导出。导入角色模板后必须 fork 新 `character_id/name`，并跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`；用户只需说“查资产库 / 导入冷宫废妃模板为沈念 / 把这个武器导出成模板 / 把这套打斗沉淀成模板”，不要要求用户背命令。
+> **系列资产库提示（让用户不用记 CLI）**：开新剧、建角色卡、出图新增共享定妆/场景/道具/武器/服装/VFX，或某类路由/打斗经验值得沉淀时，agent 先提醒“我会查制漫剧系列 `_资产库/`，有可复用模板就问你是否导入”，再后台跑 `market.py list`。制作过程先沉淀到本作品 `角色库/`、`identity_registry` 与 `asset_registry`；只有资产稳定、审过、授权清楚、值得复用时才主动导出到 `创作区/制漫剧/_资产库/`。仓库根不设共享资产库；其它五条生产线各自拥有 `_资产库/`。跨系列/机器只交付单个自包含 pack，不建立目录级依赖。
 > **LoRA 生命周期（第三档一致性）**：LoRA 不默认启用；只有核心长线角色在参考图派生 + 后端原生角色 ID/主体库仍不稳时，才调 `n2d-lora`。它管理 `设定库/lora/<CHAR_ID>/<形态>/` 下的 `lora_card`、`dataset_manifest`、`train_job`、`validation_report` 和 `.safetensors`；验证报告未 `pass` 不得写 `identity_registry` 的 `lora.status=ready`。用户只需说“给沈念启动 LoRA 生命周期 / 验证这个 safetensors / 写回 registry”，不要背命令。
 > **角色 DNA 梯子（出图）**：①参考图派生（默认）→ **②后端原生角色ID/主体**（可灵主体库 / Seedream Universal Reference；Sora Cameo 仅旧项目 manual·注册一次按 ID 引用·opt-in·先于 LoRA 用尽）→ ③LoRA。能力对照见 `n2d-image/references/platforms.md`「后端原生角色ID / 主体库」，opt-in 流程见 `n2d-image/SKILL.md` 同名节；后端无持久 ID 自动回退第①档。**出图侧锚定双保险**：锚点句（锁特征词）+ **身份锁定句**（锁"与参考图①同一角色 DNA"，多参考/编辑类模型最敏感）叠加用；定妆 ≥1024px·覆盖 3–6 角度。**多人同框/复杂站位可选增强（控制网双保险）**：站位易乱且后端支持 pose/depth 时，用骨架/深度图锁站位+景别（控制网锁"站位"、参考图锁"身份"·正交叠加），后端不暴露控制网则退回多参考后端/分别出图合成，不为上控制网而混后端（见 `n2d-image/SKILL.md` 多角色同框节 (c)）。
 > **一致性梯子（出视频·治 image2video 脸漂）**：除首帧锁脸外，有原生角色一致能力的后端把定妆喂进去当**持久角色参考**——可灵 3.0 **Character ID** / Seedance 2.0 **Face Lock** / Veo 3.1 **reference controls**；**极端角度/大暗部/人物过小**是公认崩脸高危带，分镜阶段就规避（见 `n2d-script/references/分镜语法.md`「一致性高危镜」+ `角色一致性checklist §二`）。缺原生能力退回「首帧+首尾双帧+强 end_state 文字」。
+
+> **视频 prompt compiler（2026-07）**：`n2d-video` 现在把每 Clip 的严格生产合同与模型提交文本彻底分层。`skills/n2d/_lib/video_prompt_compiler.py` 按 Dreamina/Seedance/Kling、Runway、Veo、Luma/Pika profile 生成唯一精简 prompt；`prompt_pack.py` 不再产中英两套冗长执行真值，`video_runner.py` 只提取 compiler fenced block，`n2d-review` gate 分别检查完整合同与提交 prompt。行业证据、schema 与硬闸见 `n2d-video/references/行业通用视频Prompt规范.md`。
+
+> **跨线 prompt compiler 落地（2026-07）**：完整生产合同不再直接等同于模型输入。n2d / ad / mv 的视频阶段各自持有 backend-aware motion compiler；comic-image 保留静态画面的必要构图/画风/稿层，但移除 registry、内部 ID/路径与审计散文；song-compose 把完整 A&R/参考/和声合同编译为后端独立的 style/prompt + 原样 lyrics + duration 字段。novel 不强造短 prompt compiler：逐章任务包、static/dynamic context、状态账本、检索、hash 与 cache metrics 才是其正确分层。所有实现均留在本线 `_lib`，不跨线 import；决策矩阵见 `docs/prompt-compiler-跨线落地.md`，设计法条见 `docs/skill-design-principles.md` B13。
 
 ## 公共能力与仓库级元工具
 
@@ -207,7 +211,7 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 | 视觉蓝图 | `mv-script` | 听歌识影、角色/场景/叙事结构 |
 | 分镜规划 | `mv-plan` | clip/timeline 规划与 prompt 任务包 |
 | 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；每张 PNG 落档后跑 mv 自己的 `image_qc`，批后再收尾复核 |
-| 出视频 | `mv-video` | 生成/维护视频任务 manifest 与挑版 |
+| 出视频 | `mv-video` | 完整 MV 合同 + 后端编译提交 prompt、任务 manifest、多版登记与挑版；歌曲外铺、不生成原生音轨 |
 | 字幕 | `mv-lyric-sync` | 歌词强制对齐、LRC/ASS/Karaoke |
 | 合成 | `mv-compose` | 歌轨、clips、卡拉 OK 字幕合成成片 |
 | 质检/评分 | `mv-review` / `mv-score` | 卡点、成片、`生产数据/consistency_findings.json`、视觉一致性、分镜表现力 |
@@ -232,7 +236,7 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 页面排版 | `comic-layout` | `panel_script.json` + 可选 `name_board.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位和原稿安全区 |
 | 原稿收尾 | `comic-finishing` | `layout.json` + `panel_script.json` → `finishing_plan.json`，含墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划 |
 | 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、定型图角色 DNA、年龄/形态继承、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划 |
-| 出图 | `comic-image` | 逐格 prompt/job 包、后端参考图预算适配、真实参考图入参、风格锚/角色 DNA 与传统原稿收尾契约注入、面板图登记；每格落档写 comic 自己的 `panel_qc`，`block` 不算 ready；不绑定具体后端 |
+| 出图 | `comic-image` | schema v2 完整逐格合同 + 后端编译提交 prompt、参考图预算与真实图片入参、风格锚/角色 DNA/传统稿层、面板登记；每格落档写本线 `panel_qc`，`block` 不算 ready |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、文字语言选择、按 layout 渲染页面图、长图分段、WebP/PNG 尺寸 fallback、`export_manifest.json` 与进度回写 |
 | 质检/自审 | `comic-review` | 阶段 gate、阅读顺序、文字遮挡、传统 name/原稿收尾覆盖、角色一致性并排复核与 face/hair/outfit 启发式、风格一致性/场景族群基线/调色离群/拼贴或外框嫌疑、高一致性风格锚/形态继承硬闸、导出规格、权利状态与返修清单 |
 
@@ -255,7 +259,7 @@ ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件�
 | 脚本/分镜 | `ad-script` | 广告脚本、VO、时间轴、广告法机检、配音后分镜 |
 | 配音 | `ad-voice` | VO 配音与时长清单 |
 | 出图 | `ad-image` | 产品/角色/场景三层定妆与逐镜图；每张关键图落档后跑 ad 自己的 `product_qc`/广告落档自检 |
-| 出视频 | `ad-video` | 广告图生视频、模型路由、视觉契约继承 |
+| 出视频 | `ad-video` | 广告完整品牌/产品/合规合同 + 后端编译提交 prompt、模型路由、视觉契约继承 |
 | 合成/交付 | `ad-compose` | 主片、cutdown、多比例、包装、交付矩阵 |
 | 评分（投放前·横切） | `ad-score` | 出图烧积分前 pre-spend 评分闸门：钩子前3秒/卖点/CTA/品牌露出/广告法/时长贴合，确定性 prescore + LLM 语义分 → 三档 go/revise/reject + 低分维度回流 ad-concept/ad-script/ad-image |
 | 质检/自审 | `ad-review` | 模式①汇总 `生产数据/consistency_findings.json` 后做投放前 M0 硬项+交付件人工复核；模式②流程自审（钩子/合规/成本三轴拉市场基准对照 ad-* 找差距） |

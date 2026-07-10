@@ -2,7 +2,10 @@
 """Cross-project n2d asset pack import/export.
 
 This is intentionally a lightweight local "market": asset packs are folders
-under 资产库/ with an asset_pack.json manifest and copied reference files.
+under the owning series' ``_资产库/`` (for n2d, normally
+``创作区/制漫剧/_资产库/``) with an ``asset_pack.json`` manifest and copied
+reference files.  A pack is the cross-machine/cross-series handoff unit; no
+consumer should keep a live dependency on the source series library.
 Native backend IDs are reset by default on import because most Character ID /
 Face Lock handles are account/project scoped and should be re-registered.
 """
@@ -51,7 +54,9 @@ PACK_KIND = ASSET_PACK_KIND
 PACK_VERSION = 1
 REGISTRY_KIND = IDENTITY_REGISTRY_KIND
 ASSET_REGISTRY_KIND = ASSET_REFERENCE_REGISTRY_KIND
-DEFAULT_LIBRARY = Path("资产库")
+DEFAULT_LIBRARY = Path("创作区") / "制漫剧" / "_资产库"
+SERIES_LIBRARY_DIRNAME = "_资产库"
+SOURCE_SERIES = "n2d"
 REFERENCE_KEYS = IDENTITY_REFERENCE_KEYS
 ASSET_ID_PREFIX = {
     "scene": "LOC_",
@@ -73,6 +78,44 @@ ROLE_SUFFIX = {
     "outfit": "_半身",
     "turnaround": "_三视图",
 }
+CHARACTER_BUNDLE_SECTIONS = ("reference", "prompts", "lora", "voice", "adapters", "qc")
+NON_PORTABLE_MODEL_SUFFIXES = {".safetensors", ".ckpt", ".pt", ".pth", ".onnx"}
+TEXT_ASSET_SUFFIXES = {".md", ".json", ".jsonl", ".txt", ".yaml", ".yml", ".toml"}
+
+
+def series_library_for_project(project_root: Path) -> Path:
+    """Return the reusable library owned by the project's creative line.
+
+    ``创作区/制漫剧/<作品>`` therefore resolves to
+    ``创作区/制漫剧/_资产库``.  Keeping this derivation project-relative makes
+    a standalone n2d distribution self-contained and avoids a repository-root
+    shared library dependency.
+    """
+    return project_root.expanduser().resolve().parent / SERIES_LIBRARY_DIRNAME
+
+
+def selected_library(args: argparse.Namespace, project_root: Optional[Path] = None) -> Path:
+    explicit = str(getattr(args, "library", "") or "").strip()
+    if explicit:
+        return Path(explicit).expanduser()
+    if project_root is not None:
+        return series_library_for_project(project_root)
+    return DEFAULT_LIBRARY
+
+
+def portability_block(files: Iterable[Mapping[str, Any]] = ()) -> Dict[str, Any]:
+    rows = [dict(row) for row in files if isinstance(row, Mapping)]
+    missing = [str(row.get("source") or row.get("path") or row.get("role") or "unknown")
+               for row in rows if row.get("exists") is False or not str(row.get("path") or "").strip()]
+    return {
+        "handoff_mode": "explicit_self_contained_pack",
+        "source_series": SOURCE_SERIES,
+        "self_contained": not missing,
+        "requires_source_library": False,
+        "import_policy": "copy_or_fork_into_target_series_library",
+        "cross_series_policy": "target series reads portable core/files and ignores or adapts n2d-only fields",
+        "missing_files": missing,
+    }
 
 
 def now_iso() -> str:
@@ -322,6 +365,67 @@ def copy_reference_files(root: Path, out_dir: Path, char: Dict[str, Any]) -> Lis
     return files
 
 
+def copy_character_bundle_files(
+    root: Path,
+    out_dir: Path,
+    char: Mapping[str, Any],
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Copy the portable parts of a work-local 角色库 package into one pack.
+
+    Executable model weights remain project/account specific and are never
+    copied.  Their omission is recorded so import can require retraining.
+    """
+    bundle = char.get("asset_bundle") if isinstance(char.get("asset_bundle"), Mapping) else {}
+    package_rel = str(bundle.get("package_dir") or "").strip()
+    tier = str(char.get("library_tier") or bundle.get("tier") or "named_minimal").strip()
+    meta: Dict[str, Any] = {
+        "source_package_dir": package_rel,
+        "pack_root": "files/character_bundle",
+        "library_tier": tier,
+        "sections": list(CHARACTER_BUNDLE_SECTIONS),
+        "included": False,
+        "excluded_model_files": [],
+    }
+    if not package_rel:
+        meta["status"] = "source_bundle_not_registered"
+        return [], meta
+    source_base = relative_or_absolute(root, package_rel).resolve()
+    try:
+        source_base.relative_to(root.resolve())
+    except ValueError:
+        meta["status"] = "source_bundle_outside_project"
+        return [{"role": "character_bundle", "source": package_rel, "path": "", "exists": False}], meta
+    if not source_base.is_dir():
+        meta["status"] = "source_bundle_missing"
+        return [{"role": "character_bundle", "source": package_rel, "path": "", "exists": False}], meta
+
+    files: List[Dict[str, Any]] = []
+    for source in sorted(source_base.rglob("*")):
+        if not source.is_file():
+            continue
+        bundle_rel = source.relative_to(source_base).as_posix()
+        if source.suffix.lower() in NON_PORTABLE_MODEL_SUFFIXES:
+            meta["excluded_model_files"].append(bundle_rel)
+            continue
+        target = out_dir / "files" / "character_bundle" / bundle_rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        pack_rel = target.relative_to(out_dir).as_posix()
+        files.append({
+            "role": "character_bundle",
+            "bundle_rel": bundle_rel,
+            "source": str(source.relative_to(root)),
+            "path": pack_rel,
+            "exists": True,
+            "sha256": sha256(target),
+            "bytes": target.stat().st_size,
+        })
+    meta["included"] = True
+    meta["status"] = "copied"
+    meta["included_file_count"] = len(files)
+    return files, meta
+
+
 def copy_asset_reference_files(root: Path, out_dir: Path, asset: Dict[str, Any]) -> List[Dict[str, Any]]:
     files: List[Dict[str, Any]] = []
     files_dir = out_dir / "files"
@@ -476,6 +580,103 @@ def append_import_log(root: Path, text: str) -> None:
     path.write_text(old.rstrip() + "\n\n" + text.strip() + "\n", encoding="utf-8")
 
 
+def character_bundle_target(root: Path, character_id: str, name: str) -> Path:
+    return root / "角色库" / f"{character_id}__{slugify(name)}"
+
+
+def target_character_bundle_ref(root: Path, character_id: str, name: str, tier: str) -> Dict[str, Any]:
+    base = character_bundle_target(root, character_id, name)
+    rel = base.relative_to(root).as_posix()
+    return {
+        "manifest": f"{rel}/manifest.json",
+        "package_dir": rel,
+        "base_dir": rel,
+        "sections": {section: f"{rel}/{section}" for section in CHARACTER_BUNDLE_SECTIONS},
+        "tier": tier,
+    }
+
+
+def land_character_bundle(
+    root: Path,
+    pack_root: Path,
+    pack: Mapping[str, Any],
+    *,
+    character_id: str,
+    name: str,
+    tier: str,
+    source_character_id: str,
+    source_name: str,
+    replace: bool,
+) -> Dict[str, Any]:
+    """Fork the pack's portable role package into the target work 角色库."""
+    target = character_bundle_target(root, character_id, name)
+    if target.exists() and not replace:
+        raise ValueError(f"target character bundle already exists: {target} (use --replace)")
+    if target.exists():
+        shutil.rmtree(target)
+    target.mkdir(parents=True, exist_ok=True)
+    for section in CHARACTER_BUNDLE_SECTIONS:
+        (target / section).mkdir(parents=True, exist_ok=True)
+
+    template = pack.get("character_template") if isinstance(pack.get("character_template"), Mapping) else {}
+    bundle_meta = template.get("source_asset_bundle") if isinstance(template.get("source_asset_bundle"), Mapping) else {}
+    source_package_dir = str(bundle_meta.get("source_package_dir") or "")
+    for row in pack.get("files") or []:
+        if not isinstance(row, Mapping) or row.get("role") != "character_bundle":
+            continue
+        bundle_rel = str(row.get("bundle_rel") or "").strip()
+        pack_rel = str(row.get("path") or "").strip()
+        if not bundle_rel or not pack_rel or Path(bundle_rel).name == "manifest.json":
+            continue
+        source = (pack_root / pack_rel).resolve()
+        dest = (target / bundle_rel).resolve()
+        try:
+            source.relative_to(pack_root.resolve())
+            dest.relative_to(target.resolve())
+        except ValueError:
+            raise ValueError(f"character bundle file escapes pack/target root: {bundle_rel}")
+        if not source.is_file():
+            raise FileNotFoundError(f"character bundle file missing in pack: {pack_rel}")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, dest)
+        if dest.suffix.lower() in TEXT_ASSET_SUFFIXES:
+            try:
+                text = dest.read_text(encoding="utf-8")
+            except UnicodeDecodeError:
+                continue
+            text = text.replace(source_character_id, character_id).replace(source_name, name)
+            if source_package_dir:
+                text = text.replace(source_package_dir, target.relative_to(root).as_posix())
+            dest.write_text(text, encoding="utf-8")
+
+    ref = target_character_bundle_ref(root, character_id, name, tier)
+    manifest = {
+        "kind": "n2d_project_character_asset_bundle",
+        "version": 1,
+        "character_id": character_id,
+        "name": name,
+        "library_tier": tier,
+        "directories": ref["sections"],
+        "truth_sources": {
+            "identity_registry": "出图/共享/identity_registry.json",
+            "character_card": f"设定库/characters/{name}.md",
+        },
+        "imported_from": str(pack_root / "asset_pack.json"),
+        "forked_from_character_id": source_character_id,
+        "excluded_model_files": list(bundle_meta.get("excluded_model_files") or []),
+        "notes": "后端主体 ID、Face Lock、LoRA ready 已重置；被排除的模型权重须在目标项目重新训练/验证。",
+        "updated_at": now_iso(),
+    }
+    write_json(target / "manifest.json", manifest)
+    readme = root / "角色库" / "README.md"
+    if not readme.exists():
+        readme.write_text(
+            "# 角色库\n\n本目录存本作品角色生产包；语义真值仍在 `设定库/` 与 identity_registry。\n",
+            encoding="utf-8",
+        )
+    return ref
+
+
 def cmd_hint(_: argparse.Namespace) -> int:
     print(
         """# n2d 跨项目资产库提示
@@ -502,7 +703,7 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 
 
 def cmd_list(args: argparse.Namespace) -> int:
-    library = Path(args.library)
+    library = selected_library(args)
     packs = sorted(library.glob("**/asset_pack.json"))
     if not packs:
         print(f"[empty] no asset packs under {library}")
@@ -523,6 +724,49 @@ def cmd_list(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_verify_pack(args: argparse.Namespace) -> int:
+    """Verify that a handoff pack can travel without its source library."""
+    raw = Path(args.pack).expanduser()
+    pack_path = raw / "asset_pack.json" if raw.is_dir() else raw
+    pack_root = pack_path.parent.resolve()
+    pack = read_json(pack_path)
+    findings: List[str] = []
+    if pack.get("kind") != PACK_KIND:
+        findings.append(f"kind must be {PACK_KIND}: {pack.get('kind')}")
+    for row in pack.get("files") or []:
+        if not isinstance(row, Mapping):
+            findings.append("files[] contains a non-object entry")
+            continue
+        rel = str(row.get("path") or "").strip()
+        if not rel:
+            findings.append(f"missing copied file for {row.get('source') or row.get('role') or 'unknown'}")
+            continue
+        target = (pack_root / rel).resolve()
+        try:
+            target.relative_to(pack_root)
+        except ValueError:
+            findings.append(f"file escapes pack root: {rel}")
+            continue
+        if not target.is_file():
+            findings.append(f"file missing inside pack: {rel}")
+            continue
+        expected = str(row.get("sha256") or "").strip()
+        if expected and sha256(target) != expected:
+            findings.append(f"sha256 mismatch: {rel}")
+    portability = pack.get("portability") if isinstance(pack.get("portability"), Mapping) else {}
+    if portability.get("self_contained") is not True:
+        findings.append("portability.self_contained must be true")
+    if portability.get("requires_source_library") is not False:
+        findings.append("portability.requires_source_library must be false")
+    if findings:
+        print(f"[fail] portable asset pack verification: {pack_path}")
+        for finding in findings:
+            print(f"- {finding}")
+        return 1
+    print(f"[ok] self-contained asset pack: {pack_path}")
+    return 0
+
+
 def cmd_export_character(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -530,13 +774,15 @@ def cmd_export_character(args: argparse.Namespace) -> int:
     char = filter_forms(char, args.form or "")
     title = args.title or str(char.get("name") or char.get("id") or "character")
     slug = slugify(args.slug or title)
-    out_dir = pack_dir(Path(args.library), "character", slug)
+    out_dir = pack_dir(selected_library(args, root), "character", slug)
     if out_dir.exists() and not args.force:
         raise FileExistsError(f"asset pack already exists, use --force: {out_dir}")
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     files = copy_reference_files(root, out_dir, char)
+    bundle_files, bundle_meta = copy_character_bundle_files(root, out_dir, char)
+    files.extend(bundle_files)
 
     pack = {
         "kind": PACK_KIND,
@@ -562,9 +808,11 @@ def cmd_export_character(args: argparse.Namespace) -> int:
             },
             "fork_required": True,
             "reset_native_adapters_on_import": True,
+            "source_asset_bundle": bundle_meta,
         },
         "registry_fragment": {"kind": REGISTRY_KIND, "version": 1, "characters": [char]},
         "files": files,
+        "portability": portability_block(files),
         "reminders": [
             "导入到新剧时必须 fork 新 character_id/name，避免多剧撞脸撞身份。",
             "Character ID / Face Lock / reference controls 通常需在新项目重新注册；默认导入会重置。",
@@ -628,6 +876,20 @@ def cmd_import_character(args: argparse.Namespace) -> int:
     source_character_id = str(source_char.get("id", "")).strip()  # 覆盖前捕获，写入 fork 溯源
     as_name = args.as_name or str(source_char.get("name") or pack.get("title") or "角色")
     as_id = args.as_id or f"CHAR_{slugify(as_name).upper()}"
+    template = pack.get("character_template") if isinstance(pack.get("character_template"), Mapping) else {}
+    bundle_meta = template.get("source_asset_bundle") if isinstance(template.get("source_asset_bundle"), Mapping) else {}
+    source_bundle = source_char.get("asset_bundle") if isinstance(source_char.get("asset_bundle"), Mapping) else {}
+    library_tier = str(
+        source_char.get("library_tier")
+        or bundle_meta.get("library_tier")
+        or source_bundle.get("tier")
+        or "named_minimal"
+    ).strip()
+    if library_tier not in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
+        library_tier = "named_minimal"
+    bundle_target = character_bundle_target(root, as_id, as_name)
+    if bundle_target.exists() and not args.replace:
+        raise ValueError(f"target character bundle already exists: {bundle_target} (use --replace)")
 
     # fork 溯源链：先继承源角色自带的 fork_history（源若本身是 fork 来的，链 A→B→C 不断），
     # 再追加本次条目；entry 键严格按契约 IDENTITY_FORK_HISTORY_ENTRY_FIELDS 构造。
@@ -652,6 +914,8 @@ def cmd_import_character(args: argparse.Namespace) -> int:
     source_char["source_asset_pack"] = str(pack_path)
     source_char["source_asset_slug"] = pack.get("slug", "")
     source_char["scope"] = args.scope or source_char.get("scope") or "全篇"
+    source_char["library_tier"] = library_tier
+    source_char["asset_bundle"] = target_character_bundle_ref(root, as_id, as_name, library_tier)
 
     forms = [form for form in (source_char.get("forms", []) or []) if isinstance(form, dict)]
     multi_form = len(forms) > 1
@@ -692,6 +956,17 @@ def cmd_import_character(args: argparse.Namespace) -> int:
 
     registry = ensure_registry(root)
     merge_character(registry, source_char, replace=args.replace)
+    land_character_bundle(
+        root,
+        pack_root,
+        pack,
+        character_id=as_id,
+        name=as_name,
+        tier=library_tier,
+        source_character_id=source_character_id,
+        source_name=str(fragment_chars[0].get("name") or ""),
+        replace=args.replace,
+    )
     write_json(registry_path(root), registry)
 
     adapter_strategy = "已保留为 candidate 参考，需在本项目重新审核/注册" if args.preserve_adapters else "已重置，需按新项目重新注册"
@@ -723,7 +998,7 @@ def cmd_export_asset(args: argparse.Namespace) -> int:
     validate_asset_id_prefix(asset_type, str(asset.get("id", "")).strip())
     title = args.title or str(asset.get("name") or asset.get("id") or asset_type)
     slug = slugify(args.slug or title)
-    out_dir = pack_dir(Path(args.library), asset_type, slug)
+    out_dir = pack_dir(selected_library(args, root), asset_type, slug)
     if out_dir.exists() and not args.force:
         raise FileExistsError(f"asset pack already exists, use --force: {out_dir}")
     if out_dir.exists():
@@ -749,6 +1024,7 @@ def cmd_export_asset(args: argparse.Namespace) -> int:
         "tags": args.tag or [],
         "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": [asset]},
         "files": files,
+        "portability": portability_block(files),
         "reminders": [
             "导入到新剧时必须按新项目命名/ID 合并，避免 LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ 冲突。",
             "非角色资产模板只复用结构、参考图和约束；新剧仍要按剧情校准 constraints/lifecycle/profile。",
@@ -834,7 +1110,7 @@ def cmd_export_routes(args: argparse.Namespace) -> int:
         raise FileNotFoundError(f"video_model_routes.json not found: {route_path}")
     routes = read_json(route_path)
     slug = slugify(args.slug or f"{project_name(root)}-{args.episode}-routes")
-    out_dir = pack_dir(Path(args.library), "route_template", slug)
+    out_dir = pack_dir(selected_library(args, root), "route_template", slug)
     if out_dir.exists() and not args.force:
         raise FileExistsError(f"route template already exists, use --force: {out_dir}")
     if out_dir.exists():
@@ -852,6 +1128,7 @@ def cmd_export_routes(args: argparse.Namespace) -> int:
         "style_tags": args.style_tag or [],
         "tags": args.tag or [],
         "route_template": routes,
+        "portability": portability_block(),
         "reminders": [
             "路由模板只做参考，不直接覆盖新剧逐 Clip 路由。",
             "新剧仍需按 storyboard 重新运行 n2d-model-router。",
@@ -906,7 +1183,7 @@ def cmd_export_motif(args: argparse.Namespace) -> int:
     motif = copy.deepcopy(find_motif(load_motif_registry(root), motif_id))
     title = args.title or str(motif.get("motif_type") or motif_id)
     slug = slugify(args.slug or title)
-    out_dir = pack_dir(Path(args.library), "motif", slug)
+    out_dir = pack_dir(selected_library(args, root), "motif", slug)
     if out_dir.exists() and not args.force:
         raise FileExistsError(f"motif pack already exists, use --force: {out_dir}")
     if out_dir.exists():
@@ -941,6 +1218,7 @@ def cmd_export_motif(args: argparse.Namespace) -> int:
         "motif_fragment": {"kind": MOTIF_REGISTRY_KIND, "version": 1, "motifs": [motif]},
         "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": vfx_assets},
         "files": files,
+        "portability": portability_block(files),
         "reminders": [
             "母题模板只复用结构（镜头模板/台词腔/VFX 定妆/overlay 规格），不复用具体剧情数值。",
             "导入到新剧时 progression 成长档会被重置（新剧从 Lv.1 起按自身剧情重排）。",
@@ -1122,7 +1400,7 @@ def cmd_export_combat(args: argparse.Namespace) -> int:
     combat_set = find_combat_set(load_combat_registry(root), args.combat_id or "")
     title = args.title or str(combat_set.get("name") or combat_set.get("combat_id") or "combat")
     slug = slugify(args.slug or title)
-    out_dir = pack_dir(Path(args.library), "combat", slug)
+    out_dir = pack_dir(selected_library(args, root), "combat", slug)
     if out_dir.exists() and not args.force:
         raise FileExistsError(f"combat pack already exists, use --force: {out_dir}")
     if out_dir.exists():
@@ -1165,6 +1443,7 @@ def cmd_export_combat(args: argparse.Namespace) -> int:
         "combat_fragment": {"kind": COMBAT_REGISTRY_KIND, "version": 1, "combat_sets": [combat_set]},
         "asset_registry_fragment": {"kind": ASSET_REGISTRY_KIND, "version": 1, "assets": bound_assets},
         "files": files,
+        "portability": portability_block(files),
         "reminders": [
             "打斗 pack 只复用结构：五帧拆招/力链/contact/速度曲线/节奏 preset + 武器VFX定妆锁形，不复用同一把可识别武器或具体数值。",
             "导入到新剧时关键帧 PNG 会被清空（reskin）：必须在新剧重出起手/命中关键帧，再过 image/video gate。",
@@ -1251,8 +1530,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_hint)
 
     p = sub.add_parser("list", help="list local asset packs")
-    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--library", default="", help=f"override series library (default: {DEFAULT_LIBRARY})")
     p.set_defaults(func=cmd_list)
+
+    p = sub.add_parser("verify-pack", help="verify one self-contained asset pack for file handoff")
+    p.add_argument("pack")
+    p.set_defaults(func=cmd_verify_pack)
 
     p = sub.add_parser("export-character", help="export one registry character as an asset pack")
     p.add_argument("project_root")
@@ -1261,7 +1544,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--form", default="")
     p.add_argument("--title", default="")
     p.add_argument("--slug", default="")
-    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--library", default="", help="override; default is <project series>/_资产库")
     p.add_argument("--force", action="store_true")
     p.add_argument("--license-status", default="user_owned_or_synthetic")
     p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
@@ -1290,7 +1573,7 @@ def build_parser() -> argparse.ArgumentParser:
         p.add_argument("--asset-name", default="")
         p.add_argument("--title", default="")
         p.add_argument("--slug", default="")
-        p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+        p.add_argument("--library", default="", help="override; default is <project series>/_资产库")
         p.add_argument("--force", action="store_true")
         p.add_argument("--license-status", default="user_owned_or_synthetic")
         p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
@@ -1327,7 +1610,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--routes-json", default="")
     p.add_argument("--title", default="")
     p.add_argument("--slug", default="")
-    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--library", default="", help="override; default is <project series>/_资产库")
     p.add_argument("--force", action="store_true")
     p.add_argument("--style-tag", action="append")
     p.add_argument("--tag", action="append")
@@ -1343,7 +1626,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--motif-id", default="", help=f"母题 id（默认 {SYSTEM_PANEL_MOTIF_ID}）")
     p.add_argument("--title", default="")
     p.add_argument("--slug", default="")
-    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--library", default="", help="override; default is <project series>/_资产库")
     p.add_argument("--force", action="store_true")
     p.add_argument("--license-status", default="user_owned_or_synthetic")
     p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])
@@ -1364,7 +1647,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--combat-id", default="", help="combat_id（默认导出 combat_registry 第一条）")
     p.add_argument("--title", default="")
     p.add_argument("--slug", default="")
-    p.add_argument("--library", default=str(DEFAULT_LIBRARY))
+    p.add_argument("--library", default="", help="override; default is <project series>/_资产库")
     p.add_argument("--force", action="store_true")
     p.add_argument("--license-status", default="user_owned_or_synthetic")
     p.add_argument("--reuse", default="template_only", choices=["template_only", "same_ip", "licensed_reuse"])

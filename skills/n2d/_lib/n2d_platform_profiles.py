@@ -8,7 +8,9 @@ these constants for routing/gate decisions.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+import math
+
+from typing import Any, Dict, Mapping, Optional, Sequence
 
 
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
@@ -45,6 +47,30 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_quality_tier": "fast",
         "identity_mechanism": "first_last_frame_or_reference_group",
         "native_av": False,
+        "duration_control": {
+            "kind": "integer_range",
+            "min_seconds": 4,
+            "max_seconds": 15,
+            "step_seconds": 1,
+            "default_seconds": 5,
+            "model_ranges": {
+                "3.0": (3, 10),
+                "3.0fast": (3, 10),
+                "3.0pro": (3, 10),
+                "3.5pro": (4, 12),
+                "seedance2.0": (4, 15),
+                "seedance2.0fast": (4, 15),
+                "seedance2.0_vip": (4, 15),
+                "seedance2.0fast_vip": (4, 15),
+            },
+            "native_multiframe": {
+                "kind": "continuous_range",
+                "min_seconds": 2,
+                "max_seconds": 15,
+                "step_seconds": 0.1,
+            },
+            "verified": "2026-06-22 local official Dreamina CLI --help snapshots",
+        },
         "frame_control": {
             "mode": "multi_keyframe",
             "max_timeline_frames": 20,
@@ -72,6 +98,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "frames2video",
         "identity_mechanism": "character_id",
         "native_av": False,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (5, 10),
+            "verified": "conservative profile; re-verify current Kling model before paid submit",
+        },
         "consistency_face_floor_delta": 0.05,  # multishot + character_id → tighter identity floor
         "lipsync_audio_ref": True,  # 可灵 Omni 原生口型：可吃音频参考做口型驱动
         "multilingual_lipsync": True,  # 可灵 3.0 Omni 多语言/方言/口音原生口型（出海次选，Seedance 优先）
@@ -102,6 +133,13 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "face_lock",
         "native_av": True,
+        "duration_control": {
+            "kind": "integer_range",
+            "min_seconds": 4,
+            "max_seconds": 15,
+            "step_seconds": 1,
+            "verified": "2026-07-01 Seedance 2.0 official duration range",
+        },
         "lipsync_audio_ref": True,  # Seedance 2.0 音素级口型：可吃音频参考做口型驱动
         "multilingual_lipsync": True,  # 2026 多语言唇同步 best-in-class（出海非中文台词口型/口音匹配）
         # Seedance 2.0 一次生成可出「多镜头叙事 + 跨镜人物一致 + 无缝转场」（multi-shot single-gen），
@@ -127,6 +165,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "reference_controls",
         "native_av": True,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (4, 6, 8),
+            "verified": "2026-07-10 Google Veo 3.1 first/last-frame API docs",
+        },
         "availability": {
             "status": "preview",
             "current_model": "Veo 3.1",
@@ -166,6 +209,12 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_model_version": "gemini-omni-flash-preview",
         "identity_mechanism": "multi_input_reference",
         "native_av": True,
+        "duration_control": {
+            "kind": "manual_confirm",
+            "min_seconds": 1,
+            "max_seconds": 8,
+            "verified": "public duration controls not exposed in the current adapter",
+        },
         "multishot_native": True,
         "availability": {
             "status": "preview",
@@ -194,6 +243,12 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         # 2026-06-25：Sora Web/App 已停服，API 处于明确日落窗口。保留档案只为读旧项目/人工补单；
         # 自动路由、原生音画候选、批量付费提交不得再把 Sora 当 primary/fallback。
         "native_av": False,
+        "duration_control": {
+            "kind": "manual_confirm",
+            "min_seconds": 1,
+            "max_seconds": 20,
+            "verified": "legacy/manual-only profile",
+        },
         "auto_routing": False,
         "availability": {
             "status": "legacy_manual_only",
@@ -219,6 +274,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "frames2video",
         "identity_mechanism": "first_last_frame",
         "native_av": False,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (5,),
+            "verified": "2026-07-10 Luma Ray 2 API docs",
+        },
         "frame_control": {
             "mode": "first_last",
             "max_timeline_frames": 2,
@@ -237,6 +297,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "reference_image",
         "native_av": False,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (5, 10),
+            "verified": "conservative Gen-4/Gen-4.5 profile; re-verify selected model before paid submit",
+        },
         "frame_control": {
             "mode": "first_frame",
             "max_timeline_frames": 1,
@@ -255,6 +320,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "reference_image",
         "native_av": False,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (5, 10),
+            "verified": "conservative profile; official API not verified in this audit",
+        },
         "frame_control": {
             "mode": "first_frame",
             "max_timeline_frames": 1,
@@ -274,6 +344,11 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
         "default_mode": "image2video",
         "identity_mechanism": "first_last_frame_or_reference",
         "native_av": False,
+        "duration_control": {
+            "kind": "allowed_values",
+            "values": (5, 10),
+            "verified": "conservative self-hosted profile; re-verify the local checkpoint",
+        },
         "consistency_face_floor_delta": -0.03,  # open-source self-host; identity less stable than cloud APIs
         # 开源/可自托管的「多镜单次生成」后端（Wan 2.6/2.7）：native-multishot 里唯一不绑付费云 API、
         # 可在本地 ComfyUI/自建管线跑的选项——契合「主流程不硬绑后端、缺依赖优雅降级」（设计宪法 C4）。
@@ -535,6 +610,113 @@ def video_backend_max_seconds(backend: Optional[str], default: int = 8) -> int:
     return VIDEO_BACKEND_MAX_SECONDS.get(key, default)
 
 
+def video_backend_duration_control(
+    backend: Optional[str],
+    channel: Optional[str] = None,
+    *,
+    model_version: Optional[str] = None,
+    mode: Optional[str] = None,
+) -> Dict[str, object]:
+    """Return the executable backend's duration contract.
+
+    Duration is a request-field capability, not a storytelling decision.  The
+    returned profile describes only what the selected backend can submit; the
+    compiler separately keeps the narrative span and edit target.
+    """
+    key = effective_frame_backend(backend, channel)
+    spec = VIDEO_BACKEND_PROFILES.get(key, {})
+    raw = spec.get("duration_control")
+    if not isinstance(raw, Mapping):
+        return {
+            "kind": "manual_confirm",
+            "min_seconds": 0.1,
+            "max_seconds": float(spec.get("max_clip_seconds") or 8),
+            "verified": "unknown duration control; confirm the selected model before paid submit",
+            "execution_backend": key,
+        }
+    control: Dict[str, object] = dict(raw)
+    low_mode = str(mode or "").strip().lower()
+    if key == "dreamina" and low_mode in {"multiframe2video", "native_multiframe"}:
+        native = raw.get("native_multiframe")
+        if isinstance(native, Mapping):
+            control.update(dict(native))
+    model = str(model_version or spec.get("default_model_version") or "").strip()
+    ranges = raw.get("model_ranges")
+    if model and isinstance(ranges, Mapping):
+        pair = ranges.get(model)
+        if isinstance(pair, Sequence) and not isinstance(pair, (str, bytes)) and len(pair) >= 2:
+            control["min_seconds"] = float(pair[0])
+            control["max_seconds"] = float(pair[1])
+    control["execution_backend"] = key
+    control["model_version"] = model
+    return control
+
+
+def quantize_video_duration(
+    target_seconds: Optional[float],
+    backend: Optional[str],
+    channel: Optional[str] = None,
+    *,
+    model_version: Optional[str] = None,
+    mode: Optional[str] = None,
+) -> Dict[str, object]:
+    """Map an edit target to a backend request duration without changing edit intent."""
+    try:
+        target = float(target_seconds) if target_seconds is not None else 0.0
+    except (TypeError, ValueError):
+        target = 0.0
+    control = video_backend_duration_control(
+        backend, channel, model_version=model_version, mode=mode
+    )
+    kind = str(control.get("kind") or "manual_confirm")
+    request = target
+    requires_manual = kind == "manual_confirm"
+    requires_split = False
+    reason = kind
+    values = control.get("values")
+    if kind == "allowed_values" and isinstance(values, Sequence) and not isinstance(values, (str, bytes)):
+        allowed = sorted({float(v) for v in values if isinstance(v, (int, float)) and float(v) > 0})
+        if allowed:
+            request = next((v for v in allowed if v + 1e-9 >= target), allowed[-1])
+            requires_split = target > allowed[-1] + 1e-9
+            reason = "allowed_values:" + ",".join(f"{v:g}" for v in allowed)
+    elif kind in {"integer_range", "continuous_range"}:
+        minimum = float(control.get("min_seconds") or 0.1)
+        maximum = float(control.get("max_seconds") or max(minimum, target))
+        step = float(control.get("step_seconds") or (1.0 if kind == "integer_range" else 0.1))
+        if target > maximum + 1e-9:
+            request = maximum
+            requires_split = True
+        else:
+            base = max(minimum, target)
+            request = math.ceil((base - minimum) / step - 1e-9) * step + minimum
+            request = min(maximum, max(minimum, request))
+        reason = f"{kind}:{minimum:g}-{maximum:g}/step={step:g}"
+    else:
+        minimum = float(control.get("min_seconds") or 0.1)
+        maximum = float(control.get("max_seconds") or max(minimum, target))
+        request = min(maximum, max(minimum, target))
+        requires_split = target > maximum + 1e-9
+        reason = "manual_confirm"
+    request = round(float(request), 3)
+    target = round(max(0.0, target), 3)
+    surplus = round(max(0.0, request - target), 3)
+    return {
+        "execution_backend": control.get("execution_backend") or "",
+        "model_version": control.get("model_version") or "",
+        "duration_control_kind": kind,
+        "edit_target_sec": target,
+        "backend_request_sec": request,
+        "backend_surplus_sec": surplus,
+        "usable_window": [0.0, min(target, request)],
+        "trim_mode": "trim_tail" if surplus > 0.05 else "none",
+        "requires_split": requires_split,
+        "requires_manual_confirmation": requires_manual,
+        "quantization_reason": reason,
+        "verified": control.get("verified") or "",
+    }
+
+
 def video_backend_profile(backend: str) -> Optional[Dict[str, object]]:
     key = normalize_video_backend(backend, default="")
     if not key:
@@ -601,31 +783,90 @@ def effective_frame_backend(backend: Optional[str], channel: Optional[str] = Non
 
 
 def backend_supports_three_plus_frames(backend: Optional[str], channel: Optional[str] = None) -> bool:
-    """Whether the route can express 3+ timeline anchors (first + mid + last).
+    """Whether one native request can consume 3+ timeline anchors.
 
-    This is a video consumption capability, not the image-stage policy. n2d still
-    produces first/mid/end image assets by default; this function only tells
-    n2d-video whether those anchors can become native timeline frames or need
-    split relay/reference/QC/reroute handling.
-    判定（证据优先）：
-      · 后端不在档案里（未知/新后端）→ False（需 record-refresh/smoke 或人工确认后入档；不默认假定支持）。
-      · 原生多帧（supports_native_mid_anchors，如即梦 multiframe2video）→ True。
-      · max_timeline_frames ≥ 3 → True。
-      · 支持尾帧（supports_last_frame，如可灵/Veo/Luma 首尾档）→ True：可首尾拆段接力凑 ≥3 帧。
-    False = 不具备可执行三帧证据：明确 first-frame-only，或未知/未选后端；
-    不表示图片阶段可以省掉 `_mid`。
+    A first+last backend is deliberately False: two paid first/last requests
+    joined at a middle image are split relay, not native three-frame control.
     """
     key = effective_frame_backend(backend, channel)
     spec = VIDEO_BACKEND_PROFILES.get(key)
     if not spec:                       # 未知/未选后端：先要能力证据，不默认强制三帧
         return False
     fc = spec.get("frame_control") or {}
-    if fc.get("supports_native_mid_anchors") or fc.get("supports_last_frame"):
+    if fc.get("supports_native_mid_anchors"):
         return True
     try:
         return int(fc.get("max_timeline_frames") or 1) >= 3
     except (TypeError, ValueError):
         return False
+
+
+VIDEO_FRAME_STRATEGIES = frozenset({
+    "first_only",
+    "first_last",
+    "native_multiframe",
+    "split_relay",
+    "edit_cut",
+    "edit_cut_pending_assets",
+    "reference_qc",
+    "reroute_required",
+})
+
+
+def select_video_frame_strategy(
+    backend: Optional[str],
+    channel: Optional[str] = None,
+    *,
+    shot_count: int = 1,
+    anchor_count: int = 0,
+    need_end: bool = False,
+    requires_mid_anchors: bool = False,
+    explicit: Optional[str] = None,
+) -> Dict[str, object]:
+    """Choose 1/2/N-frame execution from story grammar and native capability.
+
+    `shot_count>1` means editorial coverage changes, not a continuous keyframe
+    interpolation.  Such clips use separate edit-cut takes when boundary images
+    exist.  A middle anchor is otherwise required only for an explicitly risky
+    continuous shot.
+    """
+    control = video_backend_frame_control(backend, channel)
+    supports_last = bool(control.get("supports_last_frame"))
+    supports_native_mid = bool(control.get("supports_native_mid_anchors"))
+    requested = str(explicit or "").strip().lower()
+    if requested in VIDEO_FRAME_STRATEGIES:
+        strategy = requested
+        reason = "explicit_storyboard_strategy"
+    elif int(shot_count or 0) > 1:
+        required_boundaries = max(1, int(shot_count) - 1)
+        strategy = "edit_cut" if int(anchor_count or 0) >= required_boundaries and need_end else "edit_cut_pending_assets"
+        reason = "multiple_editorial_shots_require_hard_cut_coverage"
+    elif requires_mid_anchors:
+        if supports_native_mid:
+            strategy = "native_multiframe"
+            reason = "high_risk_continuous_shot_with_native_mid_control"
+        elif supports_last:
+            strategy = "split_relay"
+            reason = "high_risk_continuous_shot_requires_explicit_relay"
+        else:
+            strategy = "reroute_required"
+            reason = "high_risk_continuous_shot_backend_cannot_consume_mid_anchors"
+    elif need_end and supports_last:
+        strategy = "first_last"
+        reason = "single_beat_with_required_end_state"
+    else:
+        strategy = "first_only"
+        reason = "low_risk_single_beat_or_backend_first_frame_only"
+    return {
+        "strategy": strategy,
+        "reason": reason,
+        "shot_count": max(1, int(shot_count or 1)),
+        "anchor_count": max(0, int(anchor_count or 0)),
+        "need_end": bool(need_end),
+        "supports_last_frame": supports_last,
+        "supports_native_mid_anchors": supports_native_mid,
+        "frame_control_mode": control.get("mode") or "unknown",
+    }
 
 
 def video_backend_frame_control(backend: Optional[str], channel: Optional[str] = None) -> Dict[str, object]:
@@ -651,6 +892,7 @@ def anchor_consumption_plan(
     *,
     anchor_count: int = 0,
     need_end: bool = False,
+    frame_strategy: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Describe how first/mid/end keyframes can actually be consumed by the backend.
 
@@ -667,8 +909,25 @@ def anchor_consumption_plan(
     supports_last = bool(control.get("supports_last_frame"))
     max_reference_images = int(control.get("max_reference_images") or 0)
     known = spec is not None
+    requested_strategy = str(frame_strategy or "").strip().lower()
     mode = "first_frame"
-    if anchor_count > 0:
+    if requested_strategy == "edit_cut":
+        mode = "edit_cut"
+    elif requested_strategy == "edit_cut_pending_assets":
+        mode = "edit_cut_pending_assets"
+    elif requested_strategy == "reference_qc":
+        mode = "reference_only_qc"
+    elif requested_strategy == "reroute_required":
+        mode = "unsupported_mid_anchor"
+    elif requested_strategy == "first_only":
+        mode = "first_frame"
+    elif requested_strategy == "first_last":
+        mode = "first_last" if supports_last else "unsupported_endframe"
+    elif requested_strategy == "native_multiframe":
+        mode = "native_multiframe" if supports_native_mid else "unsupported_mid_anchor"
+    elif requested_strategy == "split_relay":
+        mode = "split_relay" if supports_last else "unsupported_mid_anchor"
+    elif anchor_count > 0:
         if supports_native_mid:
             mode = "native_multiframe"
         elif supports_last:
@@ -686,7 +945,7 @@ def anchor_consumption_plan(
             mode = "unsupported_endframe"
         else:
             mode = "unknown_manual_confirm"
-    consumes_endframe = bool(need_end and mode in {"native_multiframe", "split_relay", "first_last"})
+    consumes_endframe = bool(need_end and mode in {"native_multiframe", "split_relay", "first_last", "edit_cut"})
     plan: Dict[str, Any] = {
         "backend": normalize_video_backend(backend or "", default="") or (backend or ""),
         "execution_backend": key,
@@ -694,6 +953,7 @@ def anchor_consumption_plan(
         "anchor_count": int(anchor_count or 0),
         "need_end": bool(need_end),
         "consumption_mode": mode,
+        "frame_strategy": requested_strategy or "legacy_auto",
         "consumes_mid_anchors_natively": mode == "native_multiframe",
         "consumes_endframe": consumes_endframe,
         "requires_split_relay": mode == "split_relay",
@@ -703,7 +963,11 @@ def anchor_consumption_plan(
         "supports_last_frame": supports_last,
         "auto_routable": video_backend_auto_routable(backend),
     }
-    if mode == "native_multiframe":
+    if mode == "edit_cut":
+        plan["action"] = "generate separate physical takes for storyboard shots and join them with editorial cuts"
+    elif mode == "edit_cut_pending_assets":
+        plan["action"] = "create missing shot-boundary images before paid generation"
+    elif mode == "native_multiframe":
         if need_end:
             plan["action"] = "submit first/mid/end frames in one native multi-keyframe request"
         else:

@@ -28,6 +28,18 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
+
+AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
+if str(AD_LIB) not in sys.path:
+    sys.path.insert(0, str(AD_LIB))
+from ad_video_prompt_compiler import (  # noqa: E402
+    KIND as COMPILER_KIND,
+    VERSION as COMPILER_VERSION,
+    lint as lint_compiled_prompt,
+    normalize_backend,
+    parse_markdown,
+)
 
 # 这些字段是像素级硬继承（视频改不动）：缺失或与上游冲突 = block。
 HARD_FIELDS = ["品牌色", "光位锚", "轴线"]
@@ -172,6 +184,42 @@ def check_product_handoff(prod_ids, clip_prompt_text):
     return findings
 
 
+def check_compiled_prompt(clip_prompt_text, expected_backend=None):
+    """Validate the provider-facing compiler block without weakening the full contract."""
+    parsed = parse_markdown(clip_prompt_text or "")
+    if not parsed:
+        return [{
+            "severity": "block", "field": "prompt compiler",
+            "msg": "缺后端编译提交 prompt；完整广告合同不得直接提交给视频模型",
+        }]
+    findings = []
+    if parsed.get("kind") != COMPILER_KIND or parsed.get("version") != COMPILER_VERSION:
+        findings.append({
+            "severity": "block", "field": "prompt compiler",
+            "msg": (
+                f"编译器协议不兼容：kind={parsed.get('kind')} version={parsed.get('version')}；"
+                f"期望 {COMPILER_KIND} v{COMPILER_VERSION}"
+            ),
+        })
+    source_hash = str(parsed.get("source_contract_sha256") or "")
+    if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
+        findings.append({
+            "severity": "block", "field": "prompt compiler",
+            "msg": "编译块缺有效 source_contract_sha256，无法追溯到完整合同",
+        })
+    if expected_backend and normalize_backend(parsed.get("backend")) != normalize_backend(expected_backend):
+        findings.append({
+            "severity": "block", "field": "prompt compiler",
+            "msg": f"编译后端 {parsed.get('backend')} 与路由 primary={expected_backend} 不一致",
+        })
+    lint_result = lint_compiled_prompt(parsed)
+    for code in lint_result["errors"]:
+        findings.append({"severity": "block", "field": "prompt compiler", "msg": f"编译 prompt lint: {code}"})
+    for code in lint_result["warnings"]:
+        findings.append({"severity": "warn", "field": "prompt compiler", "msg": f"编译 prompt lint: {code}"})
+    return findings
+
+
 # ── 上游契约源解析（出图 00_总览.md → storyboard.json 回退） ───────────────────────
 def _extract_section(text, title=CONTRACT_SECTION_TITLE):
     """取 markdown 中标题含 title 的整节正文（到下一个同级/更高级标题为止）；无该节返回 None。"""
@@ -281,6 +329,12 @@ def run(root, out_json=None):
     prod_by_index = storyboard_prod_by_index(sb)
 
     prompt_dir = os.path.join(root, "出视频", "分镜", "prompt")
+    route_data = load_json(os.path.join(prompt_dir, "video_model_routes.json"), {}) or {}
+    backend_by_clip = {
+        str(item.get("clip")): item.get("primary")
+        for item in route_data.get("routes", [])
+        if isinstance(item, dict) and item.get("clip")
+    }
     results = []
     if os.path.isdir(prompt_dir):
         for name in sorted(os.listdir(prompt_dir)):
@@ -296,8 +350,11 @@ def run(root, out_json=None):
             for fnd in check_product_handoff(prod_ids, txt):
                 fnd["clip"] = name
                 results.append(fnd)
+            for fnd in check_compiled_prompt(txt, backend_by_clip.get(Path(name).stem)):
+                fnd["clip"] = name
+                results.append(fnd)
 
-    payload = {"schema_version": 1, "kind": "ad_contract_inheritance",
+    payload = {"schema_version": 2, "kind": "ad_contract_inheritance",
                "contract_source": contract_source, "visual_contract": contract,
                "findings": results,
                "summary": {"block": sum(1 for r in results if r["severity"] == "block"),

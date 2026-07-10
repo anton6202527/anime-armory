@@ -116,22 +116,22 @@
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
       "bytes": 163923,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
-      "rel_path": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+      "rel_path": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
       "role": "character",
       "sequence": 3,
       "sha256": "5a40380027f26910e338aa052af5c735e9d1d583609c35895ffdbfc470a5053b",
       "source": "reference_bundle"
     },
     {
-      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+      "abs_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
       "bytes": 393872,
       "owner": "CHAR_01/囚犯初醒态",
       "priority": 120,
-      "rel_path": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+      "rel_path": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
       "role": "character",
       "sequence": 4,
       "sha256": "0878ce5d68da20b3bb1ee16a5c991aabee163d3a79cd3325d11392f623601384",
@@ -285,8 +285,8 @@
       "id": "CHAR_01",
       "kind": "character",
       "paths": [
-        "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
-        "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
+        "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg",
+        "角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg",
         "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
         "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
         "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",

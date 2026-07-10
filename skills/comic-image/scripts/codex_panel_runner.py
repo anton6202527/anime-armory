@@ -10,6 +10,7 @@ import datetime as dt
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,17 @@ import tempfile
 import time
 from pathlib import Path
 from typing import Any
+
+
+COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
+if str(COMIC_LIB) not in sys.path:
+    sys.path.insert(0, str(COMIC_LIB))
+from comic_image_prompt_compiler import (  # noqa: E402
+    KIND as COMPILER_KIND,
+    VERSION as COMPILER_VERSION,
+    lint as lint_compiled_prompt,
+    normalize_backend,
+)
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
@@ -381,49 +393,67 @@ def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
 
 
 def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference_records: list[dict[str, str]]) -> str:
+    """Build the small execution wrapper around the compiled provider prompt."""
+    validate_compiled_job(job, expected_backend=CODEX_MODEL + " " + CODEX_CHANNEL)
     size = job.get("size") or {}
     width = int(size.get("width") or 1296)
     height = int(size.get("height") or 900)
-    if reference_records:
-        ref_lines = "\n".join(
-            f"- {record['id']}: 已作为 --image 附件传入，路径 {record['path']}"
-            for record in reference_records
-        )
-    else:
-        ref_lines = "- 无真实参考图附件；只按文字 prompt 生成"
-    anatomy = anatomy_guidance(job)
+    ref_line = (
+        f"已随请求附入 {len(reference_records)} 张真实参考图；按附件中的角色、场景、道具与画风保持一致。"
+        if reference_records else
+        "本格没有参考图附件，只按可见画面描述生成。"
+    )
+    negative = f"\n独立负向字段：{job.get('negative_prompt')}" if job.get("negative_prompt") else ""
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
-项目：《{project_name}》漫画{chapter}
-面板：{job.get('panel_id')}
 目标尺寸：{width}x{height}，长宽比约 {width / max(height, 1):.3f}
+{ref_line}
 
-已附共享参考图：
-{ref_lines}
+模型提交 prompt：
+{job.get('submit_prompt', '')}{negative}
 
-正向要求：
-{job.get('prompt', '')}
+本格人体/接触点补充：
+{anatomy_guidance(job)}
 
-负向要求：
-{job.get('negative_prompt', '')}
-
-人体与动作要求：
-{anatomy}
-
-硬性要求：
-1. 已附参考图优先级高于文字；同一个 CHAR/MON/PROP/LOC/SYS 参考 ID 在所有面板中必须保持同一角色、同一妖物、同一道具或同一场景资产，不得换脸、换发型、换服装主色、换体型或换关键结构。
-2. 多角色同框时，按参考 ID 分别锁定身份，不要把一个角色的脸、发型、衣服套到另一个角色身上。
-3. 只生成一张无字漫画画面，不要水印、logo、签名、印章、角标、字幕、中文、英文或乱码字；画面四角必须干净，不能出现任何小字或作者署名。
-4. 不要画对白气泡、空白气泡、旁白框、标题框或任何文字容器；如需要后期嵌字，只在不挡脸、不挡手脚、不挡关键道具的位置保留低细节留白区域，由 comic-compose 另行绘制气泡和文字。
-5. 画面必须铺满整张画布，不要外框、截图边、白色斜线边、相框、胶片边、画中画边框、内部漫画分格线或拼贴式多面板版式；当前任务只输出一个完整面板。
-6. 画风、题材、色彩和光效必须服从“正向要求”中的项目风格锚与当前面板事实，不要套用其它项目的默认风格。
-7. 危险、受伤或压迫感只做叙事必要表现，避免内脏、碎尸或过度 gore 特写。
-8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+执行约束：
+1. 只生成一个铺满画布的完整面板，不要外框、截图边、画中画、内部漫画分格或拼贴。
+2. 参考图作为真实图片输入，优先于与其冲突的泛化文字；多角色不得串脸、串发型、串服装。
+3. 生成完成后只回复一句完成，不要写文件、搜索文件系统或输出 Markdown。
 """
 
 
+def validate_compiled_job(job: dict[str, Any], expected_backend: str = "") -> None:
+    compiler = job.get("prompt_compiler") if isinstance(job.get("prompt_compiler"), dict) else {}
+    payload = {
+        **compiler,
+        "prompt": str(job.get("submit_prompt") or ""),
+        "negative_prompt": str(job.get("negative_prompt") or ""),
+        "source_contract_sha256": str(job.get("source_contract_sha256") or ""),
+    }
+    errors: list[str] = []
+    if job.get("prompt_source_kind") != "compiled_submit_prompt":
+        errors.append("prompt_source_kind_invalid")
+    if compiler.get("kind") != COMPILER_KIND or compiler.get("version") != COMPILER_VERSION:
+        errors.append("prompt_compiler_incompatible")
+    if str(job.get("prompt") or "") != str(job.get("submit_prompt") or ""):
+        errors.append("prompt_alias_mismatch")
+    if not re.fullmatch(r"[0-9a-f]{64}", str(job.get("source_contract_sha256") or "")):
+        errors.append("source_contract_hash_invalid")
+    actual_hash = hashlib.sha256(str(job.get("submit_prompt") or "").encode("utf-8")).hexdigest()
+    if str(job.get("submit_prompt_sha256") or "") != actual_hash:
+        errors.append("submit_prompt_hash_mismatch")
+    if expected_backend and normalize_backend(compiler.get("backend")) != normalize_backend(expected_backend):
+        errors.append(f"prompt_backend_mismatch:{compiler.get('backend')}!={normalize_backend(expected_backend)}")
+    errors.extend(lint_compiled_prompt(payload)["errors"])
+    if errors:
+        raise ValueError(f"{job.get('panel_id')} compiled prompt invalid: {errors}")
+
+
 def anatomy_guidance(job: dict[str, Any]) -> str:
-    text = " ".join(str(job.get(key, "")) for key in ("panel_id", "prompt", "negative_prompt"))
+    text = " ".join(
+        str(job.get(key, ""))
+        for key in ("panel_id", "production_contract_prompt", "production_negative_contract", "submit_prompt")
+    )
     lines = [
         "- 人物最多两条手臂两只手；每只可见手必须自然连接同侧手腕、前臂、肘部和肩线。",
         "- 禁止额外手掌、漂浮断手、手从刀柄/地面/光效中长出、左右手归属互换、同一只手重复出现。",

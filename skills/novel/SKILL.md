@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3132 | 目录文本总行数 66142
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3134 | 目录文本总行数 66144
 
 # novel — 小说工坊调度入口
 
@@ -13,6 +13,8 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
 **当前默认口径保持不变**：`写小说` 默认进入 novel 纯文本小说生产线，但不默认等于“专门制作漫剧的小说”。新建原创项目时先定 `小说用途`，且该选择点**无默认值**；用户可选 `传统小说 / 漫剧源书 / 微短剧源书 / 短读/短篇 / 出海译制底稿 / 自定义`。只有用户明确选择 `漫剧源书` 或 `微短剧源书`，才启用对应的短章、强钩子、市场基准和后续转制检查；否则按普通小说/网文项目推进。
 
 **默认成书工作流**：已有作品根时，优先跑 `python3 skills/novel-craft/scripts/author_workflow.py "<作品根>" --write`。它会按作者视角检查“入口设置 → 作者意图/蓝图/读者契约 → 资料/观察/审美与事实落场景 → 设定/场景卡/结构地图 → Demo 双闸门 → 分章写作 → review/score → 真实读者验证 → 分层编辑与 editor query → AI/合规/发布元数据 → release manifest”，输出当前步骤、真实 blocker/warning 和下一步命令；`flow.py`、`pipeline_runner.py`、`novel-dashboard` 都以这套默认流程作为可落地的导航层。
+
+**Prompt 分层裁决（2026-07）**：小说线不新增“把完整写作合同压成短 prompt”的 provider compiler。蓝图、设定圣经、状态账本、读者契约、章纲、场景卡、上一章窗口与修订项本来就是正文生成所需上下文，擅自精简会造成设定/人物/伏笔漂移。正确边界由 `draft_packets.py` 的逐章/逐 pass 任务包、static/dynamic context、检索命中、source/state hash、语义任务绑定和 `prompt_cache_metrics.py` 提供；只有某个实际文本后端出现独立结构字段时，才在小说线 `_lib` 内新增对应 adapter，不能为了与其它媒介形式统一而强造 compiler。
 
 **本系列成员**见下方"路由规则"表（家族唯一权威名册；新增/移除子 skill 只改那张表）。
 

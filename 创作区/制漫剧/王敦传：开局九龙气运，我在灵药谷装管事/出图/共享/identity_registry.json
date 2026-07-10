@@ -383,7 +383,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_WANG_DUN__常态.png",
@@ -790,22 +790,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_WANG_DUN__王敦/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_WANG_DUN__王敦",
-        "base_dir": "设定库/character_assets/CHAR_WANG_DUN__王敦",
+        "manifest": "角色库/CHAR_WANG_DUN__王敦/manifest.json",
+        "package_dir": "角色库/CHAR_WANG_DUN__王敦",
+        "base_dir": "角色库/CHAR_WANG_DUN__王敦",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_WANG_DUN__王敦/reference",
-          "prompts": "设定库/character_assets/CHAR_WANG_DUN__王敦/prompts",
-          "lora": "设定库/character_assets/CHAR_WANG_DUN__王敦/lora",
-          "voice": "设定库/character_assets/CHAR_WANG_DUN__王敦/voice",
-          "adapters": "设定库/character_assets/CHAR_WANG_DUN__王敦/adapters",
-          "qc": "设定库/character_assets/CHAR_WANG_DUN__王敦/qc"
-        }
+          "reference": "角色库/CHAR_WANG_DUN__王敦/reference",
+          "prompts": "角色库/CHAR_WANG_DUN__王敦/prompts",
+          "lora": "角色库/CHAR_WANG_DUN__王敦/lora",
+          "voice": "角色库/CHAR_WANG_DUN__王敦/voice",
+          "adapters": "角色库/CHAR_WANG_DUN__王敦/adapters",
+          "qc": "角色库/CHAR_WANG_DUN__王敦/qc"
+        },
+        "tier": "core_full"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "core_full",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_JAILER_A",
@@ -1245,7 +1248,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_A__常态.png",
@@ -1652,22 +1655,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_JAILER_A__狱卒甲",
-        "base_dir": "设定库/character_assets/CHAR_JAILER_A__狱卒甲",
+        "manifest": "角色库/CHAR_JAILER_A__狱卒甲/manifest.json",
+        "package_dir": "角色库/CHAR_JAILER_A__狱卒甲",
+        "base_dir": "角色库/CHAR_JAILER_A__狱卒甲",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/reference",
-          "prompts": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/prompts",
-          "lora": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/lora",
-          "voice": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/voice",
-          "adapters": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/adapters",
-          "qc": "设定库/character_assets/CHAR_JAILER_A__狱卒甲/qc"
-        }
+          "reference": "角色库/CHAR_JAILER_A__狱卒甲/reference",
+          "prompts": "角色库/CHAR_JAILER_A__狱卒甲/prompts",
+          "lora": "角色库/CHAR_JAILER_A__狱卒甲/lora",
+          "voice": "角色库/CHAR_JAILER_A__狱卒甲/voice",
+          "adapters": "角色库/CHAR_JAILER_A__狱卒甲/adapters",
+          "qc": "角色库/CHAR_JAILER_A__狱卒甲/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_JAILER_B",
@@ -2107,7 +2113,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_JAILER_B__常态.png",
@@ -2514,22 +2520,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_JAILER_B__狱卒乙",
-        "base_dir": "设定库/character_assets/CHAR_JAILER_B__狱卒乙",
+        "manifest": "角色库/CHAR_JAILER_B__狱卒乙/manifest.json",
+        "package_dir": "角色库/CHAR_JAILER_B__狱卒乙",
+        "base_dir": "角色库/CHAR_JAILER_B__狱卒乙",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/reference",
-          "prompts": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/prompts",
-          "lora": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/lora",
-          "voice": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/voice",
-          "adapters": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/adapters",
-          "qc": "设定库/character_assets/CHAR_JAILER_B__狱卒乙/qc"
-        }
+          "reference": "角色库/CHAR_JAILER_B__狱卒乙/reference",
+          "prompts": "角色库/CHAR_JAILER_B__狱卒乙/prompts",
+          "lora": "角色库/CHAR_JAILER_B__狱卒乙/lora",
+          "voice": "角色库/CHAR_JAILER_B__狱卒乙/voice",
+          "adapters": "角色库/CHAR_JAILER_B__狱卒乙/adapters",
+          "qc": "角色库/CHAR_JAILER_B__狱卒乙/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_PURSUER",
@@ -2969,7 +2978,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "restricted_partial",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_PURSUER__常态.png",
@@ -3376,22 +3385,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_PURSUER__大齐追兵/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_PURSUER__大齐追兵",
-        "base_dir": "设定库/character_assets/CHAR_PURSUER__大齐追兵",
+        "manifest": "角色库/CHAR_PURSUER__大齐追兵/manifest.json",
+        "package_dir": "角色库/CHAR_PURSUER__大齐追兵",
+        "base_dir": "角色库/CHAR_PURSUER__大齐追兵",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_PURSUER__大齐追兵/reference",
-          "prompts": "设定库/character_assets/CHAR_PURSUER__大齐追兵/prompts",
-          "lora": "设定库/character_assets/CHAR_PURSUER__大齐追兵/lora",
-          "voice": "设定库/character_assets/CHAR_PURSUER__大齐追兵/voice",
-          "adapters": "设定库/character_assets/CHAR_PURSUER__大齐追兵/adapters",
-          "qc": "设定库/character_assets/CHAR_PURSUER__大齐追兵/qc"
-        }
+          "reference": "角色库/CHAR_PURSUER__大齐追兵/reference",
+          "prompts": "角色库/CHAR_PURSUER__大齐追兵/prompts",
+          "lora": "角色库/CHAR_PURSUER__大齐追兵/lora",
+          "voice": "角色库/CHAR_PURSUER__大齐追兵/voice",
+          "adapters": "角色库/CHAR_PURSUER__大齐追兵/adapters",
+          "qc": "角色库/CHAR_PURSUER__大齐追兵/qc"
+        },
+        "tier": "restricted_partial"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0
     },
     {
       "id": "CROWD_VALLEY_WORKERS",
@@ -3594,22 +3606,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/manifest.json",
-        "package_dir": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群",
-        "base_dir": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群",
+        "manifest": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/manifest.json",
+        "package_dir": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群",
+        "base_dir": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群",
         "sections": {
-          "reference": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/reference",
-          "prompts": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/prompts",
-          "lora": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/lora",
-          "voice": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/voice",
-          "adapters": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/adapters",
-          "qc": "设定库/character_assets/CROWD_VALLEY_WORKERS__灵药谷杂役群/qc"
-        }
+          "reference": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/reference",
+          "prompts": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/prompts",
+          "lora": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/lora",
+          "voice": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/voice",
+          "adapters": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/adapters",
+          "qc": "角色库/CROWD_VALLEY_WORKERS__灵药谷杂役群/qc"
+        },
+        "tier": "restricted_partial"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_XIAO_LIUZI",
@@ -4049,7 +4064,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_XIAO_LIUZI__常态.png",
@@ -4456,22 +4471,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子",
-        "base_dir": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子",
+        "manifest": "角色库/CHAR_XIAO_LIUZI__小六子/manifest.json",
+        "package_dir": "角色库/CHAR_XIAO_LIUZI__小六子",
+        "base_dir": "角色库/CHAR_XIAO_LIUZI__小六子",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/reference",
-          "prompts": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/prompts",
-          "lora": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/lora",
-          "voice": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/voice",
-          "adapters": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/adapters",
-          "qc": "设定库/character_assets/CHAR_XIAO_LIUZI__小六子/qc"
-        }
+          "reference": "角色库/CHAR_XIAO_LIUZI__小六子/reference",
+          "prompts": "角色库/CHAR_XIAO_LIUZI__小六子/prompts",
+          "lora": "角色库/CHAR_XIAO_LIUZI__小六子/lora",
+          "voice": "角色库/CHAR_XIAO_LIUZI__小六子/voice",
+          "adapters": "角色库/CHAR_XIAO_LIUZI__小六子/adapters",
+          "qc": "角色库/CHAR_XIAO_LIUZI__小六子/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_HE_PINGSHENG",
@@ -4911,7 +4929,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
@@ -5318,22 +5336,25 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
-        "base_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
+        "manifest": "角色库/CHAR_HE_PINGSHENG__贺平生/manifest.json",
+        "package_dir": "角色库/CHAR_HE_PINGSHENG__贺平生",
+        "base_dir": "角色库/CHAR_HE_PINGSHENG__贺平生",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/reference",
-          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/prompts",
-          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/lora",
-          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/voice",
-          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/adapters",
-          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/qc"
-        }
+          "reference": "角色库/CHAR_HE_PINGSHENG__贺平生/reference",
+          "prompts": "角色库/CHAR_HE_PINGSHENG__贺平生/prompts",
+          "lora": "角色库/CHAR_HE_PINGSHENG__贺平生/lora",
+          "voice": "角色库/CHAR_HE_PINGSHENG__贺平生/voice",
+          "adapters": "角色库/CHAR_HE_PINGSHENG__贺平生/adapters",
+          "qc": "角色库/CHAR_HE_PINGSHENG__贺平生/qc"
+        },
+        "tier": "core_full"
       },
       "evolution_profile": {
         "mode": "single_anchor",
         "identity_anchor_form": "常态"
-      }
+      },
+      "library_tier": "core_full",
+      "planned_episode_count": 0
     }
   ],
   "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -18,6 +19,7 @@ try:
 except Exception:  # pragma: no cover - keep job building usable in partially-copied skill folders
     ImageBackendCapabilities = Any  # type: ignore
     resolve_capabilities = None  # type: ignore
+from comic_image_prompt_compiler import compile_prompt
 
 
 PRESERVE_GENERATION_KEYS = {
@@ -48,6 +50,14 @@ REFERENCE_VIEW_PRIORITY = {
     "side": 4,
     "back": 5,
 }
+PRODUCTION_NEGATIVE_CONTRACT = (
+    "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，"
+    "对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，"
+    "脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，"
+    "标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，"
+    "eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，"
+    "Q版化，过度血腥细节"
+)
 
 
 def load_json(path: Path) -> dict:
@@ -413,6 +423,82 @@ def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict, fi
     return "；".join(part for part in parts if part)
 
 
+def compile_panel_prompt(
+    panel: dict[str, Any],
+    *,
+    model: str,
+    channel: str,
+    style: str,
+    render_stage: str,
+    continuity: dict[str, str],
+    finish: dict[str, Any],
+    references: list[dict[str, str]],
+    size: dict[str, int],
+) -> dict[str, Any]:
+    scene = "；".join(
+        f"{label}:{continuity[key]}"
+        for key, label in (
+            ("spatial_layout", "空间布局"),
+            ("lighting_anchor", "光位/光色"),
+            ("axis_eyeline", "轴线/视线"),
+            ("resident_assets", "常驻物件"),
+            ("spatial_relationships", "人物站位/前后景"),
+            ("gaze_target", "视线目标"),
+            ("eyeline_direction", "视线方向"),
+            ("camera_role", "镜头角色"),
+        )
+        if continuity.get(key)
+    )
+    finishing = "；".join(
+        f"{label}:{compact_metadata(finish.get(key), max_len=180)}"
+        for key, label in (
+            ("ink_plan", "墨线"),
+            ("black_fill_plan", "黑场"),
+            ("tone_plan", "网点/灰阶"),
+            ("value_plan", "黑白灰层级"),
+            ("effects_plan", "效果线/漫符"),
+        )
+        if compact_metadata(finish.get(key), max_len=180)
+    )
+    has_identity_refs = any(str(ref.get("id") or "").startswith(("CHAR_", "MON_")) for ref in references)
+    identity_hold = (
+        "按已附角色/妖物参考保持同一张脸、眼型、发际线、发型轮廓、服装主色、体型和标志物；不同角色不得串脸串衣"
+        if has_identity_refs else
+        "按已附场景、道具或风格参考保持相同结构、材质与视觉语言"
+    )
+    has_text = bool(panel.get("dialogue") or panel.get("narration"))
+    compiled = compile_prompt({
+        "panel_id": panel.get("panel_id"),
+        "backend": f"{model} {channel}",
+        "visible_facts": panel.get("description"),
+        "style": f"{style}；目标稿层={render_stage or '完成稿'}",
+        "composition": panel.get("art_notes") or "主体明确、叙事焦点清楚、前中后景关系可读",
+        "scene_continuity": scene,
+        "identity_hold": identity_hold,
+        "finishing": finishing or "线条清晰，黑白灰层级稳定，效果服务叙事焦点",
+        "text_strategy": (
+            "不生成对白、旁白、可读文字、气泡或文字框；仅在不挡脸、手脚和关键道具处保留低细节后期嵌字区"
+            if has_text else
+            "不生成可读文字、气泡、文字框、字幕、Logo 或水印"
+        ),
+        "anatomy": "叙事需要的头发、脸、手臂、手、腿、脚和关键道具完整可读；肢体与道具接触关系自然",
+        "negative_elements": [
+            "文字、气泡、UI、Logo 或水印",
+            "额外或畸形手指、手脚混淆",
+            "脸、发际线、眼型、发型或服装漂移",
+            "场景布局、光位或常驻道具漂移",
+            "角色无故直视读者镜头",
+            "内部多面板、截图边或拼贴边框",
+            "低清晰度、Q版化或过度血腥特写",
+        ],
+        "reference_inputs": references,
+        "canvas": size,
+    })
+    if compiled["lint"]["errors"]:
+        raise ValueError(f"{panel.get('panel_id')} prompt compiler blocked: {compiled['lint']['errors']}")
+    return compiled
+
+
 def build_jobs(root: Path, chapter: str) -> dict:
     panel_script = load_json(root / "脚本" / chapter / "panel_script.json")
     layout = load_json(root / "排版" / chapter / "layout.json")
@@ -431,26 +517,50 @@ def build_jobs(root: Path, chapter: str) -> dict:
         pid = panel.get("panel_id")
         rect = rects.get(pid, {})
         finish = finishing_map.get(str(pid), {})
+        size = {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))}
+        continuity = panel_continuity_contract(panel, panel_script)
+        references = panel_references(root, panel, registry, caps)
+        production_prompt = build_prompt(panel, style, registry, panel_script, finish, render_stage)
+        compiled = compile_panel_prompt(
+            panel,
+            model=model,
+            channel=channel,
+            style=style,
+            render_stage=render_stage,
+            continuity=continuity,
+            finish=finish,
+            references=references,
+            size=size,
+        )
+        submit_prompt = str(compiled["prompt"])
         jobs.append(
             {
                 "panel_id": pid,
                 "status": "planned",
-                "size": {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))},
-                "prompt": build_prompt(panel, style, registry, panel_script, finish, render_stage),
-                "negative_prompt": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
-                "continuity_contract": panel_continuity_contract(panel, panel_script),
+                "size": size,
+                "production_contract_prompt": production_prompt,
+                "production_negative_contract": PRODUCTION_NEGATIVE_CONTRACT,
+                "prompt_source_kind": "compiled_submit_prompt",
+                "prompt_compiler": {
+                    key: compiled[key]
+                    for key in ("kind", "version", "profile_version", "profile", "backend", "language")
+                },
+                "submit_prompt": submit_prompt,
+                "prompt": submit_prompt,
+                "negative_prompt": compiled["negative_prompt"],
+                "source_contract_sha256": compiled["source_contract_sha256"],
+                "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
+                "submit_prompt_chars": len(submit_prompt),
+                "continuity_contract": continuity,
                 "traditional_finish_contract": finish,
-                "references": [
-                    item
-                    for item in panel_references(root, panel, registry, caps)
-                ],
+                "references": references,
                 "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",
                 "source": channel,
             }
         )
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_panel_jobs",
         "chapter": chapter,
         "model": model,

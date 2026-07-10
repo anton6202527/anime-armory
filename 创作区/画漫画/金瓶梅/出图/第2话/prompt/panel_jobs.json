@@ -23,7 +23,7 @@
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 1040
@@ -161,11 +161,12 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
       "result_path": "",
-      "source": "Codex CLI"
+      "source": "Codex CLI",
+      "error": "codex exit 124: stderr=Reading additional input from stdin...\n2026-07-09T12:35:58.674144Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: IO error: tls handshake eof, url: wss://chatgpt.com/backend-api/codex/responses\n\ntimeout after 300s | stdout=\\n\\nUse the user's prompt specificity to decide how much augmentation is appropriate:\\n\\n- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.\\n- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.\\n\\nAllowed augmentations:\\n- composition or framing hints\\n- polish level or intended-use hints\\n- practical layout guidance\\n- reasonable scene concreteness that supports the stated request\\n\\nNot allowed augmentations:\\n- extra characters or objects that are not implied by the request\\n- brand names, slogans, palettes, or narrative beats that are not implied\\n- arbitrary side-specific placement unless the surrounding layout supports it\\n\\n## Use-case taxonomy (exact slugs)\\n\\nClassify each request into one of these buckets and keep the slug consistent across prompts and references.\\n\\nGenerate:\\n- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.\\n- product-mockup — product/packaging shots, catalog imagery, merch concepts.\\n- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.\\n- infographic-diagram — diagrams/infographics with structured layout and text.\\n- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.\\n- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.\\n- productivity-visual — slide, chart, workflow, and data-heavy business visuals.\\n- logo-brand — logo/mark exploration, vector-friendly.\\n- illustration-story — comics, children’s book art, narrative scenes.\\n- stylized-concept — style-driven concept art, 3D/stylized renders.\\n- historical-scene — period-accurate/world-knowledge scenes.\\n\\nEdit:\\n- text-localization — translate/replace in-image text, preserve layout.\\n- identity-preserve — try-on, person-in-scene; lock face/body/pose.\\n- precise-object-edit — remove/replace a specific element (including interior swaps).\\n- lighting-weather — time-of-day/season/atmosphere changes only.\\n- background-extraction — transparent background / clean cutout. Use built-in `image_gen` with chroma-key removal first for simple opaque subjects; ask before using CLI true transparency for complex subjects.\\n- style-transfer — apply reference style while changing subject/scene.\\n- compositing — multi-image insert/merge with matched lighting/perspective.\\n- sketch-to-render — drawing/line art to photoreal render.\\n\\n## Shared prompt schema\\n\\nUse the following labeled spec as shared prompt scaffolding for both top-level modes:\\n\\n```text\\nUse case: <taxonomy slug>\\nAsset type: <where the asset will be used>\\nPrimary request: <user's main prompt>\\nInput images: <Image 1: role; Image 2: role> (optional)\\nScene/backdrop: <environment>\\nSubject: <main subject>\\nStyle/medium: <photo/illustration/3D/etc>\\nComposition/framing: <wide/close/top-down; placement>\\nLighting/mood: <lighting + mood>\\nColor palette: <palette notes>\\nMaterials/textures: <surface details>\\nText (verbatim): \\\"<exact text>\\\"\\nConstraints: <must keep/must avoid>\\nAvoid: <negative constraints>\\n```\\n\\nNotes:\\n- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.\\n- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.\\n- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.\\n\\nAugmentation rules:\\n- Keep it short.\\n- Add only the details needed to improve the prompt materially.\\n- For edits, explicitly list invariants (`change only X; keep Y unchanged`).\\n- If any critical detail is missing and blocks success, ask a question; otherwise proceed.\\n\",\"exit_code\":0,\"status\":\"completed\"}}"
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 840
@@ -284,11 +285,12 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
       "result_path": "",
-      "source": "Codex CLI"
+      "source": "Codex CLI",
+      "error": "codex exit 124: stderr=Reading additional input from stdin...\n\ntimeout after 300s | stdout=output.\\n- If a transparent request may need CLI fallback, ask before using `gpt-image-1.5` unless the user already explicitly requested `gpt-image-1.5`, `scripts/image_gen.py`, or CLI fallback. Explain that the built-in chroma-key path is the default, but true transparency requires `gpt-image-1.5` because `gpt-image-2` does not support `background=transparent`.\\n- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.\\n- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.\\n- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.\\n- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.\\n- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.\\n- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.\\n\\nPopular `gpt-image-2` sizes:\\n- `1024x1024` square\\n- `1536x1024` landscape\\n- `1024x1536` portrait\\n- `2048x2048` 2K square\\n- `2048x1152` 2K landscape\\n- `3840x2160` 4K landscape\\n- `2160x3840` 4K portrait\\n- `auto`\\n\\n## Fallback CLI mode only\\n\\n### Temp and output conventions\\nThese conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.\\n- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.\\n- Write final artifacts under `output/imagegen/`.\\n- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.\\n\\n### Dependencies\\nPrefer `uv` for dependency management in this repo.\\n\\nRequired Python package:\\n```bash\\nuv pip install openai\\n```\\n\\nRequired for local chroma-key removal and optional downscaling:\\n```bash\\nuv pip install pillow\\n```\\n\\nPortability note:\\n- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.\\n- In uv-managed environments, `uv pip install ...` remains the preferred path.\\n\\n### Environment\\n- `OPENAI_API_KEY` must be set for live API calls.\\n- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.\\n- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.\\n\\nIf the key is missing, give the user these steps:\\n1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys\\n2. Set `OPENAI_API_KEY` as an environment variable in their system.\\n3. Offer to guide them through setting the environment variable for their OS/shell if needed.\\n\\nIf installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.\\n\\n### Script-mode notes\\n- CLI commands + examples: `references/cli.md`\\n- API parameter quick reference: `references/image-api.md`\\n- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`\\n\\n## Reference map\\n- `references/prompting.md`: shared prompting principles for both modes.\\n- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.\\n- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.\\n- `references/image-api.md`: fallback-only API/CLI parameter reference.\\n- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.\\n- `scripts/image_gen.py`: fallback-only CLI implementation. Do not load or use it unless the user explicitly chooses CLI mode or explicitly confirms a transparent request's true CLI transparency fallback.\\n- `$CODEX_HOME/skills/.system/imagegen/scripts/remove_chroma_key.py`: local post-processing helper for built-in transparent-image requests.\\n\",\"exit_code\":0,\"status\":\"completed\"}}"
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 920
@@ -425,12 +427,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P003.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T22:14:06",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "8ffcf01ca0880d8a2472386db9023623c0d19185e3f60f6a16af15a6a2c418a1",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 16,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P003.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P003",
+        "created_at": "2026-07-09T22:14:06",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P003.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 16,
+        "reference_input_count": 16,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -537,12 +569,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P004.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T22:20:26",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "0b4c991a5cb4bf884c6842a2cfc37f98d00335d1aeea03a8ec44eb990416cd5e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 10,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P004.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P004",
+        "created_at": "2026-07-09T22:20:26",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P004.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 10,
+        "reference_input_count": 10,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -661,12 +723,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P005.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T22:26:43",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "e1fddac6a250098d3f47a1abcec6e74d9cb87abdf0fdc7ee3e2e53c2df6a8117",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 12,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P005.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P005",
+        "created_at": "2026-07-09T22:26:43",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P005.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 12,
+        "reference_input_count": 12,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -792,12 +884,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P006.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T22:34:16",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "7371a094f377c76d9c552ecbb82626adc1023f6b5272b43e7dbf5989573dd625",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 14,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P006.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P006",
+        "created_at": "2026-07-09T22:34:16",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P006.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 14,
+        "reference_input_count": 14,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 960
@@ -918,12 +1040,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P007.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T22:40:25",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "2cbc62ca29a91404a3fbecdf563f05b5d423fe9e1dfdab90dbe03b5cfec575a0",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 13,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P007.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P007",
+        "created_at": "2026-07-09T22:40:25",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P007.png",
+        "size": {
+          "width": 1296,
+          "height": 960
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "declared_reference_count": 13,
+        "reference_input_count": 13,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 960
@@ -1049,12 +1201,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P008.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-09T23:09:22",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "f060da44ed34227e3114fd360b09b7857ce5e99d51a6322d20b2c1d5897e12ef",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 14,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P008.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P008",
+        "created_at": "2026-07-09T23:09:22",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P008.png",
+        "size": {
+          "width": 1296,
+          "height": 960
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "declared_reference_count": 14,
+        "reference_input_count": 14,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "failed",
       "size": {
         "width": 1296,
         "height": 780
@@ -1177,11 +1359,12 @@
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
       "result_path": "",
-      "source": "Codex CLI"
+      "source": "Codex CLI",
+      "error": "codex exit 124: stderr=Reading additional input from stdin...\n\ntimeout after 300s | stdout=slucent materials, reflective objects, soft shadows, realistic product grounding, or subject colors that conflict with all practical key colors.\\n\\nUse a concise confirmation like:\\n\\n```text\\nThis likely needs true native transparency. The default built-in path uses a chroma-key background plus local removal, but true transparency requires the CLI fallback with gpt-image-1.5 because gpt-image-2 does not support background=transparent. It also requires OPENAI_API_KEY. Should I proceed with that CLI fallback?\\n```\\n\\n## Prompt augmentation\\n\\nReformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.\\n\\nTreat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.\\n\\n### Specificity policy\\n\\nUse the user's prompt specificity to decide how much augmentation is appropriate:\\n\\n- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.\\n- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.\\n\\nAllowed augmentations:\\n- composition or framing hints\\n- polish level or intended-use hints\\n- practical layout guidance\\n- reasonable scene concreteness that supports the stated request\\n\\nNot allowed augmentations:\\n- extra characters or objects that are not implied by the request\\n- brand names, slogans, palettes, or narrative beats that are not implied\\n- arbitrary side-specific placement unless the surrounding layout supports it\\n\\n## Use-case taxonomy (exact slugs)\\n\\nClassify each request into one of these buckets and keep the slug consistent across prompts and references.\\n\\nGenerate:\\n- photorealistic-natural — candid/editorial lifestyle scenes with real texture and natural lighting.\\n- product-mockup — product/packaging shots, catalog imagery, merch concepts.\\n- ui-mockup — app/web interface mockups and wireframes; specify the desired fidelity.\\n- infographic-diagram — diagrams/infographics with structured layout and text.\\n- scientific-educational — classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.\\n- ads-marketing — campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.\\n- productivity-visual — slide, chart, workflow, and data-heavy business visuals.\\n- logo-brand — logo/mark exploration, vector-friendly.\\n- illustration-story — comics, children’s book art, narrative scenes.\\n- stylized-concept — style-driven concept art, 3D/stylized renders.\\n- historical-scene — period-accurate/world-knowledge scenes.\\n\\nEdit:\\n- text-localization — translate/replace in-image text, preserve layout.\\n- identity-preserve — try-on, person-in-scene; lock face/body/pose.\\n- precise-object-edit — remove/replace a specific element (including interior swaps).\\n- lighting-weather — time-of-day/season/atmosphere changes only.\\n- background-extraction — transparent background / clean cutout. Use built-in `image_gen` with chroma-key removal first for simple opaque subjects; ask before using CLI true transparency for complex subjects.\\n- style-transfer — apply reference style while changing subject/scene.\\n- compositing — multi-image insert/merge with matched lighting/perspective.\\n- sketch-to-render — drawing/line art to photoreal render.\\n\\n## Shared prompt schema\\n\\nUse the following labeled spec as shared prompt scaffolding for both top-level modes:\\n\\n```text\\nUse case: <taxonomy slug>\\nAsset type: <where the asset will be used>\\nPrimary request: <user's main prompt>\\nInput images: <Image 1: role; Image 2: role> (optional)\\nScene/backdrop: <environment>\\nSubject: <main subject>\\n\",\"exit_code\":0,\"status\":\"completed\"}}\n{\"type\":\"error\",\"message\":\"Reconnecting... 1/5 (stream disconnected before completion: Transport error: network error: error decoding response body)\"}"
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 960
@@ -1302,12 +1485,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P010.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T01:11:12",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "31a51ee7f5385e54cab6ce17598ab927ee7355867e1b34ca0b7c66ff7b461b21",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 13,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P010.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P010",
+        "created_at": "2026-07-10T01:11:12",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P010.png",
+        "size": {
+          "width": 1296,
+          "height": 960
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 960
+        },
+        "declared_reference_count": 13,
+        "reference_input_count": 13,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -1434,12 +1647,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P011.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T01:16:31",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "d42b04c10d7b7c3b30765a220fe85558a45e71dc156588095e8b283dc447f93b",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 14,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P011.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P011",
+        "created_at": "2026-07-10T01:16:31",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P011.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 14,
+        "reference_input_count": 14,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 920
@@ -1561,12 +1804,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P012.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T01:43:48",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "75ced11db23132c30f0e976c74cd57d9c34701e1aed7f3ad53c85e17446aa9b9",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 13,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P012.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P012",
+        "created_at": "2026-07-10T01:43:48",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P012.png",
+        "size": {
+          "width": 1296,
+          "height": 920
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 920
+        },
+        "declared_reference_count": 13,
+        "reference_input_count": 13,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 780
@@ -1692,12 +1965,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P013.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T01:49:09",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "14a57d673025623accc75ccf30c19676efb5f67e357445f81aafd17654576d4e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 14,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P013.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P013",
+        "created_at": "2026-07-10T01:49:09",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P013.png",
+        "size": {
+          "width": 1296,
+          "height": 780
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 780
+        },
+        "declared_reference_count": 14,
+        "reference_input_count": 14,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -1821,12 +2124,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P014.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T01:54:51",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "52bf2b4e05df65f53b28bd560014b64f945df1bb75066e930bdfb6c080a45419",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 13,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P014.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P014",
+        "created_at": "2026-07-10T01:54:51",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P014.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 13,
+        "reference_input_count": 13,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1040
@@ -1944,12 +2277,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P015.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T03:14:40",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "804758178a24be49f04cefd46c273d5e76ae614e998d6febb62fdac4cabf52e0",
+      "attempt": 3,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 12,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P015.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P015",
+        "created_at": "2026-07-10T03:14:40",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P015.png",
+        "size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1040
+        },
+        "declared_reference_count": 12,
+        "reference_input_count": 12,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P016",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 700
@@ -2070,12 +2433,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P016.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T03:35:41",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "85e16b45bc8b2aa1d188935a1f2a787d0dad988103c3aca197ad9555903affa7",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 13,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P016.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P016",
+        "created_at": "2026-07-10T03:35:41",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P016.png",
+        "size": {
+          "width": 1296,
+          "height": 700
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 700
+        },
+        "declared_reference_count": 13,
+        "reference_input_count": 13,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P017",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1160
@@ -2213,12 +2606,42 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P017.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T04:20:55",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "a27f5231db3f3e5dac398e60babff81fa746c2e6592091885bfddcf97da9eb72",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 16,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P017.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P017",
+        "created_at": "2026-07-10T04:20:55",
+        "verdict": "pass",
+        "path": "出图/第2话/panels/P017.png",
+        "size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1160
+        },
+        "declared_reference_count": 16,
+        "reference_input_count": 16,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P018",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1296,
         "height": 1120
@@ -2356,8 +2779,66 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第2话/panels/P018.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-10T05:12:44",
+      "backend_version": "codex-cli 0.143.0",
+      "artifact_sha256": "901784415562036e794ac3f3d5df72956b01b94127b17f93b832ef35bc76ca0c",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 16,
+      "reference_manifest": "生产数据/codex_reference_bundles/第2话/P018.json",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第2话",
+        "panel_id": "P018",
+        "created_at": "2026-07-10T05:12:44",
+        "verdict": "warn",
+        "path": "出图/第2话/panels/P018.png",
+        "size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "expected_size": {
+          "width": 1296,
+          "height": 1120
+        },
+        "declared_reference_count": 16,
+        "reference_input_count": 16,
+        "blank_region_candidates": [
+          {
+            "x": 0,
+            "y": 793,
+            "w": 145,
+            "h": 117,
+            "area": 5627
+          },
+          {
+            "x": 0,
+            "y": 928,
+            "w": 163,
+            "h": 188,
+            "area": 12939
+          },
+          {
+            "x": 132,
+            "y": 1002,
+            "w": 185,
+            "h": 114,
+            "area": 11016
+          }
+        ],
+        "issues": [
+          {
+            "severity": "warn",
+            "category": "baked_text_container",
+            "reason": "found 3 likely blank white region(s); manually verify this is not a baked bubble"
+          }
+        ],
+        "manual_review_required": true
+      }
     }
   ]
 }

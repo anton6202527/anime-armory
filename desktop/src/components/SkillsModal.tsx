@@ -9,9 +9,8 @@ export function SkillsModal(props: {
   repoRoot: string;
   line: LineInfo;
   onClose: () => void;
-  onEnter: (line: LineInfo) => void;
 }) {
-  const { repoRoot, line, onClose, onEnter } = props;
+  const { repoRoot, line, onClose } = props;
   const { t } = useI18n();
   const lineLabel = useLineLabel();
   const [skillCount, setSkillCount] = useState(0);
@@ -30,23 +29,12 @@ export function SkillsModal(props: {
           <h2>
             {lineLabel(line)} · {t("skills.skills")} <span className="count">{skillCount}</span>
           </h2>
-          <button className="modal-close" title={t("skills.close")} onClick={onClose}>
+          <button className="modal-close" aria-label={t("skills.close")} onClick={onClose}>
             ✕
           </button>
         </div>
         <div className="modal-body">
           <SkillsBrowser repoRoot={repoRoot} line={line} onCountChange={setSkillCount} />
-        </div>
-        <div className="modal-foot">
-          <button
-            className="primary"
-            onClick={() => {
-              onClose();
-              onEnter(line);
-            }}
-          >
-            {t("skills.enterCreation")}
-          </button>
         </div>
       </div>
     </div>

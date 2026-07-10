@@ -88,8 +88,17 @@ class VideoJobsTest(unittest.TestCase):
             self.assertEqual(len(manifest["jobs"]), 2)
             self.assertEqual(manifest["jobs"][0]["requested_takes"], 1)
             self.assertEqual(manifest["jobs"][1]["requested_takes"], 2)
-            prompt = manifest["jobs"][1]["takes"][0]["prompt_path"]
+            self.assertEqual(manifest["schema_version"], 2)
+            take = manifest["jobs"][1]["takes"][0]
+            prompt = take["prompt_path"]
             self.assertTrue(os.path.exists(os.path.join(tmp, prompt)))
+            self.assertEqual(take["prompt_source_kind"], "compiled_submit_prompt")
+            self.assertEqual(take["prompt_compiler"]["native_audio_policy"], "external_song_track")
+            self.assertNotIn("identity_registry", take["submit_prompt"])
+            with open(os.path.join(tmp, prompt), encoding="utf-8") as f:
+                prompt_text = f.read()
+            self.assertIn("### 后端编译提交 prompt", prompt_text)
+            self.assertIn(take["submit_prompt"], prompt_text)
 
     def test_quality_tier_and_motion_reference_fields(self):
         with tempfile.TemporaryDirectory() as tmp:

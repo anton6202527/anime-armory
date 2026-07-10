@@ -371,6 +371,16 @@ IDENTITY_REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
 # 角色定妆基础包不可缺失铁律（设计宪法 B7）：三视图是人审拼版，不能替代可喂图拆分资产。
 REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
 REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS = ("front", "three_quarter", "side", "back")
+CHARACTER_LIBRARY_TIER_CORE = "core_full"
+CHARACTER_LIBRARY_TIER_STANDARD = "recurring_standard"
+CHARACTER_LIBRARY_TIER_MINIMAL = "named_minimal"
+CHARACTER_LIBRARY_TIER_PARTIAL = "restricted_partial"
+CHARACTER_LIBRARY_TIERS = {
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_STANDARD,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+}
 CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_MAKEUP_FACE_REFERENCE_FIELDS = ("face_anchor_refs", "expressions")
 READY_CHARACTER_MAKEUP_STATUSES = {"ready", "registered"}
@@ -2701,8 +2711,9 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
     if not isinstance(bundle, dict):
         add(BLOCK, "角色资产包", loc,
             "人物角色缺 asset_bundle；所有入镜人物（含短线/功能角色）都必须指向 "
-            "设定库/character_assets/<CHAR_ID>__<slug>/manifest.json。角色体量只影响 LoRA/原生主体是否升档，"
-            "不影响基础定妆包完整度；否则换模型/工作流/视频工具时无法继承 reference/prompts/lora/voice/adapters/qc。")
+            "角色库/<CHAR_ID>__<slug>/manifest.json。角色体量决定角色库档位（core_full / recurring_standard / "
+            "named_minimal），但不取消基础资产包；否则换模型/工作流/视频工具时无法继承 "
+            "reference/prompts/lora/voice/adapters/qc。")
         return
     manifest_rel = str(bundle.get("manifest") or "").strip()
     package_dir = str(bundle.get("package_dir") or "").strip()
@@ -2711,6 +2722,14 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
         return
     if not package_dir:
         add(BLOCK, "角色资产包", f"{loc} asset_bundle.package_dir", "asset_bundle.package_dir 缺失")
+    normalized_manifest_rel = manifest_rel.replace("\\", "/")
+    if normalized_manifest_rel.startswith("设定库/character_assets/"):
+        add(
+            WARN,
+            "角色资产包",
+            f"{loc} asset_bundle.manifest",
+            "仍在使用旧路径 `设定库/character_assets/`；请迁到作品根 `角色库/`，不要长期并存两套目录。",
+        )
     sections = bundle.get("sections")
     if sections is not None:
         missing_sections = [s for s in ASSET_BUNDLE_REQUIRED_SECTIONS if s not in sections]
@@ -2725,6 +2744,13 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
         return
     if manifest.get("kind") != "n2d_project_character_asset_bundle":
         add(BLOCK, "角色资产包", manifest_path, "manifest.kind 必须是 n2d_project_character_asset_bundle")
+    manifest_tier = str(manifest.get("library_tier") or bundle.get("tier") or "").strip()
+    if manifest_tier and manifest_tier not in CHARACTER_LIBRARY_TIERS:
+        add(BLOCK, "角色资产包", manifest_path,
+            "library_tier 必须是 core_full / recurring_standard / named_minimal / restricted_partial")
+    elif not manifest_tier:
+        add(WARN, "角色资产包", manifest_path,
+            "旧资产包未登记 library_tier；迁移或下次重建时补齐，避免所有具名人物被误做成完整主角包。")
     if char_id and str(manifest.get("character_id") or "").strip() != char_id:
         add(BLOCK, "角色资产包", manifest_path,
             f"manifest.character_id 必须等于 registry character id {char_id}")
@@ -2835,6 +2861,44 @@ def _identity_ready_reference_list_paths(value: object) -> List[str]:
             if p and _identity_reference_item_ready(item):
                 out.append(p)
     return out
+
+
+def _normalize_character_library_tier(value: object) -> str:
+    tier = str(value or "").strip()
+    if tier in CHARACTER_LIBRARY_TIERS:
+        return tier
+    if tier.startswith("restricted_partial"):
+        return CHARACTER_LIBRARY_TIER_PARTIAL
+    # Legacy registries used these values for the old all-views contract.
+    if tier in {"standard_full", "full_makeup_pack", "full", "core"} or not tier:
+        return CHARACTER_LIBRARY_TIER_CORE
+    return CHARACTER_LIBRARY_TIER_CORE
+
+
+def _required_character_makeup_views(form: Mapping[str, Any]) -> Tuple[str, ...]:
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    tier = _normalize_character_library_tier(atlas.get("build_tier"))
+    if tier == CHARACTER_LIBRARY_TIER_STANDARD:
+        return ("front", "three_quarter")
+    if tier == CHARACTER_LIBRARY_TIER_MINIMAL:
+        return ("front",)
+    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
+        return ()
+    return REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS
+
+
+def _required_character_reference_group_fields(form: Mapping[str, Any]) -> Tuple[str, ...]:
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    tier = _normalize_character_library_tier(atlas.get("build_tier"))
+    if tier == CHARACTER_LIBRARY_TIER_STANDARD:
+        return ("front", "three_quarter")
+    if tier == CHARACTER_LIBRARY_TIER_MINIMAL:
+        return ("front",)
+    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
+        return ()
+    return REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS
+
+
 def _validate_reference_atlas(
     root: str,
     form: dict,
@@ -2854,13 +2918,16 @@ def _validate_reference_atlas(
             add(BLOCK, "资产身份注册层", floc,
                 "restricted_partial 形态的 reference_atlas.build_tier 必须标为 restricted_partial，避免误当完整人物参考。")
         return
+    library_tier = _normalize_character_library_tier(atlas.get("build_tier"))
+    required_views = _required_character_makeup_views(form)
     base_views = atlas.get("base_views")
     if not isinstance(base_views, dict):
         if strict_references:
             add(BLOCK, "资产身份注册层", floc,
-                "reference_atlas.base_views 缺失；必须登记 front/three_quarter/side/back/half_body 或 full_body 的 ready 状态。")
+                f"reference_atlas.base_views 缺失；角色库档位 {library_tier} 必须登记本档基础角度与 "
+                "half_body 或 full_body 的 ready 状态。")
     else:
-        missing_views = [key for key in REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS if key not in base_views]
+        missing_views = [key for key in required_views if key not in base_views]
         if "half_body" not in base_views and "full_body" not in base_views:
             missing_views.append("half_body_or_full_body")
         if missing_views and strict_references:
@@ -2868,7 +2935,7 @@ def _validate_reference_atlas(
                 "reference_atlas.base_views 缺基础视角：" + ", ".join(missing_views))
         if strict_references:
             not_ready: List[str] = []
-            required_view_keys = [key for key in REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS if key in base_views]
+            required_view_keys = [key for key in required_views if key in base_views]
             required_view_keys.append("half_body" if "half_body" in base_views else "full_body")
             for key in required_view_keys:
                 item = base_views.get(key)
@@ -2882,7 +2949,7 @@ def _validate_reference_atlas(
                 add(BLOCK, "资产身份注册层", floc,
                     "reference_atlas.base_views 基础视角必须为 ready 且有路径："
                     + ", ".join(not_ready)
-                    + "；所有人物/形态都强制包含 45°/three_quarter 与脸部特写基础锚，不能登记为 planned 后放行。")
+                    + f"；当前角色库档位={library_tier}，本档必需项不能登记为 planned 后放行。")
     face_anchor_refs = atlas.get("face_anchor_refs")
     expression_refs = atlas.get("expression_refs")
     has_face_anchor_refs = bool(_identity_ready_reference_list_paths(face_anchor_refs))
@@ -5194,6 +5261,11 @@ __all__ = [
     'IDENTITY_REFERENCE_FIELDS',
     'REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS',
     'REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS',
+    'CHARACTER_LIBRARY_TIER_CORE',
+    'CHARACTER_LIBRARY_TIER_STANDARD',
+    'CHARACTER_LIBRARY_TIER_MINIMAL',
+    'CHARACTER_LIBRARY_TIER_PARTIAL',
+    'CHARACTER_LIBRARY_TIERS',
     'CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS',
     'CHARACTER_MAKEUP_FACE_REFERENCE_FIELDS',
     'READY_CHARACTER_MAKEUP_STATUSES',
@@ -5422,6 +5494,9 @@ __all__ = [
     '_identity_expression_path',
     '_identity_reference_list_paths',
     '_identity_ready_reference_list_paths',
+    '_normalize_character_library_tier',
+    '_required_character_makeup_views',
+    '_required_character_reference_group_fields',
     '_validate_reference_atlas',
     '_identity_reference_exists',
     '_identity_reference_matches_asset_key',

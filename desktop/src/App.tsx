@@ -387,6 +387,7 @@ export function App() {
                   return next;
                 });
               }}
+              onShowSkills={(line) => setSkillsLine(line)}
               onBack={() => {
                 setActiveId(null);
                 setHomeRoute({ kind: "line", line: t.line });
@@ -404,11 +405,6 @@ export function App() {
             repoRoot={repoRoot}
             line={skillsLine}
             onClose={() => setSkillsLine(null)}
-            onEnter={(line) => {
-              setSkillsLine(null);
-              setActiveId(null);
-              setHomeRoute({ kind: "line", line });
-            }}
           />
         </Suspense>
       )}

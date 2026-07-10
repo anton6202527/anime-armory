@@ -1,0 +1,42 @@
+from comic_image_prompt_compiler import compile_prompt, lint
+
+
+def contract(backend="GPT Image 2 Codex"):
+    return {
+        "panel_id": "P001",
+        "backend": backend,
+        "visible_facts": "主角在祠堂内发现画右下方匕首反光，身体微微后撤",
+        "style": "彩色国漫条漫，完成稿，清晰墨线与克制高光",
+        "composition": "中景，主角画左看画右，匕首反光是第二视觉焦点",
+        "scene_continuity": "香案居中，祠堂门在画右后景，画左上冷窗光",
+        "identity_hold": "按已附角色与场景参考保持同一张脸、服装和空间结构",
+        "finishing": "人物外轮廓较重，背景 20% 网点，集中线指向匕首",
+        "text_strategy": "不生成文字、气泡或文字框；画面上方保留低细节嵌字区",
+        "anatomy": "双手、衣袖和匕首落点完整可读，接触关系自然",
+        "negative_elements": ["文字", "气泡", "水印", "额外手指", "脸部漂移", "直视读者镜头"],
+        "reference_inputs": [{"id": "CHAR_MAIN", "path": "anchor.png"}],
+        "canvas": {"width": 1000, "height": 800},
+    }
+
+
+def test_compiler_keeps_visible_art_but_drops_internal_ids_and_paths():
+    payload = compile_prompt(contract())
+    assert payload["lint"]["errors"] == []
+    assert "匕首反光" in payload["prompt"]
+    assert "CHAR_MAIN" not in payload["prompt"]
+    assert "anchor.png" not in payload["prompt"]
+    assert len(payload["prompt"]) < 1400
+
+
+def test_diffusion_uses_separate_negative_field():
+    payload = compile_prompt(contract("Flux ComfyUI"))
+    assert payload["negative_prompt"]
+    assert "避免：" not in payload["prompt"]
+
+
+def test_exact_dialogue_and_internal_reference_lint_block():
+    payload = compile_prompt(contract())
+    payload["prompt"] += " 台词：你好。 LOC_HALL"
+    errors = lint(payload)["errors"]
+    assert "submit_prompt_contains_exact_dialogue" in errors
+    assert "submit_prompt_contains_internal_contract_reference" in errors

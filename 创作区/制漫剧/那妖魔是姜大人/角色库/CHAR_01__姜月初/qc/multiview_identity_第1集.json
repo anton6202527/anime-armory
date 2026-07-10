@@ -1,0 +1,294 @@
+{
+  "asset_bundle": {
+    "base_dir": "角色库/CHAR_01__姜月初",
+    "manifest": "角色库/CHAR_01__姜月初/manifest.json",
+    "package_dir": "角色库/CHAR_01__姜月初",
+    "sections": {
+      "adapters": "角色库/CHAR_01__姜月初/adapters",
+      "lora": "角色库/CHAR_01__姜月初/lora",
+      "prompts": "角色库/CHAR_01__姜月初/prompts",
+      "qc": "角色库/CHAR_01__姜月初/qc",
+      "reference": "角色库/CHAR_01__姜月初/reference",
+      "voice": "角色库/CHAR_01__姜月初/voice"
+    }
+  },
+  "buckets": {
+    "back": {
+      "items": [
+        {
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "back",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+            "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+          },
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+          "sha256": "906bbb895b67c1b898a40f6b9b7559c011318e7a52bd4d44f3d7980411149e64",
+          "source": "reference_group.back",
+          "status": "ready"
+        },
+        {
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "bucket": "back",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+            "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+          },
+          "form": "镇魔司伪装态",
+          "human_review": {
+            "reason": "shared back reference passed finalized review",
+            "reviewed_at": "2026-07-04T14:20:17.429859+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_背.png",
+          "sha256": "40fba369976cdeaabad09d6cc49d78eaae9aef35bc37589a6744c70767c0bee2",
+          "source": "reference_group.back",
+          "status": "ready"
+        }
+      ],
+      "status": "ready"
+    },
+    "expression": {
+      "items": [
+        {
+          "anchor_sha": "",
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "expression",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "front_crop",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+            "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+          },
+          "emotion": "克制",
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制_脸锚裁切.png",
+          "sha256": "4d3ad20ea695ceb66f112643c2b9b4ca07aa962a8d9f7a852f8821809b423a89",
+          "source": "reference_group.expressions",
+          "status": "ready"
+        },
+        {
+          "anchor_sha": "",
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "expression",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "front_crop",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+            "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+          },
+          "emotion": "震动",
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动_脸锚裁切.png",
+          "sha256": "3c9f5de816e86f96e37e17f6acba25b3f36da9df441fd719a96e8e94c39abf42",
+          "source": "reference_group.expressions",
+          "status": "ready"
+        },
+        {
+          "anchor_sha": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "bucket": "expression",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "front_crop",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+            "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+          },
+          "emotion": "基础",
+          "form": "镇魔司伪装态",
+          "human_review": {
+            "reason": "expression anchor finalized from reference_group.expressions",
+            "reviewed_at": "2026-07-06T08:58:05.820075+00:00",
+            "reviewed_by": "image_qc --finalize-expr",
+            "reviewer": "agent_visual_review",
+            "status": "pass"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_脸部特写_脸锚裁切.png",
+          "sha256": "ef3b58cfeb85b7cf60af09e77410fd5b85f3b4ae6916bf22088c3777ddf49ab6",
+          "source": "reference_group.expressions",
+          "status": "ready"
+        }
+      ],
+      "status": "ready"
+    },
+    "front": {
+      "items": [
+        {
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "front",
+          "derivation": {},
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+          "sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3",
+          "source": "reference_group.front",
+          "status": "ready"
+        },
+        {
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "bucket": "front",
+          "derivation": {},
+          "form": "镇魔司伪装态",
+          "human_review": {
+            "reason": "shared front reference passed finalized review",
+            "reviewed_at": "2026-07-04T14:20:17.429748+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+          "sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9",
+          "source": "reference_group.front",
+          "status": "ready"
+        }
+      ],
+      "status": "ready"
+    },
+    "profile_or_side": {
+      "items": [
+        {
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "profile_or_side",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+            "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+          },
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+          "sha256": "50a62d634ca8b2778deb35f7ed337e6ffb4c15dbca74d6656fd71ae05dececf7",
+          "source": "reference_group.side",
+          "status": "ready"
+        },
+        {
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "bucket": "profile_or_side",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+            "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+          },
+          "form": "镇魔司伪装态",
+          "human_review": {
+            "reason": "shared side reference passed finalized review",
+            "reviewed_at": "2026-07-04T14:20:17.429849+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_侧.png",
+          "sha256": "108ddc24085d6765be6143c86f78e48bbe75a7720d559accec94749d9c661604",
+          "source": "reference_group.side",
+          "status": "ready"
+        }
+      ],
+      "status": "ready"
+    },
+    "three_quarter": {
+      "items": [
+        {
+          "asset_key": "CHAR_01__囚犯初醒态",
+          "bucket": "three_quarter",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png",
+            "source_sha256": "55779763e0f8fcca1d0d5d9d981ac5112e110329e95b68e1b23a490611cf25f3"
+          },
+          "form": "囚犯初醒态",
+          "human_review": {},
+          "path": "出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+          "sha256": "dffb14686d5ad273ee29e60b56efedfc100db53525bee1d16953a70628809496",
+          "source": "reference_group.three_quarter",
+          "status": "ready"
+        },
+        {
+          "asset_key": "CHAR_01__镇魔司伪装态",
+          "bucket": "three_quarter",
+          "derivation": {
+            "crop_box": [
+              0,
+              0,
+              1,
+              1
+            ],
+            "method": "controlled_multiref_generation",
+            "source_path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态.png",
+            "source_sha256": "49ba51ad435f3153942a3249b90bd8cf08eb1c88e3a2b55bcfbc170cec3e76b9"
+          },
+          "form": "镇魔司伪装态",
+          "human_review": {
+            "reason": "shared three_quarter reference passed finalized review",
+            "reviewed_at": "2026-07-04T14:20:17.429834+00:00",
+            "reviewer": "image_qc.mark_finalized",
+            "status": "accepted"
+          },
+          "path": "出图/共享/图片/定妆_CHAR_01__镇魔司伪装态_45度.png",
+          "sha256": "d7b5214936d5c223c23991e022f2aa0a6941ff41cbb7fadfd70026f26c98a543",
+          "source": "reference_group.three_quarter",
+          "status": "ready"
+        }
+      ],
+      "status": "ready"
+    }
+  },
+  "character_id": "CHAR_01",
+  "limitations": [
+    "本包为多视角资产证据清单与固定哨兵，不伪造本地 face_embedding 数值。",
+    "review gate 使用本包验证核心角色正脸/45度/侧脸/背影/表情桶覆盖。"
+  ],
+  "method": "registry_reference_atlas_inventory",
+  "name": "姜月初",
+  "status": "pass",
+  "verdict": "pass"
+}

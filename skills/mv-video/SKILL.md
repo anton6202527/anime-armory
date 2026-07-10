@@ -1,6 +1,6 @@
 ---
 name: mv-video
-description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，clip 时长对齐 mv-plan/beatgrid 卡点（副歌踩鼓点切），用 jobs_manifest 跟踪多版生成、评分和挑版，并用 inherit_contract/video_qc 检查身份、参考输入、首尾帧、时长、画幅和音轨。用通用生视频模型/渠道（Seedance/Veo/Kling/即梦/可灵/manual 等）。Use when asked to MV出视频 / 生成MV视频 / MV图生视频 / 卡点剪辑素材 / 登记视频take / 挑版. Triggers MV出视频, MV视频, MV图生视频, MV运镜, 视频take, 挑版, mv-video.
+description: 制MV 出视频 — 把 mv-image PNG 图生视频成卡点 MV clip；保留身份/首尾帧/参考输入/continuity 完整合同，并用本线 prompt compiler 生成后端感知的精简提交 prompt；jobs_manifest 跟踪多版、评分、挑版，inherit_contract/video_qc 检查继承与成片。Use when asked MV出视频 / MV图生视频 / MV视频prompt / prompt compiler / 卡点素材 / 登记take / 挑版. Triggers MV出视频, MV视频, MV图生视频, MV视频prompt, prompt compiler, MV运镜, 视频take, 挑版, mv-video.
 ---
 
 # mv-video — 制MV 出视频（mv 系列自建）
@@ -23,6 +23,8 @@ description: 制MV 出视频 — 把 mv-image 的 PNG 图生视频成 MV clip，
   - **MV 默认卡点硬切**（踩 downbeat 切），接点靠"视觉身份一致 + 卡点准"。但**同段落·非卡点切·人物姿态连续**的接缝（如副歌内一段连续动作分两 clip），可选尾帧接力：`clip_plan.json` 标 `need_end_frame=true`，mv-image 出 `出图/段落/图片/Clip_XXX_end.png`=下一 clip 首帧构图，mv-video 首尾双帧引导锁接点。换段/卡点切不需要。
 - **导演视角八维（视频版）**：①镜头/③人物/⑤场景/⑥光影/⑧画风**已由首帧 PNG 锁死**（出图阶段做完），视频阶段**只升级 ④动作→人物运动+表情(踩段落)、②机位→运镜(对齐 downbeat)、⑦张力**，其余严禁重定（改了=与首帧打架=闪烁）。详见 `mv/references/导演视角prompt.md §四`。
 - **MV 单曲一致性继承**：`mv-image` 已锁主角身份、主色、母题和段落 look；视频 prompt 只让它动起来，不改脸、不换衣型、不换场景风格。副歌可以让光效和相机更猛，但不能换成另一套视觉语言。
+- **完整合同 ≠ 模型 prompt**：逐 take Markdown 完整保留身份锚、资产/参考路径、首尾帧、卡点、continuity、渠道/规格和声音约束，供 gate、人工复核与溯源；`skills/mv/_lib/mv_video_prompt_compiler.py` 只把人物主动作、运镜、明确环境响应、动作峰值和结尾落幅编译成唯一提交块。不得把完整 Markdown 整段粘给模型。
+- **歌曲永远外铺**：compiler 固定 `native_audio_policy=external_song_track`、请求控制 `generate_audio=false`；即使后端支持原生音频，MV clip 也只生成画面，最终歌曲由 `mv-compose` 铺设。演唱口型若启用，只把人声轨作为口型条件，不让后端替换歌曲。
 - **继承合约必跑**：`scripts/inherit_contract.py` 检查 `clip_plan` 的身份锚点、参考输入、首帧/尾帧、shot_design 和 continuity 是否进入 `jobs_manifest` 与逐 take prompt；缺失先修 prompt/job，不要带病出视频。
 - **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
@@ -79,8 +81,8 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
    ```bash
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>"
    ```
-   脚本入口会先过 `mv-craft/scripts/gate.py video_jobs`：缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、clip_plan 或首帧 PNG 时直接阻断。通过后产 `出视频/jobs_manifest.json` + `出视频/prompt/Clip_XXX_take_YY.md`，并回写 `_进度.md` 的 `video_jobs` 行。每个 job 带首帧、时长、转场、continuity、跑几版、关键镜标记。
-3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 按 job prompt 逐 take 图生视频。外部生成后登记：
+   脚本入口会先过 `mv-craft/scripts/gate.py video_jobs`：缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、clip_plan 或首帧 PNG 时直接阻断。通过后产 schema v2 `出视频/jobs_manifest.json` + `出视频/prompt/Clip_XXX_take_YY.md`，并回写 `_进度.md`。每个 take 同时记录 `submit_prompt`、compiler 元数据、合同 hash 和提交 prompt hash。
+3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 只提交逐 take Markdown 的 `后端编译提交 prompt`（负向字段若存在则走后端独立字段），不要提交完整合同。外部生成后登记：
    ```bash
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --register /path/to/take.mp4 --clip Clip_001 --take 1
    ```
@@ -95,7 +97,7 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
    python3 skills/mv-video/scripts/inherit_contract.py "<制MV作品根>"
    python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>"
    ```
-   有 hard block 先回 mv-plan/mv-image/mv-video 修；demo 或人工外部产物可用 `--no-fail` 落报告，但交付说明必须标注。报告会写 `生产数据/video_qc/frames/<clip>/start|mid|end.jpg` 供并排审片。
+   缺 compiler、后端不一致、合同/manifest 漂移、外部歌曲策略不一致都属于 hard block；先回 mv-plan/mv-image/mv-video 修。demo 或人工外部产物可用 `--no-fail` 落报告，但交付说明必须标注。报告会写 `生产数据/video_qc/frames/<clip>/start|mid|end.jpg` 供并排审片。
 6. 下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 timeline 拼）。
 
 ## 详细参考
@@ -114,6 +116,8 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
 | 外部生成后只丢 mp4 | 用 `video_jobs.py --register/--score/--select` 登记 take、挑版并同步 timeline |
 | 首帧还没出就生成视频任务 | `video_jobs.py` 会 gate 阻断；先跑 mv-image 产出 `clip.image_path` 指向的 PNG |
 | 图像 prompt 写了身份锚点但视频 prompt 没继承 | 跑 `inherit_contract.py`，按报告补 `jobs_manifest`/take prompt |
+| 把身份注册表、歌词、路径和渠道说明整段交给模型 | 完整合同留给 gate；模型只接 `后端编译提交 prompt` |
+| Veo/Kling 有原生音频就让它生成 MV 声音 | 禁止；compiler 固定外部歌曲轨，clip 只出画面，歌曲由 `mv-compose` 铺设 |
 | clip 能播但时长/画幅/音轨乱 | 跑 `video_qc.py`，修 selected 视频或 timeline |
 | 接缝只靠肉眼临场看 | 用 `video_qc.py` 生成 start/mid/end 帧和接缝 end→start 指标，再做人判 |
 | 只写画面不写运动 | 人物运动+镜头运动+动态细节三件套 |

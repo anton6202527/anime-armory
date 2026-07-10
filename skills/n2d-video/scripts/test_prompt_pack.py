@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 
@@ -175,12 +176,33 @@ def test_prompt_pack_builds_overview_and_clip_contract(tmp_path: Path) -> None:
     assert shot_reverse["exists"] is True and shot_reverse["sha256"]
     assert all(row["exists"] and row["sha256"] for row in data["prompt_files"])
     assert "执行配方 / Execution Recipe" in clips
-    assert "执行配方约束" in clips
     assert "frame_inputs=" in clips and "reference_inputs=" in clips and "anchor_consumption=" in clips
+    assert "### 后端编译提交 prompt" in clips
+    assert "kind=n2d_compiled_video_prompt" in clips
+    assert "profile=zh_motion_first" in clips
+    assert "执行配方约束" not in clips
+    submitted = re.search(r"### 后端编译提交 prompt.*?```text\s*(.*?)```", clips, re.S)
+    assert submitted is not None
+    submit_text = submitted.group(1).strip()
+    assert len(submit_text) < 600
+    assert "模型路由" not in submit_text
+    assert "执行配方" not in submit_text
+    assert "identity_registry" not in submit_text
+    compiled = prompt_pack.compile_video_prompt({
+        "clip_id": "Clip_01",
+        "backend": "seedance",
+        "mode": "frames2video",
+        "primary_action": "抬眼握刀",
+        "camera_motion": "缓慢推近",
+        "frame_inputs": ["first.png", "last.png"],
+    })
+    assert len(compiled["prompt"]) < 600
     assert "近景升格守卫" in clips
     assert "不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸" in clips
     assert "检查清单（视频三件套自查" in clips
     assert "自检（生成后逐条过" in clips
+    assert "冷月与火把光影轻微随动" not in clips
+    assert "低雾/尘土/衣袂/火把烟" not in clips
 
 
 def test_prompt_pack_fills_style_anchor_from_storyboard_when_overview_is_generic(tmp_path: Path) -> None:
@@ -211,6 +233,19 @@ def test_clip_id_prefers_clip_number_over_episode_number() -> None:
     assert prompt_pack.clip_id("EP03_CLIP01", 99) == "Clip_01"
     assert prompt_pack.clip_id("EP10_CLIP09", 99) == "Clip_09"
     assert prompt_pack.clip_id("Clip_07", 99) == "Clip_07"
+
+
+def test_native_audio_contract_follows_route_instead_of_hardcoding_silence() -> None:
+    line, policy = prompt_pack.native_audio_contract(
+        {"mode": "native_av", "native_audio_policy": "native_speech"},
+        "yes",
+    )
+
+    assert policy == "native_speech"
+    assert "audio_intent=native_speech" in line
+    assert "speech_policy=native_speech" in line
+    assert "compose_policy=保留原片音轨" in line
+    assert "no_native_speech" not in line
 
 
 def test_inner_focus_directive_isolates_video_motion_subject() -> None:
@@ -317,7 +352,8 @@ def test_prompt_pack_adds_tail_hold_for_offscreen_object_reaction(tmp_path: Path
     assert "尾端落幅保持" in clips
     assert "最后 0.5 秒必须维持 storyboard 的手部/物件/侧背/反打落幅直到剪点" in clips
     assert "offscreen_presence=CHAR_01" in clips
-    assert "在场链约束：required_presence=CHAR_02、WEAPON_01" in clips
+    assert "required_presence=CHAR_02、WEAPON_01" in clips
+    assert "offscreen_presence=CHAR_01" in clips
     assert "forbidden_presence" in clips
     assert "不要提前把 offscreen 角色拉回清晰入画" in clips
 

@@ -718,6 +718,8 @@ def main():
     settings = os.path.join(root, "设定库")
     os.makedirs(os.path.join(settings, "characters"), exist_ok=True)
     os.makedirs(os.path.join(settings, "locations"), exist_ok=True)
+    character_library = os.path.join(root, "角色库")
+    os.makedirs(character_library, exist_ok=True)
     os.makedirs(os.path.join(root, "脚本"), exist_ok=True)
     source_analysis = write_analysis(root, title, "\n".join(paras), episodes)
 
@@ -733,6 +735,16 @@ def main():
     write_if_absent(
         os.path.join(settings, "locations", "_场景总表.md"),
         f"# {title} — 场景卡总表\n\n> 全篇首次出现即建卡，后续镜头保持一致。格式见 references/formats.md。\n",
+    )
+    write_if_absent(
+        os.path.join(character_library, "README.md"),
+        "# 角色库\n\n"
+        "本目录只存本作品的角色生产资产包；世界观、角色圣经、角色卡和场景语义仍在 `设定库/`。\n\n"
+        "- `core_full`：主角、核心长线、或计划出场 10 集及以上。\n"
+        "- `recurring_standard`：多集复现配角。\n"
+        "- `named_minimal`：具名短线角色。\n"
+        "- `restricted_partial`：只露局部或群像剪影。\n\n"
+        "跨作品复用时显式导出自包含 asset pack 到 `创作区/制漫剧/_资产库/`，其它作品不得直接依赖本目录。\n",
     )
     write_if_absent(
         os.path.join(settings, "characters", "_生命周期.md"),

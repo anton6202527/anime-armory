@@ -7,6 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import render_dreamina as rd  # noqa: E402
+from ad_video_prompt_compiler import compile_prompt, render_markdown  # noqa: E402
 
 
 def test_submit_duration_seedance_clamps_and_ceil():
@@ -20,21 +21,40 @@ def test_find_media_url_nested_payload():
     assert rd._find_media_url(payload) == "https://example.com/a.mp4"
 
 
-def test_build_prompt_extracts_key_sections(tmp_path):
+def test_build_prompt_submits_only_compiled_block(tmp_path):
     p = tmp_path / "镜头01.md"
+    compiled = compile_prompt({
+        "clip_id": "镜头01",
+        "backend": "seedance",
+        "mode": "image2video",
+        "product_action": "UI 卡片归入今日手账",
+        "camera_motion": "缓慢推近手机正面",
+        "end_state": "产品主视觉稳定落幅",
+        "product_hold": "同一包装结构与 Logo 位置",
+    })
     p.write_text(
         "# test\n\n"
         "## 输入帧\n- skip\n\n"
         "## 运镜与动作\nslow push in\n\n"
         "## 产品/品牌身份锁定\nPROD_STARBOX_APP same logo\n\n"
-        "## 负向\nno watermark\n",
+        "## 负向\nno watermark\n\n"
+        + render_markdown(compiled),
         encoding="utf-8",
     )
     prompt = rd.build_prompt(p)
-    assert "slow push in" in prompt
-    assert "PROD_STARBOX_APP" in prompt
+    assert prompt == compiled["prompt"]
+    assert "slow push in" not in prompt
+    assert "PROD_STARBOX_APP" not in prompt
     assert "skip" not in prompt
-    assert "commercial ad video" in prompt
+
+
+def test_build_prompt_keeps_legacy_fallback_during_migration(tmp_path):
+    p = tmp_path / "legacy.md"
+    p.write_text("## 运镜与动作\nslow push in\n\n## 负向\nno watermark\n", encoding="utf-8")
+    prompt = rd.build_prompt(p)
+    assert "slow push in" in prompt
+    assert "no watermark" in prompt
+    assert "commercial ad video" not in prompt
 
 
 def test_render_jobs_with_fake_backend(tmp_path, monkeypatch):

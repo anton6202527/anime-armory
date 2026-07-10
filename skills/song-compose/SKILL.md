@@ -1,6 +1,6 @@
 ---
 name: song-compose
-description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风，生成一首【带人声】的完整歌（歌/song.wav）。多后端：云 Suno/Udio / 本地 ACE-Step(Mac可跑)/DiffRhythm；不是 TTS（TTS 不会唱）。先用 compose_song.py 生成作曲任务包和 takes_manifest，多版生成后登记/评分/挑版定稿。song 写歌线第 2 步。Use when asked to 作曲 / 生成歌曲 / 出歌 / 让它唱出来 / Suno / ACE-Step / 把词谱成歌 / 挑版. Triggers 作曲, 生成歌曲, 出歌, 唱出来, 谱曲, Suno, Udio, ACE-Step, DiffRhythm, 挑版, 多版, song-compose.
+description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风生成带人声完整歌；完整 A&R/参考/和声/topline 合同与实际后端提交字段分层，由本线 compiler 映射 Suno/Udio/ACE-Step/DiffRhythm 的 style/prompt、lyrics、duration；多版登记、评分、挑版定稿。Use when asked 作曲 / 生成歌曲 / 出歌 / 音乐 prompt / prompt compiler / Suno / ACE-Step / 把词谱成歌 / 挑版. Triggers 作曲, 生成歌曲, 出歌, 唱出来, 谱曲, 音乐prompt, prompt compiler, Suno, Udio, ACE-Step, DiffRhythm, 挑版, 多版, song-compose.
 ---
 
 # song-compose — 作曲 + 演唱（写歌线第 2 步）
@@ -31,10 +31,11 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风，生成一首�
    - `歌/compose_task.json`
    - `歌/compose_prompts/take_XX.md`
    - `歌/takes_manifest.json`
-   > **Style Prompt 配方（细节越足越可控）**：2026 生成式后端对"小节数/调式/曲式"这类纯文字指令仍跟不稳，所以 Style Prompt 要把**整体声音**写满——`曲风 + 情绪 + BPM + 调性 + 器乐编制（如 piano and strings）+ 人声类型（female/male/duet/合成）+ 动态走向（安静主歌推到大副歌）+ 参考情绪`。`make_style` 现已纳入 `instrumentation`/`vocal_type`（在 `_meta.json` 或 `_设置.md` 写 `乐器编制`/`人声类型` 即自动进 prompt，缺则跳过）。**段内的转场/器乐高光/演唱方式**则靠歌词里的**内联元标签**（`[Build]`/`[Drop]`/`[Instrumental]`/`[Whispered]`…）指挥——见 `song-lyrics/references/songcraft.md §元标签`，两者一个管整首一个管段内。
-2. **按后端生成多版**：
-   - 云 Suno → web 生成或 API（见 backends.md），下载到 `歌/`。
-   - 本地 ACE-Step → headless 调用（见 backends.md）。
+   > **完整合同 ≠ 后端字段**：take Markdown 保留 A&R brief、参考边界、和声、topline、操作提示和挑版标准；`skills/song/_lib/song_prompt_compiler.py` 只把可执行的声音身份、Style seed、情绪动态、hook 意图编译到 style/prompt 字段，把**完整歌词原文**放 lyrics 字段，把时长放结构化参数。Suno/Udio、ACE-Step、DiffRhythm 的字段名不同，由 profile 映射；不得把整份 Markdown 粘进一个 prompt 框，也不得摘要歌词。
+   > **Style Prompt 配方**：整体声音写 `曲风 + 情绪 + BPM + 调性 + 器乐编制 + 人声类型 + 动态走向 + hook 意图`；段内转场/器乐高光/演唱方式靠歌词内联元标签（`[Build]`/`[Drop]`/`[Instrumental]`/`[Whispered]`…）。compiler 会消费 `song_brief.json.sonic_identity/emotional_arc/hook_deadline_seconds`，但不会把 reference pack、权利说明或文件路径拼进 style。
+2. **按后端编译字段生成多版**：
+   - 云 Suno/Udio → 只把 take 的 `submit_fields.style` / `submit_fields.lyrics` / title 分别贴入 Custom 字段；下载到 `歌/`。
+   - 本地 ACE-Step → `submit_fields.prompt`、`lyrics`、`audio_duration` 分列传入 headless 调用。
    - DiffRhythm / manual → 按任务包生成。
 3. **登记 take**：外部生成的每版音频用 `compose_song.py --register <音频> --take N` 写回 `歌/takes/take_NN.wav` 和 manifest。
 4. **挑版**：音乐生成随机性大，**多生几版挑最佳**（副歌 hook / 人声清晰 / 与蓝图贴合 / MV 卡点适配）。先用 `take_review.py` 记录盲听分、timecode note、风险和推荐版；再用 `compose_song.py --score take_NN ...` 同步到 manifest。
@@ -67,5 +68,7 @@ python3 <skill>/scripts/place_song.py <写歌作品根> <生成的歌文件> [--
 | 拿 TTS 来"唱" | TTS 不会唱；必用音乐生成模型(Suno/ACE-Step) |
 | 克隆真人歌手嗓未授权 | 拒做；只用自有/授权/合成音色 |
 | 一版就定 | 先生成/登记多版，按 take manifest 挑旋律/演唱最佳 |
+| 把 A&R/参考/和声说明整份粘进 style | 只提交 `后端编译提交字段`；完整合同留给制作决策、复核和溯源 |
+| 为了“精简 prompt”摘要或删改歌词 | 禁止；歌曲 compiler 只精简 style，上游定稿歌词原文完整进入 lyrics 字段并以 hash 锁定 |
 | 需要更准地检查人声 | 先用 demucs 分离 vocals，再做试听和时间点核对 |
 | 拿说话 TTS 当唱歌 | TTS 只能说话；唱歌必须走音乐生成或歌声转换 |

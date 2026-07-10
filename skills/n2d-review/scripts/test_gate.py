@@ -419,6 +419,12 @@ continuity constraint: begin from continuity.start_state, perform only continuit
 audio constraint: no dialogue, no narration, no generated native voice;
 ```
 
+### 后端编译提交 prompt
+**编译元数据**：kind=n2d_compiled_video_prompt; version=1; profile_version=2026-07-10.1; profile=zh_motion_first; backend=dreamina; mode=image2video; language=zh; native_audio_policy=none; source_contract_sha256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```text
+以已提交首帧为视觉真值。主动作：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制。镜头：略俯 MCU 缓慢推近 0.5x，结尾稳定停住。节奏：前两秒压住呼吸，中段聚焦眼神，最后一秒停稳。结尾停稳在：眼神与左腕疤。仅保留已登记主体；人物身份、服装、构图与光位保持稳定；画面保持干净，不增加文字或水印。
+```
+
 ### 检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）
 1. ✅ 导演意图/起幅/落幅/场面调度/表演节拍齐全
 2. ✅ ④人物运动：动作链明确、幅度可控、可由首帧自然推出
@@ -1928,8 +1934,9 @@ def _identity_registry(overrides=None):
                 "scope": "全篇",
                 "asset_bundle": {
                     "kind": "project_character_asset_bundle_ref",
-                    "manifest": "设定库/character_assets/CHAR_SHEN__shen_nian/manifest.json",
-                    "package_dir": "设定库/character_assets/CHAR_SHEN__shen_nian",
+                    "manifest": "角色库/CHAR_SHEN__shen_nian/manifest.json",
+                    "package_dir": "角色库/CHAR_SHEN__shen_nian",
+                    "tier": "core_full",
                     "role": "female_lead",
                     "sections": ["reference", "prompts", "lora", "voice", "adapters", "qc"],
                     "truth_policy": "manifest_points_to_identity_registry_and_character_bible",
@@ -2088,6 +2095,7 @@ def _write_identity_registry(tmp_path, data=None, make_assets=False):
             "version": 1,
             "character_id": char.get("id"),
             "character_name": char.get("name"),
+            "library_tier": bundle.get("tier") or char.get("library_tier") or "core_full",
             "package_dir": str(bundle.get("package_dir") or package_dir),
             "truth_sources": {"identity_registry": "出图/共享/identity_registry.json"},
             "directories": directories,
@@ -2549,6 +2557,70 @@ def test_identity_registry_turnaround_cannot_replace_split_makeup_refs(tmp_path)
     assert any("side" in f["msg"] for f in missing)
     assert any("back" in f["msg"] for f in missing)
     assert any("half_body_or_full_body" in f["msg"] for f in missing)
+
+
+def test_identity_registry_recurring_standard_does_not_prebuild_side_or_back(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["library_tier"] = "recurring_standard"
+    char["asset_bundle"]["tier"] = "recurring_standard"
+    form = char["forms"][0]
+    form["reference_atlas"]["build_tier"] = "recurring_standard"
+    for key in ("side", "back", "turnaround"):
+        form["reference_group"].pop(key, None)
+    for key in ("side", "back"):
+        form["reference_atlas"]["base_views"].pop(key, None)
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and any(key in f["msg"] for key in ("side", "back", "turnaround"))
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_named_minimal_keeps_front_body_and_face_only(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["scope"] = "第1集具名短线角色"
+    char["library_tier"] = "named_minimal"
+    char["asset_bundle"]["tier"] = "named_minimal"
+    form = char["forms"][0]
+    form["reference_atlas"]["build_tier"] = "named_minimal"
+    for key in ("three_quarter", "side", "back", "turnaround"):
+        form["reference_group"].pop(key, None)
+    for key in ("three_quarter", "side", "back"):
+        form["reference_atlas"]["base_views"].pop(key, None)
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "资产身份注册层"
+        and any(key in f["msg"] for key in ("three_quarter", "side", "back", "turnaround"))
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_legacy_character_assets_path_warns_for_migration(tmp_path):
+    data = _identity_registry()
+    bundle = data["characters"][0]["asset_bundle"]
+    bundle["manifest"] = "设定库/character_assets/CHAR_SHEN__shen_nian/manifest.json"
+    bundle["package_dir"] = "设定库/character_assets/CHAR_SHEN__shen_nian"
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.WARN
+        and f["dim"] == "角色资产包"
+        and "旧路径" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_identity_registry_missing_expression_reference_is_blocked(tmp_path):
@@ -5193,22 +5265,57 @@ def test_good_video_clip_prompt_passes_director_structure():
     assert gate.findings == []
 
 
-def test_video_clip_missing_compact_prompt_fields_is_blocked():
+def test_video_clip_compiler_backend_must_match_route():
+    gate.check_video_clip_prompt_section(
+        "01_clips.md",
+        GOOD_VIDEO_CLIP,
+        route={"primary_backend": "veo", "mode": "image2video", "native_audio_policy": "none"},
+    )
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "prompt compiler"
+        and "route.primary_backend=veo" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_runway_compiled_prompt_blocks_negative_commands():
+    clip = GOOD_VIDEO_CLIP.replace("profile=zh_motion_first", "profile=runway_motion_positive").replace(
+        "backend=dreamina", "backend=runway"
+    ).replace("language=zh", "language=en").replace(
+        "以已提交首帧为视觉真值。主动作：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制。镜头：略俯 MCU 缓慢推近 0.5x，结尾稳定停住。节奏：前两秒压住呼吸，中段聚焦眼神，最后一秒停稳。结尾停稳在：眼神与左腕疤。仅保留已登记主体；人物身份、服装、构图与光位保持稳定；画面保持干净，不增加文字或水印。",
+        "Animate the supplied first frame. Primary action: she slowly raises her eyes. Camera: dolly in slowly. Do not add text.",
+    )
+
+    gate.check_video_clip_prompt_section(
+        "01_clips.md",
+        clip,
+        route={"primary_backend": "runway", "mode": "image2video", "native_audio_policy": "none"},
+    )
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "prompt compiler"
+        and "runway_prompt_contains_negative_command" in f["msg"]
+        for f in gate.findings
+    )
+
+
+def test_video_clip_compiled_submit_prompt_requires_primary_action():
     clip = GOOD_VIDEO_CLIP.replace(
-        "首帧保持：保持首帧已锁定的沈念脸型、发髻、服装、冷宫寝殿、烛火光位和前景鸩酒托盘，不重定人物外貌、场景布局或光色；\n",
-        "",
-    ).replace(
-        "情绪节奏：[0-2s] 惊惧呼吸压住；[2-4s] 眼神缓慢聚焦；[4-5s] 克制停住，为下一镜留半拍；\n",
-        "",
-    ).replace(
-        "禁止：不要换脸、不要换衣、不要新增人物或道具、不要改变冷宫场景和烛火光位、不要生成文字/logo/水印、不要生成原生人声；\n",
-        "",
+        "主动作：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制。",
+        "动作参考：沈念急促呼吸后缓慢抬眼，表情从惊惧压成克制。",
     )
 
     gate.check_video_clip_prompt_section("01_clips.md", clip)
 
-    for key in ("首帧保持", "情绪节奏", "禁止"):
-        assert any(f["sev"] == gate.BLOCK and f["dim"] == "prompt" and key in f["msg"] for f in gate.findings)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "prompt compiler"
+        and "missing_primary_action" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_video_clip_missing_presence_chain_constraint_is_blocked():
@@ -5219,7 +5326,12 @@ def test_video_clip_missing_presence_chain_constraint_is_blocked():
 
     gate.check_video_clip_prompt_section("01_clips.md", clip)
 
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "prompt" and "在场链约束" in f["msg"] for f in gate.findings)
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "人物在场链"
+        and "required_presence" in f["msg"]
+        for f in gate.findings
+    )
 
 
 def test_video_clip_presence_chain_constraint_requires_three_fields():
@@ -5319,7 +5431,7 @@ def test_video_clip_missing_identity_lock_is_blocked():
         "",
     )
     gate.check_video_clip_prompt_section("01_clips.md", clip)
-    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "身份锁定约束" in f["msg"] for f in gate.findings)
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "角色身份注册层" in f["msg"] for f in gate.findings)
 
 
 def test_video_clip_missing_motion_refinement_is_blocked():

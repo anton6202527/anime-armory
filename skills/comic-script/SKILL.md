@@ -31,7 +31,7 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 3. 源本是外语、文言/古汉语、混合语言，或用户要求跨语种/古文改编时，先跑源语义归一化 gate；未通过前不要写最终 `panel_script.json`。
 4. 选择分话目标：本话必须有开场吸引、冲突推进、转折或爽点、结尾钩子。
 5. 写 `分话大纲.md`，避免只按字数切段；边界服从戏剧闭环。
-6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。若本话经过源语义归一化，每格还要保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。需要传统漫画审美时，可预填 `layout_weight`、`panel_shape`、`gutter_intent`、`ink_plan`、`black_fill_plan`、`tone_plan`、`value_plan`、`effects_plan`，供 `comic-name` 和 `comic-finishing` 继承。
+6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。需要镜头感时，参考 `skills/comic/references/运镜/manifest.json`，把视频运镜转译为静态机位/景别/前景遮挡/速度线/格子轻重（如推镜头=近景聚焦，拉镜头=扩大环境，甩镜=斜切格+速度线，焦点转移=前后景虚实）。若本话经过源语义归一化，每格还要保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。需要传统漫画审美时，可预填 `layout_weight`、`panel_shape`、`gutter_intent`、`ink_plan`、`black_fill_plan`、`tone_plan`、`value_plan`、`effects_plan`，供 `comic-name` 和 `comic-finishing` 继承。
 7. 台词写入结构字段，不要求图像模型直接生成文字；跨语种/古文改编时，最终嵌字文本写 `dialogue[].text_target`、`narration_target` 或对应目标字段，原文不要覆盖掉。
 8. 自检通过后回写 `_进度.md` 的 `漫画脚本` 列。
 
@@ -70,6 +70,7 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 - 人物完整性要逐格写清：脸型、眼型/眼距、发际线、发型轮廓、服装主色、标志物、手脚和关键道具是否完整可读；动作格写清接触点和不可裁掉的部位。
 - 复杂动作拆成“准备 → 接触/爆发 → 后果”，不要塞进一格。
 - 动作、冲击、揭示、恐惧、速度感强的格子可写 `effects_plan`；黑白页漫和日漫网点风格建议写 `tone_plan` 或让 `comic-finishing` 生成显式计划。
+- 运镜库只作为漫画镜头语言参考，不要求单格表达完整运动。优先把 `skills/comic/references/运镜/manifest.json` 的条目转译成静态构图、速度线、集中线、格子尺寸和阅读顺序。
 - 出图难点只影响实现路径，不删掉必要剧情；必要时在 `art_notes` 标明分层、反打或合成建议。
 
 ## 回写进度

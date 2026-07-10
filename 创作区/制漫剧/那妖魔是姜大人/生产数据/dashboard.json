@@ -1328,49 +1328,49 @@
       "recent_blockers": [
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/reference",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/reference",
           "msg": "角色资产包分区不存在：reference",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/prompts",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/prompts",
           "msg": "角色资产包分区不存在：prompts",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/lora",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/lora",
           "msg": "角色资产包分区不存在：lora",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/voice",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/voice",
           "msg": "角色资产包分区不存在：voice",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/adapters",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/adapters",
           "msg": "角色资产包分区不存在：adapters",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/CHAR_04__陈青源/qc",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/CHAR_04__陈青源/qc",
           "msg": "角色资产包分区不存在：qc",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/reference",
           "msg": "角色资产包分区不存在：reference",
           "stage": "video_prompt_preflight"
         },
         {
           "dim": "角色资产包",
-          "loc": "创作区/制漫剧/那妖魔是姜大人/设定库/character_assets/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
+          "loc": "创作区/制漫剧/那妖魔是姜大人/角色库/GROUP_飞鹰门众人__GROUP_飞鹰门众人/prompts",
           "msg": "角色资产包分区不存在：prompts",
           "stage": "video_prompt_preflight"
         }

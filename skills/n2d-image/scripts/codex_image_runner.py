@@ -28,7 +28,7 @@ import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
 try:
     from PIL import Image, ImageFilter, ImageOps
@@ -68,6 +68,8 @@ CROSS_EPISODE_SOURCE_FRAME_LINE_RE = re.compile(
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
 CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
+CHARACTER_SHARED_STANDARD_FIELDS = ("front", "three_quarter")
+CHARACTER_SHARED_MINIMAL_FIELDS = ("front",)
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
 REALISTIC_RENDERING_STYLE_GUIDANCE = (
@@ -1536,7 +1538,42 @@ def _character_forms_for_ref(identity: Dict[str, Any], char_ref: str) -> tuple[L
     return [], False
 
 
-def _character_basic_pack_issues(root: Path, char_ref: str, form: Dict[str, Any]) -> List[str]:
+def _character_library_tier(form: Mapping[str, Any]) -> str:
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    value = str(atlas.get("build_tier") or form.get("library_tier") or "core_full").strip()
+    if value in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
+        return value
+    if value.startswith("restricted_partial"):
+        return "restricted_partial"
+    return "core_full"
+
+
+def _character_required_fields_for_shot(form: Mapping[str, Any], shot_text: str = "") -> Tuple[str, ...]:
+    tier = _character_library_tier(form)
+    if tier == "core_full":
+        required = list(CHARACTER_SHARED_CORE_FIELDS)
+    elif tier == "recurring_standard":
+        required = list(CHARACTER_SHARED_STANDARD_FIELDS)
+    elif tier == "named_minimal":
+        required = list(CHARACTER_SHARED_MINIMAL_FIELDS)
+    else:
+        return ()
+    text = str(shot_text or "")
+    if tier == "named_minimal" and re.search(r"CU|MCU|ECU|近景|特写|反打|过肩|转头|回头|打斗|动作|挥|劈|斩|刺", text, re.I):
+        required.append("three_quarter")
+    if re.search(r"侧面|侧脸|全侧|profile|side view", text, re.I):
+        required.append("side")
+    if re.search(r"背面|背影|背身|背对|back view|rear view", text, re.I):
+        required.append("back")
+    return tuple(dict.fromkeys(required))
+
+
+def _character_basic_pack_issues(
+    root: Path,
+    char_ref: str,
+    form: Dict[str, Any],
+    shot_text: str = "",
+) -> List[str]:
     if _form_is_restricted_partial(form):
         return []
     form_name = str(form.get("form") or "常态").strip()
@@ -1547,7 +1584,8 @@ def _character_basic_pack_issues(root: Path, char_ref: str, form: Dict[str, Any]
         return [f"{char_ref}/{form_name}: reference_group 缺失，不能进入 Clip 分镜图生成"]
 
     missing: List[str] = []
-    for key in CHARACTER_SHARED_CORE_FIELDS:
+    library_tier = _character_library_tier(form)
+    for key in _character_required_fields_for_shot(form, shot_text):
         if not _ready_shared_paths_for_node(root, reference_group.get(key)):
             missing.append(key)
     if not any(_ready_shared_paths_for_node(root, reference_group.get(key)) for key in CHARACTER_SHARED_BODY_FIELDS):
@@ -1556,7 +1594,7 @@ def _character_basic_pack_issues(root: Path, char_ref: str, form: Dict[str, Any]
         missing.append("face_anchor_or_expression")
     if missing:
         return [
-            f"{char_ref}/{form_name}: 共享定妆基础包未齐（缺 {', '.join(missing)}），"
+            f"{char_ref}/{form_name}: 共享定妆分档基础包未齐（library_tier={library_tier}，缺 {', '.join(missing)}），"
             "先补共享库并过自检，禁止生成 Clip 分镜图"
         ]
     return []
@@ -1655,7 +1693,7 @@ def shared_first_interlock_issues(root: Path, episode: str, targets: Optional[Se
                 add_issue(f"{section.clip}: {char_ref} 未找到对应形态，先补 identity_registry.json")
                 continue
             for cid, form in forms:
-                for issue in _character_basic_pack_issues(root, cid, form):
+                for issue in _character_basic_pack_issues(root, cid, form, section.body):
                     add_issue(f"{section.clip}: {issue}")
 
         for asset_ref in sorted(_shot_asset_refs(section.body)):

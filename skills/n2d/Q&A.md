@@ -39,6 +39,13 @@
 - [Q45：本项目使用的 "image2" 生图后端支持图生图（img2img）吗？怎么保证角色一致性？](#q45)
 - [Q46：一个 Clip 生视频到底锚定几帧？跟 Q42/Q43 声明的 3 帧是一回事吗？](#q46)
 - [Q47：Clip 图片生成顺序应该从 Clip_01 开始吗？](#q47)
+- [Q48：前两集暴露的 Split Relay / 视频 gate 问题，下一集怎么提前规避？](#q48)
+- [Q49：为什么删除仓库根共享 `资产库/`，改成每条生产线自己的 `_资产库/`？](#q49)
+- [Q50：每条线一个 `_资产库/` 会不会更割裂？跨系列怎么共享？](#q50)
+- [Q51：`设定库/` 和新 `角色库/` 谁更完善？场景等其它资产放哪里？](#q51)
+- [Q52：每个人物都放进 `角色库/`，还是只放主角和出场超过 10 集的人物？](#q52)
+- [Q53：角色库和其它资产怎样安全打包给别的作品、系列或机器？](#q53)
+- [Q54：视频 prompt 有没有行业通用规范？应该只加说明文档吗？](#q54)
 
 ---
 
@@ -842,3 +849,78 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 3. **同一 manifest 串行处理**：Split Relay 的 `query` / `accept` / `qc` 不并行写同一 manifest。part1、part2 按顺序落证据，必要并行时拆成互不共享的 manifest。
 4. **split prompt 要有分段合同**：part1 写清停在 split endpoint、不要提前演到下一段；part2 写清接上段尾势并落到最终 `end_state`。manifest 要能查到 `split_relay_prompt_guard` 和起止图。
 5. **视频 gate 签收只处理误报**：VSEM/S2V/SPECV/MOT1 如果是参考锚帧错、split prompt 错、角色/场景真漂，就回 image/video 重出；只有成片可接受且机检参照不适配时，才写结构化 `consistency_advisory_signoff_第N集.json`，并附抽帧、contact sheet、MP4 hash 和无音轨证据。
+
+---
+
+## Q49：为什么删除仓库根共享 `资产库/`，改成每条生产线自己的 `_资产库/`？<a id="q49"></a>
+
+**结论**：系列独立性比“所有东西放一个大库”更重要。仓库根共享库会让单独分发 `n2d`、`comic`、`song` 等系列时，不得不把仓库公共目录一起打包，形成隐含依赖，也容易让不同系列的 schema、权利规则和导入逻辑互相污染。
+
+现在每条生产线只维护本系列创作区下的 `_资产库/`，具体路径由本线 skill 自己定义。同系列作品直接从本系列库复制/fork 包；单独分发某条生产线时只带自己的 `_资产库/` 规则和所需包，不需要仓库根公共库。
+
+---
+
+## Q50：每条线一个 `_资产库/` 会不会更割裂？跨系列怎么共享？<a id="q50"></a>
+
+**结论**：目录所有权分开，但交换格式统一，割裂感由“自包含单包”消除，而不是靠共享路径消除。
+
+资产分三层：
+
+1. **作品内生产层**：例如 n2d 的 `角色库/`、`identity_registry.json`、`asset_registry.json`，只服务本作品。
+2. **系列内复用层**：`创作区/<系列>/_资产库/<type>/<slug>/asset_pack.json`，只由本系列工具维护。
+3. **显式交接层**：跨系列、跨仓库或跨机器只复制所需的单个 pack。包内带 manifest、授权/复用范围、文件与 SHA256，并声明 `portability.requires_source_library=false`。
+
+目标系列获得自己的副本并适配 n2d 专用字段；它不能运行时回指来源系列目录，也不需要把来源系列整座 `_资产库/` 一起打包。
+
+---
+
+## Q51：`设定库/` 和新 `角色库/` 谁更完善？场景等其它资产放哪里？<a id="q51"></a>
+
+二者不是“新目录替代整个旧目录”的关系：
+
+- `设定库/` 更广，是语义真值层：世界观、角色圣经、characters、locations、声音设定、风格与剧情规则继续放这里。
+- `角色库/` 更窄，是角色生产资产层，只替代旧 `设定库/character_assets/`，归拢 reference / prompts / lora / voice / adapters / qc，并指回角色圣经和 `identity_registry.json`，不得另写一套角色 DNA。
+- 场景、道具、武器、独立服装和 VFX 的项目内执行真值仍在 `出图/共享/asset_registry.json` 与 `出图/共享/图片/`。稳定、审过、授权清楚且值得复用时，再各自导出为 scene/prop/weapon/outfit/vfx pack 到本系列 `_资产库/`。
+
+因此，`设定库/` 不删；只删除它下面旧的 `character_assets/` 位置，避免两个角色资产目录长期并存。
+
+---
+
+## Q52：每个人物都放进 `角色库/`，还是只放主角和出场超过 10 集的人物？<a id="q52"></a>
+
+**结论**：所有入镜具名人物都建包，但不都做成完整主角库。分档如下：
+
+| 档位 | 触发 | 默认交付深度 |
+|---|---|---|
+| `core_full` | 主角、核心长线、或预计/计划出场 10 集及以上 | 正面、45°、侧面、背面、半身/全身、脸锚、三视图；表情/动作按剧本扩展 |
+| `recurring_standard` | 多集复现配角，通常预计 3–9 集或明确常驻 | 正面、45°、服装锚、脸锚；侧背按实际镜头补 |
+| `named_minimal` | 具名短线/单集角色 | 正面、服装锚、脸锚；近景、侧背或复用增加时升档 |
+| `restricted_partial` | 群像、远景、只露手/肩背/剪影 | 只建真实需要的局部参考，不建立清晰正脸 |
+
+这套档位是**资产生产深度**，不是后端主体 ID / face embedding / LoRA 的身份锁档位。角色进入更多集或分镜真的需要新角度时再升档，不提前为所有人生成九宫格和完整动作库。
+
+---
+
+## Q53：角色库和其它资产怎样安全打包给别的作品、系列或机器？<a id="q53"></a>
+
+1. 从作品内 `角色库/`、`identity_registry.json` 或 `asset_registry.json` 选择稳定、审过、授权清楚的资产。
+2. 用 `n2d-asset-market` 显式 export 到 `创作区/制漫剧/_资产库/<type>/<slug>/`；不要自动把生产废稿全部外溢。
+3. 运行 `python3 skills/n2d-asset-market/scripts/market.py verify-pack <包目录>`，确认文件不越出包目录、全部存在、SHA256 一致且不依赖源系列库。
+4. 同系列新作品用 import fork；角色默认重置 Character ID / Face Lock / LoRA ready / voice id，再重建 adapter 与 QC。
+5. 跨系列/仓库/机器只交付这个包。目标侧读取通用字段与文件，显式适配或忽略 n2d 专用 registry fragment；不得把 n2d 与 novel 建成自动数据耦合。
+
+---
+
+## Q54：视频 prompt 有没有行业通用规范？应该只加说明文档吗？<a id="q54"></a>
+
+**结论**：没有跨厂商强制统一的行业标准，但官方指南有稳定共识：视频 prompt 应围绕可见动作、镜头运动、时序/节奏、必要环境响应和落幅；首尾帧、角色参考、控制图、音频与负向词属于结构化请求输入，不该变成长篇制作说明。
+
+因此不能只新增一篇文档。n2d 已把它落实成可执行边界：
+
+1. `01_clips.md` 的完整合同继续严格保留导演、continuity、身份、在场链、接缝、执行配方、Motion Control、音频和 QC。
+2. `video_prompt_compiler.py` 按 Dreamina/Seedance/Kling、Runway、Veo、Luma/Pika 等 profile 编译唯一提交 prompt；切 backend 必须重新编译。
+3. `prompt_pack.py` 不再生成中英两套冗长 prompt，也不再为所有场景硬塞月光、火把、低雾、尘土等元素；native_speech 按 route 分支。
+4. `video_runner.py` 只提取 compiler fenced block，并在 manifest 记录 profile、来源合同 SHA、prompt SHA 和字符数。
+5. gate 分开检查完整合同与提交 prompt：合同缺项仍 BLOCK；提交 prompt 缺主动作/运镜、后端/模式/音频不匹配才 BLOCK，长度偏长只 WARN。
+
+规范、官方来源、schema 和 profile 详见 `skills/n2d-video/references/行业通用视频Prompt规范.md`。

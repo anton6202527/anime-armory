@@ -23,7 +23,7 @@
 
 ## 跨项目资产库 + 项目资产账本（P1 横切）— `n2d-asset-market`
 
-用户要"查资产库 / 导入角色模板 / 导出服装武器 VFX 模板 / 沉淀打斗套路 / 成本摊薄"时，调 `n2d-asset-market`。跨项目层写 `资产库/.../asset_pack.json`，导入角色必须 fork 新身份并重置后端 Character ID / Face Lock / LoRA ready；导入非角色资产合并到本剧 `asset_registry.json`。
+用户要"查资产库 / 导入角色模板 / 导出服装武器 VFX 模板 / 沉淀打斗套路 / 成本摊薄"时，调 `n2d-asset-market`。跨项目层写 `创作区/制漫剧/_资产库/.../asset_pack.json`，导入角色必须 fork 新身份并重置后端 Character ID / Face Lock / LoRA ready；导入非角色资产合并到本剧 `asset_registry.json`。
 
 发布追溯另走项目内内容账本：`python3 skills/n2d-asset-market/scripts/asset_registry.py scan <作品根> --write` 生成 `生产数据/asset_registry.jsonl` 与摘要，记录脚本/图片/视频/成片/合规文件的 SHA256；`verify` 用于发现发布前资产缺失或被改。这个账本不等同跨项目模板 export。
 

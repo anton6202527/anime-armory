@@ -300,7 +300,6 @@ export function NextActionStrip(props: {
                 type="button"
                 className="project-settings-close"
                 aria-label={t("common.close")}
-                title={t("common.close")}
                 onClick={() => setDetailsOpen(false)}
               >
                 ×

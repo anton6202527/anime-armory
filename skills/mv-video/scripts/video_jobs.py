@@ -9,6 +9,7 @@ Usage:
     python3 video_jobs.py <制MV作品根> --select Clip_001 --take 1
 """
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -22,11 +23,16 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
 GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
+CAMERA_MANIFEST_REL = "skills/mv/references/运镜/manifest.json"
+MV_LIB = os.path.join(REPO, "skills", "mv", "_lib")
 
 # mv 线自包含的两轴标记（质量档 + 运动参考），与本文件同目录。
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
+if MV_LIB not in sys.path:
+    sys.path.insert(0, MV_LIB)
 import motion_axes
+from mv_video_prompt_compiler import compile_prompt, render_markdown
 
 def load_contract():
     spec = importlib.util.spec_from_file_location("mv_contract", CONTRACT_PATH)
@@ -76,7 +82,7 @@ def normalize_take_id(value):
     raise SystemExit(f"[err] take id 无效：{value}（用 1 / take_01）")
 
 
-def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", quality_tier=None, motion_reference=None):
+def prompt_bundle_for_take(clip, backend, spec_profile, take_id, video_model="", quality_tier=None, motion_reference=None):
     c = clip.get("continuity", {})
     shot = clip.get("shot_design") or {}
     ident = clip.get("identity_contract") or {}
@@ -93,6 +99,35 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", qualit
         channel_profile = contract.video_channel_profile(backend)
     except KeyError:
         channel_profile = {}
+    camera_motion = str(shot.get("camera_movement") or "固定机位，保持首帧构图，动作峰值后稳定落幅")
+    environment_motion = str(
+        clip.get("environment_motion")
+        or clip.get("dynamic_detail")
+        or c.get("environment_motion")
+        or shot.get("environment_motion")
+        or ""
+    )
+    negative_raw = str(c.get("negative") or "换脸、换衣、新增人物、文字或水印、原生人声")
+    negative_elements = [v.strip() for v in re.split(r"[、,，;；]", negative_raw) if v.strip()]
+    mode = "frames2video" if clip.get("need_end_frame") else "image2video"
+    canonical = {
+        "clip_id": clip.get("clip_id"),
+        "backend": video_model or backend,
+        "mode": mode,
+        "primary_action": c.get("action"),
+        "camera_motion": camera_motion,
+        "environment_motion": environment_motion,
+        "rhythm": f"动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；结尾保留 8-12 帧稳定落幅",
+        "end_state": c.get("end_state"),
+        "negative_elements": negative_elements,
+        "frame_inputs": [
+            value for value in (clip.get("image_path"), clip.get("end_frame_path") if clip.get("need_end_frame") else "") if value
+        ],
+        "reference_inputs": reference_inputs,
+    }
+    compiled = compile_prompt(canonical)
+    if compiled["lint"]["errors"]:
+        raise SystemExit(f"[err] {clip.get('clip_id')} prompt compiler blocked: {compiled['lint']['errors']}")
     lines = [
         f"# {clip['clip_id']} {take_id} 视频生成任务",
         "",
@@ -113,6 +148,7 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", qualit
         f"- 动作峰值：{clip.get('action_peak', clip.get('end'))}s",
         f"- 转场母题：{clip.get('transition_motif', '')}",
         f"- 景别：{shot.get('shot_size', '')}",
+        f"- 运镜参考：{CAMERA_MANIFEST_REL}",
         f"- 运镜：{shot.get('camera_movement', '')}",
         f"- 光影：{shot.get('lighting', '')}",
         f"- 参考输入：{', '.join(str(x.get('path') or x.get('asset_id')) for x in reference_inputs)}",
@@ -130,10 +166,22 @@ def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", qualit
         f"- constraints：{c.get('constraints', '')}",
         f"- negative：{c.get('negative', '')}",
         "",
-        "## Prompt",
-        f"人物运动：{c.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：{shot.get('camera_movement') or '服务 ' + str(clip.get('section')) + ' 段落张力'}；光影继承：{shot.get('lighting', '')}；动态细节：发丝、衣摆、光斑或环境粒子随节拍变化；卡点约束：动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定脸、服装、长剑、场景 setup、光色基调；声音约束：无对白、无旁白、不要生成原生人声。",
+        "## 导演执行合同（不可整段提交）",
+        f"人物运动：{c.get('action', '')}；动作家族：{clip.get('action_family', '')}；镜头运动：{camera_motion}；运镜参考：{CAMERA_MANIFEST_REL}；光影继承：{shot.get('lighting', '')}；明确环境响应：{environment_motion or '无新增，保持首帧环境'}；卡点约束：动作峰值对齐 {clip.get('action_peak', clip.get('end'))}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定脸、服装、道具、场景 setup、光色基调；声音约束：视频只生成画面，成片歌曲由合成阶段铺设。",
+        "",
+        "## 模型提交边界",
+        "以上是完整 MV 生产合同，供身份/接缝/卡点/参考输入闸门、人工复核和溯源使用，不得整段提交。后端只接收下方编译块；歌曲、歌词、身份注册表、资产路径、渠道说明和审计文字不进入主 prompt。",
+        "",
+        render_markdown(compiled),
     ]
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines) + "\n", compiled
+
+
+def prompt_for_take(clip, backend, spec_profile, take_id, video_model="", quality_tier=None, motion_reference=None):
+    """Compatibility wrapper returning the full contract Markdown."""
+    return prompt_bundle_for_take(
+        clip, backend, spec_profile, take_id, video_model, quality_tier, motion_reference
+    )[0]
 
 
 def create_jobs(root, args):
@@ -172,11 +220,28 @@ def create_jobs(root, args):
         for i in range(1, requested + 1):
             take_id = f"take_{i:02d}"
             prompt_path = os.path.join("出视频", "prompt", f"{clip['clip_id']}_{take_id}.md")
-            mv_utils.write_text(os.path.join(root, prompt_path), prompt_for_take(clip, backend, profile, take_id, video_model, quality_tier, motion_reference))
+            prompt_text, compiled = prompt_bundle_for_take(
+                clip, backend, profile, take_id, video_model, quality_tier, motion_reference
+            )
+            mv_utils.write_text(os.path.join(root, prompt_path), prompt_text)
+            submit_prompt = str(compiled["prompt"])
             takes.append({
                 "take_id": take_id,
                 "status": "planned",
                 "prompt_path": prompt_path,
+                "prompt_source_kind": "compiled_submit_prompt",
+                "prompt_compiler": {
+                    key: compiled[key]
+                    for key in (
+                        "kind", "version", "profile_version", "profile", "backend", "mode", "language",
+                        "native_audio_policy",
+                    )
+                },
+                "submit_prompt": submit_prompt,
+                "negative_prompt": compiled["negative_prompt"],
+                "source_contract_sha256": compiled["source_contract_sha256"],
+                "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
+                "submit_prompt_chars": len(submit_prompt),
                 "video_path": os.path.join("出视频", "takes", clip["clip_id"], f"{take_id}.mp4"),
                 "score": {},
                 "notes": "",
@@ -212,7 +277,7 @@ def create_jobs(root, args):
             "takes": takes,
         })
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_video_jobs",
         "generated_at": date.today().isoformat(),
         "project_root": root,

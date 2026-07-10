@@ -4,7 +4,7 @@
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "kind": "comic_panel_jobs",
   "chapter": "第1话",
   "model": "自定义",
@@ -23,8 +23,22 @@
       "panel_id": "P001",
       "status": "planned",
       "size": {"width": 1440, "height": 900},
-      "prompt": "无字漫画画面描述",
-      "negative_prompt": "不要文字、不要水印、不要多余手指",
+      "production_contract_prompt": "含参考ID、角色DNA、场景锚、传统稿层与禁继承的完整生产合同",
+      "production_negative_contract": "完整负向/合规/禁继承合同",
+      "prompt_source_kind": "compiled_submit_prompt",
+      "prompt_compiler": {
+        "kind": "comic_compiled_image_prompt",
+        "version": 1,
+        "profile_version": "2026-07-10.1",
+        "profile": "gpt_image_comic_natural",
+        "backend": "gpt_image",
+        "language": "zh"
+      },
+      "submit_prompt": "只含可见画面、构图、画风稿层、连续性、最短身份保持、收尾技法、无字策略和人体接触点",
+      "prompt": "与 submit_prompt 完全相同的兼容别名",
+      "negative_prompt": "仅在 profile 支持独立负向字段时填写",
+      "source_contract_sha256": "64位sha256",
+      "submit_prompt_sha256": "64位sha256",
       "continuity_contract": {
         "scene_anchor_id": "LOC_001",
         "spatial_layout": "继承 LOC_001 空间布局",
@@ -67,7 +81,15 @@
 - `qc_block`：图片已落盘但 `post_qc.verdict=block`，不算 ready，不能进入合成。
 - `rework`：需要重出。
 
-正文台词不要写进 prompt。`text_language` 只记录后期嵌字/导出的文字语言；台词只作为气泡预留和表演语气参考。
+正文台词不要写进 `submit_prompt`。`text_language` 只记录后期嵌字/导出的文字语言；台词只作为低细节嵌字区和表演语气的上游依据。
+
+## 完整合同与提交 prompt 的边界
+
+- `production_contract_prompt` / `production_negative_contract`：人和 gate 使用，必须完整；可以含内部 ID、reference 路径、角色 DNA、场景锚、continuity、禁继承、传统稿层和审计说明。
+- `submit_prompt`：`skills/comic/_lib/comic_image_prompt_compiler.py` 的唯一模型输入。静态图比视频 prompt 需要更多构图/画风/稿层信息，但仍不得含内部 ID、路径、registry 全文、精确对白或后期流程说明。
+- `prompt`：为旧 runner/人工流程保留的兼容键，schema v2 中必须与 `submit_prompt` 完全相同；不得重新塞回完整合同。
+- `references` / `reference_budget`：属于请求控制层；runner 真实附图，模型 prompt 只写参考角色作用，不写本地路径。
+- `comic-review gate --stage image_preflight` 会校验 schema、compiler kind/version、backend/profile、合同 hash、提交 hash 和 lint；`codex_panel_runner.py` 在调用前再验一次。
 
 注意：`references[].path` 表示 job 已绑定共享参考图；`reference_input_count` 和 `reference_manifest` 表示生成时已经把这些参考图真实传给后端。已有面板如果只有 path、没有 manifest 或 `reference_input_count=0`，应由 `comic-identity` 标入重抽计划。
 
@@ -92,3 +114,15 @@
 - `no_bake_text_contract`：禁止正文、空白气泡、旁白框、UI 字、乱码字、水印烘焙进原图。
 
 启用传统原稿流程但缺该字段时，`comic-review gate --stage image_preflight` 给 warn，建议先跑 `comic-finishing` 并重建出图包。
+
+## 镜头语言参考
+
+`skills/comic/references/运镜/manifest.json` 是漫画线可用的镜头语言参考库。漫画不直接播放运镜，出图任务中应把它转译为静态画面约束：
+
+- `推镜头` → 更近景别、更大主体占比、焦点压到脸/手/道具。
+- `拉镜头` → 更大环境关系、孤独/余韵/处境暴露。
+- `甩镜` / `冲击变焦` → 斜切格、速度线、冲击线、动势模糊，但不要牺牲人物完整性。
+- `焦点转移` / `前景遮挡揭示` → 前后景虚实、遮挡边缘、视线引导。
+- `顶视俯拍` / `无人机航拍` → 大格定场、阵法几何、路线和群像站位。
+
+写 `prompt`、`art_notes` 或 `traditional_finish_contract.effects_plan` 时可引用这些结构化词，但最终必须落成可画的构图、线条和层次，不要只写“炫酷运镜”。

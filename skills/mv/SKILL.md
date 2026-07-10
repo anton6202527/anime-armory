@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1042 | 目录文本总行数 13342
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1046 | 目录文本总行数 15114
 
 # mv — 制MV 生产线 · 总调度
 
@@ -77,7 +77,7 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 > **MV 版一致性边界**：MV 通常是一支歌/一集长视频，只锁“同一首歌内部”的主角身份、主色、画风、反复视觉母题和段落光色。使用 `mv-image/references/visual_consistency.md`：主角/主唱最严，段落场景中等，特效转场最宽松。
 > **MV 出图一致性增强**：组图前 `mv-image` 必须提示 `MV一致性增强` 四档：共享定妆+锚点（默认）、指定参考图、后端主体库、+LoRA。MV 不默认训练 LoRA；只有用户已有或明确授权的 LoRA 资产才接入。
 
-> **MV 动作知识库**：炫酷动作优先从 `mv-video/references/action_knowledge.md` 选动作家族，再写进 `clip_plan.json` 的 `action_family/action_peak/visual_motif/transition_motif`。原则是“一 clip 一个主动作，动作峰值踩 beat/downbeat”，避免空泛写“炫酷运镜”。
+> **MV 动作/运镜知识库**：炫酷动作优先从 `mv-video/references/action_knowledge.md` 选动作家族，运镜优先从 `mv/references/运镜/manifest.json` 选结构化词，再写进 `clip_plan.json` 的 `action_family/action_peak/visual_motif/transition_motif/shot_design.camera_movement`。原则是“一 clip 一个主动作 + 一个主运镜，动作峰值踩 beat/downbeat”，避免空泛写“炫酷运镜”。
 
 ## 合法性
 - 输入歌的版权随歌而定（自有/授权/原创）；本线只做视觉，不改词曲版权属性。

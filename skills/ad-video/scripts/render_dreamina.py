@@ -29,6 +29,11 @@ KEY_SECTIONS = (
     "文字与安全区",
     "负向",
 )
+
+AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
+if str(AD_LIB) not in sys.path:
+    sys.path.insert(0, str(AD_LIB))
+from ad_video_prompt_compiler import parse_markdown  # noqa: E402
 SUCCESS_STATUSES = {"success", "succeeded", "completed", "done"}
 PENDING_STATUSES = {"querying", "queueing", "queued", "processing", "running", "pending", "submitted", "created"}
 
@@ -73,14 +78,16 @@ def extract_sections(markdown: str, wanted: Iterable[str] = KEY_SECTIONS) -> Dic
 
 def build_prompt(prompt_file: Path) -> str:
     text = prompt_file.read_text(encoding="utf-8")
+    compiled = parse_markdown(text)
+    if compiled and str(compiled.get("prompt") or "").strip():
+        return str(compiled["prompt"]).strip()
+    # Legacy migration fallback. Newly planned jobs must contain a compiler block;
+    # inherit_contract.py blocks them before paid generation when it is absent.
     sections = extract_sections(text)
     body = "\n".join(sections[key] for key in KEY_SECTIONS if sections.get(key)).strip()
     if not body:
         body = text.strip()
-    return (
-        body
-        + "\nVertical 9:16 commercial ad video, stable product identity, readable Chinese UI text, no watermark."
-    )
+    return body
 
 
 def submit_duration(seconds: float, model_version: str) -> int:

@@ -92,7 +92,12 @@ def normalize_camera_move(text: str) -> Dict[str, Any]:
     for zh, spec in CAMERA_MOVE_LEXICON.items():
         triggers = tuple(spec.get("triggers") or ()) or (zh,)
         if any((trg in t) or (trg.lower() in low) for trg in triggers):
-            moves.append({"zh": zh, "en": str(spec.get("en", "")), "slots": tuple(spec.get("slots") or ())})
+            move = {"zh": zh, "en": str(spec.get("en", "")), "slots": tuple(spec.get("slots") or ())}
+            for field in ("category", "risk_level", "prompt_template", "media_refs"):
+                if spec.get(field):
+                    move[field] = spec.get(field)
+            moves.append(move)
+    moves.sort(key=lambda item: len(str(item.get("zh") or "")), reverse=True)
     speeds = [zh for zh, en in CAMERA_SPEED_WORDS.items()
               if (zh in t) or (str(en).lower() in low)]
     is_static = any((w in t) or (w.lower() in low) for w in STATIC_CAMERA_WORDS)

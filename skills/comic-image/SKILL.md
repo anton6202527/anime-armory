@@ -1,11 +1,11 @@
 ---
 name: comic-image
-description: 画漫画出图阶段。Use when preparing shared visual references, per-panel image prompts, generation job packets, traditional manga ink/tone/effects contracts, registering panel images, or checking textless comic art for projects under 创作区/画漫画. Produces 出图/共享 references, 出图/第N话/prompt job packs, and 出图/第N话/panels images. Triggers 漫画出图, 分格出图, panel image, 漫画prompt, 角色定妆, 场景参考, 道具参考, 墨线, 网点, 效果线, comic-image.
+description: 画漫画出图阶段。Builds strict per-panel production contracts and backend-aware concise image prompts, binds real shared references, carries ink/tone/effects plans, generates/registers textless panel images, and runs immediate QC. Produces 出图/共享 references, schema-v2 panel job packs, and panels. Triggers 漫画出图, 分格出图, panel image, 漫画prompt, prompt compiler, 角色定妆, 场景参考, 道具参考, 墨线, 网点, 效果线, comic-image.
 ---
 
 # comic-image — 漫画出图包与面板图
 
-把漫画脚本和排版转换成逐格 prompt/job 包和面板图登记。共享定妆、reference registry、一致性重抽计划由 `comic-identity` 维护；本 skill 消费其结果，并把真实参考图传给出图后端。出图阶段只画无字画面和低细节留白，不再让图像模型画空白气泡或文字框，气泡与文字由 `comic-compose` 可控绘制。
+把漫画脚本和排版转换成逐格“完整生产合同 + 后端编译提交 prompt”任务包和面板图登记。共享定妆、reference registry、一致性重抽计划由 `comic-identity` 维护；本 skill 消费其结果，并把真实参考图传给出图后端。出图阶段只画无字画面和低细节留白，不再让图像模型画空白气泡或文字框，气泡与文字由 `comic-compose` 可控绘制。
 
 ## 输入
 
@@ -84,18 +84,21 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ## 工作流
 
-1. 读 `panel_script.json`、`layout.json` 和可选 `finishing_plan.json`，给每格生成 prompt/job。prompt 必须包含画面事实、构图、角色状态、参考 ID、禁止漂移项和留白/气泡预留。
-   - 正式出图前，`panel_script.json` 顶层 `visual_contract` 和逐格视觉契约必须存在。含角色格必须消费 `gaze_target / eyeline_direction / character_integrity`；含场景格必须消费 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`，眼神目标必须是具体戏内对象，多人同格必须有站位/遮挡/接触点。这些字段会写入 job 的 `continuity_contract`，并进入 prompt。
+1. 读 `panel_script.json`、`layout.json` 和可选 `finishing_plan.json`，给每格生成 schema v2 job。每个 job 明确分层：
+   - `production_contract_prompt` / `production_negative_contract` 是完整生产合同，保留参考 ID、角色 DNA、场景锚、continuity、禁继承、传统稿层和审计信息，供 gate、人工复核与溯源；
+   - `skills/comic/_lib/comic_image_prompt_compiler.py` 把合同编译成 `submit_prompt`：只留可见画面事实、构图/表演、画风稿层、可画的场景连续性、最短身份保持、墨线/黑场/网点/效果、无字策略和人体接触点；内部 ID、路径、registry 元数据、正文台词不得进入；
+   - `prompt` 只是 `submit_prompt` 的兼容别名，runner 只提交编译层，不读取完整生产合同。
+   - 正式出图前，`panel_script.json` 顶层 `visual_contract` 和逐格视觉契约必须存在。含角色格必须消费 `gaze_target / eyeline_direction / character_integrity`；含场景格必须消费 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`，眼神目标必须是具体戏内对象，多人同格必须有站位/遮挡/接触点。这些字段完整写入 `continuity_contract`；compiler 只抽取模型能画出来的布局、光位、轴线、站位和眼神目标。
    - 漫画格也要锁脸、眼神和身体完整性：脸型、眼型/眼距、发际线、发型、服装主色、配饰/伤痕/标志物、手脚和关键道具不能跨格漂移；动作格不得为了构图裁掉叙事需要的头发、脸、手脚、武器或接触点。
    - 除非本格明确 `camera_role=POV/破第四墙`，不要让角色看读者镜头；眼神应锁定对话对象、对手、武器/道具、命中点、画外声源或下一动作目标。
    - 启用传统原稿流程时，应先跑 `comic-finishing`，让 job 带 `traditional_finish_contract`，把墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划注入 prompt。缺该契约时 gate 给 warn，正式长线项目应补齐后再批量出图。
 2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
-3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；若项目登记了 `character_dna`、`variant_policy`、`STYLE_` 风格锚，逐格 prompt 必须消费这些契约。
-4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约和混用生成配方；`comic-batch` 会自动跑。
+3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；`character_dna`、`variant_policy`、`STYLE_` 风格锚进入完整合同，模型通过真实图片输入 + 精简身份保持语句消费，不把 registry 全文粘进 prompt。
+4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约、混用生成配方、legacy schema、缺 compiler、后端/profile 不一致或 prompt/hash 漂移；`comic-batch` 会自动跑。
 5. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
 6. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
 7. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
-8. Codex 路线必须把 reference path 转成真实 `--image` 入参，而不是只把路径写进 prompt。
+8. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装。
 9. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
 10. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
 11. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
@@ -110,7 +113,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 同一角色的不同年龄、闭关前后、受伤、觉醒、换装或境界形态必须继承 `identity_registry.json` 的定型 DNA；不要用“年轻版/老年版”泛化出新脸。
 - 用户截图参考里的播放按钮、字幕、搜索框、平台 UI、竖排标题、水印不是视觉设定，必须进入 negative prompt 或禁继承说明。
 - 风格要跟项目风格锚一致；不要退化成低细节彩漫、Q 版、泛化韩漫脸，或和定型图不相干的模型默认风格。
-- 场景与道具引用写成结构化 ID 或清晰路径。
+- 场景与道具引用在完整合同/job 中写成结构化 ID 或路径；模型 prompt 只写可见结构/材质，并通过真实图片附件消费引用。
 - 场景连续性写成可执行约束：同一 `scene_anchor_id/LOC_` 的空间布局、主光方向、冷暖色、常驻物件、人物左右关系和前后景层级必须继承；剧情改光、换轴或换景必须在 panel_script 里写理由。
 - 眼神一致性写成正向约束：`gaze_target` 是读者能看懂的戏内目标，不是泛泛“坚定眼神”；动作/冲突格还要写“镜头是旁观者，角色不看镜头，视线锁定 X”。
 - 需要文字的区域只写“预留低细节留白区域”，不要画空白气泡；气泡形状、文字、中英双语由 `comic-compose` 绘制。

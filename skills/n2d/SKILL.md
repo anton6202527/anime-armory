@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4614 | 目录文本总行数 239684
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4606 | 目录文本总行数 242563
 
 # n2d — 主状态机调度器
 
@@ -16,6 +16,15 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 4. **解释流水线整体结构** 给第一次使用的用户
 
 详细架构与目录约定见 `references/architecture.md`。机器契约见 `references/contract.md`（脚本真值源：`skills/n2d/_lib/n2d_contract.py`，定义阶段图、`_进度.md` schema、manifest、gate 回滚字段）。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
+
+## 资产目录边界（正式约定）
+
+- **作品根 `设定库/`**：保留，继续做世界观、角色圣经、场景语义、提示词与制作规则的真值层；它比视觉角色资产更广，不被 `角色库/` 替代。
+- **作品根 `角色库/`**：替代旧 `设定库/character_assets/`，只收角色可迁移生产包。所有入镜具名人物至少建基础包；主角/核心长线/预计出场 10 集及以上用 `core_full`，复现配角用 `recurring_standard`，具名短线角色用 `named_minimal`，局部群像用 `restricted_partial`。档位控制生产深度，不改变角色 DNA 真值归属。
+- **作品内非角色视觉资产**：场景、道具、武器、服装、VFX 仍由 `出图/共享/asset_registry.json` + `出图/共享/图片/` 管理；稳定、审过且授权清楚后，才显式导出。
+- **系列根 `创作区/制漫剧/_资产库/`**：只供制漫剧系列不同作品复用，不是仓库公共层。其它五条生产线各有自己的 `_资产库/`，任何生产线不得运行时 import 或回读另一条线的目录。
+- **跨系列 / 跨仓库 / 跨机器**：只显式交付所需的单个自包含 asset pack。目标侧复制或 fork 后自行适配；包必须 `requires_source_library=false`，不要求顺带打包整个系列库。
+- **旧目录迁移**：运行 `python3 skills/n2d-image/scripts/migrate_character_library.py <作品根>` 先 dry-run，确认后加 `--apply`。发现旧、新两套同时存在时脚本拒绝自动合并，避免双真值长期并存。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 

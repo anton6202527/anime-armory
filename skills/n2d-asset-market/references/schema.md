@@ -1,9 +1,9 @@
 # n2d 跨项目资产包 schema
 
-资产包是一个本地目录，核心文件为 `asset_pack.json`。默认库根：
+资产包是一个可独立复制的本地目录，核心文件为 `asset_pack.json`。n2d 默认库根：
 
 ```text
-资产库/
+创作区/制漫剧/_资产库/
 ├── characters/<slug>/asset_pack.json
 ├── scenes/<slug>/asset_pack.json
 ├── props/<slug>/asset_pack.json
@@ -15,7 +15,7 @@
 └── templates/model_routes/<slug>/asset_pack.json
 ```
 
-注意：这份 schema 描述的是**跨项目模板市场包**。项目内长线角色资产包使用 `设定库/character_assets/<CHAR_ID>__<slug>/manifest.json`，用于同一部剧内归拢 reference / prompts / lora / voice / adapters / qc；它可以作为导出来源，但不是 `asset_pack.json`，也不能替代 `identity_registry.json`。
+注意：这份 schema 描述的是**系列内跨作品模板包，也是跨系列/机器的单包交接格式**。项目内角色资产包使用 `角色库/<CHAR_ID>__<slug>/manifest.json`，用于同一部剧内分档归拢 reference / prompts / lora / voice / adapters / qc；它可以作为导出来源，但不是 `asset_pack.json`，也不能替代 `identity_registry.json`。任何消费者都不得要求源系列 `_资产库/` 仍在原路径。
 
 ## 通用字段
 
@@ -34,9 +34,21 @@
     "notes": ""
   },
   "style_tags": ["古风", "宫廷", "写实漫剧"],
-  "tags": ["女主", "冷宫", "复仇"]
+  "tags": ["女主", "冷宫", "复仇"],
+  "files": [],
+  "portability": {
+    "handoff_mode": "explicit_self_contained_pack",
+    "source_series": "n2d",
+    "self_contained": true,
+    "requires_source_library": false,
+    "import_policy": "copy_or_fork_into_target_series_library",
+    "cross_series_policy": "target series reads portable core/files and ignores or adapts n2d-only fields",
+    "missing_files": []
+  }
 }
 ```
+
+`portability` 是跨目录边界的硬约定：`files[].path` 必须留在包目录内、文件存在且 SHA256 匹配；跨系列/跨仓库/跨机器前运行 `market.py verify-pack <包目录>`。目标系列可读取通用字段（`asset_type/title/license/tags/files/portability`），n2d 专用 registry fragment 由目标侧显式适配或忽略，不能直接 import n2d 代码。
 
 `license.reuse`：
 
@@ -54,7 +66,9 @@
 
 ## character pack
 
-角色包包含一个 `identity_registry.json` 片段和 `files/` 下的定妆 PNG。若源项目有 `设定库/character_assets/.../manifest.json`，导出时可把其中的 lora/voice/adapters/qc 缺口说明写入 `notes` 或扩展字段，但跨项目导入仍按 fork 处理。
+角色包包含一个 `identity_registry.json` 片段和 `files/` 下的定妆 PNG。若源项目有 `角色库/.../manifest.json`，导出时可把其中的 lora/voice/adapters/qc 缺口说明写入 `notes` 或扩展字段，但跨项目导入仍按 fork 处理。
+
+源作品存在 `角色库/` 包时，portable pack 还会包含 `files/character_bundle/`：复制 prompts/reference/voice/adapters/qc 与非模型说明文件；模型权重 `.safetensors/.ckpt/.pt/.pth/.onnx` 排除并记入 `character_template.source_asset_bundle.excluded_model_files`。导入后目标作品创建自己的 `角色库/<新ID>__<新名>/manifest.json`，不回指来源角色库。
 
 关键字段：
 
@@ -104,11 +118,11 @@
 
 | asset_type | CLI | 目录 | ID 前缀 | registry type 别名 |
 |---|---|---|---|---|
-| `scene` | `export-scene` / `import-scene` | `资产库/scenes` | `LOC_` | `scene` / `location` |
-| `prop` | `export-prop` / `import-prop` | `资产库/props` | `PROP_` | `prop` |
-| `weapon` | `export-weapon` / `import-weapon` | `资产库/weapons` | `WEAPON_` | `weapon` / `magic_weapon` / `equipment` / `armory` |
-| `outfit` | `export-outfit` / `import-outfit` | `资产库/outfits` | `OUTFIT_` | `outfit` / `costume` |
-| `vfx` | `export-vfx` / `import-vfx` | `资产库/vfx` | `VFX_` | `vfx` / `effect` |
+| `scene` | `export-scene` / `import-scene` | `创作区/制漫剧/_资产库/scenes` | `LOC_` | `scene` / `location` |
+| `prop` | `export-prop` / `import-prop` | `创作区/制漫剧/_资产库/props` | `PROP_` | `prop` |
+| `weapon` | `export-weapon` / `import-weapon` | `创作区/制漫剧/_资产库/weapons` | `WEAPON_` | `weapon` / `magic_weapon` / `equipment` / `armory` |
+| `outfit` | `export-outfit` / `import-outfit` | `创作区/制漫剧/_资产库/outfits` | `OUTFIT_` | `outfit` / `costume` |
+| `vfx` | `export-vfx` / `import-vfx` | `创作区/制漫剧/_资产库/vfx` | `VFX_` | `vfx` / `effect` |
 
 导入默认行为：
 

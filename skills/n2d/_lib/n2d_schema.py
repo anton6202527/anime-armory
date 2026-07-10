@@ -248,7 +248,7 @@ BOUNDARY_PRODUCT_KINDS = {
     },
     ASSET_PACK_KIND: {
         "owner": "n2d-asset-market",
-        "path": "资产库/{slug}/asset_pack.json",
+        "path": "创作区/制漫剧/_资产库/{type}/{slug}/asset_pack.json",
         "layer": "asset_market",
         "boundary": "asset_pack",
     },

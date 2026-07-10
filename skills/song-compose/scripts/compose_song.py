@@ -13,6 +13,7 @@ Usage:
     python3 compose_song.py <写歌作品根> --select take_01
 """
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -54,6 +55,14 @@ if _COMMON_DIR not in sys.path:
     sys.path.insert(0, _COMMON_DIR)
 from settings import load_settings as _load_settings  # noqa: E402
 import io_utils  # noqa: E402
+from song_prompt_compiler import (  # noqa: E402
+    KIND as SONG_PROMPT_KIND,
+    VERSION as SONG_PROMPT_VERSION,
+    compile_prompt,
+    lint as lint_song_prompt,
+    normalize_backend as normalize_song_backend,
+    render_markdown,
+)
 
 
 def rel(root, path):
@@ -168,7 +177,7 @@ def read_context_blocks(root):
     return blocks
 
 
-def build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks=None):
+def build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks=None, compiled=None):
     duration_line = f"{duration}s" if duration else settings.get("目标时长", "未定")
     lines = [
         f"# 作曲任务 — 《{title}》 {take_id}",
@@ -181,7 +190,7 @@ def build_prompt(title, take_id, backend, style, lyrics, duration, settings, met
         f"- BPM/速度：{settings.get('BPM/速度', meta.get('bpm', '未定'))}",
         f"- 调性：{settings.get('调性', meta.get('key', '未定'))}",
         "",
-        "## Style Prompt",
+        "## Style Prompt Seed（完整合同字段，不直接复制）",
         style,
         "",
     ]
@@ -199,12 +208,20 @@ def build_prompt(title, take_id, backend, style, lyrics, duration, settings, met
         f"- 挑版策略：{settings.get('挑版策略', meta.get('take_selection_strategy', '人工挑版'))}",
         "- 优先判断：副歌 hook、旋律记忆点、人声清晰度、咬字、与蓝图情绪贴合、是否适合 MV 卡点。",
         "",
-        "## Lyrics",
+        "## Lyrics Contract（歌词原文必须完整，后端字段见下）",
         "```lyrics",
         lyrics.strip(),
         "```",
         "",
     ])
+    if compiled:
+        lines.extend([
+            "## 提交边界",
+            "以上 A&R、参考边界、和声/topline、挑版说明和操作提示是完整生产合同；不得整份粘进音乐后端。只提交下方 compiler 映射出的 style/prompt、lyrics 与结构化参数。歌词不做摘要或压缩。",
+            "",
+            render_markdown(compiled),
+            "",
+        ])
     return "\n".join(lines)
 
 
@@ -227,6 +244,7 @@ def prompt_plan(root, args):
     duration = args.duration or parse_seconds(meta.get("target_duration_seconds")) or parse_seconds(settings.get("目标时长"))
     style = make_style(meta, settings, args)
     context_blocks = read_context_blocks(root)
+    brief = load_json(os.path.join(root, "创作", "song_brief.json"), {}) or {}
 
     song_dir = os.path.join(root, "歌")
     prompt_dir = os.path.join(song_dir, "compose_prompts")
@@ -241,21 +259,58 @@ def prompt_plan(root, args):
     for i in range(1, takes + 1):
         take_id = f"take_{i:02d}"
         prompt_path = os.path.join(prompt_dir, f"{take_id}.md")
-        write_text(prompt_path, build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks))
+        compiled = compile_prompt({
+            "take_id": take_id,
+            "backend": backend,
+            "title": title,
+            "style_seed": style,
+            "sonic_identity": brief.get("sonic_identity") or meta.get("sonic_identity"),
+            "emotional_arc": brief.get("emotional_arc") or meta.get("emotional_arc") or meta.get("dynamic_arc"),
+            "hook_intent": (
+                f"在前 {brief.get('hook_deadline_seconds')} 秒建立可复唱 hook"
+                if brief.get("hook_deadline_seconds") else ""
+            ),
+            "lyrics": lyrics,
+            "duration_seconds": duration,
+            "contract_context": {
+                "settings": settings,
+                "meta": meta,
+                "song_brief": brief,
+                "context_blocks": {heading: text for heading, text in context_blocks},
+            },
+        })
+        if compiled["lint"]["errors"]:
+            raise SystemExit(f"[err] {take_id} song prompt compiler blocked: {compiled['lint']['errors']}")
+        write_text(
+            prompt_path,
+            build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks, compiled),
+        )
         previous = old_takes.get(take_id, {})
+        submit_fields_raw = json.dumps(compiled["submit_fields"], ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         take_rows.append({
             "take_id": take_id,
             "backend": previous.get("backend", backend),
             "status": previous.get("status", "planned"),
             "audio_path": previous.get("audio_path", rel(root, os.path.join(takes_dir, f"{take_id}.wav"))),
             "prompt_path": rel(root, prompt_path),
+            "prompt_source_kind": "compiled_submit_fields",
+            "prompt_compiler": {
+                key: compiled[key]
+                for key in ("kind", "version", "profile_version", "profile", "backend", "field_map")
+            },
+            "style_prompt": compiled["style_prompt"],
+            "lyrics": compiled["lyrics"],
+            "submit_fields": compiled["submit_fields"],
+            "source_contract_sha256": compiled["source_contract_sha256"],
+            "lyrics_sha256": compiled["lyrics_sha256"],
+            "submit_fields_sha256": hashlib.sha256(submit_fields_raw.encode("utf-8")).hexdigest(),
             "score": previous.get("score", {}),
             "notes": previous.get("notes", ""),
             "registered_at": previous.get("registered_at"),
         })
 
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "song_take_manifest",
         "generated_at": date.today().isoformat(),
         "project_root": root,
@@ -263,7 +318,7 @@ def prompt_plan(root, args):
         "backend": backend,
         "requested_takes": takes,
         "target_duration_seconds": duration,
-        "style_prompt": style,
+        "style_prompt": take_rows[0]["style_prompt"] if take_rows else style,
         "context_sources": [heading for heading, _ in context_blocks],
         "lyrics_path": "词/lyrics.md",
         "selected_take": old.get("selected_take"),
@@ -271,13 +326,14 @@ def prompt_plan(root, args):
     }
     write_json(manifest_path, manifest)
     write_json(os.path.join(song_dir, "compose_task.json"), {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "song_compose_task",
         "title": title,
         "backend": backend,
         "requested_takes": takes,
         "target_duration_seconds": duration,
-        "style_prompt": style,
+        "style_prompt": take_rows[0]["style_prompt"] if take_rows else style,
+        "prompt_compiler": take_rows[0].get("prompt_compiler", {}) if take_rows else {},
         "context_sources": [heading for heading, _ in context_blocks],
         "prompt_dir": "歌/compose_prompts",
         "manifest_path": "歌/takes_manifest.json",
@@ -327,6 +383,32 @@ def get_take(manifest, take_id):
     raise SystemExit(f"[err] manifest 里没有 {take_id}")
 
 
+def validate_compiled_take(take, expected_backend):
+    compiler = take.get("prompt_compiler") if isinstance(take.get("prompt_compiler"), dict) else {}
+    payload = {
+        **compiler,
+        "style_prompt": str(take.get("style_prompt") or ""),
+        "lyrics": str(take.get("lyrics") or ""),
+        "submit_fields": take.get("submit_fields"),
+        "lyrics_sha256": str(take.get("lyrics_sha256") or ""),
+    }
+    errors = []
+    if take.get("prompt_source_kind") != "compiled_submit_fields":
+        errors.append("prompt_source_kind_invalid")
+    if compiler.get("kind") != SONG_PROMPT_KIND or compiler.get("version") != SONG_PROMPT_VERSION:
+        errors.append("prompt_compiler_incompatible")
+    if normalize_song_backend(compiler.get("backend")) != normalize_song_backend(expected_backend):
+        errors.append("prompt_backend_mismatch")
+    source_hash = str(take.get("source_contract_sha256") or "")
+    if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
+        errors.append("source_contract_hash_invalid")
+    fields_raw = json.dumps(take.get("submit_fields"), ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    if str(take.get("submit_fields_sha256") or "") != hashlib.sha256(fields_raw.encode("utf-8")).hexdigest():
+        errors.append("submit_fields_hash_mismatch")
+    errors.extend(lint_song_prompt(payload)["errors"])
+    return errors
+
+
 def copy_audio(src, dst):
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     if src.lower().endswith(".wav"):
@@ -347,6 +429,9 @@ def register_take(root, src, take_id):
         raise SystemExit(f"[err] 找不到音频文件：{src}")
     manifest_path, manifest = load_manifest(root)
     take = get_take(manifest, take_id)
+    compiler_errors = validate_compiled_take(take, manifest.get("backend"))
+    if compiler_errors:
+        raise SystemExit(f"[err] {take_id} 作曲提交字段无效：{compiler_errors}；先重跑 compose_song.py 重建任务包")
     target = os.path.join(root, "歌", "takes", f"{take_id}.wav")
     copied = copy_audio(src, target)
     take["status"] = "registered"

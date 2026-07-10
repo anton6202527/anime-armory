@@ -1660,6 +1660,31 @@ def test_character_basic_pack_blocks_dirty_self_check(tmp_path: Path) -> None:
     assert issues == ["CHAR_01/常态: 共享定妆 self_check_passed=false，先复核/重出共享库"]
 
 
+def test_named_minimal_shared_interlock_only_adds_angles_when_shot_needs_them(tmp_path: Path) -> None:
+    paths = {
+        "front": "出图/共享/图片/定妆_短线角色.png",
+        "outfit": "出图/共享/图片/定妆_短线角色_半身.png",
+        "face": "出图/共享/图片/定妆_短线角色_脸部特写.png",
+    }
+    for rel in paths.values():
+        write_valid_png(tmp_path / rel)
+    form = {
+        "form": "常态",
+        "reference_group": {
+            "front": {"path": paths["front"], "status": "ready"},
+            "outfit": {"path": paths["outfit"], "status": "ready"},
+            "face_anchor_refs": [{"path": paths["face"], "status": "ready"}],
+        },
+        "reference_atlas": {"build_tier": "named_minimal"},
+    }
+
+    assert codex_image_runner._character_basic_pack_issues(tmp_path, "CHAR_GUEST", form, "普通中景站立") == []
+    closeup = codex_image_runner._character_basic_pack_issues(tmp_path, "CHAR_GUEST", form, "CU 近景反打")
+    assert closeup and "three_quarter" in closeup[0]
+    back_view = codex_image_runner._character_basic_pack_issues(tmp_path, "CHAR_GUEST", form, "背身离开")
+    assert back_view and "back" in back_view[0]
+
+
 def test_shared_target_skips_existing_png_without_force(tmp_path: Path, monkeypatch) -> None:
     final = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     final.parent.mkdir(parents=True)
@@ -2247,7 +2272,7 @@ def test_shared_first_interlock_blocks_incomplete_character_pack(tmp_path: Path)
     issues = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
 
     assert issues
-    assert any("共享定妆基础包未齐" in issue for issue in issues)
+    assert any("共享定妆分档基础包未齐" in issue for issue in issues)
     assert any("three_quarter" in issue and "禁止生成 Clip 分镜图" in issue for issue in issues)
 
 

@@ -26,6 +26,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _performance_signature_present,
     _production_events_path,
     _prohibited_face_patch_outputs,
+    _required_character_reference_group_fields,
     _route_clip_character_refs,
     _sha256_file,
     _styleid_release_gate_required,
@@ -293,7 +294,8 @@ def check_identity_registry(
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 else:
-                    for key in REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS:
+                    required_group_fields = _required_character_reference_group_fields(form)
+                    for key in required_group_fields:
                         if _field_is_missing(reference_group, key):
                             if strict_references:
                                 add(BLOCK, "资产身份注册层", floc, f"reference_group 缺核心路径：{key}")

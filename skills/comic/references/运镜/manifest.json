@@ -1,0 +1,1340 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-10",
+  "name": "comic camera language manifest",
+  "purpose": "为 comic-script 的分格镜头感、comic-image 的画面 prompt 和 comic-layout 的格子轻重判断提供结构化机位/镜头语言候选。漫画不直接播放运镜，但这些条目可转译为静态格子的机位、景别、速度线、前景遮挡和阅读节奏。",
+  "source_summary": "从 n2d 运镜库同步：23 个用户提供 animated WebP 已绑定媒体；另有 10 个高价值影视/AI 视频常用镜头控制项。漫画使用时主要转译为静态画面语言。",
+  "sources": [
+    {
+      "name": "StudioBinder camera movement guide",
+      "url": "https://www.studiobinder.com/blog/different-types-of-camera-movements-in-film/",
+      "used_for": "传统影视运镜分类：pan, tilt, zoom, dolly, tracking, arc, roll, handheld, aerial 等。"
+    },
+    {
+      "name": "Storyblocks basic camera movements",
+      "url": "https://www.storyblocks.com/resources/tutorials/7-basic-camera-movements",
+      "used_for": "基础轴向：zoom, pan, tilt, dolly, truck, pedestal, rack focus。"
+    },
+    {
+      "name": "Kling AI camera control guide",
+      "url": "https://kling.ai/quickstart/ai-camera-control-guide",
+      "used_for": "AI 视频控制口径：水平/垂直/变焦/摇/倾斜/滚转及组合控制。"
+    },
+    {
+      "name": "Runway camera control documentation",
+      "url": "https://help.runwayml.com/hc/en-us/articles/34926468947347-Creating-with-Camera-Control-on-Gen-3-Alpha-Turbo",
+      "used_for": "AI 视频提示词与相机控制配合方式。"
+    }
+  ],
+  "selection_policy": {
+    "default_safe_moves": [
+      "固定机位",
+      "推镜头",
+      "拉镜头",
+      "移镜头",
+      "跟拍"
+    ],
+    "identity_risk_downgrade": "近景大表情、对白反打、角色身份不稳时，优先降级为固定机位、轻微推镜头、稳定器低幅跟拍或 OTS/物件反应镜。",
+    "high_motion_rule": "打斗、追逐、飞行、载具、多人接触镜头先保证动作/身份/接缝，再决定是否使用强运镜；必要时拆 Clip 或走 Motion Control。",
+    "prompt_rule": "每条镜头运动必须补 speed、direction、start_frame、end_frame；只写运镜名不够。",
+    "comic_static_translation": "视频运镜词在漫画中转译为静态机位/构图/速度线/遮挡揭示/格子尺寸：推镜头=更近景别，拉镜头=扩大环境，甩镜=动势线或斜切格，焦点转移=前后景虚实与视线引导，环绕/盘旋=大格奇观或连续小格。"
+  },
+  "moves": [
+    {
+      "id": "fixed_static",
+      "name_zh": "固定机位",
+      "name_en": "static locked-off shot",
+      "lexicon_kind": "static",
+      "category": "static",
+      "axes": [
+        "none"
+      ],
+      "slots": [],
+      "aliases_zh": [
+        "固定镜头",
+        "定镜",
+        "锁定机位",
+        "无运镜",
+        "静止镜头"
+      ],
+      "aliases_en": [
+        "static shot",
+        "fixed camera",
+        "locked-off shot"
+      ],
+      "narrative_functions": [
+        "对白",
+        "身份保真",
+        "近景表演",
+        "信息可读",
+        "屏幕/面板"
+      ],
+      "use_when": "需要稳定读表演、读文字、保脸或保道具状态。",
+      "avoid_when": "需要强调空间移动、追逐速度或强烈心理冲击。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：固定机位；速度=无；方向=无；起止=保持首帧构图不漂移。",
+      "media": {
+        "webp": "固定镜头.webp",
+        "preview": "_preview/固定镜头.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "dolly_in",
+      "name_zh": "镜头前推",
+      "name_en": "dolly in / push in",
+      "lexicon_key": "推镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "z_in"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "推镜头",
+        "推近",
+        "前推",
+        "推进"
+      ],
+      "aliases_en": [
+        "dolly in",
+        "push in",
+        "track in"
+      ],
+      "narrative_functions": [
+        "逼近",
+        "压迫",
+        "揭示",
+        "聚焦情绪",
+        "聚焦物证"
+      ],
+      "use_when": "人物意识到关键事实、危险逼近、表情或证物需要被观众读到。",
+      "avoid_when": "多人同框身份不稳或前景遮挡复杂时不要大幅推近。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：推镜头；速度={缓慢/匀速/快速}；方向=沿镜头轴线前推；起止={MS 到 MCU / MCU 到 CU}。",
+      "media": {
+        "webp": "镜头前推.webp",
+        "preview": "_preview/镜头前推.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "dolly_out",
+      "name_zh": "镜头后移",
+      "name_en": "dolly out / pull back",
+      "lexicon_key": "拉镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "z_out"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "拉镜头",
+        "拉远",
+        "后拉",
+        "后移"
+      ],
+      "aliases_en": [
+        "dolly out",
+        "pull back",
+        "track out"
+      ],
+      "narrative_functions": [
+        "退场",
+        "孤独",
+        "余韵",
+        "空间关系揭示",
+        "情绪释放"
+      ],
+      "use_when": "从人物情绪释放到环境关系，或让观众意识到人物处境更大。",
+      "avoid_when": "本镜需要清晰读微表情或文字信息时。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：拉镜头；速度={缓慢/匀速}；方向=沿镜头轴线后移；起止={CU 到 MS / MS 到 LS}。",
+      "media": {
+        "webp": "镜头后移.webp",
+        "preview": "_preview/镜头后移.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "zoom_in",
+      "name_zh": "变焦推进",
+      "name_en": "zoom in",
+      "lexicon_key": "变焦推进",
+      "lexicon_kind": "lens_control",
+      "category": "optical",
+      "axes": [
+        "focal_length_in"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "变焦推近",
+        "焦距推进"
+      ],
+      "aliases_en": [
+        "zoom in",
+        "lens zoom in"
+      ],
+      "narrative_functions": [
+        "压迫",
+        "信息聚焦",
+        "心理逼近"
+      ],
+      "use_when": "需要不移动机位地把观众注意力拉到人物、道具或文字上。",
+      "avoid_when": "要表现真实空间穿行或强视差时，改用推镜头。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：变焦推进；速度={缓慢/快速}；方向=焦距收窄；起止={画面中心目标从 MS 放大到 MCU/CU}。",
+      "media": {
+        "webp": "变焦推进.webp",
+        "preview": "_preview/变焦推进.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "zoom_out",
+      "name_zh": "变焦拉远",
+      "name_en": "zoom out",
+      "lexicon_key": "变焦拉远",
+      "lexicon_kind": "lens_control",
+      "category": "optical",
+      "axes": [
+        "focal_length_out"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "变焦后拉",
+        "焦距拉远"
+      ],
+      "aliases_en": [
+        "zoom out",
+        "lens zoom out"
+      ],
+      "narrative_functions": [
+        "疏离",
+        "暴露空间",
+        "情绪释放",
+        "揭示危险范围"
+      ],
+      "use_when": "从局部信息拉开到环境，表达人物被空间吞没或真相范围扩大。",
+      "avoid_when": "要保持脸部一致的高风险近景时不要快速拉远。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：变焦拉远；速度={缓慢/匀速}；方向=焦距放宽；起止={CU/MCU 到 MS/LS}。",
+      "media": {
+        "webp": "变焦拉远.webp",
+        "preview": "_preview/变焦拉远.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "dolly_zoom",
+      "name_zh": "柯克变焦",
+      "name_en": "dolly zoom / vertigo effect",
+      "lexicon_key": "柯克变焦",
+      "lexicon_kind": "compound",
+      "category": "optical_position_combo",
+      "axes": [
+        "z_motion",
+        "focal_length_counter"
+      ],
+      "slots": [
+        "speed",
+        "end_size",
+        "background_scale"
+      ],
+      "aliases_zh": [
+        "滑动变焦",
+        "希区柯克变焦",
+        "眩晕变焦"
+      ],
+      "aliases_en": [
+        "dolly zoom",
+        "vertigo effect",
+        "zolly"
+      ],
+      "narrative_functions": [
+        "真相冲击",
+        "心理失衡",
+        "眩晕",
+        "恐惧骤升"
+      ],
+      "use_when": "角色突然意识到致命真相、记忆崩塌或空间压迫感反常。",
+      "avoid_when": "人脸稳定性比心理冲击更重要时；慎用于大特写。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：柯克变焦；速度={缓慢/快速}；方向=机位与焦距反向变化；背景尺度={拉伸/压缩}；主体大小尽量保持。",
+      "media": {
+        "webp": "柯克变焦.webp",
+        "preview": "_preview/柯克变焦.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "pan_left",
+      "name_zh": "镜头左摇",
+      "name_en": "pan left",
+      "lexicon_key": "摇镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "yaw_left"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "左摇",
+        "横摇向左"
+      ],
+      "aliases_en": [
+        "pan left"
+      ],
+      "narrative_functions": [
+        "横向揭示",
+        "视线跟随",
+        "空间连接"
+      ],
+      "use_when": "由画面右侧人物/物件摇到左侧目标或危险。",
+      "avoid_when": "左右关系严格不可换轴时避免过快。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向左横摇；起止={右侧主体到左侧目标}。",
+      "media": {
+        "webp": "镜头左摇.webp",
+        "preview": "_preview/镜头左摇.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "pan_right",
+      "name_zh": "镜头右摇",
+      "name_en": "pan right",
+      "lexicon_key": "摇镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "yaw_right"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "右摇",
+        "横摇向右"
+      ],
+      "aliases_en": [
+        "pan right"
+      ],
+      "narrative_functions": [
+        "横向揭示",
+        "视线跟随",
+        "空间连接"
+      ],
+      "use_when": "由画面左侧人物/物件摇到右侧目标或危险。",
+      "avoid_when": "左右关系严格不可换轴时避免过快。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向右横摇；起止={左侧主体到右侧目标}。",
+      "media": {
+        "webp": "镜头右摇.webp",
+        "preview": "_preview/镜头右摇.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "tilt_up",
+      "name_zh": "镜头上摇",
+      "name_en": "tilt up",
+      "lexicon_key": "摇镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "pitch_up"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "上摇",
+        "仰摇"
+      ],
+      "aliases_en": [
+        "tilt up"
+      ],
+      "narrative_functions": [
+        "高处威胁揭示",
+        "巨物揭示",
+        "仰望",
+        "升格"
+      ],
+      "use_when": "从人物、道具或地面线索揭示天空、巨物、高处人物。",
+      "avoid_when": "主体脸部需持续可读时不要摇出脸太久。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向上摇；起止={人物/道具到高处目标}。",
+      "media": {
+        "webp": "镜头上摇.webp",
+        "preview": "_preview/镜头上摇.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "tilt_down",
+      "name_zh": "镜头下摇",
+      "name_en": "tilt down",
+      "lexicon_key": "摇镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "pitch_down"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "下摇",
+        "俯摇"
+      ],
+      "aliases_en": [
+        "tilt down"
+      ],
+      "narrative_functions": [
+        "压迫落点",
+        "地面证据揭示",
+        "从权力到结果"
+      ],
+      "use_when": "从高处压到人物、道具、尸体、裂纹、脚步或证据。",
+      "avoid_when": "需要持续保持对话双方视线时。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：摇镜头；速度={缓慢/匀速}；方向=向下摇；起止={高处目标到人物/地面证据}。",
+      "media": {
+        "webp": "镜头下摇.webp",
+        "preview": "_preview/镜头下摇.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "truck_left",
+      "name_zh": "镜头左移",
+      "name_en": "truck left / track left",
+      "lexicon_key": "移镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "x_left"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "左移",
+        "平移向左",
+        "横移向左"
+      ],
+      "aliases_en": [
+        "truck left",
+        "track left"
+      ],
+      "narrative_functions": [
+        "平移跟随",
+        "横向调度",
+        "空间层次",
+        "保持轴线"
+      ],
+      "use_when": "角色横向移动、队列/群像调度、需要用前后景视差表达空间。",
+      "avoid_when": "背景细节太乱且主体身份不稳时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：移镜头；速度={匀速/缓慢}；方向=向左平移；起止={保持主体相对构图稳定}。",
+      "media": {
+        "webp": "镜头左移.webp",
+        "preview": "_preview/镜头左移.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "truck_right",
+      "name_zh": "镜头右移",
+      "name_en": "truck right / track right",
+      "lexicon_key": "移镜头",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "x_right"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "右移",
+        "平移向右",
+        "横移向右"
+      ],
+      "aliases_en": [
+        "truck right",
+        "track right"
+      ],
+      "narrative_functions": [
+        "平移跟随",
+        "横向调度",
+        "空间层次",
+        "保持轴线"
+      ],
+      "use_when": "角色横向移动、队列/群像调度、需要用前后景视差表达空间。",
+      "avoid_when": "背景细节太乱且主体身份不稳时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：移镜头；速度={匀速/缓慢}；方向=向右平移；起止={保持主体相对构图稳定}。",
+      "media": {
+        "webp": "镜头右移.webp",
+        "preview": "_preview/镜头右移.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "pedestal_up",
+      "name_zh": "镜头上升",
+      "name_en": "pedestal up / crane up",
+      "lexicon_key": "升降",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "y_up"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "升镜",
+        "机位上升",
+        "向上升"
+      ],
+      "aliases_en": [
+        "pedestal up",
+        "crane up",
+        "rise up"
+      ],
+      "narrative_functions": [
+        "建立空间层级",
+        "权力关系",
+        "从人物抬到全景"
+      ],
+      "use_when": "从人物状态升到环境规模、阵法范围、战场全局。",
+      "avoid_when": "室内低顶、近脸表演或需要稳定读口型时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：升降；速度={缓慢/匀速}；方向=上升；终点高度={中机位到高机位/俯视}。",
+      "media": {
+        "webp": "镜头上升.webp",
+        "preview": "_preview/镜头上升.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "pedestal_down",
+      "name_zh": "镜头下降",
+      "name_en": "pedestal down / crane down",
+      "lexicon_key": "升降",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "y_down"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "降镜",
+        "机位下降",
+        "向下降"
+      ],
+      "aliases_en": [
+        "pedestal down",
+        "crane down",
+        "descend"
+      ],
+      "narrative_functions": [
+        "降临",
+        "压迫",
+        "从环境压到人物",
+        "落地"
+      ],
+      "use_when": "从天象/高处威胁/大环境落到冲突中心或关键人物。",
+      "avoid_when": "需要保持画面文字或脸部稳定时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：升降；速度={缓慢/匀速}；方向=下降；终点高度={高机位到平视/低机位}。",
+      "media": {
+        "webp": "镜头下降.webp",
+        "preview": "_preview/镜头下降.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "orbit",
+      "name_zh": "环绕拍摄",
+      "name_en": "orbit / circular shot",
+      "lexicon_key": "环绕",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "arc"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "arc"
+      ],
+      "aliases_zh": [
+        "环绕",
+        "绕拍",
+        "半环绕",
+        "180环绕",
+        "360环绕"
+      ],
+      "aliases_en": [
+        "orbit",
+        "circular shot",
+        "180 orbit",
+        "360 orbit"
+      ],
+      "narrative_functions": [
+        "爽点",
+        "高光",
+        "人物气场",
+        "关系围困",
+        "空间展示"
+      ],
+      "use_when": "人物开大、高光登场、关系压力围绕主体，或需要展示主体与环境一圈关系。",
+      "avoid_when": "近景身份高风险、多人脸复杂、需要读字幕/屏幕时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：环绕；速度={缓慢/匀速}；方向={顺时针/逆时针}；弧度={90/180/360度}；主体保持居中。",
+      "media": {
+        "webp": "环绕拍摄.webp",
+        "preview": "_preview/环绕拍摄.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "spiral_up",
+      "name_zh": "盘旋抬升",
+      "name_en": "spiral crane up",
+      "lexicon_key": "盘旋抬升",
+      "lexicon_kind": "compound",
+      "category": "camera_path",
+      "axes": [
+        "arc",
+        "y_up"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "arc",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "螺旋上升",
+        "盘旋上升"
+      ],
+      "aliases_en": [
+        "spiral up",
+        "spiral crane up"
+      ],
+      "narrative_functions": [
+        "奇观",
+        "飞行",
+        "空间揭示",
+        "战场升格"
+      ],
+      "use_when": "需要从人物/战场抬升到大范围奇观或地理关系。",
+      "avoid_when": "人物脸部是主要信息或场景资产不稳定时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：盘旋抬升；速度={缓慢/匀速}；方向={顺/逆时针}；弧度={半圈/一圈}；终点高度=高机位。",
+      "media": {
+        "webp": "盘旋抬升.webp",
+        "preview": "_preview/盘旋抬升.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "spiral_down",
+      "name_zh": "盘旋下降",
+      "name_en": "spiral crane down",
+      "lexicon_key": "盘旋下降",
+      "lexicon_kind": "compound",
+      "category": "camera_path",
+      "axes": [
+        "arc",
+        "y_down"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "arc",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "螺旋下降",
+        "盘旋下落"
+      ],
+      "aliases_en": [
+        "spiral down",
+        "spiral crane down"
+      ],
+      "narrative_functions": [
+        "降临",
+        "锁定目标",
+        "从奇观落到冲突中心"
+      ],
+      "use_when": "从高空/法阵/战场全局下降到关键人物或冲突中心。",
+      "avoid_when": "主体太小、身份锁不稳或落点需要精确接缝时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：盘旋下降；速度={缓慢/匀速}；方向={顺/逆时针}；弧度={半圈/一圈}；终点高度=平视/低机位。",
+      "media": {
+        "webp": "盘旋下降.webp",
+        "preview": "_preview/盘旋下降.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "drone_aerial",
+      "name_zh": "高空航拍",
+      "name_en": "aerial drone shot",
+      "lexicon_key": "无人机航拍",
+      "lexicon_kind": "movement",
+      "category": "aerial",
+      "axes": [
+        "x_y_z"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "无人机航拍",
+        "航拍",
+        "高空俯拍"
+      ],
+      "aliases_en": [
+        "aerial",
+        "drone shot",
+        "high aerial"
+      ],
+      "narrative_functions": [
+        "定场",
+        "大场面",
+        "路线",
+        "地理关系"
+      ],
+      "use_when": "建立地点、路线、追逐范围、军阵/城池/山谷空间。",
+      "avoid_when": "要读人物表演、脸部或小道具时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：无人机航拍；速度={缓慢/匀速}；方向={前进/上升/横移}；终点高度={高空/俯视}。",
+      "media": {
+        "webp": "高空航拍.webp",
+        "preview": "_preview/高空航拍.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "drone_cruise",
+      "name_zh": "无人机",
+      "name_en": "drone cruise",
+      "lexicon_key": "无人机航拍",
+      "lexicon_kind": "movement",
+      "category": "aerial",
+      "axes": [
+        "x_y_z"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "无人机巡航",
+        "航拍穿行",
+        "空中跟飞"
+      ],
+      "aliases_en": [
+        "drone cruise",
+        "drone fly-through"
+      ],
+      "narrative_functions": [
+        "飞行",
+        "追逐",
+        "空间穿梭",
+        "场景巡航"
+      ],
+      "use_when": "需要空中视角穿过环境、跟随飞行路线或给强视差。",
+      "avoid_when": "室内、狭窄空间或人物近脸保真镜。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：无人机航拍；速度={匀速/快速}；方向={前进/穿行/侧向跟飞}；终点高度={保持/上升/下降}。",
+      "media": {
+        "webp": "无人机.webp",
+        "preview": "_preview/无人机.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "follow_shot",
+      "name_zh": "跟随拍摄",
+      "name_en": "following / tracking follow",
+      "lexicon_key": "跟拍",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "subject_relative"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "跟拍",
+        "跟随",
+        "跟移",
+        "追随拍摄"
+      ],
+      "aliases_en": [
+        "follow shot",
+        "tracking follow"
+      ],
+      "narrative_functions": [
+        "追逐",
+        "行走",
+        "打斗跟随",
+        "代入"
+      ],
+      "use_when": "角色行动是镜头中心，观众需要跟着角色进入事件。",
+      "avoid_when": "复杂近身接触或人群遮挡多时先拆镜。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：跟拍；速度={匀速/快速}；方向={跟随主体前进/侧向跟随/背后跟随}；主体相对构图保持稳定。",
+      "media": {
+        "webp": "跟随拍摄.webp",
+        "preview": "_preview/跟随拍摄.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "first_person_pov",
+      "name_zh": "第一视角",
+      "name_en": "first-person POV",
+      "lexicon_key": "第一视角",
+      "lexicon_kind": "camera_viewpoint",
+      "category": "pov",
+      "axes": [
+        "viewer_subjective"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "主观视角",
+        "第一人称视角",
+        "POV"
+      ],
+      "aliases_en": [
+        "first-person POV",
+        "fpv",
+        "subjective camera"
+      ],
+      "narrative_functions": [
+        "主观代入",
+        "追逐",
+        "探索",
+        "惊吓",
+        "被卷入事件"
+      ],
+      "use_when": "需要观众替角色看到危险、奔跑、跌落或进入未知空间。",
+      "avoid_when": "角色正脸身份、复杂双人互动、需要客观交代空间时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：第一视角；速度={缓慢/快速}；方向={向前/转头/躲避}；画面表现主观视线，不显示本角色正脸。",
+      "media": {
+        "webp": "第一视角.webp",
+        "preview": "_preview/第一视角.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "handheld",
+      "name_zh": "手持拍摄",
+      "name_en": "handheld shake",
+      "lexicon_key": "手持晃动",
+      "lexicon_kind": "movement_style",
+      "category": "camera_style",
+      "axes": [
+        "micro_jitter"
+      ],
+      "slots": [
+        "strength"
+      ],
+      "aliases_zh": [
+        "手持",
+        "晃动",
+        "晃镜",
+        "手持晃动"
+      ],
+      "aliases_en": [
+        "handheld",
+        "shaky camera",
+        "handheld shake"
+      ],
+      "narrative_functions": [
+        "紧张",
+        "混乱",
+        "逃跑",
+        "临场感"
+      ],
+      "use_when": "危险逼近、慌乱逃跑、突发冲突、纪实感。",
+      "avoid_when": "近脸保真、文字可读、镜头接缝必须稳定时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：手持晃动；强度={轻微/中等}；节奏=随角色动作产生微晃，不改变主体身份。",
+      "media": {
+        "webp": "手持拍摄.webp",
+        "preview": "_preview/手持拍摄.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "barrel_roll",
+      "name_zh": "滚筒旋转",
+      "name_en": "barrel roll / camera roll",
+      "lexicon_key": "滚筒旋转",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "roll"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "roll_angle"
+      ],
+      "aliases_zh": [
+        "镜头滚转",
+        "滚转",
+        "翻滚镜头"
+      ],
+      "aliases_en": [
+        "barrel roll",
+        "camera roll"
+      ],
+      "narrative_functions": [
+        "失控",
+        "坠落",
+        "眩晕",
+        "空间翻转"
+      ],
+      "use_when": "人物坠落、失去平衡、幻觉、空间错乱。",
+      "avoid_when": "脸部保真、对白、文字、需要稳定接缝的镜头。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：滚筒旋转；速度={缓慢/快速}；方向={顺/逆时针}；滚转角={15/45/90度}；主体不要变形。",
+      "media": {
+        "webp": "滚筒旋转.webp",
+        "preview": "_preview/滚筒旋转.jpg",
+        "source": "user_provided"
+      }
+    },
+    {
+      "id": "whip_pan",
+      "name_zh": "甩镜",
+      "name_en": "whip pan",
+      "lexicon_key": "甩镜",
+      "lexicon_kind": "movement",
+      "category": "camera_rotation",
+      "axes": [
+        "fast_yaw"
+      ],
+      "slots": [
+        "direction"
+      ],
+      "aliases_zh": [
+        "快速甩镜",
+        "急甩",
+        "甩动转场"
+      ],
+      "aliases_en": [
+        "whip pan",
+        "swish pan"
+      ],
+      "narrative_functions": [
+        "突发反应",
+        "动作转场",
+        "高光切换",
+        "惊吓"
+      ],
+      "use_when": "从一个动作/人物快速甩到另一侧冲突或用于同方向动作转场。",
+      "avoid_when": "对话、文字、脸部稳定是本镜核心时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：甩镜；速度=急速冲击；方向={向左/向右/向上/向下}；起止={前一主体到后一主体}；中间允许运动模糊。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "crash_zoom_in",
+      "name_zh": "急推变焦",
+      "name_en": "crash zoom in",
+      "lexicon_key": "冲击变焦",
+      "lexicon_kind": "lens_control",
+      "category": "optical",
+      "axes": [
+        "focal_length_snap_in"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "冲击变焦",
+        "快速变焦推进",
+        "猛推变焦"
+      ],
+      "aliases_en": [
+        "crash zoom in",
+        "snap zoom in"
+      ],
+      "narrative_functions": [
+        "发现",
+        "惊讶",
+        "威胁锁定",
+        "爽点强调"
+      ],
+      "use_when": "需要短促冲击地把注意力砸到人物表情、武器、证物或敌人。",
+      "avoid_when": "严肃情绪铺垫、古典慢节奏、保脸优先镜头。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：冲击变焦；速度=急速冲击；方向=快速变焦推进；终点={CU/物件特写}。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "crash_zoom_out",
+      "name_zh": "急拉变焦",
+      "name_en": "crash zoom out",
+      "lexicon_key": "冲击变焦",
+      "lexicon_kind": "lens_control",
+      "category": "optical",
+      "axes": [
+        "focal_length_snap_out"
+      ],
+      "slots": [
+        "speed",
+        "end_size"
+      ],
+      "aliases_zh": [
+        "快速变焦拉远",
+        "猛拉变焦",
+        "急速拉远"
+      ],
+      "aliases_en": [
+        "crash zoom out",
+        "snap zoom out"
+      ],
+      "narrative_functions": [
+        "危险暴露",
+        "空间突然打开",
+        "荒诞/惊吓反应"
+      ],
+      "use_when": "从局部突然暴露大范围危险、包围、巨物或荒诞反差。",
+      "avoid_when": "需要优雅、克制、稳定读情绪时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：冲击变焦；速度=急速冲击；方向=快速变焦拉远；终点={MS/LS/大环境}。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "rack_focus",
+      "name_zh": "焦点转移",
+      "name_en": "rack focus / focus pull",
+      "lexicon_key": "焦点转移",
+      "lexicon_kind": "focus_control",
+      "category": "optical",
+      "axes": [
+        "focus_plane"
+      ],
+      "slots": [
+        "speed",
+        "from_subject",
+        "to_subject"
+      ],
+      "aliases_zh": [
+        "拉焦",
+        "移焦",
+        "焦点拉移",
+        "前后景转焦"
+      ],
+      "aliases_en": [
+        "rack focus",
+        "focus pull",
+        "pull focus"
+      ],
+      "narrative_functions": [
+        "注意力转移",
+        "前后景关系",
+        "隐藏信息揭示",
+        "心理变化"
+      ],
+      "use_when": "从前景道具转到人物，或从人物转到背后危险/证据。",
+      "avoid_when": "模型无法稳定保持前后景主体，或画面景深不明显时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：焦点转移；速度={缓慢/匀速}；方向=焦点从{前景/人物A}转到{背景/人物B/道具}；机位保持稳定。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "crane_reveal",
+      "name_zh": "摇臂揭示",
+      "name_en": "crane reveal / jib reveal",
+      "lexicon_key": "摇臂揭示",
+      "lexicon_kind": "movement",
+      "category": "camera_position",
+      "axes": [
+        "y_up",
+        "z_or_x"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height",
+        "revealed_subject"
+      ],
+      "aliases_zh": [
+        "摇臂升起揭示",
+        "升降揭示",
+        "吊臂揭示"
+      ],
+      "aliases_en": [
+        "crane reveal",
+        "jib reveal"
+      ],
+      "narrative_functions": [
+        "宏大揭示",
+        "地点建立",
+        "威胁规模",
+        "人物处境"
+      ],
+      "use_when": "从近处人物/物件抬起后揭示完整场景、军阵、城池、巨物。",
+      "avoid_when": "狭小室内或需要保持脸部近景时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：摇臂揭示；速度=缓慢；方向={上升并后拉/上升并侧移}；终点高度=高机位；揭示={场景/威胁/军阵}。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "gimbal_follow",
+      "name_zh": "稳定器跟拍",
+      "name_en": "gimbal tracking shot",
+      "lexicon_key": "稳定器跟拍",
+      "lexicon_kind": "movement_style",
+      "category": "camera_path",
+      "axes": [
+        "subject_relative"
+      ],
+      "slots": [
+        "speed",
+        "direction"
+      ],
+      "aliases_zh": [
+        "稳定跟拍",
+        "平稳跟拍",
+        "云台跟拍"
+      ],
+      "aliases_en": [
+        "gimbal tracking",
+        "stabilized follow",
+        "steadicam follow"
+      ],
+      "narrative_functions": [
+        "商业片质感",
+        "行走对话",
+        "追随",
+        "不晃的代入"
+      ],
+      "use_when": "需要跟着角色移动但不想要手持混乱感，适合走廊、街道、队伍推进。",
+      "avoid_when": "需要失控、慌乱或强纪实感时用手持。",
+      "risk_level": "low",
+      "prompt_template": "镜头运动：稳定器跟拍；速度={缓慢/匀速/快速}；方向={背后跟随/侧向跟随/前方倒退跟拍}；画面稳定低晃动。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "low_tracking",
+      "name_zh": "低机位贴地跟拍",
+      "name_en": "low-angle ground tracking shot",
+      "lexicon_key": "低机位贴地跟拍",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "low_height",
+        "subject_relative"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "贴地跟拍",
+        "低角度跟拍",
+        "低机位追拍"
+      ],
+      "aliases_en": [
+        "low tracking shot",
+        "ground tracking",
+        "low-angle tracking"
+      ],
+      "narrative_functions": [
+        "压迫",
+        "速度",
+        "奔跑",
+        "武器/脚步强调",
+        "战斗临场"
+      ],
+      "use_when": "追脚步、刀尖、车轮、怪物腿部、冲刺路线，强化速度和压迫。",
+      "avoid_when": "必须看清人物脸或复杂上半身动作时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：低机位贴地跟拍；速度={匀速/快速}；方向={跟随脚步/侧向追拍/前方倒退}；终点高度=低机位保持。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "foreground_reveal",
+      "name_zh": "前景遮挡揭示",
+      "name_en": "foreground reveal / push through foreground",
+      "lexicon_key": "前景遮挡揭示",
+      "lexicon_kind": "compound",
+      "category": "camera_path",
+      "axes": [
+        "z_in",
+        "occlusion"
+      ],
+      "slots": [
+        "speed",
+        "foreground_layer",
+        "revealed_subject"
+      ],
+      "aliases_zh": [
+        "穿过前景揭示",
+        "门框揭示",
+        "树枝遮挡揭示",
+        "肩后揭示"
+      ],
+      "aliases_en": [
+        "foreground reveal",
+        "push through foreground",
+        "occlusion reveal"
+      ],
+      "narrative_functions": [
+        "悬念",
+        "偷窥感",
+        "空间层次",
+        "进入场景",
+        "揭示主体"
+      ],
+      "use_when": "从门框、树枝、帘子、肩膀后推进，慢慢揭示人物或危险。",
+      "avoid_when": "AI 容易把遮挡物粘到人物脸/身体上时，改用硬切或固定窥视。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：前景遮挡揭示；速度=缓慢；前景={门框/树枝/肩膀/帘子}；揭示={人物/道具/危险}；遮挡物只在边缘掠过。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "top_down",
+      "name_zh": "顶视俯拍",
+      "name_en": "top-down / bird's-eye shot",
+      "lexicon_key": "顶视俯拍",
+      "lexicon_kind": "camera_viewpoint",
+      "category": "camera_angle",
+      "axes": [
+        "vertical_down"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "end_height"
+      ],
+      "aliases_zh": [
+        "垂直俯拍",
+        "鸟瞰",
+        "上帝视角",
+        "顶拍"
+      ],
+      "aliases_en": [
+        "top-down shot",
+        "bird's-eye view",
+        "overhead shot"
+      ],
+      "narrative_functions": [
+        "阵法几何",
+        "布局",
+        "追逐路线",
+        "孤立感",
+        "空间秩序"
+      ],
+      "use_when": "阵法、棋局、群像站位、追逐路线、人物被空间压住。",
+      "avoid_when": "需要看清脸部表情或眼神交流时。",
+      "risk_level": "medium",
+      "prompt_template": "镜头运动：顶视俯拍；速度={固定/缓慢}；方向={垂直向下/轻微上升}；终点高度={保持高空/略升高}。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    },
+    {
+      "id": "vehicle_tracking",
+      "name_zh": "载具跟拍",
+      "name_en": "vehicle-mounted tracking shot",
+      "lexicon_key": "载具跟拍",
+      "lexicon_kind": "movement",
+      "category": "camera_path",
+      "axes": [
+        "vehicle_relative"
+      ],
+      "slots": [
+        "speed",
+        "direction",
+        "vehicle",
+        "screen_direction"
+      ],
+      "aliases_zh": [
+        "车载跟拍",
+        "载具追拍",
+        "车侧跟拍",
+        "马车跟拍"
+      ],
+      "aliases_en": [
+        "vehicle tracking",
+        "vehicle-mounted shot",
+        "car tracking shot"
+      ],
+      "narrative_functions": [
+        "追逐",
+        "街景移动",
+        "车流",
+        "马车/飞舟/坐骑速度"
+      ],
+      "use_when": "现代车辆、马车、飞舟、坐骑或队伍移动，需要保持载具方向与速度感。",
+      "avoid_when": "载具结构尚未锁定或画面中车轮/缰绳/坐骑接触点不清楚时。",
+      "risk_level": "high",
+      "prompt_template": "镜头运动：载具跟拍；速度={匀速/快速}；方向={车侧/车前倒退/车后追随}；载具={车/马车/飞舟/坐骑}；屏幕方向保持一致。",
+      "media": null,
+      "status": "added_without_visual_reference"
+    }
+  ],
+  "synced_from": "camera manifest snapshot 2026-07-10; copied into this line, no runtime dependency",
+  "synced_at": "2026-07-10"
+}

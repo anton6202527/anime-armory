@@ -23,6 +23,18 @@ def test_character_makeup_prompt_requires_neutral_gray_backdrop() -> None:
     assert "不要雨窗/房间/家具场景" in image_prompt_pack.shared_style_anchor_prompt()
     assert "same studio/rain-window background" not in prompt
     assert "深灰/雨窗影棚背景" not in prompt
+    assert "资产包 `角色库/" in prompt
+    assert "设定库/character_assets" not in prompt
+
+
+def test_character_library_tiers_use_story_weight_and_ten_episode_threshold() -> None:
+    tier = image_prompt_pack.character_library_tier
+
+    assert tier(scope="主角/全篇长线", narrative_tier="核心长线", episode_count=1) == "core_full"
+    assert tier(scope="普通配角", narrative_tier="单集角色", episode_count=10) == "core_full"
+    assert tier(scope="多集复现配角", narrative_tier="单集角色", episode_count=3) == "recurring_standard"
+    assert tier(scope="第1集具名短线角色", narrative_tier="单集角色", episode_count=1) == "named_minimal"
+    assert tier(scope="群像局部", narrative_tier="局部参考", episode_count=12, restricted=True) == "restricted_partial"
 
 
 def test_missing_character_card_gets_project_specific_visual_fallback(tmp_path: Path) -> None:
@@ -859,8 +871,8 @@ def test_existing_asset_bundle_creates_missing_sections(tmp_path: Path) -> None:
         "name": "姜月初",
         "scope": "主角",
         "asset_bundle": {
-            "manifest": "设定库/character_assets/CHAR_01__姜月初/manifest.json",
-            "package_dir": "设定库/character_assets/CHAR_01__姜月初",
+            "manifest": "角色库/CHAR_01__姜月初/manifest.json",
+            "package_dir": "角色库/CHAR_01__姜月初",
         },
     }
 

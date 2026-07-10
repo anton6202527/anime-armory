@@ -497,9 +497,8 @@ def existing_anchor_contract_valid(cont: Dict[str, Any], duration: Any) -> bool:
 
 def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
     """把 plan 注回 storyboard.json 的 continuity.anchors（原子写）；返回写入 Clip 数。
-    default_midframe 模式下同时写 policy.midframe_default=true 和豁免镜的
-    continuity.midframe_exempt_reason（gate 据此强制三帧契约）；关闭模式仅保留为
-    dev/迁移逃生口，正常 n2d 流程不应使用。"""
+    default_midframe 是普通 D0 镜的显式 opt-in；R1/R2/R3 高风险规划始终生效。
+    关闭时保留已有人工锚帧，但不再为普通镜新增 `_mid`。"""
     path = storyboard_path(root, ep)
     sb = load_json(path)
     if not isinstance(sb, dict):
@@ -530,9 +529,10 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
             cont["midframe_exempt_reason"] = exempt_by_index[i]["reason"]
     if default_mode:
         sb.setdefault("policy", {})["midframe_default"] = True
+        sb.setdefault("policy", {})["midframe_default_mode"] = "explicit_opt_in"
     else:
-        # 仅用于 dev/迁移逃生口；正常流程保持 default_mode=true，图片资产仍至少首/中/尾三帧。
         sb.setdefault("policy", {})["midframe_default"] = False
+        sb.setdefault("policy", {})["midframe_default_mode"] = "risk_only"
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(sb, f, ensure_ascii=False, indent=2)
@@ -582,22 +582,21 @@ def render_md(plan: Dict[str, Any]) -> str:
 
 def resolve_default_midframe(force_on: bool, force_off: bool, setting_value: Optional[str],
                              backend_capable: Optional[bool] = None) -> bool:
-    """普通镜 D0 中段锚帧默认开关解析（三帧图片契约）。
+    """普通镜 D0 中段锚帧 opt-in 解析。
 
     R1/R2/R3 高风险锚帧不走这个开关，始终按规则规划。这里仅决定未命中高风险规则的普通镜
-    是否补 `_mid`。正常 n2d 流程一律开启；视频后端能力只决定这些锚帧后续是 native
-    keyframe、split relay、reference/QC，还是需要改路由，不决定图片阶段是否产出。
+    是否补 `_mid`。普通镜只有用户开启且后端可在一次请求中原生消费 3+ 时间轴帧时才补；
+    首尾帧后端的 split relay 不算原生三帧能力。
 
     优先级：
       1. CLI --default-midframe → True；--no-default-midframe → False（dev/临时覆盖）。
-      2. 其余正常流程均 True。`setting_value` 与 `backend_capable` 只留给旧项目/报告兼容；
-         不再用「后端不支持」或「关闭」跳过中段图片。
+      2. 其余按 `setting_value=开启` 且 `backend_capable=True`。
     纯函数·可测。"""
     if force_on:
         return True
     if force_off:
         return False
-    return True
+    return str(setting_value or "").strip() == "开启" and bool(backend_capable)
 
 
 def video_backend_selection(root: str) -> Dict[str, Any]:
@@ -638,12 +637,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = ap.parse_args(argv)
 
     root = os.path.abspath(args.project_root)
-    # 三帧图片契约：R1/R2/R3 强制多锚；普通镜 D0 默认补 _mid。视频后端能力只影响消费计划。
+    # 风险分层：R1/R2/R3 强制多锚；普通镜 D0 仅显式 opt-in 且后端原生支持时补 `_mid`。
     backend_selection = video_backend_selection(root)
     backend_capable = bool(backend_selection["supports_three_plus_frames"])
     default_mid = resolve_default_midframe(
         args.default_midframe, args.no_default_midframe,
-        get_setting(root, "中段锚帧默认", "开启"), backend_capable)
+        get_setting(root, "中段锚帧默认", "关闭"), backend_capable)
     plan = plan_episode(root, args.episode, min_seg=args.min_segment,
                         target_seg=args.target_segment, fight_target=args.fight_target,
                         long_shot_threshold=args.long_shot_threshold,

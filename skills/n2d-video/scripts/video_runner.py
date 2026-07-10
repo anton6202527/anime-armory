@@ -42,6 +42,7 @@ except Exception:  # pragma: no cover
     parse_progress = None  # type: ignore[assignment]
 
 from n2d_handoff import check_identity_handoff
+from video_prompt_compiler import normalize_backend as normalize_prompt_backend, parse_compiled_markdown
 import native_av_sidecar
 import video_qc
 
@@ -548,6 +549,12 @@ def video_shot_split_plan(item: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def _extract_prompt(block: str) -> str:
+    compiled = parse_compiled_markdown(block)
+    if compiled:
+        prompt = str(compiled.get("prompt") or "").strip()
+        if not prompt:
+            raise ValueError("compiled video submit prompt is empty")
+        return prompt
     match = ZH_PROMPT_RE.search(block)
     if match:
         return match.group(1).strip()
@@ -585,6 +592,7 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
         end_image_rel = last.group(1).strip() if last else None
         end_image = (root / end_image_rel).resolve() if end_image_rel and not Path(end_image_rel).is_absolute() else (Path(end_image_rel) if end_image_rel else None)
 
+        compiled = parse_compiled_markdown(block)
         prompt = _extract_prompt(block)
         target = video_target_name(number, heading, image_rel)
         story_duration = _duration_from_heading(heading) or _duration_from_heading(block)
@@ -599,6 +607,15 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
             "story_duration": story_duration,
             "submit_duration": submit_duration(story_duration),
             "prompt_text": prompt,
+            "prompt_source_kind": "compiled_submit_prompt" if compiled else "legacy_zh_prompt",
+            "prompt_compiler": {
+                key: compiled.get(key)
+                for key in (
+                    "kind", "version", "profile_version", "profile", "backend", "mode",
+                    "language", "native_audio_policy", "source_contract_sha256",
+                )
+            } if compiled else None,
+            "negative_prompt": str(compiled.get("negative_prompt") or "") if compiled else "",
             "status": "prepared",
         })
     expected = set(range(start, end + 1))
@@ -726,6 +743,13 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
     items = []
     for item in parse_prompt_pack(root, episode, start, end):
         prompt_text = item.pop("prompt_text")
+        compiler_backend = normalize_prompt_backend((item.get("prompt_compiler") or {}).get("backend"))
+        requested_backend = normalize_prompt_backend(backend)
+        if item.get("prompt_source_kind") == "compiled_submit_prompt" and compiler_backend != requested_backend:
+            raise ValueError(
+                f"{item['clip']} compiled prompt backend={compiler_backend} but prepare requested backend={requested_backend}. "
+                "Update video_model_routes.json and rerun n2d-video prompt_pack.py; do not submit a primary-backend prompt to a different backend."
+            )
         if _requests_native_speech(prompt_text):
             item["require_audio"] = True
             item["force_multimodal"] = True
@@ -736,6 +760,8 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         prompt_file = prompts_dir / f"{item['target'][:-4]}.prompt.txt"
         prompt_file.write_text(prompt_text + "\n", encoding="utf-8")
         item["prompt_file"] = str(prompt_file)
+        item["prepared_prompt_sha256"] = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()
+        item["prepared_prompt_chars"] = len(prompt_text)
 
         num = _clip_number(item)
         anchors_info = anchors_by_clip.get(num) if num is not None else None

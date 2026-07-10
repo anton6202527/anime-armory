@@ -223,7 +223,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_HE_PINGSHENG__常态.png",
@@ -520,17 +520,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
-        "base_dir": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生",
+        "manifest": "角色库/CHAR_HE_PINGSHENG__贺平生/manifest.json",
+        "package_dir": "角色库/CHAR_HE_PINGSHENG__贺平生",
+        "base_dir": "角色库/CHAR_HE_PINGSHENG__贺平生",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/reference",
-          "prompts": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/prompts",
-          "lora": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/lora",
-          "voice": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/voice",
-          "adapters": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/adapters",
-          "qc": "设定库/character_assets/CHAR_HE_PINGSHENG__贺平生/qc"
-        }
+          "reference": "角色库/CHAR_HE_PINGSHENG__贺平生/reference",
+          "prompts": "角色库/CHAR_HE_PINGSHENG__贺平生/prompts",
+          "lora": "角色库/CHAR_HE_PINGSHENG__贺平生/lora",
+          "voice": "角色库/CHAR_HE_PINGSHENG__贺平生/voice",
+          "adapters": "角色库/CHAR_HE_PINGSHENG__贺平生/adapters",
+          "qc": "角色库/CHAR_HE_PINGSHENG__贺平生/qc"
+        },
+        "tier": "core_full"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -547,7 +548,9 @@
           "use_policy": "identity_reference",
           "sha256": "1a528797eb6a1d914297a7ead47fa24547c48ff5e86f6fc161db6271c4e99729"
         }
-      ]
+      ],
+      "library_tier": "core_full",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_ZHANG_LAODA",
@@ -768,7 +771,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_ZHANG_LAODA__常态.png",
@@ -1064,17 +1067,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
-        "base_dir": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大",
+        "manifest": "角色库/CHAR_ZHANG_LAODA__张老大/manifest.json",
+        "package_dir": "角色库/CHAR_ZHANG_LAODA__张老大",
+        "base_dir": "角色库/CHAR_ZHANG_LAODA__张老大",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/reference",
-          "prompts": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/prompts",
-          "lora": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/lora",
-          "voice": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/voice",
-          "adapters": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/adapters",
-          "qc": "设定库/character_assets/CHAR_ZHANG_LAODA__张老大/qc"
-        }
+          "reference": "角色库/CHAR_ZHANG_LAODA__张老大/reference",
+          "prompts": "角色库/CHAR_ZHANG_LAODA__张老大/prompts",
+          "lora": "角色库/CHAR_ZHANG_LAODA__张老大/lora",
+          "voice": "角色库/CHAR_ZHANG_LAODA__张老大/voice",
+          "adapters": "角色库/CHAR_ZHANG_LAODA__张老大/adapters",
+          "qc": "角色库/CHAR_ZHANG_LAODA__张老大/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1082,7 +1086,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "GROUP_SERVANTS",
@@ -1334,17 +1340,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/GROUP_SERVANTS__群杂役/manifest.json",
-        "package_dir": "设定库/character_assets/GROUP_SERVANTS__群杂役",
-        "base_dir": "设定库/character_assets/GROUP_SERVANTS__群杂役",
+        "manifest": "角色库/GROUP_SERVANTS__群杂役/manifest.json",
+        "package_dir": "角色库/GROUP_SERVANTS__群杂役",
+        "base_dir": "角色库/GROUP_SERVANTS__群杂役",
         "sections": {
-          "reference": "设定库/character_assets/GROUP_SERVANTS__群杂役/reference",
-          "prompts": "设定库/character_assets/GROUP_SERVANTS__群杂役/prompts",
-          "lora": "设定库/character_assets/GROUP_SERVANTS__群杂役/lora",
-          "voice": "设定库/character_assets/GROUP_SERVANTS__群杂役/voice",
-          "adapters": "设定库/character_assets/GROUP_SERVANTS__群杂役/adapters",
-          "qc": "设定库/character_assets/GROUP_SERVANTS__群杂役/qc"
-        }
+          "reference": "角色库/GROUP_SERVANTS__群杂役/reference",
+          "prompts": "角色库/GROUP_SERVANTS__群杂役/prompts",
+          "lora": "角色库/GROUP_SERVANTS__群杂役/lora",
+          "voice": "角色库/GROUP_SERVANTS__群杂役/voice",
+          "adapters": "角色库/GROUP_SERVANTS__群杂役/adapters",
+          "qc": "角色库/GROUP_SERVANTS__群杂役/qc"
+        },
+        "tier": "restricted_partial"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1352,7 +1359,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "restricted_partial",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_HAN_LAOSAN",
@@ -1573,7 +1582,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "named_minimal",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_HAN_LAOSAN__常态.png",
@@ -1869,17 +1878,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
-        "base_dir": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三",
+        "manifest": "角色库/CHAR_HAN_LAOSAN__韩老三/manifest.json",
+        "package_dir": "角色库/CHAR_HAN_LAOSAN__韩老三",
+        "base_dir": "角色库/CHAR_HAN_LAOSAN__韩老三",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/reference",
-          "prompts": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/prompts",
-          "lora": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/lora",
-          "voice": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/voice",
-          "adapters": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/adapters",
-          "qc": "设定库/character_assets/CHAR_HAN_LAOSAN__韩老三/qc"
-        }
+          "reference": "角色库/CHAR_HAN_LAOSAN__韩老三/reference",
+          "prompts": "角色库/CHAR_HAN_LAOSAN__韩老三/prompts",
+          "lora": "角色库/CHAR_HAN_LAOSAN__韩老三/lora",
+          "voice": "角色库/CHAR_HAN_LAOSAN__韩老三/voice",
+          "adapters": "角色库/CHAR_HAN_LAOSAN__韩老三/adapters",
+          "qc": "角色库/CHAR_HAN_LAOSAN__韩老三/qc"
+        },
+        "tier": "named_minimal"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -1887,7 +1897,9 @@
         "forms": [
           "常态"
         ]
-      }
+      },
+      "library_tier": "named_minimal",
+      "planned_episode_count": 0
     },
     {
       "id": "CHAR_FEMALE_LEAD",
@@ -2109,7 +2121,7 @@
             ]
           },
           "reference_atlas": {
-            "build_tier": "full_makeup_pack",
+            "build_tier": "core_full",
             "base_views": {
               "front": {
                 "path": "出图/共享/图片/定妆_CHAR_FEMALE_LEAD__常态.png",
@@ -2406,17 +2418,18 @@
         }
       ],
       "asset_bundle": {
-        "manifest": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/manifest.json",
-        "package_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
-        "base_dir": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
+        "manifest": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/manifest.json",
+        "package_dir": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
+        "base_dir": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定",
         "sections": {
-          "reference": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/reference",
-          "prompts": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/prompts",
-          "lora": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/lora",
-          "voice": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/voice",
-          "adapters": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/adapters",
-          "qc": "设定库/character_assets/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/qc"
-        }
+          "reference": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/reference",
+          "prompts": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/prompts",
+          "lora": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/lora",
+          "voice": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/voice",
+          "adapters": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/adapters",
+          "qc": "角色库/CHAR_FEMALE_LEAD__女主_待剧情确认姓名后绑定/qc"
+        },
+        "tier": "core_full"
       },
       "evolution_profile": {
         "mode": "single_anchor",
@@ -2433,7 +2446,9 @@
           "use_policy": "identity_reference",
           "sha256": "52c22b4f7069bbb8ab92fbd4f3b7f84cded24c9a41e96067bf43dad85faf1bc6"
         }
-      ]
+      ],
+      "library_tier": "core_full",
+      "planned_episode_count": 0
     }
   ],
   "notes": "第1集 prompt 阶段身份注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成并回填 self_check/anchor_sha。"

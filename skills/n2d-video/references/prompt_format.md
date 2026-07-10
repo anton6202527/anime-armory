@@ -2,7 +2,7 @@
 
 把 `脚本/第N集/故事板.md` 的 Clip 表派生为**开箱即用**的视频 prompt 文件夹：`出视频/第N集/prompt/`。
 
-> **提交口径**：图生视频的 prompt 不是越长越稳。角色、场景、光位、画风已经由首帧/尾帧锁住；最终提交给后端的中文 prompt 用 `首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止` 收束。详细合同字段留在 Clip 块里供审计与机检，复杂动作靠锚帧、Motion Control、拆 Clip 或实现分解，不靠长段文字硬压。
+> **两层对象**：Clip 块是完整生产合同；`后端编译提交 prompt` 才是模型输入。图生视频已经由首/尾/参考帧锁住视觉，compiler 只抽取主动作、运镜、必要环境响应、节奏/落幅和最短保持语句。路由、身份注册、在场链、接缝、执行配方、Motion Control 与 QC 留在合同/真实请求侧，绝不整段复制进模型文本。权威规则和官方证据见 `行业通用视频Prompt规范.md`。
 
 ---
 
@@ -48,65 +48,30 @@
 - constraints：{服装发型、人物左右站位、轴线方向、光线、天气、道具、背景布局保持一致}
 - negative：{不要换脸、不要换衣、不要新增人物、不要改变场景、不要改变发型、不要生成文字/logo/水印、不要生成原生人声；**表情变化时不要改变脸型/五官比例/眼距/鼻梁/下颌/痣疤（锁脸不锁情）、不要随表情拉伸或重塑脸**}
 
-**视频提交口径**（最终提交给后端时必填）：`首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止`。前文合同字段用于约束与审计，提交 prompt 不把角色卡、场景卡、路由理由整段塞给模型；复杂动作先补锚帧/控制资产/拆 Clip。
+**提交边界**：上面是严格生产合同，下面是 compiler 产物。每个 Clip 只允许一个执行真值；切换 backend 必须重新编译。
 
-### 视频 prompt（中文，目标=即梦/可灵/Seedance）
-\`\`\`
-continuity:
-  start_state: {start_state}
-  action: {action}
-  end_state: {end_state}
-  constraints: {constraints}
-  negative: {negative}
-导演意图：{导演意图，一句话，不给模型重画面，只给它理解运动目的};
-起幅：{起幅};
-落幅：{落幅};
-场面调度：{场面调度，尤其轴线/左右站位/画面重心};
-表演节拍：{表演节拍};
-运动精修约束：{根据 幅度/能量/身体守卫 描述物理层面的动作力度、锁定部位和遮挡规则};
-环境交互约束：{描述动作对光影、粒子、背景物体的物理影响};
-动作编排约束：{高动作镜写 beats/speed_curve/spatial_path/camera_path/readability_beats；打斗写命中帧/接触点/力方向/收势，追逐写屏幕方向/距离曲线/障碍/视差层，飞行写飞行路径/高度曲线/姿态锁/御剑或祥云形态锁；普通镜写“无”};
-专项模板约束：{若有 template_contract，写明本 Clip 必须遵守的模板动作/站位/运镜/负向；普通镜写“无”};
-模型路由约束：{读取 video_model_routes.json；本镜 primary_backend=...，fallback=...，mode=...，native_audio_policy=...，identity_requirement=...；同时读取 execution_recipe，把 frame_inputs/reference_inputs/control_inputs/audio_inputs/fallback 转成真实调用入参；prompt 只使用 primary 后端真实支持的能力，不能混用其它后端专属能力；失败按机器字段 degrade_plan 切 fallback 或执行保真实现分解/拆镜};
-物理交互约束：{若 motion_control.level=required，先读取 motion_control_manifest.json；status=ready 时按 pose_sequence/depth_sequence/instance_masks/contact_map/camera_path/spatial_path/parallax_layers 控制资产生成；status=degrade_only（兼容状态名，含义=保真实现分解）时不直接生成全身复杂接触或长连续高速动作，按 degrade_plan 拆手部特写/反打/释放帧/正反打追逐/起飞巡航机动抵达；禁止只靠文本 prompt 让模型猜两人遮挡、手部归属、武器接触、追逐距离或飞行高度};
-身份锁定约束：{读取 identity_adapter_matrix.json + identity_registry.json；若目标后端 binding ready，则写入 Character ID / Face Lock / reference controls / LoRA trigger 等平台参数；否则回退首帧+尾帧+reference_group；保持 drift_forbidden，避开高危角度};
-近景身份锁定约束：{CU/MCU/反打/说话镜必须优先使用脸部特写/表情参考/expressions；表情按 表情锚 起→止 引用对应情绪定妆图，表情幅度不超本镜封顶（CU≤中、配角CU≤微）；锁脸不锁情——表情变化只动面部肌肉，脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤保持不变；无原生锁时限制为低幅度表情和小角度转头，锁脸型/五官比例/发型发髻/标志配饰/服装配色；表情跨情绪（判为「大」）的镜走首尾双帧或 MCU 保真实现；配角近景不稳则转入 MCU/OTS/侧脸/手部/物件反应镜等保真实现分解};
-原生音画约束：{若 route.native_audio_policy=native_speech：台词+口型由原生音画后端生成，声源归属=画内说话主体，compose_policy=保留原片音轨；否则默认禁止原生人声，audio_intent=ambience/native_sfx 只允许环境声/动作音效，禁止台词/旁白/哼唱，生成后确认无原生人声};
-首帧保持：{只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心；不重定视觉设定，不新增角色卡/场景卡形容};
-人物运动：{角色 A 动作链}；{角色 A 表情变化——按 表情锚 起→止、幅度不超本镜封顶，锁脸不锁情}；
-镜头运动：{推/拉/跟/环绕/固定 + 速度词，如"缓慢推近 0.5x"}；   ← 由"节奏/张力"决定：铺垫=缓慢推/固定，爽点=轻甩/环绕/快推
-情绪节奏：{按时间段写情绪/停顿/张力变化，如 [0-2s] 克制呼吸 [2-5s] 眼神压近 [5-7s] 定住；只描述节奏，不新增视觉设定};
-动态细节：{烛火摇曳 / 晨雾流动 / 衣袂飘动 / 妖气扩散 / 发丝飘动 ...};
-衔接约束：开头承接 continuity.start_state，动作只执行 continuity.action，结尾停在 continuity.end_state，保持 continuity.constraints，避开 continuity.negative，按{转场}服务下一镜；
-禁止：{不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印；非 native_speech 镜不要生成原生人声；native_speech 镜不要生成旁白或额外台词};
-声音约束：{native_speech 镜写“按脚本文本生成本镜台词并口型同步，后期保留原片音轨”；非 native_speech 镜写“无对白、无旁白、不要生成原生人声”；若故事板标声音先行，仅作为后期 n2d-compose 的剪辑意图，不让视频模型自行生成台词};
-（末尾追加平台风格词，参见 platforms.md）
+### 后端编译提交 prompt
+**编译元数据**：`kind=n2d_compiled_video_prompt; version=1; profile_version=...; profile=...; backend=...; mode=...; language=...; native_audio_policy=...; source_contract_sha256=...`
+
+\`\`\`text
+{唯一模型提交文本：主动作 + 镜头 + 可选环境响应 + 节奏 + 落幅 + 最短保持；I2V 不重复角色卡/场景卡/路由/审计/文件路径}
 \`\`\`
 
-### 视频 prompt（英文，目标=安全兜底/Veo/海外）
-\`\`\`
-continuity:
-  start_state: ...
-  action: ...
-  end_state: ...
-  constraints: ...
-  negative: ...
-director intent: ...;
-opening frame state: ...;
-ending frame state: ...;
-blocking: ...;
-performance beats: ...;
-motion refinement: amplitude=..., energy=..., anatomy_guard=...;
-ambient interaction: shadows and particles reacting to action;
-close-up identity lock: for CU/MCU/reaction/speaking shots use face close-up or expression references first; drive expression from start-emotion to end-emotion via the matching expression reference images, capped per shot size (CU<=mid, supporting-character CU<=micro); lock face not emotion — during expression change move facial muscles ONLY, keep face shape / facial proportions / eye spacing / nose bridge / jawline / hairline / moles & scars unchanged; cross-emotion (big) close-ups must use first-last-frame interpolation or downgrade to MCU; if only reference_group fallback is available, keep expression and head motion low-amplitude, preserve facial proportions and signature accessories, and downgrade unstable supporting-character close-ups to MCU/OTS/side-face or hand reaction shots;
-character motion: ...;
-camera motion: dolly in slowly;
-dynamic detail: candle flame flickering, hair strands swaying;
-continuity constraint: begin from continuity.start_state, perform only continuity.action, end on continuity.end_state, preserve continuity.constraints, avoid continuity.negative, designed for ... transition;
-native audio policy: if route.native_audio_policy=native_speech, generate this clip's speech and lip sync natively and preserve the original clip audio in compose; otherwise audio_intent=none by default, and low-risk ambience/native SFX may allow environmental sound effects but no speech, no narration, no humming, no generated native voice;
+profile 支持独立负向字段时可追加：
+
+### 后端负向字段（单独提交，不拼入主 prompt）
+\`\`\`text
+{不希望出现的元素列表}
 \`\`\`
 
-> **中英双 prompt**：中文和英文视频 prompt 默认都写。英文不是只给海外平台；当中文 prompt 被平台安全策略误伤、被自动规避改写，或生成结果明显跑偏时，直接切英文版作为同义兜底。
+后端 profile：
+
+- `zh_motion_first`：Dreamina/Seedance/Kling/Wan/通用；精简中文，必要保持句可内联。
+- `runway_motion_positive`：英文正向运动描述；不生成负向字段，主 prompt 禁止 `no/don't/avoid/不要/禁止` 等负向命令。
+- `veo_cinematography`：英文 subject/action/camera/context/rhythm 口径；不希望出现的元素单列 `negative_prompt`，不用 don't/no 命令句。
+- `english_motion_keyframe`：Luma/Pika；英文动作与 camera motion，首尾/关键帧走真实请求参数。
+
+长度和分句数量是 advisory，不以任意字符阈值直接判废；缺主动作、缺运镜、profile/route 不一致、图生视频无 frame inputs、native_speech 策略冲突是确定性 BLOCK。
 
 ### 平台参数
 - primary_backend / fallback_backends / mode / 模型质量档 / 时长 / 帧率 / 画幅 / image2video 强度 / identity adapter / native_audio_policy
@@ -114,13 +79,13 @@ native audio policy: if route.native_audio_policy=native_speech, generate this c
 ### 检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）
 1. ✅ 首帧 PNG 已落档并与 Clip 编号匹配
 2. ✅ 导演调度字段：导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互 齐全，且都服务剧情，不重定首帧视觉
-3. ✅ 提交五字段：中文 prompt 已逐行写 `首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止`；首帧保持不重定视觉，禁止项覆盖换脸/换衣/改场景/改光位/新增人物道具/生成文字水印/原生人声策略
+3. ✅ compiler：唯一提交 prompt 与 primary_backend/mode/language/native_audio_policy 匹配，I2V 只写运动，不重述整套视觉设定
 4. ✅ ④人物运动：动作链明确、幅度与能量可控、可由首帧自然推出
 5. ✅ 物理守卫：已写明身体守卫约束（重心/锁定/遮挡），预防融化或穿模
 6. ✅ ②镜头运动：推/拉/跟/环绕/固定等词明确，速度词明确，不只写"运镜"
 7. ✅ 动态细节 & 环境交互：烛火/雨丝/衣袂/雾气/灵光等 ≥1 条，且包含动作对环境的物理反馈，不改首帧设定
 8. ✅ ⑦张力：运镜与"节奏/张力"一致（铺垫缓慢、爽点短促、留白定格）
-9. ✅ 衔接设计：入点/出点/转场/轴线方向已从 `故事板.md` 读取，并写进 prompt 的衔接约束
+9. ✅ 衔接设计：入点/出点/转场/轴线方向已从 `故事板.md` 读取，写入完整合同并落实为首尾/锚帧与落幅
 10. ✅ continuity：start_state/action/end_state/constraints/negative 五字段齐全，且已读取上一/下一 Clip 的衔接信息
 11. ✅ 模型路由：已读取 `video_model_routes.json`，本镜有 primary/fallback/mode/rationale/degrade_plan，且平台参数只写目标后端支持的能力
 12. ✅ 执行配方：已读取 route.execution_recipe，真实入参按 frame/reference/control/audio/fallback 配方组织
@@ -166,7 +131,7 @@ native audio policy: if route.native_audio_policy=native_speech, generate this c
 > **基础视觉风格也继承，不重发明**：风格名 / 视觉基调 / 镜头与构图 / 光色策略 / 运动边界 / 风格禁忌来自 `storyboard.json.style_contract` → `出图/第N集/prompt/00_总览.md`「本集基础视觉风格契约」。视频阶段只能把它落实到与首帧相容的运动，不能把首帧改成另一种风格。旧 `cinematic_contract` 仅兼容旧项目。
 > **专项镜头模板也继承，不重发明**：`storyboard.json clips[]` 的 `template/template_contract` 是复杂镜头的动作、空间、证据反应链和关系转折真值源。视频阶段把它转成 `专项镜头模板` 字段、人物运动、镜头运动、衔接约束和保真实现分解方案；不得把打斗/追逐/反打/揭示反应链/公开对质/关系转折/法术/飞行/御兽/坐骑/马车/载具/飞舟/现代车辆/屏幕插入/搜证/尾随潜入/渡劫突破/打坐静修/炼丹炼器/双修合修/接吻近吻/亲密互动/拥抱拉扯/阵法仪式/神魂显化/穿越传送/契约召唤/测灵觉醒/多人同框/群像站位重新自由发挥。
 > **动作编排契约也继承，不靠模型临场编招**：`video_model_routes.json.action_choreography` + `storyboard.json.template_contract` 是打斗/追逐/飞行/坐骑/载具/飞舟/现代车辆/尾随潜入的动作真值源。`fight_exchange` 必须锁一招一击的 attack_path / impact_frame / force_direction / recovery_beat；`chase` 必须锁 screen_direction / distance_curve / obstacle_beats / parallax_layers；`flight` 必须锁 flight_path / altitude_curve / pose_lock / mount_or_cloud_lock；`mount_ride` 必须锁 mount_contact / gait_cycle / harness_lock；`vehicle_ride` 必须锁 vehicle_lock / wheel_rotation / harness_lock；`vessel_flight` 必须锁 vehicle_lock / flight_path / altitude_curve；`road_vehicle` 必须锁 vehicle_lock / wheel_rotation / driver_control_lock / lane_lock / traffic_flow；`stealth_stalk` 必须锁 distance_curve / occlusion_layers / light_shadow_lock / reveal_or_hide_beat。视频 prompt 不得只写“精彩打斗/高速追逐/腾云驾雾/骑兽狂奔/马车疾驰/飞舟掠空/车流疾驰/暗处尾随”，必须写成可读节拍、速度曲线、空间路径、镜头路径和保真实现分解方案。
-> **模型路由也继承，不临场乱选**：`video_model_routes.json` 是视频模型选择真值源。默认 `视频模型路由=自动按镜头路由`，打斗/追逐/对话反打/真相揭示/公开对质/关系转折/飞行/空镜/法术爆发/渡劫突破/打坐静修/炼丹炼器/双修合修/接吻近吻/亲密互动/拥抱拉扯/多人同框/群像站位按模型能力选 primary/fallback；`生视频模型` 只做普通镜/兜底，`生视频渠道` 只决定实际调用入口。逐 Clip prompt 必须把路由表转成 `模型路由` 字段、`执行配方 / Execution Recipe` 字段、中文 prompt 的 `模型路由约束` 和平台参数，不得把不同后端专属能力混写。
+> **模型路由也继承，不临场乱选**：`video_model_routes.json` 是视频模型选择真值源。默认 `视频模型路由=自动按镜头路由`，打斗/追逐/对话反打/真相揭示/公开对质/关系转折/飞行/空镜/法术爆发/渡劫突破/打坐静修/炼丹炼器/双修合修/接吻近吻/亲密互动/拥抱拉扯/多人同框/群像站位按模型能力选 primary/fallback；`生视频模型` 只做普通镜/兜底，`生视频渠道` 只决定实际调用入口。完整合同必须含 `模型路由` 与 `执行配方 / Execution Recipe`；compiler 只用 primary backend 的 profile 生成提交文本。切 fallback 后重新编译，不得混写不同后端专属能力。
 > **Motion Control 也继承，不靠文本猜物理**：`video_model_routes.json.motion_control` 是复杂动作/物理交互的控制真值源。打斗命中、追逐、飞行、御兽/坐骑、马车/载具、飞舟/御物、现代车辆/车流、尾随/潜入、双修、接吻/近吻、拥抱、抓腕、拉扯、近距离接触必须有 `motion_control_manifest.json`；ready 才能直接走 pose/depth/instance/contact/camera_path/spatial_path/parallax_layers 控制生成；degrade_only 是兼容状态名，含义=保真实现分解，必须拆成手部特写、反打、释放帧、正反打追逐、坐骑特写/骑手反应、轮子/马蹄/车内反应、轮胎/后视镜/驾驶员手/暗处脚步/门缝视线、背影能量循环/光雾淡出、近吻停顿/额头吻/脸颊吻/错肩，或起飞/巡航/机动/抵达等可控短镜。OpenPose/DWPose 只锁姿态，遮挡顺序和身体归属还要靠 depth/instance masks/contact_map；追逐/飞行/御兽/载具/现代车辆/尾随潜入还要靠 camera_path、spatial_path、parallax_layers、mount_contact/gait_cycle/vehicle_lock/wheel_rotation/harness_lock/lane_lock/occlusion_layers/light_shadow_lock，双修还要锁 `adult_consent_lock`、`non_explicit_boundary`、`paired_posture_lock`、`energy_circulation`，接吻还要锁 `age_context_lock`、`consent_lock`、`face_angle_lock`、`contact_or_near_contact_frame`，不能只让文本 prompt 猜速度、高度、车道、遮挡和接触关系。
 > **资产身份注册层也继承，不重发明**：`出图/共享/identity_registry.json` 是角色/形态身份真值源，`生产数据/identity_adapter_matrix.json` 是可执行视图。视频阶段先读 matrix 确定目标后端是 Character ID / Face Lock / reference controls / LoRA / reference_group fallback，再回 registry 取 `reference_group`、`angle_policy` 和 `drift_forbidden`；不能在视频 prompt 现场凭记忆写临时 ID。
 > **近景身份锁定也继承，不靠泛化锚点硬扛**：CU/MCU/反打/说话镜要把 registry 的脸部特写、表情参考、正侧面、半身参考拆成可执行约束；尤其配角近景必须显式锁脸型、五官比例、发型发髻、标志配饰和服装配色。若目标后端只有 fallback reference_group，没有原生 Face Lock/Character ID/reference controls，就降低表情、张嘴、转头和运镜幅度；配角连续脸漂时必须转入 MCU/OTS/侧脸/手部或物件反应镜等保真实现分解，而不是继续加泛化形容词。
@@ -206,15 +171,15 @@ native audio policy: if route.native_audio_policy=native_speech, generate this c
 | 动作力度 / 重心 / 遮挡风险 | "运动精修"；明确 幅度/能量/身体守卫，预防融化穿模 |
 | 动作对环境的影响 | "环境交互"；描述 粒子/光影/物理反馈 |
 | `template/template_contract`（复杂镜头） | "专项镜头模板"字段 + 人物运动/镜头运动/衔接约束/保真实现分解方案；不从零写复杂动作 |
-| `video_model_routes.json.action_choreography` + `template_contract`（高动作编排） | "动作编排契约 / Action Choreography"字段 + 中文 prompt 的"动作编排约束" + 生成后动作编排自检；打斗/追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入必须写速度曲线、空间路径、镜头路径、可读性节拍、`degrade_plan` 和专属字段 |
-| `video_model_routes.json`（模型适配层） | "模型路由"字段 + "执行配方 / Execution Recipe"字段 + 中文 prompt 的"模型路由约束" + 平台参数里的 primary/fallback/mode/identity adapter/native_audio_policy；不固定一个视频模型，执行层按 execution_recipe 组织 frame/reference/control/audio 入参 |
-| `video_model_routes.json.motion_control` + `control/Clip_XX/motion_control_manifest.json`（复杂动作/物理交互） | "Motion Control / 物理交互控制"字段 + 中文 prompt 的"物理交互约束" + 生成后 FeatureMelting/路径漂移自检；ready 走控制资产，degrade_only（兼容状态名）走保真实现分解/拆镜 |
-| `identity_adapter_matrix.json` + `identity_registry.json`（角色/形态） | "角色身份注册层"字段 + 中文 prompt 的"身份锁定约束" + 平台参数里的 Character ID/Face Lock/reference controls/LoRA；无注册则 fallback reference_group |
-| CU/MCU/反打/说话镜的配角身份风险 | "近景/反打身份锁定"字段 + 中文 prompt 的"近景身份锁定约束" + 总览「本集近景身份风险表」；脸部特写/表情参考不足时转入 MCU/OTS/侧脸/手部或物件反应镜等保真实现分解 |
+| `video_model_routes.json.action_choreography` + `template_contract`（高动作编排） | 完整合同的"动作编排契约 / Action Choreography" + 真实锚帧/控制输入 + 生成后动作编排自检；compiler 只抽取当前物理 video_shot 的主动作、空间/速度可读节点和运镜，不复制整套字段 |
+| `video_model_routes.json`（模型适配层） | 完整合同的"模型路由" + "执行配方 / Execution Recipe"；compiler metadata 固化 primary backend/mode/profile，runner 按 execution_recipe 组织 frame/reference/control/audio 入参 |
+| `video_model_routes.json.motion_control` + `control/Clip_XX/motion_control_manifest.json`（复杂动作/物理交互） | 完整合同的"Motion Control / 物理交互控制" + runner 真实 control inputs + 生成后 FeatureMelting/路径漂移自检；控制资产不转抄成冗长模型文本 |
+| `identity_adapter_matrix.json` + `identity_registry.json`（角色/形态） | 完整合同的"角色身份注册层" + runner 的 Character ID/Face Lock/reference controls/LoRA/reference_group 入参；I2V prompt 只保留最短身份稳定句 |
+| CU/MCU/反打/说话镜的配角身份风险 | 完整合同的"近景/反打身份锁定" + 同源近景/expressions 参考输入 + 总览风险表；脸部参考不足时转入 MCU/OTS/侧脸/手部或物件反应镜，不用长 prompt 硬扛 |
 | 近景表情从起到止的跨度（哭/笑/怒/惊） | "近景/反打身份锁定"的 表情锚/表情幅度/锁脸不锁情 三子字段 + 总览风险表「表情跨度」列；表情幅度=大的近景走「近景大表情变化类 Clip」首尾双帧（`mode=frames2video`，首=起表情、尾=止表情）或 MCU 保真实现；尾帧表情图来自 `identity_registry.reference_group.expressions` 或 `n2d-image` 出的 `镜头N_expr_end.png` |
-| `视频原生音轨` 选择点 / route.native_audio_policy / 低风险声音意图 | "原生音画策略"字段 + 中文 prompt 的"原生音画约束" + `00_总览.md`「原生音画 opt-in / native_speech 清单」；compose 阶段按 `丢弃/低音量混入环境声/保留原片音轨` 处理 |
+| `视频原生音轨` 选择点 / route.native_audio_policy / 低风险声音意图 | 完整合同的"原生音画策略" + compiler metadata/audio 句 + `00_总览.md` opt-in 清单；native_speech 只允许已登记画内台词，compose 按 `丢弃/低音量混入环境声/保留原片音轨` 处理 |
 | **节奏注记**（铺垫/加速/爽点/留白） | 标题"节奏"+ 决定运镜速度（铺垫=缓慢/固定，爽点=快推/轻甩，留白=固定定格） |
-| **衔接设计**（入点/出点/转场/连贯性） | "衔接设计"块 + prompt 里的"衔接约束"；决定是否要尾帧、空镜缓冲、按场景分批或后期 J-cut |
+| **衔接设计**（入点/出点/转场/连贯性） | 完整合同的"衔接设计" + 首尾/锚帧输入；compiler 只保留本镜落幅，决定是否要尾帧、空镜缓冲、按场景分批或后期 J-cut |
 | 上一 Clip 的出点/下一 Clip 的入点 | `continuity.start_state` / `continuity.end_state`；自动读取相邻 Clip，缺失时按首帧、尾帧、视线方向、动作完成前后一拍推断 |
 | 分镜 N 的镜头·景别/机位/运镜 | "镜头运动"行（多分镜则按顺序拼成镜头运动链）|
 | 分镜 N 的人物动作 | `continuity.action` + "人物运动"行；只保留一个主动作链，避免模型额外发挥 |

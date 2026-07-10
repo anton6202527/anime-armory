@@ -5,7 +5,7 @@
   "manifest_id": "7f89b0a19c54f285",
   "records": [
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip01_first.png|出图/第1集/图片/Clip01_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip01_first.png|出图/第1集/图片/Clip01_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
       "asset": "出图/第1集/图片/Clip01_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -44,7 +44,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
       "asset": "出图/第1集/图片/Clip01_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -83,7 +83,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip01_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip01_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
       "asset": "出图/第1集/图片/Clip01_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -122,7 +122,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip02_first.png|出图/第1集/图片/Clip02_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip02_first.png|出图/第1集/图片/Clip02_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip02_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -161,7 +161,7 @@
       }
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip02_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -200,7 +200,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip02_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip02_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip02_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -239,7 +239,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip03_first.png|出图/第1集/图片/Clip03_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip03_first.png|出图/第1集/图片/Clip03_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
       "asset": "出图/第1集/图片/Clip03_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -278,7 +278,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
       "asset": "出图/第1集/图片/Clip03_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -317,7 +317,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip03_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip03_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
       "asset": "出图/第1集/图片/Clip03_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -356,7 +356,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip04_first.png|出图/第1集/图片/Clip04_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip04_first.png|出图/第1集/图片/Clip04_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip04_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -395,7 +395,7 @@
       }
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip04_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -434,7 +434,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip04_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip04_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip04_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -473,7 +473,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip05_first.png|出图/第1集/图片/Clip05_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip05_first.png|出图/第1集/图片/Clip05_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip05_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -512,7 +512,7 @@
       }
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip05_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -551,7 +551,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip05_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip05_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip05_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -590,7 +590,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip06_first.png|出图/第1集/图片/Clip06_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip06_first.png|出图/第1集/图片/Clip06_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip06_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -657,7 +657,7 @@
       "trace": {}
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip06_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -696,7 +696,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip06_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip06_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_特效_VFX_虎妖黑血妖气.png",
       "asset": "出图/第1集/图片/Clip06_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -763,7 +763,7 @@
       "trace": {}
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip07_first.png|出图/第1集/图片/Clip07_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip07_first.png|出图/第1集/图片/Clip07_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip07_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -802,7 +802,7 @@
       }
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip07_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -841,7 +841,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip07_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip07_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip07_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -880,7 +880,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip08_first.png|出图/第1集/图片/Clip08_mid.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip08_first.png|出图/第1集/图片/Clip08_mid.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip08_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -919,7 +919,7 @@
       }
     },
     {
-      "actual_image_inputs": "设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip08_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -958,7 +958,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip08_first.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip08_first.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png",
       "asset": "出图/第1集/图片/Clip08_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -997,7 +997,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip09_first.png|出图/第1集/图片/Clip09_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip09_first.png|出图/第1集/图片/Clip09_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png",
       "asset": "出图/第1集/图片/Clip09_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1036,7 +1036,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
       "asset": "出图/第1集/图片/Clip09_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1075,7 +1075,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip09_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip09_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png",
       "asset": "出图/第1集/图片/Clip09_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1114,7 +1114,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip10_first.png|出图/第1集/图片/Clip10_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip10_first.png|出图/第1集/图片/Clip10_mid.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png",
       "asset": "出图/第1集/图片/Clip10_end.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1153,7 +1153,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
+      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_背面.png",
       "asset": "出图/第1集/图片/Clip10_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1192,7 +1192,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/第1集/图片/Clip10_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
+      "actual_image_inputs": "出图/第1集/图片/Clip10_first.png|出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_45度.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_侧面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_三视图.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_三视图.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_背面.png",
       "asset": "出图/第1集/图片/Clip10_mid.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",
@@ -1231,7 +1231,7 @@
       }
     },
     {
-      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|设定库/character_assets/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
+      "actual_image_inputs": "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png|出图/共享/图片/定妆_武器_横刀.png|出图/共享/图片/定妆_特效_百妖谱金色古卷面板.png|出图/共享/图片/定妆_场景_荒野尸骸战场.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_脸部特写.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_脸部特写.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_脸部特写.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_半身.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_半身.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_半身.png|角色库/CHAR_01__姜月初/reference/user_face_body_ref_01_clean.jpg|角色库/CHAR_01__姜月初/reference/user_face_body_ref_02_clean.jpg|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_正面.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_克制.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_表情_震动.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_正面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_克制.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_表情_震动.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_正面.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_克制.png|出图/共享/图片/定妆_CHAR_02__濒死战损态_表情_震动.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_45度.png|出图/共享/图片/定妆_CHAR_01__囚犯初醒态_侧面.png|出图/共享/图片/定妆_CHAR_03__诈死复苏态_45度.png",
       "asset": "出图/第1集/图片/Clip11_first.png",
       "backend_version": "codex-cli 0.142.4",
       "capability_evidence_id": "生产数据/image_backend_capabilities/codex.json#bbbd4ea62bf4",

@@ -146,6 +146,13 @@ function savedOrAutoPosition(
   return saved;
 }
 
+function isEditableShortcutTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  const tagName = target.tagName.toLowerCase();
+  return tagName === "input" || tagName === "textarea" || tagName === "select";
+}
+
 function clipPromptTooltip(clip: CanvasClip): string {
   return [
     clip.number != null ? `${clip.number}. ${clip.label}` : clip.label,
@@ -314,7 +321,7 @@ function ClipEditDialog(props: {
       <form className="modal canvas-edit-modal" onClick={(e) => e.stopPropagation()} onSubmit={save}>
         <div className="modal-head">
           <h2>{t("canvas.editTitle")}</h2>
-          <button type="button" className="modal-close" title={t("common.close")} onClick={onClose}>×</button>
+          <button type="button" className="modal-close" aria-label={t("common.close")} onClick={onClose}>×</button>
         </div>
         <div className="canvas-edit-body">
           {loading ? (
@@ -396,16 +403,94 @@ function CanvasControlDock(props: {
   const { t } = useI18n();
   const flow = useReactFlow();
   const viewport = useViewport();
-  const zoom = Math.max(0.1, Math.min(1.6, viewport.zoom));
-  const zoomLabel = `${Math.round(zoom * 100)}%`;
+  const dockRef = useRef<HTMLDivElement>(null);
+  const [zoomMenuOpen, setZoomMenuOpen] = useState(false);
+  const [zoomDraft, setZoomDraft] = useState("");
+  const zoom = Math.max(0.1, Math.min(8, viewport.zoom));
+  const zoomPercent = Math.round(zoom * 100);
+  const zoomLabel = `${zoomPercent}%`;
+  const shortcutMod = /Mac|iPhone|iPad|iPod/.test(window.navigator.platform) ? "⌘" : "Ctrl";
 
-  function setZoom(nextZoom: number) {
-    flow.setViewport({ x: viewport.x, y: viewport.y, zoom: nextZoom }, { duration: 120 });
+  const setZoom = useCallback((nextZoom: number) => {
+    const bounded = Math.max(0.1, Math.min(8, nextZoom));
+    flow.setViewport({ x: viewport.x, y: viewport.y, zoom: bounded }, { duration: 120 });
+  }, [flow, viewport.x, viewport.y]);
+
+  function openZoomMenu() {
+    setZoomDraft(String(zoomPercent));
+    setZoomMenuOpen(true);
   }
+
+  function applyZoomDraft() {
+    const value = Number(zoomDraft.replace("%", "").trim());
+    if (!Number.isFinite(value)) {
+      setZoomDraft(String(zoomPercent));
+      return;
+    }
+    setZoom(value / 100);
+  }
+
+  const fitScreen = useCallback(() => {
+    flow.fitView({ padding: 0.18, duration: 220 });
+    setZoomMenuOpen(false);
+  }, [flow]);
+
+  function zoomTo(percent: number) {
+    setZoom(percent / 100);
+    setZoomDraft(String(percent));
+    setZoomMenuOpen(false);
+  }
+
+  useEffect(() => {
+    if (!zoomMenuOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const node = dockRef.current;
+      if (node && event.target instanceof Node && !node.contains(event.target)) {
+        setZoomMenuOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setZoomMenuOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [zoomMenuOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.altKey || isEditableShortcutTarget(event.target)) return;
+      const key = event.key;
+      if (key === "+" || key === "=") {
+        event.preventDefault();
+        flow.zoomIn({ duration: 120 });
+      } else if (key === "-" || key === "_") {
+        event.preventDefault();
+        flow.zoomOut({ duration: 120 });
+      } else if (key === "0") {
+        event.preventDefault();
+        fitScreen();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [fitScreen, flow]);
 
   return (
     <Panel position="bottom-left" className="canvas-control-dock">
-      <div className="canvas-control-row">
+      <div className="canvas-control-row" ref={dockRef}>
+        <button
+          type="button"
+          className="canvas-control-btn"
+          title={t("canvas.resetLayout")}
+          aria-label={t("canvas.resetLayout")}
+          onClick={onResetLayout}
+        >
+          <Codicon name="refresh" />
+        </button>
         <button
           type="button"
           className={"canvas-control-btn" + (miniMapOpen ? " active" : "")}
@@ -418,53 +503,56 @@ function CanvasControlDock(props: {
         </button>
         <button
           type="button"
-          className="canvas-control-btn"
-          title={t("canvas.fitView")}
-          aria-label={t("canvas.fitView")}
-          onClick={() => flow.fitView({ padding: 0.18, duration: 220 })}
-        >
-          <Codicon name="screenFull" />
-        </button>
-        <button
-          type="button"
-          className="canvas-control-btn"
-          title={t("canvas.resetLayout")}
-          aria-label={t("canvas.resetLayout")}
-          onClick={onResetLayout}
-        >
-          <Codicon name="refresh" />
-        </button>
-      </div>
-      <div className="canvas-zoom-control">
-        <button
-          type="button"
-          className="canvas-control-btn"
-          title={t("canvas.zoomOut")}
-          aria-label={t("canvas.zoomOut")}
-          onClick={() => flow.zoomOut({ duration: 120 })}
-        >
-          <Codicon name="zoomOut" />
-        </button>
-        <input
-          className="canvas-zoom-range"
-          type="range"
-          min="0.2"
-          max="1.4"
-          step="0.05"
-          value={zoom}
+          className={"canvas-zoom-trigger" + (zoomMenuOpen ? " active" : "")}
           aria-label={t("canvas.zoom")}
-          onChange={(event) => setZoom(Number(event.target.value))}
-        />
-        <button
-          type="button"
-          className="canvas-control-btn"
-          title={t("canvas.zoomIn")}
-          aria-label={t("canvas.zoomIn")}
-          onClick={() => flow.zoomIn({ duration: 120 })}
+          aria-expanded={zoomMenuOpen}
+          onClick={() => (zoomMenuOpen ? setZoomMenuOpen(false) : openZoomMenu())}
         >
-          <Codicon name="zoomIn" />
+          {zoomLabel}
         </button>
-        <span className="canvas-zoom-value">{zoomLabel}</span>
+        {zoomMenuOpen && (
+          <div className="canvas-zoom-menu" role="menu" onPointerDown={(event) => event.stopPropagation()}>
+            <label className="canvas-zoom-input-wrap">
+              <input
+                value={zoomDraft}
+                inputMode="numeric"
+                aria-label={t("canvas.zoomPercent")}
+                onChange={(event) => setZoomDraft(event.target.value)}
+                onBlur={applyZoomDraft}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    applyZoomDraft();
+                    setZoomMenuOpen(false);
+                  }
+                }}
+              />
+              <span>%</span>
+            </label>
+            <button type="button" className="canvas-zoom-menu-item" onClick={() => flow.zoomIn({ duration: 120 })}>
+              <span>{t("canvas.zoomInShort")}</span>
+              <kbd>{shortcutMod}</kbd><kbd>+</kbd>
+            </button>
+            <button type="button" className="canvas-zoom-menu-item" onClick={() => flow.zoomOut({ duration: 120 })}>
+              <span>{t("canvas.zoomOutShort")}</span>
+              <kbd>{shortcutMod}</kbd><kbd>-</kbd>
+            </button>
+            <button type="button" className="canvas-zoom-menu-item" onClick={fitScreen}>
+              <span>{t("canvas.fitScreen")}</span>
+              <kbd>{shortcutMod}</kbd><kbd>0</kbd>
+            </button>
+            <div className="canvas-zoom-menu-divider" />
+            {[50, 100, 800].map((percent) => (
+              <button
+                key={percent}
+                type="button"
+                className="canvas-zoom-menu-item"
+                onClick={() => zoomTo(percent)}
+              >
+                <span>{t("canvas.zoomTo", { percent })}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </Panel>
   );
@@ -544,41 +632,6 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
     return [...assetEdges, ...clipVideoEdges];
   }, [assetImages, canvas, hasVideoLane]);
 
-  const laneGuides = useMemo(() => [
-    {
-      id: "shot",
-      label: t("canvas.shotLane"),
-      position: { x: LANE_X.shot, y: -72 },
-      meta: [t("canvas.shotCount", { count: canvas?.clips.length ?? 0 })],
-    },
-    ...(hasVideoLane ? [{
-      id: "video",
-      label: t("canvas.videoLane"),
-      position: { x: LANE_X.video, y: -72 },
-      meta: [t("canvas.videoCount", { count: canvas?.clips.filter((clip) => clip.video_exists).length ?? 0 })],
-    }] : []),
-  ].map((guide) => ({
-      id: `lane:${guide.id}`,
-      type: "clip",
-      position: guide.position,
-      selectable: false,
-      draggable: false,
-      data: {
-        id: `lane:${guide.id}`,
-        label: guide.label,
-        first_frame_exists: false,
-        video_exists: false,
-        frames: [],
-        qa: [],
-        qa_blocks: 0,
-        qa_warnings: 0,
-        qa_infos: 0,
-        variant: "lane",
-        laneMeta: guide.meta,
-        promptTooltip: [guide.label, ...guide.meta].join("\n"),
-      } as unknown as Record<string, unknown>,
-    })), [canvas?.clips, hasVideoLane, t]);
-
   const flowNodes = useMemo(() => {
     if (!canvas) return [] as Node[];
     const rowOffsets = clipRowOffsets(canvas.clips);
@@ -639,8 +692,8 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
           } satisfies Node;
         })
       : [];
-    return [...laneGuides, ...assetAnchorNodes, ...frameNodes, ...videoNodes];
-  }, [assetImages, canvas, hasVideoLane, laneGuides, layout, refreshKey, root.path]);
+    return [...assetAnchorNodes, ...frameNodes, ...videoNodes];
+  }, [assetImages, canvas, hasVideoLane, layout, refreshKey, root.path]);
 
   useEffect(() => {
     let alive = true;
@@ -732,9 +785,11 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
       return { ...node, position: positionForNode(node.id, rowOffsets[i] / ROW_H) };
     });
     setLayout(new Map(next.map((node) => [node.id, { x: node.position.x, y: node.position.y }])));
+    nodesRef.current = next;
     setNodes(next);
     persistLayout(next);
-  }, [canvas, persistLayout, setNodes]);
+    fitCanvasView(220);
+  }, [canvas, fitCanvasView, persistLayout, setNodes]);
 
   const onSavedClip = useCallback((saved: ClipEditData) => {
     setNodes((current) => current.map((node) => {
@@ -780,7 +835,7 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
           if (pendingFitRef.current) fitCanvasView(0);
         }}
         minZoom={0.1}
-        maxZoom={1.6}
+        maxZoom={8}
         onlyRenderVisibleElements
         proOptions={{ hideAttribution: true }}
       >
@@ -794,9 +849,9 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
             maskColor="rgba(11,14,20,.7)"
             nodeColor={(node) => {
               if (node.id.startsWith("asset:")) return "transparent";
-              if (node.id.startsWith("video:")) return "#3b4f7b";
-              if (node.id.startsWith("frame:") || node.id.startsWith("shot:")) return "#28666a";
-              return "#2a3450";
+              if (node.id.startsWith("video:")) return "#6b6b6b";
+              if (node.id.startsWith("frame:") || node.id.startsWith("shot:")) return "#575757";
+              return "#505050";
             }}
           />
         )}

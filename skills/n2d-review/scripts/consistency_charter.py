@@ -135,8 +135,10 @@ CHARTER: Dict[str, Dict[str, Any]] = {
         "may_be_profile_gated": False, "may_be_opt_in": False, "review_status": "stable",
         "rationale": "结构校验(缺/kind错/空/重复)+ 核心角色 performance_signature + 标志配饰 signature_equipment "
                      "全部无条件 BLOCK（2026-06-27 用户裁决：performance_signature/signature_equipment 从 production-only "
-                     "拉平到 demo·B11）。四视图 PNG 文件级存在性由 image 块 _require_real_refs（本集有逐镜帧后）强制。",
-        "decided": "2026-06-27",
+                     "拉平到 demo·B11）。2026-07-10 用户裁决把角色资产生产深度改为 tier-aware：core_full 保留完整视角硬闸，"
+                     "recurring_standard/named_minimal 只对本档与本镜实际需要的 ready 参考硬闸；这不是按 demo/profile 降级，"
+                     "而是显式内容档位，所有档位仍无条件 BLOCK 缺失的本档必需项。",
+        "decided": "2026-07-10",
     },
 
     # ── 第二批拉平（2026-06-27 用户裁决"默认全 False·demo 也挡·C4 豁免也堵死"）──────────────

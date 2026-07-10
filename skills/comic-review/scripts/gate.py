@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime
+import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -38,6 +40,18 @@ try:
     from image_backend_adapter import resolve_capabilities
 except Exception:  # pragma: no cover
     resolve_capabilities = None
+try:
+    from comic_image_prompt_compiler import (
+        KIND as IMAGE_PROMPT_COMPILER_KIND,
+        VERSION as IMAGE_PROMPT_COMPILER_VERSION,
+        lint as lint_image_submit_prompt,
+        normalize_backend as normalize_image_prompt_backend,
+    )
+except Exception:  # pragma: no cover
+    IMAGE_PROMPT_COMPILER_KIND = ""
+    IMAGE_PROMPT_COMPILER_VERSION = 0
+    lint_image_submit_prompt = None
+    normalize_image_prompt_backend = None
 try:
     from platform_profiles import profile_for_platform, validate_manifest as validate_platform_manifest
 except Exception:  # pragma: no cover
@@ -740,6 +754,52 @@ def check_backend(root: Path, jobs: dict[str, Any], findings: list[dict[str, Any
         )
 
 
+def check_prompt_compiler(jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    artifact = f"出图/{jobs.get('chapter', '')}/prompt/panel_jobs.json"
+    if lint_image_submit_prompt is None or normalize_image_prompt_backend is None:
+        add(findings, "block", "prompt_compiler_unavailable", artifact, "comic image prompt compiler 不可用。", "image", "修复 skills/comic/_lib/comic_image_prompt_compiler.py。")
+        return
+    if jobs.get("schema_version") != 2:
+        add(findings, "block", "panel_jobs_schema_legacy", artifact, "panel_jobs 不是 compiler-aware schema v2。", "image", "重跑 comic-image/scripts/build_panel_jobs.py。")
+    expected_backend = f"{jobs.get('model', '')} {jobs.get('channel', '')}"
+    for job in jobs.get("jobs") or []:
+        if not isinstance(job, dict):
+            continue
+        pid = str(job.get("panel_id") or "unknown")
+        compiler = job.get("prompt_compiler") if isinstance(job.get("prompt_compiler"), dict) else {}
+        payload = {
+            **compiler,
+            "prompt": str(job.get("submit_prompt") or ""),
+            "negative_prompt": str(job.get("negative_prompt") or ""),
+            "source_contract_sha256": str(job.get("source_contract_sha256") or ""),
+        }
+        errors: list[str] = []
+        warnings: list[str] = []
+        if not job.get("production_contract_prompt") or not job.get("production_negative_contract"):
+            errors.append("missing_full_production_contract")
+        if job.get("prompt_source_kind") != "compiled_submit_prompt":
+            errors.append("prompt_source_kind_invalid")
+        if compiler.get("kind") != IMAGE_PROMPT_COMPILER_KIND or compiler.get("version") != IMAGE_PROMPT_COMPILER_VERSION:
+            errors.append("prompt_compiler_incompatible")
+        if str(job.get("prompt") or "") != str(job.get("submit_prompt") or ""):
+            errors.append("prompt_alias_mismatch")
+        source_hash = str(job.get("source_contract_sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
+            errors.append("source_contract_hash_invalid")
+        submit = str(job.get("submit_prompt") or "")
+        if str(job.get("submit_prompt_sha256") or "") != hashlib.sha256(submit.encode("utf-8")).hexdigest():
+            errors.append("submit_prompt_hash_mismatch")
+        if normalize_image_prompt_backend(compiler.get("backend")) != normalize_image_prompt_backend(expected_backend):
+            errors.append("prompt_backend_mismatch")
+        lint_result = lint_image_submit_prompt(payload)
+        errors.extend(lint_result["errors"])
+        warnings.extend(lint_result["warnings"])
+        for code in errors:
+            add(findings, "block", "compiled_prompt_invalid", artifact, f"{pid}: {code}", "image", "重建 panel_jobs；不要手改 compiler 块或把完整合同当提交 prompt。")
+        for code in warnings:
+            add(findings, "warn", "compiled_prompt_advisory", artifact, f"{pid}: {code}", "image", "精简本格可见画面描述后重建 panel_jobs。")
+
+
 def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
     post_qc_acceptance = load_panel_post_qc_acceptance(root, chapter)
     for job in jobs.get("jobs") or []:
@@ -826,6 +886,7 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     jobs = load_json(paths["panel_jobs"], {})
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
+        check_prompt_compiler(jobs, findings)
     if isinstance(panel_script, dict) and isinstance(layout, dict) and isinstance(jobs, dict):
         check_traditional_manga_contract(root, chapter, panel_script, layout, jobs, findings)
     report = refresh_identity_report(root, chapter, findings, no_refresh=no_refresh)

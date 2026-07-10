@@ -16,6 +16,7 @@ if str(LIB) not in sys.path:
 
 from n2d_contract import stage_for_progress_column  # noqa: E402
 from n2d_route import parse_progress, stage_of  # noqa: E402
+from skill_snapshot import artifact_fingerprint  # noqa: E402
 
 
 FIXTURES = REPO / "tests" / "fixtures" / "n2d_golden_projects"
@@ -29,6 +30,10 @@ spec.loader.exec_module(production_readiness)
 @pytest.fixture(autouse=True)
 def _stable_ffprobe(monkeypatch):
     monkeypatch.setattr(production_readiness.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
+    # Golden release fixtures exercise project evidence, not the wall-clock age of
+    # repository-wide backend candidate snapshots. Keep that orthogonal audit in
+    # freshness.py's own tests so this suite stays deterministic over time.
+    monkeypatch.setattr(production_readiness, "run_freshness_checks", lambda root: [])
 
 
 def _stage_key(route: dict) -> str:
@@ -89,6 +94,13 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     script = root / "脚本" / episode
     script.mkdir(parents=True, exist_ok=True)
     _write_json(script / "storyboard.json", {"kind": "storyboard", "clips": []})
+    _write_json(root / "设定库" / "source_comprehension.json", {"kind": "n2d_source_comprehension", "status": "confirmed"})
+    (root / "设定库" / "global_style.md").write_text("status: confirmed\n", encoding="utf-8")
+    (script / "voiceover.txt").write_text("对白\n", encoding="utf-8")
+    (script / "bgm.txt").write_text("fixture music bed\n", encoding="utf-8")
+    _write_json(script / "镜头时长.json", {})
+    _write_json(script / "director_blocking_pack.json", {"kind": "n2d_director_blocking_pack", "status": "confirmed"})
+    _write_json(script / "preventive_contracts.json", {"kind": "n2d_preventive_contracts", "status": "confirmed"})
     (script / "字幕_中文.srt").write_text("1\n00:00:00,000 --> 00:00:01,000\n对白\n", encoding="utf-8")
 
     compliance = production_readiness.release_manifest.compliance
@@ -116,6 +128,40 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
 
     prod = root / "生产数据"
     prod.mkdir(exist_ok=True)
+    _write_json(prod / f"script_quality_contract_{episode}.json", {"kind": "n2d_script_quality_contract", "status": "pass"})
+    _write_json(prod / f"story_economy_audit_{episode}.json", {"kind": "n2d_story_economy_audit", "version": 1, "ok": True, "status": "pass", "summary": {"blocks": 0}})
+    for name, kind, extra in (
+        ("production_breakdown.json", "n2d_production_breakdown", {"scene_breakdowns": []}),
+        ("continuity_breakdown.json", "n2d_continuity_breakdown", {"rows": []}),
+        ("continuity_chain.json", "n2d_continuity_chain", {"clips": [], "seams": [], "summary": {"block": 0}}),
+        ("continuity_bible.json", "n2d_continuity_bible", {"clips": []}),
+        ("ai_shooting_schedule.json", "n2d_ai_shooting_schedule", {"tasks": []}),
+    ):
+        _write_json(script / name, {"kind": kind, "version": 1, "episode": episode, "status": "confirmed", **extra})
+    (script / "ai_call_sheet.md").write_text("status: confirmed\n# fixture call sheet\n", encoding="utf-8")
+    handoff_inputs = [
+        "设定库/source_comprehension.json",
+        f"脚本/{episode}/voiceover.txt",
+        f"脚本/{episode}/storyboard.json",
+        f"脚本/{episode}/镜头时长.json",
+        f"脚本/{episode}/director_blocking_pack.json",
+        f"脚本/{episode}/preventive_contracts.json",
+        f"生产数据/script_quality_contract_{episode}.json",
+    ]
+    _write_json(script / "production_handoff_pack.json", {
+        "kind": "n2d_production_handoff_pack",
+        "version": 1,
+        "episode": episode,
+        "status": "confirmed",
+        "inputs_fingerprint": artifact_fingerprint(str(root), handoff_inputs),
+    })
+    _write_json(prod / f"ai_shooting_schedule_batch_seed_{episode}.json", {
+        "kind": "n2d_ai_shooting_schedule_batch_seed",
+        "version": 1,
+        "status": "ready",
+        "batch_tasks": [{"task_id": "fixture", "stage": "image"}],
+    })
+    (prod / f"ai_shooting_schedule_batch_seed_{episode}.md").write_text("# fixture batch seed\n", encoding="utf-8")
     _write_json(prod / f"budget_{episode}.json", {"kind": "n2d_budget_evidence", "version": 1, "status": "pass"})
     _write_json(prod / f"final_timeline_probe_{episode}.json", {"kind": "n2d_final_timeline_probe", "version": 1, "status": "pass", "segments": []})
     _write_json(prod / f"video_qc_{episode}.json", {"kind": "n2d_video_qc", "version": 1, "status": "pass"})
@@ -139,6 +185,8 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     _write_json(prod / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(prod / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(prod / f"review_signoff_{episode}.json", {"kind": "n2d_review_signoff", "version": 1, "status": "approved", "reviewer": "qa"})
+    _write_json(prod / f"release_verdict_{episode}.json", {"kind": "n2d_release_verdict", "version": 1, "status": "internal-only"})
+    _write_json(prod / "identity_adapter_matrix.json", {"kind": "n2d_identity_adapter_matrix", "version": 1, "forms": []})
     events = [
         _generation_event(episode, "image", f"出图/{episode}/图片/Clip_01.png"),
         _generation_event(episode, "video", f"出视频/{episode}/视频/Clip_01.mp4"),

@@ -67,10 +67,6 @@ const QualityInsightsPane = lazy(() =>
   import("../components/QualityInsightsPane").then((mod) => ({ default: mod.QualityInsightsPane })),
 );
 
-const SkillsBrowser = lazy(() =>
-  import("../components/SkillsBrowser").then((mod) => ({ default: mod.SkillsBrowser })),
-);
-
 const OP_RIGHT_MIN_WIDTH = 72;
 const OP_RIGHT_MAX_WIDTH = 340;
 const OP_BOTTOM_MIN_HEIGHT = 82;
@@ -78,7 +74,7 @@ const OP_BOTTOM_MAX_HEIGHT = 440;
 const OP_LEFT_RAIL_WIDTH = 48;
 const TERMINAL_SIDE_COLLAPSE_WIDTH = OP_RIGHT_MIN_WIDTH;
 const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = OP_BOTTOM_MIN_HEIGHT;
-type LeftTab = "files" | "search" | "skills" | "changes" | "canvas" | "kanban" | "review";
+type LeftTab = "files" | "search" | "changes" | "canvas" | "kanban" | "review";
 type TerminalDock = "side" | "bottom";
 
 function isMacPlatform(): boolean {
@@ -96,6 +92,7 @@ export function Operation(props: {
   onRootChanged: (root: WorkRoot) => void;
   onCloseTerminal: () => void;
   onToggleTerminal: () => void;
+  onShowSkills: (line: LineInfo) => void;
   onBack: () => void;
 }) {
   const {
@@ -109,6 +106,7 @@ export function Operation(props: {
     onRootChanged,
     onCloseTerminal,
     onToggleTerminal,
+    onShowSkills,
     onBack,
   } = props;
   const { t } = useI18n();
@@ -442,9 +440,6 @@ export function Operation(props: {
       } else if ((cmd || event.ctrlKey) && event.shiftKey && key === "g") {
         event.preventDefault();
         showLeft("changes");
-      } else if (cmd && event.shiftKey && key === "x") {
-        event.preventDefault();
-        showLeft("skills");
       } else if (cmd && !event.shiftKey && key === "b" && !editingText) {
         event.preventDefault();
         setLeftCollapsed((collapsed) => !collapsed);
@@ -721,18 +716,16 @@ export function Operation(props: {
   const resizeTerminalAria =
     terminalDock === "bottom" ? t("operation.resizeTerminalHeightAria") : t("operation.resizeTerminalAria");
   const shortcut = isMacPlatform()
-    ? {
+      ? {
         files: "⌘⇧E",
         search: "⌘⇧F",
         changes: "⌃⇧G",
-        skills: "⌘⇧X",
         hidePanel: "⌘J",
       }
     : {
         files: "Ctrl+Shift+E",
         search: "Ctrl+Shift+F",
         changes: "Ctrl+Shift+G",
-        skills: "Ctrl+Shift+X",
         hidePanel: "Ctrl+J",
       };
   const shortcutTitle = (label: string, keys: string) => `${label} (${keys})`;
@@ -761,7 +754,7 @@ export function Operation(props: {
 
   return (
     <div className="op">
-      <div className="op-top">
+      <div className="op-top work-nav">
         <button onClick={onBack}>{t("operation.backSeries")}</button>
         <div className="crumb">
           {lineLabel(line)} / <b>{root.name}</b>
@@ -794,6 +787,15 @@ export function Operation(props: {
             )}
           </div>
         )}
+        <button
+          type="button"
+          className="work-nav-skill-btn"
+          title={t("line.skillsButton")}
+          aria-label={t("line.skillsButton")}
+          onClick={() => onShowSkills(line)}
+        >
+          <Codicon name="wrench" />
+        </button>
       </div>
 
       <div
@@ -845,16 +847,6 @@ export function Operation(props: {
               ) : changeCount > 0 ? (
                 <span className="rail-badge">{changeCount > 99 ? "99+" : changeCount}</span>
               ) : null}
-            </button>
-            <button
-              type="button"
-              className={"rail-tab rail-skills" + (sidePanelOpen && tab === "skills" ? " active" : "")}
-              data-tooltip={shortcutTitle(t("operation.skillsTab"), shortcut.skills)}
-              data-tooltip-placement="right"
-              aria-label={t("operation.skillsTab")}
-              onClick={() => openLeft("skills")}
-            >
-              <RailIcon name="skills" />
             </button>
             {isCanvasLine && (
               <button
@@ -953,13 +945,6 @@ export function Operation(props: {
                       <div className="subtab-layer">
                         <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
                           <SearchPane root={root} refreshKey={refreshKey + baselineVersion} />
-                        </Suspense>
-                      </div>
-                    )}
-                    {sidePanelOpen && tab === "skills" && (
-                      <div className="subtab-layer">
-                        <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                          <SkillsBrowser repoRoot={repoRoot} line={line} />
                         </Suspense>
                       </div>
                     )}

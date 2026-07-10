@@ -1,0 +1,22 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_03",
+  "name": "虎山神 / 虎妖",
+  "scope": "虎首人身大妖，疑似半只脚踏入鸣骨境，拥有近似不死或重生的天赋神通。",
+  "directories": {
+    "reference": "角色库/CHAR_03__虎山神_虎妖/reference",
+    "prompts": "角色库/CHAR_03__虎山神_虎妖/prompts",
+    "lora": "角色库/CHAR_03__虎山神_虎妖/lora",
+    "voice": "角色库/CHAR_03__虎山神_虎妖/voice",
+    "adapters": "角色库/CHAR_03__虎山神_虎妖/adapters",
+    "qc": "角色库/CHAR_03__虎山神_虎妖/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/虎山神 / 虎妖.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-09T08:38:59+00:00",
+  "library_tier": "named_minimal"
+}

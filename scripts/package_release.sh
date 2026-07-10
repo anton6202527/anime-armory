@@ -72,11 +72,10 @@ copy_file desktop/.gitignore
 copy_file desktop/package.json
 copy_file desktop/package-lock.json
 
-copy_file 资产库/README.md
 copy_file scripts/package_release.sh
 
 for dir in "${CREATIVE_LINES[@]}"; do
-  mkdir -p "${PKG}/创作区/${dir}"
+  mkdir -p "${PKG}/创作区/${dir}/_资产库"
   cat > "${PKG}/创作区/${dir}/README.md" <<EOF
 # 创作区/${dir}
 
@@ -84,6 +83,11 @@ for dir in "${CREATIVE_LINES[@]}"; do
 
 需要参考 demo 时，请回到完整仓库查看同名创作区目录。
 EOF
+  if [ ! -f "${ROOT}/创作区/${dir}/_资产库/README.md" ]; then
+    echo "Missing series asset library manual: 创作区/${dir}/_资产库/README.md" >&2
+    exit 1
+  fi
+  cp -p "${ROOT}/创作区/${dir}/_资产库/README.md" "${PKG}/创作区/${dir}/_资产库/README.md"
 done
 copy_creation_manuals
 
@@ -98,11 +102,11 @@ cat > "${PKG}/版本说明.md" <<EOF
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
 - desktop/ 桌面端源码，不含 node_modules 和构建产物
-- 创作区/ 六条空作品线目录与各系列使用手册
-- 资产库/README.md
+- 创作区/ 六条空作品线目录、各系列使用手册与各自的 _资产库/ 说明
 
 不包含：
 - 仓库内现有 demo 媒体、小说工程和视频工程产物
+- 各系列 _资产库/ 中的实际资产包（starter 只带规则说明）
 - .git、.claude、.codex、.cursor 等私有 agent 配置
 - .venv、node_modules、__pycache__、dist 等本地依赖和缓存
 

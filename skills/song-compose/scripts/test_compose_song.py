@@ -62,9 +62,21 @@ class ComposeSongTest(unittest.TestCase):
             with open(manifest_path, encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["backend"], "ACE-Step")
+            self.assertEqual(manifest["schema_version"], 2)
             self.assertEqual(manifest["requested_takes"], 2)
             self.assertEqual(manifest["target_duration_seconds"], 90)
-            self.assertTrue(os.path.exists(os.path.join(tmp, "歌", "compose_prompts", "take_01.md")))
+            prompt_path = os.path.join(tmp, "歌", "compose_prompts", "take_01.md")
+            self.assertTrue(os.path.exists(prompt_path))
+            take = manifest["takes"][0]
+            self.assertEqual(take["prompt_source_kind"], "compiled_submit_fields")
+            self.assertEqual(take["prompt_compiler"]["profile"], "ace_step_prompt_lyrics")
+            self.assertIn("prompt", take["submit_fields"])
+            self.assertIn("lyrics", take["submit_fields"])
+            self.assertEqual(take["submit_fields"]["audio_duration"], 90)
+            with open(prompt_path, encoding="utf-8") as f:
+                prompt_text = f.read()
+            self.assertIn("## 后端编译提交字段", prompt_text)
+            self.assertIn("## 提交边界", prompt_text)
 
     def test_register_score_and_select_take(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -111,6 +123,30 @@ class MakeStyleTest(unittest.TestCase):
         # 缺器乐/人声字段时跳过，不塞空（向后兼容旧 meta）
         s = compose_song.make_style({"genre": "流行"}, {}, self._args())
         self.assertEqual(s, "流行")
+
+    def test_validate_compiled_take_detects_drift(self):
+        payload = compose_song.compile_prompt({
+            "take_id": "take_01",
+            "backend": "ACE-Step",
+            "title": "测试歌",
+            "style_seed": "国风流行",
+            "lyrics": "[verse]\n一句歌词",
+            "duration_seconds": 90,
+        })
+        raw = json.dumps(payload["submit_fields"], ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        take = {
+            "prompt_source_kind": "compiled_submit_fields",
+            "prompt_compiler": {key: payload[key] for key in ("kind", "version", "profile_version", "profile", "backend", "field_map")},
+            "style_prompt": payload["style_prompt"],
+            "lyrics": payload["lyrics"],
+            "submit_fields": payload["submit_fields"],
+            "source_contract_sha256": payload["source_contract_sha256"],
+            "lyrics_sha256": payload["lyrics_sha256"],
+            "submit_fields_sha256": __import__("hashlib").sha256(raw.encode("utf-8")).hexdigest(),
+        }
+        self.assertEqual(compose_song.validate_compiled_take(take, "ACE-Step"), [])
+        take["submit_fields"]["prompt"] += " drift"
+        self.assertIn("submit_fields_hash_mismatch", compose_song.validate_compiled_take(take, "ACE-Step"))
 
 
 if __name__ == "__main__":

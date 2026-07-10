@@ -15,8 +15,17 @@ import hashlib
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+N2D_LIB = SCRIPT_DIR.parents[1] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+
+from video_prompt_compiler import compile_video_prompt, render_compiled_markdown
+from n2d_platform_profiles import anchor_consumption_plan, select_video_frame_strategy
 
 KIND = "n2d_video_prompt_pack"
 CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
@@ -37,6 +46,32 @@ ENDING_REACTION_HOLD_RE = re.compile(
     r"side[- ]?face|side[- ]?back|no clear face|no face|hold",
     re.I,
 )
+
+HIGH_RISK_CONTINUOUS_SHOTS = {
+    "fight_exchange", "chase", "flight", "mount_ride", "vehicle_ride",
+    "vessel_flight", "road_vehicle", "stealth_stalk", "magic_burst",
+    "intimate_interaction", "hug_or_pull", "kiss_or_near_kiss",
+}
+
+
+def _frame_strategy_requires_mid(
+    clip: Mapping[str, Any], route: Mapping[str, Any], anchors: Sequence[Mapping[str, Any]],
+    mid: Optional[Mapping[str, Any]],
+) -> bool:
+    """Only continuous high-risk motion requires a real middle timeline anchor."""
+    template = str(clip.get("template") or route.get("shot_type") or "").strip().lower()
+    motion = route.get("motion_control") if isinstance(route.get("motion_control"), Mapping) else {}
+    if template in HIGH_RISK_CONTINUOUS_SHOTS or str(motion.get("level") or "").lower() == "required":
+        return True
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    if str(cont.get("expression_span") or "").strip().lower() in {"大", "large", "high"}:
+        return True
+    rows = list(anchors) + ([mid] if isinstance(mid, Mapping) else [])
+    for row in rows:
+        reason = str(row.get("reason") or "").lower()
+        if any(mark in reason for mark in ("r1 ", "r2 ", "r3 ", "apex:", "auto:")):
+            return True
+    return False
 
 
 def ep_label(value: str) -> str:
@@ -507,6 +542,72 @@ def motion_words(clip: Mapping[str, Any], route: Mapping[str, Any]) -> Tuple[str
     return "小幅；只执行本镜主动作链", "克制匀速", "固定或极缓推近"
 
 
+def environment_motion(clip: Mapping[str, Any]) -> str:
+    """Return only scene evidence explicitly present in storyboard contracts.
+
+    The old generator injected moonlight, torches, fog and dust into every
+    project.  A neutral fallback belongs in the audit contract, but it must not
+    invent weather/props for the model-facing prompt.
+    """
+    for key in ("environment_interaction", "environment_motion", "dynamic_detail", "dynamic_details"):
+        value = one_line(clip.get(key), "")
+        if value:
+            return value
+    shots = [s for s in clip.get("shots") or [] if isinstance(s, Mapping)]
+    values: List[str] = []
+    for shot in shots:
+        for key in ("environment_interaction", "environment_motion", "dynamic_detail", "dynamic_details"):
+            value = one_line(shot.get(key), "")
+            if value and value not in values:
+                values.append(value)
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), Mapping) else {}
+    for key in ("environment_stillness", "micro_motion", "aura_vfx_lock"):
+        value = one_line(contract.get(key), "")
+        if value and value not in values:
+            values.append(value)
+    return "；".join(values)
+
+
+def _recipe_list(recipe: Mapping[str, Any], key: str, fallback: Sequence[str] = ()) -> List[str]:
+    value = recipe.get(key)
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()]
+    if value not in (None, "", "none", "无", []):
+        return [one_line(value)]
+    return [str(v) for v in fallback if str(v)]
+
+
+def native_audio_contract(route: Mapping[str, Any], mouth: str) -> Tuple[str, str]:
+    policy = str(route.get("native_audio_policy") or "none").strip().lower()
+    mode = str(route.get("mode") or "").strip().lower()
+    if policy == "native_speech" or mode == "native_av":
+        return (
+            f"audio_intent=native_speech; risk=medium; mouth_visible={mouth}; "
+            "speech_policy=native_speech; compose_policy=保留原片音轨; "
+            "review=确认仅生成已登记画内台词且台词/口型/声源同步。",
+            "native_speech",
+        )
+    if policy in {"ambience", "native_sfx", "environment_sfx"}:
+        return (
+            f"audio_intent={policy}; risk=low; mouth_visible={mouth}; "
+            "speech_policy=no_native_speech; compose_policy=低音量混入环境声; "
+            "review=确认只有环境声/动作音效且无原生人声。",
+            policy,
+        )
+    if policy == "lipsync_condition_only" or mode == "voice_conditioned_lipsync":
+        return (
+            f"audio_intent=voice_conditioned_lipsync; risk=medium; mouth_visible={mouth}; "
+            "speech_policy=no_native_speech; compose_policy=丢弃; "
+            "review=配音只作口型条件，确认模型音轨未进入成片。",
+            policy,
+        )
+    return (
+        f"audio_intent=none; risk=low; mouth_visible={mouth}; "
+        "speech_policy=no_native_speech; compose_policy=丢弃; review=生成后确认无原生人声。",
+        "none",
+    )
+
+
 def action_choreography_line(route: Mapping[str, Any], clip: Optional[Mapping[str, Any]] = None) -> str:
     choreo = route.get("action_choreography") if isinstance(route.get("action_choreography"), Mapping) else {}
     contract = clip.get("template_contract") if isinstance(clip, Mapping) and isinstance(clip.get("template_contract"), Mapping) else {}
@@ -767,9 +868,21 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"forbidden_presence={one_line(entity.get('forbidden_presence'), 'modern vehicles, phones, random readable text, watermark')}; "
         f"eyeline={one_line(cont.get('eyeline'), '按出图轴线')}"
     )
-    negative = "不要换脸、不要换衣、不要新增人物、不要改变场景/光位/发型、不要生成文字/logo/水印、不要生成原生人声、不要随表情改变脸型/五官比例/眼距/鼻梁/下颌。"
     amp, energy, camera = motion_words(clip, route)
     mouth = "yes" if mouths.get(cid) else "no"
+    audio_line, normalized_audio_policy = native_audio_contract(route, mouth)
+    negative_items = [
+        "换脸或五官比例漂移",
+        "换衣或发型漂移",
+        "新增未登记人物或道具",
+        "改变场景、光位或构图",
+        "随机文字、logo 或水印",
+    ]
+    if normalized_audio_policy == "native_speech":
+        negative_items.append("旁白、额外台词或错误说话人")
+    else:
+        negative_items.append("原生人声")
+    negative = "禁止：" + "；".join(negative_items) + "；表情变化不得改变脸型、眼距、鼻梁或下颌。"
     contract = contract_rows.get(cid, {})
     dramatic = one_line(contract.get("dramatic_function") or clip.get("dramatic_function"))
     audience = one_line(contract.get("audience_effect") or clip.get("audience_effect"))
@@ -786,12 +899,33 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     assets = ", ".join([x for x in [location] + objects if x])
     asset_ids = [x for x in [location] + objects if x]
     inner_focus = inner_focus_directive(clip, chars, asset_ids)
-    frame_control = route.get("anchor_consumption") if isinstance(route.get("anchor_consumption"), Mapping) else {}
+    env_motion = environment_motion(clip)
     first = str(clip.get("firstframe_png") or f"出图/{ep}/图片/{cid}.png")
     endframe = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
     anchors = [a for a in cont.get("anchors") or [] if isinstance(a, Mapping)]
     mid = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
     mid_count = (1 if mid else 0) + len(anchors)
+    shots = [row for row in clip.get("shots") or [] if isinstance(row, Mapping)]
+    explicit_frame_strategy = cont.get("frame_strategy")
+    if isinstance(explicit_frame_strategy, Mapping):
+        explicit_frame_strategy = explicit_frame_strategy.get("strategy")
+    strategy_plan = select_video_frame_strategy(
+        route.get("primary_backend") or "generic",
+        route.get("channel") or route.get("backend_channel") or "",
+        shot_count=max(1, len(shots)),
+        anchor_count=mid_count,
+        need_end=bool(endframe or cont.get("need_endframe")),
+        requires_mid_anchors=_frame_strategy_requires_mid(clip, route, anchors, mid),
+        explicit=str(explicit_frame_strategy or ""),
+    )
+    frame_strategy = str(strategy_plan.get("strategy") or "first_only")
+    frame_control = anchor_consumption_plan(
+        route.get("primary_backend") or "generic",
+        route.get("channel") or route.get("backend_channel") or "",
+        anchor_count=mid_count,
+        need_end=bool(endframe or cont.get("need_endframe")),
+        frame_strategy=frame_strategy,
+    )
     handoff_line = handoff_package_line(first, endframe, mid_count, cont, frame_control, fallback)
     exec_line = execution_recipe_line(recipe, frame_control, fallback)
     incoming_line = seam_summary_line(incoming_seam, "本镜为本集首镜且无前集边界，或 continuity_chain 未生成。")
@@ -810,6 +944,36 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         negative += " 不得从小脸/远脸/侧背/遮挡脸直接升格成清晰近脸；缺同源近景锚帧时改 MCU/OTS/侧脸/手部/物件反应。"
     if tail_hold_guard:
         negative += " 本镜尾端保持手部/物件/侧背/反打落幅直到剪点，不要提前把 offscreen 角色拉回清晰入画或预演下一镜构图。"
+
+    frame_inputs = _recipe_list(recipe, "frame_inputs", [first, endframe] if endframe else [first])
+    reference_inputs = _recipe_list(recipe, "reference_inputs")
+    control_inputs = _recipe_list(recipe, "control_inputs")
+    audio_inputs = _recipe_list(recipe, "audio_inputs")
+    compiled = compile_video_prompt({
+        "clip_id": cid,
+        "backend": route.get("primary_backend") or "generic",
+        "mode": route.get("mode") or "image2video",
+        "native_audio_policy": normalized_audio_policy,
+        "duration": clip.get("duration"),
+        "story_span_sec": clip.get("duration"),
+        "edit_target_sec": clip.get("edit_target_sec") or clip.get("video_shot_duration") or clip.get("duration"),
+        "model_version": route.get("model_version") or route.get("model") or "",
+        "channel": route.get("channel") or route.get("backend_channel") or "",
+        "frame_strategy": frame_strategy,
+        "subject": chars,
+        "scene": clip.get("scene"),
+        "primary_action": action,
+        "camera_motion": camera,
+        "environment_motion": env_motion,
+        "rhythm": clip.get("rhythm"),
+        "end_state": end,
+        "must_hold": [constraints, closeup_guard, tail_hold_guard],
+        "must_avoid": negative_items,
+        "frame_inputs": frame_inputs,
+        "reference_inputs": reference_inputs,
+        "control_inputs": control_inputs,
+        "audio_inputs": audio_inputs,
+    })
 
     lines = [
         f"## Clip {idx:02d}（时长 {float(clip.get('duration') or 0):.3f}s · {raw_id} · {label}）",
@@ -837,10 +1001,11 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"- 幅度：{amp}",
         f"- 能量：{energy}",
         "- 身体守卫：脸型/五官比例/发型发髻/服装轮廓保持；手部归属和遮挡层级清楚；多人槽位不互换。",
-        "**环境交互**：冷月/火把光影按动作产生轻微阴影变化；土粒、低雾、衣袂、火把烟与马队尘土只做物理反馈，不新增现代物或随机文字。",
+        f"**环境交互**：{env_motion or 'storyboard 未登记专属环境动态；背景保持稳定，不凭空增加天气、粒子、道具或光源运动。'}",
         f"**动作编排契约 / Action Choreography**：{action_choreography_line(route, clip)}",
         f"**专项镜头模板**：template={one_line(route.get('template') or route.get('shot_type'), '无')}；blocking/continuity_must/negative 继承 storyboard，不临场改戏。",
         f"**模型路由**：{route_line}",
+        f"**帧策略 / Frame Strategy**：strategy={frame_strategy}；reason={strategy_plan.get('reason')}；shot_count={strategy_plan.get('shot_count')}；anchor_count={strategy_plan.get('anchor_count')}；首尾帧后端不得把 split relay 冒充原生三帧。",
         f"**接缝执行包 / Handoff Package**：{handoff_line}",
         f"**连续性链路 / Continuity Chain**：入点={incoming_line}；出点={outgoing_line}",
         f"**执行配方 / Execution Recipe**：{exec_line}",
@@ -849,7 +1014,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"**近景/反打身份锁定**：主焦点={one_line(chars[:1], '无')}；脸部特写/表情参考/expressions 优先；表情锚=起幅情绪→落幅情绪；表情幅度={span}；锁脸不锁情：只动眉眼嘴角，脸型/五官比例/眼距/鼻梁/下颌/发际线/痣疤保持；配角不稳则 MCU/OTS/侧脸/手部/物件反应保真实现。",
         f"**近景升格守卫**：{closeup_guard or '未触发近景升格；按当前首/中/尾锚帧景别生成，不主动新增近脸。'}",
         f"**尾端落幅保持**：{tail_hold_guard or '未触发；按 continuity.end_state 自然停住，不提前预演下一 Clip。'}",
-        f"**原生音画策略**：audio_intent=none; risk=low; mouth_visible={mouth}; speech_policy=no_native_speech; compose_policy=丢弃; review=生成后确认无原生人声。",
+        f"**原生音画策略**：{audio_line}",
         "**衔接设计**：",
         f"- 入点：{start}",
         f"- 出点：{end}",
@@ -863,70 +1028,18 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         f"- constraints：{constraints}",
         f"- negative：{negative}",
         "",
-        "**视频提交口径**：`首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止`。",
+        "**视频提交口径**：严格合同保留在本 Clip 块；runner 只提取下方 compiler 产物，不把路由、审计、身份注册层或接缝说明拼入模型 prompt。",
         "",
-        "### 视频 prompt（中文，目标=即梦/可灵/Seedance）",
-        "```",
-        "continuity:",
-        f"  start_state: {start}",
-        f"  action: {action}",
-        f"  end_state: {end}",
-        f"  constraints: {constraints}",
-        f"  negative: {negative}",
-        f"剧本可看性合同：dramatic_function={dramatic}; audience_effect={audience}; 本镜承接留存承诺和观众问题处理，运动与表演只强化不改写；",
-        f"导演意图：{dramatic};",
-        f"起幅：{start};",
-        f"落幅：{end};",
-        f"场面调度：{one_line(lenses, '按 storyboard 镜头链')}；角色槽位={one_line(chars, '无')}；资产ID={assets or '无'}；",
-        f"正反打/对峙合同约束：{shot_reverse_line or '不适用；若改成反打，必须先补 shot_reverse_contract。'}；",
-        f"内心戏主体隔离：{inner_focus or '非内心戏/按在场链执行'}；",
-        f"表演节拍：[0-30%] 承接首帧；[30-75%] {action}；[75-100%] {end};",
-        f"运动精修约束：幅度={amp}；能量={energy}；身体守卫=脸型五官比例发型发髻服装轮廓保持，手部归属清楚，遮挡不穿模；",
-        "环境交互约束：冷月与火把光影轻微随动，低雾/尘土/衣袂/火把烟提供动态反馈，不改变首帧设定；",
-        f"动作编排约束：{action_choreography_line(route, clip)}；",
-        f"专项模板约束：template={one_line(route.get('template') or route.get('shot_type'), '无')}；按 storyboard template_contract 执行；",
-        f"模型路由约束：读取 video_model_routes.json；本镜 primary_backend={one_line(route.get('primary_backend'))}，fallback={route_list(route, 'fallback_backends') or '无'}，mode={one_line(route.get('mode'))}，native_audio_policy={one_line(route.get('native_audio_policy'), 'none')}，identity_requirement={one_line(route.get('identity_requirement'))}；失败按 degrade_plan={fallback}；",
-        f"接缝执行包：{handoff_line}；",
-        f"连续性链路：入点={incoming_line}；出点={outgoing_line}；若 policy=relay，必须把上一镜尾帧/尾态当作本镜起幅硬约束；若 policy=intentional_discontinuity，只按已签收理由跳切，不偷接上一镜动作；",
-        f"执行配方约束：{exec_line}；真正提交给后端时必须把 frame_inputs/reference_inputs/control_inputs/audio_inputs 按该配方组织，不得只提交裸文本 prompt；",
-        f"物理交互约束：读取 motion_control_manifest.json；{motion_control_line(route)}；degrade_only 时不直接生成全身复杂接触或长连续高速动作，按保真实现分解执行，避免 FeatureMelting/特征融化；",
-        f"身份锁定约束：{identity_line(forms, chars)}；锁脸型/五官比例/发型发髻/标志配饰/服装配色，reference_group 和首帧为身份真值；",
-        f"近景身份锁定约束：表情锚起→止，表情幅度={span}；锁脸不锁情；无原生锁时限制低幅表情和小角度转头，必要时 MCU/OTS/侧脸/手部/物件反应保真实现；",
-        f"在场链约束：{constraints}；只允许 required_presence/entity_schedule/首帧已登记的人物、物件、场景和特效进入清晰画面；offscreen_presence 只能作为画外声音、影子、侧背/手部/物件反应承接，不得清晰入画抢动作；forbidden_presence 完全不出现；",
-        f"近景升格守卫：{closeup_guard or '不主动把小脸/远脸升格成近脸；按锚帧景别保持。'}；",
-        f"尾端落幅保持：{tail_hold_guard or '按 continuity.end_state 停住，不提前预演下一 Clip。'}；",
-        "原生音画约束：默认禁止原生人声；audio_intent=none；speech_policy=no_native_speech；compose_policy=丢弃；",
-        "首帧保持：只保持首帧已锁定的人物身份、服装、场景、光位、道具位置和画面重心；不重定视觉设定；",
-        f"人物运动：{action}；表情只动面部肌肉，脸型五官比例不变；",
-        f"镜头运动：{camera}；",
-        f"情绪节奏：[0-30%] 克制承接；[30-75%] 张力推进；[75-100%] 定住，服务{one_line(clip.get('rhythm'), '本镜节奏')}；",
-        "动态细节：低雾缓流、衣袂微动、火把烟或土粒细动，与人物动作产生轻微物理反馈；",
-        f"衔接约束：开头承接 continuity.start_state 和 continuity_chain 入点，动作只执行 continuity.action，结尾停在 continuity.end_state 并交给 continuity_chain 出点，保持 continuity.constraints 和在场链约束，避开 continuity.negative，按{one_line(cont.get('transition'), '转场')}服务下一镜；",
-        "禁止：不要换脸、不要换衣、不要新增人物/道具、不要改变场景/光位/发型、不要生成文字/logo/水印，非 native_speech 镜不要生成原生人声；内心戏镜头不得重复上一镜群像/妖魔/道具陈列；",
-        "声音约束：无对白、无旁白、不要生成原生人声；声音只作为后期 n2d-compose 的剪辑意图。",
-        "```",
-        "",
-        "### 视频 prompt（英文，目标=安全兜底/Veo/海外）",
-        "```",
-        f"continuity: start from {start}; perform only {action}; end on {end}; preserve {constraints}; follow required_presence/offscreen_presence/forbidden_presence exactly; avoid face drift, costume changes, unregistered characters or props, text, logos, watermarks, and generated native voice.",
-        f"continuity chain: incoming seam = {incoming_line}; outgoing seam = {outgoing_line}. If policy=relay, preserve the previous shot's boundary frame/state as the hard start constraint; if intentional discontinuity, cut only for the signed reason.",
-        f"inner-focus isolation: {inner_focus or 'not an inner-focus shot; follow entity schedule.'}",
-        f"director intent: {dramatic}; audience effect: {audience}.",
-        f"character motion: {action}; camera motion: {camera}; dynamic detail: cold moonlight, torch smoke, dust, fog, and fabric move subtly with the action.",
-        "close-up identity lock: preserve face shape, facial proportions, eye spacing, nose bridge, jawline, hairstyle, signature accessories, and costume palette; lock face not emotion; downgrade unstable close-ups to MCU, OTS, side-face, hand or object reaction shots.",
-        "close-up promotion guard: do not turn a small, distant, side/back, occluded, or non-primary anchor face into a clear close-up face unless a same-source close-up anchor/expression reference has passed full image QC.",
-        f"ending reaction hold: {tail_hold_guard or 'hold the continuity.end_state until the cut and do not preview the next clip early.'}",
-        "native audio policy: audio_intent=none; speech_policy=no_native_speech; compose_policy=discard.",
-        "```",
+        render_compiled_markdown(compiled),
         "",
         "### 检查清单（视频三件套自查·最易漏 ④人物运动 / ②镜头运动 / ⑦张力）",
         "- ✅ 首帧 PNG 已落档并与 Clip 编号匹配。",
-        "- ✅ 剧本可看性合同 dramatic_function / audience_effect 已进入 prompt。",
+        "- ✅ 剧本可看性合同 dramatic_function / audience_effect 已由完整合同承接，未塞入模型提交 prompt。",
         "- ✅ 导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互齐全。",
-        "- ✅ 中文 prompt 已写首帧保持 / 人物运动 / 镜头运动 / 情绪节奏 / 禁止。",
-        "- ✅ 在场链约束 required_presence/offscreen_presence/forbidden_presence 已进入中文 prompt。",
-        "- ✅ 接缝执行包 / 执行配方约束已进入中文 prompt，frame_inputs/reference_inputs/control_inputs/audio_inputs 与 route 一致。",
-        "- ✅ Continuity Chain 已进入 prompt：每镜知道上一 seam 和下一 seam，跨集首镜不再裸起。",
+        "- ✅ compiler 已按 primary_backend / mode 生成唯一提交 prompt，语言与负向策略匹配后端。",
+        "- ✅ 在场链 required_presence/offscreen_presence/forbidden_presence 保留在完整合同与真实输入层。",
+        "- ✅ 接缝执行包 / 执行配方已进入完整合同，frame/reference/control/audio 输入与 route 一致。",
+        "- ✅ Continuity Chain 保留在完整合同和锚帧输入层；提交 prompt 只保留动作、运镜、节奏、落幅。",
         "- ✅ ④人物运动动作链明确，幅度与能量可控。",
         "- ✅ ②镜头运动有结构化运镜词和速度。",
         "- ✅ ⑦张力与节奏匹配，留白/爽点/压迫不乱甩。",

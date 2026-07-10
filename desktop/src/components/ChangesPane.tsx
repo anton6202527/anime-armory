@@ -512,7 +512,6 @@ export function ChangesPane({
               <button
                 type="button"
                 className="changes-detail-close"
-                title={t("common.close")}
                 aria-label={t("common.close")}
                 onClick={() => {
                   if (confirmCloseOpened("")) setOpenedPath("");

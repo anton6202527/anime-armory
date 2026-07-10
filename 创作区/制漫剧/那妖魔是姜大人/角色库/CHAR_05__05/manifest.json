@@ -1,0 +1,22 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "CHAR_05",
+  "name": "05",
+  "scope": "本集入镜角色",
+  "directories": {
+    "reference": "角色库/CHAR_05__05/reference",
+    "prompts": "角色库/CHAR_05__05/prompts",
+    "lora": "角色库/CHAR_05__05/lora",
+    "voice": "角色库/CHAR_05__05/voice",
+    "adapters": "角色库/CHAR_05__05/adapters",
+    "qc": "角色库/CHAR_05__05/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/05.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-09T08:38:59+00:00",
+  "library_tier": "named_minimal"
+}
