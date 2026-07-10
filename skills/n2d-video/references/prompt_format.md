@@ -51,7 +51,7 @@
 **提交边界**：上面是严格生产合同，下面是 compiler 产物。每个 Clip 只允许一个执行真值；切换 backend 必须重新编译。
 
 ### 后端编译提交 prompt
-**编译元数据**：`kind=n2d_compiled_video_prompt; version=1; profile_version=...; profile=...; backend=...; mode=...; language=...; native_audio_policy=...; source_contract_sha256=...`
+**编译元数据**：`kind=n2d_compiled_video_prompt; version=2; profile_version=...; profile=...; backend=...; mode=...; language=...; native_audio_policy=...; frame_strategy=...; story_span_sec=...; edit_target_sec=...; backend_request_sec=...; action_start_sec=...; action_end_sec=...; hold_end_sec=...; trim_mode=...; requires_split=...; source_contract_sha256=...`
 
 \`\`\`text
 {唯一模型提交文本：主动作 + 镜头 + 可选环境响应 + 节奏 + 落幅 + 最短保持；I2V 不重复角色卡/场景卡/路由/审计/文件路径}
@@ -308,22 +308,26 @@ profile 支持独立负向字段时可追加：
 
 ---
 
-## 中段锚帧 Clip（默认契约·能力门控）
+## 时长合同（v2）
+
+每个 compiled block 必须同时携带 `story_span_sec / edit_target_sec / backend_request_sec`。`prompt_pack.py` 写动作窗口与尾端保持区；`video_runner.py` 按实际 backend/model 重新量化请求档位；`compose.sh` 默认按 `edit_target_sec` 裁尾。后端最短档位不是剪辑最低时长，默认禁止用整段 `setpts` 把多余尾巴压回目标。`speed_mode=warp` 只用于导演明确要求的慢动作/加速。
+
+## 中段锚帧 Clip（风险/显式 opt-in·能力门控）
 
 > 首尾双帧只锁 Clip 两端；≥8s 多拍动作镜、打斗/追逐等高运动模板镜的**中段**模型仍自由发挥，常见症状是中间拍动作路径漂走（方向跑偏/多余动作/节拍错位），首尾却都对。多放锚帧 = 帧间空隙更短 = 模型自由发挥的漂移更小。**执行分两条路，按后端能力自动选（video_runner 决定）：**
 >
-> - **① 原生多帧（首选·即梦/Dreamina `multiframe2video`）**：后端原生收 **2–20 张关键帧** [首帧, 锚帧1..K, 尾帧] → **一次调用**出一条连续视频，模型自己做帧间插值和运镜，**无内部焊缝、无 concat**——拼接"刹车感"正是它要解决的。每段 [0.5, 8]s、总 ≥2s。这是中段锚帧链的**原生执行路径**，`use=qc/split` 的区分对它无意义（每段只要 ≥0.5s，几乎所有锚帧都是真关键帧）。
+> - **① 原生多帧（首选·即梦/Dreamina `multiframe2video`）**：后端原生收 **2–20 张关键帧** [首帧, 锚帧1..K, 尾帧] → **一次调用**出一条连续视频，模型自己做帧间插值和运镜，**无内部焊缝、无 concat**——拼接"刹车感"正是它要解决的。每段 [0.5, 8]s、总 ≥2s。只有 `use=split/keyframe/edit_cut` 等执行锚进入时间轴；`use=qc/reference` 始终只用于验收，不得被 runner 偷偷提交。
 > - **② 拆段接力 + concat（兜底·只收两帧的后端）**：后端只有 frames2video（两帧）时，才退回把 Clip 拆成 K+1 段逐段 frames2video、再 ffmpeg concat 焊回一条；此时各段须 ≥ 后端最短时长，焊点是新增内部接缝（见下「焊点自检」）。
 >
 > 两条路的**规划层完全一样**（anchor_planner 产 `continuity.anchors` 带 `at_sec`），只是执行器按后端能力选 ① 或 ②。要点：
 
-- **判定（默认规划 + 规则增锚）**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`。默认三帧契约给每镜至少 `_mid`（除极短镜/末镜/后端真不支持且有豁免），再按三条确定性规则加锚：**R1** 高运动/接触模板镜（fight_exchange/chase/magic_burst/flight/mount_ride/vehicle_ride/vessel_flight/road_vehicle/stealth_stalk/dual_cultivation/kiss_or_near_kiss/hug_or_pull/intimate_interaction，段长目标更短 ~3.5s 贴换招拍）；**R2** ≥8s 且节拍 ≥3 的普通长镜；**R3** dashboard 重抽记录里有中段漂移 redraw 的镜头。dry-run 报告（`生产数据/anchor_plan_第N集.json/md`）写明命中规则+成本增量，确认后 `--write` 注回 `continuity.anchors`（单锚帧也可手写 `continuity.midframe`；二选一，gate 缺项/不递增/越界/缺 PNG 阻断）。身份漂（脸/服装）不归本工艺，先升 Character ID/Face Lock/LoRA。锚帧由 `n2d-image` 出（`_mid` 或 `_a1.._aN`，同定妆组 image2image 派生，姿态=各 `at_sec` 时刻的中间拍；打斗镜对齐 beats 拆招拍）。
+- **判定（risk-only + 编辑切点）**：分镜定稿后跑 `python3 skills/n2d-script/scripts/anchor_planner.py <作品根> 第N集`。普通单拍默认不补 `_mid`；只有用户显式开启 `中段锚帧默认=开启` 且后端原生支持 3+ 帧时才加 D0。默认始终执行四类确定性规则：**E1** `shots[]` 明确声明多个 `lens/camera/shot_size` 时，在镜位边界生成 `use=edit_cut` 的接力图；**R1** 高运动/接触模板镜；**R2** ≥8s 且节拍 ≥3 的普通长连续镜；**R3** dashboard 有中段漂移 redraw 实证。dry-run 报告写明命中规则+成本增量，确认后 `--write` 注回 `continuity.anchors`。身份漂（脸/服装）不归本工艺，先升 Character ID/Face Lock/LoRA。
 - **身份同源硬要求**：含角色的首/中/尾多锚 Clip 必须在同一 Clip 块写 `CHAR_xx/形态`、`reference_group=<同源组>` 和脸型/五官比例/眼距/鼻梁/下颌/发型发髻/标志配饰/服装配色不变量；目标后端支持 Character ID / Face Lock / reference controls / LoRA 时同时传原生身份。不同来源锚图即使单张都过 QC，也不能混成一条视频；不支持稳定锁脸时降运动、降 MCU/侧脸/手部反应镜，或拆 Clip。
 - **prompt 块格式（两路通用）**：`01_clips.md` 里仍是一个 Clip 块；块头在 `**首帧**`/`**尾帧**` 之后逐锚加行 `**锚帧1**：\`…_a1.png\``（单锚帧写 `**中段锚帧**：\`…_mid.png\``；gate 核验——storyboard 声明数 > prompt 引用数 = WARN 意图誊抄丢失；引用的 PNG 不存在 = WARN）。① 原生多帧：每段配一句**转场 prompt**（frame k→k+1 怎么演变，由该锚帧的中间拍提示派生）；② 拆段：内部分 `### 段1`/`### 段2`… 子 prompt，**前段 end_state = 后段 start_state = 该锚帧画面**（单一真值，照抄不重写）。导演调度七字段、模型路由、身份锁定等块两路共用。
 - **① 原生多帧调用（即梦 multiframe2video，video_runner 自动构造）**：`prepare` 时从 storyboard 的 `continuity.anchors` 取 [首帧, *锚帧(按 at_sec), 尾帧]，算每段时长（消费 `multiframe_segments`，校验 [0.5,8]/总≥2，不合法就回退 ②），拼 `dreamina multiframe2video --images a,b,c --transition-prompt … --transition-duration …`（2 帧用 `--prompt`/`--duration` 简写）。**不支持 `--model_version`/`--video_resolution`**（比例随首帧、分辨率走后端默认）——所以 `出视频规格` 的分辨率档对 multiframe 路径不生效，需要时改走 image2video/frames2video。命令真值以 `references/cli_snapshots/dreamina/multiframe2video.txt` 为准。
 - **② 拆段焊回一条（兜底）**：各段验收后 concat 回单一 `Clip_K_<描述>.mp4` 落 `出视频/第N集/视频/`——对 compose/`_进度.md`/配音时长仍是一个 Clip，不重编号、不动 `镜头时长.json`。各段同分辨率/帧率/编码无损拼（`ffmpeg -f concat -safe 0 -i list.txt -c copy`）；分段草片（`Clip_K_seg1/seg2…`）拼完进 `废料/`。
 - **焊点自检（仅 ② 拆段路）**：每个焊点是新增内部接缝——验收看各 `at_sec` 处**速度连续性**（动作到锚帧不"到站急停再起步"）；前段落幅写"动作经过锚帧姿态、不停顿"，后段起幅写"承接进行中的动作"。① 原生多帧由模型做插值，无此问题。
-- **成本提醒**：① 原生多帧——多 K 张出图 + **同一次调用**（不翻倍视频成本，长镜尤划算）；② 拆段——多 K 张出图 + 视频从 1 段变 K+1 段。两路都"能一镜到底就别切碎"仍是默认，planner 的 dry-run 成本报告是确认闸。
+- **成本提醒**：① 原生多帧——多 K 张出图 + **同一次调用**；② 拆段——多 K 张出图 + 视频从 1 段变 K+1 段。成本不能反向覆盖剪辑语法：明确镜位切换仍拆 take；只有单一连续镜头才比较 native multiframe 与 split relay 的调用成本。planner 的 dry-run 报告是确认闸。
 
 ---
 

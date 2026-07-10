@@ -4,6 +4,7 @@ import { Handle, Position, type NodeProps } from "@xyflow/react";
 import { getMediaPort, mediaUrl, saveCanvasCapture, subscribeMediaPort } from "../api";
 import { useI18n } from "../i18n";
 import type { CanvasClip, CanvasFrame } from "../types";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 
 type CanvasNodeVariant = "asset-anchor" | "character" | "reference" | "frame" | "shot" | "video" | "lane";
 interface SharedAssetImage {
@@ -11,6 +12,7 @@ interface SharedAssetImage {
   label: string;
   abs: string;
   exists: boolean;
+  revision?: string;
   prompt?: string;
   clipIds: string[];
   roles: string[];
@@ -23,6 +25,7 @@ type EditableCanvasClip = CanvasClip & {
   assetImages?: SharedAssetImage[];
   refImageAbs?: string;
   refImageExists?: boolean;
+  refImageRevision?: string;
   refRoles?: string[];
   rootPath?: string;
   onEdit?: () => void;
@@ -205,13 +208,14 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
   rootPath?: string;
   durationHint?: number;
   noVideoLabel: string;
-  onOpenDetail: (event: ReactMouseEvent<HTMLDivElement>) => void;
+  onOpenDetail: (event: ReactMouseEvent<HTMLElement>) => void;
 }) {
   const { videoUrl, posterUrl, label, rootPath, durationHint, noVideoLabel, onOpenDetail } = props;
   const { t } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [activated, setActivated] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
   const [volumeOpen, setVolumeOpen] = useState(false);
@@ -223,6 +227,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
 
   useEffect(() => {
     setPlaying(false);
+    setActivated(false);
     setCurrent(0);
     setDuration(durationHint ?? 0);
   }, [durationHint, videoUrl]);
@@ -296,9 +301,31 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
           onOpenDetail(event);
         }}
       >
-        {posterUrl ? <img src={posterUrl} alt="" loading="lazy" /> : null}
+        {posterUrl ? <DecodedImage src={posterUrl} alt="" maxDecodeDimension={1280} /> : null}
         <span>{noVideoLabel}</span>
       </div>
+    );
+  }
+
+  if (!activated) {
+    return (
+      <button
+        type="button"
+        className="canvas-video-player dormant nodrag"
+        aria-label={t("canvas.playVideo")}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={(event) => {
+          event.stopPropagation();
+          setActivated(true);
+        }}
+        onDoubleClick={(event) => {
+          event.stopPropagation();
+          onOpenDetail(event);
+        }}
+      >
+        {posterUrl ? <DecodedImage src={posterUrl} alt="" maxDecodeDimension={1280} /> : null}
+        <span className="canvas-video-dormant-play"><VideoControlIcon name="play" /></span>
+      </button>
     );
   }
 
@@ -427,7 +454,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
 
 // Custom React Flow node = one storyboard Clip card with a frame thumbnail,
 // rhythm chip, duration, and QA badges.
-export function ClipNode({ data, selected }: NodeProps) {
+function ClipNodeComponent({ data, selected }: NodeProps) {
   const { t } = useI18n();
   const clip = data as unknown as EditableCanvasClip;
   const variant = clip.variant ?? "shot";
@@ -441,8 +468,8 @@ export function ClipNode({ data, selected }: NodeProps) {
   const [mediaDetail, setMediaDetail] = useState<MediaDetailState | null>(null);
   // re-render once the media server port is ready (else thumbs stay "未出图")
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
-  const rev = clip.mediaRevision ?? 0;
-  const withRevision = (url: string) => (url ? `${url}&v=${rev}` : "");
+  const withRevision = (url: string, revision?: string) =>
+    url && revision ? `${url}&v=${encodeURIComponent(revision)}` : url;
   const frames = (clip.frames || []).filter((frame) => isFrame || frame.abs || frame.exists);
   const visibleFrames = (isShot || isFrame) ? frames.filter((frame) => isFrame || !isReferenceInputFrame(frame)) : frames;
   const shownFrames = visibleFrames.length
@@ -457,9 +484,13 @@ export function ClipNode({ data, selected }: NodeProps) {
         }]
       : [];
   const posterFrame = shownFrames.find((frame) => frame.exists && frame.abs);
-  const posterUrl = posterFrame?.abs ? withRevision(mediaUrl(posterFrame.abs)) : "";
-  const videoUrl = clip.video_exists && clip.video_abs ? withRevision(mediaUrl(clip.video_abs)) : "";
-  const refImageUrl = clip.refImageExists && clip.refImageAbs ? withRevision(mediaUrl(clip.refImageAbs)) : "";
+  const posterUrl = posterFrame?.abs ? withRevision(mediaUrl(posterFrame.abs), posterFrame.revision) : "";
+  const videoUrl = clip.video_exists && clip.video_abs
+    ? withRevision(mediaUrl(clip.video_abs), clip.video_revision)
+    : "";
+  const refImageUrl = clip.refImageExists && clip.refImageAbs
+    ? withRevision(mediaUrl(clip.refImageAbs), clip.refImageRevision)
+    : "";
   const referenceFrames = frames.filter((frame) => frame.exists && frame.abs && isReferenceInputFrame(frame));
   const clipTooltip = clip.promptTooltip || [
     clip.label,
@@ -500,7 +531,7 @@ export function ClipNode({ data, selected }: NodeProps) {
         id: `${frame.role || "frame"}-${frame.abs}-${index}`,
         label: frame.label || t("canvas.imageNumber", { count: index + 1 }),
         role: frame.role,
-        url: withRevision(mediaUrl(frame.abs)),
+        url: withRevision(mediaUrl(frame.abs), frame.revision),
       }];
     }).slice(0, 14);
   }
@@ -512,7 +543,7 @@ export function ClipNode({ data, selected }: NodeProps) {
         id: asset.id,
         label: asset.label || t("canvas.imageNumber", { count: index + 1 }),
         role: asset.roles[0],
-        url: withRevision(mediaUrl(asset.abs)),
+        url: withRevision(mediaUrl(asset.abs), asset.revision),
       }];
     }).slice(0, 14);
   }
@@ -525,7 +556,7 @@ export function ClipNode({ data, selected }: NodeProps) {
       title: frame.label || clip.label,
       subtitle: clip.number != null ? `${clip.number}. ${clip.label}` : clip.label,
       prompt: detailPrompt(frame),
-      mediaUrl: withRevision(mediaUrl(frame.abs)),
+      mediaUrl: withRevision(mediaUrl(frame.abs), frame.revision),
       references: mediaRefsFromFrames(referenceSource),
       anchor: detailAnchor(event),
     });
@@ -542,7 +573,7 @@ export function ClipNode({ data, selected }: NodeProps) {
         asset.roles.length ? asset.roles.join(" / ") : "",
         t("canvas.referenceCount", { count: asset.clipIds.length }),
       ].filter(Boolean).join("\n"),
-      mediaUrl: withRevision(mediaUrl(asset.abs)),
+      mediaUrl: withRevision(mediaUrl(asset.abs), asset.revision),
       references: mediaRefsFromAssets(clip.assetImages || []),
       anchor: detailAnchor(event),
     });
@@ -647,7 +678,7 @@ export function ClipNode({ data, selected }: NodeProps) {
             <div className="canvas-media-detail-refs">
               {references.map((reference, index) => (
                 <div className="canvas-media-detail-ref" key={reference.id}>
-                  <img src={reference.url} alt={reference.label} loading="lazy" />
+                  <DecodedImage src={reference.url} alt={reference.label} maxDecodeDimension={256} />
                   <span className="canvas-media-detail-ref-index">{index + 1}</span>
                   {reference.role && <span className="canvas-media-detail-ref-role">{reference.role}</span>}
                 </div>
@@ -703,7 +734,9 @@ export function ClipNode({ data, selected }: NodeProps) {
           {assetImages.length > 0 && (
             <div className="shared-asset-grid">
               {assetImages.map((asset) => {
-                const url = asset.exists && asset.abs ? withRevision(mediaUrl(asset.abs)) : "";
+                const url = asset.exists && asset.abs
+                  ? withRevision(mediaUrl(asset.abs), asset.revision)
+                  : "";
                 return (
                   <span className="shared-asset-thumb-wrap" key={asset.id}>
                     <button
@@ -715,7 +748,7 @@ export function ClipNode({ data, selected }: NodeProps) {
                         openAssetDetail(asset, event);
                       }}
                     >
-                      {url ? <img src={url} alt={asset.label} loading="lazy" /> : <span>{t("canvas.noImage")}</span>}
+                      {url ? <DecodedImage src={url} alt={asset.label} maxDecodeDimension={320} /> : <span>{t("canvas.noImage")}</span>}
                     </button>
                     <Handle type="source" id={asset.id} position={Position.Right} className="shared-asset-handle" />
                   </span>
@@ -743,7 +776,7 @@ export function ClipNode({ data, selected }: NodeProps) {
               openReferenceDetail(event);
             }}
           >
-            {refImageUrl ? <img src={refImageUrl} alt={clip.label} loading="lazy" /> : <span>{t("canvas.noImage")}</span>}
+            {refImageUrl ? <DecodedImage src={refImageUrl} alt={clip.label} maxDecodeDimension={512} /> : <span>{t("canvas.noImage")}</span>}
           </button>
           <div className="body">
             <div className="clip-head">
@@ -769,7 +802,7 @@ export function ClipNode({ data, selected }: NodeProps) {
       exists: false,
       prompt: clip.prompt,
     };
-    const url = frame.exists && frame.abs ? withRevision(mediaUrl(frame.abs)) : "";
+    const url = frame.exists && frame.abs ? withRevision(mediaUrl(frame.abs), frame.revision) : "";
     return (
       <>
         <div
@@ -790,7 +823,7 @@ export function ClipNode({ data, selected }: NodeProps) {
           >
             <span className="frame-label">{frame.label || frame.role || clip.label}</span>
             {url ? (
-              <img src={url} alt={`${clip.label} ${frame.label || frame.role || ""}`} loading="lazy" />
+              <DecodedImage src={url} alt={`${clip.label} ${frame.label || frame.role || ""}`} maxDecodeDimension={640} />
             ) : (
               <span>{t("canvas.noImage")}</span>
             )}
@@ -815,7 +848,7 @@ export function ClipNode({ data, selected }: NodeProps) {
       {isShot && (
         <div className="frame-strip" aria-label={`${clip.label} frames`}>
           {shownFrames.length ? shownFrames.map((frame, idx) => {
-            const url = frame.exists && frame.abs ? withRevision(mediaUrl(frame.abs)) : "";
+            const url = frame.exists && frame.abs ? withRevision(mediaUrl(frame.abs), frame.revision) : "";
             return (
               <button
                 key={`${frame.role}-${frame.abs || idx}`}
@@ -827,7 +860,7 @@ export function ClipNode({ data, selected }: NodeProps) {
                 }}
               >
                 <span className="frame-label">{frame.label || frame.role || `帧${idx + 1}`}</span>
-                {url ? <img src={url} alt={`${clip.label} ${frame.label || idx + 1}`} loading="lazy" /> : <span>{t("canvas.noImage")}</span>}
+                {url ? <DecodedImage src={url} alt={`${clip.label} ${frame.label || idx + 1}`} maxDecodeDimension={640} /> : <span>{t("canvas.noImage")}</span>}
               </button>
             );
           }) : (
@@ -899,3 +932,5 @@ export function ClipNode({ data, selected }: NodeProps) {
     </>
   );
 }
+
+export const ClipNode = memo(ClipNodeComponent);

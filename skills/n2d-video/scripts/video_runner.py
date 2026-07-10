@@ -47,9 +47,20 @@ import native_av_sidecar
 import video_qc
 
 try:
-    from n2d_platform_profiles import anchor_consumption_plan, video_backend_frame_control
+    from n2d_platform_profiles import (
+        anchor_consumption_plan,
+        quantize_video_duration,
+        select_video_frame_strategy,
+        video_backend_frame_control,
+    )
 except ImportError:
     anchor_consumption_plan = lambda m, c, **kw: {}  # type: ignore
+    quantize_video_duration = lambda d, m, c=None, **kw: {  # type: ignore
+        "edit_target_sec": float(d or 0), "backend_request_sec": submit_duration(d),
+        "backend_surplus_sec": max(0.0, float(submit_duration(d)) - float(d or 0)),
+        "trim_mode": "trim_tail", "requires_split": False,
+    }
+    select_video_frame_strategy = lambda m, c=None, **kw: {"strategy": "first_only"}  # type: ignore
     video_backend_frame_control = lambda m, c: {}  # type: ignore
 
 
@@ -492,9 +503,30 @@ def _duration_from_heading(text: str) -> Optional[float]:
 
 
 def submit_duration(story_duration: Optional[float], minimum: int = 4, maximum: int = 15) -> int:
+    """Legacy Dreamina integer-duration wrapper for v1 prompt packs.
+
+    v2 manifests use `quantize_video_duration` with the actual backend/model.
+    Keeping this helper avoids silently changing resumable v1 batches.
+    """
     if story_duration is None:
         return minimum
     return max(minimum, min(maximum, int(math.ceil(story_duration))))
+
+
+def backend_duration_plan(
+    edit_target: Optional[float],
+    backend: str,
+    *,
+    model_version: Optional[str] = None,
+    frame_strategy: Optional[str] = None,
+) -> Dict[str, Any]:
+    return dict(quantize_video_duration(
+        edit_target,
+        backend,
+        "",
+        model_version=model_version,
+        mode=frame_strategy,
+    ))
 
 
 def _story_duration(item: Mapping[str, Any]) -> Optional[float]:
@@ -544,7 +576,7 @@ def video_shot_split_plan(item: Mapping[str, Any]) -> Dict[str, Any]:
         "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
         "recommended_parts": count,
         "direct_submit_allowed": duration <= VIDEO_SHOT_HARD_MAX_SEC,
-        "policy": "story_clip may stay long, but paid video_shot generation should use 4-8s physical parts",
+        "policy": "split editorial camera changes first; then keep each continuous generation take within the selected backend window",
     }
 
 
@@ -596,6 +628,14 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
         prompt = _extract_prompt(block)
         target = video_target_name(number, heading, image_rel)
         story_duration = _duration_from_heading(heading) or _duration_from_heading(block)
+        compiled_duration = (
+            dict(compiled.get("duration_plan") or {})
+            if isinstance(compiled, Mapping) and isinstance(compiled.get("duration_plan"), Mapping)
+            else {}
+        )
+        edit_target = compiled_duration.get("edit_target_sec") or story_duration
+        backend_request = compiled_duration.get("backend_request_sec")
+        frame_strategy = str((compiled or {}).get("frame_strategy") or "legacy_auto").strip().lower()
         out.append({
             "clip": clip_key(number),
             "heading": heading,
@@ -605,14 +645,18 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
             "end_image_rel": end_image_rel,
             "target": target,
             "story_duration": story_duration,
-            "submit_duration": submit_duration(story_duration),
+            "edit_target_duration": edit_target,
+            "duration_plan": compiled_duration,
+            "submit_duration": backend_request or submit_duration(story_duration),
+            "speed_mode": "trim",
+            "frame_strategy": frame_strategy,
             "prompt_text": prompt,
             "prompt_source_kind": "compiled_submit_prompt" if compiled else "legacy_zh_prompt",
             "prompt_compiler": {
                 key: compiled.get(key)
                 for key in (
                     "kind", "version", "profile_version", "profile", "backend", "mode",
-                    "language", "native_audio_policy", "source_contract_sha256",
+                    "language", "native_audio_policy", "source_contract_sha256", "frame_strategy",
                 )
             } if compiled else None,
             "negative_prompt": str(compiled.get("negative_prompt") or "") if compiled else "",
@@ -647,9 +691,7 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     info = anchors_by_clip.get(num) if num is not None else None
     if not info:
         return False
-    split = [(t, png, hint) for t, png, use, hint in
-             zip(info["times"], info["images"], info["uses"], info["hints"])
-             if t is not None and png]
+    split = _consumable_anchor_rows(info)
     if not split:
         return False
     end_rel = item.get("end_image_rel")
@@ -689,12 +731,22 @@ def attach_multiframe(root: Path, item: Dict[str, Any], prompt_text: str,
     # image2video --duration cap. Keep audit/log duration aligned with the
     # native timeline we actually submit.
     item["submit_duration"] = round(sum(seg_durs), 3)
+    duration_plan = dict(item.get("duration_plan") or {})
+    duration_plan.update({
+        "backend_request_sec": item["submit_duration"],
+        "backend_surplus_sec": round(max(0.0, item["submit_duration"] - float(item.get("edit_target_duration") or item["submit_duration"])), 3),
+        "trim_mode": "trim_tail" if item["submit_duration"] > float(item.get("edit_target_duration") or item["submit_duration"]) + 0.05 else "none",
+        "requires_split": False,
+        "duration_control_kind": "native_transition_segments",
+    })
+    item["duration_plan"] = duration_plan
     return True
 
 
 def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str, *,
                             part_index: int, part_total: int, start_rel: str, end_rel: str,
-                            start_sec: float, end_sec: float, end_hint: str = "") -> str:
+                            start_sec: float, end_sec: float, end_hint: str = "",
+                            shot_description: str = "") -> str:
     """Wrap a parent clip prompt with a hard segment contract for split relay.
 
     Split relay feeds one physical first/end pair per paid submit.  The parent
@@ -707,6 +759,7 @@ def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str
     else:
         boundary = "本段为最后一段；可以抵达父镜头最终 end_state，但必须以本段尾帧为唯一落幅。"
     hint_line = f"段落目标：{end_hint.strip()}" if end_hint and end_hint.strip() else "段落目标：以尾帧构图、主体姿态、道具/面板位置为准。"
+    shot_line = f"本段镜位/动作：{shot_description.strip()}" if shot_description and shot_description.strip() else ""
     parent = parent_prompt.strip()
     guard = "\n".join([
         "【Split Relay Segment Contract】",
@@ -715,10 +768,11 @@ def split_relay_prompt_text(parent_prompt: str, parent_clip: str, part_clip: str
         f"时间范围：{start_sec:.3f}s -> {end_sec:.3f}s",
         f"首帧：`{start_rel}`",
         f"尾帧：`{end_rel}`",
+        shot_line,
         hint_line,
         boundary,
         "执行要求：从首帧状态开始，运动连续自然，在尾帧附近稳定结束；父镜头参考提示词只用于风格、主体和镜头语气，不得覆盖本段首尾帧约束。",
-    ])
+    ]).replace("\n\n", "\n")
     return f"{guard}\n\n【Parent Clip Reference Prompt】\n{parent}".rstrip()
 
 
@@ -757,6 +811,19 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
         item["model_version"] = select_dreamina_model_version(resolved_model_version, budget_tier, item, prompt_text)
         if item["model_version"] != resolved_model_version:
             item["model_version_reason"] = "high_value_clip_uses_vip"
+        requested_strategy = str(item.get("frame_strategy") or "legacy_auto").strip().lower()
+        edit_target = item.get("edit_target_duration") or item.get("story_duration")
+        actual_duration_plan = backend_duration_plan(
+            edit_target,
+            backend,
+            model_version=item.get("model_version"),
+            frame_strategy=requested_strategy,
+        )
+        actual_duration_plan["story_span_sec"] = item.get("story_duration")
+        item["duration_plan"] = actual_duration_plan
+        item["edit_target_duration"] = actual_duration_plan.get("edit_target_sec")
+        item["submit_duration"] = actual_duration_plan.get("backend_request_sec")
+        item["speed_mode"] = "trim"
         prompt_file = prompts_dir / f"{item['target'][:-4]}.prompt.txt"
         prompt_file.write_text(prompt_text + "\n", encoding="utf-8")
         item["prompt_file"] = str(prompt_file)
@@ -765,44 +832,73 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
 
         num = _clip_number(item)
         anchors_info = anchors_by_clip.get(num) if num is not None else None
-        anchor_times = [t for t in (anchors_info or {}).get("times", []) if t is not None]
+        consumable_anchors = _consumable_anchor_rows(anchors_info or {})
+        anchor_times = [row[0] for row in consumable_anchors]
+        shots = list((anchors_info or {}).get("shots") or [])
+        editorial_shot_count = len([
+            row for row in shots if str(row.get("lens") or "").strip()
+        ])
+        if requested_strategy == "legacy_auto":
+            requested_strategy = str(select_video_frame_strategy(
+                backend,
+                "",
+                shot_count=max(1, editorial_shot_count),
+                anchor_count=len(anchor_times),
+                need_end=bool(item.get("end_image_rel")),
+                requires_mid_anchors=bool(anchor_times and not shots),
+            ).get("strategy") or "first_only")
+            item["frame_strategy"] = requested_strategy
         frame_plan = anchor_consumption_plan(
             backend,
             "",
             anchor_count=len(anchor_times),
             need_end=bool(item.get("end_image_rel")),
+            frame_strategy=requested_strategy,
         )
         item["frame_control_mode"] = capability.get("mode")
         item["anchor_consumption"] = frame_plan
         item["anchor_consumption_mode"] = frame_plan.get("consumption_mode")
         item["video_shot_split_plan"] = video_shot_split_plan(item)
-        force_physical_split = bool(item["video_shot_split_plan"].get("required"))
+        force_physical_split = requested_strategy == "edit_cut" or bool(item["video_shot_split_plan"].get("required"))
 
         # 尝试接入原生多帧
         attached_mf = False
-        if supports_mf and anchor_times and not force_physical_split:
+        if requested_strategy == "native_multiframe" and supports_mf and anchor_times and not force_physical_split:
             attached_mf = attach_multiframe(root, item, prompt_text, anchors_by_clip)
-        elif supports_mf and anchor_times and force_physical_split:
+        elif requested_strategy == "native_multiframe" and supports_mf and anchor_times and force_physical_split:
             item["native_multiframe_skip"] = (
                 f"story_clip duration {item['video_shot_split_plan'].get('story_duration_sec')}s "
                 f"> {VIDEO_SHOT_PLAN_THRESHOLD_SEC:g}s; use physical video_shot split instead of one long native multiframe clip"
             )
         
         # 如果不支持原生多帧，或者 attach 失败，但有中锚 -> 自动化拆段接力 (Split Relay)
-        if not attached_mf and anchors_info and anchors_info.get("times"):
+        relay_requested = force_physical_split or requested_strategy in {"split_relay", "edit_cut"} or (
+            str((item.get("prompt_compiler") or {}).get("version") or "") == "1" and bool(anchor_times)
+        )
+        if not attached_mf and relay_requested and anchor_times:
             # 执行自动化拆段 (仅当有 end_frame 且后端支持首尾帧或明确要求拆段时)
             if supports_last and item.get("end_image") and Path(item["end_image"]).is_file():
                 # 构造子段列表
-                anchor_times_raw = anchors_info.get("times") or []
-                anchor_images_raw = anchors_info.get("images") or []
-                anchor_hints_raw = anchors_info.get("hints") or []
-                relay_anchors = []
-                for a_idx, (t, png) in enumerate(zip(anchor_times_raw, anchor_images_raw)):
-                    if t is None or not png:
+                relay_anchors = list(consumable_anchors)
+                if requested_strategy == "edit_cut" and shots:
+                    boundaries = [float(row["start_sec"]) for row in shots[1:]]
+                    selected: List[Tuple[float, str, str]] = []
+                    missing_boundaries: List[float] = []
+                    for boundary in boundaries:
+                        nearest = min(relay_anchors, key=lambda row: abs(row[0] - boundary), default=None)
+                        if nearest is None or abs(nearest[0] - boundary) > 0.35:
+                            missing_boundaries.append(boundary)
+                        else:
+                            selected.append((boundary, nearest[1], nearest[2]))
+                    if missing_boundaries:
+                        item["frame_strategy_issue"] = (
+                            "edit_cut boundary images missing at "
+                            + ", ".join(f"{value:g}s" for value in missing_boundaries)
+                        )
+                        refresh_item_recipe_evidence(root, episode, item)
+                        items.append(item)
                         continue
-                    hint = anchor_hints_raw[a_idx] if a_idx < len(anchor_hints_raw) else ""
-                    relay_anchors.append((float(t), png, hint))
-                relay_anchors.sort(key=lambda x: x[0])
+                    relay_anchors = selected
                 t_list = [0.0] + [t for t, _, _ in relay_anchors] + [float(item["story_duration"])]
                 png_list = [item["image_rel"]] + [png for _, png, _ in relay_anchors] + [item["end_image_rel"]]
                 segment_end_hints = [hint for _, _, hint in relay_anchors] + [str(anchors_info.get("end_state") or "")]
@@ -840,7 +936,16 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                     part_item["end_image_rel"] = png_list[p_idx+1]
                     part_item["end_image"] = str((root / png_list[p_idx+1]).resolve()) if not Path(png_list[p_idx+1]).is_absolute() else png_list[p_idx+1]
                     part_item["story_duration"] = seg_dur
-                    part_item["submit_duration"] = submit_duration(seg_dur)
+                    part_item["edit_target_duration"] = round(seg_dur, 3)
+                    part_item["duration_plan"] = backend_duration_plan(
+                        seg_dur,
+                        backend,
+                        model_version=part_item.get("model_version"),
+                        frame_strategy="first_last",
+                    )
+                    part_item["duration_plan"]["story_span_sec"] = round(seg_dur, 3)
+                    part_item["submit_duration"] = part_item["duration_plan"].get("backend_request_sec")
+                    part_item["speed_mode"] = "trim"
                     part_item["relay_parent"] = item["clip"]
                     part_item["story_clip"] = item["clip"]
                     part_item["video_shot_segment"] = {
@@ -851,9 +956,15 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         "part_total": len(t_list) - 1,
                         "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
                         "parent_story_duration_sec": item["video_shot_split_plan"].get("story_duration_sec"),
-                        "reason": "story_clip_longer_than_video_shot_threshold" if force_physical_split else "backend_requires_split_relay",
+                        "edit_target_sec": round(seg_dur, 3),
+                        "reason": (
+                            "storyboard_editorial_cut" if requested_strategy == "edit_cut"
+                            else "story_clip_longer_than_video_shot_threshold" if force_physical_split
+                            else "backend_requires_split_relay"
+                        ),
                     }
-                    part_item["anchor_consumption_mode"] = "split_relay_part"
+                    part_item["frame_strategy"] = "edit_cut_part" if requested_strategy == "edit_cut" else "split_relay_part"
+                    part_item["anchor_consumption_mode"] = part_item["frame_strategy"]
                     part_item["anchor_consumption_parent_mode"] = frame_plan.get("consumption_mode")
                     part_prompt = split_relay_prompt_text(
                         prompt_text,
@@ -866,6 +977,13 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         start_sec=float(t_list[p_idx]),
                         end_sec=float(t_list[p_idx + 1]),
                         end_hint=segment_end_hints[p_idx] if p_idx < len(segment_end_hints) else "",
+                        shot_description=(
+                            "；".join(filter(None, (
+                                str(shots[p_idx].get("lens") or "") if p_idx < len(shots) else "",
+                                str(shots[p_idx].get("description") or "") if p_idx < len(shots) else "",
+                            )))
+                            if requested_strategy == "edit_cut" else ""
+                        ),
                     )
                     part_prompt_file = prompts_dir / f"{part_item['target'][:-4]}.prompt.txt"
                     part_prompt_file.write_text(part_prompt + "\n", encoding="utf-8")
@@ -879,6 +997,8 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                         "end_sec": float(t_list[p_idx + 1]),
                         "start_image_rel": part_item["image_rel"],
                         "end_image_rel": part_item["end_image_rel"],
+                        "strategy": requested_strategy,
+                        "edit_target_sec": round(seg_dur, 3),
                     }
                     refresh_item_recipe_evidence(root, episode, part_item)
                     parts.append(part_item)
@@ -889,11 +1009,24 @@ def prepare_manifest(root: Path, episode: str, start: int, end: int, *, backend:
                 "mid anchors declared but backend cannot consume native mid anchors"
                 if not supports_last else "mid anchors declared but end frame is missing for split relay"
             )
-        if force_physical_split and not (anchors_info and anchors_info.get("times")):
+        if requested_strategy == "edit_cut_pending_assets":
+            item["frame_strategy_issue"] = (
+                "multiple storyboard shots require edit-cut boundary images and an end frame before paid generation"
+            )
+        elif requested_strategy == "reroute_required":
+            item["frame_strategy_issue"] = (
+                "high-risk continuous shot needs mid-frame control but the selected backend cannot consume it"
+            )
+        if force_physical_split and not anchor_times:
             item["duration_segment_issue"] = (
-                f"story_clip duration {item['video_shot_split_plan'].get('story_duration_sec')}s "
-                f"> {VIDEO_SHOT_PLAN_THRESHOLD_SEC:g}s but storyboard has no continuity.anchors[] for physical video_shot split; "
+                f"story_clip duration {item.get('story_duration')}s requires physical edit/generation parts "
+                "but storyboard has no consumable continuity.anchors[] at cut boundaries; "
                 "run n2d-script shot_split_decision + anchor_planner before paid video generation"
+            )
+        if bool((item.get("duration_plan") or {}).get("requires_split")) and not item.get("video_shot_segment"):
+            item["duration_segment_issue"] = (
+                f"edit target {item.get('edit_target_duration')}s exceeds the selected backend request ceiling; "
+                "prepare explicit physical parts before paid submission"
             )
         refresh_item_recipe_evidence(root, episode, item)
         items.append(item)
@@ -1047,6 +1180,60 @@ def beat_hint_at(clip: Dict[str, Any], at_sec: Optional[float]) -> str:
     return str(beats[max(0, min(len(beats) - 1, idx))])
 
 
+def _shot_time_range(value: Any) -> Optional[Tuple[float, float]]:
+    if isinstance(value, (list, tuple)) and len(value) >= 2:
+        try:
+            return float(value[0]), float(value[1])
+        except (TypeError, ValueError):
+            return None
+    match = re.search(r"([0-9]+(?:\.[0-9]+)?)\s*(?:s|秒)?\s*[-~—–至]\s*([0-9]+(?:\.[0-9]+)?)", str(value or ""))
+    if not match:
+        return None
+    return float(match.group(1)), float(match.group(2))
+
+
+def _storyboard_shots(clip: Mapping[str, Any], duration: Any) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for idx, shot in enumerate(clip.get("shots") or [], 1):
+        if not isinstance(shot, Mapping):
+            continue
+        timing = _shot_time_range(shot.get("t") or shot.get("time") or shot.get("range"))
+        if timing is None:
+            continue
+        start, end = timing
+        if start < 0 or end <= start:
+            continue
+        rows.append({
+            "index": idx,
+            "start_sec": round(start, 3),
+            "end_sec": round(end, 3),
+            "description": str(shot.get("description") or shot.get("visual") or shot.get("action") or ""),
+            "lens": str(shot.get("lens") or shot.get("shot_size") or shot.get("camera") or ""),
+        })
+    rows.sort(key=lambda row: float(row["start_sec"]))
+    if rows and isinstance(duration, (int, float)):
+        rows[-1]["end_sec"] = round(float(duration), 3)
+    return rows
+
+
+def _consumable_anchor_rows(info: Mapping[str, Any]) -> List[Tuple[float, str, str]]:
+    rows: List[Tuple[float, str, str]] = []
+    for t, png, use, hint in zip(
+        info.get("times") or [], info.get("images") or [],
+        info.get("uses") or [], info.get("hints") or [],
+    ):
+        use_key = str(use or "split").strip().lower()
+        if use_key in {"qc", "reference", "reference_qc", "review"}:
+            continue
+        if t is None or not png:
+            continue
+        try:
+            rows.append((float(t), str(png), str(hint or "")))
+        except (TypeError, ValueError):
+            continue
+    return sorted(rows, key=lambda row: row[0])
+
+
 def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
     """{clip_number: {"times": [at_sec...], "images": [rel png...], "hints": [beat...], "duration"}}
     from storyboard.json. 读 continuity.anchors（N 锚链）或 continuity.midframe（单锚）。
@@ -1071,8 +1258,8 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
             mid = cont["midframe"]
             anchors = [{"anchor_png": mid.get("midframe_png"), "at_sec": mid.get("split_at_sec"),
                         "use": "split"}]
-        if not isinstance(anchors, list) or not anchors:
-            continue
+        if not isinstance(anchors, list):
+            anchors = []
         times, images, uses, hints = [], [], [], []
         for a in anchors:
             if not isinstance(a, dict):
@@ -1084,6 +1271,7 @@ def clip_anchor_index(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
             hints.append(beat_hint_at(clip, a.get("at_sec")))
         out[i] = {"times": times, "images": images, "uses": uses, "hints": hints,
                   "duration": clip.get("duration"),
+                  "shots": _storyboard_shots(clip, clip.get("duration")),
                   "end_state": str(cont.get("end_state") or "")}  # 末段转场 prompt 用它，比泛化句具体
     return out
 
@@ -1280,6 +1468,18 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
     item = find_item(manifest, clip)
     if item.get("submit_id") and item.get("status") not in {"failed", "rejected"}:
         raise RuntimeError(f"{item['clip']} already has submit_id={item['submit_id']}; query or reject before resubmitting")
+    unresolved = item.get("frame_strategy_issue") or item.get("duration_segment_issue") or item.get("anchor_consumption_issue")
+    if unresolved:
+        raise RuntimeError(f"{item['clip']} paid submission blocked by unresolved execution contract: {unresolved}")
+    if str(item.get("frame_strategy") or "").lower() in {"edit_cut_pending_assets", "reroute_required"}:
+        raise RuntimeError(
+            f"{item['clip']} frame_strategy={item.get('frame_strategy')} is not directly submit-able; "
+            "complete boundary assets or change the backend route, then prepare again."
+        )
+    if bool((item.get("duration_plan") or {}).get("requires_split")) and not item.get("video_shot_segment"):
+        raise RuntimeError(
+            f"{item['clip']} edit target exceeds the backend duration ceiling; submit prepared physical parts, not the parent clip."
+        )
     if direct_submit_forbidden(item):
         duration = _story_duration(item)
         plan = video_shot_split_plan(item)
@@ -1287,7 +1487,7 @@ def submit_clip(root: Path, manifest_file: Path, clip: str, *, dry_run: bool = F
             f"{item['clip']} story_duration={duration:g}s exceeds hard single video_shot cap "
             f"{VIDEO_SHOT_HARD_MAX_SEC:g}s. Do not submit a long story_clip directly. "
             "Run n2d-script shot_split_decision/anchor_planner and video_runner prepare again so it expands "
-            f"into ~{plan.get('recommended_parts')} physical 4-8s video_shot parts, then submit those part clips."
+            f"into ~{plan.get('recommended_parts')} explicit physical takes within the backend window, then submit those part clips."
         )
     backend_key, adapter = resolve_video_backend(manifest)
     item["cost_provider"] = adapter["provider"]

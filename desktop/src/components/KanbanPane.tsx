@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { getMediaPort, mediaUrl, subscribeMediaPort } from "../api";
 import { useI18n } from "../i18n";
 import type { CanvasClip, CanvasFrame } from "../types";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 import { QualitySummaryStrip } from "./QualitySummary";
 import type { ViewProps } from "../views/registry";
 
@@ -80,23 +81,28 @@ function fmtScore(score?: number): string {
   return Number.isInteger(score) ? String(score) : score.toFixed(1);
 }
 
-function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumnKey; refreshKey: number }) {
+function Card({ clip, kind }: { clip: CanvasClip; kind: KanbanColumnKey }) {
   const { t } = useI18n();
   useSyncExternalStore(subscribeMediaPort, getMediaPort);
   const [previewFrame, setPreviewFrame] = useState<CanvasFrame | null>(null);
   const [previewVideo, setPreviewVideo] = useState(false);
-  const withRevision = (url: string) => (url ? `${url}&v=${refreshKey}` : "");
+  const withRevision = (url: string, revision?: string) =>
+    url && revision ? `${url}&v=${encodeURIComponent(revision)}` : url;
   const frames = imageFrames(clip);
-  const poster = frames[0]?.abs ? withRevision(mediaUrl(frames[0].abs)) : "";
-  const previewUrl = previewFrame?.abs ? withRevision(mediaUrl(previewFrame.abs)) : "";
-  const videoUrl = clip.video_exists && clip.video_abs ? withRevision(mediaUrl(clip.video_abs)) : "";
+  const poster = frames[0]?.abs ? withRevision(mediaUrl(frames[0].abs), frames[0].revision) : "";
+  const previewUrl = previewFrame?.abs
+    ? withRevision(mediaUrl(previewFrame.abs), previewFrame.revision)
+    : "";
+  const videoUrl = clip.video_exists && clip.video_abs
+    ? withRevision(mediaUrl(clip.video_abs), clip.video_revision)
+    : "";
   return (
     <>
     <div className="kanban-card" title={clipTooltip(clip)}>
       {(kind === "image" || kind === "review") && frames.length > 0 && (
         <div className="kanban-frame-grid" aria-label={`${clip.label} frames`}>
           {frames.slice(0, 4).map((frame, idx) => {
-            const url = frame.abs ? withRevision(mediaUrl(frame.abs)) : "";
+            const url = frame.abs ? withRevision(mediaUrl(frame.abs), frame.revision) : "";
             return (
               <button
                 key={`${frame.role}-${frame.abs || idx}`}
@@ -106,7 +112,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
                 onClick={() => setPreviewFrame(frame)}
               >
                 <span>{frame.label || frame.role || `帧${idx + 1}`}</span>
-                {url && <img src={url} alt={`${clip.label} ${frame.label || idx + 1}`} loading="lazy" />}
+                {url && <DecodedImage src={url} alt={`${clip.label} ${frame.label || idx + 1}`} maxDecodeDimension={640} />}
               </button>
             );
           })}
@@ -119,7 +125,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
           title={`${videoUrl ? t("canvas.playVideo") : t("canvas.noVideo")}\n${clip.video_abs}\n${clip.prompt || ""}`}
           onClick={() => videoUrl && setPreviewVideo(true)}
         >
-          {poster && <img src={poster} alt="" loading="lazy" />}
+          {poster && <DecodedImage src={poster} alt="" maxDecodeDimension={960} />}
           <span className="clip-video-play">▶</span>
           <span className="clip-video-label">{videoUrl ? t("canvas.video") : t("canvas.noVideo")}</span>
         </button>
@@ -161,7 +167,9 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
       >
         <div className="media-preview" onClick={(event) => event.stopPropagation()}>
           <button type="button" className="media-preview-close" aria-label={t("common.close")} onClick={() => setPreviewFrame(null)}>×</button>
-          <img src={previewUrl} alt={`${clip.label} ${previewFrame.label}`} />
+          <div className="media-preview-image-wrap">
+            <DecodedImage src={previewUrl} alt={`${clip.label} ${previewFrame.label}`} loading="eager" maxDecodeDimension={4096} />
+          </div>
           <div className="media-preview-meta">
             <strong>{clip.number != null ? `${clip.number}. ` : ""}{clip.label} · {previewFrame.label}</strong>
             <span>{previewFrame.abs}</span>
@@ -194,7 +202,7 @@ function Card({ clip, kind, refreshKey }: { clip: CanvasClip; kind: KanbanColumn
   );
 }
 
-export function KanbanPane({ canvas, refreshKey = 0 }: ViewProps) {
+export function KanbanPane({ canvas }: ViewProps) {
   const { t } = useI18n();
   const groups = useMemo(() => {
     const clips = canvas?.clips ?? [];
@@ -219,7 +227,7 @@ export function KanbanPane({ canvas, refreshKey = 0 }: ViewProps) {
               {g.clips.length === 0 ? (
                 <div className="kanban-empty">—</div>
               ) : (
-                g.clips.map((c) => <Card key={c.id} clip={c} kind={g.key} refreshKey={refreshKey} />)
+                g.clips.map((c) => <Card key={c.id} clip={c} kind={g.key} />)
               )}
             </div>
           </div>

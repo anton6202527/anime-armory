@@ -636,13 +636,14 @@ def video_backend_duration_control(
         }
     control: Dict[str, object] = dict(raw)
     low_mode = str(mode or "").strip().lower()
-    if key == "dreamina" and low_mode in {"multiframe2video", "native_multiframe"}:
+    native_duration_mode = key == "dreamina" and low_mode in {"multiframe2video", "native_multiframe"}
+    if native_duration_mode:
         native = raw.get("native_multiframe")
         if isinstance(native, Mapping):
             control.update(dict(native))
     model = str(model_version or spec.get("default_model_version") or "").strip()
     ranges = raw.get("model_ranges")
-    if model and isinstance(ranges, Mapping):
+    if model and isinstance(ranges, Mapping) and not native_duration_mode:
         pair = ranges.get(model)
         if isinstance(pair, Sequence) and not isinstance(pair, (str, bytes)) and len(pair) >= 2:
             control["min_seconds"] = float(pair[0])

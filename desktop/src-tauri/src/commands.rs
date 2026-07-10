@@ -3161,6 +3161,7 @@ pub struct CanvasFrame {
     label: String,
     abs: Option<String>,
     exists: bool,
+    revision: Option<String>,
     at_sec: Option<f64>,
     prompt: Option<String>,
 }
@@ -3178,6 +3179,7 @@ pub struct CanvasClip {
     first_frame_exists: bool,
     video_abs: Option<String>,
     video_exists: bool,
+    video_revision: Option<String>,
     frames: Vec<CanvasFrame>,
     prompt: Option<String>,
     qa: Vec<QaFlag>,
@@ -3759,6 +3761,21 @@ fn rel_abs(root: &Path, rel: Option<String>) -> (Option<String>, bool) {
         }
         _ => (None, false),
     }
+}
+
+fn media_revision(abs: &Option<String>) -> Option<String> {
+    let path = Path::new(abs.as_deref()?);
+    let metadata = fs::metadata(path).ok()?;
+    if !metadata.is_file() {
+        return None;
+    }
+    let modified = metadata
+        .modified()
+        .ok()
+        .and_then(|value| value.duration_since(UNIX_EPOCH).ok())
+        .map(|value| value.as_nanos())
+        .unwrap_or_default();
+    Some(format!("{:x}-{modified:x}", metadata.len()))
 }
 
 fn clip_prompt(c: &Value) -> Option<String> {
@@ -5108,8 +5125,7 @@ fn finalize_quality_insights(out: &mut QualityInsights) {
     }
 }
 
-#[tauri::command]
-pub fn read_quality_insights(root: String, line: String, ep: Option<String>) -> QualityInsights {
+fn build_quality_insights(root: String, line: String, ep: Option<String>) -> QualityInsights {
     let root_p = Path::new(&root);
     let clean_ep = ep
         .filter(|value| validate_episode_name(value).is_ok())
@@ -5131,6 +5147,24 @@ pub fn read_quality_insights(root: String, line: String, ep: Option<String>) -> 
     out
 }
 
+#[tauri::command]
+pub async fn read_quality_insights(
+    root: String,
+    line: String,
+    ep: Option<String>,
+) -> QualityInsights {
+    let fallback_line = line.clone();
+    let fallback_episode = ep.clone();
+    tauri::async_runtime::spawn_blocking(move || build_quality_insights(root, line, ep))
+        .await
+        .unwrap_or_else(|_| QualityInsights {
+            line: fallback_line,
+            episode: fallback_episode,
+            status: Some("error".into()),
+            ..Default::default()
+        })
+}
+
 fn push_frame(
     frames: &mut Vec<CanvasFrame>,
     root: &Path,
@@ -5141,11 +5175,13 @@ fn push_frame(
     prompt: Option<String>,
 ) {
     let (abs, exists) = rel_abs(root, rel);
+    let revision = media_revision(&abs);
     frames.push(CanvasFrame {
         role: role.into(),
         label: label.into(),
         abs,
         exists,
+        revision,
         at_sec,
         prompt,
     });
@@ -5218,6 +5254,7 @@ fn review_asset_frame(
 ) -> CanvasFrame {
     let rel = s(raw, "path");
     let (abs, exists_by_path) = rel_abs(root, rel);
+    let revision = media_revision(&abs);
     CanvasFrame {
         role: s(raw, "role").unwrap_or_else(|| fallback_label.into()),
         label: s(raw, "label")
@@ -5228,6 +5265,7 @@ fn review_asset_frame(
             .get("exists")
             .and_then(|e| e.as_bool())
             .unwrap_or(exists_by_path),
+        revision,
         at_sec: raw.get("at_sec").and_then(|x| x.as_f64()),
         prompt,
     }
@@ -5281,6 +5319,7 @@ fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
             let (ff_abs, ff_exists) = rel_abs(root, ff_rel);
             let vid_rel = s(c, "video_out");
             let (vid_abs, vid_exists) = rel_abs(root, vid_rel);
+            let video_revision = media_revision(&vid_abs);
             CanvasClip {
                 id: s(c, "id").unwrap_or_else(|| format!("{ep}_CLIP{:02}", i + 1)),
                 number: c
@@ -5296,6 +5335,7 @@ fn from_storyboard(root: &Path, ep: &str, data: &Value) -> Vec<CanvasClip> {
                 first_frame_exists: ff_exists,
                 video_abs: vid_abs,
                 video_exists: vid_exists,
+                video_revision,
                 frames,
                 prompt,
                 qa: vec![],
@@ -5397,6 +5437,7 @@ fn push_shared_asset_files(root: &Path, dir: &Path, depth: usize, out: &mut Vec<
             label,
             abs: Some(path.to_string_lossy().to_string()),
             exists: true,
+            revision: media_revision(&Some(path.to_string_lossy().to_string())),
             at_sec: None,
             prompt: Some(rel),
         });
@@ -5448,6 +5489,7 @@ fn push_comic_shared_asset_frame(
         return;
     }
     let view_label = view.trim_end_matches("_path");
+    let revision = media_revision(&abs);
     frames.push(CanvasFrame {
         role: "shared_asset".into(),
         label: if view_label.is_empty() {
@@ -5457,6 +5499,7 @@ fn push_comic_shared_asset_frame(
         },
         abs,
         exists,
+        revision,
         at_sec: None,
         prompt: Some(format!("id: {id}\nview: {view}\n{rel}")),
     });
@@ -5479,6 +5522,7 @@ fn comic_reference_frames(root: &Path, panel: &Value, job: Option<&Value>) -> Ve
             }
             let label = comic_reference_label(raw);
             let (abs, exists) = rel_abs(root, Some(rel.clone()));
+            let revision = media_revision(&abs);
             let prompt = Some(
                 [
                     s(raw, "id").map(|id| format!("id: {id}")),
@@ -5495,6 +5539,7 @@ fn comic_reference_frames(root: &Path, panel: &Value, job: Option<&Value>) -> Ve
                 label,
                 abs,
                 exists,
+                revision,
                 at_sec: None,
                 prompt,
             });
@@ -5790,11 +5835,13 @@ fn from_comic_panel_script(root: &Path, ep: &str, data: &Value) -> Vec<CanvasCli
                 .or_else(|| qc.as_ref().and_then(|q| s(q, "path")))
                 .or_else(|| Some(format!("出图/{ep}/panels/{panel_id}.png")));
             let (image_abs, image_exists) = rel_abs(root, image_rel);
+            let image_revision = media_revision(&image_abs);
             let mut frames = vec![CanvasFrame {
                 role: "panel".into(),
                 label: "成图".into(),
                 abs: image_abs.clone(),
                 exists: image_exists,
+                revision: image_revision,
                 at_sec: None,
                 prompt: prompt.clone(),
             }];
@@ -5835,6 +5882,7 @@ fn from_comic_panel_script(root: &Path, ep: &str, data: &Value) -> Vec<CanvasCli
                 first_frame_exists: image_exists,
                 video_abs: None,
                 video_exists: false,
+                video_revision: None,
                 frames,
                 prompt,
                 qa,
@@ -5937,6 +5985,7 @@ fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam
             let (ff_abs, ff_exists_by_path) = rel_abs(root, ff_path);
             let video = c.get("video").cloned().unwrap_or(Value::Null);
             let (vid_abs, vid_exists_by_path) = rel_abs(root, s(&video, "path"));
+            let video_revision = media_revision(&vid_abs);
             let qa: Vec<QaFlag> = c
                 .get("qa_flags")
                 .and_then(|q| q.as_array())
@@ -5989,6 +6038,7 @@ fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam
                     .get("exists")
                     .and_then(|e| e.as_bool())
                     .unwrap_or(vid_exists_by_path),
+                video_revision,
                 frames,
                 prompt,
                 qa,
@@ -6003,8 +6053,7 @@ fn from_review_ui(root: &Path, data: &Value) -> (Vec<CanvasClip>, Vec<CanvasSeam
     (out_clips, seams)
 }
 
-#[tauri::command]
-pub fn read_canvas(root: String, ep: String) -> CanvasData {
+fn build_canvas(root: String, ep: String) -> CanvasData {
     let root_p = Path::new(&root);
     let episodes = list_episodes(root_p);
     let mut out = CanvasData {
@@ -6067,6 +6116,18 @@ pub fn read_canvas(root: String, ep: String) -> CanvasData {
     }
 
     out
+}
+
+#[tauri::command]
+pub async fn read_canvas(root: String, ep: String) -> CanvasData {
+    let fallback_episode = ep.clone();
+    tauri::async_runtime::spawn_blocking(move || build_canvas(root, ep))
+        .await
+        .unwrap_or_else(|_| CanvasData {
+            source: "none".into(),
+            episode: fallback_episode,
+            ..Default::default()
+        })
 }
 
 #[tauri::command]

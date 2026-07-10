@@ -44,6 +44,7 @@ import {
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 
 const MonacoFileEditor = lazy(() =>
   import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
@@ -746,10 +747,9 @@ export function FilesPane({
   const previewVersion = selEntry
     ? `${selEntry.path}:${selEntry.size ?? "unknown"}:${selEntry.mtime ?? "unknown"}`
     : "";
-  const mediaRevision = refreshKey + localRefresh;
   const mediaSrc = (path: string) => {
     const url = mediaUrl(path);
-    return url ? `${url}&v=${mediaRevision}` : "";
+    return url ? `${url}&v=${encodeURIComponent(previewVersion)}` : "";
   };
 
   useEffect(() => {
@@ -1201,16 +1201,16 @@ export function FilesPane({
               <div className="files-media files-image-stage" ref={imageStageRef} onWheel={onImageWheel}>
                 {abs && (
                   <div className="files-image-frame" style={imageFrameStyle}>
-                    <img
+                    <DecodedImage
                       className="files-zoom-image"
                       src={mediaSrc(abs)}
                       alt={selEntry.name}
                       style={imageStyle}
-                      onLoad={(event) => {
-                        const img = event.currentTarget;
+                      loading="eager"
+                      onDecoded={(metadata) => {
                         setImageNatural({
-                          width: img.naturalWidth || img.width || 1,
-                          height: img.naturalHeight || img.height || 1,
+                          width: metadata.width,
+                          height: metadata.height,
                         });
                       }}
                     />

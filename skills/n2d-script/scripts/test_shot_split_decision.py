@@ -117,6 +117,26 @@ def test_long_fight_clip_keeps_detail_but_splits_video_shots():
     assert row["story_economy"]["economy_class"] == "premium_detail"
 
 
+def test_short_parent_with_two_editorial_shots_becomes_two_physical_takes():
+    root = _mk_storyboard([{
+        "id": "Clip_07",
+        "duration": 5.0,
+        "visual": "先看刀柄，再硬切到人物反应。",
+        "shots": [
+            {"t": "0-2s", "lens": "ECU", "description": "手握刀柄"},
+            {"t": "2-5s", "lens": "CU", "description": "人物抬眼"},
+        ],
+        "continuity": {"shot_size": "ECU→CU", "need_endframe": True},
+    }])
+
+    row = SSD.build_plan(root, "第1集")["decisions"][0]
+
+    assert row["primary_action"] == "split_video_shots"
+    assert row["video_shot_policy"]["direct_submit_allowed"] is False
+    assert [segment["duration_sec"] for segment in row["video_shot_segments"]] == [2.0, 3.0]
+    assert all(segment["reason"] == "storyboard_editorial_cut" for segment in row["video_shot_segments"])
+
+
 def test_plain_prop_does_not_force_composite():
     root = _mk_storyboard([{
         "id": "Clip_05",

@@ -101,14 +101,60 @@ def _segment_id(parent: str, index: int) -> str:
     return f"{parent}_shot{index:02d}"
 
 
-def plan_video_shot_segments(parent: str, duration: Optional[float]) -> List[Dict[str, Any]]:
-    """Split long story clips into physical video shots for generation/editing.
+def _shot_range(value: Any) -> Optional[Tuple[float, float]]:
+    if isinstance(value, (list, tuple)) and len(value) >= 2:
+        try:
+            return float(value[0]), float(value[1])
+        except (TypeError, ValueError):
+            return None
+    match = re.search(r"([0-9]+(?:\.[0-9]+)?)\s*(?:s|秒)?\s*[-~—–至]\s*([0-9]+(?:\.[0-9]+)?)", str(value or ""))
+    if not match:
+        return None
+    return float(match.group(1)), float(match.group(2))
 
-    `story_clip` can stay as a 15-35s dramatic unit, but paid video generation
-    should work on roughly 4-8s `video_shot` units.  The returned plan is a
-    timing/editing plan, not a rewrite of storyboard.json.
+
+def plan_video_shot_segments(
+    parent: str,
+    duration: Optional[float],
+    shots: Optional[Sequence[Mapping[str, Any]]] = None,
+) -> List[Dict[str, Any]]:
+    """Plan physical takes from editorial shot grammar, then duration fallback.
+
+    Two storyboard shots are two editorial takes even when the parent Clip is
+    shorter than 12s. Backend minimums are handled later by duration
+    quantization + tail trim; they must not stretch the edit beat.
     """
-    if duration is None or duration <= VIDEO_SHOT_PLAN_THRESHOLD_SEC:
+    if duration is None:
+        return []
+    explicit: List[Tuple[float, float, Mapping[str, Any]]] = []
+    for shot in shots or []:
+        if not isinstance(shot, Mapping):
+            continue
+        timing = _shot_range(shot.get("t") or shot.get("time") or shot.get("range"))
+        if timing and 0 <= timing[0] < timing[1] <= float(duration) + 0.05:
+            explicit.append((timing[0], timing[1], shot))
+    explicit.sort(key=lambda row: row[0])
+    has_editorial_coverage = len(explicit) > 1 and any(
+        any(row[2].get(key) for key in ("lens", "camera", "shot_size")) for row in explicit
+    )
+    if has_editorial_coverage:
+        boundaries = [0.0] + [row[0] for row in explicit[1:]] + [float(duration)]
+        rows: List[Dict[str, Any]] = []
+        for idx, (start, end) in enumerate(zip(boundaries, boundaries[1:]), 1):
+            source = explicit[min(idx - 1, len(explicit) - 1)][2]
+            rows.append({
+                "video_shot_id": _segment_id(parent, idx),
+                "parent_story_clip": parent,
+                "index": idx,
+                "start_sec": round(start, 3),
+                "end_sec": round(end, 3),
+                "duration_sec": round(end - start, 3),
+                "reason": "storyboard_editorial_cut",
+                "shot_description": str(source.get("description") or source.get("visual") or source.get("action") or ""),
+                "shot_lens": str(source.get("lens") or source.get("shot_size") or source.get("camera") or ""),
+            })
+        return rows
+    if duration <= VIDEO_SHOT_PLAN_THRESHOLD_SEC:
         return []
     count = max(2, int(math.ceil(float(duration) / VIDEO_SHOT_TARGET_SEC)))
     seg = float(duration) / count
@@ -125,6 +171,7 @@ def plan_video_shot_segments(parent: str, duration: Optional[float]) -> List[Dic
             "end_sec": round(end, 3),
             "duration_sec": round(end - start, 3),
             "target_duration_sec": VIDEO_SHOT_TARGET_SEC,
+            "reason": "continuous_take_exceeds_generation_window",
         })
         cursor = end
     return rows
@@ -210,6 +257,12 @@ def decide_actions(
         add("defer_to_composite")
     if duration is not None and duration > VIDEO_SHOT_PLAN_THRESHOLD_SEC:
         add("split_video_shots")
+    shot_rows = clip.get("shots") if isinstance(clip.get("shots"), list) else []
+    if len(shot_rows) > 1 and any(
+        isinstance(row, Mapping) and any(row.get(key) for key in ("lens", "camera", "shot_size"))
+        for row in shot_rows
+    ):
+        add("split_video_shots")
     if economy_row:
         over_budget = economy_row.get("over_budget_sec")
         try:
@@ -248,7 +301,7 @@ def action_note(action: str) -> str:
         "template_required": "复杂动作、多人、奇观或证据链必须使用 template/template_contract；缺失时先补，已存在时保持合同并让下游继承。",
         "add_mid_or_multi_anchor": "高风险长镜或大表情镜补中段锚帧/多锚/豁免说明。",
         "defer_to_composite": "把文字、光效、证据标记、复杂同框等交给分层出图或后期合成，避免视频后端自由生成。",
-        "split_video_shots": "story_clip 时长超过 12s，必须规划 4-8s 物理 video_shot；超过 15s 不允许作为单个付费视频段直提。",
+        "split_video_shots": "按 storyboard 镜位切换规划独立物理 take；连续长镜再按后端窗口拆段。后端最短档位只决定多生成后裁尾，不反向拉长剪辑节拍。",
         "compress_before_video": "剧情经济性超预算且不属于战斗/强情绪详拍：先回编剧压缩、合并、旁白带过或改成蒙太奇，再决定是否拆 video_shot。",
     }
     return notes.get(action, "")
@@ -291,7 +344,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
         primary = primary_action(actions)
         tags = list(row.get("tags") or [])
         duration = duration_of(clip)
-        video_segments = plan_video_shot_segments(cid, duration)
+        video_segments = plan_video_shot_segments(cid, duration, clip.get("shots") if isinstance(clip.get("shots"), list) else None)
         decisions.append({
             "clip": cid,
             "label": clip.get("label", ""),
@@ -317,7 +370,7 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
                 "story_clip_plan_threshold_sec": VIDEO_SHOT_PLAN_THRESHOLD_SEC,
                 "video_shot_hard_max_sec": VIDEO_SHOT_HARD_MAX_SEC,
                 "target_video_shot_sec": VIDEO_SHOT_TARGET_SEC,
-                "direct_submit_allowed": not (duration is not None and duration > VIDEO_SHOT_HARD_MAX_SEC),
+                "direct_submit_allowed": not video_segments and not (duration is not None and duration > VIDEO_SHOT_HARD_MAX_SEC),
             },
             "video_shot_segments": video_segments,
         })
@@ -378,7 +431,7 @@ def render_md(plan: Mapping[str, Any]) -> str:
             f"{'、'.join(row.get('risk_tags') or [])} | {row.get('reason')} |"
         )
     lines.append("")
-    lines.append("N=叙事权重，G=分镜语法拆分需求，R=生成风险桶。Economy 来自 story_economy_audit；Video Shots 为建议拆出的 4-8s 物理生成/剪辑镜头数；story_clip >15s 不允许单段直提。")
+    lines.append("N=叙事权重，G=分镜语法拆分需求，R=生成风险桶。Economy 来自 story_economy_audit；Video Shots 先按明确景别/机位切换拆物理 take，连续长 take 再适配后端窗口；story_clip >15s 不允许未拆直提。")
     return "\n".join(lines)
 
 

@@ -33,7 +33,7 @@
 - [Q38：小说怎么拆？「集 → 镜头(分镜) → Clip」三层粒度各自的依据是什么？](#q38)
 - [Q39：故事板是怎么来的？就是把几个镜头放一起吗？](#q39)
 - [Q41：即梦 multiframe2video（智能多帧）怎么用？跟中段锚帧什么关系？](#q41)
-- [Q42：开了三帧契约后，是不是每个 Clip 都至少有 3 帧（首+中锚+尾）了？](#q42)
+- [Q42：每个 Clip 都至少要 3 帧（首+中锚+尾）吗？](#q42)
 - [Q43：长镜头、打斗镜头会出现超过 3 帧（首+多中锚+尾）吗？](#q43)
 - [Q44：n2d-score 和 n2d-review 的关系？各司其职还是 n2d-review 调起 n2d-score？（为什么和 novel 那对不一样）](#q44)
 - [Q45：本项目使用的 "image2" 生图后端支持图生图（img2img）吗？怎么保证角色一致性？](#q45)
@@ -46,6 +46,7 @@
 - [Q52：每个人物都放进 `角色库/`，还是只放主角和出场超过 10 集的人物？](#q52)
 - [Q53：角色库和其它资产怎样安全打包给别的作品、系列或机器？](#q53)
 - [Q54：视频 prompt 有没有行业通用规范？应该只加说明文档吗？](#q54)
+- [Q55：为什么 2 秒情节会生成 4–8 秒视频？应该裁切、变速还是拆镜？](#q55)
 
 ---
 
@@ -757,7 +758,7 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 1. **集**：一个戏剧节拍（冲突→钩子）。
 2. **镜头**：配音时长当量化锚 + 节奏曲线塑长短 + 内容类型定拆法。
-3. **Clip**：相邻分镜合并，时长不超后端上限，换场处必断。
+3. **story Clip / edit shot / generation take**：story Clip 承载小情节；`shots[]` 按景别/机位变化定义剪辑镜头；generation take 再适配后端时长档位。不能只按“是否超后端上限”决定拆不拆。
 
 ---
 
@@ -776,20 +777,20 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 **结论**：`multiframe2video` 是原生多关键帧能力（20帧出连续镜）。
 - **原生多帧**：把 `[首帧, 中锚1..K, 尾帧]` 一次喂入，自动运镜，无焊缝，不翻倍成本。
-- **三帧契约**：默认出一张 `_mid` 中锚供多帧引用。
+- **中段锚策略**：普通单拍默认不出 `_mid`；高风险连续动作、漂移实证或显式 opt-in 才出中锚。`use=qc/reference` 只验收，不进时间轴。
 这套干净链路取代了旧的“拼贴板”模式。
 
 ---
 
-## Q42：开了三帧契约后，是不是每个 Clip 都至少有 3 帧（首+中锚+尾）了？<a id="q42"></a>
+## Q42：每个 Clip 都至少要 3 帧（首+中锚+尾）吗？<a id="q42"></a>
 
-**不是**。极短镜（<3s）和最终镜豁免。满足“声明了豁免理由或末镜”即过 gate。
+**不是，而且普通镜的默认就是不强制三帧。** 单一低风险 take 通常用首帧或首尾帧；只有 R1/R2/R3 高风险连续动作、E1 编辑切点或用户显式开启且后端原生支持时才补中锚。末镜只影响是否需要尾帧，不是中锚规则的唯一豁免来源。
 
 ---
 
 ## Q43：长镜头、打斗镜头会出现超过 3 帧（首+多中锚+尾）吗？<a id="q43"></a>
 
-**会**。打斗/长镜按 R1/R2/R3 规则出多个中锚。multiframe2video 最多收 20 帧，时长越长锚越密（约 1.5s 一锚）。
+**会，但只针对连续动作。** 打斗/长连续镜按 R1/R2/R3 出多个执行锚；明确的景别/机位变化走 E1 `edit_cut`，拆成多条 take，而不是把所有镜位塞进一个 multiframe 请求。multiframe2video 最多收 20 帧。
 
 ---
 
@@ -814,13 +815,13 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 
 **结论**：**「几帧」由两层决定，Q42/Q43 只是第一层（声明侧），实际锚几帧还看第二层（后端执行侧），可能回退。**
 
-1. **声明侧（storyboard 帧契约）**：每个 Clip 在 `storyboard.json.continuity` 里声明要几帧——`midframe`/`anchors` 给中锚、`need_endframe` 给尾帧。默认三帧契约 = 首+中锚×1+尾（豁免见 Q42，多中锚见 Q43）。
+1. **声明侧（storyboard 帧/剪辑契约）**：先看 `shots[]` 是否有真实景别/机位切换；有则按 `edit_cut` 拆 take。单一连续 take 再由 `midframe/anchors` 声明中锚、`need_endframe` 声明尾帧。没有固定“默认三帧”。
 2. **执行侧（后端/渠道能力，真正决定能锚几帧）**：能不能把声明的帧原生吃下，看的是**生视频渠道**而非模型名。判定走 `n2d_platform_profiles.frame_control` + 路由产物的 `anchor_consumption`，**别按模型名猜**：
    - **原生多帧后端（即梦 Dreamina `multiframe2video`，≤20 帧）** → 首/中/尾一次请求**原生锚定**（`consumption_mode=native_multiframe`），不拆段、不加成本。
-   - **只支持首尾的后端（可灵/Veo/Luma）** → 中锚吃不下，降到 **2 帧（首+尾）+ 拆段接力**（`split_relay`）。
+   - **只支持首尾的后端（可灵/Veo/Luma）** → 普通 take 用 **2 帧（首+尾）**；高风险连续镜需要中锚时才拆段接力（`split_relay`）。
    - **纯首帧后端（直连 Seedance / Runway / Pika）** → 退到 **1 帧（仅首帧）**，中/尾靠自由外推（漂移风险，`video_preflight` 会 WARN）。
 - **关键坑**：`生视频模型=Seedance` 但 `生视频渠道=即梦/Dreamina` 时，真正执行帧能力是**即梦的**（≤20 帧原生多帧），不是直连 Seedance 的「仅首帧」——`effective_frame_backend` 已把这层归一，按渠道读 `frame_control`。
-- **实例（本宫剧·第1集）**：12 镜都声明三帧契约（首+中锚×1+尾），走即梦渠道 → 全 12 镜 `native_multiframe`，**3 帧原生锚定**。若换成纯首帧渠道，同一套声明会塌成 1 帧。
+- **执行纪律**：`use=qc/reference` 中锚不提交；`edit_cut_pending_assets` 或 `reroute_required` 在付费前阻断。帧数由镜头需要决定，不以“后端能吃 20 帧”为理由给所有镜头加帧。
 
 ---
 
@@ -922,5 +923,22 @@ EN:   cinematic Chinese ancient-fantasy aesthetic, photoreal Eastern Asian face,
 3. `prompt_pack.py` 不再生成中英两套冗长 prompt，也不再为所有场景硬塞月光、火把、低雾、尘土等元素；native_speech 按 route 分支。
 4. `video_runner.py` 只提取 compiler fenced block，并在 manifest 记录 profile、来源合同 SHA、prompt SHA 和字符数。
 5. gate 分开检查完整合同与提交 prompt：合同缺项仍 BLOCK；提交 prompt 缺主动作/运镜、后端/模式/音频不匹配才 BLOCK，长度偏长只 WARN。
+6. compiler v2 还编译 `frame_strategy` 与 `story_span/edit_target/backend_request` 三套时钟；缺边界图、需改路由或请求时长不足未拆段时，在付费前 BLOCK。
 
 规范、官方来源、schema 和 profile 详见 `skills/n2d-video/references/行业通用视频Prompt规范.md`。
+
+---
+
+## Q55：为什么 2 秒情节会生成 4–8 秒视频？应该裁切、变速还是拆镜？<a id="q55"></a>
+
+根因通常是把三套时钟混成一个字段：父剧情/对白覆盖的是 `story_span_sec`，成片里这条 take 真正需要的是 `edit_target_sec`，模型 API 允许请求的是 `backend_request_sec`。后端最短 4/5 秒只是请求能力，不代表剧情必须演满。
+
+n2d v2 的处理顺序是：
+
+1. storyboard 若有多个明确 `lens/camera/shot_size`，先按编辑镜位拆独立 take，短父 Clip 也拆；
+2. 每条 take 独立确定 `edit_target_sec`；
+3. compiler/runner 把它向上量化到后端允许档位，在 prompt 里要求动作在目标窗口内完成，剩余时间只保持落幅；
+4. compose 默认读取 manifest 按 `edit_target_sec` 裁尾；
+5. 只有导演明确要慢动作/加速时才用 `speed_mode=warp`，不再默认 `setpts` 整段变速。
+
+所以 2.1 秒插入镜遇到 4 秒最低档，正确做法通常是“请求 4 秒、2.1 秒完成、尾端保持、裁到 2.1 秒”，而不是硬把表演拉长或把整条视频压速。

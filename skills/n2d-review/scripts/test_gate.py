@@ -439,6 +439,20 @@ audio constraint: no dialogue, no narration, no generated native voice;
 - [ ] 衔接落点可接下一 Clip
 """
 
+GOOD_VIDEO_CLIP_V2 = GOOD_VIDEO_CLIP.replace(
+    "version=1; profile_version=2026-07-10.1;",
+    "version=2; profile_version=2026-07-10.2;",
+).replace(
+    "native_audio_policy=none; source_contract_sha256=",
+    "native_audio_policy=none; frame_strategy=first_last; story_span_sec=5.0; edit_target_sec=5.0; "
+    "backend_request_sec=5.0; action_start_sec=0.25; action_end_sec=4.5; hold_end_sec=5.0; "
+    "trim_mode=none; requires_split=false; duration_quantization=integer_range:3-10/step=1; "
+    "source_contract_sha256=",
+).replace(
+    "节奏：前两秒压住呼吸，中段聚焦眼神，最后一秒停稳。",
+    "节奏：前两秒压住呼吸，中段聚焦眼神，最后一秒停稳。时间：0.25-4.50秒完成主动作，持续保持落幅到5.00秒。",
+)
+
 
 def setup_function():
     gate.findings.clear()
@@ -5262,7 +5276,15 @@ Character reference sheet.
 
 def test_good_video_clip_prompt_passes_director_structure():
     gate.check_video_clip_prompt_section("01_clips.md", GOOD_VIDEO_CLIP)
-    assert gate.findings == []
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and "v1 编译产物" in f["msg"] for f in gate.findings)
+
+
+def test_v2_video_clip_prompt_passes_compiler_contract_without_legacy_warning():
+    gate.check_video_clip_prompt_section("01_clips.md", GOOD_VIDEO_CLIP_V2)
+
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert not any("v1 编译产物" in f["msg"] for f in gate.findings)
 
 
 def test_video_clip_compiler_backend_must_match_route():
@@ -8426,14 +8448,11 @@ def _midframe_findings():
 
 
 def test_midframe_warns_on_unknown_backend_qc_only(tmp_path):
-    # 分级 severity（charter three_frame_graduated_severity）：后端未选/未知，中帧消费不了、仅作 QC
-    # 参考 → WARN（不硬拦无谓出图花钱）；中帧仍是默认应产图片资产，WARN≠豁免。
+    # 普通镜没有行业通用“三帧最低要求”；未知后端不应仅因缺中帧制造噪音。
     root = _write_midframe_storyboard(tmp_path, None)
     gate.findings.clear()
     gate.check_storyboard_contract(root, "第1集")
-    hits = [f for f in _midframe_findings() if "三帧契约" in f["msg"]]
-    assert hits and hits[0]["sev"] == gate.WARN
-    assert not any(f["sev"] == gate.BLOCK for f in hits)
+    assert _midframe_findings() == []
 
 
 def test_midframe_blocks_production_high_motion_even_on_unknown_backend(tmp_path):
@@ -8446,47 +8465,51 @@ def test_midframe_blocks_production_high_motion_even_on_unknown_backend(tmp_path
 
     gate.findings.clear()
     gate.check_storyboard_contract(root, "第1集")
-    hits = [f for f in _midframe_findings() if "三帧契约" in f["msg"]]
+    hits = _midframe_findings()
     assert hits and hits[0]["sev"] == gate.BLOCK and "production 高运动镜" in hits[0]["msg"]
 
 
 def test_midframe_default_flag_does_not_force_block_on_incapable_backend(tmp_path):
-    # 防误判回退：policy.midframe_default=true 是 anchor_planner 的"已规划"标记（正常流程恒 true），
-    # 不是"弱后端也强制 BLOCK"的意图。severity 纯按后端能力——未选后端即便带该标记仍 WARN，
-    # 否则 WARN 路径在正常流程里永不触发，等于回到 44af5704 的一刀切。
+    # 旧项目只有 midframe_default=true、没有 explicit_opt_in 模式，不升级成新硬约束。
     root = _write_midframe_storyboard(tmp_path, None, midframe_default=True)
     gate.findings.clear()
     gate.check_storyboard_contract(root, "第1集")
-    hits = [f for f in _midframe_findings() if "三帧契约" in f["msg"]]
-    assert hits and hits[0]["sev"] == gate.WARN
-    assert not any(f["sev"] == gate.BLOCK for f in hits)
+    assert _midframe_findings() == []
 
 
 def test_midframe_blocks_on_capable_backend(tmp_path):
-    # 即梦/dreamina 原生多帧 → 中帧被消费 → 缺锚帧 BLOCK。
+    # 后端有原生多帧能力也不等于所有普通镜都必须使用三帧。
     root = _write_midframe_storyboard(tmp_path, None, video_backend="即梦")
     gate.check_storyboard_contract(root, "第1集")
-    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+    assert _midframe_findings() == []
 
 
 def test_midframe_enforced_despite_disabled_flag_on_capable_backend(tmp_path):
-    # 能消费中帧的后端：即便项目想用 midframe_default=false 关掉也照样 BLOCK（缺中帧=成片退化）。
+    # risk-only 默认关闭时，普通镜不因后端能力被强制补中帧。
     root = _write_midframe_storyboard(tmp_path, None, video_backend="dreamina", midframe_default=False)
     gate.check_storyboard_contract(root, "第1集")
-    assert any(f["sev"] == gate.BLOCK and "三帧契约" in f["msg"] for f in _midframe_findings())
+    assert _midframe_findings() == []
 
 
 def test_midframe_graduated_severity_matches_backend_capability(tmp_path):
-    # 分级真值源 = backend_supports_three_plus_frames：能消费(原生多帧/首尾拆段接力)→BLOCK；
-    # 真 first-frame-only→WARN（中帧仅 QC 参考·按 cost 由作者定）。直接对齐能力函数，避免硬编码。
-    from n2d_platform_profiles import backend_supports_three_plus_frames
+    # 普通镜的默认与后端菜单解耦；没有 explicit_opt_in 时都不报缺中帧。
     for backend in ("runway", "seedance", "sora", "pika", "kling", "即梦", "dreamina"):
         root = _write_midframe_storyboard(tmp_path, None, video_backend=backend)
         gate.findings.clear()
         gate.check_storyboard_contract(root, "第1集")
-        hits = [f for f in _midframe_findings() if "三帧契约" in f["msg"]]
-        expected = gate.BLOCK if backend_supports_three_plus_frames(backend) else gate.WARN
-        assert hits and hits[0]["sev"] == expected, (backend, hits[0]["sev"] if hits else None)
+        assert _midframe_findings() == [], backend
+
+
+def test_midframe_explicit_opt_in_blocks_only_on_native_three_plus_backend(tmp_path):
+    root = _write_midframe_storyboard(tmp_path, None, video_backend="dreamina", midframe_default=True)
+    sb_path = Path(root) / "脚本" / "第1集" / "storyboard.json"
+    sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    sb["policy"]["midframe_default_mode"] = "explicit_opt_in"
+    sb_path.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_storyboard_contract(root, "第1集")
+
+    assert any(f["sev"] == gate.BLOCK and "显式开启" in f["msg"] for f in _midframe_findings())
 
 
 def test_midframe_must_be_object(tmp_path):
@@ -8731,14 +8754,11 @@ def _write_midframe_policy_storyboard(tmp_path, cont_extra):
 
 
 def test_midframe_default_policy_flags_undeclared_clip(tmp_path):
-    # 未声明中帧的镜仍被标记；本 fixture 未选后端 → 分级 severity 为 WARN（中帧仅 QC 参考·按 cost 由作者定）。
-    # midframe_default=true 在 policy 里只是"已规划"标记，不把 severity 抬成 BLOCK。
+    # legacy policy 没有 explicit_opt_in 模式，不把普通镜误判为缺中帧。
     root = _write_midframe_policy_storyboard(tmp_path, {})
     gate.findings.clear()
     gate.check_storyboard_contract(root, "第1集")
-    hits = [f for f in _midframe_findings() if "三帧契约" in f["msg"]]
-    assert hits and hits[0]["sev"] == gate.WARN
-    assert not any(f["sev"] == gate.BLOCK for f in hits)
+    assert _midframe_findings() == []
 
 
 def test_midframe_default_policy_accepts_exempt_reason(tmp_path):

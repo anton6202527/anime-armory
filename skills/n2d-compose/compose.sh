@@ -158,6 +158,39 @@ def _ffprobe_duration(path):
         return value if value > 0 else None
     except Exception:
         return None
+
+def _video_manifest_index(root, ep):
+    by_target = {}
+    by_clip = {}
+    pattern = os.path.join(root, "生产数据", f"video_batch_{ep}_*.json")
+    for manifest_path in sorted(glob.glob(pattern)):
+        try:
+            payload = json.load(open(manifest_path, encoding="utf-8"))
+        except Exception:
+            continue
+        for item in payload.get("items") or []:
+            if not isinstance(item, dict):
+                continue
+            target = os.path.basename(str(item.get("target") or ""))
+            if target:
+                by_target[target] = item
+            clip_id = str(item.get("clip") or "")
+            if clip_id:
+                by_clip[clip_id] = item
+    return by_target, by_clip
+
+manifest_by_target, manifest_by_clip = _video_manifest_index(root, ep)
+
+def _manifest_item_for_path(path):
+    name = os.path.basename(path)
+    if name in manifest_by_target:
+        return manifest_by_target[name]
+    stem = os.path.splitext(name)[0]
+    for target, item in manifest_by_target.items():
+        if os.path.splitext(target)[0] == stem:
+            return item
+    return None
+
 storyboard_path = os.path.join(root, "脚本", ep, "storyboard.json")
 try:
     data = json.load(open(storyboard_path, encoding="utf-8"))
@@ -184,15 +217,24 @@ if clips:
                 src_durations = [_ffprobe_duration(p) for p in parts]
                 total_src = sum(d for d in src_durations if d)
                 for p in parts:
-                    # 拆段子文件按原始时长比例分摊逻辑镜总时长。生成端偶尔只保证每段可用、
-                    # 不保证两段合计等于 storyboard 锁定时长；这里仍由 compose 统一焊回剪辑节奏。
+                    # v2 直接消费 runner manifest 的 edit_target_duration；后端为了满足 4/5/6/8s
+                    # 等离散档位多生成的尾巴只裁掉，不再按成片原始时长比例整段变速。
                     # 拆段子文件不加震屏（命中秒是相对整镜的，映射到 part 偏移过复杂·保守跳过）
                     part_duration = None
-                    if target_duration and total_src:
+                    manifest_item = _manifest_item_for_path(p)
+                    if manifest_item:
+                        value = manifest_item.get("edit_target_duration")
+                        if value in (None, "") and isinstance(manifest_item.get("duration_plan"), dict):
+                            value = manifest_item["duration_plan"].get("edit_target_sec")
+                        try:
+                            part_duration = float(value) if value not in (None, "") else None
+                        except (TypeError, ValueError):
+                            part_duration = None
+                    if part_duration is None and target_duration and total_src:
                         src_duration = src_durations[parts.index(p)] or (total_src / len(parts))
                         part_duration = target_duration * src_duration / total_src
                     ordered.append((p, f"{part_duration:.6f}" if part_duration else "None",
-                                    "warp" if part_duration else "trim", ""))
+                                    "trim", ""))
                 continue
 
             # 无拆段时，尝试精确匹配或模糊匹配
@@ -201,7 +243,15 @@ if clips:
                 if cands: path = cands[0]
 
         if path and os.path.exists(path):
-            ordered.append((path, clip.get("duration", "None"), clip.get("speed_mode", "warp"), _punch(clip)))
+            manifest_item = _manifest_item_for_path(path) or manifest_by_clip.get(str(cid or ""))
+            duration = clip.get("duration", "None")
+            speed_mode = clip.get("speed_mode", "trim")
+            if manifest_item:
+                duration = manifest_item.get("edit_target_duration")
+                if duration in (None, "") and isinstance(manifest_item.get("duration_plan"), dict):
+                    duration = manifest_item["duration_plan"].get("edit_target_sec")
+                speed_mode = manifest_item.get("speed_mode", "trim")
+            ordered.append((path, duration, speed_mode, _punch(clip)))
 else:
     for p in sorted(glob.glob(os.path.join(vid, "*.mp4"))):
         ordered.append((p, "None", "trim", ""))
@@ -238,7 +288,7 @@ while IFS=$'\t' read -r c dur speed_mode punch_vf; do
           FACTOR=$(python3 -c "print(round(float('$dur') / float('$SRC_DUR'), 4))" 2>/dev/null || echo "")
           if [ -n "$FACTOR" ]; then
             SETPTS_OPT="setpts=${FACTOR}*PTS,"
-            echo "  ✨ 光流拉伸(Time-Warp): $(basename "$c") ($SRC_DUR s -> ${dur}s, ${FACTOR}x)"
+            echo "  ⏱️ 显式整段变速(Time-Warp): $(basename "$c") ($SRC_DUR s -> ${dur}s, ${FACTOR}x)"
           else
             echo "  ✂️ 精确裁切: $(basename "$c") -> ${dur}s"
           fi

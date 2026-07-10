@@ -12,16 +12,17 @@
      命中漂移关键词（漂/drift/中段/动作崩/路径），duration ≥ 2×min_segment 即命中
 
 节拍数 = len(template_contract.beats)，缺则 len(shots)。
-锚点放置：优先吸附 shots[] 的分镜边界（自然换拍点，焊点不切在动作进行中），
-吸不上才均分；每段 ≥ min_segment（默认 4s，对齐 video_runner.submit_duration 下限）。
+锚点放置：显式 `lens/camera/shot_size` 变化先生成 `use=edit_cut` 边界图；
+连续动作锚优先吸附 shots[] 节拍边界，吸不上才均分。`min_segment` 只给 split-relay
+兼容路径使用；实际请求下限由后端 duration profile 量化，不能反向拉长剪辑节拍。
 
 默认 dry-run：只写 生产数据/anchor_plan_第N集.json/.md（含成本增量：多 K 张出图 +
 视频从 1 段变 K+1 段），给人确认。--write 才把 continuity.anchors 注回
 storyboard.json；已手动声明且时间仍落在当前 duration 内的 midframe/anchors 跳过（人工优先），
 越界旧锚帧按当前 duration 重算或写豁免。
 
---default-midframe（三帧图片契约·选择点「中段锚帧默认」=开启时用）：
-未命中 R1/R2/R3 的普通镜也默认规划一张中段锚帧（命名=首帧名+`_mid`，内容=表演节拍
+--default-midframe（普通镜显式 opt-in·选择点「中段锚帧默认」=开启且后端原生支持时用）：
+未命中 E1/R1/R2/R3 的普通镜额外规划一张中段锚帧（命名=首帧名+`_mid`，内容=表演节拍
 中间拍），按时长分级用法 `use`：
   · split（duration ≥ 2×min_segment）——拆两段 frames2video 接力（真锚定）
   · qc（更短镜或视频后端不原生吃中帧）——不拆段；中帧作出视频验收的中段一致性基准 + 后端多参考输入
@@ -41,21 +42,21 @@ import json
 import os
 import re
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 try:
-    from n2d_settings import get_setting  # 读「中段锚帧默认」选择点（全局默认=开启）
-except Exception:  # 退化：settings 不可用时按全局默认（开启）走，不阻断规划
+    from n2d_settings import get_setting  # 读「中段锚帧默认」选择点（全局默认=关闭）
+except Exception:  # 退化：settings 不可用时按 risk-only 默认走，不阻断规划
     def get_setting(root, key, default=None):  # type: ignore
         return default
 try:
     from n2d_platform_profiles import anchor_consumption_plan, backend_supports_three_plus_frames
-except Exception:  # 退化：能力档不可用时按"支持"（向前看·强制三帧）走
+except Exception:  # 退化：能力档不可用时不假定原生三帧，付费前再要求能力证据
     def backend_supports_three_plus_frames(backend, channel=None):  # type: ignore
-        return True
+        return False
     def anchor_consumption_plan(backend, channel=None, *, anchor_count=0, need_end=False):  # type: ignore
         return {
             "backend": backend or "",
@@ -296,7 +297,22 @@ def _duration_matches(value: Any, duration: Any) -> bool:
 
 def _generated_anchor_reason(text: Any) -> bool:
     raw = str(text or "").strip()
-    return raw.startswith("auto:") or raw.startswith("default:")
+    return raw.startswith("auto:") or raw.startswith("default:") or raw.startswith("edit_cut:")
+
+
+def anchors_cover_boundaries(cont: Mapping[str, Any], boundaries: Sequence[float], tolerance: float = 0.35) -> bool:
+    anchors = cont.get("anchors") if isinstance(cont, Mapping) else None
+    if not isinstance(anchors, list):
+        return False
+    times: List[float] = []
+    for anchor in anchors:
+        if not isinstance(anchor, Mapping):
+            continue
+        try:
+            times.append(float(anchor.get("at_sec")))
+        except (TypeError, ValueError):
+            continue
+    return all(any(abs(value - boundary) <= tolerance for value in times) for boundary in boundaries)
 
 
 def generated_anchor_contract_stale(cont: Dict[str, Any], duration: Any) -> bool:
@@ -367,23 +383,49 @@ def plan_episode(root: str, ep: str, *, min_seg: float = 4.0, target_seg: float 
         drift = redraw_drift_hits(events, ep, i)
         rule = classify_clip(clip, min_seg=min_seg,
                              long_shot_threshold=long_shot_threshold, drift_hits=drift)
+        shot_rows = clip.get("shots") if isinstance(clip.get("shots"), list) else []
+        has_explicit_editorial_coverage = len(shot_rows) > 1 and any(
+            isinstance(row, Mapping) and any(row.get(key) for key in ("lens", "camera", "shot_size"))
+            for row in shot_rows
+        )
+        editorial_boundaries = parse_shot_boundaries(clip) if has_explicit_editorial_coverage else []
         has_mid = cont.get("midframe") is not None
         has_anchors = cont.get("anchors") is not None
+        valid_existing = False
+        generated_stale = False
         if has_mid or has_anchors:
             valid_existing = existing_anchor_contract_valid(cont, duration)
             generated_stale = generated_anchor_contract_stale(cont, duration)
-            if valid_existing and has_anchors and not generated_stale:
+            if valid_existing and has_anchors and not generated_stale and (
+                not editorial_boundaries or anchors_cover_boundaries(cont, editorial_boundaries)
+            ):
                 skipped.append({"clip": cid, "why": "已手动声明 anchors，人工优先"})
                 continue
             if valid_existing and has_anchors and generated_stale:
                 skipped.append({"clip": cid, "why": "已有自动 anchors 但源时长已变或缺 source_duration，按当前 duration 重算"})
-            if valid_existing and has_mid and not rule:
+            if valid_existing and has_mid and not rule and not editorial_boundaries:
                 skipped.append({"clip": cid, "why": "已手动声明 midframe，且未命中多锚规则，人工优先"})
                 continue
             if valid_existing and has_mid and rule:
                 skipped.append({"clip": cid, "why": f"已有单 midframe，但命中 {rule}，升级为 continuity.anchors[]"})
             else:
                 skipped.append({"clip": cid, "why": "已有 midframe/anchors 但时间越界或不可解析，按当前 duration 重算"})
+        if editorial_boundaries:
+            anchors = [{
+                "anchor_png": anchor_png_name(clip, ep, i, k),
+                "at_sec": round(t, 2),
+                "use": "edit_cut",
+                "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                "source_duration": round(float(duration), 3),
+            } for k, t in enumerate(editorial_boundaries, 1) if 0 < t < float(duration)]
+            if anchors:
+                planned.append({
+                    "clip_index": i, "clip_id": cid, "duration": duration,
+                    "rule": "E1 storyboard 多镜位硬切边界",
+                    "anchors": anchors,
+                    "added_cost": {"images": len(anchors), "video_segments": len(anchors)},
+                })
+                continue
         if rule:
             template = str(clip.get("template") or "")
             # R1（正式高运动模板）与 R1b（文本/运镜运动信号·大表情）都用更短 fight_target → 更密锚帧。
@@ -515,15 +557,28 @@ def write_back(root: str, ep: str, plan: Dict[str, Any]) -> int:
         p = by_index.get(i)
         valid_existing = existing_anchor_contract_valid(cont, clip.get("duration")) if has_existing else False
         generated_stale = generated_anchor_contract_stale(cont, clip.get("duration")) if has_existing else False
-        if has_existing and valid_existing and cont.get("anchors") is not None and not generated_stale:
+        if has_existing and valid_existing and cont.get("anchors") is not None and not generated_stale and not p:
             continue  # 写回前再护一次：有效手动 anchors 优先
         if has_existing and valid_existing and cont.get("midframe") is not None and not p:
             continue  # 普通镜有效手动 midframe 优先；命中多锚规则时 p 会覆盖
+        preserved_anchors = []
+        if p and valid_existing and str(p.get("rule") or "").startswith("E1") and isinstance(cont.get("anchors"), list):
+            preserved_anchors = [dict(row) for row in cont["anchors"] if isinstance(row, dict)]
         if has_existing:
             cont.pop("midframe", None)
             cont.pop("anchors", None)
         if p:
-            cont["anchors"] = p["anchors"]
+            merged = preserved_anchors + [dict(row) for row in p["anchors"]]
+            deduped: List[Dict[str, Any]] = []
+            for row in sorted(merged, key=lambda value: float(value.get("at_sec") or 0)):
+                try:
+                    at = float(row.get("at_sec"))
+                except (TypeError, ValueError):
+                    continue
+                if any(abs(float(existing.get("at_sec") or 0) - at) <= 0.35 for existing in deduped):
+                    continue
+                deduped.append(row)
+            cont["anchors"] = deduped
             written += 1
         elif default_mode and i in exempt_by_index and not cont.get("midframe_exempt_reason"):
             cont["midframe_exempt_reason"] = exempt_by_index[i]["reason"]
@@ -556,13 +611,12 @@ def render_md(plan: Dict[str, Any]) -> str:
     lines.append(f"- 命中 Clip：{s['clips_planned']} 个；新增锚帧 {s['total_anchors']} 张")
     lines.append(
         f"- **成本增量**：多出图 **{s['added_images']} 张**（便宜）。视频成本看执行后端："
-        f"**multiframe2video（即梦，首选）= 仍 1 次调用/Clip，不翻倍**；"
-        f"仅 frames2video-only 后端才退化为 K+1 段（共 {s['added_video_segments']} 段）。")
+        f"连续动作可用 native multiframe 保持 1 次调用，或用 split relay 变 K+1 段；"
+        f"E1 编辑切点本来就是独立 take，不得为省调用合回一条。当前新增物理边界/分段计数 {s['added_video_segments']}。")
     lines.append("- 确认后用 `--write` 注回 storyboard.json，再走 n2d-image 出 `_aK`/`_mid` 锚帧")
     lines.append("")
     for p in plan["planned"]:
-        # 不显示 use 字段：multiframe2video 执行器对所有锚帧一视同仁（段只需 ≥0.5s），
-        # use=split/qc 仅是 frames2video-only 兜底的 advisory，显示出来反而误导"qc 不进时间轴"。
+        # 显示时刻即可；runner 会严格排除 use=qc/reference，避免验收图改变执行时间轴。
         anchors = "、".join(
             f"{a['at_sec']}s→{os.path.basename(a['anchor_png'])}" for a in p["anchors"])
         lines.append(f"## {p['clip_id']}（{p['duration']}s）— {p['rule']}")
@@ -663,8 +717,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     print(f"[ok] 人读报告 → {md_path}")
     s = plan["summary"]
     print(f"     命中 {s['clips_planned']} Clip / 新增锚帧 {s['total_anchors']} 张"
-          f"（多 {s['added_images']} 张出图；视频走 multiframe2video 仍 1 次/Clip 不翻倍，"
-          f"仅 frames2video-only 后端才 +{s['added_video_segments']} 段）")
+          f"（多 {s['added_images']} 张出图；连续动作由后端选择 native multiframe/split relay，"
+          f"明确镜位切换保留独立 take；边界/分段计数 {s['added_video_segments']}）")
     if args.write:
         n = write_back(root, args.episode, plan)
         print(f"[ok] 已注回 storyboard.json：{n} 个 Clip 的 continuity.anchors")

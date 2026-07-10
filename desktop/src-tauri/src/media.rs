@@ -96,6 +96,9 @@ fn percent_decode(s: &str) -> String {
 }
 
 fn parse_range(headers: &[Header], len: u64) -> Option<(u64, u64)> {
+    if len == 0 {
+        return None;
+    }
     for h in headers {
         if h.field.equiv("Range") {
             let v = h.value.as_str();
@@ -122,6 +125,7 @@ fn media_headers(path: &str) -> Vec<Header> {
         Header::from_bytes("Accept-Ranges", "bytes").unwrap(),
         Header::from_bytes("Access-Control-Allow-Origin", "*").unwrap(),
         Header::from_bytes("Access-Control-Allow-Headers", "Range").unwrap(),
+        Header::from_bytes("X-Content-Type-Options", "nosniff").unwrap(),
     ]
 }
 
@@ -192,7 +196,11 @@ fn handle(req: tiny_http::Request, roots: Arc<Mutex<Vec<PathBuf>>>) {
 
 impl MediaState {
     fn start(&self) -> Result<u16, String> {
-        if let Some(p) = *self.port.lock().unwrap() {
+        let mut port_guard = self
+            .port
+            .lock()
+            .map_err(|_| "media port lock poisoned".to_string())?;
+        if let Some(p) = *port_guard {
             return Ok(p);
         }
         let server = Arc::new(Server::http("127.0.0.1:0").map_err(|e| e.to_string())?);
@@ -201,11 +209,9 @@ impl MediaState {
             .to_ip()
             .map(|a| a.port())
             .ok_or("no port")?;
-        *self.port.lock().unwrap() = Some(port);
-        // Single bounded worker keeps idle memory low. Media requests are local
-        // and short-lived; avoiding extra thread stacks matters more here than
-        // parallel throughput.
-        for _ in 0..1 {
+        // Four bounded workers keep image grids and one range-streaming video
+        // from serializing behind a single large WebP/MP4 response.
+        for _ in 0..4 {
             let server = server.clone();
             let roots = self.roots.clone();
             thread::spawn(move || {
@@ -214,6 +220,7 @@ impl MediaState {
                 }
             });
         }
+        *port_guard = Some(port);
         Ok(port)
     }
 

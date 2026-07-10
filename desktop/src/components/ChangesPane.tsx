@@ -27,6 +27,7 @@ import {
 import type { SkillTreeEntry, WorkChangeDetail, WorkChangeEntry, WorkChangeSummary, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 
 const ChangesDiffEditor = lazy(() =>
   import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
@@ -525,7 +526,14 @@ export function ChangesPane({
                 <div className="changes-empty">{t("files.previewFailed", { error: openedError })}</div>
               ) : openedKind === "img" ? (
                 openedMediaSrc ? (
-                  <div className="files-media"><img src={openedMediaSrc} alt={fileName(openedEntry.path)} /></div>
+                  <div className="files-media">
+                    <DecodedImage
+                      src={openedMediaSrc}
+                      alt={fileName(openedEntry.path)}
+                      loading="eager"
+                      maxDecodeDimension={4096}
+                    />
+                  </div>
                 ) : (
                   <div className="changes-empty">{t("common.loading")}</div>
                 )

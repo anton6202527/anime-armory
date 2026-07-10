@@ -6,7 +6,8 @@ import {
   readEpisodeWorkspace,
   subscribeMediaPort,
 } from "../api";
-import type { CanvasClip, CanvasData, EpisodeWorkspace, LineKey, WorkRoot } from "../types";
+import type { CanvasClip, CanvasData, CanvasFrame, EpisodeWorkspace, LineKey, WorkRoot } from "../types";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 import { ReviewPane } from "./QualitySummary";
 import { QualityInsightsPane } from "./QualityInsightsPane";
 
@@ -40,9 +41,11 @@ function stageMetricValue(value: unknown): string {
   return textValue(value);
 }
 
-function firstExistingFrame(clip: CanvasClip): string {
+function firstExistingFrame(clip: CanvasClip): CanvasFrame | undefined {
   const frame = (clip.frames || []).find((item) => item.exists && item.abs);
-  return frame?.abs || (clip.first_frame_exists ? clip.first_frame_abs || "" : "");
+  if (frame) return frame;
+  if (!clip.first_frame_exists || !clip.first_frame_abs) return undefined;
+  return { role: "first", label: "首帧", abs: clip.first_frame_abs, exists: true };
 }
 
 function scoreText(value: unknown): string {
@@ -190,13 +193,16 @@ export function EpisodeWorkspacePane({
         <h3>镜头概览</h3>
         <div className="episode-clip-grid">
           {clips.map((clip) => {
-            const img = firstExistingFrame(clip);
-            const url = img ? `${mediaUrl(img)}&v=${refreshKey}` : "";
+            const frame = firstExistingFrame(clip);
+            const baseUrl = frame?.abs ? mediaUrl(frame.abs) : "";
+            const url = baseUrl && frame?.revision
+              ? `${baseUrl}&v=${encodeURIComponent(frame.revision)}`
+              : baseUrl;
             const tone = clip.qa_blocks > 0 ? "block" : clip.qa_warnings > 0 ? "warn" : clip.video_exists ? "pass" : "info";
             return (
               <article className={"episode-clip " + tone} key={clip.id}>
                 <div className="episode-clip-thumb">
-                  {url ? <img src={url} alt={clip.label} loading="lazy" /> : <span>无图</span>}
+                  {url ? <DecodedImage src={url} alt={clip.label} maxDecodeDimension={640} /> : <span>无图</span>}
                 </div>
                 <div className="episode-clip-body">
                   <strong>{clip.number != null ? `${clip.number}. ` : ""}{clip.label || clip.id}</strong>

@@ -904,18 +904,26 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
     endframe = str(cont.get("endframe_png") or clip.get("endframe_png") or "")
     anchors = [a for a in cont.get("anchors") or [] if isinstance(a, Mapping)]
     mid = cont.get("midframe") if isinstance(cont.get("midframe"), Mapping) else None
-    mid_count = (1 if mid else 0) + len(anchors)
+    execution_anchors = [
+        row for row in anchors
+        if str(row.get("use") or "split").strip().lower() not in {"qc", "reference", "reference_qc", "review"}
+    ]
+    mid_count = (1 if mid and str(mid.get("use") or "split").strip().lower() not in {"qc", "reference", "reference_qc", "review"} else 0) + len(execution_anchors)
     shots = [row for row in clip.get("shots") or [] if isinstance(row, Mapping)]
+    editorial_shots = [
+        row for row in shots
+        if any(row.get(key) for key in ("lens", "camera", "shot_size"))
+    ]
     explicit_frame_strategy = cont.get("frame_strategy")
     if isinstance(explicit_frame_strategy, Mapping):
         explicit_frame_strategy = explicit_frame_strategy.get("strategy")
     strategy_plan = select_video_frame_strategy(
         route.get("primary_backend") or "generic",
         route.get("channel") or route.get("backend_channel") or "",
-        shot_count=max(1, len(shots)),
+        shot_count=max(1, len(editorial_shots)),
         anchor_count=mid_count,
         need_end=bool(endframe or cont.get("need_endframe")),
-        requires_mid_anchors=_frame_strategy_requires_mid(clip, route, anchors, mid),
+        requires_mid_anchors=_frame_strategy_requires_mid(clip, route, execution_anchors, mid),
         explicit=str(explicit_frame_strategy or ""),
     )
     frame_strategy = str(strategy_plan.get("strategy") or "first_only")

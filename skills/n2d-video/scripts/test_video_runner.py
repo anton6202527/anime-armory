@@ -66,6 +66,21 @@ COMPILED_PROMPT_PACK = """# clips
 """
 
 
+COMPILED_PROMPT_PACK_V2 = COMPILED_PROMPT_PACK.replace(
+    "version=1; profile_version=2026-07-10.1;",
+    "version=2; profile_version=2026-07-10.2;",
+).replace(
+    "native_audio_policy=none; source_contract_sha256=",
+    "native_audio_policy=none; frame_strategy=first_only; story_span_sec=4.0; edit_target_sec=2.1; "
+    "backend_request_sec=3.0; action_start_sec=0.17; action_end_sec=1.78; hold_end_sec=2.1; "
+    "trim_mode=trim_tail; requires_split=false; duration_quantization=integer_range:3-10/step=1; "
+    "source_contract_sha256=",
+).replace(
+    "主动作：她缓慢抬眼。镜头：极缓推近，尾端固定。",
+    "主动作：她缓慢抬眼。镜头：极缓推近，尾端固定。时间：0.17-1.78秒完成主动作，持续保持落幅到2.10秒。2.10-3.00秒只保持落幅供后期裁切，不开始新动作。",
+)
+
+
 def test_parse_prompt_pack_prefers_compiled_submit_prompt(tmp_path: Path) -> None:
     prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
     prompt_dir.mkdir(parents=True)
@@ -77,6 +92,19 @@ def test_parse_prompt_pack_prefers_compiled_submit_prompt(tmp_path: Path) -> Non
     assert items[0]["prompt_compiler"]["backend"] == "dreamina"
     assert items[0]["prompt_text"].startswith("以已提交首帧为视觉真值")
     assert "旧的冗长" not in items[0]["prompt_text"]
+
+
+def test_parse_v2_prompt_keeps_edit_target_separate_from_backend_request(tmp_path: Path) -> None:
+    prompt_dir = tmp_path / "出视频" / "第1集" / "prompt"
+    prompt_dir.mkdir(parents=True)
+    (prompt_dir / "01_clips.md").write_text(COMPILED_PROMPT_PACK_V2, encoding="utf-8")
+
+    item = video_runner.parse_prompt_pack(tmp_path, "第1集", 1, 1)[0]
+
+    assert item["frame_strategy"] == "first_only"
+    assert item["edit_target_duration"] == 2.1
+    assert item["submit_duration"] == 3.0
+    assert item["speed_mode"] == "trim"
 
 
 def test_prepare_manifest_rejects_compiled_prompt_for_different_backend(tmp_path: Path) -> None:
@@ -385,7 +413,7 @@ def test_submit_blocks_unsplit_story_clip_over_hard_cap(tmp_path: Path) -> None:
         video_runner.submit_clip(tmp_path, manifest, "Clip_01", dry_run=True)
 
     assert "exceeds hard single video_shot cap" in str(exc.value)
-    assert "physical 4-8s video_shot parts" in str(exc.value)
+    assert "explicit physical takes within the backend window" in str(exc.value)
 
 
 def test_prepare_splits_long_story_clip_into_physical_parts(tmp_path: Path, monkeypatch) -> None:
@@ -842,6 +870,27 @@ def test_resolve_video_backend_unsupported_reports_gap_not_silent_switch():
         video_runner.resolve_video_backend({"backend": "kling"})
     msg = str(exc.value)
     assert "kling" in msg and "不偷偷换路" in msg  # C2: stop & report, never substitute dreamina
+
+
+def test_submit_clip_blocks_unresolved_frame_or_duration_contract(tmp_path: Path) -> None:
+    manifest_file = tmp_path / "manifest.json"
+    video_runner.atomic_write_json(manifest_file, {
+        "episode": "第1集",
+        "backend": "dreamina",
+        "items": [{
+            "clip": "Clip_01",
+            "target": "Clip_01.mp4",
+            "image": str(tmp_path / "first.png"),
+            "prompt_file": str(tmp_path / "prompt.txt"),
+            "submit_duration": 4,
+            "status": "prepared",
+            "frame_strategy": "edit_cut_pending_assets",
+            "frame_strategy_issue": "boundary image missing",
+        }],
+    })
+
+    with pytest.raises(RuntimeError, match="unresolved execution contract"):
+        video_runner.submit_clip(tmp_path, manifest_file, "Clip_01", dry_run=True)
 
 
 def test_resolve_video_backend_manual_points_to_accept():

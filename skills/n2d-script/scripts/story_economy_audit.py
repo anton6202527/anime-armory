@@ -206,7 +206,7 @@ def classify_clip(clip: Mapping[str, Any], idx: int, total: int) -> Dict[str, An
     if is_combat or is_emotion:
         economy_class = "premium_detail"
         detail_allowed = True
-        reason = "战斗/动作或强情绪交流可详拍，但仍拆为 4-8s video_shot。"
+        reason = "战斗/动作或强情绪交流可详拍，但仍先按动作/镜位拆 take；4-8s 只是生成舒适区，短插入镜可更短。"
     elif is_selective:
         economy_class = "selective_detail"
         detail_allowed = False
@@ -252,7 +252,7 @@ def classify_clip(clip: Mapping[str, Any], idx: int, total: int) -> Dict[str, An
 
     if detail_allowed:
         action = "keep_detail_but_split_video_shots" if duration and duration > 12 else "keep_detail"
-        demo = "保留起手/接触或眼神/停顿/关键台词，拆成 4-8s video_shot，别把解释塞进动作段。"
+        demo = "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。"
     elif economy_class == "montage_bridge":
         action = "merge_or_montage_before_video"
         demo = "改成 3-6s 蒙太奇：建立镜一闪 + 关键道具/动作特写 + 目的地落幅。"

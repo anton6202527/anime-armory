@@ -31,13 +31,20 @@ import type {
 export const DEFAULT_REPO = import.meta.env.VITE_ANIME_ARMORY_REPO || "";
 
 let mediaPort = 0;
+let mediaStartPromise: Promise<number> | null = null;
 const mediaListeners = new Set<() => void>();
 export async function ensureMedia(): Promise<number> {
-  if (!mediaPort) {
-    mediaPort = await invoke<number>("start_media");
-    mediaListeners.forEach((l) => l()); // wake components that read the port
-  }
-  return mediaPort;
+  if (mediaPort) return mediaPort;
+  mediaStartPromise ??= invoke<number>("start_media")
+    .then((port) => {
+      mediaPort = port;
+      mediaListeners.forEach((listener) => listener());
+      return port;
+    })
+    .finally(() => {
+      mediaStartPromise = null;
+    });
+  return mediaStartPromise;
 }
 
 /** External-store hooks so components re-render once the port is ready. */

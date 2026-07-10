@@ -31,6 +31,9 @@ n2d 因此采用两层对象：
   "backend": "seedance",
   "mode": "frames2video",
   "native_audio_policy": "none",
+  "story_span_sec": 5.0,
+  "edit_target_sec": 3.2,
+  "frame_strategy": "first_last",
   "subject": ["CHAR_01"],
   "scene": "LOC_01",
   "primary_action": "角色抬眼并握紧刀柄",
@@ -52,15 +55,26 @@ n2d 因此采用两层对象：
 ```json
 {
   "kind": "n2d_compiled_video_prompt",
-  "version": 1,
-  "profile_version": "2026-07-10.1",
+  "version": 2,
+  "profile_version": "2026-07-10.2",
   "clip_id": "Clip_01",
   "backend": "seedance",
   "profile": "zh_motion_first",
   "mode": "frames2video",
   "language": "zh",
   "native_audio_policy": "none",
-  "prompt": "从首帧连续运动到尾帧。主动作：……镜头：……",
+  "frame_strategy": "first_last",
+  "duration_plan": {
+    "story_span_sec": 5.0,
+    "edit_target_sec": 3.2,
+    "backend_request_sec": 4.0,
+    "action_start_sec": 0.25,
+    "action_end_sec": 2.7,
+    "hold_end_sec": 3.2,
+    "trim_mode": "trim_tail",
+    "requires_split": false
+  },
+  "prompt": "从首帧连续运动到尾帧。主动作：……镜头：……时间：0.25-2.70秒完成主动作，保持落幅到3.20秒；其余只保持供裁切。",
   "negative_prompt": "",
   "request_controls": {
     "frame_inputs": [],
@@ -86,6 +100,27 @@ n2d 因此采用两层对象：
 
 英文 profile 不做词典式伪翻译。canonical contract 可提供 `primary_action_en/camera_motion_en/environment_motion_en/end_state_en/subject_en/scene_en/rhythm_en`；若只提供中文，compiler 保留事实原文、把 `language` 标成 `mixed` 并 WARN，避免自动错译人物动作或剧情事实。正式海外投递应补齐这些 `*_en` 字段后重新编译。
 
+## 帧策略与三套时钟
+
+`frame_strategy` 不是“默认塞几张图”，而是由分镜语法与后端能力共同决定：
+
+- `first_only`：低风险单拍、后端只收首帧；
+- `first_last`：一个连续动作，需要锁定起落状态；这是最常用的跨后端稳定公约数；
+- `native_multiframe`：高风险连续动作且后端单次请求原生消费 3+ 时间轴帧；
+- `split_relay`：高风险连续动作，但后端只收首尾两帧，需显式拆段接力；
+- `edit_cut`：`shots[]` 已声明景别/机位变化；每个 shot 是独立 take，不能把多个镜位误当成一条连续插值视频；
+- `edit_cut_pending_assets` / `reroute_required`：缺分镜边界图或后端能力不足，付费前 BLOCK。
+
+“至少三帧”不是行业统一要求。普通单拍不默认生产中帧；中段锚只服务高风险连续动作、明确 opt-in 或编辑切点。`use=qc/reference` 的图只参与验收，runner 不得偷偷当时间轴帧提交。
+
+时长必须分成三套互不覆盖的时钟：
+
+1. `story_span_sec`：父剧情段覆盖的叙事/对白跨度；
+2. `edit_target_sec`：本条物理 take 在成片中真正要占的时长；
+3. `backend_request_sec`：后端允许提交的离散档位或区间。
+
+例如剪辑只要 2.1s，而后端最短只能请求 4s：动作必须在 2.1s 内完成，2.1-4s 只保持落幅，compose 默认裁尾到 2.1s。不得把 4s 原片用 `setpts` 整段压回 2.1s，也不得反过来把 2.1s 情节拉长成 4s。只有创作明确要求慢动作/加速时才显式使用 time-warp。
+
 ## 模式规则
 
 - `image2video`：不重述角色、服装、场景、光位和画风；从首帧真值出发，只写怎么动。
@@ -105,6 +140,8 @@ n2d 因此采用两层对象：
 - Runway 主 prompt 出现 `no/don't/avoid/不要/禁止` 等负向命令，或带独立 negative prompt；
 - `native_speech` 没有“只允许已登记画内台词”的守卫，或和 `no_native_speech` 同时出现；
 - 来源合同 SHA 非法，无法追溯。
+- v2 缺 `frame_strategy` 或 `duration_plan`，或后端请求短于剪辑目标却未声明拆段；
+- `edit_cut_pending_assets` / `reroute_required` 仍未解决。
 
 只 WARN：
 

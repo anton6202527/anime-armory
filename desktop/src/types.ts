@@ -163,6 +163,7 @@ export interface CanvasFrame {
   label: string;
   abs?: string;
   exists: boolean;
+  revision?: string;
   at_sec?: number;
   prompt?: string;
 }
@@ -180,9 +181,9 @@ export interface CanvasClip {
   first_frame_exists: boolean;
   video_abs?: string;
   video_exists: boolean;
+  video_revision?: string;
   frames: CanvasFrame[];
   prompt?: string;
-  mediaRevision?: number; // frontend cache-buster for regenerated files at the same path
   qa: QaFlag[];
   score?: number;
   qa_blocks: number;

@@ -15,6 +15,9 @@ def _contract(**overrides):
         "backend": "seedance",
         "mode": "frames2video",
         "native_audio_policy": "none",
+        "story_span_sec": 3.2,
+        "edit_target_sec": 3.2,
+        "frame_strategy": "first_last",
         "primary_action": "她抬眼，握紧刀柄，然后停住。",
         "camera_motion": "缓慢推近，尾端固定",
         "environment_motion": "衣袖只随抬手轻动",
@@ -40,6 +43,8 @@ def test_seedance_compiler_keeps_submit_prompt_compact_and_motion_first():
     assert "identity_registry" not in payload["prompt"]
     assert "video_model_routes" not in payload["prompt"]
     assert len(payload["prompt"]) < 600
+    assert "时间：" in payload["prompt"]
+    assert payload["duration_plan"]["edit_target_sec"] == 3.2
     assert payload["lint"]["errors"] == []
 
 
@@ -81,3 +86,5 @@ def test_compiled_markdown_round_trip_preserves_submit_prompt_and_metadata():
     assert parsed["backend"] == "seedance"
     assert parsed["prompt"] == payload["prompt"]
     assert parsed["source_contract_sha256"] == payload["source_contract_sha256"]
+    assert parsed["frame_strategy"] == "first_last"
+    assert parsed["duration_plan"]["edit_target_sec"] == 3.2

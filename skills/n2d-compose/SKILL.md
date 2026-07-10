@@ -20,7 +20,7 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
 ## 核心原则
-- **剪辑节奏 = 不许等长化**（`n2d/references/导演节奏.md §四/§五`）：clip 的时长曲线就是剪辑节奏，由上游（配音时长 + 故事板节奏注记）设计好——铺垫长镜、爽点碎切、爽点后留白。本 skill **按原时长拼接（concat -c copy），绝不把 clip 拉成等长**，否则节奏塌成 PPT。
+- **剪辑节奏 = `edit_target_sec`，不是后端原片长度**（`n2d/references/导演节奏.md §四/§五`）：铺垫长镜、爽点碎切、爽点后留白由上游设计。compose 优先读 `video_batch_*.json` 的 `edit_target_duration/duration_plan.edit_target_sec`，后端因离散档位多生成的尾端默认 `trim`；绝不把所有 clip 拉成等长，也不默认用 `setpts` 整段变速。`speed_mode=warp` 仅供导演显式慢动作/加速。
 - **三轨后期执行铁律（旁白/字幕/花字都归 compose）**：`n2d-script` 产出的 `dialogue / narration / screen_text` 三轨在本阶段合流。角色对白若已由原生音画 clip 生成，则本阶段只保留/混音并做字幕对齐；旁白一律在 compose 阶段用 TTS/配音轨生成并混入，不让视频模型直接生成旁白音频；`screen_text_lines[]`、标题卡、花字、系统面板数值和普通字幕一律由 compose 用 Pillow/overlay 叠加，不让视频模型烤字。`dialogue_fact_contract_第N集.json` 是三轨事实账本：旁白和屏幕文案必须按合同取词，年龄、身高、灵根、趟数等数字不得在后期脚本里临场改写。字幕也是 compose 阶段统一产物：原生音画可先出无字幕 draft，但 review/发布前必须从原生音轨或三轨合同生成/对齐 `字幕_中文.srt` 并过 `native_av_subtitle_alignment`。
 - **卡点**：爽点的冲击 = 画面 + 声音同一帧砸下。用 `BGM_OFFSET` 平移 BGM，让 drop/炸点落在 `故事板.md` 标的爽点时间戳（如 `💥爽点 @ 0:48`）那一帧；反转/觉醒处铺 bgm.txt 标的"重音"音效。
 - **留白呼吸**：爆发后那个 `留白·定格` clip 不要被音效填满——让它喘一口（必要时 BGM 瞬时拉低再起）。

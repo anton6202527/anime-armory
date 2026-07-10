@@ -55,6 +55,7 @@ interface CanvasAssetImage {
   label: string;
   abs: string;
   exists: boolean;
+  revision?: string;
   prompt?: string;
   clipIds: string[];
   roles: string[];
@@ -196,6 +197,7 @@ function collectSharedAssetImages(sharedAssets: CanvasFrame[], clips: CanvasClip
       label: assetLabel(frame, frame.abs),
       abs: frame.abs,
       exists: frame.exists,
+      revision: frame.revision,
       prompt: frame.prompt,
       clipIds: [],
       roles: [],
@@ -204,6 +206,7 @@ function collectSharedAssetImages(sharedAssets: CanvasFrame[], clips: CanvasClip
       firstClipIndex: clipIndex,
     };
     current.exists = current.exists || frame.exists;
+    current.revision = frame.revision || current.revision;
     current.prompt ||= frame.prompt;
     current.firstClipIndex = Math.min(current.firstClipIndex, clipIndex);
     if (frame.role) current.roleSet.add(frame.role);
@@ -559,7 +562,7 @@ function CanvasControlDock(props: {
 }
 
 // Infinite canvas for visual production lines: character context -> shot nodes -> clip videos.
-export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
+export function CanvasPane({ canvas, root }: ViewProps) {
   const { t } = useI18n();
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<Node>([]);
   const [editing, setEditing] = useState<CanvasClip | null>(null);
@@ -567,7 +570,9 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
   const [layoutLoaded, setLayoutLoaded] = useState(false);
   const [layout, setLayout] = useState<Map<string, { x: number; y: number }>>(new Map());
   const nodesRef = useRef<Node[]>([]);
+  const layoutRef = useRef<Map<string, { x: number; y: number }>>(new Map());
   const flowRef = useRef<ReactFlowInstance | null>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const fittedEntryRef = useRef("");
   const pendingFitRef = useRef(false);
 
@@ -612,7 +617,6 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
             source: FLOW_NODE.frame(clip.id, frameIndex),
             target: videoId,
             className: clip.video_exists ? "video-edge video-edge-done" : "video-edge video-edge-pending",
-            animated: !clip.video_exists,
             type: "default",
             zIndex: 1,
             interactionWidth: 14,
@@ -652,13 +656,16 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
         qa_warnings: 0,
         qa_infos: 0,
         variant: "asset-anchor",
+        __renderKey: hashString(`${asset.id}:${asset.label}:${asset.revision ?? ""}`),
       } as unknown as Record<string, unknown>,
     } satisfies Node));
     const frameNodes = canvas.clips.flatMap((clip, clipIndex) =>
       displayFramesForClip(clip).map((frame, frameIndex) => {
         const id = FLOW_NODE.frame(clip.id, frameIndex);
-        const legacyShotPosition = frameIndex === 0 ? layout.get(FLOW_NODE.shot(clip.id)) : undefined;
-        const saved = layout.get(id) ?? legacyShotPosition;
+        const legacyShotPosition = frameIndex === 0
+          ? layoutRef.current.get(FLOW_NODE.shot(clip.id))
+          : undefined;
+        const saved = layoutRef.current.get(id) ?? legacyShotPosition;
         return {
           id,
           type: "clip",
@@ -668,7 +675,7 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
             frames: [frame],
             variant: "frame",
             promptTooltip: clipPromptTooltip(clip),
-            mediaRevision: refreshKey,
+            __renderKey: hashString(JSON.stringify({ clip, frame })),
             onEdit: () => setEditing(clip),
           } as unknown as Record<string, unknown>,
         } satisfies Node;
@@ -680,12 +687,12 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
           return {
             id,
             type: "clip",
-            position: savedOrAutoPosition(id, layout.get(id), autoVideoPosition(rowOffsets[i])),
+            position: savedOrAutoPosition(id, layoutRef.current.get(id), autoVideoPosition(rowOffsets[i])),
             data: {
               ...clip,
               variant: "video",
               promptTooltip: clipPromptTooltip(clip),
-              mediaRevision: refreshKey,
+              __renderKey: hashString(JSON.stringify(clip)),
               rootPath: root.path,
               onEdit: () => setEditing(clip),
             } as unknown as Record<string, unknown>,
@@ -693,7 +700,7 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
         })
       : [];
     return [...assetAnchorNodes, ...frameNodes, ...videoNodes];
-  }, [assetImages, canvas, hasVideoLane, layout, refreshKey, root.path]);
+  }, [assetImages, canvas, hasVideoLane, layout, root.path]);
 
   useEffect(() => {
     let alive = true;
@@ -702,12 +709,16 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
     readCanvasLayout(root.path, canvas.episode)
       .then((saved) => {
         if (!alive) return;
-        setLayout(new Map((saved.nodes || []).map((n) => [n.id, { x: n.x, y: n.y }])));
+        const nextLayout = new Map((saved.nodes || []).map((n) => [n.id, { x: n.x, y: n.y }]));
+        layoutRef.current = nextLayout;
+        setLayout(nextLayout);
         setLayoutLoaded(true);
       })
       .catch(() => {
         if (!alive) return;
-        setLayout(new Map());
+        const nextLayout = new Map<string, { x: number; y: number }>();
+        layoutRef.current = nextLayout;
+        setLayout(nextLayout);
         setLayoutLoaded(true);
       });
     return () => {
@@ -734,7 +745,23 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
       setNodes([]);
       return;
     }
-    setNodes(flowNodes);
+    setNodes((current) => {
+      const previous = new Map(current.map((node) => [node.id, node]));
+      return flowNodes.map((next) => {
+        const old = previous.get(next.id);
+        if (!old) return next;
+        const oldKey = (old.data as Record<string, unknown>).__renderKey;
+        const nextKey = (next.data as Record<string, unknown>).__renderKey;
+        if (
+          oldKey === nextKey &&
+          old.position.x === next.position.x &&
+          old.position.y === next.position.y
+        ) {
+          return old;
+        }
+        return next;
+      });
+    });
   }, [canvas, flowNodes, setNodes]);
 
   useEffect(() => {
@@ -765,7 +792,7 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
     const next = dragged
       ? nodesRef.current.map((node) => (node.id === dragged.id ? { ...node, position: dragged.position } : node))
       : nodesRef.current;
-    setLayout(new Map(next.map((node) => [node.id, { x: node.position.x, y: node.position.y }])));
+    layoutRef.current = new Map(next.map((node) => [node.id, { x: node.position.x, y: node.position.y }]));
     persistLayout(next);
   }, [persistLayout]);
 
@@ -784,7 +811,7 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
       const i = Math.max(0, canvas.clips.findIndex((clip) => clip.id === baseId));
       return { ...node, position: positionForNode(node.id, rowOffsets[i] / ROW_H) };
     });
-    setLayout(new Map(next.map((node) => [node.id, { x: node.position.x, y: node.position.y }])));
+    layoutRef.current = new Map(next.map((node) => [node.id, { x: node.position.x, y: node.position.y }]));
     nodesRef.current = next;
     setNodes(next);
     persistLayout(next);
@@ -820,16 +847,24 @@ export function CanvasPane({ canvas, root, refreshKey = 0 }: ViewProps) {
   }
 
   return (
-    <div className="canvas-wrap">
+    <div className="canvas-wrap" ref={wrapRef}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        onNodeDragStop={(_, node) => saveCurrentLayout(node)}
+        onMoveStart={() => wrapRef.current?.classList.add("is-interacting")}
+        onMoveEnd={() => wrapRef.current?.classList.remove("is-interacting")}
+        onNodeDragStart={() => wrapRef.current?.classList.add("is-interacting")}
+        onNodeDragStop={(_, node) => {
+          wrapRef.current?.classList.remove("is-interacting");
+          saveCurrentLayout(node);
+        }}
         nodesDraggable
         nodesConnectable={false}
-        fitView
+        nodesFocusable={false}
+        edgesFocusable={false}
+        elevateNodesOnSelect={false}
         onInit={(instance) => {
           flowRef.current = instance;
           if (pendingFitRef.current) fitCanvasView(0);

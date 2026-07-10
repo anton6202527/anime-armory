@@ -10,13 +10,11 @@ import anchor_planner as ap
 # ── resolve_default_midframe（选择点解析·纯函数）──
 
 def test_default_midframe_defaults_on_per_choice_point():
-    # 缺设置 / 设置开启 / 旧项目写关闭 → 都开（三帧图片契约全局默认）
-    assert ap.resolve_default_midframe(False, False, None) is True
-    assert ap.resolve_default_midframe(False, False, "开启") is True
-    assert ap.resolve_default_midframe(False, False, "关闭") is True
-    # 后端能力只决定视频消费方式，不决定图片阶段是否产出 _mid。
-    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is True
-    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is True
+    # 普通镜默认 risk-only；只有显式开启且后端原生支持 3+ 帧才加 D0 中锚。
+    assert ap.resolve_default_midframe(False, False, None) is False
+    assert ap.resolve_default_midframe(False, False, "关闭", backend_capable=True) is False
+    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=False) is False
+    assert ap.resolve_default_midframe(False, False, "开启", backend_capable=True) is True
 
 
 def test_default_midframe_cli_flags_override_setting():
@@ -65,6 +63,24 @@ def test_times_capped_by_min_segment():
     times = ap.plan_anchor_times(13, [], target_seg=3.5, min_seg=4)
     assert len(times) == 2
     assert all(b - a >= 4 for a, b in zip([0] + times, times + [13]))
+
+
+def test_editorial_shot_boundaries_get_cut_anchors_without_global_midframe(tmp_path):
+    root = _write_project(tmp_path, [_clip(
+        1,
+        5.0,
+        shots=[
+            {"t": "0-2s", "lens": "ECU 手部", "description": "先看手部"},
+            {"t": "2-5s", "lens": "CU 反应", "description": "硬切到表情"},
+        ],
+    )])
+
+    plan = ap.plan_episode(root, "第1集", default_midframe=False)
+
+    assert plan["summary"]["clips_planned"] == 1
+    assert plan["planned"][0]["rule"].startswith("E1")
+    assert plan["planned"][0]["anchors"][0]["at_sec"] == 2.0
+    assert plan["planned"][0]["anchors"][0]["use"] == "edit_cut"
 
 
 # ── plan_episode（集成）──

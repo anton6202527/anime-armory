@@ -201,7 +201,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("项目规模", ("n2d",), ("短 demo", "单集", "多集长线", "长篇量产", "自定义"), parameterized=True, syncable=False),
     SettingSpec("首切范围", ("n2d",), ("部分先切", "全篇粗切"), parameterized=True),
     SettingSpec("脚本批次", ("n2d",), ("逐集", "小批", "整批"), parameterized=True),
-    SettingSpec("中段锚帧默认", ("n2d",), ("开启", "关闭")),
+    SettingSpec("中段锚帧默认", ("n2d",), ("关闭", "开启")),
     # C5 生成轴=具体模型（默认 GPT Image 2）。`生图AI` 保留为访问入口/渠道（壳）。
     SettingSpec("生图模型", ("n2d",), ("GPT Image 2", "Seedream 5.0", "Seedream 4.5", "Nano Banana Pro", "Gemini 3 Pro Image", "Flux 2 Pro", "可灵主体库模型", "自定义"), key_aliases=("生图model", "image_model"), parameterized=True),
     SettingSpec("生图AI", ("n2d",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), key_aliases=("生图渠道", "生图入口"), parameterized=True),

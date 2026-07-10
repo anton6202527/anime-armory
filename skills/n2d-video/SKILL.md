@@ -17,7 +17,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 - **图生视频为主，文生视频为辅**：每个 Clip 以出图阶段的 PNG 为首帧（可灵/部分平台支持首尾帧），生视频模型只控制"动作 + 运镜"。纯空镜/转场/氛围镜头可文生视频。
 - **运镜参考库优先**：写 `镜头运动` 和最终 `视频提交口径` 时，优先参考 `skills/n2d/references/运镜/manifest.json`（机器真值：中文/英文名、别名、slot、风险、prompt 模板、媒体路径）与同目录 WebP 示例图；再落成 `CAMERA_MOVE_LEXICON` 的结构化词 + 速度/方向/起止点。常用库包含固定、前推/后移、变焦推进/拉远、柯克变焦、摇/移/升降、环绕、盘旋抬升/下降、无人机航拍、跟拍、第一视角、手持、滚筒旋转，以及新增的甩镜、急推/急拉变焦、焦点转移、摇臂揭示、稳定器跟拍、低机位贴地跟拍、前景遮挡揭示、顶视俯拍、载具跟拍。复杂/眩晕类运镜只在剧情需要时用，身份高风险镜头先降级为固定、轻推、MCU/OTS 或物件反应镜。
-- **story_clip / video_shot 执行边界**：`storyboard.json` 里的 Clip 可能是 15-35s 的剧情段落（story_clip），但本阶段真正烧积分的是 4-8s 的物理视频镜头（video_shot）。`story_duration > 12s` 的 Clip 必须有拆镜/分段计划；`video_runner prepare` 会在有中段锚帧和尾帧时自动展开成 `Clip_XX_partN` 物理段，避免一次生成 30s+ 长片。`story_duration > 15s` 的未拆父 Clip 在 `submit` 付费边界硬拒，必须回 `n2d-script` 跑 `shot_split_decision.py --write` + `anchor_planner.py --write`，拆成建制镜/动作细节/人物反应/落幅钩子后再提交。不要把“1clip”误解为“一个 35 秒 MP4”。
+- **story_clip / edit shot / generation take 执行边界**：storyboard 父 Clip 可以承载 15-35s 小情节，但真正烧积分的是按 `shots[]` 景别/机位语法拆出的物理 take。多个明确镜位即使父 Clip 很短也拆；单一连续 take 再按后端上限处理。`video_runner prepare` 为每条 take 保存 `story_span_sec / edit_target_sec / backend_request_sec`，短 take 可请求后端最短档后裁尾；>15s 未拆父 take 仍在付费边界硬拒。
 - **对白密集集先定真实时长**：若本集对白/反打/说话镜占比较高，`先出视频后配音` 的占位/估算时长不再允许进入 `video_prompt_preflight/video_preflight`；先切到 `配音先行`，或至少生成真实配音/可信时长清单并回 `n2d-script` 重定时。否则 clip 停顿、口型、J/L cut 和情绪转折会被粗时长锁死，后补配音只能返工。
 - **完整合同与提交 prompt 分层铁律（P1）**：`01_clips.md` 的 Clip 块是严格生产合同，完整保留导演意图、continuity、在场链、身份、接缝、执行配方、Motion Control、原生音画和 QC；它**不等于**模型 prompt。`skills/n2d/_lib/video_prompt_compiler.py` 必须按 `primary_backend + mode` 把合同编译成唯一的 `后端编译提交 prompt`：图生视频只留一条主动作、结构化运镜、必要环境响应、节奏/落幅和最短保持语句；文生视频才补主体/场景。Runway 使用正向运动描述；Veo 负向元素走独立字段；本土/通用后端用精简中文 motion-first 口径。长度/分句过多只 WARN，缺主动作、缺运镜、后端/模式/音频策略不匹配或 Runway 出现负向命令才 BLOCK。复杂动作靠锚帧、真实 reference/control 输入、拆 Clip 或实现分解，不靠长段 prompt 硬压。行业证据与具体 schema 见 `references/行业通用视频Prompt规范.md`。
 - **正反打视频消费铁律**：`dialogue_shot_reverse` 视频 prompt 必须优先消费 `脚本/第N集/shot_reverse_contract.json`，并兼容继承 P-2 `axis_blocking_map.json#shot_reverse_patterns` 与 P-3 `continuity_bible.json#shot_reverse_continuity`：A/B 屏幕左右或 9:16 纵深高低位不换、互补视线不看镜头、OTS/clean single/insert/reaction 成对 coverage、镜头高度/距离/焦段连续、主光与背景深度延续。若剧情需要越轴，prompt 的 `正反打/对峙合同约束`、`接缝执行包` 和 `执行配方` 必须写 `buffer_or_reestablishing`（建立镜/插入物/中线移动/明确转场），且最后 0.5 秒保持落幅给剪点；不得让视频模型临场改站位、改视线或把画外角色拉回清晰正脸。`consumed_contracts_video_prompt_第N集.json` 会记录 `shot_reverse_contract` 的 path/sha256。
@@ -48,7 +48,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 - **物理段验收真值源铁律（`_mid` 不折叠）**：出视频验收/QC 的最小单位是 `video_runner` manifest item（`items[].clip` + `items[].target`），不是 MP4 文件名里复用的源图编号。正式落盘 MP4 的 `target` 必须以物理 `Clip_NN` 开头，例如 `Clip_02_黑殿审问下.mp4`，不得把首帧源图名 `Clip01_x_mid.png` 直接换后缀成 `Clip01_x_mid.mp4`；源图编号/_mid 只能作为输入素材信息，不能作为验收主键。`Clip_01_x.mp4` 和 `Clip_02_x下.mp4` 是两个物理视频段时，必须分别按 manifest 的 `Clip_01` / `Clip_02` 验收；`_mid` 不是非 `_mid` 的替代品，也不能被报告折叠成同一条 `Clip_01`。QC 报告必须同时列 `Clip` 与 `Source MP4`，抽帧文件名必须带 manifest clip 或唯一物理段前缀，禁止只用 `Clip01` 数字导致抽帧覆盖、warn 成对重复或 accept 错对象。只有要交给 compose 的最终 MP4 才算该物理段通过；逻辑镜头分组只供人理解，不作为验收主键。
 - **视觉锚点闭环**：脚本会自动从 `出视频/第N集/prompt/01_clips.md` 提取 `**尾帧**` PNG。若存在尾帧，生成时会切换至 `multimodal2video` 模式，将首帧与尾帧同时作为参考，强制 AI 在指定时长内完成从起点到终点的演变，极大提升了 Clip 间的接缝平滑度。付费前 `gate.py --stage video_preflight` 会**核验 `01_clips.md` 实际引用的首帧/尾帧 PNG**（runner 真正喂后端的那条路径，与 `storyboard.firstframe_png` 分开誊抄、可能漂）：**首帧缺失 = BLOCK**（image2video 必失败、白扣一次）；**声明了尾帧但 PNG 缺失、或 storyboard 标 `need_endframe=true` 而 prompt 漏写尾帧 = WARN**（双帧接力回退为单首帧，大表情近景有脸重画风险）。
 - **在场链继承铁律（防凭空多/少人）**：完整合同必须读取 `storyboard.json` 的 `entity_schedule` 与 `continuity.entry_exit`，保留 `required_presence`（画面必须有）、`offscreen_presence`（仍在场但画外/虚焦/反打外）、`forbidden_presence`（不得出现）。人物或关键物件跨 Clip 新增/消失，必须继承入画/出画/画外保留/换场/空镜/时间跳跃解释；不能只写泛化“不要新增人物”，也不能让后端随机生成路人、侍卫、同伴或把上镜人物吞掉。compiler 只在目标后端确有必要时把它压缩成一句正向保持/独立负向字段，真实约束仍以锚帧、reference inputs、执行配方和 QC 为准。
-- **中段锚帧（风险分层三帧契约·能力门控）**：首尾双帧只锁两端，**长 Clip 中段**模型仍自由发挥；但不再把“每镜至少 3 帧”写成无条件成本铁律。`anchor_planner.py` 分两层：① **强制层**：打斗/追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/亲密接触/大表情、≥8s 多拍长镜、R3 漂移重抽镜按 R1/R2/R3 规划 `_a1.._aN` 多锚，不受 ROI/速度设置关闭影响；② **普通 D0 层**：未命中高风险规则的普通镜，只有 `_设置.md` 的 `中段锚帧默认=开启` 且后端可表达 ≥3 帧时才补 `_mid`，`关闭` 时低风险短镜可豁免并在 storyboard policy 留痕。`storyboard.json` 声明 `continuity.midframe` 或 `continuity.anchors` 后，执行分三档：① **原生多帧（首选·即梦 `multiframe2video`）**——[首帧, 锚帧1..K, 尾帧] 一次生成连续视频（2–20 帧、每段 0.5–8s、总≥2s），无 concat，不按 K+1 倍烧视频；② **首尾帧后端（Veo/Luma/可灵等档案）**——首尾两帧作为时间轴约束，中段锚帧只能改为拆段接力、extend/interpolate 或作为 QC/参考图，gate 会 WARN；③ **首帧/参考图后端**——退回单首帧 + 强 end_state 文字，或直接 reroute 到 Dreamina/native multiframe。两路/三路对 compose/进度/配音时长都仍是同一个 Clip，不重编号、不动 `镜头时长.json`。Clip 块头在 `**首帧**`/`**尾帧**` 后逐锚加 `**中段锚帧**`/`**锚帧K**` 行；storyboard 声明数 > prompt 引用数、引用 PNG 缺失、或后端不能消费声明帧 = `video_preflight` WARN。详见 `references/prompt_format.md`「中段锚帧 Clip」和 `references/platforms.md`「关键帧/多帧能力」。
+- **中段锚帧（风险分层·能力门控）**：首尾双帧只锁两端，长连续 take 的中段仍可能漂移；但“每镜至少 3 帧”不是行业铁律。`anchor_planner.py` 分三层：① **E1 编辑切点**：`shots[]` 有多个明确 `lens/camera/shot_size` 时，边界图标为 `use=edit_cut`，runner 生成独立 take；② **R1/R2/R3 强制层**：高运动/长连续动作/漂移实证镜规划 `_a1.._aN`；③ **普通 D0 层**：只有 `_设置.md 中段锚帧默认=开启` 且后端单次请求原生支持 3+ 帧时才补 `_mid`。连续动作执行分 native multiframe / split relay / reroute；`use=qc/reference` 永不进时间轴。缺编辑边界图或必须 reroute 时，v2 compiler/gate/runner 在付费前 BLOCK，不再只给 WARN。详见 `references/prompt_format.md` 与 `references/platforms.md`。
 - **首/中/尾身份同源铁律（P0·不可缺失·不可弱化·不可删除）**：同一角色 Clip 只要引用 2 张以上关键帧（首帧/中段锚帧/锚帧K/尾帧），这些锚图必须来自同一个 `identity_registry` 角色/形态的同一套 `reference_group`，不得把不同脸型、眼距、鼻梁、下颌、发髻或标志配饰的图混成一条视频。逐镜 prompt 必须显式写 `CHAR_xx/形态`、可执行的 `reference_group=<同源组>` 绑定，以及脸型/五官比例/眼距/鼻梁/下颌、发型/发髻、标志配饰、服装配色等身份不变量；大表情近景必须使用同源 `reference_group.expressions` 或表情定妆作首尾双帧，写清 `表情锚`、`表情幅度`、`锁脸不锁情`。若后端支持 Character ID / Face Lock / reference controls / LoRA，必须同时喂角色 ID；不支持时走保真实现分解：降低运动幅度、缩小景别、侧脸/手部/反应镜、拆 Clip 等，但剧情 beat、人物目标和情绪功能不能删改。**机器保护**：`n2d_handoff.check_identity_handoff`、`dashboard.py gate --stage video_preflight|video|review` 和 `video_runner.py submit` 付费前 guard 都会阻断缺项；未来改 skill 不得删除、绕过或弱化此规则，只能用更严格的确定性机检 + 回归测试替换。
 - **运动 + 运镜 + 动态细节三件套必写**：只写画面不写运动 → AI 会随机推断，常翻车。
 - **导演调度七字段硬要求**：每个 Clip 必须先写 `导演意图`、`起幅`、`落幅`、`场面调度`、`表演节拍`、`运动精修`、`环境交互`，再写人物运动/镜头运动/动态细节。目标不是把 prompt 写长，而是让它回答"这一镜为什么这样拍、从哪里接、停到哪里、空间关系怎么守、物理层如何稳、环境如何动"。缺任一字段不得提交视频生成，`dashboard.py gate --stage video`（生产入口，底层调 `n2d-review/scripts/gate.py --json`）会阻断。
@@ -131,7 +131,7 @@ description: Stage 5 of n2d pipeline — for a 作品 episode whose 出图(PNG) 
 
 ## 输入前置条件
 
-- `配音先行` 模式：`_进度.md` 该集 `配音=✅`（真实配音）+ `分镜设计=✅` + `出图` 列分子=分母；`配音=⏳rough` 不准出视频。`先出视频后配音` 模式：`配音=⏳rough` 可作为估算时间脚手架放行到出视频，但必须复述不推荐理由，并确认用户接受后期补真音可能重切/重出。原生音画模式：`配音` 是可选旁白层，不要求 `配音` 列 ✅；但必须已由 `finalize_storyboard.py` 从 `storyboard.json clips[].duration` 生成 `镜头时长.json`，且 `分镜设计` ✅ + `出图` 满。**Clip 时长读定稿 `故事板.md` / `镜头时长.json`，不再用平台默认估**；平台档案只约束单 Clip 上限——**按后端读 `references/platforms.md`「单 Clip 上限铁律」（即梦 image2video≤8s / Seedance 2.0≤15s / 可灵多镜较长 / Veo≈8s），不是一刀切 8s**，超上限才拆 Clip。
+- `配音先行` 模式：`_进度.md` 该集 `配音=✅`（真实配音）+ `分镜设计=✅` + `出图` 列分子=分母；`配音=⏳rough` 不准出视频。`先出视频后配音` 模式：`配音=⏳rough` 可作为估算时间脚手架放行到出视频，但必须复述不推荐理由，并确认用户接受后期补真音可能重切/重出。原生音画模式：`配音` 是可选旁白层，不要求 `配音` 列 ✅；但必须已由 `finalize_storyboard.py` 从 `storyboard.json clips[].duration` 生成 `镜头时长.json`，且 `分镜设计` ✅ + `出图` 满。**story_clip 时长读定稿故事板；物理 edit shot 读 `shots[]`；后端请求时长读 capability profile**。先按镜位拆 take，再按后端档位量化，不得只在超上限时才拆。
 - 正式出视频前必须先跑模型路由，再跑确定性 preflight gate：
   1. `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`
   2. `python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write`
@@ -243,7 +243,7 @@ python3 skills/n2d-video/scripts/inherit_contract.py <作品根> 第N集
 **视频提交边界**（必填）：上面是完整生产合同；下面只允许出现 compiler 产物。不得手工把合同段落复制到 fenced prompt，也不得同时维护中英两个执行真值。
 
 ### 后端编译提交 prompt
-**编译元数据**：`kind=n2d_compiled_video_prompt; version=1; profile_version=...; profile=...; backend=...; mode=...; language=...; native_audio_policy=...; source_contract_sha256=...`
+**编译元数据**：`kind=n2d_compiled_video_prompt; version=2; profile_version=...; profile=...; backend=...; mode=...; language=...; native_audio_policy=...; frame_strategy=...; story_span_sec=...; edit_target_sec=...; backend_request_sec=...; action_start_sec=...; action_end_sec=...; hold_end_sec=...; trim_mode=...; requires_split=...; source_contract_sha256=...`
 
 \`\`\`text
 {由 `video_prompt_compiler.py` 生成的唯一提交文本；图生视频通常是“主动作 + 镜头 + 可选环境响应 + 节奏 + 落幅 + 最短保持”，不得含路由理由、文件路径、审计说明、身份注册表全文或执行配方}
@@ -279,7 +279,7 @@ python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 
 1. ✅ 首帧 PNG 已落档并与 Clip 编号匹配
 2. ✅ 剧本可看性合同：dramatic_function / audience_effect / retention promise / audience question 已进入完整 Clip 合同，并已跑 `script_contract_receipt.py --scope 出视频`；不要求逐字进入模型 prompt
 3. ✅ 导演调度：导演意图 / 起幅 / 落幅 / 场面调度 / 表演节拍 / 运动精修 / 环境交互齐全，且服务本集导演一致性契约
-4. ✅ prompt compiler：只有一个 `后端编译提交 prompt`；metadata 的 backend/mode/language/native_audio_policy 与 route 一致；提交文本包含主动作 + 运镜，I2V 不重述整套视觉设定
+4. ✅ prompt compiler v2：只有一个 `后端编译提交 prompt`；metadata 的 backend/mode/language/native_audio_policy 与 route 一致；必须有 `frame_strategy` 和 `story_span/edit_target/backend_request` 三套时钟；提交文本包含主动作 + 运镜 + 明确动作/保持窗口，I2V 不重述整套视觉设定
 5. ✅ ④人物运动：动作链明确、幅度与能量可控、可由首帧自然推出
 6. ✅ 物理守卫：运动精修写明重心、锁定部位、遮挡层级和不穿模/不拉脸约束
 7. ✅ ②镜头运动：推/拉/跟/环绕/固定等词明确，速度词明确，不只写"运镜"
@@ -471,10 +471,12 @@ python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
 | 让 Veo/Seedance/Kling 原生台词进 clip | 只允许低风险环境声/音效 opt-in；原生台词/旁白/哼唱默认禁，若仍有原生音轨则按无声策略剥离，或在显式原生音画项目中保留并标记 |
 | 反复空镜/转场每集重生成 | 进 `出视频/共享/视频/` 共享库跨集复用 |
 | 正面大特写说话镜口型对不上 | 启用对口型 lip-sync；若剧情允许，可改用侧脸/背身/反应镜承载同一句台词，避免删对白或换叙事目标 |
-| 单 Clip 时长超**该后端**上限（即梦 image2video>8s / Veo>8s；Seedance 2.0 可到 15s / 可灵多镜更长） | 拆成两个 Clip，补首尾双帧接力：上一 Clip 尾帧 = 下一 Clip 首帧。**别用 8s 一刀切**——上限按后端读 `references/platforms.md`，能一镜到底就别切碎 |
-| 把 20-35s 剧情段落当成一个付费视频 Clip 直提 | 错。`story_clip` 可以长，`video_shot` 目标 4-8s；`duration>12s` 先看 `shot_split_plan_第N集.json` 的 `video_shot_segments[]`，`duration>15s` 未拆父 Clip 会被 `video_runner submit` 硬拒。用 `prepare` 展开 `Clip_XX_partN` 后逐段生成，再由 compose/剪辑接回故事段落 |
+| 把后端最短/最长档位当剪辑节拍 | 错。先定 `edit_target_sec`，再量化 `backend_request_sec`；多出的尾巴只保持落幅并裁掉。后端最短 4s 不等于故事必须演 4s，默认不整段 time-warp |
+| 父 Clip 不长，就把其中多个景别/机位一次生成 | 错。只要 `shots[]` 明确发生 `lens/camera/shot_size` 切换，就按 `edit_cut` 拆独立 take；哪怕父 Clip 只有 5s。单一连续 take 超后端上限才按时长继续拆段 |
+| 把 20-35s 剧情段落当成一个付费视频 Clip 直提 | 错。`story_clip` 可以长；物理 take 先服从镜位/动作语法，连续长 take 再服从后端窗口。用 `shot_split_plan_第N集.json` + `prepare` 展开 `Clip_XX_partN`，逐段生成后由 compose 接回故事段落 |
 | 以为所有后端都能一次吃首/中/尾三帧 | 错。只有能力档确认的原生多帧后端可把 `_mid/_aK` 当时间轴关键帧；首尾帧后端只吃 first/last，首帧后端只能退回文字/参考图。跑 `video_preflight` 看「多帧能力」WARN，必要时改 Dreamina multiframe、拆段接力或 reroute |
 | 选了首尾帧后端还期待 `_mid` 自动生效 | `_mid` 可保留作 QC/参考，但不能假装在一次请求里锁中段。需要中段锁动作时拆 A→M、M→B 接力并验内部接缝；若想无焊缝，改走已核验的 native multiframe |
+| 把 `use=qc/reference` 中锚提交给视频后端 | 错。它只用于抽帧验收；runner 只消费执行锚，避免“为 QC 出的图”悄悄改变生成时间轴 |
 | Split Relay 的 part1/part2 在同一 manifest 上并行 query/accept | 不要并行写同一 manifest。按 `submit → query → accept → qc` 串行处理，或给不同重出范围拆独立 manifest；否则容易串下载路径、覆盖状态或把 part 证据写乱 |
 | 废视频留在 Downloads | 全部归档 `废料/出视频/第N集/`，Downloads 清空 |
 | 装第三方逆向 CLI | 违 ToS、封号风险，仅装官方 |

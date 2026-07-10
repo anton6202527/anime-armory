@@ -1942,6 +1942,13 @@ def check_image_prompt_overview(root: str, ep: str) -> None:
         if key not in text:
             add(BLOCK, "契约继承", p, f"本集视觉一致性契约缺字段：{key}")
     check_markdown_style_contract(text, p, "出图总览")
+def _compiled_float(value: Any) -> Optional[float]:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dict[str, Any]] = None) -> None:
     name = _headline(section, "Clip")
     loc = f"{path} {name}"
@@ -1984,8 +1991,40 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
                 add(BLOCK, "prompt compiler", loc, f"编译元数据缺字段：{key}")
         if compiled_prompt.get("kind") != COMPILED_VIDEO_PROMPT_KIND:
             add(BLOCK, "prompt compiler", loc, f"编译产物 kind 错误：{compiled_prompt.get('kind')}")
-        if compiled_prompt.get("version") != 1:
-            add(BLOCK, "prompt compiler", loc, f"不支持的编译产物 version={compiled_prompt.get('version')}")
+        compiler_version = compiled_prompt.get("version")
+        if compiler_version not in {1, 2}:
+            add(BLOCK, "prompt compiler", loc, f"不支持的编译产物 version={compiler_version}")
+        elif compiler_version == 1:
+            add(
+                WARN,
+                "prompt compiler",
+                loc,
+                "仍在使用 v1 编译产物：缺少帧策略与后端时长量化合同；请重新运行 n2d-video prompt_pack.py 升级到 v2。",
+            )
+        else:
+            for key in ("frame_strategy",):
+                if not str(compiled_prompt.get(key) or "").strip():
+                    add(BLOCK, "prompt compiler", loc, f"v2 编译元数据缺字段：{key}")
+            duration_plan = compiled_prompt.get("duration_plan")
+            if not isinstance(duration_plan, dict):
+                add(BLOCK, "prompt compiler", loc, "v2 编译元数据缺 duration_plan；无法区分剪辑目标与后端请求时长")
+            else:
+                for key in (
+                    "story_span_sec", "edit_target_sec", "backend_request_sec",
+                    "action_start_sec", "action_end_sec", "hold_end_sec", "trim_mode",
+                ):
+                    if duration_plan.get(key) in (None, ""):
+                        add(BLOCK, "prompt compiler", loc, f"v2 duration_plan 缺字段：{key}")
+                edit_target = _compiled_float(duration_plan.get("edit_target_sec"))
+                backend_request = _compiled_float(duration_plan.get("backend_request_sec"))
+                if edit_target is not None and backend_request is not None:
+                    if backend_request + 0.05 < edit_target and not duration_plan.get("requires_split"):
+                        add(BLOCK, "prompt compiler", loc, "后端请求时长短于剪辑目标但未声明 requires_split")
+            strategy = str(compiled_prompt.get("frame_strategy") or "").strip().lower()
+            if strategy == "edit_cut_pending_assets":
+                add(BLOCK, "帧策略", loc, "多镜位 Clip 选择了 edit_cut，但缺少分镜边界图或尾帧；先补图再付费生成")
+            elif strategy == "reroute_required":
+                add(BLOCK, "帧策略", loc, "高风险连续镜需要中段控制，但当前后端无法消费；必须改路由或显式拆段")
         if not re.fullmatch(r"[0-9a-f]{64}", str(compiled_prompt.get("source_contract_sha256") or "")):
             add(BLOCK, "prompt compiler", loc, "编译元数据 source_contract_sha256 非 64 位 SHA-256；无法追溯来源合同")
         expected_backend = normalize_video_prompt_backend((route or {}).get("primary_backend")) if route else ""

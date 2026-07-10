@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ensureMedia, listSkills, mediaAllowRoot, mediaUrl, readSkillFile, skillTree } from "../api";
 import { useI18n } from "../i18n";
 import type { LineInfo, SkillInfo, SkillTreeEntry } from "../types";
+import { DecodedImage } from "../mediaPreview/DecodedImage";
 
 const IMG = new Set(["png", "jpg", "jpeg", "webp", "gif", "bmp", "svg"]);
 const VIDEO = new Set(["mp4", "mov", "webm", "m4v"]);
@@ -146,7 +147,14 @@ export function SkillsBrowser(props: {
   const useStaticPreview = isOptimizedImage && !useOriginalMedia && !staticPreviewMissing;
   const activeMediaRel = activeFile && useStaticPreview ? staticPreviewPath(activeFile) : activeFile;
   const activeAbs = current && activeMediaRel ? joinPath(repoRoot, "skills", current.dir, activeMediaRel) : "";
-  const activeMediaSrc = mediaReady && activeAbs ? mediaUrl(activeAbs) : "";
+  const activeMediaEntry = tree?.find((node) => node.path === activeMediaRel);
+  const activeMediaRevision = activeMediaEntry
+    ? `${activeMediaEntry.path}:${activeMediaEntry.size ?? 0}:${activeMediaEntry.mtime ?? 0}`
+    : activeMediaRel ?? "";
+  const activeMediaBase = mediaReady && activeAbs ? mediaUrl(activeAbs) : "";
+  const activeMediaSrc = activeMediaBase
+    ? `${activeMediaBase}&v=${encodeURIComponent(activeMediaRevision)}`
+    : "";
 
   return (
     <div className="skills-browser">
@@ -204,10 +212,11 @@ export function SkillsBrowser(props: {
                         </button>
                       </div>
                     )}
-                    <img
+                    <DecodedImage
                       src={activeMediaSrc}
                       alt={activeFile}
-                      decoding="async"
+                      loading="eager"
+                      maxDecodeDimension={useStaticPreview ? 1920 : 4096}
                       onError={() => {
                         if (useStaticPreview) setStaticPreviewMissing(true);
                       }}

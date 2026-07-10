@@ -37,13 +37,12 @@ def test_luma_supports_first_last_but_not_native_mid_anchors():
 
 def test_backend_supports_three_plus_frames_capability_gate():
     import n2d_platform_profiles as p
-    # 原生多帧 / 首尾档（可拆段凑≥3帧）→ 强制三帧
+    # 只有单次原生请求真能消费 3+ 时间轴帧才算；首尾拆段接力不是原生三帧。
     assert p.backend_supports_three_plus_frames("dreamina") is True
     assert p.backend_supports_three_plus_frames("即梦") is True
-    assert p.backend_supports_three_plus_frames("kling") is True
-    assert p.backend_supports_three_plus_frames("veo") is True
-    assert p.backend_supports_three_plus_frames("luma") is True
-    # first-frame-only：视频消费能力不足；不代表图片阶段可省中段锚帧。
+    assert p.backend_supports_three_plus_frames("kling") is False
+    assert p.backend_supports_three_plus_frames("veo") is False
+    assert p.backend_supports_three_plus_frames("luma") is False
     assert p.backend_supports_three_plus_frames("seedance") is False
     assert p.backend_supports_three_plus_frames("sora") is False
     assert p.backend_supports_three_plus_frames("runway") is False
@@ -51,6 +50,37 @@ def test_backend_supports_three_plus_frames_capability_gate():
     # 未知/缺省 → 需要刷新/探活/人工确认，不默认假定支持三帧
     assert p.backend_supports_three_plus_frames(None) is False
     assert p.backend_supports_three_plus_frames("某新后端2027") is False
+
+
+def test_frame_strategy_separates_editorial_cuts_from_continuous_keyframes():
+    low_risk = profiles.select_video_frame_strategy("veo", shot_count=1, need_end=True)
+    editorial = profiles.select_video_frame_strategy(
+        "veo", shot_count=2, anchor_count=1, need_end=True
+    )
+    risky_relay = profiles.select_video_frame_strategy(
+        "kling", shot_count=1, anchor_count=1, need_end=True, requires_mid_anchors=True
+    )
+    risky_native = profiles.select_video_frame_strategy(
+        "dreamina", shot_count=1, anchor_count=1, need_end=True, requires_mid_anchors=True
+    )
+
+    assert low_risk["strategy"] == "first_last"
+    assert editorial["strategy"] == "edit_cut"
+    assert risky_relay["strategy"] == "split_relay"
+    assert risky_native["strategy"] == "native_multiframe"
+
+
+def test_backend_duration_quantization_preserves_edit_target():
+    veo = profiles.quantize_video_duration(5.1, "veo")
+    dreamina = profiles.quantize_video_duration(2.1, "dreamina", model_version="3.0")
+    native = profiles.quantize_video_duration(2.1, "dreamina", mode="native_multiframe")
+    luma = profiles.quantize_video_duration(2.0, "luma")
+
+    assert (veo["edit_target_sec"], veo["backend_request_sec"]) == (5.1, 6.0)
+    assert (dreamina["edit_target_sec"], dreamina["backend_request_sec"]) == (2.1, 3.0)
+    assert native["backend_request_sec"] == 2.1
+    assert luma["backend_request_sec"] == 5.0
+    assert all(row["trim_mode"] == "trim_tail" for row in (veo, dreamina, luma))
 
 
 def test_anchor_consumption_plan_distinguishes_native_and_split():
