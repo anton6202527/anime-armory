@@ -16,6 +16,7 @@ import argparse
 import datetime as dt
 import importlib.util
 import json
+import math
 import os
 from collections import defaultdict
 from typing import Dict, List, Optional, Sequence, Tuple
@@ -108,6 +109,7 @@ def _suggested_action(dim: str, direction: str) -> str:
 
 MIN_PASS_SAMPLES = 3
 MIN_FAIL_SAMPLES = 2
+MIN_AUTO_BLOCK_SAMPLES = 20
 
 
 def _golden_path(root: str) -> str:
@@ -152,8 +154,10 @@ def derive_floor(pass_scores: Sequence[float], fail_scores: Sequence[float]) -> 
                 "need": f">= {MIN_PASS_SAMPLES} pass & {MIN_FAIL_SAMPLES} fail"}
     if max(f) < min(p):  # 完全可分
         floor = round((max(f) + min(p)) / 2, 3)
-        return {"status": "separable", "recommended_floor": floor, "pass_n": len(p), "fail_n": len(f),
-                "margin": round(min(p) - max(f), 3)}
+        out = {"status": "separable", "recommended_floor": floor, "pass_n": len(p), "fail_n": len(f),
+               "margin": round(min(p) - max(f), 3)}
+        out.update(_classification_metrics(p, f, floor))
+        return out
     # 重叠：在候选切点里取 Youden's J = TPR - FPR 最大者（FPR=fail 被判 pass 的比例）
     cands = sorted(set(p) | set(f))
     best_floor, best_j = cands[0], -1.0
@@ -163,9 +167,44 @@ def derive_floor(pass_scores: Sequence[float], fail_scores: Sequence[float]) -> 
         j = tpr - fpr
         if j > best_j:
             best_j, best_floor = j, c
-    return {"status": "overlap", "recommended_floor": round(best_floor, 3), "youden_j": round(best_j, 3),
-            "separable": False, "pass_n": len(p), "fail_n": len(f),
-            "note": "pass/fail 分布重叠——floor 取 Youden 最优切点，建议补金标样本或换更强识别器组提升可分性。"}
+    out = {"status": "overlap", "recommended_floor": round(best_floor, 3), "youden_j": round(best_j, 3),
+           "separable": False, "pass_n": len(p), "fail_n": len(f),
+           "note": "pass/fail 分布重叠——floor 取 Youden 最优切点，建议补金标样本或换更强识别器组提升可分性。"}
+    out.update(_classification_metrics(p, f, float(best_floor)))
+    return out
+
+
+def _wilson(successes: int, total: int, z: float = 1.959963984540054) -> List[float]:
+    if total <= 0:
+        return [0.0, 1.0]
+    phat = successes / total
+    den = 1 + z * z / total
+    centre = (phat + z * z / (2 * total)) / den
+    margin = z * math.sqrt((phat * (1 - phat) + z * z / (4 * total)) / total) / den
+    return [round(max(0.0, centre - margin), 4), round(min(1.0, centre + margin), 4)]
+
+
+def _classification_metrics(pass_scores: Sequence[float], fail_scores: Sequence[float], floor: float) -> dict:
+    tp = sum(1 for value in pass_scores if value >= floor)
+    fn = len(pass_scores) - tp
+    fp = sum(1 for value in fail_scores if value >= floor)
+    tn = len(fail_scores) - fp
+    sensitivity = tp / len(pass_scores) if pass_scores else 0.0
+    specificity = tn / len(fail_scores) if fail_scores else 0.0
+    balanced = (sensitivity + specificity) / 2
+    sample_ready = len(pass_scores) >= MIN_AUTO_BLOCK_SAMPLES and len(fail_scores) >= MIN_AUTO_BLOCK_SAMPLES
+    eligible = sample_ready and balanced >= 0.85
+    return {
+        "confusion": {"tp": tp, "fn": fn, "fp": fp, "tn": tn},
+        "sensitivity": round(sensitivity, 4),
+        "specificity": round(specificity, 4),
+        "balanced_accuracy": round(balanced, 4),
+        "sensitivity_ci95": _wilson(tp, len(pass_scores)),
+        "specificity_ci95": _wilson(tn, len(fail_scores)),
+        "calibration_tier": "production" if eligible else "exploratory",
+        "auto_block_eligible": eligible,
+        "auto_block_min_samples_per_class": MIN_AUTO_BLOCK_SAMPLES,
+    }
 
 
 def build_calibration(root: str) -> dict:

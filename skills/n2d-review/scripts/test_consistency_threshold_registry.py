@@ -59,6 +59,7 @@ def test_build_registry_merges_calibration_and_recommendations(tmp_path: Path) -
     assert row["threshold_floor"] == 0.72
     assert row["evidence_status"] == "calibrated"
     assert row["production_escalation"]["direction"] == "loosen_threshold_or_add_exemption"
+    assert row["enforcement"]["auto_block_eligible"] is False
 
 
 def test_write_registry_outputs_machine_readable_file(tmp_path: Path) -> None:
@@ -66,6 +67,8 @@ def test_write_registry_outputs_machine_readable_file(tmp_path: Path) -> None:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     assert data["kind"] == reg.KIND
     assert data["rows"]
+    assert len(data["rows"]) >= 12
+    assert {"state_pixel_presence", "seam_continuity", "lip_sync", "audio_sync"} <= {row["dimension"] for row in data["rows"]}
 
 
 # ── P4：后端 floor 单调性/连贯校验（掣肘四：缺单调校验，放松无人察觉）──

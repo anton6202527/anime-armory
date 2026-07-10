@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""State pixel verification via VLM: close the last zero-pixel-check BLOCK field.
+"""State pixel verification via VLM: semantic triage for claimed visual states.
 
 Reads state_continuity ledger for claimed state changes (injured/transformed/
 awakened/blood/tears). For each state-change shot, uses VLM (N2D_VLM_CMD) to ask
@@ -8,7 +8,8 @@ awakened/blood/tears). For each state-change shot, uses VLM (N2D_VLM_CMD) to ask
 Complements state_pixel_contract.py (which uses identity_marks + OWLv2 detection
 for registered marks). This covers states NOT backed by registered identity_marks.
 
-Verdict: VLM says "no" on claimed state → BLOCK; "uncertain" → WARN.
+Verdict: VLM says "no" on claimed state → WARN + mandatory human confirmation;
+VLM alone never supplies a load-bearing BLOCK. "uncertain" → WARN.
 Degrades gracefully: no N2D_VLM_CMD → available=False, skip.
 
 Usage: python3 state_pixel_verify.py <作品根> 第N集 [--json]
@@ -25,7 +26,12 @@ import sys
 from typing import Any, Dict, List, Optional, Sequence
 
 KIND = "n2d_state_pixel_verify"
-VERSION = 1
+VERSION = 2
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+import detector_reliability  # noqa: E402
 
 # State types requiring pixel verification (not covered by identity_marks)
 STATE_VERIFY_TERMS = (
@@ -63,8 +69,11 @@ def parse_state_verdict(raw: str) -> Optional[str]:
 def state_verdict_to_finding(vlm_answer: str, claim: str, shot: str) -> Dict[str, str]:
     """VLM answer → finding dict. Pure function."""
     if vlm_answer == "no":
-        return {"verdict": "block", "msg": f"VLM 判定图中未呈现声明状态「{claim}」",
-                "shot": shot}
+        governed = detector_reliability.govern_verdict("block", detector_kind="vlm")
+        return {"verdict": governed["verdict"], "raw_verdict": "block",
+                "needs_human_confirmation": "true",
+                "msg": f"VLM 判定图中未呈现声明状态「{claim}」；VLM 仅作告警，须人审或确定性像素证据确认后才能 BLOCK",
+                "shot": shot, "detector_kind": "vlm"}
     if vlm_answer == "uncertain":
         return {"verdict": "warn", "msg": f"VLM 无法确定图中是否呈现状态「{claim}」，建议人判",
                 "shot": shot}

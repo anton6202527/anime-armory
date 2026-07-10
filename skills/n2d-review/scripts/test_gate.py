@@ -5,6 +5,7 @@ import datetime as dt
 from pathlib import Path
 
 import gate
+from image_prompt_compiler import compile_image_section, render_compiled_markdown
 
 _TEST_PNG_BYTES = b"\x89PNG\r\n\x1a\n"
 _TEST_PNG_SHA256 = hashlib.sha256(_TEST_PNG_BYTES).hexdigest()
@@ -1169,6 +1170,52 @@ def test_video_gate_runs_multimodal_p2_before_video_prompt(monkeypatch, tmp_path
 def test_good_character_shot_prompt_passes_strict_structure():
     gate.check_image_shot_prompt_section("01_分镜出图.md", 1, GOOD_SHOT)
     assert gate.findings == []
+
+
+def test_image_shot_gate_requires_fresh_backend_compiled_request(tmp_path):
+    gate.check_image_shot_prompt_section(
+        "01_分镜出图.md",
+        1,
+        GOOD_SHOT,
+        root=str(tmp_path),
+    )
+    assert any(
+        item["sev"] == gate.BLOCK
+        and item["dim"] == "image prompt compiler"
+        and "missing_compiled_image_request" in item["msg"]
+        for item in gate.findings
+    )
+
+    gate.findings.clear()
+    compiled = compile_image_section(
+        GOOD_SHOT,
+        backend="codex",
+        model="gpt-image-2",
+        mode="firstframe",
+        task_type="shot_keyframe",
+        request_params={"aspect_ratio": "9:16"},
+    )
+    embedded = GOOD_SHOT.rstrip() + "\n\n" + render_compiled_markdown(compiled) + "\n"
+    gate.check_image_shot_prompt_section(
+        "01_分镜出图.md",
+        1,
+        embedded,
+        root=str(tmp_path),
+    )
+    assert not any(
+        item["sev"] == gate.BLOCK and item["dim"] == "image prompt compiler"
+        for item in gate.findings
+    )
+
+    gate.findings.clear()
+    stale = embedded.replace("沈念抬眼", "沈念回头", 1)
+    gate.check_image_shot_prompt_section(
+        "01_分镜出图.md",
+        1,
+        stale,
+        root=str(tmp_path),
+    )
+    assert any("compiled_source_contract_stale" in item["msg"] for item in gate.findings)
 
 
 def test_image_shot_missing_structured_prompt_fields_blocks():

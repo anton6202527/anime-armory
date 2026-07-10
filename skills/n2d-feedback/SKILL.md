@@ -53,6 +53,8 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> \
 
 ## 投放 A/B 化
 
+> **实验结论必须满足统计合同**：`experiments.py audit` 的 `min_samples` 按**每个变体**计算，不再把 A+B 总播放量相加；每个变体输出加权转化率与 Wilson 95% 区间，候选相对登记的 control 做双侧两比例 z 检验，多候选用 Bonferroni 校正。只有每个变体都达样本量且校正后 `p < alpha` 才可 `promote_variant/keep_control`；否则是 `no_significant_difference` 或 `insufficient_samples`。分流差异过大、固定样本实验出现多次 `look_index` 又无 alpha-spending 时标 `analysis_design_review`，禁止把中途偷看后的偶然领先写成导演铁律。
+
 同一集可以上多个变体，不再只复盘单版本。最小做法：
 
 1. 为同一集生成 2-4 个变体：开场顺序、封面/首图、集尾断点、标题文案一次只重点改 1-2 个变量，避免归因混乱。
@@ -83,10 +85,11 @@ python3 skills/n2d-feedback/scripts/experiments.py upsert <作品根> \
   --variant B=system_panel_first \
   --primary-metric retention_3s \
   --min-samples 1000 \
+  --alpha 0.05 \
   --write
 
 python3 skills/n2d-feedback/scripts/experiments.py audit <作品根> \
-  --metrics <平台指标.csv> --write
+  --metrics <平台指标.csv> --alpha 0.05 --write
 ```
 
 输出 `生产数据/creative_experiments.json` 与 `creative_experiment_audit.json/md`。`audit.status=fail` 表示 metrics 里有 `ab_test_id` 没有实验定义；`observe` 表示变体或样本不足，只能观察，不能写成导演铁律。

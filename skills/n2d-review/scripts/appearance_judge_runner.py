@@ -30,6 +30,7 @@ import sys
 from typing import Any, Dict, List, Mapping, Optional
 
 import production_consistency as pc
+import detector_reliability
 
 APPEARANCE_JUDGE_KIND = "n2d_appearance_judge"
 SIM_WARN_FLOOR = float(os.environ.get("N2D_APPEARANCE_WARN_FLOOR", "0.7"))
@@ -181,10 +182,12 @@ def fill_findings(root: str, manifest: dict) -> dict:
         sim = res.get("similarity")
         if verdict not in ("ok", "warn", "block") and isinstance(sim, (int, float)):
             verdict = "block" if sim < SIM_BLOCK_FLOOR else "warn" if sim < SIM_WARN_FLOOR else "ok"
+        governed = detector_reliability.govern_verdict(verdict, detector_kind="vlm")
         if verdict in ("warn", "block"):
             findings.append({
                 "shot": pair["shot"], "character": pair["character"],
-                "verdict": verdict, "similarity": sim,
+                "verdict": governed["verdict"], "vlm_raw_verdict": verdict, "similarity": sim,
+                "needs_human_confirmation": governed["human_confirmation_required"],
                 "message": res.get("message") or "外观判官判定与定妆不一致",
             })
     manifest["findings"] = findings
@@ -204,6 +207,19 @@ def _run_batch(path: str, cmd: str) -> bool:
         return False
 
 
+def cap_vlm_findings(manifest: dict) -> dict:
+    """Enforce advisory severity even for a custom batch command's output."""
+    for row in manifest.get("findings") or []:
+        if not isinstance(row, dict):
+            continue
+        raw = str(row.get("vlm_raw_verdict") or row.get("verdict") or "warn").lower()
+        governed = detector_reliability.govern_verdict(raw, detector_kind="vlm")
+        row["vlm_raw_verdict"] = raw
+        row["verdict"] = governed["verdict"]
+        row["needs_human_confirmation"] = governed["human_confirmation_required"]
+    return manifest
+
+
 def write(root: str, ep: str) -> str:
     manifest = build_manifest(root, ep)
     batch_cmd = _appearance_batch_cmd()
@@ -214,7 +230,15 @@ def write(root: str, ep: str) -> str:
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
-    _run_batch(path, batch_cmd)
+    if _run_batch(path, batch_cmd):
+        try:
+            with open(path, encoding="utf-8") as fh:
+                manifest = cap_vlm_findings(json.load(fh))
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(manifest, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
+        except Exception as exc:
+            print(f"[appearance_judge][warn] 无法归一 batch VLM verdict：{exc}", file=sys.stderr)
     return path
 
 

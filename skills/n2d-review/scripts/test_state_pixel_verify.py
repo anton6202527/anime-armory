@@ -41,9 +41,11 @@ class TestParseStateVerdict:
 
 
 class TestStateVerdictToFinding:
-    def test_no_is_block(self):
+    def test_no_is_warn_until_human_or_deterministic_confirmation(self):
         f = spv.state_verdict_to_finding("no", "受伤", "clip_01")
-        assert f["verdict"] == "block"
+        assert f["verdict"] == "warn"
+        assert f["raw_verdict"] == "block"
+        assert f["needs_human_confirmation"] == "true"
         assert "未呈现" in f["msg"]
 
     def test_uncertain_is_warn(self):

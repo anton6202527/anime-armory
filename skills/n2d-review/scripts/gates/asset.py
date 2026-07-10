@@ -35,6 +35,7 @@ from gate_core import (
     _validate_weapon_profile,
     _weapon_profile,
 )
+from image_prompt_compiler import lint_compiled_section as lint_compiled_image_section  # noqa: E402
 
 def check_costume_registry_reconcile(root: str) -> None:
     """定妆库 ↔ identity_registry 双向对账。
@@ -286,6 +287,15 @@ def check_common_image_prompts(root: str) -> None:
         add(BLOCK, "共享定妆", prompt_dir, "缺共享定妆 prompt 目录")
         return
     derived_forms = _evolution_derived_forms(root)
+    selection = image_backend_adapter.current_image_backend_selection(root)
+    expected_backend = selection.get("backend") or selection.get("access")
+    allowed_tasks_by_file = {
+        "角色定妆.md": ("character_catalog", "style_anchor"),
+        "场景定妆.md": ("scene_asset",),
+        "道具定妆.md": ("prop_asset",),
+        "法宝定妆.md": ("prop_asset",),
+        "特效定妆.md": ("prop_asset",),
+    }
     for filename in ("角色定妆.md", "场景定妆.md", "道具定妆.md", "法宝定妆.md", "特效定妆.md"):
         p = os.path.join(prompt_dir, filename)
         if not os.path.isfile(p):
@@ -295,6 +305,21 @@ def check_common_image_prompts(root: str) -> None:
         for i, sec in enumerate(sections, 1):
             name = _headline(sec, f"{filename} block#{i}")
             loc = f"{p} {name}"
+            compiled_audit = lint_compiled_image_section(
+                sec,
+                expected_backend=expected_backend,
+                allowed_tasks=allowed_tasks_by_file.get(filename),
+            )
+            for code in compiled_audit.get("errors") or []:
+                add(
+                    BLOCK,
+                    "image prompt compiler",
+                    loc,
+                    f"共享资产编译图片请求结构错误：{code}。请重新运行 n2d-image image_prompt_pack.py，完整合同不得直接提交。",
+                    return_to_stage="image_prompt",
+                )
+            for code in compiled_audit.get("warnings") or []:
+                add(WARN, "image prompt compiler", loc, f"共享资产编译图片请求可进一步精简：{code}")
             if "目标存档" not in sec:
                 add(BLOCK, "共享定妆", loc, "缺目标存档；共享资产无法归档追踪")
             if not _has_positive_prompt_heading(sec, "中文"):
@@ -322,7 +347,7 @@ def check_common_image_prompts(root: str) -> None:
                             "脸部特写/同源表情参考 + `定妆_<角色>_三视图.png` 人审拼版。"
                             "完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
-                    add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回 9:16；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
+                    add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回项目所选画幅；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")
                 if "锚点" not in sec:
                     add(BLOCK, "角色一致性", loc, "角色定妆缺锚点字段；下游每镜无锚可拼")
                 # E 跨集成长派生形态：新境界/换装升级 form 的定妆必须从锚定/上一形态 image2image 派生，

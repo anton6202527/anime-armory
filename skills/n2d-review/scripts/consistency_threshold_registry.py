@@ -12,12 +12,17 @@ import argparse
 import datetime as dt
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 
 KIND = "n2d_consistency_threshold_registry"
-VERSION = 1
+VERSION = 2
+
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+import detector_reliability  # noqa: E402
 
 DEFAULT_ROWS = [
     {
@@ -28,6 +33,7 @@ DEFAULT_ROWS = [
         "threshold_floor": None,
         "evidence_status": "default_policy_only",
         "signoff_policy": "human_review_required_when_machine_uncertain",
+        "detector_kind": "numeric",
     },
     {
         "dimension": "outfit_consistency",
@@ -37,6 +43,7 @@ DEFAULT_ROWS = [
         "threshold_floor": None,
         "evidence_status": "default_policy_only",
         "signoff_policy": "human_review_required_when_machine_uncertain",
+        "detector_kind": "hybrid",
     },
     {
         "dimension": "style_consistency",
@@ -46,6 +53,7 @@ DEFAULT_ROWS = [
         "threshold_floor": None,
         "evidence_status": "default_policy_only",
         "signoff_policy": "human_review_required_when_machine_uncertain",
+        "detector_kind": "numeric",
     },
     {
         "dimension": "temporal_consistency",
@@ -55,7 +63,18 @@ DEFAULT_ROWS = [
         "threshold_floor": None,
         "evidence_status": "default_policy_only",
         "signoff_policy": "human_review_required_when_machine_uncertain",
+        "detector_kind": "numeric",
     },
+    {"dimension": "scene_geometry_consistency", "stage": "image", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_when_machine_uncertain", "detector_kind": "hybrid"},
+    {"dimension": "prop_state_consistency", "stage": "image", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_when_machine_uncertain", "detector_kind": "vlm"},
+    {"dimension": "state_pixel_presence", "stage": "image", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "vlm_warn_then_human_confirmation", "detector_kind": "vlm"},
+    {"dimension": "seam_continuity", "stage": "video", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_until_calibrated", "detector_kind": "numeric"},
+    {"dimension": "intra_clip_identity", "stage": "video", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_until_calibrated", "detector_kind": "numeric"},
+    {"dimension": "anchor_adherence", "stage": "video", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_until_calibrated", "detector_kind": "numeric"},
+    {"dimension": "motion_physics", "stage": "video", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "vlm_warn_then_human_confirmation", "detector_kind": "vlm"},
+    {"dimension": "lip_sync", "stage": "video", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "human_review_required_until_calibrated", "detector_kind": "numeric"},
+    {"dimension": "audio_sync", "stage": "compose", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "deterministic_timing_plus_human_spotcheck", "detector_kind": "deterministic"},
+    {"dimension": "overlay_text_integrity", "stage": "compose", "backend": "any", "style": "any", "threshold_floor": None, "evidence_status": "default_policy_only", "signoff_policy": "deterministic_contract_plus_ocr_review", "detector_kind": "contract"},
 ]
 
 
@@ -161,10 +180,15 @@ def build_registry(root: str) -> Dict[str, Any]:
             "pass_n": cal.get("pass_n"),
             "fail_n": cal.get("fail_n"),
             "recognizers": cal.get("recognizers") or [],
+            "detector_kind": str(cal.get("detector_kind") or "numeric"),
+            "auto_block_eligible": bool(cal.get("auto_block_eligible")),
+            "calibration_tier": cal.get("calibration_tier") or "exploratory",
+            "balanced_accuracy": cal.get("balanced_accuracy"),
+            "confusion": cal.get("confusion") or {},
             "source": _source_rel(root_path, cal_path),
             "signoff_policy": (
                 "machine_threshold_plus_human_spotcheck"
-                if str(cal.get("status") or "") in {"separable", "overlap"}
+                if bool(cal.get("auto_block_eligible"))
                 else "human_review_required_until_more_golden_samples"
             ),
         }
@@ -203,6 +227,10 @@ def build_registry(root: str) -> Dict[str, Any]:
                 rows[key]["evidence_status"] = "recommendation_pending_calibration"
 
     row_list = sorted(rows.values(), key=lambda r: _row_key(r))
+    for row in row_list:
+        row.setdefault("detector_kind", "numeric")
+        row.setdefault("auto_block_eligible", False)
+        row["enforcement"] = detector_reliability.registry_enforcement(row)
     return {
         "kind": KIND,
         "version": VERSION,

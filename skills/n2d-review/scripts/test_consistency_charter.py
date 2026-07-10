@@ -79,7 +79,7 @@ def test_enforcement_decisions_well_formed():
 
 
 def test_three_frame_graduated_severity_registered():
-    """具体守护：三帧契约分级 severity 决策必须在册（防回退到 44af5704 的无条件 BLOCK）。"""
+    """兼容 ID 仍在册，但裁决正文已升级为 risk-only + native explicit opt-in。"""
     ids = {d.get("id") for d in getattr(charter, "ENFORCEMENT_DECISIONS", [])}
     assert "three_frame_graduated_severity" in ids
 

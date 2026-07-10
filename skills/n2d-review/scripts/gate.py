@@ -315,6 +315,10 @@ from video_prompt_compiler import (  # noqa: E402  完整合同 → 后端提交
     normalize_backend as normalize_video_prompt_backend,
     parse_compiled_markdown,
 )
+from image_prompt_compiler import (  # noqa: E402  完整图片合同 → 后端提交 prompt 的单一编译边界
+    KIND as COMPILED_IMAGE_PROMPT_KIND,
+    lint_compiled_section as lint_compiled_image_section,
+)
 
 def check_gate_policy_matrix(stage: str) -> None:
     for err in validate_gate_policy_matrix():
@@ -704,7 +708,13 @@ def check_prompt_checklists(root: str, ep: str, kind: str) -> None:
         _img_canon, _ = classify_image_backend(get_setting(root, "生图AI", "Codex").strip())
         single_ref_backend = not image_backend_supports_persistent_subject(_img_canon)
         for idx, sec in enumerate(sections, 1):
-            check_image_shot_prompt_section(p, idx, sec, single_ref_backend=single_ref_backend)
+            check_image_shot_prompt_section(
+                p,
+                idx,
+                sec,
+                single_ref_backend=single_ref_backend,
+                root=root,
+            )
         return
     else:
         check_video_prompt_overview(root, ep)
@@ -2228,9 +2238,28 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
     if "自检（生成后逐条过" not in section:
         add(BLOCK, "prompt", loc, "缺生成后自检段")
 def check_image_shot_prompt_section(path: str, idx: int, section: str,
-                                    single_ref_backend: bool = False) -> None:
+                                    single_ref_backend: bool = False,
+                                    root: str = "") -> None:
     name = _headline(section, f"镜头 {idx}")
     loc = f"{path} {name}"
+
+    if root:
+        selection = image_backend_adapter.current_image_backend_selection(root)
+        compiled_audit = lint_compiled_image_section(
+            section,
+            expected_backend=selection.get("backend") or selection.get("access"),
+            allowed_tasks=("shot_keyframe", "relay_edit", "multi_subject"),
+        )
+        for code in compiled_audit.get("errors") or []:
+            add(
+                BLOCK,
+                "image prompt compiler",
+                loc,
+                f"编译图片请求结构错误：{code}。完整生产合同不得直接提交；请重新运行 n2d-image image_prompt_pack.py。",
+                return_to_stage="image_prompt",
+            )
+        for code in compiled_audit.get("warnings") or []:
+            add(WARN, "image prompt compiler", loc, f"编译图片请求可进一步精简：{code}")
 
     if "检查清单（八维自查" not in section:
         add(BLOCK, "prompt", loc, "缺提交前检查清单（八维自查·最易漏②机位/⑥光影/⑦张力）")

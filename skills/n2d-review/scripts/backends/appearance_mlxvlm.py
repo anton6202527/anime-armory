@@ -21,6 +21,11 @@ import re
 import sys
 from typing import Any, Dict, List, Optional
 
+PARENT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PARENT not in sys.path:
+    sys.path.insert(0, PARENT)
+import detector_reliability  # noqa: E402
+
 MODEL = os.environ.get("N2D_VLM_MODEL", "mlx-community/Qwen2.5-VL-3B-Instruct-4bit")
 WARN_FLOOR = float(os.environ.get("N2D_APPEARANCE_WARN_FLOOR", "0.7"))
 BLOCK_FLOOR = float(os.environ.get("N2D_APPEARANCE_BLOCK_FLOOR", "0.5"))
@@ -52,7 +57,10 @@ def _verdict_from(res: Optional[dict]) -> Optional[Dict[str, Any]]:
         verdict = "block" if sim < BLOCK_FLOOR else "warn" if sim < WARN_FLOOR else "ok"
     if verdict not in ("ok", "warn", "block"):
         return None
-    return {"verdict": verdict, "similarity": sim, "message": res.get("message") or ""}
+    governed = detector_reliability.govern_verdict(verdict, detector_kind="vlm")
+    return {"verdict": governed["verdict"], "vlm_raw_verdict": verdict,
+            "similarity": sim, "message": res.get("message") or "",
+            "needs_human_confirmation": governed["human_confirmation_required"]}
 
 
 def main(argv: List[str]) -> int:
@@ -100,6 +108,8 @@ def main(argv: List[str]) -> int:
             findings.append({
                 "shot": pair.get("shot"), "character": pair.get("character"),
                 "verdict": verdict["verdict"], "similarity": verdict.get("similarity"),
+                "vlm_raw_verdict": verdict.get("vlm_raw_verdict"),
+                "needs_human_confirmation": verdict.get("needs_human_confirmation"),
                 "message": verdict.get("message") or "外观判官判定与定妆不一致",
             })
     manifest["findings"] = findings

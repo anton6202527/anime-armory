@@ -4057,7 +4057,10 @@ def _has_halfbody_crop_rule(section: str) -> bool:
         "正面图裁切",
     ))
     has_crop = _has_any(section, ("裁切", "裁剪", "crop"))
-    has_resize = _has_any(section, ("放大", "重采样", "回 9:16", "回9:16", "9:16"))
+    has_resize = _has_any(section, (
+        "放大", "重采样", "回项目画幅", "保持项目画幅", "恢复项目画幅",
+        "回原画幅", "保持原画幅", "回 9:16", "回9:16", "9:16",
+    ))
     forbids_padding = _has_any(section, (
         "不得用白底",
         "不要用白底",

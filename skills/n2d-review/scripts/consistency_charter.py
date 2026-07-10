@@ -282,18 +282,17 @@ ENFORCEMENT_DECISIONS: List[Dict[str, Any]] = [
         "id": "three_frame_graduated_severity",
         "gate_function": "check_storyboard_contract",
         "dim": "中段锚帧",
-        "design": "capability_gated_severity",
+        "design": "risk_only_with_explicit_native_opt_in",
         "guard_token": "backend_supports_three_plus_frames",
-        "rule": "缺中段锚帧的 severity 纯按路由后端能否消费中帧分级："
-                "backend_supports_three_plus_frames=True（原生多帧/首尾拆段接力）→ BLOCK；"
-                "否则（真 first-frame-only 或后端未选/未知，中帧仅作 QC 参考）→ WARN。"
-                "不看 policy.midframe_default（那是 anchor_planner 的'已规划'标记·正常流程恒 true，"
-                "当闸会让 WARN 永不触发）。中帧仍是默认应产图片资产，WARN≠豁免。",
-        "supersedes": "44af5704 midframe_enforced=True（对所有后端无条件 BLOCK）",
-        "rationale": "SOTA(2026) 证实原生 3 关键帧极罕见（仅即梦智能多帧/Pika），真 first-frame-only "
-                     "后端被强出的中帧消费不了、仅作 QC 参考，不应为它 hard-BLOCK 真金白银出图；"
-                     "把『是否为不可消费的中帧花这笔钱』交作者按 cost 决定，同时不放松能消费中帧的后端。",
-        "decided": "2026-06-27",
+        "rule": "普通镜不设至少三帧要求。只有 policy.midframe_default_mode=explicit_opt_in 且"
+                "backend_supports_three_plus_frames=True 时强制普通 D0 中锚；production 高运动镜、"
+                "E1 编辑切点及已声明 anchors 继续按执行合同硬检。首尾 split relay 不冒充原生三帧；"
+                "use=qc/reference 不进入时间轴。",
+        "supersedes": "2026-06-27 three_frame capability-gated default-image policy",
+        "rationale": "多家主流视频 API 的稳定公约数是首帧或首尾帧，不存在跨厂商普通镜三帧最低标准。"
+                     "帧数应由剪辑语法和连续动作风险决定；低风险镜无条件补中帧浪费出图，且旧 runner "
+                     "会误消费 QC 图。风险/显式 opt-in 保留真正需要的控制力。",
+        "decided": "2026-07-10",
     },
 ]
 

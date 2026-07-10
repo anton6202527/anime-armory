@@ -134,13 +134,14 @@ def test_appearance_fill_uses_env_command(tmp_path, monkeypatch):
        {"clips": [{"id": "Clip_02", "desc": "CHAR_shen 近景"}]})
     _img(os.path.join(root, "ref.png"))
     _img(os.path.join(root, "出图", "第1集", "图片", "Clip_02.png"))
-    # 假判官：永远回 similarity 0.4 → 应被归一成 block
+    # 假 VLM 判官：raw similarity 0.4 命中 block 档，但自动结论封顶 warn。
     fake = tmp_path / "judge.sh"
     fake.write_text('#!/bin/sh\necho \'{"similarity": 0.4}\'\n')
     fake.chmod(0o755)
     monkeypatch.setenv("N2D_APPEARANCE_CMD", f"sh {fake}")
     m = ajr.fill_findings(root, ajr.build_manifest(root, "第1集"))
-    assert m["findings"] and m["findings"][0]["verdict"] == "block"
+    assert m["findings"] and m["findings"][0]["verdict"] == "warn"
+    assert m["findings"][0]["vlm_raw_verdict"] == "block"
     assert m["findings"][0]["similarity"] == 0.4
 
 
@@ -162,7 +163,7 @@ def test_appearance_write_uses_batch_backend(tmp_path, monkeypatch):
         "with open(path, encoding='utf-8') as fh:\n"
         "    data = json.load(fh)\n"
         "data['judge'] = 'fake-batch'\n"
-        "data['findings'] = [{'shot': 'Clip_02', 'character': 'CHAR_shen', 'verdict': 'warn'}]\n"
+        "data['findings'] = [{'shot': 'Clip_02', 'character': 'CHAR_shen', 'verdict': 'block'}]\n"
         "with open(path, 'w', encoding='utf-8') as fh:\n"
         "    json.dump(data, fh, ensure_ascii=False)\n",
         encoding="utf-8",
@@ -174,6 +175,8 @@ def test_appearance_write_uses_batch_backend(tmp_path, monkeypatch):
         payload = json.load(fh)
     assert payload["judge"] == "fake-batch"
     assert payload["findings"][0]["character"] == "CHAR_shen"
+    assert payload["findings"][0]["verdict"] == "warn"
+    assert payload["findings"][0]["vlm_raw_verdict"] == "block"
 
 
 def test_appearance_auto_mlxvlm_batch_off_by_default(monkeypatch):
@@ -209,3 +212,13 @@ def test_appearance_mlxvlm_backend_no_pairs_writes_manifest(tmp_path):
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert payload["findings"] == []
     assert payload["judge"].endswith("(no-pairs)")
+
+
+def test_appearance_mlxvlm_backend_caps_self_reported_block_to_warn():
+    backend_path = os.path.join(os.path.dirname(__file__), "backends", "appearance_mlxvlm.py")
+    spec = importlib.util.spec_from_file_location("appearance_mlxvlm_backend_policy", backend_path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    row = mod._verdict_from({"similarity": 0.1, "verdict": "block", "message": "不像"})
+    assert row["verdict"] == "warn"
+    assert row["vlm_raw_verdict"] == "block"

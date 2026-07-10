@@ -18,6 +18,9 @@ def test_derive_floor_separable_midpoint():
     assert res["status"] == "separable"
     assert res["recommended_floor"] == round((0.5 + 0.8) / 2, 3)
     assert res["margin"] == round(0.8 - 0.5, 3)
+    assert res["confusion"] == {"tp": 3, "fn": 0, "fp": 0, "tn": 2}
+    assert res["calibration_tier"] == "exploratory"
+    assert res["auto_block_eligible"] is False
 
 
 def test_derive_floor_insufficient_samples():
@@ -29,6 +32,13 @@ def test_derive_floor_overlap_uses_youden():
     assert res["status"] == "overlap"
     assert res["separable"] is False
     assert 0.0 <= res["recommended_floor"] <= 1.0
+    assert "balanced_accuracy" in res and "sensitivity_ci95" in res
+
+
+def test_derive_floor_only_enables_auto_block_with_production_sized_golden_set():
+    res = ct.derive_floor([0.8 + i / 1000 for i in range(20)], [0.2 + i / 1000 for i in range(20)])
+    assert res["calibration_tier"] == "production"
+    assert res["auto_block_eligible"] is True
 
 
 def test_build_calibration_groups_by_backend_style(tmp_path):
