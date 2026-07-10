@@ -43,8 +43,13 @@ import production_locks  # noqa: E402
 import script_supervisor_log  # noqa: E402
 import stop_loss  # noqa: E402
 
+try:
+    from flow_telemetry import record_milestone as _record_flow_milestone  # noqa: E402
+except Exception:  # pragma: no cover
+    _record_flow_milestone = None
 
-VERSION = 1
+
+VERSION = 2
 OUT_JSON = "release_verdict_{episode}.json"
 OUT_MD = "release_verdict_{episode}.md"
 PILOT_REQUIRED_COVERAGE = {"face", "scene", "action", "lipsync", "seam", "routing"}
@@ -687,10 +692,9 @@ def final_status(components: Sequence[Mapping[str, Any]], root: Path, profile: s
     return "pass"
 
 
-def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[str, Any]:
-    root = root.resolve()
-    episode = normalize_episode(episode)
-    components = [
+def build_components(root: Path, episode: str, profile: str) -> List[Dict[str, Any]]:
+    """Evaluate the existing release checks for one profile without writing state."""
+    return [
         check_progress_dag(root, episode),
         check_production_handoff(root, episode),
         check_script_supervisor_log(root, episode),
@@ -712,7 +716,129 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         check_release_evidence_freshness(root, episode),
         check_taxonomy(root, episode, profile),
     ]
+
+
+def _clip_delivery_coverage(root: Path, episode: str) -> Dict[str, Any]:
+    storyboard = load_json(root / "脚本" / episode / "storyboard.json")
+    clips = storyboard.get("clips") if isinstance(storyboard, dict) else []
+    expected: set[str] = set()
+    for index, row in enumerate(clips or [], 1):
+        raw = str((row or {}).get("id") or (row or {}).get("clip") or f"Clip_{index:02d}") if isinstance(row, Mapping) else f"Clip_{index:02d}"
+        match = re.search(r"Clip[_-]?(\d+)", raw, re.I)
+        expected.add(f"Clip_{int(match.group(1)):02d}" if match else f"Clip_{index:02d}")
+    present: set[str] = set()
+    media_paths: List[str] = []
+    for path in (root / "出视频" / episode / "视频").rglob("*.mp4") if (root / "出视频" / episode / "视频").is_dir() else []:
+        match = re.search(r"Clip[_-]?(\d+)", path.name, re.I)
+        if not match:
+            continue
+        cid = f"Clip_{int(match.group(1)):02d}"
+        present.add(cid)
+        media_paths.append(relpath(root, path))
+    for path in production_dir(root).glob(f"video_batch_{episode}_*.json"):
+        batch = load_json(path)
+        if not isinstance(batch, dict):
+            continue
+        for item in batch.get("items") or []:
+            if not isinstance(item, Mapping) or str(item.get("status") or "") not in {"accepted", "downloaded", "downloaded_existing_target"}:
+                continue
+            match = re.search(r"Clip[_-]?(\d+)", str(item.get("story_clip") or item.get("relay_parent") or item.get("clip") or ""), re.I)
+            if match:
+                present.add(f"Clip_{int(match.group(1)):02d}")
+    missing = sorted(expected - present)
+    complete = bool(expected) and not missing
+    return {
+        "complete": complete,
+        "status": "complete" if complete else ("not_started" if not present else "incomplete"),
+        "expected": sorted(expected),
+        "present": sorted(expected & present),
+        "missing": missing,
+        "media_paths": sorted(media_paths),
+    }
+
+
+def _state_from_components(profile: str, components: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    blockers = [
+        {"name": row.get("name"), "status": row.get("status"), "message": row.get("message")}
+        for row in components if row.get("status") != "pass"
+    ]
+    ready = not blockers
+    return {
+        "complete": ready,
+        "status": "complete" if ready else "blocked",
+        "profile": profile,
+        "blockers": blockers,
+    }
+
+
+def delivery_state_matrix(
+    root: Path,
+    episode: str,
+    requested_profile: str,
+    requested_components: Sequence[Mapping[str, Any]],
+) -> Dict[str, Any]:
+    """Separate production delivery from public/commercial publication readiness.
+
+    Public AI labels, filing and platform review may block publish readiness but
+    cannot retroactively make a technically accepted clip/master nonexistent.
+    Rights/label compliance remains fully enforced in each publication profile.
+    """
+    clip_state = _clip_delivery_coverage(root, episode)
+    internal_components = (
+        list(requested_components)
+        if str(requested_profile).lower() in INTERNAL_PROFILES
+        else build_components(root, episode, "internal")
+    )
+    publication_only = {"compliance", "release_profile", "release_evidence_freshness"}
+    technical_blockers = [
+        {"name": row.get("name"), "status": row.get("status"), "message": row.get("message")}
+        for row in internal_components
+        if row.get("name") not in publication_only and row.get("status") == "block"
+    ]
+    final_master = next((row for row in internal_components if row.get("name") == "final_master"), {})
+    master_complete = clip_state["complete"] and final_master.get("status") == "pass" and not technical_blockers
+    master_state = {
+        "complete": master_complete,
+        "status": "complete" if master_complete else "incomplete",
+        "blockers": technical_blockers + ([] if final_master.get("status") == "pass" else [{
+            "name": "final_master", "status": final_master.get("status") or "missing", "message": final_master.get("message") or "final master missing",
+        }]),
+        "publication_labels_required": False,
+    }
+    profile_components: Dict[str, Sequence[Mapping[str, Any]]] = {}
+    normalized_requested = "commercial" if str(requested_profile).lower() == "production" else str(requested_profile).lower()
+    for target in ("cn_public", "overseas", "commercial"):
+        profile_components[target] = (
+            requested_components if normalized_requested == target else build_components(root, episode, target)
+        )
+    publish = {target: _state_from_components(target, rows) for target, rows in profile_components.items()}
+    current_publish = publish.get(normalized_requested) if normalized_requested in publish else {
+        "complete": False,
+        "status": "not_evaluated_for_internal_or_demo",
+        "profile": normalized_requested or "demo",
+        "blockers": [],
+    }
+    return {
+        "clip_delivery_complete": clip_state,
+        "master_delivery_complete": master_state,
+        "production_complete": {
+            **master_state,
+            "definition": "all logical clips covered + final master present + non-publication technical/review components have no block",
+        },
+        "publish_ready_cn": publish["cn_public"],
+        "publish_ready_overseas": publish["overseas"],
+        "publish_ready_commercial": publish["commercial"],
+        "publish_ready_current_profile": current_publish,
+        "separation_rule": "delivery completion excludes public AI-label/filing/platform fields; publication readiness never does",
+    }
+
+
+def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[str, Any]:
+    root = root.resolve()
+    episode = normalize_episode(episode)
+    components = build_components(root, episode, profile)
     status = final_status(components, root, profile)
+    delivery_states = delivery_state_matrix(root, episode, profile, components)
     payload = {
         "kind": "n2d_release_verdict",
         "version": VERSION,
@@ -729,6 +855,7 @@ def build_verdict(root: Path, episode: str, *, profile: str = "demo") -> Dict[st
         "components": components,
         "blocking_reasons": [c for c in components if c.get("status") == "block"],
         "warnings": [c for c in components if c.get("status") == "warn"],
+        "delivery_states": delivery_states,
     }
     return payload
 
@@ -741,6 +868,9 @@ def render_markdown(payload: Mapping[str, Any]) -> str:
         f"- 状态：{payload.get('status')}",
         f"- profile：{payload.get('profile')}",
         f"- 汇总：{payload.get('summary')}",
+        f"- clip delivery：{((payload.get('delivery_states') or {}).get('clip_delivery_complete') or {}).get('status')}",
+        f"- master delivery：{((payload.get('delivery_states') or {}).get('master_delivery_complete') or {}).get('status')}",
+        f"- publish ready（当前 profile）：{((payload.get('delivery_states') or {}).get('publish_ready_current_profile') or {}).get('status')}",
         "",
         "| component | status | message |",
         "|---|---|---|",
@@ -761,6 +891,22 @@ def write_outputs(root: Path, episode: str, payload: Mapping[str, Any]) -> Dict[
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(tmp, json_path)
     md_path.write_text(render_markdown(payload), encoding="utf-8")
+    if _record_flow_milestone is not None:
+        try:
+            states = payload.get("delivery_states") if isinstance(payload.get("delivery_states"), Mapping) else {}
+            current = states.get("publish_ready_current_profile") if isinstance(states, Mapping) else {}
+            _record_flow_milestone(
+                root, "release_verdict_evaluated", episode=episode, stage="review",
+                extra={
+                    "status": payload.get("status"), "profile": payload.get("profile"),
+                    "clip_delivery_complete": bool((states.get("clip_delivery_complete") or {}).get("complete")),
+                    "master_delivery_complete": bool((states.get("master_delivery_complete") or {}).get("complete")),
+                    "publish_ready": bool((current or {}).get("complete")),
+                    "artifact": relpath(root, json_path),
+                },
+            )
+        except Exception:
+            pass
     return {"json": relpath(root, json_path), "markdown": relpath(root, md_path)}
 
 

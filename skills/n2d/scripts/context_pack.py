@@ -128,7 +128,7 @@ def preview_json(path: Path) -> Dict[str, Any]:
         return {"preview": preview_text(path)}
     if isinstance(data, dict):
         keys = list(data.keys())[:40]
-        summary = {key: data.get(key) for key in keys if key in {"kind", "version", "episode", "summary", "status", "verdict", "stage", "clips"}}
+        summary = {key: data.get(key) for key in keys if key in {"kind", "version", "episode", "summary", "status", "verdict", "stage", "clips", "graph_hash"}}
         summary["top_level_keys"] = keys
         return summary
     if isinstance(data, list):
@@ -168,6 +168,9 @@ def candidate_relpaths(stage_key: str, ep: str, root: Optional[Path] = None) -> 
                 continue
         if rel not in out:
             out.append(rel)
+    graph_rel = f"生产数据/episode_graph_{ep}.json"
+    if graph_rel not in out:
+        out.append(graph_rel)
     return out
 
 

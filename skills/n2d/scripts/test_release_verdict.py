@@ -162,6 +162,9 @@ def test_release_verdict_internal_only_when_all_components_pass(tmp_path: Path) 
     assert payload["summary"]["block"] == 0
     assert {c["name"]: c["status"] for c in payload["components"]}["image_qc"] == "pass"
     assert {c["name"]: c["status"] for c in payload["components"]}["pilot_release_gate"] == "pass"
+    assert payload["delivery_states"]["clip_delivery_complete"]["complete"] is True
+    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is True
+    assert payload["delivery_states"]["publish_ready_cn"]["complete"] is False
 
 
 def test_release_verdict_blocks_stale_image_qc(tmp_path: Path) -> None:
@@ -271,6 +274,22 @@ def test_release_verdict_blocks_missing_final_master(tmp_path: Path) -> None:
     assert payload["status"] == "blocked"
     master = next(c for c in payload["components"] if c["name"] == "final_master")
     assert master["status"] == "block"
+    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is False
+
+
+def test_public_ai_label_gap_does_not_erase_technical_master_delivery(tmp_path: Path) -> None:
+    _release_ready_project(tmp_path)
+    path = tmp_path / "合规" / "compliance_manifest.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["ai_labeling"]["explicit_label"]["status"] = "pending"
+    data["ai_labeling"]["implicit_metadata"]["applied"] = False
+    _write_json(path, data)
+
+    payload = release_verdict.build_verdict(tmp_path, "第1集", profile="cn_public")
+
+    assert payload["delivery_states"]["master_delivery_complete"]["complete"] is True
+    assert payload["delivery_states"]["publish_ready_cn"]["complete"] is False
+    assert payload["status"] == "blocked"
 
 
 def test_release_verdict_blocks_incomplete_pilot_evidence(tmp_path: Path) -> None:

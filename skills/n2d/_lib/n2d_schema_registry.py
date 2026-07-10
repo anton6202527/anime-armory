@@ -62,6 +62,15 @@ SCHEMA_REGISTRY_KIND = "n2d_schema_registry"
 ARTIFACT_VALIDATION_KIND = "n2d_artifact_validation"
 CONTEXT_PACK_KIND = "n2d_context_pack"
 CREATIVE_LOOP_KIND = "n2d_creative_loop_packet"
+EPISODE_GRAPH_KIND = "n2d_episode_graph"
+BLOCKING_BUNDLE_KIND = "n2d_blocking_bundle"
+FLOW_TELEMETRY_KIND = "n2d_flow_telemetry"
+FLOW_EVENT_KIND = "n2d_flow_event"
+VIDEO_EXECUTION_ADAPTER_REGISTRY_KIND = "n2d_video_execution_adapter_registry"
+VIDEO_EXECUTION_REQUEST_KIND = "n2d_video_execution_request"
+MULTISHOT_BATCH_KIND = "n2d_multishot_batch"
+POST_VIDEO_PROXY_KIND = "n2d_post_video_proxy"
+POST_VIDEO_PROXY_TIMELINE_KIND = "n2d_post_video_proxy_timeline"
 SUPERVISOR_PLAN_KIND = "n2d_supervisor_plan"
 GATE_POLICY_MATRIX_KIND = "n2d_gate_policy_matrix"
 JOB_RECONCILE_KIND = "n2d_job_reconcile"
@@ -269,6 +278,121 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
             "stage_key": {"type": "string"},
             "action_contract": {"type": "object"},
             "files": arr(obj(("relpath", "exists"), {"relpath": {"type": "string"}, "exists": {"type": "boolean"}})),
+        },
+    ),
+    EPISODE_GRAPH_KIND: obj(
+        ("kind", "version", "root", "episode", "nodes", "edges", "source_files", "graph_hash", "summary", "status"),
+        {
+            "kind": {"type": "string", "enum": [EPISODE_GRAPH_KIND]},
+            "version": {"type": "integer"},
+            "root": {"type": "string"},
+            "episode": {"type": "string"},
+            "nodes": arr(obj(("id", "type"), {"id": {"type": "string"}, "type": {"type": "string"}})),
+            "edges": arr(obj(("source", "relation", "target"), {
+                "source": {"type": "string"}, "relation": {"type": "string"}, "target": {"type": "string"},
+            })),
+            "source_files": arr({"type": "object"}),
+            "graph_hash": {"type": "string"},
+            "summary": {"type": "object"},
+            "status": {"type": "string"},
+            "lineage_gaps": arr({"type": "object"}),
+        },
+    ),
+    BLOCKING_BUNDLE_KIND: obj(
+        ("kind", "version", "episode", "stage_key", "stop_reason", "category", "blocked", "blockers"),
+        {
+            "kind": {"type": "string", "enum": [BLOCKING_BUNDLE_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "stage_key": {"type": "string"},
+            "stop_reason": {"type": "string"},
+            "category": {"type": "string"},
+            "blocked": {"type": "boolean"},
+            "blockers": arr({"type": "object"}),
+            "repair_commands": arr({"type": "string"}),
+            "gate": {"type": "object"},
+            "episode_graph": {"type": "object"},
+        },
+    ),
+    FLOW_TELEMETRY_KIND: obj(
+        ("kind", "version", "event_count", "stop_reasons", "stages", "prework", "orchestrator_latency_ms"),
+        {
+            "kind": {"type": "string", "enum": [FLOW_TELEMETRY_KIND]},
+            "version": {"type": "integer"},
+            "event_count": {"type": "integer"},
+            "stop_reasons": {"type": "object"},
+            "stages": {"type": "object"},
+            "prework": {"type": "object"},
+            "orchestrator_latency_ms": {"type": "object"},
+        },
+    ),
+    FLOW_EVENT_KIND: obj(
+        ("kind", "version", "at", "event_type"),
+        {
+            "kind": {"type": "string", "enum": [FLOW_EVENT_KIND]},
+            "version": {"type": "integer"},
+            "at": {"type": "string"},
+            "event_type": {"type": "string"},
+            "episode": {"type": "string"},
+            "stage": {"type": "string"},
+        },
+    ),
+    VIDEO_EXECUTION_ADAPTER_REGISTRY_KIND: obj(
+        ("kind", "version", "adapters"),
+        {
+            "kind": {"type": "string", "enum": [VIDEO_EXECUTION_ADAPTER_REGISTRY_KIND]},
+            "version": {"type": "integer"},
+            "adapters": {"type": "object"},
+        },
+    ),
+    VIDEO_EXECUTION_REQUEST_KIND: obj(
+        ("kind", "version", "operation", "adapter_id", "root", "episode", "clip", "inputs", "output", "idempotency_key", "request_sha256"),
+        {
+            "kind": {"type": "string", "enum": [VIDEO_EXECUTION_REQUEST_KIND]},
+            "version": {"type": "integer"},
+            "operation": {"type": "string"},
+            "adapter_id": {"type": "string"},
+            "root": {"type": "string"},
+            "episode": {"type": "string"},
+            "clip": {"type": "string"},
+            "inputs": {"type": "object"},
+            "output": {"type": "object"},
+            "idempotency_key": {"type": "string"},
+            "request_sha256": {"type": "string"},
+        },
+    ),
+    MULTISHOT_BATCH_KIND: obj(
+        ("kind", "version", "episode", "group_id", "backend", "members", "status", "shots"),
+        {
+            "kind": {"type": "string", "enum": [MULTISHOT_BATCH_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "group_id": {"type": "string"},
+            "backend": {"type": "string"},
+            "members": arr({"type": "string"}),
+            "status": {"type": "string"},
+            "shots": arr({"type": "object"}),
+        },
+    ),
+    POST_VIDEO_PROXY_KIND: obj(
+        ("kind", "version", "episode", "status", "timeline", "output"),
+        {
+            "kind": {"type": "string", "enum": [POST_VIDEO_PROXY_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "status": {"type": "string"},
+            "timeline": arr({"type": "object"}),
+            "output": {"type": "string"},
+        },
+    ),
+    POST_VIDEO_PROXY_TIMELINE_KIND: obj(
+        ("kind", "version", "episode", "status", "timeline"),
+        {
+            "kind": {"type": "string", "enum": [POST_VIDEO_PROXY_TIMELINE_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "status": {"type": "string"},
+            "timeline": arr({"type": "object"}),
         },
     ),
     CREATIVE_LOOP_KIND: obj(
@@ -681,6 +805,12 @@ def scan_artifacts(root: str, *, strict_unknown: bool = False) -> Dict[str, Any]
         ev_issues = validate_jsonl_file(events, expected_kind=PRODUCTION_EVENT_KIND)
         issues.extend(ev_issues)
         checked.append({"path": str(events), "kind": PRODUCTION_EVENT_KIND, "format": "jsonl", "issues": len(ev_issues)})
+
+    flow_events = root_path / production_dir("") / "flow_events.jsonl"
+    if flow_events.is_file():
+        flow_issues = validate_jsonl_file(flow_events, expected_kind=FLOW_EVENT_KIND)
+        issues.extend(flow_issues)
+        checked.append({"path": str(flow_events), "kind": FLOW_EVENT_KIND, "format": "jsonl", "issues": len(flow_issues)})
 
     for path in sorted(root_path.rglob("*.json")):
         if ".tmp." in path.name or path.name.endswith(".tmp"):

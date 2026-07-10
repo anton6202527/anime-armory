@@ -24,6 +24,33 @@ def test_validate_known_payload_passes() -> None:
     assert reg.validate_payload(payload) == []
 
 
+def test_validate_runtime_v2_artifact_kinds_pass() -> None:
+    payloads = [
+        {
+            "kind": "n2d_episode_graph", "version": 1, "root": "/tmp/work", "episode": "第1集",
+            "nodes": [{"id": "episode:第1集", "type": "episode"}], "edges": [], "source_files": [],
+            "graph_hash": "abc", "summary": {}, "status": "pass",
+        },
+        {
+            "kind": "n2d_blocking_bundle", "version": 1, "episode": "第1集", "stage_key": "video",
+            "stop_reason": "needs_payment_confirm", "category": "paid_confirmation", "blocked": True,
+            "blockers": [],
+        },
+        {
+            "kind": "n2d_video_execution_adapter_registry", "version": 2, "adapters": {},
+        },
+        {
+            "kind": "n2d_post_video_proxy", "version": 1, "episode": "第1集", "status": "ready",
+            "timeline": [], "output": "合成/第1集/_proxy/actual_rough_cut.mp4",
+        },
+        {
+            "kind": "n2d_multishot_batch", "version": 1, "episode": "第1集", "group_id": "MSG_01",
+            "backend": "seedance", "members": ["Clip_01", "Clip_02"], "status": "prepared", "shots": [],
+        },
+    ]
+    assert all(reg.validate_payload(payload) == [] for payload in payloads)
+
+
 def test_validate_payload_blocks_missing_required() -> None:
     issues = reg.validate_payload({"kind": "n2d_batch_queue", "version": 1})
     messages = [item["message"] for item in issues]
@@ -235,6 +262,10 @@ def test_scan_artifacts_validates_json_and_jsonl(tmp_path: Path) -> None:
         "trace": {"trace_id": "tr_1"},
     }
     (prod / "production_events.jsonl").write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
+    (prod / "flow_events.jsonl").write_text(json.dumps({
+        "kind": "n2d_flow_event", "version": 1, "at": "2026-07-10T00:00:00+0800",
+        "event_type": "next_action", "episode": "第1集", "stage": "video",
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
     (prod / "batch_queue.json").write_text(
         json.dumps({"kind": "n2d_batch_queue", "version": 1, "root": str(tmp_path), "tasks": []}, ensure_ascii=False),
         encoding="utf-8",
@@ -243,4 +274,4 @@ def test_scan_artifacts_validates_json_and_jsonl(tmp_path: Path) -> None:
     payload = reg.scan_artifacts(str(tmp_path))
 
     assert payload["status"] == "pass"
-    assert payload["checked_count"] == 2
+    assert payload["checked_count"] == 3

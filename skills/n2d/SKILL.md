@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4606 | 目录文本总行数 242563
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4637 | 目录文本总行数 247474
 
 # n2d — 主状态机调度器
 
@@ -58,7 +58,9 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
      n2d-review                 release verdict + production locks + creative governance + 失败归因回流 + review gate + score + 验收总账 + review-ui；只在已启用合成/发布包时签收 master_delivery_complete
 ```
 
-每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。`合成阶段` 默认 `跳过`：`视频` 列完成只表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览/继续后配音），不等于可发布母版。用户需要母带、BGM、烧字幕、交付矩阵或发布证据包时，再把 `_设置.md` 的 `合成阶段` 设为 `启用` 或直接调用 `n2d-compose`；只有合成、release/readiness、锁版和人工验收都通过，才叫 `master_delivery_complete`。
+每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。`合成阶段` 默认 `跳过`：`视频` 列完成只表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览/继续后配音），不等于可发布母版；齐片后会 best-effort 用真实 Clip + `edit_target_sec` 生成 `actual_rough_cut.mp4`，用于尽早看节奏但仍不是母版。用户需要母带、BGM、烧字幕、交付矩阵或发布证据包时，再把 `_设置.md` 的 `合成阶段` 设为 `启用` 或直接调用 `n2d-compose`；只有合成、技术 QA、锁版和人工验收通过，才叫 `master_delivery_complete`。发行再按 `publish_ready_cn / publish_ready_overseas / publish_ready_commercial` 分别判，不用一个“完成”状态混掉地区/用途差异。
+
+> **运行时收敛层**：正式 `run.py next` 会物化 `生产数据/episode_graph_第N集.json`（storyboard→route→job→media→粗剪→母版→release 的派生索引）和 `生产数据/blocking_bundles/latest_第N集.json`（选择/付费/合规/adapter/合同/QC 分类修复包），并追加隐私最小化 `flow_events.jsonl`。这些都不另立状态机：`_进度.md`、现有 gate 与 release verdict 仍是权威。安全的 report-only 前置按 stage 缓存，指纹覆盖脚本、合同、路由、prompt 与媒体变化；命中只省重复执行，不缓存 block/异常。
 
 > **机器契约层**：阶段顺序、列名、gate stage、每集 manifest、回退目标统一由 `skills/n2d/_lib/n2d_contract.py` 定义，`progress.py` / `n2d-progress` / `n2d-review gate` 复用它。改阶段职责或列名时，先改 contract，再同步 `references/contract.md` 与本说明。
 >

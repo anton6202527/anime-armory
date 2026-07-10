@@ -14,7 +14,7 @@ from copy import deepcopy
 from typing import Any, Dict, List
 
 
-ACTION_SCHEMA_VERSION = 1
+ACTION_SCHEMA_VERSION = 2
 
 AGENT_CREATIVE_STAGES = {"script_stage1", "script_stage2", "image_prompt", "video_prompt"}
 PAID_STAGES = {"image", "video", "compose"}
@@ -59,7 +59,7 @@ def _base(stage_key: str, owner: str, *, specialist: str, stop: str, prework: Li
         "stage_key": stage_key,
         "owner": owner,
         "specialist": specialist,
-        "prework_steps": prework,
+        "prework_steps": ["episode_graph", *[step for step in prework if step != "episode_graph"]],
         "requires_context_pack": True,
         "requires_creative_loop": creative,
         "requires_trace": True,

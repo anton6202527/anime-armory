@@ -22,6 +22,7 @@
 """
 from __future__ import annotations
 
+import glob
 import hashlib
 import importlib.util
 import json
@@ -110,13 +111,48 @@ def _hash_file_stat(path: str, h: "hashlib._Hash") -> None:
         h.update(f"{path}:missing".encode("utf-8"))
 
 
-def episode_input_fingerprint(root: str, ep: str, script_paths: Sequence[str] = ()) -> str:
+def _expanded_extra_paths(paths: Sequence[str]) -> List[str]:
+    out: set[str] = set()
+    for raw in paths:
+        value = str(raw or "")
+        if not value:
+            continue
+        matches = glob.glob(value, recursive=True) if any(ch in value for ch in "*?[") else [value]
+        if not matches:
+            out.add(value)  # missing glob is itself a stable input fact
+        for match in matches:
+            if os.path.isfile(match):
+                out.add(match)
+    return sorted(out)
+
+
+def _hash_stage_input(path: str, h: "hashlib._Hash") -> None:
+    suffix = Path(path).suffix.lower()
+    try:
+        size = os.path.getsize(path)
+    except OSError:
+        _hash_file_stat(path, h)
+        return
+    # Contracts and prompts are content-addressed; large media is represented by
+    # size+mtime so cache invalidation stays cheap while still noticing replacement.
+    if suffix in {".json", ".jsonl", ".md", ".txt", ".yaml", ".yml", ".csv"} and size <= 8 * 1024 * 1024:
+        _hash_file_content(path, h)
+    else:
+        _hash_file_stat(path, h)
+
+
+def episode_input_fingerprint(
+    root: str,
+    ep: str,
+    script_paths: Sequence[str] = (),
+    extra_paths: Sequence[str] = (),
+) -> str:
     """本集 prework 输入指纹：主输入文件内容 + 参与审计脚本的 (size,mtime)。
 
     任一变化都改变指纹，从而让缓存失效。纯函数式（只读盘），永不抛。
     """
     h = hashlib.sha256()
-    h.update(f"v1|{ep}|".encode("utf-8"))
+    h.update(f"v2|{ep}|".encode("utf-8"))
     ep_dir = os.path.join(root, "脚本", ep)
     for rel in _EPISODE_INPUT_RELPATHS:
         h.update(f"|{rel}|".encode("utf-8"))
@@ -127,6 +163,9 @@ def episode_input_fingerprint(root: str, ep: str, script_paths: Sequence[str] = 
     for sp in sorted(set(script_paths)):
         h.update(b"|script|")
         _hash_file_stat(sp, h)
+    for path in _expanded_extra_paths(extra_paths):
+        h.update(f"|stage_input|{path}|".encode("utf-8"))
+        _hash_stage_input(path, h)
     # 共享 _lib 契约模块（n2d_const/n2d_schema/n2d_contract…）：审计脚本 import 它们，
     # 改了会改审计行为——纳入指纹，避免共享契约一改、缓存仍吐陈旧审计结果。
     for lp in _lib_contract_module_paths():
@@ -167,6 +206,7 @@ class PreworkCache:
     """
 
     def __init__(self, root: str, ep: str, stage_key: str, fingerprint: str):
+        self.root = root
         self.path = cache_path(root, ep, stage_key)
         self.fingerprint = fingerprint
         self.enabled = not cache_disabled()
@@ -183,7 +223,18 @@ class PreworkCache:
         hit = self._fresh.get(step_key)
         if not isinstance(hit, dict):
             hit = self._steps.get(step_key)
-        return dict(hit) if isinstance(hit, dict) else None
+        if not isinstance(hit, dict):
+            return None
+        artifacts = hit.get("_cache_artifacts")
+        if isinstance(artifacts, list):
+            for raw in artifacts:
+                path = str(raw or "")
+                if not path:
+                    continue
+                candidate = path if os.path.isabs(path) else os.path.join(self.root, path)
+                if not os.path.isfile(candidate):
+                    return None
+        return dict(hit)
 
     def put(self, step_key: str, outcome: Dict[str, Any]) -> None:
         self._fresh[step_key] = outcome

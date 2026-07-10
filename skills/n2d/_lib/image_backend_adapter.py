@@ -44,6 +44,14 @@ except Exception:  # pragma: no cover
     except Exception:
         image_backend_standards = None  # type: ignore
 
+try:
+    from image_prompt_compiler import backend_profile as image_prompt_profile
+except Exception:  # pragma: no cover
+    try:
+        from .image_prompt_compiler import backend_profile as image_prompt_profile  # type: ignore
+    except Exception:
+        image_prompt_profile = None  # type: ignore
+
 
 CATALOG_VERIFIED = {
     "date": "2026-07-01",
@@ -330,6 +338,16 @@ def backend_adapter(raw: Optional[str]) -> Dict[str, Any]:
     adapter.setdefault("exact_model_id", "")
     adapter.setdefault("exact_model_evidence_required", False)
     adapter.setdefault("channel", adapter.get("label") or (canonical or key))
+    if image_prompt_profile is not None:
+        adapter["prompt_profile"] = image_prompt_profile(canonical or key)
+    else:
+        adapter["prompt_profile"] = {
+            "name": "generic_image_brief",
+            "backend": canonical or key or "generic",
+            "language": "zh",
+            "negative_strategy": "inline_constraints",
+            "request_fields": ("aspect_ratio", "size", "quality", "output_format"),
+        }
     return adapter
 
 
@@ -691,6 +709,10 @@ def default_capability_assertions(raw: Optional[str]) -> Dict[str, Any]:
         "reference_mode": refs.get("mode") or "",
         "max_reference_images": refs.get("max_total"),
         "output": adapter.get("output") or "",
+        "prompt_profile": (adapter.get("prompt_profile") or {}).get("name") or "",
+        "prompt_language": (adapter.get("prompt_profile") or {}).get("language") or "",
+        "negative_strategy": (adapter.get("prompt_profile") or {}).get("negative_strategy") or "",
+        "prompt_request_fields": list((adapter.get("prompt_profile") or {}).get("request_fields") or ()),
     }
 
 

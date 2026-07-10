@@ -21,6 +21,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
@@ -39,6 +40,18 @@ from n2d_action_registry import (
     stage_action_spec,
 )
 from n2d_trace import new_trace_context
+
+try:
+    from flow_telemetry import record_next_action as _record_next_action_telemetry
+except Exception:  # pragma: no cover - telemetry must never break orchestration
+    _record_next_action_telemetry = None
+
+try:
+    import episode_graph as _episode_graph
+    import n2d_blocking as _n2d_blocking
+except Exception:  # pragma: no cover - derived views never replace state/gates
+    _episode_graph = None
+    _n2d_blocking = None
 
 try:
     from settings import get_setting, get_setting_spec, load_settings, project_setting_source
@@ -78,13 +91,13 @@ def _prework_run(steps, run_one, *, cache=None, should_cache=None):
     return [run_one(obj) for _key, obj in steps]
 
 
-def _make_prework_cache(root, ep, stage_key, script_paths):
+def _make_prework_cache(root, ep, stage_key, script_paths, extra_paths=()):
     """Build a per-(root,ep,stage) prework cache keyed on episode inputs + audit-script mtimes.
     Returns None (cache off, run fresh) when the module is unavailable or fingerprinting fails."""
     if _PreworkCache is None or _episode_input_fingerprint is None or not ep:
         return None
     try:
-        fp = _episode_input_fingerprint(root, ep, list(script_paths))
+        fp = _episode_input_fingerprint(root, ep, list(script_paths), list(extra_paths))
         return _PreworkCache(root, ep, stage_key, fp)
     except Exception:  # pragma: no cover - never let caching break the orchestrator
         return None
@@ -92,6 +105,19 @@ def _make_prework_cache(root, ep, stage_key, script_paths):
 
 def _identity_matrix_path(root: str) -> str:
     return os.path.join(root, "生产数据", "identity_adapter_matrix.json")
+
+
+def _stage_cache_inputs(root: str, ep: str) -> List[str]:
+    """Stage-independent superset of contracts/media that report-only planners consume."""
+    return [
+        os.path.join(root, "脚本", ep, "**", "*"),
+        os.path.join(root, "出图", "共享", "*.json"),
+        os.path.join(root, "出图", ep, "prompt", "**", "*"),
+        os.path.join(root, "出视频", ep, "prompt", "**", "*"),
+        os.path.join(root, "生产数据", f"video_batch_{ep}_*.json"),
+        os.path.join(root, "生产数据", f"post_video_proxy_{ep}.json"),
+        os.path.join(root, "合成", ep, "**", "*.mp4"),
+    ]
 
 
 def _identity_exit_is_planned_asset_gap(root: str) -> tuple[bool, str]:
@@ -514,6 +540,53 @@ def _post_qc_bundle(root: str, ep: str, scope: str = "post_compose") -> Dict[str
     }
 
 
+def _post_video_proxy_card(root: str, ep: Optional[str], *, preview: bool = False) -> Dict[str, Any]:
+    if not ep:
+        return {"status": "episode_unspecified"}
+    manifest = os.path.join(root, "生产数据", f"post_video_proxy_{ep}.json")
+    if not preview:
+        script = os.path.join(SKILLS_DIR, "n2d-compose", "scripts", "post_video_proxy.py")
+        if os.path.isfile(script):
+            try:
+                _run([sys.executable, script, root, ep, "--render", "--json"])
+            except Exception:
+                pass
+    try:
+        payload = json.load(open(manifest, encoding="utf-8"))
+    except Exception:
+        payload = {"status": "missing", "manifest_path": manifest}
+    return {
+        "status": payload.get("status") or "unknown",
+        "rendered": bool(payload.get("rendered")),
+        "proxy": payload.get("output") or f"合成/{ep}/_proxy/actual_rough_cut.mp4",
+        "manifest": os.path.relpath(manifest, root),
+        "missing_story_clips": payload.get("missing_story_clips") or [],
+        "scope": "actual generated clips trimmed and joined; no voice/BGM/subtitles/grade",
+    }
+
+
+def _delivery_states_card(root: str, ep: Optional[str]) -> Dict[str, Any]:
+    if not ep:
+        return {}
+    path = os.path.join(root, "生产数据", f"release_verdict_{ep}.json")
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        return {"status": "not_evaluated", "command": f"python3 skills/n2d/scripts/release_verdict.py {root} {ep} --write --json"}
+    states = payload.get("delivery_states") if isinstance(payload, dict) else {}
+    if not isinstance(states, dict):
+        return {"status": "legacy_verdict_without_delivery_states", "path": path}
+    return {
+        "status": "evaluated",
+        "path": path,
+        "clip_delivery_complete": bool((states.get("clip_delivery_complete") or {}).get("complete")),
+        "master_delivery_complete": bool((states.get("master_delivery_complete") or {}).get("complete")),
+        "publish_ready_cn": bool((states.get("publish_ready_cn") or {}).get("complete")),
+        "publish_ready_overseas": bool((states.get("publish_ready_overseas") or {}).get("complete")),
+        "publish_ready_commercial": bool((states.get("publish_ready_commercial") or {}).get("complete")),
+    }
+
+
 def _context_pack_card(root: str, ep: str, stage_key: str) -> Dict[str, Any]:
     rel = context_pack_relpath(ep, stage_key)
     return {
@@ -843,6 +916,28 @@ def _finding_detail(stdout: str, stderr: str) -> str:
     return (text.splitlines()[-1] if text.splitlines() else text)[:200]
 
 
+def _cache_artifact_paths(root: str, stdout: str) -> List[str]:
+    """Collect only output-like existing files from a planner's JSON response."""
+    payload = _parse_trailing_json(stdout)
+    found: set[str] = set()
+    output_keys = {"output", "outputs", "path", "paths", "json", "markdown", "manifest_path", "report_path"}
+
+    def walk(value: Any, key: str = "") -> None:
+        if isinstance(value, dict):
+            for child_key, child in value.items():
+                walk(child, str(child_key))
+        elif isinstance(value, list):
+            for child in value:
+                walk(child, key)
+        elif key in output_keys and isinstance(value, str) and value.strip():
+            candidate = value if os.path.isabs(value) else os.path.join(root, value)
+            if os.path.isfile(candidate):
+                found.add(os.path.abspath(candidate))
+
+    walk(payload)
+    return sorted(found)
+
+
 def _run_report_only_prework(p: Probes, commands: List[tuple], cache=None) -> None:
     """Run deterministic sidecar planners without turning report-only gaps into blockers.
 
@@ -863,7 +958,8 @@ def _run_report_only_prework(p: Probes, commands: List[tuple], cache=None) -> No
         try:
             r = _run([sys.executable, script_path, *args])
             return {"step": step, "status": "pass" if r.returncode == 0 else "warn",
-                    "detail": _finding_detail(r.stdout, r.stderr)}
+                    "detail": _finding_detail(r.stdout, r.stderr),
+                    "_cache_artifacts": _cache_artifact_paths(str(args[0]) if args else "", r.stdout)}
         except Exception as exc:  # pragma: no cover
             return {"step": step, "status": "skip", "detail": str(exc)[:160]}
 
@@ -871,7 +967,7 @@ def _run_report_only_prework(p: Probes, commands: List[tuple], cache=None) -> No
     if steps:
         for o in _prework_run(steps, run_one, cache=cache,
                               should_cache=lambda o: o.get("status") in ("pass", "warn")):
-            outcomes[o.get("step")] = {k: v for k, v in o.items() if k != "_cached"}
+            outcomes[o.get("step")] = {k: v for k, v in o.items() if k != "_cache_artifacts"}
 
     # 按 commands 原顺序回填，保证 p.prework 顺序与串行版逐字一致。
     for step, _script_path, _args in commands:
@@ -1271,6 +1367,14 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     spec = stage_for_key(stage_key) or {}
     p = Probes()
     ep = route.get("ep")
+    _stage_prework_cache = None
+    if ep:
+        # Cache every safe report-only planner, not only image_prompt.  The key
+        # includes stage contracts, route/prompt files and media stat changes.
+        cache_scripts = sorted(glob.glob(os.path.join(SKILLS_DIR, "n2d*", "scripts", "*.py")))
+        _stage_prework_cache = _make_prework_cache(
+            root, ep, stage_key, cache_scripts, _stage_cache_inputs(root, ep)
+        )
 
     if ep:
         p.entry_checks = entry_checks(root, ep, stage_key=stage_key)
@@ -1289,6 +1393,21 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             script_stage1_missing_choices = [k for k in FIRST_RUN_CHOICES if _explicit_choice_missing(root, k)]
         except Exception:  # pragma: no cover
             script_stage1_missing_choices = []
+
+    # Episode graph 是现有 storyboard/route/job/media/gate 的派生索引，不是新状态机。
+    # 先物化再做 context pack，使 specialist 能从一张图追到当前事实与血缘。
+    if ep and _episode_graph is not None:
+        try:
+            graph = _episode_graph.build(root, ep)
+            paths = _episode_graph.write(root, ep, graph)
+            p.prework.append({
+                "step": "episode_graph",
+                "status": "warn" if graph.get("status") == "warn" else "pass",
+                "detail": f"nodes={(graph.get('summary') or {}).get('nodes', 0)} gaps={(graph.get('summary') or {}).get('lineage_gaps', 0)}",
+                "path": paths.get("json"),
+            })
+        except Exception as e:  # pragma: no cover
+            p.prework.append({"step": "episode_graph", "status": "skip", "detail": str(e)[:160]})
 
     # Context pack / creative loop：确定性生成阶段最小上下文和评审-修订包。
     # 失败不默认阻断；真正的 stage gate 仍是放行真值。
@@ -1496,7 +1615,9 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         # 本阶段 prework 缓存：指纹覆盖本集主输入 + 全部 n2d-script 审计脚本的 mtime，
         # 任一变化即失效；输入/脚本未变时复用上轮结果，跳过十几个 subprocess 冷启动。
         _audit_script_paths = sorted(glob.glob(os.path.join(SKILLS_DIR, "n2d-script", "scripts", "*.py")))
-        _prework_cache_obj = _make_prework_cache(root, ep, "image_prompt", _audit_script_paths)
+        _prework_cache_obj = _stage_prework_cache or _make_prework_cache(
+            root, ep, "image_prompt", _audit_script_paths, _stage_cache_inputs(root, ep)
+        )
         audits = [
             (
                 "source_adaptation_audit",
@@ -1564,6 +1685,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             entry = {"step": o["step"], "status": o["status"]}
             if "detail" in o:
                 entry["detail"] = o["detail"]
+            if o.get("_cached") is True:
+                entry["_cached"] = True
             p.prework.append(entry)
             if o["status"] == "block":
                 _record_prework_block(p, str(o["step"]), o.get("block_msg") or f"{o['step']} 未通过")
@@ -1690,10 +1813,6 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             ),
         ], cache=_prework_cache_obj)
 
-        # 落盘本阶段缓存（audits + report-only 的 pass/warn 结果），供下次 run next 复用。
-        if _prework_cache_obj is not None:
-            _prework_cache_obj.save()
-
         for step, script_name, args in (
             ("spectacle_plan", "spectacle_plan.py", [root, ep, "--write", "--json"]),
             ("spectacle_sequence_plan", "spectacle_sequence_plan.py", [root, ep, "--write", "--json"]),
@@ -1813,7 +1932,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-video", "scripts", "video_production_pack.py"),
                 [root, ep, "--write", "--json"],
             ),
-        ])
+        ], cache=_stage_prework_cache)
         _run_preventive_contract_prework(p, root, ep, stage_key)
 
     if stage_key in {"video", "compose"} and ep:
@@ -1868,7 +1987,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-review", "scripts", "production_learning_pack.py"),
                 [root, ep, "--write", "--json"],
             ),
-        ])
+        ], cache=_stage_prework_cache)
 
     if stage_key in PRODUCTION_LOCK_STAGES and ep:
         _run_production_locks_prework(p, root, ep, stage_key)
@@ -1935,7 +2054,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-image", "scripts", "no_cost_image_pack.py"),
                 [root, ep, "--write", "--json"],
             ),
-        ])
+        ], cache=_stage_prework_cache)
 
     # gate：有 gate_stage 的阶段先过 dashboard gate（退出码 1=block）
     gate_stage = _gate_stage_for_frontier(root, ep, stage_key, spec)
@@ -1994,6 +2113,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
     if stage_key == "script_stage1":
         p.pending_choices = script_stage1_missing_choices
 
+    if _stage_prework_cache is not None:
+        _stage_prework_cache.save()
     return p
 
 
@@ -2012,7 +2133,7 @@ def _enrich_gate(gate: Dict[str, Any], findings_path: str) -> None:
 
 
 # ── 顶层：一次步进（v1：每个路由阶段都是 stop-point，--auto 预留给将来确定性阶段）──
-def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview: bool = False) -> Dict[str, Any]:
+def _next_action_impl(root: str, ep: Optional[str] = None, auto: bool = False, preview: bool = False) -> Dict[str, Any]:
     while True:
         try:
             route = resolve_frontier(root, ep)
@@ -2028,8 +2149,11 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview
                 "headline": "该作品/该集当前阶段已完成，无下一步",
                 "to_user": f"{delivery_hint} 若后续源文或 skill 更新，再按 update/source 检查生成最小重制计划。",
             }
+            if not compose_stage_enabled(root):
+                action_card["actual_rough_cut_proxy"] = _post_video_proxy_card(root, ep, preview=preview)
             if compose_stage_enabled(root):
                 action_card["post_qc_bundle"] = _post_qc_bundle(root, ep or "<集>", "post_compose_review")
+            action_card["delivery_states"] = _delivery_states_card(root, ep)
             return {"frontier": None, "prework": [], "stop_reason": "done",
                     "action_card": action_card,
                     "gate": None, "auto_continue": False}
@@ -2044,6 +2168,40 @@ def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview
         if auto and na["auto_continue"]:
             continue  # 仅当出现纯确定性阶段时才真正跨阶段推进
         return na
+
+
+def next_action(root: str, ep: Optional[str] = None, auto: bool = False, preview: bool = False) -> Dict[str, Any]:
+    """Return one action card and, outside preview mode, record control-plane telemetry."""
+    started = time.monotonic()
+    payload = _next_action_impl(root, ep, auto=auto, preview=preview)
+    effective_ep = str(((payload.get("frontier") or {}).get("ep") if isinstance(payload.get("frontier"), dict) else "") or ep or "")
+    graph: Dict[str, Any] = {}
+    if effective_ep and _episode_graph is not None:
+        try:
+            graph = _episode_graph.build(root, effective_ep)
+            if not preview:
+                _episode_graph.write(root, effective_ep, graph)
+        except Exception:
+            graph = {}
+    if _n2d_blocking is not None:
+        try:
+            bundle = _n2d_blocking.build(payload, graph=graph)
+            paths = _n2d_blocking.write(root, bundle) if not preview else {}
+            card = payload.setdefault("action_card", {})
+            card["blocking_bundle"] = {
+                "category": bundle.get("category"),
+                "blocked": bundle.get("blocked"),
+                "graph_hash": (bundle.get("episode_graph") or {}).get("graph_hash"),
+                "path": paths.get("json") if paths else "preview_only",
+            }
+        except Exception:
+            pass
+    if not preview and _record_next_action_telemetry is not None:
+        try:
+            _record_next_action_telemetry(root, payload, (time.monotonic() - started) * 1000.0)
+        except Exception:
+            pass  # observability is best-effort, production decisions are not
+    return payload
 
 
 def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] = None, preview: bool = False) -> List[Dict[str, Any]]:
@@ -2184,6 +2342,17 @@ def render_human(na: Dict[str, Any]) -> str:
     creative_loop = card.get("creative_loop") or {}
     if creative_loop:
         lines.append(f"   Creative loop：{creative_loop.get('relpath')}")
+    blocking = card.get("blocking_bundle") or {}
+    if blocking:
+        lines.append(f"   Blocking bundle：{blocking.get('category')} · {blocking.get('path')}")
+    delivery = card.get("delivery_states") or {}
+    if delivery:
+        lines.append(
+            "   Delivery："
+            f"clip={delivery.get('clip_delivery_complete')} · master={delivery.get('master_delivery_complete')} · "
+            f"publish(CN/overseas/commercial)={delivery.get('publish_ready_cn')}/"
+            f"{delivery.get('publish_ready_overseas')}/{delivery.get('publish_ready_commercial')}"
+        )
     trace = na.get("trace") or {}
     if trace.get("trace_id"):
         lines.append(f"   Trace：{trace.get('trace_id')} span={trace.get('span_id')}")

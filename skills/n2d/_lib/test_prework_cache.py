@@ -56,6 +56,33 @@ def test_fingerprint_never_raises_on_missing(tmp_path):
     assert isinstance(pc.episode_input_fingerprint(str(tmp_path), "第9集"), str)
 
 
+def test_fingerprint_includes_stage_specific_contract_and_media_stats(tmp_path):
+    root = _mk_episode(tmp_path)
+    route = os.path.join(root, "出视频", "第1集", "prompt", "video_model_routes.json")
+    os.makedirs(os.path.dirname(route), exist_ok=True)
+    with open(route, "w", encoding="utf-8") as fh:
+        fh.write('{"routes":[]}')
+    fp1 = pc.episode_input_fingerprint(root, "第1集", extra_paths=[route])
+    with open(route, "w", encoding="utf-8") as fh:
+        fh.write('{"routes":[{"clip":"Clip_01"}]}')
+    fp2 = pc.episode_input_fingerprint(root, "第1集", extra_paths=[route])
+    assert fp1 != fp2
+
+
+def test_fingerprint_expands_recursive_globs(tmp_path):
+    root = _mk_episode(tmp_path)
+    pattern = os.path.join(root, "出图", "第1集", "**", "*.json")
+    path = os.path.join(root, "出图", "第1集", "prompt", "pack.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{"v":1}')
+    fp1 = pc.episode_input_fingerprint(root, "第1集", extra_paths=[pattern])
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write('{"v":2}')
+    fp2 = pc.episode_input_fingerprint(root, "第1集", extra_paths=[pattern])
+    assert fp1 != fp2
+
+
 # ── 缓存命中/失效 ────────────────────────────────────────────────────────────
 def test_cache_roundtrip(tmp_path):
     root = _mk_episode(tmp_path)
@@ -77,6 +104,20 @@ def test_cache_invalidated_on_fingerprint_change(tmp_path):
     # 新指纹 → 旧 steps 作废
     c2 = pc.PreworkCache(root, "第1集", "image_prompt", "fp-new")
     assert c2.get("beat_audit") is None
+
+
+def test_cache_hit_is_invalidated_when_declared_output_disappears(tmp_path):
+    root = _mk_episode(tmp_path)
+    output = os.path.join(root, "生产数据", "report.json")
+    os.makedirs(os.path.dirname(output), exist_ok=True)
+    with open(output, "w", encoding="utf-8") as fh:
+        fh.write("{}")
+    cache = pc.PreworkCache(root, "第1集", "video", "fp")
+    cache.put("report", {"status": "pass", "_cache_artifacts": [output]})
+    cache.save()
+    assert pc.PreworkCache(root, "第1集", "video", "fp").get("report") is not None
+    os.unlink(output)
+    assert pc.PreworkCache(root, "第1集", "video", "fp").get("report") is None
 
 
 def test_cache_disabled_env(tmp_path, monkeypatch):

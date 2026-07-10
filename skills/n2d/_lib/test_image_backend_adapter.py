@@ -27,6 +27,14 @@ def test_alias_normalizes_to_capability_profile():
     assert data["canonical"] == "nano_banana"
     assert data["transport"] == "generate_content_parts"
     assert data["supports_high_fidelity_reference"] is True
+    assert data["prompt_profile"]["name"] == "gemini_multimodal_reference_roles"
+    assert data["prompt_profile"]["negative_strategy"] == "inline_constraints"
+
+
+def test_prompt_dialects_are_backend_specific():
+    assert adapter.backend_adapter("FLUX.2")["prompt_profile"]["negative_strategy"] == "positive_only"
+    assert adapter.backend_adapter("Imagen")["prompt_profile"]["negative_strategy"] == "separate_element_list"
+    assert adapter.backend_adapter("Codex")["prompt_profile"]["embed_aspect"] is True
 
 
 def test_mask_workload_blocks_backend_without_mask_path():

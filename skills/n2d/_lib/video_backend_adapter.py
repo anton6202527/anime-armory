@@ -185,7 +185,7 @@ def probe_video_backend(
             f"{_GENERIC_VIDEO_HEALTH_URL_ENV} 或对应 *_BASE_URL 启用自动探活。")
 
 
-def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[str, Any]:
+def backend_adapter(raw: Optional[str], channel: Optional[str] = None, *, root: Optional[str] = None) -> Dict[str, Any]:
     canonical, status = canonical_backend(raw)
     channel_key, channel_status = canonical_backend(channel)
     execution = effective_frame_backend(canonical, channel_key)
@@ -195,8 +195,9 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
     confidence = video_backend_capability_confidence(canonical, channel_key)
     control_idiom = static_control_idiom(canonical, channel_key)
     native_av = bool(profile.get("native_av"))
-    return {
+    payload = {
         "kind": "n2d_video_backend_adapter",
+        "version": 2,
         "canonical": canonical,
         "classification": status,
         "label": profile.get("label") or raw or canonical or "unknown",
@@ -227,6 +228,13 @@ def backend_adapter(raw: Optional[str], channel: Optional[str] = None) -> Dict[s
         if isinstance(profile.get("frame_control"), dict)
         else "unknown",
     }
+    if root is not None:
+        try:
+            from video_execution_adapter import execution_status
+        except ImportError:  # pragma: no cover
+            from .video_execution_adapter import execution_status  # type: ignore
+        payload["execution"] = execution_status(root, canonical, channel_key)
+    return payload
 
 
 def static_control_idiom(raw: Optional[str], channel: Optional[str] = None) -> str:

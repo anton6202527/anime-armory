@@ -1,0 +1,116 @@
+{
+  "kind": "n2d_image_prompt_compiler_golden",
+  "version": 1,
+  "profile_version": "2026-07-10.3",
+  "contract": {
+    "task_type": "multi_subject",
+    "model": "fixture-model",
+    "mode": "firstframe",
+    "objective": "两名角色在雨夜屋脊交锋，定格刀剑相触的一瞬",
+    "subject": "画左黑发女剑客，画右白发男刺客",
+    "subject_slots": "LEFT=CHAR_A，只用图1；RIGHT=CHAR_B，只用图2",
+    "composition": "低机位中景，交锋点位于上三分线",
+    "action": "双刃在两人之间唯一接触点相撞，衣摆沿相反方向扬起",
+    "scene": "雨夜旧城屋脊，远处灯笼虚化",
+    "lighting": "画右后方冷月轮廓光，灯笼暖色补光",
+    "mood": "克制但即将爆发",
+    "style": "二次元赛璐璐，清晰线稿，低饱和冷暖对比",
+    "preserve": ["两张脸分别与各自参考一致", "服装主色与武器结构不变"],
+    "policy_guards": ["每个主体只使用自己的身份参考，手部归属清楚"],
+    "exclude": ["文字", "水印", "额外手", "身份互换"],
+    "risk_flags": ["hands"],
+    "reference_inputs": [
+      {"role": "identity", "owner": "CHAR_A", "path": "char_a.png", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+      {"role": "identity", "owner": "CHAR_B", "path": "char_b.png", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+    ],
+    "request_params": {"aspect_ratio": "16:9", "size": "1536x1024", "quality": "high"}
+  },
+  "backend_cases": [
+    {
+      "backend": "codex",
+      "profile": "codex_gpt_image_agent_brief",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "c6b78f6edf29602a51df551f491e5bcb2eec28f7d76c4577822d99ddcd1b7075",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "openai",
+      "profile": "openai_gpt_image_natural_brief",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "9906e91b1bb60cfec56dfd8241f406d3cef4805dfee27ad6d1c4266992ee0efc",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "dreamina",
+      "profile": "seedream_concise_natural_language",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "c6b78f6edf29602a51df551f491e5bcb2eec28f7d76c4577822d99ddcd1b7075",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "seedream",
+      "profile": "seedream_concise_natural_language",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "9906e91b1bb60cfec56dfd8241f406d3cef4805dfee27ad6d1c4266992ee0efc",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "gemini",
+      "profile": "gemini_multimodal_reference_roles",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "9906e91b1bb60cfec56dfd8241f406d3cef4805dfee27ad6d1c4266992ee0efc",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "flux",
+      "profile": "flux_positive_structured",
+      "negative_strategy": "positive_only",
+      "prompt_sha256": "f38c441a6f175631aa78454bced5626380bbebc7a554fc55131a3f986cff7a90",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "midjourney",
+      "profile": "midjourney_compact_snapshot",
+      "negative_strategy": "parameter_no",
+      "prompt_sha256": "76f385a261b0f23b4dd2d383af4fde52022f179059bd959b62e24d3f179a585f",
+      "negative_sha256": "2b6b10298cc77fd5d6530dddb3f36ad61feb25dbdadba49fc207a75fb9542ab5"
+    },
+    {
+      "backend": "imagen",
+      "profile": "imagen_prompt_with_negative_elements",
+      "negative_strategy": "separate_element_list",
+      "prompt_sha256": "76f385a261b0f23b4dd2d383af4fde52022f179059bd959b62e24d3f179a585f",
+      "negative_sha256": "2b6b10298cc77fd5d6530dddb3f36ad61feb25dbdadba49fc207a75fb9542ab5"
+    },
+    {
+      "backend": "stable_diffusion",
+      "profile": "diffusion_positive_negative",
+      "negative_strategy": "separate_element_list",
+      "prompt_sha256": "76f385a261b0f23b4dd2d383af4fde52022f179059bd959b62e24d3f179a585f",
+      "negative_sha256": "2b6b10298cc77fd5d6530dddb3f36ad61feb25dbdadba49fc207a75fb9542ab5"
+    },
+    {
+      "backend": "kling",
+      "profile": "kling_subject_bound_brief",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "c6b78f6edf29602a51df551f491e5bcb2eec28f7d76c4577822d99ddcd1b7075",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "backend": "generic",
+      "profile": "generic_image_brief",
+      "negative_strategy": "inline_constraints",
+      "prompt_sha256": "c6b78f6edf29602a51df551f491e5bcb2eec28f7d76c4577822d99ddcd1b7075",
+      "negative_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "task_cases": [
+    {"task_type": "character_catalog", "opening": "生成中性生产级角色参考图"},
+    {"task_type": "scene_asset", "opening": "生成生产级场景参考图"},
+    {"task_type": "prop_asset", "opening": "生成独立生产级资产参考图"},
+    {"task_type": "style_anchor", "opening": "生成中性视觉风格参考板"},
+    {"task_type": "shot_keyframe", "opening": "生成一张正式剧情关键帧"},
+    {"task_type": "relay_edit", "opening": "编辑已提交源帧"},
+    {"task_type": "multi_subject", "opening": "生成一张正式多人剧情关键帧"}
+  ]
+}
