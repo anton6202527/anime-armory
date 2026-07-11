@@ -67,6 +67,14 @@ function createWindow(): BrowserWindow {
            })()`,
         )
         console.log('[smoke probe]', probe)
+        const recheck = await win.webContents.executeJavaScript(
+          `JSON.stringify({
+             tabs: document.querySelectorAll('.work-tab').length,
+             op: Boolean(document.querySelector('.op')),
+             status: (document.querySelector('.statusbar')?.textContent || '').slice(0, 40),
+           })`,
+        )
+        console.log('[smoke recheck]', recheck)
         const image = await win.webContents.capturePage()
         const { writeFileSync } = await import('node:fs')
         writeFileSync(process.env.SMOKE_SHOT!, image.toPNG())
