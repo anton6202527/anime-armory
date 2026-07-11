@@ -55,9 +55,8 @@ if [ "$KEEP_CLIP_AUDIO" = "1" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; 
 fi
 
 # 制作模式=原生音画：说话镜的台词由视频后端原生生成、就在 clip 自带音轨里——绝不能丢弃，否则台词没了。
-# 默认从单一真值源 n2d_const.PRODUCTION_MODE_DEFAULT 取（当前=先出视频后配音）——别在此硬编旧默认
-# 「配音先行」：未写「制作模式」的原生音画项目会被误判成配音先行→跳过下面的保留台词轨守卫→台词丢失。
-PROD_MODE_DEFAULT=$(PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "from n2d_const import PRODUCTION_MODE_DEFAULT; print(PRODUCTION_MODE_DEFAULT)" 2>/dev/null || echo "先出视频后配音")
+# 默认从单一真值源 n2d_const.PRODUCTION_MODE_DEFAULT 取（当前=混合自动路由）。
+PROD_MODE_DEFAULT=$(PYTHONPATH="$SKILL_DIR/../n2d/_lib" python3 -c "from n2d_const import PRODUCTION_MODE_DEFAULT; print(PRODUCTION_MODE_DEFAULT)" 2>/dev/null || echo "混合自动路由")
 PROD_MODE=$(eval $_GET_SETTING "\"$ROOT\" \"制作模式\" \"$PROD_MODE_DEFAULT\"")
 NATIVE_AV_MODE=$(python3 -c "m='$PROD_MODE'; print('1' if ('原生音画' in m or 'native_av' in m.lower()) else '0')")
 if [ "$NATIVE_AV_MODE" = "1" ] && [ -z "${VIDEO_NATIVE_AUDIO_POLICY_EXPLICIT:-}" ] && [ "$VIDEO_NATIVE_AUDIO_POLICY" = "丢弃" ]; then
@@ -110,6 +109,7 @@ echo "=== [1/6] 时域插帧/裁切 + 统一规格 ${PXW}x${PXH}/30fps（含 cli
 SOURCE_LIST="$W/source_clips.txt"
 python3 - "$ROOT" "$EP" "$VID" "$SOURCE_LIST" "$SKILL_DIR" "$PXW" "$PXH" <<'PY'
 import glob, json, os, re, subprocess, sys
+from pathlib import Path
 root, ep, vid, out_path, skill_dir, pxw, pxh = sys.argv[1:8]
 try:
     pxw, pxh = int(pxw), int(pxh)
@@ -121,6 +121,10 @@ try:
     import combat_punch as _cp
 except Exception:
     _cp = None
+try:
+    import compose_clip_resolver as _ccr
+except Exception as exc:
+    raise SystemExit(f"⛔ 无法加载 compose clip 版本解析器：{exc}")
 def _punch(clip):
     if _cp is None or not pxw or not pxh:
         return ""
@@ -180,6 +184,8 @@ def _video_manifest_index(root, ep):
     return by_target, by_clip
 
 manifest_by_target, manifest_by_clip = _video_manifest_index(root, ep)
+compose_routes = _ccr.route_index(Path(root), ep)
+allow_base_preview = os.environ.get("ALLOW_BASE_VIDEO_COMPOSE", "0") == "1"
 
 def _manifest_item_for_path(path):
     name = os.path.basename(path)
@@ -205,10 +211,24 @@ if clips:
         if path:
             path = os.path.join(root, path)
 
-        cid = clip.get("id")
+        cid = clip.get("id") or clip.get("clip_id")
         if cid:
+            force_lipsync_version = _ccr.requires_post_lipsync(compose_routes.get(str(cid), {}))
+            if force_lipsync_version:
+                try:
+                    resolved, source_kind = _ccr.resolve_clip_video(
+                        Path(root), ep, str(cid), path, compose_routes,
+                        allow_base_preview=allow_base_preview,
+                    )
+                except FileNotFoundError as exc:
+                    raise SystemExit(f"⛔ {exc}；先运行 lipsync_pass.py --apply。仅 rough preview 可显式 ALLOW_BASE_VIDEO_COMPOSE=1。")
+                path = str(resolved) if resolved else ""
+                if source_kind == "post_lipsync":
+                    print(f"  👄 {cid}: compose 使用后期口型版本 {path}", file=sys.stderr)
+                elif source_kind == "base_preview_waiver":
+                    print(f"  ⚠️ {cid}: rough preview 显式豁免，仍使用 neutral-mouth base plate", file=sys.stderr)
             # 优先找 part 拆段 (automated split relay)
-            parts = _clip_file_globs(vid, cid, part=True)
+            parts = [] if force_lipsync_version else _clip_file_globs(vid, cid, part=True)
             if parts:
                 try:
                     target_duration = float(clip.get("duration")) if clip.get("duration") not in (None, "", "None") else None
@@ -254,7 +274,19 @@ if clips:
             ordered.append((path, duration, speed_mode, _punch(clip)))
 else:
     for p in sorted(glob.glob(os.path.join(vid, "*.mp4"))):
-        ordered.append((p, "None", "trim", ""))
+        resolved = p
+        for cid, route in compose_routes.items():
+            if cid and cid.lower() in os.path.basename(p).lower() and _ccr.requires_post_lipsync(route):
+                try:
+                    selected, _kind = _ccr.resolve_clip_video(
+                        Path(root), ep, cid, p, compose_routes,
+                        allow_base_preview=allow_base_preview,
+                    )
+                except FileNotFoundError as exc:
+                    raise SystemExit(f"⛔ {exc}；先运行 lipsync_pass.py --apply。")
+                resolved = str(selected) if selected else p
+                break
+        ordered.append((resolved, "None", "trim", ""))
 
 with open(out_path, "w", encoding="utf-8") as f:
     for p, d, s, pv in ordered:

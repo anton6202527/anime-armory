@@ -532,7 +532,9 @@ def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: i
     panels: list[dict[str, Any]] = []
     notes: list[str] = []
 
-    style_anchor = read_setting(root, "风格锚", "")
+    style_anchor = read_setting(root, "风格锚", "").strip()
+    if style_anchor.lower() in {"未指定", "无", "待定", "暂无", "无固定锚", "none", "n/a", "tbd", "-", "未定"}:
+        style_anchor = ""
     style_contract = registry.get("style_contract") if isinstance(registry, dict) else None
     if not style_anchor and not style_contract:
         add_finding(

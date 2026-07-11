@@ -54,7 +54,7 @@ _CATEGORY_ACTIONS = {
     },
     "director_blocking": {
         "owner": "导演/分镜",
-        "fix": "回到导演排戏包、轴线图、景别进程、转场/首尾帧接力，先修可拍性和剪辑连续性。",
+        "fix": "回到导演排戏包、轴线图、景别进程和 seam_mode 证据，先修可拍性与剪辑连续性。",
         "rerun": [
             "python3 skills/n2d-script/scripts/director_blocking_pack.py {root} {episode} check --json",
             "python3 skills/n2d-review/scripts/gate.py {root} {episode} image --json",

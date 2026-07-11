@@ -16,7 +16,7 @@
 |---|---|
 | `✅` | 完成；在 `配音` 列只代表真实配音已可作为定稿输入 |
 | `⬜` / 空 | 未开始 |
-| `⏳rough` | 占位/估算水位，不是最终产物；仅 `制作模式=先出视频后配音` 下可作为时间脚手架推进到出图/出视频 |
+| `⏳rough` | 前期时间基准已建立，不是最终声音。新默认通常对应 `timing_estimate.json`（`audio_generated=false`）；旧项目也可能是占位轨。能推进哪些镜头由逐镜 route 决定 |
 | `N/M` | 部分完成；仅 `N >= M` 算完成 |
 | `—` / `N/A` / `无` | 本集不适用，路由视为已满足 |
 
@@ -59,14 +59,16 @@
 
 | 模式 | 语义 |
 |---|---|
-| `配音先行` | **默认**（2026-07-01 起）。真实配音先出，实测时长驱动分镜、出图、无声视频；对白、BGM、SFX 分层后由 FFmpeg 合成。逐句音色/语速可控，适合长期量产。 |
+| `混合自动路由` | **默认**（2026-07-10 起）。项目先锁声音选角与无 WAV 时间基准，再逐镜路由到表演音轨先行、基础视频后置口型、旁白/口外音后配、画面先行或原生音画；最终配音在音色定妆后生成。 |
+| `配音先行` | 显式强控制/兼容模式。整项目真实配音先出，实测时长驱动分镜、出图和视频。 |
 | `原生音画` | native AV 模式：说话镜由支持原生同步音画的后端一次生成台词+口型+环境声，主流程不把 `配音` 列作为硬依赖；配音层只用于旁白/系统音或单镜回退。最快看到出图/出视频，但少逐句音色控制。仿真人音色授权仍由 compliance gate 管。 |
-| `先出视频后配音` | demo 模式。先用占位/估算时长锁镜头，视频出齐后补真实配音；合成前若配音仍占位，路由会拦回 `n2d-voice`。 |
+| `先出视频后配音` | 显式整项目画面先行模式。用无 WAV 估时锁大致槽位，视频出齐后补真实配音；合成前若 final voice 缺失，路由会拦回 `n2d-voice`。 |
 
 模式感知规则：
 
+- `混合自动路由`：`配音=⏳rough` 表示 no-audio timing 就绪。旁白/画外音、动作、空镜等可继续；口型可见对白必须有获批表演轨，或只生成 neutral-mouth base plate 并在最终交付前完成独立 lipsync。成片所需 final voice 未齐时，compose/review 阻断。
 - `配音先行`：`配音=⏳rough` 只算“已尝试”，不算满足；image/video gate 会阻断占位配音。
-- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；默认 `视频` 完成即收为 `clip_delivery_complete`。只有 `合成阶段=启用` 或本集已开始成片/验收时，合成前才必须补真实配音，且 `n2d-route` 会把前沿从 `compose` 拦回 `n2d-voice`。
+- `先出视频后配音`：`配音=⏳rough` 可满足分镜、出图、出视频的时间脚手架依赖；优先使用无 WAV `timing_estimate.json`。合成前必须补真实配音。
 - `原生音画`：`配音` 对主流程视作可选旁白层；分镜时长来自 `storyboard.json clips[].duration`，compose 默认保留 clip 原生音轨，避免丢台词。
 
 ## 4. 每集 manifest
@@ -79,7 +81,7 @@
   "schema_version": 2,
   "episode": "第1集",
   "stage": "all",
-  "production_mode": "原生音画",
+  "production_mode": "混合自动路由",
   "artifacts": [
     {
       "stage": "script_stage2",
@@ -135,8 +137,8 @@ JSON 输出保留旧字段：
 - `visual_contract` 必含：`色调基线 / 场景光位锚 / 场景轴线视线 / 角色状态演进 / 景别阶梯`
 - `style_contract` 必含：`风格名 / 视觉基调 / 镜头与构图 / 光色策略 / 运动边界 / 风格禁忌`
 - 旧项目 `cinematic_contract` 兼容通过：`摄影基调 / 镜头焦段 / 光源动机 / 色彩策略 / 运镜边界 / 真实感禁忌`
-- 每个 `clips[]` 的 `continuity` 必含：`start_state / action / end_state / constraints / negative / transition / need_endframe`
-- 非最终 Clip 默认 `need_endframe=true`；豁免必须写 `endframe_exempt_reason`
+- 每个 `clips[]` 的 `continuity` 必含：`start_state / action / end_state / constraints / negative / transition`
+- 每个非末镜 outgoing seam 必须显式写 `seam_mode + seam_evidence`。只有 `continuous_take_relay` 写 `need_endframe=true` 并要求同一边界帧；非 relay 的镜内尾锚写 `end_anchor_required=true`
 
 出图、出视频、review 都只能继承这些字段并细化，不能各自另写一套真值。
 
@@ -163,7 +165,7 @@ markdown 层新产物继承标题固定为「本集基础视觉风格契约」�
 
 - **每个契约项分两类**：`invariant`（已定不变量，可硬化进 BLOCK gate / "必须"措辞）vs `contested`（待决原则，**只能进 choice point，不得新增 BLOCK / "只能·不可选"措辞**）。
 - **真值源**：`skills/n2d/_lib/n2d_contract.py` 的 `CONTESTED`（当前标注，**零消费·零行为变化**）+ `INVARIANT_NOTE`。
-- **当前 contested 三项**：① 生图后端垄断（"图必须 Codex"）② 占位驱动付费生成（"先出视频后配音"）③ 基础视觉风格（默认预选为 `冷灰写实3D国风漫剧`，但风格必须 derive from `基础视觉风格` + `global_style.md`，不写成 skill 铁律）。其中③已落地为选择点 + `style_contract`；旧 `cinematic_contract` 兼容。
+- **当前 contested 三项**：① 生图后端垄断（“图必须 Codex”）② 是否把某类镜头强制成统一音画顺序（默认已收敛为 `混合自动路由`，逐镜证据决定，不生成整集占位 WAV）③ 基础视觉风格（默认预选为 `冷灰写实3D国风漫剧`，但必须 derive from `基础视觉风格` + `global_style.md`）。其中③已落地为选择点 + `style_contract`；旧 `cinematic_contract` 兼容。
 
 ## 8. 版本治理：bump 必带迁移
 

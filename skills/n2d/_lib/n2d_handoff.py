@@ -22,6 +22,11 @@ import json
 import os
 import re
 
+try:
+    from seam_contract import needs_end_anchor
+except ImportError:  # pragma: no cover
+    from .seam_contract import needs_end_anchor
+
 # ── 身份交接 ──────────────────────────────────────────────────────────────────
 ROUTE_IDENTITY_NONE = "none"
 # 逐镜 video prompt 里「声明了身份锁定」的字段名（中/英两套写法都认）。
@@ -217,7 +222,7 @@ def _has_native_binding(text: str) -> bool:
 
 
 def _storyboard_clip_meta(root: str, ep: str) -> dict:
-    """storyboard.json → {clip_num: {expression_span, closeup, need_endframe}}。缺文件返回空。
+    """storyboard.json → per-clip expression/seam/end-anchor projection。缺文件返回空。
 
     `shot_intent.json` 里的 expression_span/need_endframe/motion_intensity 是 storyboard 快照投影，
     不是作者 override；生成/交接契约必须继续以 storyboard 为真值源，避免 gate 与生成侧读不同值。
@@ -237,7 +242,9 @@ def _storyboard_clip_meta(root: str, ep: str) -> dict:
                 blob += " " + " ".join(str(shot.get(k) or "") for k in ("lens", "desc", "shot_size"))
         out[idx] = {
             "expression_span": str(cont.get("expression_span") or "").strip(),
+            "seam_mode": str(cont.get("seam_mode") or "").strip(),
             "need_endframe": cont.get("need_endframe") is True,
+            "end_anchor_required": needs_end_anchor(clip),
             "closeup": any(m in blob for m in CLOSEUP_MARKERS),
             "action_beat": _is_action_beat_blob(blob, cont),
             "motion_intensity": str(cont.get("motion_intensity") or "").strip(),

@@ -371,13 +371,13 @@ character design / reference sheet: {name}, minimum named-character set with fro
 
 **片段1（Clip 1）：时长：7秒**　**节奏**：铺垫·长镜　**累计**：0:00-0:07
 **场景**：{场景名}（夜晚/内）
-**衔接设计**（接力契约）：
-- 入点：**原样抄上一个 Clip 的「出点」**（同一句话——接力链单一真值，不允许相邻镜各写各的）；首帧构图如何接住上一镜尾势。
-- 出点：本 Clip 结束时人物姿态/视线/道具/空镜停在哪里，下一 Clip 从哪里接。**这句会成为下一 Clip 的入点。**
-- 转场：match cut / eyeline cut / 动作切 / 空镜缓冲 / 声音先行(J-cut) / 硬切。
-- 需要尾帧?：是/否。**默认首尾双帧接力：除最终 Clip 外均为是**（n2d-image 出尾帧 PNG=下一 Clip 首帧构图，**尾帧命名=对应首帧名+`_end`**：`镜头N_xxx.png`→`镜头N_end.png`、`Clip_NN.png`→`Clip_NN_end.png`；n2d-video 用首尾双帧引导锁死接点）；只有换场空镜/时间大跳/明确不连续的接缝可设否，并必须写豁免原因。
+**接缝设计**（P-2/P-3 合同）：
+- 入点 / 出点：分别描述当前镜从何状态进入、在何状态切出；只有 `continuous_take_relay` 要求上一出点与下一入点是同一瞬间/同一边界帧，设计切镜不强抄成同一句。
+- `seam_mode`：`continuous_take_relay / match_on_action / graphic_match / eyeline_cut / reaction_cut / insert_cutaway / j_cut / l_cut / dissolve / hard_cut / intentional_discontinuity` 十一选一。
+- `seam_evidence`：relay 填 boundary frame + start/end state；动作匹配填 action phase + direction；graphic match 填前后匹配元素 + 构图关系；视线填 source/target/axis；反应/插入填刺激—反应或插入物—返回锚；J/L、溶解、硬切/有意不连续分别填声桥、时长/动机、剪辑意图/理由。
+- `需要尾帧?`：只在 `continuous_take_relay` 为是，并使用 `镜头N_end.png`/`Clip_NN_end.png` 与下一首帧同一 SHA/构图；其他模式可有本镜落幅参考，但不得当成跨镜像素焊接要求。
 - 中段锚帧/编辑切点?（risk-only）：普通单拍默认不补 `_mid`。`shots[]` 有多个明确 `lens/camera/shot_size` 时，E1 在每个切点写 `continuity.anchors[].use=edit_cut`；高运动模板、≥8s 多拍连续镜或中段漂移实证按 R1/R2/R3 写 `use=split/keyframe` 多锚。用户显式 `中段锚帧默认=开启` 且后端单次请求原生支持 3+ 帧时，普通 D0 才补一张 `_mid`。`use=qc/reference` 只作视频验收，不得被 runner 当时间轴输入。声明即必须填全字段，gate 阻断缺项/不递增/越界/缺 PNG；`--write` 写回 `policy.midframe_default_mode=risk_only|explicit_opt_in`。执行分 `edit_cut / native_multiframe / split_relay / first_last / first_only`，缺边界图或需 reroute 在付费前 BLOCK。
-- 连贯性：轴线方向、人物左右站位、出入画方向、首尾帧是否可用于双帧引导；非最终 Clip 不能省略接力契约。
+- 连贯性：轴线方向、人物左右站位、出入画方向及该 `seam_mode` 的证据；非最终 Clip 不能省略接缝分类。
 - 在场链：本 Clip 画面内出现谁/哪些关键物件，谁仍在场但只在画外，谁禁止出现；若相邻 Clip 有人物或物件新增/消失，必须写入画/出画/反打画外/换场/空镜/时间跳跃原因，不允许交给视频模型随机补人。
 **分镜1：0-4s**
 镜头：{景别}，{距离}，{机位角度}，{运镜}。
@@ -483,7 +483,7 @@ character design / reference sheet: {name}, minimum named-character set with fro
 ```json
 { "episode": 1, "title": "本宫才是这皇宫最大的妖·第1集", "source": "原著章节1-2",
   "total_duration": 86.5,
-  "policy": { "tailframe_default": true, "midframe_default": true },   // tailframe gate 要求 =true；midframe_default=true 时每镜须有中锚声明或豁免（anchor_planner --write 写入）
+  "policy": { "seam_taxonomy_version": 1, "midframe_default": false }, // 不默认尾帧；中锚按 risk-only/显式 opt-in
 
   "first_3s_visual_hook": {
     "visual_hook": "沈念惊醒特写，门外刀影压进画面",
@@ -572,15 +572,18 @@ character design / reference sheet: {name}, minimum named-character set with fro
         "end_state": "沈念起身、右手扶榻、视线移向窗",   // ← 下一 clip 的 start_state 原样复制这句
         "eyeline": "沈念视线画右门口（继承 visual_contract.场景轴线视线，正反打镜按此对位）",
         "shot_size": "MS（继承 visual_contract.景别阶梯，不撞上一镜）",
-        "expression_span": "大",                         // ← opt-in·近景表情跨度 微|中|大；本镜脸的情绪从起到止跨几档（平静→爆哭=大）。缺=不追踪。
-                                                        //    `大`+近景/特写/反打 → gate 强制 need_endframe=true 走首尾双帧只插值（首=起表情/尾=止表情同源定妆），
+        "expression_span": "大",                         // ← 近景表情跨度 微|中|大。
+                                                        //    `大`+近景/特写/反打 → gate 强制 end_anchor_required=true 走镜内首尾双帧只插值，
                                                         //    否则单首帧硬扛跨情绪表情=脸型/五官随表情漂移（脸被表情带着重画的头号根因）。同情绪小变化用 微/中。
         "微表情节拍": "起：AU4 眉头紧锁+AU7 眼睑收紧+AU24 抿唇（隐忍）→ 止：AU1+AU4 眉头拧起+AU15 嘴角下压+welling tears（将哭）；屏息、下颌微颤",
                                                         // ← 近景/特写人物镜必填·FACS/AU 级微表情线索（眉/眼/鼻唇/嘴/呼吸微动）。expression_span=大 时首帧=起 AU 组、尾帧=止 AU 组。
                                                         //    单一真值源 n2d_const.MICRO_EXPRESSION_FIELD / FACS_AU_REGIONS；AU 术语优先英文，中文给口语化等义。详见 n2d-image「近景微表情深化铁律」。
-        "transition": "match_cut",                      // match_cut|eyeline|action_cut|empty_buffer|j_cut|hard_cut
-        "need_endframe": true,                          // 默认 true；非最终 Clip 若 false 必填 endframe_exempt_reason
-        "endframe_png": "出图/第1集/图片/镜头02_end.png",     // need_endframe 时由 n2d-image 落档后回填
+        "transition": "视线切到门外反应镜",
+        "seam_mode": "eyeline_cut",                    // 11 类标准枚举之一；必须由导演显式选择
+        "seam_evidence": {"eyeline_source":"沈念看画右门口","eyeline_target":"门外刀影","axis":"沈念画左/门口画右"},
+        "need_endframe": false,                         // 只有 continuous_take_relay=true
+        "end_anchor_required": true,                    // 本镜大表情需要止表情尾锚，但不是跨镜同帧
+        "endframe_png": "出图/第1集/图片/镜头01_end.png",
         "midframe": {                                   // ← 中段锚帧·单锚帧手写糖（默认规划；执行成本按后端能力：native multiframe / split / qc）
           "midframe_png": "出图/第1集/图片/镜头01_mid.png",   // 命名=首帧名+`_mid`；由 n2d-image 落档后回填
           "split_at_sec": 4.0,                          // 建议锚点秒数；native multiframe 为时间轴约束，split 时为 A 段时长

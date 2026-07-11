@@ -34,6 +34,12 @@ import sys
 from pathlib import Path
 from typing import Mapping, Optional
 import json
+from seam_contract import (
+    missing_evidence as seam_missing_evidence,
+    needs_end_anchor,
+    normalize_seam_mode,
+    requires_boundary_frame,
+)
 
 ACTION_HANDOFF_DIM = "跨集动作接力"
 ACTION_HANDOFF_TEMPLATES = {
@@ -920,7 +926,11 @@ def _presence_continuous_pair(prev_clip: Mapping[str, Any], next_clip: Mapping[s
     next_scene = str(next_clip.get("scene") or next_clip.get("场景") or "").strip()
     if prev_scene and next_scene and prev_scene != next_scene:
         return False
-    return bool(prev_cont.get("need_endframe") is True or next_cont.get("start_state") == prev_cont.get("end_state"))
+    mode = normalize_seam_mode(
+        prev_cont.get("seam_mode"), prev_cont.get("transition"),
+        need_endframe=bool(prev_cont.get("need_endframe")),
+    ).get("mode")
+    return bool(mode and mode != "intentional_discontinuity" or next_cont.get("start_state") == prev_cont.get("end_state"))
 
 
 _DUPLICATE_TEXT_KEYS = (
@@ -1074,6 +1084,11 @@ def _state_handoff_blob(prev_clip: Mapping[str, Any], next_clip: Mapping[str, An
 
 
 def _requires_exact_state_handoff(prev_clip: Mapping[str, Any], next_clip: Mapping[str, Any]) -> bool:
+    prev_cont = prev_clip.get("continuity") if isinstance(prev_clip.get("continuity"), Mapping) else {}
+    explicit_mode = prev_clip.get("seam_mode") or prev_cont.get("seam_mode")
+    if str(explicit_mode or "").strip():
+        mode = normalize_seam_mode(explicit_mode).get("mode")
+        return requires_boundary_frame(mode)
     blob = _state_handoff_blob(prev_clip, next_clip)
     return any(marker.lower() in blob for marker in _EXACT_STATE_HANDOFF_MARKERS)
 
@@ -1156,8 +1171,8 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
         return None
     clips = data["clips"]
     policy = data.get("policy")
-    if not isinstance(policy, dict) or policy.get("tailframe_default") is not True:
-        add(BLOCK, "故事板", storyboard_path(root, ep), "storyboard.json 缺 policy.tailframe_default=true；首尾双帧接力必须作为默认契约")
+    if not isinstance(policy, dict):
+        policy = {}
     prev_end = None
     prev_clip = None
     routes_file = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
@@ -1193,9 +1208,33 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
         if not isinstance(cont, dict):
             add(BLOCK, "故事板", loc, "缺 continuity 块")
             continue
-        for key in ("start_state", "end_state", "transition", "need_endframe"):
+        for key in ("start_state", "end_state", "transition"):
             if key not in cont:
                 add(BLOCK, "故事板", loc, f"continuity 缺字段：{key}")
+        if i < len(clips):
+            mode_info = normalize_seam_mode(
+                cont.get("seam_mode"), cont.get("transition"),
+                need_endframe=bool(cont.get("need_endframe")),
+            )
+            seam_mode = str(mode_info.get("mode") or "")
+            if mode_info.get("source") != "explicit":
+                add(BLOCK, "接缝分类", loc,
+                    "非末镜必须显式选择 continuity.seam_mode；旧 transition/need_endframe 只能用于迁移提示，不能代替导演剪辑决定。",
+                    return_to_stage="script_stage2")
+            else:
+                evidence = cont.get("seam_evidence") if isinstance(cont.get("seam_evidence"), Mapping) else {}
+                missing = list(seam_missing_evidence(seam_mode, evidence))
+                if seam_mode == "continuous_take_relay":
+                    missing = [field for field in missing if field not in {"boundary_frame", "end_state", "start_state"}]
+                if missing:
+                    add(BLOCK, "接缝分类", loc,
+                        f"{seam_mode} 缺可执行 seam_evidence：{', '.join(missing)}。",
+                        return_to_stage="script_stage2")
+                expected_relay = requires_boundary_frame(seam_mode)
+                if bool(cont.get("need_endframe")) != expected_relay:
+                    add(BLOCK, "接缝分类", loc,
+                        f"need_endframe 与 seam_mode={seam_mode} 不一致；只有 continuous_take_relay 才表示跨镜同帧。",
+                        return_to_stage="script_stage2")
         if prev_end and cont.get("start_state") != prev_end:
             if isinstance(prev_clip, Mapping) and _requires_exact_state_handoff(prev_clip, clip):
                 add(BLOCK, "故事板", loc, "start_state 未原样继承上一 Clip 的 end_state")
@@ -1246,40 +1285,30 @@ def check_storyboard_contract(root: str, ep: str, require_frame_assets: bool = T
                 add(BLOCK, "表情一致性", loc,
                     "近景/特写/反打镜必须声明 continuity.expression_span（微/中/大）——跨情绪近景是脸随表情"
                     f"漂移的头号根因，不可 opt-in。按起止情绪（{cont.get('start_state')!r}→{cont.get('end_state')!r}）"
-                    "补标；大表情(大)须配首尾双帧 need_endframe=true。",
+                    "补标；大表情(大)须配镜内首尾双帧 end_anchor_required=true。",
                     return_to_stage="script_stage2")
             elif span not in EXPRESSION_SPAN_VALUES:
                 add(BLOCK, "表情一致性", loc,
                     f"continuity.expression_span={span!r} 非法；必须是 {'/'.join(EXPRESSION_SPAN_VALUES)} 之一。",
                     return_to_stage="script_stage2")
         is_high_motion = str(clip.get("template") or "") in HIGH_MOTION_TEMPLATES
-        # 高速运动镜首尾双帧不可豁免：快速运动靠首+尾两帧把两端钉死、模型只补中间，是控高动态一致性的
-        # 关键手段（与表情近景的 need_endframe 不同关注点——那是脸随表情漂，这是肢体大动作漂）。这类镜
-        # 不论是否末镜、都不接受 endframe_exempt_reason，是 i<len 默认闸 + 表情近景闸之外的第三条触发。
-        if is_high_motion and cont.get("need_endframe") is not True:
+        # 高速运动镜仍要镜内尾锚，但这与跨镜同帧接力是两个独立合同。
+        if is_high_motion and not needs_end_anchor(clip):
             add(BLOCK, "尾帧", loc,
-                f"高速运动镜(template={clip.get('template')})必须 need_endframe=true，且不可用 endframe_exempt_reason 豁免——"
-                "快速运动靠首+尾帧钉住两端、模型只补中间是控一致性关键；末镜同样要求。",
+                f"高速运动镜(template={clip.get('template')})必须 end_anchor_required=true——"
+                "快速运动靠镜内首+尾锚钉住两端；这不会把 outgoing seam 误判为 continuous_take_relay，末镜同样要求。",
                 return_to_stage="script_stage2")
-        elif i < len(clips) and cont.get("need_endframe") is not True:
-            exempt = cont.get("endframe_exempt_reason")
-            if not exempt:
-                add(BLOCK, "尾帧", loc, "非最终 Clip 默认必须 need_endframe=true；若豁免需填写 endframe_exempt_reason")
-            elif len(str(exempt).strip()) < ENDFRAME_EXEMPT_REASON_MIN_CHARS:
-                add(BLOCK, "尾帧", loc,
-                    f"endframe_exempt_reason 过短（{str(exempt).strip()!r}）——豁免首尾双帧必须写明实质理由"
-                    "（如「极短镜<3s 无表情变化」），不接受占位/单字。")
-        if cont.get("need_endframe") is True and require_frame_assets:
+        if needs_end_anchor(clip) and require_frame_assets:
             # n2d-script 早期/部分产物把 endframe_png 落在 clip 顶层；
             # continuity.endframe_png 是规范位置，但 gate 不能把等价旧字段误报成“未填写”。
             end_png = (cont.get("endframe_png") or clip.get("endframe_png")
                        or clip.get("last_frame") or clip.get("end_frame_png"))
             if not end_png:
-                add(BLOCK, "尾帧", loc, "need_endframe=true 但未填写 endframe_png")
+                add(BLOCK, "尾帧", loc, "镜头需要尾锚但未填写 endframe_png")
             else:
                 full = end_png if os.path.isabs(end_png) else os.path.join(root, end_png)
                 if not os.path.exists(full):
-                    add(BLOCK, "尾帧", full, "need_endframe=true 但尾帧 PNG 不存在")
+                    add(BLOCK, "尾帧", full, "镜头需要尾锚但尾帧 PNG 不存在")
         # 中段锚帧：声明了 midframe/anchors 就必须是完整可执行契约。
         # 执行成本由后端能力决定（native multiframe / split relay / qc reference），但锚帧 PNG、
         # 时间点和理由缺一不放行，避免生成了 `_mid` 却在视频阶段被静默忽略。

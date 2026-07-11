@@ -65,6 +65,78 @@ def test_report_does_not_force_rerun_when_current_refs_expand_after_acceptance(t
     assert panel["reference_delta_after_rebind"] == 1
 
 
+def _write_ready_job_with_manifest(root: Path, chapter: str, *, recorded_sha: str) -> None:
+    shared = root / "出图" / "共享" / "图片"
+    jobs_dir = root / "出图" / chapter / "prompt"
+    manifest_dir = root / "生产数据" / "codex_reference_bundles" / chapter
+    shared.mkdir(parents=True, exist_ok=True)
+    jobs_dir.mkdir(parents=True, exist_ok=True)
+    manifest_dir.mkdir(parents=True, exist_ok=True)
+    (shared / "CHAR_A__front.png").write_bytes(b"front-v2")
+    (manifest_dir / "P001.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "kind": "comic_codex_reference_bundle",
+                "chapter": chapter,
+                "panel_id": "P001",
+                "references": [
+                    {"id": "CHAR_A", "path": "出图/共享/图片/CHAR_A__front.png", "sha256": recorded_sha}
+                ],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    (jobs_dir / "panel_jobs.json").write_text(
+        json.dumps(
+            {
+                "jobs": [
+                    {
+                        "panel_id": "P001",
+                        "status": "ready",
+                        "reference_input_count": 1,
+                        "reference_manifest": f"生产数据/codex_reference_bundles/{chapter}/P001.json",
+                        "references": [
+                            {"id": "CHAR_A", "path": "出图/共享/图片/CHAR_A__front.png"},
+                        ],
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_report_flags_rerun_when_generated_reference_content_changed(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    chapter = "第1话"
+    stale_sha = identity.hashlib.sha256(b"front-v1").hexdigest()
+    _write_ready_job_with_manifest(root, chapter, recorded_sha=stale_sha)
+
+    rc = identity.report(type("Args", (), {"project_root": str(root), "chapter": chapter, "write": False})())
+    assert rc == 0
+    report = json.loads((root / "生产数据" / f"comic_identity_report_{chapter}.json").read_text(encoding="utf-8"))
+    assert report["rerun_targets"] == ["P001"]
+    panel = report["panels"][0]
+    assert panel["stale_generated_refs"][0]["reason"] == "reference_content_changed"
+    assert "changed after generation" in panel["rerun_reason"]
+
+
+def test_report_keeps_ready_when_generated_reference_sha_matches(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    chapter = "第1话"
+    current_sha = identity.hashlib.sha256(b"front-v2").hexdigest()
+    _write_ready_job_with_manifest(root, chapter, recorded_sha=current_sha)
+
+    rc = identity.report(type("Args", (), {"project_root": str(root), "chapter": chapter, "write": False})())
+    assert rc == 0
+    report = json.loads((root / "生产数据" / f"comic_identity_report_{chapter}.json").read_text(encoding="utf-8"))
+    assert report["rerun_targets"] == []
+    assert report["panels"][0]["stale_generated_refs"] == []
+
+
 def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"

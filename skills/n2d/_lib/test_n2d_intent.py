@@ -32,7 +32,9 @@ def test_build_derives_per_shot_intent(tmp_path):
     s1 = obj["shots"][0]
     assert s1["clip_no"] == 1 and s1["expression_span"] == "大"
     assert s1["need_endframe"] is True and s1["action_beat"] is True and s1["closeup"] is True
+    assert s1["end_anchor_required"] is True
     assert obj["shots"][1]["need_endframe"] is False
+    assert obj["shots"][1]["end_anchor_required"] is False
 
 
 def test_write_load_roundtrip_and_path(tmp_path):

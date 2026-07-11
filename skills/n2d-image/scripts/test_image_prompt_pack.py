@@ -723,6 +723,19 @@ def test_continuity_targets_use_explicit_action_anchors() -> None:
     assert "动作锚帧 a2" in "；".join(parts)
 
 
+def test_end_anchor_generation_respects_explicit_seam_taxonomy() -> None:
+    assert image_prompt_pack.continuity_needs_end_anchor({
+        "continuity": {"seam_mode": "continuous_take_relay"},
+    }) is True
+    assert image_prompt_pack.continuity_needs_end_anchor({
+        "continuity": {"seam_mode": "hard_cut", "need_endframe": True},
+    }) is False
+    assert image_prompt_pack.continuity_needs_end_anchor({
+        "continuity": {"seam_mode": "hard_cut", "end_anchor_required": True},
+    }) is True
+    assert image_prompt_pack.continuity_needs_end_anchor({"continuity": {}}) is False
+
+
 def test_body_grounding_directive_prevents_buried_closeup_crop() -> None:
     clip = {
         "label": "读懂长久买卖",
@@ -813,7 +826,7 @@ def test_shot_prompt_section_sanitizes_false_screen_director_injection(tmp_path:
     assert "挑水蒙太奇以身体代价为第一目标" in text
 
 
-def test_nonfinal_endframe_exemption_is_not_called_final_shot(tmp_path: Path) -> None:
+def test_nonfinal_nonrelay_does_not_need_endframe_exemption(tmp_path: Path) -> None:
     clips = [
         {
             "id": "EP01_CLIP01",
@@ -835,7 +848,7 @@ def test_nonfinal_endframe_exemption_is_not_called_final_shot(tmp_path: Path) ->
 
     text = image_prompt_pack.shot_prompt_section(tmp_path, "第1集", 1, clips[0], {}, {"clips": clips})
 
-    assert "本镜尾帧豁免" in text
+    assert "这不是豁免" in text
     assert "末镜无尾帧" not in text
 
 

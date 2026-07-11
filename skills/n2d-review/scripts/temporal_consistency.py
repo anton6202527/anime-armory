@@ -28,6 +28,7 @@ import face_consistency as fc  # 复用 cosine
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
+from seam_contract import normalize_seam_mode, requires_boundary_frame
 try:
     import n2d_spectacle as _spec  # 动作 beat 单一真值源（与 subject_video/script/gate 共用 ACTION_BEAT_LEXICON）
 except Exception:  # pragma: no cover - _lib 不可用时优雅退化（仅失去 storyboard 派生的运动豁免信号）
@@ -40,7 +41,7 @@ SAMPLE_CAP = 24            # 采样上限（cap）——封顶单镜 insightface
 CLOSEUP_MARKERS = ("ECU", "MCU", "BCU", "CU", "OTS", "反打", "特写", "近景", "过肩")  # 与 video_qc 同义
 DEFAULT_ID_FLOOR = 0.60     # 相邻帧同人余弦下限（低于=片内身份漂移）
 DEFAULT_FLICKER_MAX = 0.06  # 相邻帧亮度归一化绝对差均值上限（高于=闪烁）
-SEAM_WARN = 18   # 尾帧 vs 下一首帧 64位dHash 距 > 此 → 接缝构图对不上（尾帧接力本应近乎同构图）
+SEAM_WARN = 18   # 仅 relay 用作阻断阈值；其他 seam_mode 的帧距只作信息
 SEAM_BLOCK = 29  # 距更大 → 接力基本断（出视频会跳切）
 # 色彩直方图距（dHash 是灰度结构哈希，抓不到"同构图但灯光/色温跳"的剪辑点闪光）。
 # 接缝两帧本应近乎同色，故用绝对阈值（非自标定）；cosine 距 = 1 - 余弦相似度。
@@ -53,10 +54,11 @@ SEAM_COLOR_BLOCK = 0.30
 SEAM_FACE_WARN_COS = 0.50   # 尾帧 vs 首帧 人脸余弦 < 此 → warn（脸偏，疑似漂）
 SEAM_FACE_BLOCK_COS = 0.35  # < 此 → block（基本是另一张脸/严重漂）
 HIST_BINS = 16   # 每通道直方图 bin 数（16×3=48 维，够分辨色温/明暗跳，又不过拟合噪点）
-# 跨镜动作接力（match-on-action）：接力尾帧本应=下一首帧的同一瞬间，主体（人/肢体）位置应几乎不动。
+# 连续 take relay：边界帧是同一瞬间，主体（人/肢体）位置应几乎不动。
 # dHash 抓全局结构、色距抓灯光、人脸抓身份——都抓不到"构图/色都对，但主体（抬到一半的手/迈出的腿）
 # 位置跳了"=动作没接上。这里用**边缘质心位移**作姿态/动作距：背景不动则质心稳（不误报灯光），主体
-# 大幅移位则其边缘搬家、质心偏移。只对 strict 接力对生效（硬切/溶解本就允许重新布主体，不判免误报）。
+# 大幅移位则其边缘搬家、质心偏移。只对 continuous_take_relay 生效；match-on-action
+# 允许动作相位前进，改由其 action_phase_out/in + screen_direction 证据和人审判断。
 SEAM_ACTION_GRID = 12       # 边缘图降到 GxG 网格算质心（够定位主体大块位移，又不被纹理噪点带偏）
 SEAM_ACTION_WARN = 0.16     # 归一质心位移 > 此 → warn（主体位置跳，动作疑似没接上）
 SEAM_ACTION_BLOCK = 0.30    # > 此 → block（动作硬断，出视频接缝会明显跳）
@@ -476,9 +478,8 @@ def _load_closeup_map(root: str, ep: str) -> Dict[int, bool]:
     return out
 
 
-# ── 接缝意图（storyboard 是唯一真值源）──────────────────────────────────────
-# 与 n2d-video/scripts/video_qc.py 的 seam_strictness/RELAY_TRANSITIONS 同义，两处保持同步。
-RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")
+# ── 接缝意图（P-3 continuity_chain 是正式真值；storyboard 仅 legacy fallback）──
+RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")  # legacy aliases
 
 
 def _is_relay_transition(transition: Any) -> bool:
@@ -488,10 +489,9 @@ def _is_relay_transition(transition: Any) -> bool:
 def _declared_relay(transition: Any, need_endframe: bool) -> bool:
     """Whether this seam should be treated as a strict cross-clip relay.
 
-    `need_endframe=true` also exists for the triframe contract: it means an end
-    frame asset is required for video guidance, but an explicit hard/match/action
-    cut still means the cross-clip dHash distance is informational.  If the
-    storyboard omits transition intent, keep the old conservative strict mode.
+    Legacy boards also used `need_endframe=true` for within-shot guidance; an
+    explicit hard/match/action cut therefore keeps cross-clip distance
+    informational. New boards use `end_anchor_required` for that purpose.
     """
     text = str(transition or "").strip()
     if _is_relay_transition(text):
@@ -502,22 +502,49 @@ def _declared_relay(transition: Any, need_endframe: bool) -> bool:
 
 
 def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
-    """relay 声明 → strict；声明了其他切镜 → info（构图必变，只记录）；无意图 → strict。纯函数。"""
+    """Only continuous_take_relay makes cross-frame similarity blocking."""
     if intent is None:
         return "strict"
-    if intent.get("relay") or str(intent.get("transition") or "").strip().lower() in RELAY_TRANSITIONS:
+    mode = normalize_seam_mode(
+        intent.get("seam_mode"), intent.get("transition"),
+        need_endframe=bool(intent.get("relay")),
+    ).get("mode")
+    if intent.get("relay") or requires_boundary_frame(mode):
         return "strict"
-    if str(intent.get("transition") or "").strip():
+    if mode or str(intent.get("transition") or "").strip():
         return "info"
     return "strict"
 
 
 def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
-    """clip 序号 → storyboard 声明的接缝意图（continuity.transition + need_end_frame）。"""
+    """clip 序号 → P-3 接缝分类；storyboard 仅作旧项目 fallback。"""
+    out: Dict[int, Dict[str, Any]] = {}
+    chain = _load_json(os.path.join(root, "脚本", ep, "continuity_chain.json"))
+    if isinstance(chain, dict):
+        for seam in chain.get("seams") or []:
+            if not isinstance(seam, dict):
+                continue
+            if seam.get("scope") == "episode_boundary" or (
+                seam.get("from_episode") and str(seam.get("from_episode")) != ep
+            ):
+                continue
+            n = _shot_num(str(seam.get("from_clip") or ""))
+            if n is None:
+                continue
+            mode_info = normalize_seam_mode(seam.get("seam_mode"), seam.get("transition"))
+            mode = str(mode_info.get("mode") or "")
+            out[n] = {
+                "transition": seam.get("transition"),
+                "seam_mode": mode,
+                "seam_evidence": seam.get("seam_evidence") or {},
+                "relay": requires_boundary_frame(mode),
+                "source": "continuity_chain",
+            }
+    if out:
+        return out
     data = _load_json(os.path.join(root, "脚本", ep, "storyboard.json"))
     if not isinstance(data, dict):
         return {}
-    out: Dict[int, Dict[str, Any]] = {}
     for clip in (data.get("clips") or data.get("shots") or []):
         if not isinstance(clip, dict):
             continue
@@ -531,9 +558,15 @@ def load_seam_intents(root: str, ep: str) -> Dict[int, Dict[str, Any]]:
         transition = cont.get("transition")
         need_end = bool(clip.get("need_endframe") or cont.get("need_endframe")
                         or clip.get("need_end_frame") or cont.get("need_end_frame"))
-        out[n] = {"transition": cont.get("transition"),
-                  # 规范字段 need_endframe（无下划线）；need_end_frame 仅旧别名兜底。
-                  "relay": _declared_relay(transition, need_end)}
+        mode_info = normalize_seam_mode(cont.get("seam_mode"), transition, need_endframe=need_end)
+        mode = str(mode_info.get("mode") or "")
+        out[n] = {
+            "transition": transition,
+            "seam_mode": mode,
+            "seam_evidence": cont.get("seam_evidence") or {},
+            "relay": requires_boundary_frame(mode),
+            "source": "storyboard" if mode_info.get("source") == "explicit" else "storyboard_legacy",
+        }
     return out
 
 
@@ -595,8 +628,8 @@ def seam_action_shift(tail: str, first: str, grid: int = SEAM_ACTION_GRID) -> Op
 
 
 def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BLOCK) -> dict:
-    """⑤ 接缝姿态/构图连续机检（PNG 层，出图后即可跑）——把"逐接缝人判并排读图"降成机检初筛。
-    尾帧接力铁律：`镜头N_end.png` 构图 = 下一 Clip 首帧。两者 dHash 距应很小；
+    """⑤ 分类接缝的 PNG 初筛；跨帧相似度只约束 continuous_take_relay。
+    Relay 铁律：`镜头N_end.png` 构图 = 下一 Clip 首帧。两者 dHash 距应很小；
     距大 = 尾帧没对上下一首帧 → 出视频接缝会跳切。距小不代表姿态完美（仍需人判），但距大几乎必跳。
     两个互补指标：① dHash（灰度结构）抓构图/姿态错位；② RGB 直方图 cosine 距抓"同构图但灯光/色温
     跳"的剪辑点闪光（dHash 看不到颜色）。任一超阈即报，取较重者定级。色彩端缺 Pillow 时静默退化为纯
@@ -643,7 +676,7 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
                                          min_margin=0.08)
     intents = load_seam_intents(root, ep)
     if not intents and pairs:
-        res["notes"].append("storyboard 接缝意图不可用——_end.png 接力对全部按接力铁律严格判（可能误报设计切镜）。")
+        res["notes"].append("continuity_chain/storyboard 接缝分类不可用——_end.png 对保守按 relay 严格判；先回 P-2/P-3 补 seam_mode。")
     res["contradictions"] = []
     for n, tail, first, chk, intra_cos, cross_cos, action_shift in pairs:
         v = apply_relative_outlier(chk["verdict"], chk["dist"], rel_floor)
@@ -661,21 +694,14 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
             face_v = apply_relative_outlier("ok", 1.0 - cross_cos, rel_face_floor)
         if face_v is not None:
             v = _worse(v, face_v)
-        # 跨镜动作接力（match-on-action）：仅 strict 接力对判——主体边缘质心大幅位移=动作没接上。
-        # 硬切/溶解（info/loose）本就允许重新布主体，不判免误报。
+        # 连续 take relay 才要求边界是同一瞬间，故只对 strict 判质心位移。
+        # match-on-action 允许动作相位前进，由模式证据和人审判断，不套同帧阈值。
         action_v = action_match_verdict(action_shift) if strictness == "strict" else None
         if action_v is not None:
             v = _worse(v, action_v)
         if intents and strictness == "info":
-            # 真值源矛盾：出图层有 镜头N_end.png（接力素材），storyboard 却声明非接力切镜。
-            # 以 storyboard 为准——dHash 降为 info，但矛盾本身要报（两套声明必须收敛）。
-            res["contradictions"].append({
-                "shot": n, "tail": os.path.basename(tail),
-                "transition": (intent or {}).get("transition"),
-                "msg": f"镜头{n} 存在接力尾帧 _end.png，但 storyboard 声明 "
-                       f"{(intent or {}).get('transition')}（非接力）——真值源矛盾，"
-                       "以 storyboard 为准；请补 need_endframe 或移除 _end 尾帧",
-            })
+            # 非 relay 仍可有 end frame 作为本镜落幅/内部插值参考；不能因此
+            # 反推它是连续接力，也不把画面差异误报成合同矛盾。
             if v != "ok":
                 v = "info"
         if v != "ok":
@@ -689,6 +715,7 @@ def seam_analyze(root: str, ep: str, warn: int = SEAM_WARN, block: int = SEAM_BL
                                  "action_verdict": action_v,
                                  "action_shift": round(action_shift, 3) if action_shift is not None else None,
                                  "transition": (intent or {}).get("transition"),
+                                 "seam_mode": (intent or {}).get("seam_mode"),
                                  "relative_outlier": v == "warn" and chk["verdict"] == "ok"})
     return res
 

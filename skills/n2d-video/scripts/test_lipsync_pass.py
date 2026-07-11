@@ -66,6 +66,20 @@ def test_needs_post_pass_off_never():
     assert not lp.needs_post_pass({"shot_type": "dialogue"}, "关闭")
 
 
+def test_hybrid_base_video_contract_requires_post_pass_even_when_project_toggle_off():
+    route = {
+        "clip_id": "Clip_01",
+        "shot_type": "dialogue_shot_reverse",
+        "audio_strategy": "base_video_then_post_lipsync",
+        "post_lipsync_required": True,
+        "base_video_only": True,
+    }
+    assert lp.needs_post_pass(route, "关闭")
+    selected = lp.select_post_pass_clips([route], "关闭")
+    assert selected[0]["reason"] == "hybrid_base_video_contract"
+    assert selected[0]["base_video_only"] is True
+
+
 def test_needs_post_pass_force_all_speech_on_post_pass():
     assert lp.needs_post_pass({"shot_type": "dialogue", "mode": "image2video"}, "后期pass")
     # voice_conditioned 的说话镜在 post_pass 档也强制本地后期
@@ -148,3 +162,23 @@ def test_build_job_ready_vs_needs_input():
     assert no_audio["status"] == "needs_input"
     no_tool = lp.build_job(clip, "/v/Clip_01.mp4", ["/a/line_01.wav"], "/o/x.mp4", None)
     assert no_tool["status"] == "needs_input"
+
+
+def test_output_receipt_hashes_applied_lipsync(tmp_path):
+    output = tmp_path / "Clip_01_lipsync.mp4"
+    output.write_bytes(b"verified-lipsync-output")
+
+    receipt = lp._output_receipt(str(output))
+
+    assert receipt["output_size"] == len(b"verified-lipsync-output")
+    assert len(receipt["output_sha256"]) == 64
+    assert receipt["completed_at"]
+
+
+def test_audio_for_clip_maps_one_based_voiceover_to_zero_based_wav(tmp_path):
+    voice = tmp_path / "合成" / "第1集" / "配音"
+    voice.mkdir(parents=True)
+    first = voice / "line_00.wav"
+    first.write_bytes(b"audio")
+
+    assert lp._audio_for_clip(str(tmp_path), "第1集", [1]) == [str(first)]

@@ -1,4 +1,4 @@
-# n2d 主状态机 — 架构与目录约定（模式感知：原生音画 / 配音先行 / 后配音）
+# n2d 主状态机 — 架构与目录约定（时间基准先行 / 逐镜混合音画路由）
 
 本文档是调度器 `n2d` 的扩展参考。说清楚整个 pipeline 是怎么组织的，子 skill 如何协作，目录铁律，以及 first-time 的标准首跑示范。
 
@@ -18,13 +18,13 @@
 |---|---|---|---|
 | 调度 | `n2d` | 路由 + 全局架构 | 任何具体生产细节 |
 | ①剧本改编 | `n2d-script`(阶段1) | 拆集 + 台词/bgm/封面 + 角色/场景卡 + global_style + table read 围读包 | 分镜 / AI CLI 调用 |
-| ②配音 | `n2d-voice` | `配音先行` 的逐句 AI 配音 + 时长清单.json；`原生音画` 下只作可选旁白/回退层 | 分镜 / 出图 |
-| ③分镜设计 | `n2d-script`(阶段2) | 按制作模式定稿分镜剧本/故事板/素材清单/SRT：原生音画读脚本时长，配音先行读真实配音时长；出图前补 executable animatic、P-3 制片拆解和 batch seed | 出图细节 |
+| ②声音前期/最终配音 | `n2d-voice` | 默认先建 voice casting + 无 WAV timing；音色获批后生成 final voice；按需提供可信 guide/performance 轨 | 分镜 / 出图 |
+| ③分镜设计 | `n2d-script`(阶段2) | 按逐镜 timing basis 定稿分镜/故事板/素材/SRT；默认读 no-audio timing，final voice 到位后刷新实测时长；出图前补 executable animatic、P-3 制片拆解和 batch seed | 出图细节 |
 | ④出图 | `n2d-image` | 两层出图 prompt（定妆库+本集分镜）+ 扫 CLI + 生图 | 视频 prompt |
 | ⑤视频 | `n2d-video` | 视频 prompt + 扫 CLI + 生视频 / 指导；默认 `clip_delivery_complete` 边界 | 物料模板 |
 | ⑥合成（可选） | `n2d-compose` | 用户启用 `合成阶段` 后，FFmpeg 脚本化剪辑 + BGM + 烧字幕 → 成片 | prompt 设计 |
 
-> **两个非显然的顺序决定**：① `配音先行` 才把配音前移到分镜之前，用逐句实测时长驱动镜头；`原生音画` 则由脚本/故事板时长直接驱动分镜，说话镜在视频后端一次生成台词+口型+环境声。② 出图分两层（先共享定妆库锁脸/场景/画风，再本集分镜，保跨镜一致）。
+> **两个非显然的顺序决定**：① 默认前移的是“声音选角 + 时间基准”，不是整集最终配音。逐镜 route 决定表演音轨先行、基础视频后置口型、旁白后配、画面先行或原生音画。② 出图分两层（先共享定妆库锁脸/场景/画风，再本集分镜，保跨镜一致）。
 
 ---
 
@@ -95,7 +95,7 @@
 │       │   └── 01_分镜出图.md            本集分镜 prompt
 │       └── 图片/                         本集 PNG 产物（与 prompt/ 同级子目录）
 │           ├── 镜头N_*.png               本集分镜首帧 PNG
-│           └── 镜头N_end.png             尾帧接力 PNG（=下一 Clip 首帧构图，供 n2d-video 首尾双帧锁接点）
+│           └── 镜头N_end.png             可选尾锚（relay 时为下一 Clip 同一边界帧；否则只作镜内控制）
 ├── 出视频/                               ← n2d-video（⑤视频）：唯一产物=各镜头 clips
 │   ├── 共享/                             （如有跨集复用片段，如转场/空镜；旧项目 common/ 读取兼容）
 │   │   ├── prompt/
@@ -119,7 +119,7 @@
 每个 `出图/` 或 `出视频/` 文件夹（`共享/` 或 `第N集/`；旧项目 `common/` 仅读取兼容）一律分两层：
 
 - **`prompt/` 子目录** 装该文件夹所有 prompt md（共享层的 00_索引 + 角色/场景/道具定妆，或本集的 00_总览 + 01_分镜/clips）
-- **生成产物**：PNG 进 **`图片/` 子目录**（与 `prompt/` 同级；含分镜首帧 `镜头N_*.png` + 尾帧接力 `镜头N_end.png`，共享层为 `图片/定妆_*.png`）；**clip MP4 进 `出视频/第N集/视频/` 子目录**（出视频阶段唯一产物，供 n2d-compose 归集）；**配音 / 成片产物落 `合成/第N集/`**（不在出视频层）
+- **生成产物**：PNG 进 **`图片/` 子目录**（与 `prompt/` 同级；含分镜首帧 `镜头N_*.png` + 按契约生成的可选尾锚 `镜头N_end.png`，共享层为 `图片/定妆_*.png`）；**clip MP4 进 `出视频/第N集/视频/` 子目录**；**配音 / 成片产物落 `合成/第N集/`**
 
 好处：
 - 一目了然——浏览父目录只看到产物缩略图，找 prompt 进 `prompt/` 子目录
@@ -148,7 +148,7 @@
 | 死亡 / 仅本集形态 | **仍共享** | 规则统一 > 节省 3MB |
 | 一次性道具 | 本集 | 不复用 |
 | 分镜出图（首帧 `镜头N_*.png`）| 本集 | 一镜一图 |
-| 尾帧接力（`镜头N_end.png`）| 本集 | 接缝焊接=下一 Clip 首帧构图，供 n2d-video 首尾双帧锁接点 |
+| 可选尾锚（`镜头N_end.png`）| 本集 | relay 时焊接同一边界帧；其他模式只控制本镜落幅，不要求等于下一首帧 |
 | 封面 | 本集 | 一集一封 |
 | 视频片段 | 本集 | 一镜一段 |
 
@@ -192,8 +192,8 @@
 |---|---|---|
 | raw | n2d-script 拆集脚本 | 原文片段已落档（展示用，不计入流程完成判定） |
 | 剧本改编 / bgm / 封面 | n2d-script 阶段1 | 配音前的剧本改编（台词/BGM 设计/封面）完毕 |
-| 配音 | n2d-voice | 配音先行：逐句配音 + 时长清单.json。真实配音写 `✅`；任一句占位/估算写 `⏳rough`，不能冒充定稿。原生音画：主流程可选，不作为说话镜硬依赖 |
-| 分镜设计 / 素材清单 / 字幕中 / 字幕英 | n2d-script 阶段2 | 按制作模式定稿分镜剧本/故事板/素材清单/SRT；配音先行读真实配音时长，原生音画读 `storyboard.json clips[].duration` |
+| 配音 | n2d-voice | `⏳rough`=声音选角/无 WAV 时间基准已建立；`✅`=所需 final voice 已真实生成。逐镜口型完成度另由 route + lipsync 产物检查，不能只看本格 |
+| 分镜设计 / 素材清单 / 字幕中 / 字幕英 | n2d-script 阶段2 | 按逐镜 timing basis 定稿分镜/故事板/素材/SRT；可先读 `timing_estimate.json`，final voice 后刷新实测时长，native AV 读脚本/对齐结果 |
 | 出图prompt | n2d-image | 本集出图 prompt **全套**写完（共享定妆库 + 本集分镜） |
 | 出图 | n2d-image | `已完成 PNG / 本集需要的总数`（分子含共享复用 + 本集分镜） |
 | 视频prompt / 视频 | n2d-video | prompt 写完 ✅；`视频` = `已完成 MP4 / 本集 Clip 总数`；默认到这里是 `clip_delivery_complete`，不是可发布母版 |
@@ -237,9 +237,9 @@
 用户：把这个小说改成漫剧素材：/Users/me/works/我的小说.docx
 
 调度（n2d）→ 识别"情境 A 首跑"：
-  先给「制作模式」菜单选一次（影响全程出片顺序，不静默默认）：
-    A 配音先行（低返工：真实 TTS 先锁时长，再做无声视频）/ B 原生音画（快速预览 / native AV，一次出同步音画）/ C 先出视频后配音（默认·后配音：先用估算/占位时长出无声视频，真实配音后补拟合）
-    → 用户选后落 _设置.md（见 SKILL「制作模式 · 首跑选择」）。下面按默认 C 走。
+  先给「制作模式」菜单选一次：
+    A 混合自动路由（默认）/ B 配音先行 / C 原生音画 / D 先出视频后配音
+    → 用户选后落 _设置.md。下面按默认 A 走；逐集 router 写可执行的逐镜声音合同。
   不询问具体生视频模型/渠道；后端选择延后到 n2d-video 出视频前。
   推荐：调 n2d-script "/Users/me/works/我的小说.docx"
   说明：会先拆集，然后精修第1集
@@ -252,14 +252,14 @@ n2d-script（阶段1·剧本改编）→
   3. 在 _进度.md 写入 N 集骨架（raw 列 ✅，其他全 ⬜）
   4. 精修 设定库/global_style.md + 设定库/characters/ + 设定库/locations/
   5. 精修第1集 阶段1剧本(台词+bgm+封面) → 剧本改编/bgm/封面列 ✅（**此阶段不做分镜**）
-  6. 报告：第1集剧本齐，下一步按制作模式走——默认先出视频后配音先 n2d-voice 产占位/估算时长（配音=⏳rough），再回 n2d-script 做阶段2分镜；配音先行才用真音时长驱动镜头，原生音画才直接回 n2d-script 做阶段2分镜
+  6. 报告：第1集剧本齐；默认先跑 n2d-voice preflight，生成选角表与无 WAV 时间基准，再回阶段2分镜
 
 用户：跑 n2d-voice 创作区/制漫剧/我的小说 第1集
 
 n2d-voice →
-  1. 把 voiceover.txt 逐句配音（CosyVoice/克隆/MiniMax；缺凭证回退 say 占位）
-  2. 落 合成/第1集/配音/{line_NN.wav, voice_zh.wav, 时长清单.json(每句实测时长)}
-  3. 全句真实配音 → 配音列 ✅；若任一句占位/估算 → 配音列 ⏳rough，并提示只能作 rough timing
+  1. `voice_preflight.py prepare` 解析 voiceover.txt，落 `设定库/voice_casting.json` + `合成/第1集/配音/timing_estimate.json`
+  2. 不生成 WAV；配音列写 `⏳rough`，表示时间基准已建立
+  3. 少量试听锁定角色声音；最终音色获批后才跑 render_voice，落 line WAV / voice_zh.wav / 实测时长清单并写 `✅`
 
 用户：跑 n2d-script 第1集（阶段2·分镜设计，配音后回跑）
 
@@ -292,20 +292,26 @@ n2d-image →
 ```
 def dispatch(work_root):
     progress = read(f"{work_root}/_进度.md")
-    mode = read_setting(work_root, "制作模式", default="配音先行")
+    mode = read_setting(work_root, "制作模式", default="混合自动路由")
     compose_enabled = read_setting(work_root, "合成阶段", default="跳过") == "启用"
     for episode in episodes_sorted_by_number(progress):
         compose_tail = compose_enabled or any_started(episode, ["成片", "验收"])
         if any(episode[c] != "✅" for c in ["剧本改编", "bgm", "封面"]):
             return ("n2d-script(阶段1)", episode.id, "剧本改编未齐")
+        if mode == "混合自动路由" and episode["配音"] == "⬜":
+            return ("n2d-voice(preflight)", episode.id, "缺声音选角/无 WAV 时间基准")
         if mode == "配音先行" and episode["配音"] != "✅":
-            return ("n2d-voice", episode.id, "未配音")
+            return ("n2d-voice(final)", episode.id, "强配音先行模式尚无最终配音")
         if episode["分镜设计"] != "✅":   # 实际路由只闸 分镜设计；素材清单/字幕中是阶段2 副产物、字幕英仅海外投放才出，均不阻塞路由（与 progress.py STAGES 一致）
             return ("n2d-script(阶段2)", episode.id, "分镜设计未齐（配音后回跑）")
         if episode["出图prompt"] != "✅" or not all_done(episode["出图"]):  # "4/19" 形式
             return ("n2d-image", episode.id, "出图未完")
         if episode["视频prompt"] != "✅" or not all_done(episode["视频"]):
             return ("n2d-video", episode.id, "视频未完")
+        if compose_tail and route_requires_final_voice(episode) and episode["配音"] != "✅":
+            return ("n2d-voice(final)", episode.id, "成片所需最终声音未齐")
+        if compose_tail and route_requires_post_lipsync(episode) and not lipsync_done(episode):
+            return ("n2d-video(lipsync pass)", episode.id, "可见口型镜头后期表演未齐")
         if compose_tail and episode["成片"] != "✅":
             return ("n2d-compose", episode.id, "未合成")
         if compose_tail and episode["验收"] != "✅":
@@ -313,10 +319,10 @@ def dispatch(work_root):
     return (None, None, "全集 clip_delivery_complete（若启用合成尾段且验收通过，则为 master_delivery_complete）")
 ```
 
-> 实际不需要另写脚本——机读路由用 `n2d/progress.py`，它经 `n2d/_lib/n2d_route.py` 复用 `n2d_contract.STAGE_GRAPH` 并按 `制作模式` 与 `合成阶段` 调整依赖。`制作模式=先出视频后配音` 的 `⏳rough` 放行、合成尾段启用后的补真音、`制作模式=原生音画` 的配音可选旁白层，都在同一套路由里生效。
+> 实际不需要另写脚本——机读路由用 `n2d/progress.py`，它经 `n2d/_lib/n2d_route.py` 复用 `n2d_contract.STAGE_GRAPH`，再消费逐镜 production route。混合模式的 no-audio timing 放行、成片前 final voice 回补、base plate 的 lipsync pass、原生音画的配音可选层都在同一套路由里生效。
 
 ---
 
 ## 七、配音 / 分镜 / 合成阶段（均已实现）
 
-主状态机已全部落地：制作模式决定是否先跑配音；`配音先行` 是 `n2d-voice` 前移到分镜与出图之前，`原生音画` 是脚本时长驱动分镜并由视频后端生成台词+口型；默认在 `视频` 列完成后收为 `clip_delivery_complete`。只有用户启用 `合成阶段` 或本集已开始 `成片/验收` 时，才进入 `n2d-compose` 和 `n2d-review` 刷新 review gate、score、验收总账、review-ui、release/readiness、production locks 和 creative governance；发布包/交付口径下再由人工显式签收 `验收` 列，形成 `master_delivery_complete`。完整逐列路由见调度器 SKILL.md。
+主状态机已全部落地：默认先跑声音 preflight，再由逐镜 route 决定音画先后；项目级 `配音先行` / `原生音画` / `先出视频后配音` 只作显式兼容模式。`视频` 列完成只表示基础 clip 交付；若 route 要求 final voice 或后期口型，这些条件满足后才可进入成片签收。只有用户启用 `合成阶段` 或本集已开始 `成片/验收` 时，才进入完整母版尾段和人工签收。

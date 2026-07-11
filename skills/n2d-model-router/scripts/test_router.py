@@ -6,7 +6,7 @@ import pytest
 import router
 
 
-def _root(tmp_path, settings="- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n"):
+def _root(tmp_path, settings="- 制作模式: 配音先行\n- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n"):
     root = tmp_path / "制漫剧" / "测试剧"
     (root / "脚本" / "第1集").mkdir(parents=True)
     (root / "_设置.md").write_text("# _设置\n\n## 选择\n" + settings, encoding="utf-8")
@@ -52,6 +52,51 @@ def test_fight_routes_to_kling_with_safe_fallback(tmp_path):
     assert plan["backend_consistency_scope"]["image_generation"] == "single_model_channel_per_project"
     assert route["identity_preservation_plan"]["applies_to"] == "fight_exchange"
     assert recipe["reference_inputs"]["identity_preservation_plan"]["applies_to"] == "fight_exchange"
+
+
+def test_hybrid_visible_dialogue_without_track_routes_base_video_post_lipsync(tmp_path):
+    root = _root(tmp_path, settings="- 制作模式: 混合自动路由\n- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n")
+    (root / "脚本" / "第1集" / "voiceover.txt").write_text(
+        "[镜头1·沈念·迟疑] 你看见了吗？\n", encoding="utf-8"
+    )
+    _write_storyboard(root, [{
+        "id": "Clip_01", "template": "dialogue_shot_reverse",
+        "voiceover_indices": [1], "dialogue_indices": [1], "mouth_visible": True,
+    }])
+
+    plan = router.route_episode(root, "第1集")
+    route = plan["routes"][0]
+
+    assert plan["av_mode"] == "hybrid"
+    assert route["audio_strategy"] == "base_video_then_post_lipsync"
+    assert route["mode"] == "image2video"
+    assert route["native_audio_policy"] == "none"
+    assert route["base_video_only"] is True
+    assert route["post_lipsync_required"] is True
+    assert route["execution_recipe"]["audio_inputs"]["base_video_only"] is True
+    assert route["execution_recipe"]["audio_inputs"]["performance_audio_paths"] == []
+
+
+def test_hybrid_visible_dialogue_with_guide_routes_voice_conditioned(tmp_path):
+    root = _root(tmp_path, settings="- 制作模式: 混合自动路由\n- 生视频AI: 即梦\n- 视频模型路由: 自动按镜头路由\n")
+    (root / "脚本" / "第1集" / "voiceover.txt").write_text(
+        "[镜头1·沈念·克制] 别动。\n", encoding="utf-8"
+    )
+    guide = root / "生产数据" / "guide.wav"
+    guide.parent.mkdir(parents=True)
+    guide.write_bytes(b"guide")
+    _write_storyboard(root, [{
+        "id": "Clip_01", "template": "dialogue_shot_reverse",
+        "voiceover_indices": [1], "dialogue_indices": [1], "mouth_visible": True,
+        "guide_audio": "生产数据/guide.wav",
+    }])
+
+    route = router.route_episode(root, "第1集")["routes"][0]
+
+    assert route["audio_strategy"] == "performance_audio_first"
+    assert route["mode"] == "voice_conditioned_lipsync"
+    assert route["performance_track_status"] == "guide_ready"
+    assert route["execution_recipe"]["audio_inputs"]["performance_audio_paths"] == ["生产数据/guide.wav"]
 
 
 def test_mid_anchor_without_endframe_does_not_consume_last_frame(tmp_path):
@@ -1103,6 +1148,10 @@ def test_is_relay_clip_signals():
     # 规范字段 need_endframe（无下划线）——画板真实数据用的就是这个
     assert router.is_relay_clip({"continuity": {"need_endframe": True}}) is True
     assert router.is_relay_clip({"need_endframe": True}) is True
+    assert router.is_relay_clip({"continuity": {"seam_mode": "hard_cut", "need_endframe": True}}) is False
+    assert router.is_relay_clip({"relay": True, "continuity": {"seam_mode": "hard_cut"}}) is False
+    assert router.is_relay_clip({"continuity": {"seam_mode": "graphic_match"}}) is False
+    assert router.is_relay_clip({"continuity": {"seam_mode": "continuous_take_relay"}}) is True
     # 旧别名 need_end_frame 仍兜底
     assert router.is_relay_clip({"continuity": {"need_end_frame": True}}) is True
     assert router.is_relay_clip({"relay": True}) is True

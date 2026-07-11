@@ -34,6 +34,8 @@ PRESERVE_GENERATION_KEYS = {
     "reference_input_mode",
     "reference_input_count",
     "reference_manifest",
+    "generated_from_contract_sha256",
+    "generated_from_submit_prompt_sha256",
     "post_qc",
     "last_error",
 }
@@ -573,20 +575,33 @@ def build_jobs(root: Path, chapter: str) -> dict:
     }
 
 
-def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> int:
+def job_is_stale(old: dict, new: dict) -> bool:
+    """已生成图对应的提交契约是否已过期。
+
+    只比较真正影响成图内容的部分：submit_prompt 哈希和画布尺寸。
+    参考图集合的扩充（补视图）不算过期——参考图内容变化由
+    comic-identity report 的 sha 比对负责触发重抽。
+    """
+    if str(old.get("submit_prompt_sha256") or "") != str(new.get("submit_prompt_sha256") or ""):
+        return True
+    return (old.get("size") or {}) != (new.get("size") or {})
+
+
+def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> tuple[int, list[str]]:
     path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
     if not path.is_file():
-        return 0
+        return 0, []
     try:
         existing = load_json(path)
     except (OSError, json.JSONDecodeError):
-        return 0
+        return 0, []
     old_by_id = {
         str(job.get("panel_id")): job
         for job in existing.get("jobs", [])
         if isinstance(job, dict) and job.get("panel_id")
     }
     preserved = 0
+    stale: list[str] = []
     for job in jobs.get("jobs", []):
         if not isinstance(job, dict):
             continue
@@ -601,11 +616,59 @@ def preserve_ready_jobs(root: Path, chapter: str, jobs: dict) -> int:
             result = root / result
         if not result.is_file():
             continue
+        if job_is_stale(old, job):
+            stale.append(str(job.get("panel_id")))
+            continue
         for key in PRESERVE_GENERATION_KEYS:
             if key in old:
                 job[key] = old[key]
         preserved += 1
-    return preserved
+    return preserved, stale
+
+
+def check_stale_jobs(root: Path, chapter: str, fresh: dict) -> dict:
+    """对比当前契约与已落盘 panel_jobs.json，不写任何文件。"""
+    path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    result: dict[str, Any] = {
+        "kind": "comic_panel_jobs_check",
+        "chapter": chapter,
+        "jobs_file": str(Path("出图") / chapter / "prompt" / "panel_jobs.json"),
+        "stale_panels": [],
+        "missing_panels": [],
+        "orphan_panels": [],
+        "reference_shifted_panels": [],
+        "checked": 0,
+    }
+    if not path.is_file():
+        result["error"] = "panel_jobs_missing"
+        return result
+    try:
+        existing = load_json(path)
+    except (OSError, json.JSONDecodeError):
+        result["error"] = "panel_jobs_unreadable"
+        return result
+    old_by_id = {
+        str(job.get("panel_id")): job
+        for job in existing.get("jobs", [])
+        if isinstance(job, dict) and job.get("panel_id")
+    }
+    fresh_ids: set[str] = set()
+    for job in fresh.get("jobs", []):
+        if not isinstance(job, dict):
+            continue
+        pid = str(job.get("panel_id"))
+        fresh_ids.add(pid)
+        old = old_by_id.get(pid)
+        if not old:
+            result["missing_panels"].append(pid)
+            continue
+        result["checked"] += 1
+        if job_is_stale(old, job):
+            result["stale_panels"].append(pid)
+        elif str(old.get("source_contract_sha256") or "") != str(job.get("source_contract_sha256") or ""):
+            result["reference_shifted_panels"].append(pid)
+    result["orphan_panels"] = sorted(set(old_by_id) - fresh_ids)
+    return result
 
 
 def write_reference_index(root: Path, chapter: str, jobs: dict) -> None:
@@ -665,11 +728,29 @@ def main() -> int:
     parser.add_argument("project_root")
     parser.add_argument("--chapter", default="第1话")
     parser.add_argument("--no-progress", action="store_true")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="只对比当前契约与已落盘 panel_jobs.json 并输出 JSON 结果，不写任何文件；有陈旧/缺失格时退出码 1",
+    )
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
+    if args.check:
+        try:
+            jobs = build_jobs(root, args.chapter)
+        except Exception as exc:  # noqa: BLE001 - check 模式必须给出结构化结果
+            print(json.dumps(
+                {"kind": "comic_panel_jobs_check", "chapter": args.chapter, "error": f"rebuild_failed: {exc}"},
+                ensure_ascii=False,
+            ))
+            return 1
+        result = check_stale_jobs(root, args.chapter, jobs)
+        print(json.dumps(result, ensure_ascii=False))
+        dirty = bool(result.get("error") or result["stale_panels"] or result["missing_panels"])
+        return 1 if dirty else 0
     jobs = build_jobs(root, args.chapter)
-    preserved = preserve_ready_jobs(root, args.chapter, jobs)
+    preserved, stale = preserve_ready_jobs(root, args.chapter, jobs)
     out_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(jobs, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -677,7 +758,11 @@ def main() -> int:
     if not args.no_progress:
         update_progress(root, args.chapter, "出图包", "✅")
     suffix = f" preserved_ready={preserved}" if preserved else ""
+    if stale:
+        suffix += f" stale_reset_to_planned={','.join(stale)}"
     print(f"[ok] {out_path}{suffix}")
+    if stale:
+        print(f"[stale] 这些格的提交契约已变化，旧图不再有效，已回到 planned 待重抽：{','.join(stale)}")
     return 0
 
 

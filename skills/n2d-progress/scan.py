@@ -38,7 +38,7 @@ from n2d_route import (
     parse_progress,
     stage_of,
 )
-from n2d_settings import is_native_av, is_video_first
+from n2d_settings import is_hybrid_routing, is_native_av, is_video_first
 from n2d_findings_utils import findings_status, review_report_status, score_status
 try:
     from n2d_contract import cross_cutting, cross_cutting_tools, COSTLY_HINTS
@@ -177,7 +177,9 @@ def report(root, out):
     flow = flow_columns(header)
     show_optional_delivery = any(optional_delivery_active(root, r) for r in dict_rows)
     effective_flow = [c for c in flow if show_optional_delivery or c not in OPTIONAL_DELIVERY_COLUMNS]
-    if is_video_first(root):
+    if is_hybrid_routing(root):
+        out.append("制作模式: 混合自动路由·时间基准先行；逐镜分流表演音轨/后期配音/画面先行/原生音画")
+    elif is_video_first(root):
         out.append("制作模式: 先出视频后配音 ⚠️(快速 demo·不推荐：占位时长锁镜头→后期补真音对不上)")
     elif is_native_av(root):
         out.append("制作模式: 原生音画(native AV)·说话镜由视频后端一次出同步音画；配音=可选旁白层，不卡路由")

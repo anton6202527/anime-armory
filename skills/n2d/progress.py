@@ -20,9 +20,9 @@ if COMMON not in sys.path:
 from n2d_contract import contract_version_report, write_episode_manifest
 from n2d_route import STAGES, cell_state, flow_columns, format_route, is_episode_row, parse_progress, progress_path, stage_of, summarize, voice_is_placeholder, is_progress_satisfied
 try:
-    from settings import is_native_av, is_video_first
+    from settings import is_hybrid_routing, is_native_av, is_video_first
 except ImportError:
-    from n2d_settings import is_native_av, is_video_first
+    from n2d_settings import is_hybrid_routing, is_native_av, is_video_first
 
 # H1 fail-closed 兜底常量（2026-06-28）：gate_receipt 模块若导入失败仍需识别受闸列 + 写同一 waiver 账本。
 # 与 gate_receipt.ENFORCED_COLUMN_GATE_STAGE / ALLOW_ENV / WAIVER_LEDGER 同源复刻，
@@ -356,8 +356,8 @@ def _dag_expected_for(root, target_col, prereq):
     if prereq == "配音":
         if is_native_av(root):
             return "可选（原生音画模式）"
-        if is_video_first(root) and target_col not in _DAG_STRICT_VOICE_TARGETS:
-            return "✅ 或 ⏳rough（video-first 前中段可用粗配）"
+        if (is_video_first(root) or is_hybrid_routing(root)) and target_col not in _DAG_STRICT_VOICE_TARGETS:
+            return "✅ 或 ⏳rough（前中段可用无 WAV 时间基准；最终交付仍需声音签收）"
         return "✅ 真完成（最终交付不得用 ⏳rough）"
     return "✅ / N/A"
 
@@ -369,7 +369,7 @@ def _dag_prereq_satisfied(root, row, target_col, prereq):
             return True
         if state == "stale":
             return False
-        if is_video_first(root) and target_col not in _DAG_STRICT_VOICE_TARGETS:
+        if (is_video_first(root) or is_hybrid_routing(root)) and target_col not in _DAG_STRICT_VOICE_TARGETS:
             return state in ("done", "rough", "na")
         return state in ("done", "na")
     if state in ("stale", "manual-waived"):

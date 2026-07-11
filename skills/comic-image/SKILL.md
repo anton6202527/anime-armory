@@ -41,6 +41,8 @@ python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作�
 
 脚本只写 `panel_jobs.json` 和 `出图/共享/prompt/00_索引.md`，不调用任何生图后端；它会把本话 `出图包` 标为 `✅`，但不会把 `出图` 标完成。
 
+重建出图包时，已 ready 的格只有在提交契约未变（`submit_prompt_sha256` 与画布尺寸一致）时才保留生成状态；改了 `panel_script`/`finishing_plan`/风格设置后重建，受影响格自动回 `planned` 并在输出里列为 `stale_reset_to_planned`，必须重抽，不允许旧图按新契约蒙混过 gate。参考图集合的扩充（补视图）不算契约变化——参考图内容变化由 `comic-identity report` 的 sha 比对触发重抽。加 `--check` 可只读对比当前契约与已落盘出图包（输出 JSON，不写任何文件），`comic-review gate --stage image_preflight` 会自动跑这一检查并对陈旧格阻断。
+
 正式逐格出图前，先用 `comic-identity` 补齐共享锚点并回填路径：
 
 ```bash

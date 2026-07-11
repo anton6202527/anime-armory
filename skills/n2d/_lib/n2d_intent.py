@@ -6,7 +6,7 @@ series_bible），冲突只能事后两两对消（打地鼠）。本模块收�
 **script 写、下游只读** 的权威对象 `脚本/<集>/shot_intent.json`。
 
 **名实边界（2026-06-26 归正·诚实分层，勿再宣称「全意图单源」）：**
-  ① **派生投影**：expression_span / need_endframe / motion_intensity / action_beat / closeup—
+  ① **派生投影**：expression_span / seam_mode / need_endframe / end_anchor_required / motion_intensity / action_beat / closeup—
      从 storyboard 逐镜派生。**storyboard 仍是这些字段的源**；黑板只是只读投影，重建即覆盖（不持久化
      手改）。故强制这些字段的 BLOCK 闸（gate.py）读 storyboard 是**正确的**，不经黑板——黑板不override它们。
   ② **作者 override（黑板的真权威所在）**：allowed_evolution——作者**显式声明**「这一镜某角色的脸/发/
@@ -30,8 +30,13 @@ import os
 import re
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+try:
+    from seam_contract import needs_end_anchor
+except ImportError:  # pragma: no cover
+    from .seam_contract import needs_end_anchor
+
 SHOT_INTENT_KIND = "n2d_shot_intent"
-SHOT_INTENT_VERSION = 1
+SHOT_INTENT_VERSION = 2
 # 允许 author 把 allowed_evolution 条目的 field 标到这些维度，强制路由给对应锁；"" = 交关键词自动分类。
 EVOLUTION_FIELDS = ("costume", "face", "hair", "prop")
 
@@ -96,7 +101,9 @@ def _derive_shot(clip: Mapping[str, Any], idx: int) -> Dict[str, Any]:
         "clip": str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}"),
         "clip_no": idx,
         "expression_span": str(cont.get("expression_span") or "").strip(),
+        "seam_mode": str(cont.get("seam_mode") or "").strip(),
         "need_endframe": cont.get("need_endframe") is True,
+        "end_anchor_required": needs_end_anchor(clip),
         "motion_intensity": str(cont.get("motion_intensity") or "").strip(),
         "action_beat": bool(cont.get("action_beat") is True or cont.get("spectacle") is True),
         "closeup": any(m in blob for m in _CLOSEUP_MARKERS),
@@ -150,7 +157,8 @@ def build_shot_intent(root: str, ep: str, *, prior: Optional[Mapping[str, Any]] 
         "shots": shots,
         "allowed_evolution": allowed,
         "notes": [
-            "派生字段只是 storyboard 快照投影：expression_span/need_endframe/motion_intensity/action_beat/closeup "
+            "派生字段只是 storyboard 快照投影：expression_span/seam_mode/need_endframe/end_anchor_required/"
+            "motion_intensity/action_beat/closeup "
             "以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
             "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、"
             "置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn"

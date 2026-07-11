@@ -128,7 +128,7 @@ def check_generation_recipe_evidence(root: str, ep: str, stage: str) -> None:
         )
 
 def check_production_mode_contract_sync(root: str, ep: str, stage: str) -> None:
-    """Meta-gate: A/B/C production-mode docs must match executable enum values."""
+    """Meta-gate: A/B/C/D production-mode docs must match executable enum values."""
     issues = _production_mode_contract_issues()
     if not issues:
         return
@@ -136,7 +136,7 @@ def check_production_mode_contract_sync(root: str, ep: str, stage: str) -> None:
         BLOCK,
         "制作模式口径",
         os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "n2d", "SKILL.md")),
-        "制作模式 A/B/C 文档与枚举不一致：" + "；".join(issues) +
+        "制作模式 A/B/C/D 文档与枚举不一致：" + "；".join(issues) +
         "。修正 n2d/SKILL.md、选择点文档和测试后再继续，避免把后配音误路由到配音先行。",
         return_to_stage="script_stage1",
     )

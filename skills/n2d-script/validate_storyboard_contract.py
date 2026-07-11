@@ -25,6 +25,11 @@ from n2d_contract import (  # noqa: E402
 from n2d_const import HIGH_MOTION_TEMPLATES, STYLE_CONTRACT_FIELDS, VISUAL_CONTRACT_FIELDS  # noqa: E402
 from n2d_logic import special_template_keywords  # noqa: E402
 from n2d_platform_profiles import backend_supports_three_plus_frames  # noqa: E402
+from seam_contract import (  # noqa: E402
+    missing_evidence as seam_missing_evidence,
+    normalize_seam_mode,
+    requires_boundary_frame,
+)
 
 
 ACTION_ANCHOR_DURATION_SEC = 8.0
@@ -389,7 +394,7 @@ def check_anchor_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc:
     if not isinstance(cont, dict):
         add(rows, "block", "衔接契约", loc, "缺 continuity 块。")
         return
-    for field in ("start_state", "end_state", "transition", "need_endframe"):
+    for field in ("start_state", "end_state", "transition"):
         if field not in cont:
             add(rows, "block", "衔接契约", loc, f"continuity 缺字段：{field}")
     mid = cont.get("midframe")
@@ -413,6 +418,29 @@ def check_anchor_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc:
             loc,
             f"{req['reason']}，必须写 continuity.anchors[] 多中帧链；{suffix}请跑 skills/n2d-script/scripts/anchor_planner.py <作品根> <集> --write 后重跑 n2d-image。",
         )
+
+
+def check_seam_contract(rows: List[Dict[str, Any]], clip: Dict[str, Any], loc: str) -> None:
+    """Validate the outgoing editorial decision; the final clip has no in-episode seam."""
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+    mode_info = normalize_seam_mode(
+        cont.get("seam_mode"), cont.get("transition"),
+        need_endframe=bool(cont.get("need_endframe")),
+    )
+    mode = str(mode_info.get("mode") or "")
+    if mode_info.get("source") != "explicit":
+        add(rows, "block", "接缝分类", loc,
+            "必须显式选择 continuity.seam_mode；transition/need_endframe 推断只用于迁移。")
+        return
+    evidence = cont.get("seam_evidence") if isinstance(cont.get("seam_evidence"), dict) else {}
+    missing_fields = list(seam_missing_evidence(mode, evidence))
+    if mode == "continuous_take_relay":
+        missing_fields = [field for field in missing_fields if field not in {"boundary_frame", "end_state", "start_state"}]
+    if missing_fields:
+        add(rows, "block", "接缝分类", loc, f"{mode} 缺 seam_evidence：{', '.join(missing_fields)}")
+    if bool(cont.get("need_endframe")) != requires_boundary_frame(mode):
+        add(rows, "block", "接缝分类", loc,
+            f"need_endframe 与 seam_mode={mode} 不一致；只有 continuous_take_relay 才能设为 true。")
     duration = duration_of(clip)
     anchor_rows: List[Tuple[int, Dict[str, Any], str, str, str]] = []
     if mid is not None:
@@ -525,6 +553,8 @@ def validate(root: str, ep: str) -> Dict[str, Any]:
             add(rows, "block", "镜头时长", loc, "clip 缺可解析的 duration（duration/duration_sec/时长/seconds 之一）；原生音画下镜头时长靠它定时间预算，分镜设计时必须填 Clip duration。")
         check_template_contract(rows, clip, loc)
         check_anchor_contract(rows, clip, loc, enforce_midframe)
+        if index < len(clips):
+            check_seam_contract(rows, clip, loc)
         check_inner_focus_isolation(rows, clip, loc)
     return {"ok": not any(r["severity"] == "block" for r in rows), "findings": rows}
 

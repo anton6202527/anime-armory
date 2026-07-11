@@ -546,6 +546,35 @@ def test_confirmed_reference_slots_allow_double_underscore_asset_names(tmp_path:
     assert report["status"] == "pass"
 
 
+def test_hybrid_audio_timing_consumes_per_shot_base_lipsync_route(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text("- 制作模式: 混合自动路由\n", encoding="utf-8")
+    voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voice.parent.mkdir(parents=True)
+    voice.write_text("[镜头1·沈念·迟疑] 你真的看见了吗？\n", encoding="utf-8")
+    clips = [{
+        "clip_id": "Clip_01",
+        "voiceover_indices": [1],
+        "dialogue_indices": [1],
+        "mouth_visible": True,
+        "template": "dialogue_shot_reverse",
+        "duration": 3.0,
+    }]
+    _write_json(tmp_path / "脚本" / "第1集" / "storyboard.json", {"clips": clips})
+    _write_json(tmp_path / "合成" / "第1集" / "配音" / "timing_estimate.json", {
+        "kind": "n2d_timing_estimate", "audio_generated": False,
+        "lines": [{"line_index": 1, "estimated_duration_sec": 2.4}],
+    })
+
+    audio = preventive_contracts.derive_audio_timing(tmp_path, "第1集", clips)
+    row = audio["dialogue_closeups"][0]
+
+    assert row["audio_strategy"] == "base_video_then_post_lipsync"
+    assert row["timing_basis"] == "text_estimate_no_audio"
+    assert row["base_video_only"] is True
+    assert row["post_lipsync_required"] is True
+    assert "neutral" in row["mouth_policy"]
+
+
 def test_asset_id_parser_ignores_generic_vfx_only_prose() -> None:
     ids = preventive_contracts.asset_ids_from_clip({
         "clip_id": "Clip_01",

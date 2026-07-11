@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """shot_intent.py — 写逐镜创作意图黑板 `脚本/<集>/shot_intent.json`（派生投影 + 演进 override）。
 
-分镜定稿后由 script 阶段调用：把逐镜意图（expression_span/need_endframe/motion_intensity/景别/
+分镜定稿后由 script 阶段调用：把逐镜意图（expression_span/seam_mode/need_endframe/end_anchor_required/motion_intensity/景别/
 action_beat/identity_requirement）投影到黑板，并保留 allowed_evolution（允许的演进白名单）。
 派生字段仍以 storyboard.json 为权威；手改本文件不会覆盖 gate 或生成侧行为。唯一作者 override
 通道是 allowed_evolution，用来声明某镜某角色的脸/发/服装/道具演进，补关键词漏检。

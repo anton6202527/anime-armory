@@ -1093,6 +1093,20 @@ def test_count_formal_clips_collapses_split_relay_parts(tmp_path: Path) -> None:
     assert video_runner.count_formal_clips(tmp_path, "第1集") == 2
 
 
+def test_count_accepted_clips_ignores_downloaded_manifest_items(tmp_path: Path) -> None:
+    prod = tmp_path / "生产数据"
+    prod.mkdir()
+    (prod / "video_batch_第1集_01_02.json").write_text(json.dumps({
+        "items": [
+            {"clip": "Clip_01", "status": "accepted"},
+            {"clip": "Clip_02", "status": "downloaded"},
+            {"clip": "Clip_01_part2", "story_clip": "Clip_01", "status": "accepted"},
+        ],
+    }), encoding="utf-8")
+
+    assert video_runner.count_accepted_clips(tmp_path, "第1集") == 1
+
+
 def test_silent_video_policy_strips_audio_to_formal_asset(monkeypatch, tmp_path: Path) -> None:
     target = tmp_path / "出视频" / "第1集" / "视频" / "Clip_07_part1.mp4"
     target.parent.mkdir(parents=True)

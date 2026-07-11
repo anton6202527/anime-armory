@@ -30,6 +30,7 @@ if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
 from n2d_contract import stage_for_key, stage_for_progress_column  # 契约真值（facade）
+from n2d_const import PRODUCTION_MODE_DEFAULT
 from n2d_logic import normalize_production_mode
 from n2d_route import compose_stage_enabled, normalize_episode, parse_progress, stage_of, summarize
 from n2d_visual_styles import STYLE_INTAKE_OPTIONS, STYLE_OPTIONS
@@ -180,11 +181,11 @@ STAGE_MENU = {
 
 
 def _is_video_first_rough_voice(root: str, route: Dict[str, Any], stage_key: str) -> bool:
-    """视频先行模式下，进度表「配音」列先产占位/估算时长，不是最终真实配音。"""
+    """Deferred/mixed modes first produce casting + a no-audio timing basis."""
     if stage_key != "voice" or route.get("col") != "配音":
         return False
-    mode = normalize_production_mode(get_setting(root, "制作模式", "先出视频后配音"))
-    return mode == "先出视频后配音"
+    mode = normalize_production_mode(get_setting(root, "制作模式", PRODUCTION_MODE_DEFAULT))
+    return mode in {"混合自动路由", "先出视频后配音"}
 
 
 # ── 探针结果（decide() 的纯输入，便于测试注入）────────────────────────────────
@@ -259,6 +260,8 @@ def stage_key_of(route: Dict[str, Any]) -> Optional[str]:
     """
     if route.get("label") == "补真实配音" or (route.get("skill") == "n2d-voice" and route.get("col") == "成片"):
         return "voice"
+    if route.get("label") == "完成后期口型/表演 pass" or (route.get("skill") == "n2d-video" and route.get("col") == "成片"):
+        return "video"
     spec = stage_for_progress_column(route["col"])
     return spec["key"] if spec else None
 
@@ -420,18 +423,19 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "writeback_after": _writeback_hint(root, ep, spec),
         })
 
-    # 5.5 视频先行模式的「配音」列只做占位/估算时长，真实配音留到成片前补。
+    # 5.5 混合/视频先行的「配音」前沿只做选角表 + 无 WAV 时间估算；最终声音后置。
     if _is_video_first_rough_voice(root, route, stage_key):
+        mode = normalize_production_mode(get_setting(root, "制作模式", PRODUCTION_MODE_DEFAULT))
         return na("needs_stage_execution", {
-            "headline": f"{ep} {frontier['label']}（视频先行：先产占位/估算时长）",
+            "headline": f"{ep} 声音前期（{mode}：选角先行 + 无 WAV 时间基准）",
             "to_user": (
-                "本作品制作模式=先出视频后配音；当前只生成 rough timing 脚手架，"
-                "不触发真实音色克隆或付费配音。真实角色配音留到视频完成后、合成前再确认。"
+                f"本作品制作模式={mode}；当前生成 voice_casting.json 与 timing_estimate.json，"
+                "不生成整集占位/静音 WAV。音色试听签收后才批量渲染最终配音；可见口型镜按逐镜路由使用表演轨或后期表演 pass。"
             ),
-            "exact_command": cmd,
+            "exact_command": f"python3 skills/n2d-voice/voice_preflight.py prepare {root} {ep}",
             "writeback_after": f"python3 skills/n2d/progress.py set {root} {ep} 配音 ⏳rough",
             "expected_writeback": "配音=⏳rough",
-            "recommended_backend": "say占位/估算时长",
+            "recommended_backend": "纯文本估时（不调用 TTS）",
         })
 
     # 6. 花钱/重活生成 —— 停下，附该阶段"放行前必问"菜单
@@ -1094,15 +1098,16 @@ def _run_production_breakdown_prework(p: Probes, root: str, ep: str) -> None:
         p.prework.append({
             "step": "production_breakdown",
             "status": "pass" if status == "pass" else "block",
-            "detail": f"{summary.get('pass', 0)}/{summary.get('required', 5)} confirmed",
+            "detail": f"{summary.get('pass', 0)}/{summary.get('required', 9)} checks passed",
             "check_path": report.get("check_path") or os.path.join(root, "生产数据", f"production_breakdown_check_{ep}.json"),
         })
         if status != "pass":
             _record_prework_block(p, "production_breakdown", (
                 "P-3 制片拆解包未确认；先补齐 脚本/{ep}/production_breakdown.json、"
                 "continuity_breakdown.json、continuity_chain.json、continuity_bible.json、ai_shooting_schedule.json、ai_call_sheet.md，删除待补/TODO，"
-                "并把每个文件 status 改为 confirmed，再进入出图 prompt/付费出图。"
-            ).format(ep=ep))
+                "把内容 status 改为 confirmed，再运行 signoff.py {root} p3 approve {ep} --reviewer-id <明确身份> "
+                "--reviewer-role producer（或 assistant_director/script_supervisor）签当前哈希，才可进入出图 prompt/付费出图。"
+            ).format(root=root, ep=ep))
     except Exception as e:  # pragma: no cover
         detail = str(e)[:160]
         _record_prework_block(p, "production_breakdown", f"production_breakdown 无法运行：{detail}")
@@ -1122,19 +1127,42 @@ def _run_story_acceptance_prework(p: Probes, root: str, ep: str, packet_kind: st
         p.prework.append({
             "step": f"story_acceptance_{packet_kind}",
             "status": "pass" if status == "pass" else "block",
-            "detail": f"{summary.get('pass', 0)}/{summary.get('required', 0)} confirmed",
+            "detail": f"{summary.get('pass', 0)}/{summary.get('required', 0)} checks passed",
             "check_path": report.get("check_path"),
         })
         if status != "pass":
             label = "围读验收包" if packet_kind == "table_read" else "animatic 粗剪验收包"
             _record_prework_block(p, f"story_acceptance_{packet_kind}", (
                 f"{label}未确认；先补齐 脚本/{ep}/{packet_kind}_packet.json/md，"
-                "确认台词/节奏/时长风险后把 status 改为 confirmed，再继续。"
+                "确认台词/节奏/时长风险后把内容 status 改为 confirmed，再用 signoff.py 的 "
+                f"{packet_kind} profile 由明确 reviewer 身份签当前输入与证据哈希。"
             ))
     except Exception as e:  # pragma: no cover
         detail = str(e)[:160]
         _record_prework_block(p, f"story_acceptance_{packet_kind}", f"story_acceptance_{packet_kind} 无法运行：{detail}")
         p.prework.append({"step": f"story_acceptance_{packet_kind}", "status": "block", "detail": detail})
+
+
+def _run_production_mode_router_prework(p: Probes, root: str, ep: str) -> None:
+    """Write an advisory mode route without mutating the user's setting."""
+    script = os.path.join(SKILLS_DIR, "n2d", "scripts", "production_mode_router.py")
+    if not os.path.exists(script):
+        return
+    try:
+        r = _run([sys.executable, script, root, ep, "--write", "--json"])
+        report = _parse_trailing_json(r.stdout) or {}
+        decision = report.get("decision") if isinstance(report.get("decision"), dict) else {}
+        aligned = decision.get("aligned") is True
+        p.prework.append({
+            "step": "production_mode_router",
+            "status": "pass" if aligned else "warn",
+            "detail": (
+                f"selected={decision.get('selected_mode')} recommended={decision.get('recommended_mode')}"
+            ),
+            "report_path": os.path.join(root, "生产数据", f"production_mode_route_{ep}.json"),
+        })
+    except Exception as e:  # pragma: no cover - recommendation cannot break flow
+        p.prework.append({"step": "production_mode_router", "status": "skip", "detail": str(e)[:160]})
 
 
 def _run_preventive_contract_prework(p: Probes, root: str, ep: str, stage_name: str) -> None:
@@ -1564,14 +1592,15 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 p.prework.append({
                     "step": "development_pack",
                     "status": "pass" if status == "pass" else "block",
-                    "detail": f"{summary.get('pass', 0)}/{summary.get('required', 5)} confirmed",
+                    "detail": f"{summary.get('pass', 0)}/{summary.get('required', 6)} checks passed",
                     "check_path": report.get("check_path") or os.path.join(root, "生产数据", "development_pack_check.json"),
                 })
                 if status != "pass" and not script_stage1_missing_choices:
                     _record_prework_block(p, "development_pack", (
                         "P-1 开发包未确认；先补齐 开发包/series_bible.md、adaptation_strategy.json、"
                         "season_arc.json、production_feasibility.json、pilot_greenlight.md，删除待补/TODO，"
-                        "并把每个文件 status 改为 confirmed，再进入阶段1写词。"
+                        "把内容 status 改为 confirmed，再用 signoff.py 的 p1 profile 由 creative 与 producer "
+                        "两个角色组签当前输入与五件套哈希，才可进入阶段1写词。"
                     ))
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
@@ -1580,6 +1609,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     # director_blocking_pack：阶段2 分镜前先过导演排戏层，不让 storyboard 临场发明轴线/调度/转场。
     if stage_key == "script_stage2" and ep:
+        _run_production_mode_router_prework(p, root, ep)
         _run_story_acceptance_prework(p, root, ep, "table_read")
         _run_preventive_contract_prework(p, root, ep, "script_stage2")
         director_script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "director_blocking_pack.py")
@@ -1592,7 +1622,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 p.prework.append({
                     "step": "director_blocking_pack",
                     "status": "pass" if status == "pass" else "block",
-                    "detail": f"{summary.get('pass', 0)}/{summary.get('required', 6)} confirmed",
+                    "detail": f"{summary.get('pass', 0)}/{summary.get('required', 7)} checks passed",
                     "check_path": report.get("check_path") or os.path.join(root, "生产数据", f"director_blocking_pack_check_{ep}.json"),
                 })
                 if status != "pass":
@@ -1600,7 +1630,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         "P-2 导演排戏包未确认；先补齐 脚本/{ep}/director_beat_sheet.json、"
                         "axis_blocking_map.json、shot_progression_plan.json、transition_map.json、"
                         "vertical_composition_plan.json、edit_rhythm_map.json，删除待补/TODO，"
-                        "并把每个文件 status 改为 confirmed，再进入阶段2分镜设计。"
+                        "把内容 status 改为 confirmed，并为每个接缝填写 seam_mode/seam_evidence；再用 signoff.py 的 p2 profile "
+                        "由 director 与 producer/editor 两个角色组签当前哈希，才可进入阶段2分镜设计。"
                     ).format(ep=ep))
             except Exception as e:  # pragma: no cover
                 detail = str(e)[:160]
@@ -1860,6 +1891,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
 
     # model-router：出视频前置（写理论路由表），幂等
     if stage_key in ROUTER_STAGES:
+        _run_production_mode_router_prework(p, root, ep)
         script = os.path.join(SKILLS_DIR, "n2d-model-router", "scripts", "router.py")
         if os.path.exists(script):
             try:

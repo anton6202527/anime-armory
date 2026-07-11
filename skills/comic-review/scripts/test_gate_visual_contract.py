@@ -160,3 +160,72 @@ def test_panel_post_qc_warn_acceptance_downgrades_to_info(tmp_path: Path) -> Non
     assert findings[0]["severity"] == "info"
     assert findings[0]["machine_severity"] == "warn"
     assert findings[0]["manual_acceptance"]["status"] == "accepted"
+
+
+def test_ready_panel_generated_under_stale_contract_blocks(tmp_path: Path) -> None:
+    root = tmp_path
+    chapter = "第1话"
+    panel_dir = root / "出图" / chapter / "panels"
+    panel_dir.mkdir(parents=True)
+    (panel_dir / "P001.png").write_bytes(b"placeholder")
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "status": "ready",
+                "result_path": f"出图/{chapter}/panels/P001.png",
+                "submit_prompt_sha256": "a" * 64,
+                "generated_from_submit_prompt_sha256": "b" * 64,
+            }
+        ]
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(root, chapter, jobs, findings)
+
+    assert "panel_generated_under_stale_contract" in codes(findings)
+    assert all(item["severity"] == "block" for item in findings)
+
+
+def test_ready_panel_with_matching_generation_hash_passes(tmp_path: Path) -> None:
+    root = tmp_path
+    chapter = "第1话"
+    panel_dir = root / "出图" / chapter / "panels"
+    panel_dir.mkdir(parents=True)
+    (panel_dir / "P001.png").write_bytes(b"placeholder")
+    jobs = {
+        "jobs": [
+            {
+                "panel_id": "P001",
+                "status": "ready",
+                "result_path": f"出图/{chapter}/panels/P001.png",
+                "submit_prompt_sha256": "a" * 64,
+                "generated_from_submit_prompt_sha256": "a" * 64,
+            }
+        ]
+    }
+    findings: list[dict] = []
+
+    gate.check_panel_jobs_ready(root, chapter, jobs, findings)
+
+    assert findings == []
+
+
+def test_style_anchor_placeholder_counts_as_missing(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "_设置.md").write_text("- 风格锚: 未指定\n", encoding="utf-8")
+    findings: list[dict] = []
+
+    gate.check_style_contract(root, findings)
+
+    assert "style_anchor_missing" in codes(findings)
+
+
+def test_style_anchor_real_value_passes(tmp_path: Path) -> None:
+    root = tmp_path
+    (root / "_设置.md").write_text("- 风格锚: STYLE_INK_WASH\n", encoding="utf-8")
+    findings: list[dict] = []
+
+    gate.check_style_contract(root, findings)
+
+    assert findings == []

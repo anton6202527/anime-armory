@@ -9,17 +9,35 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import director_blocking_pack as dbp  # noqa: E402
+from signoff_contract import new_manifest, profile_spec, record_approval, write_manifest  # noqa: E402
 
 
 def _confirm_pack(root: Path, ep: str = "第1集") -> None:
     dbp.scaffold(root, ep)
     ep_dir = root / "脚本" / ep
+    # P-2 is downstream of table read; unit fixture supplies that upstream receipt.
+    (ep_dir / "table_read_signoff.json").write_text('{"status":"approved"}', encoding="utf-8")
     for name in dbp.REQUIRED_FILES:
         path = ep_dir / name
         data = json.loads(path.read_text(encoding="utf-8"))
         data["status"] = "confirmed"
+        if name == "transition_map.json":
+            for seam in data.get("seams") or []:
+                seam["transition_type"] = "hard_cut"
+                seam["seam_mode"] = "hard_cut"
+                seam["seam_mode_source"] = "explicit"
+                seam["seam_evidence"] = {"editorial_intent": "测试确认：以冲击性硬切推进下一拍"}
+                seam["need_endframe"] = False
         blob = json.dumps(data, ensure_ascii=False).replace("待补", "已填写")
         path.write_text(json.dumps(json.loads(blob), ensure_ascii=False, indent=2), encoding="utf-8")
+    spec = profile_spec(root, "p2", ep)
+    payload = new_manifest(
+        root, artifact_scope=spec["artifact_scope"], episode=ep, author_id="automation:n2d",
+        input_paths=spec["input_paths"], evidence_paths=spec["evidence_paths"], required_role_groups=spec["required_role_groups"],
+    )
+    payload = record_approval(payload, root, reviewer_id="user:owner", reviewer_role="director", evidence_paths=spec["evidence_paths"])
+    payload = record_approval(payload, root, reviewer_id="user:owner", reviewer_role="producer", evidence_paths=spec["evidence_paths"])
+    write_manifest(root / spec["signoff_path"], payload)
 
 
 def test_scaffold_creates_required_director_files(tmp_path: Path) -> None:
@@ -77,7 +95,7 @@ def test_scaffold_axis_map_uses_storyboard_ids_not_placeholders(tmp_path: Path) 
     assert "LOC_xx" not in blob
     assert "CHAR_01" in blob
     assert "LOC_01" in blob
-    assert data["status"] == "confirmed"
+    assert data["status"] == "draft"
 
 
 def test_scaffold_axis_map_adds_shot_reverse_pattern(tmp_path: Path) -> None:
@@ -114,6 +132,8 @@ def test_scaffold_axis_map_adds_shot_reverse_pattern(tmp_path: Path) -> None:
     assert pattern["applies_to"] == ["EP01_CLIP02"]
     assert pattern["screen_sides"]["left"] == "CHAR_A"
     assert "越轴" in pattern["crossing_axis_policy"]
+    data["status"] = "confirmed"
+    (ep_dir / "axis_blocking_map.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     report = dbp.check(tmp_path, "第1集")
     axis_row = next(row for row in report["files"] if row["rel"].endswith("axis_blocking_map.json"))
     assert axis_row["status"] == "pass"
@@ -134,7 +154,7 @@ def test_check_blocks_confirmed_axis_map_missing_shot_reverse_pattern(tmp_path: 
     assert any("shot_reverse_patterns" in issue for issue in axis_row["issues"])
 
 
-def test_scaffold_from_storyboard_confirms_pack_without_placeholders(tmp_path: Path) -> None:
+def test_scaffold_from_storyboard_prefills_but_does_not_self_approve(tmp_path: Path) -> None:
     ep_dir = tmp_path / "脚本" / "第1集"
     ep_dir.mkdir(parents=True)
     (ep_dir / "voiceover.txt").write_text("她拔刀。\n他后退。\n", encoding="utf-8")
@@ -193,9 +213,12 @@ def test_scaffold_from_storyboard_confirms_pack_without_placeholders(tmp_path: P
     report = dbp.check(tmp_path, "第1集")
     merged = "".join((ep_dir / name).read_text(encoding="utf-8") for name in dbp.REQUIRED_FILES)
 
-    assert report["status"] == "pass"
-    assert "待补" not in merged
+    assert report["status"] == "block"
+    assert all(json.loads((ep_dir / name).read_text(encoding="utf-8"))["status"] == "draft" for name in dbp.REQUIRED_FILES)
     assert "EP01_CLIP01" in merged
+
+    _confirm_pack(tmp_path)
+    assert dbp.check(tmp_path, "第1集")["status"] == "pass"
 
 
 def test_check_blocks_draft_pack(tmp_path: Path) -> None:
@@ -204,7 +227,7 @@ def test_check_blocks_draft_pack(tmp_path: Path) -> None:
     report = dbp.check(tmp_path, "第1集")
 
     assert report["status"] == "block"
-    assert report["summary"]["block"] == len(dbp.REQUIRED_FILES)
+    assert report["summary"]["block"] == len(dbp.REQUIRED_FILES) + 1
 
 
 def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
@@ -213,5 +236,20 @@ def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
     report = dbp.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
-    assert report["summary"]["pass"] == len(dbp.REQUIRED_FILES)
+    assert report["summary"]["pass"] == len(dbp.REQUIRED_FILES) + 1
     assert Path(report["check_path"]).is_file()
+
+
+def test_transition_map_rejects_noncanonical_or_mismatched_endframe_mode(tmp_path: Path) -> None:
+    _confirm_pack(tmp_path)
+    path = tmp_path / "脚本" / "第1集" / "transition_map.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["seams"][0]["seam_mode"] = "动作切一下"
+    data["seams"][0]["need_endframe"] = True
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    report = dbp.check(tmp_path, "第1集")
+    row = next(item for item in report["files"] if item["rel"].endswith("transition_map.json"))
+
+    assert row["status"] == "block"
+    assert any("seam_mode 必须显式选择" in issue for issue in row["issues"])

@@ -110,6 +110,8 @@ def test_anchor_adherence_flags_mid_anchor_drift(tmp_path: Path) -> None:
 
 def test_seam_strictness_respects_storyboard_intent() -> None:
     assert video_qc.seam_strictness(None) == "strict"                       # 无意图 → 宁可误报
+    assert video_qc.seam_strictness({"seam_mode": "match_on_action"}) == "info"
+    assert video_qc.seam_strictness({"seam_mode": "continuous_take_relay"}) == "strict"
     assert video_qc.seam_strictness({"transition": "match_cut"}) == "info"  # 设计切镜 → 只记录
     assert video_qc.seam_strictness({"transition": "hard_cut"}) == "info"
     assert video_qc.seam_strictness({"transition": "relay"}) == "strict"    # 声明接力 → 铁律
@@ -157,6 +159,28 @@ def test_load_seam_intents_marks_native_multishot_internal_seam_informational(tm
     assert intents[1]["model_handled"] is True
     assert video_qc.seam_strictness(intents[1]) == "model_handled"
     assert "model_handled" not in intents[2]
+
+
+def test_load_seam_intents_prefers_p3_continuity_chain(tmp_path: Path) -> None:
+    import json
+
+    ep = tmp_path / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_01", "continuity": {"transition": "relay", "need_endframe": True}},
+    ]}), encoding="utf-8")
+    (ep / "continuity_chain.json").write_text(json.dumps({"seams": [{
+        "scope": "intra_episode", "from_episode": "第1集", "from_clip": "Clip_01",
+        "to_clip": "Clip_02", "transition": "动作切", "seam_mode": "match_on_action",
+        "seam_evidence": {"action_phase_out": "抬手", "action_phase_in": "落掌", "screen_direction": "L2R"},
+    }]}), encoding="utf-8")
+
+    intents = video_qc.load_seam_intents(tmp_path, "第1集")
+
+    assert intents[1]["source"] == "continuity_chain"
+    assert intents[1]["seam_mode"] == "match_on_action"
+    assert intents[1]["relay"] is False
+    assert video_qc.seam_strictness(intents[1]) == "info"
 
 
 def test_is_closeup_lens_markers() -> None:

@@ -7,12 +7,14 @@ Run from this directory:
 import json
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Importing the module triggers its own sys.path.insert for ../common.
 import validate_timings as V  # noqa: E402
 import validate_storyboard_contract as VC  # noqa: E402
+from voice_preproduction import build_timing_estimate, timing_path  # noqa: E402
 
 
 _SRT = (
@@ -84,6 +86,34 @@ def test_srt_last_end_value(tmp_path):
 
 def test_srt_last_end_missing():
     assert V.srt_last_end("/nonexistent/x.srt") is None
+
+
+def test_validate_no_wav_timing_estimate_passes_with_explicit_warning(tmp_path, capsys):
+    root = Path(tmp_path)
+    ep = "第1集"
+    script = root / "脚本" / ep
+    script.mkdir(parents=True)
+    (script / "voiceover.txt").write_text("[镜头1·旁白·克制] 夜色压下来。\n", encoding="utf-8")
+    payload = build_timing_estimate(root, ep)
+    path = timing_path(root, ep)
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    line = payload["lines"][0]
+    (script / "镜头时长.json").write_text(
+        json.dumps({"镜头1": line["时长"] + line["gap_after"]}, ensure_ascii=False), encoding="utf-8"
+    )
+    (script / "字幕_中文.srt").write_text(
+        f"1\n00:00:00,000 --> 00:00:{line['end']:06.3f}\n夜色压下来。\n".replace(".", ",", 1),
+        encoding="utf-8",
+    )
+
+    code = V._validate_estimated_timing(
+        str(root), ep, str(script / "镜头时长.json"), str(script / "字幕_中文.srt"), 0.5,
+    )
+
+    assert code == 0
+    assert "不是最终配音" in capsys.readouterr().out
+    assert not list(root.rglob("*.wav"))
 
 
 # ── _validate_native_av branch ──

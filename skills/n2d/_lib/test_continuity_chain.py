@@ -62,6 +62,8 @@ def test_cross_episode_handoff_alias_satisfies_episode_boundary() -> None:
                     "end_state": "青面郎君喊杀了她",
                     "transition": "hard_cut",
                     "need_endframe": True,
+                    "seam_mode": "continuous_take_relay",
+                    "seam_evidence": {},
                     "endframe_png": "出图/第4集/图片/Clip11_end.png",
                 },
             }
@@ -72,4 +74,33 @@ def test_cross_episode_handoff_alias_satisfies_episode_boundary() -> None:
     seam = payload["seams"][0]
     assert seam["scope"] == "episode_boundary"
     assert seam["policy"] == "relay"
+    assert seam["severity"] == "pass"
+
+
+def test_match_on_action_is_mode_specific_not_frame_relay() -> None:
+    payload = cc.build_chain(
+        "第1集",
+        [
+            {
+                "id": "Clip_01",
+                "continuity": {
+                    "start_state": "人物举刀",
+                    "end_state": "刀锋向画右下劈至中段",
+                    "transition": "动作切",
+                    "seam_mode": "match_on_action",
+                    "seam_evidence": {
+                        "action_phase_out": "刀锋下劈中段",
+                        "action_phase_in": "下一角度接刀锋下劈后段",
+                        "screen_direction": "画左上至画右下",
+                    },
+                    "need_endframe": False,
+                },
+            },
+            {"id": "Clip_02", "continuity": {"start_state": "另一角度接下劈后段", "end_state": "刀锋命中"}},
+        ],
+        status="confirmed",
+    )
+    seam = payload["seams"][0]
+    assert seam["seam_mode"] == "match_on_action"
+    assert seam["required_boundary_frame"] == ""
     assert seam["severity"] == "pass"

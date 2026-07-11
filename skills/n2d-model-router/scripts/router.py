@@ -64,6 +64,8 @@ from n2d_const import (  # noqa: E402  打斗镜判定 + 风格自适应视觉�
     combat_spectacle_guidance_for_style,
 )
 from n2d_settings import load_settings as _load_settings_md  # noqa: E402  _设置.md 解析单一真值源
+from production_mode_router import build_route as build_production_mode_route  # noqa: E402
+from seam_contract import needs_end_anchor, normalize_seam_mode, requires_boundary_frame  # noqa: E402
 from video_execution_adapter import execution_status as video_execution_status  # noqa: E402
 try:  # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色
     from n2d_registry import load_identity_registry as _load_identity_registry  # noqa: E402
@@ -245,7 +247,12 @@ def av_mode_from_settings(settings: Mapping[str, str]) -> str:
     """生产模式 → 音画路线。默认制作模式来自 n2d_contract.PRODUCTION_MODE_DEFAULT。
     判定走 n2d_contract.is_native_av_mode（与 n2d_settings.is_native_av / gate 同源）。"""
     mode = settings.get("制作模式", "") or PRODUCTION_MODE_DEFAULT
-    return "native_av" if is_native_av_mode(mode) else "voice_first"
+    normalized = str(mode or "").strip().lower()
+    if is_native_av_mode(mode):
+        return "native_av"
+    if "混合自动路由" in str(mode) or "hybrid" in normalized or "mixed" in normalized:
+        return "hybrid"
+    return "voice_first"
 
 
 # ── 时效档（成本轴·与质量档正交·G8）────────────────────────────────────────────
@@ -575,7 +582,7 @@ def _timeline_frame_requirements(clip: Mapping[str, Any]) -> Dict[str, int | boo
         anchor_count = 1
     elif isinstance(cont.get("anchors"), list):
         anchor_count = len([a for a in cont.get("anchors") if isinstance(a, Mapping)])
-    need_end = cont.get("need_endframe") is True
+    need_end = needs_end_anchor(clip)
     return {
         "anchor_count": anchor_count,
         "need_end": need_end,
@@ -992,15 +999,21 @@ def backend_supports_dual_keyframe(backend: str, video_channel: str = "") -> boo
 
 
 def is_relay_clip(clip: Mapping[str, Any]) -> bool:
-    """该 clip 是否接力/无缝转场镜（尾帧接力，接缝应近乎同构图）。纯函数·可测。"""
+    """Only continuous_take_relay receives the dual-keyframe relay route."""
     cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    explicit_mode = clip.get("seam_mode") or cont.get("seam_mode")
+    trans = str(clip.get("transition") or cont.get("transition") or "").strip().lower()
+    need_end = any(clip.get(k) or cont.get(k) for k in ("need_endframe", "need_end_frame"))
+    mode = normalize_seam_mode(
+        explicit_mode,
+        trans,
+        need_endframe=False if str(explicit_mode or "").strip() else bool(need_end),
+    ).get("mode")
+    if str(explicit_mode or "").strip():
+        return requires_boundary_frame(mode)
     if clip.get("relay") or cont.get("relay"):
         return True
-    # 画板 schema 的规范字段是 need_endframe（无下划线）；need_end_frame 仅作旧别名兜底。
-    if any(clip.get(k) or cont.get(k) for k in ("need_endframe", "need_end_frame")):
-        return True
-    trans = str(clip.get("transition") or cont.get("transition") or "").strip().lower()
-    return trans in RELAY_TRANSITIONS
+    return requires_boundary_frame(mode)
 
 
 def seam_relay_plan(clip: Mapping[str, Any], primary: str,
@@ -1158,6 +1171,14 @@ def execution_recipe_for_route(
             "speech_policy": "native_speech" if entry.get("native_audio_policy") == "native_speech" else "no_native_speech",
             "requires_voice_track": bool(entry.get("requires_voice_fallback")),
             "fallback_production_mode": entry.get("fallback_production_mode") or "",
+            "audio_strategy": entry.get("audio_strategy") or "",
+            "timing_basis": entry.get("timing_basis") or "",
+            "performance_track_status": entry.get("performance_track_status") or "",
+            "performance_audio_paths": list(entry.get("performance_audio_paths") or []),
+            "requires_performance_audio_before_final": bool(entry.get("requires_performance_audio_before_final")),
+            "post_lipsync_required": bool(entry.get("post_lipsync_required")),
+            "base_video_only": bool(entry.get("base_video_only")),
+            "base_video_mouth_policy": entry.get("base_video_mouth_policy") or "route_default",
         },
         "fallback": {
             "fallback_backends": list(entry.get("fallback_backends") or []),
@@ -2514,20 +2535,47 @@ def route_clip(
     backend_affinity: Optional[List[Dict[str, Any]]] = None,
     t2v_action: bool = False,
     overseas: bool = False,
+    sound_route: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     shot_type = infer_shot_type(clip)
+    sound = dict(sound_route or {})
+    sound_strategy = str(sound.get("audio_strategy") or "").strip()
+    effective_av_mode = av_mode
+    effective_lip_sync = lip_sync_setting
+    if av_mode == "hybrid":
+        effective_av_mode = "native_av" if sound_strategy == "native_av" else "voice_first"
+        if sound_strategy == "performance_audio_first" and str(sound.get("performance_track_status") or "") in {"guide_ready", "final_ready"}:
+            effective_lip_sync = "配音对齐"
+        else:
+            effective_lip_sync = "关闭"
     route = choose_route(
         clip,
         shot_type,
         default_backend=default_backend,
         routing_mode=routing_mode,
         native_audio_setting=native_audio_setting,
-        lip_sync_setting=lip_sync_setting,
-        av_mode=av_mode,
+        lip_sync_setting=effective_lip_sync,
+        av_mode=effective_av_mode,
         fixed_fallback_backends=fixed_fallback_backends,
         t2v_action=t2v_action,
         overseas=overseas,
     )
+    if av_mode == "hybrid" and sound_strategy == "base_video_then_post_lipsync":
+        # This is intentionally a base-performance plate, not a finished talking
+        # shot.  The later lipsync/Act-Two-like channel owns visible articulation.
+        route = dict(route)
+        route["mode"] = "image2video"
+        route["native_audio_policy"] = "none"
+        route["rationale"] = list(route.get("rationale") or []) + [
+            "混合路由：当前无已签收表演音轨，只生成中性嘴型的基础视频；音轨就绪后走独立后期表演/口型驱动。"
+        ]
+        route["prompt_requirements"] = list(route.get("prompt_requirements") or []) + [
+            "base_video_only=true；嘴唇保持自然闭合/静息，不做可辨识发音动作，不让模型即兴说话；为后期表演驱动保留稳定正脸与表情空间。"
+        ]
+        route["degrade_plan"] = (
+            "先完成无台词基础视频；音色定妆与最终/可信导引音轨就绪后运行 lipsync_pass 独立驱动口型和表情。"
+            "基础视频未经该 pass 不得作为最终说话镜进入 compose。"
+        )
     route = prefer_execution_multiframe_backend(
         clip,
         route,
@@ -2618,6 +2666,24 @@ def route_clip(
         "degrade_plan": route["degrade_plan"],
         "character_backend_conflicts": backend_conflicts,
     }
+    if sound:
+        entry["sound_route"] = sound
+        for key in (
+            "audio_strategy", "timing_basis", "performance_track_status",
+            "performance_audio_paths", "voice_lock_status", "final_voice_required",
+            "requires_voice_lock_before_final_render", "requires_performance_audio_before_final",
+            "post_lipsync_required", "base_video_only", "base_video_mouth_policy",
+            "post_lipsync_output",
+            "can_generate_base_video", "can_generate_final_performance", "final_voice_stage", "route_commitment",
+        ):
+            if key in sound:
+                entry[key] = sound[key]
+        if sound.get("post_lipsync_required"):
+            entry["risk_flags"] = sorted(set(entry.get("risk_flags") or []) | {"post_lipsync_required", "base_video_only"})
+            entry["post_video_qc"] = {
+                "required": True,
+                "checks": ["base_plate_identity_stable", "neutral_rest_mouth", "post_lipsync_output_required_before_compose"],
+            }
     for key in (
         "experimental_t2v",
         "t2v_identity_reference_plan",
@@ -3311,6 +3377,18 @@ def route_episode(
     clips = storyboard.get("clips") or []
     if not isinstance(clips, list):
         raise ValueError("storyboard.json clips must be a list")
+    production_sound_plan: Dict[str, Any] = {}
+    sound_routes: List[Mapping[str, Any]] = []
+    if av_mode == "hybrid":
+        try:
+            production_sound_plan = build_production_mode_route(root, episode)
+            sound_routes = [row for row in production_sound_plan.get("clip_routes") or [] if isinstance(row, Mapping)]
+        except Exception as exc:
+            production_sound_plan = {
+                "status": "unavailable",
+                "error": f"{type(exc).__name__}: {exc}",
+                "clip_routes": [],
+            }
     failure_counts = load_identity_failure_counts(root, episode)  # E4：identity 反复失败镜升锁
     # ③ 一角一后端亲和（advisory）：读 identity_registry 找已注册原生视频主体的角色，逐镜对账 primary
     registry = {}
@@ -3321,6 +3399,27 @@ def route_episode(
             registry = {}
     backend_affinity = build_backend_affinity(registry)
     urgency_tier = urgency_tier_from_settings(settings)  # G8 时效档（成本轴·项目级意图）
+    routes: List[Dict[str, Any]] = []
+    for i, clip in enumerate(clips, 1):
+        sound_route = sound_routes[i - 1] if i - 1 < len(sound_routes) else None
+        routes.append(route_clip(
+            clip,
+            i,
+            episode=episode,
+            default_backend=default_backend,
+            routing_mode=routing_mode,
+            native_audio_setting=native_audio_setting,
+            lip_sync_setting=lip_sync_setting,
+            video_generation_audio_policy=video_generation_audio_policy,
+            video_channel=video_channel,
+            av_mode=av_mode,
+            fixed_fallback_backends=fixed_fallback_backends,
+            failure_counts=failure_counts,
+            backend_affinity=backend_affinity,
+            t2v_action=t2v_action,
+            overseas=overseas,
+            sound_route=sound_route,
+        ))
     plan = {
         "kind": VIDEO_MODEL_ROUTES_KIND,
         "version": 1,
@@ -3336,26 +3435,13 @@ def route_episode(
         "configured_default_backend": configured_default_backend,
         "backend_consistency_scope": backend_consistency_scope(),
         "generated_at": generated_at or dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-        "routes": [
-            route_clip(
-                clip,
-                i,
-                episode=episode,
-                default_backend=default_backend,
-                routing_mode=routing_mode,
-                native_audio_setting=native_audio_setting,
-                lip_sync_setting=lip_sync_setting,
-                video_generation_audio_policy=video_generation_audio_policy,
-                video_channel=video_channel,
-                av_mode=av_mode,
-                fixed_fallback_backends=fixed_fallback_backends,
-                failure_counts=failure_counts,
-                backend_affinity=backend_affinity,
-                t2v_action=t2v_action,
-                overseas=overseas,
-            )
-            for i, clip in enumerate(clips, 1)
-        ],
+        "production_sound_route": {
+            "status": production_sound_plan.get("status") if production_sound_plan else "fixed_project_mode",
+            "kind": production_sound_plan.get("kind") if production_sound_plan else "",
+            "version": production_sound_plan.get("version") if production_sound_plan else None,
+            "summary": production_sound_plan.get("summary") if production_sound_plan else {},
+        },
+        "routes": routes,
     }
     # P0-2 打斗 motion 侧视觉盛宴：把风格自适应「经费在燃烧」指导挂进打斗/法术镜 route（与出图 runner 同源），
     # 让 LLM 撰写的出视频 prompt 拿得到同一份风格自适应文案——治「首帧盛宴、运动平淡」的图↔视频不对称。
@@ -3459,8 +3545,8 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         "",
         "## 本集模型路由表",
         "",
-        "| Clip | characters | shot_type | primary | fallback | mode | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "| Clip | characters | shot_type | primary | fallback | mode | 时间基准 | 声音策略 | 表演轨 | 档 | 帧消费 | native_audio | identity | motion_control | policy | 风险 | 降级 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for route in plan.get("routes", []):
         fallback = ", ".join(route.get("fallback_backends", []))
@@ -3475,13 +3561,16 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         ) or "-"
         policy = route.get("policy_resolution") if isinstance(route.get("policy_resolution"), Mapping) else {}
         lines.append(
-            "| {clip} | {characters} | {shot} | {primary} | {fallback} | {mode} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {policy} | {flags} | {degrade} |".format(
+            "| {clip} | {characters} | {shot} | {primary} | {fallback} | {mode} | {timing} | {strategy} | {track} | {tier} | {frame_mode} | {audio} | {identity} | {motion} | {policy} | {flags} | {degrade} |".format(
                 clip=route.get("clip_id", ""),
                 characters=characters.replace("|", "/"),
                 shot=route.get("shot_type", ""),
                 primary=route.get("primary_backend", ""),
                 fallback=fallback,
                 mode=route.get("mode", ""),
+                timing=route.get("timing_basis", "-"),
+                strategy=route.get("audio_strategy", "-"),
+                track=route.get("performance_track_status", "-"),
                 tier=route.get("quality_tier", "-"),
                 frame_mode=frame_mode,
                 audio=route.get("native_audio_policy", ""),
@@ -3511,6 +3600,15 @@ def render_markdown(plan: Mapping[str, Any]) -> str:
         lines.append(f"- primary: {route.get('primary_backend')}")
         lines.append(f"- fallback: {', '.join(route.get('fallback_backends', []))}")
         lines.append(f"- mode: {route.get('mode')}")
+        if route.get("audio_strategy"):
+            lines.append(
+                f"- sound: timing_basis={route.get('timing_basis')} / audio_strategy={route.get('audio_strategy')} / "
+                f"performance_track={route.get('performance_track_status')} / voice_lock={route.get('voice_lock_status')}"
+            )
+            lines.append(
+                f"- final_sound: stage={route.get('final_voice_stage')} / post_lipsync_required={route.get('post_lipsync_required')} / "
+                f"base_video_only={route.get('base_video_only')}"
+            )
         lines.append(f"- quality_tier: {route.get('quality_tier', '-')}")
         execution = route.get("execution_adapter") if isinstance(route.get("execution_adapter"), Mapping) else {}
         if execution:

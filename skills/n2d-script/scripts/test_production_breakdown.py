@@ -9,6 +9,25 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import production_breakdown as pb  # noqa: E402
+from signoff_contract import new_manifest, profile_spec, record_approval, write_manifest  # noqa: E402
+
+
+def _sign_p3(root: Path, ep: str = "第1集") -> None:
+    ep_dir = root / "脚本" / ep
+    ep_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("director_blocking_signoff.json", "animatic_signoff.json"):
+        path = ep_dir / name
+        if not path.exists():
+            path.write_text('{"status":"approved"}', encoding="utf-8")
+    spec = profile_spec(root, "p3", ep)
+    payload = new_manifest(
+        root, artifact_scope=spec["artifact_scope"], episode=ep, author_id="automation:n2d",
+        input_paths=spec["input_paths"], evidence_paths=spec["evidence_paths"], required_role_groups=spec["required_role_groups"],
+    )
+    payload = record_approval(
+        payload, root, reviewer_id="user:owner", reviewer_role="producer", evidence_paths=spec["evidence_paths"],
+    )
+    write_manifest(root / spec["signoff_path"], payload)
 
 
 def _write_storyboard(root: Path, ep: str = "第1集") -> None:
@@ -55,6 +74,7 @@ def _confirm_pack(root: Path, ep: str = "第1集") -> None:
     manifest = json.loads((ep_dir / "production_handoff_pack.json").read_text(encoding="utf-8"))
     manifest["status"] = "confirmed"
     (ep_dir / "production_handoff_pack.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    _sign_p3(root, ep)
 
 
 def test_scaffold_creates_production_handoff_files(tmp_path: Path) -> None:
@@ -107,7 +127,7 @@ def test_check_blocks_draft_pack(tmp_path: Path) -> None:
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "block"
-    assert report["summary"]["block"] == len(pb.REQUIRED_FILES) + 1
+    assert report["summary"]["block"] == len(pb.REQUIRED_FILES) + 2
 
 
 def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
@@ -117,18 +137,21 @@ def test_check_passes_confirmed_pack(tmp_path: Path) -> None:
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
-    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 2
+    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 3
     assert Path(report["check_path"]).is_file()
 
 
-def test_scaffold_confirm_can_pass_when_storyboard_is_complete(tmp_path: Path) -> None:
+def test_scaffold_confirm_still_requires_independent_signoff(tmp_path: Path) -> None:
     _write_storyboard(tmp_path)
 
     pb.scaffold(tmp_path, "第1集", confirmed=True)
     report = pb.check(tmp_path, "第1集")
 
+    assert report["status"] == "block"
+    _sign_p3(tmp_path)
+    report = pb.check(tmp_path, "第1集")
     assert report["status"] == "pass"
-    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 2
+    assert report["summary"]["pass"] == len(pb.REQUIRED_FILES) + 3
 
 
 def test_scaffold_drops_stale_endframe_when_continuity_exempts_it(tmp_path: Path) -> None:
@@ -155,6 +178,7 @@ def test_scaffold_confirm_does_not_leave_placeholder_for_missing_eyeline(tmp_pat
     sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
     pb.scaffold(tmp_path, "第1集", confirmed=True)
+    _sign_p3(tmp_path)
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
@@ -170,6 +194,7 @@ def test_scaffold_confirm_fills_missing_knowledge_state(tmp_path: Path) -> None:
     sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
     pb.scaffold(tmp_path, "第1集", confirmed=True)
+    _sign_p3(tmp_path)
     report = pb.check(tmp_path, "第1集")
 
     assert report["status"] == "pass"
@@ -228,11 +253,46 @@ def test_continuity_chain_blocks_relay_without_endframe(tmp_path: Path) -> None:
     assert any("relay_without_endframe_flag" in issue for issue in row["issues"])
 
 
+def test_production_chain_hashes_both_sides_of_relay_boundary(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    data = json.loads(sb_path.read_text(encoding="utf-8"))
+    boundary_rel = "出图/第1集/图片/relay_boundary.png"
+    boundary = tmp_path / boundary_rel
+    boundary.parent.mkdir(parents=True)
+    boundary.write_bytes(b"same-boundary")
+    data["clips"][0]["endframe_png"] = boundary_rel
+    data["clips"][0]["continuity"].update({
+        "transition": "连续接力", "seam_mode": "continuous_take_relay",
+        "seam_evidence": {
+            "boundary_frame": boundary_rel,
+            "end_state": "B 后退半步",
+            "start_state": "B 后退半步",
+        },
+        "need_endframe": True,
+    })
+    data["clips"].append({
+        "id": "EP01_CLIP02", "label": "接力下半段", "location_id": "LOC_HALL",
+        "character_ids": ["CHAR_A", "CHAR_B"], "firstframe_png": boundary_rel,
+        "continuity": {"start_state": "B 后退半步", "end_state": "B 站稳", "transition": "hard_cut"},
+        "entity_schedule": {"required_presence": ["CHAR_A", "CHAR_B"]},
+    })
+    sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pb.scaffold(tmp_path, "第1集", confirmed=False)
+    chain = json.loads((tmp_path / "脚本" / "第1集" / "continuity_chain.json").read_text(encoding="utf-8"))
+    seam = chain["seams"][0]
+
+    assert seam["required_boundary_frame_sha256"] == seam["next_firstframe_sha256"]
+    assert seam["required_boundary_frame_sha256"]
+
+
 def test_cross_episode_boundary_requires_explicit_contract(tmp_path: Path) -> None:
     _write_storyboard(tmp_path, "第1集")
     _write_storyboard(tmp_path, "第2集")
 
     pb.scaffold(tmp_path, "第2集", confirmed=True)
+    _sign_p3(tmp_path, "第2集")
     report = pb.check(tmp_path, "第2集")
 
     assert report["status"] == "block"
@@ -252,6 +312,7 @@ def test_cross_episode_intentional_discontinuity_passes(tmp_path: Path) -> None:
     sb_path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
     pb.scaffold(tmp_path, "第2集", confirmed=True)
+    _sign_p3(tmp_path, "第2集")
     report = pb.check(tmp_path, "第2集")
 
     assert report["status"] == "pass"

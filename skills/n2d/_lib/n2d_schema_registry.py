@@ -84,6 +84,12 @@ STORY_INTEGRITY_LEDGER_KIND = "n2d_story_integrity_ledger"
 THREAD_SCHEDULER_KIND = "n2d_thread_scheduler"
 PILOT_ARC_CONTRACT_KIND = "n2d_pilot_arc_contract"
 STORYBOARD_KIND = "n2d_storyboard"
+ARTIFACT_SIGNOFF_KIND = "n2d_artifact_signoff"
+PRODUCTION_MODE_ROUTE_KIND = "n2d_production_mode_route"
+EDITORIAL_TIMELINE_KIND = "n2d_editorial_timeline"
+VOICE_CASTING_KIND = "n2d_voice_casting"
+TIMING_ESTIMATE_KIND = "n2d_timing_estimate"
+SHOT_TIMING_BASIS_KIND = "n2d_shot_timing_basis"
 SCHEMA_VERSION = 1
 NON_ROUTABLE_JSON_FILENAMES = {"镜头时长.json"}
 
@@ -393,6 +399,104 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
             "episode": {"type": "string"},
             "status": {"type": "string"},
             "timeline": arr({"type": "object"}),
+        },
+    ),
+    ARTIFACT_SIGNOFF_KIND: obj(
+        ("kind", "version", "artifact_scope", "authored_by", "input_fingerprint", "evidence_fingerprint", "required_approval_groups", "approvals", "status"),
+        {
+            "kind": {"type": "string", "enum": [ARTIFACT_SIGNOFF_KIND]},
+            "version": {"type": "integer"},
+            "artifact_scope": {"type": "string"},
+            "episode": {"type": "string"},
+            "authored_by": {"type": "string"},
+            "input_fingerprint": {"type": "object"},
+            "evidence_fingerprint": {"type": "object"},
+            "required_approval_groups": arr({"type": "object"}),
+            "approvals": arr({"type": "object"}),
+            "status": {"type": "string"},
+        },
+    ),
+    PRODUCTION_MODE_ROUTE_KIND: obj(
+        ("kind", "version", "episode", "status", "decision", "signals", "inputs_fingerprint"),
+        {
+            "kind": {"type": "string", "enum": [PRODUCTION_MODE_ROUTE_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "status": {"type": "string"},
+            "decision": {"type": "object"},
+            "signals": {"type": "object"},
+            "clip_routes": arr({"type": "object"}),
+            "summary": {"type": "object"},
+            "inputs_fingerprint": {"type": "object"},
+        },
+    ),
+    VOICE_CASTING_KIND: obj(
+        ("kind", "version", "status", "policy", "roles", "summary"),
+        {
+            "kind": {"type": "string", "enum": [VOICE_CASTING_KIND]},
+            "version": {"type": "integer"},
+            "status": {"type": "string"},
+            "policy": {"type": "string"},
+            "roles": arr(obj(("role", "status"), {
+                "role": {"type": "string"},
+                "status": {"type": "string"},
+                "backend": {"type": "string"},
+                "voice_id": {"type": "string"},
+                "canonical_sample": {"type": "string"},
+            })),
+            "summary": {"type": "object"},
+        },
+    ),
+    TIMING_ESTIMATE_KIND: obj(
+        ("kind", "version", "episode", "status", "audio_generated", "timing_basis", "lines", "summary"),
+        {
+            "kind": {"type": "string", "enum": [TIMING_ESTIMATE_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "status": {"type": "string"},
+            "source_fingerprint": {"type": "string"},
+            "audio_generated": {"type": "boolean", "enum": [False]},
+            "timing_basis": {"type": "string", "enum": ["text_estimate_no_audio"]},
+            "lines": arr(obj(("line_index", "镜头", "角色", "文本", "时长", "start", "end", "gap_after", "timing_basis"), {
+                "line_index": {"type": "integer"},
+                "镜头": {"type": "string"},
+                "角色": {"type": "string"},
+                "文本": {"type": "string"},
+                "时长": {"type": "number"},
+                "start": {"type": "number"},
+                "end": {"type": "number"},
+                "gap_after": {"type": "number"},
+                "timing_basis": {"type": "string"},
+            })),
+            "summary": {"type": "object"},
+        },
+    ),
+    SHOT_TIMING_BASIS_KIND: obj(
+        ("kind", "version", "episode", "timing_basis", "provisional", "source", "final_voice_required_before_compose"),
+        {
+            "kind": {"type": "string", "enum": [SHOT_TIMING_BASIS_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "timing_basis": {"type": "string"},
+            "provisional": {"type": "boolean"},
+            "source": {"type": "string"},
+            "final_voice_required_before_compose": {"type": "boolean"},
+        },
+    ),
+    EDITORIAL_TIMELINE_KIND: obj(
+        ("kind", "version", "episode", "phase", "status", "duration_sec", "track_names", "media", "seams", "otio_path", "otio_sha256"),
+        {
+            "kind": {"type": "string", "enum": [EDITORIAL_TIMELINE_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "phase": {"type": "string"},
+            "status": {"type": "string"},
+            "duration_sec": {"type": "number"},
+            "track_names": arr({"type": "string"}),
+            "media": arr({"type": "object"}),
+            "seams": arr({"type": "object"}),
+            "otio_path": {"type": "string"},
+            "otio_sha256": {"type": "string"},
         },
     ),
     CREATIVE_LOOP_KIND: obj(

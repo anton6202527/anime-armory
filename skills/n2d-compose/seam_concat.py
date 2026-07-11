@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""seam_concat.py — 按 storyboard 每个接缝的转场类型自动拼接（接缝自动化引擎）。
+"""seam_concat.py — 按 P-3 seam_mode 执行逐接缝剪辑。
 
 替代 compose.sh 里一律 `concat -c copy` 的裸拼：读 `storyboard.json` 每个接缝的
-`clips[].continuity.transition`，逐接缝判定接法——
+`continuity_chain.json`（缺时才兼容 storyboard），逐接缝判定接法——
 
-  - 硬切（默认/有意硬切）          → 直接拼，不加转场
-  - 微溶解（跳变/视觉跳变/未焊住）  → 局部 xfade 交叉溶解（0.1–0.3s）
-  - 缺空镜（需要空镜但没补）        → 报警（不静默裸切，也不自造素材）
+  - `dissolve` → 按 `seam_evidence.duration_sec` 做局部 xfade
+  - 其余标准模式 → 在已签剪点直接切；relay 同帧由上游 QC 保证
+  - 旧项目缺分类时才读取 transition/fallback 做迁移兼容
 
 实现策略（重编码最小化）：把被硬切/报警接缝相连的连续 clip 归为一个 run，run 内
 `concat -c copy`（compose 工作缓存里的 clip 已统一规格、无音轨，零重编码；`出视频/` 原片不改写）；只在**溶解接缝**之间做 xfade。
-任何 ffmpeg 失败 → 回退整体 `concat -c copy`，绝不让合成中断。
+显式 `dissolve` 渲染失败必须阻断，不能静默降成硬切；只有旧项目推断出的溶解允许兼容回退。
 
 纯逻辑（分类/分段/xfade offset/滤镜串）可单测；ffmpeg 调用是薄执行层。
 clip 在 compose.sh 的 list.txt 阶段已统一到同分辨率/fps/yuv420p 且缓存内 `-an`，故只做视频
@@ -30,7 +30,12 @@ import os
 import re
 import subprocess
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Tuple
+
+N2D_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "n2d", "_lib"))
+if N2D_LIB not in sys.path:
+    sys.path.insert(0, N2D_LIB)
+from seam_contract import compose_decision, normalize_seam_mode  # noqa: E402
 
 DISSOLVE_WORDS = ("微溶解", "溶解", "叠化", "渐变", "淡入淡出", "交叉溶解", "dissolve", "crossfade", "cross fade", "cross-fade")
 WARN_WORDS = ("缺空镜", "需要空镜", "空镜缺", "需补空镜", "补空镜", "missing establishing", "insert needed", "需插入空镜")
@@ -48,10 +53,15 @@ def _has(text: str, words) -> bool:
     return any(w.lower() in t for w in words)
 
 
-def classify_seam(transition: str, ctx: str = "", fallback: str = "cut") -> Tuple[str, str]:
+def classify_seam(transition: str, ctx: str = "", fallback: str = "cut", seam_mode: str = "") -> Tuple[str, str]:
     """返回 (decision, reason)，decision ∈ {cut, dissolve, warn}。
     优先级：缺空镜报警 > 显式溶解 > 显式硬切 > 跳变(→溶解，除非有意冲击) > 兜底。"""
     t = transition or ""
+    mode_info = normalize_seam_mode(seam_mode, t)
+    mode = str(mode_info.get("mode") or "")
+    if mode_info.get("source") == "explicit":
+        decision = compose_decision(mode)
+        return decision, f"seam_mode={mode} → {'微溶解' if decision == 'dissolve' else '编辑切'}"
     if _has(t, WARN_WORDS):
         return "warn", f"转场标注缺空镜：{t.strip()}"
     if _has(t, DISSOLVE_WORDS):
@@ -104,6 +114,52 @@ def load_storyboard_seams(storyboard_path: str) -> Tuple[List[str], List[str]]:
     return transitions, ctxs
 
 
+def load_storyboard_seam_contracts(storyboard_path: str) -> Tuple[List[str], List[str], List[str], List[Dict[str, Any]]]:
+    """Prefer P-3 continuity_chain seam modes; fall back to storyboard fields."""
+    transitions, ctxs = load_storyboard_seams(storyboard_path)
+    modes: List[str] = []
+    evidences: List[Dict[str, Any]] = []
+    chain_path = os.path.join(os.path.dirname(storyboard_path), "continuity_chain.json") if storyboard_path else ""
+    if chain_path and os.path.isfile(chain_path):
+        try:
+            data = json.load(open(chain_path, encoding="utf-8"))
+            seams = [
+                row for row in data.get("seams") or []
+                if isinstance(row, dict) and str(row.get("scope") or "intra_episode") == "intra_episode"
+            ] if isinstance(data, dict) else []
+            if seams:
+                transitions = [str(row.get("transition") or "") for row in seams]
+                modes = [str(row.get("seam_mode") or "") for row in seams]
+                evidences = [dict(row.get("seam_evidence") or {}) for row in seams]
+                # build_plan expects one transition per logical clip; final clip
+                # has no outgoing seam.
+                transitions.append("")
+                modes.append("")
+                evidences.append({})
+                if len(ctxs) < len(transitions):
+                    ctxs.extend([""] * (len(transitions) - len(ctxs)))
+        except (ValueError, OSError):
+            modes = []
+    if not modes and storyboard_path and os.path.isfile(storyboard_path):
+        try:
+            data = json.load(open(storyboard_path, encoding="utf-8"))
+            clips = data.get("clips") if isinstance(data, dict) else []
+            modes = [
+                str((row.get("continuity") or {}).get("seam_mode") or "")
+                if isinstance(row, dict) and isinstance(row.get("continuity"), dict) else ""
+                for row in clips or []
+            ]
+            evidences = [
+                dict((row.get("continuity") or {}).get("seam_evidence") or {})
+                if isinstance(row, dict) and isinstance(row.get("continuity"), dict) else {}
+                for row in clips or []
+            ]
+        except (ValueError, OSError):
+            modes = []
+            evidences = []
+    return transitions, ctxs, modes, evidences
+
+
 def _logical_cid(path: str) -> str:
     """从文件名提取逻辑 ID（如 Clip_01_part1 -> Clip_01）。"""
     name = os.path.basename(path)
@@ -112,7 +168,9 @@ def _logical_cid(path: str) -> str:
     return match.group(1).lower() if match else name
 
 
-def build_plan(files: List[str] | int, transitions: List[str], ctxs: List[str], fallback: str = "cut") -> Dict[str, Any]:
+def build_plan(files: List[str] | int, transitions: List[str], ctxs: List[str], fallback: str = "cut",
+               seam_modes: Optional[List[str]] = None,
+               seam_evidences: Optional[List[Mapping[str, Any]]] = None) -> Dict[str, Any]:
     """逐接缝判定。支持 _partN 拆段：子段间强制硬切，跨逻辑镜接缝查 storyboard。"""
     if isinstance(files, int):
         files = [f"Clip_{i + 1:02d}.mp4" for i in range(max(0, files))]
@@ -141,20 +199,38 @@ def build_plan(files: List[str] | int, transitions: List[str], ctxs: List[str], 
         
         if cid_a == cid_b:
             # 同一逻辑镜内部拆段（Split Relay）——强制硬切（无缝接力）
+            evidence = {}
             decision, reason = "cut", f"内部拆段接力({cid_a})"
         elif use_sb:
             # 跨逻辑镜接缝，查 storyboard
             try:
                 logical_idx = unique_logical.index(cid_a)
-                decision, reason = classify_seam(transitions[logical_idx], 
-                                                 ctxs[logical_idx] if logical_idx < len(ctxs) else "", 
-                                                 fallback)
+                mode = seam_modes[logical_idx] if seam_modes and logical_idx < len(seam_modes) else ""
+                evidence = seam_evidences[logical_idx] if seam_evidences and logical_idx < len(seam_evidences) else {}
+                decision, reason = classify_seam(transitions[logical_idx],
+                                                 ctxs[logical_idx] if logical_idx < len(ctxs) else "",
+                                                 fallback, mode)
             except ValueError:
+                evidence = {}
                 decision, reason = "cut", "逻辑 ID 匹配失败，硬切"
         else:
+            evidence = {}
             decision, reason = ("cut", "无 storyboard 或镜数不符，硬切")
             
-        seam = {"seam": i, "between": [i, i + 1], "decision": decision, "reason": reason}
+        seam = {
+            "seam": i,
+            "between": [i, i + 1],
+            "decision": decision,
+            "reason": reason,
+            "seam_mode": (seam_modes[unique_logical.index(cid_a)] if seam_modes and cid_a in unique_logical and unique_logical.index(cid_a) < len(seam_modes) else ""),
+            "seam_evidence": dict(evidence),
+        }
+        if decision == "dissolve":
+            try:
+                duration = float(evidence.get("duration_sec"))
+                seam["dissolve_sec"] = duration if duration > 0 else None
+            except (TypeError, ValueError):
+                seam["dissolve_sec"] = None
         seams.append(seam)
         if decision == "warn":
             warnings.append(f"接缝 {i}→{i+1}：{reason}；建议补缓冲 clip")
@@ -195,6 +271,20 @@ def xfade_offsets(seg_durations: List[float], dissolve_sec: float) -> List[float
     return offsets
 
 
+def variable_xfade_offsets(seg_durations: List[float], dissolve_secs: List[float]) -> List[float]:
+    """Offsets for per-seam dissolve durations."""
+    if len(dissolve_secs) != max(0, len(seg_durations) - 1):
+        raise ValueError("dissolve_secs 数量必须等于段数-1")
+    offsets: List[float] = []
+    cumulative_segments = 0.0
+    cumulative_dissolves = 0.0
+    for idx, dissolve in enumerate(dissolve_secs):
+        cumulative_segments += seg_durations[idx]
+        cumulative_dissolves += dissolve
+        offsets.append(round(cumulative_segments - cumulative_dissolves, 4))
+    return offsets
+
+
 def build_xfade_filter(seg_durations: List[float], dissolve_sec: float, transition: str = "fade") -> Tuple[str, str]:
     """生成 N 段 xfade 链 filter_complex（视频）。返回 (filter_complex, 末端label)。"""
     n = len(seg_durations)
@@ -209,6 +299,21 @@ def build_xfade_filter(seg_durations: List[float], dissolve_sec: float, transiti
         out = f"vx{k}" if k < n - 1 else "vout"
         parts.append(
             f"[{prev}][{k}:v]xfade=transition={transition}:duration={dissolve_sec}:offset={offsets[k-1]}[{out}]"
+        )
+        prev = out
+    return ";".join(parts), "vout"
+
+
+def build_variable_xfade_filter(seg_durations: List[float], dissolve_secs: List[float], transition: str = "fade") -> Tuple[str, str]:
+    if len(seg_durations) <= 1:
+        return ("", "0:v") if seg_durations else ("", "")
+    offsets = variable_xfade_offsets(seg_durations, dissolve_secs)
+    parts: List[str] = []
+    prev = "0:v"
+    for idx, (offset, dissolve) in enumerate(zip(offsets, dissolve_secs), 1):
+        out = f"vx{idx}" if idx < len(seg_durations) - 1 else "vout"
+        parts.append(
+            f"[{prev}][{idx}:v]xfade=transition={transition}:duration={dissolve}:offset={offset}[{out}]"
         )
         prev = out
     return ";".join(parts), "vout"
@@ -244,7 +349,7 @@ def render_report(plan: Dict[str, Any], dissolve_sec: float) -> str:
     lines = ["# 接缝处理报告", "",
              f"- clip 数: {plan['n_clips']}",
              f"- 用 storyboard 转场: {plan['used_storyboard']}",
-             f"- 微溶解接缝: {plan['dissolve_count']}（每处 {dissolve_sec}s xfade）",
+             f"- 微溶解接缝: {plan['dissolve_count']}（逐缝读取 seam_evidence.duration_sec；缺值回退 {dissolve_sec}s）",
              f"- 缺空镜报警: {plan['warn_count']}", ""]
     if plan["warnings"]:
         lines += ["## ⚠️ 报警", ""]
@@ -253,15 +358,16 @@ def render_report(plan: Dict[str, Any], dissolve_sec: float) -> str:
     lines += ["## 逐接缝", "", "| 接缝 | 接法 | 理由 |", "|---|---|---|"]
     icon = {"cut": "✂️ 硬切", "dissolve": "🌫️ 微溶解", "warn": "🚨 缺空镜"}
     for s in plan["seams"]:
-        lines.append(f"| {s['between'][0]}→{s['between'][1]} | {icon.get(s['decision'], s['decision'])} | {s['reason']} |")
+        duration_note = f"；duration={s.get('dissolve_sec') or dissolve_sec}s" if s["decision"] == "dissolve" else ""
+        lines.append(f"| {s['between'][0]}→{s['between'][1]} | {icon.get(s['decision'], s['decision'])} | {s['reason']}{duration_note} |")
     return "\n".join(lines) + "\n"
 
 
 def run(list_txt: str, out: str, *, storyboard: str = "", fallback: str = "cut",
         dissolve_sec: float = DEFAULT_DISSOLVE_SEC, report: str = "", plan_only: bool = False) -> int:
     files = parse_list_file(list_txt)
-    transitions, ctxs = load_storyboard_seams(storyboard)
-    plan = build_plan(files, transitions, ctxs, fallback)
+    transitions, ctxs, seam_modes, seam_evidences = load_storyboard_seam_contracts(storyboard)
+    plan = build_plan(files, transitions, ctxs, fallback, seam_modes, seam_evidences)
     work = os.path.dirname(os.path.abspath(out)) or "."
 
     if report:
@@ -272,11 +378,12 @@ def run(list_txt: str, out: str, *, storyboard: str = "", fallback: str = "cut",
         print(f"[seam][warn] {w}", file=sys.stderr)
 
     runs = group_runs(plan["seams"], len(files))
+    dissolve_secs = [float(row.get("dissolve_sec") or dissolve_sec) for row in plan["seams"] if row["decision"] == "dissolve"]
 
     if plan_only:
         seg_filter = ""
         if len(runs) > 1:
-            seg_filter, _ = build_xfade_filter([0.0] * len(runs), dissolve_sec)  # 形状预览（duration 占位）
+            seg_filter, _ = build_variable_xfade_filter([1.0] * len(runs), dissolve_secs)
         print(json.dumps({"plan": plan, "runs": runs, "mode": "xfade" if len(runs) > 1 else "concat_copy",
                           "filter_preview": seg_filter}, ensure_ascii=False, indent=2))
         return 0
@@ -306,7 +413,7 @@ def run(list_txt: str, out: str, *, storyboard: str = "", fallback: str = "cut",
         durations = [_ffprobe_duration(s) for s in seg_files]
         if any(d is None for d in durations):
             raise RuntimeError("ffprobe 取段时长失败")
-        filt, final = build_xfade_filter(durations, dissolve_sec)
+        filt, final = build_variable_xfade_filter([float(d) for d in durations], dissolve_secs)
         cmd = ["ffmpeg", "-y", "-loglevel", "error"]
         for s in seg_files:
             cmd += ["-i", s]
@@ -317,7 +424,17 @@ def run(list_txt: str, out: str, *, storyboard: str = "", fallback: str = "cut",
         print(f"[seam] xfade 链合成完成：{plan['dissolve_count']} 处微溶解 / {len(runs)} 段", file=sys.stderr)
         return 0
     except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
-        print(f"[seam][warn] xfade 失败({exc}) → 回退 concat -c copy（接缝降级为硬切，不中断合成）", file=sys.stderr)
+        strict_dissolve = any(
+            row.get("decision") == "dissolve" and row.get("seam_mode") == "dissolve"
+            for row in plan["seams"]
+        )
+        if strict_dissolve:
+            if report:
+                with open(report, "a", encoding="utf-8") as fh:
+                    fh.write(f"\n## 渲染阻断\n\n- 显式 dissolve 渲染失败：{exc}\n- 未降级为硬切。\n")
+            print(f"[seam][block] 显式 dissolve 渲染失败({exc})；拒绝静默降级为硬切", file=sys.stderr)
+            return 1
+        print(f"[seam][warn] legacy xfade 失败({exc}) → 回退 concat -c copy", file=sys.stderr)
         return 0 if _concat_copy(files, out, work) else 1
 
 

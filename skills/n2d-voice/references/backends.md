@@ -1,6 +1,6 @@
 # 配音后端
 
-优先级：**零样本克隆组**（CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，按此序取**第一个设了 URL 的**）> MiniMax(MINIMAX_API_KEY+GROUP_ID) > 火山(VOLC_APPID+TOKEN) > macOS say(占位)。缺凭证回退 say 并告警。
+后端能力发现顺序：**零样本克隆组**（CosyVoice > FishSpeech > GPT-SoVITS > IndexTTS-2 > VoxCPM2，按此序取第一个设了 URL 的）> MiniMax > 火山。真正执行哪个后端以 `设定库/voice_casting.json` 的角色定妆锁为准；混合自动路由下，选角锁与当前可用后端不一致或缺凭证时直接阻断，**不静默回退 macOS say**。
 > 五个零样本后端走同一份代码路径（`render_voice.py` 的 `ZS_SPECS` 表 + `zeroshot_tts()`），只是 URL_env / 参考音前缀 / 超时不同；设了哪个 URL 就用哪个，合成结果按「后端+参考音+文本」持久缓存进 `_voicecache/`。
 
 | 后端 | env | 说明 |
@@ -12,11 +12,11 @@
 | VoxCPM2 | VOXCPM_URL, VOX_REF_AUDIO, VOX_REF_TEXT | 本地零样本；48kHz、~30 语、可控音色设计；要高采样率/多语时选。同 CosyVoice 契约 |
 | MiniMax | MINIMAX_API_KEY, MINIMAX_GROUP_ID, MINIMAX_MODEL | 云；t2a_v2；克隆见 cloning.md |
 | 火山 | VOLC_APPID, VOLC_TOKEN, VOLC_CLUSTER | 云 |
-| say | （无） | macOS 占位，仅冒烟用；中文语音若输出空音频，脚本会自动生成静音占位时长轨并写 `_占位说明.md` |
+| say | （无） | 仅供旧流程/显式冒烟；不得充当新项目的前期时间基准或最终声音。混合模式为空音频时直接失败，不生成静音占位 WAV |
 
 > **情绪驱动选型（2026-06）**：voiceover 每句的 `情绪/语速/停顿/钩子` 标注**会驱动 TTS**（不是注释）。情绪起伏大的集（强反转/哭戏/爆发）——**IndexTTS-2** 的音色/情绪解耦最贴这套标注；日常对白 CosyVoice/FishSpeech 已够。能力/版本会变，以 `n2d/references/模型矩阵.md` 配音行为准。新后端只进档案，默认优先级不变（情绪要求高时按集临时指定）。
 
-> ⚠️ **重要**：静音占位时长轨不是有声朗读，只能用于 rough timing / 字幕初定时。`先出视频后配音` 默认流程可用它先推进无声视频，但合成前必须换真实配音并拟合；`配音先行` 流程跨过出图前必须换真实配音重跑，否则真实音色时长变化会导致镜头和字幕重切。
+> ⚠️ **前期估时不需要声音后端**：默认先跑 `voice_preflight.py prepare`，只生成 `timing_estimate.json`，不创建 WAV。可见口型镜头需要已批准表演/guide 轨；旁白、口外音、动作、空镜和蒙太奇可先按文本估时或画面推进。最终音色定妆通过后才批量渲染 final 音轨。
 
 ## 其它可调 env
 - 句间留拍：`LINE_GAP`(0.4) / `GAP_HOOK`(0.6) / `GAP_CLIMAX`(0.7) / `GAP_END`(1.0)。

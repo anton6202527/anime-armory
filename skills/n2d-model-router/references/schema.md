@@ -170,7 +170,12 @@
 - `template`: 来自 `storyboard.json clips[].template`；没有写 `none`。
 - `primary_backend`: 首选后端，归一化为 `dreamina|kling|seedance|veo|sora`。
 - `fallback_backends`: 备用后端，按优先级排序。
-- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。注：`multi_shot` 是保留值——多镜单次生成走 **advisory** 的 `multishot_groups` 候选组（见顶层），router **不会**把逐镜 mode 自动改成 `multi_shot`（保逐 Clip 可重跑粒度），需要真合并时由出片侧/用户显式决定。`text2video` 只默认用于 `identity_requirement=none` 的空镜/氛围镜；含具名角色的动作 T2V 只能作为实验特例，必须同时写 `experimental_t2v=true`、`t2v_identity_reference_plan`、reference_inputs/identity anchors 和可执行 `degrade_plan`，否则 gate 阻断。`native_av`=原生音画模式说话镜，一次出同步音画（后端自生成台词，绕过配音先行）；`voice_conditioned_lipsync`=`voice_first`+显式 `视频生成音频策略=配音对齐口型` 的说话镜，把克隆配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端（Seedance 2.0 音素级 / 可灵 Omni）同帧出对口型画面，**音轨仍是配音轨、模型音频不接管声音**——区别于 native_av 的根本点。
+- `mode`: `image2video|frames2video|text2video|multi_shot|native_av|voice_conditioned_lipsync`。`voice_conditioned_lipsync` 可由混合 route 的获批 performance/guide 轨触发，不要求整项目先有 final voice；模型音频只作表演/口型条件，成片仍用获批 final voice。没有可信轨时保持 image2video base plate，并由 `post_lipsync_required` 打开独立后期通道。`native_av` 仅给逐镜合同允许且能力已核验的同步音画镜。其它 text2video/multi_shot 边界不变。
+- `audio_strategy`: `performance_audio_first|base_video_then_post_lipsync|rough_timing_final_dub_later|post_dub|picture_first|native_av`，混合模式必填。
+- `timing_basis`: 本镜使用 final/guide performance、`text_estimate_no_audio`、picture rhythm 或 native AV script timing。
+- `performance_track_status/path`: 可见口型镜头的表演证据；路径必须指向真实音频，不能写计划路径冒充 ready。
+- `voice_casting_status` / `final_voice_stage`: 声音定妆与最终声音阶段。
+- `base_video_only` / `neutral_mouth_policy` / `post_lipsync_required` / `post_lipsync_output`: 基础视频后置口型合同；最终 video/compose/review 按输出路径验收。
 - `video_generation_audio_policy`: `无声视频流|配音对齐口型|低风险环境声|原生音画|自定义`。非原生音画默认 `无声视频流`，表示执行层应走 video-only/no-audio 图生视频或多关键帧视频流；不要因为后期 `视频原生音轨` 设置而改走音频条件或原生人声路径。只有显式 opt-in 时才允许 `voice_conditioned_lipsync`、`native_sfx/ambience` 或 `native_speech`。
 - `native_audio_policy`: `none|ambience|native_sfx|native_speech|lipsync_condition_only`，只表达生成意图；compose 是否混入仍由 `视频原生音轨`/`制作模式` 决定。`native_speech`（台词+口型由后端原生生成）只在 `av_mode=native_av` 的说话镜出现；`lipsync_condition_only`（配音仅作口型条件、不进音轨）只在 `voice_conditioned_lipsync` 镜出现，compose 必须用 voice-first 配音轨、丢弃模型这条音频。
 - `requires_voice_fallback`: 可选布尔。仅用于 `av_mode=native_av` 但本 Clip 因固定后端/身份优先模板不能走 `native_speech` 的说话/口型镜。为 `true` 时必须同时写 `fallback_production_mode=voice_first`，表示本镜重新打开 n2d-voice 真实配音链路；video/compose gate 会阻断缺配音或占位配音，防止无声对白镜。
@@ -191,7 +196,7 @@
   - `frame_inputs`: 首帧/尾帧/中段锚帧、后端实际消费模式、native timeline 帧数、是否仅作 reference。
   - `reference_inputs`: 本镜角色、资产、参考图上限、可用动作参考库路径（`生产数据/motion_reference_library.json`）。
   - `control_inputs`: Motion Control manifest、required_inputs 和 gate policy；`required=true` 时缺 `manifest_path` 会被 video gate 阻断。
-  - `audio_inputs`: `video_generation_audio_policy` + native audio / speech policy，供无声视频流、原生音画、配音先行、口型条件路线分流。
+  - `audio_inputs`: 上述逐镜声音字段 + `video_generation_audio_policy` + native audio/speech policy，供无声 base、表演条件、后配与原生音画分流。
   - `fallback`: fallback 后端和降级拆镜方案，供重试/批量回流消费。
   - `capability_match`: 帧契约、运动参考、控制能力是否满足，供 gate 和执行层做最后兜底。
 - `multishot_candidate`: `{group_id, members, note}`，仅当本镜属一个多镜单次生成候选组时出现。见顶层 `multishot_groups`。

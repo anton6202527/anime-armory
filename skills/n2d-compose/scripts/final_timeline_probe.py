@@ -18,6 +18,11 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from editorial_timeline import build_editorial_timeline, write_editorial_timeline  # noqa: E402
+
 
 VERSION = 1
 
@@ -241,9 +246,14 @@ def write_timeline_outputs(root: Path, episode: str, payload: Dict[str, Any]) ->
     tmp_html = rough_html.with_name(f"{rough_html.name}.tmp.{os.getpid()}")
     tmp_html.write_text(render_rough_cut_html(payload), encoding="utf-8")
     os.replace(tmp_html, rough_html)
+    editorial = build_editorial_timeline(root.resolve(), episode)
+    editorial_outputs = write_editorial_timeline(root.resolve(), editorial)
     return {
         "timeline": relpath(root, timeline_path),
         "rough_cut_preview": relpath(root, rough_html),
+        "editorial_otio": editorial_outputs["otio"],
+        "editorial_sidecar": editorial_outputs["sidecar"],
+        "editorial_phase": str(editorial.get("phase") or ""),
     }
 
 

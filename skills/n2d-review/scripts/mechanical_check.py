@@ -18,6 +18,12 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_text_utils import is_placeholder  # noqa: E402  占位检测单一真值源
+from seam_contract import (  # noqa: E402
+    missing_evidence as seam_missing_evidence,
+    needs_end_anchor,
+    normalize_seam_mode,
+    requires_boundary_frame,
+)
 
 BLOCK, WARN, INFO = "🔴", "🟡", "🟢"
 ZH_LINE_MAX = 20   # 中文单行字数上限（竖屏 9:16，超易溢出/换行难看）
@@ -263,7 +269,7 @@ def check_storyboard_and_video(root, ep):
     """Machine-readable continuity contract + clip integrity checks."""
     sb_p = os.path.join(root, "脚本", ep, "storyboard.json")
     if not os.path.exists(sb_p):
-        add(BLOCK, "故事板", sb_p, "缺机器可读 storyboard.json——下游无法稳定校验 continuity / need_endframe")
+        add(BLOCK, "故事板", sb_p, "缺机器可读 storyboard.json——下游无法稳定校验 continuity / seam_mode / end_anchor")
         return
     try:
         sb = json.load(open(sb_p, encoding="utf-8"))
@@ -282,20 +288,37 @@ def check_storyboard_and_video(root, ep):
         if not isinstance(cont, dict):
             add(BLOCK, "故事板", loc, "continuity 不是对象")
             continue
-        for k in ("start_state", "end_state", "transition", "need_endframe"):
+        for k in ("start_state", "end_state", "transition"):
             if k not in cont:
                 add(BLOCK, "故事板", loc, f"continuity 缺字段：{k}")
         if prev_end and cont.get("start_state") != prev_end:
             add(WARN, "衔接", loc, "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，需无缝尾帧接力时再原样继承")
         prev_end = cont.get("end_state")
-        if cont.get("need_endframe") is True:
+        if i < len(clips):
+            mode_info = normalize_seam_mode(
+                cont.get("seam_mode"), cont.get("transition"),
+                need_endframe=bool(cont.get("need_endframe")),
+            )
+            mode = str(mode_info.get("mode") or "")
+            if mode_info.get("source") != "explicit":
+                add(BLOCK, "接缝分类", loc, "缺显式 seam_mode；旧 transition/need_endframe 不能代替剪辑决策")
+            else:
+                evidence = cont.get("seam_evidence") if isinstance(cont.get("seam_evidence"), dict) else {}
+                missing = list(seam_missing_evidence(mode, evidence))
+                if mode == "continuous_take_relay":
+                    missing = [field for field in missing if field not in {"boundary_frame", "end_state", "start_state"}]
+                if missing:
+                    add(BLOCK, "接缝分类", loc, f"{mode} 缺 seam_evidence：{', '.join(missing)}")
+                if bool(cont.get("need_endframe")) != requires_boundary_frame(mode):
+                    add(BLOCK, "接缝分类", loc, f"need_endframe 与 seam_mode={mode} 不一致")
+        if needs_end_anchor(c):
             need_endframes += 1
-            endp = cont.get("endframe_png")
+            endp = cont.get("endframe_png") or c.get("endframe_png") or c.get("last_frame")
             full = os.path.join(root, endp) if endp and not os.path.isabs(endp) else endp
             if not endp or not os.path.exists(full):
-                add(BLOCK, "尾帧", loc, "need_endframe=true 但 endframe_png 缺失或文件不存在")
+                add(BLOCK, "尾帧", loc, "镜头需要尾锚但 endframe_png 缺失或文件不存在")
     if need_endframes:
-        add(INFO, "尾帧", ep, f"本集需要尾帧接力 {need_endframes} 处")
+        add(INFO, "尾帧", ep, f"本集需要镜内尾锚/连续 take 边界帧 {need_endframes} 处")
 
     mp4s = sorted(glob.glob(os.path.join(root, "出视频", ep, "视频", "*.mp4")))
     expected_nums = _storyboard_clip_numbers(clips)

@@ -5,9 +5,11 @@
 #   字幕语言看 ../skills/n2d/references/选择点与偏好.md 的「字幕语言」选择点：默认仅中文；中英双语/仅英文用 SUB_LANG=zh,en（或 en）开启。
 #   未设 SUB_LANG 时：已存在非占位 字幕_英文.srt 译文就一并重定时，否则只产中文。
 import sys, os, re, json, textwrap
+from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
 from n2d_route import placeholder_indices, manifest_path  # 占位判定/清单定位单一真值源
-from n2d_settings import is_native_av  # 制作模式判定单一真值源（替代本地窄正则）
+from n2d_settings import is_hybrid_routing, is_native_av, is_video_first  # 制作模式判定单一真值源
+from voice_preproduction import TIMING_KIND, timing_path
 
 def _ts(t):
     h=int(t//3600); m=int((t%3600)//60); s=int(t%60); ms=int(round((t-int(t))*1000))
@@ -442,6 +444,8 @@ def main():
     # 时长清单一律落 合成/（render_voice 与制作模式无关；出视频/ 为已废弃历史路径的兜底）——走 n2d_route 单一真值源
     man_p = manifest_path(root, ep)
     native_av = is_native_av(root)
+    estimated_timing = False
+    timing_estimate = {}
     if not man_p:
         # 原生音画模式：说话镜由视频后端一次出同步音画，没有逐句配音清单——改从 storyboard 脚本时长定稿，不崩。
         if native_av:
@@ -470,11 +474,31 @@ def main():
                 print(f"  storyboard.json 已清理 {frame_contract_changed} 个与 continuity 矛盾的旧帧路径。")
             write_shot_intent_best_effort(root, ep)
             sys.exit(0)
-        print('⛔ 缺 时长清单.json（合成/'+ep+'/配音/ 或 出视频/'+ep+'/配音/）——请先 n2d-voice 配音。'); sys.exit(2)
-    manifest=json.load(open(man_p,encoding='utf-8'))
+        estimate_p = timing_path(Path(root), ep)
+        try:
+            timing_estimate = json.load(open(estimate_p, encoding='utf-8')) if estimate_p.is_file() else {}
+        except (OSError, ValueError):
+            timing_estimate = {}
+        estimate_lines = timing_estimate.get('lines') if isinstance(timing_estimate, dict) else None
+        if (
+            (is_hybrid_routing(root) or is_video_first(root))
+            and timing_estimate.get('kind') == TIMING_KIND
+            and isinstance(estimate_lines, list)
+            and estimate_lines
+        ):
+            manifest = estimate_lines
+            estimated_timing = True
+            print(f"时间基准定稿（无 WAV）：读取 {estimate_p}；只锁粗剪/旁白/画面先行节奏，不冒充最终配音。")
+        else:
+            print('⛔ 缺 时长清单.json，且没有有效 timing_estimate.json。')
+            print('   混合自动路由先跑：python3 skills/n2d-voice/voice_preflight.py prepare '+root+' '+ep)
+            print('   配音先行固定模式则先跑 n2d-voice 生成真实配音。')
+            sys.exit(2)
+    else:
+        manifest=json.load(open(man_p,encoding='utf-8'))
     # 占位闸门：占位音色时长是估算值（与真实配音差 20~40%），定稿到镜头时长后会污染故事板 Clip 时长 → 出视频按错时长生成 → 大返工。
     # render_voice 已把占位句标 "占位":true；这里默认拒绝定稿，仅 rough preview 可用 FINALIZE_ALLOW_PLACEHOLDER=1 放行。
-    ph=placeholder_indices(manifest)
+    ph=[] if estimated_timing else placeholder_indices(manifest)
     # 原生音画模式下，配音清单只覆盖旁白/非说话镜；占位不作硬闸（说话镜不靠它定时）。
     if ph and not native_av and os.environ.get('FINALIZE_ALLOW_PLACEHOLDER','')!='1':
         print('⛔ 拒绝定稿：本集配音仍是占位音色（'+str(len(ph))+'/'+str(len(manifest))+' 句，idx='+','.join(map(str,ph[:10]))+('…' if len(ph)>10 else '')+'）。')
@@ -499,7 +523,8 @@ def main():
     elif placeholder_en and os.path.exists(en_path):
         os.remove(en_path)
     json.dump(shots, open(os.path.join(root,'脚本',ep,'镜头时长.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
-    print(f"定稿: {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
+    label = "估算时间基准" if estimated_timing else "最终配音时长"
+    print(f"定稿({label}): {len(manifest)} 句重定时 → 字幕_中文.srt{'+字幕_英文.srt' if want_en else '(仅中文)'}；{len(shots)} 镜 → 镜头时长.json")
     synced = sync_storyboard_durations_from_manifest(root, ep, manifest, gap)
     if synced.get('duration'):
         print(f"  storyboard.json 已按 voiceover_indices 回填 {synced.get('duration')} 个 Clip duration，并更新 total_duration。")
@@ -507,6 +532,21 @@ def main():
         print(f"  storyboard.json 已同步 {synced.get('timeline')} 处 Clip start_sec/end_sec 时间轴。")
     if synced.get('frame_contract'):
         print(f"  storyboard.json 已清理 {synced.get('frame_contract')} 个与 continuity 矛盾的旧帧路径。")
+    timing_meta = {
+        "kind": "n2d_shot_timing_basis",
+        "version": 1,
+        "episode": ep,
+        "timing_basis": "text_estimate_no_audio" if estimated_timing else "final_voice",
+        "provisional": bool(estimated_timing),
+        "source": str(timing_path(Path(root), ep)) if estimated_timing else str(man_p),
+        "source_fingerprint": timing_estimate.get('source_fingerprint', '') if estimated_timing else '',
+        "final_voice_required_before_compose": bool(estimated_timing),
+        "restrictions": (
+            ["not_final_mix", "not_final_lipsync", "visible_mouth_clips_follow production_mode_route"]
+            if estimated_timing else []
+        ),
+    }
+    json.dump(timing_meta, open(os.path.join(root,'脚本',ep,'镜头时长.meta.json'),'w',encoding='utf-8'), ensure_ascii=False, indent=2)
     _apply_priors()
     # 逐镜意图黑板生产者（StageC）：分镜定稿后重建 shot_intent.json，让作者 override 通道(allowed_evolution)
     # 真存在、且派生字段与最新 storyboard 同步（陈旧自失效靠镜数对账）。best-effort：缺/异常不挡定稿。

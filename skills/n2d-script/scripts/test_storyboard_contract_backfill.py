@@ -41,7 +41,7 @@ def test_backfill_policy_template_and_presence_chain():
 
     changes = bf.backfill(data)
 
-    assert data["policy"]["tailframe_default"] is True
+    assert data["policy"]["seam_taxonomy_version"] == 1
     assert data["clips"][0]["continuity"]["expression_span"] == "大"
     assert data["clips"][1]["continuity"]["start_state"] == "A 看面板"
     assert "入画" in data["clips"][0]["continuity"]["entry_exit"]

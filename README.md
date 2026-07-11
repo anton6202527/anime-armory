@@ -138,7 +138,9 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 ```bash
 bash tools/e2a/scripts/e2a_release.sh                # 默认：Electron DMG + 各线 demo zip，一起上传
-bash tools/e2a/scripts/e2a_release.sh --apps-only    # 只打 DMG
+bash tools/e2a/scripts/e2a_release.sh --apps-only    # 只打安装包
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # DMG + Windows x64 exe（mac 上交叉构建，未签名）
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # 只打 Windows exe（增量补包）
 bash tools/e2a/scripts/e2a_release.sh --demo-assets  # 只重打各线 demo zip（保留已有 release notes）
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物在 dist/e2a-release-<tag>/
 ```
@@ -390,7 +392,9 @@ Published packages use the stable filenames listed above when uploaded to the `a
 
 ```bash
 bash tools/e2a/scripts/e2a_release.sh                # default: Electron DMG + per-line demo zips, uploaded together
-bash tools/e2a/scripts/e2a_release.sh --apps-only    # DMG only
+bash tools/e2a/scripts/e2a_release.sh --apps-only    # installers only
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # DMG + Windows x64 exe (cross-built on macOS, unsigned)
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # Windows exe only (incremental upload)
 bash tools/e2a/scripts/e2a_release.sh --demo-assets  # rebuild demo zips only (keeps existing release notes)
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifacts in dist/e2a-release-<tag>/
 ```
@@ -413,6 +417,7 @@ Both destinations are generated snapshots and are gitignored; the VS Code seed `
 Uploaded assets use these stable filenames:
 
 - `AnimeArmory_electron_macos_arm64.dmg`
+- `AnimeArmory_electron_windows.exe`
 - `anime-armory.vsix`
 
 Manual packaging without `e2a`:

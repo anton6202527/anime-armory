@@ -15,8 +15,14 @@ import html
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence
+
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from editorial_timeline import build_editorial_timeline, write_editorial_timeline  # noqa: E402
 
 
 VERSION = 1
@@ -324,6 +330,12 @@ def write_outputs(root: Path, ep: str, payload: Dict[str, Any]) -> Dict[str, Any
     payload = dict(payload)
     payload["json_path"] = relpath(root, json_path)
     payload["preview_artifact"] = relpath(root, html_path)
+    editorial = build_editorial_timeline(root, ep)
+    payload["editorial_timeline"] = {
+        "phase": editorial.get("phase"),
+        "status": editorial.get("status"),
+        "outputs": write_editorial_timeline(root, editorial),
+    }
     write_json(json_path, payload)
     return payload
 

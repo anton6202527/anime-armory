@@ -1,6 +1,6 @@
 ---
 name: n2d-compose
-description: Optional post-video stage of n2d (剪映合成的脚本化替代) — assemble a finished episode 成片 from 视频/ clips + (可选)配音轨 + (可选)BGM(占位/文件/Suno) + 烧录双语字幕. Default n2d video completion is clip_delivery_complete, not publishable master; use this when the user enables 合成阶段 or asks for 成片/BGM/subtitles/release packaging/master delivery. Mixes voice with BGM ducking, burns subtitles via Pillow+overlay (本机 ffmpeg 无 libass). Writes _进度.md 成片 column. Use when asked to 合成, 合成成片, 成片, 加BGM, 加背景音乐, 烧字幕, 混音, 出成片, 导出成片, 母版, 发布包. Triggers 合成, 成片, 加BGM, 背景音乐, 烧字幕, 混音, 导出, compose, 剪映, 母版, 发布.
+description: Optional post-video stage of n2d — maintain an OpenTimelineIO editorial handoff from animatic through accepted clips/rough cut/final master, then assemble a finished episode from video, dialogue/narration, ambience/foley, BGM and subtitles. Default video completion is clip_delivery_complete, not publishable master; use when the user enables 合成阶段 or asks for OTIO/剪辑时间线/成片/BGM/subtitles/release packaging/master delivery. Mixes voice with BGM ducking and burns subtitles via Pillow+overlay. Triggers OTIO, OpenTimelineIO, 剪辑时间线, 合成, 成片, 加BGM, 烧字幕, 混音, 导出, compose, 剪映, 母版, 发布.
 ---
 
 # n2d-compose — 合成成片（剪映那步的脚本化替代）
@@ -9,7 +9,7 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
 
 > **可选尾段**：n2d 默认在 `视频` 列完成后收为 `clip_delivery_complete`；本 skill 只在用户显式要成片、BGM、烧字幕、母带、交付矩阵、发布证据包，或 `_设置.md` 写 `合成阶段: 启用` 时进入。直接调用本 skill 等同于用户选择启用本集的合成尾段。`master_delivery_complete` 还需要后续 release/readiness、production locks、creative governance 和人工验收通过，不能把单个 MP4 存在误当可发布。
 
-> **视频阶段后的真实粗剪代理**：即使合成尾段保持跳过，视频齐片后也可运行 `python3 skills/n2d-compose/scripts/post_video_proxy.py <作品根> 第N集 --render --json`。它只用真实已生成 Clip + `edit_target_sec` 产 `合成/<集>/_proxy/actual_rough_cut.mp4`，用于尽早检查节奏、镜序和多余尾巴；不加配音/BGM/字幕/调色，既不回写成片列，也不等于 `master_delivery_complete`。正式 compose 应复用同一 edit target 语义，而不是继承后端原片的离散时长。
+> **视频阶段后的真实粗剪代理 + OTIO**：animatic 创建 working `editorial_timeline.otio` 与签收专用 `animatic_timeline.otio` 快照；每个 Clip 验收后只刷新 working 时间线，齐片后 `post_video_proxy.py --render` 生成 `actual_rough_cut.mp4`。只认 manifest `status=accepted`。final voice 未生成时，OTIO 的 A1 用 `MissingReference` 建 planned audio slots，时长和文本来自 `timing_estimate.json`；它们是编辑槽位，不是假音频。final voice 到位后刷新为真实媒体引用。OTIO 同时保留声音 route、casting 状态、V1、旁白/对白、环境/拟音、BGM、字幕 marker、媒体哈希、缺料槽位和 `seam_mode`。
 
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
@@ -17,7 +17,7 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill涉及的选择点：`合成阶段`、`BGM来源`、`画幅`、`制作模式`（决定配音轨是否需先拟合到已锁定视频镜头长·见「先出视频后配音」节）、`视频原生音轨`（丢弃 / 低音量混入环境声 / 保留原片音轨）、`后期拟音策略`（自动 / 强制叠加 / 关闭）、`目标平台`、`发行地区`、`合规用途`。其中 `目标平台/发行地区/合规用途` 只是偏好入口，**实际放行以 `合规/compliance_manifest.json` 为准**，不得只看 `_设置.md`。
+本 skill涉及的选择点：`合成阶段`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
 
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
@@ -27,20 +27,15 @@ description: Optional post-video stage of n2d (剪映合成的脚本化替代) �
 - **卡点**：爽点的冲击 = 画面 + 声音同一帧砸下。用 `BGM_OFFSET` 平移 BGM，让 drop/炸点落在 `故事板.md` 标的爽点时间戳（如 `💥爽点 @ 0:48`）那一帧；反转/觉醒处铺 bgm.txt 标的"重音"音效。
 - **留白呼吸**：爆发后那个 `留白·定格` clip 不要被音效填满——让它喘一口（必要时 BGM 瞬时拉低再起）。
 - **声音连续 / J-cut / 空镜缓冲**：合成默认尊重 `故事板.md` 的衔接设计：BGM 全程连续铺底，不按 clip 断；空镜缓冲 clip 原样保留呼吸；默认 `J_CUT_SEC=0.25`，脚本基于 `line_*.wav + 时长清单.json` 重建轻量提前入声的配音轨，让下一句更早粘住画面切换。正面口型特写多的集可设 `J_CUT_SEC=0` 关闭。
-- **按转场类型接 clip，别盲拼**（接力链末端兜底）：读 `故事板.md`/`storyboard.json` 每个接缝的 `转场类型` 决定接法，而不是一律裸切——
-  - `match_cut / 动作切 / 有尾帧接力的硬切`：直接硬切（上游已用首尾双帧焊好接点，这里无缝最稳）。
-  - `空镜缓冲`：契约要求缓冲但 `视频/` 里没有对应空镜 clip → **停下报警**（缺料），不要默默硬切糊过去；有就原样保留其呼吸。
-  - `转场未定 / 上下 clip 视觉跳变明显`（接点没焊住又非有意硬切）：可加 **0.1–0.3s 微交叉溶解**兜底跳切——ffmpeg `xfade` 滤镜即可（不依赖 libass），仅在该接缝局部重编码、其余仍 `concat -c copy`。爽点/反转的有意硬切**不要**加溶解（会泄掉冲击）。
-  - 默认策略走 `创作偏好-默认.md`，可在 `_设置.md` 记 `接缝兜底=硬切|微溶解|报警`；接法属可控点，拿不准时按"有意硬切硬切、跳变溶解、缺空镜报警"。
-  - **实现现状（已落地·不再是 TODO）**：`compose.sh` 拼接步已改调 `seam_concat.py`——自动读 `storyboard.json` 每接缝 `continuity.transition` 分类：**硬切→裸拼、微溶解→局部 `xfade`、缺空镜→报警**（写 `合成/<ep>/_work/接缝报告.md` + stderr）。**支持 Split Relay (拆段接力)**：同一逻辑镜的子段（`_partN`）强制硬切以保证无缝，仅跨逻辑镜接缝才应用 storyboard 转场。实现策略：硬切/报警/Split子段相连的 clip 归为一个 run 先 `concat -c copy`（零重编码），只在**溶解接缝**间做 xfade，把重编码压到最小。**无溶解接缝时等价今天的 `concat -c copy`**；clip 数与 storyboard 对不上、或 ffmpeg 失败 → 自动回退裸拼，绝不中断合成。兜底/溶解秒可用环境变量 `SEAM_FALLBACK`（默认硬切）/`SEAM_DISSOLVE_SEC`（默认 0.25）覆盖。缺空镜仍只报警**不自造素材**——要消除生硬跳切需人工补一个空镜 clip 再合成。`seam_concat.py --plan-only` 可干跑看接法计划。
-- **配音先行**：BGM 垫在配音下面并被配音 ducking（先有配音再压 BGM）。配音轨由 n2d-voice 在前置阶段产出，本 skill **只消费不生成**。
-- **后配音默认线（2026-07 当前代码默认）**：`制作模式` 的机器真值来自 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT`，当前为 `先出视频后配音`：先用估算/占位时长推进画面，真实配音在视频后补并拟合。长期量产、少返工或声音一致性优先时，应在首跑选择里主动改 `制作模式=配音先行`；那条线的视频层只生产无声 Image2Video，对白层由 CosyVoice / Fish Speech / MiniMax Speech / 其它 TTS 独立生成并按角色固定音色。`原生音画` 仅作为快速预览或特殊后端选项。
+- **按 `seam_mode` 接 clip**：优先读 P-3 chain。只有 relay 要相同边界帧；match-on-action、graphic match、eyeline、reaction、insert、J/L、hard cut 与 intentional discontinuity 保留各自证据并切接；dissolve 按每缝 `seam_evidence.duration_sec` 写 OTIO Transition/xfade。显式 dissolve 渲染失败直接阻断，不静默降成硬切；缺显式模式先回 P-2/P-3。
+- **声音选角先行、最终配音后置**：机器默认是 `混合自动路由`。本 skill 不生成角色 final voice；它只消费已签收声音、逐镜原生音轨和 planned audio slots。需要外部声音的 route 在 final voice 未齐时阻断正式合成。
+- **后期口型是独立交付通道**：`base_video_then_post_lipsync` 镜头不能直接把 base plate 当最终 clip。compose/review gate 要求 `出视频/第N集/视频_lipsync/Clip_XX_lipsync.mp4` 存在并通过 QC；OTIO V1 应引用该版本。
 - **张力感知 BGM 增益（爽点抬/细节压·替代一刀切）**：`DUCK_RATIO` 是整集统一档；要让爽点/爆发镜 BGM 顶上去、悬念/细节镜压更狠，先跑 `python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr` 读 `storyboard.json` 每 Clip `rhythm` 映射成随时间变化的 BGM 基准音量包络，再喂给 compose：`BGM_GAIN_EXPR="$(python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr)" bash compose.sh ...`。这条增益作用在 voice 侧链 ducking **之前**的 BGM 基准上，与既有 `DUCK_RATIO` 侧链叠加。**不传 `BGM_GAIN_EXPR` 时保持原固定 `0.9/0.85` 行为**（向后兼容）；缺 storyboard 时给提示不臆造。`tension_mix.py`（无 `--expr`）打人读包络图 + 建议叠音效的爽点镜清单。
 - **🎼 角色/势力主题动机（leitmotif·确定性复用）**：BGM 此前只到「逐集情绪 + 张力 ducking」，没有跨集「听见就知道是他」的复现旋律。生成式音乐跨集维持同一动机极不稳，故用**确定性复用**：可选 `<作品根>/设定库/motif.json`（`{"沈念":{"file":"素材/motif/shen.wav","cue":"focus","gain":0.5}}`）一次性登记角色/势力的一段动机 clip。compose `[6/6]` 后自动跑 `motif_registry.py --mix`：读 `时长清单.json` 在角色焦点 span 开头铺**同一段 clip**（`min_gap` 去重防刷屏），视频流直 copy 只改音轨。缺 motif.json=空规划 no-op，成片一字不动。巡检：`python3 motif_registry.py <作品根> 第N集`。
 - **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`，量成片**集成响度/真峰** vs 平台目标（youtube/bilibili/tiktok≈-14、broadcast -23、默认 -16 LUFS·候选快照），advisory 不阻断——超标给整改提示（既有逐句 loudnorm + dynaudnorm/alimiter 之外的最终符合性对账）。`--platform` 可指定目标。
-- **粗剪锁版 + 交付包装证据包（review warn 回灌）**：成片通过不只看 MP4 存在。每次正式合成后要补齐或刷新 `final_timeline_probe_第N集.json`；`final_timeline_probe.py --write` 同时写 `合成/<集>/_work/timeline.json` 和 `合成/<集>/rough_cut_preview.html`，这是 rough cut lock 的机器证据。生成后 review 前还会补 `script_supervisor_log_第N集.jsonl`，把每个 storyboard Clip 对到 accepted take/资产/连续性偏差。除此之外还要补齐 `合成/<集>/grade_applied.json`、混合视频后端时的 color match/grade report、`tension_mix`/BGM gain 证据、room tone/foley/ambient bed 证据、`loudness_conform` 报告和 `series_packaging`/release manifest。缺这些证据时，review/score 的 `delivery_packaging_consistency` 只能给 warn/缺数据；production/release profile 下先回 compose 补证据，不把内部预览误当可投放母带。
-- **audio_timing_gate 前置**：正式合成前 `run.py next` 与 `dashboard gate --stage compose` 会消费 `脚本/第N集/preventive_contracts.json` 的 `audio_timing`。对白近景、后配音、原生音画必须先写清口型、字幕、声纹/音色、时长拟合和 overflow 策略；缺字段回 `script_stage2`，不要等 compose 时才发现音画无法对齐。
-- **clip 原生音频处理（P1 原生音画 / 配音先行分流）**：Veo / Seedance / Kling 出的 clip 可能**自带原生音轨**（环境音甚至台词）。n2d-video 阶段保留平台原片，不提前去音轨；本 skill 是唯一处理原生音轨的地方。默认 `配音先行` 会丢弃 clip 原生音轨，不让原生台词接管角色声音；只有显式 `原生音画` 时才保留原片音轨承接台词。选择点 `视频原生音轨`：
+- **粗剪锁版 + 交付包装证据包**：`final_timeline_probe.py --write` 同时刷新 `timeline.json`、`rough_cut_preview.html` 与 `editorial_timeline.otio`，并把阶段推进到 rough_cut/final_master；OTIO sidecar 记录每个媒体 SHA、缺料槽位、轨道和接缝证据。review 前还要补 `script_supervisor_log`、调色、声音、响度、series packaging/release manifest；单个 MP4 存在不能代替这些锁版证据。
+- **audio_timing_gate 前置**：正式合成前除 `preventive_contracts.json.audio_timing` 外，还要检查 `production_mode_route_第N集.json`、`voice_casting.json`、final voice manifest 与 lipsync 产物。对白近景、后配音、原生音画必须写清 timing basis、表演轨、字幕、声纹/音色、时长拟合和 overflow 策略。
+- **clip 原生音频处理（按逐镜 route 分流）**：Veo / Seedance / Kling 出的 clip 可能自带环境音甚至台词。本 skill 是统一处理点：普通/base plate/表演条件镜丢弃模型音轨，低风险环境声镜可压低混入，`native_av` 镜保留原片声。不要用一个项目级开关覆盖所有 Clip。选择点 `视频原生音轨`：
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。
   - `低音量混入环境声`：仅当 n2d-video 的「原生音画 opt-in 清单」确认该 Clip 低风险、无口型、无原生人声时，将 clip 原生音轨按 `CLIP_AUDIO_GAIN`（默认 0.35）压低混入作环境底。
   - `保留原片音轨`：仅用于无配音/测试预览/明确要原片声时；有 n2d-voice 配音轨时 `compose.sh` 会直接阻断，compose gate 也会把“保留原片音轨 + 存在配音轨 + clip 有音频流”视为阻断。原生音画项目若配音轨确认为旁白/系统层，先过 gate/sidecar，再显式 `ALLOW_NATIVE_AV_VOICEOVER=1`；仅内部预览才可 `ALLOW_DOUBLE_VOICE=1` 自担风险。
@@ -127,6 +122,7 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 ## 输入前置
 - `出视频/第N集/视频/` 有 clip MP4（n2d-video 产物，必须是 AI 平台原片，不应出现 `.noaudio.mp4`、`*_noaudio.mp4` 或 `_raw_with_audio/` 这类提前剥音轨中间件）。否则报错建议先 n2d-video。
 - `合成/第N集/配音/voice_{zh,en}.wav`（n2d-voice 产物，可选；无则纯 BGM+字幕）。
+- 混合模式先读 `生产数据/production_mode_route_第N集.json`：若任一 route `final_voice_required=true`，上述 final voice 不再可选；若任一 route `post_lipsync_required=true`，必须先有相应 `视频_lipsync/Clip_XX_lipsync.mp4`。`timing_estimate.json` 只能填 OTIO planned slots，不能作为正式混音输入。
 - `脚本/第N集/字幕_{中文,英文}.srt`。`原生音画` draft 可临时缺中文字幕，但 review/付费投放前必须补 whisperx/词级对齐字幕和 `native_av_subtitle_alignment` sidecar。
 - 正式合成前必须先跑确定性 gate 并入账：`python3 skills/n2d-dashboard/scripts/dashboard.py gate <作品根> 第N集 --stage compose`（内部调用 `n2d-review/scripts/gate.py --json`；检查视频列、`storyboard.json`、clip 音轨/时长、原生音画 opt-in 清单、占位配音、字幕、`合规/compliance_manifest.json` 的平台/本地化计划）。缺合规包时先跑 `python3 skills/n2d-compliance/scripts/compliance.py <作品根> 第N集 --init`，人工补齐后再 `--check`。
 - 发布前建议先跑 `python3 skills/n2d-dashboard/scripts/event_ledger.py doctor <作品根>`，再跑 `release_manifest.py build --write`；manifest 只汇总证据，不替代人审签收。
@@ -139,7 +135,8 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 | 爽点/反转处画面与声音不同步 | 必须用 `BGM_OFFSET` 卡点，确保 drop/炸点与爽点时间戳同一帧砸下 |
 | 在原生音画模式下仍然丢弃 clip 原生音频 | 错误。原生音画模式下台词在 clip 里，必须 `保留原片音轨` |
 | 合成前未检查 `合规/compliance_manifest.json` | 版权/角色授权/声音克隆/平台审核是合规闸门，必须先在合规包声明策略 |
-| 将占位配音烧进正式成片 | 严禁。占位时长不准，会导致音画错位。成片前必须换真音色拟合或配音先行 |
+| 把 `timing_estimate.json` 或占位配音当正式声音 | 严禁。前者没有音频，后者没有签收；先完成声音定妆与 final voice，再刷新 OTIO/拟合 |
+| 直接用 neutral-mouth base plate 合成正面对白 | 先完成 route 要求的独立 lipsync pass，并让 OTIO V1 指向 `视频_lipsync` 版本 |
 | 在 `先出视频后配音` 模式下直接合成 | 必须先跑 `fit_voice_to_clips.py` 拟合真音到锁定槽位，产生拟合轨后再合成 |
 | 忽略 `J-cut` 设计，导致对话感生硬 | 默认开启 `J_CUT_SEC=0.25`，让声音轻微提前入场，增强连贯性 |
 | 字幕遮挡关键画面或风格不符 | 字幕渲染应按 `render_subs.py` 约束，确需调整则修改渲染策略 |

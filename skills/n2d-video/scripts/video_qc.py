@@ -25,6 +25,10 @@ CLIP_RE = re.compile(r"Clip[_\s-]*(\d+)", re.IGNORECASE)
 
 # 同家族复用：接缝机检的阈值与数学只在 n2d-review/temporal_consistency 维护一份。
 REVIEW_SCRIPTS_DIR = Path(__file__).resolve().parents[2] / "n2d-review" / "scripts"
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from seam_contract import needs_end_anchor, normalize_seam_mode, requires_boundary_frame
 
 
 def _load_temporal_module():
@@ -45,9 +49,9 @@ def seam_pairs(indices: Iterable[int]) -> List[Tuple[int, int]]:
     return [(n, n + 1) for n in sorted(s) if n + 1 in s]
 
 
-# 尾帧接力铁律只对"声明了接力"的接缝成立；match/hard/action cut 换机位换构图是设计，
-# dHash 距大是正常剪辑——一律 strict 会把每个切镜都误报成接力断。
-RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")
+# 像素同帧铁律只对 continuous_take_relay 成立。其它 seam_mode 的相邻
+# 画面本就可以不同，dHash/色距仅作信息，不得阻断验收。
+RELAY_TRANSITIONS = ("接力", "relay", "seamless", "continuous")  # legacy aliases
 
 
 def _is_relay_transition(transition: Any) -> bool:
@@ -57,9 +61,9 @@ def _is_relay_transition(transition: Any) -> bool:
 def _declared_relay(transition: Any, need_endframe: bool) -> bool:
     """Whether this seam is a strict cross-clip relay.
 
-    `need_endframe=true` may simply mean the clip has an end frame for
-    first/last-frame guidance.  Explicit hard/match/action cuts keep seam
-    distance informational; missing transition intent remains strict.
+    In migrated legacy boards `need_endframe=true` may have meant within-shot
+    guidance. Explicit hard/match/action cuts therefore keep seam distance
+    informational; new boards use `end_anchor_required` for that purpose.
     """
     text = str(transition or "").strip()
     if _is_relay_transition(text):
@@ -70,44 +74,80 @@ def _declared_relay(transition: Any, need_endframe: bool) -> bool:
 
 
 def seam_strictness(intent: Optional[Dict[str, Any]]) -> str:
-    """接缝执行档位（纯函数）：relay 声明 → strict（block 拦验收）；
-    声明了其他切镜方式 → info（只记录距离供人参考）；
-    无 storyboard 意图 → strict（宁可误报交人判，不静默放过）。"""
+    """Only continuous_take_relay makes cross-frame similarity blocking."""
     if intent is None:
         return "strict"
     if intent.get("model_handled"):
         return "model_handled"
-    if intent.get("relay") or str(intent.get("transition") or "").strip().lower() in RELAY_TRANSITIONS:
+    mode = normalize_seam_mode(
+        intent.get("seam_mode"), intent.get("transition"),
+        need_endframe=bool(intent.get("relay")),
+    ).get("mode")
+    if intent.get("relay") or requires_boundary_frame(mode):
         return "strict"
-    if str(intent.get("transition") or "").strip():
+    if mode or str(intent.get("transition") or "").strip():
         return "info"
     return "strict"
 
 
 def load_seam_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
-    """clip 序号 → storyboard 声明的接缝意图（continuity.transition + need_end_frame）。"""
-    path = root / "脚本" / episode / "storyboard.json"
+    """clip 序号 → P-3 continuity_chain 分类；storyboard 仅作 legacy fallback。"""
+    chain_path = root / "脚本" / episode / "continuity_chain.json"
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        chain = json.loads(chain_path.read_text(encoding="utf-8"))
     except Exception:
-        return {}
+        chain = {}
     out: Dict[int, Dict[str, Any]] = {}
-    for clip in (data.get("clips") or data.get("shots") or []):
-        if not isinstance(clip, dict):
-            continue
-        idx = clip_index(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
-        if idx is None:
-            match = re.search(r"(\d+)\s*$", str(clip.get("id") or ""))
-            idx = int(match.group(1)) if match else None
-        if idx is None:
-            continue
-        cont = clip.get("continuity") or {}
-        transition = cont.get("transition")
-        need_end = bool(clip.get("need_endframe") or cont.get("need_endframe")
-                        or clip.get("need_end_frame") or cont.get("need_end_frame"))
-        out[idx] = {"transition": cont.get("transition"),
-                    # 规范字段 need_endframe（无下划线）；need_end_frame 仅旧别名兜底。
-                    "relay": _declared_relay(transition, need_end)}
+    if isinstance(chain, dict):
+        for seam in chain.get("seams") or []:
+            if not isinstance(seam, dict):
+                continue
+            if seam.get("scope") == "episode_boundary" or (
+                seam.get("from_episode") and str(seam.get("from_episode")) != episode
+            ):
+                continue
+            idx = clip_index(str(seam.get("from_clip") or ""))
+            if idx is None:
+                continue
+            mode_info = normalize_seam_mode(seam.get("seam_mode"), seam.get("transition"))
+            mode = str(mode_info.get("mode") or "")
+            out[idx] = {
+                "transition": seam.get("transition"),
+                "seam_mode": mode,
+                "seam_evidence": seam.get("seam_evidence") or {},
+                "relay": requires_boundary_frame(mode),
+                "source": "continuity_chain",
+            }
+    if not out:
+        path = root / "脚本" / episode / "storyboard.json"
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+        if not isinstance(data, dict):
+            return {}
+        for clip in (data.get("clips") or data.get("shots") or []):
+            if not isinstance(clip, dict):
+                continue
+            idx = clip_index(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+            if idx is None:
+                match = re.search(r"(\d+)\s*$", str(clip.get("id") or ""))
+                idx = int(match.group(1)) if match else None
+            if idx is None:
+                continue
+            cont = clip.get("continuity") or {}
+            transition = cont.get("transition")
+            need_end = bool(clip.get("need_endframe") or cont.get("need_endframe")
+                            or clip.get("need_end_frame") or cont.get("need_end_frame"))
+            mode_info = normalize_seam_mode(cont.get("seam_mode"), transition, need_endframe=need_end)
+            mode = str(mode_info.get("mode") or "")
+            out[idx] = {
+                "transition": transition,
+                "seam_mode": mode,
+                "seam_evidence": cont.get("seam_evidence") or {},
+                "relay": requires_boundary_frame(mode),
+                "source": "storyboard" if mode_info.get("source") == "explicit" else "storyboard_legacy",
+            }
     # Native multi-shot co-generation owns seams inside an activated group.  The
     # seam is still measured, but a large frame distance is informational rather
     # than proof that a first/last-frame relay failed (there was no relay).
@@ -126,7 +166,7 @@ def load_seam_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
 
 def machine_check(payload: Dict[str, Any], context_frames: Optional[Dict[int, Dict[str, str]]] = None,
                   seam_intents: Optional[Dict[int, Dict[str, Any]]] = None) -> None:
-    """就地给 QC payload 加接缝机检：前镜 end 帧 vs 后镜 start 帧（尾帧接力铁律的出视频侧验证）。
+    """就地加接缝机检；只有 continuous_take_relay 的跨帧相似度会阻断。
 
     阈值与 dHash/色距数学复用 n2d-review/temporal_consistency（单一真值源）；
     缺 Pillow / review 模块不可用时写 machine_notes 降级，不臆造分数。
@@ -161,16 +201,18 @@ def machine_check(payload: Dict[str, Any], context_frames: Optional[Dict[int, Di
         intent = (seam_intents or {}).get(n)
         strictness = seam_strictness(intent)
         chk.update({"from_clip": f"Clip_{n:02d}", "to_clip": f"Clip_{m:02d}",
-                    "transition": (intent or {}).get("transition"), "strictness": strictness})
+                    "transition": (intent or {}).get("transition"),
+                    "seam_mode": (intent or {}).get("seam_mode"),
+                    "strictness": strictness})
         if strictness in {"info", "model_handled"} and chk["verdict"] != "ok":
-            # storyboard 声明的设计切镜（match/hard/action cut）——构图必然变，距离只记录不拦。
+            # 非 relay 的设计切镜允许换构图；距离只记录，不拿错标准拦验收。
             chk["verdict_if_relay"] = chk["verdict"]
             chk["verdict"] = "info"
         seams.append(chk)
     if skipped and not checked:
         notes.append("缺 Pillow——接缝机检跳过，交人判 contact sheet。")
     if seam_intents is None and checked:
-        notes.append("storyboard 接缝意图不可用——全部接缝按接力铁律严格判（可能误报设计切镜）。")
+        notes.append("continuity_chain/storyboard 接缝分类不可用——全部接缝保守按 relay 严格判，先回 P-2/P-3 补 seam_mode。")
     payload["seams"] = seams
     payload["machine_summary"] = {
         "seams_checked": checked,
@@ -219,9 +261,8 @@ def load_shot_types(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
         lenses = "；".join(str((s or {}).get("lens", "")) for s in (clip.get("shots") or []))
         cont = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
         out[idx] = {"closeup": is_closeup_shot(clip), "lens": lenses,
-                    # 双帧接力镜：首尾两端帧已锚同人，大表情弧线天然大 dHash → 片内 block 豁免，不误杀。
-                    "double_frame": bool(clip.get("need_endframe") or cont.get("need_endframe")
-                                         or clip.get("need_end_frame") or cont.get("need_end_frame"))}
+                    # 镜内首尾双锚可合法承载较大表情弧；这不等于跨镜同帧接力。
+                    "double_frame": needs_end_anchor(clip)}
     return out
 
 
@@ -704,7 +745,7 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     summary = payload.get("machine_summary") or {}
     seams = payload.get("seams") or []
     lines.append("")
-    lines.append("## Seam machine check（尾帧接力 · 前镜 end 帧 vs 后镜 start 帧）")
+    lines.append("## Seam machine check（按 seam_mode 分类；仅 relay 同帧阻断）")
     lines.append("")
     if summary:
         lines.append(f"- checked: {summary.get('seams_checked', 0)}"

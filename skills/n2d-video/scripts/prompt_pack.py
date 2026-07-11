@@ -25,7 +25,9 @@ if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 
 from video_prompt_compiler import compile_video_prompt, render_compiled_markdown
+from n2d_const import PRODUCTION_MODE_DEFAULT
 from n2d_platform_profiles import anchor_consumption_plan, select_video_frame_strategy
+from seam_contract import needs_end_anchor, normalize_seam_mode
 
 KIND = "n2d_video_prompt_pack"
 CONSUMED_CONTRACTS_KIND = "n2d_prompt_consumed_contracts"
@@ -666,9 +668,14 @@ def handoff_package_line(
     fallback: str,
 ) -> str:
     """Machine-readable summary of the frame handoff the runner must preserve."""
+    seam_mode = normalize_seam_mode(
+        cont.get("seam_mode"), cont.get("transition"),
+        need_endframe=bool(cont.get("need_endframe")),
+    ).get("mode")
     return (
         f"first_frame={first or '无'}；end_frame={endframe or '无'}；midframes={mid_count}；"
-        f"need_endframe={cont.get('need_endframe')}；transition={one_line(cont.get('transition'), '按 storyboard')}；"
+        f"seam_mode={seam_mode or 'missing'}；need_end_anchor={needs_end_anchor(cont)}；"
+        f"transition={one_line(cont.get('transition'), '按 storyboard')}；"
         f"entry_exit={one_line(cont.get('entry_exit') or cont.get('entry_exit_plan'), '按 entity_schedule')}；"
         f"anchor_consumption={one_line(frame_control)}；fallback={fallback}"
     )
@@ -711,7 +718,7 @@ def render_overview(root: Path, ep: str, sb: Mapping[str, Any], route_rows: Mapp
         f"- kind: {KIND}",
         f"- Clip 总数：{len(clips)}",
         f"- 总时长：{total_sec:.3f}s",
-        f"- 制作模式：{project_setting(root, '制作模式', str(sb.get('production_mode') or '先出视频后配音'))}",
+        f"- 制作模式：{project_setting(root, '制作模式', str(sb.get('production_mode') or PRODUCTION_MODE_DEFAULT))}",
         f"- 视频生成音频策略：{project_setting(root, '视频生成音频策略', '无声视频流')}",
         f"- 生视频渠道：{project_setting(root, '生视频渠道', 'Dreamina')}",
         f"- 出视频规格：{project_setting(root, '出视频规格', '预算充足')}",
@@ -922,7 +929,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         route.get("channel") or route.get("backend_channel") or "",
         shot_count=max(1, len(editorial_shots)),
         anchor_count=mid_count,
-        need_end=bool(endframe or cont.get("need_endframe")),
+        need_end=bool(endframe) or needs_end_anchor(cont),
         requires_mid_anchors=_frame_strategy_requires_mid(clip, route, execution_anchors, mid),
         explicit=str(explicit_frame_strategy or ""),
     )
@@ -931,7 +938,7 @@ def render_clip(root: Path, ep: str, idx: int, clip: Mapping[str, Any], route: M
         route.get("primary_backend") or "generic",
         route.get("channel") or route.get("backend_channel") or "",
         anchor_count=mid_count,
-        need_end=bool(endframe or cont.get("need_endframe")),
+        need_end=bool(endframe) or needs_end_anchor(cont),
         frame_strategy=frame_strategy,
     )
     handoff_line = handoff_package_line(first, endframe, mid_count, cont, frame_control, fallback)

@@ -34,8 +34,8 @@ try:  # `制作模式` 取值的单一真值在 n2d_contract.PRODUCTION_MODES；
     from n2d_contract import production_mode_keys as _production_mode_keys
     _PRODUCTION_MODE_KEYS = _production_mode_keys()
 except Exception:  # pragma: no cover - keep generic settings usable outside n2d.
-    _PRODUCTION_MODE_DEFAULT = "先出视频后配音"  # 真值在 n2d_const.PRODUCTION_MODE_DEFAULT；此处仅为导入失败时的兜底
-    _PRODUCTION_MODE_KEYS = ("原生音画", "配音先行", "先出视频后配音")
+    _PRODUCTION_MODE_DEFAULT = "混合自动路由"  # 真值在 n2d_const.PRODUCTION_MODE_DEFAULT；此处仅为导入失败时的兜底
+    _PRODUCTION_MODE_KEYS = ("混合自动路由", "配音先行", "原生音画", "先出视频后配音")
 
 
 DEFAULTS = {
@@ -227,7 +227,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
                 aliases={"不选": "跳过", "默认不选": "跳过", "关闭": "跳过", "关闭合成": "跳过",
                          "开启": "启用", "需要": "启用", "合成": "启用", "合成成片": "启用"},
                 key_aliases=("成片合成", "后期合成", "compose阶段", "compose_stage")),
-    SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say占位", "自定义"), parameterized=True),
+    SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say冒烟", "自定义"),
+                aliases={"say占位": "say冒烟", "macOS say": "say冒烟"}, parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),
     SettingSpec("字幕字号", ("n2d",), ("小", "中", "大", "自定义"), parameterized=True),
     SettingSpec("AI显式角标", ("n2d",), ("开启", "仅元数据", "关闭")),
@@ -1005,6 +1006,13 @@ def production_mode(work_root: str) -> str:
 
 def is_video_first(work_root: str) -> bool:
     return "先出视频" in production_mode(work_root)
+
+
+def is_hybrid_routing(work_root: str) -> bool:
+    """`制作模式=混合自动路由`: timing-first, per-shot sound routing."""
+    mode = production_mode(work_root)
+    low = mode.lower()
+    return "混合自动路由" in mode or "hybrid" in low or "mixed" in low
 
 
 def is_native_av(work_root: str) -> bool:

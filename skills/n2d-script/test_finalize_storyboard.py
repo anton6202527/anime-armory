@@ -34,6 +34,47 @@ def test_placeholder_gate_blocks_finalize(tmp_path):
     assert allowed.returncode == 0
     assert os.path.exists(os.path.join(root, "脚本", ep, "镜头时长.json"))
 
+
+def test_hybrid_finalize_consumes_no_wav_timing_estimate(tmp_path):
+    root, ep = str(tmp_path), "第1集"
+    script_dir = os.path.join(root, "脚本", ep)
+    voice_dir = os.path.join(root, "合成", ep, "配音")
+    os.makedirs(script_dir, exist_ok=True)
+    os.makedirs(voice_dir, exist_ok=True)
+    open(os.path.join(root, "_设置.md"), "w", encoding="utf-8").write(
+        "# _设置\n## 选择\n- 制作模式: 混合自动路由\n"
+    )
+    open(os.path.join(script_dir, "voiceover.txt"), "w", encoding="utf-8").write(
+        "[镜头1·旁白·克制] 夜色压下来。\n"
+    )
+    json.dump({
+        "kind": "n2d_timing_estimate",
+        "version": 1,
+        "episode": ep,
+        "source_fingerprint": "abc",
+        "audio_generated": False,
+        "lines": [{
+            "idx": 0, "镜头": "镜头1", "角色": "旁白", "文本": "夜色压下来。",
+            "时长": 2.0, "start": 0.0, "end": 2.0, "gap_after": 0.0,
+            "timing_basis": "text_estimate_no_audio", "audio_path": "",
+        }],
+    }, open(os.path.join(voice_dir, "timing_estimate.json"), "w", encoding="utf-8"), ensure_ascii=False)
+    json.dump({"clips": [{"id": "Clip_01", "duration": 1.0, "voiceover_indices": [1]}]},
+              open(os.path.join(script_dir, "storyboard.json"), "w", encoding="utf-8"), ensure_ascii=False)
+
+    result = subprocess.run(
+        [sys.executable, os.path.join(_HERE, "finalize_storyboard.py"), root, ep],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "无 WAV" in result.stdout
+    assert not os.path.exists(os.path.join(voice_dir, "时长清单.json"))
+    assert not any(name.endswith(".wav") for name in os.listdir(voice_dir))
+    meta = json.load(open(os.path.join(script_dir, "镜头时长.meta.json"), encoding="utf-8"))
+    assert meta["timing_basis"] == "text_estimate_no_audio"
+    assert meta["provisional"] is True
+
 def test_build_legacy_manifest_reconstructs_timeline():
     # 旧 manifest（无 start/end）：按 gap 模型重建，末句不留拍
     manifest=[

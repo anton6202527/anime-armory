@@ -35,6 +35,8 @@ if str(SCRIPT_DIR) not in sys.path:
 if str(COMMON_DIR) not in sys.path:
     sys.path.insert(0, str(COMMON_DIR))
 
+from n2d_const import PRODUCTION_MODE_DEFAULT
+
 try:
     from n2d_route import normalize_episode, parse_progress
 except Exception:  # pragma: no cover
@@ -1853,7 +1855,7 @@ def _expects_silent_video_stream(root: Path, item: Mapping[str, Any],
     prompt = _prompt_text_for_item(item)
     if _requests_native_speech(prompt):
         return False
-    mode = _setting_value(root, "制作模式", "先出视频后配音")
+    mode = _setting_value(root, "制作模式", PRODUCTION_MODE_DEFAULT)
     policy = _setting_value(root, "视频生成音频策略", "无声视频流")
     if "原生音画" in mode or "原生音画" in policy:
         return False
@@ -2530,6 +2532,21 @@ def count_formal_clips(root: Path, episode: str) -> int:
     return len(logical_clips)
 
 
+def count_accepted_clips(root: Path, episode: str) -> int:
+    """Count accepted logical clips; MP4 presence alone only proves download."""
+    logical_clips = set()
+    for path in (root / "生产数据").glob(f"video_batch_{episode}_*.json"):
+        data = load_json(path)
+        for item in data.get("items") or []:
+            if not isinstance(item, dict) or str(item.get("status") or "").lower() != "accepted":
+                continue
+            raw = str(item.get("story_clip") or item.get("relay_parent") or item.get("clip") or "")
+            match = re.search(r"Clip[_-]?(\d+)", raw, re.IGNORECASE)
+            if match:
+                logical_clips.add(f"Clip_{int(match.group(1)):02d}")
+    return len(logical_clips)
+
+
 def progress_denominator(root: Path, episode: str) -> int:
     if parse_progress is not None:
         try:
@@ -2552,27 +2569,29 @@ def update_progress(root: Path, episode: str) -> None:
     total = progress_denominator(root, episode)
     if total <= 0:
         return
-    count = count_formal_clips(root, episode)
+    count = count_accepted_clips(root, episode)
     progress_py = SKILLS_DIR / "n2d" / "progress.py"
     subprocess.run([sys.executable, str(progress_py), "set", str(root), episode, "视频", f"{count}/{total}"], check=False)
 
 
 def maybe_build_post_video_proxy(root: Path, episode: str) -> Dict[str, Any]:
-    """Render the actual rough-cut proxy once all logical clips are present.
+    """Refresh OTIO/assembly after every accepted clip; render once complete.
 
     Best-effort by design: clip delivery remains valid on a clean machine without
     ffmpeg, while the proxy script records a resumable ``planned_ffmpeg_missing``
     state instead of fabricating a playable asset.
     """
     total = progress_denominator(root, episode)
-    count = count_formal_clips(root, episode)
-    if total <= 0 or count < total:
-        return {"status": "waiting_for_clips", "count": count, "total": total}
+    count = count_accepted_clips(root, episode)
     script = SKILLS_DIR / "n2d-compose" / "scripts" / "post_video_proxy.py"
     if not script.is_file():
         return {"status": "script_missing", "path": str(script)}
+    args = [sys.executable, str(script), str(root), episode]
+    if total > 0 and count >= total:
+        args.append("--render")
+    args.append("--json")
     proc = subprocess.run(
-        [sys.executable, str(script), str(root), episode, "--render", "--json"],
+        args,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -2665,7 +2684,7 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
     if qc_blocks and not allow_qc_block:
         reasons = []
         if machine.get("seam_blocks"):
-            reasons.append(f"接缝机检 block×{machine['seam_blocks']}（尾帧没接上相邻镜首帧，出视频会跳切）")
+            reasons.append(f"接缝机检 block×{machine['seam_blocks']}（continuous_take_relay 边界帧未接上）")
         if machine.get("intra_blocks"):
             reasons.append(f"近景片内身份 block×{machine['intra_blocks']}（脸被表情带着重画，非双帧接力镜）")
         if native_anchor_expected and machine.get("anchor_blocks"):
@@ -2703,8 +2722,8 @@ def accept_clip(root: Path, manifest_file: Path, clip: str, *, no_record: bool =
         record_acceptance(root, episode, item, qc_clip, manifest)
     if not no_progress:
         update_progress(root, episode)
-        item["post_video_proxy"] = maybe_build_post_video_proxy(root, episode)
-        update_manifest(manifest_file, manifest)
+    item["post_video_proxy"] = maybe_build_post_video_proxy(root, episode)
+    update_manifest(manifest_file, manifest)
     _record_flow_milestone(
         root, episode, "video_accepted", clip=item.get("clip"), status=item.get("status"),
         provider=item.get("cost_provider"), artifact=str(target),

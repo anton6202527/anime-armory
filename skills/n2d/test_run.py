@@ -9,10 +9,28 @@ import json
 import sys
 import tempfile
 import hashlib
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 import run  # noqa: E402
 from skill_snapshot import artifact_fingerprint  # noqa: E402  (run.py 已把 _lib 入 sys.path)
+from signoff_contract import new_manifest, profile_spec, record_approval, write_manifest  # noqa: E402
+
+
+def _sign_profile(root, profile, ep="第1集"):
+    spec = profile_spec(Path(root), profile, ep if profile != "p1" else "")
+    payload = new_manifest(
+        Path(root), artifact_scope=spec["artifact_scope"], episode=spec["episode"], author_id="automation:n2d",
+        input_paths=spec["input_paths"], evidence_paths=spec["evidence_paths"], required_role_groups=spec["required_role_groups"],
+    )
+    roles = {
+        "p1": ("director", "producer"),
+        "table_read": ("director",),
+        "p2": ("director", "producer"),
+    }[profile]
+    for role in roles:
+        payload = record_approval(payload, Path(root), reviewer_id="user:fixture", reviewer_role=role, evidence_paths=spec["evidence_paths"])
+    write_manifest(Path(root) / spec["signoff_path"], payload)
 
 
 def _fresh_fp(root, files=()):
@@ -93,6 +111,7 @@ def _write_confirmed_development_pack(root):
     for name in ("adaptation_strategy.json", "season_arc.json", "production_feasibility.json"):
         with open(os.path.join(base, name), "w", encoding="utf-8") as fh:
             json.dump({"kind": "fixture", "status": "confirmed", "content": "已填写"}, fh, ensure_ascii=False)
+    _sign_profile(root, "p1")
 
 
 def _write_confirmed_director_pack(root, ep="第1集"):
@@ -111,13 +130,23 @@ def _write_confirmed_director_pack(root, ep="第1集"):
             }],
         },
         "shot_progression_plan.json": {"kind": "fixture", "status": "confirmed", "progressions": [{"beat_id": "Beat_01", "camera_move": "缓慢推镜"}]},
-        "transition_map.json": {"kind": "fixture", "status": "confirmed", "seams": [{"from_beat": "Beat_01", "to_beat": "Beat_02", "transition_type": "eyeline"}]},
+        "transition_map.json": {"kind": "fixture", "status": "confirmed", "seams": [{
+            "seam_id": "Seam_01", "from_beat": "Beat_01", "to_beat": "Beat_02",
+            "transition_type": "eyeline", "seam_mode": "eyeline_cut",
+            "seam_mode_source": "explicit",
+            "seam_evidence": {"eyeline_source": "CHAR_A", "eyeline_target": "CHAR_B", "axis": "A-B axis"},
+            "need_endframe": False,
+        }]},
         "vertical_composition_plan.json": {"kind": "fixture", "status": "confirmed", "composition_rules": {"safe_zone": "bottom clear"}},
         "edit_rhythm_map.json": {"kind": "fixture", "status": "confirmed", "timeline": {"first_3s_hook": "visual conflict"}},
     }
     for name, data in payloads.items():
         with open(os.path.join(ep_dir, name), "w", encoding="utf-8") as fh:
             json.dump(data, fh, ensure_ascii=False)
+    table_signoff = os.path.join(ep_dir, "table_read_signoff.json")
+    if not os.path.exists(table_signoff):
+        open(table_signoff, "w", encoding="utf-8").write('{"status":"fixture-upstream"}')
+    _sign_profile(root, "p2", ep)
 
 
 def _write_confirmed_preventive_contract(root, ep="第1集"):
@@ -182,6 +211,7 @@ def _write_confirmed_story_acceptance(root, ep="第1集", kind="table_read"):
         json.dump(payload, fh, ensure_ascii=False)
     with open(os.path.join(ep_dir, md_name), "w", encoding="utf-8") as fh:
         fh.write(f"---\nkind: {payload['kind']}\nstatus: confirmed\n---\n# confirmed\n")
+    _sign_profile(root, kind, ep)
 
 
 # ── 前沿解析 + stage key 反查（真实 fixture 文件）──────────────────────────────
@@ -271,11 +301,11 @@ def test_next_action_done_after_review_signoff():
     assert "clip_delivery_complete" in na["action_card"]["to_user"]
 
 
-def test_production_mode_menu_defaults_to_video_first_post_dub():
+def test_production_mode_menu_defaults_to_hybrid_auto_routing():
     root = make_work(ALL_DONE_TO["script_stage1"])
     menu = run._menu(root, "制作模式")
-    assert menu["options"][:3] == ["配音先行", "原生音画", "先出视频后配音"]
-    assert menu["default_preselect"] == "先出视频后配音"
+    assert menu["options"][:4] == ["混合自动路由", "配音先行", "原生音画", "先出视频后配音"]
+    assert menu["default_preselect"] == "混合自动路由"
 
 
 def test_base_visual_style_menu_includes_reference_media_intake():
@@ -296,6 +326,11 @@ def test_stage_key_of_voice_redirect():
     # 先出视频后配音模式下的 compose→voice 重定向特例
     route = {"ep": "第1集", "col": "成片", "label": "补真实配音", "skill": "n2d-voice"}
     assert run.stage_key_of(route) == "voice"
+
+
+def test_stage_key_of_post_lipsync_redirect():
+    route = {"ep": "第1集", "col": "成片", "label": "完成后期口型/表演 pass", "skill": "n2d-video"}
+    assert run.stage_key_of(route) == "video"
 
 
 # ── 纯决策 decide()：stop 分类 + 优先级 ───────────────────────────────────────
@@ -329,15 +364,24 @@ def test_decide_payment_confirm_image_carries_granularity_menu():
 
 
 def test_decide_video_first_voice_uses_rough_timing_without_payment_menu():
-    root = make_work(ALL_DONE_TO["voice"])
+    root = make_work(ALL_DONE_TO["voice"], settings="- 制作模式: 先出视频后配音\n")
     na = run.decide(root, _route("voice"), "voice", run.Probes())
     assert na["stop_reason"] == "needs_stage_execution"
-    assert "占位/估算时长" in na["action_card"]["headline"]
+    assert "无 WAV 时间基准" in na["action_card"]["headline"]
     assert na["action_card"]["expected_writeback"] == "配音=⏳rough"
-    assert na["action_card"]["recommended_backend"] == "say占位/估算时长"
+    assert na["action_card"]["recommended_backend"] == "纯文本估时（不调用 TTS）"
+    assert "voice_preflight.py prepare" in na["action_card"]["exact_command"]
     assert "menu" not in na["action_card"]
     assert na["action_contract"]["stop_policy"] == "needs_stage_execution"
     assert na["action_contract"]["requires_human_approval"] is False
+
+
+def test_decide_hybrid_voice_preflight_creates_no_wav_contract():
+    root = make_work(ALL_DONE_TO["voice"], settings="- 制作模式: 混合自动路由\n")
+    na = run.decide(root, _route("voice"), "voice", run.Probes())
+    assert na["stop_reason"] == "needs_stage_execution"
+    assert "选角先行" in na["action_card"]["headline"]
+    assert "不生成整集占位/静音 WAV" in na["action_card"]["to_user"]
 
 
 def test_decide_voice_first_payment_menu_is_backend():
@@ -682,6 +726,9 @@ def test_gather_probes_allows_script_stage2_with_confirmed_director_pack():
     _write_confirmed_preventive_contract(root)
     _write_confirmed_director_pack(root)
     _write_confirmed_story_acceptance(root, kind="table_read")
+    # P-2 input fingerprint includes the table-read signoff, so refresh its
+    # approvals after that upstream packet is signed.
+    _sign_profile(root, "p2", "第1集")
 
     probes = run.gather_probes(root, _route("script_stage2"), "script_stage2")
 

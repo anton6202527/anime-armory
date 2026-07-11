@@ -9,6 +9,19 @@ if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
 import story_acceptance_packets as sap  # noqa: E402
+from signoff_contract import new_manifest, profile_spec, record_approval, write_manifest  # noqa: E402
+
+
+def _sign(root: Path, profile: str, ep: str = "第1集") -> None:
+    spec = profile_spec(root, profile, ep)
+    payload = new_manifest(
+        root, artifact_scope=spec["artifact_scope"], episode=ep, author_id="automation:n2d",
+        input_paths=spec["input_paths"], evidence_paths=spec["evidence_paths"], required_role_groups=spec["required_role_groups"],
+    )
+    roles = ("director",) if profile == "table_read" else ("director", "editor")
+    for role in roles:
+        payload = record_approval(payload, root, reviewer_id="user:owner", reviewer_role=role, evidence_paths=spec["evidence_paths"])
+    write_manifest(root / spec["signoff_path"], payload)
 
 
 def _write_inputs(root: Path, ep: str = "第1集") -> None:
@@ -31,13 +44,17 @@ def test_scaffold_and_check_blocks_draft(tmp_path: Path) -> None:
     report = sap.check(tmp_path, "第1集", kind="both")
 
     assert report["status"] == "block"
-    assert report["summary"]["block"] == 5
+    assert report["summary"]["block"] == 7
 
 
 def test_confirmed_packets_pass(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
 
     sap.scaffold(tmp_path, "第1集", kind="both", confirmed=True)
+    unsigned = sap.check(tmp_path, "第1集", kind="both", write_missing=True)
+    assert unsigned["status"] == "block"
+    _sign(tmp_path, "table_read")
+    _sign(tmp_path, "animatic")
     report = sap.check(tmp_path, "第1集", kind="both", write_missing=True)
 
     assert report["status"] == "pass"

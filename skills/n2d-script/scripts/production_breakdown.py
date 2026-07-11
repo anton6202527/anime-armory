@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import hashlib
 import json
@@ -27,6 +28,15 @@ if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 from continuity_chain import KIND as CONTINUITY_CHAIN_KIND  # noqa: E402
 from continuity_chain import build_chain as build_continuity_chain  # noqa: E402
+from continuity_chain import normalize_clip_id  # noqa: E402
+from signoff_contract import (  # noqa: E402
+    load_manifest as load_signoff_manifest,
+    new_manifest as new_signoff_manifest,
+    profile_spec as signoff_profile_spec,
+    validate_manifest as validate_signoff_manifest,
+    write_manifest as write_signoff_manifest,
+)
+from seam_contract import needs_end_anchor, normalize_seam_mode, requires_boundary_frame  # noqa: E402
 
 KIND = "n2d_production_handoff_pack"
 CHECK_KIND = "n2d_production_handoff_pack_check"
@@ -186,6 +196,10 @@ def _clip_continuity(clip: Mapping[str, Any]) -> Mapping[str, Any]:
     return clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
 
 
+def _clip_requires_endframe(clip: Mapping[str, Any]) -> bool:
+    return needs_end_anchor(clip)
+
+
 def _clip_entity(clip: Mapping[str, Any]) -> Mapping[str, Any]:
     return clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), dict) else {}
 
@@ -227,7 +241,7 @@ def _backend_risk(clip: Mapping[str, Any]) -> str:
         risks.append("系统面板镜头禁止烤字，保留干净面板区给后期叠字。")
     if "dialogue" in template or "CU" in str(continuity.get("shot_size") or ""):
         risks.append("近景/对话镜优先锁脸和视线，口型只做视觉占位。")
-    return " ".join(risks) if risks else "常规镜头：继承本场轴线、光位和身份参考，按首尾帧接力。"
+    return " ".join(risks) if risks else "常规镜头：继承本场轴线、光位和身份参考，按 seam_mode 执行剪辑。"
 
 
 def _department_notes(clip: Mapping[str, Any]) -> Dict[str, str]:
@@ -319,9 +333,14 @@ def _production_breakdown(root: Path, ep: str, clips: List[Dict[str, Any]], *, c
     for idx, clip in enumerate(clips, start=1):
         vfx_assets = _vfx_assets(clip)
         continuity = _clip_continuity(clip)
-        need_endframe = bool(continuity.get("need_endframe") or continuity.get("need_end") or continuity.get("endframe"))
+        seam = normalize_seam_mode(
+            continuity.get("seam_mode"), continuity.get("transition"),
+            need_endframe=bool(continuity.get("need_endframe")),
+        )
+        relay_boundary = requires_boundary_frame(seam.get("mode"))
+        need_end_anchor = needs_end_anchor(clip)
         endframe = clip.get("endframe_png") or continuity.get("endframe_png") or continuity.get("last_frame") or ""
-        if not need_endframe:
+        if not need_end_anchor:
             endframe = ""
         scenes.append({
             "clip_id": _clip_id(clip, idx),
@@ -344,6 +363,8 @@ def _production_breakdown(root: Path, ep: str, clips: List[Dict[str, Any]], *, c
             "image_video_requirements": {
                 "firstframe": clip.get("firstframe_png") or "",
                 "endframe": endframe,
+                "end_anchor_required": need_end_anchor,
+                "relay_boundary": relay_boundary,
                 "anchors": _as_list(continuity.get("anchors")),
                 "backend_risk": _backend_risk(clip),
             },
@@ -417,13 +438,53 @@ def _continuity_breakdown(ep: str, clips: List[Dict[str, Any]], *, confirmed: bo
 def _continuity_chain(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirmed: bool = False) -> Dict[str, Any]:
     prev_ep = _previous_episode(root, ep)
     prev_clips = _clips(root, prev_ep) if prev_ep else []
+    # P-2 transition_map is the director/editor seam decision surface.  Merge it
+    # into a copy of storyboard clips before materializing the canonical chain;
+    # downstream never has to guess seam type from free-form transition prose.
+    enriched = copy.deepcopy(clips)
+    by_id = {_clip_id(clip, idx): clip for idx, clip in enumerate(enriched, 1)}
+    transition_map = load_json(_episode_dir(root, ep) / "transition_map.json")
+    if isinstance(transition_map, Mapping):
+        for idx, row in enumerate(transition_map.get("seams") or [], 1):
+            if not isinstance(row, Mapping):
+                continue
+            raw_from = row.get("from_beat") or row.get("from_clip") or f"Clip_{idx:02d}"
+            normalized = normalize_clip_id(raw_from, idx)
+            clip = by_id.get(normalized)
+            if not isinstance(clip, dict):
+                continue
+            continuity = clip.get("continuity") if isinstance(clip.get("continuity"), dict) else {}
+            continuity = dict(continuity)
+            continuity["seam_mode"] = row.get("seam_mode") or continuity.get("seam_mode") or ""
+            continuity["seam_evidence"] = row.get("seam_evidence") or continuity.get("seam_evidence") or {}
+            continuity["transition"] = row.get("transition_type") or continuity.get("transition") or ""
+            legacy_end_anchor = needs_end_anchor(clip)
+            mode = normalize_seam_mode(
+                continuity.get("seam_mode"), continuity.get("transition"),
+                need_endframe=bool(continuity.get("need_endframe")),
+            ).get("mode")
+            continuity["need_endframe"] = requires_boundary_frame(mode)
+            if legacy_end_anchor and not continuity["need_endframe"]:
+                continuity["end_anchor_required"] = True
+            clip["continuity"] = continuity
     payload = build_continuity_chain(
         ep,
-        clips,
+        enriched,
         previous_episode=prev_ep,
         previous_clips=prev_clips,
         status="confirmed" if confirmed else "draft",
     )
+    for seam in payload.get("seams") or []:
+        if not isinstance(seam, dict) or not requires_boundary_frame(seam.get("seam_mode")):
+            continue
+        for path_key, hash_key in (
+            ("required_boundary_frame", "required_boundary_frame_sha256"),
+            ("next_firstframe", "next_firstframe_sha256"),
+        ):
+            raw = str(seam.get(path_key) or "").strip()
+            path = Path(raw)
+            path = path if path.is_absolute() else root / path
+            seam[hash_key] = file_sha256(path) if path.is_file() else ""
     payload["generated_at"] = now_iso()
     payload["owner"] = "script_supervisor"
     payload["inputs"] = {
@@ -431,9 +492,9 @@ def _continuity_chain(root: Path, ep: str, clips: List[Dict[str, Any]], *, confi
         "previous_storyboard": f"脚本/{prev_ep}/storyboard.json" if prev_ep else "",
     }
     payload["policy"] = {
-        "transition_owner": "Clip N 的 continuity.transition/need_endframe 描述 Clip N -> Clip N+1；跨集首镜必须写 continuity.episode_boundary。",
-        "relay_requires": "上一镜 need_endframe=true + endframe_png；下一镜 firstframe_png；start/end state 已确认。",
-        "design_cut_requires": "显式 transition；硬切/跳切/转场不做帧级接力，但必须保持在场链和剧情状态可解释。",
+        "transition_owner": "P-2 transition_map.seams[].seam_mode + seam_evidence 是导演剪辑决策；P-3 continuity_chain 是下游机器真值。",
+        "relay_requires": "仅 continuous_take_relay 要求 need_endframe=true + endframe_png + 下一镜 firstframe_png。",
+        "design_cut_requires": "match_on_action/eyeline/J-L/反应/插入/溶解/硬切各填自己的模式证据，不要求相邻帧像素相同。",
     }
     return payload
 
@@ -561,7 +622,7 @@ def _schedule_priority(clip: Mapping[str, Any]) -> str:
     if any(token in template or token in text for token in high_tokens):
         return "high"
     continuity = _clip_continuity(clip)
-    if _as_list(continuity.get("anchors")) or continuity.get("need_endframe"):
+    if _as_list(continuity.get("anchors")) or _clip_requires_endframe(clip):
         return "medium"
     return "normal"
 
@@ -739,7 +800,9 @@ def _ai_call_sheet(root: Path, ep: str, clips: List[Dict[str, Any]], *, confirme
                 scene=str(clip.get("scene") or "").replace("|", "/"),
                 duration=clip.get("duration") or "",
                 risk=str(clip.get("template") or clip.get("rhythm") or "standard_scene").replace("|", "/"),
-                hold="尾帧" if continuity.get("need_endframe") else "无尾帧要求",
+                hold=("连续 take 同帧接力" if requires_boundary_frame(continuity.get("seam_mode"))
+                      else "镜内尾锚（非接力）" if _clip_requires_endframe(clip)
+                      else "按 seam_mode 剪辑；无尾锚要求"),
             )
         )
     body = "\n".join(rows) if rows else "| 1 | Clip_01 | 待补 | 待补 | 待补 | 待补 |"
@@ -843,6 +906,18 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
         "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
     }
     write_json_atomic(ep_dir / "production_handoff_pack.json", manifest)
+    signoff_spec = signoff_profile_spec(root, "p3", ep)
+    signoff_path = root / signoff_spec["signoff_path"]
+    if not signoff_path.exists():
+        write_signoff_manifest(signoff_path, new_signoff_manifest(
+            root,
+            artifact_scope=signoff_spec["artifact_scope"],
+            episode=ep,
+            author_id="automation:n2d",
+            input_paths=signoff_spec["input_paths"],
+            evidence_paths=signoff_spec["evidence_paths"],
+            required_role_groups=signoff_spec["required_role_groups"],
+        ))
     overview = _write_overview(root, ep)
     return {
         "kind": KIND,
@@ -854,6 +929,20 @@ def scaffold(root: Path, ep: str, *, force: bool = False, confirmed: bool = Fals
         "overview_path": overview,
         "batch_seed": [seed_json, seed_md],
     }
+
+
+def _signoff_status(root: Path, ep: str) -> Dict[str, Any]:
+    spec = signoff_profile_spec(root, "p3", ep)
+    path = root / spec["signoff_path"]
+    issues = validate_signoff_manifest(
+        load_signoff_manifest(path),
+        root,
+        artifact_scope=spec["artifact_scope"],
+        input_paths=spec["input_paths"],
+        evidence_paths=spec["evidence_paths"],
+        required_role_groups=spec["required_role_groups"],
+    )
+    return {"rel": spec["signoff_path"], "status": "pass" if not issues else "block", "issues": issues}
 
 
 def _batch_seed_status(root: Path, ep: str) -> Dict[str, Any]:
@@ -975,6 +1064,7 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         rows.append({"rel": rel, "status": status, "issues": issues})
     rows.append(_handoff_manifest_status(root, ep))
     rows.append(_batch_seed_status(root, ep))
+    rows.append(_signoff_status(root, ep))
     blockers = [row for row in rows if row["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,
@@ -991,7 +1081,7 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         "files": rows,
         "scaffold_command": f"python3 skills/n2d-script/scripts/production_breakdown.py {root} {ep} scaffold --write",
         "next_when_blocked": (
-            "补齐 P-3 制片交接包，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
+            "补齐 P-3 制片交接包并把内容 status 改为 confirmed；再用 signoff.py 由制片/副导演/场记角色签收当前文件哈希。"
             "确认 ai_shooting_schedule 已导出 batch seed；之后重跑 check，再进入出图 prompt。"
         ),
     }

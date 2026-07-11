@@ -967,6 +967,49 @@ def job_reference_status(root: Path, job: dict[str, Any]) -> tuple[list[str], li
     return missing, valid
 
 
+def stale_generated_references(
+    root: Path,
+    job: dict[str, Any],
+    sha_cache: dict[str, str],
+) -> list[dict[str, str]]:
+    """比对生成时 reference manifest 记录的 sha256 与当前参考图内容。
+
+    只检查生成时真实附入过的参考图：内容变化或文件消失都视为陈旧。
+    生成之后新补充的参考图（扩充视图）不在此列，保持"参考扩充不强制重抽"。
+    manifest 文件缺失或不可解析时跳过（旧数据没有逐格 manifest）。
+    """
+    manifest_rel = str(job.get("reference_manifest") or "").strip()
+    if not manifest_rel or str(job.get("status") or "") != "ready":
+        return []
+    manifest_path = resolve_path(root, manifest_rel)
+    if not manifest_path.is_file():
+        return []
+    try:
+        manifest = load_json(manifest_path)
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(manifest, dict):
+        return []
+    stale: list[dict[str, str]] = []
+    for record in manifest.get("references") or []:
+        if not isinstance(record, dict):
+            continue
+        recorded_sha = str(record.get("sha256") or "").strip()
+        raw = str(record.get("path") or "").strip()
+        if not recorded_sha or not raw:
+            continue
+        path = resolve_path(root, raw)
+        if not path.is_file():
+            stale.append({"id": str(record.get("id") or ""), "path": raw, "reason": "reference_file_missing"})
+            continue
+        key = str(path.resolve())
+        if key not in sha_cache:
+            sha_cache[key] = file_sha256(path)
+        if sha_cache[key] != recorded_sha:
+            stale.append({"id": str(record.get("id") or ""), "path": raw, "reason": "reference_content_changed"})
+    return stale
+
+
 def report_markdown(report: dict[str, Any]) -> str:
     lines = [
         f"# 漫画一致性报告 — {report['chapter']}",
@@ -1038,6 +1081,7 @@ def report(args: argparse.Namespace) -> int:
     refs_seen: set[str] = set()
     panels: list[dict[str, Any]] = []
     rerun_targets: list[str] = []
+    reference_sha_cache: dict[str, str] = {}
     for job in jobs.get("jobs") or []:
         pid = str(job.get("panel_id") or "")
         missing, valid = job_reference_status(root, job)
@@ -1047,6 +1091,7 @@ def report(args: argparse.Namespace) -> int:
         for rid in missing:
             missing_refs.setdefault(rid, []).append(pid)
         generated_count = int(job.get("reference_input_count") or 0)
+        stale_refs = stale_generated_references(root, job, reference_sha_cache)
         needs_rerun = False
         reason = ""
         if valid and job.get("status") == "ready" and generated_count == 0:
@@ -1055,6 +1100,11 @@ def report(args: argparse.Namespace) -> int:
         elif valid and job.get("status") == "ready" and not job.get("reference_manifest"):
             needs_rerun = True
             reason = "ready panel has no reference manifest evidence"
+        elif stale_refs:
+            needs_rerun = True
+            reason = "generated-with reference images changed after generation: " + ",".join(
+                f"{item.get('id') or item.get('path')}({item.get('reason')})" for item in stale_refs
+            )
         reference_delta = max(0, len(valid) - generated_count) if valid and job.get("status") == "ready" else 0
         if needs_rerun:
             rerun_targets.append(pid)
@@ -1067,6 +1117,7 @@ def report(args: argparse.Namespace) -> int:
                 "missing_refs": missing,
                 "generated_reference_input_count": generated_count,
                 "reference_manifest": job.get("reference_manifest", ""),
+                "stale_generated_refs": stale_refs,
                 "needs_rerun": needs_rerun,
                 "rerun_reason": reason,
                 "reference_delta_after_rebind": reference_delta,

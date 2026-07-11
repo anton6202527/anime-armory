@@ -691,6 +691,8 @@ def main() -> int:
                         "reference_input_mode": "codex_exec_image_flags",
                         "reference_input_count": len(reference_records),
                         "reference_manifest": rel_to_root(root, reference_manifest),
+                        "generated_from_contract_sha256": str(job.get("source_contract_sha256") or ""),
+                        "generated_from_submit_prompt_sha256": str(job.get("submit_prompt_sha256") or ""),
                         "post_qc": post_qc,
                     }
                 )

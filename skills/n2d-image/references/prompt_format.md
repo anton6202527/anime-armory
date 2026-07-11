@@ -288,7 +288,7 @@
 **固定 seed 策略**（含角色镜必填；普通无人物镜写“无”）：从 `identity_registry.json` 当前 `CHAR_xx/形态.generation_control` 读取 `seed_strategy=fixed_pool` 和本镜用途 seed；生成事件必须记录 `requested_seed / effective_seed / seed_effective / seed_support / seed_strategy`。后端不支持或未暴露 seed 时写 `seed_effective=false`，不得把本镜标为 seed 可复现。
 **资产引用注册层**（含关键场景/道具/武器/独立服装/VFX 必填）：`LOC_xx` / `PROP_xx` / `WEAPON_xx` / `OUTFIT_xx` / `VFX_xx`；从 `出图/共享/asset_registry.json` 读取本镜非人物关键资产的 `reference_group`、场景 `scene_dna`、武器 `weapon_profile`、`constraints` 和 `drift_forbidden`；执行时按该 ID 自动传入对应场景/道具/武器/服装/VFX 参考图并继承地标、材质、光色、常驻物件、武器剪影尺度、结构、光位、件数、时代风格等约束。普通无关键非人物资产镜写“无”。用了场景定妆/道具锚/武器法宝定妆却没写资产 ID，gate 阻断。
 **近景/反打身份锁定**（CU/ECU、正反打、过肩反应、表情特写必填；普通镜可写“无”）：引用 `reference_group.face_anchor_refs[]` / `定妆_<角色>_脸部特写.png`；若是强情绪镜，再引用 `reference_group.expressions[]` / `定妆_<角色>_表情.png`。逐项锁角色 DNA 五层：`脸型 / 五官比例 / 发型发髻 / 服装配色 / 标志配饰`，并继承角色圣经的气质/动作习惯。接力帧相邻的反应镜要写“若角色 DNA 五层不一致即返工”。registry 若缺脸部/表情参考，先回共享层从已通过定妆裁切脸部特写并登记到 `reference_group.face_anchor_refs[]`，不得在逐镜里重新抽新脸。
-**尾帧接力生成方式**（正反打/反应/表情镜必填；普通镜可写“无”）：尾帧必须以上一张成图或同镜首帧 `image2image/图生图` 为母图，不得纯文生图；只改表情 / 眼神 / 嘴角 / 细微姿态，不重画演员脸、发髻、发簪、耳坠和服装。若执行后与母图发髻/脸型不一致，归档废料并重出，不得覆盖正式尾帧。
+**尾帧接力生成方式**（兼容字段名，语义=尾锚派生方式；声明尾锚时必填）：尾锚必须以上一张成图或同镜首帧 `image2image/图生图` 为母图，不得纯文生图；只改表情 / 眼神 / 嘴角 / 细微姿态，不重画演员脸、发髻、配饰和服装。它不决定剪辑接缝；是否跨镜同帧只看 `seam_mode=continuous_take_relay`。
 **尾帧专用重抽提示**（当尾帧/下一镜入点主体 ≠ 本镜 `资产身份注册层` 主体时必填；否则写“无”）：说明 `*_end.png` 实际服务的角色/形态，并写目标 `CHAR_xx/形态` 或 `定妆_<角色>_<形态>_脸部特写.png` / `reference_group.face_anchor_refs[]`（强情绪再加 `expressions[]`）；母图只继承构图、光位、前景遮挡和轴线，不继承主镜角色脸。若只写中文角色名、只写“锁脸”、或仍沿用主镜身份层，`image_qc` 视为未锁定并 hard block。
 **本镜出图张数**（每镜必写 · 由 `storyboard.json` 该 Clip 的 `continuity` 推导，让人一眼看出本镜出几张）：`N 张 = 首帧 1 + 尾帧 {need_endframe?1:0} + 执行/验收锚 {len(anchors)|midframe?1:0}`，并附一句"为什么是这个数"（如"E1 两镜位切点 1 张 edit_cut 边界图"/"R1 打斗 2 张执行锚"/"显式 D0 中锚"/"普通 risk-only 镜=首+尾"/"最终镜无尾帧"）。账面合计必须等于本镜在 `出图/第N集/图片/` 落档的 PNG 数，也对账 `00_总览.md` 图数账本与 `出图 X/Y` 分母。
 **中段锚帧生成方式**（`continuity.midframe/anchors` 已声明时必填；未声明写“无”）：逐张 `_mid`/`_aK` 锚帧 = 该 Clip `表演节拍` 在各 `at_sec` 时刻的拍（打斗镜对齐 `template_contract.beats`：起手/发力/命中/受击/收势），以本镜首帧 `image2image` 为母图，只改姿态、不重画脸/发髻/服装/场景，机位构图与首帧一致。出完回填 `anchors[].anchor_png`，过 `image_qc` + 记账 `--meta self_check=pass`（见 SKILL「中段锚帧」节）。
@@ -359,7 +359,7 @@
 14. ✅ 参考图入参清单与预算已写：列出 selected/dropped、后端图数上限、控制图/遮罩/区域槽位和不合格参考剔除原因，不把 planned 或脏参考传给后端
 15. ✅ 关键场景/道具/武器镜已继承 `asset_registry.json`：本镜写了具体 `LOC_xx` / `PROP_xx` / `WEAPON_xx` / `OUTFIT_xx` / `VFX_xx`，reference_group / scene_dna（场景）/ weapon_profile（武器）/ constraints / drift_forbidden 已写进本镜约束，执行时按 ID 自动取参考图、场景 DNA、武器画像和结构/光位约束
 16. ✅ CU/ECU、正反打、过肩反应、表情特写已写 `近景/反打身份锁定`，并引用脸部特写/表情参考锁脸型、发髻和配饰
-17. ✅ 正反打/反应/表情尾帧已写 `尾帧接力生成方式`：必须以上一张成图或同镜首帧 image2image/图生图为母图，不得纯文生图重抽
+17. ✅ 声明尾锚的镜头已写 `尾帧接力生成方式`（兼容字段名）：从同镜首帧 image2image 派生；是否与下一首帧同帧另按 `seam_mode` 验收
 18. ✅ 尾帧/下一镜入点主体不同于本镜 `资产身份注册层` 时，已写 `尾帧专用重抽提示`，并包含目标 `CHAR_xx/形态` 或目标定妆脸部参考
 19. ✅ 首帧=起幅非动作顶点 + 已按计划运镜预留构图余量（④·出图为视频铺路）
 

@@ -23,6 +23,17 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from signoff_contract import (  # noqa: E402
+    load_manifest as load_signoff_manifest,
+    new_manifest as new_signoff_manifest,
+    profile_spec as signoff_profile_spec,
+    validate_manifest as validate_signoff_manifest,
+    write_manifest as write_signoff_manifest,
+)
+
 
 KIND = "n2d_story_acceptance_packets"
 CHECK_KIND = "n2d_story_acceptance_packets_check"
@@ -192,7 +203,8 @@ def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict
             "exposition_not_overloaded": "unreviewed" if not confirmed else "accepted",
             "duration_risk_understood": "unreviewed" if not confirmed else "accepted",
             "rewrite_notes": [],
-            "reviewer": "" if not confirmed else "agent_or_human",
+            "reviewer": "",
+            "signoff_manifest": f"脚本/{ep}/table_read_signoff.json",
         },
     }
 
@@ -243,7 +255,8 @@ def _animatic_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[s
             "mid_episode_drag_checked": "unreviewed" if not confirmed else "accepted",
             "cliffhanger_or_payoff_clear": "unreviewed" if not confirmed else "accepted",
             "image_generation_ready": "unreviewed" if not confirmed else "accepted",
-            "reviewer": "" if not confirmed else "agent_or_human",
+            "reviewer": "",
+            "signoff_manifest": f"脚本/{ep}/animatic_signoff.json",
         },
     }
 
@@ -260,6 +273,11 @@ def _load_animatic_assembler():
 
 
 def _ensure_animatic_preview(root: Path, ep: str) -> None:
+    # Idempotence matters because animatic evidence is hash-signed. A plain
+    # `check --write-missing` must not rewrite generated_at/OTIO and stale an
+    # otherwise valid approval when inputs have not changed.
+    if _animatic_preview_status(root, ep).get("status") == "pass":
+        return
     mod = _load_animatic_assembler()
     if mod is None:
         return
@@ -270,6 +288,7 @@ def _ensure_animatic_preview(root: Path, ep: str) -> None:
 def _animatic_preview_status(root: Path, ep: str) -> Dict[str, Any]:
     manifest = root / "生产数据" / f"animatic_{ep}.json"
     preview = root / "生产数据" / f"animatic_{ep}.html"
+    otio_snapshot = root / "合成" / ep / "_work" / "animatic_timeline.otio"
     issues: List[str] = []
     data = load_json(manifest)
     if not isinstance(data, Mapping):
@@ -290,6 +309,13 @@ def _animatic_preview_status(root: Path, ep: str) -> Dict[str, Any]:
             issues.append("timed animatic preview artifact 缺失")
     if not preview.is_file():
         issues.append("缺 timed animatic HTML 预览")
+    if not otio_snapshot.is_file():
+        issues.append("缺 animatic OTIO 锁版快照")
+    else:
+        otio = load_json(otio_snapshot)
+        phase = (((otio.get("metadata") or {}).get("n2d") or {}).get("phase") if isinstance(otio, Mapping) else "")
+        if otio.get("OTIO_SCHEMA") != "Timeline.1" or phase != "animatic":
+            issues.append("animatic OTIO 快照 schema/phase 不正确")
     return {
         "packet": "animatic_preview",
         "file": str(manifest),
@@ -406,7 +432,38 @@ def scaffold(root: Path, ep: str, *, kind: str = "both", confirmed: bool = False
         if force or not md_path.exists():
             write_atomic(md_path, render_md(payload))
             created.append(str(md_path))
+        signoff_spec = signoff_profile_spec(root, item, ep)
+        signoff_path = root / signoff_spec["signoff_path"]
+        if not signoff_path.exists():
+            write_signoff_manifest(signoff_path, new_signoff_manifest(
+                root,
+                artifact_scope=signoff_spec["artifact_scope"],
+                episode=ep,
+                author_id="automation:n2d",
+                input_paths=signoff_spec["input_paths"],
+                evidence_paths=signoff_spec["evidence_paths"],
+                required_role_groups=signoff_spec["required_role_groups"],
+            ))
     return {"kind": KIND, "episode": ep, "created": created, "status": "scaffolded"}
+
+
+def _signoff_status(root: Path, ep: str, kind: str) -> Dict[str, Any]:
+    spec = signoff_profile_spec(root, kind, ep)
+    path = root / spec["signoff_path"]
+    issues = validate_signoff_manifest(
+        load_signoff_manifest(path),
+        root,
+        artifact_scope=spec["artifact_scope"],
+        input_paths=spec["input_paths"],
+        evidence_paths=spec["evidence_paths"],
+        required_role_groups=spec["required_role_groups"],
+    )
+    return {
+        "packet": kind,
+        "file": str(path),
+        "status": "pass" if not issues else "block",
+        "issues": issues,
+    }
 
 
 def _json_status(root: Path, path: Path) -> Tuple[str, List[str]]:
@@ -456,6 +513,7 @@ def check(root: Path, ep: str, *, kind: str = "both", write_missing: bool = Fals
         if item == "animatic":
             rows.append(_animatic_preview_status(root, ep))
             rows.append(_story_economy_status(root, ep))
+        rows.append(_signoff_status(root, ep, item))
     blockers = [r for r in rows if r["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,
@@ -466,7 +524,7 @@ def check(root: Path, ep: str, *, kind: str = "both", write_missing: bool = Fals
         "generated_at": now_iso(),
         "summary": {"required": len(rows), "pass": len(rows) - len(blockers), "block": len(blockers)},
         "files": rows,
-        "next_when_blocked": "补齐围读/animatic 低成本验收包，生成 timed animatic 预览，删除占位，并把 JSON 与 Markdown 的 status 改为 confirmed。",
+        "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
     }
     out = root / "生产数据" / f"story_acceptance_packets_check_{kind}_{ep}.json"
     write_json_atomic(out, payload)

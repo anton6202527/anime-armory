@@ -21,6 +21,24 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from signoff_contract import (  # noqa: E402
+    load_manifest as load_signoff_manifest,
+    new_manifest as new_signoff_manifest,
+    profile_spec as signoff_profile_spec,
+    validate_manifest as validate_signoff_manifest,
+    write_manifest as write_signoff_manifest,
+)
+from seam_contract import (  # noqa: E402
+    missing_evidence,
+    normalize_seam_mode,
+    requires_boundary_frame,
+    requirements_for,
+    seam_evidence,
+)
+
 KIND = "n2d_director_blocking_pack"
 CHECK_KIND = "n2d_director_blocking_pack_check"
 VERSION = 1
@@ -368,7 +386,7 @@ def _beat_sheet(root: Path, ep: str, lines: List[str]) -> Dict[str, Any]:
             "kind": "n2d_director_beat_sheet",
             "version": VERSION,
             "episode": ep,
-            "status": "confirmed",
+            "status": "draft",
             "generated_at": now_iso(),
             "inputs": {
                 "voiceover": f"脚本/{ep}/voiceover.txt",
@@ -423,7 +441,7 @@ def _axis_blocking_map(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str
         "kind": "n2d_axis_blocking_map",
         "version": VERSION,
         "episode": ep,
-        "status": "confirmed" if clips else "draft",
+        "status": "draft",
         "generated_at": now_iso(),
         "scene_axis_rules": [
             {
@@ -469,7 +487,7 @@ def _shot_progression_plan(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict
             "kind": "n2d_shot_progression_plan",
             "version": VERSION,
             "episode": ep,
-            "status": "confirmed",
+            "status": "draft",
             "generated_at": now_iso(),
             "rules": {
                 "establishing": "每个场面先交代角色、压迫源和关键道具/VFX，竖屏里脸部仍可辨。",
@@ -513,14 +531,29 @@ def _transition_map(root: Path, ep: str, beat_ids: List[str]) -> Dict[str, Any]:
         for idx, (prev, nxt) in enumerate(zip(clips, clips[1:]), start=1):
             prev_cont = _clip_continuity(prev)
             next_cont = _clip_continuity(nxt)
+            # A seam is owned by the outgoing Clip. Incoming-only legacy text
+            # is a fallback, never allowed to override the outgoing decision.
+            transition = _clean_text(prev_cont.get("transition") or next_cont.get("transition"), "cut")
+            mode_info = normalize_seam_mode(
+                prev_cont.get("seam_mode"),
+                transition,
+                need_endframe=bool(prev_cont.get("need_endframe")),
+            )
+            mode = str(mode_info.get("mode") or "")
+            evidence = dict(seam_evidence(prev_cont))
+            for field in requirements_for(mode):
+                evidence.setdefault(field, f"待补：{field}")
             seams.append({
                 "seam_id": f"Seam_{idx:02d}",
                 "from_beat": str(prev.get("id") or f"Clip_{idx:02d}"),
                 "to_beat": str(nxt.get("id") or f"Clip_{idx + 1:02d}"),
                 "out_point": _clean_text(prev_cont.get("end_state"), "上一镜动作/信息完成落点"),
                 "in_point": _clean_text(next_cont.get("start_state"), "下一镜接住上一镜状态"),
-                "transition_type": _clean_text(next_cont.get("transition") or prev_cont.get("transition"), "cut"),
-                "need_endframe": bool(prev_cont.get("need_endframe", True)),
+                "transition_type": transition,
+                "seam_mode": mode,
+                "seam_mode_source": mode_info.get("source"),
+                "seam_evidence": evidence,
+                "need_endframe": requires_boundary_frame(mode),
                 "sound_bridge": _clip_post_cues(prev),
                 "continuity_guard": _clean_text(
                     next_cont.get("eyeline") or prev_cont.get("eyeline"),
@@ -531,7 +564,7 @@ def _transition_map(root: Path, ep: str, beat_ids: List[str]) -> Dict[str, Any]:
             "kind": "n2d_transition_map",
             "version": VERSION,
             "episode": ep,
-            "status": "confirmed",
+            "status": "draft",
             "generated_at": now_iso(),
             "seams": seams,
         }
@@ -544,7 +577,10 @@ def _transition_map(root: Path, ep: str, beat_ids: List[str]) -> Dict[str, Any]:
             "out_point": "待补：上一拍最后一帧/动作/声音",
             "in_point": "待补：下一拍第一帧；应与 out_point 形成接力",
             "transition_type": "待补：match_cut / eyeline / action_cut / j_cut / l_cut / empty_buffer / hard_cut",
-            "need_endframe": True,
+            "seam_mode": "待补：continuous_take_relay / match_on_action / graphic_match / eyeline_cut / reaction_cut / insert_cutaway / j_cut / l_cut / dissolve / hard_cut / intentional_discontinuity",
+            "seam_mode_source": "explicit_required",
+            "seam_evidence": {"待补": "按 seam_mode 填对应执行证据"},
+            "need_endframe": False,
             "sound_bridge": "待补：下句先入/上句延续/环境声桥/BGM hit",
             "continuity_guard": "待补：轴线、视线、道具/服装/状态不能断",
         })
@@ -561,7 +597,10 @@ def _transition_map(root: Path, ep: str, beat_ids: List[str]) -> Dict[str, Any]:
             "out_point": "待补",
             "in_point": "待补",
             "transition_type": "待补",
-            "need_endframe": True,
+            "seam_mode": "待补",
+            "seam_mode_source": "explicit_required",
+            "seam_evidence": {"待补": "按 seam_mode 填对应执行证据"},
+            "need_endframe": False,
             "sound_bridge": "待补",
             "continuity_guard": "待补",
         }],
@@ -575,7 +614,7 @@ def _vertical_composition_plan(root: Path, ep: str, beat_ids: Iterable[str]) -> 
             "kind": "n2d_vertical_composition_plan",
             "version": VERSION,
             "episode": ep,
-            "status": "confirmed",
+            "status": "draft",
             "generated_at": now_iso(),
             "composition_rules": {
                 "safe_zone": "字幕、百妖谱面板和道行计数统一走后期 overlay，主体脸部避开底部字幕区。",
@@ -627,7 +666,7 @@ def _edit_rhythm_map(root: Path, ep: str, beat_ids: Iterable[str]) -> Dict[str, 
             "kind": "n2d_edit_rhythm_map",
             "version": VERSION,
             "episode": ep,
-            "status": "confirmed",
+            "status": "draft",
             "generated_at": now_iso(),
             "timeline": {
                 "first_3s_hook": _clean_text(story.get("first_3s_visual_hook"), "首镜用尸场、插胸长刀和百妖谱金光建立冷开爆点。"),
@@ -707,7 +746,10 @@ def scaffold(root: Path, ep: str, *, force: bool = False) -> Dict[str, Any]:
     lines = _voiceover_lines(root, ep)
     storyboard_clips = _storyboard_clips(root, ep)
     beat_ids = _planning_ids(root, ep, lines)
-    status = "confirmed" if storyboard_clips else "draft"
+    # Existing storyboard data may prefill this pack, but generated content is
+    # never self-approved.  A reviewer marks content confirmed, then signs the
+    # independent hash-bound manifest.
+    status = "draft"
     created: List[str] = []
     templates: Tuple[Tuple[str, Dict[str, Any]], ...] = (
         ("director_beat_sheet.json", _beat_sheet(root, ep, lines)),
@@ -732,6 +774,18 @@ def scaffold(root: Path, ep: str, *, force: bool = False) -> Dict[str, Any]:
     }
     write_json_atomic(ep_dir / "director_blocking_pack.json", manifest)
     overview = _write_overview(root, ep)
+    signoff_spec = signoff_profile_spec(root, "p2", ep)
+    signoff_path = root / signoff_spec["signoff_path"]
+    if not signoff_path.exists():
+        write_signoff_manifest(signoff_path, new_signoff_manifest(
+            root,
+            artifact_scope=signoff_spec["artifact_scope"],
+            episode=ep,
+            author_id="automation:n2d",
+            input_paths=signoff_spec["input_paths"],
+            evidence_paths=signoff_spec["evidence_paths"],
+            required_role_groups=signoff_spec["required_role_groups"],
+        ))
     return {
         "kind": KIND,
         "root": str(root),
@@ -741,6 +795,20 @@ def scaffold(root: Path, ep: str, *, force: bool = False) -> Dict[str, Any]:
         "manifest": f"脚本/{ep}/director_blocking_pack.json",
         "overview_path": overview,
     }
+
+
+def _signoff_status(root: Path, ep: str) -> Dict[str, Any]:
+    spec = signoff_profile_spec(root, "p2", ep)
+    path = root / spec["signoff_path"]
+    issues = validate_signoff_manifest(
+        load_signoff_manifest(path),
+        root,
+        artifact_scope=spec["artifact_scope"],
+        input_paths=spec["input_paths"],
+        evidence_paths=spec["evidence_paths"],
+        required_role_groups=spec["required_role_groups"],
+    )
+    return {"rel": spec["signoff_path"], "status": "pass" if not issues else "block", "issues": issues}
 
 
 def _json_status(path: Path) -> Tuple[str, List[str]]:
@@ -800,6 +868,33 @@ def _axis_blocking_contract_issues(data: Mapping[str, Any], required_clip_ids: I
     return issues
 
 
+def _transition_map_contract_issues(data: Mapping[str, Any]) -> List[str]:
+    issues: List[str] = []
+    seams = data.get("seams")
+    if not isinstance(seams, list) or not seams:
+        return ["transition_map 缺 seams[]"]
+    for idx, row in enumerate(seams, start=1):
+        if not isinstance(row, Mapping):
+            issues.append(f"seams[{idx}] 不是 object")
+            continue
+        label = str(row.get("seam_id") or f"seams[{idx}]")
+        mode_info = normalize_seam_mode(row.get("seam_mode"), row.get("transition_type"))
+        mode = str(mode_info.get("mode") or "")
+        if mode_info.get("source") != "explicit" or row.get("seam_mode_source") != "explicit":
+            issues.append(f"{label} seam_mode 必须显式选择标准枚举，不能只靠 transition 推断")
+            continue
+        evidence = row.get("seam_evidence") if isinstance(row.get("seam_evidence"), Mapping) else {}
+        missing = missing_evidence(mode, evidence)
+        if missing:
+            issues.append(f"{label} ({mode}) 缺 seam_evidence：{', '.join(missing)}")
+        expected_endframe = requires_boundary_frame(mode)
+        if bool(row.get("need_endframe")) != expected_endframe:
+            issues.append(
+                f"{label} need_endframe 与 {mode} 不一致；只有 continuous_take_relay 必须为 true"
+            )
+    return issues
+
+
 def _as_iter(value: Any) -> List[Any]:
     if value is None:
         return []
@@ -826,7 +921,13 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
             if isinstance(data, Mapping):
                 issues.extend(_axis_blocking_contract_issues(data, _storyboard_shot_reverse_clip_ids(root, ep)))
                 status = "pass" if not issues else "block"
+        if name == "transition_map.json" and status == "pass":
+            data = load_json(path)
+            if isinstance(data, Mapping):
+                issues.extend(_transition_map_contract_issues(data))
+                status = "pass" if not issues else "block"
         rows.append({"rel": rel, "status": status, "issues": issues})
+    rows.append(_signoff_status(root, ep))
     blockers = [row for row in rows if row["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,
@@ -836,14 +937,14 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         "episode": ep,
         "status": "pass" if not blockers else "block",
         "summary": {
-            "required": len(REQUIRED_FILES),
+            "required": len(rows),
             "pass": len(rows) - len(blockers),
             "block": len(blockers),
         },
         "files": rows,
         "scaffold_command": f"python3 skills/n2d-script/scripts/director_blocking_pack.py {root} {ep} scaffold --write",
         "next_when_blocked": (
-            "补齐 P-2 导演排戏包六件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
+            "补齐 P-2 导演排戏包六件套并把内容 status 改为 confirmed；再用 signoff.py 由导演与制片/剪辑角色签收当前文件哈希。"
             "之后重跑 check，再进入阶段2分镜设计。"
         ),
     }

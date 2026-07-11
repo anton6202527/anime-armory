@@ -38,6 +38,8 @@ try:
     from flow_telemetry import record_milestone as _record_flow_milestone
 except Exception:  # pragma: no cover - proxy rendering remains independent
     _record_flow_milestone = None
+from editorial_timeline import build_editorial_timeline, write_editorial_timeline  # noqa: E402
+from compose_clip_resolver import resolve_clip_video, route_index  # noqa: E402
 
 
 def now_iso() -> str:
@@ -123,11 +125,13 @@ def _manifest_assets(root: Path, episode: str) -> List[Dict[str, Any]]:
         for item in data.get("items") or []:
             if not isinstance(item, Mapping):
                 continue
+            if str(item.get("status") or "").strip().lower() != "accepted":
+                continue
             clip = str(item.get("clip") or "")
             target = _target_path(root, episode, item)
             if not clip or not target.is_file():
                 continue
-            score = target.stat().st_mtime + (10**12 if str(item.get("status")) == "accepted" else 0)
+            score = target.stat().st_mtime
             duration = (
                 _positive_float(item.get("edit_target_duration"))
                 or _positive_float((item.get("duration_plan") or {}).get("edit_target_sec") if isinstance(item.get("duration_plan"), Mapping) else None)
@@ -174,7 +178,21 @@ def _fallback_assets(root: Path, episode: str) -> List[Dict[str, Any]]:
 
 
 def discover_assets(root: Path, episode: str) -> List[Dict[str, Any]]:
-    assets = _manifest_assets(root, episode) or _fallback_assets(root, episode)
+    # With manifests present, acceptance is the editorial truth. Directory
+    # presence only proves download, so fallback is reserved for legacy work.
+    manifest_paths = list((root / "生产数据").glob(f"video_batch_{episode}_*.json"))
+    assets = _manifest_assets(root, episode) if manifest_paths else _fallback_assets(root, episode)
+    routes = route_index(root, episode)
+    for row in assets:
+        cid = str(row.get("story_clip") or row.get("clip") or "")
+        match = CLIP_RE.search(cid)
+        cid = f"Clip_{int(match.group(1)):02d}" if match else cid
+        selected, source_kind = resolve_clip_video(
+            root, episode, cid, row.get("path"), routes, allow_base_preview=True,
+        )
+        if selected and selected.is_file():
+            row["path"] = str(selected)
+        row["picture_version"] = source_kind
     return sorted(assets, key=lambda row: (*clip_parts(row.get("clip")), str(row.get("path"))))
 
 
@@ -224,6 +242,7 @@ def build_plan(root: Path, episode: str) -> Dict[str, Any]:
         "output": f"合成/{episode}/_proxy/actual_rough_cut.mp4",
         "notes": [
             "This proxy uses accepted/generated clip pixels and edit targets only; voice/BGM/subtitles/grade remain outside scope.",
+            "Hybrid talking shots use post-lipsync video when present; otherwise the rough proxy may retain the explicitly marked base-preview plate.",
         ],
     }
 
@@ -328,6 +347,12 @@ def build_and_maybe_render(root: Path, episode: str, *, render: bool) -> Dict[st
         payload = render_proxy(root.resolve(), episode, payload)
     path = write_plan(root.resolve(), episode, payload)
     payload["manifest_path"] = relpath(root.resolve(), path)
+    editorial = build_editorial_timeline(root.resolve(), episode)
+    payload["editorial_timeline"] = {
+        "phase": editorial.get("phase"),
+        "status": editorial.get("status"),
+        "outputs": write_editorial_timeline(root.resolve(), editorial),
+    }
     if _record_flow_milestone is not None:
         try:
             _record_flow_milestone(

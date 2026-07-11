@@ -473,6 +473,19 @@ def required_source_semantic_panel_fields(source_semantics: dict) -> list[str]:
     return ["source_excerpt", "meaning_zh", "text_target", "adaptation_note"]
 
 
+STYLE_ANCHOR_PLACEHOLDERS = {"未指定", "无", "待定", "暂无", "无固定锚", "none", "n/a", "tbd", "-", "未定"}
+SETTING_ON_VALUES = {"开启", "启用", "on", "true", "yes", "是"}
+
+
+def setting_enabled(value: str) -> bool:
+    return str(value or "").strip().lower() in SETTING_ON_VALUES
+
+
+def effective_style_anchor(value: str) -> str:
+    text = str(value or "").strip()
+    return "" if text.lower() in STYLE_ANCHOR_PLACEHOLDERS else text
+
+
 def has_style_anchor(registry: dict) -> bool:
     if not isinstance(registry, dict):
         return False
@@ -485,6 +498,47 @@ def has_style_anchor(registry: dict) -> bool:
         if ref_id.startswith("STYLE_") or str(asset.get("type") or "").lower() == "style":
             return True
     return False
+
+
+def check_high_grade_consistency(
+    root: Path,
+    settings: dict,
+    registry_path: Path,
+    identity_registry: dict,
+    panel_script: dict,
+    issues: list[dict],
+) -> None:
+    """高一致性长线口径的登记硬闸。
+
+    角色一致性硬闸 / 年龄形态继承 的合法值是 开启/关闭，必须按开关值显式判断；
+    长值策略（如"高一致性共享参考图+多视图+形态继承"）仍按 token 兼容。
+    """
+    artifact = str(registry_path.relative_to(root)) if registry_path.is_absolute() else str(registry_path)
+    hard_gate_on = setting_enabled(settings.get("角色一致性硬闸") or "")
+    variant_inheritance_on = setting_enabled(settings.get("年龄形态继承") or "")
+    consistency_text = str(settings.get("参考一致性策略") or "")
+    high_grade_consistency = hard_gate_on or variant_inheritance_on or any(
+        token in consistency_text.lower() for token in ("dna", "形态继承", "硬闸", "高一致性", "多视图")
+    )
+    if not high_grade_consistency:
+        return
+    require_variant_policy = hard_gate_on or variant_inheritance_on or "形态继承" in consistency_text
+    if not isinstance(identity_registry, dict) or not identity_registry:
+        add_issue(issues, "block", artifact, "高一致性长线口径缺少 identity_registry.json", "comic-identity", "登记角色/风格锚和定妆契约后重跑报告", "identity")
+    elif not (has_style_anchor(identity_registry) or effective_style_anchor(settings.get("风格锚") or "")):
+        add_issue(issues, "block", artifact, "高一致性长线口径缺少项目风格锚或 style_contract（\"未指定\"等占位值不算风格锚）", "comic-identity", "登记 STYLE_ 风格资产或 registry.style_contract", "identity")
+    assets = identity_registry.get("assets") if isinstance(identity_registry, dict) and isinstance(identity_registry.get("assets"), dict) else {}
+    used_refs = panel_reference_ids(panel_script)
+    character_ids = sorted(ref_id for ref_id in (used_refs | set(assets.keys())) if ref_id.startswith("CHAR_"))
+    for ref_id in character_ids:
+        asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
+        if not asset:
+            add_issue(issues, "block", artifact, f"{ref_id} 未在 registry.assets 登记", "comic-identity", "补登记角色锚点、DNA 和多视图", "identity")
+            continue
+        if not (asset.get("character_dna") or asset.get("dna_contract")):
+            add_issue(issues, "block", artifact, f"{ref_id} 缺少 character_dna/dna_contract，无法做跨年龄或跨话一致性", "comic-identity", "把定型图提炼成角色 DNA/禁漂移项", "identity")
+        if require_variant_policy and not (asset.get("variant_policy") or asset.get("age_variants")):
+            add_issue(issues, "block", artifact, f"{ref_id} 缺少年龄/形态继承策略", "comic-identity", "登记 age_variants 或 variant_policy，明确少年/成年/受伤/觉醒等形态如何继承定型图", "identity")
 
 
 def is_publish_like_usage(value: str) -> bool:
@@ -964,27 +1018,10 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
                 "export",
             )
 
-    consistency_text = " ".join(str(settings.get(key) or "") for key in ("参考一致性策略", "年龄形态继承", "角色一致性硬闸"))
-    high_grade_consistency = any(token in consistency_text.lower() for token in ("dna", "形态继承", "硬闸", "高一致性", "多视图"))
-    if high_grade_consistency:
-        if not isinstance(identity_registry, dict) or not identity_registry:
-            add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), "高一致性长线口径缺少 identity_registry.json", "comic-identity", "登记角色/风格锚和定妆契约后重跑报告", "identity")
-        elif not has_style_anchor(identity_registry):
-            add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), "高一致性长线口径缺少项目风格锚或 style_contract", "comic-identity", "登记 STYLE_ 风格资产或 registry.style_contract", "identity")
-        assets = identity_registry.get("assets") if isinstance(identity_registry, dict) and isinstance(identity_registry.get("assets"), dict) else {}
-        used_refs = panel_reference_ids(panel_script)
-        character_ids = sorted(ref_id for ref_id in (used_refs | set(assets.keys())) if ref_id.startswith("CHAR_"))
-        for ref_id in character_ids:
-            asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
-            if not asset:
-                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 未在 registry.assets 登记", "comic-identity", "补登记角色锚点、DNA 和多视图", "identity")
-                continue
-            if not (asset.get("character_dna") or asset.get("dna_contract")):
-                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 缺少 character_dna/dna_contract，无法做跨年龄或跨话一致性", "comic-identity", "把定型图提炼成角色 DNA/禁漂移项", "identity")
-            if "形态继承" in consistency_text and not (asset.get("variant_policy") or asset.get("age_variants")):
-                add_issue(issues, "block", str(paths["identity_registry"].relative_to(root)), f"{ref_id} 缺少年龄/形态继承策略", "comic-identity", "登记 age_variants 或 variant_policy，明确少年/成年/受伤/觉醒等形态如何继承定型图", "identity")
+    check_high_grade_consistency(root, settings, paths["identity_registry"], identity_registry, panel_script, issues)
+    hard_gate_on = setting_enabled(settings.get("角色一致性硬闸") or "")
 
-    if settings["定妆级别"].startswith("长线") or "专门定妆" in settings["定妆级别"]:
+    if settings["定妆级别"].startswith("长线") or "专门定妆" in settings["定妆级别"] or hard_gate_on:
         missing_views = identity_report.get("missing_character_views") if isinstance(identity_report, dict) else None
         if not isinstance(missing_views, dict):
             add_issue(issues, "block", str(paths["identity_report"].relative_to(root)), "长线专门定妆缺少可解析的 missing_character_views", "comic-identity", "重新运行 comic-identity report --write", "identity")

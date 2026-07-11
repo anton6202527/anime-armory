@@ -10,8 +10,16 @@ import argparse
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+N2D_LIB = SCRIPT_DIR.parents[1] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+
+from seam_contract import needs_end_anchor, normalize_seam_mode  # noqa: E402
 
 KIND = "n2d_video_production_pack"
 CHAR_RE = re.compile(r"\bCHAR_[A-Za-z0-9_\-\u4e00-\u9fff]+\b")
@@ -100,7 +108,12 @@ def anchor_chain_for_clip(ep: str, clip: Mapping[str, Any], idx: int) -> Dict[st
                 "image": item.get("anchor_png") or f"出图/{ep}/图片/{cid}_a{i}.png",
                 "reason": item.get("reason") or "planned_anchor",
             })
-    need_end = bool(cont.get("need_endframe") or cont.get("need_end") or cont.get("endframe"))
+    need_end = needs_end_anchor(clip)
+    seam_mode = normalize_seam_mode(
+        clip.get("seam_mode") or cont.get("seam_mode"),
+        clip.get("transition") or cont.get("transition"),
+        need_endframe=bool(cont.get("need_endframe")),
+    ).get("mode")
     chain = {
         "clip": cid,
         "first_frame": (
@@ -120,7 +133,9 @@ def anchor_chain_for_clip(ep: str, clip: Mapping[str, Any], idx: int) -> Dict[st
             or (f"出图/{ep}/图片/{cid}_end.png" if need_end else "")
         ),
         "status": "ready" if anchors or need_end else "minimal",
-        "policy": "first + anchors + last；长镜/动作镜优先用多帧，后端不支持再拆段。",
+        "seam_mode": seam_mode or "missing",
+        "end_anchor_required": need_end,
+        "policy": "first + anchors + optional last；仅 continuous_take_relay 把尾锚解释为跨镜同帧，其余只作镜内控制。",
     }
     return chain
 

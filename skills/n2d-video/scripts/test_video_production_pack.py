@@ -86,6 +86,17 @@ def test_anchor_chain_prefers_storyboard_top_level_frame_paths() -> None:
     assert chain["last_frame"] == "出图/第1集/图片/Clip02_end.png"
 
 
+def test_anchor_chain_does_not_treat_explicit_hard_cut_as_relay_tail() -> None:
+    chain = vpp.anchor_chain_for_clip("第1集", {
+        "id": "Clip_03",
+        "continuity": {"seam_mode": "hard_cut", "need_endframe": True},
+    }, 3)
+
+    assert chain["seam_mode"] == "hard_cut"
+    assert chain["end_anchor_required"] is False
+    assert chain["last_frame"] == ""
+
+
 def test_video_production_pack_builds_anchor_motion_and_route_scores(tmp_path: Path) -> None:
     _write_project(tmp_path)
 

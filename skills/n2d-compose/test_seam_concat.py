@@ -71,6 +71,22 @@ def test_xfade_offsets_and_filter():
     assert "offset=8.5" in filt
     # 单段无 xfade
     assert s.build_xfade_filter([5], 0.25) == ("", "0:v")
+    assert s.variable_xfade_offsets([5, 4, 3], [0.2, 0.5]) == [4.8, 8.3]
+    variable, final = s.build_variable_xfade_filter([5, 4, 3], [0.2, 0.5])
+    assert final == "vout"
+    assert "duration=0.2:offset=4.8" in variable
+    assert "duration=0.5:offset=8.3" in variable
+
+
+def test_explicit_seam_mode_drives_compose_without_boundary_frame_assumption():
+    assert s.classify_seam("", seam_mode="dissolve")[0] == "dissolve"
+    assert s.classify_seam("", seam_mode="match_on_action")[0] == "cut"
+    assert s.classify_seam("", seam_mode="eyeline_cut")[0] == "cut"
+    plan = s.build_plan(
+        2, ["溶解", ""], ["", ""], "cut",
+        ["dissolve", ""], [{"duration_sec": 0.6, "editorial_reason": "时间流逝"}, {}],
+    )
+    assert plan["seams"][0]["dissolve_sec"] == 0.6
 
 
 def test_parse_list_file(tmp_path):

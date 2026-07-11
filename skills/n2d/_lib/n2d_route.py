@@ -19,7 +19,7 @@ try:
         stage_requires_for_mode,
         stage_specs,
     )
-    from n2d_settings import get_setting, is_native_av, is_video_first
+    from n2d_settings import get_setting, is_hybrid_routing, is_native_av, is_video_first
 except ImportError:  # when imported as package-ish via sys.path parent
     from .n2d_contract import (
         PROGRESS_DONE,
@@ -31,7 +31,7 @@ except ImportError:  # when imported as package-ish via sys.path parent
         stage_requires_for_mode,
         stage_specs,
     )
-    from .n2d_settings import get_setting, is_native_av, is_video_first
+    from .n2d_settings import get_setting, is_hybrid_routing, is_native_av, is_video_first
 
 
 # Single source of truth for routing stage order.  The tuple shape is kept for
@@ -146,7 +146,7 @@ def is_progress_satisfied(root: str, row: Dict[str, str], col: str) -> bool:
     if is_native_av(root) and col == "配音":
         return True
     state = cell_state(row.get(col, ""))
-    if col == "配音" and is_video_first(root) and state == "rough":
+    if col == "配音" and (is_video_first(root) or is_hybrid_routing(root)) and state == "rough":
         return True
     return state in ("done", "na")
 
@@ -288,6 +288,56 @@ def voice_is_placeholder(root: str, ep: str) -> Optional[bool]:
     return None
 
 
+def mixed_final_voice_required(root: str, ep: str) -> bool:
+    """Whether mixed per-shot routes still require a final external voice layer."""
+    path = os.path.join(root, "生产数据", f"production_mode_route_{ep}.json")
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+        routes = data.get("clip_routes") if isinstance(data, dict) else []
+        if isinstance(routes, list) and routes:
+            return any(isinstance(row, dict) and row.get("final_voice_required") is True for row in routes)
+    except Exception:
+        pass
+    voiceover = os.path.join(root, "脚本", ep, "voiceover.txt")
+    try:
+        return any(line.strip() and not line.lstrip().startswith("#") for line in open(voiceover, encoding="utf-8"))
+    except OSError:
+        return False
+
+
+def mixed_post_lipsync_pending(root: str, ep: str) -> List[str]:
+    """Return hybrid base-plate Clip IDs whose required lipsync output is absent."""
+    candidates = (
+        (os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json"), "routes"),
+        (os.path.join(root, "生产数据", f"production_mode_route_{ep}.json"), "clip_routes"),
+    )
+    routes: List[Dict[str, object]] = []
+    for path, key in candidates:
+        try:
+            payload = json.load(open(path, encoding="utf-8"))
+            rows = payload.get(key) if isinstance(payload, dict) else []
+            if isinstance(rows, list) and rows:
+                routes = [dict(row) for row in rows if isinstance(row, dict)]
+                break
+        except Exception:
+            continue
+    pending: List[str] = []
+    for idx, route in enumerate(routes, 1):
+        if not (
+            route.get("post_lipsync_required") is True
+            or str(route.get("audio_strategy") or "") == "base_video_then_post_lipsync"
+        ):
+            continue
+        cid = str(route.get("clip_id") or route.get("id") or f"Clip_{idx:02d}")
+        raw = str(route.get("post_lipsync_output") or "").strip()
+        path = raw if os.path.isabs(raw) else os.path.join(root, raw) if raw else os.path.join(
+            root, "出视频", ep, "视频_lipsync", f"{cid}_lipsync.mp4"
+        )
+        if not os.path.isfile(path):
+            pending.append(cid)
+    return pending
+
+
 def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Optional[str]]:
     """Return the next stage for a row, with production-mode adjustments.
 
@@ -295,7 +345,8 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
     并按 `制作模式` 调整：
       - 原生音画：配音是可选旁白层——`配音` 列视作已满足、不把 n2d-voice 当硬路由步骤，
         免得分镜/出图被"先去配音"误推卡住（说话镜由视频后端一次出同步音画）。
-      - 先出视频后配音：合成前若配音仍是占位，前沿改指 n2d-voice 先补真音。
+      - 混合自动路由 / 先出视频后配音：估算时间基准可放行画面链；合成前若逐镜合同仍需
+        外部声音且真实配音未完成，前沿改指 n2d-voice 先补最终声音。
     """
     ep = row.get("_ep") or row.get("集") or ""
     def satisfied(col: str) -> bool:
@@ -345,14 +396,28 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
             note = "原生音画模式：配音列不作为硬前置，按 storyboard.json clips[].duration 定稿分镜与字幕节奏。"
         else:
             note = ""
-        if not native_av and is_video_first(root) and skill == "n2d-compose" and voice_is_placeholder(root, ep) is not False:
+        needs_deferred_final_voice = (
+            is_video_first(root)
+            or (is_hybrid_routing(root) and mixed_final_voice_required(root, ep))
+        )
+        if not native_av and needs_deferred_final_voice and skill == "n2d-compose" and voice_is_placeholder(root, ep) is not False:
             return {
                 "ep": ep,
                 "col": col,
                 "label": "补真实配音",
                 "skill": "n2d-voice",
                 "cmd": "n2d-voice {root} {ep}  (补真音；之后 fit_voice_to_clips + n2d-compose)",
-                "note": "先出视频后配音模式：当前真实配音未确认（缺清单或仍是占位），合成前必须先补真实配音。",
+                "note": "声音后置合同尚未完成：当前缺最终真实配音或仍为占位；先完成音色锁与最终配音，口型可见镜还要完成后期表演 pass，再合成。",
+            }
+        pending_lipsync = mixed_post_lipsync_pending(root, ep) if is_hybrid_routing(root) and skill == "n2d-compose" else []
+        if pending_lipsync:
+            return {
+                "ep": ep,
+                "col": col,
+                "label": "完成后期口型/表演 pass",
+                "skill": "n2d-video",
+                "cmd": "python3 skills/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply",
+                "note": "仍有 neutral-mouth base plate 未升级为最终说话镜：" + "、".join(pending_lipsync),
             }
         return {"ep": ep, "col": col, "label": label, "skill": skill, "cmd": cmd, "note": note}
     label = "✅已验收" if delivery_active else "✅视频已完成（默认收尾）"

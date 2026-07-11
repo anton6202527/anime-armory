@@ -22,8 +22,10 @@ Run:
 ```bash
 bash tools/e2a/scripts/e2a_release.sh                # Electron DMG + demo zips, upload
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only (dist/e2a-release-<tag>)
-bash tools/e2a/scripts/e2a_release.sh --apps-only    # DMG only, skip demo zips
+bash tools/e2a/scripts/e2a_release.sh --apps-only    # installers only, skip demo zips
 bash tools/e2a/scripts/e2a_release.sh --demo-assets  # demo zips only, keep release notes
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # DMG + Windows exe
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # Windows exe only
 ```
 
 Contract:
@@ -46,7 +48,16 @@ Contract:
 - n2d demo zip is slimmed to first-episode media (rule inherited from the
   retired `/r2a`). Demo zips are deterministic (fixed timestamps, `zip -X`).
 - Artifact names: `AnimeArmory_electron_macos_arm64.dmg`,
+  `AnimeArmory_electron_windows.exe` (`--win`),
   `AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`, `SHA256SUMS.txt`.
+- `--win` cross-builds the Windows x64 NSIS installer on macOS: electron-builder
+  downloads its nsis/winCodeSign toolchains (cached after first run), native
+  rebuild is disabled (`npmRebuild: false`) and node-pty runs from its bundled
+  win32 NAPI prebuilds (`node_modules/node-pty/build` is excluded from packages
+  so the host-built binary can't shadow them). The exe is unsigned.
+- Release notes are written on release creation; on an existing release,
+  incremental uploads (`--win --no-mac`, `--demo-assets`) keep the notes —
+  pass `--refresh-notes` to overwrite.
 - Default tag `electron-v<desktop-electron/package.json version>`; the release
   is not marked latest by default and README download links are not rewritten
   by the tool — update them manually when publishing a user-facing release.

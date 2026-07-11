@@ -30,6 +30,12 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 # 共享基座（增量2·按证据族拆分）：常量/findings/add/无状态助手全部住 gate_core，
 # gate.py 只留 check_*/run/main。gates/<family>.py 后续也从 gate_core 取，避免循环导入。
 from gate_core import *  # noqa: F401,F403
+from seam_contract import (  # noqa: E402
+    missing_evidence as seam_missing_evidence,
+    needs_end_anchor,
+    normalize_seam_mode,
+    requires_boundary_frame,
+)
 from gates.evidence import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.consistency import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.backend import *  # noqa: F401,F403  证据族 check_（增量3）
@@ -433,6 +439,27 @@ def check_placeholder_policy(root: str, ep: str, stage: str) -> None:
     family = policy_family_for_stage(stage, fallback=gate_family(stage))
     profile = consistency_release_profile(root, stage, ep)
     ph = voice_is_placeholder(root, ep)
+    if is_hybrid_routing(root):
+        estimate, estimate_error = _hybrid_timing_estimate(root, ep)
+        if ph is False:
+            return
+        if family in {"compose", "review"} and _hybrid_final_voice_required(root, ep):
+            add(
+                BLOCK, "配音", ep,
+                "混合自动路由仍有 final_voice_required 镜头，但最终真实配音尚未完成。"
+                "timing_estimate.json 只是无 WAV 时间基准，不能进入正式合成/验收；先完成声音选角锁与最终配音。",
+                return_to_stage="voice",
+            )
+        elif family in {"image", "video"} and estimate:
+            add(
+                WARN, "时间基准", ep,
+                "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。"
+                "可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+                return_to_stage="voice",
+            )
+        elif family in {"image", "video", "compose", "review"} and not estimate:
+            add(BLOCK, "时间基准", ep, f"混合自动路由缺有效 timing_estimate.json：{estimate_error}", return_to_stage="voice")
+        return
     if ph is None:
         if family in {"image", "video", "compose", "review"}:
             add(BLOCK, "配音", ep, "未找到可判定的时长清单；无法确认真实配音或 rough timing，先跑 n2d-voice 生成 `时长清单.json`")
@@ -456,6 +483,34 @@ def check_placeholder_policy(root: str, ep: str, stage: str) -> None:
         add(WARN, "配音", ep, "先出视频后配音模式已放行占位时长进入出视频；后期补真音可能需要重出视频")
     else:
         add(BLOCK, "配音", ep, "配音仍为占位音色；`配音先行` 模式下该阶段不应继续，先 n2d-voice 换真实配音并重定时")
+
+
+def _hybrid_timing_estimate(root: str, ep: str) -> Tuple[Optional[Dict[str, Any]], str]:
+    path = os.path.join(root, "合成", ep, "配音", "timing_estimate.json")
+    data = load_json(path)
+    if not isinstance(data, dict):
+        return None, f"缺或无法解析 {path}"
+    if data.get("kind") != "n2d_timing_estimate":
+        return None, "kind 不是 n2d_timing_estimate"
+    if data.get("audio_generated") is not False:
+        return None, "audio_generated 必须为 false（估时合同不可冒充音频）"
+    rows = data.get("lines")
+    if not isinstance(rows, list) or not rows:
+        return None, "lines 为空"
+    return data, ""
+
+
+def _hybrid_final_voice_required(root: str, ep: str) -> bool:
+    path = os.path.join(root, "生产数据", f"production_mode_route_{ep}.json")
+    data = load_json(path)
+    routes = data.get("clip_routes") if isinstance(data, dict) else []
+    if isinstance(routes, list) and routes:
+        return any(isinstance(row, dict) and row.get("final_voice_required") is True for row in routes)
+    voiceover = os.path.join(root, "脚本", ep, "voiceover.txt")
+    try:
+        return any(line.strip() and not line.lstrip().startswith("#") for line in open(voiceover, encoding="utf-8"))
+    except OSError:
+        return False
 def check_timing_manifest_complete(root: str, ep: str) -> None:
     """时长清单逐句完整性：非占位但残缺也要拦。
 
@@ -467,6 +522,37 @@ def check_timing_manifest_complete(root: str, ep: str) -> None:
     if is_native_av_production(root):
         return
     man_p = manifest_path(root, ep)
+    if is_hybrid_routing(root) and not man_p:
+        estimate, error = _hybrid_timing_estimate(root, ep)
+        if not estimate:
+            add(BLOCK, "时间基准", os.path.join(root, "合成", ep, "配音", "timing_estimate.json"), error, return_to_stage="voice")
+            return
+        rows = estimate.get("lines") or []
+        bad = []
+        for idx, row in enumerate(rows):
+            try:
+                duration = float(row.get("时长") or row.get("estimated_duration_sec") or 0)
+            except (TypeError, ValueError, AttributeError):
+                duration = 0.0
+            if not isinstance(row, dict) or duration <= 0 or str(row.get("timing_basis") or "") != "text_estimate_no_audio":
+                bad.append(idx)
+        if bad:
+            add(BLOCK, "时间基准", os.path.join(root, "合成", ep, "配音", "timing_estimate.json"),
+                f"timing_estimate 有 {len(bad)} 行缺正时长或 timing_basis（如 {bad[:8]}）", return_to_stage="voice")
+        vo_p = os.path.join(root, "脚本", ep, "voiceover.txt")
+        parsed_lines = []
+        if os.path.isfile(vo_p):
+            parsed_lines = [
+                line.strip() for line in open(vo_p, encoding="utf-8")
+                if re.match(r"\[(镜头[^·]*)·([^·]+)·([^\]]*)\]\s*(.+)", line.strip())
+            ]
+        current = hashlib.sha256("\n".join(parsed_lines).encode("utf-8")).hexdigest() if parsed_lines else ""
+        recorded = str(estimate.get("source_fingerprint") or "")
+        if recorded and current and recorded != current:
+            add(BLOCK, "时间基准", vo_p, "voiceover.txt 在估时后被改动；重跑 voice_preflight.py prepare 与 finalize_storyboard", return_to_stage="voice")
+        if parsed_lines and len(parsed_lines) != len(rows):
+            add(BLOCK, "时间基准", vo_p, f"voiceover {len(parsed_lines)} 句 ≠ timing_estimate {len(rows)} 行", return_to_stage="voice")
+        return
     rows = load_json(man_p)
     if not isinstance(rows, list) or not rows:
         return  # 缺/空清单由 check_progress_artifact_signoff 覆盖，避免重复上报
@@ -976,7 +1062,7 @@ def check_route_frame_capability(
             sev,
             "首尾帧能力",
             route_path,
-            f"{clip_id} storyboard 需要尾帧接力，但 primary 后端 {primary or 'unknown'}{channel_note} "
+            f"{clip_id} storyboard 需要镜内尾锚/连续 take 边界帧，但 primary 后端 {primary or 'unknown'}{channel_note} "
             f"的帧能力档案为 {mode}，消费计划为 {consumption_mode}，未确认可消费尾帧。fallback：改走支持首尾帧的后端，"
             f"或退回单首帧 + 强 end_state 文字（接缝/大表情近景风险升高）。能力来源：{verified}{risk_note}",
             return_to_stage="video",
@@ -2081,10 +2167,10 @@ def check_video_clip_prompt_section(path: str, section: str, route: Optional[Dic
             BLOCK,
             "接缝执行包",
             loc,
-            "缺接缝执行包；每条视频 prompt 必须把 first_frame/end_frame/midframes/need_endframe/anchor_consumption/fallback 写成执行真值，避免文字接缝和真实入参脱节。",
+            "缺接缝执行包；每条视频 prompt 必须把 seam_mode/first_frame/end_frame/midframes/need_end_anchor/anchor_consumption/fallback 写成执行真值。",
         )
     else:
-        for key in ("first_frame", "end_frame", "midframes", "need_endframe", "anchor_consumption", "fallback"):
+        for key in ("seam_mode", "first_frame", "end_frame", "midframes", "need_end_anchor", "anchor_consumption", "fallback"):
             if key not in section:
                 add(BLOCK, "接缝执行包", loc, f"接缝执行包缺字段：{key}")
     if not (_has_field(section, "执行配方") or _has_field(section, "Execution Recipe")):
@@ -2522,8 +2608,8 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
     （`parse_prompt_pack`）真正喂给后端的路径，与 `storyboard.firstframe_png` 分开誊抄、可能漂；
     `check_storyboard_contract` 查的是 storyboard 字段，这里查**真正提交的那条路径**，互补不重复。
       · 首帧 PNG 缺失 → BLOCK（image2video 必失败、白扣一次最贵的钱）；
-      · 声明了尾帧但 PNG 缺失 → WARN（双帧接力降级为单首帧，大表情近景有脸重画风险）；
-      · storyboard 标 `need_endframe=true` 但视频 prompt 该 Clip 漏写 `**尾帧**` → WARN（双帧意图誊抄时丢了）；
+      · 声明了尾帧但 PNG 缺失 → WARN（镜内双锚/relay 降级为单首帧）；
+      · storyboard 需要尾锚但视频 prompt 漏写 `**尾帧**` → WARN（执行意图誊抄时丢失）；
       · storyboard 声明 `continuity.midframe` 但视频 prompt 该 Clip 漏写 `**中段锚帧**`、或引用的
         锚帧 PNG 缺失 → WARN（拆段意图誊抄时丢失/锚帧漂，runner 会按单段出，中段漂移风险回归）；
       · 视频 prompt 引用的首帧路径 ≠ storyboard.firstframe_png（两侧都存在但不是同一张）→ BLOCK
@@ -2538,12 +2624,12 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
     need_mid: Dict[int, int] = {}  # Clip → 声明的锚帧数（midframe=1；anchors=len）
     sb_first: Dict[int, str] = {}  # Clip → storyboard.firstframe_png（路径相等校验基准）
     sb_end: Dict[int, str] = {}    # Clip → storyboard continuity/top-level endframe_png
-    sb = load_json(storyboard_path(root, ep))  # 只读取 need_endframe/midframe/anchors/首尾帧，不重复报 storyboard 缺失
+    sb = load_json(storyboard_path(root, ep))  # 只读取尾锚/中锚/首尾帧，不重复报 storyboard 缺失
     if isinstance(sb, dict) and isinstance(sb.get("clips"), list):
         for i, clip in enumerate(sb["clips"], 1):
             if isinstance(clip, dict) and isinstance(clip.get("continuity"), dict):
                 cont = clip["continuity"]
-                need_end[i] = cont.get("need_endframe") is True
+                need_end[i] = needs_end_anchor(clip)
                 if isinstance(cont.get("midframe"), dict):
                     need_mid[i] = 1
                 elif isinstance(cont.get("anchors"), list):
@@ -2589,7 +2675,7 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
         em = _VID_END_FRAME_RE.search(block)
         if em and _missing(em.group(1).strip()):
             add(frame_warn, "尾帧", loc,
-                f"视频 prompt 声明了尾帧但 PNG 不存在：{em.group(1).strip()}——双帧接力会降级为单首帧"
+                f"视频 prompt 声明了尾帧但 PNG 不存在：{em.group(1).strip()}——镜内双锚/relay 会降级为单首帧"
                 "（大表情近景有脸重画风险），先补尾帧或确认降级。", return_to_stage="image")
         elif em and num in sb_end and not _missing(em.group(1).strip()) \
                 and not _same_path(em.group(1).strip(), sb_end[num]):
@@ -2599,8 +2685,8 @@ def check_video_prompt_frames(root: str, ep: str, stage: str = "video") -> None:
                 return_to_stage="video")
         elif em is None and need_end.get(num):
             add(frame_warn, "尾帧", loc,
-                "storyboard 标 need_endframe=true 但视频 prompt 此 Clip 漏写 `**尾帧**` 引用——"
-                "双帧接力意图在誊抄时丢失，runner 会按单首帧出，大表情近景有脸重画风险。",
+                "storyboard 要求 end_anchor/relay boundary，但视频 prompt 此 Clip 漏写 `**尾帧**` 引用——"
+                "尾锚意图在誊抄时丢失，runner 会按单首帧出，大表情近景或连续 take 会失去安全网。",
                 return_to_stage="image")
         mids = _VID_MID_FRAME_RE.findall(block)
         for rel in mids:
@@ -3472,6 +3558,9 @@ def _continuity_chain_seams(data: Mapping[str, Any]) -> List[Mapping[str, Any]]:
             "from_end_state": current.get("end_state"),
             "to_start_state": nxt.get("start_state"),
             "transition": current.get("transition_to_next") or current.get("transition"),
+            "seam_mode": current.get("seam_mode"),
+            "seam_evidence": current.get("seam_evidence") or {},
+            "need_endframe": current.get("need_endframe") is True,
             "required_boundary_frame": current.get("endframe_png") or current.get("end_frame"),
             "common_entities": sorted(set(_listify(current.get("required_presence"))) & set(_listify(nxt.get("required_presence")))),
         })
@@ -3504,10 +3593,26 @@ def check_seam_hard_contract(root: str, ep: str, stage: str) -> None:
             issues.append(f"{label} 缺 from_clip/to_clip")
         elif from_clip == to_clip and seam.get("scope") != "episode_boundary":
             issues.append(f"{label} from_clip 与 to_clip 相同：{from_clip}")
-        if not _meaningful_contract_value(_value_any(seam, ("transition", "transition_to_next", "cut_type")), min_chars=3):
+        transition_value = _value_any(seam, ("transition", "transition_to_next", "cut_type"))
+        if not _meaningful_contract_value(transition_value, min_chars=3):
             issues.append(f"{label} 缺可执行 transition")
+        mode_info = normalize_seam_mode(
+            seam.get("seam_mode"), transition_value,
+            need_endframe=bool(seam.get("need_endframe")),
+        )
+        seam_mode = str(mode_info.get("mode") or "")
+        if mode_info.get("source") != "explicit":
+            issues.append(f"{label} 缺显式 seam_mode；旧 transition/need_endframe 推断不能替代剪辑决策")
+        evidence = seam.get("seam_evidence") if isinstance(seam.get("seam_evidence"), Mapping) else {}
         discontinuity_reason = _value_any(seam, ("intentional_discontinuity_reason", "jump_cut_reason", "time_jump_reason"))
-        intentional = _meaningful_contract_value(discontinuity_reason, min_chars=10)
+        if seam_mode == "intentional_discontinuity" and not discontinuity_reason:
+            discontinuity_reason = evidence.get("reason")
+        intentional = seam_mode == "intentional_discontinuity" and _meaningful_contract_value(discontinuity_reason, min_chars=10)
+        mode_missing = list(seam_missing_evidence(seam_mode, evidence))
+        if seam_mode == "continuous_take_relay":
+            mode_missing = [field for field in mode_missing if field not in {"boundary_frame", "end_state", "start_state"}]
+        if mode_missing:
+            issues.append(f"{label} {seam_mode or '未分类'} 缺模式证据：{', '.join(mode_missing)}")
         if not intentional:
             if not _meaningful_contract_value(_value_any(seam, ("from_end_state", "previous_out_point", "out_point", "end_state")), min_chars=10):
                 issues.append(f"{label} 缺 from_end_state/out_point")
@@ -3523,41 +3628,36 @@ def check_seam_hard_contract(root: str, ep: str, stage: str) -> None:
             ))
             if not _meaningful_contract_value(entity_value, min_chars=5):
                 issues.append(f"{label} 缺人物/资产出入场链 entry_exit/common_entities")
-            axis_value = _value_any(seam, (
-                "screen_side",
-                "screen_sides",
-                "eyeline",
-                "axis",
-                "axis_eyeline",
-                "shot_reverse_continuity",
-                "screen_direction",
-            ))
-            if not _meaningful_contract_value(axis_value, min_chars=5):
-                issues.append(f"{label} 缺轴线/视线/画面方向合同")
-            audio_value = _value_any(seam, (
-                "audio_cut",
-                "jl_cut",
-                "j_l_cut",
-                "audio_bridge",
-                "audio_transition",
-                "sound_bridge",
-                "no_audio_reason",
-            ))
-            if not _meaningful_contract_value(audio_value, min_chars=5):
-                issues.append(f"{label} 缺 J/L cut 或声画衔接说明")
-            frame_rel, frame_sha = _path_and_hash_from_seam(seam)
-            if not frame_rel:
-                issues.append(f"{label} 缺 required_boundary_frame/from_end_frame")
-            elif not frame_sha:
-                issues.append(f"{label} 缺边界帧 sha256：{frame_rel}")
-            else:
-                frame_path = os.path.join(root, frame_rel)
-                if not os.path.isfile(frame_path):
-                    issues.append(f"{label} 边界帧文件缺失：{frame_rel}")
+            if requires_boundary_frame(seam_mode):
+                frame_rel, frame_sha = _path_and_hash_from_seam(seam)
+                if not frame_rel:
+                    issues.append(f"{label} continuous_take_relay 缺 required_boundary_frame/from_end_frame")
+                elif not frame_sha:
+                    issues.append(f"{label} 缺边界帧 sha256：{frame_rel}")
                 else:
-                    current_sha = _sha256_file(frame_path)
-                    if current_sha and current_sha != frame_sha:
-                        issues.append(f"{label} 边界帧 sha256 已过期：{frame_rel}")
+                    frame_path = os.path.join(root, frame_rel)
+                    if not os.path.isfile(frame_path):
+                        issues.append(f"{label} 边界帧文件缺失：{frame_rel}")
+                    else:
+                        current_sha = _sha256_file(frame_path)
+                        if current_sha and current_sha != frame_sha:
+                            issues.append(f"{label} 边界帧 sha256 已过期：{frame_rel}")
+                next_rel = str(seam.get("next_firstframe") or seam.get("to_firstframe") or "").strip()
+                next_sha = str(seam.get("next_firstframe_sha256") or seam.get("to_firstframe_sha256") or "").strip()
+                if not next_rel:
+                    issues.append(f"{label} continuous_take_relay 缺 next_firstframe")
+                elif not next_sha:
+                    issues.append(f"{label} 缺下一首帧 sha256：{next_rel}")
+                else:
+                    next_path = os.path.join(root, next_rel)
+                    if not os.path.isfile(next_path):
+                        issues.append(f"{label} 下一首帧文件缺失：{next_rel}")
+                    else:
+                        current_next_sha = _sha256_file(next_path)
+                        if current_next_sha and current_next_sha != next_sha:
+                            issues.append(f"{label} 下一首帧 sha256 已过期：{next_rel}")
+                if frame_sha and next_sha and frame_sha != next_sha:
+                    issues.append(f"{label} relay 边界帧与下一首帧 SHA 不同，不能视为同一接点")
         if len(issues) >= 16:
             break
 
@@ -3570,7 +3670,7 @@ def check_seam_hard_contract(root: str, ep: str, stage: str) -> None:
         "continuity_chain 的 clip/seam 还不足以进入视频生成："
         + "；".join(issues[:12])
         + ("；…" if len(issues) > 12 else "")
-        + "。请在 n2d-script/repair_preflight 回补 start/end state、出入场、轴线/视线、J/L cut 和边界帧 sha256。",
+        + "。请在 n2d-script/repair_preflight 回补 seam_mode、模式证据、start/end state、出入场与声画衔接；仅 continuous_take_relay 补边界帧 sha256。",
         return_to_stage="script_stage2",
         evidence_family="continuity",
     )
@@ -3677,6 +3777,74 @@ def check_dialogue_timing_mode(root: str, ep: str, stage: str) -> None:
     )
 
 
+def check_hybrid_performance_routes(root: str, ep: str, stage: str) -> None:
+    """Enforce the execution half of mixed per-shot sound routing.
+
+    Preflight may pass a neutral base plate with no audio.  Post-generation
+    video/compose/review may not treat that plate as a finished talking shot.
+    """
+    if not is_hybrid_routing(root):
+        return
+    routes_path = os.path.join(root, "出视频", ep, "prompt", "video_model_routes.json")
+    data = load_json(routes_path)
+    routes = data.get("routes") if isinstance(data, dict) else None
+    if not isinstance(routes, list) or not routes:
+        add(BLOCK, "逐镜声音路由", routes_path, "混合自动路由缺 video_model_routes.json routes；先重跑 n2d-model-router", return_to_stage="video_prompt")
+        return
+    preflight = stage in {"video_prompt_preflight", "video_preflight"}
+    final_video_boundary = stage in {"video", "compose", "review"}
+    for idx, route in enumerate(routes):
+        if not isinstance(route, Mapping):
+            continue
+        cid = str(route.get("clip_id") or f"routes[{idx}]")
+        strategy = str(route.get("audio_strategy") or "")
+        if not strategy:
+            add(BLOCK, "逐镜声音路由", routes_path, f"{cid} 缺 audio_strategy/timing_basis；混合模式不能退回项目级一刀切", return_to_stage="video_prompt")
+            continue
+        if strategy == "performance_audio_first":
+            paths = []
+            for raw in route.get("performance_audio_paths") or []:
+                path = str(raw or "")
+                path = path if os.path.isabs(path) else os.path.join(root, path)
+                if os.path.isfile(path):
+                    paths.append(path)
+            if str(route.get("performance_track_status") or "") not in {"guide_ready", "final_ready"} or not paths:
+                add(BLOCK, "表演音轨", routes_path, f"{cid} 路由为 performance_audio_first，但没有可验证的已签收音轨路径", return_to_stage="voice")
+        if strategy == "base_video_then_post_lipsync":
+            if route.get("base_video_only") is not True or route.get("post_lipsync_required") is not True:
+                add(BLOCK, "后期表演通道", routes_path, f"{cid} 基础视频路线缺 base_video_only=true / post_lipsync_required=true", return_to_stage="video_prompt")
+            if str(route.get("base_video_mouth_policy") or "") != "neutral_rest_no_visible_articulation":
+                add(BLOCK, "后期表演通道", routes_path, f"{cid} 基础片未锁 neutral_rest_no_visible_articulation，可能提前生成假口型", return_to_stage="video_prompt")
+            if preflight:
+                add(WARN, "后期表演通道", routes_path, f"{cid} 只获准生成中性嘴型基础片；完成 lipsync_pass 前不是最终说话镜", return_to_stage="video")
+            if final_video_boundary:
+                declared = str(route.get("post_lipsync_output") or "").strip()
+                candidates = [
+                    declared,
+                    os.path.join("出视频", ep, "视频_lipsync", f"{cid}_lipsync.mp4"),
+                ]
+                exists = False
+                for raw in candidates:
+                    if not raw:
+                        continue
+                    path = raw if os.path.isabs(raw) else os.path.join(root, raw)
+                    if os.path.isfile(path):
+                        exists = True
+                        break
+                if not exists:
+                    add(
+                        BLOCK, "后期表演通道", os.path.join(root, "出视频", ep, "视频_lipsync"),
+                        f"{cid} 仍只有 base_video_only 基础片，缺最终后期口型/表演输出。"
+                        f"先运行 python3 skills/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply（或按 jobs 手工执行）。",
+                        return_to_stage="video",
+                    )
+    if stage in {"compose", "review"} and any(isinstance(row, Mapping) and row.get("final_voice_required") is True for row in routes):
+        casting = load_json(os.path.join(root, "设定库", "voice_casting.json"))
+        if not isinstance(casting, dict) or casting.get("status") != "locked":
+            add(BLOCK, "声音选角", os.path.join(root, "设定库", "voice_casting.json"),
+                "最终声音已进入合成边界，但 voice_casting.status 不是 locked；先完成角色声音定妆签收。", return_to_stage="voice")
+
+
 def run(root: str, ep: str, stage: str) -> None:
     _DEGRADED_QC_WAIVERS.clear()  # 每次 gate 运行重置降级 waiver 账本（进程内复用/测试安全）
     _HEURISTIC_BLOCK_DEMOTIONS.clear()  # 同上：重置启发式降级账本
@@ -3687,6 +3855,8 @@ def run(root: str, ep: str, stage: str) -> None:
     check_consistency_rule_registry(root, ep, stage)
     check_production_mode_contract_sync(root, ep, stage)
     check_stage = policy_family_for_stage(stage, fallback=gate_family(stage))
+    if check_stage in {"video_prompt_preflight", "video", "compose", "review"}:
+        check_hybrid_performance_routes(root, ep, stage)
     if check_stage not in {"image_prompt_preflight", "video_prompt_preflight"}:
         check_preventive_contracts(root, ep, stage)
     av_native = is_native_av_production(root)  # 原生音画：说话镜不跑配音，不要求「配音」列就绪

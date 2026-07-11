@@ -28,6 +28,7 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_VIDEO_ADAPTERS,
 )
 from n2d_visual_styles import DEFAULT_STYLE, style_anchor_path_for  # noqa: E402
+from seam_contract import needs_end_anchor, normalize_seam_mode, requires_boundary_frame  # noqa: E402
 from image_backend_adapter import current_image_backend_selection  # noqa: E402
 from image_prompt_compiler import (  # noqa: E402
     COMPILED_HEADING as IMAGE_COMPILED_HEADING,
@@ -3099,6 +3100,10 @@ def inner_focus_directive(clip: Mapping[str, Any], chars: Sequence[str], assets:
     )
 
 
+def continuity_needs_end_anchor(clip: Mapping[str, Any]) -> bool:
+    return needs_end_anchor(clip)
+
+
 def continuity_frame_count(clip: Mapping[str, Any]) -> Tuple[int, bool, bool]:
     cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
     anchors = cont.get("anchors") if isinstance(cont.get("anchors"), list) else []
@@ -3109,13 +3114,13 @@ def continuity_frame_count(clip: Mapping[str, Any]) -> Tuple[int, bool, bool]:
     )
     mid_count = 1 if isinstance(cont.get("midframe"), Mapping) else 0
     has_mid = bool(mid_count or anchor_count)
-    need_end = cont.get("need_endframe") is not False
+    need_end = continuity_needs_end_anchor(clip)
     return 1 + mid_count + anchor_count + (1 if need_end else 0), has_mid, need_end
 
 
 def continuity_target_paths(ep: str, idx: int, clip: Mapping[str, Any]) -> Tuple[List[str], List[str]]:
     cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
-    need_end = cont.get("need_endframe") is not False
+    need_end = continuity_needs_end_anchor(clip)
     paths: List[str] = []
     frame_parts: List[str] = []
 
@@ -4290,12 +4295,20 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
     story_clips = story.get("clips") if isinstance(story.get("clips"), list) else []
     is_last_clip = bool(story_clips) and idx >= len(story_clips)
     if need_end:
-        tail = "尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；尾帧稳定 0.3-0.5 秒给视频接缝。"
+        seam_mode = normalize_seam_mode(
+            cont.get("seam_mode"), cont.get("transition"),
+            need_endframe=bool(cont.get("need_endframe")),
+        ).get("mode")
+        purpose = (
+            "continuous_take_relay：它是下一镜复用的同一边界帧"
+            if requires_boundary_frame(seam_mode)
+            else "镜内尾锚：只控制本镜落幅，不要求等于下一镜首帧"
+        )
+        tail = f"尾帧必须用同镜首帧/中段锚帧 image2image 派生，不得纯文生图重抽；用途={purpose}。"
     elif is_last_clip:
-        tail = "本集最终镜无尾帧，continuity.need_endframe=false；最终 cliffhanger/硬断仍不得纯文重抽角色脸和道具结构。"
+        tail = "本集最终镜未声明尾锚；最终 cliffhanger/硬断仍不得纯文重抽角色脸和道具结构。"
     else:
-        reason = str(cont.get("endframe_exempt_reason") or "本镜以换场/空镜/时间跳转豁免尾帧接力").strip()
-        tail = f"本镜尾帧豁免：{reason}；continuity.need_endframe=false；若仍生成接力帧，只能基于同镜首帧 image2image 派生。"
+        tail = "本镜按 seam_mode 不需要尾锚；这不是豁免。若临时增加镜内尾锚，先写 end_anchor_required=true，并从同镜首帧 image2image 派生。"
     mid = "中段锚帧用首帧 image2image 派生，锁住光位、轴线和本镜状态锁；不跳角色站位。" if has_mid else "本镜无中段锚帧。"
     char_phrase = "；".join(character_anchor_for_clip(c, idx) for c in chars if c in CHARACTER_DEFS)
     asset_phrase = "；".join(str(ASSET_DEFS[a]["name"]) for a in assets if a in ASSET_DEFS)

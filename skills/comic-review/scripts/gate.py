@@ -713,12 +713,20 @@ def check_identity(root: Path, report: dict[str, Any], findings: list[dict[str, 
                 add(findings, "block", "missing_character_views", "生产数据/comic_identity_report.json", "长线专门定妆未补齐：" + reason, "identity", "补 front/three_quarter/side/back/face 后重跑 gate。")
 
 
+STYLE_ANCHOR_PLACEHOLDERS = {"未指定", "无", "待定", "暂无", "无固定锚", "none", "n/a", "tbd", "-", "未定"}
+
+
+def effective_style_anchor(value: str) -> str:
+    text = str(value or "").strip()
+    return "" if text.lower() in STYLE_ANCHOR_PLACEHOLDERS else text
+
+
 def check_style_contract(root: Path, findings: list[dict[str, Any]]) -> None:
     registry = load_json(root / "出图" / "共享" / "identity_registry.json", {})
     has_registry_style = isinstance(registry, dict) and bool(registry.get("style_contract") or registry.get("visual_style"))
     assets = registry.get("assets") if isinstance(registry, dict) and isinstance(registry.get("assets"), dict) else {}
     has_style_asset = any(str(key).startswith("STYLE_") for key in assets)
-    style_anchor = read_setting(root, "风格锚", "")
+    style_anchor = effective_style_anchor(read_setting(root, "风格锚", ""))
     if not style_anchor and not has_registry_style and not has_style_asset:
         add(
             findings,
@@ -800,6 +808,82 @@ def check_prompt_compiler(jobs: dict[str, Any], findings: list[dict[str, Any]]) 
             add(findings, "warn", "compiled_prompt_advisory", artifact, f"{pid}: {code}", "image", "精简本格可见画面描述后重建 panel_jobs。")
 
 
+def check_panel_jobs_stale(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """用当前 panel_script/finishing/registry 重编契约，比对已落盘出图包是否陈旧。"""
+    script = SKILLS_ROOT / "comic-image" / "scripts" / "build_panel_jobs.py"
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    if not script.is_file() or not jobs_path.is_file():
+        if not script.is_file():
+            notes.append("comic-image build_panel_jobs.py 不可用，跳过出图包契约陈旧检测")
+        return
+    proc = subprocess.run(
+        [sys.executable, str(script), str(root), "--chapter", chapter, "--check"],
+        stdin=subprocess.DEVNULL,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    result: dict[str, Any] = {}
+    for line in reversed((proc.stdout or "").strip().splitlines()):
+        line = line.strip()
+        if line.startswith("{"):
+            try:
+                result = json.loads(line)
+            except json.JSONDecodeError:
+                result = {}
+            break
+    artifact = f"出图/{chapter}/prompt/panel_jobs.json"
+    if not result or result.get("kind") != "comic_panel_jobs_check":
+        add(
+            findings,
+            "warn",
+            "panel_jobs_stale_check_failed",
+            artifact,
+            "出图包契约陈旧检测未能运行：" + ((proc.stderr or proc.stdout or "no output").strip()[-600:]),
+            "image",
+            "修复 panel_script/layout 后重跑 build_panel_jobs.py --check。",
+        )
+        return
+    error = str(result.get("error") or "")
+    if error:
+        add(
+            findings,
+            "block",
+            "panel_jobs_stale_check_error",
+            artifact,
+            "出图包无法按当前契约重编：" + error,
+            "image",
+            "修复上游产物后重跑 comic-image/scripts/build_panel_jobs.py。",
+        )
+        return
+    stale = [str(pid) for pid in result.get("stale_panels") or []]
+    missing = [str(pid) for pid in result.get("missing_panels") or []]
+    shifted = [str(pid) for pid in result.get("reference_shifted_panels") or []]
+    if stale:
+        add(
+            findings,
+            "block",
+            "panel_jobs_stale_contract",
+            artifact,
+            "这些格的落盘出图包与当前脚本/收尾/风格契约不一致（改了契约没重建出图包）：" + "、".join(stale[:20]),
+            "image",
+            "重跑 comic-image/scripts/build_panel_jobs.py（陈旧格自动回 planned），再重抽这些格。",
+        )
+    if missing:
+        add(
+            findings,
+            "block",
+            "panel_jobs_missing_panels",
+            artifact,
+            "当前脚本包含但出图包缺失的格：" + "、".join(missing[:20]),
+            "image",
+            "重跑 comic-image/scripts/build_panel_jobs.py 补齐后再出图。",
+        )
+    if shifted:
+        notes.append("参考图集合有扩充但提交 prompt 未变的格（不阻断，由 identity report 管理重抽）：" + "、".join(shifted[:20]))
+
+
 def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findings: list[dict[str, Any]]) -> None:
     post_qc_acceptance = load_panel_post_qc_acceptance(root, chapter)
     for job in jobs.get("jobs") or []:
@@ -808,6 +892,18 @@ def check_panel_jobs_ready(root: Path, chapter: str, jobs: dict[str, Any], findi
         pid = str(job.get("panel_id") or "")
         status = str(job.get("status") or "")
         panel_path = find_panel_image(root, chapter, pid)
+        generated_from = str(job.get("generated_from_submit_prompt_sha256") or "")
+        if status == "ready" and generated_from and generated_from != str(job.get("submit_prompt_sha256") or ""):
+            add(
+                findings,
+                "block",
+                "panel_generated_under_stale_contract",
+                str(job.get("result_path") or f"出图/{chapter}/panels/{pid}.png"),
+                f"{pid} 的成图是按旧提交契约生成的（generated_from_submit_prompt_sha256 与当前 submit_prompt_sha256 不一致）。",
+                "image",
+                "重跑 build_panel_jobs.py 后 force 重抽该格；不要手工把旧图改回 ready。",
+            )
+            continue
         post_qc = job.get("post_qc") if isinstance(job.get("post_qc"), dict) else {}
         post_verdict = str(post_qc.get("verdict") or "")
         if status == "qc_block" or post_verdict == "block":
@@ -887,6 +983,8 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
         check_prompt_compiler(jobs, findings)
+    if paths["panel_script"].is_file() and paths["layout"].is_file():
+        check_panel_jobs_stale(root, chapter, findings, notes)
     if isinstance(panel_script, dict) and isinstance(layout, dict) and isinstance(jobs, dict):
         check_traditional_manga_contract(root, chapter, panel_script, layout, jobs, findings)
     report = refresh_identity_report(root, chapter, findings, no_refresh=no_refresh)

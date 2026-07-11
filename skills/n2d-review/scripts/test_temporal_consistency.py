@@ -164,10 +164,12 @@ def test_seam_pair_check_same_and_color_jump(tmp_path):
     assert jump["verdict"] in ("warn", "block")
 
 
-# ── 接缝意图真值源（storyboard 唯一真值）单测 ──
+# ── 接缝意图真值源（P-3 chain 优先，storyboard legacy fallback）单测 ──
 
 def test_seam_strictness_canonical():
     assert tc.seam_strictness(None) == "strict"
+    assert tc.seam_strictness({"seam_mode": "match_on_action"}) == "info"
+    assert tc.seam_strictness({"seam_mode": "continuous_take_relay"}) == "strict"
     assert tc.seam_strictness({"transition": "match_cut"}) == "info"
     assert tc.seam_strictness({"transition": "relay"}) == "strict"
     assert tc.seam_strictness({"transition": "match_cut", "relay": True}) == "strict"
@@ -200,13 +202,13 @@ def test_anchor_png_names_are_not_first_frames():
     assert tc._is_anchor_png_name("Clip_02_end.png") is False
 
 
-def test_seam_analyze_reports_truth_source_contradiction(tmp_path):
+def test_seam_analyze_does_not_treat_nonrelay_endframe_as_contradiction(tmp_path):
     import json
     import pytest
     Image = pytest.importorskip("PIL.Image")
     pics = tmp_path / "出图" / "第1集" / "图片"
     pics.mkdir(parents=True)
-    # 镜头1 有接力尾帧 _end.png，但 storyboard 声明 match_cut → 矛盾 + dHash 降 info
+    # 非 relay 仍可有 end frame 作为本镜落幅参考；跨帧差异只降 info，不构成矛盾。
     Image.new("RGB", (64, 64), (200, 30, 30)).save(pics / "镜头1_end.png")
     Image.new("RGB", (64, 64), (30, 30, 200)).save(pics / "镜头2_首帧.png")
     sb = tmp_path / "脚本" / "第1集"
@@ -216,7 +218,7 @@ def test_seam_analyze_reports_truth_source_contradiction(tmp_path):
         {"id": "EP01_CLIP02", "continuity": {"transition": "hard_cut"}},
     ]}), encoding="utf-8")
     res = tc.seam_analyze(str(tmp_path), "第1集")
-    assert len(res["contradictions"]) == 1 and res["contradictions"][0]["shot"] == 1
+    assert res["contradictions"] == []
     assert all(s["verdict"] == "info" for s in res["seams"])  # storyboard 为准，不 block
 
     # 改成声明接力 → 无矛盾，红蓝色跳必须升 warn/block
@@ -227,6 +229,27 @@ def test_seam_analyze_reports_truth_source_contradiction(tmp_path):
     res2 = tc.seam_analyze(str(tmp_path), "第1集")
     assert res2["contradictions"] == []
     assert any(s["verdict"] in ("warn", "block") for s in res2["seams"])
+
+
+def test_load_seam_intents_prefers_p3_chain(tmp_path):
+    import json
+
+    d = tmp_path / "脚本" / "第1集"
+    d.mkdir(parents=True)
+    (d / "storyboard.json").write_text(json.dumps({"clips": [
+        {"id": "Clip_01", "continuity": {"transition": "relay", "need_endframe": True}},
+    ]}), encoding="utf-8")
+    (d / "continuity_chain.json").write_text(json.dumps({"seams": [{
+        "scope": "intra_episode", "from_episode": "第1集", "from_clip": "Clip_01",
+        "to_clip": "Clip_02", "transition": "视线切", "seam_mode": "eyeline_cut",
+        "seam_evidence": {"eyeline_source": "A", "eyeline_target": "门", "axis": "A-B"},
+    }]}), encoding="utf-8")
+
+    intents = tc.load_seam_intents(str(tmp_path), "第1集")
+
+    assert intents[1]["source"] == "continuity_chain"
+    assert intents[1]["seam_mode"] == "eyeline_cut"
+    assert intents[1]["relay"] is False
 
 
 def test_adaptive_frame_count_floor_and_density():

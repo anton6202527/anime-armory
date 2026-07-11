@@ -201,7 +201,7 @@ def test_prompt_consumed_contracts_block_when_upstream_stale(tmp_path):
     assert hits and "storyboard 已变更" in hits[0]["msg"]
 
 
-def test_seam_hard_contract_blocks_missing_axis_audio_hash(tmp_path):
+def test_seam_hard_contract_blocks_relay_missing_hash_and_next_frame(tmp_path):
     gate.findings.clear()
     root = tmp_path / "work"
     ep = "第1集"
@@ -211,8 +211,10 @@ def test_seam_hard_contract_blocks_missing_axis_audio_hash(tmp_path):
         "kind": "n2d_continuity_chain",
         "seams": [{
             "from_clip": "Clip_01",
-            "to_clip": "Clip_02",
-            "transition": "match_cut",
+                "to_clip": "Clip_02",
+                "transition": "continuous relay",
+                "seam_mode": "continuous_take_relay",
+                "seam_evidence": {},
             "from_end_state": "角色在画左举刀，火光从右侧扫过。",
             "to_start_state": "下一镜仍保持画左举刀，火光方向不变。",
             "common_entities": ["CHAR_01"],
@@ -223,7 +225,7 @@ def test_seam_hard_contract_blocks_missing_axis_audio_hash(tmp_path):
     gate.check_seam_hard_contract(str(root), ep, "video_prompt_preflight")
 
     hits = [f for f in gate.findings if f["dim"] == "Clip接缝硬合同" and f["sev"] == gate.BLOCK]
-    assert hits and "轴线/视线" in hits[0]["msg"] and "J/L cut" in hits[0]["msg"] and "sha256" in hits[0]["msg"]
+    assert hits and "sha256" in hits[0]["msg"] and "next_firstframe" in hits[0]["msg"]
 
 
 def test_seam_hard_contract_passes_complete_contract(tmp_path):
@@ -231,8 +233,10 @@ def test_seam_hard_contract_passes_complete_contract(tmp_path):
     root = tmp_path / "work"
     ep = "第1集"
     frame = root / "出图" / ep / "图片" / "Clip01_end.png"
+    next_frame = root / "出图" / ep / "图片" / "Clip02.png"
     frame.parent.mkdir(parents=True)
     frame.write_bytes(b"frame-v1")
+    next_frame.write_bytes(b"frame-v1")
     ep_dir = root / "脚本" / ep
     ep_dir.mkdir(parents=True)
     (ep_dir / "continuity_chain.json").write_text(json.dumps({
@@ -240,7 +244,9 @@ def test_seam_hard_contract_passes_complete_contract(tmp_path):
         "seams": [{
             "from_clip": "Clip_01",
             "to_clip": "Clip_02",
-            "transition": "match_cut",
+            "transition": "continuous relay",
+            "seam_mode": "continuous_take_relay",
+            "seam_evidence": {},
             "from_end_state": "角色在画左举刀，火光从右侧扫过。",
             "to_start_state": "下一镜仍保持画左举刀，火光方向不变。",
             "common_entities": ["CHAR_01", "WEAPON_01"],
@@ -248,6 +254,34 @@ def test_seam_hard_contract_passes_complete_contract(tmp_path):
             "audio_cut": "上一镜刀鸣做 J cut 延入下一镜半秒。",
             "required_boundary_frame": f"出图/{ep}/图片/Clip01_end.png",
             "required_boundary_frame_sha256": hashlib.sha256(b"frame-v1").hexdigest(),
+            "next_firstframe": f"出图/{ep}/图片/Clip02.png",
+            "next_firstframe_sha256": hashlib.sha256(b"frame-v1").hexdigest(),
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_seam_hard_contract(str(root), ep, "video_prompt_preflight")
+
+    assert not [f for f in gate.findings if f["dim"] == "Clip接缝硬合同" and f["sev"] == gate.BLOCK]
+
+
+def test_seam_hard_contract_nonrelay_uses_mode_evidence_without_frame_hash(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "work"
+    ep = "第1集"
+    ep_dir = root / "脚本" / ep
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "continuity_chain.json").write_text(json.dumps({
+        "kind": "n2d_continuity_chain",
+        "seams": [{
+            "from_clip": "Clip_01", "to_clip": "Clip_02",
+            "transition": "动作切", "seam_mode": "match_on_action",
+            "seam_evidence": {
+                "action_phase_out": "手掌抬到肩线", "action_phase_in": "手掌越过肩线落下",
+                "screen_direction": "画左向画右",
+            },
+            "from_end_state": "角色在画左抬手至肩线，动作仍在继续。",
+            "to_start_state": "下一镜从手掌越过肩线的后续相位切入。",
+            "common_entities": ["CHAR_01"],
         }],
     }, ensure_ascii=False), encoding="utf-8")
 
@@ -360,7 +394,7 @@ GOOD_VIDEO_CLIP = """## Clip 1（时长 5.0s · 镜头1） **节奏**：铺垫·
 **运动精修**：幅度=极小；能量=克制蓄压；身体守卫=肩颈和下巴不大幅扭动，脸部轮廓不拉伸，手部不穿过衣襟。
 **环境交互**：残烛光在眼下轻轻跳动，床幔阴影随呼吸微动，前景托盘保持不位移。
 **模型路由**：shot_type=dialogue_closeup；primary_backend=dreamina；fallback_backends=seedance,kling；mode=image2video；native_audio_policy=none；identity_requirement=reference_group；risk_flags=mouth_visible；rationale=普通近景先用项目默认后端，失败切身份/运动更强后端；degrade_plan=改侧脸或反应镜，必要时切 seedance/kling 重跑
-**接缝执行包 / Handoff Package**：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图
+**接缝执行包 / Handoff Package**：seam_mode=eyeline_cut；first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_end_anchor=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图
 **执行配方 / Execution Recipe**：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false
 **角色身份注册层**：`CHAR_SHEN/常态`；目标后端 dreamina=fallback_reference_group；fallback reference_group=出图/共享/图片/定妆_沈念.png + 侧面/半身参考；高危角度=deep_shadow；禁漂项=face_shape/hairstyle/outfit_palette
 **近景/反打身份锁定**：本镜是说话近景；优先引用 expressions/脸部特写，缺脸部特写时用正脸 front + 侧面 + 半身 reference_group；锁脸型、五官比例、发型发髻、标志配饰、服装配色；只允许眼神和嘴角小幅变化，脸漂则用 MCU/侧脸/反应镜保真实现。
@@ -389,7 +423,7 @@ continuity:
 运动精修约束：幅度极小，能量克制，脸部轮廓和发髻不拉伸，手部不穿模；
 环境交互约束：残烛光在眼下轻跳，床幔阴影随呼吸微动；
 模型路由约束：读取 video_model_routes.json；本镜 primary_backend=dreamina，fallback=seedance,kling，mode=image2video，native_audio_policy=none，identity_requirement=reference_group；prompt 只使用 dreamina 支持的 image2video 能力；失败按 degrade_plan 改侧脸或切 fallback 重跑；
-接缝执行包：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；
+接缝执行包：seam_mode=eyeline_cut；first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_end_anchor=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；
 执行配方约束：frame_inputs=首帧+尾帧；reference_inputs=CHAR_SHEN reference_group + PROP_鸩酒托盘；control_inputs=none；audio_inputs=none；fallback=改侧脸或反应镜；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；
 身份锁定约束：读取 identity_registry.json；dreamina 回退首帧+尾帧+reference_group；保持 drift_forbidden=face_shape/hairstyle/outfit_palette；
 近景身份锁定约束：近景优先脸部特写/表情参考；缺 reference_controls 时只做低幅度眼神和嘴角变化，不大幅转头，不重绘五官，配角近景不稳则用 MCU/OTS/侧脸保真实现；
@@ -4311,6 +4345,7 @@ def _patch_video_prompt_preflight_dependencies(monkeypatch):
         "check_multimodal_continuity", "check_semantic_lineage", "check_state_continuity",
         "check_video_backend_reachable",
         "check_dialogue_timing_mode",
+        "check_hybrid_performance_routes",
         "check_story_economy_audit", "check_production_handoff_pack", "check_production_locks_preflight",
     ):
         monkeypatch.setattr(gate, name, lambda *a, **k: None)
@@ -5416,10 +5451,10 @@ def test_video_clip_presence_chain_constraint_requires_three_fields():
 
 def test_video_clip_missing_handoff_package_is_blocked():
     clip = GOOD_VIDEO_CLIP.replace(
-        "**接缝执行包 / Handoff Package**：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图\n",
+        "**接缝执行包 / Handoff Package**：seam_mode=eyeline_cut；first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_end_anchor=True；transition=eyeline cut；entry_exit=CHAR_LIU offscreen；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true,requires_split_relay=false；fallback=尾帧不可用时按 end_state 强约束，但不得提前预演下一镜构图\n",
         "",
     ).replace(
-        "接缝执行包：first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_endframe=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；\n",
+        "接缝执行包：seam_mode=eyeline_cut；first_frame=出图/第1集/图片/镜头1_冷开场.png；end_frame=出图/第1集/图片/镜头1_end.png；midframes=0；need_end_anchor=True；anchor_consumption=consumption_mode=first_last_frame,consumes_endframe=true；fallback=尾帧不可用时按 end_state 强约束；\n",
         "",
     )
 
@@ -8058,6 +8093,68 @@ def test_video_first_rough_without_manifest_blocks_as_unverifiable(tmp_path):
     assert any(f["sev"] == gate.BLOCK and f["dim"] == "配音" and "时长清单" in f["msg"] for f in gate.findings)
 
 
+def _hybrid_timing(tmp_path: Path) -> None:
+    voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voice.parent.mkdir(parents=True, exist_ok=True)
+    source = "[镜头1·旁白·克制] 夜色压下来。"
+    voice.write_text(source + "\n", encoding="utf-8")
+    out = tmp_path / "合成" / "第1集" / "配音"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "timing_estimate.json").write_text(json.dumps({
+        "kind": "n2d_timing_estimate", "version": 1, "episode": "第1集",
+        "status": "provisional", "source_fingerprint": hashlib.sha256(source.encode("utf-8")).hexdigest(),
+        "audio_generated": False, "timing_basis": "text_estimate_no_audio",
+        "lines": [{
+            "line_index": 1, "镜头": "镜头1", "角色": "旁白", "文本": "夜色压下来。",
+            "时长": 2.0, "start": 0.0, "end": 2.0, "gap_after": 0.0,
+            "timing_basis": "text_estimate_no_audio",
+        }], "summary": {"line_count": 1, "duration_sec": 2.0},
+    }, ensure_ascii=False), encoding="utf-8")
+
+
+def test_hybrid_rough_uses_no_wav_timing_estimate_for_video_preflight(tmp_path):
+    _settings(tmp_path, "混合自动路由")
+    _progress(tmp_path, 配音="⏳rough")
+    _hybrid_timing(tmp_path)
+
+    gate.findings.clear()
+    gate.require_progress(str(tmp_path), "第1集", ("配音",))
+    gate.check_placeholder_policy(str(tmp_path), "第1集", "video")
+    gate.check_timing_manifest_complete(str(tmp_path), "第1集")
+
+    assert not any(f["sev"] == gate.BLOCK and f["dim"] in {"进度", "配音", "时间基准"} for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "时间基准" for f in gate.findings)
+    assert not list(tmp_path.rglob("*.wav"))
+
+
+def test_hybrid_base_video_contract_blocks_final_video_until_lipsync_output(tmp_path):
+    _settings(tmp_path, "混合自动路由")
+    routes = tmp_path / "出视频" / "第1集" / "prompt"
+    routes.mkdir(parents=True)
+    (routes / "video_model_routes.json").write_text(json.dumps({"routes": [{
+        "clip_id": "Clip_01", "audio_strategy": "base_video_then_post_lipsync",
+        "timing_basis": "text_estimate_no_audio", "post_lipsync_required": True,
+        "base_video_only": True, "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+        "final_voice_required": True,
+    }]}), encoding="utf-8")
+
+    gate.findings.clear()
+    gate.check_hybrid_performance_routes(str(tmp_path), "第1集", "video_preflight")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+    assert any(f["sev"] == gate.WARN and f["dim"] == "后期表演通道" for f in gate.findings)
+
+    gate.findings.clear()
+    gate.check_hybrid_performance_routes(str(tmp_path), "第1集", "video")
+    assert any(f["sev"] == gate.BLOCK and f["dim"] == "后期表演通道" for f in gate.findings)
+
+    output = tmp_path / "出视频" / "第1集" / "视频_lipsync" / "Clip_01_lipsync.mp4"
+    output.parent.mkdir(parents=True)
+    output.write_bytes(b"video")
+    gate.findings.clear()
+    gate.check_hybrid_performance_routes(str(tmp_path), "第1集", "video")
+    assert not any(f["sev"] == gate.BLOCK for f in gate.findings)
+
+
 def test_signoff_stage_without_contract_needs_some_output(tmp_path):
     _progress(tmp_path, 分镜设计="✅")  # script_stage2 无 output_contract，要求 outputs 至少一个在
     gate.findings.clear()
@@ -8927,6 +9024,7 @@ def test_timing_legacy_key_field_accepted(tmp_path, monkeypatch):
 def test_timing_missing_manifest_no_double_report(tmp_path, monkeypatch):
     # 缺清单由 check_progress_artifact_signoff 覆盖，这里不重复 BLOCK
     monkeypatch.setattr(gate, "is_native_av_production", lambda _root: False)
+    (tmp_path / "_设置.md").write_text("- 制作模式: 配音先行\n", encoding="utf-8")
     (tmp_path / "脚本" / "第1集").mkdir(parents=True, exist_ok=True)
     (tmp_path / "脚本" / "第1集" / "voiceover.txt").write_text(_VO2, encoding="utf-8")
     gate.findings.clear()
@@ -9770,7 +9868,7 @@ def test_storyboard_generic_template_missing_base_contract_blocks(tmp_path):
 
 
 # ── L7 endframe 豁免理由不能是占位/单字 ──
-def test_short_endframe_exempt_reason_blocks(tmp_path):
+def test_nonrelay_no_longer_needs_endframe_exemption_form(tmp_path):
     gate.findings.clear()
     clips = [
         {"firstframe_png": "a.png", "label": "远景",
@@ -9783,8 +9881,7 @@ def test_short_endframe_exempt_reason_blocks(tmp_path):
     ]
     root = _write_storyboard_with_clips(tmp_path, clips)
     gate.check_storyboard_contract(root, "第1集", require_frame_assets=False)
-    assert any(f["dim"] == "尾帧" and f["sev"] == "block" and "过短" in str(f["msg"])
-               for f in gate.findings)
+    assert not any(f["dim"] == "尾帧" and "过短" in str(f["msg"]) for f in gate.findings)
 
 
 def test_substantive_endframe_exempt_reason_ok(tmp_path):

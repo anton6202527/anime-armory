@@ -525,7 +525,7 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
     },
     {
         "key": "voice",
-        "label": "角色配音",
+        "label": "声音选角 / 时间基准 / 最终配音",
         "owner": "n2d-voice",
         "progress_columns": ("配音",),
         "command": "n2d-voice {root} {ep}",
@@ -533,12 +533,21 @@ STAGE_GRAPH: List[Dict[str, Any]] = [
         "gate_stage": None,
         "requires": ("剧本改编",),
         "outputs": (
+            "设定库/voice_casting.json",
+            "合成/{ep}/配音/timing_estimate.json",
             "合成/{ep}/配音/voice_zh.wav",
             "合成/{ep}/配音/时长清单.json",
             "合成/{ep}/配音/_占位说明.md",
         ),
         "output_contract": {
             "any_of": (
+                {
+                    "label": "混合路由声音前期（无 WAV）",
+                    "all_of": (
+                        "设定库/voice_casting.json",
+                        "合成/{ep}/配音/timing_estimate.json",
+                    ),
+                },
                 {
                     "label": "真实配音",
                     "all_of": (

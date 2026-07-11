@@ -201,7 +201,7 @@ CHARTER: Dict[str, Dict[str, Any]] = {
     "check_placeholder_policy": {
         "dim": "production配音占位", "required_severity": "block",
         "may_be_profile_gated": True, "may_be_opt_in": False, "review_status": "production_consistency_default",
-        "rationale": "先出视频后配音的占位时长只能做 rough demo；production 正式片必须配音先行或原生音画并补证据。",
+        "rationale": "production 正式片不得使用占位声音；混合模式可用无 WAV 时间基准推进，但交付前必须补齐逐镜 final voice、原生音画或后期口型证据。",
         "decided": "2026-06-29",
     },
     "check_image_backend_baseline": {

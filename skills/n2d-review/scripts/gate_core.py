@@ -39,6 +39,7 @@ from n2d_const import (  # noqa: E402
     MULTI_SUBJECT_SLOT_MARKERS,
     MULTI_SUBJECT_POSITION_MARKERS,
 )
+from seam_contract import needs_end_anchor  # noqa: E402
 from n2d_contract import (  # noqa: E402
     APPROVED_IMAGE_BACKENDS,
     ACTION_BEAT_CATEGORY_SPLIT_THRESHOLD,
@@ -133,7 +134,7 @@ from n2d_route import (  # noqa: E402
     voice_meta_path,
     voiceover_fingerprint,
 )
-from n2d_settings import get_setting, is_native_av, is_video_first  # noqa: E402
+from n2d_settings import get_setting, is_hybrid_routing, is_native_av, is_video_first  # noqa: E402
 from n2d_logic import normalize_camera_move, color_temperature_findings  # noqa: E402  运镜词典归一 + 色温数值化体检
 from gate_policy_matrix import family_for_stage as policy_family_for_stage, validate_matrix as validate_gate_policy_matrix  # noqa: E402
 from n2d_cross_episode import (  # noqa: E402  跨集视觉契约方向反转（同地点光位/轴线翻）核心
@@ -729,26 +730,20 @@ CONSISTENCY_RULE_REGISTRY: Dict[str, Dict[str, Any]] = {
     },
 }
 def _production_mode_contract_issues() -> List[str]:
-    """Lint n2d production mode docs against executable enum order."""
+    """Lint n2d production-mode menu against the executable enum order."""
     skill_path = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "..", "n2d", "SKILL.md"))
     try:
         text = open(skill_path, encoding="utf-8").read()
     except OSError as exc:
         return [f"cannot read n2d/SKILL.md: {exc}"]
     modes = list(production_mode_keys())
-    expected = {
-        "A": modes[0],
-        "B": modes[1],
-        "C": modes[2],
-    }
+    expected = dict(zip(("A", "B", "C", "D"), modes))
     issues: List[str] = []
     for letter, mode in expected.items():
         if not re.search(rf"\*\*{letter}\.\s*{re.escape(mode)}", text):
             issues.append(f"menu {letter} should be {mode}")
-    if "B（后配音）" in text or "别走 B" in text:
-        issues.append("后配音/先出视频后配音 must map to C, not B")
-    if "用户一旦明确表态" in text and "制作模式=先出视频后配音" in text and "C" not in text[text.find("用户一旦明确表态") - 80:text.find("用户一旦明确表态") + 160]:
-        issues.append("explicit 后配音 mapping should mention C / 先出视频后配音")
+    if "B（后配音）" in text or "C（后配音）" in text:
+        issues.append("后配音/先出视频后配音 must map to D")
     return issues
 PRODUCTION_CONSISTENCY_VALUES = {
     "production", "prod", "release", "strict", "final", "publish", "published",
@@ -2081,7 +2076,7 @@ def load_storyboard(root: str, ep: str) -> Optional[dict]:
     p = storyboard_path(root, ep)
     data = load_json(p)
     if not isinstance(data, dict):
-        add(BLOCK, "故事板", p, "缺少机器可读 storyboard.json；下游无法确定 continuity/need_endframe")
+        add(BLOCK, "故事板", p, "缺少机器可读 storyboard.json；下游无法确定 continuity/seam_mode/end_anchor")
         return None
     clips = data.get("clips")
     if not isinstance(clips, list) or not clips:
@@ -3482,7 +3477,7 @@ def _storyboard_frame_requirements(root: str, ep: str) -> Dict[int, Dict[str, in
             anchor_count = 1
         elif isinstance(cont.get("anchors"), list):
             anchor_count = len([a for a in cont.get("anchors") or [] if isinstance(a, dict)])
-        need_end = cont.get("need_endframe") is True
+        need_end = needs_end_anchor(clip)
         out[idx] = {
             "need_end": need_end,
             "anchor_count": anchor_count,
@@ -5219,6 +5214,7 @@ __all__ = [
     'voice_meta_path',
     'voiceover_fingerprint',
     'get_setting',
+    'is_hybrid_routing',
     'is_native_av',
     'is_video_first',
     'normalize_camera_move',

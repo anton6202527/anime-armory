@@ -20,6 +20,17 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 
+N2D_LIB = Path(__file__).resolve().parents[2] / "n2d" / "_lib"
+if str(N2D_LIB) not in sys.path:
+    sys.path.insert(0, str(N2D_LIB))
+from signoff_contract import (  # noqa: E402
+    load_manifest as load_signoff_manifest,
+    new_manifest as new_signoff_manifest,
+    profile_spec as signoff_profile_spec,
+    validate_manifest as validate_signoff_manifest,
+    write_manifest as write_signoff_manifest,
+)
+
 KIND = "n2d_development_pack"
 CHECK_KIND = "n2d_development_pack_check"
 VERSION = 1
@@ -288,7 +299,32 @@ def scaffold(root: Path, *, title: str = "", force: bool = False) -> Dict[str, A
         "gate": "run.py script_stage1 prework requires all required files to be confirmed.",
     }
     write_json_atomic(base / "development_pack.json", manifest)
+    signoff_spec = signoff_profile_spec(root, "p1")
+    signoff_path = root / signoff_spec["signoff_path"]
+    if not signoff_path.exists():
+        write_signoff_manifest(signoff_path, new_signoff_manifest(
+            root,
+            artifact_scope=signoff_spec["artifact_scope"],
+            author_id="automation:n2d",
+            input_paths=signoff_spec["input_paths"],
+            evidence_paths=signoff_spec["evidence_paths"],
+            required_role_groups=signoff_spec["required_role_groups"],
+        ))
     return {"kind": KIND, "root": str(root), "pack_dir": str(base), "created": created, "manifest": f"{PACK_DIR}/development_pack.json"}
+
+
+def _signoff_status(root: Path) -> Dict[str, Any]:
+    spec = signoff_profile_spec(root, "p1")
+    path = root / spec["signoff_path"]
+    issues = validate_signoff_manifest(
+        load_signoff_manifest(path),
+        root,
+        artifact_scope=spec["artifact_scope"],
+        input_paths=spec["input_paths"],
+        evidence_paths=spec["evidence_paths"],
+        required_role_groups=spec["required_role_groups"],
+    )
+    return {"rel": spec["signoff_path"], "status": "pass" if not issues else "block", "issues": issues}
 
 
 def _json_status(path: Path) -> Tuple[str, List[str]]:
@@ -329,6 +365,7 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
             continue
         status, issues = _json_status(path) if path.suffix == ".json" else _md_status(path)
         rows.append({"rel": rel, "status": status, "issues": issues})
+    rows.append(_signoff_status(root))
     blockers = [r for r in rows if r["status"] != "pass"]
     payload = {
         "kind": CHECK_KIND,
@@ -337,14 +374,14 @@ def check(root: Path, *, write_missing: bool = False) -> Dict[str, Any]:
         "root": str(root),
         "status": "pass" if not blockers else "block",
         "summary": {
-            "required": len(REQUIRED_FILES),
+            "required": len(rows),
             "pass": len(rows) - len(blockers),
             "block": len(blockers),
         },
         "files": rows,
         "scaffold_command": f"python3 skills/n2d-script/scripts/development_pack.py {root} scaffold --write",
         "next_when_blocked": (
-            "补齐开发包五件套，删除待补/TODO 占位，并把每个文件 status 改为 confirmed；"
+            "补齐开发包五件套并把内容 status 改为 confirmed；再用 signoff.py 让创意与制片角色分别签收当前文件哈希。"
             "之后重跑 check，再进入首批粗切/阶段1写词。"
         ),
     }

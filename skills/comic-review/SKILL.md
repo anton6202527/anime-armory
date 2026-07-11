@@ -67,7 +67,7 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage review
 ```
 
-`image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、缺 `visual_contract`、逐格缺人物完整性/眼神目标、逐格缺场景布局/光位/轴线、`LOC_` 未登记、无理由看镜头、多人同格缺站位/遮挡/接触点、混用模型/渠道等问题；`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。
+`image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、缺 `visual_contract`、逐格缺人物完整性/眼神目标、逐格缺场景布局/光位/轴线、`LOC_` 未登记、无理由看镜头、多人同格缺站位/遮挡/接触点、混用模型/渠道等问题；它还会用 `comic-image` 的 `build_panel_jobs.py --check` 按当前脚本/收尾/风格契约重编提交 prompt 并与落盘出图包比对，改了契约没重建出图包（`panel_jobs_stale_contract`）或脚本新增格缺 job（`panel_jobs_missing_panels`）都阻断。`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block，以及成图生成时哈希与当前提交契约不一致的格（`panel_generated_under_stale_contract`，防手工把旧图改回 ready）；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。风格锚判定不认 `未指定/无/待定` 等占位值。
 
 若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。
 
@@ -95,7 +95,7 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 | 角色指纹/并排证据 | `CHAR_` 参考图是否与本话出场 panel 并排可审，face/hair/outfit 启发式是否提示异常 |
 | 风格一致性 | 生图模型/渠道是否统一，风格锚是否登记，面板是否出现照片感/色彩/细节密度离群，场景族群内是否自洽，同场景是否冷暖调色横跳，是否出现多面板拼贴 gutter 或外框/截图边 |
 | 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |
-| 高一致性长线口径 | 开启高一致性参考策略、年龄形态继承或角色硬闸时，是否登记风格锚、角色 DNA、禁漂移项和形态继承策略 |
+| 高一致性长线口径 | `角色一致性硬闸=开启` 或 `年龄形态继承=开启`（按设置值显式判断，长值策略 token 兼容）时，是否登记风格锚、角色 DNA、禁漂移项和形态继承策略；硬闸开启同时强制长线多视图缺口阻断 |
 | 手脚/动作解剖 | 脚尖、脚步、踩踏、跪地、武器落点是否被画成手或漂浮肢体 |
 | 文字质量 | 错字、标点、语气、拟声词是否统一；`文字语言` 与 manifest、`lettering.json` 是否一致 |
 | 空气泡 | 没有文字的气泡/旁白框是否已删除或回图像阶段重出 |

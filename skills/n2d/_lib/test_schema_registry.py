@@ -47,6 +47,44 @@ def test_validate_runtime_v2_artifact_kinds_pass() -> None:
             "kind": "n2d_multishot_batch", "version": 1, "episode": "第1集", "group_id": "MSG_01",
             "backend": "seedance", "members": ["Clip_01", "Clip_02"], "status": "prepared", "shots": [],
         },
+        {
+            "kind": "n2d_artifact_signoff", "version": 1, "artifact_scope": "stage2_animatic",
+            "episode": "第1集", "authored_by": "automation:n2d", "input_fingerprint": {},
+            "evidence_fingerprint": {}, "required_approval_groups": [], "approvals": [], "status": "pending",
+        },
+        {
+            "kind": "n2d_production_mode_route", "version": 1, "episode": "第1集",
+            "status": "aligned", "decision": {}, "signals": {}, "inputs_fingerprint": {},
+        },
+        {
+            "kind": "n2d_editorial_timeline", "version": 1, "episode": "第1集",
+            "phase": "animatic", "status": "ready", "duration_sec": 12.0,
+            "track_names": ["V1 Picture"], "media": [], "seams": [],
+            "otio_path": "合成/第1集/_work/editorial_timeline.otio", "otio_sha256": "abc",
+        },
+        {
+            "kind": "n2d_voice_casting", "version": 1, "status": "casting",
+            "policy": "casting_first_final_render_later",
+            "roles": [{"role": "沈念", "status": "unselected"}],
+            "summary": {"role_count": 1, "locked_count": 0},
+        },
+        {
+            "kind": "n2d_timing_estimate", "version": 1, "episode": "第1集",
+            "status": "provisional", "source_fingerprint": "abc", "audio_generated": False,
+            "timing_basis": "text_estimate_no_audio",
+            "lines": [{
+                "line_index": 1, "镜头": "镜头1", "角色": "旁白", "文本": "夜色。",
+                "时长": 1.0, "start": 0.0, "end": 1.0, "gap_after": 0.0,
+                "timing_basis": "text_estimate_no_audio",
+            }],
+            "summary": {"line_count": 1, "duration_sec": 1.0},
+        },
+        {
+            "kind": "n2d_shot_timing_basis", "version": 1, "episode": "第1集",
+            "timing_basis": "text_estimate_no_audio", "provisional": True,
+            "source": "合成/第1集/配音/timing_estimate.json",
+            "final_voice_required_before_compose": True,
+        },
     ]
     assert all(reg.validate_payload(payload) == [] for payload in payloads)
 

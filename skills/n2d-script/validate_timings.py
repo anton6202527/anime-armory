@@ -4,9 +4,11 @@
 #       不给 --target-seconds 时默认从 _设置.md「拆集节奏」预设自动取软节奏目标做集长 WARN（--no-target 关闭）。
 # 退出码: 0=全过 / 1=有硬不一致或缺文件（可接 CI）。所有检查仅读取，不改文件。
 import sys, os, re, json, subprocess
+from pathlib import Path
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
-from n2d_settings import is_native_av, get_setting  # 制作模式判定 + 选择点读取（单一真值源）
+from n2d_settings import is_hybrid_routing, is_native_av, is_video_first, get_setting  # 制作模式判定 + 选择点读取
 from n2d_route import placeholder_indices, voiceover_fingerprint  # 占位判定 + 配音源指纹（单一真值源）
+from voice_preproduction import TIMING_KIND, load_voiceover, timing_path
 
 # 拆集节奏 → 软节奏目标秒（仅用于 WARN，不作硬上下限；旧键「单集时长」兼容读取）。
 # 「前长后短」第1集与其余集不同档：用 (ep1_target, rest_target)；其余预设第1集同其余集。
@@ -183,6 +185,65 @@ def _validate_native_av(root, ep, shots_p, tol, target=None):
     print("\n时长链一致（原生音画）。"); return 0
 
 
+def _validate_estimated_timing(root, ep, shots_p, zh_srt, tol, target=None):
+    """Validate a no-WAV editorial timing basis without pretending it is final audio."""
+    path = timing_path(Path(root), ep)
+    data = json.load(open(path, encoding="utf-8")) if path.is_file() else {}
+    lines = data.get("lines") if isinstance(data, dict) else None
+    fails=[]; warns=[]; oks=[]
+    print(f"=== 时长一致性 {ep}（无 WAV 估算时间基准·tol={tol}s）===")
+    if data.get("kind") != TIMING_KIND or not isinstance(lines, list) or not lines:
+        print(f"  ⛔ {path} 缺 kind={TIMING_KIND} 或 lines 为空")
+        return 1
+    if data.get("audio_generated") is not False:
+        fails.append("timing_estimate.audio_generated 必须为 false；估时合同不能冒充音频资产")
+    _source, _rows, current_fingerprint = load_voiceover(Path(root), ep)
+    recorded = str(data.get("source_fingerprint") or "")
+    if recorded and current_fingerprint and recorded != current_fingerprint:
+        fails.append("voiceover.txt 已在估时后改动（指纹失配）→ 重跑 voice_preflight.py prepare 与 finalize_storyboard")
+    elif recorded and current_fingerprint:
+        oks.append("voiceover 指纹与 timing_estimate 一致")
+    def _number(value, default=0.0):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+    bad = [i for i, row in enumerate(lines) if not isinstance(row, dict) or _number(row.get("时长")) <= 0]
+    if bad:
+        fails.append(f"timing_estimate 有 {len(bad)} 行时长<=0（如 {bad[:6]}）")
+    estimate_total = sum(_number(row.get("时长")) + _number(row.get("gap_after")) for row in lines if isinstance(row, dict))
+    if not os.path.isfile(shots_p):
+        fails.append("缺 镜头时长.json；先跑 finalize_storyboard")
+    else:
+        shots = json.load(open(shots_p, encoding="utf-8"))
+        shots_total = sum(float(value) for value in shots.values())
+        if abs(estimate_total - shots_total) > tol:
+            fails.append(f"timing_estimate 累计 {estimate_total:.2f}s ≠ 镜头时长累计 {shots_total:.2f}s")
+        else:
+            oks.append(f"timing_estimate {estimate_total:.2f}s ≈ 镜头时长 {shots_total:.2f}s")
+        tw = target_deviation_warn(shots_total, target)
+        if tw:
+            warns.append(tw)
+    blocks = srt_blocks(zh_srt)
+    if blocks and len(blocks) != len(lines):
+        fails.append(f"timing_estimate {len(lines)} 句 ≠ 字幕_中文.srt {len(blocks)} 块")
+    last = srt_last_end(zh_srt)
+    if last is not None:
+        voiced_end = max((_number(row.get("end")) for row in lines if isinstance(row, dict)), default=0.0)
+        if abs(last - voiced_end) > tol:
+            fails.append(f"字幕末行 {last:.2f}s ≠ 估算念白末点 {voiced_end:.2f}s")
+    warns.append("这是估算时间基准，不是最终配音；可见口型镜必须按 production_mode_route 使用表演轨或完成后期口型 pass")
+    warns.append("compose/review 前必须完成声音选角锁和最终声音资产；本检查通过不代表最终音画同步通过")
+    for item in oks: print(f"  ✅ {item}")
+    for item in warns: print(f"  ⚠️  {item}")
+    for item in fails: print(f"  ⛔ {item}")
+    if fails:
+        print(f"\n{len(fails)} 处硬不一致 → 重建时间基准后再继续。")
+        return 1
+    print("\n估算时间链一致（仍需最终声音签收）。")
+    return 0
+
+
 def main():
     if len(sys.argv) < 3:
         sys.exit('用法: validate_timings.py <作品根> <第N集> [--tol 0.5]')
@@ -225,6 +286,10 @@ def main():
         if is_native_av(root):
             native_code = _validate_native_av(root, ep, shots_p, tol, target)
             sys.exit(1 if contract_code or native_code else 0)
+        estimate_p = timing_path(Path(root), ep)
+        if (is_hybrid_routing(root) or is_video_first(root)) and estimate_p.is_file():
+            estimate_code = _validate_estimated_timing(root, ep, shots_p, zh_srt, tol, target)
+            sys.exit(1 if contract_code or estimate_code else 0)
         print(f"⛔ 缺 {man_p}（先 n2d-voice）"); sys.exit(1)
     man = json.load(open(man_p,encoding='utf-8'))
     n = len(man)

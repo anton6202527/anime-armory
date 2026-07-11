@@ -349,10 +349,10 @@ def backfill(data: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(policy, dict):
         policy = {}
         data["policy"] = policy
-    if policy.get("tailframe_default") is not True:
-        policy["tailframe_default"] = True
+    if policy.get("seam_taxonomy_version") != 1:
+        policy["seam_taxonomy_version"] = 1
         changes["policy"] += 1
-    policy.setdefault("midframe_default", True)
+    policy.setdefault("midframe_default", False)
 
     clips = data.get("clips")
     if not isinstance(clips, list):

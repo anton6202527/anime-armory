@@ -43,6 +43,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _validate_wardrobe_profile,
     _video_route_backend_roles,
 )
+from seam_contract import needs_end_anchor
 
 def check_input_frame_qc(root: str, ep: str) -> None:
     """出视频前置（省最贵那一步的钱）：图生视频是 n2d 最贵工位，image2video 会**忠实把首帧缺陷动起来**——
@@ -820,7 +821,7 @@ def check_expression_anchors(root: str, ep: str) -> None:
                             "有意更新就重出依赖镜后 `image_qc --finalize-expr` 重钉，否则恢复原图。")
 
 def check_expression_span_frame_contract(root: str, ep: str) -> None:
-    """出视频前置（脸被表情带着重画的头号根因·机检闸门）：跨情绪近景必须走首尾双帧只插值工艺。
+    """出视频前置：跨情绪近景必须有镜内尾锚，接缝类型另行判定。
 
     `prompt_format.md`「近景大表情变化类 Clip」铁律：表情跨度=大（平静→爆哭/隐忍→暴怒）的 CU/MCU/反打镜
     若靠单首帧让模型自由生成中间表情，脸型/五官比例会随表情拉伸漂移、剪起来像换了个人。此前
@@ -828,7 +829,7 @@ def check_expression_span_frame_contract(root: str, ep: str) -> None:
     `continuity.expression_span` ∈ {微,中,大}）后机检：
 
       · expression_span 值非法（非 微/中/大）→ BLOCK（typo 防呆）；
-      · expression_span=大 且镜为近景/特写/反打 → 必须 need_endframe=true（有止表情尾帧可插值），
+      · expression_span=大 且镜为近景/特写/反打 → 必须 end_anchor_required=true（或本镜本就是 relay），
         否则 BLOCK——单首帧扛不住跨情绪表情；
       · expression_span=大 但镜非近景 → WARN（远景大表情风险低，或景别标错，提示复核）。
 
@@ -860,11 +861,11 @@ def check_expression_span_frame_contract(root: str, ep: str) -> None:
                 "expression_span=大 但本镜景别未识别为近景/特写/反打——跨情绪大表情通常是脸戏；"
                 "若确为远景/空镜风险较低，否则复核景别或下调跨度档。", return_to_stage="script_stage2")
             continue
-        if cont.get("need_endframe") is not True:
+        if not needs_end_anchor(clip):
             add(BLOCK, "表情一致性", loc,
-                "expression_span=大 的近景/特写/反打镜必须 need_endframe=true 走「首尾双帧只插值」"
+                "expression_span=大 的近景/特写/反打镜必须 end_anchor_required=true 走「镜内首尾双帧只插值」"
                 "（首=起表情、尾=止表情同源定妆，mode=frames2video，让模型只插值表情肌肉、不自由重画脸）；"
-                "缺尾帧=单首帧硬扛跨情绪表情=脸型/五官比例随表情漂移。补 endframe_png（止表情定妆，"
+                "该字段只声明镜内尾锚，不会把剪辑接缝误标成连续 take。缺尾帧=单首帧硬扛跨情绪表情。补 endframe_png（止表情定妆，"
                 "如 `镜头N_expr_end.png` 或 reference_group.expressions 对应情绪图）或用 MCU/OTS/侧脸保真实现后下调跨度档。",
                 return_to_stage="image")
 

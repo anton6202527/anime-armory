@@ -212,7 +212,7 @@ def recommend_camera_move(clip: Dict[str, Any]) -> Dict[str, str]:
     if flags["action"] and flags["peak"] and not flags["closeup"]:
         return _recommendation(
             "跟拍", "快速", "顺动作方向跟随半拍，命中点前稳定", shot or "MS/LS",
-            "动作高光用跟拍制造代入感，但在命中/反应拍前收稳，方便首尾帧接力。",
+            "动作高光用跟拍制造代入感，但在命中/反应剪点前收稳，给 match_on_action 或反应切留清楚相位。",
         )
     if flags["action"] and not flags["closeup"]:
         return _recommendation(

@@ -1,6 +1,6 @@
 ---
 name: n2d-model-router
-description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专项模板/原生音画/身份锁定/时长，把每个 Clip 路由到最适合的视频后端 primary/fallback，避免固定一个视频模型包打天下。Use when asked about model routing, 模型适配层, 后端路由, 视频模型选择, 打斗/对话/真相揭示/公开对质/关系转折/飞行/空镜/法术爆发/亲密互动/拥抱拉扯/多人同框/群像站位该用哪个视频模型.
+description: 横切模型与音画制作适配层：在 n2d 出视频前，先按镜头判断表演音轨先行、无 WAV 粗时间、画面先行、原生音画或基础视频后置口型，再结合镜头类型、身份锁、控制资产和时长路由到最适合的视频后端 primary/fallback。Use when asked about model routing、制作模式路由、音画先后、后端路由、视频模型选择。
 ---
 
 # n2d-model-router — 视频模型适配层
@@ -13,6 +13,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 4. 复杂物理交互是否需要 Motion Control manifest。
 5. 失败时怎么换实现路径、补控制资产或拆镜拍全。
 6. prompt / 平台参数 / gate 要怎样执行这条路由。
+7. 本镜的时间基准和声音策略是什么，生成的是最终表演、neutral-mouth base plate，还是原生同步音画。
 
 ## 触发
 
@@ -22,7 +23,7 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、视频模型/渠道能力档案、跨集路由基线；若存在 `生产数据/spectacle_backend_benchmark.json`，自动读取打斗/追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/大场景 probe 结果作为自动路由加权。
+- **输入**：`_设置.md`、`storyboard.json`、`identity_registry.json`、`voice_casting.json`、`timing_estimate.json`、可选 `配音_导引/line_NN.wav`、视频模型/渠道能力档案与跨集路由基线；若存在 `生产数据/spectacle_backend_benchmark.json`，自动读取打斗/追逐/飞行/御兽/马车/飞舟/现代车辆/尾随潜入/大场景 probe 结果作为自动路由加权。
 - **输出**：`出视频/第N集/prompt/video_model_routes.json` 和 `.md`，同步写 `生产数据/consistency_policy_lattice.json`；第 1 集打样后写 `设定库/model_routes_baseline.json`。第 2 集起凡含核心/角色身份或高风险镜头（打斗/追逐/多人/揭示/对质/关系转折等），`n2d-review gate` 会要求路由按该基线锚定；自然路由漂移需刷新基线或写结构化 `baseline_override`（`accepted/reviewer/reason/expires_at/affected_routes`）。
 - **读写边界**：只写路由表和基线；不生成视频、不改 `_进度.md`、不替 `n2d-video` 写最终 clip prompt。
 - **契约关系**：模型路由是 `skills/n2d/_lib/n2d_contract.py` 的横切工具（`CROSS_CUTTING_TOOLS`），不是进度 readiness 项；motion control / native AV / lipsync 判定必须复用契约常量。
@@ -50,13 +51,16 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
   - 输出形状与 gate `check_motion_control_manifest` 单一真值源对齐（已交叉验证：planned 阻断 / 填齐 ready 放行 / degrade_only+plan 放行）。
 - **T2V 原生动作通道（实验特例 · 默认关闭）**：`mode=text2video` 不是主线默认，也不能绕过角色身份链。只有同时满足以下条件才允许路由切到 T2V：① `_设置.md` 显式写 `T2V动作通道=实验开启`；② Clip 是 `fight_exchange` / `chase` / `mount_ride` / `vehicle_ride` / `vessel_flight` / `road_vehicle` / `stealth_stalk` 等高动量、强物理镜头；③ 镜头不是核心角色近景/清晰脸/身份验收重点，或已写 `t2v_identity_reference_plan`（reference_inputs、禁漂身份锚、资产锚、失败回退）；④ route 写明 `experimental_t2v=true`、`degrade_plan=image2video_or_frames2video`。**收益**：在远景高速动作、空中追逐、群体运动、载具行进、车流/潜入等对物理连贯性高于脸部一致性的镜头里，让 Veo / Seedance 等后端从文本和参考资产重算动量，减少“静态首帧微动”感。**执行边界**：T2V 只可跳过付费首帧 PNG，不可跳过共享定妆、角色/场景/道具参考包、视觉/风格契约和 route 证据；`n2d-video` 的 frame 检查只对 `experimental_t2v=true` 的 Clip 豁免 `firstframe_png`，仍要检查 reference_inputs、identity anchors、motion contract 和失败回退。若这些专用字段缺失，router 必须回退 image2video/frames2video，而不是直接走文生视频。
 - **mouth_visible 自动预填**：`scripts/mouth_detect.py <作品根> 第N集` 为每 Clip 预填/复核 `mouth_visible`（决定原生音画 opt-in 与是否要口型同步）。文本端复用 `clip_has_mouth_visible`（单一真值源），图像端装 insightface 时从首帧 PNG 用 106 关键点判正脸+嘴可见（缺库优雅回退文本端、标 `image=unknown`，绝不臆造）。图↔文本/图↔prompt 不一致标 warn（以图为准），省得逐镜手判后还填错原生音画策略。
-- **三条音画路线，按 `制作模式` + `对口型` 选（避免被代差绕过）**：
-  - **`配音先行`（强配音控制模式）**：说话镜由配音链路控制，**不让视频模型生成台词**；只有空镜/远景/无口型低风险镜头可 opt-in 原生环境声/音效（`ambience/native_sfx`）。
-  - **`配音先行 + 对口型 opt-in`（voice_conditioned_lipsync）**：`制作模式=配音先行` 且 `对口型≠关闭` 时，**说话镜（对话反打/说话特写/mouth_visible）路由 `mode=voice_conditioned_lipsync`、`native_audio_policy=lipsync_condition_only`**，primary 选支持音频参考口型的后端（Seedance 2.0 音素级 / 可灵 Omni，见 `LIPSYNC_AUDIO_REF_BACKENDS`），把本镜配音 `line_NN.wav` 当**口型条件**喂进去同帧出对口型画面。**关键：音轨仍是 voice-first 克隆音色（compose 用配音轨），模型音频只作口型条件、不接管声音**——既不双人声、又省一道后期 MuseTalk/Wav2Lip 对口型 pass。后端不支持音频参考口型 → 按 `degrade_plan` 回退「image2video 静音 + 后期对口型 pass」，或改用侧脸/背身/反应镜实现同一对白 beat。这是 native_av 与「配音→后期对口型」之间的中间路线。
-  - **`原生音画`（native AV·opt-in 整剧）**：`制作模式=原生音画` 时，**说话镜路由到原生同步音画后端**（Seedance 2.0 / Veo 3.1，见 `NATIVE_AV_BACKENDS`），`mode=native_av`、`native_audio_policy=native_speech`，一次出台词+口型+环境声，**绕过配音先行的时长清单**（台词文本/情绪/单镜时长来自脚本）。Sora legacy/manual-only，不进入 `NATIVE_AV_BACKENDS`。规避「配音→对口型」代差与占位返工；代价是少了逐句音色控制。原生口型/音质不达标 → 按 degrade_plan 本镜回退配音先行。若 `视频模型路由=固定生视频模型` 或身份优先模板导致说话镜不能走 `native_speech`，router 必须写 `requires_voice_fallback=true` + `fallback_production_mode=voice_first`，gate 会强制先补真实 n2d-voice 配音，避免“无声对白镜”。**动作/空镜等非说话镜不变。** native_speech / lipsync 镜的真人音色克隆仍需授权（compliance gate）。
+- **默认逐镜混合音画路由，时间基准先行**：`制作模式=混合自动路由` 时，每条 route 必须写 `audio_strategy`、`timing_basis`、`performance_track_status/path`、`final_voice_stage`、`base_video_only`、`post_lipsync_required`。项目级模式只决定默认策略，不再把所有镜头强制成同一种生产顺序：
+  - **`performance_audio_first`**：对白近景、正反打、口型可见镜头已有获批表演/guide 轨时，走 `voice_conditioned_lipsync` 或相应表演驱动后端；该轨负责节奏、口型和表情，最终高质量配音仍可在后期替换。
+  - **`base_video_then_post_lipsync`**：同类镜头尚无可信表演轨时，先产无原生人声的 neutral-mouth base plate，`base_video_only=true`、`post_lipsync_required=true`；不得让模型猜台词口型。最终/获批表演轨到位后由 `lipsync_pass.py` 生成独立 `视频_lipsync/Clip_XX_lipsync.mp4`。
+  - **`rough_timing_final_dub_later` / `post_dub`**：旁白、内心戏、口外音读取 `timing_estimate.json`，不需要占位 WAV；画内不做口型。
+  - **`picture_first`**：动作、空镜、蒙太奇按画面节奏先行，声音在后期设计。
+  - **`native_av`**：仅镜头和已核验后端能力适合时一次生成同步音画；仍受台词事实锁、声音授权和原生音轨 QC 约束。
+- **旧项目模式继续兼容**：显式 `配音先行` 可全片真音先出，`先出视频后配音` 可全片画面先行，`原生音画` 可项目级 opt-in；新项目默认用上面的逐镜组合。
 - **身份优先级**：含主要角色且高风险角度/多人互动时，优先选择有 `Character ID / Face Lock / reference controls` 可用的后端；没有 registered/ready 状态时，在实现分解方案里写明首尾帧 + reference_group 或拆镜。
 - **逐镜角色绑定是机器字段**：含身份要求的 route 必须写 `clip_characters[]`，从 `storyboard.json` 的 `characters/character_ids/cast/subjects/character_refs` 或文本里的 `CHAR_xx/形态` 提取。gate 会用它把身份锁检查缩到本 Clip 实际角色；缺该字段的身份镜会被要求重跑 router。
-- **接力镜 → 双关键帧（seam_relay，2026 起一等公民）**：接力/无缝镜（`continuity.need_endframe=true` 或 transition∈接力/relay/seamless）路由会带 `seam_relay` 子表。`backend_supports_dual_keyframe`（首尾硬约束插值：即梦 multiframe / 可灵 O3 的 `first_last_frame|native_multiframe`）的后端做 primary → `seam_guaranteed=true`：把上一镜尾帧作本镜首帧**硬约束**插值，接缝结构保证、且**边界帧两镜复用省一次出图**；primary 不支持则从 fallback 挑一个支持的（`dual_keyframe_fallback`）并在 rationale 里提示改用它。注意这是**预防侧**——落档侧 `temporal_consistency` 接缝机检照常 block（双关键帧镜接缝仍漂=后端没真消费尾帧/被拆段，是真故障，不因「声明了」就放过）。
+- **接力镜 → 双关键帧（seam_relay）**：只有显式 `continuity.seam_mode=continuous_take_relay`（旧项目才允许 transition/need_endframe 迁移推断）会带 `seam_relay` 子表。支持首尾硬约束的后端可把授权边界帧作为双关键帧；不支持则从 fallback 挑可执行后端。`hard_cut/match_on_action/graphic_match/...` 即使有镜内尾锚也不进入 relay 路由，避免把有意剪辑误焊成连续 take。落档侧 `temporal_consistency` 仍验证 relay 同帧，声明本身不豁免。
 - **QC 失败自动升锁（E4·闭环）**：`route_episode` 开跑先读 `生产数据/production_events.jsonl`，按 clip 聚合**本集 identity 失败次数**（redraw status=fail / qa_gate block 且原因命中脸/身份关键词）。某镜 ≥2 次 → `escalate_identity_for_failures` 自动升锁：`identity_requirement=native_identity_lock_required` + `risk_flag=identity_escalated`，primary 无原生身份锁(Character ID/Face Lock)时换成有的后端（**固定后端模式只收紧 requirement + 提示手动换厂/补 ref/拆镜，绝不擅自换厂**）。把"反复崩脸还路由到同一弱锁后端白烧"的静态盲点闭环。
 - **失败可回滚**：每条路由都写 fallback 和 `degrade_plan`（实现分解/回退方案），让 n2d-batch 只重跑受影响 Clip。
 - **空间复杂镜 → 评估世界模型类后端（spatial-heavy·新兴能力·防过期）**：同场景多镜需 **3D 空间一致 + 道具恒存**的镜——长连续运镜、绕物/环绕运镜、可探索环境、镜头穿越空间——纯 2D 视频后端易出空间漂移与道具凭空增减。命中这类镜时，在 fallback/rationale 里**提示评估世界模型类能力后端**（采集 2026-06-19：Kling 3.0 原生多镜+主体锁、Genie 3 类、NVIDIA Cosmos、Marble，原生维护 4D 空间与 object permanence）。**这类后端仍新兴、未必接入 n2d 渠道**：先作 primary 候选**评估**、不擅自硬切，落地前以 `n2d-video/references/platforms.md` 官方能力档案复核（与模型矩阵「二、视频」同源）。判定走能力档案，不 hardcode 厂商名。
@@ -74,7 +78,8 @@ description: 横切模型适配层：在 n2d 出视频前，按镜头类型/专�
 
 必读：
 
-- `<作品根>/_设置.md`：`生视频模型`、`生视频渠道`、`视频模型路由`、`视频备用后端`（固定模式可设 `无`）、`制作模式`（=原生音画→说话镜走 native_speech）、`视频原生音轨`、`对口型`。旧 `生视频AI` 兼容读取。
+- `<作品根>/_设置.md`：`生视频模型`、`生视频渠道`、`视频模型路由`、`视频备用后端`、`制作模式`（默认混合）、`视频生成音频策略`、`视频原生音轨`、`对口型`。
+- `<作品根>/设定库/voice_casting.json` 与 `合成/第N集/配音/timing_estimate.json`；可选 final/guide line WAV。缺前两者先跑 n2d-voice preflight，不用占位音频补洞。
 - `<作品根>/脚本/第N集/storyboard.json`：`clips[]`、`template`、`template_contract`、时长、场景、动作文字。
 - `<作品根>/出图/共享/identity_registry.json`：角色 ID / Face Lock / reference controls 状态。
 - `skills/n2d-video/references/platforms.md`：后端能力档案。
@@ -92,6 +97,7 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write
 
 - `出视频/第N集/prompt/video_model_routes.json`
 - `出视频/第N集/prompt/video_model_routes.md`
+- 其顶层 `production_sound_plan` 与逐 route 声音字段；需要独立人读报告时运行 `python3 skills/n2d/scripts/production_mode_router.py <作品根> 第N集 --write`。
 
 `video_model_routes.json` 是机器真值，`video_model_routes.md` 供人审。字段约定见 `references/schema.md`。
 
@@ -101,8 +107,8 @@ python3 skills/n2d-model-router/scripts/router.py <作品根> 第N集 --write
 |---|---|---|---|
 | 打斗 / 命中 / 多主体接触 | Kling | Seedance / Dreamina | 首尾帧、运动笔刷、Character ID、多主体互动更重要；`motion_control=required`；`action_choreography=required` |
 | 追逐 / 飞行 / 长连续运动 | Seedance | Kling | 长单镜、连续运镜、背景运动更重要；`motion_control=required`；`action_choreography=required`；优先视频运动参考 |
-| 对话反打 / 说话近景 | Kling | Veo / Seedance | 口型/身份锁定/角色稳定优先；若海外或原生口型 opt-in 可切 Veo |
-| 对话反打 / 说话近景（`配音先行`+`对口型≠关闭`） | Seedance / 可灵 Omni | Kling / Veo | `mode=voice_conditioned_lipsync`：把配音 `line_NN.wav` 当口型条件喂进支持音频参考的后端，音轨仍走配音轨（不双人声、省后期对口型 pass） |
+| 对话反打 / 说话近景（已有获批表演/guide） | Seedance / 可灵 Omni | Kling / Veo | `performance_audio_first` + `voice_conditioned_lipsync`；表演轨只作条件，final voice 可后置 |
+| 对话反打 / 说话近景（暂无可信表演轨） | Kling / 项目默认 | Seedance / Veo | `base_video_then_post_lipsync`；只出 neutral-mouth base plate，随后独立 lipsync pass |
 | 真相揭示 / 身份曝光 | Kling | Veo / Seedance | 证据物稳定、反应链、脸部微表情和台词口型优先；通常走 high 档 |
 | 公开对质 / 审讯 / 谈判 | Kling | Seedance / Veo | 多人空间层级、裁决者/证人/对手反应和台词密度优先；必要时拆正反打 |
 | 关系转折 / 告白 / 决裂 / 和解 | Kling | Veo / Seedance | 微表情、关系距离、称谓/台词和身份稳定优先；大表情跨度需首尾帧或 MCU 保真实现 |

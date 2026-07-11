@@ -37,6 +37,11 @@ try:
     from n2d_route import normalize_episode  # type: ignore
 except Exception:  # pragma: no cover
     normalize_episode = lambda x: str(x or "").strip()  # type: ignore
+from n2d_const import PRODUCTION_MODE_DEFAULT
+try:
+    from production_mode_router import build_route as build_production_mode_route
+except Exception:  # pragma: no cover - legacy/minimal distribution fallback
+    build_production_mode_route = None  # type: ignore
 
 
 KIND = "n2d_preventive_contracts"
@@ -408,41 +413,98 @@ def derive_interaction_row(clip: Mapping[str, Any], cid: str) -> Dict[str, Any]:
     return row
 
 
-def derive_audio_timing(root: Path, clips: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
-    mode = production_mode(root) or "先出视频后配音"
+def derive_audio_timing(root: Path, episode: str, clips: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    mode = production_mode(root) or PRODUCTION_MODE_DEFAULT
     audio_strategy = setting_value(root, "视频生成音频策略") or "无声视频流"
     lipsync = setting_value(root, "对口型") or "关闭"
     native_track = setting_value(root, "视频原生音轨") or "丢弃"
+    sound_plan: Dict[str, Any] = {}
+    sound_by_clip: Dict[str, Dict[str, Any]] = {}
+    if build_production_mode_route is not None and (
+        "混合自动路由" in mode or "hybrid" in mode.lower() or "mixed" in mode.lower()
+    ):
+        try:
+            sound_plan = build_production_mode_route(root, episode)
+            sound_by_clip = {
+                str(row.get("clip_id") or ""): dict(row)
+                for row in (sound_plan.get("clip_routes") or [])
+                if isinstance(row, Mapping) and str(row.get("clip_id") or "").strip()
+            }
+        except Exception:
+            sound_plan = {}
+            sound_by_clip = {}
     dialogue_rows: List[Dict[str, Any]] = []
     for idx, clip in enumerate(clips, 1):
         if not clip_needs_audio_timing(clip):
             continue
         cid = clip_key(clip, idx)
+        sound = sound_by_clip.get(cid, {})
+        strategy = str(sound.get("audio_strategy") or "").strip()
+        timing_basis = str(sound.get("timing_basis") or "").strip()
+        if not strategy:
+            if "原生音画" in mode:
+                strategy = "native_av"
+            elif "先出视频后配音" in mode:
+                strategy = "post_dub"
+            else:
+                strategy = "performance_audio_first"
+        if not timing_basis:
+            timing_basis = (
+                "native_av_script_timing" if strategy == "native_av"
+                else "text_estimate_no_audio" if strategy in {"post_dub", "rough_timing_final_dub_later"}
+                else "approved_performance_or_final_audio"
+            )
         duration = clip.get("duration") or clip.get("duration_sec") or clip.get("时长")
         dialogue_indices = clip.get("dialogue_indices") or []
         voiceover_indices = clip.get("voiceover_indices") or []
-        timing_parts = [f"storyboard.duration={duration}s" if duration else "storyboard clip duration"]
+        timing_parts = [f"timing_basis={timing_basis}", f"storyboard.duration={duration}s" if duration else "storyboard clip duration"]
         if dialogue_indices:
             timing_parts.append(f"dialogue_indices={dialogue_indices}")
         if voiceover_indices:
             timing_parts.append(f"voiceover_indices={voiceover_indices}")
+        if strategy == "performance_audio_first":
+            mouth_policy = (
+                f"voice_conditioned_lipsync；performance_track_status={sound.get('performance_track_status') or 'required'}；"
+                "模型音轨只作表演条件，成片使用 final voice。"
+            )
+            voice_policy = "声音选角锁定后可先用获批表演/guide 驱动；final voice 可后置替换，替换后重验口型。"
+        elif strategy == "base_video_then_post_lipsync":
+            mouth_policy = (
+                "neutral_resting_mouth_base_plate；no_native_speech；"
+                f"post_lipsync_required=true；output={sound.get('post_lipsync_output') or '出视频/<集>/视频_lipsync/<clip>_lipsync.mp4'}。"
+            )
+            voice_policy = "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+        elif strategy == "native_av":
+            mouth_policy = "native_speech；逐镜核验台词事实、声源、口型与后端同步音画能力。"
+            voice_policy = f"native_av；原生音轨策略={native_track}；仿真人音色仍需授权。"
+        else:
+            mouth_policy = f"no_visible_lipsync；{audio_strategy}；no_native_speech；画内不生成角色口型人声。"
+            voice_policy = "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
         dialogue_rows.append({
             "clip_id": cid,
-            "timing_source": "；".join(timing_parts) + "；最终配音在 n2d-voice/compose 阶段按锁定视频时长贴合。",
-            "mouth_policy": f"video-only/{audio_strategy}；no_native_speech；no audio-conditioned lipsync；对口型={lipsync}，口部运动不由视频后端生成人声驱动。",
+            "audio_strategy": strategy,
+            "timing_basis": timing_basis,
+            "performance_track_status": sound.get("performance_track_status") or "not_applicable",
+            "final_voice_stage": sound.get("final_voice_stage") or "after_voice_casting_lock",
+            "base_video_only": bool(sound.get("base_video_only")),
+            "post_lipsync_required": bool(sound.get("post_lipsync_required")),
+            "timing_source": "；".join(timing_parts),
+            "mouth_policy": mouth_policy,
             "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
-            "voice_or_native_policy": f"后配音；视频阶段 audio_intent=none；原生音轨策略={native_track}；不得启用原生人声/旁白/哼唱。",
+            "voice_or_native_policy": voice_policy,
         })
     return {
         "mode": mode,
+        "policy": "time_basis_first_per_shot_sound_routing",
+        "production_route_status": sound_plan.get("status") or "legacy_project_mode",
         "post_dub": {
-            "fit_strategy": "先锁定无声视频流时长，再由 n2d-voice/compose 贴合对白、旁白、音效和 BGM。",
-            "overflow_policy": "配音超时回 n2d-script/video_prompt 调整节奏或拆镜；不得临时改用原生人声、音频条件口型或保留后端人声。",
+            "fit_strategy": "先锁无 WAV 时间槽或画面节奏；音色定妆后生成 final voice，按偏差刷新 OTIO、拟合或局部重切。",
+            "overflow_policy": "final voice 超出估时范围时回 n2d-script/video 调整节奏；不得用重度压速或静音占位伪装通过。",
         },
         "native_av_policy": {
-            "lipsync_policy": f"off；对口型={lipsync}；非原生音画默认不走 voice_conditioned_lipsync。",
+            "lipsync_policy": f"逐镜 route 决定；项目级对口型={lipsync}。",
             "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
-            "voice_identity_policy": "n2d-voice 后配音；视频阶段不生成角色声音，不克隆/合成人声。",
+            "voice_identity_policy": "native_av 仍须声音授权；其它 route 的 final voice 由 voice_casting 锁定。",
         },
         "dialogue_closeups": dialogue_rows,
     }
@@ -742,7 +804,7 @@ def _blank_contract(root: Path, episode: str) -> Dict[str, Any]:
             derive_interaction_row(clip, cid)
             for cid, clip in high_risk
         ],
-        "audio_timing": derive_audio_timing(root, clips),
+        "audio_timing": derive_audio_timing(root, episode, clips),
     }
 
 
@@ -1115,6 +1177,14 @@ def check_audio_timing(root: Path, episode: str, contract: Optional[Mapping[str,
         missing = [key for key in ("timing_source", "mouth_policy", "subtitle_policy", "voice_or_native_policy") if not filled(row.get(key))]
         if missing:
             add_finding(findings, gate, "block", cid, "对白/口型时长合同缺字段：" + "、".join(missing), return_to_stage="script_stage2")
+        if "混合自动路由" in mode or "hybrid" in mode.lower() or "mixed" in mode.lower():
+            route_missing = [key for key in ("audio_strategy", "timing_basis", "final_voice_stage") if not filled(row.get(key))]
+            if route_missing:
+                add_finding(findings, gate, "block", cid, "混合逐镜声音合同缺字段：" + "、".join(route_missing), return_to_stage="script_stage2")
+            strategy = str(row.get("audio_strategy") or "")
+            if strategy == "base_video_then_post_lipsync":
+                if row.get("base_video_only") is not True or row.get("post_lipsync_required") is not True or "neutral" not in str(row.get("mouth_policy") or "").lower():
+                    add_finding(findings, gate, "block", cid, "基础视频后置口型合同必须声明 base_video_only、post_lipsync_required 与 neutral mouth。", return_to_stage="script_stage2")
     if "先出视频后配音" in mode:
         post = audio.get("post_dub") if isinstance(audio.get("post_dub"), Mapping) else {}
         missing = [key for key in ("fit_strategy", "overflow_policy") if not filled(post.get(key))]

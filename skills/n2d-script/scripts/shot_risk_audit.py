@@ -30,6 +30,7 @@ from n2d_contract import (  # noqa: E402
 # 多主体「已登记执行策略」放行集单一真值源（n2d_const）：与 gate/image_qc/face_drift 同源，
 # 使 multi_subject_missing_slots_or_strategy 的 must ⊆ review 同框 block，不再靠人手同步词表。
 from n2d_const import MULTI_SUBJECT_ACCEPTING_MARKERS  # noqa: E402
+from seam_contract import needs_end_anchor  # noqa: E402
 
 ACTION_KINDS = set(ACTION_CHOREOGRAPHY_SHOT_TYPES)
 MOTION_RE = re.compile(r"(打斗|追逐|追车|疾驰|翻滚|俯冲|爆炸|法术|对轰|飞行|御兽|坐骑|骑兽|马车|车轮|载具|汽车|摩托|车流|变道|刹车|高架|飞舟|御物|尾随|跟踪|潜入|潜行|暗走廊|手电|渡劫|雷劫|突破|传送|穿越|召唤|元神|神魂|夺舍|快摇|甩镜|冲刺|撞击|受击|命中)")
@@ -193,9 +194,9 @@ def score_clip(clip: Dict[str, Any], idx: int) -> Dict[str, Any]:
         findings.append({"severity": "warn", "code": "large_same_frame_strategy_recommended",
                          "message": "清晰同框具名角色 ≥4：人数高，优先拆组/反打/景别分层或分区构建；"
                                     "这是要求把同框做对，不是删戏/砍人数。"})
-    if expression == "大" and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)) and not cont.get("need_endframe"):
+    if expression == "大" and (CLOSE_RE.search(shot_size) or CLOSE_RE.search(blob)) and not needs_end_anchor(clip):
         findings.append({"severity": "must", "code": "large_expression_without_endframe",
-                         "message": "大表情近景缺 need_endframe=true，脸会被表情重画。"})
+                         "message": "大表情近景缺 end_anchor_required=true，脸会被表情重画；该尾锚不等于跨镜 relay。"})
     if score >= 5 and not has_mid_anchor(cont):
         findings.append({"severity": "warn", "code": "high_risk_without_mid_anchor",
                          "message": "高风险 Clip 缺中段锚帧/多锚/豁免说明，建议先跑 anchor_planner --write。"})

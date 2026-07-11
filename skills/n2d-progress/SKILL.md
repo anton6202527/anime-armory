@@ -67,17 +67,18 @@ python3 skills/n2d-update/scripts/update_plan.py check <剧根> 第N集 --write-
 | 成片 | `n2d-compose` |
 | 验收 | `n2d-review` |
 
-n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → 按 `制作模式` 决定是否先跑 `n2d-voice` → `n2d-script(分镜设计)` → `n2d-image(出图)` → `n2d-video(出视频)` → `n2d-compose(成片)` → `n2d-review(验收)`；代码默认 `先出视频后配音`（后配音快速路径）允许 `配音=⏳rough` 先推进画面；`配音先行` 会先配真实音再分镜，并要求视频层无声；`原生音画` 才跳过配音硬依赖。
+n2d 阶段顺序（模式感知，记牢）：`n2d-script(改编)` → `n2d-voice(选角+无 WAV 时间基准)` → `n2d-script(分镜设计)` → `n2d-image(出图)` → `n2d-video(按镜头音画路由)` → `n2d-voice(最终音色获批后批量配音)` → `n2d-video(必要的独立口型 pass)` → `n2d-compose(成片)` → `n2d-review(验收)`。默认是 `混合自动路由`，不是整项目配音先行；`配音=⏳rough` 在新流程中表示无音频时间基准已就绪。
 
-### 制作模式（`先出视频后配音` / `原生音画` 时下一步会变）
+### 制作模式（默认逐镜混合，旧项目模式继续兼容）
 
-上面的路由表是完整列映射；实际下一步由脚本读取 `<剧根>/_设置.md` 的 `制作模式` 决定，缺省来自 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT`，当前为 `先出视频后配音`（见 `skills/n2d/references/选择点与偏好.md` / `n2d` SKILL「制作模式」节）：
+上面的路由表是完整列映射；实际下一步由脚本读取 `<剧根>/_设置.md` 的 `制作模式` 决定，缺省来自 `skills/n2d/_lib/n2d_const.py::PRODUCTION_MODE_DEFAULT`，当前为 `混合自动路由`（见 `skills/n2d/references/选择点与偏好.md` / `n2d` SKILL「制作模式」节）：
 
-- **`配音先行`（低返工 / 声音一致性优先）**：按上表线性路由；`配音=⏳rough` 只算已开始，不算完成，前沿仍会指向 `n2d-voice` 补真实配音。视频层只产无声 Image2Video，音频由 TTS/BGM/SFX 后期合成。
+- **`混合自动路由`（默认）**：先由 `voice_preflight.py prepare` 建 `voice_casting.json` + `timing_estimate.json`，不生成 WAV。对白近景/可见口型镜头有可信表演轨就音频驱动；没有就先出 neutral-mouth base plate，之后独立 lipsync。旁白/口外音读估时，动作/空镜/蒙太奇画面先行，适合的单镜可走 native AV。最终配音在音色定妆后生成，compose/review 前必须补齐所有 route 所需 final 声音与口型 pass。
+- **`配音先行`（旧项目/强声音控制）**：按旧线性路由；`配音=⏳rough` 只算已开始，不算完成，前沿仍会指向 `n2d-voice` 补真实配音。
 - **`原生音画`（native AV）**：`配音` 列对主流程视作可选旁白层；脚本不会因为 `配音=⬜` 把前沿推去 `n2d-voice`，会直接推进分镜/出图/出视频。说话镜由原生音画后端一次出台词+口型+环境声，合规（角色/声音克隆授权）仍照常 gate。
-- **`先出视频后配音`（当前默认 · 快速 demo/后配音路径，不推荐作发布默认）**：脚本会在输出顶部打 `制作模式: 先出视频后配音 ⚠️`。此模式下 `配音=⏳rough` 代表**占位音色/粗时长**（真实配音被推迟到出视频之后），可推进分镜、出图、出视频。当某集**视频已出、只差成片**时，脚本**不会**直接指向 `n2d-compose`，而是检测 `合成/第N集/配音/时长清单.json` 是否仍含占位句——若是，**前沿改指 `n2d-voice`**（先补真实配音），并附「补真音后再 `n2d-compose` 把真音拟合到已成片镜头长」的提醒。真音补齐（占位句清零）后，前沿才回到 `n2d-compose`。
+- **`先出视频后配音`（显式整项目备选）**：保留给用户明确要求整集画面先行的项目；新流程仍优先用无 WAV `timing_estimate.json`，不必生成占位音色。某集只差成片时，脚本拦回 `n2d-voice` 补真实配音，再拟合/重切。
 - 旧项目兼容检查：`python3 skills/n2d/progress.py audit-placeholders <作品根>` 会找出 `配音=✅` 但 `时长清单.json` 仍含 `占位:true` 的伪完成；加 `--fix` 可降级为 `⏳rough`。
-- 你转述时照脚本输出走即可；遇到这条拦截提醒，**务必把「先出视频后配音」不推荐的代价讲清楚**（占位时长锁死镜头，真音对不上可能要重出最贵的视频），别让用户以为占位轨能直接成片。
+- 你转述时照脚本输出走即可；不要把 `⏳rough` 说成“已有粗配音”。它可能只是文本估时。最终签收看 casting、final voice、逐镜 route 和 lipsync 产物，而不是只看进度格。
 
 ## 给建议时的闸门提醒（必带）
 

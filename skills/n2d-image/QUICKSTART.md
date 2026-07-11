@@ -16,7 +16,7 @@ Required outputs:
 - `出图/第N集/prompt/00_总览.md`
 - `出图/第N集/prompt/01_分镜出图.md`
 - shot PNGs in `出图/第N集/图片/`
-- required tail-frame PNGs when `storyboard.json continuity.need_endframe=true`
+- required tail-frame PNGs when `seam_mode=continuous_take_relay` or `continuity.end_anchor_required=true`
 - every executable prompt block contains a fresh `后端编译提交 image prompt`
 - every real call writes an immutable receipt under `生产数据/compiled_image_requests/第N集/history/`
 

@@ -17,6 +17,9 @@ UPLOAD_RETRIES="${E2A_UPLOAD_RETRIES:-6}"
 
 BUILD_APP_ASSETS=1
 BUILD_DEMO_ASSETS=1
+BUILD_MAC=1
+BUILD_WIN=0
+REFRESH_NOTES=0
 UPLOAD=1
 TAG="${E2A_RELEASE_TAG:-}"
 WORK=""
@@ -46,8 +49,15 @@ Default behaviour (no flags):
   (the Tauri /r2a flow owns those).
 
 Options:
-  --apps-only, --no-demo-assets   Build/upload only the Electron DMG.
+  --apps-only, --no-demo-assets   Build/upload only the app installers.
   --demo-assets, --demos, --demo  Build/upload only demo zip assets.
+  --win                           Also build the Windows x64 NSIS installer
+                                  (cross-built on macOS; node-pty uses its
+                                  bundled win32 NAPI prebuilds; unsigned).
+  --no-mac                        Skip the macOS DMG (e.g. --apps-only --win
+                                  --no-mac for an incremental Windows upload).
+  --refresh-notes                 Overwrite release notes on an existing
+                                  release (default keeps them).
   --no-upload                     Build locally only (artifacts in dist/e2a-release-<tag>).
   --repo owner/name               Target GitHub repo. Default: anton6202527/anime-armory.
   --tag TAG                       Release tag. Default: electron-v<desktop-electron version>.
@@ -55,6 +65,7 @@ Options:
 
 Release artifact names:
   AnimeArmory_electron_macos_arm64.dmg
+  AnimeArmory_electron_windows.exe (--win)
   AnimeArmory_demo_novel.zip / _n2d / _comic / _song / _mv / _ad (selected works only)
 
 Environment:
@@ -73,6 +84,9 @@ while [[ $# -gt 0 ]]; do
     --apps-only|--no-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; shift ;;
     --demo-assets|--demos|--demo) BUILD_APP_ASSETS=0; BUILD_DEMO_ASSETS=1; shift ;;
     --with-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=1; shift ;;
+    --win) BUILD_WIN=1; shift ;;
+    --no-mac) BUILD_MAC=0; shift ;;
+    --refresh-notes) REFRESH_NOTES=1; shift ;;
     --no-upload) UPLOAD=0; shift ;;
     --repo) TARGET_REPO="${2:?missing owner/name after --repo}"; shift 2 ;;
     --tag) TAG="${2:?missing tag after --tag}"; shift 2 ;;
@@ -280,18 +294,29 @@ make_macos_dmg() {
   rm -rf "$stage"
 }
 
-build_electron_macos() {
+APP_PREPARED=0
+prepare_electron_source() {
+  [[ "$APP_PREPARED" == "1" ]] && return
   require_cmd npm
-  require_cmd hdiutil
-  require_cmd codesign
-  require_cmd ditto
   stage_bundled_resources
-
-  echo "[e2a] building Electron app (npm ci + typecheck + electron-vite + electron-builder --dir)"
+  echo "[e2a] preparing Electron app (npm ci + typecheck + electron-vite)"
   (
     cd "$SOURCE_DIR/desktop-electron"
     if [[ -f package-lock.json ]]; then npm ci; else npm install; fi
     npm run build
+  )
+  APP_PREPARED=1
+}
+
+build_electron_macos() {
+  require_cmd hdiutil
+  require_cmd codesign
+  require_cmd ditto
+  prepare_electron_source
+
+  echo "[e2a] packaging macOS app (electron-builder --dir + hdiutil DMG)"
+  (
+    cd "$SOURCE_DIR/desktop-electron"
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac --arm64 --dir
   )
 
@@ -306,6 +331,30 @@ build_electron_macos() {
   notarize_dmg_if_configured "$artifact_dmg"
   validate_macos_dmg "$artifact_dmg"
   ASSETS+=("$artifact_dmg")
+}
+
+build_electron_windows() {
+  prepare_electron_source
+
+  echo "[e2a] packaging Windows x64 NSIS installer (cross-build, unsigned)"
+  (
+    cd "$SOURCE_DIR/desktop-electron"
+    CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --win nsis --x64
+  )
+
+  local exe_src="$SOURCE_DIR/desktop-electron/release/AnimeArmory_electron_windows.exe"
+  if [[ ! -f "$exe_src" ]]; then
+    echo "Could not locate built Windows installer: $exe_src" >&2
+    exit 1
+  fi
+  local artifact_exe="$ARTIFACT_DIR/AnimeArmory_electron_windows.exe"
+  mv "$exe_src" "$artifact_exe"
+  if [[ ! -s "$artifact_exe" || "$(head -c 2 "$artifact_exe")" != "MZ" ]]; then
+    echo "Windows installer failed validation (empty or not a PE executable)" >&2
+    exit 1
+  fi
+  echo "[e2a] validated Windows installer: $(basename "$artifact_exe")"
+  ASSETS+=("$artifact_exe")
 }
 
 # --- demo zip assets (same layout + slimming as r2a) -------------------------
@@ -447,11 +496,13 @@ upload_release() {
   require_cmd gh
   local notes="$1"
   if gh release view "$TAG" --repo "$TARGET_REPO" >/dev/null 2>&1; then
-    if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
+    if [[ "$REFRESH_NOTES" == "1" ]]; then
       gh release edit "$TAG" --repo "$TARGET_REPO" \
         --title "AnimeArmory (Electron) ${TAG}" --notes-file "$notes"
     else
-      echo "[e2a] demo-assets upload: keeping existing release notes for ${TAG}"
+      # incremental uploads (e.g. --win --no-mac, --demo-assets) must not
+      # shrink the notes to just this run's asset subset
+      echo "[e2a] release ${TAG} exists: keeping its notes (--refresh-notes to overwrite)"
     fi
   else
     gh release create "$TAG" --repo "$TARGET_REPO" \
@@ -482,7 +533,12 @@ echo "[e2a] release tag: $TAG"
 echo "[e2a] release repo: $TARGET_REPO"
 
 if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
-  build_electron_macos
+  if [[ "$BUILD_MAC" == "1" ]]; then
+    build_electron_macos
+  fi
+  if [[ "$BUILD_WIN" == "1" ]]; then
+    build_electron_windows
+  fi
 fi
 if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
   build_demo_zip_assets
