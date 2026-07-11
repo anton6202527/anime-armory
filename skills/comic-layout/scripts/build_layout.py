@@ -33,19 +33,14 @@ HEAVY_FUNCTIONS = {
     "breakthrough",
     "speed_montage",
 }
+# 只收录跨作品通用的叙事功能名；作品专属 story_function 请用逐格
+# layout_weight/visual_weight 显式标注，不要往这里加词。
 MEDIUM_FUNCTIONS = {
     "compressed_backstory",
     "labor_montage",
     "task_assignment",
     "rules_and_threat",
-    "wash_basin",
-    "morning_canteen",
-    "breakfast_reward",
-    "zhang_visit",
-    "rice_allocation",
-    "night_water_finish",
     "secret_hide",
-    "raw_resource_use",
     "concealment_strategy",
     "task_speedup",
     "self_restraint",
@@ -59,23 +54,8 @@ COMPACT_FUNCTIONS = {
     "setup",
     "identity_question",
     "mockery_setup",
-    "leave_hall",
-    "empty_room",
-    "water_task_scale",
     "proactive_choice",
-    "night_fifth_trip",
-    "approach_basin",
     "sleep_transition",
-    "spoilage_question",
-    "spoilage_decision",
-    "night_worry",
-    "door_knock",
-    "empty_room_choice",
-    "wake_smell",
-    "not_a_dream",
-    "check_lock",
-    "breakfast_warning",
-    "sensory_change",
 }
 
 HEAVY_TOKENS = (
@@ -390,12 +370,16 @@ def build_layout(root: Path, chapter: str, max_segment_height: int, gutter: int)
     if current["panels"]:
         segments.append(current)
 
+    # deterministic 脚本只会产出单列竖排几何；页漫/四格需要人工或 agent 排版。
+    deterministic_supported = any(token in comic_format for token in ("条漫", "分镜稿"))
     return {
         "schema_version": 1,
         "kind": "comic_layout",
         "chapter": chapter,
         "format": comic_format,
         "reading_direction": reading_direction,
+        "geometry_profile": "longstrip_single_column",
+        "format_supported_by_script": deterministic_supported,
         "manuscript": manuscript,
         "name_board": str(Path("排版") / chapter / "name_board.json") if name_board else "",
         "canvas": {"width": width, "height": "auto"},
@@ -460,6 +444,12 @@ def main() -> int:
     if not args.no_progress:
         update_progress(root, args.chapter, "页面排版", "✅")
     print(f"[ok] {out_path}")
+    if not layout.get("format_supported_by_script"):
+        print(
+            f"[warn] 漫画形态={layout.get('format')}：deterministic 脚本只会生成单列条漫几何，"
+            "页漫/四格需要人工或 agent 重排 layout.json（页内网格/RTL/分页）；"
+            "comic-review gate 会对形态与几何不符阻断合成。",
+        )
     return 0
 
 

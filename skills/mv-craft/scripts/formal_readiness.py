@@ -72,7 +72,8 @@ def summarize_reference_requirements(root):
     }
 
 
-def build_formal_upgrade_plan(root, reference_summary):
+def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
+    visual_style = settings.get("MV视觉风格") or "电影叙事"
     return [
         {
             "step": "1. 正式歌入库",
@@ -81,13 +82,13 @@ def build_formal_upgrade_plan(root, reference_summary):
         },
         {
             "step": "2. 重跑真实卡点",
-            "action": "用正式整首歌重算 BPM、beats/downbeats 与段落能量。",
-            "command": f'conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "{root}"',
+            "action": "用正式定稿歌重算 BPM、beats 和局部 tempo；人工确认拍号、小节相位与段落时间。",
+            "command": f'conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "{root}" --downbeat-phase <0-based相位> --confirm-timing',
         },
         {
             "step": "3. 重拆正式 timeline",
-            "action": "按正式歌结构重拆 clip/timeline，不沿用 20s demo 的 5 镜头。",
-            "command": f'python3 skills/mv-plan/scripts/plan_clips.py "{root}" --granularity 标准 --strategy 副歌强卡点 --visual-style 国风写意',
+            "action": "按已确认的歌曲结构重拆 clip/timeline；镜头数由歌曲时长、段落能量和剪辑策略决定。",
+            "command": f'python3 skills/mv-plan/scripts/plan_clips.py "{root}" --granularity 标准 --strategy 副歌强卡点 --visual-style "{visual_style}"',
         },
         {
             "step": "4. 补语义镜头设计",
@@ -101,7 +102,7 @@ def build_formal_upgrade_plan(root, reference_summary):
         },
         {
             "step": "6. 补正式 reference pack",
-            "action": "按 `设定/reference_requirements.md` 补主角多角度、成年态、青锋剑、关键场景和剑光/VFX 参考图；补完后重跑第 5 步确认 ready。",
+            "action": "按 `设定/reference_requirements.md` 补各身份/状态变体、交互道具、复用场景和关键 VFX 参考；补完后重跑第 5 步。",
             "command": "",
         },
         {
@@ -110,19 +111,19 @@ def build_formal_upgrade_plan(root, reference_summary):
             "command": f'python3 skills/mv-image/scripts/image_qc.py "{root}" --strict',
         },
         {
-            "step": "8. 视频登记与挑版",
-            "action": "为每个 clip 登记图生视频 take，按动作/身份/卡点/清晰度评分并 selected。",
-            "command": f'python3 skills/mv-video/scripts/video_jobs.py "{root}"',
+            "step": "8. Animatic 与 Picture Lock",
+            "action": "用首帧和正式歌渲染可播放 animatic；审叙事、覆盖、切点、轴线和字幕安全区后绑定 hash 签收。",
+            "command": f'python3 skills/mv-craft/scripts/render_animatic.py "{root}" && python3 skills/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>',
         },
         {
-            "step": "9. 继承合约与视频 QC",
-            "action": "检查首帧到视频是否继承身份/场景/道具，并抽 start/mid/end 帧看接缝与崩坏。",
-            "command": f'python3 skills/mv-video/scripts/inherit_contract.py "{root}" --no-fail && python3 skills/mv-video/scripts/video_qc.py "{root}" --no-fail',
+            "step": "9. 视频登记、评分、继承与 QC",
+            "action": "每个 take 完成动作/身份/卡点/清晰度四维评分后挑版；逐镜和接缝语义复核并签收。",
+            "command": f'python3 skills/mv-video/scripts/video_jobs.py "{root}" && python3 skills/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>',
         },
         {
             "step": "10. 字幕、合成、总审",
             "action": "重做全曲卡拉 OK 字幕，合成正式成片，再跑 mv-review。",
-            "command": f'bash skills/mv-compose/mv_compose.sh "{root}" 9:16 && python3 skills/mv-review/scripts/mv_check.py "{root}"',
+            "command": f'bash skills/mv-compose/mv_compose.sh "{root}" {aspect} && python3 skills/mv-review/scripts/mv_check.py "{root}"',
         },
     ]
 
@@ -137,6 +138,8 @@ def build_report(root):
     video_qc = mv_utils.load_json(os.path.join(root, "生产数据", "video_qc", "video_qc.json"), {}) or {}
     alignment = mv_utils.load_json(os.path.join(root, "字幕", "alignment_report.json"), {}) or {}
     reference_summary = summarize_reference_requirements(root)
+    settings = mv_utils.parse_settings(root)
+    aspect = meta.get("aspect") or settings.get("合成画幅") or "16:9"
 
     song = mv_utils.find_song(root)
     song_duration = mv_utils.audio_duration(song) if song else None
@@ -160,12 +163,15 @@ def build_report(root):
         next_actions.append("替换/确认正式整首歌后，清除 _meta.is_demo 或改为 false，并重跑 mv-beat + mv-plan。")
     if song_duration is None:
         blockers.append("缺正式歌/song.* 或无法读取时长。")
-    elif song_duration < 90:
-        blockers.append(f"当前歌长 {song_duration:.2f}s，明显不是完整 MV 歌曲。")
-        next_actions.append("放入正式整首歌，保留 demo 成片作参考，不要直接扩剪。")
-    if len(clips) < 12:
-        blockers.append(f"clip_plan 只有 {len(clips)} 个 clip，正式 MV 通常需要更多镜头覆盖完整结构。")
-        next_actions.append("正式歌入库后用精细/标准粒度重新生成 clip_plan。")
+    if song_duration and clips:
+        planned_duration = sum(float(c.get("duration") or 0) for c in clips)
+        if abs(planned_duration - song_duration) > max(1.0, song_duration * 0.02):
+            blockers.append(f"clip_plan 总时长 {planned_duration:.2f}s 与正式歌 {song_duration:.2f}s 不一致。")
+        average_shot = planned_duration / len(clips)
+        if average_shot > 8.0:
+            warnings.append(f"平均镜头时长 {average_shot:.2f}s，覆盖可能偏疏；应按创意与段落能量人工确认，不按固定镜头数判定。")
+    elif song_duration and not clips:
+        blockers.append("正式歌曲已存在但 clip_plan 没有镜头。")
     if count_existing(image_paths, root) < len(image_paths):
         blockers.append("并非所有 clip 首帧/尾帧都已存在。")
         next_actions.append("按 reference_plan 补齐正式版首帧/尾帧，再跑 image_qc。")
@@ -179,9 +185,16 @@ def build_report(root):
         blockers.append("video inherit contract 仍有 hard block。")
     if video_qc.get("summary", {}).get("hard_blocks"):
         blockers.append("video_qc 仍有 hard block。")
+    if video_qc and not (video_qc.get("semantic_review") or {}).get("accepted"):
+        blockers.append("video_qc 尚未完成人工语义复核签收。")
+    if not (mv_utils.load_json(os.path.join(root, "制片", "picture_lock.json"), {}) or {}).get("accepted"):
+        blockers.append("缺绑定当前 animatic/plan/图片的 picture lock。")
+    rights = mv_utils.load_json(os.path.join(root, "合规", "rights_manifest.json"), {}) or {}
+    if len((rights.get("assertions") or {})) < 6:
+        blockers.append("缺完整 rights_manifest（歌曲、视觉参考、真人肖像、品牌、场地、编舞）。")
     if all_groups and len(ready_groups) < len(all_groups):
         warnings.append(f"身份参考组未全部 ready：{len(ready_groups)}/{len(all_groups)}。")
-        next_actions.append("补成年态、手部/剑、关键场景多角度参考包。")
+        next_actions.append("补各身份状态、手部交互、关键道具和复用场景的多角度参考包。")
     if reference_summary["total"]:
         if reference_summary["missing"]:
             missing_preview = "、".join(reference_summary["missing_targets"][:8])
@@ -196,7 +209,7 @@ def build_report(root):
         warnings.append("字幕对齐行数少于歌词行数，正式版需重新对齐全曲。")
 
     status = "ready" if not blockers and not warnings else ("blocked" if blockers else "review")
-    command_plan = build_formal_upgrade_plan(root, reference_summary)
+    command_plan = build_formal_upgrade_plan(root, reference_summary, settings, aspect)
     return {
         "schema_version": 1,
         "kind": "mv_formal_readiness",

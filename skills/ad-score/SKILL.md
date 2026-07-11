@@ -1,11 +1,11 @@
 ---
 name: ad-score
-description: 拍广告 投放前 pre-spend 评分闸门——正式出图/出视频烧积分前，对广告脚本+分镜按「钩子前3秒 / 前3秒品牌产品出现 / 卖点清晰度 / CTA 强度 / 品牌露出充分度 / 广告法风险 / 时长贴合」打分体检，拦平庸 ROI。混合模型：确定性 prescore（读 ad-script 已有产物，广告法 block=硬地板）+ LLM 语义分 → 阈值三档（go/revise/reject）+ 低分维度按成因回流 ad-concept、ad-script、ad-image。Use when asked 广告评分, 投放前评分, 广告分镜打分, 这广告行不行, 出图前体检, ad-score for a 拍广告 project. Triggers 广告评分, 投放前评分, 广告体检, 广告分镜打分, 钩子评分, 卖点评分, CTA评分, 广告能不能行, ad-score.
+description: 拍广告 投放前 pre-spend 创意诊断——按 campaign_objective 使用不同权重检查钩子、品牌/产品、卖点、CTA、时长和广告法。分数仅作 revise/reject 建议与回流，不把启发式总分伪装成 ROI 硬闸；广告法 block 仍是唯一机器硬地板。Use when asked 广告评分, 投放前评分, 广告分镜打分, 出图前体检, ad-score. Triggers 广告评分, 投放前评分, 广告体检, 钩子评分, CTA评分, ad-score.
 ---
 
-# ad-score — 拍广告 投放前 pre-spend 评分闸门
+# ad-score — 拍广告 投放前 pre-spend 创意诊断
 
-广告**一条主片就是全部产出**，正式出图/出视频一旦开跑即烧积分。`ad-score` 是出图前的**质量闸门**：用 `ad-script`/`ad-voice` 已产出的确定性产物先拦平庸 ROI（钩子塌、卖点糊、CTA 弱、品牌露出不足、广告法 block、总时长超标），比出完片再靠 `ad-review` 发现省得多。
+`ad-score` 是出图前的**诊断与返工建议**。启发式分数不能证明 ROI，也不应仅凭阈值阻断付费生产；广告法 block 才是机器硬地板。品牌认知、考虑种草、转化行动、全链路分别使用目标化权重。
 
 `ad-score` 纯标准库实现，评分口径只面向广告片。
 
@@ -39,9 +39,9 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 
 确定性维度覆盖不了的语义判断由 LLM 打分后用 `--dim` 喂进来：钩子吸引力、卖点清晰度、CTA 说服力、品牌调性等。总分 = 确定性分 ×0.6 + LLM 维度均分 ×0.4（无 `--dim` 时总分=确定性分）。
 
-### 3) 阈值三档 + 回流（成因映射）
+### 3) 目标化三档 + 回流（成因映射）
 
-`--threshold` 后：≥阈值=**go**（可出图）；`[阈值-20, 阈值)`=**revise**（局部改后重评）；其下 或 **硬地板**=**reject**（退回上游）。低分维度按成因映射回上游 stage 产 `affected_items`：
+`--threshold` 后：≥阈值=**go**；`[阈值-20, 阈值)`=**revise**；其下=**reject**。revise/reject 都是建议档，只有广告法硬地板 `blocked=true`。低分维度产 `affected_items`：
 
 | 低分维度 | 回流 stage |
 |---|---|
@@ -49,7 +49,7 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 | 卖点不清 / 广告法 block / 总时长超标 / 露出分配 / 前3秒未露产品品牌 | `ad-script`（脚本/分镜/finalize 重切） |
 | 无任何产品/品牌露出镜 | `ad-image`（补 hero/品牌镜）+ `ad-script` 落镜 |
 
-`--enqueue` 落 `评分/回流清单.json`（`kind=ad_score_rework_queue`，按 `return_to_stage` 分组，ad 自有格式，不引用别线 batch）。退出码：0=go/建议性；1=reject/低于阈值（pre-spend 拦截）；2=输入缺失。
+`--enqueue` 落 `评分/回流清单.json`。退出码：0=评分建议（含 revise/reject）；1=广告法硬地板；2=输入缺失。
 
 ## 产物
 
@@ -58,7 +58,7 @@ python3 skills/ad-score/scripts/score_pre.py <作品根> --master 30s --threshol
 
 ## 何时跑
 
-- **出图前**（`ad-image` 烧积分前）：这是主用途，reject 就别出图，回上游改。
+- **出图前**（`ad-image` 烧积分前）：这是主用途；revise/reject 建议回上游改，但不冒充效果保证。
 - 脚本/分镜定稿后想体检一遍「这广告值不值得做下去」时。
 
 ## 常见错误

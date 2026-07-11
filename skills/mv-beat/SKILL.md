@@ -1,6 +1,6 @@
 ---
 name: mv-beat
-description: 制MV 卡点分析 — 用 librosa 检测成品歌的 BPM / tempo_candidates / energy_map / beats / downbeats，生成 节拍/beatgrid.json，驱动下游 mv-plan/mv-video 剪辑卡点（副歌踩鼓点切）。mv 系列自包含。Use when asked to 分析卡点 / 卡点 / 提取节拍 / beatgrid / BPM. Triggers 卡点, 节拍分析, beatgrid, BPM, 踩点, mv-beat.
+description: 制MV 卡点分析 — 用 librosa 的 HPSS/打击乐 onset 检测 BPM、动态 tempo、beats、估算小节相位与能量，人工确认 downbeat/段落后生成 beatgrid.json，驱动 mv-plan/mv-video。Use when asked to 分析卡点 / 卡点 / 提取节拍 / beatgrid / BPM. Triggers 卡点, 节拍分析, beatgrid, BPM, 踩点, mv-beat.
 ---
 
 # mv-beat — 卡点分析（制MV 线）
@@ -20,21 +20,24 @@ pip install librosa soundfile   # Mac 友好，纯 CPU 可跑
 
 ## 用法
 ```bash
-python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> [--meter 4]
+python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4
+python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --downbeat-phase 2 --confirm-timing
 ```
 产 `节拍/beatgrid.json`：
 - `bpm` / `tempo_candidates[]`：主 BPM + 半速/倍速候选，便于人工校正。
-- `beats[]` / `downbeats[]`：每拍与小节首秒点。
+- `beats[]` / `downbeats[]`：打击乐拍点与按 onset 相位估算的小节首；未确认时不是正式真值。
+- `tempo_curve[]`：局部速度曲线；用于发现变速、rubato 和全局 BPM 不可靠的段落。
 - `energy_map[]`：按秒聚合的能量/起音强度，给高能段和转场判断。
-- `sections[]`：若 `_meta.structure` 已有，先按歌长等分成初始段落；之后可人工改为真实段落起止。
+- `sections[]`：只消费 `_meta.section_timings` 的真实起止，不再把结构名按歌长等分伪装成段落检测。
+- `timing_verified` / `downbeat_phase_confidence` / `downbeat_method`：正式 `mv-plan` 的证据字段。
 - `duration` / `meter` / `song`：基础对账字段。
 
 ## 工作流
 1. 确认 `歌/song.*` 已就位（用户提供或本项目内维护）。
    - 若 `_设置.md` 为 `歌曲输入时序=后配歌曲` 且 `歌/` 还没有最终音频，先停下：让用户补入最终音频，不能用估算节奏替代 beatgrid。
 2. 跑 beat_detect.py → beatgrid.json。
-3. 校对 BPM 是否合理（偶尔会半速/倍速，肉眼听一下；不对手动改 bpm 并按 60/bpm 重排 beats，或用 `--meter` 调拍号）。
-4. （可选）把 `sections` 改成真实段落起止（intro/verse/chorus…），供 `mv-plan` 更准地拆 clip。
+3. 校对 BPM/动态 tempo、拍号和小节第一拍相位；把真实段落起止写入 `_meta.section_timings`。
+4. 用 `--downbeat-phase N --confirm-timing` 重跑。正式项目 `timing_verified=false` 会被下游 gate 阻断。
 5. 回写 `_进度.md` 卡点行 ✅。下一步 `mv-plan` 生成 `分镜/clip_plan.json`。
 
 ## 卡点原则（喂给 mv-video / mv-compose）
@@ -49,4 +52,4 @@ python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> [--meter 4]
 | 无歌就跑 | 先放入 `歌/song.*`（用户提供或本项目内维护） |
 | 后配歌曲路线用 rough 蓝图直接卡点 | 先补最终歌，再跑 beatgrid；rough 蓝图只服务视觉方向 |
 | clip 等长不卡点 | mv-video 按 beatgrid 相邻卡点定 clip 时长 |
-| `sections` 只是等分 | 人工把真实段落起止写回 `sections`，再跑 mv-plan |
+| 把 `beats[::4]` 当真 downbeat | 听辨并确认小节相位；用 `--downbeat-phase` 留痕，不能默认第一拍就是小节首 |

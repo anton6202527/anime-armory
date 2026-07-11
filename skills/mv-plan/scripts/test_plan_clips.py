@@ -21,7 +21,7 @@ def make_project(root):
     for sub in ("词", "节拍", "歌"):
         os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump({"title": "测试MV", "structure": ["verse1", "chorus"]}, f, ensure_ascii=False)
+        json.dump({"title": "测试MV", "structure": ["verse1", "chorus"], "is_demo": True}, f, ensure_ascii=False)
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
         f.write("# _设置\n\n## 选择\n- MV规划粒度: 标准\n- 卡点策略: 副歌强卡点\n- MV视觉风格: 国风写意\n")
     with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:

@@ -40,6 +40,16 @@ def _rights_errors(root, stage, meta):
     按 CLAUDE.md，合规/不可逆点每次都查（不因记过一次就永久放行 unknown）。"""
     if stage not in _COSTLY_STAGES:
         return []
+    manifest = mv_utils.load_json(os.path.join(root, "合规", "rights_manifest.json"), None)
+    if not meta.get("is_demo"):
+        if not isinstance(manifest, dict):
+            return ["正式项目缺 合规/rights_manifest.json；需记录歌曲、视觉参考、真人肖像、品牌、场地和编舞权利状态"]
+        allowed = {"owned", "public_domain", "licensed", "authorized", "cleared", "not_applicable"}
+        assertions = manifest.get("assertions") or {}
+        missing = [key for key in ("song", "visual_reference", "likeness", "brand", "location", "choreography")
+                   if assertions.get(key) not in allowed]
+        if missing:
+            return [f"rights_manifest 未解决：{', '.join(missing)}"]
     rights = _song_rights_status(root, meta)
     low = rights.lower()
     if low in _UNRESOLVED_RIGHTS:
@@ -143,6 +153,68 @@ def _image_qc_errors_warnings(root, stage):
     return errors, warnings
 
 
+def _video_report_errors(root, stage):
+    if stage != "compose":
+        return []
+    reports = (
+        ("生产数据/video_inherit_contract/inherit_contract.json",
+         ("分镜/clip_plan.json", "出视频/jobs_manifest.json", "设定/identity_registry.json", "分镜/reference_plan.json")),
+        ("生产数据/video_qc/video_qc.json", ("分镜/clip_plan.json", "分镜/timeline_manifest.json")),
+    )
+    errors = []
+    for report_rel, required_inputs in reports:
+        report = mv_utils.load_json(os.path.join(root, report_rel), None)
+        if not isinstance(report, dict):
+            errors.append(f"缺或损坏 {report_rel}；全部视频挑版后重跑 mv-video 对应检查")
+            continue
+        summary = report.get("summary") or {}
+        if int(summary.get("hard_blocks") or 0):
+            errors.append(f"{report_rel} 仍有 hard_blocks={summary.get('hard_blocks')}")
+        recorded = report.get("inputs_sha256") or {}
+        for rel in required_inputs:
+            current = mv_utils.content_hash(os.path.join(root, rel))
+            if not current or recorded.get(rel) != current:
+                errors.append(f"{report_rel} 已过期：{rel} 与报告 hash 不一致；重跑对应检查")
+                break
+        if report_rel.endswith("video_qc.json"):
+            video_hashes = report.get("selected_video_sha256") or {}
+            if not video_hashes:
+                errors.append(f"{report_rel} 缺 selected_video_sha256，不能证明检查对应当前视频")
+            for rel, recorded_hash in video_hashes.items():
+                if mv_utils.content_hash(os.path.join(root, rel)) != recorded_hash:
+                    errors.append(f"{report_rel} 已过期：选中视频 {rel} 已变化")
+                    break
+            meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+            if not meta.get("is_demo") and not (report.get("semantic_review") or {}).get("accepted"):
+                errors.append("正式项目缺视频语义人工签收：逐镜/接缝复核后运行 video_qc.py --accept-semantic --reviewer <name>")
+    return errors
+
+
+def _picture_lock_errors(root, stage, meta):
+    if stage not in {"video_jobs", "compose"} or meta.get("is_demo"):
+        return []
+    path = os.path.join(root, "制片", "picture_lock.json")
+    payload = mv_utils.load_json(path, None)
+    if not isinstance(payload, dict) or not payload.get("accepted"):
+        return ["正式项目缺已签收 picture lock；先 render_animatic.py，再 picture_lock.py --reviewer <name>"]
+    errors = []
+    recorded_inputs = payload.get("inputs_sha256") or {}
+    plan = _load_plan(root)
+    required = {"分镜/clip_plan.json", "节拍/beatgrid.json", "分镜/animatic.mp4", "生产数据/image_qc/image_qc.json"}
+    song = mv_utils.find_song(root)
+    if song:
+        required.add(mv_utils.relpath(root, song))
+    required.update(c.get("image_path") for c in plan.get("clips", []) if c.get("image_path"))
+    omitted = [rel for rel in required if rel not in recorded_inputs]
+    if omitted:
+        errors.append(f"picture lock 输入不完整，未绑定：{omitted[0]}")
+    for rel, recorded in recorded_inputs.items():
+        if mv_utils.content_hash(os.path.join(root, rel)) != recorded:
+            errors.append(f"picture lock 已过期：{rel} 已变化；重渲 animatic 并重新签收")
+            break
+    return errors
+
+
 def check(root, stage):
     errors = []
     warnings = []
@@ -161,6 +233,11 @@ def check(root, stage):
         errors.append("缺 词/lyrics.md")
     if stage in {"plan", "image", "video_jobs", "compose"} and not os.path.exists(beatgrid):
         errors.append("缺 节拍/beatgrid.json，先跑 mv-beat")
+    if stage in {"plan", "image", "video_jobs", "compose"} and os.path.exists(beatgrid):
+        beat_payload = mv_utils.load_json(beatgrid, {}) or {}
+        if not beat_payload.get("timing_verified") and not meta.get("is_demo"):
+            errors.append("beatgrid 的拍号/小节相位/段落边界尚未人工确认（timing_verified=false）；"
+                          "正式项目请校正 section_timings，并用 mv-beat --downbeat-phase N --confirm-timing 重跑")
     if stage in {"script_review", "plan", "image", "video_jobs"} and not os.path.exists(blueprint):
         errors.append("缺 视觉蓝图.md")
     if stage in {"plan", "image", "video_jobs", "compose"} and _has_rough_blueprint(root):
@@ -183,6 +260,8 @@ def check(root, stage):
     qc_errors, qc_warnings = _image_qc_errors_warnings(root, stage)
     errors.extend(qc_errors)
     warnings.extend(qc_warnings)
+    errors.extend(_video_report_errors(root, stage))
+    errors.extend(_picture_lock_errors(root, stage, meta))
 
     if stage == "compose" and os.path.exists(timeline):
         data = mv_utils.load_json(timeline, {}) or {}

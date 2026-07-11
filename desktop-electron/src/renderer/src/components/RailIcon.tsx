@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type RailIconName = "files" | "search" | "changes" | "skills" | "canvas" | "kanban" | "review";
+export type RailIconName = "files" | "search" | "changes" | "skills" | "canvas" | "review";
 
 const ICON_CLASS: Record<RailIconName, string> = {
   files: "rail-icon-files",
@@ -8,7 +8,6 @@ const ICON_CLASS: Record<RailIconName, string> = {
   changes: "rail-icon-changes",
   skills: "rail-icon-skills",
   canvas: "rail-icon-canvas",
-  kanban: "rail-icon-kanban",
   review: "rail-icon-review",
 };
 
@@ -74,15 +73,6 @@ export function RailIcon({ name }: { name: RailIconName }) {
           <rect x="4.5" y="14" width="5.7" height="5" rx="1.2" />
           <rect x="13.8" y="14" width="5.7" height="5" rx="1.2" />
           <path d="M10.2 7.5h3.6M7.4 10v4M16.6 10v4M10.2 16.5h3.6" />
-        </Svg>
-      );
-    case "kanban":
-      return (
-        <Svg name={name}>
-          <rect x="4.2" y="5" width="15.6" height="14" rx="2" />
-          <path d="M9.4 5v14M14.6 5v14" />
-          <path d="M6.4 8.4h1.5M11.2 8.4h1.6M16.2 8.4h1.4" />
-          <path d="M6.4 12.2h1.5M11.2 12.2h1.6" />
         </Svg>
       );
     case "review":

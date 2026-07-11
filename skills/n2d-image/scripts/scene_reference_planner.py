@@ -39,7 +39,8 @@ SCENE_LOCK_TIERS = ("reference_plate", "backend_subject", "scene_lora")
 MASTER_ANCHOR_MIN_SHOTS = 3
 # 核心场景跨 ≥ 这么多集 × 无后端场景锁 → 主动建议 scene LoRA（不等漂移坐实·#4）。镜像角色 PROACTIVE 档。
 PROACTIVE_SCENE_EPISODE_THRESHOLD = 3
-_READY_LORA = ("ready", "training")
+_READY_LORA = ("ready", "registered", "validated", "deployed")
+_READY_SUBJECT = ("ready", "registered", "validated", "deployed")
 
 
 # ── 纯逻辑（pytest 覆盖）────────────────────────────────────────────────────────
@@ -79,7 +80,8 @@ def _ref_path(value: Any) -> str:
     return ""
 
 
-def plan_scene_refs(loc_asset: Mapping[str, Any], master_anchor: Optional[str] = None) -> List[Dict[str, Any]]:
+def plan_scene_refs(loc_asset: Mapping[str, Any], master_anchor: Optional[str] = None,
+                    *, master_anchor_planned: bool = True) -> List[Dict[str, Any]]:
     """该 LOC 每镜应携带的**场景参考槽**（纯函数·#1 的核心：纳入 spatial_map + base_views）。
 
     顺序按锚定强度：master 全景 plate（若有·#3）→ 场景定妆 primary → 布局图 spatial_map → 反打/侧视
@@ -93,9 +95,8 @@ def plan_scene_refs(loc_asset: Mapping[str, Any], master_anchor: Optional[str] =
             out.append({"slot": slot, "ref": ref, "weight": weight, "planned": not ref, "reason": reason})
 
     if master_anchor:
-        add("master_plate", "", 0.4, "主全景 establishing plate：其余镜条件在它上锚定空间（环境锚定）", planned=True)
-        out[-1]["ref"] = master_anchor  # master 是计划生成的 id（未必已落盘）
-        out[-1]["planned"] = True
+        add("master_plate", master_anchor, 0.4, "主全景 establishing plate：其余镜条件在它上锚定空间（环境锚定）",
+            planned=master_anchor_planned)
     add("primary", _ref_path(rg.get("primary")), 0.45, "场景定妆主参考（空场景底板/主视角）")
     # #1：布局图（此前死字段）——锁门窗位置/空间几何，治反打把房间拍成另一个房间
     add("spatial_map", _ref_path(rg.get("spatial_map")), 0.3, "布局图 spatial_map：锁门窗朝向/floor_plan 几何")
@@ -115,9 +116,14 @@ def plan_loc(loc_asset: Mapping[str, Any], *, intra_shots: int, cross_eps: int,
     loc_id = str(loc_asset.get("id") or loc_asset.get("asset_id") or "")
     is_core = bool(loc_asset.get("core")) or str(loc_asset.get("tier") or "").strip().lower() == "core"
     lora = loc_asset.get("scene_lora") if isinstance(loc_asset.get("scene_lora"), Mapping) else {}
+    subject = loc_asset.get("scene_subject") if isinstance(loc_asset.get("scene_subject"), Mapping) else {}
     lora_status = str(lora.get("status") or "")
-    tier = scene_lock_tier(backend_supports_subject=backend_supports_subject, scene_lora_status=lora_status)
+    subject_status = str(subject.get("status") or "").strip().lower()
+    subject_ready = backend_supports_subject and subject_status in _READY_SUBJECT
+    tier = scene_lock_tier(backend_supports_subject=subject_ready, scene_lora_status=lora_status)
     master = plan_master_anchor(loc_id, intra_shots)
+    rg = loc_asset.get("reference_group") if isinstance(loc_asset.get("reference_group"), Mapping) else {}
+    master_ref = _ref_path(rg.get("master_plate")) or (_ref_path(rg.get("primary")) if master else "")
     suggest_lora = should_suggest_scene_lora(is_core=is_core, cross_eps=cross_eps,
                                              backend_supports_subject=backend_supports_subject,
                                              scene_lora_status=lora_status)
@@ -128,8 +134,15 @@ def plan_loc(loc_asset: Mapping[str, Any], *, intra_shots: int, cross_eps: int,
         "cross_eps": int(cross_eps),
         "scene_lock_tier": tier,
         "master_anchor": master,
-        "refs": plan_scene_refs(loc_asset, master_anchor=master),
+        "master_anchor_ref": master_ref,
+        "refs": plan_scene_refs(
+            loc_asset,
+            master_anchor=master_ref or master,
+            master_anchor_planned=bool(master and not master_ref),
+        ),
         "suggest_scene_lora": suggest_lora,
+        "subject_registration_required": bool(backend_supports_subject and not subject_ready),
+        "subject_status": subject_status,
         "lora_status": lora_status,
     }
 

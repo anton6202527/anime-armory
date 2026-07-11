@@ -13,7 +13,7 @@ ffmpeg 无 libass 时，字幕走 Pillow PNG overlay。
 
 按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`品牌包装模板`、`字幕语言`、`音乐来源`、`cutdown版本`、`交付比例`、`交付规格`。合成是**花钱/不可逆**阶段，正式跑前确认；开跑前先跑 `python3 skills/ad-craft/scripts/gate.py "<作品根>" --stage compose`。
 
-> **AI 标识/水印不再由本流水线处理**：ad-compose 出成片/交付件即收尾，不再生成可见 AI 标识/水印、不再调用任何 watermark skill。若投放地区/平台需要 AI 标识或披露，由使用方在工具之外按当地法规自行处理（`ad-craft/ai_usage.py` 仍记录 AI 使用披露文本）。
+> compose 不替平台烙统一 AI 水印；但合成后必须进入 `ad-craft` 发布合规 manifest，再由 `ad-review` 验收平台声明/标识责任和证据，不能把“平台外操作”当作无须留痕。
 
 ## 工作流
 
@@ -21,16 +21,16 @@ ffmpeg 无 libass 时，字幕走 Pillow PNG overlay。
 
 1. **主片合成**（自动出片）：`bash skills/ad-compose/compose.sh "<作品根>" <主比例> [字幕语言 zh|en|bilingual|none] [交付规格]`
    - 拼 `出视频/分镜/视频/` clips：**始终 filter-concat 归一**（scale/pad/fps/setsar，按主比例），不用 `-c copy`（异构 clip 会静默产出损坏）；ffmpeg stderr 不再被吞。
-   - 追加 **品牌包装 end card**（按主比例归一后接 2.5s）。
+   - 运行 `compose_preflight.py`：storyboard 已含 end card 时不重复追加；只有确实缺片尾才补品牌包装。
    - **字幕烧录**（步 2 已内联进 compose.sh）：`字幕语言≠none` 时自动调 `render_subs.py` 出字幕 PNG + overlay 链（`vfilter.txt`），再 overlay 烧进底片。
    - 混 VO（主）+ 音乐床（duck 到 ~25%）；占位 VO 会提醒不可定稿。
-   - **交付规格响度归一**：成片有音轨时按 `交付规格`（平台默认 -16 LUFS / 广电TVC -23 LUFS）自动跑 ffmpeg `loudnorm` → `合成/成片_主片_loud.mp4`。
+   - **交付规格响度归一**：目标统一读 ad-craft contract；临时文件原位替换正式 `成片_主片.mp4`，避免“进度指向未归一版本”。
 2. **字幕**：默认由 compose.sh 第 4 参数驱动；也可单独跑 `render_subs.py 脚本/字幕_zh.srt --out-dir 合成/_work/subs`（出 PNG + `vfilter.txt` 供 overlay）。
-3. **多时长 cutdown**（自动出片）：`python3 cutdown.py "<作品根>" --target 15s --aspect <比例> --render` → 按镜头优先级保钩子/产品/CTA 重剪出 plan，并**实际**按 plan 取 clip filter-concat + 接 end card → `合成/cutdown/成片_15s.mp4`。镜头时长读权威 `脚本/镜头时长.json`；任一保留镜时长缺失 → block，拒绝出计划。无 ffmpeg 时只出 plan。
-4. **多比例 reframe**（自动出片）：`python3 reframe.py --src 1920x1080 --target 9:16 --in 合成/成片_主片.mp4 --render [--crop-x 0.4 --crop-y 0.45]` → 实际跑 crop/pad 滤镜出 `合成/多比例/成片_9x16.mp4`。不传焦点=中心裁切（偏置主体会被裁掉，脚本会提示）；传 `--crop-x/--crop-y` 把裁切窗对到主体焦点。
+3. **多时长 cutdown**：按镜头优先级选段，但渲染从已混音/字幕/包装的主片精确 trim，保留 VO、音乐、字幕；不再从无声 clips 重拼，也不重复加 end card。
+4. **多比例 reframe**：支持固定 `--crop-x/--crop-y`，也支持 `--focus-plan` 按时间段动态跟随主体；高价值竖版不得默认中心裁切后直接交付。
 5. **A/B 版本**：deliver.py 只给 expected_path，由操作者手工剪/导出。
-6. **交付矩阵闭环**：跑 `python3 skills/ad-compose/deliver.py "<作品根>" --mark-existing` 生成 `合成/delivery_plan.json`（含每个交付件的可执行 `--render` 命令），并把已存在交付件回写 `_进度.md`。
-7. 回写 `_进度.md` 剪辑包装 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" compose --status ✅ --artifact 合成`，提示 AI 披露（`ad-craft/ai_usage.py`）和 `ad-review`。
+6. **逐交付件实测 QC**：`deliver.py` 生成 `delivery_qc.json`，用 ffprobe/ffmpeg 实测时长、视频/音轨、分辨率/比例、integrated LUFS 与 true peak；只把通过项回写 ✅。
+7. 回写 compose 后先跑 `ai_usage.py` + `compliance_manifest.py`，再进入 `ad-review`。
 
 ## 广告专有强化（差异化）
 

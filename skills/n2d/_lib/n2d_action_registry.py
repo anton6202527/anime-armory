@@ -16,8 +16,29 @@ from typing import Any, Dict, List
 
 ACTION_SCHEMA_VERSION = 2
 
+# NextAction.stop_reason 的机器契约真值。文档、schema、supervisor 与 run.py
+# 必须只消费这组值；新增停因先在这里登记并补消费者测试，避免 switch 静默漏分支。
+STOP_REASONS = (
+    "needs_agent_gen",
+    "needs_stage_execution",
+    "needs_payment_confirm",
+    "needs_choice",
+    "needs_compliance",
+    "needs_acceptance_signoff",
+    "blocked_by_entry_check",
+    "capability_evidence_required",
+    "blocked_by_gate",
+    "blocked_by_image_qc",
+    "blocked_by_review_acceptance",
+    "prework_failed",
+    "env_missing",
+    "auto_ran",
+    "done",
+    "unknown_stage",
+)
+
 AGENT_CREATIVE_STAGES = {"script_stage1", "script_stage2", "image_prompt", "video_prompt"}
-PAID_STAGES = {"image", "video", "compose"}
+PAID_STAGES = {"voice", "image", "video", "compose"}
 
 SPECIALISTS: Dict[str, Dict[str, Any]] = {
     "n2d-script-agent": {

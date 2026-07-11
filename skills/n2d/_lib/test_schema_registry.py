@@ -89,6 +89,31 @@ def test_validate_runtime_v2_artifact_kinds_pass() -> None:
     assert all(reg.validate_payload(payload) == [] for payload in payloads)
 
 
+def test_blocking_bundle_rejects_unregistered_stop_reason() -> None:
+    payload = {
+        "kind": "n2d_blocking_bundle", "version": 1, "episode": "第1集", "stage_key": "video",
+        "stop_reason": "future_silent_branch", "category": "unknown", "blocked": True, "blockers": [],
+    }
+    assert any("stop_reason" in str(issue.get("pointer")) for issue in reg.validate_payload(payload))
+
+
+def test_new_audio_and_series_contracts_are_registered() -> None:
+    payloads = [
+        {"kind": "n2d_bgm_contract", "version": 1, "episode": "第1集", "status": "draft",
+         "strategy": "none", "source": {}, "cues": []},
+        {"kind": "n2d_series_consistency", "version": 1, "status": "draft", "subtitle_style": {},
+         "canonical_names": {}, "dialogue_registers": {}, "audio_baseline": {}},
+        {"kind": "n2d_voice_fit_report", "version": 1, "episode": "第1集", "language": "zh",
+         "status": "planned", "applied": False, "fit_scope": [], "rows": [], "input_sha256": {}},
+        {"kind": "n2d_bgm_generation_job", "version": 1, "episode": "第1集", "duration_sec": 10.0,
+         "model": "Music 1", "channel": "manual", "output": "/tmp/bgm.wav", "cues": []},
+        {"kind": "n2d_bgm_generation_receipt", "version": 1, "status": "pass", "episode": "第1集",
+         "model": "Music 1", "channel": "manual", "output": "/tmp/bgm.wav", "output_sha256": "a",
+         "contract_sha256": "b", "mode": "register_existing"},
+    ]
+    assert all(reg.validate_payload(payload) == [] for payload in payloads)
+
+
 def test_validate_payload_blocks_missing_required() -> None:
     issues = reg.validate_payload({"kind": "n2d_batch_queue", "version": 1})
     messages = [item["message"] for item in issues]

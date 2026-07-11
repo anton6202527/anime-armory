@@ -23,7 +23,7 @@ def make_project(root):
     with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
         f.write("# _设置\n\n## 选择\n- 生视频AI: manual\n- 出视频规格: 预算一般\n")
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump({"title": "测试MV", "song_timing": "先传音乐", "has_song": True, "has_lyrics": True, "song_rights_status": "owned"}, f, ensure_ascii=False)
+        json.dump({"title": "测试MV", "song_timing": "先传音乐", "has_song": True, "has_lyrics": True, "song_rights_status": "owned", "is_demo": True}, f, ensure_ascii=False)
     with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:
         f.write("# 视觉蓝图\n")
     with open(os.path.join(root, "歌", "song.wav"), "wb") as f:
@@ -31,7 +31,7 @@ def make_project(root):
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
         f.write("[verse1]\n一句歌词\n")
     with open(os.path.join(root, "节拍", "beatgrid.json"), "w", encoding="utf-8") as f:
-        json.dump({"duration": 6, "beats": [1, 2, 3], "downbeats": [1, 3]}, f, ensure_ascii=False)
+        json.dump({"duration": 6, "beats": [1, 2, 3], "downbeats": [1, 3], "timing_verified": True}, f, ensure_ascii=False)
     clips = [
         {
             "clip_id": "Clip_001",
@@ -134,13 +134,25 @@ class VideoJobsTest(unittest.TestCase):
                 f.write(b"fake mp4 bytes")
             subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
             subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
-            subprocess.run([sys.executable, JOBS, tmp, "--score", "Clip_001", "--take", "1", "--motion-score", "5", "--identity-score", "4"], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--score", "Clip_001", "--take", "1", "--motion-score", "5", "--identity-score", "4", "--beat-score", "5", "--clarity-score", "4"], capture_output=True, text=True, check=True)
             subprocess.run([sys.executable, JOBS, tmp, "--select", "Clip_001", "--take", "1"], capture_output=True, text=True, check=True)
             self.assertTrue(os.path.exists(os.path.join(tmp, "出视频", "视频", "Clip_001.mp4")))
             with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["jobs"][0]["selected_take"], "take_01")
             self.assertEqual(manifest["jobs"][0]["takes"][0]["score"]["motion"], 5)
+
+    def test_select_rejects_unscored_take(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"fake mp4 bytes")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            proc = subprocess.run([sys.executable, JOBS, tmp, "--select", "1", "--take", "1"], capture_output=True, text=True)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("评分缺字段", proc.stderr)
 
 
 if __name__ == "__main__":

@@ -30,20 +30,35 @@ def load_meta(root):
         return {}
 
 
-def default_sections(meta, duration):
-    structure = meta.get("structure") if isinstance(meta, dict) else None
-    if not isinstance(structure, list) or not structure or not duration:
+def declared_sections(meta, duration):
+    rows = meta.get("section_timings") if isinstance(meta, dict) else None
+    if not isinstance(rows, list):
         return []
-    step = duration / len(structure)
-    rows = []
-    for i, name in enumerate(structure):
-        rows.append({
-            "section": str(name),
-            "start": round(i * step, 3),
-            "end": round((i + 1) * step if i + 1 < len(structure) else duration, 3),
-            "source": "meta_even_split",
-        })
-    return rows
+    out = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        try:
+            start, end = float(row["start"]), float(row["end"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if 0 <= start < end <= duration + 0.1:
+            out.append({"section": str(row.get("section") or row.get("name") or "section"),
+                        "start": round(start, 3), "end": round(end, 3), "source": "meta_section_timings"})
+    return sorted(out, key=lambda row: row["start"])
+
+
+def estimate_bar_phase(beat_frames, onset_env, meter, forced=None):
+    if not len(beat_frames):
+        return 0, 0.0, []
+    scores = []
+    for phase in range(meter):
+        frames = beat_frames[phase::meter]
+        scores.append(float(sum(float(onset_env[min(int(frame), len(onset_env) - 1)]) for frame in frames)))
+    phase = int(forced) if forced is not None else max(range(meter), key=lambda idx: scores[idx])
+    ordered = sorted(scores, reverse=True)
+    confidence = 1.0 if len(ordered) == 1 else max(0.0, min(1.0, (ordered[0] - ordered[1]) / (ordered[0] or 1.0)))
+    return phase, round(confidence, 4), [round(x, 4) for x in scores]
 
 
 def tempo_candidates(bpm):
@@ -59,6 +74,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root", help="创作区/制MV/<曲名>/ 作品根")
     ap.add_argument("--meter", type=int, default=4, help="每小节拍数（4/4 默认 4）")
+    ap.add_argument("--downbeat-phase", type=int, help="人工指定 beat 序列中第几拍为小节首，0-based")
+    ap.add_argument("--confirm-timing", action="store_true", help="确认拍号、小节相位和 section_timings 已人工复核")
     args = ap.parse_args()
 
     song = mv_utils.find_song(args.root)
@@ -75,12 +92,22 @@ def main():
 
     y, sr = librosa.load(song, mono=True)
     dur = float(librosa.get_duration(y=y, sr=sr))
-    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
-    tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr, onset_envelope=onset_env)
+    _harmonic, percussive = librosa.effects.hpss(y)
+    onset_env = librosa.onset.onset_strength(y=percussive, sr=sr)
+    tempo, beat_frames = librosa.beat.beat_track(y=percussive, sr=sr, onset_envelope=onset_env)
     bpm = float(tempo if not hasattr(tempo, "__len__") else tempo[0])
     beats = [round(float(t), 3) for t in librosa.frames_to_time(beat_frames, sr=sr)]
-    # downbeat 近似：每 meter 拍取一个（4/4 → 每 4 拍一个小节首）
-    downbeats = beats[::args.meter] if beats else []
+    if args.downbeat_phase is not None and not 0 <= args.downbeat_phase < args.meter:
+        sys.exit(f"--downbeat-phase 必须在 0..{args.meter - 1}")
+    phase, phase_confidence, phase_scores = estimate_bar_phase(
+        beat_frames, onset_env, args.meter, args.downbeat_phase)
+    downbeats = beats[phase::args.meter] if beats else []
+    local_tempo = librosa.feature.tempo(onset_envelope=onset_env, sr=sr, aggregate=None)
+    tempo_curve = []
+    curve_times = librosa.frames_to_time(range(len(local_tempo)), sr=sr)
+    curve_step = max(1, int(round(sr / 512)))
+    for i in range(0, len(local_tempo), curve_step):
+        tempo_curve.append({"time": round(float(curve_times[i]), 3), "bpm": round(float(local_tempo[i]), 2)})
     rms = librosa.feature.rms(y=y)[0]
     rms_times = librosa.frames_to_time(range(len(rms)), sr=sr)
     onset_times = librosa.frames_to_time(range(len(onset_env)), sr=sr)
@@ -103,11 +130,17 @@ def main():
         "tempo_candidates": tempo_candidates(bpm),
         "meter": args.meter,
         "beats": beats,                 # 每拍时间戳（秒）
-        "downbeats": downbeats,         # 小节首（卡大点用）
+        "downbeats": downbeats,
+        "downbeat_method": "manual_phase" if args.downbeat_phase is not None else "onset_phase_estimate",
+        "downbeat_phase": phase,
+        "downbeat_phase_confidence": phase_confidence,
+        "downbeat_phase_scores": phase_scores,
+        "tempo_curve": tempo_curve,
         "energy_map": energy_map,        # 粗能量曲线：mv-plan / 人工校正用
-        "sections": default_sections(meta, dur),  # 初始段落；人工校正后可覆盖
-        "section_source": "meta_even_split" if meta.get("structure") else "empty",
-        "note": "副歌踩 downbeats 切；verse 缓。tempo_candidates 用于半/倍速人工校正；energy_map 用于段落/高潮校正。",
+        "sections": declared_sections(meta, dur),
+        "section_source": "meta_section_timings" if declared_sections(meta, dur) else "unconfirmed",
+        "timing_verified": bool(args.confirm_timing and (args.downbeat_phase is not None or phase_confidence >= 0.15)),
+        "note": "downbeats 默认仅为 onset 相位估算，不等于人工确认的小节首；正式规划前确认拍号/相位/段落边界。",
     }
     out = os.path.join(out_dir, "beatgrid.json")
     json.dump(grid, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)

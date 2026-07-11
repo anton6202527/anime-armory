@@ -17,12 +17,13 @@ from typing import Any, Dict, Mapping, Optional, Sequence
 # 这是「生视频模型/渠道」选择点的能力档快照；max_clip_seconds/native_av/frame_control、以及
 # 下方 MOTION_CONTROL_PROFILES（运镜/运动控制能力）和 lipsync_audio_ref（音频参考口型）都随后端迭代变，
 # 同属本快照、同一个戳记覆盖（freshness 注册 id=n2d-video-backends）。
-# 采集日期：2026-07-01  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0 official page + cli_snapshots/
+# 采集日期：2026-07-11  来源：Google Gemini API video/Omni/Veo docs + ByteDance Seedance 2.0 official + Kling VIDEO 3.0 official guide + PixVerse C1 official launch + cli_snapshots/
 CATALOG_VERIFIED = {
-    "date": "2026-07-01",
+    "date": "2026-07-11",
     "source": (
         "Google Gemini API video overview/Omni Flash/Veo docs (last updated 2026-06-30) + "
-        "ByteDance Seedance 2.0 official page + Dreamina CLI snapshots + Luma Ray docs + "
+        "ByteDance Seedance 2.0 official launch + Kling VIDEO 3.0 official guide + "
+        "PixVerse C1 official launch (2026-04-07) + Dreamina CLI snapshots + Luma Ray docs + "
         "OpenAI Sora discontinuation notice; other entries are conservative fallbacks"
     ),
 }
@@ -335,6 +336,33 @@ VIDEO_BACKEND_PROFILES: Dict[str, Dict[str, object]] = {
             "verified": "conservative n2d profile; official API not verified in this audit",
         },
     },
+    "pixverse_c1": {
+        "label": "PixVerse C1",
+        "capability_confidence": "evidence",
+        "aliases": ("pixverse_c1", "PixVerse C1", "pixverse c1", "C1"),
+        "max_clip_seconds": 15,
+        "default_mode": "reference_to_video",
+        "identity_mechanism": "reference_guided",
+        "native_av": True,
+        # 官方能力已核验；尚无 n2d 正式 submit adapter，因此不进入自动付费 roster。
+        "auto_routing": False,
+        "multishot_native": True,
+        "reference_to_video_native": True,
+        "duration_control": {
+            "kind": "integer_range", "min_seconds": 1, "max_seconds": 15, "step_seconds": 1,
+            "verified": "2026-04-07 PixVerse official C1 launch: up to 15s/1080p with audio",
+        },
+        "frame_control": {
+            "mode": "storyboard_or_reference_bundle",
+            "max_timeline_frames": 9,
+            "max_reference_images": 9,
+            "supports_first_frame": True,
+            "supports_last_frame": True,
+            "supports_native_mid_anchors": True,
+            "fallback": "Use a 3-9 panel storyboard/reference bundle; n2d emits a job package until a verified C1 adapter is registered.",
+            "verified": "2026-04-07 PixVerse official C1 storyboard-to-video/reference-guided announcement",
+        },
+    },
     "wan": {
         "label": "Wan/万相",
         "capability_confidence": "conservative",
@@ -465,6 +493,10 @@ MOTION_CONTROL_PROFILES: Dict[str, Dict[str, object]] = {
         "level": "medium",
         "capabilities": ["multimodal_reference", "conversational_edit", "native_audio"],
     },
+    "pixverse_c1": {
+        "level": "medium",
+        "capabilities": ["multimodal_reference", "reference_video_motion", "storyboard_reference", "native_audio"],
+    },
     "sora": {
         "level": "medium",
         "capabilities": ["reference_media", "multimodal_reference"],
@@ -546,6 +578,9 @@ def spectacle_backend_prior_ranking(spectacle_type: Optional[str]) -> tuple:
 
 # ── 多镜单次生成 / 视频运动参考 / 质量档 能力派生（CATALOG_VERIFIED 戳记覆盖）──────────
 # 三者都从档案字段派生，集中在本档（不散落在 router）。判定走能力字段，不 hardcode 厂商名。
+MULTISHOT_CAPABLE_BACKENDS = frozenset(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("multishot_native"))
+)
 MULTISHOT_NATIVE_BACKENDS = frozenset(
     key for key, spec in VIDEO_BACKEND_PROFILES.items()
     if bool(spec.get("multishot_native")) and spec.get("auto_routing", True) is not False
@@ -558,11 +593,19 @@ MOTION_REFERENCE_BACKENDS = frozenset(
     key for key, spec in MOTION_CONTROL_PROFILES.items()
     if "reference_video_motion" in (spec.get("capabilities") or [])
 )
+REFERENCE_TO_VIDEO_BACKENDS = frozenset(
+    key for key, spec in VIDEO_BACKEND_PROFILES.items() if bool(spec.get("reference_to_video_native"))
+)
 
 
 def video_backend_supports_multishot(backend: Optional[str]) -> bool:
     """该后端是否支持「多镜单次生成」（一次出多镜头叙事、跨镜一致、无缝转场）。纯函数·可测。"""
-    return normalize_video_backend(backend or "", default="") in MULTISHOT_NATIVE_BACKENDS
+    return normalize_video_backend(backend or "", default="") in MULTISHOT_CAPABLE_BACKENDS
+
+
+def video_backend_supports_reference_to_video(backend: Optional[str]) -> bool:
+    """Whether a backend can generate from a storyboard/reference bundle without a per-shot hero frame."""
+    return normalize_video_backend(backend or "", default="") in REFERENCE_TO_VIDEO_BACKENDS
 
 
 def video_backend_supports_quality_tier(backend: Optional[str]) -> bool:

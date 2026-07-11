@@ -406,6 +406,8 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "col": col,
                 "label": "补真实配音",
                 "skill": "n2d-voice",
+                "redirect_stage_key": "voice",
+                "redirect_reason": "deferred_final_voice_required",
                 "cmd": "n2d-voice {root} {ep}  (补真音；之后 fit_voice_to_clips + n2d-compose)",
                 "note": "声音后置合同尚未完成：当前缺最终真实配音或仍为占位；先完成音色锁与最终配音，口型可见镜还要完成后期表演 pass，再合成。",
             }
@@ -416,6 +418,8 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
                 "col": col,
                 "label": "完成后期口型/表演 pass",
                 "skill": "n2d-video",
+                "redirect_stage_key": "video",
+                "redirect_reason": "post_lipsync_required",
                 "cmd": "python3 skills/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply",
                 "note": "仍有 neutral-mouth base plate 未升级为最终说话镜：" + "、".join(pending_lipsync),
             }

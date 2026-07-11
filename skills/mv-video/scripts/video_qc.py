@@ -19,6 +19,7 @@ from datetime import date
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
+IMAGE_QC_PATH = os.path.join(REPO, "skills", "mv-image", "scripts", "image_qc.py")
 
 
 def load_mv_utils():
@@ -29,6 +30,16 @@ def load_mv_utils():
 
 
 mv_utils = load_mv_utils()
+
+
+def load_image_qc():
+    try:
+        spec = importlib.util.spec_from_file_location("mv_image_qc_for_video", IMAGE_QC_PATH)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except Exception:
+        return None
 
 
 ASPECTS = {
@@ -73,6 +84,10 @@ def probe(path):
         "height": video.get("height"),
         "fps": fps,
         "has_audio": audio,
+        "color_primaries": video.get("color_primaries"),
+        "color_transfer": video.get("color_transfer"),
+        "color_space": video.get("color_space"),
+        "color_range": video.get("color_range"),
         "streams": len(streams),
     }
 
@@ -124,9 +139,23 @@ def image_stats(path):
                 "size": list(im.size),
                 "mean_rgb": mean,
                 "brightness": brightness,
+                "perceptual_hash": perceptual_hash(im),
             }
     except Exception as exc:
         return {"available": False, "error": str(exc)}
+
+
+def perceptual_hash(image):
+    gray = image.convert("L").resize((16, 16))
+    pixels = list(gray.getdata())
+    mean = sum(pixels) / len(pixels)
+    return "".join("1" if value >= mean else "0" for value in pixels)
+
+
+def hash_similarity(a, b):
+    if not a or not b or len(a) != len(b):
+        return None
+    return round(1.0 - sum(x != y for x, y in zip(a, b)) / len(a), 4)
 
 
 def color_distance(a, b):
@@ -199,14 +228,44 @@ def check_clip(root, clip, expected_aspect):
             findings.append({"level": "warn", "code": "low_resolution", "width": width, "height": height})
     if info.get("has_audio"):
         findings.append({"level": "warn", "code": "clip_has_audio", "msg": "compose should normally use the master song track; mute clip audio unless native audio is intentionally approved"})
+    hdr_markers = {"bt2020", "smpte2084", "arib-std-b67"}
+    color_values = {info.get("color_primaries"), info.get("color_transfer"), info.get("color_space")}
+    if color_values & hdr_markers:
+        findings.append({"level": "block", "code": "hdr_input_requires_explicit_tonemap",
+                         "color": sorted(x for x in color_values if x)})
+    elif not any((info.get("color_primaries"), info.get("color_transfer"), info.get("color_space"))):
+        findings.append({"level": "warn", "code": "unmanaged_input_color",
+                         "msg": "输入无色彩标签；正式调色需确认按 Rec.709 解释而非仅在输出补标签"})
     frames, frame_note = sample_frames(root, cid, path, dur or expected_dur, findings)
     if frame_note:
         findings.append({"level": "warn", "code": frame_note})
+    visual_adherence = {}
+    start_frame = next((row for row in frames if row.get("label") == "start" and row.get("ok")), {})
+    first_image = clip.get("image_path")
+    if first_image and os.path.exists(os.path.join(root, first_image)) and start_frame:
+        source_stats = image_stats(os.path.join(root, first_image))
+        start_stats = start_frame.get("stats") or {}
+        similarity = hash_similarity(source_stats.get("perceptual_hash"), start_stats.get("perceptual_hash"))
+        delta = color_distance(source_stats, start_stats)
+        visual_adherence["first_frame"] = {"source": first_image, "perceptual_similarity": similarity, "mean_rgb_distance": delta}
+        if similarity is not None and similarity < 0.45:
+            findings.append({"level": "warn", "code": "first_frame_visual_drift", "similarity": similarity})
+    end_target = clip.get("end_frame_path") if clip.get("need_end_frame") else None
+    end_frame = next((row for row in frames if row.get("label") == "end" and row.get("ok")), {})
+    if end_target and os.path.exists(os.path.join(root, end_target)) and end_frame:
+        target_stats = image_stats(os.path.join(root, end_target))
+        actual_stats = end_frame.get("stats") or {}
+        similarity = hash_similarity(target_stats.get("perceptual_hash"), actual_stats.get("perceptual_hash"))
+        visual_adherence["end_frame"] = {"target": end_target, "perceptual_similarity": similarity,
+                                          "mean_rgb_distance": color_distance(target_stats, actual_stats)}
+        if similarity is not None and similarity < 0.45:
+            findings.append({"level": "warn", "code": "end_frame_visual_drift", "similarity": similarity})
     return {
         "clip_id": cid,
         "video_path": rel,
         "probe": info,
         "frame_samples": frames,
+        "visual_adherence": visual_adherence,
         "findings": findings,
         "verdict": "block" if any(f.get("level") == "block" for f in findings) else ("review" if findings else "ok"),
     }
@@ -241,6 +300,34 @@ def seam_rows(clip_rows):
     return rows
 
 
+def apply_face_identity_qc(root, clips, clip_rows):
+    image_qc = load_image_qc()
+    app = image_qc._load_embedder() if image_qc else None
+    if app is None:
+        return "unavailable"
+    for clip, row in zip(clips, clip_rows):
+        source = clip.get("image_path")
+        if not source or not os.path.exists(os.path.join(root, source)):
+            continue
+        source_embedding = image_qc._embed(app, os.path.join(root, source))
+        if source_embedding is None:
+            continue
+        scores = []
+        for frame in row.get("frame_samples") or []:
+            if not frame.get("ok"):
+                continue
+            embedding = image_qc._embed(app, os.path.join(root, frame["path"]))
+            if embedding is not None:
+                scores.append({"label": frame.get("label"), "score": round(image_qc.cosine(source_embedding, embedding), 4)})
+        row["face_identity_adherence"] = {"mode": "insightface", "source": source, "samples": scores}
+        low = [sample for sample in scores if sample["score"] < 0.45]
+        if low:
+            row["findings"].append({"level": "warn", "code": "video_face_identity_drift",
+                                    "samples": low, "message": "需与定妆/首帧并排人工复核"})
+            row["verdict"] = "review"
+    return "insightface"
+
+
 def build_report(root):
     timeline = mv_utils.load_json(os.path.join(root, "分镜", "timeline_manifest.json"), {}) or {}
     plan = mv_utils.load_json(os.path.join(root, "分镜", "clip_plan.json"), {}) or {}
@@ -253,16 +340,22 @@ def build_report(root):
         base.update(row)
         merged.append(base)
     clip_rows = [check_clip(root, c, expected_aspect) for c in merged]
+    face_mode = apply_face_identity_qc(root, merged, clip_rows)
     hard = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "block")
     warn = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "warn")
     seams = seam_rows(clip_rows)
     sampled = sum(1 for r in clip_rows for f in r.get("frame_samples", []) if f.get("ok"))
+    input_paths = ("分镜/clip_plan.json", "分镜/timeline_manifest.json")
+    selected_hashes = {row.get("video_path"): mv_utils.content_hash(os.path.join(root, row.get("video_path")))
+                       for row in merged if row.get("video_path") and os.path.exists(os.path.join(root, row.get("video_path")))}
     report = {
         "schema_version": 1,
         "kind": "mv_video_qc",
         "generated_at": date.today().isoformat(),
         "root": root,
         "expected_aspect": expected_aspect,
+        "inputs_sha256": {rel: mv_utils.content_hash(os.path.join(root, rel)) for rel in input_paths},
+        "selected_video_sha256": selected_hashes,
         "summary": {
             "clips": len(clip_rows),
             "hard_blocks": hard,
@@ -270,6 +363,8 @@ def build_report(root):
             "seams": len(seams),
             "frame_samples": sampled,
             "verdict": "block" if hard else ("review" if warn else "ok"),
+            "semantic_scope": "deterministic first/end-frame and seam signals; identity/outfit/prop/pose require calibrated face/VLM or signed human review",
+            "face_identity_mode": face_mode,
         },
         "clips": clip_rows,
         "seams": seams,
@@ -318,6 +413,9 @@ def main():
     ap = argparse.ArgumentParser(description="Run deterministic MV video QC")
     ap.add_argument("project_root")
     ap.add_argument("--no-fail", action="store_true")
+    ap.add_argument("--accept-semantic", action="store_true", help="人工逐镜/逐接缝复核身份、服化道、空间、动作、口型和画风后签收")
+    ap.add_argument("--reviewer", help="配合 --accept-semantic，记录复核人")
+    ap.add_argument("--notes", default="")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -325,8 +423,23 @@ def main():
         print(f"[err] 找不到作品根：{root}", file=sys.stderr)
         return 2
     report = build_report(root)
+    if args.accept_semantic:
+        if not args.reviewer:
+            print("[err] --accept-semantic 必须同时提供 --reviewer", file=sys.stderr)
+            return 2
+        report["semantic_review"] = {
+            "accepted": True,
+            "reviewer": args.reviewer,
+            "date": date.today().isoformat(),
+            "notes": args.notes,
+            "dimensions": ["identity", "hair_wardrobe", "props", "scene_topology", "screen_direction",
+                           "pose_motion", "lip_sync_if_applicable", "style_color", "subtitle_safe_area"],
+            "bound_video_sha256": report.get("selected_video_sha256") or {},
+        }
     path = write_report(root, report)
     print(f"[ok] video QC → {path} ({report['summary']['verdict']})")
+    if args.accept_semantic and not report["summary"]["hard_blocks"]:
+        mv_utils.update_progress_stage(root, "video")
     if report["summary"]["hard_blocks"] and not args.no_fail:
         return 1
     return 0

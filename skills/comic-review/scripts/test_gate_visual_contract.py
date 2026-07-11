@@ -211,6 +211,55 @@ def test_ready_panel_with_matching_generation_hash_passes(tmp_path: Path) -> Non
     assert findings == []
 
 
+def test_page_format_with_longstrip_geometry_blocks(tmp_path: Path) -> None:
+    layout = {
+        "format": "页漫",
+        "geometry_profile": "longstrip_single_column",
+        "canvas": {"width": 1440},
+        "segments": [{"panels": [{"panel_id": "P001", "x": 72, "y": 28, "w": 1296, "h": 900}]}],
+    }
+    findings: list[dict] = []
+
+    gate.check_format_geometry(tmp_path, "第1话", layout, findings)
+
+    assert "format_geometry_mismatch" in codes(findings)
+    assert findings[0]["severity"] == "block"
+
+
+def test_page_format_with_real_grid_geometry_passes(tmp_path: Path) -> None:
+    layout = {
+        "format": "页漫",
+        "canvas": {"width": 1440},
+        "segments": [
+            {
+                "panels": [
+                    {"panel_id": "P001", "x": 72, "y": 28, "w": 620, "h": 500},
+                    {"panel_id": "P002", "x": 748, "y": 28, "w": 620, "h": 500},
+                ]
+            }
+        ],
+    }
+    findings: list[dict] = []
+
+    gate.check_format_geometry(tmp_path, "第1话", layout, findings)
+
+    assert findings == []
+
+
+def test_longstrip_format_single_column_is_fine(tmp_path: Path) -> None:
+    layout = {
+        "format": "条漫",
+        "geometry_profile": "longstrip_single_column",
+        "canvas": {"width": 1440},
+        "segments": [{"panels": [{"panel_id": "P001", "x": 72, "y": 28, "w": 1296, "h": 900}]}],
+    }
+    findings: list[dict] = []
+
+    gate.check_format_geometry(tmp_path, "第1话", layout, findings)
+
+    assert findings == []
+
+
 def test_style_anchor_placeholder_counts_as_missing(tmp_path: Path) -> None:
     root = tmp_path
     (root / "_设置.md").write_text("- 风格锚: 未指定\n", encoding="utf-8")

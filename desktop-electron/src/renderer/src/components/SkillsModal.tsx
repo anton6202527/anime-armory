@@ -29,7 +29,7 @@ export function SkillsModal(props: {
           <h2>
             {lineLabel(line)} · {t("skills.skills")} <span className="count">{skillCount}</span>
           </h2>
-          <button className="modal-close" aria-label={t("skills.close")} onClick={onClose}>
+          <button className="modal-close skills-modal-close" aria-label={t("skills.close")} onClick={onClose}>
             ✕
           </button>
         </div>

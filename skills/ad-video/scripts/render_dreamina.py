@@ -9,6 +9,7 @@ records provenance. This script uses only the official Dreamina CLI path.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import shutil
@@ -34,6 +35,7 @@ AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
 if str(AD_LIB) not in sys.path:
     sys.path.insert(0, str(AD_LIB))
 from ad_video_prompt_compiler import parse_markdown  # noqa: E402
+from ad_video_prompt_compiler import normalize_backend  # noqa: E402
 SUCCESS_STATUSES = {"success", "succeeded", "completed", "done"}
 PENDING_STATUSES = {"querying", "queueing", "queued", "processing", "running", "pending", "submitted", "created"}
 
@@ -81,13 +83,7 @@ def build_prompt(prompt_file: Path) -> str:
     compiled = parse_markdown(text)
     if compiled and str(compiled.get("prompt") or "").strip():
         return str(compiled["prompt"]).strip()
-    # Legacy migration fallback. Newly planned jobs must contain a compiler block;
-    # inherit_contract.py blocks them before paid generation when it is absent.
-    sections = extract_sections(text)
-    body = "\n".join(sections[key] for key in KEY_SECTIONS if sections.get(key)).strip()
-    if not body:
-        body = text.strip()
-    return body
+    raise RuntimeError("缺后端编译提交 prompt；拒绝把完整生产合同回退提交给模型")
 
 
 def submit_duration(seconds: float, model_version: str) -> int:
@@ -245,6 +241,14 @@ def job_matches(job: Mapping[str, Any], only: set[str]) -> bool:
     return bool(keys & only)
 
 
+def enforce_gate(root: Path) -> None:
+    gate_cmd = [sys.executable, str(Path(__file__).resolve().parents[2] / "ad-craft" / "scripts" / "gate.py"),
+                str(root), "--stage", "video"]
+    gate = subprocess.run(gate_cmd, text=True)
+    if gate.returncode:
+        raise RuntimeError("ad video gate blocked paid generation")
+
+
 def render_jobs(
     root: Path,
     *,
@@ -258,6 +262,8 @@ def render_jobs(
     collect_only: bool = False,
 ) -> Dict[str, Any]:
     root = root.resolve()
+    if not collect_only:
+        enforce_gate(root)
     manifest_path = root / "出视频" / "分镜" / "video_jobs_manifest.json"
     manifest = load_json(manifest_path)
     if not isinstance(manifest, dict):
@@ -321,6 +327,21 @@ def render_jobs(
             print(f"[pending] {job.get('job_id')} no submit_id yet", flush=True)
             continue
         try:
+            prompt_path = root / str(job.get("prompt") or "")
+            if not prompt_path.is_file():
+                raise RuntimeError(f"缺 prompt：{prompt_path}")
+            actual_prompt_sha = hashlib.sha256(build_prompt(prompt_path).encode("utf-8")).hexdigest()
+            expected_prompt_sha = str(job.get("submit_prompt_sha256") or "")
+            if expected_prompt_sha and actual_prompt_sha != expected_prompt_sha:
+                raise RuntimeError("模型提交 prompt 已变更但 manifest 未重建")
+            for frame_key in ("first_frame", "end_frame"):
+                rel = job.get(frame_key)
+                if rel and not (root / str(rel)).is_file():
+                    raise RuntimeError(f"缺真实输入帧：{rel}")
+            expected_backend = normalize_backend(((job.get("route") or {}).get("primary")))
+            actual_backend = "seedance" if "seedance" in model_version.lower() else "dreamina"
+            if expected_backend not in {actual_backend, "generic"}:
+                raise RuntimeError(f"路由 primary={expected_backend} 与 Dreamina runner 实际模型={actual_backend} 不一致")
             payload = run_dreamina_video(
                 job,
                 root,
@@ -367,8 +388,10 @@ def render_jobs(
                 "backend": "Dreamina/即梦官方 CLI",
                 "model_version": model_version,
                 "video_resolution": video_resolution,
+                "actual_model_backend": actual_backend,
                 "submit_id": payload.get("submit_id"),
-                "credit_count": payload.get("credit_count"),
+                        "credit_count": payload.get("credit_count"),
+                        "submit_prompt_sha256": actual_prompt_sha,
                 "submitted_duration": payload.get("_submitted_duration"),
                 "output": str(job.get("expected_output")),
                 "generated_at": now_iso(),
@@ -385,9 +408,11 @@ def render_jobs(
                     "end_frame": job.get("end_frame"),
                     "submit_id": payload.get("submit_id"),
                     "model_version": model_version,
-                    "video_resolution": video_resolution,
+                "video_resolution": video_resolution,
+                "actual_model_backend": actual_backend,
                     "duration": payload.get("_submitted_duration"),
                     "credit_count": payload.get("credit_count"),
+                    "submit_prompt_sha256": actual_prompt_sha,
                 },
             })
             rendered += 1

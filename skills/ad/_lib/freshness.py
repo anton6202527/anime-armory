@@ -49,6 +49,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "path": "skills/ad-craft/scripts/contract.py",
         "choice_points": ["生图AI"],
         "max_age_days": 45,
+        "stamp_label": "生图候选采集日期",
         "note": "AD_APPROVED/FORBIDDEN 生图后端白名单（广告投放侧从严：禁即梦）。",
     },
     {
@@ -56,15 +57,17 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "path": "skills/ad-craft/scripts/contract.py",
         "choice_points": ["生视频模型", "生视频渠道"],
         "max_age_days": 30,
+        "stamp_label": "生视频候选采集日期",
         "note": "VIDEO_MODELS / VIDEO_CHANNELS 高频变动（Seedance/Veo/Kling 版本…）；"
                 "与生图后端同源于 contract.py，共用文件首个采集日期戳。",
     },
 ]
 
 
-def parse_stamp(text: str) -> Optional[str]:
+def parse_stamp(text: str, label: Optional[str] = None) -> Optional[str]:
     """从文本里取第一处「采集日期：YYYY-MM-DD」；取不到返回 None。"""
-    m = _STAMP_RE.search(text or "")
+    pattern = re.compile(rf"{re.escape(label)}\s*[:：]\s*(\d{{4}}-\d{{2}}-\d{{2}})") if label else _STAMP_RE
+    m = pattern.search(text or "")
     return m.group(1) if m else None
 
 
@@ -109,7 +112,7 @@ def check_source(source: Dict[str, object], today: Optional[_dt.date] = None) ->
     if text is None:
         out["status"] = "missing_file"
         return out
-    stamp = parse_stamp(text)
+    stamp = parse_stamp(text, str(source.get("stamp_label") or "") or None)
     if not stamp:
         out["status"] = "missing_stamp"
         return out

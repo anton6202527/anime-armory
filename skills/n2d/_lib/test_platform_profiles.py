@@ -146,3 +146,9 @@ def test_wan_registered_as_self_host_multishot_backend():
 def test_native_multishot_set_includes_cloud_and_selfhost():
     # 云端(可灵/Seedance) + 自托管(Wan) 都在多镜原生集里。
     assert {"kling", "seedance", "wan"} <= set(profiles.MULTISHOT_NATIVE_BACKENDS)
+
+
+def test_pixverse_c1_is_verified_manual_reference_to_video_candidate():
+    assert profiles.video_backend_supports_multishot("PixVerse C1") is True
+    assert profiles.video_backend_supports_reference_to_video("PixVerse C1") is True
+    assert profiles.video_backend_auto_routable("PixVerse C1") is False

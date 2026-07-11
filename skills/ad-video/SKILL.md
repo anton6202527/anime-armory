@@ -45,6 +45,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    - **完整生产合同**：输入帧、路由理由、品牌色/光位/轴线、产品资产 ID、精确 CTA/slogan/法律声明、安全区、负向和合规信息；供 gate、人工复核和溯源，必须严格完整。
    - **后端编译提交 prompt**：`skills/ad/_lib/ad_video_prompt_compiler.py` 按 primary 后端只编译产品主动作、运镜、明确的环境响应、结尾落幅、产品保持与文字处理；renderer 只提交此块。每条主运镜补速度、方向与落幅，禁止把整份合同、路由理由、资产路径或法规说明拼给模型。
    - 精确 CTA、slogan、价格、法律声明和 UI 文案由 `ad-compose` 可控叠加；视频模型只保持首帧已有文字像素，不负责重新拼写。绑定 `PROD_*` 的产品镜仍须在**完整合同**重写身份锁定句/资产引用。
+   - runner 拒绝旧版完整合同回退提交；提交前重算 compiler source hash、submit prompt hash 和输入帧 hash，并核对 route primary 与实际模型家族。
 3. **契约继承机检（硬闸门）**：
    ```bash
    python3 skills/ad-video/scripts/inherit_contract.py "<作品根>" --json "<作品根>/出视频/分镜/contract_inheritance.json"
@@ -55,7 +56,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    ```bash
    python3 skills/ad-video/scripts/video_qc.py "<作品根>"
    ```
-   结构化检查每个 Clip 文件、产品镜是否路由到主体一致性后端、视频 prompt 是否继承 `PROD_*`/「同一包装/同一 logo/同一品牌色」锁定句、品牌/UI/CTA/法律文字是否声明清晰可读、安全区/接缝是否有契约。报告写 `出视频/分镜/video_qc.json`；`summary.block>0` 不得进入合成，`ad-craft gate --stage compose` 会读取它。
+   用 ffprobe 实测视频流/分辨率/时长，用 ffmpeg 抽 start/mid/end 三帧并生成 contact sheet；对输入首帧、镜内产品漂移、相邻镜头真实尾/首帧做启发式比较。抽帧失败会 block“无法验收”，视觉 dHash 只 WARN 交人工。报告须晚于 clips 且 full precision 才能进 compose（或显式人工签收）。
 6. 回写 `_进度.md` 视频 ✅：`python3 skills/ad-craft/scripts/progress_set.py set-stage "<作品根>" video --status ✅ --artifact 出视频/分镜/视频`，提示 `ad-compose`。
 
 ## 广告专有强化

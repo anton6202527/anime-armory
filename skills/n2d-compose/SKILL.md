@@ -32,7 +32,7 @@ description: Optional post-video stage of n2d — maintain an OpenTimelineIO edi
 - **后期口型是独立交付通道**：`base_video_then_post_lipsync` 镜头不能直接把 base plate 当最终 clip。compose/review gate 要求 `出视频/第N集/视频_lipsync/Clip_XX_lipsync.mp4` 存在并通过 QC；OTIO V1 应引用该版本。
 - **张力感知 BGM 增益（爽点抬/细节压·替代一刀切）**：`DUCK_RATIO` 是整集统一档；要让爽点/爆发镜 BGM 顶上去、悬念/细节镜压更狠，先跑 `python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr` 读 `storyboard.json` 每 Clip `rhythm` 映射成随时间变化的 BGM 基准音量包络，再喂给 compose：`BGM_GAIN_EXPR="$(python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr)" bash compose.sh ...`。这条增益作用在 voice 侧链 ducking **之前**的 BGM 基准上，与既有 `DUCK_RATIO` 侧链叠加。**不传 `BGM_GAIN_EXPR` 时保持原固定 `0.9/0.85` 行为**（向后兼容）；缺 storyboard 时给提示不臆造。`tension_mix.py`（无 `--expr`）打人读包络图 + 建议叠音效的爽点镜清单。
 - **🎼 角色/势力主题动机（leitmotif·确定性复用）**：BGM 此前只到「逐集情绪 + 张力 ducking」，没有跨集「听见就知道是他」的复现旋律。生成式音乐跨集维持同一动机极不稳，故用**确定性复用**：可选 `<作品根>/设定库/motif.json`（`{"沈念":{"file":"素材/motif/shen.wav","cue":"focus","gain":0.5}}`）一次性登记角色/势力的一段动机 clip。compose `[6/6]` 后自动跑 `motif_registry.py --mix`：读 `时长清单.json` 在角色焦点 span 开头铺**同一段 clip**（`min_gap` 去重防刷屏），视频流直 copy 只改音轨。缺 motif.json=空规划 no-op，成片一字不动。巡检：`python3 motif_registry.py <作品根> 第N集`。
-- **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`，量成片**集成响度/真峰** vs 平台目标（youtube/bilibili/tiktok≈-14、broadcast -23、默认 -16 LUFS·候选快照），advisory 不阻断——超标给整改提示（既有逐句 loudnorm + dynaudnorm/alimiter 之外的最终符合性对账）。`--platform` 可指定目标。
+- **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`；多集/发布项目优先消费已签收 `设定库/series_consistency.json.audio_baseline`，把全剧目标响度、容差与真峰锁成同一基线。平台候选只在未启用剧级合同的单集内部粗剪中兜底。
 - **粗剪锁版 + 交付包装证据包**：`final_timeline_probe.py --write` 同时刷新 `timeline.json`、`rough_cut_preview.html` 与 `editorial_timeline.otio`，并把阶段推进到 rough_cut/final_master；OTIO sidecar 记录每个媒体 SHA、缺料槽位、轨道和接缝证据。review 前还要补 `script_supervisor_log`、调色、声音、响度、series packaging/release manifest；单个 MP4 存在不能代替这些锁版证据。
 - **audio_timing_gate 前置**：正式合成前除 `preventive_contracts.json.audio_timing` 外，还要检查 `production_mode_route_第N集.json`、`voice_casting.json`、final voice manifest 与 lipsync 产物。对白近景、后配音、原生音画必须写清 timing basis、表演轨、字幕、声纹/音色、时长拟合和 overflow 策略。
 - **clip 原生音频处理（按逐镜 route 分流）**：Veo / Seedance / Kling 出的 clip 可能自带环境音甚至台词。本 skill 是统一处理点：普通/base plate/表演条件镜丢弃模型音轨，低风险环境声镜可压低混入，`native_av` 镜保留原片声。不要用一个项目级开关覆盖所有 Clip。选择点 `视频原生音轨`：
@@ -47,12 +47,13 @@ description: Optional post-video stage of n2d — maintain an OpenTimelineIO edi
 - **付费/续看闭环字段**：成片进入投放、解锁或追更平台时，发布侧的 `platform_metrics.*` 不只写留存和收入；必须带 `paywall_position_sec`、`paywall_after_promise_id`、`unlock_friction`、`continue_path`。这些字段由 `n2d-feedback` 分析“卡点是否落在已打开承诺之后、哪条续看路径追更最高”，下一批再回灌到分镜和交付策略；compose 不直接改平台数据，但交付说明必须提醒运营/发布工序落这些列。
 - **字幕烧录**：本机 Homebrew ffmpeg **无 libass**（无 subtitles/drawtext 滤镜）→ 用 Pillow 把 SRT 渲染成透明 PNG 再 overlay 烧录（render_subs.py）。
 - **原生音画字幕闭环**：`制作模式=原生音画` 时，compose 可在缺 `字幕_中文.srt` 的情况下先出 draft（脚本会跳过字幕并给 warning），但这不是可交付成片。进入 review/付费投放前必须用 whisperx 或等效词级对齐从原生音轨生成中文字幕，落 `脚本/第N集/字幕_中文.srt`，并写 `生产数据/native_av_subtitle_alignment_第N集.json`（`kind=n2d_native_av_subtitle_alignment`、`status=pass|aligned`、`alignment_tool/source`、`word_level=true`、`subtitle_path`、可选逐 Clip 状态）。`n2d-review` 的 review gate 与 `paid_distribution` compose gate 会 BLOCK 缺 sidecar 或 sidecar 不完整。
-- **占位 BGM 为主**：默认程序化占位；可选真实文件覆盖。
+- **BGM 是机器合同，不是隐式占位**：正式/直调 compose 都先校验 `合成/第N集/bgm_contract.json`。`licensed_file/generated` 必须有真实文件和版权/模型+渠道来源；`none` 产生静音底；程序化 `placeholder` 只有明确 `approved_by` 且 `scope=internal_rough_only` 才可生成，并在 review/发布边界硬阻断。`BGMFILE` 不得与合同 source.file 静默换轨。
+- **生成式 BGM 有统一适配入口**：`gen_bgm.py` 不写死厂商，读取合同生成 `bgm_generation_job.json`；配置 `N2D_BGM_CMD` 后用 `--run` 执行，已有 Suno/ACE-Step/其它合成音乐文件可用 `--register-existing` 登记。两条路径都写带合同 SHA 与音频 SHA 的 `bgm_generation_receipt.json`；文件或合同变化后 gate 判过期。
 - **占位配音不许成片**：`compose.sh` 进门先查 `配音/时长清单.json`——若仍含占位句且未用 `VOICEFILE` 指定别的轨，**拒绝合成**（占位时长≠真实时长，烧进成片必音画错位）。仅 rough preview 可 `ALLOW_PLACEHOLDER_COMPOSE=1` 放行。
 
-## 先出视频后配音（`制作模式` 选择点 · 真音拟合到已锁定视频镜头长）
+## 混合/画面先行镜头的最终配音拟合（真音拟合到已锁定视频镜头长）
 
-仅当 `制作模式=先出视频后配音`（快速 demo·不推荐，见 `n2d` SKILL「制作模式」节）。`原生音画` 默认不走本节；`配音先行` 也不走本节——那条线镜头时长本就由真音驱动，`voice_<lang>.wav` 与 clip 天然对齐，直接合成即可。
+适用于默认混合模式中 `rough_timing_final_dub_later`、`post_dub`、`base_video_then_post_lipsync`，也兼容整项目 `先出视频后配音`。`performance_audio_first` 与纯 `native_av` 不走本节。报告绑定镜头时长、最终配音清单、逐镜 route 和输出拟合轨 SHA；任一输入或拟合轨变化都会被 compose/review gate 判过期。
 
 这条线的视频是按**估算时长**锁死出的，真实配音补在最后，每句长短与锁定镜头不一致；若把真音整轨直接 amix 到拼好的 clip 上会**渐进失步**。所以合成前**必须先拟合**：
 
@@ -66,11 +67,12 @@ python3 <skill>/fit_voice_to_clips.py <作品根> 第N集 zh --apply
 VOICEFILE=<作品根>/合成/第N集/配音/voice_zh_fitted.wav bash <skill>/compose.sh <作品根> 第N集 zh
 ```
 
-`fit_voice_to_clips.py` 按 `脚本/第N集/镜头时长.json`（锁定槽位）逐镜头核对真音（实测 `line_*.wav`），三档处理，**拟合轨总长精确 = 锁定槽位总长 = 视频总长**：
+`fit_voice_to_clips.py` 按 `脚本/第N集/镜头时长.json`（锁定槽位）逐镜核对真音（实测 `line_*.wav`），四档处理，**拟合轨总长精确 = 锁定槽位总长 = 视频总长**：
 
 | 情况 | 动作 | 代价 |
 |---|---|---|
 | 真音 ≤ 镜头槽位 | `pad`：放槽位起点 + 尾部补静音 | 无损 |
+| 真音只超槽位且仍在 `FIT_TOLERANCE` 内 | `trim`：裁掉容差内尾差 | 避免为 0.01s 误差无谓变速 |
 | 槽位 < 真音 ≤ 槽位×`FIT_MAX_STRETCH`(默认1.25) | `stretch`：atempo 轻微提速塞入 | 语速略快（已告警） |
 | 真音 > 槽位×1.25 | `overflow`：**不静默处理**，列出镜头、退出码 2 | 须回 `n2d-video` 重出/重切加长，或显式调高阈值 |
 
@@ -144,8 +146,8 @@ python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 
 ## 加 BGM —— 给用户更丰富选项 + 接受自定义
 到 BGM 环节，提示用户：
-> 「BGM 怎么来？ⓐ 你用 Suno 生成一条给我文件 ⓑ 素材库选 ⓒ 指定本地文件 ⓓ 占位合成。也可以直接说你的想法（循环某首/某风格/某时长），我**鉴定合理可行**(文件存在/格式/时长够循环/版权)后按你的来；不可行说明原因给替代。」
-用户给文件 → `BGMFILE=<路径>`；否则占位。
+> 「BGM 怎么来？ⓐ 已授权素材/本地文件 ⓑ 指定生成模型+渠道并落真实文件 ⓒ 本集明确不用 BGM ⓓ 仅内部粗剪使用占位。也可以直接说你的想法；我会校验文件、时长、版权和来源后写进机器合同。」
+运行 `bgm_contract.py --write-missing` 后填写 `strategy/source/cues/status`。不能只靠临时 `BGMFILE`，也不能把未签收占位带进 review。
 
 ## 转场音效（可选层）
 clip 已带即梦原生音效。额外「2~5 个转场音效」做成可选：用户给 SFX 文件就在 clip 边界铺，不给跳过。
@@ -164,7 +166,7 @@ compose 混音前自动跑 `foley_agent.py`：分析 `storyboard.json` 识别视
 
 ## 工作流
 1. 归集 `视频/` clips → 统一 1080x1920/30fps → 拼接。
-2. BGM：`BGMFILE` 文件(loop/trim+fade) 或 程序化占位。
+2. BGM：按 `bgm_contract.json` 执行真实文件、明确无 BGM 或已签收的 internal rough 占位；无合同直接拒绝。
 3. 混音：配音(若有) + ducking BGM + clip 自带音效底。若显式 `J_CUT_SEC>0` 且存在 `line_*.wav`，先重建一条 `voice_jcut.wav` 参与混音。
 4. 烧字幕（render_subs.py，模式 zh/en/bilingual）。
 5. 输出 `合成/第N集/成片_第N集_{mode}.mp4`；回写 `_进度.md` 成片列。

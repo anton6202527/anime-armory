@@ -77,7 +77,7 @@ def main():
     print()
     brief_hint(root)
     if frontier is None:
-        print("[done] 阶段进度看起来都已完成 ✅ —— 下一步：投放前 AI/授权披露（ad-craft ai_usage.py）+ 质检 ad-review M0。")
+        print("[done] 生产阶段已完成 ✅ —— 下一步：ai_usage + compliance_manifest 发布证据 → ad-review M0；投放后用 ad-feedback 回灌。")
         return
     label, meta = frontier
     owner = meta["owner"] if meta else "?"

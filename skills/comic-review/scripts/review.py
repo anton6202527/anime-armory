@@ -974,6 +974,18 @@ def review(root: Path, chapter: str, *, refresh_qa_preview: bool = True) -> dict
     if unknown_slots:
         add_issue(issues, "warn", "排版/" + chapter + "/lettering.json", "lettering 引用了 layout 不存在的 slot：" + ", ".join(unknown_slots), "comic-compose", "同步 layout 和 lettering 的 slot_id", "lettering")
 
+    lettering_style = lettering.get("style_consistency") if isinstance(lettering.get("style_consistency"), dict) else {}
+    for mismatch in lettering_style.get("mismatches") or []:
+        add_issue(
+            issues,
+            "warn",
+            "排版/" + chapter + "/lettering.json",
+            "嵌字样式一致性：" + str(mismatch),
+            "comic-compose",
+            "统一字体/字号/气泡样式后重新导出，或确认有意变更后更新 排版/lettering_style_baseline.json",
+            "lettering",
+        )
+
     text_layout_qc = manifest.get("text_layout_qc") if isinstance(manifest.get("text_layout_qc"), dict) else {}
     unsupported_text = text_layout_qc.get("unsupported_items") if isinstance(text_layout_qc.get("unsupported_items"), list) else []
     if unsupported_text:

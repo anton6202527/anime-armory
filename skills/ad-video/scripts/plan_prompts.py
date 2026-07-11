@@ -162,7 +162,7 @@ def build_prompt(
         if prod_assets else
         "同一品牌色、Logo 位置与版式层级；继承首帧已有品牌像素"
     )
-    compiled = compile_prompt({
+    compiler_source = {
         "clip_id": label,
         "backend": route_item.get("primary") or "generic",
         "mode": mode,
@@ -181,9 +181,17 @@ def build_prompt(
             "CTA 或法律声明贴边",
             "快速运镜造成产品、UI 或文字抖花",
         ],
-    })
+    }
+    compiled = compile_prompt(compiler_source)
     if compiled["lint"]["errors"]:
         raise ValueError(f"{label} prompt compiler blocked: {compiled['lint']['errors']}")
+    brand_registry = load_json(root / "出图" / "共享" / "asset_registry.json", {}) or {}
+    brand = brand_registry.get("brand") if isinstance(brand_registry.get("brand"), Mapping) else {}
+    brand_name = str(brand.get("name") or brand.get("text_logo") or "登记品牌")
+    locked_texts = []
+    for key in ("text_logo", "slogan"):
+        if brand.get(key):
+            locked_texts.append(str(brand[key]))
     text = f"""# {label} 图生视频 prompt
 
 ## 输入帧
@@ -214,12 +222,12 @@ def build_prompt(
 
 ## 产品/品牌身份锁定
 - 资产引用：{prod_line} / {brand_line}
-- 身份锁定句：与首帧、尾帧和定妆包同一款 App UI、同一 logo、同一品牌色；同一文字标识“星盒”；UI 文案清晰可读，不乱码。
+- 身份锁定句：与首帧、尾帧和定妆包同一产品结构、同一 logo、同一品牌色；同一品牌“{brand_name}”；登记文案清晰可读，不乱码。
 - 产品锁：{shot.get("product_lock", "")}
 
 ## 文字与安全区
-文字清晰可读，准确显示并保留原文；星盒、今日手账、明日清单、立即预约内测、slogan、法律声明保持在中心安全区。
-产品、Logo、CTA 和法律声明保持 9:16 center 6x6；核心产品/UI 保持 center 4x4。
+文字清晰可读，准确显示并保留登记原文：{('、'.join(locked_texts) or '按 brief/asset_registry') }。
+产品、Logo、CTA 和法律声明遵守目标 placement 的官方 safe-zone 模板；不以通用中心网格代替平台遮挡区。
 
 ## 负向
 不要改包装文字；不要变形 logo；不要改 logo；不要改品牌色；不要乱码；不要出现第三方真实 App UI；不要明星脸；不要医疗/心理疗效暗示；不要让 CTA 或法律声明贴边；不要过快运镜导致 UI/文字抖花。
@@ -253,8 +261,13 @@ def build_prompt(
         "submit_prompt": submit_prompt,
         "negative_prompt": compiled["negative_prompt"],
         "source_contract_sha256": compiled["source_contract_sha256"],
+        "compiler_source_contract": compiler_source,
         "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
         "submit_prompt_chars": len(submit_prompt),
+        "input_frame_sha256": {
+            "first": hashlib.sha256(first.read_bytes()).hexdigest() if first.is_file() else None,
+            "end": hashlib.sha256(end.read_bytes()).hexdigest() if end and end.is_file() else None,
+        },
         "status": "planned",
     }
     return text, job

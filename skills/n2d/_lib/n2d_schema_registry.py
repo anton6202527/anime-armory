@@ -35,6 +35,7 @@ try:
     )
     from n2d_registry import production_dir
     from n2d_schema import BOUNDARY_PRODUCT_KINDS
+    from n2d_action_registry import STOP_REASONS
 except ImportError:  # pragma: no cover - package import fallback
     from .n2d_const import (
         ARTIFACT_LINEAGE_MANIFEST_KIND,
@@ -56,6 +57,7 @@ except ImportError:  # pragma: no cover - package import fallback
     )
     from .n2d_registry import production_dir
     from .n2d_schema import BOUNDARY_PRODUCT_KINDS
+    from .n2d_action_registry import STOP_REASONS
 
 
 SCHEMA_REGISTRY_KIND = "n2d_schema_registry"
@@ -90,6 +92,11 @@ EDITORIAL_TIMELINE_KIND = "n2d_editorial_timeline"
 VOICE_CASTING_KIND = "n2d_voice_casting"
 TIMING_ESTIMATE_KIND = "n2d_timing_estimate"
 SHOT_TIMING_BASIS_KIND = "n2d_shot_timing_basis"
+BGM_CONTRACT_KIND = "n2d_bgm_contract"
+BGM_GENERATION_JOB_KIND = "n2d_bgm_generation_job"
+BGM_GENERATION_RECEIPT_KIND = "n2d_bgm_generation_receipt"
+SERIES_CONSISTENCY_KIND = "n2d_series_consistency"
+VOICE_FIT_REPORT_KIND = "n2d_voice_fit_report"
 SCHEMA_VERSION = 1
 NON_ROUTABLE_JSON_FILENAMES = {"镜头时长.json"}
 
@@ -311,13 +318,71 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
             "version": {"type": "integer"},
             "episode": {"type": "string"},
             "stage_key": {"type": "string"},
-            "stop_reason": {"type": "string"},
+            "stop_reason": {"type": "string", "enum": list(STOP_REASONS)},
             "category": {"type": "string"},
             "blocked": {"type": "boolean"},
             "blockers": arr({"type": "object"}),
             "repair_commands": arr({"type": "string"}),
             "gate": {"type": "object"},
             "episode_graph": {"type": "object"},
+        },
+    ),
+    BGM_CONTRACT_KIND: obj(
+        ("kind", "version", "episode", "status", "strategy", "source", "cues"),
+        {
+            "kind": {"type": "string", "enum": [BGM_CONTRACT_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "status": {"type": "string"},
+            "strategy": {"type": "string", "enum": ["none", "licensed_file", "generated", "placeholder"]},
+            "source": {"type": "object"},
+            "cues": arr({"type": "object"}),
+            "mix": {"type": "object"},
+            "placeholder_approval": {"type": "object"},
+        },
+    ),
+    BGM_GENERATION_JOB_KIND: obj(
+        ("kind", "version", "episode", "duration_sec", "model", "channel", "output", "cues"),
+        {"kind": {"type": "string", "enum": [BGM_GENERATION_JOB_KIND]}, "version": {"type": "integer"},
+         "episode": {"type": "string"}, "duration_sec": {"type": "number"}, "model": {"type": "string"},
+         "channel": {"type": "string"}, "output": {"type": "string"}, "cues": arr({"type": "object"}),
+         "mix": {"type": "object"}},
+    ),
+    BGM_GENERATION_RECEIPT_KIND: obj(
+        ("kind", "version", "status", "episode", "model", "channel", "output", "output_sha256", "contract_sha256", "mode"),
+        {"kind": {"type": "string", "enum": [BGM_GENERATION_RECEIPT_KIND]}, "version": {"type": "integer"},
+         "status": {"type": "string", "enum": ["pass"]}, "episode": {"type": "string"},
+         "model": {"type": "string"}, "channel": {"type": "string"}, "output": {"type": "string"},
+         "output_sha256": {"type": "string"}, "contract_sha256": {"type": "string"}, "mode": {"type": "string"},
+         "registered_at": {"type": "string"}},
+    ),
+    SERIES_CONSISTENCY_KIND: obj(
+        ("kind", "version", "status", "subtitle_style", "canonical_names", "dialogue_registers", "audio_baseline"),
+        {
+            "kind": {"type": "string", "enum": [SERIES_CONSISTENCY_KIND]},
+            "version": {"type": "integer"},
+            "status": {"type": "string"},
+            "subtitle_style": {"type": "object"},
+            "canonical_names": {"type": "object"},
+            "dialogue_registers": {"type": "object"},
+            "audio_baseline": {"type": "object"},
+        },
+    ),
+    VOICE_FIT_REPORT_KIND: obj(
+        ("kind", "version", "episode", "language", "status", "applied", "fit_scope", "rows", "input_sha256"),
+        {
+            "kind": {"type": "string", "enum": [VOICE_FIT_REPORT_KIND]},
+            "version": {"type": "integer"},
+            "episode": {"type": "string"},
+            "language": {"type": "string"},
+            "status": {"type": "string", "enum": ["planned", "pass", "block"]},
+            "applied": {"type": "boolean"},
+            "fit_scope": arr({"type": "string"}),
+            "rows": arr({"type": "object"}),
+            "summary": {"type": "object"},
+            "output": {"type": "string"},
+            "output_sha256": {"type": "string"},
+            "input_sha256": {"type": "object"},
         },
     ),
     FLOW_TELEMETRY_KIND: obj(

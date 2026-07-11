@@ -240,8 +240,15 @@ def check_alignment_report(root):
     warnings = report.get("warnings") or []
     for warning in warnings:
         add(WARN, "字幕", "字幕/alignment_report.json", f"对齐报告提示：{warning}")
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    confidence = report.get("alignment_confidence")
+    if not meta.get("is_demo"):
+        if report.get("alignment_unit") != "character":
+            add(BLOCK, "字幕", "字幕/alignment_report.json", "正式项目仍是旧 word-count 切行报告，需重跑字符级对齐")
+        if isinstance(confidence, (int, float)) and confidence < 0.9:
+            add(BLOCK, "字幕", "字幕/alignment_report.json", f"字符对齐置信度 {confidence:.1%} < 90%")
     add(INFO, "字幕", "字幕/alignment_report.json",
-        f"对齐快照：{report.get('aligned_lines', 0)}/{report.get('lyric_lines', 0)} 行 · unused={report.get('unused_word_segments', 0)}")
+        f"对齐快照：{report.get('aligned_lines', 0)}/{report.get('lyric_lines', 0)} 行 · confidence={confidence}")
 
 
 def check_plan_manifests(root, songlen):
@@ -299,6 +306,11 @@ def check_video_jobs(root):
         p = job.get("selected_video_path")
         if p and not os.path.exists(os.path.join(root, p)):
             add(BLOCK, "规划", p, f"{job.get('clip_id')} selected_take 已选但成品 clip 不存在")
+        take = next((row for row in job.get("takes", []) if row.get("take_id") == job.get("selected_take")), {})
+        score = take.get("score") or {}
+        missing_scores = [key for key in ("motion", "identity", "beat_fit", "clarity") if not isinstance(score.get(key), (int, float))]
+        if missing_scores and not take.get("selection_waiver"):
+            add(BLOCK, "规划", path, f"{job.get('clip_id')} 已挑版但缺评分：{', '.join(missing_scores)}")
 
 
 def check_consistency_artifacts(root, meta=None):
@@ -354,7 +366,8 @@ def check_consistency_artifacts(root, meta=None):
             (video_qc_path, "生产数据/video_qc/video_qc.json", "视频QC"),
         ):
             if not os.path.exists(path):
-                add(WARN, "一致性", label, f"缺 {kind} 报告——建议跑 mv-video/scripts/{'inherit_contract.py' if 'inherit' in label else 'video_qc.py'}")
+                severity = INFO if (meta or {}).get("is_demo") else BLOCK
+                add(severity, "一致性", label, f"缺 {kind} 报告——运行 mv-video/scripts/{'inherit_contract.py' if 'inherit' in label else 'video_qc.py'}")
                 continue
             payload = load_json_safe(path)
             if payload is None:
@@ -370,6 +383,17 @@ def check_consistency_artifacts(root, meta=None):
                 add(WARN, "一致性", label, f"{kind} verdict={verdict} warnings={warn}")
             else:
                 add(INFO, "一致性", label, f"{kind} verdict={verdict}")
+            stale = [rel for rel, recorded in (payload.get("inputs_sha256") or {}).items()
+                     if mv_utils.content_hash(os.path.join(root, rel)) != recorded]
+            if stale:
+                add(BLOCK, "一致性", label, f"{kind} 报告已过期，输入已变化：{stale[0]}")
+            if kind == "视频QC":
+                stale_video = [rel for rel, recorded in (payload.get("selected_video_sha256") or {}).items()
+                               if mv_utils.content_hash(os.path.join(root, rel)) != recorded]
+                if stale_video:
+                    add(BLOCK, "一致性", label, f"视频 QC 未绑定当前选中视频：{stale_video[0]}")
+            if kind == "视频QC" and not (meta or {}).get("is_demo") and not (payload.get("semantic_review") or {}).get("accepted"):
+                add(BLOCK, "一致性", label, "正式项目视频语义人工复核尚未签收")
 
 
 def check_production_pack(root, meta):
@@ -378,10 +402,13 @@ def check_production_pack(root, meta):
         return
     expected = [
         ("分镜/animatic_manifest.json", "animatic manifest"),
+        ("分镜/animatic.mp4", "reviewable animatic"),
+        ("分镜/timeline.otio", "OpenTimelineIO timeline"),
         ("制片/shot_list.json", "shot list"),
         ("制片/setup_schedule.md", "setup schedule"),
         ("制片/take_log.csv", "take log"),
         ("制片/picture_lock_color_checklist.md", "picture lock/color checklist"),
+        ("制片/picture_lock.json", "signed picture lock"),
     ]
     missing = [rel for rel, _label in expected if not os.path.exists(os.path.join(root, rel))]
     if missing:
@@ -403,6 +430,8 @@ def check_formal_readiness(root, meta):
     if not os.path.exists(path):
         if meta and meta.get("is_demo"):
             add(INFO, "正式版", "formal_readiness.json", "当前为 demo；可跑 mv-craft/scripts/formal_readiness.py 生成正式版缺口清单")
+        else:
+            add(BLOCK, "正式版", "formal_readiness.json", "正式项目缺 formal readiness 报告")
         return
     payload = load_json_safe(path)
     if payload is None:
@@ -414,7 +443,7 @@ def check_formal_readiness(root, meta):
     warnings = int(summary.get("warnings") or 0)
     msg = f"formal readiness status={status} · blockers={blockers} · warnings={warnings}"
     if status == "blocked" and not (meta or {}).get("is_demo"):
-        add(WARN, "正式版", "formal_readiness.json", msg)
+        add(BLOCK, "正式版", "formal_readiness.json", msg)
     else:
         add(INFO, "正式版", "formal_readiness.json", msg)
 
@@ -454,6 +483,30 @@ def check_final(root, meta, songlen):
                     f"成片画幅 {w}x{h}(≈{act:.3f}) 与 _meta.aspect {aspect}(≈{exp:.3f}) 不符")
     add(INFO, "音画", os.path.basename(final),
         f"快照：{dur:.1f}s · {w}x{h} · {'有音轨' if has_audio else '无音轨'}")
+
+
+def check_delivery_artifacts(root):
+    final = os.path.join(root, "成片_MV.mp4")
+    if not os.path.exists(final):
+        return
+    master = os.path.join(root, "成片_MV_master.mov")
+    if not os.path.exists(master):
+        add(BLOCK, "交付", "成片_MV_master.mov", "缺可回溯的高质量 mezzanine master")
+    qc_path = os.path.join(root, "生产数据", "delivery_qc", "delivery_qc.json")
+    qc = load_json_safe(qc_path)
+    if qc is None:
+        add(BLOCK, "交付", "生产数据/delivery_qc/delivery_qc.json", "缺交付编码/音频/色彩 QC")
+    elif int((qc.get("summary") or {}).get("hard_blocks") or 0):
+        add(BLOCK, "交付", "生产数据/delivery_qc/delivery_qc.json", "delivery QC 仍有 hard block")
+    provenance_path = os.path.join(root, "合规", "provenance.json")
+    provenance = load_json_safe(provenance_path)
+    if provenance is None:
+        add(BLOCK, "交付", "合规/provenance.json", "缺全链路 hash provenance")
+    else:
+        assets = {row.get("path"): row.get("sha256") for row in provenance.get("assets") or []}
+        rel = "成片_MV.mp4"
+        if assets.get(rel) != mv_utils.content_hash(final):
+            add(BLOCK, "交付", provenance_path, "provenance 未绑定当前最终 MP4")
 
 
 def check_ai_usage(root):
@@ -532,6 +585,7 @@ def main():
     check_subtitles(root, songlen, lyric_lines)
     check_alignment_report(root)
     check_final(root, meta, songlen)
+    check_delivery_artifacts(root)
     check_ai_usage(root)
     if songlen:
         add(INFO, "音画", mv_utils.relpath(root, song_path), f"歌长基准：{songlen:.2f}s")

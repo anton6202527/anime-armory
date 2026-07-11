@@ -21,7 +21,9 @@ description: 画漫画审查阶段。Use when reviewing comic scripts, name boar
 - `生产数据/comic_review_第N话.json`。
 - `生产数据/comic_review_第N话.md`。
 - `生产数据/comic_style_consistency_第N话.json/md` 与 `consistency_findings_style_第N话.json`：面板风格一致性、场景族群基线、调色离群、拼贴/分栏/外框嫌疑和生成配方一致性 findings。
-- `生产数据/comic_character_consistency_第N话.json/md` 与 `consistency_findings_character_第N话.json`：角色参考图对本话面板的并排复核、可选 face/hair/outfit 指纹提示和返修目标。
+- `生产数据/comic_character_consistency_第N话.json/md` 与 `consistency_findings_character_第N话.json`：角色参考图对本话面板的并排复核、CCIP 身份快筛（可用时）、face/hair/outfit 指纹提示和返修目标。
+- `生产数据/comic_scene_prop_consistency_第N话.json/md`：场景锚组 contact sheet、组内布局指纹离群、`PROP_/SYS_/FX_` 并排复核与参考缺口（LOC_/PROP_ 的图像级覆盖）。
+- `生产数据/comic_vlm_judge_tasks_第N话.json` / `comic_vlm_judge_verdicts_第N话.json`：CANVAS 三轴 VLM 并排判定任务包与 agent 裁决（脸/服装体型、背景连续、道具身份位置；sha 绑定，重抽自动失效）。
 - `生产数据/comic_gate_<stage>_第N话.json/md` 与 `gate_findings_<stage>_第N话.json`：`image_preflight` / `image` / `compose` / `review` 阶段 gate 结果，供 `comic-batch` 和人工续跑消费。
 - `生产数据/qa_previews/第N话_panels_contact_sheet.jpg`、`第N话_style_outliers_detail.jpg`、`第N话_character_consistency_contact_sheet.jpg`：风格和角色复核自动生成的人审证据图，用于签收计划内光效、系统特效、动作速度线、构图差异或启发式角色指纹误报。
 - `_进度.md`：人工或机器审查通过后，把 `审查` 标 `✅`；有阻断问题时不回写完成。
@@ -48,7 +50,7 @@ python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --
 python3 skills/comic-review/scripts/style_consistency.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-该报告使用漫画线自包含的风格一致性口径：同一话必须统一生图模型/渠道、登记风格锚/`style_contract`，并用面板风格指纹检查画风/照片感/细节密度离群；全话基线之外还会按场景族群复核，避免把脚本计划内的日景、夜景、山路、水底或蒙太奇误判成画风漂移。同场景会检查冷暖/品绿调色横跳，并检测疑似内部分栏、拼贴 gutter、外框/截图边。`block` 回 `comic-image` 重抽，`warn` 必须人审签收或重抽。
+该报告使用漫画线自包含的风格一致性口径：同一话必须统一生图模型/渠道、登记风格锚/`style_contract`（`未指定/无/待定` 等占位值不算锚），并用面板风格指纹检查画风/照片感/细节密度离群；全话基线之外还会按场景族群复核，避免把脚本计划内的日景、夜景、山路、水底或蒙太奇误判成画风漂移。同场景会检查冷暖/品绿调色横跳，并检测疑似内部分栏、拼贴 gutter、外框/截图边。另有三层新增检查：① **跨话基准回归**——首话（或 `--rebaseline` 指定话）+ 风格锚图的指纹持久化到 `出图/共享/style_baseline.json`，后续各话整体指纹与基准比，抓"整话一起漂"（换模型版本/风格锚失效，话内相对比较发现不了）；② **相邻格连续性**——同场景锚在阅读顺序上相邻的两格冷暖/亮度跳变（光位翻转代理）；③ **黑白灰量化**——黑场占比与线宽代理（边缘密度）对话内中位的离群（网点密度/黑场/线宽口径不统一）。三层均 warn-only。`block` 回 `comic-image` 重抽，`warn` 必须人审签收或重抽。
 
 只跑角色一致性机检：
 
@@ -56,7 +58,7 @@ python3 skills/comic-review/scripts/style_consistency.py "创作区/画漫画/�
 python3 skills/comic-review/scripts/character_consistency.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-该报告优先产出并排人审证据：每个 `CHAR_` 的共享参考图放在同一张 contact sheet 里，旁边是本话所有出场 panel。装了 Pillow 时会额外给 face / hair / outfit 三类裁剪指纹相似度提示；这些像素提示是启发式，只能 `warn`，不能替代人眼对脸型、发际线、发型、服装、配饰和标志物的判定。
+该报告优先产出并排人审证据：每个 `CHAR_`/`MON_` 的共享参考图放在同一张 contact sheet 里，旁边是本话所有出场 panel；`characters` 里没有 ref ID 也匹配不到 registry display_name 的裸名字会记 `named_character_without_ref` warn（一致性机检覆盖不到的角色必须显式登记）。机检分三层：① **CCIP 动漫身份 embedding 快筛**（安装 `dghs-imgutils` 时启用；同角色判定阈值 0.178，是动漫脸的事实标准——ArcFace 系人脸模型对动漫脸不可用；缺依赖时明示降级并给安装建议）；② Pillow face / hair / outfit 裁剪指纹（色彩分布代理，换脸同色调会漏报，仅作次级提示）；③ **CANVAS 三轴 VLM 并排判定**——`vlm_judge.py` 生成 `生产数据/comic_vlm_judge_tasks_第N话.json`（脸/服装体型、背景连续、道具身份位置三轴），由多模态 agent 看图逐条裁决写回 verdict 文件，只做相对排序；score<=2 或 suspect 转 warn，裁决绑定图像 sha、重抽自动失效。全部像素/嵌入提示只能 `warn`，最终判定仍是并排人审。
 
 正式出图或交付前跑 gate：
 
@@ -69,9 +71,9 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 
 `image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、缺 `visual_contract`、逐格缺人物完整性/眼神目标、逐格缺场景布局/光位/轴线、`LOC_` 未登记、无理由看镜头、多人同格缺站位/遮挡/接触点、混用模型/渠道等问题；它还会用 `comic-image` 的 `build_panel_jobs.py --check` 按当前脚本/收尾/风格契约重编提交 prompt 并与落盘出图包比对，改了契约没重建出图包（`panel_jobs_stale_contract`）或脚本新增格缺 job（`panel_jobs_missing_panels`）都阻断。`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block，以及成图生成时哈希与当前提交契约不一致的格（`panel_generated_under_stale_contract`，防手工把旧图改回 ready）；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。风格锚判定不认 `未指定/无/待定` 等占位值。
 
-若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。
+若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；**建议写 `artifact_sha256`（当前图像的 sha256）**——带 sha 的签收在该格重抽后自动失效，不带 sha 的签收会被注记"重抽不失效"风险。**block 级机检 finding 不可签收**（拼贴 gutter/外框/缺图等硬证据必须返修）。脚本会把生效的 warn finding 降为 `info`，同时保留原始 `machine_severity`。
 
-若 face/hair/outfit 指纹低分来自低机位、遮挡、泥污、强光、动作变形或剧情换装等计划内角色状态，可写 `生产数据/character_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `character_consistency.py` 或 gate。签收记录至少匹配 `code + panel_id` 或 `code + artifact`，可选再加 `character_id`；脚本会把对应 finding 降为 `info`，同时保留原始 `machine_severity`。签收不能替代缺定妆图、缺角色 DNA、明显换脸或主服装设定错误的返修。
+若 face/hair/outfit 指纹低分来自低机位、遮挡、泥污、强光、动作变形或剧情换装等计划内角色状态，可写 `生产数据/character_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `character_consistency.py` 或 gate。签收记录至少匹配 `code + panel_id` 或 `code + artifact`，可选再加 `character_id`；**建议写 `artifact_sha256`**——带 sha 的签收在该格重抽后自动失效。**block 级（缺图/缺参考等 deterministic finding）不可签收**。脚本会把生效的 warn finding 降为 `info`，同时保留原始 `machine_severity`。签收不能替代缺定妆图、缺角色 DNA、明显换脸或主服装设定错误的返修。
 
 若“疑似烘焙空白气泡”其实是天空、雾光、宣纸留白或系统绘卷等计划内亮部，可写 `生产数据/raw_bubble_acceptance_第N话.json` 做人审签收。`accepted_findings[]` 至少包含 `{"code":"raw_bubble_candidate","panel_id":"Pxxx","reason":"...","evidence":"..."}`；重跑 `comic-review` 后对应项会降为 `info`，但该格重抽后必须重新复核。
 

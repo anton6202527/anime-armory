@@ -55,10 +55,6 @@ const SearchPane = lazy(() =>
   import("../components/SearchPane").then((mod) => ({ default: mod.SearchPane })),
 );
 
-const KanbanPane = lazy(() =>
-  import("../components/KanbanPane").then((mod) => ({ default: mod.KanbanPane })),
-);
-
 const EpisodeWorkspacePane = lazy(() =>
   import("../components/EpisodeWorkspacePane").then((mod) => ({ default: mod.EpisodeWorkspacePane })),
 );
@@ -74,7 +70,7 @@ const OP_BOTTOM_MAX_HEIGHT = 440;
 const OP_LEFT_RAIL_WIDTH = 48;
 const TERMINAL_SIDE_COLLAPSE_WIDTH = OP_RIGHT_MIN_WIDTH;
 const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = OP_BOTTOM_MIN_HEIGHT;
-type LeftTab = "files" | "search" | "changes" | "canvas" | "kanban" | "review";
+type LeftTab = "files" | "search" | "changes" | "canvas" | "review";
 type TerminalDock = "side" | "bottom";
 
 function isMacPlatform(): boolean {
@@ -114,14 +110,13 @@ export function Operation(props: {
   const [canvas, setCanvas] = useState<CanvasData | null>(null);
   const [ep, setEp] = useState<string>("第1集");
   const [err, setErr] = useState<string>("");
-  // left-pane sub-tabs: 文件/搜索/技能/变动 for every line, plus visual 画布/看板 and all-line 质检.
+  // left-pane sub-tabs: 文件/搜索/技能/变动 for every line, plus visual 画布 and all-line 质检.
   const isCanvasLine = line.view === "canvas";
   const [tab, setTab] = useState<LeftTab>("files");
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
-  // 画布/看板 are per-episode views driven by canvas data; 质检 is available to every line.
-  const isCanvasBoardTab = tab === "canvas" || tab === "kanban";
-  const shouldReadCanvas = isCanvasLine && (isCanvasBoardTab || tab === "review");
+  // 画布 is a per-episode view driven by canvas data; 质检 is available to every line.
+  const shouldReadCanvas = isCanvasLine && (tab === "canvas" || tab === "review");
   // bumped (debounced) whenever the work root changes on disk → re-pull data
   const [refreshKey, setRefreshKey] = useState(0);
   const [changeScanKey, setChangeScanKey] = useState(0);
@@ -481,7 +476,7 @@ export function Operation(props: {
   // Polling fallback for long-running skills/agents. Native fs events are fast
   // when available, but some generator CLIs write via atomic replace, temp dirs,
   // or external processes that can be missed on a few platforms. This keeps the
-  // file tree, canvas, kanban, and next-action strip converging automatically.
+  // file tree, canvas, and next-action strip converging automatically.
   useEffect(() => {
     if (!active || !secondaryReady) return;
     let alive = true;
@@ -862,18 +857,6 @@ export function Operation(props: {
                 <RailIcon name="canvas" />
               </button>
             )}
-            {isCanvasLine && (
-              <button
-                type="button"
-                className={"rail-tab" + (sidePanelOpen && tab === "kanban" ? " active" : "")}
-                data-tooltip={t("operation.boardTab")}
-                data-tooltip-placement="right"
-                aria-label={t("operation.boardTab")}
-                onClick={() => openLeft("kanban")}
-              >
-                <RailIcon name="kanban" />
-              </button>
-            )}
             <button
               type="button"
               className={"rail-tab" + (sidePanelOpen && tab === "review" ? " active" : "")}
@@ -980,16 +963,12 @@ export function Operation(props: {
                         )}
                       </div>
                     )}
-                    {sidePanelOpen && isCanvasLine && isCanvasBoardTab && (
+                    {sidePanelOpen && isCanvasLine && tab === "canvas" && (
                       <div className="subtab-layer">
                         {err ? (
                           <div className="stub-view">{t("common.readFailed", { error: err })}</div>
                         ) : !canvas ? (
                           <div className="stub-view">{t("common.loading")}</div>
-                        ) : tab === "kanban" ? (
-                          <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                            <KanbanPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />
-                          </Suspense>
                         ) : (
                           <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
                             <CanvasPane canvas={canvas} root={root} ep={ep} refreshKey={refreshKey} />

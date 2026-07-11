@@ -80,7 +80,6 @@ const zh = {
   "operation.skillsTab": "技能",
   "operation.changesTab": "变动",
   "operation.canvasTab": "画布",
-  "operation.boardTab": "看板",
   "operation.reviewTab": "质检",
   "operation.episodeSelect": "选择集/话",
   "operation.expandLeft": "展开左侧面板",
@@ -260,6 +259,7 @@ const zh = {
   "canvas.noStoryboard": "当前集/话暂无可视化分镜（storyboard.json 或 panel_script.json 未生成）。",
   "canvas.noImage": "未出图",
   "canvas.video": "成片视频",
+  "canvas.videoNode": "视频节点 {number}",
   "canvas.noVideo": "未出视频",
   "canvas.playVideo": "播放成片视频",
   "canvas.pauseVideo": "暂停视频",
@@ -315,10 +315,6 @@ const zh = {
   "canvas.zoomTo": "缩放至{percent}%",
   "canvas.zoomPercent": "缩放百分比",
 
-  "kanban.todo": "📝 待出图",
-  "kanban.image": "🎨 已出图",
-  "kanban.video": "🎬 已出视频",
-  "kanban.review": "✅ 质检问题",
 
   "review.noData": "暂无质检评分数据。跑对应 review / score 后会显示整体评分、阻断和返工任务。",
   "review.scoreShort": "评分 {score}",
@@ -414,7 +410,6 @@ const en: Record<I18nKey, string> = {
   "operation.skillsTab": "Skills",
   "operation.changesTab": "Changes",
   "operation.canvasTab": "Canvas",
-  "operation.boardTab": "Board",
   "operation.reviewTab": "Review",
   "operation.episodeSelect": "Select episode/chapter",
   "operation.expandLeft": "Expand left panel",
@@ -594,6 +589,7 @@ const en: Record<I18nKey, string> = {
   "canvas.noStoryboard": "No visual script for this episode/chapter yet (storyboard.json or panel_script.json has not been generated).",
   "canvas.noImage": "No image yet",
   "canvas.video": "Clip video",
+  "canvas.videoNode": "Video node {number}",
   "canvas.noVideo": "No video yet",
   "canvas.playVideo": "Play clip video",
   "canvas.pauseVideo": "Pause video",
@@ -649,10 +645,6 @@ const en: Record<I18nKey, string> = {
   "canvas.zoomTo": "Zoom to {percent}%",
   "canvas.zoomPercent": "Zoom percent",
 
-  "kanban.todo": "📝 To Image",
-  "kanban.image": "🎨 Image Done",
-  "kanban.video": "🎬 Video Done",
-  "kanban.review": "✅ Review Issues",
 
   "review.noData": "No review score data yet. Run the matching review / score skill to show overall score, blockers, and rerun tasks.",
   "review.scoreShort": "Score {score}",

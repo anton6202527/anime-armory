@@ -76,6 +76,10 @@ DIMENSIONS = [
     ("plot_structure", "剧情结构与主线张力"),
     ("prose", "文学性 / 文笔"),
     ("retention", "完读 / 留存潜力"),
+    # ⑧ 新颖度/想象力（2026-07 新增）：此前创意质量只有「AI味/雷同」雷点扣分（罚下限），
+    # 没有正向上限评估——系统擅长"不写崩"、不擅长"写得让人惊喜"。本维评差异化记忆点、
+    # 预期违背（意外但回看合理）、非模板化桥段/结局；锚点见 rubric.md ⑧。
+    ("novelty", "新颖度 / 想象力"),
 ]
 
 # 书名体检（附加体检项 · 不计入百分制总分）：维度沿用 novel-title 的 5 维（各 1-5 分，满分 25）。
@@ -106,27 +110,29 @@ ADAPTATION_LOW_THRESHOLD = 15
 
 WEIGHTS = {
     "商业爽文向": {
-        "topic_heat": 20,
-        "opening_hook": 18,
-        "payoff_density": 18,
+        "topic_heat": 18,
+        "opening_hook": 16,
+        "payoff_density": 16,
         "character_power": 12,
         "plot_structure": 12,
         "prose": 8,
-        "retention": 12,
+        "retention": 10,
+        "novelty": 8,
     },
     "品质向": {
-        "topic_heat": 12,
-        "opening_hook": 14,
-        "payoff_density": 12,
-        "character_power": 14,
-        "plot_structure": 18,
-        "prose": 18,
+        "topic_heat": 10,
+        "opening_hook": 12,
+        "payoff_density": 10,
+        "character_power": 12,
+        "plot_structure": 16,
+        "prose": 16,
         "retention": 12,
+        "novelty": 12,
     }
 }
 
-# 平台 → 评分模式映射：品质导向平台用品质权重（prose 18/topic_heat 12），
-# 商业爽文平台用商业权重（topic_heat 20/prose 8）。不在此表的平台按子串匹配兜底。
+# 平台 → 评分模式映射：品质导向平台用品质权重（prose 16/novelty 12/topic_heat 10），
+# 商业爽文平台用商业权重（topic_heat 18/prose 8/novelty 8）。不在此表的平台按子串匹配兜底。
 PLATFORM_WEIGHT_MODE = {
     "晋江": "品质向",
     "起点": "品质向",
@@ -1516,8 +1522,15 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
 {chr(10).join(f"### 第{c['num']}章 {c['title']}\n{c['content'][:1000]}..." for c in chapters)}
 
 ## 任务要求
-请根据上述内容，对照评分细则（rubric.md），对以下七个维度给出 1-10 的原始分，并提供证据（原文引文）和短评。
+请根据上述内容，对照评分细则（rubric.md），对以下八个维度给出 1-10 的原始分，并提供证据（原文引文）和短评。
 同时检查是否有「雷点扣分项」（开篇慢热、题材退潮、主角降智、注水、三观雷、AI味、烂尾）。
+
+**⑧ novelty（新颖度/想象力）是正向上限维度，与雷点扣分互补**：评"这部有什么别人没有的"——
+设定/金手指/题材组合的差异化记忆点、情节走向的预期违背（意外但回看合理、不靠 deus ex machina）、
+非模板化的桥段与结局。全程套路复刻、每个转折都可预测、结局落回模板=低分（1-4）；
+熟悉套路混搭出新切口、至少一处让老读者惊到但服气的反转=中高分（6-8）；
+核心设定/叙事结构本身即记忆点、可被读者转述传播=高分（9-10）。
+注意：新颖不能以牺牲连贯为代价——为怪而怪、破坏读者契约的"意外"应同时在 plot_structure 扣回。
 
 **评分中立化须知（判官去偏·务必遵守）**：只评**内容质量本身**——情节、人物、文笔、信息密度、留存力。
 - **不要**因为某段更长、字数更多、排版/markdown 更花、列表更多、标题层级更清楚、辞藻更密就给更高分；长度/篇幅相近时以内容质量为先。
@@ -1537,7 +1550,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
       "comment": "...",
       "improve_by": "..."
     }},
-    ... (其余6个维度)
+    ... (其余7个维度)
   ],
   "deductions": [
     {{
@@ -1548,7 +1561,7 @@ def build_prompt(root, meta, settings, baseline, chapters, platform_mode, first_
   ]{title_check_json}{adaptation_json}
 }}
 
-【可选·去偏增强】关键稿推荐用 ≥3 个**不同模型家族**的判官各自独立打这 7 个维度；
+【可选·去偏增强】关键稿推荐用 ≥3 个**不同模型家族**的判官各自独立打这 8 个维度；
 若当前只有 ≥2 个相互独立的判官视角（或不同模型），系统仍向后兼容接收，但会提示未满推荐标准。
 请额外附 "judges_panel": {{"判官A": {{"topic_heat": 8, ...}}, "判官B": {{...}}}}（每维 1-10）。
 如判官名不含模型家族，可额外附 "judge_families": {{"判官A": "openai", "判官B": "anthropic", "判官C": "google"}}。

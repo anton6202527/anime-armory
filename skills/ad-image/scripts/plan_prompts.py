@@ -10,6 +10,7 @@ manifest. It does not call an image model and does not fake PNG outputs.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from datetime import datetime, timezone
@@ -95,6 +96,33 @@ def product_entries(registry: Mapping[str, Any]) -> List[Mapping[str, Any]]:
     return [p for p in raw if isinstance(p, Mapping)]
 
 
+def registry_entry_map(registry: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
+    out: Dict[str, Mapping[str, Any]] = {}
+    brand = brand_entry(registry)
+    if brand.get("id"):
+        out[str(brand["id"])] = brand
+    for product in product_entries(registry):
+        if product.get("id"):
+            out[str(product["id"])] = product
+    for key in ("characters", "locations", "assets"):
+        for item in registry.get(key) or []:
+            if isinstance(item, Mapping) and item.get("id"):
+                out[str(item["id"])] = item
+    return out
+
+
+def reference_paths(entry: Mapping[str, Any]) -> List[str]:
+    raw = entry.get("reference_images") or entry.get("references") or entry.get("reference_paths") or []
+    if isinstance(raw, str):
+        raw = [raw]
+    out = []
+    for item in raw if isinstance(raw, Sequence) else []:
+        value = item.get("path") if isinstance(item, Mapping) else item
+        if value and str(value) not in out:
+            out.append(str(value))
+    return out
+
+
 def brand_entry(registry: Mapping[str, Any]) -> Mapping[str, Any]:
     raw = registry.get("brand")
     return raw if isinstance(raw, Mapping) else {}
@@ -136,7 +164,7 @@ def build_shared_registry(root: Path, registry: Mapping[str, Any]) -> None:
 
 def build_brand_prompt(registry: Mapping[str, Any]) -> str:
     brand = brand_entry(registry)
-    return f"""# BRAND_STARBOX 品牌定妆 prompt
+    return f"""# {brand.get('id', 'BRAND_UNKNOWN')} 品牌定妆 prompt
 
 资产身份注册：{brand.get('id', 'BRAND_UNKNOWN')}
 品牌名称：{brand.get('name', '')}
@@ -199,10 +227,12 @@ def build_overview(root: Path, registry: Mapping[str, Any], storyboard: Mapping[
     brand = brand_entry(registry)
     style = read_text(root / "设定库" / "global_style.md")
     deliverables = load_json(root / "生产数据" / "platform_pack.json", {}) or {}
+    brand_id = str(brand.get("id") or "BRAND_UNKNOWN")
+    product_ids = sorted(x for x in flatten_registry_ids(registry) if x.startswith("PROD_"))
     return f"""# ad-image 视觉一致性契约总览
 
 项目：{root.name}
-画幅：{storyboard.get('aspect') or '9:16'}
+画幅：{storyboard.get('aspect') or '按项目交付比例'}
 品牌资产：{brand.get('id', '')} / {brand.get('name', '')}
 品牌色：{', '.join(brand_hexes(registry)) or brand.get('primary_hex', '')}
 产品资产：{', '.join(sorted(x for x in flatten_registry_ids(registry) if x.startswith('PROD_')))}
@@ -214,7 +244,8 @@ def build_overview(root: Path, registry: Mapping[str, Any], storyboard: Mapping[
 
 ## 出图硬约束
 
-- 所有 App/UI/片尾镜必须引用 PROD_STARBOX_APP 和 BRAND_STARBOX。
+- 所有产品/App/UI 镜必须引用对应 PROD_*；品牌/片尾镜必须引用 {brand_id}。
+- 当前产品资产：{', '.join(product_ids) or '未登记'}。
 - 参考图/资产引用必须走共享定妆包，不做纯文生图产品。
 - 身份锁定句必须包含：同一款 App UI、同一 logo、同一品牌色。
 - 负向必须包含：不要改包装文字、不要变形 logo、不要乱码。
@@ -225,8 +256,15 @@ def build_overview(root: Path, registry: Mapping[str, Any], storyboard: Mapping[
 
 def frame_prompt(label: str, shot: Mapping[str, Any], registry: Mapping[str, Any], *, end_frame: bool = False) -> str:
     brand = brand_entry(registry)
-    product_ids = asset_ids(shot, PROD_RE) or sorted(x for x in flatten_registry_ids(registry) if x.startswith("PROD_"))
-    brand_ids = asset_ids(shot, BRAND_RE) or sorted(x for x in flatten_registry_ids(registry) if x.startswith("BRAND_"))
+    product_ids = asset_ids(shot, PROD_RE)
+    brand_ids = asset_ids(shot, BRAND_RE)
+    if product_ids and not brand_ids and brand.get("id"):
+        brand_ids = [str(brand["id"])]
+    entries = registry_entry_map(registry)
+    refs = []
+    for aid in product_ids + brand_ids:
+        refs.extend(reference_paths(entries.get(aid, {})))
+    refs = list(dict.fromkeys(refs))
     cont = continuity(shot)
     suffix = "尾帧" if end_frame else "首帧"
     end_note = cont.get("transition") or "保持可与下一镜自然接力"
@@ -242,14 +280,14 @@ def frame_prompt(label: str, shot: Mapping[str, Any], registry: Mapping[str, Any
 ## 资产身份注册
 - 产品资产：{', '.join(product_ids)}
 - 品牌资产：{', '.join(brand_ids)}
-- 参考图/资产引用：出图/共享/asset_registry.json；出图/共享/prompt/产品_PROD_STARBOX_APP.md；出图/共享/prompt/品牌_BRAND_STARBOX.md
-- image2image / 多参考：使用 PROD_STARBOX_APP 定妆母图 + BRAND_STARBOX 文字标识作为产品和品牌参考。
+- 参考图/资产引用：{'; '.join(refs) or '无；产品镜在正式生成前必须补 registry.reference_images'}
+- image2image / 多参考：产品镜必须把以上真实图片作为模型图片输入；不能只在 prompt 里声称引用。
 
 ## 画面 prompt
 {shot.get('prompt') or shot_text(shot)}
 
 ## 身份锁定句
-与产品参考图①同一款 App UI、同一 logo、同一品牌色 {brand.get('primary_hex', '')}；同一文字标识“{brand.get('text_logo', '')}”；UI 文案清晰可读，不乱码。
+与登记产品参考图同一结构、同一 logo、同一品牌色 {brand.get('primary_hex', '')}；同一文字标识“{brand.get('text_logo', '')}”；登记文案清晰可读，不乱码。
 
 ## 产品/品牌锁
 {shot.get('product_lock') or '保持产品和品牌资产一致。'}
@@ -258,7 +296,7 @@ def frame_prompt(label: str, shot: Mapping[str, Any], registry: Mapping[str, Any
 文字清晰可读，准确显示并保留原文；CTA、slogan、法律声明保持在中心安全区，不乱码。
 
 ## 构图与光位
-realistic cinematic vertical ad, warm low-contrast desk light, product/core UI inside center 4x4, text inside center 6x6, leave motion headroom for image-to-video.
+严格继承 storyboard 的画幅、构图、光位、场景与风格；按目标 placement 的官方安全区模板留出 UI overlay 避让，给图生视频保留运动余量。
 
 ## 尾帧接力
 need_end_frame：{str(needs_end_frame(shot)).lower()}
@@ -272,15 +310,21 @@ transition：{end_note}
 
 def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]]:
     jobs: List[Dict[str, Any]] = []
+    registry = load_json(root / "出图" / "共享" / "asset_registry.json", {}) or load_json(root / "设定库" / "asset_registry.json", {}) or {}
+    entries = registry_entry_map(registry)
     for index, shot in enumerate(shots(storyboard), start=1):
         label = shot_label(shot, index)
+        required = asset_ids(shot, PROD_RE) + asset_ids(shot, BRAND_RE)
+        refs = list(dict.fromkeys(path for aid in required for path in reference_paths(entries.get(aid, {}))))
         jobs.append({
             "job_id": f"{label}_first",
             "shot": label,
             "kind": "first_frame",
             "prompt": f"出图/分镜/prompt/{label}.md",
             "expected_output": f"出图/分镜/图片/{label}.png",
-            "requires_assets": asset_ids(shot, PROD_RE) + asset_ids(shot, BRAND_RE),
+            "requires_assets": required,
+            "reference_inputs": refs,
+            "requires_image_input": bool(asset_ids(shot, PROD_RE)),
             "status": "planned",
         })
         if needs_end_frame(shot):
@@ -290,7 +334,9 @@ def build_jobs(root: Path, storyboard: Mapping[str, Any]) -> List[Dict[str, Any]
                 "kind": "end_frame",
                 "prompt": f"出图/分镜/prompt/{label}_end.md",
                 "expected_output": f"出图/分镜/图片/{label}_end.png",
-                "requires_assets": asset_ids(shot, PROD_RE) + asset_ids(shot, BRAND_RE),
+                "requires_assets": required,
+                "reference_inputs": refs,
+                "requires_image_input": bool(asset_ids(shot, PROD_RE)),
                 "status": "planned",
             })
     return jobs
@@ -333,6 +379,9 @@ def run(root: Path) -> Dict[str, Any]:
             write_text(shot_prompt_dir / f"{label}_end.md", frame_prompt(label, shot, registry, end_frame=True))
 
     jobs = build_jobs(root, storyboard)
+    for job in jobs:
+        prompt_path = root / str(job["prompt"])
+        job["prompt_sha256"] = hashlib.sha256(prompt_path.read_bytes()).hexdigest()
     manifest = {
         "schema_version": 1,
         "kind": KIND,

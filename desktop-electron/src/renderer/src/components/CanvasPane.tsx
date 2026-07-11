@@ -3,7 +3,6 @@ import {
   Background,
   BackgroundVariant,
   MiniMap,
-  MarkerType,
   Panel,
   ReactFlow,
   type ReactFlowInstance,
@@ -600,13 +599,7 @@ export function CanvasPane({ canvas, root }: ViewProps) {
           type: "default",
           zIndex: 0,
           interactionWidth: 14,
-          style: { stroke: "rgba(66, 68, 74, .78)", strokeWidth: 1.6 },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 11,
-            height: 11,
-            color: "rgba(66, 68, 74, .82)",
-          },
+          style: { stroke: "rgba(154, 163, 173, .86)", strokeWidth: 1.25 },
         } satisfies Edge)),
     );
     const clipVideoEdges = hasVideoLane
@@ -621,14 +614,8 @@ export function CanvasPane({ canvas, root }: ViewProps) {
             zIndex: 1,
             interactionWidth: 14,
             style: {
-              stroke: clip.video_exists ? "rgba(82, 116, 154, .64)" : "rgba(139, 121, 72, .62)",
-              strokeWidth: 1.35,
-            },
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              width: 12,
-              height: 12,
-              color: clip.video_exists ? "rgba(82, 116, 154, .72)" : "rgba(139, 121, 72, .72)",
+              stroke: "rgba(154, 163, 173, .86)",
+              strokeWidth: 1.25,
             },
           } satisfies Edge));
         })
@@ -874,7 +861,7 @@ export function CanvasPane({ canvas, root }: ViewProps) {
         onlyRenderVisibleElements
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={32} size={1.7} color="rgba(96, 101, 108, .72)" />
+        <Background variant={BackgroundVariant.Dots} gap={32} size={1.25} color="rgba(112, 112, 112, .52)" />
         {miniMapOpen && (
           <MiniMap
             position="bottom-left"

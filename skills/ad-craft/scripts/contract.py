@@ -12,10 +12,12 @@
 from copy import deepcopy
 
 
-CONTRACT_VERSION = 1
+CONTRACT_VERSION = 2
 
 # ── 选择点取值域 ───────────────────────────────────────────────────────────
 AD_TYPES = ("TVC", "信息流短视频", "品牌片", "产品demo", "电商详情视频", "直播切片", "自定义")
+CAMPAIGN_OBJECTIVES = ("品牌认知", "考虑种草", "转化行动", "全链路", "自定义")
+FUNNEL_STAGES = ("awareness", "consideration", "conversion", "full_funnel", "自定义")
 CREATIVE_ROUTES = ("功能卖点", "情感共鸣", "幽默", "悬念反转", "名人代言", "场景种草", "自定义")
 AD_VISUAL_STYLES = ("写实电影感", "CG质感", "定格动画", "二次元", "极简产品", "国风写意", "自定义")
 MASTER_DURATIONS = ("6s", "15s", "30s", "60s", "自定义")
@@ -23,8 +25,12 @@ DELIVERY_ASPECTS = ("16:9", "9:16", "1:1", "多比例")
 CUTDOWN_PLANS = ("主片+15s+6s", "主片+15s", "仅主片", "自定义")
 CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
 # 生视频模型/渠道候选快照（高频变动，freshness.py 据 采集日期 判过期）。
-# 采集日期：2026-06-13  来源：各后端官方文档（待复核）
-AD_VIDEO_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各生视频后端官方文档(待复核)"}
+# 生视频候选采集日期：2026-07-11  来源：BytePlus Seedance 2.0 API、Google Veo 3.1 API、项目实际 CLI probe；范围=默认/适配内后端，其余候选执行时仍须 probe
+AD_VIDEO_BACKENDS_VERIFIED = {
+    "date": "2026-07-11",
+    "source": "https://docs.byteplus.com/en/docs/modelark/1520757 ; https://ai.google.dev/gemini-api/docs/video",
+    "scope": "default_and_adapter_backends",
+}
 VIDEO_MODELS = (
     "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
     "Runway Gen-4", "Luma Ray3.2", "Pika 2.5",
@@ -72,13 +78,17 @@ RELEASE_REGIONS = ("中国大陆", "港澳台", "北美", "东南亚", "全球",
 # ── 生图后端治理（Codex image2 优先，本线自持）────────────────────────────
 # `生图AI` 是真选择点，默认且优先 Codex/OpenAI；其它官方后端只作为签核例外，
 # gate 会要求 <作品根>/合规/image_backend_override.json。仍拦 ① 项目内后端混用
-# ② 逆向/未授权出图路径（安全 invariant）。AI 标识/披露义务移到工具之外，与本治理无关。
+# ② 逆向/未授权出图路径（安全 invariant）。发布标识/声明另由 compliance_manifest 闭环。
 # 候选快照新鲜度戳记（本线 _lib/freshness.py 据此判过期）。
 # 注意：广告投放侧从严处理，Dreamina/即梦逆向或未授权路径保留在 FORBIDDEN；
 # 明确写作“官方 CLI / official CLI / official API”的本机官方工具路径只代表可识别的
 # official 后端；是否能付费出图由 gate 的非 Codex 签核闸决定。
-# 采集日期：2026-06-13  来源：各后端官方文档 + 广告投放合规口径（待复核）
-AD_IMAGE_BACKENDS_VERIFIED = {"date": "2026-06-13", "source": "各后端官方文档 + 广告投放合规口径(待复核)"}
+# 生图候选采集日期：2026-07-11  来源：OpenAI Images、Google Gemini Image、BytePlus Seedream 官方文档；其它后端执行时仍须官方入口 probe + 项目签核
+AD_IMAGE_BACKENDS_VERIFIED = {
+    "date": "2026-07-11",
+    "source": "https://platform.openai.com/docs/api-reference/images ; https://ai.google.dev/gemini-api/docs/image-generation ; https://docs.byteplus.com/en/docs/ModelArk/1541523",
+    "scope": "official_api_and_adapter_verification",
+}
 AD_APPROVED_IMAGE_BACKENDS = {
     "codex":    {"label": "Codex / 官方 OpenAI gpt-image", "multi_reference": False, "native_subject": False, "default": True},
     "openai":   {"label": "官方 OpenAI gpt-image / DALL·E", "multi_reference": False, "native_subject": False},
@@ -126,6 +136,8 @@ def classify_image_backend(raw):
 # ── 默认设置 + 选择点目录 ───────────────────────────────────────────────────
 DEFAULT_SETTINGS = {
     "广告类型": "信息流短视频",
+    "广告目标": "转化行动",
+    "漏斗阶段": "conversion",
     "创意路线": "情感共鸣",
     "基础视觉风格": "写实电影感",
     "主片时长": "30s",
@@ -153,6 +165,8 @@ DEFAULT_SETTINGS = {
 
 CHOICE_POINTS = {
     "广告类型": AD_TYPES,
+    "广告目标": CAMPAIGN_OBJECTIVES,
+    "漏斗阶段": FUNNEL_STAGES,
     "创意路线": CREATIVE_ROUTES,
     "基础视觉风格": AD_VISUAL_STYLES,
     "主片时长": MASTER_DURATIONS,
@@ -186,9 +200,12 @@ RECONFIRM_CHOICE_POINTS = (
 
 # ── brief 必填分层（一句话入口的机器判据）────────────────────────────────────
 # 必问最小集：缺任一项 ad-concept 不应开工创意（由其第0步访谈式补齐，别让用户填 JSON）。
-BRIEF_REQUIRED = ("brand", "product", "usp", "audience")
+BRIEF_REQUIRED = ("brand", "product", "usp", "audience", "campaign_objective")
 # 可延后合规项：允许标「待补」先做创意/脚本，但进入 GATE_STAGES（花钱/不可逆）前必须补齐。
-BRIEF_DEFER_TO_GATE = ("claims", "rights", "mandatories.legal_lines")
+BRIEF_DEFER_TO_GATE = (
+    "claims", "rights", "mandatories.legal_lines",
+    "measurement.primary_kpi", "measurement.conversion_event",
+)
 
 _BRIEF_PENDING_TOKENS = ("", "待补", "tbd")
 
@@ -252,8 +269,9 @@ AD_STAGE_TABLE = [
     {"key": "image",      "label": "定妆库+出图",  "owner": "ad-image",    "gate": "visual identity + 首尾帧"},
     {"key": "video",      "label": "图生视频",     "owner": "ad-video",    "gate": "契约继承 + clip videos"},
     {"key": "compose",    "label": "剪辑包装+交付", "owner": "ad-compose",  "gate": "成片 + cutdown + 交付规格"},
-    {"key": "review",     "label": "质检自审", "owner": "ad-review",  "gate": "M0 delivery review + human review"},
-    {"key": "handoff",    "label": "AI披露/交付",  "owner": "ad-craft/scripts/ai_usage.py", "gate": "AI usage disclosure"},
+    {"key": "handoff",    "label": "AI披露/发布合规",  "owner": "ad-craft", "gate": "AI usage + compliance manifest"},
+    {"key": "review",     "label": "质检自审", "owner": "ad-review",  "gate": "M0 delivery review + human sign-off"},
+    {"key": "feedback",   "label": "投放反馈(可选)", "owner": "ad-feedback", "gate": "test-learn-refresh report"},
 ]
 
 # 高风险（花钱/不可逆/合规）阶段：正式生产入口须先确认。

@@ -42,6 +42,8 @@ description: 漫剧质检 + 流程自审（n2d 的 QA 环节，不生产内容�
 
 ## 机检 / 人判分工
 
+> **本轮严格化新增合同**：多集/发布项目必须有已签收 `设定库/series_consistency.json`，统一锁字幕样式、角色 canonical 中文名及禁用变体、核心角色语域/禁词、全剧响度基线；compose/review 同时检查 `bgm_contract.json`，占位配乐只能内部粗剪，review 必阻断。混合后配镜必须有 `voice_fit_*.json`，并对镜头时长、配音清单、route 与拟合轨 SHA 做新鲜度校验。高复用场景的 `scene_reference_plan` 必须落实真实 master plate/已注册主体/LoRA 状态，不能只停在 planner 建议。
+
 > **检测器证据分级（不可把模型意见伪装成铁证）**：`detector_reliability.py` 统一治理自动 verdict。确定性 schema/合同/像素精确检查，以及已经在 gate 中明确标作 load-bearing 的硬证据规则，继续保留 BLOCK；VLM/多模态语义判题即使回答“no”也最多出 WARN，必须经人审或确定性证据复核才能升 BLOCK；新接入或尚未成为 load-bearing 的数值/embedding 检测器，只有在 per-(维度, 后端, 风格) 金标集达到生产样本量、混淆矩阵与 balanced accuracy 门槛后才可自动 BLOCK。`calibrate_thresholds.py --calibrate` 输出 confusion、sensitivity/specificity 及 Wilson 95% 区间、`calibration_tier`、`auto_block_eligible`；`consistency_threshold_registry.py` 覆盖角色/服装/风格/场景/道具状态/状态像素/接缝/片内身份/锚帧/运动物理/口型/音画同步/文字完整性等维度，并显式写 enforcement。样本不足只告警交人判，绝不以“有一个阈值”冒充已标定。
 
 > **交付状态与发布状态分离**：`release_verdict.py` 除原 `status` 外固定输出 `delivery_states`：`clip_delivery_complete`、`master_delivery_complete`、`production_complete`、`publish_ready_cn`、`publish_ready_overseas`、`publish_ready_commercial`。公开 AI 标识、备案、本地化与平台审核可以阻断对应 `publish_ready_*`，但不能抹掉已验收 Clip 或技术母版；角色/声音/版权授权仍由各发布 profile 完整执行。不要再用单一 “pass/blocked” 同时表达“片做完了”和“可以在哪发布”。

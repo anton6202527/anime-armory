@@ -114,26 +114,23 @@ function VideoControlIcon({ name }: { name: VideoControlIconName }) {
       );
     case "volumeOn":
       return (
-        <svg className="cv-icon cv-icon-volume-on" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <path className="cv-fill" d="M5.5 15.2h7.2L22 7.4v25.2l-9.3-7.8H5.5Z" />
-          <path className="cv-stroke" d="M26.2 14.1a8 8 0 0 1 0 11.8" />
-          <path className="cv-stroke" d="M30.4 10.2a13.8 13.8 0 0 1 0 19.6" />
+        <svg className="cv-icon cv-icon-volume-on" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path className="cv-stroke" d="M4.5 12.2h5.2l6.7-5.4v18.4l-6.7-5.4H4.5Z" />
+          <path className="cv-stroke" d="M21.6 11.6a6.4 6.4 0 0 1 0 8.8" />
         </svg>
       );
     case "volumeOff":
       return (
-        <svg className="cv-icon cv-icon-volume-off" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <path className="cv-fill" d="M5.2 15.2h7.2L21.8 7.4v25.2l-9.4-7.8H5.2Z" />
-          <path className="cv-stroke muted-wave" d="M26.2 14.1a8 8 0 0 1 0 11.8" />
-          <path className="cv-stroke muted-wave" d="M30.4 10.2a13.8 13.8 0 0 1 0 19.6" />
-          <path className="cv-stroke cv-mute-slash" d="M7.4 7.4 33.2 33.2" />
+        <svg className="cv-icon cv-icon-volume-off" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path className="cv-stroke" d="M4.5 12.2h5.2l6.7-5.4v18.4l-6.7-5.4H4.5Z" />
+          <path className="cv-stroke cv-mute-slash" d="m21.2 12.2 6.4 7.6m0-7.6-6.4 7.6" />
         </svg>
       );
     case "camera":
       return (
-        <svg className="cv-icon cv-icon-camera" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <path className="cv-stroke" d="M8.3 14.3h5.8l2.3-3.6h7.2l2.3 3.6h5.8a3.2 3.2 0 0 1 3.2 3.2v11.2a3.2 3.2 0 0 1-3.2 3.2H8.3a3.2 3.2 0 0 1-3.2-3.2V17.5a3.2 3.2 0 0 1 3.2-3.2Z" />
-          <circle className="cv-stroke" cx="20" cy="23.2" r="6.2" />
+        <svg className="cv-icon cv-icon-camera" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path className="cv-stroke" d="M4.5 11.5h5l2.6-3.4h7.8l2.6 3.4h5a2 2 0 0 1 2 2v11.2a2 2 0 0 1-2 2h-23a2 2 0 0 1-2-2V13.5a2 2 0 0 1 2-2Z" />
+          <circle className="cv-stroke" cx="16" cy="18.4" r="5" />
         </svg>
       );
   }
@@ -205,12 +202,13 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
   videoUrl: string;
   posterUrl: string;
   label: string;
+  nodeLabel: string;
   rootPath?: string;
   durationHint?: number;
   noVideoLabel: string;
   onOpenDetail: (event: ReactMouseEvent<HTMLElement>) => void;
 }) {
-  const { videoUrl, posterUrl, label, rootPath, durationHint, noVideoLabel, onOpenDetail } = props;
+  const { videoUrl, posterUrl, label, nodeLabel, rootPath, durationHint, noVideoLabel, onOpenDetail } = props;
   const { t } = useI18n();
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
@@ -218,11 +216,10 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
   const [activated, setActivated] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [volumeOpen, setVolumeOpen] = useState(false);
-  const [captureOpen, setCaptureOpen] = useState(false);
   const [savingCapture, setSavingCapture] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(durationHint ?? 0);
+  const [resolution, setResolution] = useState("");
   const lastTimeUpdateRef = useRef(0);
 
   useEffect(() => {
@@ -230,6 +227,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
     setActivated(false);
     setCurrent(0);
     setDuration(durationHint ?? 0);
+    setResolution("");
   }, [durationHint, videoUrl]);
 
   useEffect(() => {
@@ -283,7 +281,6 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
       console.error("failed to save canvas capture", error);
     } finally {
       setSavingCapture(false);
-      setCaptureOpen(false);
       if (wasPlaying) await video.play().catch(() => undefined);
     }
   }
@@ -313,6 +310,8 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
         type="button"
         className="canvas-video-player dormant"
         aria-label={t("canvas.playVideo")}
+        onPointerEnter={() => setActivated(true)}
+        onFocus={() => setActivated(true)}
         onClick={(event) => {
           event.stopPropagation();
           setActivated(true);
@@ -323,7 +322,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
         }}
       >
         {posterUrl ? <DecodedImage src={posterUrl} alt="" maxDecodeDimension={1280} /> : null}
-        <span className="canvas-video-dormant-play"><VideoControlIcon name="play" /></span>
+        <span className="canvas-video-node-label"><VideoControlIcon name="play" />{nodeLabel}</span>
       </button>
     );
   }
@@ -332,7 +331,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
     <>
       <div
         ref={playerRef}
-        className="canvas-video-player"
+        className={"canvas-video-player active" + (playing ? " playing" : "")}
         onClick={(event) => {
           event.stopPropagation();
           onOpenDetail(event);
@@ -345,11 +344,13 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
           poster={posterUrl || undefined}
           crossOrigin="anonymous"
           playsInline
-          preload="none"
+          preload="metadata"
           muted={muted}
           onLoadedMetadata={(event) => {
             const nextDuration = event.currentTarget.duration;
             if (Number.isFinite(nextDuration)) setDuration(nextDuration);
+            const { videoWidth, videoHeight } = event.currentTarget;
+            setResolution(videoWidth && videoHeight ? `${videoWidth} × ${videoHeight}` : "");
           }}
           onDurationChange={(event) => {
             const nextDuration = event.currentTarget.duration;
@@ -364,6 +365,10 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
         />
+        <div className="canvas-video-node-meta" aria-hidden="true">
+          <span className="canvas-video-node-label"><VideoControlIcon name="play" />{nodeLabel}</span>
+          {resolution && <span className="canvas-video-resolution">{resolution}</span>}
+        </div>
         <div
           className="canvas-video-controls nodrag"
           onPointerDown={(event) => event.stopPropagation()}
@@ -391,14 +396,10 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
             style={rangeStyle}
           />
           <span className="canvas-video-time">{formatVideoTime(duration)}</span>
-          <div
-            className="canvas-video-volume"
-            onPointerEnter={() => setVolumeOpen(true)}
-            onPointerLeave={() => setVolumeOpen(false)}
-          >
-            {volumeOpen && (
-              <div className="canvas-video-volume-popover">
-                <span>{Math.round(volumeValue * 100)}</span>
+          <div className="canvas-video-volume">
+            <div className="canvas-video-volume-popover">
+              <span>{Math.round(volumeValue * 100)}</span>
+              <div className="canvas-video-volume-slider">
                 <input
                   className="canvas-video-volume-range"
                   type="range"
@@ -406,41 +407,35 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
                   max="1"
                   step="0.01"
                   value={volumeValue}
+                  style={{ "--volume-level": `${volumeValue * 100}%` } as CSSProperties}
                   aria-label={muted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
                   onChange={(event) => changeVolume(Number(event.target.value))}
                 />
               </div>
-            )}
+            </div>
             <button
               type="button"
               className="canvas-video-icon"
               aria-label={muted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
-              onClick={() => {
-                setVolumeOpen(true);
-                setMuted((value) => !value);
-              }}
+              onClick={() => setMuted((value) => !value)}
             >
               <VideoControlIcon name={muted ? "volumeOff" : "volumeOn"} />
             </button>
           </div>
           <div className="canvas-video-capture">
-            {captureOpen && (
-              <div
-                className="canvas-video-capture-menu"
-                onPointerDown={(event) => event.stopPropagation()}
-                onClick={(event) => event.stopPropagation()}
-              >
-                <button type="button" disabled={savingCapture} onClick={() => captureFrame("first")}>{t("canvas.captureFirstFrame")}</button>
-                <button type="button" disabled={savingCapture} onClick={() => captureFrame("last")}>{t("canvas.captureLastFrame")}</button>
-                <button type="button" disabled={savingCapture} onClick={() => captureFrame("current")}>{t("canvas.captureCurrentFrame")}</button>
-              </div>
-            )}
+            <div
+              className="canvas-video-capture-menu"
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button type="button" disabled={savingCapture} onClick={() => captureFrame("first")}>{t("canvas.captureFirstFrame")}</button>
+              <button type="button" disabled={savingCapture} onClick={() => captureFrame("last")}>{t("canvas.captureLastFrame")}</button>
+              <button type="button" disabled={savingCapture} onClick={() => captureFrame("current")}>{t("canvas.captureCurrentFrame")}</button>
+            </div>
             <button
               type="button"
               className="canvas-video-icon canvas-video-capture-btn"
               aria-label={t("canvas.captureFrame")}
-              aria-expanded={captureOpen}
-              onClick={() => setCaptureOpen((value) => !value)}
             >
               <VideoControlIcon name="camera" />
             </button>
@@ -874,6 +869,7 @@ function ClipNodeComponent({ data, selected }: NodeProps) {
           videoUrl={videoUrl}
           posterUrl={posterUrl}
           label={clip.label}
+          nodeLabel={t("canvas.videoNode", { number: clip.number ?? clip.label })}
           rootPath={clip.rootPath}
           durationHint={clip.duration}
           noVideoLabel={t("canvas.noVideo")}

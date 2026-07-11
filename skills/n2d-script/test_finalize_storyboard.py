@@ -5,6 +5,25 @@ import sys
 
 import finalize_storyboard as F
 
+
+def _srt_seconds(value):
+    hh, mm, tail = value.split(":")
+    ss, ms = tail.split(",")
+    return int(hh) * 3600 + int(mm) * 60 + int(ss) + int(ms) / 1000
+
+
+def test_planned_subtitles_never_escape_short_clip_boundary():
+    srt = F.build_planned_srt_from_storyboard([
+        {"id": "Clip_01", "duration_sec": 1.0, "subtitle_lines": ["第一行", "第二行", "第三行"]},
+    ])
+    ranges = []
+    for line in srt.splitlines():
+        if " --> " in line:
+            start, end = line.split(" --> ")
+            ranges.append((_srt_seconds(start), _srt_seconds(end)))
+    assert len(ranges) == 3
+    assert all(0 <= start < end <= 1.0 for start, end in ranges)
+
 _HERE = os.path.dirname(os.path.abspath(__file__))
 
 

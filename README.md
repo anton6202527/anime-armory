@@ -134,14 +134,15 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 **桌面端 App（Electron）发布（走 `tools/e2a`）**：
 
-`e2a` 的发布方式是：先从本地 checkout 生成一份干净打包快照，在本机完成 Electron 安装包构建，再把产物上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets（tag 默认 `electron-v<版本>`）；安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建产物；桌面端内置当前全部 skill、`创作区/` 各系列使用手册和 demo 下载目录，不内置完整 demo payload（demo zip 是独立 Release 资产，App 内按需下载）。
+`e2a` 会先从本地 checkout 生成一份干净打包快照，再在本机完成 Electron 安装包或 demo zip 构建；只有显式传入 `--up`、`--demos` 或 `--all` 才上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets（tag 默认 `electron-v<版本>`）。安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建产物；桌面端内置当前全部 skill、`创作区/` 各系列使用手册和 demo 下载目录，不内置完整 demo payload（demo zip 是独立 Release 资产，App 内按需下载）。
 
 ```bash
-bash tools/e2a/scripts/e2a_release.sh                # 默认：Electron DMG + 各线 demo zip，一起上传
-bash tools/e2a/scripts/e2a_release.sh --apps-only    # 只打安装包
-bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # DMG + Windows x64 exe（mac 上交叉构建，未签名）
+bash tools/e2a/scripts/e2a_release.sh          # 默认：只打 DMG，不上传
+bash tools/e2a/scripts/e2a_release.sh --up     # 只打 DMG，并上传
+bash tools/e2a/scripts/e2a_release.sh --demos  # 只打各线 demo zip，并上传
+bash tools/e2a/scripts/e2a_release.sh --all    # 打 DMG + Windows x64 exe + VSIX 并上传，不打 demo
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # 本地打 DMG + Windows x64 exe（mac 上交叉构建，未签名）
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # 只打 Windows exe（增量补包）
-bash tools/e2a/scripts/e2a_release.sh --demo-assets  # 只重打各线 demo zip（保留已有 release notes）
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物在 dist/e2a-release-<tag>/
 ```
 
@@ -150,7 +151,7 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物�
 - release 默认不标 latest、不改 README 下载链接——发布对用户可见的新版时手动更新上表链接（固定 tag 链接可复现，`releases/latest/download/...` 永远指向最新）。
 - 完整契约见 `tools/e2a/SKILL.md`。
 
-**VS Code 插件发布**：在 `vscode-extension/` 里 `npx @vscode/vsce package` 打出 `anime-armory.vsix`，手动上传 Release 并按需更新 README 链接。
+**VS Code 插件发布**：`e2a --all` 会自动打出并上传 `anime-armory.vsix`；单独本地打包时，可在 `vscode-extension/` 里运行 `npx @vscode/vsce package`。
 
 只需要把当前 checkout 的 `skills/` 与 `创作区/` 使用手册同步进桌面端和 VS Code 插件的内置资源时，跑：
 
@@ -388,14 +389,15 @@ Published packages use the stable filenames listed above when uploaded to the `a
 
 **Desktop App (Electron) release, via `tools/e2a`:**
 
-`e2a` builds from a clean snapshot of the local checkout, produces the Electron installer locally, and uploads the finished files to GitHub Release assets under `https://github.com/anton6202527/anime-armory` (default tag `electron-v<version>`). Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build output. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a demo download catalog, not full demo payloads (demo zips are separate Release assets the app downloads on demand).
+`e2a` builds from a clean snapshot of the local checkout and produces Electron installers or demo zips locally. It uploads only when `--up`, `--demos`, or `--all` is explicitly supplied, targeting GitHub Release assets under `https://github.com/anton6202527/anime-armory` (default tag `electron-v<version>`). Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build output. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a demo download catalog, not full demo payloads (demo zips are separate Release assets the app downloads on demand).
 
 ```bash
-bash tools/e2a/scripts/e2a_release.sh                # default: Electron DMG + per-line demo zips, uploaded together
-bash tools/e2a/scripts/e2a_release.sh --apps-only    # installers only
-bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # DMG + Windows x64 exe (cross-built on macOS, unsigned)
+bash tools/e2a/scripts/e2a_release.sh          # default: DMG only, local; no upload
+bash tools/e2a/scripts/e2a_release.sh --up     # DMG only, then upload
+bash tools/e2a/scripts/e2a_release.sh --demos  # demo zips only, then upload
+bash tools/e2a/scripts/e2a_release.sh --all    # DMG + Windows x64 exe + VSIX, then upload; no demos
+bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # local DMG + Windows x64 exe (cross-built on macOS, unsigned)
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # Windows exe only (incremental upload)
-bash tools/e2a/scripts/e2a_release.sh --demo-assets  # rebuild demo zips only (keeps existing release notes)
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifacts in dist/e2a-release-<tag>/
 ```
 
@@ -403,7 +405,7 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifac
 - Demo zip asset names: `AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`; the n2d zip is slimmed to first-episode media.
 - Releases are not marked latest and README download links are not rewritten by the tool — update the download table manually when publishing a user-facing release. Full contract: `tools/e2a/SKILL.md`.
 
-**VS Code extension release**: run `npx @vscode/vsce package` inside `vscode-extension/` to produce `anime-armory.vsix`, upload it to the Release manually, and update the README link as needed.
+**VS Code extension release**: `e2a --all` packages and uploads `anime-armory.vsix` automatically. For a standalone local build, run `npx @vscode/vsce package` inside `vscode-extension/`.
 
 To sync the current checkout's `skills/` and `创作区/` usage manuals into the bundled desktop and VS Code resources without a full release, run:
 

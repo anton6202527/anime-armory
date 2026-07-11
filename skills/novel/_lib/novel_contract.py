@@ -57,6 +57,10 @@ NOVEL_STAGES = [
         "label": "改写",
         "skill": "novel-rewrite",
         "routes": True,
+        # 改写是 score 判「小改/大改」后的可选支路（作品级派生），不是每章必过阶段。
+        # optional 列新建矩阵默认填 —（na）；路由对 ⬜ 跳过，只有显式标 ⏳ 才路由到它，
+        # 否则每章评分 done 后会被卡在改写列、导出永远轮不到。
+        "optional": True,
     },
     {
         "id": "export",
@@ -620,9 +624,16 @@ def build_progress_markdown(title: str, kind: str, chapters: int) -> str:
     header = "| " + " | ".join(header_cols) + " |"
     separator = "| " + " | ".join(["---"] * len(header_cols)) + " |"
     
+    # optional 阶段（如「改写」）默认 —（na）：它们是按需触发的支路，默认 ⬜ 会让
+    # 路由在评分 done 后卡在该列、导出永远轮不到。需要时手动改回 ⬜/⏳ 即可重新入路由。
+    stage_defaults = [
+        "—" if s.get("optional") else PROGRESS_TODO
+        for s in NOVEL_STAGES
+        if s.get("routes")
+    ]
     rows = []
     for i in range(1, chapters + 1):
-        row = [f"第{i:02d}章", "", "0"] + [PROGRESS_TODO] * len(routing_stages())
+        row = [f"第{i:02d}章", "", "0"] + list(stage_defaults)
         rows.append("| " + " | ".join(row) + " |")
         
     return f"""# 进度 — 《{title}》

@@ -2084,8 +2084,11 @@ def load_storyboard(root: str, ep: str) -> Optional[dict]:
         return None
     return data
 def _route_allows_no_firstframe(route: Mapping[str, Any]) -> bool:
-    """Only empty/ambience T2V, or explicit experimental T2V, may skip firstframe_png."""
+    """Only empty T2V or a ready explicit reference-to-video contract may skip a hero frame."""
     mode = str(route.get("mode") or "").strip().lower()
+    if mode in {"reference_to_video", "reference2video", "r2v"}:
+        contract = route.get("reference_to_video_contract")
+        return route.get("reference_bundle_status") == "ready" and isinstance(contract, Mapping) and bool(contract)
     if mode not in {"text2video", "t2v"}:
         return False
     identity = str(route.get("identity_requirement") or "").strip().lower()

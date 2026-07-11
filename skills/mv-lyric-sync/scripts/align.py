@@ -4,7 +4,7 @@
 #   → 字幕/karaoke.ass(逐字\k高亮) + 字幕/lyrics.lrc(逐行)。mv 系列自包含。
 # 用法: align.py <制MV作品根> [--lang zh] [--device cpu] [--audio <vocals.wav>]
 # 依赖: pip install whisperx   （首次会下 wav2vec2 对齐模型；CPU 可跑，慢）
-import sys, os, re, json, argparse
+import sys, os, re, json, argparse, difflib
 import importlib.util
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -38,12 +38,54 @@ def load_lyric_lines(path):
     return lines
 
 
+def alignable_char(value):
+    return bool(value and (value.isalnum() or "\u3400" <= value <= "\u9fff"))
+
+
+def flatten_aligned_chars(result):
+    rows = []
+    for segment in result.get("segments") or []:
+        for row in segment.get("chars") or []:
+            char = str(row.get("char") or "")
+            if alignable_char(char) and row.get("start") is not None and row.get("end") is not None:
+                rows.append({"char": char, "start": float(row["start"]), "end": float(row["end"])})
+    return rows
+
+
+def map_chars_to_lines(lines, aligned_chars):
+    source = [(line_index, char) for line_index, line in enumerate(lines) for char in line if alignable_char(char)]
+    source_text = "".join(char.lower() for _line, char in source)
+    observed_text = "".join(row["char"].lower() for row in aligned_chars)
+    matcher = difflib.SequenceMatcher(a=source_text, b=observed_text, autojunk=False)
+    source_to_observed = {}
+    for block in matcher.get_matching_blocks():
+        for offset in range(block.size):
+            source_to_observed[block.a + offset] = block.b + offset
+    per_line = [[] for _ in lines]
+    matched_per_line = [0 for _ in lines]
+    for source_index, (line_index, _char) in enumerate(source):
+        observed_index = source_to_observed.get(source_index)
+        if observed_index is not None:
+            per_line[line_index].append(aligned_chars[observed_index])
+            matched_per_line[line_index] += 1
+    total = len(source)
+    return per_line, matched_per_line, total, len(source_to_observed) / total if total else 0.0
+
+
+def aspect_geometry(root):
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    settings = mv_utils.parse_settings(root)
+    aspect = meta.get("aspect") or settings.get("合成画幅") or "16:9"
+    return {"9:16": (1080, 1920), "1:1": (1080, 1080)}.get(aspect, (1920, 1080))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("--lang", default="zh")
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--audio", default=None, help="可指定 demucs 分离后的人声文件，提升歌词对齐稳定性")
+    ap.add_argument("--allow-low-confidence", action="store_true", help="仅用于人工复核流程：低置信度也落档并推进阶段")
     args = ap.parse_args()
 
     song = args.audio
@@ -78,44 +120,48 @@ def main():
     # 强制对齐【已知歌词】（不转写，直接拿 lyrics 当 transcript 对到音频）
     model_a, meta = whisperx.load_align_model(language_code=args.lang, device=args.device)
     seg = [{"start": 0.0, "end": dur, "text": full}]
-    res = whisperx.align(seg, model_a, meta, audio, args.device, return_char_alignments=False)
-    words = res.get("word_segments") or [w for s in res["segments"] for w in s.get("words", [])]
-    words = [w for w in words if w.get("start") is not None and w.get("end") is not None]
-    if not words: sys.exit("对齐失败：无词级时间戳（试 --device cpu，或检查歌词与音频是否匹配）")
+    res = whisperx.align(seg, model_a, meta, audio, args.device, return_char_alignments=True)
+    chars = flatten_aligned_chars(res)
+    if not chars: sys.exit("对齐失败：无字符级时间戳；检查语言模型、歌词与音频，勿退回按 word 数硬切行")
+    per_line, matched_per_line, source_chars, confidence = map_chars_to_lines(lines, chars)
 
     # 把对齐到的词按原始行切回（按每行字符数顺序消费）
     out_dir = os.path.join(args.root, "字幕"); os.makedirs(out_dir, exist_ok=True)
-    wi = 0
     ass_events, lrc_lines, report_lines = [], [], []
-    for line in lines:
-        n = len(line.replace(" ", "")) or 1
-        wl = words[wi:wi + n]; wi += n
-        if not wl: break
-        start, end = wl[0]["start"], wl[-1]["end"]
+    for index, line in enumerate(lines):
+        aligned = per_line[index]
+        if not aligned:
+            continue
+        start, end = aligned[0]["start"], aligned[-1]["end"]
         # .ass 逐字 \k（厘秒）
-        ktext = "".join(f"{{\\k{max(1,int(round((w['end']-w['start'])*100)))}}}{w['word']}" for w in wl)
+        ktext = "".join(f"{{\\k{max(1,int(round((row['end']-row['start'])*100)))}}}{row['char']}" for row in aligned)
         ass_events.append(f"Dialogue: 0,{mv_utils.ts_ass(start)},{mv_utils.ts_ass(end)},Default,,0,0,0,,{ktext}")
         lrc_lines.append(f"{mv_utils.ts_lrc(start)}{line}")
         report_lines.append({
             "line": line,
             "start": round(float(start), 3),
             "end": round(float(end), 3),
-            "word_count": len(wl),
+            "char_count": len(aligned),
+            "source_char_count": sum(1 for char in line if alignable_char(char)),
+            "line_confidence": round(matched_per_line[index] / max(1, sum(1 for char in line if alignable_char(char))), 4),
             "duration": round(float(end - start), 3),
         })
 
-    ass = ("[Script Info]\nScriptType: v4.00+\nPlayResX: 1920\nPlayResY: 1080\n\n"
+    play_w, play_h = aspect_geometry(args.root)
+    font_size = 54 if play_h <= 1080 else 62
+    margin_v = max(64, int(play_h * 0.075))
+    ass = (f"[Script Info]\nScriptType: v4.00+\nPlayResX: {play_w}\nPlayResY: {play_h}\n\n"
            "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, "
            "OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, "
            "Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
-           "Style: Default,PingFang SC,54,&H00FFFFFF,&H0000C8FF,&H00000000,&H64000000,"
-           "-1,0,0,0,100,100,0,0,1,3,1,2,40,40,80,1\n\n"
+           f"Style: Default,PingFang SC,{font_size},&H00FFFFFF,&H0000C8FF,&H00000000,&H64000000,"
+           f"-1,0,0,0,100,100,0,0,1,3,1,2,40,40,{margin_v},1\n\n"
            "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
            + "\n".join(ass_events) + "\n")
     open(os.path.join(out_dir, "karaoke.ass"), "w", encoding="utf-8").write(ass)
     open(os.path.join(out_dir, "lyrics.lrc"), "w", encoding="utf-8").write("\n".join(lrc_lines) + "\n")
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_lyric_alignment_report",
         "audio": os.path.relpath(song, args.root),
         "language": args.lang,
@@ -123,24 +169,32 @@ def main():
         "audio_duration": round(float(dur), 3),
         "lyric_lines": len(lines),
         "aligned_lines": len(report_lines),
-        "word_segments": len(words),
-        "consumed_word_segments": wi,
-        "unused_word_segments": max(0, len(words) - wi),
+        "alignment_unit": "character",
+        "source_characters": source_chars,
+        "aligned_characters": sum(matched_per_line),
+        "alignment_confidence": round(confidence, 4),
         "coverage_seconds": round(float(report_lines[-1]["end"] - report_lines[0]["start"]), 3) if report_lines else 0,
         "lines": report_lines,
         "warnings": [],
     }
     if len(report_lines) != len(lines):
         report["warnings"].append("aligned_lines != lyric_lines，可能有歌词未对齐")
-    if len(words) - wi > max(3, 0.2 * len(words)):
-        report["warnings"].append("未消费词级片段偏多，可能实唱/歌词不一致或切行策略需人工校正")
+    if confidence < 0.9:
+        report["warnings"].append(f"字符对齐置信度仅 {confidence:.1%}，需人工校正歌词、语言或人声 stem")
+    weak_lines = [row["line"] for row in report_lines if row["line_confidence"] < 0.85]
+    if weak_lines:
+        report["warnings"].append(f"{len(weak_lines)} 行字符覆盖低于 85%")
     open(os.path.join(out_dir, "alignment_report.json"), "w", encoding="utf-8").write(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     )
-    mv_utils.update_progress_stage(args.root, "lyric_sync")
-    print(f"[ok] 对齐 {len(lines)} 行 / {wi} 词 → 字幕/karaoke.ass + lyrics.lrc")
+    passed = len(report_lines) == len(lines) and confidence >= 0.9 and not weak_lines
+    if passed or args.allow_low_confidence:
+        mv_utils.update_progress_stage(args.root, "lyric_sync")
+    print(f"[ok] 对齐 {len(report_lines)}/{len(lines)} 行，字符置信度 {confidence:.1%} → 字幕/karaoke.ass + lyrics.lrc")
     if report["warnings"]:
         print("[warn] " + "；".join(report["warnings"]))
+    if not passed and not args.allow_low_confidence:
+        sys.exit("字符对齐未达到发布阈值，已落报告但未推进阶段；人工修正后重跑，或显式 --allow-low-confidence 留痕")
     print("[next] mv-compose 合成（有 libass 烧 .ass 逐字高亮，无则自带 render_lyrics.py 用 .lrc）")
 
 

@@ -102,7 +102,7 @@
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `dimension` | string | `topic_heat/opening_hook/payoff_density/character_power/plot_structure/prose/retention` |
+| `dimension` | string | `topic_heat/opening_hook/payoff_density/character_power/plot_structure/prose/retention/novelty` |
 | `raw_score` | number | 1-10 |
 | `weight` | number | 当前平台权重 |
 | `weighted_score` | number | 折算后分值 |

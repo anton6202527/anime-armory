@@ -990,3 +990,16 @@ def test_cost_keys_fold_urgency_tier():
     # realtime / 缺省 → 维持旧键，老事件零影响
     assert dashboard.cost_keys({"unit": "USD", "provider": "seedance", "urgency_tier": "realtime"}) == (
         "USD", "seedance:USD")
+
+
+def test_flow_speed_metrics_tracks_first_episode_and_gate_throughput():
+    events = [
+        {"ts": "2026-07-01T00:00:00+00:00", "episode": "第1集", "stage": "image", "event": "generation"},
+        {"ts": "2026-07-01T06:00:00+00:00", "episode": "第1集", "stage": "image", "event": "qa_gate_run", "qa_gate": {"blocks": 0}},
+        {"ts": "2026-07-02T00:00:00+00:00", "episode": "第1集", "stage": "compose", "event": "qa_gate_run", "qa_gate": {"blocks": 0}},
+    ]
+    metrics = dashboard.flow_speed_metrics(events)
+    assert metrics["time_to_first_episode_sec"] == 86400.0
+    assert metrics["time_to_first_episode_hours"] == 24.0
+    assert metrics["gates_passed"] == 2
+    assert metrics["gates_passed_per_day"] == 2.0

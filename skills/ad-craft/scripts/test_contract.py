@@ -76,7 +76,8 @@ class AdContractTest(unittest.TestCase):
         self.assertFalse(empty["ready"])
         self.assertEqual(set(empty["missing_required"]), set(contract.BRIEF_REQUIRED))
 
-        minimal = {"brand": "山岚", "product": "手冲咖啡", "usp": ["现烘现磨"], "audience": "都市白领"}
+        minimal = {"brand": "山岚", "product": "手冲咖啡", "usp": ["现烘现磨"],
+                   "audience": "都市白领", "campaign_objective": "转化行动"}
         chk = contract.brief_check(minimal)
         self.assertTrue(chk["ready"])
         self.assertFalse(chk["gate_ready"])
@@ -88,6 +89,7 @@ class AdContractTest(unittest.TestCase):
             claims=["48小时内烘焙（有据）"],
             rights={"talent": "未使用真人", "music": "授权曲库", "fonts": "思源黑体", "assets": "自有素材"},
             mandatories={"legal_lines": ["广告"]},
+            measurement={"primary_kpi": "CVR", "conversion_event": "完成下单"},
         )
         self.assertTrue(contract.brief_check(full)["gate_ready"])
         # 「待补」占位算缺项；空列表/空字符串同理

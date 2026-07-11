@@ -14,6 +14,18 @@ assert _spec.loader is not None
 _spec.loader.exec_module(supervisor)
 
 
+def test_stop_reason_classification_is_exhaustive():
+    assert set(supervisor.STOP_REASONS)
+    for reason in supervisor.STOP_REASONS:
+        result = supervisor.classify_human_gate(reason)
+        assert set(result) == {"required", "reason"}
+        assert isinstance(result["required"], bool)
+    assert supervisor.classify_human_gate("future_unregistered_reason") == {
+        "required": True,
+        "reason": "unknown_stop_reason",
+    }
+
+
 def _progress(root: Path) -> None:
     (root / "_设置.md").write_text("- 制作模式: 原生音画\n- 基础视觉风格: 写实电影感\n", encoding="utf-8")
     (root / "_进度.md").write_text(

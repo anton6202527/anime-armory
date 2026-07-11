@@ -5,7 +5,7 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，判断当前前沿，然后调用本线已有阶段脚本推进。它不替代 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-image` / `comic-compose` / `comic-review`，只负责把一话的批量执行、重抽、候选归档和下一步衔接串起来。出图前必须先跑 `comic-review` 的 `image_preflight` gate；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，从当前前沿起**自动 chain 免费确定性阶段**（缩略分镜→页面排版→原稿收尾→出图包→嵌字合成的 lettering/导出），出图阶段带 gate 批跑，审查阶段只产 review gate 报告、不代替人工把 `审查` 标 ✅。创作阶段（源本/企划、漫画脚本）不自动化。`传统原稿流程=关闭` 或旧进度表缺列时自动跳过对应阶段。它不替代各 stage skill 的判断，只负责批量执行、重抽、候选归档和衔接。出图前必须先跑 `comic-review` 的 `image_preflight` gate（runner 本身也内置该 gate，编排层跑过后以 `--skip-gate` 免重复）；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
 
 ## 适用场景
 

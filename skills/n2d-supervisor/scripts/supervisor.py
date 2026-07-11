@@ -20,7 +20,7 @@ N2D_LIB = N2D_DIR / "_lib"
 if str(N2D_LIB) not in sys.path:
     sys.path.insert(0, str(N2D_LIB))
 
-from n2d_action_registry import specialist_for_stage, stage_action_spec  # noqa: E402
+from n2d_action_registry import STOP_REASONS, specialist_for_stage, stage_action_spec  # noqa: E402
 
 try:
     from flow_telemetry import record_milestone as _record_flow_milestone  # noqa: E402
@@ -119,10 +119,14 @@ def resolve_effective_round(root: str, key: str, caller_round: int, *, persist: 
 
 
 def classify_human_gate(stop_reason: str) -> Dict[str, Any]:
+    if stop_reason not in STOP_REASONS:
+        return {"required": True, "reason": "unknown_stop_reason"}
     if stop_reason in {"needs_choice", "needs_payment_confirm", "needs_compliance", "needs_acceptance_signoff"}:
         return {"required": True, "reason": stop_reason}
     if stop_reason.startswith("blocked_by_") or stop_reason in {"prework_failed", "capability_evidence_required", "env_missing"}:
         return {"required": True, "reason": "repair_or_decision_required"}
+    if stop_reason == "unknown_stage":
+        return {"required": True, "reason": "unknown_stage"}
     return {"required": False, "reason": ""}
 
 

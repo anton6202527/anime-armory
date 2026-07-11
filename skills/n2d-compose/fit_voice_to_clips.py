@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """fit_voice_to_clips.py — 把【后期补录的真实配音】拟合到【已锁定的视频镜头时长】。
 
-仅用于 `制作模式 = 先出视频后配音`（快速 demo·不推荐，见 n2d SKILL「制作模式」节）。
-在该模式下，视频是按**估算时长**锁死出的；真实配音补在最后，每句长短与锁定镜头不一致。
+用于 `制作模式 = 先出视频后配音`，也用于混合自动路由中
+`rough_timing_final_dub_later/post_dub/base_video_then_post_lipsync` 镜头。视频按估算槽位
+锁定后，真实配音补在最后，每句长短与锁定镜头不一致。
 本脚本把真音逐镜头放回锁定时间轴，使配音轨总长 = 视频总长、不再渐进失步：
 
   - 真音 ≤ 镜头槽位     → `pad`     ：放在槽位起点，尾部补静音（无损）。
-  - 槽位 < 真音 ≤ 槽位×MAX → `stretch` ：atempo 轻微提速塞进槽位（语速略快，已告警）。
+  - 槽位 < 真音 ≤ 容差      → `trim`    ：不变速，仅裁掉容差内尾部余量。
+  - 容差 < 真音 ≤ 槽位×MAX → `stretch` ：atempo 轻微提速塞进槽位（语速略快，已告警）。
   - 真音 > 槽位×MAX      → `overflow`：差太多，**不静默处理**——列出需回 n2d-video
                                        重出/重切（加长）的镜头，退出码 2 让用户定夺。
 
@@ -22,10 +24,12 @@
 环境：FIT_MAX_STRETCH(默认1.25) FIT_TOL_FRAC(0.10) FIT_TOL_MIN(0.3)
 """
 import json
+import hashlib
 import os
 import re
 import subprocess
 import sys
+import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "n2d", "_lib"))
 from n2d_route import placeholder_rows  # 占位判定单一真值源
@@ -52,7 +56,7 @@ def plan(slots, reals, max_stretch=1.25, tol_frac=0.10, tol_min=0.3):
     slots: [(镜头名, 槽位秒)]，按时间轴顺序。
     reals: {镜头名: (真音秒, 源)}；源 = 该镜头的拼接素材（aggregate_reals 产的 parts 列表），
            或单 wav 路径（兼容旧调用），或 None=该镜头无台词→按静音填满槽位。
-    返回逐行 dict：镜头/slot/real/wav/action(pad|stretch|overflow)/ratio/over(超出秒)/minor(是否微调)。
+    返回逐行 dict：镜头/slot/real/wav/action(pad|trim|stretch|overflow)/ratio/over(超出秒)/minor。
     """
     rows = []
     for shot, slot in slots:
@@ -61,6 +65,8 @@ def plan(slots, reals, max_stretch=1.25, tol_frac=0.10, tol_min=0.3):
         tol = max(slot * tol_frac, tol_min)
         if real <= slot:
             action, ratio = "pad", 1.0
+        elif over <= tol:
+            action, ratio = "trim", 1.0
         elif real <= slot * max_stretch:
             action, ratio = "stretch", real / slot  # atempo>1 提速压进槽位
         else:
@@ -132,6 +138,73 @@ def load_inputs(root, ep):
     ph = placeholder_rows(man)
     reals = aggregate_reals(man, vdir, lambda p: ffdur(p) if (p and os.path.isfile(p)) else 0.0)
     return slots, reals, ph
+
+
+def _sha256(path):
+    if not os.path.isfile(path):
+        return ""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_fit_scope(root, ep):
+    """Return route IDs whose final voice is fitted after picture timing locks."""
+    path = os.path.join(root, "生产数据", f"production_mode_route_{ep}.json")
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+    except Exception:
+        payload = {}
+    routes = payload.get("clip_routes") if isinstance(payload, dict) else []
+    strategies = {"rough_timing_final_dub_later", "post_dub", "base_video_then_post_lipsync"}
+    out = []
+    for i, row in enumerate(routes or [], 1):
+        if not isinstance(row, dict) or str(row.get("audio_strategy") or "") not in strategies:
+            continue
+        out.append(str(row.get("clip_id") or row.get("id") or f"Clip_{i:02d}"))
+    return out
+
+
+def write_report(root, ep, lang, rows, *, applied, output_path=""):
+    vdir = os.path.join(root, "合成", ep, "配音")
+    os.makedirs(vdir, exist_ok=True)
+    shots_p = os.path.join(root, "脚本", ep, "镜头时长.json")
+    man_p = os.path.join(vdir, "时长清单.json")
+    route_p = os.path.join(root, "生产数据", f"production_mode_route_{ep}.json")
+    fit_scope = load_fit_scope(root, ep)
+    overflow = [r["镜头"] for r in rows if r["action"] == "overflow"]
+    report = {
+        "kind": "n2d_voice_fit_report",
+        "version": 1,
+        "episode": ep,
+        "language": lang,
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "status": "block" if overflow else ("pass" if applied and output_path and os.path.isfile(output_path) else "planned"),
+        "applied": bool(applied and output_path and os.path.isfile(output_path)),
+        "fit_scope": fit_scope,
+        "rows": rows,
+        "summary": {
+            "slot_total_sec": round(sum(r["slot"] for r in rows), 3),
+            "real_total_sec": round(sum(r["real"] for r in rows), 3),
+            "overflow_clips": overflow,
+            "actions": {action: sum(1 for r in rows if r["action"] == action) for action in ("pad", "trim", "stretch", "overflow")},
+        },
+        "output": output_path,
+        "output_sha256": _sha256(output_path) if output_path else "",
+        "input_sha256": {
+            "shot_durations": _sha256(shots_p),
+            "voice_manifest": _sha256(man_p),
+            "production_mode_route": _sha256(route_p),
+        },
+    }
+    path = os.path.join(vdir, f"voice_fit_{lang}.json")
+    with open(path + ".tmp", "w", encoding="utf-8") as fh:
+        json.dump(report, fh, ensure_ascii=False, indent=2)
+        fh.write("\n")
+    os.replace(path + ".tmp", path)
+    return path
 
 
 def _silence_wav(path, dur, sr):
@@ -218,15 +291,19 @@ def main(argv):
 
     rows = plan(slots, reals, max_stretch, tol_frac, tol_min)
     pad = sum(1 for r in rows if r["action"] == "pad")
+    trim = [r for r in rows if r["action"] == "trim"]
     stretch = [r for r in rows if r["action"] == "stretch"]
     overflow = [r for r in rows if r["action"] == "overflow"]
     slot_total = sum(r["slot"] for r in rows)
     real_total = sum(r["real"] for r in rows)
 
-    print(f"=== 真音拟合对账 {ep}（先出视频后配音模式）===")
+    fit_scope = load_fit_scope(root, ep)
+    scope_text = f"混合路由需拟合 {len(fit_scope)} 镜" if fit_scope else "项目级画面先行/后配"
+    print(f"=== 真音拟合对账 {ep}（{scope_text}）===")
     print(f"镜头 {len(rows)} | 锁定总长 {slot_total:.2f}s | 真音总长 {real_total:.2f}s "
           f"| 差 {real_total - slot_total:+.2f}s")
-    print(f"pad(无损补静音) {pad} | stretch(轻微提速) {len(stretch)} | overflow(需重出) {len(overflow)}")
+    print(f"pad(无损补静音) {pad} | trim(容差内不变速) {len(trim)} | "
+          f"stretch(轻微提速) {len(stretch)} | overflow(需重出) {len(overflow)}")
     for r in stretch:
         print(f"  ⚠️ {r['镜头']}: 真音 {r['real']:.2f}s > 槽位 {r['slot']:.2f}s "
               f"→ atempo×{r['ratio']:.2f} 提速塞入" + ("（微调，几乎无感）" if r["minor"] else "（语速会变快）"))
@@ -235,19 +312,23 @@ def main(argv):
               f" → 回 n2d-video 重出/重切此镜头加长，或显式接受重度提速")
 
     if overflow:
+        report_path = write_report(root, ep, lang, rows, applied=False)
         print(f"\n🔴 {len(overflow)} 个镜头真音严重超长，**不静默处理**。"
               "请二选一：①回 n2d-video 重出/重切上列镜头加长（推荐）"
-              "②确认接受重度变速后调高 FIT_MAX_STRETCH 重跑。未决前不生成 fitted 轨。")
+              f"②确认接受重度变速后调高 FIT_MAX_STRETCH 重跑。未决前不生成 fitted 轨。报告：{report_path}")
         return 2
 
     if not apply:
-        print("\n（dry-run）以上可自动拟合，无 overflow。加 --apply 生成 fitted 轨。")
+        report_path = write_report(root, ep, lang, rows, applied=False)
+        print(f"\n（dry-run）以上可自动拟合，无 overflow。计划报告：{report_path}；加 --apply 生成 fitted 轨。")
         return 0
 
     out_wav = os.path.join(root, "合成", ep, "配音", f"voice_{lang}_fitted.wav")
     build_fitted(rows, out_wav)
+    report_path = write_report(root, ep, lang, rows, applied=True, output_path=out_wav)
     print(f"\n✅ 已生成拟合配音轨：{out_wav}（总长≈{slot_total:.2f}s，对齐已锁定视频镜头）")
     print(f"   合成时指向它：VOICEFILE='{out_wav}' bash <skill>/compose.sh {root} {ep} {lang}")
+    print(f"   拟合报告：{report_path}")
     return 0
 
 

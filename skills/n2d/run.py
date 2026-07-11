@@ -35,6 +35,7 @@ from n2d_logic import normalize_production_mode
 from n2d_route import compose_stage_enabled, normalize_episode, parse_progress, stage_of, summarize
 from n2d_visual_styles import STYLE_INTAKE_OPTIONS, STYLE_OPTIONS
 from n2d_action_registry import (
+    STOP_REASONS,
     context_pack_relpath,
     creative_loop_relpath,
     specialist_for_stage,
@@ -162,7 +163,7 @@ def _identity_exit_is_planned_asset_gap(root: str) -> tuple[bool, str]:
 # ── 阶段分类（key 来自 STAGE_GRAPH，不另立并行表，只贴标签）──────────────────
 AGENT_GEN_STAGES = {"script_stage1", "script_stage2", "image_prompt", "video_prompt"}
 GENERATION_STAGES = {"voice", "image", "video", "compose"}
-PAID_STAGES = {"image", "video", "compose"}          # 进这些前必过合规闸门
+PAID_STAGES = {"voice", "image", "video", "compose"}  # 真正执行生成前必过合规闸门；混合模式 voice preflight 例外
 ENTRY_GATED_STAGES = AGENT_GEN_STAGES | GENERATION_STAGES | {"review"}
 ROUTER_STAGES = {"video_prompt", "video"}            # 出视频前置：先写模型路由表
 IDENTITY_REFRESH_STAGES = {"image_prompt", "image", "video_prompt", "video", "compose", "review"}
@@ -186,6 +187,16 @@ def _is_video_first_rough_voice(root: str, route: Dict[str, Any], stage_key: str
         return False
     mode = normalize_production_mode(get_setting(root, "制作模式", PRODUCTION_MODE_DEFAULT))
     return mode in {"混合自动路由", "先出视频后配音"}
+
+
+def _stage_requires_paid_compliance(root: str, route: Dict[str, Any], stage_key: str) -> bool:
+    """Whether this frontier can spend money/create licensed media.
+
+    Hybrid/video-first voice preflight only writes casting + text timing and is
+    therefore not paid. Every other voice execution may invoke cloud TTS or a
+    clone backend and must pass the same compliance stop as image/video/compose.
+    """
+    return stage_key in PAID_STAGES and not _is_video_first_rough_voice(root, route, stage_key)
 
 
 # ── 探针结果（decide() 的纯输入，便于测试注入）────────────────────────────────
@@ -258,9 +269,12 @@ def stage_key_of(route: Dict[str, Any]) -> Optional[str]:
     特例：先出视频后配音模式下，compose 前沿会被重定向成 label='补真实配音'、skill='n2d-voice'
     （col 仍是 '成片'）——这里按 voice 处理，否则 stage_for_progress_column('成片') 会误判成 compose。
     """
-    if route.get("label") == "补真实配音" or (route.get("skill") == "n2d-voice" and route.get("col") == "成片"):
+    redirect = str(route.get("redirect_stage_key") or "").strip()
+    if redirect in {"voice", "video"}:
+        return redirect
+    if route.get("skill") == "n2d-voice" and route.get("col") == "成片":
         return "voice"
-    if route.get("label") == "完成后期口型/表演 pass" or (route.get("skill") == "n2d-video" and route.get("col") == "成片"):
+    if route.get("skill") == "n2d-video" and route.get("col") == "成片":
         return "video"
     spec = stage_for_progress_column(route["col"])
     return spec["key"] if spec else None
@@ -297,6 +311,8 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
     }
 
     def na(stop_reason: str, card: Dict[str, Any]) -> Dict[str, Any]:
+        if stop_reason not in STOP_REASONS:
+            raise ValueError(f"unregistered n2d stop_reason: {stop_reason}")
         trace = new_trace_context(root, ep, stage_key, action=stop_reason)
         action_contract = stage_action_spec(stage_key)
         if stage_key == "voice" and stop_reason == "needs_stage_execution":
@@ -394,7 +410,7 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
         })
 
     # 3. 合规缺口（仅花钱档）
-    if stage_key in PAID_STAGES and probes.compliance_gap:
+    if _stage_requires_paid_compliance(root, route, stage_key) and probes.compliance_gap:
         return na("needs_compliance", {
             "headline": f"{ep} {frontier['label']}：合规缺口未补齐（花钱前阻断）",
             "to_user": "跑 n2d-compliance --check 补齐 evidence/profile 后再进付费 gate。绝不放行。",
@@ -1996,6 +2012,22 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 p.prework.append({"step": "shared_video_materialize", "status": "skip", "detail": str(e)[:160]})
 
     if stage_key == "compose" and ep:
+        bgm_script = os.path.join(SKILLS_DIR, "n2d-compose", "bgm_contract.py")
+        if os.path.exists(bgm_script):
+            try:
+                r = _run([sys.executable, bgm_script, root, ep, "--write-missing", "--json"])
+                detail = _finding_detail(r.stdout, r.stderr)
+                p.prework.append({"step": "bgm_contract", "status": "pass" if r.returncode == 0 else "block", "detail": detail})
+                if r.returncode != 0:
+                    _record_prework_block(
+                        p,
+                        "bgm_contract",
+                        "BGM 机器合同未确认：补齐 strategy/cues/source/rights；占位只可显式批准用于 internal rough。",
+                    )
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                _record_prework_block(p, "bgm_contract", f"bgm_contract 无法运行：{detail}")
+                p.prework.append({"step": "bgm_contract", "status": "block", "detail": detail})
         script = os.path.join(SKILLS_DIR, "n2d-script", "scripts", "action_edit_cues.py")
         if os.path.exists(script):
             try:
@@ -2088,6 +2120,26 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             ),
         ], cache=_stage_prework_cache)
 
+    # 多集/发布项目的剧级字幕、人名、语域、响度合同：先建骨架，再由 gate 严格消费。
+    if ep and stage_key in ENTRY_GATED_STAGES:
+        series_script = os.path.join(SKILLS_DIR, "n2d", "scripts", "series_consistency.py")
+        phase = "full" if stage_key in {"compose", "review"} else "script"
+        if os.path.exists(series_script):
+            try:
+                # 脚本自己报告 required；单集 internal rough 即使骨架未建也不应制造阻断。
+                check = _run([sys.executable, series_script, root, ep, "--phase", phase, "--json"])
+                payload = _parse_trailing_json(check.stdout)
+                if payload.get("required"):
+                    result = _run([sys.executable, series_script, root, ep, "--phase", phase, "--write-missing", "--json"])
+                    detail = _finding_detail(result.stdout, result.stderr)
+                    p.prework.append({"step": "series_consistency", "status": "pass" if result.returncode == 0 else "block", "detail": detail})
+                    if result.returncode != 0:
+                        _record_prework_block(p, "series_consistency", "剧级字幕/人名/语域/响度合同未确认；先补 series_consistency.json。")
+            except Exception as e:  # pragma: no cover
+                detail = str(e)[:160]
+                _record_prework_block(p, "series_consistency", f"series_consistency 无法运行：{detail}")
+                p.prework.append({"step": "series_consistency", "status": "block", "detail": detail})
+
     # gate：有 gate_stage 的阶段先过 dashboard gate（退出码 1=block）
     gate_stage = _gate_stage_for_frontier(root, ep, stage_key, spec)
     if gate_stage:
@@ -2120,7 +2172,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             p.prework.append({"step": "gate", "stage": gate_stage, "status": "block", "detail": detail})
 
     # compliance：花钱档前置检查
-    if stage_key in PAID_STAGES:
+    if _stage_requires_paid_compliance(root, route, stage_key):
         script = os.path.join(SKILLS_DIR, "n2d-compliance", "scripts", "compliance.py")
         if os.path.exists(script):
             try:

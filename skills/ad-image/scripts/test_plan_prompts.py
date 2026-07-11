@@ -2,6 +2,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import plan_prompts as pp  # noqa: E402
 
@@ -73,3 +75,29 @@ def test_asset_regex_does_not_match_plain_product_or_brand_words():
 
     assert pp.asset_ids(shot, pp.PROD_RE) == []
     assert pp.asset_ids(shot, pp.BRAND_RE) == []
+
+
+@pytest.mark.parametrize("brand,product,pid,bid,scene", [
+    ("清露", "气泡水", "PROD_QINGLU_BOTTLE", "BRAND_QINGLU", "瓶装饮料 hero"),
+    ("岚途", "电动汽车", "PROD_LANTU_CAR", "BRAND_LANTU", "汽车外观 hero"),
+    ("安家", "家政服务", "PROD_ANJIA_SERVICE", "BRAND_ANJIA", "服务流程演示"),
+    ("云账", "财务软件", "PROD_YUNZHANG_APP", "BRAND_YUNZHANG", "App 界面 demo"),
+])
+def test_prompt_templates_are_industry_neutral(tmp_path, brand, product, pid, bid, scene):
+    root = tmp_path / pid
+    (root / "脚本").mkdir(parents=True)
+    (root / "设定库").mkdir()
+    (root / "脚本" / "storyboard.json").write_text(json.dumps({
+        "aspect": "9:16", "shots": [{"shot_id": "S1", "duration": 3, "scene": scene,
+        "assets": {pid: True, bid: True}, "safe_area": {"core_in_center_4x4": True}}],
+    }, ensure_ascii=False), encoding="utf-8")
+    (root / "设定库" / "asset_registry.json").write_text(json.dumps({
+        "brand": {"id": bid, "name": brand, "text_logo": brand, "primary_hex": "#224466"},
+        "products": [{"id": pid, "name": product, "brand_id": bid,
+                      "reference_images": [f"设定库/{pid}.png"]}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    pp.run(root)
+    rendered = "\n".join(p.read_text(encoding="utf-8") for p in (root / "出图").rglob("*.md"))
+    assert brand in rendered and pid in rendered and bid in rendered
+    assert "STARBOX" not in rendered and "Starbox" not in rendered and "星盒" not in rendered

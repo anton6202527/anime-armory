@@ -277,6 +277,8 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/voice_backends.py",
             "_lib/n2d_text_utils.py",
             "_lib/text_utils.py",
+            # 选角/无声时长契约：改动影响 casting 与文本估时清单，需从 voice 回放。
+            "_lib/voice_preproduction.py",
         ),
     ),
     (
@@ -285,6 +287,8 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/n2d_platform_profiles.py",
             "_lib/n2d_spectacle.py",
             "_lib/n2d_intent.py",
+            # confirmed/哈希签收契约：最早消费者是 P-2/animatic 签收快照。
+            "_lib/signoff_contract.py",
         ),
     ),
     (
@@ -295,6 +299,10 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/image_backend_standards.py",
             # P-3 后生成的 seam 真值；改动需刷新 continuity_chain 及其下游 prompt 收据。
             "_lib/continuity_chain.py",
+            # 接缝类型学是 continuity_chain seam_mode/证据的真值源，同级回放。
+            "_lib/seam_contract.py",
+            # 出图生产合同→提交请求的唯一编译边界，改动即 prompt 变化。
+            "_lib/image_prompt_compiler.py",
         ),
     ),
     (
@@ -308,9 +316,18 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
         ),
     ),
     (
+        "video",
+        (
+            # 本机执行/重试/幂等契约：不改 prompt，只影响 video 执行层，从 video 回放。
+            "_lib/video_execution_adapter.py",
+        ),
+    ),
+    (
         "compose",
         (
             "_lib/subtitle_render.py",
+            # OTIO 剪辑交接时间线：改 schema 只需重出 compose 侧交接产物。
+            "_lib/editorial_timeline.py",
         ),
     ),
 )

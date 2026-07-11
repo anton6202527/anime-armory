@@ -2,7 +2,8 @@
 # 把中/英 SRT 渲染成逐句透明 PNG（1080x1920），供 ffmpeg overlay 烧录。
 # 用法: render_subs.py <workdir> <zh|en|bilingual>
 # 产出: <workdir>/subpng/sub_NN.png + 写 inputs.txt(png路径) + vfilter.txt(overlay链)
-import sys, os, re
+import sys, os, re, json
+from pathlib import Path
 
 if len(sys.argv) < 3:
     print("usage: render_subs.py <workdir> <zh|en|bilingual>", file=sys.stderr)
@@ -13,10 +14,31 @@ from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'n2d', '_lib'))
 import subtitle_render as sr  # 共享原语：SRT 解析 / 字体回退 / CJK 折行 / overlay 链
 
-ZH_FONT_PATHS = ["/System/Library/Fonts/STHeiti Medium.ttc"]
+# 多集/发布项目从剧级真值读取字幕样式；环境变量仍是本次渲染的显式最高优先覆盖。
+_root = Path(W).resolve().parents[2] if len(Path(W).resolve().parents) >= 3 else None
+_series_style = {}
+if _root:
+    try:
+        _series = json.loads((_root / '设定库' / 'series_consistency.json').read_text(encoding='utf-8'))
+        if str(_series.get('status', '')).lower() in {'confirmed', 'approved', 'ready'}:
+            _series_style = _series.get('subtitle_style') if isinstance(_series.get('subtitle_style'), dict) else {}
+    except Exception:
+        _series_style = {}
+
+def _color(value, fallback):
+    raw = str(value or '').strip().lstrip('#')
+    if len(raw) in (6, 8):
+        try:
+            parts = tuple(int(raw[i:i+2], 16) for i in range(0, len(raw), 2))
+            return parts + (255,) if len(parts) == 3 else parts
+        except ValueError:
+            pass
+    return fallback
+
+ZH_FONT_PATHS = [str(x) for x in (_series_style.get('zh_font_paths') or ["/System/Library/Fonts/STHeiti Medium.ttc"])]
 # 英文字回退序与旧逻辑同：Arial → Helvetica → 中文字（STHeiti）
-EN_FONT_PATHS = ["/System/Library/Fonts/Supplemental/Arial.ttf",
-                 "/System/Library/Fonts/Helvetica.ttc", ZH_FONT_PATHS[0]]
+EN_FONT_PATHS = [str(x) for x in (_series_style.get('en_font_paths') or [
+    "/System/Library/Fonts/Supplemental/Arial.ttf", "/System/Library/Fonts/Helvetica.ttc"])] + [ZH_FONT_PATHS[0]]
 WIDTH  = int(os.environ.get('SUB_W', 1080))   # 由 compose.sh 按画幅选择点透传（竖屏 1080 / 横屏 1920）
 HEIGHT = int(os.environ.get('SUB_H', 1920))
 
@@ -29,8 +51,15 @@ zh = parse_srt(os.path.join(W, 'zh.srt'))
 en = parse_srt(os.path.join(W, 'en.srt'))
 idxs = sorted(set(zh) | set(en))
 
-ZH_SIZE = int(os.environ.get('ZH_SIZE', 38))   # 竖屏漫剧默认更克制；可由 compose 的「字幕字号」选择点覆盖
-EN_SIZE = int(os.environ.get('EN_SIZE', 28))
+ZH_SIZE = int(os.environ.get('ZH_SIZE', _series_style.get('zh_size_px', 38)))
+EN_SIZE = int(os.environ.get('EN_SIZE', _series_style.get('en_size_px', 28)))
+ZH_NORMAL_FILL = _color(_series_style.get('zh_fill'), (255,255,255,255))
+EN_NORMAL_FILL = _color(_series_style.get('en_fill'), (235,235,235,255))
+OUTLINE_FILL = _color(_series_style.get('outline_fill'), (10,10,10,255))
+ZH_OUTLINE = int(_series_style.get('zh_outline_px', 4))
+EN_OUTLINE = int(_series_style.get('en_outline_px', 3))
+BOTTOM_MARGIN = int(_series_style.get('bottom_margin_px', 130))
+SAFE_WIDTH_MARGIN = int(_series_style.get('safe_width_margin_px', 60))
 
 # ── 字幕样式分级（cue 标签 → 字号/颜色）。默认=normal 即原行为，全部 env 可覆盖 ──
 # 标签来自 时长清单.json（compose.sh 复制为 W/manifest.json）：角色含"系统/旁白"→narrator；钩子=climax→emphasis。
@@ -48,7 +77,7 @@ if os.path.exists(_mf):
         TAGS = {}
 # 每级 (中字号增量, 中色RGBA, 英字号增量, 英色RGBA)；env 覆盖键见注释
 STYLES = {
-    'normal':   (0,                                  (255,255,255,255), 0,                                  (235,235,235,255)),
+    'normal':   (0,                                  ZH_NORMAL_FILL, 0,                                  EN_NORMAL_FILL),
     'narrator': (int(os.environ.get('NARR_DZH',-8)), (205,205,205,235), int(os.environ.get('NARR_DEN',-4)), (200,200,200,225)),  # 旁白/系统：小一号、灰
     'emphasis': (int(os.environ.get('EMPH_DZH', 6)), (255,225,120,255), int(os.environ.get('EMPH_DEN', 2)), (255,225,120,255)),  # 爽点：大一号、暖金
 }
@@ -59,7 +88,7 @@ wrap = sr.wrap_cjk
 
 os.makedirs(os.path.join(W, 'subpng'), exist_ok=True)
 manifest = []
-MAXW = WIDTH - 120
+MAXW = WIDTH - SAFE_WIDTH_MARGIN * 2
 # 垂直安全区：字幕总高超过画面这一比例就缩字号（治长双语句顶出画面/叠死画面元素）
 MAXH = int(HEIGHT * float(os.environ.get('SUB_MAXH_FRAC', '0.45')))
 overflow_hits = 0
@@ -90,15 +119,15 @@ for i in idxs:
             zh_sz -= 2; en_sz -= 2
             zh_font, en_font, zh_lines, en_lines, total_h = _layout(d, i, zh_sz, en_sz)
     # 自底向上排版：英文在最底，中文在其上
-    y = HEIGHT - 130
+    y = HEIGHT - BOTTOM_MARGIN
     def draw_line(text, font, fill, stroke, y_baseline):
         d.text((WIDTH//2, y_baseline), text, font=font, fill=fill,
-               anchor='ms', stroke_width=stroke, stroke_fill=(10,10,10,255))
+               anchor='ms', stroke_width=stroke, stroke_fill=OUTLINE_FILL)
     for ln in reversed(en_lines):
-        draw_line(ln, en_font, en_fill, 3, y); y -= en_sz+12
+        draw_line(ln, en_font, en_fill, EN_OUTLINE, y); y -= en_sz+12
     if en_lines and zh_lines: y -= 8
     for ln in reversed(zh_lines):
-        draw_line(ln, zh_font, zh_fill, 4, y); y -= zh_sz+14
+        draw_line(ln, zh_font, zh_fill, ZH_OUTLINE, y); y -= zh_sz+14
     p = os.path.join(W, 'subpng', f'sub_{i:02d}.png')
     img.save(p)
     manifest.append((p, s, e))

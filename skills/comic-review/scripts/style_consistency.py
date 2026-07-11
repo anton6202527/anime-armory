@@ -21,6 +21,14 @@ DEFAULT_BINS = 16
 EDGE_WEIGHT_DIMS = 4
 GRADE_WARMTH_MARGIN = 0.20
 GRADE_TINT_MARGIN = 0.18
+# 跨话基准回归：与首话/锚图基准指纹的余弦低于该值 → warn（整话一起漂）。
+BASELINE_DRIFT_WARN = 0.92
+# 相邻格（同场景锚）冷暖/亮度跳变阈值。
+ADJACENT_WARMTH_JUMP = 0.40
+ADJACENT_VAL_JUMP = 0.35
+# 黑白灰量化（网点密度/黑场占比/线宽代理）与话内中位的偏差阈值。
+TONE_BLACK_DEV = 0.18
+TONE_EDGE_DEV_RATIO = 0.60
 
 
 def _norm_bucket(value: str) -> str:
@@ -170,6 +178,7 @@ def image_fingerprint(path: Path, bins: int) -> dict[str, Any] | None:
     means = ImageStat.Stat(sample).mean
     warmth, tint = grade_proxy(float(means[0]), float(means[1]), float(means[2]))
     fp = channel_hist(sat, bins) + channel_hist(val, bins) + [edge_density] * EDGE_WEIGHT_DIMS
+    total = max(1, len(val))
     return {
         "fingerprint": fp,
         "size": {"width": source_size[0], "height": source_size[1]},
@@ -178,7 +187,146 @@ def image_fingerprint(path: Path, bins: int) -> dict[str, Any] | None:
         "edge_density": edge_density,
         "warmth": warmth,
         "tint": tint,
+        # 黑白灰量化：黑场占比 / 高光占比 / 中灰占比（网点密度代理）。
+        "black_ratio": sum(1 for v in val if v <= 0.12) / total,
+        "white_ratio": sum(1 for v in val if v >= 0.95) / total,
+        "midgray_ratio": sum(1 for v in val if 0.25 <= v <= 0.75) / total,
     }
+
+
+def mean_fingerprint(fps: Sequence[Sequence[float]]) -> list[float]:
+    if not fps:
+        return []
+    dims = len(fps[0])
+    return [sum(fp[i] for fp in fps) / len(fps) for i in range(dims)]
+
+
+def file_sha256(path: Path) -> str:
+    import hashlib
+
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def resolve_path(root: Path, raw: str) -> Path:
+    path = Path(str(raw or ""))
+    return path if path.is_absolute() else root / path
+
+
+def style_baseline_path(root: Path) -> Path:
+    return root / "出图" / "共享" / "style_baseline.json"
+
+
+def style_anchor_image_paths(root: Path, registry: dict[str, Any]) -> list[str]:
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    out: list[str] = []
+    for ref_id, asset in assets.items():
+        if not (str(ref_id).startswith("STYLE_") or (isinstance(asset, dict) and str(asset.get("type") or "").lower() == "style")):
+            continue
+        if not isinstance(asset, dict):
+            continue
+        for key in ("anchor_path", "primary_path", "path"):
+            raw = asset.get(key)
+            if isinstance(raw, str) and raw.strip() and resolve_path(root, raw).is_file():
+                out.append(raw)
+        for item in asset.get("reference_images") or []:
+            raw = item.get("path") if isinstance(item, dict) else item
+            if isinstance(raw, str) and raw.strip() and resolve_path(root, raw).is_file():
+                out.append(raw)
+    return out[:6]
+
+
+def check_style_baseline(
+    root: Path,
+    chapter: str,
+    fingerprints: list[list[float]],
+    panels: list[dict[str, Any]],
+    registry: dict[str, Any],
+    findings: list[dict[str, Any]],
+    notes: list[str],
+    *,
+    bins: int,
+    rebaseline: bool = False,
+) -> None:
+    """首话/锚图基准指纹落盘，后续各话与基准比——抓"整话一起漂"。
+
+    话内离群检测是相对比较，整话换模型/换画风时全体一起漂完全不可见；
+    这里把基准持久化到 出图/共享/style_baseline.json 做跨话回归。warn-only：
+    画风演化可能是有意决策，漂移由人来裁决（重建基准跑 --rebaseline）。
+    """
+    if not fingerprints:
+        return
+    chapter_fp = mean_fingerprint(fingerprints)
+    baseline_file = style_baseline_path(root)
+    baseline = load_json(baseline_file, {})
+    anchor_paths = style_anchor_image_paths(root, registry)
+    if rebaseline or not (isinstance(baseline, dict) and baseline.get("chapter_fingerprint")):
+        anchor_fps = []
+        for raw in anchor_paths:
+            data = image_fingerprint(resolve_path(root, raw), bins)
+            if data:
+                anchor_fps.append({"path": raw, "fingerprint": data["fingerprint"]})
+        payload = {
+            "schema_version": 1,
+            "kind": "comic_style_baseline",
+            "created_at": datetime.now().isoformat(timespec="seconds"),
+            "source_chapter": chapter,
+            "bins": bins,
+            "chapter_fingerprint": chapter_fp,
+            "warmth_median": median([float(p["warmth"]) for p in panels]),
+            "edge_median": median([float(p["edge_density"]) for p in panels]),
+            "black_ratio_median": median([float(p.get("black_ratio") or 0.0) for p in panels]),
+            "anchor_fingerprints": anchor_fps,
+        }
+        baseline_file.parent.mkdir(parents=True, exist_ok=True)
+        baseline_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        notes.append(
+            f"风格基准指纹已{'重建' if rebaseline else '建立'}（source_chapter={chapter}，锚图 {len(anchor_fps)} 张）："
+            f"{rel(root, baseline_file)}；后续各话将与该基准比对整话漂移。"
+        )
+        return
+    if int(baseline.get("bins") or 0) != bins:
+        notes.append("style_baseline 的 bins 与当前不一致，跳过跨话基准比对；用 --rebaseline 重建。")
+        return
+    if str(baseline.get("source_chapter")) == chapter:
+        notes.append(f"本话即基准话（{chapter}），跨话基准比对跳过。")
+        return
+    similarity = cosine(chapter_fp, [float(v) for v in baseline.get("chapter_fingerprint") or []])
+    if similarity < BASELINE_DRIFT_WARN:
+        add_finding(
+            findings,
+            severity="warn",
+            code="chapter_style_drift_from_baseline",
+            artifact=rel(root, baseline_file),
+            reason=(
+                f"本话整体风格指纹与基准话（{baseline.get('source_chapter')}）相似度 {similarity:.4f}"
+                f" < {BASELINE_DRIFT_WARN}：整话可能一起漂了（换模型版本/风格锚失效），话内相对比较发现不了这种漂移。"
+            ),
+            suggested_fix="与基准话并排人审；确认有意演化则跑 style_consistency --rebaseline 重建基准，否则回 comic-image 统一风格锚重抽。",
+            evidence_family="cross_chapter_baseline",
+        )
+    else:
+        notes.append(f"跨话基准比对通过：与基准话（{baseline.get('source_chapter')}）相似度 {similarity:.4f}。")
+    anchor_fps = [
+        [float(v) for v in item.get("fingerprint") or []]
+        for item in baseline.get("anchor_fingerprints") or []
+        if isinstance(item, dict)
+    ]
+    if anchor_fps:
+        anchor_sim = max(cosine(chapter_fp, fp) for fp in anchor_fps)
+        if anchor_sim < BASELINE_DRIFT_WARN:
+            add_finding(
+                findings,
+                severity="warn",
+                code="style_anchor_drift",
+                artifact=rel(root, baseline_file),
+                reason=f"本话整体指纹与风格锚图最高相似度仅 {anchor_sim:.4f}，风格锚可能已失去约束力。",
+                suggested_fix="并排比对锚图与本话 contact sheet；必要时更新风格锚或统一重抽。",
+                evidence_family="cross_chapter_baseline",
+            )
 
 
 def internal_gutter_count(path: Path) -> int:
@@ -316,9 +464,11 @@ def panel_contexts(root: Path, chapter: str) -> dict[str, dict[str, str]]:
         pid = str(panel.get("panel_id") or "")
         if pid:
             explicit = str(panel.get("style_bucket") or panel.get("scene_family") or panel.get("visual_context") or "").strip()
+            scene_anchor = str(panel.get("scene_anchor_id") or panel.get("scene_id") or panel.get("location_id") or "").strip()
             out[pid] = {
                 "location": str(panel.get("location") or "unknown").strip() or "unknown",
                 "style_bucket": explicit,
+                "scene_anchor_id": scene_anchor,
             }
     return out
 
@@ -495,12 +645,29 @@ def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, 
     if not records:
         return
     accepted_count = 0
+    expired: list[str] = []
+    unbound: list[str] = []
+    blocked_attempts: list[str] = []
     for finding in findings:
         if finding.get("severity") not in {"block", "warn"}:
             continue
         record = matching_acceptance(finding, records)
         if not record:
             continue
+        label = f"{finding.get('code')}@{finding.get('panel_id') or finding.get('artifact')}"
+        if finding.get("severity") == "block":
+            # block 级（拼贴 gutter/外框/缺图/严重离群）是硬证据，签收不能洗掉。
+            blocked_attempts.append(label)
+            continue
+        recorded_sha = str(record.get("artifact_sha256") or "").strip()
+        artifact_path = resolve_path(root, str(finding.get("artifact") or ""))
+        if recorded_sha:
+            current_sha = file_sha256(artifact_path) if artifact_path.is_file() else ""
+            if current_sha != recorded_sha:
+                expired.append(label)
+                continue
+        else:
+            unbound.append(label)
         machine_severity = str(finding.get("severity") or "")
         finding["machine_severity"] = machine_severity
         finding["severity"] = "info"
@@ -511,6 +678,7 @@ def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, 
             "accepted_at": str(record.get("accepted_at") or ""),
             "reason": str(record.get("reason") or ""),
             "evidence": str(record.get("evidence") or ""),
+            "artifact_sha256": recorded_sha,
             "source": rel(root, path),
         }
         if record.get("suggested_followup"):
@@ -520,9 +688,22 @@ def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, 
         accepted_count += 1
     if accepted_count:
         notes.append(f"已按 {rel(root, path)} 人审签收 {accepted_count} 条风格一致性 finding；原始机器 severity 保留在 machine_severity。")
+    if expired:
+        notes.append("以下签收因图像 sha 已变化（重抽后）自动失效，需重新复核：" + "、".join(expired[:10]))
+    if unbound:
+        notes.append("以下签收未绑定 artifact_sha256，重抽后不会自动失效；建议在签收记录里补 sha：" + "、".join(unbound[:10]))
+    if blocked_attempts:
+        notes.append("block 级机检 finding 不可签收，已忽略对应签收记录：" + "、".join(blocked_attempts[:10]))
 
 
-def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: int = DEFAULT_BINS) -> dict[str, Any]:
+def analyze(
+    root: Path,
+    chapter: str,
+    *,
+    margin: float = DEFAULT_MARGIN,
+    bins: int = DEFAULT_BINS,
+    rebaseline: bool = False,
+) -> dict[str, Any]:
     root = root.resolve()
     ids = panel_order(root, chapter)
     contexts = panel_contexts(root, chapter)
@@ -606,6 +787,7 @@ def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: i
             "panel_id": pid,
             "path": rel(root, path),
             "location": context.get("location", "unknown"),
+            "scene_anchor_id": context.get("scene_anchor_id", ""),
             "style_context_bucket": style_context_bucket(context.get("location", "unknown"), context.get("style_bucket", "")),
             "size": data["size"],
             "sat_mean": round(float(data["sat_mean"]), 4),
@@ -613,6 +795,9 @@ def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: i
             "edge_density": round(float(data["edge_density"]), 4),
             "warmth": round(float(data["warmth"]), 4),
             "tint": round(float(data["tint"]), 4),
+            "black_ratio": round(float(data["black_ratio"]), 4),
+            "white_ratio": round(float(data["white_ratio"]), 4),
+            "midgray_ratio": round(float(data["midgray_ratio"]), 4),
             "internal_gutters": internal_gutter_count(path),
             "outer_frame_edges": outer_frame_edges(path),
         }
@@ -727,6 +912,65 @@ def analyze(root: Path, chapter: str, *, margin: float = DEFAULT_MARGIN, bins: i
                     suggested_fix="人审确认是否为有意光效；否则统一白平衡/冷暖光口径后重抽该格。",
                     evidence_family="color_grade",
                 )
+
+    # 相邻格连续性：同场景锚在阅读顺序上相邻的两格，冷暖/亮度不应跳变
+    # （光位翻转的低成本代理；轴线本身交给 VLM 三轴的 background 轴人判）。
+    prev_item: dict[str, Any] | None = None
+    for item in panels:
+        anchor = str(item.get("scene_anchor_id") or "")
+        if prev_item is not None and anchor and anchor == str(prev_item.get("scene_anchor_id") or ""):
+            warmth_jump = abs(float(item["warmth"]) - float(prev_item["warmth"]))
+            val_jump = abs(float(item["val_mean"]) - float(prev_item["val_mean"]))
+            if warmth_jump > ADJACENT_WARMTH_JUMP or val_jump > ADJACENT_VAL_JUMP:
+                add_finding(
+                    findings,
+                    severity="warn",
+                    code="adjacent_panel_grade_jump",
+                    panel_id=item["panel_id"],
+                    artifact=item["path"],
+                    reason=(
+                        f"与同场景锚 {anchor} 的前一格 {prev_item['panel_id']} 相比冷暖/亮度跳变："
+                        f"warmth_jump={warmth_jump:.3f}, val_jump={val_jump:.3f}；疑似光位翻转或昼夜漂移。"
+                    ),
+                    suggested_fix="并排两格人审；非剧情光效则按场景锚 lighting_anchor 重抽该格。",
+                    evidence_family="adjacent_continuity",
+                )
+        prev_item = item
+
+    # 黑白灰量化一致性：黑场占比与线宽代理（边缘密度）与话内中位比。
+    if len(panels) >= 4:
+        black_floor = median([float(item["black_ratio"]) for item in panels])
+        edge_floor = median([float(item["edge_density"]) for item in panels])
+        for item in panels:
+            black_dev = abs(float(item["black_ratio"]) - black_floor)
+            edge_dev_ratio = abs(float(item["edge_density"]) - edge_floor) / max(edge_floor, 1e-6)
+            if black_dev > TONE_BLACK_DEV or edge_dev_ratio > TONE_EDGE_DEV_RATIO:
+                add_finding(
+                    findings,
+                    severity="warn",
+                    code="tone_value_outlier",
+                    panel_id=item["panel_id"],
+                    artifact=item["path"],
+                    reason=(
+                        f"黑白灰量化偏离话内中位：black_ratio={item['black_ratio']}（中位 {black_floor:.3f}），"
+                        f"线宽代理 edge_density={item['edge_density']}（中位 {edge_floor:.3f}）。"
+                        "疑似网点密度/黑场/线宽口径不统一。"
+                    ),
+                    suggested_fix="对照 finishing_plan 的 tone/black/ink 计划人审；口径确实漂了则统一收尾契约后重抽。",
+                    evidence_family="tone_value",
+                )
+
+    check_style_baseline(
+        root,
+        chapter,
+        fingerprints,
+        panels,
+        registry if isinstance(registry, dict) else {},
+        findings,
+        notes,
+        bins=bins,
+        rebaseline=rebaseline,
+    )
 
     apply_manual_acceptances(root, chapter, findings, notes)
     return make_report(root, chapter, panels, findings, notes, margin, bins, available=True)
@@ -856,11 +1100,12 @@ def main() -> int:
     parser.add_argument("--chapter", default="第1话")
     parser.add_argument("--margin", type=float, default=DEFAULT_MARGIN)
     parser.add_argument("--bins", type=int, default=DEFAULT_BINS)
+    parser.add_argument("--rebaseline", action="store_true", help="用本话重建 出图/共享/style_baseline.json 跨话风格基准")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
-    report = analyze(root, args.chapter, margin=args.margin, bins=args.bins)
+    report = analyze(root, args.chapter, margin=args.margin, bins=args.bins, rebaseline=args.rebaseline)
     paths = write_outputs(root, args.chapter, report)
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))

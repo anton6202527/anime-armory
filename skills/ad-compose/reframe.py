@@ -14,6 +14,7 @@
     python3 reframe.py --src 1920x1080 --target 9:16 --in 合成/成片_主片.mp4 --render
 """
 import argparse
+import json
 import os
 import shutil
 import subprocess
@@ -33,7 +34,7 @@ def aspect_value(s):
 
 
 def reframe_filter(src_wh, target_aspect, mode="crop", out_long=1920,
-                   crop_x=None, crop_y=None):
+                   crop_x=None, crop_y=None, focus_plan=None):
     """返回 ffmpeg -vf 滤镜串：把 src 分辨率 reframe 到 target 比例。
 
     mode=crop：裁切到目标比例。crop_x/crop_y 为归一焦点（0..1，主体中心在源画面的相对位置）；
@@ -45,6 +46,22 @@ def reframe_filter(src_wh, target_aspect, mode="crop", out_long=1920,
     ow, oh = out_resolution(target_aspect, out_long)
 
     if mode == "crop":
+        if focus_plan:
+            # placement/shot-aware dynamic crop: each plan row is {start,end,x,y}.
+            def expr(axis, fallback):
+                coord = "iw" if axis == "x" else "ih"
+                out = ow if axis == "x" else oh
+                value = fallback
+                for row in reversed(focus_plan):
+                    start, end = float(row["start"]), float(row["end"])
+                    focus = max(0.0, min(1.0, float(row.get(axis, 0.5))))
+                    pos = f"max(0\\,min({coord}-{out}\\,{focus:.4f}*{coord}-{out}/2))"
+                    value = f"if(between(t\\,{start:.3f}\\,{end:.3f})\\,{pos}\\,{value})"
+                return value
+            x_default = f"(iw-{ow})/2"
+            y_default = f"(ih-{oh})/2"
+            return (f"scale={ow}:{oh}:force_original_aspect_ratio=increase,"
+                    f"crop={ow}:{oh}:{expr('x', x_default)}:{expr('y', y_default)},setsar=1")
         if crop_x is None and crop_y is None:
             # 中心裁切（原行为）
             return (f"scale={ow}:{oh}:force_original_aspect_ratio=increase,"
@@ -108,12 +125,18 @@ def main():
                     help="归一焦点 X（0..1，主体水平中心位置）；不传=中心裁切")
     ap.add_argument("--crop-y", type=float, default=None,
                     help="归一焦点 Y（0..1，主体垂直中心位置）；不传=中心裁切")
+    ap.add_argument("--focus-plan", default=None,
+                    help="逐镜动态焦点 JSON：[{start,end,x,y},...]；优先于单一 --crop-x/--crop-y")
     ap.add_argument("--in", dest="in_path", default=None, help="输入 MP4（--render 时用）")
     ap.add_argument("--render", action="store_true", help="实际 ffmpeg 输出 reframe MP4")
     ap.add_argument("--out", default=None, help="渲染输出路径（默认 多比例/成片_<比例>.mp4）")
     args = ap.parse_args()
+    focus_plan = None
+    if args.focus_plan:
+        with open(args.focus_plan, encoding="utf-8") as fh:
+            focus_plan = json.load(fh)
     vf = reframe_filter(args.src, args.target, args.mode, args.out_long,
-                        args.crop_x, args.crop_y)
+                        args.crop_x, args.crop_y, focus_plan)
     ow, oh = out_resolution(args.target, args.out_long)
     print(f"# {args.src} → {args.target} ({args.mode})  输出 {ow}x{oh}")
     print(vf)
@@ -132,7 +155,7 @@ def main():
         out_path = args.out or out_default
         ok, msg = render_reframe(args.in_path or "", out_path, vf)
         print(("[ok] " if ok else "[skip] ") + msg)
-        sys.exit(0 if ok else 0)
+        sys.exit(0 if ok else 1)
     sys.exit(0)
 
 

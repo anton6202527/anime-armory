@@ -7,6 +7,8 @@ description: 画漫画排版阶段。Use when turning panel_script.json and opti
 
 把 `panel_script.json` 转成可出图、可嵌字、可审查的 `layout.json`。本阶段决定阅读顺序、格子尺寸、留白、节奏和气泡占位，不负责生成最终图像。
 
+**形态支持边界**：deterministic 脚本 `build_layout.py` 只会产出单列条漫几何（layout 会带 `geometry_profile=longstrip_single_column` 与 `format_supported_by_script` 标记）。`漫画形态=页漫/四格` 时，页内多格网格、RTL 阅读方向和分页装订必须由人工或 agent 重排 layout.json；不重排直接出图会被 `comic-review gate` 的 `format_geometry_mismatch` 阻断。
+
 ## 输入
 
 - `_设置.md`：漫画形态、阅读方向、页面尺寸、单话分段高度、原稿规格。

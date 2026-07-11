@@ -76,7 +76,7 @@ PRODUCT_SEMANTIC_MARKERS = (
     "cta", "end card", "endcard", "片尾", "预约", "购买", "下载", "扫码",
 )
 TEXT_LEGIBILITY_MARKERS = (
-    "文字", "文案", "slogan", "cta", "legal", "法律声明", "字幕", "明日清单", "星盒", "立即", "预约",
+    "文字", "文案", "slogan", "cta", "legal", "法律声明", "字幕", "立即", "预约",
 )
 TEXT_LOCK_MARKERS = (
     "清晰", "可读", "不乱码", "不要乱码", "不改文字", "不要改文字", "保留", "准确显示",
@@ -553,9 +553,10 @@ def check_brand_color(shot_label: str, img_path: Optional[Path], brand_hex: Opti
                     return [_finding("warn", shot_label, "brand_color",
                                      f"品牌色 {brand_hex} 像素证据偏少（ΔE≤12 占比 {strict_ratio:.3%}），"
                                      "缺产品区域信息，需人工复核品牌露出是否足够", detail)]
-                return [_finding("block", shot_label, "brand_color",
+                detail["confidence"] = "heuristic"
+                return [_finding("warn", shot_label, "brand_color",
                                  f"画面中基本检不到品牌色 {brand_hex}（最小 ΔE={min_de:.1f}，"
-                                 f"ΔE≤12 占比 {strict_ratio:.3%}），疑品牌色丢失，必重抽", detail)]
+                                 f"ΔE≤12 占比 {strict_ratio:.3%}）；无产品 ROI 时仅提示人工复核", detail)]
             if de > BRAND_COLOR_DE_WARN:
                 return [_finding("warn", shot_label, "brand_color",
                                  f"整图主色偏离 {brand_hex}（ΔE={de:.1f}），但检测到品牌色像素证据；"
@@ -632,8 +633,9 @@ def check_dhash_group(labels_paths: List[Tuple[str, Optional[Path]]], Image: Any
                   "region": "product_bbox" if product_region_known else "whole_image"}
         if nn > DHASH_OUTLIER_BLOCK:
             if product_region_known:
-                findings.append(_finding("block", lb, "product_dhash",
-                                         f"产品图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})，疑换包装/角度全变，必重抽", detail))
+                detail["confidence"] = "heuristic"
+                findings.append(_finding("warn", lb, "product_dhash",
+                                         f"产品 ROI 与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})，启发式提示人工复核", detail))
             else:
                 findings.append(_finding("warn", lb, "product_dhash",
                                          f"整张广告图与组内最近邻差 {nn} bit (>{DHASH_OUTLIER_BLOCK})；"
@@ -695,8 +697,9 @@ def check_logo(shot_label: str, img_path: Optional[Path], logo_template: Path,
     detail = {"ncc_peak": round(peak, 3), "threshold_warn": LOGO_NCC_WARN, "threshold_block": LOGO_NCC_BLOCK,
               "template": str(logo_template)}
     if peak < LOGO_NCC_BLOCK:
-        return [_finding("block", shot_label, "logo",
-                         f"产品镜基本检不到注册 logo（NCC={peak:.2f}<{LOGO_NCC_BLOCK}），疑 logo 缺失/严重形变，必修", detail)]
+        detail["confidence"] = "heuristic"
+        return [_finding("warn", shot_label, "logo",
+                         f"产品镜粗模板基本检不到注册 logo（NCC={peak:.2f}<{LOGO_NCC_BLOCK}）；未做尺度/透视校准，仅提示人工复核", detail)]
     if peak < LOGO_NCC_WARN:
         return [_finding("warn", shot_label, "logo",
                          f"产品镜 logo 匹配偏弱（NCC={peak:.2f}<{LOGO_NCC_WARN}），疑形变/被遮挡，人工复核", detail)]

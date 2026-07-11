@@ -35,7 +35,7 @@ AI 生图对**小文字 / logo 字形**仍不稳。策略：
 
 ## 机检（已落地 · `scripts/product_qc.py`）
 
-二期设想的产品一致性机检**已实现并前移到出图落档**，是 gate spend 的硬闸（不再只是散文/人审）。出完图、还没继续出视频时跑：
+产品一致性机检**已实现并前移到出图落档**，是 gate spend 的硬闸（不再只是散文/人审）。出完图、还没继续出视频时跑：
 
 ```bash
 python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--strict]

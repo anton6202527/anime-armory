@@ -111,6 +111,14 @@ def check_clip(root, clip, job, ref_row, identity_registry):
         ("continuity.end_state", c.get("end_state")),
         ("continuity.constraints", c.get("constraints")),
         ("continuity.negative", c.get("negative")),
+        ("continuity.identity_state", c.get("identity_state")),
+        ("continuity.wardrobe_state", c.get("wardrobe_state")),
+        ("continuity.prop_state", c.get("prop_state")),
+        ("continuity.scene_topology", c.get("scene_topology")),
+        ("continuity.screen_direction", c.get("screen_direction")),
+        ("continuity.eyeline", c.get("eyeline")),
+        ("continuity.motion_vector", c.get("motion_vector")),
+        ("continuity.lighting_state", c.get("lighting_state")),
         ("identity_contract.lead_identity_anchor", ident.get("lead_identity_anchor")),
         ("shot_design.camera_movement", (clip.get("shot_design") or {}).get("camera_movement")),
         ("shot_design.lighting", (clip.get("shot_design") or {}).get("lighting")),
@@ -195,6 +203,7 @@ def build_report(root):
         hard_blocks += sum(1 for f in findings if f.get("level") == "block")
         warnings += sum(1 for f in findings if f.get("level") == "warn")
         rows.append({"clip_id": cid, "findings": findings, "verdict": "block" if any(f.get("level") == "block" for f in findings) else ("review" if findings else "ok")})
+    input_paths = ("分镜/clip_plan.json", "出视频/jobs_manifest.json", "设定/identity_registry.json", "分镜/reference_plan.json")
     report = {
         "schema_version": 2,
         "kind": "mv_video_inherit_contract",
@@ -206,6 +215,7 @@ def build_report(root):
             "identity_registry": "设定/identity_registry.json",
             "reference_plan": "分镜/reference_plan.json",
         },
+        "inputs_sha256": {rel: mv_utils.content_hash(os.path.join(root, rel)) for rel in input_paths},
         "summary": {
             "clips": len(plan_clips),
             "hard_blocks": hard_blocks,

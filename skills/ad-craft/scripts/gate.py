@@ -11,6 +11,7 @@ import importlib.util
 import json
 import os
 import sys
+from pathlib import Path
 
 import contract
 
@@ -62,6 +63,32 @@ def has_files(folder, suffixes):
         if name.lower().endswith(suffixes):
             return True
     return False
+
+
+def _newest_mtime(paths):
+    newest = 0.0
+    for raw in paths:
+        path = Path(raw)
+        if path.is_dir():
+            for child in path.rglob("*"):
+                if child.is_file():
+                    newest = max(newest, child.stat().st_mtime)
+        elif path.is_file():
+            newest = max(newest, path.stat().st_mtime)
+    return newest
+
+
+def report_freshness_findings(report_path, source_paths, code):
+    """A clean but stale report is not evidence for newer inputs."""
+    if not os.path.isfile(report_path):
+        return []
+    report_mtime = os.path.getmtime(report_path)
+    newest = _newest_mtime(source_paths)
+    if newest and report_mtime + 1e-6 < newest:
+        return [finding("block", f"{code}_stale",
+                        f"{os.path.basename(report_path)} 早于其输入产物，必须重跑；旧报告不能证明新产物通过",
+                        report_path)]
+    return []
 
 
 def brief_findings(root):
@@ -211,6 +238,10 @@ def image_output_backend_findings(root):
                                f"已落图 job {job.get('job_id') or job.get('shot') or '?'} 缺 backend provenance",
                                manifest_path))
             continue
+        if job.get("requires_image_input") and not job.get("actual_reference_inputs"):
+            out.append(finding("block", "image_output_reference_inputs_missing",
+                               f"产品镜 job {job.get('job_id') or '?'} 已完成但 actual_reference_inputs=0；"
+                               "prompt 声称引用不等于真实图片输入", manifest_path))
         canon, kind = contract.classify_image_backend(backend)
         seen.add(canon or backend)
         if kind == "forbidden":
@@ -278,6 +309,12 @@ def product_qc_findings(root):
                            "产品一致性报告仍含 no_image pending 项，需先补产品镜图并重跑 product_qc", path))
     if warns:
         out.append(finding("warn", "product_qc_warn", f"产品一致性 warn={warns}，需人工确认", path))
+    out.extend(report_freshness_findings(path, [
+        os.path.join(root, "脚本", "storyboard.json"),
+        os.path.join(root, "出图", "分镜", "prompt"),
+        os.path.join(root, "出图", "分镜", "图片"),
+        os.path.join(root, "出图", "共享", "asset_registry.json"),
+    ], "product_qc"))
     return out
 
 
@@ -330,6 +367,11 @@ def video_contract_findings(root):
         out.append(finding("block", "video_contract_block", f"视频契约继承仍有 block={blocks}", path))
     if warns:
         out.append(finding("warn", "video_contract_warn", f"视频契约继承 warn={warns}，需人工确认", path))
+    out.extend(report_freshness_findings(path, [
+        os.path.join(root, "脚本", "storyboard.json"),
+        os.path.join(root, "出图", "分镜", "prompt", "00_总览.md"),
+        os.path.join(root, "出视频", "分镜", "prompt"),
+    ], "video_contract"))
     return out
 
 
@@ -364,9 +406,57 @@ def video_qc_findings(root):
     if blocks:
         out.append(finding("block", "video_qc_block",
                            f"出视频落档 QC 仍有 block={blocks}（产品/品牌/接缝/clip 文件需修）", path))
+    env = report.get("qc_environment") if isinstance(report.get("qc_environment"), dict) else {}
+    precision = str(env.get("precision_level") or "")
+    manual_ok = bool(env.get("manual_review_accepted") or report.get("manual_review_accepted"))
+    if precision != "full" and not manual_ok:
+        out.append(finding("block", "video_qc_precision_not_full",
+                           f"视频 QC precision={precision or 'unknown'}；正式合成前需 ffmpeg/ffprobe/Pillow 完整抽帧，或留痕人工放行",
+                           path))
     if warns:
         out.append(finding("warn", "video_qc_warn", f"出视频落档 QC warn={warns}，需人工确认", path))
+    out.extend(report_freshness_findings(path, [
+        os.path.join(root, "出视频", "分镜", "视频"),
+        os.path.join(root, "出视频", "分镜", "prompt"),
+        os.path.join(root, "出视频", "分镜", "contract_inheritance.json"),
+    ], "video_qc"))
     return out
+
+
+def producer_pack_findings(root):
+    module = _load_sibling_module("producer_pack")
+    pack = module.build_pack(Path(root))
+    blocks = int(((pack.get("summary") or {}).get("approval_blocks")) or 0)
+    out = []
+    if blocks:
+        out.append(finding("block", "producer_pack_block",
+                           f"制片前控包仍有 approval_blocks={blocks}；claim 依据/授权/法律声明/资产绑定未闭合",
+                           os.path.join(root, "生产数据", "producer_pack.json")))
+    return out
+
+
+def platform_pack_findings(root):
+    module = _load_sibling_module("platform_pack")
+    pack = module.build_pack(Path(root))
+    out = []
+    for item in pack.get("findings") or []:
+        sev = item.get("severity") if item.get("severity") in {"block", "warn"} else "warn"
+        out.append(finding(sev, str(item.get("code") or "platform_pack"),
+                           str(item.get("msg") or "平台规格需复核"),
+                           os.path.join(root, "生产数据", "platform_pack.json")))
+    return out
+
+
+def score_findings(root):
+    """Creative heuristics stay advisory; only the separate ad-law gate can BLOCK."""
+    path = os.path.join(root, "评分", "ad_score.json")
+    report = load_json(path)
+    if not isinstance(report, dict):
+        return [finding("warn", "ad_score_missing", "未生成目标化 pre-spend 创意评分；建议先跑 ad-score", path)]
+    tier = str(report.get("tier") or "")
+    if tier in {"revise", "reject"}:
+        return [finding("warn", "ad_score_advisory", f"创意评分为 {tier}；启发式只提示复核，不作为付费硬阻断", path)]
+    return []
 
 
 def compose_output_findings(root):
@@ -385,10 +475,13 @@ def run_gate(root, stage, allow_placeholder=False):
     findings.extend(ad_law_findings(root))
     findings.extend(storyboard_findings(root))
     findings.extend(voice_findings(root, stage, allow_placeholder))
+    findings.extend(producer_pack_findings(root))
+    findings.extend(score_findings(root))
     if stage == "image":
         # 出图前：核验生图后端治理（白名单/不混用），此时图还没生成，不查 product_qc。
         findings.extend(image_backend_findings(root))
     if stage in ("video", "compose"):
+        findings.extend(platform_pack_findings(root))
         # 图已生成：查存在性 + 产品/品牌色一致性机检（最便宜的拦截点）+ 契约继承。
         findings.extend(image_backend_findings(root))
         findings.extend(image_output_backend_findings(root))

@@ -14,6 +14,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "contract.py")
 MV_UTILS_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "mv_utils.py")
 GATE_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "gate.py")
+REGISTRY_PATH = os.path.join(REPO, "skills", "mv-craft", "scripts", "identity_registry.py")
 
 
 def load_contract():
@@ -34,9 +35,21 @@ def load_gate():
     spec.loader.exec_module(mod)
     return mod
 
+def load_registry():
+    spec = importlib.util.spec_from_file_location("mv_identity_registry", REGISTRY_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
 contract = load_contract()
 mv_utils = load_mv_utils()
 mv_gate = load_gate()
+registry = load_registry()
+
+
+def blueprint_value(blueprint, key, default=""):
+    match = re.search(rf"^\s*[-*]\s*{re.escape(key)}\s*[:：]\s*(.+)$", blueprint, re.M | re.I)
+    return match.group(1).strip() if match else default
 
 def parse_lyrics(root):
     path = os.path.join(root, "词", "lyrics.md")
@@ -88,11 +101,17 @@ def normalize_sections(bg, meta, lyric_sections):
         names = ["intro", "verse", "chorus", "outro"]
     if not duration:
         duration = 60.0
-    step = duration / len(names)
-    return [
-        {"section": name, "start": round(i * step, 3), "end": round((i + 1) * step if i + 1 < len(names) else duration, 3)}
-        for i, name in enumerate(names)
-    ]
+    lyric_counts = {row["section"]: max(1, len(row.get("lines") or [])) for row in lyric_sections}
+    weights = [lyric_counts.get(name, 1) for name in names]
+    total = float(sum(weights))
+    cursor = 0.0
+    rows = []
+    for name, weight in zip(names, weights):
+        end = duration if len(rows) == len(names) - 1 else cursor + duration * weight / total
+        rows.append({"section": name, "start": round(cursor, 3), "end": round(end, 3),
+                     "source": "unverified_lyric_weight_estimate"})
+        cursor = end
+    return rows
 
 
 def is_chorus(name):
@@ -109,9 +128,14 @@ def get_energy_at(t, energy_map):
     if not energy_map:
         return 0.5
     idx = int(t)
-    if idx < 0: return energy_map[0]
-    if idx >= len(energy_map): return energy_map[-1]
-    return energy_map[idx]
+    if idx < 0: row = energy_map[0]
+    elif idx >= len(energy_map): row = energy_map[-1]
+    else: row = energy_map[idx]
+    if isinstance(row, dict):
+        values = [float(x.get("rms") or 0) for x in energy_map if isinstance(x, dict)]
+        peak = max(values) if values else 0
+        return min(1.0, float(row.get("rms") or 0) / peak) if peak else 0.5
+    return float(row)
 
 
 def nearest_downbeat(t, downbeats):
@@ -120,30 +144,29 @@ def nearest_downbeat(t, downbeats):
     return min((float(x) for x in downbeats), key=lambda x: abs(x - t))
 
 
-def section_location(section, lyric_hint=""):
-    blob = f"{section} {lyric_hint}".lower()
-    if any(k in blob for k in ("intro", "山门", "石阶", "pre")):
-        return ("LOC_MOUNTAIN_GATE", "山门石阶")
-    if any(k in blob for k in ("chorus", "副歌", "仗剑", "山高", "水远")):
-        return ("LOC_CLOUD_SEA", "云海/山巅")
-    if any(k in blob for k in ("verse2", "客栈", "灯", "酒")):
-        return ("LOC_INN", "江湖客栈")
-    if any(k in blob for k in ("bridge", "竹林", "多年")):
-        return ("LOC_BAMBOO_FOREST", "竹林")
-    if any(k in blob for k in ("月", "伤", "雪", "荒野")):
-        return ("LOC_SNOWFIELD", "雪原/月下荒野")
-    return ("LOC_MOUNTAIN_GATE", "山门石阶")
+def section_location(section, lyric_hint, assets):
+    locations = [a for a in assets.get("assets", []) if a.get("type") == "location"]
+    if not locations:
+        return "LOC_UNSPECIFIED", "场景待从语义分镜确认"
+    blob = re.sub(r"\s+", "", f"{section} {lyric_hint}").lower()
+    scored = []
+    for asset in locations:
+        tokens = re.split(r"[/·、，,\s]+", f"{asset.get('name', '')} {asset.get('anchor', '')}".lower())
+        score = sum(1 for token in tokens if len(token) >= 2 and token in blob)
+        scored.append((score, asset))
+    best = max(scored, key=lambda row: row[0])[1]
+    return best.get("id"), best.get("name")
 
 
-def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint):
-    loc_id, loc_name = section_location(section, lyric_hint)
+def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint, assets, aspect):
+    loc_id, loc_name = section_location(section, lyric_hint, assets)
     if key:
         shot_size = "中近景/特写交替"
-        angle = "低角度或荷兰角，服务副歌爆点"
-        camera = "快速推镜头、甩镜或半环绕，动作峰值压在重拍"
+        angle = "低角度、正面或三分之二机位，服务段落爆点"
+        camera = "快速推进、甩镜或半环绕，动作峰值压在确认重拍"
         lens = "35mm-50mm 电影感，近景可用 70mm 压缩背景"
-        lighting = "逆光+冷青剑光，副歌光效随鼓点脉冲"
-        blocking = "主角占画面中轴，剑/衣袂形成对角线，留出转场遮挡物"
+        lighting = "继承段落色彩脚本，提高反差或光效脉冲但不更换主画风"
+        blocking = "主体占视觉重心，动作线形成清晰方向，留出转场遮挡物"
         setup_group = f"{section}/high_energy/{loc_id}"
     else:
         shot_size = "远景/中景/近景按叙事推进"
@@ -163,33 +186,36 @@ def shot_design_for(section, clip_id, key, energy_level, transition, lyric_hint)
         "location_id": loc_id,
         "location_name": loc_name,
         "setup_group": setup_group,
-        "floorplan_hint": "竖屏 9:16：主体头部不贴边，字幕安全区留在下 18%，剑尖/手部不出框",
-        "production_design": "服装、长剑、场景陈设沿同段 setup_group 连续；同一场景不换时代质感",
+        "floorplan_hint": f"目标画幅 {aspect}：主体、面部、手部和关键道具不贴边；下方字幕安全区至少留 18%",
+        "production_design": "服装、发型、关键道具和场景陈设沿同段 setup_group 连续；同一场景保持空间拓扑与时代质感",
         "take_intent": "关键镜至少两版挑动作/脸；叙事镜优先稳定和可剪",
-        "color_grade": "青白墨为底，按段落加暖灯/冷蓝；相邻镜过渡不突变",
-        "qc_notes": "检查脸、手、剑、衣服、字幕安全区、动作峰值与重拍",
+        "color_grade": "继承视觉蓝图 palette_anchor 和 section_look；相邻镜曝光、白平衡和饱和度有意连续",
+        "qc_notes": "检查身份、服装、手部、关键道具、空间方向、字幕安全区、动作峰值与重拍",
     }
 
 
-def identity_contract_for(section):
-    adult = "bridge" in str(section).lower() or "桥" in str(section)
+def identity_contract_for(section, identity_registry):
+    identities = identity_registry.get("identities") or []
+    lead_id = identity_registry.get("lead_id")
+    identity = next((x for x in identities if x.get("id") == lead_id), identities[0] if identities else {})
+    states = [x for x in identity_registry.get("identity_states", []) if x.get("identity_id") == identity.get("id")]
+    section_low = str(section).lower()
+    state = next((x for x in states if str(x.get("name", "")).lower() in section_low), states[0] if states else {})
     return {
-        "lead_id": "CHAR_LEAD_ADULT" if adult else "CHAR_LEAD_YOUNG",
-        "lead_identity_anchor": "鬓染霜、白袍泛旧、眼神沉静，仍背同一柄青锋长剑" if adult else "白衣束发玄发带·眉目清俊倔强眼·背青锋墨鞘长剑·玄色腰穗",
-        "reference_group": "REF_LEAD_ADULT" if adult else "REF_LEAD_YOUNG",
-        "wardrobe_props": ["月白/白色武袍", "玄色腰穗", "青锋长剑"],
-        "forbidden_drift": ["换脸", "换发型", "换主服装", "新增无关人物", "文字/logo/水印", "现代物件"],
+        "lead_id": identity.get("id") or "CHAR_UNSPECIFIED",
+        "identity_state_id": state.get("state_id"),
+        "lead_identity_anchor": state.get("anchor") or identity.get("anchor") or "身份锚点待补",
+        "reference_group": identity.get("reference_group"),
+        "wardrobe_props": [],
+        "forbidden_drift": identity.get("forbidden_drift") or ["换脸", "换发型", "无依据换服装", "新增无关人物", "文字/logo/水印"],
     }
 
 
-def reference_inputs_for(section, location_id):
-    refs = [
-        {"path": "出图/共享/图片/定妆_少年_常态.png", "use": "lead_identity"},
-        {"asset_id": location_id, "use": "scene_anchor"},
-        {"asset_id": "PROP_QINGFENG_SWORD", "use": "prop_anchor"},
-    ]
-    if "bridge" in str(section).lower():
-        refs[0] = {"asset_id": "CHAR_LEAD_ADULT", "use": "adult_variant_planned"}
+def reference_inputs_for(identity_contract, location_id, identity_registry):
+    lead = next((x for x in identity_registry.get("identities", []) if x.get("id") == identity_contract.get("lead_id")), {})
+    refs = [{"path": path, "use": "lead_identity"} for path in lead.get("reference_images", [])]
+    if location_id and location_id != "LOC_UNSPECIFIED":
+        refs.append({"asset_id": location_id, "use": "scene_anchor"})
     return refs
 
 
@@ -201,7 +227,8 @@ def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
     if energy_map:
         relevant = energy_map[int(start):int(end)+1]
         if relevant:
-            avg_energy = sum(relevant) / len(relevant)
+            samples = [get_energy_at(i, energy_map) for i in range(int(start), int(end) + 1)]
+            avg_energy = sum(samples) / len(samples) if samples else 0.5
 
     # Base bars from profile
     base_bars = profile["chorus_bars"] if is_chorus(sec["section"]) or strategy == "全程强卡点" else profile["verse_bars"]
@@ -272,7 +299,8 @@ def lyric_hint_for(section_name, lyric_sections, index):
     return lines[index % len(lines)]
 
 
-def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style):
+def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style,
+                blueprint, identities, assets, aspect):
     profile = contract.plan_granularity_profile(granularity)
     downbeats = [float(x) for x in (bg.get("downbeats") or bg.get("beats") or [])]
     energy_map = bg.get("energy_map")
@@ -302,6 +330,8 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
     raw_clips = merge_to_limit(raw_clips, profile["max_clips"])
     clips = []
     previous_end_state = ""
+    previous_section = None
+    screen_direction = "left_to_right"
     for idx, clip in enumerate(raw_clips, 1):
         clip_id = f"Clip_{idx:03d}"
         section = clip["section"]
@@ -318,16 +348,20 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         beat_anchor = nearest_downbeat(action_peak_abs, downbeats)
         action_peak_relative = round(action_peak_abs - start, 3)
         
-        action_family = "dance_hit/vfx_burst" if key else "performance_pose/expressive_walk"
-        action = f"力量等级 Level {energy_level}；副歌高光动作/光效爆点对齐击中点" if key else f"力量等级 Level {energy_level}；叙事动作完整推进，镜头缓推"
-        transition_motif = "光效切/whip pan" if key else "动作切/视线切"
-        visual_motif = "继承视觉蓝图的主角身份锚点、段落主色和本段反复母题"
+        action_family = "performance_peak/visual_burst" if key else "performance_pose/narrative_action"
+        action = f"力量等级 Level {energy_level}；段落高光动作/视觉爆点对齐确认重拍" if key else f"力量等级 Level {energy_level}；叙事或表演动作完整推进，镜头克制"
+        transition_motif = "光效切/whip pan/动作匹配切" if key else "动作切/视线切/构图匹配切"
+        visual_motif = blueprint_value(blueprint, "motif_ledger", "继承视觉蓝图的身份锚点、段落主色和反复视觉母题")
         end_state = f"{section} 段 {clip_id} 结束姿态，画面重心留给下一刀"
         start_state = previous_end_state or f"{section} 段首帧，继承视觉蓝图和定妆锚点"
+        if previous_section != section:
+            screen_direction = "left_to_right"
+        previous_section = section
         previous_end_state = end_state
-        shot_design = shot_design_for(section, clip_id, key, energy_level, transition, clip.get("lyric_hint", ""))
-        identity_contract = identity_contract_for(section)
-        reference_inputs = reference_inputs_for(section, shot_design["location_id"])
+        shot_design = shot_design_for(section, clip_id, key, energy_level, transition, clip.get("lyric_hint", ""), assets, aspect)
+        identity_contract = identity_contract_for(section, identities)
+        reference_inputs = reference_inputs_for(identity_contract, shot_design["location_id"], identities)
+        asset_ids = [x for x in (shot_design["location_id"],) if x and x != "LOC_UNSPECIFIED"]
         image_prompt = f"出图/段落/prompt/{clip_id}.md"
         video_prompt = f"出视频/prompt/{clip_id}.md"
         clips.append({
@@ -349,7 +383,8 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "shot_design": shot_design,
             "identity_contract": identity_contract,
             "reference_inputs": reference_inputs,
-            "asset_ids": [shot_design["location_id"], "PROP_QINGFENG_SWORD", "VFX_SWORD_LIGHT"],
+            "identity_ids": [identity_contract["lead_id"]],
+            "asset_ids": asset_ids,
             "image_prompt_path": image_prompt,
             "video_prompt_path": video_prompt,
             "image_path": f"出图/段落/图片/{clip_id}.png",
@@ -362,8 +397,16 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
                 "start_state": start_state,
                 "action": action,
                 "end_state": end_state,
-                "constraints": "同一段落保持角色定妆、服装发型、主色调、光线、道具、背景布局一致",
-                "negative": "不要换脸、不要换衣、不要新增人物、不要改变场景、不要生成文字/logo/水印、不要生成原生人声",
+                "identity_state": identity_contract.get("identity_state_id") or identity_contract.get("lead_id"),
+                "wardrobe_state": "继承身份状态卡；变化需显式写入 clip 合同",
+                "prop_state": "继承上一镜关键道具、持握手和开合/损伤状态",
+                "scene_topology": f"继承 {shot_design['setup_group']} 的入口、主体、背景层次和关键陈设位置",
+                "screen_direction": screen_direction,
+                "eyeline": "承接上一镜视线目标；反打时显式标记轴线变化",
+                "motion_vector": "动作速度和方向承接上一镜尾帧，峰值后保留稳定落幅",
+                "lighting_state": shot_design["lighting"],
+                "constraints": "同一段落保持身份状态、服装发型、主色调、光线、关键道具、空间拓扑和屏幕方向一致",
+                "negative": "不要换脸、不要无依据换衣、不要新增人物、不要改变场景拓扑、不要生成文字/logo/水印、不要生成原生人声",
             },
         })
     return clips
@@ -397,7 +440,7 @@ def write_prompt_files(root, clips, blueprint):
             "## 一致性锚点",
             f"- 身份锚点(lead_identity_anchor)：{clip['identity_contract']['lead_identity_anchor']}",
             f"- 参考输入(reference_inputs)：{', '.join(str(x.get('path') or x.get('asset_id')) for x in clip.get('reference_inputs', []))}",
-            f"- 视觉锚点(global_style/palette_anchor)：{clip['visual_style']}；青、白、墨为底，按段落光色变化",
+            f"- 视觉锚点(global_style/palette_anchor)：{clip['visual_style']}；按视觉蓝图 palette_anchor/section_look 变化",
             f"- 禁止漂移(forbidden_drift)：{', '.join(clip['identity_contract']['forbidden_drift'])}",
             "",
             "## 继承",
@@ -430,9 +473,17 @@ def write_prompt_files(root, clips, blueprint):
             f"- end_state：{clip['continuity']['end_state']}",
             f"- constraints：{clip['continuity']['constraints']}",
             f"- negative：{clip['continuity']['negative']}",
+            f"- identity_state：{clip['continuity']['identity_state']}",
+            f"- wardrobe_state：{clip['continuity']['wardrobe_state']}",
+            f"- prop_state：{clip['continuity']['prop_state']}",
+            f"- scene_topology：{clip['continuity']['scene_topology']}",
+            f"- screen_direction：{clip['continuity']['screen_direction']}",
+            f"- eyeline：{clip['continuity']['eyeline']}",
+            f"- motion_vector：{clip['continuity']['motion_vector']}",
+            f"- lighting_state：{clip['continuity']['lighting_state']}",
             "",
             "## 视频 prompt",
-            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{clip['shot_design']['camera_movement']}；光影继承：{clip['shot_design']['lighting']}；动态细节：发丝、衣摆、光斑或环境粒子随节拍产生物理惯性偏移；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定脸、服装、长剑、场景 setup、光色基调；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
+            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{clip['shot_design']['camera_movement']}；光影继承：{clip['shot_design']['lighting']}；动态细节遵循人物、服装、道具和环境的物理惯性；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定身份、服装、关键道具、场景 setup、空间方向或光色基调；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
         mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 
@@ -476,13 +527,18 @@ def main():
     granularity = args.granularity or settings.get("MV规划粒度") or "标准"
     strategy = args.strategy or settings.get("卡点策略") or "副歌强卡点"
     visual_style = args.visual_style or settings.get("MV视觉风格") or "电影叙事"
+    aspect = meta.get("aspect") or settings.get("合成画幅") or "16:9"
+    blueprint = mv_utils.read_text(os.path.join(root, "视觉蓝图.md"))
+    identities = registry.build_identity_registry(root)
+    assets = registry.build_asset_registry(root)
     lyric_sections = parse_lyrics(root)
     sections = normalize_sections(bg, meta, lyric_sections)
-    clips = build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style)
+    clips = build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style,
+                        blueprint, identities, assets, aspect)
     if not clips:
         print("[err] 未生成任何 clip，请检查 beatgrid duration/sections", file=sys.stderr)
         sys.exit(1)
-    write_prompt_files(root, clips, mv_utils.read_text(os.path.join(root, "视觉蓝图.md")))
+    write_prompt_files(root, clips, blueprint)
     plan = {
         "schema_version": 1,
         "kind": "mv_clip_plan",
@@ -535,6 +591,15 @@ def main():
     mv_utils.write_json(os.path.join(plan_dir, "clip_plan.json"), plan)
     mv_utils.write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
     mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
+    # Rebuild registries after clip_plan exists so asset/reference usage reflects this exact plan.
+    identities = registry.build_identity_registry(root)
+    assets = registry.build_asset_registry(root)
+    refs = registry.build_reference_plan(root, identities, assets)
+    requirements = registry.build_reference_requirements(root, identities, assets, refs)
+    mv_utils.write_json(os.path.join(root, "设定", "identity_registry.json"), identities)
+    mv_utils.write_json(os.path.join(root, "设定", "asset_registry.json"), assets)
+    mv_utils.write_json(os.path.join(root, "分镜", "reference_plan.json"), refs)
+    registry.write_reference_requirements(root, requirements)
     mv_utils.update_progress_stage(root, "plan")
     print(f"[ok] clip plan → {os.path.join(plan_dir, 'clip_plan.json')}（{len(clips)} clips）")
     print(f"[ok] timeline → {os.path.join(plan_dir, 'timeline_manifest.json')}")

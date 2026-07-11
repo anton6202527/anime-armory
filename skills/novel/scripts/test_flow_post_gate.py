@@ -251,14 +251,28 @@ class NovelRouteProgressCellTest(unittest.TestCase):
 """)
             summary = novel_route.summarize(root)
             self.assertNotIn("error", summary)
-            self.assertEqual(summary["first"]["label"], "改写")
-            self.assertEqual(summary["bottleneck"], {"改写": 1})
-            # 🟡 不回炉路由（仍是改写在前），但不能被静默吞进 done——必须单列出来。
+            # 改写是 optional 支路列：⬜ = 未启用，路由越过它直达导出，不再卡死。
+            self.assertEqual(summary["first"]["label"], "导出")
+            self.assertEqual(summary["bottleneck"], {"导出": 1})
+            # 🟡 不回炉路由，但不能被静默吞进 done——必须单列出来。
             flagged = summary["flagged"]
             self.assertEqual(len(flagged), 1)
             self.assertEqual(flagged[0]["col"], "审稿")
             self.assertEqual(flagged[0]["value"], "🟡偏长")
             self.assertTrue(flagged[0]["ch"].startswith("第01章"))
+
+    def test_optional_rewrite_column_routes_only_when_engaged(self):
+        # 显式标 ⏳ = 启用改写支路，照常路由；—（na）与 ⬜ 都不路由到改写。
+        with tempfile.TemporaryDirectory() as root:
+            write(os.path.join(root, "_进度.md"), """# 进度
+
+| 章节 | 标题 | 字数 | 大纲 | 细纲 | 正文初稿 | 机检 | 审稿 | 评分 | 改写 | 导出 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 第01章 | 开局 | 1000 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ⏳返工中 | ⬜ |
+""")
+            summary = novel_route.summarize(root)
+            self.assertNotIn("error", summary)
+            self.assertEqual(summary["first"]["label"], "改写")
 
     def test_yellow_cell_is_flagged_state_but_counts_as_done_for_routing(self):
         # cell_state 单元语义：🟡 → flagged；is_done 仍 True（路由不回炉）。

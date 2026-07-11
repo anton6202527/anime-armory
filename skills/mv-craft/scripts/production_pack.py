@@ -21,6 +21,9 @@ def load_mv_utils():
 
 
 mv_utils = load_mv_utils()
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import export_otio
 
 
 def setup_key(clip):
@@ -141,6 +144,7 @@ def write_artifacts(root, shot_list, setups, animatic):
         "- [ ] demo/full scope 已在 _meta 和 alignment_report 明确",
     ]
     mv_utils.write_text(os.path.join(prod_dir, "picture_lock_color_checklist.md"), "\n".join(checklist) + "\n")
+    mv_utils.write_json(os.path.join(root, "分镜", "timeline.otio"), export_otio.build(root))
     return prod_dir
 
 

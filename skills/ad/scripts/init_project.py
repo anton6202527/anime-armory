@@ -30,6 +30,10 @@ BRIEF_TEMPLATE = {
     "product": "",
     "usp": [],
     "audience": "",
+    "campaign_objective": "",
+    "funnel_stage": "",
+    "offer": "",
+    "landing_page": "",
     "tone": "",
     "key_message": "",
     "mandatories": {"logo": "", "slogan": "", "legal_lines": [], "endcard_cta": ""},
@@ -37,8 +41,16 @@ BRIEF_TEMPLATE = {
     "must_avoid": [],
     "deliverables": {"master_duration": "", "aspect": "", "cutdowns": []},
     "platforms": [],
+    "platform_specs": {},
+    "platform_safe_zone_evidence": {},
     "deadline": "",
     "rights": {"talent": "", "music": "", "fonts": "", "assets": ""},
+    "measurement": {
+        "primary_kpi": "",
+        "conversion_event": "",
+        "attribution_window": "",
+        "media_budget": "",
+    },
 }
 
 
@@ -93,6 +105,8 @@ def main():
         "cutdown版本": plan,
         "生视频模型": video_model,
         "生视频渠道": video_channel,
+        "广告目标": contract.DEFAULT_SETTINGS["广告目标"],
+        "漏斗阶段": contract.DEFAULT_SETTINGS["漏斗阶段"],
     }
     write_if_absent("_设置.md", contract.settings_markdown(title, setting_overrides))
     write_if_absent("_进度.md", contract.progress_markdown(title, deliverables))
@@ -113,6 +127,8 @@ def main():
 
     brief = dict(BRIEF_TEMPLATE)
     brief["brand"] = args.brand
+    brief["campaign_objective"] = contract.DEFAULT_SETTINGS["广告目标"]
+    brief["funnel_stage"] = contract.DEFAULT_SETTINGS["漏斗阶段"]
     brief["deliverables"] = {"master_duration": md, "aspect": aspect,
                              "cutdowns": [d["duration"] for d in deliverables if d["kind"] == "cutdown"]}
     if not os.path.exists(os.path.join(root, "需求", "brief.json")):

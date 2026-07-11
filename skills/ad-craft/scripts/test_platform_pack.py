@@ -23,7 +23,7 @@ def test_build_pack_includes_platform_specs_and_deliverables(tmp_path):
 
     assert pack["summary"]["platform_count"] == 2
     assert pack["summary"]["deliverable_count"] == 3
-    assert pack["specs"]["抖音"]["safe_area"] == "center_6x6"
+    assert pack["specs"]["抖音"]["safe_area"] == "placement_overlay_aware"
     assert [row["deliverable_id"] for row in pack["deliverables"]] == ["master", "cut_15s", "cut_6s"]
 
 
@@ -37,12 +37,24 @@ def test_write_pack_outputs_json(tmp_path):
     assert disk["kind"] == pp.KIND
 
 
-def test_unknown_platform_warns(tmp_path):
+def test_unknown_platform_blocks_until_current_spec_is_bound(tmp_path):
     root = tmp_path / "广告项目"
     (root / "需求").mkdir(parents=True)
     (root / "需求" / "brief.json").write_text(json.dumps({"platforms": ["新平台"]}, ensure_ascii=False), encoding="utf-8")
 
     pack = pp.build_pack(root)
 
-    assert pack["summary"]["warn"] == 1
+    assert pack["summary"]["block"] == 1
     assert pack["specs"]["新平台"]["platform_key"] == "manual"
+
+
+def test_safe_zone_evidence_closes_known_platform_release_warning(tmp_path):
+    root = _project(tmp_path)
+    brief_path = root / "需求" / "brief.json"
+    brief = json.loads(brief_path.read_text(encoding="utf-8"))
+    brief["platform_safe_zone_evidence"] = {"抖音": "合规/douyin-safe.png", "小红书": "合规/xhs-safe.png"}
+    brief_path.write_text(json.dumps(brief, ensure_ascii=False), encoding="utf-8")
+
+    pack = pp.build_pack(root)
+
+    assert not any(f["code"] == "safe_zone_asset_pending" for f in pack["findings"])

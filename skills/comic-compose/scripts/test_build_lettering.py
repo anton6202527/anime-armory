@@ -129,3 +129,51 @@ def test_build_lettering_carries_drawn_sfx_plan() -> None:
     assert item["style"]["drawn_lettering_mode"] == "drawn_sfx"
     assert item["style"]["integration"] == "along impact zone"
     assert item["style"]["shape"] == "jagged impact"
+
+
+def test_translation_todo_created_and_cleared(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    (root / "排版" / "第1话").mkdir(parents=True)
+    lettering = {
+        "language_mode": "中上英下",
+        "items": [
+            {"item_id": "L001", "panel_id": "P001", "type": "dialogue", "text": "你是谁？", "text_zh": "你是谁？"},
+            {"item_id": "L002", "panel_id": "P001", "type": "dialogue", "text": "报上名来。", "text_zh": "报上名来。", "text_en": "State your name."},
+        ],
+    }
+
+    todo = build_lettering.write_translation_todo(root, "第1话", lettering)
+
+    assert todo is not None and todo.is_file()
+    import json
+
+    payload = json.loads(todo.read_text(encoding="utf-8"))
+    assert payload["pending_count"] == 1
+    assert payload["pending"][0]["text_zh"] == "你是谁？"
+
+    # 补齐译文后重跑 → todo 清除
+    lettering["items"][0]["text_en"] = "Who are you?"
+    assert build_lettering.write_translation_todo(root, "第1话", lettering) is None
+    assert not todo.is_file()
+
+
+def test_lettering_style_baseline_persists_and_flags_mismatch(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    (root / "排版").mkdir(parents=True)
+    ch1 = {
+        "items": [
+            {"type": "dialogue", "style": {"font": "project_default", "size": 44, "direction": "horizontal", "bubble": "round"}},
+        ]
+    }
+    build_lettering.check_lettering_style_baseline(root, "第1话", ch1)
+    assert (root / "排版" / "lettering_style_baseline.json").is_file()
+    assert ch1["style_consistency"]["mismatches"] == []
+
+    ch2 = {
+        "items": [
+            {"type": "dialogue", "style": {"font": "other_font", "size": 52, "direction": "horizontal", "bubble": "round"}},
+        ]
+    }
+    build_lettering.check_lettering_style_baseline(root, "第2话", ch2)
+    mismatches = ch2["style_consistency"]["mismatches"]
+    assert mismatches and "不一致" in mismatches[0]

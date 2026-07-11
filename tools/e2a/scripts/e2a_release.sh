@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # e2a — build the Electron desktop app (desktop-electron/) as release installers
-# plus the per-line demo zip assets, and upload them to GitHub Release assets.
+# or the per-line demo zip assets, with upload enabled only by an explicit mode.
 # Successor of the retired Tauri /r2a flow. Self-contained: demo selection
 # (scripts/select_demo.cjs), skills bundler (scripts/sync_bundle.cjs) and the
 # demo-works config live in tools/e2a/; the safe payload copier is the shared
@@ -16,11 +16,14 @@ NOTARY_PROFILE="${E2A_NOTARY_KEYCHAIN_PROFILE:-}"
 UPLOAD_RETRIES="${E2A_UPLOAD_RETRIES:-6}"
 
 BUILD_APP_ASSETS=1
-BUILD_DEMO_ASSETS=1
+BUILD_DEMO_ASSETS=0
 BUILD_MAC=1
 BUILD_WIN=0
+BUILD_VSCODE=0
 REFRESH_NOTES=0
-UPLOAD=1
+UPLOAD=0
+PRIMARY_MODE="local-dmg"
+EXPLICIT_MODE=""
 TAG="${E2A_RELEASE_TAG:-}"
 WORK=""
 SOURCE_DIR=""
@@ -43,22 +46,28 @@ Usage:
 Default behaviour (no flags):
   Snapshot the local checkout, build the Electron macOS Apple Silicon DMG
   (AnimeArmory_electron_macos_arm64.dmg) WITH the bundled skills repo + demo
-  catalog, build the per-line demo zip assets, upload everything to the
-  anime-armory GitHub Release for the tag, and write SHA256SUMS.txt.
+  catalog, write SHA256SUMS.txt, and keep all artifacts local. Demo zip assets
+  are not built and nothing is uploaded.
   README download links are NOT touched and the release is NOT marked latest
   (the Tauri /r2a flow owns those).
 
 Options:
-  --apps-only, --no-demo-assets   Build/upload only the app installers.
-  --demo-assets, --demos, --demo  Build/upload only demo zip assets.
+  --up                            Build the macOS DMG and upload it.
+  --demos                         Build only demo zip assets and upload them.
+  --all                           Build all desktop installers (macOS DMG +
+                                  Windows x64 EXE) plus the VS Code VSIX and
+                                  upload them; no demo zips.
+  --apps-only, --no-demo-assets   Build only app installers (advanced/legacy).
+  --demo-assets, --demo           Alias of --demos.
   --win                           Also build the Windows x64 NSIS installer
                                   (cross-built on macOS; node-pty uses its
                                   bundled win32 NAPI prebuilds; unsigned).
+  --vscode                        Also build the VS Code VSIX (advanced).
   --no-mac                        Skip the macOS DMG (e.g. --apps-only --win
                                   --no-mac for an incremental Windows upload).
   --refresh-notes                 Overwrite release notes on an existing
                                   release (default keeps them).
-  --no-upload                     Build locally only (artifacts in dist/e2a-release-<tag>).
+  --no-upload                     Force local-only output for advanced flag combinations.
   --repo owner/name               Target GitHub repo. Default: anton6202527/anime-armory.
   --tag TAG                       Release tag. Default: electron-v<desktop-electron version>.
   -h, --help                      Show this help.
@@ -66,6 +75,7 @@ Options:
 Release artifact names:
   AnimeArmory_electron_macos_arm64.dmg
   AnimeArmory_electron_windows.exe (--win)
+  anime-armory.vsix (--vscode or --all)
   AnimeArmory_demo_novel.zip / _n2d / _comic / _song / _mv / _ad (selected works only)
 
 Environment:
@@ -79,12 +89,37 @@ Environment:
 EOF
 }
 
+select_primary_mode() {
+  local requested="$1"
+  if [[ -n "$EXPLICIT_MODE" && "$EXPLICIT_MODE" != "$requested" ]]; then
+    echo "Conflicting e2a modes: $EXPLICIT_MODE and $requested" >&2
+    exit 1
+  fi
+  EXPLICIT_MODE="$requested"
+  PRIMARY_MODE="$requested"
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --up)
+      select_primary_mode "upload-dmg"
+      BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; BUILD_MAC=1; BUILD_WIN=0; BUILD_VSCODE=0; UPLOAD=1
+      shift
+      ;;
+    --all)
+      select_primary_mode "upload-all-apps"
+      BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; BUILD_MAC=1; BUILD_WIN=1; BUILD_VSCODE=1; UPLOAD=1
+      shift
+      ;;
     --apps-only|--no-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; shift ;;
-    --demo-assets|--demos|--demo) BUILD_APP_ASSETS=0; BUILD_DEMO_ASSETS=1; shift ;;
+    --demo-assets|--demos|--demo)
+      select_primary_mode "upload-demos"
+      BUILD_APP_ASSETS=0; BUILD_DEMO_ASSETS=1; BUILD_MAC=0; BUILD_WIN=0; BUILD_VSCODE=0; UPLOAD=1
+      shift
+      ;;
     --with-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=1; shift ;;
     --win) BUILD_WIN=1; shift ;;
+    --vscode) BUILD_VSCODE=1; shift ;;
     --no-mac) BUILD_MAC=0; shift ;;
     --refresh-notes) REFRESH_NOTES=1; shift ;;
     --no-upload) UPLOAD=0; shift ;;
@@ -357,6 +392,42 @@ build_electron_windows() {
   ASSETS+=("$artifact_exe")
 }
 
+build_vscode_extension() {
+  require_cmd npx
+  require_cmd unzip
+  local extension_dir="$SOURCE_DIR/vscode-extension"
+  local artifact_vsix="$ARTIFACT_DIR/anime-armory.vsix"
+  if [[ ! -f "$extension_dir/package.json" ]]; then
+    echo "Could not locate VS Code extension package: $extension_dir/package.json" >&2
+    exit 1
+  fi
+  rm -f "$artifact_vsix"
+  echo "[e2a] packaging VS Code extension: $(basename "$artifact_vsix")"
+  (
+    cd "$extension_dir"
+    npx --yes @vscode/vsce package --out "$artifact_vsix"
+  )
+  if [[ ! -s "$artifact_vsix" ]]; then
+    echo "VS Code extension packaging failed: $artifact_vsix is missing or empty" >&2
+    exit 1
+  fi
+  unzip -tqq "$artifact_vsix"
+  if ! unzip -p "$artifact_vsix" extension/package.json | node -e '
+    let raw = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => { raw += chunk; });
+    process.stdin.on("end", () => {
+      const pkg = JSON.parse(raw);
+      if (pkg.name !== "anime-armory" || !pkg.version) process.exit(1);
+    });
+  '; then
+    echo "VS Code extension validation failed: extension/package.json is invalid" >&2
+    exit 1
+  fi
+  echo "[e2a] validated VS Code extension: $(basename "$artifact_vsix")"
+  ASSETS+=("$artifact_vsix")
+}
+
 # --- demo zip assets (same layout + slimming as r2a) -------------------------
 
 demo_line_key() {
@@ -439,6 +510,37 @@ write_checksums() {
       (cd "$(dirname "$asset")" && sha256sum "$base") >> "$OUT_DIR/SHA256SUMS.txt"
     fi
   done
+  merge_remote_checksums
+}
+
+# Incremental uploads (--win --no-mac, --demo-assets) must not clobber the
+# release's SHA256SUMS.txt with a subset: keep remote entries for assets not
+# rebuilt in this run.
+merge_remote_checksums() {
+  [[ "$UPLOAD" == "1" ]] || return 0
+  command -v gh >/dev/null 2>&1 || return 0
+  local remote="$OUT_DIR/SHA256SUMS.remote.txt"
+  gh release download "$TAG" --repo "$TARGET_REPO" \
+    --pattern "SHA256SUMS.txt" -O "$remote" --clobber 2>/dev/null || return 0
+  local merged="$OUT_DIR/SHA256SUMS.merged.txt"
+  : > "$merged"
+  local line name skip asset
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    name="${line##* }"
+    skip=0
+    for asset in "${ASSETS[@]}"; do
+      if [[ "$(basename "$asset")" == "$name" ]]; then
+        skip=1
+        break
+      fi
+    done
+    [[ "$skip" == "0" ]] && printf '%s\n' "$line" >> "$merged"
+  done < "$remote"
+  cat "$OUT_DIR/SHA256SUMS.txt" >> "$merged"
+  mv "$merged" "$OUT_DIR/SHA256SUMS.txt"
+  rm -f "$remote"
+  echo "[e2a] merged checksums with existing release SHA256SUMS.txt"
 }
 
 release_notes() {
@@ -531,6 +633,7 @@ mkdir -p "$OUT_DIR" "$ARTIFACT_DIR"
 
 echo "[e2a] release tag: $TAG"
 echo "[e2a] release repo: $TARGET_REPO"
+echo "[e2a] mode: $PRIMARY_MODE (upload=$UPLOAD, mac=$BUILD_MAC, win=$BUILD_WIN, vscode=$BUILD_VSCODE, demos=$BUILD_DEMO_ASSETS)"
 
 if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
   if [[ "$BUILD_MAC" == "1" ]]; then
@@ -539,6 +642,9 @@ if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
   if [[ "$BUILD_WIN" == "1" ]]; then
     build_electron_windows
   fi
+fi
+if [[ "$BUILD_VSCODE" == "1" ]]; then
+  build_vscode_extension
 fi
 if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
   build_demo_zip_assets

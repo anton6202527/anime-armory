@@ -75,12 +75,21 @@ def is_done(value: str) -> bool:
     return value.strip() in DONE or value.strip().startswith("✅")
 
 
-def row_stage_done(row: dict[str, str], stage: str) -> bool:
+TRADITIONAL_STAGES = ("缩略分镜", "原稿收尾")
+TRADITIONAL_OFF_VALUES = {"关闭", "off", "disabled", "false", "False"}
+
+
+def row_stage_state(row: dict[str, str], stage: str) -> str:
+    """'done' / 'pending' / 'absent'。
+
+    旧进度表可能整列缺失（如早期 7 列表没有 缩略分镜/原稿收尾）；
+    缺列表示"该阶段对此表不适用"，不能当作未完成卡死前沿。
+    """
     aliases = STAGE_ALIASES.get(stage, (stage,))
     present = [alias for alias in aliases if alias in row]
     if not present:
-        return False
-    return any(is_done(row.get(alias, "")) for alias in present)
+        return "absent"
+    return "done" if any(is_done(row.get(alias, "")) for alias in present) else "pending"
 
 
 def has_identity_blocker(root: Path, chapter: str) -> tuple[bool, str]:
@@ -203,13 +212,19 @@ def has_source_semantics_blocker(root: Path, chapter: str) -> tuple[bool, str]:
 def summarize_project(root: Path) -> dict:
     progress = root / "_进度.md"
     parsed = parse_progress(progress)
+    traditional_off = read_setting(root, "传统原稿流程", "启用").strip() in TRADITIONAL_OFF_VALUES
     fronts = []
     for row in parsed["rows"]:
         chapter = row.get("话", "未命名")
         next_stage = None
         next_skill = None
         for stage in ROUTE:
-            if not row_stage_done(row, stage):
+            if traditional_off and stage in TRADITIONAL_STAGES:
+                continue
+            state = row_stage_state(row, stage)
+            if state == "absent":
+                continue
+            if state != "done":
                 next_stage = stage
                 next_skill = ROUTE[stage]
                 break

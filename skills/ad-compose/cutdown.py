@@ -10,8 +10,8 @@
 的占位 duration——骨架 storyboard 的 0s 时长会误判成 0.00s「通过」。任一保留镜时长解析
 不出来 → 出 block 错误，拒绝出计划。
 
-`--render` 模式：按计划 trim/concat 主片对应片段、再追加 end card，产出实际 MP4
-（需要 ffmpeg；无 ffmpeg 时只出计划）。自包含纯标准库 + 单测。
+`--render` 模式：按计划从已完成混音/字幕/包装的主片 trim/concat，产出实际 MP4
+（保留完整音轨且不重复追加 end card；需要 ffmpeg，无 ffmpeg 时只出计划）。自包含纯标准库 + 单测。
 
 用法：
     python3 cutdown.py <作品根> --target 15s --json 合成/cutdown/plan_15s.json
@@ -200,61 +200,56 @@ def _clip_path_for_shot(clip_dir, sid, index):
 
 
 def render_cutdown(root, kept, total, target_label, out_path=None, aspect="16:9"):
-    """按 kept 计划，从 出视频/分镜/视频/ 取对应 clip，filter-concat 归一拼接，
-    再追加 end card（若 合成/_work/endcard.png 存在），产出 MP4。
-    返回 (ok, msg, out_path)。无 ffmpeg → (False, 提示, None)。"""
+    """从已完成主片按镜头时间段重剪，保留其 VO/音乐/字幕/法律文字。"""
     ff = _ffmpeg()
     if not ff:
         return False, "无 ffmpeg：跳过渲染（计划已出，可在带 ffmpeg 的机器上 --render）", None
-    clip_dir = os.path.join(root, "出视频", "分镜", "视频")
+    master = os.path.join(root, "合成", "成片_主片.mp4")
+    if not os.path.isfile(master):
+        return False, "缺 合成/成片_主片.mp4；cutdown 必须从已混音/字幕/响度归一主片重剪", None
     out_path = out_path or os.path.join(root, "合成", "cutdown", f"成片_{safe_label(target_label)}.mp4")
     work = os.path.join(root, "合成", "cutdown", "_work")
     os.makedirs(work, exist_ok=True)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
-    inputs = []
-    missing = []
-    for idx, sh in enumerate(kept):
-        sid = shot_id(sh)
-        # kept 的 idx 不是原 storyboard idx；按 shot_id 优先匹配
-        p = _clip_path_for_shot(clip_dir, sid, idx)
-        if p is None:
-            missing.append(sid or f"#{idx}")
-        else:
-            inputs.append(p)
-    if missing:
-        return False, f"缺 clip：{', '.join(str(m) for m in missing)}（出视频/分镜/视频/ 内未找到对应文件）", None
-    if not inputs:
-        return False, "无可拼接 clip", None
+    sb = load_json(os.path.join(root, "脚本", "storyboard.json"), {}) or {}
+    all_shots = sb.get("shots") or sb.get("clips") or []
+    dmap = duration_map_from_finalize(load_json(os.path.join(root, "脚本", "镜头时长.json"), {}) or {})
+    spans = {}
+    cursor = 0.0
+    for _, sh, dur in resolve_durations(all_shots, dmap):
+        if dur is None:
+            return False, f"镜头 {shot_id(sh)} 缺权威时长，无法从主片精确重剪音画", None
+        spans[str(shot_id(sh))] = (cursor, cursor + dur)
+        cursor += dur
+    chosen_spans = [spans.get(str(shot_id(sh))) for sh in kept]
+    if not chosen_spans or any(x is None for x in chosen_spans):
+        return False, "cutdown 选镜无法映射到主片时间段", None
 
-    endcard = os.path.join(root, "合成", "_work", "endcard.png")
-    endcard_mp4 = None
-    if os.path.isfile(endcard):
-        endcard_mp4 = os.path.join(work, "_endcard.mp4")
-        ow, oh = _aspect_size(aspect)
-        rc = subprocess.run([ff, "-y", "-loop", "1", "-t", "2.5", "-i", endcard,
-                             "-vf", f"scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
-                                    f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30",
-                             "-c:v", "libx264", "-pix_fmt", "yuv420p", endcard_mp4],
-                            capture_output=True, text=True)
-        if rc.returncode != 0:
-            return False, f"end card 转视频失败：{rc.stderr[-400:]}", None
-        inputs.append(endcard_mp4)
-
-    # 异构 clip 用 filter-concat 归一（scale/fps/setsar），不用 -c copy（会静默产出损坏）
+    probe = subprocess.run([shutil.which("ffprobe") or "ffprobe", "-v", "error", "-select_streams", "a",
+                            "-show_entries", "stream=index", "-of", "csv=p=0", master],
+                           capture_output=True, text=True)
+    has_audio = probe.returncode == 0 and bool(probe.stdout.strip())
     ow, oh = _aspect_size(aspect)
-    args = [ff, "-y"]
-    for p in inputs:
-        args += ["-i", p]
-    n = len(inputs)
+    args = [ff, "-y", "-i", master]
+    n = len(chosen_spans)
     pre = []
-    for k in range(n):
-        pre.append(f"[{k}:v]scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
+    for k, (start, end) in enumerate(chosen_spans):
+        pre.append(f"[0:v]trim=start={start}:end={end},setpts=PTS-STARTPTS,"
+                   f"scale={ow}:{oh}:force_original_aspect_ratio=decrease,"
                    f"pad={ow}:{oh}:(ow-iw)/2:(oh-ih)/2:black,setsar=1,fps=30[v{k}]")
+        if has_audio:
+            pre.append(f"[0:a]atrim=start={start}:end={end},asetpts=PTS-STARTPTS[a{k}]")
     concat_in = "".join(f"[v{k}]" for k in range(n))
-    fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=0[outv]"
-    args += ["-filter_complex", fc, "-map", "[outv]",
-             "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
+    if has_audio:
+        concat_in = "".join(f"[v{k}][a{k}]" for k in range(n))
+        fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=1[outv][outa]"
+        args += ["-filter_complex", fc, "-map", "[outv]", "-map", "[outa]",
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", out_path]
+    else:
+        fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=0[outv]"
+        args += ["-filter_complex", fc, "-map", "[outv]",
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         return False, f"cutdown 渲染失败：{rc.stderr[-600:]}", None
@@ -323,7 +318,7 @@ def main():
         print(("[ok] " if render_result["ok"] else "[skip] ") + render_result["msg"])
     elif args.render and blocked:
         print("[skip] 计划被阻断，未渲染")
-    sys.exit(0)
+    sys.exit(1 if args.render and render_result and not render_result["ok"] else 0)
 
 
 if __name__ == "__main__":

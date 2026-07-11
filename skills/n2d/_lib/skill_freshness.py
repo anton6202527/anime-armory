@@ -77,6 +77,14 @@ N2D_LIB_OBSERVE_ONLY_TOKENS = (
     "_lib/prework_cache.py",
     "_lib/n2d_cross_episode.py",
     "_lib/n2d_maintenance.py",
+    # 血缘索引：只从既有产物派生节点/边，从不改变阶段状态或替代 _进度.md/gate。
+    "_lib/episode_graph.py",
+    # 控制面 telemetry：只记阶段/停点/缓存/耗时事件，不产也不改任何物料。
+    "_lib/flow_telemetry.py",
+    # 把 NextAction 停点归一化成修复导向 bundle，纯控制面，不产物料。
+    "_lib/n2d_blocking.py",
+    # 制作模式路由只给证据化建议，从不改写 _设置.md、不构成阻断 gate。
+    "_lib/production_mode_router.py",
 )
 # 命中即只改 gate/QC 结论、不改 prompt/PNG/视频产物（与 update_plan.GATE_ONLY_FILE_STAGE_HINTS 对齐的常见项）。
 GATE_ONLY_TOKENS = (

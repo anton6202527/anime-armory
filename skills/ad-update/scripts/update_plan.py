@@ -56,6 +56,7 @@ SKILL_DEFAULT_STAGE = {
     "ad-video": "video",
     "ad-compose": "compose",
     "ad-review": "review",
+    "ad-feedback": "feedback",
     "ad-progress": "brief",
     "ad-update": "brief",
 }

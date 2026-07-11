@@ -270,12 +270,14 @@ def build_planned_srt_from_storyboard(clips):
         if not lines:
             t += dur
             continue
-        span = max(0.8, dur / len(lines))
+        # 每条 cue 必须严格留在所属 Clip 内。旧逻辑强制最短 0.8s，短镜多行时
+        # 会让后续 cue 起点越过 clip end；可读性问题应回分镜加时，而不是污染时间轴。
+        span = dur / len(lines)
         for j, line in enumerate(lines):
             start = t + j * span
             end = t + dur if j == len(lines) - 1 else min(t + dur, start + span)
             if end <= start:
-                end = start + 0.8
+                end = min(t + dur, start + max(span, 0.001))
             cues.append(f"{idx}\n{_ts(start)} --> {_ts(end)}\n{_wrap_zh(_clean_punct(line))}\n")
             idx += 1
         t += dur

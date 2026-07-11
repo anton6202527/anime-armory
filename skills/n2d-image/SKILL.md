@@ -154,6 +154,8 @@ description: Stage 4 of n2d pipeline — for a 作品 episode whose mode-aware �
 
 ## 逐镜参考规划（治跨集脸漂 · 出图前前置）
 
+场景参考规划不是建议性孤岛：`scene_reference_planner.py` 产出的核心高复用场景计划必须指向真实 master plate/reference group；声称走后端主体库时，对应主体状态必须是 `registered/ready`；触发 scene LoRA 升档却仍未登记时，image gate 阻断。`scene_lock.py` 的执行回执与实际 primary/master 文件由 gate 对账，不能只写 planner 文案。
+
 **为什么**：跨集脸漂的一个真因是——不同集的**服装/表情/景别/角度/光线**变化时，只靠**单张定妆照做图生图不够准**。定妆照对 AI 只是"固定板式"，身份判别细节不足，模型在新条件下会重画整张脸，逐集累积成漂移。光有标准三视图定妆**不等于**每镜都喂对了参考。
 
 **怎么治**：付费出图前先跑**能力路由的逐镜参考规划器**，它按**每镜变化量 × 所选后端真实能力**给出"这一镜该喂哪些参考 + 要不要控制网 + 要不要升档"的处方：

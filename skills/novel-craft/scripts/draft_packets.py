@@ -1504,6 +1504,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。
+- 若本章确实回答了读者契约的核心戏剧问题（解决主线核心冲突），必须把状态增量的 `core_conflict_resolved` 置 `true` 如实声明——非终局章节的该声明会被弧段 gate 硬阻断（反向刹车），瞒报则只剩关键词提醒、失去硬保护。
 - 写完后填写 `{delta_path}`，再跑 `python3 skills/novel-review/scripts/mechanical_check.py "{root}"`（字数带宽会自动读取 `_meta.target_wordcount_min_max`，不要手填旧默认）；若已选择 `边写边自检`，同步填写 `{concl_path}`，继续跑 `python3 skills/novel/scripts/post_write.py "{root}" --chapter 第{chapter:02d}章 --conclusion "{root}/{concl_path}"`。
 
 ## 状态增量模板
@@ -1520,6 +1521,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
   "threads_resolved": [],
   "reader_contract_progress": [],
   "theme_alignment": "",
+  "core_conflict_resolved": false,
   "setting_constraints_added": [],
   "next_chapter_carry": []
 }}

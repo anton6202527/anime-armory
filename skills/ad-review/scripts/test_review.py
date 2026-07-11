@@ -3,6 +3,7 @@
 import json
 import os
 import tempfile
+import time
 import unittest
 
 import review
@@ -22,6 +23,9 @@ class ReviewTest(unittest.TestCase):
         self._write_json(root, "配音/时长清单.json", {"has_placeholder": False})
         self._write_json(root, "出视频/分镜/video_qc.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合规/ai_usage.json", {"visual_mode": "AI-generated"})
+        self._write_json(root, "合规/compliance_manifest.json", {"summary": {"release_ready": True, "block": 0}})
+        self._write_json(root, "生产数据/consistency_findings.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合成/delivery_qc.json", {"summary": {"block": 0, "warn": 0}})
         with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
             f.write("""## 交付版本矩阵
 | 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
@@ -34,6 +38,15 @@ class ReviewTest(unittest.TestCase):
             self._base(root)
             payload = review.review(root)
             self.assertEqual(payload["summary"]["block"], 0)
+
+    def test_review_blocks_stale_delivery_qc(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._base(root)
+            time.sleep(0.002)
+            with open(os.path.join(root, "合成", "成片_主片.mp4"), "ab") as f:
+                f.write(b"new")
+            payload = review.review(root)
+            self.assertTrue(any(f["code"] == "delivery_qc_stale" for f in payload["findings"]))
 
     def test_review_blocks_placeholder(self):
         with tempfile.TemporaryDirectory() as root:

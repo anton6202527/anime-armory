@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import render_dreamina as rd  # noqa: E402
 from ad_video_prompt_compiler import compile_prompt, render_markdown  # noqa: E402
@@ -48,19 +50,19 @@ def test_build_prompt_submits_only_compiled_block(tmp_path):
     assert "skip" not in prompt
 
 
-def test_build_prompt_keeps_legacy_fallback_during_migration(tmp_path):
+def test_build_prompt_rejects_legacy_uncompiled_contract(tmp_path):
     p = tmp_path / "legacy.md"
     p.write_text("## 运镜与动作\nslow push in\n\n## 负向\nno watermark\n", encoding="utf-8")
-    prompt = rd.build_prompt(p)
-    assert "slow push in" in prompt
-    assert "no watermark" in prompt
-    assert "commercial ad video" not in prompt
+    with pytest.raises(RuntimeError, match="缺后端编译提交 prompt"):
+        rd.build_prompt(p)
 
 
 def test_render_jobs_with_fake_backend(tmp_path, monkeypatch):
     root = tmp_path / "项目"
     (root / "出视频" / "分镜" / "prompt").mkdir(parents=True)
     (root / "出视频" / "分镜" / "prompt" / "镜头01.md").write_text("## 运镜与动作\nslow", encoding="utf-8")
+    (root / "出图" / "分镜" / "图片").mkdir(parents=True)
+    (root / "出图" / "分镜" / "图片" / "镜头01.png").write_bytes(b"png")
     manifest = {
         "jobs": [{
             "job_id": "镜头01",
@@ -85,6 +87,8 @@ def test_render_jobs_with_fake_backend(tmp_path, monkeypatch):
 
     monkeypatch.setattr(rd, "run_dreamina_video", fake_run)
     monkeypatch.setattr(rd, "download_result", fake_download)
+    monkeypatch.setattr(rd, "enforce_gate", lambda root_arg: None)
+    monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
     summary = rd.render_jobs(
         root,
         only=set(),
@@ -104,6 +108,8 @@ def test_render_jobs_records_pending_submission(tmp_path, monkeypatch):
     root = tmp_path / "项目"
     (root / "出视频" / "分镜" / "prompt").mkdir(parents=True)
     (root / "出视频" / "分镜" / "prompt" / "镜头01.md").write_text("## 运镜与动作\nslow", encoding="utf-8")
+    (root / "出图" / "分镜" / "图片").mkdir(parents=True)
+    (root / "出图" / "分镜" / "图片" / "镜头01.png").write_bytes(b"png")
     (root / "出视频" / "分镜" / "video_jobs_manifest.json").write_text(
         json.dumps({"jobs": [{
             "job_id": "镜头01",
@@ -126,6 +132,8 @@ def test_render_jobs_records_pending_submission(tmp_path, monkeypatch):
         }
 
     monkeypatch.setattr(rd, "run_dreamina_video", fake_run)
+    monkeypatch.setattr(rd, "enforce_gate", lambda root_arg: None)
+    monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
     summary = rd.render_jobs(
         root,
         only=set(),
@@ -147,6 +155,8 @@ def test_run_dreamina_video_rechecks_submit_id_when_initial_status_fail(tmp_path
     root = tmp_path / "项目"
     (root / "出视频" / "分镜" / "prompt").mkdir(parents=True)
     (root / "出视频" / "分镜" / "prompt" / "镜头01.md").write_text("## 运镜与动作\nslow", encoding="utf-8")
+    (root / "出图" / "分镜" / "图片").mkdir(parents=True)
+    (root / "出图" / "分镜" / "图片" / "镜头01.png").write_bytes(b"png")
     calls = []
 
     def fake_run(cmd, text, capture_output):
@@ -162,6 +172,7 @@ def test_run_dreamina_video_rechecks_submit_id_when_initial_status_fail(tmp_path
         }), "")
 
     monkeypatch.setattr(rd.subprocess, "run", fake_run)
+    monkeypatch.setattr(rd, "build_prompt", lambda path: "compiled prompt")
     payload = rd.run_dreamina_video(
         {
             "mode": "image2video",

@@ -24,6 +24,7 @@
     python3 inherit_contract.py <作品根> --json 出视频/分镜/contract_inheritance.json
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -336,12 +337,14 @@ def run(root, out_json=None):
         if isinstance(item, dict) and item.get("clip")
     }
     results = []
+    seen_prompt_stems = set()
     if os.path.isdir(prompt_dir):
         for name in sorted(os.listdir(prompt_dir)):
             if not name.endswith((".md", ".txt")):
                 continue
             with open(os.path.join(prompt_dir, name), encoding="utf-8", errors="replace") as f:
                 txt = f.read()
+            seen_prompt_stems.add(Path(name).stem)
             for fnd in diff_contract(contract, txt):
                 fnd["clip"] = name
                 results.append(fnd)
@@ -353,6 +356,31 @@ def run(root, out_json=None):
             for fnd in check_compiled_prompt(txt, backend_by_clip.get(Path(name).stem)):
                 fnd["clip"] = name
                 results.append(fnd)
+    expected_stems = {f"镜头{i:02d}" for i, _ in enumerate(sb.get("shots") or sb.get("clips") or [], 1)}
+    for missing in sorted(expected_stems - seen_prompt_stems):
+        results.append({"severity": "block", "field": "prompt coverage", "clip": missing,
+                        "msg": "storyboard 镜头缺视频 prompt；空目录/少文件不得得到 0 block"})
+
+    manifest = load_json(os.path.join(root, "出视频", "分镜", "video_jobs_manifest.json"), {}) or {}
+    for job in manifest.get("jobs") or []:
+        if not isinstance(job, dict):
+            continue
+        clip = str(job.get("clip") or job.get("job_id") or "?")
+        source = job.get("compiler_source_contract")
+        if isinstance(source, dict):
+            raw = json.dumps(source, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            actual = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+            if actual != job.get("source_contract_sha256"):
+                results.append({"severity": "block", "field": "prompt compiler", "clip": clip,
+                                "msg": "compiler source hash 与结构化 source contract 不一致"})
+        prompt_path = os.path.join(root, str(job.get("prompt") or ""))
+        if os.path.isfile(prompt_path):
+            parsed = parse_markdown(Path(prompt_path).read_text(encoding="utf-8")) or {}
+            submit = str(parsed.get("prompt") or "")
+            actual_submit = hashlib.sha256(submit.encode("utf-8")).hexdigest()
+            if job.get("submit_prompt_sha256") and actual_submit != job.get("submit_prompt_sha256"):
+                results.append({"severity": "block", "field": "prompt compiler", "clip": clip,
+                                "msg": "提交 prompt hash 与 manifest 不一致，需重建执行包"})
 
     payload = {"schema_version": 2, "kind": "ad_contract_inheritance",
                "contract_source": contract_source, "visual_contract": contract,

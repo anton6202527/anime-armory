@@ -34,9 +34,9 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 3. **asset_registry 对账**：优先读 `出图/共享/asset_registry.json` / `设定库/asset_registry.json`。产品镜建议同时绑定 `PROD_*` 与 `BRAND_*`；缺 registry 或缺品牌资产先 warn，避免出图前没有 logo mask/品牌色/包装禁漂项。
 4. **文字可读性**：品牌/UI/CTA/法律文字镜必须在 prompt 写清“文字清晰可读/不乱码/保留原文”；缺锁定句 → warn，缺 prompt → block。
 5. **万能安全区**：产品/logo/UI/CTA 镜应写 `safe_area.core_in_center_4x4=true`；显式 false → block，缺声明 → warn。
-6. **brand-color ΔE**：产品镜主色 vs `visual_contract.品牌色` HEX（CIE76 Lab）。超阈 → block，临界 → warn；无区域信息取整图主色并降级 warn。
-7. **product dHash 离群**：产品镜组内 dHash 最近邻 Hamming 距离离群 → 漂移 warn/block。
-8. **logo 模板匹配**：仅当注册了 `出图/共享/定妆库/产品/logo.png` 时做 NCC 粗匹配；缺失/形变 → flag。无模板干净跳过。
+6. **brand-color ΔE**：无校准产品 ROI 时只作 WARN 启发式，不能因整图环境色不同就宣判品牌不一致。
+7. **product dHash 离群**：全帧 Hamming 只作 WARN 候选，不把换构图误判成产品漂移硬挡。
+8. **logo NCC**：只作 WARN 快筛；Logo/包装文字硬签收来自真实参考输入、可控后期层和人工并排复核。
 9. **禁本地贴图伪修复**：若 `生产数据/production_events.jsonl` 记录某最终产品镜来自 `local_product_patch` / `logo_patch` / `packaging_patch` / alpha blend / pasteback 等 image-stage 局部贴图链路，直接 block。真 logo/包装文字贴图应在 `ad-compose` 交付层做，不得拿来伪造出图阶段产品一致性通过。
 
 报告写 **`出图/分镜/product_qc.json`**，schema `{"kind":"ad_product_qc","version":2,"summary":{"block":N,"warn":N,"info":N},"findings":[{"severity","shot","check","reason","detail"}],"qc_environment":{"precision_level","pending_product_images",...}}`；`summary.block>0` → 退出非零。`ad-craft/gate.py` 读 `summary.block`、`qc_environment.precision_level` 和 `pending_product_images` 据此挡 spend（与 `video_contract_findings` 读 `contract_inheritance.json` 同形）。`--strict` 给 `ad-review`/刷新用：降级 info 提级 warn 进候选重出。测试：`cd skills/ad-image/scripts && python3 -m pytest test_plan_prompts.py test_product_qc.py`。
@@ -51,7 +51,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
    ```bash
    python3 skills/ad-image/scripts/plan_prompts.py "<作品根>"
    ```
-   产物：`出图/共享/asset_registry.json`、`出图/共享/prompt/品牌_*.md`、`出图/共享/prompt/产品_*.md`、`出图/分镜/prompt/00_总览.md`、逐镜 `镜头NN.md` / `镜头NN_end.md`、`出图/分镜/image_jobs_manifest.json`。此脚本只做 prompt 计划和 jobs manifest，不调用生图后端，不伪造 PNG。
+   产物：`出图/共享/asset_registry.json`、共享/逐镜 prompt 和 `image_jobs_manifest.json`。产品 job 写 `reference_inputs` / `requires_image_input` / prompt hash；正式 runner 必须把真实参考图传给 image-to-image API，并记录 `actual_reference_inputs`，否则 gate 阻断。
 1. **建三层定妆库**（`出图/共享/`）：
    - 角色：每个出正/侧/背三视图 → `定妆_<角色>_三视图.png`。
    - 场景：关键场景四视图。

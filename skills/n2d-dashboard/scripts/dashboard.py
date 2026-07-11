@@ -695,6 +695,51 @@ def ratio_dict(numerators: Dict[str, float], denominators: Dict[str, float]) -> 
     return result
 
 
+def flow_speed_metrics(events: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Measure gate throughput without weakening the gate profile."""
+    parsed: List[Tuple[dt.datetime, Dict[str, Any]]] = []
+    for event in events:
+        raw = str(event.get("ts") or "").strip()
+        if not raw:
+            continue
+        try:
+            when = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if when.tzinfo is None:
+                when = when.replace(tzinfo=dt.timezone.utc)
+        except ValueError:
+            continue
+        parsed.append((when.astimezone(dt.timezone.utc), event))
+    if not parsed:
+        return {"time_to_first_episode_sec": None, "time_to_first_episode_hours": None, "time_to_first_episode_hms": "—",
+                "gates_passed": 0, "gates_passed_per_day": None}
+    parsed.sort(key=lambda row: row[0])
+    start = parsed[0][0]
+    passed: List[dt.datetime] = []
+    first_episode_done: Optional[dt.datetime] = None
+    for when, event in parsed:
+        if str(event.get("event") or "") != "qa_gate_run":
+            continue
+        gate = event.get("qa_gate") if isinstance(event.get("qa_gate"), dict) else {}
+        if int(gate.get("blocks") or 0) != 0:
+            continue
+        passed.append(when)
+        if (normalize_episode(str(event.get("episode") or "")) == "第1集"
+                and str(event.get("stage") or "") in {"compose", "review"}
+                and first_episode_done is None):
+            first_episode_done = when
+    span_days = max(1.0, (parsed[-1][0] - start).total_seconds() / 86400.0)
+    seconds = (first_episode_done - start).total_seconds() if first_episode_done else None
+    return {
+        "time_to_first_episode_sec": round(seconds, 3) if seconds is not None else None,
+        "time_to_first_episode_hours": round(seconds / 3600.0, 3) if seconds is not None else None,
+        "time_to_first_episode_hms": hms(seconds) if seconds is not None else "—",
+        "gates_passed": len(passed),
+        "gates_passed_per_day": round(len(passed) / span_days, 3),
+        "measurement_start": start.isoformat(),
+        "first_episode_gate": first_episode_done.isoformat() if first_episode_done else "",
+    }
+
+
 def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
     progress = progress_index(root)
     episodes: Dict[str, Dict[str, Any]] = {
@@ -933,6 +978,7 @@ def aggregate_events(root: str, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         key: sum(int((item.get("consistency_ledger") or {}).get("counts", {}).get(key) or 0) for item in ordered)
         for key in ("block", "high", "medium")
     }
+    totals["flow_speed"] = flow_speed_metrics(events)
 
     retention_trend = {}
     eps_with_ret3 = [

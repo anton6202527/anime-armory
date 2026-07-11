@@ -3,7 +3,7 @@
 """时长清单逐句条目构造 + 音色键解析（独立模块·带单测，render_voice 主流程可安全 import）。
 
 广告版 VO 配音对账：voicemap.json 是 角色/旁白 → 音色注册表，时长清单每句记 voice_key
-（实际应用音色键），ad-review(二期) 跨镜对账音色一致。占位后端（macOS say）记
+（实际应用音色键），ad-review 跨镜对账音色一致。占位后端（macOS say）记
 `say:<声音名>#placeholder` 留痕，识别需重配音。自包含，不 import ad-craft。
 """
 

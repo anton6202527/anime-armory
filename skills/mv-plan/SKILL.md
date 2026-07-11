@@ -22,7 +22,7 @@ description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid
 - `出视频/prompt/Clip_XXX.md`：视频 motion prompt 任务。
 - `分镜/semantic_prompts.json`：语义分镜引擎补写后的结构化留痕。
 
-`clip_plan.json` 除时间线外还要沉淀 MV 的导演和一致性字段：`action_family`、`action_peak`、`visual_motif`、`transition_motif`、`shot_design`、`identity_contract`、`reference_inputs`、`asset_ids`。这些字段由本阶段初填，语义分镜引擎可精修，后续 `mv-image` / `mv-video` / `mv-score` / `mv-review` 直接消费，不再临场猜“炫酷动作”或主角锚点。
+`clip_plan.json` 除时间线外还要沉淀 MV 的导演和一致性字段：`action_family`、`action_peak`、`visual_motif`、`transition_motif`、`shot_design`、`identity_contract`、`reference_inputs`、`asset_ids`，以及 continuity 内的身份/服装/道具状态、场景拓扑、屏幕方向、视线、动作向量和光线状态。字段由本阶段初填，语义分镜引擎精修，后续直接消费。
 
 ## 用法
 

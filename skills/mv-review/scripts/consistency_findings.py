@@ -139,6 +139,10 @@ def video_qc_details(findings: list[dict[str, Any]], root: str) -> None:
     rel = "生产数据/video_qc/video_qc.json"
     report_summary(findings, root, rel, "video_handoff", "video_qc")
     report = load_json(os.path.join(root, rel), {}) or {}
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    if not meta.get("is_demo") and not (report.get("semantic_review") or {}).get("accepted"):
+        findings.append(finding("block", "video_handoff", "semantic_review_missing",
+                                "正式项目视频语义复核尚未绑定当前选中视频签收。", rel, "video_qc"))
     for seam in report.get("seams") or []:
         risks = seam.get("risk") or []
         if risks:
@@ -169,6 +173,16 @@ def build_report(root: str) -> dict[str, Any]:
                    "video_handoff", "inherit_contract")
     video_qc_details(findings, root)
     timing_checks(findings, root)
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    if has_clip_plan(root) and not meta.get("is_demo"):
+        lock = load_json(os.path.join(root, "制片", "picture_lock.json"))
+        if not isinstance(lock, dict) or not lock.get("accepted"):
+            findings.append(finding("block", "picture_lock", "picture_lock_missing",
+                                    "正式项目缺绑定 animatic/plan/图片的 picture lock。", "制片/picture_lock.json"))
+    if os.path.exists(os.path.join(root, "成片_MV.mp4")):
+        report_summary(findings, root, "生产数据/delivery_qc/delivery_qc.json", "delivery", "delivery_qc", "block")
+        if not isinstance(load_json(os.path.join(root, "合规", "provenance.json")), dict):
+            findings.append(finding("block", "provenance", "provenance_missing", "成片缺全链路 provenance。", "合规/provenance.json"))
     counts = summary_counts(findings)
     return {
         "schema_version": 1,
@@ -189,6 +203,9 @@ def build_report(root: str) -> dict[str, Any]:
             "生产数据/video_inherit_contract/inherit_contract.json",
             "生产数据/video_qc/video_qc.json",
             "字幕/alignment_report.json",
+            "制片/picture_lock.json",
+            "生产数据/delivery_qc/delivery_qc.json",
+            "合规/provenance.json",
         ],
     }
 

@@ -15,6 +15,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from datetime import date
 
@@ -207,21 +208,29 @@ def create_jobs(root, args):
     channel_profile = contract.video_channel_profile(backend)
     jobs = []
     for clip in plan.get("clips", []):
+        clip_model = clip.get("video_model") or video_model
+        clip_backend = clip.get("video_channel") or clip.get("video_backend") or backend
+        if clip_model not in contract.MV_VIDEO_MODELS:
+            raise SystemExit(f"[err] {clip.get('clip_id')} 不支持的生视频模型：{clip_model}")
+        if clip_backend not in contract.MV_VIDEO_CHANNELS:
+            raise SystemExit(f"[err] {clip.get('clip_id')} 不支持的生视频渠道：{clip_backend}")
+        clip_model_profile = contract.video_model_profile(clip_model)
+        clip_channel_profile = contract.video_channel_profile(clip_backend)
         image_path = clip.get("image_path")
         if image_path:
             full_image_path = os.path.join(root, image_path)
             if not os.path.exists(full_image_path):
                 print(f"[warn] {clip['clip_id']} 缺首帧 PNG：{image_path}，请确保 mv-image 出图完毕再开始生成视频。")
                 
-        quality_tier = motion_axes.quality_tier_for_clip(clip, backend)
-        motion_reference = motion_axes.motion_reference_plan(clip, backend)
+        quality_tier = motion_axes.quality_tier_for_clip(clip, clip_backend)
+        motion_reference = motion_axes.motion_reference_plan(clip, clip_backend)
         requested = profile["key_takes"] if clip.get("beat_role") == "key" else profile["normal_takes"]
         takes = []
         for i in range(1, requested + 1):
             take_id = f"take_{i:02d}"
             prompt_path = os.path.join("出视频", "prompt", f"{clip['clip_id']}_{take_id}.md")
             prompt_text, compiled = prompt_bundle_for_take(
-                clip, backend, profile, take_id, video_model, quality_tier, motion_reference
+                clip, clip_backend, profile, take_id, clip_model, quality_tier, motion_reference
             )
             mv_utils.write_text(os.path.join(root, prompt_path), prompt_text)
             submit_prompt = str(compiled["prompt"])
@@ -256,11 +265,11 @@ def create_jobs(root, args):
             "section": clip["section"],
             "duration": clip["duration"],
             "beat_role": clip.get("beat_role", "normal"),
-            "backend": backend,
-            "video_model": video_model,
+            "backend": clip_backend,
+            "video_model": clip_model,
             "video_spec": spec,
-            "model_profile": model_profile,
-            "channel_profile": channel_profile,
+            "model_profile": clip_model_profile,
+            "channel_profile": clip_channel_profile,
             "quality_tier": quality_tier,
             "motion_reference": motion_reference,
             "reference_inputs": clip.get("reference_inputs") or [],
@@ -285,6 +294,7 @@ def create_jobs(root, args):
         "video_model": video_model,
         "video_channel": backend,
         "backend": backend,
+        "backend_policy": "capability_routed" if any(j.get("backend") != backend or j.get("video_model") != video_model for j in jobs) else "uniform_default",
         "video_spec": spec,
         "spec_profile": profile,
         "model_profile": model_profile,
@@ -359,10 +369,42 @@ def score_take(root, clip_id, take_id, args):
     mv_utils.write_json(manifest_path, manifest)
 
 
-def select_take(root, clip_id, take_id):
+def selection_errors(take):
+    score = take.get("score") or {}
+    required = ("motion", "identity", "beat_fit", "clarity")
+    missing = [key for key in required if not isinstance(score.get(key), (int, float))]
+    errors = [f"评分缺字段：{', '.join(missing)}"] if missing else []
+    if not missing:
+        average = sum(float(score[key]) for key in required) / len(required)
+        if average < 3.0:
+            errors.append(f"平均分 {average:.2f} < 3.0")
+        if float(score["identity"]) < 3:
+            errors.append(f"identity={score['identity']} < 3")
+    return errors
+
+
+def run_final_video_checks(root):
+    commands = [
+        [sys.executable, os.path.join(HERE, "inherit_contract.py"), root],
+        [sys.executable, os.path.join(HERE, "video_qc.py"), root],
+    ]
+    for command in commands:
+        proc = subprocess.run(command, text=True, capture_output=True)
+        if proc.stdout:
+            print(proc.stdout.rstrip())
+        if proc.returncode:
+            raise SystemExit(proc.stderr.strip() or f"[err] {' '.join(command)} failed")
+
+
+def select_take(root, clip_id, take_id, waiver_reason=""):
     manifest_path, manifest = load_manifest(root)
     job = find_job(manifest, clip_id)
     take = find_take(job, take_id)
+    errors = selection_errors(take)
+    if errors and not waiver_reason:
+        raise SystemExit("[err] 挑版被阻断：" + "；".join(errors) + "。先补全四维评分，或显式 --waiver-reason 留痕")
+    if errors:
+        take["selection_waiver"] = {"reason": waiver_reason, "date": date.today().isoformat(), "errors": errors}
     src = os.path.join(root, take["video_path"])
     if not os.path.exists(src):
         raise SystemExit(f"[err] {clip_id} {take_id} 尚未登记视频：{take['video_path']}")
@@ -379,7 +421,12 @@ def select_take(root, clip_id, take_id):
     mv_utils.write_json(manifest_path, manifest)
     update_timeline(root, clip_id, rel(root, dst))
     if all(j.get("selected_take") for j in manifest.get("jobs", [])):
-        mv_utils.update_progress_stage(root, "video")
+        run_final_video_checks(root)
+        meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+        if meta.get("is_demo"):
+            mv_utils.update_progress_stage(root, "video")
+        else:
+            print("[next] 正式项目需逐镜/接缝人审：video_qc.py --accept-semantic --reviewer <name>")
     return dst
 
 
@@ -410,6 +457,7 @@ def main():
     ap.add_argument("--clarity-score", type=int, choices=range(1, 6))
     ap.add_argument("--notes")
     ap.add_argument("--select", help="选择某个 clip 的 take 定稿，1/Clip_001 均可")
+    ap.add_argument("--waiver-reason", help="评分未达门槛时的显式人工放行原因；会写入 manifest")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)
@@ -437,7 +485,7 @@ def main():
     if args.select:
         clip_id = normalize_clip_id(args.select)
         take_id = normalize_take_id(args.take)
-        dst = select_take(root, clip_id, take_id)
+        dst = select_take(root, clip_id, take_id, args.waiver_reason or "")
         print(f"[ok] {clip_id} {take_id} 已定稿 → {dst}")
 
 

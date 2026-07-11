@@ -5,9 +5,12 @@
     （或 python3 test_cutdown_reframe.py）
 """
 import unittest
+from unittest import mock
+from pathlib import Path
 
 import cutdown
 import deliver
+import delivery_qc
 import reframe
 
 
@@ -52,6 +55,15 @@ class ReframeTest(unittest.TestCase):
         # 越界焦点被夹进 [0,1]
         vf = reframe.reframe_filter("1920x1080", "9:16", "crop", 1920, crop_x=2.0)
         self.assertIn("1.0000", vf)
+
+    def test_dynamic_focus_plan_builds_time_aware_crop(self):
+        vf = reframe.reframe_filter("1920x1080", "9:16", focus_plan=[
+            {"start": 0, "end": 3, "x": 0.25, "y": 0.5},
+            {"start": 3, "end": 6, "x": 0.75, "y": 0.5},
+        ])
+        self.assertIn("between(t", vf)
+        self.assertIn("0.2500", vf)
+        self.assertIn("0.7500", vf)
 
 
 class CutdownTest(unittest.TestCase):
@@ -215,6 +227,20 @@ class DeliverTest(unittest.TestCase):
         self.assertIn("--render", cut["command"])
         self.assertIn("--render", ref["command"])
         self.assertNotIn("#", ref["command"])
+
+    def test_delivery_qc_measures_loudness_and_peak(self):
+        item = {"deliverable_id": "master", "expected_path": "合成/成片_主片.mp4",
+                "duration": "30s", "aspect": "16:9", "loudness_lufs": -16.0, "true_peak_db": -1.0}
+        probe = {"format": {"duration": "30.0"}, "streams": [
+            {"codec_type": "video", "width": 1920, "height": 1080}, {"codec_type": "audio"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe), \
+             mock.patch.object(delivery_qc, "measure_loudness", return_value={
+                 "integrated_lufs": -16.2, "true_peak_db": -1.2, "lra": 4.0,
+             }):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["loudness"]["integrated_lufs"], -16.2)
 
 
 if __name__ == "__main__":

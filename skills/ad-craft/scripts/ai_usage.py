@@ -3,7 +3,7 @@
 """Write publishing-facing AI usage + 授权 disclosure for an ad (拍广告) project.
 
 广告投放对 AI 标识、肖像/音乐/字体/素材授权、广告法 claim 留痕要求比一般视频更严。
-本脚本只做项目留痕，不替代法律意见；完整合规清单留给二期 `ad-compliance`。
+本脚本只做项目留痕，不替代法律意见；发布就绪由同目录 `compliance_manifest.py` 验证。
 写盘/骨架统一走本线 ad/_lib/disclosure.py（vendored，本线自包含）；本线只保留专属字段与文案。
 """
 import argparse
@@ -19,10 +19,10 @@ from contract import AI_VISUAL_USAGE_MODES  # noqa: E402
 
 NOTES = [
     "- 广告若图像/视频主要由 AI 生成，通常按 AI-generated 留痕。",
-    "- AI 标识/水印不再由本流水线处理：本线只记录 AI 使用披露文本，AI 标识/水印义务由使用方在工具之外按目标平台/各地区法规自行处理。",
+    "- 平台声明/显式标识由发布方或平台实际执行；执行证据、隐式元数据状态和责任方须写入 compliance_manifest.json。",
     "- 代言人肖像 / 真人声音 / 授权音乐 / 商业字体均需可追溯授权；未授权不得投放。",
     "- 广告语 claim（功效、对比、数据）须有依据；绝对化用语等违禁词由 `ad-script/ad_law_check.py` 机检拦截。",
-    "- 本文件只做项目留痕，不替代法律意见；完整合规清单见二期 `ad-compliance`。",
+    "- 本文件只做项目留痕，不替代法律意见；发布合规清单见同目录 compliance_manifest.py。",
 ]
 
 

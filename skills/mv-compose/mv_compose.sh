@@ -18,6 +18,7 @@ ASS="$ROOT/字幕/karaoke.ass"
 BEAT="$ROOT/节拍/beatgrid.json"
 TIMELINE="$ROOT/分镜/timeline_manifest.json"
 OUT="$ROOT/成片_MV.mp4"
+MASTER="$ROOT/成片_MV_master.mov"
 WK="$ROOT/_mvwork"; rm -rf "$WK"; mkdir -p "$WK"
 
 [ -d "$VID" ] || { echo "缺 clips 目录（先 mv-video，作品根=$ROOT）"; exit 1; }
@@ -78,7 +79,7 @@ if missing:
 with open(out_path, "w", encoding="utf-8") as f:
     for path, dur, speed_mode in ordered:
         dur_str = str(dur) if dur is not None else ""
-        f.write(f"{path}\t{dur_str}\t{speed_mode}\n")
+        f.write(f"{path}|{dur_str}|{speed_mode}\n")
 PY
 fi
 
@@ -87,14 +88,29 @@ if [ ! -s "$SOURCE_LIST" ]; then
   [ -f "$TIMELINE" ] && echo "    timeline 未提供可用视频，退回 $VID 文件名顺序"
   : > "$SOURCE_LIST"
   for c in "$VID"/*.mp4; do
-    [ -e "$c" ] && printf '%s\t\ttrim\n' "$c" >> "$SOURCE_LIST"
+    [ -e "$c" ] && printf '%s||trim\n' "$c" >> "$SOURCE_LIST"
   done
 fi
 [ -s "$SOURCE_LIST" ] || { echo "$VID 无 clip"; exit 1; }
+FPS="${MV_OUTPUT_FPS:-}"
+if [ -z "$FPS" ]; then
+  FIRST_CLIP=$(awk -F '|' 'NR==1 {print $1}' "$SOURCE_LIST")
+  RATE=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=p=0 "$FIRST_CLIP" 2>/dev/null || true)
+  FPS=$(python3 - "$RATE" <<'PY'
+import sys
+try:
+    a, b = sys.argv[1].split('/')
+    value = float(a) / float(b)
+    print(round(value, 3) if value > 0 else 24)
+except Exception:
+    print(24)
+PY
+)
+fi
 
-echo "=== [1/4] 时域插帧/裁切 + 统一画幅 ${W}x${H}/30fps + 拼接 ==="
+echo "=== [1/6] 时域插帧/裁切 + 统一画幅 ${W}x${H}/${FPS}fps + 拼接 ==="
 : > "$WK/list.txt"; i=0
-while IFS=$'\t' read -r c dur speed_mode; do
+while IFS='|' read -r c dur speed_mode; do
   [ -f "$c" ] || continue
   TRIM_OPT=""
   SETPTS_OPT=""
@@ -120,7 +136,7 @@ while IFS=$'\t' read -r c dur speed_mode; do
   fi
   
   ffmpeg -y -loglevel error -i "$c" \
-    -vf "${SETPTS_OPT}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=30,format=yuv420p" \
+    -vf "${SETPTS_OPT}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=${FPS},format=yuv420p" \
     -an $TRIM_OPT -c:v libx264 -preset medium -crf 18 "$WK/n$i.mp4"
   echo "file 'n$i.mp4'" >> "$WK/list.txt"; i=$((i+1))
 done < "$SOURCE_LIST"
@@ -138,7 +154,7 @@ if abs(v-s)>1.0:
 PY
 [ -f "$BEAT" ] && echo "    （beatgrid 存在：剪辑点应已在 mv-video 上游对齐鼓点）" || echo "    （无 beatgrid：按 clip 原时长顺接，未卡点）"
 
-echo "=== [2/4] 字幕探测（mv 自包含：libass 优先 → 自带 render_lyrics.py 降级）==="
+echo "=== [2/6] 字幕探测（mv 自包含：libass 优先 → 自带 render_lyrics.py 降级）==="
 SUB_VF=""; LRC="$ROOT/字幕/lyrics.lrc"
 if [ -f "$ASS" ] && ffmpeg -hide_banner -filters 2>/dev/null | grep -q ' subtitles '; then
   cp "$ASS" "$WK/k.ass"; SUB_VF="-vf subtitles=$WK/k.ass"
@@ -155,20 +171,31 @@ else
   echo "    无 字幕/karaoke.ass|lyrics.lrc，出无字幕版（mv-lyric-sync 生成后重跑可加字幕）"
 fi
 
-echo "=== [3/4] 铺歌轨（整首歌=主音轨，画面静音）+ 烧字幕 ==="
-COM=(-c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p -c:a aac -b:a 256k -movflags +faststart)
+echo "=== [3/6] 生成 10-bit ProRes 422 HQ / 48kHz PCM 母版 ==="
+MASTER_COM=(-c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le -c:a pcm_s24le -ar 48000)
 if [ -n "$SUB_VF" ]; then                       # libass 逐字
   ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" $SUB_VF \
-    -map 0:v -map 1:a -shortest "${COM[@]}" "$OUT"
+    -map 0:v -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
 elif [ -f "$WK/sub_filter.txt" ]; then          # 自带 render_lyrics PNG overlay
   PNGS=(); while IFS= read -r p; do [ -n "$p" ] && PNGS+=(-i "$p"); done < "$WK/sub_inputs.txt"
   ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" "${PNGS[@]}" \
-    -filter_complex "$(cat "$WK/sub_filter.txt")" -map "[v]" -map 1:a -shortest "${COM[@]}" "$OUT"
+    -filter_complex "$(cat "$WK/sub_filter.txt")" -map "[v]" -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
 else                                            # 无字幕
   ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" \
-    -map 0:v -map 1:a -shortest "${COM[@]}" "$OUT"
+    -map 0:v -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
 fi
 
-echo "=== [4/4] 完成: $OUT ==="
+echo "=== [4/6] 从母版派生 YouTube/通用 SDR MP4 ==="
+ffmpeg -y -loglevel error -i "$MASTER" \
+  -vf "setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709:range=tv" \
+  -c:v libx264 -profile:v high -level:v 4.2 -preset slow -crf 18 -pix_fmt yuv420p \
+  -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv \
+  -c:a aac -ar 48000 -b:a 320k -movflags +faststart "$OUT"
+
+echo "=== [5/6] 交付 QC + provenance ==="
+python3 "$(dirname "$0")/delivery_qc.py" "$ROOT" "$OUT" --master "$MASTER"
+python3 "$CRAFT_DIR/provenance.py" "$ROOT" --final "$OUT" --master "$MASTER"
+
+echo "=== [6/6] 完成: $OUT (master: $MASTER) ==="
 python3 "$CRAFT_DIR/progress_set.py" "$ROOT" compose || echo "⚠ _进度.md 回写失败"
-ls -la "$OUT"
+ls -la "$MASTER" "$OUT"

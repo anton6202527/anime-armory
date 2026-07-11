@@ -176,14 +176,31 @@ def claims_check(brief: Mapping[str, Any]) -> List[Dict[str, Any]]:
         if isinstance(claim, Mapping):
             text = str(claim.get("claim") or "").strip()
             evidence = claim.get("evidence")
+            evidence_file = claim.get("evidence_file") or claim.get("source")
+            method = claim.get("method")
+            sample = claim.get("sample")
+            evidence_date = claim.get("date") or claim.get("evidence_date")
+            territory = claim.get("territory")
+            approved_by = claim.get("approved_by") or claim.get("legal_owner")
         else:
             text = str(claim).strip()
             evidence = ""
+            evidence_file = method = sample = evidence_date = territory = approved_by = ""
+        evidence_complete = all(not pending(v) for v in (
+            evidence, evidence_file, method, evidence_date, territory, approved_by
+        ))
         out.append({
             "id": f"claim_{idx:02d}",
             "claim": text,
-            "evidence_status": "pending" if pending(evidence) else "declared",
+            "status": "approved" if evidence_complete else "pending",
+            "evidence_status": "approved" if evidence_complete else "pending",
             "evidence": evidence or "",
+            "evidence_file": evidence_file or "",
+            "method": method or "",
+            "sample": sample or "",
+            "evidence_date": evidence_date or "",
+            "territory": territory or "",
+            "approved_by": approved_by or "",
         })
     return out
 

@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Mapping, Sequence
 
 KIND = "comic_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-10.1"
+PROFILE_VERSION = "2026-07-10.2"
 _INTERNAL_RE = re.compile(
     r"(?:CHAR_|MON_|LOC_|PROP_|SYS_|FX_|STYLE_|出图/|\.png\b|identity_registry|asset_registry|reference_group)",
     re.I,
@@ -71,7 +71,7 @@ def compile_prompt(contract: Mapping[str, Any]) -> Dict[str, Any]:
     style = one_line(contract.get("style"), 260)
     composition = one_line(contract.get("composition"), 300)
     scene = one_line(contract.get("scene_continuity"), 340)
-    identity = one_line(contract.get("identity_hold"), 220)
+    identity = one_line(contract.get("identity_hold"), 320)
     finishing = one_line(contract.get("finishing"), 360)
     text_strategy = one_line(contract.get("text_strategy"), 220)
     anatomy = one_line(contract.get("anatomy"), 220)

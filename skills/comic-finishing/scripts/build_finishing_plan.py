@@ -70,10 +70,12 @@ def weight_for(panel: dict[str, Any], name_panel: dict[str, Any], rect: dict[str
     raw = str(panel.get("layout_weight") or name_panel.get("layout_weight") or "").lower()
     if raw in {"heavy", "medium", "compact"}:
         return raw
-    area = int(rect.get("w") or 0) * int(rect.get("h") or 0)
-    if area >= 900000:
+    # 用格高分级（宽度无关）：条漫 layout 的格高区间约 560..1500，
+    # heavy 基准 960、默认 760、compact 620/680（见 comic-layout panel_height）。
+    height = int(rect.get("h") or 0)
+    if height >= 920:
         return "heavy"
-    if area <= 420000 and area > 0:
+    if 0 < height <= 700:
         return "compact"
     fn = str(panel.get("story_function") or "").lower()
     if any(token in fn for token in ("hook", "cliff", "reveal", "peak", "action", "冲击", "揭示", "高潮")):

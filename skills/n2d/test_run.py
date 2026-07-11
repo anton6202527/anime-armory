@@ -333,6 +333,11 @@ def test_stage_key_of_post_lipsync_redirect():
     assert run.stage_key_of(route) == "video"
 
 
+def test_stage_key_redirect_uses_structured_field_not_display_label():
+    route = {"ep": "第1集", "col": "成片", "label": "任意本地化标题", "skill": "n2d-compose", "redirect_stage_key": "voice"}
+    assert run.stage_key_of(route) == "voice"
+
+
 # ── 纯决策 decide()：stop 分类 + 优先级 ───────────────────────────────────────
 def _route(stage_key, ep="第1集"):
     spec = run.stage_for_key(stage_key)
@@ -389,6 +394,29 @@ def test_decide_voice_first_payment_menu_is_backend():
     na = run.decide(root, _route("voice"), "voice", run.Probes())
     assert na["stop_reason"] == "needs_payment_confirm"
     assert na["action_card"]["menu"][0]["choice_point"] == "配音后端"
+
+
+def test_voice_first_compliance_gap_blocks_before_paid_tts():
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 配音先行\n")
+    na = run.decide(root, _route("voice"), "voice", run.Probes(compliance_gap=True))
+    assert na["stop_reason"] == "needs_compliance"
+
+
+def test_hybrid_text_only_voice_preflight_does_not_require_paid_compliance():
+    root = make_work(ALL_DONE_TO["voice"], settings="# _设置\n- 制作模式: 混合自动路由\n")
+    na = run.decide(root, _route("voice"), "voice", run.Probes(compliance_gap=True))
+    assert na["stop_reason"] == "needs_stage_execution"
+
+
+def test_all_returned_stop_reasons_are_registered():
+    expected = {
+        "needs_agent_gen", "needs_stage_execution", "needs_payment_confirm", "needs_choice",
+        "needs_compliance", "needs_acceptance_signoff", "blocked_by_entry_check",
+        "capability_evidence_required", "blocked_by_gate", "blocked_by_image_qc",
+        "blocked_by_review_acceptance", "prework_failed", "env_missing", "auto_ran", "done",
+        "unknown_stage",
+    }
+    assert set(run.STOP_REASONS) == expected
 
 
 def test_decide_compose_payment_menu_is_bgm():

@@ -18,14 +18,16 @@ description: Shared machine contracts and deterministic helpers for the mv-* ski
 | 主题 | 参考 / 脚本 | 何时用 |
 |---|---|---|
 | 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md` / `_meta.json`、按 `歌曲输入时序` 决定阶段顺序、生成 clip/timeline/video job manifest 时 |
-| 身份/资产注册 | `scripts/identity_registry.py` | 从角色卡、场景卡、视觉蓝图和 clip_plan 生成 `设定/identity_registry.json`、`设定/asset_registry.json`、`分镜/reference_plan.json` |
-| 参考资产需求 | `scripts/identity_registry.py` | 同步生成 `设定/reference_requirements.json/.md`，列主角/成年态/手部/剑/场景/VFX 的缺口 |
-| 正式版 readiness | `scripts/formal_readiness.py` | 判断当前项目能否当正式整首 MV 处理；demo/短歌/镜头不足/参考图未齐会落 blocker，并生成正式版升级计划 |
-| 传统制片包 | `scripts/production_pack.py` | 由 clip_plan 生成 `分镜/animatic_manifest.json`、`制片/shot_list.json`、setup schedule、take log、picture lock/color pass 清单 |
+| 身份/资产注册 | `scripts/identity_registry.py` | 从任意角色卡、状态变体、场景卡、视觉蓝图和 clip_plan 动态生成 registry；共享实现不含作品模板 |
+| 参考资产需求 | `scripts/identity_registry.py` | 同步生成身份/状态、交互道具、复用场景和 VFX 的参考缺口 |
+| 正式版 readiness | `scripts/formal_readiness.py` | 按实际歌长、计划覆盖、参考、picture lock、QC 与签收判断；不再用固定 90 秒/12 镜规则 |
+| 制片与锁版 | `scripts/production_pack.py` + `render_animatic.py` + `picture_lock.py` | 生成 shot list/OTIO，渲染带正式歌的 animatic，并把人工 picture lock 绑定到 plan/图片/song hash |
+| 来源链 | `scripts/provenance.py` | 汇总输入、生成图/视频、母版、交付件 hash，并生成可选 C2PA manifest/嵌入接口 |
 | 候选新鲜度 | `../mv/_lib/freshness.py` + `../mv/_lib/refresh.py` | 模型/渠道/生图后端候选过期检查、刷新快照和 provenance |
 | 阶段 gate | `scripts/gate.py` | `mv-plan` / `mv-video` / `mv-lyric-sync` / `mv-compose` 等正式阶段开跑前做确定性前置检查 |
 | 进度回写 | `scripts/progress_set.py` + `scripts/mv_utils.py` | 阶段脚本完成后回写 `_进度.md`，并同步 `_meta.has_song/has_lyrics` |
 | AI 视觉使用披露 | `scripts/ai_usage.py` | 发布、交平台前记录输入歌、AI 生图/视频等使用情况（仅项目留痕；AI 标识/披露/水印不由本流水线处理，移到工具之外按平台/地区法规自行处理） |
+| 权利清单 | `scripts/rights_manifest.py` | 正式付费生成前记录歌曲、视觉参考、真人肖像、品牌、场地与编舞的权利断言；不是法律意见 |
 
 ## 共享脚本
 
@@ -35,6 +37,10 @@ python3 skills/mv-craft/scripts/progress_set.py "<制MV作品根>" plan
 python3 skills/mv-craft/scripts/identity_registry.py "<制MV作品根>"
 python3 skills/mv-craft/scripts/formal_readiness.py "<制MV作品根>" --no-fail
 python3 skills/mv-craft/scripts/production_pack.py "<制MV作品根>"
+python3 skills/mv-craft/scripts/render_animatic.py "<制MV作品根>"
+python3 skills/mv-craft/scripts/picture_lock.py "<制MV作品根>" --reviewer <name>
+python3 skills/mv-craft/scripts/export_otio.py "<制MV作品根>"
+python3 skills/mv-craft/scripts/rights_manifest.py "<制MV作品根>" --song owned --visual-reference owned --likeness not_applicable --brand not_applicable --location not_applicable --choreography not_applicable --reviewer <name>
 python3 skills/mv/_lib/freshness.py
 
 python3 skills/mv-craft/scripts/ai_usage.py "<制MV作品根>" \
@@ -51,10 +57,15 @@ python3 skills/mv-craft/scripts/ai_usage.py "<制MV作品根>" \
 - `设定/reference_requirements.json`
 - `分镜/reference_plan.json`
 - `分镜/animatic_manifest.json`
+- `分镜/animatic.mp4`
+- `分镜/timeline.otio`
 - `制片/shot_list.json`
 - `制片/setup_schedule.md`
 - `制片/take_log.csv`
 - `制片/picture_lock_color_checklist.md`
+- `制片/picture_lock.json`
+- `合规/provenance.json` + `合规/c2pa_manifest.json`
+- `合规/rights_manifest.json`
 - `生产数据/formal_readiness/formal_readiness.json`
 - `生产数据/formal_readiness/formal_upgrade_plan.md`
 - `skills/mv/references/candidate_snapshots/*.json`
@@ -64,7 +75,7 @@ python3 skills/mv-craft/scripts/ai_usage.py "<制MV作品根>" \
 > 跨线通用原则（选择点不写死 C1/C2、阶段回写 B5、脚本不伪装云端自动化 B4、合规闸门 D1…）见 [`docs/skill-design-principles.md`](../../docs/skill-design-principles.md)，此处只列 mv 线特有原则。mv 的选择点目录：`skills/mv-craft/references/选择点与偏好.md`。
 
 - **manifest 是源头**：clip 时长、转场、尾帧、prompt、已登记视频都落 manifest；`mv-compose` 不再凭文件名猜时间线。
-- **registry 锁一致性**：主角、变体、道具、场景、VFX 用本线自持的身份/资产 ID 和 reference plan 传递；不得引用别线实现，也不得只靠聊天记录记住主角长相。
+- **registry 锁一致性**：任意数量的角色、状态变体、道具、场景、VFX 用项目派生 ID、状态图和 reference plan 传递；共享代码不得硬编码某支 MV 的人物或资产。
 - **脚本先过 gate（本线前置条件）**：正式产物阶段默认调用 `scripts/gate.py`，缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、首帧或已选视频时先停下。
 
 ## 常见错误

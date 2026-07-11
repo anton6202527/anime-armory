@@ -51,7 +51,7 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 
 若报告显示 `missing_refs`，先补定妆或用已采纳面板种临时锚点，再出图。
 
-若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG：
+若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出；编排层（comic-batch）刚跑过 gate、或人工确认误报时，用 `--skip-gate` 显式豁免（豁免会打印留痕）：
 
 ```bash
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话
@@ -61,6 +61,8 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 每格生成落盘后 runner 会立刻写 `生产数据/panel_qc/第N话/Pxxx.json`，并把 `post_qc` 写回对应 job。`verdict=block` 时该 job 标为 `qc_block` 而不是 `ready`，默认立即停止批跑，不能进入合成；修复后用 `--force --targets Pxxx` 重抽。`verdict=warn` 可继续登记，但 `comic-review gate --stage image` 会要求人审签收或重抽。这个 post-QC 是 comic 线自维护实现，只服务漫画 panel；不要抽成公共实现，也不要被其它系列 import。
 
 带 `references` 的格子默认要求 reference path 存在。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；只有明确需要纯文生图试验时才加 `--allow-missing-refs`。
+
+换装格在 panel_script 里写 `outfit_id`：build_panel_jobs 会从 registry 的 `assets[角色].outfits[该ID]` 取服装描述、"绝不"负向清单和服装参考图，优先注入该角色的参考位并把服装契约编进提交 prompt（领型/纽扣/花纹/配饰不得代际漂移）；未登记的 outfit_id 会在 identity report 记 `outfit_gaps`（`角色一致性硬闸=开启` 时 gate 阻断）。
 
 预算充足或后端偶发失败时，可加多次尝试：
 

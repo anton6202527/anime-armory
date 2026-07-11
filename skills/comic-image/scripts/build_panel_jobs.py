@@ -266,6 +266,52 @@ def panel_continuity_contract(panel: dict, panel_script: dict) -> dict[str, str]
     }
 
 
+def panel_outfit(panel: dict, registry: dict) -> tuple[str, str, dict[str, Any]]:
+    """返回 (角色 ref_id, outfit_id, outfit 记录)。
+
+    outfit 子注册表：registry.assets[CHAR_x].outfits[OUTFIT_y] =
+    {name, description, reference_images: [path], forbidden}。
+    业界已验证的失效模式是"锁了脸锁不住领型/纽扣/花纹"，
+    所以换装格必须显式声明 outfit_id 并绑定专属参考图与"绝不"负向清单。
+    """
+    outfit_id = str(panel.get("outfit_id") or panel.get("outfit") or "").strip()
+    if not outfit_id:
+        return "", "", {}
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    for ref_id in panel_reference_ids(panel):
+        asset = assets.get(ref_id) if isinstance(assets, dict) else None
+        outfits = asset.get("outfits") if isinstance(asset, dict) and isinstance(asset.get("outfits"), dict) else {}
+        record = outfits.get(outfit_id)
+        if isinstance(record, dict):
+            return ref_id, outfit_id, record
+    return "", outfit_id, {}
+
+
+def outfit_reference_paths(root: Path, ref_id: str, outfit_id: str, record: dict[str, Any]) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    for item in record.get("reference_images") or []:
+        raw = item.get("path") if isinstance(item, dict) else item
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        path = Path(raw)
+        resolved = path if path.is_absolute() else root / path
+        if resolved.is_file():
+            out.append({"id": ref_id, "path": path_relative_to_root(root, resolved), "view": f"outfit:{outfit_id}"})
+    return out
+
+
+def outfit_contract_text(outfit_id: str, record: dict[str, Any]) -> str:
+    parts = [f"本格服装={record.get('name') or outfit_id}"]
+    description = compact_metadata(record.get("description"), max_len=200)
+    if description:
+        parts.append(description)
+    forbidden = compact_metadata(record.get("forbidden"), max_len=140)
+    if forbidden:
+        parts.append("绝不出现：" + forbidden)
+    parts.append("领型、纽扣数、布料花纹、配饰按服装参考保持，不得代际漂移")
+    return "；".join(parts)
+
+
 def reference_priority(item: dict[str, str]) -> tuple[int, str]:
     view = str(item.get("view") or "")
     return (REFERENCE_VIEW_PRIORITY.get(view, 99), str(item.get("path") or ""))
@@ -292,6 +338,15 @@ def panel_references(root: Path, panel: dict, registry: dict, caps: Any) -> list
     for ref_id in panel_reference_ids(panel):
         resolved = resolve_reference_paths(root, str(ref_id), registry) or [{"id": str(ref_id), "path": ""}]
         grouped[ref_id] = sorted(resolved, key=reference_priority)
+
+    outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
+    if outfit_ref_id and outfit_record:
+        outfit_refs = outfit_reference_paths(root, outfit_ref_id, outfit_id, outfit_record)
+        if outfit_refs:
+            seen_paths = {ref["path"] for ref in outfit_refs}
+            grouped[outfit_ref_id] = outfit_refs + [
+                ref for ref in grouped.get(outfit_ref_id, []) if ref.get("path") not in seen_paths
+            ]
 
     character_ids = [ref_id for ref_id in grouped if ref_id.startswith("CHAR_")]
     char_limit = (
@@ -388,6 +443,12 @@ def build_prompt(panel: dict, style: str, registry: dict, panel_script: dict, fi
             )
         if continuity.get("character_integrity"):
             parts.append("人物完整性契约：" + continuity["character_integrity"])
+    outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
+    if outfit_id:
+        if outfit_record:
+            parts.append("服装契约：" + outfit_contract_text(outfit_id, outfit_record))
+        else:
+            parts.append(f"服装契约：本格声明 outfit_id={outfit_id} 但 registry 未登记该服装，出图前先补 outfits 子注册表")
     if panel.get("art_notes"):
         parts.append("构图与表演：" + str(panel.get("art_notes")))
     finish_parts = []
@@ -436,7 +497,11 @@ def compile_panel_prompt(
     finish: dict[str, Any],
     references: list[dict[str, str]],
     size: dict[str, int],
+    outfit_contract: str = "",
 ) -> dict[str, Any]:
+    continuity = dict(continuity)
+    if continuity.get("continuity_from", "").strip().lower() in {"none", "无", "n/a", "-"}:
+        continuity.pop("continuity_from")
     scene = "；".join(
         f"{label}:{continuity[key]}"
         for key, label in (
@@ -444,6 +509,7 @@ def compile_panel_prompt(
             ("lighting_anchor", "光位/光色"),
             ("axis_eyeline", "轴线/视线"),
             ("resident_assets", "常驻物件"),
+            ("continuity_from", "承接上一格"),
             ("spatial_relationships", "人物站位/前后景"),
             ("gaze_target", "视线目标"),
             ("eyeline_direction", "视线方向"),
@@ -468,6 +534,8 @@ def compile_panel_prompt(
         if has_identity_refs else
         "按已附场景、道具或风格参考保持相同结构、材质与视觉语言"
     )
+    if outfit_contract:
+        identity_hold += "；" + outfit_contract
     has_text = bool(panel.get("dialogue") or panel.get("narration"))
     compiled = compile_prompt({
         "panel_id": panel.get("panel_id"),
@@ -523,6 +591,8 @@ def build_jobs(root: Path, chapter: str) -> dict:
         continuity = panel_continuity_contract(panel, panel_script)
         references = panel_references(root, panel, registry, caps)
         production_prompt = build_prompt(panel, style, registry, panel_script, finish, render_stage)
+        outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
+        outfit_contract = outfit_contract_text(outfit_id, outfit_record) if outfit_ref_id and outfit_record else ""
         compiled = compile_panel_prompt(
             panel,
             model=model,
@@ -533,6 +603,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
             finish=finish,
             references=references,
             size=size,
+            outfit_contract=outfit_contract,
         )
         submit_prompt = str(compiled["prompt"])
         jobs.append(
@@ -555,6 +626,11 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "submit_prompt_chars": len(submit_prompt),
                 "continuity_contract": continuity,
                 "traditional_finish_contract": finish,
+                "outfit_binding": (
+                    {"ref_id": outfit_ref_id, "outfit_id": outfit_id, "registered": bool(outfit_record)}
+                    if outfit_id
+                    else {}
+                ),
                 "references": references,
                 "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",

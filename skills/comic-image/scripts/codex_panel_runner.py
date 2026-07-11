@@ -34,6 +34,28 @@ from comic_image_prompt_compiler import (  # noqa: E402
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
+SKILLS_ROOT = Path(__file__).resolve().parents[2]
+
+
+def run_preflight_gate(root: Path, chapter: str) -> int:
+    """付费出图入口自带闸门：跑 comic-review image_preflight gate。
+
+    gate 脚本缺失也按阻断处理——离钱最近的入口不能把"没闸"当"通过"；
+    确认误报或特殊场景用 --skip-gate 显式豁免（豁免会打印在输出里留痕）。
+    """
+    gate_script = SKILLS_ROOT / "comic-review" / "scripts" / "gate.py"
+    if not gate_script.is_file():
+        print(f"[err] preflight gate 不可用（缺 {gate_script}）；如确要跳过请显式传 --skip-gate", file=sys.stderr)
+        return 2
+    proc = subprocess.run(
+        [sys.executable, str(gate_script), str(root), "--chapter", chapter, "--stage", "image_preflight"],
+        stdin=subprocess.DEVNULL,
+        check=False,
+    )
+    if proc.returncode != 0:
+        print("[err] image_preflight gate blocked；先按 gate 报告返修，或确认误报后显式传 --skip-gate", file=sys.stderr)
+        return 2
+    return 0
 
 
 def repo_root(start: Path) -> Path:
@@ -592,10 +614,21 @@ def main() -> int:
     parser.add_argument("--no-resize", action="store_true")
     parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
     parser.add_argument("--continue-on-qc-block", action="store_true", help="调试用：遇到 post_qc=block 仍继续后续格；默认立即停下")
+    parser.add_argument(
+        "--skip-gate",
+        action="store_true",
+        help="显式跳过内置 image_preflight gate（编排层刚跑过 gate、或人工确认误报时用；跳过会留痕）",
+    )
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root(root)
+    if args.skip_gate:
+        print("[warn] --skip-gate：跳过内置 image_preflight gate（显式豁免，留痕）", flush=True)
+    else:
+        rc = run_preflight_gate(root, args.chapter)
+        if rc != 0:
+            return rc
     jobs_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     data = load_json(jobs_path)
     data["model"] = CODEX_MODEL

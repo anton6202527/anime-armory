@@ -30,7 +30,7 @@
 ├── 出图/共享/ 出图/分镜/     prompt/ + 图片/（三层定妆库 + 逐镜首尾帧）
 ├── 出视频/分镜/             prompt/ + 视频/（每 Clip MP4 + video_model_routes.json + video_qc.json）
 ├── 合成/                    _work/ + 成片_主片.mp4 + cutdown/ + 多比例/
-├── 合规/                    ai_usage.json + AI使用说明.md（二期补 compliance_manifest.json）
+├── 合规/                    ai_usage.json + AI使用说明.md + compliance_manifest.json
 └── 成片_主片.mp4
 ```
 
@@ -38,9 +38,11 @@
 
 | 层 | 字段 | 约定 |
 |---|---|---|
-| **必问最小集** `BRIEF_REQUIRED` | `brand` `product` `usp` `audience` | 缺任一 `ready=false`，`ad-concept` 第0步访谈补齐后才开工创意；一句话需求通常只差卖点和人群两问 |
+| **必问最小集** `BRIEF_REQUIRED` | `brand` `product` `usp` `audience` `campaign_objective` | 缺任一 `ready=false`，先补齐再开工创意；广告目标决定创意/评分权重 |
 | 推断 + 一次确认 | 调性/key_message/主片时长/平台/创意路线 | AI 给推断值打包让用户一次确认（与 `_设置.md` 选择点合并问），不算必填 |
-| **可延后合规项** `BRIEF_DEFER_TO_GATE` | `claims` `rights` `mandatories.legal_lines` | 可标「待补」先做创意/脚本；`gate_ready=false` 时禁入花钱 gate（image/video/compose）。`scripts/progress.py` 持续提示缺项 |
+| **花钱前闭合项** `BRIEF_DEFER_TO_GATE` | `claims` `rights` `mandatories.legal_lines` `measurement.primary_kpi` `measurement.conversion_event` | 可先做探索，但 `gate_ready=false` 时禁入 image/video/compose；claim 还须在 producer pack 中有证据文件、方法、日期、地区和批准人 |
+
+发布前另须把目标版位当前官方安全区/遮挡模板证据写进 `brief.platform_safe_zone_evidence.{平台}`；未知平台在 `brief.platform_specs` 录入客户/官方确认规格。缺失可继续做母版，但 compliance manifest 不给 release-ready。
 
 空串/空列表/「待补」/「TBD」都算缺。
 
@@ -56,8 +58,9 @@
 | `image` | 定妆库+出图 | `ad-image` | visual identity + 首尾帧 + product_qc（高风险闸门）|
 | `video` | 图生视频 | `ad-video` | 契约继承 + clip videos + video_qc（高风险闸门）|
 | `compose` | 剪辑包装+交付 | `ad-compose` | 成片 + cutdown + 交付规格 + video_qc 0 block（高风险闸门）|
-| `review` | 质检自审 | `ad-review` | M0 delivery review + video_qc 0 block + human review |
-| `handoff` | AI披露/交付 | `ad-craft/scripts/ai_usage.py` | AI usage disclosure |
+| `handoff` | AI披露/发布合规 | `ad-craft` | ai_usage + compliance_manifest release-ready |
+| `review` | 质检自审 | `ad-review` | consistency/video/delivery/compliance 0 block + human review |
+| `feedback` | 投放反馈（可选） | `ad-feedback` | 有样本门槛/置信区间的 test-learn-refresh report |
 
 > **不拆集**：一条主片是整体；`_进度.md` 用「阶段进度表」而非逐集矩阵。
 > **音频先行**：VO 实测时长驱动镜头时长，`script` 跑两遍（脚本 pass → 配音后 `storyboard` pass）。广告常是「音乐床 + VO」混合驱动，音乐床作为节奏锚一并记录。
@@ -71,11 +74,11 @@
 
 ## 关键选择点（详见 `skills/ad-craft/references/选择点与偏好.md` 拍广告节）
 
-`广告类型` `创意路线` `基础视觉风格` `主片时长` `交付比例` `cutdown版本` `生图AI` `一致性增强` `生视频模型` `生视频渠道` `视频模型路由` `出视频规格` `视频分辨率` `配音后端` `音乐来源` `品牌包装模板` `字幕语言` `AI视觉使用披露` `广告法地区` `交付规格` `生成粒度` `目标平台` `发行地区`。
+`广告类型` `广告目标` `漏斗阶段` `创意路线` `基础视觉风格` `主片时长` `交付比例` `cutdown版本` `生图AI` `一致性增强` `生视频模型` `生视频渠道` `视频模型路由` `出视频规格` `视频分辨率` `配音后端` `音乐来源` `品牌包装模板` `字幕语言` `AI视觉使用披露` `广告法地区` `交付规格` `生成粒度` `目标平台` `发行地区`。
 
 合规/不可逆/花钱多的点（`广告法地区`、`音乐来源`）即便记录过每次仍确认。
 
-> AI 标识/水印不再由本流水线处理：本线只记录 AI 使用披露，AI 标识/水印义务移到工具之外，由使用方按目标平台/各地区法规自行处理。
+> 产线不替发布者点击平台声明，也不对所有地区硬烙同一种水印；但发布声明证据、显式标识责任和元数据状态必须进入 compliance manifest，最终 review 消费它。
 
 ## 核心资产深层身份 (Hero Asset Deep Identity)
 

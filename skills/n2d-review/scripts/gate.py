@@ -19,6 +19,7 @@ Exit codes:
 from __future__ import annotations
 
 import glob
+import importlib.util
 import json
 import os
 import re
@@ -44,6 +45,13 @@ from gates.voice import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.scene import *  # noqa: F401,F403  证据族 check_（增量3）
 from gates.contract import *  # noqa: F401,F403  证据族 check_（增量3·face 先行）
 from gates.face import *  # noqa: F401,F403  证据族 check_（增量3·face 先行）
+_BGM_CORE_PATH = Path(__file__).resolve().parents[2] / "n2d" / "_lib" / "bgm_contract.py"
+_BGM_CORE_SPEC = importlib.util.spec_from_file_location("n2d_bgm_contract_core_for_gate", _BGM_CORE_PATH)
+assert _BGM_CORE_SPEC is not None and _BGM_CORE_SPEC.loader is not None
+bgm_contract_core = importlib.util.module_from_spec(_BGM_CORE_SPEC)
+sys.modules[_BGM_CORE_SPEC.name] = bgm_contract_core
+_BGM_CORE_SPEC.loader.exec_module(bgm_contract_core)
+import series_consistency as series_consistency_core  # noqa: E402
 from gate_core import (  # 显式带上 import* 默认会漏的下划线私有助手
     _IDENTITY_SCRIPTS,
     _cross_episode_diff,
@@ -3843,6 +3851,125 @@ def check_hybrid_performance_routes(root: str, ep: str, stage: str) -> None:
         if not isinstance(casting, dict) or casting.get("status") != "locked":
             add(BLOCK, "声音选角", os.path.join(root, "设定库", "voice_casting.json"),
                 "最终声音已进入合成边界，但 voice_casting.status 不是 locked；先完成角色声音定妆签收。", return_to_stage="voice")
+        fit_strategies = {"rough_timing_final_dub_later", "post_dub", "base_video_then_post_lipsync"}
+        fit_routes = [
+            str(row.get("clip_id") or row.get("id") or "")
+            for row in routes if isinstance(row, Mapping) and str(row.get("audio_strategy") or "") in fit_strategies
+        ]
+        if fit_routes:
+            report_path = os.path.join(root, "合成", ep, "配音", "voice_fit_zh.json")
+            fitted_path = os.path.join(root, "合成", ep, "配音", "voice_zh_fitted.wav")
+            report = load_json(report_path)
+            report_scope = {str(x) for x in (report.get("fit_scope") or [])} if isinstance(report, Mapping) else set()
+            missing_scope = sorted(set(fit_routes) - report_scope)
+            input_hashes = report.get("input_sha256") if isinstance(report, Mapping) and isinstance(report.get("input_sha256"), Mapping) else {}
+            expected_inputs = {
+                "shot_durations": os.path.join(root, "脚本", ep, "镜头时长.json"),
+                "voice_manifest": os.path.join(root, "合成", ep, "配音", "时长清单.json"),
+                "production_mode_route": os.path.join(root, "生产数据", f"production_mode_route_{ep}.json"),
+            }
+            stale_inputs = sorted(
+                key for key, path in expected_inputs.items()
+                if not input_hashes.get(key) or input_hashes.get(key) != _safe_sha256(path)
+            )
+            fitted_hash_stale = bool(
+                isinstance(report, Mapping)
+                and (not report.get("output_sha256") or report.get("output_sha256") != _safe_sha256(fitted_path))
+            )
+            if (
+                not isinstance(report, Mapping)
+                or report.get("kind") != "n2d_voice_fit_report"
+                or report.get("status") != "pass"
+                or report.get("applied") is not True
+                or not os.path.isfile(fitted_path)
+                or missing_scope
+                or stale_inputs
+                or fitted_hash_stale
+            ):
+                add(
+                    BLOCK,
+                    "后配音时长拟合",
+                    report_path,
+                    f"混合模式有 {len(fit_routes)} 个按粗时长锁画面的后配镜，但缺新鲜 pass 拟合报告/轨，"
+                    f"或报告未覆盖 {missing_scope or '全部 route'}、输入已变更 {stale_inputs or '无'}、拟合轨哈希过期={fitted_hash_stale}。"
+                    f"先运行 `python3 skills/n2d-compose/fit_voice_to_clips.py {root} {ep} zh --apply`；"
+                    "overflow 必须局部重定时/重出，不得直接拿整轨合成。",
+                    return_to_stage="compose",
+                    affected_artifacts=[report_path, fitted_path],
+                    evidence_family="audio_sync",
+                )
+
+
+def check_bgm_machine_contract(root: str, ep: str, *, allow_placeholder: bool = True) -> None:
+    """BGM must be an explicit machine contract, not a silent sine-wave fallback."""
+    path = str(bgm_contract_core.contract_path(root, ep))
+    for issue in bgm_contract_core.validate(root, ep, allow_placeholder=allow_placeholder):
+        add(
+            BLOCK,
+            "BGM合同",
+            path,
+            f"[{issue.get('code')}] {issue.get('message')}",
+            return_to_stage="compose",
+            affected_artifacts=[path, os.path.join(root, "脚本", ep, "bgm.txt")],
+            evidence_family="audio_sync",
+        )
+
+
+def check_series_consistency_baseline(root: str, ep: str, stage: str) -> None:
+    if not series_consistency_core.required(root):
+        return
+    phase = "full" if gate_family(stage) in {"compose", "review"} else "script"
+    contract_path = str(series_consistency_core.path(root))
+    for issue in series_consistency_core.validate(root, ep, phase=phase):
+        add(
+            BLOCK,
+            "剧级一致性合同",
+            contract_path,
+            f"[{issue.get('code')}] {issue.get('message')} 运行 `python3 skills/n2d/scripts/series_consistency.py {root} {ep} --phase {phase} --write-missing --json` 补齐后签收。",
+            return_to_stage="script_stage1" if phase == "script" else "compose",
+            affected_artifacts=[contract_path],
+            evidence_family="contract",
+        )
+
+
+def check_scene_lock_execution(root: str, ep: str) -> None:
+    """A planned scene lock only counts after its plate/subject/LoRA is executable."""
+    _, referenced_assets = episode_registry_reference_ids(root, ep)
+    referenced_locations = {str(value) for value in referenced_assets if str(value).upper().startswith("LOC_")}
+    if not referenced_locations:
+        return
+    plan_path = os.path.join(root, "生产数据", f"scene_reference_plan_{ep}.json")
+    plan = load_json(plan_path)
+    if not isinstance(plan, Mapping) or plan.get("kind") != "n2d_scene_reference_plan":
+        add(
+            BLOCK, "场景锁执行", plan_path,
+            f"缺场景生成侧执行计划；先运行 `python3 skills/n2d-image/scripts/scene_reference_planner.py {root} {ep} --write --json`。",
+            return_to_stage="image_prompt", evidence_family="contract",
+        )
+        return
+    for row in plan.get("locations") or []:
+        if not isinstance(row, Mapping):
+            continue
+        loc_id = str(row.get("loc_id") or "LOC_unknown")
+        if loc_id not in referenced_locations:
+            continue
+        if row.get("master_anchor") and not str(row.get("master_anchor_ref") or "").strip():
+            add(BLOCK, "场景锁执行", plan_path,
+                f"{loc_id} 同集达到 master plate 阈值，但只有计划 ID、没有真实 master_anchor_ref；先补场景主全景 plate。",
+                return_to_stage="image_prompt", affected_shots=[loc_id], evidence_family="contract")
+        if row.get("subject_registration_required") is True and row.get("is_core") and int(row.get("cross_eps") or 0) >= 3:
+            add(BLOCK, "场景锁执行", plan_path,
+                f"核心长线场景 {loc_id} 的后端支持 subject，但 registry 尚未 registered/ready；能力声明不能冒充已注册执行。",
+                return_to_stage="image_prompt", affected_shots=[loc_id], evidence_family="contract")
+        if row.get("suggest_scene_lora") is True:
+            add(BLOCK, "场景锁执行", plan_path,
+                f"核心长线场景 {loc_id} 无可用后端 subject 且已触发 scene LoRA 升档；先执行 scene_lock job/register，或显式改用已注册场景主体后端。",
+                return_to_stage="image_prompt", affected_shots=[loc_id], evidence_family="contract")
+        refs = [ref for ref in row.get("refs") or [] if isinstance(ref, Mapping)]
+        if not any(ref.get("slot") in {"primary", "master_plate"} and str(ref.get("ref") or "").strip() and not ref.get("planned") for ref in refs):
+            add(BLOCK, "场景锁执行", plan_path,
+                f"{loc_id} 缺可执行 primary/master scene plate；场景锁仍是空计划。",
+                return_to_stage="image_prompt", affected_shots=[loc_id], evidence_family="contract")
 
 
 def run(root: str, ep: str, stage: str) -> None:
@@ -3854,6 +3981,7 @@ def run(root: str, ep: str, stage: str) -> None:
     check_gate_policy_matrix(stage)
     check_consistency_rule_registry(root, ep, stage)
     check_production_mode_contract_sync(root, ep, stage)
+    check_series_consistency_baseline(root, ep, stage)
     check_stage = policy_family_for_stage(stage, fallback=gate_family(stage))
     if check_stage in {"video_prompt_preflight", "video", "compose", "review"}:
         check_hybrid_performance_routes(root, ep, stage)
@@ -3946,6 +4074,7 @@ def run(root: str, ep: str, stage: str) -> None:
         # 标记解析（花钱前）：本集引用到的 CHAR_/LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ id 必须在注册层真实存在。
         # registry schema 已由上面两道校验保证；这里加 referenced⊆registered，堵「写错 id 空烧」（image_preflight 即拦）。
         check_referenced_markers_resolve(root, ep)
+        check_scene_lock_execution(root, ep)
         check_storyboard_contract(root, ep, require_frame_assets=False)
         check_storyboard_possession_gate(root, ep)
         check_storyboard_visual_contract(root, ep)
@@ -4090,6 +4219,7 @@ def run(root: str, ep: str, stage: str) -> None:
             # 视频落档后立即跑总审：重型 sidecar 缺证据、主体串换、相机/动作问题不要拖到 compose 才回流。
             check_consistency_audit_gate(root, ep, stage="video")
     elif check_stage == "compose":
+        check_bgm_machine_contract(root, ep)
         check_compliance_manifest(root, ep, check_stage)
         require_progress(root, ep, ("视频",))
         check_progress_artifact_signoff(root, ep, ("视频",))
@@ -4126,6 +4256,7 @@ def run(root: str, ep: str, stage: str) -> None:
         check_consistency_audit_gate(root, ep, stage="compose")
         check_progress_receipt_reconcile(root, ep, current_stage="compose")  # H3：成片前对账已标 ✅ 的上游受闸列都有新鲜凭据
     elif check_stage == "review":
+        check_bgm_machine_contract(root, ep, allow_placeholder=False)
         check_compliance_manifest(root, ep, check_stage)
         referenced_characters, referenced_assets = episode_registry_reference_ids(root, ep)
         referenced_identity_refs = episode_registry_identity_refs(root, ep)

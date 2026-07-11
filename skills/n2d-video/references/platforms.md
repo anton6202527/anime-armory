@@ -2,6 +2,8 @@
 
 > **机器真值源**：视频后端别名、`max_clip_seconds`、原生音画后端集合等可执行字段集中在 `skills/n2d/_lib/n2d_platform_profiles.py`。本文件负责人读解释；若两者不一致，以 `_lib` 模块为准，并同步修本文。
 
+> **2026-07-11 官方能力复核**：Seedance 2.0 官方确认多镜音画生成及图/视频/音频多参考；Kling VIDEO 3.0 官方指南确认 multi-shot/custom multi-shot 与视频作为 Elements 参考；PixVerse C1 官方确认多面板 storyboard-to-video、reference-guided consistency、最长 15s/1080p/音频。机器档案因此新增 PixVerse C1 的 `reference_to_video + multishot_native` 能力，但在没有 n2d adapter smoke 前 `auto_routing=false`，只产人工/job package，不宣称自动化成功。来源：`https://seed.bytedance.com/blog/seedance-2-0-official-launch`、`https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide`、`https://pixverse.ai/en/blog/pixverse-introduces-c1-ai-video-model-for-film-production`。
+
 本 skill 的核心产物——分镜剧本、角色/场景卡、爽剧节拍、双语字幕——**平台无关**。
 各 AI 生成平台的差异，由下面的「平台档案」描述。
 

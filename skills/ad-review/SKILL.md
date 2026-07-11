@@ -16,12 +16,13 @@ description: 拍广告 质检 + 流程自审（ad 线 QA 环节，不生产内�
 
 # 模式①：作品质检（M0）
 
-在 `ad-compose` 出主片和交付件后跑。M0 先做**投放前硬项**，不伪装成视觉模型审片：产品/logo/品牌色像素级判断仍要人审，但脚本会把必须看的位置列出来。
+在 `ad-compose`、delivery QC 和发布合规 manifest 完成后跑。M0 不把全帧 dHash/NCC 伪装成语义审片：机器负责真实媒体抽帧、并排、结构/时长/响度和证据完整性，产品/logo/人物/场景语义一致性由人对 contact sheet 签收。
 
 ## 用法
 
 ```bash
 python3 skills/ad-review/scripts/consistency_findings.py "<作品根>" --write
+python3 skills/ad-craft/scripts/compliance_manifest.py "<作品根>" --declaration-status completed --declaration-evidence "<回执>"
 python3 skills/ad-review/scripts/review.py "<作品根>" --json "<作品根>/合规/ad_review_m0.json"
 ```
 
@@ -32,14 +33,14 @@ python3 skills/ad-review/scripts/review.py "<作品根>" --json "<作品根>/合
 1. 主片 `合成/成片_主片.mp4` 存在。
 2. `脚本/广告法机检报告.json` 存在且 `summary.block=0`。
 3. `出视频/分镜/video_qc.json` 存在且 `summary.block=0`。
-4. `生产数据/consistency_findings.json` 汇总 product_qc / contract_inheritance / video_qc / 广告法 / AI 披露，一处看产品、品牌、视频接力和合规证据链。
+4. `consistency_findings.json` 汇总 product_qc / contract inheritance / video_qc / asset consistency / voice consistency / 广告法 / AI 披露；角色、场景、道具跨镜生成并排表，voice_key 漂移硬挡。
 5. **开篇钩子饱和度评分 (Hook Saturation Score)**：评估前 3 秒的视觉张力和音效吸引力。
-6. **万能安全区核查**：确认核心产品和 USP 落在 8x8 网格中心，无遮挡且适配裁切。
+6. **placement-aware 安全区核查**：按实际版位/交互遮挡模板确认核心产品、USP、CTA；未知平台规格不得用通用中心网格冒充通过。
 7. **视觉虚假宣传检测**：核对产品比例与真人比例的逻辑合理性。
 8. `配音/时长清单.json.has_placeholder=false`。
-9. `合规/ai_usage.json` AI 使用披露留痕存在。（AI 标识/水印不再由本流水线把关，移到工具之外由使用方按平台/地区法规自行处理。）
-10. `_进度.md` 的交付矩阵至少有主片路径；缺回写则先跑 `ad-compose/deliver.py --mark-existing`。
-11. 产品/logo/品牌色/字幕/音画同步列为人工复核清单。
+9. `ai_usage.json` + `compliance_manifest.json.release_ready=true`；平台声明/显式标识/元数据责任必须有证据。
+10. `合成/delivery_qc.json` 0 block：每件实测时长、比例、音轨、LUFS、true peak 通过。
+11. `_进度.md` 只允许把 delivery_qc 通过的交付件标 ✅；产品/logo/人物/场景/道具/字幕/音画同步列人工签收。
 
 ## 常见错误
 

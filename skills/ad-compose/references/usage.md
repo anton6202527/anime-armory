@@ -13,12 +13,12 @@
 
 | 脚本 | 作用 |
 |---|---|
-| `compose.sh <作品根> [比例] [字幕语言] [交付规格]` | 拼 clips（filter-concat 归一）+ 混 VO/音乐床 + 烧字幕 + 追加 end card + 响度归一 → `合成/成片_主片.mp4`(+`_loud.mp4`) |
+| `compose.sh <作品根> [比例] [字幕语言] [交付规格]` | gate → 拼 clips + 混音/字幕 + 按需（不重复）end card + 响度归一，正式路径始终是 `合成/成片_主片.mp4` |
 | `endcard.py --out … (--size WxH \| --aspect 9:16) …` | 品牌包装片尾 PNG；尺寸按 `--size`/`--aspect` 推（不再写死 1920x1080），版式用实测文字高度堆叠 |
 | `render_subs.py <srt> --out-dir … --png-input-base 1` | SRT → 字幕 PNG + `overlay_table.json` + `inputs.txt` + `vfilter.txt`（compose.sh 直接消费 vfilter）|
-| `cutdown.py <作品根> --target 15s [--aspect 16:9] [--render]` | 多时长重剪规划（必保镜先占预算 + 权威时长源 + 缺失 block）；`--render` 实际出 MP4，带 pytest |
-| `reframe.py --src WxH --target 9:16 [--crop-x/--crop-y] [--in … --render]` | 多比例 crop/pad 滤镜 + 焦点裁切；`--render` 实际出 MP4，带 pytest |
-| `deliver.py <作品根> --mark-existing` | 读 `_进度.md` 交付矩阵，生成 delivery_plan（含可执行 `--render` 命令），并把已存在交付件回写 ✅ |
+| `cutdown.py <作品根> --target 15s [--render]` | 先选镜，再从完成混音/字幕的主片 trim/concat，保留完整音画包装 |
+| `reframe.py … [--focus-plan plan.json]` | 固定或分时焦点裁切；动态主体可按镜头移动裁切窗 |
+| `deliver.py <作品根> --mark-existing` | 生成 delivery_plan + delivery_qc；只有实测时长/比例/音轨/LUFS/true peak 通过才回写 ✅ |
 
 ## 交付规格（响度归一）
 
@@ -27,8 +27,7 @@
 - 广电 TVC：`-23 LUFS`，true peak `-2 dB`。
 
 ```bash
-# compose.sh 自动产出 合成/成片_主片_loud.mp4；如需单独跑：
-ffmpeg -i 成片_主片.mp4 -af loudnorm=I=-16:TP=-1:LRA=11 -c:v copy 合成/成片_主片_loud.mp4
+# 目标从 ad-craft contract 读取；delivery_qc 对最终文件再次实测，不以“跑过 loudnorm 命令”代替验收。
 ```
 
 ## 安全框
@@ -61,4 +60,4 @@ python3 skills/ad-compose/deliver.py "<作品根>" --mark-existing
 
 `ad-craft/scripts/ai_usage.py` 记 AI 使用 + 授权（音乐/代言人/字体/素材）。
 
-> AI 标识/水印不再由本流水线处理：ad-compose 出成片/交付件即收尾，不再生成可见 AI 标识/水印、不再调用任何 watermark skill。若投放地区/平台需要 AI 标识，由使用方在工具之外按当地法规自行处理。
+随后生成 `compliance_manifest.json`；平台声明/标识由发布方实际执行并回写证据，未完成不能通过最终 review。

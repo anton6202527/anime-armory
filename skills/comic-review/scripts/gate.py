@@ -32,6 +32,10 @@ except Exception as exc:  # pragma: no cover
     IMPORT_ERROR = exc
 else:
     IMPORT_ERROR = None
+try:
+    import scene_prop_consistency
+except Exception:  # pragma: no cover
+    scene_prop_consistency = None
 
 COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
 if str(COMIC_LIB) not in sys.path:
@@ -559,6 +563,49 @@ def check_panel_visual_contract(root: Path, chapter: str, panel_script: dict[str
                 )
 
 
+def layout_is_single_column(layout: dict[str, Any]) -> bool:
+    if layout.get("geometry_profile") == "longstrip_single_column":
+        return True
+    panels = [
+        panel
+        for segment in layout.get("segments") or []
+        if isinstance(segment, dict)
+        for panel in segment.get("panels") or []
+        if isinstance(panel, dict)
+    ]
+    if not panels:
+        return False
+    xs = {int(panel.get("x") or 0) for panel in panels}
+    if len(xs) > 1:
+        return False
+    width = int((layout.get("canvas") or {}).get("width") or 0)
+    if not width:
+        return True
+    return all(int(panel.get("w") or 0) >= int(width * 0.7) for panel in panels)
+
+
+def check_format_geometry(root: Path, chapter: str, layout: dict[str, Any], findings: list[dict[str, Any]]) -> None:
+    """页漫/四格选择点 vs layout 实际几何。
+
+    deterministic build_layout 只会产单列条漫几何；选了页漫/四格却拿着单列
+    layout 出图，最终交付物必然是一条竖条。必须在付费出图前拦下，
+    由人工/agent 重排 layout（页内网格、RTL、分页）后再继续。
+    """
+    fmt = str(layout.get("format") or read_setting(root, "漫画形态", "条漫"))
+    if not any(token in fmt for token in ("页漫", "四格")):
+        return
+    if layout_is_single_column(layout):
+        add(
+            findings,
+            "block",
+            "format_geometry_mismatch",
+            f"排版/{chapter}/layout.json",
+            f"漫画形态={fmt}，但 layout 是单列条漫几何（deterministic 脚本仅支持条漫）。按此出图/合成只能得到一条竖条。",
+            "layout",
+            "人工或 agent 重排 layout.json（页内多格网格、阅读方向、分页装订），或把 漫画形态 改回 条漫。",
+        )
+
+
 def traditional_workflow_enabled(root: Path) -> bool:
     return read_setting(root, "传统原稿流程", "启用") not in {"关闭", "off", "disabled", "false", "False"}
 
@@ -701,6 +748,18 @@ def check_identity(root: Path, report: dict[str, Any], findings: list[dict[str, 
         add(findings, "block", "missing_ready_refs", "生产数据/comic_identity_report.json", "仍有共享参考图缺失。", "identity", "补齐 missing_refs 后重建出图包。")
     if int(summary.get("rerun_target_count") or 0) > 0:
         add(findings, "block", "reference_rerun_targets", "生产数据/comic_identity_report.json", "存在已 ready 但未按当前参考图重抽的 panel。", "image", "按 identity report 的 rerun_targets force 重抽。")
+    outfit_gaps = report.get("outfit_gaps") if isinstance(report.get("outfit_gaps"), dict) else {}
+    if outfit_gaps:
+        hard_gate_on = read_setting(root, "角色一致性硬闸", "关闭").strip() in {"开启", "on", "true"}
+        add(
+            findings,
+            "block" if hard_gate_on else "warn",
+            "outfit_registry_gaps",
+            "生产数据/comic_identity_report.json",
+            "换装格缺服装子注册或服装参考图：" + "；".join(f"{pid}: {reason}" for pid, reason in sorted(outfit_gaps.items())[:10]),
+            "identity",
+            "在 registry.assets[角色].outfits 登记该服装（描述+参考图+绝不清单）后重建出图包。",
+        )
     level = read_setting(root, "定妆级别", "长线专门定妆")
     if level.startswith("长线") or "专门定妆" in level or "高一致性" in level:
         missing = report.get("missing_character_views") if isinstance(report, dict) else {}
@@ -979,6 +1038,8 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
         check_source_semantics(root, chapter, panel_script, findings)
         check_panel_visual_contract(root, chapter, panel_script, findings)
     layout = load_json(paths["layout"], {})
+    if isinstance(layout, dict) and layout:
+        check_format_geometry(root, chapter, layout, findings)
     jobs = load_json(paths["panel_jobs"], {})
     if isinstance(jobs, dict):
         check_backend(root, jobs, findings, notes)
@@ -990,6 +1051,21 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     report = refresh_identity_report(root, chapter, findings, no_refresh=no_refresh)
     check_identity(root, report, findings)
     check_style_contract(root, findings)
+    check_consistency_strategy_support(root, findings)
+
+
+def check_consistency_strategy_support(root: Path, findings: list[dict[str, Any]]) -> None:
+    strategy = read_setting(root, "参考一致性策略", "共享参考图")
+    if any(token in strategy for token in ("主体库", "LoRA", "lora")) and "共享参考图" not in strategy:
+        add(
+            findings,
+            "warn",
+            "consistency_strategy_unimplemented",
+            "_设置.md",
+            f"参考一致性策略={strategy}：漫画线暂无主体库/LoRA 执行实现，当前按共享参考图口径降级执行。",
+            "identity",
+            "接受降级则改回 共享参考图；坚持 LoRA 需在本线外训练，并把产出图登记为 registry 参考后照常走共享参考流程。",
+        )
 
 
 def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:
@@ -1008,6 +1084,11 @@ def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: l
     char_paths = character_consistency.write_outputs(root, chapter, char_report)
     notes.append(f"character consistency refreshed: {char_paths['markdown']}")
     merge_consistency_report(char_report, findings, category="character_consistency")
+    if scene_prop_consistency is not None:
+        scene_report = scene_prop_consistency.analyze(root, chapter)
+        scene_paths = scene_prop_consistency.write_outputs(root, chapter, scene_report)
+        notes.append(f"scene/prop consistency refreshed: {scene_paths['markdown']}")
+        merge_consistency_report(scene_report, findings, category="scene_prop_consistency")
 
 
 def run_compose(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:

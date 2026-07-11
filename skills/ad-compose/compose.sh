@@ -7,13 +7,16 @@ set -euo pipefail
 ROOT="${1:?用法: compose.sh <作品根> [比例] [字幕语言] [交付规格]}"
 ASPECT="${2:-16:9}"
 SUBLANG="${3:-none}"      # zh|en|bilingual|none（none=不烧字幕）
-DELIVERY="${4:-平台默认}"  # 平台默认 -16 LUFS / 广电TVC -23 LUFS
+DELIVERY="${4:-平台默认}"
 WORK="$ROOT/合成/_work"
 OUT="$ROOT/合成/成片_主片.mp4"
 CLIP_DIR="$ROOT/出视频/分镜/视频"
 VO="$ROOT/配音/vo.wav"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$WORK" "$ROOT/合成"
+
+# 正式合成入口强制跑 compose gate，不能靠操作者记住文档步骤。
+python3 "$HERE/../ad-craft/scripts/gate.py" "$ROOT" --stage compose
 
 command -v ffmpeg >/dev/null || { echo "[err] 需要 ffmpeg"; exit 2; }
 
@@ -40,7 +43,7 @@ ffmpeg -y "${in_args[@]}" -filter_complex "$fc" -map "[outv]" -c:v libx264 -pix_
 
 # 2) 片尾 end card（若已生成 endcard.png，按当前画幅归一后追加 2.5s）
 ENDCARD="$WORK/endcard.png"
-if [ -f "$ENDCARD" ]; then
+if [ -f "$ENDCARD" ] && python3 "$HERE/compose_preflight.py" "$ROOT" --should-append-endcard; then
   ffmpeg -y -loop 1 -t 2.5 -i "$ENDCARD" -vf "${NORM}" \
     -c:v libx264 -pix_fmt yuv420p "$WORK/_endcard.mp4"
   ffmpeg -y -i "$VIDEO" -i "$WORK/_endcard.mp4" \
@@ -80,19 +83,20 @@ fi
 # 4) 混音：VO（主）+ 音乐床（duck）。音乐床可选：$ROOT/配音/music.wav
 MUSIC="$ROOT/配音/music.wav"
 if [ -f "$VO" ] && [ -f "$MUSIC" ]; then
-  ffmpeg -y -i "$VIDEO" -i "$VO" -i "$MUSIC" \
-    -filter_complex "[2:a]volume=0.25[m];[1:a][m]amix=inputs=2:duration=first:dropout_transition=2[a]" \
+  ffmpeg -y -i "$VIDEO" -i "$VO" -stream_loop -1 -i "$MUSIC" \
+    -filter_complex "[2:a]volume=0.25[m];[1:a]apad[vo];[vo][m]amix=inputs=2:duration=longest:dropout_transition=2,apad[a]" \
     -map 0:v -map "[a]" -c:v copy -c:a aac -shortest "$OUT"
 elif [ -f "$VO" ]; then
-  ffmpeg -y -i "$VIDEO" -i "$VO" -map 0:v -map 1:a -c:v copy -c:a aac -shortest "$OUT"
+  ffmpeg -y -i "$VIDEO" -i "$VO" -filter_complex "[1:a]apad[a]" \
+    -map 0:v -map "[a]" -c:v copy -c:a aac -shortest "$OUT"
 else
   cp "$VIDEO" "$OUT"
 fi
 echo "[ok] 成片：$OUT"
 
 # 5) 交付规格响度归一（按 DELIVERY 的 LUFS）。只有当成片有音轨时才跑。
-LUFS="-16"; TP="-1"
-[ "$DELIVERY" = "广电TVC" ] && { LUFS="-23"; TP="-2"; }
+PROFILE="$(python3 "$HERE/delivery_profile.py" "$DELIVERY")"
+LUFS="${PROFILE%%$'\t'*}"; TP="${PROFILE#*$'\t'}"
 HAS_AUDIO=0
 if command -v ffprobe >/dev/null; then
   ffprobe -v error -select_streams a -show_entries stream=index -of csv=p=0 "$OUT" | grep -q . && HAS_AUDIO=1
@@ -100,9 +104,10 @@ else
   ffmpeg -i "$OUT" -hide_banner 2>&1 | grep -q "Audio:" && HAS_AUDIO=1
 fi
 if [ "$HAS_AUDIO" = "1" ]; then
-  LOUD="$ROOT/合成/成片_主片_loud.mp4"
+  LOUD="$ROOT/合成/_work/成片_主片_loud.tmp.mp4"
   ffmpeg -y -i "$OUT" -af "loudnorm=I=${LUFS}:TP=${TP}:LRA=11" -c:v copy -c:a aac "$LOUD"
-  echo "[ok] 响度归一（${LUFS} LUFS / TP ${TP}）：$LOUD"
+  mv "$LOUD" "$OUT"
+  echo "[ok] 响度归一（${LUFS} LUFS / TP ${TP}）：$OUT（正式交付路径已替换）"
 else
   echo "[i] 成片无音轨（无 VO），跳过响度归一"
 fi

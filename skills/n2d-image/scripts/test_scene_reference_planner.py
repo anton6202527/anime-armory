@@ -11,7 +11,7 @@ def test_scene_lock_tier_ladder():
     assert srp.scene_lock_tier(backend_supports_subject=False) == "reference_plate"
     assert srp.scene_lock_tier(backend_supports_subject=True) == "backend_subject"
     assert srp.scene_lock_tier(backend_supports_subject=True, scene_lora_status="ready") == "scene_lora"
-    assert srp.scene_lock_tier(backend_supports_subject=False, scene_lora_status="training") == "scene_lora"
+    assert srp.scene_lock_tier(backend_supports_subject=False, scene_lora_status="registered") == "scene_lora"
 
 
 def test_master_anchor_threshold():
@@ -61,8 +61,23 @@ def test_plan_loc_full():
     plan = srp.plan_loc(loc, intra_shots=4, cross_eps=3, backend_supports_subject=False)
     assert plan["scene_lock_tier"] == "reference_plate"
     assert plan["master_anchor"] == "LOC_HALL_MASTER"
+    assert plan["master_anchor_ref"] == "p.png"
+    assert plan["subject_registration_required"] is False
     assert plan["suggest_scene_lora"] is True
     assert plan["is_core"] is True
+
+
+def test_backend_capability_does_not_fake_subject_registration():
+    loc = {"id": "LOC_HALL", "core": True, "reference_group": {"primary": "p.png"}}
+    unregistered = srp.plan_loc(loc, intra_shots=3, cross_eps=3, backend_supports_subject=True)
+    assert unregistered["scene_lock_tier"] == "reference_plate"
+    assert unregistered["subject_registration_required"] is True
+    registered = srp.plan_loc(
+        {**loc, "scene_subject": {"status": "registered"}},
+        intra_shots=3, cross_eps=3, backend_supports_subject=True,
+    )
+    assert registered["scene_lock_tier"] == "backend_subject"
+    assert registered["subject_registration_required"] is False
 
 
 if __name__ == "__main__":

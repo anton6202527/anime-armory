@@ -82,15 +82,23 @@ python3 skills/n2d/run.py next  <作品根> [第N集] [--json] [--auto]
 | stop_reason | 触发条件（真值源） | 编排器动作 |
 |---|---|---|
 | `needs_agent_gen` | 前沿阶段 owner 的产出含"代理 LLM 创作"（script_stage1/2、image_prompt、video_prompt 文案） | 跑完脚手架，停，给"该生成什么 + prompt 包路径" |
+| `needs_stage_execution` | 前置已齐，但非代理创作的阶段执行仍需外部 runner/人工执行 | 停在明确工位，不假装已执行 |
 | `needs_payment_confirm` | 前沿 `STAGE_GRAPH[key].gate_stage` 属花钱档（image / video / compose；voice 走云后端时） | 停，附 `生成粒度` 菜单 + 放行确认 |
 | `needs_choice` | 该阶段有**未解析**的"首跑必给"/"每次必问"选择点（制作模式·基础视觉风格·BGM来源·生成粒度；生视频模型/渠道只在 n2d-video 出视频前因固定模式、账号硬约束或 probe 缺口才问） | 停，弹对应菜单（默认预选=设置里的上次值，但不沉默沿用） |
 | `needs_compliance` | `n2d-compliance --check` 在 image/video/compose 前报缺口 | 停，列缺口，绝不放行 |
+| `needs_acceptance_signoff` | 技术检查已过，仍缺独立验收签收 | 停，等待签收，不让生成者自批 |
+| `blocked_by_entry_check` | 源文本/skill/旧资产新鲜度入口检查失败 | 停，按 repair plan 最小回流 |
+| `capability_evidence_required` | 后端能力证据过期、保守或仅人工声明 | 停，刷新官方证据/adapter smoke，或换可证实后端 |
 | `prework_failed` | P-1 开发包、P-2 导演排戏包、源语言理解层、中段前情资产包、边界复核等确定性前置未确认或脚本失败 | 停，给补齐命令/路径，不进入创作或花钱 |
 | `blocked_by_gate` | `dashboard gate` 退出码 1 | 停，透传 `return_to_stage/affected_artifacts/rerun_scope`，指向最小返工 |
 | `blocked_by_image_qc` | video/compose/review 前置发现 `image_qc` 缺失、非 full、或 hard block | 停，回 `n2d-image` 修复/确认受影响 PNG；不再误报为后端环境缺失 |
+| `blocked_by_review_acceptance` | 审片结论/人工验收未满足发布边界 | 停，按 finding 回流或补签收 |
 | `env_missing` | `doctor.py` 报该阶段所需后端/精度档缺失 | 停（或路由占位+大声告警），不让代理跑到花钱工位才发现 |
 | `auto_ran` | 纯确定性步骤（router/gate-pass/矩阵刷新/进度回写） | **不停**，`--auto` 下继续推进 |
 | `done` | `stage_of` 返回 `col=None`（默认视频已完成；或已启用的合成/验收尾段完成） | 报完成 |
+| `unknown_stage` | 前沿阶段不在 action registry | fail-closed，升级维护者；禁止猜测路由 |
+
+枚举唯一真值为 `skills/n2d/_lib/n2d_action_registry.py::STOP_REASONS`；本表只做人读解释。schema 与 supervisor 有穷举测试，新增值必须先改注册表再补消费者测试。
 
 > 关键不变量：**编排器只会在前置未确认、`gate_stage` 标了花钱、选择点未解析、合规/env 缺口时停。**
 > 其余（找前沿、跑 gate、写路由表、刷身份矩阵、回写进度+dashboard）一律自动，对代理透明。

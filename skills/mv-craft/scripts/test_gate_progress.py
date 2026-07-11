@@ -18,7 +18,7 @@ def make_project(root):
     for sub in ("歌", "词", "节拍", "分镜", "出图/段落/图片"):
         os.makedirs(os.path.join(root, sub), exist_ok=True)
     with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
-        json.dump({"title": "测试", "song_timing": "先传音乐", "song_rights_status": "自有"}, f, ensure_ascii=False)
+        json.dump({"title": "测试", "song_timing": "先传音乐", "song_rights_status": "自有", "is_demo": True}, f, ensure_ascii=False)
     with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
         f.write("""# 进度
 
@@ -33,7 +33,7 @@ def make_project(root):
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
         f.write("[verse]\n一句歌词\n")
     with open(os.path.join(root, "节拍", "beatgrid.json"), "w", encoding="utf-8") as f:
-        json.dump({"duration": 5, "beats": [1, 2], "downbeats": [1]}, f)
+        json.dump({"duration": 5, "beats": [1, 2], "downbeats": [1], "timing_verified": True}, f)
     with open(os.path.join(root, "视觉蓝图.md"), "w", encoding="utf-8") as f:
         f.write("# 视觉蓝图\n")
 
@@ -107,6 +107,52 @@ class GateProgressTest(unittest.TestCase):
             write_image_qc(tmp)
             errors, _warnings = gate.check(tmp, "video_jobs")
             self.assertEqual(errors, [])
+
+    def test_formal_video_jobs_requires_picture_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            meta_path = os.path.join(tmp, "_meta.json")
+            with open(meta_path, encoding="utf-8") as f:
+                meta = json.load(f)
+            meta["is_demo"] = False
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(meta, f, ensure_ascii=False)
+            write_clip_plan_with_image(tmp)
+            write_image_qc(tmp)
+            errors, _warnings = gate.check(tmp, "video_jobs")
+            self.assertTrue(any("picture lock" in error for error in errors))
+
+    def test_compose_video_reports_are_hash_bound(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            for rel in ("出视频", "设定", "生产数据/video_inherit_contract", "生产数据/video_qc", "出视频/视频"):
+                os.makedirs(os.path.join(tmp, rel), exist_ok=True)
+            inputs = {
+                "分镜/clip_plan.json": {"clips": [{"clip_id": "Clip_001"}]},
+                "分镜/timeline_manifest.json": {"clips": [{"clip_id": "Clip_001", "video_path": "出视频/视频/Clip_001.mp4"}]},
+                "出视频/jobs_manifest.json": {"jobs": []},
+                "设定/identity_registry.json": {},
+                "分镜/reference_plan.json": {},
+            }
+            for rel, payload in inputs.items():
+                with open(os.path.join(tmp, rel), "w", encoding="utf-8") as f:
+                    json.dump(payload, f)
+            video_rel = "出视频/视频/Clip_001.mp4"
+            with open(os.path.join(tmp, video_rel), "wb") as f:
+                f.write(b"video-v1")
+            inherit_inputs = ("分镜/clip_plan.json", "出视频/jobs_manifest.json", "设定/identity_registry.json", "分镜/reference_plan.json")
+            video_inputs = ("分镜/clip_plan.json", "分镜/timeline_manifest.json")
+            inherit = {"summary": {"hard_blocks": 0}, "inputs_sha256": {rel: mv_utils.content_hash(os.path.join(tmp, rel)) for rel in inherit_inputs}}
+            video = {"summary": {"hard_blocks": 0}, "inputs_sha256": {rel: mv_utils.content_hash(os.path.join(tmp, rel)) for rel in video_inputs},
+                     "selected_video_sha256": {video_rel: mv_utils.content_hash(os.path.join(tmp, video_rel))}}
+            with open(os.path.join(tmp, "生产数据/video_inherit_contract/inherit_contract.json"), "w", encoding="utf-8") as f:
+                json.dump(inherit, f)
+            with open(os.path.join(tmp, "生产数据/video_qc/video_qc.json"), "w", encoding="utf-8") as f:
+                json.dump(video, f)
+            self.assertEqual(gate._video_report_errors(tmp, "compose"), [])
+            with open(os.path.join(tmp, video_rel), "wb") as f:
+                f.write(b"video-v2")
+            self.assertTrue(any("已变化" in error for error in gate._video_report_errors(tmp, "compose")))
 
 
 if __name__ == "__main__":

@@ -24,6 +24,11 @@ REQUIRED_SEMANTIC_FIELDS = (
     "lighting",
     "visual_motif",
     "transition_motif",
+    "screen_direction",
+    "eyeline",
+    "prop_state",
+    "scene_topology",
+    "motion_vector",
 )
 
 
@@ -101,7 +106,12 @@ def build_composer_prompt(clips, blueprint, lyrics):
 	      "blocking": "主体走位和画面重心",
 	      "lighting": "光影氛围（如：逆光剪影、红蓝霓虹律动），需符合色彩剧本",
 	      "visual_motif": "本 clip 继承或强化的视觉母题",
-	      "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切"
+	      "transition_motif": "转场母题，如 光效切/遮挡擦镜/动作切",
+      "screen_direction": "主体运动方向，如 left_to_right",
+      "eyeline": "视线目标与反打轴线",
+      "prop_state": "关键道具、持握手和状态",
+      "scene_topology": "入口、主体、背景和陈设空间关系",
+      "motion_vector": "动作速度、方向和相位承接"
     }}
   ]
 }}
@@ -176,6 +186,9 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
         clip["continuity"]["start_state"] = sem.get("start_state", "")
         clip["continuity"]["action"] = sem.get("action", "")
         clip["continuity"]["end_state"] = sem.get("end_state", "")
+        for key in ("screen_direction", "eyeline", "prop_state", "scene_topology", "motion_vector"):
+            if sem.get(key):
+                clip["continuity"][key] = sem.get(key)
         if sem.get("action_family"):
             clip["action_family"] = sem.get("action_family")
         if sem.get("energy_level"):

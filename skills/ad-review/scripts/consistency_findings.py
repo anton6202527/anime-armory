@@ -10,12 +10,20 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from datetime import date
+from pathlib import Path
 from typing import Any, Iterable
 
 
 KIND = "ad_consistency_findings"
 SEVERITIES = ("block", "warn", "info")
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+import asset_consistency  # noqa: E402
+import voice_consistency  # noqa: E402
 
 
 def load_json(path: str, default: Any = None) -> Any:
@@ -174,6 +182,16 @@ def compliance_checks(root: str, findings: list[dict[str, Any]]) -> None:
 def build_report(root: str) -> dict[str, Any]:
     root = os.path.abspath(root)
     findings: list[dict[str, Any]] = []
+    for module, relpath, dimension in (
+        (asset_consistency, "生产数据/asset_consistency.json", "asset_identity"),
+        (voice_consistency, "生产数据/voice_consistency.json", "voice_identity"),
+    ):
+        payload = module.build(Path(root))
+        write_json(os.path.join(root, relpath), payload)
+        for item in payload.get("findings") or []:
+            findings.append(finding(str(item.get("severity") or "info"), dimension,
+                                    str(item.get("code") or "finding"), str(item.get("msg") or ""),
+                                    relpath, payload.get("kind", ""), dict(item)))
     product_qc_checks(root, findings)
     video_checks(root, findings)
     compliance_checks(root, findings)
@@ -194,6 +212,8 @@ def build_report(root: str) -> dict[str, Any]:
             "出视频/分镜/video_qc.json",
             "脚本/广告法机检报告.json",
             "合规/ai_usage.json",
+            "生产数据/asset_consistency.json",
+            "生产数据/voice_consistency.json",
         ],
     }
 

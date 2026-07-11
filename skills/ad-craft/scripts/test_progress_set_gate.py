@@ -36,12 +36,22 @@ class GateTest(unittest.TestCase):
             "product": "手冲咖啡",
             "usp": ["48小时内烘焙"],
             "audience": "都市白领",
-            "claims": ["48小时内烘焙（有据）"],
+            "campaign_objective": "转化行动",
+            "measurement": {"primary_kpi": "CVR", "conversion_event": "完成下单"},
+            "claims": [{
+                "claim": "48小时内烘焙", "evidence": "批次烘焙记录",
+                "evidence_file": "证据/批次记录.pdf", "method": "按批次核验",
+                "sample": "2026Q3 全批次", "date": "2026-07-01",
+                "territory": "中国大陆", "approved_by": "法务甲",
+            }],
             "rights": {"talent": "未使用真人", "music": "授权曲库", "fonts": "思源黑体", "assets": "自有素材"},
             "mandatories": {"legal_lines": ["广告"]},
         })
         self._write_json(root, "脚本/广告法机检报告.json", {"summary": {"block": 0, "warn": 0}})
-        self._write_json(root, "脚本/storyboard.json", {"shots": [{"shot_id": "S1", "duration": 3}]})
+        self._write_json(root, "脚本/storyboard.json", {"shots": [{
+            "shot_id": "S1", "duration": 3,
+            "assets": {"PROD_SHANLAN_COFFEE": True, "BRAND_SHANLAN": True},
+        }]})
         self._write_json(root, "脚本/镜头时长.json", {"findings": []})
         self._write_json(root, "配音/时长清单.json", {"has_placeholder": False, "lines": []})
 

@@ -20,19 +20,22 @@ PLATFORM_SPECS = {
     "抖音": {
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
+        "safe_area": "placement_overlay_aware",
+        "safe_zone_asset": "required_before_release",
         "text_rules": ["Logo、CTA、法律声明避开右侧互动栏与底部标题区", "首帧/前三秒出现产品或品牌"],
     },
     "小红书": {
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
+        "safe_area": "placement_overlay_aware",
+        "safe_zone_asset": "required_before_release",
         "text_rules": ["封面/首帧要能独立说明卖点", "底部交互区不放关键法律声明"],
     },
     "TikTok": {
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
+        "safe_area": "placement_overlay_aware",
+        "safe_zone_asset": "download_current_official_template",
         "text_rules": ["Avoid app UI overlays; keep CTA and logo in safe area", "Hook in the first 3 seconds"],
     },
 }
@@ -86,8 +89,9 @@ def spec_for(platform: str) -> Dict[str, Any]:
         "platform_key": "manual",
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
-        "text_rules": ["未登记平台规格；按 9:16 信息流安全区保守交付，投放前人工复核。"],
+        "safe_area": "manual_required",
+        "safe_zone_asset": "manual_required",
+        "text_rules": ["未登记平台规格；不得以通用中心网格冒充平台安全区，投放前录入官方 placement 模板。"],
     }
 
 
@@ -128,14 +132,24 @@ def build_pack(root: Path) -> Dict[str, Any]:
     brief = load_json(root / "需求" / "brief.json", {}) or {}
     settings = parse_settings(root / "_设置.md")
     platforms = normalize_platforms(brief, settings)
-    specs = {p: spec_for(p) for p in platforms}
+    custom_specs = brief.get("platform_specs") if isinstance(brief.get("platform_specs"), Mapping) else {}
+    evidence_map = brief.get("platform_safe_zone_evidence") if isinstance(brief.get("platform_safe_zone_evidence"), Mapping) else {}
+    specs = {}
+    for p in platforms:
+        custom = custom_specs.get(p) if isinstance(custom_specs, Mapping) else None
+        specs[p] = dict(custom, platform_key="custom") if isinstance(custom, Mapping) else spec_for(p)
+        specs[p]["safe_zone_evidence"] = specs[p].get("safe_zone_evidence") or evidence_map.get(p) or ""
     rows = deliverable_rows(brief, settings)
     findings = []
     if not platforms:
         findings.append({"severity": "warn", "code": "platforms_missing", "msg": "brief/_设置.md 未声明目标平台。"})
     for platform, spec in specs.items():
         if spec.get("platform_key") == "manual":
-            findings.append({"severity": "warn", "code": "platform_manual_review", "msg": f"{platform} 缺内置规格，需人工复核。"})
+            findings.append({"severity": "block", "code": "platform_spec_missing", "msg": f"{platform} 缺官方/客户确认规格；先写 brief.platform_specs 再出视频。"})
+        if (spec.get("safe_zone_asset") in {"required_before_release", "download_current_official_template"}
+                and not spec.get("safe_zone_evidence")):
+            findings.append({"severity": "warn", "code": "safe_zone_asset_pending",
+                             "msg": f"{platform} 需在发布前绑定当前 placement/anchor 对应官方安全区模板，不可只用 center 网格。"})
     return {
         "schema_version": 1,
         "kind": KIND,

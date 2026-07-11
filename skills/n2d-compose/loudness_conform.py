@@ -34,6 +34,11 @@ import subprocess
 import sys
 from typing import List, Optional
 
+_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "n2d", "_lib"))
+if _LIB not in sys.path:
+    sys.path.insert(0, _LIB)
+import series_consistency  # noqa: E402
+
 # 平台 → 集成 LUFS 目标（dated 候选 snapshot · 2026-06）。改这里，勿散落。
 PLATFORM_TARGETS = {
     "youtube": -14.0,
@@ -153,8 +158,19 @@ def analyze(root: str, ep: str, platform: str = "default",
             tol: float = DEFAULT_TOL, tp_ceiling: float = DEFAULT_TP_CEILING,
             ffmpeg: str = "ffmpeg") -> dict:
     target = resolve_target(platform)
+    baseline_source = "platform_snapshot"
+    series = series_consistency.load(root)
+    baseline = series.get("audio_baseline") if isinstance(series, dict) and isinstance(series.get("audio_baseline"), dict) else {}
+    if platform == "default" and str(series.get("status") or "").lower() in {"confirmed", "approved", "ready"}:
+        try:
+            target = float(baseline.get("target_lufs"))
+            tol = float(baseline.get("tolerance_lu"))
+            tp_ceiling = float(baseline.get("true_peak_dbtp"))
+            baseline_source = "series_consistency"
+        except (TypeError, ValueError):
+            pass
     res: dict = {
-        "available": False, "platform": platform, "target": target,
+        "available": False, "platform": platform, "target": target, "baseline_source": baseline_source,
         "measured_lufs": None, "true_peak": None, "verdict": "ok", "notes": [],
     }
     out = _find_final_cut(root, ep)

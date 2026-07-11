@@ -1081,10 +1081,27 @@ def report(args: argparse.Namespace) -> int:
     refs_seen: set[str] = set()
     panels: list[dict[str, Any]] = []
     rerun_targets: list[str] = []
+    outfit_gaps: dict[str, str] = {}
     reference_sha_cache: dict[str, str] = {}
     for job in jobs.get("jobs") or []:
         pid = str(job.get("panel_id") or "")
         missing, valid = job_reference_status(root, job)
+        outfit_binding = job.get("outfit_binding") if isinstance(job.get("outfit_binding"), dict) else {}
+        if outfit_binding.get("outfit_id"):
+            outfit_id = str(outfit_binding.get("outfit_id"))
+            if not outfit_binding.get("registered"):
+                outfit_gaps[pid] = f"outfit_id={outfit_id} 未在 registry.assets[角色].outfits 登记"
+            else:
+                attached = [
+                    ref for ref in valid
+                    if any(
+                        str(r.get("view") or "").startswith("outfit:") and str(r.get("path")) == ref["path"]
+                        for r in job.get("references") or []
+                        if isinstance(r, dict)
+                    )
+                ]
+                if not attached:
+                    outfit_gaps[pid] = f"outfit_id={outfit_id} 已登记但没有可用服装参考图（补 outfits.reference_images）"
         for ref in job.get("references") or []:
             if isinstance(ref, dict) and ref.get("id"):
                 refs_seen.add(str(ref.get("id")))
@@ -1148,7 +1165,9 @@ def report(args: argparse.Namespace) -> int:
             "panel_count": len(panels),
             "missing_ref_count": len(missing_refs),
             "rerun_target_count": len(rerun_targets),
+            "outfit_gap_count": len(outfit_gaps),
         },
+        "outfit_gaps": outfit_gaps,
         "missing_refs": missing_refs,
         "required_character_views": list(REQUIRED_CHARACTER_VIEWS),
         "character_views": character_views,
@@ -1169,6 +1188,8 @@ def report(args: argparse.Namespace) -> int:
         print("[ok] no rerun targets")
     if missing_character_views:
         print("[warn] missing character views: " + ", ".join(f"{rid}({','.join(views)})" for rid, views in sorted(missing_character_views.items())))
+    if outfit_gaps:
+        print("[warn] outfit gaps: " + "; ".join(f"{pid}: {reason}" for pid, reason in sorted(outfit_gaps.items())))
     return 0
 
 

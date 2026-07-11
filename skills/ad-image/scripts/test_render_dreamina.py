@@ -26,10 +26,10 @@ def test_extract_sections_and_build_prompt(tmp_path):
     assert "phone on desk" in prompt
     assert "同一 logo" in prompt
     assert "不要乱码" in prompt
-    assert "Vertical 9:16" in prompt
+    assert "Vertical 9:16" not in prompt
 
 
-def test_run_dreamina_text2image_parses_success():
+def test_run_dreamina_image_parses_text2image_success():
     payload = {
         "submit_id": "sid",
         "gen_status": "success",
@@ -37,18 +37,31 @@ def test_run_dreamina_text2image_parses_success():
     }
     with mock.patch("render_dreamina.subprocess.run") as run:
         run.return_value = subprocess.CompletedProcess(["dreamina"], 0, json.dumps(payload), "")
-        out = rd.run_dreamina_text2image("prompt", ratio="9:16", resolution_type="2k", model_version="5.0", poll=1)
+        out = rd.run_dreamina_image("prompt", [], ratio="9:16", resolution_type="2k", model_version="5.0", poll=1)
 
     assert out["submit_id"] == "sid"
     assert run.call_args.args[0][0:2] == ["dreamina", "text2image"]
 
 
-def test_run_dreamina_text2image_blocks_no_image():
+def test_run_dreamina_image_uses_references():
+    payload = {
+        "submit_id": "sid", "gen_status": "success",
+        "result_json": {"images": [{"image_url": "https://example.test/a.png"}]},
+    }
+    with mock.patch("render_dreamina.subprocess.run") as run:
+        run.return_value = subprocess.CompletedProcess(["dreamina"], 0, json.dumps(payload), "")
+        rd.run_dreamina_image("prompt", ["/tmp/product.png"], ratio="9:16", resolution_type="2k", model_version="5.0", poll=1)
+    cmd = run.call_args.args[0]
+    assert cmd[0:2] == ["dreamina", "image2image"]
+    assert cmd[cmd.index("--images") + 1] == "/tmp/product.png"
+
+
+def test_run_dreamina_image_blocks_no_image():
     payload = {"submit_id": "sid", "gen_status": "success", "result_json": {"images": []}}
     with mock.patch("render_dreamina.subprocess.run") as run:
         run.return_value = subprocess.CompletedProcess(["dreamina"], 0, json.dumps(payload), "")
         try:
-            rd.run_dreamina_text2image("prompt", ratio="9:16", resolution_type="2k", model_version="5.0", poll=1)
+            rd.run_dreamina_image("prompt", [], ratio="9:16", resolution_type="2k", model_version="5.0", poll=1)
         except RuntimeError as exc:
             assert "no image_url" in str(exc)
         else:

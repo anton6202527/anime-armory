@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""拍广告 投放前 pre-spend 评分闸门（出图烧钱前拦平庸广告）。
+"""拍广告 投放前 pre-spend 目标化创意诊断。
 
 本脚本实现「廉价确定性 prescore + LLM 语义分 → 阈值三档决策 + 受影响项回流」
 闭环，判据全部围绕广告特有场景，且 **ad 线自包含（纯标准库）**。
@@ -17,14 +17,14 @@
      · CTA 存在（有无 end card/CTA 镜 + brief CTA mandatory 落镜）；
      · 钩子前 3s（首镜/0-3s 段是否钩子镜，非缓起势空镜——半确定性关键词初筛）。
   2) LLM 语义分（--dim 名=分 传入，由调用方 LLM 判）——钩子吸引力/卖点清晰度/CTA 说服力等。
-  3) 阈值三档（--threshold）：≥阈值=go 继续出图；次档=revise 局部改；<低档 或 硬地板=reject 退回上游。
+  3) 阈值三档（--threshold）：≥阈值=go；次档=revise；其下=reject 建议。只有广告法硬地板阻断。
      低分维度按成因映射回 ad-concept / ad-script / ad-image，产 affected_items 回流清单；
      --enqueue 落一份 ad 自有格式的返工清单文件（不引用别线 batch）。
 
 用法：
     python3 score_pre.py <作品根> [--master 30s] [--threshold 80] \
         [--dim 钩子吸引力=72] [--dim 卖点清晰度=80] [--enqueue] [--json 评分/ad_score.json]
-退出码：0=go/无阈值（建议性）；1=reject（硬地板或低于阈值，pre-spend 拦截）；2=输入缺失/损坏。
+退出码：0=评分建议（含 revise/reject）；1=广告法硬地板；2=输入缺失/损坏。
 """
 import argparse
 import json
@@ -47,6 +47,15 @@ DET_DIM_WEIGHTS = {
     "duration_fit": 0.15,    # 总时长贴合主片目标
     "cta_present": 0.15,     # CTA/end card 落镜
     "hook": 0.10,            # 钩子前 3s（半确定性）
+}
+OBJECTIVE_WEIGHTS = {
+    "品牌认知": {"adlaw": .25, "brand_exposure": .25, "first_3s_brand_product": .10,
+             "duration_fit": .15, "cta_present": .05, "hook": .20},
+    "考虑种草": {"adlaw": .25, "brand_exposure": .20, "first_3s_brand_product": .10,
+             "duration_fit": .15, "cta_present": .10, "hook": .20},
+    "转化行动": {"adlaw": .25, "brand_exposure": .15, "first_3s_brand_product": .20,
+             "duration_fit": .15, "cta_present": .20, "hook": .05},
+    "全链路": DET_DIM_WEIGHTS,
 }
 DET_WEIGHT = 0.6   # 确定性 prescore 占总分
 LLM_WEIGHT = 0.4   # LLM 语义分占总分（无 --dim 时总分 = 确定性分）
@@ -258,7 +267,9 @@ def compute_prescore(brief, adlaw_report, storyboard, duration_report, target_se
     hook = hook_score(storyboard)
     dims = {"adlaw": adlaw, "brand_exposure": brand, "first_3s_brand_product": first3, "duration_fit": dur,
             "cta_present": cta, "hook": hook}
-    det_score = round(sum(dims[k] * DET_DIM_WEIGHTS[k] for k in DET_DIM_WEIGHTS), 1)
+    objective = str((brief or {}).get("campaign_objective") or "全链路") if isinstance(brief, dict) else "全链路"
+    weights = OBJECTIVE_WEIGHTS.get(objective, DET_DIM_WEIGHTS)
+    det_score = round(sum(dims[k] * weights[k] for k in weights), 1)
     return {
         "dims": dims,
         "det_score": det_score,
@@ -266,7 +277,8 @@ def compute_prescore(brief, adlaw_report, storyboard, duration_report, target_se
         "facts": {"adlaw_block": block, "adlaw_warn": warn, "brand_shots": brand_shots,
                   "total_shots": total_shots, "actual_seconds": round(actual_sec, 2),
                   "target_seconds": target_sec, "duration_deviation": dev,
-                  "first_3s_identity_checked": first3_checked},
+                  "first_3s_identity_checked": first3_checked, "campaign_objective": objective,
+                  "weights": weights},
     }
 
 
@@ -312,9 +324,9 @@ def decide_tier(total, hard_block, threshold):
         return "go", False, [f"总分 {total} ≥ 阈值 {threshold}，可进入出图"]
     if total >= threshold - REVISE_BAND:
         reasons.append(f"总分 {total} 落在 [{threshold - REVISE_BAND}, {threshold}) 区间——局部改后重评")
-        return "revise", True, reasons
+        return "revise", False, reasons
     reasons.append(f"总分 {total} < {threshold - REVISE_BAND}——退回上游重做")
-    return "reject", True, reasons
+    return "reject", False, reasons
 
 
 # 确定性低分维度 → 回流 stage（成因映射）。
@@ -425,7 +437,7 @@ def parse_dims(dim_args):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="拍广告 投放前 pre-spend 评分闸门")
+    ap = argparse.ArgumentParser(description="拍广告 投放前 pre-spend 目标化创意诊断")
     ap.add_argument("project_root")
     ap.add_argument("--master", default=None, help="主片目标时长（如 30s）；缺省读 brief.master_duration")
     ap.add_argument("--threshold", type=float, default=None,

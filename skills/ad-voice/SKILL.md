@@ -44,7 +44,7 @@ python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-d
 ## 广告专有要点
 
 - **VO + 音乐床混合驱动**：广告节奏常由 VO 与音乐床共同决定；VO 时长是镜头长度的硬锚，音乐床节奏点在 `ad-script` 时间轴标注、`ad-compose` 混音时对齐。
-- **voice_key 跨镜对账**：逐句记实际音色键（旁白一色、代言人一色），二期 `ad-review` 据此查"同一旁白换了声"。
+- **voice_key 跨镜对账**：逐句记实际音色键（旁白一色、代言人一色），`ad-review` 已会阻断“同一角色/旁白跨句换 voice_key”。
 
 ## 测试
 

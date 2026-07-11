@@ -45,8 +45,22 @@ def _project(tmp_path: Path, *, route_cap="subject_consistency", prompt=True, vi
     return root
 
 
-def test_video_qc_passes_structural_product_clip(tmp_path):
+def test_video_qc_passes_measured_product_clip(tmp_path, monkeypatch):
     root = _project(tmp_path)
+    monkeypatch.setattr(vq, "_probe", lambda path: {
+        "streams": [{"codec_type": "video", "width": 1280, "height": 720}],
+        "format": {"duration": "4" if "01" in path.stem else "3"},
+    })
+
+    def fake_extract(video, at, out):
+        Image, _ = vq._load_imaging()
+        if Image is None:
+            return False
+        out.parent.mkdir(parents=True, exist_ok=True)
+        Image.new("RGB", (32, 18), (20, 20, 20)).save(out)
+        return True
+
+    monkeypatch.setattr(vq, "_extract_frame", fake_extract)
     payload = vq.run_qc(root)
 
     assert payload["kind"] == vq.KIND

@@ -205,6 +205,125 @@ def build_lettering(panel_script: dict, layout: dict, translations: dict[str, st
     }
 
 
+EN_MODES = ("英文", "中上英下", "英上中下")
+STYLE_KEYS = ("font", "size", "direction", "bubble")
+
+
+def write_translation_todo(root: Path, chapter: str, lettering: dict) -> Path | None:
+    """英文/双语模式下缺 text_en 的条目 → 翻译任务包（翻译这步的 owner 是 agent）。
+
+    agent 逐条翻译后写 排版/第N话/lettering_translations.json
+    （{"translations": {"中文原文": "English"}}），重跑 build_lettering 即回填。
+    """
+    todo_path = root / "排版" / chapter / "lettering_translations.todo.json"
+    if lettering.get("language_mode") not in EN_MODES:
+        if todo_path.is_file():
+            todo_path.unlink()
+        return None
+    pending = [
+        {
+            "item_id": item.get("item_id"),
+            "panel_id": item.get("panel_id"),
+            "type": item.get("type"),
+            "speaker": item.get("speaker", ""),
+            "tone": item.get("tone", ""),
+            "text_zh": item.get("text_zh") or item.get("text") or "",
+        }
+        for item in lettering.get("items") or []
+        if str(item.get("text") or "").strip() and not str(item.get("text_en") or "").strip()
+    ]
+    if not pending:
+        if todo_path.is_file():
+            todo_path.unlink()
+        return None
+    todo_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "kind": "comic_lettering_translation_todo",
+                "chapter": chapter,
+                "instructions": (
+                    "由 agent 按 speaker/tone 逐条译成自然英文台词（不是逐字直译），"
+                    "写 排版/" + chapter + "/lettering_translations.json："
+                    '{"translations": {"<text_zh>": "<English>"}}，然后重跑 build_lettering.py 回填 text_en。'
+                ),
+                "pending_count": len(pending),
+                "pending": pending,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return todo_path
+
+
+def dominant_styles(lettering: dict) -> dict[str, dict]:
+    """每种 item type 的主流 style（font/size/direction/bubble）。"""
+    by_type: dict[str, dict[tuple, int]] = {}
+    for item in lettering.get("items") or []:
+        style = item.get("style") if isinstance(item.get("style"), dict) else {}
+        key = tuple(str(style.get(k, "")) for k in STYLE_KEYS)
+        by_type.setdefault(str(item.get("type") or ""), {})[key] = by_type.get(str(item.get("type") or ""), {}).get(key, 0) + 1
+    out: dict[str, dict] = {}
+    for item_type, counter in by_type.items():
+        best = max(counter, key=counter.get)
+        out[item_type] = {
+            "style": dict(zip(STYLE_KEYS, best)),
+            "variant_count": len(counter),
+            "item_count": sum(counter.values()),
+        }
+    return out
+
+
+def check_lettering_style_baseline(root: Path, chapter: str, lettering: dict) -> None:
+    """嵌字字体/字号/气泡样式的项目级基线：首话落盘，后续各话比对。
+
+    结果写进 lettering["style_consistency"]，comic-review 把 mismatches 转 warn。
+    """
+    baseline_path = root / "排版" / "lettering_style_baseline.json"
+    current = dominant_styles(lettering)
+    mismatches: list[str] = []
+    for item_type, info in current.items():
+        if info["variant_count"] > 1:
+            mismatches.append(f"本话 {item_type} 出现 {info['variant_count']} 种样式（字体/字号/气泡应统一）")
+    baseline = {}
+    if baseline_path.is_file():
+        try:
+            baseline = json.loads(baseline_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            baseline = {}
+    if not baseline.get("styles"):
+        baseline_path.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "kind": "comic_lettering_style_baseline",
+                    "source_chapter": chapter,
+                    "styles": {k: v["style"] for k, v in current.items()},
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        print(f"[ok] 嵌字样式基线已建立：{baseline_path}")
+    else:
+        for item_type, info in current.items():
+            expected = baseline["styles"].get(item_type)
+            if expected and expected != info["style"]:
+                mismatches.append(
+                    f"{item_type} 样式与基线话（{baseline.get('source_chapter')}）不一致：{info['style']} != {expected}"
+                )
+    lettering["style_consistency"] = {
+        "baseline": str(Path("排版") / "lettering_style_baseline.json"),
+        "dominant_styles": {k: v["style"] for k, v in current.items()},
+        "mismatches": mismatches,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成漫画 lettering.json 草案")
     parser.add_argument("project_root")
@@ -224,10 +343,16 @@ def main() -> int:
         lettering["chapter"] = args.chapter
     if translations:
         lettering["translation_map"] = str(translation_path.relative_to(root))
+    check_lettering_style_baseline(root, args.chapter, lettering)
     out_path = root / "排版" / args.chapter / "lettering.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(lettering, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"[ok] {out_path}")
+    todo = write_translation_todo(root, args.chapter, lettering)
+    if todo:
+        print(f"[warn] {lettering.get('language_mode')} 模式缺英文译文，翻译任务包已生成：{todo}；由 agent 翻译后重跑本脚本回填 text_en")
+    for mismatch in (lettering.get("style_consistency") or {}).get("mismatches") or []:
+        print(f"[warn] 嵌字样式：{mismatch}")
     return 0
 
 

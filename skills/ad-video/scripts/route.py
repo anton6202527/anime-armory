@@ -55,13 +55,13 @@ PLATFORM_SPECS = {
     "抖音": {
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
+        "safe_area": "placement_overlay_aware",
         "notes": ["字幕、CTA、Logo 避开右侧互动栏和底部标题区", "主文案建议前 3 秒出现产品/品牌"],
     },
     "小红书": {
         "aspect": "9:16",
         "min_resolution": "720x1280",
-        "safe_area": "center_6x6",
+        "safe_area": "placement_overlay_aware",
         "notes": ["封面/首帧要能独立说明卖点", "标题区和底部交互区避免放关键法律声明"],
     },
 }

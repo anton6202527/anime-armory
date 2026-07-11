@@ -28,9 +28,14 @@ def test_overflow_beyond_max():
 
 
 def test_minor_flag_small_overflow_inside_tolerance():
-    # 槽位 5s，真音超 0.2s（< tol=max(0.5,0.3)）→ 标 minor（几乎无感的提速）
+    # 槽位 5s，真音超 0.2s（< tol=max(0.5,0.3)）→ 不做无谓 atempo，只裁尾部余量。
     rows = plan([("镜头1", 5.0)], {"镜头1": (5.2, "a.wav")}, tol_frac=0.10, tol_min=0.3)
-    assert rows[0]["action"] == "stretch" and rows[0]["minor"] is True
+    assert rows[0]["action"] == "trim" and rows[0]["ratio"] == 1.0 and rows[0]["minor"] is True
+
+
+def test_stretch_only_after_tolerance_is_exceeded():
+    rows = plan([("镜头1", 5.0)], {"镜头1": (5.6, "a.wav")}, tol_frac=0.10, tol_min=0.3)
+    assert rows[0]["action"] == "stretch" and rows[0]["minor"] is False
 
 
 def test_fitted_total_equals_locked_total():
@@ -65,8 +70,8 @@ def test_aggregate_multiline_drives_plan_on_full_duration():
         {"镜头": "镜头1", "line_wav": "b", "时长": 3.0, "gap_after": 0.0},
     ]
     reals = aggregate_reals(man, "", lambda p: {"a": 2.0, "b": 3.0}.get(p, 0.0))
-    rows = plan([("镜头1", 5.0)], reals)          # 槽位 5.0 < 真音 5.4 → 需提速
-    assert rows[0]["real"] == 5.4 and rows[0]["action"] == "stretch"
+    rows = plan([("镜头1", 5.0)], reals)          # 超 0.4s 仍在默认 0.5s 容差内 → 不变速裁尾
+    assert rows[0]["real"] == 5.4 and rows[0]["action"] == "trim"
 
 
 def test_aggregate_missing_wav_falls_back_to_manifest_duration():

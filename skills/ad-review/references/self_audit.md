@@ -22,6 +22,9 @@ python3 skills/ad-review/scripts/self_audit.py --json     # 喂回 LLM 汇总
 - **生图后端白名单文档一致性**：ad-image SKILL + 选择点目录覆盖 `AD_APPROVED_IMAGE_BACKENDS`，且不把即梦/Dreamina 逆向当成可选放行后端。
 - **AI 使用披露文档一致性**：`ai_usage.py` 存在且与 `AI_VISUAL_USAGE_MODES` 对齐。
 - **选择点对齐**：`contract.CHOICE_POINTS` 的每个键都暴露在 `选择点与偏好.md` 目录里。
+- **正式 runner 真 gate**：image/video/compose 执行器入口直接调用 gate，不只靠文档提醒。
+- **模板去样例化**：非测试生产文件不得泄漏 STARBOX/星盒等 fixture 品牌。
+- **发布顺序与证据**：compose → handoff/compliance → review → feedback；claim 证据字段与 compliance manifest 均机器化。
 
 **0 block / 0 warn 才进入下一步联网市场对标。** 该脚本是 ad 线专属产线治理脚本；自审工艺写在本手册内，脚本实现只服务广告系列。
 
@@ -31,7 +34,7 @@ python3 skills/ad-review/scripts/self_audit.py --json     # 喂回 LLM 汇总
 | 轴 | 搜什么 | 映射到 ad 的 |
 |---|---|---|
 | **① 钩子/转化效果** | 前 3 秒留存基准、信息流划走窗口（多少秒内必须出钩子）、CTA 形态与时点、完播率/点击转化标杆、不同平台（抖音/快手/视频号/电商）开篇节奏 | ad-concept（big idea/钩子）/ ad-script（0-3s 时间轴）/ ad-compose（cutdown 保钩子-产品-CTA）/ ad-review M0 钩子饱和度 |
-| **② 合规**（广告线特有·高频变动） | 各地《广告法》及配套口径更新（绝对化用语执法案例、医疗/化妆品/金融/教育/房地产违禁词新增）、平台广告审核口径变化、AI 内容标识/水印各地区/平台要求 | ad-script `ad_law_check.py` 词库 + `usp_disclaimer_check`（卖点-免责联动）/ ad-craft `ai_usage.py` 披露 |
+| **② 合规**（广告线特有·高频变动） | 广告法/平台审核、AI 生成合成内容显式与隐式标识、主动声明及元数据保留 | ad-script 词库 + producer_pack claim 证据 + ad-craft ai_usage/compliance_manifest + final review |
 | **③ 成本/路由 + 各 stage 模型 SOTA** | 单条广告生成成本/周期、批量自动化、产品 hero 一致性的最省路由；图/视频/配音各 stage 当前最强模型及新语法（主体库/原生音画/多参考/最大时长） | ad-image / ad-video 模型路由 / ad-voice 后端 / 重抽预算策略 |
 
 > 搜索词带"2026""广告法 最新 案例""信息流 前3秒 留存""TVC AI 制作"更易命中实战贴；中英文各搜一轮（国内抖音/电商投放生态 + 英文 performance-ad 圈）。

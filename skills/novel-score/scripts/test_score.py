@@ -21,7 +21,8 @@ def valid_assessment(score_task_id=None):
             {"dimension": "character_power", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."},
             {"dimension": "plot_structure", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."},
             {"dimension": "prose", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."},
-            {"dimension": "retention", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."}
+            {"dimension": "retention", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."},
+            {"dimension": "novelty", "raw_score": 10, "evidence": "...", "comment": "...", "improve_by": "..."}
         ],
         "deductions": [
             {"item": "Boring", "points": -5, "reason": "Too slow"}

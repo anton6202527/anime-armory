@@ -89,7 +89,9 @@ def cmd_bump(args) -> int:
         print(f"--date 非法：{new_date}", file=sys.stderr)
         return 2
 
-    m = _STAMP_LINE_RE.search(text)
+    stamp_label = str(src.get("stamp_label") or "")
+    stamp_re = re.compile(rf"({re.escape(stamp_label)}\s*[:：]\s*)(\d{{4}}-\d{{2}}-\d{{2}})") if stamp_label else _STAMP_LINE_RE
+    m = stamp_re.search(text)
     if not m:
         print(f"该文件没有「采集日期：YYYY-MM-DD」戳记行，无法 bump：{src['path']}\n"
               f"先在文件里加一行 `采集日期：{new_date}` 再重试。", file=sys.stderr)

@@ -104,23 +104,23 @@ def build_prompt(prompt_file: Path) -> str:
     body = "\n".join(sections[key] for key in KEY_SECTIONS if sections.get(key)).strip()
     if not body:
         body = text.strip()
-    return (
-        body
-        + "\nVertical 9:16 polished commercial advertising key frame, realistic cinematic still, "
-          "clear readable Chinese UI text, no watermark."
-    )
+    return body
 
 
-def run_dreamina_text2image(prompt: str, *, ratio: str, resolution_type: str, model_version: str, poll: int) -> Dict[str, Any]:
+def run_dreamina_image(prompt: str, images: Sequence[str], *, ratio: str, resolution_type: str, model_version: str, poll: int) -> Dict[str, Any]:
     cmd = [
         "dreamina",
-        "text2image",
+        "image2image" if images else "text2image",
+    ]
+    if images:
+        cmd.extend(["--images", *images])
+    cmd.extend([
         "--prompt", prompt,
         "--ratio", ratio,
         "--resolution_type", resolution_type,
         "--model_version", model_version,
         "--poll", str(poll),
-    ]
+    ])
     proc = subprocess.run(cmd, text=True, capture_output=True)
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or proc.stdout.strip() or "dreamina text2image failed")
@@ -153,6 +153,14 @@ def job_matches(job: Mapping[str, Any], only: set[str]) -> bool:
     return bool(keys & only)
 
 
+def enforce_gate(root: Path) -> None:
+    gate_cmd = [sys.executable, str(Path(__file__).resolve().parents[2] / "ad-craft" / "scripts" / "gate.py"),
+                str(root), "--stage", "image"]
+    gate = subprocess.run(gate_cmd, text=True)
+    if gate.returncode:
+        raise RuntimeError("ad image gate blocked paid generation")
+
+
 def render_jobs(
     root: Path,
     *,
@@ -166,6 +174,7 @@ def render_jobs(
 ) -> Dict[str, Any]:
     root = root.resolve()
     require_dreamina_image_signoff(root)
+    enforce_gate(root)
     manifest_path = root / "出图" / "分镜" / "image_jobs_manifest.json"
     manifest = load_json(manifest_path)
     if not isinstance(manifest, dict):
@@ -195,8 +204,13 @@ def render_jobs(
             continue
         try:
             prompt = build_prompt(prompt_path)
-            payload = run_dreamina_text2image(
+            refs = [root / str(p) for p in (job.get("reference_inputs") or [])]
+            missing_refs = [str(p) for p in refs if not p.is_file()]
+            if job.get("requires_image_input") and (not refs or missing_refs):
+                raise RuntimeError(f"产品镜缺真实参考图输入：{missing_refs or 'reference_inputs=[]'}")
+            payload = run_dreamina_image(
                 prompt,
+                [str(p) for p in refs],
                 ratio=ratio,
                 resolution_type=resolution_type,
                 model_version=model_version,
@@ -208,6 +222,7 @@ def render_jobs(
                 "status": "done",
                 "backend": "Dreamina/即梦官方 CLI",
                 "model_version": model_version,
+                "actual_reference_inputs": [str(p.relative_to(root)) for p in refs],
                 "submit_id": payload.get("submit_id"),
                 "credit_count": payload.get("credit_count"),
                 "output": out_rel.as_posix(),
@@ -220,12 +235,13 @@ def render_jobs(
                 "stage": "image",
                 "event": "generation",
                 "generation": {
-                    "method": "dreamina_official_cli_text2image",
+                    "method": "dreamina_official_cli_image2image" if refs else "dreamina_official_cli_text2image",
                     "asset": out_rel.as_posix(),
                     "prompt": prompt_rel.as_posix(),
                     "submit_id": payload.get("submit_id"),
                     "model_version": model_version,
                     "credit_count": payload.get("credit_count"),
+                    "reference_inputs": [str(p.relative_to(root)) for p in refs],
                 },
             })
             rendered += 1

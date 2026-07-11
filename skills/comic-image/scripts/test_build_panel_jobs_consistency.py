@@ -98,6 +98,8 @@ def test_panel_job_carries_visual_continuity_contract(tmp_path: Path) -> None:
     assert "匕首反光" in job["submit_prompt"]
     assert "CHAR_MAIN" not in job["submit_prompt"]
     assert "LOC_HALL" not in job["submit_prompt"]
+    # continuity_from="none" 属占位值，不应进入提交 prompt
+    assert "承接上一格" not in job["submit_prompt"]
     actual = codex_panel_runner.build_prompt(job, "work", chapter, [])
     assert job["submit_prompt"] in actual
     assert "传统漫画原稿收尾契约" not in actual
@@ -197,6 +199,80 @@ def test_preserve_resets_ready_when_submit_prompt_changed(tmp_path: Path) -> Non
     assert stale == ["P001"]
     assert rebuilt["jobs"][0]["status"] == "planned"
     assert not rebuilt["jobs"][0].get("result_path")
+
+
+def test_outfit_binding_injects_refs_and_contract(tmp_path: Path) -> None:
+    root = tmp_path / "work"
+    chapter = "第1话"
+    make_fixture(root, chapter)
+    outfit_img = root / "出图" / "共享" / "图片" / "CHAR_MAIN__outfit_prison.png"
+    outfit_img.parent.mkdir(parents=True, exist_ok=True)
+    outfit_img.write_bytes(b"outfit-ref")
+    write_json(
+        root / "出图" / "共享" / "identity_registry.json",
+        {
+            "assets": {
+                "CHAR_MAIN": {
+                    "id": "CHAR_MAIN",
+                    "type": "character",
+                    "outfits": {
+                        "OUTFIT_PRISON": {
+                            "name": "囚服",
+                            "description": "粗麻灰囚服，右肩补丁，无纽扣",
+                            "forbidden": "官服玉带、任何金属饰物",
+                            "reference_images": ["出图/共享/图片/CHAR_MAIN__outfit_prison.png"],
+                        }
+                    },
+                }
+            }
+        },
+    )
+    script_path = root / "脚本" / chapter / "panel_script.json"
+    script = json.loads(script_path.read_text(encoding="utf-8"))
+    script["panels"][0]["outfit_id"] = "OUTFIT_PRISON"
+    write_json(script_path, script)
+
+    jobs = build_panel_jobs.build_jobs(root, chapter)
+    job = jobs["jobs"][0]
+
+    assert job["outfit_binding"] == {"ref_id": "CHAR_MAIN", "outfit_id": "OUTFIT_PRISON", "registered": True}
+    outfit_refs = [ref for ref in job["references"] if str(ref.get("view", "")).startswith("outfit:")]
+    assert outfit_refs and outfit_refs[0]["path"].endswith("CHAR_MAIN__outfit_prison.png")
+    assert "服装契约" in job["production_contract_prompt"]
+    assert "囚服" in job["submit_prompt"]
+    assert "官服玉带" in job["submit_prompt"]
+    assert "OUTFIT_PRISON" not in job["submit_prompt"]
+
+
+def test_unregistered_outfit_marks_binding(tmp_path: Path) -> None:
+    root = tmp_path / "work"
+    chapter = "第1话"
+    make_fixture(root, chapter)
+    script_path = root / "脚本" / chapter / "panel_script.json"
+    script = json.loads(script_path.read_text(encoding="utf-8"))
+    script["panels"][0]["outfit_id"] = "OUTFIT_MISSING"
+    write_json(script_path, script)
+
+    jobs = build_panel_jobs.build_jobs(root, chapter)
+    job = jobs["jobs"][0]
+
+    assert job["outfit_binding"]["registered"] is False
+    assert "未登记该服装" in job["production_contract_prompt"]
+
+
+def test_continuity_from_compiles_into_submit_prompt(tmp_path: Path) -> None:
+    root = tmp_path / "work"
+    chapter = "第1话"
+    make_fixture(root, chapter)
+    script_path = root / "脚本" / chapter / "panel_script.json"
+    script = json.loads(script_path.read_text(encoding="utf-8"))
+    script["panels"][0]["continuity_from"] = "延续上一格的祠堂雨夜与画左灯笼"
+    write_json(script_path, script)
+
+    jobs = build_panel_jobs.build_jobs(root, chapter)
+    prompt = jobs["jobs"][0]["submit_prompt"]
+
+    assert "承接上一格:延续上一格的祠堂雨夜与画左灯笼" in prompt
 
 
 def test_check_stale_jobs_reports_contract_drift(tmp_path: Path) -> None:

@@ -13,6 +13,25 @@ import re
 import sys
 from datetime import date
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_COMMON = os.path.abspath(os.path.join(_HERE, "..", "..", "novel", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+
+from heuristic_gate import enforce, count_blocking  # B10：脆弱启发式不得硬阻断（单一收口）
+
+# arc_gate 自己的确定性闸（只查文件存在性 / JSON 合法性 / curated 台账结构化字段的有无，
+# trigger 不含对自由文本的子串/关键词扫描），显式登记后才保留阻断级（B10 挣得 block 权）：
+_ARC_DETERMINISTIC_TYPES = frozenset({
+    "chapter_missing",                       # 文件存在性
+    "state_delta_missing",                   # 文件存在性
+    "state_delta_invalid_json",              # JSON 合法性
+    "reader_contract_stall",                 # curated 字段连续缺失（有/无判定×章号计数）
+    "arc_without_reader_contract_progress",  # curated 字段整段缺失
+    "arc_without_theme_alignment",           # curated 字段整段缺失
+    "premature_core_resolution_declared",    # state_delta 结构化布尔声明×章号阈值比较
+})
+
 
 def _read_text(path):
     if not os.path.exists(path):
@@ -243,8 +262,13 @@ def analyze(root, start, end):
 
     # ── 反向刹车：非终局禁解主线核心冲突 (P2-⑧) ──────────────────────────
     # 行业最佳实践：AI 倾向于过早"收束"冲突（稳定偏差），必须检测主线戏剧问题
-    # 是否在终局前被意外回答。分辨率阈值：当前进度 < 总章数 80% 且弧段包含
-    # 对核心戏剧问题的"解决"信号 → 阻断。
+    # 是否在终局前被意外回答。分辨率阈值：当前进度 < 总章数 80%。
+    # 双通道（B10 分层）：
+    #   ① 结构化声明闸（确定性·可阻断）：state_delta 显式声明 core_conflict_resolved=true
+    #      （布尔×章号阈值比较，不扫任何自由文本）→ premature_core_resolution_declared 阻断。
+    #      post_write/写章包要求作者在解决主线核心冲突的章节里如实置位该字段。
+    #   ② 关键词信号（启发式·仅建议级）：对 curated 自由文本字段的关键词命中按 B10 只能
+    #      提醒人审，由 enforce() 统一收口降级，不硬挡 post_write。
     meta = _load_json(os.path.join(root, "_meta.json"), {}) or {}
     target_chapters = int(meta.get("target_chapters") or 0)
     if target_chapters > 0:
@@ -261,38 +285,55 @@ def analyze(root, start, end):
             for rpt in chapter_reports:
                 ch = rpt["chapter"]
                 delta = _load_json(_delta_path(root, ch), {}) or {}
+                # ① 结构化声明闸（确定性）
+                if bool(delta.get("core_conflict_resolved")):
+                    blocks.append({
+                        "severity": "阻断级",
+                        "type": "premature_core_resolution_declared",
+                        "chapter": ch,
+                        "message": (
+                            f"反向刹车：第{ch:02d}章 state_delta 显式声明 core_conflict_resolved=true"
+                            f"（进度 {end}/{target_chapters}，{end*100//target_chapters}%）。"
+                            "非终局章节禁止解决主线核心冲突，请推迟到终局或修正声明。"
+                        ),
+                    })
+                    break
+                # ② 关键词信号（启发式，enforce 收口后一律建议级）
                 progress = _as_list(delta.get("reader_contract_progress"))
                 theme = str(delta.get("theme_alignment") or "")
                 combined = " ".join(progress) + " " + theme
                 if any(kw in combined for kw in resolution_kw):
                     is_core, answered = _core_resolution_hit(combined, dramatic_question, must_answer)
-                    item = {
-                        "severity": "阻断级" if is_core else "建议级",
-                        "type": "premature_resolution" if is_core else "resolution_signal_needs_review",
+                    warnings.append({
+                        "severity": "建议级",
+                        "type": "premature_resolution_signal" if is_core else "resolution_signal_needs_review",
                         "chapter": ch,
                         "message": (
                             f"反向刹车：第{ch:02d}章出现收束信号（进度 {end}/{target_chapters}，"
                             f"{end*100//target_chapters}%）。核心问题：「{dramatic_question or '见读者契约'}」"
                             + (f"；疑似已回答：{'、'.join(answered)}" if answered else "")
-                            + ("。非终局章节禁止解决主线核心冲突，请推迟到终局。"
+                            + ("。关键词命中疑似主线收束——请人工确认；若属实，把该章 state_delta 的 "
+                               "core_conflict_resolved 置 true（结构化声明会硬阻断），或推迟收束到终局。"
                                if is_core else "。未命中核心问题/终局必须回答项，按局部支线回收候选提醒人审。")
                         ),
-                    }
-                    if is_core:
-                        blocks.append(item)
-                        break
-                    warnings.append(item)
+                    })
 
+    findings = blocks + warnings
+    # B10 单一收口：未登记进确定性名册的 finding 一律降为建议级；降级账保留可见。
+    findings, downgrades = enforce(findings, _ARC_DETERMINISTIC_TYPES)
+    blocking = count_blocking(findings)
+    advisory = len(findings) - blocking
     return {
         "schema_version": 1,
         "kind": "novel_arc_gate",
         "checked_at": date.today().isoformat(),
         "arc": f"{start}-{end}",
         "chapters": chapter_reports,
-        "status": "blocked" if blocks else ("warnings" if warnings else "clean"),
-        "blocking": len(blocks),
-        "warnings": len(warnings),
-        "findings": blocks + warnings,
+        "status": "blocked" if blocking else ("warnings" if advisory else "clean"),
+        "blocking": blocking,
+        "warnings": advisory,
+        "downgrades": downgrades,
+        "findings": findings,
     }
 
 

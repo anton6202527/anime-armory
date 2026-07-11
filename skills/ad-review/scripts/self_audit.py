@@ -169,7 +169,8 @@ def check_delivery_specs_external(root: Path, findings: List[Finding]) -> None:
 
     # ad-compose 不得自己写死响度数字（应从 contract.delivery_profile 取）。
     compose_dir = root / "skills" / "ad-compose"
-    lufs_re = re.compile(r"-?\d{1,2}(?:\.\d+)?\s*lufs", re.I)
+    # 只抓疑似写死目标值（负数）；容差说明如 ±1.5 LUFS 不算目标重复定义。
+    lufs_re = re.compile(r"-\d{1,2}(?:\.\d+)?\s*lufs", re.I)
     offenders = []
     if compose_dir.is_dir():
         for path in compose_dir.glob("**/*.py"):
@@ -307,6 +308,76 @@ def check_choice_point_catalog(root: Path, findings: List[Finding]) -> None:
             "contract.CHOICE_POINTS 全部出现在选择点目录文档里。")
 
 
+def check_paid_runner_gates(root: Path, findings: List[Finding]) -> None:
+    """付费执行器本身必须调用 gate，不能只靠 SKILL.md 提醒。"""
+    runners = {
+        "skills/ad-image/scripts/render_dreamina.py": "enforce_gate",
+        "skills/ad-video/scripts/render_dreamina.py": "enforce_gate",
+        "skills/ad-compose/compose.sh": "gate.py",
+    }
+    present = 0
+    for relpath, token in runners.items():
+        path = root / relpath
+        if not path.is_file():
+            continue
+        present += 1
+        if token not in text(path):
+            add(findings, "block", "付费执行器 gate", relpath,
+                f"正式执行器未包含 {token}，可绕过花钱/不可逆闸门。",
+                "在 runner/compose 入口直接执行 ad-craft gate，失败即停止。")
+    if present and not any(f["dim"] == "付费执行器 gate" and f["sev"] == "block" for f in findings):
+        add(findings, "info", "付费执行器 gate", "ad image/video/compose runners",
+            "现有正式执行器均在代码入口调用 gate。")
+
+
+def check_demo_literals(root: Path, findings: List[Finding]) -> None:
+    """样例品牌不能泄漏到非测试生产 prompt/runner。"""
+    offenders = []
+    for base in (root / "skills" / "ad-image", root / "skills" / "ad-video"):
+        if not base.is_dir():
+            continue
+        for path in base.glob("**/*"):
+            if not path.is_file() or path.suffix not in {".py", ".md"} or path.name.startswith("test_"):
+                continue
+            if re.search(r"STARBOX|Starbox|星盒", text(path)):
+                offenders.append(rel(root, path))
+    if offenders:
+        add(findings, "block", "模板去样例化", ", ".join(offenders[:8]),
+            "样例品牌字面量泄漏到生产出图/视频代码或文档，会污染其它行业项目。",
+            "改为读取 brief/asset_registry；样例只允许存在 test fixture。")
+    elif any((root / "skills" / x).is_dir() for x in ("ad-image", "ad-video")):
+        add(findings, "info", "模板去样例化", "skills/ad-image + skills/ad-video",
+            "非测试生产文件未发现 STARBOX/Starbox/星盒样例字面量。")
+
+
+def check_release_order_and_evidence(root: Path, findings: List[Finding]) -> None:
+    contract, error = load_contract(root)
+    if error or contract is None:
+        return
+    table = getattr(contract, "AD_STAGE_TABLE", None)
+    if isinstance(table, list):
+        keys = [row.get("key") for row in table if isinstance(row, dict)]
+        if "handoff" in keys and "review" in keys and keys.index("handoff") > keys.index("review"):
+            add(findings, "block", "发布阶段顺序", "skills/ad-craft/scripts/contract.py",
+                "review 发生在 handoff/compliance 之前，最终审查无法消费发布合规证据。",
+                "阶段顺序改为 compose → handoff/compliance → review → feedback。")
+        elif "handoff" in keys and "review" in keys:
+            add(findings, "info", "发布阶段顺序", "skills/ad-craft/scripts/contract.py",
+                "handoff/compliance 位于最终 review 之前。")
+    manifest = root / "skills" / "ad-craft" / "scripts" / "compliance_manifest.py"
+    producer = root / "skills" / "ad-craft" / "scripts" / "producer_pack.py"
+    if manifest.is_file() and producer.is_file():
+        required = ("evidence_file", "method", "evidence_date", "territory", "approved_by")
+        missing = [token for token in required if token not in text(producer)]
+        if missing:
+            add(findings, "block", "claim证据结构", rel(root, producer),
+                "claim 证据缺结构化字段：" + ", ".join(missing),
+                "claim 必须记录证据文件、方法、日期、适用地区和批准人。")
+        else:
+            add(findings, "info", "claim证据结构", rel(root, producer),
+                "claim 依据与发布 compliance manifest 均已机器化。")
+
+
 # ── 编排 + 渲染 ──────────────────────────────────────────────────────────────
 
 def audit(root: Path) -> Dict[str, Any]:
@@ -317,6 +388,9 @@ def audit(root: Path) -> Dict[str, Any]:
     check_image_backend_docs(root, findings)
     check_ai_usage_disclosure(root, findings)
     check_choice_point_catalog(root, findings)
+    check_paid_runner_gates(root, findings)
+    check_demo_literals(root, findings)
+    check_release_order_and_evidence(root, findings)
     counts = {sev: sum(1 for item in findings if item["sev"] == sev) for sev in ("block", "warn", "info")}
     return {
         "kind": "ad_self_audit",

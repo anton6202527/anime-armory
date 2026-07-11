@@ -113,12 +113,12 @@ class DecisionTest(unittest.TestCase):
     def test_revise_band(self):
         tier, blocked, _ = sp.decide_tier(70, False, 80)  # [60,80)
         self.assertEqual(tier, "revise")
-        self.assertTrue(blocked)
+        self.assertFalse(blocked)
 
     def test_reject_below_band(self):
         tier, blocked, _ = sp.decide_tier(50, False, 80)
         self.assertEqual(tier, "reject")
-        self.assertTrue(blocked)
+        self.assertFalse(blocked)
 
     def test_map_dim_stage(self):
         self.assertEqual(sp.map_dim_stage("钩子吸引力"), "ad-concept")

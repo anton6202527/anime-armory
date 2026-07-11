@@ -102,7 +102,7 @@ export const forgeSkin: SkinPlugin = {
     "--bg": "#121413",
     "--bg-2": "#191a1c",
     "--panel": "#222325",
-    "--border": "#2d2f33",
+    "--border": "#2b2b2b",
     "--text": "#e3e7ed",
     "--muted": "#929ba8",
     "--accent": "#58a6ff",

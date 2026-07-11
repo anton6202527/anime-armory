@@ -176,17 +176,17 @@ def test_brand_color_block_vs_pass(tmp_path):
     root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT, "镜头2.md": GOOD_PROMPT.replace("镜头1", "镜头2")})
     imgdir = stage / "图片"
     imgdir.mkdir()
-    # 镜头1：纯品牌红 #E60012 → ΔE≈0 pass；镜头2：纯蓝 → ΔE 巨大 block
+    # 镜头1：纯品牌红 #E60012 → ΔE≈0；镜头2：纯蓝 → 启发式 WARN，不以全图颜色硬挡。
     Image.new("RGB", (64, 64), (0xE6, 0x00, 0x12)).save(str(imgdir / "镜头1.png"))
     Image.new("RGB", (64, 64), (0, 0, 255)).save(str(imgdir / "镜头2.png"))
 
     payload = pq.run_qc(stage)
     bc = {f["shot"]: f for f in payload["findings"] if f["check"] == "brand_color"}
-    # 镜头2 蓝色应 block
-    assert "镜头2" in bc and bc["镜头2"]["severity"] == "block"
+    assert "镜头2" in bc and bc["镜头2"]["severity"] == "warn"
     # 镜头1 红色：whole-image 降级，ΔE 在阈内 → 应是 warn（降级判定），不是 block
     assert "镜头1" in bc and bc["镜头1"]["severity"] != "block"
-    assert payload["summary"]["block"] >= 1
+    assert payload["summary"]["block"] == 0
+    assert payload["summary"]["warn"] >= 1
 
 
 def test_brand_color_presence_prevents_full_frame_false_block(tmp_path):

@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1046 | 目录文本总行数 15114
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1070 | 目录文本总行数 16203
 
 # mv — 制MV 生产线 · 总调度
 
@@ -51,7 +51,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 出图 | **`mv-image`** | `出图/`（共享定妆 + 分段分镜 PNG） | ✅ 已建（生图 CLI） |
 | 出视频 | **`mv-video`** | `出视频/jobs_manifest.json` + `takes/` + `视频/`（按段落+卡点挑版） | ✅ 已建（生视频 CLI/登记脚本） |
 | 卡拉OK字幕 | **`mv-lyric-sync`** | `字幕/karaoke.ass` + `lyrics.lrc` + `alignment_report.json` | ✅ 已建（whisperx） |
-| 合成 | **`mv-compose`** | `成片_MV.mp4`（读 timeline 顺序 + 歌轨 + 精准裁切 + 卡拉OK烧录） | ✅ 已建（自包含 ffmpeg） |
+| Animatic/Picture Lock | **`mv-craft`** | 可播放 animatic + OTIO + 绑定 hash 的人工锁版 | ✅ 已建（正式出视频前强制） |
+| 合成/交付 | **`mv-compose`** | ProRes/PCM 母版 + BT.709 MP4 + delivery QC + provenance/C2PA 接口 | ✅ 已建（自包含 ffmpeg） |
 | 质检/自审(横切) | **`mv-review`** | `consistency_findings.json` + 双模 QA：作品质检（视觉一致性/卡点/字幕/音画合成/合规）+ 流程自审 | ✅ 已建（机检+人判，不生产只审） |
 
 | 用户输入 | 路由到 |
@@ -68,19 +69,20 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 | 给了 `创作区/制MV/<曲名>/` 没说动作 / 问进度或下一步 | `mv-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
 | 问 skill 更新是否影响本 MV / 要返工计划 / 重审重评前先看范围 | `mv-update`（只写更新影响计划和基线，不改素材/视频/进度） |
 
-> **先传音乐推荐顺序**：成品歌/歌词入库 → mv-craft 立项/选择 → mv-beat 卡点 → mv-script 剧本创作 → mv-plan 时间线 → 分镜体检(mv-score) → 出图 → 视频任务/挑版 → 卡拉OK字幕 → 合成 → AI使用披露/质检。
+> **先传音乐推荐顺序**：成品歌/歌词入库 → 立项 → 卡点并人工确认 timing → 剧本 → timeline → 分镜体检 → 出图/QC → 真实 animatic/picture lock → 视频评分挑版/语义签收 → 字幕 → 母版/派生交付 → provenance/总审。
 
 > **后配歌曲推荐顺序**：mv-craft 立项/选择 → mv-script rough 视觉蓝图/设定 → 用户补入成品歌+歌词 → mv-beat 卡点 → mv-script 按真实 beatgrid 复核蓝图 → mv-plan 时间线 → 分镜体检(mv-score) → 出图 → 视频任务/挑版 → 卡拉OK字幕 → 合成 → AI使用披露/质检。**未补最终音频前不得跑 mv-plan / mv-image / mv-video / mv-compose 的正式产物**。
 
 > **mv-image/mv-video 是 mv 自己的视觉 skill**。两层定妆、尾帧接力、出图前一致性包和视频动作模板化都在 mv 家族内自持。
 
-> **MV 版一致性边界**：MV 通常是一支歌/一集长视频，只锁“同一首歌内部”的主角身份、主色、画风、反复视觉母题和段落光色。使用 `mv-image/references/visual_consistency.md`：主角/主唱最严，段落场景中等，特效转场最宽松。
+> **MV 版一致性边界**：除身份、主色、画风和母题外，还锁状态变体、服装/道具状态、场景拓扑、屏幕方向/视线、动作速度/相位、光线方向、字幕安全区、色彩管理、主歌轨 hash 与交付来源链。主角/主唱最严，段落场景中等，特效转场最宽松。
 > **MV 出图一致性增强**：组图前 `mv-image` 必须提示 `MV一致性增强` 四档：共享定妆+锚点（默认）、指定参考图、后端主体库、+LoRA。MV 不默认训练 LoRA；只有用户已有或明确授权的 LoRA 资产才接入。
 
 > **MV 动作/运镜知识库**：炫酷动作优先从 `mv-video/references/action_knowledge.md` 选动作家族，运镜优先从 `mv/references/运镜/manifest.json` 选结构化词，再写进 `clip_plan.json` 的 `action_family/action_peak/visual_motif/transition_motif/shot_design.camera_movement`。原则是“一 clip 一个主动作 + 一个主运镜，动作峰值踩 beat/downbeat”，避免空泛写“炫酷运镜”。
 
 ## 合法性
 - 输入歌的版权随歌而定（自有/授权/原创）；本线只做视觉，不改词曲版权属性。
+- 正式付费生成前用 `mv-craft/scripts/rights_manifest.py` 记录歌曲、视觉参考、真人肖像、品牌、场地和编舞权利状态；该记录不替代平台/地区专业审查。
 - AI 标识/AI 披露/水印不再由本流水线处理：mv-compose 出成片即收尾，不生成可见水印、不调用任何 watermark skill；若投放地区/平台需要 AI 标识或披露，由使用方在工具之外按当地法规自行处理。
 
 ## 持续改进

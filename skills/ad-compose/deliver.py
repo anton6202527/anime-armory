@@ -11,12 +11,14 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
 
 _CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "ad-craft", "scripts"))
 if _CRAFT not in sys.path:
     sys.path.insert(0, _CRAFT)
 import contract  # noqa: E402
 import progress_set  # noqa: E402
+import delivery_qc  # noqa: E402
 
 
 FIELDS = ("label", "duration", "aspect", "kind", "spec", "status", "path")
@@ -75,7 +77,11 @@ def planned_command(row, root):
     quoted = json.dumps(root, ensure_ascii=False)
     out = expected_relpath(row)
     if row["kind"] == "master":
-        return f"bash skills/ad-compose/compose.sh {quoted} {row['aspect']}"
+        settings = _parse_settings(os.path.join(root, "_设置.md"))
+        sub_map = {"中文": "zh", "中英双语": "bilingual", "仅英文": "en", "无字幕": "none"}
+        sub = sub_map.get(settings.get("字幕语言"), "zh")
+        spec = row["spec"] if row["spec"] in contract.DELIVERY_PROFILE else settings.get("交付规格", "平台默认")
+        return f"bash skills/ad-compose/compose.sh {quoted} {row['aspect']} {sub} {json.dumps(spec, ensure_ascii=False)}"
     if row["kind"] == "cutdown":
         plan = os.path.join(root, "合成", "cutdown", f"plan_{_safe_name(row['duration'])}.json")
         outp = os.path.join(root, out)
@@ -92,6 +98,19 @@ def planned_command(row, root):
                 f"--in {json.dumps(src, ensure_ascii=False)} --render "
                 f"--out {json.dumps(outp, ensure_ascii=False)}")
     return f"# A/B 版本需操作者手工生成 → {out}"
+
+
+def _parse_settings(path):
+    out = {}
+    try:
+        raw = open(path, encoding="utf-8").read()
+    except OSError:
+        return out
+    for line in raw.splitlines():
+        m = re.match(r"\s*[-*]?\s*([^:：#]+)[:：]\s*([^#]+)", line)
+        if m:
+            out[m.group(1).strip()] = m.group(2).strip()
+    return out
 
 
 def build_plan(root, progress_text):
@@ -113,14 +132,16 @@ def build_plan(root, progress_text):
             "exists": os.path.isfile(abs_path),
             "command": planned_command(row, root),
             "loudness_lufs": profile["loudness_lufs"],
+            "true_peak_db": profile["true_peak_db"],
         })
     return {"schema_version": 1, "kind": "ad_delivery_plan", "project_root": root, "deliverables": items}
 
 
-def mark_existing(root, progress_text, plan):
+def mark_existing(root, progress_text, plan, qc_report=None):
     out = progress_text
+    passed = {i.get("deliverable_id") for i in (qc_report or {}).get("items", []) if i.get("passed")}
     for item in plan["deliverables"]:
-        if not item["exists"]:
+        if not item["exists"] or item["deliverable_id"] not in passed:
             continue
         out = progress_set.set_deliverable_text(
             out,
@@ -147,9 +168,14 @@ def main():
     with open(progress_path, encoding="utf-8") as f:
         progress_text = f.read()
     plan = build_plan(root, progress_text)
+    qc_report = delivery_qc.build_report(Path(root), plan)
+    qc_path = os.path.join(root, "合成", "delivery_qc.json")
+    os.makedirs(os.path.dirname(qc_path), exist_ok=True)
+    with open(qc_path, "w", encoding="utf-8") as f:
+        json.dump(qc_report, f, ensure_ascii=False, indent=2)
     if args.mark_existing:
         with open(progress_path, "w", encoding="utf-8") as f:
-            f.write(mark_existing(root, progress_text, plan))
+            f.write(mark_existing(root, progress_text, plan, qc_report))
     json_path = args.json or os.path.join(root, "合成", "delivery_plan.json")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as f:
@@ -159,6 +185,7 @@ def main():
         flag = "✅" if item["exists"] else "⬜"
         print(f"{flag} {item['label']} -> {item['expected_path']}")
     print(f"[ok] {json_path}")
+    print(f"[ok] {qc_path} block={qc_report['summary']['block']}")
 
 
 if __name__ == "__main__":

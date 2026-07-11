@@ -57,6 +57,7 @@ from n2d_platform_profiles import (  # noqa: E402  视频后端档案单一真�
     video_backend_supports_multilingual_lipsync,
     video_backend_supports_multishot,
     video_backend_supports_quality_tier,
+    video_backend_supports_reference_to_video,
     preferred_multilingual_lipsync_backend,
 )
 from n2d_const import (  # noqa: E402  打斗镜判定 + 风格自适应视觉盛宴（与出图 runner 同源单一真值源）
@@ -2236,6 +2237,17 @@ def choose_route(
         route["prompt_requirements"].append(
             "T2V实验镜必须保留 reference_inputs / identity anchors / motion contract，并在失败时回退 image2video_or_frames2video。"
         )
+    if t2v_allowed and video_backend_supports_reference_to_video(route.get("primary_backend")):
+        route["mode"] = "reference_to_video"
+        route["reference_to_video_contract"] = dict(t2v_plan or {})
+        route["reference_bundle_status"] = "ready" if t2v_plan else "missing"
+        route["prompt_requirements"].append(
+            "reference-to-video：必须提交真实 storyboard/reference bundle；逐镜 hero frame 可选，但身份/场景/动作参考不得为空。"
+        )
+        route["degrade_plan"] = (
+            str(route.get("degrade_plan") or "")
+            + " If the reference-to-video adapter or bundle fails, return to image2video with landed first/end frames."
+        ).strip()
 
     # Avoid duplicate fallbacks and make sure default is available as last resort.
     fallbacks: List[str] = []

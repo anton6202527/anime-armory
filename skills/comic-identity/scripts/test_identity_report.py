@@ -137,6 +137,36 @@ def test_report_keeps_ready_when_generated_reference_sha_matches(tmp_path: Path)
     assert report["panels"][0]["stale_generated_refs"] == []
 
 
+def test_report_flags_outfit_gaps(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    chapter = "第1话"
+    jobs_dir = root / "出图" / chapter / "prompt"
+    jobs_dir.mkdir(parents=True)
+    (root / "生产数据").mkdir(parents=True)
+    (jobs_dir / "panel_jobs.json").write_text(
+        json.dumps(
+            {
+                "jobs": [
+                    {
+                        "panel_id": "P001",
+                        "status": "planned",
+                        "references": [],
+                        "outfit_binding": {"ref_id": "", "outfit_id": "OUTFIT_X", "registered": False},
+                    }
+                ]
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+    rc = identity.report(type("Args", (), {"project_root": str(root), "chapter": chapter, "write": False})())
+    assert rc == 0
+    report = json.loads((root / "生产数据" / f"comic_identity_report_{chapter}.json").read_text(encoding="utf-8"))
+    assert report["summary"]["outfit_gap_count"] == 1
+    assert "OUTFIT_X" in report["outfit_gaps"]["P001"]
+
+
 def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"

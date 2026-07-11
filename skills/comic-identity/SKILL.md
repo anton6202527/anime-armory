@@ -96,6 +96,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - `report` 会按 reference manifest 记录的 sha256 比对参考图当前内容：生成后换过锚点/定妆图内容（含 `seed --overwrite`）或参考文件消失的 ready 格进 `rerun_targets`（`stale_generated_refs` 给出逐图原因）；生成后新增的参考图不强制重抽。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
 - 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；`定妆级别=长线专门定妆` 时这些缺口是进入发布/连载审查前的阻断项。
+- **服装子注册表（outfits）**：业界已验证的失效模式是"锁了脸锁不住领型/纽扣/花纹"。同一角色的每套换装在 `registry.assets[CHAR_x].outfits[OUTFIT_y]` 登记 `{name, description, forbidden, reference_images}`；分格脚本用 `outfit_id` 引用。`report` 会检查换装格的登记与服装参考图（`outfit_gaps`），`角色一致性硬闸=开启` 时 gate 按 block 处理。修复服装漂移优先补服装参考图重抽，不走"每套服装一个 LoRA"。
 - 角色一致性不只看“像不像脸”。登记 `character_dna/dna_contract` 时必须覆盖脸型、眼型/眼距、鼻梁/嘴型、发际线、发型轮廓、服装主色、标志配饰/伤痕/灵纹、身高体态和眼神气质；这些字段会被 `comic-image` 写入逐格 prompt。
 - `visual_contract.scene_anchors` 里的 `LOC_` 场景锚同样属于 identity 层资产：关键场景必须登记布局、常驻物件、主光方向/冷暖、轴线视线和禁漂移项。缺场景锚时不要直接批量出图。
 - 漫画格的眼神和完整性标准必须独立达标：角色必须有戏内 `gaze_target`，身体和关键道具必须完整可读；“漫画夸张”“Q版动态”不能作为换脸、换眼型、丢手脚、丢服装标志或场景漂移的豁免。

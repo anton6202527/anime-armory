@@ -82,16 +82,29 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
 """
 
 
+TRADITIONAL_OFF_VALUES = {"关闭", "off", "disabled", "false", "False"}
+
+
+def traditional_enabled(value: str) -> bool:
+    return str(value or "").strip() not in TRADITIONAL_OFF_VALUES
+
+
 def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) -> str:
     source_status = "✅" if source_ready or args.mode == "原创漫画" else "⬜"
+    stages = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
+    if not traditional_enabled(args.traditional_workflow):
+        stages = [s for s in stages if s not in ("缩略分镜", "原稿收尾")]
+    header = "| 话 | " + " | ".join(stages) + " |"
+    divider = "|" + "---|" * (len(stages) + 1)
+    row = "| 第1话 | " + " | ".join(source_status if s == "源本/企划" else "⬜" for s in stages) + " |"
     return f"""# 进度 — 画漫画《{title}》
 
 > 输入模式={args.mode} 漫画形态={args.format} 阅读方向={args.reading_direction}
 
 ## 章节流程
-| 话 | 源本/企划 | 漫画脚本 | 缩略分镜 | 页面排版 | 原稿收尾 | 出图包 | 出图 | 嵌字合成 | 审查 |
-|---|---|---|---|---|---|---|---|---|---|
-| 第1话 | {source_status} | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+{header}
+{divider}
+{row}
 
 ## 导出
 - [ ] 第1话 页面图

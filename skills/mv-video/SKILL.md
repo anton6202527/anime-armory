@@ -91,13 +91,14 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 5 --identity-score 4 --beat-score 5 --clarity-score 4   # 各项 1-5 分
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --select Clip_001 --take 1
    ```
-   `--select` 会复制到 `出视频/视频/Clip_001.mp4`，并同步 `分镜/timeline_manifest.json`；全部 clip 都选中后脚本自动回写 `_进度.md` 的 `video` 行。
+   `--select` 要求 motion/identity/beat_fit/clarity 四项齐全、均分至少 3 且 identity 至少 3；例外必须 `--waiver-reason` 留痕。全部 clip 选中后自动运行继承合约和机械视频 QC，通过才回写进度。
 5. 跑继承合约和视频 QC：
    ```bash
    python3 skills/mv-video/scripts/inherit_contract.py "<制MV作品根>"
    python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>"
+   python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>" --accept-semantic --reviewer <name>
    ```
-   缺 compiler、后端不一致、合同/manifest 漂移、外部歌曲策略不一致都属于 hard block；先回 mv-plan/mv-image/mv-video 修。demo 或人工外部产物可用 `--no-fail` 落报告，但交付说明必须标注。报告会写 `生产数据/video_qc/frames/<clip>/start|mid|end.jpg` 供并排审片。
+   缺 compiler、合同/manifest 漂移、外部歌曲策略不一致都属于 hard block。QC 会检查首/尾帧感知相似度、可用时检查多帧 InsightFace 身份、抽 start/mid/end 帧和接缝色彩；服装/道具/空间/轴线/动作/口型仍需逐镜人审并用 `--accept-semantic` 绑定当前视频 hash 签收。
 6. 下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 timeline 拼）。
 
 ## 详细参考
@@ -126,5 +127,5 @@ MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸�
 | clip 单条好看但剪起来跳 | 每条补 `continuity` 五字段：承接上一条、给下一条留落点、锁服装发型/场景/轴线/道具，负面禁止换脸换衣新增人物 |
 | 运镜乱炫 | 服务节奏：副歌快/verse 缓/爽点对 downbeat |
 | 有角色用文生视频 | 用图生视频，首帧=mv-image PNG |
-| 想按镜型换视频后端 | mv 全程同一后端防风格跳变——只标 `quality_tier`/`motion_reference` 两轴，绝不换后端 |
+| 为了“一致”禁止所有后端路由 | 默认同一模型/渠道；只有 clip 明确写 `video_model`/`video_channel` 且能力确有需要时按镜路由，输出仍必须过统一视觉合同、调色和 QC |
 | 把 quality_tier 直接写成 model_version | 只表达 high/fast 意图，落档侧再解析成 pro/fast 档；后端无档位=n/a |

@@ -125,6 +125,10 @@ def stage_of(root: str, row: Dict[str, str], header: List[str]) -> Dict[str, Opt
             continue
             
         val = row.get(label, "")
+        if spec.get("optional") and cell_state(val) == "todo":
+            # optional 列（如「改写」）是按需支路：⬜/空 = 未启用，跳过不路由；
+            # 显式标 ⏳ 才视作已启用、照常路由。存量项目无需迁移即可越过该列。
+            continue
         if not is_done(val):
             skill = spec["skill"]
             cmd = 'python3 skills/novel/scripts/flow.py "{root}"'

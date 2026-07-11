@@ -12,6 +12,8 @@ import argparse
 import json
 import os
 import re
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Set
 
@@ -164,6 +166,131 @@ def clip_presence_findings(root: Path, clip: str, job: Optional[Mapping[str, Any
     return []
 
 
+def _probe(path: Path) -> Dict[str, Any]:
+    exe = shutil.which("ffprobe")
+    if not exe or not path.is_file():
+        return {}
+    proc = subprocess.run([exe, "-v", "error", "-show_streams", "-show_format", "-of", "json", str(path)],
+                          capture_output=True, text=True)
+    try:
+        return json.loads(proc.stdout) if proc.returncode == 0 else {}
+    except json.JSONDecodeError:
+        return {}
+
+
+def _seconds(value: Any) -> float:
+    m = re.search(r"\d+(?:\.\d+)?", str(value or ""))
+    return float(m.group()) if m else 0.0
+
+
+def technical_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    path = expected_video_path(root, clip)
+    data = _probe(path)
+    if not data:
+        return [finding("block", clip, "ffprobe", "clip 无法用 ffprobe 读取，不能只凭文件非空验收")]
+    streams = data.get("streams") or []
+    video = next((s for s in streams if s.get("codec_type") == "video"), None)
+    if not video:
+        return [finding("block", clip, "video_stream", "clip 缺有效视频流")]
+    out = []
+    actual = _seconds((data.get("format") or {}).get("duration"))
+    expected = _seconds(next((shot.get(k) for k in ("duration", "duration_sec", "seconds", "时长") if shot.get(k) is not None), 0))
+    if expected and abs(actual - expected) > max(0.35, expected * 0.08):
+        out.append(finding("block", clip, "duration", f"实测 {actual:.3f}s 与镜头目标 {expected:.3f}s 不符"))
+    if int(video.get("width") or 0) <= 0 or int(video.get("height") or 0) <= 0:
+        out.append(finding("block", clip, "resolution", "clip 分辨率无效"))
+    return out
+
+
+def _load_imaging():
+    try:
+        from PIL import Image, ImageDraw  # type: ignore
+        return Image, ImageDraw
+    except Exception:
+        return None, None
+
+
+def _extract_frame(video: Path, at: float, out: Path) -> bool:
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        return False
+    out.parent.mkdir(parents=True, exist_ok=True)
+    proc = subprocess.run([ffmpeg, "-y", "-ss", f"{max(0, at):.3f}", "-i", str(video), "-frames:v", "1", str(out)],
+                          capture_output=True, text=True)
+    return proc.returncode == 0 and out.is_file()
+
+
+def _dhash(path: Path, Image) -> Optional[int]:
+    try:
+        im = Image.open(path).convert("L").resize((9, 8))
+        px = list(im.get_flattened_data() if hasattr(im, "get_flattened_data") else im.getdata())
+        bits = 0
+        for y in range(8):
+            for x in range(8):
+                bits = (bits << 1) | (1 if px[y * 9 + x] < px[y * 9 + x + 1] else 0)
+        return bits
+    except Exception:
+        return None
+
+
+def _ham(a: Optional[int], b: Optional[int]) -> Optional[int]:
+    return None if a is None or b is None else (a ^ b).bit_count()
+
+
+def visual_sample_findings(root: Path, clip: str, shot: Mapping[str, Any], Image) -> tuple[List[Dict[str, Any]], List[Path]]:
+    path = expected_video_path(root, clip)
+    duration = _seconds((_probe(path).get("format") or {}).get("duration"))
+    if not duration:
+        return [], []
+    out_dir = root / "出视频" / "分镜" / "qc_frames"
+    points = {"start": min(0.05, duration / 10), "mid": duration / 2, "end": max(0, duration - 0.08)}
+    frames = []
+    for name, at in points.items():
+        target = out_dir / f"{clip}_{name}.png"
+        if _extract_frame(path, at, target):
+            frames.append(target)
+    out = []
+    source = root / "出图" / "分镜" / "图片" / f"{clip}.png"
+    if source.is_file() and frames:
+        dist = _ham(_dhash(source, Image), _dhash(frames[0], Image))
+        if dist is not None and dist > 24:
+            out.append(finding("warn", clip, "start_frame_drift",
+                               f"视频首采样与输入首帧 dHash 差 {dist}bit；启发式仅提示人工复核，不硬挡",
+                               {"source": str(source), "sample": str(frames[0]), "confidence": "heuristic"}))
+    if prod_assets(shot) and len(frames) >= 3:
+        hashes = [_dhash(p, Image) for p in frames]
+        drift = max((_ham(hashes[0], h) or 0) for h in hashes[1:])
+        if drift > 26:
+            out.append(finding("warn", clip, "within_clip_product_drift",
+                               f"产品镜 start/mid/end 全帧 dHash 最大漂移 {drift}bit；需看 contact sheet 复核包装/Logo",
+                               {"samples": [str(p) for p in frames], "confidence": "heuristic"}))
+    return out, frames
+
+
+def write_contact_sheet(root: Path, samples: List[Path], Image, ImageDraw) -> Optional[str]:
+    if not samples:
+        return None
+    thumbs = []
+    for path in samples:
+        try:
+            im = Image.open(path).convert("RGB")
+            im.thumbnail((320, 180))
+            thumbs.append((path, im.copy()))
+        except Exception:
+            pass
+    if not thumbs:
+        return None
+    sheet = Image.new("RGB", (320 * min(3, len(thumbs)), 215 * ((len(thumbs) + 2) // 3)), "white")
+    draw = ImageDraw.Draw(sheet)
+    for idx, (path, im) in enumerate(thumbs):
+        x, y = (idx % 3) * 320, (idx // 3) * 215
+        sheet.paste(im, (x, y))
+        draw.text((x + 4, y + 184), path.stem, fill="black")
+    out = root / "出视频" / "分镜" / "video_qc_contact_sheet.jpg"
+    sheet.save(out, quality=88)
+    return str(out)
+
+
 def route_findings(clip: str, shot: Mapping[str, Any], route: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
     if not prod_assets(shot):
         return []
@@ -219,14 +346,45 @@ def run_qc(root: Path) -> Dict[str, Any]:
     routes = route_by_clip(root)
     jobs = video_job_by_clip(root)
     shots = storyboard_shots(root)
+    Image, ImageDraw = _load_imaging()
+    all_samples: List[Path] = []
+    samples_by_clip: Dict[str, List[Path]] = {}
     if not shots:
         findings.append(finding("block", "-", "storyboard", "缺 storyboard clips/shots，无法验收视频。"))
     for index, shot in enumerate(shots, start=1):
         clip = clip_id(shot, index)
         findings.extend(clip_presence_findings(root, clip, jobs.get(clip)))
+        if expected_video_path(root, clip).is_file():
+            findings.extend(technical_findings(root, clip, shot))
+            if Image is not None:
+                sample_findings, samples = visual_sample_findings(root, clip, shot, Image)
+                findings.extend(sample_findings)
+                all_samples.extend(samples)
+                samples_by_clip[clip] = samples
+                if len(samples) < 3:
+                    findings.append(finding(
+                        "block", clip, "frame_sampling",
+                        "未能从成片实取 start/mid/end 三帧；不能把视频一致性验收降级为只看合同。",
+                        {"sample_count": len(samples)},
+                    ))
         findings.extend(route_findings(clip, shot, routes.get(clip)))
         findings.extend(prompt_handoff_findings(root, clip, shot))
         findings.extend(seam_findings(root, clip, shot, index, len(shots)))
+    if Image is not None:
+        for index in range(len(shots) - 1):
+            left = clip_id(shots[index], index + 1)
+            right = clip_id(shots[index + 1], index + 2)
+            left_samples = samples_by_clip.get(left) or []
+            right_samples = samples_by_clip.get(right) or []
+            if len(left_samples) >= 3 and right_samples:
+                dist = _ham(_dhash(left_samples[-1], Image), _dhash(right_samples[0], Image))
+                if dist is not None and dist > 28:
+                    findings.append(finding(
+                        "warn", f"{left}->{right}", "actual_seam_drift",
+                        f"相邻镜头实测尾帧/首帧 dHash 差 {dist}bit；需在 contact sheet 人工确认是否为有意跳切。",
+                        {"left_end": str(left_samples[-1]), "right_start": str(right_samples[0]),
+                         "confidence": "heuristic"},
+                    ))
     inheritance = load_json(root / "出视频" / "分镜" / "contract_inheritance.json")
     if not inheritance:
         findings.append(finding("warn", "-", "contract_inheritance", "缺 contract_inheritance.json，建议先跑 ad-video/scripts/inherit_contract.py。"))
@@ -234,6 +392,8 @@ def run_qc(root: Path) -> Dict[str, Any]:
         blocks = int(((inheritance.get("summary") or {}).get("block")) or 0)
         if blocks:
             findings.append(finding("block", "-", "contract_inheritance", f"契约继承仍有 block={blocks}，不能进入合成。"))
+    contact_sheet = write_contact_sheet(root, all_samples, Image, ImageDraw) if Image is not None else None
+    precision = "full" if shutil.which("ffmpeg") and shutil.which("ffprobe") and Image is not None else "structural"
     payload = {
         "schema_version": 1,
         "kind": KIND,
@@ -241,8 +401,10 @@ def run_qc(root: Path) -> Dict[str, Any]:
         "summary": summarize(findings),
         "findings": findings,
         "qc_environment": {
-            "precision_level": "structural",
-            "note": "baseline structural QC; pixel frame drift checks can be added with ffmpeg/Pillow later",
+            "precision_level": precision,
+            "manual_review_accepted": False,
+            "contact_sheet": contact_sheet,
+            "note": "full=ffprobe + start/mid/end extraction + adjacent seam sampling + contact sheet; heuristic visual drift never auto-BLOCK",
         },
     }
     out = root / "出视频" / "分镜" / "video_qc.json"

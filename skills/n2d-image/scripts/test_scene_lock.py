@@ -49,6 +49,12 @@ def test_registry_loop_closes_planner_tier():
     assert after["scene_lock_tier"] == "scene_lora" and after["suggest_scene_lora"] is False
 
 
+def test_registered_scene_lora_status_closes_planner_tier():
+    after = srp.plan_loc(sl.apply_lock_status(LOC, "scene_lora", "registered"),
+                         intra_shots=4, cross_eps=3, backend_supports_subject=False)
+    assert after["scene_lock_tier"] == "scene_lora"
+
+
 def test_register_writes_back_to_registry(tmp_path):
     root = tmp_path / "剧"
     d = root / "出图" / "共享"

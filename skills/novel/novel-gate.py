@@ -22,7 +22,7 @@ _LIB = os.path.join(_HERE, "_lib")
 if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
-from novel_contract import get_product_path, parse_regions
+from novel_contract import get_product_path, parse_regions, demo_chapters_for
 from novel_route import parse_progress, cell_state, chapter_number as parse_chapter_number
 from project_io import list_chapter_files, load_project_settings, read_text
 from qa_gate import collect_gate_status
@@ -133,7 +133,29 @@ def check_drafting_ready(root, chapter_label):
         blockers.append(f"缺少或为空：{reader_contract}")
 
     meta = _load_json(os.path.join(root, "_meta.json"))
-    demo_count = int(meta.get("demo_chapters") or 0)
+    raw_demo = meta.get("demo_chapters")
+    target_chapters = int(meta.get("target_chapters") or 0)
+    if raw_demo is None:
+        # demo_chapters 缺失 ≠ 显式关闭 Demo 闸：缺失时不能让批量章静默绕过 demo_gate。
+        if target_chapters > 0:
+            demo_count = demo_chapters_for(target_chapters)
+            warnings.append(
+                f"_meta.json 未写 demo_chapters；按 target_chapters={target_chapters} "
+                f"推得 demo_chapters={demo_count} 参与 Demo 闸判定（建议补齐 _meta.json）"
+            )
+        else:
+            blockers.append(
+                "_meta.json 缺少 demo_chapters 且无 target_chapters，无法判定 Demo 闸适用性；"
+                "补齐 _meta.json 后重试（短篇 ≤3 章可显式写 demo_chapters: 0 关闭 Demo 闸）"
+            )
+            demo_count = 0
+    else:
+        demo_count = int(raw_demo or 0)
+        if demo_count <= 0 and target_chapters > 3:
+            warnings.append(
+                f"demo_chapters={demo_count} 但 target_chapters={target_chapters} > 3："
+                "Demo 双闸门被显式关闭，批量写章不查 demo_gate（请确认这是有意选择）"
+            )
     is_bulk_chapter = demo_count <= 0 or chapter_num > demo_count
     if is_bulk_chapter:
         if demo_count > 0:

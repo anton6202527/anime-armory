@@ -19,13 +19,13 @@ description: Shared machine contracts and deterministic helpers for the ad-* (�
 
 | 主题 | 参考 / 脚本 | 何时用 |
 |---|---|---|
-| 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、写 `_设置.md`/`_进度.md`/`_meta.json`、派生 cutdown 交付件、查阶段表/选择点/交付规格时；含 **brief 必填分层** `brief_check()`（必问最小集 brand/product/usp/audience；claims/rights/legal_lines 可标「待补」延后到花钱 gate 前） |
+| 机器契约 | `references/contract.md` + `scripts/contract.py` | 初始化项目、交付件和阶段表；`brief_check()` 必问 brand/product/usp/audience/campaign_objective，花钱前补 claims/rights/legal_lines/primary_kpi/conversion_event |
 | 制片前控包 | `scripts/producer_pack.py` | 传统广告 pre-production/PPM 的机器版：汇总 brief/concept/storyboard/settings，产 `生产数据/producer_pack.json/md`，列 shot list、rights/claims/legal、交付矩阵、`PROD_*`/`BRAND_*` 资产绑定缺口和审批阻断项 |
-| 平台交付包 | `scripts/platform_pack.py` | 把目标平台 + deliverables 落成 `生产数据/platform_pack.json`：抖音/小红书/TikTok 的 9:16、最低分辨率、安全区、cutdown 交付矩阵和人工复核提示 |
+| 平台交付包 | `scripts/platform_pack.py` | 把目标平台 + deliverables 落成 platform pack；安全区按 placement/overlay，当前官方模板/回执路径写 `brief.platform_safe_zone_evidence`，未知平台缺规格即 block |
 | 只读进度 | `scripts/progress.py` | 查项目当前前沿 + 下一步该跑哪个 ad-* skill（公共 `progress` 分发路由到此，与 novel/song/mv 各 craft 同构） |
 | 状态回写 | `scripts/progress_set.py` | 阶段完成后回写 `_进度.md` 阶段进度；交付件存在后回写交付版本矩阵状态/路径 |
 | 花钱 gate | `scripts/gate.py` | image/video/compose 正式生产入口统一阻断：brief 合规项、广告法报告、分镜时长、占位 VO、上游产物 |
-| AI 使用 + 授权披露 | `scripts/ai_usage.py` | 投放、交平台前记录 AI 生图/视频、配音、音乐授权、代言人肖像、字体素材（AI 标识/水印由使用方在工具之外按平台/地区法规自行处理）|
+| AI 使用 + 发布合规 | `scripts/ai_usage.py` + `scripts/compliance_manifest.py` | 记录 AI/授权，并对平台主动声明证据、显式标识责任、元数据保留生成 release-ready 闸门；平台 UI 动作由发布方执行后回写证据 |
 
 ## 共享脚本
 
@@ -55,9 +55,13 @@ python3 skills/ad-craft/scripts/progress_set.py set-deliverable "<拍广告作�
 python3 skills/ad-craft/scripts/ai_usage.py "<拍广告作品根>" \
   --visual-mode AI-generated --video-mode AI-generated \
   --music-status 授权曲库:已购 --talent-status 未使用真人 --publish-target 抖音
+
+python3 skills/ad-craft/scripts/compliance_manifest.py "<拍广告作品根>" \
+  --declaration-status completed --declaration-evidence "合规/平台声明回执.png" \
+  --explicit-label-status platform_managed --metadata-status preserve
 ```
 
-输出：`合规/ai_usage.json` + `合规/AI使用说明.md`。
+输出：`合规/ai_usage.json` + `合规/AI使用说明.md` + `合规/compliance_manifest.json`。
 
 ## 设计原则
 

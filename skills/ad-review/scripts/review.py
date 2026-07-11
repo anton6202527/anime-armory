@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 _COMPOSE = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-compose"))
 if _COMPOSE not in sys.path:
@@ -55,6 +56,28 @@ def _summary_block(report):
         return None, None
 
 
+def _newest_mtime(paths):
+    newest = 0.0
+    for raw in paths:
+        path = Path(raw)
+        if path.is_dir():
+            for child in path.rglob("*"):
+                if child.is_file():
+                    newest = max(newest, child.stat().st_mtime)
+        elif path.is_file():
+            newest = max(newest, path.stat().st_mtime)
+    return newest
+
+
+def stale_finding(report_path, sources, code, label):
+    if not os.path.isfile(report_path):
+        return None
+    newest = _newest_mtime(sources)
+    if newest and os.path.getmtime(report_path) + 1e-6 < newest:
+        return finding("block", code, f"{label} 早于其输入产物，旧报告不能证明当前交付通过", report_path)
+    return None
+
+
 def review(root):
     root = os.path.abspath(root)
     findings = []
@@ -100,6 +123,32 @@ def review(root):
                 findings.append(finding("block", "video_qc_block", f"出视频落档 QC 仍有 block={blocks}", video_qc))
             if warns:
                 findings.append(finding("warn", "video_qc_warn", f"出视频落档 QC warn={warns}，需人工确认", video_qc))
+        stale = stale_finding(video_qc, [os.path.join(root, "出视频", "分镜", "视频")],
+                              "video_qc_stale", "video_qc")
+        if stale:
+            findings.append(stale)
+
+    consistency = os.path.join(root, "生产数据", "consistency_findings.json")
+    cr = load_json(consistency)
+    if cr is None:
+        findings.append(finding("block", "consistency_findings_missing",
+                                "缺统一一致性总账；先跑 consistency_findings.py --write", consistency))
+    else:
+        blocks, warns = _summary_block(cr)
+        if blocks is None:
+            findings.append(finding("block", "consistency_findings_malformed",
+                                    "一致性总账缺 summary.block/warn", consistency))
+        elif blocks:
+            findings.append(finding("block", "consistency_findings_block", f"一致性总账仍有 block={blocks}", consistency))
+        if warns:
+            findings.append(finding("warn", "consistency_findings_warn", f"一致性总账有 warn={warns}，需签收", consistency))
+        stale = stale_finding(consistency, [
+            os.path.join(root, "出图", "分镜", "product_qc.json"),
+            os.path.join(root, "出视频", "分镜", "video_qc.json"),
+            os.path.join(root, "配音", "时长清单.json"),
+        ], "consistency_findings_stale", "consistency_findings")
+        if stale:
+            findings.append(stale)
 
     # AI 使用/授权披露：不仅查文件存在，还要查内容与 brief 授权信息不矛盾（空壳披露应拦）。
     ai_usage = os.path.join(root, "合规", "ai_usage.json")
@@ -130,6 +179,44 @@ def review(root):
         ):
             findings.append(finding("warn", "ai_usage_all_unrecorded",
                                     "AI 披露各授权项均未记录，请确认确无真人/授权音乐/字体/素材", ai_usage))
+
+    compliance = os.path.join(root, "合规", "compliance_manifest.json")
+    cm = load_json(compliance)
+    if not isinstance(cm, dict):
+        findings.append(finding("block", "compliance_manifest_missing",
+                                "缺发布合规 manifest；母版完成不等于平台发布就绪", compliance))
+    else:
+        blocks, _ = _summary_block(cm)
+        if blocks is None:
+            findings.append(finding("block", "compliance_manifest_malformed",
+                                    "发布合规 manifest 缺 summary.block/warn", compliance))
+        elif blocks or not bool((cm.get("summary") or {}).get("release_ready")):
+            findings.append(finding("block", "compliance_manifest_block",
+                                    "AI/平台声明、版位安全区或元数据责任尚未闭合，不能标记发布就绪", compliance))
+        else:
+            stale = stale_finding(compliance, [ai_usage, os.path.join(root, "需求", "brief.json")],
+                                  "compliance_manifest_stale", "compliance_manifest")
+            if stale:
+                findings.append(stale)
+
+    delivery_qc = os.path.join(root, "合成", "delivery_qc.json")
+    dq = load_json(delivery_qc)
+    if not isinstance(dq, dict):
+        findings.append(finding("block", "delivery_qc_missing", "缺逐交付件技术 QC", delivery_qc))
+    else:
+        blocks, warns = _summary_block(dq)
+        if blocks is None:
+            findings.append(finding("block", "delivery_qc_malformed",
+                                    "交付件技术 QC 缺 summary.block/warn", delivery_qc))
+        elif blocks:
+            findings.append(finding("block", "delivery_qc_block", f"交付件技术 QC block={blocks}", delivery_qc))
+        if warns:
+            findings.append(finding("warn", "delivery_qc_warn", f"交付件技术 QC warn={warns}", delivery_qc))
+        stale = stale_finding(delivery_qc, [master, os.path.join(root, "合成", "cutdown"),
+                                            os.path.join(root, "合成", "多比例")],
+                              "delivery_qc_stale", "delivery_qc")
+        if stale:
+            findings.append(stale)
 
     progress = os.path.join(root, "_进度.md")
     if not os.path.isfile(progress):

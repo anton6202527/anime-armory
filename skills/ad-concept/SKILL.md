@@ -12,20 +12,21 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 
 ## 偏好（私有）
 
-按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及选择点：`广告类型`、`创意路线`、`基础视觉风格`、`主片时长`、`目标平台`。`创意路线`/`基础视觉风格` 首次需给菜单让用户选一次（影响全程调性），选后落 `_设置.md`。
+按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`广告类型`、`广告目标`、`漏斗阶段`、`创意路线`、`基础视觉风格`、`主片时长`、`目标平台`。
 
 ## 工作流
 
 ### 第0步：brief 补齐（AI 代理交互节点 · 三层访谈，别问一面墙）
 读 `需求/brief.json`，缺项按三层分治。**别让用户填 JSON**——AI 问人话、自己落档：
 
-1. **必问最小集**（机器判据 `ad-craft contract.brief_check()`，缺任一不开工）：品牌 `brand` / 产品 `product` / 核心卖点 `usp`（1–2 个就够）/ 目标人群 `audience`。一句话需求（如"给我的手冲咖啡店拍个15秒广告"）通常已含品牌+产品，**往往只差卖点和人群两问**。
-2. **推断 + 一次确认**：调性 / key_message 雏形 / 主片时长 / 目标平台 / 创意路线倾向——AI 按产品与行业常识先给推断值，**打包成一组让用户一次确认或修改**（与 `_设置.md` 选择点合并问，别拆多轮）；用户不置可否就用推断值继续。
-3. **合规项可延后**：claims 依据 / rights 授权（代言人/音乐/字体/素材）/ legal_lines——标 `"待补"`，**不阻塞创意和脚本**；进花钱 gate（出图/出视频/合成）前由 `brief_check()` 的 deferred 清单强制补齐（`ad-craft/scripts/progress.py` 会一直提示）。
+1. **必问最小集**：brand / product / usp / audience / `campaign_objective`。目标至少落到品牌认知、考虑种草、转化行动或全链路之一。
+2. **推断 + 一次确认**：漏斗阶段、调性、key message、时长、平台、路线；同时确认 offer、landing page（如有）。
+3. **花钱前闭合**：claims、rights、legal_lines、`measurement.primary_kpi`、`measurement.conversion_event`。claim 不能只写“有据”，须准备证据文件、方法、日期、适用地区、批准人给 producer pack。
 
 补完把答案结构化回写 `brief.json` + 人读 `brief.md`，并回写 `_进度.md` 客户需求立项 ✅。
 
 ### 第1步：定 big idea 与一句话主张
+- 先写 **Objective → Audience → Promise → Proof → Action**：目标/KPI 不同，品牌露出、产品演示和 CTA 比重也不同。
 - **big idea**：一句能统领整片的核心创意（不是卖点罗列，是"用什么角度让人记住"）。
 - **一句话主张 key message**：观众看完该记住的一句话（常与 slogan 呼应，但不等于 slogan）。
 - 给 2–3 个候选，按 brief 的受众/调性/平台推荐一个，让用户选。
@@ -52,6 +53,7 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 ## KV 方向           # 主视觉：主体/构图/品牌色/产品位/slogan 摆位
 ## 故事线（段落级）   # 钩子→痛点→方案→证据→CTA，每段秒数预算
 ## 强制项 mandatories # logo/slogan/法律声明/endcard CTA（来自 brief）
+## 衡量设计           # campaign objective / primary KPI / conversion event / variant hypothesis
 ## 必避点            # 竞品/违禁表述/品牌禁忌（来自 brief）
 ```
 
