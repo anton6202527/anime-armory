@@ -1,0 +1,944 @@
+{
+  "audio_timing": {
+    "dialogue_closeups": [
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_01",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_01_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=8.435s；dialogue_indices=[1, 2]；voiceover_indices=[1, 2]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_02",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=6.15s；dialogue_indices=[4]；voiceover_indices=[3, 4]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_03",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=7.632s；voiceover_indices=[5]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_04",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=11.028s；dialogue_indices=[6, 7]；voiceover_indices=[6, 7]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_05",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=8.614s；dialogue_indices=[8, 9, 10]；voiceover_indices=[8, 9, 10]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_06",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=5.439s；dialogue_indices=[12]；voiceover_indices=[11, 12]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_07",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_07_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=13.487s；dialogue_indices=[13, 14, 15]；voiceover_indices=[13, 14, 15]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_08",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_08_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=2.4s；dialogue_indices=[16, 17]；voiceover_indices=[16, 17]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_09",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=5.874s；dialogue_indices=[18, 19]；voiceover_indices=[18, 19]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_10",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_10_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.188s；dialogue_indices=[20, 21]；voiceover_indices=[20, 21]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_11",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=9.586s；dialogue_indices=[22]；voiceover_indices=[22, 23, 24]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_12",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=6.113s；dialogue_indices=[25, 26]；voiceover_indices=[25, 26]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_13",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=13.473s；voiceover_indices=[27, 28]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_14",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=3.794s；dialogue_indices=[29]；voiceover_indices=[29]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "post_dub",
+        "base_video_only": false,
+        "clip_id": "Clip_15",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=6.582s；dialogue_indices=[30]；voiceover_indices=[30]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_16",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_16_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=3.074s；dialogue_indices=[31, 32]；voiceover_indices=[31, 32]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "rough_timing_final_dub_later",
+        "base_video_only": false,
+        "clip_id": "Clip_17",
+        "final_voice_stage": "post_video_before_compose",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=4.369s；voiceover_indices=[33]",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      },
+      {
+        "audio_strategy": "base_video_then_post_lipsync",
+        "base_video_only": true,
+        "clip_id": "Clip_18",
+        "final_voice_stage": "post_lipsync_before_compose",
+        "mouth_policy": "neutral_resting_mouth_base_plate；no_native_speech；post_lipsync_required=true；output=出视频/第1集/视频_lipsync/Clip_18_lipsync.mp4。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": true,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "text_estimate_no_audio",
+        "timing_source": "timing_basis=text_estimate_no_audio；storyboard.duration=0.893s；dialogue_indices=[34]；voiceover_indices=[34]",
+        "voice_or_native_policy": "先出中性口型基础视频；获批表演/final 音轨到位后走独立 lipsync pass，不让视频后端猜台词。"
+      },
+      {
+        "audio_strategy": "picture_first",
+        "base_video_only": false,
+        "clip_id": "Clip_19",
+        "final_voice_stage": "optional_post",
+        "mouth_policy": "no_visible_lipsync；无声视频流；no_native_speech；画内不生成角色口型人声。",
+        "performance_track_status": "missing",
+        "post_lipsync_required": false,
+        "subtitle_policy": "compose_overlay_only；视频模型禁止生成字幕/屏幕文字/logo/水印。",
+        "timing_basis": "storyboard_duration",
+        "timing_source": "timing_basis=storyboard_duration；storyboard.duration=1.3s",
+        "voice_or_native_policy": "最终旁白/口外音后置；前期仅用 text_estimate_no_audio 或画面节奏，不生成占位 WAV。"
+      }
+    ],
+    "mode": "混合自动路由",
+    "native_av_policy": {
+      "lipsync_policy": "逐镜 route 决定；项目级对口型=关闭。",
+      "subtitle_policy": "compose_overlay_only；视频后端禁止烤字。",
+      "voice_identity_policy": "native_av 仍须声音授权；其它 route 的 final voice 由 voice_casting 锁定。"
+    },
+    "policy": "time_basis_first_per_shot_sound_routing",
+    "post_dub": {
+      "fit_strategy": "先锁无 WAV 时间槽或画面节奏；音色定妆后生成 final voice，按偏差刷新 OTIO、拟合或局部重切。",
+      "overflow_policy": "final voice 超出估时范围时回 n2d-script/video 调整节奏；不得用重度压速或静音占位伪装通过。"
+    },
+    "production_route_status": "aligned"
+  },
+  "episode": "第1集",
+  "episode_promise": {
+    "cliffhanger": "姜月初主动将横刀刺入并非恶人的裴长青胸口；第2集必须立即承接道行到账、血溅反应和斩虎兑现。",
+    "obstacle": "她只是凡境弱女子；虎妖半步鸣骨且拥有致命伤复活神通；现场唯一可获得道行的活物是将死的裴长青。",
+    "opening_hook": "胸口被洞穿的虎妖尸体睁眼起身并说‘别跑了’，随后回到一炷香前。",
+    "payoff_or_progress": "本集兑现百妖谱首现和完整核心规则，但故意把第一次道行到账与反杀留到第2集；信息回报先于情绪爽点。",
+    "promise": "姜月初每次在更危险规则里作出有代价的选择，并以可记账道行收录独特妖魔能力；力量增长不会抹去选择后果。",
+    "source_trace_ids": [
+      "SRC_PROMISE_001",
+      "SRC_MOTIVE_001",
+      "SRC_CAUSE_002",
+      "SRC_FORESHADOW_003"
+    ]
+  },
+  "interaction_physics": [
+    {
+      "action_decomposition": [
+        "伤口物证",
+        "虎眼睁开",
+        "姜月初惊骇",
+        "三者绝境关系",
+        "start_state: 虎妖伏在巨石旁，贯胸伤口可见。",
+        "end_state: 虎妖完全站起，姜月初仰视惊骇。",
+        "entry_exit: 三者均保持尸场既定位置；无新实体入画。",
+        "不死虎妖冷开"
+      ],
+      "clip_id": "Clip_01",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "multi_character_same_frame",
+      "screen_positions": [
+        "BEAST_01画右上后景高位；CHAR_01画左中景；CHAR_02下方前景低位。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 黑场时间字卡结束。",
+        "end_state: 姜月初坐起并决定先活下去。",
+        "entry_exit: 姜月初原地醒来；其余实体留在画外。",
+        "一炷香前醒来"
+      ],
+      "clip_id": "Clip_02",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "一炷香前醒来 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初坐起查看自身。",
+        "end_state: 她站稳并锁定远端镇魔司尸体。",
+        "entry_exit: 姜月初由地面进入中景站姿。",
+        "尸场与妖魔大唐"
+      ],
+      "clip_id": "Clip_03",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "尸场与妖魔大唐 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初看向赤云纹。",
+        "end_state: 她从虎尸移开视线，警惕稍降。",
+        "entry_exit: 虎妖仅以尸体状态留在画右后景。",
+        "赤云纹与死透错觉"
+      ],
+      "clip_id": "Clip_04",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01画左前景观察；BEAST_01以贯胸尸态留画右上后景，不起身。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初背对尸堆。",
+        "end_state: 她朝画左南向出口迈出第一步。",
+        "entry_exit: 裴长青从尸堆轮廓中被发现但不起身；姜月初欲向画左离开。",
+        "尸堆活人与逃念"
+      ],
+      "clip_id": "Clip_05",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01画左站立；CHAR_02画右下尸堆低位，左臂不承重。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初左脚迈向出口。",
+        "end_state: 断刀钉地，姜脚尖停在刀后一掌。",
+        "entry_exit: 断刀入画并固定在地；裴保持画外右后。",
+        "断刀钉脚"
+      ],
+      "clip_id": "Clip_06",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "裴报身份",
+        "路引施压",
+        "姜计算",
+        "伸手成交",
+        "start_state: 断刀钉在两者之间，姜站、裴倒。",
+        "end_state: 姜月初伸手扶住裴未伤侧，交易成立。",
+        "entry_exit: 双方不换位；姜由站立俯身，裴准备起身。",
+        "路引交易"
+      ],
+      "clip_id": "Clip_07",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "dialogue_shot_reverse",
+      "screen_positions": [
+        "CHAR_01画左站立，CHAR_02画右下倒地，PROP_01在两者中间。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "接肩",
+        "借力起身",
+        "向南挪步",
+        "画外咳声停步",
+        "先看清接触点",
+        "起身后只迈两步",
+        "咳声处停住",
+        "start_state: 姜扶住裴未伤侧。"
+      ],
+      "clip_id": "Clip_08",
+      "contact_points": [
+        "姜右手托裴右侧肩背，左手扶其右前臂。"
+      ],
+      "degrade_plan": "若全身搀扶不稳，拆肩背手部特写与双人半身短跟。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "hug_or_pull",
+      "screen_positions": [
+        "CHAR_01画左中景扶CHAR_02右侧未伤肩背，二人共同向画左深处。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "咳声",
+        "虎尸起身",
+        "裴失血反应",
+        "姜确认伤口仍在",
+        "start_state: 姜裴向画左移动。",
+        "end_state: 二人面向画右上，虎妖完全站起。",
+        "entry_exit: 虎妖由伏地尸态进入站立；姜裴原地停步。",
+        "虎妖复活追上时间"
+      ],
+      "clip_id": "Clip_09",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "reveal_reaction_chain",
+      "screen_positions": [
+        "虎妖画右上后景起身；姜左中景、裴右中景回看。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "虎妖宣告",
+        "裴识级",
+        "姜屏息",
+        "start_state: 虎妖完全站起，姜裴停步。",
+        "end_state: 裴长青挣开姜支撑并压低重心。",
+        "entry_exit: 裴由被扶转为独立站姿，姜后退半步。",
+        "半步鸣骨宣判"
+      ],
+      "clip_id": "Clip_10",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "multi_character_same_frame",
+      "screen_positions": [
+        "虎妖画右上主导，姜画左中景，裴画右下前景。"
+      ],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "裴起手冲锋",
+        "横刀斩落",
+        "虎妖抬脚命中",
+        "裴倒飞砸落",
+        "姜低头签收",
+        "斩落前看清裴刀路",
+        "抬脚前半拍看清虎妖不闪",
+        "命中停一帧"
+      ],
+      "clip_id": "Clip_11",
+      "contact_points": [
+        "虎妖右脚掌接触裴胸腹护衣。",
+        "identity=裴攻击、虎妖防守，角色不可交换；axis_path=沿尸场主轴往返；contact=只在虎妖脚掌与裴胸腹；vfx=无无来源法术，仅气血微红边光"
+      ],
+      "degrade_plan": "若连续动作不稳，拆冲锋起手、脚掌命中特写、裴落地三段，以动作匹配剪辑。",
+      "effect_cause": "identity 裴攻击、虎妖防守，角色不可交换 axis_path 沿尸场主轴往返 contact 只在虎妖脚掌与裴胸腹 vfx 无无来源法术，仅气血微红边光",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "CHAR_02自画左下冲向画右上BEAST_01；CHAR_01留画左中景；受击后CHAR_02沿原线倒飞至CHAR_01脚边。",
+        "裴进攻左下到右上，受击回右上到左下。",
+        "裴沿主轴直线往返，不横穿摄影机。",
+        "侧跟→命中固定→落地下摇。"
+      ],
+      "vfx_layers": [
+        "identity=裴攻击、虎妖防守，角色不可交换；axis_path=沿尸场主轴往返；contact=只在虎妖脚掌与裴胸腹；vfx=无无来源法术，仅气血微红边光"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 裴倒在姜脚边。",
+        "end_state: 姜月初被压在裴与虎妖之间，外界声场将抽空。",
+        "entry_exit: 虎妖只前进一步，姜裴不换位。",
+        "败局与虎妖劝死"
+      ],
+      "clip_id": "Clip_12",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "按 storyboard 光影/粒子/烟尘因果生成 VFX，不新增未登记法术或系统文字。"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "黑金底框展开",
+        "属性overlay出现",
+        "斩杀规则刷新",
+        "姜月初扫视目标",
+        "start_state: 姜处于等死最低谷。",
+        "end_state: 姜月初看见规则并快速扫向虎妖、断刀与裴长青。",
+        "entry_exit: VFX_01作为仅姜可见叠加进入；人物空间位置冻结。",
+        "百妖谱规则亮牌"
+      ],
+      "clip_id": "Clip_13",
+      "contact_points": [
+        "无直接身体接触；按 screen_positions/entry_exit 保持画面分层、距离和画外保留关系。"
+      ],
+      "degrade_plan": "面板文字全部交 compose overlay；视频只保留人物反应和干净负空间，必要时拆为人物反应 + 面板空镜。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "system_panel",
+      "screen_positions": [
+        "CHAR_01中近景偏左，VFX_01占右上负空间，裴与虎妖仅作画外位置锚。"
+      ],
+      "vfx_layers": [
+        "VFX_01",
+        "MOTIF_系统面板",
+        "VFX_01作为仅姜可见叠加进入",
+        "VFX_01占右上负空间"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜看向虎妖。",
+        "end_state: 她的视线缓慢下落到脚边。",
+        "entry_exit: 系统底框退出清晰画面，人物不移动。",
+        "凡人拿什么杀妖"
+      ],
+      "clip_id": "Clip_14",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "凡人拿什么杀妖 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "VFX_01"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜月初视线向脚边下落。",
+        "end_state: 她的手伸向落地断刀，但尚未握住。",
+        "entry_exit: 人物不移动；PROP_01由画外位置在视线插入中显露。",
+        "唯一活物就在脚边"
+      ],
+      "clip_id": "Clip_15",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [
+        "CHAR_01画左上清晰；CHAR_02画右下仅单人反应镜；PROP_02在裴右侧地面。"
+      ],
+      "vfx_layers": [
+        "VFX_01"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "姜握刀",
+        "裴看刀",
+        "两人对视",
+        "抱歉",
+        "start_state: 姜手停在刀柄上方。",
+        "end_state: 姜握刀与裴对视，说完抱歉，刀尖开始下压。",
+        "entry_exit: 姜拿起PROP_01站在裴左上方；裴仍倒地。",
+        "拿刀与抱歉"
+      ],
+      "clip_id": "Clip_16",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "relationship_turn",
+      "screen_positions": [
+        "CHAR_01画左上持刀，CHAR_02画右下仰视；左右不交换。"
+      ],
+      "vfx_layers": [
+        "VFX_01"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "刀尖下压",
+        "刺入衣料与胸口",
+        "血点落脸",
+        "两人僵住",
+        "看清姜握刀",
+        "看清一次刺入",
+        "血点出现后留反应",
+        "start=刀尖悬在胸前；intent_mid=刀尖压住衣料；impact_or_apex=刀刺入并停住；result_or_recovery=血点落姜脸；end=两人僵住对视"
+      ],
+      "clip_id": "Clip_17",
+      "contact_points": [
+        "断刀与裴胸口衣料单一接触点。",
+        "identity=姜持刀、裴受击不可交换；axis_path=刀由上向下；contact=单一胸口接触点；blood=少量暗红血点，只在命中后出现"
+      ],
+      "degrade_plan": "若双人接触不稳，分为刀压衣料特写、血点落脸、裴错愕三镜剪辑。",
+      "effect_cause": "identity 姜持刀、裴受击不可交换 axis_path 刀由上向下 contact 单一胸口接触点 blood 少量暗红血点，只在命中后出现",
+      "risk_type": "fight_exchange",
+      "screen_positions": [
+        "CHAR_01画左上，CHAR_02画右下；刀由上向下，人物不换位。",
+        "姜左上到裴右下，不越姜裴轴。",
+        "刀沿单一直线短路径，不横扫。",
+        "固定近景，命中后切姜脸。"
+      ],
+      "vfx_layers": [
+        "identity=姜持刀、裴受击不可交换；axis_path=刀由上向下；contact=单一胸口接触点；blood=少量暗红血点，只在命中后出现",
+        "VFX_01"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 姜脸有新血点，刀停在裴胸口。",
+        "end_state: 裴吐出你字，眼神仍锁住姜月初。",
+        "entry_exit: 人物与刀保持原位。",
+        "裴长青错愕硬断"
+      ],
+      "clip_id": "Clip_18",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "复杂多人/接触不稳时拆为建立镜、手部/物件特写、反打反应镜，保留剧情 beat 和动作目标。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "VFX_01"
+      ]
+    },
+    {
+      "action_decomposition": [
+        "start_state: 裴最后一字结束，姜仍看向画右下。",
+        "end_state: 姜月初血点脸和颤抖握刀手保持，画面硬切黑。",
+        "entry_exit: 只切姜单人反应；其余实体保持画外位置。",
+        "姜月初血点脸静默硬断"
+      ],
+      "clip_id": "Clip_19",
+      "contact_points": [
+        "手部与 LOC_01 的接触点由首帧/参考帧保持，避免道具漂移或穿模。"
+      ],
+      "degrade_plan": "姜月初血点脸静默硬断 动作不稳时拆为建立镜 + 关键动作 + 反应/结果镜，保留剧情 beat。",
+      "effect_cause": "VFX 只响应本镜动作、系统面板或环境事件；文字交 compose overlay，不在视频内烤字。",
+      "risk_type": "auto_detected",
+      "screen_positions": [],
+      "vfx_layers": [
+        "VFX_01"
+      ]
+    }
+  ],
+  "kind": "n2d_preventive_contracts",
+  "reference_slots": {
+    "assets": [
+      {
+        "id": "PROP_01",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_01在两者中间",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_01由持起转为刺入状态",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "PROP_01由画外位置在视线插入中显露",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_01",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_01作为仅姜可见叠加进入",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      },
+      {
+        "id": "VFX_01占右上负空间",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "asset"
+      }
+    ],
+    "characters": [
+      {
+        "id": "BEAST_01",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_01",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      },
+      {
+        "id": "CHAR_02",
+        "identity_strategy": "same-source registry reference_group identity lock",
+        "reference_slots": [],
+        "role": "core"
+      }
+    ],
+    "scenes": [
+      {
+        "id": "LOC_01",
+        "lock_strategy": "registry reference_group shape/scene lock",
+        "reference_slots": [],
+        "type": "scene"
+      }
+    ]
+  },
+  "shots": [
+    {
+      "clip_id": "Clip_01",
+      "dramatic_function": "以不死事实提出全剧第一危机。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_02",
+      "dramatic_function": "重置时间并确立求生目标。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_03",
+      "dramatic_function": "用可见细节完成身份与时代交代。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_04",
+      "dramatic_function": "建立镇魔司威名并制造虎妖死透的反差前提。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_05",
+      "dramatic_function": "把潜在救援者先呈现为危险变量。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_06",
+      "dramatic_function": "用行动改变双方权力关系。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_07",
+      "dramatic_function": "用路引和自由把二人绑定成脆弱同盟。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_08",
+      "dramatic_function": "将交易变为可见行动并给复活危机制造移动目标。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_09",
+      "dramatic_function": "兑现冷开时间闭环并撤销逃生可能。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_10",
+      "dramatic_function": "量化敌我战力差并给裴最后出手动机。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_11",
+      "dramatic_function": "以清楚命中链兑现绝对战力差。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_12",
+      "dramatic_function": "让行动失败转为姜月初个人死局。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_13",
+      "dramatic_function": "交付本剧核心成长规则并把死局转为残酷选择题。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_14",
+      "dramatic_function": "指出系统规则与现实战力之间的缺口。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_15",
+      "dramatic_function": "把抽象规则转化为道德困境。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_16",
+      "dramatic_function": "完成同盟到加害者与受害者的关系翻转。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_17",
+      "dramatic_function": "不可逆地兑现生存选择。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_18",
+      "dramatic_function": "让受害者的错愕完整落地，并把反应交给最终静默镜。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    },
+    {
+      "clip_id": "Clip_19",
+      "dramatic_function": "让越线代价在主角脸上落地，同时扣住下一集道行到账。",
+      "editing_intent": "",
+      "emotional_turn": "",
+      "source_trace_ids": [],
+      "visual_question": ""
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

@@ -10,6 +10,7 @@ const GLYPHS = {
   trash: "\uea81",
   wrench: "\ueb65",
   sourceControl: "\uea68",
+  extensions: "\ueae6",
   deviceCameraVideo: "\uead9",
   beaker: "\uea79",
   layout: "\uebeb",
@@ -39,6 +40,10 @@ const GLYPHS = {
   settingsGear: "\ueb51",
   settings: "\ueb52",
   bell: "\ueaa2",
+  symbolFunction: "\uea8c",
+  symbolKey: "\uea93",
+  symbolClass: "\ueb5b",
+  symbolString: "\ueb8d",
 } as const;
 
 const CLASS_NAMES = {
@@ -53,6 +58,7 @@ const CLASS_NAMES = {
   trash: "trash",
   wrench: "wrench",
   sourceControl: "source-control",
+  extensions: "extensions",
   deviceCameraVideo: "device-camera-video",
   beaker: "beaker",
   layout: "layout",
@@ -82,6 +88,10 @@ const CLASS_NAMES = {
   settingsGear: "settings-gear",
   settings: "settings",
   bell: "bell",
+  symbolFunction: "symbol-function",
+  symbolKey: "symbol-key",
+  symbolClass: "symbol-class",
+  symbolString: "symbol-string",
 } as const satisfies Record<keyof typeof GLYPHS, string>;
 
 export type CodiconName = keyof typeof GLYPHS;

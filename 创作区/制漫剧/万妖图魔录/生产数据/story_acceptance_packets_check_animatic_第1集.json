@@ -1,0 +1,46 @@
+{
+  "episode": "第1集",
+  "files": [
+    {
+      "file": "创作区/制漫剧/万妖图魔录/脚本/第1集/animatic_packet.json",
+      "issues": [],
+      "packet": "animatic",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/万妖图魔录/脚本/第1集/animatic_packet.md",
+      "issues": [],
+      "packet": "animatic",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/万妖图魔录/生产数据/animatic_第1集.json",
+      "issues": [],
+      "packet": "animatic_preview",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/万妖图魔录/生产数据/story_economy_audit_第1集.json",
+      "issues": [],
+      "packet": "story_economy",
+      "status": "pass"
+    },
+    {
+      "file": "创作区/制漫剧/万妖图魔录/脚本/第1集/animatic_signoff.json",
+      "issues": [],
+      "packet": "animatic",
+      "status": "pass"
+    }
+  ],
+  "generated_at": "2026-07-12T11:57:10+00:00",
+  "kind": "n2d_story_acceptance_packets_check",
+  "next_when_blocked": "补齐围读/animatic 内容与 timed preview，把内容 status 改为 confirmed，再用 signoff.py 由明确角色签收当前输入与证据哈希。",
+  "packet_kind": "animatic",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "pass": 5,
+    "required": 5
+  },
+  "version": 1
+}

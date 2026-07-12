@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_shot_progression_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "rules": {
+    "establishing": "闪回后用一枚竖屏纵深定场镜交代尸骸、姜月初、虎尸、南向出口；回到冷开时复用相同空间锚。",
+    "scale_ladder": "每个单元从关系可读景别进入反应近景，在动作或信息峰值落 CU 或 ECU，再以关系镜或道具镜释放。",
+    "peak_closeup": "虎妖睁眼、断刀钉地、裴被踢回、百妖谱点亮、握刀发抖、血点落脸六处必须有近特写签收。",
+    "movement_motivation": "推镜只用于威胁逼近或决定形成；跟镜只服务逃生与冲锋方向；系统段人物机位稳定以突出认知变化。"
+  },
+  "progressions": [
+    {"beat_id": "Beat_01", "start_shot_size": "ECU 虎妖空洞伤口", "peak_shot_size": "CU 虎眼睁开与姜月初惊骇", "release_shot_size": "MS 三者绝境关系", "camera_move": "伤口到眼睛短促上摇，反应镜微推", "camera_motivation": "让死而复生先有物证再有情绪签收", "must_have_insert_or_reaction": "虎眼睁开 insert；姜月初与裴长青双反应"},
+    {"beat_id": "Beat_02", "start_shot_size": "LS 竖屏纵深尸场定场", "peak_shot_size": "MCU 姜月初辨认囚服和赤云纹", "release_shot_size": "MS 她回看虎尸", "camera_move": "醒来时低位缓升，观察环境时克制跟移", "camera_motivation": "随她恢复意识逐层揭示世界和身份", "must_have_insert_or_reaction": "囚服、赤云纹、贯胸虎尸三处插入"},
+    {"beat_id": "Beat_03", "start_shot_size": "MS 尸堆与姜月初关系", "peak_shot_size": "ECU 断刀钉入脚前", "release_shot_size": "双人 MCU 扶起成交", "camera_move": "断刀用短促甩接，谈判阶段固定反打", "camera_motivation": "动作突变建立裴的控制，静止机位让交易表演落地", "must_have_insert_or_reaction": "脚尖僵住、裴伤臂、姜月初计算式眼神"},
+    {"beat_id": "Beat_04", "start_shot_size": "MS 虎妖起身封路", "peak_shot_size": "LS 裴冲锋到虎妖抬脚，CU 重击反应", "release_shot_size": "俯拍 MS 裴落在姜脚边", "camera_move": "冲锋侧跟，抬脚瞬间停住，落地短促下摇", "camera_motivation": "先给裴主动势能，再用静止与反向落点放大力量差", "must_have_insert_or_reaction": "裴失血脸、虎妖抬脚、姜月初向下看的反应"},
+    {"beat_id": "Beat_05", "start_shot_size": "CU 姜月初绝望脸", "peak_shot_size": "MCU 人脸与百妖谱金纹同框", "release_shot_size": "POV 三目标扫视", "camera_move": "系统出现时锁机，规则落点后做三次短视线切", "camera_motivation": "让超自然信息清晰可读，并把规则转为可执行选择", "must_have_insert_or_reaction": "道行零、妖血为墨图形后期叠加；姜月初视线反应"},
+    {"beat_id": "Beat_06", "start_shot_size": "POV 虎妖到裴长青", "peak_shot_size": "ECU 握刀发抖与裴看刀", "release_shot_size": "双人紧 MCU 对视", "camera_move": "从高位目标缓慢下移至脚边，抱歉前停止", "camera_motivation": "用垂直视线变化表现她把求生方案转向同伴", "must_have_insert_or_reaction": "握刀手、裴眼神、姜月初说抱歉的正面反应"},
+    {"beat_id": "Beat_07", "start_shot_size": "CU 刀尖下压", "peak_shot_size": "ECU 血点落在姜月初脸上", "release_shot_size": "紧双人 CU 后硬切黑", "camera_move": "动作匹配切入，刺中后完全静止", "camera_motivation": "动作只需明确，余下时间交给两人对越线事实的反应", "must_have_insert_or_reaction": "裴完整错愕、姜月初震颤克制、结尾黑场"}
+  ]
+}

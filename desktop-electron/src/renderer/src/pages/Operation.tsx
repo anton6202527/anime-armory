@@ -26,8 +26,9 @@ import type { AgentInfo, CanvasData, LineInfo, WorkChangeSummary, WorkRoot } fro
 import { TerminalPane, type TerminalHandle } from "../components/TerminalPane";
 import { NextActionStrip } from "../components/NextActionStrip";
 import { Codicon } from "../components/Codicon";
+import { BreadcrumbHomeIcon } from "../components/BreadcrumbHomeIcon";
 import { RailIcon } from "../components/RailIcon";
-import { useI18n, useLineLabel } from "../i18n";
+import { plainLineLabel, useI18n, useLineLabel } from "../i18n";
 import {
   COLLAPSE_LEFT_SIDEBAR_EVENT,
   FILES_SIDE_COLLAPSE_WIDTH,
@@ -67,7 +68,7 @@ const OP_RIGHT_MIN_WIDTH = 72;
 const OP_RIGHT_MAX_WIDTH = 340;
 const OP_BOTTOM_MIN_HEIGHT = 82;
 const OP_BOTTOM_MAX_HEIGHT = 440;
-const OP_LEFT_RAIL_WIDTH = 48;
+const OP_LEFT_RAIL_WIDTH = 44;
 const TERMINAL_SIDE_COLLAPSE_WIDTH = OP_RIGHT_MIN_WIDTH;
 const TERMINAL_BOTTOM_COLLAPSE_HEIGHT = OP_BOTTOM_MIN_HEIGHT;
 type LeftTab = "files" | "search" | "changes" | "canvas" | "review";
@@ -89,6 +90,7 @@ export function Operation(props: {
   onCloseTerminal: () => void;
   onToggleTerminal: () => void;
   onShowSkills: (line: LineInfo) => void;
+  onHome: () => void;
   onBack: () => void;
 }) {
   const {
@@ -103,6 +105,7 @@ export function Operation(props: {
     onCloseTerminal,
     onToggleTerminal,
     onShowSkills,
+    onHome,
     onBack,
   } = props;
   const { t } = useI18n();
@@ -748,9 +751,19 @@ export function Operation(props: {
 
   return (
     <div className="op">
-      <div className="op-top work-nav">
+      <div className={"op-top work-nav" + (isMacPlatform() ? " work-nav-mac" : "")}>
+        <button
+          type="button"
+          onClick={onHome}
+          className="crumb-btn crumb-home-btn"
+          title={t("common.home")}
+          aria-label={t("common.home")}
+        >
+          <BreadcrumbHomeIcon />
+        </button>
+        <span className="crumb-sep">/</span>
         <button onClick={onBack} className="crumb-btn">
-          {lineLabel(line)}
+          {plainLineLabel(lineLabel(line))}
         </button>
         <span className="crumb-sep">/</span>
         <div className="crumb">
@@ -884,7 +897,12 @@ export function Operation(props: {
                   <div className="stub-view">{t("common.loading")}</div>
                 ) : (
                   <>
-                    <div className={"subtab-layer" + (sidePanelOpen && tab !== "files" ? " hidden" : "")}>
+                    <div
+                      className={
+                        "subtab-layer" +
+                        (sidePanelOpen && tab !== "files" && tab !== "search" && tab !== "changes" ? " hidden" : "")
+                      }
+                    >
                       <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
                         <FilesPane
                           root={root}
@@ -892,6 +910,7 @@ export function Operation(props: {
                           allowNovelImport={line.line === "n2d" && workIsEmpty}
                           active={active}
                           sideVisible={sidePanelOpen && tab === "files"}
+                          reserveSide={sidePanelOpen && (tab === "search" || tab === "changes")}
                           onImported={(result) => {
                             if (result.root !== root.path || result.name !== root.name) {
                               onRootChanged({
@@ -909,13 +928,14 @@ export function Operation(props: {
                       </Suspense>
                     </div>
                     {sidePanelOpen && tab === "changes" && (
-                      <div className="subtab-layer">
+                      <div className="subtab-layer side-only-layer">
                         <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
                           <ChangesPane
                             root={root}
                             refreshKey={changeScanKey}
                             baselineVersion={baselineVersion}
                             summary={changeSummary}
+                            sideOnly
                             onArchived={(summary) => {
                               changeSummaryEpochRef.current += 1;
                               setChangeSummary(summary);
@@ -927,9 +947,9 @@ export function Operation(props: {
                       </div>
                     )}
                     {sidePanelOpen && tab === "search" && (
-                      <div className="subtab-layer">
+                      <div className="subtab-layer side-only-layer">
                         <Suspense fallback={<div className="stub-view">{t("common.loading")}</div>}>
-                          <SearchPane root={root} refreshKey={refreshKey + baselineVersion} />
+                          <SearchPane root={root} refreshKey={refreshKey + baselineVersion} sideOnly />
                         </Suspense>
                       </div>
                     )}

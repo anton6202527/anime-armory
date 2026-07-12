@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { scanWorkspace } from "../api";
-import { useI18n, useLineLabel } from "../i18n";
+import { plainLineLabel, useI18n, useLineLabel } from "../i18n";
 import type { LineInfo } from "../types";
 
 // Placeholder cover glyph per line (until real cover art is wired).
@@ -42,9 +42,11 @@ export function Home(props: {
           <div className="line-card" key={line.line}>
             <div className="line-cover">{GLYPH[line.line] ?? "✦"}</div>
             <div className="line-info">
-              <div className="line-title">{lineLabel(line)}</div>
-              <div className="line-sub">
-                {line.dir.split("/").pop()}/ · {t("common.workCount", { count: line.roots.length })}
+              <div className="line-title">
+                {plainLineLabel(lineLabel(line))}
+                <span className="line-work-count">
+                  · {t("common.workCount", { count: line.roots.length })}
+                </span>
               </div>
             </div>
             <div className="card-actions">

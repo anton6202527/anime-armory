@@ -1,0 +1,121 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "e61c270d661d755d8dfba34b09c23f9c0e6aa3c0f27d0590eadf6eac9b66b702"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "13f7306d9d88f7eb6d79ed0ce654051d832749027b2fd88beb8357cc38ed9d6b"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "d3c33567363d3e3e5bd56816ea57e338f95e057d589e39057e0d7be7fdb1f18d"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "28d9c49c40656a95bd1971908fc09283a0db79e589740cd0a06eacb026200978"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "ba1c3d37bead90e802bbb042edf088f2888c55f03c25f8fdbf3759b2e4224f83"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "f6057fdbf99bc24a35ed917cfdc9b277fdcaeb34b70756500a3952e53a2bf3e8"
+        }
+      ],
+      "note": "沿用用户2026-07-12明确批准P2；仅撤销阶段2机械回填并恢复已批准轴线语义，无创作变更",
+      "reviewed_at": "2026-07-12T08:29:45+00:00",
+      "reviewer_id": "user:owner",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "85eee0457f1647392512faaec6d7932d146972fc15f6bf9caab0754ab7a8300d",
+      "signed_input_fingerprint_sha": "01897dd76c2840647267bc32754391e2199fc60e8978c607c2e0e2c76565d44a",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "脚本/第1集/axis_blocking_map.json",
+          "sha256": "e61c270d661d755d8dfba34b09c23f9c0e6aa3c0f27d0590eadf6eac9b66b702"
+        },
+        {
+          "path": "脚本/第1集/director_beat_sheet.json",
+          "sha256": "13f7306d9d88f7eb6d79ed0ce654051d832749027b2fd88beb8357cc38ed9d6b"
+        },
+        {
+          "path": "脚本/第1集/edit_rhythm_map.json",
+          "sha256": "d3c33567363d3e3e5bd56816ea57e338f95e057d589e39057e0d7be7fdb1f18d"
+        },
+        {
+          "path": "脚本/第1集/shot_progression_plan.json",
+          "sha256": "28d9c49c40656a95bd1971908fc09283a0db79e589740cd0a06eacb026200978"
+        },
+        {
+          "path": "脚本/第1集/transition_map.json",
+          "sha256": "ba1c3d37bead90e802bbb042edf088f2888c55f03c25f8fdbf3759b2e4224f83"
+        },
+        {
+          "path": "脚本/第1集/vertical_composition_plan.json",
+          "sha256": "f6057fdbf99bc24a35ed917cfdc9b277fdcaeb34b70756500a3952e53a2bf3e8"
+        }
+      ],
+      "note": "沿用用户2026-07-12明确批准P2；仅撤销阶段2机械回填并恢复已批准轴线语义，无创作变更",
+      "reviewed_at": "2026-07-12T08:29:51+00:00",
+      "reviewer_id": "user:owner",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "85eee0457f1647392512faaec6d7932d146972fc15f6bf9caab0754ab7a8300d",
+      "signed_input_fingerprint_sha": "01897dd76c2840647267bc32754391e2199fc60e8978c607c2e0e2c76565d44a",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p2_director_blocking",
+  "authored_by": "codex:n2d-script",
+  "created_at": "2026-07-12T08:29:40+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "脚本/第1集/axis_blocking_map.json": "e61c270d661d755d8dfba34b09c23f9c0e6aa3c0f27d0590eadf6eac9b66b702",
+      "脚本/第1集/director_beat_sheet.json": "13f7306d9d88f7eb6d79ed0ce654051d832749027b2fd88beb8357cc38ed9d6b",
+      "脚本/第1集/edit_rhythm_map.json": "d3c33567363d3e3e5bd56816ea57e338f95e057d589e39057e0d7be7fdb1f18d",
+      "脚本/第1集/shot_progression_plan.json": "28d9c49c40656a95bd1971908fc09283a0db79e589740cd0a06eacb026200978",
+      "脚本/第1集/transition_map.json": "ba1c3d37bead90e802bbb042edf088f2888c55f03c25f8fdbf3759b2e4224f83",
+      "脚本/第1集/vertical_composition_plan.json": "f6057fdbf99bc24a35ed917cfdc9b277fdcaeb34b70756500a3952e53a2bf3e8"
+    },
+    "sha": "85eee0457f1647392512faaec6d7932d146972fc15f6bf9caab0754ab7a8300d"
+  },
+  "input_fingerprint": {
+    "files": {
+      "脚本/第1集/table_read_packet.json": "f8e05e89df2e8df8759566036a0cb31d5ba5a0b6ce67e6f761ab782d9587c5c1",
+      "脚本/第1集/table_read_signoff.json": "ab3c9e1e52f50447ac4d24e09aa7534dabb0a75954d72cef94fe1a479246f219",
+      "脚本/第1集/voiceover.txt": "66e3a26ca65e3ab43c4fd2495b147828cf4bf3f409078008e2c65b0c15b1d6fb",
+      "设定库/source_comprehension.json": "e61a0b7d635074f810fde7f21320172a9173736e9c346477ea1eb7083ec36560"
+    },
+    "sha": "01897dd76c2840647267bc32754391e2199fc60e8978c607c2e0e2c76565d44a"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-12T08:29:51+00:00",
+  "version": 1
+}

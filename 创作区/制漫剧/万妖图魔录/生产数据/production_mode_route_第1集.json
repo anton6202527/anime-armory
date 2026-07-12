@@ -1,0 +1,639 @@
+{
+  "clip_routes": [
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_01",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        1,
+        2
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_01_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "虎妖"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_02",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        3,
+        4
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "旁白"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "rough_timing_final_dub_later",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_03",
+      "content_class": "narration_or_offscreen",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        5
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "旁白"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_04",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        6,
+        7
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_05",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        8,
+        9,
+        10
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_06",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        11,
+        12
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "旁白"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_07",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        13,
+        14,
+        15
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_07_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_08",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        16,
+        17
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_08_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_09",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        18,
+        19
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "虎妖"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_10",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        20,
+        21
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_10_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "虎妖",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_11",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        22,
+        23,
+        24
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "旁白",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_12",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        25,
+        26
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "虎妖"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "rough_timing_final_dub_later",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_13",
+      "content_class": "narration_or_offscreen",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        27,
+        28
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "系统"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_14",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        29
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "post_dub",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_15",
+      "content_class": "offscreen_or_nonvisible_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        30
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_16",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        31,
+        32
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_16_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "姜月初",
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "rough_timing_final_dub_later",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_17",
+      "content_class": "narration_or_offscreen",
+      "final_voice_required": true,
+      "final_voice_stage": "post_video_before_compose",
+      "line_indices": [
+        33
+      ],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "旁白"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending"
+    },
+    {
+      "audio_strategy": "base_video_then_post_lipsync",
+      "base_video_mouth_policy": "neutral_rest_no_visible_articulation",
+      "base_video_only": true,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": false,
+      "clip_id": "Clip_18",
+      "content_class": "visible_mouth_dialogue",
+      "final_voice_required": true,
+      "final_voice_stage": "post_lipsync_before_compose",
+      "line_indices": [
+        34
+      ],
+      "mouth_visible": true,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "出视频/第1集/视频_lipsync/Clip_18_lipsync.mp4",
+      "post_lipsync_required": true,
+      "requires_performance_audio_before_final": true,
+      "requires_voice_lock_before_final_render": true,
+      "roles": [
+        "裴长青"
+      ],
+      "route_commitment": "uncommitted",
+      "timing_basis": "text_estimate_no_audio",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "pending",
+      "warning": "当前只允许生成不含可见发音动作的基础视频；音色/表演轨就绪后必须走独立后期表演驱动，该基础视频不能直接冒充最终说话镜。"
+    },
+    {
+      "audio_strategy": "picture_first",
+      "base_video_mouth_policy": "route_default",
+      "base_video_only": false,
+      "can_generate_base_video": true,
+      "can_generate_final_performance": true,
+      "clip_id": "Clip_19",
+      "content_class": "action_montage_or_picture",
+      "final_voice_required": false,
+      "final_voice_stage": "optional_post",
+      "line_indices": [],
+      "mouth_visible": false,
+      "performance_audio_paths": [],
+      "performance_track_status": "missing",
+      "post_lipsync_output": "",
+      "post_lipsync_required": false,
+      "requires_performance_audio_before_final": false,
+      "requires_voice_lock_before_final_render": false,
+      "roles": [],
+      "route_commitment": "uncommitted",
+      "timing_basis": "storyboard_duration",
+      "timing_estimate_path": "合成/第1集/配音/timing_estimate.json",
+      "voice_lock_status": "not_applicable"
+    }
+  ],
+  "decision": {
+    "advisory_only": true,
+    "aligned": true,
+    "reasons": [
+      "本集同时包含不同声音需求，按镜头路由：可见口型对白走表演音轨/后期表演驱动，旁白与口外音只锁估算节奏，动作/空镜画面先行，native_speech 镜单独处理。",
+      "其中 6 个近景/正反打说话 Clip 需要表演音轨或明确的后期口型通道，不要求整集最终配音前置。"
+    ],
+    "recommended_mode": "混合自动路由",
+    "risks": [],
+    "selected_mode": "混合自动路由"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-07-12T10:24:50+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "_设置.md": "e0ff26389a3e8e096af4f97e523891047be0940f45991ac4f6b9379bcf7db9d3",
+      "合成/第1集/配音/timing_estimate.json": "ae7f1fe41536f715e058954ba30216331338bf623034fd6ce2a30760a86ba2fe",
+      "合成/第1集/配音/时长清单.json": null,
+      "脚本/第1集/storyboard.json": "ad35954eda30c5ce592a2dea96b91a7b5bc2374513c5b7f132830ba57a5c4ccf",
+      "脚本/第1集/voiceover.txt": "66e3a26ca65e3ab43c4fd2495b147828cf4bf3f409078008e2c65b0c15b1d6fb",
+      "设定库/voice_casting.json": "12a82728c74b5b419012642b3a874fc43472faf2a680b9e527820e3b2a9f2d9d"
+    },
+    "sha": "3ba3ca9ee3d76205674e712afd0d15e285baff753358a06f7bd1db6e73228df8"
+  },
+  "kind": "n2d_production_mode_route",
+  "mode_source": "explicit_user",
+  "next": "执行逐镜声音路线；最终配音只在音色锁定后批量渲染。",
+  "signals": {
+    "action_or_montage_clip_count": 15,
+    "audio_strategy_counts": {
+      "base_video_then_post_lipsync": 6,
+      "picture_first": 1,
+      "post_dub": 9,
+      "rough_timing_final_dub_later": 3
+    },
+    "character_dialogue_count": 23,
+    "closeup_speaking_clip_count": 6,
+    "episode": "第1集",
+    "final_voice_manifest_present": false,
+    "final_voice_required_clip_count": 18,
+    "mouth_visible_clip_count": 6,
+    "narration_count": 11,
+    "native_speech_clip_count": 0,
+    "placeholder_timing": false,
+    "post_lipsync_clip_count": 6,
+    "sample": [
+      "[镜头1·虎妖·阴冷] 别跑了……这荒郊野岭的，你们想去哪儿？ ⚡钩子",
+      "[镜头2·姜月初·惊骇·快] 它胸口明明被捅穿了——为什么还能站起来？！ ⚡危机",
+      "[镜头3·旁白·冷峻·慢] 一炷香前。",
+      "[镜头4·姜月初·茫然·慢] 我不是刚下班吗……这里是哪儿？我得先活下去。",
+      "[镜头5·旁白·压迫·慢] 枯草、尸骸，还有她身上灰扑扑的囚服。这里不是现代，而是妖魔横行的大唐。"
+    ],
+    "speaking_clip_count": 15,
+    "spoken_line_count": 34,
+    "storyboard_clip_count": 19,
+    "timing_estimate_present": true,
+    "timing_manifest_present": false,
+    "voice_casting_status": "casting",
+    "voiceover_present": true
+  },
+  "status": "aligned",
+  "summary": {
+    "audio_strategy_counts": {
+      "base_video_then_post_lipsync": 6,
+      "picture_first": 1,
+      "post_dub": 9,
+      "rough_timing_final_dub_later": 3
+    },
+    "base_video_only_count": 6,
+    "clip_count": 19,
+    "final_voice_required": true,
+    "post_lipsync_required": true
+  },
+  "version": 2
+}

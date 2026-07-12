@@ -23,7 +23,7 @@
 4. `comic-layout` 产 `排版/第N话/layout.json`，决定页漫或条漫、阅读方向、格子比例、气泡占位，并继承 name board 的原稿安全框、页侧、翻页钩子和气泡优先级。
 5. `comic-finishing` 产 `出图/第N话/finishing/finishing_plan.json`，把墨线、黑场、网点/灰阶、效果线、漫符和拟声词画法写成出图可消费的契约。
 6. `comic-image` 先补 `出图/共享/` 角色、场景、道具参考，再产逐格 prompt/job 包和图像登记；job 必须消费 `panel_script.json` 的视觉一致性契约（角色完整性、视线目标、场景布局、光位/冷暖、轴线视线）和 `finishing_plan.json` 的传统原稿契约。
-   - `出图/共享/identity_registry.json` 是统一机器真值；长线项目可用 `comic-identity/scripts/library.py --write` 派生 `角色库/` 与 `资产库/` manifests，作为人读资产包视图。派生层不反向覆盖 registry，也不依赖其它系列实现。
+   - `出图/共享/identity_registry.json` 是统一机器真值，参考图片只放 `出图/共享/图片/`；长线项目可用 `comic-identity/scripts/library.py --write` 生成单一的 `设定库/共享资产索引.md` 供人浏览。项目内不再派生逐资产 manifest 树，索引也不反向覆盖 registry 或依赖其它系列实现。
 7. `comic-compose` 根据 `layout.json`、面板图和 `lettering.json` 嵌字，导出页面图、长图和 manifest。
 8. `comic-review` 审阅读顺序、遮挡、文字密度、角色一致性、传统工艺层、改编取舍、平台规格，再生成返修清单。
 

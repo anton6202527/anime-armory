@@ -43,7 +43,11 @@ CONSISTENCY_PROFILE_KEYS = ("一致性严格度", "一致性发布档", "一致�
 INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
 VERSION = 1
-WARNING_SCORE_CAP = 1
+# warn 扣分封顶（2026-07 实跑痛点回修）：旧 cap=1 让「1 个 warn」与「31 个 warn」扣同样 12 分——
+# 实证某片角色维 warn=15、场景维 warn=31 仍 86/86 分、总分 93 放行，人眼却明显看出一致性问题。
+# 提到 3（最多 -36/维）：单一噪声 warn 仍不误伤，系统性多信号才真正压分。env 可回调旧口径；
+# 与阈值同属内部启发式（confidence=low·见 SKILL「阈值出处」），待第一方数据校准。
+WARNING_SCORE_CAP = int(os.environ.get("N2D_SCORE_WARNING_CAP", "3"))
 
 DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
 

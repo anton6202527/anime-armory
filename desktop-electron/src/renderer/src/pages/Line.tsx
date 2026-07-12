@@ -21,8 +21,8 @@ export function Line(props: {
   const [newName, setNewName] = useState("");
   const [pendingDelete, setPendingDelete] = useState<WorkRoot | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [availableDemo, setAvailableDemo] = useState<DemoDownloadInfo | null>(null);
-  const [installingDemo, setInstallingDemo] = useState(false);
+  const [availableDemos, setAvailableDemos] = useState<DemoDownloadInfo[]>([]);
+  const [installingDemoRel, setInstallingDemoRel] = useState<string | null>(null);
 
   // re-pull this line's roots (so a freshly created/deleted work shows up)
   function refresh() {
@@ -30,7 +30,7 @@ export function Line(props: {
       .then(([lines, demos]) => {
         const fresh = lines.find((l) => l.line === line.line);
         if (fresh) setRoots(fresh.roots);
-        setAvailableDemo(demos.find((demo) => demo.line_key === line.line && !demo.installed) ?? null);
+        setAvailableDemos(demos.filter((demo) => demo.line_key === line.line && !demo.installed));
         return fresh;
       })
       .catch((e) => setErr(String(e)));
@@ -81,19 +81,19 @@ export function Line(props: {
     }
   }
 
-  async function downloadDemo() {
-    if (installingDemo) return;
+  async function downloadDemo(demo: DemoDownloadInfo) {
+    if (installingDemoRel) return;
     setErr("");
-    setInstallingDemo(true);
+    setInstallingDemoRel(demo.rel);
     try {
-      const result = await installDemo(workspaceRoot, line.line);
+      const result = await installDemo(workspaceRoot, demo.rel);
       const fresh = await refresh();
       const root = fresh?.roots.find((r) => r.path === result.root.path) ?? result.root;
       onOpen(root);
     } catch (e) {
       setErr(t("line.downloadDemoFailed", { error: String(e) }));
     } finally {
-      setInstallingDemo(false);
+      setInstallingDemoRel(null);
     }
   }
 
@@ -134,24 +134,35 @@ export function Line(props: {
           );
         })}
 
-        {availableDemo && (
-          <div
-            className={"root-card demo-download-card" + (installingDemo ? " installing" : "")}
-            onClick={downloadDemo}
-            role="button"
-            aria-disabled={installingDemo}
-          >
-            <div className="demo-download-icon">
-              <Codicon name="project" />
+        {availableDemos.map((demo) => {
+          const installing = installingDemoRel === demo.rel;
+          const disabled = installingDemoRel !== null;
+          return (
+            <div
+              className={"root-card demo-download-card" + (installing ? " installing" : "") + (disabled && !installing ? " disabled" : "")}
+              key={demo.rel}
+              onClick={() => !disabled && downloadDemo(demo)}
+              onKeyDown={(event) => {
+                if ((event.key === "Enter" || event.key === " ") && !disabled) {
+                  event.preventDefault();
+                  void downloadDemo(demo);
+                }
+              }}
+              role="button"
+              tabIndex={disabled ? -1 : 0}
+              aria-label={t("line.downloadDemoMeta", { name: demo.name })}
+              aria-disabled={disabled}
+            >
+              <div className="demo-download-icon">
+                <Codicon name="project" />
+              </div>
+              <div className="name">{demo.name}</div>
+              <div className="meta">
+                {installing ? t("line.downloadingDemo") : t("line.downloadDemo")}
+              </div>
             </div>
-            <div className="name">
-              {installingDemo ? t("line.downloadingDemo") : t("line.downloadDemo")}
-            </div>
-            <div className="meta">
-              {t("line.downloadDemoMeta", { name: availableDemo.name })}
-            </div>
-          </div>
-        )}
+          );
+        })}
 
         {creating ? (
           <div className="root-card new-card editing">

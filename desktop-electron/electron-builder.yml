@@ -24,12 +24,15 @@ asarUnpack:
   - "**/node_modules/node-pty/**"
 mac:
   category: public.app-category.productivity
+  # electron-builder converts the 1024px source into the required ICNS set.
+  icon: assets/app-icon/icon.png
   artifactName: AnimeArmory_electron_macos_${arch}.${ext}
   target:
     - target: dmg
       arch:
         - arm64
 win:
+  icon: assets/app-icon/icon.ico
   artifactName: AnimeArmory_electron_windows.${ext}
   target:
     - target: nsis

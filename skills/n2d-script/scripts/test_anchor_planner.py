@@ -130,6 +130,13 @@ def test_fight_clip_planned_normal_short_clip_not(tmp_path):
     assert p["anchors"][1]["anchor_png"] == "出图/第1集/图片/镜头01_x_a2.png"
 
 
+def test_anchor_fallback_filename_uses_canonical_clip_id() -> None:
+    clip = {"id": "EP01_CLIP01"}
+
+    assert ap.anchor_png_name(clip, "第1集", 1, 2) == "出图/第1集/图片/EP01_CLIP01_a2.png"
+    assert ap.midframe_png_name(clip, "第1集", 1) == "出图/第1集/图片/EP01_CLIP01_mid.png"
+
+
 def test_long_fight_gets_more_than_three_frames(tmp_path):
     # 15s 打斗(Seedance 长镜)：3 锚 → 5 帧。这是"长镜/打斗会超过3帧"的核心兑现。
     root = _write_project(tmp_path, [

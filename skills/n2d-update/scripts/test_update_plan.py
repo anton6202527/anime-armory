@@ -668,6 +668,36 @@ def test_risk_only_ignores_ordinary_clips_but_validates_declared_anchor(tmp_path
     assert r["violating_clips"] == []
 
 
+def test_risk_only_does_not_require_edit_cut_anchor_for_untimed_coverage_rows(tmp_path):
+    root = make_project(tmp_path)
+    clip = _clip("C1")
+    clip["shots"] = [
+        {"lens": "LS", "camera": "fixed"},
+        {"lens": "CU", "camera": "push"},
+    ]
+    _write_storyboard(Path(root), "第1集", [clip], video_backend="deferred")
+
+    r = up.check_three_frame_compliance(root, "第1集")
+
+    assert r["required_anchor_clips"] == []
+    assert r["violating_clips"] == []
+
+
+def test_risk_only_requires_edit_cut_anchor_when_coverage_has_timed_boundary(tmp_path):
+    root = make_project(tmp_path)
+    clip = _clip("C1")
+    clip["shots"] = [
+        {"t": "0-2s", "lens": "LS", "camera": "fixed"},
+        {"t": "2-4s", "lens": "CU", "camera": "push"},
+    ]
+    _write_storyboard(Path(root), "第1集", [clip], video_backend="deferred")
+
+    r = up.check_three_frame_compliance(root, "第1集")
+
+    assert r["required_anchor_clips"] == ["C1"]
+    assert r["violating_clips"] == ["C1"]
+
+
 def test_three_frame_empty_anchor_structures_are_not_compliant(tmp_path):
     root = make_project(tmp_path)
     clips = [

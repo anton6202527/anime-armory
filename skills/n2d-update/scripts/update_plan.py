@@ -1053,8 +1053,14 @@ def check_three_frame_compliance(root: str, ep: str) -> Optional[Dict[str, Any]]
             strategy_value = strategy_value.get("strategy")
         strategy = str(strategy_value or "").strip().lower()
         shots = clip.get("shots") if isinstance(clip, dict) and isinstance(clip.get("shots"), list) else []
+        # Keep this audit aligned with n2d-script/anchor_planner.py: an E1
+        # edit-cut anchor is executable only when shots carry a timed `t`
+        # boundary.  Untimed coverage rows describe editorial intent but do
+        # not provide a legal second at which to demand an anchor image.
         editorial_cut = len(shots) > 1 and any(
-            isinstance(row, dict) and any(row.get(key) for key in ("lens", "camera", "shot_size"))
+            isinstance(row, dict)
+            and row.get("t")
+            and any(row.get(key) for key in ("lens", "camera", "shot_size"))
             for row in shots
         )
         template = str(clip.get("template") or "") if isinstance(clip, dict) else ""

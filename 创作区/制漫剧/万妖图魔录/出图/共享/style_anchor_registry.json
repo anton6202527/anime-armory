@@ -1,0 +1,96 @@
+{
+  "kind": "n2d_style_anchor_registry",
+  "version": 1,
+  "generated_at": "2026-07-12T14:53:19+00:00",
+  "style_name": "自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）",
+  "selected_anchor": {
+    "id": "STYLE_ANCHOR",
+    "name": "自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）",
+    "path": "出图/共享/图片/风格锚_自定义（暗黑盛唐写实国漫+黑金妖谱水墨奇观）.png",
+    "status": "approved",
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "role": "shared_rendering_language_anchor",
+    "sha256": "4f97fdfad4b3c919ba11875c6d53d09644b67b83ba7e37938de81bc7fdc29a32",
+    "human_review": {
+      "status": "accepted_with_scope_guard",
+      "reviewer": "Codex visual inspection",
+      "reviewed_at": "2026-07-12T20:36:00+08:00",
+      "reason": "首版为风格板式、无清晰正脸、无文字水印，黑金水墨/粗布旧金属/血尘材质可用；人物背影和武器仅作材质样本，后续严格 style_only，不继承身份、服装、道具结构或构图。"
+    }
+  },
+  "anchors": [
+    {
+      "id": "STYLE_ANCHOR",
+      "name": "自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）",
+      "path": "出图/共享/图片/风格锚_自定义（暗黑盛唐写实国漫+黑金妖谱水墨奇观）.png",
+      "status": "approved",
+      "use_policy": "style_only",
+      "identity_policy": "do_not_clone_face_or_costume",
+      "role": "shared_rendering_language_anchor",
+      "sha256": "4f97fdfad4b3c919ba11875c6d53d09644b67b83ba7e37938de81bc7fdc29a32",
+      "human_review": {
+        "status": "accepted_with_scope_guard",
+        "reviewer": "Codex visual inspection",
+        "reviewed_at": "2026-07-12T20:36:00+08:00",
+        "reason": "首版为风格板式、无清晰正脸、无文字水印，黑金水墨/粗布旧金属/血尘材质可用；人物背影和武器仅作材质样本，后续严格 style_only，不继承身份、服装、道具结构或构图。"
+      }
+    }
+  ],
+  "rules": {
+    "use_policy": "style_only",
+    "identity_policy": "do_not_clone_face_or_costume",
+    "notes": "统一风格锚只锁本剧 `style_contract` 已选定的线条/材质/渲染语言、色彩分级、镜头焦段和完成度；不得私自附加写实、3D、赛璐璐、水墨、Q版或其它未被项目选择的固定风格，也不得继承风格锚里的具体人物脸、服装、动作、剧情状态或背景场景。角色定妆背景以中性灰白棚拍底为准，风格锚不得把雨窗/房间/道具背景带进定妆照。"
+  },
+  "source_style_references": [
+    {
+      "path": "设定库/参考资料/视觉参考/ref_03_白发妖化打坐.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "style_source_only",
+      "character_ids": [],
+      "allowed_traits": [
+        "暗黑写实国漫完成度",
+        "冷灰废墟层次",
+        "红金能量纹材质",
+        "克制妖异氛围"
+      ],
+      "forbidden_inheritance": [
+        "具体人物身份",
+        "白发",
+        "兽角",
+        "铠甲",
+        "打坐动作",
+        "服装",
+        "文字",
+        "水印"
+      ],
+      "status": "ready",
+      "sha256": "f068983d31357baeb0a52a4af6d2e3f5acd78629c234889353e35b05f7e79e4c"
+    },
+    {
+      "path": "设定库/参考资料/视觉参考/ref_04_白发妖化持兵.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "style_source_only",
+      "character_ids": [],
+      "allowed_traits": [
+        "写实国漫材质",
+        "冷蓝云海尺度",
+        "长发运动表现",
+        "兵器剪影与人物层次"
+      ],
+      "forbidden_inheritance": [
+        "具体人物身份",
+        "白发",
+        "兽角",
+        "武器结构",
+        "服装",
+        "截图界面",
+        "文字",
+        "水印"
+      ],
+      "status": "ready",
+      "sha256": "f4c5996c018821f4053e8e72ce409daf613f58a06b4c0ddcbff05906979278bf"
+    }
+  ],
+  "source_reference_policy": "only_for_clean_style_anchor_synthesis; do_not_attach_raw source references to character/scene/shot generation"
+}

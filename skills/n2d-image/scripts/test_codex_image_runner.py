@@ -674,8 +674,9 @@ def test_codex_prompt_treats_user_character_references_as_face_only(tmp_path: Pa
     assert "不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜" in prompt
     assert "外部参考图的风格权重视为 0" in prompt
     assert "附件是真实视觉证据" in prompt
-    assert "禁止把 A 的脸、发型、衣服或配饰套给 B" in prompt
-    assert "身份、发型、服装与道具结构以对应附件为准" in prompt
+    assert "禁止把 A 的脸或身形套给 B" in prompt
+    assert "禁止继承外部参考图衣装" in prompt or "不得继承参考图里的画风" in prompt
+    assert "发型、服装、配饰和道具结构必须服从本项目角色定妆合同" in prompt
     assert "不得继承低清、像素化、模糊、压缩块、屏幕截图质感" in prompt
     # Internal sources and preprocessing stay in the full contract/receipt,
     # never in the text actually submitted to the image model.
@@ -1219,6 +1220,49 @@ def test_reference_inputs_do_not_self_reference_target_being_regenerated(tmp_pat
     assert all(item["rel_path"] != lineage_rel for item in inputs)
 
 
+def test_style_source_references_attach_only_to_clean_style_anchor_target(tmp_path: Path) -> None:
+    style_rel = "设定库/参考资料/视觉参考/style.jpg"
+    write_valid_png(tmp_path / style_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "style_anchor_registry.json").write_text(json.dumps({
+        "source_style_references": [
+            {"path": style_rel, "status": "ready", "use_policy": "style_source_only"}
+        ]
+    }), encoding="utf-8")
+    style_section = codex_image_runner.ClipSection(
+        clip="STYLE_ANCHOR", title="## 风格锚", body="风格锚", target_line=""
+    )
+    style_target = codex_image_runner.Target(
+        "STYLE_ANCHOR", "STYLE_ANCHOR", "shared",
+        "出图/共享/图片/风格锚_测试.png", style_section,
+    )
+    shot_target = codex_image_runner.Target(
+        "CHAR_01", "CHAR_01", "shared",
+        "出图/共享/图片/定妆_CHAR_01.png", style_section,
+    )
+
+    style_bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", style_target)
+    shot_bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", shot_target)
+
+    assert any(style_rel in item.get("paths", []) for item in style_bundle["items"])
+    assert all(style_rel not in item.get("paths", []) for item in shot_bundle["items"])
+
+
+def test_target_generation_lock_blocks_duplicate_paid_submission(tmp_path: Path) -> None:
+    first = codex_image_runner.acquire_target_generation_lock(
+        tmp_path, "出图/共享/图片/风格锚.png", 600
+    )
+    second = codex_image_runner.acquire_target_generation_lock(
+        tmp_path, "出图/共享/图片/风格锚.png", 600
+    )
+
+    assert first is not None and first.is_file()
+    assert second is None
+    codex_image_runner.release_target_generation_lock(first)
+    assert not first.exists()
+
+
 def test_faceless_shared_scene_suppresses_character_refs_from_prompt_text(tmp_path: Path) -> None:
     face_rel = "出图/共享/图片/定妆_姜月初_脸部特写.png"
     scene_rel = "出图/共享/图片/定妆_姜月初识海阴山.png"
@@ -1375,7 +1419,7 @@ def test_face_mood_only_form_excludes_outfit_references(tmp_path: Path) -> None:
     assert [item["rel_path"] for item in inputs] == [face_rel]
 
 
-def test_asset_shared_target_status_ready_even_with_makeup_filename() -> None:
+def test_asset_shared_target_waits_for_visual_review_even_with_makeup_filename() -> None:
     section = codex_image_runner.ClipSection("LOC_TEST", "## LOC_TEST", "", "")
     target = codex_image_runner.Target(
         "LOC_TEST::定妆_姜月初识海阴山",
@@ -1386,7 +1430,7 @@ def test_asset_shared_target_status_ready_even_with_makeup_filename() -> None:
     )
     target.aliases = {"LOC_TEST"}
 
-    assert codex_image_runner.status_after_shared_generation(target.rel_path, target) == "ready"
+    assert codex_image_runner.status_after_shared_generation(target.rel_path, target) == "review_pending"
 
 
 def test_character_shared_target_status_still_review_pending(monkeypatch) -> None:
@@ -1402,6 +1446,114 @@ def test_character_shared_target_status_still_review_pending(monkeypatch) -> Non
     target.aliases = {"CHAR_01", "CHAR_01/常态"}
 
     assert codex_image_runner.status_after_shared_generation(target.rel_path, target) == "review_pending"
+
+
+def test_primary_character_makeup_uses_strict_front_guard_not_action_gaze() -> None:
+    section = codex_image_runner.ClipSection(
+        "CHAR_01",
+        "## CHAR_01",
+        "角色动作镜可用 45° 侧脸，但本目标是共享主定妆。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "CHAR_01::定妆_沈念_常态",
+        "CHAR_01",
+        "shared",
+        "出图/共享/图片/定妆_沈念_常态.png",
+        section,
+    )
+    target.aliases = {"CHAR_01", "CHAR_01/常态"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "身体、肩线和脸严格正对相机" in guards
+    assert "头部偏转不超过 5 度" in guards
+    assert "镜头为旁观者视角" not in guards
+
+
+def test_character_45_degree_reference_does_not_use_primary_front_guard() -> None:
+    section = codex_image_runner.ClipSection("CHAR_01", "## CHAR_01", "", "")
+    target = codex_image_runner.Target(
+        "CHAR_01::定妆_沈念_常态_45度",
+        "CHAR_01",
+        "shared",
+        "出图/共享/图片/定妆_沈念_常态_45度.png",
+        section,
+    )
+    target.aliases = {"CHAR_01", "CHAR_01/常态"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "共享角色正面主母本" not in guards
+
+
+def test_broken_left_arm_guard_uses_character_left_and_preserves_limb_count() -> None:
+    section = codex_image_runner.ClipSection(
+        "CHAR_02",
+        "## CHAR_02",
+        "服装妆造：玄黑劲装；左臂不自然扭曲，胸腹有伤。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "CHAR_02::定妆_裴长青_常态",
+        "CHAR_02",
+        "shared",
+        "出图/共享/图片/定妆_裴长青_常态.png",
+        section,
+    )
+    target.aliases = {"CHAR_02", "CHAR_02/常态"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "按角色自身左右计" in guards
+    assert "画面观者右侧" in guards
+    assert "恰好两条手臂两只手" in guards
+
+
+def test_shared_scene_baseline_excludes_baked_system_gold_vfx() -> None:
+    section = codex_image_runner.ClipSection(
+        "LOC_01",
+        "## LOC_01",
+        "LOC_01 低位夕阳从画左后侧逆光，系统金光仅作局部剧情光。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "LOC_01::定妆_场景_夕照荒野尸场",
+        "LOC_01",
+        "shared",
+        "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+        section,
+    )
+    target.aliases = {"LOC_01"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "无特效的环境底版" in guards
+    assert "完全不出现系统金光" in guards
+    assert "系统特效由后续镜头单独叠加" in guards
+
+
+def test_shared_scene_resident_beast_keeps_registered_species_and_topology() -> None:
+    section = codex_image_runner.ClipSection(
+        "LOC_01",
+        "## LOC_01",
+        "常驻主体：`BEAST_01/实体_重伤复活`，远端虎山神尸体。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "LOC_01::定妆_场景_夕照荒野尸场",
+        "LOC_01",
+        "shared",
+        "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+        section,
+    )
+    target.aliases = {"LOC_01"}
+
+    guards = " ".join(codex_image_runner.model_facing_policy_guards(target, []))
+
+    assert "BEAST_01/实体_重伤复活" in guards
+    assert "尸体/倒地状态只改变姿势" in guards
+    assert "禁止把虎头人身妖物改成四足普通虎" in guards
 
 
 def test_shared_first_interlock_blocks_review_failed_asset_reference(tmp_path: Path) -> None:

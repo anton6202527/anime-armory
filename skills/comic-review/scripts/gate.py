@@ -147,12 +147,19 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
         panel_id = str(item.get("panel_id") or "").strip()
         code = str(item.get("code") or "raw_bubble_candidate").strip()
         if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
+            recorded_sha = str(item.get("artifact_sha256") or "").strip()
+            panel_path = find_panel_image(root, chapter, panel_id)
+            if recorded_sha:
+                current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
+                if current_sha != recorded_sha:
+                    continue
             accepted[panel_id] = {
                 "status": "accepted",
                 "accepted_by": str(item.get("accepted_by") or data.get("accepted_by") or "manual_review"),
                 "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
                 "reason": str(item.get("reason") or ""),
                 "evidence": str(item.get("evidence") or ""),
+                "artifact_sha256": recorded_sha,
                 "source": rel(root, path),
             }
     for panel_id in data.get("accepted_panels") or []:
@@ -1062,6 +1069,71 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     check_identity(root, report, findings)
     check_style_contract(root, findings)
     check_consistency_strategy_support(root, findings)
+    run_script_advisory_audits(root, chapter, findings, notes)
+
+
+def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """出图前的编剧层 advisory 机检（2026-07 标准审计·report-only 起步，误报校准后再议升 block）。
+
+    - 分话节拍：首格开场钩/末格结尾钩/高潮位/格数带/全书拆分蓝图（chapter_beat_audit·comic-script）。
+    - 话内冗余：台词同义反复/事实复现/旁白硬转占比/构图重复计划（redundancy_audit·本目录）。
+    机检产物落 生产数据/，findings 以 warn/info 并入本 gate（must→warn：advisory 期不阻断付费）。
+    审计脚本缺失/异常时留 note 不拦——advisory 层绝不制造假 block。"""
+    import subprocess
+    here = Path(__file__).resolve().parent
+    audits = [
+        ("chapter_beat_audit", here.parent.parent / "comic-script" / "scripts" / "chapter_beat_audit.py"),
+        ("redundancy_audit", here / "redundancy_audit.py"),
+    ]
+    for name, script in audits:
+        if not script.is_file():
+            notes.append(f"{name} 脚本缺失，advisory 机检跳过")
+            continue
+        try:
+            proc = subprocess.run([sys.executable, str(script), str(root), chapter, "--write", "--json"],
+                                  capture_output=True, text=True, timeout=120)
+            payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+        except Exception as exc:
+            notes.append(f"{name} 运行失败（{exc}），advisory 机检跳过")
+            continue
+        for item in payload.get("findings") or []:
+            sev = str(item.get("severity") or "warn")
+            add(findings,
+                "warn" if sev in ("must", "block", "warn") else "info",
+                str(item.get("code") or name),
+                f"生产数据/comic_{name}_{chapter}.json" if name == "redundancy_audit" else f"生产数据/{payload.get('kind') or name}_{chapter}.json",
+                str(item.get("message") or ""),
+                "comic-script",
+                "按机检建议回 comic-script 修分话/分格后重跑。")
+        notes.append(f"{name}: must={payload.get('summary', {}).get('must', payload.get('summary', {}).get('block', 0))} "
+                     f"warn={payload.get('summary', {}).get('warn', 0)}（advisory·不阻断）")
+
+
+def run_panel_variety_advisory(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """出图后的面板构图重复机检（2026-07·"太相似=重复"反向告警·advisory 不阻断）。
+
+    一致性检查全部只抓"太不同=漂移"；一屏多格里近重复构图是漫画特有穿帮，靠本检补盲区。
+    脚本缺失/异常留 note 不拦。"""
+    import subprocess
+    script = Path(__file__).resolve().parent / "panel_variety.py"
+    if not script.is_file():
+        notes.append("panel_variety 脚本缺失，构图重复机检跳过")
+        return
+    try:
+        proc = subprocess.run([sys.executable, str(script), str(root), chapter, "--write", "--json"],
+                              capture_output=True, text=True, timeout=120)
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+    except Exception as exc:
+        notes.append(f"panel_variety 运行失败（{exc}），构图重复机检跳过")
+        return
+    for item in payload.get("findings") or []:
+        add(findings, "warn", str(item.get("code") or "near_duplicate_panels"),
+            f"生产数据/comic_panel_variety_{chapter}.json",
+            str(item.get("message") or ""),
+            "comic-image",
+            "换景别/机位/前景遮挡重出其一，或回 comic-script 合并格。")
+    s = payload.get("summary") or {}
+    notes.append(f"panel_variety: panels={s.get('panels')} 近重复对={s.get('duplicate_pairs')}（advisory·不阻断）")
 
 
 def check_consistency_strategy_support(root: Path, findings: list[dict[str, Any]]) -> None:
@@ -1083,6 +1155,7 @@ def run_image(root: Path, chapter: str, findings: list[dict[str, Any]], notes: l
     jobs = load_json(root / "出图" / chapter / "prompt" / "panel_jobs.json", {})
     if isinstance(jobs, dict):
         check_panel_jobs_ready(root, chapter, jobs, findings)
+    run_panel_variety_advisory(root, chapter, findings, notes)
     if style_consistency is None or character_consistency is None:
         add(findings, "block", "consistency_module_unavailable", "skills/comic-review/scripts", f"一致性模块不可用：{IMPORT_ERROR}", "review", "修复 comic-review 模块导入。")
         return

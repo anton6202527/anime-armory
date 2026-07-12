@@ -112,6 +112,26 @@ def test_multi_subject_without_slots_or_strategy_is_must():
     assert any(f["code"] == "multi_subject_missing_slots_or_strategy" for f in result["findings"])
 
 
+def test_offscreen_character_does_not_trigger_multi_subject_gate():
+    root = _mk_storyboard([{
+        "id": "EP01_CLIP10",
+        "duration": 4,
+        "continuity": {"shot_size": "CU", "midframe_exempt_reason": "短镜"},
+        "entity_schedule": {
+            "characters": ["CHAR_01", "CHAR_02"],
+            "required_presence": ["CHAR_01"],
+            "offscreen_presence": ["CHAR_02"],
+            "forbidden_presence": [],
+        },
+        "shots": [{"desc": "CHAR_01 单人近景，CHAR_02 只有画外声"}],
+    }])
+
+    result = SRA.audit(root, "第1集")
+
+    assert result["ok"]
+    assert not any(f["code"] == "multi_subject_missing_slots_or_strategy" for f in result["findings"])
+
+
 def test_high_motion_long_clip_without_anchor_warns():
     root = _mk_storyboard([{
         "id": "EP01_CLIP03",

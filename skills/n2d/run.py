@@ -1678,7 +1678,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             (
                 "beat_audit",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "beat_audit.py"),
-                [root, ep, "--strict", "--json"],
+                [root, ep, "--strict", "--write", "--json"],
                 "beat_audit 未通过；先回 n2d-script 补冷开场、钩子间隔、反转、集尾钩、信息回报或集间钩子接力（上集集尾钩→本集冷开场接住同一根线）。",
             ),
             (
@@ -1805,6 +1805,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
         _run_production_breakdown_prework(p, root, ep)
 
         _run_report_only_prework(p, [
+            (
+                # 集内冗余机检（2026-07 实跑痛点回修）：台词同义反复/事实复述/旁白占比/构图重复计划。
+                # report-only 起步（误报校准后再议升 --strict 硬闸）；产物落 生产数据/redundancy_audit_<集>.*
+                "redundancy_audit",
+                os.path.join(SKILLS_DIR, "n2d-script", "scripts", "redundancy_audit.py"),
+                [root, ep, "--write", "--json"],
+            ),
             (
                 "series_bible",
                 os.path.join(SKILLS_DIR, "n2d-script", "scripts", "series_bible.py"),

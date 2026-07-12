@@ -53,6 +53,10 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 
 若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出；编排层（comic-batch）刚跑过 gate、或人工确认误报时，用 `--skip-gate` 显式豁免（豁免会打印留痕）：
 
+Codex 内置 `image_generation` 当前单次最多接收 5 张图片附件。即使渠道候选表声明更高参考能力，runner 仍以真实工具上限为硬边界，按“角色身份 → 场景/妖物 → 关键道具 → 风格 → 特效”选择 5 张；被省略附件必须写入 reference bundle 的 `omitted_attachments`，其完整约束继续保留在文字生产合同中，禁止静默丢约束或让工具超限后反复空耗。
+
+若只是参考预算或 QC 规则升级导致一张已生成且人工检查良好的图被旧规则标成 `qc_block`，用 `--recheck-existing --targets Pxxx` 对原 PNG 重跑 post-QC；该模式不得调用模型、归档或重抽。检测器升级不能成为删除好图和重复付费的理由。
+
 ```bash
 python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话
 ```

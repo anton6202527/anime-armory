@@ -29,7 +29,12 @@ SHOT_REVERSE_RE = re.compile(
 CONFRONTATION_TEMPLATES = {"public_confrontation", "reveal_reaction_chain", "relationship_turn", "fight_exchange"}
 AXIAL_PRESSURE_RE = re.compile(r"对峙|对压|沿主轴|轴线|高位|低位|前景|后景|深处|逼近|跪|仰视|俯视", re.I)
 CAMERA_GAZE_RE = re.compile(r"看镜头|直视镜头|looking at (?:the )?(?:viewer|camera)|direct eye contact", re.I)
-CAMERA_GAZE_NEG_RE = re.compile(r"不看镜头|不得看镜头|不要看镜头|禁止看镜头|非\s*POV\s*镜不看镜头|no direct camera gaze", re.I)
+CAMERA_GAZE_NEG_RE = re.compile(
+    r"不看镜头|不得看镜头|不要看镜头|禁止看镜头|"
+    r"(?:不得|不要|禁止)(?:让?[^，。；]{0,12})?(?:看|直视)镜头|"
+    r"非\s*POV\s*镜不看镜头|no direct camera gaze|do not (?:look at|face) (?:the )?(?:viewer|camera)",
+    re.I,
+)
 POV_ALLOW_RE = re.compile(r"\bPOV\b|主观镜头|破第四墙|看镜头是剧情|fourth wall", re.I)
 OTS_RE = re.compile(r"\bOTS\b|过肩|over[- ]the[- ]shoulder", re.I)
 FOREGROUND_SHOULDER_RE = re.compile(r"前景.*(?:肩|背头|侧背)|(?:肩|背头|侧背).*前景|foreground.*shoulder|shoulder.*foreground", re.I)

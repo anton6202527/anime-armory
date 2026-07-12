@@ -604,6 +604,36 @@ def check_mini_pilot(root: Path, episode: str, profile: str) -> Dict[str, Any]:
     )
 
 
+def check_identity_drift(root: Path, episode: str, profile: str) -> Dict[str, Any]:
+    """跨集身份漂移证据（2026-07 实跑痛点回修）。
+
+    run.py 日常路由用 --skip-face 只刷骨架（省钱正确）；但此前**没有任何环节要求交付前跑过
+    一次全量报告**——实证某片 identity_drift_report available=False（skip-face 空壳）直接过验收，
+    跨集脸漂 0.04 的 medium 信号无人消费。strict 档要求 available=true 的真实报告。"""
+    path = production_dir(root) / "identity_drift_report.json"
+    data = load_json(path)
+    strict = _strict_release_context(root, profile)
+    if not isinstance(data, dict):
+        return component(
+            "identity_drift",
+            "warn" if strict else "pass",
+            "缺 identity_drift_report.json——跨集身份漂移未核过；"
+            "strict 发布前跑 python3 skills/n2d-identity/scripts/identity.py <作品根> --write（不带 --skip-face）。"
+            if strict else "identity_drift_report 未生成（demo/单集可接受）。",
+            path=relpath(root, path),
+        )
+    if data.get("available") is not True:
+        notes = "；".join(str(n) for n in (data.get("notes") or [])[:2])
+        return component(
+            "identity_drift",
+            "block" if strict else "warn",
+            f"identity_drift_report 是 --skip-face 骨架（available=false{f'：{notes}' if notes else ''}）——"
+            "空壳不算证据；交付边界前必须跑一次全量脸漂移报告（identity.py --write，不带 --skip-face）。",
+            path=relpath(root, path),
+        )
+    return component("identity_drift", "pass", "跨集身份漂移报告可用。", path=relpath(root, path))
+
+
 def check_stop_loss(root: Path, episode: str, profile: str) -> Dict[str, Any]:
     payload = stop_loss.build_report(root, episode=episode)
     if payload.get("status") == "critical":
@@ -737,6 +767,7 @@ def build_components(root: Path, episode: str, profile: str) -> List[Dict[str, A
         check_compliance(root, episode),
         check_release_profile(root, episode, profile),
         check_gate(root, episode),
+        check_identity_drift(root, episode, profile),
         check_score(root, episode, profile),
         check_ledger(root, episode),
         check_review_ui(root, episode),

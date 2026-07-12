@@ -1,8 +1,8 @@
 # 漫画 Gate — image_preflight — 第1话
 
-- 生成时间：2026-07-12T00:44:53
-- 结论：block
-- block/warn/info：2 / 0 / 0
+- 生成时间：2026-07-12T11:56:59
+- 结论：pass
+- block/warn/info：0 / 0 / 0
 
 ## 记录
 
@@ -11,7 +11,4 @@
 
 ## Findings
 
-| severity | code | artifact | reason | return_to | suggested_fix |
-|---|---|---|---|---|---|
-| block | missing_ready_refs | 生产数据/comic_identity_report.json | 仍有共享参考图缺失。 | identity | 补齐 missing_refs 后重建出图包。 |
-| block | missing_character_views | 生产数据/comic_identity_report.json | 长线专门定妆未补齐：CHAR_DAOIST 缺 three_quarter,side,back,face；CHAR_JIANGZHU 缺 three_quarter,side,back,face；CHAR_MONK 缺 three_quarter,side,back,face；CHAR_SHENYING 缺 three_quarter,side,back,face；CHAR_YINGLIAN_CHILD 缺 three_quarter,side,back,face；CHAR_ZHEN_SHIYIN 缺 three_quarter,side,back,face | identity | 补 front/three_quarter/side/back/face 后重跑 gate。 |
+- 未发现阻断或警告。

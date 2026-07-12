@@ -9,11 +9,34 @@ from image_prompt_compiler import (
     PROFILE_VERSION,
     compile_image_prompt,
     compile_image_section,
+    infer_task_type,
     lint_compiled_prompt,
     lint_compiled_section,
     parse_compiled_markdown,
     render_compiled_markdown,
 )
+
+
+def test_task_inference_does_not_misclassify_character_that_mentions_style_anchor():
+    section = """## 姜月初（`CHAR_01/常态`）
+**资产身份注册层**：CHAR_01；继承 STYLE_ANCHOR，不得风格漂移。
+"""
+
+    assert infer_task_type(
+        section,
+        mode="shared",
+        target_path="出图/共享/图片/定妆_CHAR_01__常态.png",
+    ) == "character_catalog"
+    assert infer_task_type(
+        "## 统一风格锚\nSTYLE_ANCHOR",
+        mode="shared",
+        target_path="出图/共享/图片/风格锚_暗黑盛唐.png",
+    ) == "style_anchor"
+    assert infer_task_type(
+        "## 虎山神（`BEAST_01/实体_重伤复活`）",
+        mode="shared",
+        target_path="出图/共享/图片/定妆_BEAST_01__实体_重伤复活.png",
+    ) == "character_catalog"
 
 
 def _contract(**overrides):
@@ -96,6 +119,67 @@ def test_catalog_profile_drops_story_action_without_mutating_source_contract():
 
     assert "动作瞬间：" not in payload["prompt"]
     assert "neutral_catalog_dropped_story_action" in payload["compiler_decisions"]
+
+
+def test_character_catalog_compiles_makeup_identity_wardrobe_and_reference_boundary():
+    section = """## 姜月初（`CHAR_01/常态`）
+### 定妆图提交口径
+```text
+角色身份：CHAR_01/常态；姜月初，年轻东方女性；
+年龄/年龄档：十七至二十岁；
+固定外貌：鹅蛋脸偏小，长杏眼，长黑发凌乱披散；
+服装妆造：灰扑扑粗布囚服，无配饰，无发冠；
+定妆要求：中性灰棚拍背景，全身从头到鞋完整；
+禁止：黑金铠甲、红裘、金色肩甲、高马尾、华丽发冠；
+```
+### 正向 prompt（中文）
+姜月初角色参考板。
+### 负向 prompt
+不要文字、水印。
+"""
+    payload = compile_image_section(
+        section,
+        backend="codex",
+        model="GPT Image 2",
+        mode="shared",
+        task_type="character_catalog",
+        target_path="出图/共享/图片/定妆_CHAR_01__常态.png",
+        style="暗黑盛唐写实国漫",
+        aspect_ratio="9:16",
+        policy_guards=["用户提供的人物/主角参考图默认只作身份与身形锚，不继承参考图衣装"],
+    )
+
+    assert "鹅蛋脸偏小" in payload["prompt"]
+    assert "灰扑扑粗布囚服" in payload["prompt"]
+    assert "中性灰棚拍背景" in payload["prompt"]
+    assert "不继承参考图衣装" in payload["prompt"]
+    assert "黑金铠甲" in payload["prompt"]
+
+
+def test_scene_asset_keeps_unlabelled_scene_dna_landmarks_axis_and_light():
+    section = """## 夕照荒野尸场（`LOC_01`）
+### 正向 prompt（中文）
+夕照荒野尸场；地貌：陇右风沙荒野、枯草、碎石、无村落；稳定地标：画右上巨岩与远端虎妖尸体；空间轴线：画左下南向逃生通道连接画右上巨岩；光位：低位夕阳从画左后侧逆光，环境冷灰土褐；纯场景，不出现具名角色清晰脸。
+### 负向 prompt
+禁止现代物件、建筑、竹林、雪山、仙宫、文字和水印。
+"""
+    payload = compile_image_section(
+        section,
+        backend="codex",
+        model="GPT Image 2",
+        mode="shared",
+        task_type="scene_asset",
+        target_path="出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+        style="暗黑盛唐写实国漫",
+        aspect_ratio="9:16",
+    )
+
+    assert "画右上巨岩" in payload["prompt"]
+    assert "远端虎妖尸体" in payload["prompt"]
+    assert "画左下南向逃生通道" in payload["prompt"]
+    assert "低位夕阳从画左后侧逆光" in payload["prompt"]
+    assert "可见手部归属" not in payload["prompt"]
+    assert "主检脸" not in payload["prompt"]
 
 
 def test_imagen_compiler_normalizes_separate_negative_elements():

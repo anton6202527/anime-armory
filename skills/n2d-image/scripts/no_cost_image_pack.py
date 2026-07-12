@@ -16,8 +16,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 KIND = "n2d_no_cost_image_production_pack"
-CHAR_RE = re.compile(r"\bCHAR_[A-Za-z0-9_\-\u4e00-\u9fff]+\b")
-ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\-\u4e00-\u9fff]+\b")
+ASSET_PREFIXES = ("LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_")
 
 
 def load_json(path: Path) -> Optional[Any]:
@@ -65,6 +64,43 @@ def storyboard(root: Path, ep: str) -> List[dict]:
 
 def clip_id(clip: Mapping[str, Any], idx: int) -> str:
     return str(clip.get("id") or clip.get("clip_id") or clip.get("label") or f"Clip_{idx:02d}")
+
+
+def structured_entities(clip: Mapping[str, Any]) -> Tuple[List[str], List[str]]:
+    """Read entity IDs from schema fields without extending IDs into prose."""
+    chars: List[str] = []
+    assets: List[str] = []
+
+    def add(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text or any(ch.isspace() for ch in text):
+            return
+        target = chars if text.startswith(("CHAR_", "BEAST_")) else assets if text.startswith(ASSET_PREFIXES) else None
+        if target is not None and text not in target:
+            target.append(text)
+
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    offscreen = {str(value).strip() for value in (schedule.get("offscreen_presence") or []) if str(value).strip()}
+    forbidden = {str(value).strip() for value in (schedule.get("forbidden_presence") or []) if str(value).strip()}
+    nonvisible = offscreen | forbidden
+    char_values = schedule.get("characters") if isinstance(schedule.get("characters"), list) else clip.get("character_ids") or []
+    object_values = schedule.get("objects") if isinstance(schedule.get("objects"), list) else clip.get("object_ids") or []
+    location_values = schedule.get("locations") if isinstance(schedule.get("locations"), list) else [clip.get("location_id")]
+    for value in char_values:
+        if str(value).strip() not in nonvisible:
+            add(value)
+    for value in object_values:
+        if str(value).strip() not in nonvisible:
+            add(value)
+    for value in location_values:
+        if str(value).strip() not in nonvisible:
+            add(value)
+    for key in ("characters", "objects", "locations", "required_presence", "offscreen_presence", "forbidden_presence"):
+        if key in {"required_presence"}:
+            for value in schedule.get(key) or []:
+                if str(value).strip() not in nonvisible:
+                    add(value)
+    return chars, assets
 
 
 def load_pack(root: Path, ep: str) -> Dict[str, Any]:
@@ -167,7 +203,7 @@ def regional_construct_manifests(root: Path, ep: str, clips: Sequence[Mapping[st
     manifests: List[Dict[str, Any]] = []
     for idx, clip in enumerate(clips, 1):
         cid = clip_id(clip, idx)
-        cids = list(dict.fromkeys(str(x) for x in (clip.get("character_ids") or CHAR_RE.findall(flatten(clip))) if x))
+        cids, _ = structured_entities(clip)
         if len(cids) < 2 and cid not in strategies:
             continue
         strategy = strategies.get(cid, {})
@@ -236,9 +272,7 @@ def shot_packages(root: Path, ep: str, clips: Sequence[Mapping[str, Any]],
     packages: List[Dict[str, Any]] = []
     for idx, clip in enumerate(clips, 1):
         cid = clip_id(clip, idx)
-        blob = flatten(clip)
-        chars = list(dict.fromkeys(str(x) for x in (clip.get("character_ids") or CHAR_RE.findall(blob)) if x))
-        assets = list(dict.fromkeys(ASSET_RE.findall(blob)))
+        chars, assets = structured_entities(clip)
         related_refs = []
         for owner, tasks in ref_by_owner.items():
             if any(char in owner for char in chars) or any(asset in owner for asset in assets):

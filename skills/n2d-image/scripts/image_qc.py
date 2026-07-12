@@ -2167,6 +2167,7 @@ HARD_CHECKS = ("face", "human_anatomy", "seam")  # 崩脸：insightface 模式�
                                               # 接缝：seam_analyze 仅在 _end.png 接力对触发、设计切镜已降 info，
                                               # 故 block=真接力断；断=出视频必跳切，与崩脸同级硬伤前移到落档拦截
 HARD_LINT_CODES = (
+    "static_long_take",  # ①c ≥10s 且首尾锚 dHash≤6 的静态长镜：成片 PPT 感根源，花钱出视频前硬拦
     "unknown_char_id",
     "no_reference_block",
     "outfit_form_mismatch",
@@ -4714,6 +4715,136 @@ def audit_turnaround_alignment(root: Path, ep: str) -> Dict[str, Any]:
     return res
 
 
+# ── ①c 镜头多样性/静镜机检（2026-07 实跑痛点回修：成片像 PPT / 镜头重复 / 冗余观感） ──────────
+#
+# 实证（那妖魔是姜大人 EP1/EP2）：11+10 个 Clip 平均 11s、5.3-5.5 镜/分钟（低于 density_slow=10
+# 地板一半）、两集 21 个 Clip 全在同一场景；17 对同 Clip first/end 锚 dHash≤12，Clip07/08 首尾
+# 距离仅 1-2/64——**整镜画面基本不动**。视频后端拿到"起点=终点"的锚只会产静态长镜，正是
+# "PPT 感/镜头重复"的机理。本门在**花钱出视频前**拦三类结构问题（阈值为内部启发式·env 可标定）：
+#   static_long_take  同 Clip first≈end 且时长偏长 → 静态长镜（warn；≥block 秒且更近 → block）
+#   duplicate_composition  跨 Clip 首帧近似 → 构图重复（warn）
+#   lens_variety_low  同场景连续段景别种类过少 → 观感同质（warn）
+STATIC_ANCHOR_DHASH_MAX = int(os.environ.get("N2D_STATIC_ANCHOR_DHASH_MAX", "10"))
+STATIC_TAKE_MIN_SEC = float(os.environ.get("N2D_STATIC_TAKE_MIN_SEC", "6"))
+STATIC_TAKE_BLOCK_SEC = float(os.environ.get("N2D_STATIC_TAKE_BLOCK_SEC", "10"))
+STATIC_TAKE_BLOCK_DHASH = int(os.environ.get("N2D_STATIC_TAKE_BLOCK_DHASH", "6"))
+CROSS_CLIP_DUP_DHASH_MAX = int(os.environ.get("N2D_CROSS_CLIP_DUP_DHASH_MAX", "10"))
+LENS_VARIETY_RUN_MIN = int(os.environ.get("N2D_LENS_VARIETY_RUN_MIN", "5"))
+LENS_VARIETY_MIN_KINDS = int(os.environ.get("N2D_LENS_VARIETY_MIN_KINDS", "3"))
+_HOLD_ROLE_RE = re.compile(r"留白|定格|hold|freeze", re.IGNORECASE)
+_LENS_CLASS_RE = re.compile(r"ECU|CU|MCU|MS|MLS|LS|WS|EWS|OTS|POV|特写|近景|中景|全景|远景|大远景|过肩|插入|insert", re.IGNORECASE)
+
+
+def _lens_classes(clip: Mapping[str, Any]) -> Set[str]:
+    out: Set[str] = set()
+    for shot in clip.get("shots") or []:
+        if isinstance(shot, Mapping):
+            m = _LENS_CLASS_RE.search(str(shot.get("lens") or ""))
+            if m:
+                out.add(m.group(0).upper())
+    return out
+
+
+def audit_shot_variety(root: Path, ep: str) -> Dict[str, Any]:
+    """①c 静镜/构图重复/景别同质机检。storyboard + 已落档锚帧驱动；缺 storyboard/依赖优雅跳过。"""
+    res: Dict[str, Any] = {"available": True, "findings": [], "notes": [],
+                           "clips_checked": 0, "static_pairs": [], "duplicate_pairs": []}
+    try:
+        sb = json.loads((root / "脚本" / ep / "storyboard.json").read_text(encoding="utf-8"))
+        clips = [c for c in (sb.get("clips") or []) if isinstance(c, Mapping)]
+    except Exception:
+        res["available"] = False
+        res["notes"].append("storyboard.json 缺失/损坏——镜头多样性机检跳过。")
+        return res
+    scn = _load_review_module("scene_consistency")
+    if scn is None or not hasattr(scn, "_dhash_image"):
+        res["available"] = False
+        res["notes"].append("scene_consistency._dhash_image 不可用——镜头多样性机检跳过（装 Pillow 后复检）。")
+        return res
+
+    def resolve(rel: Any) -> Optional[str]:
+        text = str(rel or "").strip()
+        if not text:
+            return None
+        path = text if os.path.isabs(text) else str(root / text)
+        return path if os.path.isfile(path) else None
+
+    hash_cache: Dict[str, Optional[List[int]]] = {}
+
+    def dhash_of(path: str) -> Optional[List[int]]:
+        if path not in hash_cache:
+            try:
+                hash_cache[path] = scn._dhash_image(path)
+            except Exception:
+                hash_cache[path] = None
+        return hash_cache[path]
+
+    firsts: List[Tuple[str, str, List[int]]] = []  # (clip_id, path, hash)
+    for clip in clips:
+        cid = str(clip.get("id") or "").strip() or "?"
+        try:
+            duration = float(clip.get("duration") or 0)
+        except (TypeError, ValueError):
+            duration = 0.0
+        role = str(clip.get("pacing_role") or "")
+        first_path = resolve(clip.get("firstframe_png"))
+        end_path = resolve(clip.get("endframe_png"))
+        first_hash = dhash_of(first_path) if first_path else None
+        end_hash = dhash_of(end_path) if end_path else None
+        if first_hash:
+            firsts.append((cid, first_path, first_hash))
+        if first_hash and end_hash:
+            res["clips_checked"] += 1
+            dist = scn.hamming(first_hash, end_hash)
+            if dist <= STATIC_ANCHOR_DHASH_MAX and duration >= STATIC_TAKE_MIN_SEC and not _HOLD_ROLE_RE.search(role):
+                level = ("block" if duration >= STATIC_TAKE_BLOCK_SEC and dist <= STATIC_TAKE_BLOCK_DHASH
+                         else "warn")
+                res["static_pairs"].append({"clip": cid, "dhash": dist, "duration": duration})
+                res["findings"].append({
+                    "level": level, "code": "static_long_take",
+                    "msg": f"静态长镜 {cid}：first↔end 锚 dHash={dist}/64（≤{STATIC_ANCHOR_DHASH_MAX}≈同构图）"
+                           f"且时长 {duration:g}s——视频后端拿到起点=终点的锚只会产几乎不动的长镜（成片 PPT 感根源）。"
+                           "处理：①改尾锚为不同构图/景别（推镜落幅、反应镜、插入镜）②按动作拆碎切 ③确属留白/定格镜则在"
+                           " pacing_role 标注豁免。",
+                })
+        # 跨 Clip 构图重复（first vs first；不与相邻 relay 的 end↔first 混淆）
+    for i in range(len(firsts)):
+        for j in range(i + 1, len(firsts)):
+            cid_a, path_a, ha = firsts[i]
+            cid_b, path_b, hb = firsts[j]
+            dist = scn.hamming(ha, hb)
+            if dist <= CROSS_CLIP_DUP_DHASH_MAX:
+                res["duplicate_pairs"].append({"clips": [cid_a, cid_b], "dhash": dist})
+                res["findings"].append({
+                    "level": "warn", "code": "duplicate_composition",
+                    "msg": f"镜头构图重复 {cid_a} ↔ {cid_b}：首帧 dHash={dist}/64——观众在成片里会看到"
+                           "两个几乎一样的镜头。换景别/机位/构图重出其一，或合并两镜。",
+                })
+    # 同场景连续段景别多样性
+    run: List[Tuple[str, Set[str]]] = []
+    prev_loc = None
+    def _flush(run_list):
+        if len(run_list) >= LENS_VARIETY_RUN_MIN:
+            kinds = set().union(*(k for _cid, k in run_list)) if run_list else set()
+            if len(kinds) < LENS_VARIETY_MIN_KINDS:
+                res["findings"].append({
+                    "level": "warn", "code": "lens_variety_low",
+                    "msg": f"同场景连续 {len(run_list)} 镜（{run_list[0][0]}→{run_list[-1][0]}）只用了 "
+                           f"{len(kinds) or 0} 种景别（{'/'.join(sorted(kinds)) or '未标注'}）——单场景整集尤其需要"
+                           "景别/机位轮换（特写-中景-全景交替、插入镜、反应镜）打破同质感。",
+                })
+    for clip in clips:
+        loc = str(clip.get("location_id") or clip.get("scene") or "")
+        cid = str(clip.get("id") or "?")
+        if prev_loc is not None and loc != prev_loc:
+            _flush(run)
+            run = []
+        run.append((cid, _lens_classes(clip)))
+        prev_loc = loc
+    _flush(run)
+    return res
+
+
 def _qc_inputs_fingerprint(root: Path, ep: str, payload: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Best-effort content fingerprint of the files this QC verdict rests on.
 
@@ -4859,6 +4990,12 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
         payload["lint"].setdefault("findings", []).append(
             {"level": f["level"], "code": f["code"], "msg": f["msg"]})
     payload["turnaround_alignment"] = ta
+    # ①c 静镜/构图重复/景别同质（成片 PPT 感与镜头重复的花钱前拦截·2026-07 实跑痛点回修）。
+    sv = audit_shot_variety(root, ep)
+    for f in sv.get("findings", []):
+        payload["lint"].setdefault("findings", []).append(
+            {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+    payload["shot_variety"] = sv
     # 承载角色脸锚（registry 级·后端无关·治定妆脸漂真因）：含具名角色脸的 VFX/海报/关系图资产
     # 必须有 ready 脸锚可注入，否则每镜无锚渲染新脸。runner spend 闸门只拦 codex/dreamina 出图路径，
     # 此处把同一铁律前移到落档机检，覆盖手工/其它后端/旧图。block 码进 HARD_LINT_CODES → hard_blocks。

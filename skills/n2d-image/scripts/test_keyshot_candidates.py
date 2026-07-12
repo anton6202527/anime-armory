@@ -71,3 +71,23 @@ def test_keyshot_candidates_writes_outputs(tmp_path: Path) -> None:
     assert jp.exists()
     assert mp.exists()
     assert json.loads(jp.read_text(encoding="utf-8"))["kind"] == kc.KIND
+
+
+def test_classify_ignores_offscreen_character_and_schema_field_names() -> None:
+    clip = {
+        "id": "Clip_03",
+        "description": "主角平静地听画外人说话。",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "entity_schedule": {
+            "characters": ["CHAR_01"],
+            "offscreen_presence": ["CHAR_02"],
+            "forbidden_presence": [],
+        },
+        "continuity": {"shot_size": "CU", "expression_span": "中"},
+        "template_contract": {"character_slots": [], "face_priority": "primary"},
+    }
+
+    tags = kc.classify(clip, 3)
+
+    assert "multi_subject" not in tags
+    assert "strong_emotion" not in tags

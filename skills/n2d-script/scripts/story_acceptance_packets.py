@@ -159,8 +159,8 @@ def packet_input_rels(ep: str, kind: str) -> List[str]:
     if kind == "table_read":
         return [
             f"脚本/{ep}/voiceover.txt",
+            f"合成/{ep}/配音/timing_estimate.json",
             f"合成/{ep}/配音/时长清单.json",
-            f"生产数据/script_quality_contract_{ep}.json",
         ]
     return [
         f"脚本/{ep}/storyboard.json",
@@ -224,12 +224,15 @@ def _machine_reference(root: Path, ep: str, kind: str) -> Dict[str, Any]:
 def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[str, Any]:
     voiceover = clean_lines(read_text(ep_dir(root, ep) / "voiceover.txt"), limit=120)
     timing = load_json(root / "合成" / ep / "配音" / "时长清单.json")
+    timing_estimate = load_json(root / "合成" / ep / "配音" / "timing_estimate.json")
     timing_status = "missing"
     placeholder_count = 0
     if isinstance(timing, Mapping):
         timing_status = str(timing.get("status") or "present")
         blob = json.dumps(timing, ensure_ascii=False)
         placeholder_count = blob.count("占位") + blob.lower().count("placeholder")
+    elif isinstance(timing_estimate, Mapping):
+        timing_status = "estimate_only"
     return {
         "kind": "n2d_table_read_packet",
         "version": VERSION,
@@ -239,7 +242,11 @@ def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict
         "owner": "writer_director_producer",
         "inputs": {
             "voiceover": f"脚本/{ep}/voiceover.txt",
+            "timing_estimate": f"合成/{ep}/配音/timing_estimate.json",
             "timing_manifest": f"合成/{ep}/配音/时长清单.json",
+            # Advisory only: Stage 2 may create/refresh this report after the
+            # Stage 1 table read.  It must not invalidate an already-approved
+            # read-through when voiceover/timing inputs did not change.
             "script_quality_contract": f"生产数据/script_quality_contract_{ep}.json",
         },
         "inputs_fingerprint": artifact_fingerprint(root, packet_input_rels(ep, "table_read")),

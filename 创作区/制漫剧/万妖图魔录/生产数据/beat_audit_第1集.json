@@ -1,0 +1,44 @@
+{
+  "kind": "n2d_beat_audit",
+  "version": 1,
+  "episode": "第1集",
+  "generated_at": "2026-07-12T10:32:07+00:00",
+  "stats": {
+    "shots": 34,
+    "hooks": 7,
+    "payoffs": 1,
+    "info_payoff_shots": [
+      27,
+      28
+    ],
+    "emo_payoff_shots": [
+      28
+    ],
+    "has_reversal": true,
+    "has_ending_hook": true,
+    "has_timings": true,
+    "has_storyboard": true
+  },
+  "findings": [
+    {
+      "severity": "warn",
+      "code": "first_3s_caption_too_sparse",
+      "msg": "首屏烧屏文字偏少：7 units/3.0s = 2.3/s，低于参考 5-10/s；确认画面钩足够强"
+    },
+    {
+      "severity": "warn",
+      "code": "hook_gap",
+      "msg": "4s–28s 间隔 24s 无钩子（>20s）：中段易划走，补悬念/信息/反差/危机"
+    },
+    {
+      "severity": "warn",
+      "code": "hook_gap",
+      "msg": "69s–94s 间隔 25s 无钩子（>20s）：中段易划走，补悬念/信息/反差/危机"
+    },
+    {
+      "severity": "warn",
+      "code": "cadence_blast",
+      "msg": "34s–100s 间隔 66s 无爆点/反转（>30s）：有钩子撑着但久无爆点/反转，张力空转易掉留存——中间补一个爆点/反转（2026 短剧基准：爆点/反转约每 30s 一次）"
+    }
+  ]
+}

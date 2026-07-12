@@ -9,7 +9,9 @@ const M = {
     newTerminal: '新建终端',
     showTerminal: '显示终端面板',
     hideTerminal: '隐藏终端面板',
-    language: '语言 (Language)',
+    recentWorks: '历史打开项目',
+    noRecentWorks: '暂无历史项目',
+    language: '语言',
     terminal: '终端',
   },
   en: {
@@ -18,7 +20,9 @@ const M = {
     newTerminal: 'New Terminal',
     showTerminal: 'Show Terminal Panel',
     hideTerminal: 'Hide Terminal Panel',
-    language: 'Language',
+    recentWorks: 'Recent Projects',
+    noRecentWorks: 'No Recent Projects',
+    language: 'language',
     terminal: 'Terminal',
   },
 }
@@ -27,6 +31,7 @@ const M = {
 export class AppUiState {
   language: AppLanguage = 'zh'
   terminalVisible = true
+  private recentWorks: Array<{ path: string; name: string }> = []
   private win: BrowserWindow | null = null
 
   attach(win: BrowserWindow) {
@@ -45,6 +50,18 @@ export class AppUiState {
 
   setTerminalVisible(visible: boolean) {
     this.terminalVisible = visible
+    this.rebuildMenu()
+  }
+
+  setRecentWorks(works: Array<{ path: string; name: string }>) {
+    const seen = new Set<string>()
+    this.recentWorks = works
+      .filter((work) => {
+        if (!work.path || !work.name || seen.has(work.path)) return false
+        seen.add(work.path)
+        return true
+      })
+      .slice(0, 4)
     this.rebuildMenu()
   }
 
@@ -95,6 +112,15 @@ export class AppUiState {
             label: t.switchWorkspace,
             accelerator: 'CmdOrCtrl+O',
             click: () => this.send('app:switch-workspace'),
+          },
+          {
+            label: t.recentWorks,
+            submenu: this.recentWorks.length
+              ? this.recentWorks.map((work) => ({
+                  label: work.name,
+                  click: () => this.send('app:open-recent-work', work.path),
+                }))
+              : [{ label: t.noRecentWorks, enabled: false }],
           },
           { type: 'separator' },
           isMac ? { role: 'close' } : { role: 'quit' },

@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_vertical_composition_plan",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "composition_rules": {
+    "safe_zone": "底部约四分之一保持低细节供双行字幕；顶部标题区不放关键眼神；系统信息使用画面侧上方负空间。",
+    "face_readability": "对白与选择段核心脸至少为 MCU，动作全景后必须补 CU 反应；眼睛避免被金纹、刀刃或字幕遮挡。",
+    "z_axis_depth": "以尸骸或断刀作前景，姜月初和裴长青作中景，虎妖与南向出口作高低分置后景，避免三人横排。",
+    "overlay_policy": "百妖谱面板、数值、境界与章节文字全部由合成后期叠加；生成画面只保留干净金墨卷轴、光轨和负空间。"
+  },
+  "beat_composition": [
+    {"beat_id": "Beat_01", "primary_subject_zone": "虎妖眼与伤口在上中，姜月初脸在中下偏左", "foreground_midground_background": "前景枯草，中景姜月初与裴，后景高位虎妖", "subtitle_clearance": "字幕落底部低细节尸地，不压人物嘴部", "vertical_motion": "由胸口伤洞向上摇至虎眼，再落到姜月初抬头反应"},
+    {"beat_id": "Beat_02", "primary_subject_zone": "姜月初脸和上身保持中上主体区", "foreground_midground_background": "尸手或囚服前景，姜月初中景，镇魔司尸体与虎尸后景", "subtitle_clearance": "底部用暗地面留字幕，赤云纹插入置中不烤字", "vertical_motion": "从贴地醒来缓升至站起，再以抬眼建立环境高度"},
+    {"beat_id": "Beat_03", "primary_subject_zone": "姜月初中上偏左，裴长青下中偏右，断刀居两者之间", "foreground_midground_background": "断刀前景，二人中景，出口与尸堆后景", "subtitle_clearance": "谈判反打预留对侧下方字幕区，刀特写不放文字", "vertical_motion": "刀从上落下钉地；姜俯身扶裴形成由上到下再回升的运动"},
+    {"beat_id": "Beat_04", "primary_subject_zone": "虎妖占上中高位，裴冲锋走中轴，姜月初留中下", "foreground_midground_background": "落地裴为前景，姜为中景，虎妖为后景", "subtitle_clearance": "动作高潮字幕尽量短，底部避免高亮碎屑干扰", "vertical_motion": "虎妖起身上升、裴冲锋上行、被踢后快速下坠到姜脚边"},
+    {"beat_id": "Beat_05", "primary_subject_zone": "姜月初脸居中偏左，系统负空间在右上", "foreground_midground_background": "金墨光丝前景，姜中近景，虎妖与裴虚化为深度锚", "subtitle_clearance": "系统说明与对白字幕分层，底部仍保留双行字幕安全区", "vertical_motion": "卷轴金纹由下向上展开，人物仅以眼神上下扫视回应"},
+    {"beat_id": "Beat_06", "primary_subject_zone": "姜月初眼神在上中，握刀手和裴长青在下中", "foreground_midground_background": "刀手前景，姜中景，裴下方近景，虎妖虚化后景", "subtitle_clearance": "抱歉字幕独占底部一行，画面其余文字全部移除", "vertical_motion": "视线由高位虎妖下落至裴，再落到握刀手，最终回升到对视"},
+    {"beat_id": "Beat_07", "primary_subject_zone": "两人眼睛位于中上，血点与刀势位于中部", "foreground_midground_background": "刀刃前景，两张脸中近景，背景压暗并虚化", "subtitle_clearance": "裴最后一字置底部后立即断黑，不叠系统回报", "vertical_motion": "刀向下完成单一力线，镜头随后静止在两人对视"}
+  ]
+}

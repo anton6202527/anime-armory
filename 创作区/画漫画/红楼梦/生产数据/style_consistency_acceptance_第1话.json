@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "kind": "comic_style_consistency_manual_acceptance",
+  "chapter": "第1话",
+  "accepted_findings": [
+    {
+      "code": "tone_value_outlier",
+      "panel_id": "P002",
+      "artifact": "出图/第1话/panels/P002.png",
+      "artifact_sha256": "2f7eabac0f5bbc27b0466fab865b135fa1271e8b4db658446dfbe44f510597cf",
+      "accepted_by": "director_review",
+      "accepted_at": "2026-07-12",
+      "reason": "散席空场向梦境过渡的计划内暗场：水盆、残烛与深色室内承担由实入幻的视觉压暗；线条、水墨材质和项目风格未漂移。",
+      "evidence": "已与 P001 及全话 contact sheet 并排查看原图；暗值是叙事调色而非网点/线宽失控。"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P003",
+      "artifact": "出图/第1话/panels/P003.png",
+      "artifact_sha256": "b4ea6d8ef623354eeb7e15ff0fe908ed69b9098a5be4d43e8b81797064489636",
+      "accepted_by": "director_review",
+      "accepted_at": "2026-07-12",
+      "reason": "女娲补天神话大远景按脚本使用高留白、无脸剪影和裂隙金线；与人物叙事格的细节密度差是计划内镜头功能差异。",
+      "evidence": "原图保持工笔细线、低饱和矿物淡彩、水墨云气与克制金线，未出现照片感或泛仙侠 UI。"
+    },
+    {
+      "code": "panel_style_outlier",
+      "panel_id": "P004",
+      "artifact": "出图/第1话/panels/P004.png",
+      "artifact_sha256": "be6cbab2150fb11660aa7aaa4c0479f2a51f31586779a9fb551b858be4eceb04",
+      "accepted_by": "director_review",
+      "accepted_at": "2026-07-12",
+      "reason": "顽石建立镜头按脚本采用大面积云海留白和单主体构图；与人物同框格的密度差是计划内景别变化。",
+      "evidence": "原图的山石线描、灰青矿物色、水墨雾和余烬暖点与 P003、P005–P012 同属大荒山视觉系统。"
+    }
+  ]
+}

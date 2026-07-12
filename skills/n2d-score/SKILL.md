@@ -43,7 +43,7 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 
 ### 阈值出处（诚实口径·2026-07 标准审计补登）
 
-profile 阈值 `demo=75 / standard=85 / production=90 / overseas=88`（单一真值源 `skills/n2d/_lib/n2d_thresholds.py::SCORE_PROFILE_THRESHOLDS`，score 与 `release_verdict` 同口径消费）与维度扣分权重 `block=-35 / warn=-12（cap 1）/ info=-2`、缺数据维度基线 `70` 分，**全部是内部启发式常量（confidence=low），无外部可辩护基准**——与 `industry_benchmark.json` 里 pacing 阈值的诚实标注同性质。它们的作用是给回流排序一个稳定坐标系，不是质量的绝对度量；上线积累样本后应由 `n2d-feedback` 第一方数据（机器分 vs 留存/完播的相关性）回灌校准，显著失准时调整此表并记录日期与依据。`release_verdict` 按发行 profile 取 `max(score 文件阈值, profile 下限)`，杜绝「commercial 放行 demo(75) 分数文件」。
+profile 阈值 `demo=75 / standard=85 / production=90 / overseas=88`（单一真值源 `skills/n2d/_lib/n2d_thresholds.py::SCORE_PROFILE_THRESHOLDS`，score 与 `release_verdict` 同口径消费）与维度扣分权重 `block=-35 / warn=-12（cap 3·2026-07 起：旧 cap=1 让 31 个 warn 与 1 个 warn 同罚 -12，实证某片一致性维 warn=15/31 仍 86 分、总分 93 放行；env `N2D_SCORE_WARNING_CAP` 可调）/ info=-2`、缺数据维度基线 `70` 分，**全部是内部启发式常量（confidence=low），无外部可辩护基准**——与 `industry_benchmark.json` 里 pacing 阈值的诚实标注同性质。它们的作用是给回流排序一个稳定坐标系，不是质量的绝对度量；上线积累样本后应由 `n2d-feedback` 第一方数据（机器分 vs 留存/完播的相关性）回灌校准，显著失准时调整此表并记录日期与依据。`release_verdict` 按发行 profile 取 `max(score 文件阈值, profile 下限)`，杜绝「commercial 放行 demo(75) 分数文件」。
 
 评分维度、权重、`audit_labels` 和默认回流阶段的单一真值源是 `skills/n2d/_lib/n2d_schema.py::CONSISTENCY_DIMENSIONS`。本表只是人读摘要；新增检测器必须先进入 schema 的 `audit_labels`，否则 `test_consistency_audit.py` 会阻止“审得到但 score 不扣分”的松动。
 

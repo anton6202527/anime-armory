@@ -1,0 +1,38 @@
+{
+  "kind": "n2d_external_visual_reference_manifest",
+  "version": 1,
+  "references": [
+    {
+      "path": "设定库/参考资料/视觉参考/ref_01_黑金妖谱海报.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "identity_body_reference",
+      "character_ids": ["CHAR_01"],
+      "allowed_traits": ["脸型", "五官比例", "眼神气质", "黑色长发", "身高体态", "身材比例"],
+      "forbidden_inheritance": ["画风", "黑金铠甲", "红裘", "首饰", "海报构图", "文字", "水印", "金色光效"]
+    },
+    {
+      "path": "设定库/参考资料/视觉参考/ref_02_水墨山水挥毫.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "identity_body_reference",
+      "character_ids": ["CHAR_01"],
+      "allowed_traits": ["脸型", "五官比例", "眼神气质", "黑色长发", "高挑纤细体态", "四肢比例"],
+      "forbidden_inheritance": ["画风", "白衣", "毛笔", "动作", "山水背景", "水墨轨迹", "文字", "水印", "金色光效"]
+    },
+    {
+      "path": "设定库/参考资料/视觉参考/ref_03_白发妖化打坐.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "style_source_only",
+      "character_ids": [],
+      "allowed_traits": ["暗黑写实国漫完成度", "冷灰废墟层次", "红金能量纹材质", "克制妖异氛围"],
+      "forbidden_inheritance": ["具体人物身份", "白发", "兽角", "铠甲", "打坐动作", "服装", "文字", "水印"]
+    },
+    {
+      "path": "设定库/参考资料/视觉参考/ref_04_白发妖化持兵.jpg",
+      "source": "user_provided_project_reference",
+      "use_policy": "style_source_only",
+      "character_ids": [],
+      "allowed_traits": ["写实国漫材质", "冷蓝云海尺度", "长发运动表现", "兵器剪影与人物层次"],
+      "forbidden_inheritance": ["具体人物身份", "白发", "兽角", "武器结构", "服装", "截图界面", "文字", "水印"]
+    }
+  ]
+}

@@ -210,6 +210,7 @@ def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatc
     assert registry["assets"]["CHAR_A"]["status"] == "partial"
     assert registry["assets"]["CHAR_A"]["view_readiness"] == {
         "required": ["front", "three_quarter", "side", "back", "face"],
+        "tier": "unspecified(full)",
         "ready": ["front"],
         "missing": ["three_quarter", "side", "back", "face"],
         "complete": False,
@@ -466,3 +467,13 @@ def test_adopt_generated_png_archives_previous_candidate(tmp_path: Path) -> None
     assert dest.read_bytes() == new_bytes
     assert (root / archived).read_bytes() == old_bytes
     assert not candidate.exists()
+
+
+def test_required_views_for_tiers():
+    import identity as _id
+    assert _id.required_views_for({"library_tier": "named_minimal"}) == ("front", "face")
+    assert _id.required_views_for({"tier": "recurring_standard"}) == ("front", "three_quarter", "face")
+    assert _id.required_views_for({"library_tier": "core_full"}) == _id.REQUIRED_CHARACTER_VIEWS
+    assert _id.required_views_for({}) == _id.REQUIRED_CHARACTER_VIEWS
+    assert _id.required_views_for(None) == _id.REQUIRED_CHARACTER_VIEWS
+    assert _id.required_views_for({"library_tier": "restricted_partial"}) == ()

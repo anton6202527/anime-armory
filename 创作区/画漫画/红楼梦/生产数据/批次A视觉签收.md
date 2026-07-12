@@ -27,6 +27,6 @@
 
 - identity report：`missing_ref_count=15`，即场景、道具、特效锚尚未生产。
 - 六名角色各缺 `three_quarter / side / back / face`，合计 24 张。
-- 六名角色 registry 均为 `status=partial`，每个角色 `view_readiness=1 ready / 4 missing`；资产库不会把 front、计划路径和 style-only 依赖合并虚报为六张现成参考。
+- 六名角色 registry 均为 `status=partial`，每个角色 `view_readiness=1 ready / 4 missing`；共享资产索引不会把 front、计划路径和 style-only 依赖合并虚报为六张现成参考。
 - `image_preflight` 仍为 `block=2 / warn=0`，这是正确状态：批次 A 不能被误认为已经允许正式剧情格出图。
 - 本批只允许技术失败重试；没有把审美意见伪装成技术失败自动多抽，因此实际只消耗 7 次成功生成。

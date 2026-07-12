@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 from collections import deque
 from datetime import datetime
+import hashlib
 import json
 import re
 import sys
@@ -217,7 +218,15 @@ CAMERA_GAZE_TERMS = (
     "viewer",
 )
 POV_CAMERA_ROLE_TERMS = ("pov", "主观", "第一人称", "破第四墙", "直视镜头", "直视读者")
-VAGUE_GAZE_TERMS = ("坚定", "冷静", "愤怒", "悲伤", "惊讶", "眼神", "目光", "远方", "前方", "某处", "none", "n/a")
+VAGUE_GAZE_PATTERN = re.compile(
+    r"^(?:"
+    r"(?:坚定|冷静|愤怒|悲伤|惊讶)(?:的)?(?:眼神|目光)?|"
+    r"(?:眼神|目光)|"
+    r"(?:看|望向|凝视)?(?:着|向)?(?:正)?(?:远方|前方|某处)|"
+    r"none|n/a"
+    r")$",
+    re.I,
+)
 FACE_INTEGRITY_TERMS = ("脸", "五官", "眼", "眼型", "眼距", "发际线", "发型", "头发")
 BODY_INTEGRITY_TERMS = ("手", "脚", "肢体", "身体", "腿", "手臂", "完整", "道具", "武器", "接触点")
 
@@ -232,10 +241,12 @@ def camera_role_allows_direct_gaze(panel: dict) -> bool:
 
 
 def is_vague_gaze_target(value: str) -> bool:
-    text = value.strip().lower()
-    if not text:
-        return False
-    return any(term.lower() == text or term.lower() in text for term in VAGUE_GAZE_TERMS)
+    clauses = [
+        clause.strip().lower()
+        for clause in re.split(r"[；;，,。]+", value)
+        if clause.strip()
+    ]
+    return any(VAGUE_GAZE_PATTERN.fullmatch(clause) for clause in clauses)
 
 
 def is_weak_integrity_contract(value: str) -> bool:
@@ -645,6 +656,12 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
             panel_id = str(item.get("panel_id") or "").strip()
             code = str(item.get("code") or "raw_bubble_candidate").strip()
             if panel_id and code in {"raw_bubble_candidate", "baked_blank_bubble_candidate"}:
+                recorded_sha = str(item.get("artifact_sha256") or "").strip()
+                panel_path = find_panel_image(root / "出图" / chapter / "panels", panel_id)
+                if recorded_sha:
+                    current_sha = hashlib.sha256(panel_path.read_bytes()).hexdigest() if panel_path else ""
+                    if current_sha != recorded_sha:
+                        continue
                 accepted[panel_id] = {
                     "panel_id": panel_id,
                     "code": code,
@@ -653,6 +670,7 @@ def load_raw_bubble_acceptance(root: Path, chapter: str) -> dict[str, dict[str, 
                     "accepted_at": str(item.get("accepted_at") or data.get("accepted_at") or ""),
                     "reason": str(item.get("reason") or ""),
                     "evidence": str(item.get("evidence") or ""),
+                    "artifact_sha256": recorded_sha,
                     "source": display_path(root, path),
                 }
         for panel_id in data.get("accepted_panels") or []:

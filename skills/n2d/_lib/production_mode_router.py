@@ -219,8 +219,21 @@ def build_clip_sound_routes(
         indices = _clip_line_indices(row)
         line_rows = [line_by_index[item] for item in indices if item in line_by_index]
         roles = sorted({str(item.get("角色") or "").strip() for item in line_rows if str(item.get("角色") or "").strip()})
-        character_lines = [item for item in line_rows if not is_narration_role(str(item.get("角色") or ""))]
-        narration_lines = [item for item in line_rows if is_narration_role(str(item.get("角色") or ""))]
+        declared_dialogue_indices = _indices(row.get("dialogue_indices")) or _indices(row.get("allowed_character_dialogue_indices"))
+        declared_narration_indices = _indices(row.get("narration_indices")) or _indices(row.get("allowed_narration_indices"))
+        tracks_declared = any(
+            key in row
+            for key in (
+                "dialogue_indices", "narration_indices",
+                "allowed_character_dialogue_indices", "allowed_narration_indices",
+            )
+        )
+        if tracks_declared:
+            character_lines = [item for item in line_rows if int(item.get("index") or 0) in declared_dialogue_indices]
+            narration_lines = [item for item in line_rows if int(item.get("index") or 0) in declared_narration_indices]
+        else:
+            character_lines = [item for item in line_rows if not is_narration_role(str(item.get("角色") or ""))]
+            narration_lines = [item for item in line_rows if is_narration_role(str(item.get("角色") or ""))]
         explicit_dialogue = bool(
             _indices(row.get("dialogue_indices"))
             or _indices(row.get("allowed_character_dialogue_indices"))
@@ -230,8 +243,9 @@ def build_clip_sound_routes(
         has_character_dialogue = bool(character_lines or explicit_dialogue)
         narration_only = bool(narration_lines or _indices(row.get("allowed_narration_indices"))) and not has_character_dialogue
         continuity = row.get("continuity") if isinstance(row.get("continuity"), Mapping) else {}
+        mouth_declared = "mouth_visible" in row or "mouth_visible" in continuity
         mouth_visible = _yes(row.get("mouth_visible")) or _yes(continuity.get("mouth_visible"))
-        if has_character_dialogue and any(token in blob for token in CLOSEUP_TOKENS):
+        if not mouth_declared and has_character_dialogue and any(token in blob for token in CLOSEUP_TOKENS):
             mouth_visible = True
         native_policy = str(row.get("native_audio_policy") or row.get("speech_policy") or "").strip().lower()
         native_explicit = native_policy == "native_speech" or str(row.get("audio_strategy") or "").strip() == "native_av"
@@ -372,9 +386,17 @@ def collect_signals(root: Path, episode: str) -> Dict[str, Any]:
     action_clips = 0
     for row in clips:
         blob = json.dumps(row, ensure_ascii=False).lower()
+        tracks_declared = any(
+            key in row
+            for key in (
+                "dialogue_indices", "narration_indices",
+                "allowed_character_dialogue_indices", "allowed_narration_indices",
+            )
+        )
         has_dialogue = bool(
             row.get("dialogue_indices")
-            or row.get("voiceover_indices")
+            or row.get("allowed_character_dialogue_indices")
+            or (not tracks_declared and row.get("voiceover_indices"))
             or row.get("dialogue")
             or row.get("speech")
         )
@@ -388,7 +410,7 @@ def collect_signals(root: Path, episode: str) -> Dict[str, Any]:
         is_mouth = _yes(row.get("mouth_visible")) or _yes(continuity.get("mouth_visible"))
         if is_mouth:
             mouth_visible += 1
-        if has_dialogue and any(token in blob for token in CLOSEUP_TOKENS):
+        if has_dialogue and is_mouth and any(token in blob for token in CLOSEUP_TOKENS):
             closeup_speaking += 1
         if any(token in blob for token in ACTION_TOKENS):
             action_clips += 1

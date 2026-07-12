@@ -23,6 +23,13 @@ pytest.importorskip("PIL")
 from PIL import Image  # noqa: E402
 
 
+def test_only_explicit_context_can_clear_global_block() -> None:
+    assert style_consistency.explicit_context_override("block", "ok", True) is True
+    assert style_consistency.explicit_context_override("warn", "ok", True) is True
+    assert style_consistency.explicit_context_override("block", "ok", False) is False
+    assert style_consistency.explicit_context_override("block", "warn", True) is False
+
+
 def write_panel(path: Path, color: tuple[int, int, int], size: tuple[int, int] = (200, 200)) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.new("RGB", size, color).save(path)

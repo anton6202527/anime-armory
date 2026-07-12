@@ -1,0 +1,732 @@
+{
+  "content_hash": "9e6c22fd36c3c95f",
+  "contract_hash": "9e6c22fd36c3c95f",
+  "episode": "第1集",
+  "findings": [],
+  "generated_at": "2026-07-12T10:32:07+00:00",
+  "kind": "n2d_script_quality_contract",
+  "notes": [
+    "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
+    "image/video prompt 阶段必须写 script_contract_applied_第N集.json，证明这些字段已进入 prompt。"
+  ],
+  "required_consumption_fields": [
+    "core_attraction",
+    "first_3s_visual_hook",
+    "retention_promise_ledger",
+    "pacing_allocation",
+    "clip_dramatic_function",
+    "audience_question_ledger",
+    "performance_cues"
+  ],
+  "signable_fields": {
+    "adaptation_triage": {
+      "decisions": [
+        "dramatize",
+        "merge",
+        "narrate",
+        "omit"
+      ],
+      "items": 9,
+      "path": "脚本/第1集/adaptation_triage.json"
+    },
+    "audience_question_ledger": {
+      "ending_hook": true,
+      "findings": [],
+      "payoff_contexts": [
+        "月初·颤抖·慢] ||抱歉。 [镜头33·旁白·骤断] 于是横刀刺入胸口，温热的血溅上姜月初的脸。 [镜头34·裴长",
+        "| 33.245–41.859 | 8.614s | 发现重伤裴长青 | 加速·碎切 | 口外对白 | | EP0",
+        "看到规则亮牌、道德底线被迫越过，并追问她能否用第一笔道行反杀虎妖。 visual_hook 胸口被贯穿的虎头人身妖物",
+        "EP01_CLIP08-13 揭示半步鸣骨与百妖谱规则，反杀延至第2集 delayed_payoff_ep 第2集",
+        "_CLIP18 promise 杀裴所得道行能否让姜月初反杀虎妖 payoff_due 第2集 payoff_sta",
+        "为什么想离开。 scene 裴长青从尸堆低位开口，姜月初发现他的伤势并转身准备独自离开。 dramatic_func",
+        "audience_effect 观众获得因果闭合和危机升级双回报。 scene 两人停步回看，虎妖从同一巨石旁站起",
+        "起，画面追上冷开。 dramatic_function 兑现冷开时间闭环并撤销逃生可能。 continuity_st"
+      ],
+      "questions": [
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "子 [镜头2·姜月初·惊骇·快] 它胸口明明被捅穿了——为什么还能站起来？！ ⚡危机 [镜头3·旁白·冷峻·慢] 一炷",
+          "question_id": "Q01",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "妖·戏谑] 莫再反抗。早些解脱，岂不美哉？ [镜头27·系统·空灵·慢] 系统提示——宿主：姜月初。境界：凡境。武学",
+          "question_id": "Q02",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "抗。早些解脱，岂不美哉？ [镜头27·系统·空灵·慢] 系统提示——宿主：姜月初。境界：凡境。武学：无。道行：零。",
+          "question_id": "Q03",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "。境界：凡境。武学：无。道行：零。 ⚡信息 [镜头28·系统·空灵] 斩杀生物，可获得道行；以妖血为墨、百妖谱为卷，",
+          "question_id": "Q04",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "P12` 等死最低谷：姜先看裴再看虎妖；虎妖只逼近一步，系统声在静音中先入。 13. `EP01_CLIP13` 百",
+          "question_id": "Q05",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "9` 静默硬断：姜血点脸与颤抖握刀手保持 1.3 秒，无系统到账，硬切黑。 ## 下游硬约束 - `EP01_C",
+          "question_id": "Q06",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": ".473s | 百妖谱核心规则 | 爽点·CU硬切 | 系统音后配 | | EP01_CLIP14 | 107.41",
+          "question_id": "Q07",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "。 audience_question 胸口被贯穿的虎妖为何还能站起来？ onscreen_text 它明明已经死了",
+          "question_id": "Q08",
+          "signal": "为何",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ed_at EP01_CLIP01 promise 虎妖为何死而复生，姜月初如何活下来 payoff_due 第1集",
+          "question_id": "Q09",
+          "signal": "为何",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "d_at EP01_CLIP01 question 虎妖为什么不死？ status partially_answere",
+          "question_id": "Q10",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "……这荒郊野岭的，你们想去哪儿？ 它胸口明明被捅穿了——为什么还能站起来？！ rhythm 爽点·CU硬切 audie",
+          "question_id": "Q11",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "速·碎切 audience_effect 观众理解姜月初为什么想离开。 scene 裴长青从尸堆低位开口，姜月初发现他",
+          "question_id": "Q12",
+          "signal": "为什么",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "abel 百妖谱规则亮牌 subtitle_lines 系统提示——宿主：姜月初。境界：凡境。武学：无。道行：零。",
+          "question_id": "Q13",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "指空握又松开。 dramatic_function 指出系统规则与现实战力之间的缺口。 continuity_sto",
+          "question_id": "Q14",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        },
+        {
+          "expected_next_handling": "本集兑现/推进",
+          "question_context": "ene 姜月初脸颊新血点清晰，她握刀的手轻颤却不松开；无系统到账、无音乐，1.3秒后硬切黑。 dramatic_fu",
+          "question_id": "Q15",
+          "signal": "系统",
+          "status": "paid_or_progressed"
+        }
+      ]
+    },
+    "clip_dramatic_functions": [
+      {
+        "audience_effect": "无声也能看懂死者复活并堵路。",
+        "clip_id": "EP01_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "以不死事实提出全剧第一危机。",
+        "duration": 8.435,
+        "key_clip": true,
+        "pacing_role": "冷开场主钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众知道她是现代意识且处于陌生尸场。",
+        "clip_id": "EP01_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "重置时间并确立求生目标。",
+        "duration": 6.15,
+        "key_clip": false,
+        "pacing_role": "时间回跳与主角落点",
+        "primary_runtime": false,
+        "runtime_priority": "support",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "不靠长设定也明白她是流放囚犯。",
+        "clip_id": "EP01_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "用可见细节完成身份与时代交代。",
+        "duration": 7.632,
+        "key_clip": false,
+        "pacing_role": "首集世界与身份落点",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众比主角更警惕虎尸。",
+        "clip_id": "EP01_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "建立镇魔司威名并制造虎妖死透的反差前提。",
+        "duration": 11.028,
+        "key_clip": true,
+        "pacing_role": "镇魔司规则与反差主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众理解姜月初为什么想离开。",
+        "clip_id": "EP01_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "把潜在救援者先呈现为危险变量。",
+        "duration": 8.614,
+        "key_clip": true,
+        "pacing_role": "裴长青登场主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": true,
+        "spectacle_story_function": "尸堆中活人显露不是单纯奇观，而是迫姜月初在救人、防人与逃命之间立即做选择。"
+      },
+      {
+        "audience_effect": "观众确认裴重伤仍具威胁。",
+        "clip_id": "EP01_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "用行动改变双方权力关系。",
+        "duration": 5.439,
+        "key_clip": true,
+        "pacing_role": "冲突升级插入",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看见她不是轻信，而是在计算唯一出口。",
+        "clip_id": "EP01_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "用路引和自由把二人绑定成脆弱同盟。",
+        "duration": 13.487,
+        "key_clip": false,
+        "pacing_role": "人物冲突主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众短暂看到逃生可能。",
+        "clip_id": "EP01_CLIP08",
+        "compressed_runtime": true,
+        "compression_plan": false,
+        "dramatic_function": "将交易变为可见行动并给复活危机制造移动目标。",
+        "duration": 2.4,
+        "key_clip": false,
+        "pacing_role": "移动桥接",
+        "primary_runtime": false,
+        "runtime_priority": "compressed",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众获得因果闭合和危机升级双回报。",
+        "clip_id": "EP01_CLIP09",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "兑现冷开时间闭环并撤销逃生可能。",
+        "duration": 5.874,
+        "key_clip": true,
+        "pacing_role": "中段强钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众知道逃不了、打不过。",
+        "clip_id": "EP01_CLIP10",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "量化敌我战力差并给裴最后出手动机。",
+        "duration": 9.188,
+        "key_clip": false,
+        "pacing_role": "敌我战力主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众看清裴不是没反抗，而是完全不在一个层级。",
+        "clip_id": "EP01_CLIP11",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "以清楚命中链兑现绝对战力差。",
+        "duration": 9.586,
+        "key_clip": true,
+        "pacing_role": "动作高光与败局兑现",
+        "primary_runtime": true,
+        "runtime_priority": "highlight",
+        "spectacle_clip": true,
+        "spectacle_story_function": "裴的完整攻击被虎妖一脚粉碎，用动作奇观证明半步鸣骨的绝对压制，并把姜月初推入必须依赖百妖谱的死局。"
+      },
+      {
+        "audience_effect": "观众等待新规则或不可能选择。",
+        "clip_id": "EP01_CLIP12",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "让行动失败转为姜月初个人死局。",
+        "duration": 6.113,
+        "key_clip": false,
+        "pacing_role": "系统亮牌前最低谷",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众明确知道她需要完成第一次斩杀。",
+        "clip_id": "EP01_CLIP13",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "交付本剧核心成长规则并把死局转为残酷选择题。",
+        "duration": 13.473,
+        "key_clip": true,
+        "pacing_role": "系统信息回报",
+        "primary_runtime": true,
+        "runtime_priority": "highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众开始主动寻找替代斩杀目标。",
+        "clip_id": "EP01_CLIP14",
+        "compressed_runtime": true,
+        "compression_plan": false,
+        "dramatic_function": "指出系统规则与现实战力之间的缺口。",
+        "duration": 3.794,
+        "key_clip": false,
+        "pacing_role": "规则后的反问题",
+        "primary_runtime": false,
+        "runtime_priority": "compressed",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众先于裴意识到刀会指向谁。",
+        "clip_id": "EP01_CLIP15",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "把抽象规则转化为道德困境。",
+        "duration": 6.582,
+        "key_clip": true,
+        "pacing_role": "道德选择蓄压",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众确认她已经做出决定。",
+        "clip_id": "EP01_CLIP16",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "完成同盟到加害者与受害者的关系翻转。",
+        "duration": 3.074,
+        "key_clip": false,
+        "pacing_role": "越线前最后停顿",
+        "primary_runtime": true,
+        "runtime_priority": "highlight",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "动作明确、后果落脸，观众感到震动而非爽杀。",
+        "clip_id": "EP01_CLIP17",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "不可逆地兑现生存选择。",
+        "duration": 4.369,
+        "key_clip": true,
+        "pacing_role": "集尾反转兑现",
+        "primary_runtime": true,
+        "runtime_priority": "highlight",
+        "spectacle_clip": true,
+        "spectacle_story_function": "刺入动作是本集道德越线和系统规则即将验证的因果顶点，用血点落脸把选择后果可视化。"
+      },
+      {
+        "audience_effect": "观众先承受裴的不可置信，再看姜承担选择。",
+        "clip_id": "EP01_CLIP18",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "让受害者的错愕完整落地，并把反应交给最终静默镜。",
+        "duration": 0.893,
+        "key_clip": false,
+        "pacing_role": "集尾悬崖发声",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      },
+      {
+        "audience_effect": "观众带着道德震动和升级期待进入下一集。",
+        "clip_id": "EP01_CLIP19",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "dramatic_function": "让越线代价在主角脸上落地，同时扣住下一集道行到账。",
+        "duration": 1.3,
+        "key_clip": true,
+        "pacing_role": "集尾静默悬崖",
+        "primary_runtime": true,
+        "runtime_priority": "primary",
+        "spectacle_clip": false,
+        "spectacle_story_function": null
+      }
+    ],
+    "clip_pacing_roles": [
+      {
+        "clip_id": "EP01_CLIP01",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 8.435,
+        "pacing_role": "冷开场主钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP02",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 6.15,
+        "pacing_role": "时间回跳与主角落点",
+        "primary_runtime": false,
+        "runtime_priority": "support"
+      },
+      {
+        "clip_id": "EP01_CLIP03",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 7.632,
+        "pacing_role": "首集世界与身份落点",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP04",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 11.028,
+        "pacing_role": "镇魔司规则与反差主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP05",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 8.614,
+        "pacing_role": "裴长青登场主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP06",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 5.439,
+        "pacing_role": "冲突升级插入",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP07",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 13.487,
+        "pacing_role": "人物冲突主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP08",
+        "compressed_runtime": true,
+        "compression_plan": false,
+        "duration": 2.4,
+        "pacing_role": "移动桥接",
+        "primary_runtime": false,
+        "runtime_priority": "compressed"
+      },
+      {
+        "clip_id": "EP01_CLIP09",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 5.874,
+        "pacing_role": "中段强钩",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP10",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 9.188,
+        "pacing_role": "敌我战力主干",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP11",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 9.586,
+        "pacing_role": "动作高光与败局兑现",
+        "primary_runtime": true,
+        "runtime_priority": "highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP12",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 6.113,
+        "pacing_role": "系统亮牌前最低谷",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP13",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 13.473,
+        "pacing_role": "系统信息回报",
+        "primary_runtime": true,
+        "runtime_priority": "highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP14",
+        "compressed_runtime": true,
+        "compression_plan": false,
+        "duration": 3.794,
+        "pacing_role": "规则后的反问题",
+        "primary_runtime": false,
+        "runtime_priority": "compressed"
+      },
+      {
+        "clip_id": "EP01_CLIP15",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 6.582,
+        "pacing_role": "道德选择蓄压",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP16",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 3.074,
+        "pacing_role": "越线前最后停顿",
+        "primary_runtime": true,
+        "runtime_priority": "highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP17",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 4.369,
+        "pacing_role": "集尾反转兑现",
+        "primary_runtime": true,
+        "runtime_priority": "highlight"
+      },
+      {
+        "clip_id": "EP01_CLIP18",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 0.893,
+        "pacing_role": "集尾悬崖发声",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      },
+      {
+        "clip_id": "EP01_CLIP19",
+        "compressed_runtime": false,
+        "compression_plan": false,
+        "duration": 1.3,
+        "pacing_role": "集尾静默悬崖",
+        "primary_runtime": true,
+        "runtime_priority": "primary"
+      }
+    ],
+    "core_attraction": {
+      "audience_payoff": "观众看到规则亮牌、道德底线被迫越过，并追问她能否用第一笔道行反杀虎妖。",
+      "category": "生存抉择强反转",
+      "why_watch": "刚穿越的凡人少女被不死虎妖逼入绝境，百妖谱给出的第一条生路却要求她先杀死救命同伴。"
+    },
+    "first_3s_visual_hook": {
+      "audience_question": "胸口被贯穿的虎妖为何还能站起来？",
+      "content_promise": "解释虎妖不死的原因，并看姜月初如何在绝境中找到第一条生路。",
+      "content_proposition": "妖物死而复生，两个重伤凡人被重新堵死。",
+      "expected_metric": {
+        "primary": "retention_3s",
+        "target": 0.82
+      },
+      "muted_readable": true,
+      "muted_safe_proof": "先给贯胸伤口，再给睁眼和姜月初惊骇反应，无声也能理解死者复活。",
+      "onscreen_text": "它明明已经死了",
+      "render_policy": "compose_overlay_only",
+      "visual_hook": "胸口被贯穿的虎头人身妖物在夕照尸场睁眼起身，黑妖血仍从空洞伤口流下。"
+    },
+    "pacing_allocation": {
+      "declared": {
+        "compressed_clip_ids": [
+          "EP01_CLIP02",
+          "EP01_CLIP06",
+          "EP01_CLIP09",
+          "EP01_CLIP14"
+        ],
+        "primary_runtime_focus": [
+          "EP01_CLIP01",
+          "EP01_CLIP03",
+          "EP01_CLIP04",
+          "EP01_CLIP05",
+          "EP01_CLIP08",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP13",
+          "EP01_CLIP16",
+          "EP01_CLIP17",
+          "EP01_CLIP18",
+          "EP01_CLIP19"
+        ],
+        "strategy": "主时长给不死冷开、虎妖战力碾压、百妖谱亮牌与杀裴选择；世界观以物证和短旁白合并，普通移动不独立成长镜。"
+      },
+      "rule": "主时长优先给核心看点/爽点/打斗/反转/兑现；桥接、解释、气氛、普通反应镜必须短，不能用压缩说明保留低优先级长镜；长镜必须重定级为 primary/highlight。",
+      "runtime_summary": {
+        "compressed_clip_ids": [
+          "EP01_CLIP08",
+          "EP01_CLIP14"
+        ],
+        "compressed_duration": 6.194,
+        "compressed_runtime_share": 0.049,
+        "primary_clip_ids": [
+          "EP01_CLIP01",
+          "EP01_CLIP03",
+          "EP01_CLIP04",
+          "EP01_CLIP05",
+          "EP01_CLIP06",
+          "EP01_CLIP07",
+          "EP01_CLIP09",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP12",
+          "EP01_CLIP13",
+          "EP01_CLIP15",
+          "EP01_CLIP16",
+          "EP01_CLIP17",
+          "EP01_CLIP18",
+          "EP01_CLIP19"
+        ],
+        "primary_duration": 115.087,
+        "primary_runtime_share": 0.903,
+        "total_duration": 127.431,
+        "unclassified_duration": 6.15
+      },
+      "source": "storyboard.pacing_allocation"
+    },
+    "performance_cues": [],
+    "retention_promise_ledger": [
+      {
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "H01",
+        "opened_at": "EP01_CLIP01",
+        "payoff_due": "第1集",
+        "payoff_evidence": "EP01_CLIP08-13 揭示半步鸣骨与百妖谱规则，反杀延至第2集",
+        "payoff_status": "partial",
+        "promise": "虎妖为何死而复生，姜月初如何活下来",
+        "promise_type": "survival_mystery"
+      },
+      {
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "H02",
+        "opened_at": "EP01_CLIP13",
+        "payoff_due": "第2集",
+        "payoff_status": "open",
+        "promise": "斩杀生物即可获得道行",
+        "promise_type": "system_rule"
+      },
+      {
+        "hook_id": "H03",
+        "opened_at": "EP01_CLIP15",
+        "payoff_due": "第1集",
+        "payoff_evidence": "EP01_CLIP17 刀刺入胸口",
+        "payoff_status": "paid",
+        "promise": "姜月初会不会为活命杀死裴长青",
+        "promise_type": "moral_choice"
+      },
+      {
+        "delayed_payoff_ep": "第2集",
+        "hook_id": "H04",
+        "opened_at": "EP01_CLIP18",
+        "payoff_due": "第2集",
+        "payoff_status": "open",
+        "promise": "杀裴所得道行能否让姜月初反杀虎妖",
+        "promise_type": "cliffhanger"
+      }
+    ]
+  },
+  "source_paths": {
+    "adaptation_triage": "脚本/第1集/adaptation_triage.json",
+    "story_quality_pack": "生产数据/story_quality_pack_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "source_sha256": {
+    "adaptation_triage": "8f98698c07951f3615316ca15ecb69f34d1035f063979a95a8a2c7f56b9cd17b",
+    "story_quality_pack": "10274de69085fbd2c895c9965337e8d1fbf5db8794e5d0c676434f6c7047dc9f",
+    "storyboard": "0043eb4d19fecca1e8a15feff557e529642428ab917ec1cd8c0545a17b1496b0"
+  },
+  "status": "pass",
+  "summary": {
+    "blocks": 0,
+    "clips": 19,
+    "compressed_runtime_share": 0.049,
+    "open_questions": 0,
+    "primary_runtime_share": 0.903,
+    "status": "pass",
+    "warnings": 0
+  },
+  "version": 1
+}

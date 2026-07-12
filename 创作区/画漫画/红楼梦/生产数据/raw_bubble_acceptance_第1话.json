@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "comic_raw_bubble_manual_acceptance",
+  "chapter": "第1话",
+  "accepted_findings": [
+    {
+      "code": "raw_bubble_candidate",
+      "panel_id": "P017",
+      "artifact": "出图/第1话/panels/P017.png",
+      "artifact_sha256": "a9f6f71cc1b5983e55f24244da387f3783b9f92458fe03ccc330d0b569c8fb64",
+      "accepted_by": "director_review",
+      "accepted_at": "2026-07-12",
+      "reason": "检测到的亮区是茶盏上升并转成梦路的白色雾气，不是空白气泡或文字容器。",
+      "evidence": "已查看 P017 原图；亮区边缘为连续水墨雾丝并与 P018 梦境通道衔接，内部无气泡轮廓、尾巴或可写文字框。"
+    }
+  ]
+}

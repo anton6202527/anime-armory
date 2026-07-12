@@ -73,3 +73,42 @@ def test_no_cost_image_pack_writes_outputs(tmp_path: Path) -> None:
     assert jp.exists()
     assert mp.exists()
     assert json.loads(jp.read_text(encoding="utf-8"))["kind"] == ncip.KIND
+
+
+def test_shot_packages_use_structured_ids_not_prose_suffixes(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "Clip_01",
+        "description": "CHAR_01与CHAR_02连线，VFX_01退出清晰画面。",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "object_ids": ["VFX_01"],
+        "location_id": "LOC_HALL",
+    }]}, ensure_ascii=False), encoding="utf-8")
+
+    pack = ncip.build_pack(tmp_path, "第1集")
+    shot = pack["shot_packages"][0]
+
+    assert shot["characters"] == ["CHAR_01", "CHAR_02"]
+    assert shot["assets"] == ["VFX_01", "LOC_HALL"]
+
+
+def test_shot_packages_exclude_offscreen_characters_from_regional_construct(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "Clip_01",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "entity_schedule": {
+            "characters": ["CHAR_01"],
+            "offscreen_presence": ["CHAR_02"],
+            "forbidden_presence": [],
+        },
+    }]}, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "生产数据" / "reference_plan_第1集.json").write_text(
+        json.dumps({"clips": []}, ensure_ascii=False), encoding="utf-8")
+
+    pack = ncip.build_pack(tmp_path, "第1集")
+
+    assert pack["shot_packages"][0]["characters"] == ["CHAR_01"]
+    assert pack["regional_construct_manifests"] == []

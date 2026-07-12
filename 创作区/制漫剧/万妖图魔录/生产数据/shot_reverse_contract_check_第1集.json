@@ -1,0 +1,16 @@
+{
+  "kind": "n2d_shot_reverse_contract_check",
+  "version": 1,
+  "episode": "第1集",
+  "status": "pass",
+  "generated_at": "2026-07-12T10:29:19+00:00",
+  "contract_path": "脚本/第1集/shot_reverse_contract.json",
+  "report_path": "生产数据/shot_reverse_contract_第1集.md",
+  "summary": {
+    "patterns": 8,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "issues": []
+}

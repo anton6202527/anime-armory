@@ -19,6 +19,7 @@ import {
   importWorkSources,
   mediaAllowRoot,
   mediaUrl,
+  videoUrl,
   openWorkEntry,
   pickImportFiles,
   readWorkDocx,
@@ -29,6 +30,8 @@ import {
   workDir,
 } from "../api";
 import { buildWorkTreeDecorations, type WorkTreeDecoration } from "../explorerDecorations";
+import { createEditorBreadcrumbCursorStore } from "../editorBreadcrumbCursor";
+import { createEditorBreadcrumbDocumentStore } from "../editorBreadcrumbDocument";
 import { useI18n } from "../i18n";
 import {
   COLLAPSE_LEFT_SIDEBAR_EVENT,
@@ -43,8 +46,10 @@ import {
 } from "../paneLayout";
 import type { ImportWorkSourcesResult, SkillTreeEntry, WorkRoot } from "../types";
 import { Codicon } from "./Codicon";
+import { EditorBreadcrumbs } from "./EditorBreadcrumbs";
 import { WorkFileIcon } from "./FileIcon";
 import { DecodedImage } from "../mediaPreview/DecodedImage";
+import { VideoPreview } from "./VideoPreview";
 
 const MonacoFileEditor = lazy(() =>
   import("./MonacoFileEditor").then((mod) => ({ default: mod.MonacoFileEditor })),
@@ -66,8 +71,8 @@ const TREE_BASE_PADDING = 4;
 const TREE_INDENT = 12;
 const TREE_OVERSCAN = 12;
 const TREE_PAGE_LIMIT = 500;
-const PREVIEW_CACHE_LIMIT = 4;
-const PREVIEW_CACHE_TEXT_LIMIT = 96 * 1024;
+const PREVIEW_CACHE_LIMIT = 12;
+const PREVIEW_CACHE_TEXT_LIMIT = 2 * 1024 * 1024;
 const IMAGE_ZOOM_MIN = 0.25;
 const IMAGE_ZOOM_MAX = 6;
 const IMAGE_STAGE_PADDING = 32;
@@ -223,6 +228,7 @@ export function FilesPane({
   allowNovelImport = false,
   active = true,
   sideVisible = true,
+  reserveSide = false,
   onImported,
   onOpenTerminal,
 }: {
@@ -231,6 +237,7 @@ export function FilesPane({
   allowNovelImport?: boolean;
   active?: boolean;
   sideVisible?: boolean;
+  reserveSide?: boolean;
   onImported?: (result: ImportWorkSourcesResult) => void;
   onOpenTerminal?: (command?: string) => void;
 }) {
@@ -239,7 +246,8 @@ export function FilesPane({
   const treeScrollRef = useRef<HTMLDivElement>(null);
   const imageStageRef = useRef<HTMLDivElement>(null);
   const previewCacheRef = useRef<Map<string, string>>(new Map());
-  const collapseInitializedRef = useRef(false);
+  const knownDirsRef = useRef<Set<string>>(new Set());
+  const treeMutationRef = useRef(0);
   const dirPagesRef = useRef<Map<string, DirPageState>>(new Map());
   const collapsedDirsRef = useRef<Set<string>>(new Set());
   const [tree, setTree] = useState<SkillTreeEntry[]>([]);
@@ -256,6 +264,9 @@ export function FilesPane({
   const [importing, setImporting] = useState(false);
   const [draggingNovel, setDraggingNovel] = useState(false);
   const [editorDirty, setEditorDirty] = useState(false);
+  const [editorNavigation, setEditorNavigation] = useState<{ line: number; request: number } | null>(null);
+  const editorCursorStore = useMemo(createEditorBreadcrumbCursorStore, [root.path]);
+  const editorDocumentStore = useMemo(createEditorBreadcrumbDocumentStore, [root.path]);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
   const [imageZoom, setImageZoom] = useState(1);
   const [imageNatural, setImageNatural] = useState<Size | null>(null);
@@ -332,13 +343,21 @@ export function FilesPane({
     setImporting(false);
     setDraggingNovel(false);
     setEditorDirty(false);
+    editorCursorStore.setLine(1);
+    setEditorNavigation(null);
     setTree([]);
     setDirPages(new Map());
     setTreeScrollTop(0);
     treeScrollRef.current?.scrollTo({ top: 0 });
     previewCacheRef.current.clear();
-    collapseInitializedRef.current = false;
-  }, [root.path]);
+    knownDirsRef.current.clear();
+    treeMutationRef.current += 1;
+  }, [editorCursorStore, root.path]);
+
+  useEffect(() => {
+    editorCursorStore.setLine(1);
+    setEditorNavigation(null);
+  }, [editorCursorStore, sel]);
 
   useEffect(() => {
     const el = treeScrollRef.current;
@@ -354,14 +373,42 @@ export function FilesPane({
     };
   }, [root.path]);
 
+  function registerDiscoveredDirectories(entries: SkillTreeEntry[]) {
+    const next = new Set(collapsedDirsRef.current);
+    let changed = false;
+    for (const entry of entries) {
+      if (!entry.is_dir || knownDirsRef.current.has(entry.path)) continue;
+      knownDirsRef.current.add(entry.path);
+      next.add(entry.path);
+      changed = true;
+    }
+    if (!changed) return;
+    collapsedDirsRef.current = next;
+    setCollapsedDirs(next);
+  }
+
   async function loadDirectory(dir: string, offset = 0, replace = offset === 0): Promise<void> {
+    treeMutationRef.current += 1;
     setDirPages((prev) => {
       const next = new Map(prev);
       const old = next.get(dir);
       next.set(dir, { loaded: old?.loaded ?? 0, total: old?.total ?? 0, hasMore: old?.hasMore ?? false, loading: true });
+      dirPagesRef.current = next;
       return next;
     });
-    const listing = await workDir(root.path, dir, offset, TREE_PAGE_LIMIT);
+    let listing: Awaited<ReturnType<typeof workDir>>;
+    try {
+      listing = await workDir(root.path, dir, offset, TREE_PAGE_LIMIT);
+    } catch (error) {
+      setDirPages((prev) => {
+        const next = new Map(prev);
+        const old = next.get(dir);
+        if (old) next.set(dir, { ...old, loading: false });
+        dirPagesRef.current = next;
+        return next;
+      });
+      throw error;
+    }
     const loaded = listing.offset + listing.entries.length;
     const page: DirPageState = {
       loaded,
@@ -370,6 +417,7 @@ export function FilesPane({
       loading: false,
     };
     const incoming = listing.has_more ? [...listing.entries, makeLoadMoreEntry(dir, page)] : listing.entries;
+    registerDiscoveredDirectories(listing.entries);
     setTree((prev) => {
       const markerPath = loadMorePath(dir);
       if (!dir) {
@@ -391,6 +439,7 @@ export function FilesPane({
     setDirPages((prev) => {
       const next = new Map(prev);
       next.set(dir, page);
+      dirPagesRef.current = next;
       return next;
     });
   }
@@ -399,6 +448,7 @@ export function FilesPane({
     let alive = true;
     const timer = window.setTimeout(() => {
       const reload = async () => {
+        const mutationAtStart = treeMutationRef.current;
         const loadedOpenDirs = [...dirPagesRef.current.keys()]
           .filter((dir) => dir && !collapsedDirsRef.current.has(dir))
           .sort((a, b) => directChildDepth(a) - directChildDepth(b));
@@ -415,6 +465,7 @@ export function FilesPane({
           total: listing.total,
           hasMore: listing.has_more,
         };
+        registerDiscoveredDirectories(listing.entries);
         let nextTree = listing.has_more ? [...listing.entries, makeLoadMoreEntry("", rootPage)] : listing.entries;
         const nextPages = new Map<string, DirPageState>([["", rootPage]]);
         const rootDirs = new Set(listing.entries.filter((entry) => entry.is_dir).map((entry) => entry.path));
@@ -434,14 +485,13 @@ export function FilesPane({
             const end = subtreeEndIndex(nextTree, dir);
             nextTree = [...nextTree.slice(0, idx + 1), ...incoming, ...nextTree.slice(end)];
             nextPages.set(dir, page);
+            registerDiscoveredDirectories(sub.entries);
           }
         }
+        if (mutationAtStart !== treeMutationRef.current) return;
         setTree(nextTree);
+        dirPagesRef.current = nextPages;
         setDirPages(nextPages);
-        if (!collapseInitializedRef.current) {
-          collapseInitializedRef.current = true;
-          setCollapsedDirs(new Set(listing.entries.filter((e) => e.is_dir && e.depth === 0).map((e) => e.path)));
-        }
       };
       reload();
     }, 120);
@@ -571,9 +621,9 @@ export function FilesPane({
 
   useEffect(() => {
     const onOpenFile = (event: Event) => {
-      const detail = (event as CustomEvent<{ root: string; path: string }>).detail;
+      const detail = (event as CustomEvent<{ root: string; path: string; pinned?: boolean }>).detail;
       if (!detail || detail.root !== root.path || !detail.path) return;
-      openFileTab(detail.path, true);
+      openFileTab(detail.path, detail.pinned !== false);
     };
     window.addEventListener("anime-armory:open-work-file", onOpenFile);
     return () => window.removeEventListener("anime-armory:open-work-file", onOpenFile);
@@ -756,9 +806,14 @@ export function FilesPane({
     ? `${selEntry.path}:${selEntry.size ?? "unknown"}:${selEntry.mtime ?? "unknown"}`
     : "";
   const mediaSrc = (path: string) => {
-    const url = mediaUrl(path);
+    const url = kind === "video" ? videoUrl(path) : mediaUrl(path);
     return url ? `${url}&v=${encodeURIComponent(previewVersion)}` : "";
   };
+
+  useEffect(() => {
+    const symbolText = kind === "img" || kind === "video" || kind === "audio" || kind === "docx" ? "" : text;
+    editorDocumentStore.setDocument(selEntry?.path ?? "", symbolText);
+  }, [editorDocumentStore, kind, selEntry?.path, text]);
 
   useEffect(() => {
     window.dispatchEvent(
@@ -857,7 +912,6 @@ export function FilesPane({
   // Media files stream straight from the media server.
   useEffect(() => {
     setErr("");
-    setText("");
     if (!selEntry || selEntry.truncated || kind === "img" || kind === "video" || kind === "audio") return;
     const cacheKey = `${root.path}\0${previewVersion}`;
     const cached = previewCacheRef.current.get(cacheKey);
@@ -867,6 +921,7 @@ export function FilesPane({
       setText(cached);
       return;
     }
+    setText("");
     let alive = true;
     const reader = kind === "docx" ? readWorkDocx : readWorkFile;
     reader(root.path, selEntry.path)
@@ -894,11 +949,12 @@ export function FilesPane({
       const next = new Set(prev);
       if (next.has(path)) {
         next.delete(path);
-        const page = dirPages.get(path);
+        const page = dirPagesRef.current.get(path);
         if (!page || page.loaded === 0) loadDirectory(path, 0, true).catch(() => {});
       } else {
         next.add(path);
       }
+      collapsedDirsRef.current = next;
       return next;
     });
   }
@@ -979,6 +1035,7 @@ export function FilesPane({
       className={
         "files-pane" +
         (sideVisible ? "" : " files-pane-side-hidden") +
+        (reserveSide ? " files-pane-side-reserved" : "") +
         (canImportNovel && draggingNovel ? " dragging-import" : "")
       }
       ref={paneRef}
@@ -1165,6 +1222,21 @@ export function FilesPane({
             })}
           </div>
         )}
+        {selEntry && (
+          <EditorBreadcrumbs
+            rootName={root.name}
+            rootPath={root.path}
+            entry={selEntry}
+            documentStore={editorDocumentStore}
+            contentVersion={previewVersion}
+            directoryVersion={`${refreshKey}:${localRefresh}`}
+            cursorStore={editorCursorStore}
+            onOpenFile={(path) => openFileTab(path, true)}
+            onNavigateLine={(line) => {
+              setEditorNavigation((current) => ({ line, request: (current?.request ?? 0) + 1 }));
+            }}
+          />
+        )}
         <div className="files-preview-content">
           {!selEntry ? (
             <div className="files-editor-empty">
@@ -1227,7 +1299,7 @@ export function FilesPane({
               </div>
             </div>
           ) : kind === "video" ? (
-            <div className="files-media">{abs && <video src={mediaSrc(abs)} controls preload="metadata" />}</div>
+            <div className="files-media">{abs && <VideoPreview src={mediaSrc(abs)} />}</div>
           ) : kind === "audio" ? (
             <div className="files-media"><audio src={mediaSrc(abs)} controls /></div>
           ) : err ? (
@@ -1254,6 +1326,9 @@ export function FilesPane({
                 text={text}
                 loadVersion={previewVersion}
                 expectedMtime={selEntry.mtime ?? 0}
+                navigateTo={editorNavigation}
+                onCursorLineChange={editorCursorStore.setLine}
+                onContentChange={(value) => editorDocumentStore.setDocument(selEntry.path, value)}
                 onDirtyChange={setEditorDirty}
                 onSaved={(_, savedText) => {
                   setText(savedText);

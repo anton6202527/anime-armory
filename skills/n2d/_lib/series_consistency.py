@@ -64,7 +64,11 @@ def scaffold(root: str | Path) -> Dict[str, Any]:
         cid = str(row.get("id") or row.get("character_id") or f"CHAR_{idx:02d}")
         name = str(row.get("name") or row.get("canonical_name") or "")
         canonical[cid] = {"canonical_name": name, "forbidden_variants": []}
-        registers[cid] = {"formality": "", "anchors": [], "forbidden_terms": [], "sentence_len_max": None}
+        if cid.startswith("BEAST_"):
+            formality = "具名妖魔按角色卡保持非人身份语气；措辞服务剧情性格，不使用现代网络梗或无来源卖萌口吻。"
+        else:
+            formality = "按角色卡身份、年龄与关系保持稳定语域；不使用无来源现代网络梗。"
+        registers[cid] = {"formality": formality, "anchors": [], "forbidden_terms": [], "sentence_len_max": None}
     return {
         "kind": KIND,
         "version": VERSION,
@@ -91,11 +95,22 @@ def scaffold(root: str | Path) -> Dict[str, Any]:
 
 def write_missing(root: str | Path) -> Path:
     target = path(root)
-    if target.is_file():
-        return target
+    generated = scaffold(root)
+    existing = load(root) if target.is_file() else {}
+    if existing:
+        merged = dict(existing)
+        for section in ("canonical_names", "dialogue_registers"):
+            current = dict(existing.get(section) or {}) if isinstance(existing.get(section), Mapping) else {}
+            for key, value in (generated.get(section) or {}).items():
+                current.setdefault(key, value)
+            merged[section] = current
+        for key in ("subtitle_style", "audio_baseline", "note"):
+            if key not in merged:
+                merged[key] = generated[key]
+        generated = merged
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.with_name(f".{target.name}.tmp.{os.getpid()}")
-    tmp.write_text(json.dumps(scaffold(root), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    tmp.write_text(json.dumps(generated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     os.replace(tmp, target)
     return target
 
@@ -120,6 +135,11 @@ def _character_dialogue_lines(text: str, character_id: str, canonical_name: str)
     markers = [token for token in (character_id, canonical_name) if token]
     rows: List[str] = []
     for line in text.splitlines():
+        # Free-form comments, summaries and subtitle prose may mention a character
+        # without being that character's spoken line.  Only bracket-attributed
+        # voiceover rows are eligible for dialogue-register enforcement.
+        if "]" not in line and "】" not in line:
+            continue
         header = line.split("]", 1)[0] if "]" in line else line.split("】", 1)[0]
         if any(token in header for token in markers):
             rows.append(line.split("]", 1)[-1].split("】", 1)[-1].strip())

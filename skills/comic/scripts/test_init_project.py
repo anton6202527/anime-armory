@@ -19,6 +19,12 @@ def load_module():
 init_project = load_module()
 
 
+def test_project_skeleton_uses_registry_plus_compact_index_not_manifest_trees() -> None:
+    assert "设定库" in init_project.SUBDIRS
+    assert "出图/共享/图片" in init_project.SUBDIRS
+    assert not any(path == "角色库" or path.startswith("资产库/") for path in init_project.SUBDIRS)
+
+
 def test_resolve_named_paper_sizes() -> None:
     assert init_project.resolve_page_dimensions("B5", "页漫") == (2079, 2953)
     assert init_project.resolve_page_dimensions("A4", "页漫") == (2480, 3508)

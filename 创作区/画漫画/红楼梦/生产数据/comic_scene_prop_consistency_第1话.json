@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "kind": "comic_scene_prop_consistency",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/红楼梦",
+  "chapter": "第1话",
+  "created_at": "2026-07-12T15:48:23",
+  "available": true,
+  "verdict": "pass",
+  "summary": {
+    "scene_anchor_count": 7,
+    "prop_count": 8,
+    "finding_count": 0,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 0
+  },
+  "scenes": [
+    {
+      "scene_anchor_id": "LOC_DAHUANG",
+      "references": [
+        "出图/共享/图片/LOC_DAHUANG__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        },
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9757,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_DAHUANG_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_PROLOGUE_VOID",
+      "references": [
+        "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "path": "出图/第1话/panels/P001.png"
+        },
+        {
+          "panel_id": "P002",
+          "path": "出图/第1话/panels/P002.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_PROLOGUE_VOID_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_REDDUST_VISION",
+      "references": [
+        "出图/共享/图片/LOC_REDDUST_VISION__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_REDDUST_VISION_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_SPIRIT_RIVER",
+      "references": [
+        "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.989,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_SPIRIT_RIVER_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_TAIXU_GATE",
+      "references": [
+        "出图/共享/图片/LOC_TAIXU_GATE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9811,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_TAIXU_GATE_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_ZHEN_COURTYARD",
+      "references": [
+        "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P023",
+          "path": "出图/第1话/panels/P023.png"
+        },
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_ZHEN_COURTYARD_sheet.jpg"
+    },
+    {
+      "scene_anchor_id": "LOC_ZHEN_STUDY",
+      "references": [
+        "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        },
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        }
+      ],
+      "layout_cohesion_floor": 0.9682,
+      "contact_sheet": "生产数据/qa_previews/第1话_scene_LOC_ZHEN_STUDY_sheet.jpg"
+    }
+  ],
+  "props": [
+    {
+      "prop_id": "FX_INK_DREAM_TRANSITION",
+      "references": [
+        "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P002",
+          "path": "出图/第1话/panels/P002.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        },
+        {
+          "panel_id": "P016",
+          "path": "出图/第1话/panels/P016.png"
+        },
+        {
+          "panel_id": "P017",
+          "path": "出图/第1话/panels/P017.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P021",
+          "path": "出图/第1话/panels/P021.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_FX_INK_DREAM_TRANSITION_sheet.jpg"
+    },
+    {
+      "prop_id": "FX_NUWA_SILHOUETTE",
+      "references": [
+        "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P003",
+          "path": "出图/第1话/panels/P003.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_FX_NUWA_SILHOUETTE_sheet.jpg"
+    },
+    {
+      "prop_id": "FX_OMEN_EMBER",
+      "references": [
+        "出图/共享/图片/FX_OMEN_EMBER__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P024",
+          "path": "出图/第1话/panels/P024.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_FX_OMEN_EMBER_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_CRIMSON_PEARL_GRASS",
+      "references": [
+        "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "path": "出图/第1话/panels/P013.png"
+        },
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        },
+        {
+          "panel_id": "P015",
+          "path": "出图/第1话/panels/P015.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_CRIMSON_PEARL_GRASS_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_DEW_BOWL",
+      "references": [
+        "出图/共享/图片/PROP_DEW_BOWL__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P014",
+          "path": "出图/第1话/panels/P014.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_DEW_BOWL_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_TONGLING_JADE",
+      "references": [
+        "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        },
+        {
+          "panel_id": "P012",
+          "path": "出图/第1话/panels/P012.png"
+        },
+        {
+          "panel_id": "P018",
+          "path": "出图/第1话/panels/P018.png"
+        },
+        {
+          "panel_id": "P019",
+          "path": "出图/第1话/panels/P019.png"
+        },
+        {
+          "panel_id": "P020",
+          "path": "出图/第1话/panels/P020.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_TONGLING_JADE_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_UNUSED_STONE",
+      "references": [
+        "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P004",
+          "path": "出图/第1话/panels/P004.png"
+        },
+        {
+          "panel_id": "P005",
+          "path": "出图/第1话/panels/P005.png"
+        },
+        {
+          "panel_id": "P006",
+          "path": "出图/第1话/panels/P006.png"
+        },
+        {
+          "panel_id": "P007",
+          "path": "出图/第1话/panels/P007.png"
+        },
+        {
+          "panel_id": "P008",
+          "path": "出图/第1话/panels/P008.png"
+        },
+        {
+          "panel_id": "P009",
+          "path": "出图/第1话/panels/P009.png"
+        },
+        {
+          "panel_id": "P010",
+          "path": "出图/第1话/panels/P010.png"
+        },
+        {
+          "panel_id": "P011",
+          "path": "出图/第1话/panels/P011.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_UNUSED_STONE_sheet.jpg"
+    },
+    {
+      "prop_id": "PROP_YINGLIAN_FLOWER",
+      "references": [
+        "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png"
+      ],
+      "panels": [
+        {
+          "panel_id": "P022",
+          "path": "出图/第1话/panels/P022.png"
+        }
+      ],
+      "contact_sheet": "生产数据/qa_previews/第1话_prop_PROP_YINGLIAN_FLOWER_sheet.jpg"
+    }
+  ],
+  "findings": [],
+  "notes": [
+    "VLM 三轴裁决进度：0/81（生产数据/comic_vlm_judge_verdicts_第1话.json）。"
+  ]
+}

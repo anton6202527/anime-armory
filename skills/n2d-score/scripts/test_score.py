@@ -111,9 +111,12 @@ def test_extract_shots_ignores_clip_inventory_counts() -> None:
 
 
 def test_warning_score_is_capped_per_dimension() -> None:
+    # cap=3（2026-07 起）：12 个 warn 扣 3 档 = 100-36 = 64；单 warn 仍只 -12
     points, status = score.severity_counts_to_score(blocks=0, warnings=12, infos=0, skipped=False)
-    assert points == 88
+    assert points == 100 - 12 * score.WARNING_SCORE_CAP
     assert status == "warn"
+    single, status1 = score.severity_counts_to_score(blocks=0, warnings=1, infos=0, skipped=False)
+    assert single == 88 and status1 == "warn"
 
 
 def test_score_rollup_and_return_stage() -> None:

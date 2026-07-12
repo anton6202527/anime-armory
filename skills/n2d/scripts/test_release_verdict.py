@@ -327,3 +327,18 @@ def test_check_score_profile_floor_does_not_loosen_file_threshold(tmp_path: Path
                 {"total_score": 91, "threshold": 92, "status": "fail"})
     # 文件阈值 92 比 profile 下限严：取 max，91 分仍 block（status=fail 也 block）
     assert release_verdict.check_score(root, "第1集", "commercial")["status"] == "block"
+
+
+def test_identity_drift_skip_face_skeleton_blocks_strict(tmp_path: Path) -> None:
+    root = tmp_path
+    _write_json(root / "生产数据" / "identity_drift_report.json",
+                {"available": False, "notes": ["face consistency run skipped by --skip-face"]})
+    assert release_verdict.check_identity_drift(root, "第1集", "commercial")["status"] == "block"
+    assert release_verdict.check_identity_drift(root, "第1集", "demo")["status"] == "warn"
+    _write_json(root / "生产数据" / "identity_drift_report.json", {"available": True, "characters": []})
+    assert release_verdict.check_identity_drift(root, "第1集", "commercial")["status"] == "pass"
+
+
+def test_identity_drift_missing_report_warns_strict_only(tmp_path: Path) -> None:
+    assert release_verdict.check_identity_drift(tmp_path, "第1集", "commercial")["status"] == "warn"
+    assert release_verdict.check_identity_drift(tmp_path, "第1集", "demo")["status"] == "pass"

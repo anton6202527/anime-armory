@@ -81,6 +81,18 @@ def clip_blob(clip: Dict[str, Any]) -> str:
 
 
 def character_count(clip: Dict[str, Any], blob: str) -> int:
+    schedule = clip.get("entity_schedule")
+    if isinstance(schedule, dict) and isinstance(schedule.get("characters"), list):
+        offscreen = {str(v).strip() for v in (schedule.get("offscreen_presence") or []) if str(v).strip()}
+        forbidden = {str(v).strip() for v in (schedule.get("forbidden_presence") or []) if str(v).strip()}
+        visible = {
+            str(v).strip()
+            for v in schedule.get("characters") or []
+            if str(v).strip() and str(v).strip() not in offscreen and str(v).strip() not in forbidden
+        }
+        # entity_schedule is the Stage 2 visibility truth.  Do not fall back
+        # to a whole-clip regex that turns offscreen voices into clear faces.
+        return len(visible)
     for key in ("character_ids", "characters", "角色"):
         value = clip.get(key)
         if isinstance(value, list):

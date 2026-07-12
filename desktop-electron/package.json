@@ -6,10 +6,11 @@
   "description": "Electron + React desktop IDE for Creation Armory, the anime-armory creative production factory.",
   "main": "out/main/index.js",
   "scripts": {
-    "dev": "electron-vite dev",
+    "dev": "node scripts/prepare-dev-brand.cjs && electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
-    "start": "electron-vite preview",
+    "start": "node scripts/prepare-dev-brand.cjs && electron-vite preview",
+    "icon:render": "electron scripts/render-app-icon.mjs",
     "postinstall": "electron-rebuild -f -w node-pty && node scripts/fix-pty-prebuilds.cjs",
     "pack": "electron-vite build && electron-builder --dir",
     "dist": "electron-vite build && electron-builder"

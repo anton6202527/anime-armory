@@ -1,0 +1,45 @@
+# 第1集 制作模式路由
+
+- 状态：aligned
+- 当前模式：混合自动路由（source=explicit_user）
+- 推荐模式：混合自动路由
+- 性质：项目模式建议 + 逐镜执行合同；不自动改 `_设置.md`，分类启发式本身不作硬门。
+
+## 证据
+
+- 口播文本：34
+- 说话 Clip：15
+- 近景/正反打说话 Clip：6
+- native_speech Clip：0
+- 占位时长：False
+- 无 WAV 时间估算：True
+- 声音选角状态：casting
+
+## 理由
+
+- 本集同时包含不同声音需求，按镜头路由：可见口型对白走表演音轨/后期表演驱动，旁白与口外音只锁估算节奏，动作/空镜画面先行，native_speech 镜单独处理。
+- 其中 6 个近景/正反打说话 Clip 需要表演音轨或明确的后期口型通道，不要求整集最终配音前置。
+
+## 逐镜声音路线
+
+| Clip | 内容 | 时间基准 | 声音策略 | 表演轨 | 音色锁 | 最终声音阶段 |
+|---|---|---|---|---|---|---|
+| Clip_01 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_02 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_03 | narration_or_offscreen | text_estimate_no_audio | rough_timing_final_dub_later | missing | pending | post_video_before_compose |
+| Clip_04 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_05 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_06 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_07 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_08 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_09 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_10 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_11 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_12 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_13 | narration_or_offscreen | text_estimate_no_audio | rough_timing_final_dub_later | missing | pending | post_video_before_compose |
+| Clip_14 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_15 | offscreen_or_nonvisible_dialogue | text_estimate_no_audio | post_dub | missing | pending | post_video_before_compose |
+| Clip_16 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_17 | narration_or_offscreen | text_estimate_no_audio | rough_timing_final_dub_later | missing | pending | post_video_before_compose |
+| Clip_18 | visible_mouth_dialogue | text_estimate_no_audio | base_video_then_post_lipsync | missing | pending | post_lipsync_before_compose |
+| Clip_19 | action_montage_or_picture | storyboard_duration | picture_first | missing | not_applicable | optional_post |

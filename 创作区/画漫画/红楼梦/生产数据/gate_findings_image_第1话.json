@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "comic_gate_findings",
+  "chapter": "第1话",
+  "stage": "image",
+  "created_at": "2026-07-12T14:03:31",
+  "summary": {
+    "finding_count": 3,
+    "block_count": 0,
+    "warn_count": 0,
+    "info_count": 3
+  },
+  "findings": [
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P003.png",
+      "reason": "风格指纹内聚度 0.7526 明显低于本话中位 0.8151，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "panel_style_outlier",
+      "artifact": "出图/第1话/panels/P004.png",
+      "reason": "风格指纹内聚度 0.7478 明显低于本话中位 0.8151，疑似画风、细节密度或照片感跳变。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "appearance_embedding"
+    },
+    {
+      "severity": "info",
+      "dimension": "comic_gate",
+      "code": "tone_value_outlier",
+      "artifact": "出图/第1话/panels/P002.png",
+      "reason": "黑白灰量化偏离话内中位：black_ratio=0.1817（中位 0.000），线宽代理 edge_density=0.0862（中位 0.094）。疑似网点密度/黑场/线宽口径不统一。",
+      "return_to_stage": "review",
+      "suggested_fix": "已人审签收为计划内画面差异；若后续重抽该格需重新运行风格一致性机检。",
+      "evidence_family": "tone_value"
+    }
+  ]
+}

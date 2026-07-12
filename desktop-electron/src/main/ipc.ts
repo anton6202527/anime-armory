@@ -53,7 +53,7 @@ export function registerIpc(s: MainServices) {
     'workspace.pickDirectory': (a) => s.workspace.pickDirectory(a.title),
 
     'demos.list': (a) => listDemoDownloads(a.workspaceRoot),
-    'demos.install': (a) => installDemo(a.workspaceRoot, a.line),
+    'demos.install': (a) => installDemo(a.workspaceRoot, a.rel),
     'demos.seed': (a) => seedDemos(a.workspaceRoot),
 
     'skills.list': (a) => s.skills.list(a.repoRoot, a.line),
@@ -111,6 +111,7 @@ export function registerIpc(s: MainServices) {
 
     'app.setLanguage': (a) => s.ui.setLanguage(a.language === 'en' ? 'en' : 'zh'),
     'app.setTerminalVisible': (a) => s.ui.setTerminalVisible(a.visible),
+    'app.setRecentWorks': (a) => s.ui.setRecentWorks(a.works),
     'app.openSourceRepo': () => {
       shell.openExternal('https://github.com/anton6202527/anime-armory/releases')
     },

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "kind": "comic_panel_post_qc",
+  "chapter": "第1话",
+  "panel_id": "P023",
+  "created_at": "2026-07-12T13:19:34",
+  "verdict": "pass",
+  "path": "出图/第1话/panels/P023.png",
+  "size": {
+    "width": 1007,
+    "height": 900
+  },
+  "expected_size": {
+    "width": 1007,
+    "height": 900
+  },
+  "declared_reference_count": 6,
+  "reference_input_count": 5,
+  "omitted_attachment_count": 1,
+  "omitted_attachment_ids": [
+    "STYLE_HLM_GONGBI_DREAM_V1"
+  ],
+  "blank_region_candidates": [],
+  "issues": [],
+  "manual_review_required": false
+}

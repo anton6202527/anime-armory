@@ -169,9 +169,15 @@ const zh = {
   "files.selectFile": "选择左侧文件（文本编辑 / 媒体预览）。",
   "files.openEditors": "已打开的编辑器",
   "files.closeEditor": "关闭 {path}",
+  "files.breadcrumbAria": "当前文件路径与符号导航",
+  "files.breadcrumbParent": "上一级",
+  "files.breadcrumbLoadMore": "加载更多…",
+  "files.breadcrumbLine": "第 {line} 行",
   "files.emptyEditorTitle": "没有打开的编辑器",
   "files.emptyEditorHint": "从文件列表单击文件可预览，双击会固定为标签页。",
   "files.previewFailed": "无法预览：{error}",
+  "files.videoPreparing": "正在检查视频编码，必要时后台转换…",
+  "files.videoFailed": "视频无法播放，请确认已安装 FFmpeg，或检查文件是否损坏。",
   "files.docxReadonly": "DOCX 只读预览",
   "files.editorSave": "保存",
   "files.editorSaving": "保存中…",
@@ -499,9 +505,15 @@ const en: Record<I18nKey, string> = {
   "files.selectFile": "Select a file on the left for text editing or media preview.",
   "files.openEditors": "Open editors",
   "files.closeEditor": "Close {path}",
+  "files.breadcrumbAria": "Current file path and symbol navigation",
+  "files.breadcrumbParent": "Parent folder",
+  "files.breadcrumbLoadMore": "Load more…",
+  "files.breadcrumbLine": "Line {line}",
   "files.emptyEditorTitle": "No editor is open",
   "files.emptyEditorHint": "Single-click a file to preview it. Double-click to keep it as a tab.",
   "files.previewFailed": "Cannot preview: {error}",
+  "files.videoPreparing": "Checking video codecs and converting in the background if needed…",
+  "files.videoFailed": "Unable to play this video. Check that FFmpeg is installed and the file is valid.",
   "files.docxReadonly": "DOCX read-only preview",
   "files.editorSave": "Save",
   "files.editorSaving": "Saving…",
@@ -722,4 +734,8 @@ const LINE_LABEL_KEYS: Record<LineKey, I18nKey> = {
 export function useLineLabel() {
   const { t } = useI18n();
   return useCallback((line: Pick<LineInfo, "line" | "label">) => t(LINE_LABEL_KEYS[line.line]), [t]);
+}
+
+export function plainLineLabel(label: string): string {
+  return label.replace(/\s*\([^()]*\)\s*$/, "");
 }

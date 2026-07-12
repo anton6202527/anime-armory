@@ -1072,6 +1072,29 @@ def audit_episode(root, ep):
     elif hooked and not emo_hooks:
         findings.append(("info", "no_emo_payoff", "钩子偏信息、缺情绪释放，确认爽感是否足够"))
 
+    # ⑥b Clip 物理切镜密度（2026-07 实跑痛点回修·granularity 修正）：本审计的"镜"是台词行粒度
+    #    （EP1 实测 14 行/分钟看似健康），但观众看到的切镜是 storyboard 的物理 Clip——EP1/EP2 实际
+    #    只有 5.3-5.5 Clip/分钟且多为 10s+ 长镜，这才是"PPT 感"的镜头层来源。漫剧图生视频流的
+    #    行业常态是 5-8 镜/分钟（真人短剧 12-24，载体不同勿混用），地板取 5（env 可调）：低于它
+    #    = 比漫剧常态还慢，长镜必须靠镜内运动/多 sub-shot 撑住，否则回分镜拆镜。
+    clip_density_floor = float(os.environ.get("N2D_CLIP_DENSITY_SLOW", "5.0"))
+    sb_for_density = load_storyboard(root, ep)
+    if isinstance(sb_for_density, dict):
+        _clips = [c for c in (sb_for_density.get("clips") or []) if isinstance(c, dict)]
+        _total = 0.0
+        for c in _clips:
+            try:
+                _total += float(c.get("duration") or 0)
+            except (TypeError, ValueError):
+                pass
+        if len(_clips) >= 4 and _total > 30:
+            density = len(_clips) / (_total / 60.0)
+            if density < clip_density_floor:
+                findings.append(("warn", "clip_density_ppt_slow",
+                                 f"物理切镜密度 {density:.1f} Clip/分钟（{len(_clips)} Clip / {_total:.0f}s）"
+                                 f"低于漫剧地板 {clip_density_floor:g}/min——台词行密度再高，观众看到的仍是长镜堆叠"
+                                 "（PPT 感镜头层来源）。拆长 Clip 成多物理镜，或确保每个长镜有真实镜内运动/景别推进"))
+
     # ⑥ 镜头时长曲线（导演节奏 §四/§五）
     if shot_secs and len(shot_secs) >= 4:
         vals = list(shot_secs.values())
@@ -1463,6 +1486,19 @@ def main():
         sys.exit(2)
     ep = args[1] if args[1].startswith("第") else f"第{args[1]}集"
     findings, stats = audit_episode(root, ep)
+    if "--write" in flags:
+        # 落盘（2026-07 实跑痛点回修）：此前节拍/密度结论只打印——EP1 密度 5.5 镜/分钟
+        # 触发"疑节奏塌"却无档案可查、score/update 无从消费。写 生产数据/beat_audit_<集>.json
+        # 供审计追溯与 n2d-update 新鲜度比对；不改判定口径。
+        out_dir = Path(root) / "生产数据"
+        out_dir.mkdir(parents=True, exist_ok=True)
+        import datetime as _dt
+        (out_dir / f"beat_audit_{ep}.json").write_text(json.dumps({
+            "kind": "n2d_beat_audit", "version": 1, "episode": ep,
+            "generated_at": _dt.datetime.now(_dt.timezone.utc).replace(microsecond=0).isoformat(),
+            "stats": stats,
+            "findings": [{"severity": s, "code": c, "msg": m} for s, c, m in findings],
+        }, ensure_ascii=False, indent=2) + chr(10), encoding="utf-8")
     if "--json" in flags:
         print(json.dumps({"episode": ep, "stats": stats,
                           "findings": [{"severity": s, "code": c, "msg": m} for s, c, m in findings]},

@@ -1,0 +1,1342 @@
+{
+  "clips": [
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "Clip_01",
+      "end_anchor_required": true,
+      "end_state": "虎妖完全站起，姜月初仰视惊骇。",
+      "endframe_png": "",
+      "entry_exit": "三者均保持尸场既定位置；无新实体入画。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "不死虎妖冷开",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01",
+        "LOC_01"
+      ],
+      "scene": "夕照尸场，贯胸虎妖在画右上高位睁眼起身，姜月初中景僵住，裴长青低位失血。",
+      "seam_evidence": {
+        "reason": "先交危机结果，再明确回到一炷香前解释因果。"
+      },
+      "seam_mode": "intentional_discontinuity",
+      "source_id": "EP01_CLIP01",
+      "start_state": "虎妖伏在巨石旁，贯胸伤口可见。",
+      "transition_to_next": "时间回跳硬切"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_02",
+      "end_anchor_required": false,
+      "end_state": "姜月初坐起并决定先活下去。",
+      "endframe_png": "",
+      "entry_exit": "姜月初原地醒来；其余实体留在画外。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "一炷香前醒来",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "scene": "黑场时间字卡后，姜月初从尸骸间睁眼，撑地坐起。",
+      "seam_evidence": {
+        "insert_subject": "枯草掠过与囚服袖口特写",
+        "return_anchor": "回到姜月初坐起的MCU"
+      },
+      "seam_mode": "insert_cutaway",
+      "source_id": "EP01_CLIP02",
+      "start_state": "黑场时间字卡结束。",
+      "transition_to_next": "尸场环境插入"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_03",
+      "end_anchor_required": false,
+      "end_state": "她站稳并锁定远端镇魔司尸体。",
+      "endframe_png": "",
+      "entry_exit": "姜月初由地面进入中景站姿。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "尸场与妖魔大唐",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "scene": "姜月初以动作检查囚服、尸骸和荒野地貌，旁白压缩世界信息。",
+      "seam_evidence": {
+        "axis": "尸场主轴近侧",
+        "eyeline_source": "姜月初看向画右中景黑衣尸体",
+        "eyeline_target": "镇魔司袖口赤云纹"
+      },
+      "seam_mode": "eyeline_cut",
+      "source_id": "EP01_CLIP03",
+      "start_state": "姜月初坐起查看自身。",
+      "transition_to_next": "看向赤云纹目标"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "BEAST_01"
+      ],
+      "clip_id": "Clip_04",
+      "end_anchor_required": false,
+      "end_state": "她从虎尸移开视线，警惕稍降。",
+      "endframe_png": "",
+      "entry_exit": "虎妖仅以尸体状态留在画右后景。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "赤云纹与死透错觉",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "CHAR_02"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "scene": "赤云纹插入后，姜月初走到安全距离查看贯胸虎尸，只给半拍松气。",
+      "seam_evidence": {
+        "audio_lead_sec": "0.4",
+        "audio_source": "裴长青画外台词过来"
+      },
+      "seam_mode": "j_cut",
+      "source_id": "EP01_CLIP04",
+      "start_state": "姜月初看向赤云纹。",
+      "transition_to_next": "裴长青声音先行"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_05",
+      "end_anchor_required": false,
+      "end_state": "她朝画左南向出口迈出第一步。",
+      "endframe_png": "",
+      "entry_exit": "裴长青从尸堆轮廓中被发现但不起身；姜月初欲向画左离开。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "尸堆活人与逃念",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_01"
+      ],
+      "offscreen_presence": [
+        "BEAST_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "scene": "裴长青从尸堆低位开口，姜月初发现他的伤势并转身准备独自离开。",
+      "seam_evidence": {
+        "action_phase_in": "断刀沿她前进方向前方飞入并钉地",
+        "action_phase_out": "姜月初左脚向出口迈出",
+        "screen_direction": "姜向画左，刀由画右后飞向画左前"
+      },
+      "seam_mode": "match_on_action",
+      "source_id": "EP01_CLIP05",
+      "start_state": "姜月初背对尸堆。",
+      "transition_to_next": "断刀动作切入"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_06",
+      "end_anchor_required": false,
+      "end_state": "断刀钉地，姜脚尖停在刀后一掌。",
+      "endframe_png": "",
+      "entry_exit": "断刀入画并固定在地；裴保持画外右后。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "断刀钉脚",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_01"
+      ],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "PROP_01",
+        "LOC_01"
+      ],
+      "scene": "断刀从画右后飞来钉进姜月初脚前硬土，她脚尖僵住。",
+      "seam_evidence": {
+        "reaction_beat": "脚尖僵住后抬眼戒备",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "断刀钉入脚前"
+      },
+      "seam_mode": "reaction_cut",
+      "source_id": "EP01_CLIP06",
+      "start_state": "姜月初左脚迈向出口。",
+      "transition_to_next": "从刀切回双方反应"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_07",
+      "end_anchor_required": false,
+      "end_state": "姜月初伸手扶住裴未伤侧，交易成立。",
+      "endframe_png": "",
+      "entry_exit": "双方不换位；姜由站立俯身，裴准备起身。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "路引交易",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_01"
+      ],
+      "offscreen_presence": [
+        "BEAST_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_01",
+        "LOC_01"
+      ],
+      "scene": "姜月初与倒地裴长青沿既定轴线谈判，断刀作为中间筹码，最后她伸手。",
+      "seam_evidence": {
+        "action_phase_in": "裴借力从地面升至半站，姜承担重量",
+        "action_phase_out": "姜手接住裴右侧肩背，裴开始发力",
+        "screen_direction": "裴由画右下向画左上升，姜位置不交换"
+      },
+      "seam_mode": "match_on_action",
+      "source_id": "EP01_CLIP07",
+      "start_state": "断刀钉在两者之间，姜站、裴倒。",
+      "transition_to_next": "扶起动作接下一镜"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_08",
+      "end_anchor_required": true,
+      "end_state": "两人向画左挪两步后被虎妖咳声截停。",
+      "endframe_png": "",
+      "entry_exit": "二人共同向画左深处移动；断刀留在原地画外。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "扶起向南",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "BEAST_01",
+        "PROP_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "scene": "姜月初扶裴长青半站，两人朝画左南向出口挪动。",
+      "seam_evidence": {
+        "audio_lead_sec": "0.5",
+        "audio_source": "虎妖画外咳声与别跑了"
+      },
+      "seam_mode": "j_cut",
+      "source_id": "EP01_CLIP08",
+      "start_state": "姜扶住裴未伤侧。",
+      "transition_to_next": "虎妖咳声先行"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "Clip_09",
+      "end_anchor_required": false,
+      "end_state": "二人面向画右上，虎妖完全站起。",
+      "endframe_png": "",
+      "entry_exit": "虎妖由伏地尸态进入站立；姜裴原地停步。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "虎妖复活追上时间",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "PROP_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01",
+        "LOC_01"
+      ],
+      "scene": "两人停步回看，虎妖从同一巨石旁站起，画面追上冷开。",
+      "seam_evidence": {
+        "reaction_beat": "裴失血、姜确认不死",
+        "reaction_subject": "CHAR_02后CHAR_01",
+        "stimulus": "虎妖站立并保留贯胸伤口"
+      },
+      "seam_mode": "reaction_cut",
+      "source_id": "EP01_CLIP09",
+      "start_state": "姜裴向画左移动。",
+      "transition_to_next": "切虎妖傲慢宣告"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "Clip_10",
+      "end_anchor_required": false,
+      "end_state": "裴长青挣开姜支撑，捡起PROP_02并压低重心。",
+      "endframe_png": "",
+      "entry_exit": "裴由被扶转为独立站姿，俯身从同僚尸旁拾起PROP_02；姜后退半步。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "半步鸣骨宣判",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "PROP_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "虎妖高位宣告吞食意图；裴低声点破半步鸣骨和天赋神通，俯身从同僚尸旁捡起完整横刀并压低重心。",
+      "seam_evidence": {
+        "action_phase_in": "裴燃尽气血从画左下向画右上冲出",
+        "action_phase_out": "裴右手握紧刚拾起的完整横刀并压低重心",
+        "screen_direction": "攻击方向固定左下到右上"
+      },
+      "seam_mode": "match_on_action",
+      "source_id": "EP01_CLIP10",
+      "start_state": "虎妖完全站起，姜裴停步。",
+      "transition_to_next": "裴起手动作接入攻击"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "Clip_11",
+      "end_anchor_required": true,
+      "end_state": "裴仰倒在姜脚边，横刀落在其右侧。",
+      "endframe_png": "",
+      "entry_exit": "裴冲向虎妖后被踢回；姜原地后退半步；虎妖仅抬脚不位移。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "燃血一刀被踢飞",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "裴沿既定轴线冲锋斩落，虎妖单脚迎击，裴被反向踢回姜月初脚边。",
+      "seam_evidence": {
+        "reaction_beat": "姜向下确认后再抬眼看虎妖",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "裴砸落姜月初脚边并失去战力"
+      },
+      "seam_mode": "reaction_cut",
+      "source_id": "EP01_CLIP11",
+      "start_state": "裴压低重心准备冲锋。",
+      "transition_to_next": "落地后切姜反应"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_12",
+      "end_anchor_required": false,
+      "end_state": "姜月初被压在裴与虎妖之间，外界声场将抽空。",
+      "endframe_png": "",
+      "entry_exit": "虎妖只前进一步，姜裴不换位。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [
+        "VFX_01"
+      ],
+      "label": "败局与虎妖劝死",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01",
+        "PROP_02"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "scene": "姜月初低头看裴，再抬眼看虎妖；虎妖高位慢步逼近一小步。",
+      "seam_evidence": {
+        "audio_lead_sec": "0.3",
+        "audio_source": "系统空灵提示音与宿主信息"
+      },
+      "seam_mode": "j_cut",
+      "source_id": "EP01_CLIP12",
+      "start_state": "裴倒在姜脚边。",
+      "transition_to_next": "系统声音先行"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_13",
+      "end_anchor_required": false,
+      "end_state": "姜月初看见规则并快速扫向虎妖、落地横刀与裴长青。",
+      "endframe_png": "",
+      "entry_exit": "VFX_01作为仅姜可见叠加进入；人物空间位置冻结。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "百妖谱规则亮牌",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "VFX_01"
+      ],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01",
+        "PROP_02"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "VFX_01",
+        "LOC_01"
+      ],
+      "scene": "外界声场抽空，黑金无字古卷底框在姜月初右上视野展开，金墨光丝照亮她的眼。",
+      "seam_evidence": {
+        "axis": "尸场主轴近侧",
+        "eyeline_source": "姜月初从面板文字区看向画右上",
+        "eyeline_target": "不可战胜的BEAST_01"
+      },
+      "seam_mode": "eyeline_cut",
+      "source_id": "EP01_CLIP13",
+      "start_state": "姜处于等死最低谷。",
+      "transition_to_next": "视线切向虎妖"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_14",
+      "end_anchor_required": false,
+      "end_state": "她的视线缓慢下落到脚边。",
+      "endframe_png": "",
+      "entry_exit": "系统底框退出清晰画面，人物不移动。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "凡人拿什么杀妖",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01",
+        "PROP_02",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "scene": "姜月初主观近景看虎妖虚焦巨影，手指空握又松开。",
+      "seam_evidence": {
+        "axis": "姜裴对视轴近侧",
+        "eyeline_source": "姜月初向画右下低头",
+        "eyeline_target": "脚边仍有呼吸的CHAR_02"
+      },
+      "seam_mode": "eyeline_cut",
+      "source_id": "EP01_CLIP14",
+      "start_state": "姜看向虎妖。",
+      "transition_to_next": "视线切向脚边活人"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_15",
+      "end_anchor_required": false,
+      "end_state": "她的手伸向落地横刀，但尚未握住。",
+      "endframe_png": "",
+      "entry_exit": "人物不移动；PROP_02；由裴右侧地面位置在视线插入中显露。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "唯一活物就在脚边",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "BEAST_01",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "姜月初视线从虎妖移到裴长青，再落到裴右侧的完整横刀；不移动，只改变选择目标。",
+      "seam_evidence": {
+        "insert_subject": "姜月初伸向完整横刀的手与刀柄",
+        "return_anchor": "回到裴长青看见她拿刀的CU"
+      },
+      "seam_mode": "insert_cutaway",
+      "source_id": "EP01_CLIP15",
+      "start_state": "姜月初视线向脚边下落。",
+      "transition_to_next": "手部插入后回裴反应"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_16",
+      "end_anchor_required": false,
+      "end_state": "姜握刀与裴对视，说完抱歉，刀尖开始下压。",
+      "endframe_png": "",
+      "entry_exit": "姜拿起PROP_02站在裴左上方；裴仍倒地。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "拿刀与抱歉",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "BEAST_01",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "姜月初握刀起身，裴先看刀再看她；她不回避视线，只说抱歉。",
+      "seam_evidence": {
+        "action_phase_in": "刀尖继续同方向下压接触裴胸口衣料",
+        "action_phase_out": "刀尖由静止进入向下初段",
+        "screen_direction": "动作始终由画面上方向下方"
+      },
+      "seam_mode": "match_on_action",
+      "source_id": "EP01_CLIP16",
+      "start_state": "姜手停在刀柄上方。",
+      "transition_to_next": "刀尖下压动作匹配"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_17",
+      "end_anchor_required": true,
+      "end_state": "刀停在裴胸口，姜脸颊出现少量新血点，两人对视。",
+      "endframe_png": "",
+      "entry_exit": "两人不换位；PROP_02由持起转为刺入状态。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "第一刀越线",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "BEAST_01",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "完整横刀沿既定方向刺入裴胸口，克制避开猎奇；少量暗红血点溅上姜月初脸颊。",
+      "seam_evidence": {
+        "reaction_beat": "裴从看刀转为错愕看姜，只说一个你字",
+        "reaction_subject": "CHAR_02",
+        "stimulus": "姜完成一次刺入且血点落脸"
+      },
+      "seam_mode": "reaction_cut",
+      "source_id": "EP01_CLIP17",
+      "start_state": "刀尖开始向裴胸口下压。",
+      "transition_to_next": "切裴错愕反应"
+    },
+    {
+      "characters": [
+        "CHAR_02"
+      ],
+      "clip_id": "Clip_18",
+      "end_anchor_required": false,
+      "end_state": "裴吐出你字，眼神仍锁住姜月初。",
+      "endframe_png": "",
+      "entry_exit": "人物与刀保持原位。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "裴长青错愕硬断",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "CHAR_01",
+        "BEAST_01",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_02",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "裴长青错愕看姜月初，只吐出一个你字；声音断后切向姜月初的后果反应。",
+      "seam_evidence": {
+        "reaction_beat": "姜月初血点脸震颤克制，不回避裴视线",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "裴错愕吐出你字"
+      },
+      "seam_mode": "reaction_cut",
+      "source_id": "EP01_CLIP18",
+      "start_state": "姜脸有新血点，刀停在裴胸口。",
+      "transition_to_next": "受害者最后一字后切加害者反应"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "Clip_19",
+      "end_anchor_required": false,
+      "end_state": "姜月初血点脸和颤抖握刀手保持，画面硬切黑。",
+      "endframe_png": "",
+      "entry_exit": "只切姜单人反应；其余实体保持画外位置。",
+      "episode": "第1集",
+      "episode_boundary": {},
+      "firstframe_png": "",
+      "forbidden_presence": [],
+      "label": "姜月初血点脸静默硬断",
+      "location_id": "LOC_01",
+      "need_endframe": false,
+      "objects": [
+        "PROP_02"
+      ],
+      "offscreen_presence": [
+        "CHAR_02",
+        "BEAST_01",
+        "VFX_01"
+      ],
+      "required_presence": [
+        "CHAR_01",
+        "PROP_02",
+        "LOC_01"
+      ],
+      "scene": "姜月初脸颊新血点清晰，她握刀的手轻颤却不松开；无系统到账、无音乐，1.3秒后硬切黑。",
+      "seam_evidence": {
+        "editorial_intent": "静默1.3秒让后果落地后硬断，道行到账与虎妖反杀留给第2集。"
+      },
+      "seam_mode": "hard_cut",
+      "source_id": "EP01_CLIP19",
+      "start_state": "裴最后一字结束，姜仍看向画右下。",
+      "transition_to_next": "集尾硬切黑"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-12T11:57:17+00:00",
+  "inputs": {
+    "previous_storyboard": "",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_continuity_chain",
+  "owner": "script_supervisor",
+  "policy": {
+    "design_cut_requires": "match_on_action/eyeline/J-L/反应/插入/溶解/硬切各填自己的模式证据，不要求相邻帧像素相同。",
+    "relay_requires": "仅 continuous_take_relay 要求 need_endframe=true + endframe_png + 下一镜 firstframe_png。",
+    "transition_owner": "P-2 transition_map.seams[].seam_mode + seam_evidence 是导演剪辑决策；P-3 continuity_chain 是下游机器真值。"
+  },
+  "previous_episode": "",
+  "seams": [
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "三者均保持尸场既定位置；无新实体入画。；姜月初原地醒来；其余实体留在画外。",
+      "from_clip": "Clip_01",
+      "from_end_state": "虎妖完全站起，姜月初仰视惊骇。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "intentional_discontinuity",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reason": "先交危机结果，再明确回到一炷香前解释因果。"
+      },
+      "seam_mode": "intentional_discontinuity",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_02",
+      "to_episode": "第1集",
+      "to_start_state": "黑场时间字卡结束。",
+      "transition": "时间回跳硬切"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "姜月初原地醒来；其余实体留在画外。；姜月初由地面进入中景站姿。",
+      "from_clip": "Clip_02",
+      "from_end_state": "姜月初坐起并决定先活下去。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "insert_subject": "枯草掠过与囚服袖口特写",
+        "return_anchor": "回到姜月初坐起的MCU"
+      },
+      "seam_mode": "insert_cutaway",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_03",
+      "to_episode": "第1集",
+      "to_start_state": "姜月初坐起查看自身。",
+      "transition": "尸场环境插入"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "姜月初由地面进入中景站姿。；虎妖仅以尸体状态留在画右后景。",
+      "from_clip": "Clip_03",
+      "from_end_state": "她站稳并锁定远端镇魔司尸体。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "axis": "尸场主轴近侧",
+        "eyeline_source": "姜月初看向画右中景黑衣尸体",
+        "eyeline_target": "镇魔司袖口赤云纹"
+      },
+      "seam_mode": "eyeline_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_04",
+      "to_episode": "第1集",
+      "to_start_state": "姜月初看向赤云纹。",
+      "transition": "看向赤云纹目标"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "虎妖仅以尸体状态留在画右后景。；裴长青从尸堆轮廓中被发现但不起身；姜月初欲向画左离开。",
+      "from_clip": "Clip_04",
+      "from_end_state": "她从虎尸移开视线，警惕稍降。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "audio_lead_sec": "0.4",
+        "audio_source": "裴长青画外台词过来"
+      },
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_05",
+      "to_episode": "第1集",
+      "to_start_state": "姜月初背对尸堆。",
+      "transition": "裴长青声音先行"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01",
+        "PROP_01"
+      ],
+      "entity_entry_exit": "裴长青从尸堆轮廓中被发现但不起身；姜月初欲向画左离开。；断刀入画并固定在地；裴保持画外右后。",
+      "from_clip": "Clip_05",
+      "from_end_state": "她朝画左南向出口迈出第一步。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "action_phase_in": "断刀沿她前进方向前方飞入并钉地",
+        "action_phase_out": "姜月初左脚向出口迈出",
+        "screen_direction": "姜向画左，刀由画右后飞向画左前"
+      },
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_06",
+      "to_episode": "第1集",
+      "to_start_state": "姜月初左脚迈向出口。",
+      "transition": "断刀动作切入"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01",
+        "PROP_01"
+      ],
+      "entity_entry_exit": "断刀入画并固定在地；裴保持画外右后。；双方不换位；姜由站立俯身，裴准备起身。",
+      "from_clip": "Clip_06",
+      "from_end_state": "断刀钉地，姜脚尖停在刀后一掌。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reaction_beat": "脚尖僵住后抬眼戒备",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "断刀钉入脚前"
+      },
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_07",
+      "to_episode": "第1集",
+      "to_start_state": "断刀钉在两者之间，姜站、裴倒。",
+      "transition": "从刀切回双方反应"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "双方不换位；姜由站立俯身，裴准备起身。；二人共同向画左深处移动；断刀留在原地画外。",
+      "from_clip": "Clip_07",
+      "from_end_state": "姜月初伸手扶住裴未伤侧，交易成立。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "action_phase_in": "裴借力从地面升至半站，姜承担重量",
+        "action_phase_out": "姜手接住裴右侧肩背，裴开始发力",
+        "screen_direction": "裴由画右下向画左上升，姜位置不交换"
+      },
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_08",
+      "to_episode": "第1集",
+      "to_start_state": "姜扶住裴未伤侧。",
+      "transition": "扶起动作接下一镜"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "二人共同向画左深处移动；断刀留在原地画外。；虎妖由伏地尸态进入站立；姜裴原地停步。",
+      "from_clip": "Clip_08",
+      "from_end_state": "两人向画左挪两步后被虎妖咳声截停。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "audio_lead_sec": "0.5",
+        "audio_source": "虎妖画外咳声与别跑了"
+      },
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_09",
+      "to_episode": "第1集",
+      "to_start_state": "姜裴向画左移动。",
+      "transition": "虎妖咳声先行"
+    },
+    {
+      "common_entities": [
+        "BEAST_01",
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "虎妖由伏地尸态进入站立；姜裴原地停步。；裴由被扶转为独立站姿，俯身从同僚尸旁拾起PROP_02；姜后退半步。",
+      "from_clip": "Clip_09",
+      "from_end_state": "二人面向画右上，虎妖完全站起。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reaction_beat": "裴失血、姜确认不死",
+        "reaction_subject": "CHAR_02后CHAR_01",
+        "stimulus": "虎妖站立并保留贯胸伤口"
+      },
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_10",
+      "to_episode": "第1集",
+      "to_start_state": "虎妖完全站起，姜裴停步。",
+      "transition": "切虎妖傲慢宣告"
+    },
+    {
+      "common_entities": [
+        "BEAST_01",
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02"
+      ],
+      "entity_entry_exit": "裴由被扶转为独立站姿，俯身从同僚尸旁拾起PROP_02；姜后退半步。；裴冲向虎妖后被踢回；姜原地后退半步；虎妖仅抬脚不位移。",
+      "from_clip": "Clip_10",
+      "from_end_state": "裴长青挣开姜支撑，捡起PROP_02并压低重心。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "action_phase_in": "裴燃尽气血从画左下向画右上冲出",
+        "action_phase_out": "裴右手握紧刚拾起的完整横刀并压低重心",
+        "screen_direction": "攻击方向固定左下到右上"
+      },
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_11",
+      "to_episode": "第1集",
+      "to_start_state": "裴压低重心准备冲锋。",
+      "transition": "裴起手动作接入攻击"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "裴冲向虎妖后被踢回；姜原地后退半步；虎妖仅抬脚不位移。；虎妖只前进一步，姜裴不换位。",
+      "from_clip": "Clip_11",
+      "from_end_state": "裴仰倒在姜脚边，横刀落在其右侧。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reaction_beat": "姜向下确认后再抬眼看虎妖",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "裴砸落姜月初脚边并失去战力"
+      },
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_12",
+      "to_episode": "第1集",
+      "to_start_state": "裴倒在姜脚边。",
+      "transition": "落地后切姜反应"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "虎妖只前进一步，姜裴不换位。；VFX_01作为仅姜可见叠加进入；人物空间位置冻结。",
+      "from_clip": "Clip_12",
+      "from_end_state": "姜月初被压在裴与虎妖之间，外界声场将抽空。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "audio_lead_sec": "0.3",
+        "audio_source": "系统空灵提示音与宿主信息"
+      },
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_13",
+      "to_episode": "第1集",
+      "to_start_state": "姜处于等死最低谷。",
+      "transition": "系统声音先行"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "VFX_01作为仅姜可见叠加进入；人物空间位置冻结。；系统底框退出清晰画面，人物不移动。",
+      "from_clip": "Clip_13",
+      "from_end_state": "姜月初看见规则并快速扫向虎妖、落地横刀与裴长青。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "axis": "尸场主轴近侧",
+        "eyeline_source": "姜月初从面板文字区看向画右上",
+        "eyeline_target": "不可战胜的BEAST_01"
+      },
+      "seam_mode": "eyeline_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_14",
+      "to_episode": "第1集",
+      "to_start_state": "姜看向虎妖。",
+      "transition": "视线切向虎妖"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "LOC_01"
+      ],
+      "entity_entry_exit": "系统底框退出清晰画面，人物不移动。；人物不移动；PROP_02；由裴右侧地面位置在视线插入中显露。",
+      "from_clip": "Clip_14",
+      "from_end_state": "她的视线缓慢下落到脚边。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "axis": "姜裴对视轴近侧",
+        "eyeline_source": "姜月初向画右下低头",
+        "eyeline_target": "脚边仍有呼吸的CHAR_02"
+      },
+      "seam_mode": "eyeline_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_15",
+      "to_episode": "第1集",
+      "to_start_state": "姜月初视线向脚边下落。",
+      "transition": "视线切向脚边活人"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02"
+      ],
+      "entity_entry_exit": "人物不移动；PROP_02；由裴右侧地面位置在视线插入中显露。；姜拿起PROP_02站在裴左上方；裴仍倒地。",
+      "from_clip": "Clip_15",
+      "from_end_state": "她的手伸向落地横刀，但尚未握住。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "insert_subject": "姜月初伸向完整横刀的手与刀柄",
+        "return_anchor": "回到裴长青看见她拿刀的CU"
+      },
+      "seam_mode": "insert_cutaway",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_16",
+      "to_episode": "第1集",
+      "to_start_state": "姜手停在刀柄上方。",
+      "transition": "手部插入后回裴反应"
+    },
+    {
+      "common_entities": [
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02"
+      ],
+      "entity_entry_exit": "姜拿起PROP_02站在裴左上方；裴仍倒地。；两人不换位；PROP_02由持起转为刺入状态。",
+      "from_clip": "Clip_16",
+      "from_end_state": "姜握刀与裴对视，说完抱歉，刀尖开始下压。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "action_phase_in": "刀尖继续同方向下压接触裴胸口衣料",
+        "action_phase_out": "刀尖由静止进入向下初段",
+        "screen_direction": "动作始终由画面上方向下方"
+      },
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_17",
+      "to_episode": "第1集",
+      "to_start_state": "刀尖开始向裴胸口下压。",
+      "transition": "刀尖下压动作匹配"
+    },
+    {
+      "common_entities": [
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02"
+      ],
+      "entity_entry_exit": "两人不换位；PROP_02由持起转为刺入状态。；人物与刀保持原位。",
+      "from_clip": "Clip_17",
+      "from_end_state": "刀停在裴胸口，姜脸颊出现少量新血点，两人对视。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reaction_beat": "裴从看刀转为错愕看姜，只说一个你字",
+        "reaction_subject": "CHAR_02",
+        "stimulus": "姜完成一次刺入且血点落脸"
+      },
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_18",
+      "to_episode": "第1集",
+      "to_start_state": "姜脸有新血点，刀停在裴胸口。",
+      "transition": "切裴错愕反应"
+    },
+    {
+      "common_entities": [
+        "LOC_01",
+        "PROP_02"
+      ],
+      "entity_entry_exit": "人物与刀保持原位。；只切姜单人反应；其余实体保持画外位置。",
+      "from_clip": "Clip_18",
+      "from_end_state": "裴吐出你字，眼神仍锁住姜月初。",
+      "from_episode": "第1集",
+      "intentional_discontinuity_reason": "",
+      "issues": [],
+      "next_firstframe": "",
+      "policy": "design_cut",
+      "required_boundary_frame": "",
+      "same_location": true,
+      "scope": "intra_episode",
+      "seam_evidence": {
+        "reaction_beat": "姜月初血点脸震颤克制，不回避裴视线",
+        "reaction_subject": "CHAR_01",
+        "stimulus": "裴错愕吐出你字"
+      },
+      "seam_mode": "reaction_cut",
+      "seam_mode_source": "explicit",
+      "severity": "pass",
+      "strictness": "mode_specific",
+      "to_clip": "Clip_19",
+      "to_episode": "第1集",
+      "to_start_state": "裴最后一字结束，姜仍看向画右下。",
+      "transition": "受害者最后一字后切加害者反应"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "block": 0,
+    "clips": 19,
+    "design_cuts": 17,
+    "episode_boundaries": 0,
+    "intentional_discontinuities": 1,
+    "relays": 0,
+    "seam_modes": {
+      "eyeline_cut": 3,
+      "insert_cutaway": 2,
+      "intentional_discontinuity": 1,
+      "j_cut": 3,
+      "match_on_action": 4,
+      "reaction_cut": 5
+    },
+    "seams": 18,
+    "warn": 0
+  },
+  "version": 2
+}

@@ -71,6 +71,28 @@ def test_schedule_missing_expected_character_warns():
     assert finding["missing"]["characters"] == ["CHAR_02"]
 
 
+def test_offscreen_entities_count_as_declared_without_becoming_visible():
+    root = _root({
+        "clips": [{
+            "id": "C01",
+            "character_ids": ["CHAR_01", "CHAR_02"],
+            "object_ids": ["PROP_01"],
+            "entity_schedule": {
+                "characters": ["CHAR_01"],
+                "objects": [],
+                "locations": ["LOC_01"],
+                "required_presence": ["CHAR_01", "LOC_01"],
+                "offscreen_presence": ["CHAR_02", "PROP_01"],
+            },
+        }]
+    })
+
+    res = E.audit_episode(root, "第1集")
+
+    assert res["ok"]
+    assert "entity_schedule_missing_expected" not in codes(res)
+
+
 def test_shot_schedule_overrides_clip_schedule():
     root = _root({
         "clips": [{

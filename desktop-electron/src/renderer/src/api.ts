@@ -74,6 +74,13 @@ export function mediaUrl(abs: string): string {
   return `http://127.0.0.1:${mediaPort}/media?path=${encodeURIComponent(abs)}`;
 }
 
+/** Build a URL that probes video codecs and transcodes unsupported inputs in
+ *  an out-of-process FFmpeg worker before serving a Range-capable MP4. */
+export function videoUrl(abs: string): string {
+  if (!mediaPort) return "";
+  return `http://127.0.0.1:${mediaPort}/video?path=${encodeURIComponent(abs)}`;
+}
+
 export async function scanWorkspace(repoRoot: string): Promise<LineInfo[]> {
   return invoke("workspace.scan", { repoRoot });
 }
@@ -252,6 +259,10 @@ export async function setAppLanguage(language: string): Promise<void> {
   return invoke("app.setLanguage", { language });
 }
 
+export async function setAppRecentWorks(works: Array<{ path: string; name: string }>): Promise<void> {
+  return invoke("app.setRecentWorks", { works });
+}
+
 /** Native directory picker (replaces the Tauri dialog plugin). */
 export async function pickDirectory(title?: string): Promise<string | null> {
   return invoke("workspace.pickDirectory", { title });
@@ -291,9 +302,9 @@ export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDown
   return invoke("demos.list", { workspaceRoot });
 }
 
-/** Download one line's demo zip from Releases, extract into workspace, and mark it as DEMO. */
-export async function installDemo(workspaceRoot: string, line: string): Promise<DemoInstallResult> {
-  return invoke("demos.install", { workspaceRoot, line });
+/** Download one work's demo zip from Releases, extract into workspace, and mark it as DEMO. */
+export async function installDemo(workspaceRoot: string, rel: string): Promise<DemoInstallResult> {
+  return invoke("demos.install", { workspaceRoot, rel });
 }
 
 /** Move a work folder to the system Trash; guarded to the workspace root AND

@@ -1,0 +1,330 @@
+{
+  "kind": "n2d_spectacle_sequence_plan",
+  "version": 1,
+  "root": "创作区/制漫剧/万妖图魔录",
+  "episode": "第1集",
+  "clips": [
+    {
+      "clip_id": "Clip_11",
+      "source_id": "EP01_CLIP11",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "BEAST_01",
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02",
+        "VFX_01"
+      ],
+      "screen_direction": "裴进攻左下到右上，受击回右上到左下。",
+      "spatial_path": "裴沿主轴直线往返，不横穿摄影机。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "侧跟→命中固定→落地下摇。",
+      "in_state": "裴压低重心准备冲锋。",
+      "out_state": "裴仰倒在姜脚边，横刀落在其右侧。",
+      "continuity_text": "裴压低重心准备冲锋。 裴仰倒在姜脚边，横刀落在其右侧。 裴冲向虎妖后被踢回；姜原地后退半步；虎妖仅抬脚不位移。 攻击前裴看画右上，落地后姜向下看。 MS跟拍→CU命中→LS倒飞→MS落地 落地后切姜反应 reaction_cut 裴砸落姜月初脚边并失去战力 CHAR_01 姜向下确认后再抬眼看虎妖 False 大 True 出图/第1集/图片/EP01_CLIP11_a1.png 3.0 横刀举起与攻击方向锁定 出图/第1集/图片/EP01_CLIP11_a2.png 5.2 虎妖脚掌命中裴胸腹的动作顶点 出图/第1集/图片/EP01_CLIP11_a3.png 8.0 裴倒飞后砸落姜脚边的结果状态",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    },
+    {
+      "clip_id": "Clip_17",
+      "source_id": "EP01_CLIP17",
+      "spectacle_type": "fight_exchange",
+      "beat_categories": [
+        "attack",
+        "block",
+        "counter",
+        "impact"
+      ],
+      "beat_decomposition": [
+        {
+          "beat": "setup_attack",
+          "intent": "起手/突进，锁攻击方向与力的来源",
+          "camera": "简单跟随，勿叠运镜"
+        },
+        {
+          "beat": "impact",
+          "intent": "命中帧硬约束：接触点+受力方向可读，hit_stop 2 帧",
+          "camera": "稳定，留命中帧"
+        },
+        {
+          "beat": "react_recover",
+          "intent": "受击反应/收招，交代攻防转换",
+          "camera": "反打或反应特写"
+        }
+      ],
+      "motion_intensity": 3,
+      "same_frame_characters": 2,
+      "same_frame_over_cap": false,
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "loc": "LOC_01",
+      "assets": [
+        "BEAST_01",
+        "CHAR_01",
+        "CHAR_02",
+        "LOC_01",
+        "PROP_02",
+        "VFX_01"
+      ],
+      "screen_direction": "姜左上到裴右下，不越姜裴轴。",
+      "spatial_path": "刀沿单一直线短路径，不横扫。",
+      "distance_curve": "",
+      "altitude_curve": "",
+      "camera_path": "固定近景，命中后切姜脸。",
+      "in_state": "刀尖开始向裴胸口下压。",
+      "out_state": "刀停在裴胸口，姜脸颊出现少量新血点，两人对视。",
+      "continuity_text": "刀尖开始向裴胸口下压。 刀停在裴胸口，姜脸颊出现少量新血点，两人对视。 两人不换位；PROP_02由持起转为刺入状态。 姜向右下看裴，裴向左上看姜。 CU动作→ECU血点→紧双人CU 切裴错愕反应 reaction_cut 姜完成一次刺入且血点落脸 CHAR_02 裴从看刀转为错愕看姜，只说一个你字 False 大 True 出图/第1集/图片/EP01_CLIP17_a1.png 1.2 刀尖压住衣料，锁定手、刀、胸口接触位置 出图/第1集/图片/EP01_CLIP17_a2.png 2.4 刺入动作顶点与少量血点出现后的不可逆状态",
+      "control_inputs_required": [
+        "pose_sequence",
+        "depth_sequence",
+        "instance_masks",
+        "contact_map",
+        "camera_path"
+      ],
+      "premium_passes": {
+        "level": "premium_action_spectacle",
+        "required_contract_fields": [
+          "keyframe_plan",
+          "post_cue_points",
+          "physics_guard"
+        ],
+        "keyframe_policy": {
+          "required": [
+            "start",
+            "intent_mid",
+            "impact_frame",
+            "result_or_recovery",
+            "end"
+          ],
+          "rule": "首帧定身份/空间，中段定动作方向，命中/峰值帧定爽点，尾帧定结果；后端不吃多锚时拆段接力。"
+        },
+        "post_cue_policy": {
+          "required": [
+            "pre_peak",
+            "peak",
+            "aftershock_or_hold"
+          ],
+          "rule": "hit-stop/闪白/震屏/速度坡/音效峰值必须与命中或峰值帧对齐，不能用糊和乱抖遮动作。"
+        },
+        "physics_guard_policy": {
+          "required": [
+            "subject_identity",
+            "axis_or_path",
+            "contact_or_vfx_shape",
+            "no_extra_motion"
+          ],
+          "rule": "守住身份、轴线/路径、接触点或特效形态；一镜只给一个主要结果。"
+        },
+        "qc_dimensions": [
+          "keyframe_coverage",
+          "impact_apex_readability",
+          "edit_sfx_sync",
+          "optical_flow_direction",
+          "motion_smoothness",
+          "subject_identity"
+        ]
+      }
+    }
+  ],
+  "sequences": [
+    {
+      "sequence_id": "SQ_ACTION_01",
+      "sequence_type": "fight_exchange",
+      "clip_order": [
+        "Clip_11",
+        "Clip_17"
+      ],
+      "spectacle_types": [
+        "fight_exchange",
+        "fight_exchange"
+      ],
+      "subject_slots": {
+        "characters": [
+          "CHAR_01",
+          "CHAR_02"
+        ],
+        "slot_policy": "keep each registered character id in the same screen role across this sequence; do not swap pursuer/target or attacker/defender without an explicit handoff_state."
+      },
+      "asset_persistence": {
+        "assets": [
+          "BEAST_01",
+          "CHAR_01",
+          "CHAR_02",
+          "LOC_01",
+          "PROP_02",
+          "VFX_01"
+        ],
+        "locs": [
+          "LOC_01"
+        ],
+        "policy": "all listed LOC/PROP/WEAPON/OUTFIT/VFX ids must persist unless a clip handoff_state explicitly changes them."
+      },
+      "path_lock": {
+        "screen_direction": [
+          "裴进攻左下到右上，受击回右上到左下。",
+          "姜左上到裴右下，不越姜裴轴。"
+        ],
+        "spatial_path_global": [
+          "裴沿主轴直线往返，不横穿摄影机。",
+          "刀沿单一直线短路径，不横扫。"
+        ],
+        "distance_curve_global": [],
+        "altitude_curve_global": [],
+        "camera_path_global": [
+          "侧跟→命中固定→落地下摇。",
+          "固定近景，命中后切姜脸。"
+        ]
+      },
+      "handoff_states": [
+        {
+          "clip_id": "Clip_11",
+          "in": "裴压低重心准备冲锋。",
+          "out": "裴仰倒在姜脚边，横刀落在其右侧。",
+          "continuity": "裴压低重心准备冲锋。 裴仰倒在姜脚边，横刀落在其右侧。 裴冲向虎妖后被踢回；姜原地后退半步；虎妖仅抬脚不位移。 攻击前裴看画右上，落地后姜向下看。 MS跟拍→CU命中→LS倒飞→MS落地 落地后切姜反应 reaction_cut 裴砸落姜月初脚边并失去战力 CHAR_01 姜向下确认后再抬眼看虎妖 False 大 True 出图/第1集/图片/EP01_CLIP11_a1.png 3.0 横刀举起与攻击方向锁定 出图/第1集/图片/EP01_CLIP11_a2.png 5.2 虎妖脚掌命中裴胸腹的动作顶点 出图/第1集/图片/EP01_CLIP11_a3.png 8.0 裴倒飞后砸落姜脚边的结果状态"
+        },
+        {
+          "clip_id": "Clip_17",
+          "in": "刀尖开始向裴胸口下压。",
+          "out": "刀停在裴胸口，姜脸颊出现少量新血点，两人对视。",
+          "continuity": "刀尖开始向裴胸口下压。 刀停在裴胸口，姜脸颊出现少量新血点，两人对视。 两人不换位；PROP_02由持起转为刺入状态。 姜向右下看裴，裴向左上看姜。 CU动作→ECU血点→紧双人CU 切裴错愕反应 reaction_cut 姜完成一次刺入且血点落脸 CHAR_02 裴从看刀转为错愕看姜，只说一个你字 False 大 True 出图/第1集/图片/EP01_CLIP17_a1.png 1.2 刀尖压住衣料，锁定手、刀、胸口接触位置 出图/第1集/图片/EP01_CLIP17_a2.png 2.4 刺入动作顶点与少量血点出现后的不可逆状态"
+        }
+      ],
+      "required_controls": [
+        "camera_path",
+        "contact_map",
+        "depth_sequence",
+        "instance_masks",
+        "pose_sequence"
+      ],
+      "reference_clip_policy": {
+        "policy": "first_passed_clip_becomes_motion_reference",
+        "source": "生产数据/motion_reference_library.json",
+        "use": "本序列第一条通过 QC 的 clip 登记为 reference_video_motion/camera_motion_reference，后续同序列优先引用。"
+      },
+      "premium_coverage_policy": {
+        "required": true,
+        "qc_dimensions": [
+          "edit_sfx_sync",
+          "impact_apex_readability",
+          "keyframe_coverage",
+          "motion_smoothness",
+          "optical_flow_direction",
+          "subject_identity"
+        ],
+        "keyframe_rule": "每条高光动作/奇观 clip 必须有 start→intent_mid→impact/apex→result/end 的关键帧或拆段锚。",
+        "post_rule": "action_edit_cues 中的 hit-stop/速度坡/闪白/震屏/SFX 峰值必须和 impact/apex 对齐（由 combat_cue_apex_audit.py 机检兑现：impact_frame 须带 `<秒>s` → anchor_planner 把该秒落成 keyframe 锚 → 剪辑峰值钉同秒；缺一即 warn，核心打斗镜可升 BLOCK）。",
+        "review_rule": "SPECV 未覆盖 keyframe_coverage、impact_apex_readability、edit_sfx_sync 时，production 交付边界不可静默签收。"
+      },
+      "split_degrade_plan": "拆成起手/命中/反应三镜；命中帧做尾帧硬约束，接触失败则改手部特写+反打。",
+      "negative_identity_lock": [
+        "de-aging",
+        "morphing features",
+        "shifting jawline",
+        "changing face shape",
+        "changing clothes",
+        "color shift",
+        "disappearing accessories",
+        "extra limbs",
+        "extra fingers",
+        "flickering background",
+        "identity drift"
+      ],
+      "same_frame_policy": {
+        "cap": 2,
+        "over_cap_clips": [],
+        "advice": "同框具名脸 ≥2 必须登记身份槽位+执行策略；>2 的镜建议拆成正反打/分组逐一绑定主体，或压低优先级脸为侧/背/虚焦。"
+      },
+      "identity_reference_advice": "为本序列吃身份的核心角色准备 3–4 角度定妆参考（正/侧/3⁄4），强动作镜降 motion strength/cfg 换脸稳。",
+      "gate_policy": "video_preflight blocks if this sequence plan is missing for high-dynamic/large-scene clips."
+    }
+  ],
+  "summary": {
+    "spectacle_clips": 2,
+    "sequences": 1,
+    "action_sequences": 1,
+    "large_scene_sequences": 0,
+    "multi_clip_sequences": 1
+  }
+}

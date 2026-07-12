@@ -72,3 +72,40 @@ def test_reference_pack_writes_outputs(tmp_path: Path) -> None:
     assert jp.exists()
     assert mp.exists()
     assert json.loads(jp.read_text(encoding="utf-8"))["kind"] == rp.KIND
+
+
+def test_reference_pack_does_not_extend_structured_ids_into_chinese_prose(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    storyboard = tmp_path / "脚本" / "第1集" / "storyboard.json"
+    storyboard.write_text(json.dumps({"clips": [{
+        "id": "Clip_01",
+        "description": "CHAR_01与CHAR_02连线，VFX_01退出清晰画面。",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "object_ids": ["VFX_01"],
+        "location_id": "LOC_HALL",
+    }]}, ensure_ascii=False), encoding="utf-8")
+
+    pack = rp.build_pack(tmp_path, "第1集")
+
+    assert pack["used_characters"] == ["CHAR_01", "CHAR_02"]
+    assert pack["used_assets"] == ["LOC_HALL", "VFX_01"]
+
+
+def test_reference_pack_does_not_report_planned_registry_paths_as_ready(tmp_path: Path) -> None:
+    _write_project(tmp_path)
+    registry = tmp_path / "出图" / "共享" / "identity_registry.json"
+    data = json.loads(registry.read_text(encoding="utf-8"))
+    data["characters"][0]["forms"][0]["reference_group"] = {
+        "front": {"path": "出图/共享/图片/定妆_CHAR_01.png", "status": "planned"},
+        "half_body": {"path": "出图/共享/图片/定妆_CHAR_01_半身.png", "status": "planned"},
+        "face_anchor_refs": [
+            {"path": "出图/共享/图片/定妆_CHAR_01_脸部特写.png", "status": "planned"}
+        ],
+    }
+    registry.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    pack = rp.build_pack(tmp_path, "第1集")
+    char_targets = [t for t in pack["targets"] if t["owner"] == "CHAR_01/常态"]
+
+    assert char_targets
+    assert all(t["status"] == "planned" for t in char_targets)

@@ -23,12 +23,12 @@
   "jobs": [
     {
       "panel_id": "P001",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 930
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：跨页感重画面：宴席已经散去，空桌、残杯、半熄烛芯与落花；帷幕后只留下离席的模糊衣角，不出现可辨人脸。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：象征性散席空间；场景一致性契约：场景锚:LOC_PROLOGUE_VOID；空间布局:空桌下压，空椅后退，落花从画左上斜落到画右下。；光位/光色:继承 LOC_PROLOGUE_VOID 的冷月与残烛双光。；轴线/视线:物件视线：残杯→空椅→落花。；常驻物件:空桌；残杯；熄灭烛芯；落花；半卷帷幕；承接上一格:none；人物站位/前后景:无清晰人物；所有物件服务由繁华到空寂的阅读路径。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：大留白；不可画成具体影视版厅堂；旁白后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:细劲器物线，帷幕和空椅轮廓清楚，落花用飞白。；黑场计划:帷幕后景一块克制墨黑，不吞掉桌椅轮廓。；网点/灰阶计划:冷月灰蓝为中灰，残烛赭红为唯一暖点。；黑白灰可读性:空桌亮、帷幕暗、远墙中灰，三值清楚。；效果线/漫符计划:无速度线；仅用飘落花瓣引导视线。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_PROLOGUE_VOID=象征性散席空间；道具契约:空桌、残杯、熄灭烛芯、空椅、落花、半卷帷幕；残烛画左下，冷月压后景；无清晰人脸和具体影视布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：跨页感重画面：宴席已经散去，空桌、残杯、半熄烛芯与落花；帷幕后只留下离席的模糊衣角，不出现可辨人脸。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：象征性散席空间；场景一致性契约：场景锚:LOC_PROLOGUE_VOID；空间布局:空桌下压，空椅后退，落花从画左上斜落到画右下。；光位/光色:继承 LOC_PROLOGUE_VOID 的冷月与残烛双光。；轴线/视线:物件视线：残杯→空椅→落花。；常驻物件:空桌；残杯；熄灭烛芯；落花；半卷帷幕；承接上一格:none；人物站位/前后景:无清晰人物；所有物件服务由繁华到空寂的阅读路径。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：大留白；不可画成具体影视版厅堂；旁白后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:细劲器物线，帷幕和空椅轮廓清楚，落花用飞白。；黑场计划:帷幕后景一块克制墨黑，不吞掉桌椅轮廓。；网点/灰阶计划:冷月灰蓝为中灰，残烛赭红为唯一暖点。；黑白灰可读性:空桌亮、帷幕暗、远墙中灰，三值清楚。；效果线/漫符计划:无速度线；仅用飘落花瓣引导视线。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_PROLOGUE_VOID=象征性散席空间；道具契约:空桌、残杯、熄灭烛芯、空椅、落花、半卷帷幕；残烛画左下，冷月压后景；无清晰人脸和具体影视布景。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -87,7 +87,7 @@
         },
         {
           "id": "LOC_PROLOGUE_VOID",
-          "path": ""
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png"
         }
       ],
       "reference_budget": {
@@ -103,17 +103,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P001.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T11:59:53",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "c73836ab2c0edbfc3160fd0195fd077c715f4948884abb82206327a24e8f018e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
+      "generated_from_contract_sha256": "02a414f93589d346da771fa65f49234867db0c41c14e34268e8acf422594a835",
+      "generated_from_submit_prompt_sha256": "a71f948397cf2ffffbb55897c6196f723c6e754ec9bd4bc4d0d7d1863f5418e1",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P001",
+        "created_at": "2026-07-12T11:59:53",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P001.png",
+        "size": {
+          "width": 1803,
+          "height": 930
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 930
+        },
+        "declared_reference_count": 2,
+        "reference_input_count": 2,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P002",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 760,
         "height": 580
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：残花落进一只浅水盆，水面原本映着华服群像的无脸剪影，涟漪一过只剩墨色。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：象征性散席空间；场景一致性契约：场景锚:LOC_PROLOGUE_VOID；空间布局:水盆占画面下部，倒影位于上部并被同心涟漪打散。；光位/光色:冷月白反光，残烛暖色已几乎消失。；轴线/视线:落花→涟漪→破碎倒影。；常驻物件:空桌；残杯；熄灭烛芯；落花；半卷帷幕；承接上一格:P001；人物站位/前后景:无清晰人物；群像仅为不可辨倒影。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：倒影不出现演员脸；文字后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:水纹与花瓣用轻线，倒影边缘水墨化。；黑场计划:涟漪中心留白，外围倒影逐渐墨黑。；网点/灰阶计划:月白、墨青、极淡藕荷。；黑白灰可读性:花亮、倒影暗、水面中灰。；效果线/漫符计划:涟漪兼作转场圆环，不加漫画速度线。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_PROLOGUE_VOID=象征性散席空间；道具契约:空桌、残杯、熄灭烛芯、空椅、落花、半卷帷幕；残烛画左下，冷月压后景；无清晰人脸和具体影视布景。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：残花落进一只浅水盆，水面原本映着华服群像的无脸剪影，涟漪一过只剩墨色。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：象征性散席空间；场景一致性契约：场景锚:LOC_PROLOGUE_VOID；空间布局:水盆占画面下部，倒影位于上部并被同心涟漪打散。；光位/光色:冷月白反光，残烛暖色已几乎消失。；轴线/视线:落花→涟漪→破碎倒影。；常驻物件:空桌；残杯；熄灭烛芯；落花；半卷帷幕；承接上一格:P001；人物站位/前后景:无清晰人物；群像仅为不可辨倒影。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：倒影不出现演员脸；文字后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:水纹与花瓣用轻线，倒影边缘水墨化。；黑场计划:涟漪中心留白，外围倒影逐渐墨黑。；网点/灰阶计划:月白、墨青、极淡藕荷。；黑白灰可读性:花亮、倒影暗、水面中灰。；效果线/漫符计划:涟漪兼作转场圆环，不加漫画速度线。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_PROLOGUE_VOID=象征性散席空间；道具契约:空桌、残杯、熄灭烛芯、空椅、落花、半卷帷幕；残烛画左下，冷月压后景；无清晰人脸和具体影视布景。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -173,11 +207,11 @@
         },
         {
           "id": "LOC_PROLOGUE_VOID",
-          "path": ""
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -193,17 +227,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P002.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:02:24",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "2f7eabac0f5bbc27b0466fab865b135fa1271e8b4db658446dfbe44f510597cf",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
+      "generated_from_contract_sha256": "0893dbf063068c2a319493ca140a14115d8f9f4e209399d32488d07186cbbfcc",
+      "generated_from_submit_prompt_sha256": "7853d1a0142f1a45a0eee2e116694999aeb04aed3c0a0b3a56cbc10241e74745",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P002",
+        "created_at": "2026-07-12T12:02:24",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P002.png",
+        "size": {
+          "width": 760,
+          "height": 580
+        },
+        "expected_size": {
+          "width": 760,
+          "height": 580
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P003",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1007,
         "height": 580
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：大荒山云海之上，女娲巨大的背影将最后一排发光石块送向天裂；细小的青埂峰在下方。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:女娲余影和补天石阵在画左上，青埂峰在画右下。；光位/光色:天裂冷青，炼石余烬低饱和朱金。；轴线/视线:补天石由画左下升向画右上，读者随后落向青埂峰。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P002；人物站位/前后景:女娲只作无脸尺度参照；不与后续角色共轴。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：神话宏景；禁仙侠宫殿、霓虹法阵、清晰女娲脸。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:山石与云海工笔轮廓，天裂用飞白。；黑场计划:断崖底部压暗，天空保留大面积亮。；网点/灰阶计划:石青、墨青、低饱和朱砂。；黑白灰可读性:天裂亮、女娲余影中、断崖暗。；效果线/漫符计划:云气流线指向天裂，不遮住石阵。；拟声词画法:mode:drawn_sfx；text_hint:轰隆；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || FX_NUWA_SILHOUETTE=女娲补天无脸余影；道具契约:只表现巨大背影、手臂和补天动作尺度，不生成可辨人脸、具体影视造型或过度裸露。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：大荒山云海之上，女娲巨大的背影将最后一排发光石块送向天裂；细小的青埂峰在下方。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:女娲余影和补天石阵在画左上，青埂峰在画右下。；光位/光色:天裂冷青，炼石余烬低饱和朱金。；轴线/视线:补天石由画左下升向画右上，读者随后落向青埂峰。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P002；人物站位/前后景:女娲只作无脸尺度参照；不与后续角色共轴。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：神话宏景；禁仙侠宫殿、霓虹法阵、清晰女娲脸。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:山石与云海工笔轮廓，天裂用飞白。；黑场计划:断崖底部压暗，天空保留大面积亮。；网点/灰阶计划:石青、墨青、低饱和朱砂。；黑白灰可读性:天裂亮、女娲余影中、断崖暗。；效果线/漫符计划:云气流线指向天裂，不遮住石阵。；拟声词画法:mode:drawn_sfx；text_hint:轰隆；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || FX_NUWA_SILHOUETTE=女娲补天无脸余影；道具契约:只表现巨大背影、手臂和补天动作尺度，不生成可辨人脸、具体影视造型或过度裸露。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -263,11 +331,11 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "FX_NUWA_SILHOUETTE",
-          "path": ""
+          "path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -283,17 +351,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P003.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:04:28",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "b4ea6d8ef623354eeb7e15ff0fe908ed69b9098a5be4d43e8b81797064489636",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
+      "generated_from_contract_sha256": "9c7bacada99076dfae77562062fd3979e5a0237337a437c559142cf0db77c31c",
+      "generated_from_submit_prompt_sha256": "9fe31c8302d54e318756f2cc5ecaefc4cd35e9263df7fd26444e32fc8706a52c",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P003",
+        "created_at": "2026-07-12T12:04:28",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P003.png",
+        "size": {
+          "width": 1007,
+          "height": 580
+        },
+        "expected_size": {
+          "width": 1007,
+          "height": 580
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P004",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 1094
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：青埂峰低处，一块粗粝青灰顽石独卧苔间；远处其余石块已升入天际，天然环形裂纹微微发亮。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石占画右下前景，远处石阵消失在画左上。；光位/光色:冷青边光勾出顽石，炼石暖光已远。；轴线/视线:远处石阵→空白云海→前景顽石。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P003；人物站位/前后景:无人物；顽石与补天石阵形成高低、远近对照。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：顽石不长五官；天然裂纹是后续宝玉形态继承锚。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹细密但中心裂纹清楚，苔痕低细节。；黑场计划:石底阴影压实，周围云雾留白。；网点/灰阶计划:青灰、苔绿、冷白。；黑白灰可读性:裂纹亮、石体中灰、石底暗。；效果线/漫符计划:无；靠空白制造孤独。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：青埂峰低处，一块粗粝青灰顽石独卧苔间；远处其余石块已升入天际，天然环形裂纹微微发亮。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石占画右下前景，远处石阵消失在画左上。；光位/光色:冷青边光勾出顽石，炼石暖光已远。；轴线/视线:远处石阵→空白云海→前景顽石。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P003；人物站位/前后景:无人物；顽石与补天石阵形成高低、远近对照。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：顽石不长五官；天然裂纹是后续宝玉形态继承锚。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹细密但中心裂纹清楚，苔痕低细节。；黑场计划:石底阴影压实，周围云雾留白。；网点/灰阶计划:青灰、苔绿、冷白。；黑白灰可读性:裂纹亮、石体中灰、石底暗。；效果线/漫符计划:无；靠空白制造孤独。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -352,11 +454,11 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -372,17 +474,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P004.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:06:47",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "be6cbab2150fb11660aa7aaa4c0479f2a51f31586779a9fb551b858be4eceb04",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
+      "generated_from_contract_sha256": "045a78dfd0da193cad3813087eb0ac587f140ce432404a5c61dd332142218f9a",
+      "generated_from_submit_prompt_sha256": "9431146b65fa3995fdc55a6303181aa2a6a770672961d9a59455023af0b471df",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P004",
+        "created_at": "2026-07-12T12:06:47",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P004.png",
+        "size": {
+          "width": 1803,
+          "height": 1094
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 1094
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P005",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 650,
         "height": 760
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：近景：夜露沿顽石环形裂纹滑落，像一滴眼泪；远处天空已补完。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石占画面中央偏右，补完天空是左上小面积远景。；光位/光色:月白冷光从画右上擦过石面。；轴线/视线:水珠沿裂纹向下，引到下一格山路。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P004；人物站位/前后景:无人物；画外声来自顽石内部。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：画外对白后期嵌字；不画眼睛和嘴。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹与露滴精细，背景极简。；黑场计划:裂纹深处一点墨黑。；网点/灰阶计划:冷青灰，露滴保留白。；黑白灰可读性:露滴亮、石中、裂纹暗。；效果线/漫符计划:无。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：近景：夜露沿顽石环形裂纹滑落，像一滴眼泪；远处天空已补完。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石占画面中央偏右，补完天空是左上小面积远景。；光位/光色:月白冷光从画右上擦过石面。；轴线/视线:水珠沿裂纹向下，引到下一格山路。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P004；人物站位/前后景:无人物；画外声来自顽石内部。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：画外对白后期嵌字；不画眼睛和嘴。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹与露滴精细，背景极简。；黑场计划:裂纹深处一点墨黑。；网点/灰阶计划:冷青灰，露滴保留白。；黑白灰可读性:露滴亮、石中、裂纹暗。；效果线/漫符计划:无。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -442,11 +578,11 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -462,17 +598,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P005.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:08:53",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "62f7265950a923be02b5ae95b8b1a29f91e69d20f97cf56fda6b4c26744f159b",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
+      "generated_from_contract_sha256": "38552abaa4922910b2f794075578bcae8cde5908c8672f05cf9fab241051f62c",
+      "generated_from_submit_prompt_sha256": "28cfe192c9bbdc9b609ac1264e1343ca6b2dda66197b8084cf446e1d2674a505",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P005",
+        "created_at": "2026-07-12T12:08:53",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P005.png",
+        "size": {
+          "width": 650,
+          "height": 760
+        },
+        "expected_size": {
+          "width": 650,
+          "height": 760
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P006",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1117,
         "height": 760
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：远中景：和尚从画左、道士从画右沿斜坡同时入画，二人衣摆被云风带起，低处顽石在前景。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左中景，道士画右后景，顽石画右下前景。；光位/光色:冷青天光；和尚旧赭略暖，道士青灰更冷。；轴线/视线:和尚和道士都看向画右下顽石；视线在石上交汇。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P005；人物站位/前后景:和尚画左稍前，道士画右稍后；二人不互相遮脸，山路构成同一轴线，顽石在共同视线落点。；视线/眼神契约：目标=画右下方的顽石；方向=二人分别向右下与左下收束到同一顽石；人物完整性契约：继承 CHAR_MONK/CHAR_DAOIST 的脸型、眼型、发际线、发型轮廓、体态和服装剪影；二人脸、眼、头发、双手、双脚完整可读，衣袖不遮住手势，脚与山路接触点明确。；构图与表演：人物不看镜头；身段有戏曲节制但不复制具体戏服。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:衣纹用流畅长线，脸和手用更细线。；黑场计划:道士内袍与山石暗部形成两块墨色，不吞轮廓。；网点/灰阶计划:旧赭、青灰、月白。；黑白灰可读性:脸亮、外袍中、山路暗。；效果线/漫符计划:云风线顺衣摆方向，保持双脚落地。；拟声词画法:mode:drawn_sfx；text_hint:沙沙；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：远中景：和尚从画左、道士从画右沿斜坡同时入画，二人衣摆被云风带起，低处顽石在前景。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左中景，道士画右后景，顽石画右下前景。；光位/光色:冷青天光；和尚旧赭略暖，道士青灰更冷。；轴线/视线:和尚和道士都看向画右下顽石；视线在石上交汇。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P005；人物站位/前后景:和尚画左稍前，道士画右稍后；二人不互相遮脸，山路构成同一轴线，顽石在共同视线落点。；视线/眼神契约：目标=画右下方的顽石；方向=二人分别向右下与左下收束到同一顽石；人物完整性契约：继承 CHAR_MONK/CHAR_DAOIST 的脸型、眼型、发际线、发型轮廓、体态和服装剪影；二人脸、眼、头发、双手、双脚完整可读，衣袖不遮住手势，脚与山路接触点明确。；构图与表演：人物不看镜头；身段有戏曲节制但不复制具体戏服。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:衣纹用流畅长线，脸和手用更细线。；黑场计划:道士内袍与山石暗部形成两块墨色，不吞轮廓。；网点/灰阶计划:旧赭、青灰、月白。；黑白灰可读性:脸亮、外袍中、山路暗。；效果线/漫符计划:云风线顺衣摆方向，保持双脚落地。；拟声词画法:mode:drawn_sfx；text_hint:沙沙；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -534,7 +704,7 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "CHAR_MONK",
@@ -546,7 +716,7 @@
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -562,17 +732,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P006.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:14:46",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "ee5d6d7e0b6471b5a12a8eba13dec9108e4da1e083898a47f11d3bf5cca3207e",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
+      "generated_from_contract_sha256": "a39656aa4fda7c12278d643e19d22da711d6a8c08a919503ae1292af7e993561",
+      "generated_from_submit_prompt_sha256": "10bee794971526aa06571688a0f5d79df5667b1a51405b5b78e27fb51b653da9",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P006",
+        "created_at": "2026-07-12T12:14:46",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P006.png",
+        "size": {
+          "width": 1117,
+          "height": 760
+        },
+        "expected_size": {
+          "width": 1117,
+          "height": 760
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P007",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 900
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：云雾像圆窗打开：门楼、回廊、灯宴与落花三层叠景，只有无脸剪影；前景可见顽石裂纹映入一点暖光。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_DAOIST；场景：红尘幻景；场景一致性契约：场景锚:LOC_REDDUST_VISION；空间布局:道士仅以画右侧手势入画，幻景从画左远景推进画右近景，顽石边缘在最前。；光位/光色:幻景暖朱与月白对照，墨晕边界消散。；轴线/视线:道士的手势与顽石裂纹都指向云中灯宴。；常驻物件:门楼剪影；回廊；灯宴；落花；墨云边；承接上一格:P006；人物站位/前后景:道士画右前景指向画左幻景；和尚在画外；幻景人物不出现清晰身份脸。；视线/眼神契约：目标=云中打开的红尘灯宴幻景；方向=画左中部；人物完整性契约：CHAR_DAOIST 只露侧脸、眼睛、发际线、发髻和完整右手；手指数量与袖口结构清楚，身体其余部分由上一格连续，不得生成另一张脸或畸形手。；构图与表演：不复制大观园剧照；只保留抽象社会诱惑。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:道士手与侧脸工笔，幻景边缘水墨化。；黑场计划:云窗外围墨黑，灯宴内部保持清楚层次。；网点/灰阶计划:月白、低朱、墨青、淡金。；黑白灰可读性:灯宴亮、云边暗、顽石中灰。；效果线/漫符计划:墨云形成圆窗，不画魔法光圈。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_REDDUST_VISION=红尘繁华幻景；道具契约:云雾圆窗内三层叠景：门楼、回廊、灯宴；人物只作无脸剪影，暖朱与月白对照，边缘墨晕消散。 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：云雾像圆窗打开：门楼、回廊、灯宴与落花三层叠景，只有无脸剪影；前景可见顽石裂纹映入一点暖光。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_DAOIST；场景：红尘幻景；场景一致性契约：场景锚:LOC_REDDUST_VISION；空间布局:道士仅以画右侧手势入画，幻景从画左远景推进画右近景，顽石边缘在最前。；光位/光色:幻景暖朱与月白对照，墨晕边界消散。；轴线/视线:道士的手势与顽石裂纹都指向云中灯宴。；常驻物件:门楼剪影；回廊；灯宴；落花；墨云边；承接上一格:P006；人物站位/前后景:道士画右前景指向画左幻景；和尚在画外；幻景人物不出现清晰身份脸。；视线/眼神契约：目标=云中打开的红尘灯宴幻景；方向=画左中部；人物完整性契约：CHAR_DAOIST 只露侧脸、眼睛、发际线、发髻和完整右手；手指数量与袖口结构清楚，身体其余部分由上一格连续，不得生成另一张脸或畸形手。；构图与表演：不复制大观园剧照；只保留抽象社会诱惑。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:道士手与侧脸工笔，幻景边缘水墨化。；黑场计划:云窗外围墨黑，灯宴内部保持清楚层次。；网点/灰阶计划:月白、低朱、墨青、淡金。；黑白灰可读性:灯宴亮、云边暗、顽石中灰。；效果线/漫符计划:墨云形成圆窗，不画魔法光圈。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_REDDUST_VISION=红尘繁华幻景；道具契约:云雾圆窗内三层叠景：门楼、回廊、灯宴；人物只作无脸剪影，暖朱与月白对照，边缘墨晕消散。 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -633,7 +837,7 @@
         },
         {
           "id": "LOC_REDDUST_VISION",
-          "path": ""
+          "path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png"
         },
         {
           "id": "CHAR_DAOIST",
@@ -641,11 +845,11 @@
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -661,17 +865,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P007.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:19:08",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "bf792d7c7e0bd770f721e9b5aa922cf7c3a5831853ea59884e8535bcc9040005",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
+      "generated_from_contract_sha256": "b02b79a609cf4888159ba24900538f1aa5b1bffdbb6ad55f2f5456fd117b73c1",
+      "generated_from_submit_prompt_sha256": "e73808adf84f91440d0d9e28c7c15d5db9a7f2794368ecf5f4db7a2aa2e6926d",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P007",
+        "created_at": "2026-07-12T12:19:08",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P007.png",
+        "size": {
+          "width": 1803,
+          "height": 900
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 900
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P008",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 944
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：近景顽石，环形裂纹第一次由内向外泛起温润暖玉光；和尚的手掌停在石上方尚未触碰。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石居中，和尚完整手掌从画左上伸入，道士在画外。；光位/光色:冷青环境光，裂纹内部一点暖玉光照亮和尚指尖。；轴线/视线:和尚看向顽石裂纹，视线由画左上落向中央。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P007；人物站位/前后景:和尚画左上方俯视中央顽石，手掌与石面保留一指距离；道士在画外右侧。；视线/眼神契约：目标=顽石内部发亮的环形裂纹；方向=画右下方；人物完整性契约：CHAR_MONK 的侧脸、眼型、发际线与完整右手从 P006 继承；五指、掌面与袖口清楚，手尚未碰石，脚不在构图内但不得生成多余肢体。；构图与表演：声音来自石内；不画嘴和眼；和尚手部解剖严格。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹与手指工笔清线，光边不糊。；黑场计划:手与石之间留亮隙。；网点/灰阶计划:冷青灰中出现第一点暖玉。；黑白灰可读性:裂纹亮、手中、背景暗。；效果线/漫符计划:极细环形光，不用法阵。；拟声词画法:mode:drawn_sfx；text_hint:嗡；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：近景顽石，环形裂纹第一次由内向外泛起温润暖玉光；和尚的手掌停在石上方尚未触碰。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石居中，和尚完整手掌从画左上伸入，道士在画外。；光位/光色:冷青环境光，裂纹内部一点暖玉光照亮和尚指尖。；轴线/视线:和尚看向顽石裂纹，视线由画左上落向中央。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P007；人物站位/前后景:和尚画左上方俯视中央顽石，手掌与石面保留一指距离；道士在画外右侧。；视线/眼神契约：目标=顽石内部发亮的环形裂纹；方向=画右下方；人物完整性契约：CHAR_MONK 的侧脸、眼型、发际线与完整右手从 P006 继承；五指、掌面与袖口清楚，手尚未碰石，脚不在构图内但不得生成多余肢体。；构图与表演：声音来自石内；不画嘴和眼；和尚手部解剖严格。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:石纹与手指工笔清线，光边不糊。；黑场计划:手与石之间留亮隙。；网点/灰阶计划:冷青灰中出现第一点暖玉。；黑白灰可读性:裂纹亮、手中、背景暗。；效果线/漫符计划:极细环形光，不用法阵。；拟声词画法:mode:drawn_sfx；text_hint:嗡；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -733,7 +971,7 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "CHAR_MONK",
@@ -741,7 +979,7 @@
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -757,17 +995,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P008.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:21:41",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "5e45d2859ea78bd959b904e5c56188e7d714e7b3693773d5e0b25f8e11e6078b",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
+      "generated_from_contract_sha256": "83ce141ca9a9b0c8ec140632f02c0ba76cbe5585eb2c8385735c422881723314",
+      "generated_from_submit_prompt_sha256": "8f5311a5a0e8a1d426429943f922cb40a622ef7068ce151523291d90f98acdb6",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P008",
+        "created_at": "2026-07-12T12:21:41",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P008.png",
+        "size": {
+          "width": 1803,
+          "height": 944
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 944
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P009",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 620
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：双人半身对角构图：和尚画左低声说前半句，道士画右接后半句；中间留出顽石的低位视点。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左前，道士画右后，中央下方是顽石画外位置。；光位/光色:冷青天光；两人脸部同一方向受光，和尚略暖、道士略冷。；轴线/视线:二人都向中央下方顽石说话，不看镜头。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P008；人物站位/前后景:和尚画左前、道士画右后，二人不互相遮挡，视线在中央顽石汇合。；视线/眼神契约：目标=二人脚边中央的顽石；方向=和尚向右下，道士向左下；人物完整性契约：继承 CHAR_MONK/CHAR_DAOIST 的脸型、眼型、发际线、发型、体态与服装主色；脸、眼、头发、双手完整可读，袖口不串色，未入画双脚不得出现错误残肢。；构图与表演：气泡预留在两人外侧上方，不挡脸和手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:脸部细线，衣纹长线，表情克制。；黑场计划:二人之间云隙压一小块暗，保留脸部亮。；网点/灰阶计划:旧赭、青灰、月白。；黑白灰可读性:脸亮、衣中暗、云背景亮灰。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：双人半身对角构图：和尚画左低声说前半句，道士画右接后半句；中间留出顽石的低位视点。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左前，道士画右后，中央下方是顽石画外位置。；光位/光色:冷青天光；两人脸部同一方向受光，和尚略暖、道士略冷。；轴线/视线:二人都向中央下方顽石说话，不看镜头。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P008；人物站位/前后景:和尚画左前、道士画右后，二人不互相遮挡，视线在中央顽石汇合。；视线/眼神契约：目标=二人脚边中央的顽石；方向=和尚向右下，道士向左下；人物完整性契约：继承 CHAR_MONK/CHAR_DAOIST 的脸型、眼型、发际线、发型、体态与服装主色；脸、眼、头发、双手完整可读，袖口不串色，未入画双脚不得出现错误残肢。；构图与表演：气泡预留在两人外侧上方，不挡脸和手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:脸部细线，衣纹长线，表情克制。；黑场计划:二人之间云隙压一小块暗，保留脸部亮。；网点/灰阶计划:旧赭、青灰、月白。；黑白灰可读性:脸亮、衣中暗、云背景亮灰。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -828,7 +1100,7 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "CHAR_MONK",
@@ -840,7 +1112,7 @@
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -856,17 +1128,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P009.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:27:15",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "9c23298c2e9ff4ab90a60cbda4df2347b0f017495472cda35039d8892a4ee92a",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
+      "generated_from_contract_sha256": "eaeb03700bf5fc5b0de33dd8fc5ab1f0de0bf8edac1db6c068738977c707a753",
+      "generated_from_submit_prompt_sha256": "261e91383039e82ab194003a2fd93ce311d5cab3d13fe96f7bf149f0e967acf1",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P009",
+        "created_at": "2026-07-12T12:27:15",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P009.png",
+        "size": {
+          "width": 1803,
+          "height": 620
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 620
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P010",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 735,
         "height": 850
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：顽石裂纹里的暖玉光更稳定，石旁一片苔叶被光照亮；僧道的影子落在石面两侧。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石中央，和尚与道士影子分别从画左和画右覆盖石面边缘。；光位/光色:裂纹暖玉光成为局部主光，环境仍冷青。；轴线/视线:双影→裂纹→亮苔叶。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P009；人物站位/前后景:两道人影不形成具体脸；顽石仍是主体。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：不画卡通石脸；影子必须符合上一格两人站位。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:裂纹清楚，苔叶简洁。；黑场计划:两侧影子形成括号状墨黑。；网点/灰阶计划:冷青与一点暖玉。；黑白灰可读性:裂纹亮、石中、影子暗。；效果线/漫符计划:微弱呼吸光，不加爆闪。；拟声词画法:mode:drawn_sfx；text_hint:嗡——；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：顽石裂纹里的暖玉光更稳定，石旁一片苔叶被光照亮；僧道的影子落在石面两侧。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:顽石中央，和尚与道士影子分别从画左和画右覆盖石面边缘。；光位/光色:裂纹暖玉光成为局部主光，环境仍冷青。；轴线/视线:双影→裂纹→亮苔叶。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P009；人物站位/前后景:两道人影不形成具体脸；顽石仍是主体。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：不画卡通石脸；影子必须符合上一格两人站位。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:裂纹清楚，苔叶简洁。；黑场计划:两侧影子形成括号状墨黑。；网点/灰阶计划:冷青与一点暖玉。；黑白灰可读性:裂纹亮、石中、影子暗。；效果线/漫符计划:微弱呼吸光，不加爆闪。；拟声词画法:mode:drawn_sfx；text_hint:嗡——；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -926,11 +1232,11 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -946,17 +1252,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P010.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:29:44",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "e4cfbe479fd7c8874c518479c29ee3e496a7037483f46a47e46124e177757e12",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
+      "generated_from_contract_sha256": "5eabc642cf601d4448e2e8d344f2deb3f4a5f7b6168d66a7a5cdf7750ddbf23f",
+      "generated_from_submit_prompt_sha256": "0b8db0a5b517b64f44badd68c15e0dcaee6a490d4514c82b08bc985c938c4fc9",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P010",
+        "created_at": "2026-07-12T12:29:44",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P010.png",
+        "size": {
+          "width": 735,
+          "height": 850
+        },
+        "expected_size": {
+          "width": 735,
+          "height": 850
+        },
+        "declared_reference_count": 3,
+        "reference_input_count": 3,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P011",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1032,
         "height": 850
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：和尚单膝靠近，右手终于触到顽石环形裂纹；道士在后景以袖护风，石屑与墨线向内旋收。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左前单膝，手触中央顽石；道士画右后站立；石屑不遮脸。；光位/光色:触点暖玉光向外照亮和尚手和下颌，环境冷青不变。；轴线/视线:和尚看触点，道士看石屑回旋路径。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P010；人物站位/前后景:和尚画左前触石，道士画右后护风；二人不互遮，石居中央，接触点唯一且清楚。；视线/眼神契约：目标=和尚看指下裂纹，道士看顽石正在收缩的边缘；方向=和尚向右下，道士向左下；人物完整性契约：继承二人身份；和尚脸、眼、发际线、完整右手与触石食指清楚，左膝和脚落地；道士脸、头发、双手、双脚完整，衣袖不生成额外手臂；关键接触点只有和尚食指与裂纹。；构图与表演：动作接触点必须正确；禁多手、断指、光圈 UI。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物工笔清线，石屑用干笔飞白。；黑场计划:石后小块墨黑衬亮触点。；网点/灰阶计划:冷青环境与暖玉核心。；黑白灰可读性:触点最亮、人物中、石后最暗。；效果线/漫符计划:螺旋墨线追随石屑向内收缩，不遮脸与手。；拟声词画法:mode:drawn_sfx；text_hint:喀；嗡；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：和尚单膝靠近，右手终于触到顽石环形裂纹；道士在后景以袖护风，石屑与墨线向内旋收。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK、CHAR_DAOIST；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚画左前单膝，手触中央顽石；道士画右后站立；石屑不遮脸。；光位/光色:触点暖玉光向外照亮和尚手和下颌，环境冷青不变。；轴线/视线:和尚看触点，道士看石屑回旋路径。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P010；人物站位/前后景:和尚画左前触石，道士画右后护风；二人不互遮，石居中央，接触点唯一且清楚。；视线/眼神契约：目标=和尚看指下裂纹，道士看顽石正在收缩的边缘；方向=和尚向右下，道士向左下；人物完整性契约：继承二人身份；和尚脸、眼、发际线、完整右手与触石食指清楚，左膝和脚落地；道士脸、头发、双手、双脚完整，衣袖不生成额外手臂；关键接触点只有和尚食指与裂纹。；构图与表演：动作接触点必须正确；禁多手、断指、光圈 UI。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物工笔清线，石屑用干笔飞白。；黑场计划:石后小块墨黑衬亮触点。；网点/灰阶计划:冷青环境与暖玉核心。；黑白灰可读性:触点最亮、人物中、石后最暗。；效果线/漫符计划:螺旋墨线追随石屑向内收缩，不遮脸与手。；拟声词画法:mode:drawn_sfx；text_hint:喀；嗡；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_UNUSED_STONE=青埂峰未用顽石；道具契约:粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1018,7 +1358,7 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "CHAR_MONK",
@@ -1030,15 +1370,15 @@
         },
         {
           "id": "PROP_UNUSED_STONE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png"
         },
         {
           "id": "PROP_TONGLING_JADE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1054,17 +1394,54 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P011.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:49:12",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "da0d886479564f412b31e436b813d8252d5114ee6826af1fed74f244dd0606cd",
+      "attempt": 2,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
+      "generated_from_contract_sha256": "7ce37ef85959328c2d3dedba4dc98cbaf691250597a06605525a7e90cabe89ae",
+      "generated_from_submit_prompt_sha256": "a89663bae2d0e603938205a23ba185958d73c80ded4f9a883adc3ff7482c3535",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P011",
+        "created_at": "2026-07-12T12:49:12",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P011.png",
+        "size": {
+          "width": 1032,
+          "height": 850
+        },
+        "expected_size": {
+          "width": 1032,
+          "height": 850
+        },
+        "declared_reference_count": 7,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 2,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1",
+          "FX_INK_DREAM_TRANSITION"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P012",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 1134
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：和尚摊开的掌心托着温润白玉，极淡胭脂色沁；原顽石环形裂纹化为玉内纹理，背景完全留白。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚掌心自画左下伸向中央，玉居视觉中心，背景云海留白。；光位/光色:玉体自带极弱暖玉反光，外部仍是冷青天光。；轴线/视线:和尚低头看掌心宝玉。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P011；人物站位/前后景:和尚侧脸画左上，手掌中央；道士在画外右侧，玉由唯一一只手托住。；视线/眼神契约：目标=掌心中的通灵宝玉；方向=画右下中央；人物完整性契约：CHAR_MONK 的眼型、发际线、侧脸和完整掌手继承；五指托玉关系清楚，玉不嵌入皮肤，未入画双脚不出现错误肢体。；构图与表演：原画无‘通灵宝玉’文字；手和玉比例准确。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手部工笔细线，玉轮廓极净。；黑场计划:背景几乎无黑，仅袖内一块墨色。；网点/灰阶计划:月白玉、淡胭脂沁、旧赭袖口。；黑白灰可读性:玉最亮、手中、袖暗。；效果线/漫符计划:无光爆；靠留白与材质反光完成揭示。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：和尚摊开的掌心托着温润白玉，极淡胭脂色沁；原顽石环形裂纹化为玉内纹理，背景完全留白。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_MONK；场景：大荒山·青埂峰；场景一致性契约：场景锚:LOC_DAHUANG；空间布局:和尚掌心自画左下伸向中央，玉居视觉中心，背景云海留白。；光位/光色:玉体自带极弱暖玉反光，外部仍是冷青天光。；轴线/视线:和尚低头看掌心宝玉。；常驻物件:断崖；云海；炼石余烬；苔痕；PROP_UNUSED_STONE；承接上一格:P011；人物站位/前后景:和尚侧脸画左上，手掌中央；道士在画外右侧，玉由唯一一只手托住。；视线/眼神契约：目标=掌心中的通灵宝玉；方向=画右下中央；人物完整性契约：CHAR_MONK 的眼型、发际线、侧脸和完整掌手继承；五指托玉关系清楚，玉不嵌入皮肤，未入画双脚不出现错误肢体。；构图与表演：原画无‘通灵宝玉’文字；手和玉比例准确。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手部工笔细线，玉轮廓极净。；黑场计划:背景几乎无黑，仅袖内一块墨色。；网点/灰阶计划:月白玉、淡胭脂沁、旧赭袖口。；黑白灰可读性:玉最亮、手中、袖暗。；效果线/漫符计划:无光爆；靠留白与材质反光完成揭示。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_DAHUANG=大荒山·青埂峰；道具契约:补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1125,7 +1502,7 @@
         },
         {
           "id": "LOC_DAHUANG",
-          "path": ""
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png"
         },
         {
           "id": "CHAR_MONK",
@@ -1133,7 +1510,7 @@
         },
         {
           "id": "PROP_TONGLING_JADE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1149,17 +1526,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P012.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:51:35",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "5482fd57567b9e11990dfaa56ae1a57afab711ec9309a58467a1a35c7ce31c8a",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
+      "generated_from_contract_sha256": "7db184992ec01279868ae9a467a3d2f6cffedaae0d7a5f4634e4f54d2f1349b5",
+      "generated_from_submit_prompt_sha256": "7c091d1b19991db3f8e6750e86ca5c2ca7dbad21d77305bf6d540b905eefd777",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P012",
+        "created_at": "2026-07-12T12:51:35",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P012.png",
+        "size": {
+          "width": 1803,
+          "height": 1134
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 1134
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P013",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 820
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：横向大景：三生石在左后，绛珠草在石根，浅水横贯前景，雾后是离恨天轮廓；无人物。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:三生石画左后、绛珠草中左、浅水前景、离恨天远景。；光位/光色:月白逆光从画左后透雾，草叶边缘有极淡朱色。；轴线/视线:水纹从画右前引向画左后的绛珠草。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P012；人物站位/前后景:无人物；场景资产位置按 LOC_SPIRIT_RIVER 固定。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：场景大图须成为后续 LOC 锚；禁西式仙境。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:三生石与草叶工笔，雾和水用淡墨。；黑场计划:三生石背面一块墨色，水面与雾大留白。；网点/灰阶计划:月白、石青、极淡朱砂。；黑白灰可读性:雾亮、石中暗、草叶中亮。；效果线/漫符计划:水纹承接上一格玉纹，不加光圈。；拟声词画法:mode:drawn_sfx；text_hint:潺潺；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：横向大景：三生石在左后，绛珠草在石根，浅水横贯前景，雾后是离恨天轮廓；无人物。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:三生石画左后、绛珠草中左、浅水前景、离恨天远景。；光位/光色:月白逆光从画左后透雾，草叶边缘有极淡朱色。；轴线/视线:水纹从画右前引向画左后的绛珠草。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P012；人物站位/前后景:无人物；场景资产位置按 LOC_SPIRIT_RIVER 固定。；人物完整性契约：所有含角色格必须继承 registry 的脸型、眼型与眼距、发际线、发型轮廓、体态、服装剪影、主色和标志物；脸、眼、头发、双手、双脚与关键道具完整可读，接触点明确；不得借漫画夸张换脸、丢肢体或无理由看镜头。；构图与表演：场景大图须成为后续 LOC 锚；禁西式仙境。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:三生石与草叶工笔，雾和水用淡墨。；黑场计划:三生石背面一块墨色，水面与雾大留白。；网点/灰阶计划:月白、石青、极淡朱砂。；黑白灰可读性:雾亮、石中暗、草叶中亮。；效果线/漫符计划:水纹承接上一格玉纹，不加光圈。；拟声词画法:mode:drawn_sfx；text_hint:潺潺；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1219,15 +1630,15 @@
         },
         {
           "id": "LOC_SPIRIT_RIVER",
-          "path": ""
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png"
         },
         {
           "id": "PROP_CRIMSON_PEARL_GRASS",
-          "path": ""
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1243,17 +1654,49 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P013.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T10:49:47",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "371238b52e526d884f610e5d3feed7240447636ce002770987d1360932dfba05",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
+      "generated_from_contract_sha256": "7e58e1c2301917a269b4650c57984fcfff3c153d6dbf7a3bd87bce4a2c77abe6",
+      "generated_from_submit_prompt_sha256": "e8e77d57a7ecafa4c3a1acc32b2edd25b61adbbef1af8e43a885453d34aa3c00",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P013",
+        "created_at": "2026-07-12T10:49:47",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P013.png",
+        "size": {
+          "width": 1803,
+          "height": 820
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 820
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P014",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 680,
         "height": 980
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：神瑛侍者画右跪坐，以素玉小盏向画左下绛珠草滴下一滴甘露；三生石在后景。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:神瑛画右中景跪坐，绛珠草画左下，三生石画左后。；光位/光色:月白逆光，甘露一点暖玉色映亮神瑛手指和草叶。；轴线/视线:神瑛看向画左下绛珠草，动作从右上向左下。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P013；人物站位/前后景:神瑛画右、绛珠草画左，玉盏位于二者之间；一滴甘露连接，不遮三生石。；视线/眼神契约：目标=画左下方承接甘露的绛珠草叶；方向=画左下方；人物完整性契约：继承 CHAR_SHENYING 的少年脸型、眼型眼距、发际线、黑发轮廓、暖玉白衣和朱砂系带；脸、眼、头发、双手、跪地双腿与脚、玉盏完整，倾倒手与盏口/甘露接触点清楚。；构图与表演：神瑛不看镜头；手、盏、甘露路径严格。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物与草叶工笔细线，水雾软边。；黑场计划:发髻与袖内小块墨黑，脸和手保持亮。；网点/灰阶计划:月白、暖玉、朱砂细点。；黑白灰可读性:甘露亮、人物中、三生石暗。；效果线/漫符计划:只画一滴甘露的微光，不做法术束。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_DEW_BOWL=素玉甘露盏；道具契约:素玉小盏，简洁无字无纹，尺寸适合少年单手倾倒；不得变成法器、酒杯或发光水晶。 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：神瑛侍者画右跪坐，以素玉小盏向画左下绛珠草滴下一滴甘露；三生石在后景。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:神瑛画右中景跪坐，绛珠草画左下，三生石画左后。；光位/光色:月白逆光，甘露一点暖玉色映亮神瑛手指和草叶。；轴线/视线:神瑛看向画左下绛珠草，动作从右上向左下。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P013；人物站位/前后景:神瑛画右、绛珠草画左，玉盏位于二者之间；一滴甘露连接，不遮三生石。；视线/眼神契约：目标=画左下方承接甘露的绛珠草叶；方向=画左下方；人物完整性契约：继承 CHAR_SHENYING 的少年脸型、眼型眼距、发际线、黑发轮廓、暖玉白衣和朱砂系带；脸、眼、头发、双手、跪地双腿与脚、玉盏完整，倾倒手与盏口/甘露接触点清楚。；构图与表演：神瑛不看镜头；手、盏、甘露路径严格。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物与草叶工笔细线，水雾软边。；黑场计划:发髻与袖内小块墨黑，脸和手保持亮。；网点/灰阶计划:月白、暖玉、朱砂细点。；黑白灰可读性:甘露亮、人物中、三生石暗。；效果线/漫符计划:只画一滴甘露的微光，不做法术束。；拟声词画法:mode:drawn_sfx；text_hint:滴；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_DEW_BOWL=素玉甘露盏；道具契约:素玉小盏，简洁无字无纹，尺寸适合少年单手倾倒；不得变成法器、酒杯或发光水晶。 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1315,7 +1758,7 @@
         },
         {
           "id": "LOC_SPIRIT_RIVER",
-          "path": ""
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png"
         },
         {
           "id": "CHAR_SHENYING",
@@ -1323,11 +1766,11 @@
         },
         {
           "id": "PROP_DEW_BOWL",
-          "path": ""
+          "path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png"
         },
         {
           "id": "PROP_CRIMSON_PEARL_GRASS",
-          "path": ""
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1343,17 +1786,49 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P014.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T10:57:57",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "f9c2169deb45bec597f116a2c303d44e55c0aecd2e21b4035bc8ea01178e4ea9",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
+      "generated_from_contract_sha256": "3725bf6c033f97d875d33781be6a8f6a3ba539f4a143a23746d048a3a94b4e91",
+      "generated_from_submit_prompt_sha256": "d5b810b22e9821f5b2c15c2c139281c3b7e2db58ee6268dd83e270774e6c5813",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P014",
+        "created_at": "2026-07-12T10:57:57",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P014.png",
+        "size": {
+          "width": 680,
+          "height": 980
+        },
+        "expected_size": {
+          "width": 680,
+          "height": 980
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P015",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1087,
         "height": 980
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：绛珠草叶与水墨衣袖相互转化，绛珠仙子在画左由半身显形；脸清楚，草叶形纹样保留，神瑛仅在画右远处背影。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_JIANGZHU、CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:绛珠画左前由草叶显形，神瑛画右后背影，三生石左后固定。；光位/光色:月白逆光，绛珠轮廓有极淡朱色，神瑛保持暖玉白。；轴线/视线:绛珠初醒看向自己由草叶化出的手，神瑛看向绛珠。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P014；人物站位/前后景:绛珠画左前、神瑛画右后，二人不接触；草叶到衣袖的转化只发生在绛珠一侧。；视线/眼神契约：目标=绛珠看自己刚化成的左手；神瑛看画左新显形的绛珠；方向=绛珠向右下看手，神瑛向左前；人物完整性契约：CHAR_JIANGZHU 继承窄柔鹅蛋脸、细长眉、眼型眼距、发际线与浓黑轻发，脸、眼、头发、双手和下身形态完整；CHAR_SHENYING 继承发髻、暖玉白衣和朱砂系带，背影不长出第二张脸，双脚落地。；构图与表演：首次身份定妆高风险格；禁泛韩漫脸、过度裸露、仙侠光爆。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:脸与手工笔精线，草叶到衣袖用飞白过渡。；黑场计划:长发形成稳定墨色轮廓，不遮脸与手。；网点/灰阶计划:月白、灰紫、淡青、极淡朱边。；黑白灰可读性:脸和手亮、长发暗、雾中灰。；效果线/漫符计划:叶脉转为衣纹，墨晕沿形态边缘展开。；拟声词画法:mode:drawn_sfx；text_hint:簌；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_JIANGZHU=绛珠仙子 / 林黛玉；角色DNA:face:窄柔鹅蛋脸，内眼角略低，眼尾微挑但不锐，细长眉，小而清楚的鼻口；敏感、清醒、克制，不是尖锥网红脸。；hair:浓黑而轻，固定发际线与脸侧碎发轮廓；仙凡形态只改发式和饰品。；body:纤细但有人体重量，肩颈柔和，动作含蓄；不得病弱到幼童化或纸片化。；palette:月白、灰紫、淡青；病弱阶段只降饱和，不换脸。；signature:绛珠草叶形纹样轻提示；泪光是表演状态，不是永久妆效。；定妆契约:仙子形态与林黛玉必须是同一张脸、同一眼距、同一发际线和同一体态家族。；年龄/形态继承:绛珠草→绛珠仙子→幼年黛玉→少女黛玉→病中黛玉：逐级继承脸、眼、发际线和体态；只改变年龄比例、礼仪发式、服饰、病色和状态。；禁继承:具体演员肖像；夸张大眼；尖锥脸；浓艳成熟御姐；现代妆容；已定义年龄形态:immortal,child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：绛珠草叶与水墨衣袖相互转化，绛珠仙子在画左由半身显形；脸清楚，草叶形纹样保留，神瑛仅在画右远处背影。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_JIANGZHU、CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:绛珠画左前由草叶显形，神瑛画右后背影，三生石左后固定。；光位/光色:月白逆光，绛珠轮廓有极淡朱色，神瑛保持暖玉白。；轴线/视线:绛珠初醒看向自己由草叶化出的手，神瑛看向绛珠。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P014；人物站位/前后景:绛珠画左前、神瑛画右后，二人不接触；草叶到衣袖的转化只发生在绛珠一侧。；视线/眼神契约：目标=绛珠看自己刚化成的左手；神瑛看画左新显形的绛珠；方向=绛珠向右下看手，神瑛向左前；人物完整性契约：CHAR_JIANGZHU 继承窄柔鹅蛋脸、细长眉、眼型眼距、发际线与浓黑轻发，脸、眼、头发、双手和下身形态完整；CHAR_SHENYING 继承发髻、暖玉白衣和朱砂系带，背影不长出第二张脸，双脚落地。；构图与表演：首次身份定妆高风险格；禁泛韩漫脸、过度裸露、仙侠光爆。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:脸与手工笔精线，草叶到衣袖用飞白过渡。；黑场计划:长发形成稳定墨色轮廓，不遮脸与手。；网点/灰阶计划:月白、灰紫、淡青、极淡朱边。；黑白灰可读性:脸和手亮、长发暗、雾中灰。；效果线/漫符计划:叶脉转为衣纹，墨晕沿形态边缘展开。；拟声词画法:mode:drawn_sfx；text_hint:簌；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_JIANGZHU=绛珠仙子 / 林黛玉；角色DNA:face:窄柔鹅蛋脸，内眼角略低，眼尾微挑但不锐，细长眉，小而清楚的鼻口；敏感、清醒、克制，不是尖锥网红脸。；hair:浓黑而轻，固定发际线与脸侧碎发轮廓；仙凡形态只改发式和饰品。；body:纤细但有人体重量，肩颈柔和，动作含蓄；不得病弱到幼童化或纸片化。；palette:月白、灰紫、淡青；病弱阶段只降饱和，不换脸。；signature:绛珠草叶形纹样轻提示；泪光是表演状态，不是永久妆效。；定妆契约:仙子形态与林黛玉必须是同一张脸、同一眼距、同一发际线和同一体态家族。；年龄/形态继承:绛珠草→绛珠仙子→幼年黛玉→少女黛玉→病中黛玉：逐级继承脸、眼、发际线和体态；只改变年龄比例、礼仪发式、服饰、病色和状态。；禁继承:具体演员肖像；夸张大眼；尖锥脸；浓艳成熟御姐；现代妆容；已定义年龄形态:immortal,child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_CRIMSON_PEARL_GRASS=绛珠草；道具契约:细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1415,7 +1890,7 @@
         },
         {
           "id": "LOC_SPIRIT_RIVER",
-          "path": ""
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png"
         },
         {
           "id": "CHAR_JIANGZHU",
@@ -1427,11 +1902,11 @@
         },
         {
           "id": "PROP_CRIMSON_PEARL_GRASS",
-          "path": ""
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1447,17 +1922,28 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P015.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T11:24:03",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "35f498a53322d2f4bddc983f3af8a8a78ae31b6236f870c059cf3a7c9b8d7038",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
+      "generated_from_contract_sha256": "3a2e9c8826db2a36b7b9b8206fd2f22fb76069a30e0baa64770fdd122ee7d59d",
+      "generated_from_submit_prompt_sha256": "c86e3469b8d0957f1b4461901d77cd9e9b1e21f1de2e0910b9b4f055ff1edc7d",
+      "post_qc": "pass"
     },
     {
       "panel_id": "P016",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 804
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：绛珠仙子侧脸近景画左，一滴泪停在下睫；画右远处神瑛背影走入雾中，泪珠内倒映一线朱砂。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_JIANGZHU、CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:绛珠画左前侧脸，神瑛画右后背影，三生石边缘在左后。；光位/光色:月白逆光照泪珠，神瑛朱砂系带是远景唯一暖点。；轴线/视线:绛珠看向画右雾中的神瑛背影；神瑛运动向画右深处。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P015；人物站位/前后景:绛珠左前，神瑛右后，二人被雾中距离分开；没有身体接触，视线连接二人。；视线/眼神契约：目标=画右远处正走入雾中的神瑛侍者背影；方向=画右中部；人物完整性契约：CHAR_JIANGZHU 的脸型、眼型眼距、细眉、发际线、浓黑发轮廓、月白灰紫衣与完整可见的近侧手保持；泪珠只一滴；CHAR_SHENYING 背影发髻、衣服剪影、双手双脚完整，不出现第二张脸。；构图与表演：不是偶像剧凝视；泪与背影构成命运距离。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:侧脸、睫毛、泪珠工笔极细线，远景背影简化。；黑场计划:长发墨黑稳定，雾中留白。；网点/灰阶计划:月白、灰紫、墨黑、朱砂一点。；黑白灰可读性:泪珠最亮、脸中亮、长发暗。；效果线/漫符计划:泪珠内纹理溶成下一格宝玉反光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_JIANGZHU=绛珠仙子 / 林黛玉；角色DNA:face:窄柔鹅蛋脸，内眼角略低，眼尾微挑但不锐，细长眉，小而清楚的鼻口；敏感、清醒、克制，不是尖锥网红脸。；hair:浓黑而轻，固定发际线与脸侧碎发轮廓；仙凡形态只改发式和饰品。；body:纤细但有人体重量，肩颈柔和，动作含蓄；不得病弱到幼童化或纸片化。；palette:月白、灰紫、淡青；病弱阶段只降饱和，不换脸。；signature:绛珠草叶形纹样轻提示；泪光是表演状态，不是永久妆效。；定妆契约:仙子形态与林黛玉必须是同一张脸、同一眼距、同一发际线和同一体态家族。；年龄/形态继承:绛珠草→绛珠仙子→幼年黛玉→少女黛玉→病中黛玉：逐级继承脸、眼、发际线和体态；只改变年龄比例、礼仪发式、服饰、病色和状态。；禁继承:具体演员肖像；夸张大眼；尖锥脸；浓艳成熟御姐；现代妆容；已定义年龄形态:immortal,child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：绛珠仙子侧脸近景画左，一滴泪停在下睫；画右远处神瑛背影走入雾中，泪珠内倒映一线朱砂。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_JIANGZHU、CHAR_SHENYING；场景：灵河岸·三生石畔；场景一致性契约：场景锚:LOC_SPIRIT_RIVER；空间布局:绛珠画左前侧脸，神瑛画右后背影，三生石边缘在左后。；光位/光色:月白逆光照泪珠，神瑛朱砂系带是远景唯一暖点。；轴线/视线:绛珠看向画右雾中的神瑛背影；神瑛运动向画右深处。；常驻物件:三生石；绛珠草；浅水；雾；PROP_DEW_BOWL；承接上一格:P015；人物站位/前后景:绛珠左前，神瑛右后，二人被雾中距离分开；没有身体接触，视线连接二人。；视线/眼神契约：目标=画右远处正走入雾中的神瑛侍者背影；方向=画右中部；人物完整性契约：CHAR_JIANGZHU 的脸型、眼型眼距、细眉、发际线、浓黑发轮廓、月白灰紫衣与完整可见的近侧手保持；泪珠只一滴；CHAR_SHENYING 背影发髻、衣服剪影、双手双脚完整，不出现第二张脸。；构图与表演：不是偶像剧凝视；泪与背影构成命运距离。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:侧脸、睫毛、泪珠工笔极细线，远景背影简化。；黑场计划:长发墨黑稳定，雾中留白。；网点/灰阶计划:月白、灰紫、墨黑、朱砂一点。；黑白灰可读性:泪珠最亮、脸中亮、长发暗。；效果线/漫符计划:泪珠内纹理溶成下一格宝玉反光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_SPIRIT_RIVER=灵河岸·三生石畔；道具契约:三生石左后、绛珠草石根、神瑛右中、浅水右前至左后；月白逆光、甘露一点暖玉。 || CHAR_JIANGZHU=绛珠仙子 / 林黛玉；角色DNA:face:窄柔鹅蛋脸，内眼角略低，眼尾微挑但不锐，细长眉，小而清楚的鼻口；敏感、清醒、克制，不是尖锥网红脸。；hair:浓黑而轻，固定发际线与脸侧碎发轮廓；仙凡形态只改发式和饰品。；body:纤细但有人体重量，肩颈柔和，动作含蓄；不得病弱到幼童化或纸片化。；palette:月白、灰紫、淡青；病弱阶段只降饱和，不换脸。；signature:绛珠草叶形纹样轻提示；泪光是表演状态，不是永久妆效。；定妆契约:仙子形态与林黛玉必须是同一张脸、同一眼距、同一发际线和同一体态家族。；年龄/形态继承:绛珠草→绛珠仙子→幼年黛玉→少女黛玉→病中黛玉：逐级继承脸、眼、发际线和体态；只改变年龄比例、礼仪发式、服饰、病色和状态。；禁继承:具体演员肖像；夸张大眼；尖锥脸；浓艳成熟御姐；现代妆容；已定义年龄形态:immortal,child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_SHENYING=神瑛侍者 / 贾宝玉；角色DNA:face:少年圆润鹅蛋脸，明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；秀润而不女性化。；hair:浓黑丰厚，额头、发际线和鬓角轮廓固定；仙凡形态按礼仪改束发。；body:少年比例，肩背尚未成年，动作敏捷但不武侠壮汉化。；palette:朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。；signature:通灵宝玉为关联资产，红色系主服色，开放而专注的目光。；定妆契约:神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。；年龄/形态继承:神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。；禁继承:具体演员肖像；欧美深骨相；成年健身体型；短发；邪魅霸总表情；已定义年龄形态:immortal,child,teen,renounced；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1518,7 +2004,7 @@
         },
         {
           "id": "LOC_SPIRIT_RIVER",
-          "path": ""
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png"
         },
         {
           "id": "CHAR_JIANGZHU",
@@ -1530,7 +2016,7 @@
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1546,17 +2032,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P016.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T11:47:51",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "a0a8f6695462100068da5b361b2ce3d7b2a166abb459b5fd4cda604cfa867f72",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
+      "generated_from_contract_sha256": "b2a58d5c718a15f158f543b64a3c3c729b80a7f7ab82788dcb6ccaf6db3a874e",
+      "generated_from_submit_prompt_sha256": "4c3821debc1db1eb80f1f1bfe0df38c53daaf13ec3c894b6c1e28531d3631f87",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P016",
+        "created_at": "2026-07-12T11:47:51",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P016.png",
+        "size": {
+          "width": 1803,
+          "height": 804
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 804
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P017",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 650
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄宅书房中景：甄士隐伏在画左书案小憩，卷册滑到手边；画右芭蕉窗投下暖影，瓷盏反光正变成月白墨雾。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN；场景：甄宅书房；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左伏案，芭蕉窗画右，门在后景。；光位/光色:午后暖白窗光从画右；梦雾月白从瓷盏反光溢出。；轴线/视线:士隐闭眼，头朝画右；梦境运动由瓷盏向上包围书案。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P016；人物站位/前后景:士隐独处；右手在卷册旁，瓷盏不与手融合，书案与窗方位锁定。；视线/眼神契约：目标=闭眼睡眠，无主动视线；面部朝向画右芭蕉窗；方向=闭眼，头部朝画右；人物完整性契约：继承 CHAR_ZHEN_SHIYIN 的清癯脸、眼型、发际线、束发、短须、竹青家居服；闭眼仍保持五官，双手、双脚和卷册完整，右手与桌面接触自然。；构图与表演：现实层第一次出现，材质与光线要清楚；无现代家具。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物、书案、芭蕉工笔线，梦雾软边。；黑场计划:发与桌下暗部压黑，脸和手保持亮。；网点/灰阶计划:竹青、米褐、暖白，梦雾月白。；黑白灰可读性:窗亮、人物中、桌下暗。；效果线/漫符计划:瓷盏反光化为墨雾转场。；拟声词画法:mode:drawn_sfx；text_hint:沙——；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄宅书房中景：甄士隐伏在画左书案小憩，卷册滑到手边；画右芭蕉窗投下暖影，瓷盏反光正变成月白墨雾。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN；场景：甄宅书房；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左伏案，芭蕉窗画右，门在后景。；光位/光色:午后暖白窗光从画右；梦雾月白从瓷盏反光溢出。；轴线/视线:士隐闭眼，头朝画右；梦境运动由瓷盏向上包围书案。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P016；人物站位/前后景:士隐独处；右手在卷册旁，瓷盏不与手融合，书案与窗方位锁定。；视线/眼神契约：目标=闭眼睡眠，无主动视线；面部朝向画右芭蕉窗；方向=闭眼，头部朝画右；人物完整性契约：继承 CHAR_ZHEN_SHIYIN 的清癯脸、眼型、发际线、束发、短须、竹青家居服；闭眼仍保持五官，双手、双脚和卷册完整，右手与桌面接触自然。；构图与表演：现实层第一次出现，材质与光线要清楚；无现代家具。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物、书案、芭蕉工笔线，梦雾软边。；黑场计划:发与桌下暗部压黑，脸和手保持亮。；网点/灰阶计划:竹青、米褐、暖白，梦雾月白。；黑白灰可读性:窗亮、人物中、桌下暗。；效果线/漫符计划:瓷盏反光化为墨雾转场。；拟声词画法:mode:drawn_sfx；text_hint:沙——；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1618,7 +2138,7 @@
         },
         {
           "id": "LOC_ZHEN_STUDY",
-          "path": ""
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -1626,7 +2146,7 @@
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1642,17 +2162,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P017.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:54:39",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "a9f6f71cc1b5983e55f24244da387f3783b9f92458fe03ccc330d0b569c8fb64",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
+      "generated_from_contract_sha256": "bb32d0294d07e05472b08ca6ba0bdcd394cddc457ec8df4a4eef0da9876c4ca1",
+      "generated_from_submit_prompt_sha256": "ddbefb82d1acc03545d81d92f5f0b85143959b06fc00cfb9daf50fcacf836f9f",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P017",
+        "created_at": "2026-07-12T12:54:39",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P017.png",
+        "size": {
+          "width": 1803,
+          "height": 650
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 650
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P018",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 650,
         "height": 900
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：梦境中，书案木纹化成云路；和尚画左托玉，道士画右同行，甄士隐画左前景从雾中起身旁观。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：甄士隐梦境通道；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:和尚画左中托玉，道士画右中，士隐画左前稍低；牌坊尚未出现。；光位/光色:玉色散射光照三人下颌，书房暖光只在雾后残留。；轴线/视线:道士看和尚掌中玉，和尚看前路，士隐看二人。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P017；人物站位/前后景:士隐左前、和尚左中、道士右中；士隐不触碰二人，和尚掌心托玉，道士与和尚并行且不遮脸。；视线/眼神契约：目标=士隐看携玉僧道；道士看和尚掌中的宝玉；和尚看画右前方云路；方向=士隐向右中，道士向左下，和尚向右前；人物完整性契约：三人分别继承 registry：士隐清癯脸短须竹青服，和尚旧赭宽袖，道士青灰瘦长；三张脸、眼睛、发际线/发型、双手、双脚完整，和尚托玉手指正确，人物不串脸不互生肢体。；构图与表演：三人同格高风险；站位、眼线、托玉接触点必须按合同。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:三人面部清线，云路飞白，书案木纹若隐若现。；黑场计划:衣内暗部三块分离，避免合成一团。；网点/灰阶计划:玉白、旧赭、青灰、竹青。；黑白灰可读性:宝玉亮、三张脸中亮、雾后暗。；效果线/漫符计划:木纹向云纹自然过渡，不使用光圈。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：梦境中，书案木纹化成云路；和尚画左托玉，道士画右同行，甄士隐画左前景从雾中起身旁观。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：甄士隐梦境通道；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:和尚画左中托玉，道士画右中，士隐画左前稍低；牌坊尚未出现。；光位/光色:玉色散射光照三人下颌，书房暖光只在雾后残留。；轴线/视线:道士看和尚掌中玉，和尚看前路，士隐看二人。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P017；人物站位/前后景:士隐左前、和尚左中、道士右中；士隐不触碰二人，和尚掌心托玉，道士与和尚并行且不遮脸。；视线/眼神契约：目标=士隐看携玉僧道；道士看和尚掌中的宝玉；和尚看画右前方云路；方向=士隐向右中，道士向左下，和尚向右前；人物完整性契约：三人分别继承 registry：士隐清癯脸短须竹青服，和尚旧赭宽袖，道士青灰瘦长；三张脸、眼睛、发际线/发型、双手、双脚完整，和尚托玉手指正确，人物不串脸不互生肢体。；构图与表演：三人同格高风险；站位、眼线、托玉接触点必须按合同。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:三人面部清线，云路飞白，书案木纹若隐若现。；黑场计划:衣内暗部三块分离，避免合成一团。；网点/灰阶计划:玉白、旧赭、青灰、竹青。；黑白灰可读性:宝玉亮、三张脸中亮、雾后暗。；效果线/漫符计划:木纹向云纹自然过渡，不使用光圈。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1713,7 +2267,7 @@
         },
         {
           "id": "LOC_TAIXU_GATE",
-          "path": ""
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -1729,11 +2283,11 @@
         },
         {
           "id": "PROP_TONGLING_JADE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1749,17 +2303,54 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P018.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T12:58:51",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "0d1dd08cac9c1358b2ae78f1c0868518c3b56bffeffbd23fff6d631d32060204",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
+      "generated_from_contract_sha256": "29c332d70fb7878191636829542c082b7f7fdb9797d644fca9673ca4b0fa8a71",
+      "generated_from_submit_prompt_sha256": "34980b5ddf4e8c06a7a2716ee5dcef5c2ea7a4d05095812d34f78872bb6a551d",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P018",
+        "created_at": "2026-07-12T12:58:51",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P018.png",
+        "size": {
+          "width": 650,
+          "height": 900
+        },
+        "expected_size": {
+          "width": 650,
+          "height": 900
+        },
+        "declared_reference_count": 7,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 2,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1",
+          "FX_INK_DREAM_TRANSITION"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P019",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1117,
         "height": 900
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：手部与表情格：和尚画左把宝玉递出，甄士隐画右双手承接，二人手掌接触关系清楚；道士在后景看着。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：太虚幻境前的梦路；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:和尚画左前，士隐画右前，道士画右后；宝玉在两人手之间中央。；光位/光色:玉色散射光照亮两人手与下半张脸，道士受同方向边光。；轴线/视线:和尚和士隐都看宝玉，道士看士隐反应。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P018；人物站位/前后景:和尚左前递出、士隐右前双手承接，道士右后不接触；宝玉是唯一接触中心，三张脸无遮挡。；视线/眼神契约：目标=和尚与士隐看两手之间的宝玉；道士看甄士隐的表情；方向=和尚向右下、士隐向左下、道士向左前；人物完整性契约：三人脸型、眼型、发际线/发型、服装与体态继承；和尚递玉右手、士隐承接双手五指和腕袖完整，宝玉不嵌手，道士双手双脚完整且不多生手臂。；构图与表演：高风险手部交接；原画无玉字和气泡。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手部、袖口、宝玉轮廓极清楚，脸部细线。；黑场计划:袖内墨黑衬亮手和玉，不遮手指。；网点/灰阶计划:玉白、竹青、旧赭、青灰。；黑白灰可读性:玉最亮、手和脸中亮、衣袖暗。；效果线/漫符计划:仅玉面微反光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：手部与表情格：和尚画左把宝玉递出，甄士隐画右双手承接，二人手掌接触关系清楚；道士在后景看着。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：太虚幻境前的梦路；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:和尚画左前，士隐画右前，道士画右后；宝玉在两人手之间中央。；光位/光色:玉色散射光照亮两人手与下半张脸，道士受同方向边光。；轴线/视线:和尚和士隐都看宝玉，道士看士隐反应。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P018；人物站位/前后景:和尚左前递出、士隐右前双手承接，道士右后不接触；宝玉是唯一接触中心，三张脸无遮挡。；视线/眼神契约：目标=和尚与士隐看两手之间的宝玉；道士看甄士隐的表情；方向=和尚向右下、士隐向左下、道士向左前；人物完整性契约：三人脸型、眼型、发际线/发型、服装与体态继承；和尚递玉右手、士隐承接双手五指和腕袖完整，宝玉不嵌手，道士双手双脚完整且不多生手臂。；构图与表演：高风险手部交接；原画无玉字和气泡。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:手部、袖口、宝玉轮廓极清楚，脸部细线。；黑场计划:袖内墨黑衬亮手和玉，不遮手指。；网点/灰阶计划:玉白、竹青、旧赭、青灰。；黑白灰可读性:玉最亮、手和脸中亮、衣袖暗。；效果线/漫符计划:仅玉面微反光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1820,7 +2411,7 @@
         },
         {
           "id": "LOC_TAIXU_GATE",
-          "path": ""
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -1836,7 +2427,7 @@
         },
         {
           "id": "PROP_TONGLING_JADE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1852,17 +2443,53 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P019.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:03:00",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "0c174bb3b4d3d4ce0d1974bb4ce70f69428c9960459d0fcd7092f61a58711916",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P019.json",
+      "generated_from_contract_sha256": "34e3d70d780ed7b04795e2438bca6eacd82fb729f315d32f185f3d4bb65b580d",
+      "generated_from_submit_prompt_sha256": "faa7b3f45545d9d371ec5061ec0b6dae89afe05201109380370c559c46eb32d1",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P019",
+        "created_at": "2026-07-12T13:03:00",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P019.png",
+        "size": {
+          "width": 1117,
+          "height": 900
+        },
+        "expected_size": {
+          "width": 1117,
+          "height": 900
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 1,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P020",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 1054
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：大格：无字石牌坊横断云路，僧道已穿过门下，甄士隐画左前追出一步，手中宝玉即将被和尚收回。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：太虚幻境牌坊；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:牌坊中景横断；和尚左中、道士右中穿门；士隐左前，宝玉在和尚回收的手与士隐掌间。；光位/光色:玉色散射光，雷前画右上云层开始发黑。；轴线/视线:士隐看僧道和宝玉，僧道看门后深处。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P019；人物站位/前后景:士隐左前追随，和尚左中回收宝玉，道士右中先过门；人物前后层级清楚，不互相遮脸。；视线/眼神契约：目标=士隐看正从自己掌中收回宝玉的和尚；僧道看牌坊后的云路；方向=士隐向右中，僧道向画右深处；人物完整性契约：三人身份、脸、眼、发际线/发型、服装剪影、双手双脚与宝玉完整；和尚回收手与宝玉接触清楚，士隐伸手但未抓住，脚步与地面受力明确。；构图与表演：无字牌坊；标题/对联后期嵌字；翻页雷醒。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:牌坊石纹工笔，云路水墨，三人轮廓清楚。；黑场计划:画右上雷云压黑，人物脸与牌坊边缘保留亮。；网点/灰阶计划:玉白、墨青、旧赭、竹青。；黑白灰可读性:门后亮、雷云暗、人物中。；效果线/漫符计划:雷云预聚，不提前画闪电。；拟声词画法:mode:drawn_sfx；text_hint:隆……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：大格：无字石牌坊横断云路，僧道已穿过门下，甄士隐画左前追出一步，手中宝玉即将被和尚收回。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_MONK、CHAR_DAOIST；场景：太虚幻境牌坊；场景一致性契约：场景锚:LOC_TAIXU_GATE；空间布局:牌坊中景横断；和尚左中、道士右中穿门；士隐左前，宝玉在和尚回收的手与士隐掌间。；光位/光色:玉色散射光，雷前画右上云层开始发黑。；轴线/视线:士隐看僧道和宝玉，僧道看门后深处。；常驻物件:石牌坊；云雾；玉色地面反光；PROP_TONGLING_JADE；承接上一格:P019；人物站位/前后景:士隐左前追随，和尚左中回收宝玉，道士右中先过门；人物前后层级清楚，不互相遮脸。；视线/眼神契约：目标=士隐看正从自己掌中收回宝玉的和尚；僧道看牌坊后的云路；方向=士隐向右中，僧道向画右深处；人物完整性契约：三人身份、脸、眼、发际线/发型、服装剪影、双手双脚与宝玉完整；和尚回收手与宝玉接触清楚，士隐伸手但未抓住，脚步与地面受力明确。；构图与表演：无字牌坊；标题/对联后期嵌字；翻页雷醒。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:牌坊石纹工笔，云路水墨，三人轮廓清楚。；黑场计划:画右上雷云压黑，人物脸与牌坊边缘保留亮。；网点/灰阶计划:玉白、墨青、旧赭、竹青。；黑白灰可读性:门后亮、雷云暗、人物中。；效果线/漫符计划:雷云预聚，不提前画闪电。；拟声词画法:mode:drawn_sfx；text_hint:隆……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_TAIXU_GATE=太虚幻境牌坊；道具契约:无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_TONGLING_JADE=通灵宝玉；道具契约:扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -1924,7 +2551,7 @@
         },
         {
           "id": "LOC_TAIXU_GATE",
-          "path": ""
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -1940,7 +2567,7 @@
         },
         {
           "id": "PROP_TONGLING_JADE",
-          "path": ""
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png"
         }
       ],
       "reference_budget": {
@@ -1956,17 +2583,53 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P020.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:07:07",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "4c793ff5d646342257f332fac52f7df2b9bcf4c304408317cecb4d47bcf3c429",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P020.json",
+      "generated_from_contract_sha256": "78ee548a900a4f59355aa98031c837f27f81cc40a11d8b2138024671c92f76b8",
+      "generated_from_submit_prompt_sha256": "9a3d84336133a7dc3c263e2d096f8eb889a7d8ab7ccb243bd78f89157c4225cd",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P020",
+        "created_at": "2026-07-12T13:07:07",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P020.png",
+        "size": {
+          "width": 1803,
+          "height": 1054
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 1054
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 1,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P021",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 620
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：斜格：白色闪电形负空间切开墨云，下一瞬甄士隐从书案惊起；画右芭蕉窗强烈暖光照入。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN；场景：甄宅书房；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左从书案起身，芭蕉窗画右，卷册与瓷盏仍在原位。；光位/光色:闪电白转为午后暖白窗光，主光仍从画右。；轴线/视线:士隐睁眼看画右芭蕉窗，不看镜头。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P020；人物站位/前后景:士隐左侧撑桌起身，窗在右；无其他人物，家具位置继承 P017。；视线/眼神契约：目标=画右被日光照亮并摇动的芭蕉叶；方向=画右上方；人物完整性契约：CHAR_ZHEN_SHIYIN 的清癯脸、眼型、发际线、束发、短须和竹青服装继承；惊起动作中脸、双手、双脚完整，手掌撑桌接触点正确，卷册瓷盏不穿模。；构图与表演：用版面白缝兼作雷电；不可丢手或把脚画成手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物与家具清线，闪电负形，芭蕉叶线条清楚。；黑场计划:残留梦云短暂墨黑，现实侧迅速转亮。；网点/灰阶计划:暖白、竹青、墨青残影。；黑白灰可读性:闪电/窗光亮、人物中、梦云暗。；效果线/漫符计划:斜向白闪连接梦门与现实窗，不遮脸和手。；拟声词画法:mode:drawn_sfx；text_hint:轰！；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：斜格：白色闪电形负空间切开墨云，下一瞬甄士隐从书案惊起；画右芭蕉窗强烈暖光照入。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN；场景：甄宅书房；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左从书案起身，芭蕉窗画右，卷册与瓷盏仍在原位。；光位/光色:闪电白转为午后暖白窗光，主光仍从画右。；轴线/视线:士隐睁眼看画右芭蕉窗，不看镜头。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P020；人物站位/前后景:士隐左侧撑桌起身，窗在右；无其他人物，家具位置继承 P017。；视线/眼神契约：目标=画右被日光照亮并摇动的芭蕉叶；方向=画右上方；人物完整性契约：CHAR_ZHEN_SHIYIN 的清癯脸、眼型、发际线、束发、短须和竹青服装继承；惊起动作中脸、双手、双脚完整，手掌撑桌接触点正确，卷册瓷盏不穿模。；构图与表演：用版面白缝兼作雷电；不可丢手或把脚画成手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:人物与家具清线，闪电负形，芭蕉叶线条清楚。；黑场计划:残留梦云短暂墨黑，现实侧迅速转亮。；网点/灰阶计划:暖白、竹青、墨青残影。；黑白灰可读性:闪电/窗光亮、人物中、梦云暗。；效果线/漫符计划:斜向白闪连接梦门与现实窗，不遮脸和手。；拟声词画法:mode:drawn_sfx；text_hint:轰！；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_INK_DREAM_TRANSITION=水墨梦境转场；道具契约:现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -2028,7 +2691,7 @@
         },
         {
           "id": "LOC_ZHEN_STUDY",
-          "path": ""
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -2036,7 +2699,7 @@
         },
         {
           "id": "FX_INK_DREAM_TRANSITION",
-          "path": ""
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png"
         }
       ],
       "reference_budget": {
@@ -2052,17 +2715,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P021.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:10:13",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "a9126c93dfae184cae897a82e26d86e68c6b5a957a51fe7f829478444c249f73",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P021.json",
+      "generated_from_contract_sha256": "3903d58d35453c13882a12b67775136a01c4bb1c86c8f7dfc2474b38abfa5d4d",
+      "generated_from_submit_prompt_sha256": "d1c32b537241e8b3bab2f6371eb2affc5c1fb76d99db415f49c23cbd4d9fd86c",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P021",
+        "created_at": "2026-07-12T13:10:13",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P021.png",
+        "size": {
+          "width": 1803,
+          "height": 620
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 620
+        },
+        "declared_reference_count": 4,
+        "reference_input_count": 4,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P022",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 760,
         "height": 900
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄士隐在书房门口双臂接过三岁英莲，英莲一手搭在父亲肩上，另一手握着小花；芭蕉影落在二人身后。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD；场景：甄宅书房门口；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左前接抱，英莲位于中央偏右，门与奶母无脸上身在右后。；光位/光色:暖白窗光和门外日光同向，英莲脸部有柔和亮面。；轴线/视线:士隐看怀中英莲，英莲回看父亲。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P021；人物站位/前后景:士隐画左托抱中央英莲，父女脸无遮挡；奶母只在右后放手，不多生手臂，门窗轴线继承。；视线/眼神契约：目标=父女互看：士隐看英莲双眼，英莲看父亲的脸；方向=士隐向右下，英莲向左上；人物完整性契约：CHAR_ZHEN_SHIYIN 的脸、眼、发、短须、双手双脚与竹青服完整；CHAR_YINGLIAN_CHILD 的幼圆脸、杏眼眼距、发际线、双发束、藕荷米白衣、双手双脚和小花完整；父亲双臂承托孩子臀背，英莲手搭肩的接触点清楚。；构图与表演：父女接抱解剖高风险；英莲首次定妆必须可继承未来香菱。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:父女脸和手极清楚，衣纹柔和，背景低细节。；黑场计划:父亲发与门内暗部压黑，孩子脸和手保持亮。；网点/灰阶计划:竹青、藕荷、米白、暖木色。；黑白灰可读性:孩子脸亮、父亲中、门内暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_YINGLIAN_FLOWER=英莲手中小花；道具契约:一朵小型白粉野花，适合三岁幼儿握持，不是莲花象征硬贴脸，不出现文字。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄士隐在书房门口双臂接过三岁英莲，英莲一手搭在父亲肩上，另一手握着小花；芭蕉影落在二人身后。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD；场景：甄宅书房门口；场景一致性契约：场景锚:LOC_ZHEN_STUDY；空间布局:士隐画左前接抱，英莲位于中央偏右，门与奶母无脸上身在右后。；光位/光色:暖白窗光和门外日光同向，英莲脸部有柔和亮面。；轴线/视线:士隐看怀中英莲，英莲回看父亲。；常驻物件:书案；卷册；瓷盏；芭蕉窗影；竹帘；承接上一格:P021；人物站位/前后景:士隐画左托抱中央英莲，父女脸无遮挡；奶母只在右后放手，不多生手臂，门窗轴线继承。；视线/眼神契约：目标=父女互看：士隐看英莲双眼，英莲看父亲的脸；方向=士隐向右下，英莲向左上；人物完整性契约：CHAR_ZHEN_SHIYIN 的脸、眼、发、短须、双手双脚与竹青服完整；CHAR_YINGLIAN_CHILD 的幼圆脸、杏眼眼距、发际线、双发束、藕荷米白衣、双手双脚和小花完整；父亲双臂承托孩子臀背，英莲手搭肩的接触点清楚。；构图与表演：父女接抱解剖高风险；英莲首次定妆必须可继承未来香菱。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:父女脸和手极清楚，衣纹柔和，背景低细节。；黑场计划:父亲发与门内暗部压黑，孩子脸和手保持亮。；网点/灰阶计划:竹青、藕荷、米白、暖木色。；黑白灰可读性:孩子脸亮、父亲中、门内暗。；效果线/漫符计划:无。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_STUDY=甄宅书房；道具契约:书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || PROP_YINGLIAN_FLOWER=英莲手中小花；道具契约:一朵小型白粉野花，适合三岁幼儿握持，不是莲花象征硬贴脸，不出现文字。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -2123,7 +2820,7 @@
         },
         {
           "id": "LOC_ZHEN_STUDY",
-          "path": ""
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -2135,7 +2832,7 @@
         },
         {
           "id": "PROP_YINGLIAN_FLOWER",
-          "path": ""
+          "path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png"
         }
       ],
       "reference_budget": {
@@ -2151,17 +2848,51 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P022.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:14:57",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "e7b7f30e11e6dba674fe7b52b1e71470c17f3438eb62d9ffbab0e3cf1ad71a98",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P022.json",
+      "generated_from_contract_sha256": "99a99abc89bf8e59169568d16a2bfd92c0c8954e1afc1d54fe971d7759af20b6",
+      "generated_from_submit_prompt_sha256": "e5f06d986a9cfd66786df33cecf7e91e0b1c47250ca5f8fe6609ee1223002daf",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P022",
+        "created_at": "2026-07-12T13:14:57",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P022.png",
+        "size": {
+          "width": 760,
+          "height": 900
+        },
+        "expected_size": {
+          "width": 760,
+          "height": 900
+        },
+        "declared_reference_count": 5,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 0,
+        "omitted_attachment_ids": [],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P023",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1007,
         "height": 900
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄宅门前：士隐画左抱英莲，和尚从画右前走近、道士画右后；二人衣着破旧、一个赤足一个跛足，但眼神与梦中相同。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD、CHAR_MONK、CHAR_DAOIST；场景：甄宅门前街巷；场景一致性契约：场景锚:LOC_ZHEN_COURTYARD；空间布局:士隐抱英莲在画左门内，和尚画右前，道士画右后，街巷向右远处延伸。；光位/光色:夏日暖光从画右上，云影掠过四人；和尚眼窝与道士轮廓略冷。；轴线/视线:士隐看和尚，英莲先看和尚，和尚看英莲，道士看和尚。；常驻物件:木门；粉墙；芭蕉；石阶；远处灯架；承接上一格:P022；人物站位/前后景:士隐抱英莲画左，和尚右前与英莲对视，道士右后不遮和尚；父女接触保持，僧道与父女无身体接触。；视线/眼神契约：目标=士隐与英莲看画右和尚；和尚看士隐怀中的英莲；道士看和尚的反应；方向=士隐/英莲向右，和尚向左下，道士向左前；人物完整性契约：四个角色全部继承身份 DNA：士隐脸眼发须和托抱双手双脚完整；英莲幼圆脸杏眼发束与四肢完整；和尚梦中脸型眼型发际线和旧赭袖口不变，仅加癞头赤足状态；道士脸型眼型瘦长体态不变，仅加蓬头跛足状态；所有脚与地面受力、父女托抱接触点清楚。；构图与表演：四人同格高风险；和尚赤足、道士跛足必须是脚，不能画成手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:四张脸与托抱/步态清线，破衣用干笔但不脏乱。；黑场计划:云影落在街巷中部，人物脸保留亮。；网点/灰阶计划:现实暖竹色被一层冷灰压过，和尚旧赭、道士青灰。；黑白灰可读性:英莲脸亮、四人中、门内与云影暗。；效果线/漫符计划:云影和衣摆风线暗示异常，不用灵光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_COURTYARD=甄宅门前街巷；道具契约:木门左、街巷右远、芭蕉与粉墙石阶固定；夏日右上暖光，远处灯架只作元宵预兆。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：甄宅门前：士隐画左抱英莲，和尚从画右前走近、道士画右后；二人衣着破旧、一个赤足一个跛足，但眼神与梦中相同。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD、CHAR_MONK、CHAR_DAOIST；场景：甄宅门前街巷；场景一致性契约：场景锚:LOC_ZHEN_COURTYARD；空间布局:士隐抱英莲在画左门内，和尚画右前，道士画右后，街巷向右远处延伸。；光位/光色:夏日暖光从画右上，云影掠过四人；和尚眼窝与道士轮廓略冷。；轴线/视线:士隐看和尚，英莲先看和尚，和尚看英莲，道士看和尚。；常驻物件:木门；粉墙；芭蕉；石阶；远处灯架；承接上一格:P022；人物站位/前后景:士隐抱英莲画左，和尚右前与英莲对视，道士右后不遮和尚；父女接触保持，僧道与父女无身体接触。；视线/眼神契约：目标=士隐与英莲看画右和尚；和尚看士隐怀中的英莲；道士看和尚的反应；方向=士隐/英莲向右，和尚向左下，道士向左前；人物完整性契约：四个角色全部继承身份 DNA：士隐脸眼发须和托抱双手双脚完整；英莲幼圆脸杏眼发束与四肢完整；和尚梦中脸型眼型发际线和旧赭袖口不变，仅加癞头赤足状态；道士脸型眼型瘦长体态不变，仅加蓬头跛足状态；所有脚与地面受力、父女托抱接触点清楚。；构图与表演：四人同格高风险；和尚赤足、道士跛足必须是脚，不能画成手。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:四张脸与托抱/步态清线，破衣用干笔但不脏乱。；黑场计划:云影落在街巷中部，人物脸保留亮。；网点/灰阶计划:现实暖竹色被一层冷灰压过，和尚旧赭、道士青灰。；黑白灰可读性:英莲脸亮、四人中、门内与云影暗。；效果线/漫符计划:云影和衣摆风线暗示异常，不用灵光。；拟声词画法:mode:none；integration:no drawn SFX；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_COURTYARD=甄宅门前街巷；道具契约:木门左、街巷右远、芭蕉与粉墙石阶固定；夏日右上暖光，远处灯架只作元宵预兆。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -2222,7 +2953,7 @@
         },
         {
           "id": "LOC_ZHEN_COURTYARD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -2254,17 +2985,53 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P023.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:19:34",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "65820da201ef3858938bcebfdf10bfc9565b8015e6dfe8ec34781a52d0d4d361",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P023.json",
+      "generated_from_contract_sha256": "d404a9e898158194ae0b3bcaae7354e737ce514206ffadbdfbf098037fad12b6",
+      "generated_from_submit_prompt_sha256": "2efcb5a358492c0935c17e1c4fc2dc68c94538c0bbd93d7d576e44740826cd71",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P023",
+        "created_at": "2026-07-12T13:19:34",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P023.png",
+        "size": {
+          "width": 1007,
+          "height": 900
+        },
+        "expected_size": {
+          "width": 1007,
+          "height": 900
+        },
+        "declared_reference_count": 6,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 1,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     },
     {
       "panel_id": "P024",
-      "status": "planned",
+      "status": "ready",
       "size": {
         "width": 1803,
         "height": 1084
       },
-      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：背影大格：甄士隐抱英莲转身走入门内，父女在画左；僧道沿画右街巷远去。远处元宵灯架尚未点亮，只有一粒朱砂色火星落在暗处。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD、CHAR_MONK、CHAR_DAOIST；场景：甄宅门前街巷；场景一致性契约：场景锚:LOC_ZHEN_COURTYARD；空间布局:父女画左前进门，僧道画右中远去，灯架在右后远景；门、街巷方向继承 P023。；光位/光色:云影后暖光恢复但饱和度下降；远景仅一粒朱砂火星，不能形成完整火灾。；轴线/视线:英莲越过父亲肩头看向画右远去和尚；士隐看门内；僧道看前路。；常驻物件:木门；粉墙；芭蕉；石阶；远处灯架；承接上一格:P023；人物站位/前后景:父女左前向门内，僧道右中向街巷远处，双方背离；英莲仍由士隐双臂承托，四人不互相遮挡关键轮廓。；视线/眼神契约：目标=英莲看画右远去的和尚背影；士隐看门内台阶；僧道看街巷前方；方向=英莲向右后，士隐向左下，僧道向右远处；人物完整性契约：父女与僧道身份、发型轮廓、服装剪影和主色继承；士隐托抱双手、英莲双手双脚、僧道背影双手双脚完整，和尚赤足和道士跛足状态延续；背影不生成错误正脸。；构图与表演：页末留黑；火星只一粒；旁白后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:背影轮廓稳定，街巷与门楼工笔，远景简化。；黑场计划:门内和页底形成大块墨黑，人物轮廓留亮边。；网点/灰阶计划:竹青、米褐、墨青，朱砂火星唯一高纯度色。；黑白灰可读性:父女边光中亮、门内暗、远景中灰、火星最亮。；效果线/漫符计划:一粒火星和极淡铃声线，不画火焰爆发。；拟声词画法:mode:drawn_sfx；text_hint:铃……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_COURTYARD=甄宅门前街巷；道具契约:木门左、街巷右远、芭蕉与粉墙石阶固定；夏日右上暖光，远处灯架只作元宵预兆。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_OMEN_EMBER=元宵灾变朱砂火星；道具契约:远景一粒朱砂火星与未点亮灯架，只作预兆；不得提前生成完整火灾、爆炸或血腥灾难。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
+      "production_contract_prompt": "无字漫画分格画面，自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)；画面事实：背影大格：甄士隐抱英莲转身走入门内，父女在画左；僧道沿画右街巷远去。远处元宵灯架尚未点亮，只有一粒朱砂色火星落在暗处。；项目风格锚与一致性契约：style_contract:STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。；consistency_policy:registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。；forbidden_inheritance:影视演员肖像与具体表演截图；影视版完整服装组合、布景和镜头构图；参考图中的水印、字幕、播放器 UI、现代影楼背景；图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效；角色：CHAR_ZHEN_SHIYIN、CHAR_YINGLIAN_CHILD、CHAR_MONK、CHAR_DAOIST；场景：甄宅门前街巷；场景一致性契约：场景锚:LOC_ZHEN_COURTYARD；空间布局:父女画左前进门，僧道画右中远去，灯架在右后远景；门、街巷方向继承 P023。；光位/光色:云影后暖光恢复但饱和度下降；远景仅一粒朱砂火星，不能形成完整火灾。；轴线/视线:英莲越过父亲肩头看向画右远去和尚；士隐看门内；僧道看前路。；常驻物件:木门；粉墙；芭蕉；石阶；远处灯架；承接上一格:P023；人物站位/前后景:父女左前向门内，僧道右中向街巷远处，双方背离；英莲仍由士隐双臂承托，四人不互相遮挡关键轮廓。；视线/眼神契约：目标=英莲看画右远去的和尚背影；士隐看门内台阶；僧道看街巷前方；方向=英莲向右后，士隐向左下，僧道向右远处；人物完整性契约：父女与僧道身份、发型轮廓、服装剪影和主色继承；士隐托抱双手、英莲双手双脚、僧道背影双手双脚完整，和尚赤足和道士跛足状态延续；背影不生成错误正脸。；构图与表演：页末留黑；火星只一粒；旁白后期嵌字。；传统漫画原稿收尾契约（目标稿层=彩色完成稿）：传统稿层顺序:rough；pencil；lineart；ink_blacks；tone_or_color；effects；lettering_sfx；墨线计划:背影轮廓稳定，街巷与门楼工笔，远景简化。；黑场计划:门内和页底形成大块墨黑，人物轮廓留亮边。；网点/灰阶计划:竹青、米褐、墨青，朱砂火星唯一高纯度色。；黑白灰可读性:父女边光中亮、门内暗、远景中灰、火星最亮。；效果线/漫符计划:一粒火星和极淡铃声线，不画火焰爆发。；拟声词画法:mode:drawn_sfx；text_hint:铃……；integration:integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots；shape:match sound quality: jagged for impact, stretched for speed, soft for ambience；无字原图契约:dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan；共享参考ID与不可漂移约束：STYLE_HLM_GONGBI_DREAM_V1=红楼梦·工笔淡彩梦境风格锚；禁继承:演员脸；剧照构图；泛黄滤镜；霓虹法阵；空白气泡；可读乱码；风格契约:细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。 || LOC_ZHEN_COURTYARD=甄宅门前街巷；道具契约:木门左、街巷右远、芭蕉与粉墙石阶固定；夏日右上暖光，远处灯架只作元宵预兆。 || CHAR_ZHEN_SHIYIN=甄士隐；角色DNA:face:五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。；hair:黑灰相间束发，发际线稳定。；body:中等身量，读书人含胸但不佝偻。；palette:竹青、米褐、旧靛。；signature:短须、竹青家居服、温和眼神。；年龄/形态继承:梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。；禁继承:具体演员肖像；富贵官员华服；仙风道骨神仙化；现代书生写真；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_YINGLIAN_CHILD=幼年英莲 / 香菱；角色DNA:face:三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。；hair:幼年双发束，发际线和额头比例供未来香菱继承。；body:真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。；palette:藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。；signature:小痣、清亮杏眼、幼年发束。；定妆契约:幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。；年龄/形态继承:三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。；禁继承:现代儿童写真；塑料娃娃质感；成人缩小版；小痣漂移；夸张大眼；已定义年龄形态:age_3,lost_child,teen,ill；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_MONK=茫茫大士 / 和尚；角色DNA:face:宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。；hair:仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。；body:中等偏壮，宽袖动作沉稳。；palette:暖灰、旧赭、米白。；signature:旧赭宽袖、掌心托玉、左侧站位。；年龄/形态继承:仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。；禁继承:恐怖僵尸；油腻笑脸；现代和尚服；脸型更换；多手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || CHAR_DAOIST=渺渺真人 / 道士；角色DNA:face:窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。；hair:仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。；body:瘦长轻快，动作比和尚更灵活。；palette:青灰、墨黑、少量旧银。；signature:青灰长袖、右侧站位、略后半步。；年龄/形态继承:仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。；禁继承:邪派道士刻板脸；现代道袍写真；欧美脸；脸型更换；把跛足画成手；同一角色换年龄、受伤、闭关、觉醒或换装时，只允许改变年龄比例/状态/服饰层，不得换脸、换发际线、换眼型或丢失标志物 || FX_OMEN_EMBER=元宵灾变朱砂火星；道具契约:远景一粒朱砂火星与未点亮灯架，只作预兆；不得提前生成完整火灾、爆炸或血腥灾难。；在不挡脸、不挡手脚、不挡关键道具的位置预留低细节留白区域；不要画对白气泡、旁白框、空白文字框或任何可读文字；定型参考图是最高优先级；截图里的播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，必须排除；角色必须保持同一张脸、同一眼型/眼距、发际线、发型轮廓、服装主色和标志配饰；头发、脸、手臂、手、腿、脚和关键道具必须完整可读，不能裁掉叙事需要的身体部位；除非本格明确写 POV/破第四墙，角色不要直视读者镜头；眼神应锁定戏内对象、对手、道具、对白对象或下一动作目标；线条清晰，主体明确，角色脸部、发型、服装、灵力纹路、标志道具和整体画风稳定，适合后期嵌字",
       "production_negative_contract": "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，脸部漂移，发际线漂移，眼型漂移，眼距漂移，发型漂移，年龄形态换脸，服装漂移，标志灵纹丢失，场景布局漂移，光位漂移，常驻道具丢失，looking at viewer，eye contact with camera，front-facing portrait，selfie，低清晰度，低成本彩漫感，Q版化，过度血腥细节",
       "prompt_source_kind": "compiled_submit_prompt",
       "prompt_compiler": {
@@ -2326,7 +3093,7 @@
         },
         {
           "id": "LOC_ZHEN_COURTYARD",
-          "path": ""
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -2346,7 +3113,7 @@
         },
         {
           "id": "FX_OMEN_EMBER",
-          "path": ""
+          "path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png"
         }
       ],
       "reference_budget": {
@@ -2362,8 +3129,45 @@
         "style_reference_limit": 2,
         "notes": "OpenAI/Codex route: use project-memory references via real image inputs; no public persistent subject id is assumed."
       },
-      "result_path": "",
-      "source": "Codex CLI"
+      "result_path": "出图/第1话/panels/P024.png",
+      "source": "Codex CLI",
+      "model": "GPT Image 2",
+      "generated_at": "2026-07-12T13:23:44",
+      "backend_version": "codex-cli 0.144.1",
+      "artifact_sha256": "159040545eabda098f6e1f7597d96fbeec90827bff95cff34fde7a4ef932bcbc",
+      "attempt": 1,
+      "reference_input_mode": "codex_exec_image_flags",
+      "reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P024.json",
+      "generated_from_contract_sha256": "5122675f5ed079a44efc18e74f4a14cb7df2d176c1c9b12c1ca34ff4cb93cf70",
+      "generated_from_submit_prompt_sha256": "a71eadffcb37596663c2f28cbf8f2f0d6cb25a7ce53fa0d74b11167b94da0763",
+      "post_qc": {
+        "schema_version": 1,
+        "kind": "comic_panel_post_qc",
+        "chapter": "第1话",
+        "panel_id": "P024",
+        "created_at": "2026-07-12T13:23:44",
+        "verdict": "pass",
+        "path": "出图/第1话/panels/P024.png",
+        "size": {
+          "width": 1803,
+          "height": 1084
+        },
+        "expected_size": {
+          "width": 1803,
+          "height": 1084
+        },
+        "declared_reference_count": 7,
+        "reference_input_count": 5,
+        "omitted_attachment_count": 2,
+        "omitted_attachment_ids": [
+          "STYLE_HLM_GONGBI_DREAM_V1",
+          "FX_OMEN_EMBER"
+        ],
+        "blank_region_candidates": [],
+        "issues": [],
+        "manual_review_required": false
+      }
     }
   ]
 }

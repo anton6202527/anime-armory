@@ -53,7 +53,7 @@ def test_scaffold_creates_required_director_files(tmp_path: Path) -> None:
     assert (tmp_path / "生产数据" / "director_blocking_pack_第1集.md").exists()
 
 
-def test_scaffold_from_voiceover_keeps_all_beats(tmp_path: Path) -> None:
+def test_scaffold_from_voiceover_groups_lines_into_bounded_dramatic_beats(tmp_path: Path) -> None:
     ep_dir = tmp_path / "脚本" / "第1集"
     ep_dir.mkdir(parents=True)
     lines = [f"[镜头{i}·旁白·推进] 第{i}句。" for i in range(1, 13)]
@@ -63,9 +63,27 @@ def test_scaffold_from_voiceover_keeps_all_beats(tmp_path: Path) -> None:
 
     beat_sheet = json.loads((ep_dir / "director_beat_sheet.json").read_text(encoding="utf-8"))
     transition_map = json.loads((ep_dir / "transition_map.json").read_text(encoding="utf-8"))
-    assert len(beat_sheet["beats"]) == 12
-    assert beat_sheet["beats"][-1]["beat_id"] == "Beat_12"
-    assert len(transition_map["seams"]) == 11
+    assert len(beat_sheet["beats"]) == 3
+    assert beat_sheet["beats"][-1]["beat_id"] == "Beat_03"
+    assert beat_sheet["beats"][0]["source_voiceover_range"] == "voiceover lines 1-4"
+    assert beat_sheet["beats"][-1]["source_voiceover_range"] == "voiceover lines 9-12"
+    assert "第1句" in beat_sheet["beats"][0]["source_voiceover_hint"]
+    assert "第12句" in beat_sheet["beats"][-1]["source_voiceover_hint"]
+    assert len(transition_map["seams"]) == 2
+
+
+def test_scaffold_from_long_voiceover_caps_fallback_beats(tmp_path: Path) -> None:
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    lines = [f"[镜头{i}·旁白·推进] 第{i}句。" for i in range(1, 101)]
+    (ep_dir / "voiceover.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    dbp.scaffold(tmp_path, "第1集")
+
+    beat_sheet = json.loads((ep_dir / "director_beat_sheet.json").read_text(encoding="utf-8"))
+    assert len(beat_sheet["beats"]) == dbp.FALLBACK_MAX_BEATS
+    assert beat_sheet["beats"][-1]["source_voiceover_range"].endswith("-100")
+    assert "第100句" in beat_sheet["beats"][-1]["source_voiceover_hint"]
 
 
 def test_scaffold_axis_map_uses_storyboard_ids_not_placeholders(tmp_path: Path) -> None:
@@ -152,6 +170,28 @@ def test_check_blocks_confirmed_axis_map_missing_shot_reverse_pattern(tmp_path: 
 
     assert report["status"] == "block"
     assert any("shot_reverse_patterns" in issue for issue in axis_row["issues"])
+
+
+def test_p2_axis_gate_is_not_retroactively_bound_to_later_storyboard_clip_ids(tmp_path: Path) -> None:
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "voiceover.txt").write_text("她看向对手。\n", encoding="utf-8")
+    dbp.scaffold(tmp_path, "第1集")
+    axis_path = ep_dir / "axis_blocking_map.json"
+    axis = json.loads(axis_path.read_text(encoding="utf-8"))
+    axis["status"] = "confirmed"
+    axis_path.write_text(json.dumps(axis, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ep_dir / "storyboard.json").write_text(json.dumps({"clips": [{
+        "id": "EP01_CLIP99",
+        "template": "dialogue_shot_reverse",
+        "character_ids": ["CHAR_A", "CHAR_B"],
+    }]}), encoding="utf-8")
+
+    report = dbp.check(tmp_path, "第1集")
+    axis_row = next(row for row in report["files"] if row["rel"].endswith("axis_blocking_map.json"))
+
+    assert axis_row["status"] == "pass"
+    assert not any("EP01_CLIP99" in issue for issue in axis_row["issues"])
 
 
 def test_scaffold_from_storyboard_prefills_but_does_not_self_approve(tmp_path: Path) -> None:

@@ -72,7 +72,7 @@ IMAGE_QC_PYTHON_CANDIDATES = (
     "~/anaconda3/envs/facefusion/bin/python",
 )
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
-SHARED_ASSET_ID_PREFIXES = ("CHAR_", "GROUP_", "LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")
+SHARED_ASSET_ID_PREFIXES = ("CHAR_", "BEAST_", "GROUP_", "LOC_", "PROP_", "MOUNT_", "WEAPON_", "OUTFIT_", "VFX_")
 EPISODE_CLIP_IMAGE_RE = re.compile(r"^Clip_?\d{2}_.+\.(?:png|jpg|jpeg|webp)$", re.I)
 CROSS_EPISODE_SOURCE_FRAME_LINE_RE = re.compile(
     r"(?:跨集接力源帧|上一集尾帧|前集尾帧|prev_tail_frame|cross_episode_handoff)",
@@ -759,9 +759,9 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
     # The section title owns the shared target identity.  Body text may mention
     # related assets, such as VFX_01 in a character form, but those references
     # must not become selectable aliases for this target.
-    ids = re.findall(r"`?((?:CHAR|GROUP|LOC|PROP|MOUNT|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
+    ids = re.findall(r"`?((?:CHAR|BEAST|GROUP|LOC|PROP|MOUNT|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`?", title)
     aliases.update(ids)
-    form_refs = re.findall(r"`?((?:CHAR|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+/[A-Za-z0-9_\u4e00-\u9fff·.-]+)`?", f"{title}\n{body}")
+    form_refs = re.findall(r"`?((?:CHAR|BEAST|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+/[A-Za-z0-9_\u4e00-\u9fff·.-]+)`?", f"{title}\n{body}")
     aliases.update(form_refs)
     if "CHAR_01" in aliases and "常态" in title:
         aliases.add("CHAR_01/常态")
@@ -775,7 +775,7 @@ def shared_aliases(title: str, body: str, rel_path: str) -> set:
 
 
 def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
-    title_ids = re.findall(r"`((?:CHAR|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`", title)
+    title_ids = re.findall(r"`((?:CHAR|BEAST|LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+)`", title)
     for ident in title_ids:
         form_alias = ""
         if ident == "CHAR_01" and "常态" in title:
@@ -790,7 +790,7 @@ def preferred_shared_shot(title: str, aliases: set, rel_path: str) -> str:
             return form_alias
         if ident in aliases:
             return ident
-    for prefix in ("CHAR_", "LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_"):
+    for prefix in ("CHAR_", "BEAST_", "LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_"):
         candidates = sorted(a for a in aliases if isinstance(a, str) and a.startswith(prefix))
         if candidates:
             return candidates[0]
@@ -982,7 +982,7 @@ def _reference_relevant_text(body: str) -> str:
         if in_reference_block:
             lines.append(line)
             continue
-        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "身份注册", "成长派生", "资产引用注册层", "生成方式")):
+        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "身份注册", "成长派生", "资产引用注册层", "生成方式", "常驻主体", "常驻角色")):
             lines.append(line)
     return "\n".join(lines)
 
@@ -1005,8 +1005,8 @@ def _registry_ref_scan_text(body: str) -> str:
 
 def _shot_character_refs(body: str) -> Set[str]:
     text = _registry_ref_scan_text(body)
-    refs = set(re.findall(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text))
-    refs |= {m.strip("`") for m in re.findall(r"`(CHAR_[^`]+)`", text)}
+    refs = set(re.findall(r"(?:CHAR|BEAST)_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text))
+    refs |= {m.strip("`") for m in re.findall(r"`((?:CHAR|BEAST)_[^`]+)`", text)}
     return {r.strip("` *，,。；;、)）(") for r in refs if r.strip("` *，,。；;、)）(")}
 
 
@@ -1030,7 +1030,7 @@ _PERSON_SHOWING_ASSET_TYPES = {
     "cover", "群像", "海报", "封面", "关系图",
 }
 
-_CHAR_REF_RE = re.compile(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_一-鿿·.-]+)?")
+_CHAR_REF_RE = re.compile(r"(?:CHAR|BEAST)_[A-Za-z0-9_]+(?:/[A-Za-z0-9_一-鿿·.-]+)?")
 
 # Explicit "a person is in frame" signal, used to infer carried identity even when
 # the asset's `type` is blank/custom (so it falls outside _IDENTITY_BEARING_ASSET_TYPES).
@@ -1335,6 +1335,24 @@ def load_style_anchor_paths(root: Path) -> List[str]:
     return anchors
 
 
+def load_style_source_paths(root: Path) -> List[str]:
+    """Raw user style observations, usable only to synthesize the clean style anchor."""
+    data = load_json_file(root / STYLE_ANCHOR_REGISTRY)
+    if not data:
+        return []
+    paths: List[str] = []
+    seen: Set[str] = set()
+    _collect_ready_image_paths(
+        data.get("source_style_references"),
+        root,
+        paths,
+        seen,
+        allow_non_shared=True,
+        allow_pending_user_reference=True,
+    )
+    return paths
+
+
 def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dict[str, Any]:
     """Resolve per-shot character/asset references into a backend-friendly bundle."""
     body = target.section.body
@@ -1343,7 +1361,7 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
     if target.mode == "shared":
         for alias in getattr(target, "aliases", set()) or set():
             text = str(alias).strip()
-            if re.fullmatch(r"CHAR_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text):
+            if re.fullmatch(r"(?:CHAR|BEAST)_[A-Za-z0-9_]+(?:/[A-Za-z0-9_\u4e00-\u9fff·.-]+)?", text):
                 char_refs.add(text)
             elif re.fullmatch(r"(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\u4e00-\u9fff]+", text):
                 asset_refs.add(text)
@@ -1364,6 +1382,15 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
             "paths": style_anchor_paths,
             "use_policy": "style_only",
         })
+    if target.mode == "shared" and is_style_anchor_path(target.rel_path):
+        style_source_paths = load_style_source_paths(root)
+        if style_source_paths:
+            items.append({
+                "kind": "style",
+                "id": "STYLE_SOURCE_REFERENCES",
+                "paths": style_source_paths,
+                "use_policy": "style_source_only_for_clean_anchor_synthesis",
+            })
     cross_episode_sources = cross_episode_source_frame_paths(body)
     if cross_episode_sources:
         items.append({
@@ -2224,7 +2251,7 @@ def reference_bundle_prompt_text(root: Path, bundle: Dict[str, Any], manifest_pa
 
 def _target_has_character_alias(target: Target) -> bool:
     aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
-    return any(alias.startswith("CHAR_") for alias in aliases)
+    return any(alias.startswith(("CHAR_", "BEAST_")) for alias in aliases)
 
 
 def _target_has_prop_alias(target: Target) -> bool:
@@ -2535,21 +2562,66 @@ def model_facing_policy_guards(
     body = str(getattr(target.section, "body", "") or "")
     guards: List[str] = []
 
+    stem = Path(target.rel_path).stem
+    aliases = {str(item) for item in getattr(target, "aliases", set()) or set()}
+    shared_scene_target = target.mode == "shared" and any(
+        value.startswith("LOC_")
+        for value in {str(target.shot or ""), str(target.clip or ""), *aliases}
+    )
+    primary_character_makeup = (
+        target.mode == "shared"
+        and _target_has_character_alias(target)
+        and not any(token in stem for token in ("45度", "三分之二", "_侧", "侧面", "_背", "背面", "半身", "脸部", "三视图", "表情", "动作"))
+    )
     gaze_lock = bool(re.search(
         r"CHAR_|人物|角色|少年|少女|男人|女人|男子|女子|主角|对手|打斗|格挡|挥剑|劈砍|出拳|对话",
         body,
     )) and bool(camera_gaze_negatives_for(body))
-    if gaze_lock:
+    if primary_character_makeup:
+        guards.append(
+            "共享角色正面主母本：身体、肩线和脸严格正对相机，头部偏转不超过 5 度，双眼与五官近似对称可核验；"
+            "眼神轻微越过镜头而非写真式盯镜头。不得生成 45°、三分之二侧脸、侧身、背身或多视图拼板"
+        )
+    elif gaze_lock:
         guards.append(
             "镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；"
             "身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍"
         )
 
-    if re.search(r"用户(?:提供的)?(?:人物|主角)?参考图|外部参考图", body):
+    if "左臂不自然扭曲" in body or "左臂骨折" in body:
+        guards.append(
+            "左臂伤势是必须可读的连续性锚点：按角色自身左右计，伤臂位于画面观者右侧；"
+            "肘/前臂必须出现清楚的受伤折角并无力下垂，明显无法承重或正常发力；"
+            "保持恰好两条手臂两只手，不得增生肢体、错置关节或把未受伤的右臂一起画坏"
+        )
+
+    if shared_scene_target and "系统金光仅作局部剧情光" in body:
+        guards.append(
+            "空场景主母本是无特效的环境底版：本张完全不出现系统金光、金色法术纹、金色能量轨迹、"
+            "发光法器、仪式器皿、符阵或魔法烟雾；只保留自然夕阳在尘土、岩石和旧金属上的低饱和反光，"
+            "系统特效由后续镜头单独叠加"
+        )
+
+    resident_character_refs = sorted(_shot_character_refs(body)) if shared_scene_target else []
+    if resident_character_refs:
+        guards.append(
+            "场景中的常驻具名主体必须继承对应身份附件："
+            + "、".join(resident_character_refs)
+            + "；尸体/倒地状态只改变姿势和生命状态，不改变物种、人形/四足拓扑、头部结构、毛色、体量或持续伤口；"
+            "禁止把虎头人身妖物改成四足普通虎"
+        )
+
+    external_character_inputs = any(
+        str(item.get("role") or "") == "character"
+        and not str(item.get("rel_path") or "").startswith("出图/共享/")
+        for item in reference_inputs
+        if isinstance(item, Mapping)
+    )
+    if re.search(r"用户(?:提供的)?(?:人物|主角)?参考图|外部参考图", body) or external_character_inputs:
         guards.extend([
             "用户提供的人物/主角参考图默认只作身份与身形锚：提取基础身高、体型/身材比例、体态、脸型、五官比例和年龄感；"
             "外部参考图的风格权重视为 0，不得继承参考图里的画风、照片/摄影风格、渲染风格、滤镜、光影、构图、衣装或背景",
-            "附件是真实视觉证据；每个角色只使用自己的身份附件，禁止把 A 的脸、发型、衣服或配饰套给 B；身份、发型、服装与道具结构以对应附件为准",
+            "附件是真实视觉证据；每个角色只使用自己的身份附件，禁止把 A 的脸或身形套给 B；脸型、五官比例、年龄感与身形可读附件，发型、服装、配饰和道具结构必须服从本项目角色定妆合同，禁止继承外部参考图衣装",
             "低清或截图参考只锁身份与结构；不得继承低清、像素化、模糊、压缩块、屏幕截图质感、播放按钮、平台 UI、字幕或水印，输出保持清晰干净",
         ])
 
@@ -3581,14 +3653,9 @@ def mark_shared_reference_status(
 
 
 def status_after_shared_generation(rel_path: str, target: Optional[Target] = None) -> str:
-    if target is not None and target.mode == "shared":
-        aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
-        has_character_alias = any(alias.startswith("CHAR_") for alias in aliases)
-        has_asset_alias = any(alias.startswith(("LOC_", "VFX_", "PROP_", "WEAPON_", "OUTFIT_")) for alias in aliases)
-        if has_asset_alias and not has_character_alias:
-            return "ready"
     if (
-        requires_human_review_before_ready(rel_path)
+        target is not None
+        and target.mode == "shared"
         and os.environ.get("N2D_HUMAN_REVIEWED_SHARED") != "1"
     ):
         return "review_pending"
@@ -3618,6 +3685,46 @@ def latest_recorded_status(root: Path, task_id: str, rel_path: str) -> str:
             if generation.get("asset") == rel_path and str(meta.get("task") or "") == task_id:
                 status = str(generation.get("status") or "")
     return status.lower()
+
+
+def target_generation_lock(root: Path, rel_path: str) -> Path:
+    token = hashlib.sha256(str(rel_path).encode("utf-8")).hexdigest()[:20]
+    return root / "生产数据" / ".generation_locks" / f"{token}.lock"
+
+
+def acquire_target_generation_lock(root: Path, rel_path: str, timeout_sec: Optional[float]) -> Optional[Path]:
+    """Atomically prevent duplicate paid submissions for the same target."""
+    lock = target_generation_lock(root, rel_path)
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    stale_after = max(float(timeout_sec or 600.0) + 120.0, 720.0)
+    for _ in range(2):
+        try:
+            fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except FileExistsError:
+            try:
+                age = max(0.0, time.time() - lock.stat().st_mtime)
+            except OSError:
+                age = 0.0
+            if age <= stale_after:
+                return None
+            try:
+                lock.unlink()
+            except OSError:
+                return None
+            continue
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump({"pid": os.getpid(), "target": rel_path, "created_at": time.time()}, fh, ensure_ascii=False)
+        return lock
+    return None
+
+
+def release_target_generation_lock(lock: Optional[Path]) -> None:
+    if not lock:
+        return
+    try:
+        lock.unlink()
+    except FileNotFoundError:
+        pass
 
 
 def process_target(
@@ -3687,7 +3794,9 @@ def process_target(
 
     if not force and existing_shared_image:
         if is_style_anchor_path(target.rel_path):
-            mark_style_anchor_ready(root, target.rel_path)
+            # Existing pixels are not a visual signoff. Keep the registry's
+            # review_pending/approved state; a skip must never auto-promote.
+            pass
         else:
             mark_shared_reference_status(
                 root,
@@ -3781,6 +3890,13 @@ def process_target(
         compiled_request=compiled_request,
     )
     compiled_receipt = write_compiled_request_receipt(root, episode, target, compiled_request, prompt)
+    generation_lock = acquire_target_generation_lock(root, target.rel_path, timeout_sec)
+    if generation_lock is None:
+        print(
+            f"[fail] {target.shot}: target already has an active generation lock; do not resubmit while the prior paid job is running",
+            file=sys.stderr,
+        )
+        return False
     started = time.monotonic()
     error = ""
     archive_path: Optional[Path] = None
@@ -3798,7 +3914,7 @@ def process_target(
             ok = png_valid(final)
             if ok and target.mode == "shared":
                 if is_style_anchor_path(target.rel_path):
-                    mark_style_anchor_ready(root, target.rel_path)
+                    mark_style_anchor_ready(root, target.rel_path, status="review_pending")
                 else:
                     mark_shared_reference_status(
                         root,
@@ -3812,6 +3928,8 @@ def process_target(
         error = f"codex timed out after {timeout_sec}s"
     except Exception as exc:  # pragma: no cover - defensive batch guard
         error = f"{type(exc).__name__}: {exc}"
+    finally:
+        release_target_generation_lock(generation_lock)
 
     duration = time.monotonic() - started
     record_event(

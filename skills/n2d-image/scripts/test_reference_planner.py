@@ -132,6 +132,23 @@ def test_parse_clip_new_schema() -> None:
     assert "枯枝指" in parsed["text"] and "略仰机位" in parsed["text"]
 
 
+def test_parse_clip_uses_entity_schedule_visible_characters() -> None:
+    clip = {
+        "id": "Clip_03",
+        "character_ids": ["CHAR_01", "CHAR_02"],
+        "entity_schedule": {
+            "characters": ["CHAR_01"],
+            "offscreen_presence": ["CHAR_02"],
+            "forbidden_presence": [],
+        },
+        "continuity": {"shot_size": "CU"},
+    }
+
+    parsed = rp.parse_clip(clip)
+
+    assert parsed["character_ids"] == ["CHAR_01"]
+
+
 def test_parse_clip_template_contract_string() -> None:
     clip = {
         "id": "Clip_02",

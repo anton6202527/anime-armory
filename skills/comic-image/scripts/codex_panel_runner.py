@@ -35,6 +35,7 @@ PNG_SIG = b"\x89PNG\r\n\x1a\n"
 CODEX_MODEL = "GPT Image 2"
 CODEX_CHANNEL = "Codex CLI"
 SKILLS_ROOT = Path(__file__).resolve().parents[2]
+CODEX_IMAGE_GENERATION_REFERENCE_LIMIT = 5
 
 
 def run_preflight_gate(root: Path, chapter: str) -> int:
@@ -129,6 +130,34 @@ def collect_reference_images(root: Path, job: dict[str, Any]) -> list[dict[str, 
     return records
 
 
+def reference_attachment_priority(record: dict[str, str]) -> int:
+    """Codex image_generation 参考槽优先级：身份 > 场景 > 道具 > 风格 > 特效。"""
+    ref_id = str(record.get("id") or "").upper()
+    if ref_id.startswith("CHAR_"):
+        return 0
+    if ref_id.startswith(("LOC_", "MON_")):
+        return 1
+    if ref_id.startswith("PROP_"):
+        return 2
+    if ref_id.startswith("STYLE_"):
+        return 3
+    if ref_id.startswith(("FX_", "VFX_")):
+        return 4
+    return 5
+
+
+def select_reference_attachments(
+    records: list[dict[str, str]],
+    limit: int = CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """按真实工具上限选择附件；被省略项仍留在 job 的文字生产合同中。"""
+    ranked = sorted(enumerate(records), key=lambda item: (reference_attachment_priority(item[1]), item[0]))
+    selected_indices = {index for index, _record in ranked[: max(0, limit)]}
+    selected = [record for index, record in enumerate(records) if index in selected_indices]
+    omitted = [record for index, record in enumerate(records) if index not in selected_indices]
+    return selected, omitted
+
+
 def missing_reference_ids(root: Path, job: dict[str, Any]) -> list[str]:
     missing: list[str] = []
     for ref in job.get("references") or []:
@@ -143,7 +172,14 @@ def missing_reference_ids(root: Path, job: dict[str, Any]) -> list[str]:
     return missing
 
 
-def write_reference_manifest(root: Path, chapter: str, panel_id: str, records: list[dict[str, str]]) -> Path:
+def write_reference_manifest(
+    root: Path,
+    chapter: str,
+    panel_id: str,
+    records: list[dict[str, str]],
+    omitted: list[dict[str, str]] | None = None,
+) -> Path:
+    omitted = omitted or []
     path = root / "生产数据" / "codex_reference_bundles" / chapter / f"{panel_id}.json"
     payload = {
         "schema_version": 1,
@@ -151,10 +187,20 @@ def write_reference_manifest(root: Path, chapter: str, panel_id: str, records: l
         "chapter": chapter,
         "panel_id": panel_id,
         "reference_input_mode": "codex_exec_image_flags",
+        "reference_attachment_limit": CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
         "cli_image_input_count": len(records),
         "references": [
             {key: value for key, value in record.items() if key != "abs_path"}
             for record in records
+        ],
+        "omitted_attachment_count": len(omitted),
+        "omitted_attachments": [
+            {
+                "id": record.get("id", ""),
+                "path": record.get("path", ""),
+                "reason": "codex_image_generation_reference_limit; textual_contract_retained",
+            }
+            for record in omitted
         ],
         "created_at": dt.datetime.now().isoformat(timespec="seconds"),
     }
@@ -332,7 +378,9 @@ def post_qc_panel(
     job: dict[str, Any],
     path: Path,
     reference_records: list[dict[str, str]],
+    omitted_reference_records: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
+    omitted_reference_records = omitted_reference_records or []
     issues: list[dict[str, str]] = []
     pid = str(job.get("panel_id") or path.stem)
     if not png_valid(path):
@@ -358,12 +406,18 @@ def post_qc_panel(
         )
 
     declared_refs = [ref for ref in job.get("references") or [] if isinstance(ref, dict) and ref.get("id")]
-    if declared_refs and len(reference_records) < len(declared_refs):
+    unresolved_reference_count = max(
+        0, len(declared_refs) - len(reference_records) - len(omitted_reference_records)
+    )
+    if unresolved_reference_count:
         issues.append(
             {
                 "severity": "block",
                 "category": "reference",
-                "reason": f"only {len(reference_records)} real reference inputs for {len(declared_refs)} declared references",
+                "reason": (
+                    f"{unresolved_reference_count} declared reference(s) are neither attached nor "
+                    "disclosed as tool-limit omissions"
+                ),
             }
         )
 
@@ -395,6 +449,8 @@ def post_qc_panel(
         "expected_size": {"width": expected_w, "height": expected_h},
         "declared_reference_count": len(declared_refs),
         "reference_input_count": len(reference_records),
+        "omitted_attachment_count": len(omitted_reference_records),
+        "omitted_attachment_ids": [record.get("id", "") for record in omitted_reference_records],
         "blank_region_candidates": blank_regions,
         "issues": issues,
         "manual_review_required": verdict != "pass",
@@ -615,6 +671,11 @@ def main() -> int:
     parser.add_argument("--no-post-qc", action="store_true", help="跳过每格落盘后的 deterministic QC 记录")
     parser.add_argument("--continue-on-qc-block", action="store_true", help="调试用：遇到 post_qc=block 仍继续后续格；默认立即停下")
     parser.add_argument(
+        "--recheck-existing",
+        action="store_true",
+        help="只对目标格现有 PNG 重跑 post-QC 并刷新 job 状态，不调用生图模型、不归档或重抽",
+    )
+    parser.add_argument(
         "--skip-gate",
         action="store_true",
         help="显式跳过内置 image_preflight gate（编排层刚跑过 gate、或人工确认误报时用；跳过会留痕）",
@@ -661,9 +722,44 @@ def main() -> int:
         archived_existing = archive_existing(final, candidate_root / str(pid), "previous") if args.force else ""
         started = time.monotonic()
         last_error = ""
-        reference_records = collect_reference_images(root, job)
-        reference_manifest = write_reference_manifest(root, args.chapter, str(pid), reference_records)
+        all_reference_records = collect_reference_images(root, job)
+        reference_records, omitted_reference_records = select_reference_attachments(all_reference_records)
+        reference_manifest = write_reference_manifest(
+            root, args.chapter, str(pid), reference_records, omitted_reference_records
+        )
+        if omitted_reference_records:
+            omitted_ids = ", ".join(record["id"] for record in omitted_reference_records)
+            print(
+                f"[warn] {pid} reference attachments capped at "
+                f"{CODEX_IMAGE_GENERATION_REFERENCE_LIMIT}; textual contracts retained for: {omitted_ids}",
+                flush=True,
+            )
         reference_paths = [Path(record["abs_path"]) for record in reference_records]
+        if args.recheck_existing:
+            if not png_valid(final):
+                print(f"[err] {pid} has no valid existing PNG to recheck: {final}", file=sys.stderr)
+                failures += 1
+                continue
+            post_qc = post_qc_panel(
+                root,
+                args.chapter,
+                job,
+                final,
+                reference_records,
+                omitted_reference_records,
+            )
+            verdict = str(post_qc.get("verdict") or "block")
+            job["status"] = "qc_block" if verdict == "block" else "ready"
+            job["result_path"] = rel_to_root(root, final)
+            job["post_qc"] = verdict
+            job["reference_manifest"] = rel_to_root(root, reference_manifest)
+            write_json(jobs_path, data)
+            print(f"[recheck] {pid} -> post_qc={verdict}", flush=True)
+            if verdict == "block":
+                qc_blocked += 1
+                if not args.continue_on_qc_block:
+                    return 3
+            continue
         for attempt in range(1, max_attempts + 1):
             with tempfile.TemporaryDirectory(prefix=f"comic-codex-{pid}-") as tmp:
                 temp_path = Path(tmp) / f"{pid}.png"
@@ -704,7 +800,18 @@ def main() -> int:
                 final.parent.mkdir(parents=True, exist_ok=True)
                 os.replace(temp_path, final)
                 rel = str(final.relative_to(root))
-                post_qc = {} if args.no_post_qc else post_qc_panel(root, args.chapter, job, final, reference_records)
+                post_qc = (
+                    {}
+                    if args.no_post_qc
+                    else post_qc_panel(
+                        root,
+                        args.chapter,
+                        job,
+                        final,
+                        reference_records,
+                        omitted_reference_records,
+                    )
+                )
                 post_qc_verdict = str(post_qc.get("verdict") or "skipped")
                 history = job.get("history") if isinstance(job.get("history"), list) else []
                 if archived_existing:

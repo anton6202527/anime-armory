@@ -1,0 +1,66 @@
+{
+  "acceptance": {
+    "dialogue_voice_distinct": "accepted",
+    "duration_risk_understood": "accepted",
+    "exposition_not_overloaded": "accepted",
+    "reviewer": "",
+    "rewrite_notes": [],
+    "signoff_manifest": "脚本/第1集/table_read_signoff.json"
+  },
+  "episode": "第1集",
+  "generated_at": "2026-07-12T08:34:45+00:00",
+  "inputs": {
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "timing_estimate": "合成/第1集/配音/timing_estimate.json",
+    "timing_manifest": "合成/第1集/配音/时长清单.json",
+    "voiceover": "脚本/第1集/voiceover.txt"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "合成/第1集/配音/timing_estimate.json": "ae7f1fe41536f715e058954ba30216331338bf623034fd6ce2a30760a86ba2fe",
+      "合成/第1集/配音/时长清单.json": null,
+      "脚本/第1集/voiceover.txt": "66e3a26ca65e3ab43c4fd2495b147828cf4bf3f409078008e2c65b0c15b1d6fb"
+    },
+    "sha": "c584251c8019ffcffc96f64e1c4c77ec58945532e07e32946d5d7ad0250190a7"
+  },
+  "kind": "n2d_table_read_packet",
+  "machine_reference": {
+    "advisory": true,
+    "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。",
+    "story_economy": {
+      "block": 0,
+      "narration_heavy_clips": 0,
+      "over_budget_codes": [
+        "story_clip_over_economy_target"
+      ],
+      "warn": 9
+    },
+    "timing_estimate": {
+      "duration_sec": 126.131,
+      "line_count": 34,
+      "split_suggested_lines": 0
+    }
+  },
+  "owner": "writer_director_producer",
+  "read_through": {
+    "line_count": 34,
+    "placeholder_or_rough_timing_mentions": 0,
+    "sample_lines": [
+      "[镜头1·虎妖·阴冷] 别跑了……这荒郊野岭的，你们想去哪儿？ ⚡钩子",
+      "[镜头2·姜月初·惊骇·快] 它胸口明明被捅穿了——为什么还能站起来？！ ⚡危机",
+      "[镜头3·旁白·冷峻·慢] 一炷香前。",
+      "[镜头4·姜月初·茫然·慢] 我不是刚下班吗……这里是哪儿？我得先活下去。",
+      "[镜头5·旁白·压迫·慢] 枯草、尸骸，还有她身上灰扑扑的囚服。这里不是现代，而是妖魔横行的大唐。",
+      "[镜头6·姜月初·警觉] 那些黑衣人袖口的赤云纹……镇魔司。传闻他们登门，便是阎王爷亲至。",
+      "[镜头7·姜月初·后怕·慢] 至于那头虎妖——胸口都空了，应该死透了吧？ ⚡反差",
+      "[镜头8·裴长青·虚弱·慢] 过来。",
+      "[镜头9·姜月初·戒备·快] 尸堆里竟然还有活人？他浑身是伤，左臂都扭曲了。",
+      "[镜头10·姜月初·冷静内心] 他快死了。现在逃，也许还来得及。",
+      "[镜头11·旁白·骤响] 她刚转身，断刀破风，钉入脚前。",
+      "[镜头12·姜月初·惊恐·快] 半截断刀，钉在了我脚前！"
+    ],
+    "timing_status": "estimate_only"
+  },
+  "status": "confirmed",
+  "version": 1
+}

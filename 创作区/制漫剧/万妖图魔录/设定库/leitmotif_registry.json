@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_leitmotif_registry",
+  "version": 1,
+  "motifs": [
+    {"id": "LM_JIANG_YUECHU_01", "subject": "姜月初", "desc": "低弦三音下行后由一记克制木击止住；从被动坠落转为主动决断，禁止甜美女主旋律。"},
+    {"id": "LM_BAIYAO_SCROLL_01", "subject": "百妖谱", "desc": "纸卷展开、古琴泛音与低沉金属共振；每次收录/升级可变奏，道行到账只给短促识别音。"},
+    {"id": "LM_DEMON_THREAT_01", "subject": "妖魔威胁", "desc": "埙低音、粗粝呼吸与稀疏皮鼓；不同妖物叠加自己的材质声，不共用廉价咆哮。"}
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P016",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 5,
+  "references": [
+    {
+      "id": "STYLE_HLM_GONGBI_DREAM_V1",
+      "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+      "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+    },
+    {
+      "id": "LOC_SPIRIT_RIVER",
+      "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+      "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b"
+    },
+    {
+      "id": "CHAR_JIANGZHU",
+      "path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+      "sha256": "944dcbec3b474a4a3ff7c11fc7cbac6006c8ad24bbcd0b714ee5764f09c8d9e5"
+    },
+    {
+      "id": "CHAR_SHENYING",
+      "path": "出图/共享/图片/CHAR_SHENYING__front.png",
+      "sha256": "a72e6d50b13b1e6380f0f6d8bb6a15fb9c9f633165c92ed84a1d84036fc23a74"
+    },
+    {
+      "id": "FX_INK_DREAM_TRANSITION",
+      "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+      "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-12T11:42:48"
+}

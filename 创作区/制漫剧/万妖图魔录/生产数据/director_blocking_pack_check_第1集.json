@@ -1,0 +1,52 @@
+{
+  "episode": "第1集",
+  "files": [
+    {
+      "issues": [],
+      "rel": "脚本/第1集/director_beat_sheet.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/axis_blocking_map.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/shot_progression_plan.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/transition_map.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/vertical_composition_plan.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/edit_rhythm_map.json",
+      "status": "pass"
+    },
+    {
+      "issues": [],
+      "rel": "脚本/第1集/director_blocking_signoff.json",
+      "status": "pass"
+    }
+  ],
+  "generated_at": "2026-07-12T08:33:31+00:00",
+  "kind": "n2d_director_blocking_pack_check",
+  "next_when_blocked": "补齐 P-2 导演排戏包六件套并把内容 status 改为 confirmed；再用 signoff.py 由导演与制片/剪辑角色签收当前文件哈希。之后重跑 check，再进入阶段2分镜设计。",
+  "root": "创作区/制漫剧/万妖图魔录",
+  "scaffold_command": "python3 skills/n2d-script/scripts/director_blocking_pack.py 创作区/制漫剧/万妖图魔录 第1集 scaffold --write",
+  "status": "pass",
+  "summary": {
+    "block": 0,
+    "pass": 7,
+    "required": 7
+  },
+  "version": 1
+}

@@ -61,6 +61,50 @@ def test_long_fight_with_anchors_passes_action_anchor_rule():
     assert not any(row["dimension"] == "重动作多中帧" for row in rows)
 
 
+def test_anchor_fields_are_validated_in_anchor_contract_even_for_final_clip():
+    rows = []
+    VC.check_anchor_contract(
+        rows,
+        _long_fight({
+            "start_state": "s",
+            "end_state": "e",
+            "transition": "end",
+            "anchors": [
+                {"anchor_png": "", "at_sec": 12.0, "reason": ""},
+            ],
+        }),
+        "storyboard final clip",
+        enforce_midframe=False,
+    )
+
+    messages = "\n".join(row["message"] for row in rows)
+    assert "anchor_png" in messages
+    assert "reason" in messages
+    assert "必须落在" in messages
+
+
+def test_valid_seam_contract_does_not_depend_on_anchor_locals():
+    rows = []
+    VC.check_seam_contract(
+        rows,
+        {
+            "id": "EP01_CLIP01",
+            "duration": 4.0,
+            "continuity": {
+                "start_state": "s",
+                "end_state": "e",
+                "transition": "hard_cut",
+                "seam_mode": "hard_cut",
+                "seam_evidence": {"editorial_intent": "在信息落点直接切入下一拍"},
+                "need_endframe": False,
+            },
+        },
+        "storyboard EP01_CLIP01",
+    )
+
+    assert not rows
+
+
 def test_long_dialogue_with_literal_hand_or_name_does_not_require_anchors():
     rows = []
     VC.check_anchor_contract(

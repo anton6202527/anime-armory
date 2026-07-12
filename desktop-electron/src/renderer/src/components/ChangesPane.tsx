@@ -6,6 +6,7 @@ import {
   getMediaPort,
   mediaAllowRoot,
   mediaUrl,
+  videoUrl,
   readWorkDocx,
   readWorkChange,
   readWorkFile,
@@ -28,6 +29,7 @@ import type { SkillTreeEntry, WorkChangeDetail, WorkChangeEntry, WorkChangeSumma
 import { Codicon } from "./Codicon";
 import { WorkFileIcon } from "./FileIcon";
 import { DecodedImage } from "../mediaPreview/DecodedImage";
+import { VideoPreview } from "./VideoPreview";
 
 const ChangesDiffEditor = lazy(() =>
   import("./ChangesDiffEditor").then((mod) => ({ default: mod.ChangesDiffEditor })),
@@ -74,12 +76,14 @@ export function ChangesPane({
   baselineVersion,
   summary,
   onArchived,
+  sideOnly = false,
 }: {
   root: WorkRoot;
   refreshKey: number;
   baselineVersion: number;
   summary: WorkChangeSummary | null;
   onArchived: (summary: WorkChangeSummary) => void;
+  sideOnly?: boolean;
 }) {
   const { t } = useI18n();
   const [changes, setChanges] = useState<WorkChangeEntry[]>([]);
@@ -200,6 +204,14 @@ export function ChangesPane({
 
   function openChangedFile(change: WorkChangeEntry) {
     if (change.kind === "deleted") return;
+    if (sideOnly) {
+      window.dispatchEvent(
+        new CustomEvent("anime-armory:open-work-file", {
+          detail: { root: root.path, path: change.path, pinned: true },
+        }),
+      );
+      return;
+    }
     if (!confirmCloseOpened(change.path)) return;
     const kind = openedPreviewKind(change.path);
     setSelected(change.path);
@@ -373,7 +385,9 @@ export function ChangesPane({
   const openedEntry = changes.find((change) => change.path === openedPath && change.kind !== "deleted") ?? null;
   const openedAbs = openedEntry ? `${root.path}/${openedEntry.path}` : "";
   const openedMediaUrl = openedAbs ? mediaUrl(openedAbs) : "";
-  const openedMediaSrc = openedMediaUrl ? `${openedMediaUrl}&v=${openedEntry?.new_mtime ?? 0}` : "";
+  const openedVideoUrl = openedAbs ? videoUrl(openedAbs) : "";
+  const openedMediaBase = openedKind === "video" ? openedVideoUrl : openedMediaUrl;
+  const openedMediaSrc = openedMediaBase ? `${openedMediaBase}&v=${openedEntry?.new_mtime ?? 0}` : "";
   const openedEditorEntry: SkillTreeEntry | null = openedEntry ? {
     name: fileName(openedEntry.path),
     path: openedEntry.path,
@@ -393,7 +407,7 @@ export function ChangesPane({
   };
 
   return (
-    <div className="changes-pane" ref={paneRef}>
+    <div className={"changes-pane" + (sideOnly ? " side-only" : "")} ref={paneRef}>
       <div className="changes-side">
         {showToolbar && (
           <div className="changes-toolbar">
@@ -539,7 +553,7 @@ export function ChangesPane({
                 )
               ) : openedKind === "video" ? (
                 openedMediaSrc ? (
-                  <div className="files-media"><video src={openedMediaSrc} controls preload="metadata" /></div>
+                  <div className="files-media"><VideoPreview src={openedMediaSrc} /></div>
                 ) : (
                   <div className="changes-empty">{t("common.loading")}</div>
                 )

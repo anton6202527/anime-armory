@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 KIND = "n2d_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-10.3"
+PROFILE_VERSION = "2026-07-12.1"
 COMPILED_HEADING = "### 后端编译提交 image prompt"
 
 TASK_TYPES = {
@@ -56,7 +56,7 @@ _NEGATIVE_COMMAND_RE = re.compile(
 )
 _ASPECT_RE = re.compile(r"(?<!\d)(1:1|2:3|3:2|3:4|4:3|4:5|5:4|9:16|16:9|21:9)(?!\d)")
 _IMAGE_INDEX_RE = re.compile(r"(?:Image|图|参考图)\s*([0-9]+)", re.I)
-_CHAR_ID_RE = re.compile(r"\b(?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff-]+(?:/[A-Za-z0-9_\u4e00-\u9fff-]+)?\b")
+_CHAR_ID_RE = re.compile(r"\b(?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff-]+(?:/[A-Za-z0-9_\u4e00-\u9fff-]+)?\b")
 _ASSET_ID_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX|STYLE)_[A-Za-z0-9_\u4e00-\u9fff-]+\b")
 
 
@@ -430,12 +430,26 @@ def _negative_block(section: str) -> str:
     return match.group("body").strip().strip("`") if match else ""
 
 
+def _makeup_submission_block(section: str) -> str:
+    match = re.search(
+        r"(?ms)^###\s*定妆图提交口径[^\n]*\n\s*```(?:text)?\s*\n(?P<body>.*?)\n```",
+        section or "",
+    )
+    return match.group("body").strip() if match else ""
+
+
 def infer_task_type(section: str, *, mode: str = "", target_path: str = "") -> str:
     mode_low = _one_line(mode).lower()
     if mode_low in {"midframe", "tailframe", "image_edit", "edit", "inpaint", "outpaint"}:
         return "relay_edit"
     blob = f"{section}\n{target_path}"
-    if "STYLE_ANCHOR" in blob or "统一风格锚" in blob:
+    heading = re.search(r"(?m)^##\s+([^\n]+)", section or "")
+    heading_text = heading.group(1).strip() if heading else ""
+    # Shared character/asset contracts legitimately mention STYLE_ANCHOR as a
+    # dependency.  Only the current target/title may classify this request as
+    # style-anchor synthesis; scanning the whole section misroutes every makeup
+    # board that says "inherit STYLE_ANCHOR".
+    if re.search(r"(?:风格锚|style[_ -]?anchor)", f"{target_path}\n{heading_text}", re.I):
         return "style_anchor"
     if re.search(r"^##\s*镜头\s*\d+", section or "", re.M):
         ids = set(_CHAR_ID_RE.findall(blob))
@@ -468,6 +482,7 @@ def contract_from_section(
     """Extract a compact canonical image contract from a full Markdown block."""
     positive = _prompt_block(section, "中文")
     inferred = task_type or infer_task_type(section, mode=mode, target_path=target_path)
+    makeup = _makeup_submission_block(section) if inferred == "character_catalog" else ""
     identities = _prompt_line(positive, "锚点句") or _field(section, "锚点句")
     identity_lock = _prompt_line(positive, "身份锁定句") or _field(section, "身份锁定句")
     composition = _prompt_line(positive, "镜头构图") or _field(section, "镜头/机位")
@@ -477,8 +492,27 @@ def contract_from_section(
     style_text = style or _prompt_line(positive, "画风规格")
     exclusions = normalize_exclusions([
         _prompt_line(positive, "禁止"),
+        _prompt_line(makeup, "禁止"),
         _negative_block(section),
     ])
+    if makeup:
+        identities = "；".join(_dedupe([
+            _prompt_line(makeup, "角色身份"),
+            _prompt_line(makeup, "年龄/年龄档"),
+            _prompt_line(makeup, "服装妆造"),
+            _prompt_line(makeup, "固定外貌"),
+        ], limit=8))
+        composition = composition or _prompt_line(makeup, "定妆要求")
+        identity_lock = identity_lock or "；".join(_dedupe([
+            _prompt_line(makeup, "固定外貌"),
+            _prompt_line(makeup, "服装妆造"),
+        ], limit=4))
+    if inferred == "scene_asset" and not scene_light:
+        # Scene makeup sections are commonly authored as one dense visual
+        # paragraph rather than shot-style labelled lines.  Dropping that
+        # paragraph leaves the model with only the global style and silently
+        # loses landmarks, axis, resident assets and lighting continuity.
+        scene_light = positive
     preserve = _dedupe([
         identity_lock,
         _field(section, "资产拓扑锁"),
@@ -579,6 +613,14 @@ def _conditional_guards(contract: Mapping[str, Any], task: str, language: str) -
     ground = bool(re.search(r"全身|站立|跪|倒地|落地|脚|鞋|full body|standing|kneel|ground", blob, re.I)) or "grounding" in flags
     closeup = bool(re.search(r"\b(?:CU|MCU|ECU)\b|近景|特写|反打|close-up", blob, re.I)) or "closeup" in flags
     multi = task == "multi_subject" or bool(_one_line(contract.get("subject_slots")))
+    if task == "scene_asset":
+        # Scene contracts often name characters only to describe blocking and
+        # axis continuity.  Those names must not activate character hand/face
+        # guards or encourage the environment reference to populate the set.
+        hands = False
+        ground = False
+        closeup = False
+        multi = False
     guards: List[str] = []
     if language == "en":
         if hands:
@@ -648,11 +690,11 @@ def _compile_parts(contract: Mapping[str, Any], profile: Mapping[str, Any], task
     language = str(profile.get("language") or "zh")
     english = language == "en"
     objective = _compact(contract.get("objective"), 180)
-    subject = _compact(contract.get("subject"), 260)
+    subject = _compact(contract.get("subject"), 520 if task == "character_catalog" else 260)
     slots = _compact(contract.get("subject_slots"), 260)
     composition = _compact(_without_aspect_phrases(contract.get("composition")), 230)
     action = _compact(contract.get("action"), 260)
-    scene = _compact(contract.get("scene"), 220)
+    scene = _compact(contract.get("scene"), 460 if task == "scene_asset" else 220)
     lighting = _compact(contract.get("lighting"), 150)
     mood = _compact(contract.get("mood"), 140)
     style = _compact(_without_aspect_phrases(contract.get("style")), 220)

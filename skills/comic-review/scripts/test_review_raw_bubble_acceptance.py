@@ -12,6 +12,12 @@ if str(SCRIPT_DIR) not in sys.path:
 import review
 
 
+def test_review_gaze_validator_keeps_specific_spatial_targets() -> None:
+    assert review.is_vague_gaze_target("看前方") is True
+    assert review.is_vague_gaze_target("和尚看画右前方云路") is False
+    assert review.is_vague_gaze_target("僧道看街巷前方未点亮的灯架") is False
+
+
 def test_review_raw_bubble_acceptance_reads_panel_qc_manual_review(tmp_path: Path) -> None:
     chapter = "第1话"
     qc_dir = tmp_path / "生产数据" / "panel_qc" / chapter

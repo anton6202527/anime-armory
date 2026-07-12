@@ -19,6 +19,24 @@ from typing import Any
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 REQUIRED_CHARACTER_VIEWS = ("front", "three_quarter", "side", "back", "face")
+# tier 分档必需视图（2026-07 标准审计·port 自 n2d 档位模式的漫画重实现，不跨线 import）：
+# 此前对所有角色一刀切要求全五视图——named_minimal 短线具名角色也被逼出侧/背，过度要求；
+# n2d 的实践是档位只控生产深度、不改 DNA 真值归属。档位取 library_tier/tier（与 library.py
+# default_tier 同源）；未标档按全五视图保守处理（宁多不漏，与"长线连载默认"一致）。
+TIER_REQUIRED_VIEWS: dict[str, tuple[str, ...]] = {
+    "core_full": ("front", "three_quarter", "side", "back", "face"),
+    "recurring_standard": ("front", "three_quarter", "face"),
+    "named_minimal": ("front", "face"),
+    "restricted_partial": (),
+}
+
+
+def required_views_for(asset: Any) -> tuple[str, ...]:
+    """按角色档位给出必需视图集合；未知/未标档回退全五视图（保守）。纯函数·可测。"""
+    tier = ""
+    if isinstance(asset, dict):
+        tier = str(asset.get("library_tier") or asset.get("tier") or "").strip()
+    return TIER_REQUIRED_VIEWS.get(tier, REQUIRED_CHARACTER_VIEWS)
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 VIEW_LABELS = {
     "front": "front full-body view, standing neutrally, face looking forward",
@@ -754,13 +772,14 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     )
     views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
     views[view] = rel
+    tier_required = required_views_for(asset)
     ready_views = [
         required_view
-        for required_view in REQUIRED_CHARACTER_VIEWS
+        for required_view in tier_required
         if isinstance(views.get(required_view), str)
         and png_valid(resolve_path(root, str(views[required_view])))
     ]
-    missing_views = [required_view for required_view in REQUIRED_CHARACTER_VIEWS if required_view not in ready_views]
+    missing_views = [required_view for required_view in tier_required if required_view not in ready_views]
     asset.update(
         {
             "id": character_id,
@@ -768,7 +787,8 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
             "status": "ready" if not missing_views else "partial",
             "views": views,
             "view_readiness": {
-                "required": list(REQUIRED_CHARACTER_VIEWS),
+                "required": list(tier_required),
+                "tier": str(asset.get("library_tier") or asset.get("tier") or "") or "unspecified(full)",
                 "ready": ready_views,
                 "missing": missing_views,
                 "complete": not missing_views,
@@ -1314,7 +1334,8 @@ def report(args: argparse.Namespace) -> int:
     for rid in char_ids:
         views = character_view_paths(root, rid, registry)
         character_views[rid] = views
-        missing = [view for view in REQUIRED_CHARACTER_VIEWS if view not in views]
+        tier_required = required_views_for(registry_assets.get(rid))
+        missing = [view for view in tier_required if view not in views]
         if missing:
             missing_character_views[rid] = missing
 
@@ -1336,6 +1357,7 @@ def report(args: argparse.Namespace) -> int:
         "outfit_gaps": outfit_gaps,
         "missing_refs": missing_refs,
         "required_character_views": list(REQUIRED_CHARACTER_VIEWS),
+        "tier_required_views": {k: list(v) for k, v in TIER_REQUIRED_VIEWS.items()},
         "character_views": character_views,
         "missing_character_views": missing_character_views,
         "rerun_targets": rerun_targets,

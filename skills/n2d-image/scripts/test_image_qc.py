@@ -3298,3 +3298,65 @@ def test_turnaround_alignment_reason_thresholds():
     # 单视图/不可测 → 不判
     assert image_qc.turnaround_alignment_reason({"front": (0.30, 0.20)}) is None
     assert image_qc.turnaround_alignment_reason({}) is None
+
+
+def test_audit_shot_variety_static_and_duplicate(tmp_path):
+    from PIL import Image
+    import json as _json
+    root = tmp_path
+    img_dir = root / "出图" / "第1集" / "图片"
+    img_dir.mkdir(parents=True)
+    solid = Image.new("RGB", (64, 64), (120, 120, 120))
+    grad = Image.new("RGB", (64, 64))
+    for x in range(64):
+        for y in range(64):
+            grad.putpixel((x, y), (x * 4 % 256, y * 4 % 256, (x + y) % 256))
+    solid.save(img_dir / "a_first.png"); solid.save(img_dir / "a_end.png")
+    solid.save(img_dir / "b_first.png"); grad.save(img_dir / "b_end.png")
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(_json.dumps({"clips": [
+        {"id": "C1", "duration": 12.0, "pacing_role": "主看点",
+         "firstframe_png": "出图/第1集/图片/a_first.png", "endframe_png": "出图/第1集/图片/a_end.png",
+         "location_id": "L1", "shots": [{"lens": "CU 固定"}]},
+        {"id": "C2", "duration": 5.0, "pacing_role": "主看点",
+         "firstframe_png": "出图/第1集/图片/b_first.png", "endframe_png": "出图/第1集/图片/b_end.png",
+         "location_id": "L1", "shots": [{"lens": "LS 固定"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_shot_variety(root, "第1集")
+    codes = {(f["code"], f["level"]) for f in res["findings"]}
+    # C1: first==end 且 12s ≥ block 秒、d=0 ≤ block 阈 → block
+    assert ("static_long_take", "block") in codes
+    # C1.first 与 C2.first 同图 → 跨 Clip 构图重复 warn
+    assert ("duplicate_composition", "warn") in codes
+
+
+def test_audit_shot_variety_hold_role_exempt(tmp_path):
+    from PIL import Image
+    import json as _json
+    root = tmp_path
+    img_dir = root / "出图" / "第1集" / "图片"
+    img_dir.mkdir(parents=True)
+    solid = Image.new("RGB", (64, 64), (10, 10, 10))
+    solid.save(img_dir / "a_first.png"); solid.save(img_dir / "a_end.png")
+    sb_dir = root / "脚本" / "第1集"
+    sb_dir.mkdir(parents=True)
+    (sb_dir / "storyboard.json").write_text(_json.dumps({"clips": [
+        {"id": "C1", "duration": 12.0, "pacing_role": "集尾钩子·留白",
+         "firstframe_png": "出图/第1集/图片/a_first.png", "endframe_png": "出图/第1集/图片/a_end.png",
+         "location_id": "L1", "shots": [{"lens": "CU 固定"}]},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_shot_variety(root, "第1集")
+    assert not any(f["code"] == "static_long_take" for f in res["findings"])
+
+
+def test_audit_shot_variety_lens_monotony(tmp_path):
+    import json as _json
+    root = tmp_path
+    (root / "脚本" / "第1集").mkdir(parents=True)
+    clips = [{"id": f"C{i}", "duration": 6.0, "location_id": "L1",
+              "shots": [{"lens": "CU 固定"}]} for i in range(1, 7)]
+    (root / "脚本" / "第1集" / "storyboard.json").write_text(
+        _json.dumps({"clips": clips}, ensure_ascii=False), encoding="utf-8")
+    res = image_qc.audit_shot_variety(root, "第1集")
+    assert any(f["code"] == "lens_variety_low" for f in res["findings"])

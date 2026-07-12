@@ -427,6 +427,115 @@ def test_character_card_identity_parses_metadata_style_card() -> None:
     assert cid == "CHAR_FEMALE_LEAD"
 
 
+def test_character_card_identity_parses_id_first_bible_and_beast_card(tmp_path: Path) -> None:
+    woman = """# CHAR_01 姜月初｜角色圣经
+
+- 首集年龄档：十七至二十岁视觉区间。
+## 身份 DNA
+- 年轻东方女性，鹅蛋脸偏小，长杏眼。
+- 高挑纤细、四肢修长。
+## 首集妆造
+- 发型：长黑发凌乱披散。
+- 服装：灰扑扑囚服。
+## 禁漂项
+- 禁止无来源白发兽角。
+"""
+    beast = """# BEAST_01 虎山神｜妖魔卡
+
+- 角色定位：开篇首妖。
+- 形态：虎头人身，体魄雄壮如小山，黑黄毛发。
+- 持续伤势：胸膛有洞穿伤。
+"""
+    card_dir = tmp_path / "设定库" / "characters"
+    card_dir.mkdir(parents=True)
+    (card_dir / "姜月初.md").write_text(woman, encoding="utf-8")
+    (card_dir / "虎山神.md").write_text(beast, encoding="utf-8")
+
+    defs = image_prompt_pack.derive_character_defs(
+        tmp_path, {"clips": [{"character_ids": ["CHAR_01", "BEAST_01"]}]}
+    )
+
+    assert defs["CHAR_01"]["name"] == "姜月初"
+    assert "鹅蛋脸偏小" in defs["CHAR_01"]["face"]
+    assert defs["CHAR_01"]["hair"] == "长黑发凌乱披散。"
+    assert defs["CHAR_01"]["outfit"] == "灰扑扑囚服。"
+    assert "禁止无来源白发兽角。" in defs["CHAR_01"]["drift"]
+    assert defs["BEAST_01"]["name"] == "虎山神"
+    assert "虎头人身" in defs["BEAST_01"]["face"]
+
+
+def test_external_visual_manifest_routes_identity_and_style_separately(tmp_path: Path) -> None:
+    visual = tmp_path / "设定库" / "参考资料" / "视觉参考"
+    visual.mkdir(parents=True)
+    identity_rel = "设定库/参考资料/视觉参考/identity.jpg"
+    style_rel = "设定库/参考资料/视觉参考/style.jpg"
+    (tmp_path / identity_rel).write_bytes(b"identity")
+    (tmp_path / style_rel).write_bytes(b"style")
+    (visual / "reference_manifest.json").write_text(json.dumps({
+        "references": [
+            {"path": identity_rel, "use_policy": "identity_body_reference", "character_ids": ["CHAR_01"]},
+            {"path": style_rel, "use_policy": "style_source_only", "character_ids": []},
+        ]
+    }), encoding="utf-8")
+
+    identity = image_prompt_pack.external_visual_reference_entries(tmp_path, "CHAR_01", {"name": "姜月初"})
+    styles = image_prompt_pack.external_style_reference_entries(tmp_path)
+
+    assert [row["path"] for row in identity] == [identity_rel]
+    assert [row["path"] for row in styles] == [style_rel]
+
+
+def test_reference_cards_use_authored_truth_or_production_snapshots_not_top_level_duplicates(tmp_path: Path) -> None:
+    chars = tmp_path / "设定库" / "characters"
+    locs = tmp_path / "设定库" / "locations"
+    chars.mkdir(parents=True)
+    locs.mkdir(parents=True)
+    (chars / "姜月初.md").write_text("# CHAR_01 姜月初｜角色圣经\n", encoding="utf-8")
+    (locs / "荒野尸场.md").write_text("# LOC_01 荒野尸场｜场景卡\n", encoding="utf-8")
+
+    char_rel = image_prompt_pack.character_reference_card_rel(
+        tmp_path, "CHAR_01", {"name": "姜月初", "form": "常态"}
+    )
+    generated_char_rel = image_prompt_pack.character_reference_card_rel(
+        tmp_path, "CHAR_99", {"name": "路人", "form": "常态"}
+    )
+    scene_rel = image_prompt_pack.asset_reference_card_rel(
+        tmp_path, "LOC_01", {"name": "夕照荒野尸场", "type": "scene"}
+    )
+    prop_rel = image_prompt_pack.asset_reference_card_rel(
+        tmp_path, "PROP_01", {"name": "断刀", "type": "prop"}
+    )
+
+    assert char_rel == "设定库/characters/姜月初.md"
+    assert generated_char_rel.startswith("生产数据/卡片快照/角色/")
+    assert scene_rel == "设定库/locations/荒野尸场.md"
+    assert prop_rel.startswith("生产数据/卡片快照/资产/")
+    assert not any(rel.startswith(("角色卡/", "场景卡/", "道具卡/")) for rel in (char_rel, generated_char_rel, scene_rel, prop_rel))
+
+
+def test_existing_style_anchor_requires_review_and_preserves_approval(tmp_path: Path) -> None:
+    rel = image_prompt_pack.style_anchor_path_for(image_prompt_pack.DEFAULT_STYLE)
+    path = tmp_path / rel
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b"png-placeholder")
+    story = {"style_contract": {"风格名": image_prompt_pack.DEFAULT_STYLE}}
+
+    pending = image_prompt_pack.style_anchor_registry(tmp_path, story)
+    assert pending["selected_anchor"]["status"] == "review_pending"
+
+    registry_path = tmp_path / image_prompt_pack.STYLE_ANCHOR_REGISTRY_REL
+    registry_path.write_text(json.dumps({
+        "selected_anchor": {
+            "path": rel,
+            "status": "approved",
+            "human_review": {"reviewer": "user"},
+        }
+    }), encoding="utf-8")
+    approved = image_prompt_pack.style_anchor_registry(tmp_path, story)
+    assert approved["selected_anchor"]["status"] == "approved"
+    assert approved["selected_anchor"]["human_review"]["reviewer"] == "user"
+
+
 def test_inner_focus_directive_isolates_subject_and_context_entities() -> None:
     clip = {
         "description": "姜月初内心独白：这百妖谱到底是什么。",
@@ -484,7 +593,7 @@ def test_style_anchor_prompt_and_overview_inherit_story_style_contract(tmp_path:
     assert "style_anchor：`出图/共享/图片/风格锚_国漫写实.png`" in overview
 
 
-def test_style_anchor_registry_marks_existing_anchor_ready(tmp_path: Path) -> None:
+def test_style_anchor_registry_marks_existing_anchor_review_pending(tmp_path: Path) -> None:
     rel = "出图/共享/图片/风格锚_国漫写实.png"
     anchor = tmp_path / rel
     anchor.parent.mkdir(parents=True)
@@ -501,7 +610,7 @@ def test_style_anchor_registry_marks_existing_anchor_ready(tmp_path: Path) -> No
     selected = registry["selected_anchor"]
     assert registry["kind"] == "n2d_style_anchor_registry"
     assert selected["path"] == rel
-    assert selected["status"] == "ready"
+    assert selected["status"] == "review_pending"
     assert selected["use_policy"] == "style_only"
     assert selected["identity_policy"] == "do_not_clone_face_or_costume"
     assert selected["sha256"] == image_prompt_pack.sha256_file(anchor)
@@ -534,6 +643,25 @@ def test_dict_asset_requirements_canonicalize_human_aliases() -> None:
     assert "LOC_01" in ids
     assert all(" " not in aid and "/" not in aid for aid in ids)
     assert reqs["WEAPON_01"]["name"] == "横刀"
+
+
+def test_clip_assets_normalize_prose_suffix_against_offscreen_id() -> None:
+    clip = {
+        "location_id": "LOC_01",
+        "object_ids": ["PROP_02"],
+        "scene": "VFX_01退出清晰画面，人物不移动。",
+        "entity_schedule": {
+            "objects": ["PROP_02"],
+            "locations": ["LOC_01"],
+            "required_presence": ["PROP_02", "LOC_01"],
+            "offscreen_presence": ["VFX_01"],
+        },
+    }
+
+    ids = image_prompt_pack.clip_assets(clip)
+
+    assert ids == ["LOC_01", "PROP_02"]
+    assert "VFX_01退出清晰画面" not in ids
 
 
 def test_material_list_supplies_asset_names_and_prompts(tmp_path: Path) -> None:
@@ -582,6 +710,26 @@ def test_derived_scene_drift_uses_generic_continuity_not_stale_wildland(tmp_path
 
     assert "巨岩/尸堆" not in drift
     assert "空间轴线" in drift
+
+
+def test_scene_card_resident_subject_id_is_preserved_in_scene_dna(tmp_path: Path) -> None:
+    locations = tmp_path / "设定库" / "locations"
+    locations.mkdir(parents=True)
+    (locations / "荒野尸场.md").write_text(
+        """# LOC_01 荒野尸场｜场景卡
+
+- 平面关系：左下逃生通道通往右上巨岩。
+- 常驻主体：`BEAST_01/实体_重伤复活`（虎头人身尸体，禁止改成四足虎）。
+""",
+        encoding="utf-8",
+    )
+    story = {"clips": [{"location_id": "LOC_01"}]}
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+    residents = "；".join(defs["LOC_01"]["scene_dna"]["resident_assets"])
+
+    assert "BEAST_01/实体_重伤复活" in residents
+    assert "禁止改成四足虎" in residents
 
 
 def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Path) -> None:

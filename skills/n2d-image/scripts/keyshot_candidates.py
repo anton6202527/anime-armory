@@ -31,6 +31,7 @@ SIGNATURE_RE = re.compile(
 MULTI_RE = re.compile(r"(多人|同框|CHAR_[A-Za-z0-9_]+.*CHAR_[A-Za-z0-9_]+)")
 CLOSE_RE = re.compile(r"(CU|ECU|MCU|近景|特写|反打|表情)")
 ACTION_RE = re.compile(r"(打斗|追逐|法术|飞行|爆炸|御剑|冲刺|受击)")
+STRONG_EMOTION_RE = re.compile(r"(惊骇|错愕|崩溃|绝望|愤怒|狰狞|恐惧|痛哭|悲恸|狂喜|震惊|死志|杀意)")
 
 
 def load_json(path: Path) -> Optional[Any]:
@@ -46,7 +47,10 @@ def flatten(value: Any) -> str:
     if isinstance(value, list):
         return " ".join(flatten(v) for v in value)
     if isinstance(value, dict):
-        return " ".join(str(k) + " " + flatten(v) for k, v in value.items())
+        # Classify from authored values, not schema key names such as
+        # ``expression_span``/``character_slots`` which otherwise make every
+        # clip look like a strong-emotion or multi-subject keyshot.
+        return " ".join(flatten(v) for v in value.values())
     return str(value or "")
 
 
@@ -81,11 +85,21 @@ def classify(clip: Mapping[str, Any], idx: int) -> List[str]:
         tags.append("signature_scene")
     if KEY_RE.search(blob):
         tags.append("hook_or_payoff")
-    if MULTI_RE.search(blob):
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    scheduled_chars = schedule.get("characters") if isinstance(schedule.get("characters"), list) else clip.get("character_ids") or []
+    offscreen = {str(x).strip() for x in (schedule.get("offscreen_presence") or []) if str(x).strip()}
+    forbidden = {str(x).strip() for x in (schedule.get("forbidden_presence") or []) if str(x).strip()}
+    visible_chars = {str(x).strip() for x in scheduled_chars
+                     if str(x).strip().startswith(("CHAR_", "BEAST_"))
+                     and str(x).strip() not in offscreen and str(x).strip() not in forbidden}
+    if len(visible_chars) > 1 or (not visible_chars and MULTI_RE.search(blob)):
         tags.append("multi_subject")
-    if CLOSE_RE.search(blob):
+    cont = clip.get("continuity") if isinstance(clip.get("continuity"), Mapping) else {}
+    expression_span = str(cont.get("expression_span") or "").strip()
+    if expression_span in {"大", "large", "extreme"} or (CLOSE_RE.search(blob) and STRONG_EMOTION_RE.search(blob)):
         tags.append("strong_emotion")
-    if ACTION_RE.search(blob):
+    template = str(clip.get("template") or "")
+    if template in {"fight_exchange", "chase", "magic_burst", "flight", "hug_or_pull", "intimate_interaction"} or ACTION_RE.search(blob):
         tags.append("action")
     return list(dict.fromkeys(tags))
 

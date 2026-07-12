@@ -92,6 +92,83 @@ def test_visible_dialogue_with_guide_uses_performance_audio_first(tmp_path) -> N
     assert route["can_generate_final_performance"] is True
 
 
+def test_explicit_mouth_hidden_beats_closeup_inference(tmp_path) -> None:
+    voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voice.parent.mkdir(parents=True)
+    voice.write_text("[镜头1·沈念·内心] 不能让他看出来。\n", encoding="utf-8")
+    clips = [{
+        "id": "EP01_CLIP01",
+        "voiceover_indices": [1],
+        "dialogue_indices": [1],
+        "narration_indices": [],
+        "mouth_visible": False,
+        "shots": [{"lens": "CU", "description": "单人眼神近景"}],
+    }]
+    _path, lines, _fingerprint = pmr.load_voiceover(tmp_path, "第1集")
+
+    route = pmr.build_clip_sound_routes(
+        tmp_path, "第1集", clips, lines, casting={},
+        timing_estimate={"kind": "n2d_timing_estimate", "lines": [{"idx": 0}]},
+        final_manifest=[],
+    )[0]
+
+    assert route["mouth_visible"] is False
+    assert route["audio_strategy"] == "post_dub"
+    assert route["post_lipsync_required"] is False
+
+
+def test_declared_narration_track_overrides_non_narrator_role_name(tmp_path) -> None:
+    voice = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voice.parent.mkdir(parents=True)
+    voice.write_text("[镜头1·系统·空灵] 道行到账。\n", encoding="utf-8")
+    clips = [{
+        "id": "EP01_CLIP13",
+        "voiceover_indices": [1],
+        "dialogue_indices": [],
+        "narration_indices": [1],
+        "mouth_visible": False,
+        "template": "system_panel",
+    }]
+    _path, lines, _fingerprint = pmr.load_voiceover(tmp_path, "第1集")
+
+    route = pmr.build_clip_sound_routes(
+        tmp_path, "第1集", clips, lines, casting={},
+        timing_estimate={"kind": "n2d_timing_estimate", "lines": [{"idx": 0}]},
+        final_manifest=[],
+    )[0]
+
+    assert route["content_class"] == "narration_or_offscreen"
+    assert route["audio_strategy"] == "rough_timing_final_dub_later"
+    assert route["mouth_visible"] is False
+
+
+def test_collect_signals_respects_declared_tracks_and_mouth_visibility(tmp_path) -> None:
+    script = tmp_path / "脚本" / "第1集"
+    script.mkdir(parents=True)
+    (script / "voiceover.txt").write_text(
+        "[镜头1·系统·空灵] 道行到账。\n[镜头2·沈念·克制] 别动。\n",
+        encoding="utf-8",
+    )
+    (script / "storyboard.json").write_text(json.dumps({"clips": [
+        {
+            "id": "EP01_CLIP01", "voiceover_indices": [1],
+            "dialogue_indices": [], "narration_indices": [1],
+            "mouth_visible": False, "shots": [{"lens": "CU"}],
+        },
+        {
+            "id": "EP01_CLIP02", "voiceover_indices": [2],
+            "dialogue_indices": [2], "narration_indices": [],
+            "mouth_visible": True, "shots": [{"lens": "CU"}],
+        },
+    ]}), encoding="utf-8")
+
+    signals = pmr.collect_signals(tmp_path, "第1集")
+
+    assert signals["speaking_clip_count"] == 1
+    assert signals["mouth_visible_clip_count"] == 1
+    assert signals["closeup_speaking_clip_count"] == 1
+
+
 def test_existing_base_plate_keeps_post_lipsync_route_when_final_voice_arrives(tmp_path) -> None:
     (tmp_path / "_设置.md").write_text("- 制作模式: 混合自动路由\n", encoding="utf-8")
     script = tmp_path / "脚本" / "第1集"

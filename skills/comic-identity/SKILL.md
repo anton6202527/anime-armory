@@ -25,7 +25,7 @@ description: 画漫画角色/场景/道具一致性流程。Use when comic panel
 - `生产数据/comic_identity_views_第N话_contact_sheet.jpg`：人物多视图 QA 拼图，用于快速检查是否缺图、串脸或视图不对。
 - `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标。
 - 更新 `panel_jobs.json` 中每个 reference 的真实 `path`。
-- `角色库/<CHAR_ID>__<名称>/manifest.json` 与 `资产库/{场景,道具,服装,特效,风格}/.../manifest.json`：从 comic 自己的统一 registry 派生的人读资产包视图；registry 仍是机器真值，manifest 不复制其它生产线代码或项目记忆。
+- `设定库/共享资产索引.md`：从 comic 自己的统一 registry 派生的单一人读总览；registry 仍是机器真值，不再为每个角色/资产复制 manifest 目录树。
 
 ## 快速命令
 
@@ -83,13 +83,19 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
   --targets P003,P004 --force --max-attempts 3
 ```
 
-从当前 `identity_registry.json` 生成项目内角色库/资产库索引和 manifests：
+从当前 `identity_registry.json` 生成项目内单一共享资产索引：
 
 ```bash
 python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名" --write
 ```
 
-这一步采用工业资产包的组织思想，但实现、schema 和真值均属于 comic：角色目录只保留 reference/forms/prompts/qc，场景道具等按类型归档；不会引入视频路由、配音、外部训练状态或其它系列项目 ID。
+旧项目若存在纯机器派生的 `角色库/`、`资产库/`，可一次性安全迁移：
+
+```bash
+python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名" --write --remove-legacy-views
+```
+
+迁移只会删除内容完全由 `manifest.json`、`00_索引.json` 组成的旧视图；发现图片、说明或其它人工文件会立即拒绝删除。这一步采用工业资产包的真值/视图分离思想，但实现、schema 和真值均属于 comic，不引入视频路由、配音、外部训练状态或其它系列项目 ID。漫画线根目录 `_资产库/` 是跨作品复用包，不属于这次项目内去重。
 
 ## 工作流
 
@@ -106,8 +112,8 @@ python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名"
 3. 重新跑 `report --write`，确认每个带 reference 的格子都有真实图片路径。
 4. 对 `rerun_targets` 用 `comic-image` 的 `--force --targets ...` 重抽。runner 会把参考图作为 `codex exec --image` 真实附件传入，并写 `生产数据/codex_reference_bundles/`。
 5. 重抽后再跑一次 `report --write`。`missing_refs=[]` 且 `rerun_targets=[]` 后，才进入 `comic-compose`。
-6. 长线项目在 registry 有新增/改名/分级后运行 `library.py --write`，刷新项目内角色库/资产库视图；只改 registry，不手工让 manifest 与真值分叉。
-   - 派生 manifest 的 `reference_files/reference_count` 只统计真实存在的身份参考；尚未落盘的声明进入 `planned_reference_files/planned_reference_count`，生成时使用的 style-only/anchor 输入进入 `generation_dependency_files`。禁止递归扫描 source 元数据后把计划路径或生成依赖虚报成“已有参考”。
+6. 长线项目在 registry 有新增/改名/分级后运行 `library.py --write`，刷新 `设定库/共享资产索引.md`；只改 registry，不手工修改自动索引。
+   - 索引的已有参考数只统计真实存在的身份参考；尚未落盘的声明进入计划数，生成时使用的 style-only/anchor 输入不冒充身份参考。禁止递归扫描 source 元数据后把计划路径或生成依赖虚报成“已有参考”。
 
 ## 判定口径
 

@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import re
 import subprocess
 import sys
@@ -103,6 +104,23 @@ def pillow_available() -> bool:
     return importlib.util.find_spec("PIL") is not None
 
 
+def chapter_images_ready(root: Path, chapter: str) -> bool:
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    if not jobs_path.is_file():
+        return False
+    try:
+        jobs = json.loads(jobs_path.read_text(encoding="utf-8")).get("jobs") or []
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not jobs:
+        return False
+    for job in jobs:
+        rel = str(job.get("result_path") or "").strip()
+        if job.get("status") != "ready" or not rel or not (root / rel).is_file():
+            return False
+    return True
+
+
 def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
     rc = run_gate(repo, root, args.chapter, "image_preflight")
     if rc != 0:
@@ -130,6 +148,13 @@ def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
     rc = run_cmd(cmd, repo)
     if rc != 0:
         return rc
+    if not chapter_images_ready(root, args.chapter):
+        print(
+            "[comic-batch] target/limited batch post-QC passed; chapter is still incomplete, "
+            "so the full image gate is deferred until every panel is ready",
+            flush=True,
+        )
+        return 0
     return run_gate(repo, root, args.chapter, "image")
 
 

@@ -55,6 +55,7 @@ python3 skills/comic-compose/scripts/export_longstrip.py "创作区/画漫画/�
 2. `lettering.json` 记录每条文字、气泡类型、位置、字号、阅读顺序；生成草案时会优先读取 `dialogue[].text_target` / `narration_target`，保留 `text_source` 便于追溯；`文字语言=中文` 时只渲中文；需要英文或双语时写 `text_en`，英文自动按词换行。拟声词可继承 finishing plan 的 `drawn_sfx` 元数据。**翻译有 owner**：英文/双语模式下缺 `text_en` 时，`build_lettering.py` 会产 `排版/第N话/lettering_translations.todo.json` 翻译任务包，由 agent 按 speaker/tone 译成自然英文写入 `lettering_translations.json` 后重跑回填；缺译文时 `comic-review` 仍按原规则阻断导出。**嵌字样式基线**：首话的字体/字号/气泡样式落 `排版/lettering_style_baseline.json`，后续各话不一致会写进 `lettering.json` 的 `style_consistency.mismatches`，`comic-review` 转 warn（有意改版则更新基线文件）。
 3. 合成阶段绘制最终不规则对白气泡/旁白容器并渲染文字；不要在不规则气泡里再叠一个矩形文字框。
 4. 没有文字的槽位不画气泡；旧图里烘焙的空白气泡应回 `comic-image` 重出或在审查中标返修。
+5. 嵌字安全区不仅保护脸：对白框、旁白框和 SFX 不得遮挡角色双眼/嘴部、说话人身份标志、`character_integrity` 明确列出的关键手脚/步态、接触点或剧情道具。页漫/四格完成渲染后必须用 `--qc-slots` 检查槽位，再逐页查看实际成品；槽位接触表通过不等于页面通过，发现遮挡优先改 `layout.json` 的 bubble slot 后重导出，不重抽好图。
 5. 字体、商用授权和目标地区发布规范在正式发布前确认。
 
 `drawn_sfx` 只允许拟声词作为画面节奏元素；对白、旁白和系统正文仍不应烘焙进 raw panel。

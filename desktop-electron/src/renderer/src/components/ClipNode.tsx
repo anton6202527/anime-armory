@@ -102,35 +102,44 @@ function VideoControlIcon({ name }: { name: VideoControlIconName }) {
     case "play":
       return (
         <svg className="cv-icon cv-icon-play" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <path className="cv-fill" d="M13.5 8.6 31.8 20 13.5 31.4Z" />
+          <path className="cv-fill" d="M13 7 32 20 13 33Z" />
         </svg>
       );
     case "pause":
       return (
         <svg className="cv-icon cv-icon-pause" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
-          <rect className="cv-fill" x="12" y="9" width="5.8" height="22" rx="1.4" />
-          <rect className="cv-fill" x="22.2" y="9" width="5.8" height="22" rx="1.4" />
+          <rect className="cv-fill" x="11.5" y="6" width="5.2" height="28" rx="1.2" />
+          <rect className="cv-fill" x="23.3" y="6" width="5.2" height="28" rx="1.2" />
         </svg>
       );
     case "volumeOn":
       return (
         <svg className="cv-icon cv-icon-volume-on" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path className="cv-stroke" d="M4.5 12.2h5.2l6.7-5.4v18.4l-6.7-5.4H4.5Z" />
-          <path className="cv-stroke" d="M21.6 11.6a6.4 6.4 0 0 1 0 8.8" />
+          <path
+            className="cv-stroke cv-speaker"
+            d="M4.2 9.4h5.4L18 3.5c.8-.6 1.9 0 1.9 1v23c0 1-1.1 1.6-1.9 1l-8.4-5.8H4.2a1.8 1.8 0 0 1-1.8-1.8v-9.7a1.8 1.8 0 0 1 1.8-1.8Z"
+          />
+          <path className="cv-stroke cv-sound-wave" d="M26.1 10.1c3.6 3.2 3.6 8.6 0 11.8" />
         </svg>
       );
     case "volumeOff":
       return (
         <svg className="cv-icon cv-icon-volume-off" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path className="cv-stroke" d="M4.5 12.2h5.2l6.7-5.4v18.4l-6.7-5.4H4.5Z" />
-          <path className="cv-stroke cv-mute-slash" d="m21.2 12.2 6.4 7.6m0-7.6-6.4 7.6" />
+          <path
+            className="cv-stroke cv-speaker"
+            d="M4.2 9.4h5.4L18 3.5c.8-.6 1.9 0 1.9 1v23c0 1-1.1 1.6-1.9 1l-8.4-5.8H4.2a1.8 1.8 0 0 1-1.8-1.8v-9.7a1.8 1.8 0 0 1 1.8-1.8Z"
+          />
+          <path className="cv-stroke cv-mute-mark" d="m22 12 7 8m0-8-7 8" />
         </svg>
       );
     case "camera":
       return (
         <svg className="cv-icon cv-icon-camera" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path className="cv-stroke" d="M4.5 11.5h5l2.6-3.4h7.8l2.6 3.4h5a2 2 0 0 1 2 2v11.2a2 2 0 0 1-2 2h-23a2 2 0 0 1-2-2V13.5a2 2 0 0 1 2-2Z" />
-          <circle className="cv-stroke" cx="16" cy="18.4" r="5" />
+          <path
+            className="cv-stroke"
+            d="M5 11h4.5l3.2-4.5h6.6l3.2 4.5H27a2.5 2.5 0 0 1 2.5 2.5v13A2.5 2.5 0 0 1 27 29H5a2.5 2.5 0 0 1-2.5-2.5v-13A2.5 2.5 0 0 1 5 11Z"
+          />
+          <circle className="cv-stroke" cx="16" cy="19.5" r="4.6" />
         </svg>
       );
   }
@@ -216,6 +225,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
   const [activated, setActivated] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+  const previousVolumeRef = useRef(1);
   const [savingCapture, setSavingCapture] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(durationHint ?? 0);
@@ -254,7 +264,19 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
   function changeVolume(value: number) {
     const next = Math.max(0, Math.min(1, value));
     setVolume(next);
+    if (next > 0) previousVolumeRef.current = next;
     setMuted(next <= 0);
+  }
+
+  function toggleMute() {
+    if (muted || volume <= 0) {
+      const restored = volume > 0 ? volume : Math.max(0.01, previousVolumeRef.current);
+      setVolume(restored);
+      setMuted(false);
+      return;
+    }
+    previousVolumeRef.current = volume;
+    setMuted(true);
   }
 
   async function captureFrame(kind: "first" | "current" | "last") {
@@ -287,7 +309,8 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
 
   const progress = duration > 0 ? Math.max(0, Math.min(100, (current / duration) * 100)) : 0;
   const rangeStyle = { "--video-progress": `${progress}%` } as CSSProperties;
-  const volumeValue = muted ? 0 : volume;
+  const effectivelyMuted = muted || volume <= 0;
+  const volumeValue = effectivelyMuted ? 0 : volume;
 
   if (!videoUrl) {
     return (
@@ -345,7 +368,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
           crossOrigin="anonymous"
           playsInline
           preload="metadata"
-          muted={muted}
+          muted={effectivelyMuted}
           onLoadedMetadata={(event) => {
             const nextDuration = event.currentTarget.duration;
             if (Number.isFinite(nextDuration)) setDuration(nextDuration);
@@ -408,7 +431,7 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
                   step="0.01"
                   value={volumeValue}
                   style={{ "--volume-level": `${volumeValue * 100}%` } as CSSProperties}
-                  aria-label={muted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
+                  aria-label={effectivelyMuted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
                   onChange={(event) => changeVolume(Number(event.target.value))}
                 />
               </div>
@@ -416,10 +439,10 @@ const CanvasVideoPlayer = memo(function CanvasVideoPlayer(props: {
             <button
               type="button"
               className="canvas-video-icon"
-              aria-label={muted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
-              onClick={() => setMuted((value) => !value)}
+              aria-label={effectivelyMuted ? t("canvas.unmuteVideo") : t("canvas.muteVideo")}
+              onClick={toggleMute}
             >
-              <VideoControlIcon name={muted ? "volumeOff" : "volumeOn"} />
+              <VideoControlIcon name={effectivelyMuted ? "volumeOff" : "volumeOn"} />
             </button>
           </div>
           <div className="canvas-video-capture">

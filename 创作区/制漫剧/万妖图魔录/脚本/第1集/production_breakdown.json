@@ -1,0 +1,933 @@
+{
+  "episode": "第1集",
+  "generated_at": "2026-07-12T11:57:17+00:00",
+  "inputs": {
+    "director_blocking_pack": "脚本/第1集/director_blocking_pack.json",
+    "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
+    "storyboard": "脚本/第1集/storyboard.json"
+  },
+  "kind": "n2d_production_breakdown",
+  "scene_breakdowns": [
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, BEAST_01；关键物件 无关键道具。",
+        "camera": "景别/机位：ECU→CU→MS；视线/轴线：姜月初与裴长青看画右上，虎妖俯视画左下。；模板：multi_character_same_frame。",
+        "post": "转场 时间回跳硬切；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "at_sec": 4.22,
+            "reason": "auto: R2 普通长镜（8.435s/4拍）",
+            "source_duration": 8.435,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "不死虎妖冷开",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "夕照尸场，贯胸虎妖在画右上高位睁眼起身，姜月初中景僵住，裴长青低位失血。",
+      "sound_needs": {
+        "dialogue_indices": [
+          1,
+          2
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 无关键道具。",
+        "camera": "景别/机位：黑场→LS→MCU；视线/轴线：先俯视手边尸骸，再抬眼扫视空间。；模板：铺垫·长镜。",
+        "post": "转场 尸场环境插入；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "一炷香前醒来",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "黑场时间字卡后，姜月初从尸骸间睁眼，撑地坐起。",
+      "sound_needs": {
+        "dialogue_indices": [
+          4
+        ],
+        "narration_indices": [
+          3
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 无关键道具。",
+        "camera": "景别/机位：MCU→MS→LS；视线/轴线：由下向上扫描尸骸与远景。；模板：铺垫·长镜。",
+        "post": "转场 看向赤云纹目标；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "尸场与妖魔大唐",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "姜月初以动作检查囚服、尸骸和荒野地貌，旁白压缩世界信息。",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          5
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "BEAST_01"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, BEAST_01；关键物件 无关键道具。",
+        "camera": "景别/机位：ECU纹样→OTS→CU反应；视线/轴线：姜月初先看纹样，再看画右上虎尸。；模板：reveal_reaction_chain。",
+        "post": "转场 裴长青声音先行；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+            "at_sec": 5.51,
+            "reason": "auto: R2 普通长镜（11.028s/3拍）",
+            "source_duration": 11.028,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "赤云纹与死透错觉",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "赤云纹插入后，姜月初走到安全距离查看贯胸虎尸，只给半拍松气。",
+      "sound_needs": {
+        "dialogue_indices": [
+          6,
+          7
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 PROP_01。",
+        "camera": "景别/机位：MS→CU伤臂→CU姜反应；视线/轴线：姜月初看画右下裴，再转向画左出口。；模板：reveal_reaction_chain。",
+        "post": "转场 断刀动作切入；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "at_sec": 4.31,
+            "reason": "auto: R2 普通长镜（8.614s/3拍）",
+            "source_duration": 8.614,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "尸堆活人与逃念",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_01"
+      ],
+      "scene": "裴长青从尸堆低位开口，姜月初发现他的伤势并转身准备独自离开。",
+      "sound_needs": {
+        "dialogue_indices": [
+          8,
+          9,
+          10
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 PROP_01。",
+        "camera": "景别/机位：ECU→CU反应；视线/轴线：姜先看脚前刀，再向画右后看裴。；模板：爽点·CU硬切。",
+        "post": "转场 从刀切回双方反应；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 1.5,
+            "reason": "断刀进入脚前区域并锁定飞行方向"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+            "at_sec": 3.2,
+            "reason": "断刀钉地与姜脚尖停住的结果状态"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "断刀钉脚",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_01"
+      ],
+      "scene": "断刀从画右后飞来钉进姜月初脚前硬土，她脚尖僵住。",
+      "sound_needs": {
+        "dialogue_indices": [
+          12
+        ],
+        "narration_indices": [
+          11
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、PROP_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 PROP_01。",
+        "camera": "景别/机位：MS→MCU/CU反打→insert→MS；视线/轴线：姜画左看右下，裴画右看左上。；模板：dialogue_shot_reverse。",
+        "post": "转场 扶起动作接下一镜；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 4.5,
+            "reason": "auto: R2 普通长镜（13.487s/4拍）",
+            "source_duration": 13.487,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+            "at_sec": 8.99,
+            "reason": "auto: R2 普通长镜（13.487s/4拍）",
+            "source_duration": 13.487,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "路引交易",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_01"
+      ],
+      "scene": "姜月初与倒地裴长青沿既定轴线谈判，断刀作为中间筹码，最后她伸手。",
+      "sound_needs": {
+        "dialogue_indices": [
+          13,
+          14,
+          15
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 无关键道具。",
+        "camera": "景别/机位：MS双人；视线/轴线：先看画左出口，咳声后同时回看画右上。；模板：hug_or_pull。",
+        "post": "转场 虎妖咳声先行；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_a1.png",
+            "at_sec": 0.9,
+            "reason": "搀扶接触点与裴左臂不承重状态"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_a2.png",
+            "at_sec": 2.1,
+            "reason": "二人向画左挪步后同步停住的落幅"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "扶起向南",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "姜月初扶裴长青半站，两人朝画左南向出口挪动。",
+      "sound_needs": {
+        "dialogue_indices": [
+          16,
+          17
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, BEAST_01；关键物件 无关键道具。",
+        "camera": "景别/机位：MS→CU反应；视线/轴线：姜裴抬眼画右上，虎妖俯视画左下。；模板：reveal_reaction_chain。",
+        "post": "转场 切虎妖傲慢宣告；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "虎妖复活追上时间",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "两人停步回看，虎妖从同一巨石旁站起，画面追上冷开。",
+      "sound_needs": {
+        "dialogue_indices": [
+          18,
+          19
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, BEAST_01；关键物件 PROP_02。",
+        "camera": "景别/机位：MCU→CU反应→MS；视线/轴线：虎妖看画左下，裴姜看画右上。；模板：multi_character_same_frame。",
+        "post": "转场 裴起手动作接入攻击；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_a1.png",
+            "at_sec": 4.59,
+            "reason": "auto: R2 普通长镜（9.188s/3拍）",
+            "source_duration": 9.188,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 1 个，按首/中/尾关键帧拆分控制。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "半步鸣骨宣判",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "虎妖高位宣告吞食意图；裴低声点破半步鸣骨和天赋神通，俯身从同僚尸旁捡起完整横刀并压低重心。",
+      "sound_needs": {
+        "dialogue_indices": [
+          20,
+          21
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02",
+        "BEAST_01"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02, BEAST_01；关键物件 PROP_02。",
+        "camera": "景别/机位：MS跟拍→CU命中→LS倒飞→MS落地；视线/轴线：攻击前裴看画右上，落地后姜向下看。；模板：fight_exchange。",
+        "post": "转场 落地后切姜反应；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+            "at_sec": 3.0,
+            "reason": "横刀举起与攻击方向锁定"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+            "at_sec": 5.2,
+            "reason": "虎妖脚掌命中裴胸腹的动作顶点"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a3.png",
+            "at_sec": 8.0,
+            "reason": "裴倒飞后砸落姜脚边的结果状态"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "燃血一刀被踢飞",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "裴沿既定轴线冲锋斩落，虎妖单脚迎击，裴被反向踢回姜月初脚边。",
+      "sound_needs": {
+        "dialogue_indices": [
+          22
+        ],
+        "narration_indices": [
+          23,
+          24
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、BEAST_01、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 无关键道具。",
+        "camera": "景别/机位：CU姜→MCU虎妖→CU姜；视线/轴线：姜先向下看裴，再抬眼画右上看虎妖。；模板：留白·定格。",
+        "post": "转场 系统声音先行；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "败局与虎妖劝死",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "姜月初低头看裴，再抬眼看虎妖；虎妖高位慢步逼近一小步。",
+      "sound_needs": {
+        "dialogue_indices": [
+          25,
+          26
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 VFX_01。",
+        "camera": "景别/机位：CU→MCU含面板→POV；视线/轴线：姜先看右上面板，再依次看画右上虎妖、地面横刀、脚边裴。；模板：system_panel。",
+        "post": "转场 视线切向虎妖；所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+            "at_sec": 3.37,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.473s）",
+            "source_duration": 13.473,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+            "at_sec": 6.74,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.473s）",
+            "source_duration": 13.473,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a3.png",
+            "at_sec": 10.1,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.473s）",
+            "source_duration": 13.473,
+            "use": "split"
+          }
+        ],
+        "backend_risk": "多锚帧 3 个，按首/中/尾关键帧拆分控制。 系统面板镜头禁止烤字，保留干净面板区给后期叠字。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "百妖谱规则亮牌",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "VFX_01"
+      ],
+      "scene": "外界声场抽空，黑金无字古卷底框在姜月初右上视野展开，金墨光丝照亮她的眼。",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          27,
+          28
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；百妖谱面板亮起/计数跳变 UI 音效。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "所有可读系统文字、数值和状态面板只交 compose overlay；生图/视频只画空面板与安全留白。",
+        "system_panels": [
+          {
+            "render_policy": "compose_overlay_only",
+            "text": "宿主 姜月初｜凡境｜道行 0"
+          },
+          {
+            "render_policy": "compose_overlay_only",
+            "text": "斩杀生物，可获得道行"
+          }
+        ],
+        "vfx_assets": [
+          "VFX_01"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、VFX_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP14",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 无关键道具。",
+        "camera": "景别/机位：CU单人；视线/轴线：由画右上虎妖下落至画右下裴长青。；模板：加速·碎切。",
+        "post": "转场 视线切向脚边活人；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "凡人拿什么杀妖",
+      "location_id": "LOC_01",
+      "props_and_objects": [],
+      "scene": "姜月初主观近景看虎妖虚焦巨影，手指空握又松开。",
+      "sound_needs": {
+        "dialogue_indices": [
+          29
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP15",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 PROP_02。",
+        "camera": "景别/机位：CU→POV insert→CU；视线/轴线：姜看画右下裴，再看其右侧横刀。；模板：reveal_reaction_chain。",
+        "post": "转场 手部插入后回裴反应；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "唯一活物就在脚边",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "姜月初视线从虎妖移到裴长青，再落到裴右侧的完整横刀；不移动，只改变选择目标。",
+      "sound_needs": {
+        "dialogue_indices": [
+          30
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP16",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 PROP_02。",
+        "camera": "景别/机位：ECU刀手→CU裴→CU姜；视线/轴线：姜画左看右下，裴画右下看左上。；模板：relationship_turn。",
+        "post": "转场 刀尖下压动作匹配；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "拿刀与抱歉",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "姜月初握刀起身，裴先看刀再看她；她不回避视线，只说抱歉。",
+      "sound_needs": {
+        "dialogue_indices": [
+          31,
+          32
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP17",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01, CHAR_02；关键物件 PROP_02。",
+        "camera": "景别/机位：CU动作→ECU血点→紧双人CU；视线/轴线：姜向右下看裴，裴向左上看姜。；模板：fight_exchange。",
+        "post": "转场 切裴错愕反应；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP17_a1.png",
+            "at_sec": 1.2,
+            "reason": "刀尖压住衣料，锁定手、刀、胸口接触位置"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP17_a2.png",
+            "at_sec": 2.4,
+            "reason": "刺入动作顶点与少量血点出现后的不可逆状态"
+          }
+        ],
+        "backend_risk": "多锚帧 2 个，按首/中/尾关键帧拆分控制。 高运动镜头，动作线、命中点和收势要拆清，失败时降级为更短 Clip。 近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": true,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "第一刀越线",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "完整横刀沿既定方向刺入裴胸口，克制避开猎奇；少量暗红血点溅上姜月初脸颊。",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [
+          33
+        ],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续；冲撞、妖风、命中点、收势重音。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_02"
+      ],
+      "clip_id": "EP01_CLIP18",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_02；关键物件 PROP_02。",
+        "camera": "景别/机位：CU裴；视线/轴线：裴看画左上姜，姜在画外右上位置。；模板：留白·定格。",
+        "post": "转场 受害者最后一字后切加害者反应；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "裴长青错愕硬断",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "裴长青错愕看姜月初，只吐出一个你字；声音断后切向姜月初的后果反应。",
+      "sound_needs": {
+        "dialogue_indices": [
+          34
+        ],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_02、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "characters": [
+        "CHAR_01"
+      ],
+      "clip_id": "EP01_CLIP19",
+      "department_notes": {
+        "art": "场景 LOC_01；入画角色 CHAR_01；关键物件 PROP_02。",
+        "camera": "景别/机位：CU姜→黑场；视线/轴线：姜看画右下裴，不看镜头。；模板：留白·定格。",
+        "post": "转场 集尾硬切黑；本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。"
+      },
+      "image_video_requirements": {
+        "anchors": [],
+        "backend_risk": "近景/对话镜优先锁脸和视线，口型只做视觉占位。",
+        "end_anchor_required": false,
+        "endframe": "",
+        "firstframe": "",
+        "relay_boundary": false
+      },
+      "label": "姜月初血点脸静默硬断",
+      "location_id": "LOC_01",
+      "props_and_objects": [
+        "PROP_02"
+      ],
+      "scene": "姜月初脸颊新血点清晰，她握刀的手轻颤却不松开；无系统到账、无音乐，1.3秒后硬切黑。",
+      "sound_needs": {
+        "dialogue_indices": [],
+        "narration_indices": [],
+        "sfx": "荒野风声/环境底噪按场景 AMBIENT 延续。"
+      },
+      "vfx_or_overlay": {
+        "compose_overlay_only": "本镜无可读画中文字；字幕、花字和临时说明统一在 compose 层处理。",
+        "system_panels": [],
+        "vfx_assets": [
+          "场景风沙、血尘、光位变化按本场视觉契约继承"
+        ]
+      },
+      "wardrobe_makeup_state": "按本镜 required_presence 锁定：CHAR_01、PROP_02、LOC_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "summary": {
+    "characters": [
+      "BEAST_01",
+      "CHAR_01",
+      "CHAR_02"
+    ],
+    "clip_count": 19,
+    "locations": [
+      "LOC_01"
+    ],
+    "objects": [
+      "PROP_01",
+      "PROP_02",
+      "VFX_01"
+    ]
+  },
+  "version": 1
+}

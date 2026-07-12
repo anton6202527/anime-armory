@@ -39,7 +39,7 @@ export interface IpcCommands {
 
   // demos
   'demos.list': (a: { workspaceRoot: string }) => DemoDownloadInfo[]
-  'demos.install': (a: { workspaceRoot: string; line: string }) => DemoInstallResult
+  'demos.install': (a: { workspaceRoot: string; rel: string }) => DemoInstallResult
   'demos.seed': (a: { workspaceRoot: string }) => number
 
   // skills
@@ -137,6 +137,7 @@ export interface IpcCommands {
   // app / shell
   'app.setLanguage': (a: { language: string }) => void
   'app.setTerminalVisible': (a: { visible: boolean }) => void
+  'app.setRecentWorks': (a: { works: Array<{ path: string; name: string }> }) => void
   'app.openSourceRepo': (a?: undefined) => void
   'app.openExternalUrl': (a: { url: string }) => void
 }
@@ -152,6 +153,7 @@ export interface IpcEvents {
   'fs-changed': { root: string }
   'app:set-language': 'zh' | 'en'
   'app:switch-workspace': void
+  'app:open-recent-work': string
   'app:new-terminal': void
   'app:toggle-terminal': boolean | undefined
 }

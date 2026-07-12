@@ -165,7 +165,8 @@ def load_seam_intents(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
 
 
 def machine_check(payload: Dict[str, Any], context_frames: Optional[Dict[int, Dict[str, str]]] = None,
-                  seam_intents: Optional[Dict[int, Dict[str, Any]]] = None) -> None:
+                  seam_intents: Optional[Dict[int, Dict[str, Any]]] = None,
+                  clip_scenes: Optional[Dict[int, str]] = None) -> None:
     """就地加接缝机检；只有 continuous_take_relay 的跨帧相似度会阻断。
 
     阈值与 dHash/色距数学复用 n2d-review/temporal_consistency（单一真值源）；
@@ -208,6 +209,17 @@ def machine_check(payload: Dict[str, Any], context_frames: Optional[Dict[int, Di
             # 非 relay 的设计切镜允许换构图；距离只记录，不拿错标准拦验收。
             chk["verdict_if_relay"] = chk["verdict"]
             chk["verdict"] = "info"
+            # 同场景软档（2026-07 实跑痛点回修·衔接不一致）：hard_cut 允许换构图，但**同一场景**
+            # 相邻镜的灯光/色温应连贯——实证 EP1 全部 10 个接缝被降 info 放行，其中 3 个同场景
+            # 色距 0.169-0.258 超 SEAM_COLOR_WARN(0.12)，观感即"换相机换调色"。构图距离仍 info，
+            # 只对色距超标升 warn（有意断裂在 intentional_discontinuity manifest 登记后不罚）。
+            if (strictness == "info" and clip_scenes
+                    and clip_scenes.get(n) and clip_scenes.get(n) == clip_scenes.get(m)
+                    and not (intent or {}).get("intentional_discontinuity")):
+                cdist = chk.get("color_dist")
+                if isinstance(cdist, (int, float)) and cdist > tc.SEAM_COLOR_WARN:
+                    chk["verdict"] = "warn"
+                    chk["same_scene_color_jump"] = True
         seams.append(chk)
     if skipped and not checked:
         notes.append("缺 Pillow——接缝机检跳过，交人判 contact sheet。")
@@ -239,6 +251,26 @@ def is_closeup_shot(clip: Dict[str, Any]) -> bool:
         if isinstance(shot, dict) and is_closeup_lens(shot.get("lens", "")):
             return True
     return False
+
+
+def load_clip_scenes(root: Path, episode: str) -> Dict[int, str]:
+    """clip 序号 → location/scene id。同场景硬切接缝的光色连贯性检查用。"""
+    path = root / "脚本" / episode / "storyboard.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: Dict[int, str] = {}
+    for clip in (data.get("clips") or data.get("shots") or []):
+        if not isinstance(clip, dict):
+            continue
+        idx = clip_index(str(clip.get("id") or clip.get("clip") or clip.get("shot") or ""))
+        if idx is None:
+            continue
+        scene = str(clip.get("location_id") or clip.get("scene") or "").strip()
+        if scene:
+            out[idx] = scene
+    return out
 
 
 def load_shot_types(root: Path, episode: str) -> Dict[int, Dict[str, Any]]:
@@ -888,7 +920,8 @@ def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
     contact = make_contact_sheet(all_frames, out_dir / f"contact_sheet_{batch}.jpg")
     payload["contact_sheet"] = contact
     machine_check(payload, neighbor_context_frames(root, episode, payload, frames_dir),
-                  load_seam_intents(root, episode) or None)
+                  load_seam_intents(root, episode) or None,
+                  load_clip_scenes(root, episode) or None)
     intra_clip_check(payload, load_shot_types(root, episode) or None)
     anchor_adherence_check(payload, root, load_anchor_intents(root, episode) or None)
     delivery_consistency_check(payload)

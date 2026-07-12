@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "kind": "comic_codex_reference_bundle",
+  "chapter": "第1话",
+  "panel_id": "P001",
+  "reference_input_mode": "codex_exec_image_flags",
+  "reference_attachment_limit": 5,
+  "cli_image_input_count": 2,
+  "references": [
+    {
+      "id": "STYLE_HLM_GONGBI_DREAM_V1",
+      "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+      "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+    },
+    {
+      "id": "LOC_PROLOGUE_VOID",
+      "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+      "sha256": "2207ef0704900c00896f0e116826eea87d6b12a447558e8676e467884e947cfa"
+    }
+  ],
+  "omitted_attachment_count": 0,
+  "omitted_attachments": [],
+  "created_at": "2026-07-12T11:56:59"
+}

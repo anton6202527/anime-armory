@@ -866,9 +866,12 @@ export function CanvasPane({ canvas, root }: ViewProps) {
           <MiniMap
             position="bottom-left"
             className="canvas-minimap"
+            style={{ width: 176, height: 116 }}
             pannable
             zoomable
-            maskColor="rgba(11,14,20,.7)"
+            maskColor="transparent"
+            maskStrokeColor="rgba(206, 206, 206, .68)"
+            maskStrokeWidth={1.2}
             nodeColor={(node) => {
               if (node.id.startsWith("asset:")) return "transparent";
               if (node.id.startsWith("video:")) return "#6b6b6b";

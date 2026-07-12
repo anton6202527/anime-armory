@@ -883,3 +883,30 @@ def test_domestic_region_stays_loose():
     _set(root, "- 发行地区: 中国大陆\n")
     assert B.pacing_region(root) == "domestic"
     assert "hook_gap" not in codes(B.audit_episode(root, "第1集")[0])
+
+
+def test_clip_density_ppt_slow_fires_below_floor(tmp_path):
+    import json as _json
+    root = tmp_path
+    ep_dir = root / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "voiceover.txt").write_text(
+        "\n".join(f"[镜头{i}·旁白·平静] 第{i}句台词内容。" for i in range(1, 9)), encoding="utf-8")
+    (ep_dir / "storyboard.json").write_text(_json.dumps({
+        "clips": [{"id": f"C{i}", "duration": 30.0} for i in range(1, 5)],  # 4 clip / 120s = 2/min
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _stats = B.audit_episode(str(root), "第1集")
+    assert any(c == "clip_density_ppt_slow" for _s, c, _m in findings)
+
+
+def test_clip_density_ok_above_floor(tmp_path):
+    import json as _json
+    root = tmp_path
+    ep_dir = root / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "voiceover.txt").write_text("[镜头1·旁白·平静] 一句话。", encoding="utf-8")
+    (ep_dir / "storyboard.json").write_text(_json.dumps({
+        "clips": [{"id": f"C{i}", "duration": 8.0} for i in range(1, 10)],  # 9 clip / 72s = 7.5/min
+    }, ensure_ascii=False), encoding="utf-8")
+    findings, _stats = B.audit_episode(str(root), "第1集")
+    assert not any(c == "clip_density_ppt_slow" for _s, c, _m in findings)

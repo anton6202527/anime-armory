@@ -333,11 +333,38 @@ def _cap_value(caps: Any, name: str, default: int) -> int:
     return max(0, value)
 
 
-def panel_references(root: Path, panel: dict, registry: dict, caps: Any) -> list[dict[str, str]]:
+def load_memory_anchor_pins(root: Path, chapter: str) -> dict[str, list[dict[str, str]]]:
+    """跨话记忆锚计划（comic-identity/memory_anchor.py 产·文件契约消费，不跨 skill import）。
+
+    长间隔再登场角色把最早定妆钉为最高优先参考——对抗复现间隔越长漂移越大（Gap-Decay）。
+    计划缺失/无效 → 空 dict，零行为变化。"""
+    path = root / "生产数据" / f"comic_memory_anchor_{chapter}.json"
+    try:
+        plan = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: dict[str, list[dict[str, str]]] = {}
+    for row in plan.get("characters") or []:
+        if not isinstance(row, dict) or row.get("status") != "ready":
+            continue
+        cid = str(row.get("character_id") or "")
+        refs = [{"id": cid, "path": str(r.get("path") or ""), "role": "memory_anchor"}
+                for r in (row.get("pinned_refs") or []) if isinstance(r, dict) and r.get("path")]
+        if cid and refs:
+            out[cid] = refs
+    return out
+
+
+def panel_references(root: Path, panel: dict, registry: dict, caps: Any,
+                     memory_pins: dict[str, list[dict[str, str]]] | None = None) -> list[dict[str, str]]:
     grouped: dict[str, list[dict[str, str]]] = {}
     for ref_id in panel_reference_ids(panel):
         resolved = resolve_reference_paths(root, str(ref_id), registry) or [{"id": str(ref_id), "path": ""}]
         grouped[ref_id] = sorted(resolved, key=reference_priority)
+        pins = (memory_pins or {}).get(str(ref_id)) or []
+        if pins:
+            pinned_paths = {ref["path"] for ref in pins}
+            grouped[ref_id] = pins + [ref for ref in grouped[ref_id] if ref.get("path") not in pinned_paths]
 
     outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
     if outfit_ref_id and outfit_record:
@@ -581,6 +608,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
     render_stage = read_setting(root, "出图稿层", "完成稿")
     registry = load_reference_registry(root)
     finishing_plan = load_finishing_plan(root, chapter)
+    memory_pins = load_memory_anchor_pins(root, chapter)
     finishing_map = finishing_by_panel(finishing_plan)
     jobs = []
     for panel in panel_script.get("panels", []):
@@ -589,7 +617,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
         finish = finishing_map.get(str(pid), {})
         size = {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))}
         continuity = panel_continuity_contract(panel, panel_script)
-        references = panel_references(root, panel, registry, caps)
+        references = panel_references(root, panel, registry, caps, memory_pins=memory_pins)
         production_prompt = build_prompt(panel, style, registry, panel_script, finish, render_stage)
         outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
         outfit_contract = outfit_contract_text(outfit_id, outfit_record) if outfit_ref_id and outfit_record else ""

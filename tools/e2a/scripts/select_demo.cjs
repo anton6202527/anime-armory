@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const {
+  CREATION_ROOT,
+  LINE_KEY_BY_NAME,
+  demoAssetName,
+  parseWorkRel,
+} = require('../demo_assets.cjs');
 
-const CREATION_ROOT = '创作区';
 const CREATIVE_LINES = ['写小说', '制漫剧', '画漫画', '写歌', '制MV', '拍广告'];
 const CONFIG_REL = path.join('tools', 'e2a', 'demo-works.json');
-
-function parseWorkRel(rel) {
-  const parts = String(rel || '').split('/');
-  if (parts.length !== 3 || parts[0] !== CREATION_ROOT || !parts[1] || !parts[2]) {
-    throw new Error(`Invalid demo work path: ${rel}`);
-  }
-  return { root: parts[0], line: parts[1], name: parts[2], rel };
-}
 
 function normalizeWorkEntry(entry) {
   if (typeof entry === 'string') {
@@ -78,17 +75,44 @@ function demoWorks(root) {
   return picks;
 }
 
+function allProgressWorks(root) {
+  const picks = [];
+  for (const line of CREATIVE_LINES) {
+    const lineDir = path.join(root, CREATION_ROOT, line);
+    if (!fs.existsSync(lineDir)) continue;
+    const works = fs.readdirSync(lineDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.startsWith('_'))
+      .sort((a, b) => a.name.localeCompare(b.name, 'zh-Hans-CN'));
+    for (const work of works) {
+      const rel = `${CREATION_ROOT}/${line}/${work.name}`;
+      if (fs.existsSync(path.join(lineDir, work.name, '_进度.md'))) picks.push(rel);
+    }
+  }
+  return picks;
+}
+
 function main() {
-  const root = path.resolve(process.argv[2] || '.');
+  const args = process.argv.slice(2);
+  const rootArg = args.find((arg) => !arg.startsWith('--')) || '.';
+  const root = path.resolve(rootArg);
+  const allProgress = args.includes('--all-progress');
+  const withAssets = args.includes('--assets');
   let picks;
   try {
-    picks = demoWorks(root);
+    picks = allProgress ? allProgressWorks(root) : demoWorks(root);
   } catch (e) {
     console.error(e.message);
     process.exit(1);
   }
   if (picks.length > 0) {
-    console.log(picks.join('\n'));
+    if (withAssets) {
+      console.log(picks.map((rel) => {
+        const work = parseWorkRel(rel);
+        return [work.rel, LINE_KEY_BY_NAME.get(work.line), demoAssetName(work.rel)].join('\t');
+      }).join('\n'));
+    } else {
+      console.log(picks.join('\n'));
+    }
     return;
   }
 

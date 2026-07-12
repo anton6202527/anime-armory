@@ -216,7 +216,7 @@ function TerminalSessionView({
       fontFamily: "Menlo, Monaco, monospace",
       cursorBlink: true,
       scrollback: 300,
-      theme: { background: "#121413", foreground: "#cccccc" },
+      theme: { background: "#1f1f1f", foreground: "#cccccc" },
     });
     termRef.current = term;
     const fit = new FitAddon();

@@ -1,23 +1,37 @@
 import { app, BrowserWindow, session, shell } from 'electron'
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { AppUiState } from './menu'
 import { createServices, registerIpc } from './ipc'
 
 const ui = new AppUiState()
 const services = createServices(ui)
+const productName = 'AnimeArmory'
+
+// Electron uses its own name and icon while running an unpackaged build.
+// Set both explicitly so local development looks like the shipped product.
+app.setName(productName)
+
+function developmentIconPath(): string | undefined {
+  if (app.isPackaged) return undefined
+  const icon = path.join(app.getAppPath(), 'assets', 'app-icon', 'icon.png')
+  return existsSync(icon) ? icon : undefined
+}
 
 function createWindow(): BrowserWindow {
+  const icon = developmentIconPath()
   const win = new BrowserWindow({
-    title: 'Creation Armory',
+    title: productName,
+    ...(icon ? { icon } : {}),
     width: 1440,
     height: 920,
     minWidth: 980,
     minHeight: 640,
     show: false,
-    backgroundColor: '#121413',
+    backgroundColor: '#1f1f1f',
     ...(process.platform === 'darwin'
       ? { titleBarStyle: 'hiddenInset' as const, trafficLightPosition: { x: 12, y: 9 } }
-      : { titleBarStyle: 'hidden' as const, titleBarOverlay: { color: '#191a1c', symbolColor: '#cccccc', height: 32 } }),
+      : { titleBarStyle: 'hidden' as const, titleBarOverlay: { color: '#181818', symbolColor: '#cccccc', height: 32 } }),
     webPreferences: {
       preload: path.join(import.meta.dirname, '../preload/index.mjs'),
       contextIsolation: true,
@@ -53,12 +67,26 @@ function createWindow(): BrowserWindow {
                await sleep(9000)
                steps.push('op=' + Boolean(document.querySelector('.op')))
                steps.push('rail=' + document.querySelectorAll('.rail-tab').length)
-               const rails = document.querySelectorAll('.rail-tab')
-               click(rails[3]) // canvas tab on canvas lines
-               await sleep(6000)
-               steps.push('clipNodes=' + document.querySelectorAll('.clip-node').length)
-               steps.push('edges=' + document.querySelectorAll('.react-flow__edge').length)
-               steps.push('epSelect=' + Boolean(document.querySelector('.ep-select')))
+               if (${JSON.stringify(Boolean(process.env.SMOKE_FILES))}) {
+                 for (let i = 0; i < 30 && !document.querySelector('.tree-line:not(.dir):not(.tree-limit)'); i++) await sleep(250)
+                 const fileRows = Array.from(document.querySelectorAll('.tree-line:not(.dir):not(.tree-limit)') || [])
+                 const markdownRow = fileRows.find((row) => /\.md\s*$/.test(row.textContent || ''))
+                 click(markdownRow || fileRows[0])
+                 await sleep(2500)
+                 steps.push('fileBreadcrumb=' + Boolean(document.querySelector('.files-editor-breadcrumb')))
+                 steps.push('breadcrumbParts=' + document.querySelectorAll('.files-breadcrumb-item').length)
+                 steps.push('symbolParts=' + document.querySelectorAll('.files-breadcrumb-item.symbol').length)
+                 click(document.querySelector('.files-breadcrumb-item.symbol') || document.querySelector('.files-breadcrumb-item.current'))
+                 await sleep(800)
+                 steps.push('pickerRows=' + document.querySelectorAll('.files-breadcrumb-picker-row').length)
+               } else {
+                 const rails = document.querySelectorAll('.rail-tab')
+                 click(rails[3]) // canvas tab on canvas lines
+                 await sleep(6000)
+                 steps.push('clipNodes=' + document.querySelectorAll('.clip-node').length)
+                 steps.push('edges=' + document.querySelectorAll('.react-flow__edge').length)
+                 steps.push('epSelect=' + Boolean(document.querySelector('.ep-select')))
+               }
              }
              return JSON.stringify({
                steps,
@@ -69,7 +97,6 @@ function createWindow(): BrowserWindow {
         console.log('[smoke probe]', probe)
         const recheck = await win.webContents.executeJavaScript(
           `JSON.stringify({
-             tabs: document.querySelectorAll('.work-tab').length,
              op: Boolean(document.querySelector('.op')),
              status: (document.querySelector('.statusbar')?.textContent || '').slice(0, 40),
            })`,
@@ -105,6 +132,9 @@ function createWindow(): BrowserWindow {
 }
 
 app.whenReady().then(() => {
+  const icon = developmentIconPath()
+  if (process.platform === 'darwin' && icon) app.dock?.setIcon(icon)
+
   // Deny every permission request (camera/mic/etc.) — this app needs none.
   session.defaultSession.setPermissionRequestHandler((_wc, _permission, cb) => cb(false))
 

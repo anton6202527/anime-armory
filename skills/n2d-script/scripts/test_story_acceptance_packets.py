@@ -76,3 +76,33 @@ def test_confirmed_packet_blocks_after_storyboard_changes(tmp_path: Path) -> Non
 
     assert report["status"] == "block"
     assert any("inputs_fingerprint" in "；".join(row["issues"]) for row in report["files"])
+
+
+def test_table_read_reports_estimate_only_when_final_timing_is_absent(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+    timing = tmp_path / "合成" / "第1集" / "配音" / "timing_estimate.json"
+    timing.parent.mkdir(parents=True)
+    timing.write_text(json.dumps({
+        "kind": "n2d_timing_estimate",
+        "audio_generated": False,
+        "summary": {"duration_sec": 12.5, "line_count": 2},
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = sap._table_read_payload(tmp_path, "第1集")
+
+    assert payload["read_through"]["timing_status"] == "estimate_only"
+    assert payload["inputs"]["timing_estimate"].endswith("timing_estimate.json")
+
+
+def test_stage2_quality_report_does_not_invalidate_approved_table_read(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+    sap.scaffold(tmp_path, "第1集", kind="table_read", confirmed=True)
+    _sign(tmp_path, "table_read")
+
+    report_path = tmp_path / "生产数据" / "script_quality_contract_第1集.json"
+    report_path.parent.mkdir(parents=True)
+    report_path.write_text(json.dumps({"status": "pass"}, ensure_ascii=False), encoding="utf-8")
+
+    report = sap.check(tmp_path, "第1集", kind="table_read")
+
+    assert report["status"] == "pass"

@@ -17,6 +17,18 @@ export const editorAccessoryOptions = {
   },
 } satisfies monaco.editor.IEditorOptions;
 
+// Keep text rendering aligned with VS Code's macOS editor defaults.  Defining
+// these once also prevents the normal editor and the diff editor from slowly
+// drifting apart as their option lists evolve.
+export const vscodeEditorFontOptions = {
+  fontFamily: "Menlo, Monaco, 'Courier New', monospace",
+  fontLigatures: false,
+  fontSize: 12,
+  fontWeight: "normal",
+  letterSpacing: 0,
+  lineHeight: 0,
+} satisfies monaco.editor.IEditorOptions;
+
 let installed = false;
 
 function installJsonLinesLanguage(): void {
@@ -56,7 +68,7 @@ function installDarkPlusTheme(): void {
     inherit: true,
     rules: [
       { token: "", foreground: "d4d4d4", background: activeSkin.monacoTheme.colors["editor.background"]?.slice(1) ?? "121413" },
-      { token: "comment", foreground: "6a9955", fontStyle: "italic" },
+      { token: "comment", foreground: "6a9955" },
       { token: "keyword", foreground: "c586c0" },
       { token: "constant", foreground: "569cd6" },
       { token: "number", foreground: "b5cea8" },

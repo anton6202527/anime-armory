@@ -89,6 +89,8 @@ async function snapshotRecord(abs: string, size: number, mtime: number): Promise
  * workspace under userData/baselines/<hash16>.json, keyed by work path.
  */
 export class BaselineService {
+  private docCache = new Map<string, BaselineDoc>()
+
   private dir(): string {
     return path.join(app.getPath('userData'), 'baselines')
   }
@@ -98,16 +100,22 @@ export class BaselineService {
   }
 
   private async load(root: string): Promise<BaselineDoc | null> {
+    const key = path.resolve(root)
+    const cached = this.docCache.get(key)
+    if (cached) return cached
     try {
       const raw = await fs.readFile(this.fileFor(root), 'utf8')
       const doc = JSON.parse(raw) as BaselineDoc
-      return doc && typeof doc.files === 'object' ? doc : null
+      if (!doc || typeof doc.files !== 'object') return null
+      this.docCache.set(key, doc)
+      return doc
     } catch {
       return null
     }
   }
 
   private async save(root: string, doc: BaselineDoc): Promise<void> {
+    this.docCache.set(path.resolve(root), doc)
     await fs.mkdir(this.dir(), { recursive: true })
     const tmp = this.fileFor(root) + '.tmp'
     await fs.writeFile(tmp, JSON.stringify(doc))
@@ -154,6 +162,22 @@ export class BaselineService {
       const old = doc.files[f.rel]
       if (!old) map.set(f.rel, 'u')
       else if (await this.fileChanged(root, f, old)) map.set(f.rel, 'm')
+    }
+    return map
+  }
+
+  /** Change markers for an already-listed directory page. Unlike statusMap,
+   *  this does not recursively walk the whole work on every folder expand. */
+  async statusForEntries(
+    root: string,
+    entries: Array<{ rel: string; size: number; mtime: number }>,
+  ): Promise<Map<string, string>> {
+    const doc = await this.ensureSeeded(root)
+    const map = new Map<string, string>()
+    for (const entry of entries) {
+      const old = doc.files[entry.rel]
+      if (!old) map.set(entry.rel, 'u')
+      else if (await this.fileChanged(root, entry, old)) map.set(entry.rel, 'm')
     }
     return map
   }

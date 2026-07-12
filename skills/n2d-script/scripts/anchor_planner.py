@@ -254,11 +254,18 @@ def plan_anchor_times(duration: float, boundaries: List[float],
     return anchors
 
 
+def clip_asset_stem(clip: Dict[str, Any], index: int) -> str:
+    """Keep anchor filenames aligned with the storyboard's canonical Clip ID."""
+    raw = str(clip.get("id") or clip.get("clip_id") or "").strip()
+    safe = re.sub(r"[^\w.-]+", "_", raw, flags=re.UNICODE).strip("._")
+    return safe or f"Clip_{index:02d}"
+
+
 def anchor_png_name(clip: Dict[str, Any], ep: str, index: int, k: int) -> str:
     first = str(clip.get("firstframe_png") or "")
     if first.endswith(".png"):
         return f"{first[:-4]}_a{k}.png"
-    return f"出图/{ep}/图片/Clip_{index:02d}_a{k}.png"
+    return f"出图/{ep}/图片/{clip_asset_stem(clip, index)}_a{k}.png"
 
 
 def classify_clip(clip: Dict[str, Any], *, min_seg: float, long_shot_threshold: float,
@@ -285,7 +292,7 @@ def midframe_png_name(clip: Dict[str, Any], ep: str, index: int) -> str:
     first = str(clip.get("firstframe_png") or "")
     if first.endswith(".png"):
         return f"{first[:-4]}_mid.png"
-    return f"出图/{ep}/图片/Clip_{index:02d}_mid.png"
+    return f"出图/{ep}/图片/{clip_asset_stem(clip, index)}_mid.png"
 
 
 def _duration_matches(value: Any, duration: Any) -> bool:

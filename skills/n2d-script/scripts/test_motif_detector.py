@@ -52,6 +52,29 @@ def test_classify_motif_system_panel():
     assert "命中" in hit["rule"]
 
 
+def test_classify_motif_accepts_explicit_contract_and_description_field():
+    explicit = {
+        "id": "EP01_CLIP13",
+        "template": "system_panel",
+        "motif_id": "MOTIF_系统面板",
+        "shots": [{"description": "黑金无字古卷底框展开"}],
+    }
+    hit = md.classify_motif(explicit)
+
+    assert hit is not None
+    assert hit["motif_type"] == "system_panel"
+    assert "显式" in hit["rule"]
+
+
+def test_clip_text_reads_current_description_field():
+    clip = _clip(label="升级时刻")
+    clip["shots"] = [{"description": "系统面板显示等级与属性"}]
+
+    hit = md.classify_motif(clip)
+    assert hit is not None
+    assert hit["motif_type"] == "system_panel"
+
+
 def test_classify_motif_no_hit():
     assert md.classify_motif(_clip(label="两人在街头对话", desc="过肩反打")) is None
 

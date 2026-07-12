@@ -822,6 +822,37 @@ def pick_existing_ref(root: Path, candidates: Sequence[str], *, key: str = "", s
 
 def external_visual_reference_entries(root: Path, cid: str, cfg: Mapping[str, Any]) -> List[Dict[str, Any]]:
     """User-provided identity anchors that should be attached before the first generated makeup PNG."""
+    manifest = load_json(root / "设定库" / "参考资料" / "视觉参考" / "reference_manifest.json")
+    if isinstance(manifest, Mapping):
+        out: List[Dict[str, Any]] = []
+        seen = set()
+        for row in manifest.get("references") or []:
+            if not isinstance(row, Mapping):
+                continue
+            character_ids = row.get("character_ids") or row.get("identity_for") or []
+            if isinstance(character_ids, str):
+                character_ids = [character_ids]
+            policy = str(row.get("use_policy") or "").strip()
+            if cid not in {str(item).strip() for item in character_ids} or policy not in {
+                "identity_reference", "identity_body_reference",
+            }:
+                continue
+            rel = str(row.get("path") or "").strip()
+            if not rel or rel in seen or not (root / rel).is_file():
+                continue
+            seen.add(rel)
+            item = dict(row)
+            item.update({
+                "path": rel,
+                "status": "ready",
+                "source": str(row.get("source") or "user_provided_project_reference"),
+                "use_policy": policy,
+                "sha256": sha256_file(root / rel),
+            })
+            out.append(item)
+        if out:
+            return out
+
     name = safe_slug(str(cfg.get("name") or cid))
     candidates = [
         f"出图/共享/图片/{cid}_定型参考.png",
@@ -857,6 +888,14 @@ def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
 
 def parse_character_card_identity(text: str, fallback_name: str = "") -> Tuple[str, str]:
     name, cid = parse_card_header(text, "角色")
+    if not cid:
+        modern = re.search(
+            r"^#\s*((?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s+(.+?)(?:\s*[｜|]\s*.+)?\s*$",
+            text,
+            re.M,
+        )
+        if modern:
+            cid, name = modern.group(1).strip(), modern.group(2).strip()
     if not cid:
         m = re.search(r"^\s*-\s*character_id\s*[:：]\s*`?([^`\s]+)`?\s*$", text, re.M)
         if m:
@@ -917,6 +956,23 @@ def md_bullet_contains(text: str, label: str) -> str:
 def md_bold_value(text: str, label: str) -> str:
     m = re.search(rf"\*\*[^*\n]*{re.escape(label)}[^*\n]*\*\*\s*[：:]\s*(.+)", text)
     return m.group(1).strip() if m else ""
+
+
+def md_first_bullet(text: str, labels: Sequence[str]) -> str:
+    for label in labels:
+        value = md_bullet(text, label) or md_bullet_contains(text, label)
+        if value:
+            return value
+    return ""
+
+
+def md_section_bullets(text: str, heading: str) -> List[str]:
+    match = re.search(rf"(?m)^##+\s+{re.escape(heading)}\s*$", text)
+    if not match:
+        return []
+    end = re.search(r"(?m)^##+\s+", text[match.end():])
+    body = text[match.end(): match.end() + end.start()] if end else text[match.end():]
+    return [m.group(1).strip() for m in re.finditer(r"(?m)^\s*-\s*(.+?)\s*$", body)]
 
 
 AGE_CONTEXT_RE = re.compile(
@@ -1123,7 +1179,7 @@ def required_character_ids(story: Mapping[str, Any]) -> List[str]:
 
     def add_marker(raw: Any) -> None:
         text = normalize_marker(raw)
-        if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in ids:
+        if text.startswith(("CHAR_", "BEAST_", "CROWD_", "GROUP_")) and text not in ids:
             ids.append(text)
 
     for clip in story.get("clips") or []:
@@ -1137,7 +1193,7 @@ def required_character_ids(story: Mapping[str, Any]) -> List[str]:
         for key in states:
             add_marker(str(key).split()[0])
     blob = json.dumps(story, ensure_ascii=False)
-    for token in re.findall(r"(?<![A-Za-z0-9_])(?:CHAR|CROWD|GROUP)_[A-Za-z0-9_]*[A-Za-z0-9]", blob):
+    for token in re.findall(r"(?<![A-Za-z0-9_])(?:CHAR|BEAST|CROWD|GROUP)_[A-Za-z0-9_]*[A-Za-z0-9]", blob):
         add_marker(token)
     return ids
 
@@ -1281,7 +1337,12 @@ def state_key_for(data: Mapping[str, Any], cid: str) -> Optional[str]:
 
 def first_form_from_card(text: str) -> str:
     variants = md_bullet_contains(text, "形态变体")
+    if not variants:
+        variants = md_bullet_contains(text, "形态分层")
     if variants:
+        quoted = re.search(r"`([^`]+)`", variants)
+        if quoted:
+            return quoted.group(1).strip()
         cleaned = re.sub(r"第\d+集\s*", "", variants)
         cleaned = re.split(r"[；;，,。]", cleaned)[0].strip()
         cleaned = cleaned.replace("/", "").replace(" ", "")
@@ -1667,18 +1728,30 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         traits = md_bullet(text, "性格关键词")
         age_context = extract_age_context(text, roster_text) or fallback_character_visual(cid, name, "age_context")
         visual_identity = extract_visual_identity(text, roster_text)
-        face = md_bullet(text, "固定外貌") or visual_identity or fallback_character_visual(cid, name, "face")
+        dna_lines = md_section_bullets(text, "身份 DNA")
+        face = (
+            md_first_bullet(text, ("固定外貌", "外貌", "形态"))
+            or visual_identity
+            or "；".join(dna_lines)
+            or fallback_character_visual(cid, name, "face")
+        )
         if age_context and age_context not in face:
             face = f"{age_context}；{face}"
         face = sanitize_static_identity_text(face)
-        body = md_bullet(text, "固定体态")
-        scale = sanitize_static_identity_text(md_bullet(text, "相对身量") or body or fallback_character_visual(cid, name, "relative_scale"))
-        outfit = sanitize_static_identity_text(md_bullet(text, "固定服装") or fallback_character_visual(cid, name, "outfit"))
+        body = md_first_bullet(text, ("固定体态", "体态", "身形"))
+        scale = sanitize_static_identity_text(md_first_bullet(text, ("相对身量", "体型", "身形")) or body or fallback_character_visual(cid, name, "relative_scale"))
+        outfit = sanitize_static_identity_text(md_first_bullet(text, ("固定服装", "服装")) or fallback_character_visual(cid, name, "outfit"))
         palette = md_bullet(text, "固定配色")
-        hair = md_bullet_contains(text, "发型/发色/发饰") or fallback_character_visual(cid, name, "hair")
+        hair = md_first_bullet(text, ("发型/发色/发饰", "发型")) or fallback_character_visual(cid, name, "hair")
         makeup = md_bullet(text, "妆容")
-        accessory = md_bullet(text, "配饰") or fallback_character_visual(cid, name, "accessories", "无")
-        performance = md_bullet_contains(text, "固定表情风格 / 动作习惯") or traits or fallback_character_visual(cid, name, "performance_signature")
+        accessory = md_first_bullet(text, ("配饰", "道具")) or fallback_character_visual(cid, name, "accessories", "无")
+        performance = md_first_bullet(text, ("固定表情风格 / 动作习惯", "表演")) or traits or fallback_character_visual(cid, name, "performance_signature")
+        if cid.startswith("BEAST_"):
+            injury = md_first_bullet(text, ("持续伤势", "伤势"))
+            hair = md_first_bullet(text, ("毛发", "发型")) or "非人兽首与粗硬毛发按形态真值保持，不生成人类束发或发饰。"
+            outfit = md_first_bullet(text, ("服装", "甲胄")) or "以非人虎头人身、黑黄粗硬毛发和伤势为主体；不添加西式兽人铠甲或无来源古装衣袍。"
+            if injury:
+                accessory = f"持续伤势：{injury}；{accessory}".strip("；")
         anchor = md_bold_value(text, "锚点句") or md_bullet(text, "锚点句")
         if not anchor:
             anchors = md_bold_value(text, "识别锚点")
@@ -1715,6 +1788,7 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             drift_hint = m.group(1).strip()
         if drift_hint:
             drift.append(drift_hint)
+        drift.extend(md_section_bullets(text, "禁漂项"))
         bundle_manifest = asset_index.get(cid, {}).get("manifest")
         bundle_package = str(asset_index.get(cid, {}).get("package_dir") or "")
         if bundle_package and safe_slug(name or cid) not in bundle_package and name not in {cid, "04"}:
@@ -2003,6 +2077,14 @@ def scene_card_map(root: Path) -> Dict[str, Tuple[str, str]]:
     for path in sorted(loc_dir.glob("*.md")) if loc_dir.is_dir() else []:
         text = path.read_text(encoding="utf-8")
         name, aid = parse_card_header(text, "场景")
+        if not aid:
+            modern = re.search(
+                r"^#\s*((?:LOC)_[A-Za-z0-9_\u4e00-\u9fff]+)\s+(.+?)(?:\s*[｜|]\s*.+)?\s*$",
+                text,
+                re.M,
+            )
+            if modern:
+                aid, name = modern.group(1).strip(), modern.group(2).strip()
         if aid:
             out[aid] = (name, text)
     return out
@@ -2031,6 +2113,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             weather = md_bullet_contains(text, "时间 / 天气 / 光线")
             tone = md_bullet_contains(text, "主色调 / 氛围")
             anchors = md_bullet(text, "连续性锚点")
+            resident_subjects = md_bullet(text, "常驻主体") or md_bullet(text, "常驻角色")
             positive = (
                 md_bold_value(text, "Codex 图片 Prompt（中文）")
                 or " ".join(x for x in [env, weather, tone, anchors] if x)
@@ -2038,6 +2121,13 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             )
             negative = "现代物品、平台UI、水印、空间轴线随机跳变、丢失连续性锚点"
             scene_dna = dict(hint.get("scene_dna") or {})
+            if resident_subjects:
+                existing_residents = scene_dna.get("resident_assets")
+                if isinstance(existing_residents, str):
+                    existing_residents = [existing_residents]
+                elif not isinstance(existing_residents, list):
+                    existing_residents = []
+                scene_dna["resident_assets"] = merge_unique_terms(existing_residents, [resident_subjects])
             scene_dna = complete_asset_scene_dna(
                 {
                     "name": name or str(req.get("name") or aid),
@@ -2368,20 +2458,34 @@ def generation_control(seed_base: int) -> Dict[str, Any]:
     }
 
 
-def character_reference_card_rel(cid: str, cfg: Mapping[str, Any], form_cfg: Optional[Mapping[str, Any]] = None) -> str:
+def character_reference_card_rel(root: Path, cid: str, cfg: Mapping[str, Any], form_cfg: Optional[Mapping[str, Any]] = None) -> str:
     name = str((form_cfg or {}).get("name") or cfg.get("name") or cid)
     form = str((form_cfg or {}).get("form") or cfg.get("form") or "常态")
     base_form = str(cfg.get("form") or "常态")
+    authored = Path("设定库") / "characters" / f"{name}.md"
+    if (root / authored).is_file():
+        return str(authored)
     if cid.startswith("GROUP_"):
-        return f"角色卡/{cid}.md"
-    base = f"角色卡/{cid}_{safe_slug(name)}"
+        return f"生产数据/卡片快照/角色/{cid}.md"
+    base = f"生产数据/卡片快照/角色/{cid}_{safe_slug(name)}"
     if form and form not in {"常态", "默认", "default"} and form != base_form:
         return f"{base}__{safe_slug(form)}.md"
     return f"{base}.md"
 
 
-def asset_reference_card_rel(aid: str, cfg: Mapping[str, Any]) -> str:
-    folder = "场景卡" if str(cfg.get("type") or "") in {"scene", "location"} else "道具卡"
+def asset_reference_card_rel(root: Path, aid: str, cfg: Mapping[str, Any]) -> str:
+    if str(cfg.get("type") or "") in {"scene", "location"}:
+        authored_dir = root / "设定库" / "locations"
+        for path in sorted(authored_dir.glob("*.md")) if authored_dir.is_dir() else []:
+            try:
+                text = path.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            if re.search(rf"(?m)^#\s*{re.escape(aid)}(?:\s|$)", text) or re.search(rf"ID[:：]\s*{re.escape(aid)}\b", text):
+                return str(path.relative_to(root))
+        folder = "生产数据/卡片快照/场景"
+    else:
+        folder = "生产数据/卡片快照/资产"
     name = clean_asset_display_name(aid, str(cfg.get("name") or aid)).strip()
     if not name or name == aid or name.startswith(aid) or aid.endswith(name):
         return f"{folder}/{aid}.md"
@@ -2580,7 +2684,7 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 "reference_group": rg,
                 "reference_atlas": atlas,
                 "reference_slots": [
-                    reference_slot(root, character_reference_card_rel(cid, cfg, form_cfg), "character_card"),
+                    reference_slot(root, character_reference_card_rel(root, cid, cfg, form_cfg), "character_card"),
                     reference_slot(root, primary_path, "primary_reference") if primary_path else {"slot": "primary_reference", "path": "", "status": "planned"},
                 ],
                 "identity_adapters": adapter_defaults(),
@@ -2593,8 +2697,8 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 "drift_forbidden": merged_cfg["drift"],
                 "performance_signature": merged_cfg["performance_signature"],
                 "signature_equipment": merged_cfg["signature_equipment"],
-                "self_check_passed": primary_ready,
-                "self_check_note": "existing shared PNG reused by prompt pack" if primary_ready else "prompt-stage registered; PNG 自检在出图后回填。",
+                "self_check_passed": False,
+                "self_check_note": "PNG exists but requires explicit visual/QC signoff" if primary_ready else "prompt-stage registered; PNG 自检在出图后回填。",
             }
             if restricted:
                 form["restricted_partial"] = True
@@ -2727,14 +2831,14 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             "name": cfg["name"],
             "reference_group": rg,
             "reference_slots": [
-                reference_slot(root, asset_reference_card_rel(aid, cfg), "asset_card"),
+                reference_slot(root, asset_reference_card_rel(root, aid, cfg), "asset_card"),
                 reference_slot(root, str(primary.get("path") or ""), "primary_reference") if primary.get("path") else {"slot": "primary_reference", "path": "", "status": "planned"},
             ],
             "constraints": constraints,
             "face_policy": constraints.get("face_policy") if constraints else "faceless",
                 "drift_forbidden": cfg.get("drift", []),
                 "scene_dna": cfg.get("scene_dna") or complete_asset_scene_dna(cfg, asset_id=aid, asset_type=str(cfg.get("type") or ""), visual={}),
-                "self_check_passed": bool((root / primary["path"]).is_file()),
+                "self_check_passed": False,
                 "self_check_note": "existing shared PNG reused by prompt pack" if (root / primary["path"]).is_file() else "prompt-stage registered; PNG 自检在出图后回填。",
             }
         if cfg["type"] in {"prop"}:
@@ -2863,7 +2967,7 @@ def clip_chars(clip: Mapping[str, Any]) -> List[str]:
     out: List[str] = []
     for item in raw:
         text = str(item)
-        if text.startswith(("CHAR_", "CROWD_", "GROUP_")) and text not in out:
+        if text.startswith(("CHAR_", "BEAST_", "CROWD_", "GROUP_")) and text not in out:
             out.append(text)
     return out
 
@@ -2888,7 +2992,11 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
         # normalize any longer free-text token back to that id instead of
         # minting a bogus registry entry.
         normalized = aid
-        for known in sorted((x for x in structured_ids if x), key=len, reverse=True):
+        # Offscreen/forbidden IDs are also valid canonical boundaries.  Without
+        # them, prose such as ``VFX_01退出清晰画面`` mints a fake asset even
+        # though ``VFX_01`` is explicitly declared offscreen for this clip.
+        known_ids = list(dict.fromkeys([*structured_ids, *offscreen_ids]))
+        for known in sorted((x for x in known_ids if x), key=len, reverse=True):
             if aid != known and aid.startswith(known):
                 normalized = known
                 break
@@ -3354,9 +3462,42 @@ def primary_style_anchor_rel(sc: Mapping[str, Any]) -> str:
     return style_anchor_rels(sc)[0]
 
 
+def external_style_reference_entries(root: Path) -> List[Dict[str, Any]]:
+    """Return user references explicitly routed to style, never to identity.
+
+    Projects may keep contaminated screenshots/posters as source observations.
+    They are attached only while synthesizing the clean project style anchor;
+    later shots consume that approved clean anchor instead.
+    """
+    manifest = load_json(root / "设定库" / "参考资料" / "视觉参考" / "reference_manifest.json")
+    if not isinstance(manifest, Mapping):
+        return []
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    for row in manifest.get("references") or []:
+        if not isinstance(row, Mapping) or str(row.get("use_policy") or "").strip() != "style_source_only":
+            continue
+        rel = str(row.get("path") or "").strip()
+        if not rel or rel in seen or not (root / rel).is_file():
+            continue
+        seen.add(rel)
+        item = dict(row)
+        item.update({
+            "path": rel,
+            "status": "ready",
+            "source": str(row.get("source") or "user_provided_project_reference"),
+            "use_policy": "style_source_only",
+            "sha256": sha256_file(root / rel),
+        })
+        out.append(item)
+    return out
+
+
 def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, Any]:
     sc = style_contract(story)
     style_name = style_name_from_contract(sc)
+    previous = load_json(root / STYLE_ANCHOR_REGISTRY_REL)
+    previous_selected = previous.get("selected_anchor") if isinstance(previous, Mapping) and isinstance(previous.get("selected_anchor"), Mapping) else {}
     anchors: List[Dict[str, Any]] = []
     for idx, rel in enumerate(style_anchor_rels(sc)):
         path = root / rel
@@ -3364,13 +3505,21 @@ def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, 
             "id": "STYLE_ANCHOR" if idx == 0 else f"STYLE_ANCHOR_{idx + 1}",
             "name": style_name,
             "path": rel,
-            "status": "ready" if path.is_file() else "planned",
+            "status": (
+                str(previous_selected.get("status"))
+                if path.is_file()
+                and str(previous_selected.get("path") or "") == rel
+                and str(previous_selected.get("status") or "") in {"review_pending", "approved", "selected", "rejected"}
+                else ("review_pending" if path.is_file() else "planned")
+            ),
             "use_policy": "style_only",
             "identity_policy": "do_not_clone_face_or_costume",
             "role": "shared_rendering_language_anchor",
         }
         if path.is_file():
             entry["sha256"] = sha256_file(path)
+            if str(previous_selected.get("path") or "") == rel and isinstance(previous_selected.get("human_review"), Mapping):
+                entry["human_review"] = dict(previous_selected["human_review"])
         anchors.append(entry)
     selected = dict(anchors[0]) if anchors else {
         "id": "STYLE_ANCHOR",
@@ -3381,7 +3530,7 @@ def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, 
         "identity_policy": "do_not_clone_face_or_costume",
         "role": "shared_rendering_language_anchor",
     }
-    return {
+    registry = {
         "kind": "n2d_style_anchor_registry",
         "version": 1,
         "generated_at": now_iso(),
@@ -3394,6 +3543,13 @@ def style_anchor_registry(root: Path, story: Mapping[str, Any]) -> Mapping[str, 
             "notes": STYLE_REFERENCE_BOARD_RULES,
         },
     }
+    source_refs = external_style_reference_entries(root)
+    if source_refs:
+        registry["source_style_references"] = source_refs
+        registry["source_reference_policy"] = (
+            "only_for_clean_style_anchor_synthesis; do_not_attach_raw source references to character/scene/shot generation"
+        )
+    return registry
 
 
 def visual_contract(story: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -4335,7 +4491,7 @@ def shot_prompt_section(root: Path, ep: str, idx: int, clip: Mapping[str, Any], 
         f"**目标落档**：{' '.join(f'`{path}`' for path in target_paths)}",
         f"**本镜出图张数**：{frame_count} 张；{'；'.join(frame_parts)}。",
         f"**跨集接力源帧**：{cross_handoff_line}",
-        "**参考图**：",
+        "**参考图入参清单**：",
         *refs,
         f"**角色圣经引用**：{', '.join(char_bindings) if char_bindings else '无人物/空镜'}；人物审美基线：继承角色圣经与项目基础视觉风格，五官/造型清楚有辨识度，不套同质化模板。",
         f"**角色资产包引用**：{', '.join(f'`角色库/{c}__*/manifest.json`' for c in chars) if chars else '无'}。",
@@ -4627,14 +4783,16 @@ def write_consumed_contracts_receipt(root: Path, ep: str) -> Path:
 
 def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
     written: List[Path] = []
-    for folder in ("角色卡", "场景卡", "道具卡"):
+    for folder in ("生产数据/卡片快照/角色", "生产数据/卡片快照/场景", "生产数据/卡片快照/资产"):
         (root / folder).mkdir(parents=True, exist_ok=True)
     for cid, cfg in CHARACTER_DEFS.items():
         forms = [cfg] + [extra for extra in cfg.get("extra_forms") or [] if isinstance(extra, Mapping)]
         for form_cfg in forms:
             merged = {**cfg, **dict(form_cfg)}
             library_tier = character_library_tier_for_cfg(merged)
-            rel = character_reference_card_rel(cid, cfg, form_cfg)
+            rel = character_reference_card_rel(root, cid, cfg, form_cfg)
+            if rel.startswith("设定库/characters/"):
+                continue
             target = shared_rel(str(merged["asset_key"]))
             text = "\n".join([
                 f"# 角色卡 — {cfg['name']}（ID: {cid}）",
@@ -4683,7 +4841,9 @@ def write_reference_slot_cards(root: Path, ep: str) -> List[Path]:
                 ]))
                 written.append(card)
     for aid, cfg in ASSET_DEFS.items():
-        rel = asset_reference_card_rel(aid, cfg)
+        rel = asset_reference_card_rel(root, aid, cfg)
+        if rel.startswith("设定库/locations/"):
+            continue
         target = f"出图/共享/图片/{cfg['path_name']}.png"
         constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
         text = "\n".join([

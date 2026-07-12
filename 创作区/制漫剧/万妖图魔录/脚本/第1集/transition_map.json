@@ -1,0 +1,92 @@
+{
+  "kind": "n2d_transition_map",
+  "version": 1,
+  "episode": "第1集",
+  "status": "confirmed",
+  "seams": [
+    {
+      "seam_id": "Seam_01",
+      "from_beat": "Beat_01",
+      "to_beat": "Beat_02",
+      "out_point": "姜月初惊骇看向画右上虎妖",
+      "in_point": "一炷香前黑底字卡后，她从尸骸间睁眼",
+      "transition_type": "时间回跳硬切",
+      "seam_mode": "intentional_discontinuity",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"reason": "冷开先交危机结果，再明确回到一炷香前重建因果"},
+      "need_endframe": false,
+      "sound_bridge": "虎妖低笑骤停，半拍静音后环境风声重新进入",
+      "continuity_guard": "字卡必须明确时间回跳；闪回重新定场，不伪装连续时空"
+    },
+    {
+      "seam_id": "Seam_02",
+      "from_beat": "Beat_02",
+      "to_beat": "Beat_03",
+      "out_point": "姜月初刚从虎尸移开视线",
+      "in_point": "裴长青画外一声过来先入，姜月初回头",
+      "transition_type": "声音先行转新威胁",
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"audio_source": "裴长青画外台词过来", "audio_lead_sec": "0.4"},
+      "need_endframe": false,
+      "sound_bridge": "尸场风声不断，裴长青声音先于画面出现",
+      "continuity_guard": "姜月初回头方向与裴长青画右下位置一致"
+    },
+    {
+      "seam_id": "Seam_03",
+      "from_beat": "Beat_03",
+      "to_beat": "Beat_04",
+      "out_point": "两人朝画左南向出口艰难移动",
+      "in_point": "虎妖画外咳声先入，两人同时停步回看画右上",
+      "transition_type": "声音先行召回冷开",
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"audio_source": "虎妖画外咳声和别跑了", "audio_lead_sec": "0.5"},
+      "need_endframe": false,
+      "sound_bridge": "脚步与喘息被虎妖咳声压住，BGM 低频回归",
+      "continuity_guard": "移动方向保持画左，回看统一转向画右上；裴伤势与扶持姿势连续"
+    },
+    {
+      "seam_id": "Seam_04",
+      "from_beat": "Beat_04",
+      "to_beat": "Beat_05",
+      "out_point": "裴长青砸落姜月初脚边，她低头确认败局",
+      "in_point": "外界声场抽空，系统提示从画外先入，姜月初抬眼",
+      "transition_type": "系统声音先行",
+      "seam_mode": "j_cut",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"audio_source": "系统空灵提示音与首句", "audio_lead_sec": "0.3"},
+      "need_endframe": false,
+      "sound_bridge": "重击余响拉尾后突然降噪，系统提示音在静音中进入",
+      "continuity_guard": "裴保持姜脚边位置，虎妖保持画右上画外威胁，姜脸部战损连续"
+    },
+    {
+      "seam_id": "Seam_05",
+      "from_beat": "Beat_05",
+      "to_beat": "Beat_06",
+      "out_point": "姜月初视线从虎妖扫到脚边裴长青",
+      "in_point": "切裴长青仰视她，再切她握刀的手",
+      "transition_type": "视线接",
+      "seam_mode": "eyeline_cut",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"eyeline_source": "姜月初向画右下低头", "eyeline_target": "脚边裴长青与断刀", "axis": "姜月初和裴长青对视轴近侧"},
+      "need_endframe": false,
+      "sound_bridge": "系统尾音消失，只留风声与两人呼吸",
+      "continuity_guard": "视线高度、断刀方位、裴倒地姿态严格对应"
+    },
+    {
+      "seam_id": "Seam_06",
+      "from_beat": "Beat_06",
+      "to_beat": "Beat_07",
+      "out_point": "姜月初说抱歉后刀尖开始向下",
+      "in_point": "同方向动作中切至刀刺入裴胸口的克制近景",
+      "transition_type": "动作匹配切",
+      "seam_mode": "match_on_action",
+      "seam_mode_source": "explicit",
+      "seam_evidence": {"action_phase_out": "刀尖由静止进入下压初段", "action_phase_in": "下压中段接触衣料并完成刺入", "screen_direction": "动作始终自画面上方向下方"},
+      "need_endframe": false,
+      "sound_bridge": "抱歉尾音短暂延续，刀入声落在 BGM 停止后的真空",
+      "continuity_guard": "握刀手、刀刃方向、人物左右与衣物伤口位置连续"
+    }
+  ]
+}

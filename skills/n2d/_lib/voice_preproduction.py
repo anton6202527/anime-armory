@@ -252,11 +252,17 @@ def build_casting(root: Path, episodes: Sequence[str]) -> Dict[str, Any]:
             by_role.setdefault(str(row["角色"]), []).append({**row, "episode": ep})
 
     # `voice_casting.json` is a project-level registry, not an episode snapshot.
-    # Keep previously cast roles even when they do not speak in the episode that
-    # is currently being prepared; otherwise preparing episode 2 could silently
-    # delete a locked episode-1 voice identity.
-    for role in existing:
-        by_role.setdefault(role, [])
+    # Preserve roles from other episodes and every locked identity, but treat the
+    # episodes being refreshed as authoritative: an unselected role removed from
+    # its only voiceover must not survive forever as a required casting blocker.
+    refreshed_episodes = set(normalized_eps)
+    for role, old_entry in existing.items():
+        previous_episodes = {
+            str(value) for value in (old_entry.get("episodes") or []) if str(value).strip()
+        }
+        surviving_episodes = previous_episodes - refreshed_episodes
+        if role not in by_role and (surviving_episodes or _entry_locked(old_entry, allow_guide=True)):
+            by_role[role] = []
 
     roles: List[Dict[str, Any]] = []
     for role in sorted(by_role):
@@ -282,7 +288,7 @@ def build_casting(root: Path, episodes: Sequence[str]) -> Dict[str, Any]:
         })
         previous_episodes = {
             str(value) for value in (entry.get("episodes") or []) if str(value).strip()
-        }
+        } - refreshed_episodes
         current_episodes = {str(row["episode"]) for row in source_lines}
         entry["line_count"] = (
             len(source_lines)

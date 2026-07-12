@@ -48,7 +48,7 @@ python3 skills/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chap
 
 - `comic-batch` 调用出图 runner 前先跑 `skills/comic-review/scripts/gate.py --stage image_preflight`；被 gate block 时不启动付费/批量出图。
 - `comic-image` runner 会在所有 job `ready` 且 PNG 有效时把 `_进度.md` 的 `出图` 标为 `✅`；`post_qc=block` 的格子标 `qc_block`，不算 ready。
-- runner 完成后 `comic-batch` 会跑 `skills/comic-review/scripts/gate.py --stage image`，刷新风格一致性和角色一致性报告。
+- runner 每张落盘后先做目标格 post-QC。指定 `--targets` / `--limit` 的验样批次若尚未补齐整话，只报告该批通过并延后整话 gate；全部 panel 都是 `ready` 且文件存在后，`comic-batch` 才跑 `skills/comic-review/scripts/gate.py --stage image` 刷新整话风格与角色一致性报告。禁止用“未生成的其它格”把已通过的小批验样误报成失败。
 - `comic-batch` 只在阶段脚本成功时继续，不吞掉失败。
 - 出图完成后下一步通常是 `comic-compose`；正式发布前仍要跑 `comic-review`。
 

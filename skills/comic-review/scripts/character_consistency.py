@@ -9,6 +9,7 @@ Optional Pillow-based face/hair/outfit fingerprints are advisory only.
 from __future__ import annotations
 
 import argparse
+import os
 from datetime import datetime
 import json
 import math
@@ -106,6 +107,58 @@ def ccip_available() -> bool:
 # CCIP（deepghs dghs-imgutils）：动漫角色身份 embedding 的事实标准，
 # 公开同角色判定阈值 0.178（difference 越小越像同一角色）。
 CCIP_SAME_THRESHOLD = 0.178
+# 自标定护栏（2026-07 标准审计·port 自 n2d face_consistency 自标定地板思路的漫画重实现）：
+# 固定阈值跨画风必假红——某角色自己五视图之间的 CCIP 距离若已达 0.24（厚涂/水墨等风格化），
+# 拿 0.178 判其面板"疑似换脸"是系统性误报。有效阈值 = max(公开阈值, 本角色定妆组内最大互距)，
+# 上限封顶防跑飞（env 可标定）；组内不足 2 张参考时回退固定阈值（与 n2d 单锚 fallback 同语义）。
+CCIP_CALIBRATED_CAP = float(os.environ.get("COMIC_CCIP_CALIBRATED_CAP", "0.32"))
+# 区域色彩指纹同理：本角色定妆组内最差同人对若低于固定地板，按组内最差对放宽（下限护栏防清零）。
+FINGERPRINT_FLOOR_MIN = float(os.environ.get("COMIC_FINGERPRINT_FLOOR_MIN", "0.25"))
+
+
+def calibrated_ccip_threshold(intra_diffs: list[float]) -> float:
+    """定妆组内互距 → 本角色有效 CCIP 阈值。纯函数·可测。"""
+    if not intra_diffs:
+        return CCIP_SAME_THRESHOLD
+    return min(max(CCIP_SAME_THRESHOLD, max(intra_diffs)), CCIP_CALIBRATED_CAP)
+
+
+def calibrated_fingerprint_floor(fixed_floor: float, intra_scores: list[float]) -> float:
+    """定妆组内最差同人相似度 → 本角色区域指纹有效地板。纯函数·可测。"""
+    if not intra_scores:
+        return fixed_floor
+    return max(min(fixed_floor, min(intra_scores)), FINGERPRINT_FLOOR_MIN)
+
+
+def intra_reference_fingerprint(root: Path, refs: list[dict[str, str]], region: str,
+                                limit: int = 4) -> list[float]:
+    """定妆组内两两区域色彩指纹相似度（复用 best_similarity 成对跑）。失败返回空=固定地板。"""
+    out: list[float] = []
+    usable = refs[:limit]
+    for i in range(len(usable)):
+        a_path = resolve_path(root, usable[i]["path"])
+        for j in range(i + 1, len(usable)):
+            result = best_similarity(root, a_path, [usable[j]], region)
+            if result.get("available") and result.get("score") is not None:
+                out.append(float(result["score"]))
+    return out
+
+
+def intra_reference_ccip(root: Path, refs: list[dict[str, str]], limit: int = 4) -> list[float]:
+    """定妆组内两两 CCIP 距离（取前 limit 张控制成本）。缺依赖/失败返回空=回退固定阈值。"""
+    try:
+        from imgutils.metrics import ccip_difference
+    except Exception:
+        return []
+    paths = [resolve_path(root, item["path"]) for item in refs[:limit]]
+    out: list[float] = []
+    for i in range(len(paths)):
+        for j in range(i + 1, len(paths)):
+            try:
+                out.append(float(ccip_difference(str(paths[i]), str(paths[j]))))
+            except Exception:
+                continue
+    return out
 
 
 def ccip_best_match(root: Path, panel_path: Path, refs: list[dict[str, str]]) -> dict[str, Any]:
@@ -127,6 +180,17 @@ def ccip_best_match(root: Path, panel_path: Path, refs: list[dict[str, str]]) ->
     best["threshold"] = CCIP_SAME_THRESHOLD
     best["same_character"] = best["difference"] <= CCIP_SAME_THRESHOLD
     return best
+
+
+def apply_calibrated_ccip(ccip: dict[str, Any], threshold: float) -> dict[str, Any]:
+    """把自标定阈值套用到 ccip_best_match 结果上（保留公开阈值字段供审计对照）。纯函数·可测。"""
+    if not ccip.get("available") or ccip.get("difference") is None:
+        return ccip
+    ccip["threshold_published"] = CCIP_SAME_THRESHOLD
+    ccip["threshold"] = round(float(threshold), 4)
+    ccip["threshold_source"] = "self_calibrated" if threshold > CCIP_SAME_THRESHOLD else "published"
+    ccip["same_character"] = float(ccip["difference"]) <= float(threshold)
+    return ccip
 
 
 def find_panel_image(root: Path, chapter: str, panel_id: str) -> Path | None:
@@ -506,13 +570,23 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
                 suggested_fix="回 comic-identity 补 anchor/front/face 等参考图后重建出图包并重抽受影响格。",
             )
         metrics: list[dict[str, Any]] = []
+        char_ccip_threshold = CCIP_SAME_THRESHOLD
+        if refs and ccip_ready:
+            char_ccip_threshold = calibrated_ccip_threshold(intra_reference_ccip(root, refs))
+        region_floors: dict[str, float] = {}
+        if refs and pillow_available:
+            # 区域指纹自标定：本角色定妆组内最差同人对低于固定地板时按组内放宽（下限护栏 0.25），
+            # 治"风格化角色的 face/hair/outfit 固定 0.50/0.46/0.42 跨画风必假红"。
+            for region, fixed_floor in (("face", 0.50), ("hair", 0.46), ("outfit", 0.42)):
+                region_floors[region] = calibrated_fingerprint_floor(
+                    fixed_floor, intra_reference_fingerprint(root, refs, region))
         if refs:
             for panel in char_panels:
                 panel_path = resolve_path(root, panel["path"])
                 metric: dict[str, Any] = {"panel_id": panel["panel_id"]}
                 multi_char = int(panel.get("char_count") or 1) >= 2
                 if ccip_ready:
-                    ccip = ccip_best_match(root, panel_path, refs)
+                    ccip = apply_calibrated_ccip(ccip_best_match(root, panel_path, refs), char_ccip_threshold)
                     metric["ccip"] = ccip
                     if ccip.get("available") and not ccip.get("same_character"):
                         add_finding(
@@ -523,15 +597,20 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
                             panel_id=panel["panel_id"],
                             artifact=panel["path"],
                             reason=(
-                                f"{char_id} CCIP 身份距离 {ccip.get('difference')} 超过同角色阈值 {CCIP_SAME_THRESHOLD}"
+                                f"{char_id} CCIP 身份距离 {ccip.get('difference')} 超过同角色阈值 {ccip.get('threshold', CCIP_SAME_THRESHOLD)}"
+                                + (f"（自标定：定妆组内互距已达该档，公开阈值 {CCIP_SAME_THRESHOLD}）" if ccip.get('threshold_source') == 'self_calibrated' else "")
                                 + ("（多人同格，全图对比结果需并排人审确认）" if multi_char else "，疑似换脸/不同角色。")
                             ),
                             suggested_fix="并排对比 contact sheet 与定妆图；确认脸漂则回 comic-image 用同一参考组重抽该格。",
                         )
                 if pillow_available:
-                    for region, threshold in (("face", 0.50), ("hair", 0.46), ("outfit", 0.42)):
+                    for region, fixed_floor in (("face", 0.50), ("hair", 0.46), ("outfit", 0.42)):
+                        threshold = region_floors.get(region, fixed_floor)
                         result = best_similarity(root, panel_path, refs, region)
                         metric[region] = result
+                        if result.get("available") and result.get("score") is not None:
+                            result["floor"] = round(threshold, 3)
+                            result["floor_source"] = "self_calibrated" if threshold < fixed_floor else "fixed"
                         if result.get("available") and float(result.get("score") or 0.0) < threshold:
                             add_finding(
                                 findings,

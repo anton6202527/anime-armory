@@ -1,0 +1,12 @@
+{
+  "kind": "n2d_contact_graph",
+  "version": 1,
+  "episode": "第1集",
+  "contacts": [
+    {"clip": "EP01_CLIP08", "a": "CHAR_01右手/左手", "b": "CHAR_02右侧肩背/右前臂", "state": "support", "release": "不释放"},
+    {"clip": "EP01_CLIP10", "a": "CHAR_02右手", "b": "PROP_02刀柄", "state": "pickup_and_hold", "release": "EP01_CLIP11落地时"},
+    {"clip": "EP01_CLIP11", "a": "BEAST_01右脚掌", "b": "CHAR_02胸腹护衣", "state": "single_impact", "release": "命中后立即分离"},
+    {"clip": "EP01_CLIP16", "a": "CHAR_01右手", "b": "PROP_02刀柄", "state": "pickup_and_hold", "release": "本集不释放"},
+    {"clip": "EP01_CLIP17", "a": "PROP_02刀尖", "b": "CHAR_02左胸偏中衣料", "state": "single_stab_hold", "release": "本集不释放"}
+  ]
+}

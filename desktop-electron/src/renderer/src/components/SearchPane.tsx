@@ -31,9 +31,11 @@ function escapeRegExp(value: string): string {
 export function SearchPane({
   root,
   refreshKey,
+  sideOnly = false,
 }: {
   root: WorkRoot;
   refreshKey: number;
+  sideOnly?: boolean;
 }) {
   const { t } = useI18n();
   const [query, setQuery] = useState("");
@@ -109,6 +111,14 @@ export function SearchPane({
     } catch (e) {
       window.alert(String(e));
     }
+  }
+
+  function openInEditor(path: string, pinned: boolean) {
+    window.dispatchEvent(
+      new CustomEvent("anime-armory:open-work-file", {
+        detail: { root: root.path, path, pinned },
+      }),
+    );
   }
 
   function startSideResize(ev: ReactPointerEvent<HTMLDivElement>) {
@@ -212,7 +222,7 @@ export function SearchPane({
             : "";
 
   return (
-    <div className="search-pane" ref={paneRef}>
+    <div className={"search-pane" + (sideOnly ? " side-only" : "")} ref={paneRef}>
       <aside className="search-side">
         <div className="search-view-title">
           <span>{t("search.title")}</span>
@@ -352,8 +362,13 @@ export function SearchPane({
               type="button"
               key={result.path}
               className={"search-result" + (selected?.path === result.path ? " active" : "")}
-              onClick={() => setSelectedPath(result.path)}
-              onDoubleClick={() => runAction(() => openWorkEntry(root.path, result.path))}
+              onClick={() => {
+                setSelectedPath(result.path);
+                if (sideOnly) openInEditor(result.path, false);
+              }}
+              onDoubleClick={() => sideOnly
+                ? openInEditor(result.path, true)
+                : runAction(() => openWorkEntry(root.path, result.path))}
               title={result.path}
             >
               <span className="search-result-name">{result.name}</span>

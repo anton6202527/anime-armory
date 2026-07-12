@@ -4,7 +4,7 @@
   "project": "红楼梦",
   "status": "preproduction_planned",
   "style_contract": "STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。",
-  "consistency_policy": "registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。",
+  "consistency_policy": "registry 与共享图片是机器/媒体真值；设定库/共享资产索引.md 只是单一派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。",
   "forbidden_inheritance": [
     "影视演员肖像与具体表演截图",
     "影视版完整服装组合、布景和镜头构图",

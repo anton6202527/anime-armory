@@ -89,3 +89,59 @@ def test_camera_gaze_in_non_pov_shot_reverse_blocks(tmp_path: Path) -> None:
 
     assert contract["status"] == "block"
     assert any(issue["code"] == "camera_gaze_not_allowed" for issue in contract["audit_issues"])
+
+
+def test_negative_prompt_forbidding_camera_gaze_does_not_block(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {
+        "clips": [{
+            "id": "EP01_CLIP07",
+            "template": "dialogue_shot_reverse",
+            "character_ids": ["CHAR_A", "CHAR_B"],
+            "character_slots": [
+                {"character_id": "CHAR_A", "screen_position": "画左"},
+                {"character_id": "CHAR_B", "screen_position": "画右"},
+            ],
+            "template_contract": {
+                "template_id": "dialogue_shot_reverse",
+                "screen_sides": {"screen_left": "CHAR_A", "screen_right": "CHAR_B"},
+                "eyeline": "CHAR_A 看画右，CHAR_B 看画左",
+                "camera_coverage": "clean single + OTS foreground shoulder",
+                "crossing_axis_policy": "禁止越轴；用插入镜缓冲。",
+                "buffer_or_reestablishing": "道具插入。",
+                "negative": ["不要让两人直视镜头", "不要交换左右站位"],
+            },
+        }],
+    })
+
+    contract = shot_reverse_contract.build_contract(tmp_path, ep)
+
+    assert not any(issue["code"] == "camera_gaze_not_allowed" for issue in contract["audit_issues"])
+
+
+def test_negative_prompt_without_rang_forbidding_camera_gaze_does_not_block(tmp_path: Path) -> None:
+    ep = "第1集"
+    _write_json(tmp_path / "脚本" / ep / "storyboard.json", {
+        "clips": [{
+            "id": "EP01_CLIP08",
+            "template": "reveal_reaction_chain",
+            "character_ids": ["CHAR_A", "CHAR_B"],
+            "character_slots": [
+                {"character_id": "CHAR_A", "screen_position": "画左"},
+                {"character_id": "CHAR_B", "screen_position": "画右"},
+            ],
+            "template_contract": {
+                "template_id": "reveal_reaction_chain",
+                "screen_sides": {"screen_left": "CHAR_A", "screen_right": "CHAR_B"},
+                "eyeline": "CHAR_A 看画右，CHAR_B 看画左",
+                "camera_coverage": "clean single + OTS foreground shoulder",
+                "crossing_axis_policy": "禁止越轴；用插入镜缓冲。",
+                "buffer_or_reestablishing": "道具插入。",
+                "negative": ["不要两人直视镜头"],
+            },
+        }],
+    })
+
+    contract = shot_reverse_contract.build_contract(tmp_path, ep)
+
+    assert not any(issue["code"] == "camera_gaze_not_allowed" for issue in contract["audit_issues"])

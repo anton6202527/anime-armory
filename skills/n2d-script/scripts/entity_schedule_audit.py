@@ -92,7 +92,16 @@ def _schedule_entities(schedule: Mapping[str, Any]) -> Dict[str, Set[str]]:
     chars = _collect_fields(schedule, ("characters", "character_ids", "角色"))
     objs = _collect_fields(schedule, ("objects", "object_ids", "props", "weapons", "道具", "物件"))
     locs = _collect_fields(schedule, ("locations", "location_ids", "scene_id", "场景", "地点"))
+    offscreen = _tokens(schedule.get("offscreen_presence") or schedule.get("画外保留"))
+    forbidden = _tokens(schedule.get("forbidden_presence") or schedule.get("禁止出现"))
+    nonvisible = offscreen | forbidden
+    declared_chars = chars | {v for v in nonvisible if v.startswith(("CHAR_", "BEAST_"))}
+    declared_objs = objs | {v for v in nonvisible if v.startswith(("PROP_", "WEAPON_", "VFX_", "VEHICLE_", "MOUNT_"))}
+    declared_locs = locs | {v for v in nonvisible if v.startswith("LOC_")}
     return {"characters": chars, "objects": objs, "locations": locs,
+            "declared_characters": declared_chars,
+            "declared_objects": declared_objs,
+            "declared_locations": declared_locs,
             "required_presence": _required_presence(schedule)}
 
 
@@ -180,9 +189,9 @@ def audit_episode(root: str, ep: str) -> Dict[str, Any]:
             continue
         scheduled += 1
         ents = _schedule_entities(schedule)
-        missing_chars = sorted(expected["characters"] - ents["characters"])
-        missing_objs = sorted(expected["objects"] - ents["objects"])
-        missing_locs = sorted(expected["locations"] - ents["locations"])
+        missing_chars = sorted(expected["characters"] - ents["declared_characters"])
+        missing_objs = sorted(expected["objects"] - ents["declared_objects"])
+        missing_locs = sorted(expected["locations"] - ents["declared_locations"])
         if missing_chars or missing_objs or missing_locs:
             mismatches += 1
             bits = []

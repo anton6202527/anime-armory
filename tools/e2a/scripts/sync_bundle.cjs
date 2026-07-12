@@ -22,6 +22,10 @@ const {
   copyDirSafe,
   shouldBundlePath,
 } = require('../../release-safety/demo_safety.cjs');
+const {
+  demoAssetName,
+  releaseDownloadUrl,
+} = require('../demo_assets.cjs');
 
 const repo = path.resolve(__dirname, '..', '..', '..');
 const bundle = process.env.E2A_BUNDLE_DIR
@@ -55,7 +59,10 @@ const RELEASE_REPO = process.env.E2A_TARGET_REPO
   || process.env.R2A_TARGET_REPO
   || process.env.ANIME_ARMORY_RELEASE_REPO
   || 'anton6202527/anime-armory';
-const RELEASE_DOWNLOAD_BASE = `https://github.com/${RELEASE_REPO}/releases/latest/download`;
+const RELEASE_TAG = String(process.env.E2A_RELEASE_TAG || '').trim();
+const RELEASE_DOWNLOAD_BASE = RELEASE_TAG
+  ? `https://github.com/${RELEASE_REPO}/releases/download/${encodeURIComponent(RELEASE_TAG)}`
+  : `https://github.com/${RELEASE_REPO}/releases/latest/download`;
 
 function parseWorkRel(relWork) {
   const parts = relWork.split('/');
@@ -345,7 +352,7 @@ function addCatalogEntry(catalog, relWork, label, opts = {}) {
     return catalog.get(relWork);
   }
   const lineKey = PRODUCT_LINE_KEYS.get(parsed.line);
-  const assetName = lineKey ? `AnimeArmory_demo_${lineKey}.zip` : null;
+  const assetName = lineKey ? demoAssetName(relWork) : null;
   const entry = {
     root: parsed.root,
     line: parsed.line,
@@ -357,7 +364,7 @@ function addCatalogEntry(catalog, relWork, label, opts = {}) {
   };
   if (assetName) {
     entry.asset_name = assetName;
-    entry.download_url = `${RELEASE_DOWNLOAD_BASE}/${assetName}`;
+    entry.download_url = releaseDownloadUrl(RELEASE_REPO, RELEASE_TAG, assetName);
   }
   const done = opts.src ? doneCountAt(opts.src) : doneCount(relWork);
   if (done !== null) entry.done = done;
@@ -505,7 +512,7 @@ function main() {
     : '+ 非 demo 作品引用: 关闭';
   console.log(`[e2a-bundle] bundled ${manifest.skills} skill files + ${toolFiles} tool files + ${manualFiles} manuals → ${path.relative(repo, bundle) || bundle}/`);
   console.log(`[e2a-bundle] demo catalog entries: ${demoCatalog.length} → ${path.relative(repo, bundle) || bundle}/demo_catalog.json`);
-  console.log(`[e2a-bundle] full demo payloads are release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line>.zip`);
+  console.log(`[e2a-bundle] full demo payloads are per-work release assets, not app resources: ${RELEASE_DOWNLOAD_BASE}/AnimeArmory_demo_<line-key>_<rel-hash>.zip`);
   console.log(`[e2a-bundle] ${featuredLine}`);
   console.log(`[e2a-bundle] ${skillDemoLine}`);
   console.log(`[e2a-bundle] ${demoLine}`);

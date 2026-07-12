@@ -348,3 +348,33 @@ def test_delivery_consistency_uniform_batch_is_clean() -> None:
     ]}
     video_qc.delivery_consistency_check(payload)
     assert payload["delivery_consistency"]["findings"] == []
+
+
+def test_same_scene_color_jump_upgrades_info_to_warn(monkeypatch, tmp_path) -> None:
+    # 同场景 hard_cut：构图跳仍 info，但色距超 SEAM_COLOR_WARN 升 warn（衔接不一致回修）
+    class _TC:
+        SEAM_COLOR_WARN = 0.12
+        @staticmethod
+        def seam_pair_check(tail, head):
+            return {"dist": 35, "color_dist": 0.2, "verdict": "block"}
+    monkeypatch.setattr(video_qc, "_load_temporal_module", lambda: _TC)
+    frames = {}
+    for idx in (1, 2):
+        f = tmp_path / f"c{idx}.jpg"
+        f.write_bytes(b"x")
+        frames[idx] = {"start": str(f), "end": str(f)}
+    payload = {"clips": [
+        {"clip": "Clip_01", "frames": [{"label": "start", "path": frames[1]["start"]},
+                                        {"label": "end", "path": frames[1]["end"]}]},
+        {"clip": "Clip_02", "frames": [{"label": "start", "path": frames[2]["start"]},
+                                        {"label": "end", "path": frames[2]["end"]}]},
+    ]}
+    intents = {1: {"seam_mode": "hard_cut", "transition": "hard_cut"}}
+    video_qc.machine_check(payload, None, intents, clip_scenes={1: "LOC_01", 2: "LOC_01"})
+    seam = payload["seams"][0]
+    assert seam["verdict"] == "warn"
+    assert seam.get("same_scene_color_jump") is True
+    # 不同场景：维持 info（换场景换光合法）
+    payload2 = {"clips": payload["clips"]}
+    video_qc.machine_check(payload2, None, intents, clip_scenes={1: "LOC_01", 2: "LOC_02"})
+    assert payload2["seams"][0]["verdict"] == "info"

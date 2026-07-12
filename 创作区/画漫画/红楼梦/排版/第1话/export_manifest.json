@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "kind": "comic_export_manifest",
+  "chapter": "第1话",
+  "layout": "排版/第1话/layout.json",
+  "panel_dir": "出图/第1话/panels",
+  "out_dir": "排版/第1话/长图",
+  "page_dir": "排版/第1话/pages",
+  "lettering": "排版/第1话/lettering.json",
+  "font": "/System/Library/Fonts/STHeiti Medium.ttc",
+  "font_status": "system_font_draft",
+  "export_formats": [
+    "webp",
+    "png"
+  ],
+  "max_segment_height": 0,
+  "split_mode": "single",
+  "panels": [
+    {
+      "panel_id": "P001",
+      "path": "出图/第1话/panels/P001.png",
+      "source_size": {
+        "width": 1803,
+        "height": 930
+      },
+      "size": {
+        "width": 1803,
+        "height": 930
+      }
+    },
+    {
+      "panel_id": "P002",
+      "path": "出图/第1话/panels/P002.png",
+      "source_size": {
+        "width": 760,
+        "height": 580
+      },
+      "size": {
+        "width": 760,
+        "height": 580
+      }
+    },
+    {
+      "panel_id": "P003",
+      "path": "出图/第1话/panels/P003.png",
+      "source_size": {
+        "width": 1007,
+        "height": 580
+      },
+      "size": {
+        "width": 1007,
+        "height": 580
+      }
+    },
+    {
+      "panel_id": "P004",
+      "path": "出图/第1话/panels/P004.png",
+      "source_size": {
+        "width": 1803,
+        "height": 1094
+      },
+      "size": {
+        "width": 1803,
+        "height": 1094
+      }
+    },
+    {
+      "panel_id": "P005",
+      "path": "出图/第1话/panels/P005.png",
+      "source_size": {
+        "width": 650,
+        "height": 760
+      },
+      "size": {
+        "width": 650,
+        "height": 760
+      }
+    },
+    {
+      "panel_id": "P006",
+      "path": "出图/第1话/panels/P006.png",
+      "source_size": {
+        "width": 1117,
+        "height": 760
+      },
+      "size": {
+        "width": 1117,
+        "height": 760
+      }
+    },
+    {
+      "panel_id": "P007",
+      "path": "出图/第1话/panels/P007.png",
+      "source_size": {
+        "width": 1803,
+        "height": 900
+      },
+      "size": {
+        "width": 1803,
+        "height": 900
+      }
+    },
+    {
+      "panel_id": "P008",
+      "path": "出图/第1话/panels/P008.png",
+      "source_size": {
+        "width": 1803,
+        "height": 944
+      },
+      "size": {
+        "width": 1803,
+        "height": 944
+      }
+    },
+    {
+      "panel_id": "P009",
+      "path": "出图/第1话/panels/P009.png",
+      "source_size": {
+        "width": 1803,
+        "height": 620
+      },
+      "size": {
+        "width": 1803,
+        "height": 620
+      }
+    },
+    {
+      "panel_id": "P010",
+      "path": "出图/第1话/panels/P010.png",
+      "source_size": {
+        "width": 735,
+        "height": 850
+      },
+      "size": {
+        "width": 735,
+        "height": 850
+      }
+    },
+    {
+      "panel_id": "P011",
+      "path": "出图/第1话/panels/P011.png",
+      "source_size": {
+        "width": 1032,
+        "height": 850
+      },
+      "size": {
+        "width": 1032,
+        "height": 850
+      }
+    },
+    {
+      "panel_id": "P012",
+      "path": "出图/第1话/panels/P012.png",
+      "source_size": {
+        "width": 1803,
+        "height": 1134
+      },
+      "size": {
+        "width": 1803,
+        "height": 1134
+      }
+    },
+    {
+      "panel_id": "P013",
+      "path": "出图/第1话/panels/P013.png",
+      "source_size": {
+        "width": 1803,
+        "height": 820
+      },
+      "size": {
+        "width": 1803,
+        "height": 820
+      }
+    },
+    {
+      "panel_id": "P014",
+      "path": "出图/第1话/panels/P014.png",
+      "source_size": {
+        "width": 680,
+        "height": 980
+      },
+      "size": {
+        "width": 680,
+        "height": 980
+      }
+    },
+    {
+      "panel_id": "P015",
+      "path": "出图/第1话/panels/P015.png",
+      "source_size": {
+        "width": 1087,
+        "height": 980
+      },
+      "size": {
+        "width": 1087,
+        "height": 980
+      }
+    },
+    {
+      "panel_id": "P016",
+      "path": "出图/第1话/panels/P016.png",
+      "source_size": {
+        "width": 1803,
+        "height": 804
+      },
+      "size": {
+        "width": 1803,
+        "height": 804
+      }
+    },
+    {
+      "panel_id": "P017",
+      "path": "出图/第1话/panels/P017.png",
+      "source_size": {
+        "width": 1803,
+        "height": 650
+      },
+      "size": {
+        "width": 1803,
+        "height": 650
+      }
+    },
+    {
+      "panel_id": "P018",
+      "path": "出图/第1话/panels/P018.png",
+      "source_size": {
+        "width": 650,
+        "height": 900
+      },
+      "size": {
+        "width": 650,
+        "height": 900
+      }
+    },
+    {
+      "panel_id": "P019",
+      "path": "出图/第1话/panels/P019.png",
+      "source_size": {
+        "width": 1117,
+        "height": 900
+      },
+      "size": {
+        "width": 1117,
+        "height": 900
+      }
+    },
+    {
+      "panel_id": "P020",
+      "path": "出图/第1话/panels/P020.png",
+      "source_size": {
+        "width": 1803,
+        "height": 1054
+      },
+      "size": {
+        "width": 1803,
+        "height": 1054
+      }
+    },
+    {
+      "panel_id": "P021",
+      "path": "出图/第1话/panels/P021.png",
+      "source_size": {
+        "width": 1803,
+        "height": 620
+      },
+      "size": {
+        "width": 1803,
+        "height": 620
+      }
+    },
+    {
+      "panel_id": "P022",
+      "path": "出图/第1话/panels/P022.png",
+      "source_size": {
+        "width": 760,
+        "height": 900
+      },
+      "size": {
+        "width": 760,
+        "height": 900
+      }
+    },
+    {
+      "panel_id": "P023",
+      "path": "出图/第1话/panels/P023.png",
+      "source_size": {
+        "width": 1007,
+        "height": 900
+      },
+      "size": {
+        "width": 1007,
+        "height": 900
+      }
+    },
+    {
+      "panel_id": "P024",
+      "path": "出图/第1话/panels/P024.png",
+      "source_size": {
+        "width": 1803,
+        "height": 1084
+      },
+      "size": {
+        "width": 1803,
+        "height": 1084
+      }
+    }
+  ],
+  "missing_panels": [],
+  "pages": [
+    {
+      "path": "排版/第1话/pages/page_001.webp",
+      "segment_id": "PAGE_001",
+      "panel_ids": [
+        "P001",
+        "P002",
+        "P003",
+        "P004"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    },
+    {
+      "path": "排版/第1话/pages/page_002.webp",
+      "segment_id": "PAGE_002",
+      "panel_ids": [
+        "P005",
+        "P006",
+        "P007",
+        "P008"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    },
+    {
+      "path": "排版/第1话/pages/page_003.webp",
+      "segment_id": "PAGE_003",
+      "panel_ids": [
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    },
+    {
+      "path": "排版/第1话/pages/page_004.webp",
+      "segment_id": "PAGE_004",
+      "panel_ids": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    },
+    {
+      "path": "排版/第1话/pages/page_005.webp",
+      "segment_id": "PAGE_005",
+      "panel_ids": [
+        "P017",
+        "P018",
+        "P019",
+        "P020"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    },
+    {
+      "path": "排版/第1话/pages/page_006.webp",
+      "segment_id": "PAGE_006",
+      "panel_ids": [
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 2953
+      },
+      "format": "webp"
+    }
+  ],
+  "rendered": [
+    {
+      "path": "排版/第1话/长图/longstrip.png",
+      "panel_ids": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006",
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012",
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018",
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "size": {
+        "width": 2079,
+        "height": 17838
+      },
+      "format": "png"
+    }
+  ],
+  "text_language": "中文",
+  "target_platform": "自定义(数字页漫+印刷母版)",
+  "platform_profile": {
+    "platform_id": "自定义(数字页漫+印刷母版)",
+    "display_name": "自定义(数字页漫+印刷母版)",
+    "verified": false,
+    "collected_at": "",
+    "source_urls": [],
+    "page_width_px": null,
+    "max_image_height_px": null,
+    "max_file_bytes": null,
+    "allowed_formats": [],
+    "thumbnail": null,
+    "notes": [
+      "Custom or unsupported platform profile; verify width, height, format and file size before publish."
+    ]
+  },
+  "text_layout_qc": {
+    "renderer": "pillow_draft",
+    "unsupported_items": [],
+    "verdict": "pass"
+  },
+  "lettering_rendered": true,
+  "bilingual_lettering": false,
+  "lettering_stats": {
+    "drawn_items": 36,
+    "skipped_empty_items": [],
+    "empty_slots_removed": []
+  },
+  "platform_findings": [
+    {
+      "severity": "warn",
+      "code": "platform_profile_unverified",
+      "artifact": "排版/export_manifest.json",
+      "reason": "自定义(数字页漫+印刷母版) 平台规格未有当前可机检的一手尺寸证据。",
+      "suggested_fix": "发布/商用前在平台后台或官方文档核验宽度、高度、格式、文件大小，并更新 platform profile。"
+    }
+  ],
+  "lettering_slot_qc": {
+    "path": "生产数据/qa_previews/第1话_lettering_slots.jpg",
+    "items": 36,
+    "missing_slots": []
+  }
+}

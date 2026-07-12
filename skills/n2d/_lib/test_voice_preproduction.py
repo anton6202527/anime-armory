@@ -84,3 +84,16 @@ def test_preparing_later_episode_preserves_existing_cast_roles(tmp_path: Path) -
     assert roles["沈念"]["voice_id"] == "synthetic_voice_01"
     assert roles["沈念"]["episodes"] == ["第1集"]
     assert roles["新角色"]["episodes"] == ["第2集"]
+
+
+def test_refresh_drops_unselected_role_removed_from_its_only_episode(tmp_path: Path) -> None:
+    _voiceover(tmp_path)
+    first = vp.write_preproduction(tmp_path, "第1集")
+    assert {row["role"] for row in first["casting"]["roles"]} == {"旁白", "沈念"}
+
+    voiceover = tmp_path / "脚本" / "第1集" / "voiceover.txt"
+    voiceover.write_text("[镜头1·沈念·迟疑] 你真的看见了吗？\n", encoding="utf-8")
+    refreshed = vp.write_preproduction(tmp_path, "第1集")
+
+    assert {row["role"] for row in refreshed["casting"]["roles"]} == {"沈念"}
+    assert refreshed["casting"]["summary"]["required_count"] == 1

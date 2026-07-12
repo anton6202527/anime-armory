@@ -22,8 +22,7 @@ EXPRESSION_MIN_CORE = 5
 EXPRESSION_MIN_NORMAL = 3
 ACTION_WORDS = re.compile(r"(打斗|追逐|飞行|法术|拥抱|拉扯|跪|拔剑|御剑|冲刺|受击|动作|fight|chase|action)")
 CORE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|主反派|常驻")
-ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[A-Za-z0-9_\-\u4e00-\u9fff]+\b")
-CHAR_RE = re.compile(r"\bCHAR_[A-Za-z0-9_\-\u4e00-\u9fff]+\b")
+ASSET_PREFIXES = ("LOC_", "PROP_", "WEAPON_", "OUTFIT_", "VFX_")
 
 
 def load_json(path: Path) -> Optional[Any]:
@@ -63,6 +62,16 @@ def _ready(value: Any) -> bool:
 def _list_refs(value: Any) -> List[str]:
     if isinstance(value, list):
         return [p for p in (_ref_path(v) for v in value) if p]
+    return []
+
+
+def _ready_ref_path(value: Any) -> str:
+    return _ref_path(value) if _ready(value) else ""
+
+
+def _list_ready_refs(value: Any) -> List[str]:
+    if isinstance(value, list):
+        return [p for item in value if (p := _ready_ref_path(item))]
     return []
 
 
@@ -116,12 +125,36 @@ def _storyboard(root: Path, ep: str) -> Tuple[List[dict], str]:
 
 
 def _used_ids(clips: Sequence[Mapping[str, Any]], blob: str) -> Tuple[set, set]:
-    chars = set(CHAR_RE.findall(blob))
-    assets = set(ASSET_RE.findall(blob))
+    """Collect IDs from storyboard schema fields, never from prose blobs.
+
+    IDs may legitimately contain Chinese (for example ``VFX_系统面板``), so a
+    permissive prose regex greedily turns ``VFX_01退出清晰画面`` or
+    ``CHAR_01与CHAR_02连线`` into fake assets.  Stage 2 already supplies structured
+    entity fields; those are the only safe truth here.
+    """
+    del blob  # compatibility with the existing call signature
+    chars: set = set()
+    assets: set = set()
+
+    def add(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text or any(ch.isspace() for ch in text):
+            return
+        if text.startswith("CHAR_") or text.startswith("BEAST_"):
+            chars.add(text)
+        elif text.startswith(ASSET_PREFIXES):
+            assets.add(text)
+
     for clip in clips:
         for cid in clip.get("character_ids") or []:
-            if str(cid).strip():
-                chars.add(str(cid).strip())
+            add(cid)
+        for oid in clip.get("object_ids") or []:
+            add(oid)
+        add(clip.get("location_id"))
+        schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+        for key in ("characters", "objects", "locations", "required_presence", "offscreen_presence", "forbidden_presence"):
+            for value in schedule.get(key) or []:
+                add(value)
     return chars, assets
 
 
@@ -143,24 +176,24 @@ def _expected_character_refs(form: Mapping[str, Any], action_needed: bool) -> Li
         })
 
     for key in BASE_VIEW_KEYS:
-        path = _first_ready_base_view(atlas, key) or _ref_path(rg.get(key))
+        path = _first_ready_base_view(atlas, key) or _ready_ref_path(rg.get(key))
         add(key, bool(path), path, "基础多角度视图；无成本档不省 45°/侧/背。")
     body_path = ""
     body_ready = False
     for key in BODY_VIEW_KEYS:
-        path = _first_ready_base_view(atlas, key) or _ref_path(rg.get(key))
+        path = _first_ready_base_view(atlas, key) or _ready_ref_path(rg.get(key))
         if path:
             body_path, body_ready = path, True
             break
     add("half_body_or_full_body", body_ready, body_path, "服装/体态参考，防止镜头内换身材或换衣。")
-    face_refs = _list_refs(rg.get("face_anchor_refs")) or _list_refs(atlas.get("face_anchor_refs"))
+    face_refs = _list_ready_refs(rg.get("face_anchor_refs")) or _list_ready_refs(atlas.get("face_anchor_refs"))
     add("face_anchor_refs", bool(face_refs), face_refs[0] if face_refs else "", "脸部特写锚，近景/反打/表情镜必用。")
-    expressions = _list_refs(rg.get("expressions")) or _list_refs(atlas.get("expression_refs"))
+    expressions = _list_ready_refs(rg.get("expressions")) or _list_ready_refs(atlas.get("expression_refs"))
     expr_min = EXPRESSION_MIN_CORE if form.get("core") else EXPRESSION_MIN_NORMAL
     add("expression_bank", len(expressions) >= expr_min, expressions[0] if expressions else "",
         f"同源情绪表情库至少 {expr_min} 档：中性/喜/怒/悲/惊；大表情近景首尾帧只插值。")
     if action_needed:
-        action_refs = _list_refs(rg.get("action_refs")) or _list_refs(atlas.get("action_refs"))
+        action_refs = _list_ready_refs(rg.get("action_refs")) or _list_ready_refs(atlas.get("action_refs"))
         add("action_pose_pack", bool(action_refs), action_refs[0] if action_refs else "",
             "动作/打斗/拥抱/拉扯姿态参考；避免视频前首帧姿态不可读。")
     if not form.get("performance_signature"):
@@ -188,24 +221,24 @@ def _expected_asset_refs(asset: Mapping[str, Any], used: bool) -> List[Dict[str,
         return targets
     if aid.startswith("LOC_") or typ in {"location", "scene", "场景"}:
         for slot in ("wide_plate", "reverse_angle", "empty_plate", "lighting_plate"):
-            add(slot, bool(_ref_path(rg.get(slot)) or _ref_path(rg.get("primary"))),
-                _ref_path(rg.get(slot)) or _ref_path(rg.get("primary")),
+            path = _ready_ref_path(rg.get(slot)) or _ready_ref_path(rg.get("primary"))
+            add(slot, bool(path), path,
                 "场景 plate / 反打 / 空底板 / 光位锚；多人分区构建先用 empty_plate。")
         # 布局图 spatial_map + scene_atlas 多视角 base_views（此前声明却喂给零代码的死字段）——纳入参考清单，
         # 锁门窗朝向/floor_plan 几何 + 同一空间换机位一致（生成侧场景锚定·详见 scene_reference_planner.py）。
-        if _ref_path(rg.get("spatial_map")):
-            add("spatial_map", True, _ref_path(rg.get("spatial_map")),
+        if _ready_ref_path(rg.get("spatial_map")):
+            add("spatial_map", True, _ready_ref_path(rg.get("spatial_map")),
                 "布局图：锁门窗位置/floor_plan 几何，治反打把房间拍成另一个房间。")
         atlas = asset.get("scene_atlas") if isinstance(asset.get("scene_atlas"), Mapping) else {}
         base_views = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
         for bv_key in ("reverse", "side"):
-            bv = _ref_path(base_views.get(bv_key))
+            bv = _ready_ref_path(base_views.get(bv_key))
             if bv:
                 add(f"base_view_{bv_key}", True, bv, f"scene_atlas {bv_key} 视角：锁同一空间换机位的一致性。")
     elif aid.startswith(("PROP_", "WEAPON_", "VFX_", "OUTFIT_")):
         for slot in ("primary", "scale_reference", "detail_closeup"):
-            add(slot, bool(_ref_path(rg.get(slot)) or _ref_path(rg.get("primary"))),
-                _ref_path(rg.get(slot)) or _ref_path(rg.get("primary")),
+            path = _ready_ref_path(rg.get(slot)) or _ready_ref_path(rg.get("primary"))
+            add(slot, bool(path), path,
                 "道具/武器/VFX sheet，锁尺度、材质、细节与禁漂项。")
     return targets
 
@@ -224,7 +257,7 @@ def build_pack(root: Path, ep: str) -> Dict[str, Any]:
         targets.extend(_expected_asset_refs(asset, aid in used_assets))
     multi_clips = []
     for i, clip in enumerate(clips, 1):
-        cids = set(clip.get("character_ids") or CHAR_RE.findall(flatten(clip)))
+        cids = {str(value).strip() for value in (clip.get("character_ids") or []) if str(value).strip()}
         if len(cids) >= 2:
             multi_clips.append(str(clip.get("id") or clip.get("label") or f"Clip_{i:02d}"))
     for clip_id in multi_clips:

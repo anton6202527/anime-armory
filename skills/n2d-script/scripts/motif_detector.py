@@ -93,16 +93,36 @@ def clip_text(clip: Dict[str, Any]) -> str:
     """
     parts: List[str] = [str(clip.get("label") or ""), str(clip.get("scene") or ""),
                         str(clip.get("voiceover") or clip.get("台词") or ""),
-                        str(clip.get("template") or "")]
+                        str(clip.get("dramatic_function") or ""),
+                        str(clip.get("subtitle_lines") or ""),
+                        str(clip.get("screen_text_lines") or ""),
+                        str(clip.get("template") or ""),
+                        str(clip.get("motif_id") or "")]
     for s in clip.get("shots") or []:
         if isinstance(s, dict):
-            parts.append(str(s.get("desc") or ""))
+            # `description` is the current storyboard field; `desc` remains
+            # supported for legacy projects and older fixtures.
+            parts.append(str(s.get("description") or s.get("desc") or ""))
             parts.append(str(s.get("台词") or s.get("line") or ""))
     return " ".join(parts)
 
 
 def classify_motif(clip: Dict[str, Any], *, min_hits: int = MOTIF_TYPE_MIN_HITS) -> Optional[Dict[str, Any]]:
     """识别 Clip 命中的母题类型（取命中最多者）。不命中返回 None。返回 {motif_type, hits, matched, rule}。"""
+    explicit_template = str(clip.get("template") or "").strip()
+    explicit_motif = str(clip.get("motif_id") or "").strip()
+    contract = clip.get("template_contract") if isinstance(clip.get("template_contract"), dict) else {}
+    if (
+        explicit_template == SYSTEM_PANEL_TEMPLATE_ID
+        or explicit_motif == SYSTEM_PANEL_MOTIF_ID
+        or str(contract.get("motif_id") or "").strip() == SYSTEM_PANEL_MOTIF_ID
+    ):
+        return {
+            "motif_type": "system_panel",
+            "hits": 1,
+            "matched": ["explicit_system_panel_contract"],
+            "rule": "显式 system_panel/MOTIF_系统面板 合同",
+        }
     text = clip_text(clip)
     best: Optional[Dict[str, Any]] = None
     for motif_type, keywords in MOTIF_TYPE_KEYWORDS:

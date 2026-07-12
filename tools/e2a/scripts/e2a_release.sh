@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # e2a — build the Electron desktop app (desktop-electron/) as release installers
-# or the per-line demo zip assets, with upload enabled only by an explicit mode.
+# or the per-work demo zip assets, with upload enabled only by an explicit mode.
 # Successor of the retired Tauri /r2a flow. Self-contained: demo selection
 # (scripts/select_demo.cjs), skills bundler (scripts/sync_bundle.cjs) and the
 # demo-works config live in tools/e2a/; the safe payload copier is the shared
@@ -32,6 +32,8 @@ SOURCE_DIRTY="unknown"
 OUT_DIR=""
 ASSETS=()
 DEMO_WORKS=()
+DEMO_KEYS=()
+DEMO_ASSET_NAMES=()
 CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
 CREATION_MANUALS=("创作区/使用手册.md")
 for line in "${CREATIVE_LINES[@]}"; do
@@ -76,7 +78,8 @@ Release artifact names:
   AnimeArmory_electron_macos_arm64.dmg
   AnimeArmory_electron_windows.exe (--win)
   anime-armory.vsix (--vscode or --all)
-  AnimeArmory_demo_novel.zip / _n2d / _comic / _song / _mv / _ad (selected works only)
+  AnimeArmory_demo_<line-key>_<rel-hash>.zip (one asset per progressed work)
+  AnimeArmory_demo_catalog.json (all demo metadata, hashes, sizes, fixed-tag URLs)
 
 Environment:
   E2A_OUTPUT_DIR                Artifact output dir. Default: dist/e2a-release-<tag>.
@@ -184,9 +187,11 @@ rsync_common_excludes=(
 
 select_demo_works() {
   local source_root="$1"
-  local demo
+  local demo key asset_name
   DEMO_WORKS=()
-  while IFS= read -r demo; do
+  DEMO_KEYS=()
+  DEMO_ASSET_NAMES=()
+  while IFS=$'\t' read -r demo key asset_name; do
     [[ -n "$demo" ]] || continue
     case "$demo" in
       创作区/*/*) ;;
@@ -197,11 +202,19 @@ select_demo_works() {
       exit 1
     fi
     DEMO_WORKS+=("$demo")
-  done < <(node "$ROOT/tools/e2a/scripts/select_demo.cjs" "$source_root")
+    DEMO_KEYS+=("$key")
+    DEMO_ASSET_NAMES+=("$asset_name")
+  done < <(node "$ROOT/tools/e2a/scripts/select_demo.cjs" "$source_root" --all-progress --assets)
 
-  echo "[e2a] demo works:"
-  for demo in ${DEMO_WORKS+"${DEMO_WORKS[@]}"}; do
-    echo "[e2a]   - $demo"
+  if [[ "$BUILD_DEMO_ASSETS" == "1" && "${#DEMO_WORKS[@]}" -eq 0 ]]; then
+    echo "No progressed demo works found under 创作区/<系列>/<作品>/_进度.md" >&2
+    exit 1
+  fi
+
+  echo "[e2a] progressed demo works: ${#DEMO_WORKS[@]}"
+  local i
+  for ((i=0; i<${#DEMO_WORKS[@]}; i++)); do
+    echo "[e2a]   - ${DEMO_WORKS[$i]} → ${DEMO_ASSET_NAMES[$i]}"
   done
 }
 
@@ -224,7 +237,16 @@ snapshot_local_source() {
   select_demo_works "$ROOT"
 
   echo "[e2a] snapshotting local checkout: $ROOT"
-  rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"
+  local snapshot_attempt=1
+  while ! rsync -a --delete "${rsync_common_excludes[@]}" --exclude='创作区/' "$ROOT/" "$SOURCE_DIR/"; do
+    if (( snapshot_attempt >= 3 )); then
+      echo "[e2a] source snapshot failed after ${snapshot_attempt} attempts" >&2
+      exit 1
+    fi
+    echo "[e2a] source changed while snapshotting (attempt ${snapshot_attempt}/3); retrying" >&2
+    snapshot_attempt=$((snapshot_attempt + 1))
+    sleep "$snapshot_attempt"
+  done
 
   local rel
   for rel in "${CREATION_MANUALS[@]}"; do
@@ -267,6 +289,7 @@ stage_bundled_resources() {
   E2A_INCLUDE_DEMOS=0 \
   E2A_FEATURED_WORKS="$featured_works" \
   E2A_TARGET_REPO="$TARGET_REPO" \
+  E2A_RELEASE_TAG="$TAG" \
   E2A_BUNDLE_DIR="$SOURCE_DIR/desktop-electron/resources" \
     node "$SOURCE_DIR/tools/e2a/scripts/sync_bundle.cjs"
   if [[ ! -f "$SOURCE_DIR/desktop-electron/resources/demo_catalog.json" ]]; then
@@ -472,12 +495,16 @@ prune_demo_asset_stage() {
 
 build_demo_zip_assets() {
   require_cmd zip
-  local demo rest line key asset stage
-  for demo in ${DEMO_WORKS+"${DEMO_WORKS[@]}"}; do
+  require_cmd unzip
+  local i demo rest line key asset_name asset stage
+  for ((i=0; i<${#DEMO_WORKS[@]}; i++)); do
+    demo="${DEMO_WORKS[$i]}"
+    key="${DEMO_KEYS[$i]}"
+    asset_name="${DEMO_ASSET_NAMES[$i]}"
     rest="${demo#创作区/}"
     line="${rest%%/*}"
-    key="$(demo_line_key "$line")"
-    asset="$ARTIFACT_DIR/AnimeArmory_demo_${key}.zip"
+    [[ "$(demo_line_key "$line")" == "$key" ]] || { echo "Demo line key mismatch: $demo" >&2; exit 1; }
+    asset="$ARTIFACT_DIR/$asset_name"
     stage="$(mktemp -d "${TMPDIR:-/tmp}/e2a-demo-${key}.XXXXXX")"
     mkdir -p "$stage/$(dirname "$demo")"
     # payload comes straight from the checkout through the release-safety
@@ -495,6 +522,11 @@ build_demo_zip_assets() {
     unzip -tqq "$asset"
     ASSETS+=("$asset")
   done
+
+  local catalog="$ARTIFACT_DIR/AnimeArmory_demo_catalog.json"
+  node "$ROOT/tools/e2a/scripts/build_demo_catalog.cjs" \
+    "$ROOT" "$TARGET_REPO" "$TAG" "$ARTIFACT_DIR" "$catalog" "${DEMO_WORKS[@]}"
+  ASSETS+=("$catalog")
 }
 
 # --- checksums / release notes / upload --------------------------------------
@@ -522,24 +554,30 @@ merge_remote_checksums() {
   local remote="$OUT_DIR/SHA256SUMS.remote.txt"
   gh release download "$TAG" --repo "$TARGET_REPO" \
     --pattern "SHA256SUMS.txt" -O "$remote" --clobber 2>/dev/null || return 0
+  local remote_assets="$OUT_DIR/release-assets.remote.json"
+  if ! gh release view "$TAG" --repo "$TARGET_REPO" --json assets > "$remote_assets" 2>/dev/null; then
+    rm -f "$remote" "$remote_assets"
+    return 0
+  fi
   local merged="$OUT_DIR/SHA256SUMS.merged.txt"
-  : > "$merged"
-  local line name skip asset
-  while IFS= read -r line; do
-    [[ -n "$line" ]] || continue
-    name="${line##* }"
-    skip=0
-    for asset in "${ASSETS[@]}"; do
-      if [[ "$(basename "$asset")" == "$name" ]]; then
-        skip=1
-        break
-      fi
-    done
-    [[ "$skip" == "0" ]] && printf '%s\n' "$line" >> "$merged"
-  done < "$remote"
+  node - "$remote" "$remote_assets" "$merged" "${ASSETS[@]}" <<'NODE'
+const fs = require('node:fs');
+const path = require('node:path');
+const [checksumFile, assetsFile, outputFile, ...rebuiltFiles] = process.argv.slice(2);
+const liveAssets = new Set(
+  (JSON.parse(fs.readFileSync(assetsFile, 'utf8')).assets || []).map((asset) => asset.name),
+);
+const rebuilt = new Set(rebuiltFiles.map((file) => path.basename(file)));
+const kept = fs.readFileSync(checksumFile, 'utf8').split(/\r?\n/).filter((line) => {
+  if (!line.trim()) return false;
+  const name = line.trim().split(/\s+/).at(-1);
+  return liveAssets.has(name) && !rebuilt.has(name);
+});
+fs.writeFileSync(outputFile, kept.length ? `${kept.join('\n')}\n` : '');
+NODE
   cat "$OUT_DIR/SHA256SUMS.txt" >> "$merged"
   mv "$merged" "$OUT_DIR/SHA256SUMS.txt"
-  rm -f "$remote"
+  rm -f "$remote" "$remote_assets"
   echo "[e2a] merged checksums with existing release SHA256SUMS.txt"
 }
 
@@ -593,6 +631,51 @@ upload_asset_with_retry() {
   exit 1
 }
 
+verify_uploaded_assets() {
+  local expected="$WORK/uploaded-assets.expected.json"
+  local remote="$WORK/uploaded-assets.remote.json"
+  node - "$expected" "${ASSETS[@]}" "$OUT_DIR/SHA256SUMS.txt" <<'NODE'
+const fs = require('node:fs');
+const path = require('node:path');
+const [output, ...files] = process.argv.slice(2);
+const expected = files.map((file) => ({
+  name: path.basename(file),
+  size: fs.statSync(file).size,
+}));
+fs.writeFileSync(output, `${JSON.stringify(expected)}\n`);
+NODE
+
+  local attempt=1
+  while (( attempt <= UPLOAD_RETRIES )); do
+    if gh release view "$TAG" --repo "$TARGET_REPO" --json assets > "$remote" \
+      && node - "$expected" "$remote" <<'NODE'
+const fs = require('node:fs');
+const [expectedFile, remoteFile] = process.argv.slice(2);
+const expected = JSON.parse(fs.readFileSync(expectedFile, 'utf8'));
+const payload = JSON.parse(fs.readFileSync(remoteFile, 'utf8'));
+const remote = new Map((payload.assets || []).map((asset) => [asset.name, Number(asset.size)]));
+const issues = expected.flatMap(({ name, size }) => {
+  if (!remote.has(name)) return [`missing remote asset: ${name}`];
+  if (remote.get(name) !== size) return [`remote size mismatch: ${name} (local=${size}, remote=${remote.get(name)})`];
+  return [];
+});
+if (issues.length) {
+  for (const issue of issues) console.error(`[e2a] ${issue}`);
+  process.exit(1);
+}
+NODE
+    then
+      echo "[e2a] verified exact remote names and sizes for $((${#ASSETS[@]} + 1)) uploaded assets"
+      return 0
+    fi
+    echo "[e2a] remote asset verification failed (attempt ${attempt}/${UPLOAD_RETRIES}); retrying" >&2
+    attempt=$((attempt + 1))
+    sleep $((attempt * 3))
+  done
+  echo "Failed to verify uploaded release assets after ${UPLOAD_RETRIES} attempts" >&2
+  exit 1
+}
+
 upload_release() {
   [[ "$UPLOAD" == "1" ]] || return 0
   require_cmd gh
@@ -615,6 +698,7 @@ upload_release() {
     upload_asset_with_retry "$asset"
   done
   upload_asset_with_retry "$OUT_DIR/SHA256SUMS.txt"
+  verify_uploaded_assets
   echo "[e2a] uploaded ${#ASSETS[@]} assets + SHA256SUMS.txt to https://github.com/${TARGET_REPO}/releases/tag/${TAG}"
 }
 

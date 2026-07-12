@@ -789,7 +789,15 @@ def parse_clip(clip: Mapping[str, Any]) -> Dict[str, Any]:
         if isinstance(s, dict):
             parts.append(str(s.get("desc") or ""))
             lenses.append(str(s.get("lens") or ""))
-    cids = [str(x) for x in (clip.get("character_ids") or []) if x]
+    schedule = clip.get("entity_schedule") if isinstance(clip.get("entity_schedule"), Mapping) else {}
+    scheduled_chars = schedule.get("characters") if isinstance(schedule.get("characters"), list) else None
+    if scheduled_chars is not None:
+        offscreen = {str(x).strip() for x in (schedule.get("offscreen_presence") or []) if str(x).strip()}
+        forbidden = {str(x).strip() for x in (schedule.get("forbidden_presence") or []) if str(x).strip()}
+        cids = [str(x).strip() for x in scheduled_chars
+                if str(x).strip() and str(x).strip() not in offscreen and str(x).strip() not in forbidden]
+    else:
+        cids = [str(x) for x in (clip.get("character_ids") or []) if x]
     if not cids and isinstance(raw_characters, (list, tuple)):
         for item in raw_characters:
             text = str(item or "").strip()

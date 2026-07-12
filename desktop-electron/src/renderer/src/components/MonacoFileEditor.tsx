@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { writeWorkFile } from "../api";
-import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
+import {
+  editorAccessoryOptions,
+  editorThemeName,
+  installEditorAccessories,
+  vscodeEditorFontOptions,
+} from "../editorAccessories";
 import { useI18n } from "../i18n";
 import type { SkillTreeEntry, WorkFileWriteResult } from "../types";
 import { languageForFile, monaco } from "../monaco";
@@ -14,6 +19,9 @@ export function MonacoFileEditor({
   text,
   loadVersion,
   expectedMtime,
+  navigateTo,
+  onContentChange,
+  onCursorLineChange,
   onDirtyChange,
   onSaved,
 }: {
@@ -23,6 +31,9 @@ export function MonacoFileEditor({
   text: string;
   loadVersion: string;
   expectedMtime: number;
+  navigateTo?: { line: number; request: number } | null;
+  onContentChange?: (text: string) => void;
+  onCursorLineChange?: (line: number) => void;
   onDirtyChange?: (dirty: boolean) => void;
   onSaved: (result: WorkFileWriteResult, savedText: string) => void;
 }) {
@@ -31,6 +42,11 @@ export function MonacoFileEditor({
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const modelRef = useRef<monaco.editor.ITextModel | null>(null);
   const changeDisposableRef = useRef<monaco.IDisposable | null>(null);
+  const cursorDisposableRef = useRef<monaco.IDisposable | null>(null);
+  const cursorFrameRef = useRef<number | null>(null);
+  const contentTimerRef = useRef<number | null>(null);
+  const onContentChangeRef = useRef(onContentChange);
+  const onCursorLineChangeRef = useRef(onCursorLineChange);
   const currentFileIdRef = useRef("");
   const currentLoadVersionRef = useRef("");
   const editorInstanceIdRef = useRef(Math.random().toString(36).slice(2));
@@ -46,6 +62,8 @@ export function MonacoFileEditor({
 
   const fileId = `${rootPath}\0${entry.path}`;
   const language = useMemo(() => languageForFile(entry.name), [entry.name]);
+  onContentChangeRef.current = onContentChange;
+  onCursorLineChangeRef.current = onCursorLineChange;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -53,16 +71,13 @@ export function MonacoFileEditor({
     installEditorAccessories();
     const editor = monaco.editor.create(container, {
       ...editorAccessoryOptions,
+      ...vscodeEditorFontOptions,
       automaticLayout: true,
       bracketPairColorization: { enabled: true },
       cursorBlinking: "smooth",
-      fontFamily: "Menlo, Monaco, 'SF Mono', Consolas, monospace",
-      fontLigatures: false,
-      fontSize: 13,
       glyphMargin: false,
       guides: { indentation: true },
       largeFileOptimizations: true,
-      lineHeight: 20,
       minimap: { enabled: false },
       overviewRulerBorder: false,
       renderLineHighlight: "line",
@@ -75,10 +90,20 @@ export function MonacoFileEditor({
       wordWrap: "on",
     });
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => saveRef.current());
+    cursorDisposableRef.current = editor.onDidChangeCursorPosition((event) => {
+      if (cursorFrameRef.current !== null) window.cancelAnimationFrame(cursorFrameRef.current);
+      cursorFrameRef.current = window.requestAnimationFrame(() => {
+        cursorFrameRef.current = null;
+        onCursorLineChangeRef.current?.(event.position.lineNumber);
+      });
+    });
     editorRef.current = editor;
     setEditorReady((n) => n + 1);
     return () => {
       changeDisposableRef.current?.dispose();
+      cursorDisposableRef.current?.dispose();
+      if (cursorFrameRef.current !== null) window.cancelAnimationFrame(cursorFrameRef.current);
+      if (contentTimerRef.current !== null) window.clearTimeout(contentTimerRef.current);
       modelRef.current?.dispose();
       editor.dispose();
       editorRef.current = null;
@@ -104,14 +129,21 @@ export function MonacoFileEditor({
       setError("");
       setSaveState("clean");
       editor.setModel(model);
+      onCursorLineChangeRef.current?.(1);
       modelRef.current = model;
       changeDisposableRef.current = model.onDidChangeContent(() => {
-        const isDirty = model.getValue() !== cleanTextRef.current;
+        const value = model.getValue();
+        const isDirty = value !== cleanTextRef.current;
         dirtyRef.current = isDirty;
         setDirty(isDirty);
         onDirtyChange?.(isDirty);
         if (isDirty) setSaveState("dirty");
         else setSaveState("clean");
+        if (contentTimerRef.current !== null) window.clearTimeout(contentTimerRef.current);
+        contentTimerRef.current = window.setTimeout(() => {
+          contentTimerRef.current = null;
+          onContentChangeRef.current?.(value);
+        }, 220);
       });
       return;
     }
@@ -147,6 +179,16 @@ export function MonacoFileEditor({
     setSaveState("clean");
     onDirtyChange?.(false);
   }, [absPath, editorReady, expectedMtime, fileId, language, loadVersion, onDirtyChange, text]);
+
+  useEffect(() => {
+    const editor = editorRef.current;
+    const model = modelRef.current;
+    if (!editor || !model || !navigateTo || currentFileIdRef.current !== fileId) return;
+    const line = Math.max(1, Math.min(model.getLineCount(), navigateTo.line));
+    editor.setPosition({ lineNumber: line, column: 1 });
+    editor.revealLineInCenterIfOutsideViewport(line);
+    editor.focus();
+  }, [editorReady, fileId, navigateTo?.request]);
 
   useEffect(() => {
     const editor = editorRef.current;

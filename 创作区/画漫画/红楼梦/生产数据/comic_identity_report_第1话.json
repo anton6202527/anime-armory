@@ -3,102 +3,18 @@
   "kind": "comic_identity_report",
   "project_root": "/Users/lalala/learn/anime-armory/创作区/画漫画/红楼梦",
   "chapter": "第1话",
-  "created_at": "2026-07-12T00:44:53",
+  "created_at": "2026-07-12T15:48:06",
   "write_back": true,
   "job_reference_paths_updated": 0,
   "summary": {
     "reference_count": 22,
     "panel_count": 24,
-    "missing_ref_count": 15,
+    "missing_ref_count": 0,
     "rerun_target_count": 0,
     "outfit_gap_count": 0
   },
   "outfit_gaps": {},
-  "missing_refs": {
-    "LOC_PROLOGUE_VOID": [
-      "P001",
-      "P002"
-    ],
-    "FX_INK_DREAM_TRANSITION": [
-      "P002",
-      "P007",
-      "P011",
-      "P013",
-      "P015",
-      "P016",
-      "P017",
-      "P018",
-      "P021"
-    ],
-    "LOC_DAHUANG": [
-      "P003",
-      "P004",
-      "P005",
-      "P006",
-      "P008",
-      "P009",
-      "P010",
-      "P011",
-      "P012"
-    ],
-    "FX_NUWA_SILHOUETTE": [
-      "P003"
-    ],
-    "PROP_UNUSED_STONE": [
-      "P004",
-      "P005",
-      "P006",
-      "P007",
-      "P008",
-      "P009",
-      "P010",
-      "P011"
-    ],
-    "LOC_REDDUST_VISION": [
-      "P007"
-    ],
-    "PROP_TONGLING_JADE": [
-      "P011",
-      "P012",
-      "P018",
-      "P019",
-      "P020"
-    ],
-    "LOC_SPIRIT_RIVER": [
-      "P013",
-      "P014",
-      "P015",
-      "P016"
-    ],
-    "PROP_CRIMSON_PEARL_GRASS": [
-      "P013",
-      "P014",
-      "P015"
-    ],
-    "PROP_DEW_BOWL": [
-      "P014"
-    ],
-    "LOC_ZHEN_STUDY": [
-      "P017",
-      "P021",
-      "P022"
-    ],
-    "LOC_TAIXU_GATE": [
-      "P018",
-      "P019",
-      "P020"
-    ],
-    "PROP_YINGLIAN_FLOWER": [
-      "P022"
-    ],
-    "LOC_ZHEN_COURTYARD": [
-      "P023",
-      "P024"
-    ],
-    "FX_OMEN_EMBER": [
-      "P024"
-    ]
-  },
+  "missing_refs": {},
   "required_character_views": [
     "front",
     "three_quarter",
@@ -108,80 +24,70 @@
   ],
   "character_views": {
     "CHAR_DAOIST": {
-      "front": "出图/共享/图片/CHAR_DAOIST__front.png"
+      "front": "出图/共享/图片/CHAR_DAOIST__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_DAOIST__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_DAOIST__side.png",
+      "back": "出图/共享/图片/CHAR_DAOIST__back.png",
+      "face": "出图/共享/图片/CHAR_DAOIST__face.png"
     },
     "CHAR_JIANGZHU": {
-      "front": "出图/共享/图片/CHAR_JIANGZHU__front.png"
+      "front": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_JIANGZHU__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_JIANGZHU__side.png",
+      "back": "出图/共享/图片/CHAR_JIANGZHU__back.png",
+      "face": "出图/共享/图片/CHAR_JIANGZHU__face.png"
     },
     "CHAR_MONK": {
-      "front": "出图/共享/图片/CHAR_MONK__front.png"
+      "front": "出图/共享/图片/CHAR_MONK__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_MONK__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_MONK__side.png",
+      "back": "出图/共享/图片/CHAR_MONK__back.png",
+      "face": "出图/共享/图片/CHAR_MONK__face.png"
     },
     "CHAR_SHENYING": {
-      "front": "出图/共享/图片/CHAR_SHENYING__front.png"
+      "front": "出图/共享/图片/CHAR_SHENYING__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_SHENYING__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_SHENYING__side.png",
+      "back": "出图/共享/图片/CHAR_SHENYING__back.png",
+      "face": "出图/共享/图片/CHAR_SHENYING__face.png"
     },
     "CHAR_YINGLIAN_CHILD": {
-      "front": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png"
+      "front": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_YINGLIAN_CHILD__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_YINGLIAN_CHILD__side.png",
+      "back": "出图/共享/图片/CHAR_YINGLIAN_CHILD__back.png",
+      "face": "出图/共享/图片/CHAR_YINGLIAN_CHILD__face.png"
     },
     "CHAR_ZHEN_SHIYIN": {
-      "front": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png"
+      "front": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+      "three_quarter": "出图/共享/图片/CHAR_ZHEN_SHIYIN__three_quarter.png",
+      "side": "出图/共享/图片/CHAR_ZHEN_SHIYIN__side.png",
+      "back": "出图/共享/图片/CHAR_ZHEN_SHIYIN__back.png",
+      "face": "出图/共享/图片/CHAR_ZHEN_SHIYIN__face.png"
     }
   },
-  "missing_character_views": {
-    "CHAR_DAOIST": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ],
-    "CHAR_JIANGZHU": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ],
-    "CHAR_MONK": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ],
-    "CHAR_SHENYING": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ],
-    "CHAR_YINGLIAN_CHILD": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ],
-    "CHAR_ZHEN_SHIYIN": [
-      "three_quarter",
-      "side",
-      "back",
-      "face"
-    ]
-  },
+  "missing_character_views": {},
   "rerun_targets": [],
   "panels": [
     {
       "panel_id": "P001",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 2,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_PROLOGUE_VOID",
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+          "sha256": "2207ef0704900c00896f0e116826eea87d6b12a447558e8676e467884e947cfa"
         }
       ],
-      "missing_refs": [
-        "LOC_PROLOGUE_VOID"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 2,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P001.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -189,21 +95,28 @@
     },
     {
       "panel_id": "P002",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_PROLOGUE_VOID",
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+          "sha256": "2207ef0704900c00896f0e116826eea87d6b12a447558e8676e467884e947cfa"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_PROLOGUE_VOID",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P002.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -211,21 +124,28 @@
     },
     {
       "panel_id": "P003",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
+          "id": "FX_NUWA_SILHOUETTE",
+          "path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png",
+          "sha256": "73ebb6e5323e10b1ee38b526501570f1462dd31a708ecd56b42ea05e8931247b"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "FX_NUWA_SILHOUETTE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P003.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -233,21 +153,28 @@
     },
     {
       "panel_id": "P004",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P004.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -255,21 +182,28 @@
     },
     {
       "panel_id": "P005",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P005.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -277,8 +211,8 @@
     },
     {
       "panel_id": "P006",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -286,22 +220,29 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P006.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -309,8 +250,8 @@
     },
     {
       "panel_id": "P007",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -318,18 +259,29 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_REDDUST_VISION",
+          "path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png",
+          "sha256": "42ccb91b801b33a79b882863dddc11b89c918e8eeb6c16113441de809f5f07c5"
+        },
+        {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_REDDUST_VISION",
-        "PROP_UNUSED_STONE",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P007.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -337,8 +289,8 @@
     },
     {
       "panel_id": "P008",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -346,17 +298,24 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P008.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -364,8 +323,8 @@
     },
     {
       "panel_id": "P009",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -373,22 +332,29 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P009.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -396,21 +362,28 @@
     },
     {
       "panel_id": "P010",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 3,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 3,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P010.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -418,8 +391,8 @@
     },
     {
       "panel_id": "P011",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 7,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -427,33 +400,48 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_UNUSED_STONE",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4"
+        },
+        {
+          "id": "PROP_TONGLING_JADE",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_UNUSED_STONE",
-        "PROP_TONGLING_JADE",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P011.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 2
     },
     {
       "panel_id": "P012",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -461,17 +449,24 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_DAHUANG",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864"
+        },
+        {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
+        },
+        {
+          "id": "PROP_TONGLING_JADE",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221"
         }
       ],
-      "missing_refs": [
-        "LOC_DAHUANG",
-        "PROP_TONGLING_JADE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P012.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -479,22 +474,33 @@
     },
     {
       "panel_id": "P013",
-      "status": "planned",
-      "valid_reference_count": 1,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_SPIRIT_RIVER",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b"
+        },
+        {
+          "id": "PROP_CRIMSON_PEARL_GRASS",
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+          "sha256": "e3140a5ff81aef6fbc2e4025affb3c00be4aac0cacf96345247a556400e7c30a"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_SPIRIT_RIVER",
-        "PROP_CRIMSON_PEARL_GRASS",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P013.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -502,8 +508,8 @@
     },
     {
       "panel_id": "P014",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -511,18 +517,29 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_SPIRIT_RIVER",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b"
+        },
+        {
           "id": "CHAR_SHENYING",
           "path": "出图/共享/图片/CHAR_SHENYING__front.png",
-          "sha256": "23b52c048bcf687f7c329be61f0436a1e1cdeae4048d75966d1affd2ff3904a9"
+          "sha256": "a72e6d50b13b1e6380f0f6d8bb6a15fb9c9f633165c92ed84a1d84036fc23a74"
+        },
+        {
+          "id": "PROP_DEW_BOWL",
+          "path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png",
+          "sha256": "30cbb1a96c295c8f7c975cf42e6714f23b34b32e61b9074c07b79db796d02910"
+        },
+        {
+          "id": "PROP_CRIMSON_PEARL_GRASS",
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+          "sha256": "e3140a5ff81aef6fbc2e4025affb3c00be4aac0cacf96345247a556400e7c30a"
         }
       ],
-      "missing_refs": [
-        "LOC_SPIRIT_RIVER",
-        "PROP_DEW_BOWL",
-        "PROP_CRIMSON_PEARL_GRASS"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P014.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -530,13 +547,18 @@
     },
     {
       "panel_id": "P015",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_SPIRIT_RIVER",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b"
         },
         {
           "id": "CHAR_JIANGZHU",
@@ -546,30 +568,41 @@
         {
           "id": "CHAR_SHENYING",
           "path": "出图/共享/图片/CHAR_SHENYING__front.png",
-          "sha256": "23b52c048bcf687f7c329be61f0436a1e1cdeae4048d75966d1affd2ff3904a9"
+          "sha256": "a72e6d50b13b1e6380f0f6d8bb6a15fb9c9f633165c92ed84a1d84036fc23a74"
+        },
+        {
+          "id": "PROP_CRIMSON_PEARL_GRASS",
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+          "sha256": "e3140a5ff81aef6fbc2e4025affb3c00be4aac0cacf96345247a556400e7c30a"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_SPIRIT_RIVER",
-        "PROP_CRIMSON_PEARL_GRASS",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P015.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 1
     },
     {
       "panel_id": "P016",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_SPIRIT_RIVER",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b"
         },
         {
           "id": "CHAR_JIANGZHU",
@@ -579,15 +612,17 @@
         {
           "id": "CHAR_SHENYING",
           "path": "出图/共享/图片/CHAR_SHENYING__front.png",
-          "sha256": "23b52c048bcf687f7c329be61f0436a1e1cdeae4048d75966d1affd2ff3904a9"
+          "sha256": "a72e6d50b13b1e6380f0f6d8bb6a15fb9c9f633165c92ed84a1d84036fc23a74"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_SPIRIT_RIVER",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P016.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -595,8 +630,8 @@
     },
     {
       "panel_id": "P017",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -604,17 +639,24 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_ZHEN_STUDY",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+          "sha256": "b1aef3881c845faa74b1fe2b7b608eefbadc96144bfd2a900e7077d32f0e7632"
+        },
+        {
           "id": "CHAR_ZHEN_SHIYIN",
           "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
           "sha256": "eab0e671b13d21bc0ded16500518260ee5b922f873b10aaa2b152276aca080a6"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_ZHEN_STUDY",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P017.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -622,13 +664,18 @@
     },
     {
       "panel_id": "P018",
-      "status": "planned",
-      "valid_reference_count": 4,
+      "status": "ready",
+      "valid_reference_count": 7,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_TAIXU_GATE",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+          "sha256": "fc39d34a2a7b4a8e046490209f29aca1eb3949441f239a0dff9fb87778da9267"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -638,35 +685,46 @@
         {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_TONGLING_JADE",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_TAIXU_GATE",
-        "PROP_TONGLING_JADE",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P018.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 2
     },
     {
       "panel_id": "P019",
-      "status": "planned",
-      "valid_reference_count": 4,
+      "status": "ready",
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_TAIXU_GATE",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+          "sha256": "fc39d34a2a7b4a8e046490209f29aca1eb3949441f239a0dff9fb87778da9267"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -676,34 +734,41 @@
         {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_TONGLING_JADE",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221"
         }
       ],
-      "missing_refs": [
-        "LOC_TAIXU_GATE",
-        "PROP_TONGLING_JADE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P019.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 1
     },
     {
       "panel_id": "P020",
-      "status": "planned",
-      "valid_reference_count": 4,
+      "status": "ready",
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_TAIXU_GATE",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+          "sha256": "fc39d34a2a7b4a8e046490209f29aca1eb3949441f239a0dff9fb87778da9267"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -713,29 +778,31 @@
         {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "PROP_TONGLING_JADE",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221"
         }
       ],
-      "missing_refs": [
-        "LOC_TAIXU_GATE",
-        "PROP_TONGLING_JADE"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P020.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 1
     },
     {
       "panel_id": "P021",
-      "status": "planned",
-      "valid_reference_count": 2,
+      "status": "ready",
+      "valid_reference_count": 4,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
@@ -743,17 +810,24 @@
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
         },
         {
+          "id": "LOC_ZHEN_STUDY",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+          "sha256": "b1aef3881c845faa74b1fe2b7b608eefbadc96144bfd2a900e7077d32f0e7632"
+        },
+        {
           "id": "CHAR_ZHEN_SHIYIN",
           "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
           "sha256": "eab0e671b13d21bc0ded16500518260ee5b922f873b10aaa2b152276aca080a6"
+        },
+        {
+          "id": "FX_INK_DREAM_TRANSITION",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f"
         }
       ],
-      "missing_refs": [
-        "LOC_ZHEN_STUDY",
-        "FX_INK_DREAM_TRANSITION"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 4,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P021.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -761,13 +835,18 @@
     },
     {
       "panel_id": "P022",
-      "status": "planned",
-      "valid_reference_count": 3,
+      "status": "ready",
+      "valid_reference_count": 5,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_ZHEN_STUDY",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+          "sha256": "b1aef3881c845faa74b1fe2b7b608eefbadc96144bfd2a900e7077d32f0e7632"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -778,14 +857,16 @@
           "id": "CHAR_YINGLIAN_CHILD",
           "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
           "sha256": "95b6f44fc7457ae7d8446bf3a58df5d0a7c2b18a674c8d3dbe63d7ac1e9493b2"
+        },
+        {
+          "id": "PROP_YINGLIAN_FLOWER",
+          "path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png",
+          "sha256": "d3a406c2948f956448682048f6890f43cfb3a87a8a14efbb8adc9f72a82968bf"
         }
       ],
-      "missing_refs": [
-        "LOC_ZHEN_STUDY",
-        "PROP_YINGLIAN_FLOWER"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P022.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
@@ -793,13 +874,18 @@
     },
     {
       "panel_id": "P023",
-      "status": "planned",
-      "valid_reference_count": 5,
+      "status": "ready",
+      "valid_reference_count": 6,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_ZHEN_COURTYARD",
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+          "sha256": "740c627f24dcdc8cca7f92e2874896a85d4f6ef077e5935356b8ffdc48fe4b97"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -814,7 +900,7 @@
         {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
@@ -822,25 +908,28 @@
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
         }
       ],
-      "missing_refs": [
-        "LOC_ZHEN_COURTYARD"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P023.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 1
     },
     {
       "panel_id": "P024",
-      "status": "planned",
-      "valid_reference_count": 5,
+      "status": "ready",
+      "valid_reference_count": 7,
       "valid_references": [
         {
           "id": "STYLE_HLM_GONGBI_DREAM_V1",
           "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
           "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34"
+        },
+        {
+          "id": "LOC_ZHEN_COURTYARD",
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+          "sha256": "740c627f24dcdc8cca7f92e2874896a85d4f6ef077e5935356b8ffdc48fe4b97"
         },
         {
           "id": "CHAR_ZHEN_SHIYIN",
@@ -855,24 +944,26 @@
         {
           "id": "CHAR_MONK",
           "path": "出图/共享/图片/CHAR_MONK__front.png",
-          "sha256": "1d6c35061da99b7b0d4f9520efeb7e07b78e994d56590b9fe5b98486db9d6384"
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5"
         },
         {
           "id": "CHAR_DAOIST",
           "path": "出图/共享/图片/CHAR_DAOIST__front.png",
           "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823"
+        },
+        {
+          "id": "FX_OMEN_EMBER",
+          "path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png",
+          "sha256": "7d09d1cfd77a70a33ed1d642d43f9e0e0772f503c6d260b21f8a96a130d7701b"
         }
       ],
-      "missing_refs": [
-        "LOC_ZHEN_COURTYARD",
-        "FX_OMEN_EMBER"
-      ],
-      "generated_reference_input_count": 0,
-      "reference_manifest": "",
+      "missing_refs": [],
+      "generated_reference_input_count": 5,
+      "reference_manifest": "生产数据/codex_reference_bundles/第1话/P024.json",
       "stale_generated_refs": [],
       "needs_rerun": false,
       "rerun_reason": "",
-      "reference_delta_after_rebind": 0
+      "reference_delta_after_rebind": 2
     }
   ]
 }

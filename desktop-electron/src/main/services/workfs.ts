@@ -51,7 +51,27 @@ function sortDirents(entries: Dirent[]): Dirent[] {
 }
 
 export class WorkFsService {
+  private textCache = new Map<string, { size: number; mtime: number; text: string }>()
+
   constructor(private baseline: BaselineService) {}
+
+  private rememberText(key: string, size: number, mtime: number, text: string) {
+    if (Buffer.byteLength(text, 'utf8') > 2 * 1024 * 1024) return
+    this.textCache.delete(key)
+    this.textCache.set(key, { size, mtime, text })
+    while (this.textCache.size > 16) {
+      const oldest = this.textCache.keys().next().value
+      if (!oldest) break
+      this.textCache.delete(oldest)
+    }
+  }
+
+  private invalidateText(abs: string) {
+    for (const key of this.textCache.keys()) {
+      const cachedAbs = key.startsWith('docx:') ? key.slice(5) : key
+      if (cachedAbs === abs || cachedAbs.startsWith(abs + path.sep)) this.textCache.delete(key)
+    }
+  }
 
   /** Full recursive tree (flat, dirs first), with baseline change markers. */
   async tree(root: string): Promise<SkillTreeEntry[]> {
@@ -81,7 +101,7 @@ export class WorkFsService {
         try {
           const st = await fs.stat(abs)
           size = st.size
-          mtime = Math.floor(st.mtimeMs / 1000)
+          mtime = Math.floor(st.mtimeMs)
         } catch {
           continue
         }
@@ -110,7 +130,6 @@ export class WorkFsService {
     const clampedLimit = Math.min(5000, Math.max(50, Math.floor(limit) || DIR_PAGE_DEFAULT))
     const absDir = rel ? resolveWithin(root, rel) : root
     const cleanRel = rel ? validateRelPath(rel) : ''
-    const status = await this.baseline.statusMap(root)
     let entries: Dirent[]
     try {
       entries = sortDirents(await fs.readdir(absDir, { withFileTypes: true }))
@@ -121,6 +140,7 @@ export class WorkFsService {
     const page = entries.slice(offset, offset + clampedLimit)
     const depth = cleanRel ? cleanRel.split('/').length : 0
     const out: SkillTreeEntry[] = []
+    const fileEntries: Array<{ rel: string; size: number; mtime: number }> = []
     for (const ent of page) {
       const entryRel = cleanRel ? `${cleanRel}/${ent.name}` : ent.name
       let size = 0
@@ -128,7 +148,7 @@ export class WorkFsService {
       try {
         const st = await fs.stat(path.join(root, entryRel))
         size = st.size
-        mtime = Math.floor(st.mtimeMs / 1000)
+        mtime = st.mtimeMs
       } catch {
         continue
       }
@@ -138,9 +158,14 @@ export class WorkFsService {
         depth,
         is_dir: ent.isDirectory(),
         size,
-        mtime,
-        status: ent.isDirectory() ? '' : (status.get(entryRel) ?? ''),
+        mtime: Math.floor(mtime),
+        status: '',
       })
+      if (ent.isFile()) fileEntries.push({ rel: entryRel, size, mtime })
+    }
+    const status = await this.baseline.statusForEntries(root, fileEntries)
+    for (const entry of out) {
+      if (!entry.is_dir) entry.status = status.get(entry.path) ?? ''
     }
     return {
       entries: out,
@@ -212,16 +237,33 @@ export class WorkFsService {
     const abs = resolveWithin(root, rel)
     const st = await fs.stat(abs)
     if (st.size > TEXT_EDIT_LIMIT) throw new Error('文件过大,无法以文本方式打开(上限 20 MB)')
+    const cached = this.textCache.get(abs)
+    if (cached && cached.size === st.size && cached.mtime === st.mtimeMs) {
+      this.textCache.delete(abs)
+      this.textCache.set(abs, cached)
+      return cached.text
+    }
     const buf = await fs.readFile(abs)
     if (looksBinary(buf)) throw new Error('二进制文件,无法以文本方式打开')
-    return decodeTextBuffer(buf)
+    const text = decodeTextBuffer(buf)
+    this.rememberText(abs, st.size, st.mtimeMs, text)
+    return text
   }
 
   async readDocx(root: string, rel: string): Promise<string> {
     const abs = resolveWithin(root, rel)
     const st = await fs.stat(abs)
     if (st.size > DOCX_LIMIT) throw new Error('docx 文件过大(上限 80 MB)')
-    return readDocxText(abs)
+    const key = `docx:${abs}`
+    const cached = this.textCache.get(key)
+    if (cached && cached.size === st.size && cached.mtime === st.mtimeMs) {
+      this.textCache.delete(key)
+      this.textCache.set(key, cached)
+      return cached.text
+    }
+    const text = await readDocxText(abs)
+    this.rememberText(key, st.size, st.mtimeMs, text)
+    return text
   }
 
   async writeFile(root: string, rel: string, text: string, expectedMtime?: number | null): Promise<WorkFileWriteResult> {
@@ -236,6 +278,7 @@ export class WorkFsService {
     }
     await fs.writeFile(abs, text, 'utf8')
     const after = await fs.stat(abs)
+    this.rememberText(abs, after.size, after.mtimeMs, text)
     return { size: after.size, mtime: Math.floor(after.mtimeMs) }
   }
 
@@ -290,6 +333,7 @@ export class WorkFsService {
       if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e
     }
     await fs.rename(abs, newAbs)
+    this.invalidateText(abs)
     return newRel
   }
 
@@ -297,6 +341,7 @@ export class WorkFsService {
     const cleanRel = validateRelPath(rel)
     if (!cleanRel) throw new Error('不能删除作品根目录')
     const abs = resolveWithin(root, cleanRel)
+    this.invalidateText(abs)
     await shell.trashItem(abs)
   }
 

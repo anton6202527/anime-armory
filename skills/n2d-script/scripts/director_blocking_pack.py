@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import math
 import os
 import re
 import sys
@@ -66,6 +67,8 @@ SHOT_REVERSE_PATTERN_FIELDS = (
     "buffer_or_reestablishing",
     "continuity_must",
 )
+FALLBACK_LINES_PER_BEAT = 5
+FALLBACK_MAX_BEATS = 8
 
 
 def now_iso() -> str:
@@ -126,8 +129,23 @@ def _voiceover_lines(root: Path, ep: str, *, limit: int | None = None) -> List[s
 
 
 def _beat_ids(lines: List[str]) -> List[str]:
-    count = max(3, len(lines) or 3)
+    # Voiceover lines are delivery units, not dramatic beats.  When no
+    # storyboard exists yet, keep the P-2 scaffold at a director-usable scale
+    # instead of emitting one repetitive planning row per spoken line.
+    count = max(3, min(FALLBACK_MAX_BEATS, math.ceil(len(lines) / FALLBACK_LINES_PER_BEAT)))
     return [f"Beat_{idx:02d}" for idx in range(1, count + 1)]
+
+
+def _voiceover_windows(lines: List[str], count: int) -> List[Tuple[int, int, List[str]]]:
+    """Split voiceover into contiguous, complete coverage windows."""
+    if not lines:
+        return [(0, 0, []) for _ in range(count)]
+    windows: List[Tuple[int, int, List[str]]] = []
+    for idx in range(count):
+        start = math.floor(idx * len(lines) / count)
+        end = math.floor((idx + 1) * len(lines) / count)
+        windows.append((start + 1, end, lines[start:end]))
+    return windows
 
 
 def _storyboard(root: Path, ep: str) -> Dict[str, Any]:
@@ -395,10 +413,19 @@ def _beat_sheet(root: Path, ep: str, lines: List[str]) -> Dict[str, Any]:
             "beats": beats,
         }
     beats = []
-    for idx, beat_id in enumerate(_beat_ids(lines), start=1):
+    beat_ids = _beat_ids(lines)
+    windows = _voiceover_windows(lines, len(beat_ids))
+    for beat_id, (start, end, window) in zip(beat_ids, windows):
+        if window:
+            hint = window[0] if len(window) == 1 else f"{window[0]} … {window[-1]}"
+            source_range = f"voiceover lines {start}-{end}"
+        else:
+            hint = ""
+            source_range = "voiceover unavailable"
         beats.append({
             "beat_id": beat_id,
-            "source_voiceover_hint": lines[idx - 1] if idx - 1 < len(lines) else "",
+            "source_voiceover_range": source_range,
+            "source_voiceover_hint": hint,
             "dramatic_function": "待补：铺垫 / 冲突 / 反转 / 兑现 / 悬念",
             "audience_question": "待补：观众此刻想知道什么",
             "emotional_value_shift": {"from": "待补", "to": "待补"},
@@ -919,7 +946,11 @@ def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]
         if name == "axis_blocking_map.json" and status == "pass":
             data = load_json(path)
             if isinstance(data, Mapping):
-                issues.extend(_axis_blocking_contract_issues(data, _storyboard_shot_reverse_clip_ids(root, ep)))
+                # P-2 is signed before storyboard Clip IDs exist.  Future
+                # storyboard files must not retroactively change this gate's
+                # evidence requirements; per-Clip coverage belongs to the
+                # downstream shot_reverse_contract gate.
+                issues.extend(_axis_blocking_contract_issues(data, ()))
                 status = "pass" if not issues else "block"
         if name == "transition_map.json" and status == "pass":
             data = load_json(path)

@@ -57,6 +57,11 @@ def style_context_bucket(location: str, explicit: str = "") -> str:
     return _norm_bucket(loc)
 
 
+def explicit_context_override(global_band: str, context_band: str, explicit: bool) -> bool:
+    """Only a director-declared style bucket may clear a global palette outlier block."""
+    return explicit and global_band in {"warn", "block"} and context_band == "ok"
+
+
 def load_json(path: Path, default: Any = None) -> Any:
     if not path.is_file():
         return default
@@ -789,6 +794,7 @@ def analyze(
             "location": context.get("location", "unknown"),
             "scene_anchor_id": context.get("scene_anchor_id", ""),
             "style_context_bucket": style_context_bucket(context.get("location", "unknown"), context.get("style_bucket", "")),
+            "style_context_explicit": bool(context.get("style_bucket")),
             "size": data["size"],
             "sat_mean": round(float(data["sat_mean"]), 4),
             "val_mean": round(float(data["val_mean"]), 4),
@@ -838,7 +844,8 @@ def analyze(
         for comp in comparable:
             by_bucket.setdefault(str(comp.get("style_context_bucket") or "unknown"), []).append(comp)
         for bucket, group in by_bucket.items():
-            if len(group) < 4:
+            explicit_group = bool(group) and all(bool(comp.get("style_context_explicit")) for comp in group)
+            if len(group) < (2 if explicit_group else 4):
                 continue
             local_scores: list[tuple[dict[str, Any], float]] = []
             for idx, comp in enumerate(group):
@@ -862,9 +869,19 @@ def analyze(
                 item["style_context_cohesion"] = round(float(context["score"]), 4)
                 item["style_context_floor"] = round(float(context["floor"]), 4)
                 item["style_context_verdict"] = context["band"]
-            if global_band == "warn" and context and context["band"] == "ok":
+            if context and explicit_context_override(
+                global_band,
+                str(context["band"]),
+                bool(item.get("style_context_explicit")),
+            ):
                 band = "ok"
-                item["style_context_adjustment"] = "global_warn_cleared_by_scene_bucket"
+                item["style_context_adjustment"] = "global_outlier_cleared_by_explicit_scene_bucket"
+                context_adjustments.append(
+                    f"{item['panel_id']} 全话指纹离群，但在脚本显式声明的 {context['bucket']} 风格场景组内一致，按计划内导演调色变化通过。"
+                )
+            elif global_band == "warn" and context and context["band"] == "ok":
+                band = "ok"
+                item["style_context_adjustment"] = "global_warn_cleared_by_inferred_scene_bucket"
                 context_adjustments.append(
                     f"{item['panel_id']} 全话指纹轻微离群，但在 {context['bucket']} 场景族群内一致，按计划内场景变化通过。"
                 )

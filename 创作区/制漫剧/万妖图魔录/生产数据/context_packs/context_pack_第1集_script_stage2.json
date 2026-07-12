@@ -1,0 +1,280 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_check",
+      "update_plan",
+      "doctor",
+      "episode_promise_gate",
+      "director_blocking_pack"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage2",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 551,
+      "exists": true,
+      "preview": "# 设置 — 本作私有选择点（skills/n2d/references/选择点与偏好.md）\n- 制作模式：混合自动路由  # source=explicit_user\n- 项目规模：长篇量产  # source=explicit_user\n- 基础视觉风格：自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）  # source=explicit_user\n## 记录\n- 2026-07-12 用户提供四张参考图并要求结合红果同类影视研究，归一为自定义风格合同\n- 2026-07-12 用户首跑明确选择：长篇量产\n- 2026-07-12 用户首跑明确选择 A：混合自动路由",
+      "relpath": "_设置.md",
+      "sha256": "e0ff26389a3e8e096af4f97e523891047be0940f45991ac4f6b9379bcf7db9d3"
+    },
+    {
+      "bytes": 1613,
+      "exists": true,
+      "preview": "# 万妖图魔录 — 生产进度\n已粗切 **10** 集（全本约估 830 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 3293 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 2188 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 2506 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 2616 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 2017 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 3197 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 2067 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 2307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 3008 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 2036 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "52c1fbede4ee4aff0fd88d746a6b0aa3a70076a916deebe6327867b07978e570"
+    },
+    {
+      "bytes": 4755,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_director_beat_sheet",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "inputs",
+          "beats"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/director_beat_sheet.json",
+      "sha256": "13f7306d9d88f7eb6d79ed0ce654051d832749027b2fd88beb8357cc38ed9d6b"
+    },
+    {
+      "bytes": 4790,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_axis_blocking_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "scene_axis_rules",
+          "beat_blocking",
+          "shot_reverse_patterns"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/axis_blocking_map.json",
+      "sha256": "e61c270d661d755d8dfba34b09c23f9c0e6aa3c0f27d0590eadf6eac9b66b702"
+    },
+    {
+      "bytes": 3704,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_shot_progression_plan",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "rules",
+          "progressions"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/shot_progression_plan.json",
+      "sha256": "28d9c49c40656a95bd1971908fc09283a0db79e589740cd0a06eacb026200978"
+    },
+    {
+      "bytes": 4329,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_transition_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "seams"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/transition_map.json",
+      "sha256": "ba1c3d37bead90e802bbb042edf088f2888c55f03c25f8fdbf3759b2e4224f83"
+    },
+    {
+      "bytes": 3533,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_vertical_composition_plan",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "composition_rules",
+          "beat_composition"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/vertical_composition_plan.json",
+      "sha256": "f6057fdbf99bc24a35ed917cfdc9b277fdcaeb34b70756500a3952e53a2bf3e8"
+    },
+    {
+      "bytes": 2771,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_edit_rhythm_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "timeline",
+          "beats"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/edit_rhythm_map.json",
+      "sha256": "d3c33567363d3e3e5bd56816ea57e338f95e057d589e39057e0d7be7fdb1f18d"
+    },
+    {
+      "bytes": 921,
+      "exists": true,
+      "preview": "# P-2 导演排戏包 — 第1集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第1集/director_beat_sheet.json`\n- `脚本/第1集/axis_blocking_map.json`\n- `脚本/第1集/shot_progression_plan.json`\n- `脚本/第1集/transition_map.json`\n- `脚本/第1集/vertical_composition_plan.json`\n- `脚本/第1集/edit_rhythm_map.json`\n## Check\n- 状态：pass\n- 通过：7/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第1集/director_beat_sheet.json` | pass | - |\n| `脚本/第1集/axis_blocking_map.json` | pass | - |\n| `脚本/第1集/shot_progression_plan.json` | pass | - |\n| `脚本/第1集/transition_map.json` | pass | - |\n| `脚本/第1集/vertical_composition_plan.json` | pass | - |\n| `脚本/第1集/edit_rhythm_map.json` | pass | - |\n| `脚本/第1集/director_blocking_signoff.json` | pass | - |",
+      "relpath": "生产数据/director_blocking_pack_第1集.md",
+      "sha256": "d56ee70cbb805b28167ab1880af37ea5cd52e95098d8db772e17a4b698d1962a"
+    },
+    {
+      "bytes": 3293,
+      "exists": true,
+      "preview": "# 《万妖图魔录》第1集｜配音文案\n# 核心看点：一个刚穿越的弱女子，为获得唯一生机，主动杀死并非恶人的将死之人。\n# 留存节拍：虎妖复活冷开场→尸场身份悬念→裴长青交易→不死反转→百妖谱规则→杀裴硬断。\n[镜头1·虎妖·阴冷] 别跑了……这荒郊野岭的，你们想去哪儿？ ⚡钩子\n[镜头2·姜月初·惊骇·快] 它胸口明明被捅穿了——为什么还能站起来？！ ⚡危机\n[镜头3·旁白·冷峻·慢] 一炷香前。\n[镜头4·姜月初·茫然·慢] 我不是刚下班吗……这里是哪儿？我得先活下去。\n[镜头5·旁白·压迫·慢] 枯草、尸骸，还有她身上灰扑扑的囚服。这里不是现代，而是妖魔横行的大唐。\n[镜头6·姜月初·警觉] 那些黑衣人袖口的赤云纹……镇魔司。传闻他们登门，便是阎王爷亲至。\n[镜头7·姜月初·后怕·慢] 至于那头虎妖——胸口都空了，应该死透了吧？ ⚡反差\n[镜头8·裴长青·虚弱·慢] 过来。\n[镜头9·姜月初·戒备·快] 尸堆里竟然还有活人？他浑身是伤，左臂都扭曲了。\n[镜头10·姜月初·冷静内心] 他快死了。现在逃，也许还来得及。\n[镜头11·旁白·骤响] 她刚转身，断刀破风，钉入脚前。\n[镜头12·姜月初·惊恐·快] 半截断刀，钉在了我脚前！\n[镜头13·裴长青·强撑] 扶我起来。我想活着离开。我是镇魔司裴长青。\n[镜头14·裴长青·沙哑·慢] 你没路引，逃不掉。帮我，我还你自由。 ⚡欲望\n[镜头15·姜月初·克制内心] 画饼是画饼。可他说得没错——我连这片荒野都走不出去。\n[镜头16·姜月初·吃力] 往哪边？\n[镜头17·裴长青·虚弱] 南……\n[镜头18·虎妖·戏谑·慢] 咳……别跑了。\n[镜头19·姜月初·惊骇] 裴长青脸上血色尽褪——那具虎妖尸体，站起来了！\n[镜头20·虎妖·傲慢] 几个不入流的镇魔卫，也配杀我？我得吃了你们，补回这身伤。\n[镜头21·裴长青·绝望·快] 半步鸣骨……它已经觉醒了天赋神通！\n[镜头22·裴长青·决绝·快] 最后一缕气血……死！\n[镜头23·旁白·冷硬] 横刀斩落。虎妖不闪不避，只抬了一脚。\n[镜头24·旁白·重击] 虎妖一脚把裴长青踢飞，重重砸在她脚边。\n[镜头25·姜月初·绝望内心·慢] 裴长青败了。下一个，就是我。\n[镜头26·虎妖·戏谑] 莫再反抗。早些解脱，岂不美哉？\n[镜头27·系统·空灵·慢] 系统提示——宿主：姜月初。境界：凡境。武学：无。道行：零。 ⚡信息\n[镜头28·系统·空灵] 斩杀生物，可获得道行；以妖血为墨、百妖谱为卷，可摹画其形，夺其神通。 💥信息回报\n[镜头29·姜月初·急切内心·快] 斩杀生物……可我只是凡人，拿什么杀这头妖？\n[镜头30·姜月初·凝滞内心·慢] 我想活下去。可除了虎妖，荒野上唯一还活着的生物……就在我脚边。\n[镜头31·裴长青·虚弱] 你……拿刀做什么？\n[镜头32·姜月初·颤抖·慢] ||抱歉。\n[镜头33·旁白·骤断] 于是横刀刺入胸口，温热的血溅上姜月初的脸。\n[镜头34·裴长青·错愕·慢] 你…… 🪝集尾",
+      "relpath": "脚本/第1集/voiceover.txt",
+      "sha256": "66e3a26ca65e3ab43c4fd2495b147828cf4bf3f409078008e2c65b0c15b1d6fb"
+    },
+    {
+      "bytes": 1475,
+      "exists": true,
+      "preview": "# 《万妖图魔录》第1集｜BGM 与音效\n## 整体情绪\n冷灰荒野压迫 → 短暂求生交易 → 虎妖复活骤升危机 → 百妖谱黑金神秘 → 杀裴前抽真空硬断。\n## BGM路线\n- 基底：低频埙、低弦持续音、极轻皮鼓心跳；不做仙气飘飘的糖水古风。\n- 尸场：风声、枯草摩擦、远处乌鸦，音乐只保留低频气压。\n- 裴长青交易：加入克制木质敲击，保持双方互相利用的距离。\n- 虎妖复活：低弦滑音下坠，鼓点从稀到密；裴被踢飞时给一次沉闷低频撞击。\n- 百妖谱：纸张展开、古琴泛音、金属低鸣，形成全剧固定系统母题；面板文字出现不使用廉价电子提示音。\n- 杀裴：姜月初说“抱歉”前，BGM瞬时抽空0.5秒；刀入体只保留克制的衣料/血肉声，随后全静默硬断。\n## 关键卡点\n1. 镜头1虎妖睁眼：反向吸气 + 极低频脉冲。\n2. 镜头11断刀落地：尖锐破风后金属入土，音乐停半拍。\n3. 镜头18回到冷开场：同一虎妖声纹母题完整出现。\n4. 镜头24裴被踢飞：BGM第一处重击峰值。\n5. 镜头27百妖谱显现：纸卷展开声与金属泛音同步。\n6. 镜头32“抱歉”：全部抽真空。\n7. 镜头33刀入体：单一近距离效果音；画面、声音同时硬切。\n## 禁忌\n禁连续轰鸣、廉价游戏升级音、过度唢呐、欢快鼓点、血腥音效猎奇化、用音乐替代姜月初的迟疑表演。",
+      "relpath": "脚本/第1集/bgm.txt",
+      "sha256": "b2b40c7d6c01caad2d42c46a37985ceae3daf7b2411ed56e67fc952f1c392090"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "bytes": 7352,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "graph_hash": "10546c084ea8bfdd13cd2219e6dd7f6d42c30470d2e2e4b92340d4999fe4e1c7",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 19,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 20,
+          "routes": 0,
+          "story_clips": 19,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第1集.json",
+      "sha256": "185d49a9260bca0a8e2fd24c76435207874709953abc6d03671cfd3c241c0da5"
+    }
+  ],
+  "genre_pack_context": {
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-07-12T08:33:31+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/万妖图魔录",
+    "stage_key": "script_stage2",
+    "status": "pass",
+    "summary": {
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json"
+  ],
+  "root": "创作区/制漫剧/万妖图魔录",
+  "stage_key": "script_stage2",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/director_beat_sheet.json",
+      "脚本/第1集/axis_blocking_map.json",
+      "脚本/第1集/shot_progression_plan.json",
+      "脚本/第1集/transition_map.json",
+      "脚本/第1集/vertical_composition_plan.json",
+      "脚本/第1集/edit_rhythm_map.json",
+      "生产数据/director_blocking_pack_第1集.md",
+      "脚本/第1集/voiceover.txt",
+      "脚本/第1集/bgm.txt",
+      "生产数据/episode_graph_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

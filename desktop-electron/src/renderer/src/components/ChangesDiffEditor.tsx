@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
-import { editorAccessoryOptions, editorThemeName, installEditorAccessories } from "../editorAccessories";
+import {
+  editorAccessoryOptions,
+  editorThemeName,
+  installEditorAccessories,
+  vscodeEditorFontOptions,
+} from "../editorAccessories";
 import { languageForFile, monaco } from "../monaco";
 import type { WorkChangeDetail } from "../types";
 
@@ -15,13 +20,11 @@ export function ChangesDiffEditor({ detail }: { detail: WorkChangeDetail }) {
     installEditorAccessories();
     const editor = monaco.editor.createDiffEditor(host, {
       ...editorAccessoryOptions,
+      ...vscodeEditorFontOptions,
       automaticLayout: true,
       diffWordWrap: "on",
-      fontFamily: "Menlo, Monaco, 'SF Mono', Consolas, monospace",
-      fontSize: 12,
       hideCursorInOverviewRuler: true,
       ignoreTrimWhitespace: false,
-      lineHeight: 19,
       minimap: { enabled: false },
       originalEditable: false,
       overviewRulerBorder: false,

@@ -1,0 +1,112 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "合成/第1集/_work/animatic_timeline.otio",
+          "sha256": "343d5cdd1657587fe7ccc83821c98bb3b3e8cfa52131850a9602f6858a95d706"
+        },
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "42508765d80c44c0254c3218e406baf7fe8ed7d28d1862f0c5ab3a95fd8f5624"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "4449c7dc69927823a8e62116db6fd9732e362019011b7fb4d3ddbd19d3a917f2"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "416a48f014a4aab18a47e6e86544890e765b5f35a506050c12daf1ae9cb1567a"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "5fecb8149b0766a6478aa0a6a676ecb245f273387dfa01c9caf8bda38e79a516"
+        }
+      ],
+      "note": "用户明确批准修订版 animatic 与 P3 制片交接包",
+      "reviewed_at": "2026-07-12T11:57:10+00:00",
+      "reviewer_id": "user",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "86e31e3d06aaa28662901c1d87d4db3ce67ab230928c6ca99ff43e4499b39737",
+      "signed_input_fingerprint_sha": "b869ba77ba49e53ee9464f233f93ed59b85ca5e951f0699d3c395a65ce71b54c",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "合成/第1集/_work/animatic_timeline.otio",
+          "sha256": "343d5cdd1657587fe7ccc83821c98bb3b3e8cfa52131850a9602f6858a95d706"
+        },
+        {
+          "path": "生产数据/animatic_第1集.html",
+          "sha256": "42508765d80c44c0254c3218e406baf7fe8ed7d28d1862f0c5ab3a95fd8f5624"
+        },
+        {
+          "path": "生产数据/animatic_第1集.json",
+          "sha256": "4449c7dc69927823a8e62116db6fd9732e362019011b7fb4d3ddbd19d3a917f2"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.json",
+          "sha256": "416a48f014a4aab18a47e6e86544890e765b5f35a506050c12daf1ae9cb1567a"
+        },
+        {
+          "path": "脚本/第1集/animatic_packet.md",
+          "sha256": "5fecb8149b0766a6478aa0a6a676ecb245f273387dfa01c9caf8bda38e79a516"
+        }
+      ],
+      "note": "用户明确批准修订版 animatic 与 P3 制片交接包",
+      "reviewed_at": "2026-07-12T11:57:10+00:00",
+      "reviewer_id": "user",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "86e31e3d06aaa28662901c1d87d4db3ce67ab230928c6ca99ff43e4499b39737",
+      "signed_input_fingerprint_sha": "b869ba77ba49e53ee9464f233f93ed59b85ca5e951f0699d3c395a65ce71b54c",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "stage2_animatic",
+  "authored_by": "automation:n2d",
+  "created_at": "2026-07-12T11:57:10+00:00",
+  "episode": "第1集",
+  "evidence_fingerprint": {
+    "files": {
+      "合成/第1集/_work/animatic_timeline.otio": "343d5cdd1657587fe7ccc83821c98bb3b3e8cfa52131850a9602f6858a95d706",
+      "生产数据/animatic_第1集.html": "42508765d80c44c0254c3218e406baf7fe8ed7d28d1862f0c5ab3a95fd8f5624",
+      "生产数据/animatic_第1集.json": "4449c7dc69927823a8e62116db6fd9732e362019011b7fb4d3ddbd19d3a917f2",
+      "脚本/第1集/animatic_packet.json": "416a48f014a4aab18a47e6e86544890e765b5f35a506050c12daf1ae9cb1567a",
+      "脚本/第1集/animatic_packet.md": "5fecb8149b0766a6478aa0a6a676ecb245f273387dfa01c9caf8bda38e79a516"
+    },
+    "sha": "86e31e3d06aaa28662901c1d87d4db3ce67ab230928c6ca99ff43e4499b39737"
+  },
+  "input_fingerprint": {
+    "files": {
+      "合成/第1集/配音/voice_zh.wav": null,
+      "脚本/第1集/storyboard.json": "0043eb4d19fecca1e8a15feff557e529642428ab917ec1cd8c0545a17b1496b0",
+      "脚本/第1集/字幕_中文.srt": "5d5e78431f57ab587dabf6ff6aef3a6b27d4b264becf040c56348cde8d41d02c",
+      "脚本/第1集/镜头时长.json": "57085e77e79e151011eb7d54c799ee08019d78af1e3fc6032699979d524728bd"
+    },
+    "sha": "b869ba77ba49e53ee9464f233f93ed59b85ca5e951f0699d3c395a65ce71b54c"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director"
+      ]
+    },
+    {
+      "group": "editorial",
+      "roles": [
+        "editor",
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-12T11:57:10+00:00",
+  "version": 1
+}

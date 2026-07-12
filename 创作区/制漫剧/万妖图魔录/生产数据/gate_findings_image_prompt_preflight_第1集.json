@@ -1,0 +1,1157 @@
+{
+  "auto_return_tasks": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "合规前置"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "合规前置",
+          "dim_key": "合规前置",
+          "dimension": "合规前置",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/合规/compliance_manifest.json",
+          "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "时间基准"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "时间基准",
+          "dim_key": "时间基准",
+          "dimension": "时间基准",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "第1集",
+          "message": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "msg": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "voice",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "voice",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "脸漂预案",
+          "dim_key": "character_consistency",
+          "dimension": "脸漂预案",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "姜月初（CHAR_01）",
+          "message": "本集脸漂风险 high（分76.4·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+          "msg": "本集脸漂风险 high（分76.4·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "脸漂预案",
+          "dim_key": "character_consistency",
+          "dimension": "脸漂预案",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "裴长青（CHAR_02）",
+          "message": "本集脸漂风险 high（分71.7·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "msg": "本集脸漂风险 high（分71.7·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "故事板"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#2",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#3",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#4",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#5",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#6",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#7",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#8",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#9",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#10",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#11",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#12",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        },
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "故事板",
+          "dim_key": "故事板",
+          "dimension": "故事板",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#13",
+          "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "人物在场链"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "人物在场链",
+          "dim_key": "人物在场链",
+          "dimension": "人物在场链",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#4→clip#5",
+          "message": "实体在下一 Clip 出现但缺入画/换场解释：PROP_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "msg": "实体在下一 Clip 出现但缺入画/换场解释：PROP_01。若是新入场，请把 entry_exit 写成机器真值。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "script_stage2",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "script_stage2",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dimensions": [
+        "character_consistency"
+      ],
+      "findings": [
+        {
+          "affected_artifacts": [
+            "合规/compliance_manifest.json",
+            "脚本/第1集/storyboard.json"
+          ],
+          "affected_shots": [],
+          "dim": "风格化脸机检",
+          "dim_key": "character_consistency",
+          "dimension": "风格化脸机检",
+          "episode": "第1集",
+          "gate_stage": "image_prompt_preflight",
+          "loc": "创作区/制漫剧/万妖图魔录/_设置.md",
+          "message": "基础视觉风格「自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "msg": "基础视觉风格「自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+          "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+          "return_to_stage": "review",
+          "sev": "warn",
+          "severity": "warn",
+          "source": "n2d-dashboard/gate"
+        }
+      ],
+      "return_to_stage": "review",
+      "scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。；定位产物：合规/compliance_manifest.json、脚本/第1集/storyboard.json"
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/合规/compliance_manifest.json",
+      "message": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "msg": "distribution_intent=internal_only；platform_review / localization / regulatory_filing 检查降为 INFO（内部 demo 免检，转投放前需补），产物不得直接投放",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "合规前置",
+      "dim_key": "合规前置",
+      "dimension": "合规前置",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/合规/compliance_manifest.json regulatory_filing",
+      "message": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（内部 demo 免检，转投放前需补）",
+      "msg": "pre_broadcast_review 不能停在 pending（境内投放须先过播前审核）（内部 demo 免检，转投放前需补）",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "时间基准",
+      "dim_key": "时间基准",
+      "dimension": "时间基准",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "第1集",
+      "message": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+      "msg": "当前使用 timing_estimate.json（无 WAV）推进画面；这是设计态时间基准。可见口型镜只可按 production_mode_route 生成表演驱动画面或 base_video_only 基础片，不能冒充最终说话镜。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "voice",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "姜月初（CHAR_01）",
+      "message": "本集脸漂风险 high（分76.4·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+      "msg": "本集脸漂风险 high（分76.4·multi_reference）：已写明项目记忆/真实参考图束路线：当前后端仍无持久主体 ID，但不再因这一点自动阻断。后续必须先生成共享定妆和脸部锚，再让执行端把这些 PNG 作为真实图片入参传入，并以 full image_qc 回验。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "脸漂预案",
+      "dim_key": "character_consistency",
+      "dimension": "脸漂预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "裴长青（CHAR_02）",
+      "message": "本集脸漂风险 high（分71.7·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "msg": "本集脸漂风险 high（分71.7·multi_reference）：GPT Image 2（渠道 Codex CLI） 无持久主体 ID：每镜必须喂定妆组/场景图并拼身份锁定句；不要只靠文字外貌描述。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "横刀（WEAPON_01）",
+      "message": "本集物料漂移风险 medium（分49）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分49）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "02（PROP_02）",
+      "message": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分37）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "百妖谱金色古卷面板（VFX_系统面板）",
+      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "01（PROP_01）",
+      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "01（VFX_01）",
+      "message": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分34）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "物料漂移预案",
+      "dim_key": "物料漂移预案",
+      "dimension": "物料漂移预案",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "夕照荒野尸场（LOC_01）",
+      "message": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "msg": "本集物料漂移风险 medium（分30）：结构/件数强锁：参考图标清拓扑（单镜面/三件套/唯一圆口），逐镜 prompt 锁件数不增减。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#2",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#3",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#4",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#5",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#6",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#7",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#8",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#9",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#10",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#11",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#12",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#13",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#14",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#15",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#16",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#17",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#18",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "故事板",
+      "dim_key": "故事板",
+      "dimension": "故事板",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#19",
+      "message": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "msg": "start_state 与上一 Clip 的 end_state 不同；普通剪辑接缝允许，但若要尾帧无缝接力，请声明 handoff_mode=exact_tailframe_match 并原样继承，若是换机位/换场则在 transition/entry_exit 写清楚。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "人物在场链",
+      "dim_key": "人物在场链",
+      "dimension": "人物在场链",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/脚本/第1集/storyboard.json clip#4→clip#5",
+      "message": "实体在下一 Clip 出现但缺入画/换场解释：PROP_01。若是新入场，请把 entry_exit 写成机器真值。",
+      "msg": "实体在下一 Clip 出现但缺入画/换场解释：PROP_01。若是新入场，请把 entry_exit 写成机器真值。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "风格化脸机检",
+      "dim_key": "character_consistency",
+      "dimension": "风格化脸机检",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/_设置.md",
+      "message": "基础视觉风格「自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "msg": "基础视觉风格「自定义（暗黑盛唐写实国漫 + 黑金妖谱水墨奇观）」属于风格化/漫剧脸，当前脸一致性机检后端=arcface；建议项目级设置 `脸一致性机检后端: styleid` 并配置 N2D_STYLEID_MODEL。未配置前，角色脸一致性 KPI 按降级档处理，近景结果需提高人审权重。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "review",
+      "sev": "warn",
+      "severity": "warn",
+      "source": "n2d-dashboard/gate"
+    },
+    {
+      "affected_artifacts": [
+        "合规/compliance_manifest.json",
+        "脚本/第1集/storyboard.json"
+      ],
+      "affected_shots": [],
+      "dim": "剧本可看性合同",
+      "dim_key": "剧本可看性合同",
+      "dimension": "剧本可看性合同",
+      "episode": "第1集",
+      "gate_stage": "image_prompt_preflight",
+      "loc": "创作区/制漫剧/万妖图魔录/生产数据/script_quality_contract_第1集.json",
+      "message": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "msg": "script_quality_contract 已通过：上游看点、首屏钩、留存承诺、逐镜戏剧功能可交接。",
+      "rerun_scope": "先修合规包、配音/分镜、storyboard visual/style_contract 与专项镜头模板，再生成出图 prompt。",
+      "return_to_stage": "script_stage2",
+      "sev": "info",
+      "severity": "info",
+      "source": "n2d-dashboard/gate"
+    }
+  ],
+  "gate_stage": "image_prompt_preflight",
+  "generated_at": "2026-07-12T12:39:18+00:00",
+  "inputs_fingerprint": {
+    "files": {
+      "合规/compliance_manifest.json": "c99c8f0103dfef85183f015fd2c1ff0be66dba50e2ead0eb9c97da22b5619446",
+      "脚本/第1集/storyboard.json": "0043eb4d19fecca1e8a15feff557e529642428ab917ec1cd8c0545a17b1496b0"
+    },
+    "sha": "97971091aa4140c3bd2b75cd5600649d3e5203b65b28318f3820b9dfc88036e3"
+  },
+  "kind": "n2d_consistency_findings",
+  "root": "创作区/制漫剧/万妖图魔录",
+  "source": {
+    "kind": "n2d_gate",
+    "path": "n2d-review/scripts/gate.py"
+  },
+  "summary": {
+    "by_dim": {
+      "人物在场链": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "剧本可看性合同": {
+        "block": 0,
+        "info": 1,
+        "warn": 0
+      },
+      "合规前置": {
+        "block": 0,
+        "info": 1,
+        "warn": 1
+      },
+      "故事板": {
+        "block": 0,
+        "info": 0,
+        "warn": 18
+      },
+      "时间基准": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      },
+      "物料漂移预案": {
+        "block": 0,
+        "info": 6,
+        "warn": 0
+      },
+      "脸漂预案": {
+        "block": 0,
+        "info": 0,
+        "warn": 2
+      },
+      "风格化脸机检": {
+        "block": 0,
+        "info": 0,
+        "warn": 1
+      }
+    },
+    "severity": {
+      "block": 0,
+      "info": 8,
+      "warn": 24
+    },
+    "total": 32
+  },
+  "version": 1
+}
