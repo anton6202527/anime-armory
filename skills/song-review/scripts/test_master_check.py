@@ -32,7 +32,9 @@ def test_master_check_passes_clean_wav():
         write_wav(os.path.join(root, "歌", "song.wav"))
         report = master_check.build_report(root, "streaming")
         assert report["passed"]
+        assert report["measurement_complete"]
         assert report["metrics"]["sample_rate"] == 44100
+        assert report["metrics"]["bs1770"]["integrated_lufs"] is not None
 
 
 def test_master_check_blocks_silent_wav():
@@ -41,3 +43,11 @@ def test_master_check_blocks_silent_wav():
         report = master_check.build_report(root, "streaming")
         assert not report["passed"]
         assert any(item["id"] == "MASTER-SILENCE" for item in report["findings"])
+
+
+def test_archive_requires_24_bit_source():
+    with tempfile.TemporaryDirectory() as root:
+        write_wav(os.path.join(root, "导出", "master.wav"))
+        report = master_check.build_report(root, "archive")
+        assert not report["passed"]
+        assert any(item["id"] == "MASTER-BIT-DEPTH" for item in report["findings"])

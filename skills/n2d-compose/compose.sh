@@ -531,8 +531,11 @@ ls -la "$OUT"
 # 主题动机（leitmotif）确定性铺设：缺 设定库/motif.json → 空规划 → no-op，$OUT 一字不动
 python3 "$SKILL_DIR/motif_registry.py" "$ROOT" "$EP" --mix "$OUT" || true
 
-# 集成响度（LUFS）达标巡检：量成片集成响度/真峰 vs 平台目标（advisory，不阻断；超标给整改提示）
-python3 "$SKILL_DIR/loudness_conform.py" "$ROOT" "$EP" --platform "${PLATFORM:-default}" || true
+# 集成响度（LUFS）达标巡检：量成片集成响度/真峰 vs 平台目标（advisory，不阻断 compose；阻断口径在 review gate）。
+# 平台目标默认由 loudness_conform 从 _设置.md「目标平台」自动解析（此前固定 default=-16，抖音/TikTok 集被按错档判）；
+# env PLATFORM 可显式覆盖。失败/超标必须在终端可见，不再 || true 静默吞掉。
+python3 "$SKILL_DIR/loudness_conform.py" "$ROOT" "$EP" ${PLATFORM:+--platform "$PLATFORM"} \
+  || echo "⚠️ 成片响度未达标或巡检失败（advisory·不阻断 compose）：review/交付前先按上方输出整改并复检。"
 
 # AI 标识 best-effort 后处理：默认内部预览只写元数据，不烤可见角标；发布需要时设 AI显式角标=开启。
 # 铁律：AI 标识/披露/水印不得阻断 compose、进度回写或 dashboard；失败仅作为发布待办提示。

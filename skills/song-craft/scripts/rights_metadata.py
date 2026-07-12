@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -37,6 +38,11 @@ def write_text(path: str, text: str) -> None:
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(text)
     os.replace(tmp, path)
+
+
+def canonical_hash(payload: Any) -> str:
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def out_paths(root: str) -> tuple[str, str, str]:
@@ -85,12 +91,13 @@ def build_metadata(root: str, args: argparse.Namespace) -> dict[str, Any]:
             contributors = [{"name": author, "role": "songwriter", "share_percent": 100.0, "pro": "", "ipi_cae": "", "publisher": ""}]
     performers = split_names(args.performer) or split_names([meta.get("performer") or ""])
     producers = split_names(args.producer)
+    title = args.title or meta.get("title") or os.path.basename(root)
     payload = {
-        "schema_version": 1,
+        "schema_version": 3,
         "kind": RIGHTS_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": os.path.abspath(root),
-        "title": args.title or meta.get("title") or os.path.basename(root),
+        "title": title,
         "alternate_titles": split_names(args.alternate_title),
         "rights_status": args.rights_status or meta.get("rights_status") or "unknown",
         "composition_rights": {
@@ -102,12 +109,23 @@ def build_metadata(root: str, args: argparse.Namespace) -> dict[str, Any]:
         },
         "sound_recording": {
             "isrc": args.isrc,
+            "reference_metadata": {
+                "title": title,
+                "version_title": getattr(args, "version_title", "") or "Original",
+                "main_artist": getattr(args, "main_artist", "") or (performers[0] if performers else ""),
+                "duration_seconds": getattr(args, "duration_seconds", None) or meta.get("target_duration_seconds"),
+                "recording_type": getattr(args, "recording_type", "") or "audio",
+                "year_of_first_publication": getattr(args, "publication_year", None),
+            },
             "performers": performers,
             "producers": producers,
             "label": args.label,
             "soundexchange_registration_status": args.soundexchange_status,
         },
         "licenses": {
+            "derivative_type": getattr(args, "derivative_type", "") or "unknown",
+            "composition_authorization_status": getattr(args, "composition_authorization_status", "") or "unknown",
+            "sample_usage_status": getattr(args, "sample_usage_status", "") or "unknown",
             "sample_clearance_status": args.sample_clearance_status,
             "cover_license_status": args.cover_license_status,
             "voice_authorization_status": args.voice_authorization_status,
@@ -140,22 +158,48 @@ def check_metadata(payload: dict[str, Any]) -> dict[str, Any]:
         if not row.get("name"):
             issue("RIGHTS-CONTRIBUTOR-NAME", "blocking", "贡献者缺 name。")
             break
-    isrc = ((payload.get("sound_recording") or {}).get("isrc") or "").strip()
+    recording = payload.get("sound_recording") if isinstance(payload.get("sound_recording"), dict) else {}
+    isrc = (recording.get("isrc") or "").strip()
     if isrc and not re.fullmatch(r"[A-Z]{2}[A-Z0-9]{3}[0-9]{7}", isrc):
         issue("RIGHTS-ISRC-FORMAT", "warning", "ISRC 格式疑似不正确，应为 12 位标准码。")
     if not isrc:
         issue("RIGHTS-ISRC-MISSING", "warning", "缺 ISRC；demo 可缺，正式发行前应补。")
+    else:
+        reference = recording.get("reference_metadata") if isinstance(recording.get("reference_metadata"), dict) else {}
+        labels = {
+            "title": "title", "version_title": "version title", "main_artist": "main artist",
+            "duration_seconds": "duration", "recording_type": "recording type",
+            "year_of_first_publication": "year of first publication",
+        }
+        missing = [label for key, label in labels.items() if reference.get(key) in {"", None}]
+        if missing:
+            issue("RIGHTS-ISRC-REFERENCE-METADATA", "blocking", "已分配 ISRC，但 reference metadata 不完整：" + ", ".join(missing) + "。")
     if not comp.get("iswc"):
         issue("RIGHTS-ISWC-MISSING", "warning", "缺 ISWC；未登记作品时可先留空。")
-    recording = payload.get("sound_recording") if isinstance(payload.get("sound_recording"), dict) else {}
     if not recording.get("performers"):
         issue("RIGHTS-PERFORMER-MISSING", "warning", "缺 performer/artist。")
+    licenses = payload.get("licenses") if isinstance(payload.get("licenses"), dict) else {}
+    derivative = licenses.get("derivative_type")
+    if derivative not in {"original", "cover", "remix", "interpolation"}:
+        issue("RIGHTS-DERIVATIVE-TYPE", "blocking", "derivative_type 必须明确为 original/cover/remix/interpolation。")
+    if derivative == "cover" and licenses.get("cover_license_status") not in {"secured", "authorized", "licensed", "已授权"}:
+        issue("RIGHTS-COVER-LICENSE", "blocking", "翻唱作品缺已落实的 cover license。")
+    if derivative in {"remix", "interpolation"} and licenses.get("composition_authorization_status") not in {"secured", "authorized", "licensed", "已授权"}:
+        issue("RIGHTS-DERIVATIVE-AUTH", "blocking", f"{derivative} 缺词曲/录音授权。")
+    sample_usage = licenses.get("sample_usage_status")
+    if sample_usage not in {"none", "used", "无", "使用"}:
+        issue("RIGHTS-SAMPLE-USAGE", "blocking", "sample_usage_status 必须明确为 none/used。")
+    if sample_usage in {"used", "使用"} and licenses.get("sample_clearance_status") not in {"cleared", "licensed", "authorized", "已清权", "已授权"}:
+        issue("RIGHTS-SAMPLE-CLEARANCE", "blocking", "使用了 sample 但 clearance 未完成。")
+    if licenses.get("voice_authorization_status") not in {"own", "authorized", "synthetic", "自有", "已授权", "合成"}:
+        issue("RIGHTS-VOICE-AUTH", "blocking", "voice_authorization_status 必须单义明确为 own/authorized/synthetic。")
     blockers = [item for item in findings if item["severity"] == "blocking"]
     return {
         "schema_version": 1,
         "kind": CHECK_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": payload.get("project_root"),
+        "source_sha256": canonical_hash(payload),
         "blocking": len(blockers),
         "warnings": len(findings) - len(blockers),
         "passed": not blockers,
@@ -193,7 +237,9 @@ def render_split_sheet(payload: dict[str, Any], check: dict[str, Any]) -> str:
         "- performers：" + (", ".join(recording.get("performers") or []) or "未填写"),
         "- producers：" + (", ".join(recording.get("producers") or []) or "未填写"),
         f"- label：{recording.get('label') or '未填写'}",
+        f"- ISRC reference metadata：{recording.get('reference_metadata') or {}}",
         f"- SoundExchange：{recording.get('soundexchange_registration_status') or '未登记'}",
+        f"- licenses：{payload.get('licenses') or {}}",
     ])
     if check.get("findings"):
         lines.extend(["", "## Findings", ""])
@@ -223,13 +269,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--producer", action="append", default=[])
     ap.add_argument("--label", default="")
     ap.add_argument("--isrc", default="")
+    ap.add_argument("--version-title", default="")
+    ap.add_argument("--main-artist", default="")
+    ap.add_argument("--duration-seconds", type=float, default=None)
+    ap.add_argument("--recording-type", default="audio")
+    ap.add_argument("--publication-year", type=int, default=None)
     ap.add_argument("--iswc", default="")
     ap.add_argument("--pro-status", default="not_registered")
     ap.add_argument("--mlc-status", default="not_registered")
     ap.add_argument("--soundexchange-status", default="not_registered")
+    ap.add_argument("--derivative-type", default="", choices=("", "original", "cover", "remix", "interpolation"))
+    ap.add_argument("--composition-authorization-status", default="")
+    ap.add_argument("--sample-usage-status", default="", choices=("", "none", "used"))
     ap.add_argument("--sample-clearance-status", default="not_applicable")
     ap.add_argument("--cover-license-status", default="not_applicable")
-    ap.add_argument("--voice-authorization-status", default="synthetic_or_own")
+    ap.add_argument("--voice-authorization-status", default="", choices=("", "own", "authorized", "synthetic"))
     ap.add_argument("--notes", default="")
     args = ap.parse_args(argv)
     root = os.path.abspath(args.project_root)
@@ -238,7 +292,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     existing = load_json(out_paths(root)[0], {}) if not any([
         args.title, args.alternate_title, args.rights_status, args.contributor, args.performer,
-        args.producer, args.label, args.isrc, args.iswc, args.notes,
+        args.producer, args.label, args.isrc, args.iswc, args.notes, args.version_title,
+        args.main_artist, args.duration_seconds, args.publication_year, args.derivative_type,
+        args.composition_authorization_status, args.sample_usage_status, args.voice_authorization_status,
     ]) else {}
     payload = existing if isinstance(existing, dict) and existing.get("kind") == RIGHTS_KIND else build_metadata(root, args)
     check = check_metadata(payload)

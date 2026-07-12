@@ -5,6 +5,8 @@
     （或 python3 test_cutdown_reframe.py）
 """
 import unittest
+import json
+import tempfile
 from unittest import mock
 from pathlib import Path
 
@@ -23,6 +25,7 @@ class ReframeTest(unittest.TestCase):
     def test_out_resolution(self):
         self.assertEqual(reframe.out_resolution("9:16", 1920), (1080, 1920))
         self.assertEqual(reframe.out_resolution("1:1", 1920), (1920, 1920))
+        self.assertEqual(reframe.out_resolution("4:5", 1920), (1536, 1920))
         self.assertEqual(reframe.out_resolution("16:9", 1920), (1920, 1080))
 
     def test_reframe_filter_crop(self):
@@ -162,6 +165,26 @@ class CutdownTest(unittest.TestCase):
         self.assertNotIn("S2", ids)
         self.assertIn("cutdown_optional_no_duration", [f["kind"] for f in findings])
 
+    def test_claim_disclosure_is_atomic_in_cutdown(self):
+        shots = [
+            {"shot_id": "S1", "section": "钩子", "duration": 3},
+            {"shot_id": "S2", "section": "产品", "duration": 4, "claim_ids": ["claim_01"]},
+            {"shot_id": "S3", "section": "证据", "duration": 2,
+             "disclosures": [{"claim_id": "claim_01", "text": "来源与条件"}]},
+            {"shot_id": "S4", "section": "CTA", "duration": 3},
+        ]
+        kept, _, findings = cutdown.plan_cutdown(shots, 8, duration_map=self._dmap(shots))
+        ids = {s["shot_id"] for s in kept}
+        self.assertIn("S2", ids)
+        self.assertIn("S3", ids)
+        self.assertFalse(any(f["severity"] == "block" for f in findings))
+
+    def test_claim_without_disclosure_blocks_cutdown(self):
+        shots = [{"shot_id": "S1", "section": "产品", "duration": 4, "claim_ids": ["claim_01"]}]
+        _, _, findings = cutdown.plan_cutdown(shots, 6, duration_map=self._dmap(shots))
+        self.assertTrue(any(f["kind"] == "cutdown_claim_disclosure_missing" and f["severity"] == "block"
+                            for f in findings))
+
     def test_parse_seconds(self):
         self.assertEqual(cutdown.parse_seconds("6s"), 6.0)
         self.assertEqual(cutdown.parse_seconds("1:00"), 60.0)
@@ -228,11 +251,47 @@ class DeliverTest(unittest.TestCase):
         self.assertIn("--render", ref["command"])
         self.assertNotIn("#", ref["command"])
 
+    def test_delivery_constraints_are_scoped_to_each_mapped_placement(self):
+        md = """## 交付版本矩阵
+| 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |
+|---|---|---|---|---|---|---|
+| 主片 | 30s | 16:9 | master | 平台默认 | ⬜ | |
+| reframe 9:16 | 30s | 9:16 | reframe | 平台默认 | ⬜ | |
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "需求").mkdir()
+            (root / "需求" / "brief.json").write_text(json.dumps({
+                "platforms": ["YouTube", "TikTok"],
+                "placements": ["YouTube:in_stream", "TikTok:auction_in_feed"],
+                "deliverable_placements": {
+                    "master": ["YouTube:in_stream"],
+                    "reframe_9x16": ["TikTok:auction_in_feed"],
+                },
+            }), encoding="utf-8")
+            plan = deliver.build_plan(str(root), md)
+        master = next(row for row in plan["deliverables"] if row["deliverable_id"] == "master")
+        vertical = next(row for row in plan["deliverables"] if row["deliverable_id"] == "reframe_9x16")
+        self.assertEqual([s["placement_key"] for s in master["platform_constraints"]], ["YouTube:in_stream"])
+        self.assertEqual([s["placement_key"] for s in vertical["platform_constraints"]], ["TikTok:auction_in_feed"])
+
     def test_delivery_qc_measures_loudness_and_peak(self):
         item = {"deliverable_id": "master", "expected_path": "合成/成片_主片.mp4",
-                "duration": "30s", "aspect": "16:9", "loudness_lufs": -16.0, "true_peak_db": -1.0}
+                "duration": "30s", "aspect": "16:9", "loudness_lufs": -16.0, "true_peak_db": -1.0,
+                "delivery_profile": {"authority": "house_standard", "source": "test contract"},
+                "technical_profile": {
+                    "video_codec": "h264", "pixel_format": "yuv420p", "audio_codec": "aac",
+                    "audio_sample_rate": 48000, "frame_rate_min": 23.0, "frame_rate_max": 30.1,
+                    "color_primaries": "bt709", "color_transfer": "bt709", "color_space": "bt709",
+                    "color_range": "tv", "scan_type": "progressive",
+                    "min_bitrate_warn": 516000,
+                }}
         probe = {"format": {"duration": "30.0"}, "streams": [
-            {"codec_type": "video", "width": 1920, "height": 1080}, {"codec_type": "audio"},
+            {"codec_type": "video", "codec_name": "h264", "pix_fmt": "yuv420p",
+             "width": 1920, "height": 1080, "avg_frame_rate": "30/1", "bit_rate": "2000000",
+             "color_primaries": "bt709", "color_transfer": "bt709", "color_space": "bt709",
+             "color_range": "tv", "field_order": "progressive"},
+            {"codec_type": "audio", "codec_name": "aac", "sample_rate": "48000"},
         ]}
         with mock.patch.object(delivery_qc, "probe", return_value=probe), \
              mock.patch.object(delivery_qc, "measure_loudness", return_value={
@@ -241,6 +300,111 @@ class DeliverTest(unittest.TestCase):
             result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
         self.assertTrue(result["passed"])
         self.assertEqual(result["loudness"]["integrated_lufs"], -16.2)
+
+    def test_delivery_qc_rejects_codec_profile_drift(self):
+        item = {"deliverable_id": "master", "expected_path": "合成/成片_主片.mp4",
+                "duration": "30s", "aspect": "16:9", "loudness_lufs": -16.0, "true_peak_db": -1.0,
+                "delivery_profile": {"authority": "house_standard", "source": "test contract"},
+                "technical_profile": {
+                    "video_codec": "h264", "pixel_format": "yuv420p", "audio_codec": "aac",
+                    "audio_sample_rate": 48000, "frame_rate_min": 23.0, "frame_rate_max": 30.1,
+                    "min_bitrate_warn": 516000,
+                }}
+        probe = {"format": {"duration": "30.0"}, "streams": [
+            {"codec_type": "video", "codec_name": "hevc", "pix_fmt": "yuv420p10le",
+             "width": 1920, "height": 1080, "avg_frame_rate": "60/1"},
+            {"codec_type": "audio", "codec_name": "mp3", "sample_rate": "44100"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe), \
+             mock.patch.object(delivery_qc, "measure_loudness", return_value={
+                 "integrated_lufs": -16.0, "true_peak_db": -1.2, "lra": 4.0,
+             }):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        codes = {row["code"] for row in result["findings"]}
+        self.assertFalse(result["passed"])
+        self.assertTrue({"video_codec_mismatch", "pixel_format_mismatch", "frame_rate_mismatch",
+                         "audio_codec_mismatch", "audio_sample_rate_mismatch"} <= codes)
+
+    def test_delivery_qc_applies_target_platform_constraints(self):
+        item = {"deliverable_id": "master", "expected_path": "合成/成片_主片.mp4",
+                "duration": "30s", "aspect": "9:16", "loudness_lufs": -16.0, "true_peak_db": -1.0,
+                "delivery_profile": {"authority": "house_standard", "source": "test contract"},
+                "technical_profile": {"video_codec": "h264", "pixel_format": "yuv420p", "audio_codec": "aac",
+                                      "audio_sample_rate": 48000, "frame_rate_min": 23, "frame_rate_max": 31},
+                "platform_constraints": [{"platform": "TikTok", "aspect": "9:16", "allowed_aspects": ["9:16"],
+                                            "min_resolution": "540x960", "min_bitrate_bps": 516000}]}
+        probe = {"format": {"duration": "30.0"}, "streams": [
+            {"codec_type": "video", "codec_name": "h264", "pix_fmt": "yuv420p", "width": 360,
+             "height": 640, "avg_frame_rate": "30/1", "bit_rate": "300000"},
+            {"codec_type": "audio", "codec_name": "aac", "sample_rate": "48000"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe), \
+             mock.patch.object(delivery_qc, "measure_loudness", return_value={
+                 "integrated_lufs": -16.0, "true_peak_db": -1.2, "lra": 4.0,
+             }):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        codes = {row["code"] for row in result["findings"]}
+        self.assertIn("platform_resolution_below_minimum", codes)
+        self.assertIn("platform_bitrate_below_minimum", codes)
+
+    def test_delivery_qc_rejects_missing_bt709_metadata_when_profile_requires_it(self):
+        item = {"deliverable_id": "master", "expected_path": "合成/成片_主片.mp4",
+                "duration": "30s", "aspect": "16:9", "loudness_lufs": -16.0, "true_peak_db": -1.0,
+                "delivery_profile": {"authority": "house_standard", "source": "test"},
+                "technical_profile": {"video_codec": "h264", "pixel_format": "yuv420p", "audio_codec": "aac",
+                                      "audio_sample_rate": 48000, "frame_rate_min": 23, "frame_rate_max": 31,
+                                      "color_primaries": "bt709", "color_transfer": "bt709",
+                                      "color_space": "bt709", "color_range": "tv", "scan_type": "progressive"}}
+        probe = {"format": {"duration": "30.0"}, "streams": [
+            {"codec_type": "video", "codec_name": "h264", "pix_fmt": "yuv420p",
+             "width": 1920, "height": 1080, "avg_frame_rate": "30/1"},
+            {"codec_type": "audio", "codec_name": "aac", "sample_rate": "48000"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe), \
+             mock.patch.object(delivery_qc, "measure_loudness", return_value={
+                 "integrated_lufs": -16.0, "true_peak_db": -1.2, "lra": 4.0,
+             }):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        self.assertFalse(result["passed"])
+        self.assertIn("color_primaries_mismatch", {f["code"] for f in result["findings"]})
+
+    def test_delivery_qc_applies_placement_duration_constraints(self):
+        item = {"deliverable_id": "cut_6s", "expected_path": "合成/cut.mp4", "duration": "6s", "aspect": "9:16",
+                "loudness_lufs": -16.0, "true_peak_db": -1.0,
+                "delivery_profile": {"authority": "house_standard", "source": "test"},
+                "technical_profile": {"video_codec": "h264", "pixel_format": "yuv420p", "audio_codec": "aac",
+                                      "audio_sample_rate": 48000, "frame_rate_min": 23, "frame_rate_max": 31},
+                "platform_constraints": [{"placement_key": "YouTube:demand_gen", "allowed_aspects": ["9:16"],
+                                            "min_duration_seconds": 5, "in_stream_eligible_min_duration_seconds": 10}]}
+        probe = {"format": {"duration": "6.0"}, "streams": [
+            {"codec_type": "video", "codec_name": "h264", "pix_fmt": "yuv420p", "width": 1080,
+             "height": 1920, "avg_frame_rate": "30/1"},
+            {"codec_type": "audio", "codec_name": "aac", "sample_rate": "48000"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe), \
+             mock.patch.object(delivery_qc, "measure_loudness", return_value={
+                 "integrated_lufs": -16.0, "true_peak_db": -1.2, "lra": 4.0,
+             }):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        codes = {f["code"] for f in result["findings"]}
+        self.assertNotIn("placement_duration_below_minimum", codes)
+        self.assertIn("placement_in_stream_ineligible", codes)
+
+    def test_sound_off_placement_can_deliver_without_audio(self):
+        item = {"deliverable_id": "oop", "expected_path": "合成/oop.mp4", "duration": "10s", "aspect": "9:16",
+                "delivery_profile": {"authority": "house_standard", "source": "test"},
+                "technical_profile": {"video_codec": "h264", "pixel_format": "yuv420p",
+                                      "frame_rate_min": 23, "frame_rate_max": 31},
+                "platform_constraints": [{"placement_key": "TikTok:out_of_phone", "sound_mode": "sound_off",
+                                            "allowed_aspects": ["9:16"]}]}
+        probe = {"format": {"duration": "10.0"}, "streams": [
+            {"codec_type": "video", "codec_name": "h264", "pix_fmt": "yuv420p", "width": 1080,
+             "height": 1920, "avg_frame_rate": "30/1"},
+        ]}
+        with mock.patch.object(delivery_qc, "probe", return_value=probe):
+            result = delivery_qc.inspect_item(Path("/tmp/ad"), item)
+        self.assertTrue(result["passed"])
+        self.assertIn("sound_off_delivery", {f["code"] for f in result["findings"]})
 
 
 if __name__ == "__main__":

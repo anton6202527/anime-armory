@@ -103,12 +103,15 @@ def render_reframe(in_path, out_path, vf):
         return False, f"缺输入：{in_path}"
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     args = [ff, "-y", "-i", in_path, "-vf", vf,
-            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "copy", out_path]
+            "-c:v", "libx264", "-pix_fmt", "yuv420p",
+            "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv",
+            "-c:a", "copy", out_path]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         # 某些输入无音轨，-c:a copy 会报错；重试无音轨
         args2 = [ff, "-y", "-i", in_path, "-vf", vf, "-an",
-                 "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                 "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv", out_path]
         rc2 = subprocess.run(args2, capture_output=True, text=True)
         if rc2.returncode != 0:
             return False, f"reframe 渲染失败：{rc.stderr[-500:]}"

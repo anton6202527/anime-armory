@@ -8,7 +8,7 @@
 - **lyrics**：取 `词/lyrics.md` 的结构化歌词原文，保留 `[verse]/[chorus]` 等段标签，不摘要、不改写；`lyrics_sha256` 防止任务包与 manifest 漂移。
 - **style/prompt**：`skills/song/_lib/song_prompt_compiler.py` 把 style seed + `song_brief.sonic_identity/emotional_arc/hook_deadline_seconds` 编译成整体声音字段，不把参考包、文件路径、权利说明或挑版清单拼进去。
 - **后端字段映射**：Suno/Udio → `style + lyrics (+ title)`；ACE-Step → `prompt + lyrics + audio_duration`；DiffRhythm → `style_prompt + lyrics + duration`。以 `takes_manifest.json.takes[].submit_fields` 和 Markdown 的“后端编译提交字段”为准。
-- **任务包**：用 `scripts/compose_song.py <写歌根> --backend <后端> --takes N --duration 秒` 生成 schema v2 manifest；外部生成后仍按 manifest 登记/挑版。
+- **任务包**：用 `scripts/compose_song.py <写歌根> --backend <后端> --takes N --duration 秒` 生成 schema v3 manifest（含上游合同 hash 与 compose gate receipt）；外部生成后仍按 manifest 登记/六维盲听挑版。
 
 ## Suno / Udio（云·最快）
 - **web**：登录 → Custom 模式，只复制 take 的“后端编译提交字段”，将 lyrics/style/title 分别放到对应框 → 生成 → 下载 → `compose_song.py --register <文件> --take X`。
@@ -22,6 +22,7 @@ pip install -e .            # Mac: 走 MPS/CoreML
 acestep --lyrics "$(cat 词/lyrics.md)" --prompt "<style>" --duration 120 --out take_01.wav
 ```
 - 出歌后 `compose_song.py <写歌根> --register take_01.wav --take 1`；试听评分后 `--select take_01` 定稿。需要分离人声时再用 `place_song.py <写歌根> 歌/song.wav --split` 或 demucs。
+- ACE-Step v1.5 官方支持 `text2music / cover / repaint / lego / extract / complete`。试听报告有 timecode 问题时先跑 `revision_plan.py`：有明确区间的 ACE-Step job 编译为 `repaint`，修复结果必须登记为新 take；不要覆盖原音频。
 - 速度/质量先在 Mac 实测（像 LoRA 那样验证再定主力）。
 
 ## DiffRhythm 2（本地·扩散，偏 CUDA）

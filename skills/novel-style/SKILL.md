@@ -13,7 +13,7 @@ description: 文风指纹提取与漂移检测 — 对项目 Demo、自有/授�
 
 1. **指纹提取 (Fingerprint Extractor)**：`extract_style.py` 对样本做**可复现的文本统计**——句长分布(均长/中位/短句比/长句比)、对白占比(引号字符比)、虚词密度(的地得/标点/破折省略)、词频锚点(无分词环境下 2-4 字 n-gram 计数滤停用词)、节奏标签。
 2. **语义风格档案 (Semantic Profile)**：统计之外，指纹还可保存 `narrative_distance`、`pov_filter`、`metaphor_source`、`silence_habit`、`emotion_delivery`、`dialogue_attack_mode`。这些字段由 AI/人工填写，用来形成独特叙述人格，而不是未授权复刻某作者。
-2. **指纹用途**：① 写作时把指纹摘要注入 `novel-create`/`novel-continue` 的 prompt；② `--compare` 算两份指纹（锚点 vs 候选章）的**漂移分**，供 `novel-review` 当"文风漂移"机检（见 `novel-review/scripts/consistency_audit.py`）。
+3. **指纹用途**：① 写作时把指纹摘要注入 `novel-create`/`novel-continue` 的 prompt；② `--compare` 算两份指纹（锚点 vs 候选章）的**漂移分**，供 `novel-review` 当"文风漂移"机检（见 `novel-review/scripts/consistency_audit.py`）。
 
 ## 工作流
 

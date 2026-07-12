@@ -6,6 +6,7 @@ Reads the clip_plan.json, lyrics.md, and 视觉蓝图.md, and generates semantic
 prompts (action, camera, state) for each clip using an LLM integration.
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -56,6 +57,16 @@ def write_json(path, payload):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+def file_sha256(path):
+    if not path or not os.path.exists(path):
+        return ""
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def build_composer_prompt(clips, blueprint, lyrics):
@@ -155,6 +166,14 @@ def validate_semantic_data(plan, semantic_data, allow_partial=False):
             dur = float(plan_by_id[cid].get("duration") or 0)
             if peak < 0 or (dur and peak > dur + 0.05):
                 errors.append(f"{cid} action_peak_relative={peak} 超出 clip 时长 {dur}")
+            anchor = plan_by_id[cid].get("action_peak_anchor", plan_by_id[cid].get("action_peak_downbeat"))
+            start = plan_by_id[cid].get("start")
+            if anchor is not None and start is not None:
+                expected = float(anchor) - float(start)
+                if abs(peak - expected) > 0.08:
+                    errors.append(
+                        f"{cid} action_peak_relative={peak} 未对齐已签收音乐锚点 {expected:.3f}s（容差80ms）"
+                    )
         except (TypeError, ValueError):
             errors.append(f"{cid} action_peak_relative 不是秒数：{row.get('action_peak_relative')}")
     return errors
@@ -170,6 +189,8 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
     validation_errors = validate_semantic_data(plan, semantic_data, allow_partial=allow_partial)
     if validation_errors:
         raise ValueError("\n".join(validation_errors))
+    plan_path = os.path.join(root, "分镜", "clip_plan.json")
+    source_plan_sha256 = file_sha256(plan_path)
     clip_map = {c["clip_id"]: c for c in semantic_data.get("clips", [])}
     updated_count = 0
     
@@ -272,13 +293,25 @@ def apply_prompts(root, plan, semantic_data, allow_partial=False):
         updated_count += 1
         
     # Save the updated clip_plan.json
-    plan_path = os.path.join(root, "分镜", "clip_plan.json")
     write_json(plan_path, plan)
+    result_plan_sha256 = file_sha256(plan_path)
+    timeline_path = os.path.join(root, "分镜", "timeline_manifest.json")
+    timeline = load_json(timeline_path, {}) or {}
+    if timeline:
+        timeline["source_clip_plan_sha256"] = result_plan_sha256
+        timeline["semantic_prompts_applied"] = True
+        write_json(timeline_path, timeline)
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_semantic_prompts",
         "generated_at": date.today().isoformat(),
         "updated_clips": updated_count,
+        "source_clip_plan_sha256": source_plan_sha256,
+        "result_clip_plan_sha256": result_plan_sha256,
+        "inputs_sha256": {
+            "lyrics": file_sha256(os.path.join(root, "词", "lyrics.md")),
+            "blueprint": file_sha256(os.path.join(root, "视觉蓝图.md")),
+        },
         "clips": semantic_data.get("clips", []),
     }
     write_json(os.path.join(root, "分镜", "semantic_prompts.json"), payload)

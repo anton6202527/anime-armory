@@ -1,6 +1,6 @@
 # 出图后端矩阵（ad-image · 本线自持）
 
-`生图AI` 默认且优先 Codex / GPT Image 2（或官方 OpenAI Images）。非 Codex/OpenAI 只作为用户明确签核的单项目例外；签核文件为 `<作品根>/合规/image_backend_override.json`。
+新项目分列 `生图模型` 与 `生图渠道`：默认 `GPT Image 2` via `Codex CLI`（或官方 OpenAI Images API）。非默认具体模型只作为用户明确签核的单项目例外；签核文件为 `<作品根>/合规/image_backend_override.json`。旧 `生图AI` 仅供迁移，不得进入正式付费 job。
 
 | 后端 | 多参考 | 原生主体ID | 广告适配 |
 |---|---|---|---|

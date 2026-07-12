@@ -201,14 +201,29 @@ def build_report(root: Path, episode: Optional[str] = None) -> Dict[str, Any]:
         violations.append({"level": "critical", "metric": "cost_per_finished_min", "value": float(cost), "threshold": thresholds["max_cost_per_finished_min"], "action": "stop_batch_and_review_roi_or_backend"})
     if m.get("evidence_files", 0) == 0:
         violations.append({"level": "info", "metric": "evidence", "value": 0, "threshold": "n/a", "action": "no_batch_metrics_yet"})
+    if cost is None and m.get("evidence_files", 0) > 0:
+        # 有其它遥测但缺 dashboard 成本口径：成本 stop-loss 静默失效——留 warn 级违规提醒补账，
+        # 不 critical（成本缺失≠成本超标），但绝不再无声跳过（2026-07 标准审计）。
+        violations.append({"level": "warn", "metric": "cost_per_finished_min", "value": None,
+                           "threshold": thresholds["max_cost_per_finished_min"],
+                           "action": "run_dashboard_build_to_restore_cost_stop_loss"})
 
+    # 无任何遥测证据时 stop-loss 不可能测到超标——旧行为 status=pass 会让"空项目恒过 stop-loss"
+    # 冒充"已核过 stop-loss"。诚实降为 no_evidence（governance 只认 critical 停线，不受影响；
+    # release_verdict 的 strict 档按非 pass 处理，逼放量前先把遥测账建起来）。
+    if any(v["level"] == "critical" for v in violations):
+        status = "critical"
+    elif m.get("evidence_files", 0) == 0:
+        status = "no_evidence"
+    else:
+        status = "pass"
     return {
         "kind": "n2d_stop_loss",
         "version": VERSION,
         "root": str(root),
         "episode": episode or "",
         "generated_at": now_iso(),
-        "status": "critical" if any(v["level"] == "critical" for v in violations) else "pass",
+        "status": status,
         "thresholds": thresholds,
         "metrics": m,
         "violations": violations,

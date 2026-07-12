@@ -4,6 +4,7 @@
 # 用法: beat_detect.py <制MV作品根> [--meter 4]
 # 依赖: pip install librosa soundfile  （Mac 友好，纯 CPU 可跑）
 import sys, os, json, argparse, importlib.util
+from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
@@ -48,6 +49,28 @@ def declared_sections(meta, duration):
     return sorted(out, key=lambda row: row["start"])
 
 
+def section_coverage(sections, duration, tolerance=0.15):
+    """Validate that declared musical sections cover the whole song once.
+
+    Section names and artistic interpretation stay human-owned; this only
+    proves that the signed boundaries are ordered, contiguous and complete.
+    """
+    issues = []
+    if not sections:
+        return False, ["missing_sections"]
+    if abs(float(sections[0]["start"])) > tolerance:
+        issues.append("first_section_not_at_song_start")
+    for left, right in zip(sections, sections[1:]):
+        delta = float(right["start"]) - float(left["end"])
+        if delta > tolerance:
+            issues.append("section_gap")
+        elif delta < -tolerance:
+            issues.append("section_overlap")
+    if abs(float(sections[-1]["end"]) - float(duration)) > tolerance:
+        issues.append("last_section_not_at_song_end")
+    return not issues, list(dict.fromkeys(issues))
+
+
 def estimate_bar_phase(beat_frames, onset_env, meter, forced=None):
     if not len(beat_frames):
         return 0, 0.0, []
@@ -76,7 +99,12 @@ def main():
     ap.add_argument("--meter", type=int, default=4, help="每小节拍数（4/4 默认 4）")
     ap.add_argument("--downbeat-phase", type=int, help="人工指定 beat 序列中第几拍为小节首，0-based")
     ap.add_argument("--confirm-timing", action="store_true", help="确认拍号、小节相位和 section_timings 已人工复核")
+    ap.add_argument("--reviewer", help="配合 --confirm-timing，记录实际听歌复核人")
+    ap.add_argument("--notes", default="", help="节拍/段落边界复核备注")
     args = ap.parse_args()
+
+    if args.confirm_timing and not str(args.reviewer or "").strip():
+        sys.exit("--confirm-timing 必须同时提供 --reviewer；正式节拍确认不能匿名")
 
     song = mv_utils.find_song(args.root)
     if not song:
@@ -123,8 +151,15 @@ def main():
 
     out_dir = os.path.join(args.root, "节拍"); os.makedirs(out_dir, exist_ok=True)
     meta = load_meta(args.root)
+    sections = declared_sections(meta, dur)
+    sections_complete, section_issues = section_coverage(sections, dur)
+    timing_verified = bool(args.confirm_timing and beats and downbeats and sections_complete)
     grid = {
+        "schema_version": 2,
+        "kind": "mv_beatgrid",
+        "generated_at": date.today().isoformat(),
         "song": os.path.relpath(song, args.root),
+        "source_audio_sha256": mv_utils.content_hash(song),
         "duration": round(dur, 3),
         "bpm": round(bpm, 2),
         "tempo_candidates": tempo_candidates(bpm),
@@ -137,20 +172,48 @@ def main():
         "downbeat_phase_scores": phase_scores,
         "tempo_curve": tempo_curve,
         "energy_map": energy_map,        # 粗能量曲线：mv-plan / 人工校正用
-        "sections": declared_sections(meta, dur),
-        "section_source": "meta_section_timings" if declared_sections(meta, dur) else "unconfirmed",
-        "timing_verified": bool(args.confirm_timing and (args.downbeat_phase is not None or phase_confidence >= 0.15)),
-        "note": "downbeats 默认仅为 onset 相位估算，不等于人工确认的小节首；正式规划前确认拍号/相位/段落边界。",
+        "sections": sections,
+        "section_source": "meta_section_timings" if sections else "unconfirmed",
+        "sections_complete": sections_complete,
+        "section_coverage_issues": section_issues,
+        "downbeats_verified": bool(args.confirm_timing and beats and downbeats),
+        "sections_verified": bool(args.confirm_timing and sections_complete),
+        "timing_verified": timing_verified,
+        "timing_review": {
+            "accepted": timing_verified,
+            "reviewer": str(args.reviewer or "").strip(),
+            "date": date.today().isoformat() if args.confirm_timing else "",
+            "notes": args.notes,
+            "confirmed_meter": args.meter,
+            "confirmed_downbeat_phase": phase,
+        },
+        "analysis_contract": {
+            "engine": "librosa_hpss_beat_track+human_bar_phase_and_sections",
+            "meter": args.meter,
+            "hop_length": 512,
+            "section_tolerance_sec": 0.15,
+        },
+        "note": "自动 beat/downbeat 只提供候选；正式规划要求具名听歌复核且 section_timings 完整覆盖全曲。",
     }
     out = os.path.join(out_dir, "beatgrid.json")
     json.dump(grid, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     mv_utils.update_meta_flags(args.root)
     # 只盖 beat 阶段；song_ingest（歌曲入库/定稿）由 song/用户上传线拥有，
     # 卡点检测对占位/真歌都会跑，不能据此判定"歌曲已正式入库"（否则后配歌曲模式状态机失真）。
-    mv_utils.update_progress_stage(args.root, "beat")
-    print(f"[ok] BPM={grid['bpm']} 拍数={len(beats)} 小节首={len(downbeats)} 时长={grid['duration']}s → {out}")
+    if meta.get("is_demo") or timing_verified:
+        mv_utils.update_progress_stage(args.root, "beat")
+    print(f"[ok] BPM={grid['bpm']} 拍数={len(beats)} 小节首={len(downbeats)} 段落={len(sections)} 时长={grid['duration']}s → {out}")
+    if not timing_verified:
+        print("[warn] timing_verified=false：需在 _meta.section_timings 写完整段落边界，并用 --confirm-timing --reviewer <name> 具名复核")
+        if not meta.get("is_demo"):
+            print("[info] 正式项目尚未推进 beat 阶段；候选网格可供听审，但下游 gate 不会放行")
     next_script = "mv-script 复核 rough 蓝图" if meta.get("song_timing") == "后配歌曲" else "mv-script 创作视觉蓝图"
-    print(f"[next] {next_script} → mv-plan 正式时间线 → mv-image → mv-video → mv-lyric-sync → mv-compose")
+    needs_lyrics_timeline = (
+        meta.get("subtitle_language", "中文") != "无字幕"
+        or meta.get("lip_sync_mode", "仅正面演唱镜") != "关闭"
+    )
+    lyric_step = "mv-lyric-sync 歌词时间轴 → " if needs_lyrics_timeline else ""
+    print(f"[next] {lyric_step}{next_script} → mv-plan → mv-score → mv-image → picture lock → mv-video → mv-compose")
 
 
 if __name__ == "__main__":

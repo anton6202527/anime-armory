@@ -21,18 +21,18 @@ description: 在正式调用生图后端/生视频模型消耗大量积分前，
 python3 skills/mv-score/scripts/score_pacing.py 创作区/制MV/<曲名>/ [--json]
 ```
 
-它读 `分镜/clip_plan.json` + `节拍/beatgrid.json`（+ 成品歌量真长，缺则退回 beatgrid.duration），输出 `评分/pacing_prescore.json`，四个机器指标 + 一个 `pacing_score`(0-10) 机器先验：
+它读 `分镜/clip_plan.json` + `节拍/beatgrid.json` + 正式歌，输出 `评分/pacing_prescore.json`，并绑定当前 plan/beatgrid/song 的完整 SHA-256。四个机器指标 + 一个 `pacing_score`(0-10) 机器先验：
 
 1. **等长 clip CV** —— `(极差/均值)` 过低 → 疑似等长不卡点（MV 命门）。
 2. **总时长 vs 歌长** —— 规划 clip 总时长是否≈歌长（容差按 10% 取大）。
 3. **切点踩鼓点率** —— clip 内部边界落在 downbeat ±容差内的比例。
 4. **副歌 vs 主歌密度对比** —— 副歌 clips/秒 是否 ≥ 主歌（>1 = 副歌更快切，符合规律）。
 
-**同源引擎**：这四个指标来自共享模块 `mv-craft/scripts/pacing.py`（纯函数、无 IO），与 `mv-review`（`mv_check.py` 的事后质检）**共用同一套数学**——事前闸门和事后体检对"卡点节奏"的判据完全一致，不再各写一份。机器先验**不替代** LLM 终判：它只是把"卡点与节奏张力"这一维从凭感觉提升为有量化依据。
+**同源引擎**：这四个指标来自本线共享模块 `mv-craft/scripts/pacing.py`，与 `mv-review` 共用同一套数学。机器先验**不替代**剪辑判断：实验性等长构图、长镜头 MV 或故意反拍都可能是成立的创意；报告负责暴露事实，只有项目显式给 `--threshold` 才把主观策略升级为硬闸门。
 
 ## pre-spend 真闸门 + 受影响 clip 回流（--threshold / --enqueue）
 
-不给阈值时它只是**建议性**机检（exit 0，供 LLM 参考）。给 `--threshold` 后它升级为**花积分前的真闸门**：综合 `pacing_score`（折百分制）或任一关键卡点维度（疑等长 / 总时长差大 / 踩鼓点率<0.5 / 副歌不快）低于阈值 → **exit 1 拦截**，在出图/出视频前把平庸/不卡点的分镜挡下来，并打印「该回哪个上游 stage」。
+不给阈值时它仍是正式流程必有的**新鲜证据收据**（exit 0，不以启发式审美阻断）。给 `--threshold` 代表项目/导演明确选择该节奏策略，才升级为花积分前真闸门：综合分或关键维度低于阈值 → exit 1，并给出回流 stage。
 
 ```bash
 # 阈值≤10 视为十分制（贴 pacing_score）；>10 视为百分制（贴综合分）
@@ -69,9 +69,9 @@ python3 skills/mv-score/scripts/score_pacing.py 创作区/制MV/<曲名>/ --thre
 2. **LLM 语义评分**：结合音乐的结构（如 BPM 和段落）**和上一步的机器预评分**，分析目前的镜头切分和画面内容，按上述维度打分。卡点/节奏维度以 `pacing_prescore.json` 的量化结果为依据。
    - 评分时必须检查 `action_family/action_peak/visual_motif/transition_motif` 是否存在且服务歌曲；缺失则建议回 `mv-plan` 语义分镜引擎补全。
 3. **决策与回流**：先跑带 `--threshold` 的真闸门（见上节）；exit 1 即在出图前被挡，按 `affected_clips` / `回流清单.json` 回到对应上游 stage（卡点→mv-plan、蓝图→mv-script、崩脸→mv-image）。LLM 综合判读：
-   - **高分 (≥80)**：概念极佳，可以放心推进到 `mv-image` 出图。
-   - **中分 (60-79)**：局部修改（如把副歌某几个平淡的镜头改成强烈的冲击镜头），然后推进。
-   - **低分 (<60)**：打回 `mv-plan` 甚至重新梳理 `视觉蓝图.md`。
+   - **≥80**：若语义审片也通过，可推进出图。
+   - **60–79**：定位到具体 clip 局部调整，再重跑本报告。
+   - **<60**：建议回 `mv-plan` / `mv-script`；除非项目已显式设 threshold，否则分数本身不是自动拒产理由。
 
 ## 执行方式
 先跑确定性卡点前奏（0 积分），再让 LLM 在其量化结果上做语义评分：

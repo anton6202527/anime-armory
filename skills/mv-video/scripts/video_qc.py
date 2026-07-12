@@ -271,11 +271,10 @@ def check_clip(root, clip, expected_aspect):
     }
 
 
-def seam_rows(clip_rows):
+def seam_rows(clips, clip_rows):
     rows = []
-    for prev, cur in zip(clip_rows, clip_rows[1:]):
-        pf = prev.get("findings") or []
-        cf = cur.get("findings") or []
+    for prev_clip, prev, cur in zip(clips, clip_rows, clip_rows[1:]):
+        contract = prev_clip.get("seam_contract") or (prev_clip.get("continuity") or {}).get("outgoing_seam") or {}
         risk = []
         if prev.get("verdict") != "ok" or cur.get("verdict") != "ok":
             risk.append("adjacent_clip_has_qc_warning")
@@ -287,7 +286,18 @@ def seam_rows(clip_rows):
         cur_start = next((f for f in cur.get("frame_samples", []) if f.get("label") == "start"), {})
         dist = color_distance((prev_end.get("stats") or {}), (cur_start.get("stats") or {}))
         if dist is not None and dist > 120:
-            risk.append("large_color_delta_review")
+            if contract.get("continuity_required"):
+                risk.append("large_color_delta_breaks_continuous_seam")
+        seam_similarity = hash_similarity(
+            (prev_end.get("stats") or {}).get("perceptual_hash"),
+            (cur_start.get("stats") or {}).get("perceptual_hash"),
+        )
+        if contract.get("continuity_required"):
+            adherence = (prev.get("visual_adherence") or {}).get("end_frame") or {}
+            if not adherence:
+                risk.append("continuous_seam_missing_end_frame_evidence")
+            if seam_similarity is not None and seam_similarity < 0.35:
+                risk.append("continuous_seam_large_structure_jump")
         rows.append({
             "from": prev.get("clip_id"),
             "to": cur.get("clip_id"),
@@ -295,7 +305,11 @@ def seam_rows(clip_rows):
             "end_frame": prev_end.get("path"),
             "start_frame": cur_start.get("path"),
             "mean_rgb_distance": dist,
-            "manual_review": "检查前一镜尾帧到后一镜首帧：脸、衣服、剑、场景方向、字幕安全区和卡点切点",
+            "perceptual_similarity": seam_similarity,
+            "seam_contract": contract,
+            "manual_review": contract.get("review") or [
+                "identity", "wardrobe_props", "screen_direction", "subtitle_safe_area", "beat_hit"
+            ],
         })
     return rows
 
@@ -343,13 +357,13 @@ def build_report(root):
     face_mode = apply_face_identity_qc(root, merged, clip_rows)
     hard = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "block")
     warn = sum(1 for r in clip_rows for f in r.get("findings", []) if f.get("level") == "warn")
-    seams = seam_rows(clip_rows)
+    seams = seam_rows(merged, clip_rows)
     sampled = sum(1 for r in clip_rows for f in r.get("frame_samples", []) if f.get("ok"))
     input_paths = ("分镜/clip_plan.json", "分镜/timeline_manifest.json")
     selected_hashes = {row.get("video_path"): mv_utils.content_hash(os.path.join(root, row.get("video_path")))
                        for row in merged if row.get("video_path") and os.path.exists(os.path.join(root, row.get("video_path")))}
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_video_qc",
         "generated_at": date.today().isoformat(),
         "root": root,
@@ -433,8 +447,11 @@ def main():
             "date": date.today().isoformat(),
             "notes": args.notes,
             "dimensions": ["identity", "hair_wardrobe", "props", "scene_topology", "screen_direction",
-                           "pose_motion", "lip_sync_if_applicable", "style_color", "subtitle_safe_area"],
+                           "pose_motion", "seam_intent_by_class", "lip_sync_if_applicable", "style_color", "subtitle_safe_area"],
             "bound_video_sha256": report.get("selected_video_sha256") or {},
+            "bound_seam_contract_sha256": mv_utils.json_hash([
+                seam.get("seam_contract") or {} for seam in report.get("seams") or []
+            ]),
         }
     path = write_report(root, report)
     print(f"[ok] video QC → {path} ({report['summary']['verdict']})")

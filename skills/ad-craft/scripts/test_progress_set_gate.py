@@ -22,6 +22,11 @@ class ProgressSetTest(unittest.TestCase):
         out = progress_set.set_deliverable_text(md, "cut_15s", "✅", "合成/cutdown/成片_15s.mp4")
         self.assertIn("| cutdown 15s | 15s | 16:9 | cutdown | 平台默认 | ✅ | 合成/cutdown/成片_15s.mp4 |", out)
 
+    def test_stage_acceptance_blocks_false_brief_completion(self):
+        with tempfile.TemporaryDirectory() as root:
+            with self.assertRaises(ValueError):
+                progress_set.require_stage_acceptance(root, "brief")
+
 
 class GateTest(unittest.TestCase):
     def _write_json(self, root, rel, payload):
@@ -39,12 +44,22 @@ class GateTest(unittest.TestCase):
             "campaign_objective": "转化行动",
             "measurement": {"primary_kpi": "CVR", "conversion_event": "完成下单"},
             "claims": [{
-                "claim": "48小时内烘焙", "evidence": "批次烘焙记录",
+                "id": "claim_01", "claim": "48小时内烘焙", "evidence_type": "brand_fact",
+                "evidence": "批次烘焙记录",
                 "evidence_file": "证据/批次记录.pdf", "method": "按批次核验",
                 "sample": "2026Q3 全批次", "date": "2026-07-01",
                 "territory": "中国大陆", "approved_by": "法务甲",
             }],
-            "rights": {"talent": "未使用真人", "music": "授权曲库", "fonts": "思源黑体", "assets": "自有素材"},
+            "rights": {
+                "talent": {"status": "not_used", "territory": "中国大陆", "media_scope": "all", "approved_by": "制片甲"},
+                "music": {"status": "licensed", "evidence_file": "证据/music.pdf", "territory": "中国大陆",
+                          "media_scope": "paid ad", "validity": "2026", "valid_from": "2026-01-01",
+                          "valid_until": "2026-12-31", "approved_by": "制片甲"},
+                "fonts": {"status": "owned", "evidence_file": "证据/font.pdf", "territory": "中国大陆",
+                          "media_scope": "all", "validity": "perpetual", "approved_by": "设计甲"},
+                "assets": {"status": "owned", "evidence_file": "证据/assets.md", "territory": "中国大陆",
+                           "media_scope": "all", "validity": "owned", "approved_by": "制片甲"},
+            },
             "mandatories": {"legal_lines": ["广告"]},
         })
         self._write_json(root, "脚本/广告法机检报告.json", {"summary": {"block": 0, "warn": 0}})
@@ -54,6 +69,14 @@ class GateTest(unittest.TestCase):
         }]})
         self._write_json(root, "脚本/镜头时长.json", {"findings": []})
         self._write_json(root, "配音/时长清单.json", {"has_placeholder": False, "lines": []})
+        os.makedirs(os.path.join(root, "证据"), exist_ok=True)
+        with open(os.path.join(root, "证据", "批次记录.pdf"), "wb") as f:
+            f.write(b"evidence")
+        for name in ("music.pdf", "font.pdf", "assets.md"):
+            with open(os.path.join(root, "证据", name), "wb") as f:
+                f.write(b"rights")
+        with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+            f.write("# 设置\n\n- 生图模型: GPT Image 2\n- 生图渠道: Codex CLI\n")
 
     def test_image_gate_passes_base_project(self):
         with tempfile.TemporaryDirectory() as root:
@@ -95,7 +118,8 @@ class GateTest(unittest.TestCase):
     def test_image_gate_blocks_forbidden_backend(self):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
-            self._write_json(root, "_meta.json", {"image_backend": "即梦"})
+            with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- 生图模型: Dreamina Image 5.0\n- 生图渠道: 即梦\n")
             payload = gate.run_gate(root, "image")
             self.assertTrue(any(f["code"] == "image_backend_forbidden" and f["severity"] == "block"
                                 for f in payload["findings"]))
@@ -103,7 +127,8 @@ class GateTest(unittest.TestCase):
     def test_image_gate_requires_signoff_for_non_codex_backend(self):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
-            self._write_json(root, "_meta.json", {"image_backend": "Dreamina/即梦官方 CLI"})
+            with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- 生图模型: Seedream 4.5\n- 生图渠道: BytePlus ModelArk API\n")
             payload = gate.run_gate(root, "image")
             self.assertTrue(any(f["code"] == "image_backend_non_codex_requires_signoff"
                                 and f["severity"] == "block" for f in payload["findings"]))
@@ -111,11 +136,12 @@ class GateTest(unittest.TestCase):
     def test_image_gate_accepts_signed_non_codex_backend_exception(self):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
-            self._write_json(root, "_meta.json", {"image_backend": "Dreamina/即梦官方 CLI"})
+            with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# 设置\n\n- 生图模型: Seedream 4.5\n- 生图渠道: BytePlus ModelArk API\n")
             self._write_json(root, "合规/image_backend_override.json", {
                 "approved": True,
                 "scope": "image",
-                "backend": "dreamina_official",
+                "backend": "seedream",
                 "reason": "用户明确指定的单项目例外",
             })
             payload = gate.run_gate(root, "image")
@@ -126,8 +152,8 @@ class GateTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
             with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
-                f.write("# 设置\n\n- 生图AI: Codex\n")
-            self._write_json(root, "_meta.json", {"image_backend": "Seedream"})
+                f.write("# 设置\n\n- 生图模型: GPT Image 2\n- 生图渠道: Codex CLI\n")
+            self._write_json(root, "_meta.json", {"image_model": "Seedream 4.5", "image_channel": "BytePlus ModelArk API"})
             payload = gate.run_gate(root, "image")
             self.assertTrue(any(f["code"] == "image_backend_mixed" and f["severity"] == "block"
                                 for f in payload["findings"]))
@@ -177,11 +203,12 @@ class GateTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             self._base_project(root)
             with open(os.path.join(root, "_设置.md"), "w", encoding="utf-8") as f:
-                f.write("# 设置\n\n- 生图AI: Codex\n")
+                f.write("# 设置\n\n- 生图模型: GPT Image 2\n- 生图渠道: Codex CLI\n")
             os.makedirs(os.path.join(root, "出图", "分镜", "图片"), exist_ok=True)
             open(os.path.join(root, "出图", "分镜", "图片", "镜头1.png"), "wb").write(b"png")
             self._write_json(root, "出图/分镜/image_jobs_manifest.json", {
-                "jobs": [{"job_id": "shot_01_first", "status": "done", "backend": "Dreamina/即梦官方 CLI"}],
+                "jobs": [{"job_id": "shot_01_first", "status": "done",
+                          "model": "Dreamina Image 5.0", "channel": "Dreamina/即梦官方 CLI/API"}],
             })
             self._write_json(root, "出图/分镜/product_qc.json", {
                 "summary": {"block": 0, "warn": 0},
@@ -318,14 +345,14 @@ class ContractDeliverableTest(unittest.TestCase):
         kinds = {r["kind"] for r in rows}
         self.assertIn("reframe", kinds)
         aspects = {r["aspect"] for r in rows if r["kind"] == "reframe"}
-        self.assertTrue({"9:16", "1:1"}.issubset(aspects))
+        self.assertTrue({"9:16", "4:5", "1:1"}.issubset(aspects))
 
     def test_single_aspect_no_reframe(self):
         rows = contract.default_deliverables("30s", "16:9", "主片+15s")
         self.assertFalse(any(r["kind"] == "reframe" for r in rows))
 
     def test_reconfirm_includes_costly_points(self):
-        for cp in ("生图AI", "生视频模型", "生视频渠道", "出视频规格"):
+        for cp in ("生图模型", "生图渠道", "生视频模型", "生视频渠道", "出视频规格"):
             self.assertIn(cp, contract.RECONFIRM_CHOICE_POINTS)
 
     def test_channel_menu_has_no_alias_dupes(self):

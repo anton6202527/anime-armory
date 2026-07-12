@@ -130,7 +130,38 @@ def classify_human_gate(stop_reason: str) -> Dict[str, Any]:
     return {"required": False, "reason": ""}
 
 
+def next_action_schema_gaps(next_action: Any) -> List[str]:
+    """NextAction 最小 schema 校验（2026-07 标准审计）：此前 dispatch_for 全 `.get()` 兜底，
+    run.py 返回结构漂移（缺 frontier/stop_reason）会被静默降级成 stage_key='' 的空计划。
+    结构漂移应升人审而不是空转。纯函数·可测。"""
+    gaps: List[str] = []
+    if not isinstance(next_action, dict):
+        return ["next_action 不是 dict"]
+    if not isinstance(next_action.get("frontier"), dict):
+        gaps.append("缺 frontier")
+    if not str(next_action.get("stop_reason") or "").strip():
+        gaps.append("缺 stop_reason")
+    if not isinstance(next_action.get("action_card"), dict):
+        gaps.append("缺 action_card")
+    return gaps
+
+
 def dispatch_for(next_action: Dict[str, Any]) -> Dict[str, Any]:
+    schema_gaps = next_action_schema_gaps(next_action)
+    if schema_gaps:
+        return {
+            "stage_key": "",
+            "stop_reason": "next_action_schema_drift",
+            "specialist": None,
+            "should_call_specialist": False,
+            "human_gate": {"required": True, "reason": "next_action_schema_drift"},
+            "schema_gaps": schema_gaps,
+            "action_contract": None,
+            "context_pack": None,
+            "creative_loop": None,
+            "allowed_operations": [],
+            "forbidden_operations": ["any automated dispatch until run.py next output is repaired"],
+        }
     frontier = next_action.get("frontier") or {}
     stage_key = str(frontier.get("stage_key") or "")
     stop_reason = str(next_action.get("stop_reason") or "")
@@ -190,6 +221,12 @@ def build_plan(root: str, ep: Optional[str] = None, *, auto: bool = False,
         dispatch["constraints_drift"] = (
             f"回带约束指纹 {echo_fingerprint} ≠ 当前 {guardrails['constraints_fingerprint']}："
             "消费 agent 可能已丢失/篡改 forbidden 或 human_gate 约束 → 停止自动派发，重新同步约束后再继续。")
+    elif echo_fingerprint is None and track_rounds and effective_round > 0:
+        # 漂移检测是 opt-in（消费方须回带 --echo-fingerprint）；多轮自动派发却从不回带时，
+        # 该护栏形同虚设——显式标注"未验证"让人/上层编排看得见，而不是静默跳过（2026-07 审计）。
+        dispatch["constraints_echo_unverified"] = (
+            f"第 {effective_round} 轮自动派发未回带约束指纹（--echo-fingerprint）：约束漂移检测未生效，"
+            "消费 agent 是否仍持有 forbidden/human_gate 约束无法验证。")
     dispatch["runtime_guardrails"] = guardrails
     payload = {
         "kind": KIND,

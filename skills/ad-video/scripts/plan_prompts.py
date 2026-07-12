@@ -118,7 +118,7 @@ def motion_instruction(shot: Mapping[str, Any], route_item: Mapping[str, Any]) -
     if "界面" in scene or "UI" in shot_text.upper() or "手机" in shot_text:
         return "镜头运动：缓慢推镜头；速度=缓慢；方向=沿手机/UI 正面轻推；起止=UI 保持 center 4x4，卡片轻微视差，不变形、不乱码。"
     if "主角" in shot_text or "人物" in scene or "情绪" in scene:
-        return "镜头运动：手持晃动或稳定器跟拍；速度=轻微；方向=随人物微动；起止=人物表演自然，手机/UI 保持可读并留在中心安全区。"
+        return "镜头运动：手持晃动或稳定器跟拍；速度=轻微；方向=随人物微动；起止=人物表演自然，手机/UI 保持可读并留中心构图余量；最终按 placement 模板复核。"
     return "镜头运动：稳定器跟拍或移镜头；速度=匀速；方向=顺主体动线；起止=保持首帧构图和 action-safe 边距，不使用快速甩镜。"
 
 

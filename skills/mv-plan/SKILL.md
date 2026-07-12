@@ -22,7 +22,7 @@ description: 制MV clip/timeline 规划 — 从 视觉蓝图 + lyrics + beatgrid
 - `出视频/prompt/Clip_XXX.md`：视频 motion prompt 任务。
 - `分镜/semantic_prompts.json`：语义分镜引擎补写后的结构化留痕。
 
-`clip_plan.json` 除时间线外还要沉淀 MV 的导演和一致性字段：`action_family`、`action_peak`、`visual_motif`、`transition_motif`、`shot_design`、`identity_contract`、`reference_inputs`、`asset_ids`，以及 continuity 内的身份/服装/道具状态、场景拓扑、屏幕方向、视线、动作向量和光线状态。字段由本阶段初填，语义分镜引擎精修，后续直接消费。
+`clip_plan.json` 除时间线外还要沉淀 MV 的导演和一致性字段：`inputs_sha256`、`section_contract`、`action_family`、实际落在确认拍的 `action_peak`、`visual_motif`、`transition_motif`、`seam_contract`、`shot_design`、`identity_contract`、`reference_inputs`、`asset_ids`，以及 continuity 内的身份/服装/道具状态、场景拓扑、屏幕方向、视线、动作向量和光线状态。字段由本阶段初填，语义分镜引擎精修，后续直接消费。
 
 ## 用法
 
@@ -34,19 +34,23 @@ python3 skills/mv-plan/scripts/plan_clips.py "<制MV作品根>" --granularity �
 ## 工作流
 
 1. 先跑 `mv-beat` 得到 `节拍/beatgrid.json`。没有最终歌/beatgrid 时不得用 rough 蓝图硬拆正式 timeline。
-2. 跑本脚本 `plan_clips.py`。脚本入口会先过 `mv-craft/scripts/gate.py plan`：缺 `歌/song.*`、`词/lyrics.md`、`beatgrid.json`、`视觉蓝图.md` 或后配歌曲仍是 rough 蓝图时直接阻断；成功后生成 clip/timeline 框架并回写 `_进度.md` 的 `plan` 行。
-3. **【AI 代理交互节点】**：跑完 `plan_clips.py` 后，AI 代理**必须**主动向用户提问（使用 `ask_user` 或直接对话）：“是否需要开启「语义分镜引擎」为你自动规划每个镜头的具体画面和动作？”
-   - 如果用户同意，AI 代理负责执行 `python3 skills/mv-plan/scripts/compose_prompts.py <作品根>`，读取输出的 prompt 并利用自身的 LLM 能力生成包含画面语义的 JSON，然后通过 `--mock-assessment` 注写入项目。
+2. 跑本脚本 `plan_clips.py`。脚本入口会先过 `mv-craft/scripts/gate.py plan`：缺正式歌、beatgrid、视觉蓝图或后配歌曲仍是 rough 时阻断；需要字幕/唱演口型时也要求 `词/lyrics.md`，纯器乐且“无字幕+关闭口型”可合法无歌词。成功后生成 clip/timeline 框架并回写 `_进度.md`。
+3. 跑语义分镜引擎。demo 可先查看框架；**正式付费出图必须注入覆盖全部 clip 的具体画面/动作并落 hash 收据**。AI 代理先把 `compose_prompts.py` 输出交给用户/导演复核，再用 `--mock-assessment` 注入；不得把通用动作占位直接送下游。
    - 语义补全时读取 `mv-video/references/action_knowledge.md`（动作家族/动作峰值/转场母题）和 `mv-image/references/visual_consistency.md`（身份锚点/主色/母题），优先补 `action_family/action_peak/visual_motif/transition_motif/shot_design`，再补 continuity；写回时同步落 `分镜/semantic_prompts.json`，便于复查和重跑。`compose_prompts.py` 默认要求覆盖全部 clip，缺字段会报错；临时局部注入才用 `--allow-partial`。
 4. 跑 `mv-craft/scripts/identity_registry.py <作品根>`，生成身份/资产/参考注册表。
-5. `mv-image` 按 `clip_plan.json` 出首帧和需要的尾帧。
-6. `mv-video/scripts/video_jobs.py` 按 `clip_plan.json` 生成视频任务包。
-7. `mv-compose` 按 `timeline_manifest.json` 合成。
+5. 跑 `mv-score` 产绑定当前 plan/beatgrid/song 的 deterministic pacing receipt；不设 `--threshold` 时只给证据、不把审美启发式做硬挡。
+6. `mv-image` 按 `clip_plan.json` 出首帧和 `match_action` 接缝需要的尾帧，并登记每张图的 model/channel/prompt/hash 收据。
+7. `mv-craft` 生成 production pack、真实 animatic、OTIO 并完成具名 picture lock。
+8. `mv-video/scripts/video_jobs.py` 按锁定计划生成逐 clip 任务和可用的多镜头 `sequence_units`。
+9. `mv-compose` 按 `timeline_manifest.json` 合成。
 
 ## 原则
 
-- 没有 sections 时按 `_meta.structure` 等分歌曲，先给可跑计划；后续可人工改 sections 重跑。
-- 副歌/高潮按 downbeat 密切，verse 按多小节缓切。
+- demo 没有 sections 时可产标为 `unverified_lyric_weight_estimate` 的脚手架；正式项目必须由 `_meta.section_timings` 具名确认并完整覆盖全曲，绝不把歌词字数估算伪装成音乐段落。
+- `max_clips` 只是成本目标，不得吞并 verse→chorus 等签收段落边界。
+- 副歌/主歌密度由歌曲与创意决定；切点取确认网格，机器报告密度，不用固定公式替代剪辑判断。
+- 默认 `speed_mode=trim_hold`，保留动作原速度；逐镜显式 `retime` 才允许变速。
+- 接缝必须分类：`beat_cut`/`section_break` 允许有意跳变，`match_action` 要尾帧目标并锁姿态相位、方向、视线、道具和光位，`terminal` 要稳定收束。
 - `timeline_manifest.json` 是合成真值源；不要让 `mv-compose` 再凭文件名猜顺序。
 - MV 不做跨集强一致，但同一首歌内必须继承视觉一致性包；动作知识库只提供可选动作家族，不覆盖歌曲情绪。
 - 每个 clip 必须像传统 MV shot list 一样写清景别、机位、运镜、焦段感、走位、光影、场景 setup、首尾状态和参考输入；不要只写“好看/炫酷”。

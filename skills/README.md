@@ -19,17 +19,17 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## Skills 规模统计
 
-> 统计时间：2026-07-11。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
+> 统计时间：2026-07-12。`SKILL.md 总行数` 仅统计 `skills/*/SKILL.md` 的物理行数（`wc -l`）；`目录文本总行数` 统计每个 skill 目录下的 `.md/.py/.sh/.json/.html` 文本文件，包含 `scripts/`、`references/`、测试与示例，排除 `__pycache__/*.pyc`、根级 README/偏好文档与项目产物。原 `skills/common/` 公共层已删除，不再单独计入。
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4677 | 257657 |
-| novel | `novel` + `novel-*` | 29 | 3134 | 66265 |
-| comic | `comic` + `comic-*` | 13 | 1002 | 20403 |
-| song | `song` + `song-*` | 11 | 622 | 8043 |
-| mv | `mv` + `mv-*` | 14 | 1070 | 16203 |
-| ad | `ad` + `ad-*` | 14 | 900 | 19828 |
-| **合计** | `skills/*/SKILL.md` | **102** | 11405 | 388399 |
+| n2d | `n2d` + `n2d-*` | 21 | 4689 | 258799 |
+| novel | `novel` + `novel-*` | 29 | 3137 | 66632 |
+| comic | `comic` + `comic-*` | 13 | 1028 | 21489 |
+| song | `song` + `song-*` | 11 | 657 | 9850 |
+| mv | `mv` + `mv-*` | 14 | 1100 | 18659 |
+| ad | `ad` + `ad-*` | 14 | 970 | 27624 |
+| **合计** | `skills/*/SKILL.md` | **102** | 11581 | 403053 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
@@ -152,10 +152,10 @@ novel 负责从点子/源书/派生需求生产可审计文本资产，产物落
 | 外传/视角 | `novel-spinoff` | 锁定原事件，换角色 POV 或写配角外传 |
 | 质检 | `novel-review` | OOC、视角、设定、节奏、伏笔、文风漂移、逐章读者契约与弧段 gate、流程自审 |
 | 专业编辑 | `novel-edit` | 发展性编辑、行文编辑、拷贝编辑、校样四层编辑计划；把 review/score/balance/feedback/scene cards 汇总成投稿前修订轮次，并产 editorial letter / style sheet / proof checklist |
-| 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，输出 go/revise/kill 决策 |
+| 市场评分 | `novel-score` | 当前市场基准 + 证据质量 + 第一方投放战绩 + 真实读者反馈 + 模拟读者信号 + 参考分布百分位，八维评分（含新颖度/想象力正向维度），输出 go/revise/kill 决策 |
 | 专业资料包 | `novel-research` | 医疗/法律/刑侦/金融/军事/历史/宗教/海外/科技/职业文等专业场景的证据层：产 `research_needs` / `research_jobs`、`资料/专业资料包_<主题>.md` + `research_sources.json` + `research_scene_usage.json`，来源含五轴评估并把事实映射到章节/场景，支持 `research_required_domains` 必需领域，刷新审计产 `research_refresh_plan.md`，写章包自动引用，review/export 阻断缺失或过期高风险资料包 |
 | 文风 | `novel-style` | 文风指纹、样本授权、漂移检查 |
-| 动态百科 | `novel-wiki` | 人物状态、伏笔、关系温度、设定一致性维护 |
+| 动态百科 | `novel-wiki` | 人物状态、伏笔、关系温度、设定一致性维护；storyworld 写前压力测试（结构化实质检查 + 可登记语义复核任务） |
 | 模拟读者 | `novel-simulate` | 虚拟试读、留存先验、弃书点和套路密度；默认 signal-only，QA gate 会提示只能低权重参考 |
 | 真实反馈 | `novel-feedback` | 生成读者测试计划，导入平台后台/测试读者 CSV·JSONL，聚合章节完读率、弃读率、评论情绪、掉点和 A/B/take 归因；beta/发布版 release manifest 要求先有 reader test plan，platform/KDP 发布缺真实数据需 scoped waiver |
 | 节奏平衡 | `novel-balance` | 情节热力图、注水、断章、爽点节奏 |
@@ -208,15 +208,15 @@ mv 负责把已有歌曲或后配歌曲企划做成音乐视频，产物落 `创
 | 进度·下一步（只读） | `mv-progress` | 扫 `创作区/制MV/<项目>/_进度.md` 阶段表 → 汇总完成度 + 当前前沿 + 后续待办；只读不改文件 |
 | 更新影响（只写计划） | `mv-update` | 本线 skill 内容快照比对 + 最小卡点/蓝图/分镜/出图/出视频/合成返工计划；只写计划/基线，不改素材、视频或 `_进度.md` |
 | 设置管理 | `mv-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/mv/_lib/settings.py` |
-| 合约/骨架 | `mv-craft` | 项目骨架、契约、进度、gate、AI 使用披露 |
-| 节拍 | `mv-beat` | BPM、beatgrid、downbeat、能量段落 |
+| 合约/骨架 | `mv-craft` | 项目骨架、完整 SHA-256 阶段契约、正式 gate、V1+A1+markers OTIO/receipt、animatic/picture lock、权利/AI 使用与 provenance |
+| 节拍 | `mv-beat` | BPM/tempo/beat/downbeat 候选；正式版绑定当前歌曲，并具名确认拍号、小节相位和完整 sections |
 | 视觉蓝图 | `mv-script` | 听歌识影、角色/场景/叙事结构 |
-| 分镜规划 | `mv-plan` | clip/timeline 规划与 prompt 任务包 |
-| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；每张 PNG 落档后跑 mv 自己的 `image_qc`，批后再收尾复核 |
-| 出视频 | `mv-video` | 完整 MV 合同 + 后端编译提交 prompt、任务 manifest、多版登记与挑版；歌曲外铺、不生成原生音轨 |
-| 字幕 | `mv-lyric-sync` | 歌词强制对齐、LRC/ASS/Karaoke |
-| 合成 | `mv-compose` | 歌轨、clips、卡拉 OK 字幕合成成片 |
-| 质检/评分 | `mv-review` / `mv-score` | 卡点、成片、`生产数据/consistency_findings.json`、视觉一致性、分镜表现力 |
+| 分镜规划 | `mv-plan` | song/beat/lyrics/blueprint/settings 收据、clip/timeline、动作峰值音乐锚、接缝分类、语义 prompt 任务包 |
+| 出图 | `mv-image` | 单曲共享定妆、Clip 首/尾帧；逐图登记 model+channel+实际 prompt/reference/asset hash，跑本线 image_qc，批后总检 |
+| 出视频 | `mv-video` | 后端能力编译、可选多镜头 `sequence_units`、逐镜任务/登记/具名评分/挑版；连续镜加 seam、唱演镜加 lip-sync；歌曲永远外铺 |
+| 字幕/唱演时间轴（条件） | `mv-lyric-sync` | 已知歌词字符时间轴强制对齐、hash-bound 覆盖报告、LRC/ASS/Karaoke；低覆盖只允许具名逐行听审；纯器乐且无字幕/口型可跳过 |
+| 合成 | `mv-compose` | 严格时间线与 OTIO 合同，trim/尾帧 hold 不批量变速；ProRes/PCM 母版 + BT.709 H.264/AAC 交付 + 时长/响度/真峰值 QC |
+| 质检/评分 | `mv-review` / `mv-score` | 新鲜节奏收据、逐缝分类审片、锁版/字幕/交付/来源链总审；启发式阈值仅项目显式选择时硬挡 |
 
 **允许的跨线交接**：song 或用户提供的成品歌/歌词文件可进入 mv；mv 不 import song 实现，深度审歌只提示回 `song-review`。
 
@@ -237,7 +237,7 @@ comic 负责把故事源、点子或已有脚本做成条漫/页漫，产物落 
 | 缩略分镜/ネーム | `comic-name` | `panel_script.json` → `name_board.json` 与 SVG 草图，含页流、格子轻重、翻页钩子、气泡优先级和原稿安全框 |
 | 页面排版 | `comic-layout` | `panel_script.json` + 可选 `name_board.json` → 页漫/条漫 `layout.json`，含阅读顺序、格子坐标、气泡占位和原稿安全区 |
 | 原稿收尾 | `comic-finishing` | `layout.json` + `panel_script.json` → `finishing_plan.json`，含墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划 |
-| 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、定型图角色 DNA、年龄/形态继承、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划 |
+| 一致性资产 | `comic-identity` | 共享定妆、专门定妆多视图、定型图角色 DNA、年龄/形态继承、`identity_registry.json`、引用绑定、缺失引用检查和受影响格重抽计划；可从统一 registry 派生 comic 自有 `角色库/` 与分类 `资产库/` manifests，不依赖其它生产线 |
 | 出图 | `comic-image` | schema v2 完整逐格合同 + 后端编译提交 prompt、参考图预算与真实图片入参、风格锚/角色 DNA/传统稿层、面板登记；每格落档写本线 `panel_qc`，`block` 不算 ready |
 | 嵌字/导出 | `comic-compose` | `lettering.json`、文字语言选择、按 layout 渲染页面图、长图分段、WebP/PNG 尺寸 fallback、`export_manifest.json` 与进度回写 |
 | 质检/自审 | `comic-review` | 阶段 gate（含出图包契约陈旧/成图旧契约/形态几何不符阻断）、阅读顺序、文字遮挡、传统 name/原稿收尾覆盖、角色一致性并排复核（CCIP 身份快筛可选 + face/hair/outfit 启发式 + CANVAS 三轴 VLM 并排判定任务包）、场景锚/道具并排与布局指纹、风格一致性/场景族群基线/跨话基准回归/相邻格连续性/黑白灰量化/调色离群/拼贴或外框嫌疑、高一致性风格锚/形态继承硬闸（按开关值显式生效）、sha 绑定人审签收、导出规格、权利状态与返修清单 |
@@ -256,16 +256,16 @@ ad 负责把客户 brief 或产品需求做成广告主片与多版本交付件�
 | 进度·下一步（只读） | `ad-progress` | 扫 `创作区/拍广告/<项目>/_进度.md` 阶段表和交付版本矩阵 → 汇总完成度 + brief 缺口 + 当前前沿；只读不改文件 |
 | 更新影响（只写计划） | `ad-update` | 本线 skill 内容快照比对 + 最小 brief/创意/脚本/配音/出图/出视频/交付返工计划；只写计划/基线，不改 brief、媒体或 `_进度.md` |
 | 设置管理 | `ad-settings` | 设置/重置/审计 `_设置.md` 选择点，并把项目设置同步到私有全局默认；底层只调用 `skills/ad/_lib/settings.py` |
-| 合约/骨架 | `ad-craft` | `_进度.md`、brief contract、gate、AI 使用披露 |
+| 合约/骨架 | `ad-craft` | `_进度.md`、旧项目安全迁移、逐阶段验收与逐资产依赖哈希、claim/placement、locale matrix、逐交付 release variant、AI 标识与逐辖区 release-SHA 合规 |
 | 创意 | `ad-concept` | brief 访谈、big idea、创意脚本 |
-| 脚本/分镜 | `ad-script` | 广告脚本、VO、时间轴、广告法机检、配音后分镜 |
-| 配音 | `ad-voice` | VO 配音与时长清单 |
-| 出图 | `ad-image` | 产品/角色/场景三层定妆与逐镜图；每张关键图落档后跑 ad 自己的 `product_qc`/广告落档自检 |
-| 出视频 | `ad-video` | 广告完整品牌/产品/合规合同 + 后端编译提交 prompt、模型路由、视觉契约继承 |
-| 合成/交付 | `ad-compose` | 主片、cutdown、多比例、包装、交付矩阵 |
+| 脚本/分镜 | `ad-script` | 广告脚本、VO、时间轴、广告法分层机检；配音后分镜用 claim_id 绑定来源/条件/范围/有效期披露并做内部可读性快筛 |
+| 配音 | `ad-voice` | VO 配音、逐句/整轨技术 QC；成片后对批准 VO→实际 VO→字幕→最终音轨做 ASR 四路关键文案精确对账 |
+| 出图 | `ad-image` | 产品/角色/场景三层定妆与逐镜图；具体生图模型/渠道分列，每张关键图落档后跑本线 `product_qc` |
+| 出视频 | `ad-video` | 品牌/产品/合规合同 + 后端编译提交 prompt、模型路由、视觉契约继承；优先消费实际 placement 规格 |
+| 合成/交付 | `ad-compose` | 原子 cutdown/多比例；逐件实测技术/色彩、最终像素文字、ASR、WCAG 目标与实际 C2PA/隐式标识，全部通过才回写交付 ✅ |
 | 评分（投放前·横切） | `ad-score` | 出图烧积分前 pre-spend 评分闸门：钩子前3秒/卖点/CTA/品牌露出/广告法/时长贴合，确定性 prescore + LLM 语义分 → 三档 go/revise/reject + 低分维度回流 ad-concept/ad-script/ad-image |
-| 质检/自审 | `ad-review` | 模式①汇总 `生产数据/consistency_findings.json` 后做投放前 M0 硬项+交付件人工复核；模式②流程自审（钩子/合规/成本三轴拉市场基准对照 ad-* 找差距） |
-| 投放反馈 | `ad-feedback` | 导入平台 CSV/JSONL，按 hook/message/CTA 变体聚合 CTR/CVR/CPA/ROAS/观看指标；以最小样本和 Wilson 区间判胜，输出创意疲劳与下一轮刷新建议 |
+| 质检/自审 | `ad-review` | 最终 clip/交付件逐镜首中尾帧 + product/character/scene/prop contact sheet；M0 + 具名逐项证据和哈希绑定；模式②实时审计流程 |
+| 投放反馈 | `ad-feedback` | 同 placement 单变量实验预注册，每个变体绑定实际媒体 SHA；投放后绑定原始数据，平台原生结论优先，Wilson 只作聚合快筛 |
 
 **允许的跨线交接**：无默认必需交接。ad 可借鉴其他线工艺概念，但脚本和契约必须留在 ad 家族内。
 

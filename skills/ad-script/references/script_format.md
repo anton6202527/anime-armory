@@ -53,8 +53,16 @@
      "frame": "特写·闹钟·冷调", "vo_lines": [1],
      "assets": {"PROD_main": false, "CHAR_user": true},
      "continuity": {"transition": "硬切", "need_end_frame": false}},
+    {"shot_id": "S4", "section": "产品/证据", "duration": 4.0,
+     "frame": "产品 hero shot + 有依据的数据宣称", "claim_ids": ["claim_01"],
+     "disclosures": [{"claim_id": "claim_01", "text": "适用条件与样本局限",
+       "source_text": "来源：某机构 2026Q2 报告", "duration_sec": 4,
+       "font_height_ratio": 0.04, "contrast_review": "pass", "safe_zone_review": "pass",
+       "relationship": "same_screen", "relative_prominence": "sufficient"}],
+     "assets": {"PROD_main": true},
+     "continuity": {"transition": "硬切", "need_end_frame": false}},
     {"shot_id": "S5", "section": "CTA", "duration": 3.0,
-     "frame": "end card: logo+slogan+CTA", "assets": {"PROD_main": true},
+     "frame": "end card: logo+slogan+CTA", "assets": {"PROD_main": true, "BRAND_main": true},
      "continuity": {"transition": "硬切", "need_end_frame": false}}
   ]
 }
@@ -62,6 +70,7 @@
 
 - `vo_lines`：该镜承载的 VO 句子下标（指向 `配音/时长清单.json` 每句的 `idx`，1-based）。`finalize_storyboard.py` 据此查**单镜 VO 溢出**（单镜 VO 秒数 > 该镜 duration → 旁白被截断 block）。
 - `assets`：逐镜绑定 `PROD_xx`（产品）/`CHAR_xx`（角色）/`LOC_xx`（场景）/`logo`/`slogan`/`CTA`，供 `ad-image` 三层定妆库锁一致性、并供定稿闸门做**强制项落镜**判定。产品镜必带 `PROD_xx`；brief mandatories（logo/slogan/法律声明/CTA）须由某镜的 `frame`/`assets`/`legal_lines`/end card 承载，否则定稿 block。
+- `claim_ids` + `disclosures`：每个会播出的 claim 必须绑定承载镜；引证来源、实验条件、适用范围、有效期/样本局限按 `claim_id` 同屏或紧邻呈现。普通 `legal_lines` 只能证明“有一行字”，不能证明 claim 与来源/条件的关系。`finalize_storyboard.py` 验结构，`cutdown.py` 把 claim+披露当原子组合，防止短版只留大字宣称。
 - `continuity.transition`：硬切 / 微溶解 / 跳切；`need_end_frame`：是否要尾帧接力（`ad-image` 出 `镜头N_end.png`，`ad-video` 双帧引导）。
 - 总时长（Σ duration）必须 ≈ `master_seconds`，由 `finalize_storyboard.py` 闸门对账。
 

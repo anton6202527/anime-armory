@@ -48,6 +48,7 @@ def _release_evidence(root: Path, episode: str) -> None:
     _write_json(root / "生产数据" / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(root / "生产数据" / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(root / "生产数据" / f"review_signoff_{episode}.json", {"status": "approved"})
+    _write_json(root / "生产数据" / f"identity_voice_print_{episode}.json", {"kind": "n2d_identity_voice_print", "version": 1, "available": False, "mode": "no_audio"})
     _write_json(root / "生产数据" / f"release_verdict_{episode}.json", {"kind": "n2d_release_verdict", "version": 1, "status": "internal-only"})
 
 

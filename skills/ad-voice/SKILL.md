@@ -1,6 +1,6 @@
 ---
 name: ad-voice
-description: 拍广告 第3阶段·VO配音 — 把 脚本/voiceover.txt（旁白/台词）转成 AI 配音：逐句音频 + 整轨 vo.wav + 时长清单.json（每句实测时长，驱动下游镜头时长；逐句记 voice_key 音色键供跨镜对账）。多后端可插拔（CosyVoice/GPT-SoVITS/MiniMax/火山 真后端 + macOS say / estimate 占位）。克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1 硬闸门。ad-* 自包含。Use when asked to 广告配音/VO/旁白配音/生成配音/时长清单 for a 拍广告 project. Triggers 广告配音, VO, 旁白, 配音, 时长清单, voice_key, voiceover, 声音克隆, ad-voice.
+description: 拍广告 第3阶段·VO配音 — 把 voiceover.txt 转成逐句音频 + vo.wav + 时长清单.json，并自动产 voice_qc.json（ffprobe/ffmpeg 实测逐句/整轨时长、可读性、非静音与峰值；voice_key 跨镜对账）。多后端可插拔，say/estimate 只作 rough 占位；克隆真人嗓需 VOICE_CLONE_AUTHORIZED=1。ad-* 自包含。Use when asked to 广告配音/VO/旁白配音/生成配音/时长清单 for a 拍广告 project. Triggers 广告配音, VO, 旁白, 配音, 时长清单, voice_key, voiceover, 声音克隆, ad-voice.
 ---
 
 # ad-voice — 拍广告 · VO 配音（音频先行）
@@ -30,9 +30,15 @@ python3 skills/ad-voice/render_edgetts.py "<作品根>" --voice zh-CN-XiaoxiaoNe
 python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-dir "<作品根>/配音/edgetts_lines"
 ```
 
-产物：`配音/line_NN.wav` + `配音/vo.wav` + `配音/时长清单.json`。
+产物：`配音/line_NN.wav` + `配音/vo.wav` + `配音/时长清单.json` + `配音/voice_qc.json`。成片后另由本 skill 的 `asr_consistency.py` 生成 `合成/asr_consistency.json` + `asr_receipts.json`，把批准 VO、实际 VO、字幕和最终音轨绑定到各自 SHA；外部预转写也必须记录媒体 SHA、transcript SHA、引擎/模型和时间，不能拿手填 txt 冒充实际 ASR。
 
-真后端不能静默降级：选择 `CosyVoice/GPT-SoVITS/MiniMax/火山/自定义` 但没有 `--from-dir` 时必须阻断，不能自动写静音占位并假装跑过正式配音。`--from-dir` 目录必须包含和 `voiceover.txt` 行数一致的 `line_01.wav..line_NN.wav`，且每条能被 `ffprobe` 读出有效时长；登记后 `has_placeholder=false`。
+真后端不能静默降级：选择 `CosyVoice/GPT-SoVITS/MiniMax/火山/自定义` 但没有 `--from-dir` 时必须阻断，不能自动写静音占位并假装跑过正式配音。`--from-dir` 目录必须包含和 `voiceover.txt` 行数一致的 `line_01.wav..line_NN.wav`。登记后自动跑 `voice_qc.py`：ffprobe 对账逐句/整轨实测时长，ffmpeg 检查非静音与峰值；正式模式要求 full precision，失败不回写完成。compose 统一重采样到 48 kHz，输入非 48 kHz 会 WARN 而不是伪称源文件合格。
+
+```bash
+python3 skills/ad-voice/voice_qc.py "<作品根>"
+python3 skills/ad-voice/asr_consistency.py "<作品根>" --run-asr --asr-model large-v3
+python3 skills/ad-craft/scripts/stage_acceptance.py "<作品根>" --stage voice
+```
 
 **收尾**：回写 `_进度.md` VO配音 ✅（占位后端 say/estimate 标 ⏳rough），提示下一步 `ad-script` **分镜 pass**（用实测时长定镜头长度）。
 
@@ -49,7 +55,7 @@ python3 skills/ad-voice/render_voice.py "<作品根>" --backend EdgeTTS --from-d
 ## 测试
 
 ```bash
-cd skills/ad-voice && python3 test_voice_manifest.py
+cd skills/ad-voice && python3 -m pytest test_voice_manifest.py test_voice_qc.py test_asr_consistency.py
 ```
 
 ## 常见错误
@@ -59,3 +65,4 @@ cd skills/ad-voice && python3 test_voice_manifest.py
 | 拿占位配音当成品直接合成 | 占位只为跑通时长/demo；正式片用真 VO 复跑 |
 | 未授权克隆真人/代言人声音 | 须 `VOICE_CLONE_AUTHORIZED=1` + 授权痕迹，否则拒做 |
 | 配音前就锁镜头时长 | 镜头时长由本阶段实测 VO 驱动（ad-script 分镜 pass 回跑）|
+| 有 WAV 就把 VO 标完成 | 还需 `voice_qc.json` full precision、非静音、逐句/整轨时长可对账 |

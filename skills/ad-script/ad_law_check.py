@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 """《广告法》违禁词 / 极限词机检 —— 拍广告线的核心硬闸门。
 
-扫广告文案/台词/VO/字幕/分镜，按《中华人民共和国广告法》及配套口径标出**绝对化用语**、
+扫广告文案/台词/VO/字幕/分镜，按《中华人民共和国广告法》及配套口径标出**法定禁用语**、
 **虚假/误导表述**、**医疗保健极限词**、**化妆品禁用功效**、**迷信/封建**、**促销欺诈词**
-等违禁/高危词，出定位报告（命中 block 即非零退出码）。**机检初筛 + 人判**：词表是确定性的，
-最终是否违法仍需结合语境/资质（如已注册商标含"国"字、有依据的对比）由人复核——但默认从严。
+等违禁/高危词，出定位报告（命中 block 即非零退出码）。**机检初筛 + 具名人判**：法定明确
+禁用/高确定性虚假承诺才硬阻断；“最新/领先/销量第一”等可能是有时空范围和依据的事实陈述，
+按监管执法指南记 warn、要求补证，不能让关键词表代替语境审查。
 
 匹配前先把文本**归一化**（NFKC + 去零宽字符 + 折叠内部空格），所以 `最 ` / `１００％` /
 全角 / 中间插空格 / 常见繁体（療效→疗效、國家級→国家级）都能命中绕过手法；报告里的
@@ -35,11 +36,15 @@ import sys
 import unicodedata
 
 # ── 词库（分类 + 严重度）。block=明确违禁；warn=高危/语境相关，需人判 ──────────
-# 绝对化用语：广告法第九条明令禁止「国家级/最高级/最佳」等表示最高级、绝对化的用语。
-# 监管补充（市场监管总局《广告绝对化用语执法指南》及处罚案例）：首选/领先/领导者/
-# 遥遥领先/销量遥遥领先/绝版/独家/填补国内空白/央视上榜/国宴 等亦被认定为绝对化或不可证。
-ABSOLUTE_TERMS = [
-    "国家级", "最高级", "最佳", "最好", "最大", "最强", "最优", "最新", "最先进",
+# 《广告法》第九条直接列举，以及失效/禁止背书：无须由词表推测“是否第一”，命中先硬阻断。
+ABSOLUTE_HARD_TERMS = [
+    "国家级", "最高级", "最佳",
+    "驰名商标", "中国驰名商标", "国家免检", "免检产品", "国家机关推荐", "质检总局推荐",
+]
+# 市监总局《广告绝对化用语执法指南》要求结合上下文、时空范围、事实依据及误导风险判断。
+# 下列可能是违法绝对化用语，也可能是可证事实/产品版本描述；机检只报待证 warn，交具名复核。
+ABSOLUTE_CONTEXT_TERMS = [
+    "最好", "最大", "最强", "最优", "最新", "最先进",
     "最低", "最便宜", "最高", "最受欢迎", "第一品牌", "全国第一", "全球第一", "世界第一",
     "行业第一", "排名第一", "销量第一", "唯一", "独一无二", "顶级", "顶尖", "极致",
     "极品", "终极", "绝无仅有", "无与伦比", "史无前例", "空前绝后", "万能", "100%",
@@ -47,15 +52,12 @@ ABSOLUTE_TERMS = [
     # —— 监管案例补充（绝对化/不可证） ——
     "首选", "领先", "领导者", "遥遥领先", "销量遥遥领先", "绝版", "独家",
     "填补国内空白", "央视上榜", "国宴",
-    # —— 广告法第九条/已废止认证体系明禁（用即违法，非语境相关） ——
-    # 第九条禁用「驰名商标」「国家机关推荐」等；「国家免检/免检产品」制度已于 2008 废止，再宣称即误导。
-    "驰名商标", "中国驰名商标", "国家免检", "免检产品", "国家机关推荐", "质检总局推荐",
 ]
 # 单字"第一/最X"高危打底（用边界规则减少误杀，见 _ABSOLUTE_LOOSE / WHITELIST）。
 ABSOLUTE_LOOSE = ["第一", "最"]
 
 # 医疗 / 保健 / 功效极限词：保健食品不得宣称疾病预防治疗功能；普通食品禁医疗用语。
-# 注：100% 已并入 ABSOLUTE_TERMS，这里不再重复（去重，避免一处文本两类命中）。
+# 注：100% 已并入 ABSOLUTE_CONTEXT_TERMS，这里不再重复（去重，避免一处文本两类命中）。
 MEDICAL_TERMS = [
     "治愈", "根治", "痊愈", "药到病除", "包治", "speedy cure", "无毒副作用", "无副作用",
     "百分百有效", "100%有效", "疗效", "治疗", "防癌", "抗癌", "防病", "祛病", "消炎",
@@ -119,7 +121,8 @@ _TRAD_SIMP = {
 }
 
 CATEGORIES = [
-    ("绝对化用语", ABSOLUTE_TERMS, "block"),
+    ("法定禁用/失效背书", ABSOLUTE_HARD_TERMS, "block"),
+    ("绝对化用语待证", ABSOLUTE_CONTEXT_TERMS, "warn"),
     ("医疗保健极限词", MEDICAL_TERMS, "block"),
     ("化妆品禁用功效", COSMETICS_TERMS, "block"),
     ("虚假/绝对承诺", FALSE_TERMS, "block"),
@@ -135,7 +138,9 @@ CATEGORIES = [
 
 # 每类一句「改法」：gate/review 不止报命中，还告诉文案怎么改（附在每条 finding 的 suggestion）。
 CATEGORY_FIX = {
-    "绝对化用语": "删除最高级/绝对化表述，或改为可证的相对表述（如「更…」「之一」）并备依据。",
+    "法定禁用/失效背书": "删除国家级/最高级/最佳或失效认证、国家机关背书；不得靠补证放行。",
+    "绝对化用语待证": "写清比较范围、时间、地区、样本与出处；不能完整举证或可能误导时删除/改为可证相对表述。",
+    "绝对化用语": "写清比较范围、时间、地区、样本与出处；不能完整举证或可能误导时删除/改为可证相对表述。",
     "医疗保健极限词": "非药品/医疗器械不得宣称疗效或医疗级别；改为温和的体验性描述，删除治疗/根治/医疗级等词。",
     "化妆品禁用功效": "普通化妆品不得宣称祛斑/生发/瘦身等特殊功效；改用「滋润/清爽」类外观感受词，或取得特证后宣称。",
     "虚假/绝对承诺": "删除保证/承诺类不可证表述；金融改为「过往业绩不代表未来」，教育删除升学/提分保证。",
@@ -146,11 +151,18 @@ CATEGORY_FIX = {
     "时限诱导待证": "确保活动截止日真实有效；删除「今天最后/涨价在即」等虚假紧迫感表述。",
 }
 
-# 海外口径：绝对化用语按平台政策松一档→warn；但促销欺诈（FTC/EU 仍硬禁）**不降级**。
+# 海外口径：中国法定词按平台/目的地法律交人判→warn；促销欺诈（FTC/EU 仍硬禁）**不降级**。
 # 房地产升值承诺为中国特有口径，海外松一档→warn（FTC 仍可能因误导追责，故不放行而降级人判）。
 REGION_OVERRIDES = {
-    "海外": {"绝对化用语": "warn", "房地产违规": "warn"},
+    "海外": {"法定禁用/失效背书": "warn", "房地产违规": "warn"},
 }
+
+LEGAL_SOURCES = [
+    {"title": "中华人民共和国广告法", "authority": "law",
+     "url": "https://www.gov.cn/xinwen/2018-11/05/content_5337659.htm"},
+    {"title": "市场监管总局广告绝对化用语执法指南", "authority": "official_enforcement_guide",
+     "url": "https://www.samr.gov.cn/ggjgs/tzgg/art/2023/art_183b5cb48d9e4f0dba67f9f912a913ba.html"},
+]
 
 DEFAULT_SCAN_FILES = [
     "脚本/广告脚本.md", "脚本/voiceover.txt", "脚本/字幕_zh.srt",
@@ -208,8 +220,7 @@ def scan_text(text, region="中国大陆"):
                     findings.append(_finding(category, term, sev, lineno, idx, line, norm, nterm))
                     start = idx + len(nterm)
         # 单字"最/第一"松规则：命中且不在白名单 → warn（人判）
-        sev_loose = overrides.get("绝对化用语", "block")
-        sev_loose = "warn" if sev_loose == "block" else sev_loose  # 松规则一律降一档到 warn
+        sev_loose = "warn"  # 单字规则只能是语境提示，永不据此直接判违法。
         for term in ABSOLUTE_LOOSE:
             nterm = normalize(term)
             start = 0
@@ -277,6 +288,7 @@ def _finding(category, term, sev, lineno, idx, line, norm=None, nterm=None):
         "line": lineno, "col": col,
         "context": snippet, "snippet": snippet,
         "suggestion": CATEGORY_FIX.get(base_cat, ""),
+        "evidence_required": sev == "warn",
     }
 
 
@@ -311,6 +323,7 @@ def _read_scan_text(path):
 
 def scan_files(paths, region="中国大陆"):
     report = {"region": region, "disabled": False, "files": [],
+              "standard_checked_at": "2026-07-11", "sources": LEGAL_SOURCES,
               "summary": {"block": 0, "warn": 0}, "findings": []}
     for path in paths:
         if not os.path.isfile(path):
@@ -331,6 +344,7 @@ def disabled_report(region="关闭", reason="广告法机检已按 _设置.md �
     """region=关闭：仍产出报告（ad-review 据 disabled 判定），不只 print。"""
     return {
         "region": region, "disabled": True, "reason": reason,
+        "standard_checked_at": "2026-07-11", "sources": LEGAL_SOURCES,
         "files": [], "summary": {"block": 0, "warn": 0}, "findings": [],
     }
 

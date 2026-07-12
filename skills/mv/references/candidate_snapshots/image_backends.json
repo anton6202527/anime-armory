@@ -1,40 +1,38 @@
 {
   "kind": "mv_candidate_snapshot",
   "key": "image_backends",
-  "collected_at": "2026-07-08",
+  "collected_at": "2026-07-11",
   "description": "MV image generation backends and consistency capabilities",
   "source_urls": [
-    "https://platform.openai.com/docs",
-    "https://ai.google.dev/",
-    "https://klingai.kuaishou.com/"
+    "https://developers.openai.com/api/docs/models/gpt-image-2",
+    "https://seed.bytedance.com/en/seedream5_0_lite",
+    "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-3-pro-image-developers/"
   ],
   "url_checks": [],
   "verification_mode": "declared_sources_only",
   "items": [
     {
-      "name": "Codex / OpenAI gpt-image",
-      "multi_reference": false,
-      "native_subject": false
+      "name": "GPT Image 2",
+      "channels": [
+        "Codex",
+        "OpenAI API"
+      ],
+      "high_fidelity_image_inputs": true
     },
     {
-      "name": "Seedream Universal Reference",
-      "multi_reference": true,
-      "native_subject": true
+      "name": "Seedream 5.0 Lite",
+      "channels": [
+        "火山方舟/Seedream"
+      ],
+      "multimodal_image_input": true
     },
     {
-      "name": "可灵主体库",
+      "name": "Nano Banana Pro (Gemini 3 Pro Image)",
+      "channels": [
+        "Google Gemini API"
+      ],
       "multi_reference": true,
-      "native_subject": true
-    },
-    {
-      "name": "Nano Banana / Gemini",
-      "multi_reference": true,
-      "native_subject": false
-    },
-    {
-      "name": "Sora Cameo",
-      "multi_reference": true,
-      "native_subject": true
+      "max_standard_inputs": 14
     }
   ],
   "notes": [

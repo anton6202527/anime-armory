@@ -33,8 +33,13 @@ pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
 1. 过合规闸门（音色来源 + 原曲权利）。
 2. **分离人声**：demucs 把目标歌分成 vocals / instrumental。
 3. **转换音色**：RVC（用目标音色模型）把 vocals 转成目标嗓。
-4. **回混**：转换后 vocals + 原 instrumental → 新 `歌/song.wav`（覆盖或另存 `歌/song_cover.wav`）。
-5. 落档 + 回写 `_进度.md`；记音色来源到 `_meta.vocal_source`。后续如需视频制作，交付最终音频成品即可。
+4. **回混**：转换后 vocals + 原 instrumental → 新换声音频；不要手工覆盖正式母版。
+5. **登记并使下游失效**：用 `scripts/register_cover.py` 记录音色授权、模型与音频 hash，更新 `歌/song.wav` / `混音/pre_master.wav`，旧 master、master check、release pack 自动视为过期。之后重新跑母版与发行链。
+
+```bash
+python3 skills/song-cover/scripts/register_cover.py "<写歌作品根>" "<换声.wav>" \
+  --model "<模型或音色>" --authorization authorized
+```
 
 ## 详细参考
 - RVC / so-vits-svc 安装·训练音色·转换·回混：`references/rvc.md`
@@ -45,4 +50,5 @@ pip install demucs    # 先分离人声再转换，质量更高（Mac 可跑）
 | 跳过合规闸门 | 先确认音色合法 + 原曲权利 |
 | 换未授权真人歌手嗓 | 拒做 |
 | 不分离直接转整首 | 先 demucs 分 vocals，只转人声再回混 |
+| 换声后沿用旧母版报告 | register cover 后重新跑 master delivery、BS.1770 检查和 release pack |
 | 想把歌声转换当成视频换脸 | 那是另一类音画处理；歌声转换只处理人声音色 |

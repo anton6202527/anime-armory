@@ -1257,7 +1257,9 @@ def apply_budget(tasks: List[Dict[str, Any]], limit: Optional[float], unit: Opti
     total = 0.0
     accepted = 0.0
     blocked = 0
-    for task in tasks:
+    # 与 reapply_ledger_budget 同序（按 priority 贪心）：旧版按插入序裁剪，首次 plan 与
+    # 后续 merge 可能 block 不同任务——预算不够时该保高优先级任务，且两条路径结论必须一致。
+    for task in sorted(tasks, key=lambda item: int(item.get("priority", 999999))):
         if str(task.get("status") or "queued") in BUDGET_IGNORED_STATUSES:
             continue
         estimate = task.get("estimated_cost", {})
@@ -2044,7 +2046,7 @@ def reclaim_expired(
         if not (expired or mine):
             continue
         attempts = int(task.get("attempts") or 0)
-        max_retries = int(task.get("max_retries") or queue.get("max_retries") or 0)
+        max_retries = resolve_max_retries(task, queue)
         task["status"] = "retry_queued" if attempts <= max_retries else "failed"
         task["updated_at"] = now_iso()
         reason = "lease_expired" if expired else "worker_resume"
@@ -2137,8 +2139,28 @@ def renew(root: str, task_ids: Iterable[str], lease_seconds: int, worker: Option
         return n
 
 
+def resolve_max_retries(task, queue) -> int:
+    """任务级显式 max_retries=0（零重试）必须生效：旧写法 `task.get(...) or queue.get(...) or 0`
+    会因 0 falsy 被队列默认覆盖，导致无法配置零重试任务。None 才回退队列级。"""
+    for source in (task.get("max_retries"), queue.get("max_retries")):
+        if source is not None:
+            try:
+                return int(source)
+            except (TypeError, ValueError):
+                continue
+    return 0
+
+
 def classify_error(note: str = "", runner: Optional[Mapping[str, Any]] = None) -> str:
+    """错误归类（8 类·SKILL 同口径）。⚠️ 关键词启发式：按子串命中、顺序敏感，可能误分类
+    （死信 error_class 只作分诊线索，不作根因结论）。runner 显式给出的结构化 error_class
+    永远优先于文本猜测。budget 在 capability 之前判：预算类报错常含 "backend" 字样，
+    旧顺序会把预算错误误归 capability。"""
     runner = runner or {}
+    declared = str(runner.get("error_class") or "").strip()
+    if declared in {"preflight_block", "capability", "budget", "timeout",
+                    "output_contract", "configuration", "command_failed", "unknown"}:
+        return declared
     text = " ".join(
         str(part or "")
         for part in (
@@ -2152,10 +2174,10 @@ def classify_error(note: str = "", runner: Optional[Mapping[str, Any]] = None) -
     exit_code = runner.get("exit_code")
     if "next_preflight blocked" in text or "blocked_by_" in text:
         return "preflight_block"
-    if "capability" in text or "evidence" in text or "backend" in text:
-        return "capability"
     if "budget" in text or "blocked_budget" in text:
         return "budget"
+    if "capability" in text or "evidence" in text or "backend" in text:
+        return "capability"
     if "timeout" in text or exit_code in (124, 137):
         return "timeout"
     if "verification failed" in text or "missing output" in text or "progress not done" in text:
@@ -2188,7 +2210,7 @@ def mark_task(queue: Dict[str, Any], task_id_value: str, status: str, note: str 
             task.pop(key, None)
     elif status == "fail":
         attempts = int(task.get("attempts") or 0)
-        max_retries = int(task.get("max_retries") or queue.get("max_retries") or 0)
+        max_retries = resolve_max_retries(task, queue)
         task["last_error_class"] = classify_error(note, runner)
         task["status"] = "retry_queued" if attempts <= max_retries else "failed"
         if task["status"] == "failed":

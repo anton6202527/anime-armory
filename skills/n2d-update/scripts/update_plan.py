@@ -328,6 +328,10 @@ N2D_LIB_FILE_STAGE_HINTS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
             "_lib/subtitle_render.py",
             # OTIO 剪辑交接时间线：改 schema 只需重出 compose 侧交接产物。
             "_lib/editorial_timeline.py",
+            # BGM 结构化合同：产物 合成/<集>/bgm_contract.json，消费者是 compose/release gate。
+            "_lib/bgm_contract.py",
+            # 跨集字幕/称谓/音频 register 真值合同：被 compose 侧 loudness_conform 与 review gate 消费。
+            "_lib/series_consistency.py",
         ),
     ),
 )

@@ -28,6 +28,19 @@ def test_compiler_keeps_visible_art_but_drops_internal_ids_and_paths():
     assert len(payload["prompt"]) < 1400
 
 
+def test_compiler_sanitizes_ids_embedded_in_visible_contract_fields():
+    data = contract()
+    data["scene_continuity"] = "继承 LOC_HALL：画左冷窗光；PROP_SWORD 在画右；参考 出图/共享/图片/hall.png"
+    data["style"] = "STYLE_GONGBI_V1 细劲工笔"
+    payload = compile_prompt(data)
+    assert payload["lint"]["errors"] == []
+    assert "LOC_HALL" not in payload["prompt"]
+    assert "PROP_SWORD" not in payload["prompt"]
+    assert "STYLE_GONGBI_V1" not in payload["prompt"]
+    assert "hall.png" not in payload["prompt"]
+    assert "已登记场景锚" in payload["prompt"]
+
+
 def test_diffusion_uses_separate_negative_field():
     payload = compile_prompt(contract("Flux ComfyUI"))
     assert payload["negative_prompt"]
@@ -40,3 +53,10 @@ def test_exact_dialogue_and_internal_reference_lint_block():
     errors = lint(payload)["errors"]
     assert "submit_prompt_contains_exact_dialogue" in errors
     assert "submit_prompt_contains_internal_contract_reference" in errors
+
+
+def test_semicolon_structured_contract_does_not_trigger_fragmentation_warning():
+    data = contract()
+    data["scene_continuity"] = "；".join(f"约束{index}" for index in range(30))
+    payload = compile_prompt(data)
+    assert "submit_prompt_many_clauses" not in payload["lint"]["warnings"]

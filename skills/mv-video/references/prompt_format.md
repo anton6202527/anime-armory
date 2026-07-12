@@ -60,7 +60,15 @@ continuity:
 
 > **分辨率/帧率/质量档/跑几版由 `出视频规格` 三档预算统一决定**（见 SKILL「出视频规格」节）：预算充足=1080p·30fps·高质量档·多跑挑稳，预算一般（默认）=720p·24-30fps·标准档·关键镜2版/普通镜1版，预算不够=720p·24fps·省积分档·全1版。**每次开跑前念一行告知当前规格档**（首次问一次记入 `_设置.md`，之后沉默沿用但仍告知，用户随时可改）。CLI 调用据此加 `--resolution`/`--fps`（flag 名以平台为准）。
 
-`video_jobs.py` 写 schema v2 manifest：每个 take 除 `prompt_path` 外还持有 `prompt_source_kind=compiled_submit_prompt`、compiler/profile 元数据、`submit_prompt`、独立负向字段、`source_contract_sha256` 与 `submit_prompt_sha256`。提交端优先读这些结构化字段；人工网页操作只复制 Markdown 编译块。`inherit_contract.py` 同时严格检查完整合同继承和编译块/manifest 一致性。
+`video_jobs.py` 写 schema v3 manifest：每个 take 除 `prompt_path` 外还持有 `prompt_source_kind=compiled_submit_prompt`、compiler/profile 元数据、`submit_prompt`、独立负向字段、`source_contract_sha256` 与 `submit_prompt_sha256`。manifest 顶层绑定当前 plan hash，并给支持的模型编译 `sequence_units`。提交端优先读结构化字段；人工网页操作只复制 Markdown 编译块。`inherit_contract.py` 同时严格检查完整合同继承和编译块/manifest 一致性。
+
+## 多镜头 sequence unit（生成侧连续性，不改剪辑真值）
+
+- 只合并**相邻、同 section、同 setup、总时长不超过 capability profile 上限**的 clips。
+- sequence prompt 写明锁定切点和各子镜的 start/end/action；跨段落、跨 setup 不得为了省调用强并。
+- 一次生成结果仍须按 picture lock 切点拆回每个 clip，分别 `--register / --score / --select`。sequence 不是新的交付单元，也不能替代逐缝 QC。
+- 实际母片用 `video_jobs.py --register-sequence <file> --unit Sequence_XXX --take N` 确定性拆回：先校验总时长，再按锁定 duration 精确切分、丢弃原生音轨、写每个 take hash；随后逐镜评分/挑版。
+- `need_end_frame=true` 只有在模型 profile 明确 `start_end_frames=true` 时才提交尾帧；否则 manifest 必须记录 `multi_shot_sequence_or_editorial_match_review` 回退，不得伪称双帧已生效。
 
 ## 卡点定 clip 时长（核心）
 - 由 `mv-plan` 读取 `节拍/beatgrid.json` 的 `downbeats[]`（小节首秒）并写入 `clip_plan.json`；mv-video 只消费，不重新拆时间线。

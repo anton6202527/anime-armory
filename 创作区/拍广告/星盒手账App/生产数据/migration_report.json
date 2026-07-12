@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "ad_project_migration",
+  "mode": "write",
+  "generated_at": "2026-07-11T16:43:19.646788+00:00",
+  "project_root": "/Users/lalala/learn/anime-armory/创作区/拍广告/星盒手账App",
+  "contract_version": 4,
+  "backup": "生产数据/migrations/20260711T164319Z",
+  "changes": [
+    "locale matrix 补交付件映射：cut_15s, cut_6s"
+  ],
+  "before_sha256": {
+    "_设置.md": "f8c37188bceeaee24f7963d869b44b6f4b3167bb56d677528fcb22f6e962007e",
+    "需求/brief.json": "7fcf2ff13c2ab6a11a80a4ef5f9ba35712818bcc5d27730e33715b0bf8f8872e",
+    "_进度.md": "3368fedc9406583bb59db9e762dc592da794a69604287a7cee56dcf845f924a5",
+    "合规/locale_matrix.json": "37cd2a8fe7c30bc1d98e7bbc1094159e8feef1600c95d5b4995770d1581221dd"
+  },
+  "after_sha256": {
+    "_设置.md": "f8c37188bceeaee24f7963d869b44b6f4b3167bb56d677528fcb22f6e962007e",
+    "需求/brief.json": "7fcf2ff13c2ab6a11a80a4ef5f9ba35712818bcc5d27730e33715b0bf8f8872e",
+    "_进度.md": "3a5a2bee3ca4923dbcb5a8f74e162d656c7a6be62b6b8c9eb60486cc5167d4c6",
+    "合规/locale_matrix.json": "960b9772201b85a4e0d895b7d854d3b7322c770baf5a2d3a20cba6f107259107"
+  },
+  "acceptance": {
+    "brief": {
+      "block": 1,
+      "warn": 2,
+      "accepted": false
+    },
+    "concept": {
+      "block": 6,
+      "warn": 1,
+      "accepted": false
+    },
+    "script": {
+      "block": 1,
+      "warn": 1,
+      "accepted": false
+    },
+    "voice": {
+      "block": 1,
+      "warn": 1,
+      "accepted": false
+    },
+    "storyboard": {
+      "block": 3,
+      "warn": 1,
+      "accepted": false
+    },
+    "image": {
+      "block": 12,
+      "warn": 2,
+      "accepted": false
+    },
+    "video": {
+      "block": 14,
+      "warn": 1,
+      "accepted": false
+    },
+    "compose": {
+      "block": 6,
+      "warn": 1,
+      "accepted": false
+    },
+    "handoff": {
+      "block": 5,
+      "warn": 1,
+      "accepted": false
+    },
+    "review": {
+      "block": 4,
+      "warn": 1,
+      "accepted": false
+    },
+    "feedback": {
+      "block": 3,
+      "warn": 1,
+      "accepted": false
+    }
+  },
+  "note": "迁移只修 schema/状态；pending 事实必须由客户、品牌、法务或发布方补齐。"
+}

@@ -377,7 +377,15 @@ CAMERA_GAZE_TERMS = (
     "viewer",
 )
 POV_CAMERA_ROLE_TERMS = ("pov", "主观", "第一人称", "破第四墙", "直视镜头", "直视读者")
-VAGUE_GAZE_TERMS = ("坚定", "冷静", "愤怒", "悲伤", "惊讶", "眼神", "目光", "远方", "前方", "某处", "none", "n/a")
+VAGUE_GAZE_PATTERN = re.compile(
+    r"^(?:"
+    r"(?:坚定|冷静|愤怒|悲伤|惊讶)(?:的)?(?:眼神|目光)?|"
+    r"(?:眼神|目光)|"
+    r"(?:看|望向|凝视)?(?:着|向)?(?:正)?(?:远方|前方|某处)|"
+    r"none|n/a"
+    r")$",
+    re.I,
+)
 FACE_INTEGRITY_TERMS = ("脸", "五官", "眼", "眼型", "眼距", "发际线", "发型", "头发")
 BODY_INTEGRITY_TERMS = ("手", "脚", "肢体", "身体", "腿", "手臂", "完整", "道具", "武器", "接触点")
 
@@ -392,10 +400,12 @@ def camera_role_allows_direct_gaze(panel: dict[str, Any]) -> bool:
 
 
 def is_vague_gaze_target(value: str) -> bool:
-    text = value.strip().lower()
-    if not text:
-        return False
-    return any(term.lower() == text or term.lower() in text for term in VAGUE_GAZE_TERMS)
+    clauses = [
+        clause.strip().lower()
+        for clause in re.split(r"[；;，,。]+", value)
+        if clause.strip()
+    ]
+    return any(VAGUE_GAZE_PATTERN.fullmatch(clause) for clause in clauses)
 
 
 def is_weak_integrity_contract(value: str) -> bool:

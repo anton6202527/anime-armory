@@ -60,6 +60,23 @@ def shot_id(shot):
     return shot.get("shot_id") or shot.get("clip_id")
 
 
+def shot_claim_ids(shot):
+    raw = shot.get("claim_ids") or []
+    if isinstance(raw, str):
+        raw = [raw]
+    return {str(v).strip() for v in raw if str(v).strip()}
+
+
+def disclosure_claim_ids(shot):
+    raw = shot.get("disclosures") or []
+    if isinstance(raw, dict):
+        raw = [raw]
+    return {
+        str(row.get("claim_id") or "").strip()
+        for row in raw if isinstance(row, dict) and str(row.get("claim_id") or "").strip()
+    }
+
+
 def resolve_durations(shots, duration_map):
     """逐镜解析时长：优先用权威 duration_map（镜头时长.json，shot_id→秒），
     回退 storyboard 自带 duration/时长。返回 [(idx, shot, dur_or_None)]。
@@ -126,8 +143,49 @@ def plan_cutdown(shots, target_seconds, tol=0.6, duration_map=None):
             chosen.add(i)
             total += d
 
+    # 3) claim 与披露是原子交付：保留宣称镜却砍掉来源/适用条件/免责，会把合规主片
+    # 机械剪成误导性 cutdown。按 claim_id 自动补回最近的披露镜；不存在或无时长则 block。
+    duration_by_index = {i: d for i, _, d in indexed}
+    disclosure_candidates = {}
+    for i, sh, _ in indexed:
+        for cid in disclosure_claim_ids(sh):
+            disclosure_candidates.setdefault(cid, []).append(i)
+    changed = True
+    while changed:
+        changed = False
+        selected_claims = set().union(*(shot_claim_ids(shots[i]) for i in chosen)) if chosen else set()
+        selected_disclosures = set().union(*(disclosure_claim_ids(shots[i]) for i in chosen)) if chosen else set()
+        for cid in sorted(selected_claims - selected_disclosures):
+            candidates = disclosure_candidates.get(cid) or []
+            if not candidates:
+                findings.append({
+                    "severity": "block", "kind": "cutdown_claim_disclosure_missing",
+                    "msg": f"cutdown 保留了 claim {cid}，但主分镜没有对应 disclosures[].claim_id；不得输出无披露版本",
+                })
+                continue
+            # 选距任一已选宣称镜最近的一镜；同屏披露自然距离为 0。
+            claim_positions = [i for i in chosen if cid in shot_claim_ids(shots[i])]
+            pick = min(candidates, key=lambda i: min(abs(i - p) for p in claim_positions))
+            if duration_by_index.get(pick) is None:
+                findings.append({
+                    "severity": "block", "kind": "cutdown_disclosure_duration_missing",
+                    "msg": f"claim {cid} 的披露镜 {shot_id(shots[pick]) or '#%d' % pick} 缺权威时长；无法安全重剪",
+                })
+                continue
+            if pick not in chosen:
+                chosen.add(pick)
+                changed = True
+
     kept = [shots[i] for i in sorted(chosen)]
-    total = round(total, 3)
+    total = round(sum(duration_by_index[i] or 0 for i in chosen), 3)
+    if any(f["severity"] == "block" for f in findings):
+        return kept, total, findings
+
+    if total > target_seconds + tol and any(disclosure_claim_ids(shots[i]) for i in chosen):
+        findings.append({
+            "severity": "warn", "kind": "cutdown_claim_bundle_overflow",
+            "msg": f"补回 claim 披露后 cutdown={total:.2f}s，超过目标 {target_seconds:.0f}s；需重写宣称/披露或压缩其它镜，不能删披露",
+        })
 
     must_total = round(sum(d for (_, _, d) in must), 3)
     if must_total > target_seconds + tol:
@@ -245,11 +303,14 @@ def render_cutdown(root, kept, total, target_label, out_path=None, aspect="16:9"
         concat_in = "".join(f"[v{k}][a{k}]" for k in range(n))
         fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=1[outv][outa]"
         args += ["-filter_complex", fc, "-map", "[outv]", "-map", "[outa]",
-                 "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "aac", out_path]
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                 "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv",
+                 "-c:a", "aac", "-ar", "48000", out_path]
     else:
         fc = ";".join(pre) + f";{concat_in}concat=n={n}:v=1:a=0[outv]"
         args += ["-filter_complex", fc, "-map", "[outv]",
-                 "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p",
+                 "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709", "-color_range", "tv", out_path]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         return False, f"cutdown 渲染失败：{rc.stderr[-600:]}", None

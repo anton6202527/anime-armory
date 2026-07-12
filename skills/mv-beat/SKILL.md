@@ -21,7 +21,7 @@ pip install librosa soundfile   # Mac 友好，纯 CPU 可跑
 ## 用法
 ```bash
 python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4
-python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --downbeat-phase 2 --confirm-timing
+python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --downbeat-phase 2 --confirm-timing --reviewer <name>
 ```
 产 `节拍/beatgrid.json`：
 - `bpm` / `tempo_candidates[]`：主 BPM + 半速/倍速候选，便于人工校正。
@@ -29,7 +29,8 @@ python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --down
 - `tempo_curve[]`：局部速度曲线；用于发现变速、rubato 和全局 BPM 不可靠的段落。
 - `energy_map[]`：按秒聚合的能量/起音强度，给高能段和转场判断。
 - `sections[]`：只消费 `_meta.section_timings` 的真实起止，不再把结构名按歌长等分伪装成段落检测。
-- `timing_verified` / `downbeat_phase_confidence` / `downbeat_method`：正式 `mv-plan` 的证据字段。
+- `source_audio_sha256`：证明该网格确实来自当前正式歌曲；换歌立即使下游失效。
+- `downbeats_verified` / `sections_verified` / `sections_complete` / `timing_review`：正式 `mv-plan` 的具名证据；`timing_verified=true` 只有在 beat/downbeat 存在、段落从 0 到歌尾连续覆盖且人工确认时成立。
 - `duration` / `meter` / `song`：基础对账字段。
 
 ## 工作流
@@ -37,11 +38,11 @@ python3 <skill>/scripts/beat_detect.py 创作区/制MV/<曲名> --meter 4 --down
    - 若 `_设置.md` 为 `歌曲输入时序=后配歌曲` 且 `歌/` 还没有最终音频，先停下：让用户补入最终音频，不能用估算节奏替代 beatgrid。
 2. 跑 beat_detect.py → beatgrid.json。
 3. 校对 BPM/动态 tempo、拍号和小节第一拍相位；把真实段落起止写入 `_meta.section_timings`。
-4. 用 `--downbeat-phase N --confirm-timing` 重跑。正式项目 `timing_verified=false` 会被下游 gate 阻断。
-5. 回写 `_进度.md` 卡点行 ✅。下一步 `mv-plan` 生成 `分镜/clip_plan.json`。
+4. 用 `--downbeat-phase N --confirm-timing --reviewer <name>` 重跑。确认不能匿名；正式项目缺完整 sections/source hash/具名 review 会被下游 gate 阻断。
+5. demo 可在候选网格生成后回写；正式项目只有 `timing_verified=true` 才回写 `_进度.md` 卡点行。字幕或演唱口型项目下一步先做 `mv-lyric-sync`；纯器乐且“无字幕+关闭口型”直接进入视觉蓝图/`mv-plan`。
 
 ## 卡点原则（喂给 mv-video / mv-compose）
-- **副歌**：每个 downbeat 切一刀（强节奏感）；**verse**：缓，2-4 拍一切。
+- **副歌/主歌密度是创作建议，不是固定公式**：切点只能取已确认音乐网格，具体密度由歌曲能量、歌词句法、表演和视觉概念决定；机器只报告密度与重拍证据。
 - **爽点/高潮**：对齐一个 downbeat，画面同帧砸下。
 - clip 时长 = 相邻卡点之差（mv-video 出 clip 按此定时长，别等长）。
 

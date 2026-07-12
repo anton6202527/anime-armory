@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import sys
 from datetime import date
@@ -21,6 +22,12 @@ FORMATS = ("条漫", "页漫", "四格", "分镜稿")
 SUBDIRS = (
     "源本",
     "设定库",
+    "角色库",
+    "资产库/场景",
+    "资产库/道具",
+    "资产库/服装",
+    "资产库/特效",
+    "资产库/风格",
     "脚本/第1话",
     "排版/第1话/name",
     "排版/第1话/pages",
@@ -202,32 +209,69 @@ def panel_script(title: str) -> dict:
     }
 
 
+PAPER_SIZES_300_DPI = {
+    "A4": (2480, 3508),
+    "B5": (2079, 2953),
+}
+
+
+def resolve_page_dimensions(value: str, comic_format: str) -> tuple[int, int]:
+    """Resolve named paper or numeric canvas values without crashing init.
+
+    `_设置.md` explicitly allows A4/B5, while the old initializer attempted
+    `int("B5")`.  Named sizes use 300 dpi production dimensions; `auto` keeps
+    the historic long-strip height for strips and a 1:1.42 page ratio for
+    paged formats.
+    """
+    raw = str(value or "").strip()
+    named = PAPER_SIZES_300_DPI.get(raw.upper())
+    if named:
+        return named
+    match = re.fullmatch(r"\s*(\d+)\s*x\s*(\d+|auto)\s*", raw, re.I)
+    if not match:
+        raise ValueError(f"unsupported page size: {value!r}; use A4, B5, WIDTHxHEIGHT, or WIDTHxauto")
+    width = int(match.group(1))
+    height_token = match.group(2).lower()
+    if height_token != "auto":
+        return width, int(height_token)
+    if comic_format in {"页漫", "四格"}:
+        return width, round(width * 1.42)
+    return width, 1800
+
+
 def layout_json(args: argparse.Namespace) -> dict:
+    width, height = resolve_page_dimensions(args.page_size, args.format)
+    is_paged = args.format in {"页漫", "四格"}
+    bleed = max(24, width // 32) if is_paged else 0
+    safe = max(72, width // 15) if is_paged else 72
     return {
         "schema_version": 1,
         "kind": "comic_layout",
         "chapter": "第1话",
         "format": args.format,
         "reading_direction": args.reading_direction,
+        "geometry_profile": "page_placeholder_manual_required" if is_paged else "longstrip_placeholder",
+        "format_supported_by_script": not is_paged,
+        "manual_layout_required": is_paged,
         "manuscript": {
             "spec": args.manuscript_spec,
-            "trim_box": {"x": 0, "y": 0, "w": int(args.page_size.split("x", 1)[0]), "h": 1800},
-            "safe_area": {"x": 72, "y": 72, "w": int(args.page_size.split("x", 1)[0]) - 144, "h": 1656},
-            "bleed": 0,
+            "trim_box": {"x": 0, "y": 0, "w": width, "h": height},
+            "safe_area": {"x": safe, "y": safe, "w": width - safe * 2, "h": height - safe * 2},
+            "bleed": bleed,
         },
-        "canvas": {"width": int(args.page_size.split("x", 1)[0]), "height": "auto"},
+        "canvas": {"width": width, "height": height if is_paged else "auto"},
         "segments": [
             {
-                "segment_id": "S001",
-                "width": int(args.page_size.split("x", 1)[0]),
-                "height": 1800,
+                "segment_id": "PAGE_001" if is_paged else "S001",
+                "width": width,
+                "height": height,
                 "panels": [
                     {
                         "panel_id": "P001",
-                        "x": 0,
-                        "y": 0,
-                        "w": int(args.page_size.split("x", 1)[0]),
-                        "h": 900,
+                        "x": safe if is_paged else 0,
+                        "y": safe if is_paged else 0,
+                        "w": width - safe * 2 if is_paged else width,
+                        "h": height - safe * 2 if is_paged else 900,
                         "bubble_slots": [],
                     }
                 ],

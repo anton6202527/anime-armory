@@ -1,0 +1,1575 @@
+{
+  "schema_version": 2,
+  "kind": "comic_identity_registry",
+  "project": "红楼梦",
+  "status": "preproduction_planned",
+  "style_contract": "STYLE_HLM_GONGBI_DREAM_V1：新国风工笔淡彩页漫；细劲墨线、低饱和矿物色、现实自然光、幻境水墨晕染；原画无正文、无空白气泡、无乱码；不得复制影视演员肖像、剧照构图或完整服装组合。",
+  "consistency_policy": "registry 是机器真值；角色库/资产库 manifests 只是派生视图。所有角色先锁身份 DNA 和多视图，再生成剧情格；同一身份的年龄、疾病、受伤、婚嫁、出家与仙凡形态只允许继承性变化。",
+  "forbidden_inheritance": [
+    "影视演员肖像与具体表演截图",
+    "影视版完整服装组合、布景和镜头构图",
+    "参考图中的水印、字幕、播放器 UI、现代影楼背景",
+    "图像模型默认的泛韩漫脸、塑料 3D 肤质、页游光效"
+  ],
+  "assets": {
+    "STYLE_HLM_GONGBI_DREAM_V1": {
+      "id": "STYLE_HLM_GONGBI_DREAM_V1",
+      "type": "style",
+      "display_name": "红楼梦·工笔淡彩梦境风格锚",
+      "status": "ready",
+      "library_tier": "project_style_lock",
+      "style_contract": "细劲工笔主线、低饱和石青石绿朱砂藕荷月白、透明淡彩叠染、三值先行；幻境用墨晕飞白和玉色散射光，现实用可追溯自然光与器物材质；精致克制而非华丽堆砌。",
+      "anchor_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+      "reference_images": [
+        {
+          "view": "style_anchor",
+          "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+          "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-11T22:30:55"
+        }
+      ],
+      "forbidden_inheritance": [
+        "演员脸",
+        "剧照构图",
+        "泛黄滤镜",
+        "霓虹法阵",
+        "空白气泡",
+        "可读乱码"
+      ],
+      "primary_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+      "sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+      "updated_at": "2026-07-11T22:30:55"
+    },
+    "CHAR_JIANGZHU": {
+      "id": "CHAR_JIANGZHU",
+      "type": "character",
+      "display_name": "绛珠仙子 / 林黛玉",
+      "status": "ready",
+      "core": true,
+      "library_tier": "core_full",
+      "character_dna": {
+        "face": "窄柔鹅蛋脸，内眼角略低，眼尾微挑但不锐，细长眉，小而清楚的鼻口；敏感、清醒、克制，不是尖锥网红脸。",
+        "hair": "浓黑而轻，固定发际线与脸侧碎发轮廓；仙凡形态只改发式和饰品。",
+        "body": "纤细但有人体重量，肩颈柔和，动作含蓄；不得病弱到幼童化或纸片化。",
+        "palette": "月白、灰紫、淡青；病弱阶段只降饱和，不换脸。",
+        "signature": "绛珠草叶形纹样轻提示；泪光是表演状态，不是永久妆效。"
+      },
+      "dna_contract": "仙子形态与林黛玉必须是同一张脸、同一眼距、同一发际线和同一体态家族。",
+      "variant_policy": "绛珠草→绛珠仙子→幼年黛玉→少女黛玉→病中黛玉：逐级继承脸、眼、发际线和体态；只改变年龄比例、礼仪发式、服饰、病色和状态。",
+      "age_variants": {
+        "immortal": "绛珠仙子",
+        "child": "幼年林黛玉",
+        "teen": "少女林黛玉",
+        "ill": "病中林黛玉"
+      },
+      "forbidden_inheritance": [
+        "具体演员肖像",
+        "夸张大眼",
+        "尖锥脸",
+        "浓艳成熟御姐",
+        "现代妆容"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_JIANGZHU__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_JIANGZHU__side.png",
+        "back": "出图/共享/图片/CHAR_JIANGZHU__back.png",
+        "face": "出图/共享/图片/CHAR_JIANGZHU__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+          "sha256": "944dcbec3b474a4a3ff7c11fc7cbac6006c8ad24bbcd0b714ee5764f09c8d9e5",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIANGZHU__three_quarter.png",
+          "sha256": "fe23d8723bfafe1fae6d37a42a3f6ec10eac4a378d2ce35eebc3cc57b7a09d68",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANGZHU__three_quarter_codex__20260712T082537581397.md",
+            "prompt_sha256": "bbaedddef68b64a64f52653666df554aa276562e01ad7fe05c1a2686b5a7dce8",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIANGZHU__side.png",
+          "sha256": "bf9593beeaa5435a5a6b9bb1b35fcf6071eb0c0fcd18f8b2444f4aac16cfef76",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANGZHU__side_codex__20260712T082704739645.md",
+            "prompt_sha256": "4e2a0e433421c87ac57246288300a0eeedc2f2370a88f9b17b9fdb31b28f86a3",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIANGZHU__back.png",
+          "sha256": "e8e3a05e2bf48c2bd3ffdb2e9427c22dccc301d3f1629635032dc4c44ac77dbe",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANGZHU__back_codex__20260712T082939120430.md",
+            "prompt_sha256": "754ab2187a626dc9be8f47ed6d8da8d6aa00ddbe9b31eca2aa4430c5e1cea6f2",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIANGZHU__face.png",
+          "sha256": "cb8b4b32d54196c21e1ab98bf165e9633a29810bf3263272289edb69f20c537d",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANGZHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANGZHU__face_codex__20260712T083058811054.md",
+            "prompt_sha256": "6d7fcb55fce15d74a3817c20c808470c24d03c704a69c974532eb64b4cbebe97",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_SHENYING": {
+      "id": "CHAR_SHENYING",
+      "type": "character",
+      "display_name": "神瑛侍者 / 贾宝玉",
+      "status": "ready",
+      "core": true,
+      "library_tier": "core_full",
+      "character_dna": {
+        "face": "少年圆润鹅蛋脸，眉线较直，眉骨与下颌清楚但柔和；明亮柔和的眼型与稳定眼距，鼻梁不过高，唇线清楚；无眼线、唇妆或女性妆面，秀润但一眼可读为少年男性。",
+        "hair": "浓黑丰厚，额头、发际线和鬓角轮廓固定；标准形态为少年男性束发与小型玉冠，长发可垂落但不得梳成女式花髻或佩戴耳坠。",
+        "body": "清晰少年男性比例：平直但尚未成年的肩背、自然男性喉颈与腰胯轮廓，无女性胸型；动作敏捷但不武侠壮汉化。",
+        "palette": "朱砂红、暖玉白、旧金；家族衰败期逐渐褪色。",
+        "signature": "通灵宝玉为关联资产，朱砂男式直肩系带袍与明确腰带，开放而专注的目光。"
+      },
+      "dna_contract": "神瑛侍者与贾宝玉同一身份；通灵宝玉是关联资产，不把侍者画成玉石化身。",
+      "variant_policy": "神瑛侍者→幼年宝玉→少年宝玉→出家状态：继承脸、眼、发际线、体态和玉的关联；只改变年龄、发式、服装与精神状态。",
+      "age_variants": {
+        "immortal": "神瑛侍者",
+        "child": "幼年贾宝玉",
+        "teen": "少年贾宝玉",
+        "renounced": "出家状态"
+      },
+      "forbidden_inheritance": [
+        "具体演员肖像",
+        "欧美深骨相",
+        "成年健身体型",
+        "短发",
+        "邪魅霸总表情",
+        "女性胸型",
+        "新娘感女式礼服轮廓",
+        "女性妆面",
+        "女式花髻",
+        "耳坠",
+        "裙装式高腰轮廓"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_SHENYING__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_SHENYING__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_SHENYING__side.png",
+        "back": "出图/共享/图片/CHAR_SHENYING__back.png",
+        "face": "出图/共享/图片/CHAR_SHENYING__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_SHENYING__front.png",
+          "sha256": "a72e6d50b13b1e6380f0f6d8bb6a15fb9c9f633165c92ed84a1d84036fc23a74",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHENYING__front_codex__20260712T080858641933.md",
+            "prompt_sha256": "8804e76b860883de138ab5ff0b012f1dd3314bce615932cb5d669ab3af94a2e4",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only",
+            "archived_previous_path": "出图/共享/candidates/CHAR_SHENYING/front/20260712T081135686633__ecd0feef8d70.png"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_SHENYING__three_quarter.png",
+          "sha256": "560c26c47e7c56514dfa46736a58a928d055a8f69f9a081b66bdbfc17f130ccf",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHENYING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHENYING__three_quarter_codex__20260712T081344034341.md",
+            "prompt_sha256": "b037b5dbb455a75491c4a9994f92cdd468ba3e7cb2f3b124e3a4a9dac0545848",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_SHENYING__side.png",
+          "sha256": "6135a07a812d4395dd2040b244f082e47a3b4df4e9ec0aad0da1cc01f93109ba",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHENYING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHENYING__side_codex__20260712T081546126392.md",
+            "prompt_sha256": "bfbc1a5e64af37011ff85dc50dc39b9152358cbbefa36877ff2e0c1564e5d6be",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_SHENYING__back.png",
+          "sha256": "fc42b4e3562b4dee3f8fa21059471877b6edf12ac90e01ab84e9ba793377b6b9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHENYING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHENYING__back_codex__20260712T081750599545.md",
+            "prompt_sha256": "9e444d5f2bd838281cce396119a6918ccbff3c33c340fafe99dc9aea69171906",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_SHENYING__face.png",
+          "sha256": "6c59e49c1655d6f81fd5cefb64bd8c4043a77420719197a911ee18b6f2b6b75e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_SHENYING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_SHENYING__face_codex__20260712T081953515064.md",
+            "prompt_sha256": "08df3889fab293fbef5981abe2cf0c871b0df3b47f3313195c7bd07a60a3639e",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_YINGLIAN_CHILD": {
+      "id": "CHAR_YINGLIAN_CHILD",
+      "type": "character",
+      "display_name": "幼年英莲 / 香菱",
+      "status": "ready",
+      "core": true,
+      "library_tier": "core_full",
+      "character_dna": {
+        "face": "三岁幼圆脸，清亮杏眼、稳定眼距、淡眉、小鼻口；眉心附近固定小痣位置。",
+        "hair": "幼年双发束，发际线和额头比例供未来香菱继承。",
+        "body": "真实三岁幼儿比例与重量，不是成人缩小版，也不是塑料娃娃。",
+        "palette": "藕荷、米白、嫩绿；命运推进后逐步失去嫩绿。",
+        "signature": "小痣、清亮杏眼、幼年发束。"
+      },
+      "dna_contract": "幼年英莲与未来香菱同一身份；年龄增长时额头、眼距、鼻口和脸型连续。",
+      "variant_policy": "三岁英莲→被拐幼女→少女香菱→病弱香菱：继承脸、眼距、发际线与小痣，只改变年龄比例、发式、服饰和健康状态。",
+      "age_variants": {
+        "age_3": "幼年英莲",
+        "lost_child": "被拐幼女",
+        "teen": "少女香菱",
+        "ill": "病弱香菱"
+      },
+      "forbidden_inheritance": [
+        "现代儿童写真",
+        "塑料娃娃质感",
+        "成人缩小版",
+        "小痣漂移",
+        "夸张大眼"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_YINGLIAN_CHILD__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_YINGLIAN_CHILD__side.png",
+        "back": "出图/共享/图片/CHAR_YINGLIAN_CHILD__back.png",
+        "face": "出图/共享/图片/CHAR_YINGLIAN_CHILD__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+          "sha256": "95b6f44fc7457ae7d8446bf3a58df5d0a7c2b18a674c8d3dbe63d7ac1e9493b2",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__three_quarter.png",
+          "sha256": "6f7e25029b2c7bea8645eea9aed7ffa8e8f605b3dbecaa79fcc3dcaefd528bf9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_YINGLIAN_CHILD__three_quarter_codex__20260712T083447479186.md",
+            "prompt_sha256": "abd3a7b1afc0cec6aad9964a56ac65f4cafff6efcecec0d4ceca277fbd37713f",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__side.png",
+          "sha256": "23f8a054638bf784a645dab72d395e2c6b181c89fc966565f6fa1e2d7f240f5d",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_YINGLIAN_CHILD__side_codex__20260712T083614317190.md",
+            "prompt_sha256": "5388879aaac3acd68ff934ef257def06cffe57508ca572895ffd1bde47e2f222",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__back.png",
+          "sha256": "f0f758bca880a8a61ccc80a5fe78b5ee1edbde9bbeb1ffaee125fa148d7e29e2",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_YINGLIAN_CHILD__back_codex__20260712T083740738086.md",
+            "prompt_sha256": "032514d5bfee9c1d3d45dd4d8b075b24bd9443678f0cdf0670c5a5a2a78cbaa5",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__face.png",
+          "sha256": "e3186c5d3b90327a2be1e6e92b096038e569d0ccad65afe9451000745ae8c965",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_YINGLIAN_CHILD__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_YINGLIAN_CHILD__face_codex__20260712T083856015162.md",
+            "prompt_sha256": "93daf086294384e5b3e3da5c1850e0f949f41c2a7a11dfa4f971c3090707b1a5",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_ZHEN_SHIYIN": {
+      "id": "CHAR_ZHEN_SHIYIN",
+      "type": "character",
+      "display_name": "甄士隐",
+      "status": "ready",
+      "library_tier": "recurring_standard",
+      "character_dna": {
+        "face": "五十岁上下，清癯温和，眼下略有疲态，修整短须；好奇和爱女之情清楚。",
+        "hair": "黑灰相间束发，发际线稳定。",
+        "body": "中等身量，读书人含胸但不佝偻。",
+        "palette": "竹青、米褐、旧靛。",
+        "signature": "短须、竹青家居服、温和眼神。"
+      },
+      "variant_policy": "梦前闲适→梦中惊异→灾后潦倒：脸与骨相不变，只改变衣着整洁度、须发状态和精神疲态。",
+      "forbidden_inheritance": [
+        "具体演员肖像",
+        "富贵官员华服",
+        "仙风道骨神仙化",
+        "现代书生写真"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_ZHEN_SHIYIN__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_ZHEN_SHIYIN__side.png",
+        "back": "出图/共享/图片/CHAR_ZHEN_SHIYIN__back.png",
+        "face": "出图/共享/图片/CHAR_ZHEN_SHIYIN__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+          "sha256": "eab0e671b13d21bc0ded16500518260ee5b922f873b10aaa2b152276aca080a6",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__three_quarter.png",
+          "sha256": "15052b76b9c91ee285421e622d0aa4e72dfc56c4a2733e105a591bfa83dfc67c",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHEN_SHIYIN__three_quarter_codex__20260712T084516420828.md",
+            "prompt_sha256": "434e22feace702b6c3652cf35ca4dd7e014f81265e98bafb9e285a56042a0084",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__side.png",
+          "sha256": "5d3f54b58a4bef4247194e2d7b34674e3d7932329fbb72d3865fbafc17a01de8",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHEN_SHIYIN__side_codex__20260712T084711758067.md",
+            "prompt_sha256": "fadf1ff67c533efa6e829ddfeea3252574edd8f152053ba1a70b4d9db99bb0fd",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__back.png",
+          "sha256": "d2d75b631cd53aab5ea2f4a7c7618219c8aca917462b5cfb452c081f9bc87001",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHEN_SHIYIN__back_codex__20260712T084909256360.md",
+            "prompt_sha256": "b09a5751b43000bd287b53cb65ed1e221fa88542a5e1270c6af15a11abd7f1b7",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__face.png",
+          "sha256": "ec9f659a61053e468a042db5f2277ac0a64e1fa376ec35073aab4493c4a8f965",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_ZHEN_SHIYIN__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_ZHEN_SHIYIN__face_codex__20260712T085023213879.md",
+            "prompt_sha256": "df329e131c01be520e515cb550d4027e0efd337c9666aa449479c3d7b846a788",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_MONK": {
+      "id": "CHAR_MONK",
+      "type": "character",
+      "display_name": "茫茫大士 / 和尚",
+      "status": "ready",
+      "library_tier": "recurring_standard",
+      "character_dna": {
+        "face": "宽额、眼尾微垂、笑意慈悲中有讥诮，骨相清奇但不怪物化。",
+        "hair": "仙境剃发整洁；凡尘状态为癞头外层变化，额头与脸型不变。",
+        "body": "中等偏壮，宽袖动作沉稳。",
+        "palette": "暖灰、旧赭、米白。",
+        "signature": "旧赭宽袖、宽额、慈悲中带讥诮的眼神。"
+      },
+      "transient_props": [
+        "通灵宝玉仅在明确触及或托举宝玉的剧情格出现，不属于永久手持物"
+      ],
+      "staging_defaults": "与道士同框时和尚通常位于画左；这是镜头调度，不属于定妆身份。",
+      "variant_policy": "仙境清奇形态→凡尘癞头跣脚：脸、眼、额头、体态和旧赭袖口继承，只增加污损、赤足与疯癫外层表演。",
+      "forbidden_inheritance": [
+        "恐怖僵尸",
+        "油腻笑脸",
+        "现代和尚服",
+        "脸型更换",
+        "多手"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_MONK__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_MONK__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_MONK__side.png",
+        "back": "出图/共享/图片/CHAR_MONK__back.png",
+        "face": "出图/共享/图片/CHAR_MONK__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_MONK__front.png",
+          "sha256": "168fdaf2e5d76d6765e47b40d3e4aee7b8077d806fb18428941dfab81c0b52a5",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_MONK__front_codex__20260712T080418441981.md",
+            "prompt_sha256": "0e53339a6bae63f47aca12d2e82712412e08e2ddf8da77f2f9673509d9159c3d",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only",
+            "archived_previous_path": "出图/共享/candidates/CHAR_MONK/front/20260712T080551336163__1d6c35061da9.png"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_MONK__three_quarter.png",
+          "sha256": "34a8b13df4c7c5b62e3c4ffb29aee7091a5174750b974e66de5ce80ed69cddc7",
+          "source": {
+            "kind": "generated_character_view",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "anchor_path": "出图/共享/图片/CHAR_MONK__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_MONK__three_quarter_codex__20260712T085503502258.md",
+            "prompt_sha256": "9aa16fd4140910327f55fd1698f770338d1698b4771af0a5f99435ec6ce2b4e2"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_MONK__side.png",
+          "sha256": "fbf87f0084f8b63b2db007516f24e9d46fecf1777de87b7c32bc79ce72a06029",
+          "source": {
+            "kind": "generated_character_view",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "anchor_path": "出图/共享/图片/CHAR_MONK__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_MONK__side_codex__20260712T085658557620.md",
+            "prompt_sha256": "09b9f05560c9bbcbf82fe0d2365cceb7aa9e3323a85c36c1d01eb998da70e7e5"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_MONK__back.png",
+          "sha256": "59e6e8428a8f3ab1214cad2537d26040d48ff84cf3bb5951a4b36333c5180358",
+          "source": {
+            "kind": "generated_character_view",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "anchor_path": "出图/共享/图片/CHAR_MONK__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_MONK__back_codex__20260712T085849812106.md",
+            "prompt_sha256": "37384de04f425e2a4fde24b9f5d6114d98321ae5a04215c49341d95d0be4ebe1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_MONK__face.png",
+          "sha256": "8d0f90815fa79c9dc0ce9ff3cadb6b8ed72f11d3d0de32a5c1bbdcc4cf96cc9d",
+          "source": {
+            "kind": "generated_character_view",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "anchor_path": "出图/共享/图片/CHAR_MONK__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_MONK__face_codex__20260712T090031413632.md",
+            "prompt_sha256": "ab975fd00cfcd92f22b2fe3d4d413386f0bedba5a2f1c3763be2c0f4ee50804b"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "CHAR_DAOIST": {
+      "id": "CHAR_DAOIST",
+      "type": "character",
+      "display_name": "渺渺真人 / 道士",
+      "status": "ready",
+      "library_tier": "recurring_standard",
+      "character_dna": {
+        "face": "窄长脸，眼神清醒灵动，眉骨不过分锐利，轻短须；不画成阴险反派。",
+        "hair": "仙境整束道髻；凡尘状态蓬头但发际线、发量和脸侧轮廓不变。",
+        "body": "瘦长轻快，动作比和尚更灵活。",
+        "palette": "青灰、墨黑、少量旧银。",
+        "signature": "青灰长袖、瘦长体态、清醒灵动的目光。"
+      },
+      "transient_props": [],
+      "staging_defaults": "与和尚同框时道士通常位于画右并略后半步；这是镜头调度，不属于定妆身份。",
+      "variant_policy": "仙境清奇形态→凡尘跛足蓬头：脸、眼、发际线、瘦长体态与青灰袖口继承，只增加乱发、跛足和尘污。",
+      "forbidden_inheritance": [
+        "邪派道士刻板脸",
+        "现代道袍写真",
+        "欧美脸",
+        "脸型更换",
+        "把跛足画成手"
+      ],
+      "views": {
+        "front": "出图/共享/图片/CHAR_DAOIST__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_DAOIST__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_DAOIST__side.png",
+        "back": "出图/共享/图片/CHAR_DAOIST__back.png",
+        "face": "出图/共享/图片/CHAR_DAOIST__face.png"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_DAOIST__front.png",
+          "sha256": "0a8307683e07f020bc82a68b1239c494eecf4ff8c56ed1a3f1b4d455f0a97823",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_DAOIST__three_quarter.png",
+          "sha256": "36f29c816d0df66c823604b85254015d7351eddbde253951773bb48da9659b80",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_DAOIST__three_quarter_codex__20260712T085503501298.md",
+            "prompt_sha256": "86b1b92125aefb6835db3895b7418971b1193035d16fceb653c8002b46489683",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_DAOIST__side.png",
+          "sha256": "a31f7e039f7461ec791f54d75854d59362814a54a51f5b57ab146e2046f1fcb3",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_DAOIST__side_codex__20260712T085726178685.md",
+            "prompt_sha256": "89254e7dcdefe0cd7d10d960af0e8c2c77a6ac0c46bc2904c423da89574eb947",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_DAOIST__back.png",
+          "sha256": "4d3c7b9101548a5af46969f1db0dab071bd2b1bcc4b38e1512c8d1dcb92a3e3e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_DAOIST__back_codex__20260712T085914490496.md",
+            "prompt_sha256": "0a22503b2ccae8c4538e69c4d6bec42b8ca23ffe3c6c497a70a6840d762f491f",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_DAOIST__face.png",
+          "sha256": "1f0b35cfad7d02b77dcae693616a0c8dbf0359c3389f0ebf277cef00ee69faaa",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_DAOIST__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_DAOIST__face_codex__20260712T090033288932.md",
+            "prompt_sha256": "f703378a34fb2d6316498101a8c3ae3c72b87e78c5ab5cdf6eb66b3622191f15",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1"
+          },
+          "updated_at": "2026-07-12T09:03:40"
+        }
+      ],
+      "updated_at": "2026-07-12T09:03:40",
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "LOC_PROLOGUE_VOID": {
+      "id": "LOC_PROLOGUE_VOID",
+      "type": "scene",
+      "display_name": "象征性散席空间",
+      "status": "ready",
+      "library_tier": "chapter_anchor",
+      "anchor_path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+      "prop_contract": "空桌、残杯、熄灭烛芯、空椅、落花、半卷帷幕；残烛画左下，冷月压后景；无清晰人脸和具体影视布景。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+          "sha256": "2207ef0704900c00896f0e116826eea87d6b12a447558e8676e467884e947cfa",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_PROLOGUE_VOID__anchor_codex__20260712T091035845413.md",
+            "prompt_sha256": "00b7c60a70bfe781b1c2b432241956b7afecd22afc90f4b55b5942ae0d3e4287",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:12:12"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_PROLOGUE_VOID__anchor.png",
+      "sha256": "2207ef0704900c00896f0e116826eea87d6b12a447558e8676e467884e947cfa",
+      "updated_at": "2026-07-12T09:12:12"
+    },
+    "LOC_DAHUANG": {
+      "id": "LOC_DAHUANG",
+      "type": "scene",
+      "display_name": "大荒山·青埂峰",
+      "status": "ready",
+      "library_tier": "core_scene",
+      "anchor_path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+      "prop_contract": "补天石阵左上、青埂峰断崖右下、顽石低处前景；冷青天光与低饱和朱金炼石余烬；禁仙宫和霓虹法阵。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "reverse",
+          "path": "出图/共享/图片/LOC_DAHUANG__reverse.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+          "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_DAHUANG__anchor_codex__20260712T090858533075.md",
+            "prompt_sha256": "bd0423fa01c349c57044879997b3ff8435ffb5aae6a8a45217274c4cf4c28e81",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:10:35"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_DAHUANG__anchor.png",
+      "sha256": "144bf3ed7855b38b1af75071be6a9820f078239a4442cef5b2e79fb9d034b864",
+      "updated_at": "2026-07-12T09:10:35"
+    },
+    "LOC_REDDUST_VISION": {
+      "id": "LOC_REDDUST_VISION",
+      "type": "scene",
+      "display_name": "红尘繁华幻景",
+      "status": "ready",
+      "library_tier": "chapter_anchor",
+      "anchor_path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png",
+      "prop_contract": "云雾圆窗内三层叠景：门楼、回廊、灯宴；人物只作无脸剪影，暖朱与月白对照，边缘墨晕消散。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png",
+          "sha256": "42ccb91b801b33a79b882863dddc11b89c918e8eeb6c16113441de809f5f07c5",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_REDDUST_VISION__anchor_codex__20260712T091212662371.md",
+            "prompt_sha256": "a856a0ba7ab99b562eca42e0cb24c771f24e651c93963eb7b4865fdffb0f46c0",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:14:07"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_REDDUST_VISION__anchor.png",
+      "sha256": "42ccb91b801b33a79b882863dddc11b89c918e8eeb6c16113441de809f5f07c5",
+      "updated_at": "2026-07-12T09:14:07"
+    },
+    "LOC_SPIRIT_RIVER": {
+      "id": "LOC_SPIRIT_RIVER",
+      "type": "scene",
+      "display_name": "灵河岸·三生石畔",
+      "status": "ready",
+      "library_tier": "core_scene",
+      "anchor_path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+      "prop_contract": "三生石左后、绛珠草石根、浅水右前至左后，远处离恨天只作朦胧轮廓；月白逆光、甘露一点暖玉；纯场景锚点，不出现神瑛或任何人物。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "reverse",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__reverse.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+          "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_SPIRIT_RIVER__anchor_codex__20260712T093507633552.md",
+            "prompt_sha256": "58f92f3798a96982f9978db999e11dc86921f988d1ccf8ec548eb21a98d7f8cf",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only",
+            "archived_previous_path": "出图/共享/candidates/LOC_SPIRIT_RIVER/anchor/20260712T093644311001__9d99af489062.png"
+          },
+          "updated_at": "2026-07-12T09:36:44"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_SPIRIT_RIVER__anchor.png",
+      "sha256": "33d4a3312b6cc2a9755981d28ce8c110f5ac7e8edea7083a8e242d7f94b8235b",
+      "updated_at": "2026-07-12T09:36:44"
+    },
+    "LOC_ZHEN_STUDY": {
+      "id": "LOC_ZHEN_STUDY",
+      "type": "scene",
+      "display_name": "甄宅书房",
+      "status": "ready",
+      "library_tier": "core_scene",
+      "anchor_path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+      "prop_contract": "书案左中、芭蕉窗右、门通后景；暖白窗光从右，书案卷册瓷盏芭蕉影竹帘固定。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "reverse",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__reverse.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+          "sha256": "b1aef3881c845faa74b1fe2b7b608eefbadc96144bfd2a900e7077d32f0e7632",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZHEN_STUDY__anchor_codex__20260712T092015270917.md",
+            "prompt_sha256": "d70265d4cc287086d19a13f4a4b67406819b2b1e8d857a2977ad7b39d35e27a2",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:22:09"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_ZHEN_STUDY__anchor.png",
+      "sha256": "b1aef3881c845faa74b1fe2b7b608eefbadc96144bfd2a900e7077d32f0e7632",
+      "updated_at": "2026-07-12T09:22:09"
+    },
+    "LOC_TAIXU_GATE": {
+      "id": "LOC_TAIXU_GATE",
+      "type": "scene",
+      "display_name": "太虚幻境牌坊",
+      "status": "ready",
+      "library_tier": "core_scene",
+      "anchor_path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+      "prop_contract": "无字石牌坊横断中景，门后大片云雾留白；玉色散射光，雷从右上；禁金色宫门和游戏 UI。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "reverse",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__reverse.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+          "sha256": "fc39d34a2a7b4a8e046490209f29aca1eb3949441f239a0dff9fb87778da9267",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_TAIXU_GATE__anchor_codex__20260712T091555748669.md",
+            "prompt_sha256": "7cf0dccb9abd3d33719acdb6d00597fd624eef54b49f6600c9c07840c4da45d0",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:17:30"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_TAIXU_GATE__anchor.png",
+      "sha256": "fc39d34a2a7b4a8e046490209f29aca1eb3949441f239a0dff9fb87778da9267",
+      "updated_at": "2026-07-12T09:17:30"
+    },
+    "LOC_ZHEN_COURTYARD": {
+      "id": "LOC_ZHEN_COURTYARD",
+      "type": "scene",
+      "display_name": "甄宅门前街巷",
+      "status": "ready",
+      "library_tier": "core_scene",
+      "anchor_path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+      "prop_contract": "木门左、街巷右远、芭蕉与粉墙石阶固定；夏日右上暖光，远处灯架只作元宵预兆。",
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "reverse",
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__reverse.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+          "sha256": "740c627f24dcdc8cca7f92e2874896a85d4f6ef077e5935356b8ffdc48fe4b97",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_ZHEN_COURTYARD__anchor_codex__20260712T091730713216.md",
+            "prompt_sha256": "ad999eb10523041befb2e776f921ab4fd3a9da5248e3efc2c9c3e687a7839b14",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:20:15"
+        }
+      ],
+      "primary_path": "出图/共享/图片/LOC_ZHEN_COURTYARD__anchor.png",
+      "sha256": "740c627f24dcdc8cca7f92e2874896a85d4f6ef077e5935356b8ffdc48fe4b97",
+      "updated_at": "2026-07-12T09:20:15"
+    },
+    "PROP_UNUSED_STONE": {
+      "id": "PROP_UNUSED_STONE",
+      "type": "prop",
+      "display_name": "青埂峰未用顽石",
+      "status": "ready",
+      "library_tier": "hero_prop",
+      "anchor_path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+      "prop_contract": "粗粝青灰顽石，天然环形裂纹，苔痕和炼石余烬；不长卡通五官；变化为宝玉时裂纹母题继承。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+          "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_UNUSED_STONE__anchor_codex__20260712T092649809251.md",
+            "prompt_sha256": "7f39cf928771ed5cbba973d28998586abacf398da735c0e3028db3b9d92ebf48",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:28:15"
+        }
+      ],
+      "primary_path": "出图/共享/图片/PROP_UNUSED_STONE__anchor.png",
+      "sha256": "25a2e2092c29a43f2951e8e6621a2252948bc325f8aa8ff883f8623f11d949a4",
+      "updated_at": "2026-07-12T09:28:15"
+    },
+    "PROP_TONGLING_JADE": {
+      "id": "PROP_TONGLING_JADE",
+      "type": "prop",
+      "display_name": "通灵宝玉",
+      "status": "ready",
+      "library_tier": "hero_prop",
+      "anchor_path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+      "prop_contract": "扇坠大小温润白玉，极淡胭脂色沁，内部继承顽石环形裂纹；原画无可读文字，字样后期嵌入。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "status": "planned"
+        },
+        {
+          "view": "in_hand",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__in_hand.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+          "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_TONGLING_JADE__anchor_codex__20260712T092515659394.md",
+            "prompt_sha256": "8bf6fb60be9f83e0b56a49bf08a5837bc9aae3880cb93070b6cc625bd063b90f",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:26:49"
+        }
+      ],
+      "primary_path": "出图/共享/图片/PROP_TONGLING_JADE__anchor.png",
+      "sha256": "d838bec7d6269abcc751080f9b2ac91288a44e902e927aca74a56bb240774221",
+      "updated_at": "2026-07-12T09:26:49"
+    },
+    "PROP_DEW_BOWL": {
+      "id": "PROP_DEW_BOWL",
+      "type": "prop",
+      "display_name": "素玉甘露盏",
+      "status": "ready",
+      "library_tier": "recurring_prop",
+      "anchor_path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png",
+      "prop_contract": "素玉小盏，简洁无字无纹，尺寸适合少年单手倾倒；不得变成法器、酒杯或发光水晶。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png",
+          "sha256": "30cbb1a96c295c8f7c975cf42e6714f23b34b32e61b9074c07b79db796d02910",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_DEW_BOWL__anchor_codex__20260712T092338760022.md",
+            "prompt_sha256": "c73a975493369d67341c7e0be9e497f8cb7ff84e90d7a6e45bcbbdf2446005e5",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:25:15"
+        }
+      ],
+      "primary_path": "出图/共享/图片/PROP_DEW_BOWL__anchor.png",
+      "sha256": "30cbb1a96c295c8f7c975cf42e6714f23b34b32e61b9074c07b79db796d02910",
+      "updated_at": "2026-07-12T09:25:15"
+    },
+    "PROP_CRIMSON_PEARL_GRASS": {
+      "id": "PROP_CRIMSON_PEARL_GRASS",
+      "type": "prop",
+      "display_name": "绛珠草",
+      "status": "ready",
+      "library_tier": "identity_linked_prop",
+      "anchor_path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+      "prop_contract": "细长柔韧草叶，叶脉有极淡朱色，生于三生石根；化形时叶脉转为绛珠仙子衣纹，但不长人脸。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+          "sha256": "e3140a5ff81aef6fbc2e4025affb3c00be4aac0cacf96345247a556400e7c30a",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_CRIMSON_PEARL_GRASS__anchor_codex__20260712T092209627634.md",
+            "prompt_sha256": "98c0fe7ee6ea8e53de98c25f4d18b34a41afc25d6b2c8ee0c616fd2d2d4ffc4e",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:23:38"
+        }
+      ],
+      "primary_path": "出图/共享/图片/PROP_CRIMSON_PEARL_GRASS__anchor.png",
+      "sha256": "e3140a5ff81aef6fbc2e4025affb3c00be4aac0cacf96345247a556400e7c30a",
+      "updated_at": "2026-07-12T09:23:38"
+    },
+    "PROP_YINGLIAN_FLOWER": {
+      "id": "PROP_YINGLIAN_FLOWER",
+      "type": "prop",
+      "display_name": "英莲手中小花",
+      "status": "ready",
+      "library_tier": "chapter_prop",
+      "anchor_path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png",
+      "prop_contract": "一朵小型白粉野花，适合三岁幼儿握持，不是莲花象征硬贴脸，不出现文字。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png",
+          "sha256": "d3a406c2948f956448682048f6890f43cfb3a87a8a14efbb8adc9f72a82968bf",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_YINGLIAN_FLOWER__anchor_codex__20260712T092815467041.md",
+            "prompt_sha256": "5454d356e09b3f78e3356342253884dcfdfd19490606545e3f232f347fd1f5d8",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:29:52"
+        }
+      ],
+      "primary_path": "出图/共享/图片/PROP_YINGLIAN_FLOWER__anchor.png",
+      "sha256": "d3a406c2948f956448682048f6890f43cfb3a87a8a14efbb8adc9f72a82968bf",
+      "updated_at": "2026-07-12T09:29:52"
+    },
+    "FX_INK_DREAM_TRANSITION": {
+      "id": "FX_INK_DREAM_TRANSITION",
+      "type": "effect",
+      "display_name": "水墨梦境转场",
+      "status": "ready",
+      "library_tier": "motif_effect",
+      "anchor_path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+      "prop_contract": "现实木纹/石纹/水纹溶成墨云与飞白，边缘软而主体轮廓清楚；不使用圆形游戏法阵、霓虹或 UI。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+          "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/FX_INK_DREAM_TRANSITION__anchor_codex__20260712T090402386015.md",
+            "prompt_sha256": "f9be9b6f742a93e4e494cd439ec0275cc05797bce7b5d46a6f63ef717e16f5f9",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:05:39"
+        }
+      ],
+      "primary_path": "出图/共享/图片/FX_INK_DREAM_TRANSITION__anchor.png",
+      "sha256": "3894ffa39b947719a9c394efdc2650cc305f39db9642f9d752f272012cc1680f",
+      "updated_at": "2026-07-12T09:05:39"
+    },
+    "FX_NUWA_SILHOUETTE": {
+      "id": "FX_NUWA_SILHOUETTE",
+      "type": "effect",
+      "display_name": "女娲补天无脸余影",
+      "status": "ready",
+      "library_tier": "chapter_effect",
+      "anchor_path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png",
+      "prop_contract": "只表现巨大背影、手臂和补天动作尺度，不生成可辨人脸、具体影视造型或过度裸露。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png",
+          "sha256": "73ebb6e5323e10b1ee38b526501570f1462dd31a708ecd56b42ea05e8931247b",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/FX_NUWA_SILHOUETTE__anchor_codex__20260712T090539965065.md",
+            "prompt_sha256": "41e9dbf37238dbc4211fd099f9ebdfab72727abf3e5dfb242677038250b2d781",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:07:14"
+        }
+      ],
+      "primary_path": "出图/共享/图片/FX_NUWA_SILHOUETTE__anchor.png",
+      "sha256": "73ebb6e5323e10b1ee38b526501570f1462dd31a708ecd56b42ea05e8931247b",
+      "updated_at": "2026-07-12T09:07:14"
+    },
+    "FX_OMEN_EMBER": {
+      "id": "FX_OMEN_EMBER",
+      "type": "effect",
+      "display_name": "元宵灾变朱砂火星",
+      "status": "ready",
+      "library_tier": "motif_effect",
+      "anchor_path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png",
+      "prop_contract": "远景一粒朱砂火星与未点亮灯架，只作预兆；不得提前生成完整火灾、爆炸或血腥灾难。",
+      "reference_images": [
+        {
+          "view": "primary",
+          "path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png",
+          "status": "planned"
+        },
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png",
+          "sha256": "7d09d1cfd77a70a33ed1d642d43f9e0e0772f503c6d260b21f8a96a130d7701b",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.1",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/FX_OMEN_EMBER__anchor_codex__20260712T090714830056.md",
+            "prompt_sha256": "32c782d2ca0c70d2d262e3dbc63a298e173eebc08c3a613c71dd914861a28a28",
+            "style_reference_path": "出图/共享/图片/STYLE_HLM_GONGBI_DREAM_V1__anchor.png",
+            "style_reference_sha256": "690e5722e92f6e0b8524c5ac52388e49b945434dbe17a52894abb782db805f34",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-12T09:08:58"
+        }
+      ],
+      "primary_path": "出图/共享/图片/FX_OMEN_EMBER__anchor.png",
+      "sha256": "7d09d1cfd77a70a33ed1d642d43f9e0e0772f503c6d260b21f8a96a130d7701b",
+      "updated_at": "2026-07-12T09:08:58"
+    }
+  }
+}

@@ -13,9 +13,15 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
+
+_AD_LIB = Path(__file__).resolve().parents[2] / "ad" / "_lib"
+if str(_AD_LIB) not in sys.path:
+    sys.path.insert(0, str(_AD_LIB))
+import settings as ad_settings  # noqa: E402
 
 
 KIND = "ad_image_prompt_plan"
@@ -178,7 +184,7 @@ Slogan：{brand.get('slogan', '')}
 - text logo 必须清晰可读，不乱码，不变形 logo，不镜像。
 - color consistency: strict HEX {brand.get('primary_hex', '')}
 - Logo 保持最小留白，不贴边，不被反光、手指、通知卡片遮挡。
-- 片尾或 CTA 镜中，文字全部保持在中心安全区。
+- 片尾或 CTA 镜先保留中心构图余量；最终位置须按目标 placement 当前官方/客户模板复核。
 
 负向：
 - 不要改 logo 字形，不要变形 logo，不要改品牌色，不要乱码，不要出现第三方真实品牌。
@@ -250,7 +256,7 @@ def build_overview(root: Path, registry: Mapping[str, Any], storyboard: Mapping[
 - 身份锁定句必须包含：同一款 App UI、同一 logo、同一品牌色。
 - 负向必须包含：不要改包装文字、不要变形 logo、不要乱码。
 - UI/CTA/法律声明必须文字清晰可读，最终关键文字可在 ad-compose 后期叠加锁定。
-- 安全区：8x8 grid，产品重心 center 4x4，文字/CTA/legal center 6x6。
+- 跨比例构图余量（内部启发式）：8x8 grid，产品重心 center 4x4，文字/CTA/legal center 6x6；不等于平台 placement 安全区。
 """
 
 
@@ -293,7 +299,7 @@ def frame_prompt(label: str, shot: Mapping[str, Any], registry: Mapping[str, Any
 {shot.get('product_lock') or '保持产品和品牌资产一致。'}
 
 ## 文字锁
-文字清晰可读，准确显示并保留原文；CTA、slogan、法律声明保持在中心安全区，不乱码。
+文字清晰可读，准确显示并保留原文；CTA、slogan、法律声明先留中心构图余量，并按目标 placement 模板避让，不乱码。
 
 ## 构图与光位
 严格继承 storyboard 的画幅、构图、光位、场景与风格；按目标 placement 的官方安全区模板留出 UI overlay 避让，给图生视频保留运动余量。
@@ -379,7 +385,11 @@ def run(root: Path) -> Dict[str, Any]:
             write_text(shot_prompt_dir / f"{label}_end.md", frame_prompt(label, shot, registry, end_frame=True))
 
     jobs = build_jobs(root, storyboard)
+    image_model = ad_settings.get_setting(str(root), "生图模型", "GPT Image 2")
+    image_channel = ad_settings.get_setting(str(root), "生图渠道", "Codex CLI")
     for job in jobs:
+        job["planned_model"] = image_model
+        job["planned_channel"] = image_channel
         prompt_path = root / str(job["prompt"])
         job["prompt_sha256"] = hashlib.sha256(prompt_path.read_bytes()).hexdigest()
     manifest = {
@@ -391,6 +401,7 @@ def run(root: Path) -> Dict[str, Any]:
             str(p.relative_to(root)) for p in sorted(shared_prompt_dir.glob("*.md"))
         ],
         "overview": "出图/分镜/prompt/00_总览.md",
+        "image_route": {"model": image_model, "channel": image_channel},
         "jobs": jobs,
         "summary": {
             "first_frames": sum(1 for j in jobs if j["kind"] == "first_frame"),

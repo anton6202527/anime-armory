@@ -47,3 +47,28 @@ def test_roas_aggregate_never_claims_significance_without_variance():
     ], min_impressions=1000, measurement={"primary_kpi": "ROAS"})
     assert report["winner"] is None
     assert any(f["code"] == "aggregate_metric_no_interval" for f in report["findings"])
+
+
+def test_unregistered_experiment_never_announces_winner():
+    report = build([
+        {"variant_id": "A", "impressions": 5000, "clicks": 500},
+        {"variant_id": "B", "impressions": 5000, "clicks": 100},
+    ], min_impressions=1000, experiment_validation={})
+    assert report["winner"] is None
+    assert report["verdict"] == "directional_only"
+    assert report["summary"]["block"] == 1
+    assert any(f["code"] == "experiment_not_preregistered" for f in report["findings"])
+
+
+def test_data_must_match_registered_variants_and_strata():
+    validation = {"summary": {"approved": True}, "plan": {
+        "primary_kpi": "CTR", "platform": "TikTok", "audience": "prospecting",
+        "variants": [{"variant_id": "A"}, {"variant_id": "B"}],
+    }}
+    report = build([
+        {"variant_id": "A", "platform": "TikTok", "audience": "prospecting", "impressions": 5000, "clicks": 500},
+        {"variant_id": "C", "platform": "Meta", "audience": "prospecting", "impressions": 5000, "clicks": 100},
+    ], min_impressions=1000, measurement={"primary_kpi": "CTR"}, experiment_validation=validation)
+    assert report["winner"] is None
+    assert any(f["code"] == "unregistered_variant" for f in report["findings"])
+    assert any(f["code"] == "platform_drift" for f in report["findings"])

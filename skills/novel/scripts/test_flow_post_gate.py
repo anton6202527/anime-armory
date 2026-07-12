@@ -371,6 +371,22 @@ class NovelGateTest(unittest.TestCase):
             self.assertEqual(status["status"], "stale")
             self.assertIn("source_snapshot", status["reason"])
 
+    def test_wiki_freshness_reports_lag_chapters(self):
+        # 分级判据：snapshot 覆盖后新增/改动的章节数 = lag_chapters（≥3 章达 review/score 阻断阈值）。
+        with tempfile.TemporaryDirectory() as root:
+            wiki = os.path.join(root, "设定", "动态百科.json")
+            write(os.path.join(root, "章节", "第01章.md"), "# 第1章\n旧正文\n")
+            write_json(wiki, {"角色": {}})
+            write_json(os.path.join(root, "设定", "动态百科.source_snapshot.json"),
+                       snapshot_chapters(root, mode="wiki:dynamic"))
+            for i in (2, 3, 4):
+                write(os.path.join(root, "章节", f"第{i:02d}章.md"), f"# 第{i}章\n新正文\n")
+
+            status = novel_gate.check_wiki_freshness(root)
+            self.assertEqual(status["status"], "stale")
+            self.assertEqual(status["lag_chapters"], 3)
+            self.assertGreaterEqual(status["lag_chapters"], novel_gate.WIKI_LAG_BLOCK_THRESHOLD)
+
     def test_wiki_freshness_rejects_partial_snapshot(self):
         with tempfile.TemporaryDirectory() as root:
             wiki = os.path.join(root, "设定", "动态百科.json")

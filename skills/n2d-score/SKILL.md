@@ -32,8 +32,18 @@ description: P2 automatic review scoring for n2d. Produce a machine score per ep
 | 交互/接触因果一致性 | 8 | 持有账本、接触图谱、结构化交互图、物理因果链 CG1 | `script_stage2` |
 | 成片/包装一致性 | 8 | 成片统一、时间线探针、系列包装 | `compose` |
 | 生产操作一致性 | 6 | 生成配方、强配方 schema、成本路由、人审校准 CAL、一致性 PROBE | `review` |
+| 音色一致性 | 10 | voice_print 说话人 embedding 跨集对账 + voice_key 留痕；缺后端降级不臆造 | `voice` |
+| UI/系统面板/HUD 一致性 | 6 | 母题 registry、系统面板锁色锁形、overlay 文字层 | `image` |
+| 音乐母题 leitmotif 一致性 | 6 | leitmotif_registry 母题铺设/串用对账 | `script_stage1`(bgm)，铺设错回 `compose` |
+| 图中文字渲染一致性 | 8 | OCR sidecar 校验画内文字（招牌/书信/面板数值） | `image` |
+
+**共 18 维、权重合计 184（加权平均归一）**；此前本表只列 14 行漏了后 4 维，已按 schema 补齐——本表永远只是人读摘要，以 `n2d_schema.py::CONSISTENCY_DIMENSIONS` 为准。
 
 默认阈值 `85`。任一维度 block 会让该维度 fail；总分低于阈值或存在 fail 时，整集状态为 `fail`，输出 `auto_return_tasks`。缺机器信号的维度是 `insufficient_data`：只输出 `data_collection_tasks`，先采集检查信号，不直接排返工。
+
+### 阈值出处（诚实口径·2026-07 标准审计补登）
+
+profile 阈值 `demo=75 / standard=85 / production=90 / overseas=88`（单一真值源 `skills/n2d/_lib/n2d_thresholds.py::SCORE_PROFILE_THRESHOLDS`，score 与 `release_verdict` 同口径消费）与维度扣分权重 `block=-35 / warn=-12（cap 1）/ info=-2`、缺数据维度基线 `70` 分，**全部是内部启发式常量（confidence=low），无外部可辩护基准**——与 `industry_benchmark.json` 里 pacing 阈值的诚实标注同性质。它们的作用是给回流排序一个稳定坐标系，不是质量的绝对度量；上线积累样本后应由 `n2d-feedback` 第一方数据（机器分 vs 留存/完播的相关性）回灌校准，显著失准时调整此表并记录日期与依据。`release_verdict` 按发行 profile 取 `max(score 文件阈值, profile 下限)`，杜绝「commercial 放行 demo(75) 分数文件」。
 
 评分维度、权重、`audit_labels` 和默认回流阶段的单一真值源是 `skills/n2d/_lib/n2d_schema.py::CONSISTENCY_DIMENSIONS`。本表只是人读摘要；新增检测器必须先进入 schema 的 `audit_labels`，否则 `test_consistency_audit.py` 会阻止“审得到但 score 不扣分”的松动。
 

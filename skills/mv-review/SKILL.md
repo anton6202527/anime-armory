@@ -19,16 +19,16 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 ## 机检 / 人判分工
 
 - **机检（确定性，先跑）**：`scripts/mv_check.py <制MV作品根>` —— 秒级出确定性问题：
-  - **卡点**：`节拍/beatgrid.json` 存在/可解析、BPM 合理（半速/倍速嫌疑）、beats/downbeats 单调递增、`歌/song.*` 时长 vs beatgrid.duration 一致。
+	  - **卡点**：`beatgrid.json` 绑定当前歌曲 SHA-256；正式版小节首/sections 有具名签收且完整覆盖；BPM、单调性、歌长一致。
 	  - **规划**：`分镜/clip_plan.json` / `timeline_manifest.json` 存在可解析、clip_id 不重复、timeline 与 plan 对账、timeline selected video 是否存在。
 	  - **一致性注册**：`设定/identity_registry.json` / `asset_registry.json` / `分镜/reference_plan.json` / `设定/reference_requirements.json` 存在可解析，参考组与正式参考图覆盖度有快照。
-	  - **制片锁版**：`animatic.mp4`、OTIO、shot list、setup schedule、take log、picture lock 是否齐且 hash 新鲜。
+	  - **制片锁版**：animatic、V1+A1+markers OTIO/receipt、shot list、setup schedule、take log、picture lock 是否齐且 edit/input hash 新鲜。
 	  - **视频任务**：`出视频/jobs_manifest.json` 存在可解析、已选 take 是否真的落到 `出视频/视频/Clip_XXX.mp4`。
 	  - **图生视频继承 / 视频QC**：报告存在、hash 对应当前 plan/jobs/video；正式项目缺报告或语义签收直接阻断。
 	  - **正式版 readiness**：`生产数据/formal_readiness/formal_readiness.json` 存在时读取状态；demo 项目只作为信息提示，正式项目 blocked/review 会暴露。
 	  - **clip 节奏**（需 `ffprobe`，缺则显式跳过）：每个 `出视频/视频/*.mp4` 时长、**clip 是否疑似等长（不卡点）**、clip 总时长 ≈ 歌长。
-  - **卡拉OK字幕**：`字幕/lyrics.lrc` / `karaoke.ass` 解析、占位未精修、时间单调/不重叠、**时间戳越界（超歌长）**、字幕行数对账、`alignment_report.json` warnings。
-	  - **音画合成/交付**（需 `ffprobe`）：母版和 MP4、时长/画幅/音轨、BT.709/H.264/48kHz、delivery QC、provenance 是否齐。
+	  - **卡拉OK字幕**：LRC/ASS 解析、占位/越界/重叠/行数；alignment report 是否绑定当前歌/歌词/对齐音轨，低置信度人工放行是否具名。
+	  - **音画合成/交付**（需 `ffprobe`）：母版和 MP4、音画差、画幅/音轨、BT.709/H.264/48kHz；delivery QC 对比输入母带与输出响度/真峰值/时长，provenance 是否齐。
   - **AI 视觉使用披露**：已有成片时检查 `合规/ai_usage.json` 是否留痕、枚举是否有效。
   - **完整性/对账**：词/歌/beatgrid/出图/clip/成片 产物快照、`_meta.has_song/has_lyrics` vs 实际文件、段落数 vs `_meta.structure`。
   ```bash
@@ -43,7 +43,7 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
   - **崩脸 / 场景漂移 / 画风跳变用图判**：把 `出图/段落/图片/镜头*.png` 与 `出图/共享/图片/定妆_*.png` **并排读图比对**（脸型/发型/服色/画风锚点）；装了 `face_recognition`/`insightface` 可给相似度分，缺库则人判兜。
   - **接缝跳切用图判（逐接缝过）**：取相邻 clip 的 Clip K 末帧 vs Clip K+1 首帧**并排读图**，对照 `分镜/clip_plan.json` + `timeline_manifest.json` 的接缝契约：① 标 `need_end_frame=true`/连续硬切但两帧姿态/站位/视线/光线明显对不上 → 跳切/闪烁；② 标 `need_end_frame=true` 却没出 `_end.png`（mv-image 漏做）→ 接力断链；③ 服装/发型/道具在接缝处突变 → 接缝崩。**注意 MV 容差更宽**：副歌卡点硬切处的视觉跳变若踩准鼓点、是有意冲击，**不算问题**（卡点切本就允许画面跳）；只标"非卡点切又接不住"的接缝。修法：回 mv-image 补尾帧 / 回 mv-video 用首尾双帧重出该 clip。
   - **运镜与动作服务节奏**：副歌快速推镜头/甩镜/环绕/冲击变焦、verse 缓慢推镜头/稳定器跟拍、bridge 换机位/前景遮挡揭示，爽点对 downbeat 同帧砸下；动作家族、动作峰值、转场母题对 `mv-video/references/action_knowledge.md` + `mv-video/references/prompt_format.md`，运镜词对 `mv/references/运镜/manifest.json`。只写“炫酷动作/炫酷运镜”但没有可执行动作链和结构化镜头运动，标为建议级。
-	  - **单曲视觉一致性**：除身份/画风，还逐接缝审状态变体、服装/道具状态、持握手、场景拓扑、屏幕方向、视线、动作速度/相位、光线方向和字幕安全区；结论由 `video_qc --accept-semantic` 绑定当前视频 hash。
+	  - **单曲视觉一致性**：除身份/画风，还逐接缝审状态变体、服装/道具状态、持握手、场景拓扑、屏幕方向、视线、动作速度/相位、光线方向和字幕安全区；结论由 `video_qc --accept-semantic` 同时绑定当前视频 hashes 与 seam-contract hash。
   - **卡点体感**：机检给"clip 是否对齐 downbeat"的客观判断，**踩得爽不爽**由人判（看成片副歌切点是否砸在鼓点）。
 
 ## 工作流（模式①）
@@ -58,7 +58,7 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 
 | 级别 | 含 | 处置 |
 |---|---|---|
-| 🔴 阻断级 | 崩脸/角色断层、字幕占位未精修、**成片无音轨（歌没进去）**、beatgrid 损坏不可解析、成片缺失但进度标已合成 | **必改**，回源头重跑 |
+| 🔴 阻断级 | 崩脸/角色断层、字幕占位未精修、成片无音轨、beatgrid 损坏/乱序/与当前歌不匹配、正式收据/锁版失效、母带被截短或交付 QC hard block | **必改**，回源头重跑 |
 | 🟡 建议级 | 场景轻漂、画风跳变、**非卡点切接缝跳切/接力断链**、**clip 疑似等长不卡点**、clip/成片总时长 vs 歌长差大、分辨率不符画幅、BPM 半/倍速嫌疑、字幕时间越界/重叠、运镜不服务节奏、爽点没对 downbeat | 建议改 |
 | 🟢 润色级 | 个别运镜偏好、转场差一拍、字幕位置微调 | 可改可不改 |
 
@@ -100,4 +100,4 @@ description: 制MV 质检 + 流程自审（mv 生产线的 QA 环节，不生产
 | 在成片 MP4 上直接剪 | 回源头改重跑回流；成片是产物不是源 |
 | 把未到的阶段当问题报 | 先读 `_进度.md`：还没出视频就别报"缺 clip" |
 | 重复审输入歌的音质/词 | mv 只审歌轨进没进、卡点对不对 |
-| 模式②直接改 skill | 默认只出建议报告，人确认后改；改 skill 必同步 README 索引 |
+| 模式②未经授权直接改 skill | 默认只出建议；用户像本次一样明确要求“自行全部优化”时可在范围内直接落地，仍须测试、同步统计并保留其他未提交改动 |

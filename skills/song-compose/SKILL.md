@@ -26,7 +26,7 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风生成带人声�
 
 ## 工作流
 0. **合法性闸门**：演唱音色 = 自有 / 授权 / 合成；**克隆真人嗓需授权**（2026 opt-in），未授权拒做。把音色来源记进 `_meta.vocal_source`。
-1. **生成作曲任务包**：先跑 `scripts/compose_song.py`，从 `_设置.md` / `_meta.json` / `词/lyrics.md` / `创作蓝图.md`，并自动读取可选的 `创作/song_brief.md`、`素材/reference_pack.md`、`歌/chord_sheet.md`、`歌/topline_notes.md` 生成：
+1. **生成作曲任务包**：先跑 `scripts/compose_song.py`。默认硬闸门要求 brief、reference、prosody、song form 检查全部通过，且词曲权利与音色来源明确；所有输入以 hash 写入 manifest v3。探索性例外必须用 `--waiver-reason "具体理由"` 留痕。随后读取 `_设置.md` / `_meta.json` / `词/lyrics.md` / `创作蓝图.md` 和已通过的合同证据生成：
    - `歌/compose_task.md`
    - `歌/compose_task.json`
    - `歌/compose_prompts/take_XX.md`
@@ -38,18 +38,20 @@ description: 写歌·作曲+演唱 — 把定稿歌词 + 曲风生成带人声�
    - 本地 ACE-Step → `submit_fields.prompt`、`lyrics`、`audio_duration` 分列传入 headless 调用。
    - DiffRhythm / manual → 按任务包生成。
 3. **登记 take**：外部生成的每版音频用 `compose_song.py --register <音频> --take N` 写回 `歌/takes/take_NN.wav` 和 manifest。
-4. **挑版**：音乐生成随机性大，**多生几版挑最佳**（副歌 hook / 人声清晰 / 与蓝图贴合 / MV 卡点适配）。先用 `take_review.py` 记录盲听分、timecode note、风险和推荐版；再用 `compose_song.py --score take_NN ...` 同步到 manifest。
-5. **落档**：用 `compose_song.py --select take_NN` 把选中版归一成 `歌/song.wav`；回写 `_进度.md`。下一步：继续 `song-cover`（可选换音色）或 `song-review` / `song-craft` 合规留痕；如需视频制作，交付最终音频成品即可。
+4. **挑版**：音乐生成随机性大，**多生几版挑最佳**。`take_review.py` 与 manifest 统一六维：hook、melody、vocal、arrangement、mix、brief_fit；试听记录绑定 take 音频 hash。六维不完整、单项低于 2/5 或音频变更会阻断 select。
+5. **先修再选**：对 `take_review.timecode_notes` 中的 open 问题跑 `revision_plan.py`。ACE-Step 明确区间优先 repaint；其他后端退化为新一轮完整生成。阻断级 note 未 resolved/accepted 时 select gate 不通过。
+6. **落档**：`--select` 产生 `歌/song.wav` 预览、`混音/pre_master.wav` 与 selection receipt；它不是发行母版。下一步先做 mix/performance signoff，再按 `master_delivery.py -> master_check.py -> release_pack.py` 生成并验证 `导出/master.wav`。
 
 ## 多版任务包 / 挑版脚本
 ```bash
 python3 <skill>/scripts/compose_song.py <写歌作品根> --backend ACE-Step --takes 4 --duration 120
 python3 <skill>/scripts/compose_song.py <写歌作品根> --register ./out.wav --take 1
-python3 <skill>/scripts/compose_song.py <写歌作品根> --score take_01 --hook-score 5 --vocal-score 4 --fit-score 5 --notes "副歌最稳"
+python3 <skill>/scripts/compose_song.py <写歌作品根> --score take_01 --hook-score 5 --melody-score 5 --vocal-score 4 --arrangement-score 4 --mix-score 4 --fit-score 5 --notes "副歌最稳"
 python3 <skill>/scripts/compose_song.py <写歌作品根> --select take_01
 python3 <skill>/scripts/take_review.py <写歌作品根> --take take_01 \
   --hook-score 5 --melody-score 5 --vocal-score 4 --arrangement-score 4 --mix-score 4 --fit-score 5 \
   --timecode "00:38|note|副歌进入很稳" --write
+python3 <skill>/scripts/revision_plan.py <写歌作品根> --take take_01 --write
 ```
 
 ## 兼容归一脚本
@@ -68,6 +70,8 @@ python3 <skill>/scripts/place_song.py <写歌作品根> <生成的歌文件> [--
 | 拿 TTS 来"唱" | TTS 不会唱；必用音乐生成模型(Suno/ACE-Step) |
 | 克隆真人歌手嗓未授权 | 拒做；只用自有/授权/合成音色 |
 | 一版就定 | 先生成/登记多版，按 take manifest 挑旋律/演唱最佳 |
+| 评分两三个维度就 select | 六维评分与盲听记录必须完整并绑定同一音频 hash；需要例外时显式写 waiver |
+| 把 selected take 直接叫母版 | selected take 是 pre-master；正式交付另生成 24-bit master 并跑 BS.1770 测量 |
 | 把 A&R/参考/和声说明整份粘进 style | 只提交 `后端编译提交字段`；完整合同留给制作决策、复核和溯源 |
 | 为了“精简 prompt”摘要或删改歌词 | 禁止；歌曲 compiler 只精简 style，上游定稿歌词原文完整进入 lyrics 字段并以 hash 锁定 |
 | 需要更准地检查人声 | 先用 demucs 分离 vocals，再做试听和时间点核对 |

@@ -410,6 +410,11 @@ def build_dataset_manifest(root: Path, out_dir: Path, char: Mapping[str, Any], f
         )
     if len(items) < 15:
         warnings.append("dataset_below_recommended_15_images")
+    if len(items) > 30:
+        # 与 n2d-image/references/lora_consistency.md 口径统一：15–20 张是甜区，>~30 张即进过拟合观察带
+        # （风格/表情多样性不足时 LoRA 会背图）；>50 维持原重度风险码。两级都走
+        # dataset_has_warnings → 人工 override + notes 留痕，不静默放行。
+        warnings.append("dataset_above_30_images_overfit_watch")
     if len(items) > 50:
         warnings.append("dataset_above_recommended_50_images_overfit_risk")
     if sum(1 for item in items if item.get("warnings")):
@@ -431,7 +436,7 @@ def build_dataset_manifest(root: Path, out_dir: Path, char: Mapping[str, Any], f
         "trigger": trigger,
         "generated_at": now_iso(),
         "dataset_dir": relative(root, dataset_dir),
-        "recommended": {"min_images": 15, "max_images": 50, "target_resolution": "1024x1024"},
+        "recommended": {"min_images": 15, "sweet_spot_max_images": 30, "max_images": 50, "target_resolution": "1024x1024"},
         "summary": {
             "images": len(items),
             "captions": sum(1 for item in items if item.get("caption")),
@@ -634,6 +639,83 @@ def cmd_package(args: argparse.Namespace) -> int:
     return 0
 
 
+def _load_face_consistency():
+    """加载 n2d-review 的脸一致性模块（同线内复用，阈值单一真值源不另立）；缺依赖返回 None，诚实降级。"""
+    review = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d-review", "scripts"))
+    if review not in sys.path:
+        sys.path.insert(0, review)
+    try:
+        import face_consistency  # type: ignore
+        return face_consistency
+    except Exception:
+        return None
+
+
+def identity_qc_check(root: Path, dataset: Mapping[str, Any], qc_dir: Path) -> Dict[str, Any]:
+    """LoRA 产物身份实测：QC 样图 vs 数据集 front/closeup/side 锚的脸余弦。
+
+    此前 validate 只查元数据存在性，`pass` 实质等于人手 `--approved`——「第三档一致性」
+    资产准入没有任何客观度量。本检为可选实测档：地板复用 face_consistency 的自标定口径
+    （锚组内互余弦最小值，单锚 fallback 0.50），不另立第二套脸阈值。三态结果：
+    measured / no_samples / no_reference_anchors / unavailable（缺 embedder 依赖，不臆造分）。"""
+    out: Dict[str, Any] = {"status": "unavailable", "samples": 0, "scored": 0,
+                           "median_cosine": None, "floor": None, "encoder": "", "per_image": []}
+    fc = _load_face_consistency()
+    if fc is None:
+        return out
+    qc_imgs = sorted(p for p in qc_dir.rglob("*") if p.suffix.lower() in IMAGE_EXTS) if qc_dir.is_dir() else []
+    out["samples"] = len(qc_imgs)
+    if not qc_imgs:
+        out["status"] = "no_samples"
+        return out
+    refs: List[Path] = []
+    items = dataset.get("items") if isinstance(dataset, Mapping) else None
+    for item in items or []:
+        if isinstance(item, Mapping) and str(item.get("role") or "") in {"front", "closeup", "side"}:
+            p = Path(str(item.get("file") or ""))
+            if not p.is_absolute():
+                p = root / p
+            if p.is_file():
+                refs.append(p)
+    if not refs:
+        out["status"] = "no_reference_anchors"
+        return out
+    try:
+        backend = fc._encoder_from_settings(str(root))
+    except Exception:
+        backend = None
+    app, encoder = fc._load_embedder(backend=backend)
+    if app is None:
+        return out
+    out["encoder"] = encoder or ""
+    ref_embs = [e for e in (fc._embed(app, str(p)) for p in refs) if e]
+    if not ref_embs:
+        out["status"] = "no_reference_anchors"
+        return out
+    intra = [fc.cosine(a, b) for i, a in enumerate(ref_embs) for b in ref_embs[i + 1:]]
+    floor = fc.calibrate_floor(intra)
+    out["floor"] = round(float(floor), 4)
+    out["floor_calibrated"] = bool(intra)
+    scores: List[float] = []
+    for p in qc_imgs:
+        emb = fc._embed(app, str(p))
+        sc = fc.best_anchor_score(emb, ref_embs) if emb else None
+        out["per_image"].append({"file": relative(root, p), "cosine": round(float(sc), 4) if sc is not None else None})
+        if sc is not None:
+            scores.append(float(sc))
+    out["scored"] = len(scores)
+    if not scores:
+        out["status"] = "no_faces_detected"
+        return out
+    scores.sort()
+    mid = len(scores) // 2
+    median = scores[mid] if len(scores) % 2 else (scores[mid - 1] + scores[mid]) / 2.0
+    out["median_cosine"] = round(float(median), 4)
+    out["status"] = "measured"
+    out["passes_floor"] = bool(median >= floor)
+    return out
+
+
 def cmd_validate(args: argparse.Namespace) -> int:
     root = Path(args.project_root)
     registry = load_registry(root)
@@ -666,6 +748,20 @@ def cmd_validate(args: argparse.Namespace) -> int:
         blocks.append("trigger_missing")
     if not args.base_model and not train_job.get("base_model"):
         blocks.append("base_model_missing")
+    identity_qc: Dict[str, Any] = {"status": "not_run"}
+    qc_images = str(getattr(args, "qc_images", "") or "").strip()
+    if qc_images:
+        qc_dir = Path(qc_images)
+        if not qc_dir.is_absolute():
+            qc_dir = root / qc_dir
+        identity_qc = identity_qc_check(root, dataset, qc_dir)
+        if identity_qc.get("status") == "measured" and not identity_qc.get("passes_floor"):
+            blocks.append("qc_identity_below_floor")
+        elif identity_qc.get("status") != "measured":
+            warnings.append(f"identity_qc_{identity_qc['status']}")
+    else:
+        # 未提供 QC 样图时 validate 退回元数据+人工判档；显式留痕，别让 pass 伪装成实测过。
+        warnings.append("identity_qc_not_run_manual_only")
     if args.approved:
         verdict = "pass" if not blocks else "block"
     else:
@@ -700,6 +796,7 @@ def cmd_validate(args: argparse.Namespace) -> int:
             "dataset_warnings": dataset_warnings,
             "trigger_present": bool(args.trigger or train_job.get("trigger")),
             "base_model_present": bool(args.base_model or train_job.get("base_model")),
+            "identity_qc": identity_qc,
         },
     }
     write_json(out_dir / "validation_report.json", report)
@@ -943,6 +1040,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--trigger", default="")
     p.add_argument("--approved", action="store_true")
     p.add_argument("--allow-dataset-warnings", action="store_true", help="explicitly allow dataset warnings to pass validation")
+    p.add_argument("--qc-images", default="", help="LoRA 生成的 QC 样图目录：与数据集 front/closeup/side 锚做脸余弦实测，median<自标定地板即 block（qc_identity_below_floor）")
     p.add_argument("--notes", default="")
     p.set_defaults(func=cmd_validate)
 

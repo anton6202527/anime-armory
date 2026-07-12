@@ -21,5 +21,8 @@ def test_feedback_ingest_summarizes_csv():
         group = summary["groups"][0]
         assert group["completion_rate"] == 0.45
         assert "save_signal" in group["signals"]
+        assert group["sample_confidence"] == "directional"
+        assert group["rate_intervals"]["completion"]["low"] < 0.45 < group["rate_intervals"]["completion"]["high"]
+        assert "不据此改歌" in summary["recommendations"][0]
         feedback_ingest.write_outputs(root, events, summary)
         assert os.path.exists(os.path.join(root, "发行", "feedback_summary.json"))

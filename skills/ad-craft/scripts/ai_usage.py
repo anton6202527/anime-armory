@@ -14,13 +14,14 @@ _COMMON_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."
 if _COMMON_DIR not in sys.path:
     sys.path.insert(0, _COMMON_DIR)
 import disclosure  # noqa: E402
+import settings as ad_settings  # noqa: E402
 
 from contract import AI_VISUAL_USAGE_MODES  # noqa: E402
 
 NOTES = [
     "- 广告若图像/视频主要由 AI 生成，通常按 AI-generated 留痕。",
     "- 平台声明/显式标识由发布方或平台实际执行；执行证据、隐式元数据状态和责任方须写入 compliance_manifest.json。",
-    "- 代言人肖像 / 真人声音 / 授权音乐 / 商业字体均需可追溯授权；未授权不得投放。",
+    "- 代言人肖像 / 真人声音 / 音乐 / 字体 / 素材逐项使用结构化 rights 合同：证据、地域、媒介范围、期限和批准人；未授权不得投放。",
     "- 广告语 claim（功效、对比、数据）须有依据；绝对化用语等违禁词由 `ad-script/ad_law_check.py` 机检拦截。",
     "- 本文件只做项目留痕，不替代法律意见；发布合规清单见同目录 compliance_manifest.py。",
 ]
@@ -50,7 +51,9 @@ def main():
         "brand": meta.get("brand") or "未记录",
         "visual_mode": args.visual_mode,
         "video_mode": args.video_mode,
-        "image_backend": meta.get("image_backend") or "未记录",
+        "image_model": ad_settings.get_setting(root, "生图模型", meta.get("image_model") or "未记录"),
+        "image_channel": ad_settings.get_setting(root, "生图渠道", meta.get("image_channel") or "未记录"),
+        "image_backend_legacy": meta.get("image_backend") or "",
         "video_model": meta.get("video_model") or "未记录",
         "video_channel": meta.get("video_channel") or meta.get("video_backend") or "未记录",
         "video_backend": meta.get("video_backend") or "未记录",
@@ -64,7 +67,8 @@ def main():
         f"- 品牌 / 广告主：{payload['brand']}",
         f"- 视觉素材使用类型：{payload['visual_mode']}",
         f"- 视频素材使用类型：{payload['video_mode']}",
-        f"- 生图后端：{payload['image_backend']}",
+        f"- 生图模型：{payload['image_model']}",
+        f"- 生图渠道：{payload['image_channel']}",
         f"- 生视频模型：{payload['video_model']}",
         f"- 生视频渠道：{payload['video_channel']}",
         f"- 配音 / 旁白来源：{payload['voice_status']}",

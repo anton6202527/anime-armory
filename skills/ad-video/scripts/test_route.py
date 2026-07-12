@@ -192,6 +192,16 @@ class EndToEndTest(unittest.TestCase):
             self.assertIn("小红书", payload["platform_specs"])
             self.assertTrue(payload["asset_registry_path"].endswith("asset_registry.json"))
 
+    def test_unknown_platform_blocks_routing_until_spec_is_bound(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._project(td, {"shots": [{"shot_id": "S1", "frame": "痛点叙事", "duration": 3.0}]})
+            os.makedirs(os.path.join(td, "需求"), exist_ok=True)
+            with open(os.path.join(td, "需求", "brief.json"), "w", encoding="utf-8") as f:
+                json.dump({"platforms": ["未知新平台"]}, f, ensure_ascii=False)
+            payload = rt.run(td)
+            self.assertGreater(payload["summary"]["block"], 0)
+            self.assertTrue(any(row["code"] == "platform_spec_missing" for row in payload["platform_findings"]))
+
 
 class ThreeAxisTest(unittest.TestCase):
     def test_quality_tier_high_for_product_and_brand_shots(self):

@@ -13,33 +13,33 @@ import re
 import time
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-# 本线自包含：视频后端/制作模式在本文件内提供通用兜底，保持 settings.py 零外部依赖。
+# 本线自包含：视频后端与 MV 选择点在本文件内提供通用兜底。
 VIDEO_BACKEND_ALIASES = {}
 
 def normalize_video_backend(value: Optional[str], default: str = "dreamina") -> str:
     return (value or default or "").strip().lower()
 
-_PRODUCTION_MODE_DEFAULT = "配音先行"
-_PRODUCTION_MODE_KEYS = ("配音先行", "先出视频后配音", "原生音画")
-
-
 DEFAULTS = {
-    "制作模式": _PRODUCTION_MODE_DEFAULT,
-    "基础视觉风格": "写实电影感",
+    "MV用途": "歌曲Demo",
+    "歌曲输入时序": "先传音乐",
+    "MV视觉风格": "电影叙事",
+    "MV规划粒度": "标准",
+    "卡点策略": "副歌强卡点",
     "生图AI": "Codex",
+    "生图模型": "GPT Image 2",
+    "生图渠道": "Codex",
+    "MV一致性增强": "共享定妆+锚点",
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
     # Legacy combined key. New projects should write `生视频模型` + `生视频渠道`.
     "生视频AI": "即梦",
-    "视频模型路由": "自动按镜头路由",
-    "视频备用后端": "",
-    "中段锚帧默认": "开启",
     "重抽预算策略": "预算充足",
     "出视频规格": "预算一般",
     "演唱口型": "仅正面演唱镜",
-    "视频原生音轨": "丢弃",
-    "水印": "AI合规标识",
     "字幕语言": "中文",
+    "合成画幅": "16:9",
+    "AI视觉使用披露": "AI-generated",
+    "发行目标平台": "未定",
 }
 
 
@@ -97,14 +97,14 @@ VIDEO_MODEL_CHOICES = (
     "Veo 3.1", "Veo",
     "Kling 3.0", "Kling",
     "Hailuo 02", "Hailuo 2.3", "Hailuo",
-    "Runway Gen-4", "Runway",
+    "Runway Gen-4.5", "Runway Gen-4", "Runway",
     "Luma Ray3 / Ray3.14", "Luma Ray3.2", "Luma",
     "Pika 2.5", "Pika",
     "HunyuanVideo 1.5", "HunyuanVideo",
     "Wan 2.2", "Wan 2.x", "Wan",
     "LTX-2.3", "LTX",
-    "Sora",
-    "manual",
+    "Sora 2", "Sora",
+    "manual", "自定义",
 )
 
 VIDEO_CHANNEL_CHOICES = (
@@ -123,6 +123,8 @@ VIDEO_CHANNEL_CHOICES = (
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("生图AI", ("mv",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
+    SettingSpec("生图模型", ("mv",), ("GPT Image 2", "Seedream 5.0 Lite", "Nano Banana Pro (Gemini 3 Pro Image)", "自定义"), parameterized=True),
+    SettingSpec("生图渠道", ("mv",), ("Codex", "OpenAI API", "火山方舟/Seedream", "Google Gemini API", "可灵/Kling", "manual"), parameterized=True),
     SettingSpec("生视频模型", ("mv",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
     SettingSpec("生视频渠道", ("mv",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.
@@ -617,22 +619,3 @@ def get_setting(work_root: str, key: str, default: Optional[str] = None) -> str:
     if default is not None:
         return normalize_setting_value(key, default)
     return normalize_setting_value(key, DEFAULTS.get(key, ""))
-
-
-def production_mode(work_root: str) -> str:
-    mode = get_setting(work_root, "制作模式", DEFAULTS["制作模式"])
-    return mode or DEFAULTS["制作模式"]
-
-
-def is_video_first(work_root: str) -> bool:
-    return "先出视频" in production_mode(work_root)
-
-
-def is_native_av(work_root: str) -> bool:
-    """`制作模式=原生音画`: speaking shots use native synchronized A/V."""
-    mode = production_mode(work_root)
-    return "原生音画" in mode or "native_av" in mode.lower()
-
-
-def watermark_setting(work_root: str) -> str:
-    return get_setting(work_root, "水印", DEFAULTS["水印"])

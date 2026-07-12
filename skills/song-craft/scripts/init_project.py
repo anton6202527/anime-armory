@@ -108,11 +108,15 @@ def build_progress(title, meta):
 | 多版生成 / 注册 | song-compose + 后端 | [ ] |
 | 挑版定稿 | song-compose/scripts/compose_song.py | [ ] |
 | 多版试听评审 | song-compose/scripts/take_review.py | [ ] |
+| timecode 局部返修 | song-compose/scripts/revision_plan.py | [ ] |
 | （可选）翻唱/换声 | song-cover | [ ] |
 | 质检 | song-review | [ ] |
-| 混音/母带检查 | song-review/scripts/master_check.py | [ ] |
+| 表演/混音人工签核 | song-review/scripts/mix_signoff.py | [ ] |
+| 交付母版格式归一 | song-craft/scripts/master_delivery.py | [ ] |
+| 母带 BS.1770 检查 | song-review/scripts/master_check.py | [ ] |
 | AI 使用披露 | song-craft/scripts/ai_usage.py | [ ] |
 | 权益元数据 | song-craft/scripts/rights_metadata.py | [ ] |
+| 发行级元数据 | song-craft/scripts/release_metadata.py | [ ] |
 | 发布交付包 | song-craft/scripts/release_pack.py | [ ] |
 | （可选）发行数据回测 | song-feedback | [ ] |
 
@@ -121,8 +125,11 @@ def build_progress(title, meta):
 - [ ] 歌/compose_task.md（作曲任务包）
 - [ ] 歌/takes_manifest.json（多版记录）
 - [ ] 歌/song.wav（成品歌）
+- [ ] 混音/pre_master.wav + mix_signoff.json（人工签核）
+- [ ] 导出/master.wav + master_delivery.json（交付母版）
 - [ ] 合规/AI使用说明.md（发布/交平台前）
 - [ ] 合规/rights_metadata.json（权益/版税元数据）
+- [ ] 发行/release_metadata.json（平台发行元数据）
 - [ ] 导出/release_pack.json（发布交付证据）
 
 """

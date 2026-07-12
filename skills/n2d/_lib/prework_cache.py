@@ -76,12 +76,19 @@ def _lib_contract_module_paths() -> list:
     （多失效=安全方向；生产态 _lib 稳定 → 仍命中，不伤吞吐）。排除 test_/__pycache__。"""
     import glob as _glob
     here = os.path.dirname(os.path.abspath(__file__))
+    patterns = [os.path.join(here, "*.py")]
+    # 跨 skill _lib 也入指纹（2026-07 标准审计补漏）：缓存的审计脚本是 n2d-*/scripts/*.py，
+    # 它们 import 各自 skill 的 _lib（n2d-script/_lib、n2d-image/_lib…）——旧指纹只含
+    # 本目录 _lib，改跨 skill _lib 不失效缓存 → 陈旧审计结果。多失效=安全方向。
+    skills_dir = os.path.dirname(os.path.dirname(here))
+    patterns.append(os.path.join(skills_dir, "n2d-*", "_lib", "*.py"))
     out = []
-    for p in _glob.glob(os.path.join(here, "*.py")):
-        base = os.path.basename(p)
-        if base.startswith("test_") or base == "prework_cache.py":
-            continue
-        out.append(p)
+    for pattern in patterns:
+        for p in _glob.glob(pattern):
+            base = os.path.basename(p)
+            if base.startswith("test_") or base == "prework_cache.py" or "__pycache__" in p:
+                continue
+            out.append(p)
     return sorted(out)
 
 

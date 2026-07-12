@@ -45,6 +45,14 @@ def _filled(value):
     return value is not None
 
 
+def _right_used(value):
+    if isinstance(value, dict):
+        return str(value.get("status") or "").lower() != "not_used"
+    if isinstance(value, list):
+        return any(_right_used(v) for v in value)
+    return _filled(value)
+
+
 def _summary_block(report):
     """读报告 summary.block 整数；格式异常返回 None。"""
     summary = report.get("summary")
@@ -146,6 +154,7 @@ def review(root):
             os.path.join(root, "出图", "分镜", "product_qc.json"),
             os.path.join(root, "出视频", "分镜", "video_qc.json"),
             os.path.join(root, "配音", "时长清单.json"),
+            os.path.join(root, "生产数据", "final_media_consistency.json"),
         ], "consistency_findings_stale", "consistency_findings")
         if stale:
             findings.append(stale)
@@ -159,22 +168,22 @@ def review(root):
         brief = load_json(os.path.join(root, "需求", "brief.json"), {}) or {}
         rights = brief.get("rights") if isinstance(brief.get("rights"), dict) else {}
         # 用了真人/代言人但披露里 talent_status 仍占位或写「未使用真人」= 矛盾，block。
-        if _filled(rights.get("talent")):
+        if _right_used(rights.get("talent")):
             ts = usage.get("talent_status")
             if _pending(ts) or "未使用" in str(ts):
                 findings.append(finding("block", "ai_usage_talent_unrecorded",
                                         f"brief 标注使用真人/代言人，但 AI 披露 talent_status={ts!r} 未留授权痕迹", ai_usage))
-        if _filled(rights.get("music")):
+        if _right_used(rights.get("music")):
             if _pending(usage.get("music_status")):
                 findings.append(finding("block", "ai_usage_music_unrecorded",
                                         "brief 标注音乐授权，但 AI 披露 music_status 未记录", ai_usage))
         for fld, key in (("fonts", "asset_status"), ("assets", "asset_status")):
-            if _filled(rights.get(fld)) and _pending(usage.get(key)):
+            if _right_used(rights.get(fld)) and _pending(usage.get(key)):
                 findings.append(finding("warn", "ai_usage_asset_unrecorded",
                                         f"brief 标注 {fld} 授权，但 AI 披露 {key} 未记录", ai_usage))
                 break
         # 全空披露兜底：各项均占位且 brief 无任何授权信息 → 提示确认确无真人/授权素材。
-        if not any(_filled(rights.get(k)) for k in ("talent", "music", "fonts", "assets")) and all(
+        if not any(_right_used(rights.get(k)) for k in ("talent", "music", "fonts", "assets")) and all(
             _pending(usage.get(k)) for k in ("talent_status", "music_status", "voice_status", "asset_status")
         ):
             findings.append(finding("warn", "ai_usage_all_unrecorded",
@@ -194,7 +203,11 @@ def review(root):
             findings.append(finding("block", "compliance_manifest_block",
                                     "AI/平台声明、版位安全区或元数据责任尚未闭合，不能标记发布就绪", compliance))
         else:
-            stale = stale_finding(compliance, [ai_usage, os.path.join(root, "需求", "brief.json")],
+            stale = stale_finding(compliance, [
+                ai_usage, os.path.join(root, "需求", "brief.json"),
+                os.path.join(root, "脚本", "广告脚本.md"), os.path.join(root, "脚本", "storyboard.json"),
+                master, os.path.join(root, "合成", "delivery_plan.json"),
+            ],
                                   "compliance_manifest_stale", "compliance_manifest")
             if stale:
                 findings.append(stale)
@@ -215,6 +228,52 @@ def review(root):
         stale = stale_finding(delivery_qc, [master, os.path.join(root, "合成", "cutdown"),
                                             os.path.join(root, "合成", "多比例")],
                               "delivery_qc_stale", "delivery_qc")
+        if stale:
+            findings.append(stale)
+
+    for rel, code, label, sources in (
+        ("合成/color_preflight.json", "color_preflight", "色彩源预检", [os.path.join(root, "出视频", "分镜", "视频")]),
+        ("合成/accessibility_qc.json", "accessibility_qc", "字幕/闪烁无障碍 QC", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合成/rendered_text_qc.json", "rendered_text_qc", "最终像素文字/OCR/对比度/遮挡 QC", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+            os.path.join(root, "合规", "rendered_text_plan.json"),
+        ]),
+        ("合成/asr_consistency.json", "asr_consistency", "VO/字幕/最终音轨 ASR 一致性", [
+            master, os.path.join(root, "配音", "vo.wav"), os.path.join(root, "脚本", "voiceover.txt"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合规/provenance_qc.json", "provenance_qc", "最终文件 AI 元数据/C2PA 探测", [
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"), ai_usage,
+        ]),
+        ("合规/locale_matrix_validation.json", "locale_matrix_validation", "多语言 locale matrix 验证", [
+            os.path.join(root, "合规", "locale_matrix.json"), os.path.join(root, "脚本", "voiceover.txt"),
+            os.path.join(root, "脚本", "字幕_zh.srt"), os.path.join(root, "脚本", "字幕_en.srt"),
+        ]),
+        ("合规/release_variant_manifest.json", "release_variant_manifest", "逐交付版本发布清单", [
+            os.path.join(root, "合成", "delivery_plan.json"), os.path.join(root, "合规", "locale_matrix.json"),
+            master, os.path.join(root, "合成", "cutdown"), os.path.join(root, "合成", "多比例"),
+        ]),
+        ("生产数据/final_media_consistency.json", "final_media_consistency", "最终媒体逐资产 contact sheet", [
+            master, os.path.join(root, "出视频", "分镜", "视频"),
+            os.path.join(root, "合成", "delivery_plan.json"),
+        ]),
+    ):
+        path = os.path.join(root, rel)
+        report = load_json(path)
+        if not isinstance(report, dict):
+            findings.append(finding("block", f"{code}_missing", f"缺{label}", path))
+            continue
+        blocks, warns = _summary_block(report)
+        if blocks is None:
+            findings.append(finding("block", f"{code}_malformed", f"{label}缺 summary.block/warn", path))
+        elif blocks:
+            findings.append(finding("block", f"{code}_block", f"{label} block={blocks}", path))
+        if warns:
+            findings.append(finding("warn", f"{code}_warn", f"{label} warn={warns}，须在具名审片中闭合", path))
+        stale = stale_finding(path, sources, f"{code}_stale", label)
         if stale:
             findings.append(stale)
 
@@ -252,6 +311,7 @@ def review(root):
         "info": sum(1 for f in findings if f["severity"] == "info"),
     }
     return {"schema_version": 1, "kind": "ad_review_m0", "project_root": root,
+            "human_signoff_required": True,
             "summary": summary, "findings": findings}
 
 

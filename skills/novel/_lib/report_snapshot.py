@@ -86,7 +86,9 @@ def validate_snapshot(root, snapshot):
         return False, "source_snapshot.files 缺失或不是 list。"
     root = os.path.abspath(root)
     mode = snapshot.get("mode") or "custom"
-    if str(mode).startswith("review") or mode in {"chapters", "score:full"}:
+    # 全量语义的快照必须与「当前全部章节」对比——只重哈希快照内文件会漏掉新增章
+    # （曾致 wiki:dynamic 百科在新章写完后仍判 fresh，新鲜度闸形同虚设）。
+    if str(mode).startswith("review") or mode in {"chapters", "score:full", "wiki:dynamic"}:
         current = snapshot_chapters(root, mode=mode)
     else:
         current_paths = [os.path.join(root, item.get("path", "")) for item in expected_files]

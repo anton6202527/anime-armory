@@ -113,7 +113,7 @@ def _stage_cache_inputs(root: str, ep: str) -> List[str]:
     """Stage-independent superset of contracts/media that report-only planners consume."""
     return [
         os.path.join(root, "脚本", ep, "**", "*"),
-        os.path.join(root, "出图", "共享", "*.json"),
+        os.path.join(root, "出图", "共享", "**", "*.json"),
         os.path.join(root, "出图", ep, "prompt", "**", "*"),
         os.path.join(root, "出视频", ep, "prompt", "**", "*"),
         os.path.join(root, "生产数据", f"video_batch_{ep}_*.json"),
@@ -339,7 +339,10 @@ def decide(root: str, route: Dict[str, Any], stage_key: str, probes: Probes) -> 
             "gate": probes.gate,
             "trace": trace,
             "action_contract": action_contract,
-            "auto_continue": stop_reason == "auto_ran",
+            # auto_ran 分支不执行任何工作、不推进 progress——若它对某前沿可达且 auto_continue=True，
+            # `--auto` 会因前沿永不变而死循环（2026-07 标准审计）。当前没有真正的"确定性自动阶段"，
+            # 故一律停下交人/上层编排；将来真有此类阶段时，必须先让分支自己推进 progress 再放开。
+            "auto_continue": False,
         }
 
     ep = frontier["ep"]

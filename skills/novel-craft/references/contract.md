@@ -80,6 +80,18 @@
 
 > 即：阶段级查询走 `novel-craft/scripts/progress.py`（清单型）；逐章生产进度走 `novel/progress.py`（矩阵型，init 实际产物）。下面「原创阶段表 / 派生同构阶段表」是**流程语义**定义（每个 stage 的含义/负责人/回流），与上面哪种物理布局无关，两种 reader 都对齐同一套 stage key。
 
+### 三层阶段模型对照（防"改一层漏两层"）
+
+家族里有**三套并存的"阶段"定义**，粒度与用途不同、刻意不合并；新增/改名任何阶段时按此表检查另两层是否受影响：
+
+| 层 | 定义处 | 粒度/用途 | 阶段集 |
+|---|---|---|---|
+| A. 逐章路由矩阵列 | `novel/_lib/novel_contract.py:NOVEL_STAGES` | 每章一行的生产勾选与路由（`novel/progress.py`/`novel_route.py` 读写） | 大纲→细纲→正文初稿→机检→审稿→评分→(改写·optional 支路,默认 —)→导出 |
+| B. 派生流水线叙事骨架 | 本文「派生同构阶段表」+ `derive-pipeline.md` | rewrite/continue/expand/condense/spinoff 的文档级流程语义 | setup→source_model→direction_spec→title→outline→demo→draft→review→export |
+| C. 宏观可执行 registry | `novel/_lib/novel_pipeline.py:PIPELINE_REGISTRY` | agent 编排层 dry-run/执行态（`pipeline_runner.py` 消费），20+ 阶段含 demo_readiness/post_write/revision/edit/metadata_pack/release_manifest 等 | 见 registry 本体 |
+
+对齐关系：A 是 C 的 `draft→review→score→export` 段的**逐章展开**；B 是 C 在派生线上的**文档投影**。A/C 分歧由 `novel_pipeline._reconcile_progress` 做 report-only 对账提示（advisory，不自动改写彼此）。**改 C 的 registry 阶段时**：若涉及逐章列（draft/review/score/export 语义），同步查 A 的 `NOVEL_STAGES`；若涉及派生流程叙述，同步查本文 B 表与 `derive-pipeline.md`。
+
 阶段清单型样例 —— 原创 `create`：
 
 ```markdown

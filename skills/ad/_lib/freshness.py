@@ -47,7 +47,7 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
     {
         "id": "ad-image-backends",
         "path": "skills/ad-craft/scripts/contract.py",
-        "choice_points": ["生图AI"],
+        "choice_points": ["生图模型", "生图渠道"],
         "max_age_days": 45,
         "stamp_label": "生图候选采集日期",
         "note": "AD_APPROVED/FORBIDDEN 生图后端白名单（广告投放侧从严：禁即梦）。",
@@ -60,6 +60,14 @@ CANDIDATE_SOURCES: List[Dict[str, object]] = [
         "stamp_label": "生视频候选采集日期",
         "note": "VIDEO_MODELS / VIDEO_CHANNELS 高频变动（Seedance/Veo/Kling 版本…）；"
                 "与生图后端同源于 contract.py，共用文件首个采集日期戳。",
+    },
+    {
+        "id": "ad-platform-placements",
+        "path": "skills/ad-craft/scripts/platform_pack.py",
+        "choice_points": ["目标平台", "brief.placements"],
+        "max_age_days": 30,
+        "stamp_label": "平台规格采集日期",
+        "note": "实际 placement 的比例/时长/声音/安全区官方快照；发布前仍须绑定当前模板。",
     },
 ]
 

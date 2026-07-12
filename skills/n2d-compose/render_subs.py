@@ -58,7 +58,10 @@ EN_NORMAL_FILL = _color(_series_style.get('en_fill'), (235,235,235,255))
 OUTLINE_FILL = _color(_series_style.get('outline_fill'), (10,10,10,255))
 ZH_OUTLINE = int(_series_style.get('zh_outline_px', 4))
 EN_OUTLINE = int(_series_style.get('en_outline_px', 3))
-BOTTOM_MARGIN = int(_series_style.get('bottom_margin_px', 130))
+# 底部安全边距默认 300px（2026-07 实搜对齐竖屏平台惯例：抖音/快手底部 ~300px 是简介/音乐/
+# 进度条/评论入口区，旧默认 130px 会让字幕压进平台 UI 层）。系列风格 bottom_margin_px 可覆盖；
+# 旧项目续作如需与已出集保持一致，在 设定库/series_style.json 显式写回 130。
+BOTTOM_MARGIN = int(_series_style.get('bottom_margin_px', 300))
 SAFE_WIDTH_MARGIN = int(_series_style.get('safe_width_margin_px', 60))
 
 # ── 字幕样式分级（cue 标签 → 字号/颜色）。默认=normal 即原行为，全部 env 可覆盖 ──

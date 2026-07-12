@@ -315,3 +315,36 @@ def test_intra_verdict_blocks_only_closeup_nondoubleframe_redraw() -> None:
     assert video_qc.intra_verdict(50, g, have_types=True, double_frame=True) == "warn"
     # 景别未知（无 storyboard）→ 绝不 block（不误杀非近景）→ warn
     assert video_qc.intra_verdict(50, g, have_types=False, double_frame=False) == "warn"
+
+
+def test_parse_fps_handles_ratio_and_invalid() -> None:
+    assert video_qc._parse_fps("30000/1001") == 29.97
+    assert video_qc._parse_fps("30/1") == 30.0
+    assert video_qc._parse_fps("0/0") is None
+    assert video_qc._parse_fps("") is None
+    assert video_qc._parse_fps("24") == 24.0
+
+
+def test_delivery_consistency_flags_fps_and_resolution_outliers() -> None:
+    payload = {"clips": [
+        {"clip": "Clip_01", "width": 1080, "height": 1920, "fps": 30.0},
+        {"clip": "Clip_02", "width": 1080, "height": 1920, "fps": 30.0},
+        {"clip": "Clip_03", "width": 1280, "height": 720, "fps": 24.0},
+    ]}
+    video_qc.delivery_consistency_check(payload)
+    dc = payload["delivery_consistency"]
+    assert dc["resolution_mode"] == "1080x1920"
+    assert dc["fps_mode"] == 30
+    kinds = {(f["clip"], f["kind"]) for f in dc["findings"]}
+    assert ("Clip_03", "resolution") in kinds
+    assert ("Clip_03", "fps") in kinds
+    assert payload["machine_summary"]["delivery_mismatch_warns"] == 2
+
+
+def test_delivery_consistency_uniform_batch_is_clean() -> None:
+    payload = {"clips": [
+        {"clip": "Clip_01", "width": 1080, "height": 1920, "fps": 29.97},
+        {"clip": "Clip_02", "width": 1080, "height": 1920, "fps": 30.0},
+    ]}
+    video_qc.delivery_consistency_check(payload)
+    assert payload["delivery_consistency"]["findings"] == []

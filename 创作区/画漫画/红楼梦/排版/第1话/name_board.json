@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "kind": "comic_name_board",
+  "chapter": "第1话",
+  "format": "页漫",
+  "reading_direction": "从左到右",
+  "manuscript": {
+    "spec": "B5商漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 2079,
+      "h": 2952
+    },
+    "safe_area": {
+      "x": 138,
+      "y": 138,
+      "w": 1803,
+      "h": 2676
+    },
+    "bleed": 64,
+    "inner_frame": {
+      "x": 189,
+      "y": 189,
+      "w": 1701,
+      "h": 2574
+    }
+  },
+  "pages": [
+    {
+      "page_id": "PAGE_001",
+      "page_side": "left",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P004 page_turn_reveal",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004"
+      ],
+      "gutter_intent": "P001:开卷长停顿；P002:从终局进入神话；P003:神话尺度建立；P004:翻页前孤独停顿",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 138,
+            "w": 1803,
+            "h": 855
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "borderless",
+          "border_style": "none",
+          "camera_hint": "大留白；不可画成具体影视版厅堂；旁白后期嵌字。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "无速度线；仅用飘落花瓣引导视线。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 288,
+            "y": 1030,
+            "w": 1503,
+            "h": 285
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "thin",
+          "camera_hint": "倒影不出现演员脸；文字后期嵌字。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "涟漪兼作转场圆环，不加漫画速度线。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 1352,
+            "w": 1653,
+            "h": 570
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "神话宏景；禁仙侠宫殿、霓虹法阵、清晰女娲脸。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "云气流线指向天裂，不遮住石阵。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1959,
+            "w": 1803,
+            "h": 855
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "顽石不长五官；天然裂纹是后续宝玉形态继承锚。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "无；靠空白制造孤独。"
+        }
+      ]
+    },
+    {
+      "page_id": "PAGE_002",
+      "page_side": "right",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P007 temptation_reveal",
+      "eye_flow_path": [
+        "P005",
+        "P006",
+        "P007",
+        "P008"
+      ],
+      "gutter_intent": "P005:情绪收紧；P006:新角色入场；P007:诱惑展开；P008:页末选择",
+      "panels": [
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 288,
+            "y": 138,
+            "w": 1503,
+            "h": 320
+          },
+          "layout_weight": "compact",
+          "panel_shape": "tall",
+          "border_style": "thin",
+          "camera_hint": "画外对白后期嵌字；不画眼睛和嘴。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 495,
+            "w": 1653,
+            "h": 641
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "人物不看镜头；身段有戏曲节制但不复制具体戏服。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "云风线顺衣摆方向，保持双脚落地。"
+        },
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1173,
+            "w": 1803,
+            "h": 961
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "soft_ink",
+          "camera_hint": "不复制大观园剧照；只保留抽象社会诱惑。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "墨云形成圆窗，不画魔法光圈。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 2171,
+            "w": 1653,
+            "h": 643
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "声音来自石内；不画嘴和眼；和尚手部解剖严格。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "极细环形光，不用法阵。"
+        }
+      ]
+    },
+    {
+      "page_id": "PAGE_003",
+      "page_side": "left",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P012 page_turn_reveal",
+      "eye_flow_path": [
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "gutter_intent": "P009:对句式停顿；P010:选择落锤；P011:变化加速；P012:翻页见前缘",
+      "panels": [
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 138,
+            "w": 1653,
+            "h": 570
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "气泡预留在两人外侧上方，不挡脸和手。",
+          "text_load": 2,
+          "bubble_first": "left_top",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 288,
+            "y": 745,
+            "w": 1503,
+            "h": 285
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "thin",
+          "camera_hint": "不画卡通石脸；影子必须符合上一格两人站位。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "微弱呼吸光，不加爆闪。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1067,
+            "w": 1803,
+            "h": 855
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "diagonal",
+          "border_style": "ink_break",
+          "camera_hint": "动作接触点必须正确；禁多手、断指、光圈 UI。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "螺旋墨线追随石屑向内收缩，不遮脸与手。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1959,
+            "w": 1803,
+            "h": 855
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "none",
+          "camera_hint": "原画无‘通灵宝玉’文字；手和玉比例准确。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "无光爆；靠留白与材质反光完成揭示。"
+        }
+      ]
+    },
+    {
+      "page_id": "PAGE_004",
+      "page_side": "right",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P015 identity_reveal",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016"
+      ],
+      "gutter_intent": "P013:新神话空间长停顿；P014:温柔静拍；P015:身份揭示；P016:翻页前情感长停顿",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 138,
+            "w": 1803,
+            "h": 699
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "soft_ink",
+          "camera_hint": "场景大图须成为后续 LOC 锚；禁西式仙境。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "水纹承接上一格玉纹，不加光圈。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 874,
+            "w": 1653,
+            "h": 466
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "神瑛不看镜头；手、盏、甘露路径严格。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "只画一滴甘露的微光，不做法术束。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1377,
+            "w": 1803,
+            "h": 699
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "diagonal",
+          "border_style": "ink_break",
+          "camera_hint": "首次身份定妆高风险格；禁泛韩漫脸、过度裸露、仙侠光爆。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "叶脉转为衣纹，墨晕沿形态边缘展开。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 2113,
+            "w": 1803,
+            "h": 701
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "none",
+          "camera_hint": "不是偶像剧凝视；泪与背影构成命运距离。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "泪珠内纹理溶成下一格宝玉反光。"
+        }
+      ]
+    },
+    {
+      "page_id": "PAGE_005",
+      "page_side": "left",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P020 threshold_reveal",
+      "eye_flow_path": [
+        "P017",
+        "P018",
+        "P019",
+        "P020"
+      ],
+      "gutter_intent": "P017:从神话落地现实；P018:梦中相遇；P019:宝玉第一次被凡人触碰；P020:翻页阈限",
+      "panels": [
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 138,
+            "w": 1653,
+            "h": 513
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "现实层第一次出现，材质与光线要清楚；无现代家具。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "瓷盏反光化为墨雾转场。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 688,
+            "w": 1653,
+            "h": 513
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "soft_ink",
+          "camera_hint": "三人同格高风险；站位、眼线、托玉接触点必须按合同。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "木纹向云纹自然过渡，不使用光圈。"
+        },
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1238,
+            "w": 1803,
+            "h": 769
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "高风险手部交接；原画无玉字和气泡。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "仅玉面微反光。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 2044,
+            "w": 1803,
+            "h": 770
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "borderless",
+          "border_style": "none",
+          "camera_hint": "无字牌坊；标题/对联后期嵌字；翻页雷醒。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "雷云预聚，不提前画闪电。"
+        }
+      ]
+    },
+    {
+      "page_id": "PAGE_006",
+      "page_side": "right",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P024 cliffhanger",
+      "eye_flow_path": [
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "gutter_intent": "P021:梦醒冲击；P022:冲击后的温柔停顿；P023:神话侵入现实；P024:本话终止与灾难预告",
+      "panels": [
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 138,
+            "w": 1803,
+            "h": 699
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "diagonal",
+          "border_style": "ink_break",
+          "camera_hint": "用版面白缝兼作雷电；不可丢手或把脚画成手。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "effects_hint": "斜向白闪连接梦门与现实窗，不遮脸和手。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 213,
+            "y": 874,
+            "w": 1653,
+            "h": 466
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "camera_hint": "父女接抱解剖高风险；英莲首次定妆必须可继承未来香菱。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "无。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 1377,
+            "w": 1803,
+            "h": 699
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "camera_hint": "四人同格高风险；和尚赤足、道士跛足必须是脚，不能画成手。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "云影和衣摆风线暗示异常，不用灵光。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 138,
+            "y": 2113,
+            "w": 1803,
+            "h": 701
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "borderless",
+          "border_style": "none",
+          "camera_hint": "页末留黑；火星只一粒；旁白后期嵌字。",
+          "text_load": 1,
+          "bubble_first": "left_top",
+          "effects_hint": "一粒火星和极淡铃声线，不画火焰爆发。"
+        }
+      ]
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "彩色完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "显式tone_plan: grayscale/value planning even when final art is color",
+    "effects_plan": "显式effects_plan: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  }
+}

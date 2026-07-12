@@ -202,6 +202,10 @@ GROUP_COVERAGE: Dict[str, Dict[str, Any]] = {
         "implementation": ["skills/n2d-identity/scripts/voice_consistency.py", "skills/n2d-identity/scripts/voice_print_consistency.py"],
         "tests": ["skills/n2d-identity/scripts/test_voice_consistency.py", "skills/n2d-identity/scripts/test_voice_print_consistency.py"],
         "evidence": ["生产数据/native_voice_identity_{ep}.json", "生产数据/identity_voice_print_{ep}.json"],
+        # 2026-07 标准审计：音色一致性是 score 正式维度（权重 10），发布口径不该比它松。
+        # voice_print_consistency 在无音频/无声纹后端时也落 available=false 的诚实报告，
+        # 故 release_required 只要求「检查至少跑过并留档」，不会对无对白集误伤。
+        "release_required": True,
     },
     "score": {
         "implementation": ["skills/n2d-score/scripts/score.py"],
@@ -251,9 +255,9 @@ GROUP_GATE_CHECKS: Dict[str, List[str]] = {
     "identity_handoff": ["check_identity_handoff_inheritance"],
     "asset_handoff": ["check_asset_handoff_inheritance"],
     "voice_identity": ["check_native_voice_identity"],
-    # 2026-06-26 扩面（P1）：补到 19 组——每个都已 AST 验证「从 run/main 可达」。未列组（progress/score/
-    # review_ui/consistency_ledger/human_review/generation_recipe/seed_events/contract_inheritance/
-    # model_router/voice_timing/retention）的强制在 gate.py 之外（独立脚本/release_manifest），故不强行映射。
+    # 2026-06-26 扩面（P1）：补到 19 组——每个都已 AST 验证「从 run/main 可达」。未列组的强制在
+    # gate.py 之外（独立脚本/release_manifest），映射见 GROUP_ENFORCED_OUTSIDE_GATE（机器可见，
+    # 不再只留注释）。
     "budget": ["check_budget_cap"],
     "image_qc": ["check_input_frame_qc", "check_image_assets"],
     "consistency_audit": ["check_consistency_audit_gate"],
@@ -449,6 +453,24 @@ def evidence_matches(root: Path, episode: str, patterns: Sequence[str]) -> List[
     return sorted(set(out))
 
 
+# gate.py 之外强制的 group → 实际执行者（2026-07 标准审计：此前只在注释里说"在 gate.py 之外"，
+# coverage 报告里看不到谁负责——现落成字段，report 消费方可核对执行者存在）。
+GROUP_ENFORCED_OUTSIDE_GATE: Dict[str, str] = {
+    "progress": "skills/n2d/progress.py (audit-dag) + run.py 收尾自动包",
+    "score": "skills/n2d/scripts/release_verdict.py check_score",
+    "review_ui": "skills/n2d/scripts/release_verdict.py check_review_ui",
+    "consistency_ledger": "skills/n2d/scripts/release_verdict.py check_ledger",
+    "human_review": "skills/n2d/scripts/release_verdict.py + run.py needs_acceptance_signoff",
+    "generation_recipe": "skills/n2d/scripts/generation_recipe_manifest.py + release_manifest.py",
+    "seed_events": "skills/n2d-dashboard/scripts/event_ledger.py audit",
+    "contract_inheritance": "skills/n2d-video/scripts/inherit_contract.py（video prework）",
+    "model_router": "skills/n2d-model-router/scripts/router.py + video preflight consumed_contracts",
+    "voice_timing": "skills/n2d-script/validate_timings.py（finalize/compose 前）",
+    "retention": "skills/n2d-script/scripts/beat_audit.py --strict（image_prompt prework）",
+    "release_verdict": "skills/n2d/scripts/release_verdict.py（终判本体）",
+}
+
+
 def matrix_required_groups(matrix: Dict[str, Any]) -> Dict[str, List[str]]:
     out: Dict[str, List[str]] = {}
     for stage, policy in (matrix.get("stages") or {}).items():
@@ -482,6 +504,7 @@ def group_row(root: Path, episode: str, group: str, stages: Sequence[str]) -> Di
         "group": group,
         "stages": list(stages),
         "release_required": release_required,
+        "enforced_outside_gate": GROUP_ENFORCED_OUTSIDE_GATE.get(group, ""),
         "implementation": impl,
         "tests": tests,
         "evidence": evidence,

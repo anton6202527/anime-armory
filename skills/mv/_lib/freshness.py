@@ -19,11 +19,11 @@ CANDIDATE_SOURCES = {
         "snapshot": "skills/mv/references/candidate_snapshots/video_models.json",
         "description": "MV image-to-video / text-to-video model capability candidates",
         "source_urls": [
-            "https://ai.google.dev/gemini-api/docs/veo",
-            "https://runwayml.com/research/introducing-runway-gen-4",
-            "https://kling.ai/quickstart/ai-video-start-end-frames",
-            "https://kling.ai/blog/kling-video-3-omni-native-lip-sync-audio-guide",
-            "https://lumalabs.ai/ray3",
+            "https://seed.bytedance.com/en/blog/seedance-2-0-official-launch",
+            "https://developers.googleblog.com/en/introducing-veo-3-1-and-new-creative-capabilities-in-the-gemini-api/",
+            "https://runwayml.com/research/introducing-runway-gen-4.5",
+            "https://app.klingai.com/cn/quickstart/klingai-video-3-model-user-guide",
+            "https://lumalabs.ai/learning-hub/ray3-modify-user-guide",
         ],
     },
     "video_channels": {
@@ -40,9 +40,9 @@ CANDIDATE_SOURCES = {
         "snapshot": "skills/mv/references/candidate_snapshots/image_backends.json",
         "description": "MV image generation backends and consistency capabilities",
         "source_urls": [
-            "https://platform.openai.com/docs",
-            "https://ai.google.dev/",
-            "https://klingai.kuaishou.com/",
+            "https://developers.openai.com/api/docs/models/gpt-image-2",
+            "https://seed.bytedance.com/en/seedream5_0_lite",
+            "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-3-pro-image-developers/",
         ],
     },
 }

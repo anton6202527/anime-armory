@@ -26,7 +26,8 @@ _PRODUCTION_MODE_KEYS = ("配音先行", "先出视频后配音", "原生音画"
 DEFAULTS = {
     "制作模式": _PRODUCTION_MODE_DEFAULT,
     "基础视觉风格": "写实电影感",
-    "生图AI": "Codex",
+    "生图模型": "GPT Image 2",
+    "生图渠道": "Codex CLI",
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
     # Legacy combined key. New projects should write `生视频模型` + `生视频渠道`.
@@ -119,10 +120,23 @@ VIDEO_CHANNEL_CHOICES = (
     "manual",
 )
 
+IMAGE_MODEL_CHOICES = (
+    "GPT Image 2", "Seedream 4.5", "Nano Banana Pro (Gemini 3 Pro Image)",
+    "Kling Image 3.0", "Sora 2", "manual",
+)
+
+IMAGE_CHANNEL_CHOICES = (
+    "Codex CLI", "OpenAI Images API", "BytePlus ModelArk API", "Google Gemini API",
+    "Kling API", "OpenAI Sora", "manual",
+)
+
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("基础视觉风格", ("ad",), ("写实电影感", "国漫写实", "二次元赛璐璐", "二次元", "水墨国风", "厚涂幻想", "赛博霓虹", "Q版轻喜", "CG质感", "定格动画", "极简产品", "国风写意", "自定义"), parameterized=True),
-    SettingSpec("生图AI", ("ad",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义官方后端", "自定义"), parameterized=True),
+    SettingSpec("生图模型", ("ad",), IMAGE_MODEL_CHOICES, key_aliases=("图片模型",), parameterized=True),
+    SettingSpec("生图渠道", ("ad",), IMAGE_CHANNEL_CHOICES, key_aliases=("图片渠道",), parameterized=True),
+    # Legacy combined key: readable for migration, never emitted by new-project defaults.
+    SettingSpec("生图AI", ("ad",), ("Codex", "OpenAI", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义"), parameterized=True, syncable=False),
     SettingSpec("生视频模型", ("ad",), VIDEO_MODEL_CHOICES, key_aliases=("视频模型", "目标视频模型"), parameterized=True),
     SettingSpec("生视频渠道", ("ad",), VIDEO_CHANNEL_CHOICES, key_aliases=("视频渠道", "目标视频渠道"), parameterized=True),
     # Legacy combined key kept for existing projects and old CLI flags.
@@ -149,7 +163,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec("广告类型", ("ad",), ("TVC", "信息流短视频", "品牌片", "产品demo", "电商详情视频", "直播切片", "自定义"), parameterized=True),
     SettingSpec("创意路线", ("ad",), ("功能卖点", "情感共鸣", "幽默", "悬念反转", "名人代言", "场景种草", "自定义"), parameterized=True),
     SettingSpec("主片时长", ("ad",), ("6s", "15s", "30s", "60s", "自定义"), parameterized=True),
-    SettingSpec("交付比例", ("ad",), ("16:9", "9:16", "1:1", "多比例"), parameterized=True),
+    SettingSpec("交付比例", ("ad",), ("16:9", "9:16", "4:5", "1:1", "多比例"), parameterized=True),
     SettingSpec("cutdown版本", ("ad",), ("主片+15s+6s", "主片+15s", "仅主片", "自定义"), parameterized=True),
     SettingSpec("一致性增强", ("ad",), ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA"), parameterized=True),
     SettingSpec("音乐来源", ("ad",), ("授权曲库", "原创定制", "AI生成", "占位"), sensitive=True),

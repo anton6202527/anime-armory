@@ -104,6 +104,22 @@ def evaluate(root: str) -> Dict[str, Any]:
         violations.append({"level": "critical", "kind": "dead_letters", "value": len(dead), "threshold": q_slo.get("max_dead_letters")})
     if retry_rate > float(q_slo.get("max_retry_rate", 1.0)):
         violations.append({"level": "warn", "kind": "retry_rate", "value": round(retry_rate, 4), "threshold": q_slo.get("max_retry_rate")})
+    # max_running_age_sec 此前只在 DEFAULT_SLO 里声明、evaluate 从不校验——"假标准"。
+    # 现按 lease_until 反推补齐：running 任务的租约已过期超龄仍未被回收=卡死/僵尸 worker，warn。
+    max_age = q_slo.get("max_running_age_sec")
+    if max_age is not None:
+        import time as _time
+        now = _time.time()
+        for task in tasks:
+            if task.get("status") != "running":
+                continue
+            lease = task.get("lease_until")
+            if isinstance(lease, (int, float)) and now - float(lease) > float(max_age):
+                violations.append({"level": "warn", "kind": "running_age",
+                                   "task_id": task.get("id"),
+                                   "value": round(now - float(lease), 1),
+                                   "threshold": max_age,
+                                   "note": "running 租约过期超龄未回收：先跑 queue.py reclaim 或人工排查僵尸 worker"})
     stage_slo = slo.get("stages") if isinstance(slo.get("stages"), dict) else {}
     for task in tasks:
         stage = str(task.get("stage_key") or "")

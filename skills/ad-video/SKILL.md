@@ -11,7 +11,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
 
 ## 偏好（私有）
 
-按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再问用户选渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `python3 skills/ad-craft/scripts/gate.py "<作品根>" --stage video`。
+按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生视频模型`（固定/兜底）、`生视频渠道`（固定/调用入口偏好）、`视频模型路由`、`出视频规格`、`视频分辨率`、`交付比例`。出视频是**花钱/高风险**阶段，正式跑前确认规格；若未显式固定后端，先按模型路由、CLI/API 探测与账号约束决定入口，探测不到可执行后端时再问用户选渠道或 `manual`。写完视频 prompt 并跑完契约继承机检后、正式生成前跑 `gate.py --stage video`；正式 runner 同时自动跑 `stage_acceptance.py --stage image`，只有全部 image job、真实输出/参考输入 provenance 与 full product_qc 通过才花视频额度。
 
 ## 上游契约单一真值源
 
@@ -36,7 +36,7 @@ description: 拍广告 第6阶段·图生视频 — 把 ad-image 首帧按 story
    - end card/包装定格 → 静帧或极慢运镜
    - 镜头时长超 primary 后端单 Clip 上限 = 🔴 block（改用更长后端或拆镜）。
    - 语义产品/App/UI/片尾镜缺 `PROD_*` = 🔴 block；引用的 `PROD_*`/`BRAND_*` 若不在 `设定库/asset_registry.json` 或 `出图/共享/asset_registry.json` = warn。
-   - 读取 brief/platform pack 的抖音/小红书/TikTok 规格，落 `platform_specs`，提醒 9:16、720x1280、安全区和首帧/前三秒产品品牌要求。
+   - 只消费 `ad-craft/platform_pack.py` 的单一规格源（不在 route 内复制清单），优先落 `placement_specs` + 来源/采集日期/安全区证据；只有平台名时可做母版但不能发布，未知或无出处自定义 placement 直接 block。
    - **三轴增量字段**，逐镜写进 `video_model_routes.json`：
      - **`quality_tier` 质量档（成本×质量）**：产品 hero/代言人特写/end card 品牌定格 → `high`（值后端 pro 档把脸·包装·logo·品牌色钉稳）；空镜/痛点/普通镜 → `fast`（量产省成本）；后端无 fast/pro 档 → `n/a`。只表达意图，落档侧把 `high→pro`、`fast→fast` 解析成实际档位，不写死 model_version。
      - **`motion_reference` 视频运动参考**：产品环绕 hero/demo 连续动作镜 + primary 支持 `reference_video_motion`（Seedance/可灵）时 `applicable=true`，提示把同段前一条已通过 clip 作运动/风格参考喂进去锁运镜节奏（与图身份锁正交）。

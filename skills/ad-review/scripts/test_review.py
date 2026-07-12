@@ -24,8 +24,16 @@ class ReviewTest(unittest.TestCase):
         self._write_json(root, "出视频/分镜/video_qc.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合规/ai_usage.json", {"visual_mode": "AI-generated"})
         self._write_json(root, "合规/compliance_manifest.json", {"summary": {"release_ready": True, "block": 0}})
-        self._write_json(root, "生产数据/consistency_findings.json", {"summary": {"block": 0, "warn": 0}})
         self._write_json(root, "合成/delivery_qc.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合成/color_preflight.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合成/accessibility_qc.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合成/rendered_text_qc.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合成/asr_consistency.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合规/provenance_qc.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合规/locale_matrix_validation.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "合规/release_variant_manifest.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "生产数据/final_media_consistency.json", {"summary": {"block": 0, "warn": 0}})
+        self._write_json(root, "生产数据/consistency_findings.json", {"summary": {"block": 0, "warn": 0}})
         with open(os.path.join(root, "_进度.md"), "w", encoding="utf-8") as f:
             f.write("""## 交付版本矩阵
 | 交付件 | 时长 | 比例 | 类型 | 交付规格 | 状态 | 成片路径 |

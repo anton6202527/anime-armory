@@ -1771,6 +1771,8 @@ def parser() -> argparse.ArgumentParser:
     )
     ap.add_argument("--markdown", action="store_true")
     ap.add_argument("--update-guide", action="store_true")
+    ap.add_argument("--force-writeback", action="store_true",
+                    help="显式绕过写回前的统计合同门（experiments audit 非 pass 时默认拒写先验/快照）；强推留痕自负")
     ap.add_argument(
         "--guide",
         default=os.path.join("skills", "n2d", "references", "导演节奏.md"),
@@ -1813,6 +1815,42 @@ def cmd(ns: argparse.Namespace) -> int:
         write_creative_features(features_out, extract_storyboard_features(root, episodes=episodes))
     if not ns.no_write:
         write_feedback(root, feedback)
+    # ── 写回前统计合同门（2026-07 标准审计）────────────────────────────────────
+    # SKILL 承诺"实验结论必须满足统计合同"，但旧写回路径（--write-priors/--update-guide/
+    # --write-pacing-profiles）从不跑 experiments audit：2 个 paired context、无显著性、
+    # 无实验登记也能把结论写成导演先验/节奏快照。现在只要 metrics 含 A/B 行，写回前强制
+    # experiments.audit_metrics；非 pass（缺登记/欠样本/顺序偷看）默认拒写，--force-writeback
+    # 显式强推。纯观察数据（无 ab_test_id）不受此门限制——它的地板仍是探索性 min_samples。
+    writeback_requested = (ns.write_priors or ns.update_guide or ns.write_pacing_profiles) and not ns.no_write
+    if writeback_requested:
+        gate_reasons: List[str] = []
+        try:
+            import experiments as _experiments
+            from pathlib import Path as _Path
+            _audit = _experiments.audit_metrics(root, _Path(metrics_path))
+        except Exception as exc:  # audit 本身失败不拦观察性写回，但必须可见
+            _audit = None
+            print(f"⚠️ experiments audit 未能运行（{exc}）——本次写回未经统计合同校验", file=sys.stderr)
+        if _audit and _audit.get("ab_test_ids_in_metrics") and _audit.get("status") != "pass":
+            gate_reasons.append(
+                f"experiments audit status={_audit.get('status')}"
+                f"（missing={len(_audit.get('missing_experiment_definitions') or [])} "
+                f"underpowered={len(_audit.get('underpowered') or [])} "
+                f"warnings={len(_audit.get('analysis_warnings') or [])}）")
+        _must = [f for f in ((feedback.get("input_audit") or {}).get("findings") or [])
+                 if str((f or {}).get("severity") or "") == "must"]
+        if _must:
+            print("⚠️ input_audit 有 %d 条 must 级缺口（付费维度字段缺失等），写回结论可能失真：\n  %s"
+                  % (len(_must), "\n  ".join(str((f or {}).get("message") or (f or {}).get("code") or f)[:160] for f in _must[:5])),
+                  file=sys.stderr)
+        if gate_reasons and not ns.force_writeback:
+            print("⛔ 统计合同门拦下本次写回（先验/导演快照/节奏档均跳过；--force-writeback 可显式强推）：\n  "
+                  + "\n  ".join(gate_reasons), file=sys.stderr)
+            ns.write_priors = False
+            ns.update_guide = False
+            ns.write_pacing_profiles = False
+        elif gate_reasons:
+            print("⚠️ --force-writeback：统计合同未过仍强制写回（留痕）：\n  " + "\n  ".join(gate_reasons), file=sys.stderr)
     if ns.write_priors and not ns.no_write:
         priors = build_creative_priors(
             feedback["analyses"],

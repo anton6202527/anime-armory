@@ -84,7 +84,12 @@ def normalize_sections(bg, meta, lyric_sections):
         name = row.get("section") or row.get("name") or row.get("label") or f"section{i+1}"
         start = float(row.get("start", row.get("start_sec", 0)))
         end = row.get("end", row.get("end_sec"))
-        sections.append({"section": str(name), "start": start, "end": float(end) if end is not None else None})
+        sections.append({
+            "section": str(name),
+            "start": start,
+            "end": float(end) if end is not None else None,
+            "source": row.get("source") or bg.get("section_source") or "beatgrid_sections",
+        })
     if sections:
         sections = sorted(sections, key=lambda x: x["start"])
         for i, sec in enumerate(sections):
@@ -219,7 +224,7 @@ def reference_inputs_for(identity_contract, location_id, identity_registry):
     return refs
 
 
-def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
+def cut_points_for_section(sec, downbeats, beats, meter, energy_map, profile, strategy):
     start, end = sec["start"], sec["end"]
     
     # Calculate average energy for this section to drive ASL curve
@@ -244,20 +249,19 @@ def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
         bars = base_bars
 
     in_range = [t for t in downbeats if start < t < end]
+    stride = max(1, int(bars))
     if not in_range:
-        # Fallback to fixed interval if no downbeats
-        interval = 2.0 if avg_energy > 0.6 else 4.0
-        pts = [start]
-        cur = start + interval
-        while cur < end:
-            pts.append(round(cur, 3))
-            cur += interval
-        pts.append(end)
-        return pts
+        # A sparse/missing downbeat grid may still have confirmed beat times.
+        # Never invent 2s/4s cuts: use musical beat anchors or preserve the
+        # signed section as one shot when no anchor exists inside it.
+        in_range = [t for t in beats if start < t < end]
+        stride = max(1, int(bars) * max(1, int(meter or 4)))
+    if not in_range:
+        return [round(start, 3), round(end, 3)]
 
     pts = [start]
     for idx, t in enumerate(in_range):
-        if idx % max(1, int(bars)) == 0:
+        if idx % stride == 0:
             pts.append(float(t))
     pts.append(end)
     # 去重并丢掉太短切点
@@ -271,24 +275,71 @@ def cut_points_for_section(sec, downbeats, energy_map, profile, strategy):
 
 
 def merge_to_limit(clips, max_clips):
+    """Reduce task count without ever erasing a musical section boundary.
+
+    The old pairwise recursion could merge the last clip of a verse with the
+    first clip of a chorus.  ``max_clips`` is now a cost target, not authority
+    to corrupt the signed music structure.
+    """
     if len(clips) <= max_clips:
         return clips
-    merged = []
-    i = 0
-    while i < len(clips):
-        cur = dict(clips[i])
-        if len(clips) - i + len(merged) > max_clips and i + 1 < len(clips):
-            nxt = clips[i + 1]
-            cur["end"] = nxt["end"]
-            cur["duration"] = round(cur["end"] - cur["start"], 3)
-            cur["lyric_hint"] = " / ".join(x for x in (cur.get("lyric_hint"), nxt.get("lyric_hint")) if x)
-            # Recalculate energy level for merged clip
-            cur["energy_level"] = max(cur.get("energy_level", 5), nxt.get("energy_level", 5))
-            i += 2
-        else:
-            i += 1
-        merged.append(cur)
-    return merge_to_limit(merged, max_clips)
+    rows = [dict(row) for row in clips]
+    while len(rows) > max_clips:
+        candidates = [
+            (float(left.get("duration") or 0) + float(right.get("duration") or 0), idx)
+            for idx, (left, right) in enumerate(zip(rows, rows[1:]))
+            if left.get("section") == right.get("section")
+        ]
+        if not candidates:
+            break
+        _cost, idx = min(candidates)
+        cur, nxt = dict(rows[idx]), rows[idx + 1]
+        cur["end"] = nxt["end"]
+        cur["duration"] = round(float(cur["end"]) - float(cur["start"]), 3)
+        cur["lyric_hint"] = " / ".join(
+            value for value in (cur.get("lyric_hint"), nxt.get("lyric_hint")) if value
+        )
+        cur["energy_level"] = max(cur.get("energy_level", 5), nxt.get("energy_level", 5))
+        rows[idx:idx + 2] = [cur]
+    return rows
+
+
+def seam_contract_for(current, following, key_cut):
+    """Classify the outgoing edit seam so generation and review share intent."""
+    if not following:
+        return {
+            "kind": "terminal",
+            "transition_type": "cut",
+            "continuity_required": False,
+            "need_end_frame": False,
+            "review": ["final_hold", "song_end"],
+        }
+    if current.get("section") != following.get("section"):
+        return {
+            "kind": "section_break",
+            "transition_type": "beat_cut",
+            "continuity_required": False,
+            "need_end_frame": False,
+            "expected_discontinuity": ["setup_or_palette_may_change"],
+            "review": ["musical_boundary", "new_section_readability", "intentional_contrast"],
+        }
+    if key_cut:
+        return {
+            "kind": "beat_cut",
+            "transition_type": "hard_cut",
+            "continuity_required": False,
+            "need_end_frame": False,
+            "expected_discontinuity": ["pose_or_scale_may_jump_on_confirmed_beat"],
+            "review": ["beat_hit", "identity", "color_intent"],
+        }
+    return {
+        "kind": "match_action",
+        "transition_type": "hard_cut",
+        "continuity_required": True,
+        "need_end_frame": True,
+        "expected_discontinuity": [],
+        "review": ["pose_phase", "motion_vector", "screen_direction", "eyeline", "prop_state", "lighting"],
+    }
 
 
 def lyric_hint_for(section_name, lyric_sections, index):
@@ -302,12 +353,19 @@ def lyric_hint_for(section_name, lyric_sections, index):
 def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visual_style,
                 blueprint, identities, assets, aspect):
     profile = contract.plan_granularity_profile(granularity)
-    downbeats = [float(x) for x in (bg.get("downbeats") or bg.get("beats") or [])]
+    beats = [float(x) for x in (bg.get("beats") or [])]
+    downbeats = [float(x) for x in (bg.get("downbeats") or [])]
+    if not downbeats:
+        downbeats = list(beats)
+    try:
+        meter = int(bg.get("meter") or 4)
+    except (TypeError, ValueError):
+        meter = 4
     energy_map = bg.get("energy_map")
     raw_clips = []
     lyric_index_by_section = {}
     for sec in sections:
-        pts = cut_points_for_section(sec, downbeats, energy_map, profile, strategy)
+        pts = cut_points_for_section(sec, downbeats, beats, meter, energy_map, profile, strategy)
         for i in range(len(pts) - 1):
             start, end = pts[i], pts[i + 1]
             if end <= start:
@@ -338,14 +396,31 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
         start, end = clip["start"], clip["end"]
         energy_level = clip["energy_level"]
         key = is_chorus(section) or is_bridge(section) or energy_level >= 8
-        transition = "卡点硬切" if key else "动作切"
+        following = raw_clips[idx] if idx < len(raw_clips) else None
+        seam_contract = seam_contract_for(clip, following, key)
+        seam_contract["from_clip"] = clip_id
+        seam_contract["to_clip"] = f"Clip_{idx + 1:03d}" if following else None
+        transition = {
+            "section_break": "段落切",
+            "beat_cut": "卡点硬切",
+            "match_action": "动作匹配切",
+            "terminal": "收束",
+        }[seam_contract["kind"]]
         beat_role = "key" if key else "normal"
-        speed_mode = "trim" if key else "warp"
+        # Preserve motion cadence by default.  Editorial fills a short source by
+        # holding the final stable frames; retiming is an explicit exception.
+        speed_mode = "trim_hold"
         
-        # Action Peak logic: Try to find a beat within the second half of the clip
-        # Fallback to 80% through the clip
-        action_peak_abs = round(end - min(0.2, max(0.05, (end - start) * 0.2)), 3)
-        beat_anchor = nearest_downbeat(action_peak_abs, downbeats)
+        # Action peak must bind to a musical anchor inside the locked clip.
+        desired_peak = round(start + (end - start) * 0.8, 3)
+        in_clip_downbeats = [value for value in downbeats if start <= value <= end]
+        in_clip_beats = [value for value in beats if start <= value <= end]
+        anchors = in_clip_downbeats or in_clip_beats
+        anchor_kind = "downbeat" if in_clip_downbeats else ("beat" if in_clip_beats else "section_boundary")
+        beat_anchor = nearest_downbeat(desired_peak, anchors)
+        if beat_anchor is None:
+            beat_anchor = nearest_downbeat(desired_peak, [start, end])
+        action_peak_abs = round(beat_anchor, 3)
         action_peak_relative = round(action_peak_abs - start, 3)
         
         action_family = "performance_peak/visual_burst" if key else "performance_pose/narrative_action"
@@ -376,8 +451,11 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "action_family": action_family,
             "action_peak": action_peak_abs,
             "action_peak_relative": action_peak_relative,
-            "action_peak_downbeat": beat_anchor,
+            "action_peak_anchor": beat_anchor,
+            "action_peak_anchor_kind": anchor_kind,
+            "action_peak_downbeat": beat_anchor if anchor_kind == "downbeat" else None,
             "transition_motif": transition_motif,
+            "seam_contract": seam_contract,
             "visual_motif": visual_motif,
             "lyric_hint": clip.get("lyric_hint", ""),
             "shot_design": shot_design,
@@ -389,7 +467,7 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
             "video_prompt_path": video_prompt,
             "image_path": f"出图/段落/图片/{clip_id}.png",
             "end_frame_path": f"出图/段落/图片/{clip_id}_end.png",
-            "need_end_frame": False,
+            "need_end_frame": seam_contract["need_end_frame"],
             "selected_video_path": f"出视频/视频/{clip_id}.mp4",
             "transition": transition,
             "visual_style": visual_style,
@@ -405,6 +483,11 @@ def build_clips(root, bg, sections, lyric_sections, granularity, strategy, visua
                 "eyeline": "承接上一镜视线目标；反打时显式标记轴线变化",
                 "motion_vector": "动作速度和方向承接上一镜尾帧，峰值后保留稳定落幅",
                 "lighting_state": shot_design["lighting"],
+                "outgoing_seam": seam_contract,
+                "end_frame_target": (
+                    f"出图/段落/图片/Clip_{idx + 1:03d}.png"
+                    if seam_contract["need_end_frame"] else ""
+                ),
                 "constraints": "同一段落保持身份状态、服装发型、主色调、光线、关键道具、空间拓扑和屏幕方向一致",
                 "negative": "不要换脸、不要无依据换衣、不要新增人物、不要改变场景拓扑、不要生成文字/logo/水印、不要生成原生人声",
             },
@@ -449,6 +532,14 @@ def write_prompt_files(root, clips, blueprint):
             "## 负向",
             clip["continuity"]["negative"],
         ]
+        if clip.get("need_end_frame"):
+            image_lines.extend([
+                "",
+                "## 尾帧接力（必做）",
+                f"- 输出：`{clip['end_frame_path']}`",
+                f"- 对齐下一镜首帧：`{clip['continuity'].get('end_frame_target', '')}`",
+                "- 尾帧必须保持同一身份/服化道/道具/场景拓扑，并把姿态相位、运动方向、视线和光线交给下一镜；不得只复制首帧。",
+            ])
         mv_utils.write_text(os.path.join(root, clip["image_prompt_path"]), "\n".join(image_lines) + "\n")
         video_lines = [
             f"# {clip['clip_id']} 视频任务",
@@ -457,6 +548,8 @@ def write_prompt_files(root, clips, blueprint):
             f"- 时长：{clip['duration']:.2f}s",
             f"- 卡点：{clip['start']:.2f}s → {clip['end']:.2f}s",
             f"- 转场：{clip['transition']}",
+            f"- 接缝类型：{clip.get('seam_contract', {}).get('kind', '')}",
+            f"- 连续性要求：{clip.get('seam_contract', {}).get('continuity_required', False)}",
             f"- 动作家族：{clip.get('action_family', '')}",
             f"- 力量等级：{clip.get('energy_level', 'Level 5')}",
             f"- 动作峰值：{clip.get('action_peak_relative', 0.8):.2f}s (relative)",
@@ -481,9 +574,11 @@ def write_prompt_files(root, clips, blueprint):
             f"- eyeline：{clip['continuity']['eyeline']}",
             f"- motion_vector：{clip['continuity']['motion_vector']}",
             f"- lighting_state：{clip['continuity']['lighting_state']}",
+            f"- outgoing_seam：{json.dumps(clip.get('seam_contract') or {}, ensure_ascii=False)}",
+            f"- end_frame_target：{clip['continuity'].get('end_frame_target', '')}",
             "",
             "## 视频 prompt",
-            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{clip['shot_design']['camera_movement']}；光影继承：{clip['shot_design']['lighting']}；动态细节遵循人物、服装、道具和环境的物理惯性；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定身份、服装、关键道具、场景 setup、空间方向或光色基调；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
+            f"人物运动：{clip['continuity']['action']}；动作家族：{clip.get('action_family', '')}；力量等级：{clip.get('energy_level', 'Level 5')}；镜头运动：{clip['shot_design']['camera_movement']}；光影继承：{clip['shot_design']['lighting']}；动态细节遵循人物、服装、道具和环境的物理惯性；卡点约束：动作峰值/击中点对齐本 clip 内部的 {clip.get('action_peak_relative', 0.8):.2f}s；接缝执行：{clip.get('seam_contract', {}).get('kind', '')}，连续性要求={clip.get('seam_contract', {}).get('continuity_required', False)}，复核 {', '.join(clip.get('seam_contract', {}).get('review') or [])}；转场母题：{clip.get('transition_motif', '')}；继承约束：不得重定身份、服装、关键道具、场景 setup、空间方向或光色基调；声音约束：无对白、无旁白、不要生成原生人声，音乐由 mv-compose 使用原歌轨统一处理。",
         ]
         mv_utils.write_text(os.path.join(root, clip["video_prompt_path"]), "\n".join(video_lines) + "\n")
 
@@ -539,8 +634,16 @@ def main():
         print("[err] 未生成任何 clip，请检查 beatgrid duration/sections", file=sys.stderr)
         sys.exit(1)
     write_prompt_files(root, clips, blueprint)
+    song_path = mv_utils.find_song(root)
+    upstream_paths = {
+        "song": song_path,
+        "beatgrid": bg_path,
+        "lyrics": os.path.join(root, "词", "lyrics.md"),
+        "blueprint": os.path.join(root, "视觉蓝图.md"),
+        "settings": os.path.join(root, "_设置.md"),
+    }
     plan = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_clip_plan",
         "generated_at": date.today().isoformat(),
         "project_root": root,
@@ -559,20 +662,41 @@ def main():
             "consistency_rule": "首帧锁身份/场景/光色；视频阶段只升级动作、运镜、张力，不重定脸和服化道",
         },
         "beatgrid_path": "节拍/beatgrid.json",
-        # 内容快照：下游 gate 用它判定换歌/重算 beatgrid 后 clip_plan 是否过期（git-free 失效检测）。
+        "section_contract": {
+            "source": bg.get("section_source") or "unconfirmed",
+            "verified": bool(bg.get("sections_verified")),
+            "complete": bool(bg.get("sections_complete")),
+            "sections": sections,
+        },
+        "planning_warnings": (
+            [f"max_clips={contract.plan_granularity_profile(granularity)['max_clips']} 是成本目标；为保护段落边界，实际保留 {len(clips)} clips"]
+            if len(clips) > contract.plan_granularity_profile(granularity)["max_clips"] else []
+        ),
+        # 全输入内容收据：歌词、蓝图或设置变化也会使昂贵下游失效。
+        "inputs_sha256": {key: mv_utils.content_hash(path) for key, path in upstream_paths.items()},
+        # Legacy aliases retained for older readers.
         "beatgrid_hash": mv_utils.content_hash(bg_path),
-        "song_hash": mv_utils.content_hash(mv_utils.find_song(root)),
+        "song_hash": mv_utils.content_hash(song_path),
         "clips": clips,
     }
-    song_path = mv_utils.find_song(root)
+    plan_dir = os.path.join(root, "分镜")
+    plan_path = os.path.join(plan_dir, "clip_plan.json")
+    mv_utils.write_json(plan_path, plan)
+    try:
+        output_rate = contract.video_spec_profile(settings.get("出视频规格") or "预算一般")["fps"]
+    except KeyError:
+        output_rate = 24
     timeline = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_timeline_manifest",
         "generated_at": date.today().isoformat(),
         "project_root": root,
         "title": title,
         "song_path": mv_utils.relpath(root, song_path) if song_path else "",
+        "rate": output_rate,
+        "audio_policy": "locked_master_song_only; generated_clip_audio_discarded",
         "beatgrid_path": "节拍/beatgrid.json",
+        "source_clip_plan_sha256": mv_utils.content_hash(plan_path),
         "clips": [
             {
                 "clip_id": c["clip_id"],
@@ -583,12 +707,11 @@ def main():
                 "video_path": c["selected_video_path"],
                 "transition": c["transition"],
                 "speed_mode": c["speed_mode"],
+                "seam_contract": c.get("seam_contract") or {},
             }
             for c in clips
         ],
     }
-    plan_dir = os.path.join(root, "分镜")
-    mv_utils.write_json(os.path.join(plan_dir, "clip_plan.json"), plan)
     mv_utils.write_json(os.path.join(plan_dir, "timeline_manifest.json"), timeline)
     mv_utils.write_text(os.path.join(plan_dir, "clip_plan.md"), build_markdown(title, clips))
     # Rebuild registries after clip_plan exists so asset/reference usage reflects this exact plan.

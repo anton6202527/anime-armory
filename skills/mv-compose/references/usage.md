@@ -7,7 +7,7 @@ bash <skill>/mv_compose.sh <制MV作品根> [16:9|9:16|1:1]
 bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9
 # 抖音竖屏
 bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 9:16
-# 临时救场：缺 timeline 或未选视频时才允许按目录顺序兜底
+# 临时救场：只写 预览/fallback_preview.mp4，不构成正式交付
 bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 ```
 
@@ -20,7 +20,7 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 
 ## Clip 顺序
 1. 优先读取 `分镜/timeline_manifest.json` 的 `clips[].video_path`，按 manifest 顺序拼接。
-2. timeline 中某个 `video_path` 缺失时会提示缺料并阻断；只有显式 `--allow-fallback` 才退回 `出视频/视频/*.mp4` 文件名顺序。
+2. timeline 中某个 `video_path` 缺失时会提示缺料并阻断；显式 `--allow-fallback` 才退回文件名顺序，且只写预览，不写正式母版/成片、进度、QC 或 provenance。
 3. 外部/网页生成的视频先用 `mv-video/scripts/video_jobs.py --register` 登记，再用 `--select` 挑版；`--select` 会复制到 `出视频/视频/Clip_XXX.mp4` 并同步 timeline。
 
 ## 字幕降级链（全在本 skill 内，不借外部 skill）
@@ -30,8 +30,14 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 
 > 查 libass：`ffmpeg -hide_banner -filters | grep ' subtitles '`。本机 Homebrew ffmpeg 常无。
 
-## 时长校验
-脚本会比对 `画面总时长` vs `歌时长`：相差 >1s 告警。**正解是上游对齐**——mv-plan/mv-video 出 clip 时按 `beatgrid.json` 的段落/鼓点定 clip 时长，而不是在 compose 里硬 trim。
+## 时长与重定时
+
+- 正式模式比对 `画面总时长` vs `歌时长`：差值大于 `max(100ms, 2帧)` 直接拒产。
+- 默认逐镜 `trim_hold`：长素材裁切、短素材尾帧停稳；只在 timeline 逐镜显式 `retime` 时变速。
+- 通过合同后把最终画面精确 hold 到歌曲尾；不使用 `-shortest` 截掉母带尾音。
+- 正解仍是上游对齐：mv-plan/mv-video 按已签收 beatgrid 和 picture lock 生成/挑选镜头，compose 不替剪辑师重新发明节奏。
+
+内部画幅统一、裁切/尾帧 hold 和拼接使用 ProRes 422 HQ/10-bit 临时中间件，避免在母版前先压一代 H.264；临时文件只存在作品 `_mvwork/`，正式完成后可由清理工具处理。
 
 `歌曲输入时序=后配歌曲` 时，compose 只接受最终成品歌后的正式 timeline；rough 视觉蓝图阶段不合成。
 
@@ -40,4 +46,4 @@ bash <skill>/mv_compose.sh "创作区/制MV/我的歌" 16:9 --allow-fallback
 - Pillow（无 libass 时 `render_lyrics.py` 用）。
 
 ## 进度回写
-完成后回写 `_进度.md`「合成成片」行（`成片_MV.mp4`）。
+只有正式母版、交付 MP4、delivery QC 与 provenance 全通过后才回写 `_进度.md`「合成成片」行。fallback 预览永不推进进度。

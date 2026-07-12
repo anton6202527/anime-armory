@@ -27,6 +27,7 @@ description: 横切角色身份闭环层：把 n2d 的 identity_registry.json �
 - **输出**：`identity_adapter_matrix.json/md`、`identity_drift_report.json/md`、音色/声纹 drift 报表和 batch 可消费 findings。
 - **读写边界**：只读 registry 并写报表；不写 registry 本体、不训练 LoRA、不重配音、不重出图。
 - **契约关系**：registry path/schema owner、writer owner、adapter status、LoRA ready 阻断、voice finding kind 都来自 `skills/n2d/_lib/n2d_contract.py`；本 skill 是 registry 消费方与 identity_adapter_matrix 写入方，不是 registry 本体写入方。
+- **tier 档位归属澄清（2026-07 审计）**：`core_full/recurring_standard/named_minimal/restricted_partial` 四档的**强制点在 n2d-image（runner 按档补脸锚、face_drift_risk 按档定必需视图）与 n2d-review gate**；本 skill 只感知 `restricted_partial`（缩减必需 reference 字段）并在漂移报表打 `tier_confound` 标签，不执行档位闸门。别在这里找 tier 阻断逻辑。
 
 ## 核心规则
 

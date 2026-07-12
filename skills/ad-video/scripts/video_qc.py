@@ -323,9 +323,10 @@ def prompt_handoff_findings(root: Path, clip: str, shot: Mapping[str, Any]) -> L
     safe = shot.get("safe_area") or shot.get("安全区") or {}
     if (products or brand_assets(shot) or any(mark in combined for mark in ("CTA", "cta", "片尾", "logo"))) and not safe:
         out.append(finding("warn", clip, "safe_area",
-                           "产品/品牌/CTA clip 缺 8x8 安全区声明，多比例 reframe 可能裁切核心信息。"))
+                           "产品/品牌/CTA clip 缺中心构图余量声明，多比例 reframe 可能裁切核心信息；仍须实际 placement 模板人审。"))
     elif isinstance(safe, Mapping) and safe.get("core_in_center_4x4") is False:
-        out.append(finding("block", clip, "safe_area", "safe_area.core_in_center_4x4=false，核心资产不在中心安全区。"))
+        out.append(finding("warn", clip, "safe_area",
+                           "core_in_center_4x4=false：跨比例裁切风险高；中心网格不是平台安全区，最终按实际 placement 模板人审。"))
     return out
 
 

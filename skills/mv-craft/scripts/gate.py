@@ -22,6 +22,16 @@ def _has_rough_blueprint(root):
     return "rough（待成品歌/beatgrid 复核）" in text or "状态：rough" in text
 
 
+def _lyrics_required(root, meta, stage=None):
+    """Lyrics are conditional: instrumental/no-subtitle/no-lipsync MVs are valid."""
+    if stage == "lyric_sync":
+        return True
+    settings = mv_utils.parse_settings(root)
+    subtitle_mode = settings.get("字幕语言") or meta.get("subtitle_language") or "中文"
+    lip_mode = settings.get("演唱口型") or meta.get("lip_sync_mode") or "仅正面演唱镜"
+    return subtitle_mode != "无字幕" or lip_mode != "关闭"
+
+
 # 付费 / 不可逆阶段：进入前必须确认输入歌曲版权（音乐媒介的核心合规闸）。
 _COSTLY_STAGES = {"image", "video_jobs", "compose"}
 _UNRESOLVED_RIGHTS = {"", "unknown", "未知", "未定", "未确认", "未声明", "待确认"}
@@ -64,16 +74,39 @@ def _rights_errors(root, stage, meta):
     return []
 
 
-def _staleness_errors(root, stage):
-    """后配歌曲招牌路径的工程化闸：clip_plan 记录了它依据的 beatgrid/song 内容快照，
-    若之后换歌或重测卡点（hash 变了），下游付费阶段硬报，逼用户先重跑 mv-plan。
-    旧 plan 没有 hash 字段时跳过（向后兼容，不误报）。"""
+def _staleness_errors(root, stage, meta):
+    """Verify that a plan still describes its exact upstream creative truth."""
     if stage not in _COSTLY_STAGES:
         return []
     plan = _load_plan(root)
     if not plan:
         return []
     errs = []
+    input_paths = {
+        "song": mv_utils.find_song(root),
+        "beatgrid": os.path.join(root, "节拍", "beatgrid.json"),
+        "lyrics": os.path.join(root, "词", "lyrics.md"),
+        "blueprint": os.path.join(root, "视觉蓝图.md"),
+        "settings": os.path.join(root, "_设置.md"),
+    }
+    recorded_inputs = plan.get("inputs_sha256")
+    if isinstance(recorded_inputs, dict):
+        for key, path in input_paths.items():
+            recorded = recorded_inputs.get(key)
+            current = mv_utils.content_hash(path)
+            if key == "lyrics" and not _lyrics_required(root, meta, stage) and not os.path.exists(path):
+                if recorded not in (None, ""):
+                    errs.append("clip_plan 记录了不存在的 lyrics 输入；重跑 mv-plan 清理旧收据")
+                continue
+            if not recorded:
+                errs.append(f"clip_plan.inputs_sha256 缺 {key}；重跑 mv-plan 建立完整输入收据")
+            elif current != recorded:
+                errs.append(f"{key} 自 mv-plan 后已变化；重跑 mv-plan，不能让旧分镜消费新输入")
+    elif not meta.get("is_demo"):
+        errs.append("正式 clip_plan 缺 inputs_sha256 全输入收据；重跑 mv-plan 升级合同")
+
+    # Legacy fields remain readable so demo/older projects receive precise
+    # change detection while migrating to inputs_sha256.
     rec_bg = plan.get("beatgrid_hash")
     if rec_bg:
         cur_bg = mv_utils.content_hash(os.path.join(root, "节拍", "beatgrid.json"))
@@ -86,6 +119,211 @@ def _staleness_errors(root, stage):
         if cur_song and cur_song != rec_song:
             errs.append("歌/song.* 自 mv-plan 之后已变（后配歌曲定稿/换歌）；先重跑 mv-beat + mv-plan。")
     return errs
+
+
+def _beatgrid_contract(root, stage, meta, song):
+    """Return deterministic errors/warnings for the music-timing truth source."""
+    if stage not in {"plan", "image", "video_jobs", "compose"}:
+        return [], []
+    path = os.path.join(root, "节拍", "beatgrid.json")
+    payload = mv_utils.load_json(path, {}) or {}
+    if not payload:
+        return [], []  # the common existence gate owns the missing-file message
+    errors, warnings = [], []
+    recorded_song = str(payload.get("source_audio_sha256") or "")
+    current_song = mv_utils.content_hash(song)
+    if recorded_song and current_song != recorded_song:
+        errors.append("beatgrid 不是由当前 歌/song.* 生成（source_audio_sha256 不一致）；先重跑 mv-beat")
+    elif not recorded_song:
+        message = "beatgrid 缺 source_audio_sha256，不能证明节拍来自当前歌曲；重跑 mv-beat"
+        (warnings if meta.get("is_demo") else errors).append(message)
+
+    for key in ("beats", "downbeats"):
+        values = payload.get(key) or []
+        if not values:
+            (warnings if meta.get("is_demo") else errors).append(f"beatgrid.{key} 为空")
+            continue
+        try:
+            floats = [float(value) for value in values]
+        except (TypeError, ValueError):
+            errors.append(f"beatgrid.{key} 含非数值时间戳")
+            continue
+        if any(right <= left for left, right in zip(floats, floats[1:])):
+            errors.append(f"beatgrid.{key} 必须严格递增")
+
+    sections = payload.get("sections") or []
+    if not meta.get("is_demo"):
+        review = payload.get("timing_review") or {}
+        if not payload.get("timing_verified"):
+            errors.append("beatgrid timing_verified=false；正式项目需具名确认拍号、小节相位和完整段落边界")
+        if not payload.get("downbeats_verified"):
+            errors.append("beatgrid.downbeats_verified=false；正式卡点不能把自动 onset 相位当人工确认")
+        if not payload.get("sections_verified") or not payload.get("sections_complete"):
+            errors.append("beatgrid 段落边界未完整覆盖全曲并签收；补 _meta.section_timings 后重跑 mv-beat")
+        if not review.get("accepted") or not str(review.get("reviewer") or "").strip():
+            errors.append("beatgrid 缺具名 timing_review；用 mv-beat --confirm-timing --reviewer <name> 重跑")
+        if not sections:
+            errors.append("beatgrid.sections 为空；正式 mv-plan 不得按歌词字数伪造段落时长")
+
+    measured = mv_utils.audio_duration(song) if song else None
+    try:
+        grid_duration = float(payload.get("duration"))
+    except (TypeError, ValueError):
+        grid_duration = None
+    if measured and grid_duration is not None and abs(measured - grid_duration) > 0.25:
+        errors.append(f"beatgrid.duration={grid_duration:.3f}s 与当前歌曲实测 {measured:.3f}s 不一致")
+    return list(dict.fromkeys(errors)), list(dict.fromkeys(warnings))
+
+
+def _timeline_contract_errors(root, stage, meta):
+    if stage not in {"image", "video_jobs", "compose"}:
+        return []
+    plan = _load_plan(root)
+    timeline = mv_utils.load_json(os.path.join(root, "分镜", "timeline_manifest.json"), {}) or {}
+    if not plan or not timeline:
+        return []
+    errors = []
+    p_rows = plan.get("clips") or []
+    t_rows = timeline.get("clips") or []
+    if [r.get("clip_id") for r in p_rows] != [r.get("clip_id") for r in t_rows]:
+        errors.append("timeline_manifest 与 clip_plan 的 clip 顺序/集合不一致；重跑 mv-plan")
+        return errors
+    for left, right in zip(p_rows, t_rows):
+        for key in ("start", "end", "duration"):
+            try:
+                if abs(float(left.get(key)) - float(right.get(key))) > 0.001:
+                    errors.append(f"{right.get('clip_id')} timeline.{key} 与 clip_plan 不一致")
+                    break
+            except (TypeError, ValueError):
+                errors.append(f"{right.get('clip_id')} timeline/clip_plan 缺有效 {key}")
+                break
+    source_hash = timeline.get("source_clip_plan_sha256")
+    if not source_hash and not meta.get("is_demo"):
+        errors.append("正式 timeline_manifest 缺 source_clip_plan_sha256；重跑 mv-plan")
+    elif source_hash and source_hash != mv_utils.content_hash(os.path.join(root, "分镜", "clip_plan.json")):
+        errors.append("timeline_manifest 未绑定当前 clip_plan；同步语义分镜后需刷新 timeline/OTIO")
+    return list(dict.fromkeys(errors))
+
+
+def _otio_contract_errors(root, stage, meta):
+    if stage not in {"video_jobs", "compose"} or meta.get("is_demo"):
+        return []
+    otio_rel = "分镜/timeline.otio"
+    receipt_rel = "生产数据/otio/otio_receipt.json"
+    otio_path = os.path.join(root, otio_rel)
+    receipt = mv_utils.load_json(os.path.join(root, receipt_rel), None)
+    if not os.path.isfile(otio_path) or not isinstance(receipt, dict):
+        return ["正式项目缺可编辑 OTIO + hash receipt；先跑 production_pack.py 或 export_otio.py"]
+    timeline_path = os.path.join(root, "分镜", "timeline_manifest.json")
+    beat_path = os.path.join(root, "节拍", "beatgrid.json")
+    timeline = mv_utils.load_json(timeline_path, {}) or {}
+    errors = []
+    if receipt.get("otio_sha256") != mv_utils.content_hash(otio_path):
+        errors.append("timeline.otio 与 otio_receipt 不一致；重跑 export_otio.py")
+    if receipt.get("timeline_edit_sha256") != mv_utils.timeline_edit_hash(timeline):
+        errors.append("timeline.otio 未反映当前剪辑决定；重跑 export_otio.py")
+    recorded = receipt.get("inputs_sha256") or {}
+    if recorded.get("分镜/timeline_manifest.json") != mv_utils.content_hash(timeline_path):
+        errors.append("OTIO receipt 已过期：timeline_manifest 在导出后变化")
+    if recorded.get("节拍/beatgrid.json") != mv_utils.content_hash(beat_path):
+        errors.append("OTIO receipt 已过期：beatgrid 在导出后变化")
+    if stage == "compose" and receipt.get("missing_media"):
+        errors.append(f"OTIO 仍有 {len(receipt['missing_media'])} 个 missing media；全部挑版后重导 OTIO")
+    return errors
+
+
+def _pacing_receipt_errors(root, stage, meta):
+    if stage not in {"image", "video_jobs"} or meta.get("is_demo"):
+        return []
+    rel = "评分/pacing_prescore.json"
+    report = mv_utils.load_json(os.path.join(root, rel), None)
+    if not isinstance(report, dict):
+        return ["正式付费生产前缺 pacing_prescore；先跑 mv-score 的确定性节奏检查（可不设主观阈值）"]
+    required = ("分镜/clip_plan.json", "节拍/beatgrid.json")
+    recorded = report.get("inputs_sha256") or {}
+    errors = []
+    for input_rel in required:
+        if recorded.get(input_rel) != mv_utils.content_hash(os.path.join(root, input_rel)):
+            errors.append(f"pacing_prescore 已过期：{input_rel} 变化；重跑 mv-score")
+    song = mv_utils.find_song(root)
+    if song:
+        song_rel = mv_utils.relpath(root, song)
+        if recorded.get(song_rel) != mv_utils.content_hash(song):
+            errors.append("pacing_prescore 已过期：当前歌曲变化；重跑 mv-score")
+    if report.get("threshold") is not None and report.get("blocked"):
+        errors.append("pacing_prescore 按项目显式阈值判定 blocked；先按 return_to_stages 回流")
+    return errors
+
+
+def _alignment_contract_errors(root, stage, meta):
+    if stage not in {"video_jobs", "compose"} or meta.get("is_demo"):
+        return []
+    settings = mv_utils.parse_settings(root)
+    plan = _load_plan(root)
+    vocal_performance = any(
+        str(clip.get("action_family") or "") == "performance_vocal" or clip.get("vocal_lyrics")
+        for clip in plan.get("clips", []) if isinstance(clip, dict)
+    )
+    lip_mode = settings.get("演唱口型") or "仅正面演唱镜"
+    subtitle_mode = settings.get("字幕语言") or "中文"
+    required = (stage == "video_jobs" and vocal_performance and lip_mode != "关闭") or (
+        stage == "compose" and subtitle_mode != "无字幕"
+    )
+    if not required:
+        return []
+    report = mv_utils.load_json(os.path.join(root, "字幕", "alignment_report.json"), None)
+    if not isinstance(report, dict):
+        purpose = "演唱口型镜" if stage == "video_jobs" else "正式字幕"
+        return [f"{purpose} 缺歌词强制对齐收据；先跑 mv-lyric-sync"]
+    errors = []
+    recorded = report.get("inputs_sha256") or {}
+    lyrics_rel = "词/lyrics.md"
+    if recorded.get(lyrics_rel) != mv_utils.content_hash(os.path.join(root, lyrics_rel)):
+        errors.append("alignment_report 已过期：lyrics.md 变化；重跑 mv-lyric-sync")
+    song = mv_utils.find_song(root)
+    if song:
+        song_rel = mv_utils.relpath(root, song)
+        if recorded.get(song_rel) != mv_utils.content_hash(song):
+            errors.append("alignment_report 已过期：主歌轨变化；重跑 mv-lyric-sync")
+    automatic_pass = (
+        int(report.get("aligned_lines") or 0) == int(report.get("lyric_lines") or -1)
+        and float(report.get("character_coverage_ratio", report.get("alignment_confidence") or 0)) >= 0.9
+        and not report.get("timing_issues")
+    )
+    manual = report.get("manual_review") or {}
+    manual_pass = bool(
+        manual.get("accepted")
+        and str(manual.get("reviewer") or "").strip()
+        and str(manual.get("notes") or "").strip()
+    )
+    if manual_pass and manual.get("bound_inputs_sha256") != recorded:
+        manual_pass = False
+    if not automatic_pass and not manual_pass:
+        errors.append("歌词时间轴未达到完整行/90% 字符覆盖且无具名逐行听审说明")
+    for rel in ("字幕/karaoke.ass", "字幕/lyrics.lrc"):
+        if stage == "compose" and not os.path.isfile(os.path.join(root, rel)):
+            errors.append(f"正式字幕模式缺 {rel}")
+    return errors
+
+
+def _semantic_prompt_errors(root, stage, meta):
+    if stage not in {"image", "video_jobs"} or meta.get("is_demo"):
+        return []
+    plan_path = os.path.join(root, "分镜", "clip_plan.json")
+    plan = _load_plan(root)
+    receipt = mv_utils.load_json(os.path.join(root, "分镜", "semantic_prompts.json"), None)
+    if not isinstance(receipt, dict):
+        return ["正式出图前缺语义分镜消费收据；用 compose_prompts.py 注入覆盖全部 clips 的具体画面/动作"]
+    errors = []
+    if int(receipt.get("updated_clips") or 0) != len(plan.get("clips") or []):
+        errors.append("semantic_prompts 未覆盖全部 clip；正式项目不得用通用占位动作直接出图")
+    if receipt.get("result_clip_plan_sha256") != mv_utils.content_hash(plan_path):
+        errors.append("semantic_prompts 收据未绑定当前 clip_plan；重新注入或签收语义分镜")
+    recorded = receipt.get("inputs_sha256") or {}
+    for key, rel in (("lyrics", "词/lyrics.md"), ("blueprint", "视觉蓝图.md")):
+        if recorded.get(key) != mv_utils.content_hash(os.path.join(root, rel)):
+            errors.append(f"semantic_prompts 已过期：{rel} 变化")
+    return errors
 
 
 def _load_plan(root):
@@ -126,6 +364,10 @@ def _image_qc_errors_warnings(root, stage):
         advisory = 0
     if advisory or summary.get("verdict") == "review":
         warnings.append(f"mv-image image_qc 有非阻断初筛项 advisory={advisory}，进入视频前请确认主色/锚点/参考输入已复核")
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    provenance = report.get("generation_provenance") or {}
+    if not meta.get("is_demo") and not provenance.get("complete"):
+        errors.append("正式出图缺逐资产 model+channel+prompt+asset hash 生成收据，或项目内混用生图模型/渠道；先补 production_events 再重跑 image_qc")
 
     plan = _load_plan(root)
     try:
@@ -185,8 +427,17 @@ def _video_report_errors(root, stage):
                     errors.append(f"{report_rel} 已过期：选中视频 {rel} 已变化")
                     break
             meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
-            if not meta.get("is_demo") and not (report.get("semantic_review") or {}).get("accepted"):
+            semantic = report.get("semantic_review") or {}
+            if not meta.get("is_demo") and not semantic.get("accepted"):
                 errors.append("正式项目缺视频语义人工签收：逐镜/接缝复核后运行 video_qc.py --accept-semantic --reviewer <name>")
+            elif semantic.get("accepted"):
+                if semantic.get("bound_video_sha256") != video_hashes:
+                    errors.append("视频语义签收未绑定当前 selected_video_sha256；重跑 video_qc 具名签收")
+                seam_hash = mv_utils.json_hash([
+                    seam.get("seam_contract") or {} for seam in report.get("seams") or []
+                ])
+                if semantic.get("bound_seam_contract_sha256") != seam_hash:
+                    errors.append("视频语义签收未绑定当前接缝分类合同；重跑 video_qc 逐缝签收")
     return errors
 
 
@@ -200,11 +451,38 @@ def _picture_lock_errors(root, stage, meta):
     errors = []
     recorded_inputs = payload.get("inputs_sha256") or {}
     plan = _load_plan(root)
-    required = {"分镜/clip_plan.json", "节拍/beatgrid.json", "分镜/animatic.mp4", "生产数据/image_qc/image_qc.json"}
+    timeline = mv_utils.load_json(os.path.join(root, "分镜", "timeline_manifest.json"), {}) or {}
+    editorial_hash = mv_utils.timeline_edit_hash(timeline)
+    if payload.get("editorial_timeline_sha256") != editorial_hash:
+        errors.append("picture lock 已过期：镜头顺序/切点/时长/接缝意图发生变化；重渲 animatic 并重新签收")
+    if payload.get("otio_timeline_sha256") != editorial_hash:
+        errors.append("picture lock 未绑定同一 OTIO 编辑合同；重导 OTIO、重渲 animatic 并重新签收")
+    required = {
+        "分镜/clip_plan.json", "节拍/beatgrid.json", "分镜/animatic.mp4",
+        "生产数据/animatic/animatic.json", "生产数据/image_qc/image_qc.json",
+        "评分/pacing_prescore.json", "分镜/semantic_prompts.json",
+    }
     song = mv_utils.find_song(root)
     if song:
         required.add(mv_utils.relpath(root, song))
-    required.update(c.get("image_path") for c in plan.get("clips", []) if c.get("image_path"))
+    for clip in plan.get("clips", []):
+        for key in ("image_path", "image_prompt_path", "video_prompt_path"):
+            if clip.get(key):
+                required.add(clip[key])
+        if clip.get("need_end_frame") and clip.get("end_frame_path"):
+            required.add(clip["end_frame_path"])
+    settings = mv_utils.parse_settings(root)
+    vocal_performance = any(
+        clip.get("action_family") == "performance_vocal" or clip.get("vocal_lyrics")
+        for clip in plan.get("clips", []) if isinstance(clip, dict)
+    )
+    if settings.get("字幕语言", "中文") != "无字幕" or (
+        vocal_performance and settings.get("演唱口型", "仅正面演唱镜") != "关闭"
+    ):
+        required.add("字幕/alignment_report.json")
+    for optional in ("视觉蓝图.md", "词/lyrics.md", "分镜/semantic_prompts.json"):
+        if os.path.exists(os.path.join(root, optional)):
+            required.add(optional)
     omitted = [rel for rel in required if rel not in recorded_inputs]
     if omitted:
         errors.append(f"picture lock 输入不完整，未绑定：{omitted[0]}")
@@ -212,6 +490,11 @@ def _picture_lock_errors(root, stage, meta):
         if mv_utils.content_hash(os.path.join(root, rel)) != recorded:
             errors.append(f"picture lock 已过期：{rel} 已变化；重渲 animatic 并重新签收")
             break
+    animatic_report = mv_utils.load_json(os.path.join(root, "生产数据", "animatic", "animatic.json"), {}) or {}
+    if animatic_report.get("output_sha256") != mv_utils.content_hash(os.path.join(root, "分镜", "animatic.mp4")):
+        errors.append("animatic 报告未绑定当前 分镜/animatic.mp4；重跑 render_animatic.py")
+    if animatic_report.get("timeline_edit_sha256") != editorial_hash:
+        errors.append("animatic 不是当前编辑时间线的预演；重跑 render_animatic.py")
     return errors
 
 
@@ -229,15 +512,14 @@ def check(root, stage):
 
     if stage in {"beat", "plan", "image", "video_jobs", "lyric_sync", "compose"} and not song:
         errors.append("缺 歌/song.*，请先补入最终成品歌")
-    if stage in {"plan", "image", "video_jobs", "lyric_sync", "compose"} and not os.path.exists(lyrics):
+    if (stage in {"plan", "image", "video_jobs", "lyric_sync", "compose"}
+            and _lyrics_required(root, meta, stage) and not os.path.exists(lyrics)):
         errors.append("缺 词/lyrics.md")
     if stage in {"plan", "image", "video_jobs", "compose"} and not os.path.exists(beatgrid):
         errors.append("缺 节拍/beatgrid.json，先跑 mv-beat")
-    if stage in {"plan", "image", "video_jobs", "compose"} and os.path.exists(beatgrid):
-        beat_payload = mv_utils.load_json(beatgrid, {}) or {}
-        if not beat_payload.get("timing_verified") and not meta.get("is_demo"):
-            errors.append("beatgrid 的拍号/小节相位/段落边界尚未人工确认（timing_verified=false）；"
-                          "正式项目请校正 section_timings，并用 mv-beat --downbeat-phase N --confirm-timing 重跑")
+    beat_errors, beat_warnings = _beatgrid_contract(root, stage, meta, song)
+    errors.extend(beat_errors)
+    warnings.extend(beat_warnings)
     if stage in {"script_review", "plan", "image", "video_jobs"} and not os.path.exists(blueprint):
         errors.append("缺 视觉蓝图.md")
     if stage in {"plan", "image", "video_jobs", "compose"} and _has_rough_blueprint(root):
@@ -262,6 +544,11 @@ def check(root, stage):
     warnings.extend(qc_warnings)
     errors.extend(_video_report_errors(root, stage))
     errors.extend(_picture_lock_errors(root, stage, meta))
+    errors.extend(_timeline_contract_errors(root, stage, meta))
+    errors.extend(_otio_contract_errors(root, stage, meta))
+    errors.extend(_pacing_receipt_errors(root, stage, meta))
+    errors.extend(_alignment_contract_errors(root, stage, meta))
+    errors.extend(_semantic_prompt_errors(root, stage, meta))
 
     if stage == "compose" and os.path.exists(timeline):
         data = mv_utils.load_json(timeline, {}) or {}
@@ -273,7 +560,7 @@ def check(root, stage):
         if missing:
             errors.append(f"timeline 有 {len(missing)} 个 clip 未选中视频，例：{missing[0]}")
         # 交叉核对挑版台账：timeline 仅按"文件存在"判选中，绕过 --select 手动丢入的 clip
-        # 会冒充已选中且无 take/分记录。jobs_manifest 在时给出告警（不硬挡手动工作流）。
+        # 会冒充已选中且无 take/分记录。demo 可提醒，正式交付必须登记/评分/挑版。
         jobs = (mv_utils.load_json(os.path.join(root, "出视频", "jobs_manifest.json"), {}) or {}).get("jobs") or []
         if jobs:
             selected_ids = {j.get("clip_id") for j in jobs if j.get("selected_take")}
@@ -284,12 +571,14 @@ def check(root, stage):
                 and clip.get("clip_id") not in selected_ids
             ]
             if unverified:
-                warnings.append(
+                message = (
                     f"{len(unverified)} 个 clip 有成片视频但 jobs_manifest 无挑版记录"
-                    f"（可能绕过 --select 手动放入）：{unverified[0]}…；确认来源/质量已经过挑版。")
+                    f"（可能绕过 --select 手动放入）：{unverified[0]}…；先登记、具名评分并挑版。"
+                )
+                (warnings if meta.get("is_demo") else errors).append(message)
 
     errors.extend(_rights_errors(root, stage, meta))
-    errors.extend(_staleness_errors(root, stage))
+    errors.extend(_staleness_errors(root, stage, meta))
 
     if stage == "lyric_sync" and os.path.exists(lyrics):
         lines = [

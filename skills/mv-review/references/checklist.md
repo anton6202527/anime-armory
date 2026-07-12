@@ -16,15 +16,16 @@
 | 画面糊/低质 | 判 | 出图/clip 分辨率清晰度够投放 | 🟡 |
 | 单曲视觉一致性包缺失 | 判 | `lead_identity_anchor / global_style / palette_anchor / section_look / motif_ledger` 是否在视觉蓝图/设定/分镜里被继承；MV 可换段落 look，但不能一支歌内换脸换主画风 | 🟡 |
 | 参考输入/LoRA 未登记 | 判 | 若 `_设置.md` 写 `MV一致性增强=指定参考图/后端主体库/+LoRA`，检查 prompt 是否含 `reference_inputs`、参考图路径/主体 ID/LoRA trigger+底模+授权说明 | 🟡 |
-| 演唱镜口型对不上 | 判 | **正面跟唱大特写**主角嘴型是否对得上人声（仅 `演唱口型≠关闭` 时要求；远景/侧脸/B-roll/空镜豁免）。对不上→开 `演唱口型`(配音对齐/后期pass·LatentSync 优先)重出该 clip，或回 `mv-plan` 改分镜规避。见 `mv-video`「演唱口型对齐」 | 🟡 |
+| 出图来源链缺失/漂移 | 机 | 每张正式帧必须有统一 model+channel、实际 prompt、reference inputs、asset SHA-256；prompt/参考/图片被替换后收据应失效 | 正式版 🔴 |
+| 演唱镜口型对不上 | 判 | **正面跟唱大特写**主角嘴型是否对得上人声（仅 `演唱口型≠关闭` 时要求；远景/侧脸/B-roll/空镜豁免）。对不上→用人声音频条件或后期 pass（LatentSync 优先）重做该 clip，或回 `mv-plan` 改分镜规避。见 `mv-video`「演唱口型对齐」 | 🟡 |
 
 ## B. 卡点 / 节奏（**MV 的命** —— 对 `mv-beat` 卡点原则）
 
 | 维度 | 机/判 | 怎么查 | 定级 |
 |---|---|---|---|
-| beatgrid 可用 | 机 | `节拍/beatgrid.json` 存在/可解析、有 beats/downbeats | 损坏 🔴 / 缺 🟡 |
+| beatgrid 来源与结构 | 机+判 | 可解析、有 beats/downbeats；绑定当前歌曲 SHA-256；正式版小节首相位与全曲 sections 由具名听审确认 | 正式缺证据/损坏 🔴 |
 | BPM 合理 | 机 | bpm 在 ~40–220；偏低/偏高疑半速/倍速 | 嫌疑 🟡 |
-| beats/downbeats 单调 | 机 | 时间戳严格递增、在歌长内 | 乱序 🟡 |
+| beats/downbeats 单调 | 机 | 时间戳严格递增、在歌长内 | 乱序 🔴 |
 | clip 时长卡点 | 机（需 ffprobe）+判 | 每 clip 时长 = 相邻卡点之差；**clip 疑似等长 = 不卡点** | 等长 🟡 |
 | 副歌密 verse 疏 | 判 | 副歌每 downbeat 切（碎）、verse 缓（2–4 拍） | 🟡 |
 | 爽点对 downbeat | 判 | 高潮画面同帧砸在 downbeat 上 | 🟡 |
@@ -42,6 +43,7 @@
 | 行数对账 | 机 | 字幕行数 vs `词/lyrics.md` 词行数 | 差大 🟡 |
 | 卡拉OK视觉 | 判 | 逐字高亮可读、位置不挡主体、竖屏适配 | 🟢/🟡 |
 | 词↔实唱一致 | 判 | 对齐偏差大多因词与实唱不符 | 🟡 |
+| 对齐收据新鲜 | 机 | alignment report 绑定当前 song/master/lyrics hash；低覆盖 waiver 有 reviewer + notes | 正式版 🔴 |
 
 ## D. 音画 / 合成（对 `mv-compose`）
 
@@ -53,6 +55,9 @@
 | 歌是主音轴 | 判 | 整首歌作主音轨、clip 原声静音（MV 不做 ducking） | 🟡 |
 | 剪辑点踩鼓点 | 判 | 切点对齐 beatgrid（不是匀速过场） | 🟡 |
 | 留白/呼吸 | 判 | 间奏/outro 留白不被硬切填满 | 🟢 |
+| OTIO/锁版 | 机+判 | `timeline.otio` 有 V1 画面+A1正式歌+段落/接缝 markers，receipt/edit hash 新鲜；picture lock 绑定 animatic、帧、prompt、时间线 | 正式版 🔴 |
+| 母带未被截短/改响 | 机 | 输出 vs 输入歌时长 ≤100ms；integrated loudness 漂移 ≤0.5 LU；真峰值 >0 dBTP 阻断、>-1 dBTP 复核 | 越阈 🔴/🟡 |
+| 交付编码 | 机 | ProRes 422 HQ/PCM 48k 母版；BT.709 H.264 High yuv420p/AAC 48k/faststart 交付版 | 正式版 🔴 |
 
 ## E. 合规（非交涉项，每次必查）
 

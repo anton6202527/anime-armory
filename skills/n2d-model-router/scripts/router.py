@@ -3012,7 +3012,31 @@ def load_spectacle_backend_benchmark(root: Path) -> Dict[str, Any]:
     if kind and kind != SPECTACLE_BACKEND_BENCHMARK_KIND:
         return {}
     recs = data.get("recommendations")
-    return dict(data) if isinstance(recs, Mapping) else {}
+    if not isinstance(recs, Mapping):
+        return {}
+    out = dict(data)
+    # 新鲜度护栏（2026-07 标准审计）：旧逻辑对 probe 结果零时效校验——任意久远的 benchmark
+    # 会永久覆盖高动态镜路由。probed_at/generated_at 超龄（默认 45 天·对齐 freshness 候选表
+    # 上限·env N2D_SPECTACLE_BENCHMARK_MAX_AGE_DAYS 可调）即标 stale：仍返回数据供审计，
+    # 但 apply 端只留 advisory 不改 primary。缺时间戳按 stale 处理（诚实：没证据日期=不可信）。
+    max_age_days = float(os.environ.get("N2D_SPECTACLE_BENCHMARK_MAX_AGE_DAYS", "45"))
+    stamp = str(data.get("probed_at") or data.get("generated_at") or data.get("checked_at") or "").strip()
+    stale = True
+    if stamp:
+        try:
+            probed = dt.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+            if probed.tzinfo is None:
+                probed = probed.replace(tzinfo=dt.timezone.utc)
+            age = (dt.datetime.now(dt.timezone.utc) - probed).days
+            stale = age > max_age_days
+            out["benchmark_age_days"] = age
+        except ValueError:
+            stale = True
+    out["benchmark_stale"] = stale
+    if stale:
+        out["stale_reason"] = (f"probe 时间戳缺失" if not stamp
+                               else f"probe 已 {out.get('benchmark_age_days')} 天 > {max_age_days:g} 天上限")
+    return out
 
 
 def _benchmark_recommendation(benchmark: Mapping[str, Any], spectacle_type: str) -> Dict[str, Any]:
@@ -3041,6 +3065,13 @@ def apply_spectacle_backend_benchmark(
     """
     if routing_mode == "fixed_default" or not benchmark:
         return []
+    if benchmark.get("benchmark_stale"):
+        # 过期 probe 不改 primary：逐 route 打 advisory 风险旗留痕，提示重跑 probe 刷新。
+        for route in routes:
+            flags = set(route.get("risk_flags") or [])
+            flags.add("spectacle_benchmark_stale")
+            route["risk_flags"] = sorted(flags)
+        return [{"skipped": "benchmark_stale", "reason": str(benchmark.get("stale_reason") or "")}]
     applied: List[Dict[str, Any]] = []
     for idx, route in enumerate(routes):
         clip = clips[idx] if idx < len(clips) and isinstance(clips[idx], Mapping) else {}

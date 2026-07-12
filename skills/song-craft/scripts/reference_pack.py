@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from datetime import date
@@ -94,6 +95,7 @@ def check_pack(pack: dict[str, Any]) -> dict[str, Any]:
         "kind": CHECK_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": pack.get("project_root"),
+        "source_sha256": hashlib.sha256(json.dumps(pack, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest(),
         "passed": not blockers,
         "blocking": len(blockers),
         "warnings": len(findings) - len(blockers),

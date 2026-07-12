@@ -207,16 +207,34 @@ def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatc
     assert rc == 0
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
     assert registry["assets"]["CHAR_A"]["views"]["front"].endswith("CHAR_A__front.png")
+    assert registry["assets"]["CHAR_A"]["status"] == "partial"
+    assert registry["assets"]["CHAR_A"]["view_readiness"] == {
+        "required": ["front", "three_quarter", "side", "back", "face"],
+        "ready": ["front"],
+        "missing": ["three_quarter", "side", "back", "face"],
+        "complete": False,
+    }
+    manifest = json.loads((root / "生产数据" / "comic_identity_views_第1话.json").read_text(encoding="utf-8"))
+    assert manifest["items"][0]["status"] == "character_view_reused"
+    assert manifest["items"][0]["sha256"] == identity.file_sha256(shared / "CHAR_A__front.png")
 
 
 def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     (root / "出图" / "共享").mkdir(parents=True)
+    (root / "出图" / "共享" / "图片").mkdir(parents=True)
     (root / "设定库").mkdir(parents=True)
+    style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    style_path.write_bytes(PNG_1X1)
     (root / "出图" / "共享" / "identity_registry.json").write_text(
         json.dumps(
             {
                 "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                    },
                     "CHAR_A": {
                         "id": "CHAR_A",
                         "type": "character",
@@ -274,21 +292,38 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     assert rc == 0
     assert calls
     prompt, image_paths = calls[0]
-    assert image_paths == []
+    assert image_paths == [style_path]
     assert "本次没有已采纳角色图片作为附件" in prompt
+    assert "它只用于继承线条、上色、明暗、材质和墨晕语言" in prompt
+    assert "不得继承其中人物的脸、发型、服装" in prompt
+    assert "不生成临时剧情手持物" in prompt
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
     source = registry["assets"]["CHAR_A"]["reference_images"][0]["source"]
     assert source["kind"] == "generated_character_view_text_seed"
     assert source["anchor_kind"] == "text_prompt_seed"
+    assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
+    assert source["style_reference_sha256"] == identity.file_sha256(style_path)
+    assert source["style_reference_role"] == "style_only"
+    assert source["prompt_sha256"]
+    assert (root / source["prompt_path"]).is_file()
+    assert registry["assets"]["CHAR_A"]["status"] == "partial"
 
 
 def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     (root / "出图" / "共享").mkdir(parents=True)
+    style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    style_path.parent.mkdir(parents=True)
+    style_path.write_bytes(PNG_1X1)
     (root / "出图" / "共享" / "identity_registry.json").write_text(
         json.dumps(
             {
                 "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                    },
                     "PROP_A": {
                         "id": "PROP_A",
                         "type": "prop",
@@ -336,9 +371,98 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     assert rc == 0
     assert calls
     prompt, image_paths = calls[0]
-    assert image_paths == []
+    assert image_paths == [style_path]
     assert "参考 ID：PROP_A" in prompt
+    assert "只用于继承线条、上色、明暗、材质、色域和墨晕语言" in prompt
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
     asset = registry["assets"]["PROP_A"]
     assert asset["anchor_path"].endswith("PROP_A__anchor.png")
-    assert asset["reference_images"][0]["source"]["kind"] == "generated_text_anchor"
+    source = asset["reference_images"][0]["source"]
+    assert source["kind"] == "generated_text_anchor"
+    assert source["style_reference_path"] == "出图/共享/图片/STYLE_A__anchor.png"
+    assert source["style_reference_role"] == "style_only"
+    assert source["prompt_sha256"]
+    assert (root / source["prompt_path"]).is_file()
+
+
+def test_style_and_fx_prefixes_have_specialized_anchor_contracts() -> None:
+    style_prompt = identity.asset_anchor_prompt(
+        "STYLE_CLASSIC_V1",
+        {
+            "type": "style",
+            "display_name": "古典工笔风格锚",
+            "style_contract": "细线、矿物淡彩、水墨边缘。",
+        },
+        visual_style="新国风工笔淡彩",
+    )
+    fx_prompt = identity.asset_anchor_prompt(
+        "FX_INK_TRANSITION",
+        {
+            "type": "effect",
+            "display_name": "水墨转场",
+            "prop_contract": "墨晕由实到虚。",
+        },
+        visual_style="新国风工笔淡彩",
+    )
+
+    assert identity.ref_type("STYLE_CLASSIC_V1") == "style"
+    assert identity.ref_type("FX_INK_TRANSITION") == "vfx"
+    assert "单幅、非叙事的漫画风格校准画" in style_prompt
+    assert "不是项目角色、影视演员" in style_prompt
+    assert "单一视觉特效 reference art" in fx_prompt
+
+
+def test_location_anchor_reserves_blocking_without_baking_in_characters() -> None:
+    prompt = identity.asset_anchor_prompt(
+        "LOC_SPIRIT_RIVER",
+        {
+            "type": "scene",
+            "display_name": "灵河岸",
+            "prop_contract": "三生石左后，神瑛右中。",
+        },
+        visual_style="新国风工笔淡彩",
+    )
+
+    assert "不出现任何具体人物、人物剪影或角色表演" in prompt
+    assert "只在对应位置保留可用的空白与走位空间" in prompt
+
+
+def test_single_view_contact_sheet_uses_casting_grid(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    shared = root / "出图" / "共享" / "图片"
+    shared.mkdir(parents=True)
+    characters = [f"CHAR_{index}" for index in range(6)]
+    for character_id in characters:
+        (shared / f"{character_id}__front.png").write_bytes(PNG_1X1)
+
+    rel = identity.write_character_view_contact_sheet(root, "第1话", characters, ["front"])
+
+    from PIL import Image
+
+    image = Image.open(root / rel)
+    assert image.width > 700
+    assert image.height < 1000
+
+
+def test_adopt_generated_png_archives_previous_candidate(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    dest = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+    candidate = dest.with_name(".CHAR_A__front__pending.png")
+    dest.parent.mkdir(parents=True)
+    old_bytes = PNG_1X1 + b"old"
+    new_bytes = PNG_1X1 + b"new"
+    dest.write_bytes(old_bytes)
+    candidate.write_bytes(new_bytes)
+
+    archived = identity.adopt_generated_png(
+        root,
+        candidate,
+        dest,
+        asset_id="CHAR_A",
+        variant="front",
+    )
+
+    assert archived
+    assert dest.read_bytes() == new_bytes
+    assert (root / archived).read_bytes() == old_bytes
+    assert not candidate.exists()

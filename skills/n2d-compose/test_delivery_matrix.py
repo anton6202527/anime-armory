@@ -239,3 +239,26 @@ class DeliverMatrixTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestPlatformEncoding(unittest.TestCase):
+    def test_encoding_for_platform(self):
+        self.assertEqual(deliver.encoding_for_platform("抖音")["profile"], "vertical_short")
+        self.assertEqual(deliver.encoding_for_platform("B站")["profile"], "bilibili")
+        self.assertEqual(deliver.encoding_for_platform("YouTube")["profile"], "youtube")
+        self.assertEqual(deliver.encoding_for_platform("未定")["profile"], "default")
+        self.assertEqual(deliver.encoding_for_platform(None)["profile"], "default")
+        spec = deliver.encoding_for_platform("红果")
+        self.assertEqual(spec["video_codec"], "h264")
+        self.assertTrue(spec["video_bitrate"])
+
+    def test_matrix_carries_encoding(self):
+        m = deliver.build_matrix("/tmp/不存在的作品根", "第1集", "抖音", "9:16", None)
+        self.assertEqual(m["encoding"]["profile"], "vertical_short")
+
+    def test_reframe_encoding_args(self):
+        import reframe
+        args = reframe._encoding_args({"video_bitrate": "8M", "maxrate": "12M"})
+        self.assertEqual(args, ["-b:v", "8M", "-maxrate", "12M", "-bufsize", "24M"])
+        self.assertEqual(reframe._encoding_args(None), [])
+        self.assertEqual(reframe._encoding_args({}), [])

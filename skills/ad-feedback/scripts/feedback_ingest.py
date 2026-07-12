@@ -3,16 +3,27 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
 import subprocess
+import shutil
 import sys
+from datetime import datetime, timezone
 from collections import defaultdict
 from pathlib import Path
 
 
 NUMERIC = ("impressions", "clicks", "conversions", "spend", "revenue", "video_3s", "video_6s", "completed_views")
+
+
+def file_sha256(path: Path):
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def rows(path: Path):
@@ -97,7 +108,7 @@ def _fatigue(rows_by_variant):
     return findings
 
 
-def build(input_rows, min_impressions=1000, measurement=None):
+def build(input_rows, min_impressions=1000, measurement=None, experiment_validation=None):
     measurement = measurement or {}
     primary_kpi = str(measurement.get("primary_kpi") or "CTR").upper()
     agg = defaultdict(lambda: {k: 0.0 for k in NUMERIC})
@@ -111,7 +122,7 @@ def build(input_rows, min_impressions=1000, measurement=None):
         for key in NUMERIC:
             agg[vid][key] += number(row.get(key))
         frequency_weighted[vid] += number(row.get("frequency")) * number(row.get("impressions"))
-        meta[vid] = {k: row.get(k) for k in ("hook_id", "message_id", "cta_id", "platform", "audience")}
+        meta[vid] = {k: row.get(k) for k in ("hook_id", "message_id", "cta_id", "platform", "placement", "audience")}
         rows_by_variant[vid].append(row)
     variants = []
     for vid, vals in agg.items():
@@ -130,7 +141,7 @@ def build(input_rows, min_impressions=1000, measurement=None):
     variants.sort(key=rank, reverse=True)
     verdict = "insufficient_data"
     winner = None
-    strata = {(v.get("platform") or "", v.get("audience") or "") for v in variants}
+    strata = {(v.get("platform") or "", v.get("placement") or "", v.get("audience") or "") for v in variants}
     comparable = len(strata) <= 1
     interval_key = "ctr_wilson95" if primary_kpi == "CTR" else ("cvr_wilson95" if primary_kpi == "CVR" else None)
     if variants and variants[0]["sample_qualified"] and comparable and interval_key:
@@ -145,16 +156,62 @@ def build(input_rows, min_impressions=1000, measurement=None):
         findings.append({"severity": "warn", "code": "no_qualified_winner", "msg": "样本或区间不足，不宣布胜者"})
     if not comparable:
         findings.append({"severity": "warn", "code": "non_comparable_strata",
-                         "msg": "变体跨平台或受众，不在同一可比层，禁止直接宣布胜者"})
+                         "msg": "变体跨平台、placement 或受众，不在同一可比层，禁止直接宣布胜者"})
     if primary_kpi not in {"CTR", "CVR"}:
         findings.append({"severity": "warn", "code": "aggregate_metric_no_interval",
                          "msg": f"primary_kpi={primary_kpi} 仅有聚合值、无方差/逐事件数据，不做显著性胜者判定"})
+    plan_approved = None if experiment_validation is None else bool(
+        ((experiment_validation or {}).get("summary") or {}).get("approved")
+    )
+    registered_plan = (experiment_validation or {}).get("plan") if isinstance(experiment_validation, dict) else {}
+    registered_plan = registered_plan if isinstance(registered_plan, dict) else {}
+    if plan_approved:
+        plan_kpi = str(registered_plan.get("primary_kpi") or "").upper()
+        if plan_kpi and plan_kpi != primary_kpi:
+            winner = None
+            verdict = "directional_only" if variants else "insufficient_data"
+            findings.append({"severity": "block", "code": "primary_kpi_drift",
+                             "msg": f"报告 KPI={primary_kpi} 与预注册 KPI={plan_kpi} 不一致"})
+        expected_ids = {str(row.get("variant_id") or "") for row in registered_plan.get("variants") or []}
+        actual_ids = {row["variant_id"] for row in variants}
+        unexpected = sorted(actual_ids - expected_ids)
+        missing_ids = sorted(expected_ids - actual_ids)
+        if unexpected:
+            winner = None
+            verdict = "directional_only"
+            findings.append({"severity": "block", "code": "unregistered_variant",
+                             "msg": "数据含未预注册变体：" + "、".join(unexpected)})
+        if missing_ids:
+            findings.append({"severity": "warn", "code": "registered_variant_missing_data",
+                             "msg": "预注册变体无数据：" + "、".join(missing_ids)})
+        for field in ("platform", "placement", "audience"):
+            expected = str(registered_plan.get(field) or "")
+            observed = {str(v.get(field) or "") for v in variants if str(v.get(field) or "")}
+            if expected and observed and observed != {expected}:
+                winner = None
+                verdict = "directional_only"
+                findings.append({"severity": "block", "code": f"{field}_drift",
+                                 "msg": f"数据 {field}={sorted(observed)} 与预注册 {expected} 不一致"})
+            elif expected and not observed:
+                findings.append({"severity": "warn", "code": f"{field}_unverified",
+                                 "msg": f"原始数据未带 {field}，无法核验预注册不变量 {expected}"})
+    if plan_approved is False:
+        winner = None
+        verdict = "directional_only" if variants else "insufficient_data"
+        findings.append({"severity": "block", "code": "experiment_not_preregistered",
+                         "msg": "缺已批准且绑定当前计划的实验预注册；本批数据只可诊断，不得宣布胜者"})
     findings.extend(_fatigue(rows_by_variant))
     components = {key: _component_rollup(input_rows, key, min_impressions)
                   for key in ("hook_id", "message_id", "cta_id")}
-    return {"schema_version": 2, "kind": "ad_feedback_report", "verdict": verdict, "winner": winner,
+    return {"schema_version": 3, "kind": "ad_feedback_report", "verdict": verdict, "winner": winner,
             "primary_kpi": primary_kpi, "comparable_strata": comparable,
+            "experiment_plan_approved": plan_approved,
             "min_impressions": min_impressions, "variants": variants,
+            "methodology": {
+                "local_intervals": "Wilson 95% interval for aggregate binomial CTR/CVR only",
+                "boundary": "Not equivalent to platform-native randomized experiment inference; platform assignment and significance output take precedence",
+                "aggregate_cpa_roas": "directional only without event-level variance/randomization data",
+            },
             "components": components,
             "recommendations": ["先单变量刷新 hook/message/CTA，再在同平台同受众同预算条件复测"] if findings else [],
             "summary": {"block": sum(1 for f in findings if f["severity"] == "block"),
@@ -184,9 +241,42 @@ def main(argv=None):
         measurement = (json.loads(brief_path.read_text(encoding="utf-8")) or {}).get("measurement") or {}
     except Exception:
         measurement = {}
-    report = build(rows(Path(ns.input)), ns.min_impressions, measurement)
+    validation_path = root / "投放反馈" / "experiment_plan_validation.json"
+    try:
+        validation = json.loads(validation_path.read_text(encoding="utf-8"))
+        canonical = json.loads((root / "投放反馈" / "experiment_plan.json").read_text(encoding="utf-8"))
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from experiment_plan import plan_sha256  # local ad-line module
+        if validation.get("plan_sha256") != plan_sha256(canonical):
+            validation = {}
+    except Exception:
+        validation = {}
+    input_path = Path(ns.input).resolve()
+    effective_min_impressions = ns.min_impressions
+    if bool(((validation or {}).get("summary") or {}).get("approved")):
+        plan_measurement = (validation.get("plan") or {}) if isinstance(validation.get("plan"), dict) else {}
+        measurement = dict(measurement)
+        if plan_measurement.get("primary_kpi"):
+            measurement["primary_kpi"] = plan_measurement["primary_kpi"]
+        if plan_measurement.get("conversion_event"):
+            measurement["conversion_event"] = plan_measurement["conversion_event"]
+        try:
+            effective_min_impressions = int(plan_measurement.get("min_impressions"))
+        except (TypeError, ValueError):
+            pass
+    report = build(rows(input_path), effective_min_impressions, measurement, validation)
     out = root / "投放反馈" / "feedback_report.json"
     out.parent.mkdir(parents=True, exist_ok=True)
+    raw_dir = root / "投放反馈" / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    canonical_input = raw_dir / input_path.name
+    if input_path != canonical_input.resolve():
+        shutil.copy2(input_path, canonical_input)
+    report["source_data"] = {
+        "path": str(canonical_input.relative_to(root)),
+        "sha256": file_sha256(canonical_input),
+        "ingested_at": datetime.now(timezone.utc).isoformat(),
+    }
     out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     out.with_suffix(".md").write_text(markdown(report), encoding="utf-8")
     if ns.mark_progress and not report["summary"]["block"]:

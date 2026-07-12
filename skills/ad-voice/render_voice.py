@@ -269,6 +269,12 @@ def main():
     with open(os.path.join(out_dir, "时长清单.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
 
+    qc_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "voice_qc.py")
+    qc = subprocess.run([sys.executable, qc_script, root])
+    if real_backend and qc.returncode:
+        print("[block] 正式 VO 技术 QC 未通过；修复 配音/voice_qc.json findings 后重跑。", file=sys.stderr)
+        sys.exit(7)
+
     print(f"[ok] 配音 {len(entries)} 句  总时长≈{cursor:.2f}s  后端={backend}"
           + ("  ⏳占位（正式定稿前需真配音复跑）" if manifest["has_placeholder"] else ""))
     print(f"     时长清单：{os.path.join(out_dir, '时长清单.json')}")

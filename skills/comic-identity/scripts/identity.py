@@ -222,6 +222,39 @@ def decode_image_event(stdout: str, out_path: Path) -> bool:
     return write_image_payload(payload, out_path) if payload else False
 
 
+def prompt_snapshot(root: Path, chapter: str, asset_id: str, variant: str, prompt: str) -> tuple[str, str]:
+    stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+    safe_asset = re.sub(r"[^A-Za-z0-9_.-]+", "_", asset_id).strip("_") or "asset"
+    safe_variant = re.sub(r"[^A-Za-z0-9_.-]+", "_", variant).strip("_") or "prompt"
+    path = root / "生产数据" / "comic_identity_prompts" / chapter / f"{safe_asset}__{safe_variant}__{stamp}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(prompt.rstrip() + "\n", encoding="utf-8")
+    return rel_to_root(root, path), hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+
+
+def adopt_generated_png(
+    root: Path,
+    candidate: Path,
+    dest: Path,
+    *,
+    asset_id: str,
+    variant: str,
+) -> str:
+    """Atomically adopt a valid candidate and archive the previous accepted PNG."""
+    if not png_valid(candidate):
+        return ""
+    archived = ""
+    if png_valid(dest):
+        stamp = dt.datetime.now().strftime("%Y%m%dT%H%M%S%f")
+        archive = root / "出图" / "共享" / "candidates" / asset_id / variant / f"{stamp}__{file_sha256(dest)[:12]}.png"
+        archive.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(dest, archive)
+        archived = rel_to_root(root, archive)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    candidate.replace(dest)
+    return archived
+
+
 def run_codex_image(prompt: str, repo: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
     cmd = ["codex", "exec", "--json", "--enable", "image_generation"]
     for path in image_paths:
@@ -391,6 +424,8 @@ def character_asset_contract(asset: dict[str, Any]) -> str:
         ("character_dna", "角色DNA"),
         ("dna_contract", "定妆契约"),
         ("variant_policy", "年龄/形态继承"),
+        ("transient_props", "临时剧情物（不得固化为身份）"),
+        ("staging_defaults", "同框调度（不得固化为身份）"),
         ("forbidden_inheritance", "禁继承"),
         ("style_contract", "风格契约"),
         ("notes", "备注"),
@@ -433,6 +468,7 @@ def character_view_prompt(
 已附一张当前采纳角色参考图。必须以它为最高优先级，保持同一角色 DNA、脸型、发型、发量、服装主形制和整体画风。
 年龄、身高体量、服饰阶层和状态强度必须服从下面的项目定妆契约；如果契约声明本话基准形态是少年/杂役/受伤/觉醒等，不要把附件锚点的成年感或剧情动作原样继承成当前标准视图。
 如果参考图来自剧情动作或受伤场面，只保留身份、服装和伤痕信息，不继承原图的坐姿、跪姿、弯腰、挥砍、镜头裁切或动态构图。
+附件里的临时手持物、剧情道具、画面左右站位、注视目标和同框遮挡不属于身份；除非项目定妆契约明确登记为永久身体特征或永久佩饰，否则必须从中性多视图移除。
 如果参考图来自截图，播放按钮、搜索框、字幕、水印、平台 UI、竖排标题和可读文字都不是设定，不得继承进角色设计。
 
 角色设定摘录：
@@ -447,8 +483,9 @@ def character_view_prompt(
 3. {view_rules}
 4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
 5. 不同年龄、闭关前后、受伤、觉醒、换装或境界变化都必须继承当前角色 DNA；只能改年龄比例、状态、服饰层和特效强度，不得换脸、换发际线、换眼型或丢失标志物。
-6. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 {view} 视图，画面里只能有一个完整角色。
-7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+6. 临时剧情手持物、左右站位和动作调度不得继承；只有定妆契约明确列为永久佩饰/身体特征的标志物才保留。
+7. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 {view} 视图，画面里只能有一个完整角色。
+8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -458,13 +495,21 @@ def character_text_anchor_prompt(
     *,
     visual_style: str,
     asset_contract: str = "",
+    style_reference_attached: bool = False,
 ) -> str:
+    style_reference_note = (
+        "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质和墨晕语言；"
+        "不得继承其中人物的脸、发型、服装、体态、姿势、构图或具体场景。"
+        if style_reference_attached
+        else "本次没有风格图片附件；严格按下列项目基础视觉风格执行。"
+    )
     return f"""请用内置 image_generation 工具生成漫画角色首张专门定妆参考图。
 
 角色 ID：{character_id}
 视图：front / {VIEW_LABELS['front']}
 
 本次没有已采纳角色图片作为附件。必须只依据下面的项目设定生成稳定、可复用的长线 front 定妆图；这张图会成为后续 three_quarter / side / back / face 视图的参考锚点。
+{style_reference_note}
 
 角色设定摘录：
 {notes or '无额外设定；以项目定妆契约为准。'}
@@ -477,20 +522,46 @@ def character_text_anchor_prompt(
 2. 单人站立全身正面定妆：从头顶到鞋底完整入画，脚/鞋完整可见，人物居中，面向镜头，中性表情，直立或轻微放松站姿。
 3. 中性浅灰或低饱和纯色背景，柔和均匀光，五官、发际线、发型轮廓、服装主形制、标志配饰和体态比例必须清楚。
 4. 保持项目基础视觉风格：{visual_style}；定妆图要清楚、稳定、少动态夸张，不要退化成低细节彩漫、Q 版或泛化韩漫脸。
-5. 不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或随身道具。
-6. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 front 视图，画面里只能有一个完整角色。
-7. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+5. 不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或永久身份佩饰。
+6. 不生成临时剧情手持物、画面左右站位或同框调度；只有项目定妆契约明确列为永久佩饰/身体特征的标志物才可出现。
+7. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 front 视图，画面里只能有一个完整角色。
+8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
-def asset_anchor_prompt(ref_id: str, asset: dict[str, Any], *, visual_style: str) -> str:
-    kind = ref_type(ref_id)
+def asset_anchor_prompt(
+    ref_id: str,
+    asset: dict[str, Any],
+    *,
+    visual_style: str,
+    style_reference_attached: bool = False,
+) -> str:
+    kind = str(asset.get("type") or ref_type(ref_id)).strip().lower()
+    kind = {
+        "scene": "location",
+        "fx": "vfx",
+        "effect": "vfx",
+        "style_anchor": "style",
+    }.get(kind, kind)
     display_name = compact_contract(asset.get("display_name"))
     style_contract = compact_contract(asset.get("style_contract"), max_len=900)
     prop_contract = compact_contract(asset.get("prop_contract"), max_len=900)
     dna_contract = compact_contract(asset.get("dna_contract"), max_len=900)
     forbidden = compact_contract(asset.get("forbidden_inheritance"), max_len=900)
-    if kind == "monster":
+    style_reference_note = (
+        "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质、色域和墨晕语言；"
+        "不得复制其中人物、服装、姿势、具体物件、场景布局或构图。"
+        if style_reference_attached
+        else "本次没有风格图片附件；严格按项目基础视觉风格与资产契约执行。"
+    )
+    if kind == "style":
+        subject_rules = (
+            "生成一张原创、单幅、非叙事的漫画风格校准画：以一名无具体身份的古典人物半身或全身为视觉中心，"
+            "同时包含少量绢、木、石与衣料细节，并让一侧现实自然光自然过渡到另一侧的水墨梦境边缘；"
+            "必须清楚展示人物脸与手、细线层级、肤色、衣纹、矿物淡彩、三值明暗和墨晕边缘。"
+            "这不是项目角色、影视演员、剧情镜头、拼贴、九宫格、角色卡、设定表或多视图。"
+        )
+    elif kind == "monster":
         subject_rules = (
             "生成单体妖物/动物 reference art：完整主体入画，头、躯干、四肢、尾部和标志纹理清楚；"
             "中性低饱和背景，不要血腥内脏，不要战斗叙事，不要人物。"
@@ -498,12 +569,19 @@ def asset_anchor_prompt(ref_id: str, asset: dict[str, Any], *, visual_style: str
     elif kind == "location":
         subject_rules = (
             "生成场景 reference art：清楚交代空间布局、主光方向、固定物件、入口/窗/路/桌案等轴线关系；"
-            "不要角色表演，不要现代物件，不要可读随机文字。"
+            "这是可跨镜头复用的纯场景锚点，不出现任何具体人物、人物剪影或角色表演；"
+            "若资产契约提到人物站位，只在对应位置保留可用的空白与走位空间，不把人物固化进场景图。"
+            "不要现代物件，不要可读随机文字。"
         )
     elif kind == "prop":
         subject_rules = (
             "生成单个道具 reference art：道具完整居中，结构、材质、比例和磨损细节清楚；"
             "中性低饱和背景，不要手持动作，不要角色，不要 logo、水印或可读随机文字。"
+        )
+    elif kind == "vfx":
+        subject_rules = (
+            "生成单一视觉特效 reference art：清楚展示形状语言、边缘软硬、运动方向、颜色范围和与留白的关系；"
+            "使用中性低饱和承载面，不要人物表演、完整剧情场景、游戏法阵、UI、logo、水印或可读随机文字。"
         )
     else:
         subject_rules = (
@@ -521,6 +599,9 @@ def asset_anchor_prompt(ref_id: str, asset: dict[str, Any], *, visual_style: str
 - prop_contract: {prop_contract or '未登记'}
 - dna_contract: {dna_contract or '未登记'}
 - forbidden_inheritance: {forbidden or '未登记'}
+
+风格参考规则：
+{style_reference_note}
 
 画面要求：
 1. {subject_rules}
@@ -555,12 +636,54 @@ def character_generation_anchor(
     return fallback, "registry_anchor"
 
 
+def project_style_anchor(root: Path, registry: dict) -> Path | None:
+    """Return a valid adopted style image without treating it as identity."""
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    preferred = read_setting(root, "风格锚", "").strip()
+    style_ids: list[str] = []
+    if preferred:
+        style_ids.append(preferred)
+    style_ids.extend(
+        rid
+        for rid, asset in sorted(assets.items())
+        if rid not in style_ids
+        and (
+            rid.startswith("STYLE_")
+            or (isinstance(asset, dict) and str(asset.get("type") or "").strip().lower() in {"style", "style_anchor"})
+        )
+    )
+    for rid in style_ids:
+        asset = assets.get(rid) if isinstance(assets.get(rid), dict) else {}
+        for key in ("anchor_path", "primary_path", "path"):
+            raw = str(asset.get(key) or "").strip()
+            if raw:
+                candidate = resolve_path(root, raw)
+                if png_valid(candidate):
+                    return candidate
+        fallback = root / "出图" / "共享" / "图片" / f"{rid}__anchor.png"
+        if png_valid(fallback):
+            return fallback
+    return None
+
+
 def existing_view_source(asset: dict[str, Any], view: str) -> dict[str, Any]:
     for item in asset.get("reference_images") or []:
         if isinstance(item, dict) and item.get("view") == view and isinstance(item.get("source"), dict):
             source = dict(item["source"])
             if source.get("kind") != "existing_character_view":
                 return source
+    return {}
+
+
+def existing_anchor_source(root: Path, asset: dict[str, Any], path: Path) -> dict[str, Any]:
+    for item in asset.get("reference_images") or []:
+        if not isinstance(item, dict) or not isinstance(item.get("source"), dict):
+            continue
+        raw = str(item.get("path") or "").strip()
+        if raw and resolve_path(root, raw).resolve() == path.resolve():
+            return dict(item["source"])
+    if isinstance(asset.get("source"), dict):
+        return dict(asset["source"])
     return {}
 
 
@@ -597,7 +720,19 @@ def source_from_event(row: dict[str, Any], *, anchor_path: str, anchor_kind: str
         "chapter": chapter,
         "attempt": row.get("attempt", ""),
     }
-    for key in ("backend_version", "model_version", "resolution_type", "ratio", "submit_id"):
+    for key in (
+        "backend_version",
+        "model_version",
+        "resolution_type",
+        "ratio",
+        "submit_id",
+        "style_reference_path",
+        "style_reference_sha256",
+        "style_reference_role",
+        "prompt_path",
+        "prompt_sha256",
+        "archived_previous_path",
+    ):
         if row.get(key):
             source[key] = row[key]
     return source
@@ -619,12 +754,25 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     )
     views = asset.get("views") if isinstance(asset.get("views"), dict) else {}
     views[view] = rel
+    ready_views = [
+        required_view
+        for required_view in REQUIRED_CHARACTER_VIEWS
+        if isinstance(views.get(required_view), str)
+        and png_valid(resolve_path(root, str(views[required_view])))
+    ]
+    missing_views = [required_view for required_view in REQUIRED_CHARACTER_VIEWS if required_view not in ready_views]
     asset.update(
         {
             "id": character_id,
             "type": "character",
-            "status": "ready",
+            "status": "ready" if not missing_views else "partial",
             "views": views,
+            "view_readiness": {
+                "required": list(REQUIRED_CHARACTER_VIEWS),
+                "ready": ready_views,
+                "missing": missing_views,
+                "complete": not missing_views,
+            },
             "reference_images": refs,
             "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
         }
@@ -677,35 +825,51 @@ def write_character_view_contact_sheet(root: Path, chapter: str, characters: lis
     header_h = 34
     label_h = 28
     gap = 12
-    cols = max(1, len(views))
-    rows = max(1, len(characters))
+    single_view_casting = len(views) == 1 and len(characters) > 1
+    if single_view_casting:
+        cols = min(3, len(characters))
+        rows = max(1, (len(characters) + cols - 1) // cols)
+    else:
+        cols = max(1, len(views))
+        rows = max(1, len(characters))
     width = gap + cols * (cell_w + gap)
     height = header_h + gap + rows * (cell_h + label_h + gap)
     canvas = Image.new("RGB", (width, height), (24, 24, 24))
     draw = ImageDraw.Draw(canvas)
     font = ImageFont.load_default()
-    for col, view in enumerate(views):
-        x = gap + col * (cell_w + gap)
-        draw.text((x, 10), view, fill=(238, 238, 238), font=font)
-    for row, character_id in enumerate(characters):
-        y = header_h + gap + row * (cell_h + label_h + gap)
+    if single_view_casting:
+        draw.text((gap, 10), f"{views[0]} · character casting", fill=(238, 238, 238), font=font)
+        cells = [
+            (index // cols, index % cols, character_id, views[0])
+            for index, character_id in enumerate(characters)
+        ]
+    else:
         for col, view in enumerate(views):
             x = gap + col * (cell_w + gap)
-            image_path = shared_dir / f"{character_id}__{view}.png"
-            if image_path.is_file():
-                try:
-                    image = Image.open(image_path).convert("RGB")
-                    image.thumbnail((cell_w, cell_h), Image.LANCZOS)
-                    px = x + (cell_w - image.width) // 2
-                    py = y + (cell_h - image.height) // 2
-                    canvas.paste(image, (px, py))
-                except OSError:
-                    draw.rectangle((x, y, x + cell_w, y + cell_h), outline=(180, 68, 68), width=2)
-                    draw.text((x + 8, y + 8), "invalid image", fill=(255, 180, 180), font=font)
-            else:
+            draw.text((x, 10), view, fill=(238, 238, 238), font=font)
+        cells = [
+            (row, col, character_id, view)
+            for row, character_id in enumerate(characters)
+            for col, view in enumerate(views)
+        ]
+    for row, col, character_id, view in cells:
+        y = header_h + gap + row * (cell_h + label_h + gap)
+        x = gap + col * (cell_w + gap)
+        image_path = shared_dir / f"{character_id}__{view}.png"
+        if image_path.is_file():
+            try:
+                image = Image.open(image_path).convert("RGB")
+                image.thumbnail((cell_w, cell_h), Image.LANCZOS)
+                px = x + (cell_w - image.width) // 2
+                py = y + (cell_h - image.height) // 2
+                canvas.paste(image, (px, py))
+            except OSError:
                 draw.rectangle((x, y, x + cell_w, y + cell_h), outline=(180, 68, 68), width=2)
-                draw.text((x + 8, y + 8), "missing", fill=(255, 180, 180), font=font)
-            draw.text((x, y + cell_h + 8), f"{character_id} {view}", fill=(238, 238, 238), font=font)
+                draw.text((x + 8, y + 8), "invalid image", fill=(255, 180, 180), font=font)
+        else:
+            draw.rectangle((x, y, x + cell_w, y + cell_h), outline=(180, 68, 68), width=2)
+            draw.text((x + 8, y + 8), "missing", fill=(255, 180, 180), font=font)
+        draw.text((x, y + cell_h + 8), f"{character_id} {view}", fill=(238, 238, 238), font=font)
     out = root / "生产数据" / f"comic_identity_views_{chapter}_contact_sheet.jpg"
     out.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(out, quality=90)
@@ -719,6 +883,8 @@ def ref_type(ref_id: str) -> str:
         "MON": "monster",
         "LOC": "location",
         "PROP": "prop",
+        "STYLE": "style",
+        "FX": "vfx",
         "SYS": "system_asset",
         "VFX": "vfx",
         "OUTFIT": "outfit",
@@ -1211,6 +1377,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
     shared_dir.mkdir(parents=True, exist_ok=True)
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     codex_backend_version = codex_version()
+    style_reference = project_style_anchor(root, registry)
     generated = 0
     skipped = 0
     failed = 0
@@ -1220,7 +1387,7 @@ def generate_anchors(args: argparse.Namespace) -> int:
         asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
         dest = shared_dir / f"{ref_id}__anchor.png"
         if png_valid(dest) and not args.overwrite:
-            source = {
+            source = existing_anchor_source(root, asset, dest) or {
                 "kind": "existing_text_anchor",
                 "chapter": args.chapter,
                 "backend": CODEX_CHANNEL,
@@ -1228,10 +1395,33 @@ def generate_anchors(args: argparse.Namespace) -> int:
             }
             register_asset_anchor(registry, root, ref_id, dest, source=source)
             skipped += 1
-            print(f"[skip] {ref_id}: {rel_to_root(root, dest)}")
+            manifest_items.append(
+                {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "reference_anchor_reused",
+                    "ref_id": ref_id,
+                    "path": rel_to_root(root, dest),
+                    "sha256": file_sha256(dest),
+                    "backend": source.get("backend", ""),
+                    "model": source.get("model", ""),
+                }
+            )
+            print(f"[skip] {ref_id}: {rel_to_root(root, dest)}", flush=True)
             continue
 
-        prompt = asset_anchor_prompt(ref_id, asset, visual_style=visual_style)
+        use_style_reference = bool(
+            style_reference
+            and png_valid(style_reference)
+            and ref_id != read_setting(root, "风格锚", "").strip()
+            and style_reference.resolve() != dest.resolve()
+        )
+        prompt = asset_anchor_prompt(
+            ref_id,
+            asset,
+            visual_style=visual_style,
+            style_reference_attached=use_style_reference,
+        )
+        prompt_path, prompt_sha256 = prompt_snapshot(root, args.chapter, ref_id, "anchor_codex", prompt)
         ready = False
         last_error = ""
         for attempt in range(1, max(1, args.max_attempts) + 1):
@@ -1242,16 +1432,31 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "backend": CODEX_CHANNEL,
                 "model": CODEX_MODEL,
                 "backend_version": codex_backend_version,
+                "prompt_path": prompt_path,
+                "prompt_sha256": prompt_sha256,
             }
-            proc = run_codex_image(prompt, repo, args.timeout_sec, [])
+            if use_style_reference and style_reference:
+                source.update(
+                    {
+                        "style_reference_path": rel_to_root(root, style_reference),
+                        "style_reference_sha256": file_sha256(style_reference),
+                        "style_reference_role": "style_only",
+                    }
+                )
+            proc = run_codex_image(prompt, repo, args.timeout_sec, [style_reference] if use_style_reference and style_reference else [])
             if proc.returncode != 0:
                 last_error = format_failure(proc)
                 print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
                 continue
-            if not decode_image_event(proc.stdout, dest):
+            candidate = dest.with_name(f".{dest.stem}__pending.png")
+            candidate.unlink(missing_ok=True)
+            if not decode_image_event(proc.stdout, candidate):
                 last_error = "codex completed but no image_generation_end payload was available"
                 print(f"[retry] {ref_id} codex attempt {attempt}/{args.max_attempts}: {last_error}", flush=True)
                 continue
+            archived = adopt_generated_png(root, candidate, dest, asset_id=ref_id, variant="anchor")
+            if archived:
+                source["archived_previous_path"] = archived
             register_asset_anchor(registry, root, ref_id, dest, source=source)
             write_json(registry_path(root), registry)
             generated += 1
@@ -1265,10 +1470,20 @@ def generate_anchors(args: argparse.Namespace) -> int:
                 "model": CODEX_MODEL,
                 "backend_version": codex_backend_version,
                 "attempt": attempt,
+                "prompt_path": prompt_path,
+                "prompt_sha256": prompt_sha256,
             }
+            for key in (
+                "style_reference_path",
+                "style_reference_sha256",
+                "style_reference_role",
+                "archived_previous_path",
+            ):
+                if source.get(key):
+                    row[key] = source[key]
             manifest_items.append(row)
             append_event(root, row)
-            print(f"[ok] {ref_id} -> {rel_to_root(root, dest)}")
+            print(f"[ok] {ref_id} -> {rel_to_root(root, dest)}", flush=True)
             ready = True
             break
         if not ready:
@@ -1301,8 +1516,8 @@ def generate_anchors(args: argparse.Namespace) -> int:
     }
     out = root / "生产数据" / f"comic_identity_anchors_{args.chapter}.json"
     write_json(out, manifest)
-    print(f"[ok] anchor manifest: {out}")
-    print(f"[summary] generated={generated} skipped={skipped} failed={failed}")
+    print(f"[ok] anchor manifest: {out}", flush=True)
+    print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
     return 1 if failed else 0
 
 
@@ -1335,6 +1550,7 @@ def generate_views(args: argparse.Namespace) -> int:
     shared_dir.mkdir(parents=True, exist_ok=True)
     codex_backend_version = codex_version() if "codex" in available else ""
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
+    style_reference = project_style_anchor(root, registry)
     generated = 0
     skipped = 0
     failed = 0
@@ -1381,7 +1597,36 @@ def generate_views(args: argparse.Namespace) -> int:
                     source=source,
                 )
                 skipped += 1
-                print(f"[skip] {character_id} {view}: {rel_to_root(root, dest)}")
+                row = {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "character_view_reused",
+                    "ref_id": character_id,
+                    "view": view,
+                    "path": rel_to_root(root, dest),
+                    "sha256": file_sha256(dest),
+                    "anchor_path": str(source.get("anchor_path") or anchor_rel),
+                    "anchor_kind": str(source.get("anchor_kind") or anchor_kind),
+                    "backend": source.get("backend", ""),
+                    "model": source.get("model", ""),
+                    "attempt": source.get("attempt", ""),
+                }
+                for key in (
+                    "backend_version",
+                    "model_version",
+                    "resolution_type",
+                    "ratio",
+                    "submit_id",
+                    "style_reference_path",
+                    "style_reference_sha256",
+                    "style_reference_role",
+                    "prompt_path",
+                    "prompt_sha256",
+                    "archived_previous_path",
+                ):
+                    if source.get(key):
+                        row[key] = source[key]
+                manifest_items.append(row)
+                print(f"[skip] {character_id} {view}: {rel_to_root(root, dest)}", flush=True)
                 continue
             anchor_is_valid = png_valid(anchor)
             use_text_anchor = False
@@ -1390,7 +1635,7 @@ def generate_views(args: argparse.Namespace) -> int:
                     use_text_anchor = True
                     anchor_kind = "text_prompt_seed"
                 else:
-                    print(f"[fail] {character_id} {view}: anchor missing or invalid: {anchor}")
+                    print(f"[fail] {character_id} {view}: anchor missing or invalid: {anchor}", flush=True)
                     failed += 1
                     manifest_items.append(
                         {
@@ -1413,6 +1658,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         notes,
                         visual_style=visual_style,
                         asset_contract=asset_contract,
+                        style_reference_attached=bool(style_reference),
                     )
                     if use_text_anchor
                     else character_view_prompt(
@@ -1433,6 +1679,16 @@ def generate_views(args: argparse.Namespace) -> int:
                     backend="dreamina",
                 ),
             }
+            prompt_records = {
+                backend: prompt_snapshot(
+                    root,
+                    args.chapter,
+                    character_id,
+                    f"{view}_{backend}",
+                    prompt_by_backend[backend],
+                )
+                for backend in backend_candidates
+            }
             last_error = ""
             last_backend = ""
             ready = False
@@ -1446,14 +1702,26 @@ def generate_views(args: argparse.Namespace) -> int:
                         "view": view,
                         "chapter": args.chapter,
                         "attempt": attempt,
+                        "prompt_path": prompt_records[backend][0],
+                        "prompt_sha256": prompt_records[backend][1],
                     }
+                    candidate = dest.with_name(f".{dest.stem}__pending.png")
+                    candidate.unlink(missing_ok=True)
                     if backend == "codex":
                         source.update({"backend": CODEX_CHANNEL, "model": CODEX_MODEL, "backend_version": codex_backend_version})
+                        if use_text_anchor and style_reference:
+                            source.update(
+                                {
+                                    "style_reference_path": rel_to_root(root, style_reference),
+                                    "style_reference_sha256": file_sha256(style_reference),
+                                    "style_reference_role": "style_only",
+                                }
+                            )
                         proc = run_codex_image(
                             prompt_by_backend["codex"],
                             repo,
                             args.timeout_sec,
-                            [] if use_text_anchor else [anchor],
+                            ([style_reference] if style_reference else []) if use_text_anchor else [anchor],
                         )
                         if proc.returncode != 0:
                             last_error = format_failure(proc)
@@ -1462,7 +1730,7 @@ def generate_views(args: argparse.Namespace) -> int:
                                 flush=True,
                             )
                             continue
-                        if not decode_image_event(proc.stdout, dest):
+                        if not decode_image_event(proc.stdout, candidate):
                             last_error = "codex completed but no image_generation_end payload was available"
                             print(
                                 f"[retry] {character_id} {view} codex attempt {attempt}/{args.max_attempts}: {last_error}",
@@ -1476,7 +1744,7 @@ def generate_views(args: argparse.Namespace) -> int:
                         ok, submit_id, error = run_dreamina_image(
                             prompt_by_backend["dreamina"],
                             anchor,
-                            dest,
+                            candidate,
                             timeout_sec=args.timeout_sec,
                             poll_sec=args.poll_sec,
                             model_version=args.model_version,
@@ -1501,6 +1769,15 @@ def generate_views(args: argparse.Namespace) -> int:
                             )
                             continue
 
+                    archived = adopt_generated_png(
+                        root,
+                        candidate,
+                        dest,
+                        asset_id=character_id,
+                        variant=view,
+                    )
+                    if archived:
+                        source["archived_previous_path"] = archived
                     register_character_view(registry, root, character_id, view, dest, source=source)
                     write_json(registry_path(root), registry)
                     generated += 1
@@ -1517,12 +1794,24 @@ def generate_views(args: argparse.Namespace) -> int:
                         "model": source.get("model", ""),
                         "attempt": attempt,
                     }
-                    for key in ("backend_version", "model_version", "resolution_type", "ratio", "submit_id"):
+                    for key in (
+                        "backend_version",
+                        "model_version",
+                        "resolution_type",
+                        "ratio",
+                        "submit_id",
+                        "style_reference_path",
+                        "style_reference_sha256",
+                        "style_reference_role",
+                        "prompt_path",
+                        "prompt_sha256",
+                        "archived_previous_path",
+                    ):
                         if source.get(key):
                             row[key] = source[key]
                     manifest_items.append(row)
                     append_event(root, row)
-                    print(f"[ok] {character_id} {view} -> {rel_to_root(root, dest)}")
+                    print(f"[ok] {character_id} {view} -> {rel_to_root(root, dest)}", flush=True)
                     ready = True
                     break
                 if ready:
@@ -1562,8 +1851,8 @@ def generate_views(args: argparse.Namespace) -> int:
     }
     out = root / "生产数据" / f"comic_identity_views_{args.chapter}.json"
     write_json(out, manifest)
-    print(f"[ok] view manifest: {out}")
-    print(f"[summary] generated={generated} skipped={skipped} failed={failed}")
+    print(f"[ok] view manifest: {out}", flush=True)
+    print(f"[summary] generated={generated} skipped={skipped} failed={failed}", flush=True)
     return 1 if failed else 0
 
 

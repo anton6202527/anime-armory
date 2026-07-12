@@ -20,6 +20,9 @@ def load_mv_utils():
 
 
 mv_utils = load_mv_utils()
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+import gate as mv_gate
 
 
 def lyric_line_count(root):
@@ -74,6 +77,10 @@ def summarize_reference_requirements(root):
 
 def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
     visual_style = settings.get("MV视觉风格") or "电影叙事"
+    needs_lyric_timeline = (
+        settings.get("字幕语言", "中文") != "无字幕"
+        or settings.get("演唱口型", "仅正面演唱镜") != "关闭"
+    )
     return [
         {
             "step": "1. 正式歌入库",
@@ -83,46 +90,62 @@ def build_formal_upgrade_plan(root, reference_summary, settings, aspect):
         {
             "step": "2. 重跑真实卡点",
             "action": "用正式定稿歌重算 BPM、beats 和局部 tempo；人工确认拍号、小节相位与段落时间。",
-            "command": f'conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "{root}" --downbeat-phase <0-based相位> --confirm-timing',
+            "command": f'conda run -n cosyvoice python skills/mv-beat/scripts/beat_detect.py "{root}" --downbeat-phase <0-based相位> --confirm-timing --reviewer <name>',
         },
         {
-            "step": "3. 重拆正式 timeline",
+            "step": "3. 建歌词/唱演时间轴",
+            "action": (
+                "用已知歌词强制对齐正式歌曲或 vocals stem；低覆盖只能具名逐行听审。"
+                if needs_lyric_timeline else "纯器乐且无字幕/口型：本阶段按设置合法跳过。"
+            ),
+            "command": (
+                f'conda run -n cosyvoice python skills/mv-lyric-sync/scripts/align.py "{root}"'
+                if needs_lyric_timeline else ""
+            ),
+        },
+        {
+            "step": "4. 重拆正式 timeline",
             "action": "按已确认的歌曲结构重拆 clip/timeline；镜头数由歌曲时长、段落能量和剪辑策略决定。",
             "command": f'python3 skills/mv-plan/scripts/plan_clips.py "{root}" --granularity 标准 --strategy 副歌强卡点 --visual-style "{visual_style}"',
         },
         {
-            "step": "4. 补语义镜头设计",
+            "step": "5. 补语义镜头设计",
             "action": "让每个 clip 都有动作、景别、运镜、身份合约和参考输入。",
             "command": f'python3 skills/mv-plan/scripts/compose_prompts.py "{root}"',
         },
         {
-            "step": "5. 刷新身份/资产/参考需求",
+            "step": "6. 刷新身份/资产/参考需求",
             "action": f"重建 reference pack 缺口；当前未 ready：{reference_summary.get('missing', 0)}/{reference_summary.get('total', 0)}。",
             "command": f'python3 skills/mv-craft/scripts/identity_registry.py "{root}"',
         },
         {
-            "step": "6. 补正式 reference pack",
-            "action": "按 `设定/reference_requirements.md` 补各身份/状态变体、交互道具、复用场景和关键 VFX 参考；补完后重跑第 5 步。",
+            "step": "7. 补正式 reference pack",
+            "action": "按 `设定/reference_requirements.md` 补身份/状态、交互道具、复用场景和关键 VFX 参考；补完后重跑第 6 步。",
             "command": "",
         },
         {
-            "step": "7. 出图后立即 QC",
-            "action": "正式首帧/尾帧落档后先过 image_qc，再进入图生视频。",
+            "step": "8. 节奏预检",
+            "action": "生成绑定当前 plan/beatgrid/song 的节奏证据；只有项目明确选择阈值时才用启发式分数阻断。",
+            "command": f'python3 skills/mv-score/scripts/score_pacing.py "{root}"',
+        },
+        {
+            "step": "9. 出图、逐图收据与 QC",
+            "action": "每张正式首/尾帧登记 model/channel/实际 prompt/reference/asset hash，再跑全量 image_qc。",
             "command": f'python3 skills/mv-image/scripts/image_qc.py "{root}" --strict',
         },
         {
-            "step": "8. Animatic 与 Picture Lock",
-            "action": "用首帧和正式歌渲染可播放 animatic；审叙事、覆盖、切点、轴线和字幕安全区后绑定 hash 签收。",
-            "command": f'python3 skills/mv-craft/scripts/render_animatic.py "{root}" && python3 skills/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>',
+            "step": "10. OTIO、Animatic 与 Picture Lock",
+            "action": "生成 V1+A1 OTIO/receipt，用完整歌曲渲 animatic；审叙事、切点、接缝、轴线和安全区后具名绑定 hash。",
+            "command": f'python3 skills/mv-craft/scripts/production_pack.py "{root}" && python3 skills/mv-craft/scripts/render_animatic.py "{root}" && python3 skills/mv-craft/scripts/picture_lock.py "{root}" --reviewer <name>',
         },
         {
-            "step": "9. 视频登记、评分、继承与 QC",
-            "action": "每个 take 完成动作/身份/卡点/清晰度四维评分后挑版；逐镜和接缝语义复核并签收。",
+            "step": "11. 视频登记、评分、继承与 QC",
+            "action": "每个 take 具名评动作/身份/卡点/清晰度；连续镜加 seam_fit、唱演镜加 lip_sync；逐缝语义签收。",
             "command": f'python3 skills/mv-video/scripts/video_jobs.py "{root}" && python3 skills/mv-video/scripts/video_qc.py "{root}" --accept-semantic --reviewer <name>',
         },
         {
-            "step": "10. 字幕、合成、总审",
-            "action": "重做全曲卡拉 OK 字幕，合成正式成片，再跑 mv-review。",
+            "step": "12. 母版、交付与总审",
+            "action": "按锁定 timeline 合成 ProRes/PCM 母版和 BT.709 MP4，运行 delivery QC/provenance，再跑 mv-review。",
             "command": f'bash skills/mv-compose/mv_compose.sh "{root}" {aspect} && python3 skills/mv-review/scripts/mv_check.py "{root}"',
         },
     ]
@@ -157,6 +180,16 @@ def build_report(root):
     blockers = []
     warnings = []
     next_actions = []
+
+    stage_contracts = []
+    for stage in ("plan", "image", "video_jobs", "compose"):
+        stage_errors, stage_warnings = mv_gate.check(root, stage)
+        stage_contracts.append({
+            "stage": stage,
+            "status": "block" if stage_errors else ("review" if stage_warnings else "pass"),
+            "errors": stage_errors,
+            "warnings": stage_warnings,
+        })
 
     if meta.get("is_demo") or plan.get("scope") == "demo_excerpt" or alignment.get("scope") == "demo_excerpt":
         blockers.append("当前项目标记为 demo_excerpt，不能作为正式整首 MV 发布。")
@@ -207,11 +240,20 @@ def build_report(root):
             blockers.append(f"关键身份/道具/VFX 参考图未齐：{critical_preview}。")
     if alignment and alignment.get("aligned_lines", 0) < lyric_line_count(root) and alignment.get("scope") != "demo_excerpt":
         warnings.append("字幕对齐行数少于歌词行数，正式版需重新对齐全曲。")
+    for stage_row in stage_contracts:
+        for message in stage_row["errors"]:
+            tagged = f"[{stage_row['stage']}] {message}"
+            if tagged not in blockers:
+                blockers.append(tagged)
+        for message in stage_row["warnings"]:
+            tagged = f"[{stage_row['stage']}] {message}"
+            if tagged not in warnings:
+                warnings.append(tagged)
 
     status = "ready" if not blockers and not warnings else ("blocked" if blockers else "review")
     command_plan = build_formal_upgrade_plan(root, reference_summary, settings, aspect)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "mv_formal_readiness",
         "generated_at": date.today().isoformat(),
         "root": root,
@@ -230,6 +272,7 @@ def build_report(root):
         "warnings": warnings,
         "next_actions": next_actions,
         "reference_requirements": reference_summary,
+        "stage_contracts": stage_contracts,
         "formal_upgrade_plan": command_plan,
     }
 
@@ -262,6 +305,9 @@ def write_report(root, report):
     append_items(lines, "## Blockers", report["blockers"])
     append_items(lines, "## Warnings", report["warnings"])
     append_items(lines, "## Next Actions", report["next_actions"])
+    lines.extend(["", "## Stage Contracts", "", "| Stage | Status | Errors | Warnings |", "|---|---|---:|---:|"])
+    for row in report.get("stage_contracts") or []:
+        lines.append(f"| {row['stage']} | {row['status']} | {len(row['errors'])} | {len(row['warnings'])} |")
     lines.append("")
     lines.append("## Reference Requirements")
     ref = report.get("reference_requirements") or {}

@@ -2829,8 +2829,34 @@ def _final_timeline_probe_passes(root: str, ep: str) -> bool:
         return False
 
 
+def check_video_delivery_consistency(root: str, ep: str) -> None:
+    """批内帧率/分辨率一致性（video_qc.delivery_consistency 消费端·2026-07 落地）。
+
+    video_qc 只产报告不阻断（main 恒 0）；混帧率/混分辨率 clip 进 compose 会被规格化静默掩盖
+    （重复帧/缩放糊边）。这里读最新批次 QC 报告，把 delivery mismatch 升为 gate WARN——
+    warn 而非 block：混批可能是有意的（如后端能力差异），但必须在验收面可见。缺报告不拦。"""
+    import glob as _glob
+    reports = sorted(_glob.glob(os.path.join(root, "生产数据", "video_qc", ep, "*", f"video_qc_{ep}_*.json")))
+    seen_clips: set = set()
+    for path in reversed(reports):  # 新批次优先，避免旧报告覆盖新结论
+        try:
+            payload = json.loads(open(path, encoding="utf-8").read())
+        except Exception:
+            continue
+        dc = payload.get("delivery_consistency") or {}
+        for f in dc.get("findings") or []:
+            key = (str(f.get("clip") or ""), str(f.get("kind") or ""))
+            if key in seen_clips:
+                continue
+            seen_clips.add(key)
+            add(WARN, "视频", path,
+                f"{f.get('clip')} 交付一致性偏离：{f.get('kind')}={f.get('value')}（批内众数 {f.get('expected')}）"
+                "——混帧率/混分辨率进 compose 会被静默规格化掩盖，确认该 clip 是否该重出。")
+
+
 def check_video_assets(root: str, ep: str) -> None:
     check_video_stage_raw_output_policy(root, ep)
+    check_video_delivery_consistency(root, ep)
     clips = clip_files(root, ep)
     if not clips:
         add(BLOCK, "视频", os.path.join(root, "出视频", ep, "视频"), "缺 clip MP4")
@@ -3846,6 +3872,21 @@ def check_hybrid_performance_routes(root: str, ep: str, stage: str) -> None:
                         f"先运行 python3 skills/n2d-video/scripts/lipsync_pass.py {root} {ep} --apply（或按 jobs 手工执行）。",
                         return_to_stage="video",
                     )
+                else:
+                    # 口型同步最小量化消费（2026-07 落地）：lipsync 回执现记录输出/音频时长差
+                    # av_duration_delta_ms；>500ms 说明对口型工具吞/拉了轨（"偏差大则重跑"从散文
+                    # 变成可查数字）。仍是 warn——真口型同步度量（嘴部-音频包络）另议，时长差只是下限信号。
+                    jobs_payload = load_json(os.path.join(root, "出视频", ep, "control", "lipsync_jobs.json"))
+                    for job in (jobs_payload.get("jobs") or []) if isinstance(jobs_payload, Mapping) else []:
+                        if not isinstance(job, Mapping) or str(job.get("clip_id") or "") != cid:
+                            continue
+                        delta = job.get("av_duration_delta_ms")
+                        if isinstance(delta, (int, float)) and delta > 500:
+                            add(WARN, "后期表演通道",
+                                os.path.join(root, "出视频", ep, "control", "lipsync_jobs.json"),
+                                f"{cid} lipsync 输出与音频时长差 {delta:.0f}ms（>500ms）：对口型工具可能吞/拉了轨，"
+                                "复核该镜口型后决定是否重跑 lipsync_pass。",
+                                return_to_stage="video")
     if stage in {"compose", "review"} and any(isinstance(row, Mapping) and row.get("final_voice_required") is True for row in routes):
         casting = load_json(os.path.join(root, "设定库", "voice_casting.json"))
         if not isinstance(casting, dict) or casting.get("status") != "locked":

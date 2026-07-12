@@ -157,7 +157,8 @@ python3 skills/n2d-feedback/scripts/feedback.py <作品根> --metrics <平台指
 ## 使用原则
 
 - **没有导演标签就不能归因**：平台数据只知道留存，不知道开场类型；默认先从 `storyboard.json` 自动抽取，低置信或误判再用手工 `creative_features` 覆盖。
-- **样本不足只做观察**：默认每组至少 `2` 个样本才给强建议，可用 `--min-samples` 调整。
+- **样本不足只做观察**：默认每组至少 `2` 个样本才给强建议，可用 `--min-samples` 调整。**两套"样本"口径必须分清（2026-07 审计澄清）**：feedback 的 `min_samples` 数的是 **paired context 数**（同集同平台配对组，探索性地板，2 个 context 可能只有几十次播放）；experiments 的 `min_samples` 数的是 **每变体播放量**（默认 1000，统计合同地板）。前者只配"观察/建议"，**铁律必须过 experiments audit**。
+- **写回有统计合同门（2026-07 落地）**：metrics 含 `ab_test_id` 行时，`--write-priors/--update-guide/--write-pacing-profiles` 会先跑 `experiments.audit_metrics`；status 非 `pass`（缺实验定义/每变体欠样本/顺序偷看）默认**拒写**并打印原因，`--force-writeback` 才可显式强推（留痕自负）。input_audit 存在 `must` 级缺口（付费维度字段缺失）时写回前打印醒目告警。纯观察数据（无 A/B 行）不受此门限制。
 - **看 lift，不看孤立绝对值**：跨集分组看相对总体 lift；A/B 先看同集 paired lift，避免剧情强弱、平台流量波动误导。
 - **A/B 一次别混太多变量**：开场、封面、断点、标题可以同集多版本，但要在字段里标清；若四项同时变化，结论只能说“组合胜出”，不能硬归因到单个元素。
 - **回灌只改节奏策略**：结论进入 `导演节奏.md`，不直接改已生产集；下一批分镜时由 `n2d-script` 吸收。

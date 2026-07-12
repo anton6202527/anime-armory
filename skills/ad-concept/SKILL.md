@@ -20,8 +20,8 @@ description: 拍广告 第1阶段·创意策划 — 把 需求/brief.json（客�
 读 `需求/brief.json`，缺项按三层分治。**别让用户填 JSON**——AI 问人话、自己落档：
 
 1. **必问最小集**：brand / product / usp / audience / `campaign_objective`。目标至少落到品牌认知、考虑种草、转化行动或全链路之一。
-2. **推断 + 一次确认**：漏斗阶段、调性、key message、时长、平台、路线；同时确认 offer、landing page（如有）。
-3. **花钱前闭合**：claims、rights、legal_lines、`measurement.primary_kpi`、`measurement.conversion_event`。claim 不能只写“有据”，须准备证据文件、方法、日期、适用地区、批准人给 producer pack。
+2. **推断 + 一次确认**：漏斗阶段、调性、key message、时长、平台、实际 placement、发行辖区、路线；同时确认 offer、landing page（如有）。平台名不足以推出安全区，`海外` 也不是法律辖区。
+3. **花钱前闭合**：claims、rights、legal_lines、`measurement.primary_kpi`、`measurement.conversion_event`。claim 不能只写“有据”：先选 `evidence_type`，再按类型准备完整依据。rights 也不能只写“授权曲库/自有素材”：真人、音乐、字体、素材逐项写 status、证据文件、地域、媒介范围、期限和批准人。
 
 补完把答案结构化回写 `brief.json` + 人读 `brief.md`，并回写 `_进度.md` 客户需求立项 ✅。
 

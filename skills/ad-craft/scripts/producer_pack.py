@@ -17,16 +17,38 @@ import argparse
 import json
 import os
 import re
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 
 PACK_KIND = "ad_producer_pack"
 PENDING_TOKENS = {"", "待补", "待填写", "待定", "待确认", "tbd", "未定", "未记录", "占位"}
+CLAIM_EVIDENCE_TYPES = {
+    "brand_fact", "test_measurement", "statistics_survey", "scientific_literature",
+    "comparison", "testimonial", "other",
+}
+CITED_CLAIM_TYPES = {
+    "test_measurement", "statistics_survey", "scientific_literature", "comparison",
+}
+CLAIM_TYPE_REQUIRED = {
+    "test_measurement": (
+        "issuer", "issuer_qualification", "method_standard", "test_conditions", "sample",
+    ),
+    "statistics_survey": (
+        "statistical_method", "sample_size", "sample_definition", "representativeness",
+        "survey_period", "bias_limitations",
+    ),
+    "scientific_literature": ("publication", "publication_locator", "applicability_basis"),
+    "comparison": ("comparison_target", "comparison_basis", "same_conditions"),
+    "testimonial": ("endorser_authorization", "typicality_basis", "material_connection_disclosure"),
+}
+RIGHTS_STATUSES = {"not_used", "owned", "licensed", "public_domain", "client_supplied"}
 PROD_RE = re.compile(r"\bPROD_[A-Za-z0-9_]*\b")
 BRAND_RE = re.compile(r"\bBRAND_[A-Za-z0-9_]*\b")
 CHAR_RE = re.compile(r"\bCHAR[_A-Za-z0-9]*\b")
 LOC_RE = re.compile(r"\bLOC[_A-Za-z0-9]*\b")
+CITED_SIGNAL_RE = re.compile(r"(?:\d|%|％|实验|测试|调查|统计|研究|对比|提升|降低)")
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -154,53 +176,180 @@ def deliverables_from_brief(brief: Mapping[str, Any], settings: Mapping[str, str
     }
 
 
-def rights_check(brief: Mapping[str, Any]) -> List[Dict[str, Any]]:
+def rights_check(brief: Mapping[str, Any], root: Optional[Path] = None) -> List[Dict[str, Any]]:
     rights = brief.get("rights") if isinstance(brief.get("rights"), Mapping) else {}
     out: List[Dict[str, Any]] = []
     for key in ("talent", "music", "fonts", "assets"):
-        value = rights.get(key)
-        out.append({
-            "item": key,
-            "status": "pending" if pending(value) else "declared",
-            "detail": value or "",
-        })
+        raw = rights.get(key)
+        entries = raw if isinstance(raw, list) else [raw]
+        if not entries or entries == [None]:
+            entries = [{}]
+        for pos, value in enumerate(entries, 1):
+            item = key if len(entries) == 1 else f"{key}_{pos:02d}"
+            if not isinstance(value, Mapping):
+                out.append({"item": item, "category": key, "status": "pending", "detail": value or "",
+                            "rights_status": "", "missing_fields": ["structured_rights_record"]})
+                continue
+            rights_status = str(value.get("status") or "").strip().lower()
+            evidence_file = value.get("evidence_file") or value.get("license_file") or value.get("source") or ""
+            required = ["status", "territory", "media_scope", "approved_by"]
+            values = {
+                "status": rights_status if rights_status in RIGHTS_STATUSES else "",
+                "territory": value.get("territory"), "media_scope": value.get("media_scope"),
+                "approved_by": value.get("approved_by"),
+            }
+            if rights_status != "not_used":
+                required.extend(("evidence_file", "validity"))
+                values["evidence_file"] = evidence_file
+                values["validity"] = value.get("validity") or value.get("valid_until")
+            if rights_status == "licensed":
+                required.extend(("valid_from", "valid_until"))
+                values["valid_from"] = value.get("valid_from")
+                values["valid_until"] = value.get("valid_until")
+            missing_fields = [field for field in required if pending(values.get(field))]
+            if rights_status == "licensed" and not any(field in missing_fields for field in ("valid_from", "valid_until")):
+                try:
+                    valid_from = date.fromisoformat(str(value.get("valid_from")))
+                    valid_until = date.fromisoformat(str(value.get("valid_until")))
+                    if valid_from > date.today():
+                        missing_fields.append("license_not_yet_valid")
+                    if valid_until < date.today():
+                        missing_fields.append("license_expired")
+                    if valid_until < valid_from:
+                        missing_fields.append("license_date_range_invalid")
+                except ValueError:
+                    missing_fields.append("license_dates_valid")
+            evidence_valid = True if rights_status == "not_used" else _queryable(root, evidence_file)
+            if evidence_file and not evidence_valid:
+                missing_fields.append("evidence_file_exists")
+            missing_fields = sorted(set(missing_fields))
+            out.append({
+                "item": item, "category": key, "status": "declared" if not missing_fields else "pending",
+                "rights_status": rights_status, "detail": value.get("detail") or value.get("description") or "",
+                "evidence_file": evidence_file, "evidence_file_exists": evidence_valid,
+                "territory": value.get("territory") or "", "media_scope": value.get("media_scope") or "",
+                "validity": value.get("validity") or value.get("valid_until") or "",
+                "valid_from": value.get("valid_from") or "", "valid_until": value.get("valid_until") or "",
+                "approved_by": value.get("approved_by") or "", "missing_fields": missing_fields,
+            })
     return out
 
 
-def claims_check(brief: Mapping[str, Any]) -> List[Dict[str, Any]]:
+def _claim_value(claim: Mapping[str, Any], *keys: str) -> Any:
+    for key in keys:
+        if key in claim and not pending(claim.get(key)):
+            return claim.get(key)
+    return ""
+
+
+def _queryable(root: Optional[Path], value: Any) -> bool:
+    ref = str(value or "").strip()
+    if not ref:
+        return False
+    if ref.startswith(("https://", "http://", "doi:", "record:")):
+        return True
+    if root is None:
+        return True
+    path = Path(ref)
+    if not path.is_absolute():
+        path = root / path
+    return path.is_file()
+
+
+def claims_check(brief: Mapping[str, Any], root: Optional[Path] = None) -> List[Dict[str, Any]]:
+    """Normalize and validate claim substantiation.
+
+    `evidence_type` drives conditional evidence.  Numeric/test/statistical cited
+    content receives the 2026 SAMR fields; brand facts do not inherit irrelevant
+    survey fields.  House structure is stricter than keyword screening but does
+    not claim that its field names are statutory wording.
+    """
     out: List[Dict[str, Any]] = []
     claims = brief.get("claims") or []
     if isinstance(claims, Mapping):
         claims = [claims]
     for idx, claim in enumerate(claims, start=1):
         if isinstance(claim, Mapping):
+            claim_id = str(claim.get("id") or f"claim_{idx:02d}").strip()
             text = str(claim.get("claim") or "").strip()
-            evidence = claim.get("evidence")
-            evidence_file = claim.get("evidence_file") or claim.get("source")
-            method = claim.get("method")
-            sample = claim.get("sample")
-            evidence_date = claim.get("date") or claim.get("evidence_date")
-            territory = claim.get("territory")
-            approved_by = claim.get("approved_by") or claim.get("legal_owner")
+            evidence_type = str(claim.get("evidence_type") or "").strip().lower()
+            evidence = _claim_value(claim, "evidence", "reasonable_basis")
+            evidence_file = _claim_value(claim, "evidence_file", "basis_file")
+            source_name = _claim_value(claim, "source_name", "issuer_name")
+            source_locator = _claim_value(claim, "source_locator", "source_url", "source", "evidence_file", "basis_file")
+            method = _claim_value(claim, "method")
+            sample = _claim_value(claim, "sample")
+            evidence_date = _claim_value(claim, "date", "evidence_date")
+            territory = _claim_value(claim, "territory")
+            approved_by = _claim_value(claim, "approved_by", "legal_owner")
+            applicable_scope = _claim_value(claim, "applicable_scope", "scope")
+            validity = _claim_value(claim, "validity", "validity_period", "valid_until")
+            display_disclosure = _claim_value(claim, "display_disclosure", "disclosure_text")
+            citation_used = bool(claim.get("citation_used") or evidence_type in CITED_CLAIM_TYPES)
         else:
+            claim_id = f"claim_{idx:02d}"
             text = str(claim).strip()
-            evidence = ""
-            evidence_file = method = sample = evidence_date = territory = approved_by = ""
-        evidence_complete = all(not pending(v) for v in (
-            evidence, evidence_file, method, evidence_date, territory, approved_by
-        ))
+            evidence_type = ""
+            evidence = evidence_file = source_name = source_locator = method = sample = ""
+            evidence_date = territory = approved_by = applicable_scope = validity = display_disclosure = ""
+            citation_used = False
+            claim = {}
+        required = ["claim", "evidence_type", "evidence", "evidence_file", "method",
+                    "evidence_date", "territory", "approved_by"]
+        values = {
+            "claim": text, "evidence_type": evidence_type, "evidence": evidence,
+            "evidence_file": evidence_file, "method": method, "evidence_date": evidence_date,
+            "territory": territory, "approved_by": approved_by,
+        }
+        if evidence_type not in CLAIM_EVIDENCE_TYPES:
+            values["evidence_type"] = ""
+        if citation_used:
+            required.extend(("source_name", "source_locator", "applicable_scope", "validity", "display_disclosure"))
+            values.update({
+                "source_name": source_name, "source_locator": source_locator,
+                "applicable_scope": applicable_scope, "validity": validity,
+                "display_disclosure": display_disclosure,
+            })
+        conditional = CLAIM_TYPE_REQUIRED.get(evidence_type, ())
+        for key in conditional:
+            required.append(key)
+            values[key] = _claim_value(claim, key) if isinstance(claim, Mapping) else ""
+        missing_fields = [key for key in required if pending(values.get(key))]
+        source_queryable = _queryable(root, source_locator) if citation_used else True
+        evidence_file_exists = _queryable(root, evidence_file)
+        if root is not None and evidence_file and not evidence_file_exists:
+            missing_fields.append("evidence_file_exists")
+        if citation_used and source_locator and not source_queryable:
+            missing_fields.append("source_queryable")
+        missing_fields = list(dict.fromkeys(missing_fields))
+        evidence_complete = not missing_fields
+        classification_warning = ""
+        if evidence_type == "brand_fact" and CITED_SIGNAL_RE.search(text):
+            classification_warning = "文案含数字/测试/比较信号却标为 brand_fact；仅作启发式提醒，请确认是否应改为检测/统计/比较证据类型"
         out.append({
-            "id": f"claim_{idx:02d}",
+            "id": claim_id,
             "claim": text,
             "status": "approved" if evidence_complete else "pending",
             "evidence_status": "approved" if evidence_complete else "pending",
+            "evidence_type": evidence_type,
             "evidence": evidence or "",
             "evidence_file": evidence_file or "",
+            "evidence_file_exists": evidence_file_exists,
+            "citation_used": citation_used,
+            "source_name": source_name or "",
+            "source_locator": source_locator or "",
+            "source_queryable": source_queryable,
             "method": method or "",
             "sample": sample or "",
             "evidence_date": evidence_date or "",
             "territory": territory or "",
             "approved_by": approved_by or "",
+            "applicable_scope": applicable_scope or "",
+            "validity": validity or "",
+            "display_disclosure": display_disclosure or "",
+            "conditional_evidence": {key: values.get(key) or "" for key in conditional},
+            "missing_fields": missing_fields,
+            "classification_warning": classification_warning,
         })
     return out
 
@@ -239,11 +388,20 @@ def asset_gap_list(shot_list: Sequence[Mapping[str, Any]], brief: Mapping[str, A
     return gaps
 
 
-def approval_checklist(brief: Mapping[str, Any], shot_list: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+def approval_checklist(brief: Mapping[str, Any], shot_list: Sequence[Mapping[str, Any]],
+                       root: Optional[Path] = None) -> List[Dict[str, Any]]:
     checks = []
-    for row in rights_check(brief) + claims_check(brief) + legal_check(brief):
+    for row in rights_check(brief, root) + claims_check(brief, root) + legal_check(brief):
         if row.get("status") == "pending":
-            checks.append({"severity": "block", "code": f"approval_pending_{row.get('item') or row.get('id')}", "item": row})
+            missing = row.get("missing_fields") or []
+            checks.append({
+                "severity": "block", "code": f"approval_pending_{row.get('item') or row.get('id')}",
+                "msg": ("claim 依据缺 " + ", ".join(missing)) if missing else "审批项仍为 pending",
+                "item": row,
+            })
+        elif row.get("classification_warning"):
+            checks.append({"severity": "warn", "code": f"claim_type_review_{row.get('id')}",
+                           "msg": row["classification_warning"], "item": row})
     if not shot_list:
         checks.append({"severity": "block", "code": "shot_list_missing", "msg": "缺 storyboard 镜头清单。"})
     return checks
@@ -257,7 +415,7 @@ def build_pack(root: Path) -> Dict[str, Any]:
     concept = read_text(root / "创意" / "concept.md")
     shot_list = build_shot_list(storyboard)
     pack = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": PACK_KIND,
         "project_root": str(root),
         "brand": brief.get("brand") or "",
@@ -267,19 +425,20 @@ def build_pack(root: Path) -> Dict[str, Any]:
         "tone": brief.get("tone") or "",
         "big_idea": _extract_section(concept, "Big Idea"),
         "deliverables": deliverables_from_brief(brief, settings),
-        "rights": rights_check(brief),
-        "claims": claims_check(brief),
+        "rights": rights_check(brief, root),
+        "claims": claims_check(brief, root),
         "legal": legal_check(brief),
         "shot_list": shot_list,
         "asset_gaps": asset_gap_list(shot_list, brief),
         "approval_checklist": [],
     }
-    pack["approval_checklist"] = approval_checklist(brief, shot_list) + [
+    pack["approval_checklist"] = approval_checklist(brief, shot_list, root) + [
         gap for gap in pack["asset_gaps"] if gap.get("severity") == "block"
     ]
     pack["summary"] = {
         "shots": len(shot_list),
         "approval_blocks": sum(1 for row in pack["approval_checklist"] if row.get("severity") == "block"),
+        "approval_warns": sum(1 for row in pack["approval_checklist"] if row.get("severity") == "warn"),
         "asset_blocks": sum(1 for row in pack["asset_gaps"] if row.get("severity") == "block"),
         "asset_warns": sum(1 for row in pack["asset_gaps"] if row.get("severity") == "warn"),
     }

@@ -179,7 +179,10 @@ def risk_clips(root: Path, episode: str) -> List[Dict[str, Any]]:
                 "reason": text[:220],
             })
     rows.sort(key=lambda r: (-len(r["risk_factors"]), r["clip_id"]))
-    return rows[:3]
+    # 打样抽 3 个代表 Clip 是内部启发式（对齐 run.py pilot 的"挑 2-3 个代表 Clip"口径，
+    # 非外部基准）：足够覆盖画风/脸/口型/接缝/路由五类高风险轴，又不至于把打样做成半集量产。
+    # env 可按项目风险密度调大。
+    return rows[:int(os.environ.get("N2D_PILOT_RISK_SAMPLE_COUNT", "3"))]
 
 
 def acceptance_path(root: Path, episode: str) -> Path:

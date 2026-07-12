@@ -6,6 +6,7 @@
 # 依赖: pip install whisperx   （首次会下 wav2vec2 对齐模型；CPU 可跑，慢）
 import sys, os, re, json, argparse, difflib
 import importlib.util
+from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
@@ -86,7 +87,13 @@ def main():
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--audio", default=None, help="可指定 demucs 分离后的人声文件，提升歌词对齐稳定性")
     ap.add_argument("--allow-low-confidence", action="store_true", help="仅用于人工复核流程：低置信度也落档并推进阶段")
+    ap.add_argument("--reviewer", help="配合 --allow-low-confidence，记录逐行听审人")
+    ap.add_argument("--notes", default="", help="低置信度人工校正/接受说明")
     args = ap.parse_args()
+    if args.allow_low_confidence and not str(args.reviewer or "").strip():
+        sys.exit("--allow-low-confidence 必须同时提供 --reviewer；低覆盖不能匿名放行")
+    if args.allow_low_confidence and not str(args.notes or "").strip():
+        sys.exit("--allow-low-confidence 必须同时提供 --notes，说明逐行听审/校正依据")
 
     song = args.audio
     if not song:
@@ -137,13 +144,15 @@ def main():
         ktext = "".join(f"{{\\k{max(1,int(round((row['end']-row['start'])*100)))}}}{row['char']}" for row in aligned)
         ass_events.append(f"Dialogue: 0,{mv_utils.ts_ass(start)},{mv_utils.ts_ass(end)},Default,,0,0,0,,{ktext}")
         lrc_lines.append(f"{mv_utils.ts_lrc(start)}{line}")
+        line_coverage = round(matched_per_line[index] / max(1, sum(1 for char in line if alignable_char(char))), 4)
         report_lines.append({
             "line": line,
             "start": round(float(start), 3),
             "end": round(float(end), 3),
             "char_count": len(aligned),
             "source_char_count": sum(1 for char in line if alignable_char(char)),
-            "line_confidence": round(matched_per_line[index] / max(1, sum(1 for char in line if alignable_char(char))), 4),
+            "line_character_coverage": line_coverage,
+            "line_confidence": line_coverage,
             "duration": round(float(end - start), 3),
         })
 
@@ -160,10 +169,22 @@ def main():
            + "\n".join(ass_events) + "\n")
     open(os.path.join(out_dir, "karaoke.ass"), "w", encoding="utf-8").write(ass)
     open(os.path.join(out_dir, "lyrics.lrc"), "w", encoding="utf-8").write("\n".join(lrc_lines) + "\n")
+    timing_issues = []
+    for previous, current in zip(report_lines, report_lines[1:]):
+        if current["start"] < previous["start"]:
+            timing_issues.append(f"non_monotonic:{current['line']}")
+        if current["start"] < previous["end"] - 0.05:
+            timing_issues.append(f"line_overlap:{previous['line']}->{current['line']}")
     report = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_lyric_alignment_report",
         "audio": os.path.relpath(song, args.root),
+        "master_song": mv_utils.relpath(args.root, mv_utils.find_song(args.root)),
+        "inputs_sha256": {
+            os.path.relpath(song, args.root): mv_utils.content_hash(song),
+            mv_utils.relpath(args.root, mv_utils.find_song(args.root)): mv_utils.content_hash(mv_utils.find_song(args.root)),
+            "词/lyrics.md": mv_utils.content_hash(lyr),
+        },
         "language": args.lang,
         "device": args.device,
         "audio_duration": round(float(dur), 3),
@@ -172,25 +193,40 @@ def main():
         "alignment_unit": "character",
         "source_characters": source_chars,
         "aligned_characters": sum(matched_per_line),
+        "character_coverage_ratio": round(confidence, 4),
+        # Legacy alias retained for existing gate/readers.  This is textual
+        # character coverage, not a calibrated acoustic probability.
         "alignment_confidence": round(confidence, 4),
         "coverage_seconds": round(float(report_lines[-1]["end"] - report_lines[0]["start"]), 3) if report_lines else 0,
         "lines": report_lines,
+        "timing_issues": timing_issues,
+        "alignment_contract": "known_lyrics_forced_alignment; no ASR transcript substitution",
         "warnings": [],
     }
     if len(report_lines) != len(lines):
         report["warnings"].append("aligned_lines != lyric_lines，可能有歌词未对齐")
     if confidence < 0.9:
-        report["warnings"].append(f"字符对齐置信度仅 {confidence:.1%}，需人工校正歌词、语言或人声 stem")
+        report["warnings"].append(f"字符时间轴覆盖率仅 {confidence:.1%}，需人工校正歌词、语言或人声 stem")
     weak_lines = [row["line"] for row in report_lines if row["line_confidence"] < 0.85]
     if weak_lines:
         report["warnings"].append(f"{len(weak_lines)} 行字符覆盖低于 85%")
+    if timing_issues:
+        report["warnings"].append(f"{len(timing_issues)} 个歌词行时间乱序/重叠问题")
+    if args.allow_low_confidence:
+        report["manual_review"] = {
+            "accepted": True,
+            "reviewer": str(args.reviewer).strip(),
+            "date": date.today().isoformat(),
+            "notes": args.notes,
+            "bound_inputs_sha256": dict(report["inputs_sha256"]),
+        }
     open(os.path.join(out_dir, "alignment_report.json"), "w", encoding="utf-8").write(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     )
-    passed = len(report_lines) == len(lines) and confidence >= 0.9 and not weak_lines
+    passed = len(report_lines) == len(lines) and confidence >= 0.9 and not weak_lines and not timing_issues
     if passed or args.allow_low_confidence:
         mv_utils.update_progress_stage(args.root, "lyric_sync")
-    print(f"[ok] 对齐 {len(report_lines)}/{len(lines)} 行，字符置信度 {confidence:.1%} → 字幕/karaoke.ass + lyrics.lrc")
+    print(f"[ok] 对齐 {len(report_lines)}/{len(lines)} 行，字符时间轴覆盖率 {confidence:.1%} → 字幕/karaoke.ass + lyrics.lrc")
     if report["warnings"]:
         print("[warn] " + "；".join(report["warnings"]))
     if not passed and not args.allow_low_confidence:

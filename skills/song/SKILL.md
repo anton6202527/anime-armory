@@ -2,7 +2,7 @@
 name: song
 description: 写歌总调度 — 直接创作或编辑一首带人声的歌（词 + 曲 + 演唱）。支持从主题/几个字/曲风想法从零创作，也支持在已有 `创作区/写歌/<曲名>/`、歌词、曲风、半成品音频基础上改词、改结构、改曲风、重生成、多版挑版、换声、质检、进度查询和 skill 更新影响检查。产物落 创作区/写歌/<曲名>/(词/lyrics.md + 歌/song.wav)。创作过程中可按需调用 song-progress(只读进度) / song-update(更新影响计划) / song-lyrics(作词/改词) / song-score(歌词体检) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱/换声) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 创作歌曲 / 改这首歌 / 改词 / 改曲风 / 重生成 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 创作曲, 创作歌曲, 改歌, 改词, 改曲风, 重做这首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
 ---
-> 规模统计：Skill 数 11 | SKILL.md 总行数 622 | 目录文本总行数 8043
+> 规模统计：Skill 数 11 | SKILL.md 总行数 657 | 目录文本总行数 9850
 
 # song — 写歌创作线 · 总调度
 
@@ -26,13 +26,13 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 ├── 创作蓝图.md      主题/曲风/情绪/平台/演唱音色
 ├── 创作/            song_brief.json（A&R 简报）
 ├── 词/lyrics.md     结构化歌词（[verse]/[chorus]/[bridge]…）
-├── 歌/              song_form.json + chord_sheet.md + topline_notes.md + compose_task.md + takes_manifest.json + take_review.json + takes/ + song.wav
-├── 混音/            master_check.json / master_check.md
-├── 评审/            consistency_findings.json / consistency_findings.md
+├── 歌/              song_form.json + compose_task.md + takes_manifest.json + take_review.json + revision_jobs.json + takes/ + song.wav
+├── 混音/            pre_master.wav + mix_signoff.json + master_check.json
+├── 评审/            quality_gate_*.json + consistency_findings.json / consistency_findings.md
 ├── 合规/            AI使用说明.md / ai_usage.json / rights_metadata.json / split_sheet.md
-├── 发行/            feedback_summary.json / feedback_report.md
+├── 发行/            release_metadata.json + release_metadata_check.json + feedback_summary.json
 ├── 素材/            参考曲/风格样本/已有半成品
-└── 导出/
+└── 导出/            master.wav + master_delivery.json + release_pack.json
 ```
 
 ## 阶段 + 路由
@@ -43,10 +43,10 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 | 立项 + 词 | **`song-lyrics`** | 创作蓝图 + `词/lyrics.md`（结构化、可唱、押韵） | ✅ 已建（零依赖） |
 | 歌词体检(可选) | **`song-score`** | 结构与押韵分析报告 | ✅ 已建（音频生成前拦截平庸词） |
 | 旋律/和声草图 | **`song-craft`** | `歌/song_form.json` + `chord_sheet.md` + `topline_notes.md` | ✅ 已建（作曲前控制曲式与 topline 方向） |
-| 作曲任务包 + 多版挑版 | **`song-compose`** | schema v2 完整作曲合同 + 后端编译 style/prompt/lyrics/duration 字段 + `takes_manifest` + `take_review` + `song.wav` | ✅ 已建（Suno/Udio/ACE-Step/DiffRhythm，多版登记/评分/定稿） |
+| 作曲任务包 + 多版挑版 | **`song-compose`** | schema v3 输入 hash 合同 + 后端编译字段 + 六维 `take_review` + selection receipt + `pre_master.wav` | ✅ 已建（前置/挑版双闸门） |
 | 翻唱 / 换声(可选) | **`song-cover`** | 换音色人声 | ✅ 已建（RVC，带合规闸门） |
-| 质检 / 母带检查 / 自审(横切) | **`song-review`** | 作品质检 + `评审/consistency_findings.json` + `混音/master_check.json` + 流程自审 | ✅ 已建（机检+人判，不生产只审） |
-| 合约 / 合规 / 发布包(横切) | **`song-craft`** | `_设置/_meta` 字段契约 + AI 披露 + `rights_metadata` + `release_pack` | ✅ 已建（不生产，只提供共享契约与脚本） |
+| 质检 / 母带检查 / 自审(横切) | **`song-review`** | 作品质检 + consistency findings + BS.1770 响度/true-peak 报告 | ✅ 已建（机检+人判，不生产只审） |
+| 合约 / 合规 / 发布包(横切) | **`song-craft`** | AI 披露 + 条件式 rights check + release metadata + hash-bound release pack | ✅ 已建（work/resource/release 元数据分层） |
 | 发行反馈(可选) | **`song-feedback`** | `发行/feedback_summary.json` + 回测报告 | ✅ 已建（真实播放/完播/收藏/分享/评论回灌） |
 
 | 用户输入 | 路由到 |
@@ -65,7 +65,7 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 | 给了 `创作区/写歌/<曲名>/` 没说动作 / 问进度或下一步 | `song-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
 | 问 skill 更新是否影响本曲 / 要返工计划 / 重审重评前先看范围 | `song-update`（只写更新影响计划和基线，不改歌词/音频/进度） |
 
-> 推荐顺序：**A&R 简报/参考边界 → 词 → 歌词 prosody/体检(song-score) → 旋律/和声草图 → 作曲任务包 → 多版生成/登记 → 试听挑版(take_review) →（可选 翻唱）→ 作品质检 + consistency_findings + 母带检查 → AI 使用披露 + 权益元数据 → 发布交付包 → 真实反馈回灌**。先云后本地。
+> 推荐顺序：**A&R 简报/参考边界 → 词 → prosody/体检 → 曲式/和声草图 → compose gate → 多版生成 → 六维盲听 → timecode 局部返修 → select gate →（可选换声）→ pre-master 人工表演/混音签核 → 24-bit delivery master → BS.1770 检查 → AI/rights/release metadata → hash-bound 发布包 → 同实验反馈 + Wilson 区间**。逐阶段标准见 `song-craft/references/production-standards.md`。
 
 ## 后端选型（song-compose 唱歌的声音 —— 装什么）
 > **TTS（CosyVoice/FishSpeech）是说话，不能唱歌。** 唱歌走音乐生成模型或歌声转换。

@@ -1,4 +1,5 @@
 import json
+import datetime as _dt
 from pathlib import Path
 
 import pytest
@@ -384,6 +385,7 @@ def test_spectacle_backend_benchmark_can_override_auto_route(tmp_path):
     prod.mkdir(parents=True)
     (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
         "kind": "n2d_spectacle_backend_benchmark",
+        "probed_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
         "version": 1,
         "recommendations": {
             "fight_exchange": {"primary_backend": "seedance", "score": 91, "evidence": "pilot probe"}
@@ -409,6 +411,7 @@ def test_spectacle_backend_benchmark_defers_to_cross_episode_baseline(tmp_path):
     prod.mkdir(parents=True)
     (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
         "kind": "n2d_spectacle_backend_benchmark",
+        "probed_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
         "version": 1,
         "recommendations": {
             "fight_exchange": {"primary_backend": "seedance", "score": 91, "evidence": "pilot probe"}
@@ -482,6 +485,7 @@ def test_spectacle_prior_skips_when_benchmark_covers_type(tmp_path):
     prod.mkdir(parents=True)
     (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
         "kind": "n2d_spectacle_backend_benchmark",
+        "probed_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
         "recommendations": {"large_establishing": {"primary_backend": "seedance"}},
     }, ensure_ascii=False), encoding="utf-8")
 
@@ -1635,3 +1639,22 @@ def test_route_episode_overseas_threads_to_speech_clips(tmp_path):
     speech = plan["routes"][0]
     # 出海 + 原生音画说话镜 → primary 切到多语言唇同步后端（非默认 veo）。
     assert speech["primary_backend"] == "seedance"
+
+
+def test_spectacle_benchmark_stale_probe_is_advisory_only(tmp_path):
+    # 过期/无时间戳 probe 不得改 primary（2026-07 新鲜度护栏）：只打 stale 风险旗。
+    root = _root(tmp_path)
+    _write_storyboard(root, [{"id": "Clip 5", "scene": "万人战场全景，千军列阵，宏大鸟瞰"}])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    (prod / "spectacle_backend_benchmark.json").write_text(json.dumps({
+        "kind": "n2d_spectacle_backend_benchmark",
+        "probed_at": "2025-01-01T00:00:00+00:00",
+        "recommendations": {"large_establishing": {"primary_backend": "seedance"}},
+    }, ensure_ascii=False), encoding="utf-8")
+    plan = router.route_episode(root, "第1集", generated_at="2026-06-08T00:00:00Z")
+    route = plan["routes"][0]
+    assert "spectacle_benchmark_stale" in route.get("risk_flags", [])
+    # primary 不被过期 probe 覆盖（回落到 prior/默认路径）
+    bench = router.load_spectacle_backend_benchmark(root)
+    assert bench.get("benchmark_stale") is True

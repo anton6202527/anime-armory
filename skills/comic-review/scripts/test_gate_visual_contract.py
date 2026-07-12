@@ -105,6 +105,13 @@ def test_visual_contract_blocks_camera_gaze_and_unregistered_scene(tmp_path: Pat
     assert "panel_multi_character_staging_missing" in codes(findings)
 
 
+def test_specific_target_containing_front_or_distance_word_is_not_vague() -> None:
+    assert gate.is_vague_gaze_target("看前方") is True
+    assert gate.is_vague_gaze_target("坚定眼神") is True
+    assert gate.is_vague_gaze_target("画右前方云路") is False
+    assert gate.is_vague_gaze_target("街巷前方未点亮的灯架") is False
+
+
 def test_traditional_contract_missing_warns_not_blocks(tmp_path: Path) -> None:
     root = tmp_path
     chapter = "第1话"

@@ -161,6 +161,7 @@ def _release_ready_project(root: Path, episode: str) -> None:
     ]
     (prod / "production_events.jsonl").write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in events), encoding="utf-8")
     (prod / f"review_signoff_{episode}.json").write_text('{"kind":"n2d_review_signoff","version":1,"status":"approved","reviewer":"qa"}', encoding="utf-8")
+    (prod / f"identity_voice_print_{episode}.json").write_text('{"kind":"n2d_identity_voice_print","version":1,"available":false,"mode":"no_audio"}', encoding="utf-8")
     (prod / f"score_{episode}.json").write_text('{"kind":"n2d_episode_review_score","version":1,"status":"pass","score":91}', encoding="utf-8")
     production_readiness.production_locks.scaffold(root, episode, confirmed=True, reviewer="qa", force=True)
     decision = {

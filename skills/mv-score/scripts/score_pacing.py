@@ -30,6 +30,7 @@ import importlib.util
 import json
 import os
 import sys
+from datetime import date
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
@@ -286,11 +287,20 @@ def build_payload(root, threshold=None, dim_scores=None):
     low_dims = low_semantic_dims(dim_scores, thr_pct)
     blocked, return_stages, block_reasons = decide_block(score, report, low_dims, threshold)
     affected = pacing_affected_clips(clip_plan, beatgrid, report) + semantic_affected_clips(low_dims)
+    song_path = mv_utils.find_song(root)
+    inputs_sha256 = {
+        "分镜/clip_plan.json": mv_utils.content_hash(plan_path),
+        "节拍/beatgrid.json": mv_utils.content_hash(bg_path),
+    }
+    if song_path:
+        inputs_sha256[mv_utils.relpath(root, song_path)] = mv_utils.content_hash(song_path)
 
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "mv_pacing_prescore",
+        "generated_at": date.today().isoformat(),
         "project_root": root,
+        "inputs_sha256": inputs_sha256,
         "song_len": round(song_len, 3) if song_len else None,
         "song_len_source": song_src,
         "engine": "mv-craft/scripts/pacing.py",
@@ -371,6 +381,8 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     out = os.path.join(out_dir, "pacing_prescore.json")
     mv_utils.write_json(out, payload)
+    if not payload.get("blocked"):
+        mv_utils.update_progress_stage(root, "pacing_check")
     queue_out = None
     if args.enqueue:
         queue_out, _ = write_enqueue(root, payload)

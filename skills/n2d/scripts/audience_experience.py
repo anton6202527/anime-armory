@@ -26,6 +26,12 @@ except Exception:  # pragma: no cover
 VERSION = 1
 OUT_JSON = "audience_experience_{episode}.json"
 OUT_MD = "audience_experience_{episode}.md"
+# 阈值均为内部启发式（confidence=low·2026-07 标准审计补出处）：首窗 3s 对齐"黄金3秒"口径
+# （industry_benchmark.proxy_thresholds.hook_window_sec），payoff 间隔 20s 对齐导演节奏 §二
+# 国内钩子间隔上限（hook_gap_sec），集尾取末 2 拍作 cliffhanger 判定窗。留存实测数据回灌后再校准。
+FIRST_WINDOW_SEC = float(os.environ.get("N2D_AX_FIRST_WINDOW_SEC", "3.0"))
+PAYOFF_GAP_SEC = float(os.environ.get("N2D_AX_PAYOFF_GAP_SEC", "20.0"))
+DEFAULT_CLIP_SEC = 3.0  # 缺时长时的保守占位
 PAYOFF_MARKERS = ("兑现", "推进", "发现", "揭示", "反转", "冲突", "阻碍", "选择", "结果", "代价", "爽点", "钩", "reveal", "payoff", "turn", "choice")
 HOOK_MARKERS = ("钩", "危机", "冲突", "悬念", "问题", "反转", "承诺", "hook", "promise", "question")
 
@@ -163,7 +169,7 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
     first_window = []
     acc = 0.0
     for clip in clips:
-        if acc <= 3.0:
+        if acc <= FIRST_WINDOW_SEC:
             first_window.append(clip)
         acc += duration(clip)
     if clips and not any(has_marker(clip_text(c), HOOK_MARKERS) for c in first_window):
@@ -176,7 +182,7 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
         total += duration(clip)
         if has_marker(clip_text(clip), PAYOFF_MARKERS):
             last_payoff = total
-        if total - last_payoff > 20.0:
+        if total - last_payoff > PAYOFF_GAP_SEC:
             stale_windows.append({"clip_index": idx, "at_sec": round(total, 2), "gap_sec": round(total - last_payoff, 2)})
             last_payoff = total
     if stale_windows:

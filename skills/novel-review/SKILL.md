@@ -16,7 +16,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 ## 机检 / 人判分工
 
-- **机检（确定性，先跑）**：一键串跑用 `scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`，它把家族里三个确定性检测器一次跑完并汇总到 `审稿/consistency_audit.json`：
+- **机检（确定性，先跑）**：一键串跑用 `scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`，它把家族里全部确定性检测器（基础三件 + 2026 新增子检测器，共 13+ 个，见下）一次跑完并汇总到 `审稿/consistency_audit.json`：
   - `scripts/mechanical_check.py` —— 格式/字数带宽（默认读 `_meta.target_wordcount_min_max` / scale / target_words_per_chapter，可用 `--min/--max` 覆盖）/章号与章纲对齐/视角"我"密度提示/称谓·术语漂移/**原文照搬（n-gram vs 原作.txt）**/**AI腔·同质化启发式**（叙事中议论文式连接词=🟡·万能金句套话密度=🟢·advisory·线索非定论，`--no-ai-tell` 关闭；平台 AI 质检阈值属于易变信息，具体要求以 `novel-research` 平台资料包/`market_baseline` 为准；写作链路全程 AI 起草时，此项仍应作为过审风险前置自检）/**跨章重复率·机械文风**（相邻章字级 shingle Jaccard 近重复=🟡/🟢·跨章机械开篇=🟡·跨章整句逐字复用=🟡·句首词/短句式模板=🟢/🟡·全书/每章 zlib 压缩比=🟢·advisory·绝不 🔴·`--no-repetition` 关闭；对标番茄/红果对 AI 内容「连续章节重复率+机械化文风」的双重质检，阈值为内部启发式非平台公开硬数字；系统面板等刻意模板会命中，交人判）。术语**权威源优先**：人确认的 `设定/角色别名.json`（status=confirmed，由 `novel-wiki/alias_scaffold.py` 生成候选+人确认）里的规范名/别名直接采信（绕过正则启发式，含中点/单字/带「的之」的合法专名也不漏），其余从 `设定/设定圣经.md`、`角色卡.md`、`世界观.md`、`锚点表.json` 正则抽取补充，也可用 `--terms` 追加（`--no-auto-terms` 关闭确认表+正则两路自动抽取）。
   - `novel-wiki/logic_sentry.py`（先 `wiki_builder.py` 建《动态百科》）—— **死人复活 / 弃置道具复用 / 位置跳变 / 数值漂移（年龄锚点跨章不一致）**等硬冲突候选 → `审稿/logic_alerts_*.json`。这是把"设定自相矛盾/锚点漂移"从纯人判下沉到机检的深度增强（无角色卡/无年龄锚点则优雅跳过并记原因）。**审查重点章排序（ConStory arXiv 2603.05890）**：`logic_alerts_summary.json` 里 alerts 按 `priority` 降序（中段40-60% + 高 churn + 高字符熵章加权·`priority_factors` 标命中代理），并给 `review_focus_chapters` 热点表——把人工语义复审火力先投到最可能藏 bug 的章。**只排序不改 severity/blocking**（B10）。
   - `novel-style/extract_style.py --compare` —— 每章文风指纹 vs **锚点章指纹**算漂移分，超带宽即记"文风漂移"候选 → `审稿/style_drift_summary.json`（无锚点指纹则跳过，提示先提取）。
@@ -32,7 +32,7 @@ description: 小说质检 + 流程自审（novel-* 家族的 QA 环节，不写�
 
 0. **定位项目**：作品根需含 `章节/*.md`（理想还有 `设定/`、`原作.txt`、`设定/章纲.md`）。先读 `_进度.md` 和 `审稿/demo_gate.json`（如存在）；确认三件事：① POV 角色 + 人称（如"王敦/第三人称限定"）② 文风锚点章（优先 `demo_gate.style_anchor.source_chapter`）③ 是否续写/外传（是 → 需锚点对齐 + 原文照搬检查）。
 1. **跑机检脚本** → 确定性问题清单；同时落盘机器结果。一次跑全套：
-   `python3 skills/novel-review/scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`（内部串跑 mechanical_check + reader_contract_sentry + logic_sentry + style-drift，汇总 `审稿/consistency_audit.json`）。
+   `python3 skills/novel-review/scripts/consistency_audit.py <作品根> [--pov 角色名] [--anchor 设定/风格指纹.json]`（内部串跑 mechanical_check + reader_contract_sentry + logic_sentry + style-drift + hook/voice/tone/thread/antagonist/timeline/minor/arc_gate/foreshadow/power_system 等全部子检测器，汇总 `审稿/consistency_audit.json`）。
    只想跑基础机检也可单独：`python3 skills/novel-review/scripts/mechanical_check.py <作品根> ... --json-out 审稿/mechanical_findings.json`。
    长篇逐章写后由 `novel/scripts/post_write.py` 自动调用 `reader_contract_sentry.py`；对已写窗口或历史项目，可手动跑：
    `python3 skills/novel-review/scripts/reader_contract_sentry.py <作品根> --chapter 第NN章`。

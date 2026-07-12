@@ -63,7 +63,8 @@ def dreamina_image_signoff_allows(root: Path) -> bool:
     if "image" not in scope and "生图" not in scope:
         return False
     backend = str(
-        payload.get("backend")
+        payload.get("channel")
+        or payload.get("backend")
         or payload.get("canonical")
         or payload.get("image_backend")
         or ""
@@ -159,6 +160,11 @@ def enforce_gate(root: Path) -> None:
     gate = subprocess.run(gate_cmd, text=True)
     if gate.returncode:
         raise RuntimeError("ad image gate blocked paid generation")
+    acceptance_cmd = [sys.executable, str(Path(__file__).resolve().parents[2] / "ad-craft" / "scripts" / "stage_acceptance.py"),
+                      str(root), "--stage", "storyboard", "--mode", "rough"]
+    acceptance = subprocess.run(acceptance_cmd, text=True)
+    if acceptance.returncode:
+        raise RuntimeError("storyboard stage acceptance blocked paid image generation")
 
 
 def render_jobs(
@@ -199,6 +205,8 @@ def render_jobs(
         if out_path.exists() and not force:
             job["status"] = "done"
             job.setdefault("backend", "Dreamina/即梦官方 CLI")
+            job.setdefault("model", f"Dreamina Image {model_version}")
+            job.setdefault("channel", "Dreamina/即梦官方 CLI/API")
             job.setdefault("output", out_rel.as_posix())
             skipped += 1
             continue
@@ -221,6 +229,8 @@ def render_jobs(
             job.update({
                 "status": "done",
                 "backend": "Dreamina/即梦官方 CLI",
+                "model": f"Dreamina Image {model_version}",
+                "channel": "Dreamina/即梦官方 CLI/API",
                 "model_version": model_version,
                 "actual_reference_inputs": [str(p.relative_to(root)) for p in refs],
                 "submit_id": payload.get("submit_id"),
@@ -258,6 +268,8 @@ def render_jobs(
             time.sleep(0.2)
     manifest["render_summary"] = {
         "backend": "Dreamina/即梦官方 CLI",
+        "model": f"Dreamina Image {model_version}",
+        "channel": "Dreamina/即梦官方 CLI/API",
         "model_version": model_version,
         "rendered": rendered,
         "skipped": skipped,

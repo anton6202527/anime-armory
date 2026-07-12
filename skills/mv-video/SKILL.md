@@ -25,6 +25,8 @@ description: 制MV 出视频 — 把 mv-image PNG 图生视频成卡点 MV clip�
 - **MV 单曲一致性继承**：`mv-image` 已锁主角身份、主色、母题和段落 look；视频 prompt 只让它动起来，不改脸、不换衣型、不换场景风格。副歌可以让光效和相机更猛，但不能换成另一套视觉语言。
 - **完整合同 ≠ 模型 prompt**：逐 take Markdown 完整保留身份锚、资产/参考路径、首尾帧、卡点、continuity、渠道/规格和声音约束，供 gate、人工复核与溯源；`skills/mv/_lib/mv_video_prompt_compiler.py` 只把人物主动作、运镜、明确环境响应、动作峰值和结尾落幅编译成唯一提交块。不得把完整 Markdown 整段粘给模型。
 - **歌曲永远外铺**：compiler 固定 `native_audio_policy=external_song_track`、请求控制 `generate_audio=false`；即使后端支持原生音频，MV clip 也只生成画面，最终歌曲由 `mv-compose` 铺设。演唱口型若启用，只把人声轨作为口型条件，不让后端替换歌曲。
+- **生成单元可大于 clip，签收单元仍是 clip**：支持多镜头的后端可把同一 section + setup、总时长在能力上限内的相邻镜头编成 `sequence_units`，优先解决连续动作/正反关系；成片仍按 picture lock 切点拆回逐 clip 登记、评分和 QC，不能用一次生成绕过逐镜责任。
+- **首尾帧能力要诚实**：只有 capability profile 明确支持时才提交 end frame；不支持时在 job 中写明回退为多镜头生成或剪辑匹配复核，不能把“计划有尾帧”伪装成“后端收到了尾帧”。
 - **继承合约必跑**：`scripts/inherit_contract.py` 检查 `clip_plan` 的身份锚点、参考输入、首帧/尾帧、shot_design 和 continuity 是否进入 `jobs_manifest` 与逐 take prompt；缺失先修 prompt/job，不要带病出视频。
 - **视频 QC 必跑**：`scripts/video_qc.py` 检查 selected clip 是否存在、时长是否贴合 plan、画幅是否匹配、clip 是否夹带音轨；同时抽每条 selected clip 的 start/mid/end 帧，记录帧路径和基础色彩指标，并给相邻接缝留下可复查证据。
 - **生视频贵**：先在图阶段锁死视觉，视频只调动作/运镜；每 clip 跑几版挑稳由 `出视频规格` 档统一决定（见下节）。
@@ -65,41 +67,50 @@ description: 制MV 出视频 — 把 mv-image PNG 图生视频成卡点 MV clip�
 
 后端能力判定走 `motion_axes.py` 内自持的关键词能力表（`Seedance/Kling/Veo/Hailuo/Runway/Luma` 有质量档；`Seedance/Kling` 支持视频运动参考），不对 contract 渠道字面值硬耦合、不 hardcode 厂商分支。
 
-## 可选增强：演唱口型对齐（选择点 `演唱口型` · opt-in · 唱演镜才值得）
+## 选择性演唱口型对齐（默认只做正面唱演镜）
 
 MV 常有**主角正面演唱镜**（对麦/特写跟唱）；2026 共识：脸可见时演唱口型对人声可达约音素级 ~90% 对齐，对唱字幕成片很重要，但**远景/侧脸/B-roll/空镜看不出嘴，不值这成本**。这与 `mv-image` 的 `vocal_traits`（演唱神态锚点）配套——神态锚定在出图、嘴型对齐在这一步。选择点 `演唱口型`（记入 `_设置.md`，见 `mv-craft/references/选择点与偏好.md`）：
 
-- **关闭（默认）**：分镜规避——演唱段多给侧脸/背身/手部/乐器/空镜/B-roll，少给正面跟唱大特写。零成本、最稳，多数 MV 够用。
-- **配音对齐（首选·后端音频参考口型）**：把 `歌/song.*`（或 vocals 人声轨）当**音频参考口型条件**喂支持的生视频后端（可灵 Omni / Seedance 音频参考），同帧出对口型的演唱镜；**音轨仍是原歌**，模型只做口型条件不接管声音。
+- **仅正面演唱镜（默认）**：只对脸可见的 `performance_vocal` 特写做口型条件/后期 pass，其余镜头不付这笔一致性成本。
+- **关闭**：分镜规避——演唱段多给侧脸/背身/手部/乐器/空镜/B-roll，少给正面跟唱大特写。零成本、最稳。
+- **音频条件（首选）**：把 `歌/song.*`（或 vocals 人声轨）当**口型条件**喂支持的生视频后端，同帧出对口型的演唱镜；**音轨仍是原歌**，模型只做口型条件不接管声音。
 - **后期 pass**：clip 出好后用本地口型工具把正面演唱镜的嘴型对到人声轨。**工具优先序 LatentSync（身份保持最好，主角脸是 MV 命门）> MuseTalk（近实时但不保面部特征）> Wav2Lip**。重型权重在 conda env、不入本仓。
 
 后端不支持音频参考口型/对不齐 → 回退后期 pass 或分镜规避。唱演镜口型对不上属 `mv-review` 🟡（建议级），修法回本步开启 `演唱口型` 重出该 clip 或回 `mv-plan` 改分镜规避。
 
 ## 工作流
-1. 先跑 `mv-plan`，确认 `分镜/clip_plan.json` 与 `timeline_manifest.json` 已存在；若 `歌曲输入时序=后配歌曲`，必须已经补入最终 `歌/song.*` 并跑完真实 `节拍/beatgrid.json`。
+1. 先完成 `mv-plan → mv-score → mv-image/QC → mv-craft animatic/OTIO/picture_lock`。视频任务只消费已锁定的编辑合同；若 `歌曲输入时序=后配歌曲`，必须已经补入最终 `歌/song.*` 并跑完真实 beatgrid/歌词时间轴。
 2. 生成视频任务包：
    ```bash
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>"
    ```
-   脚本入口会先过 `mv-craft/scripts/gate.py video_jobs`：缺最终 `歌/song.*`、歌词、beatgrid、正式视觉蓝图、clip_plan 或首帧 PNG 时直接阻断。通过后产 schema v2 `出视频/jobs_manifest.json` + `出视频/prompt/Clip_XXX_take_YY.md`，并回写 `_进度.md`。每个 take 同时记录 `submit_prompt`、compiler 元数据、合同 hash 和提交 prompt hash。
+   脚本入口会先过 `mv-craft/scripts/gate.py video_jobs`：除最终歌/歌词/beatgrid/plan/首帧外，还要求新鲜 pacing receipt、完整出图生成收据、OTIO receipt 与具名 picture lock。通过后产 schema v3 `出视频/jobs_manifest.json`、逐 take prompt 和可用的 `sequence_units`；每个 take 记录 compiler/profile、合同 hash 和提交 prompt hash。
 3. 调 AI 前**先念「出视频规格」告知话术**（当前规格档 + 三档可改，见上节）→ 只提交逐 take Markdown 的 `后端编译提交 prompt`（负向字段若存在则走后端独立字段），不要提交完整合同。外部生成后登记：
    ```bash
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --register /path/to/take.mp4 --clip Clip_001 --take 1
    ```
+   登记会记录 take 文件 SHA-256。重新登记同一 take 会自动清空旧评分与 selected；已选 take 被重新评分也会取消 selected，必须重新挑版/QC，避免“换片或改分沿用旧签收”。
+   多镜头 `sequence_units` 生成的是一条母片，使用专门入口按锁定切点拆回逐镜（默认登记各镜 `take_01`）：
+   ```bash
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" \
+     --register-sequence /path/to/sequence.mp4 --unit Sequence_001 --take 1
+   ```
+   脚本先校验母片总时长，再精确拆段、静音、逐镜登记 hash；母片时长不符会拒绝，不能靠批量变速塞进 timeline。
 4. 对 take 评分/挑版：
    ```bash
-   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 5 --identity-score 4 --beat-score 5 --clarity-score 4   # 各项 1-5 分
+   python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --score Clip_001 --take 1 --motion-score 5 --identity-score 4 --beat-score 5 --clarity-score 4 --reviewer <name>
+   # match_action 镜另加 --seam-score；正面 performance_vocal 另加 --lip-sync-score
    python3 skills/mv-video/scripts/video_jobs.py "<制MV作品根>" --select Clip_001 --take 1
    ```
-   `--select` 要求 motion/identity/beat_fit/clarity 四项齐全、均分至少 3 且 identity 至少 3；例外必须 `--waiver-reason` 留痕。全部 clip 选中后自动运行继承合约和机械视频 QC，通过才回写进度。
+   `--select` 要求基础四项齐全、均分至少 3 且 identity 至少 3；连续动作镜和唱演镜还必须分别具名填写 seam/lip-sync 评分。例外必须同时给 `--waiver-reason` 与 `--reviewer`，匿名例外拒绝。全部 clip 选中后自动运行继承合约和机械视频 QC，通过才回写进度。
 5. 跑继承合约和视频 QC：
    ```bash
    python3 skills/mv-video/scripts/inherit_contract.py "<制MV作品根>"
    python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>"
    python3 skills/mv-video/scripts/video_qc.py "<制MV作品根>" --accept-semantic --reviewer <name>
    ```
-   缺 compiler、合同/manifest 漂移、外部歌曲策略不一致都属于 hard block。QC 会检查首/尾帧感知相似度、可用时检查多帧 InsightFace 身份、抽 start/mid/end 帧和接缝色彩；服装/道具/空间/轴线/动作/口型仍需逐镜人审并用 `--accept-semantic` 绑定当前视频 hash 签收。
-6. 下一步 mv-lyric-sync（字幕）/ mv-compose（合成，按 timeline 拼）。
+   缺 compiler、合同/manifest 漂移、外部歌曲策略不一致都属于 hard block。QC 按 `beat_cut / section_break / match_action / terminal` 分类解释信号；语义签收同时绑定当前 selected video hashes 和 seam-contract hash，换片或改接缝即自动失效。
+6. 下一步 `mv-compose`（歌词时间轴已在蓝图/分镜前完成；是否烧字幕由 `字幕语言` 决定）。
 
 ## 详细参考
 - 导演视角八维（视频版·只调动作/运镜/张力，其余继承首帧）：`mv/references/导演视角prompt.md §四`

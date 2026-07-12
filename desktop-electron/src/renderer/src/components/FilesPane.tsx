@@ -304,7 +304,11 @@ export function FilesPane({
   }, []);
 
   useEffect(() => {
-    if (sideWidth == null) return;
+    // FilesPane stays mounted while another left-rail pane is active so open
+    // editors keep their state. A hidden layer has a zero-sized bounding box;
+    // measuring it would clamp the shared sidebar width to zero and make the
+    // Files pane reopen at a different width than Changes/Search.
+    if (!sideVisible || sideWidth == null) return;
     const sync = () => {
       const pane = paneRef.current;
       if (!pane) return;
@@ -315,7 +319,7 @@ export function FilesPane({
     sync();
     window.addEventListener("resize", sync);
     return () => window.removeEventListener("resize", sync);
-  }, [sideWidth]);
+  }, [sideVisible, sideWidth]);
 
   useEffect(() => {
     setCollapsedDirs(new Set());

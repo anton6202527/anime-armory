@@ -1,0 +1,601 @@
+{
+  "schema_version": 1,
+  "kind": "comic_finishing_plan",
+  "chapter": "第1话",
+  "render_stage": "彩色完成稿",
+  "style": "自定义(新国风工笔淡彩页漫,水墨晕染幻境,低饱和矿物色,细线工笔,克制电影光影)",
+  "tone_strategy": "显式tone_plan",
+  "effects_strategy": "显式effects_plan",
+  "panels": [
+    {
+      "panel_id": "P001",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "细劲器物线，帷幕和空椅轮廓清楚，落花用飞白。",
+      "black_fill_plan": "帷幕后景一块克制墨黑，不吞掉桌椅轮廓。",
+      "tone_plan": "冷月灰蓝为中灰，残烛赭红为唯一暖点。",
+      "value_plan": "空桌亮、帷幕暗、远墙中灰，三值清楚。",
+      "effects_plan": "无速度线；仅用飘落花瓣引导视线。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P002",
+      "layout_weight": "compact",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "水纹与花瓣用轻线，倒影边缘水墨化。",
+      "black_fill_plan": "涟漪中心留白，外围倒影逐渐墨黑。",
+      "tone_plan": "月白、墨青、极淡藕荷。",
+      "value_plan": "花亮、倒影暗、水面中灰。",
+      "effects_plan": "涟漪兼作转场圆环，不加漫画速度线。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "滴",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P003",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "山石与云海工笔轮廓，天裂用飞白。",
+      "black_fill_plan": "断崖底部压暗，天空保留大面积亮。",
+      "tone_plan": "石青、墨青、低饱和朱砂。",
+      "value_plan": "天裂亮、女娲余影中、断崖暗。",
+      "effects_plan": "云气流线指向天裂，不遮住石阵。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "轰隆",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P004",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "石纹细密但中心裂纹清楚，苔痕低细节。",
+      "black_fill_plan": "石底阴影压实，周围云雾留白。",
+      "tone_plan": "青灰、苔绿、冷白。",
+      "value_plan": "裂纹亮、石体中灰、石底暗。",
+      "effects_plan": "无；靠空白制造孤独。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P005",
+      "layout_weight": "compact",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "石纹与露滴精细，背景极简。",
+      "black_fill_plan": "裂纹深处一点墨黑。",
+      "tone_plan": "冷青灰，露滴保留白。",
+      "value_plan": "露滴亮、石中、裂纹暗。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "滴",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P006",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "衣纹用流畅长线，脸和手用更细线。",
+      "black_fill_plan": "道士内袍与山石暗部形成两块墨色，不吞轮廓。",
+      "tone_plan": "旧赭、青灰、月白。",
+      "value_plan": "脸亮、外袍中、山路暗。",
+      "effects_plan": "云风线顺衣摆方向，保持双脚落地。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙沙",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P007",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "道士手与侧脸工笔，幻景边缘水墨化。",
+      "black_fill_plan": "云窗外围墨黑，灯宴内部保持清楚层次。",
+      "tone_plan": "月白、低朱、墨青、淡金。",
+      "value_plan": "灯宴亮、云边暗、顽石中灰。",
+      "effects_plan": "墨云形成圆窗，不画魔法光圈。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P008",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "石纹与手指工笔清线，光边不糊。",
+      "black_fill_plan": "手与石之间留亮隙。",
+      "tone_plan": "冷青灰中出现第一点暖玉。",
+      "value_plan": "裂纹亮、手中、背景暗。",
+      "effects_plan": "极细环形光，不用法阵。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嗡",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P009",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "脸部细线，衣纹长线，表情克制。",
+      "black_fill_plan": "二人之间云隙压一小块暗，保留脸部亮。",
+      "tone_plan": "旧赭、青灰、月白。",
+      "value_plan": "脸亮、衣中暗、云背景亮灰。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P010",
+      "layout_weight": "compact",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "裂纹清楚，苔叶简洁。",
+      "black_fill_plan": "两侧影子形成括号状墨黑。",
+      "tone_plan": "冷青与一点暖玉。",
+      "value_plan": "裂纹亮、石中、影子暗。",
+      "effects_plan": "微弱呼吸光，不加爆闪。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "嗡——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P011",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "人物工笔清线，石屑用干笔飞白。",
+      "black_fill_plan": "石后小块墨黑衬亮触点。",
+      "tone_plan": "冷青环境与暖玉核心。",
+      "value_plan": "触点最亮、人物中、石后最暗。",
+      "effects_plan": "螺旋墨线追随石屑向内收缩，不遮脸与手。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "喀；嗡",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P012",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "手部工笔细线，玉轮廓极净。",
+      "black_fill_plan": "背景几乎无黑，仅袖内一块墨色。",
+      "tone_plan": "月白玉、淡胭脂沁、旧赭袖口。",
+      "value_plan": "玉最亮、手中、袖暗。",
+      "effects_plan": "无光爆；靠留白与材质反光完成揭示。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P013",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "三生石与草叶工笔，雾和水用淡墨。",
+      "black_fill_plan": "三生石背面一块墨色，水面与雾大留白。",
+      "tone_plan": "月白、石青、极淡朱砂。",
+      "value_plan": "雾亮、石中暗、草叶中亮。",
+      "effects_plan": "水纹承接上一格玉纹，不加光圈。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "潺潺",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P014",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "人物与草叶工笔细线，水雾软边。",
+      "black_fill_plan": "发髻与袖内小块墨黑，脸和手保持亮。",
+      "tone_plan": "月白、暖玉、朱砂细点。",
+      "value_plan": "甘露亮、人物中、三生石暗。",
+      "effects_plan": "只画一滴甘露的微光，不做法术束。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "滴",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P015",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "脸与手工笔精线，草叶到衣袖用飞白过渡。",
+      "black_fill_plan": "长发形成稳定墨色轮廓，不遮脸与手。",
+      "tone_plan": "月白、灰紫、淡青、极淡朱边。",
+      "value_plan": "脸和手亮、长发暗、雾中灰。",
+      "effects_plan": "叶脉转为衣纹，墨晕沿形态边缘展开。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "簌",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P016",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "侧脸、睫毛、泪珠工笔极细线，远景背影简化。",
+      "black_fill_plan": "长发墨黑稳定，雾中留白。",
+      "tone_plan": "月白、灰紫、墨黑、朱砂一点。",
+      "value_plan": "泪珠最亮、脸中亮、长发暗。",
+      "effects_plan": "泪珠内纹理溶成下一格宝玉反光。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P017",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "人物、书案、芭蕉工笔线，梦雾软边。",
+      "black_fill_plan": "发与桌下暗部压黑，脸和手保持亮。",
+      "tone_plan": "竹青、米褐、暖白，梦雾月白。",
+      "value_plan": "窗亮、人物中、桌下暗。",
+      "effects_plan": "瓷盏反光化为墨雾转场。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "沙——",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P018",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "三人面部清线，云路飞白，书案木纹若隐若现。",
+      "black_fill_plan": "衣内暗部三块分离，避免合成一团。",
+      "tone_plan": "玉白、旧赭、青灰、竹青。",
+      "value_plan": "宝玉亮、三张脸中亮、雾后暗。",
+      "effects_plan": "木纹向云纹自然过渡，不使用光圈。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P019",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "手部、袖口、宝玉轮廓极清楚，脸部细线。",
+      "black_fill_plan": "袖内墨黑衬亮手和玉，不遮手指。",
+      "tone_plan": "玉白、竹青、旧赭、青灰。",
+      "value_plan": "玉最亮、手和脸中亮、衣袖暗。",
+      "effects_plan": "仅玉面微反光。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P020",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "牌坊石纹工笔，云路水墨，三人轮廓清楚。",
+      "black_fill_plan": "画右上雷云压黑，人物脸与牌坊边缘保留亮。",
+      "tone_plan": "玉白、墨青、旧赭、竹青。",
+      "value_plan": "门后亮、雷云暗、人物中。",
+      "effects_plan": "雷云预聚，不提前画闪电。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "隆……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P021",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "人物与家具清线，闪电负形，芭蕉叶线条清楚。",
+      "black_fill_plan": "残留梦云短暂墨黑，现实侧迅速转亮。",
+      "tone_plan": "暖白、竹青、墨青残影。",
+      "value_plan": "闪电/窗光亮、人物中、梦云暗。",
+      "effects_plan": "斜向白闪连接梦门与现实窗，不遮脸和手。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "轰！",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P022",
+      "layout_weight": "medium",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "父女脸和手极清楚，衣纹柔和，背景低细节。",
+      "black_fill_plan": "父亲发与门内暗部压黑，孩子脸和手保持亮。",
+      "tone_plan": "竹青、藕荷、米白、暖木色。",
+      "value_plan": "孩子脸亮、父亲中、门内暗。",
+      "effects_plan": "无。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P023",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "四张脸与托抱/步态清线，破衣用干笔但不脏乱。",
+      "black_fill_plan": "云影落在街巷中部，人物脸保留亮。",
+      "tone_plan": "现实暖竹色被一层冷灰压过，和尚旧赭、道士青灰。",
+      "value_plan": "英莲脸亮、四人中、门内与云影暗。",
+      "effects_plan": "云影和衣摆风线暗示异常，不用灵光。",
+      "lettering_sfx_plan": {
+        "mode": "none",
+        "integration": "no drawn SFX",
+        "shape": ""
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    },
+    {
+      "panel_id": "P024",
+      "layout_weight": "heavy",
+      "art_stage_sequence": [
+        "rough",
+        "pencil",
+        "lineart",
+        "ink_blacks",
+        "tone_or_color",
+        "effects",
+        "lettering_sfx"
+      ],
+      "ink_plan": "背影轮廓稳定，街巷与门楼工笔，远景简化。",
+      "black_fill_plan": "门内和页底形成大块墨黑，人物轮廓留亮边。",
+      "tone_plan": "竹青、米褐、墨青，朱砂火星唯一高纯度色。",
+      "value_plan": "父女边光中亮、门内暗、远景中灰、火星最亮。",
+      "effects_plan": "一粒火星和极淡铃声线，不画火焰爆发。",
+      "lettering_sfx_plan": {
+        "mode": "drawn_sfx",
+        "text_hint": "铃……",
+        "integration": "integrate with action path or impact zone; do not cover face, hands, key props, or final dialogue slots",
+        "shape": "match sound quality: jagged for impact, stretched for speed, soft for ambience"
+      },
+      "no_bake_text_contract": "dialogue and narration stay out of raw images; no blank bubbles/caption boxes/UI text/watermark/garbled text; drawn SFX only when listed in lettering_sfx_plan"
+    }
+  ]
+}

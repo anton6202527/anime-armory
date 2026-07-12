@@ -134,7 +134,7 @@ By default, a new gate run replaces previous gate events for the same episode an
 |---|---|---|
 | `budget_cap` | 单币种累计成本上限，超→critical | None |
 | `budget_warn_ratio` | 达上限该比例先 warn | 0.8 |
-| `final_pass_rate_floor` | 总通过率低于→critical（逐集低于→warn 定位） | None |
+| `final_pass_rate_floor` | **可交付通过率**（=deliverable_pass_rate，任一 QA 阻断即 0）低于→critical（逐集低于→warn 定位）。注意：有 block 时必为 0 → 必触发，与 `qa_blockers_ceiling=0` 语义重叠；想约束**生成通过率**请勿用此键 | None |
 | `redraw_rate_ceiling` | 重抽率高于→warn | None |
 | `qa_blockers_ceiling` | QA 阻断数 > 此→critical | 0 |
 | `cost_per_min_ceiling` | 每分钟成本上限（单币种）→warn | None |

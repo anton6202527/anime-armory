@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from datetime import date
@@ -38,11 +39,11 @@ def write_text(path: str, text: str) -> None:
 
 
 def parse_timecode(value: str) -> dict[str, str]:
-    """Parse MM:SS|severity|note."""
+    """Parse MM:SS[-MM:SS]|severity|note|status."""
     parts = [p.strip() for p in str(value).split("|")]
-    while len(parts) < 3:
+    while len(parts) < 4:
         parts.append("")
-    return {"timecode": parts[0], "severity": parts[1] or "note", "note": parts[2]}
+    return {"timecode": parts[0], "severity": (parts[1] or "note").lower(), "note": parts[2], "status": (parts[3] or "open").lower()}
 
 
 def score_value(value: Any) -> int:
@@ -58,11 +59,22 @@ def manifest_takes(root: str) -> list[dict[str, Any]]:
     return manifest.get("takes") if isinstance(manifest.get("takes"), list) else []
 
 
+def sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def build_review(root: str, args: argparse.Namespace) -> dict[str, Any]:
     takes = manifest_takes(root)
     existing = load_json(os.path.join(root, "歌", "take_review.json"), {}) or {}
     reviews = existing.get("reviews") if isinstance(existing.get("reviews"), list) else []
     if args.take:
+        manifest_row = next((item for item in takes if item.get("take_id") == args.take), {})
+        audio_rel = str(manifest_row.get("audio_path") or "")
+        audio_path = os.path.join(root, audio_rel)
         row = {
             "take_id": args.take,
             "blind_label": args.blind_label,
@@ -80,6 +92,8 @@ def build_review(root: str, args: argparse.Namespace) -> dict[str, Any]:
             "strengths": args.strength,
             "risks": args.risk,
             "notes": args.notes,
+            "audio_path": audio_rel,
+            "audio_sha256": sha256_file(audio_path) if audio_rel and os.path.isfile(audio_path) else "",
         }
         row["total_score"] = sum(row["scores"].values())
         reviews = [r for r in reviews if r.get("take_id") != args.take]
@@ -147,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--arrangement-score", type=int, default=0)
     ap.add_argument("--mix-score", type=int, default=0)
     ap.add_argument("--fit-score", type=int, default=0)
-    ap.add_argument("--timecode", action="append", default=[], help="MM:SS|severity|note")
+    ap.add_argument("--timecode", action="append", default=[], help="MM:SS[-MM:SS]|severity|note|open/resolved/accepted")
     ap.add_argument("--strength", action="append", default=[])
     ap.add_argument("--risk", action="append", default=[])
     ap.add_argument("--notes", default="")

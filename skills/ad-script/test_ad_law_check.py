@@ -26,7 +26,17 @@ class AdLawCheckTest(unittest.TestCase):
         self.assertIn("国家级", terms(f))
         self.assertIn("最佳", terms(f))
         self.assertIn("全国第一", terms(f))
-        self.assertTrue(all(x["severity"] == "block" for x in f if x["term"] in ("国家级", "最佳", "全国第一")))
+        self.assertTrue(all(x["severity"] == "block" for x in f if x["term"] in ("国家级", "最佳")))
+        nationwide = [x for x in f if x["term"] == "全国第一"][0]
+        self.assertEqual(nationwide["severity"], "warn")
+        self.assertTrue(nationwide["evidence_required"])
+
+    def test_contextual_claim_is_not_auto_convicted(self):
+        f = alc.scan_text("这是截至2026年6月本系列最新型号，销量第一。")
+        hits = [x for x in f if x["term"] in {"最新", "销量第一"}]
+        self.assertTrue(hits)
+        self.assertTrue(all(x["severity"] == "warn" for x in hits))
+        self.assertTrue(all("范围" in x["suggestion"] for x in hits))
 
     def test_medical_terms_block(self):
         f = alc.scan_text("七天根治，无副作用，100%有效。")
@@ -101,6 +111,7 @@ class AdLawCheckTest(unittest.TestCase):
         self.assertIn("遥遥领先", t)
         self.assertIn("领导者", t)
         self.assertIn("填补国内空白", t)
+        self.assertTrue(all(x["severity"] == "warn" for x in f))
 
     def test_cosmetics_forbidden_efficacy(self):
         f = alc.scan_text("祛斑生发，七天瘦身。")

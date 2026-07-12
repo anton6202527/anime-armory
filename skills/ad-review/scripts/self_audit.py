@@ -251,6 +251,36 @@ def check_image_backend_docs(root: Path, findings: List[Finding]) -> None:
             "关键文档已覆盖 AD_APPROVED_IMAGE_BACKENDS，未把逆向后端当作可选放行。")
 
 
+def check_image_model_channel_split(root: Path, findings: List[Finding]) -> None:
+    """C5: generation identity is a concrete model; channel is a separate access path."""
+    contract, error = load_contract(root)
+    cpath = root / "skills" / "ad-craft" / "scripts" / "contract.py"
+    if error or contract is None:
+        add(findings, "block", "生图模型/渠道分列", rel(root, cpath),
+            f"无法核验生图路由契约：{error or 'contract missing'}")
+        return
+    choices = getattr(contract, "CHOICE_POINTS", {}) or {}
+    defaults = getattr(contract, "DEFAULT_SETTINGS", {}) or {}
+    missing = []
+    if "生图模型" not in choices or "生图渠道" not in choices:
+        missing.append("CHOICE_POINTS 生图模型/生图渠道")
+    if not defaults.get("生图模型") or not defaults.get("生图渠道"):
+        missing.append("DEFAULT_SETTINGS 生图模型/生图渠道")
+    init_text = text(root / "skills" / "ad" / "scripts" / "init_project.py")
+    gate_text = text(root / "skills" / "ad-craft" / "scripts" / "gate.py")
+    if not all(token in init_text for token in ("image_model", "image_channel")):
+        missing.append("init_project image_model/image_channel")
+    if not all(token in gate_text for token in ("classify_image_model", "classify_image_channel", "image_output_route_missing")):
+        missing.append("gate model/channel provenance")
+    if missing:
+        add(findings, "block", "生图模型/渠道分列", ", ".join(missing),
+            "生图生成者仍可能退化成 agent/厂商/渠道壳，违反具体模型指代与可审计路由。",
+            "新项目分列 生图模型+生图渠道；每个已落图 job 同时记录 model/channel，旧 生图AI 只作迁移。")
+    else:
+        add(findings, "info", "生图模型/渠道分列", "skills/ad-craft/scripts/contract.py",
+            "生图模型与访问渠道已分列，init 与落图 gate 均消费。")
+
+
 def check_ai_usage_disclosure(root: Path, findings: List[Finding]) -> None:
     """AI 使用披露文档一致性：ai_usage.py 存在，且 AI_VISUAL_USAGE_MODES 各模式在披露脚本里被引用。"""
     contract, error = load_contract(root)
@@ -367,15 +397,133 @@ def check_release_order_and_evidence(root: Path, findings: List[Finding]) -> Non
     manifest = root / "skills" / "ad-craft" / "scripts" / "compliance_manifest.py"
     producer = root / "skills" / "ad-craft" / "scripts" / "producer_pack.py"
     if manifest.is_file() and producer.is_file():
-        required = ("evidence_file", "method", "evidence_date", "territory", "approved_by")
+        required = ("evidence_type", "evidence_file", "method", "evidence_date", "territory", "approved_by",
+                    "source_name", "source_locator", "applicable_scope", "validity", "display_disclosure",
+                    "issuer_qualification", "representativeness")
         missing = [token for token in required if token not in text(producer)]
         if missing:
             add(findings, "block", "claim证据结构", rel(root, producer),
                 "claim 证据缺结构化字段：" + ", ".join(missing),
-                "claim 必须记录证据文件、方法、日期、适用地区和批准人。")
+                "claim 必须按证据类型记录来源、方法/资质/样本、条件、范围、有效期、披露文案和批准人。")
         else:
             add(findings, "info", "claim证据结构", rel(root, producer),
                 "claim 依据与发布 compliance manifest 均已机器化。")
+        rights_required = ("RIGHTS_STATUSES", "media_scope", "valid_from", "valid_until", "license_expired")
+        rights_missing = [token for token in rights_required if token not in text(producer)]
+        if rights_missing:
+            add(findings, "block", "授权证据结构", rel(root, producer),
+                "授权合同缺结构化字段/期限闸：" + ", ".join(rights_missing),
+                "真人/音乐/字体/素材逐项记录状态、证据、地域、媒介范围、期限和批准人。")
+        else:
+            add(findings, "info", "授权证据结构", rel(root, producer),
+                "授权状态、证据文件、地域/媒介范围与期限已机器化。")
+
+
+def check_stage_acceptance_architecture(root: Path, findings: List[Finding]) -> None:
+    """每阶段必须有同一套可执行标准；不能靠进度表自由手填 ✅。"""
+    contract, error = load_contract(root)
+    cpath = root / "skills" / "ad-craft" / "scripts" / "contract.py"
+    if error or contract is None:
+        return
+    table = getattr(contract, "AD_STAGE_TABLE", None)
+    if not isinstance(table, list) or not table:
+        # 兼容 self_audit 的极简 fixture / 旧仓：其它检查仍可独立运行。
+        add(findings, "info", "逐阶段验收", rel(root, cpath), "未声明 AD_STAGE_TABLE，跳过逐阶段验收架构检查。")
+        return
+    keys = [row.get("key") for row in table if isinstance(row, dict) and row.get("key")]
+    criteria = getattr(contract, "STAGE_CRITERIA", None)
+    allowed = {"deterministic", "official", "house", "human", "heuristic"}
+    missing = []
+    malformed = []
+    for key in keys:
+        rows = criteria.get(key) if isinstance(criteria, dict) else None
+        if not rows:
+            missing.append(key)
+            continue
+        if any(not isinstance(row, dict) or not row.get("id") or row.get("evidence") not in allowed
+               or not row.get("standard") or not row.get("authority") or not row.get("threshold")
+               or not row.get("on_fail") for row in rows):
+            malformed.append(key)
+    if missing or malformed:
+        add(findings, "block", "逐阶段验收", rel(root, cpath),
+            f"阶段标准缺失={missing or '无'}，证据类型/依据/阈值/回退异常={malformed or '无'}。",
+            "为每阶段补 STAGE_CRITERIA 的 evidence/authority/standard/threshold/on_fail。")
+        return
+
+    required_files = (
+        "skills/ad-craft/scripts/stage_acceptance.py",
+        "skills/ad-review/scripts/human_signoff.py",
+        "skills/ad-feedback/scripts/experiment_plan.py",
+    )
+    absent = [path for path in required_files if not (root / path).is_file()]
+    consumers = {
+        "skills/ad-craft/scripts/progress_set.py": "stage_acceptance.py",
+        "skills/ad-image/scripts/render_dreamina.py": "stage_acceptance.py",
+        "skills/ad-video/scripts/render_dreamina.py": "stage_acceptance.py",
+        "skills/ad-compose/compose.sh": "stage_acceptance.py",
+    }
+    bypassed = [path for path, token in consumers.items()
+                if (root / path).is_file() and token not in text(root / path)]
+    profiles = getattr(contract, "DELIVERY_PROFILE", {})
+    profile_bad = [name for name, row in profiles.items()
+                   if not isinstance(row, dict) or not row.get("authority") or not row.get("source")]
+    if not callable(getattr(contract, "resolve_delivery_profile", None)):
+        profile_bad.append("resolve_delivery_profile()")
+    if not isinstance(getattr(contract, "HOUSE_MASTER_PROFILE", None), dict):
+        profile_bad.append("HOUSE_MASTER_PROFILE")
+    if absent or bypassed or profile_bad:
+        add(findings, "block", "逐阶段验收", ", ".join(absent + bypassed) or rel(root, cpath),
+            f"验收脚本缺失={absent or '无'}；完成/付费入口旁路={bypassed or '无'}；交付标准无权威来源={profile_bad or '无'}。",
+            "恢复统一 stage_acceptance；进度 ✅ 与 image/video/compose 入口必须消费；每个 delivery profile 标 authority/source。")
+    else:
+        add(findings, "info", "逐阶段验收", "skills/ad-craft/scripts/stage_acceptance.py",
+            f"{len(keys)} 个阶段均有带证据类型的标准；手工完成和付费入口无验收旁路，人工签收/实验预注册已落地。")
+
+
+def check_final_release_evidence_architecture(root: Path, findings: List[Finding]) -> None:
+    """P0/P1 final-file evidence must be executable, connected and regression-tested."""
+    contract, error = load_contract(root)
+    if error or contract is None or not getattr(contract, "AD_STAGE_TABLE", None):
+        add(findings, "info", "最终交付证据链", "skills/ad-craft/scripts/contract.py",
+            "旧版/极简契约未声明阶段表，跳过最终交付证据链架构检查。")
+        return
+    required = (
+        "skills/ad-craft/scripts/migrate_project.py",
+        "skills/ad-craft/scripts/locale_matrix.py",
+        "skills/ad-craft/scripts/release_variant_manifest.py",
+        "skills/ad-craft/scripts/dependency_graph.py",
+        "skills/ad-compose/rendered_text_qc.py",
+        "skills/ad-compose/provenance_qc.py",
+        "skills/ad-voice/asr_consistency.py",
+        "skills/ad-review/scripts/final_media_consistency.py",
+        "skills/ad-craft/scripts/test_golden_project.py",
+    )
+    absent = [path for path in required if not (root / path).is_file()]
+    consumers = {
+        "skills/ad-compose/deliver.py": ("rendered_text_qc", "asr_consistency", "provenance_qc", "accessibility_qc"),
+        "skills/ad-craft/scripts/compliance_manifest.py": ("locale_matrix", "release_variant_manifest", "provenance_qc"),
+        "skills/ad-craft/scripts/progress_set.py": ("dependency_graph.accept_stage",),
+        "skills/ad-review/scripts/consistency_findings.py": ("final_media_consistency",),
+        "skills/ad-review/scripts/human_signoff.py": ("final_contact_sheets", "evidence_sha256"),
+    }
+    bypassed = []
+    for path, tokens in consumers.items():
+        raw = text(root / path)
+        if not raw or any(token not in raw for token in tokens):
+            bypassed.append(path)
+    criteria = getattr(contract, "STAGE_CRITERIA", {}) or {}
+    criterion_ids = {str(row.get("id")) for rows in criteria.values() for row in (rows or []) if isinstance(row, dict)}
+    required_criteria = {"rendered_text_delivery", "asr_delivery", "locale_release", "variant_release",
+                         "provenance_release", "dependency_lineage"}
+    missing_criteria = sorted(required_criteria - criterion_ids)
+    if absent or bypassed or missing_criteria:
+        add(findings, "block", "最终交付证据链", ", ".join(absent + bypassed) or "skills/ad-craft/scripts/contract.py",
+            f"脚本缺失={absent or '无'}；调度旁路={bypassed or '无'}；阶段标准缺失={missing_criteria or '无'}。",
+            "恢复 migration/locale/release variant/final pixel/ASR/provenance/contact sheet/dependency graph，"
+            "并让 deliver/compliance/review/progress 与 golden project 测试实际消费。")
+    else:
+        add(findings, "info", "最终交付证据链", "skills/ad-craft/scripts/test_golden_project.py",
+            "旧项目迁移、locale、逐交付 SHA、最终像素、ASR、实际 provenance、contact sheet 与依赖哈希图均已接入且有全阶段 golden 回归。")
 
 
 # ── 编排 + 渲染 ──────────────────────────────────────────────────────────────
@@ -386,11 +534,14 @@ def audit(root: Path) -> Dict[str, Any]:
     check_ad_law_single_entry(root, findings)
     check_delivery_specs_external(root, findings)
     check_image_backend_docs(root, findings)
+    check_image_model_channel_split(root, findings)
     check_ai_usage_disclosure(root, findings)
     check_choice_point_catalog(root, findings)
     check_paid_runner_gates(root, findings)
     check_demo_literals(root, findings)
     check_release_order_and_evidence(root, findings)
+    check_stage_acceptance_architecture(root, findings)
+    check_final_release_evidence_architecture(root, findings)
     counts = {sev: sum(1 for item in findings if item["sev"] == sev) for sev in ("block", "warn", "info")}
     return {
         "kind": "ad_self_audit",

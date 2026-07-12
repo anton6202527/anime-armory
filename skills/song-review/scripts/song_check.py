@@ -97,8 +97,9 @@ def check_lyrics(root, meta, spread_max):
 
     tags = [t for t, _ in sections]
     # 有无副歌
-    if not any("chorus" in t or "副歌" in t for t in tags):
-        add(BLOCK, "词", "lyrics.md", "全曲无 [chorus] 副歌段——副歌是全曲核心与 hook 锚（songcraft.md §副歌）")
+    form_type = str((meta or {}).get("song_form_type") or (meta or {}).get("form_type") or "sectional").lower()
+    if form_type not in {"through_composed", "through-composed", "通谱", "rap", "spoken"} and not any("chorus" in t or "副歌" in t for t in tags):
+        add(BLOCK, "词", "lyrics.md", "当前 sectional/pop 曲式无 [chorus] 副歌段；若为通谱/说唱，请在 _meta.song_form_type 明确。")
 
     # 段落数 vs _meta.structure
     if meta and isinstance(meta.get("structure"), list):
@@ -172,9 +173,6 @@ def check_audio(root, progress_text, meta=None):
 
     if rate and rate < MIN_RATE:
         add(WARN, "音频", "歌/song.wav", f"采样率 {rate}Hz < {MIN_RATE}Hz，投放偏低（重生成/导出提采样率）")
-    if dur and dur < 30:
-        add(WARN, "音频", "歌/song.wav", f"时长仅 {dur:.1f}s——可能是 demo 片段而非整首成品（确认是否当成品用）")
-
     if peak is None:
         add(INFO, "音频", "歌/song.wav", f"非 16bit PCM（{sw*8}bit），跳过削波/静音幅度分析")
         return
@@ -241,6 +239,17 @@ def check_take_manifest(root):
             add(BLOCK, "挑版", "歌/takes_manifest.json", f"selected_take={selected} 不在 takes 列表")
         elif hit.get("audio_path") and not os.path.exists(os.path.join(root, hit["audio_path"])):
             add(BLOCK, "挑版", hit["audio_path"], "selected_take 对应音频不存在")
+        receipt = manifest.get("selection_receipt") if isinstance(manifest.get("selection_receipt"), dict) else {}
+        if not receipt:
+            add(WARN, "挑版", "歌/takes_manifest.json", "selected_take 缺 selection_receipt，无法证明试听版、pre-master 与当前 song.wav 同源。")
+        elif os.path.exists(song_path):
+            import hashlib
+            h = hashlib.sha256()
+            with open(song_path, "rb") as f:
+                for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                    h.update(chunk)
+            if receipt.get("song_audio_sha256") != h.hexdigest():
+                add(BLOCK, "挑版", "歌/song.wav", "song.wav 已在挑版后变化，selection_receipt 失效。")
 
 
 def check_compliance(root, meta):

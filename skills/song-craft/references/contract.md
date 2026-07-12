@@ -62,10 +62,14 @@
 | `compose_plan` | 作曲任务包 | `song-compose/scripts/compose_song.py` | settings + lyrics |
 | `takes` | 多版生成 / 注册 | backend + `compose_song.py register` | take manifest |
 | `selection` | 挑版定稿 | `compose_song.py score/select` | user-listening |
+| `revision` | timecode 局部返修 | `song-compose/scripts/revision_plan.py` + backend | blocking notes resolved/accepted |
 | `cover` | 翻唱/换声 | `song-cover` | voice authorization |
 | `review` | 质检 | `song-review` | machine + listening checklist |
+| `mix_signoff` | 表演/混音签核 | `song-review/scripts/mix_signoff.py` | receipt bound to pre-master hash |
+| `master_delivery` | 交付母版格式归一 | `song-craft/scripts/master_delivery.py` | mix signoff + lossless receipt |
 | `master_qc` | 混音/母带检查 | `song-review/scripts/master_check.py` | audio delivery quality |
 | `rights` | 权益元数据 | `song-craft/scripts/rights_metadata.py` | split sheet + rights metadata |
+| `release_metadata` | 发行级元数据 | `song-craft/scripts/release_metadata.py` | roles + explicit/date/territory/P/C lines |
 | `handoff` | 发布交付包 | `song-craft/scripts/release_pack.py` | release pack evidence |
 | `feedback` | 发行数据回测 | `song-feedback/scripts/feedback_ingest.py` | real listener/platform data |
 

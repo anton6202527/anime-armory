@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -117,3 +118,42 @@ def test_scaffold_slices_source_by_chapter_heading(tmp_path: Path) -> None:
     assert any("第2章 新事" in item for item in excerpts)
     assert all("source_url" not in item for item in excerpts)
     assert all("第1章" not in item for item in excerpts)
+
+
+def test_docx_source_is_discovered_and_extracted(tmp_path: Path) -> None:
+    root = tmp_path / "project"
+    source_dir = root / "源本"
+    source_dir.mkdir(parents=True)
+    docx = source_dir / "古书.docx"
+    document_xml = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+    <w:p><w:r><w:t>第1章 第一回</w:t></w:r></w:p>
+    <w:p><w:r><w:t>太祖曰：</w:t><w:tab/><w:t>善哉。</w:t></w:r></w:p>
+    <w:p><w:r><w:t>第2章 第二回</w:t></w:r></w:p>
+  </w:body>
+</w:document>"""
+    with zipfile.ZipFile(docx, "w") as archive:
+        archive.writestr("word/document.xml", document_xml)
+
+    paths = gate.candidate_source_paths(root, [])
+    assert paths == [docx]
+    records, text = gate.load_source_texts(root, paths)
+    assert records[0]["format"] == "docx"
+    assert "第1章 第一回" in text
+    assert "太祖曰：\t善哉。" in text
+
+    report = gate.scaffold_report(
+        root,
+        "第1话",
+        records,
+        text,
+        "文言/古汉语",
+        ["manual_source_language"],
+        "中文",
+        True,
+        4,
+    )
+    excerpts = [segment["source_excerpt"] for segment in report["segments"]]
+    assert any("太祖曰" in item for item in excerpts)
+    assert all("第2章" not in item for item in excerpts)

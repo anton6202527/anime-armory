@@ -86,6 +86,29 @@ def resolve_target(platform: str) -> float:
     return PLATFORM_TARGETS.get((platform or "").strip().lower(), PLATFORM_TARGETS["default"])
 
 
+def resolve_platform_key(root: str, platform: Optional[str]):
+    """(platform_key, source)：CLI 显式给了就用；缺省从 <root>/_设置.md「目标平台」解析。
+
+    此前 compose.sh 固定传 default（-16），抖音/TikTok 集实际该按 -14 判——目标错档让
+    响度门形同虚设。映射复用 deliver.PLATFORM_LOUDNESS_KEY（延迟导入避免与
+    deliver→loudness_conform 的模块级引用成环）；解析失败回退 default，不阻断。"""
+    if platform:
+        return platform, "cli"
+    try:
+        here = os.path.dirname(os.path.abspath(__file__))
+        if here not in sys.path:
+            sys.path.insert(0, here)
+        import deliver  # noqa: PLC0415  同目录·延迟导入防环
+        p = os.path.join(root, "_设置.md")
+        text = open(p, encoding="utf-8").read() if os.path.isfile(p) else ""
+        setting = deliver.parse_setting(text, "目标平台")
+        if setting:
+            return deliver.loudness_key_for_platform(setting), f"settings:{setting}"
+    except Exception:
+        pass
+    return "default", "fallback"
+
+
 # ---------- 音频测量（需 ffmpeg · 缺则 None） ----------
 
 def _parse_loudnorm_json(stderr: str) -> Optional[dict]:
@@ -205,17 +228,20 @@ def main(argv: List[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
     ap.add_argument("episode")
-    ap.add_argument("--platform", default="default",
-                    help="youtube/bilibili/tiktok/broadcast/default（dated 候选 snapshot）")
+    ap.add_argument("--platform", default=None,
+                    help="youtube/bilibili/tiktok/broadcast/default（dated 候选 snapshot）；"
+                         "缺省时自动读 _设置.md「目标平台」映射")
     ap.add_argument("--tol", type=float, default=DEFAULT_TOL)
     ap.add_argument("--tp-ceiling", type=float, default=DEFAULT_TP_CEILING)
     ap.add_argument("--ffmpeg", default="ffmpeg")
     ap.add_argument("--json", action="store_true")
     ns = ap.parse_args(argv)
-    res = analyze(ns.root.rstrip("/"), ns.episode, ns.platform, ns.tol, ns.tp_ceiling, ns.ffmpeg)
+    platform, platform_source = resolve_platform_key(ns.root.rstrip("/"), ns.platform)
+    res = analyze(ns.root.rstrip("/"), ns.episode, platform, ns.tol, ns.tp_ceiling, ns.ffmpeg)
+    res["platform_source"] = platform_source
     if ns.json:
         print(json.dumps(res, ensure_ascii=False, indent=2)); return 0
-    print(f"=== 成片响度达标门（L2-loud·{ns.platform} 目标 {res['target']} LUFS）：{ns.root} {ns.episode} ===")
+    print(f"=== 成片响度达标门（L2-loud·{platform} 目标 {res['target']} LUFS·来源 {platform_source}）：{ns.root} {ns.episode} ===")
     for note in res["notes"]:
         print("ℹ️ " + note)
     if not res["available"]:

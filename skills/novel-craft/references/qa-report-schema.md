@@ -84,7 +84,7 @@
 | `reader_telemetry_summary` | object/null | 否 | `novel-feedback` 聚合摘要：章节完读/弃读/评论/weakest_chapters |
 | `reader_panel_path` | string/null | 否 | `评分/reader_panel_signals.json`；模拟读者信号存在时填写 |
 | `benchmark_percentile` | object/null | 否 | 合规参考分布百分位；无 `reference_distribution*.json` 时为 null |
-| `scores` | list[object] | 是 | 七维分数 |
+| `scores` | list[object] | 是 | 八维分数（2026-07 起含 `novelty` 新颖度/想象力维度） |
 | `judge_debias` | object/null | 否 | 多判官去偏聚合结果；`method=persona_panel` 表示同模型多 persona 低信心参考，`method=judge_panel` 表示 ≥2 模型家族；推荐 ≥3 不同模型家族，高方差维度标 `abstain`/升级，不改原始分 |
 | `judge_bias_advisory` | object/null | 否 | 长度/格式中立性提示；只提醒复核，不改 `raw_score` 或 `total_score` |
 | `repetition_prior` | object/null | 否 | 跨章重复率/机械文风确定性先验；由 `novel/_lib/repetition.py` 生成，喂 retention 维度 |

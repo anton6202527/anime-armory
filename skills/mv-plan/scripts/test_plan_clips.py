@@ -6,6 +6,7 @@ Can run without pytest:
     python3 skills/mv-plan/scripts/test_plan_clips.py
 """
 import json
+import hashlib
 import os
 import subprocess
 import sys
@@ -61,12 +62,60 @@ class PlanClipsTest(unittest.TestCase):
             with open(timeline_path, encoding="utf-8") as f:
                 timeline = json.load(f)
             self.assertEqual(timeline["song_path"], "歌/song.mp3")
+            self.assertEqual(plan["schema_version"], 2)
+            self.assertTrue(all(len(value) == 64 for value in plan["inputs_sha256"].values()))
+            self.assertEqual(
+                timeline["source_clip_plan_sha256"],
+                hashlib.sha256(open(plan_path, "rb").read()).hexdigest(),
+            )
             first = plan["clips"][0]
             self.assertIn("action_family", first)
             self.assertIn("action_peak", first)
             self.assertIn("visual_motif", first)
+            self.assertEqual(first["speed_mode"], "trim_hold")
+            self.assertEqual(first["seam_contract"]["kind"], "match_action")
+            self.assertTrue(first["need_end_frame"])
+            self.assertAlmostEqual(first["action_peak"], first["action_peak_downbeat"], places=3)
+            self.assertEqual(first["action_peak_anchor_kind"], "downbeat")
             self.assertTrue(os.path.exists(os.path.join(tmp, first["image_prompt_path"])))
             self.assertTrue(os.path.exists(os.path.join(tmp, first["video_prompt_path"])))
+
+    def test_sparse_downbeats_fall_back_to_real_beats_not_fixed_seconds(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            bg_path = os.path.join(tmp, "节拍", "beatgrid.json")
+            with open(bg_path, encoding="utf-8") as f:
+                bg = json.load(f)
+            bg["downbeats"] = [0.0, 16.0]
+            bg["beats"] = [0.31, 1.07, 1.82, 2.61, 3.39, 4.18, 4.96, 5.73,
+                           6.51, 7.29, 8.08, 8.86, 9.64, 10.43, 11.21, 11.98,
+                           12.77, 13.55, 14.34, 15.12]
+            with open(bg_path, "w", encoding="utf-8") as f:
+                json.dump(bg, f)
+            subprocess.run([sys.executable, PLAN, tmp], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), encoding="utf-8") as f:
+                plan = json.load(f)
+            legal = {round(value, 3) for value in bg["beats"]} | {0.0, 8.0, 16.0}
+            internal = {
+                round(float(value), 3)
+                for clip in plan["clips"]
+                for value in (clip["start"], clip["end"])
+                if round(float(value), 3) not in {0.0, 8.0, 16.0}
+            }
+            self.assertTrue(internal)
+            self.assertTrue(internal.issubset(legal))
+
+    def test_instrumental_plan_can_omit_lyrics_when_features_are_off(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.remove(os.path.join(tmp, "词", "lyrics.md"))
+            with open(os.path.join(tmp, "_设置.md"), "a", encoding="utf-8") as f:
+                f.write("- 字幕语言: 无字幕\n- 演唱口型: 关闭\n")
+            subprocess.run([sys.executable, PLAN, tmp], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), encoding="utf-8") as f:
+                plan = json.load(f)
+            self.assertEqual(plan["inputs_sha256"]["lyrics"], "")
+            self.assertTrue(plan["clips"])
 
 
 if __name__ == "__main__":

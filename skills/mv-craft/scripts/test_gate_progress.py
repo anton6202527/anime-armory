@@ -63,10 +63,52 @@ def write_image_qc(root, hard=0, precision="full", advisory=0):
 
 
 class GateProgressTest(unittest.TestCase):
+    def test_beatgrid_source_hash_mismatch_blocks_even_demo(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            path = os.path.join(tmp, "节拍", "beatgrid.json")
+            payload = json.load(open(path, encoding="utf-8"))
+            payload["source_audio_sha256"] = "0" * 64
+            with open(path, "w", encoding="utf-8") as handle:
+                json.dump(payload, handle)
+            errors, _warnings = gate._beatgrid_contract(
+                tmp, "plan", {"is_demo": True}, mv_utils.find_song(tmp)
+            )
+            self.assertTrue(any("source_audio_sha256" in error for error in errors))
+
+    def test_plan_receipt_invalidates_on_lyrics_change(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            plan = {
+                "inputs_sha256": {
+                    "song": mv_utils.content_hash(mv_utils.find_song(tmp)),
+                    "beatgrid": mv_utils.content_hash(os.path.join(tmp, "节拍", "beatgrid.json")),
+                    "lyrics": mv_utils.content_hash(os.path.join(tmp, "词", "lyrics.md")),
+                    "blueprint": mv_utils.content_hash(os.path.join(tmp, "视觉蓝图.md")),
+                    "settings": mv_utils.content_hash(os.path.join(tmp, "_设置.md")),
+                },
+                "clips": [],
+            }
+            with open(os.path.join(tmp, "分镜", "clip_plan.json"), "w", encoding="utf-8") as handle:
+                json.dump(plan, handle)
+            with open(os.path.join(tmp, "词", "lyrics.md"), "a", encoding="utf-8") as handle:
+                handle.write("改词\n")
+            errors = gate._staleness_errors(tmp, "image", {"is_demo": True})
+            self.assertTrue(any("lyrics" in error for error in errors))
+
     def test_find_song_and_plan_gate(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
             self.assertEqual(os.path.basename(mv_utils.find_song(tmp)), "song.mp3")
+            errors, _warnings = gate.check(tmp, "plan")
+            self.assertEqual(errors, [])
+
+    def test_instrumental_no_subtitle_no_lipsync_does_not_require_lyrics(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            os.remove(os.path.join(tmp, "词", "lyrics.md"))
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as handle:
+                handle.write("# _设置\n\n## 选择\n- 字幕语言: 无字幕\n- 演唱口型: 关闭\n")
             errors, _warnings = gate.check(tmp, "plan")
             self.assertEqual(errors, [])
 

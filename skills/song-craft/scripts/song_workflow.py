@@ -51,7 +51,9 @@ def lyrics_ready(root: str) -> tuple[bool, list[str]]:
     blockers = []
     if "（歌词…）" in text or "TODO" in text or "待填" in text:
         blockers.append("歌词仍含占位文本")
-    if "[chorus" not in text.lower() and "[副歌" not in text:
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    form_type = str(meta.get("song_form_type") or meta.get("form_type") or "sectional").lower()
+    if form_type not in {"through_composed", "through-composed", "通谱", "rap", "spoken"} and "[chorus" not in text.lower() and "[副歌" not in text:
         blockers.append("歌词缺 chorus / 副歌段")
     return not blockers, blockers
 
@@ -69,6 +71,18 @@ def manifest_status(root: str) -> tuple[bool, bool, list[str]]:
     if registered and not selected:
         warnings.append("已有 take 但尚未 selected_take")
     return registered, selected, warnings
+
+
+def unresolved_listening_notes(root: str) -> list[str]:
+    review = load_json(os.path.join(root, "歌", "take_review.json"), {}) or {}
+    out = []
+    for row in review.get("reviews") or []:
+        for note in row.get("timecode_notes") or []:
+            severity = str(note.get("severity") or "").lower()
+            status = str(note.get("status") or "open").lower()
+            if severity in {"block", "blocking", "critical", "严重"} and status not in {"resolved", "accepted", "fixed", "已解决", "接受"}:
+                out.append(f"{row.get('take_id')}@{note.get('timecode')}: {note.get('note')}")
+    return out
 
 
 def check_report(root: str, relpath: str, passed_key: str = "passed") -> tuple[bool, list[str]]:
@@ -96,9 +110,12 @@ def build_steps(root: str) -> list[dict[str, Any]]:
     lyrics_ok, lyrics_blockers = lyrics_ready(root)
     takes_registered, take_selected, take_warnings = manifest_status(root)
     master_ok, master_blockers = check_report(root, "混音/master_check.json")
+    mix_ok, mix_blockers = check_report(root, "混音/mix_signoff.json")
     rights_ok, rights_blockers = check_report(root, "合规/rights_metadata_check.json")
+    release_metadata_ok, release_metadata_blockers = check_report(root, "发行/release_metadata_check.json")
     release_ok, release_blockers = check_report(root, "导出/release_pack.json", "release_ready")
     feedback_exists = rel_exists(root, "发行/feedback_summary.json")
+    unresolved_notes = unresolved_listening_notes(root)
     return [
         {
             "key": "setup",
@@ -112,8 +129,8 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "brief",
             "label": "A&R 简报与参考边界",
-            "status": done(rel_exists(root, "创作/song_brief.json") and rel_exists(root, "素材/reference_pack.json")),
-            "evidence": ["创作/song_brief.json", "素材/reference_pack.json"],
+            "status": done(check_report(root, "创作/song_brief_check.json")[0] and check_report(root, "素材/reference_pack_check.json")[0]),
+            "evidence": ["创作/song_brief.json", "创作/song_brief_check.json", "素材/reference_pack.json", "素材/reference_pack_check.json"],
             "blockers": [],
             "warnings": [],
             "command": f'python3 skills/song-craft/scripts/song_brief.py "{root}" --write && python3 skills/song-craft/scripts/reference_pack.py "{root}" --write',
@@ -130,8 +147,8 @@ def build_steps(root: str) -> list[dict[str, Any]]:
         {
             "key": "song_form",
             "label": "旋律/和声/曲式草图",
-            "status": done(rel_exists(root, "歌/song_form.json") and rel_exists(root, "歌/chord_sheet.md") and rel_exists(root, "歌/topline_notes.md")),
-            "evidence": ["歌/song_form.json", "歌/chord_sheet.md", "歌/topline_notes.md"],
+            "status": done(check_report(root, "歌/song_form_check.json")[0] and rel_exists(root, "歌/chord_sheet.md") and rel_exists(root, "歌/topline_notes.md")),
+            "evidence": ["歌/song_form.json", "歌/song_form_check.json", "歌/chord_sheet.md", "歌/topline_notes.md"],
             "blockers": [],
             "warnings": [],
             "command": f'python3 skills/song-craft/scripts/melody_chord_packet.py "{root}" --write',
@@ -155,6 +172,15 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "command": f'python3 skills/song-compose/scripts/compose_song.py "{root}" --register "<音频文件>" --take 1',
         },
         {
+            "key": "revision",
+            "label": "timecode 局部返修",
+            "status": done(not unresolved_notes),
+            "evidence": ["歌/take_review.json", "歌/revision_jobs.json"],
+            "blockers": unresolved_notes,
+            "warnings": [],
+            "command": f'python3 skills/song-compose/scripts/revision_plan.py "{root}" --write',
+        },
+        {
             "key": "selection",
             "label": "试听挑版与定稿",
             "status": done(take_selected and rel_exists(root, "歌/take_review.json")),
@@ -162,6 +188,24 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "blockers": [],
             "warnings": take_warnings if takes_registered else [],
             "command": f'python3 skills/song-compose/scripts/take_review.py "{root}" --write',
+        },
+        {
+            "key": "mix_signoff",
+            "label": "表演/混音人工签核",
+            "status": done(mix_ok),
+            "evidence": ["混音/pre_master.wav", "混音/mix_signoff.json"],
+            "blockers": mix_blockers if rel_exists(root, "混音/pre_master.wav") else [],
+            "warnings": [],
+            "command": f'python3 skills/song-review/scripts/mix_signoff.py "{root}" --reviewer "<签核人>" --check "<NAME>|pass|<note>" --write',
+        },
+        {
+            "key": "master_delivery",
+            "label": "交付母版格式归一",
+            "status": done(rel_exists(root, "导出/master.wav") and rel_exists(root, "导出/master_delivery.json")),
+            "evidence": ["混音/pre_master.wav", "导出/master.wav", "导出/master_delivery.json"],
+            "blockers": [],
+            "warnings": [],
+            "command": f'python3 skills/song-craft/scripts/master_delivery.py "{root}"',
         },
         {
             "key": "master_qc",
@@ -180,6 +224,15 @@ def build_steps(root: str) -> list[dict[str, Any]]:
             "blockers": rights_blockers,
             "warnings": [],
             "command": f'python3 skills/song-craft/scripts/rights_metadata.py "{root}" --write',
+        },
+        {
+            "key": "release_metadata",
+            "label": "发行级元数据",
+            "status": done(release_metadata_ok),
+            "evidence": ["发行/release_metadata.json", "发行/release_metadata_check.json"],
+            "blockers": release_metadata_blockers,
+            "warnings": [],
+            "command": f'python3 skills/song-craft/scripts/release_metadata.py "{root}" --write',
         },
         {
             "key": "release_pack",

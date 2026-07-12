@@ -60,7 +60,7 @@ def make_mv(tmp, *, lyrics=LYRICS, lrc=LRC, beatgrid=None, meta=None,
         write_wav(os.path.join(root, "歌", "song.wav"))
     if meta is None:
         meta = {"title": "曲", "aspect": "9:16", "structure": structure,
-                "has_song": True, "has_lyrics": True}
+                "has_song": True, "has_lyrics": True, "is_demo": True}
     json.dump(meta, open(os.path.join(root, "_meta.json"), "w", encoding="utf-8"))
     return root
 
@@ -116,7 +116,7 @@ def test_beats_non_monotonic_warns():
     tmp = tempfile.mkdtemp()
     try:
         bg = dict(BEATGRID, beats=[0.5, 0.4, 1.0])
-        assert has(run(make_mv(tmp, beatgrid=bg)), WARN, sub="递增")
+        assert has(run(make_mv(tmp, beatgrid=bg)), BLOCK, sub="递增")
     finally:
         shutil.rmtree(tmp)
 
@@ -125,7 +125,7 @@ def test_beatgrid_duration_mismatch_warns():
     tmp = tempfile.mkdtemp()
     try:
         bg = dict(BEATGRID, duration=30.0)   # 歌只有 6s
-        assert has(run(make_mv(tmp, beatgrid=bg)), WARN, "卡点", "歌长")
+        assert has(run(make_mv(tmp, beatgrid=bg)), BLOCK, "卡点", "歌长")
     finally:
         shutil.rmtree(tmp)
 
@@ -167,6 +167,53 @@ def test_structure_mismatch_warns():
     tmp = tempfile.mkdtemp()
     try:
         assert has(run(make_mv(tmp, structure=["intro", "verse1", "chorus", "outro"])), WARN, sub="structure")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_delivery_receipts_invalidate_when_final_changes():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp)
+        final = os.path.join(root, "成片_MV.mp4")
+        master = os.path.join(root, "成片_MV_master.mov")
+        open(final, "wb").write(b"final-v1")
+        open(master, "wb").write(b"master-v1")
+        song_rel = "歌/song.wav"
+        inputs = {
+            "成片_MV.mp4": mc.mv_utils.content_hash(final),
+            "成片_MV_master.mov": mc.mv_utils.content_hash(master),
+            song_rel: mc.mv_utils.content_hash(os.path.join(root, song_rel)),
+        }
+        qc_path = os.path.join(root, "生产数据", "delivery_qc", "delivery_qc.json")
+        os.makedirs(os.path.dirname(qc_path), exist_ok=True)
+        json.dump({"summary": {"hard_blocks": 0}, "inputs_sha256": inputs}, open(qc_path, "w"))
+        provenance_path = os.path.join(root, "合规", "provenance.json")
+        json.dump({"assets": [
+            {"path": "成片_MV.mp4", "sha256": inputs["成片_MV.mp4"]},
+            {"path": "成片_MV_master.mov", "sha256": inputs["成片_MV_master.mov"]},
+        ]}, open(provenance_path, "w"))
+        mc.findings.clear()
+        mc.check_delivery_artifacts(root)
+        assert not [row for row in mc.findings if row[0] == BLOCK]
+
+        open(final, "wb").write(b"final-v2")
+        mc.findings.clear()
+        mc.check_delivery_artifacts(root)
+        assert has(list(mc.findings), BLOCK, "交付", "过期")
+    finally:
+        shutil.rmtree(tmp)
+
+
+def test_formal_final_requires_ai_usage_receipt():
+    tmp = tempfile.mkdtemp()
+    try:
+        root = make_mv(tmp, meta={"title": "曲", "aspect": "9:16", "structure": STRUCTURE,
+                                  "has_song": True, "has_lyrics": True, "is_demo": False})
+        open(os.path.join(root, "成片_MV.mp4"), "wb").write(b"final")
+        mc.findings.clear()
+        mc.check_ai_usage(root)
+        assert has(list(mc.findings), BLOCK, "合规", "AI 视觉使用披露")
     finally:
         shutil.rmtree(tmp)
 

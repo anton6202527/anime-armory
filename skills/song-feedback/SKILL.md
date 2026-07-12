@@ -28,6 +28,8 @@ CSV/JSONL 字段可用英文或中文：
 |---|---|
 | take / 版本 | `take_id` / `take` / `版本` |
 | 平台 | `platform` / `平台` |
+| 同条件实验 | `experiment_id` / `实验` |
+| 曝光/独立听众 | `impressions` / `曝光`，`unique_listeners` / `独立听众` |
 | 播放/开始 | `plays` / `starts` / `播放` / `开始` |
 | 完播 | `completes` / `complete` / `完播` |
 | 跳出/跳过 | `skips` / `drops` / `跳出` |
@@ -40,7 +42,8 @@ CSV/JSONL 字段可用英文或中文：
 ## 判读原则
 
 - 真实反馈优先于内部主观偏好，但小样本只作方向提示。
-- A/B 只能在同平台、同批次、同投放条件下比较。
+- A/B 只能在同平台、同 `experiment_id`、同批次和投放条件下比较；报告绑定当前发行音频 sha256。
+- 少于 100 plays 标记 `insufficient`，只观察不改歌；100-499 为 `directional`；达到 500 才标记 `decision_ready`。阈值是本项目的决策纪律，不冒充平台通用真理。
+- completion/skip/save/share 同时输出 95% Wilson proportion interval；即使达到固定样本数，区间仍太宽时也不能标记 `decision_ready`。
 - 完播低不自动等于歌差，可能是投放人群、封面、标题或首屏 hook 问题；报告只给回流方向。
 - 数据回测后，若要改歌，回 `song-lyrics` / `song-compose` / `song-review`，不要直接覆盖成品而不留版本。
-

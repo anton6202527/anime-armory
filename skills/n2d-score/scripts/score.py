@@ -34,7 +34,7 @@ from n2d_contract import (  # noqa: E402  生产数据目录 / kind / 一致性�
     consistency_dimensions,
     production_dir,
 )
-from n2d_thresholds import load_thresholds  # noqa: E402  告警阈值单一真值源（与 n2d-dashboard 共用）
+from n2d_thresholds import load_thresholds, SCORE_PROFILE_THRESHOLDS, score_threshold_for_profile  # noqa: E402  告警+机器分阈值单一真值源（与 n2d-dashboard / release_verdict 共用）
 from n2d_settings import get_setting  # noqa: E402  读 canonical 一致性严格度 key（与 review gate 同源，避免门槛口径背离）
 
 # 一致性严格度 canonical key + gate 同款别名（与 n2d-review/gate.py _profile_values 对齐）。
@@ -43,7 +43,6 @@ CONSISTENCY_PROFILE_KEYS = ("一致性严格度", "一致性发布档", "一致�
 INPUT_DIR = "score_inputs"
 SCORE_KIND = EPISODE_REVIEW_SCORE_KIND
 VERSION = 1
-SCORE_PROFILE_THRESHOLDS = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
 WARNING_SCORE_CAP = 1
 
 DIMENSIONS: Dict[str, Dict[str, Any]] = consistency_dimensions()
@@ -230,7 +229,7 @@ def resolve_score_profile(root: str, explicit: Optional[str] = None) -> str:
 
 
 def threshold_for_profile(profile: str) -> int:
-    return SCORE_PROFILE_THRESHOLDS.get(profile, SCORE_PROFILE_THRESHOLDS["standard"])
+    return score_threshold_for_profile(profile)
 
 
 def empty_dimension(key: str) -> Dict[str, Any]:
@@ -584,12 +583,18 @@ def apply_dashboard(
             continue
         target = map_qa_dim(" ".join(str(blocker.get(k, "")) for k in ("dim", "loc", "msg")))
         if target:
+            # 跨源去重（2026-07 标准审计）：dashboard blocker 源自 gate findings、gate 又消费
+            # consistency_audit——同一根因常在 apply_consistency 已计过 block。同维已有 block 时
+            # 只留证据不再叠扣（block 一次 -35，双计等于把一个根因扣成 -70）；确属新根因的
+            # 第二问题会在 consistency/mechanical 源头自己计入，不靠这里补。
+            already_blocked = int((dims.get(target) or {}).get("blocks") or 0) > 0
             add_signal(
                 dims,
                 target,
-                blocks=1,
+                blocks=0 if already_blocked else 1,
                 skipped=False,
-                evidence=f"dashboard block[{blocker.get('stage', '')}/{blocker.get('dim', '')}]: {blocker.get('msg', '')}",
+                evidence=f"dashboard block[{blocker.get('stage', '')}/{blocker.get('dim', '')}]: {blocker.get('msg', '')}"
+                         + ("（同维已有 consistency block，跨源去重不重复扣分）" if already_blocked else ""),
             )
         else:
             unmapped.append({"source": "dashboard", "sev": "block", "dim": str(blocker.get("dim") or ""),

@@ -17,9 +17,16 @@ done
 ASS="$ROOT/字幕/karaoke.ass"
 BEAT="$ROOT/节拍/beatgrid.json"
 TIMELINE="$ROOT/分镜/timeline_manifest.json"
-OUT="$ROOT/成片_MV.mp4"
-MASTER="$ROOT/成片_MV_master.mov"
 WK="$ROOT/_mvwork"; rm -rf "$WK"; mkdir -p "$WK"
+if [ "$ALLOW_FALLBACK" = "1" ]; then
+  OUT="$ROOT/预览/fallback_preview.mp4"
+  MASTER="$WK/fallback_preview_master.mov"
+  mkdir -p "$ROOT/预览"
+  echo "    ⚠ fallback 只产预览，不写成片/母版、不推进进度、不生成正式 provenance"
+else
+  OUT="$ROOT/成片_MV.mp4"
+  MASTER="$ROOT/成片_MV_master.mov"
+fi
 
 [ -d "$VID" ] || { echo "缺 clips 目录（先 mv-video，作品根=$ROOT）"; exit 1; }
 [ -n "$SONG" ] || { echo "缺 $ROOT/歌/song.*（请先补入最终成品歌）"; exit 1; }
@@ -27,6 +34,7 @@ WK="$ROOT/_mvwork"; rm -rf "$WK"; mkdir -p "$WK"
 
 CRAFT_DIR="$(cd "$(dirname "$0")/../mv-craft/scripts" && pwd)"
 if [ "$ALLOW_FALLBACK" != "1" ]; then
+  python3 "$CRAFT_DIR/export_otio.py" "$ROOT"
   python3 "$CRAFT_DIR/gate.py" "$ROOT" compose
 fi
 
@@ -108,51 +116,79 @@ PY
 )
 fi
 
-echo "=== [1/6] 时域插帧/裁切 + 统一画幅 ${W}x${H}/${FPS}fps + 拼接 ==="
+echo "=== [1/6] 时长裁切/尾帧补齐 + ProRes 422 HQ 统一画幅 ${W}x${H}/${FPS}fps + 拼接 ==="
 : > "$WK/list.txt"; i=0
 while IFS='|' read -r c dur speed_mode; do
   [ -f "$c" ] || continue
   TRIM_OPT=""
-  SETPTS_OPT=""
+  TIMING_FILTER=""
   
   if [ -n "$dur" ] && [ "$dur" != "None" ]; then
-    TRIM_OPT="-t $dur"
-    if [ "$speed_mode" = "warp" ]; then
-      SRC_DUR=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$c" || echo "")
+    SRC_DUR=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$c" || echo "")
+    if [ "$speed_mode" = "warp" ] || [ "$speed_mode" = "retime" ]; then
       if [ -n "$SRC_DUR" ]; then
         FACTOR=$(python3 -c "print(round($dur / $SRC_DUR, 4))" 2>/dev/null || echo "")
         if [ -n "$FACTOR" ]; then
-          SETPTS_OPT="setpts=${FACTOR}*PTS,"
-          echo "    光流拉伸(Time-Warp): $(basename "$c") ($SRC_DUR s -> ${dur}s, ${FACTOR}x)"
+          TIMING_FILTER="setpts=${FACTOR}*PTS,trim=duration=${dur},setpts=PTS-STARTPTS,"
+          echo "    显式重定时: $(basename "$c") ($SRC_DUR s -> ${dur}s, ${FACTOR}x)"
         else
-          echo "    精确裁切: $(basename "$c") -> ${dur}s (时长计算失败)"
+          TRIM_OPT="-t $dur"
+          echo "    精确裁切: $(basename "$c") -> ${dur}s (重定时计算失败)"
         fi
       else
+        TRIM_OPT="-t $dur"
         echo "    精确裁切: $(basename "$c") -> ${dur}s (ffprobe失败)"
       fi
     else
-      echo "    精确裁切: $(basename "$c") -> ${dur}s"
+      if [ -n "$SRC_DUR" ]; then
+        PAD_DUR=$(python3 -c "print(max(0, round($dur - $SRC_DUR, 4)))" 2>/dev/null || echo "0")
+        TIMING_FILTER="tpad=stop_mode=clone:stop_duration=${PAD_DUR},trim=duration=${dur},setpts=PTS-STARTPTS,"
+        echo "    保持动作速度，精确裁切/尾帧停稳: $(basename "$c") ($SRC_DUR s -> ${dur}s)"
+      else
+        TRIM_OPT="-t $dur"
+        echo "    精确裁切: $(basename "$c") -> ${dur}s (ffprobe失败)"
+      fi
     fi
   fi
   
   ffmpeg -y -loglevel error -i "$c" \
-    -vf "${SETPTS_OPT}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=${FPS},format=yuv420p" \
-    -an $TRIM_OPT -c:v libx264 -preset medium -crf 18 "$WK/n$i.mp4"
-  echo "file 'n$i.mp4'" >> "$WK/list.txt"; i=$((i+1))
+    -vf "${TIMING_FILTER}scale=${W}:${H}:force_original_aspect_ratio=decrease,pad=${W}:${H}:(ow-iw)/2:(oh-ih)/2:black,fps=${FPS},format=yuv422p10le" \
+    -an $TRIM_OPT -c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le \
+    -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv "$WK/n$i.mov"
+  echo "file 'n$i.mov'" >> "$WK/list.txt"; i=$((i+1))
 done < "$SOURCE_LIST"
 [ "$i" -gt 0 ] || { echo "没有可合成的 clip"; exit 1; }
-ffmpeg -y -loglevel error -f concat -safe 0 -i "$WK/list.txt" -c copy "$WK/silent.mp4"
+ffmpeg -y -loglevel error -f concat -safe 0 -i "$WK/list.txt" -c copy "$WK/silent.mov"
 
-VDUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$WK/silent.mp4")
+VDUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$WK/silent.mov")
 SDUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$SONG")
 echo "    画面总时长=${VDUR}s  歌时长=${SDUR}s"
-python3 - "$VDUR" "$SDUR" <<'PY'
+if ! python3 - "$VDUR" "$SDUR" "$FPS" <<'PY'
 import sys
-v,s=float(sys.argv[1]),float(sys.argv[2])
-if abs(v-s)>1.0:
-    print(f"    ⚠ 画面与歌相差 {abs(v-s):.1f}s —— 回 mv-video 按 beatgrid 调 clip 时长，或在剪辑里 trim/补空镜")
+v,s,fps=float(sys.argv[1]),float(sys.argv[2]),float(sys.argv[3])
+tolerance=max(0.10, 2.0/max(fps, 1.0))
+diff=abs(v-s)
+if diff>tolerance:
+    print(f"    ❌ 画面与歌相差 {diff:.3f}s（容差 {tolerance:.3f}s / 2 frames）")
+    raise SystemExit(1)
 PY
+then
+  if [ "$ALLOW_FALLBACK" != "1" ]; then
+    echo "正式合成拒绝截短歌曲或用大段空镜掩盖时长错误；回 mv-video/剪辑时间线修正"
+    exit 1
+  fi
+  echo "    ⚠ fallback 预览继续，但不得当正式成片"
+fi
 [ -f "$BEAT" ] && echo "    （beatgrid 存在：剪辑点应已在 mv-video 上游对齐鼓点）" || echo "    （无 beatgrid：按 clip 原时长顺接，未卡点）"
+
+# Quantisation at clip/frame boundaries may leave a sub-frame tail even after
+# the edit contract passes.  Normalise picture to the exact song duration by
+# holding the final frame; never let a shortest-stream mux rule cut the music master.
+ffmpeg -y -loglevel error -i "$WK/silent.mov" \
+  -vf "tpad=stop_mode=clone:stop_duration=${SDUR},trim=duration=${SDUR},setpts=PTS-STARTPTS" \
+  -an -c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le \
+  -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv "$WK/silent_exact.mov"
+mv "$WK/silent_exact.mov" "$WK/silent.mov"
 
 echo "=== [2/6] 字幕探测（mv 自包含：libass 优先 → 自带 render_lyrics.py 降级）==="
 SUB_VF=""; LRC="$ROOT/字幕/lyrics.lrc"
@@ -172,27 +208,38 @@ else
 fi
 
 echo "=== [3/6] 生成 10-bit ProRes 422 HQ / 48kHz PCM 母版 ==="
-MASTER_COM=(-c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le -c:a pcm_s24le -ar 48000)
+MASTER_COM=(-c:v prores_ks -profile:v 3 -pix_fmt yuv422p10le -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv -c:a pcm_s24le -ar 48000)
 if [ -n "$SUB_VF" ]; then                       # libass 逐字
-  ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" $SUB_VF \
-    -map 0:v -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
+  ffmpeg -y -loglevel error -i "$WK/silent.mov" -i "$SONG" $SUB_VF \
+    -map 0:v -map 1:a -t "$SDUR" "${MASTER_COM[@]}" "$MASTER"
 elif [ -f "$WK/sub_filter.txt" ]; then          # 自带 render_lyrics PNG overlay
   PNGS=(); while IFS= read -r p; do [ -n "$p" ] && PNGS+=(-i "$p"); done < "$WK/sub_inputs.txt"
-  ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" "${PNGS[@]}" \
-    -filter_complex "$(cat "$WK/sub_filter.txt")" -map "[v]" -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
+  ffmpeg -y -loglevel error -i "$WK/silent.mov" -i "$SONG" "${PNGS[@]}" \
+    -filter_complex "$(cat "$WK/sub_filter.txt")" -map "[v]" -map 1:a -t "$SDUR" "${MASTER_COM[@]}" "$MASTER"
 else                                            # 无字幕
-  ffmpeg -y -loglevel error -i "$WK/silent.mp4" -i "$SONG" \
-    -map 0:v -map 1:a -shortest "${MASTER_COM[@]}" "$MASTER"
+  ffmpeg -y -loglevel error -i "$WK/silent.mov" -i "$SONG" \
+    -map 0:v -map 1:a -t "$SDUR" "${MASTER_COM[@]}" "$MASTER"
 fi
 
 echo "=== [4/6] 从母版派生 YouTube/通用 SDR MP4 ==="
+GOP=$(python3 - "$FPS" <<'PY'
+import sys
+print(max(1, int(round(float(sys.argv[1]) / 2.0))))
+PY
+)
 ffmpeg -y -loglevel error -i "$MASTER" \
   -vf "setparams=color_primaries=bt709:color_trc=bt709:colorspace=bt709:range=tv" \
   -c:v libx264 -profile:v high -level:v 4.2 -preset slow -crf 18 -pix_fmt yuv420p \
+  -g "$GOP" -keyint_min "$GOP" -sc_threshold 0 -bf 2 -flags +cgop \
   -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv \
   -c:a aac -ar 48000 -b:a 320k -movflags +faststart "$OUT"
 
 echo "=== [5/6] 交付 QC + provenance ==="
+if [ "$ALLOW_FALLBACK" = "1" ]; then
+  echo "=== [6/6] fallback 预览完成: $OUT ==="
+  ls -la "$OUT"
+  exit 0
+fi
 python3 "$(dirname "$0")/delivery_qc.py" "$ROOT" "$OUT" --master "$MASTER"
 python3 "$CRAFT_DIR/provenance.py" "$ROOT" --final "$OUT" --master "$MASTER"
 

@@ -53,6 +53,9 @@
     },
     "review_acceptance": {
       "family": "review",
+      "executable": false,
+      "enforced_by": "skills/n2d/scripts/release_verdict.py",
+      "note": "policy-only 聚合档：gate.py --stage 不能直接跑它（不在 GATE_STAGES）；其 22 个 check group 的实际验收由 release_verdict + run.py 收尾自动包代偿执行。显式标注防『最全标准不可跑』的认知偏差。",
       "human_boundary": "human_acceptance_signoff",
       "trace_policy": "required",
       "required_check_groups": ["compliance", "progress", "production_handoff", "production_locks", "identity_registry", "asset_registry", "image_qc", "video_routes", "video_assets", "compose_inputs", "subtitle_alignment", "voice_identity", "consistency_audit", "generation_recipe", "seed_events", "contract_inheritance", "semantic_lineage", "score", "review_ui", "consistency_ledger", "human_review", "release_verdict"]

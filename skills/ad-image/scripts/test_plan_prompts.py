@@ -46,6 +46,9 @@ def test_run_writes_prompt_pack_and_jobs(tmp_path):
     assert (root / "出图" / "分镜" / "prompt" / "00_总览.md").is_file()
     assert (root / "出图" / "分镜" / "prompt" / "镜头01.md").is_file()
     assert (root / "出图" / "分镜" / "prompt" / "镜头01_end.md").is_file()
+    assert payload["image_route"] == {"model": "GPT Image 2", "channel": "Codex CLI"}
+    assert payload["jobs"][0]["planned_model"] == "GPT Image 2"
+    assert payload["jobs"][0]["planned_channel"] == "Codex CLI"
 
 
 def test_shot_prompt_contains_product_qc_lint_markers(tmp_path):

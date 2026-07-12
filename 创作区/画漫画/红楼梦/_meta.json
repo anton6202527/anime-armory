@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project",
+  "title": "红楼梦",
+  "created": "2026-07-11",
+  "mode": "源本改漫画",
+  "format": "页漫",
+  "source": {
+    "path": "源本/红楼梦.docx",
+    "original_name": "红楼梦.docx",
+    "text_mirror": "源本/红楼梦.txt",
+    "manifest": "源本/source_manifest.json",
+    "source_url": "https://zh.wikisource.org/wiki/%E7%B4%85%E6%A8%93%E5%A4%A2",
+    "chapters": 120
+  },
+  "rights": {
+    "source_status": "public_domain_text",
+    "source_basis": "《红楼梦》原作公版；文本镜像来自维基文库并保留来源清单",
+    "adaptation_status": "project_original_adaptation",
+    "reference_policy": "经典影视仅作研究，不复制演员肖像、剧照构图或具体服装组合",
+    "font_status": "pending_before_publish",
+    "asset_status": "pending_before_publish"
+  },
+  "adaptation": {
+    "season_strategy": "先以短序章建立石头/还泪/繁华终散母题，再从林黛玉进贾府进入主线",
+    "chapter_1_title": "序章·顽石入梦",
+    "chapter_1_scope": "第一回开篇至甄士隐梦醒及僧道谶语",
+    "visual_research": "设定库/视觉参考研究.md",
+    "style_guide": "设定库/style_guide.md"
+  }
+}

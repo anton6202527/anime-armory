@@ -18,6 +18,7 @@ crop 默认中心裁切；可传 `--crop-x/--crop-y`（归一焦点 0..1，主�
 """
 import argparse
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -76,21 +77,41 @@ def _ffmpeg():
     return shutil.which("ffmpeg")
 
 
-def render_reframe(in_path, out_path, vf):
-    """实际跑 ffmpeg 把 in_path 按 vf reframe 成 out_path。返回 (ok, msg)。"""
+def _encoding_args(encoding):
+    """交付编码规格（deliver.PLATFORM_ENCODING）→ ffmpeg 码控参数。缺规格 → 空（历史行为：无码率控制）。纯函数·可测。"""
+    if not isinstance(encoding, dict):
+        return []
+    out = []
+    br = str(encoding.get("video_bitrate") or "").strip()
+    maxrate = str(encoding.get("maxrate") or "").strip()
+    if br:
+        out += ["-b:v", br]
+    if maxrate:
+        # bufsize 取 2x maxrate 的常规 VBV 设置；maxrate 数值解析不了就原样兜底
+        m = re.fullmatch(r"([0-9.]+)\s*([MmKk]?)", maxrate)
+        bufsize = f"{float(m.group(1)) * 2:g}{m.group(2)}" if m else maxrate
+        out += ["-maxrate", maxrate, "-bufsize", bufsize]
+    return out
+
+
+def render_reframe(in_path, out_path, vf, encoding=None):
+    """实际跑 ffmpeg 把 in_path 按 vf reframe 成 out_path。返回 (ok, msg)。
+    encoding：可选交付编码规格（码率/上限），此前派生件只有 libx264 默认码控（≈CRF23），
+    比母带（CRF20）糊一档还无人知晓；传入后按平台上传档控码率。"""
     ff = _ffmpeg()
     if not ff:
         return False, "无 ffmpeg：跳过渲染（滤镜串已出，可在带 ffmpeg 的机器上 --render）"
     if not os.path.isfile(in_path):
         return False, f"缺输入：{in_path}"
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    enc = _encoding_args(encoding)
     args = [ff, "-y", "-loglevel", "error", "-i", in_path, "-vf", vf,
-            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "copy", out_path]
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", *enc, "-c:a", "copy", out_path]
     rc = subprocess.run(args, capture_output=True, text=True)
     if rc.returncode != 0:
         # 某些输入无音轨，-c:a copy 会报错；重试无音轨
         args2 = [ff, "-y", "-loglevel", "error", "-i", in_path, "-vf", vf, "-an",
-                 "-c:v", "libx264", "-pix_fmt", "yuv420p", out_path]
+                 "-c:v", "libx264", "-pix_fmt", "yuv420p", *enc, out_path]
         rc2 = subprocess.run(args2, capture_output=True, text=True)
         if rc2.returncode != 0:
             return False, f"reframe 渲染失败：{rc.stderr[-500:]}"

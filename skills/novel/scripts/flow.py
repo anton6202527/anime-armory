@@ -21,6 +21,7 @@ if _LIB not in sys.path:
 from novel_route import summarize
 from novel_contract import is_long_arc_project
 from project_io import load_project_settings
+import sweep_schedule  # 小批回扫 due 点单一真值源（含中段防守加密）
 
 _STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
@@ -51,13 +52,17 @@ def batch_review_interval(settings, meta):
 
 
 def batch_review_window(ch_num, interval, meta):
+    # due 点收口到 novel/_lib/sweep_schedule：基础平铺 + 项目尾 + 中段防守加密
+    # （40-60% 进度带按半间隔加密，长篇矛盾高发区）。与 draft_packets 同一真值源。
     if interval <= 0:
         return None
     target = int(meta.get("target_chapters") or 0)
-    if ch_num % interval == 0 or (target and ch_num == target and ch_num % interval != 0):
-        return ((ch_num - 1) // interval) * interval + 1, ch_num
-    next_due = ((ch_num - 1) // interval + 1) * interval
-    return None, min(next_due, target) if target else next_due
+    if sweep_schedule.is_due(ch_num, interval, target):
+        return sweep_schedule.window_for(ch_num, interval, target)
+    next_due = sweep_schedule.next_due_after(ch_num, interval, target)
+    if target and next_due:
+        next_due = min(next_due, target)
+    return None, next_due
 
 
 def arc_window_for_chapter(ch_num, interval, meta):

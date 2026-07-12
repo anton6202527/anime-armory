@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -82,6 +83,10 @@ def check(root: str) -> dict[str, Any]:
     text = open(lyrics_path, encoding="utf-8").read()
     sections = parse_sections(text)
     title = str(meta.get("title") or "").strip()
+    form_type = str(meta.get("song_form_type") or meta.get("form_type") or "sectional").strip().lower()
+    genre = str(meta.get("genre") or "").lower()
+    chorus_required = form_type not in {"through_composed", "through-composed", "通谱", "rap", "spoken"} and "说唱" not in genre
+    density_profile = "rap" if form_type in {"rap", "spoken"} or "说唱" in genre else "song"
 
     def issue(issue_id: str, severity: str, message: str, location: str = "词/lyrics.md") -> None:
         findings.append({"id": issue_id, "severity": severity, "message": message, "location": location})
@@ -89,8 +94,10 @@ def check(root: str) -> dict[str, Any]:
     if not sections:
         issue("PROSODY-NO-SECTIONS", "blocking", "未解析到段落标签。")
     chorus_sections = [s for s in sections if "chorus" in s["tag"] or "副歌" in s["tag"]]
-    if not chorus_sections:
-        issue("PROSODY-NO-CHORUS", "blocking", "缺少 chorus / 副歌段。")
+    if not chorus_sections and chorus_required:
+        issue("PROSODY-NO-CHORUS", "blocking", "当前 sectional/pop 曲式缺少 chorus / 副歌段。")
+    elif not chorus_sections:
+        issue("PROSODY-NO-CHORUS", "warning", f"{form_type} 曲式没有副歌；请确认记忆锚由 refrain、flow 或主题动机承担。")
     else:
         chorus_text = "\n".join(row["text"] for sec in chorus_sections for row in sec["lines"])
         if title and title not in chorus_text:
@@ -104,14 +111,16 @@ def check(root: str) -> dict[str, Any]:
             continue
         spread = max(counts) - min(counts)
         avg = sum(counts) / len(counts)
-        if spread > 6:
+        spread_limit = 10 if density_profile == "rap" else 6
+        dense_limit = 28 if density_profile == "rap" else 18
+        if spread > spread_limit:
             issue("PROSODY-LINE-SPREAD", "warning", f"{sec['raw_tag']} 行长极差 {spread}，旋律复用会变难。", sec["raw_tag"])
-        if avg > 18:
+        if avg > dense_limit:
             issue("PROSODY-DENSE-LINES", "warning", f"{sec['raw_tag']} 平均 {avg:.1f} 字/行，可能咬字过密。", sec["raw_tag"])
         if avg < 4 and len(counts) >= 2:
             issue("PROSODY-SPARSE-LINES", "warning", f"{sec['raw_tag']} 平均 {avg:.1f} 字/行，可能信息不足或只适合作短 hook。", sec["raw_tag"])
     verses = [s for s in sections if "verse" in s["tag"] or "主歌" in s["tag"]]
-    if len(verses) >= 2:
+    if len(verses) >= 2 and form_type not in {"through_composed", "through-composed", "通谱"}:
         a = [row["chars"] for row in verses[0]["lines"]]
         b = [row["chars"] for row in verses[1]["lines"]]
         if len(a) != len(b):
@@ -120,13 +129,15 @@ def check(root: str) -> dict[str, Any]:
             issue("PROSODY-VERSE-LINE-MATCH", "warning", f"前两个 verse 对应行字数差异较大：{a} vs {b}。", "[verse]")
     blockers = [f for f in findings if f["severity"] == "blocking"]
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
         "project_root": os.path.abspath(root),
+        "source_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
         "passed": not blockers,
         "blocking": len(blockers),
         "warnings": len(findings) - len(blockers),
+        "profile": {"form_type": form_type, "density": density_profile, "chorus_required": chorus_required},
         "sections": sections,
         "findings": findings,
     }
@@ -149,6 +160,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- 生成日期：{report.get('generated_at')}",
         f"- passed：{report.get('passed')}",
         f"- blocking：{report.get('blocking')} warnings：{report.get('warnings')}",
+        f"- profile：{(report.get('profile') or {}).get('form_type', 'sectional')} / {(report.get('profile') or {}).get('density', 'song')}",
         "",
         "## Sections",
         "",

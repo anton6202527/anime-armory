@@ -8,8 +8,9 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
 不生产内容，只**审**。是 `song`（写歌线）家族的 QA 环节。两个模式：
 
 - **模式①「作品质检」**——审**一首歌的产物**（`词/lyrics.md` + `歌/song.wav` + 蓝图/meta）：扫问题 → 定位（段落 / 行号 / 时间码）→ 定级 → 给修法 → 出报告。发布或交付前 / 各阶段闸门跑。
-- **模式①b「母带/交付检查」**——跑 `master_check.py`，对 `歌/song.wav` 做采样率、位深、声道、时长、静音、削波、peak/RMS proxy、头尾静音检查，写 `混音/master_check.{json,md}`。它不是 LUFS 专业母带表，但能拦截发布前确定性硬伤。
+- **模式①b「母带/交付检查」**——跑 `master_check.py`，默认优先检查 `导出/master.wav`，使用 ffmpeg 的 ITU-R BS.1770 分析取得 integrated LUFS、true peak 与 LRA，同时检查采样率、位深、声道、静音和削波；报告绑定音频 sha256。`-14 LUFS` 只作为流媒体归一化参考，不强制把所有音乐压成同一响度。
 - **模式①c「一致性 findings」**——跑 `consistency_findings.py`，把歌词 prosody、曲式/和声草图、多版挑版、母带、AI 使用披露和权益元数据收成 `评审/consistency_findings.{json,md}`，避免审歌时散看多份 JSON。
+- **模式①d「表演/混音签核」**——`mix_signoff.py` 由真实试听者确认歌词对齐、咬字/伪影、情绪、人声与伴奏平衡、编曲转译、编辑接缝、mono 兼容和低频/headroom，并绑定当前 `pre_master.wav` hash。任何换声、返修或重混都会使旧签核失效。
 - **模式②「流程自审」**——审**写歌流水线本身**：联网拉市场基准，对照 `song-*` 各 skill + references，产出"差距清单 + 建议改哪个 skill 哪段"。让"整套流程不断自我优化"成为一条可复跑命令。
 
 > 写歌的三大验收维：**可唱性（词）· 听感（曲+演唱）· 合规**。本 skill 把这套体检在 song 产线里落成可跑流程。词的工艺标尺 = `song-lyrics/references/songcraft.md`；出歌后端能力 = `song-compose/references/backends.md`。
@@ -32,6 +33,16 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
   发布/交付前另跑：
   ```bash
   python3 skills/song-review/scripts/consistency_findings.py <写歌作品根> --write
+  python3 skills/song-review/scripts/mix_signoff.py <写歌作品根> --reviewer "制作人" \
+    --check "lyric_alignment|pass|逐段核对" \
+    --check "diction_and_artifacts|pass|无错字和生成伪影" \
+    --check "emotional_delivery|pass|情绪弧线成立" \
+    --check "vocal_instrument_balance|pass|人声与伴奏平衡" \
+    --check "arrangement_translation|pass|耳机和音箱均成立" \
+    --check "clicks_edits_and_tails|pass|无爆点和错误尾音" \
+    --check "mono_compatibility|pass|mono 无明显抵消" \
+    --check "low_end_and_headroom|pass|低频和余量正常" --write
+  python3 skills/song-craft/scripts/master_delivery.py <写歌作品根>
   python3 skills/song-review/scripts/master_check.py <写歌作品根> --platform streaming --write
   ```
 - **人判（判断题）**：机检覆盖不了的语义维度。逐维见 `references/checklist.md`。
@@ -51,7 +62,7 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
 | 级别 | 含 | 处置 |
 |---|---|---|
 | 🔴 阻断级 | 词占位未精修；演唱音色未授权真人嗓 / `vocal_source` 缺失；翻唱曲词曲版权未授权（商用）；音频全静音/损坏/不可解析；削波严重失真 | **必改**，回源头重跑 |
-| 🟡 建议级 | 同段字数离散大（拗口/难唱）、押韵乱跳、hook 不抓耳、缺副歌、段落数 ≠ 蓝图结构、采样率过低、时长与目标偏离、头尾静音过长、RMS 代理响度偏低、缺 take manifest/selected_take、缺 AI 使用披露、与蓝图主题/曲风漂、人声伴奏失衡 | 建议改 |
+| 🟡 建议级 | 同段字数离散大（拗口/难唱）、押韵乱跳、当前曲式需要但缺副歌、段落数 ≠ 蓝图结构、时长与目标偏离、编码 true-peak 余量不足、响度异常、缺 take manifest/selected_take、缺 AI 使用披露、与蓝图主题/曲风漂、人声伴奏失衡 | 建议改 |
 | 🟢 润色级 | 个别词尾可更顺、桥段升华差一拍、淡出/留白偏好 | 可改可不改 |
 
 **容错铁律**：只报"真问题"。轻微主观偏好不入报告；song-lyrics 的"可唱 > 文采"优先于华丽辞藻，否则噪声淹没硬伤。
@@ -77,6 +88,7 @@ description: 写歌质检 + 流程自审（song 写歌线的 QA 环节，不生�
 - 流程自审操作手册（拉基准 / 对照 / 起草）：`references/self_audit.md`
 - 正向标准（词工艺）：`song-lyrics/references/songcraft.md`
 - 出歌后端能力档案：`song-compose/references/backends.md`
+- 逐阶段标准、闸门和官方依据：`song-craft/references/production-standards.md`
 - 合规铁律：`song/SKILL.md` §合法性铁律 + `song-cover/SKILL.md` §合规闸门
 
 ## 常见错误

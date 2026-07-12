@@ -637,6 +637,11 @@ def _slot_artifact_issues(root: Path, row: Mapping[str, Any]) -> List[str]:
             actual = sha256_file(path)
             if actual.lower() != expected:
                 issues.append(f"{rel} sha256 不匹配")
+        else:
+            # 与 pilot_release_gate 同口径（2026-07 标准审计）：只给路径不给 hash，
+            # "存在但内容错/陈旧的图"可蒙混过闸；缺 sha256 一并报出，别让两个 gate
+            # 对"真实产物绑定"一严一松。
+            issues.append(f"{rel} 缺 sha256（引用槽位须绑定内容哈希，防陈旧/错图冒充）")
     if not resolved:
         issues.append("reference_slots 缺可解析的真实文件 path/hash")
     return issues
@@ -1362,7 +1367,9 @@ def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="check n2d preventive contracts")
     ap.add_argument("root")
     ap.add_argument("episode")
-    ap.add_argument("--stage", required=True)
+    # 未知/拼错 stage 旧行为是 gates 空集 → 零 findings → pass/exit 0（vacuous fail-open）；
+    # 用 choices fail-closed（2026-07 标准审计）。
+    ap.add_argument("--stage", required=True, choices=sorted(STAGE_GATES))
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--write-missing", action="store_true")
     ap.add_argument("--json", action="store_true")

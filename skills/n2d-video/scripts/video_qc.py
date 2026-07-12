@@ -590,7 +590,7 @@ def probe_video(path: Path, clip_label: Optional[str] = None) -> Dict[str, Any]:
         "-v",
         "error",
         "-show_entries",
-        "format=duration:stream=index,codec_type,width,height,codec_name",
+        "format=duration:stream=index,codec_type,width,height,codec_name,avg_frame_rate",
         "-of",
         "json",
         str(path),
@@ -613,11 +613,68 @@ def probe_video(path: Path, clip_label: Optional[str] = None) -> Dict[str, Any]:
         "duration_sec": duration,
         "width": video_stream.get("width"),
         "height": video_stream.get("height"),
+        "fps": _parse_fps(video_stream.get("avg_frame_rate")),
         "video_codec": video_stream.get("codec_name"),
         "audio_streams": [s for s in streams if s.get("codec_type") == "audio"],
         "has_audio": any(s.get("codec_type") == "audio" for s in streams),
         "probe_error": data.get("error"),
     }
+
+
+def _parse_fps(value: Any) -> Optional[float]:
+    """ffprobe avg_frame_rate（如 '30000/1001'）→ 浮点 fps；不可解析返回 None。"""
+    text = str(value or "").strip()
+    if not text or text == "0/0":
+        return None
+    if "/" in text:
+        num, _, den = text.partition("/")
+        try:
+            n, d = float(num), float(den)
+            return round(n / d, 3) if d else None
+        except ValueError:
+            return None
+    try:
+        return round(float(text), 3)
+    except ValueError:
+        return None
+
+
+def delivery_consistency_check(payload: Dict[str, Any]) -> None:
+    """批内交付一致性：帧率/分辨率混批此前完全没人查——混帧率片子会静默进 compose，
+    被 [1/6] 的强制 fps=30 掩盖（重复帧/丢帧），混分辨率会触发隐性缩放糊边。
+    以批内众数为基准，偏离者记 warn（advisory，不改 gate 口径；阻断仍归 n2d-review gate）。"""
+    clips = [c for c in payload.get("clips", []) if not c.get("probe_error")]
+    notes = payload.setdefault("machine_notes", [])
+    summary = payload.setdefault("machine_summary", {})
+    findings: List[Dict[str, Any]] = []
+
+    def _mode(values):
+        vals = [v for v in values if v is not None]
+        if not vals:
+            return None
+        return max(set(vals), key=vals.count)
+
+    res_mode = _mode([(c.get("width"), c.get("height")) for c in clips
+                      if c.get("width") and c.get("height")])
+    fps_mode = _mode([round(c["fps"]) for c in clips if isinstance(c.get("fps"), (int, float))])
+    for c in clips:
+        res = (c.get("width"), c.get("height"))
+        if res_mode and all(res) and res != res_mode:
+            findings.append({"clip": c.get("clip"), "kind": "resolution",
+                             "value": f"{res[0]}x{res[1]}", "expected": f"{res_mode[0]}x{res_mode[1]}"})
+        fps = c.get("fps")
+        if fps_mode and isinstance(fps, (int, float)) and round(fps) != fps_mode:
+            findings.append({"clip": c.get("clip"), "kind": "fps",
+                             "value": fps, "expected": fps_mode})
+    payload["delivery_consistency"] = {
+        "resolution_mode": f"{res_mode[0]}x{res_mode[1]}" if res_mode else None,
+        "fps_mode": fps_mode,
+        "findings": findings,
+    }
+    summary["delivery_mismatch_warns"] = len(findings)
+    for f in findings:
+        notes.append(f"交付一致性 warn：{f['clip']} {f['kind']}={f['value']}（批内众数 {f['expected']}）——"
+                     "混帧率/混分辨率进 compose 会被静默规格化掩盖，先确认该 clip 是否该重出。")
 
 
 def sample_times(duration: Optional[float]) -> List[Tuple[str, float]]:
@@ -731,8 +788,8 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         f"- clips: {len(payload['clips'])}",
         f"- contact_sheet: `{payload.get('contact_sheet') or 'not generated'}`",
         "",
-        "| Clip | Source MP4 | Duration | Size | Audio | Frames | Notes |",
-        "|---|---|---:|---|---|---:|---|",
+        "| Clip | Source MP4 | Duration | Size | FPS | Audio | Frames | Notes |",
+        "|---|---|---:|---|---:|---|---:|---|",
     ]
     for item in payload["clips"]:
         dur = item.get("duration_sec")
@@ -741,7 +798,9 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         audio = "yes" if item.get("has_audio") else ("unknown" if item.get("has_audio") is None else "no")
         frame_count = sum(1 for f in item.get("frames", []) if f.get("path") and not f.get("error"))
         notes = item.get("probe_error") or "; ".join(f.get("error", "") for f in item.get("frames", []) if f.get("error"))
-        lines.append(f"| {item.get('clip') or '-'} | `{item.get('file')}` | {duration} | {size} | {audio} | {frame_count} | {notes or ''} |")
+        fps = item.get("fps")
+        fps_text = f"{fps:g}" if isinstance(fps, (int, float)) else "?"
+        lines.append(f"| {item.get('clip') or '-'} | `{item.get('file')}` | {duration} | {size} | {fps_text} | {audio} | {frame_count} | {notes or ''} |")
     summary = payload.get("machine_summary") or {}
     seams = payload.get("seams") or []
     lines.append("")
@@ -832,6 +891,7 @@ def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
                   load_seam_intents(root, episode) or None)
     intra_clip_check(payload, load_shot_types(root, episode) or None)
     anchor_adherence_check(payload, root, load_anchor_intents(root, episode) or None)
+    delivery_consistency_check(payload)
     json_path = out_dir / f"video_qc_{episode}_{batch}.json"
     md_path = out_dir / f"video_qc_{episode}_{batch}.md"
     json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")

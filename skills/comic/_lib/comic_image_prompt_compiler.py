@@ -10,11 +10,22 @@ from typing import Any, Dict, List, Mapping, Sequence
 
 KIND = "comic_compiled_image_prompt"
 VERSION = 1
-PROFILE_VERSION = "2026-07-10.2"
+PROFILE_VERSION = "2026-07-11.1"
 _INTERNAL_RE = re.compile(
     r"(?:CHAR_|MON_|LOC_|PROP_|SYS_|FX_|STYLE_|出图/|\.png\b|identity_registry|asset_registry|reference_group)",
     re.I,
 )
+_INTERNAL_TOKEN_RE = re.compile(r"\b(?:CHAR|MON|LOC|PROP|SYS|FX|STYLE)_[A-Z0-9_]+\b", re.I)
+_IMAGE_PATH_RE = re.compile(r"(?:[^\s；;,，。]+[/\\])?[^\s；;,，。]+\.(?:png|jpe?g|webp|avif)\b", re.I)
+_TOKEN_LABELS = {
+    "CHAR": "已登记角色参考",
+    "MON": "已登记角色参考",
+    "LOC": "已登记场景锚",
+    "PROP": "已登记道具参考",
+    "SYS": "已登记效果参考",
+    "FX": "已登记效果参考",
+    "STYLE": "项目风格锚",
+}
 
 
 def one_line(value: Any, limit: int = 520) -> str:
@@ -29,6 +40,26 @@ def one_line(value: Any, limit: int = 520) -> str:
         return text
     cut = text[:limit].rsplit("；", 1)[0].rsplit("。", 1)[0]
     return (cut or text[:limit]).rstrip(" ；;,，。") + "…"
+
+
+def public_text(value: Any, limit: int = 520) -> str:
+    """Convert auditable contract text into model-facing visible language.
+
+    Scene/identity contracts may legitimately mention registry IDs and image
+    paths.  They stay in the production contract, while this compiler replaces
+    them with semantic labels so internal bookkeeping never reaches the model.
+    """
+    text = one_line(value, limit * 2)
+
+    def replace_token(match: re.Match[str]) -> str:
+        prefix = match.group(0).split("_", 1)[0].upper()
+        return _TOKEN_LABELS.get(prefix, "已登记参考")
+
+    text = _INTERNAL_TOKEN_RE.sub(replace_token, text)
+    text = _IMAGE_PATH_RE.sub("已登记参考图", text)
+    text = re.sub(r"(?:出图[/\\]|identity_registry|asset_registry|reference_group)", "已登记参考", text, flags=re.I)
+    text = re.sub(r"(已登记[^；;,，。 ]+)(?:\s*\1)+", r"\1", text)
+    return one_line(text, limit)
 
 
 def normalize_backend(value: Any) -> str:
@@ -67,15 +98,15 @@ def _hash(contract: Mapping[str, Any]) -> str:
 
 def compile_prompt(contract: Mapping[str, Any]) -> Dict[str, Any]:
     profile = profile_for(contract.get("backend"))
-    visible = one_line(contract.get("visible_facts"), 420)
-    style = one_line(contract.get("style"), 260)
-    composition = one_line(contract.get("composition"), 300)
-    scene = one_line(contract.get("scene_continuity"), 340)
-    identity = one_line(contract.get("identity_hold"), 320)
-    finishing = one_line(contract.get("finishing"), 360)
-    text_strategy = one_line(contract.get("text_strategy"), 220)
-    anatomy = one_line(contract.get("anatomy"), 220)
-    negative_elements = [one_line(v, 70) for v in contract.get("negative_elements") or [] if one_line(v, 70)]
+    visible = public_text(contract.get("visible_facts"), 420)
+    style = public_text(contract.get("style"), 260)
+    composition = public_text(contract.get("composition"), 300)
+    scene = public_text(contract.get("scene_continuity"), 340)
+    identity = public_text(contract.get("identity_hold"), 320)
+    finishing = public_text(contract.get("finishing"), 360)
+    text_strategy = public_text(contract.get("text_strategy"), 220)
+    anatomy = public_text(contract.get("anatomy"), 220)
+    negative_elements = [public_text(v, 70) for v in contract.get("negative_elements") or [] if public_text(v, 70)]
 
     parts = ["生成一张铺满画布的单格无字漫画画面。"]
     parts.append(f"画面事实：{visible}。" if visible else "")
@@ -126,6 +157,9 @@ def lint(payload: Mapping[str, Any]) -> Dict[str, List[str]]:
         errors.append("submit_prompt_contains_exact_dialogue")
     if len(prompt) > 1400:
         warnings.append(f"submit_prompt_verbose:{len(prompt)}")
-    if len([p for p in re.split(r"[。；;.!?]+", prompt) if p.strip()]) > 20:
+    # Semicolons are the intended compact structure inside scene/finishing
+    # contracts.  Count only sentence-ending punctuation here; treating every
+    # structured field separator as a new sentence warned on normal jobs.
+    if len([p for p in re.split(r"[。.!?]+", prompt) if p.strip()]) > 20:
         warnings.append("submit_prompt_many_clauses")
     return {"errors": errors, "warnings": warnings}

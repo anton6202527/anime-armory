@@ -498,6 +498,17 @@ def audit_first_screen_contract(root, ep, beats):
         severity = "must" if thresholds["first_6s_hook_required"] else "warn"
         findings.append((severity, "missing_first_6s_beat_hook",
                          "storyboard 写了首屏契约，但 voiceover 前2拍/约前6秒没有钩子信号：让台词/画面节拍与 first_3s_visual_hook 对齐"))
+    else:
+        # 黄金3秒时间量化档：宣称的是 0-3s，上面的节拍启发式只能验到「约前6秒」。
+        # 有真实 镜头时长.json 时把窗口收紧到 3.0s 复核；无时长数据维持原口径不加噪。
+        shot_secs = load_shot_seconds(root, ep)
+        if shot_secs and beats:
+            starts, _total = cumulative_starts(shot_secs)
+            hook_times = sorted(starts[b["shot"]] for b in beats
+                                if _inferred_hook(b) and b["shot"] in starts)
+            if hook_times and hook_times[0] > 3.0:
+                findings.append(("warn", "first_hook_after_golden_3s",
+                                 f"首个钩子节拍落在 {hook_times[0]:.1f}s（超出 0-3s 黄金开场窗）：前6秒有钩，但 0-3s 只能靠 first_3s_visual_hook 的画面钩/烧屏文字自证，确认冷开场画面扛得住前 3 秒"))
     return findings
 
 

@@ -304,3 +304,26 @@ def test_release_verdict_blocks_incomplete_pilot_evidence(tmp_path: Path) -> Non
     pilot = next(c for c in payload["components"] if c["name"] == "pilot_release_gate")
     assert pilot["status"] == "block"
     assert "evidence_issues" in pilot["message"]
+
+
+def test_check_score_tightens_threshold_by_release_profile(tmp_path: Path) -> None:
+    root = tmp_path
+    _write_json(root / "生产数据" / "score_第1集.json",
+                {"total_score": 80, "threshold": 75, "status": "pass"})
+    # demo profile：按文件阈值 75 判，80 分通过
+    assert release_verdict.check_score(root, "第1集", "demo")["status"] == "pass"
+    # commercial/cn_public：profile 下限 90 覆盖文件里的 75，80 分必须 block
+    assert release_verdict.check_score(root, "第1集", "commercial")["status"] == "block"
+    assert release_verdict.check_score(root, "第1集", "cn_public")["status"] == "block"
+    # overseas 下限 88
+    assert release_verdict.check_score(root, "第1集", "overseas")["status"] == "block"
+    # internal 下限 85：80 分同样不放行
+    assert release_verdict.check_score(root, "第1集", "internal")["status"] == "block"
+
+
+def test_check_score_profile_floor_does_not_loosen_file_threshold(tmp_path: Path) -> None:
+    root = tmp_path
+    _write_json(root / "生产数据" / "score_第1集.json",
+                {"total_score": 91, "threshold": 92, "status": "fail"})
+    # 文件阈值 92 比 profile 下限严：取 max，91 分仍 block（status=fail 也 block）
+    assert release_verdict.check_score(root, "第1集", "commercial")["status"] == "block"

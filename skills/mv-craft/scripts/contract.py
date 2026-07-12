@@ -7,17 +7,23 @@
 from copy import deepcopy
 
 
-CONTRACT_VERSION = 1
+CONTRACT_VERSION = 2
 
 MV_USE_CASES = ("短视频Hook", "歌曲Demo", "正式MV草稿", "投放版", "自定义")
 MV_SONG_TIMINGS = ("先传音乐", "后配歌曲")
 MV_VISUAL_STYLES = ("电影叙事", "舞台演出", "国风写意", "赛博霓虹", "二次元", "抽象视觉器", "写实旅拍", "自定义")
 MV_PLAN_GRANULARITY = ("粗略", "标准", "精细", "自定义")
 MV_BEAT_STRATEGIES = ("副歌强卡点", "全程强卡点", "叙事优先", "歌词叙事优先", "人工指定", "自定义")
+# Primary menu = capabilities reverified from official sources on 2026-07-11.
+# Profiles below retain older names only so existing projects can still be read;
+# they are not silently promoted into a new project's current candidate menu.
 MV_VIDEO_MODELS = (
-    "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Hailuo 02", "Hailuo 2.3",
-    "Runway Gen-4", "Luma Ray3 / Ray3.14", "Pika 2.5",
-    "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora", "manual",
+    "Seedance 2.0", "Veo 3.1", "Kling 3.0", "Runway Gen-4.5",
+    "Luma Ray3 / Ray3.14", "manual", "自定义",
+)
+MV_LEGACY_VIDEO_MODELS = (
+    "Hailuo 02", "Hailuo 2.3", "Runway Gen-4", "Pika 2.5",
+    "HunyuanVideo 1.5", "Wan 2.2", "LTX-2.3", "Sora 2", "Sora",
 )
 MV_VIDEO_CHANNELS = (
     "即梦/Dreamina", "即梦", "Dreamina",
@@ -32,26 +38,36 @@ MV_VIDEO_CHANNELS = (
 )
 # Legacy combined backend list. New projects write `生视频模型` + `生视频渠道`.
 MV_VIDEO_BACKENDS = MV_VIDEO_CHANNELS
-# 阶段1：生图AI 是选择点，默认 Codex；放行官方多参考一致性后端。供 _设置.md 菜单用。
+# 图片生成同视频一样拆成「具体模型」与「访问渠道」两轴；生图AI 仅作旧项目兼容。
+MV_IMAGE_MODELS = (
+    "GPT Image 2", "Seedream 5.0 Lite", "Nano Banana Pro (Gemini 3 Pro Image)", "自定义",
+)
+MV_IMAGE_CHANNELS = (
+    "Codex", "OpenAI API", "火山方舟/Seedream", "Google Gemini API",
+    "可灵/Kling", "manual",
+)
 MV_IMAGE_BACKENDS = ("Codex", "Seedream", "可灵主体库", "Nano Banana", "Sora Cameo", "自定义")
 MV_CONSISTENCY_MODES = ("共享定妆+锚点", "指定参考图", "后端主体库", "+LoRA")
 MV_VIDEO_SPECS = ("预算充足", "预算一般", "预算不够")
 MV_ASPECTS = ("16:9", "9:16", "1:1")
 MV_LIPSYNC_MODES = ("关闭", "仅正面演唱镜", "全演唱镜", "后期口型修复", "自定义")
+MV_SUBTITLE_MODES = ("中文", "中英双语", "仅英文", "无字幕")
 AI_VISUAL_USAGE_MODES = ("AI-generated", "AI-assisted", "未使用AI视觉")
 
 MV_VIDEO_MODEL_PROFILES = {
     "Seedance 2.0": {
-        "reference_images": True, "start_end_frames": True, "reference_video_motion": True,
-        "native_audio": False, "best_for": "快节奏短视频、舞蹈/运镜参考、批量镜头",
+        "reference_images": True, "start_end_frames": False, "reference_video_motion": True,
+        "native_audio": True, "audio_reference": True, "multi_shot": True, "max_sequence_seconds": 15,
+        "best_for": "多模态参考、15秒内多镜头段落、复杂动作；首尾帧须按实际渠道再次核验",
     },
     "Veo 3.1": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
-        "native_audio": True, "best_for": "电影感、首尾帧桥接、少量关键镜",
+        "native_audio": True, "multi_shot": False, "best_for": "电影感、首尾帧桥接、少量关键镜",
     },
     "Kling 3.0": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": True,
-        "native_audio": True, "best_for": "首尾帧控制、动作镜、演唱口型/原生音频候选",
+        "native_audio": True, "multi_shot": True, "max_sequence_seconds": 15,
+        "best_for": "多镜头叙事、Elements 主体、动作镜、演唱口型/原生音频候选",
     },
     "Hailuo 02": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
@@ -60,6 +76,11 @@ MV_VIDEO_MODEL_PROFILES = {
     "Hailuo 2.3": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
         "native_audio": False, "best_for": "人物表演、短镜头补片",
+    },
+    "Runway Gen-4.5": {
+        "reference_images": True, "start_end_frames": False, "reference_video_motion": False,
+        "native_audio": False, "multi_shot": False,
+        "best_for": "高动作质量、复杂连续指令、电影质感；当前公开控制以 T2V/I2V 为主",
     },
     "Runway Gen-4": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
@@ -87,12 +108,31 @@ MV_VIDEO_MODEL_PROFILES = {
     },
     "Sora": {
         "reference_images": True, "start_end_frames": True, "reference_video_motion": False,
-        "native_audio": False, "best_for": "高质量关键镜与角色 cameo 路径",
+        "native_audio": False, "legacy": True,
+        "best_for": "旧项目兼容；当前可用性必须按官方产品/地区重新核验，不进入新项目默认菜单",
+    },
+    "Sora 2": {
+        "reference_images": True, "start_end_frames": False, "reference_video_motion": False,
+        "native_audio": True, "multi_shot": True,
+        "legacy": True,
+        "best_for": "旧项目兼容；当前可用性、产品迁移与真人授权逐次核验，不进入新项目默认菜单",
     },
     "manual": {
         "reference_images": False, "start_end_frames": False, "reference_video_motion": False,
         "native_audio": False, "best_for": "人工网页/外包登记",
     },
+}
+
+_MV_VIDEO_MODEL_ALIASES = {
+    "seedance": "Seedance 2.0", "seedance 2": "Seedance 2.0",
+    "veo": "Veo 3.1", "veo 3": "Veo 3.1",
+    "kling": "Kling 3.0", "可灵": "Kling 3.0",
+    "hailuo": "Hailuo 2.3", "海螺": "Hailuo 2.3",
+    "runway": "Runway Gen-4.5", "gen-4.5": "Runway Gen-4.5",
+    "luma": "Luma Ray3 / Ray3.14", "ray3": "Luma Ray3 / Ray3.14",
+    "pika": "Pika 2.5", "hunyuanvideo": "HunyuanVideo 1.5",
+    "wan": "Wan 2.2", "ltx": "LTX-2.3", "sora": "Sora",
+    "manual": "manual",
 }
 
 MV_VIDEO_CHANNEL_PROFILES = {
@@ -115,12 +155,33 @@ MV_VIDEO_CHANNEL_PROFILES = {
     "manual": {"type": "manual", "official_api": False, "notes": "人工登记；必须留来源和挑版理由"},
 }
 
+_MV_VIDEO_CHANNEL_ALIASES = {
+    "dreamina": "Dreamina", "即梦": "即梦", "即梦/dreamina": "即梦/Dreamina",
+    "豆包": "豆包", "hailuo": "Hailuo", "海螺": "海螺AI", "海螺ai": "海螺AI",
+    "kling": "Kling", "可灵": "可灵", "可灵/kling": "可灵/Kling",
+    "google gemini api": "Google Gemini API", "runway": "Runway", "runway api": "Runway API",
+    "luma": "Luma", "luma dream machine": "Luma Dream Machine", "pika": "Pika",
+    "本地/开源": "本地/开源", "manual": "manual",
+}
+
+_MV_LEGACY_VIDEO_ROUTES = {
+    "即梦": ("Seedance 2.0", "即梦"),
+    "dreamina": ("Seedance 2.0", "Dreamina"),
+    "seedance": ("Seedance 2.0", "即梦/Dreamina"),
+    "可灵": ("Kling 3.0", "可灵"),
+    "kling": ("Kling 3.0", "Kling"),
+    "veo": ("Veo 3.1", "Google Gemini API"),
+    "runway": ("Runway Gen-4.5", "Runway"),
+    "sora": ("Sora", "manual"),
+    "manual": ("manual", "manual"),
+}
+
 # ── 生图后端治理：阶段1（解除 Codex 垄断，本线自持）──────────────────────
 # `生图AI` 是真选择点，默认 Codex；放行官方多参考一致性后端；mv-image / mv-review
 # 不再因"非 Codex"拦截，只拦 ① 项目内后端混用 ② 逆向/未授权出图路径（安全 invariant）。
 # AI 标识/披露/水印不再由本流水线处理，移到工具之外按平台/地区法规自行处理，与本治理无关。
 MV_APPROVED_IMAGE_BACKENDS = {
-    "codex":    {"label": "Codex / 官方 OpenAI gpt-image", "multi_reference": False, "native_subject": False, "default": True},
+    "codex":    {"label": "GPT Image 2 via Codex", "multi_reference": True, "native_subject": False, "default": True},
     "openai":   {"label": "官方 OpenAI gpt-image / DALL·E", "multi_reference": False, "native_subject": False},
     "gemini":   {"label": "Nano Banana / Gemini 多参考（原生 SynthID）", "multi_reference": True, "native_subject": False},
     "seedream": {"label": "Seedream Universal Reference（官方 API·免 LoRA 跨图锁人·≤14 图）", "multi_reference": True, "native_subject": True},
@@ -131,8 +192,9 @@ _MV_IMAGE_BACKEND_ALIASES = {
     "codex only": "codex", "codexonly": "codex", "codex": "codex",
     "openai": "openai", "gpt-image": "openai", "gpt image": "openai", "gptimage": "openai",
     "dall-e": "openai", "dalle": "openai",
+    "gpt image 2": "openai", "gpt-image-2": "openai",
     "nano banana": "gemini", "nanobanana": "gemini", "nano-banana": "gemini", "gemini": "gemini",
-    "seedream": "seedream", "universal reference": "seedream",
+    "seedream": "seedream", "seedream 5.0 lite": "seedream", "universal reference": "seedream",
     "kling": "kling", "可灵": "kling", "主体库": "kling",
     "sora": "sora", "character cameo": "sora", "cameo": "sora",
 }
@@ -161,11 +223,14 @@ DEFAULT_SETTINGS = {
     "MV规划粒度": "标准",
     "卡点策略": "副歌强卡点",
     "生图AI": "Codex",
+    "生图模型": "GPT Image 2",
+    "生图渠道": "Codex",
     "MV一致性增强": "共享定妆+锚点",
     "生视频模型": "Seedance 2.0",
     "生视频渠道": "即梦/Dreamina",
     "出视频规格": "预算一般",
     "演唱口型": "仅正面演唱镜",
+    "字幕语言": "中文",
     "合成画幅": "16:9",
     "AI视觉使用披露": "AI-generated",
     "发行目标平台": "未定",
@@ -178,11 +243,14 @@ CHOICE_POINTS = {
     "MV规划粒度": MV_PLAN_GRANULARITY,
     "卡点策略": MV_BEAT_STRATEGIES,
     "生图AI": MV_IMAGE_BACKENDS,
+    "生图模型": MV_IMAGE_MODELS,
+    "生图渠道": MV_IMAGE_CHANNELS,
     "MV一致性增强": MV_CONSISTENCY_MODES,
     "生视频模型": MV_VIDEO_MODELS,
     "生视频渠道": MV_VIDEO_CHANNELS,
     "出视频规格": MV_VIDEO_SPECS,
     "演唱口型": MV_LIPSYNC_MODES,
+    "字幕语言": MV_SUBTITLE_MODES,
     "合成画幅": MV_ASPECTS,
     "AI视觉使用披露": AI_VISUAL_USAGE_MODES,
     "发行目标平台": ("抖音", "B站", "小红书", "YouTube", "Spotify", "网易云", "QQ音乐", "跨平台", "未定"),
@@ -203,15 +271,17 @@ PLAN_GRANULARITY_PROFILE = {
 
 MV_STAGE_TABLE = [
     {"key": "setup", "label": "项目骨架", "owner": "mv/scripts/init_project.py", "gate": "deterministic"},
-    {"key": "song_ingest", "label": "歌曲入库/定稿", "owner": "song/user-upload", "gate": "歌/song.* + 词/lyrics.md"},
+    {"key": "song_ingest", "label": "歌曲入库/定稿", "owner": "user-file-ingest", "gate": "歌/song.*; lyrics conditional on subtitle/lipsync"},
     {"key": "beat", "label": "节拍/能量", "owner": "mv-beat/scripts/beat_detect.py", "gate": "beatgrid"},
+    {"key": "lyric_sync", "label": "歌词时间轴", "owner": "mv-lyric-sync/scripts/align.py", "gate": "hash-bound forced alignment or signed review"},
     {"key": "script", "label": "视觉蓝图/设定", "owner": "mv-script", "gate": "visual blueprint"},
     {"key": "script_review", "label": "视觉蓝图复核", "owner": "mv-script", "gate": "beatgrid-reviewed blueprint"},
     {"key": "plan", "label": "clip/timeline 规划", "owner": "mv-plan/scripts/plan_clips.py", "gate": "clip_plan"},
+    {"key": "pacing_check", "label": "节奏预检", "owner": "mv-score/scripts/score_pacing.py", "gate": "fresh deterministic receipt"},
     {"key": "image", "label": "定妆/首帧/尾帧", "owner": "mv-image", "gate": "visual identity"},
+    {"key": "picture_lock", "label": "Animatic/Picture Lock", "owner": "mv-craft", "gate": "named hash-bound signoff"},
     {"key": "video_jobs", "label": "视频任务包", "owner": "mv-video/scripts/video_jobs.py", "gate": "jobs_manifest"},
     {"key": "video", "label": "视频登记/挑版", "owner": "backend + video_jobs.py", "gate": "selected clip videos"},
-    {"key": "lyric_sync", "label": "歌词对齐", "owner": "mv-lyric-sync/scripts/align.py", "gate": "subtitles"},
     {"key": "compose", "label": "时间线合成", "owner": "mv-compose", "gate": "timeline + song"},
     {"key": "review", "label": "质检", "owner": "mv-review", "gate": "machine + human review"},
     {"key": "handoff", "label": "发布/交平台", "owner": "mv-craft/scripts/ai_usage.py", "gate": "AI usage disclosure"},
@@ -222,20 +292,24 @@ def stage_table():
     return deepcopy(MV_STAGE_TABLE)
 
 
-def workflow_stage_table(song_timing=None):
-    """Return stage order for the selected song timing mode."""
+def workflow_stage_table(song_timing=None, subtitle_mode=None, lip_sync_mode=None):
+    """Return stage order; lyric alignment is conditional for instrumental MVs."""
     timing = song_timing or DEFAULT_SETTINGS["歌曲输入时序"]
     by_key = {s["key"]: s for s in MV_STAGE_TABLE}
     if timing == "后配歌曲":
         keys = [
-            "setup", "script", "song_ingest", "beat", "script_review", "plan", "image",
-            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+            "setup", "script", "song_ingest", "beat", "lyric_sync", "script_review", "plan",
+            "pacing_check", "image", "picture_lock", "video_jobs", "video", "compose", "review", "handoff",
         ]
     else:
         keys = [
-            "setup", "song_ingest", "beat", "script", "plan", "image",
-            "video_jobs", "video", "lyric_sync", "compose", "review", "handoff",
+            "setup", "song_ingest", "beat", "lyric_sync", "script", "plan", "pacing_check",
+            "image", "picture_lock", "video_jobs", "video", "compose", "review", "handoff",
         ]
+    subtitle_mode = subtitle_mode or DEFAULT_SETTINGS["字幕语言"]
+    lip_sync_mode = lip_sync_mode or DEFAULT_SETTINGS["演唱口型"]
+    if subtitle_mode == "无字幕" and lip_sync_mode == "关闭":
+        keys = [key for key in keys if key != "lyric_sync"]
     return deepcopy([by_key[k] for k in keys])
 
 
@@ -250,15 +324,37 @@ def video_spec_profile(spec):
 
 
 def video_model_profile(model):
+    model = normalize_video_model(model)
     if model not in MV_VIDEO_MODEL_PROFILES:
         raise KeyError(f"unknown video model: {model}")
     return deepcopy(MV_VIDEO_MODEL_PROFILES[model])
 
 
 def video_channel_profile(channel):
+    channel = normalize_video_channel(channel)
     if channel not in MV_VIDEO_CHANNEL_PROFILES:
         raise KeyError(f"unknown video channel: {channel}")
     return deepcopy(MV_VIDEO_CHANNEL_PROFILES[channel])
+
+
+def normalize_video_model(value):
+    raw = str(value or "").strip()
+    if raw in MV_VIDEO_MODEL_PROFILES:
+        return raw
+    return _MV_VIDEO_MODEL_ALIASES.get(raw.lower(), raw)
+
+
+def normalize_video_channel(value):
+    raw = str(value or "").strip()
+    if raw in MV_VIDEO_CHANNEL_PROFILES:
+        return raw
+    return _MV_VIDEO_CHANNEL_ALIASES.get(raw.lower(), raw)
+
+
+def legacy_video_route(value):
+    """Map the old one-axis `生视频AI` value to an explicit model/channel pair."""
+    raw = str(value or "").strip()
+    return _MV_LEGACY_VIDEO_ROUTES.get(raw.lower(), (raw, raw))
 
 
 def plan_granularity_profile(granularity):

@@ -606,3 +606,13 @@ def test_prominent_label_spec_missing_reports_info(tmp_path: Path) -> None:
     hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="compose"))
             if "prominent_label_spec" in m]
     assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断
+
+
+def test_unknown_distribution_intent_fails_closed(tmp_path, monkeypatch):
+    import compliance as c
+    if c.get_setting is None:
+        return
+    monkeypatch.setattr(c, "get_setting", lambda root, key, default=None: "投放上线（手滑写错）")
+    assert c.default_distribution_intent(tmp_path) == "paid_distribution"
+    monkeypatch.setattr(c, "get_setting", lambda root, key, default=None: "internal_only")
+    assert c.default_distribution_intent(tmp_path) == "internal_only"

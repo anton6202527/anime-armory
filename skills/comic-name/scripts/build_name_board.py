@@ -114,6 +114,28 @@ def panels_per_page(comic_format: str) -> int:
     return 6
 
 
+def page_groups(panels: list[dict[str, Any]], comic_format: str) -> list[list[dict[str, Any]]]:
+    """Honor explicit page hints before falling back to equal-size chunks.
+
+    A generic fixed `5 panels/page` split is only a rough default.  Adaptation
+    scripts commonly make deliberate page-turn decisions; when page_hint is
+    present, the name board must preserve that editorial intent.
+    """
+    explicit = [panel.get("page_hint") for panel in panels]
+    if panels and all(str(value or "").strip().isdigit() for value in explicit):
+        groups: list[list[dict[str, Any]]] = []
+        group_keys: list[int] = []
+        for panel, raw_page in zip(panels, explicit):
+            page_number = int(str(raw_page))
+            if page_number not in group_keys:
+                group_keys.append(page_number)
+                groups.append([])
+            groups[group_keys.index(page_number)].append(panel)
+        return groups
+    capacity = panels_per_page(comic_format)
+    return [panels[start : start + capacity] for start in range(0, len(panels), capacity)]
+
+
 def page_side(index: int, comic_format: str, reading_direction: str) -> str:
     if "条漫" in comic_format:
         return "scroll"
@@ -211,11 +233,9 @@ def build_name_board(root: Path, chapter: str) -> dict[str, Any]:
     width = parse_width(read_setting(root, "页面尺寸", "1440xauto"))
     spec = read_setting(root, "原稿规格", "数字条漫")
     manuscript = manuscript_boxes(width, comic_format, spec)
-    page_capacity = panels_per_page(comic_format)
     panels = [panel for panel in panel_script.get("panels") or [] if isinstance(panel, dict) and panel.get("panel_id")]
     pages: list[dict[str, Any]] = []
-    for page_index, start in enumerate(range(0, len(panels), page_capacity), 1):
-        group = panels[start : start + page_capacity]
+    for page_index, group in enumerate(page_groups(panels, comic_format), 1):
         page_id = f"SCROLL_{page_index:03d}" if "条漫" in comic_format else f"PAGE_{page_index:03d}"
         weights = [explicit_weight(panel) for panel in group]
         rects = rough_rects(len(group), manuscript, weights)

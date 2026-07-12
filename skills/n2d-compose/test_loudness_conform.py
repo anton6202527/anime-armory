@@ -131,3 +131,17 @@ def test_find_final_cut_prefers_master_over_newer_loudnorm_backup(tmp_path):
     os.utime(backup, (200, 200))
 
     assert lc._find_final_cut(str(tmp_path), ep) == str(master)
+
+
+def test_resolve_platform_key_prefers_cli_then_settings(tmp_path):
+    import loudness_conform as lc
+    root = tmp_path / "作品"
+    root.mkdir()
+    (root / "_设置.md").write_text("## 选择\n- 目标平台: 抖音\n", encoding="utf-8")
+    assert lc.resolve_platform_key(str(root), "youtube") == ("youtube", "cli")
+    key, source = lc.resolve_platform_key(str(root), None)
+    assert key == "tiktok"
+    assert source.startswith("settings:")
+    empty = tmp_path / "空作品"
+    empty.mkdir()
+    assert lc.resolve_platform_key(str(empty), None) == ("default", "fallback")

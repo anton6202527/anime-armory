@@ -281,6 +281,12 @@ def build_report(root: Path, episode: str) -> Dict[str, Any]:
     scope = _episode_trace_scope(root, episode, set(source_ids))
     active_ids: Set[str] = set(scope["required"])
     deferred_ids: Set[str] = set(scope["deferred"])
+    if source_ids and not active_ids and deferred_ids:
+        # 自我豁免留痕（2026-07 标准审计）：scope 允许项目把 trace 声明 deferred，但"全部 deferred、
+        # 零 active"会让消费检查静默清零冒充 pass——至少 warn 出来，让 release 审计看得见这次豁免。
+        findings.append({"severity": "warn", "code": "all_traces_deferred",
+                         "message": f"本集 {len(deferred_ids)} 个 SRC_* trace 全部被声明 deferred，"
+                                    "零 active 消费检查——确认这是有意的窗口切分，而不是用豁免口清空追溯。"})
 
     for trace_id, meta in sorted(source_ids.items()):
         if trace_id in deferred_ids:

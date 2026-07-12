@@ -43,6 +43,25 @@ def test_rich_storyworld_passes_or_review_only():
         assert "outline_pressure" not in report["risk_axes"]
 
 
+def test_keyword_stuffed_shell_no_longer_passes():
+    # 升级动机：旧版只查"填没填/长度够不够"，塞满关键词的空壳能全 pass。
+    with tempfile.TemporaryDirectory() as root:
+        # 角色卡：目标词只出现在文件头，角色块内没有任何目标 → character_agency risk
+        _write(os.path.join(root, "设定", "角色卡.md"), "目标 动机 恐惧\n## 甲\n是个人。\n## 乙\n也是个人。\n## 丙\n还是个人。\n")
+        # 世界观：只命中一类规则词，没有代价/限制闭环 → world_rules risk
+        _write(os.path.join(root, "设定", "世界观.md"), "这个世界有规则。宗门很多。")
+        # 章纲：逐章条目全是干事件，无冲突/代价/钩子 → outline_pressure risk
+        _write(os.path.join(root, "设定", "章纲.md"), "\n".join(f"第 {i} 章 去了一个地方。" for i in range(1, 7)))
+        # 读者契约：凑字数、无题旨/承诺/禁偏信号 → reader_contract risk
+        _write(os.path.join(root, "设定", "读者契约.md"), "这本书会很好看很好看很好看很好看很好看很好看很好看很好看。")
+        report = spt.pressure_test(root)
+        assert report["verdict"] == "block_pre_draft"
+        for axis in ("character_agency", "world_rules", "outline_pressure", "reader_contract"):
+            assert axis in report["risk_axes"], axis
+        assert report["check_depth"] == "structural"
+        assert report["semantic_followup"]["axes_needing_semantic_review"]
+
+
 def test_main_writes_artifacts():
     with tempfile.TemporaryDirectory() as root:
         _write(os.path.join(root, "设定", "章纲.md"), "第 1 章 开局\n")

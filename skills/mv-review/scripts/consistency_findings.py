@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from datetime import date
@@ -12,6 +13,16 @@ from typing import Any, Iterable
 
 KIND = "mv_consistency_findings"
 SEVERITIES = ("block", "warn", "info")
+
+
+def load_file_hash(path: str) -> str:
+    if not os.path.isfile(path):
+        return ""
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def load_json(path: str, default: Any = None) -> Any:
@@ -143,6 +154,10 @@ def video_qc_details(findings: list[dict[str, Any]], root: str) -> None:
     if not meta.get("is_demo") and not (report.get("semantic_review") or {}).get("accepted"):
         findings.append(finding("block", "video_handoff", "semantic_review_missing",
                                 "正式项目视频语义复核尚未绑定当前选中视频签收。", rel, "video_qc"))
+    semantic = report.get("semantic_review") or {}
+    if semantic.get("accepted") and semantic.get("bound_video_sha256") != (report.get("selected_video_sha256") or {}):
+        findings.append(finding("block", "video_handoff", "semantic_video_hash_stale",
+                                "视频语义签收与当前 selected video hashes 不一致。", rel, "video_qc"))
     for seam in report.get("seams") or []:
         risks = seam.get("risk") or []
         if risks:
@@ -155,6 +170,13 @@ def timing_checks(findings: list[dict[str, Any]], root: str) -> None:
     path = os.path.join(root, "字幕", "alignment_report.json")
     report = load_json(path)
     if isinstance(report, dict):
+        stale = [
+            rel for rel, recorded in (report.get("inputs_sha256") or {}).items()
+            if load_file_hash(os.path.join(root, rel)) != recorded
+        ]
+        if stale:
+            findings.append(finding("block", "lyric_timeline", "alignment_stale",
+                                    f"歌词对齐报告输入已变化：{stale[0]}。", "字幕/alignment_report.json"))
         warnings = report.get("warnings") or []
         if warnings:
             findings.append(finding("warn", "lyric_timeline", "alignment_warn",

@@ -89,7 +89,14 @@ def _policy_active(route: Mapping[str, Any], context: Mapping[str, Any], policy:
     if policy == "identity_affinity":
         return bool(route.get("locked_backend") or route.get("backend_affinity") or route.get("character_backend_conflicts"))
     if policy == "identity_failure_escalation":
-        return bool(route.get("identity_escalation") or _flag(route, "identity_failure_escalation"))
+        # router 升锁写的 risk_flag 是 `identity_escalated`（router.py escalate_identity_for_failures）；
+        # 旧判定只查 `identity_escalation` 键与 `identity_failure_escalation` flag——全仓无人设这两个值，
+        # 导致 frame_contract 面最高优先级策略对真实升锁 route 永远 inactive（policy_resolution 审计失明）。
+        return bool(
+            route.get("identity_escalation")
+            or _flag(route, "identity_escalated")
+            or _flag(route, "identity_failure_escalation")
+        )
     if policy == "motion_control_required":
         motion = route.get("motion_control")
         return isinstance(motion, Mapping) and (motion.get("required") is True or motion.get("level") == "required")

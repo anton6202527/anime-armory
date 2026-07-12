@@ -23,6 +23,17 @@ except ImportError:  # imported via sys.path parent
 
 THRESHOLDS_FILE = "alert_thresholds.json"
 
+# 机器分（n2d-score）profile 阈值单一真值源。此前只活在 score.py，release_verdict 读不到，
+# 只能信 score 文件里已写的 threshold（fallback 还是第三个数 80）——commercial 发布可以放行
+# 一个按 demo(75) 档生成的 score 文件。收拢到这里让 score 与 release_verdict 同口径。
+# 数值属内部启发式（confidence=low·无外部可辩护基准），待 n2d-feedback 第一方数据校准；
+# 出处与校准路径登记见 skills/n2d-score/SKILL.md「阈值出处」。
+SCORE_PROFILE_THRESHOLDS: Dict[str, int] = {"demo": 75, "standard": 85, "production": 90, "overseas": 88}
+
+
+def score_threshold_for_profile(profile: str) -> int:
+    return SCORE_PROFILE_THRESHOLDS.get(str(profile or "").strip().lower(), SCORE_PROFILE_THRESHOLDS["standard"])
+
 # 阈值默认值（None = 关闭该项）。默认只对「QA 阻断」开箱即告（gate 阻断本就要停线）；
 # 成本/通过率/回收比默认 None，由用户显式设阈值，避免生产早期误报。
 DEFAULT_THRESHOLDS: Dict[str, Any] = {

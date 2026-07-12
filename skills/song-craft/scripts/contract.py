@@ -95,6 +95,13 @@ SONG_STAGE_TABLE = [
         "on_fail": "补登记 take 或换后端重生成",
     },
     {
+        "key": "revision",
+        "label": "timecode 局部返修",
+        "owner": "song-compose/scripts/revision_plan.py + backend",
+        "gate": "blocking notes resolved or accepted",
+        "on_fail": "按 repaint/regenerate job 生成新 take 后重评",
+    },
+    {
         "key": "selection",
         "label": "挑版定稿",
         "owner": "song-compose/scripts/compose_song.py score/select",
@@ -116,6 +123,20 @@ SONG_STAGE_TABLE = [
         "on_fail": "按报告回 lyrics/compose/cover",
     },
     {
+        "key": "mix_signoff",
+        "label": "表演/混音人工签核",
+        "owner": "song-review/scripts/mix_signoff.py",
+        "gate": "human listening receipt bound to pre-master hash",
+        "on_fail": "回局部返修、换声或重混",
+    },
+    {
+        "key": "master_delivery",
+        "label": "交付母版格式归一",
+        "owner": "song-craft/scripts/master_delivery.py",
+        "gate": "current mix signoff + lossless delivery receipt",
+        "on_fail": "补签核或重做 pre-master",
+    },
+    {
         "key": "master_qc",
         "label": "混音/母带检查",
         "owner": "song-review/scripts/master_check.py",
@@ -128,6 +149,13 @@ SONG_STAGE_TABLE = [
         "owner": "song-craft/scripts/rights_metadata.py",
         "gate": "split sheet + rights metadata",
         "on_fail": "补贡献者 split、ISRC/ISWC/授权状态",
+    },
+    {
+        "key": "release_metadata",
+        "label": "发行级元数据",
+        "owner": "song-craft/scripts/release_metadata.py",
+        "gate": "track/release metadata + roles + explicit/date/territory/P/C lines",
+        "on_fail": "补发行元数据并重跑检查",
     },
     {
         "key": "handoff",

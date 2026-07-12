@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from datetime import date
@@ -12,7 +13,7 @@ from typing import Any
 
 KIND = "song_brief"
 CHECK_KIND = "song_brief_check"
-REQUIRED = ("target_listener", "core_promise", "emotional_arc", "sonic_identity", "hook_deadline_seconds")
+REQUIRED = ("target_listener", "core_promise", "emotional_arc", "sonic_identity", "hook_strategy")
 
 
 def load_json(path: str, default: Any = None) -> Any:
@@ -51,18 +52,23 @@ def paths(root: str) -> tuple[str, str, str]:
 def build_brief(root: str, args: argparse.Namespace) -> dict[str, Any]:
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
     target_duration = meta.get("target_duration_seconds") or 120
+    use_case = args.use_case or meta.get("use_case") or "完整Demo"
+    platform = args.target_platform or meta.get("target_platform") or meta.get("publish_target") or "未定"
+    short_form = any(token in f"{use_case} {platform}".lower() for token in ("抖音", "tiktok", "reels", "short", "短视频"))
+    default_deadline = min(8, max(3, int(target_duration * 0.15))) if short_form else min(30, max(8, int(target_duration * 0.25)))
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
         "project_root": os.path.abspath(root),
         "title": args.title or meta.get("title") or os.path.basename(root),
-        "use_case": args.use_case or meta.get("use_case") or "完整Demo",
-        "target_platform": args.target_platform or meta.get("target_platform") or meta.get("publish_target") or "未定",
+        "use_case": use_case,
+        "target_platform": platform,
         "target_listener": args.target_listener or "待填写：目标听众画像",
         "core_promise": args.core_promise or meta.get("theme") or "待填写：一句话听歌承诺",
         "emotional_arc": args.emotional_arc or "verse 收住 -> pre-chorus 抬升 -> chorus 释放 -> bridge 反转/加深",
-        "hook_deadline_seconds": args.hook_deadline_seconds or (8 if str(meta.get("target_platform") or "").lower() in {"抖音", "tiktok"} else 30),
+        "hook_strategy": getattr(args, "hook_strategy", "") or ("cold_open" if short_form else "progressive_arrival"),
+        "hook_deadline_seconds": args.hook_deadline_seconds or default_deadline,
         "sonic_identity": args.sonic_identity or ", ".join(str(x) for x in (meta.get("genre"), meta.get("mood")) if x) or "待填写：曲风/配器/人声身份",
         "reference_boundaries": args.reference_boundaries or "只参考情绪、结构、配器方向；不得复刻旋律、歌词、标志性 riff 或声音身份。",
         "success_metrics": args.success_metric or ["hook 可复唱", "副歌记忆点明确", "目标时长内完成情绪释放"],
@@ -78,8 +84,11 @@ def check_brief(brief: dict[str, Any]) -> dict[str, Any]:
             findings.append({"id": f"BRIEF-{field.upper()}", "severity": "blocking", "message": f"{field} 未完成。"})
     try:
         deadline = int(brief.get("hook_deadline_seconds"))
-        if deadline <= 0 or deadline > 60:
-            findings.append({"id": "BRIEF-HOOK-DEADLINE", "severity": "warning", "message": "hook_deadline_seconds 建议在 1-60 秒内。"})
+        duration = int(brief.get("target_duration_seconds") or 0)
+        if deadline <= 0 or (duration and deadline >= duration):
+            findings.append({"id": "BRIEF-HOOK-DEADLINE", "severity": "blocking", "message": "hook 截止必须大于 0 且早于目标时长。"})
+        elif duration and deadline > duration * 0.4:
+            findings.append({"id": "BRIEF-HOOK-DEADLINE-LATE", "severity": "warning", "message": "hook 晚于全曲 40%；若为慢热/通谱结构，请在 hook_strategy 说明。"})
     except Exception:
         findings.append({"id": "BRIEF-HOOK-DEADLINE", "severity": "blocking", "message": "hook_deadline_seconds 必须是数字。"})
     blockers = [item for item in findings if item["severity"] == "blocking"]
@@ -88,6 +97,7 @@ def check_brief(brief: dict[str, Any]) -> dict[str, Any]:
         "kind": CHECK_KIND,
         "generated_at": date.today().isoformat(),
         "project_root": brief.get("project_root"),
+        "source_sha256": hashlib.sha256(json.dumps(brief, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest(),
         "passed": not blockers,
         "blocking": len(blockers),
         "warnings": len(findings) - len(blockers),
@@ -105,6 +115,7 @@ def render_markdown(brief: dict[str, Any], check: dict[str, Any]) -> str:
         f"- 目标听众：{brief.get('target_listener')}",
         f"- 核心承诺：{brief.get('core_promise')}",
         f"- Hook 截止：{brief.get('hook_deadline_seconds')}s",
+        f"- Hook 策略：{brief.get('hook_strategy')}",
         f"- 声音身份：{brief.get('sonic_identity')}",
         "",
         "## Emotional Arc",
@@ -148,6 +159,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--emotional-arc", default="")
     ap.add_argument("--sonic-identity", default="")
     ap.add_argument("--hook-deadline-seconds", type=int, default=None)
+    ap.add_argument("--hook-strategy", default="")
     ap.add_argument("--reference-boundaries", default="")
     ap.add_argument("--success-metric", action="append", default=[])
     args = ap.parse_args(argv)
@@ -158,7 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     existing = load_json(paths(root)[0], {}) if not any([
         args.title, args.use_case, args.target_platform, args.target_listener,
         args.core_promise, args.emotional_arc, args.sonic_identity,
-        args.hook_deadline_seconds, args.reference_boundaries, args.success_metric,
+        args.hook_deadline_seconds, args.hook_strategy, args.reference_boundaries, args.success_metric,
     ]) else {}
     brief = existing if isinstance(existing, dict) and existing.get("kind") == KIND else build_brief(root, args)
     check = check_brief(brief)

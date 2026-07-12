@@ -585,3 +585,25 @@ def test_canonical_strictness_key_overrides_platform_substring(tmp_path: Path):
 def test_canonical_strictness_key_production(tmp_path: Path):
     (tmp_path / "_设置.md").write_text("一致性严格度: production\n", encoding="utf-8")
     assert score.resolve_score_profile(str(tmp_path)) == "production"
+
+
+def test_apply_dashboard_dedups_block_when_dim_already_blocked():
+    dims = {k: score.empty_dimension(k) for k in score.DIMENSIONS}
+    # 先由 consistency 计入一个角色维 block
+    score.add_signal(dims, "character_consistency", blocks=1, skipped=False, evidence="脸(G1): block=1")
+    ep = {"episode": "第1集", "recent_blockers": [
+        {"stage": "image", "dim": "角色一致性", "loc": "Clip_03", "msg": "崩脸 角色一致性"},
+    ]}
+    score.apply_dashboard(dims, ep, None)
+    # 同维已有 block：dashboard 同根因不再叠扣，仅留证据
+    assert dims["character_consistency"]["blocks"] == 1
+    assert any("跨源去重" in e for e in dims["character_consistency"]["evidence"])
+
+
+def test_apply_dashboard_still_blocks_fresh_dim():
+    dims = {k: score.empty_dimension(k) for k in score.DIMENSIONS}
+    ep = {"episode": "第1集", "recent_blockers": [
+        {"stage": "image", "dim": "角色一致性", "loc": "Clip_03", "msg": "崩脸 角色一致性"},
+    ]}
+    score.apply_dashboard(dims, ep, None)
+    assert dims["character_consistency"]["blocks"] == 1

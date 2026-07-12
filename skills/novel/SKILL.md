@@ -2,7 +2,7 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3134 | 目录文本总行数 66265
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3137 | 目录文本总行数 66632
 
 # novel — 小说工坊调度入口
 
@@ -106,9 +106,9 @@ description: Top-level dispatcher for the novel-* skill family — inspects an o
    - **确定性 Workflow runner**：若要让薄 agent 编排长流程，先跑 `python3 skills/novel/scripts/pipeline_runner.py "<作品根>" --write-plan`。它只读 registry、查输入/输出/gate、写 `生产数据/novel_pipeline_plan.{json,md}` 和 provenance；不写正文、不调用模型。需要恢复/追踪执行态时用 `--start-run` 创建 `生产数据/pipeline_runs/<run_id>.json`，再用 `--claim-stage` / `--complete-stage` / `--fail-stage` / `--block-stage` 更新阶段。agent 只应依据该 plan/run 选择下一步，并把开放判断交给 `语义任务/` 或 specialist agent；handoff 前可跑 `--handoff <stage>` 生成边界契约。
    - **批量队列 (Batch)**：若要多 worker 并发处理多章节 review/score 等任务，先用 `python3 skills/novel-batch/scripts/queue.py plan "<作品根>" --kind review --chapters 1-10`，worker 再 `claim`，失败用 `reclaim`/`dead-letter` 处理。
    - **转制就绪**：若用户表示要继续做视觉生产/短剧/漫剧成片，先跑 `python3 skills/novel-craft/scripts/screen_adaptation_ready.py "<作品根>"`；只检查小说侧条件，不替视觉生产线生成资产或镜头结构。
-   - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`；`export` 覆盖 rights/research/review/score/state closure/AI usage/compliance profile，并在商业/平台/出海/KDP/中国公开发布等目标要求 AI 使用披露、专业资料包和平台/辖区清单闭环。
+   - **准入检查 (Gate)**：在进入 `drafting` (写正文)、`review`/`score` 或 `export` 前，跑 `python3 skills/novel/novel-gate.py <作品根> --stage <阶段>`；该入口统一调用 novel QA gate。`drafting` 只查写作前置物，不要求既有 `score_report`；`review`/`score` 要求本章 `state_delta` 已合并进 `state_ledger`，且动态百科分级新鲜度达标（滞后 ≥3 章、或整个缺失且正文已 ≥5 章 → 阻断；轻度滞后仅提醒——百科是审稿的一致性引擎，不能拿过期事实索引审新章）；`export` 覆盖 rights/research/review/score/state closure/AI usage/compliance profile，并在商业/平台/出海/KDP/中国公开发布等目标要求 AI 使用披露、专业资料包和平台/辖区清单闭环。
    - **文本主创模式**：投稿/发布前 gate 会读取 `_设置.md` 的 `文本主创模式` 与 `合规/ai_usage.json`。晋江/起点/番茄/红果等中文网文平台目标下，`AI生成` 正文会阻断，除非补 `合规/platform_ai_evidence.json`（当日平台规则证据）并写入作用域匹配的 `ai_generated_text_platform_exception` 豁免；推荐走 `人类主创` 或 `AI辅助`。
-   - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json` 和对账结论 `审稿/state_verify_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第NN章 --conclusion <作品根>/审稿/state_verify_第NN章.json`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过并合并状态账本后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正。
+   - **写后自动化**：每写完一章，先填 `审稿/state_delta_第NN章.json` 和对账结论 `审稿/state_verify_第NN章.json`，再跑 `python3 skills/novel/scripts/post_write.py <作品根> --chapter 第NN章 --conclusion <作品根>/审稿/state_verify_第NN章.json`；该入口会先过状态对账/百科/逻辑/力量体系机检，全部硬闸通过并合并状态账本后才自动勾选进度。若 `_设置.md` 选 `小说生成工作流：边写边自检`，`draft_packets.py` 会把这套闭环自动写进每章任务包，`flow.py` 也会把执行命令作为下一步提示；同时按 `小批回扫间隔`（默认 5 章，可改 3 章/关闭）保留 novel-review 的文风、节奏、钩子、人设、读者承诺集中修正；全书 40-60% 进度带自动按半间隔加密回扫（**中段防守**：长篇一致性实证的矛盾高发区；due 点单一真值源 `novel/_lib/sweep_schedule.py`）。
    - **标准化旧项目**：若 `_进度.md` 格式陈旧，跑 `python3 skills/novel/scripts/standardize_progress.py <作品根>` 迁移到标准矩阵。
    - 仅当 `_进度.md` 显示已全部完成、或用户明确要开新动作时，才往下走 1-5。
 1. 用户给了**本地 .txt/.md/.docx、目录、file:// 或 URL**，且意图是"拖进来/导入/先建作品/纳管源书"，或没说具体动作 → 先跑 `python3 skills/novel/scripts/import_novel.py "<路径或URL>"` 建 `创作区/写小说/<书名>/`。

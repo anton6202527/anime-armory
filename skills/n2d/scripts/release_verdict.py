@@ -31,6 +31,7 @@ if str(LIB) not in sys.path:
     sys.path.insert(0, str(LIB))
 
 from n2d_findings_utils import finding_counts  # noqa: E402
+from n2d_thresholds import score_threshold_for_profile  # noqa: E402  机器分 profile 阈值单一真值源（与 n2d-score 共用）
 from n2d_route import normalize_episode  # noqa: E402
 from skill_snapshot import fingerprint_is_fresh  # noqa: E402
 import failure_taxonomy  # noqa: E402
@@ -306,13 +307,30 @@ def check_gate(root: Path, episode: str) -> Dict[str, Any]:
     return component("gate", "pass", f"gate 通过；reports={len(files)}。")
 
 
-def check_score(root: Path, episode: str) -> Dict[str, Any]:
+# release profile → 机器分 profile（阈值经 n2d_thresholds.score_threshold_for_profile 解析）。
+# cn_public/commercial 公开/商用发布按 production(90) 档，overseas 按 88，internal 按 standard(85)。
+_RELEASE_TO_SCORE_PROFILE = {
+    "demo": "demo", "internal": "standard",
+    "cn_public": "production", "overseas": "overseas",
+    "commercial": "production", "production": "production",
+}
+
+
+def check_score(root: Path, episode: str, profile: str = "demo") -> Dict[str, Any]:
     path = production_dir(root) / f"score_{episode}.json"
     data = load_json(path)
     if not isinstance(data, dict):
         return component("score", "block", "缺 score_<集>.json。", path=relpath(root, path))
     score = data.get("total_score", data.get("score"))
-    threshold = data.get("threshold", 80)
+    # 阈值下限按 release profile 收紧：此前只信 score 文件里已写的 threshold（fallback 还是 80），
+    # commercial 发布可以放行按 demo(75) 档生成的 score 文件——release 侧必须重申自己的机器分下限。
+    file_threshold = data.get("threshold", 85)
+    score_profile = _RELEASE_TO_SCORE_PROFILE.get(str(profile or "").strip().lower(), "standard")
+    profile_floor = score_threshold_for_profile(score_profile)
+    try:
+        threshold = max(float(file_threshold), float(profile_floor))
+    except Exception:
+        threshold = float(profile_floor)
     status = str(data.get("status") or "").strip().lower()
     low = status not in {"pass", "ok"} if status else False
     try:
@@ -320,8 +338,13 @@ def check_score(root: Path, episode: str) -> Dict[str, Any]:
     except Exception:
         pass
     if low:
-        return component("score", "block", f"score 未达标：score={score}, threshold={threshold}, status={status or 'unknown'}。", path=relpath(root, path))
-    return component("score", "pass", f"score 通过：score={score}, threshold={threshold}。", path=relpath(root, path))
+        return component("score", "block",
+                         f"score 未达标：score={score}, threshold={threshold:g}"
+                         f"（file={file_threshold}, {profile} profile 下限={profile_floor}）, status={status or 'unknown'}。",
+                         path=relpath(root, path))
+    return component("score", "pass",
+                     f"score 通过：score={score}, threshold={threshold:g}（{profile} profile 下限={profile_floor}）。",
+                     path=relpath(root, path))
 
 
 def check_ledger(root: Path, episode: str) -> Dict[str, Any]:
@@ -591,6 +614,15 @@ def check_stop_loss(root: Path, episode: str, profile: str) -> Dict[str, Any]:
             "批量 stop-loss 阈值触发；先停线回合同层修复。" if strict else "批量 stop-loss 阈值触发；demo/internal 仅提示，放量前必须停线修复。",
             details=payload,
         )
+    if payload.get("status") == "no_evidence":
+        strict = _strict_release_context(root, profile)
+        return component(
+            "stop_loss",
+            "warn" if strict else "pass",
+            "stop-loss 无任何遥测证据（无 findings/事件账本/dashboard）——空账恒过≠核过；"
+            "strict 发布前先跑一集真实生产把遥测建起来。" if strict else "stop-loss 暂无遥测证据（demo/internal 放行）。",
+            details=payload,
+        )
     return component("stop_loss", "pass", "批量 stop-loss 未触发。", details={"metrics": payload.get("metrics"), "thresholds": payload.get("thresholds")})
 
 
@@ -705,7 +737,7 @@ def build_components(root: Path, episode: str, profile: str) -> List[Dict[str, A
         check_compliance(root, episode),
         check_release_profile(root, episode, profile),
         check_gate(root, episode),
-        check_score(root, episode),
+        check_score(root, episode, profile),
         check_ledger(root, episode),
         check_review_ui(root, episode),
         check_image_qc(root, episode, profile),

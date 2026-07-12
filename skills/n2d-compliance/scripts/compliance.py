@@ -161,9 +161,14 @@ def default_distribution_intent(root: Path) -> str:
     intent = str(get_setting(str(root), "合规用途", "internal_only") or "").strip()
     if intent in {"publish_candidate", "paid_distribution", "internal_only"}:
         return intent
-    if intent in {"demo", "demo_only", "test"}:
+    if intent in {"demo", "demo_only", "test", "内部", "内部预览", "自用", "学习"}:
         return "internal_only"
-    return "internal_only"
+    if intent in {"投放", "上线", "发布", "商用", "付费", "publish", "release", "commercial", "paid"}:
+        return "paid_distribution"
+    # fail-closed（2026-07 标准审计）：未知值旧行为静默归最宽松 internal_only——
+    # 「合规用途」写个错别字就把发布域 BLOCK 全降 INFO 放行。未知一律按最严格档处理，
+    # 用户改回合法枚举值即可放宽；安全方向只多问不放行。
+    return "paid_distribution"
 
 
 def default_manifest(root: Path, episode: str | None = None) -> Dict[str, Any]:
@@ -382,6 +387,11 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
             value = str(target.get(key) or "").strip()
             if value and value not in PLATFORM_REVIEW_STATUSES:
                 flag_skippable(f"platform_review.targets[{idx}] {key} must be ready/done/not_applicable")
+            # 与监管域同口径（2026-07 标准审计）：review 阶段平台侧版权/分级审核不能停在
+            # ready 自声明，必须 done/not_applicable——旧逻辑只查状态词合法性，
+            # `copyright_review=ready` 永远过闸，平台审核域实质弱于监管域。
+            elif stage == "review" and value not in {"done", "not_applicable"}:
+                flag_skippable(f"platform_review.targets[{idx}] {key} 须 done/not_applicable 才能过 review（当前 {value or 'missing'}）")
         platform = str(target.get("platform") or "").strip()
         region = str(target.get("region") or "").strip().lower()
         overseas = target.get("requires_localization") is True or platform.lower() in OVERSEAS_PLATFORMS or (region and region not in DOMESTIC_REGIONS)
@@ -396,7 +406,10 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
                 flag_skippable(f"localization.subtitle_languages must include target language {required}")
     # 广电备案/分级/播前审核（2026 新规）：与平台审核同属发布边界域（flag_skippable）。
     reg = data.get("regulatory_filing") if isinstance(data.get("regulatory_filing"), dict) else {}
-    if reg:
+    # 反直觉漏洞修复（2026-07 标准审计）：旧写法 `if reg:` 让「regulatory_filing: {}」空对象
+    # 比"缺 key"更宽松——空 dict 直接跳过 pbr/备案号/人审全部检查，连 paid_distribution 都不拦。
+    # 现在只要该键是 dict（含空）就进入检查；缺 key 仍由上方的存在性检查负责。
+    if isinstance(data.get("regulatory_filing"), dict):
         applicable = reg.get("applicable")
         if applicable is False:
             # 主动声明不适用（纯海外/内部）必须写理由，不能静默免备案

@@ -264,6 +264,20 @@ CLAIM_DISCLAIMER_RULES = [
      "fix": "培训效果宣称建议带「学习效果因人而异」；升学率/通过率保证已被广告法机检拦，删除即可。"},
 ]
 
+# 引证/免责呈现：字段完整是确定性交接闸；数值只作为明确标注的内部可读性快筛，
+# 不是伪称法定字号/阅读速度。最终像素与实际版位仍由 delivery + 具名人审签收。
+DISCLOSURE_HOUSE_PROFILE = {
+    "max_cjk_chars_per_second_warn": 12.0,
+    "min_font_height_ratio_warn": 0.03,
+    "authority": "house_legibility_screen",
+    "source": "内部快筛；法律硬要求来自适用辖区，最终以实际成片/版位人审为准",
+}
+CITED_EVIDENCE_TYPES = {
+    "test_measurement", "statistics_survey", "scientific_literature", "comparison",
+}
+DISCLOSURE_RELATIONSHIPS = {"same_screen", "immediate_adjacent"}
+DISCLOSURE_PROMINENCE = {"equivalent", "sufficient", "audio_read"}
+
 
 def _usp_norm(text):
     """轻归一化：去全部空白（防「效果 因人而异」被空格隔开漏判）。文案非对抗，无需 NFKC。"""
@@ -295,6 +309,125 @@ def usp_disclaimer_check(brief, storyboard, claim_text=""):
             "msg": f"宣称「{rule['label']}」（命中「{hit}」）但分镜/法律声明里缺对应免责声明",
             "suggestion": rule["fix"],
         })
+    return findings
+
+
+def _claim_id(claim, pos):
+    return str((claim or {}).get("id") or f"claim_{pos:02d}").strip()
+
+
+def _claim_ids_from_shot(shot):
+    raw = shot.get("claim_ids") or []
+    if isinstance(raw, str):
+        raw = [raw]
+    return {str(v).strip() for v in raw if str(v).strip()}
+
+
+def _disclosures_from_shot(shot):
+    raw = shot.get("disclosures") or []
+    if isinstance(raw, dict):
+        raw = [raw]
+    return [row for row in raw if isinstance(row, dict)]
+
+
+def _visible_chars(value):
+    return len(re.sub(r"[\s\W_]+", "", str(value or ""), flags=re.UNICODE))
+
+
+def claim_presentation_check(brief, storyboard):
+    """Validate claim→shot→disclosure linkage and planned legibility.
+
+    The 2026 SAMR cited-content guidance requires clear source, conditions,
+    scope and validity where applicable and targets tiny-print disclaimers.
+    This function machine-checks structure.  CPS/font ratios are house WARNs,
+    while missing linkage/source/conditions is a deterministic BLOCK.
+    """
+    raw_claims = (brief or {}).get("claims") or []
+    if isinstance(raw_claims, dict):
+        raw_claims = [raw_claims]
+    claims = [(pos, row) for pos, row in enumerate(raw_claims, 1) if isinstance(row, dict)]
+    if not claims:
+        return []
+    shots = storyboard.get("shots") or storyboard.get("clips") or []
+    findings = []
+    for pos, claim in claims:
+        cid = _claim_id(claim, pos)
+        claim_positions = [i for i, shot in enumerate(shots) if cid in _claim_ids_from_shot(shot)]
+        if not claim_positions:
+            findings.append({
+                "severity": "block", "kind": "claim_shot_binding_missing", "claim_id": cid,
+                "msg": f"claim {cid} 未绑定到任何 storyboard.shots[].claim_ids；无法证明哪一镜做了该宣称",
+            })
+            continue
+        candidates = []
+        for i, shot in enumerate(shots):
+            for row in _disclosures_from_shot(shot):
+                if str(row.get("claim_id") or "").strip() == cid:
+                    candidates.append((i, shot, row))
+        if not candidates:
+            findings.append({
+                "severity": "block", "kind": "claim_disclosure_missing", "claim_id": cid,
+                "msg": f"claim {cid} 缺结构化 disclosures[]；普通 legal_lines 不能证明来源/条件/范围的呈现关系",
+            })
+            continue
+        accepted = False
+        candidate_errors = []
+        citation_used = bool(claim.get("citation_used") or str(claim.get("evidence_type") or "").lower() in CITED_EVIDENCE_TYPES)
+        for shot_index, shot, row in candidates:
+            missing = []
+            for key in ("text", "duration_sec", "font_height_ratio", "contrast_review",
+                        "safe_zone_review", "relationship", "relative_prominence"):
+                if row.get(key) in (None, "", []):
+                    missing.append(key)
+            if citation_used and not str(row.get("source_text") or "").strip():
+                missing.append("source_text")
+            relationship = str(row.get("relationship") or "").strip()
+            if relationship and relationship not in DISCLOSURE_RELATIONSHIPS:
+                missing.append("relationship_valid")
+            prominence = str(row.get("relative_prominence") or "").strip()
+            if prominence and prominence not in DISCLOSURE_PROMINENCE:
+                missing.append("relative_prominence_valid")
+            if str(row.get("contrast_review") or "").lower() != "pass":
+                missing.append("contrast_review_pass")
+            if str(row.get("safe_zone_review") or "").lower() != "pass":
+                missing.append("safe_zone_review_pass")
+            if relationship == "same_screen" and shot_index not in claim_positions:
+                missing.append("same_screen_relation")
+            if relationship == "immediate_adjacent" and not any(abs(shot_index - p) <= 1 for p in claim_positions):
+                missing.append("immediate_adjacent_relation")
+            try:
+                duration = float(row.get("duration_sec") or 0)
+                ratio = float(row.get("font_height_ratio") or 0)
+            except (TypeError, ValueError):
+                duration = ratio = 0.0
+                missing.append("numeric_presentation_fields")
+            if duration <= 0 or ratio <= 0:
+                missing.append("positive_presentation_fields")
+            if missing:
+                candidate_errors.append(sorted(set(missing)))
+                continue
+            accepted = True
+            chars = _visible_chars(row.get("text")) + _visible_chars(row.get("source_text"))
+            cps = chars / duration if duration else 999.0
+            if cps > DISCLOSURE_HOUSE_PROFILE["max_cjk_chars_per_second_warn"]:
+                findings.append({
+                    "severity": "warn", "kind": "disclosure_reading_speed_house_warn", "claim_id": cid,
+                    "msg": f"claim {cid} 披露约 {cps:.1f} 字符/秒，超过内部快筛 "
+                           f"{DISCLOSURE_HOUSE_PROFILE['max_cjk_chars_per_second_warn']:.0f}；请实机审读（非法律数值线）",
+                })
+            if ratio < DISCLOSURE_HOUSE_PROFILE["min_font_height_ratio_warn"]:
+                findings.append({
+                    "severity": "warn", "kind": "disclosure_font_house_warn", "claim_id": cid,
+                    "msg": f"claim {cid} 计划字高占画面 {ratio:.3f}，低于内部快筛 "
+                           f"{DISCLOSURE_HOUSE_PROFILE['min_font_height_ratio_warn']:.3f}；防止“大字吸睛、小字免责”",
+                })
+            break
+        if not accepted:
+            missing = sorted({v for group in candidate_errors for v in group})
+            findings.append({
+                "severity": "block", "kind": "claim_disclosure_contract_invalid", "claim_id": cid,
+                "msg": f"claim {cid} 披露呈现合同不完整/关系不成立：{', '.join(missing)}",
+            })
     return findings
 
 
@@ -357,6 +490,7 @@ def main():
     findings += shot_vo_overflow_check(sb, dl)
     findings += forced_asset_check(brief, sb)
     findings += usp_disclaimer_check(brief, sb, claim_src)
+    findings += claim_presentation_check(brief, sb)
     findings += seam_check(sb)
 
     # 主片时长缺失：不静默放过整条总时长约束，至少 warn。
@@ -375,11 +509,19 @@ def main():
         })
 
     payload = {
-        "schema_version": 1, "kind": "ad_storyboard_finalize",
+        "schema_version": 2, "kind": "ad_storyboard_finalize",
         "master_seconds": master_sec, "storyboard_total": sb_total,
         "vo_seconds": vo_sec, "vo_placeholder": placeholder,
         "allow_placeholder": allow_ph,
         "shots": [{"shot_id": s, "duration": d} for s, d in shots],
+        "standards": {
+            "cited_content": {
+                "authority": "official_regulation_guidance", "checked_at": "2026-07-11",
+                "source": "https://policy.mofcom.gov.cn/claw/clawContent.shtml?id=106104",
+                "scope": "广告引证内容来源/条件/适用范围/有效期及显著呈现",
+            },
+            "disclosure_legibility": DISCLOSURE_HOUSE_PROFILE,
+        },
         "findings": findings,
     }
     if args.json:

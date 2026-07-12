@@ -366,3 +366,44 @@ def test_lora_exception_scope_validator_rejects_project_switch_shape():
 
     assert "scope must be hero_shots_only" in blocks
     assert "not_a_project_model_switch must be true" in blocks
+
+
+def _dataset_manifest_with_n_images(tmp_path, n):
+    root = _root(tmp_path)
+    out_dir = root / "设定库" / "lora" / "CHAR_SHEN" / "常态"
+    dataset_dir = out_dir / "dataset"
+    for i in range(n):
+        img = dataset_dir / f"seed_front_{i:02d}.png"
+        _png(img)
+        img.with_suffix(".txt").write_text(f"shen_nian, front reference, {i}\n", encoding="utf-8")
+    registry = lora.load_registry(root)
+    char, form = lora.find_character_form(registry, character_id="CHAR_SHEN", form_name="常态")
+    return lora.build_dataset_manifest(root, out_dir, char, form, "shen_nian")
+
+
+def test_dataset_overfit_watch_above_30_images(tmp_path):
+    manifest = _dataset_manifest_with_n_images(tmp_path, 31)
+    warns = manifest["summary"]["warnings"]
+    assert "dataset_above_30_images_overfit_watch" in warns
+    assert "dataset_above_recommended_50_images_overfit_risk" not in warns
+    assert manifest["recommended"]["sweet_spot_max_images"] == 30
+
+
+def test_dataset_no_overfit_watch_at_30_images(tmp_path):
+    manifest = _dataset_manifest_with_n_images(tmp_path, 30)
+    warns = manifest["summary"]["warnings"]
+    assert "dataset_above_30_images_overfit_watch" not in warns
+
+
+def test_identity_qc_check_states(tmp_path):
+    root = _root(tmp_path)
+    # 空目录 → no_samples（或缺依赖时 unavailable，两者都不臆造分）
+    qc_dir = root / "生产数据" / "lora_qc"
+    qc_dir.mkdir(parents=True, exist_ok=True)
+    res = lora.identity_qc_check(root, {"items": []}, qc_dir)
+    assert res["status"] in {"no_samples", "unavailable"}
+    assert res["median_cosine"] is None
+    # 有样图但数据集无 front/closeup/side 锚 → no_reference_anchors（或 unavailable）
+    _png(qc_dir / "sample1.png")
+    res2 = lora.identity_qc_check(root, {"items": [{"role": "outfit", "file": "x.png"}]}, qc_dir)
+    assert res2["status"] in {"no_reference_anchors", "unavailable"}

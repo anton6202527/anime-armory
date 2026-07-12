@@ -247,6 +247,11 @@ def enforce_gate(root: Path) -> None:
     gate = subprocess.run(gate_cmd, text=True)
     if gate.returncode:
         raise RuntimeError("ad video gate blocked paid generation")
+    acceptance_cmd = [sys.executable, str(Path(__file__).resolve().parents[2] / "ad-craft" / "scripts" / "stage_acceptance.py"),
+                      str(root), "--stage", "image"]
+    acceptance = subprocess.run(acceptance_cmd, text=True)
+    if acceptance.returncode:
+        raise RuntimeError("image stage acceptance blocked paid video generation")
 
 
 def render_jobs(

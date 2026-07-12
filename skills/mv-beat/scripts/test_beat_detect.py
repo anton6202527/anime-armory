@@ -17,6 +17,21 @@ class BeatPhaseTest(unittest.TestCase):
         phase, _confidence, _scores = beat_detect.estimate_bar_phase([0, 1, 2, 3], [1, 9, 1, 1], 4, forced=3)
         self.assertEqual(phase, 3)
 
+    def test_section_coverage_requires_contiguous_full_song(self):
+        ok, issues = beat_detect.section_coverage([
+            {"start": 0.0, "end": 10.0},
+            {"start": 10.0, "end": 20.0},
+        ], 20.0)
+        self.assertTrue(ok)
+        self.assertEqual(issues, [])
+
+        ok, issues = beat_detect.section_coverage([
+            {"start": 1.0, "end": 9.0},
+            {"start": 10.0, "end": 18.0},
+        ], 20.0)
+        self.assertFalse(ok)
+        self.assertIn("section_gap", issues)
+
 
 if __name__ == "__main__":
     unittest.main()

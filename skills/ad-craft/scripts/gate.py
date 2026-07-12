@@ -139,18 +139,31 @@ def ad_law_findings(root):
     return out
 
 
-def _resolve_image_backend(root):
-    """优先 _设置.md(生图AI) → 全局默认 → _meta.json(image_backend)。"""
-    val = ""
+def _resolve_image_route(root):
+    """Resolve concrete model + access channel; old `生图AI` is migration-only."""
+    model = channel = legacy = ""
     if _settings is not None:
         try:
-            val = (_settings.get_setting(root, "生图AI", "") or "").strip()
+            model = (_settings.get_setting(root, "生图模型", "GPT Image 2") or "").strip()
+            channel = (_settings.get_setting(root, "生图渠道", "Codex CLI") or "").strip()
+            try:
+                raw_settings = Path(root, "_设置.md").read_text(encoding="utf-8")
+            except OSError:
+                raw_settings = ""
+            import re
+            match = re.search(r"^\s*[-*]?\s*生图AI\s*[:：]\s*([^#\n]+)", raw_settings, re.M)
+            legacy = match.group(1).strip() if match else ""
         except Exception:
-            val = ""
-    if not val:
-        meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
-        val = (meta.get("image_backend") or "").strip()
-    return val
+            model = channel = legacy = ""
+    meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
+    model = model or str(meta.get("image_model") or "").strip()
+    channel = channel or str(meta.get("image_channel") or "").strip()
+    legacy = legacy or str(meta.get("image_backend") or "").strip()
+    return {"model": model, "channel": channel, "legacy": legacy}
+
+
+def _route_family(canonical):
+    return "openai" if canonical in {"codex", "openai"} else canonical
 
 
 def _image_backend_override_allows(root, canonical):
@@ -165,12 +178,16 @@ def _image_backend_override_allows(root, canonical):
     if "image" not in scope and "生图" not in scope:
         return False, path
     raw_backend = str(
-        payload.get("backend")
+        payload.get("model")
+        or payload.get("backend")
         or payload.get("canonical")
         or payload.get("image_backend")
         or ""
     ).strip()
     if raw_backend == canonical:
+        return True, path
+    signed_model, signed_model_kind = contract.classify_image_model(raw_backend)
+    if signed_model_kind in {"approved", "manual"} and signed_model == canonical:
         return True, path
     signed_canon, signed_kind = contract.classify_image_backend(raw_backend)
     if signed_kind == "approved" and signed_canon == canonical:
@@ -179,37 +196,58 @@ def _image_backend_override_allows(root, canonical):
 
 
 def image_backend_findings(root):
-    """生图后端治理：Codex image2 优先；非 Codex/OpenAI 需签核；项目内不混用。"""
+    """生图路由治理：具体模型/渠道分列；非默认路线需签核；项目内不混用。"""
     out = []
-    setting_val = _resolve_image_backend(root)
-    if not setting_val:
-        out.append(finding("warn", "image_backend_unset", "未解析到 生图AI 设置，无法核验后端治理", root))
+    route = _resolve_image_route(root)
+    model, channel, legacy = route["model"], route["channel"], route["legacy"]
+    if not model or not channel:
+        out.append(finding("block", "image_route_incomplete",
+                           "生图必须分列具体 生图模型 + 生图渠道；旧 生图AI/厂商壳不能作为生成者", root))
+        if legacy:
+            out.append(finding("block", "image_route_legacy",
+                               f"检测到旧 生图AI/image_backend={legacy}；迁移为具体模型与访问渠道后再花钱", root))
         return out
-    canon, kind = contract.classify_image_backend(setting_val)
-    if kind == "forbidden":
+    if legacy:
+        _, legacy_kind = contract.classify_image_backend(legacy)
+        out.append(finding("block", "image_backend_forbidden" if legacy_kind == "forbidden" else "image_route_legacy",
+                           f"_设置.md/旧默认仍使用 生图AI={legacy}；请删除旧键并保留具体模型+渠道"))
+    model_canon, model_kind = contract.classify_image_model(model)
+    channel_canon, channel_kind = contract.classify_image_channel(channel)
+    if channel_kind == "forbidden":
         out.append(finding("block", "image_backend_forbidden",
-                            f"生图AI『{setting_val}』属禁用/逆向出图路径（ad 投放合规口径），不得用于广告出图"))
-    elif kind == "unknown":
-        out.append(finding("block", "image_backend_unknown",
-                            f"生图AI『{setting_val}』不在 ad 放行白名单内；请改用官方后端或先登记核验"))
-    elif canon and canon not in PREFERRED_IMAGE_BACKENDS:
-        allowed, signoff_path = _image_backend_override_allows(root, canon)
+                           f"生图渠道『{channel}』属逆向/未授权路径，不得用于广告出图"))
+    if model_kind in {"unknown", "legacy"}:
+        out.append(finding("block", "image_model_unknown",
+                           f"生图模型『{model}』不是已核验的具体模型名；不得用 agent/渠道/厂商壳代替"))
+    if channel_kind == "unknown":
+        out.append(finding("block", "image_channel_unknown",
+                           f"生图渠道『{channel}』未登记；请录入官方访问路径或 manual 签核"))
+    if (model_kind == "manual" or channel_kind == "manual"):
+        allowed, signoff_path = _image_backend_override_allows(root, model_canon or channel_canon or "manual")
         if not allowed:
-            out.append(finding(
-                "block",
-                "image_backend_non_codex_requires_signoff",
-                "全项目生图优先 Codex image2；非 Codex/OpenAI 生图后端必须先由用户明确签核，"
-                f"再写 {IMAGE_BACKEND_OVERRIDE_REL} 后才能进入付费出图。当前：{setting_val}",
-                signoff_path,
-            ))
-    # 后端混用：_设置.md 与 _meta.json 指向不同 canonical 后端 = block。
+            out.append(finding("block", "image_backend_non_codex_requires_signoff",
+                               f"manual 生图模型/渠道需项目签核：{model} via {channel}", signoff_path))
+    elif model_canon and channel_canon and _route_family(model_canon) != _route_family(channel_canon):
+        out.append(finding("block", "image_model_channel_mismatch",
+                           f"生图模型 {model} 与渠道 {channel} 不属于同一路线；适配层不得偷偷换模型"))
+    elif model_canon and model_canon not in PREFERRED_IMAGE_BACKENDS:
+        allowed, signoff_path = _image_backend_override_allows(root, model_canon)
+        if not allowed:
+            out.append(finding("block", "image_backend_non_codex_requires_signoff",
+                               "默认 GPT Image 2；其它具体模型必须由用户明确签核后才能进入付费出图。"
+                               f"当前：{model} via {channel}", signoff_path))
+    # _设置.md 与 _meta.json 路由不同 = block。
     meta = load_json(os.path.join(root, "_meta.json"), {}) or {}
-    meta_val = (meta.get("image_backend") or "").strip()
-    if meta_val:
-        meta_canon, meta_kind = contract.classify_image_backend(meta_val)
-        if canon and meta_canon and meta_canon != canon:
-            out.append(finding("block", "image_backend_mixed",
-                                f"项目内后端混用：_设置.md『{setting_val}』≠ _meta.json『{meta_val}』，一个项目只允许一个生图后端"))
+    meta_model = str(meta.get("image_model") or "").strip()
+    meta_channel = str(meta.get("image_channel") or "").strip()
+    meta_legacy = str(meta.get("image_backend") or "").strip()
+    if meta_legacy:
+        _, legacy_kind = contract.classify_image_backend(meta_legacy)
+        out.append(finding("block", "image_backend_forbidden" if legacy_kind == "forbidden" else "image_route_legacy",
+                           f"_meta.json 仍使用旧 image_backend={meta_legacy}；请迁移为 image_model + image_channel"))
+    if meta_model and meta_model != model or meta_channel and meta_channel != channel:
+        out.append(finding("block", "image_backend_mixed",
+                           f"项目内生图路由混用：设置={model} via {channel}，meta={meta_model} via {meta_channel}"))
     return out
 
 
@@ -222,8 +260,9 @@ def image_output_backend_findings(root):
     jobs = manifest.get("jobs")
     if not isinstance(jobs, list):
         return []
-    setting_val = _resolve_image_backend(root)
-    setting_canon, setting_kind = contract.classify_image_backend(setting_val)
+    route = _resolve_image_route(root)
+    setting_model_canon, setting_model_kind = contract.classify_image_model(route["model"])
+    setting_channel_canon, _ = contract.classify_image_channel(route["channel"])
     out = []
     seen = set()
     for job in jobs:
@@ -232,25 +271,29 @@ def image_output_backend_findings(root):
         status = str(job.get("status") or "").strip().lower()
         if status not in {"done", "pass", "accepted", "ok"}:
             continue
+        model = str(job.get("model") or "").strip()
+        channel = str(job.get("channel") or job.get("access_path") or "").strip()
         backend = str(job.get("backend") or "").strip()
-        if not backend:
-            out.append(finding("block", "image_output_backend_missing",
-                               f"已落图 job {job.get('job_id') or job.get('shot') or '?'} 缺 backend provenance",
+        if not model or not channel:
+            out.append(finding("block", "image_output_route_missing",
+                               f"已落图 job {job.get('job_id') or job.get('shot') or '?'} 缺具体 model/channel provenance"
+                               + (f"（旧 backend={backend} 不能替代）" if backend else ""),
                                manifest_path))
             continue
         if job.get("requires_image_input") and not job.get("actual_reference_inputs"):
             out.append(finding("block", "image_output_reference_inputs_missing",
                                f"产品镜 job {job.get('job_id') or '?'} 已完成但 actual_reference_inputs=0；"
                                "prompt 声称引用不等于真实图片输入", manifest_path))
-        canon, kind = contract.classify_image_backend(backend)
-        seen.add(canon or backend)
-        if kind == "forbidden":
+        canon, kind = contract.classify_image_model(model)
+        channel_canon, channel_kind = contract.classify_image_channel(channel)
+        seen.add(f"{canon or model}@{channel_canon or channel}")
+        if channel_kind == "forbidden":
             out.append(finding("block", "image_output_backend_forbidden",
-                               f"已落图 job {job.get('job_id') or '?'} 使用禁用/逆向后端：{backend}",
+                               f"已落图 job {job.get('job_id') or '?'} 使用禁用/逆向渠道：{channel}",
                                manifest_path))
-        elif kind == "unknown":
+        elif kind in {"unknown", "legacy"} or channel_kind == "unknown":
             out.append(finding("block", "image_output_backend_unknown",
-                               f"已落图 job {job.get('job_id') or '?'} 的后端无法核验：{backend}",
+                               f"已落图 job {job.get('job_id') or '?'} 的模型/渠道无法核验：{model} via {channel}",
                                manifest_path))
         elif canon and canon not in PREFERRED_IMAGE_BACKENDS:
             allowed, signoff_path = _image_backend_override_allows(root, canon)
@@ -259,13 +302,17 @@ def image_output_backend_findings(root):
                     "block",
                     "image_output_non_codex_requires_redraw",
                     "已落图来自非 Codex/OpenAI 后端，且无用户签核例外；正式出视频前必须用 Codex image2 重出。"
-                    f"当前 job {job.get('job_id') or '?'} backend={backend}",
+                    f"当前 job {job.get('job_id') or '?'} model={model} channel={channel}",
                     signoff_path,
                 ))
-        if setting_kind == "approved" and canon and setting_canon and canon != setting_canon:
+        if (setting_model_kind == "approved" and canon and setting_model_canon and
+                _route_family(canon) != _route_family(setting_model_canon)):
             out.append(finding("block", "image_output_backend_mismatch",
-                               f"已落图后端 {backend} 与当前 生图AI『{setting_val}』不一致；必须重出受影响图",
+                               f"已落图模型 {model} 与当前 生图模型『{route['model']}』不一致；必须重出受影响图",
                                manifest_path))
+        if channel_canon and setting_channel_canon and _route_family(channel_canon) != _route_family(setting_channel_canon):
+            out.append(finding("block", "image_output_channel_mismatch",
+                               f"已落图渠道 {channel} 与当前 生图渠道『{route['channel']}』不一致", manifest_path))
     if len({x for x in seen if x}) >= 2:
         out.append(finding("block", "image_output_backend_mixed",
                            "已落图 manifest 内混用多个生图后端：" + "、".join(sorted(str(x) for x in seen if x)),

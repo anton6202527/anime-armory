@@ -41,6 +41,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import glob
+import hashlib
 import json
 import math
 import os
@@ -48,6 +49,28 @@ import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+
+def _sha256_path(path: Path) -> str:
+    if not path.is_file():
+        return ""
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _project_settings(root: Path) -> Dict[str, str]:
+    path = root / "_设置.md"
+    if not path.is_file():
+        return {}
+    out: Dict[str, str] = {}
+    for raw in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+        match = re.match(r"^\s*(?:[-*]\s*)?(?:\*\*)?([^:：*]+)(?:\*\*)?\s*[:：]\s*(.+?)\s*$", raw)
+        if match:
+            out[match.group(1).strip()] = re.split(r"\s+#", match.group(2), maxsplit=1)[0].strip()
+    return out
 
 # verdict 严重度；noface=图里没脸，介于 ok 与 warn。
 SEVERITY = {"ok": 0, "info": 0, "noface": 1, "warn": 2, "block": 3}
@@ -723,6 +746,134 @@ def prohibited_local_patch_outputs(root: Path) -> Dict[str, Any]:
     }
 
 
+def generation_provenance(root: Path) -> Dict[str, Any]:
+    """Audit model/channel/prompt/reference receipts for every planned frame."""
+    latest: Dict[str, Tuple[int, Dict[str, Any]]] = {}
+    for idx, event in enumerate(_load_production_events(root), start=1):
+        if str(event.get("stage") or "") != "image":
+            continue
+        rel = _event_asset_rel(root, event)
+        if rel:
+            latest[rel] = (idx, event)
+    settings = _project_settings(root)
+    plan = load_clip_plan(root) or {}
+    plan_by_id = {
+        str(clip.get("clip_id")): clip
+        for clip in plan.get("clips", []) if isinstance(clip, dict) and clip.get("clip_id")
+    }
+    expected_model = str(settings.get("生图模型") or "").strip()
+    expected_channel = str(settings.get("生图渠道") or settings.get("生图AI") or "").strip()
+    rows = []
+    pairs = set()
+    blocks = 0
+    for cid, absolute in discover_clip_frames(root):
+        rel = Path(absolute).resolve().relative_to(root.resolve()).as_posix()
+        item = latest.get(rel)
+        findings = []
+        if not item:
+            findings.append("missing_generation_event")
+            model = channel = ""
+        else:
+            line_no, event = item
+            generation = _event_mapping(event, "generation")
+            model = str(generation.get("model") or event.get("model") or "").strip()
+            channel = str(generation.get("channel") or generation.get("provider") or event.get("channel") or event.get("provider") or "").strip()
+            if not model:
+                findings.append("missing_model")
+            if not channel:
+                findings.append("missing_channel")
+            recorded_asset_hash = str(generation.get("asset_sha256") or event.get("asset_sha256") or "")
+            actual_hash = _sha256_path(root / rel)
+            if not recorded_asset_hash:
+                findings.append("missing_asset_sha256")
+            elif recorded_asset_hash != actual_hash:
+                findings.append("asset_changed_after_generation_event")
+            prompt_hash = str(generation.get("source_prompt_sha256") or event.get("source_prompt_sha256") or "")
+            prompt_rel = str(generation.get("source_prompt") or event.get("source_prompt") or "").strip()
+            reference_rows = generation.get("reference_inputs")
+            subject_rows = generation.get("subject_inputs")
+            if not prompt_rel:
+                findings.append("missing_source_prompt")
+            if not prompt_hash:
+                findings.append("missing_source_prompt_sha256")
+            if prompt_rel:
+                prompt_path = root / prompt_rel
+                if not prompt_path.is_file():
+                    findings.append("source_prompt_missing")
+                elif prompt_hash and _sha256_path(prompt_path) != prompt_hash:
+                    findings.append("source_prompt_changed_after_generation_event")
+            if not isinstance(reference_rows, list):
+                findings.append("missing_reference_inputs_receipt")
+                reference_rows = []
+            if not isinstance(subject_rows, list):
+                subject_rows = []
+            for reference in reference_rows:
+                if not isinstance(reference, dict):
+                    findings.append("invalid_reference_input_receipt")
+                    continue
+                reference_rel = str(reference.get("path") or "").strip()
+                reference_hash = str(reference.get("sha256") or "").strip()
+                if not reference_rel or not reference_hash:
+                    findings.append("incomplete_reference_input_receipt")
+                    continue
+                reference_path = root / reference_rel
+                if not reference_path.is_file():
+                    findings.append("reference_input_missing")
+                elif _sha256_path(reference_path) != reference_hash:
+                    findings.append("reference_input_changed_after_generation_event")
+            base_cid = cid[:-4] if cid.endswith("_end") else cid
+            clip_contract = plan_by_id.get(base_cid) or {}
+            required_reference_paths = set()
+            required_subject_ids = set()
+            for reference in clip_contract.get("reference_inputs") or []:
+                if isinstance(reference, str) and reference.strip():
+                    required_reference_paths.add(reference.strip())
+                elif isinstance(reference, dict):
+                    if str(reference.get("path") or "").strip():
+                        required_reference_paths.add(str(reference.get("path")).strip())
+                    subject_id = str(
+                        reference.get("subject_id") or reference.get("character_id") or ""
+                    ).strip()
+                    if subject_id:
+                        required_subject_ids.add(subject_id)
+            actual_reference_paths = {
+                str(reference.get("path") or "").strip()
+                for reference in reference_rows if isinstance(reference, dict)
+            }
+            actual_subject_ids = {str(value).strip() for value in subject_rows if str(value).strip()}
+            for missing_path in sorted(required_reference_paths - actual_reference_paths):
+                findings.append(f"required_reference_not_submitted:{missing_path}")
+            for missing_subject in sorted(required_subject_ids - actual_subject_ids):
+                findings.append(f"required_subject_not_submitted:{missing_subject}")
+            if model and channel:
+                pairs.add((model, channel))
+            if expected_model and model and model != expected_model:
+                findings.append("model_differs_from_project_setting")
+            if expected_channel and channel and channel != expected_channel:
+                findings.append("channel_differs_from_project_setting")
+        blocks += len(findings)
+        rows.append({
+            "clip": cid, "asset": rel, "model": model, "channel": channel,
+            "source_prompt": prompt_rel if item else "",
+            "reference_count": len(reference_rows) if item else 0,
+            "subject_count": len(subject_rows) if item else 0,
+            "event_line": item[0] if item else None, "findings": findings,
+            "verdict": "block" if findings else "ok",
+        })
+    if len(pairs) > 1:
+        blocks += 1
+    return {
+        "event_path": str(_production_events_path(root)),
+        "expected_model": expected_model,
+        "expected_channel": expected_channel,
+        "model_channel_pairs": [{"model": model, "channel": channel} for model, channel in sorted(pairs)],
+        "uniform": len(pairs) <= 1,
+        "complete": bool(rows) and blocks == 0,
+        "rows": rows,
+        "summary": {"block": blocks, "ok": sum(1 for row in rows if row["verdict"] == "ok")},
+    }
+
+
 def run_pixel_checks(root: Path, margin: float = DEFAULT_MARGIN,
                      palette_threshold: float = PALETTE_DRIFT_THRESHOLD) -> Dict[str, Any]:
     """脸漂移 G1 + 主色 palette；每项独立 try——某项不可用只影响该项。"""
@@ -785,6 +936,18 @@ def summarize(payload: Dict[str, Any]) -> Dict[str, Any]:
     if patch_outputs:
         rows_by_check["prohibited_local_patch"] = {"block": len(patch_outputs), "warn": 0, "noface": 0, "ok": 0}
         hard += len(patch_outputs)
+    provenance_blocks = int(((payload.get("generation_provenance") or {}).get("summary") or {}).get("block") or 0)
+    if provenance_blocks:
+        if payload.get("formal_project"):
+            hard += provenance_blocks
+        else:
+            advisory += provenance_blocks
+        rows_by_check["generation_provenance"] = {
+            "block": provenance_blocks if payload.get("formal_project") else 0,
+            "warn": 0 if payload.get("formal_project") else provenance_blocks,
+            "noface": 0,
+            "ok": int(((payload.get("generation_provenance") or {}).get("summary") or {}).get("ok") or 0),
+        }
     unavailable = unavailable_visual_checks(payload)
     face_mode = str((payload.get("checks", {}).get("face") or {}).get("mode") or "")
     degraded = bool(unavailable) or face_mode in FACE_DEGRADED_MODES
@@ -869,6 +1032,13 @@ def to_findings(payload: Dict[str, Any]) -> List[Dict[str, Any]]:
                                f"生产事件账本显示该 MV 帧来自本地贴脸/换脸/混合修复：{row.get('png')} "
                                f"（line={row.get('line')} method={row.get('method')}）。"
                                "不得用本地身份像素贴回画面来通过一致性 QC，需回 mv-image 重抽。"))
+    for row in (payload.get("generation_provenance") or {}).get("rows", []):
+        if row.get("findings"):
+            out.append(_qc_finding(
+                "block" if payload.get("formal_project") else "warn",
+                "image_generation_provenance", row.get("asset"),
+                f"出图生成收据不完整：{row.get('asset')} · {', '.join(row.get('findings') or [])}",
+            ))
     return out
 
 
@@ -960,13 +1130,20 @@ def json_safe(value: Any) -> Any:
 
 def run_qc(root: Path, with_pixel: bool = True, margin: float = DEFAULT_MARGIN,
            palette_threshold: float = PALETTE_DRIFT_THRESHOLD) -> Dict[str, Any]:
-    payload: Dict[str, Any] = {"kind": "mv_image_qc", "version": 1, "root": str(root),
+    meta = {}
+    try:
+        meta = json.loads((root / "_meta.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    payload: Dict[str, Any] = {"kind": "mv_image_qc", "version": 2, "root": str(root),
+                               "formal_project": meta.get("is_demo") is False,
                                "checks": {}, "lint": {}}
     if with_pixel:
         with contextlib.redirect_stdout(sys.stderr):
             payload["checks"] = run_pixel_checks(root, margin, palette_threshold)
     payload["lint"] = lint_prompts(root)
     payload["prohibited_local_patch_outputs"] = prohibited_local_patch_outputs(root)
+    payload["generation_provenance"] = generation_provenance(root)
     payload["summary"] = summarize(payload)
     payload["qc_environment"] = qc_environment(payload, with_pixel=with_pixel)
     payload = json_safe(payload)
@@ -1046,6 +1223,23 @@ def render_markdown(payload: Dict[str, Any]) -> str:
         event_path = patch.get("event_path")
         status = "有事件账本，未命中禁用产物" if patch.get("available") else f"无事件账本（{event_path}）"
         lines.append(f"- 🟢 {status}")
+    provenance = payload.get("generation_provenance") or {}
+    lines.extend(["", "## 出图签收（模型 × 渠道 × prompt × reference × asset hash）"])
+    pairs = provenance.get("model_channel_pairs") or []
+    if pairs:
+        lines.append("- 本项目实际模型/渠道：" + "；".join(
+            f"{row.get('model')} / {row.get('channel')}" for row in pairs
+        ))
+    else:
+        lines.append("- 🔴 未找到可验证的出图模型/渠道收据。")
+    for row in provenance.get("rows") or []:
+        flag = "🟢" if row.get("verdict") == "ok" else "🔴"
+        detail = ", ".join(str(item) for item in (row.get("findings") or [])) or "receipt fresh"
+        lines.append(
+            f"- {flag} {row.get('clip')} · {row.get('asset')} · "
+            f"{row.get('model') or '?'} / {row.get('channel') or '?'} · "
+            f"refs={row.get('reference_count', 0)} · subjects={row.get('subject_count', 0)} · {detail}"
+        )
     lines.append("")
     lines.append("落档判定：**verdict=block** → 主角脸崩（崩脸/图损坏），必须重抽后重跑；"
                  "**verdict=review** → 只有主色/锚点等非阻断初筛或视觉降级时不挡 mv-video（按阶段跳转补依赖/复核）；"

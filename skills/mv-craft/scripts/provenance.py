@@ -17,6 +17,9 @@ CORE_INPUTS = (
     "设定/identity_registry.json", "设定/asset_registry.json", "分镜/reference_plan.json",
     "生产数据/image_qc/image_qc.json", "生产数据/video_inherit_contract/inherit_contract.json",
     "生产数据/video_qc/video_qc.json", "字幕/alignment_report.json", "制片/picture_lock.json",
+    "生产数据/animatic/animatic.json", "生产数据/otio/otio_receipt.json",
+    "评分/pacing_prescore.json", "分镜/semantic_prompts.json",
+    "生产数据/delivery_qc/delivery_qc.json",
     "合规/rights_manifest.json", "合规/ai_usage.json",
 )
 

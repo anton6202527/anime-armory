@@ -156,6 +156,38 @@ class FinalizeStoryboardTest(unittest.TestCase):
         sb = {"shots": [{"shot_id": "S1", "frame": "用更轻盈的方式开启一天"}]}
         self.assertEqual(fs.usp_disclaimer_check({}, sb, claim_text="清新好心情"), [])
 
+    # ── claim 引证呈现合同 ────────────────────────────────────────────
+    def test_claim_requires_shot_binding_and_structured_disclosure(self):
+        brief = {"claims": [{"id": "claim_01", "claim": "提升20%", "evidence_type": "test_measurement"}]}
+        sb = {"shots": [{"shot_id": "S1", "duration": 3, "frame": "提升20%"}]}
+        findings = fs.claim_presentation_check(brief, sb)
+        self.assertTrue(any(f["kind"] == "claim_shot_binding_missing" for f in findings))
+
+    def test_complete_same_screen_claim_disclosure_passes(self):
+        brief = {"claims": [{"id": "claim_01", "claim": "提升20%", "evidence_type": "test_measurement"}]}
+        sb = {"shots": [{
+            "shot_id": "S1", "duration": 4, "frame": "提升20%", "claim_ids": ["claim_01"],
+            "disclosures": [{
+                "claim_id": "claim_01", "text": "特定条件下测试结果，实际因人而异", "source_text": "来源：测试报告 2026Q2",
+                "duration_sec": 4, "font_height_ratio": 0.04, "contrast_review": "pass",
+                "safe_zone_review": "pass", "relationship": "same_screen", "relative_prominence": "sufficient",
+            }],
+        }]}
+        self.assertEqual(fs.claim_presentation_check(brief, sb), [])
+
+    def test_tiny_fast_disclosure_is_house_warn_not_fake_legal_block(self):
+        brief = {"claims": [{"id": "claim_01", "claim": "提升20%", "evidence_type": "test_measurement"}]}
+        sb = {"shots": [{
+            "shot_id": "S1", "duration": 1, "claim_ids": ["claim_01"],
+            "disclosures": [{
+                "claim_id": "claim_01", "text": "仅限指定实验条件样本范围结果不代表所有消费者", "source_text": "来源：报告",
+                "duration_sec": 1, "font_height_ratio": 0.01, "contrast_review": "pass",
+                "safe_zone_review": "pass", "relationship": "same_screen", "relative_prominence": "sufficient",
+            }],
+        }]}
+        findings = fs.claim_presentation_check(brief, sb)
+        self.assertTrue(findings and all(f["severity"] == "warn" for f in findings))
+
 
 class FinalizeMainTest(unittest.TestCase):
     """端到端跑 main()：占位硬拦 / --allow-placeholder 放行 / master 缺失 warn。"""

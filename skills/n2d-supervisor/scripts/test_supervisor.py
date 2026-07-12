@@ -130,3 +130,14 @@ def test_constraints_fingerprint_echo_drift_blocks_dispatch(tmp_path, monkeypatc
     assert drift["summary"]["constraints_drift"] is True
     assert drift["summary"]["should_call_specialist"] is False
     assert "constraints_drift" in drift["dispatch"]
+
+
+def test_dispatch_fails_closed_on_next_action_schema_drift():
+    plan = supervisor.dispatch_for({"stop_reason": ""})
+    assert plan["human_gate"]["required"] is True
+    assert plan["should_call_specialist"] is False
+    assert plan["stop_reason"] == "next_action_schema_drift"
+    assert "缺 frontier" in plan["schema_gaps"]
+    # 完整 NextAction 不触发
+    ok = supervisor.dispatch_for({"frontier": {"stage_key": "image"}, "stop_reason": "needs_agent_gen", "action_card": {}})
+    assert ok["stop_reason"] == "needs_agent_gen"

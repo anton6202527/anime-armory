@@ -120,7 +120,7 @@ Stage 5 固化（脚本/skill 化，下个核心角色可复用）
 
 ## Stage 1 — 建数据集（LoRA 成败 80% 在这）
 
-目标：为该角色凑 **15–20 张「甜区」多角度图**（15–50 可用，>~30 易过拟合）。
+目标：为该角色凑 **15–20 张「甜区」多角度图**（15–50 可用，>~30 易过拟合）。机检与此同口径：`lora.py dataset` 对 <15 张记 `dataset_below_recommended_15_images`、>30 张记 `dataset_above_30_images_overfit_watch`、>50 张记 `dataset_above_recommended_50_images_overfit_risk`，任一命中都需 `validate --allow-dataset-warnings --notes` 人工留痕放行。
 
 - **种子**：该角色现有定妆照可直接当种子（如沈念常态 + 觉醒态）。但 2 张远不够。
 - **扩样**：用现有定妆在**即梦/可灵的"角色参考"**里扩出不同**角度/景别/表情**：

@@ -4457,18 +4457,29 @@ def cross_episode_face_drift(root: Path, ep: str, payload: Mapping[str, Any]) ->
 # （不碰「双手可见」的宽身位主参考——那张本就该脸小）。只拦明显过弱，不追 30–50% 理想值，避免误杀。
 WEAK_FACE_RATIO_FLOOR = 0.12   # 脸 bbox 占整图面积低于此 = 脸太小、身份信号弱
 WEAK_FACE_CROP_MIN_PX = 768    # 脸部锚裁切短边低于此 = 分辨率不足以锁五官
+# 核心/长线角色分档线（2026-07 标准审计收敛）：checklist 教头标准承诺 ≥1024px、脸占 30–50%，
+# 但此前核心角 block 也用宽松线（768/12%）——等于对最关键角色只拦极端弱锚，弱脸锚静默过闸。
+# 分辨率按教头标准 1024；占比取 0.20 而非字面 0.30：Haar bbox 比肉眼「脸占画面」更紧
+# （只框到五官区），bbox 面积 0.20 ≈ 视觉脸占 ~30%。env 可按项目重标定。
+CORE_FACE_RATIO_FLOOR = float(os.environ.get("N2D_CORE_FACE_RATIO_FLOOR", "0.20"))
+CORE_FACE_CROP_MIN_PX = int(os.environ.get("N2D_CORE_FACE_CROP_MIN_PX", "1024"))
 
 
-def weak_face_anchor_reason(face_area_ratio: Optional[float], min_dim: Optional[int]) -> Optional[str]:
+def weak_face_anchor_reason(face_area_ratio: Optional[float], min_dim: Optional[int],
+                            core: bool = False) -> Optional[str]:
     """脸部锚质量判定：脸占比太小 / 裁切分辨率不足 → 返回人读原因；合格 → None。纯函数·可测。
 
+    `core=True`（核心/长线角色）按教头标准分档线判（CORE_*），普通角色维持宽松线只拦明显过弱。
     `face_area_ratio=None`（检测器缺席/Haar 漏检风格化脸）时**不据占比误判**，只用分辨率判。
     `min_dim=None`（读不到尺寸）时跳过分辨率判。两者皆 None → None（不报）。"""
+    ratio_floor = CORE_FACE_RATIO_FLOOR if core else WEAK_FACE_RATIO_FLOOR
+    px_floor = CORE_FACE_CROP_MIN_PX if core else WEAK_FACE_CROP_MIN_PX
+    tier = "核心角教头线" if core else "最低线"
     reasons: List[str] = []
-    if face_area_ratio is not None and face_area_ratio < WEAK_FACE_RATIO_FLOOR:
-        reasons.append(f"脸占画面仅 {face_area_ratio * 100:.0f}%（建议 ≥30%，至少 ≥{int(WEAK_FACE_RATIO_FLOOR * 100)}%）")
-    if min_dim is not None and min_dim < WEAK_FACE_CROP_MIN_PX:
-        reasons.append(f"裁切短边 {min_dim}px（建议 ≥1024px，至少 ≥{WEAK_FACE_CROP_MIN_PX}px）")
+    if face_area_ratio is not None and face_area_ratio < ratio_floor:
+        reasons.append(f"脸占画面仅 {face_area_ratio * 100:.0f}%（建议 ≥30%，{tier} ≥{int(ratio_floor * 100)}%）")
+    if min_dim is not None and min_dim < px_floor:
+        reasons.append(f"裁切短边 {min_dim}px（建议 ≥1024px，{tier} ≥{px_floor}px）")
     return "；".join(reasons) or None
 
 
@@ -4586,7 +4597,7 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                     continue  # 缺图非本门职责
                 res["checked"] += 1
                 ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
-                reason = weak_face_anchor_reason(ratio, min_dim)
+                reason = weak_face_anchor_reason(ratio, min_dim, core=core)
                 if reason:
                     level = "block" if core else "warn"
                     code = "weak_face_anchor_core" if core else "weak_face_anchor"
@@ -4597,6 +4608,109 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
                                "（脸占 30–50%、≥1024px）后再放行。",
                         "asset": rel,
                     })
+    return res
+
+
+# ── ①b 三视图/多视图对齐机检（checklist 承诺"与脸漂同级硬伤"但此前零机检·2026-07 标准审计补齐） ──
+# 教头标准：turnaround 各视图同身高、同比例、水平视平线。这里用 face box 做两个几何代理：
+#   眼线代理 = 脸 bbox 垂直中心占画面高比例（各视图应基本齐平）；
+#   比例代理 = 脸 bbox 高占画面高比例（各视图应同距离同景别）。
+# 阈值是内部启发式首版（confidence=low·env 可重标定）；先落 warn 兑现宣称，误报率验证后再议升级。
+TURNAROUND_EYELINE_TOL = float(os.environ.get("N2D_TURNAROUND_EYELINE_TOL", "0.06"))
+TURNAROUND_SCALE_RATIO_MAX = float(os.environ.get("N2D_TURNAROUND_SCALE_RATIO_MAX", "1.35"))
+TURNAROUND_VIEW_KEYS = ("front", "three_quarter", "side")  # back 无脸不可测，天然跳过
+
+
+def turnaround_alignment_reason(views: Mapping[str, Tuple[float, float]]) -> Optional[str]:
+    """views: {视图名: (脸中心y比例, 脸高比例)}，≥2 个可测视图才判。纯函数·可测。
+
+    返回人读原因（未对齐）或 None（对齐/不可判）。"""
+    usable = {k: v for k, v in views.items()
+              if isinstance(v, (tuple, list)) and len(v) == 2
+              and all(isinstance(x, (int, float)) for x in v)}
+    if len(usable) < 2:
+        return None
+    ys = {k: float(v[0]) for k, v in usable.items()}
+    hs = {k: float(v[1]) for k, v in usable.items() if float(v[1]) > 0}
+    reasons: List[str] = []
+    y_spread = max(ys.values()) - min(ys.values())
+    if y_spread > TURNAROUND_EYELINE_TOL:
+        hi = max(ys, key=ys.get); lo = min(ys, key=ys.get)
+        reasons.append(f"视平线不齐：{lo}({ys[lo]:.2f}) vs {hi}({ys[hi]:.2f})，跨视图脸中心高度差 "
+                       f"{y_spread * 100:.0f}%>{TURNAROUND_EYELINE_TOL * 100:.0f}%")
+    if len(hs) >= 2:
+        ratio = max(hs.values()) / min(hs.values())
+        if ratio > TURNAROUND_SCALE_RATIO_MAX:
+            big = max(hs, key=hs.get); small = min(hs, key=hs.get)
+            reasons.append(f"比例不一：{big} 脸高是 {small} 的 {ratio:.2f} 倍（>"
+                           f"{TURNAROUND_SCALE_RATIO_MAX:g}），不是同距离同景别的定妆板")
+    return "；".join(reasons) or None
+
+
+def audit_turnaround_alignment(root: Path, ep: str) -> Dict[str, Any]:
+    """①b 三视图对齐门：对 reference_group 的 front/three_quarter/side 定妆图测视平线/比例对齐。
+    warn 级（首版启发式）；检测器缺席/风格化脸漏检 → 该视图跳过不误判，可测视图 <2 不报。"""
+    res: Dict[str, Any] = {"available": True, "findings": [], "notes": [], "checked_forms": 0}
+    try:
+        data = json.loads((root / _registry_path()).read_text(encoding="utf-8"))
+    except Exception:
+        res["available"] = False
+        res["notes"].append("identity_registry.json 缺失/损坏——三视图对齐机检跳过。")
+        return res
+    face_mod = _load_review_module("face_consistency")
+    if face_mod is None or not hasattr(face_mod, "cv2_face_boxes"):
+        res["available"] = False
+        res["notes"].append("cv2_face_boxes 不可用——三视图对齐机检跳过（装 opencv 后复检）。")
+        return res
+
+    def item_path(value: Any) -> str:
+        if isinstance(value, Mapping):
+            return str(value.get("path") or value.get("ref") or value.get("file") or "").strip()
+        return str(value or "").strip()
+
+    for ch in (data.get("characters") or []):
+        cid = str(ch.get("id") or "").strip()
+        for form in (ch.get("forms") or []):
+            if not isinstance(form, Mapping):
+                continue
+            rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+            views: Dict[str, Tuple[float, float]] = {}
+            for key in TURNAROUND_VIEW_KEYS:
+                rel = item_path(rg.get(key))
+                if not rel:
+                    continue
+                abspath = rel if os.path.isabs(rel) else str(root / rel)
+                if not os.path.isfile(abspath):
+                    continue
+                ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
+                if ratio is None:
+                    continue  # 检测器漏检风格化脸：跳过该视图，不据缺测误判
+                try:
+                    boxes = face_mod.cv2_face_boxes(abspath)
+                    from PIL import Image  # type: ignore
+                    with Image.open(abspath) as im:
+                        _w, _h = im.size
+                    if not boxes or not _h:
+                        continue
+                    bx = max(boxes, key=lambda b: int(b[2]) * int(b[3]))
+                    center_y = (int(bx[1]) + int(bx[3]) / 2.0) / float(_h)
+                    face_h = int(bx[3]) / float(_h)
+                except Exception:
+                    continue
+                views[key] = (round(center_y, 4), round(face_h, 4))
+            if len(views) < 2:
+                continue
+            res["checked_forms"] += 1
+            reason = turnaround_alignment_reason(views)
+            if reason:
+                fm = str(form.get("form") or "").strip()
+                res["findings"].append({
+                    "level": "warn", "code": "turnaround_misaligned",
+                    "msg": f"三视图对齐不达标 {cid}/{fm}：{reason}——教头标准要求各视图同身高/同比例/"
+                           "水平视平线；不齐的 turnaround 会把身形/头身比漂移带进每一镜（阈值 env "
+                           "N2D_TURNAROUND_EYELINE_TOL / N2D_TURNAROUND_SCALE_RATIO_MAX 可重标定）。",
+                    "views": views,
+                })
     return res
 
 
@@ -4739,6 +4853,12 @@ def run_qc(root: Path, ep: str, with_pixel: bool = True, strict_pixel: bool = Fa
         payload["lint"].setdefault("findings", []).append(
             {"level": f["level"], "code": f["code"], "msg": f["msg"]})
     payload["face_anchor_quality"] = fa
+    # ①b 三视图对齐门（registry 级·warn 首版）：兑现 checklist"对齐硬伤级"宣称的最小机检。
+    ta = audit_turnaround_alignment(root, ep)
+    for f in ta.get("findings", []):
+        payload["lint"].setdefault("findings", []).append(
+            {"level": f["level"], "code": f["code"], "msg": f["msg"]})
+    payload["turnaround_alignment"] = ta
     # 承载角色脸锚（registry 级·后端无关·治定妆脸漂真因）：含具名角色脸的 VFX/海报/关系图资产
     # 必须有 ready 脸锚可注入，否则每镜无锚渲染新脸。runner spend 闸门只拦 codex/dreamina 出图路径，
     # 此处把同一铁律前移到落档机检，覆盖手工/其它后端/旧图。block 码进 HARD_LINT_CODES → hard_blocks。

@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import array
+import hashlib
 import json
 import math
 import os
+import shutil
+import subprocess
+import sys
 import tempfile
 import wave
+from datetime import date, timedelta
 
 import lyric_prosody_check
+import master_delivery
 import melody_chord_packet
 import reference_pack
 import release_pack
+import release_metadata
 import rights_metadata
 import song_brief
 import song_workflow
@@ -96,33 +103,81 @@ def test_brief_reference_prosody_and_form_write():
         form_args = type("Args", (), {"key": "", "bpm": "", "progression": "", "verse_progression": "", "notes": ""})()
         packet = melody_chord_packet.build_packet(root, form_args)
         melody_chord_packet.write_packet(root, packet)
+        assert melody_chord_packet.check_packet(packet)["passed"]
+        assert "待作曲确认" in packet["sections"][0]["chord_progression"]
         assert os.path.exists(os.path.join(root, "歌", "song_form.json"))
+
+
+def test_through_composed_lyrics_do_not_require_chorus():
+    with tempfile.TemporaryDirectory() as root:
+        make_project(root)
+        meta_path = os.path.join(root, "_meta.json")
+        meta = json.load(open(meta_path, encoding="utf-8"))
+        meta["song_form_type"] = "through_composed"
+        write_json(meta_path, meta)
+        write_text(os.path.join(root, "词", "lyrics.md"), "[verse1]\n一路向北\n\n[bridge]\n不再回头\n")
+        report = lyric_prosody_check.check(root)
+        assert report["passed"]
+        assert report["profile"]["chorus_required"] is False
 
 
 def test_rights_release_and_workflow():
     with tempfile.TemporaryDirectory() as root:
         make_project(root)
         write_wav(os.path.join(root, "歌", "song.wav"))
+        os.makedirs(os.path.join(root, "混音"), exist_ok=True)
+        shutil.copy2(os.path.join(root, "歌", "song.wav"), os.path.join(root, "混音", "pre_master.wav"))
         write_json(os.path.join(root, "歌", "takes_manifest.json"), {
             "kind": "song_take_manifest",
             "selected_take": "take_01",
+            "selection_receipt": {"song_audio_sha256": hashlib.sha256(open(os.path.join(root, "歌", "song.wav"), "rb").read()).hexdigest()},
             "takes": [{"take_id": "take_01", "status": "selected", "audio_path": "歌/takes/take_01.wav"}],
         })
         write_json(os.path.join(root, "歌", "take_review.json"), {"kind": "song_take_review"})
-        write_json(os.path.join(root, "混音", "master_check.json"), {"kind": "song_master_check", "passed": True})
+        write_json(os.path.join(root, "评审", "quality_gate_select.json"), {
+            "kind": "song_quality_gate", "stage": "select", "take_id": "take_01",
+            "passed": True, "passed_without_waiver": True,
+        })
         write_json(os.path.join(root, "合规", "ai_usage.json"), {"kind": "song_ai_usage", "audio_mode": "AI-generated", "lyrics_mode": "AI-assisted", "human_contribution": "人工改词挑版"})
         args = type("Args", (), {
             "title": "", "alternate_title": [], "rights_status": "original",
             "contributor": ["作者A|songwriter|100|ASCAP||"], "performer": ["虚拟歌手"], "producer": ["制作人A"],
             "label": "", "isrc": "USABC2500001", "iswc": "", "pro_status": "not_registered",
+            "version_title": "Original", "main_artist": "虚拟歌手", "duration_seconds": 1,
+            "recording_type": "audio", "publication_year": 2026,
             "mlc_status": "not_registered", "soundexchange_status": "not_registered",
-            "sample_clearance_status": "not_applicable", "cover_license_status": "not_applicable",
-            "voice_authorization_status": "synthetic_or_own", "notes": "",
+            "derivative_type": "original", "composition_authorization_status": "not_applicable",
+            "sample_usage_status": "none", "sample_clearance_status": "not_applicable",
+            "cover_license_status": "not_applicable", "voice_authorization_status": "synthetic", "notes": "",
         })()
         rights = rights_metadata.build_metadata(root, args)
         rights_check = rights_metadata.check_metadata(rights)
         assert rights_check["passed"]
         rights_metadata.write_outputs(root, rights, rights_check)
+
+        pre_master = os.path.join(root, "混音", "pre_master.wav")
+        write_json(os.path.join(root, "混音", "mix_signoff.json"), {
+            "kind": "song_mix_performance_signoff", "passed": True,
+            "audio": {"path": "混音/pre_master.wav", "sha256": hashlib.sha256(open(pre_master, "rb").read()).hexdigest()},
+        })
+        release_args = type("Args", (), {
+            "release_title": "测试歌", "title": "", "version_title": "Original",
+            "artist": ["虚拟歌手|main_artist"], "language": "zh", "genre": "流行", "explicit": "clean",
+            "release_date": (date.today() + timedelta(days=14)).isoformat(), "territory": ["worldwide"],
+            "label": "Test Label", "p_line": "2026 Test Label", "c_line": "2026 作者A",
+            "upc_ean": "", "cover_art": "导出/cover.jpg",
+        })()
+        release_meta = release_metadata.build(root, release_args)
+        release_meta_check = release_metadata.check(release_meta)
+        assert release_meta_check["passed"]
+        release_metadata.write_outputs(root, release_meta, release_meta_check)
+        os.makedirs(os.path.join(root, "导出"), exist_ok=True)
+        with open(os.path.join(root, "导出", "cover.jpg"), "wb") as f:
+            f.write(b"test-cover")
+
+        master_delivery.build(root)
+        master_check = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "song-review", "scripts", "master_check.py"))
+        subprocess.run([sys.executable, master_check, root, "--platform", "streaming", "--write"], check=True, capture_output=True, text=True)
 
         pack = release_pack.build_pack(root, "v1", "distribution")
         assert pack["release_ready"]

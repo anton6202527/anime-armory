@@ -29,7 +29,7 @@ class AdContractTest(unittest.TestCase):
         points = contract.choice_points()
         for key in (
             "广告类型", "创意路线", "基础视觉风格", "主片时长", "交付比例",
-            "cutdown版本", "生图AI", "一致性增强", "生视频模型", "生视频渠道", "出视频规格",
+            "cutdown版本", "生图模型", "生图渠道", "一致性增强", "生视频模型", "生视频渠道", "出视频规格",
             "配音后端", "音乐来源", "品牌包装模板", "字幕语言", "广告法地区",
             "交付规格", "AI视觉使用披露",
         ):
@@ -38,6 +38,9 @@ class AdContractTest(unittest.TestCase):
         self.assertIn("Seedance 2.0", points["生视频模型"])
         self.assertIn("即梦/Dreamina", points["生视频渠道"])
         self.assertIn("9:16", points["交付比例"])
+        self.assertIn("4:5", points["交付比例"])
+        self.assertEqual(points["生图模型"][0], "GPT Image 2")
+        self.assertEqual(points["生图渠道"][0], "Codex CLI")
 
     def test_stage_table_order(self):
         keys = [s["key"] for s in contract.stage_table()]
@@ -52,7 +55,29 @@ class AdContractTest(unittest.TestCase):
     def test_profiles(self):
         self.assertEqual(contract.video_spec_profile("预算一般")["resolution"], "720p")
         self.assertEqual(contract.delivery_profile("广电TVC")["loudness_lufs"], -23.0)
+        self.assertEqual(contract.delivery_profile("广电TVC")["true_peak_db"], -1.0)
+        self.assertEqual(contract.delivery_profile("广电TVC")["authority"], "official_recommendation")
         self.assertEqual(contract.delivery_profile("平台默认")["loudness_lufs"], -16.0)
+        self.assertEqual(contract.delivery_profile("平台默认")["authority"], "house_standard")
+        self.assertEqual(contract.house_master_profile()["audio_sample_rate"], 48000)
+
+    def test_every_stage_has_typed_acceptance_criteria(self):
+        for stage in contract.stage_table():
+            rows = contract.stage_criteria(stage["key"])
+            self.assertTrue(rows, stage["key"])
+            self.assertTrue(all(row.get("id") and row.get("evidence") and row.get("standard") and
+                                row.get("threshold") and row.get("authority") and row.get("on_fail")
+                                for row in rows))
+
+    def test_custom_delivery_profile_never_silently_uses_house_default(self):
+        with self.assertRaises(ValueError):
+            contract.resolve_delivery_profile("自定义", {})
+        row = contract.resolve_delivery_profile("自定义", {
+            "loudness_lufs": -18, "true_peak_db": -1.5, "source": "客户交付规范.pdf",
+            "checked_at": "2026-07-11", "approved_by": "客户制片人",
+        })
+        self.assertEqual(row["loudness_lufs"], -18.0)
+        self.assertEqual(row["authority"], "project_override")
 
     def test_default_deliverables_cutdowns(self):
         rows = contract.default_deliverables("30s", "16:9", "主片+15s+6s")
@@ -69,7 +94,10 @@ class AdContractTest(unittest.TestCase):
         self.assertEqual(contract.classify_image_backend("Dreamina/即梦官方 CLI"), ("dreamina_official", "approved"))
         self.assertEqual(contract.classify_image_backend("即梦")[1], "forbidden")
         self.assertEqual(contract.classify_image_backend("某小众生图器")[1], "unknown")
-        self.assertEqual(contract.DEFAULT_SETTINGS["生图AI"], "Codex")
+        self.assertEqual(contract.DEFAULT_SETTINGS["生图模型"], "GPT Image 2")
+        self.assertEqual(contract.DEFAULT_SETTINGS["生图渠道"], "Codex CLI")
+        self.assertEqual(contract.classify_image_model("GPT Image 2"), ("codex", "approved"))
+        self.assertEqual(contract.classify_image_channel("Codex CLI"), ("codex", "approved"))
 
     def test_brief_check_layers(self):
         empty = contract.brief_check({})

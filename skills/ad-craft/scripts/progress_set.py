@@ -11,6 +11,7 @@ import importlib.util
 import os
 import sys
 from datetime import date
+from pathlib import Path
 
 
 def _load_contract():
@@ -175,6 +176,29 @@ def write_progress(path, text):
         f.write(text)
 
 
+def require_stage_acceptance(root, stage, mode="formal"):
+    """A ✅ row must be backed by the current stage acceptance report."""
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "stage_acceptance.py")
+    spec = importlib.util.spec_from_file_location("_ad_stage_acceptance", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    payload = module.evaluate(Path(root), stage, mode)
+    if not payload["summary"]["block"]:
+        try:
+            module.dependency_graph.accept_stage(Path(root), stage)
+        except ValueError as exc:
+            payload["findings"].append(module.finding(
+                "block", "dependency_accept_failed", str(exc),
+                "生产数据/dependency_receipts.json", "dependency_lineage"))
+            payload["summary"]["block"] += 1
+            payload["summary"]["accepted"] = False
+    report_path = module.write_report(Path(root), payload)
+    if payload["summary"]["block"]:
+        top = next((f for f in payload["findings"] if f["severity"] == "block"), {})
+        raise ValueError(f"stage acceptance blocked: {top.get('code', 'unknown')} {top.get('msg', '')}；见 {report_path}")
+    return report_path
+
+
 def main():
     ap = argparse.ArgumentParser(description="更新拍广告 _进度.md 阶段/交付矩阵")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -186,6 +210,7 @@ def main():
     sp.add_argument("--artifact", default=None)
     sp.add_argument("--remark", default=None)
     sp.add_argument("--note", default=None)
+    sp.add_argument("--acceptance-mode", default="formal", choices=("formal", "rough"))
 
     dp = sub.add_parser("set-deliverable", help="更新交付版本矩阵行")
     dp.add_argument("project_root")
@@ -199,6 +224,8 @@ def main():
     path, text = read_progress(args.project_root)
     try:
         if args.cmd == "set-stage":
+            if args.status == "✅":
+                require_stage_acceptance(args.project_root, args.stage, args.acceptance_mode)
             out = set_stage_text(text, args.stage, args.status, args.artifact, args.remark, args.note)
         else:
             out = set_deliverable_text(text, args.deliverable, args.status, args.path, args.spec, args.note)

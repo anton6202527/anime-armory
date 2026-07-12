@@ -185,6 +185,7 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
     _write_json(prod / f"review_ui_{episode}.json", {"kind": "n2d_review_ui", "version": 1, "status": "pass"})
     _write_json(prod / f"review_ui_findings_{episode}.json", {"kind": "n2d_consistency_findings", "version": 1, "episode": episode, "findings": []})
     _write_json(prod / f"review_signoff_{episode}.json", {"kind": "n2d_review_signoff", "version": 1, "status": "approved", "reviewer": "qa"})
+    _write_json(prod / f"identity_voice_print_{episode}.json", {"kind": "n2d_identity_voice_print", "version": 1, "available": False, "mode": "no_audio"})
     _write_json(prod / f"release_verdict_{episode}.json", {"kind": "n2d_release_verdict", "version": 1, "status": "internal-only"})
     _write_json(prod / "identity_adapter_matrix.json", {"kind": "n2d_identity_adapter_matrix", "version": 1, "forms": []})
     events = [

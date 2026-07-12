@@ -44,7 +44,7 @@ description: "P1 batch task queue and worker runner for n2d. Build/manage a queu
 n2d-batch 的价值不是“把所有集一口气跑完”，而是把多集生产变成**可控试产 → 小批量 → 放量**：
 
 1. **先打样**：第 1 集必须完整跑通 `script → voice/native_av → image → video → compose → review/score → 验收签收`，并把 dashboard、score、consistency ledger、review-ui 产物都落档。
-2. **再小批量**：先跑 2-10 集，观察 `n2d-dashboard` 的每分钟成本、每集耗时、一次通过率、重抽率、QA 阻断 Top、投放净回收/生产成本；`governance.py check` 会同步跑 `skills/n2d/scripts/stop_loss.py`，脸漂率、重抽率、每分钟成本、QC block 率、接缝失败率、口型失败率超过阈值即 critical 停线。
+2. **再小批量**：先跑 2-10 集，观察 `n2d-dashboard` 的每分钟成本、每集耗时、一次通过率、重抽率、QA 阻断 Top、投放净回收/生产成本；`governance.py check` 会同步跑 `skills/n2d/scripts/stop_loss.py`，脸漂率、重抽率、每分钟成本、QC block 率、接缝失败率、口型失败率超过阈值即 critical 停线。**口径区分**：能停线的是 stop_loss 的**生产重抽率**（redraw 事件/生成尝试）；governance 自己的队列**任务重试率**（`max_retry_rate=0.35`）只 warn 不停线，两者别混。死信 >0 与 stop_loss critical 是仅有的两类停线信号；`max_running_age_sec` 超龄 running 任务记 warn 提示回收。
 3. **按瓶颈扩量**：若脸漂/服装漂高，先修 identity/定妆/后端主体绑定；若视频重抽高，先修 model routing / motion control / 拆镜模板；若成本高，先调后端与 Clip 长度；若留存差，回 `n2d-feedback` 修开场/集尾/镜头密度。
 4. **只排下一步和最小返工**：常规 plan 只排每集当前下一步；返工必须带 `--rerun-from`、`--scope`、`--affected-shot` 或 `--affected-artifact`，避免整集重跑吞成本。
 5. **多机：共享 FS 用 atomic 锁，高并发再换协调后端（F3·2026-06-26）**：`N2D_QUEUE_LOCK` 选锁策略——`auto`（默认·有 fcntl 走 flock·零行为变化）/ `atomic`（O_EXCL 锁文件 + **陈旧锁自动接管**，治原 fallback「持锁机器死了→永久死锁」；O_EXCL create 在 NFSv3+ 原子，比 flock 跨 NFS 可靠）。**共享 FS 多机渲染农场**设 `N2D_QUEUE_LOCK=atomic`（陈旧阈值 `N2D_QUEUE_LOCK_TTL` 默认 120s）。worker id 已含 `hostname:pid` 天然带机器身份；真正的多机断点恢复靠**每任务 lease + reclaim_expired + heartbeat**（已有·一台机器死了它的任务自动回收）。**诚实边界**：这把锁只护临界区——高并发/强一致仍建议接 DB/Redis/对象存储条件写/消息队列，atomic 锁是「共享 FS 够用」不是「分布式强一致」。

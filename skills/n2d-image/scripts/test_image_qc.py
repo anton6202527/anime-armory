@@ -3283,3 +3283,18 @@ def test_n2d_const_camera_gaze_single_source():
     assert "selfie" in n2d_const.CAMERA_GAZE_NEGATIVES
     assert n2d_const.is_camera_gaze_pov_exempt("本镜 opponent pov 直视镜头") is True
     assert n2d_const.is_camera_gaze_pov_exempt("少女站在窗前") is False
+
+
+def test_turnaround_alignment_reason_thresholds():
+    # 视平线齐 + 比例一致 → 不报
+    assert image_qc.turnaround_alignment_reason(
+        {"front": (0.30, 0.20), "side": (0.32, 0.22)}) is None
+    # 视平线差 >6% → 报
+    r = image_qc.turnaround_alignment_reason({"front": (0.30, 0.20), "side": (0.40, 0.20)})
+    assert r and "视平线不齐" in r
+    # 脸高比例差 >1.35 倍 → 报
+    r2 = image_qc.turnaround_alignment_reason({"front": (0.30, 0.20), "side": (0.31, 0.30)})
+    assert r2 and "比例不一" in r2
+    # 单视图/不可测 → 不判
+    assert image_qc.turnaround_alignment_reason({"front": (0.30, 0.20)}) is None
+    assert image_qc.turnaround_alignment_reason({}) is None

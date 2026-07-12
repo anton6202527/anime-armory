@@ -170,6 +170,57 @@ def packet_input_rels(ep: str, kind: str) -> List[str]:
     ]
 
 
+def _machine_reference(root: Path, ep: str, kind: str) -> Dict[str, Any]:
+    """给围读/animatic 的主观验收布尔配上已算好的机器参考量（advisory·不改签收语义）。
+
+    此前 exposition_not_overloaded / duration_risk_understood / mid_episode_drag_checked
+    只有 unreviewed/accepted 两态，签收=人点头——而 story_economy/timing_estimate 里其实
+    已经算好了可挂钩的量。这里只做只读汇总：报告缺失标 missing，绝不阻断。"""
+    ref: Dict[str, Any] = {"advisory": True,
+                           "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。"}
+    econ = load_json(root / "生产数据" / f"story_economy_audit_{ep}.json")
+    if isinstance(econ, Mapping):
+        findings = econ.get("findings") if isinstance(econ.get("findings"), list) else []
+        sev = [str((f or {}).get("severity") or "") for f in findings if isinstance(f, Mapping)]
+        codes = [str((f or {}).get("code") or "") for f in findings if isinstance(f, Mapping)]
+        ref["story_economy"] = {
+            "block": sum(1 for s in sev if s == "block"),
+            "warn": sum(1 for s in sev if s == "warn"),
+            "narration_heavy_clips": sum(1 for f in findings if isinstance(f, Mapping)
+                                         and "narration_heavy" in (f.get("signals") or [])),
+            "over_budget_codes": sorted({c for c in codes if "too_long" in c or "over_economy" in c}),
+        }
+    else:
+        ref["story_economy"] = "missing"
+    timing = load_json(root / "合成" / ep / "配音" / "timing_estimate.json")
+    if isinstance(timing, Mapping):
+        summary = timing.get("summary") if isinstance(timing.get("summary"), Mapping) else {}
+        ref["timing_estimate"] = {
+            "duration_sec": summary.get("duration_sec"),
+            "line_count": summary.get("line_count"),
+            "split_suggested_lines": summary.get("split_suggested_lines", 0),
+        }
+    else:
+        ref["timing_estimate"] = "missing"
+    if kind == "animatic":
+        clips = storyboard_clips(root, ep)
+        durations = duration_map(root, ep)
+        long15 = long20 = 0
+        for idx, clip in enumerate(clips, start=1):
+            cid = clip_id(clip, idx)
+            try:
+                dur = float(clip.get("duration") or durations.get(cid) or durations.get(str(idx)) or 0)
+            except Exception:
+                continue
+            if dur > 20.0:
+                long20 += 1
+            elif dur > 15.0:
+                long15 += 1
+        ref["long_clips"] = {"over_15s": long15, "over_20s": long20,
+                             "note": ">15s 需拆段计划、>20s 详拍叙事跨度已超上限（story_economy 同口径）"}
+    return ref
+
+
 def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[str, Any]:
     voiceover = clean_lines(read_text(ep_dir(root, ep) / "voiceover.txt"), limit=120)
     timing = load_json(root / "合成" / ep / "配音" / "时长清单.json")
@@ -198,6 +249,7 @@ def _table_read_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict
             "timing_status": timing_status,
             "placeholder_or_rough_timing_mentions": placeholder_count,
         },
+        "machine_reference": _machine_reference(root, ep, "table_read"),
         "acceptance": {
             "dialogue_voice_distinct": "unreviewed" if not confirmed else "accepted",
             "exposition_not_overloaded": "unreviewed" if not confirmed else "accepted",
@@ -250,6 +302,7 @@ def _animatic_payload(root: Path, ep: str, *, confirmed: bool = False) -> Dict[s
             "estimated_total_sec": round(total, 3),
             "clips": rows,
         },
+        "machine_reference": _machine_reference(root, ep, "animatic"),
         "acceptance": {
             "opening_readable_without_sound": "unreviewed" if not confirmed else "accepted",
             "mid_episode_drag_checked": "unreviewed" if not confirmed else "accepted",

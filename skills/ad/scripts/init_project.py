@@ -11,20 +11,22 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 _CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-craft", "scripts"))
 if _CRAFT not in sys.path:
     sys.path.insert(0, _CRAFT)
 import contract  # noqa: E402
+import locale_matrix  # noqa: E402
 
 SUBDIRS = [
     "需求", "创意", "脚本", "设定库", "配音",
     "出图/共享", "出图/分镜", "出视频/分镜",
-    "合成", "合规", "废料",
+    "合成", "合规", "生产数据", "投放反馈", "废料",
 ]
 
 BRIEF_TEMPLATE = {
-    "schema_version": 1,
+    "schema_version": 2,
     "kind": "ad_brief",
     "brand": "",
     "product": "",
@@ -41,10 +43,35 @@ BRIEF_TEMPLATE = {
     "must_avoid": [],
     "deliverables": {"master_duration": "", "aspect": "", "cutdowns": []},
     "platforms": [],
+    "placements": [],
     "platform_specs": {},
+    "placement_specs": {},
     "platform_safe_zone_evidence": {},
+    "deliverable_placements": {},
+    "release_regions": [],
+    "legal_reviews": [],
+    "default_locale": "",
+    "ai_label_receipts": [],
+    "provenance_receipts": [],
+    "accessibility": {
+        "target_level": "",
+        "meaningful_non_speech_audio": False,
+        "meaningful_non_speech_events": [],
+        "non_speech_captioning_required": False,
+        "audio_description_required": False,
+        "audio_description": {},
+        "media_alternative_required": False,
+        "media_alternative": {},
+        "caption_exception": {},
+    },
+    "color_management": {"mode": "sdr_bt709", "conversion_evidence": ""},
     "deadline": "",
-    "rights": {"talent": "", "music": "", "fonts": "", "assets": ""},
+    "rights": {
+        "talent": {"status": "", "territory": "", "media_scope": "", "approved_by": ""},
+        "music": {"status": "", "evidence_file": "", "territory": "", "media_scope": "", "validity": "", "approved_by": ""},
+        "fonts": {"status": "", "evidence_file": "", "territory": "", "media_scope": "", "validity": "", "approved_by": ""},
+        "assets": {"status": "", "evidence_file": "", "territory": "", "media_scope": "", "validity": "", "approved_by": ""},
+    },
     "measurement": {
         "primary_kpi": "",
         "conversion_event": "",
@@ -103,6 +130,8 @@ def main():
         "主片时长": md,
         "交付比例": aspect,
         "cutdown版本": plan,
+        "生图模型": contract.DEFAULT_SETTINGS["生图模型"],
+        "生图渠道": contract.DEFAULT_SETTINGS["生图渠道"],
         "生视频模型": video_model,
         "生视频渠道": video_channel,
         "广告目标": contract.DEFAULT_SETTINGS["广告目标"],
@@ -113,7 +142,8 @@ def main():
 
     meta = {
         "schema_version": 1, "kind": "ad_project", "title": title, "brand": args.brand,
-        "image_backend": contract.DEFAULT_SETTINGS["生图AI"],
+        "image_model": contract.DEFAULT_SETTINGS["生图模型"],
+        "image_channel": contract.DEFAULT_SETTINGS["生图渠道"],
         "video_model": video_model,
         "video_channel": video_channel,
         "video_backend": video_channel,
@@ -135,6 +165,14 @@ def main():
         with open(os.path.join(root, "需求", "brief.json"), "w", encoding="utf-8") as f:
             json.dump(brief, f, ensure_ascii=False, indent=2)
         print("[ok] 需求/brief.json（模板，待 AI 据客户需求填充）")
+
+    locale_path = os.path.join(root, "合规", "locale_matrix.json")
+    if not os.path.exists(locale_path):
+        locale_payload = locale_matrix.template(
+            Path(root), [row["deliverable_id"] for row in deliverables])
+        with open(locale_path, "w", encoding="utf-8") as f:
+            json.dump(locale_payload, f, ensure_ascii=False, indent=2)
+        print("[ok] 合规/locale_matrix.json（pending 模板，发布前补具名语言/排版复核）")
 
     print(f"\n[done] 立项完成：{root}")
     print("下一步：ad-concept 创意策划。brief 缺的信息由 AI 在其第0步**访谈式补齐**——"

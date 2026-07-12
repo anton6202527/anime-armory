@@ -21,6 +21,12 @@ import json
 import os
 import re
 import sys
+from pathlib import Path
+
+CRAFT_SCRIPTS = Path(__file__).resolve().parents[2] / "ad-craft" / "scripts"
+if str(CRAFT_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(CRAFT_SCRIPTS))
+import platform_pack as ad_platform_pack  # noqa: E402
 
 VIDEO_MODEL_ROUTES_KIND = "ad_video_model_routes"
 
@@ -51,21 +57,6 @@ BACKEND_PROFILES = {
                  "supports_quality_tier": True, "default_quality_tier": "fast"},
 }
 DEFAULT_GENERAL_BACKEND = "dreamina"  # 普通镜/兜底默认（platforms.md：模型只作默认/普通镜兜底）
-PLATFORM_SPECS = {
-    "抖音": {
-        "aspect": "9:16",
-        "min_resolution": "720x1280",
-        "safe_area": "placement_overlay_aware",
-        "notes": ["字幕、CTA、Logo 避开右侧互动栏和底部标题区", "主文案建议前 3 秒出现产品/品牌"],
-    },
-    "小红书": {
-        "aspect": "9:16",
-        "min_resolution": "720x1280",
-        "safe_area": "placement_overlay_aware",
-        "notes": ["封面/首帧要能独立说明卖点", "标题区和底部交互区避免放关键法律声明"],
-    },
-}
-
 # 后端名归一（中英别名 → key），换厂只改这里 + BACKEND_PROFILES。
 _BACKEND_ALIASES = {
     "seedance": "seedance", "即梦seedance": "seedance", "豆包seedance": "seedance",
@@ -462,15 +453,6 @@ def _brief_platforms(root):
     return dedup
 
 
-def selected_platform_specs(platforms):
-    out = {}
-    for platform in platforms:
-        for key, spec in PLATFORM_SPECS.items():
-            if key in platform:
-                out[key] = spec
-    return out
-
-
 def run(root, out_json=None):
     root = os.path.abspath(root)
     sb = load_json(os.path.join(root, "脚本", "storyboard.json"), {}) or {}
@@ -478,11 +460,17 @@ def run(root, out_json=None):
     registry = load_asset_registry(root)
     platforms = _brief_platforms(root)
     routes, summary = build_routes(sb, default_backend, registry)
+    delivery_pack = ad_platform_pack.build_pack(Path(root))
+    platform_findings = delivery_pack.get("findings") or []
+    summary["block"] += sum(1 for row in platform_findings if row.get("severity") == "block")
+    summary["warn"] += sum(1 for row in platform_findings if row.get("severity") == "warn")
     payload = {"schema_version": 1, "kind": VIDEO_MODEL_ROUTES_KIND,
                "default_backend": default_backend,
                "asset_registry_path": registry.get("_registry_path", ""),
                "platforms": platforms,
-               "platform_specs": selected_platform_specs(platforms),
+               "platform_specs": delivery_pack.get("placement_specs") or delivery_pack.get("specs") or {},
+               "placements": delivery_pack.get("placements") or [],
+               "platform_findings": platform_findings,
                "routes": routes, "summary": summary}
     if out_json is None:
         out_json = os.path.join(root, "出视频", "分镜", "prompt", "video_model_routes.json")

@@ -23,6 +23,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 import asset_consistency  # noqa: E402
+import final_media_consistency  # noqa: E402
 import voice_consistency  # noqa: E402
 
 
@@ -192,6 +193,12 @@ def build_report(root: str) -> dict[str, Any]:
             findings.append(finding(str(item.get("severity") or "info"), dimension,
                                     str(item.get("code") or "finding"), str(item.get("msg") or ""),
                                     relpath, payload.get("kind", ""), dict(item)))
+    final_media = final_media_consistency.build(Path(root), write_frames=True)
+    write_json(os.path.join(root, "生产数据/final_media_consistency.json"), final_media)
+    for item in final_media.get("findings") or []:
+        findings.append(finding(str(item.get("severity") or "info"), "final_media_identity",
+                                str(item.get("code") or "finding"), str(item.get("msg") or ""),
+                                "生产数据/final_media_consistency.json", final_media.get("kind", ""), dict(item)))
     product_qc_checks(root, findings)
     video_checks(root, findings)
     compliance_checks(root, findings)
@@ -214,6 +221,7 @@ def build_report(root: str) -> dict[str, Any]:
             "合规/ai_usage.json",
             "生产数据/asset_consistency.json",
             "生产数据/voice_consistency.json",
+            "生产数据/final_media_consistency.json",
         ],
     }
 

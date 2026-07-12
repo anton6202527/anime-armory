@@ -224,7 +224,19 @@ def run_release(root: Path, episode: str, *, write: bool, asset: Optional[str]) 
     manifest = release_manifest.build_manifest(root, episode, asset=asset, stage="review")
     if write:
         release_manifest.write_manifest(root, episode, manifest)
-    manifest_check = release_manifest.check_manifest(root, episode) if write else {"status": "fail" if manifest.get("readiness", {}).get("status") == "blocked" else "pass", "issues": manifest.get("readiness", {}).get("blocks") or []}
+    if write:
+        manifest_check = release_manifest.check_manifest(root, episode)
+    else:
+        # 只读模式弱化收敛（2026-07 标准审计）：旧逻辑 readiness 缺失/None 也算 pass（只有
+        # 显式 blocked 才 fail）。缺 readiness 的 manifest 恰恰说明发布就绪未知——按 fail 处理。
+        readiness_status = str((manifest.get("readiness") or {}).get("status") or "")
+        manifest_check = (
+            {"status": "pass", "issues": []}
+            if readiness_status and readiness_status != "blocked"
+            else {"status": "fail",
+                  "issues": (manifest.get("readiness") or {}).get("blocks")
+                  or ["release_manifest readiness missing/blocked（只读模式无法深检，请带 --write 复跑）"]}
+        )
     return [
         check("artifact_lineage", "fail" if lineage_check.get("status") != "pass" else "pass",
               "; ".join((lineage_check.get("issues") or [])[:5]) or f"lineage_id={lineage.get('lineage_id')}",

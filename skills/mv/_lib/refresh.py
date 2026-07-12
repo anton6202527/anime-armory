@@ -27,14 +27,14 @@ CURRENT_SNAPSHOTS = {
             "notes": "适合电影感关键镜；正式使用前确认地区/API配额/价格。",
         },
         {
-            "name": "Runway Gen-4",
-            "capabilities": ["reference_images", "start_end_frames", "character_consistency"],
-            "notes": "适合单参考角色一致性和质感关键镜。",
+            "name": "Runway Gen-4.5",
+            "capabilities": ["text_to_video", "image_to_video", "complex_sequenced_instructions"],
+            "notes": "官方当前高质量模型；公开控制以 T2V/I2V 为主，首尾帧等额外输入按渠道重新核验。",
         },
         {
             "name": "Kling 3.0",
-            "capabilities": ["reference_images", "start_end_frames", "reference_video_motion", "native_audio", "lip_sync"],
-            "notes": "适合动作镜、首尾帧控制和演唱口型候选。",
+            "capabilities": ["reference_images", "elements", "start_end_frames", "reference_video_motion", "native_audio", "lip_sync", "multi_shot"],
+            "notes": "适合 Elements 主体、多镜头叙事、动作镜和演唱口型候选。",
         },
         {
             "name": "Luma Ray3 / Ray3.14",
@@ -43,8 +43,8 @@ CURRENT_SNAPSHOTS = {
         },
         {
             "name": "Seedance 2.0",
-            "capabilities": ["reference_images", "start_end_frames", "reference_video_motion"],
-            "notes": "适合快节奏短视频和批量镜头；以所用渠道官方说明为准。",
+            "capabilities": ["reference_images", "reference_audio", "reference_video_motion", "native_audio", "multi_shot_15s"],
+            "notes": "官方支持图/音/视频混合参考和 15 秒多镜头声画；首尾帧能力未从模型主页证实，按渠道核验。",
         },
         {
             "name": "manual",
@@ -62,11 +62,9 @@ CURRENT_SNAPSHOTS = {
         {"name": "manual", "integration": "manual", "official_api": False},
     ],
     "image_backends": [
-        {"name": "Codex / OpenAI gpt-image", "multi_reference": False, "native_subject": False},
-        {"name": "Seedream Universal Reference", "multi_reference": True, "native_subject": True},
-        {"name": "可灵主体库", "multi_reference": True, "native_subject": True},
-        {"name": "Nano Banana / Gemini", "multi_reference": True, "native_subject": False},
-        {"name": "Sora Cameo", "multi_reference": True, "native_subject": True},
+        {"name": "GPT Image 2", "channels": ["Codex", "OpenAI API"], "high_fidelity_image_inputs": True},
+        {"name": "Seedream 5.0 Lite", "channels": ["火山方舟/Seedream", "即梦/Dreamina"], "multimodal_image_input": True},
+        {"name": "Nano Banana Pro (Gemini 3 Pro Image)", "channels": ["Google Gemini API"], "multi_reference": True, "max_standard_inputs": 14},
     ],
 }
 

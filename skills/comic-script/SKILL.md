@@ -7,7 +7,7 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 
 把源本、点子或已有脚本改成漫画可执行的分话大纲和逐格脚本。目标不是写散文正文，而是给排版、出图、嵌字和审查提供结构化真值。
 
-输入可来自 `源本/`、用户口述、已有大纲或已有对白脚本。完整小说不是硬前置；原创漫画可以从故事蓝图直接开始。
+输入可来自 `源本/`、用户口述、已有大纲或已有对白脚本。完整小说不是硬前置；原创漫画可以从故事蓝图直接开始。`source_semantics_gate.py` 可直接读取 TXT / Markdown / JSON / DOCX 主文档正文；不再要求用户先把 Word 另存为 TXT。
 
 ## 输入
 
@@ -42,6 +42,8 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 ```bash
 python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫画/作品名" --chapter 第1话
 ```
+
+DOCX 会用标准库直接读取 `word/document.xml` 的正文段落；页眉、批注和修订说明不会混入改编源文本。无法解析的 DOCX 会显式记为 `invalid` 并阻断，不会静默当作无源本。
 
 常用覆盖：
 

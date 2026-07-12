@@ -54,6 +54,35 @@ PLATFORM_ASPECTS = {
 
 ALL_ASPECTS = ("9:16", "16:9", "1:1")
 
+# 平台 → 交付编码规格（dated 候选 snapshot · 2026-07）。此前交付矩阵只派生「画幅×时长×响度目标」，
+# 无任何码率/编码/帧率口径——所谓平台封装规格是缺失的。这里给上传档建议：平台都会二次转码，
+# 上传码率给足避免糊（竖屏短剧事实标准 H.264 High/yuv420p/30fps/8-12Mbps；B站/YT 横屏更高）。
+# 只作交付建议 + reframe/派生件渲染码控，不改母带编码（母带规格见 compose.sh：CRF20/aac192k）。
+PLATFORM_ENCODING = {
+    "vertical_short": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+                       "video_bitrate": "8M", "maxrate": "12M",
+                       "audio_codec": "aac", "audio_bitrate": "192k"},
+    "bilibili": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+                 "video_bitrate": "12M", "maxrate": "20M",
+                 "audio_codec": "aac", "audio_bitrate": "192k"},
+    "youtube": {"video_codec": "h264", "pix_fmt": "yuv420p", "fps": 30,
+                "video_bitrate": "12M", "maxrate": "20M",
+                "audio_codec": "aac", "audio_bitrate": "192k"},
+}
+PLATFORM_ENCODING["default"] = dict(PLATFORM_ENCODING["vertical_short"])
+
+
+def encoding_for_platform(platform):
+    """目标平台 → 交付编码规格（含 profile 键名）。未知/未定 → default。纯函数·可测。"""
+    p = (platform or "").strip().lower()
+    if any(t in p for t in ("b站", "bilibili", "哔哩")):
+        return dict(PLATFORM_ENCODING["bilibili"], profile="bilibili")
+    if any(t in p for t in ("youtube", "油管")):
+        return dict(PLATFORM_ENCODING["youtube"], profile="youtube")
+    if any(t in p for t in ("抖音", "快手", "tiktok", "红果", "番茄", "小红书", "reelshort")):
+        return dict(PLATFORM_ENCODING["vertical_short"], profile="vertical_short")
+    return dict(PLATFORM_ENCODING["default"], profile="default")
+
 
 def parse_setting(text, key):
     """从 _设置.md 抠 `键: 值` / `键：值` / `- 键: 值`。返回去空白的值或 None。纯函数·可测。"""
@@ -157,6 +186,7 @@ def build_matrix(root, ep, platform, aspect_setting, duration_setting,
         else durations_for(duration_setting)
     lkey = loudness_key_for_platform(platform)
     target_lufs = loudness_conform.PLATFORM_TARGETS.get(lkey, loudness_conform.PLATFORM_TARGETS["default"])
+    encoding = encoding_for_platform(platform)
 
     master = find_master(root, ep)
     deliverables = []
@@ -190,6 +220,7 @@ def build_matrix(root, ep, platform, aspect_setting, duration_setting,
         "schema_version": 1, "kind": "n2d_delivery_matrix",
         "project_root": root, "episode": ep,
         "platform": platform or "未定", "loudness_key": lkey, "target_lufs": target_lufs,
+        "encoding": encoding,
         "native_aspect": native, "aspects": aspects, "durations": durations,
         "master": (os.path.relpath(master, root) if master else None),
         "deliverables": deliverables,
@@ -248,7 +279,8 @@ def run_deliverables(root, ep, matrix):
             mode = "pad" if aspect_value(item["aspect"]) > aspect_value(native) else "crop"
             src = "1080x1920" if aspect_value(native) < 1 else "1920x1080"
             vf = _ref.reframe_filter(src, item["aspect"], mode)
-            ok, msg = _ref.render_reframe(master_abs, out_abs, vf)
+            ok, msg = _ref.render_reframe(master_abs, out_abs, vf,
+                                          encoding=matrix.get("encoding"))
             results.append({"id": item["deliverable_id"], "ok": ok, "msg": f"({mode}) {msg}"})
     return results
 

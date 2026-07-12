@@ -420,3 +420,52 @@ def test_prohibited_local_patch_outputs_reads_event_log(tmp_path: Path) -> None:
     report = image_qc.prohibited_local_patch_outputs(tmp_path)
     assert report["summary"]["block"] == 1
     assert report["outputs"][0]["clip"] == "Clip_003"
+
+
+def test_generation_provenance_binds_model_channel_prompt_and_asset(tmp_path: Path) -> None:
+    asset_rel = "出图/段落/图片/Clip_001.png"
+    prompt_rel = "出图/段落/prompt/Clip_001.md"
+    reference_rel = "出图/共享/图片/定妆_主唱.png"
+    root = _make_project(tmp_path, [{
+        "clip_id": "Clip_001", "image_path": asset_rel, "image_prompt_path": prompt_rel,
+        "reference_inputs": [{"path": reference_rel, "use": "lead_identity"}],
+    }], {prompt_rel: "prompt"})
+    asset = root / asset_rel
+    asset.parent.mkdir(parents=True, exist_ok=True)
+    asset.write_bytes(b"image")
+    reference = root / reference_rel
+    reference.parent.mkdir(parents=True, exist_ok=True)
+    reference.write_bytes(b"reference")
+    (root / "_设置.md").write_text("- 生图模型: GPT Image 2\n- 生图渠道: Codex\n", encoding="utf-8")
+    events = root / "生产数据" / "production_events.jsonl"
+    events.parent.mkdir(parents=True, exist_ok=True)
+    events.write_text(json.dumps({
+        "stage": "image", "event": "generation",
+        "generation": {
+            "asset": asset_rel,
+            "asset_sha256": image_qc._sha256_path(asset),
+            "model": "GPT Image 2", "channel": "Codex",
+            "source_prompt": prompt_rel,
+            "source_prompt_sha256": image_qc._sha256_path(root / prompt_rel),
+            "reference_inputs": [{"path": reference_rel, "sha256": image_qc._sha256_path(reference)}],
+            "subject_inputs": [],
+        },
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
+    report = image_qc.generation_provenance(root)
+    assert report["complete"] is True
+    assert report["uniform"] is True
+
+    (root / prompt_rel).write_text("prompt changed", encoding="utf-8")
+    stale = image_qc.generation_provenance(root)
+    assert stale["complete"] is False
+    assert "source_prompt_changed_after_generation_event" in stale["rows"][0]["findings"]
+
+    (root / prompt_rel).write_text("prompt", encoding="utf-8")
+    event = json.loads(events.read_text(encoding="utf-8"))
+    event["generation"]["reference_inputs"] = []
+    events.write_text(json.dumps(event, ensure_ascii=False) + "\n", encoding="utf-8")
+    missing_ref = image_qc.generation_provenance(root)
+    assert any(
+        finding.startswith("required_reference_not_submitted:")
+        for finding in missing_ref["rows"][0]["findings"]
+    )

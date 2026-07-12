@@ -240,7 +240,11 @@ def classify_clip(clip: Mapping[str, Any], idx: int, total: int) -> Dict[str, An
         t_min, t_max = manual_target
         signals.append("manual_target_story_clip_sec")
     over_budget = None if duration is None else max(0.0, duration - t_max)
-    hard_max = 35.0 if detail_allowed else (15.0 if economy_class == "selective_detail" else 12.0)
+    # hard_max 是 story_clip 的**叙事跨度**上限，不是物理 take 上限——take >12s 必须拆段、
+    # >15s 禁止直提仍由 shot_split_decision 硬管，与本预算正交。详拍档旧上限 35s 与
+    # SKILL「不能拍成 20-35s 长段」口径打架（30s 详拍只 warn 就放过），收敛到 20s：
+    # warn 带 15-20s（超经济目标），>20s 即 block。
+    hard_max = 20.0 if detail_allowed else (15.0 if economy_class == "selective_detail" else 12.0)
     severity = "pass"
     code = ""
     if duration is not None and duration > hard_max:

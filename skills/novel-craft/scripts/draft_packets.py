@@ -24,6 +24,7 @@ _COMMON = os.path.join(_SKILLS, "novel", "_lib")
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from io_utils import load_json  # noqa: E402  本线 _lib 单一真值源
+import sweep_schedule  # noqa: E402  小批回扫 due 点单一真值源（含中段防守加密）
 from project_io import load_project_settings  # noqa: E402
 try:
     from retrieval import relevant_chapters  # noqa: E402  跨窗口语义检索（检索增强长程一致性）
@@ -571,18 +572,18 @@ def batch_review_interval_from_settings(root, meta):
 
 
 def batch_review_window(chapter, interval, meta):
+    # due 点计算收口到 novel/_lib/sweep_schedule（单一真值源）：基础平铺 + 项目尾 +
+    # 中段防守加密（40-60% 进度带按半间隔加密——长篇矛盾高发区，见该模块 docstring）。
     if interval <= 0:
         return None
     target = int(meta.get("target_chapters") or 0)
-    is_interval_end = chapter % interval == 0
-    is_project_tail = bool(target and chapter == target and chapter % interval != 0)
-    if not (is_interval_end or is_project_tail):
-        next_due = ((chapter - 1) // interval + 1) * interval
-        if target:
-            next_due = min(next_due, target)
-        return {"due": False, "next_due": next_due}
-    start = ((chapter - 1) // interval) * interval + 1
-    return {"due": True, "start": start, "end": chapter}
+    if sweep_schedule.is_due(chapter, interval, target):
+        start, end = sweep_schedule.window_for(chapter, interval, target)
+        return {"due": True, "start": start, "end": end}
+    next_due = sweep_schedule.next_due_after(chapter, interval, target)
+    if target and next_due:
+        next_due = min(next_due, target)
+    return {"due": False, "next_due": next_due}
 
 
 def use_trio_pipeline(root, meta):
@@ -1501,6 +1502,7 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 - 默认输出一章正文，第一行必须是 `# 第{chapter}章 {title or "<标题>"}`；若文本主创模式为 `人类主创`，则输出本章写作/编辑指导和关键段落建议，不直接生成可投稿正文。
 - 第二行写 meta 注释：`<!-- meta: demo=false; packet=写作任务/第{chapter:02d}章.md; step={step} -->`。
 - 本章必须兑现章纲里的戏剧节拍，至少保留一个钩子或承诺。
+- 若章纲给本章登记了意外性设计位（预期违背），必须兑现"意料之外、情理之中"：违背读者预期线但回看伏笔成立；未登记设计位的章，至少留一处微意外（人物选择、对白潜台词或细节反第一直觉），不许整章顺撇可预测。
 - 若文本主创模式为 `人类主创`，最终正文由人类作者改写和定稿，AI 只做结构、检查、局部建议和非替代性辅助。
 - 本章必须推进 `读者契约` 中的至少一项：核心题旨、读者承诺、关系弧光、秘密揭示、能力代价或文学质感；不能只刷事件。
 - 不新增会推翻必读设定/骨架文件的能力、关系、地点规则；新增设定必须写入章末状态增量。

@@ -6,6 +6,7 @@ Can run without pytest:
     python3 skills/song-compose/scripts/test_compose_song.py
 """
 import array
+import hashlib
 import json
 import math
 import os
@@ -18,6 +19,18 @@ import wave
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 COMPOSE = os.path.join(HERE, "compose_song.py")
+TAKE_REVIEW = os.path.join(HERE, "take_review.py")
+
+
+def write_json(path, payload):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False)
+
+
+def canonical_hash(payload):
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def write_wav(path, seconds=1.0, rate=44100):
@@ -50,6 +63,21 @@ def make_project(root):
         f.write("# _设置\n\n## 选择\n- 作曲后端: ACE-Step\n- 生成版数: 2\n- 目标时长: 90s\n- 挑版策略: 最佳hook\n")
     with open(os.path.join(root, "词", "lyrics.md"), "w", encoding="utf-8") as f:
         f.write("[verse1]\n我从山门一路向前\n\n[chorus]\n仗剑下山闯人间\n")
+    sources = {
+        "创作/song_brief.json": {"kind": "song_brief", "sonic_identity": "国风流行"},
+        "素材/reference_pack.json": {"kind": "song_reference_pack", "references": []},
+        "歌/song_form.json": {"kind": "song_form_packet", "bpm": 100, "meter": "4/4"},
+    }
+    for relpath, payload in sources.items():
+        write_json(os.path.join(root, relpath), payload)
+    reports = {
+        "创作/song_brief_check.json": canonical_hash(sources["创作/song_brief.json"]),
+        "素材/reference_pack_check.json": canonical_hash(sources["素材/reference_pack.json"]),
+        "歌/song_form_check.json": canonical_hash(sources["歌/song_form.json"]),
+        "词/lyric_prosody.json": hashlib.sha256(open(os.path.join(root, "词", "lyrics.md"), "rb").read()).hexdigest(),
+    }
+    for relpath, source_hash in reports.items():
+        write_json(os.path.join(root, relpath), {"kind": "test_evidence", "passed": True, "source_sha256": source_hash})
 
 
 class ComposeSongTest(unittest.TestCase):
@@ -62,7 +90,7 @@ class ComposeSongTest(unittest.TestCase):
             with open(manifest_path, encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["backend"], "ACE-Step")
-            self.assertEqual(manifest["schema_version"], 2)
+            self.assertEqual(manifest["schema_version"], 3)
             self.assertEqual(manifest["requested_takes"], 2)
             self.assertEqual(manifest["target_duration_seconds"], 90)
             prompt_path = os.path.join(tmp, "歌", "compose_prompts", "take_01.md")
@@ -87,10 +115,17 @@ class ComposeSongTest(unittest.TestCase):
             subprocess.run([sys.executable, COMPOSE, tmp, "--register", src, "--take", "1"], capture_output=True, text=True, check=True)
             subprocess.run([
                 sys.executable, COMPOSE, tmp,
-                "--score", "take_01", "--hook-score", "5", "--vocal-score", "4", "--notes", "副歌最稳",
+                "--score", "take_01", "--hook-score", "5", "--melody-score", "4", "--vocal-score", "4",
+                "--arrangement-score", "4", "--mix-score", "4", "--fit-score", "5", "--notes", "副歌最稳",
+            ], capture_output=True, text=True, check=True)
+            subprocess.run([
+                sys.executable, TAKE_REVIEW, tmp, "--write", "--take", "take_01",
+                "--hook-score", "5", "--melody-score", "4", "--vocal-score", "4",
+                "--arrangement-score", "4", "--mix-score", "4", "--fit-score", "5",
             ], capture_output=True, text=True, check=True)
             subprocess.run([sys.executable, COMPOSE, tmp, "--select", "take_01"], capture_output=True, text=True, check=True)
             self.assertTrue(os.path.exists(os.path.join(tmp, "歌", "song.wav")))
+            self.assertTrue(os.path.exists(os.path.join(tmp, "混音", "pre_master.wav")))
             with open(os.path.join(tmp, "歌", "takes_manifest.json"), encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["selected_take"], "take_01")
@@ -98,6 +133,7 @@ class ComposeSongTest(unittest.TestCase):
             self.assertEqual(take["status"], "selected")
             self.assertEqual(take["score"]["hook"], 5)
             self.assertEqual(take["notes"], "副歌最稳")
+            self.assertTrue(manifest["selection_receipt"]["pre_master_sha256"])
 
 
 import importlib.util

@@ -1,6 +1,6 @@
 ---
 name: ad-image
-description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片建共享定妆库（角色/代言人 + 场景 + **产品定妆 hero product**：包装/logo/品牌色跨镜零漂移），再按 storyboard.json 逐镜出首帧/尾帧 PNG。视觉契约（品牌色/光位/构图）烤进首帧。生图AI 是选择点（默认 Codex），放行官方多参考后端（Seedream/可灵主体库/Nano Banana/Sora Cameo），拦项目内后端混用 + 逆向出图。Use when asked 广告出图/定妆/产品定妆/品牌色/出图prompt/分镜图/KV for a 拍广告 project. Triggers 广告出图, 定妆, 产品定妆, 品牌色, KV, 出图, 出图prompt, 分镜图, 首帧, 尾帧, ad-image.
+description: 拍广告 第5阶段·三层定妆库 + AI出图 — 建角色/场景/hero product 共享定妆并逐镜出首尾帧；每个 job 分列具体生图模型与访问渠道、真实参考输入和输出。默认 GPT Image 2 via Codex CLI；非默认官方路线需项目签核，逆向路径永久阻断。Use when asked 广告出图/定妆/产品定妆/品牌色/出图prompt/分镜图/KV for a 拍广告 project. Triggers 广告出图, 定妆, 产品定妆, 品牌色, KV, 出图, 出图prompt, 分镜图, 首帧, 尾帧, ad-image.
 ---
 
 # ad-image — 拍广告 · 三层定妆库 + 出图
@@ -16,7 +16,7 @@ description: 拍广告 第5阶段·三层定妆库 + AI出图 — 为广告片�
 
 ## 偏好（私有）
 
-按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生图AI`、`一致性增强`、`基础视觉风格`、`交付比例`（出图按主比例，cutdown 比例由 `ad-compose` reframe，不重复出图）、`生成粒度`、`重抽预算策略`。出图是**花钱/高风险**阶段，正式跑前确认；同时 brief 的可延后合规项（claims 依据/rights 授权/legal_lines）此时必须补齐——正式生产前跑 `python3 skills/ad-craft/scripts/gate.py "<作品根>" --stage image`，有 block 先回 `ad-concept`/`ad-script` 补齐。
+按 `../skills/ad-craft/references/选择点与偏好.md` 读 `<作品根>/_设置.md`。涉及：`生图模型`、`生图渠道`、`一致性增强`、`基础视觉风格`、`交付比例`、`生成粒度`、`重抽预算策略`。出图是**花钱/高风险**阶段，正式跑前确认具体模型+渠道；旧 `生图AI` 必须迁移。brief 的 claim 分型依据/rights/legal_lines 及分镜 claim 披露此时必须闭合。
 
 ## 产品落档机检 product_qc（**gate spend 的硬闸**）
 
@@ -33,7 +33,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 2. **产品语义镜逃逸拦截**：即使 storyboard 忘了写 assets，只要镜头语义含 App/UI/包装/logo/品牌/CTA/end card，也纳入产品 QC；缺 `PROD_*` 资产 ID → block。
 3. **asset_registry 对账**：优先读 `出图/共享/asset_registry.json` / `设定库/asset_registry.json`。产品镜建议同时绑定 `PROD_*` 与 `BRAND_*`；缺 registry 或缺品牌资产先 warn，避免出图前没有 logo mask/品牌色/包装禁漂项。
 4. **文字可读性**：品牌/UI/CTA/法律文字镜必须在 prompt 写清“文字清晰可读/不乱码/保留原文”；缺锁定句 → warn，缺 prompt → block。
-5. **万能安全区**：产品/logo/UI/CTA 镜应写 `safe_area.core_in_center_4x4=true`；显式 false → block，缺声明 → warn。
+5. **跨比例构图余量**：`safe_area.core_in_center_4x4` 只是内部中心裁切风险提示；缺失或 false → warn。它不能证明抖音/TikTok/Reels 等实际 placement 安全，发布前仍须当前模板 + 具名人审。
 6. **brand-color ΔE**：无校准产品 ROI 时只作 WARN 启发式，不能因整图环境色不同就宣判品牌不一致。
 7. **product dHash 离群**：全帧 Hamming 只作 WARN 候选，不把换构图误判成产品漂移硬挡。
 8. **logo NCC**：只作 WARN 快筛；Logo/包装文字硬签收来自真实参考输入、可控后期层和人工并排复核。
@@ -43,7 +43,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
 
 ## 生图后端治理
 
-`生图AI` 默认且优先 **Codex / GPT Image 2**（或官方 OpenAI Images）。非 Codex/OpenAI 的官方后端（Seedream、可灵主体库、Nano Banana、Sora Cameo，含 Dreamina/即梦官方 CLI/API）只能作为用户明确签核的单项目例外；签核写入 `<作品根>/合规/image_backend_override.json` 后，`ad-craft/scripts/gate.py --stage image` 才放行。两条永久硬闸门仍保留：① **项目内不混用后端** ② **禁第三方逆向/未授权出图**（即梦/Dreamina 逆向路径 forbidden）。不得因为本机 `dreamina` 可用、视频阶段走即梦，或为了省事而自动切到即梦生图。
+默认路线是 **生图模型=GPT Image 2，生图渠道=Codex CLI**（也可用官方 OpenAI Images API）。Seedream 4.5、Nano Banana Pro、Kling Image 3.0、Sora 2 或其它**自定义模型**（含具名 Dreamina Image 官方版本）只能作为用户明确签核的单项目例外，逆向 Dreamina/即梦路径仍禁用；签核写 `<作品根>/合规/image_backend_override.json`。永久硬闸：① manifest 每个 job 必须分别落 `model/channel`，不能只写厂商壳/backend；② 项目内不混用路线；③ 禁第三方逆向/未授权出图。视频渠道不改变图片路线。
 
 ## 工作流
 
@@ -59,7 +59,7 @@ python3 skills/ad-image/scripts/product_qc.py "<作品根>/出图/分镜" [--sto
       - **品牌色锁 (Hex-Lock)**：显式声明品牌 HEX 值，并在 Prompt 末尾追加 `color consistency: strict HEX #[value]`。
       - **Logo 保护区**：标记 Logo 坐标，禁止 AI 在 Logo 区域生成环境干扰（如遮挡、强反光）。
    2. **写视觉契约总览**（`出图/分镜/prompt/00_总览.md`）：继承 `storyboard.json.visual_contract`（品牌色/光位锚/画风/构图），逐镜带视线方向/光位/起幅余量。
-   3. **万能安全区对账**：出图时，确保核心资产位于 8x8 网格中心，为多画幅裁切预留边缘。
+   3. **跨比例构图余量对账**：8x8 中心网格只为多画幅裁切预留边缘；不得把它写成平台官方安全区或最终通过证据。
 
 4. **逐图落档 QC**：每张定妆/首帧/尾帧 PNG 落档后立即跑上节的 ad-image QC；产品/KV/代言人/品牌镜先过 `product_qc.py`，普通镜至少完成本线落档自检并记录。单张不过先修单张，不继续批量出后续图。只有 prompt 包而无 PNG 时，`product_qc.py` 只能证明 prompt-lint 通过，不能放行出视频。
 5. **批次/全片收尾 QC**：一批或全部分镜出完后再跑一次 `product_qc.py`，确认报告时间晚于所有关键 PNG，`summary.block==0` 且无待确认关键镜后才进入 `ad-video`。

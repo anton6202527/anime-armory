@@ -113,20 +113,30 @@ def check_beatgrid(root, songlen):
         add(BLOCK, "卡点", "节拍/beatgrid.json", "beatgrid 损坏不可解析")
         return None
     bpm = bg.get("bpm")
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    song = mv_utils.find_song(root)
+    recorded_song = bg.get("source_audio_sha256")
+    if recorded_song and recorded_song != mv_utils.content_hash(song):
+        add(BLOCK, "卡点", "beatgrid.json", "source_audio_sha256 与当前歌曲不一致；节拍证据已失效")
+    elif not recorded_song and not meta.get("is_demo"):
+        add(BLOCK, "卡点", "beatgrid.json", "正式项目缺 source_audio_sha256，不能证明节拍来自当前歌曲")
+    if not meta.get("is_demo"):
+        if not bg.get("downbeats_verified") or not bg.get("sections_verified") or not bg.get("sections_complete"):
+            add(BLOCK, "卡点", "beatgrid.json", "正式项目小节首/段落边界未完整具名签收")
     if isinstance(bpm, (int, float)) and not (BPM_LO <= bpm <= BPM_HI):
         add(WARN, "卡点", "beatgrid.json", f"BPM={bpm} 在 [{BPM_LO},{BPM_HI}] 外，疑半速/倍速——听一下校正")
     dur = bg.get("duration")
     for key in ("beats", "downbeats"):
         arr = bg.get(key) or []
         if not arr:
-            add(WARN, "卡点", "beatgrid.json", f"{key} 为空")
+            add(BLOCK if not meta.get("is_demo") else WARN, "卡点", "beatgrid.json", f"{key} 为空")
             continue
         if any(arr[i] <= arr[i - 1] for i in range(1, len(arr))):
-            add(WARN, "卡点", "beatgrid.json", f"{key} 非严格递增（时间戳乱序）")
+            add(BLOCK, "卡点", "beatgrid.json", f"{key} 非严格递增（时间戳乱序）")
         if dur and arr[-1] > dur + 0.5:
             add(WARN, "卡点", "beatgrid.json", f"{key} 末值 {arr[-1]:.2f} 超出 duration {dur:.2f}")
     if dur and songlen and abs(dur - songlen) > tol(songlen):
-        add(WARN, "卡点", "beatgrid.json",
+        add(BLOCK, "卡点", "beatgrid.json",
             f"beatgrid.duration {dur:.2f}s 与 歌长 {songlen:.2f}s 差大——歌换过却没重跑 mv-beat？")
     add(INFO, "卡点", "beatgrid.json",
         f"快照：BPM {bpm} · beats {len(bg.get('beats') or [])} · downbeats {len(bg.get('downbeats') or [])}")
@@ -392,8 +402,17 @@ def check_consistency_artifacts(root, meta=None):
                                if mv_utils.content_hash(os.path.join(root, rel)) != recorded]
                 if stale_video:
                     add(BLOCK, "一致性", label, f"视频 QC 未绑定当前选中视频：{stale_video[0]}")
-            if kind == "视频QC" and not (meta or {}).get("is_demo") and not (payload.get("semantic_review") or {}).get("accepted"):
-                add(BLOCK, "一致性", label, "正式项目视频语义人工复核尚未签收")
+            if kind == "视频QC" and not (meta or {}).get("is_demo"):
+                semantic = payload.get("semantic_review") or {}
+                if not semantic.get("accepted"):
+                    add(BLOCK, "一致性", label, "正式项目视频语义人工复核尚未签收")
+                elif semantic.get("bound_video_sha256") != (payload.get("selected_video_sha256") or {}):
+                    add(BLOCK, "一致性", label, "视频语义签收未绑定当前 selected video hashes")
+                seam_hash = mv_utils.json_hash([
+                    seam.get("seam_contract") or {} for seam in payload.get("seams") or []
+                ])
+                if semantic.get("accepted") and semantic.get("bound_seam_contract_sha256") != seam_hash:
+                    add(BLOCK, "一致性", label, "视频语义签收未绑定当前接缝分类合同")
 
 
 def check_production_pack(root, meta):
@@ -404,15 +423,17 @@ def check_production_pack(root, meta):
         ("分镜/animatic_manifest.json", "animatic manifest"),
         ("分镜/animatic.mp4", "reviewable animatic"),
         ("分镜/timeline.otio", "OpenTimelineIO timeline"),
+        ("生产数据/otio/otio_receipt.json", "OTIO hash receipt"),
         ("制片/shot_list.json", "shot list"),
         ("制片/setup_schedule.md", "setup schedule"),
         ("制片/take_log.csv", "take log"),
         ("制片/picture_lock_color_checklist.md", "picture lock/color checklist"),
+        ("制片/finishing_delivery_checklist.md", "finishing/delivery checklist"),
         ("制片/picture_lock.json", "signed picture lock"),
     ]
     missing = [rel for rel, _label in expected if not os.path.exists(os.path.join(root, rel))]
     if missing:
-        sev = INFO if (meta or {}).get("is_demo") else WARN
+        sev = INFO if (meta or {}).get("is_demo") else BLOCK
         add(sev, "制片", "production_pack", f"传统制片包缺 {len(missing)} 项：{', '.join(missing)}")
         return
     shot_list = load_json_safe(os.path.join(root, "制片", "shot_list.json"))
@@ -498,6 +519,18 @@ def check_delivery_artifacts(root):
         add(BLOCK, "交付", "生产数据/delivery_qc/delivery_qc.json", "缺交付编码/音频/色彩 QC")
     elif int((qc.get("summary") or {}).get("hard_blocks") or 0):
         add(BLOCK, "交付", "生产数据/delivery_qc/delivery_qc.json", "delivery QC 仍有 hard block")
+    elif isinstance(qc, dict):
+        recorded = qc.get("inputs_sha256") or {}
+        required = ["成片_MV.mp4"]
+        if os.path.exists(master):
+            required.append("成片_MV_master.mov")
+        song = mv_utils.find_song(root)
+        if song:
+            required.append(mv_utils.relpath(root, song))
+        stale = [rel for rel in required if recorded.get(rel) != mv_utils.content_hash(os.path.join(root, rel))]
+        if stale:
+            add(BLOCK, "交付", "生产数据/delivery_qc/delivery_qc.json",
+                f"delivery QC 已过期或未绑定当前文件：{stale[0]}")
     provenance_path = os.path.join(root, "合规", "provenance.json")
     provenance = load_json_safe(provenance_path)
     if provenance is None:
@@ -507,15 +540,19 @@ def check_delivery_artifacts(root):
         rel = "成片_MV.mp4"
         if assets.get(rel) != mv_utils.content_hash(final):
             add(BLOCK, "交付", provenance_path, "provenance 未绑定当前最终 MP4")
+        if os.path.exists(master) and assets.get("成片_MV_master.mov") != mv_utils.content_hash(master):
+            add(BLOCK, "交付", provenance_path, "provenance 未绑定当前 mezzanine master")
 
 
 def check_ai_usage(root):
     finals = glob.glob(os.path.join(root, "成片_*.mp4")) + glob.glob(os.path.join(root, "成片*.mp4"))
     path = os.path.join(root, "合规", "ai_usage.json")
+    meta = mv_utils.load_json(os.path.join(root, "_meta.json"), {}) or {}
+    formal = not meta.get("is_demo")
     if not finals:
         return
     if not os.path.exists(path):
-        add(WARN, "合规", "合规/ai_usage.json",
+        add(BLOCK if formal else WARN, "合规", "合规/ai_usage.json",
             "已有成片但缺 AI 视觉使用披露——发布/交平台前跑 mv-craft/scripts/ai_usage.py")
         return
     payload = load_json_safe(path)
@@ -524,7 +561,7 @@ def check_ai_usage(root):
         return
     mode = payload.get("visual_mode")
     if mode not in ("AI-generated", "AI-assisted", "未使用AI视觉"):
-        add(WARN, "合规", "合规/ai_usage.json", f"visual_mode 不在约定枚举内：{mode}")
+        add(BLOCK if formal else WARN, "合规", "合规/ai_usage.json", f"visual_mode 不在约定枚举内：{mode}")
     else:
         add(INFO, "合规", "合规/ai_usage.json", f"AI 视觉使用披露：visual_mode={mode}")
 

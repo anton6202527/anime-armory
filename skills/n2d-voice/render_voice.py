@@ -21,10 +21,11 @@ from voice_text import clean_text, parse_voiceover_line  # 念白文本清洗/�
 import voice_manifest as vmf  # 时长清单条目 + voice_key 音色留痕（独立模块·带单测；契约字段 VOICE_KEY_FIELD）
 import voice_lexicon as vlex  # 专名/多音字读音词典（谐音只下到声学层，字幕/清单保留正名；独立模块·带单测）
 from gptsovits_adapter import endpoint_candidates  # GPT-SoVITS 官方 API / CosyVoice 兼容端点适配
-from voice_preproduction import (  # 声音选角锁 + 最终渲染守卫
+from voice_preproduction import (  # 声音选角锁 + 最终渲染守卫 + 估时单一真值源
     casting_backend,
     casting_blockers,
     casting_path,
+    estimate_line_duration,
     role_entry as casting_role_entry,
 )
 
@@ -288,24 +289,25 @@ def dur_of(p):
     except (TypeError, ValueError):
         return 0.0
 
+# 字→秒估算单一真值源 = voice_preproduction.estimate_line_duration（text_rate_v1）。
+# 此前本文件维护过两套私有速率/clamp（5.0 与 5.2、上限 8/12s），与 timing_estimate 的
+# 0.8~15s 口径系统性漂移（validate_timings tol 只有 0.5s，足以造成定稿后返工）；
+# 现统一为同一公式，本地只叠加语速除数与占位专属的呼吸/钩子留拍。
+
+def _estimate_base(text, spd_m=1.0):
+    base=float(estimate_line_duration(text)["estimated_duration_sec"])
+    return base / max(0.55, spd_m)
+
 def estimate_placeholder_duration(text, spd_m, hk):
-    cjk=len(re.findall(r'[\u3400-\u9fff]', text))
-    punct=len(re.findall(r'[，。！？、；：,.!?;:]', text))
-    d=cjk/(5.0*spd_m)+punct*0.12
+    d=_estimate_base(text, spd_m)
     if spd_m<1.0: d+=0.25
     if spd_m>1.0: d-=0.12
     if hk=='climax': d+=0.25
     if hk=='end': d+=0.35
-    return max(1.15, min(8.0, d))
+    return max(0.8, min(15.0, d))
 
 def estimate_spoken_duration(text, spd_m=1.0):
-    cjk=len(re.findall(r'[\u3400-\u9fff]', text))
-    ascii_words=len(re.findall(r'[A-Za-z0-9]+', text))
-    punct=len(re.findall(r'[，。！？、；：,.!?;:]', text))
-    ellipsis=text.count('……') + text.count('...')
-    # Short-form narration target: roughly 4.8-5.8 CJK chars/sec, with small punctuation breath.
-    d=(cjk/5.2 + ascii_words/2.6 + punct*0.10 + ellipsis*0.22) / max(0.55, spd_m)
-    return max(1.1, min(12.0, d))
+    return max(0.8, min(15.0, _estimate_base(text, spd_m)))
 
 def _env_float(names, default):
     for name in names:

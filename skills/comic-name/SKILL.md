@@ -25,7 +25,7 @@ description: 漫画缩略分镜/ネーム阶段。Use when turning panel_script.
 python3 skills/comic-name/scripts/build_name_board.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-脚本只用标准库。它会按 `story_function`、`layout_weight`、台词量和拟声词粗分大格/中格/小格；页漫会额外记录 `page_side`、`spread_id`、`page_turn_hook`，条漫会记录每个滚动段的停顿和呼吸。
+脚本只用标准库。它会按 `story_function`、`layout_weight`、台词量和拟声词粗分大格/中格/小格；页漫会额外记录 `page_side`、`spread_id`、`page_turn_hook`，条漫会记录每个滚动段的停顿和呼吸。`panel_script.json` 若逐格提供数字 `page_hint`，会优先按明确页意图分组；只有没有完整 page_hint 时才回退到通用每页格数，避免自动平均切页破坏翻页钩子。
 
 ## 工作流
 

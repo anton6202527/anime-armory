@@ -2,11 +2,11 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（目标/KPI→创意→脚本→VO→分镜→产品/角色/场景定妆→AI出图→AI视频→剪辑交付→发布合规→质检→投放反馈）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + cutdown + 多比例）。**不拆集**、**自包含**。读 _进度.md 路由到 ad-progress / ad-update / ad-craft / ad-concept / ad-script / ad-voice / ad-image / ad-video / ad-compose / ad-review / ad-feedback。Use when given a 客户需求/brief（哪怕只有一句话）, a product/brand to advertise, an existing 拍广告 project, or asked 拍广告 / 广告创意 / TVC / 信息流广告 / 产品demo / 带货视频 / 投放复盘. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, 投放复盘, ad.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 900 | 目录文本总行数 19828
+> 规模统计：Skill 数 14 | SKILL.md 总行数 970 | 目录文本总行数 27624
 
 # ad — 拍广告生产线 · 总调度
 
-把**一份客户需求（brief）**做成一条 AI 广告片。**输入 = 客户需求/品牌产品**；**产物 = `创作区/拍广告/<项目名>/成片_主片.mp4`** + 多时长 cutdown（30→15→6s）+ 多比例（16:9/9:16/1:1）。
+把**一份客户需求（brief）**做成一条 AI 广告片。**输入 = 客户需求/品牌产品**；**产物 = `创作区/拍广告/<项目名>/成片_主片.mp4`** + 多时长 cutdown（30→15→6s）+ 多比例（16:9/9:16/4:5/1:1）。
 
 这条线的核心是**前端创意策划**（策略层）和**后端品牌包装/交付**：从 brief 到脚本、VO、分镜、出图、出视频、剪辑包装、cutdown 与多比例交付。
 
@@ -20,7 +20,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 
 按 `../skills/ad-craft/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目沉默沿用。合规/不可逆/花钱多的点（`广告法地区`、`音乐来源`、出图/出视频/合成）每次仍确认。
 
-涉及选择点：`广告类型`、`创意路线`、`基础视觉风格`、`主片时长`、`交付比例`、`cutdown版本`、`生图AI`、`一致性增强`、`生视频模型`、`生视频渠道`、`视频模型路由`、`出视频规格`、`视频分辨率`、`配音后端`、`音乐来源`、`品牌包装模板`、`字幕语言`、`AI视觉使用披露`、`广告法地区`、`交付规格`、`生成粒度`、`目标平台`、`发行地区`。
+涉及选择点：`广告类型`、`创意路线`、`基础视觉风格`、`主片时长`、`交付比例`、`cutdown版本`、`生图模型`、`生图渠道`、`一致性增强`、`生视频模型`、`生视频渠道`、`视频模型路由`、`出视频规格`、`视频分辨率`、`配音后端`、`音乐来源`、`品牌包装模板`、`字幕语言`、`AI视觉使用披露`、`广告法地区`、`交付规格`、`生成粒度`、`目标平台`、`发行地区`。模型是具体版本，渠道只是 CLI/API/网页入口；旧 `生图AI` 不再作为正式选择点。
 
 > 作为生产线入口：开新项目（`创作区/拍广告/<项目名>/`）时先问广告首跑选择点（如 `创意路线`、`基础视觉风格`、交付比例/时长/可用账号约束），再运行 `python3 skills/ad/scripts/init_project.py "创作区/拍广告/<项目名>" --brand <品牌>` 初始化 `_设置.md`/`_进度.md`/`需求/brief.json`。视频阶段默认 `视频模型路由=自动按镜头路由`，不在立项时强问具体 `生视频模型` / `生视频渠道`；只有客户/投放/账号要求固定后端、用户本轮已明确模型渠道、或 router/probe 找不到可执行后端时，才传 `--video-model` / `--video-channel` 覆盖落档。旧 `--video-backend` / `生视频AI` 兼容。
 
@@ -33,12 +33,13 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 ├── 创意/concept.md + 创意脚本.md  big idea / 主张 / mood&reference / KV方向
 ├── 脚本/                        广告脚本.md + voiceover.txt + 时间轴.json + storyboard.json + 字幕 + 镜头时长 + 广告法机检报告
 ├── 设定库/                      global_style + 角色卡 + 场景卡 + 产品卡 + voicemap.json
-├── 配音/                        line_NN.wav + vo.wav + 时长清单.json
+├── 配音/                        line_NN.wav + vo.wav + 时长清单.json + voice_qc.json
 ├── 出图/共享/ 出图/分镜/         三层定妆库（角色/场景/产品）+ 逐镜首尾帧
 ├── 出视频/分镜/                 每 Clip MP4 + video_model_routes.json + video_qc.json
-├── 生产数据/                    producer_pack.json + platform_pack.json + consistency_findings.json
-├── 合成/                        成片_主片.mp4 + cutdown/ + 多比例/
-├── 合规/                        ai_usage.json + AI使用说明.md + compliance_manifest.json
+├── 生产数据/                    producer/platform pack + dependency receipts + final frames/contact sheets + stage acceptance
+├── 合成/                        成片/cutdown/多比例 + delivery/color/rendered-text/ASR/accessibility QC
+├── 合规/                        locale matrix + AI usage + provenance + release variants + compliance + M0 + human signoff
+├── 投放反馈/                    experiment_plan/validation + raw/ + feedback_report
 └── 成片_主片.mp4
 ```
 
@@ -50,15 +51,15 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 客户需求 brief | 本调度 | `需求/brief.md`+`brief.json`（结构化客户需求） | ✅ |
 | 创意策划 | **`ad-concept`** | `创意/concept.md`+`创意脚本.md` | ✅ |
 | 广告脚本+VO+时间轴 | **`ad-script`** | `脚本/广告脚本.md`+`voiceover.txt`+`时间轴.json`+**广告法机检** | ✅ |
-| VO配音 | **`ad-voice`** | `配音/时长清单.json`（驱动镜头时长） | ✅ |
+| VO配音 | **`ad-voice`** | `配音/时长清单.json` + `voice_qc.json`（驱动镜头时长且实测非静音/时长） | ✅ |
 | 分镜（实测时长） | **`ad-script`** | `storyboard.json`+`镜头时长.json`+字幕 | ✅ |
 | 投放前评分(横切·出图前) | **`ad-score`** | `评分/ad_score.json`：钩子/卖点/CTA/品牌露出/广告法/时长 → 三档 go/revise/reject + 回流清单 | ✅ |
 | 三层定妆库+出图 | **`ad-image`** | 角色/场景/**产品**定妆 + 逐镜首尾帧 PNG | ✅ |
 | 图生视频 | **`ad-video`** | Clip MP4 + 契约继承机检 + 模型路由 + video_qc | ✅ |
-| 剪辑包装+交付 | **`ad-compose`** | 成片 + 品牌包装 end card + cutdown + 多比例 + 交付规格 | ✅ |
-| AI披露/发布合规 | **`ad-craft`** | `ai_usage.json` + `compliance_manifest.json`（平台声明证据/标识责任/元数据） | ✅ |
-| 质检/自审(横切) | **`ad-review`** | 一致性 findings + 成片/广告法/video_qc/delivery_qc/发布合规证据 + 人工签收 | ✅ |
-| 投放反馈(可选) | **`ad-feedback`** | 平台 CSV/JSONL → 有样本门槛和区间的 Test→Learn→Refresh 报告 | ✅ |
+| 剪辑包装+交付 | **`ad-compose`** | 成片 + 原子 cutdown/多比例 + 技术/色彩/最终文字/ASR/无障碍/实际 provenance QC | ✅ |
+| AI披露/发布合规 | **`ad-craft`** | locale matrix + deliverable→SHA→placement→jurisdiction→claims/rights→AI label receipt + compliance | ✅ |
+| 质检/自审(横切) | **`ad-review`** | 最终 clip/交付件首中尾帧、逐资产 contact sheet + M0 + 具名逐项哈希签收 | ✅ |
+| 投放反馈(可选) | **`ad-feedback`** | 预注册单变量实验 + 平台 CSV/JSONL → 有统计边界的 Test→Learn→Refresh 报告 | ✅ |
 
 | 用户输入 | 路由到 |
 |---|---|
@@ -74,7 +75,7 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 给了 `创作区/拍广告/<项目>/` 没说动作 / 问进度或下一步 | `ad-progress`（只读扫描 `_进度.md`，报进度 + 建议下一步） |
 | 问 skill 更新是否影响本广告 / 要返工计划 / 重审重评前先看范围 | `ad-update`（只写更新影响计划和基线，不改 brief/素材/进度） |
 
-> 推荐顺序：**目标/KPI brief → ad-concept → ad-script → ad-voice → 配音后分镜 → producer_pack + platform_pack → ad-score（启发式建议；广告法仍硬挡）→ ad-image → ad-video + 实测 video_qc → ad-compose + delivery_qc → AI/发布合规 manifest → ad-review → ad-feedback（投放后）**。
+> 推荐顺序：**目标/KPI/发行辖区 brief → ad-concept → ad-script → ad-voice + voice_qc → 配音后分镜（claim 呈现）→ producer/platform pack → ad-score → ad-image → ad-video + video_qc → ad-compose 的 delivery/color/rendered-text/ASR/accessibility/provenance QC → locale + release variant + compliance → 最终媒体 contact sheet + M0 + 具名人审签收 → 实验预注册 → ad-feedback**。每阶段由 typed acceptance + 依赖哈希收据验收，不能手填假 ✅。
 > **音频先行**：VO 实测时长驱动镜头时长，`ad-script` 跑两遍（脚本→配音后分镜）。广告常是「音乐床 + VO」混合驱动，音乐床作节奏锚一并记录。
 > **立项完成判据**：`brief.json` 的 brand/product/usp/audience/**campaign_objective** 齐全；花钱 gate 前还必须补 claims 结构化证据、rights、legal_lines、primary_kpi 和 conversion_event。
 > **零成本 demo 通道**（一句话用户的推荐路径）：进花钱 gate（出图）之前全程免费——brief 访谈 → ad-concept 创意 → ad-script 脚本(机检) → `ad-voice --backend say|estimate` 占位配音 → ad-script 分镜 storyboard。先看到完整镜头设计再决定是否花钱出图/出视频；占位配音正式定稿前须真 VO 复跑。
@@ -82,15 +83,16 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 ## 广告专有强化点
 
 - **客户需求 brief 是 source**：除品牌/产品/USP，还必须定义广告目标、漏斗阶段、主 KPI、转化事件、offer/landing page；不再用同一评分口径服务所有目标。
-- **制片前控包**：付费生产前跑 `ad-craft/scripts/producer_pack.py`，把传统广告的 PPM/producer packet 落成 `生产数据/producer_pack.json/md`：shot list、rights/claims/legal、交付矩阵、`PROD_*`/`BRAND_*` 资产绑定、审批阻断项一处对账。
-- **平台交付包**：按 placement/overlay-aware 安全区出包；未知平台无当前规格就 block，不用“通用 9:16”伪装已适配。
+- **制片前控包**：付费生产前按 claim 类型核对来源、资质、方法、条件、样本、范围、有效期、披露文案与授权；不能“先射箭后画靶”。
+- **平台交付包**：平台名不等于版位。按实际 placement 的比例、时长、声音模式与安全区出包；不用“通用 9:16”伪装已适配。
 - **创意策划层**：big idea / 一句话主张 / mood&reference / KV 方向（`ad-concept`）。
-- **《广告法》违禁词机检（硬闸门）**：绝对化用语「最/第一/国家级」、虚假宣传、医疗保健极限词 → `ad-script/ad_law_check.py` 命中即 block。
+- **《广告法》分层机检**：法定明确禁用/失效背书、医疗疗效、虚假收益等高确定性项 block；「最新/领先/销量第一」等语境型表述 warn 并要求比较范围、时间、样本、出处和具名复核，避免关键词表代替法律判断。
 - **产品定妆（三层定妆库第三层）**：hero product 包装/logo/品牌色跨镜零漂移，是最严格的"角色"。
-- **品牌包装 + 交付**：片尾 end card（logo+slogan+CTA）、cutdown 多时长、多比例 reframe、交付规格（响度 LUFS/安全框）。
+- **品牌包装 + 交付**：片尾、claim/披露原子 cutdown、多比例 reframe、placement 规格、BT.709、响度、字幕与闪烁快筛。
+- **最终文件证据**：关键口播四路对账、最终像素文字逐项具名确认、实际 C2PA/隐式标识探测、逐资产 contact sheet、逐 deliverable 发布变体链和内容哈希选择性失效。
 
 ## 合法性
-- 广告 claim（功效/对比/数据）须有依据；绝对化用语等违禁词由 `ad-script` 机检拦截。
+- 广告 claim 须有事前合理依据；检测/统计/文献/比较引证还须清楚呈现来源、条件、适用范围/有效期。绝对化用语机检不替代这些证据。
 - 代言人肖像/真人声音/授权音乐/商业字体需可追溯授权；未授权不投放。AI 生成合成内容需保留元数据、声明/标识责任与平台回执；平台侧动作由发布者执行，证据必须回写产线。
 
 ## 持续改进
@@ -101,8 +103,11 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 | 错误 | 纠正 |
 |---|---|
 | 把广告拆成「集」 | 不拆集；多时长/多比例走 cutdown 交付件矩阵 |
-| 脚本写绝对化用语「最/第一/国家级」 | `ad-script` 广告法机检会 block；改合规表述并留 claim 依据 |
+| 把所有“最/第一”一律当违法或一律放行 | 国家级/最高级/最佳等明确项硬挡；最新/领先/销量第一等先警告、补时空范围与证据并具名复核 |
 | 产品包装/logo 跨镜漂移 | 产品定妆当最严格"角色"，进三层定妆库 + 逐镜锁 PROD_xx |
 | App/UI/片尾镜没写 `PROD_*`/`BRAND_*` | producer_pack 和 product_qc 会抓；先把产品/App/品牌资产结构化绑定再出图 |
 | 跳过创意策划直接出图 | 先 `ad-concept` 定 big idea/主张，再脚本分镜，别无脑批量生成 |
 | 不留授权痕/平台声明证据 | 先写 ai_usage，再写 compliance_manifest；平台动作由发布方执行，证据必须回写后才可 release-ready |
+| 只写平台名或“海外”就开投 | 补实际 placement 模板和逐 jurisdiction 法务复核；复核须绑定当前 release content SHA |
+| 用旧 `生图AI=Codex/厂商名` | 改为具体 `生图模型` + 独立 `生图渠道`；落图 job 两字段都要留 provenance |
+| 旧项目沿用历史 ✅ | 先用 `ad-craft/scripts/migrate_project.py` dry-run，再 `--write`；旧状态按新验收/哈希收据重算，pending 不得伪造 |

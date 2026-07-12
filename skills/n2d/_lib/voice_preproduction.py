@@ -146,6 +146,9 @@ def estimate_line_duration(text: str, cue: str = "", line_type: str = "character
         "range_sec": [round(low, 3), round(high, 3)],
         "confidence": "medium" if cjk + words >= 4 else "low",
         "method": "text_rate_v1",
+        # 单句念白 >10s 在竖屏短剧里几乎必然该拆句/拆镜：既压节奏，也会把单个 Clip
+        # 顶到视频后端单 take 上限（15s）附近。advisory 旁路信号，不改 clamp、不阻断。
+        "split_suggested": base > 10.0,
     }
 
 
@@ -173,6 +176,7 @@ def build_timing_estimate(root: Path, episode: str) -> Dict[str, Any]:
             "estimated_duration_sec": round(duration, 3),
             "duration_range_sec": estimate["range_sec"],
             "confidence": estimate["confidence"],
+            "split_suggested": bool(estimate.get("split_suggested")),
             "start": round(start, 3),
             "end": round(end, 3),
             "gap_after": round(gap, 3),
@@ -196,6 +200,7 @@ def build_timing_estimate(root: Path, episode: str) -> Dict[str, Any]:
             "dialogue_lines": sum(1 for row in output_rows if row["line_type"] == "character_dialogue"),
             "narration_or_offscreen_lines": sum(1 for row in output_rows if row["line_type"] == "narration_or_offscreen"),
             "duration_sec": round(cursor, 3),
+            "split_suggested_lines": sum(1 for row in output_rows if row.get("split_suggested")),
         },
         "suitable_for": ["animatic", "rough_editorial_timing", "narration_offscreen_pacing", "picture_first_shots"],
         "not_suitable_for": ["final_mix", "visible_mouth_final_performance", "final_lipsync", "voice_identity_approval"],

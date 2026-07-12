@@ -27,6 +27,7 @@ from datetime import date
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 CONTRACT_PATH = os.path.join(REPO, "skills", "song-craft", "scripts", "contract.py")
+QUALITY_GATE_PATH = os.path.join(REPO, "skills", "song-craft", "scripts", "quality_gate.py")
 
 
 def load_contract():
@@ -44,6 +45,16 @@ def load_song_utils():
     return mod
 
 contract = load_contract()
+
+
+def load_quality_gate():
+    spec = importlib.util.spec_from_file_location("song_quality_gate", QUALITY_GATE_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+quality_gate = load_quality_gate()
 try:
     song_utils = load_song_utils()
 except Exception:
@@ -234,6 +245,11 @@ def prompt_plan(root, args):
     lyrics = read_text(lyrics_path)
     if not lyrics.strip():
         raise SystemExit("[err] 缺 词/lyrics.md，先完成 song-lyrics")
+    gate = quality_gate.evaluate(root, "compose", waiver_reason=args.waiver_reason)
+    quality_gate.write_report(root, gate)
+    if not gate["passed"]:
+        details = "; ".join(item["message"] for item in gate["findings"])
+        raise SystemExit(f"[err] 作曲前质量闸门未通过：{details}")
 
     backend = args.backend or settings.get("作曲后端") or meta.get("song_backend") or meta.get("compose_backend") or "Suno"
     if backend not in contract.COMPOSE_BACKENDS:
@@ -245,6 +261,14 @@ def prompt_plan(root, args):
     style = make_style(meta, settings, args)
     context_blocks = read_context_blocks(root)
     brief = load_json(os.path.join(root, "创作", "song_brief.json"), {}) or {}
+    source_files = [
+        "_meta.json", "_设置.md", "词/lyrics.md", "创作/song_brief.json",
+        "素材/reference_pack.json", "歌/song_form.json", "歌/chord_sheet.md", "歌/topline_notes.md",
+    ]
+    source_hashes = {
+        relpath: quality_gate.sha256_file(os.path.join(root, relpath))
+        for relpath in source_files if os.path.isfile(os.path.join(root, relpath))
+    }
 
     song_dir = os.path.join(root, "歌")
     prompt_dir = os.path.join(song_dir, "compose_prompts")
@@ -286,11 +310,12 @@ def prompt_plan(root, args):
             build_prompt(title, take_id, backend, style, lyrics, duration, settings, meta, context_blocks, compiled),
         )
         previous = old_takes.get(take_id, {})
+        contract_unchanged = previous.get("source_contract_sha256") == compiled["source_contract_sha256"]
         submit_fields_raw = json.dumps(compiled["submit_fields"], ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         take_rows.append({
             "take_id": take_id,
             "backend": previous.get("backend", backend),
-            "status": previous.get("status", "planned"),
+            "status": previous.get("status", "planned") if contract_unchanged else "planned",
             "audio_path": previous.get("audio_path", rel(root, os.path.join(takes_dir, f"{take_id}.wav"))),
             "prompt_path": rel(root, prompt_path),
             "prompt_source_kind": "compiled_submit_fields",
@@ -304,13 +329,18 @@ def prompt_plan(root, args):
             "source_contract_sha256": compiled["source_contract_sha256"],
             "lyrics_sha256": compiled["lyrics_sha256"],
             "submit_fields_sha256": hashlib.sha256(submit_fields_raw.encode("utf-8")).hexdigest(),
-            "score": previous.get("score", {}),
-            "notes": previous.get("notes", ""),
-            "registered_at": previous.get("registered_at"),
+            "score": previous.get("score", {}) if contract_unchanged else {},
+            "notes": previous.get("notes", "") if contract_unchanged else "",
+            "registered_at": previous.get("registered_at") if contract_unchanged else None,
+            "previous_contract_invalidated": bool(previous) and not contract_unchanged,
         })
 
+    old_selected = old.get("selected_take")
+    selection_valid = bool(old_selected) and any(
+        row.get("take_id") == old_selected and not row.get("previous_contract_invalidated") for row in take_rows
+    )
     manifest = {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "song_take_manifest",
         "generated_at": date.today().isoformat(),
         "project_root": root,
@@ -321,12 +351,15 @@ def prompt_plan(root, args):
         "style_prompt": take_rows[0]["style_prompt"] if take_rows else style,
         "context_sources": [heading for heading, _ in context_blocks],
         "lyrics_path": "词/lyrics.md",
-        "selected_take": old.get("selected_take"),
+        "source_hashes": source_hashes,
+        "compose_gate": gate,
+        "selected_take": old_selected if selection_valid else None,
+        "selection_receipt": old.get("selection_receipt") if selection_valid else None,
         "takes": take_rows,
     }
     write_json(manifest_path, manifest)
     write_json(os.path.join(song_dir, "compose_task.json"), {
-        "schema_version": 2,
+        "schema_version": 3,
         "kind": "song_compose_task",
         "title": title,
         "backend": backend,
@@ -337,6 +370,8 @@ def prompt_plan(root, args):
         "context_sources": [heading for heading, _ in context_blocks],
         "prompt_dir": "歌/compose_prompts",
         "manifest_path": "歌/takes_manifest.json",
+        "source_hashes": source_hashes,
+        "compose_gate_receipt": "评审/quality_gate_compose.json",
     })
     write_text(os.path.join(song_dir, "compose_task.md"), build_task_markdown(manifest))
     return manifest
@@ -409,6 +444,17 @@ def validate_compiled_take(take, expected_backend):
     return errors
 
 
+def validate_manifest_sources(root, manifest):
+    errors = []
+    for relpath, expected in (manifest.get("source_hashes") or {}).items():
+        path = os.path.join(root, relpath)
+        if not os.path.isfile(path):
+            errors.append(f"missing:{relpath}")
+        elif quality_gate.sha256_file(path) != expected:
+            errors.append(f"changed:{relpath}")
+    return errors
+
+
 def copy_audio(src, dst):
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     if src.lower().endswith(".wav"):
@@ -429,6 +475,9 @@ def register_take(root, src, take_id):
         raise SystemExit(f"[err] 找不到音频文件：{src}")
     manifest_path, manifest = load_manifest(root)
     take = get_take(manifest, take_id)
+    source_errors = validate_manifest_sources(root, manifest)
+    if source_errors:
+        raise SystemExit(f"[err] 作曲任务上游已变化：{source_errors}；先重跑 compose_song.py")
     compiler_errors = validate_compiled_take(take, manifest.get("backend"))
     if compiler_errors:
         raise SystemExit(f"[err] {take_id} 作曲提交字段无效：{compiler_errors}；先重跑 compose_song.py 重建任务包")
@@ -437,6 +486,7 @@ def register_take(root, src, take_id):
     take["status"] = "registered"
     take["audio_path"] = rel(root, copied)
     take["registered_at"] = date.today().isoformat()
+    take["audio_sha256"] = quality_gate.sha256_file(copied)
     write_json(manifest_path, manifest)
     
     # Proactive linting
@@ -452,8 +502,9 @@ def register_take(root, src, take_id):
                 dbfs = 20 * math.log10(peak)
                 if dbfs < -40.0:
                     print(f"[warn] {take_id} 近静音 (峰值 {dbfs:.1f}dBFS)，请检查是否生成成功。")
-            if dur and dur < 30:
-                print(f"[warn] {take_id} 时长仅 {dur:.1f}s，可能是截断的片段。")
+            target = manifest.get("target_duration_seconds")
+            if target and dur and (dur < float(target) * 0.75 or dur > float(target) * 1.25):
+                print(f"[warn] {take_id} 时长 {dur:.1f}s 偏离目标 {target}s 超过 25%。")
         except Exception as e:
             pass # ignore parse errors during proactive linting
             
@@ -466,10 +517,11 @@ def score_take(root, take_id, args):
     score = dict(take.get("score") or {})
     for key, attr in (
         ("hook", "hook_score"),
+        ("melody", "melody_score"),
         ("vocal", "vocal_score"),
-        ("blueprint_fit", "fit_score"),
-        ("clarity", "clarity_score"),
-        ("mv_fit", "mv_score"),
+        ("arrangement", "arrangement_score"),
+        ("mix", "mix_score"),
+        ("brief_fit", "fit_score"),
     ):
         value = getattr(args, attr)
         if value is not None:
@@ -488,14 +540,27 @@ def score_take(root, take_id, args):
 def select_take(root, take_id, args=None):
     manifest_path, manifest = load_manifest(root)
     take = get_take(manifest, take_id)
+    source_errors = validate_manifest_sources(root, manifest)
+    if source_errors:
+        raise SystemExit(f"[err] 作曲任务上游已变化：{source_errors}；先重跑 compose_song.py 并重新生成/评审")
     audio_rel = take.get("audio_path")
     if not audio_rel:
         raise SystemExit(f"[err] {take_id} 尚未登记音频")
     src = os.path.join(root, audio_rel)
     if not os.path.exists(src):
         raise SystemExit(f"[err] {take_id} 音频不存在：{audio_rel}")
+    gate = quality_gate.evaluate(
+        root, "select", take_id=take_id,
+        waiver_reason=getattr(args, "waiver_reason", "") if args else "",
+    )
+    quality_gate.write_report(root, gate)
+    if not gate["passed"]:
+        details = "; ".join(item["message"] for item in gate["findings"])
+        raise SystemExit(f"[err] 挑版质量闸门未通过：{details}")
     dst = os.path.join(root, "歌", "song.wav")
     copy_audio(src, dst)
+    pre_master = os.path.join(root, "混音", "pre_master.wav")
+    copy_audio(src, pre_master)
     for row in manifest.get("takes", []):
         if row.get("take_id") == take_id:
             row["status"] = "selected"
@@ -503,6 +568,14 @@ def select_take(root, take_id, args=None):
             row["status"] = "registered"
     manifest["selected_take"] = take_id
     manifest["selected_at"] = date.today().isoformat()
+    manifest["selection_receipt"] = {
+        "take_id": take_id,
+        "source_audio_sha256": quality_gate.sha256_file(src),
+        "song_audio_sha256": quality_gate.sha256_file(dst),
+        "pre_master_sha256": quality_gate.sha256_file(pre_master),
+        "gate_receipt": "评审/quality_gate_select.json",
+        "status": "selected_pre_master_not_release_master",
+    }
     write_json(manifest_path, manifest)
     
     if args and getattr(args, "split", False):
@@ -529,13 +602,15 @@ def main():
     ap.add_argument("--take", help="配合 --register 使用，1/take_01 均可")
     ap.add_argument("--score", help="给某个 take 评分，1/take_01 均可")
     ap.add_argument("--hook-score", type=int, choices=range(1, 6))
+    ap.add_argument("--melody-score", type=int, choices=range(1, 6))
     ap.add_argument("--vocal-score", type=int, choices=range(1, 6))
+    ap.add_argument("--arrangement-score", type=int, choices=range(1, 6))
+    ap.add_argument("--mix-score", type=int, choices=range(1, 6))
     ap.add_argument("--fit-score", type=int, choices=range(1, 6))
-    ap.add_argument("--clarity-score", type=int, choices=range(1, 6))
-    ap.add_argument("--mv-score", type=int, choices=range(1, 6))
     ap.add_argument("--notes")
     ap.add_argument("--select", help="选择某个 take 作为 歌/song.wav")
     ap.add_argument("--split", action="store_true", help="配合 --select 使用，调用 demucs 分离人声和伴奏")
+    ap.add_argument("--waiver-reason", default="", help="质量闸门例外理由（至少 10 字，会写入 receipt）")
     args = ap.parse_args()
 
     root = os.path.abspath(args.project_root)

@@ -332,16 +332,42 @@ def _apply_job(job: Mapping[str, Any], tool: str, tool_path: str) -> int:
     return 0 if result.returncode == 0 and os.path.isfile(output) and os.path.getsize(output) > 0 else 1
 
 
-def _output_receipt(path: str) -> Dict[str, Any]:
+def _media_duration(path: str) -> Any:
+    """ffprobe 时长（秒·float）；无 ffprobe/解析失败 → None（诚实降级，不臆造）。"""
+    import shutil
+    import subprocess
+    fp = shutil.which("ffprobe")
+    if not fp or not os.path.isfile(path):
+        return None
+    try:
+        out = subprocess.run([fp, "-v", "error", "-show_entries", "format=duration",
+                              "-of", "csv=p=0", path], capture_output=True, text=True).stdout.strip()
+        d = float(out)
+        return round(d, 3) if d > 0 else None
+    except Exception:
+        return None
+
+
+def _output_receipt(path: str, audio_path: str = "") -> Dict[str, Any]:
     h = hashlib.sha256()
     with open(path, "rb") as fh:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
-    return {
+    receipt = {
         "output_sha256": h.hexdigest(),
         "output_size": os.path.getsize(path),
         "completed_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
     }
+    # 最小可查同步度量：此前"口型偏差大则重跑"只是散文，回执里连输出/音频时长差都没有。
+    # 记录 duration delta（ms）给人审/gate 一个可排序的数字；≠ 真口型同步度量（那需要
+    # 嘴部-音频包络相关性模型），但时长差大的 job 一定有问题，先把最便宜的硬信号落档。
+    out_dur = _media_duration(path)
+    audio_dur = _media_duration(audio_path) if audio_path else None
+    receipt["output_duration_sec"] = out_dur
+    receipt["audio_duration_sec"] = audio_dur
+    if out_dur is not None and audio_dur is not None:
+        receipt["av_duration_delta_ms"] = round(abs(out_dur - audio_dur) * 1000)
+    return receipt
 
 
 def main(argv: List[str]) -> int:
@@ -386,7 +412,7 @@ def main(argv: List[str]) -> int:
                 continue
             if _apply_job(j, tool, tool_path) == 0:
                 j["status"] = "applied"
-                j.update(_output_receipt(str(j["output"])))
+                j.update(_output_receipt(str(j["output"]), str((j.get("audio") or [""])[0] or "")))
             else:
                 j["status"] = "failed"
                 fails += 1

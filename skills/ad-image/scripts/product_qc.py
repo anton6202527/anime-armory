@@ -323,12 +323,12 @@ def check_safe_area(label: str, shot: Dict[str, Any]) -> List[Dict[str, Any]]:
         return []
     if not isinstance(safe, dict) or not safe:
         return [_finding("warn", label, "safe_area",
-                         "产品/logo/UI/CTA 镜缺 8x8 万能安全区声明；多比例 reframe 可能裁掉核心资产。",
+                         "产品/logo/UI/CTA 镜缺中心构图余量声明；多比例 reframe 可能裁掉核心资产。该声明不替代平台 placement 模板。",
                          {"missing": "safe_area"})]
     center = safe.get("core_in_center_4x4")
     if center is False:
-        return [_finding("block", label, "safe_area",
-                         "safe_area.core_in_center_4x4=false，核心产品/logo/CTA 不在中心安全区，必须重构图。",
+        return [_finding("warn", label, "safe_area",
+                         "safe_area.core_in_center_4x4=false：跨比例中心裁切风险高；这是内部构图提示，是否可交付须按实际 placement 模板人审。",
                          {"core_in_center_4x4": False})]
     return []
 

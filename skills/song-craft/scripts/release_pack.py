@@ -46,6 +46,11 @@ def sha256_file(path: str) -> str:
     return h.hexdigest()
 
 
+def canonical_hash(payload: Any) -> str:
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
 def record(root: str, relpath: str) -> dict[str, Any]:
     path = os.path.join(root, relpath)
     out = {"path": relpath, "exists": os.path.exists(path)}
@@ -64,27 +69,42 @@ def build_pack(root: str, release_name: str, profile: str) -> dict[str, Any]:
     master = load_json(os.path.join(root, "混音", "master_check.json"), {}) or {}
     ai_usage = load_json(os.path.join(root, "合规", "ai_usage.json"), {}) or {}
     take_manifest = load_json(os.path.join(root, "歌", "takes_manifest.json"), {}) or {}
+    mix_signoff = load_json(os.path.join(root, "混音", "mix_signoff.json"), {}) or {}
+    release_metadata = load_json(os.path.join(root, "发行", "release_metadata.json"), {}) or {}
+    release_metadata_check = load_json(os.path.join(root, "发行", "release_metadata_check.json"), {}) or {}
     evidence = {
-        "audio_master": record(root, "歌/song.wav"),
+        "audio_master": record(root, "导出/master.wav"),
+        "selected_preview": record(root, "歌/song.wav"),
+        "pre_master": record(root, "混音/pre_master.wav"),
+        "master_delivery": record(root, "导出/master_delivery.json"),
+        "mix_signoff": record(root, "混音/mix_signoff.json"),
+        "selection_gate": record(root, "评审/quality_gate_select.json"),
         "lyrics": record(root, "词/lyrics.md"),
         "take_manifest": record(root, "歌/takes_manifest.json"),
         "take_review": record(root, "歌/take_review.json"),
         "master_check": record(root, "混音/master_check.json"),
         "rights_metadata": record(root, "合规/rights_metadata.json"),
+        "rights_check": record(root, "合规/rights_metadata_check.json"),
         "split_sheet": record(root, "合规/split_sheet.md"),
         "ai_usage": record(root, "合规/ai_usage.json"),
+        "cover_receipt": record(root, "歌/cover_receipt.json"),
+        "release_metadata": record(root, "发行/release_metadata.json"),
+        "release_metadata_check": record(root, "发行/release_metadata_check.json"),
         "cover_art": record(root, "导出/cover.jpg"),
     }
-    readiness = release_readiness(profile, evidence, rights, rights_check, master, ai_usage, take_manifest)
+    readiness = release_readiness(
+        root, profile, evidence, rights, rights_check, master, ai_usage, take_manifest,
+        mix_signoff, release_metadata, release_metadata_check,
+    )
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": KIND,
         "generated_at": date.today().isoformat(),
         "project_root": os.path.abspath(root),
         "release_name": release_name,
         "release_profile": profile,
-        "title": meta.get("title") or os.path.basename(root),
-        "artist": (rights.get("sound_recording") or {}).get("performers") or [meta.get("performer") or ""],
+        "title": release_metadata.get("track_title") or meta.get("title") or os.path.basename(root),
+        "artist": [row.get("name") for row in release_metadata.get("artists") or [] if row.get("role") == "main_artist"] or (rights.get("sound_recording") or {}).get("performers") or [meta.get("performer") or ""],
         "release_ready": not readiness["blockers"],
         "readiness": readiness,
         "metadata": {
@@ -94,12 +114,16 @@ def build_pack(root: str, release_name: str, profile: str) -> dict[str, Any]:
             "selected_take": take_manifest.get("selected_take"),
             "ai_audio_mode": ai_usage.get("audio_mode"),
             "ai_lyrics_mode": ai_usage.get("lyrics_mode"),
+            "release_date": release_metadata.get("release_date"),
+            "explicit": release_metadata.get("explicit"),
+            "territories": release_metadata.get("territories"),
         },
         "evidence": evidence,
     }
 
 
 def release_readiness(
+    root: str,
     profile: str,
     evidence: dict[str, dict[str, Any]],
     rights: dict[str, Any],
@@ -107,6 +131,9 @@ def release_readiness(
     master: dict[str, Any],
     ai_usage: dict[str, Any],
     take_manifest: dict[str, Any],
+    mix_signoff: dict[str, Any],
+    release_metadata: dict[str, Any],
+    release_metadata_check: dict[str, Any],
 ) -> dict[str, Any]:
     blockers: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -119,19 +146,91 @@ def release_readiness(
             issue(blockers, f"MISSING-{key.upper()}", f"缺少 {key} 证据。")
     if take_manifest and not take_manifest.get("selected_take"):
         issue(blockers, "TAKE-NOT-SELECTED", "takes_manifest 缺 selected_take。")
-    if rights_check and rights_check.get("passed") is False:
+    if profile != "demo":
+        for key in (
+            "selected_preview", "pre_master", "take_review", "mix_signoff", "master_delivery",
+            "selection_gate", "rights_check", "release_metadata", "release_metadata_check",
+        ):
+            if not evidence.get(key, {}).get("exists"):
+                issue(blockers, f"MISSING-{key.upper()}", f"正式交付缺少 {key} 证据。")
+    if rights_check and rights_check.get("passed") is not True:
         issue(blockers, "RIGHTS-CHECK", "rights metadata check 未通过。")
     elif rights and rights.get("rights_status") in {"unknown", "", None}:
         issue(blockers, "RIGHTS-UNKNOWN", "权利状态未知。")
-    if master and master.get("passed") is False:
+    if profile != "demo" and rights and rights_check.get("source_sha256") != canonical_hash(rights):
+        issue(blockers, "RIGHTS-CHECK-STALE", "rights metadata check 与当前 rights metadata 不一致。")
+    if master and master.get("passed") is not True:
         issue(blockers, "MASTER-CHECK", "master_check 未通过。")
+    elif profile != "demo" and master.get("measurement_complete") is not True:
+        issue(blockers, "MASTER-MEASUREMENT", "master_check 缺 ITU-R BS.1770 完整测量。")
+    if profile in {"archive", "apple_digital_masters"} and master.get("platform_profile") != profile:
+        issue(blockers, "MASTER-PROFILE", f"{profile} 发行包必须使用同 profile 的 master_check。")
+    master_hash = ((master.get("metrics") or {}).get("sha256") or "") if master else ""
+    evidence_hash = evidence.get("audio_master", {}).get("sha256") or ""
+    if master_hash and evidence_hash and master_hash != evidence_hash:
+        issue(blockers, "MASTER-CHECK-STALE", "master_check 绑定的音频与当前 master.wav 不一致。")
+    elif profile != "demo" and evidence_hash and not master_hash:
+        issue(blockers, "MASTER-HASH-MISSING", "master_check 未绑定 master.wav sha256。")
+    delivery = load_json(os.path.join(root, "导出", "master_delivery.json"), {}) or {}
+    pre_master_path = os.path.join(root, "混音", "pre_master.wav")
+    if profile != "demo" and os.path.isfile(pre_master_path):
+        expected_source = ((delivery.get("source") or {}).get("sha256") or "")
+        if not expected_source or expected_source != sha256_file(pre_master_path):
+            issue(blockers, "MASTER-DELIVERY-STALE", "master_delivery 不是由当前 pre_master.wav 生成。")
+        signoff_hash = ((mix_signoff.get("audio") or {}).get("sha256") or "")
+        if mix_signoff.get("passed") is not True or signoff_hash != sha256_file(pre_master_path):
+            issue(blockers, "MIX-SIGNOFF-STALE", "mix_signoff 未通过或未绑定当前 pre_master.wav。")
+    if profile == "apple_digital_masters" and int(((delivery.get("source") or {}).get("bit_depth") or 0)) < 24:
+        issue(blockers, "APPLE-SOURCE-BIT-DEPTH", "Apple Digital Masters 要求原始 source 至少 24-bit；升位深封装不能补回精度。")
+    selection_gate = load_json(os.path.join(root, "评审", "quality_gate_select.json"), {}) or {}
+    if profile != "demo":
+        if selection_gate.get("passed_without_waiver") is not True:
+            issue(blockers, "SELECTION-GATE-WAIVED", "正式发行要求 select 闸门无 waiver 通过。")
+        if selection_gate.get("take_id") != take_manifest.get("selected_take"):
+            issue(blockers, "SELECTION-GATE-STALE", "select 闸门与当前 selected_take 不一致。")
+        preview_path = os.path.join(root, "歌", "song.wav")
+        preview_hash = sha256_file(preview_path) if os.path.isfile(preview_path) else ""
+        cover = load_json(os.path.join(root, "歌", "cover_receipt.json"), {}) or {}
+        if cover:
+            cover_hash = ((cover.get("audio") or {}).get("sha256") or "")
+            if cover.get("authorization") not in {"own", "authorized", "synthetic", "自有", "已授权", "合成"} or cover_hash != preview_hash:
+                issue(blockers, "COVER-RECEIPT-STALE", "cover receipt 授权或音频 hash 与当前 song.wav 不一致。")
+            invalidated = cover.get("invalidated_evidence_hashes") if isinstance(cover.get("invalidated_evidence_hashes"), dict) else {}
+            for relpath, old_hash in invalidated.items():
+                path = os.path.join(root, relpath)
+                if os.path.isfile(path) and sha256_file(path) == old_hash:
+                    issue(blockers, "COVER-DOWNSTREAM-STALE", f"换声后仍沿用旧证据：{relpath}。")
+        else:
+            receipt = take_manifest.get("selection_receipt") if isinstance(take_manifest.get("selection_receipt"), dict) else {}
+            if not receipt or receipt.get("song_audio_sha256") != preview_hash:
+                issue(blockers, "SELECTION-RECEIPT-STALE", "selection receipt 与当前 song.wav 不一致。")
     if ai_usage and not ai_usage.get("human_contribution"):
-        issue(warnings, "AI-HUMAN-CONTRIBUTION", "AI 使用披露缺 human_contribution。")
-    if profile in {"distribution", "streaming"}:
+        target = blockers if profile != "demo" else warnings
+        issue(target, "AI-HUMAN-CONTRIBUTION", "AI 使用披露缺 human_contribution；无法说明可主张的人类创作贡献。")
+    if profile != "demo":
+        if release_metadata_check.get("passed") is not True:
+            issue(blockers, "RELEASE-METADATA-CHECK", "release metadata check 未通过。")
+        elif release_metadata_check.get("source_sha256") != canonical_hash(release_metadata):
+            issue(blockers, "RELEASE-METADATA-STALE", "release metadata check 与当前 metadata 不一致。")
+        recording = rights.get("sound_recording") if isinstance(rights.get("sound_recording"), dict) else {}
+        reference = recording.get("reference_metadata") if isinstance(recording.get("reference_metadata"), dict) else {}
+        identifiers = release_metadata.get("identifiers") if isinstance(release_metadata.get("identifiers"), dict) else {}
+        if release_metadata.get("track_title") != rights.get("title"):
+            issue(blockers, "METADATA-TITLE-DRIFT", "release track title 与 rights title 不一致。")
+        if (identifiers.get("isrc") or "") != (recording.get("isrc") or ""):
+            issue(blockers, "METADATA-ISRC-DRIFT", "release metadata 与 rights metadata 的 ISRC 不一致。")
+        if release_metadata.get("version_title") != reference.get("version_title"):
+            issue(blockers, "METADATA-VERSION-DRIFT", "release version title 与 ISRC reference metadata 不一致。")
+        actual_duration = ((master.get("metrics") or {}).get("duration_seconds"))
+        declared_duration = reference.get("duration_seconds")
+        if actual_duration is not None and declared_duration is not None and abs(float(actual_duration) - float(declared_duration)) > 1.0:
+            issue(blockers, "METADATA-DURATION-DRIFT", "ISRC reference duration 与当前 master 相差超过 1 秒。")
+    if profile in {"distribution", "streaming", "archive", "apple_digital_masters"}:
         if not ((rights.get("sound_recording") or {}).get("isrc")):
             issue(warnings, "ISRC-MISSING", "正式发行建议补 ISRC。")
         if not evidence.get("cover_art", {}).get("exists"):
-            issue(warnings, "COVER-ART-MISSING", "缺导出/cover.jpg；发行平台通常需要封面。")
+            target = blockers if profile in {"distribution", "streaming", "apple_digital_masters"} else warnings
+            issue(target, "COVER-ART-MISSING", "缺导出/cover.jpg；正式数字发行包不完整。")
     return {
         "profile": profile,
         "blockers": blockers,
@@ -181,7 +280,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="生成歌曲发布交付包")
     ap.add_argument("project_root")
     ap.add_argument("--release-name", default="v1")
-    ap.add_argument("--profile", default="distribution", choices=("demo", "distribution", "streaming", "archive"))
+    ap.add_argument("--profile", default="distribution", choices=("demo", "distribution", "streaming", "archive", "apple_digital_masters"))
     ap.add_argument("--write", action="store_true")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--allow-not-ready", action="store_true")

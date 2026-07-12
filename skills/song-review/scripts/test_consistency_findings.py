@@ -31,7 +31,7 @@ def test_song_consistency_flags_take_mismatch_and_master_block(tmp_path: Path) -
         "takes": [{"take_id": "take_01"}, {"take_id": "take_02"}],
     })
     write_json(root / "歌" / "take_review.json", {"review_count": 2, "recommended_take": "take_01"})
-    write_json(root / "混音" / "master_check.json", {"passed": False, "blocking": 1, "warnings": 0})
+    write_json(root / "混音" / "master_check.json", {"passed": False, "measurement_complete": True, "blocking": 1, "warnings": 0})
     write_json(root / "合规" / "ai_usage.json", {"audio_mode": "AI-generated"})
     write_json(root / "合规" / "rights_metadata.json", {"rights_status": "original"})
 

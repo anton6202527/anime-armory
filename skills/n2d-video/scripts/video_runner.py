@@ -657,6 +657,19 @@ def parse_prompt_pack(root: Path, episode: str, start: int, end: int) -> List[Di
         edit_target = compiled_duration.get("edit_target_sec") or story_duration
         backend_request = compiled_duration.get("backend_request_sec")
         frame_strategy = str((compiled or {}).get("frame_strategy") or "legacy_auto").strip().lower()
+        if not backend_request and compiled:
+            # compiled pack 缺 duration_plan 但已知后端：按该后端真实档位量化，
+            # 不再落到后端无关的 [4,15] clamp——对即梦 image2video(≤5s)/Veo(≤8s)
+            # 那个 clamp 可请求到 15s，是真实越界隐患。纯 v1 legacy pack（无 compiled）
+            # 保持原兜底，避免悄悄改变可续跑的旧批次。
+            compiled_backend = str(compiled.get("backend") or "").strip()
+            if compiled_backend and edit_target is not None:
+                compiled_duration = backend_duration_plan(
+                    edit_target,
+                    compiled_backend,
+                    frame_strategy=str(compiled.get("mode") or "") or None,
+                )
+                backend_request = compiled_duration.get("backend_request_sec")
         out.append({
             "clip": clip_key(number),
             "heading": heading,

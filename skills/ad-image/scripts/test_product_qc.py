@@ -271,14 +271,14 @@ def test_asset_registry_known_product_avoids_registry_degraded_warn(tmp_path):
     assert not [f for f in payload["findings"] if f["detail"].get("degraded") == "no_asset_registry"]
 
 
-def test_safe_area_false_blocks(tmp_path):
+def test_center_grid_false_warns_but_does_not_fake_platform_verdict(tmp_path):
     sb = {"visual_contract": {"品牌色": "#E60012"},
           "shots": [{"shot_id": "镜头1", "assets": {"PROD_main": True},
                      "product_lock": "产品 logo 和 CTA",
                      "safe_area": {"core_in_center_4x4": False}}]}
     root, stage = _make_project(tmp_path, {"镜头1.md": GOOD_PROMPT}, storyboard=sb)
     payload = pq.run_qc(stage)
-    assert any(f["check"] == "safe_area" and f["severity"] == "block" for f in payload["findings"])
+    assert any(f["check"] == "safe_area" and f["severity"] == "warn" for f in payload["findings"])
 
 
 def test_asset_id_regex_does_not_match_plain_product_or_brand_words():

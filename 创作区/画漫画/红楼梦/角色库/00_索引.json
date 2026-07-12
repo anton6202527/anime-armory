@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project_asset_library_index",
+  "identity_registry": "出图/共享/identity_registry.json",
+  "character_count": 6,
+  "asset_count": 16,
+  "characters": [
+    {
+      "asset_id": "CHAR_DAOIST",
+      "asset_type": "character",
+      "display_name": "渺渺真人 / 道士",
+      "library_tier": "recurring_standard",
+      "manifest": "角色库/CHAR_DAOIST__渺渺真人_道士/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    },
+    {
+      "asset_id": "CHAR_JIANGZHU",
+      "asset_type": "character",
+      "display_name": "绛珠仙子 / 林黛玉",
+      "library_tier": "core_full",
+      "manifest": "角色库/CHAR_JIANGZHU__绛珠仙子_林黛玉/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    },
+    {
+      "asset_id": "CHAR_MONK",
+      "asset_type": "character",
+      "display_name": "茫茫大士 / 和尚",
+      "library_tier": "recurring_standard",
+      "manifest": "角色库/CHAR_MONK__茫茫大士_和尚/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    },
+    {
+      "asset_id": "CHAR_SHENYING",
+      "asset_type": "character",
+      "display_name": "神瑛侍者 / 贾宝玉",
+      "library_tier": "core_full",
+      "manifest": "角色库/CHAR_SHENYING__神瑛侍者_贾宝玉/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    },
+    {
+      "asset_id": "CHAR_YINGLIAN_CHILD",
+      "asset_type": "character",
+      "display_name": "幼年英莲 / 香菱",
+      "library_tier": "core_full",
+      "manifest": "角色库/CHAR_YINGLIAN_CHILD__幼年英莲_香菱/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    },
+    {
+      "asset_id": "CHAR_ZHEN_SHIYIN",
+      "asset_type": "character",
+      "display_name": "甄士隐",
+      "library_tier": "recurring_standard",
+      "manifest": "角色库/CHAR_ZHEN_SHIYIN__甄士隐/manifest.json",
+      "reference_count": 1,
+      "planned_reference_count": 4
+    }
+  ],
+  "assets": [],
+  "cross_line_dependency": false,
+  "generated_on": "2026-07-12"
+}

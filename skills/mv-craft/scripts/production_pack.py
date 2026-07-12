@@ -70,6 +70,9 @@ def build_artifacts(root):
             "lighting": shot.get("lighting"),
             "action": c.get("action"),
             "transition": clip.get("transition"),
+            "seam_kind": (clip.get("seam_contract") or {}).get("kind"),
+            "continuity_required": (clip.get("seam_contract") or {}).get("continuity_required"),
+            "need_end_frame": clip.get("need_end_frame"),
             "selected_take": job.get("selected_take"),
             "selected_video_path": job.get("selected_video_path") or clip.get("selected_video_path"),
         })
@@ -117,34 +120,50 @@ def write_artifacts(root, shot_list, setups, animatic):
     os.makedirs(os.path.dirname(take_log_path), exist_ok=True)
     with open(take_log_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["clip_id", "take_id", "source", "motion", "identity", "beat_fit", "clarity", "selected", "notes"])
+        writer.writerow([
+            "clip_id", "take_id", "source", "motion", "identity", "beat_fit", "clarity",
+            "seam_fit", "lip_sync", "reviewer", "selected", "waiver_reason", "notes",
+        ])
         for shot in shot_list:
-            writer.writerow([shot["clip_id"], "", "", "", "", "", "", "", ""])
+            writer.writerow([shot["clip_id"], "", "", "", "", "", "", "", "", "", "", "", ""])
 
     checklist = [
-        "# picture lock / color pass checklist",
+        "# picture lock checklist",
         "",
-        "## Picture Lock",
+        "## Music/Edit Truth",
+        "- [ ] beatgrid source_audio_sha256 对应当前正式歌曲",
+        "- [ ] timing_review 已具名确认拍号、小节相位和完整段落边界",
         "- [ ] timeline_manifest 与 clip_plan clip_id 完全一致",
-        "- [ ] 每个 clip selected_take 已登记来源、评分和挑版理由",
-        "- [ ] video_inherit_contract hard_blocks=0",
-        "- [ ] video_qc hard_blocks=0",
-        "- [ ] 字幕 alignment_report 覆盖目标范围",
-        "- [ ] 成片音轨来自主歌轨，不混入未授权 clip audio",
+        "- [ ] pacing_prescore 是当前 plan/beatgrid/song 的新鲜收据",
+        "- [ ] OTIO 含 V1 Picture + A1 Master Song + 段落/接缝 markers",
+        "- [ ] 每个接缝已有 beat_cut / section_break / match_action 分类和验收意图",
         "",
-        "## Color Pass",
+        "## Animatic/Continuity",
+        "- [ ] animatic 用当前首帧、正式歌和锁定时长渲染",
+        "- [ ] match_action 接缝的尾帧任务、姿态相位、屏幕方向、视线、道具状态可接",
+        "- [ ] 叙事覆盖、表演层次和动作峰值服务歌曲结构，不是机械等长切片",
+        "",
+        "## Identity/Color",
         "- [ ] 段落主色继承 palette_anchor",
         "- [ ] 同 setup_group 内曝光/白平衡/颗粒一致",
         "- [ ] 副歌高光增强但不换主画风",
         "- [ ] 字幕安全区可读，主体不遮挡歌词",
-        "",
-        "## Deliverables",
-        "- [ ] 合规/ai_usage.json 已写",
-        "- [ ] 目标平台画幅、码率、字幕位置已确认",
-        "- [ ] demo/full scope 已在 _meta 和 alignment_report 明确",
     ]
     mv_utils.write_text(os.path.join(prod_dir, "picture_lock_color_checklist.md"), "\n".join(checklist) + "\n")
-    mv_utils.write_json(os.path.join(root, "分镜", "timeline.otio"), export_otio.build(root))
+    finishing = [
+        "# finishing / delivery checklist",
+        "",
+        "- [ ] 每个 selected_take 有具名评分；连续镜含 seam_fit，演唱镜含 lip_sync",
+        "- [ ] video_inherit_contract hard_blocks=0",
+        "- [ ] video_qc hard_blocks=0，逐镜/逐接缝 semantic_review 已绑定当前视频 hash",
+        "- [ ] 字幕 alignment_report 绑定当前歌曲/歌词并覆盖目标范围",
+        "- [ ] 正式合成只用 A1 Master Song；生成 clip 音轨全部丢弃",
+        "- [ ] 成片和歌曲时长误差不超过 100ms/2帧，未自动改变歌曲母带响度",
+        "- [ ] ProRes/PCM 母版、BT.709 H.264/AAC 交付版、delivery_qc、provenance 均齐",
+        "- [ ] 目标平台画幅、字幕位置、权利和 AI 使用留痕已确认",
+    ]
+    mv_utils.write_text(os.path.join(prod_dir, "finishing_delivery_checklist.md"), "\n".join(finishing) + "\n")
+    export_otio.write_export(root)
     return prod_dir
 
 

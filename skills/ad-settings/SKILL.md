@@ -26,4 +26,5 @@ python3 skills/ad-settings/scripts/settings_cli.py sync-global <作品根> --all
 - 本 skill 只管理设置，不启动 brief、创意、脚本、配音、出图、出视频、合成或投放评分。
 - 合规/花钱/不可逆选择即使已写入 `_设置.md`，对应 stage 开跑前仍要再次确认。
 - 用户显式改选择点时，应立即用 `set` 落档；不要等下次阶段才写。
+- 新项目生图必须分别设置具体 `生图模型` 与 `生图渠道`；审计发现旧 `生图AI` 时迁移并删除旧键，不能把 agent/厂商/渠道壳继续当模型名。
 - `自定义` / `manual` / 实验后端不应被 schema 永久挡住；确认是用户明确选择时用 `--force`，并用 `--message` 写清原因。

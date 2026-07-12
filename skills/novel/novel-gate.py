@@ -26,32 +26,59 @@ from novel_contract import get_product_path, parse_regions, demo_chapters_for
 from novel_route import parse_progress, cell_state, chapter_number as parse_chapter_number
 from project_io import list_chapter_files, load_project_settings, read_text
 from qa_gate import collect_gate_status
-from report_snapshot import validate_snapshot
+from report_snapshot import validate_snapshot, chapter_files, sha256_file, rel_path
 
 _STAGE_TABLE_MARKERS = ("novel-derived-stage-table", "novel-create-stage-table", "novel-import-stage-table")
 
+# 百科新鲜度分级（确定性判据：文件存在性 / hash 比对 / mtime 计数，不扫正文语义）：
+# 事实/细节类不一致是长篇最高频硬伤，动态百科是 review 的一致性引擎——落后太多时，
+# 审稿/评分结论就建立在过期事实索引上。轻度滞后仍留活口（warning），重度滞后阻断。
+WIKI_LAG_BLOCK_THRESHOLD = 3        # 滞后 ≥3 章 → review/score 阻断
+WIKI_MISSING_BLOCK_MIN_CHAPTERS = 5  # 百科整个缺失且正文已 ≥5 章 → review/score 阻断
+
+def _wiki_snapshot_lag(root, payload):
+    """按 snapshot 的 path+sha256 精确数出未被百科覆盖（新增或已改动）的章节文件数。"""
+    covered = {
+        item.get("path"): item.get("sha256")
+        for item in (payload.get("files") or [])
+        if isinstance(item, dict)
+    }
+    lag = 0
+    for path in chapter_files(root):
+        try:
+            digest = sha256_file(path)
+        except OSError:
+            continue
+        if covered.get(rel_path(root, path)) != digest:
+            lag += 1
+    return lag
+
 def check_wiki_freshness(root):
     wiki_path = get_product_path(root, "wiki")
+    chapters = list_chapter_files(root, numbered_only=True)
     if not os.path.exists(wiki_path):
-        return {"status": "missing", "reason": "动态百科.json 不存在"}
+        return {"status": "missing", "reason": "动态百科.json 不存在",
+                "lag_chapters": len(chapters)}
 
     snapshot_path = os.path.join(root, "设定", "动态百科.source_snapshot.json")
     if os.path.exists(snapshot_path):
         payload = _load_json(snapshot_path)
         if payload.get("mode") != "wiki:dynamic":
-            return {"status": "stale", "reason": "动态百科 source_snapshot 不是全量 wiki:dynamic；请全量重建动态百科。"}
+            return {"status": "stale", "reason": "动态百科 source_snapshot 不是全量 wiki:dynamic；请全量重建动态百科。",
+                    "lag_chapters": _wiki_snapshot_lag(root, payload)}
         ok, reason = validate_snapshot(root, payload)
         if ok:
             return {"status": "ok", "reason": "source_snapshot fresh"}
-        return {"status": "stale", "reason": f"动态百科 source_snapshot 过期：{reason}"}
+        return {"status": "stale", "reason": f"动态百科 source_snapshot 过期：{reason}",
+                "lag_chapters": _wiki_snapshot_lag(root, payload)}
 
     wiki_mtime = os.path.getmtime(wiki_path)
-    chapters = list_chapter_files(root, numbered_only=True)
     if chapters:
-        latest_chapter_mtime = max(os.path.getmtime(path) for _idx, path in chapters)
-        if latest_chapter_mtime > wiki_mtime:
-            return {"status": "stale", "reason": "正文已更新，百科可能过期"}
-            
+        newer = [path for _idx, path in chapters if os.path.getmtime(path) > wiki_mtime]
+        if newer:
+            return {"status": "stale", "reason": "正文已更新，百科可能过期",
+                    "lag_chapters": len(newer)}
+
     return {"status": "ok"}
 
 def _load_json(path):
@@ -240,7 +267,20 @@ def main():
     if args.stage in ["review", "score"]:
         wiki_status = check_wiki_freshness(root)
         if wiki_status["status"] != "ok":
-            results["warnings"].append(f"Wiki: {wiki_status['reason']}")
+            lag = int(wiki_status.get("lag_chapters") or 0)
+            missing_block = (wiki_status["status"] == "missing"
+                             and lag >= WIKI_MISSING_BLOCK_MIN_CHAPTERS)
+            stale_block = (wiki_status["status"] == "stale"
+                           and lag >= WIKI_LAG_BLOCK_THRESHOLD)
+            if missing_block or stale_block:
+                results["pass"] = False
+                results["blockers"].append(
+                    f"Wiki: {wiki_status['reason']}（滞后 {lag} 章 ≥ 阈值；"
+                    "动态百科是 review/score 的一致性引擎，先跑 "
+                    "python3 skills/novel-wiki/scripts/wiki_builder.py 再审）"
+                )
+            else:
+                results["warnings"].append(f"Wiki: {wiki_status['reason']}（滞后 {lag} 章，未达阻断阈值）")
 
     # 3. 输出
     if not results["pass"]:

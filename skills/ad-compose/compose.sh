@@ -17,8 +17,11 @@ mkdir -p "$WORK" "$ROOT/合成"
 
 # 正式合成入口强制跑 compose gate，不能靠操作者记住文档步骤。
 python3 "$HERE/../ad-craft/scripts/gate.py" "$ROOT" --stage compose
+python3 "$HERE/../ad-craft/scripts/stage_acceptance.py" "$ROOT" --stage video
+python3 "$HERE/compose_preflight.py" "$ROOT" --color-report "$ROOT/合成/color_preflight.json"
 
 command -v ffmpeg >/dev/null || { echo "[err] 需要 ffmpeg"; exit 2; }
+COLOR_ARGS=( -color_primaries bt709 -color_trc bt709 -colorspace bt709 -color_range tv )
 
 # ASPECT → 输出分辨率（长边 1920），end card / 字幕 / 归一画幅都用它。
 SIZE="$(python3 "$HERE/reframe.py" --src 1920x1080 --target "$ASPECT" --mode pad 2>/dev/null \
@@ -39,16 +42,16 @@ in_args=(); fc=""; n=${#clips[@]}
 for i in "${!clips[@]}"; do in_args+=( -i "${clips[$i]}" ); fc+="[$i:v]${NORM}[v$i];"; done
 maps=""; for i in "${!clips[@]}"; do maps+="[v$i]"; done
 fc+="${maps}concat=n=${n}:v=1:a=0[outv]"
-ffmpeg -y "${in_args[@]}" -filter_complex "$fc" -map "[outv]" -c:v libx264 -pix_fmt yuv420p "$VIDEO"
+ffmpeg -y "${in_args[@]}" -filter_complex "$fc" -map "[outv]" -c:v libx264 -pix_fmt yuv420p "${COLOR_ARGS[@]}" "$VIDEO"
 
 # 2) 片尾 end card（若已生成 endcard.png，按当前画幅归一后追加 2.5s）
 ENDCARD="$WORK/endcard.png"
 if [ -f "$ENDCARD" ] && python3 "$HERE/compose_preflight.py" "$ROOT" --should-append-endcard; then
   ffmpeg -y -loop 1 -t 2.5 -i "$ENDCARD" -vf "${NORM}" \
-    -c:v libx264 -pix_fmt yuv420p "$WORK/_endcard.mp4"
+    -c:v libx264 -pix_fmt yuv420p "${COLOR_ARGS[@]}" "$WORK/_endcard.mp4"
   ffmpeg -y -i "$VIDEO" -i "$WORK/_endcard.mp4" \
     -filter_complex "[0:v][1:v]concat=n=2:v=1:a=0[v]" -map "[v]" \
-    -c:v libx264 -pix_fmt yuv420p "$WORK/_video_full.mp4"
+    -c:v libx264 -pix_fmt yuv420p "${COLOR_ARGS[@]}" "$WORK/_video_full.mp4"
   VIDEO="$WORK/_video_full.mp4"
 fi
 
@@ -69,7 +72,7 @@ if [ "$SUBLANG" != "none" ]; then
       png_args=(); while IFS= read -r p; do [ -n "$p" ] && png_args+=( -i "$p" ); done < "$SUBDIR/inputs.txt"
       SUBBED="$WORK/_video_sub.mp4"
       ffmpeg -y -i "$VIDEO" "${png_args[@]}" \
-        -filter_complex "$VF" -map "[v]" -c:v libx264 -pix_fmt yuv420p "$SUBBED"
+        -filter_complex "$VF" -map "[v]" -c:v libx264 -pix_fmt yuv420p "${COLOR_ARGS[@]}" "$SUBBED"
       VIDEO="$SUBBED"
       echo "[i] 已烧字幕（${SUBLANG}）"
     else
@@ -85,17 +88,17 @@ MUSIC="$ROOT/配音/music.wav"
 if [ -f "$VO" ] && [ -f "$MUSIC" ]; then
   ffmpeg -y -i "$VIDEO" -i "$VO" -stream_loop -1 -i "$MUSIC" \
     -filter_complex "[2:a]volume=0.25[m];[1:a]apad[vo];[vo][m]amix=inputs=2:duration=longest:dropout_transition=2,apad[a]" \
-    -map 0:v -map "[a]" -c:v copy -c:a aac -shortest "$OUT"
+    -map 0:v -map "[a]" -c:v copy -c:a aac -ar 48000 -shortest "$OUT"
 elif [ -f "$VO" ]; then
   ffmpeg -y -i "$VIDEO" -i "$VO" -filter_complex "[1:a]apad[a]" \
-    -map 0:v -map "[a]" -c:v copy -c:a aac -shortest "$OUT"
+    -map 0:v -map "[a]" -c:v copy -c:a aac -ar 48000 -shortest "$OUT"
 else
   cp "$VIDEO" "$OUT"
 fi
 echo "[ok] 成片：$OUT"
 
 # 5) 交付规格响度归一（按 DELIVERY 的 LUFS）。只有当成片有音轨时才跑。
-PROFILE="$(python3 "$HERE/delivery_profile.py" "$DELIVERY")"
+PROFILE="$(python3 "$HERE/delivery_profile.py" "$DELIVERY" --project-root "$ROOT")"
 LUFS="${PROFILE%%$'\t'*}"; TP="${PROFILE#*$'\t'}"
 HAS_AUDIO=0
 if command -v ffprobe >/dev/null; then
@@ -105,7 +108,7 @@ else
 fi
 if [ "$HAS_AUDIO" = "1" ]; then
   LOUD="$ROOT/合成/_work/成片_主片_loud.tmp.mp4"
-  ffmpeg -y -i "$OUT" -af "loudnorm=I=${LUFS}:TP=${TP}:LRA=11" -c:v copy -c:a aac "$LOUD"
+  ffmpeg -y -i "$OUT" -af "loudnorm=I=${LUFS}:TP=${TP}:LRA=11" -c:v copy -c:a aac -ar 48000 "$LOUD"
   mv "$LOUD" "$OUT"
   echo "[ok] 响度归一（${LUFS} LUFS / TP ${TP}）：$OUT（正式交付路径已替换）"
 else

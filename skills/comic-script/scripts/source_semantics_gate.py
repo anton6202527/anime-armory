@@ -13,6 +13,8 @@ import json
 import re
 import sys
 import unicodedata
+import xml.etree.ElementTree as ET
+import zipfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -24,7 +26,7 @@ if str(COMIC_LIB) not in sys.path:
 from text_metadata import infer_language_metadata
 
 
-TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".json"}
+TEXT_SUFFIXES = {".txt", ".md", ".markdown", ".json", ".docx"}
 DEFAULT_SOURCE_SKIP_NAMES = {
     "source_manifest.json",
     "_源指纹.json",
@@ -101,7 +103,46 @@ ADAPTATION_DECISIONS = {
 }
 
 
+WORD_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+
+
+def read_docx_text(path: Path) -> str:
+    """Extract readable paragraphs from DOCX with the standard library.
+
+    comic accepts a source DOCX at initialization, so the semantic gate must
+    not silently ignore that same source type.  This intentionally reads only
+    the main document story; headers/comments are not adaptation source text.
+    """
+    try:
+        with zipfile.ZipFile(path) as archive:
+            document_xml = archive.read("word/document.xml")
+    except (OSError, KeyError, zipfile.BadZipFile) as exc:
+        raise ValueError(f"cannot read DOCX source {path}: {exc}") from exc
+    try:
+        root = ET.fromstring(document_xml)
+    except ET.ParseError as exc:
+        raise ValueError(f"invalid word/document.xml in {path}: {exc}") from exc
+
+    q = lambda name: f"{{{WORD_NS}}}{name}"
+    paragraphs: list[str] = []
+    for paragraph in root.iter(q("p")):
+        pieces: list[str] = []
+        for node in paragraph.iter():
+            if node.tag == q("t") and node.text:
+                pieces.append(node.text)
+            elif node.tag == q("tab"):
+                pieces.append("\t")
+            elif node.tag in {q("br"), q("cr")}:
+                pieces.append("\n")
+        text = "".join(pieces).strip()
+        if text:
+            paragraphs.append(text)
+    return "\n\n".join(paragraphs)
+
+
 def read_text(path: Path) -> str:
+    if path.suffix.lower() == ".docx":
+        return read_docx_text(path)
     try:
         return path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
@@ -251,8 +292,19 @@ def load_source_texts(root: Path, paths: list[Path]) -> tuple[list[dict[str, Any
         if not path.is_file():
             records.append({"path": rel(root, path), "status": "missing"})
             continue
-        text = read_text(path)
-        records.append({"path": rel(root, path), "status": "read", "chars": len(text)})
+        try:
+            text = read_text(path)
+        except ValueError as exc:
+            records.append({"path": rel(root, path), "status": "invalid", "reason": str(exc)})
+            continue
+        records.append(
+            {
+                "path": rel(root, path),
+                "status": "read",
+                "chars": len(text),
+                "format": path.suffix.lower().lstrip(".") or "text",
+            }
+        )
         chunks.append(text)
     return records, "\n\n".join(chunks)
 

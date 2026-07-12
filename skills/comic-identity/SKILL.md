@@ -25,6 +25,7 @@ description: 画漫画角色/场景/道具一致性流程。Use when comic panel
 - `生产数据/comic_identity_views_第N话_contact_sheet.jpg`：人物多视图 QA 拼图，用于快速检查是否缺图、串脸或视图不对。
 - `生产数据/comic_identity_report_第N话.json/md`：缺失引用、每格真实参考输入数、重抽目标。
 - 更新 `panel_jobs.json` 中每个 reference 的真实 `path`。
+- `角色库/<CHAR_ID>__<名称>/manifest.json` 与 `资产库/{场景,道具,服装,特效,风格}/.../manifest.json`：从 comic 自己的统一 registry 派生的人读资产包视图；registry 仍是机器真值，manifest 不复制其它生产线代码或项目记忆。
 
 ## 快速命令
 
@@ -47,6 +48,11 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
   --backend auto --characters CHAR_JYC,CHAR_PEI --views front,three_quarter,side,back,face
 ```
+
+批量定妆会在每个角色/视图完成后立即输出 `[ok]` 进度；不要等整批结束才判断是否卡住。`--max-attempts` 是总尝试次数，不是额外重试次数。
+恢复中断批次时，已有有效图会以 `character_view_reused` 写入本次 manifest，保留路径、SHA 和原始 source 证据；不能只记 `skipped` 数而丢掉逐项可追溯性。
+单一视图的多人选角批次会输出最多三列的 casting 网格；完整多视图批次仍输出“角色为行、视图为列”的 turn-around 矩阵，便于发现串脸和视图错误。
+`--overwrite` 重抽共享锚或角色视图时，旧采纳图必须先归档到 `出图/共享/candidates/<asset>/<variant>/`，新图验证为有效 PNG 后再原子替换；每次实际生成还要把完整提示快照写入 `生产数据/comic_identity_prompts/`，并在 source/manifest 记录 prompt 路径与 SHA。
 
 从小说/剧本直接开画、还没有任何角色锚点时，先显式允许用文字设定生成首张 `front`，再用这张 front 派生其它视图：
 
@@ -77,17 +83,31 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
   --targets P003,P004 --force --max-attempts 3
 ```
 
+从当前 `identity_registry.json` 生成项目内角色库/资产库索引和 manifests：
+
+```bash
+python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名" --write
+```
+
+这一步采用工业资产包的组织思想，但实现、schema 和真值均属于 comic：角色目录只保留 reference/forms/prompts/qc，场景道具等按类型归档；不会引入视频路由、配音、外部训练状态或其它系列项目 ID。
+
 ## 工作流
 
 1. 若本话还没有 `出图/第N话/prompt/panel_jobs.json`，先用 `comic-image` 的 `build_panel_jobs.py` 生成；再跑 `report --write`。若有 `missing_refs`，先补共享参考，不要合成。
 2. 对常驻角色和关键资产建立锚点。短 demo 可从已采纳面板种 `__anchor.png`；默认长线口径应换成正面/45度/侧面/背面和关键表情的专门定妆图。用 `views` 子命令从当前 anchor 生成并登记多视图；`--backend auto` 会优先用可用后端，必要时可显式指定 `dreamina`。
+   - `STYLE_` 风格锚必须生成单幅非叙事校准画，同时可读人物脸/手、线条层级、肤色、衣料与场景材质、三值明暗和特效边缘；不得用含义不明的抽象图、拼贴或角色卡代替。`FX_`/`VFX_` 锚则单独校准形状语言、运动方向、色域和留白关系。
    - 从源小说、源剧本或古文直接开画时，若还没有任何可采纳角色图，只能在用户确认图像生成成本后显式传 `--allow-text-anchor`，让 Codex 根据 `story_bible.md` 和 `identity_registry.json` 生成第一张 `front` 定妆；后续视图再以这张 front 为参考锚点。
+   - 若项目已有可用 `STYLE_` 风格锚，文字生成首张 `front` 时必须把它作为真实 `style_only` 图片附件，并记录路径与 SHA-256；提示中明确禁止继承风格锚人物的脸、发型、服装、体态、姿态和构图。风格锚不能冒充角色身份锚。
    - 对公版经典、历史题材或已有多版影视改编的项目，首张文字定妆前先做轻量视觉研究并落到项目 `设定库/视觉参考研究.md` 或 registry `notes`：优先源本、学术/博物馆/权威资料、官方/资料库式影视条目；只抽取服制、阶层、场景、道具和叙事功能。不要上传或复刻影视剧照，不要求画成某演员，不复制具体构图、镜头、服饰组合或露骨尺度。
    - `views` 默认对非 `front` 视图优先使用已存在的 `front` 定妆图作为参考锚点，避免原剧情格的坐跪、挥砍、裁切等动作姿态污染多视图；需要强制用原始锚点时传 `--no-prefer-front-anchor`。
    - `MON_`、`LOC_`、`PROP_` 等非人物资产用 `anchors` 生成 `__anchor.png` 并回写 registry；这些锚点必须先通过 `report --write` 绑定到 `panel_jobs.json`，再进入逐格出图。
+   - `LOC_` 场景锚必须保持为无人物的纯场景资产；合同即使记录人物站位，也只在对应位置预留空白与走位空间，不得把具体人物、无身份剪影或角色表演固化进长期场景参考。人物由逐格任务另附已签收角色定妆图。
+   - 除 `STYLE_` 本身外，非人物锚生成时若项目已有风格锚，必须把它作为真实 `style_only` 图片附件并记录 SHA；只继承线条、上色、明暗、材质、色域和墨晕，禁止复制风格锚人物、服装、物件、场景布局或构图。
 3. 重新跑 `report --write`，确认每个带 reference 的格子都有真实图片路径。
 4. 对 `rerun_targets` 用 `comic-image` 的 `--force --targets ...` 重抽。runner 会把参考图作为 `codex exec --image` 真实附件传入，并写 `生产数据/codex_reference_bundles/`。
 5. 重抽后再跑一次 `report --write`。`missing_refs=[]` 且 `rerun_targets=[]` 后，才进入 `comic-compose`。
+6. 长线项目在 registry 有新增/改名/分级后运行 `library.py --write`，刷新项目内角色库/资产库视图；只改 registry，不手工让 manifest 与真值分叉。
+   - 派生 manifest 的 `reference_files/reference_count` 只统计真实存在的身份参考；尚未落盘的声明进入 `planned_reference_files/planned_reference_count`，生成时使用的 style-only/anchor 输入进入 `generation_dependency_files`。禁止递归扫描 source 元数据后把计划路径或生成依赖虚报成“已有参考”。
 
 ## 判定口径
 
@@ -96,8 +116,10 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - `report` 会按 reference manifest 记录的 sha256 比对参考图当前内容：生成后换过锚点/定妆图内容（含 `seed --overwrite`）或参考文件消失的 ready 格进 `rerun_targets`（`stale_generated_refs` 给出逐图原因）；生成后新增的参考图不强制重抽。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
 - 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；`定妆级别=长线专门定妆` 时这些缺口是进入发布/连载审查前的阻断项。
+- 角色 registry 的 `status` 也必须诚实反映多视图完成度：只有五个标准视图都是有效 PNG 才能是 `ready`；仅有 front 或部分视图时写 `partial`，并维护 `view_readiness.required/ready/missing/complete`。不能依赖下游 gate 才纠正一个虚假的 ready。
 - **服装子注册表（outfits）**：业界已验证的失效模式是"锁了脸锁不住领型/纽扣/花纹"。同一角色的每套换装在 `registry.assets[CHAR_x].outfits[OUTFIT_y]` 登记 `{name, description, forbidden, reference_images}`；分格脚本用 `outfit_id` 引用。`report` 会检查换装格的登记与服装参考图（`outfit_gaps`），`角色一致性硬闸=开启` 时 gate 按 block 处理。修复服装漂移优先补服装参考图重抽，不走"每套服装一个 LoRA"。
 - 角色一致性不只看“像不像脸”。登记 `character_dna/dna_contract` 时必须覆盖脸型、眼型/眼距、鼻梁/嘴型、发际线、发型轮廓、服装主色、标志配饰/伤痕/灵纹、身高体态和眼神气质；这些字段会被 `comic-image` 写入逐格 prompt。
+- 永久身份与临时调度必须拆开：永久身体特征/佩饰才进入 `character_dna`；剧情手持物、画面左右站位、注视目标、同框遮挡和一次性动作写入 `transient_props/staging_defaults` 或逐格契约。中性 `front/three_quarter/side/back/face` 不得把临时剧情物固化成角色身份。
 - `visual_contract.scene_anchors` 里的 `LOC_` 场景锚同样属于 identity 层资产：关键场景必须登记布局、常驻物件、主光方向/冷暖、轴线视线和禁漂移项。缺场景锚时不要直接批量出图。
 - 漫画格的眼神和完整性标准必须独立达标：角色必须有戏内 `gaze_target`，身体和关键道具必须完整可读；“漫画夸张”“Q版动态”不能作为换脸、换眼型、丢手脚、丢服装标志或场景漂移的豁免。
 - `参考一致性策略` 选择高一致性长线口径或开启 `年龄形态继承` 时，角色资产必须有可读的 DNA/禁漂移项和形态继承说明；缺失时先回本 skill 补登记，不要让 `comic-image` 用松散 prompt 硬跑。

@@ -6,7 +6,9 @@ Can run without pytest:
     python3 skills/mv-video/scripts/test_video_jobs.py
 """
 import json
+import importlib.util
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -15,6 +17,9 @@ import unittest
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 JOBS = os.path.join(HERE, "video_jobs.py")
+SPEC = importlib.util.spec_from_file_location("mv_video_jobs_test", JOBS)
+video_jobs = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(video_jobs)
 
 
 def make_project(root):
@@ -62,7 +67,10 @@ def make_project(root):
     with open(os.path.join(root, "分镜", "clip_plan.json"), "w", encoding="utf-8") as f:
         json.dump({"title": "测试MV", "clips": clips}, f, ensure_ascii=False)
     with open(os.path.join(root, "分镜", "timeline_manifest.json"), "w", encoding="utf-8") as f:
-        json.dump({"title": "测试MV", "clips": [{"clip_id": c["clip_id"], "video_path": c["selected_video_path"]} for c in clips]}, f, ensure_ascii=False)
+        json.dump({"title": "测试MV", "clips": [{
+            "clip_id": c["clip_id"], "start": c["start"], "end": c["end"],
+            "duration": c["duration"], "video_path": c["selected_video_path"],
+        } for c in clips]}, f, ensure_ascii=False)
     for clip in clips:
         with open(os.path.join(root, clip["image_path"]), "wb") as f:
             f.write(b"fake png")
@@ -77,6 +85,91 @@ def make_project(root):
 
 
 class VideoJobsTest(unittest.TestCase):
+    def test_multi_shot_capability_emits_sequence_unit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            clips = []
+            for index in range(2):
+                clips.append({
+                    "clip_id": f"Clip_{index + 1:03d}", "section": "verse", "duration": 3,
+                    "image_path": f"出图/段落/图片/Clip_{index + 1:03d}.png",
+                    "shot_design": {"setup_group": "verse/stage", "camera_movement": "slow push"},
+                    "continuity": {"action": "perform", "end_state": "hold"},
+                })
+            units = video_jobs.sequence_units(
+                tmp, clips, "Seedance 2.0", "即梦/Dreamina",
+                {"multi_shot": True, "max_sequence_seconds": 15},
+            )
+            self.assertEqual(len(units), 1)
+            self.assertEqual(units[0]["clip_ids"], ["Clip_001", "Clip_002"])
+            self.assertTrue(os.path.exists(os.path.join(tmp, units[0]["prompt_path"])))
+
+    def test_sequence_unit_never_crosses_model_route(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            clips = [
+                {"clip_id": "Clip_001", "section": "verse", "duration": 3,
+                 "video_model": "Seedance 2.0", "video_channel": "即梦/Dreamina",
+                 "shot_design": {"setup_group": "verse/stage"},
+                 "continuity": {"action": "perform", "end_state": "hold"}},
+                {"clip_id": "Clip_002", "section": "verse", "duration": 3,
+                 "video_model": "Kling 3.0", "video_channel": "可灵/Kling",
+                 "shot_design": {"setup_group": "verse/stage"},
+                 "continuity": {"action": "perform", "end_state": "hold"}},
+            ]
+            units = video_jobs.sequence_units(
+                tmp, clips, "Seedance 2.0", "即梦/Dreamina",
+                {"multi_shot": True, "max_sequence_seconds": 15},
+            )
+            self.assertEqual(units, [])
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg unavailable")
+    def test_register_sequence_splits_back_into_take_ledger(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# _设置\n\n## 选择\n- 生视频模型: Seedance 2.0\n- 生视频渠道: 即梦\n- 出视频规格: 预算一般\n")
+            plan_path = os.path.join(tmp, "分镜", "clip_plan.json")
+            plan = json.load(open(plan_path, encoding="utf-8"))
+            for index, clip in enumerate(plan["clips"]):
+                clip.update({
+                    "section": "verse1", "start": index * 0.25, "end": (index + 1) * 0.25,
+                    "duration": 0.25, "shot_design": {"setup_group": "verse1/stage"},
+                    "continuity": {"action": "perform", "end_state": "hold"},
+                })
+            json.dump(plan, open(plan_path, "w", encoding="utf-8"), ensure_ascii=False)
+            timeline_path = os.path.join(tmp, "分镜", "timeline_manifest.json")
+            json.dump({"clips": [
+                {"clip_id": clip["clip_id"], "section": clip["section"], "start": clip["start"],
+                 "end": clip["end"], "duration": clip["duration"],
+                 "video_path": clip["selected_video_path"]}
+                for clip in plan["clips"]
+            ]}, open(timeline_path, "w", encoding="utf-8"), ensure_ascii=False)
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            source = os.path.join(tmp, "sequence.mp4")
+            subprocess.run([
+                "ffmpeg", "-y", "-v", "error", "-f", "lavfi",
+                "-i", "color=c=red:s=320x180:r=24:d=0.5", "-an",
+                "-c:v", "libx264", "-pix_fmt", "yuv420p", source,
+            ], check=True)
+            subprocess.run([
+                sys.executable, JOBS, tmp, "--register-sequence", source,
+                "--unit", "Sequence_001", "--take", "1",
+            ], capture_output=True, text=True, check=True)
+            manifest = json.load(open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8"))
+            self.assertEqual(manifest["sequence_units"][0]["status"], "split_registered")
+            self.assertEqual(len(manifest["sequence_units"][0]["registrations"]), 2)
+            for job in manifest["jobs"]:
+                take = job["takes"][0]
+                self.assertTrue(os.path.isfile(os.path.join(tmp, take["video_path"])))
+                self.assertEqual(len(take["video_sha256"]), 64)
+
+    def test_continuous_and_vocal_take_requires_extra_scores(self):
+        take = {"score": {"motion": 5, "identity": 5, "beat_fit": 5, "clarity": 5}, "scored_by": "editor"}
+        errors = video_jobs.selection_errors(take, {
+            "seam_contract": {"continuity_required": True}, "lip_sync_required": True,
+        })
+        self.assertTrue(any("seam_fit" in error for error in errors))
+        self.assertTrue(any("lip_sync" in error for error in errors))
+
     def test_creates_jobs_and_prompts(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
@@ -88,7 +181,7 @@ class VideoJobsTest(unittest.TestCase):
             self.assertEqual(len(manifest["jobs"]), 2)
             self.assertEqual(manifest["jobs"][0]["requested_takes"], 1)
             self.assertEqual(manifest["jobs"][1]["requested_takes"], 2)
-            self.assertEqual(manifest["schema_version"], 2)
+            self.assertEqual(manifest["schema_version"], 3)
             take = manifest["jobs"][1]["takes"][0]
             prompt = take["prompt_path"]
             self.assertTrue(os.path.exists(os.path.join(tmp, prompt)))
@@ -99,6 +192,17 @@ class VideoJobsTest(unittest.TestCase):
                 prompt_text = f.read()
             self.assertIn("### 后端编译提交 prompt", prompt_text)
             self.assertIn(take["submit_prompt"], prompt_text)
+
+    def test_legacy_single_axis_backend_maps_to_explicit_route(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            with open(os.path.join(tmp, "_设置.md"), "w", encoding="utf-8") as f:
+                f.write("# _设置\n\n## 选择\n- 生视频AI: 即梦\n- 出视频规格: 预算一般\n")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                manifest = json.load(f)
+            self.assertEqual(manifest["video_model"], "Seedance 2.0")
+            self.assertEqual(manifest["video_channel"], "即梦")
 
     def test_quality_tier_and_motion_reference_fields(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -134,13 +238,50 @@ class VideoJobsTest(unittest.TestCase):
                 f.write(b"fake mp4 bytes")
             subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
             subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
-            subprocess.run([sys.executable, JOBS, tmp, "--score", "Clip_001", "--take", "1", "--motion-score", "5", "--identity-score", "4", "--beat-score", "5", "--clarity-score", "4"], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--score", "Clip_001", "--take", "1", "--motion-score", "5", "--identity-score", "4", "--beat-score", "5", "--clarity-score", "4", "--reviewer", "editor"], capture_output=True, text=True, check=True)
             subprocess.run([sys.executable, JOBS, tmp, "--select", "Clip_001", "--take", "1"], capture_output=True, text=True, check=True)
             self.assertTrue(os.path.exists(os.path.join(tmp, "出视频", "视频", "Clip_001.mp4")))
             with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
                 manifest = json.load(f)
             self.assertEqual(manifest["jobs"][0]["selected_take"], "take_01")
             self.assertEqual(manifest["jobs"][0]["takes"][0]["score"]["motion"], 5)
+
+    def test_rescore_average_does_not_include_previous_average(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"take")
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            base = [sys.executable, JOBS, tmp, "--score", "Clip_001", "--take", "1", "--reviewer", "editor"]
+            subprocess.run(base + ["--motion-score", "5", "--identity-score", "5", "--beat-score", "5", "--clarity-score", "5"], capture_output=True, text=True, check=True)
+            subprocess.run(base + ["--motion-score", "1"], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                score = json.load(f)["jobs"][0]["takes"][0]["score"]
+            self.assertEqual(score["average"], 4.0)
+
+    def test_reregistering_selected_take_invalidates_selection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"take-v1")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            subprocess.run([
+                sys.executable, JOBS, tmp, "--score", "1", "--take", "1",
+                "--motion-score", "5", "--identity-score", "5", "--beat-score", "5",
+                "--clarity-score", "5", "--reviewer", "editor",
+            ], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--select", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            with open(src, "wb") as f:
+                f.write(b"take-v2")
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            with open(os.path.join(tmp, "出视频", "jobs_manifest.json"), encoding="utf-8") as f:
+                job = json.load(f)["jobs"][0]
+            self.assertIsNone(job["selected_take"])
+            self.assertIn("re-registered", job["takes"][0]["selection_invalidated_reason"])
 
     def test_select_rejects_unscored_take(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -153,6 +294,33 @@ class VideoJobsTest(unittest.TestCase):
             proc = subprocess.run([sys.executable, JOBS, tmp, "--select", "1", "--take", "1"], capture_output=True, text=True)
             self.assertNotEqual(proc.returncode, 0)
             self.assertIn("评分缺字段", proc.stderr)
+
+    def test_score_rejects_unregistered_take(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            proc = subprocess.run([
+                sys.executable, JOBS, tmp, "--score", "1", "--take", "1",
+                "--motion-score", "5", "--identity-score", "5", "--beat-score", "5",
+                "--clarity-score", "5", "--reviewer", "editor",
+            ], capture_output=True, text=True)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("尚未 --register", proc.stderr)
+
+    def test_selection_waiver_requires_named_reviewer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            make_project(tmp)
+            src = os.path.join(tmp, "clip.mp4")
+            with open(src, "wb") as f:
+                f.write(b"fake mp4 bytes")
+            subprocess.run([sys.executable, JOBS, tmp], capture_output=True, text=True, check=True)
+            subprocess.run([sys.executable, JOBS, tmp, "--register", src, "--clip", "1", "--take", "1"], capture_output=True, text=True, check=True)
+            proc = subprocess.run([
+                sys.executable, JOBS, tmp, "--select", "1", "--take", "1",
+                "--waiver-reason", "director accepts rough motion",
+            ], capture_output=True, text=True)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("不能匿名", proc.stderr)
 
 
 if __name__ == "__main__":

@@ -56,11 +56,13 @@ def build_visual_blueprint(title, meta):
         if meta["song_timing"] == "后配歌曲" and not meta["has_song"]
         else "`歌/song.wav`（本项目输入音频）"
     )
-    lyrics_line = (
-        "`词/lyrics.md`（可先用草稿；最终歌入库后按实唱复核）"
-        if meta["song_timing"] == "后配歌曲" and not meta["has_lyrics"]
-        else "`词/lyrics.md`（卡拉OK 对齐用）"
-    )
+    if (meta.get("subtitle_language") == "无字幕"
+            and meta.get("lip_sync_mode") == "关闭" and not meta["has_lyrics"]):
+        lyrics_line = "无（纯器乐/纯视觉路线：无字幕且关闭演唱口型）"
+    elif meta["song_timing"] == "后配歌曲" and not meta["has_lyrics"]:
+        lyrics_line = "`词/lyrics.md`（可先用草稿；最终歌入库后按实唱复核）"
+    else:
+        lyrics_line = "`词/lyrics.md`（字幕/唱演时间轴用）"
     timing_note = (
         "本项目选择【后配歌曲】：当前视觉蓝图只能做 rough 概念；最终歌定稿/上传后必须重跑 mv-beat，并用真实 beatgrid 复核蓝图与 timeline。"
         if meta["song_timing"] == "后配歌曲"
@@ -103,7 +105,9 @@ def build_progress(title, meta):
         "setup": True,
         "song_ingest": meta["has_song"],
     }
-    for st in contract.workflow_stage_table(meta["song_timing"]):
+    for st in contract.workflow_stage_table(
+        meta["song_timing"], meta.get("subtitle_language"), meta.get("lip_sync_mode")
+    ):
         status = "[x]" if done.get(st["key"], False) else "[ ]"
         if st["key"] == "song_ingest" and not meta["has_song"] and meta["song_timing"] == "后配歌曲":
             note = "（视觉草案后再补）"
@@ -117,13 +121,14 @@ def build_progress(title, meta):
             note = ""
         stage_lines.append(f"| {st['label']}{note} | {st['owner']} | {status} |")
     stages = "\n".join(stage_lines)
+    lyrics_optional = meta.get("subtitle_language") == "无字幕" and meta.get("lip_sync_mode") == "关闭"
     return f"""# 进度 — 制MV《{title}》
 
 > 平台={meta['target_platform']} 画幅={meta['aspect']} 段落={len(meta['structure'])}。歌曲输入时序={meta['song_timing']}。输入歌={'已入' if meta['has_song'] else '待放入 歌/'}。
 
 ## 输入
 - [{'x' if meta['has_song'] else ' '}] 歌/song.wav（本项目输入音频）
-- [{'x' if meta['has_lyrics'] else ' '}] 词/lyrics.md（卡拉OK对齐用）
+- [{'x' if meta['has_lyrics'] else ' '}] 词/lyrics.md（{'纯器乐路线可选' if lyrics_optional else '字幕/唱演时间轴必需'}）
 
 ## 制MV 阶段
 | 阶段 | skill | 状态 |
@@ -155,6 +160,8 @@ def main():
     ap.add_argument("--visual-style", default=contract.DEFAULT_SETTINGS["MV视觉风格"], choices=contract.MV_VISUAL_STYLES)
     ap.add_argument("--plan-granularity", default=contract.DEFAULT_SETTINGS["MV规划粒度"], choices=contract.MV_PLAN_GRANULARITY)
     ap.add_argument("--beat-strategy", default=contract.DEFAULT_SETTINGS["卡点策略"], choices=contract.MV_BEAT_STRATEGIES)
+    ap.add_argument("--image-model", default=contract.DEFAULT_SETTINGS["生图模型"], choices=contract.MV_IMAGE_MODELS)
+    ap.add_argument("--image-channel", default=contract.DEFAULT_SETTINGS["生图渠道"], choices=contract.MV_IMAGE_CHANNELS)
     ap.add_argument("--video-model", default=None, choices=contract.MV_VIDEO_MODELS,
                     help="可选：固定/覆盖生视频模型；默认不在立项时强问")
     ap.add_argument("--video-channel", default=None, choices=contract.MV_VIDEO_CHANNELS,
@@ -162,10 +169,11 @@ def main():
     ap.add_argument("--video-backend", default=None, choices=contract.MV_VIDEO_BACKENDS,
                     help="兼容旧参数：等同于 --video-channel")
     ap.add_argument("--video-spec", default=contract.DEFAULT_SETTINGS["出视频规格"], choices=contract.MV_VIDEO_SPECS)
+    ap.add_argument("--lip-sync", default=contract.DEFAULT_SETTINGS["演唱口型"], choices=contract.MV_LIPSYNC_MODES)
+    ap.add_argument("--subtitle-language", default=contract.DEFAULT_SETTINGS["字幕语言"], choices=contract.MV_SUBTITLE_MODES)
     ap.add_argument("--ai-visual-usage", default=contract.DEFAULT_SETTINGS["AI视觉使用披露"], choices=contract.AI_VISUAL_USAGE_MODES)
-    ap.add_argument("--song-rights-status", default="unknown",
-                    help="original/licensed/public-domain/unknown（默认 unknown：不静默假设自有；"
-                         "付费视觉阶段前 gate 会要求确认）")
+    ap.add_argument("--song-rights-status", default="original",
+                    help="original/licensed/public-domain/unknown（仓库默认用户为歌曲权利人；明确第三方素材时必须改成对应状态）")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -219,16 +227,21 @@ def main():
         "visual_style": args.visual_style,
         "plan_granularity": args.plan_granularity,
         "beat_strategy": args.beat_strategy,
-        "image_backend": "Codex",
+        "image_model": args.image_model,
+        "image_channel": args.image_channel,
+        "image_backend": args.image_channel,
         "video_model": video_model,
         "video_channel": video_channel,
         "video_backend": video_channel,
         "video_spec": args.video_spec,
+        "lip_sync_mode": args.lip_sync,
+        "subtitle_language": args.subtitle_language,
         "ai_visual_usage": args.ai_visual_usage,
         "song_rights_status": args.song_rights_status,
         "source_song": os.path.abspath(args.song) if args.song else None,
         "has_song": has_song,
         "has_lyrics": has_lyrics,
+        "is_demo": args.use_case in {"短视频Hook", "歌曲Demo"},
         "created_at": date.today().isoformat(),
     }
     settings = {
@@ -237,10 +250,14 @@ def main():
         "MV视觉风格": args.visual_style,
         "MV规划粒度": args.plan_granularity,
         "卡点策略": args.beat_strategy,
-        "生图AI": "Codex",
+        "生图AI": args.image_channel,
+        "生图模型": args.image_model,
+        "生图渠道": args.image_channel,
         "生视频模型": video_model,
         "生视频渠道": video_channel,
         "出视频规格": args.video_spec,
+        "演唱口型": args.lip_sync,
+        "字幕语言": args.subtitle_language,
         "合成画幅": args.aspect,
         "AI视觉使用披露": args.ai_visual_usage,
         "发行目标平台": publish_target,
@@ -255,10 +272,11 @@ def main():
     print(f"     _设置.md / 视觉蓝图.md / 分镜/ / 歌/{'(已入)' if has_song else '(待放成品歌)'} / 词/{'(已入)' if has_lyrics else '(待放)'}")
     print("     节拍/ 字幕/ 设定/ 出图/ 出视频/ 合规/ ← 预建（mv 自家阶段产物）")
     print(f"     _meta: kind=mv 平台={args.platform} 画幅={args.aspect} 风格={args.visual_style} 歌曲输入时序={song_timing}")
+    lyric_step = " → mv-lyric-sync" if args.subtitle_language != "无字幕" or args.lip_sync != "关闭" else ""
     if song_timing == "后配歌曲" and not has_song:
-        print("[next] mv-script rough视觉蓝图 → 补入成品歌 → mv-beat → mv-script复核 → mv-plan → mv-image → mv-video → mv-compose")
+        print(f"[next] mv-script rough视觉蓝图 → 补入成品歌 → mv-beat{lyric_step} → mv-script复核 → mv-plan → mv-score → mv-image → picture lock → mv-video → mv-compose")
     else:
-        print("[next] 放入/确认成品歌 → mv-beat → mv-script → mv-plan → mv-image → video_jobs.py → mv-video → mv-lyric-sync → mv-compose")
+        print(f"[next] 放入/确认成品歌 → mv-beat{lyric_step} → mv-script → mv-plan → mv-score → mv-image → picture lock → video_jobs.py → mv-video → mv-compose")
 
 
 if __name__ == "__main__":

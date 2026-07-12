@@ -2,7 +2,7 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, manga name board/ネーム, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, ネーム, 缩略分镜, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1002 | 目录文本总行数 20403
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1028 | 目录文本总行数 21489
 
 # comic — 画漫画生产线总调度
 
@@ -39,6 +39,8 @@ comic 是总调度，不直接替代阶段 skill。它负责定位作品根、�
 ├── _进度.md / _设置.md / _meta.json
 ├── 源本/                    原始故事、梗概或脚本
 ├── 设定库/                  story_bible、角色卡、场景卡、道具卡、style_guide
+├── 角色库/                  从 comic identity registry 派生的角色资产包 manifests/reference/forms/prompts/qc
+├── 资产库/                  场景/道具/服装/特效/风格资产包 manifests；项目内自包含，不依赖其它生产线
 ├── 脚本/第1话/              分话大纲.md、panel_script.json
 ├── 排版/第1话/              name_board.json、layout.json、lettering.json、name/、pages/、长图/
 ├── 出图/共享/               identity_registry、角色/场景/道具参考与 prompt 包
@@ -96,6 +98,7 @@ python3 skills/comic/scripts/init_project.py "创作区/画漫画/作品名" --t
 - **传统漫画工艺层**：默认启用 `传统原稿流程`。`comic-name` 先做ネーム，把页流、格子轻重、翻页钩子、气泡优先级和原稿安全框定下来；`comic-finishing` 再把墨线、黑场、网点/灰阶、效果线、漫符和拟声词画法写成结构化计划；`comic-image` 必须消费该计划生成无字面板图。缺 name board 或 finishing plan 时 gate 只给 warn，不替代角色/场景一致性硬闸。
 - **漫画一致性不降级铁律**：漫画不是“粗略草图”，不能因为是分格静态图就降低角色脸、人物完整性、眼神、场景、光位和轴线标准。正式出图前，`panel_script.json` 顶层必须有 `visual_contract`，逐格必须写清 `scene_anchor_id / spatial_layout / lighting_anchor / axis_eyeline / gaze_target / eyeline_direction / character_integrity`。`scene_anchor_id` 必须登记到 `visual_contract.scene_anchors`；`gaze_target` 不能写成“坚定眼神/看前方/看镜头”（除非 `camera_role=POV/破第四墙`）；多人同格必须写站位/遮挡/接触点。`comic-review gate --stage image_preflight` 缺字段或字段不可执行即阻断，回 `comic-script` 补契约，不允许靠宽泛 prompt 或后期合成蒙混。
 - 默认按长线连载口径做角色定妆：常驻角色进入批量生产前补专门定妆和多视图；短 demo 才显式改成锚点过渡。
+- `identity_registry.json` 是 comic 的统一机器真值；需要类似工业角色库/资产库的人读组织时，用 `comic-identity/scripts/library.py --write` 派生 `角色库/`、`资产库/`。可借鉴其它生产线的分级、真值/视图分离与 SHA 失效思路，但严禁 import 其它线实现或直接继承其它作品身份。
 - 用户提供的定型图必须写入 `identity_registry.json` 的角色 DNA / 禁漂移项；同一角色的少年、成年、受伤、觉醒、换装等形态只允许继承性变化，不得换脸或换画风。需要高一致性长线口径时，`comic-review` 把风格锚、年龄形态继承和多视图缺口作为硬闸。
 - 长图默认导出单张和 manifest；发布平台要求固定高度、固定宽度、格式或文件大小时，按 `目标平台` profile 与 `单话分段高度` 校验/切分，不能把未核验平台规格当可发布。
 - 出图阶段只产 job 包和登记结果，不假设某个后端一定可用；具体模型和渠道来自 `_设置.md` 与阶段确认。

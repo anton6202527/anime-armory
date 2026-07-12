@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from datetime import date
@@ -61,6 +62,14 @@ def summary_counts(items: Iterable[dict[str, Any]]) -> dict[str, int]:
         if sev in out:
             out[sev] += 1
     return out
+
+
+def sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def check_prosody(findings: list[dict[str, Any]], root: str) -> None:
@@ -144,11 +153,32 @@ def check_master(findings: list[dict[str, Any]], root: str) -> None:
     if report.get("passed") is False or blocking:
         findings.append(finding("block", "master_delivery", "master_check_block",
                                 f"master_check 未通过，blocking={blocking}。", rel))
+    if report.get("measurement_complete") is not True:
+        findings.append(finding("block", "master_delivery", "master_meter_incomplete",
+                                "master_check 缺 ITU-R BS.1770 完整测量。", rel))
     if warnings:
         findings.append(finding("warn", "master_delivery", "master_check_warn",
                                 f"master_check warnings={warnings}。", rel))
     if report.get("passed") is True and not warnings:
         findings.append(finding("info", "master_delivery", "master_check_clean", "master_check 通过。", rel))
+
+
+def check_mix_and_gates(findings: list[dict[str, Any]], root: str) -> None:
+    pre_master = os.path.join(root, "混音", "pre_master.wav")
+    signoff_rel = "混音/mix_signoff.json"
+    signoff = load_json(os.path.join(root, signoff_rel))
+    if os.path.isfile(pre_master):
+        if not isinstance(signoff, dict):
+            findings.append(finding("block", "mix_performance", "mix_signoff_missing", "pre-master 缺人工表演/混音签核。", signoff_rel))
+        elif signoff.get("passed") is not True or ((signoff.get("audio") or {}).get("sha256") or "") != sha256_file(pre_master):
+            findings.append(finding("block", "mix_performance", "mix_signoff_stale", "mix_signoff 未通过或未绑定当前 pre-master。", signoff_rel))
+        else:
+            findings.append(finding("info", "mix_performance", "mix_signoff_clean", "表演/混音签核与 pre-master hash 一致。", signoff_rel))
+    for stage in ("compose", "select"):
+        rel = f"评审/quality_gate_{stage}.json"
+        gate = load_json(os.path.join(root, rel))
+        if isinstance(gate, dict) and gate.get("passed") is not True:
+            findings.append(finding("block", "stage_gate", f"{stage}_gate_failed", f"{stage} quality gate 未通过。", rel))
 
 
 def check_rights(findings: list[dict[str, Any]], root: str) -> None:
@@ -172,6 +202,9 @@ def check_rights(findings: list[dict[str, Any]], root: str) -> None:
         blockers = ((release.get("readiness") or {}).get("blockers") or [])
         findings.append(finding("block", "rights_ai", "release_pack_not_ready",
                                 f"release_pack 未 ready，blockers={len(blockers)}。", "导出/release_pack.json"))
+    metadata_check = load_json(os.path.join(root, "发行", "release_metadata_check.json"))
+    if isinstance(metadata_check, dict) and metadata_check.get("passed") is not True:
+        findings.append(finding("block", "rights_ai", "release_metadata_failed", "release metadata check 未通过。", "发行/release_metadata_check.json"))
 
 
 def build_report(root: str) -> dict[str, Any]:
@@ -180,6 +213,7 @@ def build_report(root: str) -> dict[str, Any]:
     check_prosody(findings, root)
     check_form(findings, root)
     check_takes(findings, root)
+    check_mix_and_gates(findings, root)
     check_master(findings, root)
     check_rights(findings, root)
     counts = summary_counts(findings)
@@ -198,9 +232,13 @@ def build_report(root: str) -> dict[str, Any]:
             "歌/song_form.json",
             "歌/takes_manifest.json",
             "歌/take_review.json",
+            "评审/quality_gate_compose.json",
+            "评审/quality_gate_select.json",
+            "混音/mix_signoff.json",
             "混音/master_check.json",
             "合规/ai_usage.json",
             "合规/rights_metadata.json",
+            "发行/release_metadata_check.json",
             "导出/release_pack.json",
         ],
     }
