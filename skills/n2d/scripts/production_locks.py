@@ -43,7 +43,7 @@ LOCK_POINTS: Tuple[Tuple[str, str, Tuple[str, ...], Tuple[str, ...]], ...] = (
     ("style_identity_lock", "风格身份锁", ("_设置.md", "设定库/global_style.md", "出图/共享/identity_registry.json", "生产数据/identity_adapter_matrix.json"), ("director", "art_director", "identity_supervisor")),
     ("voice_timing_lock", "声音时长锁", ("合成/{ep}/配音/时长清单.json", "合成/{ep}/配音/voice_zh.wav"), ("voice_director", "editor")),
     ("video_material_lock", "视频素材锁", ("出视频/{ep}/视频", "出视频/{ep}/prompt/video_model_routes.json", "生产数据/image_qc/{ep}/image_qc_{ep}.json", "生产数据/video_qc_{ep}.json"), ("director", "editor", "qc")),
-    ("rough_cut_lock", "粗剪时间线锁", ("合成/{ep}/_work/timeline.json", "合成/{ep}/rough_cut_preview.html", "生产数据/final_timeline_probe_{ep}.json"), ("director", "editor", "post_supervisor")),
+    ("rough_cut_lock", "粗剪时间线锁", ("生产数据/timelines/{ep}/timeline.json", "生产数据/views/rough_cut_preview_{ep}.html", "生产数据/final_timeline_probe_{ep}.json"), ("director", "editor", "post_supervisor")),
     ("picture_lock", "最终画面锁", ("合成/{ep}/成片*.mp4", "生产数据/final_timeline_probe_{ep}.json", "生产数据/script_supervisor_log_{ep}.jsonl"), ("director", "editor", "qc")),
     ("delivery_lock", "交付母版锁", ("合成/{ep}", "合规/release_manifest_{ep}.json", "生产数据/release_verdict_{ep}.json"), ("producer", "post_supervisor", "compliance")),
 )
@@ -75,6 +75,14 @@ STAGE_ALIASES = {
 }
 
 MATERIALIZED_REQUIRED_LOCK_IDS = {"style_identity_lock", "video_material_lock", "rough_cut_lock", "picture_lock"}
+
+# Read-only compatibility for pre-migration projects.  New ledgers bind the
+# canonical production-data paths; old projects keep passing until the explicit
+# artifact-catalog migrate step moves their evidence out of `_work`.
+LEGACY_ARTIFACT_ALTERNATIVES: Mapping[str, str] = {
+    "生产数据/timelines/{ep}/timeline.json": "合成/{ep}/_work/timeline.json",
+    "生产数据/views/rough_cut_preview_{ep}.html": "合成/{ep}/rough_cut_preview.html",
+}
 
 
 def now_iso() -> str:
@@ -121,6 +129,12 @@ def sha256_file(path: Path) -> str:
 def expand_artifact_paths(root: Path, ep: str, pattern: str) -> List[Path]:
     rel = pattern.format(ep=ep)
     base = root / rel
+    legacy_pattern = LEGACY_ARTIFACT_ALTERNATIVES.get(pattern)
+    if not base.exists() and legacy_pattern:
+        legacy_rel = legacy_pattern.format(ep=ep)
+        legacy_base = root / legacy_rel
+        if legacy_base.exists():
+            rel, base = legacy_rel, legacy_base
     if any(ch in rel for ch in "*?[]"):
         matches = [Path(p) for p in sorted(glob.glob(str(base)))]
         return matches or [base]

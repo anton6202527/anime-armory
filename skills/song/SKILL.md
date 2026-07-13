@@ -2,7 +2,7 @@
 name: song
 description: 写歌总调度 — 直接创作或编辑一首带人声的歌（词 + 曲 + 演唱）。支持从主题/几个字/曲风想法从零创作，也支持在已有 `创作区/写歌/<曲名>/`、歌词、曲风、半成品音频基础上改词、改结构、改曲风、重生成、多版挑版、换声、质检、进度查询和 skill 更新影响检查。产物落 创作区/写歌/<曲名>/(词/lyrics.md + 歌/song.wav)。创作过程中可按需调用 song-progress(只读进度) / song-update(更新影响计划) / song-lyrics(作词/改词) / song-score(歌词体检) / song-compose(作曲+演唱与多版挑版) / song-cover(翻唱/换声) / song-review(质检) / song-craft(合约与AI使用披露)。Use when asked to 写首歌 / 做首歌 / 从零写歌 / 创作歌曲 / 改这首歌 / 改词 / 改曲风 / 重生成 / 我有个歌的点子 / 作词作曲. Triggers 写歌, 做歌, 写首歌, 创作曲, 创作歌曲, 改歌, 改词, 改曲风, 重做这首歌, 作词作曲, 原创歌曲, 我想写首歌, song, write a song.
 ---
-> 规模统计：Skill 数 11 | SKILL.md 总行数 657 | 目录文本总行数 9850
+> 规模统计：Skill 数 11 | SKILL.md 总行数 659 | 目录文本总行数 9864
 
 # song — 写歌创作线 · 总调度
 
@@ -11,6 +11,8 @@ description: 写歌总调度 — 直接创作或编辑一首带人声的歌（�
 总调度不是一次性黑盒：创作过程中可以按实际需要调用 `song-craft` 做 A&R 简报、参考边界、旋律/和声草图、权益元数据、发布包和合规留痕，调用 `song-lyrics` 改词/补 hook，调用 `song-score` 做歌词体检，调用 `song-compose` 生成或重生成多版歌曲并结构化试听挑版，调用 `song-cover` 换合法音色，调用 `song-review` 做成品质检/母带检查，发布后调用 `song-feedback` 回灌真实数据。
 
 产物落 **`创作区/写歌/<曲名>/`**（`词/lyrics.md` + `歌/song.wav`）。
+
+**生产数据分层与独立性**：歌词、曲式、take manifest、选版、混音签收、母带与权益记录仍是 song 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失不得阻断写歌。机器真值优先 JSON/JSONL，人读 Markdown/HTML 放 `生产数据/views/`，试听缓存与中间渲染必须可重建。持久路径使用作品根相对路径。song 不 import 仓库维护工具或其它系列实现，也不回读其它系列状态、缓存或项目记忆。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 

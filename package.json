@@ -1,0 +1,39 @@
+{
+  "name": "anime-armory-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Anime Armory application monorepo and shared cloud foundation.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:desktop": "npm run dev --workspace @anime-armory/desktop",
+    "build:desktop": "npm run build --workspace @anime-armory/desktop && npm run verify:desktop-bundle",
+    "verify:desktop-bundle": "node scripts/verify_renderer_dependencies.mjs",
+    "typecheck:desktop": "npm run typecheck --workspace @anime-armory/desktop",
+    "typecheck:cloud": "npm run typecheck --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
+    "typecheck:edge": "npm run typecheck --workspace @anime-armory/backend",
+    "test:cloud": "npm run test --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
+    "test:cloud:remote": "tsx scripts/cloud_e2e.ts",
+    "check:cloud": "npm run typecheck:cloud && npm run typecheck:edge && npm run test:cloud",
+    "check": "npm run check:cloud && npm run typecheck:desktop",
+    "supabase": "supabase --workdir apps/backend"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "supabase": "2.109.1",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.1": true,
+    "fsevents": false,
+    "node-pty@1.1.0": true
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -112,11 +112,18 @@ def write_packet(packet: Dict[str, Any]) -> Dict[str, str]:
     root = Path(str(packet["root"]))
     rel_json = creative_loop_relpath(str(packet["episode"]), str(packet["stage_key"]))
     path_json = root / rel_json
-    path_md = path_json.with_suffix(".md")
+    path_md = root / "生产数据" / "views" / "creative_loops" / path_json.with_suffix(".md").name
     path_json.parent.mkdir(parents=True, exist_ok=True)
+    path_md.parent.mkdir(parents=True, exist_ok=True)
     path_json.write_text(json.dumps(packet, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     path_md.write_text(render_markdown(packet), encoding="utf-8")
-    return {"json": str(path_json), "markdown": str(path_md), "rel_json": rel_json}
+    return {
+        "json": str(path_json),
+        "markdown": str(path_md),
+        "rel_json": rel_json,
+        "rel_markdown": path_md.relative_to(root).as_posix(),
+        "markdown_role": "derived_view",
+    }
 
 
 def main(argv: List[str]) -> int:

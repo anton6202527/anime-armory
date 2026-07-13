@@ -363,7 +363,7 @@ python3 skills/n2d-script/scripts/shot_reverse_contract.py <作品根> 第N集 -
 
 ## 阶段2.4 — Animatic 粗剪验收包（出图 prompt 前先看节奏）
 
-Stage 2 交出 `storyboard.json` 和 `镜头时长.json` 后，先做一次低成本但可执行的 animatic 验收：`story_acceptance_packets.py` 会物化 `animatic_第N集.json/.html`、可持续编辑的 `合成/第N集/_work/editorial_timeline.otio`，以及签收专用的不可变 `animatic_timeline.otio` 快照，并跑 `story_economy_audit.py --strict --write`。没有图时用 timed slate；后续 accepted 视频只刷新 working OTIO，不篡改已签 animatic 快照。
+Stage 2 交出 `storyboard.json` 和 `镜头时长.json` 后，先做一次低成本但可执行的 animatic 验收：`story_acceptance_packets.py` 会物化 `animatic_第N集.json/.html`，并在 `生产数据/timelines/第N集/` 写可持续编辑的 `editorial_timeline.otio` 与签收专用的不可变 `animatic_timeline.otio` 快照，再跑 `story_economy_audit.py --strict --write`。没有图时用 timed slate；后续 accepted 视频只刷新 working OTIO，不篡改已签 animatic 快照。
 
 ```bash
 python3 skills/n2d-script/scripts/story_acceptance_packets.py <作品根> 第N集 check --kind animatic --json --write-missing

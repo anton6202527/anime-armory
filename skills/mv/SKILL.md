@@ -2,7 +2,7 @@
 name: mv
 description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视频，开跑先让用户选择【歌曲输入时序】：先传音乐（先有成品歌/用户音频，按真实 beatgrid 卡点）或后配歌曲（先做视觉蓝图 rough，后续补入定稿歌，再重跑卡点与正式 timeline）。产物落 创作区/制MV/曲名/(成片_MV.mp4)。**mv 视觉/剪辑阶段自包含**。读 _进度.md 路由到 mv-progress(只读进度) / mv-update(更新影响计划) / mv-craft(共享契约/AI披露) / mv-script(视觉蓝图) / mv-beat(卡点) / mv-plan(clip/timeline规划) / mv-image(出图) / mv-video(出视频+挑版) / mv-lyric-sync(卡拉OK字幕) / mv-compose(合成)。Use when given a finished song/audio, a song concept that needs MV planning before final audio, or an existing 创作区/制MV/曲名/ folder, or asked 做MV / 给这首歌做视频 / 先做MV后配歌 / 先传音乐做MV / 卡点 / 卡拉OK / MV出图出视频 / 合成成片. Triggers MV, 音乐视频, 做MV, 给歌做视频, 先传音乐, 后配歌曲, 卡点, 卡拉OK, 歌词字幕, MV出图, MV出视频, MV合成, mv.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 1100 | 目录文本总行数 18659
+> 规模统计：Skill 数 14 | SKILL.md 总行数 1102 | 目录文本总行数 18720
 
 # mv — 制MV 生产线 · 总调度
 
@@ -11,6 +11,8 @@ description: 制MV 总调度 — 把歌曲或歌曲企划做成 AI 音乐 MV 视
 - **后配歌曲**：用户还没最终音频，先做视觉蓝图 rough；等用户补入成品歌后，必须再跑 `mv-beat`，用真实节拍重算 `mv-plan`，再出图/视频/合成。
 
 **完全独立铁律**：mv-* 的视觉、卡点、分镜、出图、出视频、字幕、合成阶段**自包含**。外部音频或歌词只作为用户提供的文件进入 `歌/song.*` + `词/lyrics.md`；mv 阶段仍用自己的脚本和契约。
+
+**生产数据分层**：beatgrid、timeline、选择记录、正式画面与母版仍是 mv 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失不得阻断 MV。机器真值优先 JSON/JSONL，人读 Markdown/HTML 放 `生产数据/views/`，可重建缓存单独标识。只持久化作品根相对路径；外部歌曲先复制进 `歌/song.*`，在 `_meta.json` 记录导入副本相对路径、原文件名和 SHA，不保存源机绝对路径。mv 不 import 仓库维护工具或其它系列实现，不回读其它系列状态/缓存。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 

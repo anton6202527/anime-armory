@@ -348,7 +348,7 @@ def _ensure_animatic_preview(root: Path, ep: str) -> None:
 def _animatic_preview_status(root: Path, ep: str) -> Dict[str, Any]:
     manifest = root / "生产数据" / f"animatic_{ep}.json"
     preview = root / "生产数据" / f"animatic_{ep}.html"
-    otio_snapshot = root / "合成" / ep / "_work" / "animatic_timeline.otio"
+    otio_snapshot = root / "生产数据" / "timelines" / ep / "animatic_timeline.otio"
     issues: List[str] = []
     data = load_json(manifest)
     if not isinstance(data, Mapping):

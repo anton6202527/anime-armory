@@ -177,7 +177,7 @@ def profile_spec(root: Path, profile: str, episode: str = "") -> Dict[str, Any]:
             f"脚本/{ep}/animatic_packet.md",
             f"生产数据/animatic_{ep}.json",
             f"生产数据/animatic_{ep}.html",
-            f"合成/{ep}/_work/animatic_timeline.otio",
+            f"生产数据/timelines/{ep}/animatic_timeline.otio",
         ]
         signoff_path = f"脚本/{ep}/animatic_signoff.json"
     else:  # p3

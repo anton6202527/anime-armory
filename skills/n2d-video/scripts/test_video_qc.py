@@ -32,6 +32,58 @@ def test_sample_times_uses_start_mid_end() -> None:
     assert video_qc.sample_times(5.0) == [("start", 0.0), ("mid", 2.5), ("end", 4.8)]
 
 
+def test_extract_frames_reuses_version_addressed_store(monkeypatch, tmp_path: Path) -> None:
+    clip = tmp_path / "Clip_01.mp4"
+    clip.write_bytes(b"video")
+    calls = []
+
+    class Proc:
+        returncode = 0
+        stderr = ""
+
+    def fake_run(args, **kwargs):
+        calls.append(args)
+        Path(args[-1]).write_bytes(b"jpeg")
+        return Proc()
+
+    monkeypatch.setattr(video_qc.shutil, "which", lambda _: "/usr/bin/ffmpeg")
+    monkeypatch.setattr(video_qc.subprocess, "run", fake_run)
+    store = tmp_path / "frames"
+    first = video_qc.extract_frames(clip, store, 3.0, "Clip_01")
+    second = video_qc.extract_frames(clip, store, 3.0, "Clip_01")
+    assert len(calls) == 3
+    assert [row["path"] for row in first] == [row["path"] for row in second]
+    assert all(row.get("cache_hit") is True for row in second)
+
+
+def test_migrate_legacy_frames_deduplicates_and_rewrites_reports(tmp_path: Path) -> None:
+    import json
+
+    base = tmp_path / "生产数据" / "video_qc" / "第1集"
+    one = base / "01_01" / "frames" / "a.jpg"
+    two = base / "01_11" / "frames" / "b.jpg"
+    one.parent.mkdir(parents=True)
+    two.parent.mkdir(parents=True)
+    one.write_bytes(b"same")
+    two.write_bytes(b"same")
+    report = base / "01_11" / "video_qc_第1集_01_11.json"
+    report.write_text(json.dumps({"path": str(two)}), encoding="utf-8")
+    result = video_qc.migrate_legacy_frames(tmp_path, "第1集")
+    assert result["moved"] == 1
+    assert result["deduplicated"] == 1
+    stored = list((base / "_frames").glob("*.jpg"))
+    assert len(stored) == 1
+    assert json.loads(report.read_text(encoding="utf-8"))["path"] == stored[0].relative_to(tmp_path).as_posix()
+
+
+def test_portable_value_relativizes_only_project_local_paths(tmp_path: Path) -> None:
+    local = tmp_path / "生产数据" / "frame.jpg"
+    external = Path("/tmp/external-frame.jpg")
+    payload = video_qc.portable_value({"local": str(local), "external": str(external)}, tmp_path)
+    assert payload["local"] == "生产数据/frame.jpg"
+    assert payload["external"] == str(external)
+
+
 def test_infer_clip_keys_splits_duplicate_source_clip_numbers() -> None:
     clips = [Path("Clip01_black.mp4"), Path("Clip01_black_mid.mp4"), Path("Clip02_next.mp4")]
     assert video_qc.infer_clip_keys(clips) == ["Clip_01", "Clip_02", "Clip_03"]

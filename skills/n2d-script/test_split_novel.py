@@ -35,6 +35,11 @@ def test_split_novel_builds_local_source_analysis(tmp_path):
     assert "n2d 源书分析预填候选" in roster
     assert (out / "开发包" / "series_bible.md").exists()
     assert (out / "开发包" / "adaptation_strategy.json").exists()
+    meta = json.loads((out / "_meta.json").read_text(encoding="utf-8"))
+    catalog = json.loads((out / "生产数据" / "artifact_catalog.json").read_text(encoding="utf-8"))
+    assert meta["line"] == "n2d" and meta["project_id"].startswith("n2d_")
+    assert catalog["status"] == "bootstrap"
+    assert catalog["project"]["project_id"] == meta["project_id"]
     legacy_cross_line_file = "_novel" + "_handoff.json"
     assert not (out / "设定库" / legacy_cross_line_file).exists()
 

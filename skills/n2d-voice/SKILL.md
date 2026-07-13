@@ -9,6 +9,8 @@ description: Voice casting, timing and rendering stage of n2d — 默认先做�
 
 > **落档位置（2026 调整）**：配音产物落 **`合成/第N集/配音/`**（不在 `出视频/`）——`出视频/` 只放各镜头 clips，配音/成片都归「合成」层，与 n2d-compose 同住。`render_voice.py` 已按此写盘。
 
+> **零字节产物铁律**：`ClipNN_voice.wav/json` 的 0-byte 文件不是占位证据，而是无效产物；preflight `check` 必须阻断。先运行 `python3 skills/n2d-voice/voice_preflight.py doctor <作品根> [第N集]` 只读审计，确认后加 `--apply` 只删除这些旧式零字节文件。新流程用 `timing_estimate.json` 表示未渲染时间基准，不再创建空 WAV/JSON。
+
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。

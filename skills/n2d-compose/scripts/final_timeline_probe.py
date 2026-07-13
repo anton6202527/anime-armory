@@ -224,8 +224,8 @@ def render_rough_cut_html(payload: Mapping[str, Any]) -> str:
 
 
 def write_timeline_outputs(root: Path, episode: str, payload: Dict[str, Any]) -> Dict[str, str]:
-    work = root / "合成" / episode / "_work"
-    work.mkdir(parents=True, exist_ok=True)
+    timeline_dir = root / "生产数据" / "timelines" / episode
+    timeline_dir.mkdir(parents=True, exist_ok=True)
     timeline = {
         "kind": "n2d_rough_cut_timeline",
         "version": VERSION,
@@ -238,11 +238,12 @@ def write_timeline_outputs(root: Path, episode: str, payload: Dict[str, Any]) ->
         "segments": payload.get("segments") or [],
         "cuts": payload.get("cuts") or [],
     }
-    timeline_path = work / "timeline.json"
+    timeline_path = timeline_dir / "timeline.json"
     tmp = timeline_path.with_name(f"{timeline_path.name}.tmp.{os.getpid()}")
     tmp.write_text(json.dumps(timeline, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(tmp, timeline_path)
-    rough_html = root / "合成" / episode / "rough_cut_preview.html"
+    rough_html = root / "生产数据" / "views" / f"rough_cut_preview_{episode}.html"
+    rough_html.parent.mkdir(parents=True, exist_ok=True)
     tmp_html = rough_html.with_name(f"{rough_html.name}.tmp.{os.getpid()}")
     tmp_html.write_text(render_rough_cut_html(payload), encoding="utf-8")
     os.replace(tmp_html, rough_html)

@@ -227,6 +227,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
                 aliases={"不选": "跳过", "默认不选": "跳过", "关闭": "跳过", "关闭合成": "跳过",
                          "开启": "启用", "需要": "启用", "合成": "启用", "合成成片": "启用"},
                 key_aliases=("成片合成", "后期合成", "compose阶段", "compose_stage")),
+    SettingSpec("合成缓存保留", ("n2d",), ("手动清理", "成片后清理", "保留7天"),
+                key_aliases=("缓存保留", "compose_cache_retention"), syncable=False),
     SettingSpec("配音后端", ("n2d",), ("CosyVoice", "GPT-SoVITS", "MiniMax", "火山", "say冒烟", "自定义"),
                 aliases={"say占位": "say冒烟", "macOS say": "say冒烟"}, parameterized=True),
     SettingSpec("字幕语言", ("n2d",), ("中文", "中英双语", "仅英文", "无字幕")),

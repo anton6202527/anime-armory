@@ -4,6 +4,8 @@
 This script is intentionally local-only. It reads raw AI MP4 clips from
 `出视频/<episode>/视频/`, extracts still frames for human review, probes stream
 metadata, and writes stable QC reports under `生产数据/video_qc/<episode>/<batch>/`.
+Frames are version-addressed once under `生产数据/video_qc/<episode>/_frames/`;
+overlapping batches reference that store instead of copying the same JPEGs.
 It never rewrites or strips audio from the formal video-stage outputs.
 """
 from __future__ import annotations
@@ -716,15 +718,34 @@ def sample_times(duration: Optional[float]) -> List[Tuple[str, float]]:
     return [("start", 0.0), ("mid", duration / 2.0), ("end", end)]
 
 
+def source_version_key(path: Path) -> str:
+    """Cheap immutable-enough key for one on-disk video version.
+
+    Full MP4 hashing on every single-clip accept is expensive.  Size + nanosecond
+    mtime changes whenever the runner replaces a formal clip, while the basename
+    keeps the store inspectable.  The key is persisted only in a filename and
+    never as an absolute project path.
+    """
+    try:
+        stat = path.stat()
+        raw = f"{path.name}:{stat.st_size}:{stat.st_mtime_ns}"
+    except OSError:
+        raw = path.name
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
+
+
 def extract_frames(path: Path, frames_dir: Path, duration: Optional[float],
                    clip_label: Optional[str] = None) -> List[Dict[str, Any]]:
     frames_dir.mkdir(parents=True, exist_ok=True)
-    prefix = frame_prefix(path, clip_label)
+    prefix = f"{frame_prefix(path, clip_label)}_{source_version_key(path)}"
     outputs: List[Dict[str, Any]] = []
     if shutil.which("ffmpeg") is None:
         return [{"label": label, "time_sec": t, "error": "ffmpeg not found"} for label, t in sample_times(duration)]
     for ordinal, (label, ts) in enumerate(sample_times(duration), 1):
         out = frames_dir / f"{prefix}_{ordinal:02d}_{label}.jpg"
+        if out.is_file() and out.stat().st_size > 0:
+            outputs.append({"label": label, "time_sec": round(ts, 3), "path": str(out), "cache_hit": True})
+            continue
         proc = subprocess.run(
             [
                 "ffmpeg",
@@ -751,6 +772,103 @@ def extract_frames(path: Path, frames_dir: Path, duration: Optional[float],
             item["error"] = proc.stderr.strip() or f"ffmpeg exit {proc.returncode}"
         outputs.append(item)
     return outputs
+
+
+def shared_frames_dir(root: Path, episode: str) -> Path:
+    return production_dir(root) / "video_qc" / episode / "_frames"
+
+
+def portable_value(value: Any, root: Path) -> Any:
+    """Convert persisted project-local paths to root-relative strings."""
+    if isinstance(value, str):
+        path = Path(value)
+        if path.is_absolute():
+            try:
+                return path.resolve().relative_to(root.resolve()).as_posix()
+            except (OSError, ValueError):
+                return value
+        return value
+    if isinstance(value, list):
+        return [portable_value(item, root) for item in value]
+    if isinstance(value, dict):
+        return {key: portable_value(item, root) for key, item in value.items()}
+    return value
+
+
+def migrate_legacy_frames(root: Path, episode: str) -> Dict[str, Any]:
+    """Deduplicate old per-batch frame copies without losing report references."""
+    base = production_dir(root) / "video_qc" / episode
+    store = shared_frames_dir(root, episode)
+    legacy = [
+        path for path in sorted(base.glob("*/frames/*.jpg"))
+        if path.is_file() and path.parent.parent.name != "_frames"
+    ] if base.is_dir() else []
+    if not legacy:
+        return {"kind": "n2d_video_qc_frame_migration", "episode": episode, "moved": 0, "deduplicated": 0, "rewritten_reports": 0}
+    store.mkdir(parents=True, exist_ok=True)
+    replacements: Dict[str, str] = {}
+    moved = deduplicated = 0
+    for src in legacy:
+        digest = hashlib.sha256(src.read_bytes()).hexdigest()
+        dst = store / f"legacy_{digest[:20]}.jpg"
+        if dst.is_file():
+            src.unlink()
+            deduplicated += 1
+        else:
+            shutil.move(str(src), str(dst))
+            moved += 1
+        replacements[str(src)] = dst.relative_to(root).as_posix()
+        try:
+            replacements[src.relative_to(root).as_posix()] = dst.relative_to(root).as_posix()
+        except ValueError:
+            pass
+    def rewrite_value(value: Any) -> Tuple[Any, bool]:
+        if isinstance(value, str):
+            replacement = replacements.get(value)
+            return (replacement, True) if replacement is not None else (value, False)
+        if isinstance(value, list):
+            changed = False
+            items = []
+            for item in value:
+                new_item, item_changed = rewrite_value(item)
+                items.append(new_item)
+                changed = changed or item_changed
+            return items, changed
+        if isinstance(value, dict):
+            changed = False
+            data = {}
+            for key, item in value.items():
+                new_item, item_changed = rewrite_value(item)
+                data[key] = new_item
+                changed = changed or item_changed
+            return data, changed
+        return value, False
+
+    rewritten = 0
+    for report in sorted(base.glob("*/*.json")):
+        try:
+            data = json.loads(report.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        data, changed = rewrite_value(data)
+        if changed:
+            tmp = report.with_name(f"{report.name}.tmp.{os.getpid()}")
+            tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+            os.replace(tmp, report)
+            rewritten += 1
+    for directory in sorted(base.glob("*/frames")):
+        try:
+            directory.rmdir()
+        except OSError:
+            pass
+    return {
+        "kind": "n2d_video_qc_frame_migration",
+        "episode": episode,
+        "moved": moved,
+        "deduplicated": deduplicated,
+        "rewritten_reports": rewritten,
+        "frame_store": store.relative_to(root).as_posix(),
+    }
 
 
 def make_contact_sheet(frame_paths: Sequence[Path], out_path: Path, thumb_width: int = 240) -> Optional[str]:
@@ -892,19 +1010,20 @@ def render_markdown(payload: Dict[str, Any]) -> str:
 
 def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
            out_dir: Optional[Path] = None, clip_keys: Optional[Sequence[Optional[str]]] = None) -> Dict[str, Any]:
+    custom_out = out_dir is not None
     if out_dir is None:
         out_dir = production_dir(root) / "video_qc" / episode / batch
-    frames_dir = out_dir / "frames"
+    migration = migrate_legacy_frames(root, episode)
+    frames_dir = (out_dir / "frames") if custom_out else shared_frames_dir(root, episode)
     out_dir.mkdir(parents=True, exist_ok=True)
-    if frames_dir.is_dir():
-        for old_frame in frames_dir.glob("*.jpg"):
-            old_frame.unlink()
     payload: Dict[str, Any] = {
         "kind": "n2d_video_qc",
         "version": 1,
         "root": str(root),
         "episode": episode,
         "batch": batch,
+        "frame_store": str(frames_dir),
+        "frame_migration": migration,
         "clips": [],
     }
     all_frames: List[Path] = []
@@ -926,8 +1045,14 @@ def run_qc(root: Path, episode: str, clips: Sequence[Path], batch: str,
     anchor_adherence_check(payload, root, load_anchor_intents(root, episode) or None)
     delivery_consistency_check(payload)
     json_path = out_dir / f"video_qc_{episode}_{batch}.json"
-    md_path = out_dir / f"video_qc_{episode}_{batch}.md"
-    json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if custom_out:
+        md_path = out_dir / f"video_qc_{episode}_{batch}.md"
+    else:
+        md_path = production_dir(root) / "views" / "video_qc" / episode / f"video_qc_{episode}_{batch}.md"
+        md_path.parent.mkdir(parents=True, exist_ok=True)
+    persisted = portable_value(payload, root)
+    persisted["root"] = "."
+    json_path.write_text(json.dumps(persisted, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     md_path.write_text(render_markdown(payload), encoding="utf-8")
     payload["json_path"] = str(json_path)
     payload["markdown_path"] = str(md_path)
@@ -942,10 +1067,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--batch", help="Batch label override, default derived from --range or clip span")
     ap.add_argument("--clip", action="append", default=[], help="Explicit MP4 path or filename; repeatable")
     ap.add_argument("--out-dir")
+    ap.add_argument("--migrate-legacy-frames", action="store_true",
+                    help="only consolidate old per-batch frames into the shared store")
     ap.add_argument("--json", action="store_true", help="Print machine-readable payload")
     ns = ap.parse_args(argv)
 
     root = Path(ns.root).expanduser().resolve()
+    if ns.migrate_legacy_frames:
+        payload = migrate_legacy_frames(root, ns.episode)
+        if ns.json:
+            print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+        else:
+            print(payload.get("frame_store") or "no legacy frames")
+        return 0
     start = end = None
     if ns.clip_range:
         start, end = parse_clip_range(ns.clip_range)

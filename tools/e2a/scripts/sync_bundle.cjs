@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // e2a bundle engine — copy the REAL skills/ (+ repo maintenance tools) and
-// 创作区 usage manuals from the repo into desktop-electron/resources/ so they
+// 创作区 usage manuals from the repo into apps/desktop/resources/ so they
 // ship INSIDE the packaged Electron app (electron-builder extraResources),
 // making it self-contained (install on any machine; no anime-armory source
 // checkout needed). Demo works are not bundled; this script only writes a
@@ -13,7 +13,7 @@
 //
 // Consumption: a packaged app whose live checkout is absent falls back to
 // <process.resourcesPath>/resources as its skills repo (resolveRepo in
-// desktop-electron/src/main/services/workspace.ts). Demo download buttons use
+// apps/desktop/src/main/services/workspace.ts). Demo download buttons use
 // demo_catalog.json and pull zip assets from Releases on demand. In dev the
 // live checkout always wins for skills.
 const fs = require('fs');
@@ -29,11 +29,11 @@ const {
 
 const repo = path.resolve(__dirname, '..', '..', '..');
 const bundle = process.env.E2A_BUNDLE_DIR
-  || path.join(repo, 'desktop-electron', 'resources');
+  || path.join(repo, 'apps', 'desktop', 'resources');
 const demoConfigPath = path.join(__dirname, '..', 'bundle-demos.json');
 const demoWorksConfigPath = path.join(__dirname, '..', 'demo-works.json');
 
-// the 6 creative lines, by product dir under 创作区 (mirror desktop-electron workspace.ts LINES)
+// the 6 creative lines, by product dir under 创作区 (mirror apps/desktop workspace.ts LINES)
 const CREATION_ROOT = '创作区';
 const LINES = ['制漫剧', '画漫画', '拍广告', '制MV', '写歌', '写小说'];
 const MANUAL_RELS = [

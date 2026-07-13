@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# e2a — build the Electron desktop app (desktop-electron/) as release installers
+# e2a — build the Electron desktop app (apps/desktop/) as release installers
 # or the per-work demo zip assets, with upload enabled only by an explicit mode.
 # Successor of the retired Tauri /r2a flow. Self-contained: demo selection
 # (scripts/select_demo.cjs), skills bundler (scripts/sync_bundle.cjs) and the
@@ -71,7 +71,7 @@ Options:
                                   release (default keeps them).
   --no-upload                     Force local-only output for advanced flag combinations.
   --repo owner/name               Target GitHub repo. Default: anton6202527/anime-armory.
-  --tag TAG                       Release tag. Default: electron-v<desktop-electron version>.
+  --tag TAG                       Release tag. Default: electron-v<apps/desktop version>.
   -h, --help                      Show this help.
 
 Release artifact names:
@@ -85,8 +85,8 @@ Environment:
   E2A_OUTPUT_DIR                Artifact output dir. Default: dist/e2a-release-<tag>.
   E2A_RELEASE_TAG               Override the release tag.
   E2A_TARGET_REPO               Target repo (owner/name).
-  E2A_SIGNING_IDENTITY          macOS codesign identity for electron-builder (CSC_NAME).
-                                Unset = unsigned local build (right-click open to run).
+  E2A_SIGNING_IDENTITY          macOS codesign identity used for the final app signature.
+                                Unset = ad-hoc local build (right-click open to run).
   E2A_NOTARY_KEYCHAIN_PROFILE   Optional notarytool profile; staples the DMG when set.
   E2A_UPLOAD_RETRIES            Retry count per uploaded asset. Default: 6.
 EOF
@@ -173,15 +173,19 @@ rsync_common_excludes=(
   --exclude='.github/instructions/'
   --exclude='.github/prompts/'
   --exclude='.DS_Store'
+  --exclude='.env'
+  --exclude='.env.*'
   --exclude='__pycache__/'
   --exclude='.pytest_cache/'
   --exclude='.mypy_cache/'
   --exclude='.ruff_cache/'
   --exclude='node_modules/'
   --exclude='dist/'
-  --exclude='desktop-electron/out/'
-  --exclude='desktop-electron/release/'
-  --exclude='desktop-electron/resources/'
+  --exclude='apps/desktop/out/'
+  --exclude='apps/desktop/release/'
+  --exclude='apps/desktop/resources/'
+  --exclude='apps/backend/supabase/.branches/'
+  --exclude='apps/backend/supabase/.temp/'
   --exclude='vscode-extension/node_modules/'
 )
 
@@ -280,19 +284,19 @@ snapshot_local_source() {
 
 stage_bundled_resources() {
   # sync_bundle.cjs bundles skills/tools/manuals + demo_catalog.json into
-  # desktop-electron/resources; the packaged app reads the same layout from
+  # apps/desktop/resources; the packaged app reads the same layout from
   # process.resourcesPath/resources (electron-builder extraResources).
   local featured_works
   featured_works="$(printf '%s\n' ${DEMO_WORKS+"${DEMO_WORKS[@]}"})"
   echo "[e2a] bundling skills repo + demo catalog"
-  rm -rf "$SOURCE_DIR/desktop-electron/resources"
+  rm -rf "$SOURCE_DIR/apps/desktop/resources"
   E2A_INCLUDE_DEMOS=0 \
   E2A_FEATURED_WORKS="$featured_works" \
   E2A_TARGET_REPO="$TARGET_REPO" \
   E2A_RELEASE_TAG="$TAG" \
-  E2A_BUNDLE_DIR="$SOURCE_DIR/desktop-electron/resources" \
+  E2A_BUNDLE_DIR="$SOURCE_DIR/apps/desktop/resources" \
     node "$SOURCE_DIR/tools/e2a/scripts/sync_bundle.cjs"
-  if [[ ! -f "$SOURCE_DIR/desktop-electron/resources/demo_catalog.json" ]]; then
+  if [[ ! -f "$SOURCE_DIR/apps/desktop/resources/demo_catalog.json" ]]; then
     echo "Bundled resources are missing demo_catalog.json" >&2
     exit 1
   fi
@@ -332,12 +336,62 @@ notarize_dmg_if_configured() {
 }
 
 sign_macos_app() {
-  # ad-hoc by default, same as /r2a; a real identity makes the app distributable
+  # Ad-hoc signatures do not have a stable Team ID.  Combining them with the
+  # hardened runtime makes dyld library validation reject Electron Framework
+  # on macOS 26 (the main executable and nested framework appear to have
+  # different teams), even though `codesign --verify` succeeds.  Keep hardened
+  # runtime for a real Developer ID, but omit it for local ad-hoc builds.
   local app_path="$1"
-  local identity="${SIGNING_IDENTITY:--}"
-  echo "[e2a] signing macOS app with identity: $identity"
-  codesign --force --deep --options runtime --sign "$identity" "$app_path"
+  local signature_details
+  if [[ -n "$SIGNING_IDENTITY" ]]; then
+    echo "[e2a] signing macOS app with identity + hardened runtime: $SIGNING_IDENTITY"
+    codesign --force --deep --options runtime --timestamp --sign "$SIGNING_IDENTITY" "$app_path"
+  else
+    echo "[e2a] signing macOS app ad-hoc without hardened runtime"
+    codesign --force --deep --sign - "$app_path"
+  fi
   codesign --verify --deep --strict "$app_path"
+
+  signature_details="$(codesign -dvv "$app_path" 2>&1)"
+  if [[ -z "$SIGNING_IDENTITY" && "$signature_details" == *"runtime"* ]]; then
+    echo "Ad-hoc macOS app unexpectedly has hardened runtime enabled" >&2
+    exit 1
+  fi
+}
+
+smoke_test_macos_app() {
+  # Structural DMG checks cannot catch launch-time dyld/signature failures.
+  # Keep the signed app alive for five seconds with an isolated Electron
+  # profile; an immediate exit is a release-blocking failure with its log.
+  local app_path="$1"
+  local executable="$app_path/Contents/MacOS/AnimeArmory"
+  local smoke_dir smoke_log pid status attempt
+  smoke_dir="$(mktemp -d "${TMPDIR:-/tmp}/e2a-app-smoke.XXXXXX")"
+  smoke_log="$smoke_dir/launch.log"
+
+  echo "[e2a] smoke-testing signed macOS app launch"
+  ELECTRON_ENABLE_LOGGING=1 "$executable" \
+    --user-data-dir="$smoke_dir/user-data" \
+    --disable-gpu \
+    >"$smoke_log" 2>&1 &
+  pid=$!
+
+  for attempt in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 0.5
+    if ! kill -0 "$pid" 2>/dev/null; then
+      status=0
+      wait "$pid" || status=$?
+      echo "macOS app launch smoke test failed (exit $status)" >&2
+      sed -n '1,200p' "$smoke_log" >&2
+      rm -rf "$smoke_dir"
+      exit 1
+    fi
+  done
+
+  kill "$pid" 2>/dev/null || true
+  wait "$pid" 2>/dev/null || true
+  rm -rf "$smoke_dir"
+  echo "[e2a] macOS app launch smoke test passed"
 }
 
 make_macos_dmg() {
@@ -357,11 +411,11 @@ prepare_electron_source() {
   [[ "$APP_PREPARED" == "1" ]] && return
   require_cmd npm
   stage_bundled_resources
-  echo "[e2a] preparing Electron app (npm ci + typecheck + electron-vite)"
+  echo "[e2a] preparing monorepo (root npm ci + desktop typecheck + electron-vite)"
   (
-    cd "$SOURCE_DIR/desktop-electron"
+    cd "$SOURCE_DIR"
     if [[ -f package-lock.json ]]; then npm ci; else npm install; fi
-    npm run build
+    npm run build:desktop
   )
   APP_PREPARED=1
 }
@@ -374,17 +428,18 @@ build_electron_macos() {
 
   echo "[e2a] packaging macOS app (electron-builder --dir + hdiutil DMG)"
   (
-    cd "$SOURCE_DIR/desktop-electron"
+    cd "$SOURCE_DIR/apps/desktop"
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --mac --arm64 --dir
   )
 
-  local app_src="$SOURCE_DIR/desktop-electron/release/mac-arm64/AnimeArmory.app"
+  local app_src="$SOURCE_DIR/apps/desktop/release/mac-arm64/AnimeArmory.app"
   if [[ ! -d "$app_src" ]]; then
     echo "Could not locate built Electron app bundle: $app_src" >&2
     exit 1
   fi
   local artifact_dmg="$ARTIFACT_DIR/AnimeArmory_electron_macos_arm64.dmg"
   sign_macos_app "$app_src"
+  smoke_test_macos_app "$app_src"
   make_macos_dmg "$app_src" "$artifact_dmg"
   notarize_dmg_if_configured "$artifact_dmg"
   validate_macos_dmg "$artifact_dmg"
@@ -396,11 +451,11 @@ build_electron_windows() {
 
   echo "[e2a] packaging Windows x64 NSIS installer (cross-build, unsigned)"
   (
-    cd "$SOURCE_DIR/desktop-electron"
+    cd "$SOURCE_DIR/apps/desktop"
     CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --win nsis --x64
   )
 
-  local exe_src="$SOURCE_DIR/desktop-electron/release/AnimeArmory_electron_windows.exe"
+  local exe_src="$SOURCE_DIR/apps/desktop/release/AnimeArmory_electron_windows.exe"
   if [[ ! -f "$exe_src" ]]; then
     echo "Could not locate built Windows installer: $exe_src" >&2
     exit 1
@@ -593,7 +648,7 @@ release_notes() {
     fi
     echo
     echo "- Source commit: ${SOURCE_SHA} (dirty: ${SOURCE_DIRTY})"
-    echo "- Desktop shell: Electron (desktop-electron/)"
+    echo "- Desktop shell: Electron (apps/desktop/)"
     echo "- Bundled: skills repo + creation manuals + demo catalog (payloads download on demand)"
     echo "- Release artifacts committed to git history: no"
     echo
@@ -708,7 +763,7 @@ require_cmd node
 snapshot_local_source
 
 if [[ -z "$TAG" ]]; then
-  TAG="electron-v$(json_value "$SOURCE_DIR/desktop-electron/package.json" ".version")"
+  TAG="electron-v$(json_value "$SOURCE_DIR/apps/desktop/package.json" ".version")"
 fi
 OUT_DIR="$ROOT/dist/e2a-release-${TAG}"
 [[ -n "$ARTIFACT_DIR" ]] || ARTIFACT_DIR="$OUT_DIR"

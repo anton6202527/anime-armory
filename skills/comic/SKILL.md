@@ -2,13 +2,15 @@
 name: comic
 description: 画漫画生产线总调度。Use when the user wants to create a comic, manga, manhua, webtoon, long-scroll comic, panel script, manga name board/ネーム, page layout, traditional ink/tone/effects finishing, comic art prompts, character consistency, shared references, lettering, export, batch panel generation, rerolling panels, update/rebuild planning, or adapt a source story or idea into comics. It initializes or inspects projects under 创作区/画漫画, reads _进度.md, and routes to comic-script, comic-name, comic-layout, comic-finishing, comic-identity, comic-image, comic-batch, comic-compose, comic-review, comic-update, or comic-progress. Triggers 画漫画, 漫画, 条漫, 页漫, 分格, 分镜, 故事板, ネーム, 缩略分镜, 原稿收尾, 网点, 效果线, panel, storyboard, 定妆, 脸漂, 角色一致性, 嵌字, 气泡, 长图, 漫画出图, 漫画批跑, 重抽漫画格, 漫画更新, comic-update, comic.
 ---
-> 规模统计：Skill 数 13 | SKILL.md 总行数 1074 | 目录文本总行数 25034
+> 规模统计：Skill 数 13 | SKILL.md 总行数 1076 | 目录文本总行数 25059
 
 # comic — 画漫画生产线总调度
 
 把一个故事源、点子或已有脚本做成可发布的漫画。产物落在 `创作区/画漫画/作品名/`，最小闭环是：源本/企划 → 漫画脚本 → 缩略分镜/ネーム → 页面/条漫排版 → 原稿收尾计划 → 出图包 → 面板图 → 嵌字合成 → 审查。
 
 comic 是总调度，不直接替代阶段 skill。它负责定位作品根、读 `_进度.md`、解释流程、初始化轻量项目骨架，并把下一步路由给 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-identity` / `comic-image` / `comic-batch` / `comic-compose` / `comic-review` / `comic-update` / `comic-progress`。
+
+**生产数据分层与独立性**：分格脚本、layout、identity registry、正式 panel 与嵌字成品仍是 comic 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失不得阻断漫画流程。机器真值优先 JSON/JSONL，人读 Markdown/HTML 放 `生产数据/views/`；候选、重抽与临时图不得混进正式 `panels/`，缓存必须可重建。路径使用作品根相对路径。comic 不 import 仓库维护工具或其它系列实现，也不读取其它系列项目状态。
 
 详细结构见 `references/architecture.md`；选择点和私有偏好见 `references/选择点与偏好.md`；基础视觉风格候选见 `references/视觉风格候选.md`。
 

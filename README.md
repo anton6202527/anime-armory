@@ -146,7 +146,7 @@ bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # 只打 Windo
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物在 dist/e2a-release-<tag>/
 ```
 
-- 发布前会验证 DMG：`hdiutil verify`、挂载检查（含内置技能仓库与 `demo_catalog.json`）。默认 ad-hoc 签名；配置 `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` 可出可分发的签名+公证包。
+- 发布前会先真实启动签名后的 App 5 秒，再验证 DMG：`hdiutil verify`、挂载检查（含内置技能仓库与 `demo_catalog.json`）。本地包默认采用不启用 Hardened Runtime 的 ad-hoc 签名；配置 `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` 可出启用 Hardened Runtime、Developer ID 签名并公证的分发包。
 - demo zip 资产名：`AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`；n2d 会瘦身到第 1 集媒体。
 - release 默认不标 latest、不改 README 下载链接——发布对用户可见的新版时手动更新上表链接（固定 tag 链接可复现，`releases/latest/download/...` 永远指向最新）。
 - 完整契约见 `tools/e2a/SKILL.md`。
@@ -156,7 +156,7 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物�
 只需要把当前 checkout 的 `skills/` 与 `创作区/` 使用手册同步进桌面端和 VS Code 插件的内置资源时，跑：
 
 ```bash
-scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、desktop-electron/resources/
+scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、apps/desktop/resources/
 scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo 种子目录；默认只带固定完整示例
 ```
 
@@ -166,9 +166,10 @@ scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo 种子�
 
 ```bash
 # 桌面端（Electron）：Mac Apple Silicon
-cd desktop-electron && npm install
-node ../tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库 + demo 目录 → desktop-electron/resources/
-npm run build && npx electron-builder --mac --arm64
+npm install
+node tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库 + demo 目录 → apps/desktop/resources/
+npm run build:desktop
+(cd apps/desktop && npx electron-builder --mac --arm64)
 
 # VS Code 插件：在 vscode-extension/ 里打 .vsix
 cd vscode-extension && npx @vscode/vsce package
@@ -265,6 +266,16 @@ shasum -a 256 dist/anime-armory-full.zip > dist/anime-armory-full.zip.sha256
 anime-armory/
 ├── README.md                 快速入口
 ├── AGENTS.md                 工具中立入口，AI agent 先读
+├── apps/                     可独立运行、统一由根 npm workspace 管理的应用
+│   ├── desktop/              当前 Electron 客户端
+│   ├── backend/              Supabase 数据库、RLS 与 Edge Functions
+│   └── web/                  未来 Web 客户端边界（当前无页面实现）
+├── packages/                 桌面端、Web 与后端共享的 TypeScript 包
+│   ├── contracts/            跨端 API 契约
+│   ├── cloud-client/         登录态资产客户端
+│   ├── data-access/          服务端数据访问层
+│   └── object-store/         R2/COS 对象存储适配层
+├── infrastructure/           R2 等外部云资源配置
 ├── skills/                   全部 workflow skill
 │   ├── README.md             skill 分类索引
 │   ├── n2d/ n2d-*            制漫剧能力（契约与通用脚本 vendored 进 n2d/_lib/）
@@ -401,7 +412,7 @@ bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # Windows exe 
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifacts in dist/e2a-release-<tag>/
 ```
 
-- Before upload, `e2a` validates the DMG with `hdiutil verify` plus a mount check (bundled skills repo and `demo_catalog.json`). Builds are ad-hoc signed by default; set `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` for distributable signed + notarized builds.
+- Before upload, `e2a` runs the signed App for five seconds, then validates the DMG with `hdiutil verify` plus a mount check (bundled skills repo and `demo_catalog.json`). Local builds are ad-hoc signed without hardened runtime; set `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` for distributable Developer ID signed + notarized builds.
 - Demo zip asset names: `AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`; the n2d zip is slimmed to first-episode media.
 - Releases are not marked latest and README download links are not rewritten by the tool — update the download table manually when publishing a user-facing release. Full contract: `tools/e2a/SKILL.md`.
 
@@ -410,7 +421,7 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifac
 To sync the current checkout's `skills/` and `创作区/` usage manuals into the bundled desktop and VS Code resources without a full release, run:
 
 ```bash
-scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and desktop-electron/resources/
+scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and apps/desktop/resources/
 scripts/sync_bundles.sh --demo   # include extra line champion demo seeds; default bundles only the fixed full sample
 ```
 
@@ -425,10 +436,11 @@ Uploaded assets use these stable filenames:
 Manual packaging without `e2a`:
 
 ```bash
-cd desktop-electron && npm install
-node ../tools/e2a/scripts/sync_bundle.cjs   # stage bundled skills repo + demo catalog into desktop-electron/resources/
-npm run build && npx electron-builder --mac --arm64
-cd ../vscode-extension && npx @vscode/vsce package
+npm install
+node tools/e2a/scripts/sync_bundle.cjs   # stage bundled skills repo + demo catalog into apps/desktop/resources/
+npm run build:desktop
+(cd apps/desktop && npx electron-builder --mac --arm64)
+(cd vscode-extension && npx @vscode/vsce package)
 ```
 
 **Lightweight starter package:**
@@ -516,6 +528,16 @@ System Python may be affected by PEP 668. Heavy dependencies should live in the 
 anime-armory/
 ├── README.md                 Quick entry
 ├── AGENTS.md                 Tool-neutral entry for AI agents
+├── apps/                     Runnable apps managed by the root npm workspace
+│   ├── desktop/              Current Electron client
+│   ├── backend/              Supabase database, RLS, and Edge Functions
+│   └── web/                  Reserved future Web client; no pages yet
+├── packages/                 Shared TypeScript packages for every app
+│   ├── contracts/            Cross-runtime API contracts
+│   ├── cloud-client/         Authenticated asset client
+│   ├── data-access/          Server-side data access
+│   └── object-store/         R2/COS object-store adapters
+├── infrastructure/           External cloud resource configuration
 ├── skills/                   All workflow skills
 │   ├── README.md             Skill index
 │   ├── n2d/ n2d-*            Comic-drama skills

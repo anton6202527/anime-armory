@@ -14,12 +14,14 @@ mv 系列自包含，不复用其它家族 skill；出图/出视频/合成都由
         [--visual-style 电影叙事] [--plan-granularity 标准] [--out <根>]
 """
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
 import re
 import shutil
 import sys
+import uuid
 from datetime import date
 
 
@@ -42,6 +44,14 @@ DEFAULT_STRUCTURE = "intro,verse1,pre-chorus,chorus,verse2,pre-chorus,chorus,bri
 def slug(s):
     s = re.sub(r"[^\w一-鿿-]+", "", (s or "").strip())
     return s or "新MV待定"
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def build_visual_blueprint(title, meta):
@@ -194,11 +204,16 @@ def main():
         os.makedirs(os.path.join(out_root, sub), exist_ok=True)
 
     has_song = False
+    source_song_rel = None
+    source_song_sha256 = None
     if args.song and os.path.exists(args.song):
         ext = os.path.splitext(args.song)[1] or ".wav"
         target = "song.wav" if ext.lower() == ".wav" else f"song{ext}"
-        shutil.copy(args.song, os.path.join(out_root, "歌", target))
+        imported_song = os.path.join(out_root, "歌", target)
+        shutil.copy(args.song, imported_song)
         has_song = True
+        source_song_rel = f"歌/{target}"
+        source_song_sha256 = sha256_file(imported_song)
         
         # Check for demucs vocals
         vocals_src = os.path.join(os.path.dirname(args.song), "_demucs", "vocals", "vocals.wav")
@@ -217,6 +232,8 @@ def main():
     meta = {
         "schema_version": 1,
         "kind": "mv",
+        "project_id": f"mv_{uuid.uuid4().hex[:16]}",
+        "line": "mv",
         "title": args.title,
         "target_platform": args.platform,
         "publish_target": publish_target,
@@ -238,7 +255,12 @@ def main():
         "subtitle_language": args.subtitle_language,
         "ai_visual_usage": args.ai_visual_usage,
         "song_rights_status": args.song_rights_status,
-        "source_song": os.path.abspath(args.song) if args.song else None,
+        "source_song": source_song_rel,
+        "source_song_origin": ({
+            "original_name": os.path.basename(args.song),
+            "imported_copy_rel": source_song_rel,
+            "sha256": source_song_sha256,
+        } if source_song_rel else None),
         "has_song": has_song,
         "has_lyrics": has_lyrics,
         "is_demo": args.use_case in {"短视频Hook", "歌曲Demo"},
@@ -264,6 +286,15 @@ def main():
     }
     with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
+    os.makedirs(os.path.join(out_root, "生产数据"), exist_ok=True)
+    with open(os.path.join(out_root, "生产数据", "artifact_catalog.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+            "generated_at": date.today().isoformat(),
+            "project": {"project_id": meta["project_id"], "line": "mv", "title": args.title, "root_rel": "."},
+            "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+            "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+        }, f, ensure_ascii=False, indent=2)
     write(os.path.join(out_root, "_设置.md"), contract.settings_markdown(args.title, settings))
     write(os.path.join(out_root, "视觉蓝图.md"), build_visual_blueprint(args.title, meta))
     write(os.path.join(out_root, "_进度.md"), build_progress(args.title, meta))

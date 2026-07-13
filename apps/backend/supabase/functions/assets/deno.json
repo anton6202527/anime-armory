@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["deno.ns", "dom", "dom.iterable", "esnext"]
+  },
+  "imports": {
+    "@anime-armory/contracts": "../../../../../packages/contracts/src/index.ts",
+    "@anime-armory/data-access": "../../../../../packages/data-access/src/index.ts",
+    "@anime-armory/object-store": "../../../../../packages/object-store/src/index.ts",
+    "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@3.1085.0",
+    "@aws-sdk/s3-request-presigner": "npm:@aws-sdk/s3-request-presigner@3.1085.0",
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.110.2"
+  },
+  "fmt": {
+    "lineWidth": 100,
+    "semiColons": false,
+    "singleQuote": true
+  }
+}

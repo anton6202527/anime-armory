@@ -36,6 +36,7 @@ import hashlib
 import json
 import os
 import re
+import uuid
 import sys
 import zipfile
 from pathlib import Path
@@ -671,6 +672,27 @@ def main():
                 print(f"[warn] 未找到含『创作区/制漫剧/』的仓库根，作品根回退到小说同级：{root}"
                       f"（建议用 --out 指定 创作区/制漫剧/<剧名>/）", file=sys.stderr)
     text = read_text(args.novel)
+    meta_path = os.path.join(root, "_meta.json")
+    if not os.path.exists(meta_path):
+        os.makedirs(root, exist_ok=True)
+        project_id = f"n2d_{uuid.uuid4().hex[:16]}"
+        with open(meta_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1, "kind": "n2d_project", "project_id": project_id,
+                "line": "n2d", "title": title, "created_at": _dt.date.today().isoformat(),
+            }, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        catalog_path = os.path.join(root, "生产数据", "artifact_catalog.json")
+        os.makedirs(os.path.dirname(catalog_path), exist_ok=True)
+        with open(catalog_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+                "generated_at": _dt.date.today().isoformat(),
+                "project": {"project_id": project_id, "line": "n2d", "title": title, "root_rel": "."},
+                "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+                "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+            }, f, ensure_ascii=False, indent=2)
+            f.write("\n")
     source_snapshot = write_source_snapshot(root, title, text)
     dev_pack = None
     if scaffold_development_pack is not None:

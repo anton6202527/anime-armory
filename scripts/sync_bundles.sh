@@ -12,7 +12,7 @@ Usage: scripts/sync_bundles.sh [--desktop-only|--vscode-only] [--demo|--demos]
 
 Synchronize bundled skill snapshots and 创作区 usage manuals into:
   - vscode-extension/assets/
-  - desktop-electron/resources/   (via tools/e2a/scripts/sync_bundle.cjs)
+  - apps/desktop/resources/   (via tools/e2a/scripts/sync_bundle.cjs)
 
 The destination directories are generated artifacts and are intentionally gitignored.
 VS Code also refreshes vscode-extension/创作区/使用手册.md files for the bundled seed work root.

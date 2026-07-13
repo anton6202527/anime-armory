@@ -27,6 +27,7 @@ def test_context_pack_collects_stage_files(tmp_path: Path):
     outputs = context_pack.write_pack(pack)
     assert Path(outputs["json"]).is_file()
     assert Path(outputs["markdown"]).is_file()
+    assert "生产数据/views/context_packs" in outputs["rel_markdown"]
 
 
 def test_script_stage1_does_not_require_midstart_pack_for_first_episode(tmp_path: Path):
@@ -63,6 +64,7 @@ def test_creative_loop_packet_declares_evaluator_optimizer(tmp_path: Path):
     assert any("template_contract" in rubric for item in packet["loop"] for rubric in item.get("rubric", []))
     outputs = creative_loop.write_packet(packet)
     assert Path(outputs["json"]).is_file()
+    assert "生产数据/views/creative_loops" in outputs["rel_markdown"]
 
 
 def test_script_stage2_context_and_loop_include_director_pack(tmp_path: Path):

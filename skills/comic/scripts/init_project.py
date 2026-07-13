@@ -12,6 +12,7 @@ import json
 import re
 import shutil
 import sys
+import uuid
 from datetime import date
 from pathlib import Path
 
@@ -333,6 +334,8 @@ def main() -> int:
     meta = {
         "schema_version": 1,
         "kind": "comic_project",
+        "project_id": f"comic_{uuid.uuid4().hex[:16]}",
+        "line": "comic",
         "title": title,
         "created": date.today().isoformat(),
         "mode": args.mode,
@@ -353,6 +356,13 @@ def main() -> int:
     write_if_absent(root / "排版" / "第1话" / "layout.json", json.dumps(layout_json(args), ensure_ascii=False, indent=2) + "\n")
     write_if_absent(root / "排版" / "第1话" / "lettering.json", json.dumps({"schema_version": 1, "kind": "comic_lettering", "chapter": "第1话", "items": []}, ensure_ascii=False, indent=2) + "\n")
     write_if_absent(root / "_meta.json", json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
+    write_if_absent(root / "生产数据" / "artifact_catalog.json", json.dumps({
+        "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+        "generated_at": date.today().isoformat(),
+        "project": {"project_id": meta["project_id"], "line": "comic", "title": title, "root_rel": "."},
+        "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+        "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+    }, ensure_ascii=False, indent=2) + "\n")
 
     print(f"\n[done] 画漫画项目已初始化：{root}")
     print("下一步：comic-script 补齐故事圣经、分话大纲和 panel_script.json。")

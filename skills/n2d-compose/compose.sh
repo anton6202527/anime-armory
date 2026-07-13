@@ -597,3 +597,8 @@ PY
 if [ "${N2D_UPDATE_PROGRESS:-1}" != "0" ]; then
   python3 "$SKILL_DIR/../n2d/progress.py" set "$ROOT" "$EP" 成片 ✅ || true
 fi
+
+# 缓存生命周期：始终刷新机器 manifest；只有 `_设置.md` 显式选择“成片后清理”或已到 7 天
+# 才自动删除 `_work` / `_clipcache`。持久 timeline/OTIO 已落 `生产数据/timelines/`，不在缓存内。
+python3 "$SKILL_DIR/scripts/cache_policy.py" auto "$ROOT" "$EP" \
+  || echo "⚠️ 合成缓存未自动清理：请运行 cache_policy.py doctor 查看安全阻断。"
