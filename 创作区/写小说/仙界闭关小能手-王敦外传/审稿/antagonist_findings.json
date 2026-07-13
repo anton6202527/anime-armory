@@ -1,7 +1,0 @@
-{
-  "ran": true,
-  "alerts": [],
-  "total": 0,
-  "blocking": 0,
-  "note": "registry 无任何角色被标为反派（role/阵营）——无法推断威胁，跳过 scaling 检测；如需检测请在 progression 快照或 roster 标 role=\"antagonist\"/\"反派\""
-}
