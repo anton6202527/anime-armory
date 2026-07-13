@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_styleid_release_signoff",
-  "version": 1,
-  "episode": "第1集",
-  "accepted": true,
-  "reviewer": "Codex",
-  "reason": "第1集当前进入共享定妆与试播出图验证，本机暂无可用 N2D_STYLEID_MODEL，临时接受 ArcFace 对风格化脸的一致性降级机检，并要求出图后提高近景角色镜与主角定妆的人审权重；正式投放或批量生产前必须补 StyleID 权重并重跑 full QC。",
-  "expires_at": "2026-07-14"
-}
