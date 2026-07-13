@@ -291,3 +291,55 @@ def test_scene_usage_maps_claims_to_scene_cards():
     assert usage["scene_ids"] == ["SC003-01"]
     assert usage["dramatic_use"] == "让护士阻止主角插队"
     assert os.path.exists(os.path.join(root, "资料", "research_scene_usage.json"))
+
+
+def test_pack_depth_gaps_flags_shallow_high_risk_pack():
+    # 只覆盖"诊断"一个子面的医疗包 → 报出用药/操作/法律边界缺口（建议级，不硬阻断）。
+    shallow = {
+        "topic": "心梗处置", "domain": "medical", "status": "ready", "risk_level": "high",
+        "sources": [{"id": "S1", "title": "t", "published_date": "2026-01-01",
+                     "reliability": "high",
+                     "evaluation": {a: "ok" for a in research_pack.SOURCE_EVALUATION_AXES}}],
+        "claims": [{"id": "F1", "claim": "心梗的症状与诊断", "source_ids": ["S1"],
+                    "confidence": "high", "applicable_chapters": "1-3"}],
+        "updated_at": "2026-07-01",
+    }
+    gaps = research_pack.pack_depth_gaps(shallow)
+    assert "用药/剂量" in gaps and "操作/流程" in gaps and "法律/伦理边界" in gaps
+    from pathlib import Path
+    findings = research_pack.validate_pack(Path("/tmp"), shallow)
+    depth = [f for f in findings if f["type"] == "pack_depth_insufficient"]
+    assert depth and depth[0]["severity"] == "建议级"
+
+
+def test_pack_depth_gaps_empty_when_all_subtopics_covered():
+    deep = {
+        "topic": "急救", "domain": "medical", "status": "ready",
+        "claims": [
+            {"id": "F1", "claim": "诊断与鉴别"},
+            {"id": "F2", "claim": "给药剂量与禁忌"},
+            {"id": "F3", "claim": "急救操作流程"},
+            {"id": "F4", "claim": "知情同意的法律边界"},
+        ],
+    }
+    assert research_pack.pack_depth_gaps(deep) == []
+
+
+def test_pack_depth_gaps_empty_for_unknown_domain():
+    assert research_pack.pack_depth_gaps({"domain": "自定义奇幻", "claims": [{"claim": "x"}]}) == []
+
+
+def test_scan_amateur_pitfalls_keyword_and_cooccurrence():
+    hits = research_pack.scan_amateur_pitfalls("唐朝将军吃辣椒炒肉。", {"history": ["历史"]})
+    assert any(h["evidence"] == "辣椒" and h["severity"] == "建议级" for h in hits)
+    assert research_pack.scan_amateur_pitfalls("民事纠纷法院下令逮捕。", {"legal": ["民事"]})
+    assert research_pack.scan_amateur_pitfalls("只是民事纠纷。", {"legal": ["民事"]}) == []
+
+
+def test_scan_unsupported_professional_details():
+    packs = [{"domain": "medical", "status": "ready", "claims": [{"claim": "心梗诊断要点"}]}]
+    out = research_pack.scan_unsupported_professional_details(
+        "医生用麻醉和ICU抢救，做出诊断。", packs, {"medical": ["麻醉", "ICU", "诊断"]})
+    assert out and "麻醉" in out[0]["evidence"] and "诊断" not in out[0]["evidence"]
+    assert research_pack.scan_unsupported_professional_details(
+        "麻醉。", [{"domain": "medical", "status": "draft"}], {"medical": ["麻醉"]}) == []

@@ -360,5 +360,49 @@ class StaleMarkingTest(unittest.TestCase):
             self.assertEqual(c04["stale_sources"].count(2), 1, "重复改写同一章不应重复记录 stale_sources")
 
 
+class FuzzyThreadAndConflictTest(unittest.TestCase):
+    def test_thread_similarity_matches_reworded_drops_unrelated(self):
+        self.assertGreaterEqual(
+            reconcile_ledger.thread_similarity("查明沈念身世", "沈念的身世之谜"), 0.5)
+        self.assertEqual(reconcile_ledger.thread_similarity("查明沈念身世", "反派的复仇计划"), 0.0)
+        # 同主语但不同事的近似串不应误判为同一线程
+        self.assertLess(reconcile_ledger.thread_similarity("沈念的剑", "沈念的伤"), 0.5)
+
+    def test_find_matching_thread_fuzzy_resolves_zombie(self):
+        ots = [{"chapter": 1, "thread": "沈念的身世之谜"},
+               {"chapter": 2, "thread": "反派的复仇计划"}]
+        self.assertEqual(reconcile_ledger.find_matching_thread(ots, "查明沈念身世"), 0)
+        self.assertIsNone(reconcile_ledger.find_matching_thread(ots, "全新且无关的线索"))
+
+    def test_merge_resolves_reworded_open_thread(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "审稿"))
+            reconcile_ledger.write_json(os.path.join(tmp, "审稿", "state_ledger.json"), {
+                "schema_version": 1, "kind": "novel_state_ledger",
+                "characters": {}, "setting_facts": [],
+                "open_threads": [{"chapter": 1, "thread": "沈念的身世之谜"}],
+                "resolved_threads": [], "chapter_deltas": {},
+            })
+            with open(os.path.join(tmp, "审稿", "state_delta_第05章.json"), "w", encoding="utf-8") as f:
+                json.dump({"chapter": 5, "threads_resolved": ["查明沈念身世"]}, f, ensure_ascii=False)
+            ok, msg = reconcile_ledger.merge_delta_to_ledger(tmp, 5, verification={"status": "ok"})
+            self.assertTrue(ok, msg)
+            ledger = json.load(open(os.path.join(tmp, "审稿", "state_ledger.json"), encoding="utf-8"))
+            self.assertEqual(ledger["open_threads"], [])  # 僵尸线程已消解
+            self.assertEqual(ledger["resolved_threads"][0]["match"], "fuzzy")
+
+    def test_merge_blocked_when_verification_reports_conflicts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "审稿"))
+            with open(os.path.join(tmp, "审稿", "state_delta_第03章.json"), "w", encoding="utf-8") as f:
+                json.dump({"chapter": 3, "new_facts": ["已死的角色又出现"]}, f, ensure_ascii=False)
+            ok, msg = reconcile_ledger.merge_delta_to_ledger(
+                tmp, 3, verification={"status": "ok",
+                                      "conflicts": [{"fact": "角色复活", "conflicts_with": "第2章死亡"}]})
+            self.assertFalse(ok)
+            self.assertIn("冲突", msg)
+            self.assertTrue(os.path.exists(os.path.join(tmp, "审稿", "ledger_conflicts.json")))
+
+
 if __name__ == "__main__":
     unittest.main()

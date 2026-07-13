@@ -341,6 +341,24 @@ def test_tension_fatigue_one_high_breaks_run():
     assert logic_sentry.scan_tension(led, "x", 10) == []
 
 
+def test_tension_fatigue_uses_fallback_curve_when_ledger_empty():
+    # 账本 curve 为空时，用 emotional_progression 兜底曲线激活塌陷检测（此前永久 no-op）。
+    fallback = [{"chapter": 8, "tension_score": 3}, {"chapter": 9, "tension_score": 2},
+                {"chapter": 10, "tension_score": 1}]
+    alerts = logic_sentry.scan_tension({}, "x", 10, fallback_curve=fallback)
+    assert any(a["type"] == "tension_fatigue" for a in alerts)
+
+
+def test_ledger_curve_wins_over_fallback():
+    # 账本自身有 curve 时不被兜底覆盖。
+    led = {"chapter_tension_curve": [{"chapter": 8, "tension_score": 9},
+                                     {"chapter": 9, "tension_score": 8},
+                                     {"chapter": 10, "tension_score": 9}]}
+    fallback = [{"chapter": 8, "tension_score": 1}, {"chapter": 9, "tension_score": 1},
+                {"chapter": 10, "tension_score": 1}]
+    assert logic_sentry.scan_tension(led, "x", 10, fallback_curve=fallback) == []
+
+
 # ── N4 角色护栏（底线/禁行）──
 
 def test_character_hard_limit_violation_blocks():

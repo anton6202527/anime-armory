@@ -262,8 +262,11 @@ def detect_relationship_breaks(graph, chapter_texts=None, total_chapters=None):
     return alerts
 
 
-def scan_tension(ledger, text, chapter_index):
-    """张力账本三规则（钩子过期=建议级 / 承诺违约=阻断级 / 张力疲劳=建议级）。纯函数·可测。"""
+def scan_tension(ledger, text, chapter_index, fallback_curve=None):
+    """张力账本三规则（钩子过期=建议级 / 承诺违约=阻断级 / 张力疲劳=建议级）。纯函数·可测。
+
+    fallback_curve：当张力账本自身的 chapter_tension_curve 为空时使用（通常来自
+    emotional_progression.json 的逐章 tension_score 实测回填）——否则张力疲劳检测永久 no-op。"""
     alerts = []
     ledger = ledger or {}
     # 1) 钩子过期：urgency=high 且 introduced 后超过 GAP 章仍未 resolved
@@ -298,6 +301,8 @@ def scan_tension(ledger, text, chapter_index):
             })
     # 3) 张力疲劳：截至本章的张力曲线末 RUN 章 score 全 < 阈值
     curve = [c for c in ledger.get("chapter_tension_curve", []) if isinstance(c, dict)]
+    if not curve and fallback_curve:
+        curve = [c for c in fallback_curve if isinstance(c, dict)]
     upto = sorted([c for c in curve if (c.get("chapter", 0) or 0) <= chapter_index],
                   key=lambda c: c.get("chapter", 0))
     if len(upto) >= TENSION_FATIGUE_RUN and upto[-1].get("chapter") == chapter_index:
@@ -621,11 +626,14 @@ def scan_chapter(wiki, text, chapter_index, project_root=None, numeric_anchors=N
         if matrix_data is not None:
             alerts.extend(scan_relationship_flips(matrix_data, text, chapter_index))
 
-    # 张力账本（钩子过期/承诺违约/张力疲劳）：情绪 ROI 不只追事实，也追读者承诺与节奏
+    # 张力账本（钩子过期/承诺违约/张力疲劳）：情绪 ROI 不只追事实，也追读者承诺与节奏。
+    # 张力疲劳需逐章张力曲线——tension_ledger 的 curve 常为空，用 emotional_progression.json
+    # 的实测 tension_score（tone_check --write-progression 回填）兜底，激活休眠的塌陷检测。
     if project_root:
         tension = _load_setting_json(project_root, "tension_ledger.json")
-        if tension is not None:
-            alerts.extend(scan_tension(tension, text, chapter_index))
+        fallback_curve = _tension_curve_from_progression(project_root)
+        if tension is not None or fallback_curve:
+            alerts.extend(scan_tension(tension or {}, text, chapter_index, fallback_curve=fallback_curve))
 
     # 角色护栏（底线/禁行）：把 CHIRON 式 richer character sheet 中最可机检的部分结构化。
     if project_root:
@@ -650,6 +658,20 @@ def _load_setting_json(project_root, filename):
             return json.load(f)
     except Exception:
         return None
+
+
+def _tension_curve_from_progression(project_root):
+    """从 emotional_progression.json 构造张力曲线兜底 [{chapter, tension_score}]。
+
+    只取有实测 tension_score（非 None）的章；无文件/无实测 → []。"""
+    emo = _load_setting_json(project_root, "emotional_progression.json")
+    if not isinstance(emo, dict):
+        return []
+    curve = []
+    for c in emo.get("chapters", []):
+        if isinstance(c, dict) and c.get("tension_score") is not None:
+            curve.append({"chapter": c.get("chapter"), "tension_score": c.get("tension_score")})
+    return curve
 
 
 def scan_structured_ledgers(project_root, chapter_index=None, include_world=None):

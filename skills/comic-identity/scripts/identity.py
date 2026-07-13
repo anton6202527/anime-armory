@@ -19,9 +19,9 @@ from typing import Any
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 REQUIRED_CHARACTER_VIEWS = ("front", "three_quarter", "side", "back", "face")
-# tier 分档必需视图（2026-07 标准审计·port 自 n2d 档位模式的漫画重实现，不跨线 import）：
+# tier 分档必需视图（2026-07 标准审计·参照同仓成熟生产线档位模式的漫画重实现，不跨线 import）：
 # 此前对所有角色一刀切要求全五视图——named_minimal 短线具名角色也被逼出侧/背，过度要求；
-# n2d 的实践是档位只控生产深度、不改 DNA 真值归属。档位取 library_tier/tier（与 library.py
+# 源模式的实践是档位只控生产深度、不改 DNA 真值归属。档位取 library_tier/tier（与 library.py
 # default_tier 同源）；未标档按全五视图保守处理（宁多不漏，与"长线连载默认"一致）。
 TIER_REQUIRED_VIEWS: dict[str, tuple[str, ...]] = {
     "core_full": ("front", "three_quarter", "side", "back", "face"),

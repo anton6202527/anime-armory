@@ -59,6 +59,13 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 - 歧义点已处理，`ambiguity_reviewed=true`。
 - `panel_script.json` 中的每格能追溯到源摘录、中文释义、目标嵌字文本和改编取舍说明。
 
+## 系列级开发与机检（2026-07 落地·参照同仓成熟生产线已验证模式的漫画重实现）
+
+- **开发包（长篇源本改编建议先跑）**：`python3 skills/comic-script/scripts/development_pack.py <作品根> scaffold --write` 生成 `开发包/adaptation_strategy.json`（改编边界+**爽点承诺账/因果链主干/伏笔账**——补 source_semantics 只管语言归一化、不管理解的缺口）、`开发包/season_arc.json`（前 3-5 话追更弧）、`脚本/split_blueprint.json`（**全书拆分蓝图**：候选话次边界账。实证空档：10 回只拆 1 回、无蓝图导致第 2 话断供）。内容填完置 `confirmed` 后，由 reviewer 在 `开发包/signoff.json` 对三件套 SHA 签收（`check --strict` 校验缺件/占位/签收过期；脚本只 scaffold 不自我签收）。
+- **分话节拍机检（report-only 起步·gate image_preflight 自动跑）**：`chapter_beat_audit.py <作品根> 第N话 --write` 查首格开场钩/末格结尾钩（must 级：条漫每话绝不平收）/高潮位 ~2/3 处/格数带/全书拆分蓝图缺失。
+- **伏笔种下→兑现跨话账本（SP1·report-only 起步·gate image_preflight 自动跑）**：`development_pack.foreshadowing_ledger` 是立项期一次性静态清单，逐话写完分格后无人回头核对「这坑第几话兑现、有没有忘、兑现有没有早于种下」。条漫是长线连载，实证空档正是「后续话次断供」（伏笔埋了不收=追更动力流失）。`setup_payoff_ledger.py <作品根> 第N话 --write` 从故事面文本（台词/旁白/音效·不扫 art_notes craft 术语）按**显式悬念标记**捞 `open` 坑（进 gate）、按**挖坑句式**捞 `candidate` 弱信号（只提示），并把 development_pack 手填坑作**种子**合入 `设定库/setup_payoff_ledger.json`（不覆盖已填 payoff_chapter）。逐话审 `setup_unlogged/payoff_unfilled/payoff_overdue/payoff_before_setup`。`--all` 刷全书账本；`--strict` 本话 must 级 exit 1（想开硬闸时用）。SP1 与 `source_semantics`（语言归一）、`visual_contract`（视觉状态跨格）、`chapter_beat_audit`（单话节拍）正交——它管**叙事坑跨话**。
+- **分话量化基准（2026-07 实搜·置信度标注）**：每话 **20-60 格**（快看官方成稿门槛 ≥20 格·官方投稿页实抓=高置信；商业周更常态 40-60=从业者口径·中）；拆话参照 ≈1.5 章网文/话 或 3000 字→30-60 格（中·两说冲突取带宽）；气泡 ≤2 行、字号 14-18px@800px 画布（中）；作业画布 1500-2500px 高分作业→按目标平台导出（快看 1280px 宽/腾讯 1200-2500px 仅 PNG/WEBTOON 800×1280 切片=官方口径·高）。这些进 `_设置.md`/`目标平台` profile 校验，不写死在脚本。
+
 ## 分格规则
 
 - 每格只承担一个主要阅读动作：揭示、反应、动作、转折、信息或留白。

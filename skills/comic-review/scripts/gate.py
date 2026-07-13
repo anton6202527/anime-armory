@@ -1070,6 +1070,7 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
     check_style_contract(root, findings)
     check_consistency_strategy_support(root, findings)
     run_script_advisory_audits(root, chapter, findings, notes)
+    run_reference_plan_advisory(root, chapter, findings, notes)
 
 
 def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
@@ -1083,6 +1084,7 @@ def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str
     here = Path(__file__).resolve().parent
     audits = [
         ("chapter_beat_audit", here.parent.parent / "comic-script" / "scripts" / "chapter_beat_audit.py"),
+        ("setup_payoff_ledger", here.parent.parent / "comic-script" / "scripts" / "setup_payoff_ledger.py"),
         ("redundancy_audit", here / "redundancy_audit.py"),
     ]
     for name, script in audits:
@@ -1134,6 +1136,68 @@ def run_panel_variety_advisory(root: Path, chapter: str, findings: list[dict[str
             "换景别/机位/前景遮挡重出其一，或回 comic-script 合并格。")
     s = payload.get("summary") or {}
     notes.append(f"panel_variety: panels={s.get('panels')} 近重复对={s.get('duplicate_pairs')}（advisory·不阻断）")
+
+
+def run_reference_plan_advisory(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """出图前·逐格参考事前处方（2026-07·治跨话脸漂根因·advisory 不阻断）。
+
+    identity report 是事后（已出图量漂移），reference_planner 是事前（按本格变化量×后端能力开参考处方），
+    治"服装/表情/景别变化时单张定妆照不够→模型重画整张脸"的根因。缺口/升档以 warn/info 并入，不制造假 block。
+    脚本缺失/异常留 note 不拦。"""
+    import subprocess
+    script = SKILLS_ROOT / "comic-image" / "scripts" / "reference_planner.py"
+    if not script.is_file():
+        notes.append("reference_planner 脚本缺失，参考事前处方跳过")
+        return
+    try:
+        proc = subprocess.run([sys.executable, str(script), str(root), chapter, "--write", "--json"],
+                              capture_output=True, text=True, timeout=120)
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+    except Exception as exc:
+        notes.append(f"reference_planner 运行失败（{exc}），参考事前处方跳过")
+        return
+    for item in payload.get("findings") or []:
+        sev = str(item.get("severity") or "warn")
+        add(findings,
+            "warn" if sev == "warn" else "info",
+            str(item.get("code") or "reference_plan"),
+            f"生产数据/comic_reference_plan_{chapter}.json",
+            str(item.get("message") or ""),
+            "identity",
+            "按处方补该角色缺的视图/表情/服装参考并重建出图包，或按升档建议补专门定妆/换持久主体后端。")
+    s = payload.get("summary") or {}
+    notes.append(f"reference_planner: 含角色格 {s.get('panels_with_characters')} 需处理 "
+                 f"{s.get('panels_needing_action')}（advisory·不阻断）")
+
+
+def run_drift_report_advisory(root: Path, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    """审查阶段·跨话角色漂移汇总（2026-07·治"靠人脑记第几话开始崩"·advisory 不阻断）。
+
+    汇总各话 character_consistency 报告成逐角色×逐话时间线，标 first_bad_chapter 与跨话反复漂移。
+    单话 gate 看不见跨话累积（Gap-Decay），这里补上。block/跨话反复漂移以 info 透出（不新增阻断，
+    单话该拦的漂移已由 character_consistency 在 image 阶段拦过）。脚本缺失/异常留 note 不拦。"""
+    import subprocess
+    script = SKILLS_ROOT / "comic-identity" / "scripts" / "drift_report.py"
+    if not script.is_file():
+        notes.append("drift_report 脚本缺失，跨话漂移汇总跳过")
+        return
+    try:
+        proc = subprocess.run([sys.executable, str(script), str(root), "--write", "--json"],
+                              capture_output=True, text=True, timeout=120)
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+    except Exception as exc:
+        notes.append(f"drift_report 运行失败（{exc}），跨话漂移汇总跳过")
+        return
+    for row in payload.get("characters") or []:
+        if row.get("recommendation") and (row.get("warn_or_block_chapters") or row.get("block_chapters")):
+            add(findings, "info", "cross_chapter_drift",
+                "生产数据/comic_identity_drift_report.json",
+                f"{row['char_id']} 首崩 {row.get('first_bad_chapter')}：{row['recommendation']}",
+                "identity",
+                "看 comic_identity_drift_report 决定补参考/补服装/补专门定妆或换后端。")
+    s = payload.get("summary") or {}
+    notes.append(f"drift_report: 追踪 {s.get('characters_tracked')} 角色 · 有漂移 "
+                 f"{s.get('characters_with_drift')}（跨话汇总·advisory）")
 
 
 def check_consistency_strategy_support(root: Path, findings: list[dict[str, Any]]) -> None:
@@ -1193,6 +1257,7 @@ def run_review(root: Path, chapter: str, findings: list[dict[str, Any]], notes: 
         return
     report = review_module.review(root, chapter, refresh_qa_preview=True)
     notes.append("comic-review report refreshed in review gate")
+    run_drift_report_advisory(root, findings, notes)
     for issue in report.get("issues") or []:
         add(
             findings,

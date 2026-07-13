@@ -61,6 +61,7 @@ python3 skills/novel-aesthetic/scripts/aesthetic_bank.py prompt "<作品根>" \
 - `prose`：句式、意象、叙述距离、留白。
 - `structure`：反转、伏笔、弧段配速。
 - `theme`：题旨如何通过选择和后果出现，而不是靠说教。
+- `novelty` / `surprise` / `premise`（**新颖度信号源**）：这段/这个前提**新在哪、违背了什么读者惯例、为什么让人意外但服气**。登记时建议同时填 `--why-it-is-new`。这三维让审美库不只当"工艺正向标尺"，也当创意正向信号源：`draft_packets.py` 装配写章包时会**优先注入** novelty 维度样本（至多 2 条，标 🌟），并显示 `why_it_is_new`，让登记的想象力样本真正到达写作端；`novel-score` ⑧ novelty 维度也可引用。
 
 ## 与其它 skill 的联动
 

@@ -1554,6 +1554,58 @@ def test_shared_scene_resident_beast_keeps_registered_species_and_topology() -> 
     assert "BEAST_01/实体_重伤复活" in guards
     assert "尸体/倒地状态只改变姿势" in guards
     assert "禁止把虎头人身妖物改成四足普通虎" in guards
+    assert "共享角色正面主母本" not in guards
+    assert "共享角色定妆使用统一规格" not in guards
+    assert "武器入体/接触点铁律" not in guards
+    assert "镜头为旁观者视角" not in guards
+    assert "生产级场景主母本" in codex_image_runner.shared_variant_note(target.rel_path)
+
+
+def test_faceless_shared_scene_still_attaches_explicit_resident_beast_identity(tmp_path: Path) -> None:
+    beast_rel = "出图/共享/图片/定妆_BEAST_01__实体_重伤复活.png"
+    write_valid_png(tmp_path / beast_rel)
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True, exist_ok=True)
+    (shared / "identity_registry.json").write_text(
+        json.dumps({"characters": [{
+            "id": "BEAST_01",
+            "forms": [{
+                "form": "实体_重伤复活",
+                "reference_group": {"front": {"path": beast_rel, "status": "ready"}},
+            }],
+        }]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (shared / "asset_registry.json").write_text(
+        json.dumps({"assets": [{
+            "id": "LOC_01",
+            "type": "scene",
+            "face_policy": "faceless",
+            "reference_group": {},
+        }]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    section = codex_image_runner.ClipSection(
+        "LOC_01",
+        "## LOC_01",
+        "常驻物件：`BEAST_01/实体_重伤复活`（虎头人身尸体）。",
+        "",
+    )
+    target = codex_image_runner.Target(
+        "LOC_01::定妆_场景_夕照荒野尸场",
+        "LOC_01",
+        "shared",
+        "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+        section,
+    )
+    target.aliases = {"LOC_01", "BEAST_01/实体_重伤复活"}
+
+    bundle = codex_image_runner.reference_bundle_for_target(tmp_path, "第1集", target)
+
+    character = next(item for item in bundle["items"] if item["kind"] == "character")
+    assert character["id"] == "BEAST_01"
+    assert character["form"] == "实体_重伤复活"
+    assert character["paths"] == [beast_rel]
 
 
 def test_shared_first_interlock_blocks_review_failed_asset_reference(tmp_path: Path) -> None:

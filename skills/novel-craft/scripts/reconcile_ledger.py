@@ -32,6 +32,48 @@ def write_json(path, payload):
     atomic_write_json(path, payload)
 
 
+# 线程回收模糊匹配：delta 写「查明沈念身世」而 open_thread 存「沈念的身世之谜」时，
+# 精确串等匹配失败 → 原 open_thread 永不消除，变僵尸未收线程，污染检索 query 与 arc 快照。
+# 用 CJK bigram Jaccard 做归一化匹配（阈值 0.5），把"同一条线程的不同措辞"判为同一条。
+THREAD_MATCH_THRESHOLD = 0.5
+# 归一化前剥离的功能词/标点：中文虚词让"同一条线程的不同措辞"bigram 交集虚低
+# （「查明沈念身世」vs「沈念的身世之谜」剥掉 的/之 后共享 沈念/念身/身世，Jaccard 0.22→0.5）。
+_THREAD_STOP = set("的地得了着过之其с与和跟同以为在是有个被把将对于与和，。、；：！？…—·「」“”（）()")
+
+
+def _normalize_thread(text):
+    return "".join(ch for ch in re.sub(r"\s", "", str(text or "")) if ch not in _THREAD_STOP)
+
+
+def _cjk_bigrams(text):
+    s = _normalize_thread(text)
+    return {s[i:i + 2] for i in range(len(s) - 1)} if len(s) >= 2 else ({s} if s else set())
+
+
+def thread_similarity(a, b):
+    """两条线程描述的（剥虚词后）bigram Jaccard 相似度（0-1）。精确相等直接 1.0。纯函数。"""
+    a, b = str(a or "").strip(), str(b or "").strip()
+    if not a or not b:
+        return 0.0
+    if a == b:
+        return 1.0
+    ga, gb = _cjk_bigrams(a), _cjk_bigrams(b)
+    if not ga or not gb:
+        return 0.0
+    inter = len(ga & gb)
+    return inter / len(ga | gb) if inter else 0.0
+
+
+def find_matching_thread(open_threads, thread, threshold=THREAD_MATCH_THRESHOLD):
+    """在 open_threads 里找与 thread 最相似且过阈值的一条，返回其索引；无 → None。"""
+    best_i, best_sim = None, threshold
+    for i, ot in enumerate(open_threads):
+        sim = thread_similarity(ot.get("thread"), thread)
+        if sim >= best_sim:
+            best_i, best_sim = i, sim
+    return best_i
+
+
 def get_delta_path(root, chapter):
     return os.path.join(root, "审稿", f"state_delta_第{chapter:02d}章.json")
 
@@ -158,8 +200,13 @@ def audit_delta_with_content(root, chapter, content):
   "status": "ok",
   "chapter_file_hash": "{hashes['chapter_file_hash']}",
   "delta_hash": "{hashes['delta_hash']}",
+  "conflicts": [],
   "notes": "具体差异；若无差异写明 delta 与正文一致"
 }}
+
+如第 3 项发现正文/Delta 与 Master Ledger 既有约束**矛盾**（如已死角色再行动、能力代价被推翻、
+设定自相矛盾），把每处冲突写进 `conflicts` 数组（如 `[{{"fact":"...","conflicts_with":"...","chapter":N}}]`）。
+`conflicts` 非空时 status 不应为 ok——合并会被拒绝并落 `审稿/ledger_conflicts.json`，先解决冲突再对账。
 """
     return True, prompt
 
@@ -170,6 +217,23 @@ def merge_delta_to_ledger(root, chapter, verification=None):
     delta = load_json(delta_path)
     if not delta:
         return False, f"找不到增量文件：{delta_path}"
+
+    # 冲突拦截：audit prompt 让 LLM 查一致性冲突，但此前 merge 只看 status=ok、从不读冲突结论，
+    # 矛盾事实照单全收。若 verification 报了非空 conflicts，拒绝合并并落 审稿/ledger_conflicts.json，
+    # 逼作者先解决冲突（而不是把矛盾事实写进 canonical 账本）。
+    conflicts = (verification or {}).get("conflicts")
+    if isinstance(conflicts, list) and conflicts:
+        conflict_path = os.path.join(root, "审稿", "ledger_conflicts.json")
+        os.makedirs(os.path.dirname(conflict_path), exist_ok=True)
+        write_json(conflict_path, {
+            "schema_version": 1,
+            "kind": "novel_ledger_conflicts",
+            "chapter": chapter,
+            "recorded_at": date.today().isoformat(),
+            "conflicts": conflicts,
+        })
+        return False, (f"核对结论报告了 {len(conflicts)} 处一致性冲突，已落 审稿/ledger_conflicts.json；"
+                       "先解决冲突（改正文或 delta）再重新对账合并，避免矛盾事实进 canonical 账本。")
 
     with file_lock(get_ledger_lock_path(root)):
         ledger = load_json(ledger_path)
@@ -215,14 +279,16 @@ def merge_delta_to_ledger(root, chapter, verification=None):
             ledger["open_threads"].append({"chapter": chapter, "thread": thread})
 
         for thread in delta.get("threads_resolved", []):
-            found = False
-            for i, ot in enumerate(ledger["open_threads"]):
-                if ot["thread"] == thread:
-                    ledger["open_threads"].pop(i)
-                    ledger["resolved_threads"].append({"chapter": chapter, "thread": thread})
-                    found = True
-                    break
-            if not found:
+            idx = find_matching_thread(ledger["open_threads"], thread)
+            if idx is not None:
+                matched = ledger["open_threads"].pop(idx)
+                entry = {"chapter": chapter, "thread": thread}
+                # 措辞不同但判为同一条时留痕，便于回溯是模糊匹配消解的
+                if str(matched.get("thread")).strip() != str(thread).strip():
+                    entry["matched_open_thread"] = matched.get("thread")
+                    entry["match"] = "fuzzy"
+                ledger["resolved_threads"].append(entry)
+            else:
                 ledger["resolved_threads"].append({"chapter": chapter, "thread": thread, "note": "direct resolve"})
 
         ledger["chapter_deltas"][c_key] = {

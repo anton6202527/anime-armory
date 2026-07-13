@@ -22,9 +22,11 @@ SCORE 研究把"情绪一致性"当核心指标，本检测器补上这一环。
 测试：cd skills/novel-review/scripts && python3 -m pytest test_tone_check.py
 """
 import os
+import re
 import sys
 import json
 import argparse
+from datetime import date
 
 # ── 规范情绪集 + 中文关键词词库 ────────────────────────────────────────────
 # 每个规范情绪挂一串中文触发词（子串匹配，计数即票数）。词库刻意保守、互斥度高，
@@ -81,6 +83,27 @@ def emotion_scores(text, lexicon=None):
         if cnt > 0:
             scores[emo] = cnt
     return scores
+
+
+# 高唤醒情绪：算张力分时计入（温情/悲伤/好奇属低唤醒或中性，不计张力）
+TENSION_EMOTIONS = ("紧张", "恐惧", "愤怒")
+
+
+def tension_score(text, lexicon=None):
+    """0-10 张力分：高唤醒情绪信号密度 + 急促节奏标点，归一到 0-10。纯函数。
+
+    空正文 → None（缺信号优雅放过）；真正平淡的章返回 0.0（这是有效测量，供 logic_sentry
+    的"连续 N 章张力塌陷"检测用，不能当缺失）。命中权重高于标点，避免纯排版拉高张力。
+    """
+    if not text or not text.strip():
+        return None
+    scores = emotion_scores(text, lexicon=lexicon)
+    hits = sum(scores.get(e, 0) for e in TENSION_EMOTIONS)
+    punct = (text.count("！") + text.count("!") + text.count("？") + text.count("?")
+             + text.count("——") + text.count("…"))
+    chars = max(1, len(re.sub(r"\s", "", text)))
+    density = (hits * 2 + punct) / chars * 1000.0
+    return round(min(10.0, density), 1)
 
 
 def dominant_emotion(text, lexicon=None):
@@ -241,6 +264,7 @@ def analyze(project):
             "target": target,
             "target_label": target_label,
             "realized": realized,
+            "tension_score": tension_score(text),
             "band": band,
         })
         if band == "warn":
@@ -259,11 +283,66 @@ def analyze(project):
     return {"ran": True, "alerts": alerts, "chapters": chapters}
 
 
+def measure_chapters(project):
+    """逐章确定性实测 (dominant_emotion, tension_score)，不依赖 tone_curve。纯读。"""
+    rows = []
+    for idx, text in _list_chapters(project):
+        rows.append({
+            "chapter": idx,
+            "dominant_emotion": dominant_emotion(text),
+            "tension_score": tension_score(text),
+        })
+    return rows
+
+
+def write_progression(project):
+    """把逐章实测的 dominant_emotion / tension_score 回填 设定/emotional_progression.json。
+
+    此前该文件由 arc_memory.scaffold 建成空壳（dominant_emotion=""、tension_score=None），
+    仓库内无任何脚本回填 → logic_sentry 的"张力塌陷"检测永久 no-op。这里把 tone_check 已能算的
+    情绪/张力接到存储上：**只覆盖这两个确定性字段并标 auto_measured**，保留人工字段
+    （reader_promise_progress / next_emotional_debt）。返回写入的章数。"""
+    emo_path = os.path.join(project, "设定", "emotional_progression.json")
+    try:
+        with open(emo_path, encoding="utf-8") as f:
+            emo = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        emo = {}
+    if emo.get("kind") != "novel_emotional_progression":
+        emo = {"schema_version": 1, "kind": "novel_emotional_progression", "chapters": []}
+    by_ch = {int(c.get("chapter") or 0): c for c in emo.get("chapters", []) if isinstance(c, dict)}
+    measured = measure_chapters(project)
+    for row in measured:
+        ch = int(row["chapter"])
+        node = by_ch.get(ch)
+        if node is None:
+            node = {"chapter": ch, "reader_promise_progress": "", "next_emotional_debt": ""}
+            by_ch[ch] = node
+        node["dominant_emotion"] = row["dominant_emotion"] or ""
+        node["tension_score"] = row["tension_score"]
+        node["auto_measured"] = True
+    emo["chapters"] = [by_ch[k] for k in sorted(by_ch)]
+    emo["updated_at"] = date.today().isoformat()
+    os.makedirs(os.path.dirname(emo_path), exist_ok=True)
+    tmp = emo_path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(emo, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, emo_path)
+    return len(measured)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="情绪曲线对账：实测章节主导情绪 vs tone_curve 目标弧线")
     p.add_argument("project_path")
     p.add_argument("--json", action="store_true", help="把结果 JSON 打到 stdout")
+    p.add_argument("--write-progression", action="store_true",
+                   help="把逐章实测 dominant_emotion/tension_score 回填 设定/emotional_progression.json（激活 logic_sentry 张力塌陷检测）")
     args = p.parse_args(argv)
+
+    if args.write_progression:
+        n = write_progression(args.project_path)
+        print(f"✅ 已回填情绪/张力实测到 设定/emotional_progression.json（{n} 章）")
+        return 0
 
     result = analyze(args.project_path)
 

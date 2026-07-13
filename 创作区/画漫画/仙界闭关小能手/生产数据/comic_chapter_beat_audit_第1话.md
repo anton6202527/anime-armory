@@ -1,0 +1,7 @@
+# 分话节拍机检 · 第1话
+
+- 格 18 · must 0 · warn 3 · info 0
+
+- ⚠️ `missing_opening_hook` 首格 story_function=opening_pressure，不是开场钩类（opening_hook/cold_open）——条漫首屏决定点开率，第一格就要给读者停下的理由。
+- ⚠️ `panel_count_below_platform_floor` 本话仅 18 格 < 20（快看官方成稿门槛 ≥20 格·2026-07 官方投稿页）——投稿平台会拒收；确认是有意的短话或补格。
+- ⚠️ `split_blueprint_missing` 缺 脚本/split_blueprint.json 全书拆分蓝图——拆分只覆盖眼前话次，后续话次会断供（实证：第 2 话曾因此卡死）。先按『冲突→爽点/揭示→钩子』闭环把全书粗切成候选话次边界账（每话记 source_range/核心冲突/结尾钩子候选/预计格数），再逐话精修。

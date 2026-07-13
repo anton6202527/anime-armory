@@ -130,3 +130,9 @@ python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --ch
 - 不直接重写脚本或重出图。
 - 不用主观“好看/不好看”当硬阻断；阻断要落到可定位的阅读、画面、文字、导出或合规问题。
 - 不把草稿字体授权当正式发布授权。
+
+## 冗余/节拍/构图重复 advisory 机检（2026-07 落地）
+
+- `image_preflight` gate 自动跑两个编剧层机检（advisory·warn 并入 gate，不阻断付费）：`comic-script/scripts/chapter_beat_audit.py`（首格钩/末格钩/高潮位/格数带/全书拆分蓝图）与本目录 `redundancy_audit.py`（台词同义反复 char-2gram Jaccard≥0.6、同一事实短语 ≥3 格复现、**纯旁白格占比 >50%**=旁白硬转流水账、(场景×角色×景别) 构图重复计划）。实证：金瓶梅第 1 话纯旁白格 78% 被命中。
+- `image` gate 自动跑 `panel_variety.py`：本话全部面板两两 64 位 dHash，非相邻格距离 ≤8 记 `near_duplicate_panels` warn（相邻格微差 ≤4 豁免——连续动作合法）。这是"太相似=重复"的反向告警，补此前一致性机检只抓"太不同=漂移"的盲区。
+- **一致性阈值自标定（character_consistency）**：CCIP 有效阈值 = max(公开 0.178, 本角色定妆组内最大互距)（封顶 0.32·env `COMIC_CCIP_CALIBRATED_CAP`）；face/hair/outfit 色彩指纹地板按定妆组内最差同人对放宽（下限 0.25）。治"固定阈值跨画风必假红"；findings 里 `threshold_source=self_calibrated` 留痕，公开阈值字段保留供审计对照。

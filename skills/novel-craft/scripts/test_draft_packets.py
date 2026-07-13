@@ -383,6 +383,23 @@ class DraftPacketsTest(unittest.TestCase):
             self.assertIn("先写行动中的人", text)
             self.assertIn("用一个带羞耻感的动作", text)
 
+    def test_novelty_sample_prioritized_even_when_not_first(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "设定"))
+            samples = [{"sample_id": f"AES-{i}", "source_title": f"工艺{i}",
+                        "dimensions": ["prose"], "why_it_works": "x", "transfer_rule": "y"}
+                       for i in range(5)]
+            samples.append({"sample_id": "AES-NOV", "source_title": "新颖样本",
+                            "dimensions": ["novelty"], "why_it_works": "设定新",
+                            "why_it_is_new": "把金手指设成诅咒", "transfer_rule": "代价先行"})
+            with open(os.path.join(tmp, "设定", "aesthetic_bank.json"), "w", encoding="utf-8") as f:
+                json.dump({"kind": "novel_aesthetic_bank", "samples": samples}, f, ensure_ascii=False)
+            sec, _refs = dp.aesthetic_bank_section(tmp)
+            self.assertIn("AES-NOV", sec)          # 第6个样本仍被优先注入
+            self.assertIn("🌟新颖度样本", sec)
+            self.assertIn("把金手指设成诅咒", sec)  # why_it_is_new 渲染
+
     def test_reveal_confrontation_relationship_checklists_are_injected(self):
         with tempfile.TemporaryDirectory() as tmp:
             make_project(tmp)
@@ -635,6 +652,54 @@ class DraftPacketsTest(unittest.TestCase):
                 for path in must_not_have:
                     self.assertNotIn(f"`{path}`", got.stdout)
                 self.assertIn("python3 skills/novel-review/scripts/mechanical_check.py", got.stdout)
+
+
+class RecentSeamAndForeshadowTest(unittest.TestCase):
+    def _project(self, tmp, chapters):
+        os.makedirs(os.path.join(tmp, "章节"), exist_ok=True)
+        os.makedirs(os.path.join(tmp, "设定"), exist_ok=True)
+        for i in range(1, chapters + 1):
+            with open(os.path.join(tmp, "章节", f"第{i:02d}章.md"), "w", encoding="utf-8") as f:
+                f.write(f"# 第{i}章\n" + f"第{i}章结尾发生关键事件{i}。" * 30)
+
+    def test_recent_chapters_excerpt_covers_n_minus_2_and_3(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 6)
+            ex = dp.recent_chapters_excerpt(tmp, 6)
+            self.assertIn("第05章", ex)   # N-1 全尾
+            self.assertIn("第04章", ex)   # N-2 短尾（此前是黑洞）
+            self.assertIn("第03章", ex)   # N-3 短尾
+            self.assertNotIn("第02章", ex)  # near=3 之外不注入
+
+    def test_foreshadow_ledger_injected_due_and_overdue(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 10)
+            json.dump({"kind": "novel_foreshadowing_ledger", "seeds": [
+                {"id": "SEED_001", "description": "半块断剑", "status": "pending",
+                 "confirmed": True, "expected_payoff_chapter": 8, "importance": "high",
+                 "linked_entities": ["沈念", "断剑"]},
+                {"id": "SEED_002", "description": "旧账早该收", "status": "pending",
+                 "confirmed": True, "expected_payoff_chapter": 2, "importance": "medium"},
+                {"id": "SEED_003", "description": "未确认候选", "status": "pending",
+                 "confirmed": False, "expected_payoff_chapter": 10},
+                {"id": "SEED_004", "description": "已回收", "status": "resolved",
+                 "confirmed": True, "expected_payoff_chapter": 9},
+            ]}, open(os.path.join(tmp, "设定", "foreshadowing_ledger.json"), "w", encoding="utf-8"),
+                ensure_ascii=False)
+            sec = dp.foreshadow_section_for_chapter(tmp, 10)
+            self.assertIn("SEED_001", sec)          # 预期第8章±5 覆盖第10章 → due
+            self.assertIn("SEED_002", sec)          # 第10 > 2+5 → overdue
+            self.assertIn("超期", sec)
+            self.assertNotIn("SEED_003", sec)       # 未确认不注入
+            self.assertNotIn("SEED_004", sec)       # 已回收不注入
+
+    def test_foreshadow_section_empty_without_ledger(self):
+        import draft_packets as dp
+        with tempfile.TemporaryDirectory() as tmp:
+            self._project(tmp, 3)
+            self.assertEqual(dp.foreshadow_section_for_chapter(tmp, 3), "")
 
 
 if __name__ == "__main__":

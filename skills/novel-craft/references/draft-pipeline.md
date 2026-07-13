@@ -63,6 +63,11 @@ python3 skills/novel-craft/scripts/arc_memory.py scaffold "<作品根>" --arc 1-
 
 脚本只建骨架和证据片段；`plot_summary` / `character_changes` / `carry_forward` / 情绪债务由 AI/人工补完。后续 `draft_packets.py` 会把当前章命中的 arc 摘要注入任务包，补固定前文窗口够不着的长程记忆。
 
+**逐章任务包的近程/长程衔接注入**（`draft_packets.build_packet` 装配，全部只读不改上游）：
+- **近章承接**：`recent_chapters_excerpt` 给 N-1 末尾 1800 字 + N-2/N-3 各末尾 ~400 字尾段。补上"检索刻意排除近 3 章、上一章又只取 N-1"造成的 N-2/N-3 上下文黑洞（刚立的 flag/刚受的伤在写下一章时看得见）。
+- **长程检索**：跨窗口 BM25 在近 3 章之外召回相关旧章（`k`/`window` 随书长自适应，`min_score` 阈值滤噪；query 富化并入未收线程/伏笔/在场角色**及其别名**，缓解纯字面召不回同义改写）。
+- **伏笔回收提醒**：`foreshadow_section_for_chapter` 读 `设定/foreshadowing_ledger.json`，注入预期回收窗口覆盖本章的 pending 伏笔（该收）与已超期伏笔（补收或显式 drop）——让 AI 写章时就看得见坑，不必等 scan 事后报烂尾。
+
 `draft_queue.py` 同样会在这些项目里初始化 `workflow=trio`，按 pass 认领和标记：
 
 ```bash

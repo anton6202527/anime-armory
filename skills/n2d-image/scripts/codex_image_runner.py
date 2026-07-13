@@ -518,6 +518,12 @@ def shared_variant_note(rel_path: str) -> str:
             "画面必须是肩颈以上到胸口以内的近景，脸部占画面 30%-50%，眼鼻嘴三角区清晰，"
             "不得画成全身/远景/多人构图，脸部不可换人。"
         )
+    if "定妆_场景_" in stem:
+        return (
+            "本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；"
+            "不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，"
+            "仅把该主体作为场景连续性地标，严格继承其身份附件"
+        )
     return "本次目标是共享主参考图：中性档案，不带剧情戏剧动作，锁身份/场景/道具/特效基准；人物全身/标准立绘必须头到鞋靴完整可见，半身/脸部特写目标除外。"
 
 
@@ -982,7 +988,7 @@ def _reference_relevant_text(body: str) -> str:
         if in_reference_block:
             lines.append(line)
             continue
-        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "身份注册", "成长派生", "资产引用注册层", "生成方式", "常驻主体", "常驻角色")):
+        if any(marker in line for marker in ("资产身份注册层", "身份注册层", "身份注册", "成长派生", "资产引用注册层", "生成方式", "常驻主体", "常驻角色", "常驻物件")):
             lines.append(line)
     return "\n".join(lines)
 
@@ -1367,7 +1373,14 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
                 asset_refs.add(text)
     identity = load_json_file(root / "出图" / "共享" / "identity_registry.json")
     assets = load_json_file(root / "出图" / "共享" / "asset_registry.json")
-    if target.mode == "shared" and any(
+    target_aliases = {str(item).strip() for item in (getattr(target, "aliases", set()) or set())}
+    resident_scene_identity = bool(
+        target.mode == "shared"
+        and char_refs
+        and any(value.startswith("LOC_") for value in {str(target.shot or ""), str(target.clip or ""), *target_aliases})
+        and any(marker in body for marker in ("常驻主体", "常驻角色", "常驻物件"))
+    )
+    if target.mode == "shared" and not resident_scene_identity and any(
         _shared_asset_suppresses_character_refs(asset, target.rel_path)
         for asset in _shared_target_assets_for_policy(assets, target)
     ):
@@ -2570,10 +2583,11 @@ def model_facing_policy_guards(
     )
     primary_character_makeup = (
         target.mode == "shared"
+        and not shared_scene_target
         and _target_has_character_alias(target)
         and not any(token in stem for token in ("45度", "三分之二", "_侧", "侧面", "_背", "背面", "半身", "脸部", "三视图", "表情", "动作"))
     )
-    gaze_lock = bool(re.search(
+    gaze_lock = not shared_scene_target and bool(re.search(
         r"CHAR_|人物|角色|少年|少女|男人|女人|男子|女子|主角|对手|打斗|格挡|挥剑|劈砍|出拳|对话",
         body,
     )) and bool(camera_gaze_negatives_for(body))
@@ -2645,7 +2659,7 @@ def model_facing_policy_guards(
                 "禁止新增第二处伤口，禁止把胸口伤改成腹部/腰部/肩部伤"
             )
 
-    if weapon_body_contact_guidance(target):
+    if not shared_scene_target and weapon_body_contact_guidance(target):
         guards.append(
             "武器入体/接触点铁律：只能有一个明确入体点或接触点，落在剧情指定身体部位；"
             "禁止同一把武器像插了多刀或出现互相矛盾的伤口位置"
@@ -2667,7 +2681,7 @@ def model_facing_policy_guards(
             "若一只手接触道具，另一只手和武器的归属必须明确；可自然遮挡不需展示的手，但不生成第三只手",
         ])
 
-    if target.mode == "shared" and _target_has_character_alias(target):
+    if target.mode == "shared" and not shared_scene_target and _target_has_character_alias(target):
         guards.append(
             "共享角色定妆使用统一规格的定妆参考板：中性灰白/18%灰棚拍背景，无窗、无房间、无家具、无剧情道具；"
             "全身、角度和三视图从头到鞋靴完整可见"

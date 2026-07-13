@@ -1942,6 +1942,32 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
             "english_prompt": en_m.group(1).strip() if en_m else "",
             "source": str(path.relative_to(root)),
         }
+    # Modern material lists use compact shared-asset bullets instead of one
+    # ``### ASSET_ID`` section per item, for example:
+    # ``- `PROP_01/断刀`：暗色旧钢军用直刃，半截、沾血。``
+    # Parse that form too; otherwise the machine id is reduced to the bogus
+    # display names "01"/"02" and paid generation receives no asset semantics.
+    bullet_re = re.compile(
+        r"^\s*-\s*`?((?:LOC|PROP|WEAPON|OUTFIT|VFX|MOUNT_GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)"
+        r"(?:/([^`：:\n]+))?`?\s*[：:]\s*(.+?)\s*$",
+        re.M,
+    )
+    for match in bullet_re.finditer(text):
+        aid = canonical_asset_id(match.group(1))
+        if not aid:
+            continue
+        raw_name = clean_material_name(match.group(2) or "", aid)
+        profile = match.group(3).strip()
+        # A structured heading is the richer source when both forms coexist.
+        out.setdefault(aid, {
+            "asset_id": aid,
+            "name": raw_name or asset_name_from_raw(aid, aid),
+            "type": asset_type_for_id(aid),
+            "profile": profile or raw_name or asset_name_from_raw(aid, aid),
+            "positive": profile or raw_name,
+            "english_prompt": "",
+            "source": str(path.relative_to(root)),
+        })
     return out
 
 
@@ -2228,6 +2254,14 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             "face_policy": constraints.get("face_policy") or "faceless",
             "must_not_have": must_not_have,
         })
+        if atype == "weapon" and re.search(r"(?:横刀|腰刀|朴刀|环首刀|短刀|匕首|saber|sabRE|knife|dagger)", f"{name} {profile}", re.I):
+            topology = flatten_contract_value(constraints.get("blade_topology"))
+            single_edge = (
+                "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；"
+                "一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；"
+                "禁止双面开刃、双刃剑轮廓或第二条锋刃。"
+            )
+            constraints["blade_topology"] = merge_unique_terms([single_edge], [topology])
         if aid == "VFX_系统面板":
             constraints.update({
                 "structure": "金色古卷空光幕，符纹边框固定，内部文字区留空，数值由 compose overlay 叠加。",
@@ -2817,8 +2851,12 @@ def build_asset_registry(root: Path) -> Dict[str, Any]:
             })
         if cfg["type"] in {"prop", "weapon"}:
             rg.update({
-                "scale_ref": asset_ref_existing(root, [path_name + "_比例", path_name]),
-                "in_hand": asset_ref_existing(root, [path_name + "_手持", path_name]),
+                # These are distinct production views. A landed clean primary
+                # asset plate cannot stand in for a scale board or an in-hand
+                # contact/ergonomics board; reusing it silently shrinks the
+                # generation plan and leaves downstream contact cues missing.
+                "scale_ref": asset_ref_existing(root, [path_name + "_比例"]),
+                "in_hand": asset_ref_existing(root, [path_name + "_手持"]),
             })
         constraints = dict(cfg.get("constraints") or {}) if isinstance(cfg.get("constraints"), Mapping) else {}
         if cfg["type"] in {"scene", "location"} and not constraints.get("lighting_signature"):
@@ -2922,6 +2960,13 @@ def preserve_registry_evidence(new_value: Any, old_value: Any) -> Any:
                 if key == "self_check_note" and bool(new_value.get("self_check_passed")):
                     continue
                 merged[key] = old_value[key]
+        same_path = bool(new_value.get("path")) and str(new_value.get("path")) == str(old_value.get("path"))
+        old_review = old_value.get("human_review") if isinstance(old_value.get("human_review"), Mapping) else {}
+        if same_path and str(old_value.get("status") or "").lower() == "rejected" and str(old_review.get("status") or "").lower() == "rejected":
+            # A missing rejected candidate remains rejected evidence, not a
+            # fresh planned slot.  Regeneration may still target the missing
+            # file, but prompt-pack rebuilds must not erase why it was removed.
+            merged["status"] = "rejected"
         for key, child in list(merged.items()):
             if key in old_value and key not in PRESERVED_REGISTRY_KEYS:
                 merged[key] = preserve_registry_evidence(child, old_value[key])
@@ -4079,17 +4124,20 @@ def shared_asset_positive(cfg: Mapping[str, Any]) -> str:
     constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
     scene_dna = cfg.get("scene_dna") if isinstance(cfg.get("scene_dna"), Mapping) else {}
     lifecycle = cfg.get("lifecycle") if isinstance(cfg.get("lifecycle"), Mapping) else {}
+    asset_type = str(cfg.get("type") or "").strip().lower()
+    is_scene = asset_type in {"scene", "location", "environment"}
     parts = [
+        "独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨。" if not is_scene else "",
         prompt_value_text(cfg.get("positive") or cfg.get("name")),
-        f"结构锁: {prompt_value_text(constraints.get('structure') or cfg.get('current_state'))}" if (constraints.get("structure") or cfg.get("current_state")) else "",
         f"武器拓扑: {prompt_value_text(flatten_contract_value(constraints.get('blade_topology')))}" if constraints.get("blade_topology") else "",
         f"特效边界: {prompt_value_text(flatten_contract_value(constraints.get('vfx_boundary')))}" if constraints.get("vfx_boundary") else "",
+        f"结构锁: {prompt_value_text(constraints.get('structure') or cfg.get('current_state'))}" if (constraints.get("structure") or cfg.get("current_state")) else "",
         f"归属/用途: {prompt_value_text(cfg.get('owner'))}" if cfg.get("owner") else "",
         f"当前状态: {prompt_value_text(cfg.get('current_state'))}" if cfg.get("current_state") else "",
         f"剧情生命周期: {prompt_value_text(lifecycle.get('state_order') or lifecycle.get('status'))}" if lifecycle else "",
-        f"比例与摆放: {prompt_value_text(scene_dna.get('spatial_layout'))}" if scene_dna.get("spatial_layout") else "",
+        f"比例与摆放: {prompt_value_text(scene_dna.get('spatial_layout'))}" if is_scene and scene_dna.get("spatial_layout") else "",
         f"材质与颜色: {prompt_value_text(scene_dna.get('architecture_materials'))}" if scene_dna.get("architecture_materials") else "",
-        f"光位继承: {prompt_value_text(scene_dna.get('color_lighting_weather'))}" if scene_dna.get("color_lighting_weather") else "",
+        f"光位继承: {prompt_value_text(scene_dna.get('color_lighting_weather'))}" if is_scene and scene_dna.get("color_lighting_weather") else "",
         f"脸部策略: {prompt_value_text(constraints.get('face_policy') or 'faceless')}",
         "资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照。",
     ]

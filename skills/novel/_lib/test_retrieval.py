@@ -43,6 +43,19 @@ def test_rank_empty_query_or_corpus():
     assert r.rank("断剑", [], k=3) == []
 
 
+def test_rank_min_score_filters_weak_hits():
+    corpus = [
+        (5, "沈念在山洞里捡到一柄断剑，断剑通体玄铁，刻着古老封印。断剑封印玄铁。"),
+        (12, "今日天气晴朗，断剑只被顺口提了一句，其余都是无关闲逛买糕点的日常。"),
+    ]
+    # 无阈值：弱相关的 12 章可能进；高阈值只留强相关章
+    strong = r.rank("断剑 封印 玄铁", corpus, k=5, min_score=1.0)
+    ids = [cid for cid, _ in strong]
+    assert 5 in ids
+    # 阈值足够高时弱命中被滤掉（分数低于 1.0 的不入选）
+    assert all(s > 1.0 for _cid, s in strong)
+
+
 def test_bm25_zero_when_no_overlap():
     idf = {"断剑": 1.0}
     assert r.bm25_score(["断剑"], r.cjk_bigrams("天气晴朗"), idf, 5) == 0.0

@@ -89,6 +89,9 @@ description: Professional research packet layer for novel-* projects. Use when a
    - 输出/更新 `审稿/research_fact_support.json`。
    - 高风险章节没有适用 `ready` 包、来源缺日期/可信度、事实没有来源、资料过期，都会进入阻断或建议。
    - `required_domains` 缺 ready 包时类型为 `missing_required_research_pack`，导出/商用 gate 会直接阻断。
+   - **专业深度分级**（`pack_depth_insufficient`·建议级）：一个 ready 包不只要"有来源有 claim"，还要覆盖该领域**必备子主题**（医疗→诊断/用药剂量/操作流程/法律边界；法律→实体要件/程序/证据规则/管辖文书；刑侦、金融、军事、历史、宗教、海外、科技、职场、平台各有清单，见 `research_pack.py:DOMAIN_REQUIRED_SUBTOPICS`）。缺子面时提醒补齐——把"结构齐全"升级为"深度够"，防止专业场景外行。关键词启发式判定，按 B10 只出建议级、不硬阻断。
+   - **逐章外行雷区扫描**（`amateur_pitfall_candidate`·建议级，仅 `--chapter` 时跑）：扫本章正文里领域内**高频术语混用/常识硬伤**（医疗"消炎药"≠抗生素、法律"民事+逮捕"、历史辣椒/土豆时代错位、军事"拉栓"误用等，见 `DOMAIN_PITFALLS`）。命中即候选，需结合语境人工核实——把最常见的外行破绽前置到审稿视野。
+   - **未绑定专业细节**（`unsupported_professional_detail`·建议级）：本章命中的专业关键词若在该领域 ready 包 claims 里找不到，提醒"疑似凭记忆写专业细节"，建议补 claim 或回深搜。这把"资料约束正文"从软约束变闭环（反向 scene-usage）。
 
 5. **刷新审计**
    ```bash

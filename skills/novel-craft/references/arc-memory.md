@@ -57,3 +57,11 @@ python3 skills/novel-craft/scripts/arc_memory.py scaffold "<作品根>" --arc 1-
 ```
 
 脚本只建骨架和截取证据片段；`plot_summary`、人物变化、情绪债务等字段由 AI/人工读该窗口后补全。`draft_packets.py` 会把当前章命中的 arc 摘要注入写章包，和 BM25 历史回溯互补。
+
+**`dominant_emotion` / `tension_score` 可确定性回填**（不必等人工填）：
+
+```bash
+python3 skills/novel-review/scripts/tone_check.py "<作品根>" --write-progression
+```
+
+`tone_check` 逐章实测主导情绪与 0-10 张力分，写回这两个字段并标 `auto_measured`，保留 `reader_promise_progress` / `next_emotional_debt` 人工字段。这一步很关键：`logic_sentry` 的"连续 N 章张力塌陷"节奏预警**依赖逐章 `tension_score`**，此前该字段无人回填、检测永久 no-op；回填后（tension_ledger 自身 curve 为空时）`logic_sentry` 用它兜底激活塌陷检测。建议每写完一个回扫窗口跑一次。

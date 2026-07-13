@@ -136,3 +136,9 @@ python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名"
 - 不把其它生产线脚本或数据结构直接 import 到漫画线；本 skill 只使用漫画线自己的共享定妆、真实参考入参和重抽计划流程。
 - 不做本地贴脸、换脸或裁脸贴回。修复脸漂应重抽整格或补定妆后重抽。
 - 不替代 `comic-image` 生成图片，也不替代 `comic-compose` 嵌字。
+
+## tier 分档必需视图与跨话记忆锚（2026-07 落地）
+
+- **分档必需视图**：`identity.py` 的必需视图按 `library_tier` 分档——`core_full` 全五视图（front/three_quarter/side/back/face）、`recurring_standard` 三视图（front/three_quarter/face）、`named_minimal` 两视图（front/face）、`restricted_partial` 不要求；未标档保守按全五视图。此前对短线具名角色也一刀切全五视图属过度要求；档位只控生产深度，不改角色 DNA 真值。registry 每角色 `view_readiness.tier` 留痕。
+- **跨话记忆锚（report-only）**：`python3 skills/comic-identity/scripts/memory_anchor.py <作品根> 第N话 --write` 扫全部话次出场史，对**复现间隔 ≥2 话再登场**或**距首登场 ≥5 话**的角色，把 registry 里最早 front/face 定妆钉为最高优先参考，落 `生产数据/comic_memory_anchor_第N话.json`；`comic-image/build_panel_jobs` 出图前消费（文件契约·pinned 锚置于该角色参考组最前）。对抗"一致性随复现间隔衰减"（Gap-Decay）——长线连载条漫跨话脸漂的主要形态。
+- **跨话角色漂移报表（report-only·审查阶段 gate 自动跑）**：单话 `character_consistency` 看不见"这角色从第几话开始崩、是不是跨话反复崩"。`python3 skills/comic-identity/scripts/drift_report.py <作品根> [--chapters 1-10] --write` 汇总各话已生成的 `生产数据/comic_character_consistency_第N话.json`，产 `生产数据/comic_identity_drift_report.{json,md}`：逐角色×逐话 🟢/🟡/🔴 时间线、`first_bad_chapter`、跨话漂移话次数，并按 findings 类别给工程化建议（缺参考→补 anchor/front/face；服装漂→补 outfits 子注册+参考图；跨话反复→补专门定妆多视图或换持久主体后端，漫画线不内置 LoRA；单话→按 rerun_targets 重抽）。只读各话报告、只写汇总——不重算像素、不改 registry、不重抽。`comic-review gate --stage review` 以 advisory 并入（info·不新增阻断，单话该拦的漂移已在 image 阶段拦过）。与 memory_anchor（事前钉锚）、reference_planner（事前处方）互补：这是**事后跨话**的"机器统计从哪话崩"。

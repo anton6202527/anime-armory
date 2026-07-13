@@ -37,6 +37,42 @@ def test_task_inference_does_not_misclassify_character_that_mentions_style_ancho
         mode="shared",
         target_path="出图/共享/图片/定妆_BEAST_01__实体_重伤复活.png",
     ) == "character_catalog"
+    assert infer_task_type(
+        "## 夕照荒野尸场（`LOC_01`）\n常驻主体：`BEAST_01/实体_重伤复活`",
+        mode="shared",
+        target_path="出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+    ) == "scene_asset"
+
+
+def test_task_inference_keeps_weapon_prop_when_contract_mentions_location_light():
+    section = """## 横刀（`WEAPON_01`）
+大唐镇魔司制式横刀，单把单刃。
+光位继承：LOC_01 低位夕阳从画左后侧逆光。
+"""
+
+    assert infer_task_type(
+        section,
+        mode="shared",
+        target_path="出图/共享/图片/定妆_武器_横刀.png",
+    ) == "prop_asset"
+
+    payload = compile_image_section(
+        section.replace(
+            "大唐镇魔司制式横刀，单把单刃。",
+            "### 正向 prompt（中文）\n大唐镇魔司制式横刀，暗银直身刀刃，单把单刃；中性浅灰背景，无人、无手、无脸。\n### 负向 prompt\n双持、第二把刀、水印",
+        ),
+        backend="codex",
+        model="GPT Image 2",
+        channel="Codex CLI",
+        mode="shared",
+        target_path="出图/共享/图片/定妆_武器_横刀.png",
+        style="暗黑盛唐写实国漫",
+        aspect_ratio="9:16",
+    )
+    assert payload["task_type"] == "prop_asset"
+    assert "暗银直身刀刃" in payload["prompt"]
+    assert "中性浅灰背景" in payload["prompt"]
+    assert "可见手部归属" not in payload["prompt"]
 
 
 def _contract(**overrides):

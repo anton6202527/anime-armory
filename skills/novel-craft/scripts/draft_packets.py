@@ -507,6 +507,87 @@ def previous_chapter_excerpt(root, chapter):
     return clip(text[-1800:], 1800)
 
 
+def recent_chapters_excerpt(root, chapter, near=3):
+    """N-1 全尾 + N-2/N-3 短尾，填平"近章上下文黑洞"。
+
+    此前写章包只注入 chapter-1 的末尾，而检索又刻意排除近 window(=3) 章——于是刚发生
+    在 N-2/N-3 的即时因果（刚立的 flag、刚受的伤、刚约定的会面）在写下一章时既不在
+    "上一章承接"、也不在检索召回里，是最隐蔽的衔接断裂点。这里对 N-1 给末尾 1800 字，
+    对 N-2/N-3 各给末尾 ~400 字尾段，让紧邻数章的收束状态始终在场。"""
+    if chapter <= 1:
+        return "（无上一章）"
+    blocks = []
+    prev_text = read_text(chapter_path(root, chapter - 1))
+    if prev_text:
+        blocks.append(f"### 上一章（第{chapter - 1:02d}章）结尾\n{clip(prev_text[-1800:], 1800)}")
+    else:
+        blocks.append(f"（缺上一章文件：章节/第{chapter - 1:02d}章.md）")
+    for back in range(2, near + 1):
+        idx = chapter - back
+        if idx < 1:
+            continue
+        text = read_text(chapter_path(root, idx))
+        if text:
+            blocks.append(f"### 第{idx:02d}章 收尾（近章因果回顾·勿与上一章混淆时序）\n{clip(text[-400:], 400)}")
+    return "\n\n".join(blocks)
+
+
+def alias_expansions(root, names):
+    """给定在场角色规范名，返回其别名列表（读 设定/角色别名.json 的 aliases: {规范名:[别名]}）。
+
+    用于检索 query 的离线"伪语义"扩展：把角色的封号/尊称/旧名并入 query，跨称呼召回同一人的旧场景。
+    别名表缺失/坏 → []（优雅跳过）。"""
+    alias_map = load_json(os.path.join(root, "设定", "角色别名.json"), {}) or {}
+    aliases = alias_map.get("aliases") if isinstance(alias_map, dict) else None
+    if not isinstance(aliases, dict):
+        return []
+    out = []
+    name_set = set(names)
+    for canonical, alist in aliases.items():
+        if canonical in name_set and isinstance(alist, list):
+            out.extend(str(a) for a in alist if a)
+    return out
+
+
+FORESHADOW_GRACE = 5  # 与 foreshadow_ledger.DEFAULT_GRACE / logic_sentry 宽容窗一致
+
+
+def foreshadow_section_for_chapter(root, chapter, grace=FORESHADOW_GRACE):
+    """读 novel-wiki 权威伏笔台账，注入本章"该收/该补收"的伏笔清单。
+
+    只读、不改台账（确定性）：pending 且 confirmed 的伏笔，若 expected_payoff_chapter 落在
+    [chapter-grace, chapter+grace] → "到期该考虑回收"；若 chapter 已 > expected+grace →
+    "已超期，尽快补收或显式 drop"。让 AI 在写这一章时就看得见坑，而不是等 scan 事后报烂尾。"""
+    ledger = load_json(os.path.join(root, "设定", "foreshadowing_ledger.json"), {}) or {}
+    seeds = ledger.get("seeds") or []
+    due, overdue = [], []
+    for s in seeds:
+        if s.get("status") != "pending" or not s.get("confirmed", True):
+            continue
+        exp = s.get("expected_payoff_chapter")
+        if exp is None:
+            continue
+        exp = int(exp)
+        if chapter > exp + grace:
+            overdue.append(s)
+        elif exp - grace <= chapter <= exp + grace:
+            due.append(s)
+    if not due and not overdue:
+        return ""
+    lines = ["\n## 伏笔回收提醒（写前必读·台账权威源 foreshadowing_ledger.json）"]
+    if due:
+        lines.append("> 以下伏笔的预期回收窗口覆盖本章，若剧情合适应在本章或邻近数章内回收（回收后跑 foreshadow_ledger.py payoff 登记）：")
+        for s in due:
+            ent = "、".join(s.get("linked_entities") or []) or "—"
+            twist = "，⚡twist型：回收即预期违背，务必做到「意料之外、情理之中」" if s.get("payoff_is_twist") else ""
+            lines.append(f"- **{s.get('id')}**（{s.get('importance','medium')}·预期第{s['expected_payoff_chapter']}章）：{s.get('description','')}（相关：{ent}）{twist}")
+    if overdue:
+        lines.append("> ⚠️ 以下伏笔已超期未收，本章优先考虑补收或显式作废（drop），避免烂尾：")
+        for s in overdue:
+            lines.append(f"- **{s.get('id')}**（{s.get('importance','medium')}·预期第{s['expected_payoff_chapter']}章·已超期）：{s.get('description','')}")
+    return "\n".join(lines) + "\n"
+
+
 def setting_value(root, key):
     return load_project_settings(root).get(key, "")
 
@@ -850,16 +931,32 @@ def aesthetic_bank_section(root):
         payload = load_json(bank_path, {}) or {}
         samples = payload.get("samples") if isinstance(payload, dict) else []
         if isinstance(samples, list) and samples:
+            # 选样不再无差别取前 3：优先保证 novelty/surprise/premise 维度样本进包（至多 2 条），
+            # 否则登记了想象力样本也永远轮不到注入（B2）；再用工艺样本补满到 3 条。
+            novelty_dims = {"novelty", "surprise", "premise"}
+            valid = [s for s in samples if isinstance(s, dict)]
+            novelty_samples = [s for s in valid if novelty_dims.intersection(set(s.get("dimensions") or []))]
+            picked, seen = [], set()
+            for s in (novelty_samples[:2] + valid):
+                sid = id(s)
+                if sid in seen:
+                    continue
+                seen.add(sid)
+                picked.append(s)
+                if len(picked) >= 3:
+                    break
             lines = [
                 "\n## 正向审美样本（迁移规则）",
                 "- 只迁移机制，不复制样本文句、专名或在世作者风格。",
             ]
-            for sample in samples[:3]:
-                if not isinstance(sample, dict):
-                    continue
-                lines.append(f"\n### {sample.get('sample_id') or 'AES'} · {sample.get('source_title') or '未命名样本'}")
+            for sample in picked:
+                is_novelty = bool(novelty_dims.intersection(set(sample.get("dimensions") or [])))
+                tag = "🌟新颖度样本 · " if is_novelty else ""
+                lines.append(f"\n### {tag}{sample.get('sample_id') or 'AES'} · {sample.get('source_title') or '未命名样本'}")
                 lines.append(f"- 维度：{fmt_list(sample.get('dimensions'))}")
                 lines.append(f"- 为什么有效：{sample.get('why_it_works') or '未填写'}")
+                if sample.get("why_it_is_new"):
+                    lines.append(f"- 新在哪（可迁移的不落俗套点）：{sample.get('why_it_is_new')}")
                 lines.append(f"- 可迁移规则：{sample.get('transfer_rule') or '未填写'}")
                 if sample.get("anti_copy_note"):
                     lines.append(f"- 禁抄说明：{sample.get('anti_copy_note')}")
@@ -1364,26 +1461,39 @@ def build_packet(root, chapter, *, allow_missing_demo=False, allow_missing_reade
         for L in pending_loops:
             loop_section += f"- **{L['title']}** ({L['id']}): {L['description']} [状态: {L['status']}, 埋于: {L.get('buried_in', '未知')}, 预计回收: {L.get('expected_recovery', '未知')}]\n"
 
+    # 伏笔台账注入（种↔收打通）：此前写章包只注入 剧情环.json，不读 novel-wiki 权威的
+    # foreshadowing_ledger.json——AI 写章时看不到"本章预期回收 SEED_003"，漏收全靠事后 scan 补救。
+    # 这里注入①预期回收章落在本章 ±grace 内的 pending 伏笔（该收了）②已严重超期的伏笔（补收）。
+    foreshadow_section = foreshadow_section_for_chapter(root, chapter)
+
     # 跨窗口语义检索（检索增强）：用本章章纲当 query，在前 3 章窗口**之外**的旧章里召回最相关的，
     # 补"固定窗口够不着久远相关旧章"的长程依赖盲区（写第230章想得起第47章埋的伏笔）。
     retrieval_section = ""
     if relevant_chapters is not None and chapter > 4:
-        # query 富化：除本章章纲外，并入未收线程/伏笔环/在场角色名，
+        # query 富化：除本章章纲外，并入未收线程/伏笔环/在场角色名**及其别名**，
         # 让 BM25 能召回"久远但仍相关"的旧章（光靠章纲一行信号太弱，长程伏笔召不回）。
+        # 别名扩展是离线"伪语义"：纯字面 BM25 召不回"半块断剑↔残缺剑刃"这类同义改写，
+        # 但把在场角色的别称并入 query 至少能跨"本名/封号/尊称"召回同一人的旧场景。
         extra_terms = []
         for L in pending_loops[:5]:
             extra_terms.append(str(L.get("title") or ""))
             extra_terms.append(str(L.get("description") or ""))
         for ot in (ledger.get("open_threads") or [])[:8]:
             extra_terms.append(str(ot.get("thread") or ""))
-        extra_terms.extend(name for name, _ in active_voices)
+        active_names = [name for name, _ in active_voices]
+        extra_terms.extend(active_names)
+        extra_terms.extend(alias_expansions(root, active_names))
         query = " ".join(
             str(x) for x in
             ([outline_item.get("raw") or outline_item.get("beat") or "", title] + extra_terms)
             if x and str(x).strip()
         )
+        # 召回预算随书长自适应：短篇 3 章够，长篇越写越需要更宽召回和更早的窗口。
+        target_ch = int(meta.get("target_chapters") or 0)
+        ret_k = min(6, 3 + chapter // 150)
+        ret_window = 3 if target_ch < 120 else 4
         try:
-            hits = relevant_chapters(root, chapter, query, k=3, window=3)
+            hits = relevant_chapters(root, chapter, query, k=ret_k, window=ret_window, min_score=0.15)
         except Exception:
             hits = []
         if hits:
@@ -1481,8 +1591,8 @@ python3 skills/novel-review/scripts/mechanical_check.py "{root}" --range {start}
 {outline_item.get("raw") or outline_item.get("beat")}
 
 ## 上一章承接
-{previous_chapter_excerpt(root, chapter)}
-{revision_section}{retrieval_section}{loop_section}{voice_section}{cast_section}
+{recent_chapters_excerpt(root, chapter)}
+{revision_section}{retrieval_section}{foreshadow_section}{loop_section}{voice_section}{cast_section}
 {arc_mem_section}
 {scene_card_section}
 {special_scene_sections}

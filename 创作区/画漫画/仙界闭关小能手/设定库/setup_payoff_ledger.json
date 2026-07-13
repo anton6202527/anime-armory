@@ -1,0 +1,16 @@
+{
+  "kind": "comic_setup_payoff_ledger",
+  "version": 1,
+  "generated_at": "2026-07-13T01:00:45+00:00",
+  "pairs": [
+    {
+      "id": "第1话-候选1",
+      "setup_chapter": "第1话",
+      "payoff_chapter": "",
+      "desc": "他还不知道，这个破盆会改变他的仙途",
+      "panel": "P018",
+      "status": "candidate",
+      "auto": true
+    }
+  ]
+}

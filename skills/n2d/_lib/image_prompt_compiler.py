@@ -456,6 +456,17 @@ def infer_task_type(section: str, *, mode: str = "", target_path: str = "") -> s
         if len({item.split("/", 1)[0] for item in ids}) >= 2 or "多人同框身份槽位" in blob:
             return "multi_subject"
         return "shot_keyframe"
+    # A scene plate may explicitly bind resident CHAR_/BEAST_ identities.
+    # Classify from the current target/title before scanning dependencies, or
+    # the resident identity turns the whole LOC plate into character_catalog.
+    if re.search(r"\bLOC_", f"{target_path}\n{heading_text}"):
+        return "scene_asset"
+    # Shared non-scene assets may legitimately mention a LOC lighting/axis
+    # contract in their full human-readable section. Classify the thing being
+    # generated from its target/title before scanning those dependencies, or a
+    # WEAPON/PROP/VFX card is silently compiled as an environment plate.
+    if re.search(r"\b(?:WEAPON|PROP|VFX)_", f"{target_path}\n{heading_text}"):
+        return "prop_asset"
     if _CHAR_ID_RE.search(blob):
         return "character_catalog"
     if re.search(r"\bLOC_", blob):
@@ -513,6 +524,12 @@ def contract_from_section(
         # paragraph leaves the model with only the global style and silently
         # loses landmarks, axis, resident assets and lighting continuity.
         scene_light = positive
+    if inferred == "prop_asset" and not identities:
+        # Prop/weapon/VFX cards are also commonly one dense asset paragraph.
+        # Keep it as the generated subject; otherwise the compiler emits only
+        # the filename and global style, dropping topology/material/faceless
+        # constraints from the actual paid request.
+        identities = positive
     preserve = _dedupe([
         identity_lock,
         _field(section, "资产拓扑锁"),
@@ -613,10 +630,11 @@ def _conditional_guards(contract: Mapping[str, Any], task: str, language: str) -
     ground = bool(re.search(r"全身|站立|跪|倒地|落地|脚|鞋|full body|standing|kneel|ground", blob, re.I)) or "grounding" in flags
     closeup = bool(re.search(r"\b(?:CU|MCU|ECU)\b|近景|特写|反打|close-up", blob, re.I)) or "closeup" in flags
     multi = task == "multi_subject" or bool(_one_line(contract.get("subject_slots")))
-    if task == "scene_asset":
+    if task in {"scene_asset", "prop_asset", "style_anchor"}:
         # Scene contracts often name characters only to describe blocking and
-        # axis continuity.  Those names must not activate character hand/face
-        # guards or encourage the environment reference to populate the set.
+        # axis continuity; isolated asset cards often name a knife/weapon whose
+        # noun alone matches the generic hand-risk regex. Neither case should
+        # activate character anatomy guards or populate the clean asset plate.
         hands = False
         ground = False
         closeup = False

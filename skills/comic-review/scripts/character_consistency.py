@@ -107,10 +107,10 @@ def ccip_available() -> bool:
 # CCIP（deepghs dghs-imgutils）：动漫角色身份 embedding 的事实标准，
 # 公开同角色判定阈值 0.178（difference 越小越像同一角色）。
 CCIP_SAME_THRESHOLD = 0.178
-# 自标定护栏（2026-07 标准审计·port 自 n2d face_consistency 自标定地板思路的漫画重实现）：
+# 自标定护栏（2026-07 标准审计·参照同仓成熟生产线自标定地板思路的漫画重实现）：
 # 固定阈值跨画风必假红——某角色自己五视图之间的 CCIP 距离若已达 0.24（厚涂/水墨等风格化），
 # 拿 0.178 判其面板"疑似换脸"是系统性误报。有效阈值 = max(公开阈值, 本角色定妆组内最大互距)，
-# 上限封顶防跑飞（env 可标定）；组内不足 2 张参考时回退固定阈值（与 n2d 单锚 fallback 同语义）。
+# 上限封顶防跑飞（env 可标定）；组内不足 2 张参考时回退固定阈值（与 同仓成熟生产线 单锚 fallback 同语义）。
 CCIP_CALIBRATED_CAP = float(os.environ.get("COMIC_CCIP_CALIBRATED_CAP", "0.32"))
 # 区域色彩指纹同理：本角色定妆组内最差同人对若低于固定地板，按组内最差对放宽（下限护栏防清零）。
 FINGERPRINT_FLOOR_MIN = float(os.environ.get("COMIC_FINGERPRINT_FLOOR_MIN", "0.25"))

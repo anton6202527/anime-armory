@@ -390,13 +390,15 @@ def _relevant_chapters_scan(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_
     return out
 
 
-def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAULT, embedder=None):
+def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAULT,
+                      embedder=None, min_score=0.0):
     """窗口外旧章里召回与 query 最相关的 k 章 → [{chapter, score, excerpt}]。缺章/无信号 → []。
 
     走持久增量索引：排序只用缓存 tf（不重读全部旧章），仅对命中的章读正文做摘要。
     **默认纯 BM25**（embedder=None 且未开 NOVEL_RETRIEVAL_EMBED 时，行为与历史一致）。
     若可用语义 embedder（显式传入或环境开启）：BM25 宽召回 → 语义余弦重排到 k（解决词面召不回的语义近邻）；
     语义任何环节失败 → 回退 BM25 top-k。索引任何异常 → 回退全量扫描，保证可用性。
+    min_score：过滤相关度过低的旧章（长书里"命中一个 bigram 就进 top-k"的噪声会稀释注意力）。
     """
     try:
         cutoff = chapter - window
@@ -416,7 +418,7 @@ def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAUL
             embedder = _load_embedder()
         if embedder is not None:
             wide = max(k * 4, 12)  # BM25 宽召回，给语义重排留候选
-            wide_hits = rank_from_index(query, chapters, k=wide)
+            wide_hits = rank_from_index(query, chapters, k=wide, min_score=min_score)
             cand = [(cid, _read_chapter_text(root, cid)) for cid, _s in wide_hits]
             reranked = semantic_rerank(query, cand, embedder, k=k)
             if reranked:
@@ -426,7 +428,7 @@ def relevant_chapters(root, chapter, query, k=TOPK_DEFAULT, window=WINDOW_DEFAUL
                         for cid, score in reranked]
             # 语义失败 → 落回 BM25
         out = []
-        for cid, score in rank_from_index(query, chapters, k=k):
+        for cid, score in rank_from_index(query, chapters, k=k, min_score=min_score):
             out.append({"chapter": cid, "score": score,
                         "excerpt": best_excerpt(query, _read_chapter_text(root, cid))})
         return out

@@ -150,5 +150,36 @@ def test_analyze_no_alert_on_match(tmp_path):
     assert ch["realized"] == "悲伤"
 
 
+def test_tension_score_calm_vs_tense():
+    calm = "他慢慢走过田野，看着夕阳，心里很平静很温暖很柔和。" * 10
+    tense = "危机！他猛地转身，紧张地盯着门口——敌人来了？压抑得让人窒息！" * 10
+    assert tc.tension_score(calm) < 5
+    assert tc.tension_score(tense) >= 5
+    assert tc.tension_score("") is None  # 空正文缺信号
+
+
+def test_write_progression_fills_dominant_and_tension_preserving_human_fields():
+    import tempfile
+    with tempfile.TemporaryDirectory() as root:
+        os.makedirs(os.path.join(root, "章节"))
+        os.makedirs(os.path.join(root, "设定"))
+        calm = "他慢慢走过田野，看着夕阳，很平静。" * 10
+        for i in range(1, 3):
+            with open(os.path.join(root, "章节", f"第{i:02d}章.md"), "w", encoding="utf-8") as f:
+                f.write(f"# 第{i}章\n{calm}")
+        # 预置一条带人工字段的行，回填不应清掉它
+        with open(os.path.join(root, "设定", "emotional_progression.json"), "w", encoding="utf-8") as f:
+            json.dump({"kind": "novel_emotional_progression", "chapters": [
+                {"chapter": 1, "dominant_emotion": "", "tension_score": None,
+                 "reader_promise_progress": "主角立志复仇", "next_emotional_debt": "亏欠师父"}]}, f,
+                ensure_ascii=False)
+        n = tc.write_progression(root)
+        assert n == 2
+        emo = json.load(open(os.path.join(root, "设定", "emotional_progression.json"), encoding="utf-8"))
+        ch1 = next(c for c in emo["chapters"] if c["chapter"] == 1)
+        assert ch1["tension_score"] is not None and ch1["auto_measured"] is True
+        assert ch1["reader_promise_progress"] == "主角立志复仇"  # 人工字段保留
+
+
 if __name__ == "__main__":
     sys.exit(os.system(f"python3 -m pytest {os.path.abspath(__file__)} -v"))

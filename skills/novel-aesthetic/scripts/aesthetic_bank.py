@@ -10,7 +10,11 @@ from datetime import date, datetime
 
 
 AUTHORIZED_RIGHTS = {"project-demo", "user-owned", "licensed", "public-domain"}
-KNOWN_DIMENSIONS = {"opening", "scene", "character", "dialogue", "prose", "structure", "theme", "pacing", "hook"}
+# novelty/surprise/premise：让审美库不只当"工艺正向标尺"，也当**新颖度正向信号源**——
+# 登记"这段新在哪/违背了什么惯例/前提有多不落俗套"，供写章按意外性需求定向调用、score ⑧ 维参照。
+KNOWN_DIMENSIONS = {"opening", "scene", "character", "dialogue", "prose", "structure",
+                    "theme", "pacing", "hook", "novelty", "surprise", "premise"}
+NOVELTY_DIMENSIONS = {"novelty", "surprise", "premise"}
 
 
 def bank_path(root: str) -> str:
@@ -76,6 +80,7 @@ def add_sample(args: argparse.Namespace) -> dict:
         "genre": args.genre or "",
         "dimensions": dimensions,
         "why_it_works": args.why_it_works.strip(),
+        "why_it_is_new": (getattr(args, "why_it_is_new", "") or "").strip(),
         "transfer_rule": args.transfer_rule.strip(),
         "anti_copy_note": args.anti_copy_note or "只迁移机制，不复用原句、专名或独特表达。",
         "applicable_when": args.applicable_when or "",
@@ -176,6 +181,8 @@ def main() -> int:
     add.add_argument("--genre", default="")
     add.add_argument("--dimension", required=True)
     add.add_argument("--why-it-works", required=True)
+    add.add_argument("--why-it-is-new", default="",
+                     help="（novelty/surprise/premise 维度建议填）这段新在哪/违背了什么读者惯例")
     add.add_argument("--transfer-rule", required=True)
     add.add_argument("--anti-copy-note", default="")
     add.add_argument("--applicable-when", default="")

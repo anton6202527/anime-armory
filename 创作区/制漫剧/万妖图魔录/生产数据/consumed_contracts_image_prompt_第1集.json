@@ -6,7 +6,7 @@
   "accepted": true,
   "reviewer": "Codex n2d-image prompt pack",
   "generated_by": "skills/n2d-image/scripts/image_prompt_pack.py",
-  "generated_at": "2026-07-12T14:53:20+00:00",
+  "generated_at": "2026-07-12T16:43:30+00:00",
   "contracts": [
     {
       "name": "storyboard",
@@ -49,12 +49,12 @@
     {
       "path": "出图/第1集/prompt/00_总览.md",
       "exists": true,
-      "sha256": "4ee2ad3df5ca57b87c33091ef0255d817bdcf467cc3cf498e8c42ea7dfbf9f0e"
+      "sha256": "c9a9a2fe3c00af3bc61ddca9b13f97702384c567c2555ef2ce71b766b22719b0"
     },
     {
       "path": "出图/第1集/prompt/01_分镜出图.md",
       "exists": true,
-      "sha256": "7ffbe586e1cc4bca175f5a2cbea328455f33fba49c723fc6d56f4f49257255ba"
+      "sha256": "f98510f375b1e4b5a248bf0ae9285c33d7ff3613b53674745fd2474d517dd1de"
     }
   ]
 }

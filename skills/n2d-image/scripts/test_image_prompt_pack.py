@@ -186,7 +186,10 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "一柄一刃单刃横刀" in defs["WEAPON_TEST"]["positive"]
     assert "刀背非刃" in image_prompt_pack.flatten_contract_value(defs["WEAPON_TEST"]["constraints"]["blade_topology"])
     assert "实体刀刃" in defs["VFX_TEST"]["constraints"]["must_not_have"]
-    assert "武器拓扑" in image_prompt_pack.shared_asset_positive(defs["WEAPON_TEST"])
+    weapon_positive = image_prompt_pack.shared_asset_positive(defs["WEAPON_TEST"])
+    assert "武器拓扑" in weapon_positive
+    assert "独立资产档案" in weapon_positive
+    assert "无剧情场景、无人、无手、无脸" in weapon_positive
     assert "特效边界" in image_prompt_pack.shared_asset_positive(defs["VFX_TEST"])
 
     old_assets = image_prompt_pack.ASSET_DEFS
@@ -203,6 +206,80 @@ def test_asset_topology_from_registry_is_written_to_shared_and_shot_prompt(tmp_p
     assert "weapon_count=1" in shot_text
     assert "刀光只能是半透明光轨" in shot_text
     assert "不是实体武器" in shot_text
+
+
+def test_named_saber_gets_single_cutting_edge_and_offset_tip_contract(tmp_path: Path) -> None:
+    registry_path = tmp_path / "出图" / "共享" / "asset_registry.json"
+    registry_path.parent.mkdir(parents=True)
+    registry_path.write_text(json.dumps({
+        "assets": [{
+            "id": "WEAPON_01",
+            "type": "weapon",
+            "name": "横刀",
+            "constraints": {"structure": "大唐制式横刀，暗银直身刀刃"},
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    story = {"clips": [{"weapon_ids": ["WEAPON_01"]}], "visual_contract": {}}
+
+    weapon = image_prompt_pack.derive_asset_defs(tmp_path, story)["WEAPON_01"]
+    topology = image_prompt_pack.flatten_contract_value(weapon["constraints"]["blade_topology"])
+
+    assert "cutting_edge_count=1" in topology
+    assert "连续厚钝刀背" in topology
+    assert "刀尖偏向刃侧" in topology
+    assert "对称剑尖" in topology
+
+
+def test_material_asset_map_reads_compact_shared_asset_bullets(tmp_path: Path) -> None:
+    material = tmp_path / "脚本" / "第1集" / "素材清单.md"
+    material.parent.mkdir(parents=True)
+    material.write_text(
+        """# 素材清单
+## 共享资产
+- `PROP_01/断刀`：暗色旧钢军用直刃，半截、沾血、无华丽纹饰。
+- `PROP_02/镇魔司横刀`：同僚尸旁遗落的完整军用横刀，长直刃、无华饰。
+- `VFX_01/百妖谱底框`：黑金古卷，内部留空，文字后期 overlay。
+""",
+        encoding="utf-8",
+    )
+    story = {"episode": 1}
+
+    assets = image_prompt_pack.material_asset_map(tmp_path, story)
+
+    assert assets["PROP_01"]["name"] == "断刀"
+    assert "半截" in assets["PROP_01"]["profile"]
+    assert assets["PROP_02"]["name"] == "镇魔司横刀"
+    assert assets["VFX_01"]["name"] == "百妖谱底框"
+
+
+def test_landed_prop_primary_does_not_impersonate_scale_or_in_hand_views(tmp_path: Path) -> None:
+    primary = tmp_path / "出图" / "共享" / "图片" / "定妆_武器_横刀.png"
+    primary.parent.mkdir(parents=True)
+    primary.write_bytes(b"landed-primary")
+    old_defs = image_prompt_pack.ASSET_DEFS
+    try:
+        image_prompt_pack.ASSET_DEFS = {
+            "WEAPON_01": {
+                "type": "weapon",
+                "name": "横刀",
+                "path_name": "定妆_武器_横刀",
+                "constraints": {"structure": "单把单刃横刀"},
+                "drift": [],
+            }
+        }
+        weapon = image_prompt_pack.build_asset_registry(tmp_path)["assets"][0]
+    finally:
+        image_prompt_pack.ASSET_DEFS = old_defs
+
+    assert weapon["reference_group"]["primary"]["status"] == "ready"
+    assert weapon["reference_group"]["scale_ref"] == {
+        "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
+        "status": "planned",
+    }
+    assert weapon["reference_group"]["in_hand"] == {
+        "path": "出图/共享/图片/定妆_武器_横刀_手持.png",
+        "status": "planned",
+    }
 
 
 def test_clip_assets_do_not_promote_offscreen_presence() -> None:
@@ -732,6 +809,22 @@ def test_scene_card_resident_subject_id_is_preserved_in_scene_dna(tmp_path: Path
     assert "禁止改成四足虎" in residents
 
 
+def test_registry_rebuild_preserves_rejected_status_and_review_for_same_path() -> None:
+    path = "出图/共享/图片/定妆_场景_荒野.png"
+    new = {"path": path, "status": "planned", "human_review": {"status": "pending"}}
+    old = {
+        "path": path,
+        "status": "rejected",
+        "human_review": {"status": "rejected", "reason": "常驻妖物物种漂移"},
+    }
+
+    merged = image_prompt_pack.preserve_registry_evidence(new, old)
+
+    assert merged["status"] == "rejected"
+    assert merged["human_review"]["status"] == "rejected"
+    assert merged["human_review"]["reason"] == "常驻妖物物种漂移"
+
+
 def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Path) -> None:
     old_defs = image_prompt_pack.ASSET_DEFS
     try:
@@ -783,7 +876,9 @@ def test_shared_scene_and_asset_prompts_expand_registry_constraints(tmp_path: Pa
     assert "冷月主光，右后方火把暖边光" in scene_prompt
     assert "反打不越轴" in scene_prompt
     assert "黑色交领窄袖、束腰、衣襟袖口克制暗红纹样" in asset_prompt
-    assert "无脸人台或折叠衣物尺度参考" in asset_prompt
+    assert "无脸人台或折叠衣物尺度参考" not in asset_prompt
+    assert "继承冷灰夜路光位" not in asset_prompt
+    assert "中性浅灰干净背景" in asset_prompt
     assert "资产参考图默认不生成未绑定身份的清晰人物脸" in asset_prompt
     scene_asset = next(item for item in registry["assets"] if item["id"] == "LOC_TEST")
     signature = scene_asset["constraints"]["lighting_signature"]

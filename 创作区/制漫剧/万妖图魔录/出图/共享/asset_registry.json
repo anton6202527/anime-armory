@@ -1,42 +1,42 @@
 {
   "kind": "n2d_asset_reference_registry",
   "version": 1,
-  "generated_at": "2026-07-12T14:53:19+00:00",
+  "generated_at": "2026-07-12T16:43:29+00:00",
   "assets": [
     {
       "id": "LOC_01",
       "type": "scene",
-      "name": "荒野尸场",
+      "name": "夕照荒野尸场",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸场.png",
-          "status": "planned",
+          "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
+            "status": "accepted",
             "reviewer": "Codex visual inspection",
-            "reviewed_at": "2026-07-12T22:04:00+08:00",
-            "sha256": "dd981655197532a9443b92c6bc84c74538c7fa136590a0a67b1dab0596c4da84",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "reviewed_at": "2026-07-12T22:58:00+08:00",
+            "sha256": "0f8e47591883dfaca25e57533a93ca7bb8c0be0dbd68d97672e768faf5d46c2f",
+            "reason": "画左低位夕阳、画面下方通往远端的逃生通道、画右上巨岩均稳定；虎山神为虎头人身倒地尸体，黑黄毛发、人形四肢、胸口贯穿伤可读；无四足虎漂移、无系统 VFX、无现代物件、文字或水印"
           }
         },
         "front": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸场.png",
-          "status": "planned",
+          "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+          "status": "ready",
           "human_review": {
-            "status": "pending",
+            "status": "accepted",
             "reviewer": "Codex visual inspection",
-            "reviewed_at": "2026-07-12T22:04:00+08:00",
-            "sha256": "dd981655197532a9443b92c6bc84c74538c7fa136590a0a67b1dab0596c4da84",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "reviewed_at": "2026-07-12T22:58:00+08:00",
+            "sha256": "0f8e47591883dfaca25e57533a93ca7bb8c0be0dbd68d97672e768faf5d46c2f",
+            "reason": "LOC_01 正机位主母本通过全面目检"
           }
         },
         "reverse": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸场_反打.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+          "status": "ready"
         },
         "floor_plan": {
-          "path": "出图/共享/图片/定妆_场景_荒野尸场_平面图.png",
-          "status": "planned"
+          "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+          "status": "ready"
         }
       },
       "reference_slots": [
@@ -44,18 +44,19 @@
           "slot": "asset_card",
           "path": "设定库/locations/荒野尸场.md",
           "status": "ready",
-          "sha256": "fe72ecf0aeddc3afafba55a175c6519b92fd5110b34d7fe7512d579ba33456a1"
+          "sha256": "3ee3d374d49e6c826e07a5ded0f296508104de61197e1aa646dfb3d4fd8625e6"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_场景_荒野尸场.png",
-          "status": "planned",
+          "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+          "status": "ready",
+          "sha256": "0f8e47591883dfaca25e57533a93ca7bb8c0be0dbd68d97672e768faf5d46c2f",
           "human_review": {
-            "status": "pending",
+            "status": "accepted",
             "reviewer": "Codex visual inspection",
-            "reviewed_at": "2026-07-12T22:04:00+08:00",
-            "sha256": "dd981655197532a9443b92c6bc84c74538c7fa136590a0a67b1dab0596c4da84",
-            "reason": "Codex text-generated character candidate requires human approval before ready"
+            "reviewed_at": "2026-07-12T22:58:00+08:00",
+            "sha256": "0f8e47591883dfaca25e57533a93ca7bb8c0be0dbd68d97672e768faf5d46c2f",
+            "reason": "场景主参考已通过；反打与平面图仍按后续 atlas 建设"
           }
         }
       ],
@@ -102,7 +103,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "core": true,
       "frequency": 12,
       "spatial_layout": "保持 storyboard 场景轴线和地标。",
@@ -113,19 +114,19 @@
       "scene_atlas": {
         "base_views": {
           "front": {
-            "path": "出图/共享/图片/定妆_场景_荒野尸场.png",
-            "status": "planned",
+            "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+            "status": "ready",
             "human_review": {
-              "status": "pending",
+              "status": "accepted",
               "reviewer": "Codex visual inspection",
-              "reviewed_at": "2026-07-12T22:04:00+08:00",
-              "sha256": "dd981655197532a9443b92c6bc84c74538c7fa136590a0a67b1dab0596c4da84",
-              "reason": "Codex text-generated character candidate requires human approval before ready"
+              "reviewed_at": "2026-07-12T22:58:00+08:00",
+              "sha256": "0f8e47591883dfaca25e57533a93ca7bb8c0be0dbd68d97672e768faf5d46c2f",
+              "reason": "scene_atlas 正机位母本通过，光位轴线与常驻主体连续性可用"
             }
           },
           "back": {
-            "path": "出图/共享/图片/定妆_场景_荒野尸场_反打.png",
-            "status": "planned"
+            "path": "出图/共享/图片/定妆_场景_夕照荒野尸场.png",
+            "status": "ready"
           }
         }
       }
@@ -137,7 +138,14 @@
       "reference_group": {
         "primary": {
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
+          "status": "ready",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "Codex visual inspection",
+            "reviewed_at": "2026-07-13T00:35:33+08:00",
+            "sha256": "23bbbbc887a0639a960b60679d289dd7e6c1e5431bc5900e80ccf4baaeb82e57",
+            "reason": "单把、单柄、单刃横刀拓扑清楚；一侧连续刃口、另一侧厚钝刀背与偏心刀尖可读；暗银战损刀身、黑柄、旧金属护手成立；完整未裁切，中性灰背景，无人物、手、VFX、文字、Logo或水印。"
+          }
         },
         "scale_ref": {
           "path": "出图/共享/图片/定妆_武器_横刀_比例.png",
@@ -158,11 +166,22 @@
         {
           "slot": "primary_reference",
           "path": "出图/共享/图片/定妆_武器_横刀.png",
-          "status": "planned"
+          "status": "ready",
+          "sha256": "23bbbbc887a0639a960b60679d289dd7e6c1e5431bc5900e80ccf4baaeb82e57",
+          "human_review": {
+            "status": "accepted",
+            "reviewer": "Codex visual inspection",
+            "reviewed_at": "2026-07-13T00:35:33+08:00",
+            "sha256": "23bbbbc887a0639a960b60679d289dd7e6c1e5431bc5900e80ccf4baaeb82e57",
+            "reason": "WEAPON_01 主参考通过全面目检；比例图与手持图仍为 planned。"
+          }
         }
       ],
       "constraints": {
-        "blade_topology": "weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。",
+        "blade_topology": [
+          "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。",
+          "weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。；weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。；weapon_count=1；single_hilt=1；single_blade=1；cutting_edge_count=1；一侧为连续锋利刃口，另一侧为连续厚钝刀背；刀尖偏向刃侧，不得居中形成对称剑尖；禁止双面开刃、双刃剑轮廓或第二条锋刃。；weapon_count=1；single_hilt=1；single_straight_blade=1；主角只持一把实体横刀；副手/后手不得生成短刃、匕首、副刀或第二把刀。"
+        ],
         "vfx_boundary": "刀光、光轨、残影只能是半透明运动轨迹或边缘高光，不得变成实体刀刃、第二把刀或可握持武器。",
         "must_not_have": [
           "变成长剑",
@@ -226,7 +245,7 @@
         ]
       },
       "self_check_passed": false,
-      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "self_check_note": "existing shared PNG reused by prompt pack",
       "weapon_profile": {
         "design_intent": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。",
         "silhouette": "大唐镇魔司制式横刀，暗银直身刀刃，黑色刀柄，旧金属护手，战损血尘克制；单把实体武器，刀光只作半透明运动轨迹。；单一实体武器轮廓，不复制第二把刀刃。",
@@ -325,31 +344,31 @@
     {
       "id": "PROP_01",
       "type": "prop",
-      "name": "01",
+      "name": "断刀",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_01.png",
+          "path": "出图/共享/图片/定妆_道具_断刀.png",
           "status": "planned"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_01_比例.png",
+          "path": "出图/共享/图片/定妆_道具_断刀_比例.png",
           "status": "planned"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_01_手持.png",
+          "path": "出图/共享/图片/定妆_道具_断刀_手持.png",
           "status": "planned"
         }
       },
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_01.md",
+          "path": "生产数据/卡片快照/资产/PROP_01_断刀.md",
           "status": "ready",
-          "sha256": "87cdf6fa71265dadd6f5add7de1d8143ad178c5a4800c191f622a4825d3bb39a"
+          "sha256": "7b287a7b2eb17c0b897293077e8013ae3425f0682a30f67e5c3b896b65ef104c"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_01.png",
+          "path": "出图/共享/图片/定妆_道具_断刀.png",
           "status": "planned"
         }
       ],
@@ -365,11 +384,12 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让01结构/颜色/尺寸漂移",
+        "不要让断刀结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让01结构/颜色/尺寸漂移"
       ],
       "scene_dna": {
         "belonging_anchor": "01 属于本集剧情资产，不是独立场景。",
@@ -405,31 +425,31 @@
     {
       "id": "PROP_02",
       "type": "prop",
-      "name": "02",
+      "name": "镇魔司横刀",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_道具_02.png",
+          "path": "出图/共享/图片/定妆_道具_镇魔司横刀.png",
           "status": "planned"
         },
         "scale_ref": {
-          "path": "出图/共享/图片/定妆_道具_02_比例.png",
+          "path": "出图/共享/图片/定妆_道具_镇魔司横刀_比例.png",
           "status": "planned"
         },
         "in_hand": {
-          "path": "出图/共享/图片/定妆_道具_02_手持.png",
+          "path": "出图/共享/图片/定妆_道具_镇魔司横刀_手持.png",
           "status": "planned"
         }
       },
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/PROP_02.md",
+          "path": "生产数据/卡片快照/资产/PROP_02_镇魔司横刀.md",
           "status": "ready",
-          "sha256": "95fab8f0616b08eec1585cce637e82bd9edf51dbe9f03914e60837957be521e3"
+          "sha256": "a7b935ab9207f6fbf1889a4270a88d3fc799083e3e8c4b2480699ff7637095db"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_道具_02.png",
+          "path": "出图/共享/图片/定妆_道具_镇魔司横刀.png",
           "status": "planned"
         }
       ],
@@ -445,11 +465,12 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让02结构/颜色/尺寸漂移",
+        "不要让镇魔司横刀结构/颜色/尺寸漂移",
         "不要现代物件",
         "不要文字水印",
         "不要结构漂移",
-        "不要数量漂移"
+        "不要数量漂移",
+        "不要让02结构/颜色/尺寸漂移"
       ],
       "scene_dna": {
         "belonging_anchor": "02 属于本集剧情资产，不是独立场景。",
@@ -485,23 +506,23 @@
     {
       "id": "VFX_01",
       "type": "vfx",
-      "name": "01",
+      "name": "百妖谱底框",
       "reference_group": {
         "primary": {
-          "path": "出图/共享/图片/定妆_特效_01.png",
+          "path": "出图/共享/图片/定妆_特效_百妖谱底框.png",
           "status": "planned"
         }
       },
       "reference_slots": [
         {
           "slot": "asset_card",
-          "path": "生产数据/卡片快照/资产/VFX_01.md",
+          "path": "生产数据/卡片快照/资产/VFX_01_百妖谱底框.md",
           "status": "ready",
-          "sha256": "6dcd026f0a99f5bb7a9a334388d3585ead20e00f0d38a8508bed777b538a18fc"
+          "sha256": "de995d5133cd6ded86db9fdfebfaf7066ff0db30dd6a69e5b54d83fe60eeccf5"
         },
         {
           "slot": "primary_reference",
-          "path": "出图/共享/图片/定妆_特效_01.png",
+          "path": "出图/共享/图片/定妆_特效_百妖谱底框.png",
           "status": "planned"
         }
       ],
@@ -517,11 +538,12 @@
       },
       "face_policy": "faceless",
       "drift_forbidden": [
-        "不要让01结构/颜色/尺寸漂移",
+        "不要让百妖谱底框结构/颜色/尺寸漂移",
         "不要随机改色",
         "不要遮挡主体脸",
         "不要现代科幻UI",
-        "不要过度血腥猎奇"
+        "不要过度血腥猎奇",
+        "不要让01结构/颜色/尺寸漂移"
       ],
       "scene_dna": {
         "belonging_anchor": "01 属于本集剧情资产，不是独立场景。",

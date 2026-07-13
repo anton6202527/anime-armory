@@ -136,3 +136,17 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 - 不嵌最终台词，也不画最终气泡；那是 `comic-compose`。旧项目已有空白气泡时，合成或重出图阶段要清理，不能留下无字气泡。
 - 不静默选择付费后端；出图前必须确认模型、渠道、成本和覆盖范围。
 - 不跳过 `comic-identity` 的共享参考检查直接生产核心角色高风险面板。
+
+## 跨话记忆锚消费（2026-07 落地）
+
+`build_panel_jobs.py` 出图前读取 `生产数据/comic_memory_anchor_第N话.json`（comic-identity/memory_anchor.py 产·文件契约，不跨 skill import）：计划里 `status=ready` 的角色，其 pinned 最早定妆锚（front/face）置于该角色参考组**最前**（同路径去重）——长间隔再登场角色以首登场形象为最高权重参考，压制跨话漂移。计划缺失时零行为变化。
+
+## 逐格参考事前处方（reference_planner·2026-07 落地）
+
+治跨话脸漂根因：不同格的**服装/表情/景别/角度**变化时，单张定妆照对 AI 只是"固定板式"、身份判别细节不足，模型在新条件下会重画整张脸，逐话累积成漂移。`character_consistency`/identity report 是**事后**量漂移，`memory_anchor` 是事前钉锚，缺的是**事前处方**：
+
+```bash
+python3 skills/comic-image/scripts/reference_planner.py "创作区/画漫画/作品名" 第1话 --write
+```
+
+逐格逐角色算变化量 delta（近景/大表情/极端角度/背身过肩/换装/动作/多人同框），按后端能力表（comic `_lib/image_backend_adapter`）路由「该喂哪些参考（front/¾/face/side/back/表情/服装 + memory_anchor 前置）+ 封顶参考预算 + 缺口 + 升档建议」，多人同框再给身份槽位 + 撞色区分 + 近景拆反打。动作格把 ¾/侧脸提为主锚、front 降权并写「不看镜头·视线锁戏内目标」指令（comic gate `panel_camera_gaze_unjustified` 硬闸的生成侧前移）。产物 `生产数据/comic_reference_plan_第N话.{json,md}`，`comic-review gate --stage image_preflight` 以 advisory 并入（不阻断）。**只建议不阻断·零像素·纯 stdlib。** 人审后按处方补参考/精选参考位再重建出图包。

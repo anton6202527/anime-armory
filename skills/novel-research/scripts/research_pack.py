@@ -41,6 +41,113 @@ HIGH_RISK_DOMAINS = {
     "platform",
 }
 
+# 每个高风险领域的**必备子主题清单**：一个 ready 资料包不该只"有来源有 claim"，还要覆盖
+# 该领域写专业场景绕不开的核心子面。coverage 用 claim 文本关键词命中判定（启发式·只出建议级，
+# 不硬阻断——按 B10，关键词命中不做 BLOCK）。子主题的意义是把"结构齐全"升级为"深度够"：
+# 例如医疗急救场景，缺"给药/剂量/禁忌/法律边界"任一子面，也照样能 status=ready，正文就容易外行。
+# 每个子主题 = (子面名, 命中关键词元组)。命中任一关键词即视为该子面已覆盖。
+DOMAIN_REQUIRED_SUBTOPICS = {
+    "medical": (
+        ("诊断/病理", ("诊断", "病理", "症状", "体征", "鉴别")),
+        ("用药/剂量", ("用药", "剂量", "给药", "药物", "禁忌", "配伍")),
+        ("操作/流程", ("手术", "操作", "流程", "急救", "抢救", "护理")),
+        ("法律/伦理边界", ("知情同意", "法律", "伦理", "责任", "边界", "规范")),
+    ),
+    "legal": (
+        ("实体法/罪名要件", ("构成要件", "罪名", "责任", "权利", "义务", "实体")),
+        ("程序/流程", ("程序", "流程", "立案", "开庭", "举证", "上诉", "时效")),
+        ("证据规则", ("证据", "举证责任", "证明标准", "非法证据", "质证")),
+        ("管辖/文书", ("管辖", "文书", "判决", "裁定", "送达", "格式")),
+    ),
+    "crime": (
+        ("现场/物证", ("现场勘查", "物证", "痕迹", "指纹", "DNA", "提取")),
+        ("法医/尸检", ("法医", "尸检", "死亡时间", "死因", "损伤")),
+        ("侦查/审讯", ("侦查", "审讯", "口供", "讯问", "同步录音录像")),
+        ("程序/证据链", ("立案", "证据链", "证据规则", "羁押", "强制措施")),
+    ),
+    "finance": (
+        ("产品/工具", ("股票", "债券", "基金", "期货", "外汇", "衍生品")),
+        ("交易/规则", ("交易", "结算", "涨跌停", "做市", "撮合", "T+")),
+        ("监管/合规", ("监管", "合规", "内幕", "披露", "反洗钱", "牌照")),
+        ("风控/估值", ("风控", "估值", "杠杆", "对冲", "尽调", "审计")),
+    ),
+    "military": (
+        ("编制/军衔", ("编制", "军衔", "建制", "番号", "序列")),
+        ("战术/条令", ("战术", "条令", "作战", "队形", "协同")),
+        ("装备/弹药", ("装备", "武器", "弹药", "口径", "射程", "制式")),
+        ("后勤/指挥", ("后勤", "指挥", "通信", "情报", "保障")),
+    ),
+    "history": (
+        ("制度/官制", ("制度", "官制", "科举", "职官", "品级")),
+        ("纪年/称谓", ("年号", "纪年", "谥号", "称谓", "避讳")),
+        ("器物/礼法", ("器物", "服饰", "礼法", "度量", "饮食")),
+        ("史料依据", ("史料", "考据", "出处", "文献", "记载")),
+    ),
+    "religion": (
+        ("教义/经典", ("教义", "经典", "经文", "戒律", "教理")),
+        ("仪轨/节庆", ("仪轨", "法会", "礼拜", "节庆", "斋")),
+        ("组织/神职", ("神职", "教阶", "寺庙", "教会", "僧团")),
+        ("禁忌/边界", ("禁忌", "亵渎", "边界", "尊重", "敏感")),
+    ),
+    "overseas": (
+        ("身份/签证", ("签证", "身份", "移民", "居留", "工卡")),
+        ("法律辖区", ("辖区", "法律", "版权", "合规", "管辖")),
+        ("文化/风俗", ("文化", "风俗", "禁忌", "本地化", "习惯")),
+        ("生活/流程", ("流程", "手续", "税务", "银行", "医疗", "租房")),
+    ),
+    "technology": (
+        ("原理/约束", ("原理", "算法", "架构", "约束", "限制")),
+        ("术语/规范", ("术语", "协议", "规范", "标准", "接口")),
+        ("流程/工程", ("流程", "工程", "部署", "测试", "运维")),
+        ("边界/风险", ("漏洞", "安全", "风险", "边界", "失效")),
+    ),
+    "career": (
+        ("岗位/职责", ("岗位", "职责", "分工", "角色", "职级")),
+        ("流程/规范", ("流程", "规范", "标准", "作业", "SOP")),
+        ("黑话/日常", ("术语", "黑话", "行话", "日常", "工具")),
+        ("红线/合规", ("红线", "合规", "禁忌", "责任", "边界")),
+    ),
+    "platform": (
+        ("题材/尺度", ("题材", "尺度", "红线", "敏感", "限流")),
+        ("审核/备案", ("审核", "备案", "许可证", "上线", "报审")),
+        ("合规/披露", ("合规", "披露", "AI标识", "实名", "未成年")),
+        ("发行/辖区", ("发行", "辖区", "版权", "分成", "结算")),
+    ),
+}
+
+# 外行雷区：领域内**高频术语混用/常识性硬伤**的关键词信号。命中只出建议级候选（B10 启发式·
+# 需人工核实是否真错——有语境下可能合理），意义是把"最常见的外行破绽"前置到写作/审稿视野。
+# 每项 = (触发词或共现词组, 为什么疑似外行 + 正确说法)。co 元组表示"同章共现才触发"。
+DOMAIN_PITFALLS = {
+    "medical": [
+        ("消炎药", "口语‘消炎药’常被误用为抗生素；抗生素抗的是细菌感染，非抗炎；病毒/无菌炎症用抗生素是外行硬伤"),
+        (("青霉素", "直接注射"), "青霉素类给药前需皮试，‘直接注射’易露怯"),
+        ("葡萄糖", "低血糖才补糖；对疑似糖尿病/未知患者盲目静推葡萄糖是外行"),
+    ],
+    "legal": [
+        (("民事", "逮捕"), "逮捕是刑事强制措施；民事纠纷不存在‘逮捕’，应为查封/拘传/司法拘留"),
+        (("死缓", "立即执行"), "死缓=死刑缓期二年执行，与‘立即执行’自相矛盾"),
+        ("画押", "现代诉讼是签名捺印，非古代‘画押’；除非历史/古代背景"),
+    ],
+    "crime": [
+        (("测谎", "定罪"), "测谎结论在多数法域不能作为定罪证据，只作侦查参考"),
+        (("尸斑", "死亡时间"), "尸斑/尸僵只能大致推断死亡时间，写成精确到分钟是外行"),
+    ],
+    "finance": [
+        (("涨停", "继续买入成交"), "A股涨停后封单排队，未必能继续成交买入"),
+        ("T+0", "A股股票是 T+1，随口 T+0 交易需确认标的（仅部分品种/市场）"),
+    ],
+    "military": [
+        ("拉栓上膛", "多数自动武器是拉套筒/拉机柄上膛，‘拉栓’仅限栓动步枪"),
+        (("将军", "连长"), "军衔与职务混用（将军是军衔，连长是职务），层级错配易露怯"),
+    ],
+    "history": [
+        ("辣椒", "辣椒明代才传入中国；写唐宋人吃辣是时代错位"),
+        ("土豆", "土豆/玉米/红薯为明代传入；上古中古背景出现是常见穿帮"),
+        ("陛下", "‘陛下’称皇帝；对王侯/未称帝者用‘陛下’是称谓错位"),
+    ],
+}
+
 DOMAIN_KEYWORDS = {
     "medical": ("医疗", "医院", "医生", "手术", "抢救", "急诊", "药物", "用药", "诊断", "病历", "护士", "ICU", "麻醉"),
     "legal": ("法律", "律师", "法院", "法庭", "诉讼", "合同", "判决", "检察", "证据规则", "刑法", "民法"),
@@ -613,6 +720,28 @@ def finding(severity: str, typ: str, message: str, *, pack: str = "", domain: st
     }
 
 
+def pack_depth_gaps(pack: dict[str, Any]) -> list[str]:
+    """返回该资料包在其领域必备子主题里**未覆盖**的子面名列表（启发式关键词命中）。
+
+    coverage 语料 = 所有 claim 文本 + usage + uncertainty + pack topic/domain。领域无必备
+    子主题清单（如非高风险自定义领域）返回空。用于把"结构齐全"升级为"深度够"。"""
+    domain = str(pack.get("domain") or "").strip().lower()
+    required = DOMAIN_REQUIRED_SUBTOPICS.get(domain)
+    if not required:
+        return []
+    corpus_parts = [str(pack.get("topic") or ""), domain]
+    for claim in pack.get("claims") or []:
+        corpus_parts.append(str(claim.get("claim") or ""))
+        corpus_parts.append(str(claim.get("usage") or ""))
+        corpus_parts.append(str(claim.get("uncertainty") or ""))
+    corpus = " ".join(corpus_parts)
+    gaps = []
+    for name, keywords in required:
+        if not any(kw in corpus for kw in keywords):
+            gaps.append(name)
+    return gaps
+
+
 def validate_pack(root: Path, pack: dict[str, Any], chapter: int | None = None) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     topic = pack.get("topic") or pack.get("topic_slug") or "unknown"
@@ -632,6 +761,17 @@ def validate_pack(root: Path, pack: dict[str, Any], chapter: int | None = None) 
         out.append(finding("阻断级" if high_risk else "建议级", "no_sources", f"资料包 {topic} 缺来源", pack=topic))
     if not claims:
         out.append(finding("阻断级" if high_risk else "建议级", "no_claims", f"资料包 {topic} 缺可写事实 claims", pack=topic))
+    # 专业深度分级：ready 包若在其领域必备子主题上有缺口，出建议级提醒（关键词启发式·不硬阻断）。
+    # 这把"有来源有 claim"升级为"覆盖了该领域绕不开的核心子面"，防外行硬伤在写作前就补齐。
+    if claims:
+        gaps = pack_depth_gaps(pack)
+        if gaps:
+            out.append(finding(
+                "建议级", "pack_depth_insufficient",
+                f"资料包 {topic}（{pack.get('domain')}）专业深度不足，未覆盖必备子面：{', '.join(gaps)}"
+                "；写该领域专业场景前建议补齐对应 claim，否则易外行。",
+                pack=topic,
+            ))
     source_ids = {src.get("id") for src in sources if src.get("id")}
     for src in sources:
         sid = src.get("id") or "SRC-?"
@@ -682,6 +822,53 @@ def validate_pack(root: Path, pack: dict[str, Any], chapter: int | None = None) 
     return out
 
 
+def scan_amateur_pitfalls(text: str, domains: dict[str, list[str]]) -> list[dict[str, Any]]:
+    """扫正文里的领域外行雷区（术语混用/常识硬伤）→ 建议级候选。只对已检测到的领域扫。"""
+    out: list[dict[str, Any]] = []
+    for domain in domains:
+        for trigger, why in DOMAIN_PITFALLS.get(domain, []):
+            if isinstance(trigger, tuple):
+                if all(t in text for t in trigger):
+                    hit = "+".join(trigger)
+                else:
+                    continue
+            elif trigger in text:
+                hit = trigger
+            else:
+                continue
+            out.append(finding(
+                "建议级", "amateur_pitfall_candidate",
+                f"[{domain}] 疑似外行硬伤「{hit}」：{why}（启发式候选·请结合语境人工核实）",
+                domain=domain, evidence=hit,
+            ))
+    return out
+
+
+def scan_unsupported_professional_details(text: str, packs: list[dict[str, Any]],
+                                          domains: dict[str, list[str]]) -> list[dict[str, Any]]:
+    """本章命中的领域专业关键词，若在该领域 ready 包的 claims 语料里找不到 → 疑似"凭记忆编"。
+
+    建议级候选：提醒作者本章这些专业点可能没有资料支撑（反向 scene-usage）。"""
+    out: list[dict[str, Any]] = []
+    for domain, hits in domains.items():
+        ready = [p for p in packs if p.get("domain") == domain and p.get("status") == "ready"]
+        if not ready:
+            continue  # 无 ready 包由 missing_research_pack 覆盖，这里只管"有包但没覆盖到"
+        corpus = " ".join(
+            str(c.get("claim") or "") + " " + str(c.get("usage") or "")
+            for p in ready for c in (p.get("claims") or [])
+        )
+        unsupported = [h for h in hits if h not in corpus]
+        if unsupported:
+            out.append(finding(
+                "建议级", "unsupported_professional_detail",
+                f"[{domain}] 本章出现专业关键词 {', '.join(unsupported[:8])}，但 ready 资料包 claims 未覆盖"
+                "——疑似凭记忆写专业细节，建议补对应 claim 或回 novel-research 深搜。",
+                domain=domain, evidence="、".join(unsupported[:8]),
+            ))
+    return out
+
+
 def check_project(root: str | Path, chapter: int | None = None, *, write: bool = True) -> dict[str, Any]:
     root = Path(root)
     idx = load_index(root)
@@ -729,6 +916,10 @@ def check_project(root: str | Path, chapter: int | None = None, *, write: bool =
         ))
     for pack in relevant_packs(idx, chapter, text):
         findings.extend(validate_pack(root, pack, chapter=chapter))
+    # 外行雷区 + 未绑定专业细节：只在逐章检查时扫本章正文（建议级候选·把资料约束正文从软约束变闭环）。
+    if chapter is not None and chapter_text.strip():
+        findings.extend(scan_amateur_pitfalls(chapter_text, domains))
+        findings.extend(scan_unsupported_professional_details(chapter_text, packs, domains))
     blocking = sum(1 for item in findings if item.get("severity") == "阻断级")
     report = {
         "schema_version": SCHEMA_VERSION,
