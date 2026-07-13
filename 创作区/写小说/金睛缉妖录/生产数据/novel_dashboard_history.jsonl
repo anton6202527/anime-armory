@@ -1,1 +1,0 @@
-{"actual_cache_hit_ratio": 0.0, "batch_avg_elapsed_ms": 0, "batch_dead_letter": 0, "batch_failed_runs": 0, "generated_at": "2026-07-02T10:22:23", "next_stage": "blueprint", "prompt_cache_readiness": 0.0, "retrieval_mrr": 0.0, "retrieval_recall_at_k": 0.0, "supervisor_rolling_tripped": 0}
