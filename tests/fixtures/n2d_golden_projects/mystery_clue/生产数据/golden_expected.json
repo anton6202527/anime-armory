@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_golden_project_expected",
-  "version": 1,
-  "case": "mystery_clue",
-  "expected_stage_key": "review",
-  "expected_owner": "n2d-review",
-  "expected_release_readiness_after_enrichment": "pass",
-  "notes": "悬疑线索样例成片后必须进入验收，不能把成片等同交付。"
-}

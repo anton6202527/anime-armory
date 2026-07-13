@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_golden_project_expected",
-  "version": 1,
-  "case": "voice_first",
-  "expected_stage_key": "voice",
-  "expected_owner": "n2d-voice",
-  "expected_release_readiness_after_enrichment": "pass",
-  "notes": "配音先行模式必须先生成真实配音和时长清单。"
-}

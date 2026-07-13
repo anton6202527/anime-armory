@@ -1,9 +1,0 @@
-{
-  "kind": "n2d_golden_project_expected",
-  "version": 1,
-  "case": "native_av",
-  "expected_stage_key": "script_stage2",
-  "expected_owner": "n2d-script",
-  "expected_release_readiness_after_enrichment": "pass",
-  "notes": "原生音画模式应跳过硬配音前置，直接进入脚本时长驱动的分镜设计。"
-}
