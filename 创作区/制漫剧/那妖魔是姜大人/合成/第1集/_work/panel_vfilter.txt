@@ -1,1 +1,0 @@
-[0:v][4:v]overlay=0:0:enable='between(t,82.149,93.346)'[p0];[p0][5:v]overlay=0:0:enable='between(t,93.346,101.934)'[vpanel]
