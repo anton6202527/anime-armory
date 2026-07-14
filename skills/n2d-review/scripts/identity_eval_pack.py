@@ -250,6 +250,8 @@ def _review_errors(
         return sorted(set(errors)), "", "", review
     rel, path, path_errors = _resolve_project_evidence_path(root, raw_rel)
     errors.extend(path_errors)
+    if not path_errors and raw_rel.replace("\\", "/") != rel:
+        errors.append("registry_evidence_path_not_canonical_project_relative")
     actual_sha = ""
     if not path_errors:
         actual_sha = _sha256(path)

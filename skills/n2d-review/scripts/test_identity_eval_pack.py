@@ -254,7 +254,7 @@ def test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked(tmp_path:
     assert "duplicate_png_sha_across_buckets" in buckets["back"]["errors"]
 
 
-@pytest.mark.parametrize("mode", ["absolute", "traversal"])
+@pytest.mark.parametrize("mode", ["absolute", "traversal", "noncanonical"])
 def test_producer_path_escape_and_absolute_registry_evidence_are_rejected(
     tmp_path: Path,
     mode: str,
@@ -264,11 +264,14 @@ def test_producer_path_escape_and_absolute_registry_evidence_are_rejected(
     if mode == "absolute":
         node["path"] = str((tmp_path / "出图" / "共享" / "图片" / "side.png").resolve())
         expected = "absolute_registry_evidence_path_not_allowed"
-    else:
+    elif mode == "traversal":
         outside = tmp_path.parent / f"{tmp_path.name}_outside.png"
         outside.write_bytes(_png_bytes("outside"))
         node["path"] = f"../{outside.name}"
         expected = "registry_evidence_path_outside_project_root"
+    else:
+        node["path"] = "出图/共享/图片/../图片/side.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
     _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
 
     errors = iep.build_pack(str(tmp_path))["rows"][0]["buckets"]["side"]["errors"]
@@ -354,7 +357,7 @@ def test_consumer_symlink_alias_is_independently_blocked(tmp_path: Path) -> None
     assert "duplicate_png_sha" in messages
 
 
-@pytest.mark.parametrize("mode", ["absolute", "traversal"])
+@pytest.mark.parametrize("mode", ["absolute", "traversal", "noncanonical"])
 def test_consumer_path_escape_and_absolute_registry_path_are_independently_blocked(
     tmp_path: Path,
     mode: str,
@@ -365,11 +368,14 @@ def test_consumer_path_escape_and_absolute_registry_path_are_independently_block
     if mode == "absolute":
         node["path"] = str((tmp_path / "出图" / "共享" / "图片" / "side.png").resolve())
         expected = "registry_evidence_absolute_path_not_allowed"
-    else:
+    elif mode == "traversal":
         outside = tmp_path.parent / f"{tmp_path.name}_consumer_outside.png"
         outside.write_bytes(_png_bytes("consumer_outside"))
         node["path"] = f"../{outside.name}"
         expected = "registry_evidence_path_outside_project_root"
+    else:
+        node["path"] = "出图/共享/图片/../图片/side.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
     reg_path = tmp_path / "出图" / "共享" / "identity_registry.json"
     _write_json(reg_path, registry)
     pack["identity_registry_sha256"] = hashlib.sha256(reg_path.read_bytes()).hexdigest()
