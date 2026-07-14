@@ -113,6 +113,7 @@ def test_builtin_probes_detect_known_self_certification_gaps(tmp_path: Path, cap
     assert gaps["structured_warn_exit_zero_cache"]["status"] == "gap"
     assert gaps["stale_report_resurrection"]["status"] == "gap"
     assert gaps["static_test_text_self_certification"]["status"] == "gap"
+    assert gaps["stdout_only_assurance_receipt_loss"]["status"] == "gap"
     assert gaps["link_only_calibration_spoof"]["status"] == "gap"
     assert gaps["partial_book_or_one_sided_boundary"]["status"] == "gap"
     assert "guard" in gaps["nested_fail_without_top_verdict"]["missing"]
@@ -368,6 +369,10 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
     _write(
         tmp_path,
         "skills/n2d-review/scripts/meta_audit.py",
+        "import os\n"
+        "def _atomic_write_text(path, content):\n"
+        "    os.fsync(1); os.replace('tmp', path)\n"
+        "def parser(ap): ap.add_argument(\"--out\")\n"
         "def run_registered_adversarial_tests(requested):\n"
         "    if not requested: return {\"status\": \"not_run\"}\n"
         "calibration_attempted=False; calibrations=[]; calibration_status='not_run'\n",
@@ -379,7 +384,23 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         "    assurance={'adversarially_tested': {'status': 'not_run'}}; assert assurance\n"
         "def test_official_mapping_is_grounding_but_never_link_only_calibration():\n"
         "    link_only_v2={'externally_calibrated': {'status': 'not_run'}}; assert link_only_v2\n"
+        "def test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero():\n"
+        "    assert 'same JSON and exit zero'\n"
         "no_blind_spot_claim_allowed=False\n",
+    )
+    _write(
+        tmp_path,
+        "skills/n2d-review/scripts/self_audit.py",
+        "import os\n"
+        "def _atomic_write_text(path, content):\n"
+        "    os.fsync(1); os.replace('tmp', path)\n"
+        "def parser(ap): ap.add_argument(\"--out\")\n",
+    )
+    _write(
+        tmp_path,
+        "skills/n2d-review/scripts/test_self_audit.py",
+        "def test_cli_out_matches_json_stdout_and_preserves_block_exit():\n"
+        "    assert 'same JSON and block exit'\n",
     )
 
     report = meta.audit(tmp_path)

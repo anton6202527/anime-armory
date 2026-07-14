@@ -1211,6 +1211,47 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
         ],
     },
     {
+        "id": "stdout_only_assurance_receipt_loss",
+        "class": "cross_artifact",
+        "description": (
+            "正式验收不能只靠瞬时 stdout 或退出码；meta/self 必须能把同一份完整 JSON 原子落档，"
+            "且落档不得篡改各自原有退出码语义。"
+        ),
+        "claim_id": "review_assurance_separation",
+        "guard": [
+            _req(
+                "skills/n2d-review/scripts/meta_audit.py",
+                r"def _atomic_write_text",
+                r"os\.fsync",
+                r"os\.replace",
+                r"add_argument\(\"--out\"",
+                mode="all",
+            ),
+            _req(
+                "skills/n2d-review/scripts/self_audit.py",
+                r"def _atomic_write_text",
+                r"os\.fsync",
+                r"os\.replace",
+                r"add_argument\(\"--out\"",
+                mode="all",
+            ),
+        ],
+        "regression": [
+            _req(
+                "skills/n2d-review/scripts/test_meta_audit.py",
+                r"def test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero",
+            ),
+            _req(
+                "skills/n2d-review/scripts/test_self_audit.py",
+                r"def test_cli_out_matches_json_stdout_and_preserves_block_exit",
+            ),
+        ],
+        "runtime_tests": [
+            "skills/n2d-review/scripts/test_meta_audit.py::test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero",
+            "skills/n2d-review/scripts/test_self_audit.py::test_cli_out_matches_json_stdout_and_preserves_block_exit",
+        ],
+    },
+    {
         "id": "link_only_calibration_spoof",
         "class": "adversarial",
         "description": "把官方/论文 evidence 包版本号改成 v2，仍不能在无 held-out calibration 时制造 externally-calibrated。",

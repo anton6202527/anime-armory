@@ -938,6 +938,11 @@ def _bucket_evidence_errors(
             root, registry_raw, source="registry_evidence"
         )
         errors.extend(registry_path_errors)
+        if (
+            not registry_path_errors
+            and registry_raw.replace("\\", "/") != registry_rel
+        ):
+            errors.append("registry_evidence_path_not_canonical_project_relative")
         if not registry_path_errors and registry_rel == rel:
             matching_node = node
             break
