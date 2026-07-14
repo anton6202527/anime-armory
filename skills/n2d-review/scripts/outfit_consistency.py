@@ -28,6 +28,7 @@ import sys
 from typing import Dict, List, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine / calibrate_floor / band / 资产发现
+from pillow_compat import pixel_data
 import state_continuity as stc  # 剧情指定换装/染血/破损区间 → block 降 warn（不硬误伤剧情）
 
 DEFAULT_MARGIN = 0.10
@@ -100,7 +101,7 @@ def _palette_hist(path: str, bins: int) -> Optional[List[float]]:
         im = Image.open(path).convert("RGB")
         im.thumbnail((128, 128))
         hsv = im.convert("HSV")
-        px = list(hsv.getdata())  # (H,S,V) 0..255
+        px = list(pixel_data(hsv))  # (H,S,V) 0..255
         samples = [(h / 255.0, s / 255.0, v / 255.0) for (h, s, v) in px]
         return weighted_hue_hist(samples, bins)
     except Exception:

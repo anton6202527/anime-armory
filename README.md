@@ -150,15 +150,15 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物�
 - release 默认不标 latest、不改 README 下载链接——发布对用户可见的新版时手动更新上表链接（固定 tag 链接可复现，`releases/latest/download/...` 永远指向最新）。
 - 完整契约见 `tools/e2a/SKILL.md`。
 
-**VS Code 插件发布**：`e2a --all` 会自动打出并上传 `anime-armory.vsix`；单独本地打包时，可在 `vscode-extension/` 里运行 `npx @vscode/vsce package`。
+**VS Code 插件发布**：`e2a --all` 会自动打出并上传 `anime-armory.vsix`；单独本地打包时，可在仓库根运行 `npm run package:vscode`。
 
-只需要把当前 checkout 的 `skills/` 与 `创作区/` 使用手册同步进桌面端和 VS Code 插件的内置资源时，跑：
+只需要刷新内置资源时，跑下面的同步脚本。桌面端仍同步全部 skills 与六条作品线手册；VS Code 插件只同步 `novel` / `n2d` / `comic` 三组 skills、对应三条作品线手册，以及小说 demo《那妖魔是姜大人》。
 
 ```bash
-scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、apps/desktop/resources/
+scripts/sync_bundles.sh          # 同步 apps/vscode-extension/assets/、VSIX 种子创作区、apps/desktop/resources/
 ```
 
-这两个目标目录是生成快照，默认不进 git；VS Code 的种子 `创作区/` 会刷新各系列 `使用手册.md`。VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展会直接读取旁边 checkout 的 `skills/`。
+这两个目标目录是生成快照，默认不进 git；VS Code 的种子 `创作区/` 只保留写小说、制漫剧、画漫画三个入口，且只有写小说内置 demo。VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展仍只展示上述三组 skills。
 
 本地手动打包（不走 `e2a` 时）：
 
@@ -169,8 +169,8 @@ node tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库、使用手册与 
 npm run build:desktop
 (cd apps/desktop && npx electron-builder --mac --arm64)
 
-# VS Code 插件：在 vscode-extension/ 里打 .vsix
-cd vscode-extension && npx @vscode/vsce package
+# VS Code 插件：通过根 workspace 打 .vsix
+npm run package:vscode
 ```
 
 手动产物需自行上传到 anime-armory 的 Release assets，并重命名成上表的稳定文件名；上传后还要按固定 tag 或 latest 策略手动更新 README 下载表里对应安装包的链接。
@@ -266,6 +266,7 @@ anime-armory/
 ├── AGENTS.md                 工具中立入口，AI agent 先读
 ├── apps/                     可独立运行、统一由根 npm workspace 管理的应用
 │   ├── desktop/              当前 Electron 客户端
+│   ├── vscode-extension/     VS Code 客户端扩展
 │   ├── backend/              Supabase 数据库、RLS 与 Edge Functions
 │   └── web/                  未来 Web 客户端边界（当前无页面实现）
 ├── packages/                 桌面端、Web 与后端共享的 TypeScript 包
@@ -413,15 +414,15 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifac
 - Official Demo ZIP files are published separately to Cloudflare R2 with `npm run demos:publish`; they never enter GitHub Release.
 - Releases are not marked latest and README download links are not rewritten by the tool — update the download table manually when publishing a user-facing release. Full contract: `tools/e2a/SKILL.md`.
 
-**VS Code extension release**: `e2a --all` packages and uploads `anime-armory.vsix` automatically. For a standalone local build, run `npx @vscode/vsce package` inside `vscode-extension/`.
+**VS Code extension release**: `e2a --all` packages and uploads `anime-armory.vsix` automatically. For a standalone local build, run `npm run package:vscode` from the repository root.
 
-To sync the current checkout's `skills/` and `创作区/` usage manuals into the bundled desktop and VS Code resources without a full release, run:
+Run the sync script below to refresh bundled resources. Desktop continues to receive every skill family and all six work-line manuals; the VS Code extension receives only the `novel`, `n2d`, and `comic` skill families, their three work-line manuals, and the source-novel demo `那妖魔是姜大人`.
 
 ```bash
-scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and apps/desktop/resources/
+scripts/sync_bundles.sh          # sync apps/vscode-extension/assets/, VSIX seed 创作区, and apps/desktop/resources/
 ```
 
-Both destinations are generated snapshots and are gitignored; the VS Code seed `创作区/` also receives the per-line `使用手册.md` files. `.vsix` packaging syncs extension resources through `vscode:prepublish`. During local VS Code extension debugging, if `assets/` has not been generated yet, the extension reads `skills/` from the adjacent checkout.
+Both destinations are generated snapshots and are gitignored. The VS Code seed `创作区/` contains only 写小说, 制漫剧, and 画漫画, with a demo under 写小说 only. `.vsix` packaging syncs extension resources through `vscode:prepublish`; local debugging also filters the adjacent checkout down to those three skill families.
 
 Uploaded assets use these stable filenames:
 
@@ -436,7 +437,7 @@ npm install
 node tools/e2a/scripts/sync_bundle.cjs   # stage skills/manuals + R2 catalog fallback
 npm run build:desktop
 (cd apps/desktop && npx electron-builder --mac --arm64)
-(cd vscode-extension && npx @vscode/vsce package)
+npm run package:vscode
 ```
 
 **Lightweight starter package:**
@@ -526,6 +527,7 @@ anime-armory/
 ├── AGENTS.md                 Tool-neutral entry for AI agents
 ├── apps/                     Runnable apps managed by the root npm workspace
 │   ├── desktop/              Current Electron client
+│   ├── vscode-extension/     VS Code client extension
 │   ├── backend/              Supabase database, RLS, and Edge Functions
 │   └── web/                  Reserved future Web client; no pages yet
 ├── packages/                 Shared TypeScript packages for every app

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "comic_project",
+  "project_id": "comic_80e454067154439b",
+  "line": "comic",
+  "title": "水浒传",
+  "created": "2026-07-14",
+  "mode": "源本改漫画",
+  "format": "条漫",
+  "source": {
+    "path": "源本/水浒传.docx",
+    "original_name": "水浒传.docx",
+    "sha256": "dbee5369b3fc152b340d0629eb0eb16af05c15c01e1ffba02fcd636688fc7d52",
+    "manifest": "源本/source_manifest.json",
+    "chapter_markers": 120
+  },
+  "rights": {
+    "source_status": "user_declared_with_provenance",
+    "source_review": "required_before_commercial_distribution",
+    "font_status": "pending_before_publish",
+    "asset_status": "pending_before_publish"
+  }
+}

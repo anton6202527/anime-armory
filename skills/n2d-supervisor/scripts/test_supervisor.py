@@ -1,4 +1,5 @@
 from pathlib import Path
+import importlib
 import importlib.util
 import sys
 
@@ -58,6 +59,25 @@ def test_build_plan_wraps_run_next(tmp_path: Path):
     assert plan["dispatch"]["specialist"]["name"] == "n2d-script-agent"
     outputs = supervisor.write_plan(plan)
     assert Path(outputs["json"]).is_file()
+
+
+def test_spec_loaded_run_resolves_sibling_doctor_consistently(tmp_path: Path, monkeypatch):
+    run = supervisor._load_run_module()
+    doctor = importlib.import_module("doctor")
+    assert Path(doctor.__file__).resolve() == supervisor.N2D_DIR / "doctor.py"
+
+    monkeypatch.setattr(doctor, "collect", lambda _root: {
+        "image_backend": {"status": "ok"},
+        "voice": {"say": True, "heavy_env": False},
+    })
+    probes = run.gather_probes(str(tmp_path), {"ep": None}, "script_stage2")
+    doctor_rows = [row for row in probes.prework if row.get("step") == "doctor"]
+    assert doctor_rows == [{
+        "step": "doctor",
+        "status": "ok",
+        "image_backend": "ok",
+        "voice": {"say": True, "heavy_env": False},
+    }]
 
 
 def test_runtime_guardrails_five_failure_modes():

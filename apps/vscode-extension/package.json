@@ -1,0 +1,241 @@
+{
+  "name": "anime-armory",
+  "displayName": "Creation Armory",
+  "description": "VS Code panel for organizing Creation Armory creative production workflows.",
+  "version": "0.9.43",
+  "publisher": "armory",
+  "private": true,
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "scripts": {
+    "check": "node --check extension.js && node --check sync-assets.js",
+    "package": "npx --yes @vscode/vsce package --no-dependencies",
+    "sync-assets": "node sync-assets.js",
+    "vscode:prepublish": "node sync-assets.js"
+  },
+  "activationEvents": [
+    "onView:animeArmoryView",
+    "workspaceContains:skills/README.md"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "animeArmory",
+          "title": "Creation Armory",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "animeArmory": [
+        {
+          "id": "animeArmoryView",
+          "name": "Creation Armory",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "animeArmory.refresh",
+        "title": "创作兵工厂: 刷新",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "animeArmory.selectRepo",
+        "title": "创作兵工厂: 选择仓库目录",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "animeArmory.openTerminal",
+        "title": "打开终端",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "animeArmory.openN2DBoard",
+        "title": "打开生产看板",
+        "icon": "$(preview)"
+      },
+      {
+        "command": "animeArmory.openN2DEpisodeApp",
+        "title": "打开本集工作台",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "animeArmory.refreshN2DEpisodeData",
+        "title": "刷新按集数据",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "animeArmory.newFile",
+        "title": "新建文件",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "animeArmory.newFolder",
+        "title": "新建文件夹",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "animeArmory.openToSide",
+        "title": "在侧边打开"
+      },
+      {
+        "command": "animeArmory.openInTerminal",
+        "title": "在集成终端中打开"
+      },
+      {
+        "command": "animeArmory.revealInOS",
+        "title": "在访达中显示"
+      },
+      {
+        "command": "animeArmory.revealInExplorer",
+        "title": "在资源管理器中显示"
+      },
+      {
+        "command": "animeArmory.copyPath",
+        "title": "复制路径"
+      },
+      {
+        "command": "animeArmory.copyRelativePath",
+        "title": "复制相对路径"
+      },
+      {
+        "command": "animeArmory.rename",
+        "title": "重命名",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "animeArmory.delete",
+        "title": "删除",
+        "icon": "$(trash)"
+      }
+    ],
+    "configuration": {
+      "title": "Creation Armory",
+      "properties": {
+        "animeArmory.repoRoot": {
+          "type": "string",
+          "default": "",
+          "description": "anime-armory 仓库根目录的绝对路径（含 skills/）。留空则用当前打开的工作区；设置后即使空窗口也能显示。"
+        },
+        "animeArmory.useExternalWorks": {
+          "type": "boolean",
+          "default": false,
+          "description": "使用外部作品目录，而不是扩展内置的独立样例工程。通过“创作兵工厂: 选择仓库目录”会自动开启。"
+        },
+        "animeArmory.openTerminalOnReveal": {
+          "type": "boolean",
+          "default": true,
+          "description": "第一次点开 Creation Armory 面板时自动打开一个集成终端（方便直接跑 skills 脚本）。"
+        },
+        "animeArmory.showSkills": {
+          "type": "boolean",
+          "default": false,
+          "description": "在侧栏显示内置 skills 文件树。默认隐藏；完整源码和说明建议到 GitHub 查看。"
+        },
+        "animeArmory.maxItemsPerDirectory": {
+          "type": "number",
+          "default": 500,
+          "minimum": 50,
+          "maximum": 10000,
+          "description": "文件树单个目录一次最多渲染的条目数。超出后显示“加载更多”，避免大目录卡顿。"
+        },
+        "animeArmory.maxWatchedDirectories": {
+          "type": "number",
+          "default": 96,
+          "minimum": 8,
+          "maximum": 512,
+          "description": "最多监听多少个已展开目录。监听是浅层的，避免大项目递归监听导致卡顿。"
+        }
+      }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "animeArmory.openTerminal",
+          "when": "view == animeArmoryView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "animeArmory.newFolder",
+          "when": "view == animeArmoryView && viewItem == workline-rw",
+          "group": "inline@1"
+        },
+        {
+          "command": "animeArmory.newFile",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "group": "1_new@1"
+        },
+        {
+          "command": "animeArmory.newFolder",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "group": "1_new@2"
+        },
+        {
+          "command": "animeArmory.openToSide",
+          "when": "view == animeArmoryView && viewItem =~ /^fsfile/",
+          "group": "2_open@1"
+        },
+        {
+          "command": "animeArmory.openInTerminal",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/ || viewItem == skill)",
+          "group": "2_open@2"
+        },
+        {
+          "command": "animeArmory.openN2DBoard",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "group": "3_n2d@1"
+        },
+        {
+          "command": "animeArmory.openN2DEpisodeApp",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "group": "3_n2d@2"
+        },
+        {
+          "command": "animeArmory.refreshN2DEpisodeData",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fsdir/)",
+          "group": "3_n2d@3"
+        },
+        {
+          "command": "animeArmory.revealInOS",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "group": "4_reveal@1"
+        },
+        {
+          "command": "animeArmory.revealInExplorer",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "group": "4_reveal@2"
+        },
+        {
+          "command": "animeArmory.copyPath",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "group": "5_copy@1"
+        },
+        {
+          "command": "animeArmory.copyRelativePath",
+          "when": "view == animeArmoryView && (viewItem == workline-rw || viewItem =~ /^fs/ || viewItem == skill)",
+          "group": "5_copy@2"
+        },
+        {
+          "command": "animeArmory.rename",
+          "when": "view == animeArmoryView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "group": "7_mod@1"
+        },
+        {
+          "command": "animeArmory.delete",
+          "when": "view == animeArmoryView && (viewItem == fsdir-rw || viewItem == fsfile-rw)",
+          "group": "7_mod@2"
+        }
+      ]
+    }
+  }
+}

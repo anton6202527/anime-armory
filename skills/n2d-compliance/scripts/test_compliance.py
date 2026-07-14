@@ -107,6 +107,30 @@ def test_check_manifest_blocks_invalid_rights_status(tmp_path: Path) -> None:
     assert any("rights.source_text" in item and "status must be one of" in item and "pending" in item for item in issues)
 
 
+def test_check_manifest_blocks_unknown_rights_even_for_internal_only(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "测试剧"
+    comp = root / "合规"
+    comp.mkdir(parents=True)
+    data = compliance.default_manifest(root, "第1集")
+    data["distribution_intent"] = "internal_only"
+    data["rights"]["source_text"] = {"status": "unknown", "evidence": "作者身份待确认"}
+    data["rights"]["adaptation"] = {"status": "unknown", "evidence": "改编授权待确认"}
+    data["rights"]["music_bgm"] = {"status": "unknown", "evidence": "素材来源待确认"}
+    (comp / "compliance_manifest.json").write_text(
+        json.dumps(data, ensure_ascii=False), encoding="utf-8"
+    )
+
+    issues = compliance.check_manifest(root, "第1集", stage="image")
+
+    for key in ("source_text", "adaptation", "music_bgm"):
+        assert any(
+            item.startswith("BLOCK")
+            and f"rights.{key}" in item
+            and "status=unknown is not authorization" in item
+            for item in issues
+        )
+
+
 def test_check_manifest_blocks_invalid_character_and_voice_status(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     reg = root / "出图" / "common"
@@ -606,6 +630,15 @@ def test_prominent_label_spec_missing_reports_info(tmp_path: Path) -> None:
     hits = [(m, sev) for m, sev in _msgs(compliance.check_manifest(root, "第1集", stage="compose"))
             if "prominent_label_spec" in m]
     assert hits and all(sev == "INFO" for _m, sev in hits)  # 非阻断
+
+
+def test_compliance_usage_aliases_normalize_to_internal_only(tmp_path, monkeypatch):
+    import compliance as c
+    if c.get_setting is None:
+        return
+    for alias in ("demo学习", "学习使用", "demo学习使用"):
+        monkeypatch.setattr(c, "get_setting", lambda root, key, default=None, value=alias: value)
+        assert c.default_distribution_intent(tmp_path) == "internal_only"
 
 
 def test_unknown_distribution_intent_fails_closed(tmp_path, monkeypatch):

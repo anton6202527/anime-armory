@@ -32,6 +32,7 @@ def test_valid_transition_and_next_chapter_handoff(tmp_path: Path) -> None:
     write_chapter(tmp_path, "第2话", base_contract(location="street", exit_location="street"))
     report = continuity_audit.audit(tmp_path)
     assert report["verdict"] == "pass"
+    assert report["project_root"] == "."
 
 
 def test_unexplained_exit_change_blocks(tmp_path: Path) -> None:

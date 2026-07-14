@@ -2,6 +2,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -64,15 +66,48 @@ def test_set_force_allows_experimental_value(tmp_path: Path) -> None:
     assert "- 生视频模型：未来模型X" in (root / "_设置.md").read_text(encoding="utf-8")
 
 
-def test_compliance_usage_alias_normalizes_to_internal_only(tmp_path: Path, capsys) -> None:
+@pytest.mark.parametrize("alias", ["demo学习", "学习使用", "demo学习使用"])
+def test_compliance_usage_alias_normalizes_to_internal_only(tmp_path: Path, capsys, alias: str) -> None:
     root = make_project(tmp_path)
 
-    rc = cli.main(["set", str(root), "合规用途", "demo学习使用", "--json"])
+    rc = cli.main(["set", str(root), "合规用途", alias, "--json"])
 
     assert rc == 0
     out = json.loads(capsys.readouterr().out)
     assert out["new"] == "internal_only"
     assert "- 合规用途：internal_only" in (root / "_设置.md").read_text(encoding="utf-8")
+
+
+def test_audit_validates_effective_global_compliance_alias(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (tmp_path / "repo" / "创作偏好-默认.md").write_text(
+        "- 合规用途: demo学习\n", encoding="utf-8"
+    )
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    rows = [row for row in out["rows"] if row.get("canonical_key") == "合规用途"]
+    assert rows and rows[0]["level"] == "ok"
+    assert rows[0]["value"] == "internal_only"
+    assert rows[0]["effective"] is True
+
+
+def test_audit_rejects_unknown_effective_global_compliance_usage(tmp_path: Path, capsys) -> None:
+    root = make_project(tmp_path)
+    (tmp_path / "repo" / "创作偏好-默认.md").write_text(
+        "- 合规用途: 测试用途但拼错了\n", encoding="utf-8"
+    )
+
+    rc = cli.main(["audit", str(root), "--json"])
+
+    assert rc == 1
+    out = json.loads(capsys.readouterr().out)
+    rows = [row for row in out["rows"] if row.get("canonical_key") == "合规用途"]
+    assert rows and rows[0]["level"] == "error"
+    assert rows[0]["value"] == "测试用途但拼错了"
+    assert rows[0]["effective"] is True
 
 
 def test_image2image_reference_chain_setting_is_valid(tmp_path: Path, capsys) -> None:

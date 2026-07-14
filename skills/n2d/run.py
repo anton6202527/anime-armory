@@ -25,7 +25,14 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-_LIB = os.path.abspath(os.path.join(os.path.dirname(__file__), "_lib"))
+_N2D_DIR = os.path.abspath(os.path.dirname(__file__))
+if _N2D_DIR not in sys.path:
+    # ``python skills/n2d/run.py`` gets this path from the interpreter, while
+    # n2d-supervisor loads this file through ``spec_from_file_location`` and
+    # does not.  Keep sibling imports (notably ``doctor``) entry-point neutral.
+    sys.path.insert(0, _N2D_DIR)
+
+_LIB = os.path.join(_N2D_DIR, "_lib")
 if _LIB not in sys.path:
     sys.path.insert(0, _LIB)
 
@@ -927,18 +934,116 @@ def _script_result_status(returncode: int, stdout: str) -> str:
 
 def _finding_detail(stdout: str, stderr: str) -> str:
     obj = _parse_trailing_json(stdout)
-    findings = obj.get("findings") if isinstance(obj, dict) else None
-    if isinstance(findings, list) and findings:
-        first = next((f for f in findings if isinstance(f, dict)), findings[0])
-        if isinstance(first, dict):
-            msg = first.get("message") or first.get("msg") or first.get("code")
-            if msg:
-                return str(msg)[:200]
-        return str(first)[:200]
+    if isinstance(obj, dict) and obj:
+        # Structured checks do not all call their diagnostic list ``findings``.
+        # In particular series_consistency uses ``issues``; prefer the first
+        # real diagnostic before falling back to a status/summary receipt.
+        for key in ("findings", "issues", "errors"):
+            rows = obj.get(key)
+            if not isinstance(rows, list) or not rows:
+                continue
+            first = next((row for row in rows if isinstance(row, dict)), rows[0])
+            if isinstance(first, dict):
+                msg = first.get("message") or first.get("msg") or first.get("detail") or first.get("code")
+                if msg:
+                    return str(msg)[:200]
+            return str(first)[:200]
+
+        # repair_preflight and similar orchestrators expose diagnostics as
+        # step rows.  Surface the first block/warn rather than the closing
+        # brace of their pretty-printed JSON.
+        steps = obj.get("steps")
+        if isinstance(steps, list):
+            for wanted in ("block", "blocked", "fail", "failed", "error", "warn", "warning"):
+                row = next((
+                    item for item in steps
+                    if isinstance(item, dict) and str(item.get("status") or "").strip().lower() == wanted
+                ), None)
+                if not row:
+                    continue
+                msg = row.get("message") or row.get("msg") or row.get("detail") or row.get("command") or row.get("path")
+                label = row.get("step") or row.get("code") or wanted
+                return (f"{label}: {msg}" if msg else f"{label}: {wanted}")[:200]
+
+        parts: List[str] = []
+        status = obj.get("status") or obj.get("verdict")
+        if status not in (None, ""):
+            parts.append(f"status={status}")
+        if "required" in obj and isinstance(obj.get("required"), (bool, int, float, str)):
+            parts.append(f"required={obj.get('required')}")
+        if obj.get("episode"):
+            parts.append(f"episode={obj.get('episode')}")
+        stage = obj.get("stage_key") or obj.get("stage")
+        if stage:
+            parts.append(f"stage={stage}")
+        # n2d-update receipts intentionally omit a generic status/summary.
+        # Surface the fields an operator needs to decide whether a rerun is
+        # required, instead of reducing a successful plan to only its episode.
+        if "rebuild_needed" in obj:
+            parts.append(f"rebuild_needed={bool(obj.get('rebuild_needed'))}")
+        for key in ("changed_skills", "changed_files"):
+            value = obj.get(key)
+            if isinstance(value, list):
+                parts.append(f"{key}={len(value)}")
+        source_drift = obj.get("source_drift")
+        if isinstance(source_drift, dict) and source_drift.get("status"):
+            parts.append(f"source_drift={source_drift.get('status')}")
+
+        summary = obj.get("summary")
+        if isinstance(summary, dict):
+            preferred = ("steps", "block", "warn", "pass", "skip", "failed", "total", "required")
+            summary_parts = []
+            for key in preferred:
+                value = summary.get(key)
+                if value not in (None, "") and not isinstance(value, (dict, list)):
+                    summary_parts.append(f"{key}={value}")
+            if not summary_parts:
+                for key, value in summary.items():
+                    if value not in (None, "") and not isinstance(value, (dict, list)):
+                        summary_parts.append(f"{key}={value}")
+                    if len(summary_parts) >= 5:
+                        break
+            if summary_parts:
+                parts.append("summary(" + ", ".join(summary_parts) + ")")
+
+        # Pack builders have no status field; counts make their successful
+        # structured output useful in both JSON and human action cards.
+        count_fields = (
+            ("files", "files"),
+            ("missing_required_files", "missing"),
+            ("loop", "loop_steps"),
+            ("issues", "issues"),
+        )
+        for key, label in count_fields:
+            value = obj.get(key)
+            if isinstance(value, list):
+                parts.append(f"{label}={len(value)}")
+        if obj.get("max_iterations") not in (None, ""):
+            parts.append(f"max_iterations={obj.get('max_iterations')}")
+        if obj.get("path"):
+            parts.append(f"path={obj.get('path')}")
+        if parts:
+            return "; ".join(parts)[:200]
+
+        # Unknown/legacy JSON remains readable and compact.  Most importantly,
+        # never degrade a valid multi-line JSON object to its final ``}``.
+        return json.dumps(obj, ensure_ascii=False, separators=(",", ":"))[:200]
     text = (stderr or stdout or "").strip()
     if not text:
         return ""
     return (text.splitlines()[-1] if text.splitlines() else text)[:200]
+
+
+def _genre_pack_prework_detail(payload: Dict[str, Any]) -> str:
+    genre = payload.get("genre") if isinstance(payload.get("genre"), dict) else {}
+    summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+    activation = payload.get("activation") if isinstance(payload.get("activation"), dict) else {}
+    keys = genre.get("matched_genre_keys") if isinstance(genre.get("matched_genre_keys"), list) else []
+    if not keys and genre.get("genre_key"):
+        keys = [genre.get("genre_key")]
+    genres = ",".join(str(item) for item in keys if item) or "-"
+    state = str(activation.get("state") or summary.get("activation_state") or "unknown")
+    return f"genres={genres} activation={state} active={summary.get('active_scenes', 0)}"
 
 
 def _cache_artifact_paths(root: str, stdout: str) -> List[str]:
@@ -1520,7 +1625,7 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 p.prework.append({
                     "step": "genre_pack_context",
                     "status": "pass" if status == "pass" else ("block" if status == "fail" else "warn"),
-                    "detail": f"genre={(out.get('genre') or {}).get('genre_key') or '-'} active={(out.get('summary') or {}).get('active_scenes', 0)}",
+                    "detail": _genre_pack_prework_detail(out),
                 })
                 if status == "fail" and stage_key in {"video_prompt", "video", "compose", "review"}:
                     _record_prework_block(p, "genre_pack_context", "genre_pack_context 未通过；先补齐本题材典型场景的运动契约/降级方案，再进入下游 gate。")
@@ -2397,7 +2502,7 @@ def entry_checks(root: str, ep: Optional[str] = None, stage_key: Optional[str] =
                 "episode": target_ep,
                 "stage_key": stage_key,
                 "status": status,
-                "detail": (r.stdout or r.stderr or "").strip().splitlines()[-1] if (r.stdout or r.stderr).strip() else "",
+                "detail": _finding_detail(r.stdout, r.stderr),
                 "plan": plan,
             })
         except Exception as exc:  # pragma: no cover

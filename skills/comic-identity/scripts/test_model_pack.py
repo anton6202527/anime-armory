@@ -59,6 +59,46 @@ def test_core_model_pack_needs_sha_signoff_then_becomes_ready_and_stales(tmp_pat
     assert stale["readiness"] == "needs_approval"
 
 
+def test_every_tier_with_required_views_needs_current_sha_signoff(tmp_path: Path) -> None:
+    confirmations = {key: True for key in model_pack.REQUIRED_CONFIRMATIONS}
+    for tier, required in (
+        ("recurring_standard", ["front", "three_quarter", "face"]),
+        ("named_minimal", ["front", "face"]),
+    ):
+        registry = registry_fixture(tmp_path)
+        registry["assets"]["CHAR_A"]["library_tier"] = tier
+        before = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+        assert before["required_views"] == required
+        assert before["signoff_required"] is True
+        assert before["readiness"] == "needs_approval"
+        model_pack.create_signoff(tmp_path, registry, "CHAR_A", "editor", f"并排确认 {tier}", confirmations)
+        assert model_pack.evaluate_character(tmp_path, registry, "CHAR_A")["readiness"] == "ready"
+
+
+def test_restricted_partial_has_no_view_or_signoff_requirement(tmp_path: Path) -> None:
+    registry = registry_fixture(tmp_path)
+    registry["assets"]["CHAR_A"]["library_tier"] = "restricted_partial"
+    report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert report["required_views"] == []
+    assert report["signoff_required"] is False
+    assert report["readiness"] == "ready"
+
+
+def test_report_summary_separates_characters_and_monsters() -> None:
+    summary = model_pack.summarize_reports([
+        {"character_id": "CHAR_A", "asset_type": "character", "readiness": "ready"},
+        {"character_id": "MON_A", "asset_type": "monster", "readiness": "needs_fix"},
+    ])
+    assert summary == {
+        "assets": 2,
+        "characters": 1,
+        "monsters": 1,
+        "ready": 1,
+        "needs_approval": 0,
+        "needs_fix": 1,
+    }
+
+
 def test_1x1_and_duplicate_or_mislabelled_views_cannot_be_ready(tmp_path: Path) -> None:
     registry = registry_fixture(tmp_path)
     front = tmp_path / registry["assets"]["CHAR_A"]["views"]["front"]

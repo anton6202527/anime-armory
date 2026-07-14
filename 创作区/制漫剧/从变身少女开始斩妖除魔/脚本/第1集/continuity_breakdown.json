@@ -1,0 +1,404 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第1集",
+  "generated_at": "2026-07-14T12:16:29+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "end_state": "刀尖停在裴长青胸前，尚未落刀。",
+      "eyeline": "姜月初向右下。",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道斩杀可得道行但尚未落刀"
+        ],
+        "CHAR_02": [
+          "不知道百妖谱"
+        ],
+        "CHAR_04": [
+          "认为两人必死"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：姜月初向右下。；转场方式：时间回切。。",
+      "shot_reverse_continuity": {},
+      "start_state": "未来片段，姜月初已持刀。",
+      "transition_guard": "时间回切。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "end_state": "断刀封路，姜月初停下。",
+      "eyeline": "左看右/右看左",
+      "knowledge_state": {
+        "CHAR_01": [
+          "意识到穿越与贱籍",
+          "把虎妖视为已死"
+        ],
+        "CHAR_02": [
+          "知道自己将死"
+        ],
+        "CHAR_04": [
+          "伪死"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_断刀、PROP_横刀、PROP_翻覆囚车；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_断刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：左看右/右看左；转场方式：视线切裴长青。。",
+      "shot_reverse_continuity": {
+        "axis_line": "LOC_01/十分钟前 左右轴线；反打不越轴",
+        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "eyeline_match": "左看右/右看左",
+        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
+        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+      },
+      "start_state": "刀尖停在裴长青胸前，尚未落刀。",
+      "transition_guard": "视线切裴长青。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_断刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "end_state": "姜月初缩短到一臂半。",
+      "eyeline": "左看右/右看左",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道脱籍条件"
+        ],
+        "CHAR_02": [
+          "判断她会接受"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_断刀、PROP_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_断刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：左看右/右看左；转场方式：裴长青声尾延续。。",
+      "shot_reverse_continuity": {
+        "axis_line": "LOC_01 左右轴线；反打不越轴",
+        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "eyeline_match": "左看右/右看左",
+        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
+        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+      },
+      "start_state": "断刀封路，姜月初停下。",
+      "transition_guard": "裴长青声尾延续。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_断刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "end_state": "姜月初架起裴长青，面向画面下方。",
+      "eyeline": "共同看逃生方向",
+      "knowledge_state": {
+        "CHAR_01": [
+          "暂时合作"
+        ],
+        "CHAR_02": [
+          "认为交易成立"
+        ],
+        "CHAR_04": [
+          "伪死"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：共同看逃生方向；转场方式：虎妖咳声先入。。",
+      "shot_reverse_continuity": {
+        "axis_line": "LOC_01 左右轴线；反打不越轴",
+        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "eyeline_match": "共同看逃生方向",
+        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
+        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+      },
+      "start_state": "姜月初缩短到一臂半。",
+      "transition_guard": "虎妖咳声先入。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_04；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "end_state": "虎妖站立逼近，裴长青跌回右下。",
+      "eyeline": "二人向上后景",
+      "knowledge_state": {
+        "CHAR_01": [
+          "确认虎妖复生"
+        ],
+        "CHAR_02": [
+          "确认误判境界"
+        ],
+        "CHAR_04": [
+          "暴露复生"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：二人向上后景；转场方式：刺激—反应切。。",
+      "shot_reverse_continuity": {},
+      "start_state": "姜月初架起裴长青，面向画面下方。",
+      "transition_guard": "刺激—反应切。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_04；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "end_state": "虎爪入前景，姜月初未持刀。",
+      "eyeline": "上看虎妖再右下看裴",
+      "knowledge_state": {
+        "CHAR_01": [
+          "无常规逃生可能"
+        ],
+        "CHAR_02": [
+          "准备拖延"
+        ],
+        "CHAR_04": [
+          "确信猎物无力"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：上看虎妖再右下看裴；转场方式：外压硬切内在规则。。",
+      "shot_reverse_continuity": {},
+      "start_state": "虎妖站立逼近，裴长青跌回右下。",
+      "transition_guard": "外压硬切内在规则。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_04；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "end_state": "主角理解规则，视线落在裴与横刀。",
+      "eyeline": "上后景→右下",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道斩杀得道行",
+          "知道爆发与收录两种用法",
+          "发现唯一易杀活物"
+        ],
+        "CHAR_02": [
+          "不知道系统"
+        ],
+        "CHAR_04": [
+          "不知道系统"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、VFX_百妖谱、VFX_系统面板；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "CHAR_04",
+        "VFX_百妖谱"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：上后景→右下；转场方式：视线切递刀手。。",
+      "shot_reverse_continuity": {},
+      "start_state": "虎爪入前景，姜月初未持刀。",
+      "transition_guard": "视线切递刀手。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、CHAR_04、VFX_百妖谱；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP08",
+      "end_state": "裴死亡；主角新增人血并获二十年。",
+      "eyeline": "左上/右下互看后失焦",
+      "knowledge_state": {
+        "CHAR_01": [
+          "决定以裴的死换道行"
+        ],
+        "CHAR_02": [
+          "递刀是让她自保，至死不知系统"
+        ],
+        "CHAR_04": [
+          "认为人族凉薄"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、VFX_系统面板；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：左上/右下互看后失焦；转场方式：虎妖讥讽先入。。",
+      "shot_reverse_continuity": {},
+      "start_state": "主角理解规则，视线落在裴与横刀。",
+      "transition_guard": "虎妖讥讽先入。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP09",
+      "end_state": "主角起手，虎妖抬爪。",
+      "eyeline": "沿官道对视",
+      "knowledge_state": {
+        "CHAR_01": [
+          "全投二十年，不知能否承受"
+        ],
+        "CHAR_04": [
+          "误判她仍是凡人"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、VFX_道行灌注；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_04",
+        "PROP_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：沿官道对视；转场方式：动作相位匹配。。",
+      "shot_reverse_continuity": {
+        "axis_line": "LOC_01 左右轴线；反打不越轴",
+        "buffer_or_reestablishing": "道具特写、手部动作、双人建立或空镜负责重新定向",
+        "camera_coverage": "clean singles / OTS / insert / reaction",
+        "coverage_order": "双人建立 → A 面 → B 面反打 → 插入物/反应缓冲",
+        "crossing_axis_policy": "禁止越轴；越轴必须有建立/中线/运动弧线/空镜缓冲",
+        "eyeline_match": "沿官道对视",
+        "lens_height_distance_match": "A/B 反打保持相近景别、镜头高度、距离和焦段",
+        "screen_sides": "A/B 屏幕左右关系按 storyboard 锁定",
+        "shot_pairing": "压迫方反打 ↔ 受压方反打；按 blocking 保持高低位和左右关系"
+      },
+      "start_state": "裴死亡；主角新增人血并获二十年。",
+      "transition_guard": "动作相位匹配。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP10",
+      "end_state": "虎妖斩首；刀脱手；主角跪地。",
+      "eyeline": "命中前锁定，后看手与刀",
+      "knowledge_state": {
+        "CHAR_01": [
+          "确认能斩虎但会反噬"
+        ],
+        "CHAR_04": [
+          "命中前才知误判"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、PROP_虎首、VFX_黑妖血、VFX_道行反噬；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_04",
+        "PROP_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：命中前锁定，后看手与刀；转场方式：系统播报先入。。",
+      "shot_reverse_continuity": {},
+      "start_state": "主角起手，虎妖抬爪。",
+      "transition_guard": "系统播报先入。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP11",
+      "end_state": "摹影完成，余二十五年。",
+      "eyeline": "看卷轴再看残躯",
+      "knowledge_state": {
+        "CHAR_01": [
+          "获百年",
+          "花七十五年收录",
+          "摹影完成"
+        ],
+        "CHAR_04": [
+          "已死亡，仅墨影"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、PROP_虎首、VFX_百妖谱、VFX_黑妖血、VFX_系统面板；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_04",
+        "VFX_百妖谱",
+        "VFX_黑妖血"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：看卷轴再看残躯；转场方式：奇观完成硬切现实脸。。",
+      "shot_reverse_continuity": {},
+      "start_state": "虎妖斩首；刀脱手；主角跪地。",
+      "transition_guard": "奇观完成硬切现实脸。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_04、VFX_百妖谱、VFX_黑妖血；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP12",
+      "end_state": "卷轴收起，主角看向裴长青。",
+      "eyeline": "中上→右下",
+      "knowledge_state": {
+        "CHAR_01": [
+          "猛虎快刀圆满",
+          "闻弦初境",
+          "余二十五年",
+          "收录能力长期保留"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、VFX_百妖谱、VFX_系统面板；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "VFX_系统面板"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：中上→右下；转场方式：视线切尸身与横刀。。",
+      "shot_reverse_continuity": {},
+      "start_state": "摹影完成，余二十五年。",
+      "transition_guard": "视线切尸身与横刀。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、VFX_系统面板；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP13",
+      "end_state": "承认命债，横刀仍在两人之间。",
+      "eyeline": "先回避后看尸身",
+      "knowledge_state": {
+        "CHAR_01": [
+          "承认命债",
+          "不知道能否复生",
+          "决定带债活下去"
+        ],
+        "CHAR_02": [
+          "已死亡"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_横刀、PROP_断刀；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_横刀"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：先回避后看尸身；转场方式：接黑，留短风声。。",
+      "shot_reverse_continuity": {},
+      "start_state": "卷轴收起，主角看向裴长青。",
+      "transition_guard": "接黑，留短风声。",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_横刀；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "draft",
+  "version": 1
+}

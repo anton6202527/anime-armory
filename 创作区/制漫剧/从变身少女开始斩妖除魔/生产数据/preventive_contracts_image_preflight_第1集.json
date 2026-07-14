@@ -1,0 +1,31 @@
+{
+  "contract_path": "脚本/第1集/preventive_contracts.json",
+  "episode": "第1集",
+  "findings": [
+    {
+      "gate": "reference_slot_gate",
+      "loc": "脚本/第1集/preventive_contracts.json",
+      "message": "缺 preventive_contracts.json；引用槽位/身份锁策略必须进入可签收合同。",
+      "minimal_rerun_scope": "回 production_breakdown/identity/asset registry 补引用槽位与锁定策略",
+      "owner": "制片主任/场记",
+      "return_to_stage": "image_prompt",
+      "root_cause_layer": "production_breakdown",
+      "severity": "block"
+    }
+  ],
+  "gates": [
+    "reference_slot_gate"
+  ],
+  "generated_at": "2026-07-14T07:48:20+00:00",
+  "kind": "n2d_preventive_contract_report",
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "scaffolded": false,
+  "stage": "image_preflight",
+  "status": "blocked",
+  "summary": {
+    "block": 1,
+    "info": 0,
+    "warn": 0
+  },
+  "version": 1
+}

@@ -12,6 +12,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 SCRIPT_DIR = os.path.dirname(__file__)
@@ -97,13 +98,38 @@ def load_snapshot(root: str) -> Optional[Dict[str, Any]]:
     return data
 
 
+def write_text_atomic(path: str, text: str) -> None:
+    """Atomically replace ``path`` without sharing a temp name across writers.
+
+    ``run.py next`` and ``n2d-supervisor next`` may legitimately inspect the
+    same project at the same time.  A fixed ``<path>.tmp`` lets one process
+    rename the other process' temp file, leaving the loser with
+    ``FileNotFoundError``.  ``mkstemp`` gives every writer a unique file in the
+    destination directory (required for an atomic ``os.replace``).
+    """
+    directory = os.path.dirname(os.path.abspath(path))
+    os.makedirs(directory, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(
+        prefix=f".{os.path.basename(path)}.",
+        suffix=".tmp",
+        dir=directory,
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+    finally:
+        try:
+            os.unlink(tmp)
+        except FileNotFoundError:
+            pass
+
+
 def write_json(path: str, data: Dict[str, Any]) -> None:
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(data, fh, ensure_ascii=False, indent=2, sort_keys=True)
-        fh.write("\n")
-    os.replace(tmp, path)
+    text = json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    write_text_atomic(path, text)
 
 
 def rows_by_episode(root: str) -> Tuple[List[str], Dict[str, Dict[str, str]]]:
@@ -1518,9 +1544,7 @@ def write_plan(root: str, plan: Dict[str, Any]) -> None:
     plan["plan_json"] = json_path
     plan["plan_md"] = md_path
     write_json(json_path, plan)
-    with open(md_path + ".tmp", "w", encoding="utf-8") as fh:
-        fh.write(render_markdown(plan))
-    os.replace(md_path + ".tmp", md_path)
+    write_text_atomic(md_path, render_markdown(plan))
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:

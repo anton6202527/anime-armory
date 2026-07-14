@@ -51,6 +51,21 @@ def test_empty_registry_is_valid_and_contains_no_fake_ready_assets() -> None:
     assert registry["schema_meta"]["initialized_by"] == "test"
 
 
+def test_validation_summary_separates_characters_and_monsters() -> None:
+    registry, _ = registry_v2.migrate_registry({
+        "assets": {
+            "CHAR_A": {"id": "CHAR_A", "type": "character"},
+            "MON_A": {"id": "MON_A", "type": "monster"},
+            "LOC_A": {"id": "LOC_A", "type": "location"},
+        },
+    })
+    summary = registry_v2.validate_registry(registry)["summary"]
+    assert summary["assets"] == 3
+    assert summary["identity_assets"] == 2
+    assert summary["characters"] == 1
+    assert summary["monsters"] == 1
+
+
 def test_character_upsert_scaffolds_stable_default_binding_without_images() -> None:
     registry, change = registry_v2.upsert_asset(
         registry_v2.new_registry(),

@@ -161,7 +161,10 @@ def default_distribution_intent(root: Path) -> str:
     intent = str(get_setting(str(root), "合规用途", "internal_only") or "").strip()
     if intent in {"publish_candidate", "paid_distribution", "internal_only"}:
         return intent
-    if intent in {"demo", "demo_only", "test", "内部", "内部预览", "自用", "学习"}:
+    if intent in {
+        "demo", "demo_only", "test", "内部", "内部预览", "自用", "学习",
+        "demo学习", "学习使用", "demo学习使用",
+    }:
         return "internal_only"
     if intent in {"投放", "上线", "发布", "商用", "付费", "publish", "release", "commercial", "paid"}:
         return "paid_distribution"
@@ -320,6 +323,11 @@ def check_manifest(root: Path, episode: str | None, stage: str = "compose") -> L
         status = str(item.get("status") or "").strip()
         if not status:
             issues.append(f"BLOCK {path}: rights.{key} requires status")
+        elif status == "unknown":
+            issues.append(
+                f"BLOCK {path}: rights.{key} status=unknown is not authorization; "
+                "confirm original/public_domain/licensed/user_declared/not_applicable before paid production"
+            )
         elif status not in ALLOWED_RIGHTS:
             issues.append(f"BLOCK {path}: rights.{key} status must be one of {', '.join(sorted(ALLOWED_RIGHTS))}; got {status}")
         if status in RIGHTS_EVIDENCE_REQUIRED and not has_real_value(item.get("evidence")):

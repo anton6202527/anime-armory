@@ -104,6 +104,7 @@ def test_builtin_probes_detect_known_self_certification_gaps(tmp_path: Path, cap
     assert gaps["forged_human_metadata"]["status"] == "gap"
     assert gaps["same_image_multiangle_alias"]["status"] == "gap"
     assert gaps["copied_or_symlinked_pixel_alias"]["status"] == "gap"
+    assert gaps["reencoded_same_pixels_alias"]["status"] == "gap"
     assert gaps["multiview_evidence_path_escape"]["status"] == "gap"
     assert gaps["pre_spend_registry_alias_bypass"]["status"] == "gap"
     assert gaps["multiform_row_reuse"]["status"] == "gap"
@@ -147,6 +148,8 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         "    required=['CHAR_01/常态','CHAR_02/常态']; consumed=['CHAR_01/常态']; assert 'CHAR_02/常态' not in consumed\n"
         "def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards():\n"
         "    assert 'core_full' != 'named_minimal'\n"
+        "def test_storyboard_floor_rejects_collusive_restricted_partial_without_contract():\n"
+        "    assert 'restricted_partial' != 'recurring_standard'\n"
         "def test_storyboard_tier_evidence_uses_structured_visible_ids_only():\n"
         "    assert 'offscreen' not in ['CHAR_01']\n"
         "def test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal():\n"
@@ -155,21 +158,29 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
     _write(
         tmp_path,
         "skills/n2d-review/scripts/production_consistency.py",
+        "from gate_core import _storyboard_character_appearance_evidence\n"
+        "def _core_character_forms(root):\n"
+        "    observed_episode_count=_storyboard_character_appearance_evidence(root)['CHAR_01']['episode_count']\n"
+        "    return character_library_tier_for_record({}, observed_episode_count=observed_episode_count)\n"
         "def check_multiview_identity_pack(row):\n"
         "    def _resolve_multiview_evidence_path(): return 'absolute_path_not_allowed path_outside_project_root'\n"
         "    failed_buckets = [bucket for bucket, value in row['buckets'].items() if value.get('status') == 'fail']\n"
         "    cid='CHAR_01'; form_name='常态'; by_key={(cid, form_name): row}\n"
         "    exact = by_key.get((cid, form_name))\n"
-        "    duplicate_paths=[]; duplicate_canonical_realpath=[]; duplicate_png_sha=[]\n"
+        "    duplicate_paths=[]; duplicate_canonical_realpath=[]; duplicate_png_sha=[]; duplicate_decoded_pixel_fingerprint=[]\n"
         "    reviewer_appears_automated = criteria_incomplete = explicit_current_pixels_confirmation_missing = False\n"
-        "    return failed_buckets, exact, duplicate_paths, duplicate_canonical_realpath, duplicate_png_sha, reviewer_appears_automated, criteria_incomplete, explicit_current_pixels_confirmation_missing\n"
+        "    return failed_buckets, exact, duplicate_paths, duplicate_canonical_realpath, duplicate_png_sha, duplicate_decoded_pixel_fingerprint, reviewer_appears_automated, criteria_incomplete, explicit_current_pixels_confirmation_missing\n"
         "checks = {'多视角身份包(MVIEW)': check_multiview_identity_pack}\n",
     )
     _write(
         tmp_path,
         "skills/n2d-review/scripts/test_production_consistency.py",
         "def test_multiview_bucket_fail_missing_top_level():\n"
-        "    buckets={'side': {'status': 'fail'}}; assert buckets['side']['status'] == 'fail'\n",
+        "    buckets={'side': {'status': 'fail'}}; assert buckets['side']['status'] == 'fail'\n"
+        "def test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards():\n"
+        "    assert 10 >= 10\n"
+        "def test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions():\n"
+        "    assert not {'offscreen', 'forbidden'} & {'visible'}\n",
     )
     _write(
         tmp_path,
@@ -179,7 +190,7 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         "    return 'absolute_registry_evidence_path_not_allowed registry_evidence_path_outside_project_root'\n"
         "def review(node_status):\n"
         "    if node_status not in {\"ready\", \"registered\"}: return 'registry_node_status=planned'\n"
-        "    return 'registry_binding_fingerprint duplicate_path_across_buckets duplicate_canonical_realpath_across_buckets duplicate_png_sha_across_buckets'\n",
+        "    return 'registry_binding_fingerprint duplicate_path_across_buckets duplicate_canonical_realpath_across_buckets duplicate_png_sha_across_buckets duplicate_decoded_pixel_fingerprint_across_buckets'\n",
     )
     _write(
         tmp_path,
@@ -196,12 +207,16 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         "    assert 'duplicate_path_across_buckets'\n"
         "def test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view():\n"
         "    assert 'duplicate_png_sha_across_buckets'\n"
+        "def test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint():\n"
+        "    assert 'duplicate_decoded_pixel_fingerprint_across_buckets'\n"
         "def test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked():\n"
         "    assert 'duplicate_canonical_realpath_across_buckets'\n"
         "def test_producer_path_escape_and_absolute_registry_evidence_are_rejected():\n"
         "    assert 'registry_evidence_path_outside_project_root'\n"
         "def test_consumer_duplicate_png_sha_copy_is_independently_blocked():\n"
         "    assert 'duplicate_png_sha'\n"
+        "def test_consumer_reencoded_same_pixels_are_independently_blocked():\n"
+        "    assert 'duplicate_decoded_pixel_fingerprint'\n"
         "def test_consumer_symlink_alias_is_independently_blocked():\n"
         "    assert 'duplicate_canonical_realpath'\n"
         "def test_consumer_path_escape_and_absolute_registry_path_are_independently_blocked():\n"
@@ -224,16 +239,20 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         tmp_path,
         "skills/n2d/_lib/n2d_const.py",
         "def restricted_partial_contract_valid(record): return False\n"
+        "group_or_crowd=False\n"
         "def independent_tier(observed_episode_count):\n"
         "    independent_episode_count=max(0, observed_episode_count); return independent_episode_count\n"
         "def tier(inferred, record):\n"
-        "    if inferred != CHARACTER_LIBRARY_TIER_CORE or restricted_partial_contract_valid(record): return 'partial'\n"
+        "    entity_id=record.get('id'); group_or_crowd=False\n"
+        "    if restricted_partial_contract_valid(record) or group_or_crowd or inferred == CHARACTER_LIBRARY_TIER_MINIMAL: return 'partial'\n"
         "    return CHARACTER_LIBRARY_TIER_CORE\n",
     )
     _write(
         tmp_path,
         "skills/n2d/_lib/test_character_library_contract.py",
         "def test_core_cannot_self_report_restricted_partial_without_approved_contract():\n"
+        "    assert tier == CHARACTER_LIBRARY_TIER_CORE\n"
+        "def test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract():\n"
         "    assert tier == CHARACTER_LIBRARY_TIER_CORE\n",
     )
     _write(
@@ -268,6 +287,8 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         "skills/n2d-script/scripts/test_split_novel.py",
         "def test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized():\n"
         "    source_units=['U1','U2']; assert len(source_units) == 2\n"
+        "def test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units():\n"
+        "    source_units={'count': 2}; boundary_candidates=['B1']; assert source_units['count'] == 2 and boundary_candidates\n"
         "def test_beam_optimizer_is_global_and_dictionary_is_not_a_veto():\n"
         "    assert 'full_book_beam_search_v1'\n",
     )
@@ -363,8 +384,18 @@ def test_builtin_probes_recognise_guards_plus_counterexamples(tmp_path: Path) ->
         tmp_path,
         "skills/n2d-review/scripts/image_evidence.py",
         "import zlib\n"
+        "PNG_DECODED_PIXEL_FINGERPRINT_KIND='sha256:n2d-canonical-rgba16be-v1'\n"
+        "def png_decoded_pixel_fingerprint(path): return 'RGBA16', []\n"
         "def validate():\n"
         "    stream=zlib.decompressobj(); return 'png_iend_invalid png_scanline_data_incomplete'\n",
+    )
+    _write(
+        tmp_path,
+        "skills/n2d-review/scripts/test_image_evidence.py",
+        "def test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata():\n"
+        "    assert 'same RGBA pixels'\n"
+        "def test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint():\n"
+        "    assert 'same RGBA pixels'\n",
     )
     _write(
         tmp_path,

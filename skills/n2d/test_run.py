@@ -364,6 +364,84 @@ def test_decide_action_card_carries_supervisor_metadata():
     assert na["action_card"]["creative_loop"]["relpath"].endswith("creative_loop_第1集_video_prompt.json")
 
 
+def test_genre_pack_prework_detail_exposes_composite_keys_and_activation_state():
+    detail = run._genre_pack_prework_detail({
+        "genre": {"genre_key": "chuanyue", "matched_genre_keys": ["chuanyue", "xianxia", "suspense"]},
+        "activation": {"state": "storyboard_missing"},
+        "summary": {"active_scenes": 0},
+    })
+
+    assert detail == "genres=chuanyue,xianxia,suspense activation=storyboard_missing active=0"
+
+
+def test_finding_detail_summarizes_pretty_json_receipts_instead_of_closing_brace():
+    payloads = {
+        "repair_preflight": {
+            "kind": "n2d_repair_preflight",
+            "status": "pass",
+            "summary": {"steps": 4, "block": 0, "warn": 0, "pass": 4},
+            "steps": [{"step": "update_plan", "status": "pass"}],
+            "path": "/tmp/repair.json",
+        },
+        "context_pack": {
+            "kind": "n2d_context_pack",
+            "episode": "第1集",
+            "stage_key": "script_stage1",
+            "files": [{}, {}, {}],
+            "missing_required_files": ["脚本/第1集/raw.txt"],
+        },
+        "creative_loop": {
+            "kind": "n2d_creative_loop_packet",
+            "episode": "第1集",
+            "stage_key": "script_stage1",
+            "loop": [{}, {}, {}, {}],
+            "max_iterations": 2,
+        },
+        "series_consistency": {
+            "kind": "n2d_series_consistency_check",
+            "required": True,
+            "status": "pass",
+            "path": "/tmp/series_consistency.json",
+            "issues": [],
+        },
+    }
+
+    details = {
+        name: run._finding_detail(json.dumps(payload, ensure_ascii=False, indent=2), "")
+        for name, payload in payloads.items()
+    }
+
+    assert "summary(steps=4, block=0, warn=0, pass=4)" in details["repair_preflight"]
+    assert "files=3" in details["context_pack"] and "missing=1" in details["context_pack"]
+    assert "loop_steps=4" in details["creative_loop"] and "max_iterations=2" in details["creative_loop"]
+    assert "status=pass" in details["series_consistency"] and "issues=0" in details["series_consistency"]
+    assert all(detail != "}" for detail in details.values())
+
+
+def test_finding_detail_prefers_structured_issue_and_keeps_legacy_text_fallback():
+    structured = json.dumps({
+        "status": "block",
+        "issues": [{"code": "series_consistency_missing", "message": "缺有效一致性合同。"}],
+    }, ensure_ascii=False, indent=2)
+
+    assert run._finding_detail(structured, "") == "缺有效一致性合同。"
+    assert run._finding_detail("legacy banner\nlegacy final detail", "") == "legacy final detail"
+    assert run._finding_detail("legacy stdout", "legacy stderr") == "legacy stderr"
+
+
+def test_finding_detail_surfaces_first_blocking_step_from_structured_preflight():
+    stdout = json.dumps({
+        "status": "block",
+        "summary": {"steps": 2, "block": 1, "warn": 0, "pass": 1},
+        "steps": [
+            {"step": "update_plan", "status": "pass"},
+            {"step": "preventive_contracts", "status": "block", "detail": "合同未确认"},
+        ],
+    }, ensure_ascii=False, indent=2)
+
+    assert run._finding_detail(stdout, "") == "preventive_contracts: 合同未确认"
+
+
 def test_decide_payment_confirm_image_carries_granularity_menu():
     root = make_work(ALL_DONE_TO["image"])
     na = run.decide(root, _route("image"), "image", run.Probes())
@@ -1266,6 +1344,40 @@ def test_enter_action_includes_entry_checks(monkeypatch):
     na = run.enter_action(root, "第1集")
     assert na["entry_checks"][0]["step"] == "source_check"
     assert na["stop_reason"] == "needs_payment_confirm"
+
+
+def test_entry_checks_update_plan_detail_summarizes_pretty_json(monkeypatch):
+    root = make_work(ALL_DONE_TO["image"])
+    pretty_plan = json.dumps({
+        "episode": "第1集",
+        "rebuild_needed": False,
+        "changed_files": [],
+        "changed_skills": [],
+        "source_drift": {"status": "clean"},
+        "summary": {"block": 0, "warn": 0, "pass": 3},
+    }, ensure_ascii=False, indent=2)
+    calls = {"count": 0}
+
+    def fake_run(*_args, **_kwargs):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            return _CP(0, "DRIFT={\"status\":\"clean\"}\n", "")
+        return _CP(0, pretty_plan, "")
+
+    monkeypatch.setattr(run, "_run", fake_run)
+    monkeypatch.setattr(run.os.path, "exists", lambda _path: True)
+
+    checks = run.entry_checks(root, "第1集", "image")
+    update_check = next(row for row in checks if row["step"] == "update_plan")
+
+    assert update_check["detail"] != "}"
+    assert "summary(" in update_check["detail"]
+    assert "block=0" in update_check["detail"]
+    assert "rebuild_needed=False" in update_check["detail"]
+    assert "changed_skills=0" in update_check["detail"]
+    assert "changed_files=0" in update_check["detail"]
+    assert "source_drift=clean" in update_check["detail"]
+    assert update_check["plan"]["source_drift"]["status"] == "clean"
 
 
 # ── prework 并行化（P0-2）：_run_report_only_prework 顺序保持 + skip 行为不变 ──────

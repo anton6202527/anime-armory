@@ -18,6 +18,8 @@ import os
 import sys
 from typing import List, Optional, Sequence
 
+from pillow_compat import pixel_data
+
 DEFAULT_BLOCK_FRAC = 0.40   # < 中位数*0.40 → 🔴 明显糊
 DEFAULT_WARN_FRAC = 0.60    # < 中位数*0.60 → 🟡 偏糊
 
@@ -73,7 +75,7 @@ def _gray_2d(path: str, size: int = 128) -> Optional[List[List[float]]]:
         im = Image.open(path).convert("L")
         im.thumbnail((size, size))
         w, h = im.size
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         return [[float(px[y * w + x]) for x in range(w)] for y in range(h)]
     except Exception:
         return None

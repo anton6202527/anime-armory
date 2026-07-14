@@ -66,6 +66,7 @@ QUESTION_RE = re.compile(r"(到底是谁|究竟是谁|是谁[？?]|为什么[？
 STORY_LEDGER_REL = os.path.join("设定库", "story_integrity_ledger.json")
 THREAD_REL = os.path.join("设定库", "thread_scheduler.json")
 PILOT_REL = os.path.join("设定库", "pilot_arc_contract.json")
+NON_CHARACTER_ROLES = {"旁白", "系统", "百妖谱", "系统提示", "提示音", "画外提示"}
 
 
 def ep_num(value: str) -> Optional[int]:
@@ -508,7 +509,7 @@ def audit_episode(root: str, ep: str) -> Dict[str, Any]:
     role_counts: Dict[str, int] = {}
     for b in beats:
         role = str(b.get("role") or "")
-        if role and role != "旁白":
+        if role and role not in NON_CHARACTER_ROLES:
             role_counts[role] = role_counts.get(role, 0) + 1
     motivated = {m["character"] for m in motivations}
     missing_motive = [role for role, count in role_counts.items() if count >= 3 and role not in motivated]

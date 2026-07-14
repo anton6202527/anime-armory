@@ -665,7 +665,7 @@ BUILTIN_CLAIMS: List[Dict[str, Any]] = [
             "declaration": [_req(
                 "skills/n2d-script/SKILL.md",
                 r"集 = 戏剧节拍单元[^\n]*≠ 章[^\n]*冲突[^\n]*钩子",
-                r"split_plan\.json[^\n]*source_units[^\n]*boundary_candidates[^\n]*beam",
+                r"split_plan\.json[^\n]*(?:source[-_]units?|规范化 source-unit 索引)[^\n]*boundary_candidates[^\n]*beam",
                 r"双侧边界合同",
                 mode="all",
             )],
@@ -695,6 +695,7 @@ BUILTIN_CLAIMS: List[Dict[str, Any]] = [
                 _req(
                     "skills/n2d-script/scripts/test_split_novel.py",
                     r"def test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized",
+                    r"def test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units",
                     r"def test_beam_optimizer_is_global_and_dictionary_is_not_a_veto",
                     mode="all",
                 ),
@@ -709,6 +710,8 @@ BUILTIN_CLAIMS: List[Dict[str, Any]] = [
                 _req(
                     "skills/n2d-script/scripts/test_split_novel.py",
                     r"only_first_episode_materialized[\s\S]{0,1800}source_units",
+                    r"split_plan_v3_compacts_source_axis[\s\S]{0,2200}boundary_candidates",
+                    mode="all",
                 ),
                 _req(
                     "skills/n2d-script/scripts/test_boundary_audit.py",
@@ -736,7 +739,7 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
     {
         "id": "all_chain_collusive_tier_downgrade",
         "class": "adversarial",
-        "description": "scope 与 character/bundle/manifest/atlas 四处同时伪低时，registry 外结构化 storyboard 出场下界仍须阻断；无结构化索引的旧项目不得扫散文误报。",
+        "description": "scope 与 character/bundle/manifest/atlas 四处同时伪低（含自报 restricted_partial）时，registry 外结构化 storyboard 出场下界仍须同时约束 identity gate 与 review MVIEW；无结构化索引的旧项目不得扫散文误报，offscreen/forbidden 不计可见出场。",
         "claim_id": "character_tier_authority",
         "guard": [
             _req(
@@ -749,20 +752,40 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
                 "skills/n2d/_lib/n2d_const.py",
                 r"observed_episode_count",
                 r"independent_episode_count",
+                r"restricted_partial_contract_valid",
+                mode="all",
+            ),
+            _req(
+                "skills/n2d-review/scripts/production_consistency.py",
+                r"_storyboard_character_appearance_evidence",
+                r"observed_episode_count",
+                r"def _core_character_forms",
                 mode="all",
             ),
         ],
-        "regression": [_req(
-            "skills/n2d-review/scripts/test_gate.py",
-            r"def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards",
-            r"def test_storyboard_tier_evidence_uses_structured_visible_ids_only",
-            r"def test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal",
-            mode="all",
-        )],
+        "regression": [
+            _req(
+                "skills/n2d-review/scripts/test_gate.py",
+                r"def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards",
+                r"def test_storyboard_floor_rejects_collusive_restricted_partial_without_contract",
+                r"def test_storyboard_tier_evidence_uses_structured_visible_ids_only",
+                r"def test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal",
+                mode="all",
+            ),
+            _req(
+                "skills/n2d-review/scripts/test_production_consistency.py",
+                r"def test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards",
+                r"def test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions",
+                mode="all",
+            ),
+        ],
         "runtime_tests": [
             "skills/n2d-review/scripts/test_gate.py::test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards",
+            "skills/n2d-review/scripts/test_gate.py::test_storyboard_floor_rejects_collusive_restricted_partial_without_contract",
             "skills/n2d-review/scripts/test_gate.py::test_storyboard_tier_evidence_uses_structured_visible_ids_only",
             "skills/n2d-review/scripts/test_gate.py::test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal",
+            "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards",
+            "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions",
         ],
     },
     {
@@ -974,6 +997,52 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
         ],
     },
     {
+        "id": "reencoded_same_pixels_alias",
+        "class": "adversarial",
+        "description": (
+            "同一解码像素即使改变 PNG 压缩、filter 或 metadata 导致文件 SHA 不同，"
+            "也不能伪装成独立角度；producer 与 consumer 必须在统一 RGBA 像素域独立复算。"
+        ),
+        "claim_id": "multiview_evidence_freshness_binding",
+        "guard": [
+            _req(
+                "skills/n2d-review/scripts/image_evidence.py",
+                r"PNG_DECODED_PIXEL_FINGERPRINT_KIND",
+                r"def png_decoded_pixel_fingerprint",
+                r"RGBA16",
+                mode="all",
+            ),
+            _req(
+                "skills/n2d-review/scripts/identity_eval_pack.py",
+                r"duplicate_decoded_pixel_fingerprint_across_buckets",
+            ),
+            _req(
+                "skills/n2d-review/scripts/production_consistency.py",
+                r"duplicate_decoded_pixel_fingerprint",
+            ),
+        ],
+        "regression": [
+            _req(
+                "skills/n2d-review/scripts/test_image_evidence.py",
+                r"def test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata",
+                r"def test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint",
+                mode="all",
+            ),
+            _req(
+                "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                r"def test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint",
+                r"def test_consumer_reencoded_same_pixels_are_independently_blocked",
+                mode="all",
+            ),
+        ],
+        "runtime_tests": [
+            "skills/n2d-review/scripts/test_image_evidence.py::test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata",
+            "skills/n2d-review/scripts/test_image_evidence.py::test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint",
+            "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint",
+            "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_reencoded_same_pixels_are_independently_blocked",
+        ],
+    },
+    {
         "id": "multiview_evidence_path_escape",
         "class": "adversarial",
         "description": (
@@ -1102,17 +1171,21 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
         "guard": [_req(
             "skills/n2d/_lib/n2d_const.py",
             r"def restricted_partial_contract_valid",
-            r"inferred != CHARACTER_LIBRARY_TIER_CORE[\s\S]{0,160}restricted_partial_contract_valid",
+            r"restricted_partial_contract_valid\(record\)",
+            r"group_or_crowd",
+            r"inferred == CHARACTER_LIBRARY_TIER_MINIMAL",
             mode="all",
         )],
         "regression": [_req(
             "skills/n2d/_lib/test_character_library_contract.py",
             r"def test_core_cannot_self_report_restricted_partial_without_approved_contract",
+            r"def test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract",
             r"== CHARACTER_LIBRARY_TIER_CORE",
             mode="all",
         )],
         "runtime_tests": [
             "skills/n2d/_lib/test_character_library_contract.py::test_core_cannot_self_report_restricted_partial_without_approved_contract",
+            "skills/n2d/_lib/test_character_library_contract.py::test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract",
         ],
     },
     {
@@ -1296,6 +1369,8 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
             _req(
                 "skills/n2d-script/scripts/test_split_novel.py",
                 r"def test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized",
+                r"def test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units",
+                mode="all",
             ),
             _req(
                 "skills/n2d-script/scripts/test_boundary_audit.py",
@@ -1304,6 +1379,7 @@ BUILTIN_PROBES: List[Dict[str, Any]] = [
         ],
         "runtime_tests": [
             "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized",
+            "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units",
             "skills/n2d-script/scripts/test_boundary_audit.py::test_weak_next_opening_alone_enters_strict_gate",
         ],
     },

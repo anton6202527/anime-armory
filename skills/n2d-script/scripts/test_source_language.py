@@ -44,6 +44,25 @@ def test_empty_text_defaults_modern():
     assert sl.classify_register("")["register"] == "modern_zh"
 
 
+def test_source_traits_fold_only_adjacent_identical_chapter_headings():
+    text = (
+        "第1章 起\n"
+        "第1章 起\n"
+        "正文。\n"
+        "第2章 承\n"
+        "作者: 两个标题之间的元数据\n"
+        "第2章 承\n"
+        "第3章 转\n"
+        "第3章 另一个标题\n"
+        + MODERN
+    )
+    traits = sl.detect_source_traits(text)
+
+    # Adjacent exact duplicate => one marker. A metadata-separated repeat and a
+    # same-number/different-title heading remain separate markers.
+    assert traits["chapter_markers"] == 5
+
+
 def _mk(tmp_path, text):
     novel = tmp_path / "小说"
     novel.mkdir()

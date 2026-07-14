@@ -1,0 +1,428 @@
+{
+  "clips": [
+    {
+      "clip": "EP01_CLIP01",
+      "detail_allowed": false,
+      "detail_reason": "storyboard 明确 economy_intent=selective_detail；仍按对应时长预算审查。",
+      "duration_sec": 5.14,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "刀口为何对准人",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 6.0,
+        "min": 4.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 10.747,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "十分钟前的荒野死局",
+      "narration_weight": 0.333,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 12.0,
+        "min": 9.0
+      },
+      "template": "dialogue_shot_reverse"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 10.726,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "以脱籍换搀扶",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "emotional_turn",
+        "selective_reveal_or_hook",
+        "exposition",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 12.0,
+        "min": 9.0
+      },
+      "template": "dialogue_shot_reverse"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "detail_allowed": false,
+      "detail_reason": "storyboard 明确 economy_intent=selective_detail；仍按对应时长预算审查。",
+      "duration_sec": 7.703,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "先活着再算账",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "exposition",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": "dialogue_shot_reverse"
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 11.89,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "死妖咳嗽站起",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "ordinary_reaction_or_bridge",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 13.0,
+        "min": 9.0
+      },
+      "template": "reveal_reaction_chain"
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "detail_allowed": false,
+      "detail_reason": "storyboard 明确 economy_intent=selective_detail；仍按对应时长预算审查。",
+      "duration_sec": 5.925,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "虎口最后威胁",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 7.0,
+        "min": 5.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 13.101,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "百妖谱给出残酷选择",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail_but_split_video_shots",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "exposition",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 15.0,
+        "min": 10.0
+      },
+      "template": "system_panel"
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 8.588,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "道歉之后刀落在人身上",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "combat_or_action",
+        "selective_reveal_or_hook",
+        "exposition",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 10.0,
+        "min": 8.0
+      },
+      "template": "fight_exchange"
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 9.76,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "二十年全押一斩",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "combat_or_action",
+        "selective_reveal_or_hook",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 11.0,
+        "min": 8.0
+      },
+      "template": "dialogue_shot_reverse"
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 7.15,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "一刀斩虎与反噬",
+      "narration_weight": 0.5,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "combat_or_action",
+        "selective_reveal_or_hook",
+        "travel_or_establishing",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 9.0,
+        "min": 7.0
+      },
+      "template": "fight_exchange"
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 14.641,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "妖血为墨摹影虎山神",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail_but_split_video_shots",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 15.0,
+        "min": 12.0
+      },
+      "template": "system_panel"
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 11.642,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "能力留下而道行用尽",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "exposition",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 13.0,
+        "min": 9.0
+      },
+      "template": "system_panel"
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "detail_allowed": true,
+      "detail_reason": "storyboard 明确 economy_intent=premium_detail；仍按对应时长预算审查。",
+      "duration_sec": 12.833,
+      "economy_class": "premium_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 20.0,
+      "label": "我欠你一条命",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "keep_detail_but_split_video_shots",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "保留起手/接触或眼神/停顿/关键台词，按动作与镜位拆 take；别把解释塞进动作段，短插入镜不必硬拉到后端最短时长。",
+      "signals": [
+        "emotional_turn",
+        "selective_reveal_or_hook",
+        "manual_economy_intent",
+        "manual_target_story_clip_sec"
+      ],
+      "target_story_clip_sec": {
+        "max": 14.0,
+        "min": 10.0
+      },
+      "template": ""
+    }
+  ],
+  "episode": "第1集",
+  "findings": [],
+  "generated_at": "2026-07-14T12:16:29+00:00",
+  "kind": "n2d_story_economy_audit",
+  "ok": true,
+  "rules": [
+    "默认把秒数还给战斗/动作、男女主或核心人物强情绪交流、真正反转/集尾钩。",
+    "解释、行进、普通反应、情报交代优先压成 2-6s，或并入相邻强戏。",
+    "长 story_clip 若不值得详拍，不应先拆成多个视频段烧额度；应先回 n2d-script 压缩剧情表达。"
+  ],
+  "summary": {
+    "blocks": 0,
+    "clips": 13,
+    "compact_or_montage": 0,
+    "potential_savings_sec": 0.0,
+    "premium_detail": 10,
+    "rewrite_required": 0,
+    "target_total_max_sec": 145.0,
+    "target_total_min_sec": 105.0,
+    "total_duration_sec": 129.846,
+    "warnings": 0
+  },
+  "version": 1
+}

@@ -422,11 +422,13 @@ export function App() {
         )}
       </div>
 
-      <AppStatusBar
-        activeWork={activeWork}
-        fileStatus={activeFileStatus}
-        workspaceRoot={workspaceRoot}
-      />
+      {activeWork && (
+        <AppStatusBar
+          activeWork={activeWork}
+          fileStatus={activeFileStatus}
+          workspaceRoot={workspaceRoot}
+        />
+      )}
 
       {skillsLine && (
         <Suspense fallback={null}>

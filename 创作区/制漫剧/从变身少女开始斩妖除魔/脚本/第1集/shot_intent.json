@@ -1,0 +1,194 @@
+{
+  "kind": "n2d_shot_intent",
+  "version": 2,
+  "episode": "第1集",
+  "storyboard_sha": "c4e3fe7375b2f720a936d375d45d966036ea613fb6a1a3e7d03d78f710d07545",
+  "shots": [
+    {
+      "clip": "EP01_CLIP01",
+      "clip_no": 1,
+      "expression_span": "大",
+      "seam_mode": "intentional_discontinuity",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "clip_no": 2,
+      "expression_span": "中",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "clip_no": 3,
+      "expression_span": "中",
+      "seam_mode": "l_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "clip_no": 4,
+      "expression_span": "中",
+      "seam_mode": "j_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "clip_no": 5,
+      "expression_span": "大",
+      "seam_mode": "reaction_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "clip_no": 6,
+      "expression_span": "大",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "clip_no": 7,
+      "expression_span": "大",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP08",
+      "clip_no": 8,
+      "expression_span": "大",
+      "seam_mode": "j_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP09",
+      "clip_no": 9,
+      "expression_span": "大",
+      "seam_mode": "match_on_action",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP10",
+      "clip_no": 10,
+      "expression_span": "大",
+      "seam_mode": "j_cut",
+      "need_endframe": false,
+      "end_anchor_required": true,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP11",
+      "clip_no": 11,
+      "expression_span": "中",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP12",
+      "clip_no": 12,
+      "expression_span": "中",
+      "seam_mode": "eyeline_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    },
+    {
+      "clip": "EP01_CLIP13",
+      "clip_no": 13,
+      "expression_span": "微",
+      "seam_mode": "hard_cut",
+      "need_endframe": false,
+      "end_anchor_required": false,
+      "motion_intensity": "",
+      "action_beat": false,
+      "closeup": true,
+      "identity_requirement": ""
+    }
+  ],
+  "allowed_evolution": [
+    {
+      "character": "CHAR_01",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "囚途残损无血→面颊血污→杀裴后人血增加→斩虎后反噬虚脱；始终黑发黑瞳无虎纹。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_02",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "半跪重伤→被架起→被踢飞濒死→胸口受创死亡；伤势不复原。",
+      "source": "seed"
+    },
+    {
+      "character": "CHAR_04",
+      "from_shot": null,
+      "to_shot": null,
+      "field": "",
+      "desc": "贯穿伤伪死→带伤复生→扑击→斩首→妖血入谱；贯穿伤持续。",
+      "source": "seed"
+    }
+  ],
+  "notes": [
+    "派生字段只是 storyboard 快照投影：expression_span/seam_mode/need_endframe/end_anchor_required/motion_intensity/action_beat/closeup 以 storyboard.json 为权威，手改本文件不会覆盖 gate 或生成侧行为。",
+    "allowed_evolution 是唯一作者 override 通道：把 field 标成 costume/face/hair/prop 并填 from_shot/to_shot、置 source=\"author\"，即可显式声明『这一镜某角色该维度就该变』，对应一致性锁会把该镜 block 降 warn（补回关键词漏检的有意改动）。"
+  ]
+}

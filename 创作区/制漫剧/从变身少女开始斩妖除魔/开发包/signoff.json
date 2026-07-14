@@ -1,0 +1,111 @@
+{
+  "approvals": [
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "f7610c1f2beddbb91541dd4340a234e88ae4e18ab9ea7a10057714b13f534307"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "169f1d2ea6f1443e104a56f6b689093c58407ce1f1dfed852212376f73cc1c7f"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "c15db719c5c3a5e046685cd590f3647bce7685a44374f1b0fad701bd4aee8106"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "d1fb6333d177836ee10a27415a6c18d1b89d2590f64c48ebe3ca75fb8c401143"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "0ee868052ac74235ea0c541cbc9474623bf3223dce7bbf39ee2b794323b67566"
+        }
+      ],
+      "note": "用户于 2026-07-14 明确批准当前 P-1 开发包并以制片人身份签收",
+      "reviewed_at": "2026-07-14T10:33:50+00:00",
+      "reviewer_id": "user:project-owner",
+      "reviewer_role": "producer",
+      "signed_evidence_fingerprint_sha": "9ea2590ea59f9c7dbcd640df383fa9d8020f90d43d66a727f2b144cf9453eb6f",
+      "signed_input_fingerprint_sha": "76febc5e744a35c9be8556bbbca7dbe9a648ca36111c3b5e9a61243eebe66506",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    },
+    {
+      "decision": "approved",
+      "evidence": [
+        {
+          "path": "开发包/adaptation_strategy.json",
+          "sha256": "f7610c1f2beddbb91541dd4340a234e88ae4e18ab9ea7a10057714b13f534307"
+        },
+        {
+          "path": "开发包/pilot_greenlight.md",
+          "sha256": "169f1d2ea6f1443e104a56f6b689093c58407ce1f1dfed852212376f73cc1c7f"
+        },
+        {
+          "path": "开发包/production_feasibility.json",
+          "sha256": "c15db719c5c3a5e046685cd590f3647bce7685a44374f1b0fad701bd4aee8106"
+        },
+        {
+          "path": "开发包/season_arc.json",
+          "sha256": "d1fb6333d177836ee10a27415a6c18d1b89d2590f64c48ebe3ca75fb8c401143"
+        },
+        {
+          "path": "开发包/series_bible.md",
+          "sha256": "0ee868052ac74235ea0c541cbc9474623bf3223dce7bbf39ee2b794323b67566"
+        }
+      ],
+      "note": "用户于 2026-07-14 明确批准当前 P-1 开发包并以导演/主创身份签收",
+      "reviewed_at": "2026-07-14T10:34:07+00:00",
+      "reviewer_id": "user:project-owner",
+      "reviewer_role": "director",
+      "signed_evidence_fingerprint_sha": "9ea2590ea59f9c7dbcd640df383fa9d8020f90d43d66a727f2b144cf9453eb6f",
+      "signed_input_fingerprint_sha": "76febc5e744a35c9be8556bbbca7dbe9a648ca36111c3b5e9a61243eebe66506",
+      "unresolved_risks": [],
+      "waiver_reason": ""
+    }
+  ],
+  "artifact_scope": "p1_development_greenlight",
+  "authored_by": "agent:n2d-development",
+  "created_at": "2026-07-14T10:33:50+00:00",
+  "episode": "",
+  "evidence_fingerprint": {
+    "files": {
+      "开发包/adaptation_strategy.json": "f7610c1f2beddbb91541dd4340a234e88ae4e18ab9ea7a10057714b13f534307",
+      "开发包/pilot_greenlight.md": "169f1d2ea6f1443e104a56f6b689093c58407ce1f1dfed852212376f73cc1c7f",
+      "开发包/production_feasibility.json": "c15db719c5c3a5e046685cd590f3647bce7685a44374f1b0fad701bd4aee8106",
+      "开发包/season_arc.json": "d1fb6333d177836ee10a27415a6c18d1b89d2590f64c48ebe3ca75fb8c401143",
+      "开发包/series_bible.md": "0ee868052ac74235ea0c541cbc9474623bf3223dce7bbf39ee2b794323b67566"
+    },
+    "sha": "9ea2590ea59f9c7dbcd640df383fa9d8020f90d43d66a727f2b144cf9453eb6f"
+  },
+  "input_fingerprint": {
+    "files": {
+      "_设置.md": "1b047402cdc044e6c6e939813769f518ca9b680e35ac5d416f5c39a213fbe81b",
+      "小说/从变身少女开始斩妖除魔.txt": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1"
+    },
+    "sha": "76febc5e744a35c9be8556bbbca7dbe9a648ca36111c3b5e9a61243eebe66506"
+  },
+  "kind": "n2d_artifact_signoff",
+  "required_approval_groups": [
+    {
+      "group": "creative",
+      "roles": [
+        "director",
+        "head_writer",
+        "showrunner"
+      ]
+    },
+    {
+      "group": "production",
+      "roles": [
+        "producer"
+      ]
+    }
+  ],
+  "status": "approved",
+  "updated_at": "2026-07-14T10:34:07+00:00",
+  "version": 1
+}

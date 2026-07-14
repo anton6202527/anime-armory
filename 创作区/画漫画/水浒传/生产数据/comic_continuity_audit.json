@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "kind": "comic_continuity_audit",
+  "created_at": "2026-07-14T07:47:51+00:00",
+  "project_root": ".",
+  "through_chapter": "第1话",
+  "summary": {
+    "chapters": 1,
+    "block": 0,
+    "warn": 0,
+    "info": 0
+  },
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "panel_script_path": "脚本/第1话/panel_script.json",
+      "panel_script_sha256": "14a3806b3ebc974c23a75da5075e5c705e3eb92ab570564223a66a6274024a26",
+      "state": {
+        "entry": {
+          "STORY_CHAPTER": {
+            "state": "嘉祐三年京师瘟疫加剧，仁宗朝廷手段尽失，一百零八魔君仍被封于龙虎山伏魔殿。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "奉诏求援的朝廷使者，自信权势与官阶足以解决障碍。",
+            "visual_state": "官装整洁，丹诏与御香在身。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "奉诏迎使、守护伏魔殿历代禁令的住持。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "封禁于伏魔殿地穴。"
+          },
+          "WORLD_ORDER": {
+            "state": "人间秩序表面华丽，底层已因瘟疫与治理失效承受代价。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "由洪信随身携带。"
+          }
+        },
+        "computed_exit": {
+          "STORY_CHAPTER": {
+            "state": "伏魔殿半角掀塌，一百零八星已散，住持将在下话说出天罡地煞的真相。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "擅开封印、面对灾变且尚未承认责任的当事人。",
+            "visual_state": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "化为百十道金光散入人间。"
+          },
+          "WORLD_ORDER": {
+            "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        },
+        "declared_exit": {
+          "STORY_CHAPTER": {
+            "state": "伏魔殿半角掀塌，一百零八星已散，住持将在下话说出天罡地煞的真相。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "擅开封印、面对灾变且尚未承认责任的当事人。",
+            "visual_state": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "化为百十道金光散入人间。"
+          },
+          "WORLD_ORDER": {
+            "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        }
+      }
+    }
+  ],
+  "findings": [],
+  "verdict": "pass"
+}

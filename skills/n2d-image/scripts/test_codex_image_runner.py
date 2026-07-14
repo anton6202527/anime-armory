@@ -1246,7 +1246,16 @@ def test_style_source_references_attach_only_to_clean_style_anchor_target(tmp_pa
     shared.mkdir(parents=True, exist_ok=True)
     (shared / "style_anchor_registry.json").write_text(json.dumps({
         "source_style_references": [
-            {"path": style_rel, "status": "ready", "use_policy": "style_source_only"}
+            {
+                "path": style_rel,
+                "sha256": codex_image_runner.file_sha256(tmp_path / style_rel),
+                "status": "ready",
+                "use_policy": "style_source_only",
+                "rights_status": "authorized",
+                "eligible_for_generation": True,
+                "backend_upload_allowed": True,
+                "watermark_present": False,
+            }
         ]
     }), encoding="utf-8")
     style_section = codex_image_runner.ClipSection(
@@ -1266,6 +1275,79 @@ def test_style_source_references_attach_only_to_clean_style_anchor_target(tmp_pa
 
     assert any(style_rel in item.get("paths", []) for item in style_bundle["items"])
     assert all(style_rel not in item.get("paths", []) for item in shot_bundle["items"])
+
+
+def test_pending_rights_status_is_never_ready_even_with_legacy_override_flag() -> None:
+    for status in (
+        "available_pending_rights_review",
+        "user_provided_reference_pending_rights_review",
+        "accepted_for_internal_generation_pending_rights_review",
+    ):
+        assert not codex_image_runner._status_ready(
+            {"status": status},
+            allow_pending_user_reference=True,
+        )
+
+
+def test_shared_asset_preflight_uses_compliance_not_full_image_gate(tmp_path: Path, monkeypatch) -> None:
+    captured: dict[str, list[str]] = {}
+    monkeypatch.setattr(codex_image_runner, "reference_manifest_generation_issues", lambda _root: [])
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = list(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout='{"status":"pass"}', stderr="")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", fake_run)
+
+    assert codex_image_runner.run_shared_asset_preflight(tmp_path, "第1集")
+    command = captured["cmd"]
+    assert command[1].endswith("skills/n2d-compliance/scripts/compliance.py")
+    assert command[-3:] == ["--stage", "image", "--json"]
+    assert "--stage" in command and command[command.index("--stage") + 1] == "image"
+    assert "image_preflight" not in command
+
+
+def test_shared_asset_preflight_blocks_reference_rights_before_compliance(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(
+        codex_image_runner,
+        "reference_manifest_generation_issues",
+        lambda _root: ["reference[user-1]:watermark_present_or_not_explicitly_false"],
+    )
+
+    def forbidden_run(*args, **kwargs):
+        raise AssertionError("compliance subprocess must not run after reference-rights block")
+
+    monkeypatch.setattr(codex_image_runner.subprocess, "run", forbidden_run)
+
+    assert not codex_image_runner.run_shared_asset_preflight(tmp_path, "第1集")
+
+
+def test_shared_targets_preflight_is_nonwaivable_and_runs_before_generation(tmp_path: Path, monkeypatch) -> None:
+    section = codex_image_runner.ClipSection(
+        "STYLE_ANCHOR", "## 风格锚", "风格锚", "`出图/共享/图片/风格锚.png`"
+    )
+    target = codex_image_runner.Target(
+        "STYLE_ANCHOR",
+        "STYLE_ANCHOR",
+        "shared",
+        "出图/共享/图片/风格锚.png",
+        section,
+    )
+    monkeypatch.setattr(codex_image_runner, "build_shared_targets", lambda *_args: [target])
+    monkeypatch.setattr(codex_image_runner, "run_shared_asset_preflight", lambda *_args: False)
+
+    def forbidden_process(*args, **kwargs):
+        raise AssertionError("paid shared target ran before shared_asset_preflight passed")
+
+    monkeypatch.setattr(codex_image_runner, "process_target", forbidden_process)
+
+    assert codex_image_runner.main([
+        str(tmp_path),
+        "第1集",
+        "--shared-targets",
+        "STYLE_ANCHOR",
+        "--skip-preflight",
+    ]) == 1
 
 
 def test_target_generation_lock_blocks_duplicate_paid_submission(tmp_path: Path) -> None:
@@ -2345,7 +2427,16 @@ def test_character_reference_overrides_duplicate_style_anchor_input(tmp_path: Pa
         json.dumps({
             "characters": [{
                 "id": "CHAR_01",
-                "external_visual_references": [{"path": style_rel, "status": "ready"}],
+                "external_visual_references": [{
+                    "path": style_rel,
+                    "sha256": codex_image_runner.file_sha256(tmp_path / style_rel),
+                    "status": "ready",
+                    "use_policy": "identity_reference",
+                    "rights_status": "user_owned",
+                    "eligible_for_generation": True,
+                    "backend_upload_allowed": True,
+                    "watermark_present": False,
+                }],
                 "forms": [{"form": "常态", "reference_group": {}}],
             }]
         }, ensure_ascii=False),
@@ -2808,7 +2899,7 @@ def test_main_skip_preflight_cannot_bypass_shared_first_interlock(tmp_path: Path
     ]) == 1
 
 
-def test_reference_bundle_does_not_attach_non_ready_path_metadata(tmp_path: Path) -> None:
+def test_reference_bundle_does_not_attach_pending_rights_external_reference_or_lineage(tmp_path: Path) -> None:
     active = tmp_path / "出图" / "共享" / "图片" / "定妆_沈念_常态.png"
     active.parent.mkdir(parents=True)
     active.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
@@ -2822,7 +2913,13 @@ def test_reference_bundle_does_not_attach_non_ready_path_metadata(tmp_path: Path
                 "id": "CHAR_01",
                 "external_visual_references": [{
                     "path": "设定库/reference_images/user_ref.jpg",
-                    "status": "lineage_only_after_shared_front_generation",
+                    "sha256": codex_image_runner.file_sha256(lineage),
+                    "status": "accepted_for_internal_generation_pending_rights_review",
+                    "use_policy": "identity_reference",
+                    "rights_status": "authorized",
+                    "eligible_for_generation": True,
+                    "backend_upload_allowed": True,
+                    "watermark_present": False,
                 }],
                 "forms": [{
                     "form": "常态",

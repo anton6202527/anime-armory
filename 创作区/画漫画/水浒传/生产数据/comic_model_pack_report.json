@@ -1,0 +1,574 @@
+{
+  "kind": "comic_model_pack_report",
+  "version": 1,
+  "created_at": "2026-07-14T07:08:48+00:00",
+  "characters": [
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_ABBOT_SHANGQING",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "299e1c88d9c317f3453cb6dca0da088da0940e9befdd83cf96bf95dc1d50fa74",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_ABBOT_SHANGQING.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_EMPEROR_RENZONG",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "2e18409afc97a9ee2dc8ba65df64903f47e90424cef3a33cbcba7d10473209f8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_EMPEROR_RENZONG.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_FAN_ZHONGYAN",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "edf94fdf802be7d2001fc5e915a24aa81b976df36eb799e7f630d1ba9ec49c3e",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_FAN_ZHONGYAN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_HONG_XIN",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "4ffcada56d7d6e3a84c79e3a3ff4d3e37b25e795e6ea3508bb65908d53a74f15",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_HONG_XIN.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "three_quarter",
+          "message": "缺必需视图 three_quarter"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_MASTER_XUJING",
+      "asset_type": "character",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "b69eaa9a7c416a681af3c05474f6f70dba3a9f0a5802df2a4a78ec53a5da3da8",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_MASTER_XUJING.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "three_quarter",
+          "message": "缺必需视图 three_quarter"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_WEN_YANBO",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "2a6516fecf373286bb1445e14a63a7f4e6ad0de56a8760fff22d4d1c3ea61e71",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_WEN_YANBO.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "CHAR_ZHAO_ZHE",
+      "asset_type": "character",
+      "tier": "named_minimal",
+      "required_views": [
+        "front",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "a73c7ce946afc646bf4ef8fcd64a6a4aeedbfbb6e04813ce7bf75d5b4a3c6419",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/CHAR_ZHAO_ZHE.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_SNOW_SERPENT",
+      "asset_type": "monster",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "a636ae9099bbfa2d8caaa1068894eeccafeb1f1b3f227bf63633ee0157d75b9f",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_SNOW_SERPENT.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "three_quarter",
+          "message": "缺必需视图 three_quarter"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    },
+    {
+      "kind": "comic_character_model_pack",
+      "version": 1,
+      "character_id": "MON_WHITE_TIGER",
+      "asset_type": "monster",
+      "tier": "recurring_standard",
+      "required_views": [
+        "front",
+        "three_quarter",
+        "face"
+      ],
+      "view_evidence": [
+        {
+          "view": "front",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "three_quarter",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        },
+        {
+          "view": "face",
+          "path": "",
+          "sha256": "",
+          "width": 0,
+          "height": 0,
+          "source_view": "",
+          "derivation": {}
+        }
+      ],
+      "model_pack_fingerprint": "cf7226e1523b55e3d553c10525cacc08434253324feceb0abc576965ab56c08b",
+      "signoff": {
+        "path": "生产数据/comic_model_pack_signoffs/MON_WHITE_TIGER.json",
+        "status": "missing",
+        "approved_at": "",
+        "reviewer": ""
+      },
+      "signoff_required": true,
+      "readiness": "needs_fix",
+      "technical_block": true,
+      "findings": [
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "front",
+          "message": "缺必需视图 front"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "three_quarter",
+          "message": "缺必需视图 three_quarter"
+        },
+        {
+          "severity": "block",
+          "code": "model_pack_view_missing",
+          "view": "face",
+          "message": "缺必需视图 face"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "assets": 9,
+    "characters": 7,
+    "monsters": 2,
+    "ready": 0,
+    "needs_approval": 0,
+    "needs_fix": 9
+  }
+}

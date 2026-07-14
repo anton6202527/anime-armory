@@ -327,7 +327,7 @@ def check_identity_registry(
                         if strict_references and not _identity_reference_item_ready(item):
                             add(BLOCK, "资产身份注册层", floc,
                                 f"reference_group.{key} 必须为 ready 且有路径；planned/空路径只能表示待补，不能放行。"
-                                "三视图人审拼版不能替代正/45°/侧/背等拆分参考。")
+                                "turnaround 人审拼版不能替代正面/前3/4/侧面/后3/4/背面五角拆分参考。")
                             continue
                         if asset_key and enforce_asset_key_filename and not _identity_reference_matches_asset_key(asset_key, rel):
                             add(BLOCK, "资产身份注册层", floc,

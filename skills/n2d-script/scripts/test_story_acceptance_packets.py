@@ -94,6 +94,20 @@ def test_table_read_reports_estimate_only_when_final_timing_is_absent(tmp_path: 
     assert payload["inputs"]["timing_estimate"].endswith("timing_estimate.json")
 
 
+def test_table_read_ignores_premature_story_economy_block(tmp_path: Path) -> None:
+    _write_inputs(tmp_path)
+    out = tmp_path / "生产数据" / "story_economy_audit_第1集.json"
+    out.parent.mkdir(parents=True)
+    out.write_text(json.dumps({
+        "ok": False,
+        "findings": [{"severity": "block", "code": "missing_storyboard"}],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    payload = sap._table_read_payload(tmp_path, "第1集")
+
+    assert payload["machine_reference"]["story_economy"] == "not_applicable_before_storyboard"
+
+
 def test_stage2_quality_report_does_not_invalidate_approved_table_read(tmp_path: Path) -> None:
     _write_inputs(tmp_path)
     sap.scaffold(tmp_path, "第1集", kind="table_read", confirmed=True)

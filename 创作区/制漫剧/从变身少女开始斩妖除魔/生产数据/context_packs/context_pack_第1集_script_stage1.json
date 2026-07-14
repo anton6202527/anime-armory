@@ -1,0 +1,427 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_check",
+      "source_comprehension_gate",
+      "update_plan",
+      "doctor",
+      "development_pack",
+      "midstart_context",
+      "boundary_audit"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage1",
+    "stop_policy": "needs_choice_or_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 2087,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 基础视觉风格: 国漫写实角色审美 + 电影级布光与镜头语言  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=inferred_from_request\n- 画幅: 9:16  # source=project_default\n- 字幕语言: 中文  # source=source_analysis\n- 合规用途: internal_only  # source=safety_default\n- 题材: 自定义（系统流+修仙+志怪悬疑）  # source=source_analysis\n\n[RECENT CORRECTIONS — provenance only, non-authoritative, bounded]\n- 2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实\n\nraw audit history omitted: records_seen=12, corrections_included=1/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "1b047402cdc044e6c6e939813769f518ca9b680e35ac5d416f5c39a213fbe81b"
+    },
+    {
+      "bytes": 1698,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔 — 生产进度\n已粗切 **10** 集（按本地滞后源快照约估 830 集，非完结全本；首批/部分先切，精修验证后取得有权使用的最新源，再重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 5481 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 5122 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 5214 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4374 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5044 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4578 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 4313 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 4292 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "1261091fb37648b2019f33cf47b038af912dc6e4dc75a09c8eaa094e0b44dd2b"
+    },
+    {
+      "bytes": 5258,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_series_bible\nversion: 1\nstatus: confirmed\n---\n# 从变身少女开始斩妖除魔 — P-1 剧集开发圣经\n> 内容已补齐，状态 confirmed 只表示可供创意/制片签收，不代表已经取得改编权，也不代替 开发包/signoff.json 的人工签收。\n## 一句话卖点\n一个现代男人被困进十八岁罪臣之女的身体，为活命杀死镇魔卫夺得第一笔道行，从此以黑衣横刀和“妖血为墨”的百妖谱在大唐边塞斩妖升级；她每一次变强，都在追问自己究竟要成为怎样的“姜大人”。\n## 项目形态\n- 竖屏 9:16 国漫写实漫剧。\n- 长篇量产，先做第1–10集试播窗口，对应原著第1–18章；第19–20章留作下一窗口开场，避免把超长第18章与身体/营内冲突硬塞进同集。\n- 单集候选时长 150–210 秒；以剧本 table read 后的真实语速和镜头负荷校准，不用原文字数硬塞。\n- 当前用途 internal_only；目标平台、发行地区、付费模式和最终时长在权利确认及 P-1 签收后锁定。\n## 目标受众\n- 核心：16–35 岁，偏好女强成长、变身/性别错位、志怪斩妖、系统升级、机构成长与悬疑身世的中文竖屏观众。\n- 次核心：喜欢写实国漫角色、电影化镜头和水墨志怪特效，但不希望整剧变成仙侠页游或静态海报的观众。\n- 内容承诺：先兑现选择与代价，再给升级与反杀；爽点不抹平人物道德阴影。\n## 主角欲望\n- 外在：活下去，摆脱贱籍/逃犯身份，获得可自主选择的身份和力量。\n- 内在：面对杀裴长青求生留下的道德债，并在男性意识与女性身体、婚嫁秩序之间建立新的自我。\n- 首批弧：从只顾个人逃命，到回头救村、协战金城、以受约束的方式加入镇魔司。\n## 长线悬念\n1. 姜家为何获罪，为什么由镇魔司押送，魏合知道多少。\n2. 百妖谱从何而来，道行与妖物反馈的边界是什么。\n3. 裴长青之死和冒用身份何时反噬。\n4. 姜月初如何理解并选择现在的身体、身份与关系。\n5. 她在镇魔司成长后，是成为秩序的一部分，还是改写秩序。\n## 世界观规则\n- 妖祸笼罩的大唐边塞；镇魔司是对妖武装与调查机构，黑衣赤纹形成稳定视觉识别。\n- 早期境界为凡境→闻弦→鸣骨→成丹；后续只按源书增量登记。\n- 斩杀可得道行，道行只能投入武学或百妖谱中的明确去向，不能重复消费。\n- 百妖谱以妖血为墨，依次表现摹影→染朱→点睛；妖物才可反馈武学、天赋或神通。\n- 虎妖化必须在点睛虎山神后出现；解除后红发、金色竖瞳和赤色虎纹全部复原。\n- 重伤、力竭、武器损坏、服装污损和能力代价必须跨镜承接。\n## 核心爽感\n1. 求生抉择：主角在最差选择中抢回主动权，而非无条件被奖励。\n2. 妖谱升级：妖血如墨、摹影、染朱、点睛形成可重复又可升级的视听仪式。\n3. 以弱胜强：横刀近战、伤势与环境共同决定胜负，先建立威胁再反杀。\n4. 身份反转：逃犯冒充镇魔卫，最终被识破却以实力与选择争取入司。\n5. 机构打脸：进入玄字营后在质疑中用行动立足，但不靠旁白宣布无敌。\n6. 身体错位：现代男性思维与女性身体/社会规训产生克制、非低俗的戏剧反差。\n## 关键角色弧\n- 姜月初：求生者→背负选择后果的救人者→受约束入司的新镇魔卫。缺陷是自利、嘴硬、习惯先算收益；成长不是变圣人，而是愿意为选择负责。\n- 裴长青：短线人物，却同时承担力量来源、制服来源、身份风险与道德债，不能被改成主动献祭。\n- 魏合：从审视危险变量到把姜月初纳入可控秩序；权威来自判断与克制，不靠华丽造型。\n- 刘沉：以真正镇魔卫的视角见证姜月初从可疑冒名者变成战场同伴。\n- 魏清：提供组织内的人情与身体照料视角，和姜月初形成温婉/冷硬、素白/黑赤的视觉与性格区分。\n## 视觉与声音主张\n- 基础：国漫写实角色审美 + 电影级布光与镜头语言。\n- 项目子风格：黑赤镇魔·水墨妖谱。常态是冷灰、土褐、墨黑的粗粝唐代边塞；朱砂标记状态；金色只属于点睛、竖瞳和封面强调。\n- 姜月初常态必须是黑发高马尾、玄黑赤纹劲装、横刀；用户参考图中的白衣、毛笔、金甲和海报版式不进入常态。\n- 音乐以低鼓、弦乐擦奏、木质敲击和稀疏古琴/箫气息构建边塞与悬疑；百妖谱出现时加入纸张、墨滴、低频兽鸣，不做持续轰炸式仙侠金光音效。\n## 首批制作验收\n- 前3秒有可读视觉问题或危险，不用背景旁白热场。\n- 每集至少兑现一个上一集承诺，并打开一个下一集明确问题。\n- 姜月初常态与虎妖化分别执行 core_full 五角、turnaround、服装锚和脸锚签收。\n- 同 IP 样本只作为高去重市场研究；原图、竞品截图和带水印参考不进入后端。\n- 第1集完整链路与高风险妖化/百妖谱 Clip 通过后，才允许3集一批放量。",
+      "relpath": "开发包/series_bible.md",
+      "sha256": "0ee868052ac74235ea0c541cbc9474623bf3223dce7bbf39ee2b794323b67566"
+    },
+    {
+      "bytes": 4914,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_adaptation_strategy",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "scope",
+          "principles",
+          "triage_policy",
+          "protected_functions",
+          "forbidden_changes",
+          "episode_design_standard",
+          "acceptance"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/adaptation_strategy.json",
+      "sha256": "f7610c1f2beddbb91541dd4340a234e88ae4e18ab9ea7a10057714b13f534307"
+    },
+    {
+      "bytes": 8727,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_season_arc",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "arc_name",
+          "source_scope",
+          "episode_count",
+          "boundary_status",
+          "series_promise",
+          "front_arc",
+          "monetization_or_follow_points",
+          "signature_scenes",
+          "next_window_seed"
+        ],
+        "version": 1
+      },
+      "relpath": "开发包/season_arc.json",
+      "sha256": "d1fb6333d177836ee10a27415a6c18d1b89d2590f64c48ebe3ca75fb8c401143"
+    },
+    {
+      "bytes": 9072,
+      "exists": true,
+      "preview": {
+        "kind": "n2d_development_production_feasibility",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "status",
+          "generated_at",
+          "verdict",
+          "conditions",
+          "core_characters",
+          "core_locations",
+          "props_vfx_spectacle",
+          "voice_and_music",
+          "model_route_risks",
+          "compliance_risks",
+          "acceptance"
+        ],
+        "verdict": "conditional_go_for_text_development_media_generation_blocked",
+        "version": 1
+      },
+      "relpath": "开发包/production_feasibility.json",
+      "sha256": "c15db719c5c3a5e046685cd590f3647bce7685a44374f1b0fad701bd4aee8106"
+    },
+    {
+      "bytes": 5170,
+      "exists": true,
+      "preview": "---\nkind: n2d_development_pilot_greenlight\nversion: 1\nstatus: confirmed\n---\n# 从变身少女开始斩妖除魔 — P-1 试播打样绿灯\n> 结论：文本开发条件绿灯；付费图片、视频与声音生成红灯。解除媒体红灯需要源文本/改编权证据、P-1人工签收和首批边界签收。\n## 打样范围\n- 第1集走完整文字→分镜→声音→图片→视频→合成→验收链路。\n- 第1–3集先完成文字链路，用于验证“道德债—冒名—救村”追更弧。\n- 单独打样百妖谱激活、姜月初常态/妖化身份差分、朱厌尺度与血雾动作三个高风险视觉合同。\n- 先打样，不批量生成819章或830集；长篇按3集一批放量。\n## 开跑前阻断项\n1. 用户确认自己是作者/权利人，或提供覆盖本项目用途的改编授权与既有漫剧权利边界说明。\n2. 开发包/signoff.json 获得创意组与制片组对当前文件哈希的人工签收。\n3. 脚本/_拆集复核.md 的建议第1–10集边界获人工签收，再重建正式 raw；不能让新 split_plan 与旧 raw 混用。\n4. 确认生图/生视频后端与重抽预算；当日核验官方能力和最小 smoke。\n5. 外部参考保持 analysis_only；除非另有明确授权，永不作为后端附件。\n## 高风险 Clip 打样清单\n| 优先级 | 集/Clip候选 | 为什么必须先打样 | 通过标准 | 失败回退 |\n|---|---|---|---|---|\n| P0 | 共享：姜月初常态五角 | 所有下游脸、年龄、发型、制服和横刀的母本 | 五角独立像素；同脸同龄同身量；黑发高马尾；黑赤制服结构一致；当前哈希逐项人工签收 | 先只做正面脸身母本→通过后同源派生前3/4/侧/后3/4/背；禁止拿用户水印图直接图生图 |\n| P0 | 共享：姜月初虎妖化五角 | 最易换脸、兽头化和状态串用 | 与常态同一骨相和年龄；只改血红发、金色竖瞳、手腕至肩臂赤虎纹；五角独立签收 | 拆分头发、瞳孔、虎纹局部差分；保留常态制服和脸部几何 |\n| P0 | 第1集：杀裴长青→斩虎 | 主角道德钩、动作因果和身份关系必须同时成立 | 观众无需旁白也能看清她的求生选择、刀的来源、两次杀戮对象不同；轴线不乱 | 拆成眼神/握刀/结果/虎袭四段短镜，删无功能炫技 |\n| P0 | 第1集：百妖谱首次录入 | 系列核心升级语法首次建立 | 妖血为墨→摹影→阶段反馈顺序可读；旧纸无乱码；墨/朱/金不同时泛滥 | 古卷母本与墨、兽影、文字后期分层；不让模型直接写长文 |\n| P0 | 第6–8集：虎妖化启动 | 身份连续性与高光形态的最高风险 | 常态到妖化变化逐项可见；不换脸、不兽头化；解除后状态可复原 | 用同源母本局部编辑；每次只改一个变量，合成状态链 |\n| P0 | 第7–8集：朱厌战 | 多主体、巨大妖物、锈剑、血雾和近战同时高负荷 | 朱厌尺度、攻击方向、锈剑尺寸和姜月初位置连续；VFX不遮脸；反杀有前置和代价 | 本体/锈剑/血雾/人物反应拆镜拆层，改用短动作与结果镜 |\n| P1 | 第9集：魏合识破身份 | 对话戏检验电影化反打、机构空间和权力表演 | 姜月初/魏合两张脸稳定；卷宗证据可读；站位、视线、光位连续 | 减少同框，使用过肩反打和证据物插镜 |\n## 绿灯标准\n- 剧本：前3秒有问题；第1集兑现穿越死局、道德债、斩虎与妖谱首次录入；集尾有可复述追更问题。\n- 边界：建议10集映射与来源章号经人工签收；单集 table read 落在150–210秒候选区间，超出则回剪内容，不加速念白。\n- 角色：姜月初常态与妖化态分别完成 core_full 五角、turnaround、服装锚、脸锚和当前像素收据。\n- 视觉：黑赤镇魔·水墨妖谱六字段合同贯穿 storyboard、图片总览与视频合同；常态现实域与妖谱子风格不混用。\n- 动作：横刀、轴线、接触点、起落和伤势后果清楚；多主体难镜用身份槽与分层构建，不删剧情。\n- 声音：姜月初外显十八岁女性声线但表演冷静克制；无真人克隆；最终合成前替换所有占位音。\n- 合规：源文本/改编权可放行；用户参考权利与附件用途可审计；同 IP 高去重；无水印、Logo或竞品复制。\n- 技术：后端能力证据为当日；预算上限已设；runner 预付费 gate 无 BLOCK；图片、视频和最终 review 均无核心阻断。\n## 小批量放量条件\n1. 第1集完整成片和P0高风险样片全部通过。\n2. 第1–3集文字追更弧通过 table read 与人工剧本签收。\n3. 下一批只推进第2–4集；之后每次最多3集。\n4. 每批在 script、image_preflight、image、video_preflight、video、compose、review 留审点；任一主角身份、权利、力量规则或边界哈希漂移立即停批。\n5. split_plan 长篇索引压缩已完成：schema v3 计划约 3.31 MiB，迁移前后生产语义及现有 raw 均一致；后续生成器必须继续默认 compact v3，禁止退回逐单元复制正文的 v2，旧版仅保留为可回滚压缩备份。",
+      "relpath": "开发包/pilot_greenlight.md",
+      "sha256": "169f1d2ea6f1443e104a56f6b689093c58407ce1f1dfed852212376f73cc1c7f"
+    },
+    {
+      "bytes": 16375,
+      "exists": true,
+      "preview": "第1章 百妖谱\n第1章 百妖谱\n本书单身。\n彦祖亦菲打卡处。\n----------------\n风里带着腥气。\n破败的荒野，枯草连天，不见人烟。\n姜月初愣愣地看着眼前的一切。\n她还是没能接受，自己怎么就从一个二十一世纪的现代人，穿越到一个陌生女子身上。\n破碎的记忆涌入脑海。\n神州大地，大唐王朝。\n妖魔横行，食人血肉，祸乱天下。\n可她这般手无缚鸡之力的女子，为何会置身于这荒郊野岭？\n姜月初站起身，环顾四周。\n遍地尸骸。\n多数人身上穿着灰扑扑的囚服，与她身上这件别无二致。\n另一些人则身着黑衣，衣襟与袖口绣着赤色云纹。\n视线尽头，一个庞大的身影斜斜倚着一块巨岩。\n当那身影的轮廓清晰，姜月初的呼吸一滞。\n人身，虎头，体魄雄壮如小山。\n即便已经没了声息，凶煞之气依旧扑面而来，让人心头发紧。\n它的胸膛上有一个巨大的窟窿，黑色的妖血流了一地。\n是妖魔！\n还好......还好是死的。\n她松了半口气，目光又被虎妖不远处的另一个人影吸引。\n那人也穿着黑衣赤纹的劲装，身形挺拔。\n只是此刻，他半跪在地，一把断刀插在身前的泥土里，支撑着没有倒下。\n他浑身是伤，左臂不自然地扭曲着，胸口起伏微弱，显然也到了油尽灯枯的地步。\n荒野上，风声鹤唳。\n除了这个黑衣人和她，再无活口。\n姜月初下意识地屏住呼吸，脚下悄悄向后挪了一步。\n那半跪着的黑衣人似乎察觉到了她的动静，头颅艰难地转了过来。\n他的脸庞很年轻，约莫二十出头。\n只是现在看去，面色惨白，唇嘴干裂，显然状态并不好。\n他看到了姜月初，用沙哑到几乎听不清的声音，吐出两个字。\n“过来。”\n“......”\n你说过来就过来？\n姜月初在心里嘀咕一句。\n她想起来了。\n自己这具身体的前身，本是京城里一位高官的独女。\n奈何父亲一朝获罪，满门牵连，她被没入贱籍，发配边疆。\n而眼前这个半死不活的男人，正是押送他们的官差。\n镇魔司。\n谈及镇魔司，大唐境内，无不色变。\n有传闻说，镇魔司的缇骑一旦登门，便是阎王爷亲至。\n小儿闻其名，夜不敢啼。\n况且此行边疆，下场生不如死。\n不如趁现在跑了，兴许还能寻条生路。\n姜月初打定了主意。\n她悄然后退，转身，刚要迈出步子。\n一道尖锐的破风声乍起。\n“咻！”\n半截断刀没入她身前半步的地上。\n姜月初浑身一僵，冷汗瞬间湿了后背。\n好猛的将死之人！\n如此情况，随手一掷，还能有这般手段！\n若是起了杀心，自己这颗脑袋，怕是比地上的死人多不了几分热气。\n姜月初深吸了一口气，心中满是郁闷。\n罢了。\n过来就过来！\n人在屋檐下，不得不低头。\n她僵硬地转过身，小步挪了过去。\n那人抬起头，看着她这番小鸡似的动作，嘴角似乎牵动了一下。\n他刚才掷出那半截断刀，确实是用了最后几分气力。\n若是她铁了心要跑，自己还真就只能眼睁睁看着。\n好在这番动作，已经唬住了眼前的少女。\n“扶我起来。”\n许是怕她不从，那人又补充道：“在下裴长青，陇右镇魔都司队正。”\n自报家门，算是示之以诚。\n他喘了口气，视线落在她惊魂未定的脸上。\n“我知道你想跑...可你跑的掉么......一个没有户籍路引的贱籍逃犯，就算侥幸活到下一座城镇，又能如何？”\n“若是你按我说的去做，事后，我保你脱了贱籍，还你自由身。”\n姜月初听着，心里已经翻起了白眼。\n靠！\n画大饼画到老子头上来了？\n前世被老板灌了多少鸡汤，许了多少空头支票。\n结果呢？\n还不是福报没修够，提前见了阎王。\n不过，他说的倒也是实话。",
+      "relpath": "脚本/第1集/raw.txt",
+      "sha256": "aa0ba2963b1eca46bc6da87a483e1790e804630130fa5872542ea157e5598c9f"
+    },
+    {
+      "bytes": 738,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "graph_hash": "6a6705bdc00e9c912fc05f958cf09319708c17ae55cc48a729858e5e0f3e7782",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 0,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 1,
+          "routes": 0,
+          "story_clips": 0,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第1集.json",
+      "sha256": "22f4f396ec7f5539fd16c5395254677c958433c02f24d32cb2998fc7ffe79fd7"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
+      "state": "storyboard_missing",
+      "storyboard_clip_count": 0,
+      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+      "storyboard_state": "missing",
+      "triggered": false
+    },
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-07-14T11:19:21+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "matched_genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "matched_labels": [
+        "穿越",
+        "仙侠",
+        "悬疑"
+      ],
+      "matches": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 4,
+          "matched_term": "系统流",
+          "priority": 1
+        },
+        {
+          "genre_key": "xianxia",
+          "label": "仙侠",
+          "match_start": 8,
+          "matched_term": "修仙",
+          "priority": 2
+        },
+        {
+          "genre_key": "suspense",
+          "label": "悬疑",
+          "match_start": 13,
+          "matched_term": "悬疑",
+          "priority": 3
+        }
+      ],
+      "raw": "自定义（系统流+修仙+志怪悬疑）"
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形",
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行",
+        "线索特写独立出图并在剪辑中插入，避免视频生成改掉证物细节",
+        "追逐/跟踪拆成主观视角、脚步、转角、结果镜",
+        "暗光镜降低运动幅度，保留关键证据可读性"
+      ],
+      "genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "labels": [
+        "穿越",
+        "仙侠",
+        "悬疑"
+      ],
+      "matched_packs": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 4,
+          "matched_term": "系统流",
+          "priority": 1
+        },
+        {
+          "genre_key": "xianxia",
+          "label": "仙侠",
+          "match_start": 8,
+          "matched_term": "修仙",
+          "priority": 2
+        },
+        {
+          "genre_key": "suspense",
+          "label": "悬疑",
+          "match_start": 13,
+          "matched_term": "悬疑",
+          "priority": 3
+        }
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan",
+        "gait_cycle",
+        "vehicle_lock"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果",
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移",
+        "线索可读性",
+        "证物状态",
+        "空间方位",
+        "暗光清晰度",
+        "伏笔兑现顺序"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "by_genre": [
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "chuanyue",
+            "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+          },
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "xianxia",
+            "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+          },
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "suspense",
+            "notes": "悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+          }
+        ],
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。 | 题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。 | 悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+      }
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+    "stage_key": "script_stage1",
+    "status": "pass",
+    "summary": {
+      "activation_state": "storyboard_missing",
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0,
+      "matched_genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "matched_packs": 3,
+      "storyboard_clip_count": 0,
+      "storyboard_state": "missing"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "合规用途": {
+        "source": "safety_default",
+        "value": "internal_only"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "国漫写实角色审美 + 电影级布光与镜头语言"
+      },
+      "字幕语言": {
+        "source": "source_analysis",
+        "value": "中文"
+      },
+      "画幅": {
+        "source": "project_default",
+        "value": "9:16"
+      },
+      "视频模型路由": {
+        "source": "inferred_from_request",
+        "value": "自动按镜头路由"
+      },
+      "项目规模": {
+        "source": "source_analysis",
+        "value": "长篇量产"
+      },
+      "题材": {
+        "source": "source_analysis",
+        "value": "自定义（系统流+修仙+志怪悬疑）"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [
+      {
+        "authority": "provenance_only_non_authoritative",
+        "text": "2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实"
+      }
+    ],
+    "record_summary": {
+      "corrections_included": 1,
+      "corrections_seen": 1,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 12
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "1b047402cdc044e6c6e939813769f518ca9b680e35ac5d416f5c39a213fbe81b",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "script_stage1",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "开发包/series_bible.md",
+      "开发包/adaptation_strategy.json",
+      "开发包/season_arc.json",
+      "开发包/production_feasibility.json",
+      "开发包/pilot_greenlight.md",
+      "脚本/第1集/raw.txt",
+      "生产数据/episode_graph_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

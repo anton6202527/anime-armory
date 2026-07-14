@@ -138,7 +138,10 @@ def diagnose(root: Path | None = None) -> dict[str, Any]:
         "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "python": sys.version.split()[0],
         "platform": platform.platform(),
-        "project_root": str(root) if root else "",
+        # Persisted reports must stay portable across machines/checkouts.  The
+        # report already lives under the project root, so an absolute host path
+        # adds no evidence and leaks workstation-specific state.
+        "project_root": "." if root else "",
         "overall": overall,
         "capabilities": capabilities,
         "project_checks": project_checks(root),

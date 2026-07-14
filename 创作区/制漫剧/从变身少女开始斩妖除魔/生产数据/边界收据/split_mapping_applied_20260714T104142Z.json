@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "kind": "n2d_split_mapping_application_receipt",
+  "status": "applied",
+  "applied_at": "2026-07-14T10:41:42+00:00",
+  "project_root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "source": {
+    "path": "小说/从变身少女开始斩妖除魔.txt",
+    "sha256": "df01c4e3ee2f8ae5b3af4324554ba1abff7018268b2016fe0f167d4409d74c8f"
+  },
+  "approval": {
+    "reviewer": "user:project-owner",
+    "roles": [
+      "director",
+      "producer"
+    ],
+    "approved_at": "2026-07-14T18:25:00+08:00",
+    "evidence": "用户明确批准《_拆集复核.md》第1–10集边界，并允许按该映射重建仍为 raw-only 的首10集。"
+  },
+  "mapping": {
+    "path": "生产数据/拆集映射/首10集_导演批准_2026-07-14.json",
+    "sha256": "815dd4d548fe216c5dfb3a14056c0e4556bec188733a0578c881a6b56dc3e6f0",
+    "window": {
+      "start_episode": 1,
+      "end_episode": 10,
+      "start_source_unit_id": "U000001",
+      "end_source_unit_id": "U002458",
+      "next_source_unit_id": "U002459"
+    }
+  },
+  "splice": {
+    "old_episode_count": 830,
+    "new_episode_count": 822,
+    "suffix_old_episode": 19,
+    "suffix_new_episode": 11,
+    "suffix_start_source_unit_id": "U002459"
+  },
+  "backup": {
+    "path": "生产数据/边界收据/split_mapping_before_20260714T104142Z.tar.gz",
+    "sha256": "c100c4512e8c42ef8b8b5aba30984df3596fc34b0ab9003e7b34c7afcf5a00a2",
+    "bytes": 447352
+  },
+  "before_sha256": {
+    "脚本/split_plan.json": "b377de41cbe67f0258011310b247177fe1a354acb7a205cea66bcbe1b46b7c34",
+    "脚本/_拆集机器索引.md": "680f116980d07a85cb7690c15a4ae02510f4338a60b8ff801b823a8593c97ea4",
+    "_进度.md": "bffe22db58fdbb21920efa8cced79f6a7da4f4b7dd168b0aa518bf59c188a400",
+    "脚本/第1集/raw.txt": "48d7cc9c501c7b87d1e0a8ec0b8222b402a4f99409d71e99a64f2da47191a1bd",
+    "脚本/第2集/raw.txt": "997a64189f4d3d4a20241f10caaa3a449714e525755e6015c4e171f103a89ccc",
+    "脚本/第3集/raw.txt": "ea1ecf03933a7b93b57a5d1646254cdd2f93a848b0fcb8c4db011d613ae7f8dd",
+    "脚本/第4集/raw.txt": "2c330f816cd02064c1fa0e85152245fd780784ff691ade37eff695ee5928c515",
+    "脚本/第5集/raw.txt": "059ef531fb4677dcb72d2686c4fd54c9688bd7e835a1272518db66a56ee071b1",
+    "脚本/第6集/raw.txt": "9efedd0b4405a9512ae9701a46e26c2641b9f97ddcc8ada9ef72d9c9326c8c50",
+    "脚本/第7集/raw.txt": "10c637e64f91bf7340d562a67ea697d29b1f48093b993da20aa1326461dfcf7c",
+    "脚本/第8集/raw.txt": "1a1ecfa0191739866f481c84f619e87813084569f856b4ffef3b9e8c95d0fc62",
+    "脚本/第9集/raw.txt": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+    "脚本/第10集/raw.txt": "24a409334eeb7c82d01f1b0c68cf8e0273987f84094a4ec277854b48fc236713"
+  },
+  "after_sha256": {
+    "脚本/split_plan.json": "aa3f4b51fee7bf09deb2aad4f5a63d64d2a0c3338c42c4cdb11e37f5dada71f9",
+    "脚本/_拆集机器索引.md": "bf1f80f3c153abead6843ce6f33409a89ed0ff3e60d5e65211a5f996a7dbf74a",
+    "_进度.md": "1261091fb37648b2019f33cf47b038af912dc6e4dc75a09c8eaa094e0b44dd2b",
+    "脚本/第1集/raw.txt": "aa0ba2963b1eca46bc6da87a483e1790e804630130fa5872542ea157e5598c9f",
+    "脚本/第2集/raw.txt": "ae5ebd6f7fa8973ee087b8a09755c9f5eeef6e0cd0baa372133bc9a697d38c17",
+    "脚本/第3集/raw.txt": "2fe9a8e0abd7f4a7b68d381d9bee6c04695d380893b31f20dbb69bb29359cf1b",
+    "脚本/第4集/raw.txt": "6470ce4b5cae62503487d451c7e9f2eb45550242942f4f575486c31c5d2b4018",
+    "脚本/第5集/raw.txt": "c37418f8ad64852e50f3a0cf1eeca3341ec3ba8acee52ffeea1ff5852bd6a0dd",
+    "脚本/第6集/raw.txt": "e7ebeb1a4de2e9df0442041474752690735ee7ff99b842392554655b0bed0688",
+    "脚本/第7集/raw.txt": "30d42631f0e87d8fbe6869c10d5cbd801d7bbfebffa17f562bfcb7f91c36b072",
+    "脚本/第8集/raw.txt": "d4b246cafcac23ff4d578d77b36698acce4184bd9d373f213ce1a2e0c51f02ea",
+    "脚本/第9集/raw.txt": "638d9ac57c218592fb0dbce9ff9d9b2bb656bee36fbdc526a1d1e1bb15fa672d",
+    "脚本/第10集/raw.txt": "89e89470d63a00eec2a824fb06dcb5f71fc857203ae7ea9097b7a762213f1106"
+  },
+  "checks": {
+    "source_snapshot_matched": true,
+    "mapping_contiguous": true,
+    "window_raw_only": true,
+    "suffix_unmaterialized": true,
+    "plan_raw_progress_refreshed": true
+  }
+}

@@ -100,6 +100,23 @@ def test_core_cannot_self_report_restricted_partial_without_approved_contract() 
     assert character_library_tier_for_record(record) == CHARACTER_LIBRARY_TIER_CORE
 
 
+def test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract() -> None:
+    named = {
+        "id": "CHAR_GUEST",
+        "scope": "第1集具名角色",
+        "library_tier": CHARACTER_LIBRARY_TIER_PARTIAL,
+        "face_policy": "no_full_face",
+        "restricted_partial": True,
+    }
+    assert character_library_tier_for_record(named) == CHARACTER_LIBRARY_TIER_PARTIAL
+    assert character_library_tier_for_record(
+        named, observed_episode_count=3
+    ) == CHARACTER_LIBRARY_TIER_STANDARD
+
+    group = dict(named, id="GROUP_MARKET", scope="集市群像")
+    assert character_library_tier_for_record(group) == CHARACTER_LIBRARY_TIER_PARTIAL
+
+
 def test_restricted_partial_contract_must_match_face_policy_and_cannot_allow_face() -> None:
     base = {
         "scope": "贯穿全篇神秘主角",

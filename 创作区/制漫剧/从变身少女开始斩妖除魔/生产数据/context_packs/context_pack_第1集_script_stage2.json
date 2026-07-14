@@ -1,0 +1,882 @@
+{
+  "action_contract": {
+    "owner": "n2d-script",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_check",
+      "update_plan",
+      "doctor",
+      "episode_promise_gate",
+      "director_blocking_pack"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-script-agent",
+    "stage_key": "script_stage2",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 2087,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 项目规模: 长篇量产  # source=source_analysis\n- 基础视觉风格: 国漫写实角色审美 + 电影级布光与镜头语言  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=inferred_from_request\n- 画幅: 9:16  # source=project_default\n- 字幕语言: 中文  # source=source_analysis\n- 合规用途: internal_only  # source=safety_default\n- 题材: 自定义（系统流+修仙+志怪悬疑）  # source=source_analysis\n\n[RECENT CORRECTIONS — provenance only, non-authoritative, bounded]\n- 2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实\n\nraw audit history omitted: records_seen=12, corrections_included=1/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "1b047402cdc044e6c6e939813769f518ca9b680e35ac5d416f5c39a213fbe81b"
+    },
+    {
+      "bytes": 1693,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔 — 生产进度\n已粗切 **10** 集（本地规范源共 819 个唯一章节；人工批准的首10集覆盖原著第1–18章，全书计划已重编号为约822集；第11集从原著第19章 / U002459 连续承接）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 5481 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第2集 | 5122 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第3集 | 5214 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第4集 | 4374 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第5集 | 5044 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第6集 | 4578 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第7集 | 4313 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第8集 | 4292 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第9集 | 2126 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |\n| 第10集 | 4307 | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "86a46d9129e3e3c4a44c62ec3f1caf75c00a47737c6ed0f32d5add46ddab62ee"
+    },
+    {
+      "bytes": 4820,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_director_beat_sheet",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "inputs",
+          "beats"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/director_beat_sheet.json",
+      "sha256": "5b739995238e69b668d6bd53916404b1c2a2256339516542b5cf381d31ee1a26"
+    },
+    {
+      "bytes": 4782,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_axis_blocking_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "scene_axis_rules",
+          "beat_blocking",
+          "shot_reverse_patterns"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/axis_blocking_map.json",
+      "sha256": "65e411733657e0f578f415037c130b1f1be95be9885305c7d697fe494aeb4847"
+    },
+    {
+      "bytes": 3161,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_shot_progression_plan",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "rules",
+          "progressions"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/shot_progression_plan.json",
+      "sha256": "13844fc027830c9933810a48166ef6ecd52713281e60e60a015eb1689e2f69e3"
+    },
+    {
+      "bytes": 3965,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_transition_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "seams"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/transition_map.json",
+      "sha256": "ef8f198714682e7e2fc8408fd29514818064f03bdb5a2a4d09d0eecc520604b3"
+    },
+    {
+      "bytes": 3021,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_vertical_composition_plan",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "composition_rules",
+          "beat_composition"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/vertical_composition_plan.json",
+      "sha256": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
+    },
+    {
+      "bytes": 2177,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "kind": "n2d_edit_rhythm_map",
+        "status": "confirmed",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "status",
+          "generated_at",
+          "timeline",
+          "beats"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/edit_rhythm_map.json",
+      "sha256": "67137c71bc6aa92c284cd2dc186396ba23b71e4338affd9288c191d504784468"
+    },
+    {
+      "bytes": 921,
+      "exists": true,
+      "preview": "# P-2 导演排戏包 — 第1集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第1集/director_beat_sheet.json`\n- `脚本/第1集/axis_blocking_map.json`\n- `脚本/第1集/shot_progression_plan.json`\n- `脚本/第1集/transition_map.json`\n- `脚本/第1集/vertical_composition_plan.json`\n- `脚本/第1集/edit_rhythm_map.json`\n## Check\n- 状态：pass\n- 通过：7/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第1集/director_beat_sheet.json` | pass | - |\n| `脚本/第1集/axis_blocking_map.json` | pass | - |\n| `脚本/第1集/shot_progression_plan.json` | pass | - |\n| `脚本/第1集/transition_map.json` | pass | - |\n| `脚本/第1集/vertical_composition_plan.json` | pass | - |\n| `脚本/第1集/edit_rhythm_map.json` | pass | - |\n| `脚本/第1集/director_blocking_signoff.json` | pass | - |",
+      "relpath": "生产数据/director_blocking_pack_第1集.md",
+      "sha256": "d56ee70cbb805b28167ab1880af37ea5cd52e95098d8db772e17a4b698d1962a"
+    },
+    {
+      "bytes": 3681,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔_第1集_配音文案\n# 取材：原著第1–2章 / U000001–U000342\n# 留存曲线：0–3s杀人倒叙钩 → 15s虎妖/镇魔司死局 → 虎妖复生 → 系统生机 → 杀裴反转 → 二十年一刀斩虎 → 摹影升级 → 道德债集尾\n[镜头1·姜月初·冷硬压抑·慢] 活下去，得先杀一个人。|| 可我刀下的——不是妖。  ⚡钩子\n[镜头2·旁白·低沉·快] 十分钟前。大唐荒野，囚车尽毁，满地死尸。\n[镜头3·姜月初·惊疑克制·快] 穿越。罪臣之女。贱籍。|| 这开局，是一点活路都没给我。\n[镜头4·裴长青·虚弱威严·慢] 过来。别逼我再扔一刀。\n[镜头5·姜月初·警惕讥诮·快] 都快断气了，手还这么稳？\n[镜头6·裴长青·克制施压·慢] 裴长青，陇右镇魔都司队正。我得往南。扶我走，我替你脱籍。\n[镜头7·姜月初·怀疑盘算·慢] 自由身？|| 你拿什么保？\n[镜头8·裴长青·疲惫笃定·慢] 拿镇魔司三个字。你敢离开，没路引，就会死在这片荒野。\n[镜头9·姜月初·不甘认命·快] ……行。先活着，再算账。\n[镜头10·虎山神·沙哑戏谑·慢] 别逃啊。|| 这荒郊野岭的，你们能去哪儿？  ⚡钩子\n[镜头11·裴长青·惊骇低哑·快] 不可能……你的心，明明碎了！\n[镜头12·虎山神·傲慢从容·慢] 几个不入流的镇魔卫，也配杀我？\n[镜头13·裴长青·决绝爆发·快] 快逃！\n[镜头14·姜月初·惊恐失声·快] 裴长青！\n[镜头15·虎山神·伪善轻慢·慢] 我要吃得干净些。莫再挣扎，|| 我替你们立块碑。\n[镜头16·系统·中性清晰·慢] 百妖谱开启。斩杀生物，可得道行。  ⚡钩子\n[镜头17·系统·中性清晰·慢] 道行可尽付一击；亦可用妖血为墨，收录其形，夺其馈赠。\n[镜头18·姜月初·急促盘算·快] 斩杀生物……可这里还活着的，除了虎妖——\n[镜头19·裴长青·气若游丝·慢] 拿刀……别让它吃了你。\n[镜头20·姜月初·痛苦决绝·慢] || 抱歉。\n[镜头21·裴长青·错愕虚弱·慢] 你……\n[镜头22·系统·中性清晰·快] 击杀闻弦境生物。获得道行，二十年。  ⚡钩子\n[镜头23·虎山神·讥讽厌弃·慢] 杀了同类，就想活？你们人族，真脏。\n[镜头24·姜月初·颤抖冷冽·慢] 脏不脏，|| 等我先斩了你再说。\n[镜头25·姜月初·孤注一掷·快] 二十年道行——|| 全给这一斩！  💥爽点\n[镜头26·旁白·凌厉爆发·快] 人与妖交错。横刀斩过，刀脱手，虎首落地。\n[镜头27·姜月初·剧痛喘息·快] 咳……道行反噬，差点把我也劈了。\n[镜头28·系统·中性清晰·快] 击杀闻弦境妖物。获得道行，一百年。\n[镜头29·系统·中性清晰·慢] 检测到未收录妖物。是否消耗七十五年道行，摹影虎山神？\n[镜头30·姜月初·虚弱果断·慢] 收录。\n[镜头31·系统·中性庄严·慢] 妖血为墨，百妖入谱。虎山神——摹影完成。  ⚡钩子\n[镜头32·系统·中性清晰·快] 获得妖物馈赠：猛虎快刀，圆满。境界：闻弦初境。剩余道行：二十五年。\n[镜头33·姜月初·惊异清醒·慢] 原来如此。|| 一刀会用尽，录进谱里的本事，才留得住。  💥爽点\n[镜头34·姜月初·克制愧疚·慢] 裴长青，这条命……我欠你。\n[镜头35·姜月初·嘴硬悲凉·慢] 若真有起死回生那天，我还。|| 没有的话——你在下面，先记着账。\n[镜头36·姜月初·冷静自责·慢] 我来到这世上，杀的第一个人，|| 不是妖。  🪝集尾",
+      "relpath": "脚本/第1集/voiceover.txt",
+      "sha256": "83769e68730c415c00bb2b2488bd9e073a6d54e414b7ce5acc285653f77b17d5"
+    },
+    {
+      "bytes": 2234,
+      "exists": true,
+      "preview": "# 从变身少女开始斩妖除魔_第1集_BGM与音效\n整体情绪：道德惊悚冷开 → 荒野死寂与压迫 → 虎妖复生骤升 → 杀人选择抽空 → 一刀爆发 → 水墨升级的诡异神圣 → 愧疚余寒。\nBGM风格：低频框鼓、压弦与木质敲击为现实域；不持续铺满。百妖谱只在出现时加入纸张摩擦、墨滴、反向吸气与极低兽鸣；金色强调只给系统关键反馈，不做页游式持续金光轰鸣。\n音乐母题：\n- `LM_JIANG_SURVIVAL_01` 姜月初求生动机：三音下行弦乐，第三音故意悬空；每次她作出有代价的选择时复现。\n- `LM_BAIYAOPU_01` 百妖谱：纸页摩擦 + 单滴墨 + 一次低频兽鸣；摹影/染朱/点睛随阶段增加层次，当前仅“摹影”层。\n- `LM_TIGER_THREAT_01` 虎山神真身：不规则双击低鼓 + 喉音气息；真身死亡后停止，不与谱中虎影母题混用。\n关键音效点：\n- 镜头1：刀锋入肉前抽空全部音乐，只留心跳与半拍吸气；“不是妖”落一记低频断音。\n- 镜头4：断刀扎地，短促金属入土声，空间尾响极短。\n- 镜头10：尸体咳嗽先于画面，J-cut；虎妖骨节复位为干燥脆响，禁止夸张机械声。\n- 镜头13：裴长青强行起身时心跳加速；被踢回用钝重冲击，不用喜剧飞出声。\n- 镜头16：百妖谱第一次展开，现实 BGM 瞬断，启用 `LM_BAIYAOPU_01`。\n- 镜头20–22：姜月初“抱歉”后留 0.4–0.7 秒静默；入刀声克制，系统“二十年”才回低频脉冲。\n- 镜头25：`LM_JIANG_SURVIVAL_01` 三音压缩为一次上冲；“这一刀”卡鼓点 drop。\n- 镜头26：横斩只保留破风、短暂耳鸣、虎首落地三层，先静后响；`💥爽点` 不堆金属连击。\n- 镜头29–32：七十五年道行流逝用连续墨滴倒吸；“猛虎快刀，圆满”加入第二层弦乐，不加入点睛金鸣。\n- 镜头34–36：回到单根压弦与荒野风声；末句“不是妖”后留 1.2 秒无音乐黑场。\n混音边界：角色对白始终优先；虎吼与系统播报不得同时满频；旁白/口外音走后期音轨，系统文字与数值由 compose 叠加，不让视频模型生成可读长字。",
+      "relpath": "脚本/第1集/bgm.txt",
+      "sha256": "5d7d1b76437ee6067b4f4618b8a22a6b4153fded31cb390ecd55b9a2651a2dfe"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "bytes": 4341,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "graph_hash": "19ec5b0cd91386007b919d35fbcb8bd3e2dbb6a17d3b0eac0f3cdf6bfb5b9ed9",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 13,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 14,
+          "routes": 0,
+          "story_clips": 13,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第1集.json",
+      "sha256": "72acfeba48791dd6cad0206090824a7de6e1c75cfdf20ae0310d90d9cf9aa16e"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "storyboard 中已有镜头命中题材高风险场景。",
+      "state": "scene_archetypes_triggered",
+      "storyboard_clip_count": 13,
+      "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+      "storyboard_state": "ready",
+      "triggered": true
+    },
+    "active_scene_archetypes": [
+      {
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "label": "系统面板/HUD",
+        "matched_clips": [
+          "EP01_CLIP06",
+          "EP01_CLIP07",
+          "EP01_CLIP08",
+          "EP01_CLIP09",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP12",
+          "EP01_CLIP13"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP01_CLIP06",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP07",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP09",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP11",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP12",
+            "missing": [
+              "degrade_plan"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP13",
+            "missing": [
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "中文字乱码",
+          "数值不一致",
+          "面板风格跨集漂移"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "style_binding": "HUD 作为 ui_asset_registry 资产，文字优先独立图层",
+        "style_bindings": [
+          "HUD 作为 ui_asset_registry 资产，文字优先独立图层"
+        ]
+      },
+      {
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "label": "现代物品/知识落地",
+        "matched_clips": [
+          "EP01_CLIP01",
+          "EP01_CLIP02",
+          "EP01_CLIP03",
+          "EP01_CLIP04",
+          "EP01_CLIP09",
+          "EP01_CLIP10",
+          "EP01_CLIP11",
+          "EP01_CLIP12",
+          "EP01_CLIP13"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP01_CLIP01",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP02",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP03",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP04",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP09",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP10",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP11",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP12",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          },
+          {
+            "clip": "EP01_CLIP13",
+            "missing": [
+              "mount_contact",
+              "harness_lock"
+            ]
+          }
+        ],
+        "production_risks": [
+          "道具形态漂移",
+          "古今材质冲突",
+          "手持关系错"
+        ],
+        "required_contract_fields": [
+          "mount_contact",
+          "harness_lock",
+          "screen_direction"
+        ],
+        "scene_id": "anachronism_prop",
+        "style_binding": "现代道具登记为 PROP，交互镜必须有 contact/possession 说明",
+        "style_bindings": [
+          "现代道具登记为 PROP，交互镜必须有 contact/possession 说明"
+        ]
+      },
+      {
+        "genre_keys": [
+          "suspense"
+        ],
+        "label": "反转揭示/案情复盘",
+        "matched_clips": [
+          "EP01_CLIP05"
+        ],
+        "missing_by_clip": [
+          {
+            "clip": "EP01_CLIP05",
+            "missing": [
+              "degrade_plan"
+            ]
+          }
+        ],
+        "production_risks": [
+          "回忆与现实混淆",
+          "时间线顺序错",
+          "证据前后矛盾"
+        ],
+        "required_contract_fields": [
+          "screen_direction",
+          "degrade_plan"
+        ],
+        "scene_id": "reveal_reconstruction",
+        "style_binding": "回忆镜头用明确调色/边框/音效契约区分，不靠随机风格变化",
+        "style_bindings": [
+          "回忆镜头用明确调色/边框/音效契约区分，不靠随机风格变化"
+        ]
+      }
+    ],
+    "episode": "第1集",
+    "generated_at": "2026-07-14T12:22:30+00:00",
+    "genre": {
+      "genre_key": "chuanyue",
+      "label": "穿越",
+      "matched": true,
+      "matched_genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "matched_labels": [
+        "穿越",
+        "仙侠",
+        "悬疑"
+      ],
+      "matches": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 4,
+          "matched_term": "系统流",
+          "priority": 1
+        },
+        {
+          "genre_key": "xianxia",
+          "label": "仙侠",
+          "match_start": 8,
+          "matched_term": "修仙",
+          "priority": 2
+        },
+        {
+          "genre_key": "suspense",
+          "label": "悬疑",
+          "match_start": 13,
+          "matched_term": "悬疑",
+          "priority": 3
+        }
+      ],
+      "raw": "自定义（系统流+修仙+志怪悬疑）"
+    },
+    "issues": [
+      {
+        "clip": "EP01_CLIP06",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP07",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP09",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP11",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP12",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP13",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "system_panel",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP01",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP02",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP03",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP04",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP09",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP10",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP11",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP12",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP13",
+        "genre_keys": [
+          "chuanyue"
+        ],
+        "message": "missing genre motion contract fields: mount_contact, harness_lock",
+        "missing_fields": [
+          "mount_contact",
+          "harness_lock"
+        ],
+        "scene_id": "anachronism_prop",
+        "severity": "warn"
+      },
+      {
+        "clip": "EP01_CLIP05",
+        "genre_keys": [
+          "suspense"
+        ],
+        "message": "missing genre motion contract fields: degrade_plan",
+        "missing_fields": [
+          "degrade_plan"
+        ],
+        "scene_id": "reveal_reconstruction",
+        "severity": "warn"
+      }
+    ],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [
+        "复杂系统面板改为独立 UI 图层叠加",
+        "时空转换用环境变体前后对照，不强求长镜头变形",
+        "现代物品进入古代场景时先出道具参考，避免模型改形",
+        "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+        "群战法术爆发拆成反打、特写、冲击波结果镜",
+        "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行",
+        "线索特写独立出图并在剪辑中插入，避免视频生成改掉证物细节",
+        "追逐/跟踪拆成主观视角、脚步、转角、结果镜",
+        "暗光镜降低运动幅度，保留关键证据可读性"
+      ],
+      "genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "labels": [
+        "穿越",
+        "仙侠",
+        "悬疑"
+      ],
+      "matched_packs": [
+        {
+          "genre_key": "chuanyue",
+          "label": "穿越",
+          "match_start": 4,
+          "matched_term": "系统流",
+          "priority": 1
+        },
+        {
+          "genre_key": "xianxia",
+          "label": "仙侠",
+          "match_start": 8,
+          "matched_term": "修仙",
+          "priority": 2
+        },
+        {
+          "genre_key": "suspense",
+          "label": "悬疑",
+          "match_start": 13,
+          "matched_term": "悬疑",
+          "priority": 3
+        }
+      ],
+      "motion_contract_fields": [
+        "mount_contact",
+        "harness_lock",
+        "screen_direction",
+        "parallax_layers",
+        "degrade_plan",
+        "gait_cycle",
+        "vehicle_lock"
+      ],
+      "qc_focus": [
+        "时代物件一致",
+        "系统面板 OCR",
+        "前后身份/服饰状态",
+        "空间转换因果",
+        "角色定妆跨集",
+        "法器/灵兽尺度",
+        "飞行空间层次",
+        "法术光色连续",
+        "服饰发型抗漂移",
+        "线索可读性",
+        "证物状态",
+        "空间方位",
+        "暗光清晰度",
+        "伏笔兑现顺序"
+      ],
+      "style_binding_policy": {
+        "bind_to_visual_style": true,
+        "by_genre": [
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "chuanyue",
+            "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+          },
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "xianxia",
+            "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+          },
+          {
+            "bind_to_visual_style": true,
+            "genre_key": "suspense",
+            "notes": "悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+          }
+        ],
+        "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。 | 题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。 | 悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+      }
+    },
+    "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+    "stage_key": "script_stage2",
+    "status": "warn",
+    "summary": {
+      "activation_state": "scene_archetypes_triggered",
+      "active_scenes": 3,
+      "issues": 16,
+      "matched_clips": 13,
+      "matched_genre_keys": [
+        "chuanyue",
+        "xianxia",
+        "suspense"
+      ],
+      "matched_packs": 3,
+      "storyboard_clip_count": 13,
+      "storyboard_state": "ready"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json"
+  ],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "合规用途": {
+        "source": "safety_default",
+        "value": "internal_only"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "国漫写实角色审美 + 电影级布光与镜头语言"
+      },
+      "字幕语言": {
+        "source": "source_analysis",
+        "value": "中文"
+      },
+      "画幅": {
+        "source": "project_default",
+        "value": "9:16"
+      },
+      "视频模型路由": {
+        "source": "inferred_from_request",
+        "value": "自动按镜头路由"
+      },
+      "项目规模": {
+        "source": "source_analysis",
+        "value": "长篇量产"
+      },
+      "题材": {
+        "source": "source_analysis",
+        "value": "自定义（系统流+修仙+志怪悬疑）"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [
+      {
+        "authority": "provenance_only_non_authoritative",
+        "text": "2026-07-14 数据校正：本地源副本折叠相邻重复章名后为819个唯一章节、约185.5万规范化正文字符；830只表示章号上界/当前粗切估集数，先前“830章、约565万字”不再作为生产事实"
+      }
+    ],
+    "record_summary": {
+      "corrections_included": 1,
+      "corrections_seen": 1,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 12
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "1b047402cdc044e6c6e939813769f518ca9b680e35ac5d416f5c39a213fbe81b",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "script_stage2",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/director_beat_sheet.json",
+      "脚本/第1集/axis_blocking_map.json",
+      "脚本/第1集/shot_progression_plan.json",
+      "脚本/第1集/transition_map.json",
+      "脚本/第1集/vertical_composition_plan.json",
+      "脚本/第1集/edit_rhythm_map.json",
+      "生产数据/director_blocking_pack_第1集.md",
+      "脚本/第1集/voiceover.txt",
+      "脚本/第1集/bgm.txt",
+      "生产数据/episode_graph_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

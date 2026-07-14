@@ -1,0 +1,887 @@
+{
+  "schema_version": 2,
+  "kind": "comic_identity_registry",
+  "assets": {
+    "CHAR_HONG_XIN": {
+      "id": "CHAR_HONG_XIN",
+      "type": "character",
+      "display_name": "洪信",
+      "notes": "第1-2话高曝光；前/三分之四/脸三视图及model pack人工签核后才ready",
+      "character_dna": "四十五岁左右，长方圆脸、窄眼、正常眼距、微高发际线、右眉尾轻压、直厚鼻梁、中等偏高略厚体态、非劳作型圆润指节；不得演员脸或奸臣尖脸模板",
+      "variant_policy": "官服出使与布衣上山共享脸型、眼型、眼距、发际线、体态；只切换服装和泥尘状态",
+      "forbidden_inheritance": "不继承影视演员肖像、剧照构图、临时手持物、摔倒姿势、虎蛇同框遮挡",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "官服出使与布衣上山共享脸型、眼型、眼距、发际线、体态；只切换服装和泥尘状态",
+          "forbidden": "不继承影视演员肖像、剧照构图、临时手持物、摔倒姿势、虎蛇同框遮挡",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_COURT_ENVOY": {
+          "id": "OUTFIT_COURT_ENVOY",
+          "name": "朝服出使装",
+          "description": "绛褐低饱和圆领官袍、深色幞头、革带与黑靴；出使旅途可加外层披衣，不改主形制",
+          "forbidden": "不得变成武将甲胄、明清补服或影视版特定造型",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "OUTFIT_MOUNTAIN_PLAIN": {
+          "id": "OUTFIT_MOUNTAIN_PLAIN",
+          "name": "斋戒上山布衣",
+          "description": "素灰褐窄袖布衣、布带、麻履；背黄罗诏包和手持银炉是剧情道具，不并入衣装",
+          "forbidden": "不得保留幞头官袍，不得固化跌倒泥尘、诏包或银炉",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_COMPOSED": {
+          "id": "EXPR_COMPOSED",
+          "name": "官员稳拿",
+          "emotion": "composed",
+          "intensity": "low",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "EXPR_TERRIFIED": {
+          "id": "EXPR_TERRIFIED",
+          "name": "惊恐失态",
+          "emotion": "terrified",
+          "intensity": "high",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "EXPR_DEFIANT": {
+          "id": "EXPR_DEFIANT",
+          "name": "恼怒强辩",
+          "emotion": "defiant",
+          "intensity": "medium",
+          "reference_images": [],
+          "status": "needs_reference"
+        },
+        "EXPR_STUNNED": {
+          "id": "EXPR_STUNNED",
+          "name": "面色如土",
+          "emotion": "stunned",
+          "intensity": "high",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_COURT_ENVOY": {
+          "id": "STATE_COURT_ENVOY",
+          "name": "奉诏出使",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "transient": false,
+          "continuity_contract": "朝堂、出使与返宫游览的官员身份基线；进入上山仪式时显式切换"
+        },
+        "STATE_MOUNTAIN_START": {
+          "id": "STATE_MOUNTAIN_START",
+          "name": "布衣上山・整洁",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "transient": false,
+          "continuity_contract": "布衣麻履，背黄罗诏包、右手持银炉；虎蛇试心后切换沾尘状态"
+        },
+        "STATE_MOUNTAIN_DIRTY": {
+          "id": "STATE_MOUNTAIN_DIRTY",
+          "name": "布衣上山・惊惧沾尘",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "transient": true,
+          "continuity_contract": "从白虎扰动后保留背肩、袖口和膝部泥尘；银炉跌落后被拾回，不得消失"
+        },
+        "STATE_FUMO_DEFIANT": {
+          "id": "STATE_FUMO_DEFIANT",
+          "name": "伏魔殿・强势开门",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "transient": true,
+          "continuity_contract": "恢复官装后以朝廷身份威胁道众，直到地穴开启前延续"
+        },
+        "STATE_FUMO_STUNNED": {
+          "id": "STATE_FUMO_STUNNED",
+          "name": "伏魔殿・面色如土",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_STUNNED",
+          "transient": true,
+          "continuity_contract": "黑气冲出后衣袍沾尘、幞头尚在，面色如土；下话必须继承"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_COURT_ENVOY",
+        "expression_id": "EXPR_COMPOSED",
+        "state_id": "STATE_COURT_ENVOY"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "4ffcada56d7d6e3a84c79e3a3ff4d3e37b25e795e6ea3508bb65908d53a74f15",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_MASTER_XUJING": {
+      "id": "CHAR_MASTER_XUJING",
+      "type": "character",
+      "display_name": "虚靖天师",
+      "notes": "第1话关键揭示；前/三分之四/脸三视图及人工签核后才ready",
+      "character_dna": "外观十二至十四岁，少年圆长脸、明亮偏长眼、两枚丫髻、清瘦松弛体态，笑意在眼；不得白发老仙人或仙侠游戏脸",
+      "variant_policy": "牧童少年形态与后续真人显化形态共享眼型、眼距、脸轮廓与丫髻基因；形态变化不可换脸",
+      "forbidden_inheritance": "黄牛、铁笛、倒骑姿态和山路站位属于场景状态，不自动固化为身体身份",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "牧童少年形态",
+          "inheritance_contract": "牧童少年形态与后续真人显化形态共享眼型、眼距、脸轮廓与丫髻基因；形态变化不可换脸",
+          "forbidden": "黄牛、铁笛、倒骑姿态和山路站位属于场景状态，不自动固化为身体身份",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_HERDBOY": {
+          "id": "OUTFIT_HERDBOY",
+          "name": "青衣牧童装",
+          "description": "洗旧低饱和青布衣、草编绛带、麻间芒鞋；铁笛为剧情道具，不并入衣装",
+          "forbidden": "不得变成金绣法衣、仙侠飘带或现代儿童服",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_KNOWING_SMILE": {
+          "id": "EXPR_KNOWING_SMILE",
+          "name": "明亮会意微笑",
+          "emotion": "knowing_amusement",
+          "intensity": "low",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_HERDBOY_REVEAL": {
+          "id": "STATE_HERDBOY_REVEAL",
+          "name": "牧童显化",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "transient": true,
+          "continuity_contract": "倒骑黄牛、手持铁笛、从松后入画；黄牛、铁笛与站位不固化为身体 DNA"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_HERDBOY",
+        "expression_id": "EXPR_KNOWING_SMILE",
+        "state_id": "STATE_HERDBOY_REVEAL"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "b69eaa9a7c416a681af3c05474f6f70dba3a9f0a5802df2a4a78ec53a5da3da8",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_ABBOT_SHANGQING": {
+      "id": "CHAR_ABBOT_SHANGQING",
+      "type": "character",
+      "display_name": "上清宫住持",
+      "notes": "至少front和face两视图，人工签核后才ready",
+      "character_dna": "六十岁左右，高瘦背直、高额、清瘦颊、灰黑短须、上眼皮略沉但目光稳定，青灰道袍",
+      "variant_policy": "惊惧、劝阻、悲叹均继承高瘦轮廓、高额、短须和克制仪法感",
+      "forbidden_inheritance": "不得因伏魔殿场景变成阴险反派或金绣影视道长模板",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "惊惧、劝阻、悲叹均继承高瘦轮廓、高额、短须和克制仪法感",
+          "forbidden": "不得因伏魔殿场景变成阴险反派或金绣影视道长模板",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "299e1c88d9c317f3453cb6dca0da088da0940e9befdd83cf96bf95dc1d50fa74",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_EMPEROR_RENZONG": {
+      "id": "CHAR_EMPEROR_RENZONG",
+      "type": "character",
+      "display_name": "宋仁宗",
+      "notes": "服制制度研究参见visual_research.json，馆藏图不作生成附件",
+      "character_dna": "五十岁出头，宽额圆长脸、疲惫克制神情；黑平翼幞头、素红袍、领袖内层低调隐金，原创面孔",
+      "variant_policy": "朝堂各景别共享宽额、圆长脸、平翼幞头轮廓和素红袍层级",
+      "forbidden_inheritance": "不复制馆藏画像脸、构图或影视演员肖像；不变成平面昏君脸谱",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "朝堂各景别共享宽额、圆长脸、平翼幞头轮廓和素红袍层级",
+          "forbidden": "不复制馆藏画像脸、构图或影视演员肖像；不变成平面昏君脸谱",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "2e18409afc97a9ee2dc8ba65df64903f47e90424cef3a33cbcba7d10473209f8",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_FAN_ZHONGYAN": {
+      "id": "CHAR_FAN_ZHONGYAN",
+      "type": "character",
+      "display_name": "范仲淹",
+      "notes": "第1话具名奏对角色，至少front和face",
+      "character_dna": "五十岁左右，瘦长脸、眼下疲色、姿态稳重，深红宋代官袍与平翼幞头，区别于仁宗的材质层级",
+      "variant_policy": "奏对远中近景共享瘦长脸、眼下疲色、稳定肩颈与官袍色阶",
+      "forbidden_inheritance": "不使用历史影视演员脸、现代名人脸或馆藏具体人像脸",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "奏对远中近景共享瘦长脸、眼下疲色、稳定肩颈与官袍色阶",
+          "forbidden": "不使用历史影视演员脸、现代名人脸或馆藏具体人像脸",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "edf94fdf802be7d2001fc5e915a24aa81b976df36eb799e7f630d1ba9ec49c3e",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_ZHAO_ZHE": {
+      "id": "CHAR_ZHAO_ZHE",
+      "type": "character",
+      "display_name": "赵哲",
+      "notes": "第1话具名官员，至少front和face",
+      "character_dna": "年长宰相，端方略厚体态，发须花白，紫褐低饱和官袍，眉目忧民而克制",
+      "variant_policy": "朝堂奏对共享端方体态、花白发须和紫褐官袍",
+      "forbidden_inheritance": "不得与文彦博或范仲淹换脸、换官袍色阶",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "朝堂奏对共享端方体态、花白发须和紫褐官袍",
+          "forbidden": "不得与文彦博或范仲淹换脸、换官袍色阶",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "a73c7ce946afc646bf4ef8fcd64a6a4aeedbfbb6e04813ce7bf75d5b4a3c6419",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "CHAR_WEN_YANBO": {
+      "id": "CHAR_WEN_YANBO",
+      "type": "character",
+      "display_name": "文彦博",
+      "notes": "第1话具名官员，至少front和face",
+      "character_dna": "四十余岁，偏瘦、下颌窄、发须黑、深绿褐官袍，语态稳健，与赵哲形成体态年龄对照",
+      "variant_policy": "朝堂奏对共享窄下颌、黑须、偏瘦体态和深绿褐官袍",
+      "forbidden_inheritance": "不得与赵哲或范仲淹换脸、换体态",
+      "library_tier": "named_minimal",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "朝堂奏对共享窄下颌、黑须、偏瘦体态和深绿褐官袍",
+          "forbidden": "不得与赵哲或范仲淹换脸、换体态",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "2a6516fecf373286bb1445e14a63a7f4e6ad0de56a8760fff22d4d1c3ea61e71",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "face"
+        ],
+        "updated_at": "2026-07-14T04:07:32+00:00"
+      }
+    },
+    "MON_WHITE_TIGER": {
+      "id": "MON_WHITE_TIGER",
+      "type": "monster",
+      "display_name": "吊睛白额锦毛大虫",
+      "notes": "第1话连续动作生物锚，需front/three_quarter/face或等价结构参考并人工签核",
+      "character_dna": "真实华南虎体态基础，白额黑纹、黄金褐毛、低姿近地爆发，眼神有意节制；非剑齿兽、非西幻怪物",
+      "variant_policy": "盘旋、咆哮、跃离均继承额纹、肩胛比例、尾长与四肢结构",
+      "forbidden_inheritance": "不继承任一电影怪兽设计、夸张骨刺或血腥猎杀状态",
+      "library_tier": "recurring_standard",
+      "model_pack_required": true,
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "盘旋、咆哮、跃离均继承额纹、肩胛比例、尾长与四肢结构",
+          "forbidden": "不继承任一电影怪兽设计、夸张骨刺或血腥猎杀状态",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "cf7226e1523b55e3d553c10525cacc08434253324feceb0abc576965ab56c08b",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T07:00:17+00:00"
+      }
+    },
+    "MON_SNOW_SERPENT": {
+      "id": "MON_SNOW_SERPENT",
+      "type": "monster",
+      "display_name": "雪花大蛇",
+      "notes": "第1话连续动作生物锚，结构参考与人工签核后才ready",
+      "character_dna": "吊桶粗细巨蛇，乳白冷灰鳞片、少量金色眼光、真实蛇类头颈与盘绕结构；非西方龙或电影巨蟒复刻",
+      "variant_policy": "出藤、盘石、吐气、滑离均继承鳞色、头型、眼色和体粗比例",
+      "forbidden_inheritance": "不继承高饱和绿色魔法雾、龙角、骨刺或具体影视怪蛇设计",
+      "library_tier": "recurring_standard",
+      "model_pack_required": true,
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "出藤、盘石、吐气、滑离均继承鳞色、头型、眼色和体粗比例",
+          "forbidden": "不继承高饱和绿色魔法雾、龙角、骨刺或具体影视怪蛇设计",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [],
+          "status": "needs_reference"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [],
+      "status": "partial",
+      "updated_at": "2026-07-14T04:04:20+00:00",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "a636ae9099bbfa2d8caaa1068894eeccafeb1f1b3f227bf63633ee0157d75b9f",
+        "readiness": "needs_fix",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T07:00:17+00:00"
+      }
+    },
+    "LOC_ZICHEN_HALL": {
+      "id": "LOC_ZICHEN_HALL",
+      "type": "location",
+      "display_name": "紫宸殿",
+      "description": "北宋中轴深进朝殿，御座后景高台，文武两班分列，朱黑暗金，冷晨光加暖反射",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "LOC_CAPITAL_PLAGUE_STREET": {
+      "id": "LOC_CAPITAL_PLAGUE_STREET",
+      "type": "location",
+      "display_name": "嘉祐京师瘟疫街巷",
+      "description": "北宋京师居民巷道，相邻木门逐扇关闭，药碗、清水桶、布帘和克制的送葬队列形成常驻空间逻辑；不展示尸体特写",
+      "notes": "只依据源文、项目原创合同与visual_research.json生成；外部影视图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T06:00:34+00:00"
+    },
+    "LOC_ROAD_TO_LONGHUSHAN": {
+      "id": "LOC_ROAD_TO_LONGHUSHAN",
+      "type": "location",
+      "display_name": "东京至龙虎山驿路",
+      "description": "城郊、杨柳驿道、山村野店与信州迎候组成纵向步移景异，土褐柳灰绿与红尘接力",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "LOC_SHANGQING_PALACE": {
+      "id": "LOC_SHANGQING_PALACE",
+      "type": "location",
+      "display_name": "上清宫",
+      "description": "山门、三清殿、方丈、左右廊与右廊后伏魔殿空间连续，松柏、炼药炉、石阶、山涧常驻",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "LOC_LONGHUSHAN_PATH": {
+      "id": "LOC_LONGHUSHAN_PATH",
+      "type": "location",
+      "display_name": "龙虎山后山山径",
+      "description": "丹霞赤壁夹谷、盘坡转径、松树突出处、盘陀石与山凹出场线，日光到云影再回柔光",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "LOC_FUMO_HALL_EXTERIOR": {
+      "id": "LOC_FUMO_HALL_EXTERIOR",
+      "type": "location",
+      "display_name": "伏魔殿外",
+      "description": "右廊尽头独立封闭小殿，红泥墙、朱门、灌铸锁、十数封皮与牌额常驻",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "LOC_FUMO_HALL_INTERIOR": {
+      "id": "LOC_FUMO_HALL_INTERIOR",
+      "type": "location",
+      "display_name": "伏魔殿内",
+      "description": "无窗窄长黑殿，入口后方，中心石碑龟趺大半没泥，先冷门光后统一火把暖光",
+      "notes": "只依据项目原创合同与visual_research.json生成；外部图研究-only，不作附件",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "PROP_IMPERIAL_EDICT": {
+      "id": "PROP_IMPERIAL_EDICT",
+      "type": "prop",
+      "display_name": "丹诏与御香",
+      "description": "黄罗包裹的丹诏；文字后期嵌入，不生成随机可读字",
+      "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:20+00:00"
+    },
+    "PROP_SILVER_CENSER": {
+      "id": "PROP_SILVER_CENSER",
+      "type": "prop",
+      "display_name": "银手炉",
+      "description": "带提梁银手炉，持续燃龙香；跌落、拾回、持有手侧跨格连续",
+      "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:21+00:00"
+    },
+    "PROP_FUMO_SEALS": {
+      "id": "PROP_FUMO_SEALS",
+      "type": "prop",
+      "display_name": "伏魔殿封皮与锁",
+      "description": "多代天师封皮、朱印与铜汁灌铸大锁，拆除顺序必须可读",
+      "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:21+00:00"
+    },
+    "PROP_STONE_STELE": {
+      "id": "PROP_STONE_STELE",
+      "type": "prop",
+      "display_name": "遇洪石碑",
+      "description": "五六尺石碑、龟趺、正面符箓安全区、背面四字安全区；文字后期嵌入",
+      "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:21+00:00"
+    },
+    "VFX_108_STARLIGHTS": {
+      "id": "VFX_108_STARLIGHTS",
+      "type": "vfx",
+      "display_name": "百十道星光",
+      "description": "稠密黑气先上冲、至高点散成百十道暖金光，不含星座UI或数字",
+      "notes": "原创项目资产，文字全部后期嵌字；正式锚图需人工验收",
+      "reference_images": [],
+      "status": "needs_reference",
+      "updated_at": "2026-07-14T04:04:21+00:00"
+    },
+    "STYLE_SHUIHU_SONG_CINEMATIC": {
+      "id": "STYLE_SHUIHU_SONG_CINEMATIC",
+      "type": "style",
+      "display_name": "宋画电影感国漫",
+      "description": "宋画兼工带写与淡设色为骨架，写实中国群像、低饱和矿物色、哑光绢纸、电影动机光与纵向步移景异；禁止演员脸和剧照锚定",
+      "style_contract": "细而有压力变化的人物墨线，建筑道具精确线性，山石树木兼工带写；土褐、墨青、靛蓝、石绿、朱砂点色与烟金的低饱和矿物色；哑光绢纸粒理、三值明暗和每场动机光；写实可区分的中国群像，竖向步移景异但每屏单焦点",
+      "forbidden_inheritance": "不得使用影视演员脸、剧照构图/光位/布景、单一影视版整套服装；不得使用韩漫通用脸、游戏CG、写真3D皮肤、仙侠UI或生成可读乱字",
+      "notes": "完整证据与权利边界见设定库/visual_research.json；原创建模风格锚经艺术总监人工签核后才可ready",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+          "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+          "source": {
+            "kind": "human_selected_candidate_anchor",
+            "chapter": "第1话",
+            "candidate_path": "出图/共享/candidates/STYLE_SHUIHU_SONG_CINEMATIC/anchor/20260714T152245/candidate_03.png",
+            "candidate_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+            "reviewer": "lalala",
+            "reviewer_role": "出品人",
+            "decision": "approved",
+            "reason": "采纳B",
+            "reviewed_at": "2026-07-14T16:40:42",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2"
+          },
+          "updated_at": "2026-07-14T16:40:42"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T16:40:42",
+      "anchor_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "primary_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795"
+    }
+  },
+  "schema_meta": {
+    "initialized_at": "2026-07-14T04:04:20+00:00",
+    "initialized_by": "registry_v2 init"
+  }
+}

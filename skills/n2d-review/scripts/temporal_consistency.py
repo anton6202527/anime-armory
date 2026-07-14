@@ -24,6 +24,7 @@ import tempfile
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine
+from pillow_compat import pixel_data
 
 _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if _COMMON not in sys.path:
@@ -338,7 +339,7 @@ def _luma(path: str) -> Optional[float]:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("L")
         im.thumbnail((64, 64))
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         return (sum(px) / len(px)) / 255.0 if px else None
     except Exception:
         return None
@@ -355,7 +356,7 @@ def _rgb_hist(path: str, bins: int = HIST_BINS) -> Optional[List[float]]:
         out: List[float] = []
         for ch in chans:
             h = [0.0] * bins
-            for v in ch.getdata():
+            for v in pixel_data(ch):
                 idx = min(bins - 1, int(v / step))
                 h[idx] += 1.0
             total = sum(h) or 1.0
@@ -617,7 +618,7 @@ def _edge_centroid_of(path: str, grid: int = SEAM_ACTION_GRID):
         im = Image.open(path).convert("L")
         im.thumbnail((128, 128))
         edges = im.filter(ImageFilter.FIND_EDGES).resize((grid, grid))
-        return weighted_centroid([float(p) for p in edges.getdata()], grid)
+        return weighted_centroid([float(p) for p in pixel_data(edges)], grid)
     except Exception:
         return None
 

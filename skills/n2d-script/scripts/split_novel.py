@@ -13,6 +13,8 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
     --start-chapter N  从第N章开始粗切（可写 48 / 第48章 / 第四十八章；中段开工仍需先补前情资产包）
     --limit N          首批只落地 N 集；缺省为 10 集
     --all              显式全篇粗切
+    --legacy-plan-v2   回退写逐段内嵌的 verbose v2；默认写紧凑 v3
+    --compact-existing-plan  原位把既有 v2 存储迁移为 v3，不重拆、不碰 raw/进度/人工复核
     --keep-frontmatter 保留开头简介/标签/看点（默认自动剥离）
     --out 目录          作品根（默认=小说同级；小说在 …/小说/ 下时自动取其父）
     --target 高级参数：粗胚字数参考（仅用于报告/人工复核，不参与默认切点决策）
@@ -25,7 +27,7 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
     <作品根>/设定库/characters/_角色总表.md
     <作品根>/设定库/locations/_场景总表.md
     <作品根>/小说/<剧名>.txt 规范源副本（供 source_check.py --record）
-    <作品根>/脚本/split_plan.json（v2 全书 source units / arc / 候选边界）
+    <作品根>/脚本/split_plan.json（v3 紧凑全书 source-unit 轴 / arc / 候选边界）
     <作品根>/脚本/_拆集机器索引.md + _拆集复核.md（机器/人工分离，续切不覆人工）
     <作品根>/脚本/第N集/{raw.txt 分镜剧本.md 故事板.md 素材清单.md
                          voiceover.txt bgm.txt 封面.md 字幕_中文.srt}
@@ -34,6 +36,7 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
 """
 import argparse
 import datetime as _dt
+import gzip
 import hashlib
 import json
 import os
@@ -433,27 +436,44 @@ def summarize_text(text, limit=72):
     return compact[:limit].rstrip() + "…"
 
 
+SOURCE_UNIT_SIGNAL_BITS = {
+    "chapter_heading": 1,
+    "scene_or_time_break": 2,
+    "suspense_punctuation": 4,
+    "conflict_hint": 8,
+    "payoff_or_reversal_hint": 16,
+}
+COMPACT_SOURCE_UNITS_ENCODING = "normalized_source_reference_v1"
+
+
+def source_unit_signals(text):
+    """Return advisory signals for one normalized source paragraph."""
+    text = str(text or "")
+    signals = []
+    if CHAPTER_RE.match(text):
+        signals.append("chapter_heading")
+    if SCENE_BREAK_RE.match(text):
+        signals.append("scene_or_time_break")
+    if text.rstrip().endswith(("？", "！", "…", "——", "?", "!")):
+        signals.append("suspense_punctuation")
+    # Lexical matches are metadata for human/optimizer inspection only. They
+    # never hard-exclude a candidate boundary.
+    if has_conflict(text):
+        signals.append("conflict_hint")
+    if has_payoff_or_reversal(text):
+        signals.append("payoff_or_reversal_hint")
+    return signals
+
+
 def build_source_units(paras):
-    """Build full-book normalized source units with stable content fingerprints."""
+    """Build the legacy v2 full-unit objects (rollback/on-demand compatibility)."""
     units = []
     cursor = 0
     for index, para in enumerate(paras, 1):
         text = str(para or "")
         start = cursor
         end = start + len(text)
-        signals = []
-        if CHAPTER_RE.match(text):
-            signals.append("chapter_heading")
-        if SCENE_BREAK_RE.match(text):
-            signals.append("scene_or_time_break")
-        if text.rstrip().endswith(("？", "！", "…", "——", "?", "!")):
-            signals.append("suspense_punctuation")
-        # Lexical matches are metadata for human/optimizer inspection only. They
-        # never hard-exclude a candidate boundary.
-        if has_conflict(text):
-            signals.append("conflict_hint")
-        if has_payoff_or_reversal(text):
-            signals.append("payoff_or_reversal_hint")
+        signals = source_unit_signals(text)
         units.append({
             "source_unit_id": f"U{index:06d}",
             "index": index,
@@ -465,6 +485,187 @@ def build_source_units(paras):
         })
         cursor = end + 1  # normalized units are joined by one newline
     return units
+
+
+def build_compact_source_units(paras):
+    """Build a source-referenced v3 unit axis without embedding paragraph text.
+
+    The canonical source snapshot plus normalization contract reconstructs all
+    v2 fields on demand. Only sparse signal rows remain in the plan, preventing
+    per-paragraph dict/SHA/preview duplication for 100k-unit novels.
+    """
+    digest = hashlib.sha256()
+    normalized_chars = 0
+    signal_index = []
+    for index, para in enumerate(paras, 1):
+        text = str(para or "")
+        encoded = text.encode("utf-8")
+        if index > 1:
+            digest.update(b"\n")
+            normalized_chars += 1
+        digest.update(encoded)
+        normalized_chars += len(text)
+        signals = source_unit_signals(text)
+        if signals:
+            mask = sum(SOURCE_UNIT_SIGNAL_BITS[name] for name in signals)
+            signal_index.append([index, mask])
+    return {
+        "encoding": COMPACT_SOURCE_UNITS_ENCODING,
+        "count": len(paras),
+        "id_format": "U%06d",
+        "normalization": "nonempty stripped paragraphs joined by one newline",
+        "normalized_char_count": normalized_chars,
+        "normalized_text_sha256": digest.hexdigest(),
+        "derived_fields": [
+            "source_unit_id", "index", "normalized_char_span", "chars", "sha256", "preview"
+        ],
+        "signal_bits": SOURCE_UNIT_SIGNAL_BITS,
+        "signal_index": signal_index,
+        "signal_count": len(signal_index),
+    }
+
+
+def compact_source_units_from_legacy(source_units, paras):
+    """Validate a verbose v2 source axis and losslessly compact its signals.
+
+    Migration deliberately preserves the v2 signal decisions instead of
+    recomputing them with today's genre lexicon. Every source-derived field is
+    checked first, so a stale/mismatched source snapshot fails closed.
+    """
+    if not isinstance(source_units, list):
+        raise ValueError("旧 split_plan source_units 不是 verbose v2 列表")
+    paras = list(paras or [])
+    if len(source_units) != len(paras):
+        raise ValueError("旧 source_units 数量与规范化源段落数不一致")
+    digest = hashlib.sha256()
+    normalized_chars = 0
+    signal_index = []
+    cursor = 0
+    for index, (unit, para) in enumerate(zip(source_units, paras), 1):
+        if not isinstance(unit, dict):
+            raise ValueError(f"旧 source_units 第 {index} 项不是对象")
+        text = str(para or "")
+        start, end = cursor, cursor + len(text)
+        expected = {
+            "source_unit_id": f"U{index:06d}",
+            "index": index,
+            "normalized_char_span": [start, end],
+            "chars": len(text),
+            "sha256": sha256_text(text),
+            "preview": summarize_text(text, 96),
+        }
+        for key, value in expected.items():
+            if unit.get(key) != value:
+                raise ValueError(f"旧 source_units[{index}] 的 {key} 与规范化源不一致")
+        signals = list(unit.get("signals") or [])
+        unknown = [name for name in signals if name not in SOURCE_UNIT_SIGNAL_BITS]
+        if unknown:
+            raise ValueError(f"旧 source_units[{index}] 含未知 signals: {unknown}")
+        if len(signals) != len(set(signals)):
+            raise ValueError(f"旧 source_units[{index}] signals 重复")
+        if signals:
+            mask = sum(SOURCE_UNIT_SIGNAL_BITS[name] for name in signals)
+            signal_index.append([index, mask])
+        encoded = text.encode("utf-8")
+        if index > 1:
+            digest.update(b"\n")
+            normalized_chars += 1
+        digest.update(encoded)
+        normalized_chars += len(text)
+        cursor = end + 1
+    return {
+        "encoding": COMPACT_SOURCE_UNITS_ENCODING,
+        "count": len(paras),
+        "id_format": "U%06d",
+        "normalization": "nonempty stripped paragraphs joined by one newline",
+        "normalized_char_count": normalized_chars,
+        "normalized_text_sha256": digest.hexdigest(),
+        "derived_fields": [
+            "source_unit_id", "index", "normalized_char_span", "chars", "sha256", "preview"
+        ],
+        "signal_bits": SOURCE_UNIT_SIGNAL_BITS,
+        "signal_index": signal_index,
+        "signal_count": len(signal_index),
+    }
+
+
+def source_unit_count(plan):
+    """Count source units in either verbose v2 or compact v3 plans."""
+    units = plan.get("source_units") if isinstance(plan, dict) else plan
+    if isinstance(units, list):
+        return len(units)
+    if isinstance(units, dict):
+        return int(units.get("count") or 0)
+    return 0
+
+
+def source_signal_count(plan):
+    units = plan.get("source_units") if isinstance(plan, dict) else plan
+    if isinstance(units, list):
+        return sum(1 for unit in units if isinstance(unit, dict) and unit.get("signals"))
+    if isinstance(units, dict):
+        return int(units.get("signal_count") or len(units.get("signal_index") or []))
+    return 0
+
+
+def iter_source_units(plan, source_paras=None):
+    """Yield legacy-shaped unit dicts from v2 or v3 storage.
+
+    Compact plans require normalized source paragraphs. Integrity is checked
+    against the plan hash before any derived unit is yielded.
+    """
+    units = plan.get("source_units") if isinstance(plan, dict) and "source_units" in plan else plan
+    if isinstance(units, list):
+        yield from units
+        return
+    if not isinstance(units, dict) or units.get("encoding") != COMPACT_SOURCE_UNITS_ENCODING:
+        raise ValueError("不支持的 source_units 存储格式")
+    paras = list(source_paras or [])
+    if len(paras) != int(units.get("count") or 0):
+        raise ValueError("source_units count 与规范化源段落数不一致")
+    expected_sha = str(units.get("normalized_text_sha256") or "")
+    actual_sha = sha256_text("\n".join(str(p or "") for p in paras))
+    if expected_sha and actual_sha != expected_sha:
+        raise ValueError("source_units 规范化源哈希不一致，拒绝派生")
+    signal_bits = units.get("signal_bits") or SOURCE_UNIT_SIGNAL_BITS
+    signal_by_index = {
+        int(row[0]): int(row[1])
+        for row in (units.get("signal_index") or [])
+        if isinstance(row, list) and len(row) == 2
+    }
+    ordered_signals = sorted(signal_bits.items(), key=lambda item: int(item[1]))
+    cursor = 0
+    for index, para in enumerate(paras, 1):
+        text = str(para or "")
+        start, end = cursor, cursor + len(text)
+        mask = signal_by_index.get(index, 0)
+        signals = [name for name, bit in ordered_signals if mask & int(bit)]
+        yield {
+            "source_unit_id": f"U{index:06d}",
+            "index": index,
+            "normalized_char_span": [start, end],
+            "chars": len(text),
+            "sha256": sha256_text(text),
+            "preview": summarize_text(text, 96),
+            "signals": signals,
+        }
+        cursor = end + 1
+
+
+def iter_arc_anchors(plan, source_paras=None):
+    """Yield the legacy combined source/development anchor view for v2/v3."""
+    units = plan.get("source_units") if isinstance(plan, dict) else None
+    if isinstance(units, dict):
+        for unit in iter_source_units(plan, source_paras):
+            if unit.get("signals"):
+                yield {
+                    "anchor_type": "source_signal",
+                    "source_unit_id": unit["source_unit_id"],
+                    "signals": unit["signals"],
+                    "preview": unit["preview"],
+                }
+    for anchor in (plan.get("arc_anchors") or []):
+        yield anchor
 
 
 def episode_unit_spans(episodes, paras, start_cursor=0):
@@ -688,10 +889,19 @@ def render_machine_split_review(plan):
     lines.append("- 已进入出图/出视频的集不要被粗切续跑覆盖；如边界改变，先做受影响范围返工计划。")
     lines.append(
         f"- 全书结构事实保存在 `split_plan.json` v{plan.get('schema_version')}: "
-        f"source_units={len(plan.get('source_units') or [])} / "
+        f"source_units={source_unit_count(plan)} / "
+        f"source_signals={source_signal_count(plan)} / "
         f"boundary_candidates={len(plan.get('boundary_candidates') or [])} / "
         f"beam_paths={len((plan.get('boundary_optimization') or {}).get('top_paths') or [])}。"
     )
+    approved_windows = plan.get("human_approved_windows") or []
+    if approved_windows:
+        lines.extend(["", "## 已实施的人工批准窗口", ""])
+        for window in approved_windows:
+            lines.append(
+                "- 第{start_episode}–{end_episode}集：{start_source_unit_id}–{end_source_unit_id}；"
+                "批准人 `{reviewer}`；实施收据 `{receipt}`。".format(**window)
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -713,21 +923,25 @@ def render_human_split_review_scaffold(plan):
 def write_split_plan(
     root, title, source_snapshot, episodes, n_make, *, split_mode, genre_note,
     partial, start_info=None, source_paras=None, selected_source_paras=None,
-    source_unit_offset=0,
+    source_unit_offset=0, legacy_plan_v2=False,
 ):
     """Write a full-series rough split index without overwriting reviewed episode content."""
     script_dir = os.path.join(root, "脚本")
     os.makedirs(script_dir, exist_ok=True)
     source_paras = list(source_paras or [])
     selected_source_paras = list(selected_source_paras if selected_source_paras is not None else source_paras)
-    source_units = build_source_units(source_paras)
+    if legacy_plan_v2:
+        source_units = build_source_units(source_paras)
+        source_arc_anchors = [
+            {"anchor_type": "source_signal", "source_unit_id": unit["source_unit_id"],
+             "signals": unit["signals"], "preview": unit["preview"]}
+            for unit in source_units if unit.get("signals")
+        ]
+    else:
+        source_units = build_compact_source_units(source_paras)
+        source_arc_anchors = []
     unit_spans = episode_unit_spans(episodes, source_paras, start_cursor=source_unit_offset)
     development_arc = load_development_arc_contract(root)
-    source_arc_anchors = [
-        {"anchor_type": "source_signal", "source_unit_id": unit["source_unit_id"],
-         "signals": unit["signals"], "preview": unit["preview"]}
-        for unit in source_units if unit.get("signals")
-    ]
     plan_episodes = []
     for i, machine_episode in enumerate(episodes, 1):
         raw_path = os.path.join(script_dir, f"第{i}集", "raw.txt")
@@ -757,7 +971,7 @@ def write_split_plan(
         })
     now = _dt.datetime.now(_dt.timezone.utc).isoformat()
     plan = {
-        "schema_version": 2,
+        "schema_version": 2 if legacy_plan_v2 else 3,
         "kind": "n2d_machine_split_plan",
         "generated_at": now,
         "project_root": os.path.abspath(root),
@@ -783,12 +997,20 @@ def write_split_plan(
         ),
         "source_unit_model": "normalized_paragraph_v1",
         "source_unit_scope": "full_normalized_source_after_frontmatter",
+        "source_units_storage": "verbose_v2" if legacy_plan_v2 else COMPACT_SOURCE_UNITS_ENCODING,
+        "source_units_compatibility": (
+            "v2 原对象直接可读"
+            if legacy_plan_v2 else
+            "用 split_novel.iter_source_units(plan, normalized_source_paras) 按需派生 v2 字段；"
+            "重跑时加 --legacy-plan-v2 可回退 verbose v2"
+        ),
         "selected_window": {
             "start_source_unit_index": int(source_unit_offset) + 1 if selected_source_paras else None,
             "source_unit_count": len(selected_source_paras),
             "optimization_scope": "selected_window" if source_unit_offset else "full_source",
         },
         "source_units": source_units,
+        "source_signal_anchor_count": source_signal_count({"source_units": source_units}),
         "arc_anchors": source_arc_anchors + list(development_arc.get("anchors") or []),
         "development_arc_contract": {
             key: value for key, value in development_arc.items() if key not in {"anchors", "preferred_positions"}
@@ -828,6 +1050,309 @@ def write_split_plan(
         with open(human_path, "w", encoding="utf-8") as f:
             f.write(render_human_split_review_scaffold(plan))
     return plan
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def atomic_write_bytes(path, payload):
+    """Durably replace one machine artifact without a shared temp filename."""
+    path = os.fspath(path)
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    temp = f"{path}.tmp.{os.getpid()}.{uuid.uuid4().hex}"
+    try:
+        with open(temp, "wb") as f:
+            f.write(payload)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temp, path)
+    finally:
+        if os.path.exists(temp):
+            os.remove(temp)
+
+
+def _gzip_backup(source_path, backup_path):
+    """Create/reuse a deterministic compressed backup and verify round-trip."""
+    source_sha = sha256_file(source_path)
+    source_size = os.path.getsize(source_path)
+    backup_path = os.fspath(backup_path)
+    if not os.path.exists(backup_path):
+        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        temp = f"{backup_path}.tmp.{os.getpid()}.{uuid.uuid4().hex}"
+        try:
+            with open(source_path, "rb") as src, open(temp, "wb") as raw_out:
+                with gzip.GzipFile(
+                    filename="", mode="wb", fileobj=raw_out, compresslevel=9, mtime=0
+                ) as gz_out:
+                    for chunk in iter(lambda: src.read(1024 * 1024), b""):
+                        gz_out.write(chunk)
+                raw_out.flush()
+                os.fsync(raw_out.fileno())
+            os.replace(temp, backup_path)
+        finally:
+            if os.path.exists(temp):
+                os.remove(temp)
+    restored_digest = hashlib.sha256()
+    restored_size = 0
+    with gzip.open(backup_path, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            restored_digest.update(chunk)
+            restored_size += len(chunk)
+    if restored_digest.hexdigest() != source_sha or restored_size != source_size:
+        raise ValueError("split_plan v2 压缩备份回读校验失败")
+    return {
+        "path": backup_path,
+        "compression": "gzip",
+        "bytes": os.path.getsize(backup_path),
+        "sha256": sha256_file(backup_path),
+        "uncompressed_bytes": source_size,
+        "uncompressed_sha256": source_sha,
+    }
+
+
+def _restore_gzip_backup(backup_path, target_path):
+    temp = f"{target_path}.restore.{os.getpid()}.{uuid.uuid4().hex}"
+    try:
+        with gzip.open(backup_path, "rb") as src, open(temp, "wb") as out:
+            for chunk in iter(lambda: src.read(1024 * 1024), b""):
+                out.write(chunk)
+            out.flush()
+            os.fsync(out.fileno())
+        os.replace(temp, target_path)
+    finally:
+        if os.path.exists(temp):
+            os.remove(temp)
+
+
+def _protected_split_artifact_snapshot(root):
+    """Fingerprint user-owned split artifacts; migration may not touch them."""
+    root_path = Path(root)
+    candidates = [root_path / "_进度.md", root_path / "脚本" / "_拆集复核.md"]
+    candidates.extend(sorted((root_path / "脚本").glob("第*集/raw.txt")))
+    snapshot = {}
+    for path in candidates:
+        if path.is_file():
+            stat = path.stat()
+            snapshot[relpath(path, root)] = {
+                "bytes": stat.st_size,
+                "sha256": sha256_file(path),
+                "mtime_ns": stat.st_mtime_ns,
+            }
+    return snapshot
+
+
+def _canonical_sha(value):
+    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return sha256_text(payload)
+
+
+def compact_existing_split_plan(root, source_path, source_text, *, keep_frontmatter=False):
+    """Migrate a verbose v2 plan to compact v3 without recomputing story cuts.
+
+    Only `split_plan.json`, its machine Markdown view, a compressed v2 backup,
+    and a machine-readable receipt may change. Raw, human boundary review, and
+    progress are fingerprinted before/after and any mismatch rolls the plan
+    back to the verified gzip backup.
+    """
+    root = os.path.abspath(os.fspath(root))
+    plan_path = os.path.join(root, "脚本", "split_plan.json")
+    machine_index_path = os.path.join(root, "脚本", "_拆集机器索引.md")
+    if not os.path.isfile(plan_path):
+        raise FileNotFoundError(f"找不到既有计划: {plan_path}")
+    protected_before = _protected_split_artifact_snapshot(root)
+    old_machine_index = (
+        Path(machine_index_path).read_bytes() if os.path.isfile(machine_index_path) else None
+    )
+    before_size = os.path.getsize(plan_path)
+    before_sha = sha256_file(plan_path)
+    with open(plan_path, encoding="utf-8") as f:
+        plan = json.load(f)
+    if plan.get("kind") != "n2d_machine_split_plan" or int(plan.get("schema_version") or 0) != 2:
+        raise ValueError("--compact-existing-plan 只接受 n2d_machine_split_plan schema v2")
+    # write_split_plan hashes `open(..., encoding=...).read()`, whose text-mode
+    # universal-newline handling maps CRLF/CR to LF. `read_text()` intentionally
+    # decodes raw bytes, so mirror that historical hash contract here.
+    source_for_plan_hash = str(source_text or "").replace("\r\n", "\n").replace("\r", "\n")
+    if plan.get("source_text_sha256") != sha256_text(source_for_plan_hash.rstrip()):
+        raise ValueError("传入源文本与旧 split_plan.source_text_sha256 不一致")
+
+    paras = normalize_paragraphs(source_text)
+    if not keep_frontmatter:
+        paras = strip_frontmatter(paras)
+    legacy_units = plan.get("source_units")
+    compact_units = compact_source_units_from_legacy(legacy_units, paras)
+    legacy_signal_count = int(compact_units["signal_count"])
+
+    # v2 duplicated every source signal as an arc anchor. Validate that mirror
+    # before dropping it; non-source/development anchors remain byte-semantically
+    # represented in the migrated plan.
+    development_anchors = []
+    legacy_anchor_count = 0
+    for anchor in plan.get("arc_anchors") or []:
+        if not isinstance(anchor, dict):
+            raise ValueError("旧 arc_anchors 含非对象项")
+        if anchor.get("anchor_type") != "source_signal":
+            development_anchors.append(anchor)
+            continue
+        legacy_anchor_count += 1
+        match = re.fullmatch(r"U(\d+)", str(anchor.get("source_unit_id") or ""))
+        if not match:
+            raise ValueError("旧 source_signal anchor 缺有效 source_unit_id")
+        index = int(match.group(1))
+        if index < 1 or index > len(legacy_units):
+            raise ValueError("旧 source_signal anchor 越出 source_units 范围")
+        unit = legacy_units[index - 1]
+        if (
+            anchor.get("signals") != unit.get("signals")
+            or anchor.get("preview") != unit.get("preview")
+        ):
+            raise ValueError("旧 source_signal anchor 与对应 source_unit 不一致")
+    if legacy_anchor_count != legacy_signal_count:
+        raise ValueError("旧 source_signal anchors 未完整镜像 source_units signals")
+
+    semantic_fields = (
+        "kind", "title", "source_text", "source_text_sha256", "split_mode", "scope",
+        "target_episode_count", "estimated_total_episode_count", "start_chapter",
+        "selected_window", "development_arc_contract", "boundary_candidates",
+        "boundary_optimization", "episodes",
+    )
+    semantic_before = {key: plan.get(key) for key in semantic_fields}
+    semantic_before["development_arc_anchors"] = development_anchors
+    semantic_before_sha = _canonical_sha(semantic_before)
+
+    receipt_dir = os.path.join(root, "生产数据", "迁移收据")
+    backup_name = f"split_plan.v2.{before_sha[:12]}.json.gz"
+    backup_path = os.path.join(receipt_dir, backup_name)
+    backup = _gzip_backup(plan_path, backup_path)
+    migrated_at = _dt.datetime.now(_dt.timezone.utc).replace(microsecond=0).isoformat()
+    stamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    receipt_path = os.path.join(receipt_dir, f"split_plan_storage_migration_{stamp}.json")
+
+    plan["schema_version"] = 3
+    plan["source_units_storage"] = COMPACT_SOURCE_UNITS_ENCODING
+    plan["source_units_compatibility"] = (
+        "用 split_novel.iter_source_units(plan, normalized_source_paras) 按需派生 v2 字段；"
+        "重跑时加 --legacy-plan-v2 可回退 verbose v2"
+    )
+    plan["source_units"] = compact_units
+    plan["source_signal_anchor_count"] = legacy_signal_count
+    plan["arc_anchors"] = development_anchors
+    plan["storage_migration"] = {
+        "from_schema_version": 2,
+        "migrated_at": migrated_at,
+        "method": "validated_in_place_storage_compaction_v1",
+        "source_plan_sha256": before_sha,
+        "backup": relpath(backup_path, root),
+        "receipt": relpath(receipt_path, root),
+    }
+
+    # Exact legacy view must still be derivable before replacing anything.
+    hydrated_count = 0
+    for hydrated, legacy in zip(iter_source_units(plan, paras), legacy_units):
+        if hydrated != legacy:
+            raise ValueError("compact v3 rehydrate 与 legacy v2 source_unit 不一致")
+        hydrated_count += 1
+    if hydrated_count != len(legacy_units):
+        raise ValueError("compact v3 rehydrate 数量不完整")
+    semantic_after = {key: plan.get(key) for key in semantic_fields}
+    semantic_after["development_arc_anchors"] = plan.get("arc_anchors") or []
+    semantic_after_sha = _canonical_sha(semantic_after)
+    if semantic_after_sha != semantic_before_sha:
+        raise ValueError("存储迁移意外改变拆集/边界生产语义")
+
+    plan_bytes = (json.dumps(plan, ensure_ascii=False, indent=2) + "\n\n").encode("utf-8")
+    after_size = len(plan_bytes)
+    after_sha = hashlib.sha256(plan_bytes).hexdigest()
+    if after_size >= before_size:
+        raise ValueError("compact v3 未取得体积收益，拒绝替换旧计划")
+    machine_index_bytes = render_machine_split_review(plan).encode("utf-8")
+    plan_replaced = False
+    try:
+        atomic_write_bytes(plan_path, plan_bytes)
+        plan_replaced = True
+        atomic_write_bytes(machine_index_path, machine_index_bytes)
+        protected_after = _protected_split_artifact_snapshot(root)
+        if protected_after != protected_before:
+            raise ValueError("迁移触碰了 raw、_拆集复核.md 或 _进度.md")
+        receipt = {
+            "schema_version": 1,
+            "kind": "n2d_split_plan_storage_migration_receipt",
+            "status": "pass",
+            "migrated_at": migrated_at,
+            "project_root": root,
+            "source_text": relpath(source_path, root),
+            "migration": {
+                "from_schema_version": 2,
+                "to_schema_version": 3,
+                "method": "validated_in_place_storage_compaction_v1",
+                "source_units_encoding": COMPACT_SOURCE_UNITS_ENCODING,
+            },
+            "before": {
+                "path": relpath(plan_path, root),
+                "bytes": before_size,
+                "sha256": before_sha,
+                "source_unit_count": len(legacy_units),
+                "source_signal_anchor_count": legacy_anchor_count,
+                "estimated_total_episode_count": plan.get("estimated_total_episode_count"),
+                "production_semantic_sha256": semantic_before_sha,
+            },
+            "after": {
+                "path": relpath(plan_path, root),
+                "bytes": after_size,
+                "sha256": after_sha,
+                "source_unit_count": source_unit_count(plan),
+                "source_signal_anchor_count": source_signal_count(plan),
+                "estimated_total_episode_count": plan.get("estimated_total_episode_count"),
+                "production_semantic_sha256": semantic_after_sha,
+            },
+            "reduction": {
+                "bytes_saved": before_size - after_size,
+                "fraction": round(1.0 - after_size / before_size, 6),
+                "factor": round(before_size / after_size, 4),
+            },
+            "backup": {
+                **{key: value for key, value in backup.items() if key != "path"},
+                "path": relpath(backup["path"], root),
+            },
+            "checks": {
+                "source_hash_matches_v2_plan": True,
+                "all_v2_source_units_validated": True,
+                "rehydrated_v2_units_equal": True,
+                "rehydrated_source_unit_count": hydrated_count,
+                "source_signal_anchors_equal": legacy_anchor_count == legacy_signal_count,
+                "estimated_episode_count_unchanged": True,
+                "production_semantics_unchanged": semantic_after_sha == semantic_before_sha,
+                "protected_artifacts_unchanged": True,
+            },
+            "protected_artifacts": protected_after,
+            "allowed_mutations": [
+                "脚本/split_plan.json",
+                "脚本/_拆集机器索引.md",
+                relpath(backup_path, root),
+                relpath(receipt_path, root),
+            ],
+            "rollback": {
+                "backup": relpath(backup_path, root),
+                "expected_restored_sha256": before_sha,
+            },
+        }
+        receipt_bytes = (json.dumps(receipt, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        atomic_write_bytes(receipt_path, receipt_bytes)
+    except Exception:
+        if plan_replaced:
+            _restore_gzip_backup(backup_path, plan_path)
+        if old_machine_index is None:
+            if os.path.exists(machine_index_path):
+                os.remove(machine_index_path)
+        else:
+            atomic_write_bytes(machine_index_path, old_machine_index)
+        raise
+    return receipt, receipt_path
 
 
 def progress_extra_sections(path):
@@ -927,12 +1452,21 @@ def main():
                     help=f"首批粗切：只落地前 N 集（仍按全本估总集数）；缺省={DEFAULT_FIRST_SPLIT_LIMIT}。续切=重跑加大 --limit（已存在集与进度勾选保留）")
     ap.add_argument("--all", action="store_true",
                     help="显式全篇粗切；只在边界策略稳定、准备批量推进时使用。")
+    ap.add_argument("--legacy-plan-v2", action="store_true",
+                    help="回退输出 verbose split_plan v2（逐段 SHA/preview 全内嵌，体积和加载内存显著更大）；默认写紧凑 v3")
+    ap.add_argument("--compact-existing-plan", action="store_true",
+                    help="仅把既有 split_plan v2 原位压紧为 v3；保留拆集/边界语义，备份并落迁移收据，不重写 raw/_进度/人工复核")
     args = ap.parse_args()
 
     if args.all and args.limit is not None:
         sys.exit("--all 与 --limit 只能二选一。")
     if args.limit is not None and args.limit < 1:
         sys.exit("--limit 必须是正整数；全篇粗切请用 --all。")
+    if args.compact_existing_plan and (
+        args.all or args.limit is not None or args.by_chapter or args.per_chapter
+        or args.start_chapter or args.legacy_plan_v2
+    ):
+        sys.exit("--compact-existing-plan 是纯存储迁移，不能与拆集/回退参数组合。")
 
     if not os.path.exists(args.novel):
         sys.exit(f"找不到文件: {args.novel}")
@@ -971,6 +1505,22 @@ def main():
                 print(f"[warn] 未找到含『创作区/制漫剧/』的仓库根，作品根回退到小说同级：{root}"
                       f"（建议用 --out 指定 创作区/制漫剧/<剧名>/）", file=sys.stderr)
     text = read_text(args.novel)
+    if args.compact_existing_plan:
+        try:
+            receipt, receipt_path = compact_existing_split_plan(
+                root, args.novel, text, keep_frontmatter=args.keep_frontmatter
+            )
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            sys.exit(f"split_plan 存储迁移失败：{exc}")
+        print(f"作品根: {root}")
+        print(
+            "split_plan v2→v3 存储迁移完成："
+            f"{receipt['before']['bytes']} → {receipt['after']['bytes']} bytes；"
+            "raw / _拆集复核.md / _进度.md 哈希与 mtime 均未变化。"
+        )
+        print(f"迁移收据: {receipt_path}")
+        print(f"v2 压缩备份: {receipt['backup']['path']}")
+        return
     meta_path = os.path.join(root, "_meta.json")
     if not os.path.exists(meta_path):
         os.makedirs(root, exist_ok=True)
@@ -1009,9 +1559,9 @@ def main():
         paras = strip_frontmatter(paras)
         dropped = before - len(paras)
 
-    # split_plan v2 keeps the full normalized source-unit axis even when this
-    # invocation starts from a middle chapter. The selected window is mapped by
-    # an offset; no earlier source units disappear from the planning contract.
+    # split_plan v2/v3 both keep the full normalized source-unit axis even when
+    # this invocation starts from a middle chapter. The selected window is
+    # mapped by an offset; no earlier source units disappear from the contract.
     full_source_paras = list(paras)
 
     start_info = None
@@ -1168,6 +1718,7 @@ def main():
         source_paras=full_source_paras,
         selected_source_paras=paras,
         source_unit_offset=int((start_info or {}).get("skipped_paras") or 0),
+        legacy_plan_v2=args.legacy_plan_v2,
     )
 
     print(f"作品根: {root}")

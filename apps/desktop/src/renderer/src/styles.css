@@ -291,17 +291,17 @@ button:hover { border-color: var(--accent); }
 .empty { color: var(--muted); font-style: italic; }
 
 /* ---- Home: line picker ---- */
-.line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; align-items: start; }
 .line-card {
   position: relative; background: var(--panel); border: 1px solid var(--border);
-  border-radius: 14px; padding: 18px; overflow: hidden; transition: border-color .15s, transform .15s;
+  border-radius: 14px; padding: 12px; overflow: hidden; transition: border-color .15s, transform .15s;
 }
 .line-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .line-cover {
-  height: 96px; border-radius: 10px; background: var(--sidebar-bg); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center; font-size: 42px; margin-bottom: 12px;
+  height: 120px; border-radius: 10px; background: var(--sidebar-bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 44px; margin-bottom: 8px;
 }
-.line-info .line-title { font-weight: 600; font-size: 15px; }
+.line-info .line-title { font-weight: 600; font-size: 15px; display: flex; align-items: baseline; gap: 8px; }
 .line-info .line-work-count { margin-left: 5px; color: var(--muted); font-size: 11px; font-weight: 400; }
 .card-actions {
   position: absolute; inset: 0; display: flex; gap: 10px; align-items: center; justify-content: center;
@@ -310,6 +310,29 @@ button:hover { border-color: var(--accent); }
 .line-card:hover .card-actions { opacity: 1; }
 .card-actions button { padding: 8px 14px; font-size: 13px; }
 .card-actions button.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); font-weight: 600; }
+.card-actions button.primary:disabled { background: var(--sidebar-bg); color: var(--muted); border-color: var(--border); font-weight: 500; cursor: not-allowed; }
+
+/* Cloud-line skill state, right-aligned on the title row, matching the work
+ * count's size/weight. "下载技能" stays a clickable trigger. */
+.line-info .line-title .line-title-main { display: inline-flex; align-items: baseline; min-width: 0; }
+.line-info .line-cloud-note { margin-left: auto; color: var(--muted); font-size: 9.5px; font-weight: 400; white-space: nowrap; }
+.line-info .line-cloud-note.error { color: var(--bad, #e06c75); }
+button.line-cloud-note { padding: 0; border: none; background: none; text-align: left; line-height: inherit; }
+/* Not-downloaded: show just the download icon; reveal "下载技能" on hover. */
+button.line-cloud-note.dl-link {
+  display: inline-flex; align-items: center; color: var(--good); cursor: pointer; font-weight: 600; align-self: center;
+}
+.dl-link .dl-ico { flex: 0 0 auto; }
+.dl-link .dl-label {
+  max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
+  transition: max-width .16s ease, opacity .16s ease, margin-left .16s ease;
+}
+.dl-link:hover:not(:disabled) .dl-label,
+.dl-link:focus-visible .dl-label { max-width: 6em; opacity: 1; margin-left: 4px; }
+.dl-link:disabled { opacity: .5; cursor: default; }
+button.line-cloud-note.dl-link:hover:not(:disabled) { text-decoration: underline; }
+button.line-cloud-note.dl-link:focus-visible { outline: 1px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+button.line-cloud-note.dl-link:disabled { opacity: .5; cursor: default; }
 
 /* ---- Line page (创作区) ---- */
 .line-page { padding: 0; height: 100%; overflow: auto; background: var(--editor-bg); }

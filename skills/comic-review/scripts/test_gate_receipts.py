@@ -28,6 +28,7 @@ def test_gate_receipt_binds_current_inputs(tmp_path: Path) -> None:
     jobs.parent.mkdir(parents=True)
     jobs.write_text('{"jobs": []}', encoding="utf-8")
     report = gate.make_report(tmp_path, "第1话", "script", [], [])
+    assert report["project_root"] == "."
     paths = gate.write_outputs(tmp_path, "第1话", "script", report)
     receipt = json.loads((tmp_path / paths["receipt"]).read_text(encoding="utf-8"))
     assert receipt["verdict"] == "pass"

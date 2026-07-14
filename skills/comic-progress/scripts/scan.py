@@ -483,7 +483,10 @@ def _identity_gaps(root: Path, chapter: str) -> list[dict[str, Any]]:
         if stale_views:
             return [_gap(root, chapter, "identity", "model_pack_report_stale", report_path, f"{cid} 定妆视图在检查后已改动：{','.join(stale_views)}。")]
         tier = str(asset.get("library_tier") or asset.get("tier") or "core_full")
-        if tier == "core_full":
+        # Every tier with required views needs a current SHA-bound human
+        # receipt.  Tier controls production depth, not whether visual
+        # identity approval may be skipped.
+        if tier != "restricted_partial":
             signoff_path = root / "生产数据" / "comic_model_pack_signoffs" / f"{cid}.json"
             signoff = load_json(signoff_path)
             if signoff is None:

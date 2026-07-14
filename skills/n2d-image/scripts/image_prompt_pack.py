@@ -43,6 +43,15 @@ from image_prompt_compiler import (  # noqa: E402
     render_compiled_markdown as render_compiled_image_markdown,
 )
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from visual_reference_policy import (  # noqa: E402
+    IDENTITY_GENERATION_POLICIES,
+    STYLE_GENERATION_POLICIES,
+    evaluate_generation_reference,
+)
+
 REFERENCE_PLAN_APPLICATION_KIND = "n2d_reference_plan_application"
 DIRECTOR_CAMERA_PLAN_APPLICATION_KIND = "n2d_director_camera_plan_application"
 SCRIPT_CONTRACT_APPLICATION_KIND = "n2d_script_contract_application"
@@ -839,12 +848,15 @@ def external_visual_reference_entries(root: Path, cid: str, cfg: Mapping[str, An
             if isinstance(character_ids, str):
                 character_ids = [character_ids]
             policy = str(row.get("use_policy") or "").strip()
-            if cid not in {str(item).strip() for item in character_ids} or policy not in {
-                "identity_reference", "identity_body_reference",
-            }:
+            if cid not in {str(item).strip() for item in character_ids} or policy not in IDENTITY_GENERATION_POLICIES:
                 continue
-            rel = str(row.get("path") or "").strip()
-            if not rel or rel in seen or not (root / rel).is_file():
+            eligibility = evaluate_generation_reference(
+                root,
+                row,
+                allowed_policies=tuple(IDENTITY_GENERATION_POLICIES),
+            )
+            rel = str(eligibility.get("path") or "").strip()
+            if not eligibility.get("eligible") or not rel or rel in seen:
                 continue
             seen.add(rel)
             item = dict(row)
@@ -853,34 +865,14 @@ def external_visual_reference_entries(root: Path, cid: str, cfg: Mapping[str, An
                 "status": "ready",
                 "source": str(row.get("source") or "user_provided_project_reference"),
                 "use_policy": policy,
-                "sha256": sha256_file(root / rel),
+                "sha256": str(eligibility.get("sha256") or ""),
             })
             out.append(item)
         if out:
             return out
-
-    name = safe_slug(str(cfg.get("name") or cid))
-    candidates = [
-        f"出图/共享/图片/{cid}_定型参考.png",
-        f"出图/共享/图片/{cid}_定型参考_待绑定.png",
-        f"出图/共享/图片/{cid}_定型参考_成年觉醒态.png",
-        f"出图/共享/图片/{cid}_参考.png",
-        f"出图/共享/图片/{name}_定型参考.png",
-    ]
-    out: List[Dict[str, Any]] = []
-    seen = set()
-    for rel in candidates:
-        if rel in seen or not (root / rel).is_file():
-            continue
-        seen.add(rel)
-        out.append({
-            "path": rel,
-            "status": "ready",
-            "source": "user_provided_project_reference",
-            "use_policy": "identity_reference",
-            "sha256": sha256_file(root / rel),
-        })
-    return out
+    # Legacy files under 出图/共享 lack a rights/SHA/use receipt.  They remain on
+    # disk for migration but must not silently become backend inputs.
+    return []
 
 
 def parse_card_header(text: str, kind: str) -> Tuple[str, str]:
@@ -3537,8 +3529,13 @@ def external_style_reference_entries(root: Path) -> List[Dict[str, Any]]:
     for row in manifest.get("references") or []:
         if not isinstance(row, Mapping) or str(row.get("use_policy") or "").strip() != "style_source_only":
             continue
-        rel = str(row.get("path") or "").strip()
-        if not rel or rel in seen or not (root / rel).is_file():
+        eligibility = evaluate_generation_reference(
+            root,
+            row,
+            allowed_policies=tuple(STYLE_GENERATION_POLICIES),
+        )
+        rel = str(eligibility.get("path") or "").strip()
+        if not eligibility.get("eligible") or not rel or rel in seen:
             continue
         seen.add(rel)
         item = dict(row)
@@ -3547,7 +3544,7 @@ def external_style_reference_entries(root: Path) -> List[Dict[str, Any]]:
             "status": "ready",
             "source": str(row.get("source") or "user_provided_project_reference"),
             "use_policy": "style_source_only",
-            "sha256": sha256_file(root / rel),
+            "sha256": str(eligibility.get("sha256") or ""),
         })
         out.append(item)
     return out

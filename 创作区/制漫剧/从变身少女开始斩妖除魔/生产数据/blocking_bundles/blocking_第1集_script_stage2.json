@@ -1,0 +1,33 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": true,
+  "blockers": [
+    {
+      "message": "skill 更新影响当前集，需先执行/确认重制计划：/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.md。统一修复/预检入口：python3 skills/n2d/scripts/repair_preflight.py \"创作区/制漫剧/从变身少女开始斩妖除魔\" 第1集 --stage script_stage2 --write-missing --json 已自动执行 repair_preflight（block）：update_plan: /Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/skill_update_plan_第1集.md；报告：/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/repair_preflight_script_stage2_第1集.json",
+      "step": "blocked_by_entry_check"
+    }
+  ],
+  "category": "contract_or_gate",
+  "episode": "第1集",
+  "episode_graph": {
+    "graph_hash": "19ec5b0cd91386007b919d35fbcb8bd3e2dbb6a17d3b0eac0f3cdf6bfb5b9ed9",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": null,
+    "return_to_stage": null,
+    "stage": ""
+  },
+  "generated_at": "2026-07-14T20:22:31+0800",
+  "headline": "第1集 阶段2·分镜设计：入口检查未放行",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-script",
+  "repair_commands": [
+    "n2d-script 创作区/制漫剧/从变身少女开始斩妖除魔 第1集  (配音后定稿)"
+  ],
+  "stage_key": "script_stage2",
+  "stop_reason": "blocked_by_entry_check",
+  "version": 1
+}

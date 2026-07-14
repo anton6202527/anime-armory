@@ -1,0 +1,3588 @@
+{
+  "schema_version": 2,
+  "kind": "comic_panel_script",
+  "title": "水浒传",
+  "chapter": "第1话",
+  "working_title": "伏魔殿开",
+  "status": "confirmed",
+  "chapter_contract": {
+    "path": "脚本/split_blueprint.json",
+    "chapter_contract_sha256": "39bdc9029bae52f2f7328b71091689b737398cf437b9d94f531e58cf190ea6fb",
+    "status": "confirmed"
+  },
+  "source_semantics": {
+    "path": "脚本/第1话/source_semantics.json",
+    "requires_normalization": true,
+    "source_language": "文言/古汉语",
+    "target_text_language": "中文",
+    "target_text_metadata": {
+      "lang": "zh-Hans",
+      "dir": "ltr",
+      "script": "Hans",
+      "line_break": "cjk"
+    },
+    "status": "pass"
+  },
+  "visual_contract": {
+    "style_anchor_id": "STYLE_SHUIHU_SONG_CINEMATIC",
+    "style_baseline": "宋画工笔淡彩的线性细节与散点山水结构，结合写实国漫人物和电影化动机光；低饱和石青、石绿、赭石、墨灰为主，朱砂只用于诏书与封条，金色只留给御命和一百零八星光；亚光绢纸肌理，禁止影视演员肖像、剧照构图、3D游戏CG与明清宫殿服饰混入。",
+    "character_integrity_policy": "所有具名人物和生物必须继承 registry 中的脸型/脸部结构、眼型与眼距、发际线/发型或毛发轮廓、体态与标志服饰；手、脚、四肢、身体和所持道具归属完整可读，不多肢、不断肢、不穿模；角色眼神只锁定戏内对象，非 POV 不看镜头。",
+    "scene_anchors": {
+      "LOC_ZICHEN_HALL": {
+        "spatial_layout": "北宋紫宸殿中轴线：仁宗居画面上方中央御座，文班在画左、武班在画右，丹墀通道由下向上；疫情画面只作奏报式叠化，不改变朝会轴线。",
+        "lighting_anchor": "拂晓冷天光从画左上殿门进入，御座后有微暖宫灯轮廓光；疫情叠化降饱和且不改主光方向。",
+        "axis_eyeline": "皇帝面向画下，臣子面向画上；奏对正反打保持臣子画左或画右站位不反转。",
+        "resident_assets": [
+          "御座",
+          "丹墀",
+          "珠帘",
+          "凤扇",
+          "文武班位",
+          "PROP_IMPERIAL_EDICT",
+          "PROP_SILVER_CENSER"
+        ],
+        "forbidden_drift": [
+          "禁止变成明清金銮殿",
+          "禁止文武班位互换",
+          "禁止仁宗突然转为演员脸"
+        ]
+      },
+      "LOC_CAPITAL_PLAGUE_STREET": {
+        "spatial_layout": "北宋京师居民窄巷沿画面纵深通往城门；两侧木门逐扇关闭，药碗、清水桶与布帘都有稳定位置，送葬队只在后景纵深通过。",
+        "lighting_anchor": "冷日光从画左上照入巷道，室内只有极弱暖灯；整体灰褐低饱和，不使用病毒绿光或灾难片式色调。",
+        "axis_eyeline": "巷道行进轴由画下指向画上城门；居民视线只指向家人、药碗或后景送葬队，不看镜头。",
+        "resident_assets": [
+          "木门",
+          "药碗",
+          "清水桶",
+          "布帘",
+          "城门方向",
+          "后景送葬队"
+        ],
+        "forbidden_drift": [
+          "禁止变成宫廷或现代街道",
+          "禁止尸体或病灶猎奇特写",
+          "禁止木门、药碗与队列空间随机跳位"
+        ]
+      },
+      "LOC_ROAD_TO_LONGHUSHAN": {
+        "spatial_layout": "南下驿道沿竖画面自上而下穿过山村、驿馆、溪水与远山；洪信居马队前中段，官差不超过主骑。",
+        "lighting_anchor": "日间柔和右上方日光，夜宿只在同格下段切暖驿灯；水岸保持低饱和青绿反光。",
+        "axis_eyeline": "队伍主行进方向为画右下，后续连续格不突然反向。",
+        "resident_assets": [
+          "驿道",
+          "马队",
+          "黄罗诏包",
+          "PROP_IMPERIAL_EDICT",
+          "PROP_SILVER_CENSER"
+        ],
+        "forbidden_drift": [
+          "禁止现代道路",
+          "禁止马队方向翻转",
+          "禁止道具无故消失"
+        ]
+      },
+      "LOC_SHANGQING_PALACE": {
+        "spatial_layout": "上清宫主轴从山门、三清殿至方丈，左右廊与壁画夹道对称；炼药炉在右庭，流水在台阶下，后山路从方丈后画右上方通出。",
+        "lighting_anchor": "庭院右上方柔日光、廊下青冷反光、三清殿内暖香火为动机光；次日游览延续同方位。",
+        "axis_eyeline": "洪信通常画左、住持画右；住持引路时面向画右后方，回身奏对时视线回到画左洪信。",
+        "resident_assets": [
+          "敕额山门",
+          "三清殿",
+          "金钟玉磬",
+          "炼药炉",
+          "左右壁画",
+          "PROP_IMPERIAL_EDICT",
+          "PROP_SILVER_CENSER"
+        ],
+        "forbidden_drift": [
+          "禁止佛寺化",
+          "禁止左右廊互换",
+          "禁止宫观忽新忽旧"
+        ]
+      },
+      "LOC_LONGHUSHAN_PATH": {
+        "spatial_layout": "丹霞赤壁与林径呈竖向层叠：上山方向始终为画右上，山下为画左下；盘陀石在小径画左，松树在画右后，竹藤在画左后。",
+        "lighting_anchor": "雾中天光从画右上下沉，林下为冷青灰反光；虎蛇出现不换主光，只用遮光和局部反光提高压迫。",
+        "axis_eyeline": "洪信上山朝画右上；白虎从画右后扑向画左前，雪蛇从画左后冲向盘陀石；道童由画右后出现后向画左下离开。",
+        "resident_assets": [
+          "丹霞岩柱",
+          "盘陀石",
+          "松树",
+          "竹藤",
+          "倒挂藤萝",
+          "PROP_IMPERIAL_EDICT",
+          "PROP_SILVER_CENSER"
+        ],
+        "forbidden_drift": [
+          "禁止突然雪山或热带雨林",
+          "禁止虎蛇出场方向反转",
+          "禁止洪信泥尘与香炉连续性丢失"
+        ]
+      },
+      "LOC_FUMO_HALL_EXTERIOR": {
+        "spatial_layout": "伏魔殿位于上清宫右廊后；红泥围墙、朱红隔子门、金字牌额居中，巨锁在门缝，封条交叉覆盖门扇；洪信画左，住持与道众画右。",
+        "lighting_anchor": "次日日光从画右上照亮朱门，檐下封条处在赭红阴影；门开后内部只露冷黑，不提前泄露金光。",
+        "axis_eyeline": "洪信画左视线指向画右的住持或中央门锁；住持画右朝画左劝阻，不跨过门中轴。",
+        "resident_assets": [
+          "伏魔之殿牌额",
+          "朱红隔子门",
+          "红泥墙",
+          "PROP_FUMO_SEALS"
+        ],
+        "forbidden_drift": [
+          "禁止门扇开合方向反转",
+          "禁止封条数量骤减",
+          "禁止牌额错字"
+        ]
+      },
+      "LOC_FUMO_HALL_INTERIOR": {
+        "spatial_layout": "门在画下方，中央石碑与龟趺，碑下为青石板和地穴；洪信居画左前指挥，住持画右后劝阻，火工道人环绕中心；殿角画右上方在释放时塌落。",
+        "lighting_anchor": "初入时为近黑；火把从画下与画左提供摇动暖光，岩壁保持冷灰；黑气释放后只有 108 星光改变为内发金光。",
+        "axis_eyeline": "洪信从画左看向中央碑/地穴，住持从画右看向洪信与地穴；逃散动线由中央向画下门口，星光由中央向画面上方八向散出。",
+        "resident_assets": [
+          "火把",
+          "锤、锄、铁锨",
+          "PROP_STONE_STELE",
+          "龟趺",
+          "青石板",
+          "VFX_108_STARLIGHTS"
+        ],
+        "forbidden_drift": [
+          "禁止碑与地穴位置跳变",
+          "禁止火把光方向乱跳",
+          "禁止星光数量少于108或变成西式灵魂"
+        ]
+      }
+    },
+    "character_state_timeline": {
+      "CHAR_HONG_XIN": [
+        {
+          "from_panel": "P010",
+          "state": "STATE_COURT_ENVOY：官服奉诏出使"
+        },
+        {
+          "from_panel": "P019",
+          "state": "STATE_MOUNTAIN_START：布衣麻履，背诏持炉"
+        },
+        {
+          "from_panel": "P024",
+          "state": "STATE_MOUNTAIN_DIRTY：倒地后背肩、袖口、膝部泥尘持续"
+        },
+        {
+          "from_panel": "P044",
+          "state": "STATE_FUMO_DEFIANT：次日恢复官服，以权势强开殿门"
+        },
+        {
+          "from_panel": "P048",
+          "state": "STATE_FUMO_STUNNED：幞头尚在、官袍沾尘、面色如土"
+        }
+      ],
+      "CHAR_MASTER_XUJING": [
+        {
+          "from_panel": "P035",
+          "state": "STATE_HERDBOY_REVEAL：青衣丫髻、倒骑黄牛、手持铁笛"
+        }
+      ]
+    }
+  },
+  "panels": [
+    {
+      "panel_id": "P001",
+      "story_function": "opening_hook",
+      "source_excerpt": "S003-S004：嘉祐三年拂晓，紫宸殿祥云笼罩。",
+      "meaning_zh": "仁宗临朝之日，宫阙威仪与即将暴露的疫灾形成反差。",
+      "text_target": "嘉祐三年三月初三。五更三点，紫宸殿。",
+      "adaptation_note": "将时地与祥云诗赞合并为一个长竖开场，云气偏沉暗以埋下不安。",
+      "source_segment_refs": [
+        "S003",
+        "S004"
+      ],
+      "description": "黎明中的北宋宫城沿竖画面层层上升，紫宸殿在雾中显现，一缕偏灰的祥云压过殿脊。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "紫宸殿外景",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "继承 LOC_ZICHEN_HALL：宫城中轴由画下通向殿门与御座方位。",
+      "lighting_anchor": "继承拂晓画左上冷天光，宫灯只作微暖点光。",
+      "axis_eyeline": "无具名人物；建筑中轴引导读者自下向上。",
+      "continuity_from": "none",
+      "spatial_relationships": "前景旌旗、中景宫墙、后景紫宸殿，云气不遮住殿额。",
+      "dialogue": [],
+      "narration": "嘉祐三年三月初三。五更三点，紫宸殿。",
+      "sfx": [],
+      "lettering_plan": "时地字幕置于左上雾区，不压殿脊。",
+      "art_notes": "使用清明上河图式层级与北宋宫阙语汇，不照搬影视宫门镜头。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "进入时代的长呼吸",
+      "ink_plan": "建筑用精细中细线，远景线减淡，云雾保留纸白。",
+      "black_fill_plan": "殿檐下小面积深墨，不压黑整座宫阙。",
+      "tone_plan": "石青、雾灰与赭石薄染，祥云降明度。",
+      "value_plan": "天空亮、宫阙中、檐下暗的三值阅读。",
+      "effects_plan": "只用薄雾层次，禁止仙侠粒子特效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL"
+      ]
+    },
+    {
+      "panel_id": "P002",
+      "story_function": "ritual_detail",
+      "source_excerpt": "S005-S006：御柳宫花映旌旗剑戟，百官聚丹墀。",
+      "meaning_zh": "朝会仪仗与文武班位已就绪。",
+      "text_target": "（无嵌字；仪仗与百官列班成画面）",
+      "adaptation_note": "以露珠滑过柳梢、戟刃和百官班位三层细节承接宏观宫景。",
+      "source_segment_refs": [
+        "S005",
+        "S006"
+      ],
+      "description": "近景露水柳条拂过旌旗，中景戟刃反冷光，后景戴簪着朱履的百官按班位肃立。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "紫宸殿丹墀",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "继承中轴：文班画左、武班画右，中央通道留空。",
+      "lighting_anchor": "画左上冷光在露珠和戟刃上产生小面积高光。",
+      "axis_eyeline": "百官视线统一朝画上御座方向。",
+      "continuity_from": "P001",
+      "spatial_relationships": "柳条在前景不遮挡中央通道，文武班对称分开。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "纯画面格，不置气泡。",
+      "art_notes": "服饰完成阶层可读但不给匿名百官演员脸。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "仪式建立",
+      "ink_plan": "柳叶细线、戟刃硬线、百官轮廓分组。",
+      "black_fill_plan": "旌旗背面少量深色，中轴保持亮。",
+      "tone_plan": "宫花暗朱、柳叶墨绿，官服低饱和。",
+      "value_plan": "露珠亮点、官服中值、檐影暗值。",
+      "effects_plan": "无动作线，只保留柳条微风弧线。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL"
+      ]
+    },
+    {
+      "panel_id": "P003",
+      "story_function": "imperial_reveal",
+      "source_excerpt": "S007-S010：雅乐仪卫护御驾，珠帘凤扇展开，净鞭三响后文武齐班。",
+      "meaning_zh": "仁宗在严整朝仪中正式登场。",
+      "text_target": "啪！啪！啪！",
+      "adaptation_note": "将四段仪仗诗赞合并为珠帘打开与净鞭三响的可听见揭示。",
+      "source_segment_refs": [
+        "S007",
+        "S008",
+        "S009",
+        "S010"
+      ],
+      "description": "珠帘向两侧卷起，凤扇在仁宗身后打开；他居中坐定，净鞭三声让殿内彻底静下来。",
+      "characters": [
+        "CHAR_EMPEROR_RENZONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿御座",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "仁宗居画上中央，珠帘左右打开，百官头冠只在下缘成前景。",
+      "lighting_anchor": "画左上冷天光落在仁宗脸侧，背后宫灯为微暖轮廓光。",
+      "axis_eyeline": "仁宗低看画下百官，视线不看镜头。",
+      "gaze_target": "画下中轴上等待奏事的百官班列",
+      "eyeline_direction": "画面下方略偏左",
+      "character_integrity": "继承 CHAR_EMPEROR_RENZONG 脸型、眼型/眼距、发际线与冠帽轮廓；双手、双脚、身体和御服层次完整，不被凤扇截断。",
+      "continuity_from": "P002",
+      "spatial_relationships": "仁宗在后景高位，侍卫与凤扇分居两侧，百官只作下缘前景。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "啪！",
+        "啪！",
+        "啪！"
+      ],
+      "lettering_plan": "三个净鞭字由上到下沿中轴递进，不压仁宗面部。",
+      "art_notes": "服饰依百官朝服语汇经历史研究转化，不复制任何版本水浒影视仁宗。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "三声后停顿",
+      "ink_plan": "脸与冠帽用稳定中线，珠帘以细线避免抢脸。",
+      "black_fill_plan": "御座背板深色托出面部，眼睛不陷入黑块。",
+      "tone_plan": "朱黑御服、暗金冠饰、冷灰宫殿。",
+      "value_plan": "面部亮、御服中暗、背板暗，凤扇中亮分层。",
+      "effects_plan": "净鞭三声用弱冲击线，不加爆炸光。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_EMPEROR_RENZONG"
+      ]
+    },
+    {
+      "panel_id": "P004",
+      "story_function": "court_call",
+      "source_excerpt": "S011：殿头官呼‘有事早奏’。",
+      "meaning_zh": "朝会进入奏事，百官班列中开始出现不安。",
+      "text_target": "殿头官：“有事出班早奏，无事卷帘退朝——”",
+      "adaptation_note": "从 S011 大段拆出朝会启动点，让安静仪式与下一格疫情奏报对撞。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "殿头官站在中轴侧翼高声传话，文班中赵哲、文彦博对视一眼，准备出班。",
+      "characters": [
+        "CHAR_EMPEROR_RENZONG",
+        "CHAR_ZHAO_ZHE",
+        "CHAR_WEN_YANBO"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_ZHAO_ZHE",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WEN_YANBO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿朝会",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "仁宗位于画上后景，殿头官位于中轴画右，文班画左出现微小扰动。",
+      "lighting_anchor": "继承左上冷天光和御座后微暖轮廓光。",
+      "axis_eyeline": "仁宗视线由中轴转向画左文班的动静。",
+      "gaze_target": "画左文班中即将出列的赵哲与文彦博",
+      "eyeline_direction": "画面左下方",
+      "character_integrity": "仁宗、赵哲与文彦博分别保持 registry 脸型、眼型/眼距、发际线和冠帽轮廓；三人双手、双脚、身体、御服/朝服与笏板归属完整，不被中轴前景人影穿插。",
+      "continuity_from": "P003",
+      "spatial_relationships": "仁宗后景居中，殿头官中景画右，文班在画左不跨轴。",
+      "dialogue": [
+        {
+          "speaker": "殿头官",
+          "text": "有事出班早奏，无事卷帘退朝——",
+          "text_target": "有事出班早奏，无事卷帘退朝——",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "高声传仪"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "画右上竖向长气泡，尾部指向殿头官，避开中轴。",
+      "art_notes": "百官只给差异化体态与年龄，不生成偶像群脸。",
+      "layout_weight": "compact",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "一声传令后立刻出班",
+      "ink_plan": "中轴稳定直线，文班微动用短折线。",
+      "black_fill_plan": "文武班后景中暗，出班通道保留亮。",
+      "tone_plan": "延续朝堂朱黑低饱和基线。",
+      "value_plan": "中轴亮、两班中灰、御座后暗。",
+      "effects_plan": "无特效，用气泡尾部结束静默。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_EMPEROR_RENZONG",
+        "CHAR_ZHAO_ZHE",
+        "CHAR_WEN_YANBO"
+      ]
+    },
+    {
+      "panel_id": "P005",
+      "story_function": "petition",
+      "source_excerpt": "S011：赵哲、文彦博奏京师大疫，请释罪宽恩、省刑薄税。",
+      "meaning_zh": "两位大臣把军民伤亡与救济请求带到皇帝面前。",
+      "text_target": "赵哲：“京师瘟疫盛行，军民伤亡甚多！”\n文彦博：“伏望陛下释罪宽恩，省刑薄税，救济万民！”",
+      "adaptation_note": "保留政策诉求，把疫死家庭作为奏报的屏风式叠化，不添加血腥病征。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "赵哲与文彦博在画左并肩出班持笏，画面右下以淡墨叠化关闭的民宅、药碗与蒙布担架，仁宗在上方倾身听奏。",
+      "characters": [
+        "CHAR_ZHAO_ZHE",
+        "CHAR_WEN_YANBO",
+        "CHAR_EMPEROR_RENZONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_ZHAO_ZHE",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_WEN_YANBO",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿奏对",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "赵哲在画左前、文彦博在其画右略后，仁宗画上中央；疫情叠化限在画右下。",
+      "lighting_anchor": "两臣承接画左冷天光，疫情叠化降一档明度，御座微暖不变。",
+      "axis_eyeline": "两臣朝画上仁宗奏对，仁宗低看画左两臣，保持正反打轴线。",
+      "gaze_target": "赵哲与文彦博看御座上的仁宗；仁宗看两臣手中奏笏",
+      "eyeline_direction": "两臣画面右上；仁宗画面左下",
+      "character_integrity": "三人分别继承各自脸型、眼型/眼距、发际线与冠帽轮廓；持笏手、另一只手、双脚、身体和服装完整，奏笏归属不串人。",
+      "continuity_from": "P004",
+      "spatial_relationships": "赵哲画左前、文彦博画左中、仁宗画上后；两臣不遮挡彼此面部和奏笏。",
+      "dialogue": [
+        {
+          "speaker": "赵哲",
+          "text": "京师瘟疫盛行，军民伤亡甚多！",
+          "text_target": "京师瘟疫盛行，军民伤亡甚多！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "急切"
+        },
+        {
+          "speaker": "文彦博",
+          "text": "伏望陛下释罪宽恩，省刑薄税，救济万民！",
+          "text_target": "伏望陛下释罪宽恩，省刑薄税，救济万民！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "恳切"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "赵哲气泡在左上，文彦博气泡紧接其下，不覆盖疫情叠化的药碗。",
+      "art_notes": "瘟疫展示以生活层面的空药碗、闭户和担架为主，不做尸山血海。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "盛世表象被现实打断",
+      "ink_plan": "两臣脸手用清晰中线，疫情叠化用淡墨断线。",
+      "black_fill_plan": "闭户内部深黑，三人面部保留亮面。",
+      "tone_plan": "朝服暗赭与青黑，叠化疫景只用雾灰。",
+      "value_plan": "三人中值、御座后暗、疫情叠化偏亮灰。",
+      "effects_plan": "叠化边缘用水墨渗化，禁止现代闪回框。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_ZHAO_ZHE",
+        "CHAR_WEN_YANBO",
+        "CHAR_EMPEROR_RENZONG"
+      ]
+    },
+    {
+      "panel_id": "P006",
+      "story_function": "policy_response",
+      "source_excerpt": "S011：仁宗降赦罪囚、免民间税赋，命宫观寺院禳灾。",
+      "meaning_zh": "朝廷迅速以赦罪、轻税与仪式应对疫灾。",
+      "text_target": "仁宗：“降赦罪囚，免民间税赋！命京中宫观寺院设醮禳灾！”",
+      "adaptation_note": "把多条政令压缩为一句可嵌字皇命，通过红纸诏书传递展现执行。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "仁宗俯身快速下令，画面下方三名官员同时接过分开的诏文，朱砂红成为唯一鲜色。",
+      "characters": [
+        "CHAR_EMPEROR_RENZONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿御座前",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "仁宗画上中，三份诏文由中轴分向画下左、中、右，不改文武班位。",
+      "lighting_anchor": "左上冷光照仁宗面侧和诏纸，诏纸暖红不自发光。",
+      "axis_eyeline": "仁宗看画下中央接诏官，接诏者仰看御座。",
+      "gaze_target": "画下中央伸手接取赦免诏书的官员",
+      "eyeline_direction": "画面下方中央",
+      "character_integrity": "继承仁宗脸型、眼型/眼距、发际线与冠帽；下令的右手、扶案左手、双脚、身体与御服完整，不与诏书穿插。",
+      "continuity_from": "P005",
+      "spatial_relationships": "仁宗高位后景，接诏官中前景分立三路，手与各自诏书一一对应。",
+      "dialogue": [
+        {
+          "speaker": "仁宗",
+          "text": "降赦罪囚，免民间税赋！命京中宫观寺院设醮禳灾！",
+          "text_target": "降赦罪囚，免民间税赋！命京中宫观寺院设醮禳灾！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "果断而忧急"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "仁宗气泡置画右上空白，分两行按政令断句。",
+      "art_notes": "用动作速度而非脸部夸张表演仁宗急切。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "快速执行的节拍",
+      "ink_plan": "诏文边缘用清晰硬线，官员群体轮廓分层。",
+      "black_fill_plan": "御案下方用稳定黑形，诏纸周围留白。",
+      "tone_plan": "朱砂诏纸局部高饱和，其余维持低饱和。",
+      "value_plan": "诏纸亮、御服中、御案暗。",
+      "effects_plan": "三份诏文传递用弱方向线，不加现代分屏。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_EMPEROR_RENZONG",
+        "PROP_IMPERIAL_EDICT"
+      ]
+    },
+    {
+      "panel_id": "P007",
+      "story_function": "failure_escalation",
+      "source_excerpt": "S011：不料其年瘟疫转盛。",
+      "meaning_zh": "赦免、轻税和禳灾都未阻止疫情，军民处境更糟。",
+      "text_target": "可瘟疫，转盛了。",
+      "adaptation_note": "用朝堂屏风式叠化表现施政后的失效，让因果明确而不依赖长旁白。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "上半格是赦免诏书贴上城门，下半格是更多空药碗和一扇接一扇关闭的门；最后只剩送葬小队的剪影。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "嘉祐京师瘟疫街巷",
+      "scene_anchor_id": "LOC_CAPITAL_PLAGUE_STREET",
+      "spatial_layout": "诏书贴在画上城门，画面沿窄巷向下展开空药碗、连续闭门和远景送葬队；不再借用朝堂中轴。",
+      "lighting_anchor": "继承 LOC_CAPITAL_PLAGUE_STREET 画左上冷日光，室内暖灯已弱到只剩门缝小点。",
+      "axis_eyeline": "无具名人物；读取方向由画上城门诏书沿巷道向画下空药碗，再返回画上后景送葬剪影。",
+      "continuity_from": "P006",
+      "spatial_relationships": "诏书在画上前景，空门与葬仪层层后退，不展示可识别的个人尸体。",
+      "dialogue": [],
+      "narration": "可瘟疫，转盛了。",
+      "sfx": [
+        "咳……",
+        "咳咳……"
+      ],
+      "lettering_plan": "旁白置于上下画面之间的灰白断带，咙嗽拟声远近递进。",
+      "art_notes": "不直接渲染病患脸部，用空门、药碗和队列长度表达代价。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "政令失效后的沉降",
+      "ink_plan": "前景诏书清线，后景疫景用干笔断线。",
+      "black_fill_plan": "关闭门户内部连续深黑，送葬剪影保持小尺度。",
+      "tone_plan": "全格降饱和至墨灰、土褐，朱砂诏纸也失去明度。",
+      "value_plan": "诏书中亮、闭门暗、背景雾灰。",
+      "effects_plan": "使用淡墨渗化与双层咙嗽拟声，禁止病毒显微镜图标。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_CAPITAL_PLAGUE_STREET"
+      ]
+    },
+    {
+      "panel_id": "P008",
+      "story_function": "proposal",
+      "source_excerpt": "S011：范仲淹建议宣嗣汉天师设三千六百分罗天大醮。",
+      "meaning_zh": "常规施政失效后，范仲淹提出最后的禳疫方案。",
+      "text_target": "范仲淹：“可宣嗣汉天师星夜临朝，设三千六百分罗天大醮，禳保民间瘟疫。”",
+      "adaptation_note": "保留仪式全称与‘星夜’紧迫感，用范仲淹独自越班创造视觉焦点。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "文班重新归位时，范仲淹从画左队列独自越出中轴，持笏仰面奏言；仁宗在画上身体前倾。",
+      "characters": [
+        "CHAR_FAN_ZHONGYAN",
+        "CHAR_EMPEROR_RENZONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_FAN_ZHONGYAN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿进谏",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "范仲淹由画左文班进入中轴下段，仁宗居画上中央，其余百官不跨轴。",
+      "lighting_anchor": "画左上冷光同时照亮范仲淹面部和奏笏，仁宗保持微暖轮廓光。",
+      "axis_eyeline": "范仲淹由画下左望画上仁宗，仁宗回看画下左，不跨轴。",
+      "gaze_target": "范仲淹看御座上的仁宗；仁宗看范仲淹举起的奏笏",
+      "eyeline_direction": "范仲淹画面右上；仁宗画面左下",
+      "character_integrity": "两人分别保持脸型、眼型/眼距、发际线与冠帽轮廓；范仲淹持笏双手、双脚、身体与朝服完整，仁宗的双手和御服不被御案错位截断。",
+      "continuity_from": "P007",
+      "spatial_relationships": "范仲淹画下前景，仁宗画上后景；两人由中轴连接但不重叠。",
+      "dialogue": [
+        {
+          "speaker": "范仲淹",
+          "text": "可宣嗣汉天师星夜临朝，设三千六百分罗天大醮，禳保民间瘟疫。",
+          "text_target": "可宣嗣汉天师星夜临朝，设三千六百分罗天大醮，禳保民间瘟疫。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "稳重急切"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "气泡沿画右上至中部分三行，尾部清楚指向范仲淹，不压奏笏。",
+      "art_notes": "范仲淹的威信来自站姿和发言节奏，不做突然白光圣人化。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "方案被提出的清晰拍点",
+      "ink_plan": "范仲淹与奏笏用硬朗中线，百官背景线减淡。",
+      "black_fill_plan": "文班后方中黑托出范仲淹，面部与奏笏留亮。",
+      "tone_plan": "朝服黛青，背景灰褐，不增神性金色。",
+      "value_plan": "范仲淹脸手亮、朝服中、队列背景暗。",
+      "effects_plan": "无光效，只用中轴空白强调越班动作。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_FAN_ZHONGYAN",
+        "CHAR_EMPEROR_RENZONG"
+      ]
+    },
+    {
+      "panel_id": "P009",
+      "story_function": "edict_preparation",
+      "source_excerpt": "S011：仁宗准奏，亲书丹诏并降御香一炷。",
+      "meaning_zh": "皇帝亲自把救民使命写成不可推诿的丹诏。",
+      "text_target": "仁宗：“准奏。”",
+      "adaptation_note": "以御笔落在朱砂诏纸上的动作代替繁复下旨过程，同时建立 PROP_IMPERIAL_EDICT 视觉锚。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "仁宗的手握笔写完丹诏最后一笔，画面后方的银香炉内御香微燃，烟气向画右上去。",
+      "characters": [
+        "CHAR_EMPEROR_RENZONG"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "紫宸殿御案",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "仁宗在画左上俯案，丹诏居中前景，银香炉在画右中景，道具不重叠。",
+      "lighting_anchor": "画左上冷天光照亮笔尖与诏纸，香炉火点是微弱暖光。",
+      "axis_eyeline": "仁宗视线画面右下锁定诏纸末行。",
+      "gaze_target": "PROP_IMPERIAL_EDICT 上正在写完的最后一行诏文",
+      "eyeline_direction": "画面右下方",
+      "character_integrity": "保持仁宗脸型、眼型/眼距、发际线与冠帽轮廓；握笔右手五指、扶纸左手、双脚、身体及御服完整，笔尖与诏纸接触点清楚。",
+      "continuity_from": "P008",
+      "spatial_relationships": "仁宗在画左后，诏纸前景居中，香炉画右后；笔、手、纸三者不穿插。",
+      "dialogue": [
+        {
+          "speaker": "仁宗",
+          "text": "准奏。",
+          "text_target": "准奏。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "沉着果断"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "沙……"
+      ],
+      "lettering_plan": "小气泡置画左上，笔触拟声贴近笔尖，不遮诏文主视觉块。",
+      "art_notes": "诏书正文不生成随机乱码，除标题性笔画外使用不可读的书法纹理。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "命令凝结成道具",
+      "ink_plan": "手部和笔用清晰硬线，烟气用极淡曲线。",
+      "black_fill_plan": "御案边缘深色，手与诏纸周围留白。",
+      "tone_plan": "诏纸朱砂红、笔墨深黑、香炉冷银。",
+      "value_plan": "诏纸亮、手与御服中、御案暗。",
+      "effects_plan": "只有笔触小拟声和香烟，禁止诏书自发神光。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_EMPEROR_RENZONG",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P010",
+      "story_function": "mission_assignment",
+      "source_excerpt": "S011：仁宗命殿前太尉洪信为天使，赴龙虎山宣请天师。",
+      "meaning_zh": "救民任务和皇家道具正式交给洪信。",
+      "text_target": "仁宗：“洪信，持朕丹诏御香，星夜赴龙虎山，请天师入京！”\n洪信：“臣领旨。”",
+      "adaptation_note": "保留任务地点、对象、时限与两件核心道具，让洪信低头接诏成为后续责任起点。",
+      "source_segment_refs": [
+        "S011"
+      ],
+      "description": "仁宗在画上将丹诏交下，洪信在画下跪接；银香炉由侍者捧在画右，诏书居两人之间的视觉中心。",
+      "characters": [
+        "CHAR_EMPEROR_RENZONG",
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_EMPEROR_RENZONG",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        },
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        }
+      ],
+      "location": "紫宸殿丹陛前",
+      "scene_anchor_id": "LOC_ZICHEN_HALL",
+      "spatial_layout": "仁宗在画上后景，洪信在画下前景偏左，诏书在中轴，香炉在画右中景。",
+      "lighting_anchor": "画左上冷光连续照诏书与洪信仰起的脸，香火是小面积暖点。",
+      "axis_eyeline": "仁宗由画上看向画下洪信，洪信仰看仁宗后将视线落在丹诏上。",
+      "gaze_target": "仁宗看接诏的洪信；洪信看仁宗递下的 PROP_IMPERIAL_EDICT",
+      "eyeline_direction": "仁宗画面左下；洪信画面右上后转中央",
+      "character_integrity": "两人分别保持脸型、眼型/眼距、发际线与冠帽/幞头轮廓；仁宗递诏手、洪信双手承接点、双脚、身体和服装完整，诏书归属由皇帝移向洪信清晰可读。",
+      "continuity_from": "P009",
+      "spatial_relationships": "仁宗画上后，洪信画下前，诏书中间接触，侍者只在画右不遮两人。",
+      "dialogue": [
+        {
+          "speaker": "仁宗",
+          "text": "洪信，持朕丹诏御香，星夜赴龙虎山，请天师入京！",
+          "text_target": "洪信，持朕丹诏御香，星夜赴龙虎山，请天师入京！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "郑重"
+        },
+        {
+          "speaker": "洪信",
+          "text": "臣领旨。",
+          "text_target": "臣领旨。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "笃定"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "仁宗气泡置画右上，洪信短气泡置画左下，诏书上方留无字安全区。",
+      "art_notes": "洪信此时稳拿、未显反派化；与后续布衣惊恐的同脸对比需可验。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "任务落到个人身上",
+      "ink_plan": "两人脸手清线，诏书与香炉外形硬朗可追踪。",
+      "black_fill_plan": "两人之间保持亮通道，御座与洪信官袍深色分开。",
+      "tone_plan": "洪信绛褐官袍、朱砂诏书、冷银香炉。",
+      "value_plan": "诏书最亮，两人脸次亮，服装与御座中暗。",
+      "effects_plan": "香烟细线连接诏书，无神光。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ZICHEN_HALL",
+        "CHAR_EMPEROR_RENZONG",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P011",
+      "story_function": "journey_montage",
+      "source_excerpt": "S012-S017：洪信带从骑离京，经山水、村店、驿馆向信州贵溪进发。",
+      "meaning_zh": "洪信以官差仪仗跨越长路，但他始终处于被服侍的舒适位置。",
+      "text_target": "洪信奉诏，离京南下，直奔信州贵溪。",
+      "adaptation_note": "把出城、山水、村店、日路与夜宿压缩进一个长竖滚动格，完整消化 S012-S017 的时空信息。",
+      "source_segment_refs": [
+        "S012",
+        "S013",
+        "S014",
+        "S015",
+        "S016",
+        "S017"
+      ],
+      "description": "长竖格上段是东京城门与马队出发，中段是马队穿过溪水、花柳、山村，下段由日间沙路溶到暖灯驿馆；洪信的黄罗诏包在每段都可见。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        }
+      ],
+      "location": "东京至龙虎山驿道",
+      "scene_anchor_id": "LOC_ROAD_TO_LONGHUSHAN",
+      "spatial_layout": "队伍始终沿竖画面画右下方前进，洪信位于队首与中段之间，村店和驿馆在路侧不挡行进线。",
+      "lighting_anchor": "上中段继承右上柔日光，下段只在驿馆窗户出现暖灯，不影响白日段落。",
+      "axis_eyeline": "洪信与马队统一朝画右下方行进，马头与视线方向不反转。",
+      "gaze_target": "画右下远处的下一段驿道与引路骑从",
+      "eyeline_direction": "画面右下方",
+      "character_integrity": "洪信继承长方圆脸、窄眼/正常眼距、微高发际线与幞头轮廓；握缰手、另一手、双脚、身体与 OUTFIT_COURT_ENVOY 完整，黄罗诏包不并入身体且绑带接触清楚。",
+      "continuity_from": "P010",
+      "spatial_relationships": "洪信前中景，随从后景纵深排列，马腿不穿插，洪信与诏包在三段时间中保持同一外观。",
+      "dialogue": [],
+      "narration": "洪信奉诏，离京南下，直奔信州贵溪。",
+      "sfx": [
+        "得得得……"
+      ],
+      "lettering_plan": "旁白置上段天空安全区，马蹄拟声沿道路弯线下行。",
+      "art_notes": "山水用散点透视而马队用一致运动方向，把宋画滚卷感与电影时间蒙太奇结合。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "从朝堂进入路途的长呼吸",
+      "ink_plan": "马队近景清线、山水远景淡线，道路转折不断。",
+      "black_fill_plan": "马队与驿馆檐下小块深色，山水留大面积透气中灰。",
+      "tone_plan": "石青远山、墨绿林木、赭石道路、暗朱官袍。",
+      "value_plan": "天水亮、山林中、马队中暗，驿馆灯是局部亮点。",
+      "effects_plan": "马蹄少量尘弧和日夜墨色溶接，禁止地图导航图标。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_ROAD_TO_LONGHUSHAN",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P012",
+      "story_function": "arrival",
+      "source_excerpt": "S018：洪信到信州，上清宫道众鸣钟击鼓、持幡盖下山接诏。",
+      "meaning_zh": "官方使团与道宫仪仗在山门汇合，皇命被正式迎入上清宫。",
+      "text_target": "钟——咚——\n上清宫接诏！",
+      "adaptation_note": "压缩地方官迎接细节，保留道众下山、仪乐、宫门下马三个可见节点。",
+      "source_segment_refs": [
+        "S018"
+      ],
+      "description": "上清宫道众从山门台阶向画下展开，幡盖与香花形成两侧弧线；洪信画左下马，住持画右上迎接，丹诏位于两人中间。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山上清宫山门",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信画左下，住持画右上，山门中轴在两人之间向上延伸；道众分列台阶两侧。",
+      "lighting_anchor": "右上柔日光照山门敕额，廊下为冷青反光，香火暖点很小。",
+      "axis_eyeline": "洪信画左看向画右上住持，住持看洪信手中丹诏，不跨中轴。",
+      "gaze_target": "洪信看台阶上的住持；住持看洪信双手捧着的 PROP_IMPERIAL_EDICT",
+      "eyeline_direction": "洪信画面右上；住持画面左下",
+      "character_integrity": "洪信保持长方圆脸、窄眼/正常眼距、微高发际线和幞头；住持保持高额、清瘦脸、稳定眼型与灰黑短须。两人的手、脚、身体、服装与诏书接触关系完整，下马动作不少腿。",
+      "continuity_from": "P011",
+      "spatial_relationships": "洪信画左下前景、住持画右上中景，丹诏在中间可见，道众在台阶后景不遮面。",
+      "dialogue": [
+        {
+          "speaker": "仪仗导引",
+          "text": "上清宫接诏！",
+          "text_target": "上清宫接诏！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "唱名"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "钟——",
+        "咚——"
+      ],
+      "lettering_plan": "钟鼓拟声分居画左右上方，唱名气泡置山门中轴上不压敕额。",
+      "art_notes": "上清宫建筑建立北宋道宫尺度，不使用影视版本山门复刻。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "抵达目的地的仪式性展开",
+      "ink_plan": "山门建筑精细线，幡幡中线，人物脸手清线。",
+      "black_fill_plan": "山门檐下深色、台阶中轴亮，两人不落同一黑块。",
+      "tone_plan": "青灰道袍、绛褐官袍、墨绿松柏、朱砂诏书。",
+      "value_plan": "山门额亮、人物中、廊下暗。",
+      "effects_plan": "钟鼓声用柔和外扩波纹，无神性粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P013",
+      "story_function": "temple_establish",
+      "source_excerpt": "S019-S022：上清宫青松翠柏环抱，敕额灵符列门，坛畔花柳与炼药炉错落。",
+      "meaning_zh": "上清宫是受皇权认可、与山林共生的古老道教空间。",
+      "text_target": "（无嵌字；宫观空间成画面）",
+      "adaptation_note": "把四段环境诗赞合并为从敕额山门、庭院到炼药炉的竖向建立格。",
+      "source_segment_refs": [
+        "S019",
+        "S020",
+        "S021",
+        "S022"
+      ],
+      "description": "镜头沿青松与翠柏下行，经过御赐金额与门上符篆，再转入有垂柳、花木、老桧和炼药炉的右庭。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "上清宫山门与庭院",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "继承山门—三清殿—方丈主轴，炼药炉固定在右庭。",
+      "lighting_anchor": "右上日光落在金额与炉沿，廊下保持青冷反光。",
+      "axis_eyeline": "无具名人物；建筑主轴由画下向画上延伸。",
+      "continuity_from": "P012",
+      "spatial_relationships": "前景松柏、中景山门、后景三清殿；炉与老桧在画右不挡主轴。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "潺潺……"
+      ],
+      "lettering_plan": "纯画面，流水小拟声置台阶下。",
+      "art_notes": "场景以宋画散点层次组织，禁止佛寺化与现代旅游景区化。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "到达后的空间呼吸",
+      "ink_plan": "建筑精线、松柏干笔、符篆只作可辨结构不生乱字。",
+      "black_fill_plan": "松柏枝干与檐下少量深墨，主轴保持中亮。",
+      "tone_plan": "墨绿松柏、青灰瓦、赭石墙、暗金敕额。",
+      "value_plan": "天空亮、建筑中、林与檐影暗。",
+      "effects_plan": "只使用山雾与水汽，不加仙气粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE"
+      ]
+    },
+    {
+      "panel_id": "P014",
+      "story_function": "sacred_iconography",
+      "source_excerpt": "S023-S030：左右壁画神众、真武龟蛇、南极龙虎、星宿帝君与庭中鹤龟猿鹿交叠。",
+      "meaning_zh": "宫观的神谱和生灵系统暗中预示龙虎、星宿与镇压主题。",
+      "text_target": "（无嵌字；壁画与生灵组成横移画面）",
+      "adaptation_note": "将神像枚举转为洪信行进时的一次横移，保留龟蛇、龙虎、星宿三个预示锚。",
+      "source_segment_refs": [
+        "S023",
+        "S024",
+        "S025",
+        "S026",
+        "S027",
+        "S028",
+        "S029",
+        "S030"
+      ],
+      "description": "左右廊壁画如长卷掠过：太乙、紫微与星宿神众分列，真武龟蛇和南极龙虎位于中段；画下庭中鹤龟、猿鹿与流水只作真实生灵。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "上清宫左右廊与庭院",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "左廊壁画在画左、右廊壁画在画右，中轴仍通向三清殿；流水在下缘。",
+      "lighting_anchor": "右上日光经廊柱切成间隔光斑，壁画保持亚光。",
+      "axis_eyeline": "无实体具名人物；壁画神像不与读者对视，视觉横移从画左到画右。",
+      "continuity_from": "P013",
+      "spatial_relationships": "壁画在后景平面，真实鹤龟和猿鹿在前景，两层不混成神兽实体。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "潺潺……"
+      ],
+      "lettering_plan": "无气泡，流水拟声置底部不压生灵。",
+      "art_notes": "神像作宗教美术参考，不让壁画人物活化；绿毛龟按水藻状长毛处理。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "神谱与世界观的密集扫过",
+      "ink_plan": "壁画线减淡，前景生灵轮廓清晰，不画出不可读乱字。",
+      "black_fill_plan": "廊柱深墨分节，壁画保持中灰。",
+      "tone_plan": "壁画退色矿物青绿、土红与烟灰。",
+      "value_plan": "前景生灵中亮、壁画中、廊柱暗。",
+      "effects_plan": "无神光，只用廊柱光斑带动视线。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE"
+      ]
+    },
+    {
+      "panel_id": "P015",
+      "story_function": "ritual_transition",
+      "source_excerpt": "S031-S035：金钟、玉磬与礼斗仪式中，琉璃、玛瑙映光，宫外祥云掠过。",
+      "meaning_zh": "上清宫的日常仪式严谨运行，天师已知皇命的悬念被云气暗示。",
+      "text_target": "钟——磬——",
+      "adaptation_note": "以钟磬跨格声串起仪式与日光细节，祥云只作非具象预告。",
+      "source_segment_refs": [
+        "S031",
+        "S032",
+        "S033",
+        "S034",
+        "S035"
+      ],
+      "description": "道士在三清殿击金钟，另一侧在四圣堂敲玉磬；光斑先掠过青琉璃、红玛瑙，再追随一缕云气越过殿脊。",
+      "characters": [],
+      "character_bindings": [],
+      "location": "上清宫三清殿与四圣堂",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "三清殿在画左、四圣堂在画右，中间庭院作声音与光线的过渡区。",
+      "lighting_anchor": "右上日光先映冷青琉璃，再经小面积暗红玛瑙反射；香火暖光局限殿内。",
+      "axis_eyeline": "无具名人物；道众视线面向各自坛仪，不直视镜头。",
+      "continuity_from": "P014",
+      "spatial_relationships": "金钟画左中景、玉磬画右中景，云气只在后景殿脊上方。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "钟——",
+        "磬——"
+      ],
+      "lettering_plan": "钟声字画左上，磬声字画右上，两者不遮云气轨迹。",
+      "art_notes": "不显示具体经文，不让太上老君实体出场。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "由外景进入问询的声音桥",
+      "ink_plan": "钟磬硬边线、云气淡线、道众中线。",
+      "black_fill_plan": "殿内影区中黑，钟磬周围留亮。",
+      "tone_plan": "青琉璃为主冷色，玛瑙红仅作小锚点。",
+      "value_plan": "光斑亮、器物中、殿内暗。",
+      "effects_plan": "钟磬声波轻微外扩，云气不发光。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE"
+      ]
+    },
+    {
+      "panel_id": "P016",
+      "story_function": "question",
+      "source_excerpt": "S036：丹诏供于三清殿，洪信询问天师何在。",
+      "meaning_zh": "洪信以为到宫就能立即宣诏，却发现天师不在此处。",
+      "text_target": "洪信：“天师今在何处？”",
+      "adaptation_note": "先用丹诏被供起的动作显示皇权在道宫中被暂缓，再进入询问。",
+      "source_segment_refs": [
+        "S036"
+      ],
+      "description": "丹诏被高置三清殿供案中央，洪信站在画左仰看一眼后转向画右住持发问。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫三清殿",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信画左、住持画右，供案和丹诏在画上中央，两人不跨中轴。",
+      "lighting_anchor": "殿内暖香火照丹诏，左侧殿门冷光照人物侧脸。",
+      "axis_eyeline": "洪信画左看画右住持，住持画右回看洪信。",
+      "gaze_target": "洪信看画右的住持；住持看洪信身后供案上的 PROP_IMPERIAL_EDICT",
+      "eyeline_direction": "洪信画面右方；住持画面左上",
+      "character_integrity": "洪信保持长方圆脸、窄眼/眼距、发际线和幞头；住持保持高额、清瘦脸、稳定眼型、短须与青灰道袍。两人手、脚、身体完整，丹诏不被人物头部遮住。",
+      "continuity_from": "P015",
+      "spatial_relationships": "洪信画左前、住持画右中、丹诏画上后，三者成三角。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "天师今在何处？",
+          "text_target": "天师今在何处？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "直接"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "洪信气泡置画左上、尾指洪信，供案上方保留无字区。",
+      "art_notes": "丹诏被供起而不是当场打开宣读。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "皇命遇到第一个不可控的空缺",
+      "ink_plan": "人脸手清线，供案稳定横线，香烟淡线。",
+      "black_fill_plan": "殿内背景中黑，丹诏和两人面部留亮。",
+      "tone_plan": "暖香火、青灰道袍、绛褐官袍、朱砂诏书。",
+      "value_plan": "丹诏亮、面部中亮、殿内暗。",
+      "effects_plan": "只有香烟与尘粒，无诏书神光。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT"
+      ]
+    },
+    {
+      "panel_id": "P017",
+      "story_function": "obstacle_explained",
+      "source_excerpt": "S036：住持说虚靖天师在龙虎山顶茅庵清修，踪迹不定。",
+      "meaning_zh": "天师不接俗务与迎送，也不会因洪信官阶而自动现身。",
+      "text_target": "住持：“祖师性好清高，自在龙虎山顶茅庵修真，踪迹不定。”",
+      "adaptation_note": "保留天师的清高与不可召唤性，以住持指向后山路的动作建立空间目标。",
+      "source_segment_refs": [
+        "S036"
+      ],
+      "description": "住持向画右后方开放的后山路伸手，山门外只见云中尖峰；洪信画左略皱眉。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫方丈前通后山处",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信画左、住持画右，后山路从住持肩后画右上方延出。",
+      "lighting_anchor": "庭院右上日光照住持指路手，山云是冷灰背景。",
+      "axis_eyeline": "洪信画左看住持，住持视线由洪信移向画右上山路。",
+      "gaze_target": "洪信看住持指向的后山路；住持看云中山峰下的茅庵方向",
+      "eyeline_direction": "洪信画面右上；住持画面右上",
+      "character_integrity": "洪信和住持分别继承脸型、眼型/眼距、发际线/发型、幞头或短须；住持指路手五指、洪信垂手、双脚、身体和服装完整。",
+      "continuity_from": "P016",
+      "spatial_relationships": "洪信画左前景，住持画右中景，住持手臂不穿过洪信身体，山路在后景。",
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "祖师性好清高，自在龙虎山顶茅庵修真，踪迹不定。",
+          "text_target": "祖师性好清高，自在龙虎山顶茅庵修真，踪迹不定。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "平静说明"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "住持气泡置画右上但避开山峰轮廓，尾部回指住持。",
+      "art_notes": "山顶茅庵只用极小轮廓暗示，不提前显示天师。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "官命遇到不受控的山路",
+      "ink_plan": "人物清线，山峰与茅庵淡线。",
+      "black_fill_plan": "廊柱深色分开人物与山路，面部留亮。",
+      "tone_plan": "青灰山云、青灰道袍、绛褐官袍。",
+      "value_plan": "指路手与山云亮，人物中，廊柱暗。",
+      "effects_plan": "山云只作深度，无驾雾实景。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ]
+    },
+    {
+      "panel_id": "P018",
+      "story_function": "condition_set",
+      "source_excerpt": "S036：住持要洪信斋戒沐浴，换布衣麻履，独背诏持香步行上山，以至诚才可见天师。",
+      "meaning_zh": "要见天师，洪信必须暂时卸下官威和随从，亲自承担使命。",
+      "text_target": "住持：“要救万民，请太尉斋戒沐浴，换布衣麻履，独自背诏持香上山。心须至诚，不可退悔。”",
+      "adaptation_note": "保留所有能转为可审造型和动作的条件，为下格状态切换立合同。",
+      "source_segment_refs": [
+        "S036"
+      ],
+      "description": "住持将布衣、麻履、黄罗诏包和银香炉依次摆在矮案上，指尖按顺序说明；洪信在画左站着，表情尚不以为然。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫方丈",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信画左，住持画右，矮案居中不遮两人膝部，道具从左到右排列。",
+      "lighting_anchor": "窗光从画右上照道具，室内香火微暖，人脸不陷黑。",
+      "axis_eyeline": "住持看案上道具后看画左洪信，洪信看麻履与布衣。",
+      "gaze_target": "住持看洪信是否接受条件；洪信看矮案上的麻履与 OUTFIT_MOUNTAIN_PLAIN",
+      "eyeline_direction": "住持画面左方；洪信画面右下",
+      "character_integrity": "两人分别保持脸型、眼型/眼距、发际线/发型、幞头或短须；住持指物手指完整，洪信双手、双脚、身体与官服完整，案上四类道具不串联穿模。",
+      "continuity_from": "P017",
+      "spatial_relationships": "洪信画左后、住持画右后、矮案中前，两人的手都不跨过对方身体。",
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "要救万民，请太尉斋戒沐浴，换布衣麻履，独自背诏持香上山。心须至诚，不可退悔。",
+          "text_target": "要救万民，请太尉斋戒沐浴，换布衣麻履，独自背诏持香上山。心须至诚，不可退悔。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "郑重劝诫"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "住持长气泡置画右上，按‘换装—单人—至诚’三行断句，不压道具。",
+      "art_notes": "道具是即将切换的可审合同，布衣不与官袍混搭。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "试炼条件被明确说出",
+      "ink_plan": "人脸手和麻履结构清线，衣物用柔折线。",
+      "black_fill_plan": "方丈后墙中暗，矮案道具留亮。",
+      "tone_plan": "官袍绛褐、布衣灰褐、道袍青灰、香炉冷银。",
+      "value_plan": "道具中亮、人物中、背墙暗。",
+      "effects_plan": "无特效，靠道具排列和气泡节奏。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P019",
+      "story_function": "state_change",
+      "source_excerpt": "S036：洪信沐浴后换布衣麻履，背黄罗诏包，手提银香炉。",
+      "meaning_zh": "洪信形式上接受了试炼条件，从官服出使状态切为整洁的布衣上山状态。",
+      "text_target": "洪信：“本官自京师一路食素，怎会不诚？”",
+      "adaptation_note": "以出水、换布衣、系诏包、点御香四个造型动作完成 registry 状态切换。",
+      "source_segment_refs": [
+        "S036"
+      ],
+      "description": "洪信已换素灰褐布衣与麻履，侧身让道人系紧黄罗诏包，自己右手提银炉，香上刚燃起细烟。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_MOUNTAIN_START"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫后山门内",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信居画中前、住持画右中，黄罗诏包在洪信背上，银炉在右手下方。",
+      "lighting_anchor": "五更后的冷晨光从画右上入门，香火是微暖点光。",
+      "axis_eyeline": "洪信从画中看画右住持，住持看诏包绑带和香炉火头。",
+      "gaze_target": "洪信看画右住持；住持看洪信背上的 PROP_IMPERIAL_EDICT 绑带是否牢固",
+      "eyeline_direction": "洪信画面右方；住持画面左下",
+      "character_integrity": "洪信脸型、窄眼/眼距、微高发际线与体态与官服格相同，仅切 OUTFIT_MOUNTAIN_PLAIN；提炉右手、左手、麻履双脚、身体完整，诏包带子不嵌入肩膀。住持脸、眼、发须与手脚完整。",
+      "continuity_from": "P018",
+      "spatial_relationships": "洪信画中前，住持画右后，系带道人只露手与局部身形，不与洪信手脚串联。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "本官自京师一路食素，怎会不诚？",
+          "text_target": "本官自京师一路食素，怎会不诚？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "自负"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嗤……"
+      ],
+      "lettering_plan": "洪信气泡在画左上，香火拟声紧贴炉口，诏包上不放字。",
+      "art_notes": "必须让洪信换装不换脸；诏包和香炉是剧情道具，不固化进人物 DNA。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "可见的状态切换",
+      "ink_plan": "布衣粗细线与黄罗包硬边分开，手指清晰。",
+      "black_fill_plan": "门内背景中黑，布衣与脸手留中亮。",
+      "tone_plan": "素灰褐布衣、暗黄诏包、冷银香炉。",
+      "value_plan": "诏包中亮、脸手亮、布衣中、门内暗。",
+      "effects_plan": "只有香炉细烟，无变装光效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P020",
+      "story_function": "threshold_warning",
+      "source_excerpt": "S036：住持送洪信到后山，告诫他为救万民不可生退悔之心。",
+      "meaning_zh": "洪信跨过宫观与神山的门槛，‘不可退悔’成为后续两次失败的判准。",
+      "text_target": "住持：“太尉要救万民，休生退悔之心。只顾至诚上去。”",
+      "adaptation_note": "把告诫放在洪信跨出后山门的瞬间，让语句与门槛形成不可回避的契约。",
+      "source_segment_refs": [
+        "S036"
+      ],
+      "description": "洪信背对宫观跨出后山小门，黄罗诏包和银炉都可见；住持在画右门内停步作最后告诫。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_MOUNTAIN_START"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫后山门",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信画左前已跨出门槛，住持画右后留在门内，山径向画右上延伸。",
+      "lighting_anchor": "门外晨光从右上照洪信，门内住持处于青冷半影。",
+      "axis_eyeline": "洪信回头看画右后住持，住持看洪信背上的诏包。",
+      "gaze_target": "洪信回看门内的住持；住持看洪信背上的 PROP_IMPERIAL_EDICT 与他已跨出的门槛",
+      "eyeline_direction": "洪信画面右后；住持画面左下",
+      "character_integrity": "洪信保持脸型、眼型/眼距、发际线与布衣造型；回头时颈部、提炉右手、左手、双脚、身体和道具完整，前脚与门槛接触点清楚。住持脸、眼、发须与手脚完整。",
+      "continuity_from": "P019",
+      "spatial_relationships": "洪信画左门外前景，住持画右门内后景，门槛是两人之间的空间分界。",
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "太尉要救万民，休生退悔之心。只顾至诚上去。",
+          "text_target": "太尉要救万民，休生退悔之心。只顾至诚上去。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "郑重告诫"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嗒……"
+      ],
+      "lettering_plan": "住持气泡置门内上方，门槛与洪信前路上无字；香炉小拟声贴道具。",
+      "art_notes": "门槛是剧情门槛，下一格山路必须延续画右上方。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "跨过试炼门槛",
+      "ink_plan": "门槛硬线、人物清线、山路远景淡线。",
+      "black_fill_plan": "门内中黑、门外中亮，洪信轮廓不与门框融合。",
+      "tone_plan": "门内青灰、门外雾灰、布衣灰褐、诏包暗黄。",
+      "value_plan": "门外亮、洪信中、门内暗。",
+      "effects_plan": "香烟向画右上与上山方向一致，无额外特效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P021",
+      "story_function": "mountain_establish",
+      "source_excerpt": "S037-S039：洪信独上龙虎山，山根盘地、峰顶接天，远断乱云。",
+      "meaning_zh": "洪信在巨大丹霞山势中被压缩成小小一点，试炼真正开始。",
+      "text_target": "洪信独自上山。",
+      "adaptation_note": "以长竖散点透视将山根、赤壁、林径和云顶置于同格，不字面化‘吞月’。",
+      "source_segment_refs": [
+        "S037",
+        "S038",
+        "S039"
+      ],
+      "description": "龙虎山的丹霞岩柱从画下盘到画上云端，瀑布和林径在山腰缠绕；洪信背诏持炉，只占画面下中部很小比例。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_MOUNTAIN_START"
+        }
+      ],
+      "location": "龙虎山上山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "上山方向统一为画右上，洪信从画左下进入中段，山壁在左右叠层但不封死小径。",
+      "lighting_anchor": "雾中天光从画右上下沉，岩面暖赭、林下冷青灰，洪信所在路径可读。",
+      "axis_eyeline": "洪信朝画右上的山径和云顶前进，不看镜头。",
+      "gaze_target": "画右上方穿过云雾的下一段山径",
+      "eyeline_direction": "画面右上方",
+      "character_integrity": "洪信即使缩小也保持脸型、眼型/眼距、发际线与体态轮廓；右手银炉、左手、麻履双脚、身体和黄罗诏包完整，不被藤萝截断。",
+      "continuity_from": "P020",
+      "spatial_relationships": "洪信居中小前景，山壁和瀑布为后景，藤萝在更近前景但不遮住人物与道具。",
+      "dialogue": [],
+      "narration": "洪信独自上山。",
+      "sfx": [
+        "沙……",
+        "潺潺……"
+      ],
+      "lettering_plan": "旁白置画左上云雾空白，水声和草履声沿山径分层。",
+      "art_notes": "参考龙虎山丹霞地貌的赤壁、岩柱、深谷，不复制景区照片构图。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "进入神山尺度",
+      "ink_plan": "近岩干笔粗线，远山淡线，人物轮廓完整不糊在山色中。",
+      "black_fill_plan": "岩缝少量深黑，大面积山雾保持中亮。",
+      "tone_plan": "赭石岩、石青石绿林、雾灰天空、灰褐布衣。",
+      "value_plan": "云雾亮、岩林中、岩缝暗，洪信轮廓中暗可读。",
+      "effects_plan": "雾层作自然分隔，无人工速度线。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P022",
+      "story_function": "terrain_pressure",
+      "source_excerpt": "S047-S051：山壁掩映云雾，岩峰陡峭，瀑布藤萝遍布，谷风似虎啸，山色如青玉笼烟。",
+      "meaning_zh": "山势、水势与声音一起压迫洪信，白虎危机在谷风中先被听见。",
+      "text_target": "呜——（谷风似虎啸）",
+      "adaptation_note": "合并地貌排比为一个步移景异长格，把 S050 声音设为下格危机预警。",
+      "source_segment_refs": [
+        "S047",
+        "S048",
+        "S049",
+        "S050",
+        "S051"
+      ],
+      "description": "左右岩壁叠压，瀑布斜飞、藤萝倒挂，雾气从谷中上冲；洪信沿窄径继续向画右上，远处风声在松林后形成似虎啸的低频。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_MOUNTAIN_START"
+        }
+      ],
+      "location": "龙虎山陡峭林径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信在中下小径，山壁左右夹持，瀑布画右后，松林声源在画右上后方。",
+      "lighting_anchor": "右上雾光被岩壁切窄，洪信脸与诏包仍有冷反光。",
+      "axis_eyeline": "洪信由上山方向转眼看画右后松林声源，身体仍面向画右上。",
+      "gaze_target": "画右上松林后传来低频风吼的具体声源位置",
+      "eyeline_direction": "画面右上后方",
+      "character_integrity": "洪信保持脸型、窄眼/眼距、发际线与布衣造型；攀援左手、提炉右手、麻履双脚、身体和诏包完整，手与藤萝接触点清楚。",
+      "continuity_from": "P021",
+      "spatial_relationships": "洪信中前景，岩壁两侧中景，松林声源后景，倒藤在最前但不遮道具。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "呜——",
+        "轰隆……（瀑布）"
+      ],
+      "lettering_plan": "风吼字置画右上松林后，瀑布拟声沿右侧水线下行。",
+      "art_notes": "青黛、碧纱转为低饱和石青石绿，不切换夜月实景。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "环境压力持续上升",
+      "ink_plan": "岩纹干笔、瀑布留白、人物清线，藤萝不缠死肢体。",
+      "black_fill_plan": "左右岩缝深黑夹出中央山径。",
+      "tone_plan": "石青石绿、雾灰、赭石岩、灰褐衣。",
+      "value_plan": "瀑布亮、洪信中、岩缝暗。",
+      "effects_plan": "风吼用弯曲空气线指向松林，不提前画出虎。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P023",
+      "story_function": "character_flaw",
+      "source_excerpt": "S052：洪信攀藤越岭、脚酸腿软，心中抱怨贵官不该受这等苦。",
+      "meaning_zh": "试炼尚未遇敌，洪信的志诚就已被舒适与特权心理动摇。",
+      "text_target": "洪信（心声）：“我是朝廷贵官，在京里锦衣玉食，何曾穿草鞋走这种山路！”",
+      "adaptation_note": "保留身份自怜的核心心声，用脚底、汗、诏包压肩等动作代替罗列生活奢华。",
+      "source_segment_refs": [
+        "S052"
+      ],
+      "description": "洪信弯腰扶膝在陡坡上喘息，麻履踩在尖石上，黄罗诏包勒住双肩；他望向仍无尽头的画右上山径。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_MOUNTAIN_START"
+        }
+      ],
+      "location": "龙虎山陡坡",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信位画左下坡沿，画右上山径继续上行，松树与风声来源在其画右后。",
+      "lighting_anchor": "右上雾光照出额汗和诏包边缘，林下冷青灰不变。",
+      "axis_eyeline": "洪信低头看画右上的山径台阶，不看镜头。",
+      "gaze_target": "画右上方仍需攀登的陆续三段石阶",
+      "eyeline_direction": "画面右上方",
+      "character_integrity": "洪信保持长方圆脸、窄眼/眼距、微高发际线与中高略厚体态；扶膝左手、提炉右手、麻履双脚、身体和诏包完整，膝、手、尖石接触点不错位。",
+      "continuity_from": "P022",
+      "spatial_relationships": "洪信中前景独人，诏包在背后、香炉在右下，松树后景不与人物融合。",
+      "dialogue": [],
+      "narration": "我是朝廷贵官，在京里锦衣玉食，何曾穿草鞋走这种山路！",
+      "sfx": [
+        "呼……呼……"
+      ],
+      "lettering_plan": "心声旁白框置画左上，喘息拟声紧贴肩侧，不遮诏包。",
+      "art_notes": "表情仍是稳拿中带不耐，惊恐状态在下格白虎出现后才切换。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "性格缺陷先于危机暴露",
+      "ink_plan": "脸、手、麻履结构清线，汗滴与尘土用小线点。",
+      "black_fill_plan": "松树后方深暗形预留危机，洪信脸手留亮。",
+      "tone_plan": "灰褐布衣、暗黄诏包、青灰林影。",
+      "value_plan": "额汗与诏包边亮、人物中、松后暗。",
+      "effects_plan": "只用喘息与微尘，危机尚不显形。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P024",
+      "story_function": "threat_reveal",
+      "source_excerpt": "S050,S052：谷口似虎啸的风声化为松后雷鸣，吊睛白额虎扑出，洪信惊倒。",
+      "meaning_zh": "洪信的抱怨被真正的白虎打断，试心第一关迫使他瞬间失态。",
+      "text_target": "吼——！\n洪信：“啊呀！”",
+      "adaptation_note": "用风声转虎啸、松后爆出和洪信后倒三层动势完成恐惧状态切换。",
+      "source_segment_refs": [
+        "S050",
+        "S052"
+      ],
+      "description": "画右后松树被撞开，吊睛白额虎低姿向画左前扑出；洪信后仰跌向画左下树根，银炉尚在右手但即将脱手，诏包在背上。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_WHITE_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山松林径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "白虎从画右后扑向画左前，洪信画中左倒向画左下，上山路仍在画右上。",
+      "lighting_anchor": "右上雾光照白虎额纹和洪信惊恐脸，松后为冷暗背景。",
+      "axis_eyeline": "白虎视线从画右后锁洪信，洪信从画左看扑来的白虎，不看镜头。",
+      "gaze_target": "洪信看 MON_WHITE_TIGER 的前爪落点；白虎看洪信胸前与倒地路径",
+      "eyeline_direction": "洪信画面右上；白虎画面左下",
+      "character_integrity": "洪信保持长方圆脸、窄眼/眼距、发际线与布衣造型；惊倒时双手、双脚、身体、诏包和香炉归属完整，膝肩开始沾尘。白虎保持虎脸、双眼、白额黑纹与黄金褐毛发轮廓，四肢、四爪、身体和尾巴完整，不多爪。",
+      "continuity_from": "P023",
+      "spatial_relationships": "白虎画右上中景向左前扑，洪信画左下前景后倒；虎爪尚未接触洪信，两者留出可读危险距离。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "啊呀！",
+          "text_target": "啊呀！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "骤然惊恐"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "吼——！",
+        "扑！"
+      ],
+      "lettering_plan": "虎啸大字从画右上向左扩张，洪信短气泡置画左下，不遮虎爪与倒地路径。",
+      "art_notes": "白虎以真实华南虎体态为基础，不做剑齿兽、骨刺怪兽或血腥扑咬。",
+      "layout_weight": "heavy",
+      "panel_shape": "diagonal_wide",
+      "border_style": "breakout",
+      "gutter_intent": "环境预警突然爆发",
+      "ink_plan": "虎肩胛和爪用有力粗线，洪信脸手与道具清线，松针不糊人。",
+      "black_fill_plan": "松后深黑托出白额和虎眼，洪信倒地区保留中亮。",
+      "tone_plan": "虎毛黄金褐、黑纹深墨、布衣灰褐、林影青灰。",
+      "value_plan": "白额与洪信脸亮，虎躯与人物中，松后暗。",
+      "effects_plan": "松针、尘土和香烟被扑风推向画左，集中线只指向虎爪落点。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P025",
+      "story_function": "tiger_threat_detail",
+      "source_excerpt": "毛披一帶黃金色，爪露銀鉤十八隻。睛如閃電尾如鞭，口似血盆牙似戟。伸腰展臂勢猙獰，擺尾搖頭聲霹靂。山中狐兔盡潛藏，澗下獐麀皆斂跡。",
+      "meaning_zh": "白额虎金黄毛皮、正常利爪、亮眼、长尾与巨口形成威压，山中小兽纷纷躲避。",
+      "text_target": "吼隆——！",
+      "adaptation_note": "把诗赞集中为洪信低位主观的一次威压揭示；虎保持真实四肢结构，绝不按“十八只银钩”字面增生爪肢。",
+      "source_segment_refs": [
+        "S053",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "description": "树根旁的洪信占画左下前景，白额虎从画右后压近并伸展肩背；白额黑纹、金黄褐毛、四只正常虎爪、张口牙列和横扫落叶的长尾完整可读，远处狐兔沿涧底退藏。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_WHITE_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "继承 LOC_LONGHUSHAN_PATH：洪信倒在画左下树根旁，白虎由画右后压向画左前；盘陀石尚未进入主景。",
+      "lighting_anchor": "雾中天光仍从画右上下沉，虎肩与白额获冷亮边光，虎腹和洪信身下保持冷青灰反光。",
+      "axis_eyeline": "不跨轴：白虎由画右后朝画左前锁定洪信，洪信从画左下仰看画右上虎首。",
+      "gaze_target": "白虎盯住画左下树根旁的洪信胸口，洪信仰视画右上方白虎张开的口鼻。",
+      "eyeline_direction": "白虎视线由右上指向左下，洪信视线由左下回指右上。",
+      "character_integrity": "洪信继承长方圆脸、窄眼、微高发际线与素灰褐布衣，背肩、袖口、膝部泥尘延续，黄罗诏包仍系背上；白虎继承白额黑纹、肩胛比例、尾长和真实四肢，双眼、双耳、四足、尾与完整口鼻可读，无多肢、断肢或穿模。",
+      "continuity_from": "P024",
+      "spatial_relationships": "虎首与洪信之间留出一段可读危险距离；虎爪不与洪信身体相交，小兽仅在远景退避，不抢主体。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "吼隆——！",
+        "刷——"
+      ],
+      "lettering_plan": "低频虎吼置于虎口画右上外侧，尾扫声贴近画面右缘，不压虎眼或洪信脸。",
+      "art_notes": "采用真实华南虎结构；金黄为低饱和毛色而非金属，虎眼只是自然反光，不做雷电或魔法光束。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "rough",
+      "gutter_intent": "让读者停在虎的结构与洪信的无力对比上",
+      "ink_plan": "虎头肩背用稳定粗中线，毛纹用随体积转折的细线；洪信轮廓清晰但细节略退后。",
+      "black_fill_plan": "虎口、腹下与树根投影用集中深墨，白额和四足轮廓不得被黑块吞没。",
+      "tone_plan": "金褐虎毛、墨黑条纹、冷青灰林下与赭褐泥地，朱砂与高饱和色禁用。",
+      "value_plan": "虎额与眼为小亮点，虎身中值，口内和树根最暗，洪信脸保持可读中亮。",
+      "effects_plan": "尾扫落叶和低频吼声波纹克制使用，不加扑咬速度线或血腥效果。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P026",
+      "story_function": "trial_spares_hong",
+      "source_excerpt": "那大蟲望著洪太尉，左盤右旋，咆哮了一回，托地望後山坡下跳了去。洪太尉倒在樹根底下，諕的三十六個牙齒捉對兒廝打，那心頭一似十五個吊桶，七上八落的響，渾身卻如中風麻木，兩腿一似鬥敗公雞，口裏連聲叫苦。",
+      "meaning_zh": "白虎盘旋咆哮后并未伤人，而是跃下后山坡；洪信仍瘫在树根下牙齿打颤。",
+      "text_target": "洪信：“苦也……”\n咯咯咯……",
+      "adaptation_note": "以白虎主动跃离作为主动作，明确它只是试探；洪信的身体反应承担恐惧，不新增扑咬。",
+      "source_segment_refs": [
+        "S057"
+      ],
+      "description": "白虎后肢蹬地，从洪信身前折向画左下山坡跃离；洪信仍蜷在画左前树根下，牙齿发颤，双腿发软，银炉落在右手外一臂处。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_WHITE_TIGER",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "山下方向固定为画左下；白虎沿下坡离开，洪信和树根仍在画左前，松树保持画右后。",
+      "lighting_anchor": "延续右上雾天光；虎跃出遮光区时背脊略亮，洪信仍在树根冷影内。",
+      "axis_eyeline": "白虎运动由画右中折向画左下，洪信视线追随其落点，不反转上山轴。",
+      "gaze_target": "洪信死盯画左下正在离开的白虎后躯；白虎只看向下坡落脚点，不再回看洪信。",
+      "eyeline_direction": "洪信由画左前斜看左下远处，白虎头部顺运动方向朝左下。",
+      "character_integrity": "洪信保持长方圆脸、窄眼与微高发际线，束发不散；泥尘、布衣、麻履、背上黄罗诏包连续，双手双脚和蜷缩身体完整，右手与落地银炉归属清楚。白虎额纹、眼距、耳形、面部比例、肩胛与尾长不变，四足起跳相位合理，完整身体不与树根、道具或洪信穿插。",
+      "continuity_from": "P025",
+      "spatial_relationships": "白虎与洪信已拉开距离，跃离轨迹经过二者之间空地；银炉在洪信右手外侧，不能出现在虎的运动线上。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "苦也……",
+          "text_target": "苦也……",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "气弱发颤"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "咯咯咯……",
+        "扑——"
+      ],
+      "lettering_plan": "洪信小气泡贴近嘴侧；牙颤拟声沿下颌排，虎跃声置于下坡运动尾迹。",
+      "art_notes": "虎必须表现为主动放过洪信，而不是被驱赶或受伤；银炉落点为下一格拾回动作服务。",
+      "layout_weight": "medium",
+      "panel_shape": "diagonal",
+      "border_style": "standard",
+      "gutter_intent": "危险突然退去后的空落",
+      "ink_plan": "虎跃轮廓用长弧硬线，洪信颤抖用短碎线，环境线保持稳定。",
+      "black_fill_plan": "树根下和虎腹用深墨，跃离方向留亮，避免主体粘连。",
+      "tone_plan": "延续冷青灰、金褐与泥赭，虎离开的坡面降低饱和。",
+      "value_plan": "虎背中亮、洪信中值、树根暗；左下去向保持可读亮度。",
+      "effects_plan": "仅用后肢扬尘与短促跃离线，不画攻击残影。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_WHITE_TIGER",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P027",
+      "story_function": "recommit_for_duty",
+      "source_excerpt": "大蟲去了一盞茶時，方纔爬將起來，再收拾地上香爐，還把龍香燒著，再上山來，務要尋見天師。",
+      "meaning_zh": "虎离开一会儿后，洪信爬起，拾回银炉、重燃御香，为完成使命继续上山。",
+      "text_target": "洪信：“为了复命……还得上去。”",
+      "adaptation_note": "把重燃御香作为重新行动的单一视觉动作，台词点出他首先考虑复命而非万民。",
+      "source_segment_refs": [
+        "S058"
+      ],
+      "description": "洪信半跪在山径上，右手重新提起银炉，左手护住微弱复燃的龙香火；背上黄罗诏包完好，泥尘仍留在肩袖和双膝。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信位于画面中下，身体重新转向画右上山路；银炉由前格画左前落点被拾回至右手。",
+      "lighting_anchor": "右上冷天光延续，龙香只给手指和下颌一丝暖光，不改变场景主光。",
+      "axis_eyeline": "上山方向仍为画右上；洪信身体和下一步朝向均不反转。",
+      "gaze_target": "洪信低头盯住右手银炉中重新燃起的龙香火头。",
+      "eyeline_direction": "视线由面部向画面中下右手银炉落下。",
+      "character_integrity": "继承洪信长方圆脸、窄眼、微高发际线和素灰褐布衣；双手各自护炉与稳身，五指关系清楚，双膝和麻履完整，黄罗诏包背带不穿过身体。",
+      "continuity_from": "P026",
+      "spatial_relationships": "银炉在右手下方、黄罗诏包在背后，两件道具归属分离；白虎已离场，不留虚假同框。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "为了复命……还得上去。",
+          "text_target": "为了复命……还得上去。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "余悸未消、勉强自持"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嘶……"
+      ],
+      "lettering_plan": "台词置于画左上空白雾区；香火拟声贴近炉口，不压手指。",
+      "art_notes": "御香复燃是关键连续性证据；不得把银炉画成香囊、灯笼或现代提盒。",
+      "layout_weight": "medium",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "给恐惧后的勉强重启留一口气",
+      "ink_plan": "手、炉提梁和背带用清晰中线，烟气用极细淡线。",
+      "black_fill_plan": "衣褶深处少量墨，炉体保持中亮金属灰，不画大黑烟。",
+      "tone_plan": "素灰褐衣、冷银炉、黄罗包低饱和暖黄，香火一小点暗红。",
+      "value_plan": "脸与双手中亮，衣身中值，身后树影暗，炉口为最小亮点。",
+      "effects_plan": "细烟轻升，无英雄式光芒或仪式粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P028",
+      "story_function": "failure_to_learn",
+      "source_excerpt": "又行過三五十步，口裏嘆了數口氣，怨道：『皇帝御限差俺來這裏，教我受這場驚恐。』",
+      "meaning_zh": "洪信继续上山，却抱怨皇帝限期差他来受惊，表明他没有领悟先前试心。",
+      "text_target": "洪信：“皇帝偏要限我来受这场惊恐！”",
+      "adaptation_note": "用继续攀登与怨言并置，明确他行动上前进、内心仍以自身受苦为中心。",
+      "source_segment_refs": [
+        "S059"
+      ],
+      "description": "洪信拖着发软的腿朝画右上再走三五十步，右手提银炉、背上诏包随步颠动；他回头皱脸抱怨，尚未察觉画左后竹藤将起的异动。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信从画左下沿径走向画右上；竹藤仍固定在画左后，盘陀石开始在前方画左边缘出现。",
+      "lighting_anchor": "右上雾天光照在上坡侧脸和诏包边缘，林下冷青灰不变。",
+      "axis_eyeline": "身体朝画右上上山，回头视线只略向画左下，不改变行动轴。",
+      "gaze_target": "洪信回看画左下已经走过的险路，目光落在身后空山径；抱怨指向不在场的朝廷差遣。",
+      "eyeline_direction": "头部从上山方向回转至画左下，身体仍指向画右上。",
+      "character_integrity": "洪信脸型、发际线、布衣麻履和泥尘状态不变；右手银炉提梁、背上黄罗诏包及双腿步态完整，手脚不被坡缘裁断。",
+      "continuity_from": "P027",
+      "spatial_relationships": "洪信与盘陀石尚隔一段山径；竹藤在其左后方，不提前出现蛇身。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "皇帝偏要限我来受这场惊恐！",
+          "text_target": "皇帝偏要限我来受这场惊恐！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "低声怨愤、余惊未消"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "沙……沙……"
+      ],
+      "lettering_plan": "抱怨气泡置于画左上，尾巴指向回头的嘴；脚步声沿上坡方向排。",
+      "art_notes": "表情是恐惧后的怨愤，不改绑为伏魔殿的强势状态；用姿态和眉眼表现而不另造状态 ID。",
+      "layout_weight": "compact",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "在第二次危机前保留短暂松弛",
+      "ink_plan": "人物线略疲软，山径用斜向线把阅读推至右上。",
+      "black_fill_plan": "左后竹藤根部稍暗，洪信脸和道具保持清楚。",
+      "tone_plan": "冷青灰林径、赭褐泥尘、低饱和黄罗与银灰炉体。",
+      "value_plan": "人物中亮、上坡雾区亮、左后竹藤暗，为下格异动蓄势。",
+      "effects_plan": "仅有轻微脚步扬尘，不加预知蛇形或毒雾。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P029",
+      "story_function": "serpent_warning",
+      "source_excerpt": "說猶未了，只覺得那裏又一陣風，吹得毒氣直沖將來。太尉定睛看時，山邊竹藤裏簌簌地響，",
+      "meaning_zh": "洪信话未说完，毒风突然冲来，画左后竹藤剧烈簌动。",
+      "text_target": "簌簌簌——",
+      "adaptation_note": "蛇暂不露形，只用逆向毒风、竹藤鼓动和洪信转头完成第二次试心的声音预警。",
+      "source_segment_refs": [
+        "S059"
+      ],
+      "description": "一股冷雾从画左后竹藤间贴地冲出，掀动洪信衣摆和炉烟；洪信骤然停步扭头，银炉仍握在右手，盘陀石位于他画左前方。",
+      "characters": [
+        "CHAR_HONG_XIN"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "竹藤固定画左后，洪信居中偏右，盘陀石在画左前；上山出口仍在画右上。",
+      "lighting_anchor": "主光仍从画右上，毒风只压低画左后的局部对比，不改成绿色自发光。",
+      "axis_eyeline": "洪信从画右中转看画左后声源，保持竹藤出场方向与合同一致。",
+      "gaze_target": "洪信盯住画左后正在鼓动、尚未露出蛇身的竹藤根部。",
+      "eyeline_direction": "视线由画右中斜指画左后下方。",
+      "character_integrity": "洪信脸、发型、布衣和泥尘连续；右手仍完整握住银炉提梁，诏包背带与衣摆受风方向一致，双脚踩实山径。",
+      "continuity_from": "P028",
+      "spatial_relationships": "洪信与竹藤之间有盘陀石侧缘作空间标尺；雾流穿过两者之间但不遮住银炉和诏包。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "簌簌簌——",
+        "呼——"
+      ],
+      "lettering_plan": "竹藤声从画左后向洪信递进，风声贴地排，不在雾中嵌对白。",
+      "art_notes": "毒气是低饱和冷灰雾和风压，不画荧光绿；本格不得提前露出蛇眼、蛇头或完整蛇影。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "先听见并感到，再看见",
+      "ink_plan": "竹叶用斜向碎线，人物轮廓保持稳定，雾以淡线留白。",
+      "black_fill_plan": "竹藤根部集中暗值，洪信和盘陀石保持中值分离。",
+      "tone_plan": "冷青灰雾、墨绿竹藤、素灰褐衣；禁止高饱和毒色。",
+      "value_plan": "画左后最暗、雾流中亮、洪信中值、右上山路亮。",
+      "effects_plan": "竹叶运动线和贴地风带构成预警，不使用怪物轮廓特效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P030",
+      "story_function": "serpent_burst",
+      "source_excerpt": "搶出一條弔桶大小雪花也似蛇來。太尉見了，又喫一驚，撇了手爐，叫一聲：『我今番死也。』往後便倒在盤陀石邊。微閃開眼來看那蛇時，但見：昂首驚飆起，掣目電光生。",
+      "meaning_zh": "吊桶粗的雪白巨蛇从竹藤冲出昂首，洪信丢下银炉，倒在盘陀石边。",
+      "text_target": "洪信：“我命休矣！”\n哐当！",
+      "adaptation_note": "把巨蛇冲出、洪信丢炉倒地合成一次接触爆发；蛇眼只作金色自然反光，不做激光。",
+      "source_segment_refs": [
+        "S059",
+        "S060"
+      ],
+      "description": "吊桶粗的乳白冷灰巨蛇从画左后竹藤猛冲至盘陀石边昂首，洪信向后跌在石旁；银炉从他右手脱落，正坠向画面下缘，蛇眼金色反光锁住他。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_SNOW_SERPENT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "蛇严格由画左后冲向盘陀石，洪信在石旁向画右下跌倒；银炉落在两者之间偏画下，不越过蛇身。",
+      "lighting_anchor": "右上雾天光勾出蛇头和鳞缘，竹藤遮光压暗蛇身后段；金色只在双眼留极小反光。",
+      "axis_eyeline": "蛇的进场轴从画左后指向画右前盘陀石，洪信仰视蛇头；上山方向仍保留在画右上背景。",
+      "gaze_target": "雪蛇双眼锁定盘陀石边洪信的面部，洪信仰看近在上方的蛇头与张口。",
+      "eyeline_direction": "蛇由左上俯看右下，洪信由右下仰看左上。",
+      "character_integrity": "洪信脸型、布衣、泥尘和黄罗诏包不变，跌倒时双手双脚完整且右手与脱落银炉的先后关系可读；雪蛇继承乳白冷灰鳞、真实蛇头颈和吊桶粗比例，躯干连续无断裂、无龙角骨刺。",
+      "continuity_from": "P029",
+      "spatial_relationships": "蛇头高于洪信但未接触身体；盘陀石支撑洪信背侧，银炉位于前景独立落点，为后续追踪保留。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "我命休矣！",
+          "text_target": "我命休矣！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "惊叫"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "哐当！",
+        "唰——"
+      ],
+      "lettering_plan": "洪信惊叫置于画右上空隙；银炉撞地声紧贴前景落点，蛇冲声沿左后至右前。",
+      "art_notes": "蛇是巨型真实蛇类而非西方龙；保持银炉、盘陀石、竹藤三者位置，严禁绿毒光和山体崩裂。",
+      "layout_weight": "heavy",
+      "panel_shape": "diagonal",
+      "border_style": "rough",
+      "gutter_intent": "以斜向冲击截断洪信抱怨",
+      "ink_plan": "蛇头颈用长曲线，鳞片只在受光面精选刻画；洪信跌姿用硬折线。",
+      "black_fill_plan": "竹藤和蛇身后段用深墨，蛇头与洪信脸之间保留亮缝。",
+      "tone_plan": "乳白、雾灰、冷银鳞片配冷青竹影，洪信灰褐衣和低饱和黄罗包作小暖区。",
+      "value_plan": "蛇头中亮、眼为微亮点、竹藤暗、洪信脸中亮、银炉反光小亮。",
+      "effects_plan": "单向冲出速度线、衣摆风压和银炉坠落弧线；禁止激光眼与魔法毒雾。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P031",
+      "story_function": "serpent_scale_reveal",
+      "source_excerpt": "動蕩則折峽倒岡，呼吸則吹雲吐霧。鱗甲亂分千片玉，尾梢斜捲一堆銀。",
+      "meaning_zh": "巨蛇吐息推开雾气与竹叶，乳白冷灰鳞片如玉，银白尾端斜向盘卷。",
+      "text_target": "呼——",
+      "adaptation_note": "把夸张的折峡倒冈收束为雾和竹叶受压，用完整盘绕结构与分层鳞色建立体量。",
+      "source_segment_refs": [
+        "S061",
+        "S062"
+      ],
+      "description": "巨蛇在盘陀石前抬起头颈，吐息把雾和竹叶向画右推开；乳白、雾灰与冷银鳞片沿体积转折，粗长躯干在石边盘出一圈，尾端仍连回画左后竹藤。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_SNOW_SERPENT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "蛇头颈居画左中，盘躯围住盘陀石前缘但不触碰洪信；洪信缩在画右下，银炉留在画面下方原落点。",
+      "lighting_anchor": "右上冷天光沿蛇鳞形成窄面反光，盘躯背光处落入雾灰；吐息不自发光。",
+      "axis_eyeline": "蛇仍从画左压向画右洪信，二者对视轴不反转；尾端回到画左后竹藤。",
+      "gaze_target": "雪蛇凝视画右下盘陀石边洪信的脸，洪信紧盯蛇头和吐息方向。",
+      "eyeline_direction": "蛇由左中俯向右下，洪信由右下仰向左中。",
+      "character_integrity": "洪信保持长方圆脸、窄眼、微高发际线与束发，脸眼发不因仰视变形；双手双脚及身体、布衣、泥尘、黄罗诏包完整，银炉与右手已分离且落点连续。雪蛇眼位、吻部、头颈比例固定，躯干、盘圈和尾端构成一条连续身体，鳞向随体积变化，无断体、多头、多肢、龙角或骨刺，也不吞并盘陀石与道具。",
+      "continuity_from": "P030",
+      "spatial_relationships": "盘躯与盘陀石有明确前后遮挡，洪信位于圈外侧；吐息穿过中间空气，不与人物脸部发生实体穿模。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "呼——",
+        "簌簌……"
+      ],
+      "lettering_plan": "吐息拟声沿画左至画右的雾流排，竹叶声放在右上，不压鳞片结构。",
+      "art_notes": "本格任务是结构验收：蛇头、颈粗、盘圈半径、尾端连接必须一眼可审；不表现山崩。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "从突袭降速到窒息式审视",
+      "ink_plan": "蛇外轮廓用稳定长线，鳞片按大块分组，吐息和雾用极淡线。",
+      "black_fill_plan": "盘躯缝隙与竹藤后景用深墨，蛇体亮面和洪信脸保留。",
+      "tone_plan": "石灰白、雾灰、冷银三阶蛇色，背景冷青灰，人物灰褐。",
+      "value_plan": "蛇体中亮、盘圈缝隙暗、雾中亮、洪信脸中亮，避免纯白过曝。",
+      "effects_plan": "只以雾和竹叶位移表现吐息压力，不使用爆炸、山崩或彩色魔法。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P032",
+      "story_function": "serpent_trial_peak",
+      "source_excerpt": "那條大蛇，逕搶到盤陀石邊，朝著洪太尉盤做一堆，兩隻眼迸出金光，張開巨口，吐出舌頭，噴那毒氣在洪太尉臉上，驚得太尉三魂蕩蕩，七魄悠悠。",
+      "meaning_zh": "巨蛇在洪信身边盘起，张口吐信，冷灰毒息扑到他脸前，却没有咬伤他。",
+      "text_target": "嘶——\n洪信：“别……别过来……”",
+      "adaptation_note": "以毒息停在面前而非咬合表现试心峰值；两眼金光收束为极小自然反射。",
+      "source_segment_refs": [
+        "S063"
+      ],
+      "description": "雪蛇盘在盘陀石外沿，头部压到洪信面前，张口吐信，冷灰气流拂过他的鬓发；洪信贴石后缩，双手撑地，蛇齿和人物皮肤之间仍留清楚空气缝。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_SNOW_SERPENT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信贴画右下盘陀石，蛇头从画左中压近，盘躯仍在石外缘；银炉留在画下偏右、未被盘躯覆盖。",
+      "lighting_anchor": "右上冷光勾蛇眼、鼻端和洪信额头，吐息只降低局部清晰度；无绿色或金色大面积照明。",
+      "axis_eyeline": "维持蛇左、洪信右的正面对视轴，镜位不越过二者连线。",
+      "gaze_target": "雪蛇双眼锁定洪信鼻梁与双眼，洪信盯着近在面前的蛇口和吐信。",
+      "eyeline_direction": "蛇由左向右下，洪信由右下向左上回视。",
+      "character_integrity": "洪信窄眼、脸型、布衣、泥尘和黄罗诏包连续，撑地双手与屈曲双腿完整；雪蛇口腔、舌、双眼、头颈和盘躯归属清晰，身体不断裂，不新增肢体，蛇口绝不与人物脸穿模。",
+      "continuity_from": "P031",
+      "spatial_relationships": "两张脸形成极近对峙但保留空气间距；盘陀石在洪信背后，银炉在画下，三者遮挡顺序明确。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "别……别过来……",
+          "text_target": "别……别过来……",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "近乎失声"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嘶——",
+        "呼……"
+      ],
+      "lettering_plan": "蛇嘶沿口部向画上延伸，洪信小气泡缩在画右下，不覆盖二者眼神线。",
+      "art_notes": "接触点必须是‘未接触’：毒息可见、蛇口近迫，但无咬伤、血液或肢体纠缠。",
+      "layout_weight": "heavy",
+      "panel_shape": "closeup",
+      "border_style": "rough",
+      "gutter_intent": "把第二次试心压到几乎没有呼吸空间",
+      "ink_plan": "蛇口、鳞缘和洪信眼周用硬细线，吐息用软淡线，背景大幅简化。",
+      "black_fill_plan": "蛇口内部深墨，眼与舌边保留高光；洪信脸旁不落死黑。",
+      "tone_plan": "冷银蛇鳞、雾灰吐息、人物灰褐与肤色低饱和，眼光仅微金。",
+      "value_plan": "二者脸部中亮、蛇口最暗、吐息中亮、背景压暗。",
+      "effects_plan": "近距离吐息轻微扭动发丝，不使用腐蚀、荧光或伤害特效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P033",
+      "story_function": "misread_the_trial",
+      "source_excerpt": "那蛇看了洪太尉一回，望山下一溜，卻早不見了。太尉方纔爬得起來，說道：『慚愧！驚殺下官！』看身上時，寒栗子比餶飿兒大小，口裏罵那道士：『叵耐無禮，戲弄下官，教俺受這般驚恐！』再拿了銀提爐，整頓身上詔敕，並衣服巾幘，卻待再要上山去。",
+      "meaning_zh": "雪蛇滑下山消失；洪信爬起拾炉整诏，却把试心误认为道士戏弄，并恼怒咒骂。",
+      "text_target": "洪信：“惊杀本官！那群道士定在戏弄我！”",
+      "adaptation_note": "以洪信拾炉整诏时的咒骂为主动作；蛇只留远处离场尾迹，强调他再次错误归因。",
+      "source_segment_refs": [
+        "S063"
+      ],
+      "description": "雪蛇尾端沿画左下山坡滑入雾中；洪信在盘陀石边撑起身体，右手重新抓住银炉提梁，左手整平背上诏包带，惊恐尚未退去却朝山下道众方向咒骂。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "MON_SNOW_SERPENT",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "雪蛇沿画左下离场，洪信居盘陀石画右侧；银炉由画下落点回到右手，松树仍在画右后。",
+      "lighting_anchor": "右上雾天光恢复均匀，蛇尾进入左下冷雾，洪信脸和双手得到中性反光。",
+      "axis_eyeline": "洪信朝画左下山路和画外上清宫方向咒骂，蛇离场方向与山下轴一致。",
+      "gaze_target": "洪信越过画左下消失的蛇尾，盯向山下画外上清宫道众所在方向。",
+      "eyeline_direction": "洪信由画右中看向左下画外，雪蛇头已离场、尾部顺左下运动。",
+      "character_integrity": "洪信脸、发际线、布衣、泥尘和黄罗诏包连续，右手重新握炉、左手整理背带，双脚逐步站稳；雪蛇仅可见连续尾段，鳞色与粗细不变，不凭空断尾。",
+      "continuity_from": "P032",
+      "spatial_relationships": "蛇与洪信距离迅速拉开；银炉、右手、诏包带分别清楚，盘陀石仍在洪信背后作为位置锚。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "惊杀本官！那群道士定在戏弄我！",
+          "text_target": "惊杀本官！那群道士定在戏弄我！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "惊惧转恼怒"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "沙沙……"
+      ],
+      "lettering_plan": "洪信气泡置于画右上，尾巴指向嘴部；蛇尾摩地声沿左下离场，不挡银炉。",
+      "art_notes": "洪信仍绑定惊惧沾尘状态，恼怒通过姿势和台词表现；不得提前切换伏魔殿官装或强势状态。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "让读者看清危险离开而洪信认知仍未改变",
+      "ink_plan": "蛇尾用长曲线淡出，洪信手部和道具用清楚中线，雾区减少线密度。",
+      "black_fill_plan": "左下雾内不压死黑，盘陀石下缘与衣褶用局部深墨。",
+      "tone_plan": "冷灰蛇尾渐隐、赭灰山石、素灰褐衣与冷银炉。",
+      "value_plan": "洪信中亮，盘陀石中值，左下雾区亮，蛇尾用中暗保持可追踪。",
+      "effects_plan": "蛇尾滑行仅用细尘和雾流，不加瞬移烟雾或消散粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "MON_SNOW_SERPENT",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P034",
+      "story_function": "sound_before_reveal",
+      "source_excerpt": "正欲移步，只聽得松樹背後隱隱地笛聲吹響，漸漸近來。太尉定睛看時，只見那一個道童，倒騎著一頭黃牛，橫吹著一管鐵笛，轉出山凹來。草鋪橫野六七里，笛弄晚風三四聲。",
+      "meaning_zh": "洪信正要继续上山，先听到松后渐近的笛声，随后看见倒骑黄牛、横吹铁笛的道童剪影转出山凹。",
+      "text_target": "呜—呜——",
+      "adaptation_note": "先读笛声再见人物，只借牧童诗的笛声与草色，不把白日山径改成黄昏平野。",
+      "source_segment_refs": [
+        "S063",
+        "S069"
+      ],
+      "description": "大段冷雾留白占据画面上部，三四声铁笛由画右后松树传来；下部洪信回首，松干之后仅露出黄牛头肩和倒骑其上的青衣道童侧影。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_MASTER_XUJING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "state_id": "STATE_HERDBOY_REVEAL"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "松树固定画右后，道童与黄牛由其后向画左下进入；洪信在盘陀石附近画左中回头，竹藤仍在画左后但不再运动。",
+      "lighting_anchor": "右上雾天光穿过松枝形成柔和侧光，道童保持自然受光，不加仙气背光；洪信仍在冷青灰反光中。",
+      "axis_eyeline": "道童由画右后向画左下离山方向出现，洪信由画左中回看右后，严格继承场景轴。",
+      "gaze_target": "洪信盯住画右后松树旁逐渐显出的道童与黄牛；道童视线顺黄牛行进方向落在画左下山路。",
+      "eyeline_direction": "洪信由左中看右后，道童由右后看左下，形成交叉但不对视。",
+      "character_integrity": "洪信布衣、泥尘、黄罗诏包和右手银炉连续；道童必须继承少年圆长脸轮廓、双丫髻、低饱和青衣、草绳与芒鞋，铁笛和倒骑姿态为场景状态，不把黄牛或笛固化进身体，所有可见肢体完整。",
+      "continuity_from": "P033",
+      "spatial_relationships": "洪信与道童隔着松树和一段山径，黄牛只作承载和尺度参照；两人不发生近距离重叠。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "呜—呜——",
+        "呜——"
+      ],
+      "lettering_plan": "笛声先出现在上部留白，再沿右后松树向下递近；不设置对白气泡。",
+      "art_notes": "黄牛无需新增持久主体 ID，但外形应是普通耕牛；本格不露完整正脸，以声音先行服务下一格揭示。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "在笛声前留出明显的静默沟槽",
+      "ink_plan": "上部雾区大量留白，松干用稳定粗线，道童和黄牛先用清晰剪影轮廓。",
+      "black_fill_plan": "松树背面与黄牛腹下少量深墨，道童脸部暂不压黑。",
+      "tone_plan": "冷青灰雾、墨绿松针、低饱和青衣与土黄牛体，维持白日时空。",
+      "value_plan": "雾区亮、松树暗、道童与黄牛中值、洪信中亮，声音路径保持空。",
+      "effects_plan": "仅用笛声排版与轻微草梢风向，不加仙鹤、云驾或神性粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P035",
+      "story_function": "herdboy_identity_reveal",
+      "source_excerpt": "頭綰兩枚丫髻，身穿一領青衣，腰間絛結草來編，腳下芒鞋麻間隔。明眸皓齒，飄飄並不染塵埃；綠鬢朱顏，耿耿全然無俗態。",
+      "meaning_zh": "道童梳双丫髻、穿青衣、系草绳、着芒鞋，黑发明眸，神态自然明净而不俗。",
+      "text_target": "（无嵌字；以完整人物揭示建立虚靖天师牧童形）",
+      "adaptation_note": "用全身三分之四视角一次交付可识别造型；超然来自平静眼神和身份反差，不靠柔光滤镜或仙侠装饰。",
+      "source_segment_refs": [
+        "S064",
+        "S065",
+        "S066",
+        "S067"
+      ],
+      "description": "青衣道童倒骑黄牛完整转出松后，身体呈三分之四侧面：双丫髻、自然黑发、草编绦结、麻间芒鞋和横持铁笛全部可读；他明眸微笑，视线越过狼狈的洪信落向山下。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_MASTER_XUJING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "state_id": "STATE_HERDBOY_REVEAL"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "道童与黄牛由画右后进入中景并朝画左下移动；洪信居画左前仰看，松树仍在道童身后形成出场框。",
+      "lighting_anchor": "右上柔冷天光照亮道童侧脸、双丫髻和青衣折面，洪信处于较低冷反光；无自发光或过度柔焦。",
+      "axis_eyeline": "道童运动与视线朝画左下，洪信由画左前看向画右中，道童尚未直视洪信。",
+      "gaze_target": "道童平静越过洪信看向画左下山路，洪信抬眼盯住道童的脸和双丫髻。",
+      "eyeline_direction": "道童由右中看左下，洪信由左前仰看右中。",
+      "character_integrity": "道童继承少年圆长脸、明亮偏长眼、正常眼距、双丫髻、清瘦松弛体态和自然黑发；青衣、草绳、芒鞋、双手双脚及铁笛握持完整，不变成白发老仙或仙侠偶像。洪信的脸型、布衣、泥尘、诏包与银炉连续。",
+      "continuity_from": "P034",
+      "spatial_relationships": "道童位于黄牛背上但倒骑姿态符合重心，铁笛横在胸前不切穿手臂；洪信与牛保持安全前后距离。",
+      "dialogue": [],
+      "narration": "",
+      "sfx": [
+        "呜——"
+      ],
+      "lettering_plan": "笛声置于道童身后松枝空隙，人物周围不放旁白，留足造型验收区。",
+      "art_notes": "本格是首个完整牧童形识别格，优先保证脸、丫髻、青衣、草绳、芒鞋和铁笛；不复制任何影视天师造型。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "让读者完整看清看似普通却不俗的少年",
+      "ink_plan": "脸与丫髻用稳定中细线，青衣褶皱简洁，黄牛用较厚轮廓退居承载层。",
+      "black_fill_plan": "自然黑发与松树背面用深墨，面部、青衣结构和四肢留清楚亮面。",
+      "tone_plan": "低饱和青衣、自然黑发、土黄牛体、冷青灰山雾；肤色克制红润。",
+      "value_plan": "道童脸最亮、青衣中值、黑发和松树暗、洪信中亮但次要。",
+      "effects_plan": "无仙气光晕，仅让衣角和草梢受自然风轻动。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P036",
+      "story_function": "herdboy_knows_the_mission",
+      "source_excerpt": "洪太尉見了，便喚那個道童：『你從那裏來？認得我麼？』道童不睬，只顧吹笛。太尉連問數聲，道童呵呵大笑，拿著鐵笛，指著洪太尉說道：『你來此間，莫非要見天師麼？』",
+      "meaning_zh": "洪信连声询问，道童起初只顾吹笛，随后笑着准确反问他是否来见天师。",
+      "text_target": "洪信：“你从哪里来？认得我么？”\n道童：“你可是来见天师？”",
+      "adaptation_note": "压缩重复问答，保留道童先不理会、再一语点中使命的身份反转；后续天师已赴东京与劝返留给下一格。",
+      "source_segment_refs": [
+        "S071"
+      ],
+      "description": "洪信在画左前抬手叫住道童，银炉垂在右手；道童仍倒骑黄牛，先吹完一声笛才转过侧脸，以铁笛轻点洪信和他背上的黄罗诏包，笑问是否来见天师。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_MASTER_XUJING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "state_id": "STATE_HERDBOY_REVEAL"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信固定画左前，道童与黄牛居画右中并朝画左下缓行；松树在右后，盘陀石和竹藤退入左后景。",
+      "lighting_anchor": "延续右上自然柔光，道童转脸时眼中仅有环境反光；铁笛和银炉各有克制冷亮边缘。",
+      "axis_eyeline": "洪信从画左看向画右道童，道童回身看画左洪信；正反关系在同轴内，不越过二人连线。",
+      "gaze_target": "道童先看洪信背上的黄罗诏包，再将视线落到洪信双眼；洪信盯住道童转来的脸。",
+      "eyeline_direction": "洪信由左向右中，道童由右中回看左前。",
+      "character_integrity": "洪信继承泥尘布衣状态，左手叫人、右手提银炉、背上黄罗诏包三者清楚，双臂不穿插；道童脸型、眼型、双丫髻、青衣、草绳、芒鞋与清瘦体态不变，铁笛由双手转为单手指示的动作连续，手指与笛不融合。",
+      "continuity_from": "P035",
+      "spatial_relationships": "两人保持一头黄牛长度的前后距离；铁笛只指向洪信诏包，不戳到人物身体，银炉位于洪信身侧不与牛腿重叠。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "你从哪里来？认得我么？",
+          "text_target": "你从哪里来？认得我么？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "惊疑、带官气"
+        },
+        {
+          "speaker": "道童",
+          "text": "你可是来见天师？",
+          "text_target": "你可是来见天师？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "会意微笑、从容"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "呜——"
+      ],
+      "lettering_plan": "洪信气泡置左上，道童回答置右上，气泡尾清楚分属两人；笛声小字贴近铁笛末端。",
+      "art_notes": "本格只兑现‘道童知道来意’，不得提前把他直接标作虚靖天师，也不在画面生成身份说明文字。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "由单向呼喊转成一句精准反问",
+      "ink_plan": "两张脸与手势用稳定中线，铁笛用直硬线，背景降低线密度。",
+      "black_fill_plan": "道童黑发、松影和洪信衣褶用局部深墨，眼神线附近留亮。",
+      "tone_plan": "青衣、灰褐布衣、冷银笛炉、低饱和黄罗包与山雾统一。",
+      "value_plan": "两张脸中亮、道具反光小亮、松树暗、雾区亮，确保问答阅读顺序。",
+      "effects_plan": "笛声收尾用一条短音线，禁止神性爆光或身份揭晓特效。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P037",
+      "story_function": "mission_revelation",
+      "source_excerpt": "太尉大驚，便道：『你是牧童，如何得知？』道童笑道：『我早間在草庵中伏侍天師，聽得天師說道：今上皇帝差個洪太尉齎擎丹詔御香，到來山中，宣我往東京做三千六百分羅天大醮，祈禳天下瘟疫，我如今乘鶴駕雲去也。這早晚想是去了，不在庵中。你休上去。山內毒蟲猛獸極多，恐傷害了你性命。』",
+      "meaning_zh": "道童准确说出洪信奉诏请天师入京禳疫的使命，并说天师今早已经前往东京，劝他不要再上山。",
+      "text_target": "道童：“天师今早已驾鹤乘云，往东京禳疫去了。山中毒虫猛兽甚多，你休再上去。”",
+      "adaptation_note": "把预知皇命、天师已行和蛇虎警告合为道童的一次精准陈述，保留洪信因对方知情而震惊的身份反转。",
+      "source_segment_refs": [
+        "S071"
+      ],
+      "description": "道童仍倒骑黄牛停在画右中，以铁笛轻指洪信背上的黄罗诏包，平静说出皇命与东京醮事；洪信在画左前僵住，右手银炉下垂，目光在铁笛、诏包与道童双眼之间移动。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_MASTER_XUJING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "state_id": "STATE_HERDBOY_REVEAL"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "洪信固定画左前，道童与黄牛居画右中；松树在画右后，盘陀石退入左后，上山方向仍为画右上。",
+      "lighting_anchor": "延续画右上自然柔光，道童眼中仅有环境反光；黄罗诏包与银炉各留克制暖黄、冷银边缘。",
+      "axis_eyeline": "洪信由画左看向画右道童，道童由画右回看洪信与其背上的诏包，不越过二人连线。",
+      "gaze_target": "道童先以视线点中洪信背上的黄罗诏包，再看向洪信双眼；洪信紧盯道童镇定的脸。",
+      "eyeline_direction": "洪信由左前看右中，道童由右中回看左前。",
+      "character_integrity": "洪信继承长方圆脸、窄眼、微高发际线、泥尘布衣、麻履、黄罗诏包和右手银炉，双手双脚及背带完整；道童继承少年圆长脸、明亮偏长眼、双丫髻、青衣、草绳、芒鞋与清瘦体态，铁笛握持和倒骑姿态连续，不换脸、不多肢。",
+      "continuity_from": "P036",
+      "spatial_relationships": "两人保持一头黄牛长度的对话距离；铁笛只指向诏包，不接触洪信身体，银炉不与牛腿重叠。",
+      "dialogue": [
+        {
+          "speaker": "道童",
+          "text": "天师今早已驾鹤乘云，往东京禳疫去了。山中毒虫猛兽甚多，你休再上去。",
+          "text_target": "天师今早已驾鹤乘云，往东京禳疫去了。山中毒虫猛兽甚多，你休再上去。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "从容笃定、带善意警告"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "道童对白拆为两个相邻短气泡置于画右上，先‘已赴东京’后‘休再上去’，不压铁笛、诏包或眼神线。",
+      "art_notes": "本格不画驾鹤乘云实景，避免把道童陈述误作现场闪回；不以字幕直接揭示道童就是天师。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "让一句话同时解除求见目标并加重洪信的退意",
+      "ink_plan": "两张脸、铁笛与诏包用稳定中线，背景松雾降低线密度。",
+      "black_fill_plan": "道童黑发和松影用局部深墨，面部、双手与道具边缘保持清楚。",
+      "tone_plan": "低饱和青衣、灰褐布衣、黄罗包、冷银笛炉与冷青灰山雾统一。",
+      "value_plan": "两张脸中亮、诏包与金属小亮、松树暗、雾区亮。",
+      "effects_plan": "无神迹特效，只以静止牛步和收束衣角表现谈话停顿。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P038",
+      "story_function": "fear_driven_retreat",
+      "source_excerpt": "太尉再問道：『你不要說謊。』道童笑了一聲，也不回應；又吹著鐵笛，轉過山坡去了。太尉尋思道：『這小的如何盡知此事？想是天師吩咐他，已定是了。』欲待再上山去，方纔驚諕的苦，爭些兒送了性命，不如下山去罷。",
+      "meaning_zh": "道童笑而不答，吹笛转过山坡；洪信因对方尽知使命，又惧怕先前蛇虎，最终主动选择下山。",
+      "text_target": "洪信（心声）：“方才险些送命……下山罢。”\n呜——",
+      "adaptation_note": "以道童离场和洪信转身下山完成‘当面错过’；退缩必须来自洪信自己的恐惧选择，不表现为被赶走。",
+      "source_segment_refs": [
+        "S071"
+      ],
+      "description": "道童倒骑黄牛沿画左下山坡转入薄雾，铁笛声拖在身后；洪信站在岔路中心，先看画右上山顶，再把身体转向画左下旧路，右手仍提银炉，背上诏包随转身偏移。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_MASTER_XUJING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_HERDBOY",
+          "expression_id": "EXPR_KNOWING_SMILE",
+          "state_id": "STATE_HERDBOY_REVEAL"
+        }
+      ],
+      "location": "龙虎山后山山径",
+      "scene_anchor_id": "LOC_LONGHUSHAN_PATH",
+      "spatial_layout": "上山方向画右上、下山方向画左下；道童与黄牛已在左下远景，洪信居中完成由右上向左下的转身。",
+      "lighting_anchor": "画右上雾天光照亮未走的上山路，左下离场路进入柔冷薄雾；人物不增加神性轮廓光。",
+      "axis_eyeline": "道童沿既定画左下方向离开；洪信视线在右上山顶与左下退路之间切换，最终落到左下。",
+      "gaze_target": "道童看向画左下黄牛前方的离场路；洪信最后盯住画左下自己将返回的旧路。",
+      "eyeline_direction": "道童由右向左下，洪信从右上山顶收回至左下山路。",
+      "character_integrity": "洪信保持长方圆脸、窄眼、微高发际线与束发，泥尘布衣、麻履、黄罗诏包和右手银炉连续；双手双脚及身体完整，转身时双腿重心和背带摆向正确。道童保持少年圆长脸、明亮偏长眼、正常眼距和双丫髻，青衣、草绳、芒鞋、铁笛与倒骑姿态连续；双手双脚不与牛身融合，黄牛和笛仍是独立场景物与道具。",
+      "continuity_from": "P037",
+      "spatial_relationships": "道童与洪信距离拉开，二者由中景对话变成左下远景与中央前景；两条山路分叉清晰，不让洪信误朝上山方向离场。",
+      "dialogue": [
+        {
+          "speaker": "洪信（心声）",
+          "text": "方才险些送命……下山罢。",
+          "text_target": "方才险些送命……下山罢。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "余悸压过职责"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "呜——"
+      ],
+      "lettering_plan": "笛声沿左下薄雾远去；心声置于两条路之间的空白处，阅读后落向洪信转身方向。",
+      "art_notes": "本格是选择格：右上路仍可走，洪信因恐惧自行放弃；不得增加山崩、猛兽再现或道童驱逐动作。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "用岔路和远去笛声完成当面错过",
+      "ink_plan": "两条山路用清晰方向线，道童远景减线，洪信转身轮廓保持完整。",
+      "black_fill_plan": "松树和右上险路局部深墨，左下薄雾留白，洪信不压成剪影。",
+      "tone_plan": "冷青灰山雾、灰褐布衣、低饱和青衣和黄罗包；左下略降对比。",
+      "value_plan": "右上路亮、中央洪信中值、左下雾亮、松影暗，形成可读选择。",
+      "effects_plan": "只用渐远笛声和轻雾，不加命运分叉光束或回忆蒙太奇。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_LONGHUSHAN_PATH",
+        "CHAR_HONG_XIN",
+        "CHAR_MASTER_XUJING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P039",
+      "story_function": "blame_shift_on_return",
+      "source_excerpt": "太尉拿著提爐，再尋舊路，奔下山來。眾道士接著，請至方丈坐下。真人便問太尉道：『曾見天師麼？』太尉說道：『我是朝中貴官，如何教俺走得山路，喫了這般辛苦，爭些兒送了性命。為頭上至半山裏，跳出一隻弔睛白額大蟲……又行不過一個山嘴，竹藤裏搶出一條雪花大蛇來……盡是你這道眾戲弄下官。』",
+      "meaning_zh": "洪信回到上清宫方丈，把蛇虎惊险归咎于道众戏弄，还以朝中贵官身份强调自己受苦。",
+      "text_target": "洪信：“我是朝中贵官，却险些送命！蛇虎尽是你们道众戏弄本官！”",
+      "adaptation_note": "压缩蛇虎复述，以洪信的官阶自称和指责为主动作，显示他仍未理解试心。",
+      "source_segment_refs": [
+        "S072"
+      ],
+      "description": "方丈内，仍穿沾尘布衣的洪信坐在画左前，右手把银炉重重搁在案边，左手指向画右的住持和道众；住持高瘦背直站在画右，平静迎住他的怒气，后山门在右上背景。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫方丈",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "继承上清宫轴线：洪信画左、住持画右；方丈后山门在画右上，三清殿方向在画左后。",
+      "lighting_anchor": "庭院右上柔日光进入方丈，洪信泥尘和住持青灰道袍处于同一自然光；案边银炉留冷反光。",
+      "axis_eyeline": "洪信从画左看画右住持，住持回看画左洪信，不跨过方丈奏对轴。",
+      "gaze_target": "洪信盯住画右住持的脸并以左手指责；住持稳定看向洪信指来的手与双眼。",
+      "eyeline_direction": "洪信由左向右，住持由右向左。",
+      "character_integrity": "洪信脸型、窄眼、发际线、泥尘布衣、麻履、黄罗诏包与银炉连续，指人左手和搁炉右手归属清楚；住持继承高瘦背直、高额、清瘦颊、灰黑短须、略沉上眼皮和青灰道袍，双手袖内拱持完整。",
+      "continuity_from": "P038",
+      "spatial_relationships": "洪信坐位低于站立住持但以手势压迫对方；案几横在二人之间，银炉只落在洪信一侧，匿名道众退居右后不遮具名人物。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "我是朝中贵官，却险些送命！蛇虎尽是你们道众戏弄本官！",
+          "text_target": "我是朝中贵官，却险些送命！蛇虎尽是你们道众戏弄本官！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "惊惧未消、迁怒指责"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "当！"
+      ],
+      "lettering_plan": "洪信对白拆成‘贵官受苦’与‘道众戏弄’两个气泡，由画左上递向画右；银炉落案声贴案边。",
+      "art_notes": "洪信尚未换回官服；以口气和手势体现官威，禁止提前套用伏魔殿官装状态。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "从山径恐惧切到室内迁怒",
+      "ink_plan": "两人脸和手势用稳定中线，方丈陈设减线，案几提供清楚水平轴。",
+      "black_fill_plan": "廊后和案下少量深墨，人物脸、手与银炉保持可读。",
+      "tone_plan": "青灰道袍、灰褐泥尘布衣、冷银炉与赭木案几，整体低饱和。",
+      "value_plan": "两张脸中亮、案下暗、庭院入口亮，银炉为小亮点。",
+      "effects_plan": "仅以银炉落案和衣袖动作强化迁怒，不回放蛇虎幻影。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P040",
+      "story_function": "trial_and_identity_reveal",
+      "source_excerpt": "真人覆道：『貧道等怎敢輕慢大臣？這是祖師試探太尉之心。本山雖有蛇虎，並不傷人。』太尉又道自己遇到騎牛吹笛的道童，真人道：『太尉可惜錯過，這個牧童，正是天師。』洪太尉道：『我直如此有眼不識真師，當面錯過！』",
+      "meaning_zh": "住持说明蛇虎只是在试探洪信的诚心，并揭示骑牛牧童正是虚靖天师；洪信这才意识到自己当面错过。",
+      "text_target": "住持：“蛇虎乃祖师试你之心，并不伤人。”\n住持：“方才的牧童，正是天师。”\n洪信：“我有眼不识真师，当面错过！”",
+      "adaptation_note": "以住持的两层揭示递进：先解释蛇虎不伤人，再点明牧童身份；洪信只表现短暂羞愧，不提前写成真正悔改。",
+      "source_segment_refs": [
+        "S072"
+      ],
+      "description": "住持在画右抬起一手，先指向右上后山门解释试心，再把手收回点向洪信背后空出的山径方向，平静说牧童正是天师；洪信在画左僵坐，指责的手垂下，脸从恼怒转为错愕。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫方丈",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "洪信仍画左坐于案前，住持画右站立；后山门固定右上，银炉在案左，诏包仍在洪信背后。",
+      "lighting_anchor": "右上庭院光落在住持手势与洪信侧脸，室内青冷反光稳定，不用神迹闪回光。",
+      "axis_eyeline": "住持由画右看画左洪信，洪信从画左抬看住持；手势只指向既定右上后山门，不改变轴线。",
+      "gaze_target": "住持直视洪信双眼确认揭示效果；洪信盯住住持平静的脸，余光落向其指过的后山门。",
+      "eyeline_direction": "住持由右向左，洪信由左向右上。",
+      "character_integrity": "洪信保持长方圆脸、窄眼、微高发际线与束发，泥尘布衣、麻履、黄罗诏包和银炉位置延续；双手双脚及身体完整，指责手自然垂落。住持保持高额、细长眼、清瘦颊、灰黑束发与短须，高瘦背直和青灰道袍稳定；抬手五指、双脚、袖口及完整身体清楚，不与案几或诏书道具融合，也不变成阴险反派或金绣道长。",
+      "continuity_from": "P039",
+      "spatial_relationships": "住持手势在二人之间但不遮脸；案几保持隔断，匿名道众后退，洪信与住持的正反位置不交换。",
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "蛇虎乃祖师试你之心，并不伤人。方才的牧童，正是天师。",
+          "text_target": "蛇虎乃祖师试你之心，并不伤人。方才的牧童，正是天师。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "克制、郑重"
+        },
+        {
+          "speaker": "洪信",
+          "text": "我有眼不识真师，当面错过！",
+          "text_target": "我有眼不识真师，当面错过！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "错愕、短暂羞愧"
+        }
+      ],
+      "narration": "",
+      "sfx": [],
+      "lettering_plan": "住持两层揭示拆成上下两个气泡置右上，洪信短句置左下，留出两人眼神和手势中轴。",
+      "art_notes": "不插入牧童身份闪回图；通过洪信表情和住持手势完成揭示，保留他随后容易被安慰的认知弱点。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "让‘试心’与‘天师’两次揭示连续落下",
+      "ink_plan": "脸部和住持手势用中细线，方丈背景减少线条，后山门用简洁透视线。",
+      "black_fill_plan": "廊后和衣褶用局部深墨，洪信错愕眼神与住持面部留亮。",
+      "tone_plan": "青灰道袍、灰褐布衣、赭木案与冷青室内反光，不使用神圣金光。",
+      "value_plan": "两张脸中亮、后山门亮、案下暗，手势位于中值。",
+      "effects_plan": "无特效，仅以对白气泡间距制造两次揭示的停顿。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P041",
+      "story_function": "false_relief_and_edict_handoff",
+      "source_excerpt": "真人道：『太尉且請放心。既然祖師法旨道是去了，比及太尉回京之日，這場醮事，祖師已都完了。』太尉見說，方纔放心。真人一面教安排筵宴，管待太尉，請將丹詔收藏於御書匣內，留在上清宮中，龍香就三清殿上燒了。",
+      "meaning_zh": "住持安慰天师已去东京，洪信终于放心；丹诏被收藏进上清宫御书匣，御香留在三清殿焚烧。",
+      "text_target": "住持：“天师既已去东京，太尉可放心。”",
+      "adaptation_note": "以丹诏入匣作为不可含混的连续性证据，同时让洪信因任务似已完成而迅速松弛；此后他不再随身携带丹诏。",
+      "source_segment_refs": [
+        "S072"
+      ],
+      "description": "三清殿供案前，住持在画右双手将黄罗丹诏平稳收入打开的御书匣，匣盖尚未合拢；洪信站在画左目送诏书离手，肩背明显松下，银炉与龙香被安置在供案另一侧持续燃烧。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_MOUNTAIN_PLAIN",
+          "expression_id": "EXPR_TERRIFIED",
+          "state_id": "STATE_MOUNTAIN_DIRTY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫三清殿",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "供案居中，洪信画左、住持画右；御书匣在案中央，银炉与燃香在案右后，三清殿主轴由画下通向供案。",
+      "lighting_anchor": "廊外右上冷日光与殿内暖香火共同照明，御书匣和丹诏处于清楚中亮区，香火不改变整体光位。",
+      "axis_eyeline": "洪信从画左看向案中丹诏入匣，住持从画右低看双手与匣内；二人不跨供案中轴。",
+      "gaze_target": "洪信盯着丹诏完全落入御书匣，住持注视自己双手托住的诏书边缘和匣内位置。",
+      "eyeline_direction": "洪信由左向中下，住持由右向中下。",
+      "character_integrity": "洪信脸型、布衣与泥尘延续，但黄罗诏包已从背上卸下并正作为丹诏入匣，双手放松且完整；住持高额、短须、高瘦体态与青灰道袍稳定，双手共同托诏不融合。银炉与龙香归属供案，不再画在洪信手中。",
+      "continuity_from": "P040",
+      "spatial_relationships": "丹诏位于住持双手与御书匣之间，洪信与道具已分离；银炉在供案另一侧，与御书匣保留清晰间距和不同用途。",
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "天师既已去东京，太尉可放心。",
+          "text_target": "天师既已去东京，太尉可放心。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "安抚、按礼收存"
+        }
+      ],
+      "narration": "丹诏留存上清宫，御香供于三清殿。",
+      "sfx": [
+        "嗒。"
+      ],
+      "lettering_plan": "对白置于画右上；短旁白置画左下空白；匣盖轻响贴近御书匣，不遮诏书入匣证据。",
+      "art_notes": "P041 必须清楚证明 PROP_IMPERIAL_EDICT 的 location 从洪信随身转为上清宫御书匣；之后所有伏魔殿格禁止再给洪信背诏包。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "用郑重入匣动作结束皇命道具的随身连续性",
+      "ink_plan": "双手、诏书边缘、匣口和炉提梁用精确中细线，殿内陈设减线。",
+      "black_fill_plan": "供案下与殿内后景用深墨，诏书、匣口、双手和香火保持清楚。",
+      "tone_plan": "黄罗低饱和暖黄、赭木匣、冷银炉、青灰道袍与暖灰香烟。",
+      "value_plan": "诏书与双手中亮、御书匣中值、案下暗、香火为小亮点。",
+      "effects_plan": "仅用细香烟和匣盖轻响，不加任务完成光效或神圣粒子。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_IMPERIAL_EDICT",
+        "PROP_SILVER_CENSER"
+      ]
+    },
+    {
+      "panel_id": "P042",
+      "story_function": "forbidden_hall_discovery",
+      "source_excerpt": "次日早膳以後，真人，道眾，並提點，執事人等，請太尉遊山。太尉大喜。許多人從跟隨著，步行出方丈，前面兩個道童引路。行至宮前宮後，看玩許多景致。諸宮看遍，行到右廊後一所去處。洪太尉看時，另外一所殿宇，一遭都是搗椒紅泥牆；正面兩扇朱紅隔子，門上使著肐膊大鎖鎖著，交叉上面貼著十數道封皮。",
+      "meaning_zh": "次日洪信恢复官装，由住持和道众陪同游览上清宫；走到右廊后，他发现一座红泥墙、朱门、巨锁和层叠封皮的独立殿宇。",
+      "text_target": "次日。",
+      "adaptation_note": "压缩诸殿游览，以闲适队伍转过右廊、突然看见封闭殿宇为单一发现动作；牌额和禁令细节留给下一格。",
+      "source_segment_refs": [
+        "S073"
+      ],
+      "description": "次日游宫队伍沿上清宫右廊向画右后行进，恢复绛褐官袍与深色幞头的洪信在画左前转过廊角，突然停步望见远处红泥围墙和紧闭朱门；住持在画右侧回身察觉他的视线，门上巨锁与交叉封皮已可辨但不抢先给特写。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "state_id": "STATE_FUMO_DEFIANT"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫右廊",
+      "scene_anchor_id": "LOC_SHANGQING_PALACE",
+      "spatial_layout": "继承上清宫主轴：洪信画左、住持画右，右廊向画右后延伸；独立红墙殿宇位于右廊后景，炼药炉和三清殿留在远左背景。",
+      "lighting_anchor": "次日庭院日光仍从画右上，朱门处于赭红檐影，廊下青冷反光延续；门内不泄露任何金光。",
+      "axis_eyeline": "洪信从画左看向画右后封闭殿宇，住持在画右回看洪信；不交换二人既定站位。",
+      "gaze_target": "洪信视线锁定画右后朱门中央的巨锁与交叉封皮，住持回看洪信骤然停住的脸和视线方向。",
+      "eyeline_direction": "洪信由左前看右后，住持由右中回看左前。",
+      "character_integrity": "洪信恢复绛褐低饱和圆领官袍、深色幞头、革带和黑靴，脸型、窄眼、眼距与发际线不变；P041 后不再背丹诏或手持银炉。住持高瘦背直、高额、短须与青灰道袍连续，二人双手双脚完整，道袍官袍不混形。",
+      "continuity_from": "P041",
+      "spatial_relationships": "洪信停在廊角画左前，住持在其右前半步回身，匿名道童和执事沿廊后退；红墙殿宇与队伍隔着一段庭院，未发生近距离触门。",
+      "dialogue": [],
+      "narration": "次日。",
+      "sfx": [],
+      "lettering_plan": "时序字幕置于画左上廊柱之间；朱门、巨锁和封皮区域保持无字，牌额文字留待后续专格嵌入。",
+      "art_notes": "本格 scene anchor 仍是 LOC_SHANGQING_PALACE，用右廊空间连续引出禁殿；PROP_IMPERIAL_EDICT 已留宫入匣，不得重新出现在洪信身上。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "把闲游步伐在禁门出现时突然刹住",
+      "ink_plan": "廊柱透视用稳定硬线，人物中线清楚，远处朱门与封条先以简化轮廓建立识别。",
+      "black_fill_plan": "廊下和门缝用深墨，封皮、锁轮廓与人物脸保持清楚；门内不得出现黑气。",
+      "tone_plan": "绛褐官袍、青灰道袍、赭红泥墙、暗朱门与低饱和庭院青绿。",
+      "value_plan": "庭院中亮、廊下中暗、朱门中暗、封皮中亮，洪信脸保持可读。",
+      "effects_plan": "无超自然特效，只以人物停步、衣摆惯性和廊线收束制造发现感。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_SHANGQING_PALACE",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_FUMO_SEALS"
+      ]
+    },
+    {
+      "panel_id": "P043",
+      "story_function": "forbidden_hall_reveal",
+      "source_excerpt": "S073：众人游至右廊后，见红泥墙、朱红门、巨锁与重重封皮，牌额书‘伏魔之殿’；住持说此处历代镇压魔王，誓不敢开。",
+      "meaning_zh": "闲适的游览在一座被历代禁令封死的小殿前突然停下，巨锁、封条和牌额同时明示危险。",
+      "text_target": "牌额：“伏魔之殿”\n洪信：“此殿是何去处？”\n住持：“前代天师镇压魔王之所。历代祖师均添一道封皮，誓不敢开。”",
+      "adaptation_note": "压缩其余殿宇游览，把视觉重心集中到伏魔殿的封闭结构与历代禁令；此格只揭示危险，不让魔物或黑气提前出现。",
+      "source_segment_refs": [
+        "S073"
+      ],
+      "description": "上清宫右廊尽头，一座红泥墙小殿被树影与檐影包围；朱红隔子门中缝是绿锈灌铸大锁，十数道封皮交叉并盖历代朱印，金字牌额‘伏魔之殿’置于门上。洪信在画左仰看牌额，住持在画右侧身指向锁与封条。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_COMPOSED",
+          "state_id": "STATE_COURT_ENVOY"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "上清宫右廊后的伏魔殿外",
+      "scene_anchor_id": "LOC_FUMO_HALL_EXTERIOR",
+      "spatial_layout": "继承 LOC_FUMO_HALL_EXTERIOR：红泥墙、朱门、牌额、巨锁与交叉封条居中；洪信在画左前景，住持在画右中景，道众只在右后景，不跨过门的中轴线。",
+      "lighting_anchor": "次日右上方柔日光照亮牌额与朱门上沿，檐下封条、锁体和人物侧脸处在冷赭半影；门缝只是无细节的黑，不发光。",
+      "axis_eyeline": "洪信画左先看画上中牌额，再转向画右住持；住持画右看洪信的手与门锁，两人不看镜头。",
+      "gaze_target": "洪信看门上‘伏魔之殿’牌额后看画右的住持；住持看洪信即将指向 PROP_FUMO_SEALS 的右手",
+      "eyeline_direction": "洪信画面右上后转右方；住持画面左下",
+      "character_integrity": "洪信继承长方圆脸、窄眼/正常眼距、微高发际线、深色幞头与绛褐官袍；住持继承高额、清瘦脸、稳定眼型、灰黑短须与青灰道袍。两人的手、脚、肢体和身体完整，住持指锁手指可读，幞头、短须、门锁与封条不穿插。",
+      "continuity_from": "P042",
+      "spatial_relationships": "洪信在画左前景、住持在画右中景，两人之间是门中轴与一个安全身位；住持右后道众只作小剪影，不遮两人面部、手势、锁或封条。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "此殿是何去处？",
+          "text_target": "此殿是何去处？",
+          "source_text": "此殿是甚麼去處？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "好奇"
+        },
+        {
+          "speaker": "住持",
+          "text": "前代天师镇压魔王之所。历代祖师均添一道封皮，誓不敢开。",
+          "text_target": "前代天师镇压魔王之所。历代祖师均添一道封皮，誓不敢开。",
+          "source_text": "此乃是前代老祖天師鎖鎮魔王之殿。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "庄重警示"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "沙……（树影与封皮轻动）"
+      ],
+      "lettering_plan": "牌额四字使用后期嵌字安全区，不由生图模型乱写；洪信短气泡置画左上，住持长气泡置画右上并分两段，不压牌额、锁和封条。",
+      "art_notes": "伏魔殿必须是上清宫右廊后的独立封闭小殿，不变成宏大魔殿、地宫门或明清宫门；封条层叠但不显示可读乱码。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "standard",
+      "gutter_intent": "闲游节奏在禁殿牌额前骤然停住",
+      "ink_plan": "建筑、锁体与封条用清晰硬线，人脸与手用稳定中线，墙面用干笔粗糙纹理。",
+      "black_fill_plan": "门缝与檐下使用深黑压住中心，牌额、封条、锁体和两人面部保留可读亮度。",
+      "tone_plan": "赭红墙、暗朱门、绿锈锁、退色黄纸封条和青灰道袍统一在低饱和矿物色基线中。",
+      "value_plan": "牌额和封条中亮，朱门与人物中值，门缝和檐影最暗，形成明确三值阅读。",
+      "effects_plan": "只允许树影和封皮的轻微风动，禁止魔气漏出、眼睛或鬼影预告。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_EXTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_FUMO_SEALS"
+      ]
+    },
+    {
+      "panel_id": "P044",
+      "story_function": "transgression_demand",
+      "source_excerpt": "S074：洪信要看魔王模样，命住持开门；住持再三说先祖严戒，此殿决不可开。",
+      "meaning_zh": "洪信把历代禁令视为对自己权力和知识的冒犯，首次明确命令打开殿门。",
+      "text_target": "洪信：“开门。本官倒要看看，魔王是什么模样！”\n住持：“太尉，此殿决不可开！”",
+      "adaptation_note": "将 S074 的第一轮冲突独立成格：洪信手指锁体下令，住持以身体挡在锁前；此格从 STATE_COURT_ENVOY 显式切入 STATE_FUMO_DEFIANT。",
+      "source_segment_refs": [
+        "S074"
+      ],
+      "description": "洪信从画左向门前迈出一步，右手食指直指门缝的大锁，下颌微抬。住持从画右横移半步到锁前，双手作止势，形成不曾接触但已对抗的两人身位。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "state_id": "STATE_FUMO_DEFIANT"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "伏魔殿朱门与封锁前",
+      "scene_anchor_id": "LOC_FUMO_HALL_EXTERIOR",
+      "spatial_layout": "朱门、牌额、锁与封条仍居中；洪信从画左前景逼近中心，住持画右中景横移到锁前，道众在右后景后退。",
+      "lighting_anchor": "延续右上柔日光；洪信指锁手和住持止势手同时被照亮，锁体与封条在檐下冷赭半影，不改光色。",
+      "axis_eyeline": "洪信画左直视画右的住持后瞥向中央锁体；住持画右看洪信指锁的手，两人不跨门中轴。",
+      "gaze_target": "洪信看挡在 PROP_FUMO_SEALS 前的住持；住持看洪信指向大锁的右手与即将逼近的脚步",
+      "eyeline_direction": "洪信画面右方；住持画面左下",
+      "character_integrity": "洪信继承长方圆脸、窄眼/眼距、微高发际线、幞头与 OUTFIT_COURT_ENVOY，EXPR_DEFIANT 只改眉眼和唇部紧张，不换脸。住持的高额、清瘦脸、眼型、短须与道袍不变。洪信指门的五指、另一手、双脚、身体，住持双手止势、双脚和身体均完整，手、锁、封条无穿模。",
+      "continuity_from": "P043",
+      "spatial_relationships": "洪信画左前景向右逼近，住持画右中景向左横移，两人手势之间留一掌空间；锁体在两人视线交点，道众在住持后方不遮手脚。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "开门。本官倒要看看，魔王是什么模样！",
+          "text_target": "开门。本官倒要看看，魔王是什么模样！",
+          "source_text": "你且開門來，我看魔王甚麼模樣。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "轻慢命令"
+        },
+        {
+          "speaker": "住持",
+          "text": "太尉，此殿决不可开！",
+          "text_target": "太尉，此殿决不可开！",
+          "source_text": "太尉，此殿決不敢開！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "急切警告"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "踏！"
+      ],
+      "lettering_plan": "洪信气泡置画左上、尾部指洪信；住持警告气泡置画右上且边框稍紧；脚步拟声置洪信前脚落点，不压锁体。",
+      "art_notes": "洪信的强势来自身位、指向和官袍轮廓，不添加武器、反派黑眼圈或奸臣尖脸；住持不突然变成怒目法师。",
+      "layout_weight": "medium",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "第一次明确命令后留出短暂对峙",
+      "ink_plan": "洪信指向手、住持止势手与人脸用清晰中线，锁体与封条用硬线，背景道众减线。",
+      "black_fill_plan": "门缝深黑位于两人之间，但不吞没手势和锁的轮廓；人脸保留中亮。",
+      "tone_plan": "洪信绛褐官袍、住持青灰道袍、暗朱门与退色黄封条维持低饱和。",
+      "value_plan": "手势和面部中亮，官袍与道袍中值，门缝最暗，锁体有一条可读边光。",
+      "effects_plan": "只用洪信前踏的小尘点与指向动势，不使用威压光环或超自然集中线。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_EXTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_FUMO_SEALS"
+      ]
+    },
+    {
+      "panel_id": "P045",
+      "story_function": "institutional_coercion",
+      "source_excerpt": "S074：洪信斥鬼神锁魔为煽惑良民，并威胁回朝告发道众违诏，追度牒、刺配远州；住持再三劝阻。",
+      "meaning_zh": "说服无效后，洪信用朝廷处罚威胁道众，将自己的好奇心包装成辨伪和执行圣旨。",
+      "text_target": "洪信：“胡说！你们不过借鬼神煽惑百姓。若再阻拦，本官回朝便追了你们的度牒，刺配远州！”\n住持：“太尉……恐有大害。”",
+      "adaptation_note": "把 S074 的三回五次劝阻压成身位递退与一句最重处罚威胁；此格必须说清住持屈服于现实权力，不是认为开门合理。",
+      "source_segment_refs": [
+        "S074"
+      ],
+      "description": "洪信在画左上前倾，官袍袖口将他的身形扩成一个向右的压迫三角，右手收回指向自己腰间官印。住持在画右后退半步，手仍挡在锁前但指尖已松；后方道众低头对视，一名火工道人远处接到召唤。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "state_id": "STATE_FUMO_DEFIANT"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "伏魔殿朱门与封锁前",
+      "scene_anchor_id": "LOC_FUMO_HALL_EXTERIOR",
+      "spatial_layout": "门中轴不动；洪信画左前景向右扩张，住持画右中景后退半步，道众画右后景保持两层队列，火工道人从画右远处进入。",
+      "lighting_anchor": "右上日光延续；洪信侧脸、腰间官印与住持退开的手被照亮，朱门檐下冷赭半影不变。",
+      "axis_eyeline": "洪信画左看画右住持的眼睛；住持画右看洪信腰间官印后又看锁体，用视线显示被迫与仍然担忧。",
+      "gaze_target": "洪信看画右的住持是否服从；住持先看洪信腰间代表朝廷权力的官印，再看中央 PROP_FUMO_SEALS",
+      "eyeline_direction": "洪信画面右方；住持画面左下后转左上",
+      "character_integrity": "洪信保持长方圆脸、窄眼/眼距、微高发际线、幞头、绛褐官袍与革带，恼怒表演不把脸拉成尖长反派脸。住持保持高额、清瘦脸、稳定眼型、短须和高瘦身形。洪信指官印的手、另一手、双脚与身体，住持挡锁手、另一手、双脚与身体都完整，不与锁、封条或官印穿模。",
+      "continuity_from": "P044",
+      "spatial_relationships": "洪信画左前景占更大面积，住持画右中景后退，两人之间的空间从一掌拉大到半身；道众只在住持肩后露脸或轮廓，不穿插主人物肢体。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "胡说！你们不过借鬼神煽惑百姓。若再阻拦，本官回朝便追了你们的度牒，刺配远州！",
+          "text_target": "胡说！你们不过借鬼神煽惑百姓。若再阻拦，本官回朝便追了你们的度牒，刺配远州！",
+          "source_text": "把你都追了度牒，刺配遠惡軍州受苦。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "权力威胁"
+        },
+        {
+          "speaker": "住持",
+          "text": "太尉……恐有大害。",
+          "text_target": "太尉……恐有大害。",
+          "source_text": "此殿開不得，恐惹利害，有傷於人。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "受迫中的最后劝阻"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嗡……（道众低声骚动）"
+      ],
+      "lettering_plan": "洪信长气泡从画左上压向中部，以‘追度牒’与‘刺配’换行强调；住持小气泡置画右下，不遮手势和锁体。",
+      "art_notes": "官印只作权力象征的腰间道具，不突然放大或发光；住持的屈服是被威胁，不是偷笑、黑化或暗示故意放魔。",
+      "layout_weight": "heavy",
+      "panel_shape": "wide",
+      "border_style": "standard",
+      "gutter_intent": "威胁落地后留一道压抑沟缝，下格才真正破锁",
+      "ink_plan": "洪信官袍外轮廓用较粗线，住持面部与松开的手指用细清线，道众背景减线。",
+      "black_fill_plan": "洪信官袍画左下形成大中黑块，住持脸和手在画右保留亮度，门缝继续为最暗。",
+      "tone_plan": "绛褐官袍稍深、青灰道袍降饱和、暗朱门和退色黄封条不改。",
+      "value_plan": "洪信脸与官印中亮，住持脸手次亮，官袍中暗，门缝最暗。",
+      "effects_plan": "只使用道众轻微骚动的短动势与住持后退的小尘点，禁止权力光环或黑气。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_EXTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_FUMO_SEALS"
+      ]
+    },
+    {
+      "panel_id": "P046",
+      "story_function": "false_authorization_reveal",
+      "source_excerpt": "S075-S083：道众受迫揭封、砸锁、推门；殿内昏黑阴冷，火把照出中央石碑龟趺，碑前符篆无人能识，碑后却书‘遇洪而开’；洪信将其误读为对自己的命定授权。",
+      "meaning_zh": "封闭百年的禁殿被现实权力破开；洪信面对无法理解的符篆，只抓住一句与自己姓氏相合的碑文，将警告选择性误读为授权。",
+      "text_target": "嗤啦……\n锵！锵！\n砰——！\n洪信：“点火！”\n碑文：“遇洪而开”\n洪信：“看见么？数百年前便注定我姓洪！魔王定在碑下。挖！”",
+      "adaptation_note": "用一个长竖卷面完成唯一主功能‘误读授权’：上段揭封破锁，中段以全黑与火把分层建立阴冷殿内，下段火光揭碑并以‘遇洪而开’四字完成人物误判。所有次级动作都服务于该主功能。",
+      "source_segment_refs": [
+        "S075",
+        "S076",
+        "S077",
+        "S078",
+        "S079",
+        "S080",
+        "S081",
+        "S082",
+        "S083"
+      ],
+      "description": "长竖格从上向下阅读：最上段，火工道人逐层揭下封皮、铁锤砸开灌铸大锁，朱门向两侧推开，门内只有冷黑。中段，众人进入后轮廓被黑暗吞没，洪信伸手也看不见手掌，口中命‘点火’；十数支火把由门口到殿内依次亮起，摇动暖光照出中央五六尺石碑、半陷泥中的龟趺和厚灰。最下段，碑前龙章凤篆保留无字符号安全区，碑身被转向后，背面四字安全区中后期嵌入‘遇洪而开’；洪信在画左指碑大喜，住持画右向前半步想要阻止。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "state_id": "STATE_FUMO_DEFIANT"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "伏魔殿门内至中央石碑",
+      "scene_anchor_id": "LOC_FUMO_HALL_INTERIOR",
+      "spatial_layout": "继承 LOC_FUMO_HALL_INTERIOR：朱门位于长卷上段与殿内画下方的唯一出口，中央石碑与龟趺始终在场景中轴；洪信进入后固定画左，住持固定画右，火工道人环绕石碑但不遮龟趺。",
+      "lighting_anchor": "开门初始仅有画下门口冷日光，人物进入后轮廓近黑；火把从画下与画左依次增加摇动暖光，石碑与人脸被同一组火把照亮，墙体和灰尘保持冷灰；本格绝不出现星光。",
+      "axis_eyeline": "洪信在画左从门口、火把、碑前符篆顺次看到碑后四字，最终视线锁定‘遇洪而开’安全区；住持在画右从碑文看向洪信的指碑手，不跨石碑中轴。",
+      "gaze_target": "洪信看 PROP_STONE_STELE 背面‘遇洪而开’四字的后期嵌字安全区；住持看洪信指着碑文并即将下令挖掘的右手",
+      "eyeline_direction": "洪信画面右上方；住持画面左下",
+      "character_integrity": "洪信继承长方圆脸、窄眼/眼距、微高发际线、幞头、绛褐官袍与 STATE_FUMO_DEFIANT，火光只改明暗不换脸。住持的高额、清瘦脸、稳定眼型、灰黑短须、道袍和高瘦身形不变。洪信伸手探黑、指碑的手指、另一手、双脚和身体，住持阻止手势、双脚和身体均完整；手、火把、石碑、龟趺与工具不穿模，火把不多生于手。",
+      "continuity_from": "P045",
+      "spatial_relationships": "洪信在画左前景、住持在画右中景，石碑与龟趺在两人之间的中心；火工道人只在石碑后方和两侧环形排列，每支火把对应一只手，不遮洪信与住持面部或碑文。",
+      "dialogue": [
+        {
+          "speaker": "洪信",
+          "text": "点火！",
+          "text_target": "点火！",
+          "source_text": "太尉教從人取十數個火把點著。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "命令"
+        },
+        {
+          "speaker": "洪信",
+          "text": "看见么？数百年前便注定我姓洪！魔王定在碑下。挖！",
+          "text_target": "看见么？数百年前便注定我姓洪！魔王定在碑下。挖！",
+          "source_text": "遇洪而開，分明是教我開看。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "狂喜自证"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "嗤啦……",
+        "锵！锵！",
+        "砰——！",
+        "呼——（阴冷气流）",
+        "蓬！蓬！（火把依次点燃）"
+      ],
+      "lettering_plan": "长竖卷面分三个安全文字区：上段拟声沿封条—锁—门顺序下行；中段‘点火’短气泡位于洪信头侧；下段碑后四字必须后期嵌入 PROP_STONE_STELE 预留面，洪信长气泡位于画左外缘，不压人脸、火把、碑或龟趺。",
+      "art_notes": "P046 只有一个主动作/功能：洪信看到碑文后将警告误读为授权。揭封、砸锁、进黑殿和点火均是该揭示的顺序前置，不额外设第二戏剧高潮。碑前符篆与碑后四字都使用后期嵌字/符号安全区，不让生图模型乱写。",
+      "layout_weight": "heavy",
+      "panel_shape": "long_scroll",
+      "border_style": "borderless",
+      "gutter_intent": "封条、黑暗、火把与碑文之间用竖向长距离与内部暗沟缝累积不可回头的误判",
+      "ink_plan": "封条、锁、门、石碑和龟趺用粗细分明的硬线；人脸、手指与火把握持点用清晰中线；黑暗中人物轮廓逐步减线，点火后恢复可读线。",
+      "black_fill_plan": "中段黑殿使用大面积墨黑，但门口冷光、火把光圈、人脸、手、石碑轮廓和龟趺边缘必须保留；碑文安全区不被黑块吞没。",
+      "tone_plan": "殿内以冷墨灰、土褐灰尘和火把暖赭三色组成，洪信官袍保持低饱和绛褐，住持道袍保持青灰，本格不使用星光金。",
+      "value_plan": "长卷从上段门外中亮跌入中段近黑，再由火把局部亮点揭出下段石碑中值；碑文、洪信脸和指向手是最终三个可读焦点。",
+      "effects_plan": "揭封用纸纤维与小尘、砸锁用短冲击线、开门用细冷气、点火用局部暖光与尘粒；禁止魔脸、黑气主体、星光或自发光碑文在本格提前出现。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_INTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_FUMO_SEALS",
+        "PROP_STONE_STELE"
+      ]
+    },
+    {
+      "panel_id": "P047",
+      "story_function": "action_peak",
+      "source_excerpt": "S084-S087,S090-S091：洪信不听住持反复劝阻，命人放倒石碑、挖出龟趺、抬起青石板；地穴巨响如天崩、潮涌、峰裂、竹折与军中惊雷，黑气滚出、掀塌半个殿角，于高空散作一百零八道金光奔向四面八方。",
+      "meaning_zh": "洪信借误读的碑文压过最后劝阻，一步步人为拆除石碑、龟趺与青石板三重封禁，使原本封闭在伏魔殿的一百零八星散入人间；这一格同时完成本话故事、洪信责任、世界秩序与星光封印四项不可逆变化。",
+      "text_target": "住持：“太尉，不可挖动！”\n洪信：“碑上分明叫我开，你懂什么！”\n洪信：“抬起青石板！”\n刮喇喇——\n轰隆隆——！\n众人：“快跑！”",
+      "adaptation_note": "用一个长竖灾变卷面完成唯一主功能‘不可逆释放’：上段按顺序拆除石碑、龟趺、青石板，中段黑气上冲与殿角塌落，下段/高空将黑气分解为可追踪的 108 道暖金星光向八向散开。巨响诗赞全部转为当场声画，不插入钱塘江、华山或军队实景。",
+      "source_segment_refs": [
+        "S084",
+        "S085",
+        "S086",
+        "S087",
+        "S090",
+        "S091"
+      ],
+      "description": "长竖格自上而下/由封禁深处向高空读取：上段中心，石碑已被绳索与人力向画左放倒，龟趺被从泥中挖出，多名火工道人分立青石板四周同时发力；洪信在画左指挥，住持在画右向青板伸手作最后阻止。青石板离地的接触点露出深不见底的地穴，巨响从中心震开火把、尘土与工具。中段，稠密黑气从地穴垂直滚起，顶开屋顶并掀塌画右上的半个殿角，众人沿中轴向画下门口奔逃，洪信与住持被气流压在左右两侧，未给近景表情。下段/高空，黑气到达殿顶缺口上方后由中心点分解，清晰显示 108 条互不融合的暖金光迹向东西南北与斜向八方奔散，不显示人形、星座 UI 或数字。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_DEFIANT",
+          "state_id": "STATE_FUMO_DEFIANT"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "伏魔殿中央地穴至被掀开的殿顶高空",
+      "scene_anchor_id": "LOC_FUMO_HALL_INTERIOR",
+      "spatial_layout": "地穴、青石板、龟趺与放倒的石碑始终在中轴周围保持可追踪位置；洪信画左、住持画右，火工道人环绕青板发力后向画下门口奔逃；黑气从中轴垂直上冲，殿角只在画右上塌落，108 道星光从同一中心向八向散出。",
+      "lighting_anchor": "前段仍由画下与画左火把暖光照明青板与人物；黑气冲出后火把光被遮压但不改方向；仅在黑气到达高空并分解后，VFX_108_STARLIGHTS 才作为暖金内发光，从中心照亮屋顶缺口、尘土边缘和人物剪影。",
+      "axis_eyeline": "抬板前，洪信画左看中央青石板边缘，住持画右看洪信与抬板者；释放后两人视线都转向中央地穴上冲黑气与高空星光，左右站位不交换。",
+      "gaze_target": "洪信看青石板刚离地时暴露的地穴中心；住持看地穴内第一股黑气的冲出点，随后两人都追向殿顶缺口上方正在分解的 VFX_108_STARLIGHTS",
+      "eyeline_direction": "洪信画面右下后急转右上；住持画面左下后急转左上",
+      "character_integrity": "洪信在本格近景反应前仍绑定 STATE_FUMO_DEFIANT，保持长方圆脸、窄眼/眼距、微高发际线、幞头、绛褐官袍与体态，不在长卷远景中换人。住持继承高额、清瘦脸、眼型、短须、道袍与高瘦体态。洪信指挥手、遮护手、双脚与身体，住持阻止手、另一手、双脚与身体均完整；所有抬板者的手、脚、身体与青板受力接触点可读，工具、石板、黑气与人体不穿模。",
+      "continuity_from": "P046",
+      "spatial_relationships": "洪信保持画左、住持保持画右，抬板者在中心四周低位发力；青板离地时所有手都接触板边、所有脚都踩实地面。黑气冲出后，逃散人群向画下门口分流，不从洪信或住持身上穿过；两人只在左右边缘保留可追踪剪影。",
+      "continuity_evidence": [
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "evidence": "画右上半个殿角被黑气掀塌，108 道星光穿过屋顶缺口已向宫观外散去，封闭序章结束。"
+        },
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "story_state",
+          "evidence": "洪信亲自指挥放碑、挖龟趺与抬青板，并站在已开地穴画左亲眼见证灾变，其当事人责任无法切断。"
+        },
+        {
+          "entity_id": "WORLD_108_STARS",
+          "field": "seal_state",
+          "evidence": "石碑、龟趺与青石板三重封禁均已移除，黑气明确分解为 108 道互不融合的暖金光迹并离开殿宇。"
+        },
+        {
+          "entity_id": "WORLD_ORDER",
+          "field": "state",
+          "evidence": "108 道光迹从龙虎山上空的同一中心向东西南北与斜向八方奔散，视觉上将叙事从局部宫观切向全国群像时空。"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "太尉，不可挖动！",
+          "text_target": "太尉，不可挖动！",
+          "source_text": "太尉不可掘動，恐有利害！",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "最后急谏"
+        },
+        {
+          "speaker": "洪信",
+          "text": "碑上分明叫我开，你懂什么！",
+          "text_target": "碑上分明叫我开，你懂什么！",
+          "source_text": "碑上分明鑿著遇我教開，你如何阻當？",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "恼怒强辩"
+        },
+        {
+          "speaker": "洪信",
+          "text": "抬起青石板！",
+          "text_target": "抬起青石板！",
+          "source_text": "洪太尉叫再掘起來。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "断然命令"
+        },
+        {
+          "speaker": "众人",
+          "text": "快跑！",
+          "text_target": "快跑！",
+          "source_text": "眾人吃了一驚，發聲喊，都走了。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "惊恐失序"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "咚——（石碑放倒）",
+        "嘎啦……（龟趺离泥）",
+        "刮喇喇——",
+        "轰隆隆——！",
+        "哗—轰——！",
+        "喀啦啦！",
+        "哗喇喇喇——轰！"
+      ],
+      "lettering_plan": "长卷上段的劝阻与命令气泡分居画右、画左，不压青板受力点；中段巨响拟声由地穴中心沿黑气向上递进，不重复堆在人脸上；‘快跑’气泡沿画下门口逃散动线放置；108 道光迹所在高空完全不放文字，保留计数与追踪空间。",
+      "art_notes": "P047 仅有一个主功能：人为开封导致一百零八星不可逆释放。放碑、挖龟趺、抬青板、黑气上冲、殿角塌落与星光散去必须是同一因果链，不分成互不相干的奇观。VFX_108_STARLIGHTS 要可以分组计数复核为 108，但画面不出现‘108’数字、星座 UI、人形灵魂或西式鬼火。",
+      "layout_weight": "heavy",
+      "panel_shape": "long_scroll",
+      "border_style": "borderless",
+      "gutter_intent": "三重人工拆封之间用紧凑短间距，青板离地后骤然拉开黑气上冲的长距离，最后在 108 星光散往高空时留出最大视觉呼吸",
+      "ink_plan": "上段工具、手、青板、龟趺与石碑用硬朗粗细线强调受力关系；中段黑气用大形轮廓与滚卷内纹，人物和逃散手脚保持清线；星光用 108 条独立、不合并的细亮轨迹。",
+      "black_fill_plan": "地穴与黑气构成从中轴上冲的最大深黑形，但青板边缘、人手脚、洪信和住持剪影、殿顶塌落边缘必须可读；星光分解处以黑为底但每条光迹不相互吞并。",
+      "tone_plan": "封印拆除段延续火把暖赭与冷墨灰；黑气使用近黑蓝灰；只在分解后的 108 道光迹使用温暖矿物金，不把整个天空染黄。",
+      "value_plan": "上段青板与人手中亮、地穴最暗；中段黑气最暗、塌落尘边中亮；高空段星光最亮、黑气次暗、殿宇和人物剪影中暗，三值层级不混。",
+      "effects_plan": "按因果顺序使用石土飞尘、器物震动、黑气滚卷、殿角断裂、屋瓦与木屑、风压、内发金光轨迹；潮水、华山、竹林与军中惊雷只通过拟声节奏和黑气动势转译，不插入具体实景蒙太奇。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_INTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_STONE_STELE",
+        "VFX_108_STARLIGHTS"
+      ]
+    },
+    {
+      "panel_id": "P048",
+      "story_function": "cliffhanger",
+      "source_excerpt": "S091：黑气掀塌殿角并散作百十道金光，众人奔逃；洪信目瞪口呆、面色如土，住持赶到廊下叫苦不迭。",
+      "meaning_zh": "灾变已无法追回：一百零八星向人间散去，洪信尚未承认责任但身体和表情已完全失态，住持亲眼见证历代禁令失守并掌握下话真相。",
+      "text_target": "住持：“苦也——！”",
+      "adaptation_note": "不消费 S092 的下回解释；以宏观星光与两个反应证据收尾：洪信完成 STATE_FUMO_STUNNED 外观切换，住持以震惊痛惜和‘苦也’完成禁令失守的知识/故事状态证据。",
+      "source_segment_refs": [
+        "S091"
+      ],
+      "description": "远景中，伏魔殿右上半角已塌，屋顶缺口上方的 108 道暖金光迹还在向八方奔离，最远一组已越过山脊；殿内和廊下的人群已退成凌乱小影。前景画左，洪信站在廊柱旁，幞头尚在，绛褐官袍肩、袖和下摆沾满灰尘，脸色失血如土，双手停在不知如何放置的半抬位置，嘴微张却无话。前景画右，住持从殿内奔到廊下，身体仍高瘦却第一次微微佝下，右手抓住廊柱、左手向塌殿和星光伸出，眼神震惊又痛惜，口中只有‘苦也’。丹诏不在洪信身上，已按 P041 证据留在上清宫御书匣。",
+      "characters": [
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING"
+      ],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_HONG_XIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_COURT_ENVOY",
+          "expression_id": "EXPR_STUNNED",
+          "state_id": "STATE_FUMO_STUNNED"
+        },
+        {
+          "character_id": "CHAR_ABBOT_SHANGQING",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "state_id": "STATE_BASE"
+        }
+      ],
+      "location": "伏魔殿内与廊下，背景通向山脊高空",
+      "scene_anchor_id": "LOC_FUMO_HALL_INTERIOR",
+      "spatial_layout": "伏魔殿右上角塌落方位延续 P047，屋顶缺口与地穴仍在场景中轴；洪信固定画左前景廊柱旁，住持固定画右前景从殿内奔出，逃散人群在中后景；108 道星光从屋顶缺口上方中心继续向八方拉开，不重置起点。",
+      "lighting_anchor": "殿内火把暖光仍从画下与画左方向照出灰尘；VFX_108_STARLIGHTS 的暖金内发光从画上中央向外扩散，只在洪信幞头、面侧、官袍灰尘与住持短须、伸手上留边光；人物脸部主明暗仍服从现场火把与廊外天光，不被金光洗成白脸。",
+      "axis_eyeline": "洪信画左仰看画上中央最后一组星光，住持画右的视线从塌落殿角滑到洪信脸上，再回到远去星光；两人左右站位不交换，不看镜头。",
+      "gaze_target": "洪信看屋顶缺口上方正越过山脊的最后一组 VFX_108_STARLIGHTS；住持先看画右上塌落的殿角，再看画左面色如土的洪信",
+      "eyeline_direction": "洪信画面右上；住持画面右上后转左方",
+      "character_integrity": "洪信必须精确继承长方圆脸、窄眼/正常眼距、微高发际线、右眉尾轻压、直厚鼻梁、幞头与中高略厚体态；STATE_FUMO_STUNNED 只增加面色如土、眼睛失焦、唇部微张和官袍肩/袖/下摆灰尘，幞头尚在，不丢冠、不换脸、不把灰尘固化成服装纹样。住持继承高额、清瘦颊、稳定眼型、灰黑短须、高瘦背直体态与青灰道袍；震惊痛惜只通过上眼皮张开、眉心下压、身体微佝和手势表现，不变成狂怒或阴险脸。洪信半抬双手、双脚、身体和官袍，住持抓柱右手、伸出左手、双脚、身体与道袍均完整；手、廊柱、灰尘、人群与星光无穿模。",
+      "continuity_from": "P047",
+      "spatial_relationships": "洪信在画左前景廊柱左侧，住持在画右前景廊柱右侧，两人之间留出中轴视线通道通往塌殿与星光；住持抓柱的手与柱接触，伸出手不穿过洪信或逃散人群。中后景逃散人群从两人之间更远处向画下分流，不遮两人身体、表情和星光起点。",
+      "continuity_evidence": [
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "visual_state",
+          "evidence": "近景明确显示洪信面色如土、官袍肩/袖/下摆沾尘但幞头尚在；身上没有丹诏与御香，与 P041 丹诏入御书匣的位置变化一致。"
+        },
+        {
+          "entity_id": "CHAR_ABBOT_SHANGQING",
+          "field": "story_state",
+          "evidence": "住持亲眼看见塌殿与星光散去，抓柱、伸手、微佝且叫‘苦也’，表明历代禁令已失守；他的视线在塌殿、洪信与星光之间往返，显示其掌握下话将说出的真相。"
+        }
+      ],
+      "dialogue": [
+        {
+          "speaker": "住持",
+          "text": "苦也——！",
+          "text_target": "苦也——！",
+          "source_text": "只見真人向前叫苦不迭。",
+          "lang": "zh-Hans",
+          "dir": "ltr",
+          "tone": "震惊痛惜"
+        }
+      ],
+      "narration": "",
+      "sfx": [
+        "簌簌……（木屑与灰尘落下）",
+        "嗡——（远去星光余鸣）"
+      ],
+      "lettering_plan": "整格只保留住持一个气泡，置画右中上、尾部指向住持，边框轻微震颤；洪信无气泡，以沉默保留尚未承责的状态。木屑拟声置塌殿下方，星光余鸣置远处山脊；星光轨迹本身不放文字。",
+      "art_notes": "本格是外观/故事状态交付证据，不再增加洪信追问或住持解释，S092 留待下话。洪信要面色如土但不死人化，住持要震惊痛惜但不突然换成哭嚎、怒吼或反派脸。丹诏绝不在洪信身上重现。",
+      "layout_weight": "heavy",
+      "panel_shape": "tall",
+      "border_style": "borderless",
+      "gutter_intent": "在住持‘苦也’与远去星光之间留出足够长的结尾呼吸，让读者先看清人物责任证据，再追随星光离开",
+      "ink_plan": "洪信和住持近景的脸、眼、发/须、手、脚和服装用最清晰的中细线；沾尘用不规则干笔点片，不改服装结构；背景逃散人群减线，星光保持 108 条独立细轨。",
+      "black_fill_plan": "塌殿内部与廊柱使用中黑/深黑框住两人，但洪信面部、幞头轮廓、官袍灰尘，住持眼睛、短须、抓柱手和伸出手均保留亮度；星光背后天空维持深青灰，使轨迹可分辨。",
+      "tone_plan": "人物和殿宇以低饱和绛褐、青灰、土褐与墨灰收束；灰尘使官袍局部降亮但不改主色；远去的 108 星光是唯一暖金高亮，越远越细但不少数。",
+      "value_plan": "星光轨迹最亮，洪信和住持面手中亮，官袍/道袍中值，塌殿、廊柱与黑气余痕最暗；两人脸部的明度差要足以读出惊骇与痛惜。",
+      "effects_plan": "使用屋瓦、木屑和灰尘的衰减落势，不再增加新爆炸；108 星光继承 P047 同一起点、八向扩散和暖金内发光，远处越过山脊，不变人形、鬼火或星座 UI；人物近景不加漫画冷汗图标。",
+      "references": [
+        "STYLE_SHUIHU_SONG_CINEMATIC",
+        "LOC_FUMO_HALL_INTERIOR",
+        "CHAR_HONG_XIN",
+        "CHAR_ABBOT_SHANGQING",
+        "PROP_STONE_STELE",
+        "VFX_108_STARLIGHTS"
+      ]
+    }
+  ]
+}

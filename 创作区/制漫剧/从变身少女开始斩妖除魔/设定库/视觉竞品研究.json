@@ -1,0 +1,199 @@
+{
+  "kind": "n2d_visual_research",
+  "version": 1,
+  "status": "confirmed_for_development",
+  "researched_at": "2026-07-14",
+  "research_scope": "从原著题材、用户参考和相关影视/动画官方页面中提取可转译的视觉变量；不复制人物、演员脸、海报版式或品牌识别。",
+  "bindings": {
+    "source_text": "小说/从变身少女开始斩妖除魔.txt",
+    "source_text_sha256": "4b7e02353bd41d79e5f1a7c08cce88d2f54fbf9ec8f75259147b9e0eb9fe4ee1",
+    "user_reference_manifest": "设定库/参考资料/视觉参考/reference_manifest.json",
+    "user_reference_manifest_sha256": "1f6375230a1c29a52041779c97ad1628ce266645e1680a32d5afd0db30e6798c",
+    "style_contract": "设定库/global_style.md",
+    "style_contract_sha256": "e02dba43989a88b4312b4bef86fc80c0294ce918ec66516d4cfc92221f2e8a0c"
+  },
+  "samples": [
+    {
+      "id": "VR_01",
+      "title": "凡人修仙传",
+      "source_url": "https://www.bilibili.com/bangumi/play/ss28747?from_spmid=666.16.0.0",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Bilibili 官方番剧页面可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可参考国漫写实人物的皮肤、毛发、布料与电影化机位，作为人物材质基线。"
+      ],
+      "transfer": [
+        "可信东方骨相",
+        "材质层次",
+        "远中近景叙事节奏"
+      ],
+      "do_not_copy": [
+        "具体角色脸、服装、场景设计和镜头调度"
+      ]
+    },
+    {
+      "id": "VR_02",
+      "title": "沧元图",
+      "source_url": "https://www.youku.tv/v/v_show/id_XNjQ3MTcwODUwMA%3D%3D.html?s=dcbce16ce43a439586dd",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Youku 官方播放页可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可参考三维国漫中水墨笔触与角色实体材质并存的战斗可读性。"
+      ],
+      "transfer": [
+        "黑墨/朱砂/金光分层",
+        "妖战尺度",
+        "动作前后状态清楚"
+      ],
+      "do_not_copy": [
+        "世界设定、人物造型、特效形状和成片镜头"
+      ]
+    },
+    {
+      "id": "VR_03",
+      "title": "雾山五行",
+      "source_url": "https://www.bilibili.com/bangumi/play/ep768065",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Bilibili 官方番剧页面可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可用于百妖谱神通爆发时的笔触能量、剪影优先和冲击帧可读性参考，不定义全剧基础画风。"
+      ],
+      "transfer": [
+        "动作剪影",
+        "水墨冲击帧",
+        "笔触运动方向"
+      ],
+      "do_not_copy": [
+        "绘制风格外观、角色设计、分镜和特效具体造型"
+      ]
+    },
+    {
+      "id": "VR_04",
+      "title": "唐朝诡事录",
+      "source_url": "https://www.iqiyi.com/a_m3xqg6ukf1.html",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "iQIYI 官方专辑页可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可参考唐代诡谲室内、官署层级、实景材质和冷暖有源光，服务镇魔司与边城剧情。"
+      ],
+      "transfer": [
+        "官署空间层级",
+        "有源光",
+        "诡谲但可信的环境"
+      ],
+      "do_not_copy": [
+        "演员脸、造型、布景、道具与镜头构图"
+      ]
+    },
+    {
+      "id": "VR_05",
+      "title": "大理寺日志",
+      "source_url": "https://www.bilibili.com/bangumi/play/ss32321",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Bilibili 官方番剧页面可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可参考唐代机构识别、官署动线、标识系统及人妖共存世界的信息层级。"
+      ],
+      "transfer": [
+        "机构空间语法",
+        "职级可视化",
+        "竖屏小景别信息简化"
+      ],
+      "do_not_copy": [
+        "动画角色形状、美术线条、机构名称和构图"
+      ]
+    },
+    {
+      "id": "VR_06",
+      "title": "百妖谱",
+      "source_url": "https://www.bilibili.com/bangumi/play/ss26193",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Bilibili 官方番剧页面可核验该作品与公开视觉物料。",
+        "该名称与本书内道具“百妖谱”存在名称相撞风险。"
+      ],
+      "visual_inferences": [
+        "可参考志怪单元的妖物分类感和人妖情感尺度，但必须对标题、Logo、人设和妖物形象做强去重。"
+      ],
+      "transfer": [
+        "志怪单元节奏",
+        "妖物分类层级",
+        "人妖道德结果"
+      ],
+      "do_not_copy": [
+        "名称视觉、Logo、角色、具体妖物设计和故事结构"
+      ]
+    },
+    {
+      "id": "VR_07",
+      "title": "剑来",
+      "source_url": "https://m.v.qq.com/x/m/play?cid=mzc0020072zgk61&vid=t4100wuibew",
+      "source_kind": "official_streaming_page",
+      "facts": [
+        "Tencent Video 官方播放页可核验该作品与公开视觉物料。"
+      ],
+      "visual_inferences": [
+        "可作东方玄幻空气透视、山水尺度和电影化构图的次级参考。"
+      ],
+      "transfer": [
+        "山水尺度",
+        "空气透视",
+        "前中后景层次"
+      ],
+      "do_not_copy": [
+        "角色、服装、场景、法术特效和成片构图"
+      ]
+    },
+    {
+      "id": "VR_08",
+      "title": "万妖图录传/那妖魔是姜大人",
+      "source_url": "https://www.youtube.com/playlist?list=PLRLQiks6aRn14CLhu-3jFmJ24M1qsBQZ4",
+      "secondary_source_url": "https://wangwendashuju.com/anime/detail?media=hongguo&seriesId=7640559999361485848",
+      "source_kind": "same_ip_public_market_sample_rights_unverified",
+      "facts": [
+        "公开网络上存在以该名称传播的漫剧样本与榜单数据页；当前未验证上传者与本项目的权利关系。"
+      ],
+      "visual_inferences": [
+        "仅用于理解同 IP 市场观众已见过的黑赤金、兽谱卷轴和女主宣发方向，从而主动做高去重。"
+      ],
+      "transfer": [
+        "市场预期基线",
+        "需要主动区分的颜色和识别元素"
+      ],
+      "do_not_copy": [
+        "任何精确面孔、造型、剧情镜头、海报、卷轴布局、标题字、Logo、水印和音频"
+      ]
+    }
+  ],
+  "novel_specific_queries": [
+    "唐代 陇右 凉州 边塞 黄沙 土堡 村落",
+    "唐代 横刀 女刀客 高马尾",
+    "镇魔司 黑衣 赤纹 官署 风铃",
+    "百妖谱 古卷 妖血为墨 摹影 染朱 点睛",
+    "吊睛白额虎妖 青面狼妖 朱厌 猪首人身 血雾",
+    "ink wash bestiary cinnabar gold female saber warrior"
+  ],
+  "contract_summary": {
+    "style_name": "黑赤镇魔·水墨妖谱",
+    "visual_base": "国漫写实角色 + 粗粝唐代边塞材质",
+    "camera": "竖屏电影化叙事，近景情绪/中景行动/远景尺度交替",
+    "light_color": "冷灰土褐墨黑为常态，朱砂表状态，金只表点睛/竖瞳/封面",
+    "motion": "横刀短促爆发；百妖谱按妖血为墨→染朱→点睛固定语法",
+    "forbidden": "同 IP 脸/造型/海报/品牌复制，白衣巨毫常态化，金甲页游化，水印和平台 UI"
+  },
+  "approval": {
+    "content_complete": true,
+    "human_signoff_required_before_generation": true,
+    "rights_confirmation_required_before_generation": true
+  }
+}

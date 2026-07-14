@@ -1,0 +1,1122 @@
+{
+  "batch_queue_command": "python3 skills/n2d-batch/scripts/queue.py plan 创作区/制漫剧/从变身少女开始斩妖除魔 --from-shooting-schedule 生产数据/ai_shooting_schedule_batch_seed_第1集.json",
+  "batch_tasks": [
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP01"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "at_sec": 2.7,
+            "reason": "手部ECU切主角CU，锁刀口与虎妖焦外关系",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP01",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP01",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP01",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP01"
+      },
+      "episode": "第1集",
+      "priority": 1,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP01 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 1,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP01"
+      ],
+      "clip_id": "EP01_CLIP01",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+            "at_sec": 2.7,
+            "reason": "手部ECU切主角CU，锁刀口与虎妖焦外关系",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP01",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP01",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP01",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP01"
+      },
+      "episode": "第1集",
+      "priority": 2,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP01 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 1,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP02"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+            "at_sec": 5.37,
+            "reason": "auto: R2 普通长镜（10.747s/4拍）",
+            "source_duration": 10.747,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP02",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP02",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP02",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP02"
+      },
+      "episode": "第1集",
+      "priority": 3,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP02 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 2,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP02"
+      ],
+      "clip_id": "EP01_CLIP02",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+            "at_sec": 5.37,
+            "reason": "auto: R2 普通长镜（10.747s/4拍）",
+            "source_duration": 10.747,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP02",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP02",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP02",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP02"
+      },
+      "episode": "第1集",
+      "priority": 4,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP02 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 2,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP03"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+            "at_sec": 5.36,
+            "reason": "auto: R2 普通长镜（10.726s/4拍）",
+            "source_duration": 10.726,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP03",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP03",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP03",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP03"
+      },
+      "episode": "第1集",
+      "priority": 5,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP03 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 3,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP03"
+      ],
+      "clip_id": "EP01_CLIP03",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+            "at_sec": 5.36,
+            "reason": "auto: R2 普通长镜（10.726s/4拍）",
+            "source_duration": 10.726,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP03",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP03",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP03",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP03"
+      },
+      "episode": "第1集",
+      "priority": 6,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP03 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 3,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP04"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+            "at_sec": 4.2,
+            "reason": "双人关系镜切主角答应并搀扶的动作落点",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP04",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP04",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP04",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP04"
+      },
+      "episode": "第1集",
+      "priority": 7,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP04 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 4,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP04"
+      ],
+      "clip_id": "EP01_CLIP04",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+            "at_sec": 4.2,
+            "reason": "双人关系镜切主角答应并搀扶的动作落点",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP04",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP04",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP04",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP04"
+      },
+      "episode": "第1集",
+      "priority": 8,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP04 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 4,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP05"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "at_sec": 3.96,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
+            "source_duration": 11.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+            "at_sec": 7.93,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
+            "source_duration": 11.89,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP05",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP05",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP05",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP05"
+      },
+      "episode": "第1集",
+      "priority": 9,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP05 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 5,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP05"
+      ],
+      "clip_id": "EP01_CLIP05",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+            "at_sec": 3.96,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
+            "source_duration": 11.89,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP05_a2.png",
+            "at_sec": 7.93,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，11.89s）",
+            "source_duration": 11.89,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP05",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP05",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP05",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP05"
+      },
+      "episode": "第1集",
+      "priority": 10,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP05 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 5,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP06"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 1.6,
+            "reason": "姜月初反应CU切虎妖低机位压迫镜",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP06",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP06",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP06",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP06"
+      },
+      "episode": "第1集",
+      "priority": 11,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP06 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 6,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP06"
+      ],
+      "clip_id": "EP01_CLIP06",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+            "at_sec": 1.6,
+            "reason": "姜月初反应CU切虎妖低机位压迫镜",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP06",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP06",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP06",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP06"
+      },
+      "episode": "第1集",
+      "priority": 12,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP06 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 6,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP07"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 3.28,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+            "at_sec": 6.55,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a3.png",
+            "at_sec": 9.83,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP07",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP07",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP07",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP07"
+      },
+      "episode": "第1集",
+      "priority": 13,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP07 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 7,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP07"
+      ],
+      "clip_id": "EP01_CLIP07",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+            "at_sec": 3.28,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a2.png",
+            "at_sec": 6.55,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP07_a3.png",
+            "at_sec": 9.83,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，13.101s）",
+            "source_duration": 13.101,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP07",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP07",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP07",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP07"
+      },
+      "episode": "第1集",
+      "priority": 14,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP07 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 7,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP08"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+            "at_sec": 2.6,
+            "reason": "锁递刀本意和接刀位置",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+            "at_sec": 5.6,
+            "reason": "锁落刀后的错愕与战损增量",
+            "use": "keyframe"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP08",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP08",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP08",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP08"
+      },
+      "episode": "第1集",
+      "priority": 15,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP08 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 8,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP08"
+      ],
+      "clip_id": "EP01_CLIP08",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor01.png",
+            "at_sec": 2.6,
+            "reason": "锁递刀本意和接刀位置",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP08_anchor02.png",
+            "at_sec": 5.6,
+            "reason": "锁落刀后的错愕与战损增量",
+            "use": "keyframe"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP08",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP08",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP08",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP08"
+      },
+      "episode": "第1集",
+      "priority": 16,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP08 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 8,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP09"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+            "at_sec": 3.25,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.76s）",
+            "source_duration": 9.76,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+            "at_sec": 6.51,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.76s）",
+            "source_duration": 9.76,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP09",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP09",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP09",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP09"
+      },
+      "episode": "第1集",
+      "priority": 17,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP09 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 9,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP09"
+      ],
+      "clip_id": "EP01_CLIP09",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a1.png",
+            "at_sec": 3.25,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.76s）",
+            "source_duration": 9.76,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP09_a2.png",
+            "at_sec": 6.51,
+            "reason": "auto: R1 高运动信号（文本/运镜或大表情，9.76s）",
+            "source_duration": 9.76,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP09",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP09",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP09",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP09"
+      },
+      "episode": "第1集",
+      "priority": 18,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP09 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 9,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP10"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor01.png",
+            "at_sec": 1.8,
+            "reason": "锁发力距离和方向",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor02.png",
+            "at_sec": 4.1,
+            "reason": "锁命中撞点",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor03.png",
+            "at_sec": 6.0,
+            "reason": "锁落地空间",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP10",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP10",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP10",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP10"
+      },
+      "episode": "第1集",
+      "priority": 19,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP10 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 10,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP10"
+      ],
+      "clip_id": "EP01_CLIP10",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor01.png",
+            "at_sec": 1.8,
+            "reason": "锁发力距离和方向",
+            "use": "edit_cut"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor02.png",
+            "at_sec": 4.1,
+            "reason": "锁命中撞点",
+            "use": "keyframe"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP10_anchor03.png",
+            "at_sec": 6.0,
+            "reason": "锁落地空间",
+            "use": "edit_cut"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP10",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP10",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP10",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP10"
+      },
+      "episode": "第1集",
+      "priority": 20,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP10 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 10,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP11"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+            "at_sec": 4.88,
+            "reason": "auto: R2 普通长镜（14.641s/4拍）",
+            "source_duration": 14.641,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+            "at_sec": 9.76,
+            "reason": "auto: R2 普通长镜（14.641s/4拍）",
+            "source_duration": 14.641,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP11",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP11",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP11",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP11"
+      },
+      "episode": "第1集",
+      "priority": 21,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP11 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 11,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP11"
+      ],
+      "clip_id": "EP01_CLIP11",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a1.png",
+            "at_sec": 4.88,
+            "reason": "auto: R2 普通长镜（14.641s/4拍）",
+            "source_duration": 14.641,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP11_a2.png",
+            "at_sec": 9.76,
+            "reason": "auto: R2 普通长镜（14.641s/4拍）",
+            "source_duration": 14.641,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP11",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP11",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP11",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP11"
+      },
+      "episode": "第1集",
+      "priority": 22,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP11 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 11,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP12"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+            "at_sec": 5.82,
+            "reason": "auto: R2 普通长镜（11.642s/3拍）",
+            "source_duration": 11.642,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP12",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP12",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP12",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP12"
+      },
+      "episode": "第1集",
+      "priority": 23,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP12 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 12,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP12"
+      ],
+      "clip_id": "EP01_CLIP12",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP12_a1.png",
+            "at_sec": 5.82,
+            "reason": "auto: R2 普通长镜（11.642s/3拍）",
+            "source_duration": 11.642,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP12",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP12",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP12",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP12"
+      },
+      "episode": "第1集",
+      "priority": 24,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP12 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 12,
+      "stage_key": "video"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP13"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+            "at_sec": 4.28,
+            "reason": "auto: R2 普通长镜（12.833s/3拍）",
+            "source_duration": 12.833,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+            "at_sec": 8.56,
+            "reason": "auto: R2 普通长镜（12.833s/3拍）",
+            "source_duration": 12.833,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP13",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP13",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP13",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP13"
+      },
+      "episode": "第1集",
+      "priority": 25,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP13 image：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 13,
+      "stage_key": "image"
+    },
+    {
+      "affected_artifacts": [],
+      "affected_shots": [
+        "EP01_CLIP13"
+      ],
+      "clip_id": "EP01_CLIP13",
+      "dependencies": {
+        "anchors": [
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a1.png",
+            "at_sec": 4.28,
+            "reason": "auto: R2 普通长镜（12.833s/3拍）",
+            "source_duration": 12.833,
+            "use": "split"
+          },
+          {
+            "anchor_png": "出图/第1集/图片/EP01_CLIP13_a2.png",
+            "at_sec": 8.56,
+            "reason": "auto: R2 普通长镜（12.833s/3拍）",
+            "source_duration": 12.833,
+            "use": "split"
+          }
+        ],
+        "continuity_bible": "脚本/第1集/continuity_bible.json#EP01_CLIP13",
+        "continuity_chain": "脚本/第1集/continuity_chain.json#EP01_CLIP13",
+        "endframe": "",
+        "firstframe": "",
+        "production_breakdown": "脚本/第1集/production_breakdown.json#EP01_CLIP13",
+        "storyboard": "脚本/第1集/storyboard.json#EP01_CLIP13"
+      },
+      "episode": "第1集",
+      "priority": 26,
+      "reason": "shooting_schedule",
+      "rerun_scope": "AI shooting schedule 第1集 EP01_CLIP13 video：按排期单镜执行，保留受影响接缝返工边界。",
+      "resource_plan": {
+        "budget_guard": "进入 batch 前写 max_concurrency / budget / max_retries",
+        "human_review_point": "出图后 immediate QC；出视频后 video_qc；高风险镜先审再批量",
+        "image_backend_slot": "按 n2d-image reference planner / 生图后端 smoke 证据分配",
+        "video_backend_slot": "按 n2d-model-router route primary/fallback 分配"
+      },
+      "risk_tier": "high",
+      "schedule_bucket": "pilot_high_risk_first",
+      "source_schedule_order": 13,
+      "stage_key": "video"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-14T12:16:29+00:00",
+  "kind": "n2d_ai_shooting_schedule_batch_seed",
+  "policy": {
+    "high_risk_first": true,
+    "one_task_per_clip_stage": true,
+    "queue_merge_default": true
+  },
+  "source_schedule": "脚本/第1集/ai_shooting_schedule.json",
+  "status": "ready",
+  "summary": {
+    "clips": 13,
+    "seed_tasks": 26,
+    "stages": [
+      "image",
+      "video"
+    ]
+  },
+  "version": 1
+}

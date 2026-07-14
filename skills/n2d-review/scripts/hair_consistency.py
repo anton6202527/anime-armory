@@ -35,6 +35,7 @@ from typing import Dict, List, Optional, Sequence
 
 import face_consistency as fc      # cosine / calibrate_floor / band / _sev / 资产发现 / 镜头映射
 import outfit_consistency as oc    # weighted_hue_hist / relative_calibrate / _median / _probe_pillow
+from pillow_compat import pixel_data
 import state_continuity as stc     # 剧情指定黑化换发/染发/断发区间 → 发漂 block 降 warn（不误伤剧情）
 
 DEFAULT_MARGIN = 0.08              # 发型指纹比配色更易随角度波动 → margin 略小，配合相对校准减噪
@@ -96,12 +97,12 @@ def _hair_fingerprint(path: str, bins: int, grid: int,
         head = im.crop(_head_box(w, h, head_frac))
         # 发色：头部区 HSV 加权色相直方图（复用 outfit 同款，s*v 加权压灰暗）
         hsv = head.convert("HSV")
-        samples = [(hh / 255.0, ss / 255.0, vv / 255.0) for (hh, ss, vv) in hsv.getdata()]
+        samples = [(hh / 255.0, ss / 255.0, vv / 255.0) for (hh, ss, vv) in pixel_data(hsv)]
         hue_hist = oc.weighted_hue_hist(samples, bins)
         # 发型轮廓：头部区灰度边缘 → GxG 网格 平均强度（结构指纹）
         edges = head.convert("L").filter(ImageFilter.FIND_EDGES)
         small = edges.resize((grid, grid))
-        edge_grid = [float(p) for p in small.getdata()]
+        edge_grid = [float(p) for p in pixel_data(small)]
         return combine_fingerprint(hue_hist, edge_grid, hue_weight)
     except Exception:
         return None

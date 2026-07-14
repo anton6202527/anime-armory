@@ -78,6 +78,9 @@ CONTRACT_REQUIRED = (
 # 元数据/frontmatter 行（非正文）：markdown 标题/分隔、版权/标签/简介/作者/书名等声明行，判文体前剥离。
 _META_LINE_RE = re.compile(r"^\s*(#|---|>|\[|copyright|版权|标签|简介|作者|书名|来源|平台|看点)[:：\s]",
                            re.IGNORECASE)
+_CHAPTER_HEADING_LINE_RE = re.compile(
+    r"^\s*(?:第[一二三四五六七八九十百千万\d]+[章节回]|Chapter\s+\d+)", re.I
+)
 
 
 def _strip_meta(text: str) -> str:
@@ -88,6 +91,19 @@ def _strip_meta(text: str) -> str:
             continue
         keep.append(line)
     return "\n".join(keep)
+
+
+def _fold_adjacent_duplicate_chapter_headings(text: str) -> str:
+    """Fold only physically adjacent, exactly equal chapter-heading lines."""
+    kept = []
+    previous = None
+    for line in (text or "").splitlines():
+        if previous is not None and line == previous and _CHAPTER_HEADING_LINE_RE.match(line):
+            previous = line
+            continue
+        kept.append(line)
+        previous = line
+    return "\n".join(kept)
 
 
 def _filled(value) -> bool:
@@ -104,7 +120,9 @@ def _filled(value) -> bool:
 
 
 def detect_source_traits(text: str) -> dict:
-    raw = _strip_meta(text or "")
+    # Fold before metadata stripping so two headings separated in the original
+    # source can never become "adjacent" merely because a metadata line vanished.
+    raw = _strip_meta(_fold_adjacent_duplicate_chapter_headings(text or ""))
     compact = re.sub(r"\s+", "", raw)
     chapters = len(re.findall(r"(第[一二三四五六七八九十百千万\d]+[章节回]|Chapter\s+\d+)", raw, re.I))
     has_power = any(m in raw for m in POWER_SYSTEM_MARKERS)

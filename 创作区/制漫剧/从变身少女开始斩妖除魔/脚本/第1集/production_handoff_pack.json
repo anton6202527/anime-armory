@@ -1,0 +1,38 @@
+{
+  "episode": "第1集",
+  "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
+  "generated_at": "2026-07-14T12:16:29+00:00",
+  "inputs": {
+    "director_blocking_pack.json": "脚本/第1集/director_blocking_pack.json",
+    "preventive_contracts.json": "脚本/第1集/preventive_contracts.json",
+    "script_quality_contract_第1集.json": "生产数据/script_quality_contract_第1集.json",
+    "source_comprehension.json": "设定库/source_comprehension.json",
+    "storyboard.json": "脚本/第1集/storyboard.json",
+    "voiceover.txt": "脚本/第1集/voiceover.txt",
+    "镜头时长.json": "脚本/第1集/镜头时长.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "生产数据/script_quality_contract_第1集.json": "e8cf0416a013fbe41091588ecd9b88a44e67b2a4ecb4085090b317cfbdc6db22",
+      "脚本/第1集/director_blocking_pack.json": "1857645148d1ff72fe2a4a35bee73e17d8fd9b01ef3d0da14c6332666c82ee9d",
+      "脚本/第1集/preventive_contracts.json": "47bd376afb124ef731ca1e088b7aaf2c43a1027560b8da7e5c6be52e76e5edbf",
+      "脚本/第1集/storyboard.json": "87c28507551b6ce158d28b8ed91a4762b04a00ae960fccbc90196b76b61f5aaa",
+      "脚本/第1集/voiceover.txt": "83769e68730c415c00bb2b2488bd9e073a6d54e414b7ce5acc285653f77b17d5",
+      "脚本/第1集/镜头时长.json": "e29dc35237353d4e3f6f75c4c0ff44336c049cbaa0e390931533b2dd4cce1f56",
+      "设定库/source_comprehension.json": "e1f753a90ab65e1952707d4d40d1c6d8c32d42971a0f8a4392e17f9bdbaba885"
+    },
+    "sha": "208fcf8f321aa74ed2c970e16cfbccc163b866f65a300d8741b3c44b86133314"
+  },
+  "kind": "n2d_production_handoff_pack",
+  "required_files": [
+    "脚本/第1集/production_breakdown.json",
+    "脚本/第1集/continuity_breakdown.json",
+    "脚本/第1集/continuity_chain.json",
+    "脚本/第1集/continuity_bible.json",
+    "脚本/第1集/ai_shooting_schedule.json",
+    "脚本/第1集/ai_call_sheet.md"
+  ],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "status": "draft",
+  "version": 1
+}

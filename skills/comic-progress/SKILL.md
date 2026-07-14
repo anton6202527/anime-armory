@@ -56,7 +56,7 @@ python3 skills/comic-progress/scripts/scan.py "创作区/画漫画/作品名" --
 | `name_board` 处于 draft/review、未人审、内容 SHA 或上游 SHA 过期 | `comic-name` |
 | `layout` 未人审或内容/上游 SHA 过期 | `comic-layout` |
 | `finishing_plan` 未 validated/pass 或上游过期 | `comic-finishing` |
-| identity registry 未 v2、model-pack report 不 ready、主角多视图签收缺失/过期 | `comic-identity` |
+| identity registry 未 v2、model-pack report 不 ready、纳管资产的多视图签收缺失/过期 | `comic-identity` |
 | reference plan / `panel_jobs` 缺失、未完整覆盖或未消费当前 SHA | `comic-image` |
 | 最晚已完成阶段的 gate receipt 缺失/过期、report SHA 不匹配或未 `execution_authorized` | `comic-review` |
 | gate 存在 block | 按 finding 的 `return_to_stage` 返回对应 `comic-*` skill |

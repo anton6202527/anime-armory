@@ -112,6 +112,38 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
   --refs MON_TIGER,LOC_STREET,PROP_SWORD
 ```
 
+风格锚或其它共享资产需要先并排选稿时，用候选批次模式；它只写入
+`出图/共享/candidates/` 与候选 manifest，不会把未审核图片登记成正式锚点：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 anchors \
+  --refs STYLE_CLASSIC_V1 --candidate-count 3 --ratio 4:5 --max-attempts 2
+```
+
+`--max-attempts` 对每个候选分别构成硬上限。候选须经人审选中后，才能采纳为
+`出图/共享/图片/<REF_ID>__anchor.png` 并继续生成依赖该锚的角色 front。
+
+人工选中候选后，用专用采纳命令绑定候选 SHA、审核人与审核角色：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 adopt-anchor \
+  --ref STYLE_CLASSIC_V1 --candidate "出图/共享/candidates/STYLE_CLASSIC_V1/anchor/<batch>/candidate_02.png" \
+  --reviewer "出品人姓名" --role "出品人" --reason "采纳B"
+```
+
+风格锚采纳后，可生成角色 front 选角候选。每张都把正式风格锚作为真实
+`style_only` 附件，但不会把未审核角色图写进 registry：
+
+```bash
+python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名" --chapter 第1话 views \
+  --backend codex --characters CHAR_A,CHAR_B --views front --allow-text-anchor \
+  --candidate-count 3 --ratio 3:4 --max-attempts 2
+```
+
+中断后用 `--candidate-indices 2,3` 只续跑指定序号；`--candidate-count` 仍记录该角色
+目标候选总数。不同序号剩余额度不同时应分两次调用，并分别传对应的 `--max-attempts`，
+不得重跑已耗尽的候选。
+
 Codex 图像通道不可用或需要真实图生图后端时，可显式走即梦官方 CLI：
 
 ```bash
@@ -166,7 +198,7 @@ python3 skills/comic-identity/scripts/library.py "创作区/画漫画/作品名"
 - `report` 会按 reference manifest 记录的 sha256 比对参考图当前内容：生成后换过锚点/定妆图内容（含 `seed --overwrite`）或参考文件消失的 ready 格进 `rerun_targets`（`stale_generated_refs` 给出逐图原因）；生成后新增的参考图不强制重抽。
 - 多人同框不是删除剧情的理由；补齐每个主体的锚点，再重抽该格。
 - 人物标准多视图是 `front / three_quarter / side / back / face`。`report --write` 会列 `missing_character_views`；`定妆级别=长线专门定妆` 时这些缺口是进入发布/连载审查前的阻断项。
-- 角色 registry 的 `status` 必须诚实反映生产就绪度：缺视图是 `partial`；1×1、错误 source view、重复图片冒充不同视角或全身画布不一致是 `needs_fix`；核心角色文件齐全但没有当前 SHA 人审签收是 `needs_approval`；只有技术检查通过且 receipt 当前有效才是 `ready`。像素/直方图相似度只能 `warn`，不得替代并排人审。
+- 角色 registry 的 `status` 必须诚实反映生产就绪度：缺视图是 `partial`；1×1、错误 source view、重复图片冒充不同视角或全身画布不一致是 `needs_fix`；凡档位存在必需视图（`core_full` / `recurring_standard` / `named_minimal`），文件齐全但没有当前 SHA 人审签收都是 `needs_approval`；只有技术检查通过且 receipt 当前有效才是 `ready`。`restricted_partial` 无必需视图，才不要求 model-pack signoff。像素/直方图相似度只能 `warn`，不得替代并排人审。
 - schema v2 的 `forms/outfits/expressions/states/default_binding` 是逐格状态真值。`state` 引用的 form/outfit/expression 必须已登记且彼此一致；不允许用显示名、松散文字或 panel-wide 单个 `outfit_id` 替代逐角色绑定。
 - **服装子注册表（outfits）**：业界已验证的失效模式是"锁了脸锁不住领型/纽扣/花纹"。同一角色的每套换装在 `registry.assets[CHAR_x].outfits[OUTFIT_y]` 登记 `{id, name, description, forbidden, reference_images}`；分格脚本用该角色 `character_bindings[].outfit_id` 引用，并绑定与之相符的 `state_id`。`report` 会检查换装格的登记与服装参考图（`outfit_gaps`）。修复服装漂移优先补服装参考图重抽，不走"每套服装一个 LoRA"。
 - 角色一致性不只看“像不像脸”。登记 `character_dna/dna_contract` 时必须覆盖脸型、眼型/眼距、鼻梁/嘴型、发际线、发型轮廓、服装主色、标志配饰/伤痕/灵纹、身高体态和眼神气质；这些字段会被 `comic-image` 写入逐格 prompt。

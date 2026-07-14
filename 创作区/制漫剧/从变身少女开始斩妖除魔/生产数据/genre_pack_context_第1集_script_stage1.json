@@ -1,0 +1,164 @@
+{
+  "activation": {
+    "reason": "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。",
+    "state": "storyboard_missing",
+    "storyboard_clip_count": 0,
+    "storyboard_path": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔/脚本/第1集/storyboard.json",
+    "storyboard_state": "missing",
+    "triggered": false
+  },
+  "active_scene_archetypes": [],
+  "episode": "第1集",
+  "generated_at": "2026-07-14T09:16:25+00:00",
+  "genre": {
+    "genre_key": "chuanyue",
+    "label": "穿越",
+    "matched": true,
+    "matched_genre_keys": [
+      "chuanyue",
+      "xianxia",
+      "suspense"
+    ],
+    "matched_labels": [
+      "穿越",
+      "仙侠",
+      "悬疑"
+    ],
+    "matches": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 4,
+        "matched_term": "系统流",
+        "priority": 1
+      },
+      {
+        "genre_key": "xianxia",
+        "label": "仙侠",
+        "match_start": 8,
+        "matched_term": "修仙",
+        "priority": 2
+      },
+      {
+        "genre_key": "suspense",
+        "label": "悬疑",
+        "match_start": 13,
+        "matched_term": "悬疑",
+        "priority": 3
+      }
+    ],
+    "raw": "自定义（系统流+修仙+志怪悬疑）"
+  },
+  "issues": [],
+  "kind": "n2d_genre_pack_context",
+  "pack": {
+    "degrade_plans": [
+      "复杂系统面板改为独立 UI 图层叠加",
+      "时空转换用环境变体前后对照，不强求长镜头变形",
+      "现代物品进入古代场景时先出道具参考，避免模型改形",
+      "长连续御剑/飞舟镜拆成起势、巡航、抵达三镜",
+      "群战法术爆发拆成反打、特写、冲击波结果镜",
+      "御兽骑乘失败时退为近景坐骑接触 + 远景剪影飞行",
+      "线索特写独立出图并在剪辑中插入，避免视频生成改掉证物细节",
+      "追逐/跟踪拆成主观视角、脚步、转角、结果镜",
+      "暗光镜降低运动幅度，保留关键证据可读性"
+    ],
+    "genre_keys": [
+      "chuanyue",
+      "xianxia",
+      "suspense"
+    ],
+    "labels": [
+      "穿越",
+      "仙侠",
+      "悬疑"
+    ],
+    "matched_packs": [
+      {
+        "genre_key": "chuanyue",
+        "label": "穿越",
+        "match_start": 4,
+        "matched_term": "系统流",
+        "priority": 1
+      },
+      {
+        "genre_key": "xianxia",
+        "label": "仙侠",
+        "match_start": 8,
+        "matched_term": "修仙",
+        "priority": 2
+      },
+      {
+        "genre_key": "suspense",
+        "label": "悬疑",
+        "match_start": 13,
+        "matched_term": "悬疑",
+        "priority": 3
+      }
+    ],
+    "motion_contract_fields": [
+      "mount_contact",
+      "harness_lock",
+      "screen_direction",
+      "parallax_layers",
+      "degrade_plan",
+      "gait_cycle",
+      "vehicle_lock"
+    ],
+    "qc_focus": [
+      "时代物件一致",
+      "系统面板 OCR",
+      "前后身份/服饰状态",
+      "空间转换因果",
+      "角色定妆跨集",
+      "法器/灵兽尺度",
+      "飞行空间层次",
+      "法术光色连续",
+      "服饰发型抗漂移",
+      "线索可读性",
+      "证物状态",
+      "空间方位",
+      "暗光清晰度",
+      "伏笔兑现顺序"
+    ],
+    "style_binding_policy": {
+      "bind_to_visual_style": true,
+      "by_genre": [
+        {
+          "bind_to_visual_style": true,
+          "genre_key": "chuanyue",
+          "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。"
+        },
+        {
+          "bind_to_visual_style": true,
+          "genre_key": "xianxia",
+          "notes": "题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。"
+        },
+        {
+          "bind_to_visual_style": true,
+          "genre_key": "suspense",
+          "notes": "悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+        }
+      ],
+      "notes": "穿越题材重点是时代规则和 UI 文字可靠性；风格可以古风、现代或混搭，但每个时空必须有 LOC 契约。 | 题材 pack 给场景和 QC 权重；基础视觉风格仍由项目 _设置.md 决定。不要把仙侠写成唯一画风。 | 悬疑题材优先保线索和空间逻辑，不为氛围牺牲证据可读性。"
+    }
+  },
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "stage_key": "script_stage1",
+  "status": "pass",
+  "summary": {
+    "activation_state": "storyboard_missing",
+    "active_scenes": 0,
+    "issues": 0,
+    "matched_clips": 0,
+    "matched_genre_keys": [
+      "chuanyue",
+      "xianxia",
+      "suspense"
+    ],
+    "matched_packs": 3,
+    "storyboard_clip_count": 0,
+    "storyboard_state": "missing"
+  },
+  "version": 1
+}

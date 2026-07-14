@@ -34,7 +34,11 @@ from n2d_contract import (  # noqa: E402
     identity_reviewer_appears_automated,
     required_character_library_views,
 )
-from image_evidence import png_evidence_errors  # noqa: E402
+from image_evidence import (  # noqa: E402
+    PNG_DECODED_PIXEL_FINGERPRINT_KIND,
+    png_decoded_pixel_fingerprint,
+    png_evidence_errors,
+)
 
 
 PACK_KIND = "n2d_identity_eval_pack"
@@ -231,7 +235,7 @@ def _review_errors(
     form_name: str,
     tier: str,
     view: str,
-) -> Tuple[List[str], str, str, Mapping[str, Any]]:
+) -> Tuple[List[str], str, str, str, Mapping[str, Any]]:
     raw_rel = _reference_path(node)
     review = _human_review(node)
     errors: List[str] = []
@@ -247,21 +251,28 @@ def _review_errors(
         errors.append(f"registry_node_status={node_status or 'missing'}")
     if not raw_rel:
         errors.append("path_missing")
-        return sorted(set(errors)), "", "", review
+        return sorted(set(errors)), "", "", "", review
     rel, path, path_errors = _resolve_project_evidence_path(root, raw_rel)
     errors.extend(path_errors)
     if not path_errors and raw_rel.replace("\\", "/") != rel:
         errors.append("registry_evidence_path_not_canonical_project_relative")
     actual_sha = ""
+    decoded_pixel_fingerprint = ""
     if not path_errors:
         actual_sha = _sha256(path)
         if not actual_sha:
             errors.append("path_not_found_or_unreadable")
         else:
-            errors.extend(_png_container_errors(path))
+            png_errors = _png_container_errors(path)
+            errors.extend(png_errors)
+            if not png_errors:
+                decoded_pixel_fingerprint, fingerprint_errors = png_decoded_pixel_fingerprint(path)
+                errors.extend(fingerprint_errors)
+                if not decoded_pixel_fingerprint and not fingerprint_errors:
+                    errors.append("png_pixel_fingerprint_unavailable")
     if not review:
         errors.append("human_review_missing")
-        return errors, rel, actual_sha, review
+        return errors, rel, actual_sha, decoded_pixel_fingerprint, review
     if str(review.get("status") or "").strip().lower() != "accepted":
         errors.append(f"review_status={review.get('status') or 'missing'}")
     if str(review.get("verdict") or "").strip().lower() != "pass":
@@ -312,7 +323,13 @@ def _review_errors(
         or confirmation.get("accepted_current_pixels") is not True
     ):
         errors.append("explicit_current_pixels_confirmation_missing")
-    return sorted(set(errors)), rel or raw_rel, actual_sha, review
+    return (
+        sorted(set(errors)),
+        rel or raw_rel,
+        actual_sha,
+        decoded_pixel_fingerprint,
+        review,
+    )
 
 
 def _bucket_from_node(
@@ -324,7 +341,7 @@ def _bucket_from_node(
     tier: str,
     view: str,
 ) -> dict:
-    errors, rel, actual_sha, review = _review_errors(
+    errors, rel, actual_sha, decoded_pixel_fingerprint, review = _review_errors(
         root,
         node,
         character_id=character_id,
@@ -341,6 +358,8 @@ def _bucket_from_node(
         "view": view,
         "path": rel,
         "sha256": actual_sha,
+        "decoded_pixel_fingerprint": decoded_pixel_fingerprint,
+        "decoded_pixel_fingerprint_kind": PNG_DECODED_PIXEL_FINGERPRINT_KIND,
         "registry_binding_fingerprint": str(review.get("registry_binding_fingerprint") or ""),
         "registry_binding_fingerprint_kind": str(review.get("registry_binding_fingerprint_kind") or ""),
         "review_contract": str(review.get("review_contract") or ""),
@@ -517,8 +536,17 @@ def _ensure_path_not_reused_by_another_bucket(
     if selected_errors:
         raise ReceiptError(f"证据 path 非法：{', '.join(selected_errors)}")
     selected_sha = _sha256(selected_realpath)
+    selected_pixel_fingerprint, selected_fingerprint_errors = png_decoded_pixel_fingerprint(
+        selected_realpath
+    )
+    if selected_fingerprint_errors or not selected_pixel_fingerprint:
+        details = selected_fingerprint_errors or ["png_pixel_fingerprint_unavailable"]
+        raise ReceiptError(
+            f"当前 PNG 不能作为可解码像素证据，无法计算解码像素指纹：{', '.join(details)}"
+        )
     realpath_usages: List[str] = []
     sha_usages: List[str] = []
+    pixel_fingerprint_usages: List[str] = []
     for other_view in REVIEWABLE_VIEWS:
         if other_view == "expression":
             nodes: Iterable[Any] = _mutable_expression_nodes(form)
@@ -538,12 +566,26 @@ def _ensure_path_not_reused_by_another_bucket(
             other_sha = _sha256(other_realpath)
             if selected_sha and other_sha == selected_sha:
                 sha_usages.append(other_view)
-    if realpath_usages or sha_usages:
+            other_pixel_fingerprint, other_fingerprint_errors = png_decoded_pixel_fingerprint(
+                other_realpath
+            )
+            if (
+                not other_fingerprint_errors
+                and other_pixel_fingerprint
+                and other_pixel_fingerprint == selected_pixel_fingerprint
+            ):
+                pixel_fingerprint_usages.append(other_view)
+    if realpath_usages or sha_usages or pixel_fingerprint_usages:
         details: List[str] = []
         if realpath_usages:
             details.append(f"canonical realpath 与 {','.join(sorted(set(realpath_usages)))} 重复")
         if sha_usages:
             details.append(f"current PNG SHA 与 {','.join(sorted(set(sha_usages)))} 重复")
+        if pixel_fingerprint_usages:
+            details.append(
+                "decoded pixel fingerprint 与 "
+                f"{','.join(sorted(set(pixel_fingerprint_usages)))} 重复"
+            )
         raise ReceiptError(
             f"PNG `{selected_rel}` {'；'.join(details)}；不能把同一路径或同一像素签成"
             f" `{selected_view}` 与其他桶"
@@ -689,7 +731,7 @@ def record_current_view_receipt(
     node["status"] = "registered" if previous_status == "registered" else "ready"
     node["sha256"] = png_sha
     node["human_review"] = receipt
-    validation_errors, _rel, validated_sha, _review = _review_errors(
+    validation_errors, _rel, validated_sha, validated_pixel_fingerprint, _review = _review_errors(
         root,
         node,
         character_id=character_id,
@@ -699,7 +741,11 @@ def record_current_view_receipt(
     )
     if validation_errors:
         raise ReceiptError(f"收据未通过 pack 自检：{', '.join(validation_errors)}")
-    if validated_sha != png_sha or _sha256(png_path) != png_sha:
+    if (
+        validated_sha != png_sha
+        or not validated_pixel_fingerprint
+        or _sha256(png_path) != png_sha
+    ):
         raise ReceiptError("PNG 在签收过程中发生变化；未写 registry，请重新查看当前像素")
     _write_registry_atomic(reg_path, registry, expected_sha256=before_sha)
     return {
@@ -768,11 +814,15 @@ def build_pack(root: str) -> dict:
                 path_groups: Dict[str, List[str]] = {}
                 realpath_groups: Dict[str, List[str]] = {}
                 sha_groups: Dict[str, List[str]] = {}
+                pixel_fingerprint_groups: Dict[str, List[str]] = {}
                 for bucket_name, value in buckets.items():
                     if not isinstance(value, Mapping):
                         continue
                     bucket_path = str(value.get("path") or "").strip()
                     bucket_sha = str(value.get("sha256") or "").strip()
+                    bucket_pixel_fingerprint = str(
+                        value.get("decoded_pixel_fingerprint") or ""
+                    ).strip()
                     if bucket_path:
                         path_groups.setdefault(bucket_path, []).append(bucket_name)
                         _normalized, bucket_realpath, path_errors = _resolve_project_evidence_path(
@@ -782,6 +832,10 @@ def build_pack(root: str) -> dict:
                             realpath_groups.setdefault(bucket_realpath, []).append(bucket_name)
                     if bucket_sha:
                         sha_groups.setdefault(bucket_sha, []).append(bucket_name)
+                    if bucket_pixel_fingerprint:
+                        pixel_fingerprint_groups.setdefault(
+                            bucket_pixel_fingerprint, []
+                        ).append(bucket_name)
 
                 def mark_duplicate(groups: Mapping[str, List[str]], code: str) -> None:
                     for names in groups.values():
@@ -797,6 +851,10 @@ def build_pack(root: str) -> dict:
                 mark_duplicate(path_groups, "duplicate_path_across_buckets")
                 mark_duplicate(realpath_groups, "duplicate_canonical_realpath_across_buckets")
                 mark_duplicate(sha_groups, "duplicate_png_sha_across_buckets")
+                mark_duplicate(
+                    pixel_fingerprint_groups,
+                    "duplicate_decoded_pixel_fingerprint_across_buckets",
+                )
                 failed = [key for key, value in buckets.items() if value.get("status") != "pass"]
                 rows.append({
                     "character_id": cid,

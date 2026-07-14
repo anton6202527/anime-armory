@@ -274,7 +274,7 @@ def audit(root: Path, *, through_chapter: str = "") -> dict[str, Any]:
         "schema_version": VERSION,
         "kind": "comic_continuity_audit",
         "created_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-        "project_root": str(root),
+        "project_root": ".",
         "through_chapter": through_chapter,
         "summary": summary,
         "chapters": chapters,

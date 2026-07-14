@@ -1,0 +1,193 @@
+{
+  "authority": "derived index only; _进度.md and existing gates remain authoritative",
+  "edges": [
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_01"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_02"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_03"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_04"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_05"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_06"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_07"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_08"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_09"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_10"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_11"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_12"
+    },
+    {
+      "relation": "contains",
+      "source": "episode:第1集",
+      "target": "clip:Clip_13"
+    }
+  ],
+  "episode": "第1集",
+  "generated_at": "2026-07-14T20:22:31+0800",
+  "graph_hash": "19ec5b0cd91386007b919d35fbcb8bd3e2dbb6a17d3b0eac0f3cdf6bfb5b9ed9",
+  "kind": "n2d_episode_graph",
+  "lineage_gaps": [],
+  "nodes": [
+    {
+      "clip": "Clip_01",
+      "duration_sec": 5.14,
+      "id": "clip:Clip_01",
+      "scene": "LOC_01/未来片段",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_02",
+      "duration_sec": 10.747,
+      "id": "clip:Clip_02",
+      "scene": "LOC_01/十分钟前",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_03",
+      "duration_sec": 10.726,
+      "id": "clip:Clip_03",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_04",
+      "duration_sec": 7.703,
+      "id": "clip:Clip_04",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_05",
+      "duration_sec": 11.89,
+      "id": "clip:Clip_05",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_06",
+      "duration_sec": 5.925,
+      "id": "clip:Clip_06",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_07",
+      "duration_sec": 13.101,
+      "id": "clip:Clip_07",
+      "scene": "LOC_01/主观系统层",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_08",
+      "duration_sec": 8.588,
+      "id": "clip:Clip_08",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_09",
+      "duration_sec": 9.76,
+      "id": "clip:Clip_09",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_10",
+      "duration_sec": 7.15,
+      "id": "clip:Clip_10",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_11",
+      "duration_sec": 14.641,
+      "id": "clip:Clip_11",
+      "scene": "LOC_01/百妖谱显化",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_12",
+      "duration_sec": 11.642,
+      "id": "clip:Clip_12",
+      "scene": "LOC_01/系统结算",
+      "type": "story_clip"
+    },
+    {
+      "clip": "Clip_13",
+      "duration_sec": 12.833,
+      "id": "clip:Clip_13",
+      "scene": "LOC_01",
+      "type": "story_clip"
+    },
+    {
+      "episode": "第1集",
+      "id": "episode:第1集",
+      "type": "episode"
+    }
+  ],
+  "root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "source_files": [
+    {
+      "bytes": 80971,
+      "path": "脚本/第1集/storyboard.json",
+      "role": "storyboard",
+      "sha256": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f"
+    }
+  ],
+  "status": "pass",
+  "summary": {
+    "edges": 13,
+    "lineage_gaps": 0,
+    "masters": 0,
+    "nodes": 14,
+    "routes": 0,
+    "story_clips": 13,
+    "video_media": 0
+  },
+  "version": 1
+}

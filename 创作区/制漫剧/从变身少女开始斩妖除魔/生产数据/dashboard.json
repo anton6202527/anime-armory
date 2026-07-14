@@ -1,0 +1,1081 @@
+{
+  "alert_counts": {
+    "critical": 0,
+    "warn": 0
+  },
+  "alerts": [],
+  "episodes": [
+    {
+      "blockers_per_attempt": 0.0,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": 1.0,
+      "duration_hms": "2m10s",
+      "duration_sec": 129.846,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第1集",
+      "event_count": 1,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": 1.0,
+      "follow_next_rate": null,
+      "generation_attempts": 1,
+      "generation_fails": 0,
+      "generation_pass_rate": 1.0,
+      "generation_passes": 1,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 1,
+      "one_pass_rate": 1.0,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段2·分镜设计",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": 0.0,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {
+        "script_stage1": {
+          "duration_sec": 129.846,
+          "generation_attempts": 1,
+          "generation_fails": 0,
+          "generation_passes": 1,
+          "missing_deliverables": 0,
+          "qa_blockers": 0,
+          "qa_infos": 0,
+          "qa_warnings": 0,
+          "redraw_count": 0
+        }
+      },
+      "warnings_per_attempt": 0.0
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第2集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第3集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第4集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第5集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第6集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第7集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第8集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第9集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    },
+    {
+      "blockers_per_attempt": null,
+      "completion_rate": null,
+      "consistency_blockers": 0,
+      "consistency_ledger": {},
+      "consistency_warnings": 0,
+      "cost_by_provider": {},
+      "cost_per_finished_min": {},
+      "cost_totals": {},
+      "deliverable_pass_rate": null,
+      "duration_hms": "0s",
+      "duration_sec": 0.0,
+      "elapsed_per_finished_min_sec": null,
+      "episode": "第10集",
+      "event_count": 0,
+      "false_positive_recoveries": 0,
+      "false_positive_recovery_rate": null,
+      "final_pass_rate": null,
+      "follow_next_rate": null,
+      "generation_attempts": 0,
+      "generation_fails": 0,
+      "generation_pass_rate": null,
+      "generation_passes": 0,
+      "image_qc_passive": {},
+      "missing_deliverables": [],
+      "one_pass_count": 0,
+      "one_pass_rate": null,
+      "progress_next_skill": "n2d-script",
+      "progress_next_stage": "阶段1·剧本改编",
+      "qa_blockers": 0,
+      "qa_gate_passes": 0,
+      "qa_gate_runs": 0,
+      "qa_infos": 0,
+      "qa_warnings": 0,
+      "recent_blockers": [],
+      "recoup_ratio": {},
+      "redraw_categories": {},
+      "redraw_count": 0,
+      "redraw_rate": null,
+      "redraw_reasons": {},
+      "release_net_totals": {},
+      "release_plays": 0,
+      "release_revenue_totals": {},
+      "release_rows": 0,
+      "release_spend_totals": {},
+      "retention_15s": null,
+      "retention_3s": null,
+      "runtime_hms": "—",
+      "runtime_sec": null,
+      "runtime_source": "",
+      "stages": {},
+      "warnings_per_attempt": null
+    }
+  ],
+  "event_file": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据/production_events.jsonl",
+  "generated_at": "2026-07-14T11:33:02+00:00",
+  "industry_benchmark": {
+    "_retention_benchmark_schema_valid": true,
+    "_retention_benchmark_source": "reference",
+    "all_in_cny_per_finished_min_band": [
+      400,
+      1000
+    ],
+    "collected": "2026-06-25",
+    "cost_per_min": {
+      "CNY": 6.0
+    },
+    "cost_per_min_note": "上面是生成算力口径（API/积分摊到成片分钟），与 dashboard cost_per_finished_min 同口径对比；非全链制作成本",
+    "cross_ep_consistency": 0.95,
+    "genre_retention_adjustments": {
+      "default": {
+        "note": "未识别题材使用通用基准",
+        "retention_3s_multiplier": 1.0
+      },
+      "仙侠": {
+        "note": "仙侠剧与通用基准持平",
+        "retention_3s_multiplier": 1.0
+      },
+      "古言": {
+        "note": "古言剧节奏偏慢、铺垫多，3s 留存基准比通用低 10%",
+        "retention_3s_multiplier": 0.9
+      },
+      "悬疑": {
+        "note": "悬疑剧冷开场钩子强",
+        "retention_3s_multiplier": 1.1
+      },
+      "玄幻": {
+        "note": "玄幻剧节奏略快于通用",
+        "retention_3s_multiplier": 1.05
+      },
+      "穿越": {
+        "note": "穿越剧 hook 强、节奏快，3s 留存基准比通用高 15%",
+        "retention_3s_multiplier": 1.15
+      },
+      "系统流": {
+        "note": "系统流/升级流开局即有系统面板钩，3s 留存基准比通用高 20%",
+        "retention_3s_multiplier": 1.2
+      },
+      "都市": {
+        "note": "都市剧节奏中等偏快",
+        "retention_3s_multiplier": 1.05
+      }
+    },
+    "hit_freshness_weeks": 3,
+    "kind": "n2d_industry_benchmark",
+    "notes": "只读参照线，不参与告警/阻断。厂商宣传和媒体测评口径不一，落地前应由 n2d-review 流程自审重新复核。2026 现实：常规 AI 漫剧全链成本已降到每分钟 400-1000 元（旧 1500-2500）；纯付费漫剧市场 ROI 中位约 1.1，仅前 5% 头部稳住 1.2+；爆款新鲜期缩至约 3 周——成本纪律与上新速度同为生死线。Seedance 2.0 可用率从 20% 跃升至 ~90%，盲目抽卡应随之收敛（见 n2d-video 出视频规格『QC 门控重抽』）。 2026-07-11 实搜增补：漫剧主战场已转向红果免费分账，万播单价跌至 5-10 元、爆款率约 0.16%、非头部 90% 亏损（虎嗅 2026-05-26 / 钛媒体 2026-03-09 / DataEye 2026-01）；付费剧投流盈亏线 1.18-1.2（含通道费）仍被沿用——本文件 roi_floor_reference=1.2 与该口径一致。免费分账模式下 recoup 口径应改按分账收入/成本，不再只看投流 ROI。",
+    "one_pass_rate": 0.9,
+    "redraw_rate": 0.1,
+    "retention_benchmarks": {
+      "app_retention_reference": {
+        "china_short_drama_apps": {
+          "d14_retention": 0.068,
+          "d1_retention": 0.288,
+          "d7_retention": 0.115
+        },
+        "drama_box_reference": {
+          "d14_retention": 0.05,
+          "d1_retention": 0.275,
+          "d7_retention": 0.078
+        },
+        "global_short_drama_apps": {
+          "d14_retention": 0.056,
+          "d1_retention": 0.269,
+          "d7_retention": 0.086
+        },
+        "source": "Adjoe summary of Sensor Tower top-200 short drama app retention",
+        "source_ids": [
+          "adjoe_sensor_tower_short_drama_retention_2026"
+        ]
+      },
+      "checked_at": "2026-06-25",
+      "collected": "2026-06-25",
+      "creative_attention": {
+        "caption_words_per_sec_band": [
+          5,
+          10
+        ],
+        "first_3s_proposition_required": true,
+        "first_6s_hook_required": true,
+        "source": "TikTok Ads creative best practices",
+        "source_ids": [
+          "tiktok_creative_best_practices_2025"
+        ]
+      },
+      "episode_kpi_targets": {
+        "first_episode_completion_floor": 0.75,
+        "first_episode_completion_floor_note": "首集完播 QC 地板：低于此说明内容或播放器有问题（首集是 make-or-break）。与通用 completion_rate 目标分开审，由 n2d-feedback 对第1集单独判。",
+        "required_metrics": [
+          "retention_3s",
+          "retention_6s",
+          "retention_15s",
+          "retention_25_pct",
+          "retention_50_pct",
+          "retention_75_pct",
+          "completion_rate",
+          "follow_next_rate",
+          "avg_watch_sec",
+          "avg_episodes_per_user",
+          "episodes_per_session",
+          "unlock_or_subscribe_rate",
+          "story_roi"
+        ],
+        "source": "Deloitte short-form video series KPI guidance; first-episode floor per Spyro-Soft microdrama monetisation 2026",
+        "source_ids": [
+          "deloitte_short_form_series_2026",
+          "spyro_soft_microdrama_monetisation_2026"
+        ]
+      },
+      "kind": "n2d_retention_benchmarks",
+      "policy": "只读参照线；平台差异大，正式阈值应按本作 platform_metrics 与 n2d-feedback 第一方数据校准。",
+      "provenance": {
+        "app_retention_reference.china_short_drama_apps.d14_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "China short-drama app D14 retention reference; app/series-pack level.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "app_retention_reference.china_short_drama_apps.d1_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "China short-drama app D1 retention reference; app/series-pack level.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "app_retention_reference.china_short_drama_apps.d7_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "China short-drama app D7 retention reference; app/series-pack level.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "app_retention_reference.global_short_drama_apps.d14_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Global top short-drama app D14 retention reference; app/series-pack level.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "app_retention_reference.global_short_drama_apps.d1_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Global top short-drama app D1 retention reference; app/series-pack level, not per-episode retention.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "app_retention_reference.global_short_drama_apps.d7_retention": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Global top short-drama app D7 retention reference; app/series-pack level.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "adjoe_sensor_tower_short_drama_retention_2026"
+          ]
+        },
+        "creative_attention.caption_words_per_sec_band": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Readable caption or on-screen text density band for short-form vertical creative.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "tiktok_creative_best_practices_2025"
+          ]
+        },
+        "creative_attention.first_3s_proposition_required": {
+          "checked_at": "2026-06-25",
+          "confidence": "high",
+          "definition": "First 3 seconds should make the content proposition readable before deeper body content.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "tiktok_creative_best_practices_2025"
+          ]
+        },
+        "creative_attention.first_6s_hook_required": {
+          "checked_at": "2026-06-25",
+          "confidence": "high",
+          "definition": "The first 6 seconds carry most ad recall impact and must contain a hook.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "tiktok_creative_best_practices_2025"
+          ]
+        },
+        "episode_kpi_targets.first_episode_completion_floor": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "First-episode completion-rate QC floor (≥0.75): below this signals a content or player problem. Ep1 is the make-or-break episode, audited separately from the generic completion_rate target.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "spyro_soft_microdrama_monetisation_2026"
+          ]
+        },
+        "episode_kpi_targets.required_metrics": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Episode and series KPIs required for a usable short-form series feedback loop.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "deloitte_short_form_series_2026"
+          ]
+        },
+        "proxy_thresholds.cold_open_pull_floor": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Per-episode cold-open pull-strength floor (0-1, 4-layer conflict/suspense/reversal/info weighting). Below floor = opening has a hook but lacks depth. Motivated by Sensor Tower's opening-hook-vs-cliffhanger unlock correlation; the 0.3 cut is an internal heuristic, advisory-only, recalibrate via n2d-feedback.",
+          "expires_at": "2026-09-28",
+          "source_ids": [
+            "adjoe_sensor_tower_cold_open_unlock_2026",
+            "n2d_internal_pacing_heuristic_2026"
+          ]
+        },
+        "proxy_thresholds.combat_cut_interval_slow_sec": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Internal heuristic upper bound for mean shot/cut interval inside a combat (fight_exchange/magic_burst) clip; above = sluggish action cadence. Grounded in the general short-drama '画面每~5s 一切' editing tip + 导演节奏.md action curve (combat should cut AT LEAST that dense). NOT an external published combat cuts-per-second figure — 2026-06-28 search found none. advisory-only.",
+          "expires_at": "2026-09-28",
+          "source_ids": [
+            "n2d_internal_pacing_heuristic_2026"
+          ]
+        },
+        "proxy_thresholds.density_fast_per_min": {
+          "checked_at": "2026-06-25",
+          "confidence": "low",
+          "definition": "Internal heuristic upper bound for shots-per-minute (above = fatigue). NOT an external CPM benchmark — see density_slow_per_min note; advisory-only, recalibrate via n2d-feedback first-party metrics.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "n2d_internal_pacing_heuristic_2026"
+          ]
+        },
+        "proxy_thresholds.density_slow_per_min": {
+          "checked_at": "2026-06-25",
+          "confidence": "low",
+          "definition": "Internal heuristic lower bound for shots-per-minute (below = PPT-slow). NOT an external CPM benchmark — 2026-06-25 search found no defensible published cuts/shots-per-minute figure for short drama; derived from 导演节奏.md shot-duration curve. advisory-only.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "n2d_internal_pacing_heuristic_2026"
+          ]
+        },
+        "proxy_thresholds.hook_gap_sec": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Domestic mid-episode max gap (sec) between hooks before audience drift risk (导演节奏 §二 每 15-20s 一钩). Internal heuristic, advisory-only; beat_audit uses it as the default region's hook-gap ceiling, recalibrate via n2d-feedback.",
+          "expires_at": "2026-09-28",
+          "source_ids": [
+            "n2d_internal_pacing_heuristic_2026",
+            "tiktok_creative_best_practices_2025"
+          ]
+        },
+        "proxy_thresholds.hook_window_sec": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Local proxy window for evaluating whether the opening contains a cold visual hook.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "tiktok_creative_best_practices_2025"
+          ]
+        },
+        "proxy_thresholds.overseas_combat_cut_interval_slow_sec": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Overseas (ReelShort/TikTok) combat cadence is tighter than domestic; internal heuristic lower-than-domestic upper bound for mean combat cut interval. Same internal-heuristic basis as combat_cut_interval_slow_sec. advisory-only.",
+          "expires_at": "2026-09-28",
+          "source_ids": [
+            "n2d_internal_pacing_heuristic_2026"
+          ]
+        },
+        "proxy_thresholds.overseas_hook_gap_sec": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Overseas (ReelShort/TikTok) tightened max gap (sec) between hooks/reversals; ~10s vs domestic ~20s. Applied by beat_audit only when 变现模式=海外 or 发行地区 is overseas (北美/东南亚/全球). Practitioner-grade, advisory-only.",
+          "expires_at": "2026-09-28",
+          "source_ids": [
+            "overseas_microdrama_pacing_2026"
+          ]
+        },
+        "proxy_thresholds.retention_hook_floor": {
+          "checked_at": "2026-06-25",
+          "confidence": "low",
+          "definition": "Internal pre-release proxy target for strong opening retention; must be recalibrated by first-party metrics.",
+          "expires_at": "2026-09-25",
+          "source_ids": [
+            "tiktok_creative_best_practices_2025"
+          ]
+        }
+      },
+      "proxy_thresholds": {
+        "advisory_warn_floor": 70.0,
+        "cold_open_pull_floor": 0.3,
+        "combat_cut_interval_slow_sec": 5.0,
+        "density_fast_per_min": 45.0,
+        "density_slow_per_min": 10.0,
+        "hook_gap_sec": 20.0,
+        "hook_window_sec": 3.0,
+        "long_cluster_min": 3,
+        "long_shot_sec": 6.0,
+        "min_clips_for_score": 4,
+        "open_shot_max_sec": 5.0,
+        "overseas_combat_cut_interval_slow_sec": 3.5,
+        "overseas_hook_gap_sec": 10.0,
+        "retention_hook_floor": 0.8,
+        "retention_mid_floor": 0.6
+      },
+      "required_provenance_fields": [
+        "source_ids",
+        "definition",
+        "checked_at",
+        "expires_at",
+        "confidence"
+      ],
+      "schema_version": 2,
+      "short_video_engagement_reference": {
+        "source": "Wistia State of Video 2025/2026",
+        "source_ids": [
+          "wistia_state_of_video_2026"
+        ],
+        "under_1_min_engagement_rate_2025": 0.5,
+        "under_3_min_highest_engagement_2026": true
+      },
+      "sources": {
+        "adjoe_sensor_tower_cold_open_unlock_2026": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Public summary observing next-episode unlock rate correlates with the current episode's opening-hook strength more than with the prior episode-end cliffhanger. Motivates a per-episode cold-open pull-strength floor; advisory-only proxy, recalibrate via first-party metrics.",
+          "expires_at": "2026-09-28",
+          "publisher": "adjoe / Sensor Tower (public summary)",
+          "title": "Sensor Tower microdrama unlock-correlation note (opening hook vs episode-end cliffhanger)",
+          "url": "https://adjoe.io/blog/short-drama-apps-rewarded-engagement/"
+        },
+        "adjoe_sensor_tower_short_drama_retention_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Public summary of Sensor Tower top-200 short drama app D1/D7/D14 retention benchmarks.",
+          "expires_at": "2026-09-25",
+          "publisher": "adjoe",
+          "title": "Microdramas' Hypergrowth Problems Meet Rewarded Engagement",
+          "url": "https://adjoe.io/blog/short-drama-apps-rewarded-engagement/"
+        },
+        "deloitte_short_form_series_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Short-form series KPI guidance: completion, episode depth, subscription uptake, and story ROI.",
+          "expires_at": "2026-09-25",
+          "publisher": "Deloitte Insights",
+          "title": "Deloitte Insights: Short-form video series",
+          "url": "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-and-telecom-predictions/2026/short-form-video-series.html"
+        },
+        "marketingdive_sensor_tower_microdrama_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Sensor Tower market context: category growth, time spent, revenue, and retention/monetization dependence.",
+          "expires_at": "2026-09-25",
+          "publisher": "Marketing Dive",
+          "title": "Microdrama apps stand out on mobile: Here's what the numbers say",
+          "url": "https://www.marketingdive.com/news/microdrama-apps-stand-out-on-mobile-heres-what-the-numbers-say/812610/"
+        },
+        "n2d_internal_pacing_heuristic_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "low",
+          "definition": "Internal pacing proxy derived from 导演节奏.md shot-duration curve (铺垫 3-5s/镜、爽点碎切 1-2s/镜). 2026-06-25 流程自审实搜确认：短剧『镜/分钟』『每N秒一钩』无可辩护的公开 CPM/SPM 基准，故此口径明确标为内部启发式、非市场基准，只作 advisory 旁路评估，正式阈值须由 n2d-feedback 第一方数据校准。校准已落地（2026-06-27）：`n2d-feedback --write-pacing-profiles` 据第一方留存/跳出写 生产数据/pacing_profiles.json（kind n2d_pacing_profiles），pacing_retention.py 在 evidence_status=calibrated 时优先采用其 density_slow/fast_per_min，覆盖此处默认值。",
+          "expires_at": "2026-09-25",
+          "publisher": "anime-armory n2d-review 流程自审",
+          "title": "n2d 导演节奏镜头时长曲线（内部启发式·无外部 CPM 基准）",
+          "url": "internal://n2d/references/导演节奏.md"
+        },
+        "overseas_microdrama_pacing_2026": {
+          "checked_at": "2026-06-28",
+          "confidence": "low",
+          "definition": "Overseas (ReelShort/TikTok) short-drama creative pacing guidance: opening conflict in first 3s and a major reversal roughly every ~10s, denser than the domestic ~15-20s cadence. Practitioner/white-paper grade, not a platform-official metric; advisory-only, recalibrate via n2d-feedback first-party data.",
+          "expires_at": "2026-09-28",
+          "publisher": "出海运营白皮书（行业整理）",
+          "title": "2026 TikTok 短剧机构全域运营白皮书（出海素材节奏规范）",
+          "url": "https://www.sohu.com/a/1037854031_122836987"
+        },
+        "spyro_soft_microdrama_monetisation_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Microdrama monetisation/QC reference: first-episode completion ≥75% used as a content/player quality floor, free-episode-before-paywall placement, ARPU/conversion context.",
+          "expires_at": "2026-09-25",
+          "publisher": "Spyro-Soft",
+          "title": "Microdrama monetisation models — why the real innovation is the payment stack",
+          "url": "https://spyro-soft.com/blog/media-and-entertainment/microdrama-monetisation-models-why-the-real-innovation-isnt-the-content-its-the-payment-stack"
+        },
+        "tiktok_creative_best_practices_2025": {
+          "checked_at": "2026-06-25",
+          "confidence": "high",
+          "definition": "Short-form ad creative guidance for first seconds hook, proposition, and caption density.",
+          "expires_at": "2026-09-25",
+          "publisher": "TikTok For Business",
+          "title": "TikTok Ads Creative Best Practices",
+          "url": "https://ads.tiktok.com/help/article/creative-best-practices"
+        },
+        "wistia_state_of_video_2026": {
+          "checked_at": "2026-06-25",
+          "confidence": "medium",
+          "definition": "Short video engagement context used only as secondary creative-duration reference.",
+          "expires_at": "2026-09-25",
+          "publisher": "Wistia",
+          "title": "Wistia 2026 State of Video",
+          "url": "https://wistia.com/explore/state-of-video-report"
+        }
+      },
+      "valid_until": "2026-09-25"
+    },
+    "roi_floor_reference": 1.2,
+    "roi_market_median_reference": 1.1,
+    "sources": [
+      {
+        "checked": "2026-06",
+        "title": "搜狐《2026 AI 真人短剧工业化测评》"
+      },
+      {
+        "checked": "2026-06",
+        "title": "知乎《AI 漫剧角色一致性与自动化生产》"
+      },
+      {
+        "checked": "2026-06",
+        "title": "TVOAO《短漫剧的冰与火：成本暴跌10倍，爆款新鲜期缩至3周》"
+      },
+      {
+        "checked": "2026-06",
+        "title": "36氪《AI漫剧：百亿风口下90%在亏损》"
+      },
+      {
+        "checked": "2026-06-25",
+        "title": "TikTok Ads Creative Best Practices",
+        "url": "https://ads.tiktok.com/help/article/creative-best-practices"
+      },
+      {
+        "checked": "2026-06-25",
+        "title": "Deloitte Insights: Short-form video series",
+        "url": "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-and-telecom-predictions/2026/short-form-video-series.html"
+      },
+      {
+        "checked": "2026-06-25",
+        "title": "Adjoe: Microdramas' Hypergrowth Problems Meet Rewarded Engagement",
+        "url": "https://adjoe.io/blog/short-drama-apps-rewarded-engagement/"
+      },
+      {
+        "checked": "2026-06-25",
+        "title": "Wistia 2026 State of Video",
+        "url": "https://wistia.com/explore/state-of-video-report"
+      },
+      {
+        "checked": "2026-06-25",
+        "title": "Wistia 2025 State of Video PR",
+        "url": "https://www.prnewswire.com/news-releases/wistias-2025-state-of-video-report-shows-use-of-ai-in-video-production-more-than-doubled-over-last-year-302411243.html"
+      },
+      {
+        "checked": "2026-07-11",
+        "title": "虎嗅《红果万播单价跌至5-10元》",
+        "url": "https://www.huxiu.com/article/4861632.html"
+      },
+      {
+        "checked": "2026-07-11",
+        "title": "钛媒体《AI漫剧：爆款率0.16%，90%在亏损》",
+        "url": "https://www.tmtpost.com/7905101.html"
+      }
+    ]
+  },
+  "kind": "n2d_production_dashboard",
+  "release_metrics_file": "",
+  "retention_trend": {},
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "totals": {
+    "blockers_per_attempt": 0.0,
+    "consistency_blockers": 0,
+    "consistency_ledger_counts": {
+      "block": 0,
+      "high": 0,
+      "medium": 0
+    },
+    "consistency_warnings": 0,
+    "cost_per_finished_min": {},
+    "cost_totals": {},
+    "deliverable_pass_rate": 1.0,
+    "duration_hms": "2m10s",
+    "duration_sec": 129.846,
+    "elapsed_per_finished_min_sec": null,
+    "episode_count": 10,
+    "event_count": 1,
+    "false_positive_recoveries": 0,
+    "false_positive_recovery_rate": null,
+    "final_pass_rate": 1.0,
+    "flow_speed": {
+      "first_episode_gate": "",
+      "gates_passed": 0,
+      "gates_passed_per_day": 0.0,
+      "measurement_start": "2026-07-14T11:33:02+00:00",
+      "time_to_first_episode_hms": "—",
+      "time_to_first_episode_hours": null,
+      "time_to_first_episode_sec": null
+    },
+    "generation_attempts": 1,
+    "generation_fails": 0,
+    "generation_pass_rate": 1.0,
+    "generation_passes": 1,
+    "one_pass_count": 1,
+    "one_pass_rate": 1.0,
+    "qa_blockers": 0,
+    "qa_infos": 0,
+    "qa_warnings": 0,
+    "recoup_ratio": {},
+    "redraw_categories": {},
+    "redraw_count": 0,
+    "redraw_rate": 0.0,
+    "release_net_totals": {},
+    "release_plays": 0,
+    "release_revenue_totals": {},
+    "release_rows": 0,
+    "release_spend_totals": {},
+    "runtime_hms": "—",
+    "runtime_sec": 0.0,
+    "warnings_per_attempt": 0.0
+  },
+  "version": 1
+}

@@ -22,8 +22,37 @@ from typing import Iterable, Sequence
 KIND = "n2d_source_analysis"
 ANALYSIS_JSON_REL = os.path.join("设定库", "source_analysis.json")
 ANALYSIS_MD_REL = os.path.join("设定库", "source_analysis.md")
+SPLIT_PLAN_REL = os.path.join("脚本", "split_plan.json")
+SPLIT_PLAN_HEAD_BYTES = 64 * 1024
+ESTIMATED_EPISODE_COUNT_RE = re.compile(
+    rb'"estimated_total_episode_count"\s*:\s*([0-9]+)'
+)
 
 CHAPTER_RE = re.compile(r"^\s*第\s*([0-9零一二三四五六七八九十百千两]+)\s*[章回节卷]")
+CHINESE_DIGITS = {
+    "零": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4,
+    "五": 5, "六": 6, "七": 7, "八": 8, "九": 9,
+}
+CHINESE_UNITS = {"十": 10, "百": 100, "千": 1000}
+INTEGRITY_EXAMPLE_LIMIT = 50
+
+# Conservative source-hygiene signals. These are report-only: source text is
+# never rewritten, and downstream creators must still confirm every candidate.
+SEPARATOR_RE = re.compile(r"^(?:-{3,}|—{3,}|_{3,}|={3,}|\*{3,}|\.{3,}|…{2,})$")
+HARD_SEPARATOR_RE = re.compile(r"^(?:-{5,}|—{5,}|_{5,}|={5,}|\*{5,})$")
+CAPTION_RE = re.compile(r"^[一-龥A-Za-z·—-]{2,16}$")
+AUTHOR_NOTE_HINT_RE = re.compile(
+    r"(?:作者的话|本章说|本书|打卡处|前文已修改|请假|休息|歇.{0,3}天|加更|"
+    r"更新|码字|发[一二两三四五六七八九十\d]+章|[一二两三四五六七八九十\d]+更|继续.{0,4}更|"
+    r"剩下.{0,6}发|欠.{0,8}章|还债|求.{0,8}(?:票|收藏|好评|评分)|"
+    r"跪求|催更|礼物|奉上|道歉|感谢.{0,8}支持|五星|小作者|新地图|铺垫.{0,4}章|"
+    r"理解一下|TVT|OVO|ovo|嘤嘤|困困|八爪)"
+)
+COMPLETE_SIGNAL_RE = re.compile(r"(?:全书完|全文完|正文完|完结感言|正式完结|已完结)")
+ONGOING_SIGNAL_RE = re.compile(
+    r"(?:未完待续|请假|加更|继续更新|明天.{0,8}(?:继续|更新|还债)|恢复.{0,4}更|"
+    r"欠.{0,8}章|还债|下一章)"
+)
 SENT_SPLIT_RE = re.compile(r"(?<=[。！？!?；;])")
 SPEECH_VERB_RE = re.compile(
     r"([一-龥]{2,4}?)(?:[，,、]?\s*)"
@@ -50,7 +79,7 @@ STOP_NAMES = {
     # The lightweight regex can otherwise misread “轻声道” as a character named “轻声”.
     "继续", "轻声", "低声", "沉声", "冷声", "淡淡", "忽然", "立刻", "缓缓", "咬牙", "皱眉",
     "抬头", "转身", "一笑", "冷笑", "苦笑", "漠然", "随后", "按理", "还是", "随口", "连忙",
-    "这番话", "能眼睁睁", "凄厉的惨", "侧过头", "面色放缓", "思索片刻",
+    "这番话", "能眼睁睁", "凄厉的惨", "侧过头", "面色放缓", "思索片刻", "叹了口气", "自顾自",
 }
 STOP_ENDINGS = ("时候", "声音", "眼神", "脸色", "身影", "心中", "门口", "台下", "众人", "所有")
 NON_PERSON_PREFIXES = ("获得", "当前", "消耗", "化作", "无数", "一道")
@@ -60,13 +89,14 @@ BAD_NAME_FRAGMENTS = (
     "是否", "消耗", "要知", "世道", "没有", "高临下", "思索", "声音", "侧过头",
     "面色", "闻言", "继续", "顿了顿", "摇头", "抱拳", "无奈", "疑惑", "试探",
     "意味深长", "躬身", "忽而", "森然", "说着", "平淡", "喃喃", "神神秘秘",
-    "下意识", "正色", "咬牙切齿",
+    "下意识", "正色", "咬牙切齿", "叹了口气", "自顾自",
 )
 SPEAKER_ACTION_MARKERS = (
     "侧过头", "面色", "声音", "叹了口气", "闻言", "思索", "摇了摇头", "抬起头",
     "皱眉", "微微", "缓缓", "漠然", "冷笑", "苦笑", "柔声", "轻声", "低声",
     "沉声", "冷声", "厉声", "拱手", "咬牙", "转身", "看着", "望着", "盯着",
     "整理", "直起身", "眼中", "脸上", "神色", "心中", "嘴角", "眉头",
+    "自顾自",
 )
 
 LOCATION_SUFFIXES = (
@@ -110,8 +140,179 @@ def read_text(path: str) -> str:
     return raw.decode("utf-8", errors="replace")
 
 
+def read_estimated_episode_count(root: str) -> int | None:
+    """Read the split-plan summary field without loading a potentially huge plan.
+
+    split_novel writes this field near the JSON header before source_units. A
+    bounded binary read keeps the standalone source_analyze CLI safe for plans
+    that are tens of MiB while preserving the explicit-episodes API behavior.
+    """
+    path = Path(root) / SPLIT_PLAN_REL
+    try:
+        with path.open("rb") as handle:
+            head = handle.read(SPLIT_PLAN_HEAD_BYTES)
+    except OSError:
+        return None
+    match = ESTIMATED_EPISODE_COUNT_RE.search(head)
+    return int(match.group(1)) if match else None
+
+
 def normalize_paragraphs(text: str) -> list[str]:
     return [p.strip() for p in re.split(r"\r?\n+", text or "") if p.strip()]
+
+
+def parse_chapter_number(value: str | None) -> int | None:
+    """Parse the Arabic/common-Chinese chapter token captured by CHAPTER_RE."""
+    token = str(value or "").strip()
+    if token.isdigit():
+        return int(token)
+    if not token or any(ch not in CHINESE_DIGITS and ch not in CHINESE_UNITS for ch in token):
+        return None
+    total = 0
+    number = 0
+    for ch in token:
+        if ch in CHINESE_DIGITS:
+            number = CHINESE_DIGITS[ch]
+        else:
+            total += (number or 1) * CHINESE_UNITS[ch]
+            number = 0
+    return total + number
+
+
+def fold_adjacent_duplicate_chapter_headings(text: str) -> str:
+    """Drop only physically adjacent, byte-equivalent chapter-heading lines.
+
+    Comparison happens after Python removes the newline terminator but before
+    stripping any other whitespace. Thus differently spaced/titled headings,
+    or the same heading separated by a blank/body line, remain untouched.
+    """
+    kept: list[str] = []
+    previous: str | None = None
+    for line in (text or "").splitlines():
+        if previous is not None and line == previous and CHAPTER_RE.match(line):
+            previous = line
+            continue
+        kept.append(line)
+        previous = line
+    return "\n".join(kept)
+
+
+def _near_line(index: int, candidates: set[int], distance: int) -> bool:
+    return any(abs(index - other) <= distance for other in candidates)
+
+
+def _source_integrity(text: str) -> dict:
+    """Return report-only source-integrity evidence with original line numbers."""
+    lines = (text or "").splitlines()
+    duplicate_rows: list[dict] = []
+    kept_headings: list[dict] = []
+    previous: str | None = None
+    previous_line = 0
+    chapter_line_indexes: set[int] = set()
+
+    for index, line in enumerate(lines):
+        match = CHAPTER_RE.match(line)
+        if match:
+            chapter_line_indexes.add(index)
+            if previous is not None and line == previous and CHAPTER_RE.match(previous):
+                duplicate_rows.append({
+                    "line": index + 1,
+                    "duplicate_of_line": previous_line,
+                    "text": line.strip(),
+                })
+            else:
+                kept_headings.append({
+                    "line": index + 1,
+                    "number": parse_chapter_number(match.group(1)),
+                    "text": line.strip(),
+                })
+        previous = line
+        previous_line = index + 1
+
+    chapter_numbers = sorted({
+        row["number"] for row in kept_headings if isinstance(row.get("number"), int)
+    })
+    missing: list[int] = []
+    missing_truncated = False
+    if chapter_numbers:
+        span = chapter_numbers[-1] - chapter_numbers[0]
+        if span <= 10000:
+            present = set(chapter_numbers)
+            missing = [n for n in range(chapter_numbers[0], chapter_numbers[-1] + 1) if n not in present]
+        else:
+            missing_truncated = True
+
+    captions: list[dict] = []
+    for index, line in enumerate(lines):
+        value = line.strip()
+        if (
+            not value
+            or CHAPTER_RE.match(line)
+            or not CAPTION_RE.fullmatch(value)
+            or SEPARATOR_RE.fullmatch(value)
+            or value.endswith(("——", "--"))
+            or AUTHOR_NOTE_HINT_RE.search(value)
+        ):
+            continue
+        adjacent_separator = any(
+            0 <= other < len(lines) and SEPARATOR_RE.fullmatch(lines[other].strip())
+            for other in (index - 1, index + 1)
+        )
+        if _near_line(index, chapter_line_indexes, 4) or adjacent_separator:
+            captions.append({"line": index + 1, "text": value, "kind": "suspected_caption"})
+
+    hard_separator_indexes = {
+        index for index, line in enumerate(lines) if HARD_SEPARATOR_RE.fullmatch(line.strip())
+    }
+    author_notes: list[dict] = []
+    for index, line in enumerate(lines):
+        value = line.strip()
+        if not value or not AUTHOR_NOTE_HINT_RE.search(value):
+            continue
+        if index < 20 or _near_line(index, hard_separator_indexes, 2):
+            author_notes.append({
+                "line": index + 1,
+                "text": value[:200],
+                "kind": "suspected_author_note",
+            })
+
+    completion_clues: list[dict] = []
+    for index, line in enumerate(lines):
+        value = line.strip()
+        if not value:
+            continue
+        if COMPLETE_SIGNAL_RE.search(value):
+            completion_clues.append({"line": index + 1, "text": value[:200], "kind": "complete"})
+        if ONGOING_SIGNAL_RE.search(value) and (
+            index < 20 or _near_line(index, hard_separator_indexes, 2)
+        ):
+            completion_clues.append({"line": index + 1, "text": value[:200], "kind": "ongoing"})
+
+    last_content_line = max((i + 1 for i, line in enumerate(lines) if line.strip()), default=0)
+    near_end = [
+        clue for clue in completion_clues
+        if clue["line"] >= max(1, last_content_line - 200)
+    ]
+    if near_end:
+        completion_status = "likely_complete" if near_end[-1]["kind"] == "complete" else "likely_ongoing"
+    else:
+        completion_status = "unknown"
+
+    return {
+        "line_count": len(lines),
+        "raw_chapter_heading_count": len(kept_headings) + len(duplicate_rows),
+        "adjacent_duplicate_heading_count": len(duplicate_rows),
+        "adjacent_duplicate_heading_examples": duplicate_rows[:INTEGRITY_EXAMPLE_LIMIT],
+        "duplicate_heading_examples_truncated": len(duplicate_rows) > INTEGRITY_EXAMPLE_LIMIT,
+        "chapter_headings_after_fold": len(kept_headings),
+        "unique_chapter_count": len(chapter_numbers),
+        "missing_chapter_numbers": missing,
+        "missing_chapter_numbers_truncated": missing_truncated,
+        "completion_status": completion_status,
+        "completion_clues": completion_clues,
+        "suspected_captions": captions,
+        "author_notes": author_notes,
+    }
 
 
 def split_sentences(text: str) -> list[str]:
@@ -122,7 +323,8 @@ def split_sentences(text: str) -> list[str]:
 
 
 def chapter_count(text: str) -> int:
-    return sum(1 for p in normalize_paragraphs(text) if CHAPTER_RE.match(p))
+    folded = fold_adjacent_duplicate_chapter_headings(text)
+    return sum(1 for line in folded.splitlines() if CHAPTER_RE.match(line))
 
 
 def clean_name(name: str) -> str:
@@ -313,7 +515,8 @@ def episode_briefs(episodes: Sequence[str], limit: int = 12) -> list[dict]:
 
 
 def analyze_source(title: str, text: str, episodes: Sequence[str] | None = None) -> dict:
-    normalized = "\n".join(normalize_paragraphs(text))
+    source_integrity = _source_integrity(text)
+    normalized = "\n".join(normalize_paragraphs(fold_adjacent_duplicate_chapter_headings(text)))
     return {
         "schema_version": 1,
         "kind": KIND,
@@ -322,9 +525,10 @@ def analyze_source(title: str, text: str, episodes: Sequence[str] | None = None)
         "source": "n2d_source_text",
         "stats": {
             "characters": len(re.sub(r"\s+", "", normalized)),
-            "chapters": chapter_count(normalized),
+            "chapters": source_integrity["chapter_headings_after_fold"],
             "episode_scaffolds": len(episodes or []),
         },
+        "source_integrity": source_integrity,
         "genre_candidates": infer_genres(normalized),
         "worldview_candidates": summarize_worldview(normalized),
         "characters": extract_characters(normalized),
@@ -385,6 +589,37 @@ def render_analysis_md(analysis: dict) -> str:
         f"- 粗切集数：{stats.get('episode_scaffolds', 0)}",
         "",
     ]
+    integrity = analysis.get("source_integrity") or {}
+    if integrity:
+        missing = integrity.get("missing_chapter_numbers") or []
+        status_labels = {
+            "likely_complete": "存在靠近文末的完结线索",
+            "likely_ongoing": "存在靠近文末的连载/续更线索",
+            "unknown": "未识别到可靠完结或续更线索",
+        }
+        lines += [
+            "## 源完整性（source_integrity）",
+            f"- 原始章节标题：{integrity.get('raw_chapter_heading_count', 0)}",
+            f"- 相邻完全重复标题：{integrity.get('adjacent_duplicate_heading_count', 0)}（仅分析时折叠，源文件不改）",
+            f"- 折叠后章节标题：{integrity.get('chapter_headings_after_fold', 0)}",
+            f"- 唯一章号数：{integrity.get('unique_chapter_count', 0)}",
+            f"- 缺失章号：{', '.join(str(n) for n in missing) if missing else '（无）'}",
+            f"- 连载/完结判断：{status_labels.get(integrity.get('completion_status'), integrity.get('completion_status', 'unknown'))}",
+        ]
+        clues = integrity.get("completion_clues") or []
+        if clues:
+            lines.append("- 连载/完结线索：" + "；".join(
+                f"L{item.get('line')} {item.get('text')}" for item in clues[-5:]
+            ))
+        captions = integrity.get("suspected_captions") or []
+        lines.append(f"- 疑似图注：{len(captions)} 条")
+        for item in captions[:20]:
+            lines.append(f"  - L{item.get('line')}：{item.get('text')}")
+        notes = integrity.get("author_notes") or []
+        lines.append(f"- 疑似作者注：{len(notes)} 条")
+        for item in notes[:20]:
+            lines.append(f"  - L{item.get('line')}：{item.get('text')}")
+        lines.append("")
     genres = analysis.get("genre_candidates") or []
     lines.append("## 题材候选")
     if genres:
@@ -426,6 +661,13 @@ def render_analysis_md(analysis: dict) -> str:
 
 def write_analysis(root: str, title: str, text: str, episodes: Sequence[str] | None = None) -> dict:
     analysis = analyze_source(title, text, episodes)
+    if episodes is None:
+        estimated_episode_count = read_estimated_episode_count(root)
+        if estimated_episode_count is not None:
+            analysis["stats"]["episode_scaffolds"] = estimated_episode_count
+            analysis["stats"]["episode_scaffolds_source"] = (
+                "脚本/split_plan.json:estimated_total_episode_count"
+            )
     root_path = Path(root)
     json_path = root_path / ANALYSIS_JSON_REL
     md_path = root_path / ANALYSIS_MD_REL

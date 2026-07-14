@@ -270,6 +270,8 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
             "内部学习": "internal_only",
             "学习demo": "internal_only",
             "学习 demo": "internal_only",
+            "demo学习": "internal_only",
+            "学习使用": "internal_only",
             "demo学习使用": "internal_only",
             "做demo学习使用": "internal_only",
             "自用demo": "internal_only",
@@ -434,6 +436,155 @@ def load_settings_meta(work_root: str) -> Dict[str, Dict[str, str]]:
         if key and key not in out:
             out[key] = {"value": val, "source": _setting_source_from_comment(comment), "line": line}
     return out
+
+
+# Context-pack consumers need the current settings, but must not receive the
+# whole append-only audit trail as if every historical sentence were still a
+# current project fact.  Keep this projection in the settings helper so the
+# authoritative region boundary stays identical to ``load_settings_meta``.
+SETTINGS_CONTEXT_CORRECTION_LIMIT = 3
+SETTINGS_CONTEXT_RECORD_MAX_CHARS = 600
+_CORRECTION_RECORD_MARKERS = (
+    "数据校正",
+    "事实校正",
+    "口径校正",
+    "更正",
+    "纠正",
+    "订正",
+    "修正",
+    "作废",
+    "不再作为",
+    "以此为准",
+    "以最新为准",
+)
+
+
+def _settings_record_candidates(text: str) -> Tuple[List[str], str]:
+    """Return audit-record candidates in newest-first helper order.
+
+    Current files have a ``## 记录`` region and ``append_record`` prepends new
+    entries there.  Very old files sometimes placed dated bullets directly in
+    the document; those remain readable without ever becoming setting lines.
+    """
+    lines = text.splitlines()
+    idx = _record_index(lines)
+    if idx is not None:
+        candidates = [line for line in lines[idx + 1:] if _looks_like_record_line(line)]
+        return candidates, "record_section"
+    legacy = [line for line in lines if _looks_like_record_line(line)]
+    # Legacy writers were not consistent about prepend vs append.  ISO dates
+    # let us recover newest-first ordering without changing same-day order.
+    legacy.sort(
+        key=lambda line: (
+            re.search(r"\d{4}-\d{2}-\d{2}", line).group(0)
+            if re.search(r"\d{4}-\d{2}-\d{2}", line)
+            else ""
+        ),
+        reverse=True,
+    )
+    return legacy, ("legacy_dated_lines" if legacy else "none")
+
+
+def _compact_record_line(line: str) -> str:
+    value = re.sub(r"^\s*[-*]\s*", "", str(line or "").strip())
+    value = re.sub(r"\s+", " ", value).strip()
+    if len(value) > SETTINGS_CONTEXT_RECORD_MAX_CHARS:
+        value = value[:SETTINGS_CONTEXT_RECORD_MAX_CHARS].rstrip() + "…"
+    return value
+
+
+def settings_context_snapshot(
+    work_root: str,
+    *,
+    correction_limit: int = SETTINGS_CONTEXT_CORRECTION_LIMIT,
+) -> Dict[str, Any]:
+    """Build a bounded, history-safe settings view for downstream agents.
+
+    ``effective_settings`` is derived exclusively from
+    :func:`load_settings_meta`, which stops at the first ``## 记录`` heading
+    and ignores legacy dated audit lines.  Audit records are non-authoritative
+    provenance: only explicitly corrective entries are included, with a hard
+    cap.  Parsing failure fails closed to an empty snapshot; callers must never
+    fall back to previewing the entire file.
+    """
+    path = os.path.join(work_root.rstrip("/"), "_设置.md")
+    exists = os.path.isfile(path)
+    try:
+        limit = max(0, min(int(correction_limit), SETTINGS_CONTEXT_CORRECTION_LIMIT))
+    except (TypeError, ValueError):
+        limit = SETTINGS_CONTEXT_CORRECTION_LIMIT
+
+    base: Dict[str, Any] = {
+        "kind": "n2d_settings_context",
+        "version": 1,
+        "status": "missing" if not exists else "empty",
+        "source_path": "_设置.md",
+        "authority": {
+            "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+            "audit_records": "provenance_only_non_authoritative",
+            "records_can_override_effective_settings": False,
+        },
+        "effective_settings": {},
+        "recent_corrections": [],
+        "record_summary": {
+            "format": "none",
+            "records_seen": 0,
+            "corrections_seen": 0,
+            "corrections_included": 0,
+            "limit": limit,
+            "full_history_omitted": True,
+        },
+    }
+    if not exists:
+        return base
+
+    try:
+        meta = load_settings_meta(work_root)
+        # Do not expose raw source lines: a source comment is the only
+        # provenance needed by a stage consumer, and raw lines may carry
+        # unrelated legacy prose.
+        effective: Dict[str, Dict[str, str]] = {}
+        for key, item in meta.items():
+            effective[str(key)] = {
+                "value": str(item.get("value") or ""),
+                "source": str(item.get("source") or ""),
+            }
+
+        text = _read_text(path)
+        candidates, record_format = _settings_record_candidates(text)
+        corrections = [
+            compact
+            for line in candidates
+            for compact in [_compact_record_line(line)]
+            if compact and any(marker in compact for marker in _CORRECTION_RECORD_MARKERS)
+        ]
+        included = corrections[:limit]
+        base["effective_settings"] = effective
+        base["recent_corrections"] = [
+            {
+                "text": text,
+                "authority": "provenance_only_non_authoritative",
+            }
+            for text in included
+        ]
+        base["record_summary"] = {
+            "format": record_format,
+            "records_seen": len(candidates),
+            "corrections_seen": len(corrections),
+            "corrections_included": len(included),
+            "limit": limit,
+            "full_history_omitted": True,
+        }
+        base["status"] = "ok" if effective else "empty"
+        return base
+    except Exception:
+        # Fail closed: an unreadable/malformed settings file must not make the
+        # context builder leak the raw append-only audit trail as a fallback.
+        base["status"] = "parse_error"
+        base["issues"] = [
+            "settings helper could not build a current-settings projection; raw _设置.md history was intentionally omitted"
+        ]
+        return base
 
 
 # ── _设置.md 并发安全：flock + 原子写（与 progress.py 对称；并行 batch agent 抢写不再撕裂）──
@@ -815,6 +966,21 @@ def _contains_any(value: str, tokens: Iterable[str]) -> bool:
 
 def _audit_n2d_cross_settings(work_root: str, settings: Dict[str, str]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
+    # `load_settings()` intentionally contains project-local values only.  A
+    # sensitive setting such as compliance usage may therefore come entirely
+    # from the repository default and used to escape `settings audit`.  Audit
+    # the effective fallback whenever the project has not pinned it locally;
+    # known aliases normalize through the same SettingSpec, while unknown
+    # values remain an error (and compliance continues to fail closed).
+    if "合规用途" not in settings:
+        effective_compliance = get_setting(work_root, "合规用途", DEFAULTS["合规用途"])
+        compliance_row = validate_setting("合规用途", effective_compliance, family="n2d")
+        compliance_row = dict(compliance_row)
+        compliance_row["effective"] = True
+        compliance_row["message"] = (
+            "effective default: " + str(compliance_row.get("message") or "")
+        )
+        rows.append(compliance_row)
     image_model = settings.get("生图模型", "")
     image_channel = settings.get("生图AI") or settings.get("生图渠道") or ""
     if image_model and _contains_any(image_model, IMAGE_CHANNEL_TOKENS) and not _contains_any(image_model, IMAGE_MODEL_TOKENS):

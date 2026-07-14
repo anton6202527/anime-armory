@@ -17,6 +17,8 @@ import re
 import sys
 from typing import Dict, List, Optional, Sequence, Tuple
 
+from pillow_compat import pixel_data
+
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
@@ -74,14 +76,14 @@ def image_embedding(path: str) -> Optional[List[float]]:
         small = im.copy()
         small.thumbnail((96, 96))
         hist = [0.0] * 64
-        px = list(small.getdata())
+        px = list(pixel_data(small))
         for r, g, b in px:
             ri, gi, bi = r // 64, g // 64, b // 64
             hist[int(ri) * 16 + int(gi) * 4 + int(bi)] += 1.0
         total = len(px) or 1
         hist = [v / total for v in hist]
         gray_im = im.convert("L").resize((9, 8))
-        vals = list(gray_im.getdata())
+        vals = list(pixel_data(gray_im))
         gray = [[float(vals[y * 9 + x]) for x in range(9)] for y in range(8)]
         bits = dhash_bits(gray)
         return l2_normalize(hist + bits)

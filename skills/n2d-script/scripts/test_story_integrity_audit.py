@@ -153,6 +153,20 @@ def test_short_drama_pressure_phrases_count_as_advancing_and_motivated():
     assert "motivation_vector_missing" not in codes(result)
 
 
+def test_system_voice_is_not_treated_as_character_missing_motivation():
+    root = _mk_ep(
+        "[镜头1·系统·中性·快] 面板开启。\n"
+        "[镜头2·系统·中性·快] 获得道行二十年。\n"
+        "[镜头3·系统·中性·快] 是否收录妖物？\n"
+        "[镜头4·姜月初·坚定·快] 我要活下去。\n"
+    )
+
+    result = SI.audit_episode(root, "第1集")
+
+    motivation_findings = [f for f in result["findings"] if f["code"] == "motivation_vector_missing"]
+    assert all("系统" not in f.get("characters", []) for f in motivation_findings)
+
+
 def test_fake_cliffhanger_warned():
     root = _mk_ep(
         "[镜头1·旁白·平静·慢] 风吹过院子。\n"

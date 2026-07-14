@@ -1,0 +1,324 @@
+{
+  "kind": "n2d_boundary_review",
+  "version": 2,
+  "generated_at": "2026-07-14T07:44:14.637904+00:00",
+  "scope": "1-10",
+  "source": "boundary_audit.py",
+  "reviews": [
+    {
+      "episode": "第9集",
+      "blocker_id": "E0008-E0009:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0008-E0009",
+        "from_episode": 8,
+        "to_episode": 9,
+        "left_raw_rel": "脚本/第8集/raw.txt",
+        "right_raw_rel": "脚本/第9集/raw.txt",
+        "left_raw_sha256": "1a1ecfa0191739866f481c84f619e87813084569f856b4ffef3b9e8c95d0fc62",
+        "right_raw_sha256": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+        "contract_sha256": "6c3cbd090e299e89a9631d1d9967ce2bb1f3b95bd1350564ee20bec6266743ab"
+      },
+      "decision": "rewrite",
+      "notes": "导演批准首10集 source-unit 映射已实施；第8集收束朱厌战并以冒名暴露恐惧转场，第9集从镇魔司醒转与机构审视冷开。",
+      "reviewed_by": "user:project-owner-director",
+      "reviewed_at": "2026-07-14T10:42:38.285150+00:00",
+      "semantic_evidence": {},
+      "applied_receipt": {
+        "status": "applied",
+        "previous_boundary_contract_sha256": "6c3cbd090e299e89a9631d1d9967ce2bb1f3b95bd1350564ee20bec6266743ab",
+        "new_left_raw_sha256": "6fe38b654a6b55b836c96bdda7bf4b991cd129bea1de10f01007d4d5d31b21f0",
+        "new_right_raw_sha256": "c73b76ea9ab18a02f6ad0993f1d6ec4b3e25b9749dd4773ef4355fa122a33d91",
+        "source_mapping": {
+          "schema_version": 1,
+          "kind": "n2d_approved_split_mapping",
+          "approval": {
+            "reviewer": "user:project-owner",
+            "roles": [
+              "director",
+              "producer"
+            ],
+            "approved_at": "2026-07-14T18:25:00+08:00",
+            "evidence": "用户明确批准《_拆集复核.md》第1–10集边界，并允许按该映射重建仍为 raw-only 的首10集。"
+          },
+          "window": {
+            "start_episode": 1,
+            "end_episode": 10,
+            "start_source_unit_id": "U000001",
+            "end_source_unit_id": "U002458",
+            "next_source_unit_id": "U002459"
+          },
+          "episodes": [
+            {
+              "episode": 1,
+              "start_source_unit_id": "U000001",
+              "end_source_unit_id": "U000342",
+              "source_chapters": "1–2",
+              "core_scene": "穿越死局；杀裴长青取道行；斩虎；妖血录谱",
+              "end_hook": "我杀的第一个人，不是妖。"
+            },
+            {
+              "episode": 2,
+              "start_source_unit_id": "U000343",
+              "end_source_unit_id": "U000624",
+              "source_chapters": "3–4",
+              "core_scene": "穿黑赤制服冒名；被村民推上救村选择",
+              "end_hook": "青面郎君下令杀了她"
+            },
+            {
+              "episode": 3,
+              "start_source_unit_id": "U000625",
+              "end_source_unit_id": "U000907",
+              "source_chapters": "5–6",
+              "core_scene": "狼群围杀；重伤推进妖谱；反杀救村",
+              "end_hook": "姜月初擦刀：带路。"
+            },
+            {
+              "episode": 4,
+              "start_source_unit_id": "U000908",
+              "end_source_unit_id": "U001150",
+              "source_chapters": "7–8",
+              "core_scene": "广武休整与身体错位；姜家案异常；金城六村急报",
+              "end_hook": "六村，无一活口。"
+            },
+            {
+              "episode": 5,
+              "start_source_unit_id": "U001151",
+              "end_source_unit_id": "U001393",
+              "source_chapters": "9–10",
+              "core_scene": "武道正解与境界；逆人流赴金城",
+              "end_hook": "官道尽头两头猪妖露出獠牙"
+            },
+            {
+              "episode": 6,
+              "start_source_unit_id": "U001394",
+              "end_source_unit_id": "U001639",
+              "source_chapters": "11–12",
+              "core_scene": "斩猪妖；真正镇魔司逼近；点睛虎山神；食妖补气血",
+              "end_hook": "妖物，竟也是补药。"
+            },
+            {
+              "episode": 7,
+              "start_source_unit_id": "U001640",
+              "end_source_unit_id": "U001885",
+              "source_chapters": "13–14",
+              "core_scene": "提升实力；朱厌杀意；许年队交战；姜月初入场",
+              "end_hook": "血色虎影冲天，虎啸长街"
+            },
+            {
+              "episode": 8,
+              "start_source_unit_id": "U001886",
+              "end_source_unit_id": "U002143",
+              "source_chapters": "15–16",
+              "core_scene": "镇魔卫败退；完整虎妖化；斩朱厌；力竭醒转",
+              "end_hook": "她意识到冒名可能暴露"
+            },
+            {
+              "episode": 9,
+              "start_source_unit_id": "U002144",
+              "end_source_unit_id": "U002249",
+              "source_chapters": "17",
+              "core_scene": "醒在凉州镇魔司；机构压迫；魏合审视",
+              "end_hook": "姜洵之女，姜月初？"
+            },
+            {
+              "episode": 10,
+              "start_source_unit_id": "U002250",
+              "end_source_unit_id": "U002458",
+              "source_chapters": "18",
+              "core_scene": "身份被拆穿；押京或入司二选一；获得腰牌制服",
+              "end_hook": "她握住真正属于自己的腰牌"
+            }
+          ]
+        },
+        "recorded_by": "user:project-owner-director",
+        "recorded_at": "2026-07-14T10:42:38.285150+00:00"
+      },
+      "boundary_contract_sha256": "6c3cbd090e299e89a9631d1d9967ce2bb1f3b95bd1350564ee20bec6266743ab",
+      "status": "signed"
+    },
+    {
+      "episode": "第9集",
+      "blocker_id": "E0009-E0010:weak_episode_end",
+      "blocker_code": "weak_episode_end",
+      "blocker_message": "上集收口无可验证的语义钩或悬念断点。",
+      "boundary_contract": {
+        "boundary_id": "E0009-E0010",
+        "from_episode": 9,
+        "to_episode": 10,
+        "left_raw_rel": "脚本/第9集/raw.txt",
+        "right_raw_rel": "脚本/第10集/raw.txt",
+        "left_raw_sha256": "21973aae7b4a1e65930d4650ec311e500a96711f58ec6cee23b1cfc44cf62310",
+        "right_raw_sha256": "24a409334eeb7c82d01f1b0c68cf8e0273987f84094a4ec277854b48fc236713",
+        "contract_sha256": "c5d6d2f08c84d55b9c799ddfa58bc1bb576fe894947ccc81fa3265fdc539ee53"
+      },
+      "decision": "rewrite",
+      "notes": "导演批准首10集 source-unit 映射已实施；第9集以魏合叫出姜月初真名硬断，第10集独立承载身份审判、二选一与正式入司兑现。",
+      "reviewed_by": "user:project-owner-director",
+      "reviewed_at": "2026-07-14T10:42:38.333032+00:00",
+      "semantic_evidence": {},
+      "applied_receipt": {
+        "status": "applied",
+        "previous_boundary_contract_sha256": "c5d6d2f08c84d55b9c799ddfa58bc1bb576fe894947ccc81fa3265fdc539ee53",
+        "new_left_raw_sha256": "c73b76ea9ab18a02f6ad0993f1d6ec4b3e25b9749dd4773ef4355fa122a33d91",
+        "new_right_raw_sha256": "6d65b54983f36c986e06c1bfa29c026852aaa8b8fd7ae7243d5d688d48f03167",
+        "source_mapping": {
+          "schema_version": 1,
+          "kind": "n2d_approved_split_mapping",
+          "approval": {
+            "reviewer": "user:project-owner",
+            "roles": [
+              "director",
+              "producer"
+            ],
+            "approved_at": "2026-07-14T18:25:00+08:00",
+            "evidence": "用户明确批准《_拆集复核.md》第1–10集边界，并允许按该映射重建仍为 raw-only 的首10集。"
+          },
+          "window": {
+            "start_episode": 1,
+            "end_episode": 10,
+            "start_source_unit_id": "U000001",
+            "end_source_unit_id": "U002458",
+            "next_source_unit_id": "U002459"
+          },
+          "episodes": [
+            {
+              "episode": 1,
+              "start_source_unit_id": "U000001",
+              "end_source_unit_id": "U000342",
+              "source_chapters": "1–2",
+              "core_scene": "穿越死局；杀裴长青取道行；斩虎；妖血录谱",
+              "end_hook": "我杀的第一个人，不是妖。"
+            },
+            {
+              "episode": 2,
+              "start_source_unit_id": "U000343",
+              "end_source_unit_id": "U000624",
+              "source_chapters": "3–4",
+              "core_scene": "穿黑赤制服冒名；被村民推上救村选择",
+              "end_hook": "青面郎君下令杀了她"
+            },
+            {
+              "episode": 3,
+              "start_source_unit_id": "U000625",
+              "end_source_unit_id": "U000907",
+              "source_chapters": "5–6",
+              "core_scene": "狼群围杀；重伤推进妖谱；反杀救村",
+              "end_hook": "姜月初擦刀：带路。"
+            },
+            {
+              "episode": 4,
+              "start_source_unit_id": "U000908",
+              "end_source_unit_id": "U001150",
+              "source_chapters": "7–8",
+              "core_scene": "广武休整与身体错位；姜家案异常；金城六村急报",
+              "end_hook": "六村，无一活口。"
+            },
+            {
+              "episode": 5,
+              "start_source_unit_id": "U001151",
+              "end_source_unit_id": "U001393",
+              "source_chapters": "9–10",
+              "core_scene": "武道正解与境界；逆人流赴金城",
+              "end_hook": "官道尽头两头猪妖露出獠牙"
+            },
+            {
+              "episode": 6,
+              "start_source_unit_id": "U001394",
+              "end_source_unit_id": "U001639",
+              "source_chapters": "11–12",
+              "core_scene": "斩猪妖；真正镇魔司逼近；点睛虎山神；食妖补气血",
+              "end_hook": "妖物，竟也是补药。"
+            },
+            {
+              "episode": 7,
+              "start_source_unit_id": "U001640",
+              "end_source_unit_id": "U001885",
+              "source_chapters": "13–14",
+              "core_scene": "提升实力；朱厌杀意；许年队交战；姜月初入场",
+              "end_hook": "血色虎影冲天，虎啸长街"
+            },
+            {
+              "episode": 8,
+              "start_source_unit_id": "U001886",
+              "end_source_unit_id": "U002143",
+              "source_chapters": "15–16",
+              "core_scene": "镇魔卫败退；完整虎妖化；斩朱厌；力竭醒转",
+              "end_hook": "她意识到冒名可能暴露"
+            },
+            {
+              "episode": 9,
+              "start_source_unit_id": "U002144",
+              "end_source_unit_id": "U002249",
+              "source_chapters": "17",
+              "core_scene": "醒在凉州镇魔司；机构压迫；魏合审视",
+              "end_hook": "姜洵之女，姜月初？"
+            },
+            {
+              "episode": 10,
+              "start_source_unit_id": "U002250",
+              "end_source_unit_id": "U002458",
+              "source_chapters": "18",
+              "core_scene": "身份被拆穿；押京或入司二选一；获得腰牌制服",
+              "end_hook": "她握住真正属于自己的腰牌"
+            }
+          ]
+        },
+        "recorded_by": "user:project-owner-director",
+        "recorded_at": "2026-07-14T10:42:38.333032+00:00"
+      },
+      "boundary_contract_sha256": "c5d6d2f08c84d55b9c799ddfa58bc1bb576fe894947ccc81fa3265fdc539ee53",
+      "status": "signed"
+    },
+    {
+      "episode": "第5集",
+      "blocker_id": "E0004-E0005:weak_next_opening",
+      "blocker_code": "weak_next_opening",
+      "blocker_message": "下集 0-3 秒开场无冲突/悬念/兑现承接，双侧边界不成立。",
+      "boundary_contract": {
+        "boundary_id": "E0004-E0005",
+        "from_episode": 4,
+        "to_episode": 5,
+        "left_raw_rel": "脚本/第4集/raw.txt",
+        "right_raw_rel": "脚本/第5集/raw.txt",
+        "left_raw_sha256": "29a3b0042a7e6f276814a00069cd9830f8a46a6f37b757a1b9bf3a4d6e141613",
+        "right_raw_sha256": "8f88e96e72edf9bf2e34bd3c6a76939bf2c6d585286cb1e330a945a8ff631ffa",
+        "contract_sha256": "ef7c1b6cd058db4ec39dd24522844df7dcff3ab3ca50337854ad054a6505ba37"
+      },
+      "decision": "keep",
+      "notes": "导演已批准 U001150/U001151 边界；第4集以六村尽灭的灾难钩收束，第5集先建立武道/境界规则并兑现为逆人流赴金城的主动选择，属于因果承接而非断线。",
+      "reviewed_by": "user:project-owner-director",
+      "reviewed_at": "2026-07-14T10:43:22.663787+00:00",
+      "semantic_evidence": "{\"left_payoff\":\"金城六村无一活口抬高灾难目标\",\"right_cold_open_function\":\"以武道规则压缩说明后转为逆人流赴金城的选择\",\"source_boundary\":\"U001150/U001151\",\"approval\":\"首10集边界已由用户/导演批准\"}",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "ef7c1b6cd058db4ec39dd24522844df7dcff3ab3ca50337854ad054a6505ba37",
+      "status": "signed"
+    },
+    {
+      "episode": "第10集",
+      "blocker_id": "E0010-END:weak_episode_end",
+      "blocker_code": "weak_episode_end",
+      "blocker_message": "上集收口无可验证的语义钩或悬念断点。",
+      "boundary_contract": {
+        "boundary_id": "E0010-END",
+        "from_episode": 10,
+        "to_episode": null,
+        "left_raw_rel": "脚本/第10集/raw.txt",
+        "right_raw_rel": null,
+        "left_raw_sha256": "6d65b54983f36c986e06c1bfa29c026852aaa8b8fd7ae7243d5d688d48f03167",
+        "right_raw_sha256": "",
+        "contract_sha256": "fd7292ffb63de3ec8153cb0474258a3a10f2d02da3fbf6a55a2ac09c9ebe5943"
+      },
+      "decision": "keep",
+      "notes": "第10集不是剧终而是首批物化窗口末端；U002458完成正式入司与腰牌兑现，后续已在 split_plan 由新第11集从U002459/第19章连续承接。",
+      "reviewed_by": "user:project-owner-director",
+      "reviewed_at": "2026-07-14T10:43:22.712023+00:00",
+      "semantic_evidence": "{\"window_end_not_series_end\":true,\"payoff\":\"身份审判后二选一完成，获得真正腰牌与制服\",\"next_source_unit_id\":\"U002459\",\"next_episode\":11,\"approval\":\"U002458/U002459 边界已由用户/导演批准\"}",
+      "applied_receipt": {},
+      "boundary_contract_sha256": "fd7292ffb63de3ec8153cb0474258a3a10f2d02da3fbf6a55a2ac09c9ebe5943",
+      "status": "signed"
+    }
+  ],
+  "updated_at": "2026-07-14T10:43:22.712023+00:00"
+}

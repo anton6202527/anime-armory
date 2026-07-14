@@ -64,10 +64,21 @@ from n2d_contract import (  # noqa: E402
     required_character_reference_group_fields,
 )
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from visual_reference_policy import (  # noqa: E402
+    IDENTITY_GENERATION_POLICIES,
+    STYLE_GENERATION_POLICIES,
+    evaluate_generation_reference,
+    reference_manifest_generation_issues,
+)
+
 
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
 DASHBOARD = Path("skills") / "n2d-dashboard" / "scripts" / "dashboard.py"
 IMAGE_QC = Path("skills") / "n2d-image" / "scripts" / "image_qc.py"
+COMPLIANCE = Path("skills") / "n2d-compliance" / "scripts" / "compliance.py"
 PROGRESS = Path("skills") / "n2d" / "progress.py"
 SOURCE = "skills/n2d-image/scripts/codex_image_runner.py"
 STYLE_ANCHOR_REGISTRY = Path("出图") / "共享" / "style_anchor_registry.json"
@@ -1235,13 +1246,11 @@ def _shared_asset_suppresses_character_refs(asset: Dict[str, Any], rel_path: str
 
 
 def _status_ready(node: Dict[str, Any], *, allow_pending_user_reference: bool = False) -> bool:
+    # Kept as a keyword for compatibility with older callers, but pending rights
+    # are never generation-ready.  External rows additionally pass the strict
+    # rights/SHA/watermark policy before reaching `_add_ready_image_path`.
+    del allow_pending_user_reference
     status = str(node.get("status") or "").strip().lower()
-    if allow_pending_user_reference and status in {
-        "available_pending_rights_review",
-        "user_provided_reference_pending_rights_review",
-        "accepted_for_internal_generation_pending_rights_review",
-    }:
-        return True
     return not status or status in {"ready", "registered", "pass", "ok", "accepted"}
 
 
@@ -1295,6 +1304,45 @@ def _collect_ready_image_paths(
             )
     elif isinstance(node, str):
         _add_ready_image_path(node, root, out, seen, allow_non_shared=allow_non_shared)
+
+
+def _collect_eligible_external_image_paths(
+    node: Any,
+    root: Path,
+    out: List[str],
+    seen: Set[str],
+    *,
+    allowed_policies: Sequence[str],
+) -> None:
+    """Collect external inputs only after rights, SHA and watermark approval."""
+    if isinstance(node, Mapping):
+        if "path" in node:
+            result = evaluate_generation_reference(
+                root,
+                node,
+                allowed_policies=allowed_policies,
+            )
+            rel = str(result.get("path") or "").strip()
+            if result.get("eligible") and rel:
+                _add_ready_image_path(rel, root, out, seen, allow_non_shared=True)
+            return
+        for value in node.values():
+            _collect_eligible_external_image_paths(
+                value,
+                root,
+                out,
+                seen,
+                allowed_policies=allowed_policies,
+            )
+    elif isinstance(node, list):
+        for item in node:
+            _collect_eligible_external_image_paths(
+                item,
+                root,
+                out,
+                seen,
+                allowed_policies=allowed_policies,
+            )
 
 
 def _resolve_registry_image_path(root: Path, value: str) -> tuple[str, Path, List[str]]:
@@ -1398,13 +1446,12 @@ def load_style_source_paths(root: Path) -> List[str]:
         return []
     paths: List[str] = []
     seen: Set[str] = set()
-    _collect_ready_image_paths(
+    _collect_eligible_external_image_paths(
         data.get("source_style_references"),
         root,
         paths,
         seen,
-        allow_non_shared=True,
-        allow_pending_user_reference=True,
+        allowed_policies=tuple(STYLE_GENERATION_POLICIES),
     )
     return paths
 
@@ -1517,13 +1564,12 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
                     _collect_ready_image_paths(reference_group.get(key), root, paths, seen)
                     _collect_ready_image_paths(reference_atlas.get(key), root, paths, seen)
             else:
-                _collect_ready_image_paths(
+                _collect_eligible_external_image_paths(
                     ch.get("external_visual_references"),
                     root,
                     paths,
                     seen,
-                    allow_non_shared=True,
-                    allow_pending_user_reference=True,
+                    allowed_policies=tuple(IDENTITY_GENERATION_POLICIES),
                 )
                 _collect_ready_image_paths(form.get("reference_group"), root, paths, seen)
                 _collect_ready_image_paths(form.get("reference_atlas"), root, paths, seen)
@@ -1628,6 +1674,7 @@ def _character_forms_for_ref(identity: Dict[str, Any], char_ref: str) -> tuple[L
                 continue
             enriched = dict(form)
             for key in (
+                "id", "character_id",
                 "scope", "narrative_tier", "library_tier", "tier", "core", "long_line",
                 "planned_episode_count", "episode_count", "face_policy",
                 "restricted_partial", "restricted_partial_contract",
@@ -3484,6 +3531,50 @@ def run_image_gate(root: Path, episode: str, stage: str = "image") -> bool:
     return False
 
 
+def run_shared_asset_preflight(root: Path, episode: str) -> bool:
+    """Pre-spend gate for bootstrap shared assets.
+
+    The regular ``image_preflight`` deliberately requires landed core
+    multi-view pixels and their current-pixel receipts, so calling it before
+    the first turnaround is generated would deadlock bootstrap.  This narrower
+    non-waivable gate checks the two prerequisites that must already exist:
+    project compliance and every external reference requesting backend use.
+    """
+    reference_issues = reference_manifest_generation_issues(root)
+    if reference_issues:
+        print(
+            "[gate] shared_asset_preflight blocked — external visual references are not generation-eligible",
+            file=sys.stderr,
+        )
+        for issue in reference_issues[:30]:
+            print(f"[gate] - {issue}", file=sys.stderr)
+        if len(reference_issues) > 30:
+            print(f"[gate] - ... plus {len(reference_issues) - 30} more reference issues", file=sys.stderr)
+        return False
+
+    cmd = [
+        sys.executable,
+        str(repo_root() / COMPLIANCE),
+        str(root),
+        episode,
+        "--check",
+        "--stage",
+        "image",
+        "--json",
+    ]
+    proc = subprocess.run(cmd, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode == 0:
+        print(f"[gate] shared_asset_preflight passed for {episode}")
+        return True
+    print(proc.stdout, end="", file=sys.stderr)
+    print(proc.stderr, end="", file=sys.stderr)
+    print(
+        f"[gate] shared_asset_preflight blocked for {episode} — fix compliance/reference rights before paid shared generation",
+        file=sys.stderr,
+    )
+    return False
+
+
 def record_waiver(root: Path, episode: str, stage: str, waiver: str, reason: str) -> None:
     """Log an escape-hatch / gate-bypass as a dashboard waiver event (执行时松动留痕).
 
@@ -4518,6 +4609,13 @@ def main(argv: Sequence[str]) -> int:
         targets.extend(build_targets(root, episode, shots))
     if not targets:
         raise SystemExit("no targets resolved")
+
+    # Shared style/identity assets are paid generations too.  They cannot use
+    # the full image_preflight before their own pixels/MVIEW receipts exist, but
+    # compliance and external-reference rights are already knowable and are not
+    # waivable via --skip-preflight.
+    if shared_targets and not ns.dry_run and not run_shared_asset_preflight(root, episode):
+        return 1
 
     # Non-waivable ordering lock: a Clip run may never spend before the
     # referenced shared library is complete.  Whole-episode runs scan the whole

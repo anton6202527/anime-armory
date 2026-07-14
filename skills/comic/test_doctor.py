@@ -25,3 +25,4 @@ def test_project_checks_are_explicit(tmp_path: Path) -> None:
     checks = {item["name"]: item["status"] for item in report["project_checks"]}
     assert checks["settings"] == "present"
     assert checks["identity_registry"] == "missing"
+    assert report["project_root"] == "."

@@ -278,6 +278,84 @@ def adopt_generated_png(
     return archived
 
 
+def adopt_anchor_candidate(args: argparse.Namespace) -> int:
+    """Adopt a human-selected candidate while preserving its review evidence."""
+    root = Path(args.project_root).expanduser().resolve()
+    registry = load_registry(root)
+    assets = registry.setdefault("assets", {})
+    ref_id = str(args.ref).strip()
+    if not ref_id or not isinstance(assets.get(ref_id), dict):
+        raise SystemExit(f"unknown registry asset: {ref_id or '<empty>'}")
+    candidate = resolve_path(root, str(args.candidate))
+    expected_root = (root / "出图" / "共享" / "candidates" / ref_id / "anchor").resolve()
+    try:
+        candidate.resolve().relative_to(expected_root)
+    except ValueError as exc:
+        raise SystemExit(f"candidate must be under {expected_root}: {candidate}") from exc
+    if not png_valid(candidate):
+        raise SystemExit(f"candidate is not a valid PNG: {candidate}")
+
+    candidate_rel = rel_to_root(root, candidate)
+    candidate_sha = file_sha256(candidate)
+    dest = root / "出图" / "共享" / "图片" / f"{ref_id}__anchor.png"
+    pending = dest.with_name(f".{dest.stem}__adopt_pending.png")
+    pending.parent.mkdir(parents=True, exist_ok=True)
+    pending.unlink(missing_ok=True)
+    shutil.copy2(candidate, pending)
+    archived = adopt_generated_png(root, pending, dest, asset_id=ref_id, variant="anchor")
+    if not png_valid(dest):
+        raise SystemExit(f"failed to adopt candidate: {candidate}")
+
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    source: dict[str, Any] = {
+        "kind": "human_selected_candidate_anchor",
+        "chapter": args.chapter,
+        "candidate_path": candidate_rel,
+        "candidate_sha256": candidate_sha,
+        "reviewer": str(args.reviewer).strip(),
+        "reviewer_role": str(args.role).strip(),
+        "decision": "approved",
+        "reason": str(args.reason).strip(),
+        "reviewed_at": now,
+        "backend": CODEX_CHANNEL,
+        "model": CODEX_MODEL,
+    }
+    if archived:
+        source["archived_previous_path"] = archived
+    register_asset_anchor(registry, root, ref_id, dest, source=source)
+    write_json(registry_path(root), registry)
+    row = {
+        "ts": now,
+        "status": "reference_anchor_adopted",
+        "ref_id": ref_id,
+        "path": rel_to_root(root, dest),
+        "sha256": file_sha256(dest),
+        **source,
+    }
+    append_event(root, row)
+    receipt = {
+        "schema_version": 1,
+        "kind": "comic_reference_anchor_adoption",
+        "created_at": now,
+        "ref_id": ref_id,
+        "candidate_path": candidate_rel,
+        "candidate_sha256": candidate_sha,
+        "adopted_path": rel_to_root(root, dest),
+        "adopted_sha256": file_sha256(dest),
+        "reviewer": source["reviewer"],
+        "reviewer_role": source["reviewer_role"],
+        "decision": "approved",
+        "reason": source["reason"],
+        "backend": CODEX_CHANNEL,
+        "model": CODEX_MODEL,
+    }
+    out = root / "生产数据" / f"comic_identity_anchor_adoption_{ref_id}.json"
+    write_json(out, receipt)
+    print(f"[ok] adopted {ref_id}: {rel_to_root(root, dest)}", flush=True)
+    print(f"[ok] adoption receipt: {out}", flush=True)
+    return 0
+
+
 def run_codex_image(prompt: str, repo: Path, timeout_sec: int, image_paths: list[Path]) -> subprocess.CompletedProcess[str]:
     cmd = ["codex", "exec", "--json", "--enable", "image_generation"]
     for path in image_paths:
@@ -524,6 +602,7 @@ def character_text_anchor_prompt(
     visual_style: str,
     asset_contract: str = "",
     style_reference_attached: bool = False,
+    aspect_ratio: str = "",
 ) -> str:
     style_reference_note = (
         "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质和墨晕语言；"
@@ -531,6 +610,7 @@ def character_text_anchor_prompt(
         if style_reference_attached
         else "本次没有风格图片附件；严格按下列项目基础视觉风格执行。"
     )
+    ratio_rule = f"画幅固定为 {aspect_ratio}，不得输出其他比例。" if aspect_ratio else "遵循项目登记的角色定妆画幅。"
     return f"""请用内置 image_generation 工具生成漫画角色首张专门定妆参考图。
 
 角色 ID：{character_id}
@@ -553,7 +633,8 @@ def character_text_anchor_prompt(
 5. 不得坐、蹲、跪、弯腰、倒地、挥砍、冲刺、摆战斗 pose；不得裁掉头发、手、脚、鞋或永久身份佩饰。
 6. 不生成临时剧情手持物、画面左右站位或同框调度；只有项目定妆契约明确列为永久佩饰/身体特征的标志物才可出现。
 7. 不要画成现代写真、游戏 UI、角色卡边框、设计表排版、三视图拼贴或多格拼图；本次只输出这一张 front 视图，画面里只能有一个完整角色。
-8. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+8. {ratio_rule}
+9. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -563,6 +644,7 @@ def asset_anchor_prompt(
     *,
     visual_style: str,
     style_reference_attached: bool = False,
+    aspect_ratio: str = "",
 ) -> str:
     kind = str(asset.get("type") or ref_type(ref_id)).strip().lower()
     kind = {
@@ -627,6 +709,7 @@ def asset_anchor_prompt(
             "生成共享资产 reference art：主体完整、结构清楚、便于后续作为漫画参考图；"
             "不要额外人物、文字、logo、水印或 UI。"
         )
+    ratio_rule = f"画幅固定为 {aspect_ratio}，不得输出其他比例。" if aspect_ratio else ""
     return f"""请用内置 image_generation 工具生成漫画共享参考锚点图。
 
 参考 ID：{ref_id}
@@ -647,7 +730,8 @@ def asset_anchor_prompt(
 2. 保持项目基础视觉风格：{visual_style}；以登记的 style_contract 为时代、媒介、色域、材质和明暗唯一真值，不得将未登记的古典/水墨/矿物色、现代摄影、游戏 UI 或高饱和彩漫风偷渡进项目；线与灰阶体积应清楚可审。
 3. 这是一张长期共享锚点，不是剧情分镜；构图应稳定、信息清楚、少动态夸张，适合后续作为逐格生图参考附件。
 4. 如果资产是告示、榜文、门帘、银两等道具，只画图像结构，不生成可读长文或乱码文字。
-5. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
+5. {ratio_rule or '遵循项目登记的画幅约束。'}
+6. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
 """
 
 
@@ -1437,6 +1521,154 @@ def report(args: argparse.Namespace) -> int:
     return 0
 
 
+def generate_anchor_candidates(
+    *,
+    root: Path,
+    repo: Path,
+    registry: dict[str, Any],
+    refs: list[str],
+    chapter: str,
+    candidate_count: int,
+    max_attempts: int,
+    timeout_sec: int,
+    ratio: str,
+    visual_style: str,
+    backend_version: str,
+) -> int:
+    """Generate review candidates without adopting them into the identity registry."""
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    style_reference = project_style_anchor(root, registry)
+    batch_id = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
+    ready_count = 0
+    failed_count = 0
+    items: list[dict[str, Any]] = []
+
+    for ref_id in refs:
+        asset = assets.get(ref_id) if isinstance(assets.get(ref_id), dict) else {}
+        use_style_reference = bool(
+            style_reference
+            and png_valid(style_reference)
+            and ref_id != read_setting(root, "风格锚", "").strip()
+        )
+        for candidate_index in range(1, candidate_count + 1):
+            prompt = asset_anchor_prompt(
+                ref_id,
+                asset,
+                visual_style=visual_style,
+                style_reference_attached=use_style_reference,
+                aspect_ratio=ratio,
+            )
+            prompt += f"\n候选批次要求：这是第 {candidate_index}/{candidate_count} 张，必须形成独立可比较的构图方案，同时严格保持同一资产契约。\n"
+            prompt_path, prompt_sha256 = prompt_snapshot(
+                root,
+                chapter,
+                ref_id,
+                f"anchor_candidate_{candidate_index:02d}_codex",
+                prompt,
+            )
+            out_dir = root / "出图" / "共享" / "candidates" / ref_id / "anchor" / batch_id
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out_path = out_dir / f"candidate_{candidate_index:02d}.png"
+            ready = False
+            last_error = ""
+            for attempt in range(1, max(1, max_attempts) + 1):
+                proc = run_codex_image(
+                    prompt,
+                    repo,
+                    timeout_sec,
+                    [style_reference] if use_style_reference and style_reference else [],
+                )
+                if proc.returncode != 0:
+                    last_error = format_failure(proc)
+                    print(
+                        f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
+                        f"attempt {attempt}/{max_attempts}: {last_error}",
+                        flush=True,
+                    )
+                    continue
+                pending = out_dir / f".candidate_{candidate_index:02d}__pending.png"
+                pending.unlink(missing_ok=True)
+                if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                    last_error = "codex completed but no valid image_generation_end PNG was available"
+                    print(
+                        f"[retry] {ref_id} candidate {candidate_index}/{candidate_count} "
+                        f"attempt {attempt}/{max_attempts}: {last_error}",
+                        flush=True,
+                    )
+                    continue
+                pending.replace(out_path)
+                row = {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "reference_anchor_candidate_ready",
+                    "ref_id": ref_id,
+                    "candidate_index": candidate_index,
+                    "candidate_count": candidate_count,
+                    "attempt": attempt,
+                    "path": rel_to_root(root, out_path),
+                    "sha256": file_sha256(out_path),
+                    "ratio": ratio,
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "backend_version": backend_version,
+                    "prompt_path": prompt_path,
+                    "prompt_sha256": prompt_sha256,
+                    "adopted": False,
+                }
+                if use_style_reference and style_reference:
+                    row.update(
+                        {
+                            "style_reference_path": rel_to_root(root, style_reference),
+                            "style_reference_sha256": file_sha256(style_reference),
+                            "style_reference_role": "style_only",
+                        }
+                    )
+                items.append(row)
+                append_event(root, row)
+                ready_count += 1
+                ready = True
+                print(f"[ok] {ref_id} candidate {candidate_index} -> {row['path']}", flush=True)
+                break
+            if not ready:
+                failed_count += 1
+                row = {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "reference_anchor_candidate_failed",
+                    "ref_id": ref_id,
+                    "candidate_index": candidate_index,
+                    "candidate_count": candidate_count,
+                    "ratio": ratio,
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "error": last_error,
+                    "adopted": False,
+                }
+                items.append(row)
+                append_event(root, row)
+                print(f"[fail] {ref_id} candidate {candidate_index}: {last_error}", flush=True)
+
+    manifest = {
+        "schema_version": 1,
+        "kind": "comic_reference_anchor_candidate_batch",
+        "chapter": chapter,
+        "batch_id": batch_id,
+        "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "refs": refs,
+        "candidate_count_per_ref": candidate_count,
+        "ratio": ratio,
+        "backend": CODEX_CHANNEL,
+        "model": CODEX_MODEL,
+        "generated": ready_count,
+        "failed": failed_count,
+        "adopted": False,
+        "items": items,
+    }
+    out = root / "生产数据" / f"comic_identity_anchor_candidates_{chapter}_{batch_id}.json"
+    write_json(out, manifest)
+    print(f"[ok] candidate manifest: {out}", flush=True)
+    print(f"[summary] generated={ready_count} failed={failed_count} adopted=0", flush=True)
+    return 1 if failed_count else 0
+
+
 def generate_anchors(args: argparse.Namespace) -> int:
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root(root)
@@ -1455,6 +1687,21 @@ def generate_anchors(args: argparse.Namespace) -> int:
     shared_dir.mkdir(parents=True, exist_ok=True)
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     codex_backend_version = codex_version()
+    candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
+    if candidate_count:
+        return generate_anchor_candidates(
+            root=root,
+            repo=repo,
+            registry=registry,
+            refs=refs,
+            chapter=args.chapter,
+            candidate_count=candidate_count,
+            max_attempts=args.max_attempts,
+            timeout_sec=args.timeout_sec,
+            ratio=str(getattr(args, "ratio", "4:5") or "4:5"),
+            visual_style=visual_style,
+            backend_version=codex_backend_version,
+        )
     style_reference = project_style_anchor(root, registry)
     generated = 0
     skipped = 0
@@ -1599,6 +1846,190 @@ def generate_anchors(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def generate_front_view_candidates(
+    *,
+    root: Path,
+    repo: Path,
+    registry: dict[str, Any],
+    characters: list[str],
+    chapter: str,
+    candidate_count: int,
+    candidate_indices: list[int],
+    max_attempts: int,
+    timeout_sec: int,
+    ratio: str,
+    visual_style: str,
+    style_reference: Path,
+    backend_version: str,
+) -> int:
+    """Generate front casting candidates without registering a character view."""
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    batch_id = dt.datetime.now().strftime("%Y%m%dT%H%M%S")
+    generated = 0
+    failed = 0
+    items: list[dict[str, Any]] = []
+    style_rel = rel_to_root(root, style_reference)
+    style_sha = file_sha256(style_reference)
+    out = root / "生产数据" / f"comic_identity_front_candidates_{chapter}_{batch_id}.json"
+
+    def write_batch_manifest(status: str) -> None:
+        write_json(
+            out,
+            {
+                "schema_version": 1,
+                "kind": "comic_character_front_candidate_batch",
+                "chapter": chapter,
+                "batch_id": batch_id,
+                "created_at": dt.datetime.now().isoformat(timespec="seconds"),
+                "status": status,
+                "characters": characters,
+                "view": "front",
+                "candidate_count_per_character": candidate_count,
+                "ratio": ratio,
+                "backend": CODEX_CHANNEL,
+                "model": CODEX_MODEL,
+                "style_reference_path": style_rel,
+                "style_reference_sha256": style_sha,
+                "style_reference_role": "style_only",
+                "generated": generated,
+                "failed": failed,
+                "adopted": False,
+                "items": items,
+            },
+        )
+
+    write_batch_manifest("running")
+
+    for character_id in characters:
+        asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else {}
+        notes = story_bible_character_notes(root, character_id)
+        asset_contract = character_asset_contract(asset)
+        for candidate_index in candidate_indices:
+            prompt = character_text_anchor_prompt(
+                character_id,
+                notes,
+                visual_style=visual_style,
+                asset_contract=asset_contract,
+                style_reference_attached=True,
+                aspect_ratio=ratio,
+            )
+            prompt += (
+                f"\n候选批次要求：这是 {character_id} 的第 {candidate_index}/{candidate_count} 张 front 候选；"
+                "脸部与服装方案应可独立比较，但不得改变登记的年龄、阶层、角色 DNA、服装主形制或禁继承项。\n"
+            )
+            prompt_path, prompt_sha256 = prompt_snapshot(
+                root,
+                chapter,
+                character_id,
+                f"front_candidate_{candidate_index:02d}_codex",
+                prompt,
+            )
+            out_dir = root / "出图" / "共享" / "candidates" / character_id / "front" / batch_id
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out_path = out_dir / f"candidate_{candidate_index:02d}.png"
+            ready = False
+            last_error = ""
+            for attempt in range(1, max(1, max_attempts) + 1):
+                try:
+                    proc = run_codex_image(prompt, repo, timeout_sec, [style_reference])
+                except KeyboardInterrupt:
+                    interrupted = {
+                        "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                        "status": "character_view_candidate_interrupted",
+                        "ref_id": character_id,
+                        "view": "front",
+                        "candidate_index": candidate_index,
+                        "candidate_count": candidate_count,
+                        "attempt": attempt,
+                        "ratio": ratio,
+                        "backend": CODEX_CHANNEL,
+                        "model": CODEX_MODEL,
+                        "style_reference_path": style_rel,
+                        "style_reference_sha256": style_sha,
+                        "style_reference_role": "style_only",
+                        "error": "interrupted",
+                        "adopted": False,
+                    }
+                    items.append(interrupted)
+                    append_event(root, interrupted)
+                    write_batch_manifest("interrupted")
+                    raise
+                if proc.returncode != 0:
+                    last_error = format_failure(proc)
+                    print(
+                        f"[retry] {character_id} front candidate {candidate_index}/{candidate_count} "
+                        f"attempt {attempt}/{max_attempts}: {last_error}",
+                        flush=True,
+                    )
+                    continue
+                pending = out_dir / f".candidate_{candidate_index:02d}__pending.png"
+                pending.unlink(missing_ok=True)
+                if not decode_image_event(proc.stdout, pending) or not png_valid(pending):
+                    last_error = "codex completed but no valid image_generation_end PNG was available"
+                    print(
+                        f"[retry] {character_id} front candidate {candidate_index}/{candidate_count} "
+                        f"attempt {attempt}/{max_attempts}: {last_error}",
+                        flush=True,
+                    )
+                    continue
+                pending.replace(out_path)
+                row = {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "character_view_candidate_ready",
+                    "ref_id": character_id,
+                    "view": "front",
+                    "candidate_index": candidate_index,
+                    "candidate_count": candidate_count,
+                    "attempt": attempt,
+                    "path": rel_to_root(root, out_path),
+                    "sha256": file_sha256(out_path),
+                    "ratio": ratio,
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "backend_version": backend_version,
+                    "style_reference_path": style_rel,
+                    "style_reference_sha256": style_sha,
+                    "style_reference_role": "style_only",
+                    "prompt_path": prompt_path,
+                    "prompt_sha256": prompt_sha256,
+                    "adopted": False,
+                }
+                items.append(row)
+                append_event(root, row)
+                generated += 1
+                ready = True
+                write_batch_manifest("running")
+                print(f"[ok] {character_id} front candidate {candidate_index} -> {row['path']}", flush=True)
+                break
+            if not ready:
+                failed += 1
+                row = {
+                    "ts": dt.datetime.now().isoformat(timespec="seconds"),
+                    "status": "character_view_candidate_failed",
+                    "ref_id": character_id,
+                    "view": "front",
+                    "candidate_index": candidate_index,
+                    "candidate_count": candidate_count,
+                    "ratio": ratio,
+                    "backend": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "style_reference_path": style_rel,
+                    "style_reference_sha256": style_sha,
+                    "style_reference_role": "style_only",
+                    "error": last_error,
+                    "adopted": False,
+                }
+                items.append(row)
+                append_event(root, row)
+                write_batch_manifest("running")
+                print(f"[fail] {character_id} front candidate {candidate_index}: {last_error}", flush=True)
+
+    write_batch_manifest("complete")
+    print(f"[ok] front candidate manifest: {out}", flush=True)
+    print(f"[summary] generated={generated} failed={failed} adopted=0", flush=True)
+    return 1 if failed else 0
+
+
 def generate_views(args: argparse.Namespace) -> int:
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root(root)
@@ -1629,6 +2060,41 @@ def generate_views(args: argparse.Namespace) -> int:
     codex_backend_version = codex_version() if "codex" in available else ""
     visual_style = read_setting(root, "基础视觉风格", "彩色国漫条漫")
     style_reference = project_style_anchor(root, registry)
+    candidate_count = max(0, int(getattr(args, "candidate_count", 0) or 0))
+    if candidate_count:
+        if views != ["front"]:
+            raise SystemExit("view candidate batches currently require --views front")
+        if "codex" not in available or not args.allow_text_anchor:
+            raise SystemExit("front candidate batches require --backend codex --allow-text-anchor")
+        if not style_reference or not png_valid(style_reference):
+            raise SystemExit("front candidate batches require an adopted STYLE_ anchor")
+        raw_candidate_indices = str(getattr(args, "candidate_indices", "") or "").strip()
+        if raw_candidate_indices:
+            try:
+                candidate_indices = [int(value.strip()) for value in raw_candidate_indices.split(",") if value.strip()]
+            except ValueError as exc:
+                raise SystemExit("--candidate-indices must be comma-separated positive integers") from exc
+            if not candidate_indices or any(value < 1 for value in candidate_indices):
+                raise SystemExit("--candidate-indices must contain positive integers")
+            if len(set(candidate_indices)) != len(candidate_indices):
+                raise SystemExit("--candidate-indices must not contain duplicates")
+        else:
+            candidate_indices = list(range(1, candidate_count + 1))
+        return generate_front_view_candidates(
+            root=root,
+            repo=repo,
+            registry=registry,
+            characters=characters,
+            chapter=args.chapter,
+            candidate_count=candidate_count,
+            candidate_indices=candidate_indices,
+            max_attempts=args.max_attempts,
+            timeout_sec=args.timeout_sec,
+            ratio=str(args.ratio or "3:4"),
+            visual_style=visual_style,
+            style_reference=style_reference,
+            backend_version=codex_backend_version,
+        )
     generated = 0
     skipped = 0
     failed = 0
@@ -1952,15 +2418,41 @@ def main() -> int:
     p_anchors = sub.add_parser("anchors", help="生成/登记非人物共享参考锚点")
     p_anchors.add_argument("--refs", default="", help="逗号分隔 REF_ID；默认 registry 中全部非 CHAR_")
     p_anchors.add_argument("--overwrite", action="store_true", help="覆盖已有 <REF_ID>__anchor.png")
+    p_anchors.add_argument(
+        "--candidate-count",
+        type=int,
+        default=0,
+        help="每个 REF_ID 生成指定数量的待审候选；候选不写入正式 registry",
+    )
+    p_anchors.add_argument("--ratio", default="4:5", help="Codex 候选锚点画幅；默认 4:5")
     p_anchors.add_argument("--max-attempts", type=int, default=1)
     p_anchors.add_argument("--timeout-sec", type=int, default=240)
     p_anchors.set_defaults(func=generate_anchors)
+
+    p_adopt_anchor = sub.add_parser("adopt-anchor", help="采纳已人工选中的共享锚候选")
+    p_adopt_anchor.add_argument("--ref", required=True, help="待采纳的 REF_ID")
+    p_adopt_anchor.add_argument("--candidate", required=True, help="候选 PNG 的项目内路径")
+    p_adopt_anchor.add_argument("--reviewer", required=True, help="审核人")
+    p_adopt_anchor.add_argument("--role", default="", help="审核角色")
+    p_adopt_anchor.add_argument("--reason", default="人工选定候选", help="采纳理由")
+    p_adopt_anchor.set_defaults(func=adopt_anchor_candidate)
 
     p_views = sub.add_parser("views", help="生成/登记常驻角色专门定妆多视图")
     p_views.add_argument("--characters", default="", help="逗号分隔 CHAR_ID；默认 registry 中全部 CHAR_")
     p_views.add_argument("--views", default="", help="逗号分隔 view；默认 front,three_quarter,side,back,face")
     p_views.add_argument("--backend", choices=("auto", "codex", "dreamina"), default="auto", help="多视图生成后端")
     p_views.add_argument("--overwrite", action="store_true", help="覆盖已有 <CHAR_ID>__<view>.png")
+    p_views.add_argument(
+        "--candidate-count",
+        type=int,
+        default=0,
+        help="每个角色生成指定数量的 front 待审候选；候选不写入正式 registry",
+    )
+    p_views.add_argument(
+        "--candidate-indices",
+        default="",
+        help="仅续跑指定候选序号，如 2,3；仍以 --candidate-count 记录目标总数",
+    )
     p_views.add_argument("--max-attempts", type=int, default=1)
     p_views.add_argument("--timeout-sec", type=int, default=240)
     p_views.add_argument("--poll-sec", type=int, default=180, help="Dreamina 轮询秒数")

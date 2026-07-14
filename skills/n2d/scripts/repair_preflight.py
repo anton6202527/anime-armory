@@ -38,12 +38,18 @@ try:
 except Exception:  # pragma: no cover
     fingerprint_is_fresh = None  # type: ignore
 
+import preventive_contracts as preventive_contracts_module  # noqa: E402
+
 
 KIND = "n2d_repair_preflight"
 VERSION = 1
 IMAGE_QC_STAGES = {"video_prompt", "video_prompt_preflight", "video", "video_preflight", "compose", "review"}
 P3_STAGES = {"image_prompt", "image_prompt_preflight", "image", "image_preflight", "video_prompt", "video_prompt_preflight", "video", "video_preflight"}
 LOCK_STAGES = {"image", "image_preflight", "video_prompt", "video_prompt_preflight", "video", "video_preflight", "compose", "review"}
+PREVENTIVE_CONTRACT_STAGES = frozenset(preventive_contracts_module.STAGE_GATES)
+# These are valid n2d frontiers, but their preventive-contract gate lives at a
+# later boundary.  Keep the skip explicit; arbitrary/typo stages still block.
+NO_PREVENTIVE_CONTRACT_STAGES = frozenset({"script_stage1", "voice"})
 
 
 def now_iso() -> str:
@@ -152,6 +158,20 @@ def production_locks_check(root: Path, ep: str, stage: str, *, write_missing: bo
 
 
 def preventive_contracts_check(root: Path, ep: str, stage: str, *, write_missing: bool) -> Dict[str, Any]:
+    if stage in NO_PREVENTIVE_CONTRACT_STAGES:
+        return {
+            "step": "preventive_contracts",
+            "status": "skip",
+            "stage": stage,
+            "detail": f"stage={stage} 无 preventive contract gate；首个适用边界为 script_stage2",
+        }
+    if stage not in PREVENTIVE_CONTRACT_STAGES:
+        return {
+            "step": "preventive_contracts",
+            "status": "block",
+            "stage": stage,
+            "detail": f"未知 preventive contract stage={stage!r}；拒绝按空 gate 放行",
+        }
     script = N2D_DIR / "scripts" / "preventive_contracts.py"
     cmd = [sys.executable, str(script), str(root), ep, "--stage", stage, "--json"]
     if write_missing:
@@ -229,7 +249,13 @@ def build_report(root: Path, ep: str, stage: str, *, write_missing: bool, repair
         "episode": ep,
         "stage": stage,
         "status": "block" if blocks else "warn" if warns else "pass",
-        "summary": {"steps": len(rows), "block": len(blocks), "warn": len(warns), "pass": sum(1 for r in rows if r.get("status") == "pass")},
+        "summary": {
+            "steps": len(rows),
+            "block": len(blocks),
+            "warn": len(warns),
+            "pass": sum(1 for r in rows if r.get("status") == "pass"),
+            "skip": sum(1 for r in rows if r.get("status") == "skip"),
+        },
         "steps": rows,
         "next_when_blocked": [
             str(r.get("command") or r.get("detail") or r.get("step"))

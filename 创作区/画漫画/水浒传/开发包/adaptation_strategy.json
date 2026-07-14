@@ -1,0 +1,71 @@
+{
+  "kind": "comic_adaptation_strategy",
+  "version": 2,
+  "status": "confirmed",
+  "source_edition": {
+    "title": "水浒傳（120回本）",
+    "project_source": "源本/水浒传.docx",
+    "source_sha256": "dbee5369b3fc152b340d0629eb0eb16af05c15c01e1ffba02fcd636688fc7d52",
+    "chapter_markers": 120,
+    "adaptation_language": "简体中文，古典口吻的现代可读表达"
+  },
+  "adaptation_boundary": "保留原著的因果、人物选择、社会阶层冲突与结局代价；诗赞优先转成环境、动作和节奏，只保留少量具有叙事作用的旁白。不以热血美化暴力后果，不将女性、弱者或底层人物工具化；小说中后续性暴力、酷刑与血腥以镜外、剪影、结果反应和必要警示呈现，不制作猎奇特写。历史与影视资料仅作研究，不复制演员脸、剧照构图、独特服装组合或受保护的美术资产。",
+  "adaptation_principles": [
+    "按完整戏剧闭环切话，不按原回目或固定格数机械切分。",
+    "原著中的‘官—民—江湖’压力链是长线主轴，人物不被洗成单一善恶标签。",
+    "将白话史诗的说书感转为竖向阅读的停顿、大格和步移景异，但关键转折不加速跳过。",
+    "每话对源段落留下释义、目标文本和取舍凭证，新增衔接格显式标记 original_bridge。"
+  ],
+  "promise_ledger": [
+    {
+      "promise_id": "PRM_001",
+      "promise": "一百零八位好汉究竟从何而来，为何会在乱世聚义？",
+      "opened_chapter": "第1话",
+      "payoff_chapter": "长线：随好汉逐步登场、第七十一回式大聚义完整兑现",
+      "status": "open"
+    },
+    {
+      "promise_id": "PRM_002",
+      "promise": "洪信放走的究竟是魔君还是将乱世秩序重排的英星？",
+      "opened_chapter": "第1话",
+      "payoff_chapter": "第2话揭示三十六天罡与七十二地煞，后续持续反证",
+      "status": "open"
+    }
+  ],
+  "causality_spine": [
+    "京师瘟疫逼仁宗求助天师 → 洪信奉诏上龙虎山 → 傲慢与恐惧使他错过真人 → 他为证明自己而擅开伏魔殿 → 一百零八星散入人间。",
+    "好汉在贪腐官府、宗法网络与生存危机中各自被逼出走 → 个体反抗通过义气结成群体 → 梁山从避难地变成政治力量。",
+    "聚义扩大带来生存与正当性难题 → 宋江选择招安 → 群体在征战中不可逆地损耗 → ‘忠义’与‘自由’的矛盾以悲剧付费。"
+  ],
+  "foreshadowing_ledger": [
+    {
+      "setup_id": "FSH_001",
+      "setup": "伏魔碑背‘遇洪而开’，洪信误将宿命当作对权势与好奇心的许可。",
+      "planted_chapter": "第1话",
+      "payoff_chapter": "第2话",
+      "status": "planted"
+    },
+    {
+      "setup_id": "FSH_002",
+      "setup": "百十道金光散往四面八方，以不同方向与地貌预示群像结构。",
+      "planted_chapter": "第1话",
+      "payoff_chapter": "每位核心好汉的首次登场",
+      "status": "planted"
+    },
+    {
+      "setup_id": "FSH_003",
+      "setup": "瘟疫与宫廷无能的开篇，确立‘上层秩序失灵，代价由百姓承担’的长线母题。",
+      "planted_chapter": "第1话",
+      "payoff_chapter": "全书反复兑现，结局完成回扣",
+      "status": "planted"
+    }
+  ],
+  "human_review": {
+    "required": true,
+    "state": "approved",
+    "reviewer": "lalala",
+    "role": "出品人",
+    "time": "2026-07-14T07:16:49Z",
+    "note": "第1话开发包已由出品人确认；版权与后续艺术资产仍按各自闸门验收。"
+  }
+}

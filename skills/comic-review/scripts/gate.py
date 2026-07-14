@@ -1683,7 +1683,7 @@ def make_report(root: Path, chapter: str, stage: str, findings: list[dict[str, A
     report = {
         "schema_version": 2,
         "kind": "comic_gate",
-        "project_root": str(root),
+        "project_root": ".",
         "chapter": chapter,
         "stage": stage,
         "created_at": datetime.now().isoformat(timespec="seconds"),
@@ -1701,7 +1701,7 @@ def make_report(root: Path, chapter: str, stage: str, findings: list[dict[str, A
     if stable_sha256 is not None:
         report["receipt_id"] = stable_sha256(
             {
-                "project_root": str(root),
+                "project_root": ".",
                 "chapter": chapter,
                 "stage": stage,
                 "inputs": inputs_fingerprint.get("sha256"),

@@ -33,6 +33,29 @@ def _png_bytes(label: str, width: int = 512, height: int = 512) -> bytes:
     )
 
 
+def _reencoded_png_bytes(label: str, width: int = 512, height: int = 512) -> bytes:
+    """Same decoded RGB pixels as _png_bytes, with different PNG encoding."""
+    color = hashlib.sha256(label.encode()).digest()[:3]
+    row = color * width
+    encoded_row = bytes(
+        (value - (row[index - 3] if index >= 3 else 0)) & 0xFF
+        for index, value in enumerate(row)
+    )
+    raw = b"".join(b"\1" + encoded_row for _ in range(height))
+
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        body = kind + payload
+        return struct.pack(">I", len(payload)) + body + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+        + chunk(b"tEXt", b"audit-note\0metadata changed")
+        + chunk(b"IDAT", zlib.compress(raw, 9))
+        + chunk(b"IEND", b"")
+    )
+
+
 def _forged_png_shell(width: int = 512, height: int = 512) -> bytes:
     """Valid signature/CRC/IHDR/IEND but deliberately no decodable pixel data."""
     def chunk(kind: bytes, payload: bytes) -> bytes:
@@ -230,6 +253,42 @@ def test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view(tmp_pat
     assert "duplicate_canonical_realpath_across_buckets" not in buckets["back"]["errors"]
 
 
+def test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint(
+    tmp_path: Path,
+) -> None:
+    registry = _project(tmp_path)
+    group = registry["characters"][0]["forms"][0]["reference_group"]
+    side_rel = group["side"]["path"]
+    reencoded_rel = "出图/共享/图片/back_reencoded.png"
+    original = (tmp_path / side_rel).read_bytes()
+    reencoded = _reencoded_png_bytes("side")
+    assert hashlib.sha256(original).digest() != hashlib.sha256(reencoded).digest()
+    (tmp_path / reencoded_rel).write_bytes(reencoded)
+    group["back"] = {
+        "path": reencoded_rel,
+        "status": "ready",
+        "human_review": _review("CHAR_01", "常态", "back", reencoded_rel, reencoded),
+    }
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
+
+    buckets = iep.build_pack(str(tmp_path))["rows"][0]["buckets"]
+
+    assert buckets["side"]["sha256"] != buckets["back"]["sha256"]
+    assert (
+        buckets["side"]["decoded_pixel_fingerprint"]
+        == buckets["back"]["decoded_pixel_fingerprint"]
+    )
+    assert "duplicate_png_sha_across_buckets" not in buckets["back"]["errors"]
+    assert (
+        "duplicate_decoded_pixel_fingerprint_across_buckets"
+        in buckets["side"]["errors"]
+    )
+    assert (
+        "duplicate_decoded_pixel_fingerprint_across_buckets"
+        in buckets["back"]["errors"]
+    )
+
+
 def test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked(tmp_path: Path) -> None:
     registry = _project(tmp_path)
     group = registry["characters"][0]["forms"][0]["reference_group"]
@@ -297,6 +356,13 @@ def test_distinct_crop_pixels_from_same_master_remain_valid(tmp_path: Path) -> N
     pack = iep.build_pack(str(tmp_path))
 
     assert pack["rows"][0]["verdict"] == "pass"
+    assert (
+        pack["rows"][0]["buckets"]["side"]["decoded_pixel_fingerprint"]
+        != pack["rows"][0]["buckets"]["back"]["decoded_pixel_fingerprint"]
+    )
+    iep.write_pack(str(tmp_path), pack)
+    audit = pc.check_multiview_identity_pack(str(tmp_path), "第1集")
+    assert not [item for item in audit["findings"] if item["verdict"] == "block"]
 
 
 def test_consumer_duplicate_png_sha_copy_is_independently_blocked(tmp_path: Path) -> None:
@@ -326,6 +392,40 @@ def test_consumer_duplicate_png_sha_copy_is_independently_blocked(tmp_path: Path
     messages = "\n".join(item["message"] for item in audit["findings"])
 
     assert "duplicate_png_sha" in messages
+
+
+def test_consumer_reencoded_same_pixels_are_independently_blocked(
+    tmp_path: Path,
+) -> None:
+    registry = _project(tmp_path)
+    group = registry["characters"][0]["forms"][0]["reference_group"]
+    side_rel = group["side"]["path"]
+    reencoded_rel = "出图/共享/图片/back_reencoded.png"
+    reencoded = _reencoded_png_bytes("side")
+    assert hashlib.sha256((tmp_path / side_rel).read_bytes()).digest() != hashlib.sha256(
+        reencoded
+    ).digest()
+    (tmp_path / reencoded_rel).write_bytes(reencoded)
+    group["back"] = {
+        "path": reencoded_rel,
+        "status": "ready",
+        "human_review": _review("CHAR_01", "常态", "back", reencoded_rel, reencoded),
+    }
+    _write_json(tmp_path / "出图" / "共享" / "identity_registry.json", registry)
+    pack = iep.build_pack(str(tmp_path))
+    row = pack["rows"][0]
+    row["verdict"] = "pass"
+    row["failed_buckets"] = []
+    for bucket in row["buckets"].values():
+        bucket["status"] = "pass"
+        bucket["errors"] = []
+    iep.write_pack(str(tmp_path), pack)
+
+    audit = pc.check_multiview_identity_pack(str(tmp_path), "第1集")
+    messages = "\n".join(item["message"] for item in audit["findings"])
+
+    assert "duplicate_png_sha" not in messages
+    assert "duplicate_decoded_pixel_fingerprint" in messages
 
 
 def test_consumer_symlink_alias_is_independently_blocked(tmp_path: Path) -> None:

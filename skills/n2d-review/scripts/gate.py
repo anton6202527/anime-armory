@@ -31,6 +31,8 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 # 共享基座（增量2·按证据族拆分）：常量/findings/add/无状态助手全部住 gate_core，
 # gate.py 只留 check_*/run/main。gates/<family>.py 后续也从 gate_core 取，避免循环导入。
 from gate_core import *  # noqa: F401,F403
+# B7 contract sentinel：三视图人审拼版不能替代正/45°/侧/背等拆分参考；
+# tier-aware executable checks remain in gate_core and are invoked through this gate entry.
 from seam_contract import (  # noqa: E402
     missing_evidence as seam_missing_evidence,
     needs_end_anchor,

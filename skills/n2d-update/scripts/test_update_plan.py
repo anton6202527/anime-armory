@@ -1,6 +1,8 @@
 import json
 import os
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -218,6 +220,31 @@ def test_record_writes_snapshot(tmp_path, monkeypatch):
     assert path.exists()
     data = json.loads(path.read_text(encoding="utf-8"))
     assert "n2d-image" in data["skills"]
+
+
+def test_write_json_uses_unique_temp_files_for_concurrent_writers(tmp_path, monkeypatch):
+    path = tmp_path / "生产数据" / up.SNAPSHOT_FILE
+    real_replace = up.os.replace
+    replace_barrier = threading.Barrier(2)
+    replace_sources = []
+    sources_lock = threading.Lock()
+
+    def synchronized_replace(src, dst):
+        with sources_lock:
+            replace_sources.append(str(src))
+        replace_barrier.wait(timeout=5)
+        real_replace(src, dst)
+
+    monkeypatch.setattr(up.os, "replace", synchronized_replace)
+    payloads = [{"writer": 1}, {"writer": 2}]
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures = [pool.submit(up.write_json, str(path), payload) for payload in payloads]
+        for future in futures:
+            future.result(timeout=5)
+
+    assert len(set(replace_sources)) == 2
+    assert json.loads(path.read_text(encoding="utf-8")) in payloads
+    assert not list(path.parent.glob(f".{path.name}.*.tmp"))
 
 
 def test_record_preserves_existing_snapshot_scope(tmp_path):

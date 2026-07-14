@@ -1,0 +1,15 @@
+{
+  "kind":"n2d_axis_blocking_map","version":1,"episode":"第1集","status":"confirmed","generated_at":"2026-07-14T11:40:00+00:00",
+  "scene_axis_rules":[{"scene_id":"Scene_01","location":"LOC_01 大唐荒野官道","main_axis":"以官道纵深为主轴：虎妖在画面上方/后景，姜月初与裴长青在下方/前中景。","screen_direction":"逃生方向统一向画面下方；虎妖逼近方向统一由上向下。","default_eyelines":"姜月初与裴长青互看保持左右互补；两人看虎妖均抬眼向上后景。","blocking_floorplan":"翻覆囚车在左后，裴长青靠右前倒地，姜月初在左中，断刀位于二人之间，虎妖从官道后景压近。"}],
+  "beat_blocking":[
+    {"beat_id":"Beat_01","characters":"姜月初、裴长青","entry_exit":"冷开仅见姜月初与刀；回切后裴长青从右前景控场。","power_relation":"冷开主角掌握刀；回切后裴长青以刀和身份占上风。","z_depth":"刀锋前景、主角中景、尸骸与囚车后景。","axis_exception":"冷开是未来片段，硬切回十分钟前后重新建立空间轴。"},
+    {"beat_id":"Beat_02","characters":"姜月初、裴长青","entry_exit":"姜月初从左中靠近，最终停在裴长青左侧一臂外。","power_relation":"裴长青虽倒地仍控制刀与条件；脱籍条件使姜月初主动缩短距离。","z_depth":"刀位前景作权力支点，两人分处中景左右。","axis_exception":"无。"},
+    {"beat_id":"Beat_03","characters":"姜月初、裴长青、虎山神","entry_exit":"虎山神从后景尸堆起身并沿官道压近；两人不交换左右。","power_relation":"虎妖占据上半画面，裴长青的职业权威瞬间坍塌。","z_depth":"两人前景，虎妖后景高位，保持体量差。","axis_exception":"无。"},
+    {"beat_id":"Beat_04","characters":"姜月初、裴长青、虎山神、系统","entry_exit":"虎妖继续由后向前；姜月初不逃，视线改投右下裴长青。","power_relation":"外部压迫不变，系统规则把决定权移交姜月初。","z_depth":"虎爪前景压入，主角中景，裴长青低位侧后。","axis_exception":"系统 overlay 不建立实体轴。"},
+    {"beat_id":"Beat_05","characters":"姜月初、裴长青","entry_exit":"裴长青右下递刀；姜月初从左侧接刀并保持同侧落刀。","power_relation":"递刀本意是救主角，刀落后权力与生死彻底倒转。","z_depth":"刀手前景，双脸中景，虎妖以模糊后景持续施压。","axis_exception":"无。"},
+    {"beat_id":"Beat_06","characters":"姜月初、虎山神","entry_exit":"姜月初由左下向右上斩击；虎妖仍由上向下扑击。","power_relation":"起势时虎妖压顶，刀路交错后虎妖坠落、主角勉强站立。","z_depth":"刀弧前景，主角中景，虎妖后景转前景坠落。","axis_exception":"接触瞬间可用中线正面冲击镜，之后回原屏幕方向。"},
+    {"beat_id":"Beat_07","characters":"姜月初、虎山神摹影、系统","entry_exit":"姜月初跪于下中；妖血从虎妖残躯上行汇入中部百妖谱。","power_relation":"虎妖实体消亡，能力被主角掌控，但系统仍掌握规则解释权。","z_depth":"血滴前景、书页中景、主角侧后景。","axis_exception":"百妖谱为非实体视觉层，不改变场景轴。"},
+    {"beat_id":"Beat_08","characters":"姜月初、裴长青","entry_exit":"姜月初由虎妖残躯转身回到裴长青身边，最终与尸身保持一臂距离。","power_relation":"力量升级属于主角，命债却让死者重新占据道德中心。","z_depth":"松开的刀前景、裴长青中景、姜月初后景。","axis_exception":"无。"}
+  ],
+  "shot_reverse_patterns":[{"pattern_id":"SR_DEFAULT","applies_to":["all_dialogue_or_confrontation_beats"],"mode":"none_until_storyboard_uses_dialogue_shot_reverse","axis_line":"沿两人视线连线，官道纵轴为第二空间锚。","screen_sides":"姜月初画左、裴长青画右；虎妖位于两人共同视线的上后景。","eyeline_match":"画左看右、画右看左；两人看虎妖均向上后景。","shot_pairing":"空间建立 → clean single/OTS → reverse → 刀或反应插入。","coverage_order":"先定场再反打，不在未重建空间时交换左右。","camera_coverage":"MS/CU 反打配刀手、眼神和伤口插入。","lens_height_distance_match":"A/B反打保持相近高度与焦段，权力变化只用轻微俯仰表达。","crossing_axis_policy":"默认不越轴；必须越轴时先用中线或双人关系镜缓冲。","buffer_or_reestablishing":"断刀、递刀手部、虎妖后景或双人镜均可重新定向。","continuity_must":["左右站位稳定","视线互补","主光方向稳定","战损与刀的位置连续"]}]
+}

@@ -371,13 +371,20 @@ def validate_registry(data: Any) -> dict[str, Any]:
                 linked = str(state.get(id_key) or "")
                 if linked and (not isinstance(collection, Mapping) or linked not in collection):
                     issues.append(_issue("block", f"state_{id_key}_unknown", f"state {state_id} 引用了未登记 {id_key}={linked}", asset_id=aid, field=f"states.{state_id}.{id_key}"))
+    identity_types = [
+        asset_type_for_id(str(aid), str(asset.get("type") or ""))
+        for aid, asset in assets.items()
+        if isinstance(asset, Mapping)
+    ]
     return {
         "kind": "comic_identity_registry_validation",
         "schema_version": SCHEMA_VERSION,
         "valid": not any(item["severity"] == "block" for item in issues),
         "summary": {
             "assets": len(assets),
-            "characters": sum(1 for aid, asset in assets.items() if isinstance(asset, Mapping) and asset_type_for_id(str(aid), str(asset.get("type") or "")) in CHARACTER_TYPES),
+            "identity_assets": sum(1 for asset_type in identity_types if asset_type in CHARACTER_TYPES),
+            "characters": sum(1 for asset_type in identity_types if asset_type == "character"),
+            "monsters": sum(1 for asset_type in identity_types if asset_type == "monster"),
             "block": sum(1 for item in issues if item["severity"] == "block"),
             "warn": sum(1 for item in issues if item["severity"] == "warn"),
         },

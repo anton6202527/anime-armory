@@ -34,6 +34,8 @@ import re
 import sys
 from typing import Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
+from pillow_compat import pixel_data
+
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
@@ -596,7 +598,7 @@ def _pillow_probe(image_mod, png: str) -> Optional[Tuple[int, int, float]]:
             gray = im.convert("L")
             gray.thumbnail((PILLOW_PROBE_MAX_SIDE, PILLOW_PROBE_MAX_SIDE))
             sw, sh = gray.size
-            pixels = list(gray.getdata())
+            pixels = list(pixel_data(gray))
         return w, h, laplacian_variance(pixels, sw, sh)
     except Exception:
         return None

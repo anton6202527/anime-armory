@@ -386,6 +386,244 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     assert (root / source["prompt_path"]).is_file()
 
 
+def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    (root / "出图" / "共享").mkdir(parents=True)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "display_name": "风格校准锚",
+                        "style_contract": "低饱和矿物色、清楚线条与三值明暗。",
+                        "reference_images": [],
+                    }
+                }
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[str] = []
+
+    def fake_run_codex_image(prompt: str, repo: Path, timeout_sec: int, image_paths: list[Path]):
+        calls.append(prompt)
+        return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
+
+    def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
+    monkeypatch.setattr(identity, "codex_version", lambda: "codex test")
+    monkeypatch.setattr(identity, "run_codex_image", fake_run_codex_image)
+    monkeypatch.setattr(identity, "decode_image_event", fake_decode_image_event)
+
+    rc = identity.generate_anchors(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "refs": "STYLE_A",
+                "overwrite": False,
+                "candidate_count": 3,
+                "ratio": "4:5",
+                "max_attempts": 2,
+                "timeout_sec": 1,
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert len(calls) == 3
+    assert all("画幅固定为 4:5" in prompt for prompt in calls)
+    candidates = sorted((root / "出图" / "共享" / "candidates" / "STYLE_A" / "anchor").rglob("candidate_*.png"))
+    assert len(candidates) == 3
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    assert "anchor_path" not in registry["assets"]["STYLE_A"]
+    assert registry["assets"]["STYLE_A"]["reference_images"] == []
+    manifests = list((root / "生产数据").glob("comic_identity_anchor_candidates_第1话_*.json"))
+    assert len(manifests) == 1
+    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
+    assert manifest["generated"] == 3
+    assert manifest["failed"] == 0
+    assert manifest["adopted"] is False
+
+
+def test_adopt_anchor_candidate_binds_human_review_and_sha(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True)
+    registry_path.write_text(
+        json.dumps({"assets": {"STYLE_A": {"id": "STYLE_A", "type": "style", "reference_images": []}}}),
+        encoding="utf-8",
+    )
+    candidate = root / "出图" / "共享" / "candidates" / "STYLE_A" / "anchor" / "batch" / "candidate_02.png"
+    candidate.parent.mkdir(parents=True)
+    candidate.write_bytes(PNG_1X1)
+
+    rc = identity.adopt_anchor_candidate(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "ref": "STYLE_A",
+                "candidate": str(candidate.relative_to(root)),
+                "reviewer": "甲",
+                "role": "出品人",
+                "reason": "采纳B",
+            },
+        )()
+    )
+
+    assert rc == 0
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    asset = registry["assets"]["STYLE_A"]
+    adopted = root / asset["anchor_path"]
+    assert adopted.read_bytes() == PNG_1X1
+    assert candidate.is_file()
+    source = asset["reference_images"][0]["source"]
+    assert source["kind"] == "human_selected_candidate_anchor"
+    assert source["reviewer"] == "甲"
+    assert source["reviewer_role"] == "出品人"
+    assert source["candidate_sha256"] == identity.file_sha256(candidate)
+    receipt = json.loads(
+        (root / "生产数据" / "comic_identity_anchor_adoption_STYLE_A.json").read_text(encoding="utf-8")
+    )
+    assert receipt["adopted_sha256"] == receipt["candidate_sha256"]
+
+
+def test_front_candidate_batch_uses_style_only_and_does_not_register_views(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    shared = root / "出图" / "共享"
+    style_path = shared / "图片" / "STYLE_A__anchor.png"
+    style_path.parent.mkdir(parents=True)
+    style_path.write_bytes(PNG_1X1)
+    registry_path = shared / "identity_registry.json"
+    registry_path.write_text(
+        json.dumps(
+            {
+                "assets": {
+                    "STYLE_A": {
+                        "id": "STYLE_A",
+                        "type": "style",
+                        "anchor_path": "出图/共享/图片/STYLE_A__anchor.png",
+                        "reference_images": [],
+                    },
+                    "CHAR_A": {
+                        "id": "CHAR_A",
+                        "type": "character",
+                        "character_dna": "方脸、窄眼、中等体态",
+                        "reference_images": [],
+                    },
+                }
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    calls: list[tuple[str, list[Path]]] = []
+
+    def fake_run_codex_image(prompt: str, repo: Path, timeout_sec: int, image_paths: list[Path]):
+        calls.append((prompt, image_paths))
+        return subprocess.CompletedProcess(["codex"], 0, stdout="{}", stderr="")
+
+    def fake_decode_image_event(stdout: str, out_path: Path) -> bool:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_bytes(PNG_1X1)
+        return True
+
+    monkeypatch.setattr(identity.shutil, "which", lambda name: "/usr/bin/codex" if name == "codex" else None)
+    monkeypatch.setattr(identity, "codex_version", lambda: "codex test")
+    monkeypatch.setattr(identity, "run_codex_image", fake_run_codex_image)
+    monkeypatch.setattr(identity, "decode_image_event", fake_decode_image_event)
+
+    rc = identity.generate_views(
+        type(
+            "Args",
+            (),
+            {
+                "project_root": str(root),
+                "chapter": "第1话",
+                "characters": "CHAR_A",
+                "views": "front",
+                "backend": "codex",
+                "candidate_count": 3,
+                "allow_text_anchor": True,
+                "ratio": "3:4",
+                "max_attempts": 2,
+                "timeout_sec": 1,
+            },
+        )()
+    )
+
+    assert rc == 0
+    assert len(calls) == 3
+    assert all(paths == [style_path] for _, paths in calls)
+    assert all("画幅固定为 3:4" in prompt for prompt, _ in calls)
+    assert all("不得继承其中人物的脸、发型、服装" in prompt for prompt, _ in calls)
+    candidates = sorted((shared / "candidates" / "CHAR_A" / "front").rglob("candidate_*.png"))
+    assert len(candidates) == 3
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    assert "views" not in registry["assets"]["CHAR_A"]
+    assert registry["assets"]["CHAR_A"]["reference_images"] == []
+    manifests = list((root / "生产数据").glob("comic_identity_front_candidates_第1话_*.json"))
+    assert len(manifests) == 1
+    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
+    assert manifest["generated"] == 3
+    assert manifest["failed"] == 0
+    assert manifest["style_reference_role"] == "style_only"
+    assert manifest["adopted"] is False
+
+
+def test_front_candidate_batch_persists_interrupted_manifest(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "项目"
+    style_path = root / "出图" / "共享" / "图片" / "STYLE_A__anchor.png"
+    style_path.parent.mkdir(parents=True)
+    style_path.write_bytes(PNG_1X1)
+    registry = {"assets": {"CHAR_A": {"id": "CHAR_A", "type": "character"}}}
+
+    def interrupted(*args, **kwargs):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(identity, "run_codex_image", interrupted)
+    try:
+        identity.generate_front_view_candidates(
+            root=root,
+            repo=tmp_path,
+            registry=registry,
+            characters=["CHAR_A"],
+            chapter="第1话",
+            candidate_count=3,
+            candidate_indices=[1, 2, 3],
+            max_attempts=2,
+            timeout_sec=1,
+            ratio="3:4",
+            visual_style="测试风格",
+            style_reference=style_path,
+            backend_version="codex test",
+        )
+    except KeyboardInterrupt:
+        pass
+    else:
+        raise AssertionError("expected KeyboardInterrupt")
+
+    manifests = list((root / "生产数据").glob("comic_identity_front_candidates_第1话_*.json"))
+    assert len(manifests) == 1
+    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
+    assert manifest["status"] == "interrupted"
+    assert manifest["items"][0]["status"] == "character_view_candidate_interrupted"
+    assert manifest["items"][0]["attempt"] == 1
+
+
 def test_style_and_fx_prefixes_have_specialized_anchor_contracts() -> None:
     style_prompt = identity.asset_anchor_prompt(
         "STYLE_CLASSIC_V1",

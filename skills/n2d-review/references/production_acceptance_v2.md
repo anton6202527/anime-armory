@@ -6,7 +6,7 @@
 
 - **有外部依据的方向**：动画工具采用正面、前 3/4、侧面、后 3/4、背面关键角度；多视图生成研究把跨视角一致性和内容漂移视为核心问题；视频评测研究把主体身份一致性拆成独立维度并做人类偏好对齐。
 - **n2d 项目默认值**：`计划出场 >=10 集 → core_full`、PNG 短边 `>=512px`、首批物化 10 集、候选 Top-3、beam width 24、精修前看 5–10 集窗口、记忆锚的 gap/晚集触发规则，都是当前项目的工程启发式，不是普适行业定律。
-- **“独立视角”含义**：必须是不同、可单独喂给后端的真实 PNG 路径与当前像素；复制同字节文件、软链或换标签不算独立。允许从同一张已人审通过的 turnaround 母本裁切或派生，但不同桶须有不同真实裁切像素，并登记 `derivation.method/source_path/source_sha256/crop_box`。不要求五张都独立生成。证据路径只能是解析后仍位于作品根内的规范相对路径。
+- **“独立视角”含义**：必须是不同、可单独喂给后端的真实 PNG 路径与解码后像素；复制同字节文件、把相同像素换压缩/filter/metadata 重新编码、软链或换标签都不算独立。允许从同一张已人审通过的 turnaround 母本裁切或派生，但不同桶须有不同真实裁切像素，并登记 `derivation.method/source_path/source_sha256/crop_box`。不要求五张都独立生成。证据路径只能是解析后仍位于作品根内的规范相对路径。
 - 外部来源包只会把**已登记的 `external_required` claims** 升为 `externally-grounded`；当前报告的 `4/4`（或 claims 增减后的任意 `N/N`）只表示本次登记的 N 条声明来源、日期、置信度和实现映射齐全，不代表整个 n2d-review 已获外部验证。只有独立审阅、held-out、盲法、预注册阈值、分层抽样、独立金标裁决、混淆矩阵与当前 artifact SHA 全部成立，才可写 `externally-calibrated`。
 
 外部依据快照见 `external_grounding_2026-07-14.json`。主要来源：当前可访问的 Toon Boom Harmony 24 官方文档、CVPR 2025 CoSER、CVPR 2024 VBench、EMNLP 2020 Chapter Captor、NAACL 2025 scene segmentation 与 NIST AI RMF。
@@ -60,7 +60,7 @@ python3 skills/n2d-script/scripts/boundary_review.py check <作品根> 1-10 --js
 - `core_full`：主角、核心长线、或当前计划出场 >=10 集；每个形态要求 front / three_quarter / side / rear_three_quarter / back、turnaround、body/outfit、expression/face anchor。
 - `recurring_standard`：复现配角；要求 front / three_quarter、body/outfit、face anchor，侧背按镜头补。
 - `named_minimal`：具名短线；要求 front、body/outfit、face anchor，近景/转头/过肩/复用时升档。
-- `restricted_partial`：仅允许合同内手部、肩背、服装、剪影等局部。合同必须 `status=approved`、有 reason/reviewer/allowed_parts，合同 `face_policy` 与角色记录完全一致，且 allowed_parts 不得包含 face/head/front/portrait/正脸/头部。
+- `restricted_partial`：单集 `named_minimal` 功能角色可用结构化 restricted/no-face policy 只建手部、肩背、服装、剪影等局部；一旦复现 >=3 集、属于核心/长线或显式要求例外，则必须有 `status=approved`、reason/reviewer/allowed_parts 完整的合同，合同 `face_policy` 与角色记录完全一致，且 allowed_parts 不得包含 face/head/front/portrait/正脸/头部。
 
 剧情推导给出最低档，显式设置只能升档。角色记录、asset bundle、角色 manifest、`reference_atlas.build_tier` 四处必须精确一致；任何一处自报降档都阻断。即使四处合谋写低，结构化 storyboard 的可见角色集数仍作为独立最低档证据：可见出场 `>=3` 集至少 `recurring_standard`，`>=10` 集至少 `core_full`；只扫结构化角色 ID，不扫散文、offscreen 或 forbidden，避免旧项目误报。
 
@@ -87,7 +87,7 @@ python3 skills/n2d-review/scripts/identity_eval_pack.py <作品根> --write --js
 
 - 当前 registry 节点为 `ready/registered`，不是 `planned`；角色、形态、档位、view 和 path 精确匹配。
 - PNG 可完整解码，格式/CRC/IDAT/scanline 有效，宽高均不低于 512，SHA 与当前文件一致。
-- 五角、turnaround、expression 使用解析后仍在作品根内的规范相对路径和不同当前像素；禁止绝对路径、`..` 越界、软链/非规范别名、同图换标签、复制同字节文件、跨形态复用或普通文件伪 PNG。同源母本的不同真实裁切像素允许通过。
+- 五角、turnaround、expression 使用解析后仍在作品根内的规范相对路径和不同 decoded-pixel fingerprint；该指纹把合法 PNG 统一解码到 RGBA16 像素域，忽略压缩、filter、metadata 与 Adam7/非交错编码差异。禁止绝对路径、`..` 越界、软链/非规范别名、同图换标签、复制同字节文件、同像素重编码换 SHA、跨形态复用或普通文件伪 PNG。同源母本的不同真实裁切像素允许通过。
 - binding fingerprint、对应 view 的 review contract、完整 criteria、人工声明 reviewer、带时区时间齐全；reviewer 必须非空且不得含明显自动化标识。
 - receipt 有 `confirmation.kind=explicit_current_pixels_acceptance` 且 `confirmation.accepted_current_pixels=true`；`bot/codex/agent/runner` 不能作为 reviewer。
 - 生产 consumer 会再次从当前 registry 和当前 PNG 重算以上字段，不能只信 producer 输出。

@@ -146,6 +146,21 @@ def _character_dialogue_lines(text: str, character_id: str, canonical_name: str)
     return rows
 
 
+def _spoken_segments(line: str) -> List[str]:
+    """Split one attributed voiceover row into actual spoken sentences.
+
+    ``sentence_len_max`` is a per-sentence performance constraint, not a
+    per-row limit.  Rows may deliberately contain several sentences or the
+    ``||`` breath/cut marker, and may end in non-spoken retention labels.
+    """
+    spoken = re.sub(r"\s+[⚡💥🪝][^。！？!?；;]*$", "", str(line or "")).strip()
+    return [
+        segment.strip()
+        for segment in re.split(r"\|\||[。！？!?；;]+", spoken)
+        if segment.strip()
+    ]
+
+
 def validate(root: str | Path, episode: str, *, phase: str = "full") -> List[Dict[str, str]]:
     root_path = Path(root)
     data = load(root_path)
@@ -191,7 +206,8 @@ def validate(root: str | Path, episode: str, *, phase: str = "full") -> List[Dic
         limit = row.get("sentence_len_max")
         if limit not in (None, ""):
             try:
-                too_long = [line for line in dialogue_lines if len(re.sub(r"\s+", "", line)) > int(limit)]
+                segments = [segment for line in dialogue_lines for segment in _spoken_segments(line)]
+                too_long = [segment for segment in segments if len(re.sub(r"\s+", "", segment)) > int(limit)]
             except (TypeError, ValueError):
                 issue("dialogue_register_sentence_limit_invalid", f"{cid}.sentence_len_max 必须是正整数或 null。")
             else:

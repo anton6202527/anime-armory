@@ -72,6 +72,49 @@ def test_register_ignores_unattributed_comments_that_name_character(tmp_path):
     assert sc.validate(tmp_path, "第1集", phase="script") == []
 
 
+def test_sentence_limit_applies_to_spoken_segments_not_whole_row(tmp_path):
+    _identity(tmp_path)
+    payload = sc.scaffold(tmp_path)
+    payload["status"] = "confirmed"
+    payload["dialogue_registers"]["CHAR_01"].update({
+        "formality": "克制",
+        "anchors": ["我知道"],
+        "forbidden_terms": [],
+        "sentence_len_max": 4,
+    })
+    sc.path(tmp_path).parent.mkdir(parents=True, exist_ok=True)
+    sc.path(tmp_path).write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    ep = tmp_path / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "voiceover.txt").write_text(
+        "[镜头1·沈念] 我知道。先等等。|| 别出声。  ⚡钩子",
+        encoding="utf-8",
+    )
+
+    assert sc.validate(tmp_path, "第1集", phase="script") == []
+
+
+def test_sentence_limit_still_blocks_one_long_spoken_segment(tmp_path):
+    _identity(tmp_path)
+    payload = sc.scaffold(tmp_path)
+    payload["status"] = "confirmed"
+    payload["dialogue_registers"]["CHAR_01"].update({
+        "formality": "克制",
+        "anchors": ["我知道"],
+        "forbidden_terms": [],
+        "sentence_len_max": 4,
+    })
+    sc.path(tmp_path).parent.mkdir(parents=True, exist_ok=True)
+    sc.path(tmp_path).write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    ep = tmp_path / "脚本" / "第1集"
+    ep.mkdir(parents=True)
+    (ep / "voiceover.txt").write_text("[镜头1·沈念] 我现在完全知道了。", encoding="utf-8")
+
+    assert "dialogue_register_sentence_too_long" in {
+        row["code"] for row in sc.validate(tmp_path, "第1集", phase="script")
+    }
+
+
 def test_write_missing_merges_new_identity_rows_into_existing_contract(tmp_path):
     _identity(tmp_path)
     payload = sc.scaffold(tmp_path)

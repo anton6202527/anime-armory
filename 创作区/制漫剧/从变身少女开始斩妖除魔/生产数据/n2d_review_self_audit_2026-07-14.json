@@ -1,0 +1,3435 @@
+{
+  "kind": "n2d_self_audit",
+  "generated_at": "2026-07-14T09:16:00+00:00",
+  "root": "/Users/wesley/learn/anime-armory",
+  "work_root": "/Users/wesley/learn/anime-armory/创作区/制漫剧/从变身少女开始斩妖除魔",
+  "counts": {
+    "block": 0,
+    "warn": 0,
+    "info": 14
+  },
+  "assurance": {
+    "self_checked": {
+      "label": "self-checked",
+      "status": "complete",
+      "covered": 30,
+      "total": 30,
+      "meaning": "声明、实现、调用三段静态可追溯；不等于行为已被反例击穿验证。"
+    },
+    "adversarially_tested": {
+      "label": "adversarially-tested",
+      "status": "complete",
+      "covered": 26,
+      "total": 26,
+      "meaning": "仅由本次 --run-tests 的 pytest 运行收据成立；测试文本存在不算 tested。"
+    },
+    "adversarial_test_coverage": {
+      "label": "adversarial-test-coverage",
+      "status": "complete",
+      "covered": 46,
+      "total": 46,
+      "meaning": "静态可找到测试、反例和 guard（defined-only）；不证明 pytest 实际执行过。"
+    },
+    "externally_grounded": {
+      "label": "externally-grounded",
+      "status": "complete",
+      "covered": 4,
+      "total": 4,
+      "meaning": "外部来源已做 provenance 与实现映射；链接或论文不是留出样本校准。"
+    },
+    "externally_calibrated": {
+      "label": "externally-calibrated",
+      "status": "not_run",
+      "covered": 0,
+      "total": 4,
+      "meaning": "每个外部必需 claim 都有独立审阅、held-out、盲法、预注册阈值、分层抽样、裁决金标、当前本仓 artifact SHA 与重算误差率且通过；仍不等于无偏。"
+    },
+    "no_blind_spot_claim_allowed": false,
+    "blind_spot_statement": "即使本报告 0 warn，也只表示已登记的静态链和已知反例未发现缺口；即使 externally-calibrated=complete，也不能表述为“无盲区”“审查无偏”或“结果无偏”。"
+  },
+  "meta_audit": {
+    "kind": "n2d_review_meta_audit",
+    "version": 3,
+    "generated_at": "2026-07-14T09:16:00+00:00",
+    "root": "/Users/wesley/learn/anime-armory",
+    "counts": {
+      "block": 0,
+      "warn": 0,
+      "info": 0
+    },
+    "claims": [
+      {
+        "id": "character_tier_authority",
+        "title": "人物档位真值不可由下游自报降档",
+        "statement": "核心角色的权威档位必须与 manifest/bundle/atlas 对账，不能只信 build_tier。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "docs/skill-design-principles.md",
+                "matched": [
+                  {
+                    "path": "docs/skill-design-principles.md",
+                    "pattern": "B7[^\\n]*library_tier"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate_core.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate_core.py",
+                    "pattern": "(?:library_tier|authoritative_tier)[^\\n]{0,240}build_tier"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/gate_core.py",
+                    "pattern": "build_tier[^\\n]{0,240}(?:library_tier|authoritative_tier)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate.py",
+                    "pattern": "check_identity_registry\\("
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "def test_[^\\n]*core[^\\n]*self_report[^\\n]*(?:minimal|standard)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "def test_[^\\n]*(?:core[^\\n]*(?:downgrade|self_report)|downgrade[^\\n]*core|self_report(?:ed)?_tier)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "multiview_nested_failure",
+        "title": "多视图子桶失败必须向顶层传播",
+        "statement": "identity eval 的任一必需视角失败都必须被看见，不能只检查顶层 verdict。",
+        "external_required": true,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/SKILL.md",
+                    "pattern": "多视角身份包\\(MVIEW\\)[^\\n]*(?:失败行|失败桶)[^\\n]*阻断"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/production_consistency.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "failed_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "bucket_(?:fail|verdict)"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "(?:bucket|view)[^\\n]{0,200}(?:fail|failed|block)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/production_consistency.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "多视角身份包\\(MVIEW\\).*check_multiview_identity_pack"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                    "pattern": "def test_[^\\n]*multiview"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                    "pattern": "def test_[^\\n]*multiview[^\\n]*(?:bucket|view)[^\\n]*(?:fail|missing_top_level)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "turnaround_alignment_enforcement",
+        "title": "文档硬闸与多视图对齐执行强度一致",
+        "statement": "文档称不得落档的三视图错位，必须由可复算硬证据或 hash 绑定逐视图收据闭环；低置信几何偏差本身仍按 B10 保持 WARN。",
+        "external_required": true,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-image/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-image/SKILL.md",
+                    "pattern": "低置信几何偏差保持 WARN[^\\n]*(?:人工|收据声明)[^\\n]*硬伤[^\\n]*不得落档"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-image/scripts/image_qc.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-image/scripts/image_qc.py",
+                    "pattern": "HARD_LINT_CODES[\\s\\S]{0,1800}turnaround_core_view_review_missing"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-image/scripts/image_qc.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-image/scripts/image_qc.py",
+                    "pattern": "audit_turnaround_alignment\\(root,\\s*ep\\)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-image/scripts/test_image_qc.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-image/scripts/test_image_qc.py",
+                    "pattern": "def test_[^\\n]*turnaround_alignment"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-image/scripts/test_image_qc.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-image/scripts/test_image_qc.py",
+                    "pattern": "def test_[^\\n]*turnaround[^\\n]*(?:hard|block|misaligned|hash_bound_per_view_receipts|core_view_review_missing)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "boundary_change_application_receipt",
+        "title": "变更型边界签收必须证明已应用",
+        "statement": "move/merge/split/rewrite 不能只签 decision；必须有应用收据或变更后的绑定证据。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/SKILL.md",
+                    "pattern": "实际取材优先级[^\\n]*boundary_review"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/boundary_review.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "MUTATING_DECISIONS"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "applied_receipt"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "previous_boundary_contract_sha256"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "new_left_raw_sha256"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "new_right_raw_sha256"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_review.py",
+                    "pattern": "source_mapping"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "boundary_review\\.py"
+                  },
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "review_script"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                    "pattern": "def test_"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                    "pattern": "def test_[^\\n]*(?:unapplied|not_applied|missing_receipt|requires_applied_receipt|mutating_decision)"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                    "pattern": "def test_[^\\n]*(?:passes_only_after_new_sha_and_mapping|receipt[^\\n]*binding|unchanged[^\\n]*receipt)"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                    "pattern": "move_boundary[\\s\\S]{0,600}(?:not result\\[\\\"ok\\\"\\]|missing.*receipt|unapplied)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "planned_reference_not_ready",
+        "title": "planned 参考不得靠非空路径伪装 ready",
+        "statement": "结构化参考只有显式 ready/registered 才可消费；planned 即使有路径也必须被拒绝。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "docs/skill-design-principles.md",
+                "matched": [
+                  {
+                    "path": "docs/skill-design-principles.md",
+                    "pattern": "B7[^\\n]*planned[^\\n]*(?:冒充|不得生成|不能)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate_core.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate_core.py",
+                    "pattern": "def _identity_reference_item_ready"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/gate_core.py",
+                    "pattern": "status[^\\n]{0,180}READY_CHARACTER_MAKEUP_STATUSES"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate.py",
+                    "pattern": "check_identity_registry\\("
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "def test_[^\\n]*planned[^\\n]*(?:reference|makeup)[^\\n]*(?:blocked|fails)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "def test_identity_registry_planned_makeup_reference_is_blocked"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "[\\\"']status[\\\"']\\s*:\\s*[\\\"']planned[\\\"'][\\s\\S]{0,1000}(?:BLOCK|不能放行)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "multiview_evidence_freshness_binding",
+        "title": "多视图证据必须绑定当前角色/形态/档位/视角与真实 PNG",
+        "statement": "核心角色多视图不能靠旧收据、同图换标签、复制同字节文件、软链/路径逃逸、普通文件伪 PNG 或单形态行复用放行；每个桶必须绑定作品根内规范相对路径、当前 registry 节点和 PNG 哈希，并按 (character_id, form) 精确消费。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/SKILL.md",
+                    "pattern": "MVIEW[\\s\\S]{0,700}current PNG SHA[\\s\\S]{0,700}\\(character_id,\\s*form\\)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "registry_node_status"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "not_valid_png_container"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "duplicate_path_across_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "def _resolve_project_evidence_path"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "duplicate_canonical_realpath_across_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "duplicate_png_sha_across_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                    "pattern": "registry_binding_fingerprint"
+                  }
+                ],
+                "errors": []
+              },
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/production_consistency.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "by_key\\.get\\(\\(cid,\\s*form_name\\)\\)"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "not_valid_png_container"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "duplicate_paths"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "def _resolve_multiview_evidence_path"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "duplicate_canonical_realpath"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "duplicate_png_sha"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/production_consistency.py",
+                    "pattern": "registry_node_status"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gates/face.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gates/face.py",
+                    "pattern": "def check_identity_eval_pack"
+                  }
+                ],
+                "errors": []
+              },
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate.py",
+                    "pattern": "check_identity_eval_pack\\(root,\\s*ep\\)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_planned_view_cannot_reuse_a_stale_accepted_receipt"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_plain_text_with_matching_hash_cannot_pose_as_png_evidence"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_same_png_cannot_be_relabelled_as_multiple_views"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_producer_path_escape_and_absolute_registry_evidence_are_rejected"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_consumer_duplicate_png_sha_copy_is_independently_blocked"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_distinct_crop_pixels_from_same_master_remain_valid"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "def test_one_form_row_cannot_be_reused_for_another_form"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "registry_node_status=planned"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "not_valid_png_container"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "duplicate_path_across_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "duplicate_png_sha_across_buckets"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "registry_evidence_path_outside_project_root"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                    "pattern": "CHAR_01/战损态"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "memory_anchor_per_key_consumption",
+        "title": "跨集记忆锚必须逐角色形态真实消费",
+        "statement": "memory plan 的每个 reinject 角色/形态都必须在真实 clip 中消费；聚合计数、summary 自报或只消费其中一人不能放行。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-identity/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-identity/SKILL.md",
+                    "pattern": "load-bearing[\\s\\S]{0,500}逐角色/形态[\\s\\S]{0,500}聚合"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gates/contract.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gates/contract.py",
+                    "pattern": "required_from_plan"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/gates/contract.py",
+                    "pattern": "consumed_from_clips"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/gates/contract.py",
+                    "pattern": "unconsumed"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/gates/contract.py",
+                    "pattern": "不得靠聚合数字"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/gate.py",
+                    "pattern": "check_reference_plan_applied\\(root,\\s*ep\\)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "def test_memory_anchor_gate_recomputes_each_required_character_not_aggregate_count"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_gate.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_gate.py",
+                    "pattern": "CHAR_02/常态[\\s\\S]{0,2400}memory_anchor_refs_consumed[\\s\\S]{0,1600}CHAR_02/常态"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "report_only_cache_artifact_liveness",
+        "title": "report-only 缓存必须绑定仍存在的输出 sidecar",
+        "statement": "只有 pass 且至少一个输出 artifact 仍存在的 report-only 前置可以命中缓存；删除 sidecar 后必须重跑，warn 不得缓存。",
+        "external_required": false,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d/SKILL.md",
+                    "pattern": "report-only[\\s\\S]{0,500}(?:sidecar|输出)[\\s\\S]{0,500}(?:删除|不存在)[\\s\\S]{0,500}重跑"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "def _cache_artifact_paths"
+                  },
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "_cache_artifacts"
+                  },
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "o\\.get\\(\\\"status\\\"\\) == \\\"pass\\\""
+                  },
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "bool\\(o\\.get\\(\\\"_cache_artifacts\\\"\\)\\)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "_run_report_only_prework\\([\\s\\S]{0,1800}expected_outputs\\s*="
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/test_run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/test_run.py",
+                    "pattern": "def test_report_only_cache_rebuilds_deleted_output_path_sidecar"
+                  },
+                  {
+                    "path": "skills/n2d/test_run.py",
+                    "pattern": "def test_report_only_warn_result_is_never_cached_even_with_artifact"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/test_run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/test_run.py",
+                    "pattern": "sidecar\\.unlink\\(\\)[\\s\\S]{0,1000}read_text\\(\\) == \\\"2\\\""
+                  },
+                  {
+                    "path": "skills/n2d/test_run.py",
+                    "pattern": "warn-not-cached[\\s\\S]{0,1000}\\.get\\(\\\"warn\\\"\\) is None"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "review_assurance_separation",
+        "title": "n2d-review 不得用静态清单或权威链接给自己发校准证书",
+        "statement": "静态五联、对抗测试覆盖、真实运行收据、外部依据与独立留出校准必须分层报告；任何一层 complete 都不得被改写成无盲区或无偏。",
+        "external_required": true,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/SKILL.md",
+                    "pattern": "self-checked / adversarial-test-coverage / adversarially-tested / externally-grounded / externally-calibrated"
+                  },
+                  {
+                    "path": "skills/n2d-review/SKILL.md",
+                    "pattern": "不得说[“\\\"]无盲区/审查无偏/结果无偏"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/meta_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/meta_audit.py",
+                    "pattern": "\"adversarial_test_coverage\"\\s*:"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/meta_audit.py",
+                    "pattern": "\"adversarially_tested\"\\s*:"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/meta_audit.py",
+                    "pattern": "\"externally_grounded\"\\s*:"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/meta_audit.py",
+                    "pattern": "\"externally_calibrated\"\\s*:"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/meta_audit.py",
+                    "pattern": "\"no_blind_spot_claim_allowed\"\\s*:\\s*False"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/self_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/self_audit.py",
+                    "pattern": "def check_meta_audit"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/self_audit.py",
+                    "pattern": "run_tests=run_meta_tests"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "def test_run_tests_is_the_only_path_to_adversarially_tested_and_binds_current_sha"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "def test_official_mapping_is_grounding_but_never_link_only_calibration"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "def test_self_audit_embeds_assurance_and_disallows_zero_warn_overclaim"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "link_only_v2[\\s\\S]{0,900}externally_calibrated[\\s\\S]{0,300}not_run"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "adversarially_tested[\\s\\S]{0,300}not_run"
+                  },
+                  {
+                    "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                    "pattern": "no_blind_spot_claim_allowed[\\s\\S]{0,120}False"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "chapter_boundary_semantic_contract",
+        "title": "拆集必须覆盖全书轴并校验双侧语义边界",
+        "statement": "章节/字数只能提供候选；机器计划必须保留全书 source-unit 轴，边界放行同时检查上集收口与下集冷开，最终由可追溯人工签收决定。",
+        "external_required": true,
+        "coverage": {
+          "covered": 5,
+          "total": 5,
+          "ratio": 1.0
+        },
+        "links": {
+          "declaration": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/SKILL.md",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/SKILL.md",
+                    "pattern": "集 = 戏剧节拍单元[^\\n]*≠ 章[^\\n]*冲突[^\\n]*钩子"
+                  },
+                  {
+                    "path": "skills/n2d-script/SKILL.md",
+                    "pattern": "split_plan\\.json[^\\n]*(?:source[-_]units?|规范化 source-unit 索引)[^\\n]*boundary_candidates[^\\n]*beam"
+                  },
+                  {
+                    "path": "skills/n2d-script/SKILL.md",
+                    "pattern": "双侧边界合同"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "implementation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/split_novel.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/split_novel.py",
+                    "pattern": "def build_source_units"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/split_novel.py",
+                    "pattern": "def build_boundary_candidates"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/split_novel.py",
+                    "pattern": "full_book_beam_search_v1"
+                  }
+                ],
+                "errors": []
+              },
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/boundary_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_audit.py",
+                    "pattern": "def boundary_pairs"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_audit.py",
+                    "pattern": "weak_next_opening"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/boundary_audit.py",
+                    "pattern": "上集收尾 \\+ 下集开场"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "invocation": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d/run.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "boundary_audit\\.py"
+                  },
+                  {
+                    "path": "skills/n2d/run.py",
+                    "pattern": "boundary_review\\.py"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "test": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_split_novel.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_split_novel.py",
+                    "pattern": "def test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_split_novel.py",
+                    "pattern": "def test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_split_novel.py",
+                    "pattern": "def test_beam_optimizer_is_global_and_dictionary_is_not_a_veto"
+                  }
+                ],
+                "errors": []
+              },
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                    "pattern": "def test_two_sided_boundary_pair_flags_slow_next_opening"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                    "pattern": "def test_weak_next_opening_alone_enters_strict_gate"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          },
+          "counterexample": {
+            "status": "covered",
+            "requirements": [
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_split_novel.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_split_novel.py",
+                    "pattern": "only_first_episode_materialized[\\s\\S]{0,1800}source_units"
+                  },
+                  {
+                    "path": "skills/n2d-script/scripts/test_split_novel.py",
+                    "pattern": "split_plan_v3_compacts_source_axis[\\s\\S]{0,2200}boundary_candidates"
+                  }
+                ],
+                "errors": []
+              },
+              {
+                "ok": true,
+                "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                "matched": [
+                  {
+                    "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                    "pattern": "weak_next_opening_alone[\\s\\S]{0,1800}(?:strict_blockers|weak_next_opening)"
+                  }
+                ],
+                "errors": []
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "probes": [
+      {
+        "id": "tier_self_reported_downgrade",
+        "class": "metamorphic",
+        "claim_id": "character_tier_authority",
+        "description": "把核心角色的 atlas.build_tier 改成 named_minimal 后，权威档位对账仍应抓住降档。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/gate_core.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "(?:library_tier|authoritative_tier)[^\\n]{0,240}build_tier"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "build_tier[^\\n]{0,240}(?:library_tier|authoritative_tier)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_gate.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_[^\\n]*(?:core[^\\n]*(?:downgrade|self_report)|downgrade[^\\n]*core|self_report(?:ed)?_tier)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "all_chain_collusive_tier_downgrade",
+        "class": "adversarial",
+        "claim_id": "character_tier_authority",
+        "description": "scope 与 character/bundle/manifest/atlas 四处同时伪低（含自报 restricted_partial）时，registry 外结构化 storyboard 出场下界仍须同时约束 identity gate 与 review MVIEW；无结构化索引的旧项目不得扫散文误报，offscreen/forbidden 不计可见出场。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/gate_core.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "def _storyboard_character_appearance_evidence"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "episode_count"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d/_lib/n2d_const.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "observed_episode_count"
+                },
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "independent_episode_count"
+                },
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "restricted_partial_contract_valid"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "_storyboard_character_appearance_evidence"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "observed_episode_count"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "def _core_character_forms"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_gate.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_storyboard_floor_rejects_collusive_restricted_partial_without_contract"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_storyboard_tier_evidence_uses_structured_visible_ids_only"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                  "pattern": "def test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                  "pattern": "def test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "nested_fail_without_top_verdict",
+        "class": "adversarial",
+        "claim_id": "multiview_nested_failure",
+        "description": "移除 identity eval 顶层 verdict、只让必需 bucket=fail，仍应产生失败 finding。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "failed_buckets"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "bucket_(?:fail|verdict)"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "(?:bucket|view)[^\\n]{0,200}(?:fail|failed|block)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_production_consistency.py",
+                  "pattern": "def test_[^\\n]*multiview[^\\n]*(?:bucket|view)[^\\n]*(?:fail|missing_top_level)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "hard_claim_warn_implementation",
+        "class": "cross_artifact",
+        "claim_id": "turnaround_alignment_enforcement",
+        "description": "文档称硬伤时，执行层必须有可复算硬证据或逐视图收据硬闸；不能只剩启发式 WARN。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/image_qc.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/image_qc.py",
+                  "pattern": "HARD_LINT_CODES[\\s\\S]{0,1800}turnaround_core_view_review_missing"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/test_image_qc.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/test_image_qc.py",
+                  "pattern": "def test_[^\\n]*turnaround[^\\n]*(?:hard|block|misaligned|hash_bound_per_view_receipts|core_view_review_missing)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "signed_but_unapplied_review",
+        "class": "adversarial",
+        "claim_id": "boundary_change_application_receipt",
+        "description": "decision=move_boundary 但 raw 未改且无应用收据时必须拒绝通过。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/boundary_review.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "MUTATING_DECISIONS"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "applied_receipt"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "previous_boundary_contract_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "new_left_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "new_right_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "source_mapping"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/test_boundary_review.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "def test_[^\\n]*(?:unapplied|not_applied|missing_receipt|requires_applied_receipt|mutating_decision)"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "def test_[^\\n]*(?:passes_only_after_new_sha_and_mapping|receipt[^\\n]*binding|unchanged[^\\n]*receipt)"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "move_boundary[\\s\\S]{0,600}(?:not result\\[\\\"ok\\\"\\]|missing.*receipt|unapplied)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "receipt_not_bound_to_boundary_change",
+        "class": "adversarial",
+        "claim_id": "boundary_change_application_receipt",
+        "description": "伪造 status=applied 但未绑定改前合同、新左右 raw SHA 与 source mapping 时必须拒绝。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/boundary_review.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "MUTATING_DECISIONS"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "applied_receipt"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "previous_boundary_contract_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "new_left_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "new_right_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_review.py",
+                  "pattern": "source_mapping"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/test_boundary_review.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "def test_mutating_decision_passes_only_after_new_sha_and_mapping_receipt"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "previous_boundary_contract_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "new_left_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "new_right_raw_sha256"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_review.py",
+                  "pattern": "source_mapping"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "planned_path_truthiness",
+        "class": "adversarial",
+        "claim_id": "planned_reference_not_ready",
+        "description": "参考项有非空 path 但 status=planned 时，不能因 dict/path truthy 被当成 ready。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/gate_core.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "def _identity_reference_item_ready"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/gate_core.py",
+                  "pattern": "status[^\\n]{0,180}READY_CHARACTER_MAKEUP_STATUSES"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_gate.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_identity_registry_planned_makeup_reference_is_blocked"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "[\\\"']status[\\\"']\\s*:\\s*[\\\"']planned[\\\"'][\\s\\S]{0,1000}(?:BLOCK|不能放行)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "planned_receipt_resurrection",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "registry 节点已回退 planned 时，残留 accepted/pass 旧收据不能复活该视角。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "node_status not in \\{\\\"ready\\\", \\\"registered\\\"\\}"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "registry_node_status"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_planned_view_cannot_reuse_a_stale_accepted_receipt"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "registry_node_status=planned"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "non_png_hash_spoof",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "普通文本即使哈希与收据一致，也不能冒充多视图 PNG 证据。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "def _png_container_errors"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "not_valid_png_container"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_plain_text_with_matching_hash_cannot_pose_as_png_evidence"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "not_valid_png_container"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "forged_png_shell",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "只有 PNG 签名/IHDR/IEND 的空壳即使 CRC 与哈希自洽，也不能冒充可审像素。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/image_evidence.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "png_iend_invalid"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "zlib\\.decompressobj"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "png_scanline_data_incomplete"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_forged_png_header_shell_with_matching_hash_cannot_pose_as_pixels"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "png_iend_invalid"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "forged_human_metadata",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "攻击者同时手改 registry 与 pack 时，consumer 仍须独立拒绝自动 reviewer、无时区、缺 criteria 和缺当前像素确认。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "reviewer_appears_automated"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "criteria_incomplete"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "explicit_current_pixels_confirmation_missing"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_consumer_independently_rejects_forged_human_metadata"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "reviewed_at_timezone_missing"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "explicit_current_pixels_confirmation_missing"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "same_image_multiangle_alias",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "同一 PNG 路径不能换 front/side/back 标签后重复充当多个独立视角。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "duplicate_path_across_buckets"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_same_png_cannot_be_relabelled_as_multiple_views"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "duplicate_path_across_buckets"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "copied_or_symlinked_pixel_alias",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "把同一 PNG 复制到不同文件名或用软链别名伪装多角度时，producer 与 consumer 必须按 canonical realpath/current SHA 双重阻断；同源但像素不同的真实裁切仍可通过。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "duplicate_canonical_realpath_across_buckets"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "duplicate_png_sha_across_buckets"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "duplicate_canonical_realpath"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "duplicate_png_sha"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_consumer_duplicate_png_sha_copy_is_independently_blocked"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_consumer_symlink_alias_is_independently_blocked"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_distinct_crop_pixels_from_same_master_remain_valid"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "reencoded_same_pixels_alias",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "同一解码像素即使改变 PNG 压缩、filter 或 metadata 导致文件 SHA 不同，也不能伪装成独立角度；producer 与 consumer 必须在统一 RGBA 像素域独立复算。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/image_evidence.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "PNG_DECODED_PIXEL_FINGERPRINT_KIND"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "def png_decoded_pixel_fingerprint"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/image_evidence.py",
+                  "pattern": "RGBA16"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "duplicate_decoded_pixel_fingerprint_across_buckets"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "duplicate_decoded_pixel_fingerprint"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_image_evidence.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_image_evidence.py",
+                  "pattern": "def test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_image_evidence.py",
+                  "pattern": "def test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_consumer_reencoded_same_pixels_are_independently_blocked"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "multiview_evidence_path_escape",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "绝对路径、.. 越界、软链解析出作品根或非规范别名不能作为 load-bearing 多视图证据，producer 与 consumer 必须各自复算。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "def _resolve_project_evidence_path"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "absolute_registry_evidence_path_not_allowed"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+                  "pattern": "registry_evidence_path_outside_project_root"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "def _resolve_multiview_evidence_path"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "absolute_path_not_allowed"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "path_outside_project_root"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_producer_path_escape_and_absolute_registry_evidence_are_rejected"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_consumer_path_escape_and_absolute_registry_path_are_independently_blocked"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "pre_spend_registry_alias_bypass",
+        "class": "cross_artifact",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "即使 review pack 被手改，legacy signer/finalizer 与真正付费前 shared-first runner 也必须独立拒绝路径逃逸、软链/非规范别名和复制同 SHA 的伪多视图。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/image_qc.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/image_qc.py",
+                  "pattern": "def _resolve_core_registry_image_path"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/image_qc.py",
+                  "pattern": "def _core_form_path_uniqueness_issues"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/image_qc.py",
+                  "pattern": "duplicate_png_sha_across_buckets"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/codex_image_runner.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "pattern": "def _resolve_registry_image_path"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "pattern": "duplicate_canonical_realpath"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/codex_image_runner.py",
+                  "pattern": "duplicate_png_sha"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/test_image_qc.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/test_image_qc.py",
+                  "pattern": "def test_legacy_signer_path_escape_symlink_and_noncanonical_are_rejected"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/test_image_qc.py",
+                  "pattern": "def test_legacy_finalize_consumer_duplicate_png_sha_is_independently_blocked"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-image/scripts/test_codex_image_runner.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-image/scripts/test_codex_image_runner.py",
+                  "pattern": "def test_shared_first_pre_spend_duplicate_png_sha_blocks_copied_views"
+                },
+                {
+                  "path": "skills/n2d-image/scripts/test_codex_image_runner.py",
+                  "pattern": "def test_shared_first_pre_spend_path_escape_symlink_and_noncanonical_are_blocked"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "multiform_row_reuse",
+        "class": "adversarial",
+        "claim_id": "multiview_evidence_freshness_binding",
+        "description": "同一角色的常态验收行不能回退复用给战损态等另一形态。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/production_consistency.py",
+                  "pattern": "by_key\\.get\\(\\(cid,\\s*form_name\\)\\)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "def test_one_form_row_cannot_be_reused_for_another_form"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+                  "pattern": "CHAR_01/战损态"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "memory_aggregate_false_positive",
+        "class": "adversarial",
+        "claim_id": "memory_anchor_per_key_consumption",
+        "description": "required=2 但仅一名角色在真实 clip 消费时，聚合字段不能制造假通过。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/gates/contract.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/gates/contract.py",
+                  "pattern": "required_from_plan"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/gates/contract.py",
+                  "pattern": "consumed_from_clips"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/gates/contract.py",
+                  "pattern": "unconsumed"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_gate.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "def test_memory_anchor_gate_recomputes_each_required_character_not_aggregate_count"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_gate.py",
+                  "pattern": "CHAR_02/常态"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "core_partial_self_downgrade",
+        "class": "metamorphic",
+        "claim_id": "character_tier_authority",
+        "description": "核心角色仅自报 restricted_partial/no_full_face 且无 approved 合同时仍必须回到 core_full。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/_lib/n2d_const.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "def restricted_partial_contract_valid"
+                },
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "restricted_partial_contract_valid\\(record\\)"
+                },
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "group_or_crowd"
+                },
+                {
+                  "path": "skills/n2d/_lib/n2d_const.py",
+                  "pattern": "inferred == CHARACTER_LIBRARY_TIER_MINIMAL"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/_lib/test_character_library_contract.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/_lib/test_character_library_contract.py",
+                  "pattern": "def test_core_cannot_self_report_restricted_partial_without_approved_contract"
+                },
+                {
+                  "path": "skills/n2d/_lib/test_character_library_contract.py",
+                  "pattern": "def test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract"
+                },
+                {
+                  "path": "skills/n2d/_lib/test_character_library_contract.py",
+                  "pattern": "== CHARACTER_LIBRARY_TIER_CORE"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "deleted_sidecar_cache_deadlock",
+        "class": "adversarial",
+        "claim_id": "report_only_cache_artifact_liveness",
+        "description": "缓存命中后若输出 sidecar 被删除，前置必须失效并重跑，不能永久跳过重建。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/run.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "def _cache_artifact_paths"
+                },
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "_cache_artifacts"
+                },
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "bool\\(o\\.get\\(\\\"_cache_artifacts\\\"\\)\\)"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/test_run.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/test_run.py",
+                  "pattern": "def test_report_only_cache_rebuilds_deleted_output_path_sidecar"
+                },
+                {
+                  "path": "skills/n2d/test_run.py",
+                  "pattern": "sidecar\\.unlink\\(\\)"
+                },
+                {
+                  "path": "skills/n2d/test_run.py",
+                  "pattern": "read_text\\(\\) == \\\"2\\\""
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "structured_warn_exit_zero_cache",
+        "class": "adversarial",
+        "claim_id": "report_only_cache_artifact_liveness",
+        "description": "report-only 子脚本即使 exit=0，只要结构化 JSON status=warn，就不得借旧 sidecar 被缓存成 pass。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/run.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "def _script_result_status"
+                },
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "detected_status\\s*=\\s*_script_result_status"
+                },
+                {
+                  "path": "skills/n2d/run.py",
+                  "pattern": "report_status\\s*=\\s*[\\\"']pass[\\\"']\\s*if\\s*detected_status\\s*==\\s*[\\\"']pass[\\\"']\\s*else\\s*[\\\"']warn[\\\"']"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d/test_run.py",
+              "matched": [
+                {
+                  "path": "skills/n2d/test_run.py",
+                  "pattern": "def test_report_only_exit_zero_with_structured_warn_is_not_cached"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "stale_report_resurrection",
+        "class": "adversarial",
+        "claim_id": "report_only_cache_artifact_liveness",
+        "description": "memory-anchor 本轮 unavailable/warn 时必须覆写旧 ready plan，不能因 report-only exit=0 留下昨天的可消费证据。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-identity/scripts/memory_anchor.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-identity/scripts/memory_anchor.py",
+                  "pattern": "status[\\\"']?\\s*:\\s*[\\\"']warn[\\\"']"
+                },
+                {
+                  "path": "skills/n2d-identity/scripts/memory_anchor.py",
+                  "pattern": "if not ns\\.no_write:\\s*[\\s\\S]{0,180}write_plan"
+                },
+                {
+                  "path": "skills/n2d-identity/scripts/memory_anchor.py",
+                  "pattern": "Always replace an older plan"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-identity/scripts/test_memory_anchor.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-identity/scripts/test_memory_anchor.py",
+                  "pattern": "def test_cli_overwrites_stale_ready_plan_with_explicit_unavailable_plan"
+                },
+                {
+                  "path": "skills/n2d-identity/scripts/test_memory_anchor.py",
+                  "pattern": "current\\[\\\"available\\\"\\] is False"
+                },
+                {
+                  "path": "skills/n2d-identity/scripts/test_memory_anchor.py",
+                  "pattern": "current\\[\\\"status\\\"\\] == \\\"warn\\\""
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "static_test_text_self_certification",
+        "class": "adversarial",
+        "claim_id": "review_assurance_separation",
+        "description": "测试函数名存在只能算 defined-only；未显式执行 pytest 时 adversarially-tested 必须保持 not_run。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "def run_registered_adversarial_tests"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "if not requested"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "\"status\"\\s*:\\s*\"not_run\""
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                  "pattern": "def test_run_tests_is_the_only_path_to_adversarially_tested_and_binds_current_sha"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                  "pattern": "adversarially_tested[\\s\\S]{0,300}not_run"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "stdout_only_assurance_receipt_loss",
+        "class": "cross_artifact",
+        "claim_id": "review_assurance_separation",
+        "description": "正式验收不能只靠瞬时 stdout 或退出码；meta/self 必须能把同一份完整 JSON 原子落档，且落档不得篡改各自原有退出码语义。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "def _atomic_write_text"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "os\\.fsync"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "os\\.replace"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "add_argument\\(\\\"--out\\\""
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/self_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/self_audit.py",
+                  "pattern": "def _atomic_write_text"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/self_audit.py",
+                  "pattern": "os\\.fsync"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/self_audit.py",
+                  "pattern": "os\\.replace"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/self_audit.py",
+                  "pattern": "add_argument\\(\\\"--out\\\""
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                  "pattern": "def test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_self_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_self_audit.py",
+                  "pattern": "def test_cli_out_matches_json_stdout_and_preserves_block_exit"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "link_only_calibration_spoof",
+        "class": "adversarial",
+        "claim_id": "review_assurance_separation",
+        "description": "把官方/论文 evidence 包版本号改成 v2，仍不能在无 held-out calibration 时制造 externally-calibrated。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "calibration_attempted"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "calibrations"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/meta_audit.py",
+                  "pattern": "calibration_status"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-review/scripts/test_meta_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                  "pattern": "def test_official_mapping_is_grounding_but_never_link_only_calibration"
+                },
+                {
+                  "path": "skills/n2d-review/scripts/test_meta_audit.py",
+                  "pattern": "link_only_v2[\\s\\S]{0,900}not_run"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      },
+      {
+        "id": "partial_book_or_one_sided_boundary",
+        "class": "cross_artifact",
+        "claim_id": "chapter_boundary_semantic_contract",
+        "description": "只物化首批集时仍须保留全书 source-unit 轴；只有强集尾但下集冷开弱时仍须进入 strict blocker。",
+        "status": "covered",
+        "missing": [],
+        "guard": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/split_novel.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/split_novel.py",
+                  "pattern": "def build_source_units"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/split_novel.py",
+                  "pattern": "full_book_beam_search_v1"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/boundary_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/boundary_audit.py",
+                  "pattern": "weak_next_opening"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/boundary_audit.py",
+                  "pattern": "def boundary_pairs"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        },
+        "regression": {
+          "status": "covered",
+          "requirements": [
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/test_split_novel.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/test_split_novel.py",
+                  "pattern": "def test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized"
+                },
+                {
+                  "path": "skills/n2d-script/scripts/test_split_novel.py",
+                  "pattern": "def test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units"
+                }
+              ],
+              "errors": []
+            },
+            {
+              "ok": true,
+              "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+              "matched": [
+                {
+                  "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+                  "pattern": "def test_weak_next_opening_alone_enters_strict_gate"
+                }
+              ],
+              "errors": []
+            }
+          ]
+        }
+      }
+    ],
+    "external_evidence": {
+      "entries": [
+        {
+          "claim_id": "multiview_nested_failure",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "quality_heuristic",
+          "source": {
+            "title": "VBench: Comprehensive Benchmark Suite for Video Generative Models",
+            "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Huang_VBench_Comprehensive_Benchmark_Suite_for_Video_Generative_Models_CVPR_2024_paper.html",
+            "kind": "peer_reviewed"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-review/scripts/production_consistency.py",
+              "symbol": "check_multiview_identity_pack",
+              "enforcement": "warn",
+              "rationale": "论文支持把主体身份一致性拆为独立维度；n2d 对必需 bucket 的 fail-closed 强度来自本项目确定性收据合同，而不是由论文直接授权。"
+            }
+          ]
+        },
+        {
+          "claim_id": "turnaround_alignment_enforcement",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "quality_heuristic",
+          "source": {
+            "title": "CoSER: Towards Consistent Dense Multiview Text-to-Image Generator for 3D Creation",
+            "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Li_CoSER_Towards_Consistent_Dense_Multiview_Text-to-Image_Generator_for_3D_Creation_CVPR_2025_paper.html",
+            "kind": "peer_reviewed"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-image/scripts/image_qc.py",
+              "symbol": "audit_turnaround_alignment",
+              "enforcement": "warn",
+              "rationale": "研究支持跨视角一致性与内容漂移检查；低置信几何判断保持 WARN，逐视角人工像素收据才承担确定性放行责任。"
+            }
+          ]
+        },
+        {
+          "claim_id": "turnaround_alignment_enforcement",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "capability",
+          "source": {
+            "title": "Harmony 24 Premium Documentation: Master Controller Slider Wizard Dialog Box",
+            "url": "https://docs.toonboom.com/help/harmony-24/premium/reference/dialog-box/slider-wizard-dialog-box.html",
+            "kind": "official"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-image/scripts/image_qc.py",
+              "symbol": "audit_turnaround_alignment",
+              "enforcement": "info",
+              "rationale": "官方工具文档为五个关键角度提供生产实践依据；它不证明五视图对所有角色和项目都是普适强制标准，也不决定 n2d 的像素阈值。"
+            }
+          ]
+        },
+        {
+          "claim_id": "review_assurance_separation",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "quality_heuristic",
+          "source": {
+            "title": "NIST AI Risk Management Framework Core — Measure",
+            "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+            "kind": "official"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-review/scripts/meta_audit.py",
+              "symbol": "run_registered_adversarial_tests",
+              "enforcement": "none",
+              "rationale": "NIST 为独立复核、持续 TEVV 与偏差缓解提供治理依据；n2d 因而分开报告静态覆盖、真实运行、外部 grounding 和独立校准，但该来源本身不构成 n2d gate 的性能校准。"
+            }
+          ]
+        },
+        {
+          "claim_id": "chapter_boundary_semantic_contract",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "quality_heuristic",
+          "source": {
+            "title": "Chapter Captor: Text Segmentation in Novels",
+            "url": "https://aclanthology.org/2020.emnlp-main.672/",
+            "kind": "peer_reviewed"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-script/scripts/split_novel.py",
+              "symbol": "build_source_units",
+              "enforcement": "warn",
+              "rationale": "研究支持章节作为连贯子叙事候选，也显示精确全书断点预测困难；n2d 因而保存全书 source-unit 候选并保留人工签收，不把自动切点写成普适真值。"
+            }
+          ]
+        },
+        {
+          "claim_id": "chapter_boundary_semantic_contract",
+          "valid": true,
+          "grounding_eligible": true,
+          "issues": [],
+          "claim_type": "quality_heuristic",
+          "source": {
+            "title": "Assessing the State of the Art in Scene Segmentation",
+            "url": "https://aclanthology.org/2025.naacl-long.500/",
+            "kind": "peer_reviewed"
+          },
+          "confidence": "high",
+          "implementation_mapping": [
+            {
+              "path": "skills/n2d-script/scripts/boundary_audit.py",
+              "symbol": "boundary_pairs",
+              "enforcement": "warn",
+              "rationale": "研究支持多维语义连贯性与高层理解要求；n2d 将其落实为双侧边界审计和人工语义证据，具体 P0-P6 与 strict 强度仍是项目合同。"
+            }
+          ]
+        }
+      ],
+      "calibrations": [],
+      "errors": [],
+      "calibration_errors": [],
+      "calibration_attempted": false
+    },
+    "adversarial_runtime_receipt": {
+      "kind": "n2d_review_adversarial_runtime_receipt",
+      "version": 1,
+      "requested": true,
+      "status": "complete",
+      "covered": 26,
+      "total": 26,
+      "nodeids": [
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_core_cannot_self_report_named_minimal",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_tier_must_match_character_bundle_manifest_and_atlas",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards",
+        "skills/n2d-review/scripts/test_gate.py::test_storyboard_floor_rejects_collusive_restricted_partial_without_contract",
+        "skills/n2d-review/scripts/test_gate.py::test_storyboard_tier_evidence_uses_structured_visible_ids_only",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_bucket_fail_blocks_when_top_level_verdict_missing",
+        "skills/n2d-image/scripts/test_image_qc.py::test_core_turnaround_requires_hash_bound_per_view_receipts",
+        "skills/n2d-script/scripts/test_boundary_review.py::test_move_boundary_signed_but_not_applied_fails",
+        "skills/n2d-script/scripts/test_boundary_review.py::test_mutating_decision_passes_only_after_new_sha_and_mapping_receipt",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_planned_makeup_reference_is_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_planned_view_cannot_reuse_a_stale_accepted_receipt",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_plain_text_with_matching_hash_cannot_pose_as_png_evidence",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_forged_png_header_shell_with_matching_hash_cannot_pose_as_pixels",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_independently_rejects_forged_human_metadata",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_same_png_cannot_be_relabelled_as_multiple_views",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_duplicate_png_sha_copy_is_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_symlink_alias_is_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_distinct_crop_pixels_from_same_master_remain_valid",
+        "skills/n2d-review/scripts/test_image_evidence.py::test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata",
+        "skills/n2d-review/scripts/test_image_evidence.py::test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_reencoded_same_pixels_are_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_path_escape_and_absolute_registry_evidence_are_rejected",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_path_escape_and_absolute_registry_path_are_independently_blocked",
+        "skills/n2d-image/scripts/test_image_qc.py::test_legacy_signer_path_escape_symlink_and_noncanonical_are_rejected",
+        "skills/n2d-image/scripts/test_image_qc.py::test_legacy_finalize_consumer_duplicate_png_sha_is_independently_blocked",
+        "skills/n2d-image/scripts/test_codex_image_runner.py::test_shared_first_pre_spend_duplicate_png_sha_blocks_copied_views",
+        "skills/n2d-image/scripts/test_codex_image_runner.py::test_shared_first_pre_spend_path_escape_symlink_and_noncanonical_are_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_one_form_row_cannot_be_reused_for_another_form",
+        "skills/n2d-review/scripts/test_gate.py::test_memory_anchor_gate_recomputes_each_required_character_not_aggregate_count",
+        "skills/n2d/_lib/test_character_library_contract.py::test_core_cannot_self_report_restricted_partial_without_approved_contract",
+        "skills/n2d/_lib/test_character_library_contract.py::test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract",
+        "skills/n2d/test_run.py::test_report_only_cache_rebuilds_deleted_output_path_sidecar",
+        "skills/n2d/test_run.py::test_report_only_warn_result_is_never_cached_even_with_artifact",
+        "skills/n2d/test_run.py::test_report_only_exit_zero_with_structured_warn_is_not_cached",
+        "skills/n2d-identity/scripts/test_memory_anchor.py::test_cli_overwrites_stale_ready_plan_with_explicit_unavailable_plan",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_run_tests_is_the_only_path_to_adversarially_tested_and_binds_current_sha",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero",
+        "skills/n2d-review/scripts/test_self_audit.py::test_cli_out_matches_json_stdout_and_preserves_block_exit",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_official_mapping_is_grounding_but_never_link_only_calibration",
+        "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized",
+        "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units",
+        "skills/n2d-script/scripts/test_boundary_audit.py::test_weak_next_opening_alone_enters_strict_gate"
+      ],
+      "missing_runtime_mappings": [],
+      "errors": [],
+      "artifact_bindings": [
+        {
+          "path": "skills/n2d-identity/scripts/memory_anchor.py",
+          "roles": "guard",
+          "sha256": "a2f66f45b2213bf0b0f1d7a2a652cfd26883d50ace779428178a529dbec555a9"
+        },
+        {
+          "path": "skills/n2d-identity/scripts/test_memory_anchor.py",
+          "roles": "runtime_test,test",
+          "sha256": "7d81502ce5f66b23bb3f42d27ae6ef5a25f005effe99bc22735a5617f833f94f"
+        },
+        {
+          "path": "skills/n2d-image/scripts/codex_image_runner.py",
+          "roles": "guard",
+          "sha256": "cbe9d623a5093f4d977ef6f259c4e678720b747ac697a8583ae5af6d51e22020"
+        },
+        {
+          "path": "skills/n2d-image/scripts/image_qc.py",
+          "roles": "guard",
+          "sha256": "0e51635851484172d8d711bafce74610f787888f231799c50c3f8bb53ce60d73"
+        },
+        {
+          "path": "skills/n2d-image/scripts/test_codex_image_runner.py",
+          "roles": "runtime_test,test",
+          "sha256": "1b11248bcc69e93a0103d8ede4a3ce68c7e34e82e8a54f108439cf0e235707ab"
+        },
+        {
+          "path": "skills/n2d-image/scripts/test_image_qc.py",
+          "roles": "runtime_test,test",
+          "sha256": "279fdd40bf9ed5a2856e85344ddd1de06d93e53915e59edbf9bb4d7a3dba1f66"
+        },
+        {
+          "path": "skills/n2d-review/scripts/gate_core.py",
+          "roles": "guard",
+          "sha256": "f8283ac2f939d137944edf27a087ff874da6d2710d563e56ea392270a6be2dbb"
+        },
+        {
+          "path": "skills/n2d-review/scripts/gates/contract.py",
+          "roles": "guard",
+          "sha256": "3335fff5efe2192684012e75f308dabef973f939e1bbe4609ffadb35c33302a7"
+        },
+        {
+          "path": "skills/n2d-review/scripts/identity_eval_pack.py",
+          "roles": "guard",
+          "sha256": "27a167a1f8f070fd9449fe900f3c0f93b8b126735faaf5753b71c0e89c93e7c1"
+        },
+        {
+          "path": "skills/n2d-review/scripts/image_evidence.py",
+          "roles": "guard",
+          "sha256": "0b7b377cc9dfbd5f97a85b2643df95553dc86e13f6d74e973160ba044df0c322"
+        },
+        {
+          "path": "skills/n2d-review/scripts/meta_audit.py",
+          "roles": "guard",
+          "sha256": "4324f5b61b514a6f3ac5beb389a643ca05eda6e525f8613b70cb6233dc842b9a"
+        },
+        {
+          "path": "skills/n2d-review/scripts/production_consistency.py",
+          "roles": "guard",
+          "sha256": "7a0b8597cddb44a85b1af4e9e31af3b15fc0647d23159e2b6bac4f5db4894616"
+        },
+        {
+          "path": "skills/n2d-review/scripts/self_audit.py",
+          "roles": "guard",
+          "sha256": "9dcfe745af18b810bb1428ad203fd5732a5d3c948329f8c127128cd4aed5e5fe"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_gate.py",
+          "roles": "runtime_test,test",
+          "sha256": "5c2ca4141b4a7594cdad68bdc943c8ea546a99922aa9316a2f1f8b4f6a4de76f"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_identity_eval_pack.py",
+          "roles": "runtime_test,test",
+          "sha256": "2ab33322c911b171a16574565ddedb1669b11327fc8e1c67ba6984d1836387d0"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_image_evidence.py",
+          "roles": "runtime_test,test",
+          "sha256": "b69ed63856689bc15b0a2faae62f19533d57e93df09bffc7a83da2a3456d39f8"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_meta_audit.py",
+          "roles": "runtime_test,test",
+          "sha256": "e095bff53be48f86fd1f6ea9660d80b35cc3ff69bf3af43c10b542ae8872e529"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_production_consistency.py",
+          "roles": "runtime_test,test",
+          "sha256": "7d7ec8212b3c635a776e80068de85ec4d1849a98856bdb6a6503fdcfa1b8f17a"
+        },
+        {
+          "path": "skills/n2d-review/scripts/test_self_audit.py",
+          "roles": "runtime_test,test",
+          "sha256": "b83319e7361f4cdc8a19a2122ecf317bf89cde4fa22da54026329f5c87a6f0be"
+        },
+        {
+          "path": "skills/n2d-script/scripts/boundary_audit.py",
+          "roles": "guard",
+          "sha256": "bc678aea294f9b5682572c7b07611a3fdfde8e7b7ff64f211d1e75cbd948a1dc"
+        },
+        {
+          "path": "skills/n2d-script/scripts/boundary_review.py",
+          "roles": "guard",
+          "sha256": "f8b0b40b06c90253ce0938a26a7a01f47e0e7816a333feaf93073ef63b4a57f3"
+        },
+        {
+          "path": "skills/n2d-script/scripts/split_novel.py",
+          "roles": "guard",
+          "sha256": "5cc62b9ed14cac1400461c12ef7d8ead51a4e8170701f78146e40b7e6c1a26c0"
+        },
+        {
+          "path": "skills/n2d-script/scripts/test_boundary_audit.py",
+          "roles": "runtime_test,test",
+          "sha256": "8be1c03781975a4ab4a1513fa7d24eaec8ef83ffcdd554a901f59c90d625e804"
+        },
+        {
+          "path": "skills/n2d-script/scripts/test_boundary_review.py",
+          "roles": "runtime_test,test",
+          "sha256": "4761ffb899599892b710fed2d16e19223b2be778ef3c0646aa9aa46557130f4a"
+        },
+        {
+          "path": "skills/n2d-script/scripts/test_split_novel.py",
+          "roles": "runtime_test,test",
+          "sha256": "42ecaf15940eda8f7805a5ff2663d9a576103bdcb234a9d905cb8c43d86cc827"
+        },
+        {
+          "path": "skills/n2d/_lib/n2d_const.py",
+          "roles": "guard",
+          "sha256": "0bf7824856c12a1a15be2d1cc76161b67787ffcb5913913d758e3c88d26fe53e"
+        },
+        {
+          "path": "skills/n2d/_lib/test_character_library_contract.py",
+          "roles": "runtime_test,test",
+          "sha256": "f940ff84da685a009da6175c0da013abd607cde1ebe622bc702b11c77d2905d9"
+        },
+        {
+          "path": "skills/n2d/run.py",
+          "roles": "guard",
+          "sha256": "63234839ea7b1132bfb6b3f871b29ee5c76df01d416a90914d44e2153562008f"
+        },
+        {
+          "path": "skills/n2d/test_run.py",
+          "roles": "runtime_test,test",
+          "sha256": "88b2247c36ac29890b9002badc399976d9413393cb9bd7564d4fc07e06f5490f"
+        }
+      ],
+      "started_at": "2026-07-14T09:15:57+00:00",
+      "finished_at": "2026-07-14T09:16:00+00:00",
+      "exit_code": 0,
+      "stdout_tail": "..........................................................               [100%]\n58 passed in 2.57s\n",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "pytest",
+        "-q",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_core_cannot_self_report_named_minimal",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_tier_must_match_character_bundle_manifest_and_atlas",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards",
+        "skills/n2d-review/scripts/test_gate.py::test_storyboard_floor_rejects_collusive_restricted_partial_without_contract",
+        "skills/n2d-review/scripts/test_gate.py::test_storyboard_tier_evidence_uses_structured_visible_ids_only",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions",
+        "skills/n2d-review/scripts/test_production_consistency.py::test_multiview_bucket_fail_blocks_when_top_level_verdict_missing",
+        "skills/n2d-image/scripts/test_image_qc.py::test_core_turnaround_requires_hash_bound_per_view_receipts",
+        "skills/n2d-script/scripts/test_boundary_review.py::test_move_boundary_signed_but_not_applied_fails",
+        "skills/n2d-script/scripts/test_boundary_review.py::test_mutating_decision_passes_only_after_new_sha_and_mapping_receipt",
+        "skills/n2d-review/scripts/test_gate.py::test_identity_registry_planned_makeup_reference_is_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_planned_view_cannot_reuse_a_stale_accepted_receipt",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_plain_text_with_matching_hash_cannot_pose_as_png_evidence",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_forged_png_header_shell_with_matching_hash_cannot_pose_as_pixels",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_independently_rejects_forged_human_metadata",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_same_png_cannot_be_relabelled_as_multiple_views",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_duplicate_png_sha_copy_cannot_pose_as_independent_view",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_symlink_alias_uses_canonical_realpath_and_is_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_duplicate_png_sha_copy_is_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_symlink_alias_is_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_distinct_crop_pixels_from_same_master_remain_valid",
+        "skills/n2d-review/scripts/test_image_evidence.py::test_decoded_pixel_fingerprint_ignores_compression_filter_and_metadata",
+        "skills/n2d-review/scripts/test_image_evidence.py::test_adam7_and_noninterlaced_encodings_share_pixel_fingerprint",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_reencoded_same_pixels_are_blocked_by_decoded_fingerprint",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_reencoded_same_pixels_are_independently_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_producer_path_escape_and_absolute_registry_evidence_are_rejected",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_consumer_path_escape_and_absolute_registry_path_are_independently_blocked",
+        "skills/n2d-image/scripts/test_image_qc.py::test_legacy_signer_path_escape_symlink_and_noncanonical_are_rejected",
+        "skills/n2d-image/scripts/test_image_qc.py::test_legacy_finalize_consumer_duplicate_png_sha_is_independently_blocked",
+        "skills/n2d-image/scripts/test_codex_image_runner.py::test_shared_first_pre_spend_duplicate_png_sha_blocks_copied_views",
+        "skills/n2d-image/scripts/test_codex_image_runner.py::test_shared_first_pre_spend_path_escape_symlink_and_noncanonical_are_blocked",
+        "skills/n2d-review/scripts/test_identity_eval_pack.py::test_one_form_row_cannot_be_reused_for_another_form",
+        "skills/n2d-review/scripts/test_gate.py::test_memory_anchor_gate_recomputes_each_required_character_not_aggregate_count",
+        "skills/n2d/_lib/test_character_library_contract.py::test_core_cannot_self_report_restricted_partial_without_approved_contract",
+        "skills/n2d/_lib/test_character_library_contract.py::test_one_off_partial_is_compatible_but_recurring_cannot_bypass_without_contract",
+        "skills/n2d/test_run.py::test_report_only_cache_rebuilds_deleted_output_path_sidecar",
+        "skills/n2d/test_run.py::test_report_only_warn_result_is_never_cached_even_with_artifact",
+        "skills/n2d/test_run.py::test_report_only_exit_zero_with_structured_warn_is_not_cached",
+        "skills/n2d-identity/scripts/test_memory_anchor.py::test_cli_overwrites_stale_ready_plan_with_explicit_unavailable_plan",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_run_tests_is_the_only_path_to_adversarially_tested_and_binds_current_sha",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_cli_out_matches_json_stdout_and_governance_findings_still_exit_zero",
+        "skills/n2d-review/scripts/test_self_audit.py::test_cli_out_matches_json_stdout_and_preserves_block_exit",
+        "skills/n2d-review/scripts/test_meta_audit.py::test_official_mapping_is_grounding_but_never_link_only_calibration",
+        "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v2_keeps_full_source_units_when_only_first_episode_materialized",
+        "skills/n2d-script/scripts/test_split_novel.py::test_split_plan_v3_compacts_source_axis_and_rehydrates_legacy_units",
+        "skills/n2d-script/scripts/test_boundary_audit.py::test_weak_next_opening_alone_enters_strict_gate"
+      ]
+    },
+    "assurance": {
+      "self_checked": {
+        "label": "self-checked",
+        "status": "complete",
+        "covered": 30,
+        "total": 30,
+        "meaning": "声明、实现、调用三段静态可追溯；不等于行为已被反例击穿验证。"
+      },
+      "adversarially_tested": {
+        "label": "adversarially-tested",
+        "status": "complete",
+        "covered": 26,
+        "total": 26,
+        "meaning": "仅由本次 --run-tests 的 pytest 运行收据成立；测试文本存在不算 tested。"
+      },
+      "adversarial_test_coverage": {
+        "label": "adversarial-test-coverage",
+        "status": "complete",
+        "covered": 46,
+        "total": 46,
+        "meaning": "静态可找到测试、反例和 guard（defined-only）；不证明 pytest 实际执行过。"
+      },
+      "externally_grounded": {
+        "label": "externally-grounded",
+        "status": "complete",
+        "covered": 4,
+        "total": 4,
+        "meaning": "外部来源已做 provenance 与实现映射；链接或论文不是留出样本校准。"
+      },
+      "externally_calibrated": {
+        "label": "externally-calibrated",
+        "status": "not_run",
+        "covered": 0,
+        "total": 4,
+        "meaning": "每个外部必需 claim 都有独立审阅、held-out、盲法、预注册阈值、分层抽样、裁决金标、当前本仓 artifact SHA 与重算误差率且通过；仍不等于无偏。"
+      },
+      "no_blind_spot_claim_allowed": false,
+      "blind_spot_statement": "即使本报告 0 warn，也只表示已登记的静态链和已知反例未发现缺口；即使 externally-calibrated=complete，也不能表述为“无盲区”“审查无偏”或“结果无偏”。"
+    },
+    "findings": []
+  },
+  "findings": [
+    {
+      "sev": "info",
+      "dim": "进度并发安全",
+      "loc": "skills/n2d/progress.py",
+      "msg": "`_进度.md` 写入已具备锁和原子替换。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "gate 单入口",
+      "loc": "skills/",
+      "msg": "生产文档已统一推荐 dashboard.py gate。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "横切覆盖率",
+      "loc": "skills/n2d-progress/scan.py",
+      "msg": "n2d-progress 已具备逐集覆盖率输出。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "行业基准外置",
+      "loc": "skills/n2d-dashboard/references/industry_benchmark.json",
+      "msg": "行业基准已外置，并带采集日期/来源字段。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "生图后端白名单",
+      "loc": "skills/n2d/_lib/n2d_contract.py",
+      "msg": "关键文档已覆盖 APPROVED_IMAGE_BACKENDS，且未把 `同视频AI` 当作可选后端。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "文档体量",
+      "loc": "skills/n2d/SKILL.md",
+      "msg": "skills/n2d/SKILL.md 当前 396 行。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "文档体量",
+      "loc": "skills/n2d/Q&A.md",
+      "msg": "skills/n2d/Q&A.md 当前 948 行。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "detector 治理",
+      "loc": "skills/n2d-review/scripts/detector_inventory.py",
+      "msg": "detector 套件 38 个全部有治理路径（0 孤儿；编排 37/gate 1/dashboard 2/总账 8/advisory 7/disabled 0/子检测 13）。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "一致性charter",
+      "loc": "skills/n2d-review/scripts/consistency_charter.py",
+      "msg": "23 个 locked 一致性硬闸源码核对通过（无被悄悄 profile 门控），0 项 disputed/opt-in 待裁决。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "声明→实现→调用→测试→反例",
+      "loc": "skills/n2d-review/scripts/meta_audit.py",
+      "msg": "10 条已登记关键声明的五联证据齐全。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "对抗/变形审计",
+      "loc": "skills/n2d-review/scripts/meta_audit.py",
+      "msg": "26 个已登记对抗/变形探针均有 guard + 回归。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "运行时对抗回归",
+      "loc": "skills/n2d-review/scripts/meta_audit.py",
+      "msg": "本次已实际执行 26/26 个已登记探针，收据已绑定当前 guard/test SHA。",
+      "suggestion": ""
+    },
+    {
+      "sev": "info",
+      "dim": "外部证据 provenance",
+      "loc": "skills/n2d-review/scripts/meta_audit.py",
+      "msg": "外部依据状态=complete；独立留出校准状态=not_run。官方链接/论文只能提升 grounding，不能把 calibration 从 not_run 改成 complete。",
+      "suggestion": "联网流程自审用 version=1/2 evidence 做来源映射；只有 version=2 calibrations 的完整合同可改变 externally-calibrated。"
+    },
+    {
+      "sev": "info",
+      "dim": "现场摩擦信号",
+      "loc": "创作区/制漫剧/从变身少女开始斩妖除魔/生产数据",
+      "msg": "本作 `从变身少女开始斩妖除魔` 暂无积压现场摩擦信号（生产时各 skill 未上报 `该改` 信号）。",
+      "suggestion": ""
+    }
+  ]
+}

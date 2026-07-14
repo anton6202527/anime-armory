@@ -22,6 +22,7 @@ from typing import Dict, List, Optional, Sequence, Tuple, Any
 
 import face_consistency as fc  # 复用 cosine（光色指纹相似度）
 from n2d_contract import asset_registry_path # 导入契约路径
+from pillow_compat import pixel_data
 
 DEFAULT_FACTOR = 1.8   # 镜头平均结构距离 > 组中位 * factor → 离群
 DEFAULT_FLOOR = 12     # 且绝对汉明距 > floor（64 位里差这么多才算真漂，避免小组误杀）
@@ -130,8 +131,8 @@ def verify_impact_frames(root: str, ep: str) -> List[Dict[str, Any]]:
                     mid_img = Image.open(mid_frame_path).convert("L")
                     first_img = Image.open(first_frame_path).convert("L")
                     
-                    mid_stat = sum(list(mid_img.getdata())) / (mid_img.width * mid_img.height)
-                    first_stat = sum(list(first_img.getdata())) / (first_img.width * first_img.height)
+                    mid_stat = sum(list(pixel_data(mid_img))) / (mid_img.width * mid_img.height)
+                    first_stat = sum(list(pixel_data(first_img))) / (first_img.width * first_img.height)
                     
                     # Impact requires > 15% brightness surge representing spell/flash impact
                     if mid_stat < first_stat * 1.15:
@@ -194,7 +195,7 @@ def _dhash_image(path: str) -> Optional[List[int]]:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("L").resize((9, 8))
         w, h = im.size
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         gray = [[float(px[y * w + x]) for x in range(w)] for y in range(h)]
         return dhash_bits(gray)  # 8*(9-1)=64 位
     except Exception:
@@ -215,7 +216,7 @@ def _tone_fp(path: str, bins: int = TONE_BINS) -> Optional[List[float]]:
     try:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("RGB"); im.thumbnail((96, 96))
-        hsv = im.convert("HSV"); px = list(hsv.getdata())
+        hsv = im.convert("HSV"); px = list(pixel_data(hsv))
         vh = [0.0] * bins; hh = [0.0] * bins; tot = 0.0
         for h, s, v in px:
             vi = min(int(v / 256 * bins), bins - 1); vh[vi] += 1.0
@@ -309,7 +310,7 @@ def _mean_hue_sat(path: str) -> Optional[Tuple[float, float]]:
     try:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("RGB"); im.thumbnail((96, 96))
-        px = list(im.convert("HSV").getdata())
+        px = list(pixel_data(im.convert("HSV")))
     except Exception:
         return None
     if not px:

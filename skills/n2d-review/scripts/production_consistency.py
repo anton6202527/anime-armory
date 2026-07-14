@@ -38,7 +38,11 @@ import sys
 from collections import defaultdict
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
-from image_evidence import png_evidence_errors
+from image_evidence import (
+    PNG_DECODED_PIXEL_FINGERPRINT_KIND,
+    png_decoded_pixel_fingerprint,
+    png_evidence_errors,
+)
 
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
@@ -59,8 +63,14 @@ try:
 except Exception:  # pragma: no cover - standalone fallback
     CONTRACT_IMPORT_ERROR = "n2d_contract import failed"
     CHARACTER_LIBRARY_TIER_CORE = "core_full"
-    def character_library_tier_for_record(record: Mapping[str, Any]) -> str:
-        return CHARACTER_LIBRARY_TIER_CORE if record.get("core") else "named_minimal"
+    def character_library_tier_for_record(
+        record: Mapping[str, Any], *, observed_episode_count: int = 0
+    ) -> str:
+        return (
+            CHARACTER_LIBRARY_TIER_CORE
+            if record.get("core") or observed_episode_count >= 10
+            else "named_minimal"
+        )
     def production_dir(root: str) -> str:
         return os.path.join(root, "生产数据")
     IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND = (
@@ -76,6 +86,20 @@ except Exception:  # pragma: no cover - standalone fallback
         return not bool(str(value or "").strip())
     def identity_review_binding_fingerprint(**kwargs: object) -> str:
         return ""
+
+try:
+    # MVIEW must use the exact same independent, structured storyboard
+    # presence evidence as the pre-spend identity gate.  Keeping one parser
+    # prevents review from trusting a registry's self-reported lower tier
+    # after the identity gate has already promoted the same character.
+    from gate_core import _storyboard_character_appearance_evidence  # noqa: E402
+    STORYBOARD_APPEARANCE_IMPORT_ERROR = ""
+except Exception as exc:  # pragma: no cover - fail-closed runtime guard
+    STORYBOARD_APPEARANCE_IMPORT_ERROR = (
+        f"storyboard appearance evidence import failed: {type(exc).__name__}: {exc}"
+    )
+    def _storyboard_character_appearance_evidence(root: str) -> Dict[str, Dict[str, Any]]:
+        return {}
 
 
 ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[\w\-\u4e00-\u9fff]+\b")
@@ -891,7 +915,26 @@ def _bucket_evidence_errors(
         return sorted(set(errors))
     # ``png_evidence_errors`` includes not_valid_png_container plus complete
     # chunk CRC, IDAT decompression and scanline-layout validation.
-    errors.extend(png_evidence_errors(path))
+    png_errors = png_evidence_errors(path)
+    errors.extend(png_errors)
+    actual_pixel_fingerprint = ""
+    if not png_errors:
+        actual_pixel_fingerprint, fingerprint_errors = png_decoded_pixel_fingerprint(path)
+        errors.extend(fingerprint_errors)
+        if not actual_pixel_fingerprint and not fingerprint_errors:
+            errors.append("png_pixel_fingerprint_unavailable")
+    declared_pixel_fingerprint = str(
+        value.get("decoded_pixel_fingerprint") or ""
+    ).strip()
+    if not declared_pixel_fingerprint:
+        errors.append("decoded_pixel_fingerprint_missing")
+    elif declared_pixel_fingerprint != actual_pixel_fingerprint:
+        errors.append("decoded_pixel_fingerprint_mismatch")
+    if (
+        str(value.get("decoded_pixel_fingerprint_kind") or "").strip()
+        != PNG_DECODED_PIXEL_FINGERPRINT_KIND
+    ):
+        errors.append("decoded_pixel_fingerprint_kind_invalid")
     declared_sha = str(value.get("sha256") or value.get("artifact_sha256") or "").strip()
     actual_sha = _sha256_path(path)
     if not declared_sha:
@@ -1004,12 +1047,21 @@ def _bucket_evidence_errors(
 
 
 def _core_character_forms(root: str) -> List[Tuple[str, str]]:
+    storyboard_appearances = _storyboard_character_appearance_evidence(root)
     required: List[Tuple[str, str]] = []
     for char in _registry_characters(root):
-        if character_library_tier_for_record(char) != CHARACTER_LIBRARY_TIER_CORE:
-            continue
         cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
         if not cid:
+            continue
+        evidence = storyboard_appearances.get(cid, {})
+        try:
+            observed_episode_count = max(0, int(evidence.get("episode_count") or 0))
+        except (TypeError, ValueError):
+            observed_episode_count = 0
+        if character_library_tier_for_record(
+            char,
+            observed_episode_count=observed_episode_count,
+        ) != CHARACTER_LIBRARY_TIER_CORE:
             continue
         forms = _character_forms(char)
         for form in forms:
@@ -1034,6 +1086,16 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
             evidence_family="artifact_integrity",
         ))
         return res
+    if STORYBOARD_APPEARANCE_IMPORT_ERROR:
+        res["findings"].append(_row(
+            "block",
+            "MVIEW 无法加载与 identity gate 同源的结构化 storyboard 出场索引；"
+            "为避免审查仅信 registry 自报档位而漏掉跨十集角色，已 fail-closed 阻断。",
+            stage="image",
+            artifacts=("skills/n2d-review/scripts/gate_core.py",),
+            evidence_family="artifact_integrity",
+        ))
+        return res
     required_forms = _core_character_forms(root)
     core = _unique(cid for cid, _form in required_forms)
     if not required_forms:
@@ -1044,7 +1106,8 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
         res["findings"].append(_row(
             "block",
             f"核心/长线角色 {', '.join(core[:6])} 缺 identity_eval_pack / multiview_identity_pack；"
-            "未完成正脸/前45度/侧脸/后45度/背影/表情桶的固定身份验收，不得进入分镜出图。",
+            "未完成正面/前3/4/侧面/后3/4/背面五角 + turnaround + 表情/脸锚桶的固定身份验收，"
+            "不得进入分镜出图。",
             stage="image",
             artifacts=("设定库/identity_eval_pack.json", "生产数据/identity_eval_pack.json"),
             evidence_family="text_contract",
@@ -1163,6 +1226,7 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
         path_groups: Dict[str, List[str]] = defaultdict(list)
         realpath_groups: Dict[str, List[str]] = defaultdict(list)
         current_sha_groups: Dict[str, List[str]] = defaultdict(list)
+        decoded_pixel_fingerprint_groups: Dict[str, List[str]] = defaultdict(list)
         for bucket_name in MULTIVIEW_BUCKETS:
             value = bucket_map.get(bucket_name)
             if not isinstance(value, Mapping):
@@ -1182,12 +1246,22 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
             current_sha = _sha256_path(realpath)
             if current_sha:
                 current_sha_groups[current_sha].append(bucket_name)
+            current_pixel_fingerprint, fingerprint_errors = png_decoded_pixel_fingerprint(
+                realpath
+            )
+            if current_pixel_fingerprint and not fingerprint_errors:
+                decoded_pixel_fingerprint_groups[current_pixel_fingerprint].append(bucket_name)
         duplicate_paths = sorted(path for path, names in path_groups.items() if len(names) > 1)
         duplicate_realpaths = sorted(
             names for names in realpath_groups.values() if len(names) > 1
         )
         duplicate_png_sha = sorted(
             names for names in current_sha_groups.values() if len(names) > 1
+        )
+        duplicate_decoded_pixel_fingerprint = sorted(
+            names
+            for names in decoded_pixel_fingerprint_groups.values()
+            if len(names) > 1
         )
         if duplicate_paths:
             res["findings"].append(_row(
@@ -1216,6 +1290,17 @@ def check_multiview_identity_pack(root: str, ep: str) -> dict:
                 f"{cid}/{form_name} duplicate_png_sha："
                 f"{'; '.join('/'.join(names) for names in duplicate_png_sha)}；"
                 "复制同一像素到不同文件名仍不是独立视角。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+        if duplicate_decoded_pixel_fingerprint:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} duplicate_decoded_pixel_fingerprint："
+                f"{'; '.join('/'.join(names) for names in duplicate_decoded_pixel_fingerprint)}；"
+                "改变 PNG 压缩、过滤器或 metadata 不会把同一解码像素变成独立视角。",
                 stage="image",
                 artifacts=(rel,),
                 entity_id=cid,

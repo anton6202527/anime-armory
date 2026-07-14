@@ -50,6 +50,40 @@ def test_build_report_runs_locks_for_image_stage(monkeypatch, tmp_path: Path) ->
     ]
 
 
+def test_build_report_script_stage1_explicitly_skips_preventive_contracts(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(
+        rp,
+        "update_plan_check",
+        lambda root, ep: {"step": "update_plan", "status": "pass"},
+    )
+
+    def invalid_subprocess(*args, **kwargs):
+        raise AssertionError("script_stage1 must not invoke preventive_contracts.py")
+
+    monkeypatch.setattr(rp.subprocess, "run", invalid_subprocess)
+
+    report = rp.build_report(tmp_path, "第1集", "script_stage1", write_missing=True, repair_qc=False)
+
+    preventive = next(row for row in report["steps"] if row["step"] == "preventive_contracts")
+    assert report["status"] == "pass"
+    assert report["summary"]["skip"] == 1
+    assert preventive["status"] == "skip"
+    assert preventive["stage"] == "script_stage1"
+    assert "首个适用边界为 script_stage2" in preventive["detail"]
+
+
+def test_preventive_contracts_unknown_stage_fails_closed_without_subprocess(monkeypatch, tmp_path: Path) -> None:
+    def invalid_subprocess(*args, **kwargs):
+        raise AssertionError("unknown stage must fail before invoking a subprocess")
+
+    monkeypatch.setattr(rp.subprocess, "run", invalid_subprocess)
+
+    row = rp.preventive_contracts_check(tmp_path, "第1集", "script_stgae1", write_missing=False)
+
+    assert row["status"] == "block"
+    assert "未知 preventive contract stage" in row["detail"]
+
+
 def test_main_writes_report_and_exits_nonzero_when_blocked(monkeypatch, tmp_path: Path, capsys) -> None:
     root = tmp_path / "work"
 

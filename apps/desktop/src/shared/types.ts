@@ -3,6 +3,23 @@
 
 export type LineKey = "n2d" | "comic" | "ad" | "mv" | "song" | "novel";
 
+// Storage policy per creative line. "local" lines (写小说 / 制漫剧) keep their
+// works on disk by default; "cloud" lines live in R2 and are downloaded on
+// demand (Stage 1: reuses the public demo pipeline; Stage 2 adds sign-in +
+// per-user upload/sync).
+export type LineStorage = "local" | "cloud";
+export const LINE_STORAGE: Record<LineKey, LineStorage> = {
+  novel: "local",
+  n2d: "local",
+  comic: "cloud",
+  ad: "cloud",
+  mv: "cloud",
+  song: "cloud",
+};
+export function isCloudLine(line: LineKey): boolean {
+  return LINE_STORAGE[line] === "cloud";
+}
+
 export interface WorkRoot {
   name: string;
   path: string; // absolute

@@ -21,6 +21,7 @@ description: Supervisor agent layer for n2d. Use when asked to run/coordinate th
 - `n2d-batch` 仍是多集队列/重试/预算真值。
 - `n2d-dashboard` / `production_events.jsonl` 仍是生产事件和成本真值。
 - supervisor 只输出/写入 `生产数据/supervisor/` 下的计划，不代替阶段产物。
+- context pack 对 `_设置.md` 只投影 `settings` helper 认定的当前设置区（`## 记录` 之前）及其 source；完整审计历史仍留在原文件但不进入 preview。最多附 3 条显式“校正/更正”记录且一律标为非权威 provenance，不能覆盖当前设置；解析失败时留空并报错，不得回退为全文 preview。
 - `生产数据/flow_events.jsonl` / `flow_telemetry.json` 只记控制面阶段、停因、缓存命中、adapter 里程碑与耗时；不记 prompt、密钥或供应商原始响应。它与 dashboard 的成本/QA 账本互补，不取代 `production_events.jsonl`。
 - `run.py next --preview` 不写 episode graph、blocking bundle 或 flow telemetry；正式 `next` 才原子落盘。
 

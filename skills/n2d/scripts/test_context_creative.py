@@ -30,6 +30,115 @@ def test_context_pack_collects_stage_files(tmp_path: Path):
     assert "生产数据/views/context_packs" in outputs["rel_markdown"]
 
 
+def test_context_pack_settings_preview_excludes_superseded_audit_fact(tmp_path: Path):
+    (tmp_path / "_设置.md").write_text(
+        "# 设置\n\n"
+        "- 项目规模：长篇量产  # source=source_analysis\n"
+        "- 画幅：9:16  # source=project_default\n\n"
+        "## 记录\n"
+        "- 2026-07-14 数据校正：当前为819个唯一章节；先前口径不再作为生产事实\n"
+        "- 2026-07-14 当前只推进内部开发\n"
+        "- 2026-07-14 源书共830章、约565万字，按长篇量产配置一致性与打样门\n",
+        encoding="utf-8",
+    )
+
+    pack = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")
+    settings = pack["settings_context"]
+    settings_file = next(item for item in pack["files"] if item["relpath"] == "_设置.md")
+
+    assert settings["status"] == "ok"
+    assert settings["effective_settings"]["项目规模"] == {
+        "value": "长篇量产",
+        "source": "source_analysis",
+    }
+    assert settings["authority"]["records_can_override_effective_settings"] is False
+    assert settings["record_summary"]["records_seen"] == 3
+    assert settings["record_summary"]["corrections_included"] == 1
+    assert settings_file["preview_policy"] == "settings_region_plus_bounded_corrections"
+    assert "数据校正：当前为819个唯一章节" in settings_file["preview"]
+    assert "源书共830章、约565万字，按长篇量产配置一致性与打样门" not in settings_file["preview"]
+    assert "当前只推进内部开发" not in settings_file["preview"]
+
+
+def test_context_pack_settings_corrections_are_hard_capped(tmp_path: Path):
+    records = "\n".join(
+        f"- 2026-07-{14 - i:02d} 数据校正：口径 {i}" for i in range(6)
+    )
+    (tmp_path / "_设置.md").write_text(
+        "- 制作模式: 原生音画\n\n## 记录\n" + records + "\n",
+        encoding="utf-8",
+    )
+
+    pack = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")
+    settings = pack["settings_context"]
+
+    assert settings["record_summary"]["corrections_seen"] == 6
+    assert settings["record_summary"]["corrections_included"] == 3
+    assert [item["text"] for item in settings["recent_corrections"]] == [
+        "2026-07-14 数据校正：口径 0",
+        "2026-07-13 数据校正：口径 1",
+        "2026-07-12 数据校正：口径 2",
+    ]
+
+
+def test_context_pack_settings_supports_no_record_and_legacy_dated_lines(tmp_path: Path):
+    (tmp_path / "_设置.md").write_text(
+        "- 制作模式: 配音先行\n"
+        "- 2025-01-01 初始估计为200集\n"
+        "- 2025-01-02 数据校正：现行口径为20集\n",
+        encoding="utf-8",
+    )
+
+    pack = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")
+    settings = pack["settings_context"]
+
+    assert settings["effective_settings"] == {
+        "制作模式": {"value": "配音先行", "source": ""},
+    }
+    assert settings["record_summary"]["format"] == "legacy_dated_lines"
+    assert [item["text"] for item in settings["recent_corrections"]] == [
+        "2025-01-02 数据校正：现行口径为20集",
+    ]
+
+    (tmp_path / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
+    no_records = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")["settings_context"]
+    assert no_records["status"] == "ok"
+    assert no_records["record_summary"]["format"] == "none"
+    assert no_records["recent_corrections"] == []
+
+
+def test_context_pack_settings_parse_failure_never_falls_back_to_raw_history(
+    tmp_path: Path, monkeypatch,
+):
+    obsolete = "OBSOLETE_FACT_MUST_NOT_REACH_DOWNSTREAM"
+    (tmp_path / "_设置.md").write_text(
+        f"- 制作模式: 原生音画\n\n## 记录\n- 2025-01-01 {obsolete}\n",
+        encoding="utf-8",
+    )
+
+    def explode(_root):
+        raise RuntimeError("synthetic settings parser failure")
+
+    monkeypatch.setattr(context_pack.project_settings, "settings_context_snapshot", explode)
+    pack = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")
+    settings_file = next(item for item in pack["files"] if item["relpath"] == "_设置.md")
+
+    assert pack["settings_context"]["status"] == "parse_error"
+    assert pack["settings_context"]["effective_settings"] == {}
+    assert obsolete not in settings_file["preview"]
+    assert "raw _设置.md history was intentionally omitted" in settings_file["preview"]
+
+
+def test_context_pack_markdown_exposes_composite_genres_and_untriggered_state(tmp_path: Path):
+    (tmp_path / "_设置.md").write_text("- 题材: 系统流+修仙+悬疑\n", encoding="utf-8")
+    pack = context_pack.build_pack(str(tmp_path), "第1集", "script_stage1")
+
+    markdown = context_pack.render_markdown(pack)
+
+    assert "genre packs：chuanyue, xianxia, suspense" in markdown
+    assert "genre scene activation：storyboard_missing" in markdown
+
+
 def test_script_stage1_does_not_require_midstart_pack_for_first_episode(tmp_path: Path):
     (tmp_path / "_设置.md").write_text("- 制作模式: 原生音画\n", encoding="utf-8")
     (tmp_path / "_进度.md").write_text("| 集 | 剧本改编 |\n|---|---|\n| 第1集 | ⬜ |\n", encoding="utf-8")

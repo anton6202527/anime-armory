@@ -145,6 +145,23 @@ def model_pack_fingerprint(character_id: str, tier: str, evidence: Sequence[Mapp
     return hashlib.sha256(canonical_json(material).encode("utf-8")).hexdigest()
 
 
+def summarize_reports(reports: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    def asset_type(row: Mapping[str, Any]) -> str:
+        declared = str(row.get("asset_type") or "")
+        if declared:
+            return declared
+        return "monster" if str(row.get("character_id") or "").startswith("MON_") else "character"
+
+    return {
+        "assets": len(reports),
+        "characters": sum(1 for row in reports if asset_type(row) == "character"),
+        "monsters": sum(1 for row in reports if asset_type(row) == "monster"),
+        "ready": sum(1 for row in reports if row.get("readiness") == "ready"),
+        "needs_approval": sum(1 for row in reports if row.get("readiness") == "needs_approval"),
+        "needs_fix": sum(1 for row in reports if row.get("readiness") == "needs_fix"),
+    }
+
+
 def evaluate_character(root: Path, registry: Mapping[str, Any], character_id: str) -> dict[str, Any]:
     assets = registry.get("assets") if isinstance(registry.get("assets"), Mapping) else {}
     asset = assets.get(character_id) if isinstance(assets, Mapping) and isinstance(assets.get(character_id), Mapping) else {}
@@ -233,9 +250,10 @@ def evaluate_character(root: Path, registry: Mapping[str, Any], character_id: st
     )
     receipt_status = "current" if current_receipt else ("stale" if receipt else "missing")
     technical_block = any(item["severity"] == "block" for item in findings)
+    signoff_required = bool(required)
     if technical_block:
         readiness = "needs_fix"
-    elif tier == "core_full" and not current_receipt:
+    elif signoff_required and not current_receipt:
         readiness = "needs_approval"
     else:
         readiness = "ready"
@@ -243,6 +261,7 @@ def evaluate_character(root: Path, registry: Mapping[str, Any], character_id: st
         "kind": KIND,
         "version": VERSION,
         "character_id": character_id,
+        "asset_type": str(asset.get("type") or "character"),
         "tier": tier,
         "required_views": list(required),
         "view_evidence": evidence,
@@ -253,6 +272,7 @@ def evaluate_character(root: Path, registry: Mapping[str, Any], character_id: st
             "approved_at": receipt.get("approved_at", "") if isinstance(receipt, Mapping) else "",
             "reviewer": receipt.get("reviewer", "") if isinstance(receipt, Mapping) else "",
         },
+        "signoff_required": signoff_required,
         "readiness": readiness,
         "technical_block": technical_block,
         "findings": findings,
@@ -327,7 +347,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="漫画角色 turnaround/model-pack 技术检查与人审签收")
     parser.add_argument("project_root")
     parser.add_argument("command", choices=("check", "signoff"))
-    parser.add_argument("--characters", default="", help="逗号分隔 CHAR_/MON_；默认全部角色资产")
+    parser.add_argument(
+        "--characters",
+        default="",
+        help="check 可逗号分隔 CHAR_/MON_；signoff 必须恰好一个 ID；默认全部纳管资产",
+    )
     parser.add_argument("--reviewer", default="")
     parser.add_argument("--reason", default="")
     parser.add_argument("--confirm-all", action="store_true", help="确认已并排检查全部人审项目")
@@ -361,12 +385,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "version": VERSION,
         "created_at": now_iso(),
         "characters": reports,
-        "summary": {
-            "characters": len(reports),
-            "ready": sum(1 for row in reports if row["readiness"] == "ready"),
-            "needs_approval": sum(1 for row in reports if row["readiness"] == "needs_approval"),
-            "needs_fix": sum(1 for row in reports if row["readiness"] == "needs_fix"),
-        },
+        "summary": summarize_reports(reports),
     }
     if args.write or args.command == "signoff":
         out = root / "生产数据" / "comic_model_pack_report.json"

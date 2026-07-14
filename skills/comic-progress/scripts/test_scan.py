@@ -247,9 +247,9 @@ def test_monster_model_pack_is_opt_in_but_character_is_not(tmp_path: Path) -> No
     assert scan._identity_gaps(tmp_path, "第1话")[0]["code"] == "model_pack_report_missing_or_invalid"
 
 
-def test_core_model_pack_signoff_requires_reason_and_matching_character(tmp_path: Path) -> None:
+def test_non_restricted_model_pack_signoff_requires_reason_and_matching_character(tmp_path: Path) -> None:
     asset = identity_asset("character")
-    asset["library_tier"] = "core_full"
+    asset["library_tier"] = "recurring_standard"
     write_json(tmp_path / "出图" / "共享" / "identity_registry.json", {
         "schema_version": 2, "kind": "comic_identity_registry", "assets": {"CHAR_A": asset},
     })

@@ -1,0 +1,14 @@
+{
+  "kind":"n2d_vertical_composition_plan","version":1,"episode":"第1集","status":"confirmed","generated_at":"2026-07-14T11:40:00+00:00",
+  "composition_rules":{"safe_zone":"底部约18%保留字幕安全区；系统信息置上中或侧上，不压脸和刀路。","face_readability":"核心表演镜脸部高度不低于画面约22%；动作全景后必须回反应。","z_axis_depth":"用前景刀/尸骸、中景人物、后景虎妖与官道建立纵深。","overlay_policy":"百妖谱、道行和境界文字全部后期 overlay，底图只留干净负空间。"},
+  "beat_composition":[
+    {"beat_id":"Beat_01","primary_subject_zone":"上中至中部","foreground_midground_background":"前景刀刃，中景姜月初，后景尸骸与翻车。","subtitle_clearance":"底部净空，血迹不穿字幕。","vertical_motion":"刀锋下落后以时间回切向上揭示荒野。"},
+    {"beat_id":"Beat_02","primary_subject_zone":"姜月初偏左、裴长青偏右","foreground_midground_background":"前景断刀，中景两人，后景官道出口。","subtitle_clearance":"人物嘴部避开底部18%。","vertical_motion":"姜月初从蹲到站体现交易成立。"},
+    {"beat_id":"Beat_03","primary_subject_zone":"虎妖上中、人物下中","foreground_midground_background":"前景裴长青，中景姜月初，后景虎妖起身。","subtitle_clearance":"虎妖胸腹保留无字区。","vertical_motion":"虎妖由伏地到直立形成竖向压迫。"},
+    {"beat_id":"Beat_04","primary_subject_zone":"姜月初中部，系统区侧上","foreground_midground_background":"前景刀柄，中景主角，后景逼近虎爪。","subtitle_clearance":"系统面板与对白字幕分层。","vertical_motion":"视线由虎妖高位落向裴长青低位。"},
+    {"beat_id":"Beat_05","primary_subject_zone":"手部中下、双脸中上","foreground_midground_background":"前景递刀，中景姜月初，后景裴长青。","subtitle_clearance":"刀落区与字幕区不重合。","vertical_motion":"刀从上中进入下中，结果不展示猎奇伤口。"},
+    {"beat_id":"Beat_06","primary_subject_zone":"姜月初中下、虎妖上中","foreground_midground_background":"前景横刀，中景主角，后景虎妖。","subtitle_clearance":"刀弧从中部通过，底部保留对白。","vertical_motion":"起势下沉、挥刀上挑、虎首坠落。"},
+    {"beat_id":"Beat_07","primary_subject_zone":"百妖谱中部、姜月初侧中","foreground_midground_background":"前景妖血，中景百妖谱，后景虎妖残影。","subtitle_clearance":"中上预留系统 overlay，底部对白净空。","vertical_motion":"妖血由地面向上汇入书页。"},
+    {"beat_id":"Beat_08","primary_subject_zone":"姜月初中上、裴长青尸身下中","foreground_midground_background":"前景松开的刀，中景尸身，后景主角。","subtitle_clearance":"集尾句位于底部净空，不盖尸身轮廓。","vertical_motion":"镜头从主角脸缓慢下移至两人因果关系。"}
+  ]
+}

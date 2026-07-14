@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -10,6 +11,7 @@ image_prompt_pack = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
 sys.modules[SPEC.name] = image_prompt_pack
 SPEC.loader.exec_module(image_prompt_pack)
+visual_reference_policy = sys.modules["visual_reference_policy"]
 
 
 def test_character_makeup_prompt_requires_neutral_gray_backdrop() -> None:
@@ -550,8 +552,26 @@ def test_external_visual_manifest_routes_identity_and_style_separately(tmp_path:
     (tmp_path / style_rel).write_bytes(b"style")
     (visual / "reference_manifest.json").write_text(json.dumps({
         "references": [
-            {"path": identity_rel, "use_policy": "identity_body_reference", "character_ids": ["CHAR_01"]},
-            {"path": style_rel, "use_policy": "style_source_only", "character_ids": []},
+            {
+                "path": identity_rel,
+                "sha256": hashlib.sha256(b"identity").hexdigest(),
+                "use_policy": "identity_body_reference",
+                "character_ids": ["CHAR_01"],
+                "rights_status": "user_owned",
+                "eligible_for_generation": True,
+                "backend_upload_allowed": True,
+                "watermark_present": False,
+            },
+            {
+                "path": style_rel,
+                "sha256": hashlib.sha256(b"style").hexdigest(),
+                "use_policy": "style_source_only",
+                "character_ids": [],
+                "rights_status": "authorized",
+                "eligible_for_generation": True,
+                "backend_upload_allowed": True,
+                "watermark_present": False,
+            },
         ]
     }), encoding="utf-8")
 
@@ -560,6 +580,89 @@ def test_external_visual_manifest_routes_identity_and_style_separately(tmp_path:
 
     assert [row["path"] for row in identity] == [identity_rel]
     assert [row["path"] for row in styles] == [style_rel]
+
+
+def test_external_visual_manifest_fails_closed_for_unsafe_or_tampered_rows(tmp_path: Path) -> None:
+    visual = tmp_path / "设定库" / "参考资料" / "视觉参考"
+    visual.mkdir(parents=True)
+    rel = "设定库/参考资料/视觉参考/identity.jpg"
+    payload = b"identity"
+    (tmp_path / rel).write_bytes(payload)
+    manifest = visual / "reference_manifest.json"
+    valid = {
+        "path": rel,
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "use_policy": "identity_reference",
+        "character_ids": ["CHAR_01"],
+        "rights_status": "authorized",
+        "eligible_for_generation": True,
+        "backend_upload_allowed": True,
+        "watermark_present": False,
+    }
+    unsafe_variants = [
+        {"use_policy": "analysis_only"},
+        {"status": "pending_rights_review"},
+        {"rights_status": "pending"},
+        {"watermark_present": True},
+        {"has_watermark": True},
+        {"eligible_for_generation": False},
+        {"backend_upload_allowed": False},
+        {"sha256": "0" * 64},
+        {"watermark_present": None},
+    ]
+
+    for mutation in unsafe_variants:
+        row = dict(valid)
+        row.update(mutation)
+        manifest.write_text(json.dumps({"references": [row]}), encoding="utf-8")
+        assert image_prompt_pack.external_visual_reference_entries(
+            tmp_path, "CHAR_01", {"name": "姜月初"}
+        ) == []
+
+
+def test_legacy_shared_user_reference_without_manifest_is_not_auto_attached(tmp_path: Path) -> None:
+    legacy = tmp_path / "出图" / "共享" / "图片" / "CHAR_01_定型参考.png"
+    legacy.parent.mkdir(parents=True)
+    legacy.write_bytes(b"legacy")
+
+    assert image_prompt_pack.external_visual_reference_entries(
+        tmp_path, "CHAR_01", {"name": "姜月初"}
+    ) == []
+
+
+def test_generation_manifest_check_ignores_analysis_only_but_blocks_active_tamper(tmp_path: Path) -> None:
+    visual = tmp_path / "设定库" / "参考资料" / "视觉参考"
+    visual.mkdir(parents=True)
+    rel = "设定库/参考资料/视觉参考/identity.jpg"
+    payload = b"identity"
+    source = tmp_path / rel
+    source.write_bytes(payload)
+    active = {
+        "id": "active",
+        "path": rel,
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "use_policy": "identity_reference",
+        "character_ids": ["CHAR_01"],
+        "rights_status": "authorized",
+        "eligible_for_generation": True,
+        "backend_upload_allowed": True,
+        "watermark_present": False,
+    }
+    analysis_only = {
+        "id": "research",
+        "path": rel,
+        "use_policy": "analysis_only",
+        "rights_status": "pending",
+        "watermark_present": True,
+    }
+    manifest = visual / "reference_manifest.json"
+    manifest.write_text(json.dumps({"references": [analysis_only, active]}), encoding="utf-8")
+
+    assert visual_reference_policy.reference_manifest_generation_issues(tmp_path) == []
+
+    source.write_bytes(b"tampered")
+    issues = visual_reference_policy.reference_manifest_generation_issues(tmp_path)
+    assert "reference[active]:declared_sha256_mismatch" in issues
 
 
 def test_reference_cards_use_authored_truth_or_production_snapshots_not_top_level_duplicates(tmp_path: Path) -> None:

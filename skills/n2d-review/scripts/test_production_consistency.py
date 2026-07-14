@@ -136,6 +136,80 @@ def test_multiview_identity_pack_requires_core_buckets(tmp_path: Path) -> None:
     assert any("多视角身份测试桶缺失" in row["message"] for row in res["findings"])
 
 
+def test_multiview_promotes_named_minimal_seen_in_ten_structured_storyboards(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path
+    _write_json(
+        root / "出图" / "共享" / "identity_registry.json",
+        {
+            "characters": [{
+                "id": "CHAR_GUEST",
+                "scope": "第1集具名短线角色",
+                "library_tier": "named_minimal",
+                "forms": [{"form": "常态"}],
+            }],
+        },
+    )
+    for number in range(1, 11):
+        _write_json(
+            root / "脚本" / f"第{number}集" / "storyboard.json",
+            {
+                "clips": [{
+                    "id": "Clip_01",
+                    "character_ids": ["CHAR_GUEST/常态"],
+                    "description": "可见出场",
+                }],
+            },
+        )
+
+    assert pc._core_character_forms(str(root)) == [("CHAR_GUEST", "常态")]
+    result = pc.check_multiview_identity_pack(str(root), "第1集")
+    assert any(
+        row["verdict"] == "block"
+        and "CHAR_GUEST" in row["message"]
+        and "identity_eval_pack" in row["message"]
+        for row in result["findings"]
+    )
+
+
+def test_multiview_does_not_count_offscreen_or_forbidden_storyboard_mentions(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path
+    _write_json(
+        root / "出图" / "共享" / "identity_registry.json",
+        {
+            "characters": [{
+                "id": "CHAR_GUEST",
+                "scope": "第1集具名短线角色",
+                "library_tier": "named_minimal",
+                "forms": [{"form": "常态"}],
+            }],
+        },
+    )
+    for number in range(1, 11):
+        hidden_key = "offscreen_presence" if number % 2 else "forbidden_presence"
+        _write_json(
+            root / "脚本" / f"第{number}集" / "storyboard.json",
+            {
+                "clips": [{
+                    "id": "Clip_01",
+                    "character_ids": ["CHAR_GUEST/常态"],
+                    "entity_schedule": {
+                        "characters": ["CHAR_GUEST/常态"],
+                        hidden_key: ["CHAR_GUEST/常态"],
+                    },
+                }],
+            },
+        )
+
+    assert pc._core_character_forms(str(root)) == []
+    result = pc.check_multiview_identity_pack(str(root), "第1集")
+    assert result["findings"] == []
+    assert "MVIEW 暂不强制" in "\n".join(result["notes"])
+
+
 def test_multiview_bucket_fail_blocks_when_top_level_verdict_missing(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"

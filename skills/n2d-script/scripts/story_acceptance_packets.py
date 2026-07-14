@@ -178,8 +178,13 @@ def _machine_reference(root: Path, ep: str, kind: str) -> Dict[str, Any]:
     已经算好了可挂钩的量。这里只做只读汇总：报告缺失标 missing，绝不阻断。"""
     ref: Dict[str, Any] = {"advisory": True,
                            "note": "签收前对照：flags>0 时 reviewer 应在 rewrite_notes 说明接受理由或先返工。"}
+    # story_economy consumes storyboard.json, which is intentionally not
+    # available until Stage 2.  A stale/premature audit must not bias the
+    # Stage 1 table-read packet with a synthetic missing_storyboard blocker.
     econ = load_json(root / "生产数据" / f"story_economy_audit_{ep}.json")
-    if isinstance(econ, Mapping):
+    if kind == "table_read":
+        ref["story_economy"] = "not_applicable_before_storyboard"
+    elif isinstance(econ, Mapping):
         findings = econ.get("findings") if isinstance(econ.get("findings"), list) else []
         sev = [str((f or {}).get("severity") or "") for f in findings if isinstance(f, Mapping)]
         codes = [str((f or {}).get("code") or "") for f in findings if isinstance(f, Mapping)]

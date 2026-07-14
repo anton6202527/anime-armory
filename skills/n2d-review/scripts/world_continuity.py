@@ -41,6 +41,8 @@ import re
 import sys
 from typing import Dict, List, Mapping, Optional, Sequence
 
+from pillow_compat import pixel_data
+
 # 时辰分档默认阈值（self-calibrated 不到，故给文档化可调参数，画风偏暗/偏亮时可整体平移）：
 DEFAULT_NIGHT_LUMA = 70.0    # 平均明度 < 此 → 倾向「夜」
 DEFAULT_DAY_LUMA = 140.0     # 平均明度 ≥ 此 → 倾向「白天」
@@ -321,7 +323,7 @@ def _luma_warmth(path: str, size: int = 96) -> Optional[tuple]:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("RGB")
         im.thumbnail((size, size))
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         n = len(px)
         if n == 0:
             return None
@@ -346,7 +348,7 @@ def _bright_centroid(path: str, size: int = 96, top_frac: float = 0.15) -> Optio
         w, h = im.size
         if w == 0 or h == 0:
             return None
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         n = len(px)
         order = sorted(range(n), key=lambda i: px[i], reverse=True)
         k = max(1, int(n * top_frac))
@@ -367,7 +369,7 @@ def _bright_centroid_y(path: str, size: int = 96, top_frac: float = 0.15) -> Opt
         w, h = im.size
         if w == 0 or h == 0:
             return None
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         n = len(px)
         order = sorted(range(n), key=lambda i: px[i], reverse=True)
         k = max(1, int(n * top_frac))

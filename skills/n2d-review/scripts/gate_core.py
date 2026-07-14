@@ -952,6 +952,15 @@ def _structured_character_ids(value: object) -> set[str]:
     return out
 
 
+def _schedule_hidden_character_ids(schedule: object) -> set[str]:
+    if not isinstance(schedule, Mapping):
+        return set()
+    hidden: set[str] = set()
+    for key in ("offscreen_presence", "forbidden_presence", "画外保留", "禁止出现"):
+        hidden.update(_structured_character_ids(schedule.get(key)))
+    return hidden
+
+
 def _schedule_visible_character_ids(schedule: object) -> set[str]:
     if not isinstance(schedule, Mapping):
         return set()
@@ -965,10 +974,18 @@ def _schedule_visible_character_ids(schedule: object) -> set[str]:
         "visible_presence",
     ):
         visible.update(_structured_character_ids(schedule.get(key)))
-    hidden: set[str] = set()
-    for key in ("offscreen_presence", "forbidden_presence", "画外保留", "禁止出现"):
-        hidden.update(_structured_character_ids(schedule.get(key)))
-    return visible - hidden
+    return visible - _schedule_hidden_character_ids(schedule)
+
+
+def _storyboard_hidden_character_ids(record: object) -> set[str]:
+    """Return explicit offscreen/forbidden ids for one clip or physical shot."""
+    if not isinstance(record, Mapping):
+        return set()
+    hidden = _schedule_hidden_character_ids(record)
+    hidden.update(
+        _schedule_hidden_character_ids(record.get("entity_schedule") or record.get("实体排程"))
+    )
+    return hidden
 
 
 def _storyboard_clip_visible_character_ids(clip: object) -> set[str]:
@@ -978,18 +995,21 @@ def _storyboard_clip_visible_character_ids(clip: object) -> set[str]:
     # `character_ids: []` is an explicit object/location-only clip.  Mirror
     # story_quality_pack semantics and do not resurrect ids from side fields.
     if "character_ids" in clip:
-        return _structured_character_ids(clip.get("character_ids"))
+        return _structured_character_ids(clip.get("character_ids")) - _storyboard_hidden_character_ids(clip)
     visible = _structured_character_ids(clip.get("characters"))
     visible.update(_schedule_visible_character_ids(clip.get("entity_schedule") or clip.get("实体排程")))
     for shot in clip.get("shots") or []:
         if not isinstance(shot, Mapping):
             continue
         if "character_ids" in shot:
-            visible.update(_structured_character_ids(shot.get("character_ids")))
+            shot_visible = _structured_character_ids(shot.get("character_ids"))
         else:
-            visible.update(_structured_character_ids(shot.get("characters")))
-            visible.update(_schedule_visible_character_ids(shot.get("entity_schedule") or shot.get("实体排程")))
-    return visible
+            shot_visible = _structured_character_ids(shot.get("characters"))
+            shot_visible.update(
+                _schedule_visible_character_ids(shot.get("entity_schedule") or shot.get("实体排程"))
+            )
+        visible.update(shot_visible - _storyboard_hidden_character_ids(shot))
+    return visible - _storyboard_hidden_character_ids(clip)
 
 
 def _storyboard_character_appearance_evidence(root: str) -> Dict[str, Dict[str, Any]]:
@@ -1454,7 +1474,7 @@ def _check_compliance_rights(root: str, data: dict, loc: str) -> None:
             _compliance_block(f"{loc} rights.{key}", f"缺 {key} 权利状态；不用也要写 not_applicable，不能空着")
             continue
         status = _status(item.get("status"))
-        if not status or status not in COMPLIANCE_ALLOWED_RIGHTS:
+        if not status or status not in COMPLIANCE_ALLOWED_RIGHTS or status == "unknown":
             _compliance_block(f"{loc} rights.{key}", f"{key} 权利状态未知：{status or 'missing'}")
         if status in COMPLIANCE_RIGHTS_EVIDENCE_REQUIRED and not _filled(item.get("evidence")):
             _compliance_block(f"{loc} rights.{key}", f"{key} 标为 {status} 但缺 evidence/ref")

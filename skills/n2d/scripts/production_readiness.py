@@ -311,10 +311,15 @@ def run_genre_packs(root: Path, episode: str, *, write: bool) -> Dict[str, Any]:
         genre_packs.write_context(root, episode, "review", context)
     statuses = [payload.get("status"), context.get("status")]
     status = "fail" if "fail" in statuses else ("warn" if "warn" in statuses else "pass")
+    genre = context.get("genre") if isinstance(context.get("genre"), dict) else {}
+    activation = context.get("activation") if isinstance(context.get("activation"), dict) else {}
+    keys = genre.get("matched_genre_keys") or ([genre.get("genre_key")] if genre.get("genre_key") else [])
     return check(
         "genre_packs",
         status,
-        f"packs={len(payload.get('packs') or [])} active_scenes={(context.get('summary') or {}).get('active_scenes', 0)}",
+        f"packs={len(payload.get('packs') or [])} matched={','.join(keys) or '-'} "
+        f"activation={activation.get('state') or 'unknown'} "
+        f"active_scenes={(context.get('summary') or {}).get('active_scenes', 0)}",
         path=relpath(root, genre_packs.context_path(root, episode, "review")) if write else "",
     )
 

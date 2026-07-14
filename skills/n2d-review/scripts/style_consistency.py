@@ -28,6 +28,7 @@ import sys
 from typing import Dict, List, Optional, Sequence
 
 import face_consistency as fc  # 复用 cosine / band / _sev
+from pillow_compat import pixel_data
 
 DEFAULT_MARGIN = 0.06
 DEFAULT_BINS = 16
@@ -165,13 +166,13 @@ def _fingerprint(path: str, bins: int) -> Optional[List[float]]:
         im = Image.open(path).convert("RGB")
         im.thumbnail((128, 128))
         hsv = im.convert("HSV")
-        px = list(hsv.getdata())
+        px = list(pixel_data(hsv))
         sat = [s / 255.0 for (_h, s, _v) in px]
         val = [v / 255.0 for (_h, _s, v) in px]
         sat_h = channel_hist(sat, bins)
         val_h = channel_hist(val, bins)
         edges = im.convert("L").filter(ImageFilter.FIND_EDGES)
-        ed = list(edges.getdata())
+        ed = list(pixel_data(edges))
         edge_density = (sum(ed) / len(ed) / 255.0) if ed else 0.0
         return style_fingerprint(sat_h, val_h, edge_density)
     except Exception:

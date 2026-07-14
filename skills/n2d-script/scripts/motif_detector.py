@@ -23,6 +23,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -59,6 +60,16 @@ except Exception:  # 采集绝不拖垮检测
 # 哪些母题类型呈现为"系统面板"形态（套 system_panel 镜头模板 + VFX_系统面板 + overlay）。
 # 其余（loot/cheat 等）暂不绑面板模板，只在 motif_plan 报告里列出，待后续加专属模板。
 PANEL_FAMILY_MOTIF_TYPES = ("system_panel", "level_up", "system_refresh", "signin", "gacha")
+
+# “升级”同时会出现在普通戏剧描述（威胁升级、冲突升级、升级爽感退场）中。
+# 孤立命中时必须再有角色/系统成长语境，否则会误注 system_panel。
+LEVEL_UP_POSITIVE_RE = re.compile(
+    r"主角升级|系统升级|等级(?:提升|上升|突破)|境界(?:提升|突破)|经验(?:已满|满了|值)|"
+    r"升到|升至|升级了|成功升级|获得.{0,12}(?:等级|境界|修为|能力)"
+)
+MOTIF_NEGATED_RE = re.compile(
+    r"(?:没有|并无|无|不出现|不含|不要|禁止|缺少).{0,4}(?:系统面板|属性面板|面板|等级提升|升级)"
+)
 
 
 # ── 题材检测（纯函数·可测） ──────────────────────────────────────────────────
@@ -124,12 +135,19 @@ def classify_motif(clip: Dict[str, Any], *, min_hits: int = MOTIF_TYPE_MIN_HITS)
             "rule": "显式 system_panel/MOTIF_系统面板 合同",
         }
     text = clip_text(clip)
+    match_text = MOTIF_NEGATED_RE.sub("", text)
     best: Optional[Dict[str, Any]] = None
     for motif_type, keywords in MOTIF_TYPE_KEYWORDS:
-        matched = sorted({kw for kw in keywords if kw in text})
+        matched = sorted({kw for kw in keywords if kw in match_text})
         if len(matched) >= min_hits and (best is None or len(matched) > best["hits"]):
             best = {"motif_type": motif_type, "hits": len(matched), "matched": matched}
     if best is None:
+        return None
+    if (
+        best["motif_type"] == "level_up"
+        and set(best["matched"]) == {"升级"}
+        and not LEVEL_UP_POSITIVE_RE.search(match_text)
+    ):
         return None
     best["rule"] = f"命中 {best['motif_type']}（{best['hits']} 词：{'/'.join(best['matched'])}）"
     return best

@@ -1,3 +1,5 @@
+import json
+
 import source_analyze
 
 
@@ -72,3 +74,111 @@ def test_extract_characters_ignores_non_speech_action_and_daoxing_fragments():
     assert "躬身" not in names
     assert "忽而" not in names
     assert "喃喃" not in names
+
+
+def test_extract_characters_filters_sigh_and_self_directed_action_false_positives():
+    text = """
+姜月初叹了口气说道：“罢了。”
+叹了口气说道：“今日到此。”
+魏合自顾自说道：“无需理会。”
+自顾自说道：“继续。”
+"""
+    names = {item["name"] for item in source_analyze.extract_characters(text, limit=20)}
+
+    assert "姜月初" in names
+    assert "魏合" in names
+    assert "叹了口气" not in names
+    assert "自顾自" not in names
+
+
+def test_source_integrity_folds_only_adjacent_exact_headings_and_keeps_line_evidence():
+    text = """本书单身。
+第1章 起
+第1章 起
+正文。
+第2章 承
+
+第2章 承
+第4章 转
+第4章 转
+广武县
+正文继续。
+朱厌
+
+第5章 合
+第5章 合
+--------------
+歇一天，明天继续还债
+"""
+    analysis = source_analyze.analyze_source("测试", text)
+    integrity = analysis["source_integrity"]
+
+    # Only physically adjacent, exactly equal headings are folded. The two
+    # chapter-2 headings separated by a blank line both remain analysis input.
+    assert analysis["stats"]["chapters"] == 5
+    assert integrity["raw_chapter_heading_count"] == 8
+    assert integrity["adjacent_duplicate_heading_count"] == 3
+    assert integrity["chapter_headings_after_fold"] == 5
+    assert integrity["unique_chapter_count"] == 4
+    assert integrity["missing_chapter_numbers"] == [3]
+    assert integrity["completion_status"] == "likely_ongoing"
+    assert {item["line"] for item in integrity["suspected_captions"]} >= {10, 12}
+    assert any(item["line"] == 17 for item in integrity["author_notes"])
+    assert any(item["line"] == 17 and item["kind"] == "ongoing" for item in integrity["completion_clues"])
+
+    rendered = source_analyze.render_analysis_md(analysis)
+    assert "## 源完整性（source_integrity）" in rendered
+    assert "相邻完全重复标题：3" in rendered
+    assert "L17：歇一天，明天继续还债" in rendered
+
+
+def test_duplicate_heading_fold_is_exact_not_merely_same_chapter_number():
+    text = "第1章 甲\n第1章 乙\n第1章 乙\n"
+
+    assert source_analyze.chapter_count(text) == 2
+    assert source_analyze.fold_adjacent_duplicate_chapter_headings(text).splitlines() == [
+        "第1章 甲", "第1章 乙"
+    ]
+
+
+def test_cli_recovers_episode_count_from_bounded_split_plan_header(tmp_path):
+    root = tmp_path / "work"
+    source = tmp_path / "novel.txt"
+    source.write_text("第1章 起\n正文。\n", encoding="utf-8")
+    plan = root / "脚本" / "split_plan.json"
+    plan.parent.mkdir(parents=True)
+    # Deliberately not valid full JSON: the CLI only needs the stable header
+    # field and must not parse/read the 44-MiB-class body to recover this count.
+    plan.write_bytes(
+        b'{"schema_version":2,"estimated_total_episode_count":830,"source_units":['
+        + b"x" * (source_analyze.SPLIT_PLAN_HEAD_BYTES * 2)
+    )
+
+    assert source_analyze.main([str(source), "--root", str(root), "--title", "测试"]) == 0
+
+    analysis = json.loads((root / "设定库" / "source_analysis.json").read_text(encoding="utf-8"))
+    assert analysis["stats"]["episode_scaffolds"] == 830
+    assert analysis["stats"]["episode_scaffolds_source"].endswith(
+        "split_plan.json:estimated_total_episode_count"
+    )
+
+
+def test_explicit_episode_sequence_wins_over_split_plan_estimate(tmp_path):
+    root = tmp_path / "work"
+    plan = root / "脚本" / "split_plan.json"
+    plan.parent.mkdir(parents=True)
+    plan.write_text('{"estimated_total_episode_count": 830}', encoding="utf-8")
+
+    analysis = source_analyze.write_analysis(str(root), "测试", "第1章 起\n正文。", ["第一集"])
+
+    assert analysis["stats"]["episode_scaffolds"] == 1
+    assert "episode_scaffolds_source" not in analysis["stats"]
+
+
+def test_missing_split_plan_keeps_legacy_zero_for_cli_analysis(tmp_path):
+    root = tmp_path / "work"
+
+    analysis = source_analyze.write_analysis(str(root), "测试", "第1章 起\n正文。")
+
+    assert analysis["stats"]["episode_scaffolds"] == 0
+    assert "episode_scaffolds_source" not in analysis["stats"]

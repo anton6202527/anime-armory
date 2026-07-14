@@ -289,11 +289,11 @@ python3 skills/n2d-video/scripts/script_contract_receipt.py <作品根> 第N集 
 - **形象里程碑（跨集生命周期·Gap2）**：（按集号列本角色的造型/年龄/服装/标志变化，如「第3集 换嫁衣→婚礼变体；第20集 十年后年龄跳+华发；第40集 黑化冷色造型」。全局汇总见 `设定库/characters/_生命周期.md`；每个里程碑到达前由 `n2d-image` 派生对应『形态变体』定妆，避免锁死后返工。年龄敏感长线角色必须写 `form + 年龄/年龄档 + 目标文件前缀 + reference_lineage`，如 `18岁少年态 → 定妆_贺平生_18岁少年*.png ← CHAR_HE_PINGSHENG 定型参考图脸部 DNA`。无变化写「全程沿用」）
 
 **① 定妆照 / 角色参考图 Prompt（中文）：** ← Stage 2 会据此生成定妆组，作为后续所有镜头与视频首帧的"角色参考/图生图"锚点
-角色定妆设定图：{姓名}，{年龄性别}，先做正面中性主参考 + 半身或全身服装锚 + 同源脸部特写；若角色库档位为 core_full，再做 45° + 侧面 + 背面 + 三视图人审拼版；recurring_standard 再做 45°，侧背按镜头补；named_minimal 在近景/侧背/多集复用时升档；{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨；若使用外部人物参考图，只继承脸型/五官/眼睛神态/体态比例/身材气质，不继承参考图服装/发型/配饰/妆容；按 `基础视觉风格` 的角色设定图，高细节，竖版9:16
-（备注：`core_full` = 主角/核心长线/计划出场≥10集；`recurring_standard` = 多集复现配角；`named_minimal` = 具名短线；`restricted_partial` = 只露局部/剪影。角色库档位控制资产深度，后端主体 ID/face embedding/LoRA 另行定档。）
+角色定妆设定图：{姓名}，{年龄性别}，先做正面中性主参考 + 半身或全身服装锚 + 同源脸部特写/表情锚；若角色库档位为 core_full，必须做齐正面 / 前3/4 / 侧面 / 后3/4 / 背面五角独立参考 + turnaround 人审拼版 + 同源脸部特写/表情锚；recurring_standard 再做前3/4，侧背按镜头补；named_minimal 在近景/侧背/多集复用时升档；{发型妆容服装配饰色卡}，干净浅灰纯色背景，柔和均匀打光、无强阴影，五官清晰、服装完整可辨；若使用外部人物参考图，只继承脸型/五官/眼睛神态/体态比例/身材气质，不继承参考图服装/发型/配饰/妆容；按 `基础视觉风格` 的角色设定图，高细节，竖版9:16
+（备注：`core_full` = 主角/核心长线/计划或结构化 storyboard 可见出场≥10集；`recurring_standard` = 多集复现配角；`named_minimal` = 具名短线；`restricted_partial` = 只露局部/剪影。角色库档位控制资产深度，后端主体 ID/face embedding/LoRA 另行定档。）
 
 **① 英文（备用）：**
-character design / reference sheet: {name}, minimum named-character set with front-face neutral main reference + half-body or full-body outfit reference + same-source face closeup; add 3/4, side, back and turnaround according to library_tier and actual shot needs, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and complete outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
+character design / reference sheet: {name}, minimum named-character set with a neutral front main reference + half-body or full-body outfit anchor + same-source face/expression anchor; for core_full, require five independent yaw views (front, front three-quarter, side, rear three-quarter, back) plus a turnaround review sheet and same-source face/expression anchor; for recurring_standard add front three-quarter and add side/back views when the shot plan needs them, {hair makeup outfit accessories palette}, clean light-grey solid background, soft even lighting no harsh shadows, clear face and complete outfit, Chinese ancient-fantasy webcomic character sheet, ultra detailed, vertical 9:16
 
 **② Codex 图片 Prompt（中文·常态出镜）：**
 （角色锚定描述，含外貌+妆造+气质+画风词，用于实际分镜出图）

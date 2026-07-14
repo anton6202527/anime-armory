@@ -2464,6 +2464,27 @@ def test_compliance_manifest_allows_original_source_and_adaptation_without_evide
     )
 
 
+def test_compliance_manifest_blocks_unknown_source_and_adaptation_for_internal_only(tmp_path):
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_identity_registry(tmp_path)
+    _good_compliance(root, status_overrides={
+        "distribution_intent": "internal_only",
+        "rights.source_text": {"status": "unknown", "evidence": "作者身份待确认"},
+        "rights.adaptation": {"status": "unknown", "evidence": "改编授权待确认"},
+    })
+
+    gate.check_compliance_manifest(str(root), "第1集", "image")
+
+    for key in ("source_text", "adaptation"):
+        assert any(
+            f["sev"] == gate.BLOCK
+            and f["dim"] == "合规前置"
+            and f"rights.{key}" in f["loc"]
+            and "unknown" in f["msg"]
+            for f in gate.findings
+        )
+
+
 def test_compliance_manifest_blocks_placeholder_evidence_and_platform(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     _write_identity_registry(tmp_path)
@@ -2769,6 +2790,30 @@ def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards(t
     )
 
 
+def test_storyboard_floor_rejects_collusive_restricted_partial_without_contract(tmp_path):
+    """跨三集具名人物不能把四处档位一起写 partial 来绕开基础包。"""
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["scope"] = "第1集具名短线角色"
+    char["library_tier"] = "restricted_partial"
+    char["restricted_partial"] = True
+    char["face_policy"] = "no_full_face"
+    char.pop("restricted_partial_contract", None)
+    char["asset_bundle"]["tier"] = "restricted_partial"
+    char["forms"][0]["reference_atlas"]["build_tier"] = "restricted_partial"
+    root = _write_identity_registry(tmp_path, data)
+    _write_character_storyboard_appearances(root, "CHAR_SHEN", 3, structured=True)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "最低档位 recurring_standard" in str(f["msg"])
+        and "registry 外已物化 storyboard" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
 def test_storyboard_tier_evidence_uses_structured_visible_ids_only():
     assert gate._storyboard_clip_visible_character_ids({
         "character_ids": ["CHAR_姜月初/常态"],
@@ -2782,6 +2827,17 @@ def test_storyboard_tier_evidence_uses_structured_visible_ids_only():
             "characters": ["CHAR_姜月初/常态"],
             "offscreen_presence": ["CHAR_姜月初/常态"],
         },
+    }) == set()
+    assert gate._storyboard_clip_visible_character_ids({
+        "character_ids": ["CHAR_姜月初/常态"],
+        "entity_schedule": {
+            "characters": ["CHAR_姜月初/常态"],
+            "offscreen_presence": ["CHAR_姜月初/常态"],
+        },
+    }) == set()
+    assert gate._storyboard_clip_visible_character_ids({
+        "character_ids": ["CHAR_姜月初/常态"],
+        "forbidden_presence": ["CHAR_姜月初/常态"],
     }) == set()
 
 
@@ -5652,7 +5708,7 @@ def test_character_prompt_pack_is_tier_aware() -> None:
 def test_core_character_prompt_pack_requires_rear_three_quarter() -> None:
     section = """
     **角色库档位**：`core_full`
-    角色定妆组：正面主参考、45°参考、侧面参考、背面参考、半身服装参考、脸部特写、三视图人审拼版。
+    角色定妆组：正面、前3/4、侧面、后3/4、背面五角独立参考，turnaround 人审拼版，半身服装参考，同源脸部特写/表情锚。
     """
     assert "side/rear_three_quarter/back/turnaround" in asset_gate._tier_prompt_pack_missing(
         section, "core_full"

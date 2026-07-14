@@ -18,7 +18,7 @@ python3 skills/n2d-review/scripts/meta_audit.py --run-tests --json
 # 或随总自审：python3 skills/n2d-review/scripts/self_audit.py --run-meta-tests --json
 ```
 
-默认两者都只读、不联网、不改文件；显式 `--run-tests` / `--run-meta-tests` 会执行登记的 pytest 回归，但不写生产状态。`self_audit.py` 检查 `_进度.md` 并发安全、gate 单入口、横切覆盖率、行业基准外置、detector 治理和文档体量，并自动嵌入后一份 meta 报告；`meta_audit.py` 独立核对关键质量声明的五段证据链：
+默认两者都只读、不联网、不改文件；显式 `--run-tests` / `--run-meta-tests` 会执行登记的 pytest 回归，但不写生产状态。只有显式给 `--out PATH` 时才把与本次 JSON stdout 相同的完整报告原子落档，不修改 skill、`_进度.md` 或 gate 状态。`self_audit.py` 检查 `_进度.md` 并发安全、gate 单入口、横切覆盖率、行业基准外置、detector 治理和文档体量，并自动嵌入后一份 meta 报告；`meta_audit.py` 独立核对关键质量声明的五段证据链：
 
 1. `declaration`：SKILL/宪法到底承诺了什么；
 2. `implementation`：是否有实际代码，而非只写文档；
@@ -212,7 +212,7 @@ python3 skills/n2d-review/scripts/self_audit.py --evidence <evidence.json> --jso
 1. 高价值项**直接起草** `Q&A` 新条目草案（记结论 + 决策 + 落点表，像 Q28/Q29 那样），作为"自我优化"的候选留痕。
 2. 建议的 skill edit 写成 diff 级描述（改哪段、加什么铁律/段落）。
 3. **改任何 skill → 必同步 `skills/README.md` 索引**（仓库硬约定，缺了视为未完成）。
-4. **默认不自动改产线**：模式②产报告，用户拍板后再由对应 skill / 人执行编辑。`refresh-matrix`、写 Q&A、改 SKILL.md、改 README 都属于落地模式，不属于默认 report-only。**报告一次性·不留存**：只讲给用户，**不在 skill 目录存 `_流程自审_*.md`**（已 gitignore）；每次重审都重跑全流程，不依赖任何旧存档。
+4. **默认不自动改产线**：模式②产报告，用户拍板后再由对应 skill / 人执行编辑。`refresh-matrix`、写 Q&A、改 SKILL.md、改 README 都属于落地模式，不属于默认 report-only。默认报告只输出给调用方；正式验收可用 `--out <作品根>/生产数据/...json` 留当前 SHA 绑定收据，但**不得在 skill 目录存 `_流程自审_*.md`**，也不得把旧报告当成本轮重跑替代品。
 
 ## 防过期 / 防噪声铁律
 - 每条建议**带来源链接 + 采集日期**；旧报告里的建议可能已被采纳或已过时，落地前重新核对当前 skill。

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "comic_reference_anchor_adoption",
+  "created_at": "2026-07-14T16:40:42",
+  "ref_id": "STYLE_SHUIHU_SONG_CINEMATIC",
+  "candidate_path": "出图/共享/candidates/STYLE_SHUIHU_SONG_CINEMATIC/anchor/20260714T152245/candidate_03.png",
+  "candidate_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+  "adopted_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+  "adopted_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+  "reviewer": "lalala",
+  "reviewer_role": "出品人",
+  "decision": "approved",
+  "reason": "采纳B",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2"
+}

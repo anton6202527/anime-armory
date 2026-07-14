@@ -173,7 +173,7 @@ rsync_common_excludes=(
   --exclude='apps/desktop/resources/'
   --exclude='apps/backend/supabase/.branches/'
   --exclude='apps/backend/supabase/.temp/'
-  --exclude='vscode-extension/node_modules/'
+  --exclude='apps/vscode-extension/node_modules/'
 )
 
 snapshot_local_source() {
@@ -403,7 +403,7 @@ build_electron_windows() {
 build_vscode_extension() {
   require_cmd npx
   require_cmd unzip
-  local extension_dir="$SOURCE_DIR/vscode-extension"
+  local extension_dir="$SOURCE_DIR/apps/vscode-extension"
   local artifact_vsix="$ARTIFACT_DIR/anime-armory.vsix"
   if [[ ! -f "$extension_dir/package.json" ]]; then
     echo "Could not locate VS Code extension package: $extension_dir/package.json" >&2
@@ -413,7 +413,7 @@ build_vscode_extension() {
   echo "[e2a] packaging VS Code extension: $(basename "$artifact_vsix")"
   (
     cd "$extension_dir"
-    npx --yes @vscode/vsce package --out "$artifact_vsix"
+    npx --yes @vscode/vsce package --no-dependencies --out "$artifact_vsix"
   )
   if [[ ! -s "$artifact_vsix" ]]; then
     echo "VS Code extension packaging failed: $artifact_vsix is missing or empty" >&2

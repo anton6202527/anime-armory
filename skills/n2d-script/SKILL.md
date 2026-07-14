@@ -41,12 +41,12 @@ description: Stage 1+定稿 of n2d — 阶段1把小说改成 voiceover/bgm/封�
 - **对白活人感（写 voiceover/台词前必读 `references/对白与活人感.md`）**：AI 能写对白、难写活人感——直陈情绪、说教、旁白代角色总结是短剧头号劝退，也是 AI 输给真人的那一格。改编不是把旁白念出来：把源小说的叙述/心理描写**转成被角色说出来、做出来**的台词（潜台词>直给、show-not-tell、动机藏进行为、设定靠情境逼出、留白、言行不一、信息不对称）；每个有台词的角色落「角色声音卡」做到**遮名盲听辨人**；冷开场首句带钩、爽点台词情绪+信息双回报、长度贴口播时长。写完用 `python3 scripts/subtext_audit.py <作品根> 第N集` 自检（**advisory·不阻断**，宪法 B10），命中的 AI 味回参考对应条改。
 - **画风统一**：依项目 `global_style.md` 与 `style_contract`；禁止跑到未选择的风格（如未选 Q版却低幼化）或跨镜画风漂移。
 - **生产数据记账铁律（P0）**：阶段1 剧本改编、阶段2 分镜设计完成后，都要调用 `n2d-dashboard` 记录 `stage=script` 事件：耗时、使用的模型/agent/provider、产物路径、涉及集数；若边界重切、分镜返工或 validate_timings 失败，记录 `redraw_reason` 或 QA 事件。脚本文本便宜但会决定下游贵工位，成本和返工不能漏算。
-- **低成本验收先于贵工位（P0）**：阶段1 后先做 `table_read_packet`，检查台词可演性、角色声音、信息密度和时长风险；阶段2 后先做 `animatic_packet` + timed animatic HTML/JSON，检查镜头节奏、信息可读、连续性和贵工位风险。两者都是 `story_acceptance_packets.py` 生成/检查的前置包，不新增 `_进度.md` 列，但未 confirmed 或 executable preview 生成失败时，`run.py next` 会阻断进入下一贵工位。
+- **低成本验收先于贵工位（P0）**：阶段1 后先做 `table_read_packet`，检查台词可演性、角色声音、信息密度和时长风险；此时尚无 storyboard，`story_economy` 明确记为 `not_applicable_before_storyboard`，不能拿提前运行产生的 `missing_storyboard` 假阻塞影响围读判断。阶段2 后先做 `animatic_packet` + timed animatic HTML/JSON，检查镜头节奏、信息可读、连续性和贵工位风险。两者都是 `story_acceptance_packets.py` 生成/检查的前置包，不新增 `_进度.md` 列，但未 confirmed 或 executable preview 生成失败时，`run.py next` 会阻断进入下一贵工位。
 
 ## 入口
 
 **情境 A — 首次拿到小说**（作品根不存在）：
-执行"第 1 步 首批 10 集粗切 + 建骨架" → "第 2 步 全局" → "第 3 步 精修第1集"。**默认先做前 10 集试切**：`split_novel.py` 省略 `--limit` 时只落地前 10 集 raw 脚手架，但 `脚本/split_plan.json` v2 保存全书 `source_units/arc_anchors/boundary_candidates` 与 advisory Top-3 beam paths；机器摘要写 `脚本/_拆集机器索引.md`，人工决定只写 `脚本/_拆集复核.md`，续切不得覆盖人工文件。完成后报告，让用户决定继续精修、用 `--limit N` 续切、用 `--all` 补全，或调 `n2d-image` 出图。
+执行"第 1 步 首批 10 集粗切 + 建骨架" → "第 2 步 全局" → "第 3 步 精修第1集"。**默认先做前 10 集试切**：`split_novel.py` 省略 `--limit` 时只落地前 10 集 raw 脚手架，但 `脚本/split_plan.json` 默认 compact v3，以源快照指纹、规范化 source-unit 索引和稀疏信号轴保存全书规划，并保留每集 span、`boundary_candidates` 与 advisory Top-3 beam paths；需要旧逐单元对象时必须经兼容 helper 重建，不直接假定 `source_units` 是 list。机器摘要写 `脚本/_拆集机器索引.md`，人工决定只写 `脚本/_拆集复核.md`，续切不得覆盖人工文件。存储/迁移/回退见 `references/split_plan_storage.md`。完成后报告，让用户决定继续精修、用 `--limit N` 续切、用 `--all` 补全，或调 `n2d-image` 出图。
 > 首批 10 集、Top-3、beam width 24 与精修前 5–10 集窗口是 n2d 当前的可调工程默认值，不是行业统一标准；真正硬约束是全书 source span 可追溯、双侧叙事合同成立、人工文件不被覆盖，以及变更决策有已应用收据。完整验收表见 `n2d-review/references/production_acceptance_v2.md`。
 > **首跑先定 `制作模式`（必给菜单，别静默默认）**：拆集前把出片顺序菜单 + 一句原因念给用户选一次——**A 混合自动路由（默认；声音选角先行、无 WAV 时间基准先行，再逐镜分流）/ B 配音先行（全部主要镜头都有已签收表演音轨时使用）/ C 原生音画（经能力核验的说话镜一次出台词+口型+环境声）/ D 先出视频后配音（旧式项目级画面先行固定策略）**，选后写 `_设置.md`。阶段1后 `production_mode_router.py` 会逐集写逐镜执行合同，但不自动改用户选择。
 > **生视频后端选择后移到 n2d-video**：拆集前只记录用户已明确给出的固定模型/渠道或账号硬约束；否则写/沿用 `视频模型路由=自动按镜头路由`，不展示 `生视频模型` + `生视频渠道` 菜单。真正的 primary/fallback、渠道、CLI/API 可用性和回退/保真实现方案，由 `n2d-video` 出视频前按每个 Clip 的能力需求、router/probe 和适配层决定。
@@ -169,14 +169,14 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 > ⚠️ **字数↔时长是高方差代理，非 1:1**：原文→台词压缩率因段落剧烈波动——对白/打斗段压缩少，环境/心理描写段压缩多。默认粗拆不锚字数；`--target` 只是高级报告参考。**不允许为了追 target 把一场戏、一个爽点或一个集尾钩子切断**。最终短/长都可以，关键是剧情连贯且闭环完整。
 > ⚠️ **禁止为省时长删剧情**：可以压缩重复描写、合并平淡段、调整边界、提高台词密度；不能删掉人物动机、冲突起因、铺垫承接、伏笔回收、动作转折等必要镜头/段落。任何删除都必须能说明"重复/非剧情必要"，并写入边界决策。
 
-**首批试切铁律（2026-07-14 修订）**：首次拆集默认 **只落地前 10 集**，但结构规划必须覆盖全书。`split_plan.json` v2 保存全书 paragraph source units、章节/场景/看点线索锚、所有机器分集的 source-unit span、每个边界的局部 Top-3 候选和全局 beam Top-3 路径；候选优化只用结构/句形/软均衡评分，题材词典不能硬排除边界。confirmed `开发包/season_arc.json` 会连 SHA 与意图一起纳入；只有显式给出 `boundary_after_source_unit_id/source_unit_id/source_unit_span` 时才给 beam 加约束，未映射就诚实标 `unmapped`，不从散文臆造切点。结果必须经语义复核后才改 raw。
+**首批试切铁律（2026-07-14 修订）**：首次拆集默认 **只落地前 10 集**，但结构规划必须覆盖全书。`split_plan.json` 默认 compact v3，以源快照 + 规范化 source-unit 索引 + 稀疏 signals 保存全书章节/场景/看点线索，并保留所有机器分集的 source-unit span、每个边界的局部 Top-3 候选和全局 beam Top-3 路径；旧 verbose v2 仅供 `--legacy-plan-v2` 兼容/回滚，消费者统一用 `iter_source_units()` / `iter_arc_anchors()` / `source_unit_count()`。候选优化只用结构/句形/软均衡评分，题材词典不能硬排除边界。confirmed `开发包/season_arc.json` 会连 SHA 与意图一起纳入；只有显式给出 `boundary_after_source_unit_id/source_unit_id/source_unit_span` 时才给 beam 加约束，未映射就诚实标 `unmapped`，不从散文臆造切点。结果必须经语义复核后才改 raw。
 
 - **部分先切**（默认·推荐）：省略 `--limit` 时落地前 10 集；也可 `--limit N` 明确首批/续切数量。仍按全本候选断点估算总集数，只是不创建未审目录。
 - **全篇粗切**（显式）：传 `--all`，一次粗切整本，写全篇 raw 脚手架；只在前 10 集压缩率、边界和节奏策略确认后使用。
 
 ```bash
 # 默认不传 --target；--target 只作报告/人工复核参考，不参与切点决策
-# 首切范围=部分先切（默认）：只落地前 10 集；split_plan v2 仍保存全书规划，机器/人工复核文件分离
+# 首切范围=部分先切（默认）：只落地前 10 集；compact split_plan v3 仍保存全书规划，机器/人工复核文件分离
 python3 <skill>/scripts/split_novel.py "<小说路径>"
 # 有「第X章」时强烈建议加 --by-chapter，让边界先贴章节（更接近节拍）：
 python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
@@ -207,6 +207,14 @@ python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --dec
 python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision rewrite --notes '已实施的修改' --reviewer '<人工声明 reviewer 标识>' --source-mapping-file '<source_mapping.json>'
 python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验 blocker code + 双侧边界合同 + 决策/实施收据
 ```
+
+若导演批准的是一个会吞并/平移多集的完整 source-unit 窗口，不要手工分别覆盖 raw、plan 和进度。先写 `kind=n2d_approved_split_mapping` v1 JSON（含审批人/角色、窗口、逐集连续 source-unit 范围、`next_source_unit_id`），再运行：
+
+```bash
+python3 <skill>/scripts/apply_split_mapping.py <作品根> <approved_mapping.json> --json
+```
+
+实施器只接受仍为 raw-only 的窗口；它验证源快照与连续映射，保留覆盖前 tar.gz 和新旧 SHA 收据，重建 raw，刷新 `split_plan.json` / `_拆集机器索引.md` / `_进度.md`，并把从 `next_source_unit_id` 起仍未 materialized 的机器后缀重编号。窗口或后缀已有下游产物时必须拒绝，改走专项返工/迁移计划。实施后再对旧 strict blocker 运行 `boundary_review.py sign ... --decision rewrite --source-mapping-file ...`，把旧合同与当前左右 raw SHA 绑定起来。
 `boundary_audit` 在逐集表之外还输出全局 **「剧级追更骨架」**（即使 CLI 只审 2-10 集，剧级曲线也始终使用全剧 rows）与稳定 `blockers[]`。每项 blocker 都有 code、`E0001-E0002` 双侧边界合同、左右 raw SHA 和合同 SHA；上集弱收口与下集弱冷开同权，不能只因上一集有钩就放行。标点与语义词钩独立计分，普通感叹号不会重复计成强钩。付费 blocker 只对项目明确配置的卡点生效；未配置时保持 advisory。
 
 **伏笔兑现账本脚手架（SP1·导出端·2026-06-22；2026-06-24 升格）**：拆集后跑 `python3 skills/n2d-script/scripts/setup_payoff_ledger.py <作品根> [--episodes 1-10] --write`，从各集 voiceover/故事板按显式悬念/钩子标记**捞候选伏笔**写成 `设定库/setup_payoff_ledger.json` 草稿（不自动判定哪句是伏笔·不覆盖已填 payoff·`payoff_ep` 留空交编剧填）。给每个坑填兑现集或标 `status=ongoing` 后，`n2d-review` 的 SP1 会校验坑没填/兑现早于种下/缺种下集——补「直接给小说文件、不经上游小说创作线时漫剧侧无叙事连续性兜底」。`P0/P1` 管语义/视觉状态跨集，SP1 管「叙事坑」跨集，正交。
@@ -262,7 +270,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验 b
    - ⚙️仙侠玄幻可选：在 `global_style.md` 补**境界体系 / 主要势力 / 关键术语表**结构化小节（境界多、势力杂的题材，避免跨集漂）；主角/核心反派长期使用的武器、法宝实体到 `n2d-image` 立 `WEAPON_xx` 武器库条目并写 `weapon_profile`，剑气/灵力/护体光等表现另立 `VFX_xx`；共享 prompt 放 `法宝定妆.md` / `特效定妆.md` 专类（见 `n2d-image/references/prompt_format.md §1`）
 2. **跨项目资产库提醒（不要让用户背 CLI）**：为主要角色/场景建卡前，AI 先提示一句：“我会先查 `创作区/制漫剧/_资产库/` 有没有可复用的角色原型、场景定妆或路由模板；命中再问你是否导入，没命中再新建。”然后后台跑 `python3 skills/n2d-asset-market/scripts/market.py list`。若用户说“导入某模板为某角色”，用 `n2d-asset-market import-character` 导入并 fork 新身份，再跑 `python3 skills/n2d-identity/scripts/identity.py <作品根> --write`。用户只需做选择，不需要记命令。
 3. 为**主要角色/场景**建卡，存入 `设定库/characters/`、`设定库/locations/`。格式见 `references/formats.md §1 §2`：
-   - 角色卡必含**妆造拆解**（发型/妆容/服装/配饰/色卡）、**服装选择评分卡**、`wardrobe_profile` 源头、**预计/计划出场集数**（能判断时写整数，未知写待确认）+ **① 分档定妆 prompt 源头**：所有具名角色先写正面主参考 + 半身/全身服装锚 + 脸锚；主角/核心长线/预计出场≥10集再写完整正/45°/侧/背三视图，复现配角补 45°，具名短线的侧背按真实分镜补；干净背景、中英双版 + **② 出镜 prompt**。这个集数与叙事 scope 供 `n2d-image` 决定 `core_full / recurring_standard / named_minimal / restricted_partial`，不等于主体 ID/LoRA 档位。
+   - 角色卡必含**妆造拆解**（发型/妆容/服装/配饰/色卡）、**服装选择评分卡**、`wardrobe_profile` 源头、**预计/计划出场集数**（能判断时写整数，未知写待确认）+ **① 分档定妆 prompt 源头**：所有具名角色先写正面主参考 + 半身/全身服装锚 + 脸锚；`core_full`（主角/核心长线/预计或结构化 storyboard 可见出场≥10集）必须写齐**正面 / 前3/4 / 侧面 / 后3/4 / 背面五角独立参考 + turnaround 人审拼版 + 同源脸部特写/表情锚**，复现配角补前3/4，具名短线的侧背按真实分镜补；干净背景、中英双版 + **② 出镜 prompt**。这个集数与叙事 scope 供 `n2d-image` 决定 `core_full / recurring_standard / named_minimal / restricted_partial`，不等于主体 ID/LoRA 档位。
    - **年龄敏感长线角色**（少年长大、十年后、成年/中年/长生态、境界跨度明显）必须在角色卡写「形象里程碑」和定妆命名：`<年龄或年龄档><形态>`，后续目标文件用 `定妆_<角色>_<年龄或年龄档>_<形态>*.png`。已存在的无年龄旧文件只能作为 legacy alias；新增/重出不得继续无年龄命名。
    - 若用户给外部人物参考图，角色卡必须写明**参考图只借脸型/五官/眼神/体态/身材气质**；发型、发饰、服装、配饰、妆容、身份阶层和剧情状态仍按小说原文、角色圣经、当前形态变体与本集剧情决定，不继承参考图衣装。若用户明确说这是“定型参考图”，则它同时是跨年龄/跨形态身份基准：少年态、成年态、觉醒态、高阶态都必须从同一脸部 DNA 派生，角色卡的「形象里程碑」要写清 `form + age_band + reference_lineage`，后续定妆文件名带年龄或形态，不允许无账换脸。
    - 若参考图还用于制作风格识别，`global_style.md` 必须把识别出的风格归一成具体 `基础视觉风格` 或 `自定义（...）` 六字段契约，并写明**禁止继承截图 UI/播放按钮/字幕/搜索框/水印/平台标签**；这些只作风格和人物参考，不进入成片画面。

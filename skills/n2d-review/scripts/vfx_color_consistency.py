@@ -30,6 +30,7 @@ import sys
 from typing import Dict, List, Optional, Sequence, Tuple
 
 import multimodal_consistency as mm  # 复用 split_blocks / target_from_block / asset_registry_*
+from pillow_compat import pixel_data
 
 KIND = "n2d_vfx_color_consistency"
 VERSION = 1
@@ -125,7 +126,7 @@ def _hsv_samples(path: str) -> Optional[List[Tuple[float, float, float]]]:
         im = Image.open(path).convert("RGB")
         im.thumbnail((160, 160))
         hsv = im.convert("HSV")
-        return [(h / 255.0, s / 255.0, v / 255.0) for (h, s, v) in hsv.getdata()]
+        return [(h / 255.0, s / 255.0, v / 255.0) for (h, s, v) in pixel_data(hsv)]
     except Exception:
         return None
 

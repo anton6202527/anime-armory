@@ -1,0 +1,33 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": true,
+  "blockers": [
+    {
+      "message": "boundary_audit 标出高风险粗胚边界；先运行 python3 skills/n2d-script/scripts/boundary_review.py draft 创作区/制漫剧/从变身少女开始斩妖除魔 --write，在人审文件 创作区/制漫剧/从变身少女开始斩妖除魔/脚本/boundary_review.json 按 blocker 填写 decision/notes/semantic_evidence；改边界类决策还必须附绑定改动前合同、新左右 raw SHA 和 source_mapping 的 applied_receipt，再复跑 check。",
+      "step": "boundary_audit"
+    }
+  ],
+  "category": "creative_or_execution",
+  "episode": "第1集",
+  "episode_graph": {
+    "graph_hash": "6a6705bdc00e9c912fc05f958cf09319708c17ae55cc48a729858e5e0f3e7782",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": null,
+    "return_to_stage": null,
+    "stage": ""
+  },
+  "generated_at": "2026-07-14T17:16:28+0800",
+  "headline": "第1集 阶段1·剧本改编：确定性前置失败",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-script",
+  "repair_commands": [
+    "n2d-script 创作区/制漫剧/从变身少女开始斩妖除魔 第1集"
+  ],
+  "stage_key": "script_stage1",
+  "stop_reason": "prework_failed",
+  "version": 1
+}

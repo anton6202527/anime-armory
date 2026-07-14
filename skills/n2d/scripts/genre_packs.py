@@ -9,7 +9,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 
 LIB = Path(__file__).resolve().parents[1] / "_lib"
@@ -59,33 +59,109 @@ def pack_index() -> Dict[str, Dict[str, Any]]:
     for pack in packs:
         key = str(pack.get("genre_key") or "").strip().lower()
         if key:
-            index[key] = pack
-        for alias in pack.get("aliases") or []:
+            index.setdefault(key, pack)
+        aliases = [pack.get("label"), *(pack.get("aliases") or [])]
+        for alias in aliases:
             text = str(alias or "").strip().lower()
             if text:
-                index[text] = pack
+                # Keep the first sorted pack so legacy callers remain
+                # deterministic even if local extensions reuse an alias.
+                index.setdefault(text, pack)
     return index
 
 
-def normalize_genre_key(value: str) -> str:
+def _unique_strings(values: Iterable[Any]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for value in values:
+        text = str(value or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        out.append(text)
+    return out
+
+
+def _pack_match_terms(pack: Dict[str, Any]) -> List[str]:
+    return _unique_strings([
+        pack.get("genre_key"),
+        pack.get("label"),
+        *(pack.get("aliases") or []),
+    ])
+
+
+def _term_start(text: str, term: str) -> int:
+    """Return the first explicit term match; never infer a nearby genre."""
+    term = str(term or "").strip().lower()
+    if not term:
+        return -1
+    if re.fullmatch(r"[a-z0-9_./-]+", term):
+        match = re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", text)
+        return match.start() if match else -1
+    return text.find(term)
+
+
+def match_genre_packs(value: str) -> List[Dict[str, Any]]:
+    """Match every explicitly named pack in deterministic user-declared order.
+
+    Compatibility: the first row is the same primary genre exposed by the old
+    single-pack API.  Composite values add rows ordered by first textual
+    occurrence, then the longest matching term, then sorted pack path/key.
+    Only keys, labels and declared aliases match; no semantic nearest-neighbour
+    mapping is attempted (for example, ``志怪`` alone remains unmatched).
+    """
     text = str(value or "").strip().lower()
     if not text:
-        return ""
-    index = pack_index()
-    if text in index:
-        return str(index[text].get("genre_key") or "")
-    for alias, pack in index.items():
-        if alias and alias in text:
-            return str(pack.get("genre_key") or "")
-    return ""
+        return []
+    matches: List[Dict[str, Any]] = []
+    for pack_order, path in enumerate(pack_paths()):
+        pack = load_pack(path)
+        candidates: List[tuple[int, int, int, str]] = []
+        for term_order, term in enumerate(_pack_match_terms(pack)):
+            normalized = term.strip().lower()
+            start = _term_start(text, normalized)
+            if start >= 0:
+                candidates.append((start, -len(normalized), term_order, term))
+        if not candidates:
+            continue
+        start, negative_length, term_order, matched_term = min(candidates)
+        matches.append({
+            "genre_key": str(pack.get("genre_key") or "").strip().lower(),
+            "label": str(pack.get("label") or "").strip(),
+            "matched_term": matched_term,
+            "match_start": start,
+            "match_length": -negative_length,
+            "pack_order": pack_order,
+            "term_order": term_order,
+            "path": str(path),
+            "pack": pack,
+        })
+    matches.sort(key=lambda row: (
+        int(row["match_start"]),
+        -int(row["match_length"]),
+        int(row["pack_order"]),
+        str(row["genre_key"]),
+    ))
+    return matches
+
+
+def normalize_genre_key(value: str) -> str:
+    """Return the primary key for legacy single-genre callers."""
+    matches = match_genre_packs(value)
+    return str(matches[0].get("genre_key") or "") if matches else ""
 
 
 def load_pack_by_key(value: str) -> Optional[Dict[str, Any]]:
+    """Load the primary pack (legacy API); use load_packs_by_value for composites."""
     key = normalize_genre_key(value)
     if not key:
         return None
     path = PACK_DIR / f"{key}.json"
     return load_pack(path) if path.is_file() else None
+
+
+def load_packs_by_value(value: str) -> List[Dict[str, Any]]:
+    return [row["pack"] for row in match_genre_packs(value)]
 
 
 def project_genre_text(root: Path) -> str:
@@ -113,6 +189,28 @@ def load_storyboard(root: Path, episode: str) -> Dict[str, Any]:
         return data if isinstance(data, dict) else {}
     except Exception:
         return {}
+
+
+def storyboard_probe(root: Path, episode: str) -> Dict[str, Any]:
+    path = root / "脚本" / episode / "storyboard.json"
+    if not path.is_file():
+        return {"state": "missing", "path": str(path), "data": {}, "clips": []}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {"state": "invalid", "path": str(path), "data": {}, "clips": [], "error": str(exc)}
+    if not isinstance(data, dict):
+        return {"state": "invalid", "path": str(path), "data": {}, "clips": [], "error": "root is not an object"}
+    raw_clips = data.get("clips")
+    if raw_clips is not None and not isinstance(raw_clips, list):
+        return {"state": "invalid", "path": str(path), "data": data, "clips": [], "error": "clips is not an array"}
+    clips = [item for item in (raw_clips or []) if isinstance(item, dict)]
+    return {
+        "state": "ready" if clips else "empty",
+        "path": str(path),
+        "data": data,
+        "clips": clips,
+    }
 
 
 def clip_text(clip: Dict[str, Any]) -> str:
@@ -194,17 +292,154 @@ def context_status(stage_key: str, issues: Sequence[Dict[str, Any]]) -> str:
     return "warn"
 
 
+def _public_matches(matches: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return [{
+        "priority": idx + 1,
+        "genre_key": row.get("genre_key"),
+        "label": row.get("label"),
+        "matched_term": row.get("matched_term"),
+        "match_start": row.get("match_start"),
+    } for idx, row in enumerate(matches)]
+
+
+def compose_pack(matches: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    """Merge selected packs in priority order without duplicate list values."""
+    keys = _unique_strings(row.get("genre_key") for row in matches)
+    labels = _unique_strings(row.get("label") for row in matches)
+    fields = _unique_strings(
+        item
+        for row in matches
+        for item in (row.get("pack") or {}).get("motion_contract_fields") or []
+    )
+    qc_focus = _unique_strings(
+        item
+        for row in matches
+        for item in (row.get("pack") or {}).get("qc_focus") or []
+    )
+    degrade_plans = _unique_strings(
+        item
+        for row in matches
+        for item in (row.get("pack") or {}).get("degrade_plans") or []
+    )
+    policy_rows: List[Dict[str, Any]] = []
+    policy_notes: List[str] = []
+    bind_to_visual_style = False
+    for row in matches:
+        policy = (row.get("pack") or {}).get("style_binding_policy")
+        if not isinstance(policy, dict):
+            continue
+        bind_to_visual_style = bind_to_visual_style or bool(policy.get("bind_to_visual_style"))
+        if policy.get("notes"):
+            policy_notes.append(str(policy["notes"]))
+        policy_rows.append({"genre_key": row.get("genre_key"), **policy})
+    style_policy: Dict[str, Any] = {}
+    if policy_rows:
+        # Keep legacy top-level keys while exposing every contributing policy.
+        style_policy = dict(policy_rows[0])
+        style_policy.pop("genre_key", None)
+        style_policy["bind_to_visual_style"] = bind_to_visual_style
+        style_policy["notes"] = " | ".join(_unique_strings(policy_notes))
+        style_policy["by_genre"] = policy_rows
+    return {
+        "genre_keys": keys,
+        "labels": labels,
+        "matched_packs": _public_matches(matches),
+        "motion_contract_fields": fields,
+        "qc_focus": qc_focus,
+        "degrade_plans": degrade_plans,
+        "style_binding_policy": style_policy,
+    }
+
+
+def compose_scene_archetypes(matches: Sequence[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Merge duplicate scene ids while retaining pack provenance."""
+    rows: Dict[str, Dict[str, Any]] = {}
+    for match in matches:
+        genre_key = str(match.get("genre_key") or "")
+        for scene in (match.get("pack") or {}).get("scene_archetypes") or []:
+            if not isinstance(scene, dict):
+                continue
+            scene_id = str(scene.get("id") or "").strip()
+            dedupe_key = scene_id.lower() or f"label:{str(scene.get('label') or '').strip().lower()}"
+            if dedupe_key not in rows:
+                rows[dedupe_key] = {
+                    "id": scene_id,
+                    "label": scene.get("label"),
+                    "labels": [],
+                    "genre_keys": [],
+                    "production_risks": [],
+                    "required_contract_fields": [],
+                    "style_binding": scene.get("style_binding"),
+                    "style_bindings": [],
+                }
+            row = rows[dedupe_key]
+            row["labels"] = _unique_strings([*row["labels"], scene.get("label")])
+            row["genre_keys"] = _unique_strings([*row["genre_keys"], genre_key])
+            row["production_risks"] = _unique_strings([
+                *row["production_risks"],
+                *(scene.get("production_risks") or []),
+            ])
+            row["required_contract_fields"] = _unique_strings([
+                *row["required_contract_fields"],
+                *(scene.get("required_contract_fields") or []),
+            ])
+            row["style_bindings"] = _unique_strings([
+                *row["style_bindings"],
+                scene.get("style_binding"),
+            ])
+    return list(rows.values())
+
+
+def activation_contract(
+    genre_text: str,
+    matches: Sequence[Dict[str, Any]],
+    storyboard: Dict[str, Any],
+    active: Sequence[Dict[str, Any]],
+) -> Dict[str, Any]:
+    board_state = str(storyboard.get("state") or "missing")
+    if not str(genre_text or "").strip():
+        state = "genre_unset"
+        reason = "项目未设置题材；没有题材包可触发。"
+    elif not matches:
+        state = "genre_unmatched"
+        reason = "题材未显式命中任何 genre key、label 或 alias；未做近义词猜测。"
+    elif board_state == "missing":
+        state = "storyboard_missing"
+        reason = "题材包已匹配；storyboard 尚不存在，因此场景规则尚未触发。"
+    elif board_state == "invalid":
+        state = "storyboard_invalid"
+        reason = "题材包已匹配；storyboard 不可解析，因此场景规则尚未触发。"
+    elif board_state == "empty":
+        state = "storyboard_empty"
+        reason = "题材包已匹配；storyboard 还没有结构化 clips，因此场景规则尚未触发。"
+    elif active:
+        state = "scene_archetypes_triggered"
+        reason = "storyboard 中已有镜头命中题材高风险场景。"
+    else:
+        state = "no_scene_archetype_triggered"
+        reason = "题材包已匹配且 storyboard 可读，但当前 clips 未命中题材高风险场景。"
+    return {
+        "state": state,
+        "triggered": bool(active),
+        "reason": reason,
+        "storyboard_state": board_state,
+        "storyboard_path": storyboard.get("path"),
+        "storyboard_clip_count": len(storyboard.get("clips") or []),
+    }
+
+
 def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
     root = root.resolve()
     genre_text = project_genre_text(root)
-    pack = load_pack_by_key(genre_text)
-    storyboard = load_storyboard(root, episode)
-    clips = storyboard.get("clips") if isinstance(storyboard.get("clips"), list) else []
+    matches = match_genre_packs(genre_text)
+    pack = compose_pack(matches)
+    storyboard = storyboard_probe(root, episode)
+    clips = storyboard.get("clips") or []
     active: List[Dict[str, Any]] = []
     issues: List[Dict[str, Any]] = []
-    if pack:
-        for scene in pack.get("scene_archetypes") or []:
-            matched = [clip for clip in clips if isinstance(clip, dict) and scene_matches_clip(scene, clip)]
+    if matches:
+        for scene in compose_scene_archetypes(matches):
+            matched = [clip for clip in clips if scene_matches_clip(scene, clip)]
             if not matched:
                 continue
             missing_by_clip: List[Dict[str, Any]] = []
@@ -216,10 +451,12 @@ def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
             row = {
                 "scene_id": scene.get("id"),
                 "label": scene.get("label"),
-                "matched_clips": [clip.get("id") or clip.get("clip_id") or "" for clip in matched],
+                "genre_keys": scene.get("genre_keys") or [],
+                "matched_clips": _unique_strings(clip.get("id") or clip.get("clip_id") or "" for clip in matched),
                 "required_contract_fields": scene.get("required_contract_fields") or [],
                 "missing_by_clip": missing_by_clip,
                 "style_binding": scene.get("style_binding"),
+                "style_bindings": scene.get("style_bindings") or [],
                 "production_risks": scene.get("production_risks") or [],
             }
             active.append(row)
@@ -227,10 +464,13 @@ def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
                 issues.append({
                     "severity": "block" if stage_key in {"video_prompt", "video", "compose", "review"} else "warn",
                     "scene_id": scene.get("id"),
+                    "genre_keys": scene.get("genre_keys") or [],
                     "clip": missing.get("clip"),
                     "message": "missing genre motion contract fields: " + ", ".join(missing.get("missing") or []),
                     "missing_fields": missing.get("missing") or [],
                 })
+    activation = activation_contract(genre_text, matches, storyboard, active)
+    primary = matches[0] if matches else {}
     payload = {
         "kind": CONTEXT_KIND,
         "version": 1,
@@ -240,22 +480,27 @@ def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
         "generated_at": now_iso(),
         "genre": {
             "raw": genre_text,
-            "genre_key": pack.get("genre_key") if pack else "",
-            "label": pack.get("label") if pack else "",
-            "matched": bool(pack),
+            # Singular fields stay for old consumers and point to priority #1.
+            "genre_key": primary.get("genre_key") or "",
+            "label": primary.get("label") or "",
+            "matched": bool(matches),
+            "matched_genre_keys": pack.get("genre_keys") or [],
+            "matched_labels": pack.get("labels") or [],
+            "matches": _public_matches(matches),
         },
-        "pack": {
-            "motion_contract_fields": pack.get("motion_contract_fields") if pack else [],
-            "qc_focus": pack.get("qc_focus") if pack else [],
-            "degrade_plans": pack.get("degrade_plans") if pack else [],
-            "style_binding_policy": pack.get("style_binding_policy") if pack else {},
-        },
+        "pack": pack,
+        "activation": activation,
         "active_scene_archetypes": active,
         "issues": issues,
         "summary": {
             "active_scenes": len(active),
             "issues": len(issues),
             "matched_clips": len({clip for row in active for clip in row.get("matched_clips", []) if clip}),
+            "matched_packs": len(matches),
+            "matched_genre_keys": pack.get("genre_keys") or [],
+            "activation_state": activation.get("state"),
+            "storyboard_state": activation.get("storyboard_state"),
+            "storyboard_clip_count": activation.get("storyboard_clip_count"),
         },
         "status": context_status(stage_key, issues),
     }
@@ -265,25 +510,35 @@ def build_context(root: Path, episode: str, stage_key: str) -> Dict[str, Any]:
 def render_context_markdown(payload: Dict[str, Any]) -> str:
     genre = payload.get("genre") if isinstance(payload.get("genre"), dict) else {}
     pack = payload.get("pack") if isinstance(payload.get("pack"), dict) else {}
+    activation = payload.get("activation") if isinstance(payload.get("activation"), dict) else {}
+    genre_keys = genre.get("matched_genre_keys") or ([genre.get("genre_key")] if genre.get("genre_key") else [])
     lines = [
         "# n2d Genre Pack Context",
         "",
         f"- 集：{payload.get('episode')}",
         f"- 阶段：{payload.get('stage_key')}",
-        f"- 题材：{genre.get('label') or genre.get('raw') or '未命中'}",
+        f"- 题材原值：{genre.get('raw') or '未设置'}",
+        f"- 命中 pack：{', '.join(genre_keys) or '未命中'}",
+        f"- 场景触发：{activation.get('state') or 'unknown'} — {activation.get('reason') or '无说明'}",
         f"- 状态：{payload.get('status')}",
         "",
         "## QC Focus",
         "",
     ]
     lines.extend([f"- {item}" for item in pack.get("qc_focus") or []] or ["- 无"])
-    lines.extend(["", "## Active Scenes", "", "| scene | clips | missing |", "|---|---|---|"])
-    for row in payload.get("active_scene_archetypes") or []:
+    lines.extend(["", "## Active Scenes", "", "| packs | scene | clips | missing |", "|---|---|---|---|"])
+    active = payload.get("active_scene_archetypes") or []
+    for row in active:
         missing = "; ".join(
             f"{item.get('clip')}:{','.join(item.get('missing') or [])}"
             for item in row.get("missing_by_clip") or []
         ) or "-"
-        lines.append(f"| {row.get('label')} | {','.join(row.get('matched_clips') or []) or '-'} | {missing} |")
+        lines.append(
+            f"| {','.join(row.get('genre_keys') or []) or '-'} | {row.get('label')} | "
+            f"{','.join(row.get('matched_clips') or []) or '-'} | {missing} |"
+        )
+    if not active:
+        lines.append(f"| - | 未触发（{activation.get('state') or 'unknown'}） | - | - |")
     lines.append("")
     return "\n".join(lines)
 

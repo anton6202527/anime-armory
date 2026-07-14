@@ -26,6 +26,7 @@ import os
 import sys
 from typing import Dict, List, Optional, Sequence
 
+from pillow_compat import pixel_data
 import scene_consistency as scn  # 复用 _scene_of_shot（镜头→场景映射）+ _probe_pillow
 
 DEFAULT_MARGIN = 0.30   # 景深代理比值偏离同场景中位数超过这个绝对量 = 景深档不一致
@@ -87,7 +88,7 @@ def _gray_grid(path: str, grid: int = DEFAULT_GRID) -> Optional[List[List[float]
     try:
         from PIL import Image  # type: ignore
         im = Image.open(path).convert("L").resize((grid, grid))
-        px = list(im.getdata())
+        px = list(pixel_data(im))
         return [[float(px[y * grid + x]) for x in range(grid)] for y in range(grid)]
     except Exception:
         return None

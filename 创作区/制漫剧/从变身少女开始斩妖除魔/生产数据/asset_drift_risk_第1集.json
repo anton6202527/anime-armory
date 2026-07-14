@@ -1,0 +1,13 @@
+{
+  "assets": [],
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 0,
+  "notes": [
+    "asset_registry.json 缺失/无资产——无法算物料风险分。",
+    "storyboard.json 缺失/无 clips——先跑 n2d-script 分镜设计再算风险。"
+  ],
+  "root": "创作区/制漫剧/从变身少女开始斩妖除魔",
+  "version": 1
+}

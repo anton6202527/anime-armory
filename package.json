@@ -10,6 +10,9 @@
   "scripts": {
     "dev:desktop": "npm run dev --workspace @anime-armory/desktop",
     "build:desktop": "npm run build --workspace @anime-armory/desktop && npm run verify:desktop-bundle",
+    "check:vscode": "npm run check --workspace apps/vscode-extension",
+    "sync:vscode": "npm run sync-assets --workspace apps/vscode-extension",
+    "package:vscode": "npm run package --workspace apps/vscode-extension",
     "verify:desktop-bundle": "node scripts/verify_renderer_dependencies.mjs",
     "typecheck:desktop": "npm run typecheck --workspace @anime-armory/desktop",
     "typecheck:cloud": "npm run typecheck --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
@@ -21,7 +24,7 @@
     "demos:publish": "node scripts/publish_demos_r2.mjs --publish",
     "test:cloud:remote": "tsx scripts/cloud_e2e.ts",
     "check:cloud": "npm run typecheck:cloud && npm run typecheck:edge && npm run typecheck:cloud-e2e && npm run test:cloud",
-    "check": "npm run check:cloud && npm run test:demos && npm run typecheck:desktop",
+    "check": "npm run check:cloud && npm run test:demos && npm run typecheck:desktop && npm run check:vscode",
     "supabase": "supabase --workdir apps/backend"
   },
   "devDependencies": {

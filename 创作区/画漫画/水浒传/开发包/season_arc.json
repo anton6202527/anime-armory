@@ -1,0 +1,66 @@
+{
+  "kind": "comic_season_arc",
+  "version": 2,
+  "status": "confirmed",
+  "arc_name": "星落人间·江湖将起",
+  "scope": "前5话编辑规划；后续在首话数据与编辑签核后滚动细化",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "working_title": "伏魔殿开",
+      "source_scope": "第一回全回",
+      "core_conflict": "洪信奉命求天师救民，却在敬畏、自尊和好奇之间屡次做错选择。",
+      "ending_mode": "cliffhanger",
+      "ending_intent": "百十道金光冲出龙虎山，停在‘洪信究竟放走了什么’，驱动追读。",
+      "promise_refs": ["PRM_001", "PRM_002"],
+      "soft_panel_range": [44, 52]
+    },
+    {
+      "chapter": "第2话",
+      "working_title": "天罡地煞",
+      "source_scope": "第二回之伏魔殿真相至高俅出场前",
+      "core_conflict": "住持揭示一百零八魔君真相，洪信在责任与保全官位之间选择隐瞒。",
+      "ending_mode": "reveal",
+      "ending_intent": "以‘欲知星辰落在谁身上’将神话序章接入现实人间。",
+      "promise_refs": ["PRM_002"],
+      "soft_panel_range": [38, 46]
+    },
+    {
+      "chapter": "第3话",
+      "working_title": "球落端王府",
+      "source_scope": "第二回之高俅落魄、送球入府至得宠",
+      "core_conflict": "市井浪荡子高俅要在权力门缝求生，他的蹴球才能却被上层偏好选中。",
+      "ending_mode": "irreversible_change",
+      "ending_intent": "高俅得宠，第一颗改变无数人命运的权力齿轮开始转动。",
+      "promise_refs": ["PRM_001"],
+      "soft_panel_range": [42, 50]
+    },
+    {
+      "chapter": "第4话",
+      "working_title": "一步青云",
+      "source_scope": "第二回之端王即位、高俅升迁至设局报复王进",
+      "core_conflict": "新贵高俅要将私怨包装成公权执法，王进必须在忠于体制与保全母亲之间抉择。",
+      "ending_mode": "decision",
+      "ending_intent": "王进决定带母夜逃，首个‘逼上江湖’的人间因果落地。",
+      "promise_refs": ["PRM_001"],
+      "soft_panel_range": [42, 50]
+    },
+    {
+      "chapter": "第5话",
+      "working_title": "史家村",
+      "source_scope": "第二回之王进离京至收教史进并再度上路",
+      "core_conflict": "史进的好胜心遇上王进的真功夫，两代江湖人必须从冲突转为传承。",
+      "ending_mode": "emotional_closure",
+      "ending_intent": "王进离去，史进留在晨雾中重练一棍，为下一段少华山冲突蓄势。",
+      "promise_refs": ["PRM_001"],
+      "soft_panel_range": [40, 48]
+    }
+  ],
+  "human_review": {
+    "required": true,
+    "state": "approved",
+    "reviewer": "lalala",
+    "role": "出品人",
+    "time": "2026-07-14T07:16:49Z"
+  }
+}

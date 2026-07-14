@@ -890,6 +890,7 @@ SCHEMAS: Dict[str, Dict[str, Any]] = {
             "stage_key": {"type": "string"},
             "genre": {"type": "object"},
             "pack": {"type": "object"},
+            "activation": {"type": "object"},
             "active_scene_archetypes": arr({"type": "object"}),
             "issues": arr({"type": "object"}),
             "summary": {"type": "object"},

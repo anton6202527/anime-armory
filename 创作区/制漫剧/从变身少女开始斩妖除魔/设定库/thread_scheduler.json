@@ -1,0 +1,21 @@
+{
+  "kind": "n2d_thread_scheduler",
+  "version": 1,
+  "generated_at": "2026-07-14",
+  "threads": [
+    {
+      "id": "THREAD_E0001",
+      "thread_id": "T_E0001",
+      "source": "story_integrity_audit",
+      "status": "ongoing",
+      "opened_ep": "第1集",
+      "last_touched_ep": "第1集",
+      "next_due_ep": "第2集",
+      "payoff_ep": "",
+      "open_question": "若真有起死回生那天，我还。|| 没有的话——你在下面，先记着账。 我来到这世上，杀的第一个人，|| 不是妖。  🪝集尾",
+      "touch_keywords": [
+        "姜月初"
+      ]
+    }
+  ]
+}

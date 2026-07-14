@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "comic_character_front_candidate_batch",
+  "chapter": "第1话",
+  "batch_id": "20260714T193425",
+  "created_at": "2026-07-14T19:39:27",
+  "status": "complete",
+  "characters": [
+    "CHAR_HONG_XIN"
+  ],
+  "view": "front",
+  "candidate_count_per_character": 3,
+  "ratio": "3:4",
+  "backend": "Codex CLI",
+  "model": "GPT Image 2",
+  "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+  "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+  "style_reference_role": "style_only",
+  "generated": 1,
+  "failed": 0,
+  "adopted": false,
+  "items": [
+    {
+      "ts": "2026-07-14T19:39:27",
+      "status": "character_view_candidate_ready",
+      "ref_id": "CHAR_HONG_XIN",
+      "view": "front",
+      "candidate_index": 2,
+      "candidate_count": 3,
+      "attempt": 1,
+      "path": "出图/共享/candidates/CHAR_HONG_XIN/front/20260714T193425/candidate_02.png",
+      "sha256": "9c148cea104f317a22c31f7821775c7f71a7d530ea06498c3cbf5c1ae29a5472",
+      "ratio": "3:4",
+      "backend": "Codex CLI",
+      "model": "GPT Image 2",
+      "backend_version": "codex-cli 0.144.3",
+      "style_reference_path": "出图/共享/图片/STYLE_SHUIHU_SONG_CINEMATIC__anchor.png",
+      "style_reference_sha256": "a07d1c528ab8a0567359a42aaa88ed7a2e89e65599df2c97d48b7b120cbc0795",
+      "style_reference_role": "style_only",
+      "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_HONG_XIN__front_candidate_02_codex__20260714T193425386099.md",
+      "prompt_sha256": "917036705a06b61422b856771a612e4fb98358a2dc5172d15e7c3c331b41a38d",
+      "adopted": false
+    }
+  ]
+}

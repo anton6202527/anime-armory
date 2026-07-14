@@ -22,6 +22,7 @@ if str(LIB) not in sys.path:
 
 from n2d_action_registry import context_pack_relpath, stage_action_spec  # noqa: E402
 import genre_packs  # noqa: E402
+import settings as project_settings  # noqa: E402
 
 
 KIND = "n2d_context_pack"
@@ -136,6 +137,87 @@ def preview_json(path: Path) -> Dict[str, Any]:
     return {"value": data}
 
 
+def _settings_parse_error_snapshot() -> Dict[str, Any]:
+    """Fail-closed fallback; never replace this with a raw file preview."""
+    return {
+        "kind": "n2d_settings_context",
+        "version": 1,
+        "status": "parse_error",
+        "source_path": "_设置.md",
+        "authority": {
+            "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+            "audit_records": "provenance_only_non_authoritative",
+            "records_can_override_effective_settings": False,
+        },
+        "effective_settings": {},
+        "recent_corrections": [],
+        "record_summary": {
+            "format": "unknown",
+            "records_seen": 0,
+            "corrections_seen": 0,
+            "corrections_included": 0,
+            "limit": 3,
+            "full_history_omitted": True,
+        },
+        "issues": [
+            "settings helper unavailable; raw _设置.md history was intentionally omitted"
+        ],
+    }
+
+
+def build_settings_context(root: Path) -> Dict[str, Any]:
+    """Use the settings helper's authoritative region, failing closed."""
+    try:
+        snapshot = project_settings.settings_context_snapshot(str(root))
+        return snapshot if isinstance(snapshot, dict) else _settings_parse_error_snapshot()
+    except Exception:
+        return _settings_parse_error_snapshot()
+
+
+def render_settings_preview(snapshot: Dict[str, Any]) -> str:
+    """Backward-compatible text preview without the append-only raw history."""
+    status = str(snapshot.get("status") or "parse_error")
+    lines = [
+        "[AUTHORITATIVE CURRENT SETTINGS — settings region only]",
+        f"status: {status}",
+        "audit records cannot override these values",
+    ]
+    effective = snapshot.get("effective_settings")
+    if isinstance(effective, dict) and effective:
+        for key, item in effective.items():
+            if not isinstance(item, dict):
+                continue
+            value = str(item.get("value") or "")
+            source = str(item.get("source") or "") or "legacy_unspecified"
+            lines.append(f"- {key}: {value}  # source={source}")
+    else:
+        lines.append("- (no current project settings parsed)")
+
+    corrections = snapshot.get("recent_corrections")
+    if isinstance(corrections, list) and corrections:
+        lines.extend([
+            "",
+            "[RECENT CORRECTIONS — provenance only, non-authoritative, bounded]",
+        ])
+        for record in corrections:
+            if isinstance(record, dict) and str(record.get("text") or "").strip():
+                lines.append(f"- {str(record['text']).strip()}")
+    summary = snapshot.get("record_summary") if isinstance(snapshot.get("record_summary"), dict) else {}
+    lines.extend([
+        "",
+        (
+            "raw audit history omitted: "
+            f"records_seen={summary.get('records_seen', 0)}, "
+            f"corrections_included={summary.get('corrections_included', 0)}/"
+            f"{summary.get('limit', 0)}"
+        ),
+    ])
+    issues = snapshot.get("issues")
+    if isinstance(issues, list):
+        lines.extend(f"issue: {issue}" for issue in issues if str(issue).strip())
+    return "\n".join(lines)
+
+
 def episode_number(ep: str) -> Optional[int]:
     import re
 
@@ -174,7 +256,12 @@ def candidate_relpaths(stage_key: str, ep: str, root: Optional[Path] = None) -> 
     return out
 
 
-def collect_files(root: Path, relpaths: Iterable[str]) -> List[Dict[str, Any]]:
+def collect_files(
+    root: Path,
+    relpaths: Iterable[str],
+    *,
+    settings_context: Optional[Dict[str, Any]] = None,
+) -> List[Dict[str, Any]]:
     files: List[Dict[str, Any]] = []
     for rel in relpaths:
         path = root / rel
@@ -182,7 +269,13 @@ def collect_files(root: Path, relpaths: Iterable[str]) -> List[Dict[str, Any]]:
         if path.is_file():
             item["bytes"] = path.stat().st_size
             item["sha256"] = sha256_file(path)
-            item["preview"] = preview_json(path) if path.suffix == ".json" else preview_text(path)
+            if rel == "_设置.md":
+                snapshot = settings_context or build_settings_context(root)
+                snapshot.setdefault("source_sha256", item["sha256"])
+                item["preview"] = render_settings_preview(snapshot)
+                item["preview_policy"] = "settings_region_plus_bounded_corrections"
+            else:
+                item["preview"] = preview_json(path) if path.suffix == ".json" else preview_text(path)
         files.append(item)
     return files
 
@@ -190,7 +283,12 @@ def collect_files(root: Path, relpaths: Iterable[str]) -> List[Dict[str, Any]]:
 def build_pack(root: str, ep: str, stage_key: str) -> Dict[str, Any]:
     root_path = Path(root)
     action = stage_action_spec(stage_key)
-    files = collect_files(root_path, candidate_relpaths(stage_key, ep, root_path))
+    settings_context = build_settings_context(root_path)
+    files = collect_files(
+        root_path,
+        candidate_relpaths(stage_key, ep, root_path),
+        settings_context=settings_context,
+    )
     genre_context = genre_packs.build_context(root_path, ep, stage_key)
     return {
         "kind": KIND,
@@ -199,6 +297,7 @@ def build_pack(root: str, ep: str, stage_key: str) -> Dict[str, Any]:
         "episode": ep,
         "stage_key": stage_key,
         "action_contract": action,
+        "settings_context": settings_context,
         "genre_pack_context": genre_context,
         "files": files,
         "missing_required_files": [f["relpath"] for f in files if not f.get("exists")],
@@ -210,12 +309,18 @@ def build_pack(root: str, ep: str, stage_key: str) -> Dict[str, Any]:
 
 
 def render_markdown(pack: Dict[str, Any]) -> str:
+    genre_context = pack.get("genre_pack_context") if isinstance(pack.get("genre_pack_context"), dict) else {}
+    genre = genre_context.get("genre") if isinstance(genre_context.get("genre"), dict) else {}
+    activation = genre_context.get("activation") if isinstance(genre_context.get("activation"), dict) else {}
+    genre_keys = genre.get("matched_genre_keys") or ([genre.get("genre_key")] if genre.get("genre_key") else [])
     lines = [
         "# n2d Context Pack",
         "",
         f"- 集：{pack.get('episode')}",
         f"- 阶段：{pack.get('stage_key')}",
         f"- specialist：{(pack.get('action_contract') or {}).get('specialist')}",
+        f"- genre packs：{', '.join(genre_keys) or '未命中'}",
+        f"- genre scene activation：{activation.get('state') or 'unknown'}",
         "",
         "## Files",
         "",

@@ -261,11 +261,19 @@ def character_library_tier_for_record(
         episode_count=max(recorded_episode_count, independent_episode_count),
         restricted=False,
     )
-    # 非核心局部角色可直接走 partial；核心/主角必须附审批合同，
-    # 防止只把 tier 改成 restricted_partial 就绕过五角验收。
+    entity_id = str(record.get("id") or record.get("character_id") or "").strip().upper()
+    scope_text = str(record.get("scope") or "")
+    group_or_crowd = bool(
+        entity_id.startswith(("GROUP_", "CROWD_"))
+        or re.search(r"群像|群演|人群|crowd|group", scope_text, re.I)
+    )
+    # 具名人物不能靠自报 partial 绕开复现/核心最低档。任何 recurring/core
+    # 人物都必须有审批合同；GROUP_/CROWD_ 群像保持局部资产路径。单集
+    # minimal 功能角色保留结构化 restricted_partial/no-face 的旧项目兼容。
     if restricted_requested and (
-        inferred != CHARACTER_LIBRARY_TIER_CORE
-        or restricted_partial_contract_valid(record)
+        restricted_partial_contract_valid(record)
+        or group_or_crowd
+        or inferred == CHARACTER_LIBRARY_TIER_MINIMAL
     ):
         return CHARACTER_LIBRARY_TIER_PARTIAL
     if explicit == CHARACTER_LIBRARY_TIER_PARTIAL:

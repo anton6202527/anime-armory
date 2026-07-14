@@ -79,6 +79,17 @@ def test_classify_motif_no_hit():
     assert md.classify_motif(_clip(label="两人在街头对话", desc="过肩反打")) is None
 
 
+def test_level_up_does_not_match_incidental_dramatic_upgrade_language():
+    for text in ("威胁升级为绝对死局", "升级爽感退场，回到人物命债", "关系升级但没有系统面板"):
+        assert md.classify_motif(_clip(label=text, desc="普通剧情反应镜")) is None
+
+
+def test_level_up_still_matches_character_progression_context():
+    hit = md.classify_motif(_clip(label="主角升级", desc="经验已满，等级提升"))
+    assert hit is not None
+    assert hit["motif_type"] == "level_up"
+
+
 def test_detect_motif_clips_assigns_ids_and_growth():
     clips = [
         _clip(label="日常开场", desc="走在路上"),

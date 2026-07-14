@@ -1,0 +1,150 @@
+{
+  "kind": "comic_split_blueprint",
+  "version": 2,
+  "status": "confirmed",
+  "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。第1话完整覆盖原第一回，保留‘金光散去’的回末钩子。",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "working_title": "伏魔殿开",
+      "chapter_type": "serial",
+      "format_profile": "vertical_serial",
+      "source_mode": "adapted",
+      "source_spans": [
+        {
+          "span_id": "SPAN_CH001",
+          "source_path": "源本/水浒传.docx",
+          "start": "第1章",
+          "end": "第1章"
+        }
+      ],
+      "reader_promise": "以一场由官员傲慢引爆的神话灾变，回答梁山一百零八星为何落入人间。",
+      "core_conflict": "洪信必须以诚心完成救民皇命，但他的特权习气、恐惧和对不可知的轻慢不断阻止他。",
+      "turning_point": "洪信看到碑后‘遇洪而开’，将警告误读成命定授权，强令挖开石碑与地穴。",
+      "payoff": "伏魔殿被掀塌，黑气散作百十道金光冲向四方，水浒群像的命运被正式启动。",
+      "ending_mode": "cliffhanger",
+      "budget": {
+        "unit": "panels",
+        "target": 48,
+        "soft_range": [44, 52]
+      },
+      "entry_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "嘉祐三年京师瘟疫加剧，仁宗朝廷手段尽失，一百零八魔君仍被封于龙虎山伏魔殿。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "奉诏求援的朝廷使者，自信权势与官阶足以解决障碍。",
+            "visual_state": "官装整洁，丹诏与御香在身。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "奉诏迎使、守护伏魔殿历代禁令的住持。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "封禁于伏魔殿地穴。"
+          },
+          "WORLD_ORDER": {
+            "state": "人间秩序表面华丽，底层已因瘟疫与治理失效承受代价。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "由洪信随身携带。"
+          }
+        }
+      },
+      "continuity_delta": [
+        {
+          "entity_id": "STORY_CHAPTER",
+          "field": "state",
+          "from": "嘉祐三年京师瘟疫加剧，仁宗朝廷手段尽失，一百零八魔君仍被封于龙虎山伏魔殿。",
+          "to": "伏魔殿半角掀塌，一百零八星已散，住持将在下话说出天罡地煞的真相。",
+          "panel_id": "P047",
+          "reason": "封印被人为破坏，神话序章由求援转为全国性灾变。"
+        },
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "story_state",
+          "from": "奉诏求援的朝廷使者，自信权势与官阶足以解决障碍。",
+          "to": "擅开封印、面对灾变且尚未承认责任的当事人。",
+          "panel_id": "P047",
+          "reason": "他不顾三次劝阻强令掀开青石板，百十道金光因此逃逸。"
+        },
+        {
+          "entity_id": "CHAR_HONG_XIN",
+          "field": "visual_state",
+          "from": "官装整洁，丹诏与御香在身。",
+          "to": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。",
+          "panel_id": "P048",
+          "reason": "黑气掀殿和众人奔逃造成灰尘与失态，丹诏此前已入匣。"
+        },
+        {
+          "entity_id": "CHAR_ABBOT_SHANGQING",
+          "field": "story_state",
+          "from": "奉诏迎使、守护伏魔殿历代禁令的住持。",
+          "to": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。",
+          "panel_id": "P048",
+          "reason": "伏魔殿半角掀塌、百星散尽，住持亲眼见证禁令失守。"
+        },
+        {
+          "entity_id": "WORLD_108_STARS",
+          "field": "seal_state",
+          "from": "封禁于伏魔殿地穴。",
+          "to": "化为百十道金光散入人间。",
+          "panel_id": "P047",
+          "reason": "碑、龟趺与青石板被人力移除。"
+        },
+        {
+          "entity_id": "WORLD_ORDER",
+          "field": "state",
+          "from": "人间秩序表面华丽，底层已因瘟疫与治理失效承受代价。",
+          "to": "神话序章从封闭宫观转入全国性群像时空。",
+          "panel_id": "P047",
+          "reason": "一百零八道星光散往四面八方，封印不再局限于龙虎山。"
+        },
+        {
+          "entity_id": "PROP_IMPERIAL_EDICT",
+          "field": "location",
+          "from": "由洪信随身携带。",
+          "to": "收藏于上清宫御书匣。",
+          "panel_id": "P041",
+          "reason": "虚靖已赴东京，住持按礼收存丹诏，御香留于三清殿焚烧。"
+        }
+      ],
+      "exit_state": {
+        "entities": {
+          "STORY_CHAPTER": {
+            "state": "伏魔殿半角掀塌，一百零八星已散，住持将在下话说出天罡地煞的真相。"
+          },
+          "CHAR_HONG_XIN": {
+            "story_state": "擅开封印、面对灾变且尚未承认责任的当事人。",
+            "visual_state": "面色如土，官袍沾尘但幞头尚在；丹诏已留于上清宫。"
+          },
+          "CHAR_ABBOT_SHANGQING": {
+            "story_state": "震惊且痛惜，禁令已被破坏，掌握伏魔殿真相。"
+          },
+          "WORLD_108_STARS": {
+            "seal_state": "化为百十道金光散入人间。"
+          },
+          "WORLD_ORDER": {
+            "state": "神话序章从封闭宫观转入全国性群像时空。"
+          },
+          "PROP_IMPERIAL_EDICT": {
+            "location": "收藏于上清宫御书匣。"
+          }
+        }
+      },
+      "status": "confirmed"
+    }
+  ],
+  "human_review": {
+    "required": true,
+    "state": "approved",
+    "reviewer": "lalala",
+    "role": "出品人",
+    "time": "2026-07-14T07:16:49Z",
+    "decision": "第1话开发包通过",
+    "open_questions": [
+      "第2话是否直接并入高俅出场，应在第1话读感试读后决定。",
+      "发行平台与年龄分级尚未指定，后续暴力表现需再校准。"
+    ]
+  }
+}
