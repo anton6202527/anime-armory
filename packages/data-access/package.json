@@ -1,0 +1,17 @@
+{
+  "name": "@anime-armory/data-access",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@anime-armory/contracts": "0.1.0",
+    "@supabase/supabase-js": "2.110.2"
+  }
+}

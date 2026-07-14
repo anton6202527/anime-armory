@@ -2,7 +2,7 @@
 name: ad
 description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 广告片（目标/KPI→创意→脚本→VO→分镜→产品/角色/场景定妆→AI出图→AI视频→剪辑交付→发布合规→质检→投放反馈）。产物落 创作区/拍广告/项目名/（成片_主片.mp4 + cutdown + 多比例）。**不拆集**、**自包含**。读 _进度.md 路由到 ad-progress / ad-update / ad-craft / ad-concept / ad-script / ad-voice / ad-image / ad-video / ad-compose / ad-review / ad-feedback。Use when given a 客户需求/brief（哪怕只有一句话）, a product/brand to advertise, an existing 拍广告 project, or asked 拍广告 / 广告创意 / TVC / 信息流广告 / 产品demo / 带货视频 / 投放复盘. Triggers 拍广告, 广告片, 广告创意, 广告脚本, 广告分镜, TVC, 信息流广告, 品牌片, 产品demo, 带货视频, 广告成片, 投放复盘, ad.
 ---
-> 规模统计：Skill 数 14 | SKILL.md 总行数 970 | 目录文本总行数 27624
+> 规模统计：Skill 数 14 | SKILL.md 总行数 972 | 目录文本总行数 27676
 
 # ad — 拍广告生产线 · 总调度
 
@@ -13,6 +13,8 @@ description: 拍广告 总调度 — 把【客户需求/brief】做成一条 AI 
 **不拆集铁律**：广告不切「集」。一条主片是一个整体（可以很长）；多时长/多比例/A·B 是**交付件 deliverable**，登记在 `_进度.md` 的「交付版本矩阵」，由 `ad-compose` 重剪/reframe。
 
 **自包含铁律**：`ad-*` 的创意、脚本、配音、定妆、契约继承、接缝、剪辑与交付逻辑都在广告家族内维护。
+
+**生产数据分层**：brief、创意合同、镜头/交付矩阵、正式媒体、合规与投放反馈仍是 ad 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失不得阻断广告流程。机器真值优先 JSON/JSONL，人读 Markdown/HTML 放 `生产数据/views/`，生成候选与缓存必须同正式交付分开。持久路径使用作品根相对路径。ad 不 import 仓库维护工具或其它系列实现，也不读取其它系列状态、缓存或业务数据。
 
 > **发布合规是流水线内闸门**：产线不伪造平台 UI 操作，也不擅自给母版烙通用水印；但必须用 `ai_usage.json` + `compliance_manifest.json` 记录 AI 使用、显式/隐式标识责任、平台主动声明和证据。平台声明尚未完成时母版可生成，不能标记 release-ready，最终 `ad-review` 会阻断。
 

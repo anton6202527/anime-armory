@@ -99,7 +99,7 @@ def test_profile_dependencies_exclude_progress_and_bind_animatic_otio(tmp_path: 
 
     assert "_进度.md" not in p1["input_paths"]
     assert "_设置.md" in p1["input_paths"]
-    assert "合成/第1集/_work/animatic_timeline.otio" in animatic["evidence_paths"]
+    assert "生产数据/timelines/第1集/animatic_timeline.otio" in animatic["evidence_paths"]
     assert "脚本/第1集/animatic_signoff.json" in p3["input_paths"]
 
 

@@ -60,7 +60,7 @@ def test_validate_runtime_v2_artifact_kinds_pass() -> None:
             "kind": "n2d_editorial_timeline", "version": 1, "episode": "第1集",
             "phase": "animatic", "status": "ready", "duration_sec": 12.0,
             "track_names": ["V1 Picture"], "media": [], "seams": [],
-            "otio_path": "合成/第1集/_work/editorial_timeline.otio", "otio_sha256": "abc",
+            "otio_path": "生产数据/timelines/第1集/editorial_timeline.otio", "otio_sha256": "abc",
         },
         {
             "kind": "n2d_voice_casting", "version": 1, "status": "casting",

@@ -97,7 +97,7 @@ python3 skills/n2d-compose/release_manifest.py build <作品根> 第N集 --stage
 python3 skills/n2d-compose/release_manifest.py check <作品根> 第N集
 ```
 
-`final_timeline_probe.py --write` 会落 `生产数据/final_timeline_probe_第N集.json`、`合成/第N集/_work/timeline.json`、`合成/第N集/rough_cut_preview.html`，作为 rough cut lock 证据；`script_supervisor_log.py` 会落 `生产数据/script_supervisor_log_第N集.jsonl` 和摘要，作为生成后场记日志。release manifest 输出 `合规/release_manifest_第N集.json/md`，汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收和发布待办。`readiness.status=blocked` 时不进入投放。
+`final_timeline_probe.py --write` 会落 `生产数据/final_timeline_probe_第N集.json`、`生产数据/timelines/第N集/timeline.json`、`生产数据/views/rough_cut_preview_第N集.html`，作为 rough cut lock 证据；`script_supervisor_log.py` 会落 `生产数据/script_supervisor_log_第N集.jsonl` 和摘要，作为生成后场记日志。release manifest 输出 `合规/release_manifest_第N集.json/md`，汇总母带 SHA256、合规 issue、gate findings、机器分、人审签收和发布待办。`readiness.status=blocked` 时不进入投放。
 
 ## 进度回写
 完成后回写「成片」列：`python3 <n2d skill>/progress.py set <作品根> 第N集 成片 ✅`。

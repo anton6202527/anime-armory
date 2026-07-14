@@ -64,6 +64,11 @@
 │   ├── README.md                         分档与导出规则
 │   └── <CHAR_ID>__<slug>/                reference/prompts/lora/voice/adapters/qc + manifest.json
 ├── 生产数据/                             机器证据 / gate / 队列 / 锁版账本
+│   ├── artifact_catalog.json             可重建只读索引（不是 gate / 业务真值）
+│   ├── timelines/第N集/                  持久 editorial / animatic OTIO + lock timeline
+│   ├── views/                            从 JSON/JSONL 派生的人读 Markdown / HTML
+│   ├── cache_manifests/                  _work / _clipcache 可清理性与保留策略
+│   ├── video_qc/第N集/_frames/           按源媒体版本去重的 QC 抽帧
 │   ├── animatic_第N集.json / animatic_第N集.html
 │   ├── ai_shooting_schedule_batch_seed_第N集.json / .md
 │   ├── final_timeline_probe_第N集.json
@@ -109,8 +114,8 @@
     └── 第N集/
         ├── 配音/                         ← n2d-voice 产物（line_NN.wav / voice_zh.wav / 时长清单.json）
         ├── _voicecache/                  配音缓存
-        ├── _work/                        compose 中间件（含 timeline.json；每次重建）
-        ├── rough_cut_preview.html        粗剪 HTML 预览（rough cut lock 证据）
+        ├── _work/                        compose 可重建中间件（不放持久证据）
+        ├── _clipcache/                   clip 处理缓存（不放正式 Clip）
         └── 成片_第N集_<mode>.mp4         ← n2d-compose 最终成片
 ```
 

@@ -1,6 +1,6 @@
 # e2a
 
-Repo release tool: build the **Electron desktop app** (`desktop-electron/`) or
+Repo release tool: build the **Electron desktop app** (`apps/desktop/`) or
 the per-work **demo zip assets**. The safe default is a local macOS DMG;
 uploading is enabled only by `--up`, `--demos`, or `--all`. Successor of the retired Tauri `/r2a`
 flow; fully self-contained under `tools/e2a/`:
@@ -12,7 +12,7 @@ flow; fully self-contained under `tools/e2a/`:
 - `scripts/build_demo_catalog.cjs` — writes the uploaded multi-work catalog with
   SHA256 and byte sizes
 - `scripts/sync_bundle.cjs` — bundles skills/tools/manuals + `demo_catalog.json`
-  into `desktop-electron/resources/` (electron-builder `extraResources`)
+  into `apps/desktop/resources/` (electron-builder `extraResources`)
 - shared safe payload copier: `tools/release-safety/demo_safety.cjs`
 
 Use when:
@@ -50,7 +50,7 @@ Contract:
 - App bundle ships the skills repo + manuals + `demo_catalog.json` via
   electron-builder `extraResources` — the packaged app resolves them at
   `process.resourcesPath/resources`, matching `resolve_repo`/demo download in
-  `desktop-electron/src/main/services/{workspace,demos}.ts`. Full demo
+  `apps/desktop/src/main/services/{workspace,demos}.ts`. Full demo
   payloads are **not** bundled; the app downloads the zips from Releases.
 - `--demos` scans all six `创作区/<系列>/` directories and selects every direct
   child work containing `_进度.md`; it does not stop at the pinned work in
@@ -84,13 +84,17 @@ Contract:
   verified by exact remote filename and byte size. This catches server-side
   filename rewriting, missing assets, and truncated uploads before success is
   reported.
-- Default tag `electron-v<desktop-electron/package.json version>`; the release
+- Default tag `electron-v<apps/desktop/package.json version>`; the release
   is not marked latest by default and README download links are not rewritten
   by the tool — update them manually when publishing a user-facing release.
 - Packaging: electron-builder emits the `.app` only (`--dir`); the DMG is made
   with `hdiutil` (electron-builder's dmg target downloads a dmgbuild bundle
   at build time — flaky on restricted networks). Signing is
-  ad-hoc (`codesign -s -`) by default; set `E2A_SIGNING_IDENTITY` (and
+  ad-hoc (`codesign -s -`, without hardened runtime) by default; this avoids
+  macOS 26 dyld rejecting Electron's nested framework because ad-hoc code has
+  no stable Team ID. A real signing identity keeps hardened runtime enabled.
+  Every macOS package must also pass a five-second signed-app launch smoke test
+  before the DMG is created. Set `E2A_SIGNING_IDENTITY` (and
   optionally `E2A_NOTARY_KEYCHAIN_PROFILE` to notarize + staple) for
   distributable builds.
 - Installer files are never committed into the source tree or git history.

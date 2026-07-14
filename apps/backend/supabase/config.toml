@@ -1,0 +1,49 @@
+project_id = "anime-armory"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/**"]
+jwt_expiry = 3600
+enable_signup = false
+
+# Keep the hosted project's existing security posture explicit so config push
+# does not replace it with looser CLI defaults.
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+secure_password_change = false
+max_frequency = "1m"
+otp_length = 8
+otp_expiry = 3600
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+# Vector buckets require a paid plan and are not part of this architecture.
+[storage.vector]
+enabled = false
+
+[functions.assets]
+# The function validates the caller's user JWT with auth.getUser(). Keep the
+# platform's legacy JWT gate disabled so publishable/secret API keys and modern
+# signing keys can reach that application-level authorization check.
+verify_jwt = false

@@ -350,7 +350,7 @@ python3 skills/n2d-video/scripts/video_runner.py cancel <作品根> <manifest.js
 
 # 4) 验收：抽帧 QC、dashboard 记账、回写 视频 X/Y
 python3 skills/n2d-video/scripts/video_runner.py accept <作品根> <manifest.json> --clip Clip_06
-# 每次 accepted clip 后会刷新 合成/第N集/_work/editorial_timeline.otio；全集齐时再渲 actual rough cut
+# 每次 accepted clip 后会刷新 生产数据/timelines/第N集/editorial_timeline.otio；全集齐时再渲 actual rough cut
 
 # 批次抽帧 QC（无声策略下会先确保正式 MP4 无音轨；显式原生音画/环境声才只读原片）
 python3 skills/n2d-video/scripts/video_runner.py qc <作品根> <manifest.json>
@@ -392,7 +392,7 @@ python3 skills/n2d-video/scripts/multishot_runner.py accept <作品根> <multish
 每出一条定稿 MP4：
 1. MP4 落档到 `出视频/第N集/视频/Clip<K>_<描述>.mp4`
 2. `出视频/第N集/prompt/00_总览.md` 对应 Clip 行状态改 ✅
-3. 若 `视频生成音频策略=无声视频流`，正式 MP4 必须无音轨；平台意外带音轨时由 `video_runner` 剥成无音轨正式资产，原片备份到 `生产数据/video_raw_with_audio/第N集/`。只有显式原生音画/低风险环境声/口型参考时才记录"含原生音轨"并交 n2d-compose 统一选择处理。抽帧 QC 统一放 `生产数据/video_qc/第N集/<批次>/`（`frames/` + `contact_sheet_*.jpg` + `video_qc_*.json/md`）；不得生成 `.noaudio.mp4` 作为正式视频产物。
+3. 若 `视频生成音频策略=无声视频流`，正式 MP4 必须无音轨；平台意外带音轨时由 `video_runner` 剥成无音轨正式资产，原片备份到 `生产数据/video_raw_with_audio/第N集/`。只有显式原生音画/低风险环境声/口型参考时才记录"含原生音轨"并交 n2d-compose 统一选择处理。QC 抽帧按源媒体版本只存一份于 `生产数据/video_qc/第N集/_frames/`；批次目录只留 `contact_sheet_*.jpg` 与机器真值 `video_qc_*.json`，人读 Markdown 视图放 `生产数据/views/video_qc/第N集/`。旧批次 `frames/` 用 `python3 skills/n2d-video/scripts/video_qc.py <作品根> 第N集 --migrate-legacy-frames` 按 SHA 合并并重写引用；不得生成 `.noaudio.mp4` 作为正式视频产物。
 4. 回写 `视频` 列：`python3 skills/n2d/progress.py set <作品根> 第N集 视频 X/Y`
 5. 记录生产数据：
    ```bash

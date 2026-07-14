@@ -515,11 +515,11 @@ def build_editorial_timeline(root: Path, episode: str) -> Dict[str, Any]:
 
 def write_editorial_timeline(root: Path, payload: Mapping[str, Any]) -> Dict[str, str]:
     ep = str(payload.get("episode") or "")
-    work = root / "合成" / ep / "_work"
     prod = root / "生产数据"
-    work.mkdir(parents=True, exist_ok=True)
+    timeline_dir = prod / "timelines" / ep
+    timeline_dir.mkdir(parents=True, exist_ok=True)
     prod.mkdir(parents=True, exist_ok=True)
-    otio_path = work / "editorial_timeline.otio"
+    otio_path = timeline_dir / "editorial_timeline.otio"
     sidecar_path = prod / f"editorial_timeline_{ep}.json"
     otio_data = payload.get("otio") if isinstance(payload.get("otio"), Mapping) else {}
     tmp = otio_path.with_name(f"{otio_path.name}.tmp.{os.getpid()}")
@@ -529,7 +529,7 @@ def write_editorial_timeline(root: Path, payload: Mapping[str, Any]) -> Dict[str
     # intentionally refreshed by accepted clips and final-master probes later;
     # using that mutable file as approval evidence would invalidate a legitimate
     # animatic sign-off on every editorial update.
-    snapshot_path = work / "animatic_timeline.otio"
+    snapshot_path = timeline_dir / "animatic_timeline.otio"
     if str(payload.get("phase") or "") == "animatic":
         tmp_snapshot = snapshot_path.with_name(f"{snapshot_path.name}.tmp.{os.getpid()}")
         tmp_snapshot.write_text(json.dumps(otio_data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")

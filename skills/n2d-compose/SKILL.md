@@ -11,13 +11,15 @@ description: Optional post-video stage of n2d — maintain an OpenTimelineIO edi
 
 > **视频阶段后的真实粗剪代理 + OTIO**：animatic 创建 working `editorial_timeline.otio` 与签收专用 `animatic_timeline.otio` 快照；每个 Clip 验收后只刷新 working 时间线，齐片后 `post_video_proxy.py --render` 生成 `actual_rough_cut.mp4`。只认 manifest `status=accepted`。final voice 未生成时，OTIO 的 A1 用 `MissingReference` 建 planned audio slots，时长和文本来自 `timing_estimate.json`；它们是编辑槽位，不是假音频。final voice 到位后刷新为真实媒体引用。OTIO 同时保留声音 route、casting 状态、V1、旁白/对白、环境/拟音、BGM、字幕 marker、媒体哈希、缺料槽位和 `seam_mode`。
 
+> **持久证据与缓存分离**：working/snapshot OTIO 和锁版 timeline 统一落 `生产数据/timelines/第N集/`，粗剪 HTML 落 `生产数据/views/rough_cut_preview_第N集.html`；`合成/第N集/_work` 与 `_clipcache` 只放可重建缓存。`cache_policy.py refresh|doctor|clean|auto` 维护 `生产数据/cache_manifests/compose_cache_第N集.json`；默认只审计，只有 `_设置.md` 明确 `合成缓存保留=成片后清理|保留7天` 且 doctor 无阻断才自动删缓存，绝不删除正式 Clip、母版、合同或 QC 证据。
+
 **跨集成片一致性登记（2026-06 加固·schema 见 `n2d-review/references/扩展一致性登记表.md`）**：成片阶段维护两张剧级表，让逐集观感不漂——① `设定库/series_grade.json` 剧级**调色锁**（LUT/白平衡/对比/饱和基线），每集套用后写 `合成/<集>/grade_applied.json` 留痕（`tone_light_contract` 只焊片内像素，这层管跨集色温/对比）；② `设定库/ambient_map.json` 每场景**环境声床**（LOC→ambient bed，`reverb_profile` 管混响、这层管底噪连续性）。调色采用层级裁决：`series_grade` 是默认基线，场景光位/剧情天气可局部收紧，情绪/梦境/回忆等有意变调必须在 `grade_applied.json` 写 `grade_override.reason/source_clip`，否则按漂色处理。n2d-review 的 `系列调色(GRD)` / `调色层级(COLORH)` / `环境声(AMB)` 据此对账。
 
 ## 偏好（私有 · 用户选择，不写死在本 skill）
 
 本 skill 的可选项**不写死在源码里**。按 `../skills/n2d/references/选择点与偏好.md` 读用户私有选择：先读 `<作品根>/_设置.md`；缺则用全局默认 `创作偏好-默认.md` 预填并告知一句；再缺则**首次问一次**→写回 `_设置.md`→同项目之后**沉默沿用**（合规/不可逆/花钱多的点每次仍确认）。
 
-本 skill涉及的选择点：`合成阶段`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
+本 skill涉及的选择点：`合成阶段`、`合成缓存保留`、`BGM来源`、`画幅`、`制作模式`、`视频原生音轨`、`后期拟音策略`、`目标平台`、`发行地区`、`合规用途`。混合模式还必须消费逐镜 `audio_strategy/final_voice_stage/post_lipsync_required`，不能只凭项目级模式决定音轨。平台与合规仍以 `合规/compliance_manifest.json` 为准。
 
 > **AI 标识非阻断铁律**：compose `[6/6]` 后可自动跑 `ai_label.py` 做 best-effort 后处理。默认 `AI显式角标=仅元数据`：只写机器可读 AI 元数据，不把「AI生成」角标烤进内部预览画面；正式投放若平台/地区要求显式标识，改为 `AI显式角标=开启` 再叠角标并回写 `合规/compliance_manifest.json` 的 `ai_labeling` 状态。AI 标识/披露/水印不得阻断合成、进度回写、dashboard 记账或后续集推进；失败只形成发布前待办。数字水印、平台侧 AIGC 披露与严格 GB 45438 字节级封装均可在工具外补齐。
 
@@ -33,7 +35,7 @@ description: Optional post-video stage of n2d — maintain an OpenTimelineIO edi
 - **张力感知 BGM 增益（爽点抬/细节压·替代一刀切）**：`DUCK_RATIO` 是整集统一档；要让爽点/爆发镜 BGM 顶上去、悬念/细节镜压更狠，先跑 `python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr` 读 `storyboard.json` 每 Clip `rhythm` 映射成随时间变化的 BGM 基准音量包络，再喂给 compose：`BGM_GAIN_EXPR="$(python3 skills/n2d-compose/tension_mix.py <作品根> 第N集 --expr)" bash compose.sh ...`。这条增益作用在 voice 侧链 ducking **之前**的 BGM 基准上，与既有 `DUCK_RATIO` 侧链叠加。**不传 `BGM_GAIN_EXPR` 时保持原固定 `0.9/0.85` 行为**（向后兼容）；缺 storyboard 时给提示不臆造。`tension_mix.py`（无 `--expr`）打人读包络图 + 建议叠音效的爽点镜清单。
 - **🎼 角色/势力主题动机（leitmotif·确定性复用）**：BGM 此前只到「逐集情绪 + 张力 ducking」，没有跨集「听见就知道是他」的复现旋律。生成式音乐跨集维持同一动机极不稳，故用**确定性复用**：可选 `<作品根>/设定库/motif.json`（`{"沈念":{"file":"素材/motif/shen.wav","cue":"focus","gain":0.5}}`）一次性登记角色/势力的一段动机 clip。compose `[6/6]` 后自动跑 `motif_registry.py --mix`：读 `时长清单.json` 在角色焦点 span 开头铺**同一段 clip**（`min_gap` 去重防刷屏），视频流直 copy 只改音轨。缺 motif.json=空规划 no-op，成片一字不动。巡检：`python3 motif_registry.py <作品根> 第N集`。
 - **📊 集成响度（LUFS）达标巡检**：compose `[6/6]` 后自动跑 `loudness_conform.py`；多集/发布项目优先消费已签收 `设定库/series_consistency.json.audio_baseline`，把全剧目标响度、容差与真峰锁成同一基线。平台候选只在未启用剧级合同的单集内部粗剪中兜底。
-- **粗剪锁版 + 交付包装证据包**：`final_timeline_probe.py --write` 同时刷新 `timeline.json`、`rough_cut_preview.html` 与 `editorial_timeline.otio`，并把阶段推进到 rough_cut/final_master；OTIO sidecar 记录每个媒体 SHA、缺料槽位、轨道和接缝证据。review 前还要补 `script_supervisor_log`、调色、声音、响度、series packaging/release manifest；单个 MP4 存在不能代替这些锁版证据。
+- **粗剪锁版 + 交付包装证据包**：`final_timeline_probe.py --write` 同时刷新 `生产数据/timelines/第N集/timeline.json`、`生产数据/views/rough_cut_preview_第N集.html` 与同集 `editorial_timeline.otio`，并把阶段推进到 rough_cut/final_master；OTIO sidecar 记录每个媒体 SHA、缺料槽位、轨道和接缝证据。review 前还要补 `script_supervisor_log`、调色、声音、响度、series packaging/release manifest；单个 MP4 存在不能代替这些锁版证据。
 - **audio_timing_gate 前置**：正式合成前除 `preventive_contracts.json.audio_timing` 外，还要检查 `production_mode_route_第N集.json`、`voice_casting.json`、final voice manifest 与 lipsync 产物。对白近景、后配音、原生音画必须写清 timing basis、表演轨、字幕、声纹/音色、时长拟合和 overflow 策略。
 - **clip 原生音频处理（按逐镜 route 分流）**：Veo / Seedance / Kling 出的 clip 可能自带环境音甚至台词。本 skill 是统一处理点：普通/base plate/表演条件镜丢弃模型音轨，低风险环境声镜可压低混入，`native_av` 镜保留原片声。不要用一个项目级开关覆盖所有 Clip。选择点 `视频原生音轨`：
   - `丢弃`（默认）：只在 compose 工作缓存/最终合成链路里剥掉 clip 原生音轨，**不改写 `出视频/第N集/视频/` 的 AI 原片**；音频全部由 配音+BGM+SFX 这条受控链路提供，避免双人声。

@@ -51,7 +51,7 @@
 
 `image_prompt` 前还有一层 P-3 制片拆解包，不新增 `_进度.md` 列：`脚本/第N集/production_breakdown.json`、`continuity_breakdown.json`、`continuity_bible.json`、`ai_shooting_schedule.json`、`ai_call_sheet.md`、`生产数据/ai_shooting_schedule_batch_seed_第N集.json/md`。这些文件由 `run.py` 在 `image_prompt` 前置 `production_breakdown` gate 校验，必须全部 `confirmed` 且无 `待补/TODO` 后才进入出图 prompt；汇总说明落 `生产数据/production_handoff_pack_第N集.md`，检查结果落 `生产数据/production_breakdown_check_第N集.json`。batch seed 是 `n2d-batch queue.py plan --from-shooting-schedule` 的输入，把 AI 拍摄排期转换成 image/video 队列任务草案。
 
-`review/release` 前不再只看最终 MP4。`run.py` 会先刷新 `final_timeline_probe.py --write` 和 `script_supervisor_log.py check --write-missing`：前者落 `生产数据/final_timeline_probe_第N集.json`、`合成/第N集/_work/timeline.json`、`合成/第N集/rough_cut_preview.html`，形成 rough cut lock；后者落 `生产数据/script_supervisor_log_第N集.jsonl` 与摘要，要求 storyboard 每个 Clip 都能对到 accepted take 和真实资产。`production_locks.py` 按层检查 `video_material_lock`、`rough_cut_lock`、`picture_lock`；锁版后若出现缺失/陈旧/waiver/QC 降级，`creative_governance.py` 会强制 `生产数据/creative_decision_log.jsonl` 中存在 production-ready 决策账，再允许继续 release/readiness。
+`review/release` 前不再只看最终 MP4。`run.py` 会先刷新 `final_timeline_probe.py --write` 和 `script_supervisor_log.py check --write-missing`：前者落 `生产数据/final_timeline_probe_第N集.json`、`生产数据/timelines/第N集/timeline.json`、`生产数据/views/rough_cut_preview_第N集.html`，形成 rough cut lock；后者落 `生产数据/script_supervisor_log_第N集.jsonl` 与摘要，要求 storyboard 每个 Clip 都能对到 accepted take 和真实资产。`production_locks.py` 按层检查 `video_material_lock`、`rough_cut_lock`、`picture_lock`；锁版后若出现缺失/陈旧/waiver/QC 降级，`creative_governance.py` 会强制 `生产数据/creative_decision_log.jsonl` 中存在 production-ready 决策账，再允许继续 release/readiness。
 
 ## 3. 制作模式
 

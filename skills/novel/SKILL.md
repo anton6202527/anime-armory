@@ -2,13 +2,15 @@
 name: novel
 description: Top-level dispatcher for the novel-* skill family — inspects an open-ended novel request (a bare idea / few words / book name / URL / dragged file path / spin-off character / expand·condense·rewrite / 审稿查硬伤 / 评分·能不能火 / 专业资料包 / 真实读者反馈) and routes to the right sub-skill, imports a dragged novel file/link into 创作区/写小说/<项目>/ when no action is specified, or resumes an in-progress 创作区/写小说/<项目>/ from its _进度.md. Use when the user gives a novel-related task without specifying which tool. Does not write novels itself — only routes/imports source material; the canonical sub-skill roster is the routing table in the body. Triggers 小说工坊, novel, 小说相关任务, 拖进一本小说, 导入小说, 帮我处理小说, 不知道用哪个小说 skill, 小说打分, 小说评分, 能不能火, 值不值得改, 审稿, 专业资料包, 行业感, 别外行, 医疗法律刑侦金融军事历史宗教海外科技职业文, 真实读者反馈, 完读率, 弃读, 力量体系, 等级一致性, 战力崩坏, 系统流升级, 系统面板, 小说进度, novel-progress.
 ---
-> 规模统计：Skill 数 29 | SKILL.md 总行数 3141 | 目录文本总行数 67349
+> 规模统计：Skill 数 29 | SKILL.md 总行数 3143 | 目录文本总行数 67362
 
 # novel — 小说工坊调度入口
 
 不直接写小说，**读取用户输入 → 路由**到 novel-* 家族最合适的 sub-skill。
 
 本线只管纯文本小说生产，**产物统一落 `创作区/写小说/<项目>/`**（如 `创作区/写小说/仙界闭关小能手-王敦外传/`）。
+
+**生产数据分层与独立性**：小说正文、蓝图、设定、状态账、评审与事件账仍是 novel 自己的业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失或过期不得阻断 novel。机器真值优先 JSON/JSONL，给人看的重复 Markdown/HTML 放 `生产数据/views/` 并标明来源；缓存必须可重建并有清理边界。路径只持久化作品根相对路径。novel 不 import `tools/artifact-catalog`、其它系列实现，也不读取其它系列作品目录。
 
 **当前默认口径保持不变**：`写小说` 默认进入 novel 纯文本小说生产线，但不默认等于“专门制作漫剧的小说”。新建原创项目时先定 `小说用途`，且该选择点**无默认值**；用户可选 `传统小说 / 漫剧源书 / 微短剧源书 / 短读/短篇 / 出海译制底稿 / 自定义`。只有用户明确选择 `漫剧源书` 或 `微短剧源书`，才启用对应的短章、强钩子、市场基准和后续转制检查；否则按普通小说/网文项目推进。
 

@@ -19,6 +19,7 @@ import json
 import os
 import re
 import sys
+import uuid
 from datetime import date
 
 
@@ -184,6 +185,8 @@ def main():
     meta = {
         "schema_version": 1,
         "kind": "song",
+        "project_id": f"song_{uuid.uuid4().hex[:16]}",
+        "line": "song",
         "title": None if title == "待定" else title,
         "genre": args.genre,
         "theme": args.theme,
@@ -224,6 +227,15 @@ def main():
 
     with open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
+    os.makedirs(os.path.join(out_root, "生产数据"), exist_ok=True)
+    with open(os.path.join(out_root, "生产数据", "artifact_catalog.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+            "generated_at": date.today().isoformat(),
+            "project": {"project_id": meta["project_id"], "line": "song", "title": meta.get("title") or slug(title), "root_rel": "."},
+            "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+            "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+        }, f, ensure_ascii=False, indent=2)
     write(os.path.join(out_root, "_设置.md"), contract.settings_markdown(title, settings))
     write(os.path.join(out_root, "创作蓝图.md"), build_blueprint(title, meta))
     write(os.path.join(out_root, "词", "lyrics.md"), build_lyrics(title, structure))

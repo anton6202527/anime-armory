@@ -11,6 +11,8 @@ import argparse
 import json
 import os
 import sys
+import uuid
+from datetime import date
 from pathlib import Path
 
 _CRAFT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ad-craft", "scripts"))
@@ -141,7 +143,8 @@ def main():
     write_if_absent("_进度.md", contract.progress_markdown(title, deliverables))
 
     meta = {
-        "schema_version": 1, "kind": "ad_project", "title": title, "brand": args.brand,
+        "schema_version": 1, "kind": "ad_project", "project_id": f"ad_{uuid.uuid4().hex[:16]}",
+        "line": "ad", "title": title, "brand": args.brand,
         "image_model": contract.DEFAULT_SETTINGS["生图模型"],
         "image_channel": contract.DEFAULT_SETTINGS["生图渠道"],
         "video_model": video_model,
@@ -150,10 +153,33 @@ def main():
         "adlaw_region": contract.DEFAULT_SETTINGS["广告法地区"],
         "deliverables": deliverables,
     }
-    if not os.path.exists(os.path.join(root, "_meta.json")):
-        with open(os.path.join(root, "_meta.json"), "w", encoding="utf-8") as f:
+    meta_path = os.path.join(root, "_meta.json")
+    if not os.path.exists(meta_path):
+        with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, ensure_ascii=False, indent=2)
         print("[ok] _meta.json")
+    else:
+        try:
+            with open(meta_path, encoding="utf-8") as f:
+                existing_meta = json.load(f)
+            if isinstance(existing_meta, dict):
+                meta = existing_meta
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    catalog_path = os.path.join(root, "生产数据", "artifact_catalog.json")
+    if not os.path.exists(catalog_path) and meta.get("project_id") and meta.get("line") == "ad":
+        with open(catalog_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+                "generated_at": date.today().isoformat(),
+                "project": {"project_id": meta["project_id"], "line": "ad", "title": title, "root_rel": "."},
+                "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+                "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+            }, f, ensure_ascii=False, indent=2)
+        print("[ok] 生产数据/artifact_catalog.json（bootstrap，可重建）")
+    elif not os.path.exists(catalog_path):
+        print("[skip] 旧项目缺 project_id/line；先用 tools/artifact-catalog migrate 补身份与 catalog")
 
     brief = dict(BRIEF_TEMPLATE)
     brief["brand"] = args.brand

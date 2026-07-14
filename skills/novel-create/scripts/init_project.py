@@ -26,6 +26,7 @@ import os
 import shutil
 import sys
 import re
+import uuid
 from datetime import date
 
 # Standardized imports from novel/_lib
@@ -266,6 +267,8 @@ def main():
     meta = base_meta("create", outputs=outputs, rights_status="original",
                      title=None if title == "待定" else title)
     meta.update({
+        "project_id": f"novel_{uuid.uuid4().hex[:16]}",
+        "line": "novel",
         "title": None if title == "待定" else title,
         "genre": args.genre,
         "premise": args.premise,
@@ -290,6 +293,14 @@ def main():
     W = lambda rel, txt: open(os.path.join(out_root, rel), "w", encoding="utf-8").write(txt)
     json.dump(meta, open(os.path.join(out_root, "_meta.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=2)
+    os.makedirs(os.path.join(out_root, "生产数据"), exist_ok=True)
+    W("生产数据/artifact_catalog.json", json.dumps({
+        "schema_version": 1, "kind": "artifact_catalog", "status": "bootstrap",
+        "generated_at": date.today().isoformat(),
+        "project": {"project_id": meta["project_id"], "line": "novel", "title": meta.get("title") or folder, "root_rel": "."},
+        "summary": {"artifact_count": 0, "total_bytes": 0, "disposable_bytes": 0, "invalid_count": 0},
+        "event_sources": [], "view_sources": [], "artifacts": [], "duplicates": [],
+    }, ensure_ascii=False, indent=2) + "\n")
     write_settings(out_root, {
         "目标平台": args.platform,
         "小说用途": purpose,

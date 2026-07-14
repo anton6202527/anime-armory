@@ -1,0 +1,10 @@
+{
+  "name": "@anime-armory/backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Supabase database and Edge Functions for Anime Armory.",
+  "scripts": {
+    "typecheck": "npx --yes deno@2.9.2 check --config supabase/functions/assets/deno.json --lock supabase/functions/assets/deno.lock --frozen supabase/functions/assets/index.ts",
+    "supabase": "supabase"
+  }
+}

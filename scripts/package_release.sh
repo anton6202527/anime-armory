@@ -29,7 +29,14 @@ copy_dir() {
         --exclude='*/__pycache__' \
         --exclude='*.pyc' \
         --exclude='.DS_Store' \
+        --exclude='.env' \
+        --exclude='.env.*' \
+        --exclude='.branches' \
+        --exclude='.temp' \
         --exclude='node_modules' \
+        --exclude='out' \
+        --exclude='release' \
+        --exclude='resources' \
         --exclude='dist' \
         -cf - "$src"
     ) | (
@@ -62,19 +69,29 @@ copy_file README.md
 copy_file AGENTS.md
 copy_file pytest.ini
 copy_file conftest.py
+copy_file .env.example
+copy_file package.json
+copy_file package-lock.json
+copy_file tsconfig.base.json
 
 copy_dir skills
 copy_dir tools
 copy_dir docs
-copy_dir desktop-electron/src
-copy_file desktop-electron/README.md
-copy_file desktop-electron/.gitignore
-copy_file desktop-electron/package.json
-copy_file desktop-electron/package-lock.json
-copy_file desktop-electron/electron-builder.yml
-copy_file desktop-electron/electron.vite.config.ts
-copy_file desktop-electron/tsconfig.node.json
-copy_file desktop-electron/tsconfig.web.json
+copy_dir packages
+copy_dir infrastructure
+copy_dir apps/backend
+copy_dir apps/web
+copy_dir apps/desktop/src
+copy_dir apps/desktop/scripts
+copy_dir apps/desktop/assets
+copy_file apps/desktop/README.md
+copy_file apps/desktop/.gitignore
+copy_file apps/desktop/.env.example
+copy_file apps/desktop/package.json
+copy_file apps/desktop/electron-builder.yml
+copy_file apps/desktop/electron.vite.config.ts
+copy_file apps/desktop/tsconfig.node.json
+copy_file apps/desktop/tsconfig.web.json
 
 copy_file scripts/package_release.sh
 
@@ -105,7 +122,11 @@ cat > "${PKG}/版本说明.md" <<EOF
 - skills/ 全部 workflow skill
 - tools/ 仓库级维护工具
 - docs/ 文档与截图
-- desktop-electron/ 桌面端(Electron)源码，不含 node_modules 和构建产物
+- packages/ Supabase/R2 共享契约、对象存储和客户端基础层
+- apps/backend/ Supabase 数据库迁移与私有资产 Edge Function
+- apps/web/ 未来 Web 客户端的工作区边界（当前不含页面实现）
+- infrastructure/ R2 CORS 等云资源配置样例
+- apps/desktop/ 桌面端(Electron)源码，不含 node_modules 和构建产物
 - 创作区/ 六条空作品线目录、各系列使用手册与各自的 _资产库/ 说明
 
 不包含：

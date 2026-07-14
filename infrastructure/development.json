@@ -1,0 +1,21 @@
+{
+  "environment": "development",
+  "supabase": {
+    "projectRef": "wnisfghxewadqhseschj",
+    "projectName": "anime-armory-dev",
+    "region": "ap-southeast-1",
+    "assetFunctionUrl": "https://wnisfghxewadqhseschj.supabase.co/functions/v1/assets",
+    "publicSignup": false,
+    "accountReservedBytesLimit": 21474836480,
+    "activeUploadsPerAccountLimit": 5
+  },
+  "cloudflare": {
+    "accountId": "da6652ff2280e97991d938ba004cd984",
+    "bucket": "anime-armory-private-dev",
+    "locationHint": "apac",
+    "publicAccess": false,
+    "stagedUploadPrefix": "_uploads/",
+    "stagedUploadExpirationDays": 2,
+    "incompleteMultipartAbortDays": 1
+  }
+}

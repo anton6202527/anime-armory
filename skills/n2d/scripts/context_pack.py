@@ -236,11 +236,18 @@ def write_pack(pack: Dict[str, Any]) -> Dict[str, str]:
     root = Path(str(pack["root"]))
     rel_json = context_pack_relpath(str(pack["episode"]), str(pack["stage_key"]))
     path_json = root / rel_json
-    path_md = path_json.with_suffix(".md")
+    path_md = root / "生产数据" / "views" / "context_packs" / path_json.with_suffix(".md").name
     path_json.parent.mkdir(parents=True, exist_ok=True)
+    path_md.parent.mkdir(parents=True, exist_ok=True)
     path_json.write_text(json.dumps(pack, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     path_md.write_text(render_markdown(pack), encoding="utf-8")
-    return {"json": str(path_json), "markdown": str(path_md), "rel_json": rel_json}
+    return {
+        "json": str(path_json),
+        "markdown": str(path_md),
+        "rel_json": rel_json,
+        "rel_markdown": path_md.relative_to(root).as_posix(),
+        "markdown_role": "derived_view",
+    }
 
 
 def main(argv: List[str]) -> int:

@@ -23,17 +23,19 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 | 系列 | 统计范围 | Skill 数 | SKILL.md 总行数 | 目录文本总行数 |
 |---|---|---:|---:|---:|
-| n2d | `n2d` + `n2d-*` | 21 | 4689 | 261252 |
-| novel | `novel` + `novel-*` | 29 | 3141 | 67349 |
-| comic | `comic` + `comic-*` | 13 | 1074 | 25034 |
-| song | `song` + `song-*` | 11 | 657 | 9850 |
-| mv | `mv` + `mv-*` | 14 | 1100 | 18659 |
-| ad | `ad` + `ad-*` | 14 | 970 | 27624 |
-| **合计** | `skills/*/SKILL.md` | **102** | 11631 | 409768 |
+| n2d | `n2d` + `n2d-*` | 21 | 4695 | 261905 |
+| novel | `novel` + `novel-*` | 29 | 3143 | 67362 |
+| comic | `comic` + `comic-*` | 13 | 1076 | 25059 |
+| song | `song` + `song-*` | 11 | 659 | 9864 |
+| mv | `mv` + `mv-*` | 14 | 1102 | 18720 |
+| ad | `ad` + `ad-*` | 14 | 972 | 27676 |
+| **合计** | `skills/*/SKILL.md` | **102** | 11647 | 410586 |
 
 > 仓库级清理工具 `tools/shared-cleanup` 已移出 `skills/`，不计入 skill 统计。
 
 > **系列独立性闸门**：改跨线引用、`_lib`、调度入口或选择点时，跑 `python3 tools/independence-audit/scripts/check_independence.py`。它会阻断活动的 `skills/common` / `common/*.py` 路径引用和未允许的代码级跨线依赖；文档里的跨线 handoff 必须说清“可选、文件/数据交接、缺失可降级”。
+
+> **作品资产目录（仓库维护工具）**：`tools/artifact-catalog` 可只读生成/审计 `生产数据/artifact_catalog.json`，并对旧项目给出渐进迁移计划。catalog 是派生读取索引，不是任何系列的业务真值或运行依赖；六条线各自独立落盘、独立 gate，工具不得被系列脚本 import。
 
 > **视觉线逐图 QC 原则（各线自维护）**：n2d / comic / mv / ad 的出图阶段都必须把 QC 前移到**每张图片落档后**：生成一张、登记一张、跑本线自己的最小可用 QC/落档自检，`block` 先修当前图，不把坏图继续传给视频/合成；批次或全话/全集结束后再跑一次本线收尾总闸。实现必须留在各自系列：`n2d-image` 用 n2d 的 `image_qc`/dashboard gate，`comic-image` 用 comic 的 `panel_qc`，`mv-image` 用 mv 的 `image_qc`，`ad-image` 用 ad 的 `product_qc` 与广告落档自检；不得新增公共实现目录，不得让一个系列 import 另一个系列的 QC 脚本。若某线现有脚本只能全量扫描，就每张落档后全量跑一次并聚焦新图 finding，后续再由本线自行 target 化优化。
 
@@ -43,7 +45,7 @@ skill 之间用 `<skills>/<name>/...` 互相引用，故**不要**移进子目�
 
 ## 一、n2d ——「小说 → AI 漫剧/短剧」生产管线
 
-`n2d` 是总调度，按 `_进度.md` 把用户路由到对应阶段 skill。默认 `制作模式=混合自动路由`：声音选角与无 WAV 时间基准先行，逐镜选择表演轨先行、后期口型、后配音、画面先行或原生音画；最终音色锁定后才批量生成 final voice。项目级 `配音先行` / `原生音画` / `先出视频后配音` 仅作用户显式兼容模式。逐集 `production_mode_route` 是机器执行合同，不靠中文 label 隐式跳转。`视频` 列完成表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览），不是可发布母版；接受镜头会持续刷新 `合成/第N集/_work/editorial_timeline.otio`，供专业剪辑软件接手。`合成/验收` 是用户可选尾段；发布/母版还要过 compose、release/readiness、production locks、creative governance 和人工签收，才算 `master_delivery_complete`。新项目视频默认口径：`出视频规格=预算充足`、`视频分辨率=720p`、`视频生成音频策略=无声视频流`、`视频原生音轨=丢弃`、`对口型=关闭`、`合成阶段=跳过`。
+`n2d` 是总调度，按 `_进度.md` 把用户路由到对应阶段 skill。默认 `制作模式=混合自动路由`：声音选角与无 WAV 时间基准先行，逐镜选择表演轨先行、后期口型、后配音、画面先行或原生音画；最终音色锁定后才批量生成 final voice。项目级 `配音先行` / `原生音画` / `先出视频后配音` 仅作用户显式兼容模式。逐集 `production_mode_route` 是机器执行合同，不靠中文 label 隐式跳转。`视频` 列完成表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览），不是可发布母版；接受镜头会持续刷新 `生产数据/timelines/第N集/editorial_timeline.otio`，供专业剪辑软件接手。`合成/验收` 是用户可选尾段；发布/母版还要过 compose、release/readiness、production locks、creative governance 和人工签收，才算 `master_delivery_complete`。新项目视频默认口径：`出视频规格=预算充足`、`视频分辨率=720p`、`视频生成音频策略=无声视频流`、`视频原生音轨=丢弃`、`对口型=关闭`、`合成阶段=跳过`。
 
 > **n2d 运行时 v2（2026-07）**：模型能力路由与本机执行已拆开——每条视频 route 带 adapter v2 状态，只有 `automated_ready` 才自动 submit；其它渠道用作品内 wrapper 注册，不静默换厂。视频齐片后用真实 Clip + `edit_target_sec` 产 `actual_rough_cut.mp4`；支持用户 opt-in 的原生多镜单次生成，母片会确定性拆回原 Clip 继续逐镜 QC/重跑。`run.py next` 物化 episode graph、归一化 blocking bundle 和隐私最小化 flow telemetry，但不新增状态机。QA 对 VLM verdict 封顶 WARN，数值检测器须生产规模金标校准才可自动 BLOCK；A/B 按每变体样本量 + Wilson 区间 + 显著性/多重比较给结论。`release_verdict` 分开报告 clip/master/production 完成与 CN/海外/商业发布就绪。完整合同见 `docs/n2d-adapter-v2-多镜执行与交付状态.md`。
 

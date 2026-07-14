@@ -50,7 +50,7 @@ def context_path(root: Path, episode: str, stage_key: str) -> Path:
 
 
 def context_md_path(root: Path, episode: str, stage_key: str) -> Path:
-    return context_path(root, episode, stage_key).with_suffix(".md")
+    return production_dir(root) / "views" / "genre_packs" / context_path(root, episode, stage_key).with_suffix(".md").name
 
 
 def pack_index() -> Dict[str, Dict[str, Any]]:
@@ -294,7 +294,9 @@ def write_context(root: Path, episode: str, stage_key: str, payload: Dict[str, A
     tmp = path.with_name(f"{path.name}.tmp.{os.getpid()}")
     tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(tmp, path)
-    context_md_path(root, episode, stage_key).write_text(render_context_markdown(payload), encoding="utf-8")
+    md_path = context_md_path(root, episode, stage_key)
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(render_context_markdown(payload), encoding="utf-8")
     return path
 
 

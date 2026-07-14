@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4689 | 目录文本总行数 261252
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4695 | 目录文本总行数 261905
 
 # n2d — 主状态机调度器
 
@@ -16,6 +16,8 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 4. **解释流水线整体结构** 给第一次使用的用户
 
 详细架构与目录约定见 `references/architecture.md`。机器契约见 `references/contract.md`（脚本真值源：`skills/n2d/_lib/n2d_contract.py`，定义阶段图、`_进度.md` schema、manifest、gate 回滚字段）。实战 Q&A 见 `Q&A.md`（全阶段共用，沉淀的翻车修正都在那）。
+
+**生产数据分层与独立性**：n2d 的 `_进度.md`、设置、合同、签收、事件账与正式媒体仍是本线业务真值；`生产数据/artifact_catalog.json` 只是可删除、可重建的只读索引，缺失或过期不得成为 gate。持久时间线放 `生产数据/timelines/`，人读 Markdown/HTML 派生视图放 `生产数据/views/`，可重建 `_work` / `_clipcache` 由本线 cache manifest 管理。持久路径使用作品根相对路径。n2d 不 import `tools/artifact-catalog` 或其它系列实现，不回读其它系列状态/缓存；跨线输入只能是用户显式交付并复制入本项目的成品文件与来源 SHA。
 
 ## 资产目录边界（正式约定）
 
