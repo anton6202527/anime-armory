@@ -10,6 +10,7 @@ export interface CreatePendingAssetInput {
   bucket: string
   objectKey: string
   originalName: string
+  relativePath: string
   contentType: string
   sizeBytes: number
   sha256?: string
@@ -52,8 +53,11 @@ export interface AssetRepository {
   createPendingAsset(input: CreatePendingAssetInput): Promise<AssetRecord>
   createUploadSession(input: CreateUploadSessionInput): Promise<UploadSessionRecord>
   getAsset(assetId: string): Promise<AssetRecord | null>
+  listReadyAssets(projectId: string): Promise<AssetRecord[]>
   getUploadSession(assetId: string): Promise<UploadSessionRecord | null>
   markAssetReady(assetId: string, input: ReadyAssetInput): Promise<AssetRecord>
+  supersedeReadyAssets(projectId: string, relativePath: string, currentAssetId: string): Promise<AssetRecord[]>
+  markAssetDeleted(assetId: string): Promise<void>
   markAssetFailed(assetId: string, reason: string): Promise<void>
   markUploadState(assetId: string, state: UploadSessionRecord['state']): Promise<void>
 }
@@ -80,6 +84,7 @@ interface AssetRow {
   object_etag: string | null
   object_version_id: string | null
   original_name: string
+  relative_path: string
   content_type: string
   size_bytes: number | string
   sha256: string | null
@@ -129,6 +134,7 @@ export function mapAssetRow(row: AssetRow): AssetRecord {
       versionId: row.object_version_id,
     },
     originalName: row.original_name,
+    relativePath: row.relative_path,
     contentType: row.content_type,
     sizeBytes: asSafeInteger(row.size_bytes, 'size_bytes'),
     sha256: row.sha256,
@@ -197,6 +203,7 @@ export class SupabaseAssetRepository implements AssetRepository {
         storage_bucket: input.bucket,
         object_key: input.objectKey,
         original_name: input.originalName,
+        relative_path: input.relativePath,
         content_type: input.contentType,
         size_bytes: input.sizeBytes,
         sha256: input.sha256 ?? null,
@@ -240,6 +247,19 @@ export class SupabaseAssetRepository implements AssetRepository {
     return data ? mapAssetRow(data as AssetRow) : null
   }
 
+  async listReadyAssets(projectId: string): Promise<AssetRecord[]> {
+    const { data, error } = await this.client
+      .from('assets')
+      .select('*')
+      .eq('project_id', projectId)
+      .eq('status', 'ready')
+      .is('deleted_at', null)
+      .order('relative_path', { ascending: true })
+      .order('created_at', { ascending: false })
+    if (error) throw new DataAccessError('list-assets', error.message, error)
+    return (data ?? []).map((row) => mapAssetRow(row as AssetRow))
+  }
+
   async getUploadSession(assetId: string): Promise<UploadSessionRecord | null> {
     const { data, error } = await this.client
       .from('asset_uploads')
@@ -268,6 +288,41 @@ export class SupabaseAssetRepository implements AssetRepository {
       throw new DataAccessError('mark-asset-ready', failureMessage(error, 'Unable to update asset'), error)
     }
     return mapAssetRow(data as AssetRow)
+  }
+
+  async supersedeReadyAssets(
+    projectId: string,
+    relativePath: string,
+    currentAssetId: string,
+  ): Promise<AssetRecord[]> {
+    const { data, error } = await this.client
+      .from('assets')
+      .select('*')
+      .eq('project_id', projectId)
+      .eq('relative_path', relativePath)
+      .eq('status', 'ready')
+      .is('deleted_at', null)
+      .neq('id', currentAssetId)
+    if (error) throw new DataAccessError('list-superseded-assets', error.message, error)
+    const previous = (data ?? []).map((row) => mapAssetRow(row as AssetRow))
+    if (previous.length === 0) return []
+
+    const { error: updateError } = await this.client
+      .from('assets')
+      .update({ status: 'deleted', deleted_at: new Date().toISOString() })
+      .in('id', previous.map((asset) => asset.id))
+    if (updateError) {
+      throw new DataAccessError('supersede-assets', updateError.message, updateError)
+    }
+    return previous
+  }
+
+  async markAssetDeleted(assetId: string): Promise<void> {
+    const { error } = await this.client
+      .from('assets')
+      .update({ status: 'deleted', deleted_at: new Date().toISOString() })
+      .eq('id', assetId)
+    if (error) throw new DataAccessError('delete-asset', error.message, error)
   }
 
   async markAssetFailed(assetId: string, reason: string): Promise<void> {

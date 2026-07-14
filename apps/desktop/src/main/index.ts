@@ -88,6 +88,14 @@ function createWindow(): BrowserWindow {
                  steps.push('epSelect=' + Boolean(document.querySelector('.ep-select')))
                }
              }
+             if (${JSON.stringify(Boolean(process.env.SMOKE_CLOUD))}) {
+               click(document.querySelector('.statusbar-cloud'))
+               await sleep(1200)
+               steps.push('cloudModal=' + Boolean(document.querySelector('.cloud-modal')))
+               steps.push('cloudLogin=' + Boolean(document.querySelector('.cloud-login')))
+               steps.push('cloudConfigMissing=' + Boolean(document.querySelector('.cloud-empty code')))
+               steps.push('cloudError=' + Boolean(document.querySelector('.cloud-error')))
+             }
              return JSON.stringify({
                steps,
                errs: window.armorySmokeErrors ? window.armorySmokeErrors() : [],
@@ -128,6 +136,7 @@ function createWindow(): BrowserWindow {
 
   services.pty.attach(win.webContents)
   services.watch.attach(win.webContents)
+  services.cloud.attach(win.webContents)
   ui.attach(win)
 
   // On macOS the app outlives its window (window-all-closed does not quit),
@@ -136,6 +145,7 @@ function createWindow(): BrowserWindow {
   win.on('closed', () => {
     services.pty.disposeAll()
     void services.watch.disposeAll()
+    services.cloud.dispose()
   })
 
   if (process.env.ELECTRON_RENDERER_URL) {
@@ -168,5 +178,6 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   services.pty.disposeAll()
   services.media.dispose()
+  services.cloud.dispose()
   void services.watch.disposeAll()
 })

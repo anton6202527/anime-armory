@@ -18,6 +18,18 @@ npm run dist         # electron-builder 产出安装包(release/)
 从 cwd 向上查找含 `skills/README.md` 的目录 → 打包内置 `resources/`。
 作品工作区固定为 `~/AnimeArmory`(可经菜单"切换工作区…"更换,与技能仓库互斥隔离)。
 
+### 云端登录与作品同步
+
+桌面端保持本地优先。配置 `apps/desktop/.env.local` 后，点击底部状态栏的“登录云端”，使用 Supabase Auth 邮箱密码登录；会话由 Electron 主进程通过系统安全存储加密保存，renderer 不接触令牌。
+
+打开作品后可在同一面板执行：
+
+- 增量同步到云端：首次创建/绑定项目，只上传新增或 SHA-256 变化的文件；
+- 恢复云端缺失文件：只下载本地不存在的文件，同名冲突不会覆盖；
+- 绑定已有云端作品或解除本机绑定。
+
+同步需要显式点击，不会在启动或打包时自动上传。完整安全边界见 `../../docs/cloud-architecture.md`。
+
 ## 架构
 
 ```

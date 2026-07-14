@@ -20,6 +20,8 @@ Cloudflare R2 私有桶
 - 数据库不保存永久 CDN URL，只保存 `provider + bucket + key + etag/version`。以后切换腾讯云 COS 时，客户端协议不需要改变。
 - 现有 Electron 本地工作流保持默认行为；没有云配置、没有登录时仍可离线使用。
 - Electron 正式包通过 main/preload 的受限 IPC transport 发起云请求；renderer 不直接联网，也不为 `file://` 的 `null` Origin 放宽 CSP/CORS。
+- Electron 登录会话只保存在主进程，并通过操作系统安全存储加密；邮箱密码不会落盘，access token 不会进入 renderer。
+- 作品同步必须由用户显式触发。上传只发送新增或哈希变化的文件，下载只恢复本地缺失文件；同名冲突不会覆盖本地内容。
 - Web 端本阶段只保留 `apps/web` 工作区边界，不创建页面；后续复用 `packages/contracts` 和 `packages/cloud-client`。
 
 ## 代码边界
@@ -36,6 +38,8 @@ Cloudflare R2 私有桶
 | `apps/backend/supabase/migrations` | 可审计、可迁移的 Postgres 表结构与 RLS 策略 |
 | `apps/backend/supabase/functions/assets` | 私有资产签名、权限校验、上传完成校验 |
 | `infrastructure/r2` | R2 CORS 配置样例 |
+
+每部本地作品使用 `.anime-armory/cloud.json` 保存非敏感的云端项目绑定。该目录不会作为作品资产上传；删除绑定文件只会解除本机绑定，不会删除云端数据。
 
 ## 数据模型
 
@@ -77,6 +81,18 @@ npm run supabase -- functions serve assets --env-file .env.local
 ```
 
 `.env.local` 只能保存在本机，不能提交到 Git。
+
+## 桌面端登录与同步
+
+1. 在 Supabase Auth 中由管理员创建或邀请用户。开发项目不开放公共注册。
+2. 把 `apps/desktop/.env.example` 复制为 `apps/desktop/.env.local`，填写三个可公开的 `VITE_` 配置。
+3. 启动桌面端，在底部状态栏点击“登录云端”。
+4. 打开一部作品后：
+   - “增量同步到云端”会在首次上传时创建云端项目，以后按 `relative_path + sha256` 跳过未变化文件；
+   - “恢复云端缺失文件”只写入本地不存在的路径，内容冲突会列出但不覆盖；
+   - 上传新版本成功后，Edge Function 才会把同路径旧对象标为删除并清理 R2 对象。
+
+本版本不会因为启动、文件变化或应用打包自动上传，也不会把本地绝对路径发送到服务端。远端删除同步暂不自动执行，避免误删。
 
 ## 首次远程部署（需要登录授权）
 

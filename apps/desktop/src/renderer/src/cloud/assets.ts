@@ -1,10 +1,6 @@
-import { AssetApiClient, type AssetApiClientOptions } from '@anime-armory/cloud-client'
+import type { CloudPublicConfig } from '@shared/types'
 
-export interface DesktopCloudConfig {
-  supabaseUrl: string
-  supabasePublishableKey: string
-  assetApiUrl: string
-}
+export type DesktopCloudConfig = CloudPublicConfig
 
 export type DesktopCloudCapability =
   | { enabled: true; config: DesktopCloudConfig }
@@ -47,22 +43,5 @@ export function desktopCloudCapability(env: ImportMetaEnv = import.meta.env): De
   }
 }
 
-/**
- * Authentication remains a separate concern: the future login UI supplies
- * the current Supabase access token through this callback. The transport is
- * deliberately required instead of falling back to renderer fetch: packaged
- * file:// pages have an opaque origin, so cloud traffic must cross a narrowly
- * allowlisted main/preload IPC boundary rather than weakening CSP/CORS for
- * the unsafe `null` origin.
- */
-export function createDesktopAssetClient(
-  config: DesktopCloudConfig,
-  getAccessToken: AssetApiClientOptions['getAccessToken'],
-  fetchThroughMainProcess: typeof globalThis.fetch,
-): AssetApiClient {
-  return new AssetApiClient({
-    endpoint: config.assetApiUrl,
-    getAccessToken,
-    fetch: fetchThroughMainProcess,
-  })
-}
+// Authentication and object transfer run in the Electron main process. The
+// renderer only forwards this public configuration through typed IPC.

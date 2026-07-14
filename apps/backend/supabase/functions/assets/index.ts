@@ -4,6 +4,7 @@ import {
   type AssetApiRequest,
   type AssetApiResponse,
   type AssetRecord,
+  type CloudProjectRecord,
   type CompletedPart,
   ContractError,
   DEFAULT_MAX_ASSET_BYTES,
@@ -46,6 +47,14 @@ interface RequestContext {
   accountId: string
   objectStore: ObjectStore
   config: RuntimeConfig
+}
+
+interface ProjectRow {
+  id: string
+  name: string
+  client_key: string
+  created_at: string
+  updated_at: string
 }
 
 class HttpError extends Error {
@@ -263,6 +272,113 @@ async function requireProjectAccess(
   return role
 }
 
+function mapProject(
+  row: ProjectRow,
+  role: CloudProjectRecord['role'],
+): CloudProjectRecord {
+  return {
+    id: row.id,
+    name: row.name,
+    clientKey: row.client_key,
+    role,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }
+}
+
+async function ensureProject(
+  context: RequestContext,
+  request: Extract<AssetApiRequest, { action: 'ensure-project' }>,
+): Promise<AssetApiResponse> {
+  const findExisting = async (): Promise<ProjectRow | null> => {
+    const { data, error } = await context.userClient
+      .from('projects')
+      .select('id,name,client_key,created_at,updated_at')
+      .eq('owner_account_id', context.accountId)
+      .eq('client_key', request.clientKey)
+      .maybeSingle()
+    if (error) throw new DataAccessError('find-project', error.message, error)
+    return data as ProjectRow | null
+  }
+
+  const existing = await findExisting()
+  if (existing) {
+    if (existing.name !== request.name) {
+      const { data, error } = await context.userClient
+        .from('projects')
+        .update({ name: request.name })
+        .eq('id', existing.id)
+        .select('id,name,client_key,created_at,updated_at')
+        .single()
+      if (error || !data) {
+        throw new DataAccessError('rename-project', error?.message ?? 'Unable to rename project', error)
+      }
+      return { action: 'ensure-project', project: mapProject(data as ProjectRow, 'owner') }
+    }
+    return { action: 'ensure-project', project: mapProject(existing, 'owner') }
+  }
+
+  const { data, error } = await context.userClient
+    .from('projects')
+    .insert({
+      owner_account_id: context.accountId,
+      client_key: request.clientKey,
+      name: request.name,
+    })
+    .select('id,name,client_key,created_at,updated_at')
+    .single()
+  if (error || !data) {
+    if ((error as { code?: string } | null)?.code === '23505') {
+      const raced = await findExisting()
+      if (raced) return { action: 'ensure-project', project: mapProject(raced, 'owner') }
+    }
+    throw new DataAccessError('create-project', error?.message ?? 'Unable to create project', error)
+  }
+  return { action: 'ensure-project', project: mapProject(data as ProjectRow, 'owner') }
+}
+
+async function listProjects(context: RequestContext): Promise<AssetApiResponse> {
+  const [{ data: projects, error: projectError }, { data: memberships, error: memberError }] =
+    await Promise.all([
+      context.userClient
+        .from('projects')
+        .select('id,name,client_key,created_at,updated_at')
+        .order('updated_at', { ascending: false }),
+      context.userClient
+        .from('project_members')
+        .select('project_id,role')
+        .eq('account_id', context.accountId),
+    ])
+  if (projectError) throw new DataAccessError('list-projects', projectError.message, projectError)
+  if (memberError) throw new DataAccessError('list-project-memberships', memberError.message, memberError)
+  const roles = new Map(
+    (memberships ?? []).map((membership) => [
+      String(membership.project_id),
+      membership.role as CloudProjectRecord['role'],
+    ]),
+  )
+  return {
+    action: 'list-projects',
+    projects: (projects ?? []).flatMap((project) => {
+      const role = roles.get(String(project.id))
+      return role ? [mapProject(project as ProjectRow, role)] : []
+    }),
+  }
+}
+
+async function listAssets(
+  context: RequestContext,
+  request: Extract<AssetApiRequest, { action: 'list-assets' }>,
+): Promise<AssetApiResponse> {
+  await requireProjectAccess(context, request.projectId, false)
+  const assets = await context.userRepository.listReadyAssets(request.projectId)
+  const current = new Map<string, AssetRecord>()
+  for (const asset of assets) {
+    if (!current.has(asset.relativePath)) current.set(asset.relativePath, asset)
+  }
+  return { action: 'list-assets', projectId: request.projectId, assets: [...current.values()] }
+}
+
 function assertConfiguredProvider(context: RequestContext, asset: AssetRecord): void {
   if (
     asset.object.provider !== context.objectStore.provider ||
@@ -361,6 +477,7 @@ async function createUpload(
       bucket: context.objectStore.bucket,
       objectKey,
       originalName: request.fileName,
+      relativePath: request.relativePath,
       contentType: request.contentType,
       sizeBytes: request.sizeBytes,
       ...(request.sha256 ? { sha256: request.sha256 } : {}),
@@ -579,6 +696,22 @@ async function completeUpload(
     versionId: finalObject.versionId,
   })
   await context.adminRepository.markUploadState(asset.id, 'completed')
+  const superseded = await context.adminRepository.supersedeReadyAssets(
+    asset.projectId,
+    asset.relativePath,
+    asset.id,
+  )
+  await Promise.all(
+    superseded.map((previous) =>
+      context.objectStore.deleteObject(previous.object.key).catch((error) => {
+        console.error(JSON.stringify({
+          event: 'superseded_object_delete_failed',
+          assetId: previous.id,
+          error: errorMessage(error),
+        }))
+      })
+    ),
+  )
   await context.objectStore.deleteObject(uploadObjectKey).catch(() => undefined)
   return { action: 'complete-upload', asset: readyAsset }
 }
@@ -622,11 +755,31 @@ async function createDownload(
   return { action: 'create-download', assetId: asset.id, download }
 }
 
+async function deleteAsset(
+  context: RequestContext,
+  request: Extract<AssetApiRequest, { action: 'delete-asset' }>,
+): Promise<AssetApiResponse> {
+  const { asset } = await requireAsset(context, request.assetId, true)
+  if (asset.status !== 'deleted') {
+    await context.objectStore.deleteObject(asset.object.key).catch((error) => {
+      if (!isNotFoundError(error)) throw error
+    })
+    await context.adminRepository.markAssetDeleted(asset.id)
+  }
+  return { action: 'delete-asset', assetId: asset.id, status: 'deleted' }
+}
+
 async function dispatch(
   context: RequestContext,
   request: AssetApiRequest,
 ): Promise<AssetApiResponse> {
   switch (request.action) {
+    case 'ensure-project':
+      return ensureProject(context, request)
+    case 'list-projects':
+      return listProjects(context)
+    case 'list-assets':
+      return listAssets(context, request)
     case 'create-upload':
       return createUpload(context, request)
     case 'sign-parts':
@@ -637,6 +790,8 @@ async function dispatch(
       return abortUpload(context, request)
     case 'create-download':
       return createDownload(context, request)
+    case 'delete-asset':
+      return deleteAsset(context, request)
   }
 }
 

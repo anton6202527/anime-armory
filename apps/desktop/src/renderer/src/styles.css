@@ -253,6 +253,8 @@ button:hover { border-color: var(--accent); }
 .statusbar-notifications {
   min-width: 31px; padding: 0 8px; background: transparent; border-left: 0;
 }
+.statusbar-cloud { max-width: 240px; gap: 5px; }
+.statusbar-cloud span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .statusbar-button .aa-codicon {
   font-size: 16px; line-height: 1;
 }
@@ -442,6 +444,75 @@ button:hover { border-color: var(--accent); }
   outline-offset: 1px;
 }
 .skills-modal-close { font-size: 14px; }
+
+/* ---- Authenticated cloud sync ---- */
+.cloud-modal-backdrop { z-index: var(--z-modal-raised); }
+.cloud-modal {
+  width: min(620px, calc(100vw - 36px)); max-height: min(760px, calc(100vh - 42px));
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .58);
+}
+.cloud-modal-head {
+  min-height: 58px; padding: 10px 14px 10px 18px; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: var(--sidebar-bg); border-bottom: 1px solid var(--border);
+}
+.cloud-modal-head h2 { margin: 0; color: var(--accent); font-size: 15px; }
+.cloud-modal-head span { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+.cloud-modal-head .modal-close:disabled { opacity: .35; cursor: default; }
+.cloud-modal-body { padding: 18px; overflow: auto; min-height: 160px; }
+.cloud-empty {
+  display: grid; gap: 9px; padding: 18px; color: var(--muted);
+  border: 1px dashed var(--border); border-radius: 8px; background: var(--editor-bg);
+}
+.cloud-empty p { margin: 0; }
+.cloud-empty code { white-space: normal; color: var(--text); line-height: 1.55; }
+.cloud-login { display: grid; gap: 14px; max-width: 420px; margin: 4px auto; }
+.cloud-login p { margin: 0 0 2px; color: var(--muted); line-height: 1.55; }
+.cloud-login label, .cloud-project-select { display: grid; gap: 6px; color: var(--muted); font-size: 12px; }
+.cloud-login input, .cloud-project-select select {
+  min-width: 0; height: 34px; box-sizing: border-box; padding: 0 10px;
+  color: var(--text); background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 6px;
+  outline: none;
+}
+.cloud-login input:focus, .cloud-project-select select:focus { border-color: var(--focus); }
+.cloud-login .primary, .cloud-action-card .primary {
+  color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 650;
+}
+.cloud-login button { height: 34px; }
+.cloud-login button:disabled, .cloud-sync button:disabled { opacity: .48; cursor: default; }
+.cloud-notice, .cloud-error, .cloud-result, .cloud-binding, .cloud-new-project {
+  padding: 9px 11px; border-radius: 7px; font-size: 12px; line-height: 1.45;
+}
+.cloud-notice { margin-bottom: 12px; color: #e7c56b; background: rgba(204, 167, 0, .12); border: 1px solid rgba(204, 167, 0, .25); }
+.cloud-error { margin-top: 14px; color: #ffadad; background: rgba(255, 91, 91, .1); border: 1px solid rgba(255, 91, 91, .28); }
+.cloud-result { margin-top: 12px; color: #a7e6b2; background: rgba(71, 180, 88, .1); border: 1px solid rgba(71, 180, 88, .25); }
+.cloud-result div { margin-top: 5px; color: #e7c56b; overflow-wrap: anywhere; }
+.cloud-sync { display: grid; gap: 11px; }
+.cloud-work-title { font-size: 14px; font-weight: 650; }
+.cloud-binding { color: #a7d8ff; background: rgba(46, 142, 214, .1); border: 1px solid rgba(46, 142, 214, .25); }
+.cloud-new-project { color: var(--muted); background: var(--editor-bg); border: 1px dashed var(--border); }
+.cloud-binding-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+.cloud-action-card {
+  display: grid; grid-template-columns: minmax(170px, auto) 1fr; align-items: center; gap: 12px;
+  padding: 11px; background: var(--editor-bg); border: 1px solid var(--border); border-radius: 8px;
+}
+.cloud-action-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.cloud-progress { display: grid; gap: 7px; padding: 11px; background: var(--editor-bg); border: 1px solid var(--focus); border-radius: 8px; }
+.cloud-progress-row { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 11px; }
+.cloud-progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .09); }
+.cloud-progress-track i { display: block; height: 100%; min-width: 4px; background: var(--accent); transition: width .15s ease; }
+.cloud-progress code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-size: 11px; }
+.cloud-progress button { justify-self: end; }
+.cloud-modal-foot {
+  display: flex; justify-content: flex-end; padding: 10px 18px;
+  background: var(--sidebar-bg); border-top: 1px solid var(--border);
+}
+@media (max-width: 620px) {
+  .cloud-action-card { grid-template-columns: 1fr; }
+  .statusbar-cloud span { display: none; }
+}
 
 .modal-body { flex: 1; display: flex; min-height: 0; padding: 0; }
 .skills-browser {

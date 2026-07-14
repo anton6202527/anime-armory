@@ -23,6 +23,7 @@ function readyAsset(sizeBytes: number) {
     ownerAccountId: 'd9304575-31c1-4be0-a833-4a8cd04755ff',
     object: { provider: 'r2' as const, bucket: 'private', key: 'key' },
     originalName: 'clip.mp4',
+    relativePath: '成片/clip.mp4',
     contentType: 'video/mp4',
     sizeBytes,
     status: 'ready' as const,
@@ -39,7 +40,7 @@ test('requires a login before calling the cloud API', async () => {
   })
 
   await assert.rejects(
-    client.createUpload(projectId, source(1)),
+    client.createUpload(projectId, '成片/clip.mp4', source(1)),
     (error: unknown) => error instanceof CloudApiError && error.code === 'authentication_required',
   )
 })
@@ -78,6 +79,7 @@ test('uploads and completes a single object', async () => {
 
   const asset = await client.uploadAsset({
     projectId,
+    relativePath: '成片/clip.mp4',
     source: source(16),
     onProgress: (uploaded) => progress.push(uploaded),
   })
@@ -141,6 +143,7 @@ test('uploads multipart objects and reports progress', async () => {
 
   await client.uploadAsset({
     projectId,
+    relativePath: '成片/clip.mp4',
     source: source(10),
     onProgress: (uploaded) => progress.push(uploaded),
   })

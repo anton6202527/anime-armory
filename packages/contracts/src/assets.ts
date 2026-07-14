@@ -7,6 +7,16 @@ export const MAX_SIGNED_PARTS_PER_REQUEST = 100
 export type StorageProvider = 'r2' | 'cos'
 export type AssetStatus = 'pending' | 'uploading' | 'ready' | 'failed' | 'deleted'
 export type UploadMode = 'single' | 'multipart'
+export type ProjectRole = 'owner' | 'editor' | 'viewer'
+
+export interface CloudProjectRecord {
+  id: string
+  name: string
+  clientKey: string
+  role: ProjectRole
+  createdAt: string
+  updatedAt: string
+}
 
 export interface StoredObjectRef {
   provider: StorageProvider
@@ -22,6 +32,7 @@ export interface AssetRecord {
   ownerAccountId: string
   object: StoredObjectRef
   originalName: string
+  relativePath: string
   contentType: string
   sizeBytes: number
   sha256?: string | null
@@ -30,13 +41,34 @@ export interface AssetRecord {
   updatedAt: string
 }
 
+export interface EnsureProjectRequest {
+  action: 'ensure-project'
+  clientKey: string
+  name: string
+}
+
+export interface ListProjectsRequest {
+  action: 'list-projects'
+}
+
+export interface ListAssetsRequest {
+  action: 'list-assets'
+  projectId: string
+}
+
 export interface CreateUploadRequest {
   action: 'create-upload'
   projectId: string
   fileName: string
+  relativePath: string
   contentType: string
   sizeBytes: number
   sha256?: string
+}
+
+export interface DeleteAssetRequest {
+  action: 'delete-asset'
+  assetId: string
 }
 
 export interface SignPartsRequest {
@@ -68,17 +100,37 @@ export interface CreateDownloadRequest {
 }
 
 export type AssetApiRequest =
+  | EnsureProjectRequest
+  | ListProjectsRequest
+  | ListAssetsRequest
   | CreateUploadRequest
   | SignPartsRequest
   | CompleteUploadRequest
   | AbortUploadRequest
   | CreateDownloadRequest
+  | DeleteAssetRequest
 
 export interface SignedRequest {
   url: string
   method: 'PUT' | 'GET'
   headers: Record<string, string>
   expiresAt: string
+}
+
+export interface EnsureProjectResponse {
+  action: 'ensure-project'
+  project: CloudProjectRecord
+}
+
+export interface ListProjectsResponse {
+  action: 'list-projects'
+  projects: CloudProjectRecord[]
+}
+
+export interface ListAssetsResponse {
+  action: 'list-assets'
+  projectId: string
+  assets: AssetRecord[]
 }
 
 export interface CreateUploadResponse {
@@ -113,12 +165,22 @@ export interface CreateDownloadResponse {
   download: SignedRequest
 }
 
+export interface DeleteAssetResponse {
+  action: 'delete-asset'
+  assetId: string
+  status: 'deleted'
+}
+
 export type AssetApiResponse =
+  | EnsureProjectResponse
+  | ListProjectsResponse
+  | ListAssetsResponse
   | CreateUploadResponse
   | SignPartsResponse
   | CompleteUploadResponse
   | AbortUploadResponse
   | CreateDownloadResponse
+  | DeleteAssetResponse
 
 export class ContractError extends Error {
   readonly field: string | undefined
@@ -167,6 +229,14 @@ function positiveInteger(input: Record<string, unknown>, field: string): number 
   return value
 }
 
+function nonNegativeInteger(input: Record<string, unknown>, field: string): number {
+  const value = input[field]
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0) {
+    throw new ContractError(`${field} must be a non-negative safe integer`, field)
+  }
+  return value
+}
+
 function uuid(input: Record<string, unknown>, field: string): string {
   const value = requiredString(input, field, { maxLength: 36 })
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
@@ -183,6 +253,19 @@ function sha256(input: Record<string, unknown>): string | undefined {
   return value?.toLowerCase()
 }
 
+function relativePath(input: Record<string, unknown>): string {
+  const value = requiredString(input, 'relativePath', { maxLength: 1024 })
+  if (
+    value.startsWith('/') ||
+    value.includes('\\') ||
+    value.includes('\0') ||
+    value.split('/').some((segment) => segment === '' || segment === '.' || segment === '..')
+  ) {
+    throw new ContractError('relativePath must be a safe normalized relative path', 'relativePath')
+  }
+  return value
+}
+
 export function parseAssetApiRequest(
   value: unknown,
   options: { maxAssetBytes?: number } = {},
@@ -191,8 +274,18 @@ export function parseAssetApiRequest(
   const action = requiredString(value, 'action', { maxLength: 40 })
 
   switch (action) {
+    case 'ensure-project':
+      return {
+        action,
+        clientKey: uuid(value, 'clientKey'),
+        name: requiredString(value, 'name', { maxLength: 160 }),
+      }
+    case 'list-projects':
+      return { action }
+    case 'list-assets':
+      return { action, projectId: uuid(value, 'projectId') }
     case 'create-upload': {
-      const sizeBytes = positiveInteger(value, 'sizeBytes')
+      const sizeBytes = nonNegativeInteger(value, 'sizeBytes')
       const maxAssetBytes = options.maxAssetBytes ?? DEFAULT_MAX_ASSET_BYTES
       if (sizeBytes > maxAssetBytes) {
         throw new ContractError(`sizeBytes exceeds the configured ${maxAssetBytes} byte limit`, 'sizeBytes')
@@ -206,6 +299,7 @@ export function parseAssetApiRequest(
         action,
         projectId: uuid(value, 'projectId'),
         fileName: requiredString(value, 'fileName', { maxLength: 255 }),
+        relativePath: relativePath(value),
         contentType,
         sizeBytes,
         ...(digest ? { sha256: digest } : {}),
@@ -259,12 +353,17 @@ export function parseAssetApiRequest(
       if (disposition !== undefined && disposition !== 'inline' && disposition !== 'attachment') {
         throw new ContractError('disposition must be inline or attachment', 'disposition')
       }
+      const normalizedDisposition = disposition === 'inline' || disposition === 'attachment'
+        ? disposition
+        : undefined
       return {
         action,
         assetId: uuid(value, 'assetId'),
-        ...(disposition ? { disposition } : {}),
+        ...(normalizedDisposition ? { disposition: normalizedDisposition } : {}),
       }
     }
+    case 'delete-asset':
+      return { action, assetId: uuid(value, 'assetId') }
     default:
       throw new ContractError(`unsupported action: ${action}`, 'action')
   }

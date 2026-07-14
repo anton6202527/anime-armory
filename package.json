@@ -14,9 +14,10 @@
     "typecheck:desktop": "npm run typecheck --workspace @anime-armory/desktop",
     "typecheck:cloud": "npm run typecheck --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
     "typecheck:edge": "npm run typecheck --workspace @anime-armory/backend",
+    "typecheck:cloud-e2e": "tsc -p scripts/tsconfig.cloud.json",
     "test:cloud": "npm run test --workspace @anime-armory/contracts --workspace @anime-armory/cloud-client --workspace @anime-armory/data-access --workspace @anime-armory/object-store",
     "test:cloud:remote": "tsx scripts/cloud_e2e.ts",
-    "check:cloud": "npm run typecheck:cloud && npm run typecheck:edge && npm run test:cloud",
+    "check:cloud": "npm run typecheck:cloud && npm run typecheck:edge && npm run typecheck:cloud-e2e && npm run test:cloud",
     "check": "npm run check:cloud && npm run typecheck:desktop",
     "supabase": "supabase --workdir apps/backend"
   },

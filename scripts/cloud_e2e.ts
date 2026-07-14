@@ -69,22 +69,16 @@ async function main(): Promise<void> {
       throw new Error(`resolve application account: ${accountError?.message ?? 'identity mismatch'}`)
     }
 
-    const newProjectId = crypto.randomUUID()
-    const { error: projectError } = await userClient
-      .from('projects')
-      .insert({ id: newProjectId, owner_account_id: accountId, name: 'Cloud E2E' })
-    if (projectError) throw new Error(`create RLS project: ${projectError.message}`)
-    projectId = newProjectId
-
-    const { data: visibleProject, error: visibleProjectError } = await userClient
-      .from('projects')
-      .select('id')
-      .eq('id', projectId)
-      .single()
-    if (visibleProjectError || visibleProject?.id !== projectId) {
-      throw new Error(
-        `read RLS project membership: ${visibleProjectError?.message ?? 'project is not visible'}`,
-      )
+    const assetClient = new AssetApiClient({
+      endpoint: assetApiUrl,
+      getAccessToken: async () => signedIn.session.access_token,
+    })
+    const clientKey = crypto.randomUUID()
+    const ensuredProject = await assetClient.ensureProject(clientKey, 'Cloud E2E')
+    projectId = ensuredProject.project.id
+    const listedProjects = await assetClient.listProjects()
+    if (!listedProjects.projects.some((project) => project.id === projectId && project.clientKey === clientKey)) {
+      throw new Error('created project is missing from the authenticated project list')
     }
 
     const bytes = new TextEncoder().encode('anime-armory authenticated cloud e2e')
@@ -96,12 +90,16 @@ async function main(): Promise<void> {
         return new Blob([bytes.slice(start, end)], { type: contentType })
       },
     }
-    const assetClient = new AssetApiClient({
-      endpoint: assetApiUrl,
-      getAccessToken: async () => signedIn.session.access_token,
+    const asset = await assetClient.uploadAsset({
+      projectId,
+      relativePath: 'cloud-e2e.txt',
+      source,
     })
-    const asset = await assetClient.uploadAsset({ projectId, source })
     if (asset.status !== 'ready') throw new Error(`asset finished as ${asset.status}`)
+    const listedAssets = await assetClient.listAssets(projectId)
+    if (!listedAssets.assets.some((item) => item.id === asset.id && item.relativePath === 'cloud-e2e.txt')) {
+      throw new Error('uploaded asset is missing from the project asset list')
+    }
 
     objectKeys.add(asset.object.key)
     const stagedKey = `_uploads/${projectId}/${asset.id}`
@@ -148,6 +146,8 @@ async function main(): Promise<void> {
       assetStatus: asset.status,
       bytes: bytes.byteLength,
       rlsRead: true,
+      projectDiscovery: true,
+      assetDiscovery: true,
       stagedObjectDeleted,
       downloadStatus: downloaded.status,
     }

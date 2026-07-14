@@ -23,7 +23,9 @@ const secureMonacoDomPurify = {
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
+    plugins: [externalizeDepsPlugin({
+      exclude: ['@anime-armory/cloud-client', '@anime-armory/contracts'],
+    })],
     build: {
       rollupOptions: {
         input: { index: resolve(__dirname, 'src/main/index.ts') },

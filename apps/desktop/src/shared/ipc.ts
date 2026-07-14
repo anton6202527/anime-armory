@@ -5,6 +5,12 @@ import type {
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
+  CloudAuthStatus,
+  CloudProjectBinding,
+  CloudProjectInfo,
+  CloudPublicConfig,
+  CloudSyncProgress,
+  CloudSyncResult,
   DemoDownloadInfo,
   DemoInstallResult,
   EpisodeWorkspace,
@@ -41,6 +47,32 @@ export interface IpcCommands {
   'demos.list': (a: { workspaceRoot: string }) => DemoDownloadInfo[]
   'demos.install': (a: { workspaceRoot: string; rel: string }) => DemoInstallResult
   'demos.seed': (a: { workspaceRoot: string }) => number
+
+  // authenticated cloud projects and explicit work sync
+  'cloud.authStatus': (a: { config: CloudPublicConfig }) => CloudAuthStatus
+  'cloud.signIn': (a: { config: CloudPublicConfig; email: string; password: string }) => CloudAuthStatus
+  'cloud.signOut': (a: { config: CloudPublicConfig }) => void
+  'cloud.listProjects': (a: { config: CloudPublicConfig }) => CloudProjectInfo[]
+  'cloud.getBinding': (a: { root: string }) => CloudProjectBinding | null
+  'cloud.bindProject': (a: {
+    config: CloudPublicConfig
+    root: string
+    projectId: string
+  }) => CloudProjectBinding
+  'cloud.unbindProject': (a: { root: string }) => void
+  'cloud.syncUpload': (a: {
+    config: CloudPublicConfig
+    root: string
+    projectName: string
+    operationId: string
+  }) => CloudSyncResult
+  'cloud.syncDownload': (a: {
+    config: CloudPublicConfig
+    root: string
+    projectId: string
+    operationId: string
+  }) => CloudSyncResult
+  'cloud.cancelSync': (a: { operationId: string }) => void
 
   // skills
   'skills.list': (a: { repoRoot: string; line: string }) => SkillInfo[]
@@ -156,6 +188,7 @@ export interface IpcEvents {
   'app:open-recent-work': string
   'app:new-terminal': void
   'app:toggle-terminal': boolean | undefined
+  'cloud-sync-progress': CloudSyncProgress
 }
 
 export type IpcEventName = keyof IpcEvents

@@ -10,6 +10,12 @@ import type {
   CanvasNodePosition,
   ClipEditData,
   ClipEditPatch,
+  CloudAuthStatus,
+  CloudProjectBinding,
+  CloudProjectInfo,
+  CloudPublicConfig,
+  CloudSyncProgress,
+  CloudSyncResult,
   DemoDownloadInfo,
   DemoInstallResult,
   EpisodeWorkspace,
@@ -428,7 +434,69 @@ export async function ptyKill(id: number): Promise<void> {
   return invoke("pty.kill", { id });
 }
 
-// Optional cloud boundary. Existing components remain local-first; future
-// login/upload UI can consume this without importing provider-specific code.
-export { createDesktopAssetClient, desktopCloudCapability } from "./cloud/assets";
+// Authenticated cloud boundary. Tokens, filesystem traversal and object
+// transfer stay in the Electron main process; renderer code only uses typed IPC.
+export { desktopCloudCapability } from "./cloud/assets";
 export type { DesktopCloudCapability, DesktopCloudConfig } from "./cloud/assets";
+
+export async function cloudAuthStatus(config: CloudPublicConfig): Promise<CloudAuthStatus> {
+  return invoke("cloud.authStatus", { config });
+}
+
+export async function cloudSignIn(
+  config: CloudPublicConfig,
+  email: string,
+  password: string,
+): Promise<CloudAuthStatus> {
+  return invoke("cloud.signIn", { config, email, password });
+}
+
+export async function cloudSignOut(config: CloudPublicConfig): Promise<void> {
+  return invoke("cloud.signOut", { config });
+}
+
+export async function cloudListProjects(config: CloudPublicConfig): Promise<CloudProjectInfo[]> {
+  return invoke("cloud.listProjects", { config });
+}
+
+export async function cloudGetBinding(root: string): Promise<CloudProjectBinding | null> {
+  return invoke("cloud.getBinding", { root });
+}
+
+export async function cloudBindProject(
+  config: CloudPublicConfig,
+  root: string,
+  projectId: string,
+): Promise<CloudProjectBinding> {
+  return invoke("cloud.bindProject", { config, root, projectId });
+}
+
+export async function cloudUnbindProject(root: string): Promise<void> {
+  return invoke("cloud.unbindProject", { root });
+}
+
+export async function cloudSyncUpload(
+  config: CloudPublicConfig,
+  root: string,
+  projectName: string,
+  operationId: string,
+): Promise<CloudSyncResult> {
+  return invoke("cloud.syncUpload", { config, root, projectName, operationId });
+}
+
+export async function cloudSyncDownload(
+  config: CloudPublicConfig,
+  root: string,
+  projectId: string,
+  operationId: string,
+): Promise<CloudSyncResult> {
+  return invoke("cloud.syncDownload", { config, root, projectId, operationId });
+}
+
+export async function cloudCancelSync(operationId: string): Promise<void> {
+  return invoke("cloud.cancelSync", { operationId });
+}
+
+export function onCloudSyncProgress(callback: (progress: CloudSyncProgress) => void): () => void {
+  return bridge.on("cloud-sync-progress", callback);
+}
