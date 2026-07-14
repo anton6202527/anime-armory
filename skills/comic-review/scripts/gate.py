@@ -36,6 +36,10 @@ try:
     import scene_prop_consistency
 except Exception:  # pragma: no cover
     scene_prop_consistency = None
+try:
+    import continuity_audit
+except Exception:  # pragma: no cover
+    continuity_audit = None
 
 COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
 if str(COMIC_LIB) not in sys.path:
@@ -61,9 +65,45 @@ try:
 except Exception:  # pragma: no cover
     profile_for_platform = None
     validate_platform_manifest = None
+try:
+    from contracts import stage_inputs_fingerprint, stable_sha256
+except Exception:  # pragma: no cover
+    stage_inputs_fingerprint = None
+    stable_sha256 = None
+try:
+    from settings import PRODUCTION_PROFILE_PRESETS
+except Exception:  # pragma: no cover
+    PRODUCTION_PROFILE_PRESETS = {}
 
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 SKILLS_ROOT = Path(__file__).resolve().parents[2]
+
+DETERMINISTIC_EVIDENCE_FAMILIES = {
+    "artifact_presence",
+    "deterministic",
+    "deterministic_state_contract",
+    "generation_recipe",
+    "human_acceptance",
+    "reference_presence",
+    "text_contract",
+}
+DETERMINISTIC_FINDING_CODES = {
+    "character_panel_missing",
+    "character_reference_missing",
+    "panel_image_missing",
+    "panel_image_unreadable",
+    "scene_anchor_reference_missing",
+    "prop_reference_missing",
+}
+DETERMINISTIC_REVIEW_CATEGORIES = {
+    "export",
+    "identity",
+    "layout",
+    "lettering",
+    "missing_artifact",
+    "script",
+    "source",
+}
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -110,7 +150,14 @@ def add(
     suggested_fix: str,
     *,
     evidence_family: str = "deterministic",
+    confidence: str = "deterministic",
 ) -> None:
+    normalized_confidence = str(confidence or "deterministic").strip().lower()
+    # Design-constitution B10: a heuristic may never masquerade as a hard
+    # production stop.  Deterministic contract/receipt facts remain eligible
+    # for BLOCK; aesthetic, keyword and uncalibrated numeric signals do not.
+    if severity == "block" and normalized_confidence in {"heuristic", "advisory", "uncalibrated"}:
+        severity = "warn"
     findings.append(
         {
             "severity": severity,
@@ -121,8 +168,113 @@ def add(
             "return_to_stage": return_to_stage,
             "suggested_fix": suggested_fix,
             "evidence_family": evidence_family,
+            "confidence": normalized_confidence,
         }
     )
+
+
+def finding_confidence(item: dict[str, Any], *, category: str = "") -> str:
+    """Classify evidence before allowing a hard stop.
+
+    Missing files, hashes and declared contracts are deterministic.  Pixel
+    fingerprints, embeddings, keyword/aesthetic rules and model judgements
+    remain heuristic even when their source report labels them ``block``.
+    """
+    explicit = str(item.get("confidence") or "").strip().lower()
+    if explicit:
+        return explicit
+    family = str(item.get("evidence_family") or "").strip()
+    code = str(item.get("code") or item.get("category") or "").strip()
+    if family in DETERMINISTIC_EVIDENCE_FAMILIES or code in DETERMINISTIC_FINDING_CODES:
+        return "deterministic"
+    if category == "review" and code in DETERMINISTIC_REVIEW_CATEGORIES:
+        return "deterministic"
+    return "heuristic"
+
+
+def command_tail(proc: subprocess.CompletedProcess[str], limit: int = 1800) -> str:
+    return ((proc.stderr or "") + "\n" + (proc.stdout or "")).strip()[-limit:]
+
+
+def run_contract_command(
+    root: Path,
+    chapter: str,
+    findings: list[dict[str, Any]],
+    notes: list[str],
+    *,
+    script: Path,
+    arguments: list[str],
+    code: str,
+    artifact: str,
+    return_to_stage: str,
+    label: str,
+) -> bool:
+    if not script.is_file():
+        add(
+            findings,
+            "block",
+            f"{code}_tool_missing",
+            rel(root, script),
+            f"{label} 校验器缺失。",
+            return_to_stage,
+            "恢复本线校验脚本后重跑 gate。",
+        )
+        return False
+    proc = subprocess.run(
+        [sys.executable, str(script), *arguments],
+        stdin=subprocess.DEVNULL,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if proc.returncode != 0:
+        add(
+            findings,
+            "block",
+            code,
+            artifact,
+            f"{label} 未通过：{command_tail(proc) or f'exit={proc.returncode}'}",
+            return_to_stage,
+            f"按 {label} 输出修复并重新签收后重跑 gate。",
+        )
+        return False
+    notes.append(f"{label}: pass")
+    return True
+
+
+def check_production_profile(root: Path, findings: list[dict[str, Any]]) -> None:
+    profile = read_setting(root, "生产档位", "").strip()
+    if not profile:
+        add(
+            findings,
+            "warn",
+            "production_profile_missing",
+            "_设置.md",
+            "旧项目未声明生产档位；无法确认定妆、形态继承和一致性硬闸是否为一组自洽配置。",
+            "settings",
+            "用 comic-settings 显式设置 短篇验证/连载标准/连载高一致性/出版交付 之一。",
+        )
+        return
+    expected = PRODUCTION_PROFILE_PRESETS.get(profile)
+    if not isinstance(expected, dict):
+        add(findings, "block", "production_profile_unknown", "_设置.md", f"未知生产档位：{profile}", "settings", "用 comic-settings 选择受支持档位。")
+        return
+    mismatches = []
+    for key, value in expected.items():
+        actual = read_setting(root, key, "").strip()
+        if actual != value:
+            mismatches.append(f"{key}={actual or '缺失'}（应为 {value}）")
+    if mismatches:
+        add(
+            findings,
+            "block",
+            "production_profile_incoherent",
+            "_设置.md",
+            f"生产档位={profile}，但联动设置被拆散：" + "；".join(mismatches),
+            "settings",
+            f"重新执行 comic-settings set <作品根> 生产档位 {profile}，或切换到符合当前目标的档位。",
+        )
 
 
 def find_panel_image(root: Path, chapter: str, panel_id: str) -> Path | None:
@@ -321,6 +473,13 @@ def compact_text(value: Any) -> str:
 
 def panel_reference_ids(panel: dict[str, Any]) -> list[str]:
     ids: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id"):
+            ref_id = str(binding.get(key) or "").strip()
+            if ref_id and ref_id not in ids:
+                ids.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw).strip()
@@ -611,15 +770,41 @@ def check_format_geometry(root: Path, chapter: str, layout: dict[str, Any], find
     fmt = str(layout.get("format") or read_setting(root, "漫画形态", "条漫"))
     if not any(token in fmt for token in ("页漫", "四格")):
         return
+    # Schema v2 is emitted by format-specific adapters and then independently
+    # validated + approved.  Trust its declared geometry profile; the old
+    # x/width heuristic below is only a migration fallback for legacy layouts.
+    profile = str(layout.get("geometry_profile") or "")
+    workflow_status = str(layout.get("workflow_status") or "")
+    approval = layout.get("approval") if isinstance(layout.get("approval"), dict) else {}
+    approved_v2 = (
+        int(layout.get("schema_version") or 0) >= 2
+        and workflow_status == "approved"
+        and str(approval.get("status") or "") == "approved"
+    )
+    if approved_v2:
+        if "页漫" in fmt and profile in {"paged_grid_ltr", "paged_grid_rtl"}:
+            return
+        if "四格" in fmt and profile == "yonkoma_four_rows":
+            return
+        add(
+            findings,
+            "block",
+            "format_geometry_profile_mismatch",
+            f"排版/{chapter}/layout.json",
+            f"已审批 schema v2 layout 的 geometry_profile={profile or '缺失'} 与漫画形态={fmt} 不匹配。",
+            "layout",
+            "重新选用对应形态的 comic-layout 几何适配器，并重走 review/approved。",
+        )
+        return
     if layout_is_single_column(layout):
         add(
             findings,
             "block",
             "format_geometry_mismatch",
             f"排版/{chapter}/layout.json",
-            f"漫画形态={fmt}，但 layout 是单列条漫几何（deterministic 脚本仅支持条漫）。按此出图/合成只能得到一条竖条。",
+            f"漫画形态={fmt}，但 layout 是单列条漫几何，或 schema v2 geometry_profile={profile or '缺失'} 与形态不匹配。",
             "layout",
-            "人工或 agent 重排 layout.json（页内多格网格、阅读方向、分页装订），或把 漫画形态 改回 条漫。",
+            "用 comic-layout 的对应几何适配器重建并审批 layout，或把 漫画形态 改回 条漫。",
         )
 
 
@@ -1045,10 +1230,153 @@ def merge_consistency_report(report: dict[str, Any], findings: list[dict[str, An
             str(item.get("return_to_stage") or ("image" if severity in {"block", "warn"} else "review")),
             str(item.get("suggested_fix") or "按一致性报告处理。"),
             evidence_family=str(item.get("evidence_family") or category),
+            confidence=finding_confidence(item, category=category),
         )
 
 
+def check_script_stage(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    paths = check_required(root, chapter, findings, ("settings", "panel_script"))
+    check_production_profile(root, findings)
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-script" / "scripts" / "development_pack.py",
+        arguments=[str(root), "check", "--strict", "--json"],
+        code="development_pack_not_approved",
+        artifact="开发包/signoff.json",
+        return_to_stage="script",
+        label="开发包严格合同",
+    )
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-script" / "scripts" / "source_semantics_gate.py",
+        arguments=[str(root), "--chapter", chapter],
+        code="source_trace_missing_stale_or_incomplete",
+        artifact=f"脚本/{chapter}/source_semantics.json",
+        return_to_stage="script",
+        label="源范围/SHA/逐格 coverage 合同",
+    )
+    panel_script = load_json(paths["panel_script"], {})
+    if isinstance(panel_script, dict):
+        check_source_semantics(root, chapter, panel_script, findings)
+        check_panel_visual_contract(root, chapter, panel_script, findings)
+    run_continuity_contract_audit(root, chapter, findings, notes)
+
+
+def check_name_stage(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    path = root / "排版" / chapter / "name_board.json"
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-name" / "scripts" / "build_name_board.py",
+        arguments=[str(root), "--chapter", chapter, "--check", "--no-progress"],
+        code="name_approval_missing_or_stale",
+        artifact=rel(root, path),
+        return_to_stage="name",
+        label="ネーム审批合同",
+    )
+
+
+def check_layout_stage(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    path = root / "排版" / chapter / "layout.json"
+    passed = run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-layout" / "scripts" / "build_layout.py",
+        arguments=[str(root), "--chapter", chapter, "--check", "--no-progress"],
+        code="layout_approval_missing_or_stale",
+        artifact=rel(root, path),
+        return_to_stage="layout",
+        label="排版审批合同",
+    )
+    if passed:
+        layout = load_json(path, {})
+        if isinstance(layout, dict):
+            check_format_geometry(root, chapter, layout, findings)
+
+
+def check_finishing_stage(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    if not traditional_workflow_enabled(root):
+        notes.append("传统原稿流程关闭：finishing 合同不适用")
+        return
+    path = root / "出图" / chapter / "finishing" / "finishing_plan.json"
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-finishing" / "scripts" / "build_finishing_plan.py",
+        arguments=[str(root), "--chapter", chapter, "--check", "--no-progress"],
+        code="finishing_contract_missing_or_stale",
+        artifact=rel(root, path),
+        return_to_stage="finishing",
+        label="原稿收尾合同",
+    )
+
+
+def check_identity_registry_and_model_pack(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-identity" / "scripts" / "registry_v2.py",
+        arguments=[str(root), "check", "--json"],
+        code="identity_registry_v2_invalid",
+        artifact="出图/共享/identity_registry.json",
+        return_to_stage="identity",
+        label="角色注册表 v2",
+    )
+    run_contract_command(
+        root,
+        chapter,
+        findings,
+        notes,
+        script=SKILLS_ROOT / "comic-identity" / "scripts" / "model_pack.py",
+        arguments=[str(root), "check", "--write", "--json"],
+        code="model_pack_not_signed_off",
+        artifact="生产数据/comic_model_pack_report.json",
+        return_to_stage="identity",
+        label="角色多视图技术齐套与人审签收",
+    )
+
+
+def run_script(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    check_script_stage(root, chapter, findings, notes)
+
+
+def run_name(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    check_script_stage(root, chapter, findings, notes)
+    check_name_stage(root, chapter, findings, notes)
+
+
+def run_layout(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    check_script_stage(root, chapter, findings, notes)
+    check_name_stage(root, chapter, findings, notes)
+    check_layout_stage(root, chapter, findings, notes)
+
+
+def run_finishing(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
+    check_script_stage(root, chapter, findings, notes)
+    check_name_stage(root, chapter, findings, notes)
+    check_layout_stage(root, chapter, findings, notes)
+    check_finishing_stage(root, chapter, findings, notes)
+
+
 def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str], *, no_refresh: bool) -> None:
+    check_script_stage(root, chapter, findings, notes)
+    check_name_stage(root, chapter, findings, notes)
+    check_layout_stage(root, chapter, findings, notes)
+    check_finishing_stage(root, chapter, findings, notes)
     paths = check_required(root, chapter, findings, ("settings", "panel_script", "layout", "panel_jobs"))
     panel_script = load_json(paths["panel_script"], {})
     if isinstance(panel_script, dict):
@@ -1065,12 +1393,53 @@ def run_image_preflight(root: Path, chapter: str, findings: list[dict[str, Any]]
         check_panel_jobs_stale(root, chapter, findings, notes)
     if isinstance(panel_script, dict) and isinstance(layout, dict) and isinstance(jobs, dict):
         check_traditional_manga_contract(root, chapter, panel_script, layout, jobs, findings)
+    check_identity_registry_and_model_pack(root, chapter, findings, notes)
     report = refresh_identity_report(root, chapter, findings, no_refresh=no_refresh)
     check_identity(root, report, findings)
     check_style_contract(root, findings)
     check_consistency_strategy_support(root, findings)
     run_script_advisory_audits(root, chapter, findings, notes)
     run_reference_plan_advisory(root, chapter, findings, notes)
+
+
+def run_continuity_contract_audit(
+    root: Path,
+    chapter: str,
+    findings: list[dict[str, Any]],
+    notes: list[str],
+) -> None:
+    """Merge declared cross-chapter state facts into the production gate.
+
+    No image or language model inference happens here.  A BLOCK means the
+    project's own entry/delta/exit facts contradict one another; legacy
+    chapters without the new contract remain WARN until migrated.
+    """
+    if continuity_audit is None:
+        notes.append("continuity_audit 模块不可用，跨话状态合同跳过")
+        return
+    try:
+        report = continuity_audit.audit(root, through_chapter=chapter)
+        continuity_audit.write_report(root, report)
+    except Exception as exc:
+        notes.append(f"continuity_audit 运行失败（{exc}）")
+        return
+    for item in report.get("findings") or []:
+        severity = str(item.get("severity") or "warn")
+        add(
+            findings,
+            severity if severity in {"block", "warn", "info"} else "warn",
+            str(item.get("code") or "continuity_contract"),
+            str(item.get("artifact") or f"脚本/{chapter}/panel_script.json"),
+            str(item.get("reason") or "跨话状态合同不一致。"),
+            "script",
+            str(item.get("suggested_fix") or "修正 entry_state/continuity_delta/exit_state。"),
+            evidence_family="deterministic_state_contract",
+        )
+    summary = report.get("summary") or {}
+    notes.append(
+        f"continuity_audit: chapters={summary.get('chapters', 0)} "
+        f"block={summary.get('block', 0)} warn={summary.get('warn', 0)}"
+    )
 
 
 def run_script_advisory_audits(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
@@ -1139,35 +1508,45 @@ def run_panel_variety_advisory(root: Path, chapter: str, findings: list[dict[str
 
 
 def run_reference_plan_advisory(root: Path, chapter: str, findings: list[dict[str, Any]], notes: list[str]) -> None:
-    """出图前·逐格参考事前处方（2026-07·治跨话脸漂根因·advisory 不阻断）。
-
-    identity report 是事后（已出图量漂移），reference_planner 是事前（按本格变化量×后端能力开参考处方），
-    治"服装/表情/景别变化时单张定妆照不够→模型重画整张脸"的根因。缺口/升档以 warn/info 并入，不制造假 block。
-    脚本缺失/异常留 note 不拦。"""
-    import subprocess
+    """校验已落盘处方与当前输入严格同源；不在 gate 中改写上游。"""
     script = SKILLS_ROOT / "comic-image" / "scripts" / "reference_planner.py"
+    plan_path = root / "生产数据" / f"comic_reference_plan_{chapter}.json"
     if not script.is_file():
-        notes.append("reference_planner 脚本缺失，参考事前处方跳过")
+        add(findings, "block", "reference_planner_missing", rel(root, script), "逐格参考合同校验器缺失。", "identity", "恢复 reference_planner.py。")
         return
     try:
-        proc = subprocess.run([sys.executable, str(script), str(root), chapter, "--write", "--json"],
-                              capture_output=True, text=True, timeout=120)
-        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+        proc = subprocess.run(
+            [sys.executable, str(script), str(root), chapter, "--json"],
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+        fresh = json.loads(proc.stdout) if proc.stdout.strip() else {}
     except Exception as exc:
-        notes.append(f"reference_planner 运行失败（{exc}），参考事前处方跳过")
+        add(findings, "block", "reference_plan_check_failed", rel(root, plan_path), f"参考处方重算失败：{exc}", "identity", "修复登记表/绑定后重跑。")
         return
-    for item in payload.get("findings") or []:
+    saved = load_json(plan_path, {})
+    if not isinstance(saved, dict) or not saved:
+        add(findings, "block", "reference_plan_missing", rel(root, plan_path), "缺少已落盘的逐格参考处方。", "identity", "重跑 comic-image 构建 panel_jobs，同时落盘参考处方。")
+        return
+    for key in ("inputs_fingerprint", "plan_sha256"):
+        if str(saved.get(key) or "") != str(fresh.get(key) or ""):
+            add(findings, "block", "reference_plan_stale", rel(root, plan_path), f"已落盘处方的 {key} 与当前输入不一致。", "identity", "重跑 comic-image 构建参考处方和 panel_jobs。")
+    for item in fresh.get("findings") or []:
         sev = str(item.get("severity") or "warn")
         add(findings,
-            "warn" if sev == "warn" else "info",
+            "block" if sev == "block" else "warn" if sev == "warn" else "info",
             str(item.get("code") or "reference_plan"),
             f"生产数据/comic_reference_plan_{chapter}.json",
             str(item.get("message") or ""),
             "identity",
-            "按处方补该角色缺的视图/表情/服装参考并重建出图包，或按升档建议补专门定妆/换持久主体后端。")
-    s = payload.get("summary") or {}
+            "按处方补该角色缺的视图/表情/服装参考并重建出图包。",
+            confidence="deterministic" if sev == "block" else "heuristic")
+    s = fresh.get("summary") or {}
     notes.append(f"reference_planner: 含角色格 {s.get('panels_with_characters')} 需处理 "
-                 f"{s.get('panels_needing_action')}（advisory·不阻断）")
+                 f"{s.get('panels_needing_action')}；处方 SHA 已校验")
 
 
 def run_drift_report_advisory(root: Path, findings: list[dict[str, Any]], notes: list[str]) -> None:
@@ -1259,6 +1638,8 @@ def run_review(root: Path, chapter: str, findings: list[dict[str, Any]], notes: 
     notes.append("comic-review report refreshed in review gate")
     run_drift_report_advisory(root, findings, notes)
     for issue in report.get("issues") or []:
+        issue_record = dict(issue)
+        issue_record.setdefault("code", issue.get("category"))
         add(
             findings,
             str(issue.get("severity") or "warn"),
@@ -1267,6 +1648,8 @@ def run_review(root: Path, chapter: str, findings: list[dict[str, Any]], notes: 
             str(issue.get("reason") or ""),
             str(issue.get("return_to") or "review"),
             str(issue.get("suggested_fix") or "按 comic-review 报告处理。"),
+            evidence_family=str(issue.get("evidence_family") or issue.get("category") or "review"),
+            confidence=finding_confidence(issue_record, category="review"),
         )
 
 
@@ -1292,8 +1675,13 @@ def make_report(root: Path, chapter: str, stage: str, findings: list[dict[str, A
     block_count = sum(1 for item in findings if item.get("severity") == "block")
     warn_count = sum(1 for item in findings if item.get("severity") == "warn")
     info_count = sum(1 for item in findings if item.get("severity") == "info")
-    return {
-        "schema_version": 1,
+    inputs_fingerprint = (
+        stage_inputs_fingerprint(root, chapter, stage)
+        if stage_inputs_fingerprint is not None
+        else {"kind": "comic_inputs_fingerprint", "version": 1, "files": [], "sha256": ""}
+    )
+    report = {
+        "schema_version": 2,
         "kind": "comic_gate",
         "project_root": str(root),
         "chapter": chapter,
@@ -1308,13 +1696,27 @@ def make_report(root: Path, chapter: str, stage: str, findings: list[dict[str, A
         },
         "findings": findings,
         "notes": notes,
+        "inputs_fingerprint": inputs_fingerprint,
     }
+    if stable_sha256 is not None:
+        report["receipt_id"] = stable_sha256(
+            {
+                "project_root": str(root),
+                "chapter": chapter,
+                "stage": stage,
+                "inputs": inputs_fingerprint.get("sha256"),
+                "verdict": report["verdict"],
+                "findings": findings,
+            }
+        )
+    return report
 
 
 def write_outputs(root: Path, chapter: str, stage: str, report: dict[str, Any]) -> dict[str, str]:
     out_json = root / "生产数据" / f"comic_gate_{stage}_{chapter}.json"
     out_md = root / "生产数据" / f"comic_gate_{stage}_{chapter}.md"
     findings_path = root / "生产数据" / f"gate_findings_{stage}_{chapter}.json"
+    receipt_path = root / "生产数据" / "gate_receipts" / f"{stage}_{chapter}.json"
     out_json.parent.mkdir(parents=True, exist_ok=True)
     out_json.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     findings_path.write_text(
@@ -1335,7 +1737,41 @@ def write_outputs(root: Path, chapter: str, stage: str, report: dict[str, Any]) 
         encoding="utf-8",
     )
     write_markdown(report, out_md)
-    return {"json": rel(root, out_json), "markdown": rel(root, out_md), "findings": rel(root, findings_path)}
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    jobs_path = root / "出图" / chapter / "prompt" / "panel_jobs.json"
+    panel_jobs_sha256 = hashlib.sha256(jobs_path.read_bytes()).hexdigest() if jobs_path.is_file() else ""
+    receipt_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "kind": "comic_gate_receipt",
+                "receipt_id": report.get("receipt_id", ""),
+                "chapter": chapter,
+                "stage": stage,
+                "created_at": report.get("created_at"),
+                "verdict": report.get("verdict"),
+                "execution_authorized": report.get("verdict") != "block",
+                "inputs_fingerprint_sha256": (report.get("inputs_fingerprint") or {}).get("sha256", ""),
+                "panel_jobs_sha256": panel_jobs_sha256,
+                "artifacts": {
+                    "panel_jobs_path": rel(root, jobs_path),
+                    "panel_jobs_sha256": panel_jobs_sha256,
+                },
+                "report_path": rel(root, out_json),
+                "report_sha256": hashlib.sha256(out_json.read_bytes()).hexdigest(),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "json": rel(root, out_json),
+        "markdown": rel(root, out_md),
+        "findings": rel(root, findings_path),
+        "receipt": rel(root, receipt_path),
+    }
 
 
 def write_markdown(report: dict[str, Any], path: Path) -> None:
@@ -1374,7 +1810,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="漫画生产 gate")
     parser.add_argument("project_root")
     parser.add_argument("--chapter", default="第1话")
-    parser.add_argument("--stage", choices=("image_preflight", "image", "compose", "review"), default="image_preflight")
+    parser.add_argument(
+        "--stage",
+        choices=("script", "name", "layout", "finishing", "image_preflight", "image", "compose", "review"),
+        default="image_preflight",
+    )
     parser.add_argument("--no-refresh", action="store_true", help="不刷新 identity report；style/character 仍按当前图片重算")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
@@ -1382,7 +1822,15 @@ def main() -> int:
     root = Path(args.project_root).expanduser().resolve()
     findings: list[dict[str, Any]] = []
     notes: list[str] = []
-    if args.stage == "image_preflight":
+    if args.stage == "script":
+        run_script(root, args.chapter, findings, notes)
+    elif args.stage == "name":
+        run_name(root, args.chapter, findings, notes)
+    elif args.stage == "layout":
+        run_layout(root, args.chapter, findings, notes)
+    elif args.stage == "finishing":
+        run_finishing(root, args.chapter, findings, notes)
+    elif args.stage == "image_preflight":
         run_image_preflight(root, args.chapter, findings, notes, no_refresh=args.no_refresh)
     elif args.stage == "image":
         run_image(root, args.chapter, findings, notes, no_refresh=args.no_refresh)

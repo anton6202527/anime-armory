@@ -600,6 +600,10 @@ def add_finding(
     suggested_fix: str,
     evidence_family: str,
 ) -> None:
+    deterministic_families = {"artifact_presence", "generation_recipe", "text_contract"}
+    confidence = "deterministic" if evidence_family in deterministic_families else "heuristic"
+    if severity == "block" and confidence != "deterministic":
+        severity = "warn"
     findings.append(
         {
             "severity": severity,
@@ -611,6 +615,7 @@ def add_finding(
             "return_to_stage": "image",
             "suggested_fix": suggested_fix,
             "evidence_family": evidence_family,
+            "confidence": confidence,
         }
     )
 
@@ -661,7 +666,8 @@ def apply_manual_acceptances(root: Path, chapter: str, findings: list[dict[str, 
             continue
         label = f"{finding.get('code')}@{finding.get('panel_id') or finding.get('artifact')}"
         if finding.get("severity") == "block":
-            # block 级（拼贴 gutter/外框/缺图/严重离群）是硬证据，签收不能洗掉。
+            # Only deterministic contract/artifact defects remain block;
+            # pixel geometry and appearance outliers were downgraded to warn.
             blocked_attempts.append(label)
             continue
         recorded_sha = str(record.get("artifact_sha256") or "").strip()

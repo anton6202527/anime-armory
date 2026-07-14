@@ -287,9 +287,14 @@ def thread_candidates(root: str, eps: Sequence[str]) -> List[Dict[str, Any]]:
             continue
         n = ep_num(ep) or len(out) + 1
         keywords = sorted(entities_from_beats(beats[-3:]))[:6]
+        # Stable and globally unique across incremental episode runs. The old
+        # len(out)+1 scheme restarted at T001 whenever only one episode was
+        # audited, so writing episode 2 could overwrite episode 1's thread.
+        stable_slot = f"E{n:04d}"
         out.append({
-            "id": f"THREAD_{len(out) + 1:03d}",
-            "thread_id": f"T{len(out) + 1:03d}",
+            "id": f"THREAD_{stable_slot}",
+            "thread_id": f"T_{stable_slot}",
+            "source": "story_integrity_audit",
             "status": "candidate",
             "opened_ep": ep,
             "last_touched_ep": ep,
@@ -302,6 +307,17 @@ def thread_candidates(root: str, eps: Sequence[str]) -> List[Dict[str, Any]]:
 
 
 def thread_merge_key(thread: Dict[str, Any]) -> Tuple[str, ...]:
+    # Generated tail candidates have one stable slot per opening episode. Key
+    # them by that slot so rewriting the tail updates the existing thread while
+    # separate incremental episode runs can never collide at T001.
+    opened = str(thread.get("opened_ep") or "").strip()
+    generated = str(thread.get("source") or "") == "story_integrity_audit"
+    legacy_generated = (
+        str(thread.get("status") or "") == "candidate"
+        and str(thread.get("id") or "").startswith("THREAD_")
+    )
+    if opened and (generated or legacy_generated):
+        return ("generated_opened_ep", opened)
     thread_id = str(thread.get("thread_id") or thread.get("id") or "").strip()
     if thread_id:
         return ("thread_id", thread_id)

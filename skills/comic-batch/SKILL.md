@@ -5,14 +5,16 @@ description: 画漫画流程推进与批跑控制。Use when advancing a comic c
 
 # comic-batch — 漫画流程推进与批跑
 
-`comic-batch` 是漫画线的流程层：读取 `_进度.md`，从当前前沿起**自动 chain 免费确定性阶段**（缩略分镜→页面排版→原稿收尾→出图包→嵌字合成的 lettering/导出），出图阶段带 gate 批跑，审查阶段只产 review gate 报告、不代替人工把 `审查` 标 ✅。创作阶段（源本/企划、漫画脚本）不自动化。`传统原稿流程=关闭` 或旧进度表缺列时自动跳过对应阶段。它不替代各 stage skill 的判断，只负责批量执行、重抽、候选归档和衔接。出图前必须先跑 `comic-review` 的 `image_preflight` gate（runner 本身也内置该 gate，编排层跑过后以 `--skip-gate` 免重复）；出图后必须跑 `image` gate，不能把 `qc_block` 或角色/风格一致性 block 继续传给合成。
+`comic-batch` 是漫画线的流程层：读取 `_进度.md`，自动运行可复算阶段，但把ネーム和 layout 当作显式编辑签收点。首次推进到这两步只生成 `draft` 并正常停止；只有人工执行 `draft → review → approved`、SHA 检查通过且阶段写成 ✅ 后，批跑才继续收尾、出图包、出图与合成。创作阶段（源本/企划、漫画脚本）仍不自动化，审查阶段也不代替人工验收。
+
+`传统原稿流程=关闭` 只跳过原稿收尾，不再跳过ネーム；已签收 name 是所有 layout adapter 的强制编辑合同。出图前编排器先运行 layout `--check`，传统收尾开启时再运行 finishing `--check`，然后才进入 `image_preflight`。因此即使手动指定 `--stage image`，也不能绕过 draft、失效审批或 stale 上游。
 
 ## 适用场景
 
 - 用户已经确认付费/高成本出图，要求继续批量生成面板图。
 - 预算充足，需要对失败或不满意面板多次重抽。
 - 出图齐全后，需要继续衔接嵌字合成或审查。
-- 一话中途被打断，需要从 `_进度.md` 和 job 包恢复；如果前沿停在缩略分镜、页面排版或原稿收尾，它会提示先用对应 stage skill，而不会自动跳过传统工艺层。
+- 一话中途被打断，需要从 `_进度.md` 和 job 包恢复；若停在 name/layout draft，脚本会打印提交复核和签收命令并清洁退出，不会重复覆盖草案或自动签收。
 
 ## 输入
 
@@ -46,6 +48,9 @@ python3 skills/comic-batch/scripts/run.py "创作区/画漫画/作品名" --chap
 
 ## 完成判定
 
+- `name_board.workflow_status` 或 `layout.workflow_status` 为 `draft/review` 时，批跑返回成功等待人工处理；不会继续下一阶段，也不会写假 `✅`。
+- `layout --check` 会复核 name/layout schema、validator、approval subject SHA 与当前 panel script/name/settings；失败时连手动 image 模式也停止。
+- `finishing --check` 会复核 plan 覆盖和 panel script/name/layout/settings SHA；缺输入、空计划和 stale 都停止。
 - `comic-batch` 调用出图 runner 前先跑 `skills/comic-review/scripts/gate.py --stage image_preflight`；被 gate block 时不启动付费/批量出图。
 - `comic-image` runner 会在所有 job `ready` 且 PNG 有效时把 `_进度.md` 的 `出图` 标为 `✅`；`post_qc=block` 的格子标 `qc_block`，不算 ready。
 - runner 每张落盘后先做目标格 post-QC。指定 `--targets` / `--limit` 的验样批次若尚未补齐整话，只报告该批通过并延后整话 gate；全部 panel 都是 `ready` 且文件存在后，`comic-batch` 才跑 `skills/comic-review/scripts/gate.py --stage image` 刷新整话风格与角色一致性报告。禁止用“未生成的其它格”把已通过的小批验样误报成失败。

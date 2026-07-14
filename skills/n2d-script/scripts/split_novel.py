@@ -25,6 +25,8 @@ split_novel.py — 把长篇小说自动拆分成粗胚分块，并搭好 AI漫�
     <作品根>/设定库/characters/_角色总表.md
     <作品根>/设定库/locations/_场景总表.md
     <作品根>/小说/<剧名>.txt 规范源副本（供 source_check.py --record）
+    <作品根>/脚本/split_plan.json（v2 全书 source units / arc / 候选边界）
+    <作品根>/脚本/_拆集机器索引.md + _拆集复核.md（机器/人工分离，续切不覆人工）
     <作品根>/脚本/第N集/{raw.txt 分镜剧本.md 故事板.md 素材清单.md
                          voiceover.txt bgm.txt 封面.md 字幕_中文.srt}
 （出图/ 与 出视频/ 由 n2d-image 与 n2d-video 在后续阶段创建。）
@@ -431,6 +433,221 @@ def summarize_text(text, limit=72):
     return compact[:limit].rstrip() + "…"
 
 
+def build_source_units(paras):
+    """Build full-book normalized source units with stable content fingerprints."""
+    units = []
+    cursor = 0
+    for index, para in enumerate(paras, 1):
+        text = str(para or "")
+        start = cursor
+        end = start + len(text)
+        signals = []
+        if CHAPTER_RE.match(text):
+            signals.append("chapter_heading")
+        if SCENE_BREAK_RE.match(text):
+            signals.append("scene_or_time_break")
+        if text.rstrip().endswith(("？", "！", "…", "——", "?", "!")):
+            signals.append("suspense_punctuation")
+        # Lexical matches are metadata for human/optimizer inspection only. They
+        # never hard-exclude a candidate boundary.
+        if has_conflict(text):
+            signals.append("conflict_hint")
+        if has_payoff_or_reversal(text):
+            signals.append("payoff_or_reversal_hint")
+        units.append({
+            "source_unit_id": f"U{index:06d}",
+            "index": index,
+            "normalized_char_span": [start, end],
+            "chars": len(text),
+            "sha256": sha256_text(text),
+            "preview": summarize_text(text, 96),
+            "signals": signals,
+        })
+        cursor = end + 1  # normalized units are joined by one newline
+    return units
+
+
+def episode_unit_spans(episodes, paras, start_cursor=0):
+    """Map machine episode chunks back to the full normalized source-unit axis."""
+    spans = []
+    cursor = max(0, int(start_cursor or 0))
+    for i, episode in enumerate(episodes, 1):
+        parts = str(episode or "").split("\n") if episode else []
+        count = len(parts)
+        # Normal path is exact because all splitters join normalized paragraphs.
+        # If a future splitter rewrites text, fall back to monotonic unit counts
+        # rather than silently inventing a source hash.
+        exact = paras[cursor:cursor + count] == parts
+        start = cursor + 1 if count else cursor
+        end = cursor + count
+        spans.append({
+            "episode": i,
+            "start_source_unit_id": f"U{start:06d}" if count else None,
+            "end_source_unit_id": f"U{end:06d}" if count else None,
+            "start_index": start,
+            "end_index": end,
+            "mapping_exact": exact,
+        })
+        cursor += count
+    return spans
+
+
+def boundary_quality(paras, position):
+    """Score a boundary between units ``position`` and ``position+1``.
+
+    Structural and sentence-shape evidence drive the score. Lexicon hits are
+    deliberately absent so a genre dictionary can never hard-veto a cut.
+    """
+    if position <= 0 or position >= len(paras):
+        return {"score": 0.0, "features": []}
+    left, right = str(paras[position - 1] or ""), str(paras[position] or "")
+    score, features = 0.0, []
+    if CHAPTER_RE.match(right):
+        score += 3.0
+        features.append("chapter_transition")
+    elif SCENE_BREAK_RE.match(right):
+        score += 2.0
+        features.append("scene_or_time_transition")
+    if left.rstrip().endswith(("。", "？", "！", "…", "——", ".", "?", "!")):
+        score += 1.0
+        features.append("complete_sentence")
+    if left.rstrip().endswith(("？", "！", "…", "——", "?", "!")):
+        score += 0.75
+        features.append("suspense_shape")
+    if re.match(r"^\s*(翌日|次日|三日后|与此同时|另一边|话说|回忆|从前)", right):
+        score -= 0.75
+        features.append("slow_opening_shape")
+    return {"score": round(score, 3), "features": features}
+
+
+def build_boundary_candidates(paras, episode_spans, radius=3):
+    """Return local Top-K alternatives around every machine split boundary."""
+    out = []
+    for left, right in zip(episode_spans, episode_spans[1:]):
+        current = int(left.get("end_index") or 0)
+        options = []
+        for position in range(max(1, current - radius), min(len(paras) - 1, current + radius) + 1):
+            quality = boundary_quality(paras, position)
+            options.append({
+                "after_source_unit_id": f"U{position:06d}",
+                "before_source_unit_id": f"U{position + 1:06d}",
+                "position": position,
+                "score": quality["score"],
+                "features": quality["features"],
+                "distance_from_machine_cut": position - current,
+            })
+        options.sort(key=lambda row: (-row["score"], abs(row["distance_from_machine_cut"]), row["position"]))
+        out.append({
+            "boundary_id": f"E{int(left['episode']):04d}-E{int(right['episode']):04d}",
+            "machine_position": current,
+            "top_candidates": options[:3],
+            "status": "advisory_needs_semantic_review",
+        })
+    return out
+
+
+def optimize_boundary_paths(
+    paras, episode_count, top_k=3, beam_width=24, unit_offset=0,
+    preferred_positions=None,
+):
+    """Advisory full-book beam search over boundary positions.
+
+    This does not rewrite ``raw.txt``. It offers globally coherent alternatives
+    while keeping segment size a soft balance term and structural boundary
+    quality as evidence. Human semantic review remains authoritative.
+    """
+    n = len(paras)
+    k = max(1, min(int(episode_count or 1), n or 1))
+    if n == 0:
+        return []
+    mean = n / k
+    preferred = {int(v) for v in (preferred_positions or [])}
+    states = [(0.0, 0, [])]  # score, last position, completed boundary positions
+    for step in range(1, k + 1):
+        expanded = []
+        for score, last, boundaries in states:
+            remaining_segments = k - step
+            if step == k:
+                positions = [n] if last < n else []
+            else:
+                expected = round(step * n / k)
+                radius = max(3, int(mean * 0.75 + 0.5))
+                low = max(last + 1, step, expected - radius)
+                high = min(n - remaining_segments, expected + radius)
+                positions = range(low, high + 1)
+            for pos in positions:
+                segment_units = pos - last
+                balance_penalty = abs(segment_units - mean) / max(mean, 1.0) * 0.65
+                structural = boundary_quality(paras, pos)["score"] if pos < n else 0.0
+                if pos + int(unit_offset or 0) in preferred:
+                    structural += 2.5
+                expanded.append((score + structural - balance_penalty, pos, boundaries + [pos]))
+        # deterministic dedupe + bounded beam
+        best = {}
+        for state in expanded:
+            key = tuple(state[2])
+            if key not in best or state[0] > best[key][0]:
+                best[key] = state
+        states = sorted(best.values(), key=lambda s: (-s[0], s[2]))[:beam_width]
+        if not states:
+            break
+    paths = []
+    for rank, (score, _last, positions) in enumerate(sorted(states, key=lambda s: (-s[0], s[2]))[:top_k], 1):
+        paths.append({
+            "rank": rank,
+            "score": round(score, 3),
+            "boundary_after_source_units": [f"U{p + unit_offset:06d}" for p in positions[:-1]],
+            "segment_end_positions": [p + unit_offset for p in positions],
+            "status": "advisory_needs_semantic_review",
+        })
+    return paths
+
+
+def load_development_arc_contract(root):
+    """Load confirmed season-arc intent and any explicit source-unit anchors."""
+    path = Path(root) / "开发包" / "season_arc.json"
+    if not path.exists():
+        return {"status": "missing", "sha256": "", "anchors": [], "preferred_positions": []}
+    try:
+        raw = path.read_text(encoding="utf-8")
+        data = json.loads(raw)
+    except Exception as exc:
+        return {"status": "invalid", "sha256": "", "anchors": [], "preferred_positions": [], "error": str(exc)}
+    anchors, preferred = [], []
+    rows = []
+    if isinstance(data.get("front_arc"), list):
+        rows.extend(row for row in data["front_arc"] if isinstance(row, dict))
+    if isinstance(data.get("arc_anchors"), list):
+        rows.extend(row for row in data["arc_anchors"] if isinstance(row, dict))
+    for row in rows:
+        meaningful = {
+            key: value for key, value in row.items()
+            if str(value or "").strip() and "待补" not in str(value)
+        }
+        if meaningful:
+            anchors.append({"anchor_type": "development_arc", **meaningful})
+        source_unit = (
+            row.get("boundary_after_source_unit_id")
+            or row.get("source_unit_id")
+            or ((row.get("source_unit_span") or {}).get("end_source_unit_id")
+                if isinstance(row.get("source_unit_span"), dict) else None)
+        )
+        match = re.search(r"\d+", str(source_unit or ""))
+        if match:
+            preferred.append(int(match.group()))
+    for scene in data.get("signature_scenes") or []:
+        if str(scene or "").strip() and "待补" not in str(scene):
+            anchors.append({"anchor_type": "signature_scene", "description": str(scene).strip()})
+    return {
+        "status": str(data.get("status") or "draft"),
+        "path": relpath(path, root),
+        "sha256": sha256_text(raw),
+        "series_promise": data.get("series_promise") if "待补" not in str(data.get("series_promise") or "") else "",
+        "anchors": anchors,
+        "preferred_positions": sorted(set(preferred)),
+    }
+
+
 def render_machine_split_review(plan):
     partial = plan.get("scope") == "partial"
     title_scope = "首批粗切索引" if partial else "全篇粗切索引"
@@ -458,7 +675,8 @@ def render_machine_split_review(plan):
         "| 集 | 字数 | 开头摘要 | 结尾摘要 | raw |",
         "|---|---:|---|---|---|",
     ]
-    for ep in plan.get("episodes", []):
+    visible_eps = [ep for ep in plan.get("episodes", []) if ep.get("materialized")]
+    for ep in visible_eps:
         lines.append(
             "| {episode_label} | {source_chars} | {opening_preview} | {ending_preview} | `{raw_rel}` |".format(**ep)
         )
@@ -468,20 +686,61 @@ def render_machine_split_review(plan):
     lines.append("- `raw.txt` 是取材脚手架，不是最终口播稿。")
     lines.append("- 每次精修先看前后 5-10 集窗口，再决定保留、并入、前后挪段或重写断点。")
     lines.append("- 已进入出图/出视频的集不要被粗切续跑覆盖；如边界改变，先做受影响范围返工计划。")
+    lines.append(
+        f"- 全书结构事实保存在 `split_plan.json` v{plan.get('schema_version')}: "
+        f"source_units={len(plan.get('source_units') or [])} / "
+        f"boundary_candidates={len(plan.get('boundary_candidates') or [])} / "
+        f"beam_paths={len((plan.get('boundary_optimization') or {}).get('top_paths') or [])}。"
+    )
     return "\n".join(lines) + "\n"
 
 
-def write_split_plan(root, title, source_snapshot, episodes, n_make, *, split_mode, genre_note, partial, start_info=None):
+def render_human_split_review_scaffold(plan):
+    return (
+        f"# {plan['title']} — 人工拆集复核\n\n"
+        "> 本文件只写人工/导演决策；续切不会覆盖。机器事实与候选见 "
+        "`split_plan.json` 和 `_拆集机器索引.md`。\n\n"
+        "## 当前复核窗口\n\n"
+        "- 范围：待填写（建议每次 5-10 集）\n"
+        "- 复核人：\n"
+        "- 日期：\n\n"
+        "## 边界决策\n\n"
+        "| boundary_id | blocker/candidate | 决策 | 左右 source unit 映射 | 备注 |\n"
+        "|---|---|---|---|---|\n"
+    )
+
+
+def write_split_plan(
+    root, title, source_snapshot, episodes, n_make, *, split_mode, genre_note,
+    partial, start_info=None, source_paras=None, selected_source_paras=None,
+    source_unit_offset=0,
+):
     """Write a full-series rough split index without overwriting reviewed episode content."""
     script_dir = os.path.join(root, "脚本")
+    os.makedirs(script_dir, exist_ok=True)
+    source_paras = list(source_paras or [])
+    selected_source_paras = list(selected_source_paras if selected_source_paras is not None else source_paras)
+    source_units = build_source_units(source_paras)
+    unit_spans = episode_unit_spans(episodes, source_paras, start_cursor=source_unit_offset)
+    development_arc = load_development_arc_contract(root)
+    source_arc_anchors = [
+        {"anchor_type": "source_signal", "source_unit_id": unit["source_unit_id"],
+         "signals": unit["signals"], "preview": unit["preview"]}
+        for unit in source_units if unit.get("signals")
+    ]
     plan_episodes = []
-    for i in range(1, n_make + 1):
+    for i, machine_episode in enumerate(episodes, 1):
         raw_path = os.path.join(script_dir, f"第{i}集", "raw.txt")
-        try:
-            raw_text = open(raw_path, encoding="utf-8").read()
-        except OSError:
-            raw_text = episodes[i - 1] if i - 1 < len(episodes) else ""
+        materialized = i <= n_make and os.path.exists(raw_path)
+        if materialized:
+            try:
+                raw_text = open(raw_path, encoding="utf-8").read()
+            except OSError:
+                raw_text = machine_episode
+        else:
+            raw_text = machine_episode
         raw_text = raw_text.rstrip()
+        span = unit_spans[i - 1] if i - 1 < len(unit_spans) else {}
         plan_episodes.append({
             "episode": i,
             "episode_label": f"第{i}集",
@@ -490,12 +749,15 @@ def write_split_plan(root, title, source_snapshot, episodes, n_make, *, split_mo
             "ending_preview": summarize_text(raw_text[-400:]),
             "raw_rel": relpath(raw_path, root),
             "raw_sha256": sha256_text(raw_text),
+            "machine_source_sha256": sha256_text(machine_episode.rstrip()),
+            "materialized": materialized,
+            "source_unit_span": span,
             "boundary_status": "machine_scaffold_needs_window_review",
             "adaptation_policy": "raw 是取材脚手架；阶段1 voiceover 必须按漫剧节奏重写，保留冲突、选择、反转、集尾钩，不逐字照搬。",
         })
     now = _dt.datetime.now(_dt.timezone.utc).isoformat()
     plan = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "n2d_machine_split_plan",
         "generated_at": now,
         "project_root": os.path.abspath(root),
@@ -519,15 +781,52 @@ def write_split_plan(root, title, source_snapshot, episodes, n_make, *, split_mo
             "确认冷开场、核心看点、兑现/反转和集尾钩后再写 voiceover；"
             "长篇项目先验证首批压缩率与边界策略，再续切或全篇补全。"
         ),
+        "source_unit_model": "normalized_paragraph_v1",
+        "source_unit_scope": "full_normalized_source_after_frontmatter",
+        "selected_window": {
+            "start_source_unit_index": int(source_unit_offset) + 1 if selected_source_paras else None,
+            "source_unit_count": len(selected_source_paras),
+            "optimization_scope": "selected_window" if source_unit_offset else "full_source",
+        },
+        "source_units": source_units,
+        "arc_anchors": source_arc_anchors + list(development_arc.get("anchors") or []),
+        "development_arc_contract": {
+            key: value for key, value in development_arc.items() if key not in {"anchors", "preferred_positions"}
+        },
+        "boundary_candidates": build_boundary_candidates(source_paras, unit_spans),
+        "boundary_optimization": {
+            "method": "full_book_beam_search_v1",
+            "enforcement": "advisory_needs_semantic_review",
+            "dictionary_hard_veto": False,
+            "development_arc_constraints_applied": bool(
+                development_arc.get("status") == "confirmed" and development_arc.get("preferred_positions")
+            ),
+            "development_arc_unmapped_note": (
+                "confirmed season_arc 已纳入意图/哈希审计，但未提供 source_unit 映射，故不伪造边界约束。"
+                if development_arc.get("status") == "confirmed" and not development_arc.get("preferred_positions") else ""
+            ),
+            "top_paths": optimize_boundary_paths(
+                selected_source_paras,
+                len(episodes),
+                top_k=3,
+                unit_offset=int(source_unit_offset or 0),
+                preferred_positions=development_arc.get("preferred_positions"),
+            ),
+        },
         "episodes": plan_episodes,
     }
     json_path = os.path.join(script_dir, "split_plan.json")
-    md_path = os.path.join(script_dir, "_拆集复核.md")
+    md_path = os.path.join(script_dir, "_拆集机器索引.md")
+    human_path = os.path.join(script_dir, "_拆集复核.md")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(plan, f, ensure_ascii=False, indent=2)
         f.write("\n")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(render_machine_split_review(plan))
+    # Human decisions are append/edit-owned and must survive --limit continuation.
+    if not os.path.exists(human_path):
+        with open(human_path, "w", encoding="utf-8") as f:
+            f.write(render_human_split_review_scaffold(plan))
     return plan
 
 
@@ -710,6 +1009,11 @@ def main():
         paras = strip_frontmatter(paras)
         dropped = before - len(paras)
 
+    # split_plan v2 keeps the full normalized source-unit axis even when this
+    # invocation starts from a middle chapter. The selected window is mapped by
+    # an offset; no earlier source units disappear from the planning contract.
+    full_source_paras = list(paras)
+
     start_info = None
     if args.start_chapter:
         try:
@@ -861,6 +1165,9 @@ def main():
         genre_note=genre_note,
         partial=partial,
         start_info=start_info,
+        source_paras=full_source_paras,
+        selected_source_paras=paras,
+        source_unit_offset=int((start_info or {}).get("skipped_paras") or 0),
     )
 
     print(f"作品根: {root}")

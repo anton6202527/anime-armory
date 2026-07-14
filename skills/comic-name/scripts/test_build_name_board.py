@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
@@ -45,11 +47,20 @@ def test_build_name_board_records_page_flow_and_finishing_preview(tmp_path: Path
     board = build_name_board.build_name_board(root, chapter)
 
     assert board["kind"] == "comic_name_board"
+    assert board["schema_version"] == 2
+    assert board["workflow_status"] == "draft"
+    assert board["validation"]["status"] == "pass"
+    assert len(board["upstream_receipt"]["panel_script_sha256"]) == 64
     assert board["manuscript"]["bleed"] > 0
     assert board["pages"][0]["page_side"] == "right"
     assert board["pages"][0]["eye_flow_path"] == ["P001", "P002"]
     assert board["pages"][0]["panels"][0]["layout_weight"] == "heavy"
     assert board["pages"][0]["panels"][0]["bubble_first"] == "right_top"
+    assert board["pages"][0]["panels"][0]["balloons"][0]["content_ref"] == "panel:P001.dialogue:1"
+    assert board["pages"][0]["panels"][0]["balloons"][0]["tail"]["mode"] == "toward_speaker"
+    assert board["pages"][0]["panels"][0]["subject_regions"]
+    assert board["pages"][0]["panels"][0]["avoid_regions"]
+    assert board["pages"][0]["page_turn"]["setup"]["panel_id"] == "P002"
     assert "screentone" in board["finishing_preview"]["tone_plan"]
 
 
@@ -72,3 +83,98 @@ def test_explicit_page_hints_override_fixed_page_capacity(tmp_path: Path) -> Non
     assert len(board["pages"]) == 2
     assert board["pages"][0]["eye_flow_path"] == ["P001", "P002", "P003"]
     assert board["pages"][1]["eye_flow_path"] == ["P004", "P005", "P006"]
+
+
+@pytest.mark.parametrize(
+    "hints",
+    [
+        [1, None, 2],
+        [1, 2, 1],
+    ],
+)
+def test_partial_or_nonmonotonic_page_hints_fail_instead_of_reordering(tmp_path: Path, hints: list[int | None]) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：页漫\n- 阅读方向：从左到右\n", encoding="utf-8")
+    write_json(
+        root / "脚本" / chapter / "panel_script.json",
+        {
+            "panels": [
+                {"panel_id": f"P{index:03d}", "story_function": "beat", "page_hint": hint}
+                for index, hint in enumerate(hints, 1)
+            ]
+        },
+    )
+
+    with pytest.raises(build_name_board.NameBoardError):
+        build_name_board.build_name_board(root, chapter)
+
+
+def test_name_approval_is_sha_bound_and_becomes_stale(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    settings = root / "_设置.md"
+    settings.write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    write_json(
+        root / "脚本" / chapter / "panel_script.json",
+        {"panels": [{"panel_id": "P001", "story_function": "opening_hook", "dialogue": [{"speaker": "甲", "text": "走。"}]}]},
+    )
+    path = root / "排版" / chapter / "name_board.json"
+    write_json(path, build_name_board.build_name_board(root, chapter))
+
+    review = build_name_board.transition_existing(root, chapter, "review")
+    assert review["workflow_status"] == "review"
+    approved = build_name_board.transition_existing(root, chapter, "approved", reviewed_by="editor")
+    assert approved["workflow_status"] == "approved"
+    assert approved["approval"]["subject_sha256"] == build_name_board.approval_subject_sha256(approved)
+    assert build_name_board.verify_approval(root, chapter, approved) == []
+
+    settings.write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1280xauto\n", encoding="utf-8")
+    assert any("stale" in item for item in build_name_board.verify_approval(root, chapter, approved))
+
+
+def test_name_approval_requires_named_reviewer_and_review_time(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+    write_json(root / "排版" / chapter / "name_board.json", build_name_board.build_name_board(root, chapter))
+    build_name_board.transition_existing(root, chapter, "review")
+    approved = build_name_board.transition_existing(root, chapter, "approved", reviewed_by="editor")
+    subject_sha = build_name_board.approval_subject_sha256(approved)
+
+    for field in ("reviewed_by", "reviewed_at"):
+        malformed = json.loads(json.dumps(approved, ensure_ascii=False))
+        malformed["approval"].pop(field)
+        assert build_name_board.approval_subject_sha256(malformed) == subject_sha
+        assert any(field in error for error in build_name_board.verify_approval(root, chapter, malformed))
+
+
+def test_default_cli_writes_waiting_not_complete_until_explicit_approval(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    (root / "_进度.md").write_text(
+        "| 话 | 缩略分镜 |\n|---|---|\n| 第1话 | ⬜ |\n",
+        encoding="utf-8",
+    )
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+
+    monkeypatch.setattr(sys, "argv", ["comic-name", str(root), "--chapter", chapter])
+    assert build_name_board.main() == 0
+    assert "🟡待签收" in (root / "_进度.md").read_text(encoding="utf-8")
+    assert "✅" not in (root / "_进度.md").read_text(encoding="utf-8")
+
+    monkeypatch.setattr(sys, "argv", ["comic-name", str(root), "--chapter", chapter, "--submit-review"])
+    assert build_name_board.main() == 0
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["comic-name", str(root), "--chapter", chapter, "--approve", "--reviewed-by", "editor"],
+    )
+    assert build_name_board.main() == 0
+    assert "✅" in (root / "_进度.md").read_text(encoding="utf-8")

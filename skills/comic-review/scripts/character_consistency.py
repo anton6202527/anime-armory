@@ -56,6 +56,12 @@ def file_sha256(path: Path) -> str:
 
 def panel_character_ids(panel: dict[str, Any]) -> list[str]:
     out: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        ref_id = str(binding.get("character_id") or "").strip()
+        if ref_id.startswith(("CHAR_", "MON_")) and ref_id not in out:
+            out.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw or "").strip()
@@ -116,11 +122,31 @@ CCIP_CALIBRATED_CAP = float(os.environ.get("COMIC_CCIP_CALIBRATED_CAP", "0.32"))
 FINGERPRINT_FLOOR_MIN = float(os.environ.get("COMIC_FINGERPRINT_FLOOR_MIN", "0.25"))
 
 
-def calibrated_ccip_threshold(intra_diffs: list[float]) -> float:
+def calibrated_ccip_threshold(intra_diffs: list[float], baseline: float = CCIP_SAME_THRESHOLD) -> float:
     """定妆组内互距 → 本角色有效 CCIP 阈值。纯函数·可测。"""
     if not intra_diffs:
-        return CCIP_SAME_THRESHOLD
-    return min(max(CCIP_SAME_THRESHOLD, max(intra_diffs)), CCIP_CALIBRATED_CAP)
+        return baseline
+    return min(max(baseline, max(intra_diffs)), CCIP_CALIBRATED_CAP)
+
+
+def project_ccip_threshold(root: Path) -> tuple[float, str]:
+    """Return a current human-gold threshold, otherwise the published fallback."""
+    registry = load_json(root / "生产数据" / "consistency_threshold_registry.json", {})
+    metric = registry.get("metrics", {}).get("ccip_difference") if isinstance(registry, dict) else None
+    if not isinstance(metric, dict) or metric.get("status") != "validated":
+        return CCIP_SAME_THRESHOLD, "published"
+    try:
+        threshold = float(metric.get("threshold"))
+    except (TypeError, ValueError):
+        return CCIP_SAME_THRESHOLD, "published"
+    gold_path = Path(str(registry.get("gold_set_path") or ""))
+    if not gold_path.is_absolute():
+        gold_path = root / gold_path
+    if not gold_path.is_file() or file_sha256(gold_path) != str(registry.get("gold_set_sha256") or ""):
+        return CCIP_SAME_THRESHOLD, "published"
+    if not 0.0 < threshold <= CCIP_CALIBRATED_CAP:
+        return CCIP_SAME_THRESHOLD, "published"
+    return threshold, "gold_set_validated"
 
 
 def calibrated_fingerprint_floor(fixed_floor: float, intra_scores: list[float]) -> float:
@@ -182,13 +208,21 @@ def ccip_best_match(root: Path, panel_path: Path, refs: list[dict[str, str]]) ->
     return best
 
 
-def apply_calibrated_ccip(ccip: dict[str, Any], threshold: float) -> dict[str, Any]:
+def apply_calibrated_ccip(
+    ccip: dict[str, Any],
+    threshold: float,
+    *,
+    baseline: float = CCIP_SAME_THRESHOLD,
+    baseline_source: str = "published",
+) -> dict[str, Any]:
     """把自标定阈值套用到 ccip_best_match 结果上（保留公开阈值字段供审计对照）。纯函数·可测。"""
     if not ccip.get("available") or ccip.get("difference") is None:
         return ccip
     ccip["threshold_published"] = CCIP_SAME_THRESHOLD
     ccip["threshold"] = round(float(threshold), 4)
-    ccip["threshold_source"] = "self_calibrated" if threshold > CCIP_SAME_THRESHOLD else "published"
+    ccip["threshold_baseline"] = round(float(baseline), 4)
+    ccip["threshold_baseline_source"] = baseline_source
+    ccip["threshold_source"] = "self_calibrated" if threshold > baseline else baseline_source
     ccip["same_character"] = float(ccip["difference"]) <= float(threshold)
     return ccip
 
@@ -514,6 +548,7 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
     notes: list[str] = []
     pillow_available = image_available()
     ccip_ready = ccip_available()
+    project_ccip_base, project_ccip_source = project_ccip_threshold(root)
 
     for panel in script.get("panels") or []:
         pid = str(panel.get("panel_id") or "")
@@ -570,9 +605,9 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
                 suggested_fix="回 comic-identity 补 anchor/front/face 等参考图后重建出图包并重抽受影响格。",
             )
         metrics: list[dict[str, Any]] = []
-        char_ccip_threshold = CCIP_SAME_THRESHOLD
+        char_ccip_threshold = project_ccip_base
         if refs and ccip_ready:
-            char_ccip_threshold = calibrated_ccip_threshold(intra_reference_ccip(root, refs))
+            char_ccip_threshold = calibrated_ccip_threshold(intra_reference_ccip(root, refs), project_ccip_base)
         region_floors: dict[str, float] = {}
         if refs and pillow_available:
             # 区域指纹自标定：本角色定妆组内最差同人对低于固定地板时按组内放宽（下限护栏 0.25），
@@ -586,7 +621,12 @@ def analyze(root: Path, chapter: str, *, bins: int = DEFAULT_BINS) -> dict[str, 
                 metric: dict[str, Any] = {"panel_id": panel["panel_id"]}
                 multi_char = int(panel.get("char_count") or 1) >= 2
                 if ccip_ready:
-                    ccip = apply_calibrated_ccip(ccip_best_match(root, panel_path, refs), char_ccip_threshold)
+                    ccip = apply_calibrated_ccip(
+                        ccip_best_match(root, panel_path, refs),
+                        char_ccip_threshold,
+                        baseline=project_ccip_base,
+                        baseline_source=project_ccip_source,
+                    )
                     metric["ccip"] = ccip
                     if ccip.get("available") and not ccip.get("same_character"):
                         add_finding(

@@ -36,6 +36,49 @@ from gate_core import (
     _weapon_profile,
 )
 from image_prompt_compiler import lint_compiled_section as lint_compiled_image_section  # noqa: E402
+from n2d_contract import (
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+    CHARACTER_LIBRARY_TIER_STANDARD,
+    normalize_character_library_tier,
+)
+
+
+def _prompt_character_library_tier(section: str) -> str:
+    match = re.search(
+        r"(?:角色库档位|library_tier)\s*(?:\*\*)?\s*[`：:=\s-]*"
+        r"(core_full|recurring_standard|named_minimal|restricted_partial)",
+        section,
+        re.I,
+    )
+    return normalize_character_library_tier(match.group(1) if match else "")
+
+
+def _tier_prompt_pack_missing(section: str, tier: str) -> List[str]:
+    """返回该分档 prompt 包缺的交付项；不再对所有具名配角一刀切要完整主角包。"""
+    has_front = _has_any(section, ("正面", "正脸", "主参考", "定妆_<角色>.png"))
+    has_three_quarter = _has_any(section, (
+        "45°", "45度", "三分之二侧脸", "3/4", "three_quarter", "_45度",
+    ))
+    has_outfit = _has_any(section, (
+        "_半身", "_全身", "半身服装", "全身服装", "服装参考", "体态参考",
+    ))
+    has_face_anchor = _has_any(section, (
+        "脸部特写", "面部特写", "face_anchor_refs", "基础脸部参考", "表情参考", "同源表情", "表情_",
+    ))
+    missing: List[str] = []
+    if not has_front:
+        missing.append("front")
+    if tier in {CHARACTER_LIBRARY_TIER_CORE, CHARACTER_LIBRARY_TIER_STANDARD} and not has_three_quarter:
+        missing.append("three_quarter")
+    if not has_outfit:
+        missing.append("half_body_or_full_body_or_outfit")
+    if not has_face_anchor:
+        missing.append("face_anchor_refs_or_expressions")
+    if tier == CHARACTER_LIBRARY_TIER_CORE and not _has_standard_character_turnaround(section):
+        missing.append("side/rear_three_quarter/back/turnaround")
+    return missing
 
 def check_costume_registry_reconcile(root: str) -> None:
     """定妆库 ↔ identity_registry 双向对账。
@@ -339,12 +382,20 @@ def check_common_image_prompts(root: str) -> None:
                     add(BLOCK, "资产身份注册层", loc, "角色定妆缺身份注册字段；必须指向 `出图/共享/identity_registry.json` 对应 characters[].forms[]")
                 restricted_partial = _is_restricted_partial_prompt_section(sec)
                 if not restricted_partial:
+                    library_tier = _prompt_character_library_tier(sec)
+                    if not library_tier:
+                        add(BLOCK, "角色定妆基础包", loc,
+                            "角色定妆 section 缺机器可读 library_tier；审查器无法判断应验核完整主角包还是短线最小包。")
+                        library_tier = CHARACTER_LIBRARY_TIER_CORE
                     if "角色定妆组" not in sec:
                         add(BLOCK, "角色一致性", loc, "角色定妆缺定妆组说明；人物角色不能只靠单张正脸")
-                    if not _has_standard_character_turnaround(sec):
+                    tier_missing = _tier_prompt_pack_missing(sec, library_tier)
+                    if tier_missing:
                         add(BLOCK, "角色定妆基础包", loc,
-                            "人物定妆基础包必须写齐：正面主参考 + 45°参考 + 侧面参考 + 背面参考 + 半身/全身服装参考 + "
-                            "脸部特写/同源表情参考 + `定妆_<角色>_三视图.png` 人审拼版。"
+                            f"人物定妆基础包必须写齐 library_tier={library_tier} 所需项，缺：{', '.join(tier_missing)}。"
+                            "core_full 必须写齐正面 + 前45° + 侧面 + 后45° + 背面独立可喂图参考 + 半身/全身服装参考 + "
+                            "脸部特写/同源表情参考 + `定妆_<角色>_turnaround.png` 人审拼版。"
+                            "recurring_standard 只强制正面+前45°+body/outfit+脸锚，named_minimal 只强制正面+body/outfit+脸锚。"
                             "完整表情组、动作参考、主体库/LoRA 是风险升档项，不替代基础包。")
                 if _uses_halfbody_outfit_ref(sec) and not _has_halfbody_crop_rule(sec):
                     add(BLOCK, "服装参考", loc, "半身服装参考必须写明：`定妆_<角色>_半身.png` 从已通过自检的正面主参考裁切并放大/重采样回项目所选画幅；人物主体居中、头身中线接近画面中线、左右留白基本均衡；不得新抽半身导致脸漂，也不得用白底/浅灰底/空白补下半截")

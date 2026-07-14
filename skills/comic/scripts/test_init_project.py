@@ -51,6 +51,21 @@ def test_numeric_auto_keeps_longstrip_compatibility() -> None:
     assert init_project.resolve_page_dimensions("1440xauto", "条漫") == (1440, 1800)
 
 
+def test_name_stage_remains_when_traditional_finishing_is_disabled() -> None:
+    progress = init_project.progress_markdown(
+        "测试漫画",
+        SimpleNamespace(
+            mode="原创漫画",
+            format="页漫",
+            reading_direction="从右到左",
+            traditional_workflow="关闭",
+        ),
+        source_ready=False,
+    )
+    assert "缩略分镜" in progress
+    assert "原稿收尾" not in progress
+
+
 def test_scaffold_writes_independent_bootstrap_catalog(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "comic"
     monkeypatch.setattr(sys, "argv", ["init_project.py", str(root), "--title", "测试漫画"])
@@ -60,3 +75,17 @@ def test_scaffold_writes_independent_bootstrap_catalog(tmp_path: Path, monkeypat
     assert meta["line"] == "comic" and meta["project_id"].startswith("comic_")
     assert catalog["status"] == "bootstrap"
     assert catalog["project"]["project_id"] == meta["project_id"]
+    assert not (root / "排版" / "第1话" / "layout.json").exists()
+    panel_script = json.loads((root / "脚本" / "第1话" / "panel_script.json").read_text(encoding="utf-8"))
+    assert panel_script["schema_version"] == 2
+    assert panel_script["chapter_contract"]["status"] == "draft"
+    assert panel_script["panels"][0]["character_bindings"] == []
+    progress = (root / "_进度.md").read_text(encoding="utf-8")
+    assert "| 第1话 | ✅" not in progress
+    registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    assert registry["schema_version"] == 2
+    assert registry["kind"] == "comic_identity_registry"
+    assert registry["assets"] == {}
+    bible = (root / "设定库" / "story_bible.md").read_text(encoding="utf-8")
+    assert "### 待定主角 CHAR_TBD_PROTAGONIST" in bible
+    assert "### 待定对手 CHAR_TBD_ANTAGONIST" in bible

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -134,3 +135,32 @@ def test_self_audit_accepts_image_backend_docs_aligned(tmp_path: Path) -> None:
     report = self_audit.audit(tmp_path)
     matches = [f for f in report["findings"] if f["dim"] == "生图后端白名单"]
     assert matches and matches[0]["sev"] == "info"
+
+
+def test_cli_out_matches_json_stdout_and_preserves_block_exit(
+    tmp_path: Path,
+    capsys,
+) -> None:
+    _minimal_repo(tmp_path)
+    (tmp_path / "skills" / "n2d" / "progress.py").write_text(
+        "def unsafe_progress_update(): pass\n",
+        encoding="utf-8",
+    )
+    destination = tmp_path / "audit" / "receipts" / "self.json"
+
+    exit_code = self_audit.main([
+        "--root",
+        str(tmp_path),
+        "--json",
+        "--out",
+        str(destination),
+    ])
+    stdout = capsys.readouterr().out
+    written = destination.read_text(encoding="utf-8")
+    report = json.loads(written)
+
+    assert exit_code == 1
+    assert written == stdout
+    assert report["kind"] == "n2d_self_audit"
+    assert report["root"] == str(tmp_path.resolve())
+    assert report["counts"]["block"] > 0

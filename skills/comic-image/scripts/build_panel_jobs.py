@@ -11,6 +11,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+import reference_planner  # noqa: E402
+
 COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
 if str(COMIC_LIB) not in sys.path:
     sys.path.insert(0, str(COMIC_LIB))
@@ -38,6 +43,7 @@ PRESERVE_GENERATION_KEYS = {
     "generated_from_submit_prompt_sha256",
     "post_qc",
     "last_error",
+    "generated_from_execution_input_sha256",
 }
 LEGACY_MAX_REFERENCE_IMAGES_PER_JOB = 6
 LEGACY_SINGLE_CHARACTER_REFERENCE_LIMIT = 4
@@ -52,6 +58,11 @@ REFERENCE_VIEW_PRIORITY = {
     "side": 4,
     "back": 5,
 }
+REFERENCE_ID_PREFIXES = ("CHAR_", "MON_", "LOC_", "PROP_", "OUTFIT_", "SYS_", "FX_", "VFX_", "STYLE_")
+
+
+class ReferencePlanBlocked(ValueError):
+    """Raised when deterministic reference/binding contracts are incomplete."""
 PRODUCTION_NEGATIVE_CONTRACT = (
     "文字，水印，logo，乱码字，字幕，播放按钮，搜索框，播放器控件，平台 UI，竖排标题，"
     "对白气泡，空白气泡，旁白框，文字框，额外手指，畸形手，手脚混淆，把脚画成手，"
@@ -209,10 +220,15 @@ def registry_style_contract(registry: dict) -> str:
 
 def panel_reference_ids(panel: dict) -> list[str]:
     ids: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if isinstance(binding, dict):
+            ref_id = str(binding.get("character_id") or binding.get("id") or "").strip()
+            if ref_id.startswith(("CHAR_", "MON_")) and ref_id not in ids:
+                ids.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw).strip()
-            if ref_id and ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")) and ref_id not in ids:
+            if ref_id and ref_id.startswith(REFERENCE_ID_PREFIXES) and ref_id not in ids:
                 ids.append(ref_id)
     return ids
 
@@ -274,7 +290,12 @@ def panel_outfit(panel: dict, registry: dict) -> tuple[str, str, dict[str, Any]]
     业界已验证的失效模式是"锁了脸锁不住领型/纽扣/花纹"，
     所以换装格必须显式声明 outfit_id 并绑定专属参考图与"绝不"负向清单。
     """
-    outfit_id = str(panel.get("outfit_id") or panel.get("outfit") or "").strip()
+    binding_outfits = [
+        str(item.get("outfit_id") or "").strip()
+        for item in panel.get("character_bindings") or []
+        if isinstance(item, dict) and item.get("outfit_id")
+    ]
+    outfit_id = str(panel.get("outfit_id") or panel.get("outfit") or (binding_outfits[0] if len(binding_outfits) == 1 else "")).strip()
     if not outfit_id:
         return "", "", {}
     assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
@@ -353,6 +374,100 @@ def load_memory_anchor_pins(root: Path, chapter: str) -> dict[str, list[dict[str
         if cid and refs:
             out[cid] = refs
     return out
+
+
+def reference_plan_for_build(root: Path, chapter: str, supplied: dict[str, Any] | None = None) -> dict[str, Any]:
+    fresh = reference_planner.build_plan(root, chapter)
+    plan = supplied or fresh
+    if plan.get("kind") != reference_planner.KIND or plan.get("chapter") != chapter:
+        raise ReferencePlanBlocked("reference plan kind/chapter mismatch")
+    if str(plan.get("inputs_fingerprint") or "") != str(fresh.get("inputs_fingerprint") or ""):
+        raise ReferencePlanBlocked("reference plan is stale: inputs_fingerprint differs from current project inputs")
+    if str(plan.get("plan_sha256") or "") != str(fresh.get("plan_sha256") or ""):
+        raise ReferencePlanBlocked("reference plan is stale or was edited without rebuilding: plan_sha256 differs")
+    blocks = [finding for finding in plan.get("findings") or [] if isinstance(finding, dict) and finding.get("severity") == "block"]
+    if blocks:
+        compact = "; ".join(f"{item.get('panel')}:{item.get('code')}" for item in blocks)
+        raise ReferencePlanBlocked(f"reference plan blocked: {compact}")
+    return plan
+
+
+def references_from_panel_plan(root: Path, panel_plan: dict[str, Any]) -> list[dict[str, str]]:
+    attachments = panel_plan.get("attachment_plan") if isinstance(panel_plan.get("attachment_plan"), dict) else {}
+    out: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for raw in attachments.get("selected") or []:
+        if not isinstance(raw, dict):
+            continue
+        path = str(raw.get("path") or "").strip()
+        if not path or path in seen:
+            continue
+        resolved = Path(path) if Path(path).is_absolute() else root / path
+        if not resolved.is_file():
+            raise ReferencePlanBlocked(f"reference plan attachment disappeared: {path}")
+        actual_sha = reference_planner.file_sha256(resolved)
+        expected_sha = str(raw.get("sha256") or "")
+        if expected_sha and expected_sha != actual_sha:
+            raise ReferencePlanBlocked(f"reference plan attachment changed after planning: {path}")
+        seen.add(path)
+        out.append({
+            "id": str(raw.get("id") or raw.get("character_id") or ""),
+            "path": path_relative_to_root(root, resolved),
+            "view": str(raw.get("role") or "reference"),
+            "role": str(raw.get("role") or "reference"),
+            "sha256": actual_sha,
+            "contract_id": str(raw.get("contract_id") or ""),
+            "required": bool(raw.get("required")),
+        })
+    required_count = int(attachments.get("required_count") or 0)
+    if required_count > len(out):
+        raise ReferencePlanBlocked(
+            f"reference plan selected {len(out)} existing attachments but requires {required_count}; rebuild/split the panel"
+        )
+    return out
+
+
+def binding_records(panel_plan: dict[str, Any], registry: dict[str, Any]) -> list[dict[str, Any]]:
+    assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
+    records: list[dict[str, Any]] = []
+    for binding in panel_plan.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        cid = str(binding.get("character_id") or "")
+        asset = assets.get(cid) if isinstance(assets.get(cid), dict) else {}
+        record: dict[str, Any] = {key: str(binding.get(key) or "") for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")}
+        record["display_name"] = str(asset.get("display_name") or asset.get("name") or "角色")
+        resolved: dict[str, Any] = {}
+        for key, collection_name in (("form_id", "forms"), ("outfit_id", "outfits"), ("expression_id", "expressions"), ("state_id", "states")):
+            collection = asset.get(collection_name) if isinstance(asset.get(collection_name), dict) else {}
+            item = collection.get(record[key]) if isinstance(collection.get(record[key]), dict) else {}
+            resolved[collection_name[:-1] if collection_name.endswith("s") else collection_name] = {
+                "id": record[key],
+                "name": str(item.get("name") or record[key]),
+                "description": compact_metadata(item.get("description") or item.get("continuity_contract") or item.get("inheritance_contract"), max_len=180),
+                "forbidden": compact_metadata(item.get("forbidden"), max_len=120),
+            }
+        record["resolved_contracts"] = resolved
+        records.append(record)
+    return records
+
+
+def binding_contract_text(records: list[dict[str, Any]], *, include_ids: bool = True) -> str:
+    parts: list[str] = []
+    for record in records:
+        visible: list[str] = []
+        for kind, item in (record.get("resolved_contracts") or {}).items():
+            if not isinstance(item, dict):
+                continue
+            chunk = f"{kind}={item.get('name') or item.get('id')}"
+            if item.get("description"):
+                chunk += f"({item['description']})"
+            if item.get("forbidden"):
+                chunk += f"；不得:{item['forbidden']}"
+            visible.append(chunk)
+        label = str(record.get("character_id") if include_ids else record.get("display_name") or "角色")
+        parts.append(f"{label}：" + "；".join(visible))
+    return " || ".join(parts)
 
 
 def panel_references(root: Path, panel: dict, registry: dict, caps: Any,
@@ -525,6 +640,7 @@ def compile_panel_prompt(
     references: list[dict[str, str]],
     size: dict[str, int],
     outfit_contract: str = "",
+    binding_contract: str = "",
 ) -> dict[str, Any]:
     continuity = dict(continuity)
     if continuity.get("continuity_from", "").strip().lower() in {"none", "无", "n/a", "-"}:
@@ -563,6 +679,8 @@ def compile_panel_prompt(
     )
     if outfit_contract:
         identity_hold += "；" + outfit_contract
+    if binding_contract:
+        identity_hold += "；逐角色本格状态：" + binding_contract
     has_text = bool(panel.get("dialogue") or panel.get("narration"))
     compiled = compile_prompt({
         "panel_id": panel.get("panel_id"),
@@ -596,9 +714,12 @@ def compile_panel_prompt(
     return compiled
 
 
-def build_jobs(root: Path, chapter: str) -> dict:
-    panel_script = load_json(root / "脚本" / chapter / "panel_script.json")
-    layout = load_json(root / "排版" / chapter / "layout.json")
+def build_jobs(root: Path, chapter: str, reference_plan: dict[str, Any] | None = None) -> dict:
+    panel_script_path = root / "脚本" / chapter / "panel_script.json"
+    layout_path = root / "排版" / chapter / "layout.json"
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    panel_script = load_json(panel_script_path)
+    layout = load_json(layout_path)
     rects = panel_rects(layout)
     model = read_setting(root, "生图模型", "自定义")
     channel = read_setting(root, "生图渠道", "manual")
@@ -607,18 +728,29 @@ def build_jobs(root: Path, chapter: str) -> dict:
     text_language = read_setting(root, "文字语言", "中文")
     render_stage = read_setting(root, "出图稿层", "完成稿")
     registry = load_reference_registry(root)
+    plan = reference_plan_for_build(root, chapter, reference_plan)
+    plan_by_panel = {
+        str(item.get("panel_id")): item
+        for item in plan.get("panel_plans") or []
+        if isinstance(item, dict) and item.get("panel_id")
+    }
     finishing_plan = load_finishing_plan(root, chapter)
-    memory_pins = load_memory_anchor_pins(root, chapter)
     finishing_map = finishing_by_panel(finishing_plan)
     jobs = []
     for panel in panel_script.get("panels", []):
         pid = panel.get("panel_id")
+        panel_plan = plan_by_panel.get(str(pid), {})
         rect = rects.get(pid, {})
         finish = finishing_map.get(str(pid), {})
         size = {"width": int(rect.get("w", 1440)), "height": int(rect.get("h", 900))}
         continuity = panel_continuity_contract(panel, panel_script)
-        references = panel_references(root, panel, registry, caps, memory_pins=memory_pins)
+        references = references_from_panel_plan(root, panel_plan) if panel_plan else []
+        bindings = binding_records(panel_plan, registry) if panel_plan else []
+        binding_full = binding_contract_text(bindings, include_ids=True)
+        binding_visible = binding_contract_text(bindings, include_ids=False)
         production_prompt = build_prompt(panel, style, registry, panel_script, finish, render_stage)
+        if binding_full:
+            production_prompt += "；逐角色结构化状态合同：" + binding_full
         outfit_ref_id, outfit_id, outfit_record = panel_outfit(panel, registry)
         outfit_contract = outfit_contract_text(outfit_id, outfit_record) if outfit_ref_id and outfit_record else ""
         compiled = compile_panel_prompt(
@@ -632,8 +764,35 @@ def build_jobs(root: Path, chapter: str) -> dict:
             references=references,
             size=size,
             outfit_contract=outfit_contract,
+            binding_contract=binding_visible,
         )
         submit_prompt = str(compiled["prompt"])
+        registry_sha = reference_planner.file_sha256(registry_path) if registry_path.is_file() else ""
+        consumed_contracts = {
+            "reference_plan": {
+                "path": str(Path("生产数据") / f"comic_reference_plan_{chapter}.json"),
+                "plan_sha256": str(plan.get("plan_sha256") or ""),
+                "inputs_fingerprint": str(plan.get("inputs_fingerprint") or ""),
+                "panel_plan_sha256": str(panel_plan.get("panel_plan_sha256") or ""),
+            },
+            "identity_registry": {
+                "path": "出图/共享/identity_registry.json",
+                "sha256": registry_sha,
+                "schema_version": registry.get("schema_version"),
+            },
+            "panel_script": {"path": str(panel_script_path.relative_to(root)), "sha256": reference_planner.file_sha256(panel_script_path)},
+            "layout": {"path": str(layout_path.relative_to(root)), "sha256": reference_planner.file_sha256(layout_path)},
+        }
+        execution_input = {
+            "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
+            "size": size,
+            "references": [{"id": ref.get("id"), "path": ref.get("path"), "sha256": ref.get("sha256")} for ref in references],
+            "character_bindings": [{key: row.get(key) for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")} for row in bindings],
+            "panel_plan_sha256": str(panel_plan.get("panel_plan_sha256") or ""),
+        }
+        execution_input_sha = hashlib.sha256(
+            json.dumps(execution_input, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
         jobs.append(
             {
                 "panel_id": pid,
@@ -652,6 +811,8 @@ def build_jobs(root: Path, chapter: str) -> dict:
                 "source_contract_sha256": compiled["source_contract_sha256"],
                 "submit_prompt_sha256": hashlib.sha256(submit_prompt.encode("utf-8")).hexdigest(),
                 "submit_prompt_chars": len(submit_prompt),
+                "execution_input_sha256": execution_input_sha,
+                "consumed_contracts": consumed_contracts,
                 "continuity_contract": continuity,
                 "traditional_finish_contract": finish,
                 "outfit_binding": (
@@ -659,6 +820,7 @@ def build_jobs(root: Path, chapter: str) -> dict:
                     if outfit_id
                     else {}
                 ),
+                "character_bindings": bindings,
                 "references": references,
                 "reference_budget": caps.to_dict() if caps else {},
                 "result_path": "",
@@ -674,6 +836,11 @@ def build_jobs(root: Path, chapter: str) -> dict:
         "backend_capabilities": caps.to_dict() if caps else {},
         "text_language": text_language,
         "render_stage": render_stage,
+        "reference_plan": {
+            "path": str(Path("生产数据") / f"comic_reference_plan_{chapter}.json"),
+            "plan_sha256": str(plan.get("plan_sha256") or ""),
+            "inputs_fingerprint": str(plan.get("inputs_fingerprint") or ""),
+        },
         "finishing_plan": str(Path("出图") / chapter / "finishing" / "finishing_plan.json") if finishing_plan else "",
         "jobs": jobs,
     }
@@ -687,6 +854,8 @@ def job_is_stale(old: dict, new: dict) -> bool:
     comic-identity report 的 sha 比对负责触发重抽。
     """
     if str(old.get("submit_prompt_sha256") or "") != str(new.get("submit_prompt_sha256") or ""):
+        return True
+    if str(old.get("execution_input_sha256") or "") != str(new.get("execution_input_sha256") or ""):
         return True
     return (old.get("size") or {}) != (new.get("size") or {})
 
@@ -840,9 +1009,10 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
+    plan = reference_planner.build_plan(root, args.chapter)
     if args.check:
         try:
-            jobs = build_jobs(root, args.chapter)
+            jobs = build_jobs(root, args.chapter, plan)
         except Exception as exc:  # noqa: BLE001 - check 模式必须给出结构化结果
             print(json.dumps(
                 {"kind": "comic_panel_jobs_check", "chapter": args.chapter, "error": f"rebuild_failed: {exc}"},
@@ -853,7 +1023,19 @@ def main() -> int:
         print(json.dumps(result, ensure_ascii=False))
         dirty = bool(result.get("error") or result["stale_panels"] or result["missing_panels"])
         return 1 if dirty else 0
-    jobs = build_jobs(root, args.chapter)
+    plan_dir = root / "生产数据"
+    plan_dir.mkdir(parents=True, exist_ok=True)
+    (plan_dir / f"comic_reference_plan_{args.chapter}.json").write_text(
+        json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    (plan_dir / f"comic_reference_plan_{args.chapter}.md").write_text(
+        reference_planner.render_markdown(plan), encoding="utf-8"
+    )
+    try:
+        jobs = build_jobs(root, args.chapter, plan)
+    except ReferencePlanBlocked as exc:
+        print(f"[block] {exc}; see 生产数据/comic_reference_plan_{args.chapter}.json", file=sys.stderr)
+        return 2
     preserved, stale = preserve_ready_jobs(root, args.chapter, jobs)
     out_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)

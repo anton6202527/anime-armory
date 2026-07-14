@@ -71,11 +71,16 @@ def test_vlm_tasks_cover_three_axes_and_stale_verdicts_drop(tmp_path: Path) -> N
     vlm_judge.write_tasks(root, chapter)
     char_task = next(t for t in payload["tasks"] if t["axis"] == "character_identity")
     good_sha = char_task["panel"]["sha256"]
+    evidence = {
+        "task_sha256": char_task["task_sha256"],
+        "references_sha256": char_task["references_sha256"],
+        "evaluator": {"model": "Test VLM", "version": "2026-07-14"},
+    }
     (root / "生产数据" / f"comic_vlm_judge_verdicts_{chapter}.json").write_text(
         json.dumps(
             {
                 "verdicts": [
-                    {"task_id": char_task["task_id"], "panel_sha256": good_sha, "scores": {"face": 2}, "verdict": "suspect"},
+                    {"task_id": char_task["task_id"], "panel_sha256": good_sha, "scores": {"face": 2}, "verdict": "suspect", **evidence},
                     {"task_id": char_task["task_id"] + "_stale", "panel_sha256": "0" * 64, "scores": {"face": 1}},
                 ]
             },
@@ -91,6 +96,24 @@ def test_vlm_tasks_cover_three_axes_and_stale_verdicts_drop(tmp_path: Path) -> N
     (root / "出图" / chapter / "panels" / "P001.png").write_bytes(PNG_1X1 + b"rerolled")
     vlm_judge.write_tasks(root, chapter)
     assert vlm_judge.suspect_verdicts(root, chapter, "character_identity") == []
+
+
+def test_vlm_verdict_without_complete_sha_or_evaluator_is_rejected(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    make_project(root)
+    chapter = "第1话"
+    vlm_judge.write_tasks(root, chapter)
+    task = vlm_judge.load_json(vlm_judge.tasks_path(root, chapter), {})["tasks"][0]
+    (root / "生产数据" / f"comic_vlm_judge_verdicts_{chapter}.json").write_text(
+        json.dumps({"verdicts": [{
+            "task_id": task["task_id"],
+            "panel_sha256": task["panel"]["sha256"],
+            "scores": {"face": 5},
+            "verdict": "pass",
+        }]}),
+        encoding="utf-8",
+    )
+    assert vlm_judge.load_verdicts(root, chapter) == {}
 
 
 def test_character_scope_covers_mon_and_flags_unbound_names(tmp_path: Path) -> None:

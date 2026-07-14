@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""漫画开发包（2026-07 标准审计·参照同仓成熟生产线开发包模式的漫画裁剪重实现，不跨线 import）。
+"""漫画开发包与分话合同 v2。
 
 实证空档：金瓶梅 10 回只拆 1 回、红楼梦 120 回只拆序章——**没有系列级开发层**，
 拆分/编剧直接从"眼前一话"开始，第 2 话就断供。同仓成熟生产线的解法是开发包 gate：拆集写词前
@@ -8,8 +8,8 @@
 
   开发包/adaptation_strategy.json   改编策略：改编边界、爽点承诺账、因果链主干、伏笔账
                                     （补齐 source_semantics 只管语言归一化、不管理解的缺口）
-  开发包/season_arc.json            前 3-5 话追更弧：每话核心冲突/结尾钩子/承诺兑现位
-  脚本/split_blueprint.json         全书拆分蓝图：候选话次边界账（source_range/冲突/钩子/预计格数）
+  开发包/season_arc.json            前 3-5 话追更弧：每话核心冲突/结尾模式/承诺兑现位
+  脚本/split_blueprint.json         全书拆分蓝图：结构化 source_spans + 每话创作/状态合同
                                     （chapter_beat_audit 的 split_blueprint_missing 检查同一文件）
   开发包/signoff.json               绿灯签收：reviewer/role/time + 对上述文件的 SHA 绑定
 
@@ -32,13 +32,23 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
-VERSION = 1
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from chapter_contract import (
+    SCHEMA_VERSION,
+    parse_numbered_label,
+    validate_blueprint,
+)
+
+VERSION = 2
 KIND = "comic_development_pack_check"
 PLACEHOLDER_RE = re.compile(r"待补|待填|TODO|TBD|<[^>]*>|__待", re.IGNORECASE)
 
 STRATEGY_TEMPLATE: Dict[str, Any] = {
     "kind": "comic_adaptation_strategy",
-    "version": 1,
+    "version": 2,
     "status": "draft",
     "adaptation_boundary": "待补：哪些内容不改编/如何镜外化（露骨/敏感/超纲情节的处理边界）",
     "promise_ledger": [
@@ -56,22 +66,49 @@ STRATEGY_TEMPLATE: Dict[str, Any] = {
 
 SEASON_ARC_TEMPLATE: Dict[str, Any] = {
     "kind": "comic_season_arc",
-    "version": 1,
+    "version": 2,
     "status": "draft",
     "chapters": [
-        {"chapter": f"第{i}话", "core_conflict": "待补", "ending_hook": "待补",
+        {"chapter": f"第{i}话", "core_conflict": "待补", "ending_mode": "待补",
+         "ending_intent": "待补：悬置/揭示/决定/情绪落点/完整闭合等具体效果",
          "promise_refs": []} for i in range(1, 4)
     ],
 }
 
 BLUEPRINT_TEMPLATE: Dict[str, Any] = {
     "kind": "comic_split_blueprint",
-    "version": 1,
+    "version": 2,
     "status": "draft",
-    "policy": "按『冲突→爽点/揭示→钩子』闭环切话，不按字数/回目硬切；边界候选先粗后精，逐话精修时可调",
+    "policy": "按戏剧闭环切话，不按字数、格数或源回目硬切；budget 只作软容量意图。",
     "chapters": [
-        {"chapter": "第1话", "source_range": "待补：对应源本回/章/段范围",
-         "core_conflict": "待补", "ending_hook_candidate": "待补", "estimated_panels": 0},
+        {
+            "chapter": "第1话",
+            "chapter_type": "serial",
+            "format_profile": "vertical_serial",
+            "source_mode": "adapted",
+            "source_spans": [
+                {"source_path": "源本/待补.txt", "start": "第1章", "end": "第1章"}
+            ],
+            "reader_promise": "待补：本话向读者承诺什么体验/答案",
+            "core_conflict": "待补：谁想要什么、什么在阻止",
+            "turning_point": "待补：选择、反转或认知变化",
+            "payoff": "待补：本话兑现的爽点/情绪/信息",
+            "ending_mode": "cliffhanger",
+            "budget": {"unit": "panels", "target": 36, "soft_range": [24, 48]},
+            "entry_state": {"story": "待补：本话进入时的剧情状态"},
+            "continuity_delta": [
+                {
+                    "entity_id": "CHAR_MAIN",
+                    "field": "story_state",
+                    "from": "待补：进入状态",
+                    "to": "待补：不可逆新状态",
+                    "panel_id": "P001",
+                    "reason": "待补：哪个可见事件造成变化",
+                }
+            ],
+            "exit_state": {"story": "待补：下话必须继承的退出状态"},
+            "status": "draft"
+        },
     ],
 }
 
@@ -120,9 +157,92 @@ def contains_placeholder(value: Any) -> bool:
     return bool(PLACEHOLDER_RE.search(json.dumps(value, ensure_ascii=False)))
 
 
+def _coverage_issues(blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
+    """Check deterministic gaps/overlaps in declared source ranges.
+
+    A deliberate gap/overlap remains possible, but it must be documented on
+    the later span as ``coverage_exception``.  No prose heuristic is used.
+    """
+    issues: List[Dict[str, str]] = []
+    previous: Dict[tuple[str, str], tuple[int, int, str]] = {}
+    whole_file_seen: Dict[str, str] = {}
+    chapters = blueprint.get("chapters") if isinstance(blueprint.get("chapters"), list) else []
+    for entry in chapters:
+        if not isinstance(entry, Mapping) or entry.get("source_mode", "adapted") != "adapted":
+            continue
+        chapter = str(entry.get("chapter") or "?")
+        for span in entry.get("source_spans") or []:
+            if not isinstance(span, Mapping):
+                continue
+            if span.get("whole_file") is True:
+                source_path = str(span.get("source_path") or "")
+                prior_chapter = whole_file_seen.get(source_path)
+                if prior_chapter and not str(span.get("coverage_exception") or "").strip():
+                    issues.append({
+                        "code": "source_coverage_whole_file_overlap",
+                        "message": f"{source_path} 已由 {prior_chapter} 整文件消费，{chapter} 再次消费须写 coverage_exception。",
+                    })
+                whole_file_seen[source_path] = chapter
+                continue
+            start = parse_numbered_label(span.get("start"))
+            end = parse_numbered_label(span.get("end") or span.get("start"))
+            source_path = str(span.get("source_path") or "")
+            if not start or not end or start[1] != end[1]:
+                continue
+            key = (source_path, start[1])
+            prior = previous.get(key)
+            exception = str(span.get("coverage_exception") or "").strip()
+            if prior:
+                prior_start, prior_end, prior_chapter = prior
+                if start[0] <= prior_end and not exception:
+                    issues.append({
+                        "code": "source_coverage_overlap",
+                        "message": f"{source_path} {prior_chapter} 与 {chapter} 的 {start[1]}范围重叠；"
+                                   "确需复用时在后者写 coverage_exception。",
+                    })
+                elif start[0] > prior_end + 1 and not exception:
+                    issues.append({
+                        "code": "source_coverage_gap",
+                        "message": f"{source_path} 从第{prior_end + 1}{start[1]}到第{start[0] - 1}{start[1]}"
+                                   "未被话次覆盖；删改/延后必须写 coverage_exception。",
+                    })
+                if start[0] < prior_start and not exception:
+                    issues.append({
+                        "code": "source_coverage_order_reversed",
+                        "message": f"{source_path} 在 {chapter} 的源范围早于 {prior_chapter}；"
+                                   "如为倒叙复用请写 coverage_exception。",
+                    })
+            previous[key] = (start[0], max(end[0], prior[1] if prior else end[0]), chapter)
+    return issues
+
+
+def _source_path_issues(root: Path, blueprint: Mapping[str, Any]) -> List[Dict[str, str]]:
+    issues: List[Dict[str, str]] = []
+    for entry in blueprint.get("chapters") or []:
+        if not isinstance(entry, Mapping) or entry.get("source_mode", "adapted") != "adapted":
+            continue
+        chapter = str(entry.get("chapter") or "?")
+        for span in entry.get("source_spans") or []:
+            if not isinstance(span, Mapping):
+                continue
+            raw = str(span.get("source_path") or "").strip()
+            if not raw:
+                continue
+            path = (root / raw).resolve()
+            try:
+                path.relative_to(root.resolve())
+            except ValueError:
+                issues.append({"code": "source_path_outside_project", "message": f"{chapter} 的 source_path 越出作品根：{raw}"})
+                continue
+            if not path.is_file():
+                issues.append({"code": "source_file_missing", "message": f"{chapter} 声明的源文件不存在：{raw}"})
+    return issues
+
+
 def check_pack(root: Path) -> Dict[str, Any]:
     files = pack_files(root)
     gaps: List[Dict[str, str]] = []
+    warnings: List[Dict[str, str]] = []
     file_status: Dict[str, str] = {}
     hashes: Dict[str, str] = {}
     for key in ("adaptation_strategy", "season_arc", "split_blueprint"):
@@ -138,6 +258,15 @@ def check_pack(root: Path) -> Dict[str, Any]:
             file_status[key] = "invalid"
             continue
         hashes[key] = sha256_file(path)
+        try:
+            version = int(data.get("version") or 1) if isinstance(data, Mapping) else 1
+        except (TypeError, ValueError):
+            version = 0
+            gaps.append({"code": f"{key}_version_invalid",
+                         "message": f"{path.relative_to(root)} version 必须是整数。"})
+        if version < SCHEMA_VERSION:
+            gaps.append({"code": f"{key}_migration_required",
+                         "message": f"{path.relative_to(root)} 是 v{version}；兼容读取但 strict 放行前须迁移到 v{SCHEMA_VERSION}。"})
         status = str(data.get("status") or "draft")
         if status != "confirmed":
             gaps.append({"code": f"{key}_not_confirmed",
@@ -145,6 +274,18 @@ def check_pack(root: Path) -> Dict[str, Any]:
         elif contains_placeholder(data):
             gaps.append({"code": f"{key}_placeholder_in_confirmed",
                          "message": f"{path.relative_to(root)} 声明 confirmed 却仍含『待补/TODO』占位——反声明。"})
+        if key == "split_blueprint" and isinstance(data, Mapping):
+            gaps.extend(validate_blueprint(data))
+            gaps.extend(_coverage_issues(data))
+            gaps.extend(_source_path_issues(root, data))
+            if status == "confirmed":
+                for entry in data.get("chapters") or []:
+                    if isinstance(entry, Mapping) and entry.get("status") not in {"confirmed", "locked"}:
+                        gaps.append({
+                            "code": "chapter_contract_not_confirmed",
+                            "message": f"{entry.get('chapter', '?')} status={entry.get('status', 'missing')}；"
+                                       "开发包签收前每话合同须 confirmed/locked。",
+                        })
         file_status[key] = status
     # 签收：内容 confirmed ≠ 绿灯；还需 reviewer 对当前文件 SHA 签收（脚本不自我签收）
     signoff_path = files["signoff"]
@@ -160,6 +301,8 @@ def check_pack(root: Path) -> Dict[str, Any]:
         if signoff:
             if not str(signoff.get("reviewer") or "").strip() or not str(signoff.get("role") or "").strip():
                 gaps.append({"code": "signoff_reviewer_missing", "message": "signoff 缺 reviewer/role。"})
+            if not str(signoff.get("time") or "").strip():
+                gaps.append({"code": "signoff_time_missing", "message": "signoff 缺 time。"})
             bound = signoff.get("file_sha256") if isinstance(signoff.get("file_sha256"), Mapping) else {}
             for key, digest in hashes.items():
                 if str(bound.get(key) or "") != digest:
@@ -171,6 +314,7 @@ def check_pack(root: Path) -> Dict[str, Any]:
         "file_sha256": hashes,
         "status": "confirmed" if not gaps else "blocked",
         "gaps": gaps,
+        "warnings": warnings,
     }
 
 

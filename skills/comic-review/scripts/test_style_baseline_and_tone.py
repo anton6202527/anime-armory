@@ -101,7 +101,7 @@ def test_style_acceptance_sha_binding(tmp_path: Path) -> None:
             {
                 "accepted_findings": [
                     {"code": "tone_value_outlier", "panel_id": "P001", "reason": "夜戏黑场", "artifact_sha256": good_sha},
-                    {"code": "internal_panel_gutters", "panel_id": "P002", "reason": "想洗掉 block"},
+                    {"code": "panel_image_missing", "panel_id": "P002", "reason": "想洗掉 block"},
                 ]
             },
             ensure_ascii=False,
@@ -110,7 +110,7 @@ def test_style_acceptance_sha_binding(tmp_path: Path) -> None:
     )
     findings = [
         {"severity": "warn", "code": "tone_value_outlier", "panel_id": "P001", "artifact": "出图/第1话/panels/P001.png"},
-        {"severity": "block", "code": "internal_panel_gutters", "panel_id": "P002", "artifact": "出图/第1话/panels/P002.png"},
+        {"severity": "block", "code": "panel_image_missing", "panel_id": "P002", "artifact": "出图/第1话/panels/P002.png"},
     ]
     notes: list[str] = []
 

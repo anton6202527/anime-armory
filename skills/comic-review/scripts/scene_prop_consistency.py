@@ -144,6 +144,13 @@ def asset_anchor_paths(root: Path, registry: dict[str, Any], ref_id: str, limit:
 
 def panel_ref_ids(panel: dict[str, Any], prefixes: tuple[str, ...]) -> list[str]:
     out: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id"):
+            ref_id = str(binding.get(key) or "").strip()
+            if ref_id.startswith(prefixes) and ref_id not in out:
+                out.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw or "").strip()
@@ -247,7 +254,7 @@ def analyze(root: Path, chapter: str) -> dict[str, Any]:
         anchor = panel_scene_anchor(panel)
         if anchor:
             scene_groups.setdefault(anchor, []).append(entry)
-        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_")):
+        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_")):
             prop_groups.setdefault(prop_id, []).append(entry)
 
     scenes: list[dict[str, Any]] = []

@@ -2,7 +2,7 @@
 name: n2d
 description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline. Use when given a novel file/path, an existing 作品 folder, or asked anything about turning a novel into AI comic-drama / short-drama materials for 即梦AI / 可灵Kling / Seedance / Veo. Inspects the 作品 root, reads `_进度.md`, and routes the user to the right stage skill — `n2d-script` (阶段1 剧本改编 / 阶段2 分镜设计), `n2d-voice` (配音先行的配音+时长清单 / 原生音画的可选旁白层), `n2d-image` (出图), `n2d-video` (出视频; default completion boundary), or optional `n2d-compose`/`n2d-review` when the project opts into final assembly. Triggers 小说改漫剧, 小说转视频, AI漫剧, AI短剧, 分镜, 配音, 出图, 出视频, 合成, 成片, 验收, 即梦, 可灵, 双语字幕, 海外投放, 题材, 母题, 系统面板, 穿越系统流, 升级场景增强, n2d.
 ---
-> 规模统计：Skill 数 21 | SKILL.md 总行数 4695 | 目录文本总行数 261905
+> 规模统计：Skill 数 21 | SKILL.md 总行数 4684 | 目录文本总行数 274213
 
 # n2d — 主状态机调度器
 
@@ -63,7 +63,7 @@ description: Dispatcher for the 小说 → AI 漫剧/短剧 production pipeline.
 
 每个阶段都按 **集** 为单位推进；进度统一写进 `<作品根>/_进度.md`。`合成阶段` 默认 `跳过`：`视频` 列完成只表示 `clip_delivery_complete`（镜头 MP4 齐，可内部预览/继续后配音），不等于可发布母版；齐片后会 best-effort 用真实 Clip + `edit_target_sec` 生成 `actual_rough_cut.mp4`，用于尽早看节奏但仍不是母版。用户需要母带、BGM、烧字幕、交付矩阵或发布证据包时，再把 `_设置.md` 的 `合成阶段` 设为 `启用` 或直接调用 `n2d-compose`；只有合成、技术 QA、锁版和人工验收通过，才叫 `master_delivery_complete`。发行再按 `publish_ready_cn / publish_ready_overseas / publish_ready_commercial` 分别判，不用一个“完成”状态混掉地区/用途差异。
 
-> **运行时收敛层**：正式 `run.py next` 会物化 `生产数据/episode_graph_第N集.json`（storyboard→route→job→media→粗剪→母版→release 的派生索引）和 `生产数据/blocking_bundles/latest_第N集.json`（选择/付费/合规/adapter/合同/QC 分类修复包），并追加隐私最小化 `flow_events.jsonl`。这些都不另立状态机：`_进度.md`、现有 gate 与 release verdict 仍是权威。安全的 report-only 前置按 stage 缓存，指纹覆盖脚本、合同、路由、prompt 与媒体变化；命中只省重复执行，不缓存 block/异常。
+> **运行时收敛层**：正式 `run.py next` 会物化 `生产数据/episode_graph_第N集.json`（storyboard→route→job→media→粗剪→母版→release 的派生索引）和 `生产数据/blocking_bundles/latest_第N集.json`（选择/付费/合规/adapter/合同/QC 分类修复包），并追加隐私最小化 `flow_events.jsonl`。这些都不另立状态机：`_进度.md`、现有 gate 与 release verdict 仍是权威。安全的 report-only 前置按 stage 缓存，指纹覆盖脚本、合同、路由、prompt 与媒体变化；**只有 status=pass 且登记的输出 sidecar/artifact 当前仍存在才允许缓存命中**，输出被删除或不存在必须重跑重建，warn/block/异常及“无输出的 pass”都不缓存。
 
 > **机器契约层**：阶段顺序、列名、gate stage、每集 manifest、回退目标统一由 `skills/n2d/_lib/n2d_contract.py` 定义，`progress.py` / `n2d-progress` / `n2d-review gate` 复用它。改阶段职责或列名时，先改 contract，再同步 `references/contract.md` 与本说明。
 >
@@ -215,44 +215,17 @@ python3 skills/n2d-dashboard/scripts/dashboard.py build <作品根> --markdown
 ```
 `platform_metrics.*` 里如果有 `revenue/distribution_spend/currency/duration_sec`，dashboard 会同时生成 ROI：每分钟成本、投放净回收、回收/生产成本。
 
-### 源新鲜度自检（本剧源文本更新 → 漫剧源是否过期 + 重切影响）
-
-本剧 `小说/<剧>.txt` 改了之后，已拆的 raw 也跟着旧。**进作品根先跑一次自检**（确定性，秒级，不烧上下文）：
+### 进入作品前的两项漂移检查
 
 ```bash
-python3 <skill>/source_check.py <作品根>          # 自检：比对 小说/<剧>.txt 与 小说/_源指纹.json
-python3 <skill>/source_check.py <作品根> --record # 记/更新指纹基线（首切定稿后、或同步并确认后）
-```
-
-- **无基线** → 提示用户首切定稿后 `--record` 记一次（之后才能自动发现源更新）。
-- **clean** → 静默放行，直接进路由。
-- **drift（源已更新）** → 脚本会列出**变动章 + 落在哪些集 + 每集是 `raw-only(可安全重切)` 还是 `已生产(需谨慎)`**。把它讲给用户，给三选：
-  - ① **确认源**：确保本剧 `小说/<剧>.txt` 已是当前要使用的源文本。
-  - ② **评估/重切**：⚠️**重切属"不可逆/花钱"点，每次确认、绝不自动执行**。只 raw-only 受影响 → 推进到那些集前从新源重切该窗口 raw（按 `n2d-script` P0→P6 + 精修窗口铁律）；**别为几章重跑整本 split**（字数变动会重排集号、波及已生产集）。触及已生产集 → 逐集评估配音/出图/出视频是否返工。
-  - ③ **忽略本次** / 接受现状 → 处理完后 `--record` 更新基线。
-- 受影响集可登记进 `脚本/boundary_review.json` 的待重切/边界签收记录，推进到时再切；该文件按 episode + raw 指纹校验，源片段变化后旧签收失效（配合 `首切范围=部分先切`：下游已生产集少 → 改动波及面天然小）。
-
-> **可选自动守望（agent hook）**：支持会话结束 hook 的 agent 可在自己的私有配置里让 Stop/after-response hook 跑 `source_watch.py`（例如 Claude Code 可放在 `.claude/settings.json`，其它工具按各自 hook 机制配置），扫所有有 `小说/_源指纹.json` 的漫剧，**仅在本剧源文本变动时打一行提醒**（含变动章是否触及已生产集），clean 时全静默。新漫剧首切后跑一次 `source_check.py <作品根> --record` 才纳入守望。
-
-### skill 更新影响检查（skills 更新 → 是否需要重制到当前阶段）
-
-已有作品进入调度时，源新鲜度自检之后再跑一次轻量检查：
-
-```bash
+python3 skills/n2d/source_check.py <作品根>
 python3 skills/n2d-update/scripts/update_plan.py check <作品根> 第N集 --write-plan
 ```
 
-- 无变化 → 静默继续读进度路由。
-- 无基线 → 提醒先 `record` 建立 skill 内容快照（基于文件内容 SHA，无版本控制依赖）；建立前无法检测变更。
-- 有变化 → 把 `生产数据/skill_update_plan_第N集.md` 讲给用户：从哪个阶段回放、最多重制到哪个当前阶段、哪些 skill 变了。
-- **只提示，不自动开跑**：出图/出视频/配音/合成都可能花钱或覆盖产物，必须等用户确认后再交 `n2d-batch` 或对应 stage skill 执行。
-- 重制上限 = 该集已到达的阶段。例如第1集当前 `出图=57/68`，计划最多到 `image`，不主动出视频/合成。
-
-阶段完成、用户接受现状或重制结束后，记录新基线：
-
-```bash
-python3 skills/n2d-update/scripts/update_plan.py record <作品根> 第N集
-```
+- `source_check` 比对源小说指纹；无基线时首切定稿后才 `--record`，clean 静默，drift 必须报告变动章、受影响集及 raw-only/已生产范围。禁止自动重切；局部漂移只重切受影响窗口，触及已生产集时逐集评估返工。
+- 边界保留/变更统一走 `n2d-script` 的 v2 blocker 签收与 applied receipt；命令和收据验收见 `../n2d-review/references/production_acceptance_v2.md`。
+- `n2d-update check` 只生成最小重制计划，重制上限不得超过该集已达阶段；付费或覆盖产物前必须获得用户确认。完整规则见 `../n2d-update/SKILL.md`。
+- 源同步确认或重制结束后分别执行 `source_check.py <作品根> --record`、`update_plan.py record <作品根> 第N集` 更新基线；这些基线只按文件内容 SHA 工作，不依赖版本控制。
 
 ### 读进度 → 路由
 

@@ -98,7 +98,7 @@ openai images create \
 
 ### 图片阶段调用原则
 
-- 签核例外且 `生图AI=Dreamina` 时，优先用 `image2image` / 多参考能力生成含角色镜头，避免纯文生图导致脸漂；共享角色第一张定妆可用 `text2image` 起稿，再用 `image2image` 派生侧/背/半身/三视图。
+- 签核例外且 `生图AI=Dreamina` 时，优先用 `image2image` / 多参考能力生成含角色镜头，避免纯文生图导致脸漂；共享角色第一张定妆可用 `text2image` 起稿，再用 `image2image` 按 `library_tier` 派生多视图/半身/turnaround（`core_full` 为正/前3/4/侧/后3/4/背五角）。
 - 输出必须落到 `出图/共享/图片/` 或 `出图/第N集/图片/`，废图进 `废料/出图/...`。
 - 不使用即梦 web 自动化；不安装第三方逆向版 CLI。
 

@@ -281,6 +281,88 @@ def test_front_from_turnaround_updates_matching_reference_slot_metadata(tmp_path
     assert slot["dimensions"] == {"width": 800, "height": 1200}
 
 
+def test_derive_project_splits_five_angle_turnaround_with_rear_three_quarter(tmp_path: Path) -> None:
+    root = tmp_path / "制漫剧" / "五角测试"
+    image_dir = root / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    turn = image_dir / "CHAR_CORE_常态_turnaround.png"
+    board = Image.new("RGB", (1000, 1000), (0, 0, 0))
+    colors = ((20, 20, 20), (80, 10, 10), (10, 80, 10), (80, 80, 10), (10, 10, 80))
+    for index, color in enumerate(colors):
+        board.paste(Image.new("RGB", (200, 1000), color), (index * 200, 0))
+    board.save(turn)
+    reg_path = root / "出图" / "共享" / "identity_registry.json"
+    reg_path.write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_CORE",
+            "library_tier": "core_full",
+            "forms": [{
+                "form": "常态",
+                "asset_key": "CHAR_CORE_常态",
+                "reference_group": {
+                    "turnaround": {
+                        "path": "出图/共享/图片/CHAR_CORE_常态_turnaround.png",
+                        "status": "ready",
+                        "layout": "five_angle_v1",
+                        "column_count": 5,
+                        "view_order": [
+                            "front", "three_quarter", "side", "rear_three_quarter", "back",
+                        ],
+                    },
+                    "three_quarter": {"path": "出图/共享/图片/CHAR_CORE_常态_45度.png", "status": "planned"},
+                    "side": {"path": "出图/共享/图片/CHAR_CORE_常态_侧.png", "status": "planned"},
+                    "rear_three_quarter": {"path": "出图/共享/图片/CHAR_CORE_常态_后45度.png", "status": "planned"},
+                    "back": {"path": "出图/共享/图片/CHAR_CORE_常态_背.png", "status": "planned"},
+                },
+                "reference_atlas": {"build_tier": "core_full", "base_views": {}},
+            }],
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+
+    summary = derive_makeup_pack.derive_project(root, write=True, force=True)
+
+    assert {row["field"] for row in summary["derived"]} == {
+        "three_quarter", "side", "rear_three_quarter", "back"
+    }
+    form = json.loads(reg_path.read_text(encoding="utf-8"))["characters"][0]["forms"][0]
+    rear = form["reference_group"]["rear_three_quarter"]
+    back = form["reference_group"]["back"]
+    assert rear["derivation"]["crop_box"][0] < back["derivation"]["crop_box"][0]
+    assert rear["status"] == back["status"] == "ready"
+
+
+def test_turnaround_split_plan_does_not_treat_new_rear_slot_as_five_column_evidence() -> None:
+    form = {
+        "reference_group": {
+            "turnaround": {
+                "path": "出图/共享/图片/legacy_turnaround.png",
+                "status": "ready",
+                "layout": "unknown_existing",
+            },
+            # Prompt-pack migration adds this planned slot to core characters,
+            # including registries whose existing board still has four columns.
+            "rear_three_quarter": {
+                "path": "出图/共享/图片/legacy_后45度.png",
+                "status": "planned",
+            },
+        },
+        "reference_atlas": {
+            "base_views": {
+                "rear_three_quarter": {
+                    "path": "出图/共享/图片/legacy_后45度.png",
+                    "status": "planned",
+                },
+            },
+        },
+    }
+
+    split_plan, column_count = derive_makeup_pack._turnaround_split_plan(form)
+
+    assert column_count == 4
+    assert "rear_three_quarter" not in split_plan
+    assert split_plan["back"][0] == 3
+
+
 def test_derive_project_can_filter_by_asset_key(tmp_path: Path) -> None:
     root = tmp_path / "制漫剧" / "测试剧"
     image_dir = root / "出图" / "共享" / "图片"

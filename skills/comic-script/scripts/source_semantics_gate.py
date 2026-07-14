@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Source semantic normalization gate for comic-script.
+"""Source-span, semantic-normalization and panel coverage gate.
 
-The gate is deterministic: it detects whether a source looks like foreign text
-or classical/literary Chinese, scaffolds the required semantic ledger, and
-fails until an AI/human fills the meaning and adaptation fields.
+V2 consumes the chapter contract's exact source spans, binds source/contract
+hashes and keeps every segment.  Language detection remains a legacy-compatible
+part of the broader deterministic adaptation ledger.
 """
 from __future__ import annotations
 
@@ -18,6 +18,19 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from chapter_contract import (
+    canonical_sha256,
+    chapter_contract as get_chapter_contract,
+    chapter_number as contract_chapter_number,
+    file_sha256,
+    normalize_chapter,
+    select_unit_range,
+)
 
 
 COMIC_LIB = Path(__file__).resolve().parents[2] / "comic" / "_lib"
@@ -105,6 +118,69 @@ ADAPTATION_DECISIONS = {
 
 WORD_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
+# Exact, standalone export artifacts seen in source files downloaded from
+# Wikisource/MediaWiki.  Keep this allow-list deliberately narrow: source
+# cleanup must never grow into a prose classifier that can silently delete
+# legitimate story text.
+EXPLICIT_SOURCE_WRAPPER_SIGNATURES = {
+    "publicdomainpublicdomainfalsefalse",
+}
+_IGNORABLE_WRAPPER_CODEPOINTS = {"\u200b", "\u200c", "\u200d", "\ufeff"}
+
+
+def _wrapper_signature_key(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", str(value or "")).casefold()
+    return "".join(
+        char
+        for char in normalized
+        if not char.isspace() and char not in _IGNORABLE_WRAPPER_CODEPOINTS
+    )
+
+
+def strip_explicit_source_wrapper_noise(text: str) -> str:
+    """Remove only exact standalone source-export wrapper signatures.
+
+    The known artifact may be concatenated in one DOCX paragraph or split
+    across adjacent TXT lines.  A line containing any additional prose or
+    punctuation is retained, including ordinary discussion of "public
+    domain".  Blank lines are allowed inside the exact wrapper sequence.
+    """
+    lines = str(text or "").splitlines()
+    kept: list[str] = []
+    index = 0
+    while index < len(lines):
+        first_key = _wrapper_signature_key(lines[index])
+        possible_signatures = {
+            signature for signature in EXPLICIT_SOURCE_WRAPPER_SIGNATURES
+            if first_key and signature.startswith(first_key)
+        }
+        match_end: int | None = None
+        if possible_signatures:
+            combined = ""
+            cursor = index
+            while cursor < len(lines):
+                part = _wrapper_signature_key(lines[cursor])
+                if not part:
+                    cursor += 1
+                    continue
+                combined += part
+                possible_signatures = {
+                    signature for signature in possible_signatures
+                    if signature.startswith(combined)
+                }
+                if not possible_signatures:
+                    break
+                cursor += 1
+                if combined in EXPLICIT_SOURCE_WRAPPER_SIGNATURES:
+                    match_end = cursor
+                    break
+        if match_end is not None:
+            index = match_end
+            continue
+        kept.append(lines[index])
+        index += 1
+    return "\n".join(kept)
+
 
 def read_docx_text(path: Path) -> str:
     """Extract readable paragraphs from DOCX with the standard library.
@@ -137,16 +213,17 @@ def read_docx_text(path: Path) -> str:
         text = "".join(pieces).strip()
         if text:
             paragraphs.append(text)
-    return "\n\n".join(paragraphs)
+    return strip_explicit_source_wrapper_noise("\n\n".join(paragraphs))
 
 
 def read_text(path: Path) -> str:
     if path.suffix.lower() == ".docx":
         return read_docx_text(path)
     try:
-        return path.read_text(encoding="utf-8")
+        text = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
-        return path.read_text(encoding="utf-8", errors="ignore")
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    return strip_explicit_source_wrapper_noise(text)
 
 
 def rel(root: Path, path: Path) -> str:
@@ -206,32 +283,11 @@ def candidate_source_paths(root: Path, raw_paths: list[str]) -> list[Path]:
 
 
 def chinese_number_to_int(value: str) -> int | None:
-    raw = str(value or "").strip()
-    if not raw:
-        return None
-    if raw.isdigit():
-        return int(raw)
-    digits = {"零": 0, "〇": 0, "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5, "六": 6, "七": 7, "八": 8, "九": 9}
-    units = {"十": 10, "百": 100}
-    total = 0
-    current = 0
-    for ch in raw:
-        if ch in digits:
-            current = digits[ch]
-        elif ch in units:
-            unit = units[ch]
-            total += (current or 1) * unit
-            current = 0
-        else:
-            return None
-    return total + current if total or current else None
+    return contract_chapter_number(f"第{value}话")
 
 
 def chapter_number(value: str) -> int | None:
-    match = re.search(r"第\s*([0-9]+|[零〇一二两三四五六七八九十百]+)\s*[话話章节回]", str(value or ""))
-    if not match:
-        return None
-    return chinese_number_to_int(match.group(1))
+    return contract_chapter_number(value)
 
 
 def strip_source_provenance(text: str) -> str:
@@ -251,7 +307,7 @@ def strip_source_provenance(text: str) -> str:
         if stripped.startswith("# chars:") or stripped.startswith("# copyright:"):
             continue
         lines.append(line)
-    cleaned = "\n".join(lines)
+    cleaned = strip_explicit_source_wrapper_noise("\n".join(lines))
     cleaned = re.sub(r"\[编辑\]", "", cleaned)
     return cleaned.strip()
 
@@ -303,10 +359,79 @@ def load_source_texts(root: Path, paths: list[Path]) -> tuple[list[dict[str, Any
                 "status": "read",
                 "chars": len(text),
                 "format": path.suffix.lower().lstrip(".") or "text",
+                "sha256": file_sha256(path),
             }
         )
         chunks.append(text)
     return records, "\n\n".join(chunks)
+
+
+def _safe_source_path(root: Path, raw: str) -> tuple[Path, str | None]:
+    candidate = (root / raw).resolve()
+    try:
+        candidate.relative_to(root.resolve())
+    except ValueError:
+        return candidate, "source_path_outside_project"
+    return candidate, None
+
+
+def load_contract_source_spans(
+    root: Path, contract: dict[str, Any]
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Load exactly the v2 chapter contract's declared source spans."""
+    file_records: dict[str, dict[str, Any]] = {}
+    selections: list[dict[str, Any]] = []
+    for index, span in enumerate(contract.get("source_spans") or [], 1):
+        span_id = str(span.get("span_id") or f"SPAN_{index:03d}") if isinstance(span, dict) else f"SPAN_{index:03d}"
+        if not isinstance(span, dict):
+            selections.append({"span_id": span_id, "status": "invalid", "reason": "source_span_invalid"})
+            continue
+        raw_path = str(span.get("source_path") or "").strip()
+        path, path_error = _safe_source_path(root, raw_path)
+        selection: dict[str, Any] = {
+            "span_id": span_id,
+            "source_path": raw_path,
+            "requested": {"start": span.get("start"), "end": span.get("end"), "whole_file": span.get("whole_file") is True},
+        }
+        if path_error:
+            selection.update({"status": "invalid", "reason": path_error})
+            selections.append(selection)
+            continue
+        if not path.is_file():
+            file_records[raw_path] = {"path": raw_path, "status": "missing"}
+            selection.update({"status": "missing", "reason": "source_file_missing"})
+            selections.append(selection)
+            continue
+        try:
+            text = read_text(path)
+        except (OSError, ValueError) as exc:
+            file_records[raw_path] = {"path": raw_path, "status": "invalid", "reason": str(exc)}
+            selection.update({"status": "invalid", "reason": "source_file_invalid"})
+            selections.append(selection)
+            continue
+        file_records[raw_path] = {
+            "path": raw_path,
+            "status": "read",
+            "chars": len(text),
+            "format": path.suffix.lower().lstrip(".") or "text",
+            "sha256": file_sha256(path),
+        }
+        cleaned = strip_source_provenance(text)
+        if span.get("whole_file") is True:
+            selected_text, unit_refs, select_error = cleaned, ["whole_file"], None
+        else:
+            selected_text, unit_refs, select_error = select_unit_range(cleaned, span.get("start"), span.get("end"))
+        if select_error:
+            selection.update({"status": "invalid", "reason": select_error, "source_unit_refs": unit_refs})
+        else:
+            selection.update({
+                "status": "read",
+                "chars": len(selected_text),
+                "source_unit_refs": unit_refs,
+                "text": selected_text,
+            })
+        selections.append(selection)
+    return list(file_records.values()), selections
 
 
 def char_counts(text: str) -> dict[str, int]:
@@ -369,17 +494,45 @@ def requires_normalization(source_language: str, source_records: list[dict[str, 
     return source_language not in {"现代中文", "无源本"}
 
 
-def split_segments(text: str, max_segments: int) -> list[str]:
+def split_segments(text: str, max_segments: int | None = None) -> list[str]:
+    """Split all source text without truncating content.
+
+    ``max_segments`` remains accepted for CLI/API compatibility but no longer
+    caps the ledger.  A cap silently discarded source after segment 12.
+    """
     raw_parts = re.split(r"\n\s*\n+|(?<=[。！？!?])\s+", text.strip())
-    parts = []
+    parts: list[str] = []
     for raw in raw_parts:
         chunk = re.sub(r"\s+", " ", raw).strip()
         if not chunk:
             continue
-        parts.append(chunk[:1200])
-        if len(parts) >= max_segments:
-            break
+        while len(chunk) > 1200:
+            parts.append(chunk[:1200])
+            chunk = chunk[1200:]
+        if chunk:
+            parts.append(chunk)
     return parts
+
+
+def _segments_from_selections(selections: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    segments: list[dict[str, Any]] = []
+    for selection in selections:
+        if selection.get("status") != "read":
+            continue
+        for text in split_segments(str(selection.get("text") or "")):
+            segments.append({
+                "segment_id": f"S{len(segments) + 1:03d}",
+                "source_path": selection.get("source_path"),
+                "source_span_id": selection.get("span_id"),
+                "source_unit_refs": selection.get("source_unit_refs") or [],
+                "source_excerpt": text,
+                "meaning_zh": "",
+                "text_target": "",
+                "ambiguities": [],
+                "adaptation_decision": "待定",
+                "adaptation_note": "",
+            })
+    return segments
 
 
 def scaffold_report(
@@ -392,31 +545,20 @@ def scaffold_report(
     target_text_language: str,
     force_normalization: bool,
     max_segments: int,
+    chapter_contract_data: dict[str, Any] | None = None,
+    source_selections: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     must_normalize = requires_normalization(source_language, source_records, force_normalization)
+    contract_enforced = isinstance(chapter_contract_data, dict)
+    source_mode = str((chapter_contract_data or {}).get("source_mode") or ("adapted" if source_text else "original"))
+    must_trace = contract_enforced and source_mode == "adapted"
     normalized_source_text = slice_source_for_chapter(source_text, chapter)
-    segment_texts = split_segments(normalized_source_text, max_segments) if must_normalize else []
-    return {
-        "schema_version": 1,
-        "kind": "comic_source_semantics",
-        "chapter": chapter,
-        "status": "needs_normalization" if must_normalize else "pass",
-        "created_at": datetime.now().isoformat(timespec="seconds"),
-        "source_language": source_language,
-        "target_text_language": target_text_language,
-        "target_text_metadata": infer_language_metadata("", target_text_language),
-        "requires_normalization": must_normalize,
-        "normalization_reason": detection_reasons,
-        "source_files": source_records,
-        "source_slice": {
-            "chapter": chapter,
-            "chars": len(normalized_source_text),
-            "strategy": "chapter_heading_or_cleaned_source",
-        },
-        "glossary_reviewed": False if must_normalize else True,
-        "ambiguity_reviewed": False if must_normalize else True,
-        "proper_noun_glossary": [],
-        "segments": [
+    if source_selections is not None:
+        segments = _segments_from_selections(source_selections) if (must_normalize or must_trace) else []
+        selected_chars = sum(int(item.get("chars") or 0) for item in source_selections if item.get("status") == "read")
+    else:
+        segment_texts = split_segments(normalized_source_text, max_segments) if must_normalize else []
+        segments = [
             {
                 "segment_id": f"S{idx:03d}",
                 "source_excerpt": text,
@@ -427,7 +569,44 @@ def scaffold_report(
                 "adaptation_note": "",
             }
             for idx, text in enumerate(segment_texts, 1)
-        ],
+        ]
+        selected_chars = len(normalized_source_text)
+    return {
+        "schema_version": 2,
+        "kind": "comic_source_semantics",
+        "chapter": chapter,
+        "status": "needs_normalization" if must_normalize else ("needs_adaptation_decisions" if must_trace else "pass"),
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "chapter_contract": {
+            "enforced": contract_enforced,
+            "sha256": canonical_sha256(chapter_contract_data) if contract_enforced else None,
+            "source_mode": source_mode,
+            "format_profile": (chapter_contract_data or {}).get("format_profile"),
+        },
+        "source_language": source_language,
+        "target_text_language": target_text_language,
+        "target_text_metadata": infer_language_metadata("", target_text_language),
+        "requires_normalization": must_normalize,
+        "normalization_reason": detection_reasons,
+        "source_files": source_records,
+        "source_slice": {
+            "chapter": chapter,
+            "chars": selected_chars,
+            "strategy": "split_blueprint.source_spans" if source_selections is not None else "legacy_chapter_heading_or_cleaned_source",
+            "selections": [
+                {key: value for key, value in item.items() if key != "text"}
+                for item in (source_selections or [])
+            ],
+        },
+        "glossary_reviewed": False if must_normalize else True,
+        "ambiguity_reviewed": False if must_normalize else True,
+        "proper_noun_glossary": [],
+        "segments": segments,
+        "segment_policy": {
+            "coverage": "full",
+            "max_segments_legacy_ignored": max_segments,
+            "note": "不截断源文本；长段按 1200 字符拆块，所有源段都必须有改编决策。",
+        },
         "adaptation_ledger": [],
         "panel_script_contract": {
             "required_panel_fields_when_normalized": [
@@ -435,6 +614,7 @@ def scaffold_report(
                 "meaning_zh",
                 "text_target",
                 "adaptation_note",
+                "source_segment_refs",
             ],
             "panel_script_path": rel(root, root / "脚本" / chapter / "panel_script.json"),
         },
@@ -445,7 +625,55 @@ def load_report(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def validate_report(report: dict[str, Any]) -> tuple[str, list[str]]:
+def validate_panel_coverage(report: dict[str, Any], panel_script: dict[str, Any] | None) -> tuple[dict[str, Any], list[str]]:
+    segments = [item for item in report.get("segments") or [] if isinstance(item, dict)]
+    known = {str(item.get("segment_id") or "") for item in segments}
+    required = {
+        str(item.get("segment_id") or "")
+        for item in segments
+        if str(item.get("adaptation_decision") or "") not in {"删除", "后文带出"}
+    }
+    if panel_script is None:
+        return ({"status": "pending_panel_script", "required_segment_ids": sorted(required)}, [])
+    issues: list[str] = []
+    panels = panel_script.get("panels") if isinstance(panel_script, dict) else None
+    if not isinstance(panels, list):
+        return ({"status": "block", "required_segment_ids": sorted(required), "used_segment_ids": []},
+                ["panel_script.panels must be an array for source coverage"])
+    used: set[str] = set()
+    for index, panel in enumerate(panels, 1):
+        if not isinstance(panel, dict):
+            continue
+        refs = panel.get("source_segment_refs")
+        if not isinstance(refs, list) or not refs:
+            if panel.get("adaptation_origin") == "original_bridge" and str(panel.get("adaptation_note") or "").strip():
+                continue
+            issues.append(
+                f"panel {panel.get('panel_id') or index} source_segment_refs is required; "
+                "an added bridge must declare adaptation_origin=original_bridge plus adaptation_note"
+            )
+            continue
+        for ref in refs:
+            ref_id = str(ref or "")
+            if ref_id not in known:
+                issues.append(f"panel {panel.get('panel_id') or index} references unknown source segment {ref_id}")
+            else:
+                used.add(ref_id)
+    missing = sorted(required - used)
+    if missing:
+        issues.append("source segments lack panel coverage: " + ", ".join(missing))
+    coverage = {
+        "status": "pass" if not issues else "block",
+        "required_segment_ids": sorted(required),
+        "used_segment_ids": sorted(used),
+        "missing_segment_ids": missing,
+    }
+    return coverage, issues
+
+
+def validate_report(
+    report: dict[str, Any], panel_script: dict[str, Any] | None = None
+) -> tuple[str, list[str]]:
     issues: list[str] = []
     if report.get("kind") != "comic_source_semantics":
         issues.append("kind must be comic_source_semantics")
@@ -453,26 +681,76 @@ def validate_report(report: dict[str, Any]) -> tuple[str, list[str]]:
         issues.append("source_language is required")
     if not str(report.get("target_text_language") or "").strip():
         issues.append("target_text_language is required")
-    if not report.get("requires_normalization"):
-        return ("pass" if not issues else "block"), issues
+    for record in report.get("source_files") or []:
+        if isinstance(record, dict) and record.get("status") in {"missing", "invalid"}:
+            issues.append(f"source file {record.get('path')} is {record.get('status')}")
+    for reason in report.get("stale_reasons") or []:
+        issues.append(str(reason))
+    contract_info = report.get("chapter_contract") if isinstance(report.get("chapter_contract"), dict) else {}
+    contract_enforced = contract_info.get("enforced") is True
+    adapted = contract_info.get("source_mode") == "adapted"
+    selections = (report.get("source_slice") or {}).get("selections") if isinstance(report.get("source_slice"), dict) else []
+    if contract_enforced and adapted:
+        if not isinstance(selections, list) or not selections:
+            issues.append("chapter contract source_spans produced no source selections")
+        for selection in selections or []:
+            if isinstance(selection, dict) and selection.get("status") != "read":
+                issues.append(f"source span {selection.get('span_id')} is {selection.get('status')}: {selection.get('reason')}")
 
-    if report.get("glossary_reviewed") is not True:
+    if report.get("requires_normalization") and report.get("glossary_reviewed") is not True:
         issues.append("glossary_reviewed must be true after proper noun review")
-    if report.get("ambiguity_reviewed") is not True:
+    if report.get("requires_normalization") and report.get("ambiguity_reviewed") is not True:
         issues.append("ambiguity_reviewed must be true after ambiguity review")
     segments = report.get("segments")
-    if not isinstance(segments, list) or not segments:
+    if (report.get("requires_normalization") or (contract_enforced and adapted)) and (not isinstance(segments, list) or not segments):
         issues.append("segments must contain normalized source chunks")
         return "block", issues
-    for idx, segment in enumerate(segments, 1):
+    if segments is not None and not isinstance(segments, list):
+        issues.append("segments must be an array")
+        segments = []
+    for idx, segment in enumerate(segments or [], 1):
+        if not isinstance(segment, dict):
+            issues.append(f"segments[{idx - 1}] must be an object")
+            continue
         prefix = str(segment.get("segment_id") or f"S{idx:03d}")
-        for key in ("source_excerpt", "meaning_zh", "text_target", "adaptation_note"):
+        required_fields = ["source_excerpt", "adaptation_note"]
+        if report.get("requires_normalization"):
+            required_fields.extend(["meaning_zh", "text_target"])
+        for key in required_fields:
             if not str(segment.get(key) or "").strip():
                 issues.append(f"{prefix}.{key} is required")
         decision = str(segment.get("adaptation_decision") or "").strip()
         if decision not in ADAPTATION_DECISIONS or decision == "待定":
             issues.append(f"{prefix}.adaptation_decision must be finalized")
+    if contract_enforced and adapted:
+        coverage, coverage_issues = validate_panel_coverage(report, panel_script)
+        report["panel_coverage"] = coverage
+        issues.extend(coverage_issues)
     return ("pass" if not issues else "block"), issues
+
+
+def refresh_staleness(root: Path, report: dict[str, Any], contract: dict[str, Any] | None) -> list[str]:
+    reasons: list[str] = []
+    stored_contract = report.get("chapter_contract") if isinstance(report.get("chapter_contract"), dict) else {}
+    if contract is not None and stored_contract.get("enforced") is not True:
+        reasons.append("v2 chapter contract now exists but this report was built with legacy slicing; rerun with --force")
+    if stored_contract.get("enforced") is True:
+        if contract is None:
+            reasons.append("chapter contract missing/invalid since source_semantics was created")
+        elif stored_contract.get("sha256") != canonical_sha256(contract):
+            reasons.append("chapter contract SHA changed; rerun with --force and review the new source slice")
+    for record in report.get("source_files") or []:
+        if not isinstance(record, dict) or record.get("status") != "read":
+            continue
+        raw = str(record.get("path") or "")
+        path = Path(raw)
+        if not path.is_absolute():
+            path = root / path
+        if not path.is_file():
+            reasons.append(f"source file missing since report creation: {raw}")
+        elif record.get("sha256") != file_sha256(path):
+            reasons.append(f"source SHA changed: {raw}; rerun with --force and re-review decisions")
+    return reasons
 
 
 def render_markdown(report: dict[str, Any], issues: list[str]) -> str:
@@ -531,22 +809,36 @@ def main() -> int:
     parser.add_argument("--target-text-language", default=None)
     parser.add_argument("--force-normalization", action="store_true", help="现代中文也强制建立释义/取舍账")
     parser.add_argument("--force", action="store_true", help="覆盖已有 source_semantics.json")
-    parser.add_argument("--max-segments", type=int, default=12)
+    parser.add_argument("--max-segments", type=int, default=12,
+                        help="legacy compatibility only; v2 never truncates source coverage")
     parser.add_argument("--json", default=None, help="输出路径，默认 脚本/第N话/source_semantics.json")
     parser.add_argument("--no-md", action="store_true")
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
+    args.chapter = normalize_chapter(args.chapter)
     out_path = Path(args.json).expanduser().resolve() if args.json else root / "脚本" / args.chapter / "source_semantics.json"
     target_language = normalize_target_language(args.target_text_language or read_setting(root, "文字语言", "中文"))
+    contract, contract_error = get_chapter_contract(root, args.chapter)
 
     if out_path.is_file() and not args.force:
         report = load_report(out_path)
+        report["stale_reasons"] = refresh_staleness(root, report, contract)
     else:
-        paths = candidate_source_paths(root, args.source)
-        if len(paths) == 1 and paths[0].is_dir():
-            paths = sorted(path for path in paths[0].rglob("*") if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES)
-        source_records, source_text = load_source_texts(root, paths)
+        source_selections: list[dict[str, Any]] | None = None
+        if contract is not None and contract.get("source_mode") == "adapted":
+            source_records, source_selections = load_contract_source_spans(root, contract)
+            source_text = "\n\n".join(
+                str(item.get("text") or "") for item in source_selections if item.get("status") == "read"
+            )
+        elif contract is not None and contract.get("source_mode") == "original":
+            source_records, source_text = [], ""
+            source_selections = []
+        else:
+            paths = candidate_source_paths(root, args.source)
+            if len(paths) == 1 and paths[0].is_dir():
+                paths = sorted(path for path in paths[0].rglob("*") if path.is_file() and path.suffix.lower() in TEXT_SUFFIXES)
+            source_records, source_text = load_source_texts(root, paths)
         source_language = normalize_source_language(args.source_language)
         if source_language == "auto":
             source_language, detection_reasons = guess_source_language(source_text)
@@ -562,9 +854,22 @@ def main() -> int:
             target_language,
             args.force_normalization,
             max(1, args.max_segments),
+            chapter_contract_data=contract,
+            source_selections=source_selections,
         )
+        report["chapter_contract"]["load_status"] = "loaded" if contract is not None else contract_error
 
-    verdict, issues = validate_report(report)
+    panel_path = root / "脚本" / args.chapter / "panel_script.json"
+    panel_script: dict[str, Any] | None = None
+    if panel_path.is_file():
+        try:
+            loaded_panel = json.loads(panel_path.read_text(encoding="utf-8"))
+            if isinstance(loaded_panel, dict):
+                panel_script = loaded_panel
+        except (OSError, json.JSONDecodeError):
+            # Deterministic invalid input: coverage validation will block.
+            panel_script = {}
+    verdict, issues = validate_report(report, panel_script)
     report["status"] = verdict
     report["checked_at"] = datetime.now().isoformat(timespec="seconds")
     report["issues"] = issues

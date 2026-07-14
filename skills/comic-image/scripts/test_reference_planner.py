@@ -52,7 +52,7 @@ def test_missing_front_flagged():
 
 def test_strong_emotion_wants_expression_bank():
     plan = rp.plan_character_in_panel(_char(), ["strong_emotion"], False, CAPS_WEAK, True)
-    assert any("情绪表情库" in m for m in plan["missing_references"])
+    assert any("强情绪格缺对应表情参考" in m for m in plan["missing_references"])
 
 
 def test_action_promotes_three_quarter_and_writes_directive():
@@ -113,19 +113,98 @@ def test_multi_subject_native_mode():
     assert mp["color_collisions"] == []
 
 
+def test_structured_binding_is_required_and_unknown_state_blocks():
+    chars = {
+        "CHAR_A": {
+            "forms": {"FORM_BASE": {}}, "outfits": {"OUTFIT_BASE": {}},
+            "expressions": {"EXPR_NEUTRAL": {}}, "states": {"STATE_BASE": {"form_id": "FORM_BASE", "outfit_id": "OUTFIT_BASE", "expression_id": "EXPR_NEUTRAL"}},
+        }
+    }
+    _bindings, findings = rp.validate_panel_bindings({"panel_id": "P1", "characters": ["阿甲", "CHAR_A"]}, chars)
+    codes = {item["code"] for item in findings}
+    assert "named_character_without_stable_id" in codes
+    assert "missing_structured_character_binding" in codes
+
+    panel = {"panel_id": "P2", "character_bindings": [{
+        "character_id": "CHAR_A", "form_id": "FORM_BASE", "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL", "state_id": "STATE_UNKNOWN",
+    }]}
+    _bindings, findings = rp.validate_panel_bindings(panel, chars)
+    assert any(item["code"] == "character_binding_state_id_unknown" for item in findings)
+
+
+def test_attachment_allocation_is_fair_and_keeps_location_and_prop(tmp_path):
+    paths = {}
+    for name in ("a-front", "a-face", "b-front", "b-face", "loc", "prop"):
+        path = tmp_path / f"{name}.png"
+        path.write_bytes(name.encode())
+        paths[name] = path.name
+    char_plans = [
+        {"char_id": "CHAR_A", "recommended_references": [{"role": "front", "path": paths["a-front"]}, {"role": "face", "path": paths["a-face"]}]},
+        {"char_id": "CHAR_B", "recommended_references": [{"role": "front", "path": paths["b-front"]}, {"role": "face", "path": paths["b-face"]}]},
+    ]
+    registry = {"assets": {
+        "LOC_ROOM": {"anchor_path": paths["loc"]},
+        "PROP_KEY": {"anchor_path": paths["prop"]},
+    }}
+    panel = {"references": ["LOC_ROOM", "PROP_KEY"]}
+    caps = {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16}
+    result = rp.allocate_panel_attachments(tmp_path, panel, char_plans, registry, caps)
+    selected_ids = [item["id"] for item in result["selected"]]
+    assert result["limit"] == 5
+    assert {"CHAR_A", "CHAR_B", "LOC_ROOM", "PROP_KEY"} <= set(selected_ids)
+    assert selected_ids.index("CHAR_A") != selected_ids.index("CHAR_B")
+
+
+def test_critical_reference_budget_overflow_requests_split(tmp_path):
+    char_plans = []
+    for index in range(4):
+        path = tmp_path / f"c{index}.png"
+        path.write_bytes(b"x")
+        char_plans.append({"char_id": f"CHAR_{index}", "recommended_references": [{"role": "front", "path": path.name}]})
+    loc = tmp_path / "loc.png"
+    prop = tmp_path / "prop.png"
+    loc.write_bytes(b"l")
+    prop.write_bytes(b"p")
+    registry = {"assets": {"LOC_A": {"anchor_path": loc.name}, "PROP_A": {"anchor_path": prop.name}}}
+    result = rp.allocate_panel_attachments(tmp_path, {"references": ["LOC_A", "PROP_A"]}, char_plans, registry,
+                                           {"adapter_id": "openai_gpt_image_project_memory", "reference_image_limit": 16})
+    assert result["over_capacity"] is True
+    assert "拆成单人反打" in result["split_suggestion"]
+
+
 def test_end_to_end_build_plan(tmp_path):
     root = tmp_path
     (root / "脚本" / "第1话").mkdir(parents=True)
     (root / "出图" / "共享").mkdir(parents=True)
+    bindings = [
+        {"character_id": cid, "form_id": "FORM_BASE", "outfit_id": "OUTFIT_BASE", "expression_id": "EXPR_ANGRY", "state_id": "STATE_ANGRY"}
+        for cid in ("CHAR_A", "CHAR_B")
+    ]
     (root / "脚本" / "第1话" / "panel_script.json").write_text(json.dumps({"panels": [
-        {"panel_id": "P001", "references": ["CHAR_A", "CHAR_B"], "description": "两人近景对峙，怒目"},
+        {"panel_id": "P001", "characters": ["CHAR_A", "CHAR_B"], "references": ["CHAR_A", "CHAR_B"],
+         "character_bindings": bindings, "description": "两人近景对峙，怒目"},
     ]}, ensure_ascii=False), encoding="utf-8")
-    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({"assets": {
-        "CHAR_A": {"id": "CHAR_A", "display_name": "甲", "scope": "主角",
-                   "character_dna": "红衣黑发", "views": FULL_VIEWS},
-        "CHAR_B": {"id": "CHAR_B", "display_name": "乙", "scope": "配角",
-                   "character_dna": "赤袍", "views": FULL_VIEWS},
-    }}, ensure_ascii=False), encoding="utf-8")
+    image_dir = root / "出图" / "共享" / "图片"
+    image_dir.mkdir(parents=True)
+    assets = {}
+    for cid, dna in (("CHAR_A", "红衣黑发"), ("CHAR_B", "赤袍")):
+        views = {}
+        for view in FULL_VIEWS:
+            path = image_dir / f"{cid}__{view}.png"
+            path.write_bytes(f"{cid}-{view}".encode())
+            views[view] = str(path.relative_to(root))
+        expression_path = image_dir / f"{cid}__angry.png"
+        expression_path.write_bytes(f"{cid}-angry".encode())
+        assets[cid] = {
+            "id": cid, "type": "character", "display_name": cid, "scope": "主角" if cid == "CHAR_A" else "配角",
+            "character_dna": dna, "views": views,
+            "forms": {"FORM_BASE": {"id": "FORM_BASE", "name": "常态", "reference_images": [views["front"]]}},
+            "outfits": {"OUTFIT_BASE": {"id": "OUTFIT_BASE", "name": "基础服装", "reference_images": [views["front"]]}},
+            "expressions": {"EXPR_ANGRY": {"id": "EXPR_ANGRY", "name": "愤怒", "emotion": "anger", "reference_images": [str(expression_path.relative_to(root))]}},
+            "states": {"STATE_ANGRY": {"id": "STATE_ANGRY", "form_id": "FORM_BASE", "outfit_id": "OUTFIT_BASE", "expression_id": "EXPR_ANGRY"}},
+        }
+    (root / "出图" / "共享" / "identity_registry.json").write_text(json.dumps({"schema_version": 2, "kind": "comic_identity_registry", "assets": assets}, ensure_ascii=False), encoding="utf-8")
     report = rp.build_plan(root, "第1话")
     assert report["summary"]["panels_with_characters"] == 1
     codes = {f["code"] for f in report["findings"]}

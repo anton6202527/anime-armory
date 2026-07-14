@@ -1,8 +1,10 @@
 import importlib.util
 import json
 import base64
+import struct
 import subprocess
 import sys
+import zlib
 from pathlib import Path
 
 import pytest
@@ -250,7 +252,24 @@ def write_prompt(root: Path, body: str) -> None:
 
 def write_valid_png(path: Path, fill: bytes = b"0") -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(b"\x89PNG\r\n\x1a\n" + fill * 64)
+    width = height = 512
+    color = (fill * 3)[:3]
+    raw = b"".join(b"\0" + color * width for _ in range(height))
+
+    def chunk(kind: bytes, payload: bytes) -> bytes:
+        body = kind + payload
+        return (
+            struct.pack(">I", len(payload))
+            + body
+            + struct.pack(">I", zlib.crc32(body) & 0xFFFFFFFF)
+        )
+
+    path.write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(raw))
+        + chunk(b"IEND", b"")
+    )
 
 
 def test_image_progress_counts_shared_and_episode_targets(tmp_path: Path) -> None:
@@ -2115,9 +2134,9 @@ def test_reference_bundle_resolves_ready_character_and_asset_refs(tmp_path: Path
     shared = tmp_path / "出图" / "共享"
     (shared / "identity_registry.json").write_text(
         json.dumps({
-            "characters": [{
-                "id": "CHAR_01",
-                "forms": [{
+                "characters": [{
+                    "id": "CHAR_01",
+                    "forms": [{
                     "form": "常态",
                     "reference_group": {
                         "front": {"path": "出图/共享/图片/定妆_沈念_常态.png", "status": "ready"}
@@ -2495,6 +2514,54 @@ def test_reference_bundle_prefers_form_qualified_refs_over_bare_character_id(tmp
     assert all("觉醒态" not in item["rel_path"] for item in inputs)
 
 
+def _reviewed_core_form(tmp_path: Path, refs: dict[str, str], face: str) -> dict:
+    form_name = "常态"
+
+    def reviewed(view: str, rel: str) -> dict:
+        sha = codex_image_runner.file_sha256(tmp_path / rel)
+        return {
+            "path": rel,
+            "status": "ready",
+            "sha256": sha,
+            "human_review": {
+                "status": "accepted",
+                "verdict": "pass",
+                "character_id": "CHAR_01",
+                "form": form_name,
+                "library_tier": "core_full",
+                "view": view,
+                "path": rel,
+                "reviewer": "art-director",
+                "reviewed_at": "2026-07-14T12:00:00+00:00",
+                "png_sha256": sha,
+                "registry_binding_fingerprint": codex_image_runner.core_review_binding_fingerprint(
+                    "CHAR_01", form_name, "core_full", view, rel, sha
+                ),
+                "registry_binding_fingerprint_kind": codex_image_runner.IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND,
+                "review_contract": codex_image_runner.identity_review_contract_for_view(view),
+                "criteria": sorted(codex_image_runner.identity_review_required_criteria(view)),
+                "confirmation": {
+                    "kind": "explicit_current_pixels_acceptance",
+                    "accepted_current_pixels": True,
+                },
+            },
+        }
+
+    reference_group = {
+        key: (reviewed(key, rel) if key in codex_image_runner.CHARACTER_SHARED_CORE_FIELDS else {
+            "path": rel, "status": "ready",
+        })
+        for key, rel in refs.items()
+    }
+    reference_group["face_anchor_refs"] = [reviewed("expression", face)]
+    return {
+        "form": form_name,
+        "self_check_passed": True,
+        "reference_group": reference_group,
+        "reference_atlas": {"build_tier": "core_full"},
+    }
+
+
 def test_shared_first_interlock_blocks_incomplete_character_pack(tmp_path: Path) -> None:
     write_prompt(
         tmp_path,
@@ -2509,8 +2576,11 @@ def test_shared_first_interlock_blocks_incomplete_character_pack(tmp_path: Path)
         json.dumps({
             "characters": [{
                 "id": "CHAR_01",
+                "scope": "贯穿全篇女主",
+                "library_tier": "core_full",
                 "forms": [{
                     "form": "常态",
+                    "self_check_passed": True,
                     "reference_group": {
                         "front": {"path": "出图/共享/图片/定妆_沈念_常态.png", "status": "ready"}
                     },
@@ -2538,16 +2608,17 @@ def test_shared_first_interlock_passes_when_character_pack_complete(tmp_path: Pa
     )
     refs = {
         "front": "出图/共享/图片/定妆_沈念_常态.png",
-        "three_quarter": "出图/共享/图片/定妆_沈念_常态_45度.png",
-        "side": "出图/共享/图片/定妆_沈念_常态_侧.png",
-        "back": "出图/共享/图片/定妆_沈念_常态_背.png",
+            "three_quarter": "出图/共享/图片/定妆_沈念_常态_45度.png",
+            "side": "出图/共享/图片/定妆_沈念_常态_侧.png",
+            "rear_three_quarter": "出图/共享/图片/定妆_沈念_常态_后45度.png",
+            "back": "出图/共享/图片/定妆_沈念_常态_背.png",
         "turnaround": "出图/共享/图片/定妆_沈念_常态_三视图.png",
         "half_body": "出图/共享/图片/定妆_沈念_常态_半身.png",
     }
-    for rel in refs.values():
-        write_valid_png(tmp_path / rel)
+    for index, rel in enumerate(refs.values(), start=1):
+        write_valid_png(tmp_path / rel, fill=bytes([index]))
     face = "出图/共享/图片/定妆_沈念_常态_脸部特写.png"
-    write_valid_png(tmp_path / face)
+    write_valid_png(tmp_path / face, fill=b"\x80")
     style_anchor = "出图/共享/图片/风格锚_国漫写实.png"
     write_valid_png(tmp_path / style_anchor)
     codex_image_runner.mark_style_anchor_ready(tmp_path, style_anchor)
@@ -2556,13 +2627,7 @@ def test_shared_first_interlock_passes_when_character_pack_complete(tmp_path: Pa
         json.dumps({
             "characters": [{
                 "id": "CHAR_01",
-                "forms": [{
-                    "form": "常态",
-                    "reference_group": {
-                        **{key: {"path": rel, "status": "ready"} for key, rel in refs.items()},
-                        "face_anchor_refs": [{"path": face, "status": "ready"}],
-                    },
-                }],
+                "forms": [_reviewed_core_form(tmp_path, refs, face)],
             }]
         }, ensure_ascii=False),
         encoding="utf-8",
@@ -2570,6 +2635,87 @@ def test_shared_first_interlock_passes_when_character_pack_complete(tmp_path: Pa
     (shared / "asset_registry.json").write_text('{"assets":[]}', encoding="utf-8")
 
     assert codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集") == []
+
+    registry_path = shared / "identity_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    form = registry["characters"][0]["forms"][0]
+    form["reference_group"]["front"]["human_review"]["reviewer"] = "codex-agent"
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    forged_reviewer = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
+    assert any("current_hash_review_receipts:front" in issue for issue in forged_reviewer)
+
+    form["reference_group"]["front"]["human_review"]["reviewer"] = "art-director"
+    form["reference_group"]["face_anchor_refs"][0]["human_review"]["criteria"] = []
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    forged_criteria = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
+    assert any("current_hash_review_receipts:expression" in issue for issue in forged_criteria)
+
+    form["reference_group"]["face_anchor_refs"][0]["human_review"]["criteria"] = sorted(
+        codex_image_runner.identity_review_required_criteria("expression")
+    )
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+    assert codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集") == []
+
+    # `--skip-preflight` 只能跳过广义 dashboard gate，不能绕过逐视图当前 hash 收据。
+    write_valid_png(tmp_path / refs["rear_three_quarter"], fill=b"1")
+    stale = codex_image_runner.shared_first_interlock_issues(tmp_path, "第1集")
+    assert any("current_hash_review_receipts:rear_three_quarter" in issue for issue in stale)
+
+
+def test_shared_first_pre_spend_duplicate_png_sha_blocks_copied_views(tmp_path: Path) -> None:
+    refs = {
+        view: f"出图/共享/图片/{view}.png"
+        for view in codex_image_runner.CHARACTER_SHARED_CORE_FIELDS
+    }
+    for index, rel in enumerate(refs.values(), start=1):
+        write_valid_png(tmp_path / rel, fill=bytes([index]))
+    # A byte-for-byte copy under a different filename must still fail.
+    (tmp_path / refs["back"]).write_bytes((tmp_path / refs["side"]).read_bytes())
+    face = "出图/共享/图片/expression.png"
+    write_valid_png(tmp_path / face, fill=b"\x80")
+    form = _reviewed_core_form(tmp_path, refs, face)
+
+    issues = codex_image_runner._core_review_receipt_issues(tmp_path, "CHAR_01", form)
+
+    assert any(item.startswith("duplicate_png_sha:back/side") for item in issues)
+    assert not any(item.startswith("duplicate_canonical_realpath") for item in issues)
+
+
+@pytest.mark.parametrize("mode", ["absolute", "path_escape", "symlink", "noncanonical"])
+def test_shared_first_pre_spend_path_escape_symlink_and_noncanonical_are_blocked(
+    tmp_path: Path,
+    mode: str,
+) -> None:
+    refs = {
+        view: f"出图/共享/图片/{view}.png"
+        for view in codex_image_runner.CHARACTER_SHARED_CORE_FIELDS
+    }
+    for index, rel in enumerate(refs.values(), start=1):
+        write_valid_png(tmp_path / rel, fill=bytes([index]))
+    face = "出图/共享/图片/expression.png"
+    write_valid_png(tmp_path / face, fill=b"\x80")
+    form = _reviewed_core_form(tmp_path, refs, face)
+    front = form["reference_group"]["front"]
+    if mode == "absolute":
+        front["path"] = str((tmp_path / refs["front"]).resolve())
+        expected = "absolute_registry_evidence_path_not_allowed"
+    elif mode == "path_escape":
+        outside = tmp_path.parent / f"{tmp_path.name}_outside.png"
+        write_valid_png(outside, fill=b"\x91")
+        front["path"] = f"../{outside.name}"
+        expected = "registry_evidence_path_outside_project_root"
+    elif mode == "symlink":
+        link = tmp_path / "出图" / "共享" / "图片" / "front_link.png"
+        link.symlink_to(Path(refs["front"]).name)
+        front["path"] = "出图/共享/图片/front_link.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
+    else:
+        front["path"] = "出图/共享/图片/../图片/front.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
+
+    issues = codex_image_runner._core_review_receipt_issues(tmp_path, "CHAR_01", form)
+
+    assert any(expected in item for item in issues)
 
 
 def test_shared_first_interlock_ignores_char_ids_inside_makeup_filenames(tmp_path: Path) -> None:
@@ -2582,16 +2728,17 @@ def test_shared_first_interlock_ignores_char_ids_inside_makeup_filenames(tmp_pat
     )
     refs = {
         "front": "出图/共享/图片/定妆_沈念_常态.png",
-        "three_quarter": "出图/共享/图片/定妆_沈念_常态_45度.png",
-        "side": "出图/共享/图片/定妆_沈念_常态_侧.png",
-        "back": "出图/共享/图片/定妆_沈念_常态_背.png",
+            "three_quarter": "出图/共享/图片/定妆_沈念_常态_45度.png",
+            "side": "出图/共享/图片/定妆_沈念_常态_侧.png",
+            "rear_three_quarter": "出图/共享/图片/定妆_沈念_常态_后45度.png",
+            "back": "出图/共享/图片/定妆_沈念_常态_背.png",
         "turnaround": "出图/共享/图片/定妆_沈念_常态_三视图.png",
         "half_body": "出图/共享/图片/定妆_沈念_常态_半身.png",
     }
-    for rel in refs.values():
-        write_valid_png(tmp_path / rel)
+    for index, rel in enumerate(refs.values(), start=1):
+        write_valid_png(tmp_path / rel, fill=bytes([index]))
     face = "出图/共享/图片/定妆_CHAR_01_HUMAN_脸部特写.png"
-    write_valid_png(tmp_path / face)
+    write_valid_png(tmp_path / face, fill=b"\x80")
     style_anchor = "出图/共享/图片/风格锚_国漫写实.png"
     write_valid_png(tmp_path / style_anchor)
     codex_image_runner.mark_style_anchor_ready(tmp_path, style_anchor)
@@ -2600,13 +2747,7 @@ def test_shared_first_interlock_ignores_char_ids_inside_makeup_filenames(tmp_pat
         json.dumps({
             "characters": [{
                 "id": "CHAR_01",
-                "forms": [{
-                    "form": "常态",
-                    "reference_group": {
-                        **{key: {"path": rel, "status": "ready"} for key, rel in refs.items()},
-                        "face_anchor_refs": [{"path": face, "status": "ready"}],
-                    },
-                }],
+                "forms": [_reviewed_core_form(tmp_path, refs, face)],
             }]
         }, ensure_ascii=False),
         encoding="utf-8",
@@ -2970,6 +3111,28 @@ def test_full_wingspan_makeup_derivation_accepts_same_source_refs() -> None:
         "出图/共享/图片/定妆_CHAR_YUNLING_GOLDEN_ROC_全身翼展.png",
         refs,
     )
+
+
+def test_rear_three_quarter_is_controlled_derivation_with_specific_guidance() -> None:
+    rel = "出图/共享/图片/定妆_沈念_常态_后45度.png"
+
+    assert codex_image_runner.requires_controlled_makeup_derivation(rel)
+    assert codex_image_runner.has_controlled_makeup_source(
+        rel,
+        [{"rel_path": "出图/共享/图片/定妆_沈念_常态_三视图.png"}],
+    )
+    guidance = codex_image_runner.shared_variant_note(rel)
+    assert "后3/4" in guidance
+    assert "不是前3/4" in guidance
+
+
+def test_turnaround_guidance_requires_five_angle_alignment() -> None:
+    guidance = codex_image_runner.shared_variant_note(
+        "出图/共享/图片/定妆_沈念_常态_三视图.png"
+    )
+
+    assert "正面、前3/4、侧面、后3/4、背面五角" in guidance
+    assert "脚底线" in guidance and "身体中心线" in guidance
 
 
 def test_back_view_form_turnaround_is_not_misclassified_as_split_ref() -> None:

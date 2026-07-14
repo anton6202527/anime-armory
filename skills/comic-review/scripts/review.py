@@ -79,6 +79,22 @@ def add_issue(
     suggested_fix: str,
     category: str,
 ) -> None:
+    deterministic_categories = {
+        "character",
+        "export",
+        "identity",
+        "image",
+        "layout",
+        "lettering",
+        "missing_artifact",
+        "rights",
+        "script",
+        "source",
+        "visual_contract",
+    }
+    confidence = "deterministic" if category in deterministic_categories else "heuristic"
+    if severity == "block" and confidence != "deterministic":
+        severity = "warn"
     issues.append(
         {
             "severity": severity,
@@ -87,6 +103,7 @@ def add_issue(
             "reason": reason,
             "return_to": return_to,
             "suggested_fix": suggested_fix,
+            "confidence": confidence,
         }
     )
 
@@ -132,10 +149,17 @@ def lettering_items_by_panel(lettering: dict) -> dict[str, list[dict]]:
 def panel_reference_ids(panel_script: dict) -> set[str]:
     ids: set[str] = set()
     for panel in panel_script.get("panels") or []:
+        for binding in panel.get("character_bindings") or []:
+            if not isinstance(binding, dict):
+                continue
+            for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id"):
+                ref_id = str(binding.get(key) or "").strip()
+                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
+                    ids.add(ref_id)
         for key in ("references", "characters"):
             for raw in panel.get(key) or []:
                 ref_id = str(raw).strip()
-                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "STYLE_")):
+                if ref_id.startswith(("CHAR_", "MON_", "LOC_", "PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_", "STYLE_")):
                     ids.add(ref_id)
     return ids
 
@@ -156,6 +180,13 @@ def compact_text(value: Any) -> str:
 
 def panel_refs(panel: dict) -> list[str]:
     ids: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id"):
+            ref_id = str(binding.get(key) or "").strip()
+            if ref_id and ref_id not in ids:
+                ids.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw).strip()

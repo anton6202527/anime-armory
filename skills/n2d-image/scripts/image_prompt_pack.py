@@ -23,9 +23,15 @@ if _COMMON not in sys.path:
 
 from n2d_contract import (  # noqa: E402
     ASSET_REFERENCE_REGISTRY_KIND,
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+    CHARACTER_LIBRARY_TIER_STANDARD,
     IDENTITY_IMAGE_ADAPTERS,
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
+    character_library_tier_for_record as canonical_character_library_tier_for_record,
+    infer_character_library_tier,
 )
 from n2d_visual_styles import DEFAULT_STYLE, style_anchor_path_for  # noqa: E402
 from seam_contract import needs_end_anchor, normalize_seam_mode, requires_boundary_frame  # noqa: E402
@@ -311,10 +317,10 @@ PARTIAL_CHARACTER_BOARD_RULES = (
 
 CHARACTER_LIBRARY_ROOT = "角色库"
 LEGACY_CHARACTER_LIBRARY_ROOT = "设定库/character_assets"
-FULL_LIBRARY_TIER = "core_full"
-STANDARD_LIBRARY_TIER = "recurring_standard"
-MINIMAL_LIBRARY_TIER = "named_minimal"
-PARTIAL_LIBRARY_TIER = "restricted_partial"
+FULL_LIBRARY_TIER = CHARACTER_LIBRARY_TIER_CORE
+STANDARD_LIBRARY_TIER = CHARACTER_LIBRARY_TIER_STANDARD
+MINIMAL_LIBRARY_TIER = CHARACTER_LIBRARY_TIER_MINIMAL
+PARTIAL_LIBRARY_TIER = CHARACTER_LIBRARY_TIER_PARTIAL
 RECURRING_SCOPE_RE = re.compile(r"常驻|多集|中长线|反复|复现|主要配角|男二|女二|主反派|贯穿")
 PLANNED_EPISODE_RE = re.compile(
     r"(?:预计出场集数|计划出场集数|planned_episode_count)\s*[：:=]\s*(\d+)"
@@ -1588,39 +1594,16 @@ def character_library_tier(*, scope: str, narrative_tier: str, episode_count: in
     upgrade earlier; unnamed/partial crowds stay restricted.  The value is a
     planning tier, not a backend identity-lock tier.
     """
-    if restricted:
-        return PARTIAL_LIBRARY_TIER
-    if narrative_tier == "核心长线" or episode_count >= 10:
-        return FULL_LIBRARY_TIER
-    if episode_count >= 3 or RECURRING_SCOPE_RE.search(scope):
-        return STANDARD_LIBRARY_TIER
-    return MINIMAL_LIBRARY_TIER
-
-
-def character_library_tier_for_cfg(cfg: Mapping[str, Any]) -> str:
-    explicit = str(cfg.get("library_tier") or "").strip()
-    if explicit in {
-        FULL_LIBRARY_TIER,
-        STANDARD_LIBRARY_TIER,
-        MINIMAL_LIBRARY_TIER,
-        PARTIAL_LIBRARY_TIER,
-    }:
-        return explicit
-    visual_tier = str(cfg.get("tier") or "").strip()
-    scope = str(cfg.get("scope") or "").strip()
-    narrative_tier = str(cfg.get("narrative_tier") or "").strip()
-    if not narrative_tier:
-        narrative_tier = "核心长线" if CORE_SCOPE_RE.search(scope) else "单集角色"
-    try:
-        episode_count = int(cfg.get("planned_episode_count") or 0)
-    except (TypeError, ValueError):
-        episode_count = 0
-    return character_library_tier(
+    return infer_character_library_tier(
         scope=scope,
         narrative_tier=narrative_tier,
         episode_count=episode_count,
-        restricted=visual_tier == PARTIAL_LIBRARY_TIER,
+        restricted=restricted,
     )
+
+
+def character_library_tier_for_cfg(cfg: Mapping[str, Any]) -> str:
+    return canonical_character_library_tier_for_record(cfg)
 
 
 def character_library_root(root: Path, *, prefer_existing: bool = True) -> Path:
@@ -2376,7 +2359,7 @@ def prompt_safe_forbidden(value: Any) -> str:
 
 def ref_item(root: Path, path: str, *, key: str = "", source: str = "出图/共享/图片/定妆母本_待生成.png") -> Dict[str, Any]:
     item: Dict[str, Any] = {"path": path, "status": "ready" if (root / path).is_file() else "planned"}
-    if key in {"three_quarter", "side", "back"}:
+    if key in {"three_quarter", "side", "rear_three_quarter", "back"}:
         method = "controlled_multiref_generation"
     elif key in {"half_body", "full_body", "face_anchor_refs"}:
         method = "front_crop"
@@ -2543,10 +2526,27 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         shared_rel(ak, "_front"),
     ])["path"]
     three_quarter = pick_existing_ref(root, [shared_rel(ak, "_45度"), shared_rel(ak, "_三分之二")], key="three_quarter", source=source)
-    side = pick_existing_ref(root, [shared_rel(ak, "_侧"), shared_rel(ak, "_侧面"), shared_rel(ak, "_侧背")], key="side", source=source)
-    back = pick_existing_ref(root, [shared_rel(ak, "_背"), shared_rel(ak, "_背面"), shared_rel(ak, "_侧背")], key="back", source=source)
+    side = pick_existing_ref(root, [shared_rel(ak, "_侧"), shared_rel(ak, "_侧面")], key="side", source=source)
+    rear_three_quarter = pick_existing_ref(
+        root,
+        [shared_rel(ak, "_后45度"), shared_rel(ak, "_后3／4"), shared_rel(ak, "_后四分之三"), shared_rel(ak, "_侧背")],
+        key="rear_three_quarter",
+        source=source,
+    )
+    back = pick_existing_ref(root, [shared_rel(ak, "_背"), shared_rel(ak, "_背面")], key="back", source=source)
     outfit = pick_existing_ref(root, [shared_rel(ak, "_半身"), shared_rel(ak, "_全身"), source], key="half_body", source=source)
     turnaround = pick_existing_ref(root, [shared_rel(ak, "_三视图"), shared_rel(ak, "_turnaround")])
+    if library_tier == FULL_LIBRARY_TIER:
+        if turnaround.get("status") == "ready":
+            # 无元数据的已有三视图可能是旧四栏；禁止因本次新增 rear slot
+            # 就自动宣称五栏，否则 derive 会把背面误切成后3/4。
+            turnaround["layout"] = "unknown_existing"
+        else:
+            turnaround["layout"] = "five_angle_v1"
+            turnaround["column_count"] = 5
+            turnaround["view_order"] = [
+                "front", "three_quarter", "side", "rear_three_quarter", "back",
+            ]
     rg = {
         "front": ref_item(root, source),
         "outfit": outfit,
@@ -2571,6 +2571,8 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
         rg["three_quarter"] = three_quarter
     if library_tier == FULL_LIBRARY_TIER or side.get("status") == "ready":
         rg["side"] = side
+    if library_tier == FULL_LIBRARY_TIER or rear_three_quarter.get("status") == "ready":
+        rg["rear_three_quarter"] = rear_three_quarter
     if library_tier == FULL_LIBRARY_TIER or back.get("status") == "ready":
         rg["back"] = back
     if library_tier == FULL_LIBRARY_TIER or turnaround.get("status") == "ready":
@@ -2586,7 +2588,11 @@ def full_reference_group(root: Path, cid: str, cfg: Mapping[str, Any]) -> Tuple[
             rg["expressions"].append({**ref, "emotion": emotion})
     if not rg["expressions"]:
         rg["expressions"].append({**ref_item(root, source, key="face_anchor_refs", source=source), "emotion": "基础"})
-    base_views = {key: rg[key] for key in ("front", "three_quarter", "side", "back", "half_body") if key in rg}
+    base_views = {
+        key: rg[key]
+        for key in ("front", "three_quarter", "side", "rear_three_quarter", "back", "half_body")
+        if key in rg
+    }
     atlas = {
         "build_tier": library_tier,
         "base_views": base_views,
@@ -2724,7 +2730,10 @@ def build_identity_registry(root: Path) -> Dict[str, Any]:
                 "identity_adapters": adapter_defaults(),
                 "generation_control": generation_control(1100 + i * 100 + fidx * 10),
                 "angle_policy": {
-                    "allowed": ["front", "three_quarter", "side", "MCU", "CU", "MS", "shot_reverse"],
+                    "allowed": [
+                        "front", "three_quarter", "side", "rear_three_quarter", "back",
+                        "MCU", "CU", "MS", "shot_reverse",
+                    ],
                     "risky": ["deep_shadow", "face_too_small", "extreme_top", "extreme_low", "strong_vfx_over_face"],
                     "requires_extra_reference": ["ECU", "大表情", "背光暗部", "多人同框近景"],
                 },
@@ -2938,6 +2947,12 @@ PRESERVED_REGISTRY_KEYS = {
     "machine_evidence",
     "png_sha256",
     "artifact_sha256",
+    # Turnaround layout is migration-critical evidence.  A new prompt-pack run
+    # must not downgrade a board created as five_angle_v1 to unknown_existing
+    # merely because its PNG now exists.
+    "layout",
+    "column_count",
+    "view_order",
 }
 
 
@@ -3849,8 +3864,8 @@ def character_board_spec(library_tier: str, restricted: bool) -> Tuple[str, str,
     if library_tier == FULL_LIBRARY_TIER:
         return (
             FULL_CHARACTER_BOARD_RULES,
-            "正面、45°、侧面、背面、半身/全身服装、脸部特写、标准三视图；表情与动作按剧本扩展。",
-            "正面/45°/侧面/背面/半身或全身/脸部特写是否同源，三视图仅作人审总览。",
+            "正面、前45°、侧面、后45°、背面、半身/全身服装、脸部特写、标准五角 turnaround；表情与动作按剧本扩展。",
+            "正面/前45°/侧面/后45°/背面/半身或全身/脸部特写是否同源，turnaround 仅作人审总览。",
         )
     if library_tier == STANDARD_LIBRARY_TIER:
         return (
@@ -3957,7 +3972,7 @@ def shared_character_prompt(story: Optional[Mapping[str, Any]] = None, root: Opt
                 f"## {cfg['name']}（`{cid}/{merged['form']}`）",
                 f"**目标存档**：`{target}`",
                 f"**身份注册**：`identity_registry.json` -> `{cid}/{merged['form']}`；此形态与 `{cid}/{cfg['form']}` 共用同一脸锚，只换服装/发束/道具状态。",
-                f"**角色定妆组**：正面 `_正面`、45° `_45度`、侧面 `_侧面`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、标准三视图 `_三视图`；派生形态也必须齐基础包，不能只出单张正面。",
+                f"**角色定妆组**：正面 `_正面`、前3/4 `_45度`、侧面 `_侧面`、后3/4 `_后45度`、背面 `_背面`、半身服装 `_半身`、脸部特写 `_脸部特写`、turnaround 总览 `_三视图`（旧文件名兼容）；`core_full` 派生形态也必须齐五角基础包，不能只出单张正面。",
                 f"**年龄/年龄档**：{age_context or '继承基础形态；回角色卡补齐后再定妆'}",
                 f"**锚点句:** {merged['anchor']}",
                 f"**定妆参考板规格**：{board_rule}",

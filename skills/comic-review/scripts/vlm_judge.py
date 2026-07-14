@@ -82,12 +82,34 @@ def verdicts_path(root: Path, chapter: str) -> Path:
 
 def panel_ref_ids(panel: dict[str, Any], prefixes: tuple[str, ...]) -> list[str]:
     out: list[str] = []
+    for binding in panel.get("character_bindings") or []:
+        if not isinstance(binding, dict):
+            continue
+        for key in ("character_id", "outfit_id", "expression_id", "state_id"):
+            ref_id = str(binding.get(key) or "").strip()
+            if ref_id.startswith(prefixes) and ref_id not in out:
+                out.append(ref_id)
     for key in ("references", "characters"):
         for raw in panel.get(key) or []:
             ref_id = str(raw or "").strip()
             if ref_id.startswith(prefixes) and ref_id not in out:
                 out.append(ref_id)
     return out
+
+
+def reference_sha256s(root: Path, paths: list[str]) -> dict[str, str]:
+    out: dict[str, str] = {}
+    for raw in paths:
+        path = resolve_path(root, raw)
+        if path.is_file():
+            out[str(raw)] = file_sha256(path)
+    return out
+
+
+def task_sha256(task: dict[str, Any]) -> str:
+    payload = {key: value for key, value in task.items() if key != "task_sha256"}
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def asset_reference_paths(root: Path, registry: dict[str, Any], ref_id: str, limit: int = 4) -> list[str]:
@@ -207,13 +229,13 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
             )
         prev_by_anchor[anchor] = entry
 
-    # 轴3：道具身份与位置——有参考图的 PROP_/SYS_/FX_ 资产逐格核对。
+    # 轴3：道具身份与位置——有参考图的 PROP_/SYS_/FX_/VFX_/OUTFIT_ 资产逐格核对。
     for panel in panels:
         pid = str(panel.get("panel_id"))
         entry = panel_entry(pid)
         if not entry:
             continue
-        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_")):
+        for prop_id in panel_ref_ids(panel, ("PROP_", "SYS_", "FX_", "VFX_", "OUTFIT_")):
             refs = asset_reference_paths(root, registry, prop_id, limit=2)
             if not refs:
                 continue
@@ -231,8 +253,13 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                 }
             )
 
+    for task in tasks:
+        refs = [str(item) for item in task.get("references") or []]
+        task["references_sha256"] = reference_sha256s(root, refs)
+        task["task_sha256"] = task_sha256(task)
+
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_vlm_judge_tasks",
         "protocol": "CANVAS-ContinuityEval-3axis",
         "chapter": chapter,
@@ -250,6 +277,9 @@ def build_tasks(root: Path, chapter: str) -> dict[str, Any]:
                 {
                     "task_id": "<task_id>",
                     "panel_sha256": "<复制任务里的 panel.sha256>",
+                    "task_sha256": "<复制任务里的 task_sha256>",
+                    "references_sha256": {"<reference path>": "<复制任务里的 sha256>"},
+                    "evaluator": {"model": "<具体模型名>", "version": "<版本或日期>", "reviewed_at": "<ISO-8601>"},
                     "scores": {"face": "1-5（按轴要求的子项）"},
                     "verdict": "pass | suspect",
                     "notes": "一句话证据",
@@ -276,8 +306,12 @@ def load_verdicts(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
     verdict_payload = load_json(verdicts_path(root, chapter), {})
     if not isinstance(verdict_payload, dict):
         return {}
-    task_sha = {
-        str(task.get("task_id")): str((task.get("panel") or {}).get("sha256") or "")
+    expected = {
+        str(task.get("task_id")): {
+            "panel_sha256": str((task.get("panel") or {}).get("sha256") or ""),
+            "task_sha256": str(task.get("task_sha256") or ""),
+            "references_sha256": task.get("references_sha256") if isinstance(task.get("references_sha256"), dict) else {},
+        }
         for task in (tasks.get("tasks") or [])
         if isinstance(task, dict)
     }
@@ -288,10 +322,21 @@ def load_verdicts(root: Path, chapter: str) -> dict[str, dict[str, Any]]:
         task_id = str(record.get("task_id") or "")
         if not task_id:
             continue
+        contract = expected.get(task_id)
+        if not contract:
+            continue
         recorded_sha = str(record.get("panel_sha256") or "")
-        expected = task_sha.get(task_id, "")
-        if expected and recorded_sha and recorded_sha != expected:
-            continue  # 该格已重抽，旧裁决作废
+        recorded_task_sha = str(record.get("task_sha256") or "")
+        recorded_refs = record.get("references_sha256") if isinstance(record.get("references_sha256"), dict) else None
+        evaluator = record.get("evaluator") if isinstance(record.get("evaluator"), dict) else {}
+        if not recorded_sha or recorded_sha != contract["panel_sha256"]:
+            continue
+        if not recorded_task_sha or recorded_task_sha != contract["task_sha256"]:
+            continue
+        if recorded_refs is None or recorded_refs != contract["references_sha256"]:
+            continue
+        if not str(evaluator.get("model") or "").strip() or not str(evaluator.get("version") or "").strip():
+            continue
         out[task_id] = record
     return out
 

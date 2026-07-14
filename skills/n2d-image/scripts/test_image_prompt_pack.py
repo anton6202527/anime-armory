@@ -930,6 +930,64 @@ def test_full_reference_group_prefers_tight_expression_refs(tmp_path: Path) -> N
     assert rg["face_anchor_refs"][0]["path"].endswith("_表情_克制_脸锚裁切.png")
 
 
+def test_core_reference_group_marks_new_turnaround_as_five_angle_board(tmp_path: Path) -> None:
+    cfg = {
+        "asset_key": "CHAR_CORE__常态",
+        "name": "核心角色",
+        "form": "常态",
+        "library_tier": "core_full",
+    }
+
+    rg, _ = image_prompt_pack.full_reference_group(tmp_path, "CHAR_CORE", cfg)
+
+    turnaround = rg["turnaround"]
+    assert turnaround["status"] == "planned"
+    assert turnaround["layout"] == "five_angle_v1"
+    assert turnaround["column_count"] == 5
+    assert turnaround["view_order"] == [
+        "front", "three_quarter", "side", "rear_three_quarter", "back",
+    ]
+    assert "rear_three_quarter" in rg
+
+
+def test_core_reference_group_marks_unlabelled_existing_turnaround_as_unknown(tmp_path: Path) -> None:
+    path = tmp_path / "出图" / "共享" / "图片" / "定妆_CHAR_CORE__常态_三视图.png"
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b"legacy-four-column-board")
+    cfg = {
+        "asset_key": "CHAR_CORE__常态",
+        "name": "核心角色",
+        "form": "常态",
+        "library_tier": "core_full",
+    }
+
+    rg, _ = image_prompt_pack.full_reference_group(tmp_path, "CHAR_CORE", cfg)
+
+    turnaround = rg["turnaround"]
+    assert turnaround["status"] == "ready"
+    assert turnaround["layout"] == "unknown_existing"
+    assert "column_count" not in turnaround
+    assert "view_order" not in turnaround
+
+
+def test_registry_rebuild_preserves_explicit_five_angle_turnaround_layout() -> None:
+    path = "出图/共享/图片/定妆_CHAR_CORE__常态_三视图.png"
+    new = {"path": path, "status": "ready", "layout": "unknown_existing"}
+    old = {
+        "path": path,
+        "status": "ready",
+        "layout": "five_angle_v1",
+        "column_count": 5,
+        "view_order": ["front", "three_quarter", "side", "rear_three_quarter", "back"],
+    }
+
+    merged = image_prompt_pack.preserve_registry_evidence(new, old)
+
+    assert merged["layout"] == "five_angle_v1"
+    assert merged["column_count"] == 5
+    assert merged["view_order"] == old["view_order"]
+
+
 def test_clip_assets_do_not_bind_plain_alias_from_prose() -> None:
     clip = {
         "description": "姜月初想起百妖谱规则，但本镜不出现面板。",

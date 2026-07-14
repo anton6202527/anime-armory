@@ -67,6 +67,7 @@ def test_run_generation_writes_candidates_without_touching_final(tmp_path: Path,
         return True
 
     monkeypatch.setattr(kcr.cir, "process_target", fake_process_target)
+    monkeypatch.setattr(kcr.cir, "enforce_shared_first_interlock", lambda *args, **kwargs: True)
 
     summary = kcr.run_generation(
         tmp_path,
@@ -93,3 +94,34 @@ def test_run_generation_writes_candidates_without_touching_final(tmp_path: Path,
         data = json.loads(sidecar.read_text(encoding="utf-8"))
         assert data["source_target"] == "出图/第1集/图片/Clip01_first.png"
         assert data["status"] == "pass"
+
+
+def test_skip_preflight_cannot_bypass_shared_first_interlock(tmp_path: Path, monkeypatch) -> None:
+    _write_inputs(tmp_path)
+    calls = []
+    monkeypatch.setattr(
+        kcr.cir,
+        "enforce_shared_first_interlock",
+        lambda root, episode, targets=None: False,
+    )
+    monkeypatch.setattr(kcr.cir, "process_target", lambda *args, **kwargs: calls.append(args) or True)
+
+    summary = kcr.run_generation(
+        tmp_path,
+        "第1集",
+        clips=[],
+        max_candidates_per_clip=1,
+        limit_clips=None,
+        timeout_sec=None,
+        dry_run=False,
+        force=False,
+        stop_on_fail=False,
+        skip_preflight=True,
+        select_after=False,
+        apply_selection=False,
+        no_ledger=True,
+    )
+
+    assert summary["shared_first_blocked"] is True
+    assert summary["generated"] == 0
+    assert calls == []

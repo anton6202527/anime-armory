@@ -3,12 +3,296 @@
 
 from __future__ import annotations
 
+import datetime as dt
+import hashlib
 import json
+import re
 from pathlib import Path
+from typing import Any, Mapping, Tuple
 
 # ── identity_registry 共享字段 ──────────────────────────────────────────────
-# reference_group 的标准参考视图键
+# identity adapter 的历史最小 reference_group 键；不等于 B7 分档的全部必需视图。
+# core_full 的五角契约由 CHARACTER_LIBRARY_CORE_VIEWS 单独定义，避免让
+# recurring/named 的 adapter matrix 被这个历史通用常量一刀切升档。
 IDENTITY_REFERENCE_KEYS = ("front", "side", "back", "outfit", "turnaround")
+
+# ── 人物角色库分档契约（B7 单一真值源）──────────────────────────────
+CHARACTER_LIBRARY_TIER_CORE = "core_full"
+CHARACTER_LIBRARY_TIER_STANDARD = "recurring_standard"
+CHARACTER_LIBRARY_TIER_MINIMAL = "named_minimal"
+CHARACTER_LIBRARY_TIER_PARTIAL = "restricted_partial"
+CHARACTER_LIBRARY_TIERS: Tuple[str, ...] = (
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_STANDARD,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+)
+CHARACTER_LIBRARY_TIER_RANK = {
+    CHARACTER_LIBRARY_TIER_PARTIAL: 0,
+    CHARACTER_LIBRARY_TIER_MINIMAL: 1,
+    CHARACTER_LIBRARY_TIER_STANDARD: 2,
+    CHARACTER_LIBRARY_TIER_CORE: 3,
+}
+CHARACTER_LIBRARY_CORE_VIEWS: Tuple[str, ...] = (
+    "front",
+    "three_quarter",
+    "side",
+    "rear_three_quarter",
+    "back",
+)
+CHARACTER_LIBRARY_REQUIRED_VIEWS = {
+    CHARACTER_LIBRARY_TIER_CORE: CHARACTER_LIBRARY_CORE_VIEWS,
+    CHARACTER_LIBRARY_TIER_STANDARD: ("front", "three_quarter"),
+    CHARACTER_LIBRARY_TIER_MINIMAL: ("front",),
+    CHARACTER_LIBRARY_TIER_PARTIAL: (),
+}
+CHARACTER_LIBRARY_REQUIRED_REFERENCE_GROUP_FIELDS = {
+    CHARACTER_LIBRARY_TIER_CORE: CHARACTER_LIBRARY_CORE_VIEWS + ("turnaround",),
+    CHARACTER_LIBRARY_TIER_STANDARD: ("front", "three_quarter"),
+    CHARACTER_LIBRARY_TIER_MINIMAL: ("front",),
+    CHARACTER_LIBRARY_TIER_PARTIAL: (),
+}
+
+# ── 核心人物逐视图人工收据契约（B7 单一真值源）──────────────────────
+# producer、image_qc、出图 runner 和 n2d-review consumer 都必须消费这一份，
+# 避免 expression 被误写成 turnaround 合同，或某个消费侧只看“字段非空”。
+IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND = (
+    "sha256:canonical-json(char,form,tier,view,path,png_sha256)"
+)
+IDENTITY_TURNAROUND_REVIEW_CONTRACT = "n2d_turnaround_view_review_v1"
+IDENTITY_EXPRESSION_REVIEW_CONTRACT = "n2d_expression_review_v1"
+IDENTITY_TURNAROUND_REQUIRED_CRITERIA = frozenset({
+    "identity_and_costume_same_source",
+    "head_top_and_foot_line_aligned",
+    "body_centerline_and_height_aligned",
+    "neutral_background_light_pose",
+    "full_body_head_to_foot_visible",
+})
+IDENTITY_EXPRESSION_REQUIRED_CRITERIA = frozenset({
+    "same_identity_as_canonical_face_anchor",
+    "expression_readable_without_identity_drift",
+    "hair_accessories_and_costume_continuity",
+    "neutral_or_declared_expression_lighting",
+})
+_IDENTITY_AUTOMATED_REVIEWER_RE = re.compile(
+    r"(?:^|[^a-z0-9])(bot|codex|agent|runner)(?:[^a-z0-9]|$)",
+    re.IGNORECASE,
+)
+_IDENTITY_AUTOMATED_REVIEWER_CN = ("机器人", "智能体", "自动审", "自动化审核")
+
+
+def identity_review_contract_for_view(view: object) -> str:
+    return (
+        IDENTITY_EXPRESSION_REVIEW_CONTRACT
+        if str(view or "").strip() == "expression"
+        else IDENTITY_TURNAROUND_REVIEW_CONTRACT
+    )
+
+
+def identity_review_required_criteria(view: object) -> frozenset[str]:
+    return (
+        IDENTITY_EXPRESSION_REQUIRED_CRITERIA
+        if str(view or "").strip() == "expression"
+        else IDENTITY_TURNAROUND_REQUIRED_CRITERIA
+    )
+
+
+def identity_reviewer_appears_automated(value: object) -> bool:
+    reviewer = str(value or "").strip()
+    return bool(
+        not reviewer
+        or _IDENTITY_AUTOMATED_REVIEWER_RE.search(reviewer.lower())
+        or any(marker in reviewer for marker in _IDENTITY_AUTOMATED_REVIEWER_CN)
+    )
+
+
+def identity_reviewed_at_errors(value: object) -> Tuple[str, ...]:
+    reviewed_at = str(value or "").strip()
+    if not reviewed_at:
+        return ("reviewed_at_missing",)
+    try:
+        parsed = dt.datetime.fromisoformat(reviewed_at.replace("Z", "+00:00"))
+    except ValueError:
+        return ("reviewed_at_invalid",)
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return ("reviewed_at_timezone_missing",)
+    return ()
+
+
+def identity_review_binding_fingerprint(
+    *,
+    character_id: object,
+    form: object,
+    library_tier: object,
+    view: object,
+    path: object,
+    png_sha256: object,
+) -> str:
+    payload = {
+        "character_id": str(character_id or ""),
+        "form": str(form or ""),
+        "library_tier": str(library_tier or ""),
+        "path": str(path or ""),
+        "png_sha256": str(png_sha256 or ""),
+        "view": str(view or ""),
+    }
+    blob = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+CHARACTER_LIBRARY_CORE_SCOPE_RE = re.compile(
+    r"全篇|全程|长线|核心|主角|女主|男主|主反派"
+)
+CHARACTER_LIBRARY_RECURRING_SCOPE_RE = re.compile(
+    r"常驻|多集|中长线|反复|复现|复用|主要配角|男二|女二|主反派|贯穿"
+)
+RESTRICTED_PARTIAL_FORBIDDEN_PART_RE = re.compile(
+    r"(?:^|[_\s/-])(?:face|facial|head|portrait|front)(?:$|[_\s/-])|正脸|面部|五官|头部",
+    re.I,
+)
+
+
+def normalize_character_library_tier(value: object, *, default: str = "") -> str:
+    """将旧档位别名归一。
+
+    空值不再在契约层偷偷当作 core_full；由调用方显式决定缺失值是
+    阻断、迁移警告，还是使用剧情权重推导的期望档位。
+    """
+    tier = str(value or "").strip()
+    if tier in CHARACTER_LIBRARY_TIERS:
+        return tier
+    if tier.startswith(CHARACTER_LIBRARY_TIER_PARTIAL):
+        return CHARACTER_LIBRARY_TIER_PARTIAL
+    if tier in {"standard_full", "full_makeup_pack", "full", "core"}:
+        return CHARACTER_LIBRARY_TIER_CORE
+    return default if default in CHARACTER_LIBRARY_TIERS else ""
+
+
+def infer_character_library_tier(
+    *,
+    scope: str = "",
+    narrative_tier: str = "",
+    episode_count: int = 0,
+    restricted: bool = False,
+) -> str:
+    """按剧情权重推导最低角色库档位，不信任资产自报档位。"""
+    if restricted:
+        return CHARACTER_LIBRARY_TIER_PARTIAL
+    try:
+        appearances = max(0, int(episode_count or 0))
+    except (TypeError, ValueError):
+        appearances = 0
+    scope_text = str(scope or "")
+    narrative_text = str(narrative_tier or "")
+    if (
+        narrative_text == "核心长线"
+        or CHARACTER_LIBRARY_CORE_SCOPE_RE.search(f"{scope_text} {narrative_text}")
+        or appearances >= 10
+    ):
+        return CHARACTER_LIBRARY_TIER_CORE
+    if appearances >= 3 or CHARACTER_LIBRARY_RECURRING_SCOPE_RE.search(scope_text):
+        return CHARACTER_LIBRARY_TIER_STANDARD
+    return CHARACTER_LIBRARY_TIER_MINIMAL
+
+
+def restricted_partial_contract_valid(record: Mapping[str, Any]) -> bool:
+    """验证核心角色走局部/不露脸路径时的可审计例外。
+
+    只写 ``library_tier=restricted_partial`` 或 ``face_policy=no_full_face`` 是自报，
+    不足以让主角降档。
+    """
+    contract = record.get("restricted_partial_contract")
+    if not isinstance(contract, Mapping):
+        return False
+    allowed = contract.get("allowed_parts")
+    face_policy = str(record.get("face_policy") or "").strip()
+    contract_face_policy = str(contract.get("face_policy") or "").strip()
+    allowed_values = [str(item).strip() for item in allowed] if isinstance(allowed, (list, tuple)) else []
+    return bool(
+        str(contract.get("status") or "").strip().lower() == "approved"
+        and len(str(contract.get("reason") or "").strip()) >= 8
+        and str(contract.get("reviewer") or "").strip()
+        and allowed_values
+        and not any(RESTRICTED_PARTIAL_FORBIDDEN_PART_RE.search(item) for item in allowed_values)
+        and face_policy in {"no_full_face", "no_clear_facial_features"}
+        and contract_face_policy == face_policy
+    )
+
+
+def character_library_tier_for_record(
+    record: Mapping[str, Any],
+    *,
+    observed_episode_count: int = 0,
+) -> str:
+    """返回人物记录应满足的最低档位。
+
+    显式档位可以主动升档，但不能把主角/核心长线降档来绕过多视图。
+    restricted_partial 只在有明确局部/不露正脸语义时作为独立路径。
+
+    ``observed_episode_count`` 由 registry 外的已物化故事产物提供时，只能
+    抬高最低档，不能降档。默认 0 保持旧项目兼容；本函数不自行读文件，
+    避免把可选故事索引缺失误当成一次出场。
+    """
+    explicit = normalize_character_library_tier(record.get("library_tier"))
+    visual_tier = normalize_character_library_tier(record.get("tier"))
+    face_policy = str(record.get("face_policy") or "").strip()
+    restricted_requested = bool(
+        record.get("restricted_partial") is True
+        or explicit == CHARACTER_LIBRARY_TIER_PARTIAL
+        or visual_tier == CHARACTER_LIBRARY_TIER_PARTIAL
+        or face_policy in {"no_full_face", "no_clear_facial_features"}
+    )
+    try:
+        recorded_episode_count = max(
+            0,
+            int(record.get("planned_episode_count") or record.get("episode_count") or 0),
+        )
+    except (TypeError, ValueError):
+        recorded_episode_count = 0
+    try:
+        independent_episode_count = max(0, int(observed_episode_count or 0))
+    except (TypeError, ValueError):
+        independent_episode_count = 0
+    inferred = infer_character_library_tier(
+        scope=str(record.get("scope") or ""),
+        narrative_tier=(
+            "核心长线"
+            if record.get("core") is True or record.get("long_line") is True
+            else str(record.get("narrative_tier") or "")
+        ),
+        episode_count=max(recorded_episode_count, independent_episode_count),
+        restricted=False,
+    )
+    # 非核心局部角色可直接走 partial；核心/主角必须附审批合同，
+    # 防止只把 tier 改成 restricted_partial 就绕过五角验收。
+    if restricted_requested and (
+        inferred != CHARACTER_LIBRARY_TIER_CORE
+        or restricted_partial_contract_valid(record)
+    ):
+        return CHARACTER_LIBRARY_TIER_PARTIAL
+    if explicit == CHARACTER_LIBRARY_TIER_PARTIAL:
+        explicit = ""
+    if not explicit:
+        return inferred
+    return max((explicit, inferred), key=lambda tier: CHARACTER_LIBRARY_TIER_RANK[tier])
+
+
+def required_character_library_views(tier: object) -> Tuple[str, ...]:
+    normalized = normalize_character_library_tier(tier)
+    return CHARACTER_LIBRARY_REQUIRED_VIEWS.get(normalized, ())
+
+
+def required_character_reference_group_fields(tier: object) -> Tuple[str, ...]:
+    normalized = normalize_character_library_tier(tier)
+    return CHARACTER_LIBRARY_REQUIRED_REFERENCE_GROUP_FIELDS.get(normalized, ())
+
+
+def character_library_tier_is_at_least(actual: object, expected: object) -> bool:
+    actual_tier = normalize_character_library_tier(actual)
+    expected_tier = normalize_character_library_tier(expected)
+    if not actual_tier or not expected_tier:
+        return False
+    if CHARACTER_LIBRARY_TIER_PARTIAL in {actual_tier, expected_tier}:
+        return actual_tier == expected_tier
+    return CHARACTER_LIBRARY_TIER_RANK[actual_tier] >= CHARACTER_LIBRARY_TIER_RANK[expected_tier]
 
 # identity_adapter 是否携带"已注册句柄"的字段（任一非空即视为已登记）
 IDENTITY_HANDLE_FIELDS = ("id", "handle", "reference", "model_path")

@@ -18,6 +18,107 @@ def write_json(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def write_approved_name(
+    root: Path,
+    chapter: str,
+    panels: list[dict],
+    *,
+    comic_format: str = "页漫",
+    reading_direction: str = "从右到左",
+    page_groups: list[list[str]] | None = None,
+) -> dict:
+    panel_ids = [str(panel["panel_id"]) for panel in panels]
+    page_groups = page_groups or [panel_ids]
+    width, height = 1440, 2036
+    safe = {"x": 96, "y": 96, "w": 1248, "h": 1844}
+    pages = []
+    panel_lookup = {str(panel["panel_id"]): panel for panel in panels}
+    for page_index, ids in enumerate(page_groups, 1):
+        page_panels = []
+        for panel_index, pid in enumerate(ids):
+            panel = panel_lookup[pid]
+            if "页漫" in comic_format and len(ids) > 1:
+                columns = 2
+                rows = (len(ids) + columns - 1) // columns
+                cell_w = (safe["w"] - 28) // columns
+                row_h = (safe["h"] - 28 * max(0, rows - 1)) // rows
+                row, reading_col = divmod(panel_index, columns)
+                visual_col = columns - 1 - reading_col if reading_direction == "从右到左" else reading_col
+                thumbnail = {
+                    "x": safe["x"] + visual_col * (cell_w + 28),
+                    "y": safe["y"] + row * (row_h + 28),
+                    "w": cell_w,
+                    "h": row_h,
+                }
+            else:
+                row_h = (safe["h"] - 28 * max(0, len(ids) - 1)) // max(1, len(ids))
+                thumbnail = {"x": safe["x"], "y": safe["y"] + panel_index * (row_h + 28), "w": safe["w"], "h": row_h}
+            balloons = []
+            for dialogue_index, dialogue in enumerate(panel.get("dialogue") or [], 1):
+                balloons.append(
+                    {
+                        "type": "dialogue",
+                        "content_ref": f"panel:{pid}.dialogue:{dialogue_index}",
+                        "speaker": dialogue.get("speaker", ""),
+                        "order": dialogue_index,
+                        "tail": {"mode": "toward_speaker", "target": dialogue.get("speaker", "")},
+                    }
+                )
+            page_panels.append(
+                {
+                    "panel_id": pid,
+                    "thumbnail_rect": thumbnail,
+                    "layout_weight": "heavy" if panel_index == 0 else "medium",
+                    "panel_shape": "wide",
+                    "border_style": "standard",
+                    "bubble_first": "right_top" if reading_direction == "从右到左" else "left_top",
+                    "balloons": balloons,
+                    "subject_regions": [],
+                    "avoid_regions": [],
+                }
+            )
+        pages.append(
+            {
+                "page_id": f"PAGE_{page_index:03d}" if "条漫" not in comic_format else f"SCROLL_{page_index:03d}",
+                "page_side": "right" if reading_direction == "从右到左" else "left",
+                "spread_id": f"SPREAD_{(page_index + 1) // 2:03d}",
+                "page_turn_hook": f"{ids[-1]} beat",
+                "eye_flow_path": ids,
+                "eye_flow": {"path": ids},
+                "panels": page_panels,
+            }
+        )
+    board = {
+        "schema_version": 2,
+        "kind": "comic_name_board",
+        "workflow_status": "approved",
+        "chapter": chapter,
+        "format": comic_format,
+        "reading_direction": reading_direction,
+        "manuscript": {
+            "spec": "B5商漫",
+            "trim_box": {"x": 0, "y": 0, "w": width, "h": height},
+            "safe_area": safe,
+            "bleed": 48,
+            "inner_frame": {"x": 144, "y": 144, "w": 1152, "h": 1748},
+        },
+        "pages": pages,
+        "upstream_receipt": {
+            "panel_script_sha256": build_layout.sha256_file(root / "脚本" / chapter / "panel_script.json"),
+            "settings_sha256": build_layout.sha256_file(root / "_设置.md"),
+        },
+        "approval": {},
+    }
+    board["approval"] = {
+        "status": "approved",
+        "reviewed_by": "name-editor",
+        "reviewed_at": "2026-07-14T00:00:00+00:00",
+        "subject_sha256": build_layout.approval_subject_sha256(board),
+    }
+    write_json(root / "排版" / chapter / "name_board.json", board)
+    return board
+
+
 def test_dialogue_slot_height_uses_text_target_length() -> None:
     short_panel = {
         "panel_id": "P001",
@@ -60,43 +161,166 @@ def test_build_layout_inherits_name_board_manuscript_and_panel_metadata(tmp_path
             ]
         },
     )
-    write_json(
-        root / "排版" / chapter / "name_board.json",
-        {
-            "manuscript": {
-                "spec": "B5商漫",
-                "trim_box": {"x": 0, "y": 0, "w": 1440, "h": 2036},
-                "safe_area": {"x": 96, "y": 96, "w": 1248, "h": 1844},
-                "bleed": 48,
-                "inner_frame": {"x": 144, "y": 144, "w": 1152, "h": 1748},
-            },
-            "pages": [
-                {
-                    "page_id": "PAGE_001",
-                    "page_side": "right",
-                    "spread_id": "SPREAD_001",
-                    "page_turn_hook": "P001 opening_hook",
-                    "panels": [
-                        {
-                            "panel_id": "P001",
-                            "layout_weight": "heavy",
-                            "panel_shape": "wide",
-                            "border_style": "standard",
-                            "bubble_first": "right_top",
-                            "effects_hint": "focus lines",
-                        }
-                    ],
-                }
-            ],
-        },
+    write_approved_name(
+        root,
+        chapter,
+        [
+            {
+                "panel_id": "P001",
+                "story_function": "opening_hook",
+                "description": "主角推门。",
+                "dialogue": [{"text": "来了。"}],
+            }
+        ],
     )
 
     layout = build_layout.build_layout(root, chapter, 0, 28)
     panel = layout["segments"][0]["panels"][0]
 
     assert layout["manuscript"]["spec"] == "B5商漫"
+    assert layout["schema_version"] == 2
+    assert layout["workflow_status"] == "draft"
+    assert layout["validation"]["status"] == "pass"
+    assert layout["geometry_profile"] == "paged_grid_rtl"
+    assert layout["format_supported_by_script"] is True
     assert layout["name_board"] == "排版/第1话/name_board.json"
     assert panel["layout_weight"] == "heavy"
     assert panel["page_side"] == "right"
     assert panel["bubble_first"] == "right_top"
     assert panel["bubble_slots"][0]["x"] > 700
+    assert panel["bubble_slots"][0]["content_ref"] == "panel:P001.dialogue:1"
+
+
+def test_unapproved_name_is_blocked_without_explicit_legacy_flag(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": [{"panel_id": "P001"}]})
+    write_json(
+        root / "排版" / chapter / "name_board.json",
+        {
+            "schema_version": 1,
+            "manuscript": {"trim_box": {"w": 1440, "h": 1800}, "safe_area": {"x": 72, "y": 72, "w": 1296, "h": 1656}},
+            "pages": [{"page_id": "SCROLL_001", "panels": [{"panel_id": "P001", "thumbnail_rect": {"x": 72, "y": 72, "w": 1296, "h": 1656}}]}],
+        },
+    )
+
+    try:
+        build_layout.build_layout(root, chapter, 0, 28)
+        assert False, "unapproved legacy name should block"
+    except build_layout.LayoutError:
+        pass
+
+    migrated = build_layout.build_layout(root, chapter, 0, 28, allow_legacy_name=True)
+    assert migrated["upstream_receipt"]["legacy_name_waiver"] is True
+
+
+def test_page_grid_rtl_has_unique_non_overlapping_bounded_panels(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：页漫\n- 阅读方向：从右到左\n- 页面尺寸：1440xauto\n", encoding="utf-8")
+    panels = [
+        {"panel_id": f"P{index:03d}", "story_function": "beat", "dialogue": [{"speaker": "甲", "text": f"台词{index}"}]}
+        for index in range(1, 5)
+    ]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    write_approved_name(root, chapter, panels)
+
+    layout = build_layout.build_layout(root, chapter, 0, 28)
+
+    assert layout["geometry_profile"] == "paged_grid_rtl"
+    assert build_layout.validate_layout(layout, {"panels": panels}, json.loads((root / "排版" / chapter / "name_board.json").read_text(encoding="utf-8"))) == []
+
+
+def test_yonkoma_adapter_requires_and_builds_four_rows(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：四格\n- 阅读方向：从上到下\n- 页面尺寸：1440xauto\n", encoding="utf-8")
+    panels = [{"panel_id": f"P{index:03d}", "story_function": "beat"} for index in range(1, 5)]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    write_approved_name(root, chapter, panels, comic_format="四格", reading_direction="从上到下")
+
+    layout = build_layout.build_layout(root, chapter, 0, 28)
+
+    assert layout["geometry_profile"] == "yonkoma_four_rows"
+    ys = [panel["y"] for panel in layout["segments"][0]["panels"]]
+    assert ys == sorted(ys)
+    assert len(set(ys)) == 4
+
+
+def test_layout_approval_is_bound_to_current_upstream(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    settings = root / "_设置.md"
+    settings.write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    panels = [{"panel_id": "P001", "dialogue": [{"speaker": "甲", "text": "走。"}]}]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    write_approved_name(root, chapter, panels, comic_format="条漫", reading_direction="从上到下")
+    path = root / "排版" / chapter / "layout.json"
+    write_json(path, build_layout.build_layout(root, chapter, 0, 28))
+
+    build_layout.transition_existing(root, chapter, "review")
+    approved = build_layout.transition_existing(root, chapter, "approved", reviewed_by="layout-editor")
+    assert build_layout.verify_layout_approval(approved) == []
+
+    settings.write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n- 页面尺寸：1280xauto\n", encoding="utf-8")
+    name = json.loads((root / "排版" / chapter / "name_board.json").read_text(encoding="utf-8"))
+    assert build_layout.verify_layout_upstream(root, chapter, approved, name)
+
+
+def test_name_and_layout_approvals_require_reviewer_and_time(tmp_path: Path) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    panels = [{"panel_id": "P001"}]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    name = write_approved_name(root, chapter, panels, comic_format="条漫", reading_direction="从上到下")
+
+    missing_name_reviewer = json.loads(json.dumps(name, ensure_ascii=False))
+    missing_name_reviewer["approval"].pop("reviewed_by")
+    assert any(
+        "reviewed_by" in error
+        for error in build_layout.verify_name_board(root, chapter, missing_name_reviewer)
+    )
+
+    layout_path = root / "排版" / chapter / "layout.json"
+    write_json(layout_path, build_layout.build_layout(root, chapter, 0, 28))
+    build_layout.transition_existing(root, chapter, "review")
+    approved = build_layout.transition_existing(root, chapter, "approved", reviewed_by="layout-editor")
+    subject_sha = build_layout.approval_subject_sha256(approved)
+    for field in ("reviewed_by", "reviewed_at"):
+        malformed = json.loads(json.dumps(approved, ensure_ascii=False))
+        malformed["approval"].pop(field)
+        assert build_layout.approval_subject_sha256(malformed) == subject_sha
+        assert any(field in error for error in build_layout.verify_layout_approval(malformed))
+
+
+def test_layout_cli_only_marks_complete_after_validation_and_approval(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "comic"
+    chapter = "第1话"
+    root.mkdir()
+    (root / "_设置.md").write_text("- 漫画形态：条漫\n- 阅读方向：从上到下\n", encoding="utf-8")
+    (root / "_进度.md").write_text("| 话 | 页面排版 |\n|---|---|\n| 第1话 | ⬜ |\n", encoding="utf-8")
+    panels = [{"panel_id": "P001", "dialogue": [{"speaker": "甲", "text": "走。"}]}]
+    write_json(root / "脚本" / chapter / "panel_script.json", {"panels": panels})
+    write_approved_name(root, chapter, panels, comic_format="条漫", reading_direction="从上到下")
+
+    monkeypatch.setattr(sys, "argv", ["comic-layout", str(root), "--chapter", chapter])
+    assert build_layout.main() == 0
+    assert "🟡待签收" in (root / "_进度.md").read_text(encoding="utf-8")
+    assert "✅" not in (root / "_进度.md").read_text(encoding="utf-8")
+
+    monkeypatch.setattr(sys, "argv", ["comic-layout", str(root), "--chapter", chapter, "--submit-review"])
+    assert build_layout.main() == 0
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["comic-layout", str(root), "--chapter", chapter, "--approve", "--reviewed-by", "layout-editor"],
+    )
+    assert build_layout.main() == 0
+    assert "✅" in (root / "_进度.md").read_text(encoding="utf-8")

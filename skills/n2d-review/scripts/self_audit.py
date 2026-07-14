@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
 
@@ -301,6 +302,28 @@ def load_charter_module(root: Path):
         return None, str(exc)
 
 
+def load_meta_audit_module(root: Path):
+    """Load the independent claim/adversarial meta-audit.
+
+    It intentionally lives in a separate module so the ordinary inventory does
+    not certify its own coverage logic.  The module is stdlib-only and
+    report-only; import failures are surfaced as governance warnings rather
+    than hidden behind a green self-check.
+    """
+    path = root / "skills" / "n2d-review" / "scripts" / "meta_audit.py"
+    if not path.is_file():
+        return None, "meta_audit.py 不存在"
+    try:
+        spec = importlib.util.spec_from_file_location("_n2d_review_meta_audit", str(path))
+        if spec is None or spec.loader is None:
+            return None, "无法加载 meta_audit.py"
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod, None
+    except Exception as exc:  # pragma: no cover - defensive report path
+        return None, str(exc)
+
+
 def check_consistency_charter(root: Path, findings: List[Finding]) -> None:
     """对照一致性不变量 charter 审 gate.py 源码：locked 闸被悄悄 profile 门控=block；
     被未披露降级的 disputed 闸 + opt-in 默认关项报出来等裁决（治"硬闸被时间维度弱化")。"""
@@ -387,7 +410,162 @@ def check_detector_inventory(root: Path, findings: List[Finding]) -> None:
             f"advisory {c.get('advisory', 0)}/disabled {c.get('disabled', 0)}/子检测 {c.get('peer', 0)}）。", "")
 
 
-def audit(root: Path, work_root: Path | None = None) -> Dict[str, Any]:
+def check_meta_audit(
+    root: Path,
+    findings: List[Finding],
+    *,
+    fixture_paths: Sequence[Path] = (),
+    evidence_paths: Sequence[Path] = (),
+    run_tests: bool = False,
+) -> Dict[str, Any]:
+    """Run the independent five-link/adversarial audit and summarize it.
+
+    Static meta findings are WARN at most.  They identify missing proof, not a
+    deterministic defect in a production artifact, so B10 forbids turning them
+    into a new hard gate.
+    """
+    mod, error = load_meta_audit_module(root)
+    loc = "skills/n2d-review/scripts/meta_audit.py"
+    if error:
+        add(
+            findings,
+            "warn",
+            "独立 meta-audit",
+            loc,
+            f"独立 meta-audit 未运行：{error}",
+            "恢复 meta_audit.py；普通 self_audit 的 0 warn 不能替代对抗审计。",
+        )
+        return {
+            "kind": "n2d_review_meta_audit_unavailable",
+            "assurance": {
+                "self_checked": {"label": "self-checked", "status": "not_run", "covered": 0, "total": 0},
+                "adversarial_test_coverage": {"label": "adversarial-test-coverage", "status": "not_run", "covered": 0, "total": 0},
+                "adversarially_tested": {"label": "adversarially-tested", "status": "not_run", "covered": 0, "total": 0},
+                "externally_grounded": {"label": "externally-grounded", "status": "not_run", "covered": 0, "total": 0},
+                "externally_calibrated": {"label": "externally-calibrated", "status": "not_run", "covered": 0, "total": 0},
+                "no_blind_spot_claim_allowed": False,
+                "blind_spot_statement": "独立 meta-audit 未运行；不得声称无盲区。",
+            },
+            "findings": [],
+        }
+
+    report = mod.audit(
+        root,
+        fixture_paths=[Path(p) for p in fixture_paths],
+        evidence_paths=[Path(p) for p in evidence_paths],
+        run_tests=run_tests,
+    )
+    missing_claims = []
+    for claim in report.get("claims") or []:
+        missing = [name for name, row in (claim.get("links") or {}).items() if row.get("status") != "covered"]
+        if missing:
+            missing_claims.append(f"{claim.get('id')}({','.join(missing)})")
+    if missing_claims:
+        add(
+            findings,
+            "warn",
+            "声明→实现→调用→测试→反例",
+            loc,
+            f"{len(missing_claims)} 条关键声明的五联证据不完整：{'；'.join(missing_claims[:8])}。",
+            "先补最小实现/调用链与命名明确的反例回归；静态模式只证明可追溯，不替代行为测试。",
+        )
+    else:
+        add(
+            findings,
+            "info",
+            "声明→实现→调用→测试→反例",
+            loc,
+            f"{len(report.get('claims') or [])} 条已登记关键声明的五联证据齐全。",
+            "",
+        )
+
+    gaps = [probe for probe in report.get("probes") or [] if probe.get("status") != "covered"]
+    if gaps:
+        add(
+            findings,
+            "warn",
+            "对抗/变形审计",
+            loc,
+            f"{len(gaps)} 个已知绕过类缺 guard 或反例回归："
+            + "；".join(f"{p.get('id')}({','.join(p.get('missing') or [])})" for p in gaps[:8])
+            + "。",
+            "至少覆盖：档位自报降档、planned 伪 ready、子桶 fail 但无顶层 verdict、"
+            "文档硬闸仅剩启发式 WARN、签收未绑定实际变更、structured warn 被缓存为 pass、"
+            "unavailable 报告未覆写旧 ready 证据。",
+        )
+    else:
+        add(findings, "info", "对抗/变形审计", loc,
+            f"{len(report.get('probes') or [])} 个已登记对抗/变形探针均有 guard + 回归。", "")
+
+    runtime = report.get("adversarial_runtime_receipt") or {}
+    runtime_status = runtime.get("status", "not_run")
+    if runtime_status in {"failed", "partial", "invalid"}:
+        add(
+            findings,
+            "warn",
+            "运行时对抗回归",
+            loc,
+            f"adversarially-tested={runtime_status}；静态找到测试名不算 pytest 已执行。",
+            "修复失败回归或 runtime_tests 映射后重跑 `meta_audit.py --run-tests --json`。",
+        )
+    elif runtime_status == "complete":
+        add(
+            findings,
+            "info",
+            "运行时对抗回归",
+            loc,
+            f"本次已实际执行 {runtime.get('covered', 0)}/{runtime.get('total', 0)} 个已登记探针，收据已绑定当前 guard/test SHA。",
+            "",
+        )
+    else:
+        add(
+            findings,
+            "info",
+            "运行时对抗回归",
+            loc,
+            "adversarially-tested=not_run；当前只有 defined-only 静态覆盖，未声称 pytest 已执行。",
+            "需要运行证据时加 `--run-meta-tests`，或单跑 `meta_audit.py --run-tests --json`。",
+        )
+
+    evidence_findings = [
+        row for row in report.get("findings") or []
+        if row.get("dim") in {"外部证据 schema", "外部校准合同", "meta fixture"}
+    ]
+    if evidence_findings:
+        add(
+            findings,
+            "warn",
+            "外部证据 provenance",
+            loc,
+            f"外部证据/fixture 有 {len(evidence_findings)} 个 schema 或强制力映射问题："
+            + "；".join(str(row.get("msg") or "") for row in evidence_findings[:4]),
+            "来源 grounding 必须有 claim/source/date/confidence/implementation_mapping；"
+            "校准另需 version=2 独立留出合同、盲法、预注册阈值、分层样本、裁决金标、混淆矩阵和当前 artifact SHA。",
+        )
+    else:
+        assurance = report.get("assurance") or {}
+        grounded = assurance.get("externally_grounded", {}).get("status", "not_run")
+        calibrated = assurance.get("externally_calibrated", {}).get("status", "not_run")
+        add(
+            findings,
+            "info",
+            "外部证据 provenance",
+            loc,
+            f"外部依据状态={grounded}；独立留出校准状态={calibrated}。"
+            "官方链接/论文只能提升 grounding，不能把 calibration 从 not_run 改成 complete。",
+            "联网流程自审用 version=1/2 evidence 做来源映射；只有 version=2 calibrations 的完整合同可改变 externally-calibrated。",
+        )
+    return report
+
+
+def audit(
+    root: Path,
+    work_root: Path | None = None,
+    *,
+    meta_fixture_paths: Sequence[Path] = (),
+    evidence_paths: Sequence[Path] = (),
+    run_meta_tests: bool = False,
+) -> Dict[str, Any]:
     root = root.resolve()
     findings: List[Finding] = []
     check_progress_lock(root, findings)
@@ -398,6 +576,13 @@ def audit(root: Path, work_root: Path | None = None) -> Dict[str, Any]:
     check_large_docs(root, findings)
     check_detector_inventory(root, findings)
     check_consistency_charter(root, findings)
+    meta_report = check_meta_audit(
+        root,
+        findings,
+        fixture_paths=meta_fixture_paths,
+        evidence_paths=evidence_paths,
+        run_tests=run_meta_tests,
+    )
     if work_root is not None:
         check_friction_backlog(root, work_root.resolve(), findings)
     counts = {sev: sum(1 for item in findings if item["sev"] == sev) for sev in ("block", "warn", "info")}
@@ -407,6 +592,8 @@ def audit(root: Path, work_root: Path | None = None) -> Dict[str, Any]:
         "root": str(root),
         "work_root": str(work_root.resolve()) if work_root is not None else "",
         "counts": counts,
+        "assurance": meta_report.get("assurance") or {},
+        "meta_audit": meta_report,
         "findings": findings,
     }
 
@@ -420,8 +607,30 @@ def render_markdown(report: Dict[str, Any]) -> str:
     ]
     if report.get("work_root"):
         lines.append(f"- 作品：`{report['work_root']}`（已并入现场摩擦信号）")
+    assurance = report.get("assurance") or {}
     lines += [
         f"- 统计：block {report['counts']['block']} · warn {report['counts']['warn']} · info {report['counts']['info']}",
+        "",
+        "## 结论可信层级",
+        "",
+        "| 层级 | 状态 | 覆盖 |",
+        "|---|---|---:|",
+    ]
+    for key in (
+        "self_checked",
+        "adversarial_test_coverage",
+        "adversarially_tested",
+        "externally_grounded",
+        "externally_calibrated",
+    ):
+        row = assurance.get(key) or {"status": "not_run", "covered": 0, "total": 0}
+        lines.append(
+            f"| {row.get('label') or key} | {row.get('status')} | "
+            f"{row.get('covered', 0)}/{row.get('total', 0)} |"
+        )
+    lines += [
+        "",
+        f"> {assurance.get('blind_spot_statement') or '0 warn 只代表已登记检查未发现缺口，不得表述为无盲区。'}",
         "",
         "| sev | 维度 | 位置 | 问题 | 建议 |",
         "|---|---|---|---|---|",
@@ -439,20 +648,61 @@ def render_markdown(report: Dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _atomic_write_text(path: Path, content: str) -> None:
+    """Write one UTF-8 report beside a temporary file, then replace atomically."""
+    path = path.expanduser()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        dir=str(path.parent),
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description="Report-only local self-audit for n2d skills")
     ap.add_argument("--root", default=str(repo_root_from_here()), help="repo root")
     ap.add_argument("--work", default="", help="作品根（创作区/制漫剧/<剧名>/）；给定时扫描其现场摩擦信号并入差距清单")
+    ap.add_argument("--meta-fixture", action="append", default=[], help="独立 meta-audit JSON fixture pack（可重复）")
+    ap.add_argument(
+        "--run-meta-tests",
+        action="store_true",
+        help="实际执行 meta-audit 登记的最小 pytest 回归并输出当前 SHA 绑定收据",
+    )
+    ap.add_argument(
+        "--evidence",
+        action="append",
+        default=[],
+        help="外部 grounding / 独立留出校准 JSON pack（v1 仅 grounding；v2 可含 calibrations；可重复）",
+    )
     ap.add_argument("--json", action="store_true", help="print JSON report")
+    ap.add_argument("--out", default="", help="atomically write the complete JSON report to PATH")
     return ap
 
 
 def main(argv: Sequence[str]) -> int:
     ns = parser().parse_args(argv)
     work_root = Path(ns.work) if ns.work else None
-    report = audit(Path(ns.root), work_root)
+    report = audit(
+        Path(ns.root),
+        work_root,
+        meta_fixture_paths=[Path(p) for p in ns.meta_fixture],
+        evidence_paths=[Path(p) for p in ns.evidence],
+        run_meta_tests=ns.run_meta_tests,
+    )
+    json_report = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
+    if ns.out:
+        _atomic_write_text(Path(ns.out), json_report)
     if ns.json:
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        print(json_report, end="")
     else:
         print(render_markdown(report), end="")
     return 1 if report["counts"]["block"] else 0

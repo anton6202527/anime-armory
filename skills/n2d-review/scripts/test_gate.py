@@ -5,6 +5,7 @@ import datetime as dt
 from pathlib import Path
 
 import gate
+from gates import asset as asset_gate
 from image_prompt_compiler import compile_image_section, render_compiled_markdown
 
 _TEST_PNG_BYTES = b"\x89PNG\r\n\x1a\n"
@@ -2027,6 +2028,7 @@ def _identity_registry(overrides=None):
                 "id": "CHAR_SHEN",
                 "name": "沈念",
                 "scope": "全篇",
+                "library_tier": "core_full",
                 "asset_bundle": {
                     "kind": "project_character_asset_bundle_ref",
                     "manifest": "角色库/CHAR_SHEN__shen_nian/manifest.json",
@@ -2057,6 +2059,11 @@ def _identity_registry(overrides=None):
                             ),
                             "side": _derived_reference(
                                 "出图/共享/图片/定妆_沈念_侧.png",
+                                "turnaround_split",
+                                "出图/共享/图片/定妆_沈念_三视图.png",
+                            ),
+                            "rear_three_quarter": _derived_reference(
+                                "出图/共享/图片/定妆_沈念_后45度.png",
                                 "turnaround_split",
                                 "出图/共享/图片/定妆_沈念_三视图.png",
                             ),
@@ -2097,6 +2104,11 @@ def _identity_registry(overrides=None):
                                 ),
                                 "side": _derived_reference(
                                     "出图/共享/图片/定妆_沈念_侧.png",
+                                    "turnaround_split",
+                                    "出图/共享/图片/定妆_沈念_三视图.png",
+                                ),
+                                "rear_three_quarter": _derived_reference(
+                                    "出图/共享/图片/定妆_沈念_后45度.png",
                                     "turnaround_split",
                                     "出图/共享/图片/定妆_沈念_三视图.png",
                                 ),
@@ -2214,6 +2226,22 @@ def _write_identity_registry(tmp_path, data=None, make_assets=False):
                     path.parent.mkdir(parents=True, exist_ok=True)
                     path.write_bytes(_TEST_PNG_BYTES)
     return str(root)
+
+
+def _write_character_storyboard_appearances(root, character_id, count, *, structured=True):
+    """Materialize independent story evidence without touching registry tiers."""
+    root_path = Path(root)
+    for number in range(1, count + 1):
+        episode_dir = root_path / "脚本" / f"第{number}集"
+        episode_dir.mkdir(parents=True, exist_ok=True)
+        clip = {"id": "Clip_01", "description": f"{character_id} 在本集推进剧情"}
+        if structured:
+            clip["character_ids"] = [character_id]
+            clip["entity_schedule"] = {"characters": [character_id]}
+        (episode_dir / "storyboard.json").write_text(
+            json.dumps({"episode": number, "clips": [clip]}, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
 
 def _asset_registry():
@@ -2639,9 +2667,9 @@ def test_identity_registry_ready_split_reference_requires_same_source_derivation
 def test_identity_registry_turnaround_cannot_replace_split_makeup_refs(tmp_path):
     data = _identity_registry()
     form = data["characters"][0]["forms"][0]
-    for key in ("three_quarter", "side", "back", "half_body"):
+    for key in ("three_quarter", "side", "rear_three_quarter", "back", "half_body"):
         del form["reference_group"][key]
-    for key in ("three_quarter", "side", "back", "half_body"):
+    for key in ("three_quarter", "side", "rear_three_quarter", "back", "half_body"):
         del form["reference_atlas"]["base_views"][key]
     root = _write_identity_registry(tmp_path, data)
 
@@ -2650,6 +2678,7 @@ def test_identity_registry_turnaround_cannot_replace_split_makeup_refs(tmp_path)
     missing = [f for f in gate.findings if f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层"]
     assert any("three_quarter" in f["msg"] for f in missing)
     assert any("side" in f["msg"] for f in missing)
+    assert any("rear_three_quarter" in f["msg"] for f in missing)
     assert any("back" in f["msg"] for f in missing)
     assert any("half_body_or_full_body" in f["msg"] for f in missing)
 
@@ -2657,13 +2686,14 @@ def test_identity_registry_turnaround_cannot_replace_split_makeup_refs(tmp_path)
 def test_identity_registry_recurring_standard_does_not_prebuild_side_or_back(tmp_path):
     data = _identity_registry()
     char = data["characters"][0]
+    char["scope"] = "多集复现配角"
     char["library_tier"] = "recurring_standard"
     char["asset_bundle"]["tier"] = "recurring_standard"
     form = char["forms"][0]
     form["reference_atlas"]["build_tier"] = "recurring_standard"
-    for key in ("side", "back", "turnaround"):
+    for key in ("side", "rear_three_quarter", "back", "turnaround"):
         form["reference_group"].pop(key, None)
-    for key in ("side", "back"):
+    for key in ("side", "rear_three_quarter", "back"):
         form["reference_atlas"]["base_views"].pop(key, None)
     root = _write_identity_registry(tmp_path, data)
 
@@ -2672,7 +2702,172 @@ def test_identity_registry_recurring_standard_does_not_prebuild_side_or_back(tmp
     assert not any(
         f["sev"] == gate.BLOCK
         and f["dim"] == "资产身份注册层"
-        and any(key in f["msg"] for key in ("side", "back", "turnaround"))
+        and any(key in f["msg"] for key in ("side", "rear_three_quarter", "back", "turnaround"))
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_core_cannot_self_report_named_minimal(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["scope"] = "贯穿全篇女主"
+    char["library_tier"] = "named_minimal"
+    char["asset_bundle"]["tier"] = "named_minimal"
+    form = char["forms"][0]
+    form["reference_atlas"]["build_tier"] = "named_minimal"
+    for key in ("three_quarter", "side", "rear_three_quarter", "back", "turnaround"):
+        form["reference_group"].pop(key, None)
+    for key in ("three_quarter", "side", "rear_three_quarter", "back"):
+        form["reference_atlas"]["base_views"].pop(key, None)
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "低于剧情权重推导的最低档位 core_full" in str(f["msg"])
+        for f in gate.findings
+    )
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "rear_three_quarter" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_four_way_collusive_downgrade_blocked_by_storyboards(tmp_path):
+    """character/bundle/manifest/atlas 同改低也不能覆盖 registry 外出场事实。"""
+    data = _identity_registry()
+    char = data["characters"][0]
+    # 攻击者不只改四处 tier，也把同一 registry 内 scope 伪装成短线；
+    # 独立分集产物仍显示角色实际贯穿十集。
+    char["scope"] = "第1集具名短线角色"
+    char["library_tier"] = "named_minimal"
+    char["asset_bundle"]["tier"] = "named_minimal"
+    form = char["forms"][0]
+    form["reference_atlas"]["build_tier"] = "named_minimal"
+    for key in ("three_quarter", "side", "rear_three_quarter", "back", "turnaround"):
+        form["reference_group"].pop(key, None)
+    for key in ("three_quarter", "side", "rear_three_quarter", "back"):
+        form["reference_atlas"]["base_views"].pop(key, None)
+    root = _write_identity_registry(tmp_path, data)
+    _write_character_storyboard_appearances(root, "CHAR_SHEN", 10, structured=True)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "最低档位 core_full" in str(f["msg"])
+        and "registry 外已物化 storyboard" in str(f["msg"])
+        and "至少出场 10 集" in str(f["msg"])
+        for f in gate.findings
+    )
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "rear_three_quarter" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
+def test_storyboard_tier_evidence_uses_structured_visible_ids_only():
+    assert gate._storyboard_clip_visible_character_ids({
+        "character_ids": ["CHAR_姜月初/常态"],
+        "description": "结构化在场",
+    }) == {"CHAR_姜月初"}
+    assert gate._storyboard_clip_visible_character_ids({
+        "description": "CHAR_姜月初 只在散文里提到",
+    }) == set()
+    assert gate._storyboard_clip_visible_character_ids({
+        "entity_schedule": {
+            "characters": ["CHAR_姜月初/常态"],
+            "offscreen_presence": ["CHAR_姜月初/常态"],
+        },
+    }) == set()
+
+
+def test_identity_registry_legacy_without_structured_story_index_keeps_named_minimal(tmp_path):
+    """旧 storyboard 只有散文/无结构化角色索引时不从文本猜复现档位。"""
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["scope"] = "第1集具名短线角色"
+    char["library_tier"] = "named_minimal"
+    char["asset_bundle"]["tier"] = "named_minimal"
+    form = char["forms"][0]
+    form["reference_atlas"]["build_tier"] = "named_minimal"
+    for key in ("three_quarter", "side", "rear_three_quarter", "back", "turnaround"):
+        form["reference_group"].pop(key, None)
+    for key in ("three_quarter", "side", "rear_three_quarter", "back"):
+        form["reference_atlas"]["base_views"].pop(key, None)
+    root = _write_identity_registry(tmp_path, data)
+    # 即使散文里出现 CHAR token，也不把缺少可选结构化索引的旧项目猜成十集核心角。
+    _write_character_storyboard_appearances(root, "CHAR_SHEN", 10, structured=False)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert not any("registry 外已物化 storyboard" in str(f["msg"]) for f in gate.findings)
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and "低于剧情权重推导的最低档位" in str(f["msg"])
+        for f in gate.findings
+    )
+    assert not any(
+        f["sev"] == gate.BLOCK
+        and any(key in str(f["msg"]) for key in ("three_quarter", "side", "rear_three_quarter", "back", "turnaround"))
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_tier_must_match_character_bundle_manifest_and_atlas(tmp_path):
+    data = _identity_registry()
+    char = data["characters"][0]
+    char["scope"] = "第1集具名角色"
+    char["library_tier"] = "named_minimal"
+    char["asset_bundle"]["tier"] = "recurring_standard"
+    char["forms"][0]["reference_atlas"]["build_tier"] = "named_minimal"
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "character / asset_bundle / manifest / reference_atlas 四处一致" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
+def test_identity_registry_tier_agreement_rejects_missing_atlas_tier_even_in_non_asset_mode(tmp_path):
+    data = _identity_registry()
+    data["characters"][0]["forms"][0]["reference_atlas"].pop("build_tier")
+    root = _write_identity_registry(tmp_path, data)
+
+    gate.check_identity_registry(root, require_reference_assets=False)
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and "reference_atlas 四处一致" in str(f["msg"])
+        and "(missing)" in str(f["msg"])
+        for f in gate.findings
+    )
+
+
+def test_identity_eval_pack_is_a_preflight_block_for_core_character(tmp_path):
+    shared = tmp_path / "出图" / "共享"
+    shared.mkdir(parents=True)
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_01",
+            "scope": "贯穿全篇女主",
+            "library_tier": "core_full",
+            "forms": [{"form": "常态"}],
+        }],
+    }, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_identity_eval_pack(str(tmp_path), "第1集")
+
+    assert any(
+        f["sev"] == gate.BLOCK
+        and f["dim"] == "核心人物多视图验收"
+        and "identity_eval_pack" in str(f["msg"])
         for f in gate.findings
     )
 
@@ -2836,7 +3031,16 @@ def test_identity_registry_restricted_partial_uses_partial_refs(tmp_path):
     char["id"] = "CHAR_QUEEN"
     char["name"] = "皇后"
     char["scope"] = "长线反派·局部参考"
+    char["library_tier"] = "restricted_partial"
+    char["asset_bundle"]["tier"] = "restricted_partial"
     char["face_policy"] = "no_full_face"
+    char["restricted_partial_contract"] = {
+        "status": "approved",
+        "reason": "剧情设定要求全程帘后，仅允许手部与剪影出镜",
+        "reviewer": "director@example.test",
+        "allowed_parts": ["hand", "silhouette"],
+        "face_policy": "no_full_face",
+    }
     form = char["forms"][0]
     form["form"] = "局部参考"
     form["asset_key"] = "皇后_局部参考"
@@ -2857,6 +3061,10 @@ def test_identity_registry_restricted_partial_uses_partial_refs(tmp_path):
     gate.check_identity_registry(root, require_reference_assets=False)
 
     assert not any(f["sev"] == gate.BLOCK and f["dim"] == "资产身份注册层" and "reference_group 缺核心路径" in f["msg"] for f in gate.findings)
+    assert not any(
+        f["sev"] == gate.BLOCK and f["dim"] in {"资产身份注册层", "角色资产包"}
+        for f in gate.findings
+    )
 
 
 def test_identity_registry_missing_character_dna_layer_is_blocked(tmp_path):
@@ -5075,6 +5283,220 @@ def test_reference_plan_missing_warns_for_character_storyboard_without_registry(
     assert matches and matches[0]["sev"] == gate.WARN
 
 
+def _write_valid_memory_reference_plan(root):
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    _write_registry(root, [_char("CHAR_01", "沈念", "长线女主·全篇", "常态", "registered")])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    drift_path = prod / "identity_drift_report.json"
+    drift_path.write_text(
+        json.dumps({"available": True, "characters": {"CHAR_01/常态": {}}}),
+        encoding="utf-8",
+    )
+    storyboard_path = root / "脚本" / "第1集" / "storyboard.json"
+    storyboard_path.parent.mkdir(parents=True, exist_ok=True)
+    storyboard_path.write_text(json.dumps({"clips": [{"id": "Clip_01"}]}), encoding="utf-8")
+    ref_rel = "出图/共享/图片/CHAR_01_front.png"
+    ref_path = root / ref_rel
+    ref_path.parent.mkdir(parents=True, exist_ok=True)
+    ref_path.write_bytes(b"current-memory-anchor")
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    memory_plan = {
+        "kind": "n2d_memory_anchor_plan",
+        "version": 3,
+        "status": "ready",
+        "episode": "第1集",
+        "available": True,
+        "source_fingerprint": {
+            "identity_registry_sha256": hashlib.sha256(registry_path.read_bytes()).hexdigest(),
+            "identity_drift_report_sha256": hashlib.sha256(drift_path.read_bytes()).hexdigest(),
+            "storyboard_sha256": hashlib.sha256(storyboard_path.read_bytes()).hexdigest(),
+        },
+        "rows": [{
+            "char": "CHAR_01/常态",
+            "reinject": True,
+            "memory_anchor_refs": [ref_rel],
+        }],
+    }
+    memory_path = prod / "memory_anchor_plan_第1集.json"
+    memory_path.write_text(json.dumps(memory_plan, ensure_ascii=False), encoding="utf-8")
+    clip_map = {"CHAR_01/常态": ["Clip_01"]}
+    memory_contract = {
+        "status": "ready",
+        "available": True,
+        "path": "生产数据/memory_anchor_plan_第1集.json",
+        "sha256": hashlib.sha256(memory_path.read_bytes()).hexdigest(),
+        "required_rows": 1,
+        "required_char_keys": ["CHAR_01/常态"],
+        "consumed_char_keys": ["CHAR_01/常态"],
+        "consumed_clip_ids_by_char": clip_map,
+        "validated_reference_sha256_by_char": {
+            "CHAR_01/常态": {ref_rel: hashlib.sha256(ref_path.read_bytes()).hexdigest()},
+        },
+        "missing_reference_rows": [],
+        "errors": [],
+    }
+    reference_plan = {
+        "kind": "n2d_reference_plan",
+        "episode": "第1集",
+        "clips": [{
+            "clip_id": "Clip_01",
+            "characters": [{
+                "memory_anchor_char_key": "CHAR_01/常态",
+                "memory_anchor_refs_consumed": [ref_rel],
+            }],
+        }],
+        "summary": {
+            "memory_anchor_contract": memory_contract,
+            "required_char_keys": ["CHAR_01/常态"],
+            "consumed_char_keys": ["CHAR_01/常态"],
+            "consumed_clip_ids_by_char": clip_map,
+            "memory_anchor_reinjected_clips": 1,
+            "action_required": [],
+        },
+    }
+    plan_path = prod / "reference_plan_第1集.json"
+    plan_path.write_text(json.dumps(reference_plan, ensure_ascii=False), encoding="utf-8")
+    return plan_path, memory_path, ref_path, storyboard_path
+
+
+def test_memory_anchor_gate_accepts_exact_current_per_character_evidence(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _write_valid_memory_reference_plan(root)
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    assert not any(
+        row["sev"] == gate.BLOCK and row["dim"] == "跨集记忆锚落实"
+        for row in gate.findings
+    )
+
+
+def test_memory_anchor_gate_rejects_changed_reference_and_stale_storyboard(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    _plan_path, _memory_path, ref_path, storyboard_path = _write_valid_memory_reference_plan(root)
+    ref_path.write_bytes(b"replaced-after-reference-plan")
+    storyboard_path.write_text(json.dumps({"clips": [{"id": "Clip_02"}]}), encoding="utf-8")
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    messages = [str(row["msg"]) for row in gate.findings if row["dim"] == "跨集记忆锚落实"]
+    assert any("逐文件 SHA" in message for message in messages)
+    assert any("storyboard 输入指纹" in message for message in messages)
+
+
+def test_memory_anchor_gate_rejects_tampered_top_level_clip_map(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    plan_path, _memory_path, _ref_path, _storyboard_path = _write_valid_memory_reference_plan(root)
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["summary"]["consumed_clip_ids_by_char"] = {"CHAR_01/常态": ["Fake_Clip"]}
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    assert any(
+        row["sev"] == gate.BLOCK
+        and row["dim"] == "跨集记忆锚落实"
+        and "逐行重算不一致" in str(row["msg"])
+        for row in gate.findings
+    )
+
+
+def test_memory_anchor_gate_recomputes_each_required_character_not_aggregate_count(tmp_path):
+    gate.findings.clear()
+    root = tmp_path / "制漫剧" / "测试剧"
+    root.mkdir(parents=True)
+    (root / "_设置.md").write_text("# _设置\n- 一致性严格度: production\n", encoding="utf-8")
+    _write_registry(root, [
+        _char("CHAR_01", "沈念", "长线女主·全篇", "常态", "registered"),
+        _char("CHAR_02", "柳娘子", "核心反派·全篇", "常态", "registered"),
+    ])
+    prod = root / "生产数据"
+    prod.mkdir(parents=True, exist_ok=True)
+    drift_path = prod / "identity_drift_report.json"
+    drift_path.write_text(json.dumps({"available": True, "characters": {"沈念": {}, "柳娘子": {}}}), encoding="utf-8")
+    storyboard_path = root / "脚本" / "第1集" / "storyboard.json"
+    storyboard_path.parent.mkdir(parents=True, exist_ok=True)
+    storyboard_path.write_text(json.dumps({"clips": [{"id": "Clip_01"}]}), encoding="utf-8")
+    refs = []
+    for cid in ("CHAR_01", "CHAR_02"):
+        rel = f"出图/共享/图片/{cid}_front.png"
+        path = root / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(cid.encode())
+        refs.append(rel)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    memory_plan = {
+        "kind": "n2d_memory_anchor_plan",
+        "version": 3,
+        "status": "ready",
+        "episode": "第1集",
+        "available": True,
+        "source_fingerprint": {
+            "identity_registry_sha256": hashlib.sha256(registry_path.read_bytes()).hexdigest(),
+            "identity_drift_report_sha256": hashlib.sha256(drift_path.read_bytes()).hexdigest(),
+            "storyboard_sha256": hashlib.sha256(storyboard_path.read_bytes()).hexdigest(),
+        },
+        "rows": [
+            {"char": "CHAR_01/常态", "reinject": True, "memory_anchor_refs": [refs[0]]},
+            {"char": "CHAR_02/常态", "reinject": True, "memory_anchor_refs": [refs[1]]},
+        ],
+    }
+    memory_path = prod / "memory_anchor_plan_第1集.json"
+    memory_path.write_text(json.dumps(memory_plan, ensure_ascii=False), encoding="utf-8")
+    memory_contract = {
+        "status": "ready",
+        "available": True,
+        "path": "生产数据/memory_anchor_plan_第1集.json",
+        "sha256": hashlib.sha256(memory_path.read_bytes()).hexdigest(),
+        "required_rows": 2,
+        "required_char_keys": ["CHAR_01/常态", "CHAR_02/常态"],
+        "consumed_char_keys": ["CHAR_01/常态"],
+        "consumed_clip_ids_by_char": {"CHAR_01/常态": ["Clip_01"]},
+        "validated_reference_sha256_by_char": {
+            "CHAR_01/常态": {refs[0]: hashlib.sha256((root / refs[0]).read_bytes()).hexdigest()},
+            "CHAR_02/常态": {refs[1]: hashlib.sha256((root / refs[1]).read_bytes()).hexdigest()},
+        },
+        "missing_reference_rows": [],
+        "errors": [],
+    }
+    reference_plan = {
+        "kind": "n2d_reference_plan",
+        "episode": "第1集",
+        "clips": [{
+            "clip_id": "Clip_01",
+            "characters": [{
+                "memory_anchor_char_key": "CHAR_01/常态",
+                "memory_anchor_refs_consumed": [refs[0]],
+            }],
+        }],
+        "summary": {
+            "memory_anchor_contract": memory_contract,
+            "required_char_keys": ["CHAR_01/常态", "CHAR_02/常态"],
+            "consumed_char_keys": ["CHAR_01/常态"],
+            "consumed_clip_ids_by_char": {"CHAR_01/常态": ["Clip_01"]},
+            "memory_anchor_reinjected_clips": 1,
+            "action_required": [],
+        },
+    }
+    (prod / "reference_plan_第1集.json").write_text(
+        json.dumps(reference_plan, ensure_ascii=False), encoding="utf-8"
+    )
+
+    gate.check_reference_plan_applied(str(root), "第1集")
+
+    assert any(
+        row["sev"] == gate.BLOCK
+        and row["dim"] == "跨集记忆锚落实"
+        and "CHAR_02/常态" in row["msg"]
+        for row in gate.findings
+    )
+
+
 def test_reference_plan_silent_when_no_actions(tmp_path):
     root = tmp_path / "制漫剧" / "测试剧"
     root.mkdir(parents=True)
@@ -5210,6 +5632,30 @@ Character reference sheet.
         and f["dim"] == "角色定妆基础包"
         and "人物定妆基础包必须写齐" in f["msg"]
         for f in gate.findings
+    )
+
+
+def test_character_prompt_pack_is_tier_aware() -> None:
+    minimal = """
+    **角色库档位**：`named_minimal`
+    角色定妆组：正面主参考、半身服装参考、脸部特写。
+    """
+    recurring = """
+    **角色库档位**：`recurring_standard`
+    角色定妆组：正面主参考、45°参考、半身服装参考、脸部特写。
+    """
+    assert asset_gate._prompt_character_library_tier(minimal) == "named_minimal"
+    assert asset_gate._tier_prompt_pack_missing(minimal, "named_minimal") == []
+    assert asset_gate._tier_prompt_pack_missing(recurring, "recurring_standard") == []
+
+
+def test_core_character_prompt_pack_requires_rear_three_quarter() -> None:
+    section = """
+    **角色库档位**：`core_full`
+    角色定妆组：正面主参考、45°参考、侧面参考、背面参考、半身服装参考、脸部特写、三视图人审拼版。
+    """
+    assert "side/rear_three_quarter/back/turnaround" in asset_gate._tier_prompt_pack_missing(
+        section, "core_full"
     )
 
 

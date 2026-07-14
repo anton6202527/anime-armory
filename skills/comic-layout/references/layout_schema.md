@@ -1,63 +1,98 @@
-# layout.json schema
+# layout.json schema v2
 
-最小结构：
+`layout.json` 是已签收ネーム的像素几何实现。默认状态为 `draft`；只有结构 validator 通过、上游 SHA 当前且人工签收后才成为页面排版完成态。
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "kind": "comic_layout",
+  "workflow_status": "draft",
   "chapter": "第1话",
-  "format": "条漫",
-  "reading_direction": "从上到下",
+  "format": "页漫",
+  "reading_direction": "从右到左",
+  "geometry_profile": "paged_grid_rtl",
+  "format_supported_by_script": true,
   "manuscript": {
-    "spec": "数字条漫",
-    "trim_box": {"x": 0, "y": 0, "w": 1440, "h": "auto"},
-    "safe_area": {"x": 72, "y": 72, "w": 1296, "h": 1656},
-    "bleed": 0,
-    "inner_frame": {"x": 72, "y": 72, "w": 1296, "h": 1656}
+    "spec": "B5商漫",
+    "trim_box": {"x": 0, "y": 0, "w": 1440, "h": 2036},
+    "safe_area": {"x": 96, "y": 96, "w": 1248, "h": 1844},
+    "bleed": 48,
+    "inner_frame": {"x": 144, "y": 144, "w": 1152, "h": 1748}
   },
   "name_board": "排版/第1话/name_board.json",
-  "canvas": {"width": 1440, "height": "auto"},
+  "canvas": {"width": 1440, "height": 2036},
   "segments": [
     {
-      "segment_id": "S001",
+      "segment_id": "PAGE_001",
+      "page_side": "right",
+      "spread_id": "SPREAD_001",
       "width": 1440,
-      "height": 2400,
+      "height": 2036,
+      "reading_order": ["P001", "P002"],
       "panels": [
         {
           "panel_id": "P001",
-          "x": 0,
-          "y": 0,
-          "w": 1440,
+          "x": 734,
+          "y": 96,
+          "w": 610,
           "h": 900,
           "layout_weight": "heavy",
-          "panel_shape": "wide",
-          "border_style": "standard",
           "gutter_intent": "opening pause",
-          "bubble_first": "right_top",
-          "effects_hint": "focus lines toward artifact",
           "name_page_id": "PAGE_001",
-          "page_side": "right",
-          "spread_id": "SPREAD_001",
-          "page_turn_hook": "P004 reveal",
+          "page_turn": {
+            "setup": {"panel_id": "P002"},
+            "payoff": {"panel_id": "P003", "mode": "next_page_open"}
+          },
+          "subject_regions": [],
+          "avoid_regions": [],
           "bubble_slots": [
-            {"slot_id": "B001", "type": "dialogue", "x": 920, "y": 80, "w": 360, "h": 180}
+            {
+              "slot_id": "B001D1",
+              "type": "dialogue",
+              "content_ref": "panel:P001.dialogue:1",
+              "speaker": "CHAR_01",
+              "order": 1,
+              "tail": {"mode": "toward_speaker", "target": "CHAR_01"},
+              "x": 900,
+              "y": 140,
+              "w": 360,
+              "h": 136
+            }
           ]
         }
       ]
     }
-  ]
+  ],
+  "upstream_receipt": {
+    "panel_script_sha256": "<sha256>",
+    "name_board_sha256": "<sha256>",
+    "name_approval_subject_sha256": "<sha256>",
+    "settings_sha256": "<sha256>",
+    "legacy_name_waiver": false
+  },
+  "validation": {"status": "pass", "errors": []},
+  "approval": {}
 }
 ```
 
-规则：
+支持的 adapter：
 
-- `panel_id` 必须能在 `panel_script.json` 找到。
-- 坐标单位为像素，原点在 segment 左上角。
-- `bubble_slots` 是占位，不是最终文字；最终文字进入 `lettering.json`。
-- 条漫默认可用单个 `segment` 表示整话长图；目标平台需要限高时，可用多个 `segments` 对应长图分段。
-- 页漫可把 `segment_id` 当页号，如 `PAGE_001`。
-- `manuscript` 记录传统原稿规格、裁切框、安全区、出血和内框；来自 `comic-name` 时应原样继承。页漫/投稿规格缺 `safe_area` 会在 gate/review 中提示。
-- `name_board` 记录当前 layout 消费的缩略分镜路径；没有则为空字符串。
-- `layout_weight` / `panel_shape` / `border_style` / `gutter_intent` / `bubble_first` / `effects_hint` 是从 `name_board.json` 或 `panel_script.json` 继承的传统排版提示。
-- `page_side` / `spread_id` / `page_turn_hook` 帮助页漫审查翻页节奏；条漫可写 `scroll` 或留空。
+- `longstrip_single_column`：按 name page/scroll grouping 排列；`thumbnail_rect` 的相对宽度和水平位置会映射到长条画布，`gutter_intent` 会转成实际 `gutter_after`。若设置最大分段高度，只在 panel 边界拆分。
+- `paged_grid_ltr` / `paged_grid_rtl`：一个 segment 对应一页，直接把缩略分镜矩形映射进原稿安全框；panel 数组保持阅读顺序，不能用坐标排序代替 RTL 顺序。
+- `yonkoma_four_rows`：一个 segment 对应一页，每页必须恰好四格，按四个纵向行格输出。
+
+确定性 validator：
+
+- `panel_id` 在脚本、name 和 layout 中必须唯一、完全覆盖且同序。
+- `segments[].reading_order` 必须与对应 `panels` 数组一致。
+- panel 矩形必须为正、位于 segment 内，同一 segment 不得相互重叠。
+- 每段 narration、每句 dialogue 和每个 SFX 必须恰好得到同类型 bubble slot；slot 必须位于所属 panel 内并继承 `content_ref/speaker/order/tail`。
+- `geometry_profile` 必须与项目漫画形态匹配。
+- validator 只验证可复算结构事实；构图好坏、视觉重心和气泡是否美观仍由人工签收。
+
+审批与失效：
+
+- `workflow_status` 按 `draft → review → approved` 推进。
+- `approval.subject_sha256` 绑定布局内容，receipt 同时记录 panel script、name board、settings SHA。
+- 修改脚本、已签收 name、设置或 layout 内容后，旧 approval 立即失效；`--check` 必须失败并要求从相应阶段重建。
+- `--allow-legacy-name` 只为旧项目迁移，并在 upstream receipt 留痕；正式生产入口不默认传入。

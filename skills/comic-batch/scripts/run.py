@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""漫画线流程推进脚本：从当前前沿起自动推进免费确定性阶段，出图阶段带 gate 批跑。
+"""漫画线流程推进脚本：推进已签收阶段，出图阶段带 gate 批跑。
 
-- 免费确定性阶段（缩略分镜/页面排版/原稿收尾/出图包/嵌字合成）自动 chain；
+- ネーム与 layout 默认只产 draft，批跑必须停下等待人工签收；
+- 已签收后才继续原稿收尾/出图包/嵌字合成等确定性阶段；
 - 出图阶段先跑 image_preflight gate，通过才调 runner，之后跑 image gate；
 - 审查阶段只跑 review gate 产报告，不代替人工把 审查 标 ✅；
 - 创作阶段（源本/企划、漫画脚本）不自动化，停下提示用对应 skill。
@@ -19,7 +20,8 @@ from pathlib import Path
 
 
 STAGES = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
-TRADITIONAL_STAGES = {"缩略分镜", "原稿收尾"}
+# ネーム现在是 layout 的强制编辑合同，不再随“传统原稿流程”关闭而跳过。
+TRADITIONAL_STAGES = {"原稿收尾"}
 TRADITIONAL_OFF_VALUES = {"关闭", "off", "disabled", "false", "False"}
 CREATIVE_STAGES = {"源本/企划", "漫画脚本"}
 
@@ -121,7 +123,91 @@ def chapter_images_ready(root: Path, chapter: str) -> bool:
     return True
 
 
+def load_json_file(path: Path) -> dict:
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def editorial_status(root: Path, chapter: str, stage: str) -> str:
+    if stage == "缩略分镜":
+        path = root / "排版" / chapter / "name_board.json"
+    elif stage == "页面排版":
+        path = root / "排版" / chapter / "layout.json"
+    else:
+        return ""
+    return str(load_json_file(path).get("workflow_status") or "")
+
+
+def print_editorial_wait(root: Path, chapter: str, stage: str, status: str) -> None:
+    if stage == "缩略分镜":
+        script = "skills/comic-name/scripts/build_name_board.py"
+        label = "name_board"
+    else:
+        script = "skills/comic-layout/scripts/build_layout.py"
+        label = "layout"
+    print(
+        f"[comic-batch] {label} status={status or 'missing'}；已停在人工签收点，不会自动越过。\n"
+        f"  1) python3 {script} \"{root}\" --chapter {chapter} --submit-review\n"
+        f"  2) python3 {script} \"{root}\" --chapter {chapter} --approve --reviewed-by <签收人>",
+        flush=True,
+    )
+
+
+def update_progress_stage(root: Path, chapter: str, stage: str, value: str) -> None:
+    path = root / "_进度.md"
+    if not path.is_file():
+        return
+    headers: list[str] = []
+    out: list[str] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip().startswith("|"):
+            cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+            if cells and cells[0] == "话":
+                headers = cells
+            elif headers and cells and cells[0] == chapter and stage in headers and len(cells) >= len(headers):
+                cells[headers.index(stage)] = value
+                line = "| " + " | ".join(cells) + " |"
+        out.append(line)
+    path.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
+def check_approved_editorial_stage(repo: Path, root: Path, chapter: str, stage: str) -> int:
+    script = (
+        "skills/comic-name/scripts/build_name_board.py"
+        if stage == "缩略分镜"
+        else "skills/comic-layout/scripts/build_layout.py"
+    )
+    return run_cmd([sys.executable, script, str(root), "--chapter", chapter, "--check", "--no-progress"], repo)
+
+
+def check_editorial_prerequisites(repo: Path, root: Path, chapter: str) -> int:
+    rc = run_cmd(
+        [sys.executable, "skills/comic-layout/scripts/build_layout.py", str(root), "--chapter", chapter, "--check", "--no-progress"],
+        repo,
+    )
+    if rc != 0:
+        print("[comic-batch] editorial layout 未签收、校验失败或上游已 stale；禁止进入出图", flush=True)
+        return rc
+    if read_setting(root, "传统原稿流程", "启用").strip() not in TRADITIONAL_OFF_VALUES:
+        rc = run_cmd(
+            [sys.executable, "skills/comic-finishing/scripts/build_finishing_plan.py", str(root), "--chapter", chapter, "--check", "--no-progress"],
+            repo,
+        )
+        if rc != 0:
+            print("[comic-batch] finishing_plan 缺失、不完整或 stale；禁止进入出图", flush=True)
+            return rc
+    return 0
+
+
 def run_image_stage(repo: Path, root: Path, args: argparse.Namespace) -> int:
+    rc = check_editorial_prerequisites(repo, root, args.chapter)
+    if rc != 0:
+        return rc
     rc = run_gate(repo, root, args.chapter, "image_preflight")
     if rc != 0:
         print("[comic-batch] image_preflight gate blocked; fix findings before paid/batch image generation", flush=True)
@@ -213,6 +299,18 @@ def main() -> int:
         if stage in CREATIVE_STAGES:
             print(f"[comic-batch] next stage is {stage}; creative stage — use comic-script first", flush=True)
             return 2
+        if stage in {"缩略分镜", "页面排版"}:
+            status = editorial_status(root, args.chapter, stage)
+            if status in {"draft", "review"}:
+                print_editorial_wait(root, args.chapter, stage, status)
+                return 0
+            if status == "approved":
+                rc = check_approved_editorial_stage(repo, root, args.chapter, stage)
+                if rc != 0:
+                    print(f"[comic-batch] {stage} 虽标 approved，但审批/上游已失效；停止，不能覆盖现有签收稿", flush=True)
+                    return rc
+                update_progress_stage(root, args.chapter, stage, "✅")
+                continue
         if stage in DETERMINISTIC_STAGE_SCRIPTS:
             rc = run_cmd(
                 [sys.executable, DETERMINISTIC_STAGE_SCRIPTS[stage], str(root), "--chapter", args.chapter],
@@ -232,6 +330,11 @@ def main() -> int:
             return 2
         if rc != 0:
             return rc
+        if stage in {"缩略分镜", "页面排版"}:
+            status = editorial_status(root, args.chapter, stage)
+            if status != "approved":
+                print_editorial_wait(root, args.chapter, stage, status)
+                return 0
         new_stage = read_stage(root, args.chapter)
         if new_stage == stage:
             print(f"[comic-batch] stage {stage} ran but 前沿未推进；检查该阶段脚本输出后再续跑", flush=True)

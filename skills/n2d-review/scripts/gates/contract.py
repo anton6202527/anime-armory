@@ -18,6 +18,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _cross_episode_diff,
     _earliest_storyboard_ep,
     _field_is_missing,
+    _file_sha256,
     _first_template_keyword_hit,
     _possession_ledger_exists,
     _possession_mentions_core_asset,
@@ -32,7 +33,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 import json
 from seam_contract import (
     missing_evidence as seam_missing_evidence,
@@ -284,6 +285,257 @@ def check_reference_plan_applied(root: str, ep: str) -> None:
             )
         return
     summary = plan.get("summary") or {}
+    memory = summary.get("memory_anchor_contract") if isinstance(summary, Mapping) else None
+    plan_requirement, _plan_reason = _reference_plan_requirement(root, ep)
+    if plan_requirement == BLOCK:
+        if not isinstance(memory, Mapping):
+            add(
+                BLOCK,
+                "跨集记忆锚落实",
+                plan_path,
+                "核心/长线角色的 reference_plan 缺 memory_anchor_contract 消费证据；"
+                "请先运行 n2d-identity memory_anchor.py，再重建 reference_plan。",
+                return_to_stage="image",
+            )
+        else:
+            memory_status = str(memory.get("status") or "").strip()
+            memory_errors = [str(x) for x in (memory.get("errors") or []) if str(x)]
+            if memory_status != "ready" or memory_errors:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    f"memory_anchor_contract 不可用：status={memory_status or 'missing'}"
+                    f"{f'; errors={','.join(memory_errors)}' if memory_errors else ''}。"
+                    "缺失/陈旧记忆锚计划不得被下游参考规划默默忽略。",
+                    return_to_stage="image",
+                )
+            missing_memory_refs = [
+                str(x) for x in (memory.get("missing_reference_rows") or []) if str(x)
+            ]
+            if missing_memory_refs:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "需重注入的核心角色缺 ready 记忆锚：" + "、".join(missing_memory_refs[:8])
+                    + "。先补齐并验收最早定妆锚，不能用空 rows 假装已重注入。",
+                    return_to_stage="image",
+                )
+            memory_rel = str(memory.get("path") or "").strip()
+            memory_sha = str(memory.get("sha256") or "").strip()
+            memory_path = memory_rel if os.path.isabs(memory_rel) else os.path.join(root, memory_rel)
+            if not memory_rel or not memory_sha or not os.path.isfile(memory_path) or _file_sha256(memory_path) != memory_sha:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "reference_plan 登记的 memory_anchor_plan 路径/哈希与当前文件不一致；"
+                    "记忆计划改动后必须重建 reference_plan。",
+                    return_to_stage="image",
+                )
+            memory_plan = load_json(memory_path) if os.path.isfile(memory_path) else None
+            required_from_plan: List[str] = []
+            if not isinstance(memory_plan, Mapping):
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor_plan 当前内容无法解析；reference_plan 内的聚合计数不能替代逐行验收。",
+                    return_to_stage="image",
+                )
+            else:
+                try:
+                    memory_version = int(memory_plan.get("version") or 0)
+                except (TypeError, ValueError):
+                    memory_version = 0
+                if (
+                    memory_plan.get("kind") != "n2d_memory_anchor_plan"
+                    or memory_version < 3
+                    or str(memory_plan.get("status") or "").strip().lower() != "ready"
+                    or memory_plan.get("available") is not True
+                    or str(memory_plan.get("episode") or "") != ep
+                ):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan 的 kind/version/status/available/episode 合同无效；"
+                        "旧版计划必须重建为稳定 character_id/form 的 v3。",
+                        return_to_stage="image",
+                    )
+                seen_required_keys = set()
+                validated_refs_from_plan: Dict[str, Dict[str, str]] = {}
+                raw_memory_rows = memory_plan.get("rows")
+                if not isinstance(raw_memory_rows, list):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan.rows 必须是结构化数组。",
+                        return_to_stage="image",
+                    )
+                    raw_memory_rows = []
+                for row in raw_memory_rows:
+                    if not isinstance(row, Mapping) or row.get("reinject") is not True:
+                        continue
+                    key = str(row.get("char") or "").strip()
+                    if key:
+                        required_from_plan.append(key)
+                        if key in seen_required_keys:
+                            add(
+                                BLOCK,
+                                "跨集记忆锚落实",
+                                memory_path,
+                                f"memory_anchor_plan 存在重复角色键：{key}；不得靠重复行伪造 required_rows。",
+                                return_to_stage="image",
+                            )
+                        seen_required_keys.add(key)
+                    else:
+                        add(
+                            BLOCK,
+                            "跨集记忆锚落实",
+                            memory_path,
+                            "memory_anchor_plan 的 reinject 行缺稳定 character_id/form 键。",
+                            return_to_stage="image",
+                        )
+                    raw_refs = row.get("memory_anchor_refs")
+                    if not isinstance(raw_refs, list) or not raw_refs:
+                        add(
+                            BLOCK,
+                            "跨集记忆锚落实",
+                            memory_path,
+                            f"{key or '(unknown)'} 的 memory_anchor_refs 必须是非空数组。",
+                            return_to_stage="image",
+                        )
+                        raw_refs = []
+                    for rel_ref in raw_refs:
+                        ref_path = str(rel_ref or "").strip()
+                        full_ref = ref_path if os.path.isabs(ref_path) else os.path.join(root, ref_path)
+                        if not ref_path or not os.path.isfile(full_ref):
+                            add(
+                                BLOCK,
+                                "跨集记忆锚落实",
+                                memory_path,
+                                f"{key or '(unknown)'} 的 memory_anchor_ref 不存在：{ref_path or '(empty)'}。",
+                                return_to_stage="image",
+                            )
+                        elif key:
+                            validated_refs_from_plan.setdefault(key, {})[ref_path] = _file_sha256(full_ref)
+                source = memory_plan.get("source_fingerprint") if isinstance(memory_plan.get("source_fingerprint"), Mapping) else {}
+                current_sources = {
+                    "identity_registry_sha256": _file_sha256(os.path.join(root, "出图", "共享", "identity_registry.json")),
+                    "identity_drift_report_sha256": _file_sha256(os.path.join(root, "生产数据", "identity_drift_report.json")),
+                    "storyboard_sha256": _file_sha256(os.path.join(root, "脚本", ep, "storyboard.json")),
+                }
+                if any(not sha or str(source.get(key) or "") != sha for key, sha in current_sources.items()):
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        memory_path,
+                        "memory_anchor_plan 的 registry/drift/storyboard 输入指纹缺失或已过期。",
+                        return_to_stage="image",
+                    )
+
+                declared_validated_refs = memory.get("validated_reference_sha256_by_char")
+                if not isinstance(declared_validated_refs, Mapping):
+                    declared_validated_refs = {}
+                normalized_declared_refs = {
+                    str(key): {
+                        str(path): str(sha)
+                        for path, sha in value.items()
+                        if str(path) and str(sha)
+                    }
+                    for key, value in declared_validated_refs.items()
+                    if isinstance(value, Mapping)
+                }
+                normalized_current_refs = {
+                    key: dict(sorted(value.items()))
+                    for key, value in sorted(validated_refs_from_plan.items())
+                }
+                if normalized_declared_refs != normalized_current_refs:
+                    add(
+                        BLOCK,
+                        "跨集记忆锚落实",
+                        plan_path,
+                        "memory_anchor reference 的逐文件 SHA 与当前图片不一致；"
+                        "参考图被替换后必须重建 reference_plan。",
+                        return_to_stage="image",
+                    )
+
+            required_from_plan = sorted(set(required_from_plan))
+            declared_required = sorted(
+                str(x) for x in (memory.get("required_char_keys") or []) if str(x)
+            )
+            summary_required = sorted(
+                str(x) for x in (summary.get("required_char_keys") or []) if str(x)
+            )
+            consumed_from_clips: Dict[str, List[str]] = {}
+            for clip in plan.get("clips") or []:
+                if not isinstance(clip, Mapping):
+                    continue
+                clip_id = str(clip.get("clip_id") or clip.get("id") or "").strip()
+                for char_plan in clip.get("characters") or []:
+                    if not isinstance(char_plan, Mapping) or not char_plan.get("memory_anchor_refs_consumed"):
+                        continue
+                    key = str(char_plan.get("memory_anchor_char_key") or "").strip()
+                    if key:
+                        consumed_from_clips.setdefault(key, [])
+                        if clip_id and clip_id not in consumed_from_clips[key]:
+                            consumed_from_clips[key].append(clip_id)
+            consumed_keys = sorted(consumed_from_clips)
+            declared_consumed = sorted(
+                str(x) for x in (memory.get("consumed_char_keys") or []) if str(x)
+            )
+            summary_consumed = sorted(
+                str(x) for x in (summary.get("consumed_char_keys") or []) if str(x)
+            )
+            declared_clip_map = memory.get("consumed_clip_ids_by_char")
+            if not isinstance(declared_clip_map, Mapping):
+                declared_clip_map = {}
+            normalized_declared_clip_map = {
+                str(key): sorted(str(x) for x in value if str(x))
+                for key, value in declared_clip_map.items()
+                if isinstance(value, list)
+            }
+            normalized_actual_clip_map = {
+                key: sorted(values) for key, values in sorted(consumed_from_clips.items())
+            }
+            summary_clip_map = summary.get("consumed_clip_ids_by_char")
+            if not isinstance(summary_clip_map, Mapping):
+                summary_clip_map = {}
+            normalized_summary_clip_map = {
+                str(key): sorted(str(x) for x in value if str(x))
+                for key, value in summary_clip_map.items()
+                if isinstance(value, list)
+            }
+            if (
+                required_from_plan != declared_required
+                or required_from_plan != summary_required
+                or consumed_keys != declared_consumed
+                or consumed_keys != summary_consumed
+                or normalized_declared_clip_map != normalized_actual_clip_map
+                or normalized_summary_clip_map != normalized_actual_clip_map
+                or int(memory.get("required_rows") or 0) != len(required_from_plan)
+            ):
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor 的 required/consumed/clip 映射与当前 plan 逐行重算不一致；"
+                    "不得靠聚合数字或手改 summary 放行。",
+                    return_to_stage="image",
+                )
+            unconsumed = sorted(set(required_from_plan) - set(consumed_keys))
+            if unconsumed:
+                add(
+                    BLOCK,
+                    "跨集记忆锚落实",
+                    plan_path,
+                    "memory_anchor_plan 有角色尚未在任何真实镜头消费：" + "、".join(unconsumed[:8])
+                    + "。请修正角色/形态映射后重建计划。",
+                    return_to_stage="image",
+                )
     actions = summary.get("action_required") or []
     if not actions:
         return

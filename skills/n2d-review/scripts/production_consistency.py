@@ -38,14 +38,44 @@ import sys
 from collections import defaultdict
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+from image_evidence import png_evidence_errors
+
 COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
 if COMMON not in sys.path:
     sys.path.insert(0, COMMON)
 try:
-    from n2d_contract import production_dir  # noqa: E402
+    from n2d_contract import (  # noqa: E402
+        CHARACTER_LIBRARY_TIER_CORE,
+        IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND,
+        character_library_tier_for_record,
+        identity_review_binding_fingerprint,
+        identity_review_contract_for_view,
+        identity_review_required_criteria,
+        identity_reviewed_at_errors,
+        identity_reviewer_appears_automated,
+        production_dir,
+    )
+    CONTRACT_IMPORT_ERROR = ""
 except Exception:  # pragma: no cover - standalone fallback
+    CONTRACT_IMPORT_ERROR = "n2d_contract import failed"
+    CHARACTER_LIBRARY_TIER_CORE = "core_full"
+    def character_library_tier_for_record(record: Mapping[str, Any]) -> str:
+        return CHARACTER_LIBRARY_TIER_CORE if record.get("core") else "named_minimal"
     def production_dir(root: str) -> str:
         return os.path.join(root, "生产数据")
+    IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND = (
+        "sha256:canonical-json(char,form,tier,view,path,png_sha256)"
+    )
+    def identity_review_contract_for_view(view: object) -> str:
+        return "n2d_expression_review_v1" if view == "expression" else "n2d_turnaround_view_review_v1"
+    def identity_review_required_criteria(view: object) -> frozenset[str]:
+        return frozenset()
+    def identity_reviewed_at_errors(value: object) -> Tuple[str, ...]:
+        return ("reviewed_at_missing",) if not str(value or "").strip() else ()
+    def identity_reviewer_appears_automated(value: object) -> bool:
+        return not bool(str(value or "").strip())
+    def identity_review_binding_fingerprint(**kwargs: object) -> str:
+        return ""
 
 
 ASSET_RE = re.compile(r"\b(?:LOC|PROP|WEAPON|OUTFIT|VFX)_[\w\-\u4e00-\u9fff]+\b")
@@ -123,7 +153,23 @@ TRUTH_MAP_REQUIRED = {
         "purpose": "导演有意越轴/风格变化/状态重置等例外的有期限签收",
     },
 }
-MULTIVIEW_BUCKETS = ("front", "three_quarter", "profile_or_side", "back", "expression")
+MULTIVIEW_BUCKETS = (
+    "front",
+    "three_quarter",
+    "profile_or_side",
+    "rear_three_quarter",
+    "back",
+    "expression",
+    "turnaround",
+)
+MULTIVIEW_PASS_STATUSES = {"pass", "passed", "ready", "approved", "accepted", "green"}
+MULTIVIEW_FAIL_STATUSES = {"block", "fail", "failed", "rejected", "red"}
+MULTIVIEW_HARD_EVIDENCE_KINDS = {
+    "structured_human_review",
+    "calibrated_embedding",
+    "deterministic_geometry",
+    "hybrid_human_calibrated",
+}
 WORLD_SCORE_COMPONENTS = ("object_permanence", "relation_stability", "causal_compliance", "flicker_penalty")
 ASSET_TAIL_ACTIONS = (
     "逼近", "走来", "走近", "转身", "冲向", "看向", "递给", "交给", "刺向", "砍向", "挥向",
@@ -303,6 +349,10 @@ def _normalise_bucket(value: Any) -> str:
         "45": "three_quarter",
         "three_quarters": "three_quarter",
         "3_4": "three_quarter",
+        "rear_45": "rear_three_quarter",
+        "rear45": "rear_three_quarter",
+        "back_three_quarter": "rear_three_quarter",
+        "rear_three_quarters": "rear_three_quarter",
         "emotion": "expression",
         "expressions": "expression",
     }
@@ -462,13 +512,7 @@ def _core_character_ids(root: str) -> List[str]:
     out: List[str] = []
     for char in _registry_characters(root):
         cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
-        blob = _json_text(char)
-        core = (
-            bool(char.get("core"))
-            or bool(char.get("long_line"))
-            or str(char.get("scope") or "").strip() in {"全篇", "长线", "核心", "core", "long_line"}
-            or any(token in blob for token in ("核心", "长线", "常驻", "core", "long_line", "recurring"))
-        )
+        core = character_library_tier_for_record(char) == CHARACTER_LIBRARY_TIER_CORE
         if cid and core:
             out.append(cid)
     return _unique(out)
@@ -642,6 +686,333 @@ def _eval_row_buckets(row: Mapping[str, Any]) -> set:
     return {b for b in buckets if b}
 
 
+def _eval_bucket_map(row: Mapping[str, Any]) -> Dict[str, Any]:
+    raw = row.get("buckets") or row.get("views") or row.get("tests") or row.get("yaw_buckets") or {}
+    out: Dict[str, Any] = {}
+    if isinstance(raw, Mapping):
+        for key, value in raw.items():
+            bucket = _normalise_bucket(key)
+            if bucket:
+                out[bucket] = value
+    else:
+        for item in _as_list(raw):
+            if not isinstance(item, Mapping):
+                continue
+            bucket = _normalise_bucket(item.get("bucket") or item.get("view") or item.get("name") or item.get("type"))
+            if bucket:
+                out[bucket] = item
+    return out
+
+
+def _eval_row_form(row: Mapping[str, Any]) -> str:
+    return str(row.get("form") or row.get("form_name") or row.get("variant") or "").strip()
+
+
+def _sha256_path(path: str) -> str:
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return ""
+
+
+def _registry_sha256(root: str) -> str:
+    return _sha256_path(os.path.join(root, "出图", "共享", "identity_registry.json"))
+
+
+def _bucket_status(value: Any) -> str:
+    if isinstance(value, Mapping):
+        return str(value.get("verdict") or value.get("status") or value.get("result") or "").strip().lower()
+    return str(value or "").strip().lower()
+
+
+def _multiview_binding_fingerprint(
+    *,
+    character_id: str,
+    form: str,
+    library_tier: str,
+    view: str,
+    path: str,
+    png_sha256: str,
+) -> str:
+    """Independent verifier for identity_eval_pack registry bindings."""
+    return identity_review_binding_fingerprint(
+        character_id=character_id,
+        form=form,
+        library_tier=library_tier,
+        view=view,
+        path=path,
+        png_sha256=png_sha256,
+    )
+
+
+def _multiview_reference_path(value: Any) -> str:
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, Mapping):
+        return str(value.get("path") or "").strip()
+    return ""
+
+
+def _multiview_looks_absolute_path(value: str) -> bool:
+    path = str(value or "").strip()
+    return bool(
+        os.path.isabs(path)
+        or (len(path) >= 3 and path[1] == ":" and path[2] in {"/", "\\"})
+        or path.startswith("\\\\")
+    )
+
+
+def _resolve_multiview_evidence_path(
+    root: str,
+    value: str,
+    *,
+    source: str,
+) -> Tuple[str, str, List[str]]:
+    """Resolve relative evidence under the real project root, following links."""
+    raw = str(value or "").strip()
+    if not raw:
+        return "", "", [f"{source}_path_missing"]
+    if "\x00" in raw:
+        return "", "", [f"{source}_path_invalid_nul"]
+    if _multiview_looks_absolute_path(raw):
+        return "", "", [f"{source}_absolute_path_not_allowed"]
+    root_real = os.path.realpath(os.path.abspath(root))
+    resolved = os.path.realpath(os.path.join(root_real, raw))
+    try:
+        if os.path.commonpath((root_real, resolved)) != root_real:
+            return "", "", [f"{source}_path_outside_project_root"]
+    except ValueError:
+        return "", "", [f"{source}_path_outside_project_root"]
+    normalized = os.path.relpath(resolved, root_real).replace(os.sep, "/")
+    if normalized in {"", "."} or normalized == ".." or normalized.startswith("../"):
+        return "", "", [f"{source}_path_outside_project_root"]
+    return normalized, resolved, []
+
+
+def _multiview_registry_nodes(form: Mapping[str, Any], bucket: str) -> List[Mapping[str, Any]]:
+    group = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+    view = "side" if bucket == "profile_or_side" else bucket
+    if view == "expression":
+        values: List[Any] = []
+        for raw in (
+            group.get("expressions"),
+            group.get("face_anchor_refs"),
+            atlas.get("expression_refs"),
+            atlas.get("face_anchor_refs"),
+        ):
+            if isinstance(raw, list):
+                values.extend(raw)
+        return [item for item in values if isinstance(item, Mapping)]
+    node = group.get(view)
+    if node in (None, "", [], {}):
+        node = base.get(view)
+    return [node] if isinstance(node, Mapping) else []
+
+
+def _multiview_registry_form_index(
+    root: str,
+) -> Dict[Tuple[str, str], Tuple[Mapping[str, Any], Mapping[str, Any], str]]:
+    out: Dict[Tuple[str, str], Tuple[Mapping[str, Any], Mapping[str, Any], str]] = {}
+    for char in _registry_characters(root):
+        cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
+        if not cid:
+            continue
+        tier = character_library_tier_for_record(char)
+        for form in _character_forms(char):
+            form_name = str(form.get("form") or form.get("form_name") or "default").strip() or "default"
+            out[(cid, form_name)] = (char, form, tier)
+    return out
+
+
+def _bucket_evidence_errors(
+    root: str,
+    value: Any,
+    *,
+    character_id: str,
+    form_name: str,
+    library_tier: str,
+    bucket: str,
+    registry_form: Mapping[str, Any],
+) -> List[str]:
+    if not isinstance(value, Mapping):
+        return ["bucket_not_structured"]
+    errors: List[str] = []
+    status = _bucket_status(value)
+    if status not in MULTIVIEW_PASS_STATUSES:
+        errors.append(f"status={status or 'missing'}")
+    declared_statuses = {
+        str(value.get(key) or "").strip().lower()
+        for key in ("verdict", "status", "result")
+        if str(value.get(key) or "").strip()
+    }
+    if declared_statuses & MULTIVIEW_FAIL_STATUSES:
+        errors.append("conflicting_or_failed_declared_status")
+    kind = str(value.get("evidence_kind") or value.get("review_kind") or "").strip()
+    # v2 pack currently has one implemented, reproducible evidence route.  Do
+    # not let an arbitrary file self-label as calibrated_embedding/geometry.
+    if kind != "structured_human_review":
+        errors.append(f"evidence_kind={kind or 'missing'}")
+    expected_view = "side" if bucket == "profile_or_side" else bucket
+    expected_fields = {
+        "character_id": character_id,
+        "form": form_name,
+        "library_tier": library_tier,
+        "view": expected_view,
+    }
+    for key, expected in expected_fields.items():
+        if str(value.get(key) or "").strip() != expected:
+            errors.append(f"{key}_mismatch")
+    raw_rel = str(
+        value.get("path")
+        or value.get("artifact_path")
+        or value.get("image_path")
+        or value.get("reference_path")
+        or ""
+    ).strip()
+    if not raw_rel:
+        errors.append("path_missing")
+        return errors
+    rel, path, path_errors = _resolve_multiview_evidence_path(
+        root, raw_rel, source="pack_evidence"
+    )
+    errors.extend(path_errors)
+    if path_errors:
+        return sorted(set(errors))
+    if raw_rel.replace("\\", "/") != rel:
+        errors.append("pack_path_not_canonical_project_relative")
+    if not os.path.isfile(path):
+        errors.append("path_not_found")
+        return sorted(set(errors))
+    # ``png_evidence_errors`` includes not_valid_png_container plus complete
+    # chunk CRC, IDAT decompression and scanline-layout validation.
+    errors.extend(png_evidence_errors(path))
+    declared_sha = str(value.get("sha256") or value.get("artifact_sha256") or "").strip()
+    actual_sha = _sha256_path(path)
+    if not declared_sha:
+        errors.append("sha256_missing")
+    elif actual_sha != declared_sha:
+        errors.append("sha256_mismatch")
+    expected_binding = _multiview_binding_fingerprint(
+        character_id=character_id,
+        form=form_name,
+        library_tier=library_tier,
+        view=expected_view,
+        path=rel,
+        png_sha256=actual_sha,
+    )
+    if str(value.get("registry_binding_fingerprint_kind") or "") != IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND:
+        errors.append("registry_binding_fingerprint_kind_invalid")
+    if str(value.get("registry_binding_fingerprint") or "") != expected_binding:
+        errors.append("registry_binding_fingerprint_mismatch")
+    expected_contract = identity_review_contract_for_view(expected_view)
+    if str(value.get("review_contract") or "") != expected_contract:
+        errors.append("review_contract_invalid_for_view")
+    reviewer = str(value.get("reviewer") or "").strip()
+    if not reviewer:
+        errors.append("reviewer_missing")
+    elif identity_reviewer_appears_automated(reviewer):
+        errors.append("reviewer_appears_automated")
+    errors.extend(identity_reviewed_at_errors(value.get("reviewed_at")))
+    criteria = {str(item) for item in (value.get("criteria") or []) if str(item)}
+    if not set(identity_review_required_criteria(expected_view)).issubset(criteria):
+        errors.append("criteria_incomplete")
+    confirmation = value.get("confirmation") if isinstance(value.get("confirmation"), Mapping) else {}
+    if (
+        confirmation.get("kind") != "explicit_current_pixels_acceptance"
+        or confirmation.get("accepted_current_pixels") is not True
+    ):
+        errors.append("explicit_current_pixels_confirmation_missing")
+
+    # Bind the pack back to the *current inline registry receipt*, not merely
+    # to a path and hash supplied by the pack itself.
+    matching_node: Optional[Mapping[str, Any]] = None
+    for node in _multiview_registry_nodes(registry_form, bucket):
+        registry_raw = _multiview_reference_path(node)
+        registry_rel, _registry_realpath, registry_path_errors = _resolve_multiview_evidence_path(
+            root, registry_raw, source="registry_evidence"
+        )
+        errors.extend(registry_path_errors)
+        if not registry_path_errors and registry_rel == rel:
+            matching_node = node
+            break
+    if matching_node is None:
+        errors.append("registry_node_missing_or_path_mismatch")
+    else:
+        node_status = str(matching_node.get("status") or "").strip().lower()
+        if node_status not in {"ready", "registered"}:
+            errors.append(f"registry_node_status={node_status or 'missing'}")
+        review = matching_node.get("human_review")
+        if not isinstance(review, Mapping):
+            errors.append("registry_human_review_missing")
+        else:
+            if str(review.get("status") or "").strip().lower() != "accepted":
+                errors.append("registry_review_not_accepted")
+            if str(review.get("verdict") or "").strip().lower() != "pass":
+                errors.append("registry_review_not_pass")
+            for key, expected in {
+                **expected_fields,
+                "path": rel,
+                "png_sha256": actual_sha,
+                "registry_binding_fingerprint": expected_binding,
+            }.items():
+                if str(review.get(key) or "").strip() != expected:
+                    errors.append(f"registry_review_{key}_mismatch")
+            if str(review.get("registry_binding_fingerprint_kind") or "") != IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND:
+                errors.append("registry_review_binding_kind_invalid")
+            if str(review.get("review_contract") or "") != expected_contract:
+                errors.append("registry_review_contract_invalid_for_view")
+            if str(review.get("review_contract") or "") != str(value.get("review_contract") or ""):
+                errors.append("registry_review_contract_mismatch")
+            registry_reviewer = str(review.get("reviewer") or "").strip()
+            if identity_reviewer_appears_automated(registry_reviewer):
+                errors.append("registry_reviewer_appears_automated")
+            if registry_reviewer != str(value.get("reviewer") or "").strip():
+                errors.append("registry_reviewer_mismatch")
+            registry_reviewed_at = str(review.get("reviewed_at") or "").strip()
+            errors.extend(
+                f"registry_{error}" for error in identity_reviewed_at_errors(registry_reviewed_at)
+            )
+            if registry_reviewed_at != str(value.get("reviewed_at") or "").strip():
+                errors.append("registry_reviewed_at_mismatch")
+            registry_criteria = {
+                str(item) for item in (review.get("criteria") or []) if str(item)
+            }
+            if not set(identity_review_required_criteria(expected_view)).issubset(registry_criteria):
+                errors.append("registry_criteria_incomplete")
+            registry_confirmation = (
+                review.get("confirmation")
+                if isinstance(review.get("confirmation"), Mapping)
+                else {}
+            )
+            if (
+                registry_confirmation.get("kind") != "explicit_current_pixels_acceptance"
+                or registry_confirmation.get("accepted_current_pixels") is not True
+            ):
+                errors.append("registry_explicit_current_pixels_confirmation_missing")
+    return sorted(set(errors))
+
+
+def _core_character_forms(root: str) -> List[Tuple[str, str]]:
+    required: List[Tuple[str, str]] = []
+    for char in _registry_characters(root):
+        if character_library_tier_for_record(char) != CHARACTER_LIBRARY_TIER_CORE:
+            continue
+        cid = str(char.get("id") or char.get("character_id") or char.get("name") or "").strip()
+        if not cid:
+            continue
+        forms = _character_forms(char)
+        for form in forms:
+            form_name = str(form.get("form") or form.get("form_name") or "default").strip() or "default"
+            required.append((cid, form_name))
+    return required
+
+
 def _eval_row_character(row: Mapping[str, Any]) -> str:
     return str(row.get("character_id") or row.get("id") or row.get("entity_id") or row.get("char") or "").strip()
 
@@ -649,59 +1020,236 @@ def _eval_row_character(row: Mapping[str, Any]) -> str:
 def check_multiview_identity_pack(root: str, ep: str) -> dict:
     """Core-character identity should be tested across yaw/expression buckets."""
     res = {"available": True, "findings": [], "notes": []}
-    core = _core_character_ids(root)
-    if not core:
+    if CONTRACT_IMPORT_ERROR:
+        res["findings"].append(_row(
+            "block",
+            "核心人物档位契约 n2d_contract 无法导入；为避免漏掉 scope 推导出的主角，多视图 gate 按 fail-closed 阻断。",
+            stage="image",
+            artifacts=("skills/n2d/_lib/n2d_contract.py",),
+            evidence_family="artifact_integrity",
+        ))
+        return res
+    required_forms = _core_character_forms(root)
+    core = _unique(cid for cid, _form in required_forms)
+    if not required_forms:
         res["notes"].append("无核心/长线角色登记，MVIEW 暂不强制。")
         return res
     data, rel = _identity_eval_pack(root)
     if data is None:
         res["findings"].append(_row(
-            "warn",
+            "block",
             f"核心/长线角色 {', '.join(core[:6])} 缺 identity_eval_pack / multiview_identity_pack；"
-            "后端或画风升级前缺正脸/45度/侧脸/背影/表情桶的固定身份哨兵。",
+            "未完成正脸/前45度/侧脸/后45度/背影/表情桶的固定身份验收，不得进入分镜出图。",
             stage="image",
             artifacts=("设定库/identity_eval_pack.json", "生产数据/identity_eval_pack.json"),
             evidence_family="text_contract",
         ))
         return res
+    if not isinstance(data, Mapping) or data.get("kind") != "n2d_identity_eval_pack" or data.get("version") != 2:
+        res["findings"].append(_row(
+            "block",
+            "identity_eval_pack 必须是 kind=n2d_identity_eval_pack、version=2；旧版或自定义 JSON 不能作为核心人物多视图放行证据。",
+            stage="image",
+            artifacts=(rel,),
+            evidence_family="artifact_integrity",
+        ))
+    declared_registry_sha = ""
+    if isinstance(data, Mapping):
+        source_fp = data.get("source_fingerprint") if isinstance(data.get("source_fingerprint"), Mapping) else {}
+        declared_registry_sha = str(
+            data.get("identity_registry_sha256") or source_fp.get("identity_registry_sha256") or ""
+        ).strip()
+    current_registry_sha = _registry_sha256(root)
+    if not declared_registry_sha or not current_registry_sha or declared_registry_sha != current_registry_sha:
+        res["findings"].append(_row(
+            "block",
+            "identity_eval_pack 缺当前 identity_registry_sha256 或指纹已过期；定妆/形态/档位改动后必须重建验收包。",
+            stage="image",
+            artifacts=(rel, "出图/共享/identity_registry.json"),
+            evidence_family="artifact_integrity",
+        ))
     rows = _identity_eval_rows(data)
-    by_char: Dict[str, Mapping[str, Any]] = {}
+    by_key: Dict[Tuple[str, str], Mapping[str, Any]] = {}
+    duplicate_keys: set[Tuple[str, str]] = set()
     for row in rows:
         cid = _eval_row_character(row)
         if cid:
-            by_char[cid] = row
+            key = (cid, _eval_row_form(row) or "default")
+            if key in by_key:
+                duplicate_keys.add(key)
+            else:
+                by_key[key] = row
         verdict = str(row.get("verdict") or row.get("status") or row.get("result") or "").lower()
-        if verdict in {"block", "fail", "failed", "red"}:
+        declared_row_statuses = {
+            str(row.get(key) or "").strip().lower()
+            for key in ("verdict", "status", "result")
+            if str(row.get(key) or "").strip()
+        }
+        bucket_failures = [
+            bucket for bucket, value in _eval_bucket_map(row).items()
+            if _bucket_status(value) in MULTIVIEW_FAIL_STATUSES
+        ]
+        if declared_row_statuses & MULTIVIEW_FAIL_STATUSES or bucket_failures:
             res["findings"].append(_row(
                 "block",
-                f"多视角身份测试未通过：{cid or '(unknown)'} verdict={verdict}。",
+                f"多视角身份测试未通过：{cid or '(unknown)'}"
+                f"{('/' + _eval_row_form(row)) if _eval_row_form(row) else ''} "
+                f"verdict={verdict or 'missing'}"
+                f"{f'; failed_buckets={','.join(bucket_failures)}' if bucket_failures else ''}。",
                 stage="image",
                 artifacts=(rel,),
                 entity_id=cid,
                 evidence_family="face_embedding",
             ))
-    for cid in core:
-        row = by_char.get(cid)
+    for cid, form_name in sorted(duplicate_keys):
+        res["findings"].append(_row(
+            "block",
+            f"identity_eval_pack 对 {cid}/{form_name} 存在重复测试行；无法确定哪条是有效放行证据。",
+            stage="image",
+            artifacts=(rel,),
+            entity_id=cid,
+            evidence_family="artifact_integrity",
+        ))
+    registry_forms = _multiview_registry_form_index(root)
+    for cid, form_name in required_forms:
+        row = by_key.get((cid, form_name))
         if not row:
             res["findings"].append(_row(
-                "warn",
-                f"identity_eval_pack 缺核心角色 {cid} 的测试行。",
+                "block",
+                f"identity_eval_pack 缺核心角色形态 {cid}/{form_name} 的测试行。",
                 stage="image",
                 artifacts=(rel,),
                 entity_id=cid,
                 evidence_family="text_contract",
             ))
             continue
-        missing = [bucket for bucket in MULTIVIEW_BUCKETS if bucket not in _eval_row_buckets(row)]
+        registry_entry = registry_forms.get((cid, form_name))
+        if not registry_entry:
+            res["findings"].append(_row(
+                "block",
+                f"当前 identity_registry 无法精确解析 {cid}/{form_name}；多视图证据不可绑定。",
+                stage="image",
+                artifacts=(rel, "出图/共享/identity_registry.json"),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+            continue
+        _registry_char, registry_form, expected_tier = registry_entry
+        if str(row.get("library_tier") or "").strip() != expected_tier:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} 多视图验收行 library_tier 与当前剧情推导档位不一致（应为 {expected_tier}）。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+        row_verdict = str(row.get("verdict") or row.get("status") or row.get("result") or "").strip().lower()
+        if row_verdict not in MULTIVIEW_PASS_STATUSES:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} 多视图验收行缺显式 pass 结论（当前 {row_verdict or 'missing'}）。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="structured_review",
+            ))
+        bucket_map = _eval_bucket_map(row)
+        path_groups: Dict[str, List[str]] = defaultdict(list)
+        realpath_groups: Dict[str, List[str]] = defaultdict(list)
+        current_sha_groups: Dict[str, List[str]] = defaultdict(list)
+        for bucket_name in MULTIVIEW_BUCKETS:
+            value = bucket_map.get(bucket_name)
+            if not isinstance(value, Mapping):
+                continue
+            raw_path = str(
+                value.get("path") or value.get("artifact_path") or value.get("image_path") or ""
+            ).strip()
+            if not raw_path:
+                continue
+            path_groups[raw_path].append(bucket_name)
+            _canonical_rel, realpath, path_errors = _resolve_multiview_evidence_path(
+                root, raw_path, source="pack_evidence"
+            )
+            if path_errors:
+                continue
+            realpath_groups[realpath].append(bucket_name)
+            current_sha = _sha256_path(realpath)
+            if current_sha:
+                current_sha_groups[current_sha].append(bucket_name)
+        duplicate_paths = sorted(path for path, names in path_groups.items() if len(names) > 1)
+        duplicate_realpaths = sorted(
+            names for names in realpath_groups.values() if len(names) > 1
+        )
+        duplicate_png_sha = sorted(
+            names for names in current_sha_groups.values() if len(names) > 1
+        )
+        if duplicate_paths:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} 多视图验收复用了同一图像路径：{', '.join(duplicate_paths)}；"
+                "核心人物必须是独立可投喂的五角、表情与 turnaround 资产。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+        if duplicate_realpaths:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} duplicate_canonical_realpath："
+                f"{'; '.join('/'.join(names) for names in duplicate_realpaths)}；"
+                "软链、a/../b 或其他路径别名不能伪装成独立多视图资产。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+        if duplicate_png_sha:
+            res["findings"].append(_row(
+                "block",
+                f"{cid}/{form_name} duplicate_png_sha："
+                f"{'; '.join('/'.join(names) for names in duplicate_png_sha)}；"
+                "复制同一像素到不同文件名仍不是独立视角。",
+                stage="image",
+                artifacts=(rel,),
+                entity_id=cid,
+                evidence_family="artifact_integrity",
+            ))
+        missing = [bucket for bucket in MULTIVIEW_BUCKETS if bucket not in bucket_map]
         if missing:
             res["findings"].append(_row(
-                "warn",
-                f"{cid} 多视角身份测试桶缺失：{', '.join(missing)}；建议覆盖正脸/45度/侧脸/背影/表情，避免只在正脸上看起来一致。",
+                "block",
+                f"{cid}/{form_name} 多视角身份测试桶缺失：{', '.join(missing)}；"
+                "必须覆盖正脸/前45度/侧脸/后45度/背影/表情，不能只在正脸上看起来一致。",
                 stage="image",
                 artifacts=(rel,),
                 entity_id=cid,
                 evidence_family="face_embedding",
             ))
+        for bucket in MULTIVIEW_BUCKETS:
+            if bucket not in bucket_map:
+                continue
+            errors = _bucket_evidence_errors(
+                root,
+                bucket_map[bucket],
+                character_id=cid,
+                form_name=form_name,
+                library_tier=expected_tier,
+                bucket=bucket,
+                registry_form=registry_form,
+            )
+            if errors:
+                res["findings"].append(_row(
+                    "block",
+                    f"{cid}/{form_name} 多视图桶 {bucket} 缺可核验通过证据：{', '.join(errors)}。"
+                    "identity_eval_pack v2 当前只接受绑定 current PNG SHA 的结构化人审收据；"
+                    "embedding/几何证据在校准 schema 与独立回归落地前不得自报放行。",
+                    stage="image",
+                    artifacts=(rel,),
+                    entity_id=cid,
+                    evidence_family="artifact_integrity",
+                ))
     return res
 
 

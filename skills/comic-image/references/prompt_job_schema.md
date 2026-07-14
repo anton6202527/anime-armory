@@ -18,6 +18,11 @@
   "text_language": "中文",
   "render_stage": "网点完成稿",
   "finishing_plan": "出图/第1话/finishing/finishing_plan.json",
+  "reference_plan": {
+    "path": "生产数据/comic_reference_plan_第1话.json",
+    "plan_sha256": "64位sha256",
+    "inputs_fingerprint": "64位sha256"
+  },
   "jobs": [
     {
       "panel_id": "P001",
@@ -39,6 +44,25 @@
       "negative_prompt": "仅在 profile 支持独立负向字段时填写",
       "source_contract_sha256": "64位sha256",
       "submit_prompt_sha256": "64位sha256",
+      "execution_input_sha256": "提交prompt+画布+真实参考SHA+角色绑定+panel plan 的64位sha256",
+      "consumed_contracts": {
+        "reference_plan": {
+          "plan_sha256": "64位sha256",
+          "inputs_fingerprint": "64位sha256",
+          "panel_plan_sha256": "64位sha256"
+        },
+        "identity_registry": {"schema_version": 2, "sha256": "64位sha256"},
+        "panel_script": {"sha256": "64位sha256"},
+        "layout": {"sha256": "64位sha256"}
+      },
+      "character_bindings": [{
+        "character_id": "CHAR_MAIN",
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE",
+        "resolved_contracts": {}
+      }],
       "continuity_contract": {
         "scene_anchor_id": "LOC_001",
         "spatial_layout": "继承 LOC_001 空间布局",
@@ -61,7 +85,7 @@
         "reference_image_limit": 6
       },
       "references": [
-        {"id": "CHAR_MAIN", "path": "出图/共享/图片/CHAR_MAIN_front.png"}
+        {"id": "CHAR_MAIN", "path": "出图/共享/图片/CHAR_MAIN_front.png", "role": "front", "sha256": "64位sha256", "required": true}
       ],
       "result_path": "",
       "source": "manual",
@@ -94,6 +118,10 @@
 注意：`references[].path` 表示 job 已绑定共享参考图；`reference_input_count` 和 `reference_manifest` 表示生成时已经把这些参考图真实传给后端。已有面板如果只有 path、没有 manifest 或 `reference_input_count=0`，应由 `comic-identity` 标入重抽计划。
 
 `backend_capabilities` / `reference_budget` 来自 comic 自己的 `image_backend_adapter`，用于记录当前模型+渠道的参考图预算、是否支持真实图片输入、是否具备持久主体能力。它是 job 生成时的执行约束，不代表本机一定已安装对应 runner。
+
+`character_bindings` 是具名角色逐格身份与状态真值。`characters` 只可作人读/检索列表，裸名字不能解析为资产，单独出现 `CHAR_` 也不能代替 binding。每个 binding 的四个子 ID 必须存在于 identity registry v2，且 `state_id` 声明的 form/outfit/expression 必须与本格绑定一致。
+
+`reference_plan` 与 `consumed_contracts` 证明 job 消费的是当前处方，不是另行随意挑图。处方先给每个具名角色至少一个真实身份锚，再保留 `LOC_` 与常驻 `PROP_`；关键引用超过执行后端真实附件上限时必须拆格/分区合成，不能静默省略。任何输入、计划或已选参考内容变化都会使对应 hash 失效。
 
 `continuity_contract` 来自 `panel_script.json` 的逐格字段和顶层 `visual_contract`。它是出图 job 的像素层约束，至少应覆盖：
 

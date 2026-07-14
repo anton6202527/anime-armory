@@ -235,6 +235,18 @@ def run_generation(
             })
         return summary
 
+    # Candidate pixels cost the same money and consume the same shared identity
+    # assets as the final first frame.  This ordering lock is deliberately
+    # independent from the broader dashboard preflight: --skip-preflight may
+    # waive that dashboard run, but it must never turn best-of-N into a hidden
+    # text-to-image bypass around the shared library contract.
+    interlock_targets = [task["source_target"] for task in tasks]
+    if interlock_targets and not cir.enforce_shared_first_interlock(
+        root, episode, targets=interlock_targets
+    ):
+        summary["shared_first_blocked"] = True
+        return summary
+
     if not skip_preflight and not cir.run_image_gate(root, episode, stage="image_preflight"):
         summary["preflight_blocked"] = True
         return summary
@@ -324,7 +336,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             f"关键镜候选生成 {episode}: generated={summary.get('generated')} "
             f"skipped={summary.get('skipped_existing')} failed={summary.get('failed')}"
         )
-    return 0 if not summary.get("preflight_blocked") and int(summary.get("failed") or 0) == 0 else 1
+    return 0 if (
+        not summary.get("shared_first_blocked")
+        and not summary.get("preflight_blocked")
+        and int(summary.get("failed") or 0) == 0
+        and int(summary.get("candidate_select_exit_code") or 0) == 0
+    ) else 1
 
 
 if __name__ == "__main__":

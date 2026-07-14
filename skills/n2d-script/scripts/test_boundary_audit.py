@@ -84,7 +84,7 @@ def test_paid_mode_flags_weak_payment_wall():
     eps = ["第%d章\n冲突逼问，她反击震住全场，原来另有隐情！" % i for i in range(1, 11)]
     eps[7] = "第8章\n他们坐下喝茶聊天，气氛缓和，散去，"   # 第8集软断弱钩
     eps[9] = "第10章\n众人散场，各自回房休息，夜色沉沉，"  # 第10集软断弱钩
-    root = _mk_work(eps, "题材: 宫斗\n变现模式: 付费\n")
+    root = _mk_work(eps, "题材: 宫斗\n变现模式: 付费\n付费卡点集: 8, 10\n")
     data = _run_json(root)
     arc = data["series_arc"]
     assert 8 in arc["cliffhanger_targets"] and 10 in arc["cliffhanger_targets"]
@@ -109,6 +109,46 @@ def test_two_sided_boundary_pair_flags_slow_next_opening():
     assert pairs[0]["from"] == 1 and pairs[0]["to"] == 2
     assert pairs[0]["risk"]
     assert "下集开场弱" in pairs[0]["weakness"]
+    assert any(b["code"] == "weak_next_opening" for b in data["blockers"])
+
+
+def test_punctuation_alone_is_not_double_counted_as_strong_hook():
+    root = _mk_work(["第一章\n大家今天一起喝茶！"], "变现模式: 免费\n")
+    data = _run_json(root)
+    assert data["episodes"][0]["strength"] == 1
+
+
+def test_paid_mode_without_explicit_wall_is_advisory_only():
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
+    data, rc = _run(root, "--strict", "--json")
+    assert data["series_arc"]["paywall_policy"]["status"] == "unknown"
+    assert data["series_arc"]["cliffhanger_targets"] == []
+    assert not any(b["code"] == "weak_configured_paywall" for b in data["blockers"])
+    assert rc == 0
+
+
+def test_range_limits_signoff_but_series_arc_uses_global_rows():
+    eps = [f"第{i}章\n他逼问，她反击，原来真相如此！" for i in range(1, 7)]
+    root = _mk_work(eps, "变现模式: 免费\n")
+    data = _run_json(root, "3-4")
+    assert data["scope_episodes"] == [3, 4]
+    assert data["series_arc_scope"] == "global"
+    assert sum(data["series_arc"]["strength_dist"].values()) == 6
+    assert data["series_arc"]["opening_cluster"] == [1, 2, 3, 4]
+
+
+def test_weak_next_opening_alone_enters_strict_gate():
+    slow_head = "翌日，她坐在窗边喝茶。" + ("风声很轻。" * 50)
+    eps = [
+        "第一章\n他逼问，她反击，原来真相如此！",
+        "第二章\n" + slow_head + "后来敌人逼近，她反击夺回令牌，原来另有隐情！",
+    ]
+    root = _mk_work(eps, "变现模式: 免费\n")
+    data, rc = _run(root, "--strict", "--json")
+    assert data["episode_heuristic_risk"] is False
+    assert data["has_risk"] is True
+    assert [b["code"] for b in data["blockers"]] == ["weak_next_opening"]
+    assert data["strict_block"] is True and rc == 1
 
 
 # ── 视觉奇观放置初筛（report-only·北极星看点④）──────────────────
@@ -161,9 +201,24 @@ def test_main_node_source_uses_explicit_hook_and_beats_as_boundary_evidence():
     data = _run_json(root)
     rows = data["episodes"]
     assert rows[0]["structured_main_node"] is True
-    assert rows[0]["strength"] == 2
+    assert rows[0]["strength"] >= 1
     assert rows[0]["closed_loop"] is True
     assert rows[0]["risk"] is False
+
+
+def test_main_node_field_presence_does_not_auto_pass_semantic_quality():
+    root = _mk_work([
+        "# 第1集 普通日常\n\n"
+        "必保节点：大家进屋喝茶；坐下聊天。\n\n"
+        "结尾钩子：大家喝完茶后回房休息。\n"
+    ], "变现模式: 免费\n")
+    _mark_main_nodes_source(root)
+    data = _run_json(root)
+    row = data["episodes"][0]
+    assert row["structured_main_node"] is True
+    assert row["strength"] == 0
+    assert row["closed_loop"] is False
+    assert any(b["code"] == "weak_episode_end" for b in data["blockers"])
 
 
 if __name__ == "__main__":
@@ -187,17 +242,18 @@ def _paid_eps_weak_wall8():
 
 
 def test_paid_weak_paywall_enters_strict_gate():
-    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n付费卡点集: 8, 10\n")
     data, _ = _run(root, "--json")
     arc = data["series_arc"]
     assert 8 in arc["cliffhanger_targets"]
     assert arc["weak_paywalls"] == [8]          # 付费墙断点偏弱进闸列
-    assert data["has_risk"] is False            # 第8集本身不是逐集高风险（strength=1·闭环·章头）
+    assert data["episode_heuristic_risk"] is False  # 第8集本身不是逐集高风险
+    assert data["has_risk"] is True                 # 显式卡点 blocker 仍是总体风险
     assert data["strict_block"] is True         # G3·净增覆盖：靠付费墙弱触发
 
 
 def test_paid_weak_paywall_strict_exits_1():
-    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n")
+    root = _mk_work(_paid_eps_weak_wall8(), "题材: 宫斗\n变现模式: 付费\n付费卡点集: 8, 10\n")
     _, rc_plain = _run(root)                     # 无 --strict → report-only
     _, rc_strict = _run(root, "--strict")
     assert rc_plain == 0 and rc_strict == 1
@@ -206,7 +262,7 @@ def test_paid_weak_paywall_strict_exits_1():
 def test_paid_strong_walls_pass_strict():
     # 所有付费墙都以悬念标点收尾(strength2) → 无弱卡点 → strict 放行
     eps = ["第%d章\n他逼问背叛，她反击夺回主导，竟是另有隐情！" % i for i in range(1, 11)]
-    root = _mk_work(eps, "题材: 宫斗\n变现模式: 付费\n")
+    root = _mk_work(eps, "题材: 宫斗\n变现模式: 付费\n付费卡点集: 8, 10\n")
     data, rc = _run(root, "--strict", "--json")
     assert data["series_arc"]["weak_paywalls"] == []
     assert data["strict_block"] is False and rc == 0

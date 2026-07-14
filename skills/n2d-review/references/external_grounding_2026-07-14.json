@@ -1,0 +1,126 @@
+{
+  "kind": "n2d_review_external_evidence",
+  "version": 1,
+  "evidence": [
+    {
+      "claim_id": "multiview_nested_failure",
+      "claim": "多视图一致性应作为可单独观察的质量维度，不能被一个缺失细节的总分或顶层结论掩盖。",
+      "claim_type": "quality_heuristic",
+      "source": {
+        "title": "VBench: Comprehensive Benchmark Suite for Video Generative Models",
+        "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Huang_VBench_Comprehensive_Benchmark_Suite_for_Video_Generative_Models_CVPR_2024_paper.html",
+        "kind": "peer_reviewed"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-review/scripts/production_consistency.py",
+          "symbol": "check_multiview_identity_pack",
+          "enforcement": "warn",
+          "rationale": "论文支持把主体身份一致性拆为独立维度；n2d 对必需 bucket 的 fail-closed 强度来自本项目确定性收据合同，而不是由论文直接授权。"
+        }
+      ]
+    },
+    {
+      "claim_id": "turnaround_alignment_enforcement",
+      "claim": "跨视角内容漂移和相邻视角一致性是多视图资产质量的核心问题，应形成逐视角可复核证据。",
+      "claim_type": "quality_heuristic",
+      "source": {
+        "title": "CoSER: Towards Consistent Dense Multiview Text-to-Image Generator for 3D Creation",
+        "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Li_CoSER_Towards_Consistent_Dense_Multiview_Text-to-Image_Generator_for_3D_Creation_CVPR_2025_paper.html",
+        "kind": "peer_reviewed"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-image/scripts/image_qc.py",
+          "symbol": "audit_turnaround_alignment",
+          "enforcement": "warn",
+          "rationale": "研究支持跨视角一致性与内容漂移检查；低置信几何判断保持 WARN，逐视角人工像素收据才承担确定性放行责任。"
+        }
+      ]
+    },
+    {
+      "claim_id": "turnaround_alignment_enforcement",
+      "claim": "动画角色转面通常以正面、前四分之三、侧面、后四分之三和背面作为关键角度集合。",
+      "claim_type": "capability",
+      "source": {
+        "title": "Harmony 24 Premium Documentation: Master Controller Slider Wizard Dialog Box",
+        "url": "https://docs.toonboom.com/help/harmony-24/premium/reference/dialog-box/slider-wizard-dialog-box.html",
+        "kind": "official"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-image/scripts/image_qc.py",
+          "symbol": "audit_turnaround_alignment",
+          "enforcement": "info",
+          "rationale": "官方工具文档为五个关键角度提供生产实践依据；它不证明五视图对所有角色和项目都是普适强制标准，也不决定 n2d 的像素阈值。"
+        }
+      ]
+    },
+    {
+      "claim_id": "review_assurance_separation",
+      "claim": "独立审查可提升测试有效性并缓解内部偏差与利益冲突；测试、评估、验证和确认应可重复、留痕并持续进行。",
+      "claim_type": "quality_heuristic",
+      "source": {
+        "title": "NIST AI Risk Management Framework Core — Measure",
+        "url": "https://airc.nist.gov/airmf-resources/airmf/5-sec-core/",
+        "kind": "official"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-review/scripts/meta_audit.py",
+          "symbol": "run_registered_adversarial_tests",
+          "enforcement": "none",
+          "rationale": "NIST 为独立复核、持续 TEVV 与偏差缓解提供治理依据；n2d 因而分开报告静态覆盖、真实运行、外部 grounding 和独立校准，但该来源本身不构成 n2d gate 的性能校准。"
+        }
+      ]
+    },
+    {
+      "claim_id": "chapter_boundary_semantic_contract",
+      "claim": "小说章节通常承载连贯子叙事，但全书精确断点预测本身困难，因此机器候选不应冒充最终章节边界。",
+      "claim_type": "quality_heuristic",
+      "source": {
+        "title": "Chapter Captor: Text Segmentation in Novels",
+        "url": "https://aclanthology.org/2020.emnlp-main.672/",
+        "kind": "peer_reviewed"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-script/scripts/split_novel.py",
+          "symbol": "build_source_units",
+          "enforcement": "warn",
+          "rationale": "研究支持章节作为连贯子叙事候选，也显示精确全书断点预测困难；n2d 因而保存全书 source-unit 候选并保留人工签收，不把自动切点写成普适真值。"
+        }
+      ]
+    },
+    {
+      "claim_id": "chapter_boundary_semantic_contract",
+      "claim": "文学场景边界应综合时间、空间、动作与人物组合的连贯性，不能退化成固定字数或单侧标点规则。",
+      "claim_type": "quality_heuristic",
+      "source": {
+        "title": "Assessing the State of the Art in Scene Segmentation",
+        "url": "https://aclanthology.org/2025.naacl-long.500/",
+        "kind": "peer_reviewed"
+      },
+      "checked_at": "2026-07-14",
+      "confidence": "high",
+      "implementation_mapping": [
+        {
+          "path": "skills/n2d-script/scripts/boundary_audit.py",
+          "symbol": "boundary_pairs",
+          "enforcement": "warn",
+          "rationale": "研究支持多维语义连贯性与高层理解要求；n2d 将其落实为双侧边界审计和人工语义证据，具体 P0-P6 与 strict 强度仍是项目合同。"
+        }
+      ]
+    }
+  ]
+}

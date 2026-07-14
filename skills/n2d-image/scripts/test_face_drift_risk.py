@@ -57,6 +57,17 @@ def test_three_quarter_ready_reads_atlas_and_reference_group() -> None:
     assert fdr.three_quarter_ready({"reference_atlas": {"base_views": {"three_quarter": {"status": "ready"}}}})
     # planned 不算就绪
     assert not fdr.three_quarter_ready({"reference_atlas": {"base_views": {"three_quarter": {"status": "planned"}}}})
+    # reference_group 的结构化 planned 槽也不能因 dict 非空冒充 ready。
+    assert not fdr.three_quarter_ready({
+        "reference_group": {
+            "three_quarter": {"path": "出图/共享/图片/定妆_X_45度.png", "status": "planned"}
+        }
+    })
+    assert fdr.three_quarter_ready({
+        "reference_group": {
+            "three_quarter": {"path": "出图/共享/图片/定妆_X_45度.png", "status": "ready"}
+        }
+    })
     # atlas 没建但 reference_group 直接挂 45° 命名图（旧项目兼容）→ 就绪
     assert fdr.three_quarter_ready({"reference_group": {"three_quarter": "出图/共享/图片/定妆_X_45度.png"}})
     # 空路径不算

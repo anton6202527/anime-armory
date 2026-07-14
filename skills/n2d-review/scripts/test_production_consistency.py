@@ -136,6 +136,37 @@ def test_multiview_identity_pack_requires_core_buckets(tmp_path: Path) -> None:
     assert any("多视角身份测试桶缺失" in row["message"] for row in res["findings"])
 
 
+def test_multiview_bucket_fail_blocks_when_top_level_verdict_missing(tmp_path: Path) -> None:
+    root = tmp_path
+    ep = "第1集"
+    _write_json(
+        root / "出图" / "共享" / "identity_registry.json",
+        {"characters": [{"id": "CHAR_SHEN", "core": True, "forms": [{"form": "常态"}]}]},
+    )
+    buckets = {
+        name: {
+            "status": "pass",
+            "evidence_kind": "structured_human_review",
+            "path": f"出图/共享/图片/{name}.png",
+            "sha256": "placeholder",
+        }
+        for name in pc.MULTIVIEW_BUCKETS
+    }
+    buckets["rear_three_quarter"]["status"] = "fail"
+    _write_json(
+        root / "生产数据" / "identity_eval_pack.json",
+        {"rows": [{"character_id": "CHAR_SHEN", "form": "常态", "buckets": buckets}]},
+    )
+
+    res = pc.check_multiview_identity_pack(str(root), ep)
+
+    assert any(
+        row["verdict"] == "block"
+        and "failed_buckets=rear_three_quarter" in row["message"]
+        for row in res["findings"]
+    )
+
+
 def test_interaction_graph_warns_missing_contact_graph_and_blocks_holder_jump(tmp_path: Path) -> None:
     root = tmp_path
     ep = "第1集"

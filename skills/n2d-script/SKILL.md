@@ -13,7 +13,7 @@ description: Stage 1+定稿 of n2d — 阶段1把小说改成 voiceover/bgm/封�
 
 本 skill 涉及的选择点：`制作模式`（决定阶段2 是否等真实配音·见阶段2 触发）、`题材`/`母题增强`（弱选择点·检测预填可覆盖：motif_detector 识别题材与系统面板等复现母题桥段·见阶段2「题材母题检测」+ `references/题材母题框架.md`）、`基础视觉风格`（写入 global_style + style_contract·见第 2 步）、`视频模型路由`（默认自动按镜头路由；本阶段只记录用户主动固定约束，具体后端到 n2d-video 决定）、`生图AI`、`画幅`、`首切范围`（首次拆集是部分先切还是全篇粗切·见第 1 步）、`字幕语言`（中文/中英双语/仅英文·见阶段2）、`脚本批次`（量产时几集一停·见「脚本批次」段）、`中段锚帧默认`（默认 `关闭`=risk-only；普通单拍不补 `_mid`，只有显式 `开启` 且执行后端单次请求原生支持 3+ 帧才补 D0；E1 编辑切点与 R1/R2/R3 高风险连续动作不受该开关影响）、`目标平台`、`发行地区`、`合规用途`。源文本版权/改编权按设计宪法 D4 默认用户为原著作者并写入 `合规/compliance_manifest.json`；明确第三方来源时才要求授权 evidence/ref。
 
-`拆集节奏` 与 `变现模式` 都是内部软默认/高级覆盖项，不列入首跑询问。`拆集节奏` 默认 `前长后短`（旧 `_设置.md` 的 `单集时长` 继续兼容读取）；`变现模式`（`免费`默认 / `付费` / `海外`）决定**剧级追更骨架**的断点策略与付费/AD 卡点定位（见第 1 步「剧级追更骨架」+ `references/追更骨架.md`），只在用户明确变现模式或目标平台时落档。`题材` 弱选择点同时切换 `split_novel`/`boundary_audit` 的**边界词典**（古装爽文 vs 女频情感/悬疑/都市，治非爽文题材粗拆退化成无闭环）。
+`拆集节奏` 与 `变现模式` 都是内部软默认/高级覆盖项，不列入首跑询问。`拆集节奏` 默认 `前长后短`（旧 `_设置.md` 的 `单集时长` 继续兼容读取）；`变现模式`（`免费`默认 / `付费` / `海外`）决定**剧级追更骨架**的策略，但付费/解锁卡点只能来自项目 `_设置.md` 的 `付费卡点集/付费墙集`，或 `脚本/paywall_policy.json` 的平台合同/第一方数据；未知时只提示、不猜第 8/10 集、更不硬挡。`题材` 弱选择点同时切换 `split_novel`/`boundary_audit` 的**边界词典**（古装爽文 vs 女频情感/悬疑/都市，治非爽文题材粗拆退化成无闭环）。
 
 ## 核心原则
 
@@ -46,13 +46,14 @@ description: Stage 1+定稿 of n2d — 阶段1把小说改成 voiceover/bgm/封�
 ## 入口
 
 **情境 A — 首次拿到小说**（作品根不存在）：
-执行"第 1 步 首批 10 集粗切 + 建骨架" → "第 2 步 全局" → "第 3 步 精修第1集"。**默认先做前 10 集试切**：`split_novel.py` 省略 `--limit` 时只落地前 10 集 raw 脚手架，同时在 `脚本/split_plan.json` / `脚本/_拆集复核.md` 记录全本候选断点估算；避免超长书一开局铺出上千个目录。完成后报告，让用户决定继续精修、用 `--limit N` 续切、用 `--all` 补全，或调 `n2d-image` 出图。
+执行"第 1 步 首批 10 集粗切 + 建骨架" → "第 2 步 全局" → "第 3 步 精修第1集"。**默认先做前 10 集试切**：`split_novel.py` 省略 `--limit` 时只落地前 10 集 raw 脚手架，但 `脚本/split_plan.json` v2 保存全书 `source_units/arc_anchors/boundary_candidates` 与 advisory Top-3 beam paths；机器摘要写 `脚本/_拆集机器索引.md`，人工决定只写 `脚本/_拆集复核.md`，续切不得覆盖人工文件。完成后报告，让用户决定继续精修、用 `--limit N` 续切、用 `--all` 补全，或调 `n2d-image` 出图。
+> 首批 10 集、Top-3、beam width 24 与精修前 5–10 集窗口是 n2d 当前的可调工程默认值，不是行业统一标准；真正硬约束是全书 source span 可追溯、双侧叙事合同成立、人工文件不被覆盖，以及变更决策有已应用收据。完整验收表见 `n2d-review/references/production_acceptance_v2.md`。
 > **首跑先定 `制作模式`（必给菜单，别静默默认）**：拆集前把出片顺序菜单 + 一句原因念给用户选一次——**A 混合自动路由（默认；声音选角先行、无 WAV 时间基准先行，再逐镜分流）/ B 配音先行（全部主要镜头都有已签收表演音轨时使用）/ C 原生音画（经能力核验的说话镜一次出台词+口型+环境声）/ D 先出视频后配音（旧式项目级画面先行固定策略）**，选后写 `_设置.md`。阶段1后 `production_mode_router.py` 会逐集写逐镜执行合同，但不自动改用户选择。
 > **生视频后端选择后移到 n2d-video**：拆集前只记录用户已明确给出的固定模型/渠道或账号硬约束；否则写/沿用 `视频模型路由=自动按镜头路由`，不展示 `生视频模型` + `生视频渠道` 菜单。真正的 primary/fallback、渠道、CLI/API 可用性和回退/保真实现方案，由 `n2d-video` 出视频前按每个 Clip 的能力需求、router/probe 和适配层决定。
 > **首跑再定 `基础视觉风格`（必给菜单）**：写 `global_style.md` 前按 `n2d/references/visual_styles.md` 展示菜单（冷灰写实3D国风漫剧（默认推荐） / 真实3D人物质感 + 电影叙事镜头感 / 写实电影感 / 国漫写实角色审美 + 电影级布光与镜头语言 / 国漫写实 / 二次元赛璐璐 / 水墨国风 / 厚涂幻想 / 赛博霓虹 / Q版轻喜 / 韩漫精致清透 / 日漫剧场版光影 / 3D卡通电影感 / 动态漫画条漫风 / 暗黑悬疑写实 / 古风乙女清雅 / 热血少年战斗番 / 美漫硬线阴影 / 低多边形玩具感 / 纸片剪影 / 定格动画 / 参考图片/视频自动识别 / 自定义）。若用户选 `参考图片/视频自动识别`，先让用户上传参考图或视频，分析后归一成已有预设或 `自定义（...）` 六字段契约，再写 `_设置.md`，不要把该临时入口原样落档。若用户本轮已指定或 `_设置.md` 已有则直接用；若只有全局默认，把它标为预选但仍展示菜单。**预选默认是题材感知的**：`split_novel.py` 已跑 `recommend_style()` 按本剧题材（`detect_genre` 正文命中 + 书名/`题材` 自由文本）挑了一个最贴的风格写进 `global_style.md` 的「风格推荐依据」区块（含依据 + 候选排名）；展示菜单时把这个推荐当**高亮预选**并把一句依据念给用户，而不是永远念「冷灰写实3D国风漫剧」。它仍只是预选、不是铁律，用户一句话即可覆盖。选后写 `_设置.md`，同项目沉默沿用。
 
 **情境 B — 精修某具体集**（作品根已存在）：
-跳到"第 3 步 精修该集"。先读 `_进度.md` 看该集物料列状态；再读 `脚本/boundary_review.json`（若存在），按其中已签收且 raw 指纹匹配的边界决策取材，别机械照搬单个 `raw.txt`。
+跳到"第 3 步 精修该集"。先读 `_进度.md` 看该集物料列状态；再读 `脚本/boundary_review.json`（若存在），只消费 blocker code、双侧边界合同与 receipt/semantic evidence 都通过的决策，别机械照搬单个 `raw.txt`。
 
 **情境 C — 从中间章节/中间集开始制作**：
 先做"第 -1 步 中段开工前情资产包"，再进入拆集/精修。不要只把目标章节切出来直接写 voiceover；否则主角常态定妆会被当前章节临时状态污染，人物关系/战力/道具/伏笔会断层，后续补前面章节时容易返工。
@@ -168,14 +169,14 @@ python3 skills/n2d-script/scripts/midstart_context.py <作品根> check
 > ⚠️ **字数↔时长是高方差代理，非 1:1**：原文→台词压缩率因段落剧烈波动——对白/打斗段压缩少，环境/心理描写段压缩多。默认粗拆不锚字数；`--target` 只是高级报告参考。**不允许为了追 target 把一场戏、一个爽点或一个集尾钩子切断**。最终短/长都可以，关键是剧情连贯且闭环完整。
 > ⚠️ **禁止为省时长删剧情**：可以压缩重复描写、合并平淡段、调整边界、提高台词密度；不能删掉人物动机、冲突起因、铺垫承接、伏笔回收、动作转折等必要镜头/段落。任何删除都必须能说明"重复/非剧情必要"，并写入边界决策。
 
-**首批试切铁律（2026-06-30 修订）**：首次拆集默认 **只落地前 10 集**。`首切范围` 仍保留为兼容选择点，但默认和推荐值是 **部分先切（前 10 集）**；`全篇粗切` 只在用户明确要求、边界策略已验证、或准备批量推进时用 `--all` 显式触发。不要把“机器粗切目录铺满全书”误当成“全篇统筹”：统筹靠 5-10 集窗口复核、剧级追更骨架、伏笔/状态账本和后续 `--limit N` 续切，而不是首跑生成上千个 raw。
+**首批试切铁律（2026-07-14 修订）**：首次拆集默认 **只落地前 10 集**，但结构规划必须覆盖全书。`split_plan.json` v2 保存全书 paragraph source units、章节/场景/看点线索锚、所有机器分集的 source-unit span、每个边界的局部 Top-3 候选和全局 beam Top-3 路径；候选优化只用结构/句形/软均衡评分，题材词典不能硬排除边界。confirmed `开发包/season_arc.json` 会连 SHA 与意图一起纳入；只有显式给出 `boundary_after_source_unit_id/source_unit_id/source_unit_span` 时才给 beam 加约束，未映射就诚实标 `unmapped`，不从散文臆造切点。结果必须经语义复核后才改 raw。
 
 - **部分先切**（默认·推荐）：省略 `--limit` 时落地前 10 集；也可 `--limit N` 明确首批/续切数量。仍按全本候选断点估算总集数，只是不创建未审目录。
 - **全篇粗切**（显式）：传 `--all`，一次粗切整本，写全篇 raw 脚手架；只在前 10 集压缩率、边界和节奏策略确认后使用。
 
 ```bash
 # 默认不传 --target；--target 只作报告/人工复核参考，不参与切点决策
-# 首切范围=部分先切（默认）：省略 --limit，先落地前 10 集，并写 split_plan.json / _拆集复核.md 的全本估算
+# 首切范围=部分先切（默认）：只落地前 10 集；split_plan v2 仍保存全书规划，机器/人工复核文件分离
 python3 <skill>/scripts/split_novel.py "<小说路径>"
 # 有「第X章」时强烈建议加 --by-chapter，让边界先贴章节（更接近节拍）：
 python3 <skill>/scripts/split_novel.py "<小说路径>" --by-chapter
@@ -201,15 +202,17 @@ python3 <skill>/scripts/boundary_audit.py <作品根>          # 全剧 raw 边�
 python3 <skill>/scripts/boundary_audit.py <作品根> 2-10     # 精修窗口体检
 python3 <skill>/scripts/boundary_audit.py <作品根> --strict # 阶段1入口硬门：有风险且无复核记录则先停
 python3 <skill>/scripts/boundary_audit.py <作品根> --json   # 机器可读（series_arc 块）
-python3 <skill>/scripts/boundary_review.py draft <作品根> --write # 生成结构化签收草稿
-python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验签收 episode + raw 指纹 + decision/notes
+python3 <skill>/scripts/boundary_review.py draft <作品根> --write # 刷新 boundary_review_draft.json；不覆盖人工 boundary_review.json
+python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision keep --notes '语义判断' --reviewer '<人工声明 reviewer 标识>' --semantic-evidence '闭环/承接证据'
+python3 <skill>/scripts/boundary_review.py sign <作品根> '<blocker_id>' --decision rewrite --notes '已实施的修改' --reviewer '<人工声明 reviewer 标识>' --source-mapping-file '<source_mapping.json>'
+python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验 blocker code + 双侧边界合同 + 决策/实施收据
 ```
-`boundary_audit` 在逐集表之外还输出 **「剧级追更骨架」**（Gap1，方法论见 `references/追更骨架.md`）：跨集断点强度分布、**双侧边界评分**（上集收尾强度 + 下集 0-3 秒开场承接力，防止"上集钩住、下集慢开"）、**连续弱钩集群**（≥2 连弱钩=中段流失高风险，并入相邻强断点集或补强）、**疑似无闭环/纯铺垫集**（缺冲突或缺爽点/反转·P1）、**开篇集群钩子梯度**（前 3-4 集留存投资·P6/前十集定律）、按 `变现模式` 的**付费/AD 卡点集定位**（付费/海外校验卡点是否顶格断点；免费聚焦消灭连续弱钩集群）。词典按 `题材` 选择点切换（女频情感/悬疑/都市，Gap3）。**单集闭环对了不等于整部追得动——拆集时先看这层剧级骨架，再逐集下刀。**
+`boundary_audit` 在逐集表之外还输出全局 **「剧级追更骨架」**（即使 CLI 只审 2-10 集，剧级曲线也始终使用全剧 rows）与稳定 `blockers[]`。每项 blocker 都有 code、`E0001-E0002` 双侧边界合同、左右 raw SHA 和合同 SHA；上集弱收口与下集弱冷开同权，不能只因上一集有钩就放行。标点与语义词钩独立计分，普通感叹号不会重复计成强钩。付费 blocker 只对项目明确配置的卡点生效；未配置时保持 advisory。
 
 **伏笔兑现账本脚手架（SP1·导出端·2026-06-22；2026-06-24 升格）**：拆集后跑 `python3 skills/n2d-script/scripts/setup_payoff_ledger.py <作品根> [--episodes 1-10] --write`，从各集 voiceover/故事板按显式悬念/钩子标记**捞候选伏笔**写成 `设定库/setup_payoff_ledger.json` 草稿（不自动判定哪句是伏笔·不覆盖已填 payoff·`payoff_ep` 留空交编剧填）。给每个坑填兑现集或标 `status=ongoing` 后，`n2d-review` 的 SP1 会校验坑没填/兑现早于种下/缺种下集——补「直接给小说文件、不经上游小说创作线时漫剧侧无叙事连续性兜底」。`P0/P1` 管语义/视觉状态跨集，SP1 管「叙事坑」跨集，正交。
 > **2026-06-24 升格两点**：① **自动捞候选**——除显式标记外，还按"挖坑句式"（到底是谁/为何/身世/神秘信物/不对劲…）捞无标记的弱信号候选，标 `status=candidate` 交编剧确认或删（治"作者漏标 → 真伏笔永不进账"），只认显式标记的坑才进闸、弱信号不拦流水线。② **stage2 收尾闸**——`n2d/run.py next` 到 `image_prompt` 前自动跑 `setup_payoff_ledger.py <作品根> --gate 第N集`：本集检出显式伏笔但账本缺登记或没填兑现集 → **block 出图**（坑挖了不填不让进贵工位；标 `ongoing` 放行）。
 
-**剧情完整性账本（SI1·文本期·report-first）**：拆集/voiceover 后跑 `python3 skills/n2d-script/scripts/story_integrity_audit.py <作品根> [第N集] --write`，生成/更新 `设定库/story_integrity_ledger.json`、`设定库/thread_scheduler.json`、`设定库/pilot_arc_contract.json`。它检查 **选择→后果链**、**角色动机向量**、**A/B/C 线调度**、**前 3-5 集追剧契约**、**假 cliffhanger**、**对白是否推进选择/揭示/施压/关系/动作**。默认 warn/info 只报告，`--strict` 才把 warn 当失败；不含任何时长硬门。
+**剧情完整性账本（SI1·文本期·report-first）**：拆集/voiceover 后跑 `python3 skills/n2d-script/scripts/story_integrity_audit.py <作品根> [第N集] --write`，生成/更新 `设定库/story_integrity_ledger.json`、`设定库/thread_scheduler.json`、`设定库/pilot_arc_contract.json`。自动线程 ID 按开坑集稳定为 `T_E0001`，逐集增量执行也不会从 T001 重启覆盖前集；同集尾重写仍更新原线程。它检查 **选择→后果链**、**角色动机向量**、**A/B/C 线调度**、**前 3-5 集追剧契约**、**假 cliffhanger**、**对白是否推进选择/揭示/施压/关系/动作**。
 
 **剧情/分镜质量启发式套件（2026-06-24·report-only·"先抽结构再判"不内联问 LLM）**——补 SI1「信号在不在 vs 执行好不好」盲区，全 warn/info 透出不阻断（已自动接进出图前置链）：
 - **因果链图（A1·`causal_graph.py`）**：按 Causal Plot Graph（R²·arXiv:2503.15655）抽前向因果图，flag **天降/为反转而反转候选**（反转💥或"突然/竟然/原来"惊变却无因果入边、台词也没说因）+ **因果覆盖率过低** + **A6 降智/工业糖精**（冲突/误会靠角色不沟通/无视铁证硬维持）。铁律：先抽因果结构再判，绝不内联问 LLM「合理吗」（防套刻板印象·arXiv:2410.23884）。
@@ -221,7 +224,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验�
 > 全是启发式**初筛**，只 flag 候选交人判、不计算真分、不臆造——深层动机/世界观自洽/台词质感/导演审美仍需人判。**绝不堆噪声淹没硬伤**（容错铁律）。
 
 **叙事状态台账（NS1·知识/位置/关系跨集·2026-06-24）**：视觉 `state_ledger` 只管伤/泪/妆/服，**知识/位置/关系**这条叙事轴此前无人看守——最容易出又最难发现的硬伤（A 第3集还不知道、第5集却表现知道；上集在甲地、本集无转场却到乙地）。跑 `python3 skills/n2d-script/scripts/narrative_state_audit.py <作品根> --write` 从各集 voiceover 捞候选写 `设定库/narrative_state_ledger.json`（知识条目自动用 `【…】/《…》` 专名预填 `keyword`，`character/known_from_ep` 交编剧填；自由文本不臆断谁知道什么）。填全后 `narrative_state_audit.py <作品根> --check` 或 `n2d-review` 的 NS1 做**确定性跨集校验**：**知识倒流**（声明第K集才知道，但更早集该角色已提及该 keyword）+ **位置瞬移**（同角色相邻有声明的集换地点、两集都无转场词）。诚实边界同 SP1：校验只跑在字段填全的条目上。
-`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版；若发现章内续切、弱钩、半句、短/长但无闭环等风险，必须用 `boundary_review.py draft --write` 生成 `脚本/boundary_review.json`，并填写每个风险集的 `decision` + `notes`。`boundary_review.py check` 会校验 episode、当前 `raw.txt` 的 sha256 指纹和签收字段；raw 一变旧签收失效。没有结构化签收或签收过期会阻断正式写词。**不要为合并一两集贸然重编号全剧目录**；先在精修取材层合并/挪段，等一批集都定稿后再决定是否批量重排 `_进度.md`。
+`n2d/run.py next` 进入 `script_stage1` 前会自动跑 strict 版。`boundary_review.py draft --write` 每次刷新机器文件 `脚本/boundary_review_draft.json`，只在首次缺失时创建人工文件 `脚本/boundary_review.json`，续切/重审绝不覆盖人工决定。人工决定不要手改 JSON：用 `boundary_review.py sign`（`record` 为等价别名）按**精确 `blocker_id`** 原子写入。`keep` 必须显式给非空 notes、`semantic_evidence` 和非空且不含明显自动化标识的人工声明 reviewer；自动/agent/bot/system 身份字样不能签。`move/merge/split/rewrite` 要先真实改完左右 `raw.txt`，再由 CLI 从旧 machine/human `boundary_contract` 自动绑定改前合同 SHA 与当前左右新 SHA，并要求 JSON 参数或文件形式的非空 source mapping；左右 SHA 都没变、合同陈旧/未知或 reviewer 声明缺失都会拒写。该本地字符串不认证真实身份、岗位权限或与生成流程的独立性；需要强保证时接外部认证 reviewer ID、签名或审批收据并绑定同一 blocker/合同/raw SHA。`accept_risk` 只能确认 advisory，不能解除 strict blocker。
 
 **前长后短的落地**：粗胚默认按章/场景/强钩候选切；**第1集**在精修时主动加权，必要时并入更多开篇内容来立世界观、主角欲望和系列总钩。真正节奏靠**爽点/钩子重切(②) + 配音/原生音画实测(③)**校准；不要为了让第1集或后续集落到某个秒数而拆断完整闭环。脚本自动剥离开头简介/标签/看点等元数据（`--keep-frontmatter` 可保留）。
 
@@ -242,7 +245,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验�
         └── raw.txt           拆集出来的原文片段
 ```
 
-向用户报告：输出路径、**首批粗切索引/已粗切几集**、全本候选断点估算、字数范围、`脚本/split_plan.json` 与 `脚本/_拆集复核.md` 路径；若只做首批/部分先切，提示「先审前 10 集压缩率与边界，满意后用 `--limit N` 续切或 `--all` 补全」。
+向用户报告：输出路径、**首批粗切索引/已粗切几集**、全书 source-unit/候选边界/beam paths 数量、字数范围、`脚本/split_plan.json`、机器 `脚本/_拆集机器索引.md` 与人工 `脚本/_拆集复核.md` 路径；若只做首批/部分先切，提示「先审前 10 集压缩率与边界，满意后用 `--limit N` 续切或 `--all` 补全」。
 
 > ⚠️ **拆分是粗胚脚手架，不是最终集边界**（一章 ≠ 一集）。第 3 步精修时以 `raw.txt` 为素材按戏剧节拍重切：一个节拍可跨多章合并、长章可拆上/下集。集数与 raw 分块不必一一对应。
 
@@ -271,7 +274,7 @@ python3 <skill>/scripts/boundary_review.py check <作品根> --json   # 校验�
 
 > 流程铁律（默认 **混合自动路由**）：`剧本改编 → 声音选角 + 无 WAV 时间基准 → 分镜/OTIO → 逐镜音画生成 → 音色定妆后 final voice → 必要口型 pass → compose`。对白表演镜、旁白/口外音、动作/空镜/蒙太奇和 native AV 镜各走适合自己的路径；阶段1后 `production_mode_router.py` 写逐镜执行合同，不把项目强制成一种先后顺序。
 
-先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集）——边界决策按 `references/拆集法.md` P0→P6，过一遍其自查清单再写词。**实际取材优先级**：`脚本/boundary_review.json` 的窗口决策（若有且 raw 指纹匹配） > 当前集 `raw.txt` + 前后 2-4 集 raw 的人工重切 > 单集 raw。若签收标了“第9+10合并为一个精修单元”，写第9集 voiceover 时应同时消费第9/10集 raw；第10集则暂不单独推进，等窗口定稿后再回写进度。
+先按戏剧节拍确定本集边界（合并/拆分 `raw.txt`，一章 ≠ 一集）——边界决策按 `references/拆集法.md` P0→P6，过一遍其自查清单再写词。**实际取材优先级**：`脚本/boundary_review.json` 中 blocker code、双侧 SHA 和 applied receipt 都通过的窗口决策 > 当前集 `raw.txt` + 前后 2-4 集 raw 的人工重切 > 单集 raw。若签收标了“第9+10合并为一个精修单元”，写第9集 voiceover 时应同时消费第9/10集 raw；第10集则暂不单独推进，等窗口定稿后再回写进度。
 
 **写词前先做改编取舍（新增前置层）**：在边界确认后、`voiceover.txt` 之前，逐段/逐节拍建立 `脚本/第N集/adaptation_triage.json`（批量或窗口层可先写 `脚本/adaptation_triage.json`，再按集落地）。JSON 根字段必须用 `items` 数组承载逐条取舍；不要改成 `beats`、`entries` 等别名，否则 `source_adaptation_audit` 读不到有账改写证据。每条记录写 `source_span`、`beat_function`（动机/冲突/选择/后果/伏笔/关系/状态/世界观/过渡）、`decision`（`dramatize` / `narrate` / `defer` / `merge` / `omit`）、`change_type`（`preserve` / `compress` / `reorder` / `rewrite_detail` / `intensify` / `add_hook` / `combine_minor_role` 等）、`reason`、`delivery`（若 narrate/defer/merge/改写，写由哪句旁白、哪场后文或哪个相邻节拍承接）、`adaptation_delta`（changed_from/changed_to/preserved_function/short_drama_reason/payoff_guard）、`risk_if_removed`。规则：弱信息不硬拆成 clip；能后文自然带出的设定，不在当前集停下来解释；重复心理/环境描写优先压成一句旁白或并入动作；关键细节可以为短剧爽感与节奏稍作改动，但必须保住因果、动机、伏笔、状态变化和角色弧，并写清改写账。取舍完成后再写留存曲线和 voiceover，否则会把“不重要但占字数”的原文误当成镜头，导致节奏散、clip 多、接缝多。
 
@@ -508,7 +511,7 @@ python3 <skill>/delete_shot.py <作品根> 第N集 镜头6 [镜头7 ...]
 | 错误 | 纠正 |
 |---|---|
 | 按字数/章数机械切集 | 先找结尾强断点定边界，字数让位节拍（`拆集法.md` P0/P4，章≠集）|
-| 只看单集 raw 就写 voiceover | 每次看 5-10 集窗口；先跑 `scripts/boundary_audit.py <作品根> 起-止`，风险窗口用 `scripts/boundary_review.py draft/check` 写入并校验 `脚本/boundary_review.json` |
+| 只看单集 raw 就写 voiceover | 每次看 5-10 集窗口；先跑 `boundary_audit.py` 取得稳定 blockers，再用 `boundary_review.py draft/check`；机器 draft 与人工 `boundary_review.json` 分离，改边界须有 applied receipt |
 | 短集独立成集但无强钩 | 短集(<650字)必须复核：有强爆点可保留，否则并入前/后集 |
 | 为省时长删必要镜头/铺垫 | 不删剧情因果链；只压缩重复表达、合并边界或提高台词密度，必要删除必须写明"非剧情必要" |
 | 为合并一集立刻重编号全剧 | 不要贸然重排 300 集目录；先在精修取材层合并/挪段，批量定稿后再统一整理进度表 |

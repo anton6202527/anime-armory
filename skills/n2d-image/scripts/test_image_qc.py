@@ -10,6 +10,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).with_name("image_qc.py")
 spec = importlib.util.spec_from_file_location("image_qc", SCRIPT)
@@ -3298,6 +3300,227 @@ def test_turnaround_alignment_reason_thresholds():
     # 单视图/不可测 → 不判
     assert image_qc.turnaround_alignment_reason({"front": (0.30, 0.20)}) is None
     assert image_qc.turnaround_alignment_reason({}) is None
+
+
+def test_whole_body_geometry_reports_head_feet_center_and_height(tmp_path: Path) -> None:
+    from PIL import Image, ImageDraw
+    path = tmp_path / "front.png"
+    image = Image.new("RGB", (300, 500), (220, 220, 220))
+    draw = ImageDraw.Draw(image)
+    draw.ellipse((125, 50, 175, 105), fill=(35, 35, 35))
+    draw.rectangle((105, 100, 195, 445), fill=(45, 45, 45))
+    image.save(path)
+
+    evidence = image_qc.whole_body_geometry(path)
+
+    assert evidence["measurable"] is True
+    assert 0.08 < evidence["head_top"] < 0.13
+    assert 0.87 < evidence["foot_bottom"] < 0.92
+    assert 0.48 < evidence["centerline"] < 0.52
+    assert evidence["subject_height"] > 0.75
+
+
+def _core_turnaround_registry(tmp_path: Path) -> Path:
+    from PIL import Image, ImageDraw
+    shared = tmp_path / "出图" / "共享"
+    images = shared / "图片"
+    images.mkdir(parents=True)
+    refs = {}
+    for index, key in enumerate((*image_qc.TURNAROUND_VIEW_KEYS, "turnaround")):
+        rel = f"出图/共享/图片/{key}.png"
+        image = Image.new("RGB", (512, 768), (220, 220, 220))
+        draw = ImageDraw.Draw(image)
+        draw.ellipse((220, 70, 292, 150), fill=(30 + index, 30, 30))
+        draw.rectangle((180, 145, 332, 700), fill=(45 + index, 45, 45))
+        image.save(tmp_path / rel)
+        refs[key] = {"path": rel, "status": "review_pending"}
+    expression_rel = "出图/共享/图片/expression_neutral.png"
+    expression = Image.new("RGB", (512, 512), (220, 220, 220))
+    expression_draw = ImageDraw.Draw(expression)
+    expression_draw.ellipse((128, 55, 384, 440), fill=(40, 40, 40))
+    expression.save(tmp_path / expression_rel)
+    refs["face_anchor_refs"] = [{"path": expression_rel, "status": "review_pending", "emotion": "neutral"}]
+    (shared / "identity_registry.json").write_text(json.dumps({
+        "characters": [{
+            "id": "CHAR_CORE",
+            "library_tier": "core_full",
+            "forms": [{
+                "form": "常态",
+                "reference_group": refs,
+                "reference_atlas": {
+                    "build_tier": "core_full",
+                    "base_views": {key: dict(refs[key]) for key in image_qc.TURNAROUND_VIEW_KEYS},
+                },
+            }],
+        }]
+    }, ensure_ascii=False), encoding="utf-8")
+    return tmp_path
+
+
+def test_core_turnaround_requires_hash_bound_per_view_receipts(tmp_path: Path) -> None:
+    root = _core_turnaround_registry(tmp_path)
+
+    before = image_qc.audit_turnaround_alignment(root, "第1集")
+    assert len(before["human_review_required"]) == len(image_qc.TURNAROUND_FINALIZE_KEYS)
+    assert all(f["level"] == "block" for f in before["findings"] if f["code"] == "turnaround_core_view_review_missing")
+    refused = image_qc.mark_finalized(root, "CHAR_CORE/常态")
+    assert refused["ok"] is False
+    assert {row["view"] for row in refused["required_view_receipts"]} == set(image_qc.TURNAROUND_FINALIZE_KEYS)
+
+    invalid_time = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="art-director",
+        reviewed_at="2026-07-14T12:00:00",
+    )
+    assert invalid_time["ok"] is False and "时区" in invalid_time["msg"]
+
+    missing_confirmation = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="art-director",
+        reviewed_at="2026-07-14T12:00:00+00:00",
+    )
+    assert missing_confirmation["ok"] is False and "accept-current-pixels" in missing_confirmation["msg"]
+
+    automated = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="codex-agent",
+        reviewed_at="2026-07-14T12:00:00+00:00",
+        accept_current_pixels=True,
+    )
+    assert automated["ok"] is False and "人工声明标识" in automated["msg"]
+
+    for view in image_qc.TURNAROUND_FINALIZE_KEYS:
+        result = image_qc.review_turnaround_view(
+            root,
+            "CHAR_CORE/常态",
+            view,
+            verdict="pass",
+            reviewer="art-director",
+            reviewed_at="2026-07-14T12:00:00+00:00",
+            note="identity/costume/body alignment checked",
+            accept_current_pixels=True,
+        )
+        assert result["ok"] is True
+
+    registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
+    expression_receipt = registry["characters"][0]["forms"][0]["reference_group"]["face_anchor_refs"][0]["human_review"]
+    assert expression_receipt["view"] == "expression"
+    assert expression_receipt["character_id"] == "CHAR_CORE"
+    assert expression_receipt["png_sha256"]
+    assert expression_receipt["registry_binding_fingerprint"]
+    assert expression_receipt["review_contract"] == "n2d_expression_review_v1"
+    assert expression_receipt["confirmation"]["accepted_current_pixels"] is True
+
+    after = image_qc.audit_turnaround_alignment(root, "第1集")
+    assert after["human_review_required"] == []
+    finalized = image_qc.mark_finalized(root, "CHAR_CORE/常态")
+    assert finalized["ok"] is True
+
+    # Any pixel change invalidates only that view's receipt and prevents a
+    # stale form-level self_check from being re-finalized.
+    (root / "出图" / "共享" / "图片" / "side.png").write_bytes(b"changed-pixels")
+    stale = image_qc.mark_finalized(root, "CHAR_CORE/常态")
+    assert stale["ok"] is False
+    assert [row["view"] for row in stale["required_view_receipts"]] == ["side"]
+
+
+@pytest.mark.parametrize("mode", ["absolute", "path_escape", "symlink", "noncanonical"])
+def test_legacy_signer_path_escape_symlink_and_noncanonical_are_rejected(
+    tmp_path: Path,
+    mode: str,
+) -> None:
+    root = _core_turnaround_registry(tmp_path)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    front = registry["characters"][0]["forms"][0]["reference_group"]["front"]
+    if mode == "absolute":
+        front["path"] = str((root / "出图" / "共享" / "图片" / "front.png").resolve())
+        expected = "absolute_registry_evidence_path_not_allowed"
+    elif mode == "path_escape":
+        outside = root.parent / f"{root.name}_outside.png"
+        outside.write_bytes((root / "出图" / "共享" / "图片" / "front.png").read_bytes())
+        front["path"] = f"../{outside.name}"
+        expected = "registry_evidence_path_outside_project_root"
+    elif mode == "symlink":
+        link = root / "出图" / "共享" / "图片" / "front_link.png"
+        link.symlink_to("front.png")
+        front["path"] = "出图/共享/图片/front_link.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
+    else:
+        front["path"] = "出图/共享/图片/../图片/front.png"
+        expected = "registry_evidence_path_not_canonical_project_relative"
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+
+    result = image_qc.review_turnaround_view(
+        root,
+        "CHAR_CORE/常态",
+        "front",
+        verdict="pass",
+        reviewer="art-director",
+        reviewed_at="2026-07-14T12:00:00+00:00",
+        accept_current_pixels=True,
+    )
+
+    assert result["ok"] is False
+    assert expected in result["msg"]
+
+
+def test_legacy_finalize_consumer_duplicate_png_sha_is_independently_blocked(tmp_path: Path) -> None:
+    root = _core_turnaround_registry(tmp_path)
+    for view in image_qc.TURNAROUND_FINALIZE_KEYS:
+        result = image_qc.review_turnaround_view(
+            root,
+            "CHAR_CORE/常态",
+            view,
+            verdict="pass",
+            reviewer="art-director",
+            reviewed_at="2026-07-14T12:00:00+00:00",
+            accept_current_pixels=True,
+        )
+        assert result["ok"] is True
+
+    image_dir = root / "出图" / "共享" / "图片"
+    (image_dir / "back.png").write_bytes((image_dir / "side.png").read_bytes())
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    back = registry["characters"][0]["forms"][0]["reference_group"]["back"]
+    sha = image_qc._sha256_file(image_dir / "back.png")
+    back["sha256"] = sha
+    back["human_review"]["png_sha256"] = sha
+    back["human_review"]["registry_binding_fingerprint"] = image_qc.identity_review_binding_fingerprint(
+        character_id="CHAR_CORE",
+        form="常态",
+        library_tier="core_full",
+        view="back",
+        path=back["path"],
+        png_sha256=sha,
+    )
+    registry_path.write_text(json.dumps(registry, ensure_ascii=False), encoding="utf-8")
+
+    finalized = image_qc.mark_finalized(root, "CHAR_CORE/常态")
+
+    assert finalized["ok"] is False
+    assert any(
+        "duplicate_png_sha_across_buckets" in row["issues"]
+        for row in finalized["required_view_receipts"]
+    )
+
+
+def test_body_alignment_threshold_is_warn_evidence_not_hard_receipt() -> None:
+    reason = image_qc.turnaround_body_alignment_reason({
+        "front": {"measurable": True, "head_top": 0.10, "foot_bottom": 0.90, "centerline": 0.50, "subject_height": 0.80},
+        "back": {"measurable": True, "head_top": 0.20, "foot_bottom": 0.98, "centerline": 0.64, "subject_height": 0.60},
+    })
+    assert reason and "头顶线不齐" in reason and "脚底线不齐" in reason and "身体中心线不齐" in reason
 
 
 def test_audit_shot_variety_static_and_duplicate(tmp_path):

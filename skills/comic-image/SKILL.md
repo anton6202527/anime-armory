@@ -39,6 +39,20 @@ python3 skills/comic-image/scripts/detect_image_backend.py "创作区/画漫画/
 python3 skills/comic-image/scripts/build_panel_jobs.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
+含具名角色的格必须先写逐角色结构化绑定，不能把 `characters: ["主角"]`、`characters: ["CHAR_MAIN"]` 或 panel-wide `outfit_id` 当完整身份合同：
+
+```json
+"character_bindings": [{
+  "character_id": "CHAR_MAIN",
+  "form_id": "FORM_BASE",
+  "outfit_id": "OUTFIT_BASE",
+  "expression_id": "EXPR_NEUTRAL",
+  "state_id": "STATE_BASE"
+}]
+```
+
+上述 ID 必须存在于 identity registry v2；未知 form/outfit/expression/state、由 `story_function/strong_emotion/expression_intensity` 明确声明的强情绪格仍绑定中性或无表情参考、裸名字角色都会阻断 job 构建。只靠画面文字关键词猜出的情绪信号仍是 heuristic WARN。
+
 脚本只写 `panel_jobs.json` 和 `出图/共享/prompt/00_索引.md`，不调用任何生图后端；它会把本话 `出图包` 标为 `✅`，但不会把 `出图` 标完成。
 
 重建出图包时，已 ready 的格只有在提交契约未变（`submit_prompt_sha256` 与画布尺寸一致）时才保留生成状态；改了 `panel_script`/`finishing_plan`/风格设置后重建，受影响格自动回 `planned` 并在输出里列为 `stale_reset_to_planned`，必须重抽，不允许旧图按新契约蒙混过 gate。参考图集合的扩充（补视图）不算契约变化——参考图内容变化由 `comic-identity report` 的 sha 比对触发重抽。加 `--check` 可只读对比当前契约与已落盘出图包（输出 JSON，不写任何文件），`comic-review gate --stage image_preflight` 会自动跑这一检查并对陈旧格阻断。
@@ -51,7 +65,12 @@ python3 skills/comic-identity/scripts/identity.py "创作区/画漫画/作品名
 
 若报告显示 `missing_refs`，先补定妆或用已采纳面板种临时锚点，再出图。
 
-若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出；编排层（comic-batch）刚跑过 gate、或人工确认误报时，用 `--skip-gate` 显式豁免（豁免会打印留痕）：
+若已选择 `生图渠道=Codex CLI`，可逐格生成真实 PNG。runner 启动时**内置 `image_preflight` gate**（离钱最近的入口自带闸门）：gate block 即退出。`--skip-gate` 只可复用 `生产数据/gate_receipts/image_preflight_第N话.json` 中同时绑定当前完整 preflight 输入指纹、当前 `panel_jobs` SHA、真实 gate report SHA 且 `execution_authorized=true` 的无 block receipt（`warn` 可带建议放行）；否则必须同时传 `--waiver-reason`，runner 会写 `生产数据/gate_waivers/` 持久审计 receipt，不能只打印跳过：
+
+```bash
+python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/作品名" --chapter 第1话 \
+  --skip-gate --waiver-reason "人工复核确认本次为已知误报"
+```
 
 Codex 内置 `image_generation` 当前单次最多接收 5 张图片附件。即使渠道候选表声明更高参考能力，runner 仍以真实工具上限为硬边界，按“角色身份 → 场景/妖物 → 关键道具 → 风格 → 特效”选择 5 张；被省略附件必须写入 reference bundle 的 `omitted_attachments`，其完整约束继续保留在文字生产合同中，禁止静默丢约束或让工具超限后反复空耗。
 
@@ -66,7 +85,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 带 `references` 的格子默认要求 reference path 存在。Codex runner 会把这些图片作为 `codex exec --image` 附件传入，并落 `codex_reference_bundles`；只有明确需要纯文生图试验时才加 `--allow-missing-refs`。
 
-换装格在 panel_script 里写 `outfit_id`：build_panel_jobs 会从 registry 的 `assets[角色].outfits[该ID]` 取服装描述、"绝不"负向清单和服装参考图，优先注入该角色的参考位并把服装契约编进提交 prompt（领型/纽扣/花纹/配饰不得代际漂移）；未登记的 outfit_id 会在 identity report 记 `outfit_gaps`（`角色一致性硬闸=开启` 时 gate 阻断）。
+换装格在该角色自己的 `character_bindings[].outfit_id` 与相符 `state_id` 中声明：build_panel_jobs 从 registry 的 `assets[角色].outfits[该ID]` 取服装描述、禁漂移项和真实服装参考图；未登记或 state 与 outfit 冲突时直接拒绝建立正式 job。
 
 预算充足或后端偶发失败时，可加多次尝试：
 
@@ -102,16 +121,17 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
    - 启用传统原稿流程时，应先跑 `comic-finishing`，让 job 带 `traditional_finish_contract`，把墨线、黑场、网点/灰阶、效果线、漫符和手绘拟声词计划注入 prompt。缺该契约时 gate 给 warn，正式长线项目应补齐后再批量出图。
 2. 生成 job 包时通过 comic 自己的 `image_backend_adapter` 把 `生图模型 + 生图渠道` 归一成参考图预算、是否支持真实图片输入、是否具备持久主体能力等结构字段；不要把 Codex/渠道壳当生成模型，也不要把未知后端写死成唯一口径。
 3. 跑 `comic-identity report --write`，确认主角、常驻角色、关键场景、关键道具、标志服装都有可传给模型的真实参考图；`character_dna`、`variant_policy`、`STYLE_` 风格锚进入完整合同，模型通过真实图片输入 + 精简身份保持语句消费，不把 registry 全文粘进 prompt。
-4. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约、混用生成配方、legacy schema、缺 compiler、后端/profile 不一致或 prompt/hash 漂移；`comic-batch` 会自动跑。
-5. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
-6. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
-7. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
-8. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装。
-9. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
-10. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
-11. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
-12. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无 `qc_block` 或待重抽目标后把 `出图` 标 `✅`。
-13. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
+4. `build_panel_jobs.py` 会生成并立即消费 `生产数据/comic_reference_plan_第N话.json`。计划绑定 panel script、registry、memory anchor、设置与实际参考图片 SHA，逐格写 `panel_plan_sha256`；job 再写 `execution_input_sha256` 和 `consumed_contracts`。计划过期、具名角色没有至少一个真实身份锚、LOC/常驻 PROP 缺真实图、关键附件超过执行后端上限时拒绝构建并给拆反打/分区合成建议，不静默丢约束。
+5. 正式批量出图前跑 `comic-review/scripts/gate.py --stage image_preflight`，阻断缺共享参考、多视图缺口、缺风格锚、缺逐格视觉契约、混用生成配方、legacy schema、缺 compiler、后端/profile 不一致或 prompt/hash 漂移；`comic-batch` 会自动跑。
+6. 若共享参考不足，先停在 `comic-identity` 补定妆/锚点，不直接批量生成面板图。
+7. 明确要求“无字画面 + 低细节留白”，不要让模型直接生成中文正文、英文正文、对白气泡、空白气泡、旁白框或文字框；`文字语言` 只影响后期嵌字和导出元数据。
+8. 人物动作格必须写清手脚归属、武器/道具接触点和身体受力；凡脚尖、脚步、踩踏、跪地、鞋靴落点等叙事，不得把脚画成手。
+9. Codex 路线必须把 reference path 转成真实 `--image` 入参；路径和内部 ID 不写进模型 prompt。runner 会校验 compiler/profile 后只提交 `submit_prompt` 的小型执行包装。
+10. 每生成一格立刻做落盘 QC：PNG 有效性、尺寸、真实参考输入数、疑似烘焙空白气泡/文字容器；`block` 先修当前格，不把坏图继续传给排版合成。
+11. 若单格 QC 发现角色/道具漂移，先回 `comic-identity` 种锚点或补引用，再对该格 `--force --targets Pxxx` 重抽。
+12. 如果用户已在外部生成图片，把文件放入 `出图/第N话/panels/`，并更新 job 包里的 `result_path`、`status`、`source`。
+13. job 包齐全后可把 `出图包` 标 `✅`；所有必需 panel 图就绪且无 `qc_block` 或待重抽目标后把 `出图` 标 `✅`。
+14. 预算允许多抽时，保留失败和重抽证据；不要把候选图混进正式 `panels/`，正式目录只留当前采纳版本。
 
 ## Prompt 要点
 
@@ -139,7 +159,7 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 
 ## 跨话记忆锚消费（2026-07 落地）
 
-`build_panel_jobs.py` 出图前读取 `生产数据/comic_memory_anchor_第N话.json`（comic-identity/memory_anchor.py 产·文件契约，不跨 skill import）：计划里 `status=ready` 的角色，其 pinned 最早定妆锚（front/face）置于该角色参考组**最前**（同路径去重）——长间隔再登场角色以首登场形象为最高权重参考，压制跨话漂移。计划缺失时零行为变化。
+`build_panel_jobs.py` 出图前读取 `生产数据/comic_memory_anchor_第N话.json`（comic-identity/memory_anchor.py 产·文件契约，不跨 skill import）：计划里 `status=ready` 的角色，其 pinned 最早定妆锚（front/face）置于该角色参考组**最前**（同路径去重）——长间隔再登场角色以首登场形象为最高权重参考。计划绑定所有脚本、registry 与 pinned 图片 SHA；长间隔角色需要锚时，计划缺失或 stale 会阻断 job 构建。
 
 ## 逐格参考事前处方（reference_planner·2026-07 落地）
 
@@ -149,4 +169,4 @@ python3 skills/comic-image/scripts/codex_panel_runner.py "创作区/画漫画/�
 python3 skills/comic-image/scripts/reference_planner.py "创作区/画漫画/作品名" 第1话 --write
 ```
 
-逐格逐角色算变化量 delta（近景/大表情/极端角度/背身过肩/换装/动作/多人同框），按后端能力表（comic `_lib/image_backend_adapter`）路由「该喂哪些参考（front/¾/face/side/back/表情/服装 + memory_anchor 前置）+ 封顶参考预算 + 缺口 + 升档建议」，多人同框再给身份槽位 + 撞色区分 + 近景拆反打。动作格把 ¾/侧脸提为主锚、front 降权并写「不看镜头·视线锁戏内目标」指令（comic gate `panel_camera_gaze_unjustified` 硬闸的生成侧前移）。产物 `生产数据/comic_reference_plan_第N话.{json,md}`，`comic-review gate --stage image_preflight` 以 advisory 并入（不阻断）。**只建议不阻断·零像素·纯 stdlib。** 人审后按处方补参考/精选参考位再重建出图包。
+逐格逐角色算变化量 delta（近景/大表情/极端角度/背身过肩/换装/动作/多人同框），按后端能力表路由 front/¾/face/side/back/表情/服装与 memory anchor。分配器先公平保留每个具名角色一锚，再保留 LOC/常驻 PROP；超过执行上限就明确建议拆反打/分区生成后合成。缺结构化绑定、未知状态、显式强情绪合同缺对应表情、关键真实附件缺失和计划 stale 是可复算的 BLOCK；关键词猜情绪、主色撞色、升档和像素代理仍只 WARN/INFO。`build_panel_jobs.py` 只消费该计划选中的真实图与 SHA，并写消费收据，不另起一套挑图逻辑。
