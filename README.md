@@ -134,20 +134,19 @@ MV：mv -> mv-beat -> mv-script -> mv-plan -> mv-image -> mv-video -> mv-lyric-s
 
 **桌面端 App（Electron）发布（走 `tools/e2a`）**：
 
-`e2a` 会先从本地 checkout 生成一份干净打包快照，再在本机完成 Electron 安装包或 demo zip 构建；只有显式传入 `--up`、`--demos` 或 `--all` 才上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets（tag 默认 `electron-v<版本>`）。安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存和构建产物；桌面端内置当前全部 skill、`创作区/` 各系列使用手册和 demo 下载目录，不内置完整 demo payload（demo zip 是独立 Release 资产，App 内按需下载）。
+`e2a` 会先从本地 checkout 生成一份干净打包快照，再在本机完成 Electron 安装包构建；只有显式传入 `--up` 或 `--all` 才上传到 `https://github.com/anton6202527/anime-armory` 的 GitHub Release assets（tag 默认 `electron-v<版本>`）。安装包不提交进源码目录，也不写进 git 历史。快照会排除私有 agent 配置、`.git/`、`dist/`、依赖缓存、构建产物和所有用户作品；桌面端内置当前全部 skill、`创作区/` 各系列使用手册和 R2 Demo 清单回退快照，不内置完整 Demo payload。
 
 ```bash
 bash tools/e2a/scripts/e2a_release.sh          # 默认：只打 DMG，不上传
 bash tools/e2a/scripts/e2a_release.sh --up     # 只打 DMG，并上传
-bash tools/e2a/scripts/e2a_release.sh --demos  # 只打各线 demo zip，并上传
-bash tools/e2a/scripts/e2a_release.sh --all    # 打 DMG + Windows x64 exe + VSIX 并上传，不打 demo
+bash tools/e2a/scripts/e2a_release.sh --all    # 打 DMG + Windows x64 exe + VSIX 并上传
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # 本地打 DMG + Windows x64 exe（mac 上交叉构建，未签名）
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # 只打 Windows exe（增量补包）
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物在 dist/e2a-release-<tag>/
 ```
 
 - 发布前会先真实启动签名后的 App 5 秒，再验证 DMG：`hdiutil verify`、挂载检查（含内置技能仓库与 `demo_catalog.json`）。本地包默认采用不启用 Hardened Runtime 的 ad-hoc 签名；配置 `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` 可出启用 Hardened Runtime、Developer ID 签名并公证的分发包。
-- demo zip 资产名：`AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`；n2d 会瘦身到第 1 集媒体。
+- 官方 Demo 单独使用 `npm run demos:publish` 发布到 Cloudflare R2；不会进入 GitHub Release。
 - release 默认不标 latest、不改 README 下载链接——发布对用户可见的新版时手动更新上表链接（固定 tag 链接可复现，`releases/latest/download/...` 永远指向最新）。
 - 完整契约见 `tools/e2a/SKILL.md`。
 
@@ -157,7 +156,6 @@ bash tools/e2a/scripts/e2a_release.sh --no-upload    # 只本地构建，产物�
 
 ```bash
 scripts/sync_bundles.sh          # 同步 vscode-extension/assets/、VSIX 种子创作区、apps/desktop/resources/
-scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo 种子目录；默认只带固定完整示例
 ```
 
 这两个目标目录是生成快照，默认不进 git；VS Code 的种子 `创作区/` 会刷新各系列 `使用手册.md`。VS Code `.vsix` 打包会通过 `vscode:prepublish` 自动同步扩展资源。本地调试 VS Code 扩展时若尚未生成 `assets/`，扩展会直接读取旁边 checkout 的 `skills/`。
@@ -167,7 +165,7 @@ scripts/sync_bundles.sh --demo   # desktop 额外内置各线冠军 demo 种子�
 ```bash
 # 桌面端（Electron）：Mac Apple Silicon
 npm install
-node tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库 + demo 目录 → apps/desktop/resources/
+node tools/e2a/scripts/sync_bundle.cjs   # 内置技能仓库、使用手册与 R2 清单回退快照
 npm run build:desktop
 (cd apps/desktop && npx electron-builder --mac --arm64)
 
@@ -400,20 +398,19 @@ Published packages use the stable filenames listed above when uploaded to the `a
 
 **Desktop App (Electron) release, via `tools/e2a`:**
 
-`e2a` builds from a clean snapshot of the local checkout and produces Electron installers or demo zips locally. It uploads only when `--up`, `--demos`, or `--all` is explicitly supplied, targeting GitHub Release assets under `https://github.com/anton6202527/anime-armory` (default tag `electron-v<version>`). Installer files are not committed into the source tree or git history. The snapshot excludes private agent config, `.git/`, `dist/`, dependency caches, and build output. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a demo download catalog, not full demo payloads (demo zips are separate Release assets the app downloads on demand).
+`e2a` builds Electron installers from a clean local snapshot. It uploads only when `--up` or `--all` is explicitly supplied, targeting GitHub Release assets under `https://github.com/anton6202527/anime-armory` (default tag `electron-v<version>`). Installer files are not committed into source control. The snapshot excludes private agent config, user works, `.git/`, `dist/`, dependency caches, and build output. Desktop packages bundle all current skills, the `创作区/` usage manuals, and a last-known R2 Demo catalog fallback, never full Demo payloads.
 
 ```bash
 bash tools/e2a/scripts/e2a_release.sh          # default: DMG only, local; no upload
 bash tools/e2a/scripts/e2a_release.sh --up     # DMG only, then upload
-bash tools/e2a/scripts/e2a_release.sh --demos  # demo zips only, then upload
-bash tools/e2a/scripts/e2a_release.sh --all    # DMG + Windows x64 exe + VSIX, then upload; no demos
+bash tools/e2a/scripts/e2a_release.sh --all    # DMG + Windows x64 exe + VSIX, then upload
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win           # local DMG + Windows x64 exe (cross-built on macOS, unsigned)
 bash tools/e2a/scripts/e2a_release.sh --apps-only --win --no-mac  # Windows exe only (incremental upload)
 bash tools/e2a/scripts/e2a_release.sh --no-upload    # local build only, artifacts in dist/e2a-release-<tag>/
 ```
 
 - Before upload, `e2a` runs the signed App for five seconds, then validates the DMG with `hdiutil verify` plus a mount check (bundled skills repo and `demo_catalog.json`). Local builds are ad-hoc signed without hardened runtime; set `E2A_SIGNING_IDENTITY` / `E2A_NOTARY_KEYCHAIN_PROFILE` for distributable Developer ID signed + notarized builds.
-- Demo zip asset names: `AnimeArmory_demo_{novel,n2d,comic,song,mv,ad}.zip`; the n2d zip is slimmed to first-episode media.
+- Official Demo ZIP files are published separately to Cloudflare R2 with `npm run demos:publish`; they never enter GitHub Release.
 - Releases are not marked latest and README download links are not rewritten by the tool — update the download table manually when publishing a user-facing release. Full contract: `tools/e2a/SKILL.md`.
 
 **VS Code extension release**: `e2a --all` packages and uploads `anime-armory.vsix` automatically. For a standalone local build, run `npx @vscode/vsce package` inside `vscode-extension/`.
@@ -422,7 +419,6 @@ To sync the current checkout's `skills/` and `创作区/` usage manuals into the
 
 ```bash
 scripts/sync_bundles.sh          # sync vscode-extension/assets/, VSIX seed 创作区, and apps/desktop/resources/
-scripts/sync_bundles.sh --demo   # include extra line champion demo seeds; default bundles only the fixed full sample
 ```
 
 Both destinations are generated snapshots and are gitignored; the VS Code seed `创作区/` also receives the per-line `使用手册.md` files. `.vsix` packaging syncs extension resources through `vscode:prepublish`. During local VS Code extension debugging, if `assets/` has not been generated yet, the extension reads `skills/` from the adjacent checkout.
@@ -437,7 +433,7 @@ Manual packaging without `e2a`:
 
 ```bash
 npm install
-node tools/e2a/scripts/sync_bundle.cjs   # stage bundled skills repo + demo catalog into apps/desktop/resources/
+node tools/e2a/scripts/sync_bundle.cjs   # stage skills/manuals + R2 catalog fallback
 npm run build:desktop
 (cd apps/desktop && npx electron-builder --mac --arm64)
 (cd vscode-extension && npx @vscode/vsce package)

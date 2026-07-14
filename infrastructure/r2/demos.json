@@ -1,4 +1,8 @@
 {
+  "schema_version": 1,
+  "bucket": "anime-armory-demos-public",
+  "public_base_url": "https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev",
+  "catalog_key": "catalog/v1/catalog.json",
   "works": [
     {
       "line": "写小说",
@@ -6,7 +10,8 @@
     },
     {
       "line": "制漫剧",
-      "name": "那妖魔是姜大人"
+      "name": "那妖魔是姜大人",
+      "profile": "first-episode"
     },
     {
       "line": "画漫画",

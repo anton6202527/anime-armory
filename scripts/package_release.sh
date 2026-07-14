@@ -86,7 +86,6 @@ copy_dir apps/desktop/scripts
 copy_dir apps/desktop/assets
 copy_file apps/desktop/README.md
 copy_file apps/desktop/.gitignore
-copy_file apps/desktop/.env.example
 copy_file apps/desktop/package.json
 copy_file apps/desktop/electron-builder.yml
 copy_file apps/desktop/electron.vite.config.ts

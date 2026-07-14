@@ -9,13 +9,15 @@ import extractZip from 'extract-zip'
 import type { DemoDownloadInfo, DemoInstallResult, LineKey } from '@shared/types'
 
 const DOWNLOAD_TIMEOUT = 600_000
-const CATALOG_DOWNLOAD_TIMEOUT = 3_000
+const CATALOG_DOWNLOAD_TIMEOUT = 10_000
 const CATALOG_CACHE_TTL = 5 * 60_000
-const RELEASE_BASE =
-  process.env.ANIME_ARMORY_DEMO_RELEASE_BASE ??
-  'https://github.com/anton6202527/anime-armory/releases/latest/download'
-const DEFAULT_RELEASE_REPO = 'anton6202527/anime-armory'
-const CATALOG_ASSET_NAME = 'AnimeArmory_demo_catalog.json'
+const DEFAULT_R2_PUBLIC_BASE = 'https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev'
+const R2_PUBLIC_BASE = String(
+  process.env.ANIME_ARMORY_DEMO_ASSET_BASE_URL ?? DEFAULT_R2_PUBLIC_BASE,
+).replace(/\/+$/, '')
+const CATALOG_URL =
+  process.env.ANIME_ARMORY_DEMO_CATALOG_URL ?? `${R2_PUBLIC_BASE}/catalog/v1/catalog.json`
+const MAX_DEMO_BYTES = 5 * 1024 * 1024 * 1024
 const LINE_KEYS = new Set<LineKey>(['n2d', 'comic', 'ad', 'mv', 'song', 'novel'])
 const LINE_KEY_BY_NAME: Record<string, LineKey> = {
   制漫剧: 'n2d',
@@ -32,6 +34,7 @@ interface CatalogEntry {
   name?: string
   rel?: string
   asset_name?: string
+  object_key?: string
   download_url?: string
   sha256?: string
   size?: number
@@ -72,7 +75,33 @@ function catalogEntries(doc: unknown): CatalogEntry[] {
   return []
 }
 
-function normalizeCatalogEntry(entry: CatalogEntry): CatalogEntry | null {
+function allowedCatalogOrigin(catalogUrl: string): string | null {
+  try {
+    const parsed = new URL(catalogUrl)
+    if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(parsed.hostname))) {
+      return null
+    }
+    return parsed.origin
+  } catch {
+    return null
+  }
+}
+
+function safeObjectKey(value: unknown): string | null {
+  const key = String(value ?? '').trim()
+  if (
+    !key
+    || key.length > 1024
+    || key.startsWith('/')
+    || key.includes('\\')
+    || key.includes('//')
+    || key.split('/').some((part) => !part || part === '.' || part === '..' || /[\0\r\n]/.test(part))
+    || !key.endsWith('.zip')
+  ) return null
+  return key
+}
+
+function normalizeCatalogEntry(entry: CatalogEntry, catalogUrl: string): CatalogEntry | null {
   const rel = String(entry.rel ?? '').split('\\').join('/')
   const parts = rel.split('/')
   if (
@@ -87,10 +116,16 @@ function normalizeCatalogEntry(entry: CatalogEntry): CatalogEntry | null {
   if (!LINE_KEYS.has(key) || !derivedKey || key !== derivedKey) return null
   const assetName = String(entry.asset_name ?? `AnimeArmory_demo_${key}.zip`)
   if (!assetName || path.basename(assetName) !== assetName || !assetName.endsWith('.zip')) return null
-  const url = String(entry.download_url ?? `${RELEASE_BASE}/${encodeURIComponent(assetName)}`)
+  const objectKey = safeObjectKey(entry.object_key)
+  const base = String(entry.download_url ?? (objectKey ? new URL(objectKey, `${R2_PUBLIC_BASE}/`).toString() : ''))
+  const origin = allowedCatalogOrigin(catalogUrl)
+  const size = Number(entry.size)
+  const sha256 = String(entry.sha256 ?? '').toLowerCase()
+  if (!origin || !Number.isSafeInteger(size) || size <= 0 || size > MAX_DEMO_BYTES) return null
+  if (!/^[a-f0-9]{64}$/.test(sha256)) return null
   try {
-    const parsed = new URL(url)
-    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return null
+    const parsed = new URL(base)
+    if (parsed.origin !== origin || parsed.protocol !== new URL(catalogUrl).protocol) return null
   } catch {
     return null
   }
@@ -101,7 +136,11 @@ function normalizeCatalogEntry(entry: CatalogEntry): CatalogEntry | null {
     name: parts[2],
     rel: parts.join('/'),
     asset_name: assetName,
-    download_url: url,
+    object_key: objectKey ?? undefined,
+    download_url: base,
+    sha256,
+    size,
+    source: 'r2',
   }
 }
 
@@ -114,23 +153,14 @@ async function readBundledCatalog(): Promise<CatalogEntry[]> {
     try {
       const raw = await fs.readFile(p, 'utf8')
       const list = catalogEntries(JSON.parse(raw))
+        .map((entry) => normalizeCatalogEntry(entry, CATALOG_URL))
+        .filter((entry): entry is CatalogEntry => entry !== null)
       if (list.length > 0) return list
     } catch {
       // try next location
     }
   }
   return []
-}
-
-function remoteCatalogUrls(): string[] {
-  const explicit = String(process.env.ANIME_ARMORY_DEMO_CATALOG_URL ?? '').trim()
-  const repo = String(process.env.ANIME_ARMORY_DEMO_RELEASE_REPO ?? DEFAULT_RELEASE_REPO).trim()
-  const urls = [
-    explicit,
-    `https://github.com/${repo}/releases/download/electron-v${encodeURIComponent(app.getVersion())}/${CATALOG_ASSET_NAME}`,
-    `${RELEASE_BASE}/${CATALOG_ASSET_NAME}`,
-  ].filter(Boolean)
-  return [...new Set(urls)]
 }
 
 async function fetchCatalog(url: string): Promise<CatalogEntry[]> {
@@ -143,6 +173,8 @@ async function fetchCatalog(url: string): Promise<CatalogEntry[]> {
     })
     if (!response.ok) return []
     return catalogEntries(await response.json())
+      .map((entry) => normalizeCatalogEntry(entry, url))
+      .filter((entry): entry is CatalogEntry => entry !== null)
   } catch {
     return []
   } finally {
@@ -157,15 +189,9 @@ async function readRemoteCatalog(): Promise<CatalogEntry[]> {
   }
   if (remoteCatalogPending) return remoteCatalogPending
   remoteCatalogPending = (async () => {
-    for (const url of remoteCatalogUrls()) {
-      const entries = await fetchCatalog(url)
-      if (entries.length > 0) {
-        remoteCatalogCache = { at: Date.now(), entries }
-        return entries
-      }
-    }
-    remoteCatalogCache = { at: Date.now(), entries: [] }
-    return []
+    const entries = await fetchCatalog(CATALOG_URL)
+    remoteCatalogCache = { at: Date.now(), entries }
+    return entries
   })().finally(() => {
     remoteCatalogPending = null
   })
@@ -173,17 +199,10 @@ async function readRemoteCatalog(): Promise<CatalogEntry[]> {
 }
 
 async function readCatalog(): Promise<CatalogEntry[]> {
-  const bundled = await readBundledCatalog()
-  // A packaged build always ships the matching catalog. Do not make the work
-  // list wait for GitHub; refresh in the background and use it on the next read.
-  if (bundled.length > 0 && !remoteCatalogCache) void readRemoteCatalog()
-  const remote = bundled.length > 0
-    ? (remoteCatalogCache?.entries ?? [])
-    : await readRemoteCatalog()
+  const [bundled, remote] = await Promise.all([readBundledCatalog(), readRemoteCatalog()])
   const merged = new Map<string, CatalogEntry>()
-  for (const raw of [...bundled, ...remote]) {
-    const entry = normalizeCatalogEntry(raw)
-    if (entry?.rel) merged.set(entry.rel, entry)
+  for (const entry of [...bundled, ...remote]) {
+    if (entry.rel) merged.set(entry.rel, entry)
   }
   return [...merged.values()].sort((a, b) => String(a.rel).localeCompare(String(b.rel), 'zh-Hans-CN'))
 }
@@ -207,10 +226,10 @@ export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDown
       name: entry.name ?? key,
       rel,
       asset_name: entry.asset_name ?? `AnimeArmory_demo_${key}.zip`,
-      download_url: entry.download_url ?? `${RELEASE_BASE}/${encodeURIComponent(entry.asset_name ?? `AnimeArmory_demo_${key}.zip`)}`,
+      download_url: entry.download_url ?? '',
       sha256: entry.sha256 ?? null,
       size: entry.size ?? null,
-      source: entry.source ?? 'release',
+      source: entry.source ?? 'r2',
       installed: Boolean(abs) && existsSync(path.join(abs, '_进度.md')),
       path: abs || null,
     }
@@ -268,32 +287,38 @@ export async function installDemo(workspaceRoot: string, relOrLine: string): Pro
   const cacheDir = path.join(app.getPath('temp'), 'anime-armory', 'demo-downloads', `${cacheKey}-${Date.now()}`)
   await fs.mkdir(cacheDir, { recursive: true })
   const zipPath = path.join(cacheDir, info.asset_name)
-  await download(info.download_url, zipPath)
-  if (info.sha256) {
+  try {
+    await download(info.download_url, zipPath)
+    const downloaded = await fs.stat(zipPath)
+    if (info.size && downloaded.size !== info.size) {
+      throw new Error(`示例包大小校验失败（期望 ${info.size}，实际 ${downloaded.size}）`)
+    }
     const digest = await sha256File(zipPath)
-    if (digest.toLowerCase() !== info.sha256.toLowerCase()) {
+    if (!info.sha256 || digest.toLowerCase() !== info.sha256.toLowerCase()) {
       throw new Error('示例包校验失败(sha256 不匹配),请重试')
     }
-  }
-  const extractDir = path.join(cacheDir, 'extracted')
-  await extractZip(zipPath, { dir: extractDir })
-  const expectedRoot = path.join(extractDir, ...info.rel.split('/'))
-  const progressRoot = existsSync(path.join(expectedRoot, '_进度.md'))
-    ? expectedRoot
-    : await findProgressRoot(extractDir)
-  if (!progressRoot) throw new Error('示例包中未找到 _进度.md,安装中止')
-  if (path.basename(progressRoot) !== info.name) throw new Error('示例包作品名与目录不一致,安装中止')
-  if (existsSync(target)) {
-    // never clobber user content — only fill in if missing
-    const entries = await fs.readdir(target).catch(() => [])
-    if (entries.length > 0) throw new Error('目标目录已存在且非空,拒绝覆盖')
-  }
-  await fs.mkdir(path.dirname(target), { recursive: true })
-  await fs.cp(progressRoot, target, { recursive: true })
-  await addDemoOrigin(workspaceRoot, info.rel.split(path.sep).join('/'))
-  return {
-    root: { name: path.basename(target), path: target, has_progress: true, is_demo: true },
-    already_installed: false,
+    const extractDir = path.join(cacheDir, 'extracted')
+    await extractZip(zipPath, { dir: extractDir })
+    const expectedRoot = path.join(extractDir, ...info.rel.split('/'))
+    const progressRoot = existsSync(path.join(expectedRoot, '_进度.md'))
+      ? expectedRoot
+      : await findProgressRoot(extractDir)
+    if (!progressRoot) throw new Error('示例包中未找到 _进度.md,安装中止')
+    if (path.basename(progressRoot) !== info.name) throw new Error('示例包作品名与目录不一致,安装中止')
+    if (existsSync(target)) {
+      // never clobber user content — only fill in if missing
+      const entries = await fs.readdir(target).catch(() => [])
+      if (entries.length > 0) throw new Error('目标目录已存在且非空,拒绝覆盖')
+    }
+    await fs.mkdir(path.dirname(target), { recursive: true })
+    await fs.cp(progressRoot, target, { recursive: true })
+    await addDemoOrigin(workspaceRoot, info.rel.split(path.sep).join('/'))
+    return {
+      root: { name: path.basename(target), path: target, has_progress: true, is_demo: true },
+      already_installed: false,
+    }
+  } finally {
+    await fs.rm(cacheDir, { recursive: true, force: true })
   }
 }
 

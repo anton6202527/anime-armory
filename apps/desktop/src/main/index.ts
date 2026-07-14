@@ -20,6 +20,11 @@ function developmentIconPath(): string | undefined {
 
 function createWindow(): BrowserWindow {
   const icon = developmentIconPath()
+  const smokeDemos = process.env.SMOKE_DEMOS === '1'
+  const smokeDemoInstall = smokeDemos && process.env.SMOKE_DEMO_INSTALL === '1'
+  // Demo smoke only verifies the public catalog UI. Never let the legacy
+  // workspace smoke click a Demo download card in the same run.
+  const smokeDrive = !smokeDemos && process.env.SMOKE_DRIVE === '1'
   const win = new BrowserWindow({
     title: productName,
     ...(icon ? { icon } : {}),
@@ -55,9 +60,25 @@ function createWindow(): BrowserWindow {
              const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
              const click = (el) => el && el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
              const steps = []
-             for (let i = 0; i < 40 && !document.querySelector('.line-card'); i++) await sleep(250)
+             steps.push('smokeDemos=${smokeDemos}')
+             steps.push('smokeDrive=${smokeDrive}')
+             for (let i = 0; i < 80 && !document.querySelector('.line-card'); i++) await sleep(250)
              steps.push('lineCards=' + document.querySelectorAll('.line-card').length)
-             if (${JSON.stringify(Boolean(process.env.SMOKE_DRIVE))}) {
+             if (${smokeDemos}) {
+               // The ad Demo is intentionally tiny, so install smoke can test
+               // download + checksum + extraction without pulling a large work.
+               const lineCard = document.querySelectorAll('.line-card')[${smokeDemoInstall ? 2 : 0}]
+               click(lineCard?.querySelector('.card-actions .primary') || lineCard)
+               for (let i = 0; i < 40 && !document.querySelector('.demo-download-card'); i++) await sleep(250)
+               steps.push('demoDownloads=' + document.querySelectorAll('.demo-download-card').length)
+               steps.push('cloudEntry=' + Boolean(document.querySelector('.statusbar-cloud, .cloud-modal, .cloud-login')))
+               if (${smokeDemoInstall}) {
+                 click(document.querySelector('.demo-download-card'))
+                 for (let i = 0; i < 80 && !document.querySelector('.root-demo-badge'); i++) await sleep(250)
+                 steps.push('installedDemo=' + Boolean(document.querySelector('.root-demo-badge')))
+               }
+             }
+             if (${smokeDrive}) {
                // enter the FIRST line (n2d, canvas view) and open its demo work
                const enter = document.querySelectorAll('.line-card .card-actions button')[1]
                click(enter || document.querySelector('.line-card'))
@@ -88,14 +109,6 @@ function createWindow(): BrowserWindow {
                  steps.push('epSelect=' + Boolean(document.querySelector('.ep-select')))
                }
              }
-             if (${JSON.stringify(Boolean(process.env.SMOKE_CLOUD))}) {
-               click(document.querySelector('.statusbar-cloud'))
-               await sleep(1200)
-               steps.push('cloudModal=' + Boolean(document.querySelector('.cloud-modal')))
-               steps.push('cloudLogin=' + Boolean(document.querySelector('.cloud-login')))
-               steps.push('cloudConfigMissing=' + Boolean(document.querySelector('.cloud-empty code')))
-               steps.push('cloudError=' + Boolean(document.querySelector('.cloud-error')))
-             }
              return JSON.stringify({
                steps,
                errs: window.armorySmokeErrors ? window.armorySmokeErrors() : [],
@@ -106,6 +119,8 @@ function createWindow(): BrowserWindow {
         const recheck = await win.webContents.executeJavaScript(
           `JSON.stringify({
              op: Boolean(document.querySelector('.op')),
+             demoDownloads: document.querySelectorAll('.demo-download-card').length,
+             cloudEntry: Boolean(document.querySelector('.statusbar-cloud, .cloud-modal, .cloud-login')),
              status: (document.querySelector('.statusbar')?.textContent || '').slice(0, 40),
            })`,
         )
@@ -136,7 +151,6 @@ function createWindow(): BrowserWindow {
 
   services.pty.attach(win.webContents)
   services.watch.attach(win.webContents)
-  services.cloud.attach(win.webContents)
   ui.attach(win)
 
   // On macOS the app outlives its window (window-all-closed does not quit),
@@ -145,7 +159,6 @@ function createWindow(): BrowserWindow {
   win.on('closed', () => {
     services.pty.disposeAll()
     void services.watch.disposeAll()
-    services.cloud.dispose()
   })
 
   if (process.env.ELECTRON_RENDERER_URL) {
@@ -178,6 +191,5 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   services.pty.disposeAll()
   services.media.dispose()
-  services.cloud.dispose()
   void services.watch.disposeAll()
 })

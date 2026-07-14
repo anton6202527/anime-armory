@@ -16,19 +16,17 @@ npm run dist         # electron-builder 产出安装包(release/)
 
 技能仓库解析顺序:显式 `VITE_ANIME_ARMORY_REPO` → `ANIME_ARMORY_REPO` 环境变量 →
 从 cwd 向上查找含 `skills/README.md` 的目录 → 打包内置 `resources/`。
-作品工作区固定为 `~/AnimeArmory`(可经菜单"切换工作区…"更换,与技能仓库互斥隔离)。
+作品工作区默认为 `~/AnimeArmory`(可经菜单"切换工作区…"更换,与技能仓库互斥隔离)。
+自动化调试可用 `ANIME_ARMORY_WORKSPACE` 指向临时工作区。
 
-### 云端登录与作品同步
+### 匿名 Demo 下载与本地作品
 
-桌面端保持本地优先。配置 `apps/desktop/.env.local` 后，点击底部状态栏的“登录云端”，使用 Supabase Auth 邮箱密码登录；会话由 Electron 主进程通过系统安全存储加密保存，renderer 不接触令牌。
+公开桌面端没有账号、登录或上传能力。官方 Demo 目录和 ZIP 从 Cloudflare
+R2 匿名读取，下载完成后强制核对字节数与 SHA-256，再安全解压到作品工作区。
+用户新建或修改的作品始终只保存在本地，不会自动或手动上传。
 
-打开作品后可在同一面板执行：
-
-- 增量同步到云端：首次创建/绑定项目，只上传新增或 SHA-256 变化的文件；
-- 恢复云端缺失文件：只下载本地不存在的文件，同名冲突不会覆盖；
-- 绑定已有云端作品或解除本机绑定。
-
-同步需要显式点击，不会在启动或打包时自动上传。完整安全边界见 `../../docs/cloud-architecture.md`。
+维护者通过仓库根目录的 `npm run demos:publish` 独立发布 Demo；R2 凭证和
+Cloudflare 登录态不会进入 Electron 包。完整边界见 `../../docs/cloud-architecture.md`。
 
 ## 架构
 
@@ -81,6 +79,7 @@ xyflow 画布 `__renderKey` 协调避免节点重渲、Monaco/xyflow/xterm 手�
 
 `SMOKE_SHOT=<png路径>` 启动会在 8s 后截图并输出探针 JSON;再加 `SMOKE_DRIVE=1`
 会自动点击 进入创作区 → 打开作品 → 切画布 tab,验证 PTY/文件树/画布/进度条全链路。
+`SMOKE_DEMOS=1` 会在空工作区验证 R2 Demo 下载卡片存在且登录入口不存在。
 
 ```bash
 npm run build
@@ -89,12 +88,12 @@ SMOKE_DRIVE=1 SMOKE_SHOT=/tmp/smoke.png npx electron .
 
 ## 打包发布
 
-发布走 `tools/e2a`(`bash tools/e2a/scripts/e2a_release.sh`,契约见其 SKILL.md):
-自动把技能仓库 + demo 目录经 `tools/e2a/scripts/sync_bundle.cjs` 内置进
-`resources/`(electron-builder `extraResources`),出 DMG 并连同各线 demo zip
-上传 Release。
+安装包发布走 `tools/e2a`(`bash tools/e2a/scripts/e2a_release.sh`,契约见其
+SKILL.md)：把技能仓库、使用手册和 R2 清单回退快照放进 `resources/`，生成
+DMG/EXE/VSIX，并按显式参数上传 GitHub Release。Demo ZIP 不进入安装包或
+GitHub Release，单独使用 `npm run demos:publish` 发布到 R2。
 
 ## 已知边界
 
-- `demos.seed` 为遗留 no-op(演示包统一走 Release 下载安装)。
+- `demos.seed` 为遗留 no-op（演示包统一走 R2 下载安装）。
 - PDF 导入仅复制文件,不做文本抽取(与原 Tauri 版一致)。

@@ -34,7 +34,8 @@ const LINE_LABELS: Record<LineKey, string> = {
 
 export class WorkspaceService {
   async defaultWorkspace(): Promise<string> {
-    const dir = path.join(os.homedir(), 'AnimeArmory')
+    const override = process.env.ANIME_ARMORY_WORKSPACE?.trim()
+    const dir = override ? path.resolve(override) : path.join(os.homedir(), 'AnimeArmory')
     await fs.mkdir(dir, { recursive: true })
     return dir
   }

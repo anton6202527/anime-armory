@@ -1,167 +1,124 @@
-# 云端架构：Supabase + Cloudflare R2
+# 云端架构：本地作品 + R2 公开 Demo
 
-## 当前决策
-
-开发期采用“本地优先、云能力可选”的结构：
+## 当前产品边界
 
 ```text
-Electron（当前）/ Web（以后）
-        │ Supabase 登录令牌
-        ▼
-Supabase Auth + Postgres + Edge Function
-        │ 临时签名 URL（短时有效）
-        ▼
-Cloudflare R2 私有桶
+内部维护者
+  └─ scripts/publish_demos_r2.mjs
+       └─ Cloudflare R2：anime-armory-demos-public
+            ├─ catalog/v1/catalog.json
+            └─ demos/v1/<line>/<work-id>/<sha256>.zip
+
+公开 Electron 客户端（匿名）
+  └─ 读取 catalog → 点击下载 → 校验 size/SHA-256 → 解压到 ~/AnimeArmory
+
+用户自己的作品
+  └─ 只保存在本地工作区，不登录、不上传、不云同步
 ```
 
-- Git 只保存源码、工作流和小型样例，不保存视频、音频、图片包、模型或构建产物。
-- Supabase 保存账号、项目权限、资产索引、任务状态；不保存大型二进制内容。
-- R2 桶保持私有。客户端登录后向 `assets` Edge Function 申请临时上传/下载 URL。
-- 数据库不保存永久 CDN URL，只保存 `provider + bucket + key + etag/version`。以后切换腾讯云 COS 时，客户端协议不需要改变。
-- 现有 Electron 本地工作流保持默认行为；没有云配置、没有登录时仍可离线使用。
-- Electron 正式包通过 main/preload 的受限 IPC transport 发起云请求；renderer 不直接联网，也不为 `file://` 的 `null` Origin 放宽 CSP/CORS。
-- Electron 登录会话只保存在主进程，并通过操作系统安全存储加密；邮箱密码不会落盘，access token 不会进入 renderer。
-- 作品同步必须由用户显式触发。上传只发送新增或哈希变化的文件，下载只恢复本地缺失文件；同名冲突不会覆盖本地内容。
-- Web 端本阶段只保留 `apps/web` 工作区边界，不创建页面；后续复用 `packages/contracts` 和 `packages/cloud-client`。
+- 桌面端没有 Supabase Auth、账号状态、上传按钮或上传 IPC。
+- 用户只会看到官方 Demo 的下载入口。
+- R2 Access Key、Secret 和 Cloudflare 登录态只存在于维护者环境，不进入
+  Electron renderer、preload、安装包或 Git。
+- 安装包、VSIX 和校验和仍通过 `tools/e2a` 发布到 GitHub Release；Demo ZIP
+  与 GitHub Release 完全解耦。
+- `apps/backend` 中已有的 Supabase/Postgres/私有资产基础层保留给未来 Web、
+  团队协作或其他需要登录的业务，但公开桌面端不调用它。
 
-## 代码边界
+## R2 资源
 
-| 目录 | 职责 |
-| --- | --- |
-| `apps/desktop` | 当前 Electron 客户端；保持本地优先，云能力按登录状态启用 |
-| `apps/backend` | Supabase 后端应用工作区；包含数据库迁移、RLS 与 Edge Functions |
-| `apps/web` | 未来 Web 客户端的空工作区；当前不实现页面或运行时 |
-| `packages/contracts` | 跨桌面端、Web、Edge Function 的资产 API 契约和输入校验 |
-| `packages/object-store` | 对象存储接口及 R2 实现；未来增加 COS 实现 |
-| `packages/data-access` | Supabase 资产元数据仓储 |
-| `packages/cloud-client` | 登录态客户端、单文件/分片上传、下载授权 |
-| `apps/backend/supabase/migrations` | 可审计、可迁移的 Postgres 表结构与 RLS 策略 |
-| `apps/backend/supabase/functions/assets` | 私有资产签名、权限校验、上传完成校验 |
-| `infrastructure/r2` | R2 CORS 配置样例 |
+| 资源 | 可见性 | 用途 |
+| --- | --- | --- |
+| `anime-armory-demos-public` | 公开只读 | 官方 Demo 清单和不可变 ZIP |
+| `anime-armory-private-dev` | 私有 | 预留的认证资产基础层，不供公开桌面端使用 |
 
-每部本地作品使用 `.anime-armory/cloud.json` 保存非敏感的云端项目绑定。该目录不会作为作品资产上传；删除绑定文件只会解除本机绑定，不会删除云端数据。
+开发期公开地址：
 
-## 数据模型
+```text
+https://pub-0bafc63084d743e78dbe9f72fc918988.r2.dev
+```
 
-- `accounts`：应用内部稳定账号 ID。
-- `account_identities`：把 Supabase Auth 用户映射到内部账号；迁往腾讯云时可增加新的身份提供方而不改业务外键。
-- `projects` / `project_members`：项目和 `owner/editor/viewer` 权限。
-- `assets`：对象存储引用、文件元数据和状态。
-- `asset_uploads`：单文件或 multipart 上传会话。
-- `jobs`：以后后端任务队列/执行状态的基础表，不承载大型产物。
+`r2.dev` 适合开发验证。正式面向大量用户前，应给公开 Demo 桶绑定 Cloudflare
+自定义域名并开启缓存，然后同时更新：
 
-`assets` 和 `asset_uploads` 不允许普通客户端直接写入。Edge Function 先用调用者令牌和 RLS 做项目授权，再用仅存在于服务端的 secret key 写入；上传完成后还会向 R2 查询对象大小、类型和内部资产标识，验证通过才标记 `ready`。
+- `infrastructure/r2/demos.json` 的 `public_base_url`；
+- `apps/desktop/src/main/services/demos.ts` 的默认公开地址；
+- 重新执行 `npm run demos:publish`。
 
-## 上传流程
+## 匿名下载安全边界
 
-1. 客户端必须先通过 Supabase Auth 登录。
-2. 客户端把项目 ID、文件名、MIME 类型和大小发给 `assets` Function。
-3. 小文件获得一次性 `PUT` 签名；大文件创建 multipart 会话并按需批量申请分片签名。
-4. 文件从客户端直接进入 R2 的 `_uploads/` 临时键，不经过 Supabase 数据库，也不经过 Edge Function 内存；单文件签名会绑定声明的字节数。
-5. 客户端提交 ETag 列表；服务端完成 multipart，并用 `HeadObject` 校验大小、类型和内部资产标识。
-6. 校验通过后，服务端把临时对象复制到不可变正式键并删除临时对象。旧上传签名即使仍在有效期内，也不能覆盖已完成资产。
-7. 下载前再次检查项目成员身份，只返回短时有效的 `GET` 签名。
+1. 客户端只读取固定 HTTPS R2 catalog。
+2. catalog 中每条记录必须包含合法的作品相对路径、ZIP 对象键、精确字节数和
+   64 位 SHA-256；下载地址必须与 catalog 同源。
+3. ZIP 使用内容哈希不可变路径，更新 Demo 会产生新对象，不覆盖旧缓存。
+4. 下载完成后先校验文件大小，再流式计算 SHA-256；任何不一致都拒绝解压。
+5. 解压后的作品必须包含 `_进度.md`，目录名必须与 catalog 一致。
+6. 已存在且非空的本地作品目录永远不会被覆盖。
+7. 下载临时目录无论成功或失败都会清理。
 
-默认值：100 MiB 以内单次上传，超过后使用 32 MiB 分片；单资产上限 50 GiB；开发账号已预留资产总量上限 20 GiB、最多 5 个并行上传；签名 15 分钟失效；上传会话 24 小时失效。可通过 `.env.example` 中的变量调整。
+## 发布 Demo
+
+配置文件：`infrastructure/r2/demos.json`。默认从 `~/AnimeArmory` 读取配置的
+六个作品。
+
+```bash
+# 只构建、安全扫描、压缩和生成 catalog，不操作云端
+npm run demos:build
+
+# 构建并发布到 R2；所有 ZIP 成功后才发布 catalog
+npm run demos:publish
+
+# 只构建/发布一条线或一个作品
+node scripts/publish_demos_r2.mjs --only comic
+node scripts/publish_demos_r2.mjs --publish --only '创作区/画漫画/仙界闭关小能手'
+```
+
+发布器会：
+
+- 通过 `tools/release-safety/demo_safety.cjs` 排除密钥、账号配置、缓存和生成垃圾；
+- 对漫剧 Demo 使用 `first-episode` profile，控制公开包体积；
+- 固定 ZIP 时间戳，生成稳定资产名；
+- 使用 `demos/v1/<line>/<work-id>/<sha256>.zip` 不可变对象键；
+- 先上传全部 ZIP，最后上传 `catalog/v1/catalog.json`。
+
+290 MiB 以内的对象使用当前 Wrangler OAuth 会话。更大的 ZIP 自动切换到 R2
+S3 multipart，此时只在维护者 shell 中设置：
+
+```bash
+export R2_ACCOUNT_ID=...
+export R2_ACCESS_KEY_ID=...
+export R2_SECRET_ACCESS_KEY=...
+npm run demos:publish
+```
+
+这些变量不能写入仓库或桌面端 `.env`。
+
+## 安装包发布
+
+```bash
+bash tools/e2a/scripts/e2a_release.sh          # 本地 DMG
+bash tools/e2a/scripts/e2a_release.sh --up     # DMG → GitHub Release
+bash tools/e2a/scripts/e2a_release.sh --all    # DMG + EXE + VSIX → GitHub Release
+```
+
+旧的 `--demos` / `--demo-assets` 参数不再上传 GitHub，而会提示改用
+`npm run demos:publish`。
 
 ## 本地验证
 
 ```bash
 npm install
-npm run check:cloud
+npm run test:demos
 npm run typecheck:desktop
+npm run build:desktop
 ```
 
-如已启动 Docker Desktop，可继续运行：
-
-```bash
-npm run supabase -- start
-npm run supabase -- db reset
-npm run supabase -- functions serve assets --env-file .env.local
-```
-
-`.env.local` 只能保存在本机，不能提交到 Git。
-
-## 桌面端登录与同步
-
-1. 在 Supabase Auth 中由管理员创建或邀请用户。开发项目不开放公共注册。
-2. 把 `apps/desktop/.env.example` 复制为 `apps/desktop/.env.local`，填写三个可公开的 `VITE_` 配置。
-3. 启动桌面端，在底部状态栏点击“登录云端”。
-4. 打开一部作品后：
-   - “增量同步到云端”会在首次上传时创建云端项目，以后按 `relative_path + sha256` 跳过未变化文件；
-   - “恢复云端缺失文件”只写入本地不存在的路径，内容冲突会列出但不覆盖；
-   - 上传新版本成功后，Edge Function 才会把同路径旧对象标为删除并清理 R2 对象。
-
-本版本不会因为启动、文件变化或应用打包自动上传，也不会把本地绝对路径发送到服务端。远端删除同步暂不自动执行，避免误删。
-
-## 首次远程部署（需要登录授权）
-
-下面步骤会操作你的 Supabase 和 Cloudflare 账号，执行前必须由项目所有者登录并确认目标项目。
-
-### 1. Cloudflare R2
-
-```bash
-npx wrangler login
-npx wrangler r2 bucket create anime-armory-private-dev --location apac
-npx wrangler r2 bucket cors set anime-armory-private-dev \
-  --file infrastructure/r2/cors.wrangler.development.json
-npx wrangler r2 bucket lifecycle add anime-armory-private-dev \
-  cleanup-staged-uploads _uploads/ \
-  --expire-days 2 --abort-multipart-days 1 --force
-npx wrangler r2 bucket cors list anime-armory-private-dev
-```
-
-然后在 Cloudflare Dashboard 为该桶创建仅限 Object Read & Write 的 R2 S3 API Token，取得：
-
-- `R2_ACCOUNT_ID`
-- `R2_ACCESS_KEY_ID`
-- `R2_SECRET_ACCESS_KEY`
-- `R2_BUCKET=anime-armory-private-dev`
-
-不要开启 public bucket，也不要把这些值放进 Electron renderer、Web 构建变量或 Git。
-
-### 2. Supabase
-
-在 Supabase 创建开发项目时，选靠近主要开发/测试用户的区域。然后执行：
-
-```bash
-npm run supabase -- login
-npm run supabase -- link --project-ref YOUR_PROJECT_REF
-npm run supabase -- db push
-npm run supabase -- secrets set \
-  R2_ACCOUNT_ID=... \
-  R2_ACCESS_KEY_ID=... \
-  R2_SECRET_ACCESS_KEY=... \
-  R2_BUCKET=anime-armory-private-dev \
-  ASSET_API_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-npm run supabase -- functions deploy assets
-```
-
-Supabase 会自动为 Edge Function 提供数据库 URL、publishable key 和 secret key；不需要把数据库管理密钥写入仓库。
-开发项目关闭公开注册，仅通过管理员邀请或测试账号进入；准备开放注册前，先补充验证码、滥用防护和正式配额策略。
-
-### 3. 客户端公开配置
-
-客户端只需要可公开的：
-
-```dotenv
-SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
-SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
-ASSET_API_URL=https://YOUR_PROJECT_REF.supabase.co/functions/v1/assets
-```
-
-## 上线前补充项
-
-- Web 域名确定后，同时更新 Edge Function allowlist 和 R2 CORS；生产配置不要沿用开发域名。
-- 增加过期 multipart 会话清理任务、资产软删除/延迟物理删除任务和用量告警。
-- 对用户提交的 `sha256` 目前只作为声明值保存；需要强完整性保证时，在后台校验后再标记可信。
-- 大流量公开预览与私有原片分桶，公开派生资源再考虑自定义域名和缓存策略。
-- 定期做 Postgres 导出，并保存 R2 对象清单；免费套餐不应被当作唯一备份。
+远端验证至少检查：catalog 与发布产物一致、六个对象 `Content-Length` 与 catalog
+一致、抽取一个对象重新计算 SHA-256，以及空工作区中出现 Demo 下载卡片但不存在
+登录/上传入口。
 
 ## 迁移到腾讯云
 
-1. 用标准 PostgreSQL 导出/导入迁移业务数据，保留内部 `accounts.id`。
-2. 把 Supabase Auth 身份映射到新的身份提供方，向 `account_identities` 增加记录。
-3. 批量复制 R2 对象到 COS，校验大小/哈希后更新 `storage_provider`、`bucket`、`key`。
-4. 新增 COS `ObjectStore` 适配器，继续使用同一套签名上传 API。
-5. 双写或增量同步通过后切流，再冻结旧桶；不要一次性改客户端文件 URL。
+将来国内运营时，只需把不可变 ZIP 和 catalog 复制到腾讯云 COS/CDN，保持 catalog
+字段和对象相对路径不变，再切换公开基础域名。用户本地作品不参与迁移；预留的
+Supabase 私有业务如届时启用，再独立迁移 Postgres、Auth 身份和私有对象。

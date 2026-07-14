@@ -12,7 +12,6 @@ import { readNextAction } from './services/pipeline'
 import { installDemo, listDemoDownloads, seedDemos } from './services/demos'
 import * as canvas from './services/canvas'
 import { readQualityInsights } from './services/quality'
-import { CloudService } from './services/cloud'
 import type { AppUiState } from './menu'
 
 type HandlerMap = {
@@ -27,7 +26,6 @@ export interface MainServices {
   pty: PtyService
   watch: WatchService
   media: MediaService
-  cloud: CloudService
   ui: AppUiState
 }
 
@@ -41,7 +39,6 @@ export function createServices(ui: AppUiState): MainServices {
     pty: new PtyService(),
     watch: new WatchService(),
     media: new MediaService(),
-    cloud: new CloudService(),
     ui,
   }
 }
@@ -58,17 +55,6 @@ export function registerIpc(s: MainServices) {
     'demos.list': (a) => listDemoDownloads(a.workspaceRoot),
     'demos.install': (a) => installDemo(a.workspaceRoot, a.rel),
     'demos.seed': (a) => seedDemos(a.workspaceRoot),
-
-    'cloud.authStatus': (a) => s.cloud.authStatus(a.config),
-    'cloud.signIn': (a) => s.cloud.signIn(a.config, a.email, a.password),
-    'cloud.signOut': (a) => s.cloud.signOut(a.config),
-    'cloud.listProjects': (a) => s.cloud.listProjects(a.config),
-    'cloud.getBinding': (a) => s.cloud.getBinding(a.root),
-    'cloud.bindProject': (a) => s.cloud.bindProject(a.config, a.root, a.projectId),
-    'cloud.unbindProject': (a) => s.cloud.unbindProject(a.root),
-    'cloud.syncUpload': (a) => s.cloud.syncUpload(a.config, a.root, a.projectName, a.operationId),
-    'cloud.syncDownload': (a) => s.cloud.syncDownload(a.config, a.root, a.projectId, a.operationId),
-    'cloud.cancelSync': (a) => s.cloud.cancelSync(a.operationId),
 
     'skills.list': (a) => s.skills.list(a.repoRoot, a.line),
     'skills.tree': (a) => s.skills.tree(a.repoRoot, a.dir),

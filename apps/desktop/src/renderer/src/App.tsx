@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { isMacPlatform, onAppEvent } from "./platform/bridge";
 import { Home } from "./pages/Home";
 import { Line } from "./pages/Line";
@@ -6,12 +6,9 @@ import { Operation } from "./pages/Operation";
 import { GlobalTooltip } from "./components/GlobalTooltip";
 import { Codicon } from "./components/Codicon";
 import { BreadcrumbHomeIcon } from "./components/BreadcrumbHomeIcon";
-import { CloudModal } from "./components/CloudModal";
 import {
   DEFAULT_REPO,
-  cloudAuthStatus,
   defaultWorkspace,
-  desktopCloudCapability,
   pickDirectory,
   resolveRepo,
   seedDemos,
@@ -20,7 +17,7 @@ import {
 } from "./api";
 import { plainLineLabel, useI18n, useLineLabel, type Language } from "./i18n";
 import { installSkinPlugin } from "./skins";
-import type { CloudAuthStatus, LineInfo, WorkRoot } from "./types";
+import type { LineInfo, WorkRoot } from "./types";
 
 // The non-tab "home" area: the line picker, or one line's works list.
 type HomeRoute = { kind: "home" } | { kind: "line"; line: LineInfo };
@@ -126,14 +123,10 @@ function AppStatusBar({
   activeWork,
   fileStatus,
   workspaceRoot,
-  cloudAuth,
-  onOpenCloud,
 }: {
   activeWork: OpenWork | null;
   fileStatus: FileStatusInfo | null;
   workspaceRoot: string;
-  cloudAuth: CloudAuthStatus | null;
-  onOpenCloud: () => void;
 }) {
   const { t } = useI18n();
   const hasFile = Boolean(fileStatus?.path);
@@ -164,20 +157,6 @@ function AppStatusBar({
         ) : null}
         <button
           type="button"
-          className="statusbar-button statusbar-cloud"
-          title={cloudAuth?.user
-            ? t("status.cloudSignedIn", { email: cloudAuth.user.email })
-            : t("status.cloudSignedOut")}
-          aria-label={cloudAuth?.user
-            ? t("status.cloudSignedIn", { email: cloudAuth.user.email })
-            : t("status.cloudSignedOut")}
-          onClick={onOpenCloud}
-        >
-          <Codicon name="project" />
-          <span>{cloudAuth?.user ? cloudAuth.user.email : t("status.cloudSignedOut")}</span>
-        </button>
-        <button
-          type="button"
           className="statusbar-button statusbar-notifications"
           title={t("status.notifications")}
           aria-label={t("status.notifications")}
@@ -192,9 +171,6 @@ function AppStatusBar({
 export function App() {
   const { setLanguage, t } = useI18n();
   const lineLabel = useLineLabel();
-  const cloudCapability = useMemo(() => desktopCloudCapability(), []);
-  const [cloudAuth, setCloudAuth] = useState<CloudAuthStatus | null>(null);
-  const [cloudOpen, setCloudOpen] = useState(false);
   // skills repo (runs the pipeline) — inferred live checkout on a dev machine,
   // else the bundled copy shipped inside the installed app. Separate from the works
   // workspace. Falls back to DEFAULT_REPO until resolve_repo answers.
@@ -222,13 +198,6 @@ export function App() {
   useEffect(() => {
     installSkinPlugin();
   }, []);
-
-  useEffect(() => {
-    if (!cloudCapability.enabled) return;
-    cloudAuthStatus(cloudCapability.config)
-      .then(setCloudAuth)
-      .catch((error) => console.error("cloud auth status failed", error));
-  }, [cloudCapability]);
 
   useEffect(() => {
     const unlistenLanguage = onAppEvent("app:set-language", (payload) => {
@@ -305,8 +274,8 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot. seedDemos is a legacy no-op for
-  // current builds because full demos are downloaded from Release assets.
+  // Resolve the dedicated workspace on boot. seedDemos is a legacy no-op for
+  // current builds because full demos are downloaded from Cloudflare R2.
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {
@@ -457,19 +426,7 @@ export function App() {
         activeWork={activeWork}
         fileStatus={activeFileStatus}
         workspaceRoot={workspaceRoot}
-        cloudAuth={cloudAuth}
-        onOpenCloud={() => setCloudOpen(true)}
       />
-
-      {cloudOpen && (
-        <CloudModal
-          capability={cloudCapability}
-          authStatus={cloudAuth}
-          activeWork={activeWork?.root ?? null}
-          onAuthStatus={setCloudAuth}
-          onClose={() => setCloudOpen(false)}
-        />
-      )}
 
       {skillsLine && (
         <Suspense fallback={null}>
