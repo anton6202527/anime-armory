@@ -1,9 +1,9 @@
 {
-  "content_hash": "b4da4faa72c0ab7e",
-  "contract_hash": "b4da4faa72c0ab7e",
+  "content_hash": "28e2f5e993017147",
+  "contract_hash": "28e2f5e993017147",
   "episode": "第1集",
   "findings": [],
-  "generated_at": "2026-07-14T12:13:49+00:00",
+  "generated_at": "2026-07-14T12:25:44+00:00",
   "kind": "n2d_script_quality_contract",
   "notes": [
     "n2d-script 是编剧室 + 导演预演 + 制片交接合同；本文件把'好看'拆成下游必须消费的签收字段。",
@@ -696,7 +696,7 @@
   "source_sha256": {
     "adaptation_triage": "709b5f5b3d9b3103f7a8635a85c8524f1fd5f75e630d1989640a6713387f776b",
     "story_quality_pack": "9450dcd7e6f2d4ea5ca7aa66dc16bf003aceaaef3426b34053d5d9b632f7a0a7",
-    "storyboard": "63794026b0b4b1493adeb68cf36e5ce0af0c921eecd5da69e1ced16963e0e2c6"
+    "storyboard": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f"
   },
   "status": "pass",
   "summary": {

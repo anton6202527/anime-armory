@@ -27,4 +27,4 @@
 | `脚本/第1集/ai_call_sheet.md` | block | 缺 status: confirmed / 状态: confirmed |
 | `脚本/第1集/production_handoff_pack.json` | block | status 不是 confirmed |
 | `生产数据/ai_shooting_schedule_batch_seed_第1集.json` | pass | - |
-| `脚本/第1集/production_handoff_signoff.json` | block | 缺上游签收：脚本/第1集/animatic_signoff.json；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor；signoff 尚未 approved |
+| `脚本/第1集/production_handoff_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；缺 handoff 审批；允许角色：assistant_director, producer, script_supervisor；signoff 尚未 approved |

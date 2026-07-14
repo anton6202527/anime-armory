@@ -8,7 +8,7 @@
     "signoff_manifest": "脚本/第1集/animatic_signoff.json"
   },
   "episode": "第1集",
-  "generated_at": "2026-07-14T12:16:29+00:00",
+  "generated_at": "2026-07-14T12:26:00+00:00",
   "inputs": {
     "rough_audio": "合成/第1集/配音/voice_zh.wav",
     "shot_durations": "脚本/第1集/镜头时长.json",
@@ -20,11 +20,11 @@
   "inputs_fingerprint": {
     "files": {
       "合成/第1集/配音/voice_zh.wav": null,
-      "脚本/第1集/storyboard.json": "87c28507551b6ce158d28b8ed91a4762b04a00ae960fccbc90196b76b61f5aaa",
+      "脚本/第1集/storyboard.json": "228df76aee8206f507101eb7bbfe9761bee134c38ae6383e29ffa31e60d01c4f",
       "脚本/第1集/字幕_中文.srt": "9e8e84cd32eb9505b7d986319cd0901146ebb3799887f43e9fdafedc64eccbf9",
       "脚本/第1集/镜头时长.json": "e29dc35237353d4e3f6f75c4c0ff44336c049cbaa0e390931533b2dd4cce1f56"
     },
-    "sha": "5e8b686637f45b54b0d359c037349111ee3457cf6d23fdfd3c23bfd4cb7ad414"
+    "sha": "cf0d172a8e7592d73662d35bd0b0ca4e8ba104c3b662b84aa3a7bc45a54f445a"
   },
   "kind": "n2d_animatic_packet",
   "machine_reference": {
