@@ -253,6 +253,35 @@ def test_page_format_with_real_grid_geometry_passes(tmp_path: Path) -> None:
     assert findings == []
 
 
+def test_approved_v2_page_adapter_is_not_rejected_for_full_width_panel(tmp_path: Path) -> None:
+    layout = {
+        "schema_version": 2,
+        "format": "页漫",
+        "workflow_status": "approved",
+        "geometry_profile": "paged_grid_rtl",
+        "approval": {"status": "approved"},
+        "canvas": {"width": 1440},
+        "segments": [{"panels": [{"panel_id": "P001", "x": 72, "y": 28, "w": 1296, "h": 900}]}],
+    }
+    findings: list[dict] = []
+    gate.check_format_geometry(tmp_path, "第1话", layout, findings)
+    assert findings == []
+
+
+def test_approved_v2_wrong_adapter_profile_blocks(tmp_path: Path) -> None:
+    layout = {
+        "schema_version": 2,
+        "format": "四格",
+        "workflow_status": "approved",
+        "geometry_profile": "paged_grid_ltr",
+        "approval": {"status": "approved"},
+        "segments": [{"panels": []}],
+    }
+    findings: list[dict] = []
+    gate.check_format_geometry(tmp_path, "第1话", layout, findings)
+    assert "format_geometry_profile_mismatch" in codes(findings)
+
+
 def test_longstrip_format_single_column_is_fine(tmp_path: Path) -> None:
     layout = {
         "format": "条漫",
@@ -285,3 +314,19 @@ def test_style_anchor_real_value_passes(tmp_path: Path) -> None:
     gate.check_style_contract(root, findings)
 
     assert findings == []
+
+
+def test_production_profile_mismatch_is_deterministic_block(tmp_path: Path) -> None:
+    (tmp_path / "_设置.md").write_text(
+        "- 生产档位: 连载标准\n"
+        "- 传统原稿流程: 启用\n"
+        "- 参考一致性策略: 共享参考图\n"
+        "- 定妆级别: 长线专门定妆\n"
+        "- 年龄形态继承: 关闭\n"
+        "- 角色一致性硬闸: 开启\n",
+        encoding="utf-8",
+    )
+    findings: list[dict] = []
+    gate.check_production_profile(tmp_path, findings)
+    assert findings[0]["code"] == "production_profile_incoherent"
+    assert findings[0]["severity"] == "block"

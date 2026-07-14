@@ -47,6 +47,10 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+
+import codex_image_runner as cir  # noqa: E402
 
 KIND = "n2d_candidate_selection"
 VERSION = 1
@@ -573,6 +577,37 @@ def apply_pick(root: str, ep: str, clip: str, picked: Mapping[str, Any]) -> Opti
     return dst_rel
 
 
+def _apply_interlock_targets(root: str, ep: str, rows: Sequence[Mapping[str, Any]]) -> List[Any]:
+    """Resolve selected candidate rows back to their real Clip targets.
+
+    The candidate sidecar written by keyshot_candidate_runner carries the
+    source prompt shot.  Legacy candidates may not; for those, fall back to the
+    clip id.  An unresolved row intentionally returns an empty list so the
+    caller can run the whole-episode shared-first scan rather than silently
+    waive it.
+    """
+    requested: List[str] = []
+    for row in rows:
+        picked = row.get("picked") if isinstance(row.get("picked"), Mapping) else {}
+        value = str(picked.get("source_prompt_shot") or row.get("clip") or "").strip()
+        if value:
+            requested.append(value)
+    if not requested:
+        return []
+    try:
+        return list(cir.build_targets(Path(root), ep, requested))
+    except Exception:
+        return []
+
+
+def enforce_apply_shared_first(root: str, ep: str, rows: Sequence[Mapping[str, Any]]) -> bool:
+    """Non-waivable shared-first lock before a candidate becomes a live frame."""
+    targets = _apply_interlock_targets(root, ep, rows)
+    return cir.enforce_shared_first_interlock(
+        Path(root), ep, targets=targets or None
+    )
+
+
 def build_report(root: str, ep: str, only_clip: Optional[str] = None) -> Dict[str, Any]:
     vlm = make_vlm_compare()
     clips = [only_clip] if only_clip else list_clips(root, ep)
@@ -672,8 +707,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     report = build_report(root, ns.episode, ns.clip)
     applied = []
     if ns.apply:
-        for r in report["rows"]:
-            if r.get("picked") and not r.get("reroll_needed"):
+        eligible = [r for r in report["rows"] if r.get("picked") and not r.get("reroll_needed")]
+        if eligible and not enforce_apply_shared_first(root, ns.episode, eligible):
+            report["apply_blocked"] = True
+            report["apply_block_reason"] = (
+                "shared-first interlock blocked; candidate was not copied into the live frame namespace"
+            )
+        else:
+            for r in eligible:
                 dst = apply_pick(root, ns.episode, r["clip"], r["picked"])
                 if dst:
                     applied.append({"clip": r["clip"], "dst": dst})
@@ -712,7 +753,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                   f"reroll 轮占比 {ys.get('reroll_rate')} → {report.get('yield_ledger')}")
         if ns.apply:
             print(f"  已落档 {len(applied)} 镜")
-    return 0  # report-only，永不非零退出
+    # Ranking remains report-only.  --apply is a mutating production action;
+    # refusing it on the non-waivable shared-first lock must be visible to
+    # batch callers as a non-zero exit.
+    return 1 if report.get("apply_blocked") else 0
 
 
 if __name__ == "__main__":

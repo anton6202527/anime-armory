@@ -7,8 +7,8 @@
 import os
 import json
 import sys
+import subprocess
 import tempfile
-import hashlib
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -84,22 +84,25 @@ def _write_clean_image_qc(root, ep="第1集"):
                    "inputs_fingerprint": _fresh_fp(root)}, fh)
 
 
-def _write_boundary_review(root, raw_text, decision="accept_risk", notes="已复核，保留短集并补强 voiceover。"):
+def _write_boundary_review(root, raw_text, decision="keep", notes="已复核双侧语义，保留当前边界。"):
+    """用当前 boundary_audit 生成 v2 双侧合同，再模拟人审签收。"""
     os.makedirs(os.path.join(root, "脚本"), exist_ok=True)
+    script = os.path.join(run.SKILLS_DIR, "n2d-script", "scripts", "boundary_review.py")
+    subprocess.run([sys.executable, script, "draft", root, "--write"], check=True, capture_output=True, text=True)
     path = os.path.join(root, "脚本", "boundary_review.json")
+    with open(path, encoding="utf-8") as fh:
+        payload = json.load(fh)
+    for row in payload.get("reviews") or []:
+        row["decision"] = decision
+        row["notes"] = notes
+        row["reviewed_by"] = "user:fixture"
+        row["reviewed_at"] = "2026-07-14T10:00:00+08:00"
+        row["semantic_evidence"] = {
+            "left": "左侧冲突已完成局部回报，悬念为刻意跨集延迟。",
+            "right": "右侧开场立即承接同一人物、动作与观众问题。",
+        }
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump({
-            "kind": "n2d_boundary_review",
-            "version": 1,
-            "reviews": [{
-                "episode": "第1集",
-                "raw_rel": "脚本/第1集/raw.txt",
-                "raw_sha256": hashlib.sha256(raw_text.strip().encode("utf-8")).hexdigest(),
-                "risk_flags": ["弱钩待判"],
-                "decision": decision,
-                "notes": notes,
-            }],
-        }, fh, ensure_ascii=False)
+        json.dump(payload, fh, ensure_ascii=False, indent=2)
 
 
 def _write_confirmed_development_pack(root):
@@ -1303,6 +1306,107 @@ def test_report_only_prework_runs_serially_without_cache_module(monkeypatch):
     p = run.Probes()
     run._run_report_only_prework(p, [("only", ok, [])])
     assert p.prework[0]["status"] == "pass"
+
+
+def test_report_only_cache_rebuilds_deleted_output_path_sidecar(tmp_path):
+    root = tmp_path / "project"
+    root.mkdir()
+    script = tmp_path / "writer.py"
+    script.write_text(
+        "import json, sys\n"
+        "from pathlib import Path\n"
+        "root = Path(sys.argv[1])\n"
+        "count = root / 'count.txt'\n"
+        "n = int(count.read_text() or '0') + 1 if count.exists() else 1\n"
+        "count.write_text(str(n))\n"
+        "out = root / '生产数据' / 'identity_eval_pack.json'\n"
+        "out.parent.mkdir(parents=True, exist_ok=True)\n"
+        "out.write_text('{}')\n"
+        "print(json.dumps({'output_path': str(out)}))\n",
+        encoding="utf-8",
+    )
+    cache = run._PreworkCache(str(root), "第1集", "cache-rebuild", "fp")
+    p1 = run.Probes()
+    run._run_report_only_prework(
+        p1,
+        [("identity_eval_pack", str(script), [str(root)])],
+        cache=cache,
+    )
+    cache.save()
+    sidecar = root / "生产数据" / "identity_eval_pack.json"
+    assert sidecar.exists() and (root / "count.txt").read_text() == "1"
+
+    sidecar.unlink()
+    cache2 = run._PreworkCache(str(root), "第1集", "cache-rebuild", "fp")
+    p2 = run.Probes()
+    run._run_report_only_prework(
+        p2,
+        [("identity_eval_pack", str(script), [str(root)])],
+        cache=cache2,
+    )
+
+    assert sidecar.exists()
+    assert (root / "count.txt").read_text() == "2"
+
+
+def test_report_only_warn_result_is_never_cached_even_with_artifact(tmp_path):
+    root = tmp_path / "project"
+    root.mkdir()
+    artifact = root / "warn.json"
+    script = tmp_path / "warn_writer.py"
+    script.write_text(
+        "import json, sys\n"
+        "from pathlib import Path\n"
+        "p = Path(sys.argv[1]) / 'warn.json'\n"
+        "p.write_text('{}')\n"
+        "print(json.dumps({'output_path': str(p)}))\n"
+        "raise SystemExit(2)\n",
+        encoding="utf-8",
+    )
+    cache = run._PreworkCache(str(root), "第1集", "warn-not-cached", "fp")
+    p = run.Probes()
+    run._run_report_only_prework(p, [("warn", str(script), [str(root)])], cache=cache)
+    cache.save()
+
+    assert artifact.exists()
+    assert run._PreworkCache(str(root), "第1集", "warn-not-cached", "fp").get("warn") is None
+
+
+def test_report_only_exit_zero_with_structured_warn_is_not_cached(tmp_path):
+    root = tmp_path / "project"
+    root.mkdir()
+    script = tmp_path / "structured_warn.py"
+    script.write_text(
+        "import json, sys\n"
+        "from pathlib import Path\n"
+        "p = Path(sys.argv[1]) / 'stale-sidecar.json'\n"
+        "p.write_text('{}')\n"
+        "print(json.dumps({'status':'warn','output_path':str(p)}))\n",
+        encoding="utf-8",
+    )
+    cache = run._PreworkCache(str(root), "第1集", "structured-warn", "fp")
+    p = run.Probes()
+    run._run_report_only_prework(p, [("warn", str(script), [str(root)])], cache=cache)
+    cache.save()
+
+    assert p.prework[0]["status"] == "warn"
+    assert run._PreworkCache(str(root), "第1集", "structured-warn", "fp").get("warn") is None
+
+
+def test_report_only_cache_ignores_output_paths_outside_project_root(tmp_path):
+    root = tmp_path / "project"
+    root.mkdir()
+    inside = root / "inside.json"
+    outside = tmp_path / "outside.json"
+    inside.write_text("{}", encoding="utf-8")
+    outside.write_text("{}", encoding="utf-8")
+
+    found = run._cache_artifact_paths(
+        str(root),
+        json.dumps({"output_path": str(outside), "report_path": str(inside)}),
+    )
+
+    assert found == [str(inside.resolve())]
 
 
 if __name__ == "__main__":

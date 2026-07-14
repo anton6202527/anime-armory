@@ -11,14 +11,14 @@ description: 漫画传统原稿收尾计划阶段。Use when planning manga line
 
 - `_设置.md`：基础视觉风格、出图稿层、网点策略、效果线策略。
 - `脚本/第N话/panel_script.json`。
-- `排版/第N话/layout.json`。
-- 可选 `排版/第N话/name_board.json`。
+- `排版/第N话/name_board.json`：必需且已签收的 schema v2。
+- `排版/第N话/layout.json`：必需、validator 通过且已签收的 schema v2；其中 panel 覆盖必须与脚本/name 完全同序。
 
 ## 输出
 
 - `出图/第N话/finishing/finishing_plan.json`：schema 见 `references/finishing_schema.md`。
 - `出图/第N话/finishing/finishing_plan.md`：人工可读收尾计划。
-- `_进度.md`：完成后把 `原稿收尾` 标为 `✅`。
+- `_进度.md`：只有所有输入存在、SHA 当前、panel/page coverage 完整且 finishing validator 通过后，才把 `原稿收尾` 标为 `✅`。
 
 ## 怎么跑
 
@@ -26,13 +26,23 @@ description: 漫画传统原稿收尾计划阶段。Use when planning manga line
 python3 skills/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
+出图或恢复批跑前只读检查现有计划是否仍新鲜：
+
+```bash
+python3 skills/comic-finishing/scripts/build_finishing_plan.py "创作区/画漫画/作品名" --chapter 第1话 --check
+```
+
+脚本不再对缺输入返回空计划：缺 panel script/name/layout、空 panels、覆盖或顺序不同、审批无效、任一上游 SHA 改变都会返回非零；失败不会写 `✅`。
+
 ## 工作流
 
-1. 读取分格、layout 和 name board，确定每格的稿层、黑白灰价值、网点密度、效果线类型和拟声词处理。
-2. 动作/冲击/揭示格加 `effects_plan`，但必须保留脸、手、道具和接触点可读。
-3. 黑白/页漫优先显式 `tone_plan`；彩色条漫也要有 `value_plan`，避免只靠色相堆信息。
-4. 拟声词只在需要时作为画面节奏元素处理；正文对白仍后期嵌字。
-5. 输出 plan 后，`comic-image` 会把计划注入逐格 prompt/job 包。
+1. 验证分格、已签收 name/layout 及其内容 SHA；先证明输入完整和当前，再生成计划。
+2. 确定项目 `delivery_mode`、有序 `layer_contract`，并为每个 page/segment 建 `page_value_plans`。
+3. 逐格生成 `layer_items`、墨线/黑场、`tone_items`、价值、效果线和 `sfx_items`；每个 SFX 都绑定源内容引用。
+4. 动作/冲击/揭示格加 `effects_plan`，但必须保留脸、手、道具和接触点可读。
+5. 黑白/页漫优先显式 `tone_plan`；彩色条漫也要有 `value_plan`，避免只靠色相堆信息。
+6. 拟声词只在需要时作为画面节奏元素处理；正文对白仍后期嵌字。
+7. validator 确认 plan 唯一、同序覆盖所有 panel/page 后写产物和 `✅`；`comic-image` 再把计划注入逐格 job。
 
 ## 原则
 

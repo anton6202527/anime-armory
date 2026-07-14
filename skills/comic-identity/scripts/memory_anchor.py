@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -28,7 +29,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
-VERSION = 1
+VERSION = 2
 KIND = "comic_memory_anchor_plan"
 
 GAP_CHAPTERS = int(os.environ.get("COMIC_MEMORY_ANCHOR_GAP", "2"))
@@ -39,6 +40,19 @@ PIN_VIEWS = ("front", "face")
 
 def now_iso() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+
+
+def file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def canonical_sha(value: Any) -> str:
+    raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def chapter_number(name: str) -> Optional[int]:
@@ -133,8 +147,33 @@ def build_plan(root: Path, chapter: str) -> Dict[str, Any]:
     except Exception:
         registry = {}
     rows = plan_rows(history, registry, target)
+    sources: List[Dict[str, str]] = []
+    for chapter_dir in sorted((root / "脚本").glob("第*话")) if (root / "脚本").is_dir() else []:
+        path = chapter_dir / "panel_script.json"
+        if path.is_file():
+            sources.append({"path": str(path.relative_to(root)), "sha256": file_sha256(path)})
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_sha = file_sha256(registry_path) if registry_path.is_file() else ""
+    inputs = {
+        "target_chapter": chapter,
+        "panel_scripts": sources,
+        "appearance_history_sha256": canonical_sha(history),
+        "identity_registry_sha256": registry_sha,
+        "policy": {"gap_chapters": GAP_CHAPTERS, "late_gap": LATE_GAP, "pin_views": list(PIN_VIEWS)},
+    }
+    inputs_fingerprint = canonical_sha(inputs)
+    for row in rows:
+        for ref in row.get("pinned_refs") or []:
+            raw = str(ref.get("path") or "")
+            path = Path(raw) if Path(raw).is_absolute() else root / raw
+            ref["sha256"] = file_sha256(path) if path.is_file() else ""
+            ref["exists"] = path.is_file()
+        if row.get("status") == "ready" and not all(ref.get("exists") for ref in row.get("pinned_refs") or []):
+            row["status"] = "missing_canonical_views"
     return {
         "kind": KIND, "version": VERSION, "chapter": chapter, "generated_at": now_iso(),
+        "inputs": inputs,
+        "inputs_fingerprint": inputs_fingerprint,
         "policy": {"gap_chapters": GAP_CHAPTERS, "late_gap": LATE_GAP,
                    "pin_views": list(PIN_VIEWS),
                    "consumer": "comic-image/build_panel_jobs 出图前把 pinned_refs 置于该角色参考组最前"},

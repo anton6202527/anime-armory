@@ -49,6 +49,20 @@ from image_prompt_compiler import (  # noqa: E402
     lint_compiled_prompt as lint_compiled_image_prompt,
     normalize_exclusions,
 )
+from n2d_contract import (  # noqa: E402
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+    CHARACTER_LIBRARY_TIER_STANDARD,
+    IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND,
+    character_library_tier_for_record,
+    identity_review_binding_fingerprint,
+    identity_review_contract_for_view,
+    identity_review_required_criteria,
+    identity_reviewed_at_errors,
+    identity_reviewer_appears_automated,
+    required_character_reference_group_fields,
+)
 
 
 PROMPT_REL = Path("出图") / "{episode}" / "prompt" / "01_分镜出图.md"
@@ -80,9 +94,9 @@ CROSS_EPISODE_SOURCE_FRAME_LINE_RE = re.compile(
 )
 FAILED_SHARED_REF_STATUSES = {"review_failed", "failed", "fail", "rejected", "needs_regen", "blocked"}
 STYLE_ANCHOR_READY_STATUSES = {"ready", "approved", "selected", "selected_anchor", "style_anchor", "pass", "ok"}
-CHARACTER_SHARED_CORE_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
-CHARACTER_SHARED_STANDARD_FIELDS = ("front", "three_quarter")
-CHARACTER_SHARED_MINIMAL_FIELDS = ("front",)
+CHARACTER_SHARED_CORE_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_CORE)
+CHARACTER_SHARED_STANDARD_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_STANDARD)
+CHARACTER_SHARED_MINIMAL_FIELDS = required_character_reference_group_fields(CHARACTER_LIBRARY_TIER_MINIMAL)
 CHARACTER_SHARED_BODY_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_SHARED_FACE_FIELDS = ("face_anchor_refs", "expressions")
 REALISTIC_RENDERING_STYLE_GUIDANCE = (
@@ -103,7 +117,7 @@ NON_CHARACTER_FACE_POLICY_GUIDANCE = (
     "一旦画到具名角色脸，必须绑定对应 CHAR_xx/形态并引用同源定妆组，否则视为脸漂失败。"
 )
 FULL_BODY_SHOES_GUIDANCE = (
-    "人物全身、标准立绘、正面/45°/侧面/背面、三视图/turnaround、全身动作参考必须头到脚完整入画，鞋靴/脚部清楚可见；"
+    "人物全身、标准立绘、正面/前45°/侧面/后45°/背面、五角 turnaround、全身动作参考必须头到脚完整入画，鞋靴/脚部清楚可见；"
     "不得裁掉脚、被衣摆/烟雾完全遮住鞋、或用半身构图冒充全身。半身/脸部特写目标按其命名豁免。"
 )
 STYLE_ONLY_REFERENCE_GUIDANCE = (
@@ -499,6 +513,8 @@ def shared_variant_note(rel_path: str) -> str:
             "本次目标是武器动态形态参考：青烟凝成庚金长枪的结构必须完整可读，烟雾只包裹轮廓，"
             "枪尖、枪杆、尾端和绿色法术能量层级清楚；禁止画成散雾或无实体光束。"
         )
+    if any(token in stem for token in ("后45度", "后3／4", "后四分之三", "侧背")):
+        return "本次目标是后3/4参考：同一角色同一服装，中性浅灰背景，人物从背面向侧前方转约45°，全身从头到鞋靴完整可见；不是前3/4，也不是纯背面。"
     if "45度" in stem:
         return "本次目标是 45° / 三分之二侧脸参考：同一角色同一服装，中性浅灰背景，脸部转向约 45°，人物全身从头到鞋靴完整可见；不是正脸改名，也不是纯侧脸。"
     if stem.endswith("_侧"):
@@ -510,7 +526,7 @@ def shared_variant_note(rel_path: str) -> str:
     if "脸部特写" in stem:
         return "本次目标是脸部特写参考：肩颈以上近景，眼鼻嘴三角区清晰，五官与主参考同一张脸，服装/发型边缘可见。"
     if "三视图" in stem:
-        return "本次目标是人审三视图拼版：同一角色同一服装，正面、45°、侧面、背面同框排列，同身高、同比例、水平视平线对齐，每个全身视图都必须从头到鞋靴完整可见。"
+        return "本次目标是人审 turnaround 拼版（旧文件名兼容）：同一角色同一服装，正面、前3/4、侧面、后3/4、背面五角同框排列，同身高、同比例、头顶线/脚底线/身体中心线/水平视平线对齐，每个全身视图都必须从头到鞋靴完整可见。"
     if "_表情_" in stem:
         emotion = stem.split("_表情_", 1)[-1]
         return (
@@ -536,6 +552,9 @@ def requires_controlled_makeup_derivation(rel_path: str) -> bool:
         return not stem.endswith("_背影_三视图")
     unsafe_suffixes = (
         "_45度",
+        "_后45度",
+        "_后3／4",
+        "_后四分之三",
         "_侧",
         "_背",
         "_侧背",
@@ -575,7 +594,7 @@ def shared_group_member_variant_guidance(target: Target) -> str:
         return ""
     return (
         "共享群像角色角度资产硬约束：本目标不是群像 sheet，必须从该群像身份中抽取"
-        "一名普通代表成员作为样板军士/样板队员来画；45°、侧面、背面、半身、脸部特写"
+        "一名普通代表成员作为样板军士/样板队员来画；前3/4、侧面、后3/4、背面、半身、脸部特写"
         "只能出现这一名代表成员，三视图可以同框排列多个角度但必须是同一名成员的多视图。"
         "不得画成多人队列、三名军士并排、重复复制人、关系图或小队合影；仍保持功能角色/普通队员气质，"
         "不要把他升级成独一无二的主角脸。"
@@ -615,7 +634,7 @@ def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
     path = Path(rel_path)
     stem = path.stem
     is_turnaround = stem.endswith("_三视图")
-    base = re.sub(r"_(?:45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
+    base = re.sub(r"_(?:后45度|后3／4|后四分之三|45度|侧|背|侧背|侧影|半身|全身翼展|全身|脸部特写|群像sheet|sheet|三视图)$", "", stem)
     parent = path.parent.as_posix()
     if is_turnaround:
         stems = [
@@ -624,6 +643,7 @@ def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
             f"{base}_正面",
             f"{base}_45度",
             f"{base}_侧",
+            f"{base}_后45度",
             f"{base}_背",
             f"{base}_半身",
             f"{base}_全身",
@@ -1277,18 +1297,47 @@ def _collect_ready_image_paths(
         _add_ready_image_path(node, root, out, seen, allow_non_shared=allow_non_shared)
 
 
+def _resolve_registry_image_path(root: Path, value: str) -> tuple[str, Path, List[str]]:
+    """Resolve a load-bearing registry image without path aliases or escapes."""
+    raw = str(value or "").strip()
+    if not raw:
+        return "", Path(), ["path_missing"]
+    if "\x00" in raw:
+        return "", Path(), ["path_invalid_nul"]
+    if (
+        os.path.isabs(raw)
+        or (len(raw) >= 3 and raw[1] == ":" and raw[2] in {"/", "\\"})
+        or raw.startswith("\\\\")
+    ):
+        return "", Path(), ["absolute_registry_evidence_path_not_allowed"]
+    root_real = root.expanduser().resolve()
+    resolved = (root_real / raw).resolve(strict=False)
+    try:
+        if os.path.commonpath((str(root_real), str(resolved))) != str(root_real):
+            return "", Path(), ["registry_evidence_path_outside_project_root"]
+        canonical = resolved.relative_to(root_real).as_posix()
+    except (ValueError, OSError):
+        return "", Path(), ["registry_evidence_path_outside_project_root"]
+    if raw.replace("\\", "/") != canonical:
+        return canonical, resolved, ["registry_evidence_path_not_canonical_project_relative"]
+    return canonical, resolved, []
+
+
 def _add_ready_image_path(raw: str, root: Path, out: List[str], seen: Set[str], *, allow_non_shared: bool = False) -> None:
     if Path(raw).suffix.lower() not in IMAGE_SUFFIXES:
         return
     rel = raw if str(raw).startswith("出图/") else rel_to_root(str(raw), "共享")
-    if (not allow_non_shared and not is_shared_image_path(rel)) or rel in seen:
+    canonical, resolved, path_errors = _resolve_registry_image_path(root, rel)
+    if path_errors:
+        return
+    if (not allow_non_shared and not is_shared_image_path(canonical)) or canonical in seen:
         return
     # A reference bundle is for actual backend image inputs; planned/missing paths
     # belong in gate findings, not in a generation request.
-    if not (root / rel).is_file():
+    if not resolved.is_file():
         return
-    seen.add(rel)
-    out.append(rel)
+    seen.add(canonical)
+    out.append(canonical)
 
 
 def _style_anchor_status_ready(value: Any) -> bool:
@@ -1316,10 +1365,11 @@ def load_style_anchor_paths(root: Path) -> List[str]:
         if not _style_anchor_status_ready(status):
             return
         rel = text if text.startswith("出图/") else str(Path("出图") / "共享" / "图片" / text)
-        if rel in seen or not (root / rel).is_file():
+        canonical, resolved, path_errors = _resolve_registry_image_path(root, rel)
+        if path_errors or canonical in seen or not resolved.is_file():
             return
-        seen.add(rel)
-        anchors.append(rel)
+        seen.add(canonical)
+        anchors.append(canonical)
 
     def scan(node: Any) -> None:
         if isinstance(node, dict):
@@ -1515,9 +1565,9 @@ def reference_bundle_for_target(root: Path, episode: str, target: Target) -> Dic
 
 def shared_image_ready(root: Path, rel_path: str) -> bool:
     rel = str(rel_path or "").strip()
-    if not is_shared_image_path(rel):
+    canonical, path, path_errors = _resolve_registry_image_path(root, rel)
+    if path_errors or not is_shared_image_path(canonical):
         return False
-    path = root / rel
     if not path.is_file():
         return False
     if path.suffix.lower() == ".png":
@@ -1556,21 +1606,14 @@ def _failed_shared_refs_for_node(node: Any, prefix: str = "") -> List[str]:
 
 
 def _form_is_restricted_partial(form: Dict[str, Any]) -> bool:
-    reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
-    reference_atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), dict) else {}
-    build_tier = str(reference_atlas.get("build_tier") or "").strip().lower()
-    tier = str(form.get("tier") or "").strip().lower()
-    text = " ".join(
-        str(form.get(key) or "")
-        for key in ("scope", "visibility", "coverage", "reference_policy", "policy")
-    ).lower()
-    return bool(
-        form.get("restricted_partial") is True
-        or reference_group.get("restricted_partial") is True
-        or tier == "restricted_partial"
-        or build_tier.startswith("restricted_partial")
-        or "restricted_partial" in text
-    )
+    record = dict(form)
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    group = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    if "library_tier" not in record and atlas.get("build_tier"):
+        record["library_tier"] = atlas.get("build_tier")
+    if group.get("restricted_partial") is True:
+        record["restricted_partial"] = True
+    return character_library_tier_for_record(record) == CHARACTER_LIBRARY_TIER_PARTIAL
 
 
 def _character_forms_for_ref(identity: Dict[str, Any], char_ref: str) -> tuple[List[tuple[str, Dict[str, Any]]], bool]:
@@ -1579,7 +1622,22 @@ def _character_forms_for_ref(identity: Dict[str, Any], char_ref: str) -> tuple[L
     for ch in identity.get("characters") or []:
         if not isinstance(ch, dict) or str(ch.get("id") or "").strip() != cid:
             continue
-        forms = [form for form in ch.get("forms") or [] if isinstance(form, dict)]
+        forms = []
+        for form in ch.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            enriched = dict(form)
+            for key in (
+                "scope", "narrative_tier", "library_tier", "tier", "core", "long_line",
+                "planned_episode_count", "episode_count", "face_policy",
+                "restricted_partial", "restricted_partial_contract",
+            ):
+                if key not in enriched and key in ch:
+                    enriched[key] = ch.get(key)
+            atlas = enriched.get("reference_atlas") if isinstance(enriched.get("reference_atlas"), Mapping) else {}
+            if "library_tier" not in enriched and atlas.get("build_tier"):
+                enriched["library_tier"] = atlas.get("build_tier")
+            forms.append(enriched)
         if requested_form:
             matched = [
                 (cid, form)
@@ -1592,13 +1650,191 @@ def _character_forms_for_ref(identity: Dict[str, Any], char_ref: str) -> tuple[L
 
 
 def _character_library_tier(form: Mapping[str, Any]) -> str:
+    record = dict(form)
     atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
-    value = str(atlas.get("build_tier") or form.get("library_tier") or "core_full").strip()
-    if value in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
-        return value
-    if value.startswith("restricted_partial"):
-        return "restricted_partial"
-    return "core_full"
+    if "library_tier" not in record and atlas.get("build_tier"):
+        record["library_tier"] = atlas.get("build_tier")
+    return character_library_tier_for_record(record)
+
+
+CORE_REVIEW_PASS = {"pass", "passed", "ok", "accepted", "approved", "ready"}
+
+
+def _core_review_item_path(item: Any) -> str:
+    if isinstance(item, Mapping):
+        return str(item.get("path") or item.get("ref") or item.get("file") or "").strip()
+    return str(item or "").strip()
+
+
+def _core_review_view_item(form: Mapping[str, Any], view: str) -> Any:
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    if view in rg:
+        return rg.get(view)
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+    return base.get(view)
+
+
+def _core_expression_review_items(form: Mapping[str, Any]) -> List[Any]:
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    out: List[Any] = []
+    for node in (
+        rg.get("expressions"), rg.get("face_anchor_refs"),
+        atlas.get("expression_refs"), atlas.get("face_anchor_refs"),
+    ):
+        if isinstance(node, list):
+            out.extend(node)
+        elif isinstance(node, Mapping) and any(key in node for key in ("path", "ref", "file")):
+            out.append(node)
+        elif isinstance(node, Mapping):
+            out.extend(value for value in node.values() if isinstance(value, (str, Mapping)))
+        elif isinstance(node, str):
+            out.append(node)
+    return out
+
+
+def core_review_binding_fingerprint(
+    character_id: str,
+    form_name: str,
+    library_tier: str,
+    view: str,
+    path: str,
+    png_sha256: str,
+) -> str:
+    """Canonical binding shared with image_qc's per-view receipt contract."""
+    return identity_review_binding_fingerprint(
+        character_id=character_id,
+        form=form_name,
+        library_tier=library_tier,
+        view=view,
+        path=path,
+        png_sha256=png_sha256,
+    )
+
+
+def _core_review_png_valid(path: Path) -> bool:
+    """Spending-side current-pixel check; fail closed when Pillow is absent."""
+    if Image is None or not path.is_file():
+        return False
+    try:
+        with Image.open(path) as opened:
+            if opened.format != "PNG" or min(opened.size) < 512:
+                return False
+            opened.verify()
+        with Image.open(path) as decoded:
+            decoded.load()
+        return True
+    except Exception:
+        return False
+
+
+def _core_review_receipt_valid(
+    root: Path,
+    item: Any,
+    *,
+    character_id: str,
+    form_name: str,
+    view: str,
+) -> bool:
+    if not isinstance(item, Mapping):
+        return False
+    raw_rel = _core_review_item_path(item)
+    rel, path, path_errors = _resolve_registry_image_path(root, raw_rel)
+    if path_errors:
+        return False
+    sha = optional_file_sha256(path) if rel else ""
+    review = item.get("human_review") if isinstance(item.get("human_review"), Mapping) else {}
+    verdict = str(review.get("verdict") or review.get("status") or "").strip().lower()
+    reviewer = str(review.get("reviewer") or review.get("reviewed_by") or "").strip()
+    reviewed_at = str(review.get("reviewed_at") or review.get("timestamp") or "").strip()
+    criteria = {str(value) for value in (review.get("criteria") or []) if str(value)}
+    confirmation = review.get("confirmation") if isinstance(review.get("confirmation"), Mapping) else {}
+    expected = core_review_binding_fingerprint(
+        character_id,
+        form_name,
+        "core_full",
+        view,
+        rel,
+        sha,
+    ) if rel and sha else ""
+    return bool(
+        str(item.get("status") or "").strip().lower() in {"ready", "registered"}
+        and _core_review_png_valid(path)
+        and verdict in CORE_REVIEW_PASS
+        and str(review.get("status") or "").strip().lower() == "accepted"
+        and reviewer
+        and not identity_reviewer_appears_automated(reviewer)
+        and not identity_reviewed_at_errors(reviewed_at)
+        and str(review.get("character_id") or "") == character_id
+        and str(review.get("form") or "") == form_name
+        and str(review.get("library_tier") or "") == "core_full"
+        and str(review.get("view") or "") == view
+        and str(review.get("path") or "") == rel
+        and str(review.get("review_contract") or "") == identity_review_contract_for_view(view)
+        and str(review.get("registry_binding_fingerprint_kind") or "")
+        == IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND
+        and set(identity_review_required_criteria(view)).issubset(criteria)
+        and confirmation.get("kind") == "explicit_current_pixels_acceptance"
+        and confirmation.get("accepted_current_pixels") is True
+        and str(review.get("png_sha256") or review.get("artifact_sha256") or review.get("sha256") or "").strip().lower() == sha.lower()
+        and expected
+        and str(review.get("registry_binding_fingerprint") or "").strip().lower() == expected
+    )
+
+
+def _core_review_receipt_issues(root: Path, character_id: str, form: Mapping[str, Any]) -> List[str]:
+    """Independent spending-side validation of core current-hash receipts."""
+    if _character_library_tier(form) != "core_full":
+        return []
+    form_name = str(form.get("form") or "常态").strip()
+    missing: List[str] = []
+    evidence_entries: List[tuple[str, Any]] = [
+        (view, _core_review_view_item(form, view)) for view in CHARACTER_SHARED_CORE_FIELDS
+    ]
+    evidence_entries.extend(("expression", item) for item in _core_expression_review_items(form))
+    realpath_groups: Dict[str, Set[str]] = {}
+    sha_groups: Dict[str, Set[str]] = {}
+    for evidence_view, evidence_item in evidence_entries:
+        raw_rel = _core_review_item_path(evidence_item)
+        if not raw_rel:
+            continue
+        _rel, resolved, path_errors = _resolve_registry_image_path(root, raw_rel)
+        if path_errors:
+            missing.append(f"path_safety:{evidence_view}:{'/'.join(path_errors)}")
+            continue
+        realpath_groups.setdefault(str(resolved), set()).add(evidence_view)
+        current_sha = optional_file_sha256(resolved) if resolved.is_file() else ""
+        if current_sha:
+            sha_groups.setdefault(current_sha, set()).add(evidence_view)
+    for views in realpath_groups.values():
+        if len(views) > 1:
+            missing.append("duplicate_canonical_realpath:" + "/".join(sorted(views)))
+    for views in sha_groups.values():
+        if len(views) > 1:
+            missing.append("duplicate_png_sha:" + "/".join(sorted(views)))
+    for view in CHARACTER_SHARED_CORE_FIELDS:
+        if not _core_review_receipt_valid(
+            root,
+            _core_review_view_item(form, view),
+            character_id=character_id,
+            form_name=form_name,
+            view=view,
+        ):
+            missing.append(view)
+    expression_ok = any(
+        _core_review_receipt_valid(
+            root,
+            item,
+            character_id=character_id,
+            form_name=form_name,
+            view="expression",
+        )
+        for item in _core_expression_review_items(form)
+    )
+    if not expression_ok:
+        missing.append("expression")
+    return missing
 
 
 def _character_required_fields_for_shot(form: Mapping[str, Any], shot_text: str = "") -> Tuple[str, ...]:
@@ -1616,7 +1852,9 @@ def _character_required_fields_for_shot(form: Mapping[str, Any], shot_text: str 
         required.append("three_quarter")
     if re.search(r"侧面|侧脸|全侧|profile|side view", text, re.I):
         required.append("side")
-    if re.search(r"背面|背影|背身|背对|back view|rear view", text, re.I):
+    if re.search(r"后\s*(?:3/4|45|四分之三)|后侧45|侧背|rear[- ]?(?:three[- ]?quarter|3/4|45)", text, re.I):
+        required.append("rear_three_quarter")
+    elif re.search(r"背面|背影|背身|背对|back view|rear view", text, re.I):
         required.append("back")
     return tuple(dict.fromkeys(required))
 
@@ -1630,14 +1868,21 @@ def _character_basic_pack_issues(
     if _form_is_restricted_partial(form):
         return []
     form_name = str(form.get("form") or "常态").strip()
+    library_tier = _character_library_tier(form)
+    issues: List[str] = []
     if form.get("self_check_passed") is False:
         return [f"{char_ref}/{form_name}: 共享定妆 self_check_passed=false，先复核/重出共享库"]
+    if library_tier == "core_full" and form.get("self_check_passed") is not True:
+        issues.append(
+            f"{char_ref}/{form_name}: core_full 共享定妆尚未 finalize；必须五角 + turnaround + "
+            "至少一张 expression/face anchor 逐图签当前 hash 收据，禁止生成 Clip 分镜图"
+        )
     reference_group = form.get("reference_group")
     if not isinstance(reference_group, dict):
-        return [f"{char_ref}/{form_name}: reference_group 缺失，不能进入 Clip 分镜图生成"]
+        issues.append(f"{char_ref}/{form_name}: reference_group 缺失，不能进入 Clip 分镜图生成")
+        return issues
 
     missing: List[str] = []
-    library_tier = _character_library_tier(form)
     for key in _character_required_fields_for_shot(form, shot_text):
         if not _ready_shared_paths_for_node(root, reference_group.get(key)):
             missing.append(key)
@@ -1645,12 +1890,16 @@ def _character_basic_pack_issues(
         missing.append("half_body_or_full_body")
     if not any(_ready_shared_paths_for_node(root, reference_group.get(key)) for key in CHARACTER_SHARED_FACE_FIELDS):
         missing.append("face_anchor_or_expression")
+    if library_tier == "core_full":
+        receipt_issues = _core_review_receipt_issues(root, char_ref, form)
+        if receipt_issues:
+            missing.append("current_hash_review_receipts:" + "/".join(receipt_issues))
     if missing:
-        return [
+        issues.append(
             f"{char_ref}/{form_name}: 共享定妆分档基础包未齐（library_tier={library_tier}，缺 {', '.join(missing)}），"
             "先补共享库并过自检，禁止生成 Clip 分镜图"
-        ]
-    return []
+        )
+    return issues
 
 
 def _asset_for_ref(assets: Dict[str, Any], asset_ref: str) -> Optional[Dict[str, Any]]:

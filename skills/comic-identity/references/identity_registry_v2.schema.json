@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comic-identity-registry-v2",
+  "title": "Comic Identity Registry v2",
+  "type": "object",
+  "required": ["schema_version", "kind", "assets"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "kind": {"const": "comic_identity_registry"},
+    "assets": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/asset"}
+    }
+  },
+  "$defs": {
+    "referenceImage": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {
+          "type": "object",
+          "required": ["path"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string"},
+            "view": {"type": "string"},
+            "role": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "variant": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "forbidden": {"type": ["string", "array"]},
+        "reference_images": {"type": "array", "items": {"$ref": "#/$defs/referenceImage"}}
+      }
+    },
+    "state": {
+      "allOf": [
+        {"$ref": "#/$defs/variant"},
+        {
+          "type": "object",
+          "required": ["form_id", "outfit_id", "expression_id"],
+          "properties": {
+            "form_id": {"type": "string", "minLength": 1},
+            "outfit_id": {"type": "string", "minLength": 1},
+            "expression_id": {"type": "string", "minLength": 1},
+            "transient": {"type": "boolean"},
+            "continuity_contract": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+$"},
+        "type": {"enum": ["character", "monster", "location", "prop", "outfit", "style", "vfx", "system_asset", "asset"]},
+        "library_tier": {"enum": ["core_full", "recurring_standard", "named_minimal", "restricted_partial"]},
+        "forms": {"type": "object", "additionalProperties": {"$ref": "#/$defs/variant"}},
+        "outfits": {"type": "object", "additionalProperties": {"$ref": "#/$defs/variant"}},
+        "expressions": {"type": "object", "additionalProperties": {"$ref": "#/$defs/variant"}},
+        "states": {"type": "object", "additionalProperties": {"$ref": "#/$defs/state"}},
+        "default_binding": {
+          "type": "object",
+          "required": ["form_id", "outfit_id", "expression_id", "state_id"],
+          "properties": {
+            "form_id": {"type": "string"},
+            "outfit_id": {"type": "string"},
+            "expression_id": {"type": "string"},
+            "state_id": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

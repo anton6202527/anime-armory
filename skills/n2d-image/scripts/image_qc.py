@@ -66,6 +66,14 @@ _LIB_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "
 if _LIB_DIR not in sys.path:
     sys.path.insert(0, _LIB_DIR)
 from n2d_const import (  # noqa: E402
+    CHARACTER_LIBRARY_TIER_CORE,
+    IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND,
+    character_library_tier_for_record,
+    identity_review_binding_fingerprint,
+    identity_review_contract_for_view,
+    identity_review_required_criteria,
+    identity_reviewed_at_errors,
+    identity_reviewer_appears_automated,
     STRONG_EMOTION_MARKERS,
     EXPRESSION_LIB_MARKERS,
     MULTI_SUBJECT_ACCEPTING_MARKERS,
@@ -1489,7 +1497,7 @@ def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str]
                                    persistent_subject: Optional[bool] = None) -> List[Dict[str, str]]:
     """多角度参考喂养充分性（C4·advisory）：定妆库有多角度组、本镜却只引用了 1 张时提示喂全组。
 
-    2026 原生多参考已 table-stakes（Seedream≤14 / 可灵 Elements≤4 张锁主体）。定妆库建了正/侧/背
+    2026 原生多参考已 table-stakes（Seedream≤14 / 可灵 Elements≤4 张锁主体）。定妆库建了多视图
     多角度组，却只把正面喂进去 = 没吃满后端锁主体能力。只在 registry 确有多角度组(≥3)时才 info，
     不噪；单参考后端可忽略。纯函数·可测。
 
@@ -1515,7 +1523,8 @@ def _lint_native_multiref_coverage(label: str, body: str, id_refs: Sequence[str]
                         f"若该角色尚未注册主体，则回退多参考后端口径喂全组({avail} 张可喂，本镜 {refd})"}]
     return [{"level": "info", "code": "native_multiref_underfed",
              "msg": f"{label}：定妆库有 {avail} 张多角度参考，本镜参考图块只引用了 {refd} 张——"
-                    "多参考后端(Seedream≤14 / 可灵Elements≤4)喂全角度组(正/侧/背)锁主体更稳；单参考后端可忽略"}]
+                    "多参考后端(Seedream≤14 / 可灵Elements≤4)按镜头喂满高相关角度组"
+                    "(正/前3/4/侧/后3/4/背中选)锁主体更稳；单参考后端可忽略"}]
 
 
 def _lint_physical_lens_parameters(label: str, body: str) -> List[Dict[str, str]]:
@@ -2182,6 +2191,9 @@ HARD_LINT_CODES = (
     "no_expression_lib_ref",  # ④ 所有人物近景大表情无表情库/脸部特写 = 脸漂高发，硬拦
     "closeup_core_no_expression_lib",  # 旧报告码兼容；新报告统一用 no_expression_lib_ref
     "weak_face_anchor_core",
+    # Deterministic receipt fact, not a pixel threshold: each core five-angle
+    # view + turnaround board must have a current-hash human pass receipt.
+    "turnaround_core_view_review_missing",
     "unanchored_identity_plate",  # 承载角色脸的资产无 ready 脸锚（定妆脸漂真因·后端无关落档版）
     "carried_identity_unknown",   # 承载角色在 identity_registry 不存在——无锚可注入
     "asset_faceless_face_detected",  # faceless 脸策略资产（握持比例/尺度参考）像素核验检出清晰脸=脸漂
@@ -4498,7 +4510,10 @@ def _face_anchor_ref_items(form: Mapping[str, Any]) -> List[Tuple[str, str]]:
 
     def wide_ref_paths() -> Set[str]:
         paths: Set[str] = set()
-        for key in ("front", "three_quarter", "side", "back", "outfit", "half_body", "turnaround"):
+        for key in (
+            "front", "three_quarter", "side", "rear_three_quarter", "back",
+            "outfit", "half_body", "turnaround",
+        ):
             rel = item_path(rg.get(key))
             if rel:
                 paths.add(norm(rel))
@@ -4612,14 +4627,23 @@ def audit_face_anchor_quality(root: Path, ep: str) -> Dict[str, Any]:
     return res
 
 
-# ── ①b 三视图/多视图对齐机检（checklist 承诺"与脸漂同级硬伤"但此前零机检·2026-07 标准审计补齐） ──
-# 教头标准：turnaround 各视图同身高、同比例、水平视平线。这里用 face box 做两个几何代理：
-#   眼线代理 = 脸 bbox 垂直中心占画面高比例（各视图应基本齐平）；
-#   比例代理 = 脸 bbox 高占画面高比例（各视图应同距离同景别）。
-# 阈值是内部启发式首版（confidence=low·env 可重标定）；先落 warn 兑现宣称，误报率验证后再议升级。
+# ── ①b turnaround 多视图对齐 + 逐视图人审收据 ────────────────────────────────
+# 核心档标准角度是 front / three_quarter / side / rear_three_quarter / back，另保留
+# turnaround 总览板。像素几何只能提供可复算证据，不能证明人物语义真的对齐：背景分离、脸框与任何阈值
+# 都有启发式成分，所以偏差只报 WARN（B10）。核心档真正的硬条件是：每个标准角度和总览板都必须有
+# 与当前 PNG hash 绑定的逐视图 pass 收据；"缺收据/收据过期/缺图"是确定性事实，才允许 BLOCK。
 TURNAROUND_EYELINE_TOL = float(os.environ.get("N2D_TURNAROUND_EYELINE_TOL", "0.06"))
 TURNAROUND_SCALE_RATIO_MAX = float(os.environ.get("N2D_TURNAROUND_SCALE_RATIO_MAX", "1.35"))
-TURNAROUND_VIEW_KEYS = ("front", "three_quarter", "side")  # back 无脸不可测，天然跳过
+TURNAROUND_HEAD_TOP_TOL = float(os.environ.get("N2D_TURNAROUND_HEAD_TOP_TOL", "0.045"))
+TURNAROUND_FOOT_LINE_TOL = float(os.environ.get("N2D_TURNAROUND_FOOT_LINE_TOL", "0.035"))
+TURNAROUND_CENTERLINE_TOL = float(os.environ.get("N2D_TURNAROUND_CENTERLINE_TOL", "0.055"))
+TURNAROUND_HEIGHT_RATIO_MAX = float(os.environ.get("N2D_TURNAROUND_HEIGHT_RATIO_MAX", "1.10"))
+TURNAROUND_BG_DELTA = int(os.environ.get("N2D_TURNAROUND_BG_DELTA", "28"))
+TURNAROUND_VIEW_KEYS = (
+    "front", "three_quarter", "side", "rear_three_quarter", "back",
+)
+TURNAROUND_FINALIZE_KEYS = TURNAROUND_VIEW_KEYS + ("turnaround", "expression")
+TURNAROUND_REVIEW_PASS = {"pass", "passed", "ok", "accepted", "approved", "ready"}
 
 
 def turnaround_alignment_reason(views: Mapping[str, Tuple[float, float]]) -> Optional[str]:
@@ -4648,70 +4672,515 @@ def turnaround_alignment_reason(views: Mapping[str, Tuple[float, float]]) -> Opt
     return "；".join(reasons) or None
 
 
+def _median_int(values: Sequence[int]) -> int:
+    ordered = sorted(int(v) for v in values)
+    if not ordered:
+        return 0
+    return ordered[len(ordered) // 2]
+
+
+def whole_body_geometry(path: Path) -> Dict[str, Any]:
+    """Return reproducible foreground geometry for a neutral-background full-body view.
+
+    This is deliberately evidence, not a semantic judge.  It estimates the
+    border background colour and derives a foreground bbox after removing rows
+    and columns with only isolated pixels.  The method/parameters are returned
+    with the measurements so a later reviewer can reproduce them.  A busy or
+    non-uniform border is reported as unmeasurable instead of guessed through.
+    """
+    result: Dict[str, Any] = {
+        "measurable": False,
+        "method": "border_median_foreground_bbox_v1",
+        "confidence": "heuristic",
+        "background_delta": TURNAROUND_BG_DELTA,
+    }
+    try:
+        from PIL import Image  # type: ignore
+        with Image.open(path) as opened:
+            image = opened.convert("RGB")
+            original_size = image.size
+            image.thumbnail((640, 640), Image.Resampling.LANCZOS)
+            width, height = image.size
+            pixels = image.load()
+    except Exception as exc:
+        result["reason"] = f"image_unreadable_or_pillow_missing:{type(exc).__name__}"
+        return result
+    result["image_size"] = {"width": original_size[0], "height": original_size[1]}
+    if width < 32 or height < 32:
+        result["reason"] = "image_too_small"
+        return result
+
+    step_x = max(1, width // 80)
+    step_y = max(1, height // 80)
+    border: List[Tuple[int, int, int]] = []
+    for x in range(0, width, step_x):
+        border.append(pixels[x, 0]); border.append(pixels[x, height - 1])
+    for y in range(0, height, step_y):
+        border.append(pixels[0, y]); border.append(pixels[width - 1, y])
+    bg = tuple(_median_int([p[c] for p in border]) for c in range(3))
+    distances = sorted(max(abs(p[c] - bg[c]) for c in range(3)) for p in border)
+    p90 = distances[min(len(distances) - 1, round((len(distances) - 1) * 0.90))]
+    result["background_rgb"] = list(bg)
+    result["border_delta_p90"] = p90
+    if p90 > TURNAROUND_BG_DELTA:
+        result["reason"] = "non_uniform_or_busy_border"
+        return result
+
+    row_counts = [0] * height
+    col_counts = [0] * width
+    for y in range(height):
+        for x in range(width):
+            px = pixels[x, y]
+            if max(abs(px[c] - bg[c]) for c in range(3)) > TURNAROUND_BG_DELTA:
+                row_counts[y] += 1
+                col_counts[x] += 1
+    row_floor = max(2, round(width * 0.008))
+    col_floor = max(2, round(height * 0.008))
+    ys = [idx for idx, count in enumerate(row_counts) if count >= row_floor]
+    xs = [idx for idx, count in enumerate(col_counts) if count >= col_floor]
+    if not xs or not ys:
+        result["reason"] = "foreground_not_found"
+        return result
+    left, right = min(xs), max(xs) + 1
+    top, bottom = min(ys), max(ys) + 1
+    subject_height = (bottom - top) / float(height)
+    subject_width = (right - left) / float(width)
+    if subject_height < 0.25 or subject_width < 0.04 or subject_width > 0.96:
+        result["reason"] = "foreground_bbox_implausible"
+        result["bbox_normalized"] = [
+            round(left / width, 4), round(top / height, 4),
+            round(right / width, 4), round(bottom / height, 4),
+        ]
+        return result
+    result.update({
+        "measurable": True,
+        "head_top": round(top / float(height), 4),
+        "foot_bottom": round(bottom / float(height), 4),
+        "centerline": round(((left + right) / 2.0) / float(width), 4),
+        "subject_height": round(subject_height, 4),
+        "subject_width": round(subject_width, 4),
+        "bbox_normalized": [
+            round(left / width, 4), round(top / height, 4),
+            round(right / width, 4), round(bottom / height, 4),
+        ],
+    })
+    return result
+
+
+def turnaround_body_alignment_reason(views: Mapping[str, Mapping[str, Any]]) -> Optional[str]:
+    """Compare whole-body geometry; thresholds are heuristic and WARN-only."""
+    usable = {k: v for k, v in views.items() if isinstance(v, Mapping) and v.get("measurable")}
+    if len(usable) < 2:
+        return None
+    metrics = {
+        "head_top": (TURNAROUND_HEAD_TOP_TOL, "头顶线"),
+        "foot_bottom": (TURNAROUND_FOOT_LINE_TOL, "脚底线"),
+        "centerline": (TURNAROUND_CENTERLINE_TOL, "身体中心线"),
+    }
+    reasons: List[str] = []
+    for key, (tol, label) in metrics.items():
+        vals = {name: float(row[key]) for name, row in usable.items() if isinstance(row.get(key), (int, float))}
+        if len(vals) < 2:
+            continue
+        spread = max(vals.values()) - min(vals.values())
+        if spread > tol:
+            lo, hi = min(vals, key=vals.get), max(vals, key=vals.get)
+            reasons.append(
+                f"{label}不齐：{lo}({vals[lo]:.3f}) vs {hi}({vals[hi]:.3f})，差 {spread:.3f}>{tol:.3f}"
+            )
+    heights = {
+        name: float(row["subject_height"])
+        for name, row in usable.items()
+        if isinstance(row.get("subject_height"), (int, float)) and float(row["subject_height"]) > 0
+    }
+    if len(heights) >= 2:
+        ratio = max(heights.values()) / min(heights.values())
+        if ratio > TURNAROUND_HEIGHT_RATIO_MAX:
+            big, small = max(heights, key=heights.get), min(heights, key=heights.get)
+            reasons.append(
+                f"全身高度不一：{big} 是 {small} 的 {ratio:.3f} 倍（>{TURNAROUND_HEIGHT_RATIO_MAX:g}）"
+            )
+    return "；".join(reasons) or None
+
+
+def _view_item(form: Mapping[str, Any], key: str) -> Any:
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    if key in rg:
+        return rg.get(key)
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    base = atlas.get("base_views") if isinstance(atlas.get("base_views"), Mapping) else {}
+    return base.get(key)
+
+
+def _expression_review_items(form: Mapping[str, Any]) -> List[Any]:
+    """Expression bucket candidates; one current-hash pass receipt is the core floor."""
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    out: List[Any] = []
+    for node in (
+        rg.get("expressions"), rg.get("face_anchor_refs"),
+        atlas.get("expression_refs"), atlas.get("face_anchor_refs"),
+    ):
+        if isinstance(node, list):
+            out.extend(node)
+        elif isinstance(node, Mapping) and any(k in node for k in ("path", "ref", "file")):
+            out.append(node)
+        elif isinstance(node, Mapping):
+            out.extend(value for value in node.values() if isinstance(value, (str, Mapping)))
+        elif isinstance(node, str):
+            out.append(node)
+    return out
+
+
+def _view_item_path(item: Any) -> str:
+    if isinstance(item, Mapping):
+        return str(item.get("path") or item.get("ref") or item.get("file") or "").strip()
+    return str(item or "").strip()
+
+
+def _resolve_core_registry_image_path(root: Path, value: str) -> Tuple[str, Path, List[str]]:
+    """Strict project-relative resolver for load-bearing core-view evidence."""
+    raw = str(value or "").strip()
+    if not raw:
+        return "", Path(), ["path_missing"]
+    if "\x00" in raw:
+        return "", Path(), ["path_invalid_nul"]
+    if (
+        os.path.isabs(raw)
+        or (len(raw) >= 3 and raw[1] == ":" and raw[2] in {"/", "\\"})
+        or raw.startswith("\\\\")
+    ):
+        return "", Path(), ["absolute_registry_evidence_path_not_allowed"]
+    root_real = root.expanduser().resolve()
+    resolved = (root_real / raw).resolve(strict=False)
+    try:
+        if os.path.commonpath((str(root_real), str(resolved))) != str(root_real):
+            return "", Path(), ["registry_evidence_path_outside_project_root"]
+        canonical = resolved.relative_to(root_real).as_posix()
+    except (ValueError, OSError):
+        return "", Path(), ["registry_evidence_path_outside_project_root"]
+    if raw.replace("\\", "/") != canonical:
+        return canonical, resolved, ["registry_evidence_path_not_canonical_project_relative"]
+    return canonical, resolved, []
+
+
+def _explicit_library_tier(char: Mapping[str, Any], form: Mapping[str, Any]) -> str:
+    atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+    record = dict(char)
+    for key in (
+        "scope", "narrative_tier", "library_tier", "tier", "core", "long_line",
+        "planned_episode_count", "episode_count", "face_policy",
+        "restricted_partial", "restricted_partial_contract",
+    ):
+        if key in form:
+            record[key] = form.get(key)
+    if not record.get("library_tier") and atlas.get("build_tier"):
+        record["library_tier"] = atlas.get("build_tier")
+    if not any(record.get(key) not in (None, "", False, 0) for key in (
+        "scope", "narrative_tier", "library_tier", "tier", "core", "long_line",
+        "planned_episode_count", "episode_count", "restricted_partial",
+    )):
+        return "legacy_unspecified"
+    return character_library_tier_for_record(record) or CHARACTER_LIBRARY_TIER_CORE
+
+
+def _view_receipt_state(
+    item: Any,
+    expected_sha: str,
+    *,
+    character_id: str = "",
+    form_name: str = "",
+    library_tier: str = "",
+    view: str = "",
+    path: str = "",
+    root: Optional[Path] = None,
+) -> Dict[str, Any]:
+    review = item.get("human_review") if isinstance(item, Mapping) and isinstance(item.get("human_review"), Mapping) else {}
+    canonical_path = str(path or "").strip()
+    current_path: Optional[Path] = None
+    path_reasons: List[str] = []
+    if root is not None and canonical_path:
+        canonical_path, current_path, path_reasons = _resolve_core_registry_image_path(
+            root, _view_item_path(item) or canonical_path
+        )
+        if path_reasons:
+            expected_sha = ""
+    verdict = str(review.get("verdict") or review.get("status") or "").strip().lower()
+    reviewer = str(review.get("reviewer") or review.get("reviewed_by") or "").strip()
+    reviewed_at = str(review.get("reviewed_at") or review.get("timestamp") or "").strip()
+    reviewed_sha = str(
+        review.get("png_sha256") or review.get("artifact_sha256") or review.get("sha256") or ""
+    ).strip().lower()
+    expected_fingerprint = identity_review_binding_fingerprint(
+        character_id=character_id,
+        form=form_name,
+        library_tier=library_tier,
+        view=view,
+        path=canonical_path,
+        png_sha256=expected_sha,
+    ) if all((character_id, view, canonical_path, expected_sha)) else ""
+    receipt_fingerprint = str(review.get("registry_binding_fingerprint") or "").strip().lower()
+    reasons: List[str] = []
+    reasons.extend(path_reasons)
+    if verdict not in TURNAROUND_REVIEW_PASS:
+        reasons.append("verdict_not_pass")
+    if not reviewer:
+        reasons.append("reviewer_missing")
+    elif identity_reviewer_appears_automated(reviewer):
+        reasons.append("reviewer_appears_automated")
+    reasons.extend(identity_reviewed_at_errors(reviewed_at))
+    expected_fields = {
+        "character_id": character_id,
+        "form": form_name,
+        "library_tier": library_tier,
+        "view": view,
+        "path": canonical_path,
+    }
+    for field, expected_value in expected_fields.items():
+        if str(review.get(field) or "") != str(expected_value or ""):
+            reasons.append(f"{field}_missing_or_mismatch")
+    if str(review.get("review_contract") or "") != identity_review_contract_for_view(view):
+        reasons.append("review_contract_missing_or_mismatch")
+    if str(review.get("registry_binding_fingerprint_kind") or "") != IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND:
+        reasons.append("registry_binding_fingerprint_kind_missing_or_mismatch")
+    criteria = {str(item) for item in (review.get("criteria") or []) if str(item)}
+    if not set(identity_review_required_criteria(view)).issubset(criteria):
+        reasons.append("criteria_incomplete")
+    confirmation = review.get("confirmation") if isinstance(review.get("confirmation"), Mapping) else {}
+    if (
+        confirmation.get("kind") != "explicit_current_pixels_acceptance"
+        or confirmation.get("accepted_current_pixels") is not True
+    ):
+        reasons.append("explicit_current_pixels_confirmation_missing")
+    if root is not None and canonical_path and current_path is not None and not path_reasons:
+        try:
+            from PIL import Image  # type: ignore
+            with Image.open(current_path) as opened:
+                if opened.format != "PNG":
+                    reasons.append("not_png")
+                width, height = opened.size
+                opened.verify()
+            with Image.open(current_path) as decoded:
+                decoded.load()
+            if min(int(width), int(height)) < 512:
+                reasons.append("png_short_edge_below_512")
+        except Exception:
+            reasons.append("png_not_fully_decodable_or_pillow_missing")
+    if not expected_sha:
+        reasons.append("png_missing_or_unreadable")
+    elif reviewed_sha != expected_sha.lower():
+        reasons.append("png_sha256_missing_or_stale")
+    if expected_fingerprint and receipt_fingerprint != expected_fingerprint:
+        reasons.append("registry_binding_fingerprint_missing_or_stale")
+    return {
+        "valid": not reasons,
+        "verdict": verdict or None,
+        "reviewer": reviewer or None,
+        "reviewed_at": reviewed_at or None,
+        "png_sha256": reviewed_sha or None,
+        "registry_binding_fingerprint": receipt_fingerprint or None,
+        "expected_registry_binding_fingerprint": expected_fingerprint or None,
+        "reasons": reasons,
+    }
+
+
 def audit_turnaround_alignment(root: Path, ep: str) -> Dict[str, Any]:
-    """①b 三视图对齐门：对 reference_group 的 front/three_quarter/side 定妆图测视平线/比例对齐。
-    warn 级（首版启发式）；检测器缺席/风格化脸漏检 → 该视图跳过不误判，可测视图 <2 不报。"""
-    res: Dict[str, Any] = {"available": True, "findings": [], "notes": [], "checked_forms": 0}
+    """Audit five-angle core turnarounds with evidence + hash-bound review receipts."""
+    res: Dict[str, Any] = {
+        "available": True,
+        "version": 2,
+        "findings": [],
+        "notes": [],
+        "checked_forms": 0,
+        "forms": [],
+        "human_review_required": [],
+        "view_contract": list(TURNAROUND_VIEW_KEYS),
+    }
     try:
         data = json.loads((root / _registry_path()).read_text(encoding="utf-8"))
     except Exception:
         res["available"] = False
-        res["notes"].append("identity_registry.json 缺失/损坏——三视图对齐机检跳过。")
+        res["notes"].append("identity_registry.json 缺失/损坏——核心五角 turnaround 对齐与收据审计跳过。")
         return res
     face_mod = _load_review_module("face_consistency")
-    if face_mod is None or not hasattr(face_mod, "cv2_face_boxes"):
-        res["available"] = False
-        res["notes"].append("cv2_face_boxes 不可用——三视图对齐机检跳过（装 opencv 后复检）。")
-        return res
-
-    def item_path(value: Any) -> str:
-        if isinstance(value, Mapping):
-            return str(value.get("path") or value.get("ref") or value.get("file") or "").strip()
-        return str(value or "").strip()
+    face_available = face_mod is not None and hasattr(face_mod, "cv2_face_boxes")
+    if not face_available:
+        res["notes"].append("cv2_face_boxes 不可用：眼线/脸高证据缺席；全身几何仍执行，核心档靠逐视图收据闭环。")
 
     for ch in (data.get("characters") or []):
         cid = str(ch.get("id") or "").strip()
         for form in (ch.get("forms") or []):
             if not isinstance(form, Mapping):
                 continue
-            rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
-            views: Dict[str, Tuple[float, float]] = {}
+            fm = str(form.get("form") or "").strip()
+            tier = _explicit_library_tier(ch, form)
+            core = tier == "core_full"
+            face_views: Dict[str, Tuple[float, float]] = {}
+            body_views: Dict[str, Dict[str, Any]] = {}
+            row: Dict[str, Any] = {
+                "character_id": cid,
+                "form": fm,
+                "library_tier": tier,
+                "core": core,
+                "views": {},
+            }
             for key in TURNAROUND_VIEW_KEYS:
-                rel = item_path(rg.get(key))
+                item = _view_item(form, key)
+                rel = _view_item_path(item)
+                view_row: Dict[str, Any] = {"view": key, "path": rel or None}
+                row["views"][key] = view_row
                 if not rel:
+                    view_row["machine_evidence"] = {"measurable": False, "reason": "path_missing"}
+                    if core:
+                        pending = {
+                            "character_id": cid, "form": fm, "view": key, "path": None,
+                            "png_sha256": None, "reason": "core_view_path_missing",
+                            "required_receipt": ["verdict=pass", "reviewer", "reviewed_at", "png_sha256"],
+                        }
+                        res["human_review_required"].append(pending)
                     continue
                 abspath = rel if os.path.isabs(rel) else str(root / rel)
                 if not os.path.isfile(abspath):
+                    view_row["machine_evidence"] = {"measurable": False, "reason": "png_missing"}
+                    if core:
+                        res["human_review_required"].append({
+                            "character_id": cid, "form": fm, "view": key, "path": rel,
+                            "png_sha256": None, "reason": "core_view_png_missing",
+                            "required_receipt": ["verdict=pass", "reviewer", "reviewed_at", "png_sha256"],
+                        })
                     continue
-                ratio, min_dim = _png_face_ratio_and_size(face_mod, abspath)
-                if ratio is None:
-                    continue  # 检测器漏检风格化脸：跳过该视图，不据缺测误判
-                try:
-                    boxes = face_mod.cv2_face_boxes(abspath)
-                    from PIL import Image  # type: ignore
-                    with Image.open(abspath) as im:
-                        _w, _h = im.size
-                    if not boxes or not _h:
-                        continue
-                    bx = max(boxes, key=lambda b: int(b[2]) * int(b[3]))
-                    center_y = (int(bx[1]) + int(bx[3]) / 2.0) / float(_h)
-                    face_h = int(bx[3]) / float(_h)
-                except Exception:
-                    continue
-                views[key] = (round(center_y, 4), round(face_h, 4))
-            if len(views) < 2:
-                continue
+                sha = _sha256_file(Path(abspath)) or ""
+                evidence = whole_body_geometry(Path(abspath))
+                body_views[key] = evidence
+                view_row["png_sha256"] = sha or None
+                view_row["machine_evidence"] = evidence
+                if face_available:
+                    try:
+                        boxes = face_mod.cv2_face_boxes(abspath)
+                        from PIL import Image  # type: ignore
+                        with Image.open(abspath) as im:
+                            _w, _h = im.size
+                        if boxes and _h:
+                            bx = max(boxes, key=lambda b: int(b[2]) * int(b[3]))
+                            center_y = (int(bx[1]) + int(bx[3]) / 2.0) / float(_h)
+                            face_h = int(bx[3]) / float(_h)
+                            face_views[key] = (round(center_y, 4), round(face_h, 4))
+                            view_row["face_geometry"] = {
+                                "center_y": round(center_y, 4), "face_height": round(face_h, 4),
+                                "confidence": "heuristic",
+                            }
+                    except Exception:
+                        pass
+                receipt = _view_receipt_state(
+                    item,
+                    sha,
+                    character_id=cid,
+                    form_name=fm,
+                    library_tier=tier,
+                    view=key,
+                    path=rel,
+                    root=root,
+                )
+                view_row["human_review"] = receipt
+                if core and not receipt["valid"]:
+                    res["human_review_required"].append({
+                        "character_id": cid, "form": fm, "view": key, "path": rel,
+                        "png_sha256": sha or None,
+                        "reason": "core_view_receipt_missing_or_stale",
+                        "receipt_issues": receipt["reasons"],
+                        "machine_measurable": bool(evidence.get("measurable")),
+                        "machine_unmeasurable_reason": evidence.get("reason"),
+                        "required_receipt": ["verdict=pass", "reviewer", "reviewed_at", "png_sha256"],
+                    })
+            # The turnaround board is an archive/review deliverable rather than
+            # one of the five geometric angles, but core finalization still
+            # requires its own current-hash receipt.
+            board_item = _view_item(form, "turnaround")
+            board_rel = _view_item_path(board_item)
+            board_abs = Path(board_rel) if board_rel and os.path.isabs(board_rel) else root / board_rel
+            board_sha = _sha256_file(board_abs) if board_rel and board_abs.is_file() else ""
+            board_receipt = _view_receipt_state(
+                board_item,
+                board_sha or "",
+                character_id=cid,
+                form_name=fm,
+                library_tier=tier,
+                view="turnaround",
+                path=board_rel,
+                root=root,
+            )
+            row["turnaround_board"] = {
+                "path": board_rel or None,
+                "png_sha256": board_sha or None,
+                "human_review": board_receipt,
+            }
+            if core and not board_receipt["valid"]:
+                res["human_review_required"].append({
+                    "character_id": cid, "form": fm, "view": "turnaround", "path": board_rel or None,
+                    "png_sha256": board_sha or None,
+                    "reason": "core_turnaround_board_receipt_missing_or_stale",
+                    "receipt_issues": board_receipt["reasons"],
+                    "required_receipt": ["verdict=pass", "reviewer", "reviewed_at", "png_sha256"],
+                })
+            expression_rows: List[Dict[str, Any]] = []
+            expression_valid = False
+            for expr_item in _expression_review_items(form):
+                expr_rel = _view_item_path(expr_item)
+                expr_abs = Path(expr_rel) if expr_rel and os.path.isabs(expr_rel) else root / expr_rel
+                expr_sha = _sha256_file(expr_abs) if expr_rel and expr_abs.is_file() else ""
+                expr_receipt = _view_receipt_state(
+                    expr_item,
+                    expr_sha or "",
+                    character_id=cid,
+                    form_name=fm,
+                    library_tier=tier,
+                    view="expression",
+                    path=expr_rel,
+                    root=root,
+                )
+                expression_valid = expression_valid or bool(expr_receipt["valid"])
+                expression_rows.append({
+                    "path": expr_rel or None,
+                    "png_sha256": expr_sha or None,
+                    "human_review": expr_receipt,
+                })
+            row["expression_bucket"] = {
+                "valid": expression_valid,
+                "candidates": expression_rows,
+            }
+            if core and not expression_valid:
+                res["human_review_required"].append({
+                    "character_id": cid, "form": fm, "view": "expression", "path": None,
+                    "png_sha256": None,
+                    "reason": "core_expression_bucket_has_no_current_hash_pass_receipt",
+                    "candidate_paths": [r.get("path") for r in expression_rows if r.get("path")],
+                    "required_receipt": ["verdict=pass", "reviewer", "reviewed_at", "png_sha256"],
+                })
             res["checked_forms"] += 1
-            reason = turnaround_alignment_reason(views)
+            res["forms"].append(row)
+            face_reason = turnaround_alignment_reason(face_views)
+            body_reason = turnaround_body_alignment_reason(body_views)
+            reason = "；".join(x for x in (body_reason, face_reason) if x)
             if reason:
-                fm = str(form.get("form") or "").strip()
                 res["findings"].append({
                     "level": "warn", "code": "turnaround_misaligned",
-                    "msg": f"三视图对齐不达标 {cid}/{fm}：{reason}——教头标准要求各视图同身高/同比例/"
-                           "水平视平线；不齐的 turnaround 会把身形/头身比漂移带进每一镜（阈值 env "
-                           "N2D_TURNAROUND_EYELINE_TOL / N2D_TURNAROUND_SCALE_RATIO_MAX 可重标定）。",
-                    "views": views,
+                    "confidence": "heuristic",
+                    "msg": f"多视图对齐初筛异常 {cid}/{fm}：{reason}——像素几何是可复算启发式证据，"
+                           "按 B10 只报 WARN；最终以逐视图、当前 hash 绑定的人审收据为准。",
+                    "body_views": body_views,
+                    "face_views": face_views,
                 })
+    for pending in res["human_review_required"]:
+        res["findings"].append({
+            "level": "block",
+            "code": "turnaround_core_view_review_missing",
+            "confidence": "deterministic",
+            "msg": (
+                f"核心档逐视图收据缺失/过期 {pending.get('character_id')}/{pending.get('form')} "
+                f"{pending.get('view')}（{pending.get('path') or '缺图'}）：{pending.get('reason')}"
+                f"；必须对当前 PNG 写 verdict=pass、reviewer、reviewed_at、png_sha256 后才能 finalize。"
+            ),
+        })
     return res
 
 
@@ -5155,6 +5624,22 @@ def render_markdown(payload: Dict[str, Any]) -> str:
             )
     else:
         lines.append("- ⏭ 未生成覆盖结果（旧版 image_qc 或未执行 lint）")
+    turnaround = payload.get("turnaround_alignment") or {}
+    if turnaround:
+        pending_views = turnaround.get("human_review_required") or []
+        lines.extend([
+            "",
+            "## 核心角色五角 turnaround（逐视图 hash 收据硬闸）",
+            f"- {'🔴' if pending_views else '🟢'} checked forms {turnaround.get('checked_forms', 0)} · "
+            f"pending/stale receipts {len(pending_views)} · contract "
+            f"`{'/'.join(turnaround.get('view_contract') or TURNAROUND_VIEW_KEYS)}`",
+            "- 像素头顶/脚底/中心线/身高与脸框只作 WARN 级可复算证据；硬条件仅是当前 PNG 的逐视图 pass 收据。",
+        ])
+        for item in pending_views:
+            lines.append(
+                f"  - 🔴 {item.get('character_id')}/{item.get('form')} {item.get('view')} "
+                f"`{item.get('path') or '缺图'}`：{item.get('reason')}"
+            )
     drift = payload.get("cross_episode_face_drift") or {}
     drift_entries = drift.get("entries") or []
     if drift.get("available") and (drift_entries or drift.get("history_chars")):
@@ -5240,11 +5725,415 @@ def render_markdown(payload: Dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _find_character_form(
+    registry: Mapping[str, Any], target: str
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], str]:
+    cid, _, form_name = str(target or "").strip().partition("/")
+    for char in registry.get("characters") or []:
+        if not isinstance(char, dict) or str(char.get("id") or "").strip() != cid:
+            continue
+        forms = [fm for fm in char.get("forms") or [] if isinstance(fm, dict)]
+        if form_name:
+            matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
+        elif len(forms) == 1:
+            matches = forms
+        else:
+            return char, None, f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"
+        if not matches:
+            return char, None, f"`{cid}` 无形态 `{form_name}`"
+        return char, matches[0], ""
+    return None, None, f"identity_registry 无角色 `{cid}`"
+
+
+def _core_form_evidence_entries(form: Mapping[str, Any]) -> List[Tuple[str, Any]]:
+    entries: List[Tuple[str, Any]] = []
+    for key in TURNAROUND_FINALIZE_KEYS:
+        if key == "expression":
+            entries.extend(("expression", item) for item in _expression_review_items(form))
+        else:
+            entries.append((key, _view_item(form, key)))
+    return entries
+
+
+def _core_form_path_uniqueness_issues(root: Path, form: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    realpath_groups: Dict[str, set[str]] = {}
+    sha_groups: Dict[str, set[str]] = {}
+    issues: List[Dict[str, Any]] = []
+    for view, item in _core_form_evidence_entries(form):
+        raw = _view_item_path(item)
+        if not raw:
+            continue
+        canonical, resolved, path_errors = _resolve_core_registry_image_path(root, raw)
+        if path_errors:
+            issues.append({"view": view, "path": raw, "issues": path_errors})
+            continue
+        realpath_groups.setdefault(str(resolved), set()).add(view)
+        sha = _sha256_file(resolved) if resolved.is_file() else ""
+        if sha:
+            sha_groups.setdefault(sha, set()).add(view)
+    for views in realpath_groups.values():
+        if len(views) > 1:
+            issues.append({
+                "view": "/".join(sorted(views)),
+                "path": None,
+                "issues": ["duplicate_canonical_realpath_across_buckets"],
+            })
+    for views in sha_groups.values():
+        if len(views) > 1:
+            issues.append({
+                "view": "/".join(sorted(views)),
+                "path": None,
+                "issues": ["duplicate_png_sha_across_buckets"],
+            })
+    return issues
+
+
+def _core_finalize_receipt_issues(root: Path, char: Mapping[str, Any], form: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    if _explicit_library_tier(char, form) != "core_full":
+        return []
+    issues: List[Dict[str, Any]] = _core_form_path_uniqueness_issues(root, form)
+    for key in TURNAROUND_FINALIZE_KEYS:
+        if key == "expression":
+            valid = False
+            candidates: List[Dict[str, Any]] = []
+            for item in _expression_review_items(form):
+                raw_rel = _view_item_path(item)
+                rel, path, path_errors = _resolve_core_registry_image_path(root, raw_rel)
+                sha = _sha256_file(path) if not path_errors and path.is_file() else ""
+                state = _view_receipt_state(
+                    item,
+                    sha or "",
+                    character_id=str(char.get("id") or "").strip(),
+                    form_name=str(form.get("form") or "").strip(),
+                    library_tier=_explicit_library_tier(char, form),
+                    view="expression",
+                    path=rel or raw_rel,
+                    root=root,
+                )
+                candidates.append({"path": rel or raw_rel or None, "png_sha256": sha or None, "state": state})
+                valid = valid or bool(state["valid"])
+            if not valid:
+                issues.append({
+                    "view": "expression",
+                    "path": None,
+                    "png_sha256": None,
+                    "issues": ["no_current_hash_pass_receipt"],
+                    "candidates": candidates,
+                })
+            continue
+        item = _view_item(form, key)
+        raw_rel = _view_item_path(item)
+        rel, path, path_errors = _resolve_core_registry_image_path(root, raw_rel)
+        sha = _sha256_file(path) if not path_errors and path.is_file() else ""
+        state = _view_receipt_state(
+            item,
+            sha or "",
+            character_id=str(char.get("id") or "").strip(),
+            form_name=str(form.get("form") or "").strip(),
+            library_tier=_explicit_library_tier(char, form),
+            view=key,
+            path=rel or raw_rel,
+            root=root,
+        )
+        if not state["valid"]:
+            issues.append({
+                "view": key,
+                "path": rel or raw_rel or None,
+                "png_sha256": sha or None,
+                "issues": state["reasons"],
+            })
+    return issues
+
+
+def _write_view_review_to_form(
+    root: Path,
+    form: Dict[str, Any],
+    view: str,
+    *,
+    character_id: str,
+    library_tier: str,
+    verdict: str,
+    reviewer: str,
+    reviewed_at: str,
+    note: str,
+    reference_path: str = "",
+    accept_current_pixels: bool = False,
+) -> Dict[str, Any]:
+    if view == "expression":
+        expression_items = _expression_review_items(form)
+        available = [(_view_item_path(item), item) for item in expression_items if _view_item_path(item)]
+        unique_paths = list(dict.fromkeys(path for path, _ in available))
+        selected = str(reference_path or "").strip()
+        if selected:
+            matches = [item for path, item in available if path == selected]
+            if not matches:
+                return {"ok": False, "msg": f"expression path 未登记：{selected}"}
+            source = matches[0]
+        elif len(unique_paths) == 1:
+            selected = unique_paths[0]
+            source = available[0][1]
+        elif not unique_paths:
+            return {"ok": False, "msg": "expression/face_anchor_refs 未登记 path；先生成/登记表情或脸锚"}
+        else:
+            return {
+                "ok": False,
+                "msg": "expression 有多张候选；必须用 --view-path 明确本次审阅的实际图片",
+                "candidate_paths": unique_paths,
+            }
+    else:
+        source = _view_item(form, view)
+    raw_rel = _view_item_path(source)
+    if not raw_rel:
+        return {"ok": False, "msg": f"{view} 未登记 path；先生成/登记该视图"}
+    rel, path, path_errors = _resolve_core_registry_image_path(root, raw_rel)
+    if path_errors:
+        return {
+            "ok": False,
+            "msg": f"{view} registry path 非法：{', '.join(path_errors)} ({raw_rel})",
+        }
+    sha = _sha256_file(path) if path.is_file() else None
+    if not sha:
+        return {"ok": False, "msg": f"{view} PNG 不存在或不可读：{rel}"}
+    duplicate_real_views: List[str] = []
+    duplicate_sha_views: List[str] = []
+    for other_view, other_item in _core_form_evidence_entries(form):
+        if other_view == view:
+            continue
+        other_raw = _view_item_path(other_item)
+        if not other_raw:
+            continue
+        _other_rel, other_path, other_path_errors = _resolve_core_registry_image_path(root, other_raw)
+        if other_path_errors:
+            continue
+        if other_path == path:
+            duplicate_real_views.append(other_view)
+        other_sha = _sha256_file(other_path) if other_path.is_file() else ""
+        if other_sha and other_sha == sha:
+            duplicate_sha_views.append(other_view)
+    if duplicate_real_views or duplicate_sha_views:
+        return {
+            "ok": False,
+            "msg": (
+                f"{view} 不能签收为独立视角："
+                f"duplicate_canonical_realpath={','.join(sorted(set(duplicate_real_views))) or '-'}；"
+                f"duplicate_png_sha={','.join(sorted(set(duplicate_sha_views))) or '-'}"
+            ),
+        }
+    normalized = str(verdict or "").strip().lower()
+    if normalized not in {"pass", "fail"}:
+        return {"ok": False, "msg": "view verdict 只能是 pass 或 fail"}
+    if normalized == "pass" and accept_current_pixels is not True:
+        return {
+            "ok": False,
+            "msg": "pass 必须显式确认已查看当前像素（--accept-current-pixels）",
+        }
+    reviewer = str(reviewer or "").strip()
+    if not reviewer:
+        return {"ok": False, "msg": "逐视图复核必须填写 reviewer"}
+    if identity_reviewer_appears_automated(reviewer):
+        return {
+            "ok": False,
+            "msg": "reviewer 必须是非空、非明显自动化的人工声明标识，禁止 bot/codex/agent/runner",
+        }
+    try:
+        from PIL import Image  # type: ignore
+        with Image.open(path) as opened:
+            if opened.format != "PNG":
+                return {"ok": False, "msg": f"{view} 不是 PNG 像素证据：{rel}"}
+            width, height = opened.size
+            opened.verify()
+        with Image.open(path) as decoded:
+            decoded.load()
+    except Exception as exc:
+        return {
+            "ok": False,
+            "msg": f"{view} PNG 必须可完整解码（需 Pillow）：{rel} ({type(exc).__name__})",
+        }
+    if min(int(width), int(height)) < 512:
+        return {
+            "ok": False,
+            "msg": f"{view} PNG 短边 {min(int(width), int(height))}px，小于逐视图人审底线 512px",
+        }
+    form_name = str(form.get("form") or "").strip()
+    tier = str(library_tier or "").strip() or _explicit_library_tier({}, form)
+    registry_fingerprint = identity_review_binding_fingerprint(
+        character_id=character_id,
+        form=form_name,
+        library_tier=tier,
+        view=view,
+        path=rel,
+        png_sha256=sha,
+    )
+    criteria = sorted(identity_review_required_criteria(view))
+    receipt = {
+        "status": "accepted" if normalized == "pass" else "rejected",
+        "verdict": normalized,
+        "character_id": character_id,
+        "form": form_name,
+        "library_tier": tier,
+        "view": view,
+        "path": rel,
+        "reviewer": reviewer,
+        "reviewed_at": reviewed_at,
+        "png_sha256": sha,
+        "registry_binding_fingerprint": registry_fingerprint,
+        "registry_binding_fingerprint_kind": IDENTITY_REVIEW_BINDING_FINGERPRINT_KIND,
+        "review_contract": identity_review_contract_for_view(view),
+        "criteria": criteria,
+        "confirmation": {
+            "kind": "explicit_current_pixels_acceptance",
+            "accepted_current_pixels": bool(accept_current_pixels),
+        },
+        "note": note or (
+            "逐表情核验同人、表情可读与身份不漂"
+            if view == "expression"
+            else "逐视图核验身份、服装、全身完整与五角对齐"
+        ),
+    }
+
+    def update_slot(container: Dict[str, Any], key: str) -> bool:
+        if key not in container:
+            return False
+        old = container.get(key)
+        old_rel = _view_item_path(old)
+        if old_rel and old_rel != rel:
+            return False
+        if isinstance(old, Mapping):
+            item = dict(old)
+        else:
+            item = {"path": rel}
+        item["status"] = "ready" if normalized == "pass" else "review_failed"
+        item["sha256"] = sha
+        item["human_review"] = dict(receipt)
+        container[key] = item
+        return True
+
+    updated = False
+    rg = form.setdefault("reference_group", {})
+    if view != "expression" and isinstance(rg, dict):
+        updated = update_slot(rg, view) or updated
+    atlas = form.setdefault("reference_atlas", {})
+    if isinstance(atlas, dict):
+        base = atlas.setdefault("base_views", {})
+        if isinstance(base, dict) and view not in {"turnaround", "expression"}:
+            updated = update_slot(base, view) or updated
+    if view == "expression":
+        def update_expression_node(node: Any) -> bool:
+            changed = False
+            if isinstance(node, list):
+                for index, child in enumerate(list(node)):
+                    child_rel = _view_item_path(child)
+                    if child_rel == rel:
+                        item = dict(child) if isinstance(child, Mapping) else {"path": rel}
+                        item["status"] = "ready" if normalized == "pass" else "review_failed"
+                        item["sha256"] = sha
+                        item["human_review"] = dict(receipt)
+                        node[index] = item
+                        changed = True
+            elif isinstance(node, dict):
+                if _view_item_path(node) == rel:
+                    node["status"] = "ready" if normalized == "pass" else "review_failed"
+                    node["sha256"] = sha
+                    node["human_review"] = dict(receipt)
+                    changed = True
+                else:
+                    for key, child in list(node.items()):
+                        if isinstance(child, str) and child == rel:
+                            node[key] = {
+                                "path": rel,
+                                "status": "ready" if normalized == "pass" else "review_failed",
+                                "sha256": sha,
+                                "human_review": dict(receipt),
+                            }
+                            changed = True
+                        elif isinstance(child, (dict, list)):
+                            changed = update_expression_node(child) or changed
+            return changed
+
+        if isinstance(rg, dict):
+            for key in ("expressions", "face_anchor_refs"):
+                updated = update_expression_node(rg.get(key)) or updated
+        if isinstance(atlas, dict):
+            for key in ("expression_refs", "face_anchor_refs"):
+                updated = update_expression_node(atlas.get(key)) or updated
+    if not updated and isinstance(rg, dict) and view != "expression":
+        rg[view] = {
+            "path": rel,
+            "status": "ready" if normalized == "pass" else "review_failed",
+            "sha256": sha,
+            "human_review": dict(receipt),
+        }
+    if normalized == "fail":
+        form["self_check_passed"] = False
+        form["self_check_note"] = f"{view} review failed: {note or 'manual reject'}"
+    return {"ok": True, "view": view, "path": rel, "png_sha256": sha, "receipt": receipt}
+
+
+def review_turnaround_view(
+    root: Path,
+    target: str,
+    view: str,
+    *,
+    verdict: str,
+    reviewer: str,
+    reviewed_at: str = "",
+    note: str = "",
+    reference_path: str = "",
+    accept_current_pixels: bool = False,
+) -> Dict[str, Any]:
+    """Write one current-hash review receipt; never finalize the whole form implicitly."""
+    root = Path(root)
+    view = str(view or "").strip()
+    if view not in TURNAROUND_FINALIZE_KEYS:
+        return {"ok": False, "msg": f"未知 view `{view}`；可选 {', '.join(TURNAROUND_FINALIZE_KEYS)}"}
+    when = str(reviewed_at or "").strip() or dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    try:
+        parsed_when = dt.datetime.fromisoformat(when.replace("Z", "+00:00"))
+        if parsed_when.tzinfo is None:
+            return {"ok": False, "msg": "reviewed_at 必须是带时区的 ISO-8601 时间"}
+    except ValueError:
+        return {"ok": False, "msg": "reviewed_at 不是合法 ISO-8601 时间"}
+    p = root / "出图" / "共享" / "identity_registry.json"
+    with _project_write_lock(root):
+        try:
+            reg = json.loads(p.read_text(encoding="utf-8"))
+        except Exception as exc:
+            return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
+        char, form, error = _find_character_form(reg, target)
+        if not form:
+            return {"ok": False, "msg": error}
+        result = _write_view_review_to_form(
+            root,
+            form,
+            view,
+            character_id=str(char.get("id") or "").strip(),
+            library_tier=_explicit_library_tier(char, form),
+            verdict=verdict,
+            reviewer=reviewer,
+            reviewed_at=when,
+            note=note,
+            reference_path=reference_path,
+            accept_current_pixels=accept_current_pixels,
+        )
+        if not result.get("ok"):
+            return result
+        _write_json_atomic(p, reg)
+    result["target"] = target
+    result["msg"] = (
+        f"{target}/{view} review={verdict} sha={str(result.get('png_sha256') or '')[:12]}…；"
+        "该动作只签当前视图，不会一键 finalize 整个 form"
+    )
+    return result
+
+
 def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool = True) -> Dict[str, Any]:
     """把共享定妆/资产的机器可读 finalize 真值 `self_check_passed` 置位（补 `00_索引.md` 人读 ✅）。
 
     target：角色 `CHAR_xx/形态` 或单形态时裸 `CHAR_xx`；资产 `LOC/PROP/MOUNT/WEAPON/OUTFIT/VFX_xx`。
     人工/AI 过落档自检后调用，让 `gate` 的 `check_referenced_assets_finalized` 能机检"引用必须 finalized"。
+    `core_full` 不允许 form 一键签过：必须先逐个用 `review_turnaround_view` 为五个标准角度、turnaround
+    总览板与至少一张 expression/face anchor 写入当前 PNG hash、verdict、reviewer、reviewed_at；任一缺失/过期都拒绝 finalize。旧项目未显式
+    声明 library_tier 时保留历史行为，避免迁移时无提示破坏。
 
     `auto_pin=True`（默认）：对**角色 form** 落档自检时顺带把 front 主参考的 sha256 钉进 `anchor_sha`
     （等价于自动 `--pin-anchor`），治"锚点静默漂移"结构根因——过自检的脸即刻被锚点指纹保护，gate
@@ -5276,43 +6165,50 @@ def mark_finalized(root: Path, target: str, value: bool = True, auto_pin: bool =
             reg = json.loads(p.read_text(encoding="utf-8"))
         except Exception as exc:
             return {"ok": False, "msg": f"读 identity_registry 失败：{exc}"}
-        cid, _, form_name = t.partition("/")
-        for c in (reg.get("characters") or []):
-            if str(c.get("id") or "").strip() != cid:
-                continue
-            forms = c.get("forms") or []
-            if form_name:
-                matches = [fm for fm in forms if str(fm.get("form") or "").strip() == form_name]
-            elif len(forms) == 1:
-                matches = forms
+        char, fm, error = _find_character_form(reg, t)
+        if not fm or not char:
+            return {"ok": False, "msg": error}
+        if value:
+            receipt_issues = _core_finalize_receipt_issues(root, char, fm)
+            if receipt_issues:
+                fm["self_check_passed"] = False
+                _write_json_atomic(p, reg)
+                summary = "、".join(
+                    f"{row['view']}({','.join(row['issues'])})" for row in receipt_issues
+                )
+                return {
+                    "ok": False,
+                    "target": t,
+                    "required_view_receipts": receipt_issues,
+                    "msg": f"{t} 核心档逐视图收据未齐/已过期：{summary}；先逐视图 review，禁止 form 一键签过",
+                }
+        fm["self_check_passed"] = bool(value)
+        fm["self_check_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        fm["self_check_by"] = "image_qc.mark_finalized"
+        if value and _explicit_library_tier(char, fm) != "core_full":
+            # Legacy/non-core compatibility.  Core slots have already been
+            # promoted one by one by review_turnaround_view and are never
+            # blanket-promoted here.
+            _mark_front_reference_ready(root, fm)
+        auto_pinned: List[str] = []
+        anchor_missing = False
+        if value and auto_pin:
+            rel = _anchor_relpath(fm)
+            sha = _sha256_file(root / rel) if rel else None
+            if sha:
+                fm["anchor_sha"] = sha
+                auto_pinned.append(sha)
             else:
-                return {"ok": False, "msg": f"`{cid}` 有多个形态，请指明 `CHAR_xx/形态`"}
-            if not matches:
-                return {"ok": False, "msg": f"`{cid}` 无形态 `{form_name}`"}
-            auto_pinned: List[str] = []
-            anchor_missing = False
-            for fm in matches:
-                fm["self_check_passed"] = bool(value)
-                if value:
-                    _mark_front_reference_ready(root, fm)
-                if value and auto_pin:
-                    rel = _anchor_relpath(fm)
-                    sha = _sha256_file(root / rel) if rel else None
-                    if sha:
-                        fm["anchor_sha"] = sha
-                        auto_pinned.append(sha)
-                    else:
-                        anchor_missing = True
-            _write_json_atomic(p, reg)
-            msg = f"{t}.self_check_passed={value}"
-            if value and auto_pin:
-                if auto_pinned:
-                    msg += f" + anchor_sha 自动钉死={auto_pinned[0][:12]}…"
-                elif anchor_missing:
-                    msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
-            return {"ok": True, "target": t, "value": bool(value),
-                    "auto_pinned": bool(auto_pinned), "msg": msg}
-    return {"ok": False, "msg": f"identity_registry 无角色 `{cid}`"}
+                anchor_missing = True
+        _write_json_atomic(p, reg)
+        msg = f"{t}.self_check_passed={value}"
+        if value and auto_pin:
+            if auto_pinned:
+                msg += f" + anchor_sha 自动钉死={auto_pinned[0][:12]}…"
+            elif anchor_missing:
+                msg += "（front 锚点图缺失，未自动钉死——补图后跑 --pin-anchor）"
+        return {"ok": True, "target": t, "value": bool(value),
+                "auto_pinned": bool(auto_pinned), "msg": msg}
 
 
 def _mark_front_reference_ready(root: Path, form: Dict[str, Any]) -> bool:
@@ -5570,11 +6466,27 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("root")
     ap.add_argument("episode", nargs="?")
     ap.add_argument("--mark-finalized", metavar="TARGET",
-                    help="把共享定妆/资产 `self_check_passed` 置 true（过落档自检后调用）：CHAR_xx/形态 或 LOC/PROP/WEAPON/OUTFIT/VFX_xx")
+                    help="把共享定妆/资产 `self_check_passed` 置 true；core_full 必须先逐视图 --review-view：CHAR_xx/形态 或 LOC/PROP/WEAPON/OUTFIT/VFX_xx")
     ap.add_argument("--unfinalize", action="store_true",
                     help="与 --mark-finalized 连用：改置 false（标记脏定妆，gate 引用即 block）")
     ap.add_argument("--no-auto-pin", action="store_true",
                     help="与 --mark-finalized 连用：落档时不自动钉死 anchor_sha（保留旧的纯 opt-in pin 行为）")
+    ap.add_argument("--review-view", metavar="TARGET",
+                    help="给 core_full 某一个标准视图写当前 hash 人审收据，不会一键 finalize：CHAR_xx/形态")
+    ap.add_argument("--view", choices=TURNAROUND_FINALIZE_KEYS,
+                    help="与 --review-view 连用：front/three_quarter/side/rear_three_quarter/back/turnaround/expression")
+    ap.add_argument("--view-path", default="",
+                    help="与 --review-view --view expression 连用；存在多张表情/脸锚时明确实际审阅 path")
+    ap.add_argument("--view-verdict", choices=("pass", "fail"),
+                    help="与 --review-view 连用：当前视图人审判定")
+    ap.add_argument("--view-reviewer", default="",
+                    help="与 --review-view 连用：真实审阅者/岗位标识，必填")
+    ap.add_argument("--view-reviewed-at", default="",
+                    help="与 --review-view 连用：ISO 时间；缺省写当前 UTC")
+    ap.add_argument("--view-note", default="",
+                    help="与 --review-view 连用：身份/服装/头脚线/中心线/身高复核说明")
+    ap.add_argument("--accept-current-pixels", action="store_true",
+                    help="与 --review-view --view-verdict pass 连用：明确人工已查看 path 的当前像素")
     ap.add_argument("--pin-anchor", metavar="TARGET",
                     help="把共享定妆锚点 front 主参考的内容 sha256 钉进 identity_registry `anchor_sha`（gate 校验锚点不被悄改）：CHAR_xx/形态")
     ap.add_argument("--unpin-anchor", action="store_true",
@@ -5623,6 +6535,22 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     help="只打印 pending 高风险 PROP 的 `--affected-shot ...` 串，便于 n2d-batch 最小重出")
     ns = ap.parse_args(argv)
     root = Path(ns.root).expanduser().resolve()
+    if ns.review_view:
+        if not ns.view or not ns.view_verdict or not str(ns.view_reviewer or "").strip():
+            ap.error("--review-view 必须同时提供 --view、--view-verdict、--view-reviewer")
+        r = review_turnaround_view(
+            root,
+            ns.review_view,
+            ns.view,
+            verdict=ns.view_verdict,
+            reviewer=ns.view_reviewer,
+            reviewed_at=ns.view_reviewed_at,
+            note=ns.view_note,
+            reference_path=ns.view_path,
+            accept_current_pixels=ns.accept_current_pixels,
+        )
+        print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
+        return 0 if r.get("ok") else 1
     if ns.mark_finalized:
         r = mark_finalized(root, ns.mark_finalized, value=not ns.unfinalize, auto_pin=not ns.no_auto_pin)
         print(("✅ " if r.get("ok") else "⛔ ") + r.get("msg", ""))
@@ -5640,7 +6568,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(json.dumps(r, ensure_ascii=False, indent=2, sort_keys=True))
         return 0 if r.get("available") else 1
     if not ns.episode:
-        ap.error("episode 必填（除非用 --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
+        ap.error("episode 必填（除非用 --review-view / --mark-finalized / --pin-anchor / --finalize-expr / --record-faceless 写 registry）")
     if ns.face_report:
         report = face_confirmation_report(root, ns.episode)
         print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))

@@ -86,6 +86,20 @@ def test_front_loaded_decline_flagged():
     assert "reversal_drought_late" in c
 
 
+def test_curve_compares_density_not_raw_hook_count():
+    eps = {}
+    for i in range(1, 4):
+        eps[f"第{i}集"] = _ep(4, 8)   # density .5
+    for i in range(4, 7):
+        eps[f"第{i}集"] = _ep(3, 6)   # density .5
+    for i in range(7, 10):
+        eps[f"第{i}集"] = _ep(2, 4)   # density .5, raw count lower
+    res = S.analyze(_mk(eps))
+    assert "back_loaded_decline" not in codes(res)
+    assert "back_loaded_decline_severe" not in codes(res)
+    assert res["summary"]["front"]["avg_hook_density"] == res["summary"]["back"]["avg_hook_density"]
+
+
 def test_strict_exit_on_severe():
     eps = {}
     for i in range(1, 4):

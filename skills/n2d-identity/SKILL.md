@@ -23,16 +23,16 @@ description: 横切角色身份闭环层：把 n2d 的 identity_registry.json �
 
 ## 输入 / 输出 / 读写边界
 
-- **输入**：`identity_registry.json`、reference group、后端 adapter 状态、LoRA 绑定、配音时长清单、voicemap、声纹机检依赖。
-- **输出**：`identity_adapter_matrix.json/md`、`identity_drift_report.json/md`、音色/声纹 drift 报表和 batch 可消费 findings。
+- **输入**：`identity_registry.json`、reference group、当前集 `storyboard.json` 的角色/形态在场表、历史 drift report、后端 adapter 状态、LoRA 绑定、配音时长清单、voicemap、声纹机检依赖。
+- **输出**：`identity_adapter_matrix.json/md`、`identity_drift_report.json/md`、`memory_anchor_plan_第N集.json`、音色/声纹 drift 报表和 batch 可消费 findings。
 - **读写边界**：只读 registry 并写报表；不写 registry 本体、不训练 LoRA、不重配音、不重出图。
 - **契约关系**：registry path/schema owner、writer owner、adapter status、LoRA ready 阻断、voice finding kind 都来自 `skills/n2d/_lib/n2d_contract.py`；本 skill 是 registry 消费方与 identity_adapter_matrix 写入方，不是 registry 本体写入方。
-- **tier 档位归属澄清（2026-07 审计）**：`core_full/recurring_standard/named_minimal/restricted_partial` 四档的**强制点在 n2d-image（runner 按档补脸锚、face_drift_risk 按档定必需视图）与 n2d-review gate**；本 skill 只感知 `restricted_partial`（缩减必需 reference 字段）并在漂移报表打 `tier_confound` 标签，不执行档位闸门。别在这里找 tier 阻断逻辑。
+- **tier 档位归属澄清（2026-07 审计）**：`core_full/recurring_standard/named_minimal/restricted_partial` 四档真值来自 n2d 单一档位契约；本 skill 的 adapter matrix 按档计算必需 reference 字段并把 `planned` 留作未就绪，n2d-image 负责生成/补齐，n2d-review gate 负责阻断。核心角色走 `restricted_partial` 必须有 approved `restricted_partial_contract`，不能只自报 `face_policy=no_full_face` 降档。
 
 ## 核心规则
 
 - **一份 registry，多端消费**：n2d-image 取 `reference_group` / 生图模型原生角色 ID；n2d-video 取 `Character ID / Face Lock / reference controls`；n2d-review 取 `drift_forbidden` 和跨集漂移报表。不要在 prompt 现场手写临时 ID。
-- **reference group 永远是兜底**：任何后端未注册、无权限、生成失败时，都退回 front/side/back/outfit/turnaround + 锚点句 + 首尾帧。
+- **reference group 永远是兜底，但按档位验收**：任何后端未注册、无权限、生成失败时，都回到共享 reference group；`core_full` 要五个不同可喂图路径 + turnaround + body/outfit + expression/face anchor（允许从同一已签母本派生，不要求五次独立生成），`recurring_standard` 要 front/three_quarter + body/outfit + face anchor，`named_minimal` 要 front + body/outfit + face anchor，`restricted_partial` 只允许审批合同内且不含正脸/头部的局部资产。`planned` 永远不算 ready。五角与 `>=10集` 分档是 n2d 项目生产基线/默认启发式，不冒充所有项目的普适行业标准。
 - **ready 不能空登记**：`registered/ready` 必须写真实 `id/handle/reference/model_path`；LoRA `ready` 必须写 `base_model/model_path/trigger/model_hash/validation_report`，且验证报告必须 `verdict=pass`。若报告含 `dataset_has_warnings`，只能在 `manual_review.allow_dataset_warnings=true` 且 `manual_review.notes` 写明原因时放行。
 - **后端 mode 要匹配能力**：Kling video 用 `character_id`，Seedance 用 `face_lock`，Veo 用 `reference_controls`，Dreamina 用 `first_last_frame` 或 `reference_group`；错 mode 由 gate 阻断。
 - **跨集漂移要回源头**：报表发现某角色从第 N 集开始大量 🔴/🟡，先查该集是否换定妆、混后端、缺 adapter、用了高危角度或 reference group 缺图，再只重跑受影响镜头。
@@ -51,7 +51,7 @@ python3 skills/n2d-identity/scripts/identity.py <作品根> --write
 - `生产数据/identity_adapter_matrix.md`
 - `生产数据/identity_drift_report.json`（`recommendations[]` 为 LoRA 升档自动建议，带 character_id/理由/下一步命令）
 - `生产数据/identity_drift_report.md`
-- **G2 跨集记忆锚（memory-sink）**：`python3 skills/n2d-identity/scripts/memory_anchor.py <作品根> 第N集` 读 drift report + registry，产 `生产数据/memory_anchor_plan_第N集.json`（report-only）——为**长间隔再登场 / 晚集 / 已测漂移**的角色规划「把最早集定妆记忆锚重注入本集出图参考」。2026 SOTA（StoryMem/EntityMem/Context Forcing）实证跨镜一致性随复现间隔衰减（EntityBench Gap-Decay），故顶尖流水线不止逐镜从定妆库重注入、还把早期关键帧钉成全局锚。n2d-image/reference_planner 出图前自动消费此 plan，把记忆锚作为最高优先锚前置注入（文件契约·跨 skill 不互 import）。与 B4 复现距离加权同向、互补：B4 加风险分提示，G2 落地参考前置。
+- **G2 跨集记忆锚（memory-sink，load-bearing）**：`python3 skills/n2d-identity/scripts/memory_anchor.py <作品根> 第N集` 以当前 `storyboard.json` 的角色/形态在场为本集需求真值，读 registry 取稳定 `character_id/form` 与 ready 锚，历史 drift 只提供既往风险/间隔，不以“本集已经有 PNG”作为是否计划重注入的前提；产 v3 `生产数据/memory_anchor_plan_第N集.json`。长间隔再登场 / 晚集 / 已测漂移角色必须把最早定妆锚重注入本集出图参考。n2d-image/reference_planner 出图前只消费 `status=ready/available=true` 且 episode 精确匹配的 plan，把记忆锚作为最高优先锚前置注入；n2d-review 再从当前 plan 逐角色/形态重算 required 与每个真实 Clip 的 consumed 映射，逐项核对 registry/drift/storyboard 三个 source SHA、当前锚 SHA、计划 SHA 和消费镜头。**这不是 report-only 建议**：任一 required key 未消费、只改聚合计数/summary、错把 `CHAR_1` 匹配到 `CHAR_10`、多形态歧义或任一 source 指纹过期都会 BLOCK 回 image。首个视觉集在确无更早 PNG 时允许 ready 空历史基线；已有更早 PNG 而 drift/plan 不可用则 fail closed。与 B4 复现距离加权同向、互补：B4 加风险分提示，G2 落地参考前置。
 - 若存在配音时长清单（`合成/第N集/配音/时长清单.json`），`--write` 还会顺带跑音色对账，输出
   `生产数据/identity_voice_drift_report.json` + `.md`（也可单独跑：
   `python3 skills/n2d-identity/scripts/voice_consistency.py <作品根> --write`）。

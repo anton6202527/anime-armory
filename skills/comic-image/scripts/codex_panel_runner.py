@@ -29,6 +29,7 @@ from comic_image_prompt_compiler import (  # noqa: E402
     lint as lint_compiled_prompt,
     normalize_backend,
 )
+from contracts import stage_inputs_fingerprint  # noqa: E402
 
 
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
@@ -91,6 +92,108 @@ def file_sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def gate_receipt_path(root: Path, chapter: str) -> Path:
+    return root / "生产数据" / "gate_receipts" / f"image_preflight_{chapter}.json"
+
+
+def validate_gate_receipt(root: Path, chapter: str, jobs_path: Path) -> dict[str, Any]:
+    path = gate_receipt_path(root, chapter)
+    try:
+        receipt = load_json(path)
+    except Exception:
+        return {"status": "missing", "path": rel_to_root(root, path), "reason": "receipt_missing_or_unreadable"}
+    recorded_sha = str(
+        receipt.get("panel_jobs_sha256")
+        or (receipt.get("inputs") or {}).get("panel_jobs_sha256")
+        or (receipt.get("artifacts") or {}).get("panel_jobs_sha256")
+        or ""
+    )
+    actual_sha = file_sha256(jobs_path) if jobs_path.is_file() else ""
+    verdict = str(receipt.get("verdict") or receipt.get("status") or receipt.get("result") or "").lower()
+    kind_ok = str(receipt.get("kind") or "") == "comic_gate_receipt"
+    stage_ok = str(receipt.get("stage") or "") == "image_preflight"
+    chapter_ok = str(receipt.get("chapter") or "") == chapter
+    current_inputs = stage_inputs_fingerprint(root, chapter, "image_preflight")
+    fingerprint_ok = bool(
+        receipt.get("inputs_fingerprint_sha256")
+        and receipt.get("inputs_fingerprint_sha256") == current_inputs.get("sha256")
+    )
+    report_raw = str(receipt.get("report_path") or "").strip()
+    report_path = resolve_path(root, report_raw) if report_raw else Path()
+    report: dict[str, Any] = {}
+    report_hash_ok = False
+    report_contract_ok = False
+    if report_raw and report_path.is_file():
+        try:
+            report = load_json(report_path)
+        except Exception:
+            report = {}
+        report_hash_ok = str(receipt.get("report_sha256") or "") == file_sha256(report_path)
+        report_inputs = report.get("inputs_fingerprint") if isinstance(report.get("inputs_fingerprint"), dict) else {}
+        report_contract_ok = bool(
+            report.get("kind") == "comic_gate"
+            and report.get("stage") == "image_preflight"
+            and report.get("chapter") == chapter
+            and str(report.get("verdict") or "").lower() == verdict
+            and report_inputs.get("sha256") == current_inputs.get("sha256")
+            and report_inputs.get("sha256") == receipt.get("inputs_fingerprint_sha256")
+        )
+    authorized = (
+        verdict in {"pass", "passed", "ok", "clean"}
+        or (verdict in {"warn", "warning", "pass_with_warnings"} and receipt.get("execution_authorized") is True)
+    )
+    current = bool(
+        recorded_sha
+        and recorded_sha == actual_sha
+        and kind_ok
+        and stage_ok
+        and chapter_ok
+        and fingerprint_ok
+        and report_hash_ok
+        and report_contract_ok
+        and authorized
+    )
+    return {
+        "status": "current_pass" if current else "stale_or_not_passed",
+        "path": rel_to_root(root, path),
+        "receipt_sha256": file_sha256(path),
+        "panel_jobs_sha256": actual_sha,
+        "recorded_panel_jobs_sha256": recorded_sha,
+        "inputs_fingerprint_sha256": current_inputs.get("sha256", ""),
+        "recorded_inputs_fingerprint_sha256": str(receipt.get("inputs_fingerprint_sha256") or ""),
+        "report_path": rel_to_root(root, report_path) if report_raw else "",
+        "verdict": verdict,
+        "reason": "" if current else (
+            "receipt/report must be authentic, have no block, explicitly authorize execution, "
+            "and bind the current full preflight fingerprint plus panel_jobs SHA"
+        ),
+    }
+
+
+def write_gate_waiver(root: Path, chapter: str, jobs_path: Path, reason: str, targets: str, receipt_status: dict[str, Any]) -> Path:
+    now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
+    payload = {
+        "schema_version": 1,
+        "kind": "comic_gate_waiver",
+        "stage": "image_preflight",
+        "chapter": chapter,
+        "decision": "waive_for_this_runner_invocation",
+        "reason": reason.strip(),
+        "created_at": now.isoformat(),
+        "panel_jobs_path": rel_to_root(root, jobs_path),
+        "panel_jobs_sha256": file_sha256(jobs_path),
+        "targets": [item.strip() for item in targets.split(",") if item.strip()],
+        "prior_gate_receipt": receipt_status,
+        "scope": "current panel_jobs SHA only; any rebuild invalidates this waiver",
+    }
+    out_dir = root / "生产数据" / "gate_waivers"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / f"image_preflight_{chapter}_{now.strftime('%Y%m%dT%H%M%SZ')}.json"
+    write_json(path, payload)
+    write_json(out_dir / f"image_preflight_{chapter}_latest.json", payload)
+    return path
+
+
 def rel_to_root(root: Path, path: Path) -> str:
     try:
         return str(path.resolve().relative_to(root.resolve()))
@@ -119,12 +222,18 @@ def collect_reference_images(root: Path, job: dict[str, Any]) -> list[dict[str, 
         if resolved in seen:
             continue
         seen.add(resolved)
+        current_sha = file_sha256(path)
+        expected_sha = str(ref.get("sha256") or "")
+        if expected_sha and expected_sha != current_sha:
+            raise ValueError(f"reference changed after panel job planning: {raw}")
         records.append(
             {
                 "id": str(ref.get("id") or path.stem),
                 "path": rel_to_root(root, path),
                 "abs_path": str(path),
-                "sha256": file_sha256(path),
+                "sha256": current_sha,
+                "role": str(ref.get("role") or ref.get("view") or "reference"),
+                "required": bool(ref.get("required")),
             }
         )
     return records
@@ -150,9 +259,39 @@ def select_reference_attachments(
     records: list[dict[str, str]],
     limit: int = CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
 ) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
-    """按真实工具上限选择附件；被省略项仍留在 job 的文字生产合同中。"""
-    ranked = sorted(enumerate(records), key=lambda item: (reference_attachment_priority(item[1]), item[0]))
-    selected_indices = {index for index, _record in ranked[: max(0, limit)]}
+    """Fairly allocate executable slots; never spend all slots on one face."""
+    mandatory_indices: list[int] = []
+    seen_characters: set[str] = set()
+    for index, record in enumerate(records):
+        rid = str(record.get("id") or "")
+        if record.get("required"):
+            mandatory_indices.append(index)
+        elif rid.startswith(("CHAR_", "MON_")) and rid not in seen_characters:
+            mandatory_indices.append(index)
+            seen_characters.add(rid)
+    # Legacy jobs did not mark required; preserve one scene and each named prop
+    # before allocating second/third portraits for a character.
+    if not any(record.get("required") for record in records):
+        loc_added = False
+        seen_props: set[str] = set()
+        for index, record in enumerate(records):
+            rid = str(record.get("id") or "")
+            if rid.startswith("LOC_") and not loc_added:
+                mandatory_indices.append(index)
+                loc_added = True
+            elif rid.startswith("PROP_") and rid not in seen_props:
+                mandatory_indices.append(index)
+                seen_props.add(rid)
+    mandatory_indices = list(dict.fromkeys(mandatory_indices))
+    remaining = [
+        (index, record) for index, record in enumerate(records) if index not in mandatory_indices
+    ]
+    ranked = sorted(remaining, key=lambda item: (reference_attachment_priority(item[1]), item[0]))
+    selected_indices = set(mandatory_indices[: max(0, limit)])
+    for index, _record in ranked:
+        if len(selected_indices) >= max(0, limit):
+            break
+        selected_indices.add(index)
     selected = [record for index, record in enumerate(records) if index in selected_indices]
     omitted = [record for index, record in enumerate(records) if index not in selected_indices]
     return selected, omitted
@@ -520,6 +659,30 @@ def validate_compiled_job(job: dict[str, Any], expected_backend: str = "") -> No
     actual_hash = hashlib.sha256(str(job.get("submit_prompt") or "").encode("utf-8")).hexdigest()
     if str(job.get("submit_prompt_sha256") or "") != actual_hash:
         errors.append("submit_prompt_hash_mismatch")
+    execution_hash = str(job.get("execution_input_sha256") or "")
+    if not re.fullmatch(r"[0-9a-f]{64}", execution_hash):
+        errors.append("execution_input_hash_invalid")
+    else:
+        consumed = job.get("consumed_contracts") if isinstance(job.get("consumed_contracts"), dict) else {}
+        reference_plan = consumed.get("reference_plan") if isinstance(consumed.get("reference_plan"), dict) else {}
+        material = {
+            "submit_prompt_sha256": actual_hash,
+            "size": job.get("size") or {},
+            "references": [
+                {"id": ref.get("id"), "path": ref.get("path"), "sha256": ref.get("sha256")}
+                for ref in job.get("references") or [] if isinstance(ref, dict)
+            ],
+            "character_bindings": [
+                {key: binding.get(key) for key in ("character_id", "form_id", "outfit_id", "expression_id", "state_id")}
+                for binding in job.get("character_bindings") or [] if isinstance(binding, dict)
+            ],
+            "panel_plan_sha256": str(reference_plan.get("panel_plan_sha256") or ""),
+        }
+        actual_execution_hash = hashlib.sha256(
+            json.dumps(material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if actual_execution_hash != execution_hash:
+            errors.append("execution_input_hash_mismatch")
     if expected_backend and normalize_backend(compiler.get("backend")) != normalize_backend(expected_backend):
         errors.append(f"prompt_backend_mismatch:{compiler.get('backend')}!={normalize_backend(expected_backend)}")
     errors.extend(lint_compiled_prompt(payload)["errors"])
@@ -680,17 +843,38 @@ def main() -> int:
         action="store_true",
         help="显式跳过内置 image_preflight gate（编排层刚跑过 gate、或人工确认误报时用；跳过会留痕）",
     )
+    parser.add_argument(
+        "--waiver-reason",
+        default="",
+        help="--skip-gate 且没有绑定当前 panel_jobs SHA 的 pass receipt 时必填；会写持久 waiver receipt",
+    )
     args = parser.parse_args()
 
     root = Path(args.project_root).expanduser().resolve()
     repo = repo_root(root)
+    jobs_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
+    if not jobs_path.is_file():
+        print(f"[err] missing panel jobs: {jobs_path}", file=sys.stderr)
+        return 2
     if args.skip_gate:
-        print("[warn] --skip-gate：跳过内置 image_preflight gate（显式豁免，留痕）", flush=True)
+        receipt_status = validate_gate_receipt(root, args.chapter, jobs_path)
+        if receipt_status.get("status") == "current_pass":
+            print(f"[ok] --skip-gate 复用当前 pass receipt：{receipt_status['path']}", flush=True)
+        elif not args.waiver_reason.strip():
+            print(
+                "[err] --skip-gate 没有绑定当前 panel_jobs SHA 的 pass receipt；必须提供 --waiver-reason 并留下持久审计记录",
+                file=sys.stderr,
+            )
+            return 2
+        else:
+            waiver = write_gate_waiver(
+                root, args.chapter, jobs_path, args.waiver_reason, args.targets, receipt_status
+            )
+            print(f"[warn] --skip-gate 显式豁免已留痕：{rel_to_root(root, waiver)}", flush=True)
     else:
         rc = run_preflight_gate(root, args.chapter)
         if rc != 0:
             return rc
-    jobs_path = root / "出图" / args.chapter / "prompt" / "panel_jobs.json"
     data = load_json(jobs_path)
     data["model"] = CODEX_MODEL
     data["channel"] = CODEX_CHANNEL
@@ -724,6 +908,18 @@ def main() -> int:
         last_error = ""
         all_reference_records = collect_reference_images(root, job)
         reference_records, omitted_reference_records = select_reference_attachments(all_reference_records)
+        omitted_required = [record for record in omitted_reference_records if record.get("required")]
+        selected_subjects = {str(record.get("id") or "") for record in reference_records if str(record.get("id") or "").startswith(("CHAR_", "MON_"))}
+        required_subjects = {str(binding.get("character_id") or "") for binding in job.get("character_bindings") or [] if isinstance(binding, dict)}
+        if omitted_required or not required_subjects.issubset(selected_subjects):
+            missing_subjects = sorted(required_subjects - selected_subjects)
+            print(
+                f"[err] {pid} executable reference budget cannot carry all critical contracts; "
+                f"omitted_required={','.join(str(item.get('id')) for item in omitted_required) or '-'} "
+                f"missing_subjects={','.join(missing_subjects) or '-'}；先拆格/分区生成后合成",
+                file=sys.stderr,
+            )
+            return 2
         reference_manifest = write_reference_manifest(
             root, args.chapter, str(pid), reference_records, omitted_reference_records
         )
@@ -833,6 +1029,7 @@ def main() -> int:
                         "reference_manifest": rel_to_root(root, reference_manifest),
                         "generated_from_contract_sha256": str(job.get("source_contract_sha256") or ""),
                         "generated_from_submit_prompt_sha256": str(job.get("submit_prompt_sha256") or ""),
+                        "generated_from_execution_input_sha256": str(job.get("execution_input_sha256") or ""),
                         "post_qc": post_qc,
                     }
                 )

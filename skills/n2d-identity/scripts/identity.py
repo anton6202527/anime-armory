@@ -28,6 +28,7 @@ _COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n
 if _COMMON not in sys.path:
     sys.path.insert(0, _COMMON)
 from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源（与 gate / n2d-lora 共用）
+    CHARACTER_LIBRARY_TIER_PARTIAL,
     IDENTITY_ADAPTER_FALLBACK_STATUSES,
     IDENTITY_ADAPTER_IN_PROGRESS_STATUSES,
     IDENTITY_ADAPTER_KNOWN_STATUSES,
@@ -41,8 +42,10 @@ from n2d_contract import (  # noqa: E402  身份/LoRA 判定的单一真值源�
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
     identity_allowed_modes,
+    character_library_tier_for_record,
     identity_registry_path,
     lora_registry_ready_blocks,
+    required_character_reference_group_fields,
 )
 from n2d_route import episode_number as route_episode_number, normalize_episode as route_normalize_episode  # noqa: E402
 from n2d_registry import episode_png_fingerprint  # noqa: E402  内容级新鲜度指纹（与 gate 共用单一真值源）
@@ -150,8 +153,15 @@ def reference_group_status(root: Path, reference_group: Mapping[str, Any]) -> Di
         if key not in keys:
             keys.append(str(key))
     for key in keys:
-        rel = reference_item_path(reference_group.get(key, ""))
-        out[key] = {"path": rel, "exists": path_exists(root, rel)}
+        item = reference_group.get(key, "")
+        rel = reference_item_path(item)
+        declared_status = str(item.get("status") or "").strip() if isinstance(item, Mapping) else "legacy"
+        usable = not isinstance(item, Mapping) or declared_status in {"ready", "registered"}
+        out[key] = {
+            "path": rel,
+            "status": declared_status,
+            "exists": bool(usable and path_exists(root, rel)),
+        }
     extras = {k: v for k, v in reference_group.items() if k not in REFERENCE_FIELDS}
     if extras:
         out["_extra"] = {"value": extras, "exists": True}
@@ -168,8 +178,33 @@ def form_is_restricted_partial(form: Mapping[str, Any]) -> bool:
     )
 
 
-def reference_fields_for_form(form: Mapping[str, Any]) -> tuple[str, ...]:
-    return PARTIAL_REFERENCE_FIELDS if form_is_restricted_partial(form) else tuple(REFERENCE_FIELDS)
+def character_form_library_tier(char: Mapping[str, Any], form: Mapping[str, Any]) -> str:
+    combined = dict(char)
+    for key in (
+        "library_tier",
+        "tier",
+        "face_policy",
+        "restricted_partial",
+        "restricted_partial_contract",
+        "planned_episode_count",
+        "episode_count",
+    ):
+        if key in form:
+            combined[key] = form.get(key)
+    return character_library_tier_for_record(combined)
+
+
+def reference_fields_for_form(
+    form: Mapping[str, Any],
+    char: Optional[Mapping[str, Any]] = None,
+) -> tuple[str, ...]:
+    """Use the canonical B7 tier contract; partial keeps its silhouette pack."""
+    if char is None:
+        return PARTIAL_REFERENCE_FIELDS if form_is_restricted_partial(form) else tuple(REFERENCE_FIELDS)
+    tier = character_form_library_tier(char, form)
+    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
+        return PARTIAL_REFERENCE_FIELDS
+    return tuple(required_character_reference_group_fields(tier))
 
 
 def reference_group_ready(ref_status: Mapping[str, Mapping[str, Any]], required_fields: Optional[Sequence[str]] = None) -> bool:
@@ -557,7 +592,8 @@ def build_adapter_matrix(
                 continue
             reference_group = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
             ref_status = reference_group_status(root, reference_group)
-            required_reference_fields = reference_fields_for_form(form)
+            library_tier = character_form_library_tier(char, form)
+            required_reference_fields = reference_fields_for_form(form, char)
             ref_ready = reference_group_ready(ref_status, required_reference_fields)
             adapters = form.get("identity_adapters") if isinstance(form.get("identity_adapters"), Mapping) else {}
             image_cfg = adapters.get("image") if isinstance(adapters.get("image"), Mapping) else {}
@@ -596,6 +632,7 @@ def build_adapter_matrix(
                 "character_id": str(char.get("id", "")).strip(),
                 "character_name": str(char.get("name", "")).strip(),
                 "scope": str(char.get("scope", "")).strip(),
+                "library_tier": library_tier,
                 "form": str(form.get("form", "")).strip(),
                 "asset_key": str(form.get("asset_key", "")).strip(),
                 "anchor_phrase": str(form.get("anchor_phrase", "")).strip(),
@@ -980,7 +1017,13 @@ def render_drift_md(report: Mapping[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def write_outputs(root: Path, matrix: Mapping[str, Any], drift: Mapping[str, Any]) -> Dict[str, Path]:
+def write_outputs(
+    root: Path,
+    matrix: Mapping[str, Any],
+    drift: Mapping[str, Any],
+    *,
+    write_drift: bool = True,
+) -> Dict[str, Path]:
     out_dir = root / "生产数据"
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = {
@@ -991,8 +1034,9 @@ def write_outputs(root: Path, matrix: Mapping[str, Any], drift: Mapping[str, Any
     }
     atomic_write_text(paths["matrix_json"], json.dumps(matrix, ensure_ascii=False, indent=2) + "\n")
     atomic_write_text(paths["matrix_md"], render_matrix_md(matrix) + "\n")
-    atomic_write_text(paths["drift_json"], json.dumps(drift, ensure_ascii=False, indent=2) + "\n")
-    atomic_write_text(paths["drift_md"], render_drift_md(drift) + "\n")
+    if write_drift:
+        atomic_write_text(paths["drift_json"], json.dumps(drift, ensure_ascii=False, indent=2) + "\n")
+        atomic_write_text(paths["drift_md"], render_drift_md(drift) + "\n")
     return paths
 
 
@@ -1010,13 +1054,23 @@ def main() -> int:
     available = discover_episodes(root)
     episodes = parse_episodes(ns.episodes, available) if ns.episodes else available
     generated_at = now_iso()
-    # drift 先于 matrix：matrix summary 的 characters_needing_lora_upgrade 需要 drift 信号
-    drift = build_drift_report(root, episodes, skip_face=ns.skip_face, generated_at=generated_at, registry=registry)
+    # --skip-face 是“只刷新矩阵”，不是“清空上一轮视觉测量”。若已有 drift，原字节保留；
+    # 否则才落一个 unavailable 骨架，避免日常 next 把跨集记忆输入擦成 characters={}。
+    prior_drift = load_json(root / "生产数据" / "identity_drift_report.json") if ns.skip_face else None
+    preserve_prior_drift = ns.skip_face and isinstance(prior_drift, Mapping)
+    drift = (
+        dict(prior_drift)
+        if preserve_prior_drift
+        else build_drift_report(root, episodes, skip_face=ns.skip_face, generated_at=generated_at, registry=registry)
+    )
     matrix = build_adapter_matrix(root, registry, generated_at=generated_at, drift_report=drift)
     if ns.write:
-        paths = write_outputs(root, matrix, drift)
-        for p in paths.values():
-            print(f"wrote {p}")
+        paths = write_outputs(root, matrix, drift, write_drift=not preserve_prior_drift)
+        for key, p in paths.items():
+            if preserve_prior_drift and key.startswith("drift_"):
+                print(f"preserved {p}")
+            else:
+                print(f"wrote {p}")
         # 配音 manifest 存在时顺带做音色跨集对账（import 调用，不 subprocess）
         if voice_consistency.discover_episodes(root):
             voice_report = voice_consistency.build_report(root, generated_at=generated_at)

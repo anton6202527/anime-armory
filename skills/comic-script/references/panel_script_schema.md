@@ -9,6 +9,11 @@
   "title": "作品名",
   "chapter": "第1话",
   "status": "draft",
+  "chapter_contract": {
+    "path": "脚本/split_blueprint.json",
+    "chapter_contract_sha256": "本话 chapter contract 规范 JSON 的 SHA256",
+    "status": "confirmed"
+  },
   "source_semantics": {
     "path": "脚本/第1话/source_semantics.json",
     "requires_normalization": true,
@@ -45,6 +50,16 @@
       "adaptation_note": "压缩、合并、删改、改成画面或改成对白的说明",
       "description": "首格画面描述",
       "characters": ["主角"],
+      "character_bindings": [
+        {
+          "character_id": "CHAR_MAIN",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_DEFAULT",
+          "expression_id": "EXPR_ALERT",
+          "state_id": "STATE_CH01_ENTRY"
+        }
+      ],
+      "source_segment_refs": ["S001"],
       "location": "场景名",
       "scene_anchor_id": "LOC_001",
       "spatial_layout": "继承 LOC_001 的空间布局，本格角色在画面左前景，门在右后景",
@@ -88,9 +103,13 @@
 字段规则：
 
 - `panel_id`：同一话唯一，推荐 `P001`。
+- `chapter_contract`：绑定本话 v2 contract。`chapter_contract_sha256` 与 `source_semantics.json.chapter_contract.sha256` 使用同一规范 JSON 算法；上游合同变化后 panel script 与下游任务必须 stale，重新审阅后才能更新绑定。
 - `story_function`：该格的戏剧功能，如 `opening_hook`、`reaction`、`reveal`、`action_peak`、`turning_point`、`cliffhanger`。
 - `source_semantics`（可选）：记录本话源语义归一化 gate 的路径和状态；源本是外语、文言/古汉语或混合语言时应存在，且 `status=pass` 后再进入排版/出图。
 - `source_excerpt` / `meaning_zh` / `text_target` / `adaptation_note`：跨语种、文言/古汉语或强制归一化改编时的逐格追溯字段。它们让分格衡量从源文长度统一到“源语义 → 中文释义 → 目标嵌字 → 改编取舍”。
+- `source_segment_refs`：源本改编的确定性追溯键，引用本话 `source_semantics.json.segments[].segment_id`。凡改编决策不是“删除/后文带出”的源段，都必须至少被一格消费；不存在的 segment ID、无决策源段或无格覆盖会阻断 strict source coverage。
+- 改编中新增、确实没有对应源段的衔接格可以不填 `source_segment_refs`，但必须同时写 `adaptation_origin="original_bridge"` 和非空 `adaptation_note`；这是一条显式改编取舍，不能用空引用静默绕过 coverage。
+- `character_bindings`：含具名角色格的正式身份绑定。每项必须带 `character_id / form_id / outfit_id / expression_id / state_id`，供出图任务消费角色、形态、服装、表情和当前剧情状态。旧 `characters:["CHAR_x"]` 只保留阅读与迁移兼容，不能代替正式绑定；迁移时按每个 `characters` 项查 identity registry 后补齐五个 ID，未知值不得用自然语言或 `default` 偷渡。
 - `description`：画面事实，不写空泛风格词。
 - `dialogue`：只存文字，不要求画进图里。`text_target` 优先作为最终嵌字文本；`text` 保留向后兼容；`source_text` 可记录原文。跨语种、RTL 或需词典断行文字应记录 `lang` / `dir`，避免渲染阶段靠错误启发式猜方向。
 - `narration_target` / `sfx_target`（可选）：当目标嵌字语言不同于源文本或默认正文时，用于保留最终可渲染文本。

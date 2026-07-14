@@ -243,8 +243,9 @@ def test_character_plan_requires_baseline_three_quarter_and_face_anchor() -> Non
     rg.pop("three_quarter", None)
     rg.pop("face_anchor_refs", None)
     rg["expressions"] = []
+    char = {**_char(rg=rg), "library_tier": "recurring_standard"}
     p = rp.plan_character_in_clip(
-        _char(rg=rg), deltas=[], multi=False,
+        char, deltas=[], multi=False,
         profile=_MULTI_REF, tier="multi_reference", scope_is_core=False,
     )
     assert any("45" in m or "three_quarter" in m for m in p["missing_references"])
@@ -501,6 +502,45 @@ def test_build_plan_end_to_end(tmp_path: Path) -> None:
     assert "逐镜参考规划" in mp.read_text(encoding="utf-8")
 
 
+def test_build_plan_emits_per_character_memory_consumption_from_real_clips(tmp_path: Path) -> None:
+    root = _setup_work(tmp_path)
+    _write_memory_anchor_contract_fixture(root, char_key="沈念_常态")
+
+    plan = rp.build_plan(root, "第1集")
+
+    summary = plan["summary"]
+    contract = summary["memory_anchor_contract"]
+    expected = {"沈念_常态": ["C1"]}
+    assert summary["required_char_keys"] == ["沈念_常态"]
+    assert summary["consumed_char_keys"] == ["沈念_常态"]
+    assert summary["consumed_clip_ids_by_char"] == expected
+    assert contract["required_char_keys"] == ["沈念_常态"]
+    assert contract["consumed_char_keys"] == ["沈念_常态"]
+    assert contract["consumed_clip_ids_by_char"] == expected
+    assert contract["unconsumed_char_keys"] == []
+    char_plan = plan["clips"][0]["characters"][0]
+    assert char_plan["memory_anchor_char_key"] == "沈念_常态"
+    assert char_plan["memory_anchor_refs_consumed"] == ["出图/共享/图片/memory_anchor.png"]
+
+
+def test_build_plan_exposes_required_memory_key_not_consumed_by_any_clip(tmp_path: Path) -> None:
+    root = _setup_work(tmp_path)
+    _write_memory_anchor_contract_fixture(root, char_key="CHAR_99/常态")
+
+    plan = rp.build_plan(root, "第1集")
+
+    contract = plan["summary"]["memory_anchor_contract"]
+    assert contract["status"] == "ready"
+    assert contract["required_char_keys"] == ["CHAR_99/常态"]
+    assert contract["consumed_char_keys"] == []
+    assert contract["consumed_clip_ids_by_char"] == {}
+    assert contract["unconsumed_char_keys"] == ["CHAR_99/常态"]
+    assert any(
+        action.get("kind") == "memory_anchor_unconsumed"
+        for action in plan["summary"]["action_required"]
+    )
+
+
 def test_build_plan_emits_multi_subject_actions(tmp_path: Path) -> None:
     root = _setup_work(tmp_path)
     reg_path = root / "出图" / "共享" / "identity_registry.json"
@@ -561,6 +601,9 @@ def test_memory_anchor_dedups_existing_path():
     p = rp.plan_character_in_clip(_mem_char(), [], False, _mem_profile(),
                                   "multi_reference", False, memory_refs=["f.png"])
     assert sum(1 for r in p["recommended_references"] if r["path"] == "f.png") == 1
+    assert p["memory_anchor_reinjected"] is True
+    assert p["memory_anchor_refs_consumed"] == ["f.png"]
+    assert not any(r["role"] == "memory_anchor" for r in p["recommended_references"])
 
 
 def test_no_memory_refs_is_status_quo():
@@ -574,6 +617,153 @@ def test_memory_refs_matcher_flexible_keys():
     assert rp._memory_refs_for({"CHAR_01/常态": ["m1.png"]}, "CHAR_01", "沈念", "CHAR_01/常态") == ["m1.png"]
     assert rp._memory_refs_for({"沈念": ["m2.png"]}, "CHAR_01", "沈念", "") == ["m2.png"]
     assert rp._memory_refs_for({"CHAR_99": ["x"]}, "CHAR_01", "沈念", "") == []
+
+
+def test_memory_refs_matcher_never_substring_binds_char_1_to_char_10():
+    mem = {
+        "CHAR_10/常态": ["char10.png"],
+        "沈念十号/常态": ["name10.png"],
+    }
+
+    assert rp._memory_refs_for(mem, "CHAR_1", "沈念", "CHAR_1/常态") == []
+    assert rp._memory_match_for(mem, "CHAR_10", "沈念十号", "CHAR_10/常态")[0] == "CHAR_10/常态"
+
+
+def test_memory_refs_matcher_refuses_ambiguous_character_with_multiple_forms():
+    mem = {
+        "CHAR_01/常态": ["normal.png"],
+        "CHAR_01/战损态": ["battle.png"],
+    }
+
+    assert rp._memory_match_for(mem, "CHAR_01", "沈念", "") == ("", [])
+    assert rp._memory_match_for(mem, "CHAR_01", "沈念", "CHAR_01/战损态") == (
+        "CHAR_01/战损态",
+        ["battle.png"],
+    )
+
+
+def _write_memory_anchor_contract_fixture(
+    root: Path,
+    *,
+    available: bool = True,
+    char_key: str = "CHAR_01/常态",
+    reference_rel: str = "出图/共享/图片/memory_anchor.png",
+    create_reference: bool = True,
+) -> Path:
+    shared = root / "出图" / "共享"
+    prod = root / "生产数据"
+    shared.mkdir(parents=True, exist_ok=True)
+    prod.mkdir(parents=True, exist_ok=True)
+    registry = shared / "identity_registry.json"
+    if not registry.is_file():
+        registry.write_text('{"characters":[]}', encoding="utf-8")
+    drift = prod / "identity_drift_report.json"
+    drift.write_text('{"characters":{}}', encoding="utf-8")
+    storyboard = root / "脚本" / "第1集" / "storyboard.json"
+    storyboard.parent.mkdir(parents=True, exist_ok=True)
+    if not storyboard.is_file():
+        storyboard.write_text('{"clips":[]}', encoding="utf-8")
+    if create_reference:
+        reference = root / reference_rel
+        reference.parent.mkdir(parents=True, exist_ok=True)
+        reference.write_bytes(b"memory-anchor-pixels")
+    plan = {
+        "kind": "n2d_memory_anchor_plan",
+        "version": 3,
+        "status": "ready",
+        "episode": "第1集",
+        "available": available,
+        "source_fingerprint": {
+            "identity_registry_sha256": rp._file_sha256(registry),
+            "identity_drift_report_sha256": rp._file_sha256(drift),
+            "storyboard_sha256": rp._file_sha256(storyboard),
+        },
+        "rows": [{
+            "char": char_key,
+            "reinject": True,
+            "memory_anchor_refs": [reference_rel],
+        }],
+    }
+    path = prod / "memory_anchor_plan_第1集.json"
+    path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def test_memory_anchor_contract_requires_available_and_exact_current_sources(tmp_path: Path):
+    root = tmp_path
+    plan_path = _write_memory_anchor_contract_fixture(root, available=False)
+
+    memory_map, contract = rp._memory_anchor_contract(root, "第1集")
+    assert memory_map == {}
+    assert contract["status"] == "invalid"
+    assert "plan_available_not_true" in contract["errors"]
+
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["available"] = True
+    plan["source_fingerprint"]["identity_registry_sha256"] = "stale-registry-sha"
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+    memory_map, contract = rp._memory_anchor_contract(root, "第1集")
+    assert memory_map == {}
+    assert "identity_registry_sha256_stale" in contract["errors"]
+
+    (root / "生产数据" / "identity_drift_report.json").unlink()
+    memory_map, contract = rp._memory_anchor_contract(root, "第1集")
+    assert memory_map == {}
+    assert "identity_drift_report_missing_or_unreadable" in contract["errors"]
+
+
+def test_memory_anchor_contract_rejects_legacy_version_and_stale_storyboard(tmp_path: Path):
+    plan_path = _write_memory_anchor_contract_fixture(tmp_path)
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    plan["version"] = 2
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+
+    memory_map, contract = rp._memory_anchor_contract(tmp_path, "第1集")
+    assert memory_map == {}
+    assert "plan_version_legacy" in contract["errors"]
+
+    plan["version"] = 3
+    plan["status"] = "warn"
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+    memory_map, contract = rp._memory_anchor_contract(tmp_path, "第1集")
+    assert memory_map == {}
+    assert "plan_status_not_ready" in contract["errors"]
+
+    plan["status"] = "ready"
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "脚本" / "第1集" / "storyboard.json").write_text(
+        '{"clips":[{"id":"Clip_01"}]}', encoding="utf-8"
+    )
+    memory_map, contract = rp._memory_anchor_contract(tmp_path, "第1集")
+    assert memory_map == {}
+    assert "storyboard_sha256_stale" in contract["errors"]
+
+
+def test_memory_anchor_contract_validates_every_reference_file(tmp_path: Path):
+    root = tmp_path
+    _write_memory_anchor_contract_fixture(root, create_reference=False)
+
+    memory_map, contract = rp._memory_anchor_contract(root, "第1集")
+
+    assert memory_map == {}
+    assert contract["status"] == "invalid"
+    assert contract["missing_reference_rows"] == ["CHAR_01/常态"]
+    assert contract["missing_reference_files"]["CHAR_01/常态"] == [
+        "出图/共享/图片/memory_anchor.png"
+    ]
+    assert any(error.startswith("memory_anchor_ref_missing:CHAR_01/常态:") for error in contract["errors"])
+
+
+def test_memory_anchor_contract_ready_exposes_reference_sha(tmp_path: Path):
+    root = tmp_path
+    _write_memory_anchor_contract_fixture(root)
+
+    memory_map, contract = rp._memory_anchor_contract(root, "第1集")
+
+    assert contract["status"] == "ready"
+    assert memory_map == {"CHAR_01/常态": ["出图/共享/图片/memory_anchor.png"]}
+    assert contract["required_char_keys"] == ["CHAR_01/常态"]
+    assert contract["validated_reference_sha256_by_char"]["CHAR_01/常态"]
 
 
 def test_build_plan_ignores_blackboard_expression_span_edits(tmp_path):

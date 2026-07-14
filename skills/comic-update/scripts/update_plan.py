@@ -11,16 +11,37 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import hashlib
+import importlib.util
 import json
 import os
 import re
 import sys
+from pathlib import Path
 from typing import Any, Iterable
 
 SCRIPT_DIR = os.path.dirname(__file__)
 SKILL_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
 REPO_SKILLS = os.path.abspath(os.path.join(SKILL_DIR, ".."))
 REPO_ROOT = os.path.abspath(os.path.join(REPO_SKILLS, ".."))
+
+
+def _load_progress_scanner():
+    """Load the comic-line read-only contract auditor without executing a CLI.
+
+    The update planner and progress dashboard intentionally share one
+    structural definition of "current"; otherwise they can recommend
+    contradictory frontiers for the same project.
+    """
+    path = os.path.join(REPO_SKILLS, "comic-progress", "scripts", "scan.py")
+    spec = importlib.util.spec_from_file_location("comic_progress_contract_scan", path)
+    if not spec or not spec.loader:
+        raise RuntimeError(f"cannot load comic progress contract scanner: {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+PROGRESS_SCAN = _load_progress_scanner()
 
 LINE = "comic"
 LINE_LABEL = "画漫画"
@@ -223,90 +244,35 @@ def parse_progress(root: str) -> list[dict[str, str]]:
     return parse_markdown_table(path)
 
 
-def panel_script_summary(root: str, chapter: str) -> dict[str, Any]:
-    path = os.path.join(root, "脚本", chapter, "panel_script.json")
-    data = read_json(path)
-    if not data:
-        return {"path": path, "exists": os.path.isfile(path), "valid_json": False}
-    panels = data.get("panels") if isinstance(data.get("panels"), list) else []
-    return {
-        "path": path,
-        "exists": True,
-        "valid_json": True,
-        "has_visual_contract": isinstance(data.get("visual_contract"), dict) and bool(data.get("visual_contract")),
-        "panel_count": len(panels),
-    }
-
-
-def latest_gate_summary(root: str, chapter: str, stage: str = "review") -> dict[str, Any] | None:
-    path = os.path.join(root, "生产数据", f"comic_gate_{stage}_{chapter}.json")
-    data = read_json(path)
-    if not data:
-        return None
-    summary = data.get("summary") if isinstance(data.get("summary"), dict) else {}
-    return {
-        "path": path,
-        "verdict": data.get("verdict"),
-        "block_count": int(summary.get("block_count") or 0),
-        "warn_count": int(summary.get("warn_count") or 0),
-    }
-
-
 def artifact_gaps(root: str, chapter: str, current_stage: str) -> list[dict[str, Any]]:
+    # ``current_stage`` is the highest stage claimed as started/done in the
+    # markdown table.  Ask the contract auditor to prove everything through
+    # that frontier (complete review => all receipts, including review).
+    current_idx = stage_index(current_stage)
+    if current_idx >= stage_index("review"):
+        next_stage_label = None
+    else:
+        next_stage_label = stage_label(STAGE_ORDER[current_idx + 1])
+    traditional_off = PROGRESS_SCAN.read_setting(Path(root), "传统原稿流程", "启用").strip() in {
+        "关闭", "off", "disabled", "false", "False"
+    }
+    raw_gaps = PROGRESS_SCAN.contract_gaps(
+        Path(root),
+        chapter,
+        next_stage_label,
+        traditional_off=traditional_off,
+    )
     gaps: list[dict[str, Any]] = []
-    if stage_index(current_stage) >= stage_index("script"):
-        script = panel_script_summary(root, chapter)
-        if not script.get("exists") or not script.get("valid_json"):
-            gaps.append({
-                "chapter": chapter,
-                "stage": "script",
-                "severity": "block",
-                "code": "panel_script_missing_or_invalid",
-                "artifact": os.path.relpath(script["path"], root).replace(os.sep, "/"),
-                "reason": "漫画脚本缺失或不可解析。",
-            })
-        elif not script.get("has_visual_contract"):
-            gaps.append({
-                "chapter": chapter,
-                "stage": "script",
-                "severity": "block",
-                "code": "visual_contract_missing",
-                "artifact": os.path.relpath(script["path"], root).replace(os.sep, "/"),
-                "reason": "panel_script 缺少新版必需的 visual_contract。",
-            })
-    if stage_index(current_stage) >= stage_index("name"):
-        path = os.path.join(root, "排版", chapter, "name_board.json")
-        if not os.path.isfile(path):
-            gaps.append({
-                "chapter": chapter,
-                "stage": "name",
-                "severity": "warn",
-                "code": "name_board_missing",
-                "artifact": os.path.relpath(path, root).replace(os.sep, "/"),
-                "reason": "已推进到后续阶段，但缺少缩略分镜/name_board。",
-            })
-    if stage_index(current_stage) >= stage_index("finishing"):
-        path = os.path.join(root, "出图", chapter, "finishing", "finishing_plan.json")
-        if not os.path.isfile(path):
-            gaps.append({
-                "chapter": chapter,
-                "stage": "finishing",
-                "severity": "warn",
-                "code": "finishing_plan_missing",
-                "artifact": os.path.relpath(path, root).replace(os.sep, "/"),
-                "reason": "已推进到出图/合成/审查，但缺少原稿收尾计划。",
-            })
-    gate = latest_gate_summary(root, chapter)
-    if gate and gate.get("block_count", 0) > 0:
-        gaps.append({
-            "chapter": chapter,
-            "stage": "review",
-            "severity": "block",
-            "code": "review_gate_block",
-            "artifact": os.path.relpath(str(gate["path"]), root).replace(os.sep, "/"),
-            "reason": f"最近 review gate 仍有 {gate['block_count']} 个阻断。",
-            "gate": gate,
-        })
+    for raw in raw_gaps:
+        item = dict(raw)
+        # Identity is a domain/prerequisite, while the replay graph's concrete
+        # stage is image_jobs.  Preserve the domain for routing, normalize only
+        # the stage used to calculate a minimal replay window.
+        if item.get("stage") == "identity":
+            item["domain"] = "identity"
+            item["stage"] = "image_jobs"
+            item["stage_label"] = stage_label("image_jobs")
+        gaps.append(item)
     return gaps
 
 
@@ -315,13 +281,22 @@ def progress_context(root: str) -> dict[str, Any]:
     normalized_rows: list[dict[str, Any]] = []
     headers = list(raw_rows[0].keys()) if raw_rows else []
     stage_columns = {LABEL_TO_STAGE[h]: h for h in headers if h in LABEL_TO_STAGE}
-    missing_stage_columns = [stage for stage in STAGE_ORDER if stage not in stage_columns]
+    traditional_off = PROGRESS_SCAN.read_setting(Path(root), "传统原稿流程", "启用").strip() in {
+        "关闭", "off", "disabled", "false", "False"
+    }
+    missing_stage_columns = [
+        stage for stage in STAGE_ORDER
+        if stage not in stage_columns and not (traditional_off and stage == "finishing")
+    ]
     for row in raw_rows:
         chapter = row.get("话", "未命名")
         current_stage = "source"
         first_open: dict[str, Any] | None = None
         stage_states: dict[str, dict[str, str]] = {}
         for stage in STAGE_ORDER:
+            if traditional_off and stage == "finishing":
+                stage_states[stage] = {"label": stage_label(stage), "status": "", "state": "not_applicable"}
+                continue
             label = stage_columns.get(stage)
             status = row.get(label, "") if label else ""
             state = "missing_column" if label is None else state_of(status)
@@ -330,6 +305,8 @@ def progress_context(root: str) -> dict[str, Any]:
                 current_stage = stage
         for stage in STAGE_ORDER:
             item = stage_states[stage]
+            if item["state"] == "not_applicable":
+                continue
             if item["state"] == "missing_column" and stage_index(current_stage) > stage_index(stage):
                 first_open = {
                     "stage_key": stage,
@@ -347,21 +324,36 @@ def progress_context(root: str) -> dict[str, Any]:
                 }
                 break
         gaps = artifact_gaps(root, chapter, current_stage)
+        claimed_todo = first_open or {
+            "stage_key": None,
+            "stage_label": "全部完成",
+            "status": "",
+            "skill": "comic-review",
+        }
+        if gaps:
+            earliest = min(gaps, key=lambda item: stage_index(item.get("stage")))
+            effective_todo = {
+                "stage_key": earliest.get("stage"),
+                "stage_label": stage_label(earliest.get("stage")),
+                "status": earliest.get("code"),
+                "skill": earliest.get("next_skill") or SKILL_FOR_STAGE.get(earliest.get("stage")),
+                "reason": earliest.get("reason"),
+                "artifact": earliest.get("artifact"),
+            }
+        else:
+            effective_todo = claimed_todo
         normalized_rows.append({
             "chapter": chapter,
             "current_stage": current_stage,
             "current_stage_label": stage_label(current_stage),
-            "current_todo": first_open or {
-                "stage_key": None,
-                "stage_label": "全部完成",
-                "status": "",
-                "skill": "comic-review",
-            },
+            "current_todo": effective_todo,
+            "progress_claim_todo": claimed_todo,
             "stage_states": stage_states,
             "artifact_gaps": gaps,
         })
     current_stage = max((row["current_stage"] for row in normalized_rows), key=stage_index, default="source")
-    first_open_project = next((row["current_todo"] for row in normalized_rows if row["current_todo"]["stage_key"]), None)
+    open_candidates = [row["current_todo"] for row in normalized_rows if row["current_todo"]["stage_key"]]
+    first_open_project = min(open_candidates, key=lambda item: stage_index(item.get("stage_key"))) if open_candidates else None
     all_gaps = [gap for row in normalized_rows for gap in row["artifact_gaps"]]
     return {
         "schema": "chapter_table",
@@ -539,6 +531,9 @@ def affected_chapters(progress: dict[str, Any], rerun_from: str | None, *, force
 
 def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any]]:
     steps: list[dict[str, Any]] = []
+    traditional_off = PROGRESS_SCAN.read_setting(Path(root), "传统原稿流程", "启用").strip() in {
+        "关闭", "off", "disabled", "false", "False"
+    }
     if not plan.get("rebuild_needed"):
         steps.append({"type": "command", "purpose": "查看当前前沿", "command": f'python3 skills/comic-progress/scripts/scan.py "{root}"'})
         if plan.get("changed_skills") or plan.get("baseline_bootstrapped"):
@@ -558,33 +553,71 @@ def build_execution_steps(root: str, plan: dict[str, Any]) -> list[dict[str, Any
     for chapter in plan.get("affected_chapters") or []:
         ch = chapter.get("chapter")
         rerun_from = chapter.get("rerun_from") or plan.get("rerun_from")
+        chapter_gaps = [item for item in chapter.get("gaps") or [] if isinstance(item, dict)]
+        receipt_only: list[str] = []
+        all_receipt_only = bool(chapter_gaps)
+        for gap in chapter_gaps:
+            match = re.fullmatch(
+                r"(script|name|layout|finishing|image_preflight|image|compose|review)_gate_"
+                r"(receipt_missing|receipt_stale|receipt_invalid|report_stale|execution_not_authorized)",
+                str(gap.get("code") or ""),
+            )
+            if not match:
+                all_receipt_only = False
+                break
+            if match.group(1) not in receipt_only:
+                receipt_only.append(match.group(1))
+        if all_receipt_only:
+            for gate_stage in sorted(receipt_only, key=lambda value: stage_index("image_jobs" if value == "image_preflight" else value)):
+                steps.append({
+                    "type": "command",
+                    "purpose": f"{ch} 刷新 {gate_stage} 验收 receipt",
+                    "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage {gate_stage}',
+                })
+            continue
         if stage_index(rerun_from) <= stage_index("script"):
             steps.append({
                 "type": "agent_step",
                 "purpose": f"{ch} 修订漫画脚本",
-                "instruction": f"按 comic-script 补齐 {ch} 的 visual_contract、逐格场景锚/视线/完整性/站位字段。",
+                "instruction": f"按 comic-script 补齐 {ch} 的开发包 strict/signoff、chapter contract/source coverage、visual_contract 与结构化身份绑定。",
             })
+            steps.append({
+                "type": "command",
+                "purpose": f"{ch} 开发包 strict 体检",
+                "command": f'python3 skills/comic-script/scripts/development_pack.py "{root}" check --strict --json',
+            })
+            steps.append({"type": "command", "purpose": f"{ch} 脚本 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage script'})
         if stage_index(rerun_from) <= stage_index("name"):
-            steps.append({"type": "command", "purpose": f"{ch} 生成缩略分镜", "command": f'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch}'})
+            steps.append({"type": "command", "purpose": f"{ch} 生成缩略分镜 draft", "command": f'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch}'})
+            steps.append({"type": "command", "purpose": f"{ch} 提交缩略分镜复核", "command": f'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch} --submit-review', "run_when": "draft 人工检查完成"})
+            steps.append({"type": "command", "purpose": f"{ch} 签收缩略分镜", "command": f'python3 skills/comic-name/scripts/build_name_board.py "{root}" --chapter {ch} --approve --reviewed-by "REVIEWER_NAME"', "run_when": "review 通过；执行前把 REVIEWER_NAME 替换为真实签收人"})
+            steps.append({"type": "command", "purpose": f"{ch} 缩略分镜 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage name'})
         if stage_index(rerun_from) <= stage_index("layout"):
-            steps.append({"type": "command", "purpose": f"{ch} 重建页面排版", "command": f'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch}'})
-        if stage_index(rerun_from) <= stage_index("finishing"):
+            steps.append({"type": "command", "purpose": f"{ch} 重建页面排版 draft", "command": f'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch}'})
+            steps.append({"type": "command", "purpose": f"{ch} 提交排版复核", "command": f'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch} --submit-review', "run_when": "draft 人工检查完成"})
+            steps.append({"type": "command", "purpose": f"{ch} 签收排版", "command": f'python3 skills/comic-layout/scripts/build_layout.py "{root}" --chapter {ch} --approve --reviewed-by "REVIEWER_NAME"', "run_when": "review 通过；执行前把 REVIEWER_NAME 替换为真实签收人"})
+            steps.append({"type": "command", "purpose": f"{ch} 排版 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage layout'})
+        if not traditional_off and stage_index(rerun_from) <= stage_index("finishing"):
             steps.append({"type": "command", "purpose": f"{ch} 生成原稿收尾计划", "command": f'python3 skills/comic-finishing/scripts/build_finishing_plan.py "{root}" --chapter {ch}'})
+            steps.append({"type": "command", "purpose": f"{ch} 原稿收尾 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage finishing'})
         if stage_index(rerun_from) <= stage_index("image_jobs"):
+            steps.append({"type": "command", "purpose": f"{ch} 校验定妆包与 SHA 签收", "command": f'python3 skills/comic-identity/scripts/model_pack.py "{root}" check --write --json'})
             steps.append({"type": "command", "purpose": f"{ch} 重建出图包", "command": f'python3 skills/comic-image/scripts/build_panel_jobs.py "{root}" --chapter {ch}'})
+            steps.append({"type": "command", "purpose": f"{ch} 出图前 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image_preflight'})
         if stage_index(chapter.get("current_stage")) >= stage_index("image"):
             steps.append({
                 "type": "agent_step",
                 "purpose": f"{ch} 评估是否重出图",
                 "instruction": "正式重出 PNG 前确认模型、渠道、预算和目标格；若只改便宜结构层，先跑 image gate 判断旧图是否可保留。",
             })
-            steps.append({"type": "command", "purpose": f"{ch} 出图前 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image_preflight'})
+            steps.append({"type": "command", "purpose": f"{ch} 成图 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage image'})
         if stage_index(chapter.get("current_stage")) >= stage_index("compose"):
             steps.append({
                 "type": "agent_step",
                 "purpose": f"{ch} 重建嵌字/导出",
                 "instruction": f"若 layout 或面板图变化，重新运行 comic-compose 生成 {ch} 的 lettering、页面图和长图。",
             })
+            steps.append({"type": "command", "purpose": f"{ch} 合成 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage compose'})
         steps.append({"type": "command", "purpose": f"{ch} 重制后审查 gate", "command": f'python3 skills/comic-review/scripts/gate.py "{root}" --chapter {ch} --stage review'})
     steps.append({
         "type": "command",

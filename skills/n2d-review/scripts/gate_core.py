@@ -79,6 +79,18 @@ from n2d_contract import (  # noqa: E402
     IDENTITY_REFERENCE_KEYS,
     IDENTITY_REGISTRY_KIND,
     IDENTITY_VIDEO_ADAPTERS,
+    CHARACTER_LIBRARY_CORE_VIEWS,
+    CHARACTER_LIBRARY_TIER_CORE,
+    CHARACTER_LIBRARY_TIER_STANDARD,
+    CHARACTER_LIBRARY_TIER_MINIMAL,
+    CHARACTER_LIBRARY_TIER_PARTIAL,
+    CHARACTER_LIBRARY_TIERS,
+    character_library_tier_for_record,
+    character_library_tier_is_at_least,
+    normalize_character_library_tier as canonical_normalize_character_library_tier,
+    required_character_library_views,
+    required_character_reference_group_fields,
+    restricted_partial_contract_valid,
     image_backend_supports_persistent_subject,
     identity_allowed_modes,
     identity_registry_path,
@@ -369,26 +381,23 @@ MOTION_CONTROL_CONTACT_SHOT_TYPES = ("fight_exchange", "kiss_or_near_kiss", "hug
 # IDENTITY_REGISTRY_KIND / IDENTITY_ADAPTER_MATRIX_KIND / IDENTITY_REFERENCE_FIELDS /
 # IDENTITY_HANDLE_FIELDS 从 n2d_contract 导入（写方 lora/market/identity 同源）
 IDENTITY_REFERENCE_FIELDS = IDENTITY_REFERENCE_KEYS
-# 角色定妆基础包不可缺失铁律（设计宪法 B7）：三视图是人审拼版，不能替代可喂图拆分资产。
-REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS = ("front", "three_quarter", "side", "back", "turnaround")
-REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS = ("front", "three_quarter", "side", "back")
-CHARACTER_LIBRARY_TIER_CORE = "core_full"
-CHARACTER_LIBRARY_TIER_STANDARD = "recurring_standard"
-CHARACTER_LIBRARY_TIER_MINIMAL = "named_minimal"
-CHARACTER_LIBRARY_TIER_PARTIAL = "restricted_partial"
-CHARACTER_LIBRARY_TIERS = {
-    CHARACTER_LIBRARY_TIER_CORE,
-    CHARACTER_LIBRARY_TIER_STANDARD,
-    CHARACTER_LIBRARY_TIER_MINIMAL,
-    CHARACTER_LIBRARY_TIER_PARTIAL,
-}
+# 角色定妆基础包不可缺失铁律（设计宪法 B7）：只保留历史导出名，
+# 真正的档位/视图集合位于 n2d/_lib/n2d_const.py，写方和审方不再各自拷贝。
+REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS = required_character_reference_group_fields(
+    CHARACTER_LIBRARY_TIER_CORE
+)
+REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS = CHARACTER_LIBRARY_CORE_VIEWS
 CHARACTER_MAKEUP_BODY_REFERENCE_FIELDS = ("half_body", "full_body", "outfit")
 CHARACTER_MAKEUP_FACE_REFERENCE_FIELDS = ("face_anchor_refs", "expressions")
 READY_CHARACTER_MAKEUP_STATUSES = {"ready", "registered"}
-DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS = ("three_quarter", "side", "back", "half_body", "full_body", "face_anchor_refs")
+DERIVED_CHARACTER_MAKEUP_REFERENCE_FIELDS = (
+    "three_quarter", "side", "rear_three_quarter", "back",
+    "half_body", "full_body", "face_anchor_refs",
+)
 SAME_SOURCE_MAKEUP_DERIVATION_METHODS = {
     "three_quarter": {"turnaround_split", "turnaround_crop", "controlled_multiref_generation"},
     "side": {"turnaround_split", "turnaround_crop", "controlled_multiref_generation"},
+    "rear_three_quarter": {"turnaround_split", "turnaround_crop", "controlled_multiref_generation"},
     "back": {"turnaround_split", "turnaround_crop", "controlled_multiref_generation"},
     "half_body": {"front_crop", "turnaround_crop", "controlled_multiref_generation"},
     "full_body": {"front_crop", "turnaround_crop", "controlled_multiref_generation"},
@@ -908,6 +917,116 @@ def episode_registry_reference_ids(root: str, ep: str) -> Tuple[set, set]:
     char_refs = {_normalize_registered_character_marker(ref, reg_chars) for ref in char_refs}
     asset_refs = {_normalize_registered_asset_marker(ref, reg_assets) for ref in ASSET_ID_RE.findall(text)}
     return {ref.split("/", 1)[0] for ref in char_refs}, asset_refs
+
+
+_STRUCTURED_CHARACTER_ID_RE = re.compile(
+    r"^CHAR_[A-Za-z0-9_\u4e00-\u9fff-]*[A-Za-z0-9\u4e00-\u9fff]$"
+)
+
+
+def _structured_character_ids(value: object) -> set[str]:
+    """Extract CHAR ids only from a field already declared as character data.
+
+    This deliberately does not scan arbitrary prose.  Storyboards from older
+    projects may omit structured ids; absence is unknown/no evidence, not a
+    reason to promote a character and block the project.
+    """
+    values: List[object]
+    if isinstance(value, Mapping):
+        values = [value]
+    elif isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        values = list(value)
+    elif isinstance(value, str):
+        values = [part for part in re.split(r"[,，、;；\s]+", value) if part]
+    else:
+        values = []
+    out: set[str] = set()
+    for item in values:
+        raw = item
+        if isinstance(item, Mapping):
+            raw = item.get("character_id") or item.get("char_id") or item.get("id")
+        token = str(raw or "").strip().strip("`").rstrip("*")
+        base = token.split("/", 1)[0]
+        if _STRUCTURED_CHARACTER_ID_RE.fullmatch(base):
+            out.add(base)
+    return out
+
+
+def _schedule_visible_character_ids(schedule: object) -> set[str]:
+    if not isinstance(schedule, Mapping):
+        return set()
+    visible: set[str] = set()
+    for key in (
+        "characters",
+        "character_ids",
+        "角色",
+        "required_presence",
+        "foreground_presence",
+        "visible_presence",
+    ):
+        visible.update(_structured_character_ids(schedule.get(key)))
+    hidden: set[str] = set()
+    for key in ("offscreen_presence", "forbidden_presence", "画外保留", "禁止出现"):
+        hidden.update(_structured_character_ids(schedule.get(key)))
+    return visible - hidden
+
+
+def _storyboard_clip_visible_character_ids(clip: object) -> set[str]:
+    """Return visible ids from explicit Stage-2 fields, never prose regexes."""
+    if not isinstance(clip, Mapping):
+        return set()
+    # `character_ids: []` is an explicit object/location-only clip.  Mirror
+    # story_quality_pack semantics and do not resurrect ids from side fields.
+    if "character_ids" in clip:
+        return _structured_character_ids(clip.get("character_ids"))
+    visible = _structured_character_ids(clip.get("characters"))
+    visible.update(_schedule_visible_character_ids(clip.get("entity_schedule") or clip.get("实体排程")))
+    for shot in clip.get("shots") or []:
+        if not isinstance(shot, Mapping):
+            continue
+        if "character_ids" in shot:
+            visible.update(_structured_character_ids(shot.get("character_ids")))
+        else:
+            visible.update(_structured_character_ids(shot.get("characters")))
+            visible.update(_schedule_visible_character_ids(shot.get("entity_schedule") or shot.get("实体排程")))
+    return visible
+
+
+def _storyboard_character_appearance_evidence(root: str) -> Dict[str, Dict[str, Any]]:
+    """Observed per-character episode lower bounds from materialized storyboards.
+
+    The result is independent of identity_registry/bundle/manifest/atlas tier
+    declarations.  Only parseable storyboards with structured visible CHAR ids
+    count.  Missing/legacy prose-only storyboards yield no row, preserving old
+    project compatibility instead of guessing from names or free text.
+    """
+    episodes_by_character: Dict[str, set[str]] = {}
+    sources_by_character: Dict[str, set[str]] = {}
+    pattern = os.path.join(root, "脚本", "*", "storyboard.json")
+    for path in sorted(glob.glob(pattern)):
+        data = load_json(path)
+        clips = data.get("clips") if isinstance(data, Mapping) else None
+        if not isinstance(clips, list):
+            continue
+        visible: set[str] = set()
+        for clip in clips:
+            visible.update(_storyboard_clip_visible_character_ids(clip))
+        if not visible:
+            continue
+        episode = os.path.basename(os.path.dirname(path))
+        source = os.path.relpath(path, root).replace(os.sep, "/")
+        for character_id in visible:
+            episodes_by_character.setdefault(character_id, set()).add(episode)
+            sources_by_character.setdefault(character_id, set()).add(source)
+    return {
+        character_id: {
+            "episode_count": len(episodes),
+            "episodes": sorted(episodes, key=lambda value: (_ce_episode_number(value) or 10**9, value)),
+            "sources": sorted(sources_by_character.get(character_id, set())),
+            "source_kind": "materialized_storyboard_structured_presence",
+        }
+        for character_id, episodes in sorted(episodes_by_character.items())
+    }
 
 
 def _normalize_registered_character_marker(ref: str, registered_chars: set) -> str:
@@ -2445,7 +2564,7 @@ def _is_restricted_partial_form(char: dict, form: dict) -> bool:
         or tier == "restricted_partial"
         or build_tier.startswith("restricted_partial")
     )
-    return (
+    requested = (
         partial_marked
         or (
             form_name in {"局部参考", "局部参考（暂不正脸）"}
@@ -2457,6 +2576,23 @@ def _is_restricted_partial_form(char: dict, form: dict) -> bool:
             )
         )
     )
+    if not requested:
+        return False
+    # 主角/核心长线不得靠 form.build_tier 自报 partial 降档。
+    # 若创意上确实全程帘后/局部，必须在角色或形态登记可审计例外。
+    if character_library_tier_for_record(char) == CHARACTER_LIBRARY_TIER_CORE:
+        combined = dict(char)
+        for key in (
+            "restricted_partial_contract",
+            "face_policy",
+            "restricted_partial",
+            "library_tier",
+            "tier",
+        ):
+            if key in form:
+                combined[key] = form.get(key)
+        return restricted_partial_contract_valid(combined)
+    return True
 def _gate_make_clip_id(clip: Mapping[str, Any], idx: int) -> str:
     raw = str(clip.get("clip_id") or clip.get("id") or clip.get("label") or "").strip()
     m = re.search(r"(?:Clip[_\s-]?|CLIP)(\d+)", raw, re.I)
@@ -2702,10 +2838,36 @@ def _validate_wardrobe_profile(section: object, loc: str, *, field_name: str = "
     if missing_structure:
         add(WARN, "服装契约", f"{loc} {field_name}",
             f"{field_name} 缺服装部件字段：" + ", ".join(missing_structure))
-def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
+def _validate_character_asset_bundle(
+    root: str,
+    char: dict,
+    loc: str,
+    *,
+    expected_tier: str = "",
+    expected_tier_evidence: Optional[Mapping[str, Any]] = None,
+) -> None:
     """Every image-entering character must have a portable project-local asset bundle."""
     bundle = char.get("asset_bundle")
     char_id = str(char.get("id") or "").strip()
+    expected_tier = (
+        canonical_normalize_character_library_tier(expected_tier)
+        or character_library_tier_for_record(char)
+    )
+    observed_count = 0
+    if isinstance(expected_tier_evidence, Mapping):
+        try:
+            observed_count = max(0, int(expected_tier_evidence.get("episode_count") or 0))
+        except (TypeError, ValueError):
+            observed_count = 0
+    evidence_suffix = ""
+    if observed_count:
+        episodes = expected_tier_evidence.get("episodes") if isinstance(expected_tier_evidence, Mapping) else []
+        episode_sample = "、".join(str(value) for value in (episodes or [])[:5])
+        evidence_suffix = (
+            f" registry 外已物化 storyboard 的结构化在场证据显示该角色至少出场 {observed_count} 集"
+            + (f"（{episode_sample}{'…' if len(episodes or []) > 5 else ''}）" if episode_sample else "")
+            + "；该观测是最低档下界，不能由四份资产声明共同降档覆盖。"
+        )
     if not isinstance(bundle, dict):
         add(BLOCK, "角色资产包", loc,
             "人物角色缺 asset_bundle；所有入镜人物（含短线/功能角色）都必须指向 "
@@ -2742,13 +2904,74 @@ def _validate_character_asset_bundle(root: str, char: dict, loc: str) -> None:
         return
     if manifest.get("kind") != "n2d_project_character_asset_bundle":
         add(BLOCK, "角色资产包", manifest_path, "manifest.kind 必须是 n2d_project_character_asset_bundle")
-    manifest_tier = str(manifest.get("library_tier") or bundle.get("tier") or "").strip()
-    if manifest_tier and manifest_tier not in CHARACTER_LIBRARY_TIERS:
+    char_tier_raw = str(char.get("library_tier") or "").strip()
+    bundle_tier_raw = str(bundle.get("tier") or "").strip()
+    declared_char_tier = canonical_normalize_character_library_tier(char_tier_raw)
+    declared_bundle_tier = canonical_normalize_character_library_tier(bundle_tier_raw)
+    manifest_tier_raw = str(manifest.get("library_tier") or "").strip()
+    manifest_tier = canonical_normalize_character_library_tier(manifest_tier_raw)
+    if manifest_tier_raw and not manifest_tier:
         add(BLOCK, "角色资产包", manifest_path,
             "library_tier 必须是 core_full / recurring_standard / named_minimal / restricted_partial")
     elif not manifest_tier:
-        add(WARN, "角色资产包", manifest_path,
-            "旧资产包未登记 library_tier；迁移或下次重建时补齐，避免所有具名人物被误做成完整主角包。")
+        add(BLOCK, "角色资产包", manifest_path,
+            "角色资产包未登记 library_tier；档位是多视图验收的承重证据，"
+            "不能用缺省值猜测。请迁移后重跑定妆包生成。")
+    if not char_tier_raw or not declared_char_tier:
+        add(
+            BLOCK,
+            "角色资产包",
+            loc,
+            "registry character.library_tier 缺失或非法；人物剧情档位必须在角色真值源显式落档。",
+        )
+    if not bundle_tier_raw or not declared_bundle_tier:
+        add(
+            BLOCK,
+            "角色资产包",
+            loc,
+            "asset_bundle.tier 缺失或非法；资产包引用不能靠 manifest 猜档位。",
+        )
+    tier_sources = {
+        "character.library_tier": declared_char_tier,
+        "asset_bundle.tier": declared_bundle_tier,
+        "manifest.library_tier": manifest_tier,
+    }
+    for source, tier in tier_sources.items():
+        if tier and not character_library_tier_is_at_least(tier, expected_tier):
+            add(
+                BLOCK,
+                "角色资产包",
+                manifest_path,
+                f"{source}={tier} 低于剧情权重推导的最低档位 {expected_tier}；"
+                f"主角/核心长线不得靠自报降档绕过多视图。{evidence_suffix}",
+            )
+    canonical_bundle_tier = declared_char_tier or expected_tier
+    disagreements = {
+        source: tier
+        for source, tier in tier_sources.items()
+        if tier and canonical_bundle_tier and tier != canonical_bundle_tier
+    }
+    for index, form in enumerate(char.get("forms") or []):
+        if not isinstance(form, Mapping):
+            continue
+        atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
+        atlas_raw = str(atlas.get("build_tier") or "").strip()
+        atlas_tier = canonical_normalize_character_library_tier(atlas_raw)
+        if not atlas_raw:
+            disagreements[f"forms[{index}].reference_atlas.build_tier"] = "(missing)"
+        elif not atlas_tier:
+            disagreements[f"forms[{index}].reference_atlas.build_tier"] = atlas_raw
+        elif atlas_tier and canonical_bundle_tier and atlas_tier != canonical_bundle_tier:
+            disagreements[f"forms[{index}].reference_atlas.build_tier"] = atlas_tier
+    if disagreements:
+        detail = ", ".join(f"{source}={tier}" for source, tier in sorted(disagreements.items()))
+        add(
+            BLOCK,
+            "角色资产包",
+            manifest_path,
+            f"角色库档位必须在 character / asset_bundle / manifest / reference_atlas 四处一致；"
+            f"当前主档={canonical_bundle_tier}，冲突：{detail}。",
+        )
     if char_id and str(manifest.get("character_id") or "").strip() != char_id:
         add(BLOCK, "角色资产包", manifest_path,
             f"manifest.character_id 必须等于 registry character id {char_id}")
@@ -2862,39 +3085,30 @@ def _identity_ready_reference_list_paths(value: object) -> List[str]:
 
 
 def _normalize_character_library_tier(value: object) -> str:
-    tier = str(value or "").strip()
-    if tier in CHARACTER_LIBRARY_TIERS:
-        return tier
-    if tier.startswith("restricted_partial"):
-        return CHARACTER_LIBRARY_TIER_PARTIAL
-    # Legacy registries used these values for the old all-views contract.
-    if tier in {"standard_full", "full_makeup_pack", "full", "core"} or not tier:
-        return CHARACTER_LIBRARY_TIER_CORE
-    return CHARACTER_LIBRARY_TIER_CORE
+    """历史兼容包装；新代码应直接使用 n2d_contract 的归一函数。"""
+    return canonical_normalize_character_library_tier(
+        value, default=CHARACTER_LIBRARY_TIER_CORE
+    )
 
 
-def _required_character_makeup_views(form: Mapping[str, Any]) -> Tuple[str, ...]:
+def _required_character_makeup_views(
+    form: Mapping[str, Any], expected_tier: str = ""
+) -> Tuple[str, ...]:
     atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
-    tier = _normalize_character_library_tier(atlas.get("build_tier"))
-    if tier == CHARACTER_LIBRARY_TIER_STANDARD:
-        return ("front", "three_quarter")
-    if tier == CHARACTER_LIBRARY_TIER_MINIMAL:
-        return ("front",)
-    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
-        return ()
-    return REQUIRED_CHARACTER_MAKEUP_ATLAS_VIEWS
+    tier = canonical_normalize_character_library_tier(
+        expected_tier or atlas.get("build_tier"), default=CHARACTER_LIBRARY_TIER_CORE
+    )
+    return required_character_library_views(tier)
 
 
-def _required_character_reference_group_fields(form: Mapping[str, Any]) -> Tuple[str, ...]:
+def _required_character_reference_group_fields(
+    form: Mapping[str, Any], expected_tier: str = ""
+) -> Tuple[str, ...]:
     atlas = form.get("reference_atlas") if isinstance(form.get("reference_atlas"), Mapping) else {}
-    tier = _normalize_character_library_tier(atlas.get("build_tier"))
-    if tier == CHARACTER_LIBRARY_TIER_STANDARD:
-        return ("front", "three_quarter")
-    if tier == CHARACTER_LIBRARY_TIER_MINIMAL:
-        return ("front",)
-    if tier == CHARACTER_LIBRARY_TIER_PARTIAL:
-        return ()
-    return REQUIRED_CHARACTER_MAKEUP_REFERENCE_GROUP_FIELDS
+    tier = canonical_normalize_character_library_tier(
+        expected_tier or atlas.get("build_tier"), default=CHARACTER_LIBRARY_TIER_CORE
+    )
+    return required_character_reference_group_fields(tier)
 
 
 def _validate_reference_atlas(
@@ -2904,6 +3118,7 @@ def _validate_reference_atlas(
     strict_references: bool,
     verify_source_hash: bool,
     restricted_partial: bool = False,
+    expected_tier: str = "",
 ) -> None:
     atlas = form.get("reference_atlas")
     if not isinstance(atlas, dict):
@@ -2916,13 +3131,32 @@ def _validate_reference_atlas(
             add(BLOCK, "资产身份注册层", floc,
                 "restricted_partial 形态的 reference_atlas.build_tier 必须标为 restricted_partial，避免误当完整人物参考。")
         return
-    library_tier = _normalize_character_library_tier(atlas.get("build_tier"))
-    required_views = _required_character_makeup_views(form)
+    raw_build_tier = str(atlas.get("build_tier") or "").strip()
+    library_tier = canonical_normalize_character_library_tier(raw_build_tier)
+    minimum_tier = canonical_normalize_character_library_tier(expected_tier) or library_tier
+    if strict_references and not library_tier:
+        add(BLOCK, "资产身份注册层", floc,
+            "reference_atlas.build_tier 缺失或非法；不得用缺省档位猜测必需视图。")
+    if (
+        strict_references
+        and library_tier
+        and minimum_tier
+        and not character_library_tier_is_at_least(library_tier, minimum_tier)
+    ):
+        add(
+            BLOCK,
+            "资产身份注册层",
+            floc,
+            f"reference_atlas.build_tier={library_tier} 低于该人物最低档位 {minimum_tier}；"
+                "不得通过伪造低档 atlas 规避核心多视图。",
+            )
+    effective_tier = minimum_tier or library_tier or CHARACTER_LIBRARY_TIER_CORE
+    required_views = _required_character_makeup_views(form, effective_tier)
     base_views = atlas.get("base_views")
     if not isinstance(base_views, dict):
         if strict_references:
             add(BLOCK, "资产身份注册层", floc,
-                f"reference_atlas.base_views 缺失；角色库档位 {library_tier} 必须登记本档基础角度与 "
+                f"reference_atlas.base_views 缺失；角色库档位 {effective_tier} 必须登记本档基础角度与 "
                 "half_body 或 full_body 的 ready 状态。")
     else:
         missing_views = [key for key in required_views if key not in base_views]
@@ -2947,7 +3181,7 @@ def _validate_reference_atlas(
                 add(BLOCK, "资产身份注册层", floc,
                     "reference_atlas.base_views 基础视角必须为 ready 且有路径："
                     + ", ".join(not_ready)
-                    + f"；当前角色库档位={library_tier}，本档必需项不能登记为 planned 后放行。")
+                    + f"；当前角色库档位={effective_tier}，本档必需项不能登记为 planned 后放行。")
     face_anchor_refs = atlas.get("face_anchor_refs")
     expression_refs = atlas.get("expression_refs")
     has_face_anchor_refs = bool(_identity_ready_reference_list_paths(face_anchor_refs))
@@ -4016,15 +4250,27 @@ def _needs_prop_asset_binding(refs: str) -> bool:
         "定妆_毒酒碎瓷",
     ))
 def _has_standard_character_turnaround(section: str) -> bool:
-    """角色定妆基础包：正/45°/侧/背 + 服装参考 + 脸锚 + 人审拼版。"""
+    """核心角色定妆基础包：正/前45°/侧/后45°/背 + 服装参考 + 脸锚 + 人审拼版。"""
     has_front = _has_any(section, ("正面", "正脸", "主参考", "定妆_<角色>.png"))
     has_three_quarter = _has_any(section, ("45°", "45度", "三分之二侧脸", "3/4", "three_quarter", "_45度"))
     has_side = _has_any(section, ("_侧", "侧面", "侧脸"))
+    has_rear_three_quarter = _has_any(section, (
+        "后45°", "后 45°", "后45度", "后 45 度", "后三分之二", "rear_three_quarter",
+    ))
     has_back = _has_any(section, ("_背", "背面", "背身"))
     has_outfit = _has_any(section, ("_半身", "_全身", "半身服装", "全身服装", "服装参考", "体态参考"))
     has_face_anchor = _has_any(section, ("脸部特写", "面部特写", "face_anchor_refs", "基础脸部参考", "表情参考", "同源表情", "表情_"))
     has_board = _has_any(section, ("_三视图", "标准三视图", "正/侧/背", "正面 / 侧面 / 背面"))
-    return has_front and has_three_quarter and has_side and has_back and has_outfit and has_face_anchor and has_board
+    return (
+        has_front
+        and has_three_quarter
+        and has_side
+        and has_rear_three_quarter
+        and has_back
+        and has_outfit
+        and has_face_anchor
+        and has_board
+    )
 def _is_restricted_partial_prompt_section(section: str) -> bool:
     return _has_any(section, ("局部参考", "restricted_partial", "no_full_face")) and _has_any(section, (
         "绝不正脸",
@@ -5346,6 +5592,11 @@ __all__ = [
     'ANCHOR_TOKEN_MIN_CHARS',
     '_episode_reference_texts',
     'episode_registry_reference_ids',
+    '_STRUCTURED_CHARACTER_ID_RE',
+    '_structured_character_ids',
+    '_schedule_visible_character_ids',
+    '_storyboard_clip_visible_character_ids',
+    '_storyboard_character_appearance_evidence',
     'episode_registry_identity_refs',
     '_episode_has_per_shot_frames',
     '_registered_registry_ids',

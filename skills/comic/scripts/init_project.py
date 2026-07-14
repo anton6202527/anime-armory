@@ -17,6 +17,12 @@ from datetime import date
 from pathlib import Path
 
 
+COMIC_ROOT = Path(__file__).resolve().parents[1]
+if str(COMIC_ROOT) not in sys.path:
+    sys.path.insert(0, str(COMIC_ROOT))
+from _lib.settings import PRODUCTION_PROFILE_PRESETS  # noqa: E402
+
+
 MODES = ("原创漫画", "源本改漫画", "脚本改漫画")
 FORMATS = ("条漫", "页漫", "四格", "分镜稿")
 
@@ -55,6 +61,7 @@ def settings_markdown(title: str, args: argparse.Namespace) -> str:
     return f"""# 设置 — 画漫画《{title}》
 
 ## 选择点
+- 生产档位: {args.production_profile}
 - 输入模式: {args.mode}
 - 漫画形态: {args.format}
 - 阅读方向: {args.reading_direction}
@@ -92,10 +99,14 @@ def traditional_enabled(value: str) -> bool:
 
 
 def progress_markdown(title: str, args: argparse.Namespace, source_ready: bool) -> str:
-    source_status = "✅" if source_ready or args.mode == "原创漫画" else "⬜"
+    # A copied source file (or original mode) is not an approved development
+    # pack.  Init must never pre-claim the source/planning gate as complete.
+    source_status = "🟡素材已入库" if source_ready else "⬜"
     stages = ["源本/企划", "漫画脚本", "缩略分镜", "页面排版", "原稿收尾", "出图包", "出图", "嵌字合成", "审查"]
     if not traditional_enabled(args.traditional_workflow):
-        stages = [s for s in stages if s not in ("缩略分镜", "原稿收尾")]
+        # ネーム/缩略分镜是所有漫画形态的页流与阅读顺序合同；
+        # 关闭“传统原稿流程”只能跳过墨线/网点/效果线收尾。
+        stages = [s for s in stages if s != "原稿收尾"]
     header = "| 话 | " + " | ".join(stages) + " |"
     divider = "|" + "---|" * (len(stages) + 1)
     row = "| 第1话 | " + " | ".join(source_status if s == "源本/企划" else "⬜" for s in stages) + " |"
@@ -127,9 +138,23 @@ def story_bible(title: str, args: argparse.Namespace) -> str:
 - 
 
 ## 角色
-- 主角：
-- 对手：
-- 关键配角：
+
+> 角色标题合同为 `### 人读名称 CHAR_STABLE_ID`。确定真实姓名后同步改名并用 `comic-identity` 登记；不要把待定 ID 标成 ready。
+
+### 待定主角 CHAR_TBD_PROTAGONIST
+- 角色定位：
+- 角色 DNA（脸型/五官/发型/体态/标志物）：
+- 禁漂移项：
+
+### 待定对手 CHAR_TBD_ANTAGONIST
+- 角色定位：
+- 角色 DNA（脸型/五官/发型/体态/标志物）：
+- 禁漂移项：
+
+### 待定关键配角 CHAR_TBD_SUPPORTING
+- 角色定位：
+- 角色 DNA（脸型/五官/发型/体态/标志物）：
+- 禁漂移项：
 
 ## 世界观 / 场景
 - 
@@ -163,11 +188,16 @@ def outline(title: str) -> str:
 
 def panel_script(title: str) -> dict:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "kind": "comic_panel_script",
         "title": title,
         "chapter": "第1话",
         "status": "draft",
+        "chapter_contract": {
+            "path": "脚本/split_blueprint.json",
+            "chapter_contract_sha256": "",
+            "status": "draft",
+        },
         "source_semantics": {
             "path": "脚本/第1话/source_semantics.json",
             "requires_normalization": False,
@@ -186,6 +216,8 @@ def panel_script(title: str) -> dict:
                 "adaptation_note": "",
                 "description": "待补：首格画面",
                 "characters": [],
+                "character_bindings": [],
+                "source_segment_refs": [],
                 "location": "",
                 "dialogue": [],
                 "narration": "",
@@ -201,6 +233,24 @@ def panel_script(title: str) -> dict:
                 "references": [],
             }
         ],
+    }
+
+
+def identity_registry() -> dict:
+    """Return an honest, empty schema-v2 registry for a new project.
+
+    The initializer must not invent characters, assets, reference images or
+    approval state.  Identity registration/upsert remains owned by
+    ``comic-identity`` after the development pack names stable subjects.
+    """
+    return {
+        "schema_version": 2,
+        "kind": "comic_identity_registry",
+        "assets": {},
+        "schema_meta": {
+            "initialized_at": date.today().isoformat(),
+            "initialized_by": "comic init_project bootstrap",
+        },
     }
 
 
@@ -286,8 +336,8 @@ def main() -> int:
     parser.add_argument("--reading-direction", default="从上到下")
     parser.add_argument("--page-size", default="1440xauto")
     parser.add_argument("--max-segment-height", default="0", help="最大分段高度；0 表示默认导出单张长图")
-    parser.add_argument("--traditional-workflow", default="启用")
-    parser.add_argument("--render-stage", default="完成稿")
+    parser.add_argument("--traditional-workflow", default=None)
+    parser.add_argument("--render-stage", default=None)
     parser.add_argument("--manuscript-spec", default="数字条漫")
     parser.add_argument("--name-strategy", default="自动ネーム")
     parser.add_argument("--tone-strategy", default="风格驱动")
@@ -297,16 +347,38 @@ def main() -> int:
     parser.add_argument("--image-model", default="GPT Image 2")
     parser.add_argument("--image-channel", default="Codex CLI")
     parser.add_argument("--image-ai", default="Codex")
-    parser.add_argument("--consistency", default="共享参考图")
-    parser.add_argument("--identity-level", default="长线专门定妆")
-    parser.add_argument("--age-variant-inheritance", default="关闭")
-    parser.add_argument("--identity-hard-gate", default="关闭")
+    parser.add_argument("--production-profile", choices=tuple(PRODUCTION_PROFILE_PRESETS), default="连载标准")
+    parser.add_argument("--consistency", default=None)
+    parser.add_argument("--identity-level", default=None)
+    parser.add_argument("--age-variant-inheritance", default=None)
+    parser.add_argument("--identity-hard-gate", default=None)
     parser.add_argument("--text-language", default="中文")
     parser.add_argument("--lettering", default="后期嵌字")
     parser.add_argument("--export-format", default="webp+png")
     parser.add_argument("--region", default="未指定")
     parser.add_argument("--usage", default="demo学习")
     args = parser.parse_args()
+
+    preset = PRODUCTION_PROFILE_PRESETS[args.production_profile]
+    linked_args = {
+        "traditional_workflow": "传统原稿流程",
+        "render_stage": "出图稿层",
+        "consistency": "参考一致性策略",
+        "identity_level": "定妆级别",
+        "age_variant_inheritance": "年龄形态继承",
+        "identity_hard_gate": "角色一致性硬闸",
+    }
+    fallbacks = {
+        "traditional_workflow": "启用",
+        "render_stage": "完成稿",
+        "consistency": "共享参考图",
+        "identity_level": "长线专门定妆",
+        "age_variant_inheritance": "开启",
+        "identity_hard_gate": "开启",
+    }
+    for attr, setting_key in linked_args.items():
+        if getattr(args, attr) is None:
+            setattr(args, attr, preset.get(setting_key, fallbacks[attr]))
 
     root = Path(args.project_root).expanduser().resolve()
     title = args.title or slug_title(root.name)
@@ -353,7 +425,12 @@ def main() -> int:
     write_if_absent(root / "设定库" / "story_bible.md", story_bible(title, args))
     write_if_absent(root / "脚本" / "第1话" / "分话大纲.md", outline(title))
     write_if_absent(root / "脚本" / "第1话" / "panel_script.json", json.dumps(panel_script(title), ensure_ascii=False, indent=2) + "\n")
-    write_if_absent(root / "排版" / "第1话" / "layout.json", json.dumps(layout_json(args), ensure_ascii=False, indent=2) + "\n")
+    write_if_absent(root / "出图" / "共享" / "identity_registry.json", json.dumps(identity_registry(), ensure_ascii=False, indent=2) + "\n")
+    # Layout is a downstream approved production artifact.  Do not seed a
+    # plausible-looking placeholder before script/name approval: old projects
+    # could mistake that file for completed geometry and only fail near image
+    # generation.  ``layout_json()`` remains available for migration/tests,
+    # while the normal initializer leaves layout creation to comic-layout.
     write_if_absent(root / "排版" / "第1话" / "lettering.json", json.dumps({"schema_version": 1, "kind": "comic_lettering", "chapter": "第1话", "items": []}, ensure_ascii=False, indent=2) + "\n")
     write_if_absent(root / "_meta.json", json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
     write_if_absent(root / "生产数据" / "artifact_catalog.json", json.dumps({
@@ -365,7 +442,7 @@ def main() -> int:
     }, ensure_ascii=False, indent=2) + "\n")
 
     print(f"\n[done] 画漫画项目已初始化：{root}")
-    print("下一步：comic-script 补齐故事圣经、分话大纲和 panel_script.json。")
+    print("下一步：comic-script 补齐开发包、chapter_contract、故事圣经和 panel_script.json；通过后再做ネーム/排版。")
     return 0
 
 

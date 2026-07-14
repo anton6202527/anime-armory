@@ -114,10 +114,12 @@ def _stage_cache_inputs(root: str, ep: str) -> List[str]:
     return [
         os.path.join(root, "脚本", ep, "**", "*"),
         os.path.join(root, "出图", "共享", "**", "*.json"),
+        os.path.join(root, "出图", "共享", "**", "*.png"),
         os.path.join(root, "出图", ep, "prompt", "**", "*"),
         os.path.join(root, "出视频", ep, "prompt", "**", "*"),
         os.path.join(root, "生产数据", f"video_batch_{ep}_*.json"),
         os.path.join(root, "生产数据", f"post_video_proxy_{ep}.json"),
+        os.path.join(root, "生产数据", "identity_drift_report.json"),
         os.path.join(root, "合成", ep, "**", "*.mp4"),
     ]
 
@@ -940,10 +942,14 @@ def _finding_detail(stdout: str, stderr: str) -> str:
 
 
 def _cache_artifact_paths(root: str, stdout: str) -> List[str]:
-    """Collect only output-like existing files from a planner's JSON response."""
+    """Collect only output-like, project-local existing files from JSON output."""
     payload = _parse_trailing_json(stdout)
     found: set[str] = set()
-    output_keys = {"output", "outputs", "path", "paths", "json", "markdown", "manifest_path", "report_path"}
+    root_real = os.path.realpath(os.path.abspath(root or os.curdir))
+    output_keys = {
+        "output", "outputs", "output_path", "path", "paths", "json", "markdown",
+        "manifest_path", "report_path", "check_path", "contract_path",
+    }
 
     def walk(value: Any, key: str = "") -> None:
         if isinstance(value, dict):
@@ -954,19 +960,29 @@ def _cache_artifact_paths(root: str, stdout: str) -> List[str]:
                 walk(child, key)
         elif key in output_keys and isinstance(value, str) and value.strip():
             candidate = value if os.path.isabs(value) else os.path.join(root, value)
-            if os.path.isfile(candidate):
-                found.add(os.path.abspath(candidate))
+            candidate_real = os.path.realpath(os.path.abspath(candidate))
+            try:
+                project_local = os.path.commonpath((root_real, candidate_real)) == root_real
+            except ValueError:
+                project_local = False
+            if project_local and os.path.isfile(candidate_real):
+                found.add(candidate_real)
 
     walk(payload)
     return sorted(found)
 
 
-def _run_report_only_prework(p: Probes, commands: List[tuple], cache=None) -> None:
+def _run_report_only_prework(
+    p: Probes,
+    commands: List[tuple],
+    cache=None,
+    expected_outputs: Optional[Mapping[str, Sequence[str]]] = None,
+) -> None:
     """Run deterministic sidecar planners without turning report-only gaps into blockers.
 
     这些 planner 互相独立、只产 report/sidecar、从不阻断流程，是并行+缓存的安全目标：
     缺脚本仍按序记 skip；存在的脚本并发执行、按声明顺序回填结果（顺序不变，只更快），
-    pass/warn 结果写入 prework 缓存，输入/脚本未变时下次直接复用、跳过 subprocess。
+    只有 pass + 至少一个仍存活的项目内输出才写入 prework 缓存；warn/无输出不缓存。
     """
     steps = []          # (step_key, (step, script_path, args))
     placeholders = {}   # step -> 缺脚本的 skip 占位，保持原有顺序
@@ -980,16 +996,33 @@ def _run_report_only_prework(p: Probes, commands: List[tuple], cache=None) -> No
         step, script_path, args = obj
         try:
             r = _run([sys.executable, script_path, *args])
-            return {"step": step, "status": "pass" if r.returncode == 0 else "warn",
+            root = str(args[0]) if args else ""
+            artifacts = set(_cache_artifact_paths(root, r.stdout))
+            for raw in (expected_outputs or {}).get(step, ()):
+                candidate = raw if os.path.isabs(raw) else os.path.join(root, raw)
+                candidate_real = os.path.realpath(os.path.abspath(candidate))
+                root_real = os.path.realpath(os.path.abspath(root or os.curdir))
+                try:
+                    project_local = os.path.commonpath((root_real, candidate_real)) == root_real
+                except ValueError:
+                    project_local = False
+                if project_local and os.path.isfile(candidate_real):
+                    artifacts.add(candidate_real)
+            detected_status = _script_result_status(r.returncode, r.stdout)
+            report_status = "pass" if detected_status == "pass" else "warn"
+            return {"step": step, "status": report_status,
                     "detail": _finding_detail(r.stdout, r.stderr),
-                    "_cache_artifacts": _cache_artifact_paths(str(args[0]) if args else "", r.stdout)}
+                    "_cache_artifacts": sorted(artifacts)}
         except Exception as exc:  # pragma: no cover
             return {"step": step, "status": "skip", "detail": str(exc)[:160]}
 
     outcomes = {}
     if steps:
         for o in _prework_run(steps, run_one, cache=cache,
-                              should_cache=lambda o: o.get("status") in ("pass", "warn")):
+                              should_cache=lambda o: (
+                                  o.get("status") == "pass"
+                                  and bool(o.get("_cache_artifacts"))
+                              )):
             outcomes[o.get("step")] = {k: v for k, v in o.items() if k != "_cache_artifacts"}
 
     # 按 commands 原顺序回填，保证 p.prework 顺序与串行版逐字一致。
@@ -1584,7 +1617,8 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                         _record_prework_block(p, "boundary_audit", (
                             "boundary_audit 标出高风险粗胚边界；先运行 "
                             f"python3 skills/n2d-script/scripts/boundary_review.py draft {root} --write，"
-                            f"填写 {review_json} 的 decision/notes，再复跑 check。"
+                            f"在人审文件 {review_json} 按 blocker 填写 decision/notes/semantic_evidence；"
+                            "改边界类决策还必须附绑定改动前合同、新左右 raw SHA 和 source_mapping 的 applied_receipt，再复跑 check。"
                         ))
                         p.prework.append({"step": "boundary_audit", "status": "block",
                                           "detail": detail[:160], "review_path": review_json})
@@ -2102,11 +2136,27 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
             p.prework.append({"step": "image_qc", "status": "pass"})
 
     if stage_key == "image" and ep:
+        # memory_anchor_plan 是 reference_planner 的真实输入，两者不能放在同一并行批次。
+        # 先完成/落档记忆锚，再让 reference_planner 读取并记录其 SHA。
+        _run_report_only_prework(p, [
+            (
+                "memory_anchor_plan",
+                os.path.join(SKILLS_DIR, "n2d-identity", "scripts", "memory_anchor.py"),
+                [root, ep, "--json"],
+            ),
+        ], cache=_stage_prework_cache, expected_outputs={
+            "memory_anchor_plan": [os.path.join("生产数据", f"memory_anchor_plan_{ep}.json")],
+        })
         _run_report_only_prework(p, [
             (
                 "reference_plan",
                 os.path.join(SKILLS_DIR, "n2d-image", "scripts", "reference_planner.py"),
                 [root, ep],
+            ),
+            (
+                "identity_eval_pack",
+                os.path.join(SKILLS_DIR, "n2d-review", "scripts", "identity_eval_pack.py"),
+                [root, "--write", "--json"],
             ),
             (
                 "no_cost_reference_pack",
@@ -2128,7 +2178,13 @@ def gather_probes(root: str, route: Dict[str, Any], stage_key: str, preview: boo
                 os.path.join(SKILLS_DIR, "n2d-image", "scripts", "no_cost_image_pack.py"),
                 [root, ep, "--write", "--json"],
             ),
-        ], cache=_stage_prework_cache)
+        ], cache=_stage_prework_cache, expected_outputs={
+            "reference_plan": [
+                os.path.join("生产数据", f"reference_plan_{ep}.json"),
+                os.path.join("生产数据", f"reference_plan_{ep}.md"),
+            ],
+            "identity_eval_pack": [os.path.join("生产数据", "identity_eval_pack.json")],
+        })
 
     # 多集/发布项目的剧级字幕、人名、语域、响度合同：先建骨架，再由 gate 严格消费。
     if ep and stage_key in ENTRY_GATED_STAGES:

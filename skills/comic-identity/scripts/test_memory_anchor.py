@@ -42,10 +42,15 @@ def test_build_plan_and_consumption(tmp_path):
         (tmp_path / "脚本" / ch / "panel_script.json").write_text(json.dumps({
             "panels": [{"panel_id": "P1", "characters": chars}]}, ensure_ascii=False), encoding="utf-8")
     (tmp_path / "出图" / "共享").mkdir(parents=True)
+    (tmp_path / "出图" / "共享" / "图片").mkdir(parents=True)
+    (tmp_path / "出图" / "共享" / "图片" / "CHAR_A__front.png").write_bytes(b"front")
+    (tmp_path / "出图" / "共享" / "图片" / "CHAR_A__face.png").write_bytes(b"face")
     (tmp_path / "出图" / "共享" / "identity_registry.json").write_text(
         json.dumps(REGISTRY, ensure_ascii=False), encoding="utf-8")
     plan = ma.build_plan(tmp_path, "第4话")
     assert plan["summary"]["ready"] == 1
+    assert plan["inputs_fingerprint"]
+    assert plan["characters"][0]["pinned_refs"][0]["sha256"]
     out = ma.plan_path(tmp_path, "第4话")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")

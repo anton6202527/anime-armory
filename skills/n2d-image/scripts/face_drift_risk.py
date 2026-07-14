@@ -48,8 +48,14 @@ from n2d_const import (  # noqa: E402
     MULTI_SUBJECT_SLOT_MARKERS,
 )
 try:
-    from n2d_contract import classify_image_backend, image_identity_profile, image_lock_tier
+    from n2d_contract import (
+        character_library_tier_for_record,
+        classify_image_backend,
+        image_identity_profile,
+        image_lock_tier,
+    )
 except Exception:  # pragma: no cover - 测试/异常布局兜底
+    character_library_tier_for_record = None  # type: ignore
     classify_image_backend = None  # type: ignore
     image_identity_profile = None  # type: ignore
     image_lock_tier = None  # type: ignore
@@ -129,7 +135,19 @@ def three_quarter_ready(form: Mapping[str, Any]) -> bool:
         return True
     rg = form.get("reference_group") if isinstance(form.get("reference_group"), Mapping) else {}
     for key, val in rg.items():
-        if re.search(r"three_quarter|45|三分之二|三七", str(key), re.I) and str(val or "").strip():
+        if not re.search(r"three_quarter|45|三分之二|三七", str(key), re.I):
+            continue
+        if isinstance(val, Mapping):
+            # A structured slot exists from prompt-pack time onward.  Its path
+            # is only a plan until the status is explicitly ready/registered;
+            # treating any non-empty dict as true lets ``planned`` masquerade
+            # as a usable 3/4 identity anchor.
+            path = str(val.get("path") or val.get("ref") or val.get("file") or "").strip()
+            if path and _status_value(val.get("status")) in READY_STATUSES:
+                return True
+            continue
+        # Legacy registries represented already-approved refs as bare paths.
+        if isinstance(val, str) and val.strip():
             return True
     return False
 
@@ -532,9 +550,14 @@ def load_characters(root: Path) -> List[Dict[str, Any]]:
             aliases |= _split_aliases(f.get("asset_key") or "")
         f0 = forms[0]
         atlas = f0.get("reference_atlas") if isinstance(f0.get("reference_atlas"), Mapping) else {}
-        library_tier = str(ch.get("library_tier") or atlas.get("build_tier") or "core_full").strip()
-        if library_tier not in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
-            library_tier = "core_full"
+        tier_record = dict(ch)
+        if not tier_record.get("library_tier") and atlas.get("build_tier"):
+            tier_record["library_tier"] = atlas.get("build_tier")
+        library_tier = (
+            character_library_tier_for_record(tier_record)
+            if character_library_tier_for_record is not None
+            else "core_full"
+        )
         adapters = f0.get("identity_adapters") or {}
         expression_ready = any(same_source_expression_ready(f) for f in forms)
         # lora ready on ANY form 算已上档

@@ -25,7 +25,9 @@ def _registry():
                         "anchor_phrase": "圆脸微胖·短束发·旧青袍",
                         "reference_group": {
                             "front": "出图/共享/图片/定妆_王敦.png",
+                            "three_quarter": "出图/共享/图片/定妆_王敦_45.png",
                             "side": "出图/共享/图片/定妆_王敦_侧.png",
+                            "rear_three_quarter": "出图/共享/图片/定妆_王敦_后45.png",
                             "back": "出图/共享/图片/定妆_王敦_背.png",
                             "outfit": "出图/共享/图片/定妆_王敦_半身.png",
                             "turnaround": "出图/共享/图片/定妆_王敦_三视图.png",
@@ -116,6 +118,31 @@ def test_missing_registry_writes_empty_reports_and_returns_zero(tmp_path, monkey
     assert matrix["forms"] == []
 
 
+def test_skip_face_preserves_existing_drift_report_bytes(tmp_path, monkeypatch):
+    root = _root(tmp_path)
+    registry_path = root / "出图" / "共享" / "identity_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(json.dumps(_registry(), ensure_ascii=False), encoding="utf-8")
+    drift_path = root / "生产数据" / "identity_drift_report.json"
+    drift_path.parent.mkdir(parents=True)
+    original = (
+        json.dumps({
+            "kind": "n2d_identity_drift_report",
+            "available": True,
+            "characters": {"CHAR_WANG": {"episodes": {"第1集": {}}, "total_block": 0}},
+        }, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        + b"\n"
+    )
+    drift_path.write_bytes(original)
+    monkeypatch.setattr(sys, "argv", ["identity.py", str(root), "--write", "--skip-face"])
+
+    code = identity.main()
+
+    assert code == 0
+    assert drift_path.read_bytes() == original
+    assert (root / "生产数据" / "identity_adapter_matrix.json").exists()
+
+
 def test_adapter_matrix_accepts_structured_reference_group_items(tmp_path):
     root = _root(tmp_path)
     data = _registry()
@@ -178,6 +205,58 @@ def test_restricted_partial_form_uses_partial_reference_pack(tmp_path):
     assert form["required_reference_fields"] == ["silhouette", "outfit"]
     assert not any(g.startswith("missing_reference:front") for g in form["gaps"])
     assert form["gaps"] == []
+
+
+def test_named_minimal_uses_front_only_not_legacy_one_size_pack(tmp_path):
+    root = tmp_path / "named"
+    front = root / "front.png"
+    front.parent.mkdir(parents=True)
+    front.write_bytes(b"png")
+    registry = {
+        "kind": "n2d_asset_identity_registry",
+        "characters": [{
+            "id": "CHAR_NAMED",
+            "name": "店主",
+            "scope": "单集有名角色",
+            "library_tier": "named_minimal",
+            "forms": [{"form": "常态", "reference_group": {"front": "front.png"}}],
+        }],
+    }
+
+    form = identity.build_adapter_matrix(root, registry)["forms"][0]
+
+    assert form["library_tier"] == "named_minimal"
+    assert form["required_reference_fields"] == ["front"]
+    assert form["reference_group_ready"] is True
+
+
+def test_recurring_standard_requires_front_and_three_quarter(tmp_path):
+    root = tmp_path / "recurring"
+    for name in ("front.png", "three.png"):
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"png")
+    registry = {
+        "kind": "n2d_asset_identity_registry",
+        "characters": [{
+            "id": "CHAR_RECUR",
+            "scope": "多集常驻配角",
+            "forms": [{
+                "form": "常态",
+                "reference_group": {
+                    "front": "front.png",
+                    "three_quarter": {"path": "three.png", "status": "planned"},
+                },
+            }],
+        }],
+    }
+
+    form = identity.build_adapter_matrix(root, registry)["forms"][0]
+
+    assert form["library_tier"] == "recurring_standard"
+    assert form["required_reference_fields"] == ["front", "three_quarter"]
+    assert form["reference_group_ready"] is False
+    assert "missing_reference:three_quarter" in form["gaps"]
 
 
 def test_lora_ready_dataset_warning_override_requires_notes(tmp_path):

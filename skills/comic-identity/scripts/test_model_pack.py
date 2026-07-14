@@ -1,0 +1,103 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import struct
+import sys
+from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import model_pack
+import registry_v2
+
+
+def fake_png(path: Path, width: int, height: int, marker: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(model_pack.PNG_SIG + b"\x00\x00\x00\rIHDR" + struct.pack(">II", width, height) + b"\x08\x02\x00\x00\x00" + marker * 16)
+
+
+def registry_fixture(root: Path) -> dict:
+    images = root / "出图" / "共享" / "图片"
+    source_sha = hashlib.sha256(b"canonical-front-source").hexdigest()
+    refs = []
+    views = {}
+    for index, view in enumerate(("front", "three_quarter", "side", "back", "face")):
+        path = images / f"CHAR_A__{view}.png"
+        fake_png(path, 512 if view == "face" else 768, 512 if view == "face" else 1024, bytes([65 + index]))
+        rel = str(path.relative_to(root))
+        views[view] = rel
+        refs.append({
+            "view": view, "path": rel, "sha256": model_pack.file_sha256(path),
+            "source": {"view": view},
+            "derivation": {"method": "generated_from_shared_anchor", "source_path": views.get("front", rel), "source_sha256": source_sha, "crop_box": []},
+        })
+    registry, _ = registry_v2.migrate_registry({
+        "schema_version": 2, "kind": "comic_identity_registry",
+        "assets": {"CHAR_A": {"id": "CHAR_A", "type": "character", "library_tier": "core_full", "views": views, "reference_images": refs}},
+    })
+    return registry
+
+
+def test_core_model_pack_needs_sha_signoff_then_becomes_ready_and_stales(tmp_path: Path) -> None:
+    registry = registry_fixture(tmp_path)
+    before = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert before["technical_block"] is False
+    assert before["readiness"] == "needs_approval"
+    confirmations = {key: True for key in model_pack.REQUIRED_CONFIRMATIONS}
+    receipt = model_pack.create_signoff(tmp_path, registry, "CHAR_A", "editor", "并排确认五视图", confirmations)
+    assert receipt["model_pack_fingerprint"] == before["model_pack_fingerprint"]
+    assert model_pack.evaluate_character(tmp_path, registry, "CHAR_A")["readiness"] == "ready"
+
+    # Any required view change invalidates the receipt automatically.
+    face = tmp_path / registry["assets"]["CHAR_A"]["views"]["face"]
+    fake_png(face, 512, 512, b"Z")
+    stale = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert stale["signoff"]["status"] == "stale"
+    assert stale["readiness"] == "needs_approval"
+
+
+def test_1x1_and_duplicate_or_mislabelled_views_cannot_be_ready(tmp_path: Path) -> None:
+    registry = registry_fixture(tmp_path)
+    front = tmp_path / registry["assets"]["CHAR_A"]["views"]["front"]
+    fake_png(front, 1, 1, b"X")
+    report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert report["readiness"] == "needs_fix"
+    assert any(item["code"] == "model_pack_view_degenerate_1x1" for item in report["findings"])
+
+    registry = registry_fixture(tmp_path)
+    registry["assets"]["CHAR_A"]["reference_images"][1]["source"]["view"] = "back"
+    report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert any(item["code"] == "model_pack_source_view_mismatch" for item in report["findings"])
+
+    side = tmp_path / registry["assets"]["CHAR_A"]["views"]["side"]
+    back = tmp_path / registry["assets"]["CHAR_A"]["views"]["back"]
+    back.write_bytes(side.read_bytes())
+    report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+    assert any(item["code"] == "model_pack_duplicate_view_content" for item in report["findings"])
+
+
+def test_repeated_readiness_check_is_idempotent(tmp_path: Path) -> None:
+    registry = registry_fixture(tmp_path)
+    model_pack.apply_character_readiness(tmp_path, registry, "CHAR_A")
+    first = dict(registry["assets"]["CHAR_A"]["model_pack"])
+    model_pack.apply_character_readiness(tmp_path, registry, "CHAR_A")
+    assert registry["assets"]["CHAR_A"]["model_pack"] == first
+
+
+def test_model_pack_signoff_requires_accountable_identity_and_reason(tmp_path: Path) -> None:
+    registry = registry_fixture(tmp_path)
+    confirmations = {key: True for key in model_pack.REQUIRED_CONFIRMATIONS}
+    model_pack.create_signoff(tmp_path, registry, "CHAR_A", "editor", "并排确认五视图", confirmations)
+    path = model_pack.signoff_path(tmp_path, "CHAR_A")
+    valid = json.loads(path.read_text(encoding="utf-8"))
+
+    for field in ("reviewer", "approved_at", "reason", "character_id"):
+        malformed = dict(valid)
+        malformed.pop(field)
+        path.write_text(json.dumps(malformed, ensure_ascii=False), encoding="utf-8")
+        report = model_pack.evaluate_character(tmp_path, registry, "CHAR_A")
+        assert report["signoff"]["status"] == "stale"
+        assert report["readiness"] == "needs_approval"

@@ -11,8 +11,14 @@ import argparse
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
+
+_COMMON = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "n2d", "_lib"))
+if _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+from n2d_const import character_library_tier_for_record  # noqa: E402
 
 
 OLD_REL = "设定库/character_assets"
@@ -65,20 +71,16 @@ def planned_count(char: Mapping[str, Any]) -> int:
 
 
 def infer_tier(char: Mapping[str, Any]) -> str:
-    explicit = str(char.get("library_tier") or "").strip()
-    if explicit in {"core_full", "recurring_standard", "named_minimal", "restricted_partial"}:
-        return explicit
+    record = dict(char)
     cid = str(char.get("id") or "")
     scope = " ".join(str(char.get(k) or "") for k in ("scope", "tier", "role", "name"))
     forms = char.get("forms") if isinstance(char.get("forms"), list) else []
     form_blob = json.dumps(forms, ensure_ascii=False)
     if cid.startswith(("GROUP_", "CROWD_")) or PARTIAL_RE.search(f"{scope} {form_blob}"):
-        return "restricted_partial"
-    if CORE_RE.search(scope) or planned_count(char) >= 10:
-        return "core_full"
-    if RECURRING_RE.search(scope) or planned_count(char) >= 3:
-        return "recurring_standard"
-    return "named_minimal"
+        record["restricted_partial"] = True
+    if not record.get("planned_episode_count"):
+        record["planned_episode_count"] = planned_count(char)
+    return character_library_tier_for_record(record)
 
 
 def registry_paths(root: Path) -> Iterable[Path]:

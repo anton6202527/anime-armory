@@ -93,6 +93,25 @@ def test_write_scaffolds_updates_same_episode_thread_after_tail_rewrite():
     assert "陌生脚步" in scheduler["threads"][0]["open_question"]
 
 
+def test_incremental_episode_writes_use_stable_non_colliding_thread_ids():
+    root = _mk_ep(
+        "[镜头1·旁白·悬疑·快] 门外突然传来脚步。 🪝集尾\n",
+        ep="第1集",
+    )
+    ep2 = Path(root) / "脚本" / "第2集"
+    ep2.mkdir(parents=True)
+    (ep2 / "voiceover.txt").write_text(
+        "[镜头1·旁白·悬疑·快] 屋顶的人究竟是谁？ 🪝集尾\n",
+        encoding="utf-8",
+    )
+    SI.write_scaffolds(root, ["第1集"])
+    outputs = SI.write_scaffolds(root, ["第2集"])
+    scheduler = json.loads(Path(outputs["thread_scheduler"]).read_text(encoding="utf-8"))
+    ids = [row["thread_id"] for row in scheduler["threads"]]
+    assert ids == ["T_E0001", "T_E0002"]
+    assert len(set(ids)) == 2
+
+
 def test_dialogue_not_advancing_warned():
     root = _mk_ep(
         "[镜头1·沈念·平静·慢] 从前这里有一座旧城。\n"

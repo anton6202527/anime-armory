@@ -32,6 +32,7 @@ def _load_settings_module():
 
 
 _settings = _load_settings_module()
+PRODUCTION_PROFILE_PRESETS = _settings.PRODUCTION_PROFILE_PRESETS
 audit_settings = _settings.audit_settings
 reset_project_setting = _settings.reset_project_setting
 set_project_setting = _settings.set_project_setting
@@ -104,6 +105,8 @@ def cmd_set(args: argparse.Namespace) -> int:
         "recorded": not args.no_record,
         "forced": args.force,
     }
+    if args.key == "生产档位":
+        data["applied_preset"] = PRODUCTION_PROFILE_PRESETS.get(new, {})
     if args.json:
         dump(data, as_json=True)
     else:

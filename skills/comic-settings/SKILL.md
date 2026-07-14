@@ -18,6 +18,7 @@ python3 skills/comic-settings/scripts/settings_cli.py sync-global <作品根> --
 
 - `audit`：解析 `_设置.md`，按 `skills/comic/_lib/settings.py` 的 schema 校验，默认有 error 返回非零。
 - `set`：调用 `set_project_setting()`，保留原格式，自动追加 `## 记录`。未知/实验值需要 `--force`。
+- `set <作品根> 生产档位 <档位>`：将 `短篇验证` / `连载标准` / `连载高一致性` / `出版交付` 展开为定妆、形态继承、一致性硬闸等联动设置，避免相互矛盾的组合。
 - `reset`：调用 `reset_project_setting()`，删除指定选择点并记录。
 - `sync-global`：调用 `sync_global_settings()`，把当前项目可同步选择写入私有全局默认；可用 `--all` 或传 `选择点=值`。
 - `基础视觉风格` 的内置候选见 `skills/comic/references/视觉风格候选.md`；可写 `预设(补充词)` 或 `自定义(...)`。
@@ -28,4 +29,4 @@ python3 skills/comic-settings/scripts/settings_cli.py sync-global <作品根> --
 - 合规/花钱/不可逆选择即使已写入 `_设置.md`，对应 stage 开跑前仍要再次确认。
 - 用户显式改选择点时，应立即用 `set` 落档；不要等下次阶段才写。
 - `自定义` / `manual` / 实验后端不应被 schema 永久挡住；确认是用户明确选择时用 `--force`，并用 `--message` 写清原因。
-- 漫画线默认 `传统原稿流程=启用`、`出图稿层=完成稿`、`原稿规格=数字条漫`、`网点策略=风格驱动`、`效果线策略=剧情驱动`、`定妆级别=长线专门定妆`、`文字语言=中文`；短 demo、纯草稿或海外版应通过本入口显式改项目设置。
+- 漫画线默认 `生产档位=连载标准`，因此默认开启形态继承与角色一致性硬闸；短篇验证、高一致性连载或出版交付应显式切换档位。

@@ -18,10 +18,16 @@ from PIL import Image, ImageOps
 
 
 READY_STATUSES = {"ready", "registered"}
-TURNAROUND_SPLITS = {
+LEGACY_TURNAROUND_SPLITS = {
     "three_quarter": (1, "turnaround_split"),
     "side": (2, "turnaround_split"),
     "back": (3, "turnaround_split"),
+}
+STANDARD_TURNAROUND_SPLITS = {
+    "three_quarter": (1, "turnaround_split"),
+    "side": (2, "turnaround_split"),
+    "rear_three_quarter": (3, "turnaround_split"),
+    "back": (4, "turnaround_split"),
 }
 TURNAROUND_FRONT_METHOD = "turnaround_split_front"
 FRONT_CROPS = {
@@ -228,10 +234,17 @@ def _front_crop_box(img: Image.Image, kind: str) -> tuple[int, int, int, int]:
     )
 
 
-def _save_turnaround_split(src: Path, dst: Path, column_index: int, target_size: tuple[int, int]) -> list[int]:
+def _save_turnaround_split(
+    src: Path,
+    dst: Path,
+    column_index: int,
+    target_size: tuple[int, int],
+    *,
+    column_count: int = 4,
+) -> list[int]:
     img = Image.open(src).convert("RGB")
     width, height = img.size
-    column_width = width / 4.0
+    column_width = width / float(column_count)
     inset = round(column_width * 0.06)
     left = round(column_width * column_index) + inset
     right = round(column_width * (column_index + 1)) - inset
@@ -241,6 +254,35 @@ def _save_turnaround_split(src: Path, dst: Path, column_index: int, target_size:
     dst.parent.mkdir(parents=True, exist_ok=True)
     out.save(dst)
     return list(box)
+
+
+def _turnaround_split_plan(form: dict[str, Any]) -> tuple[dict[str, tuple[int, str]], int]:
+    """Choose the board layout without corrupting legacy four-column sheets.
+
+    A rear-three-quarter *slot* is not proof that the landed board has five
+    columns: prompt-pack migration adds that slot to legacy registries too.
+    Five-column splitting therefore requires explicit board metadata.  Missing
+    or deliberately unknown metadata stays on the historical four-column map,
+    preventing an old back view from being silently relabelled as rear 3/4.
+    """
+    rg = form.get("reference_group") if isinstance(form.get("reference_group"), dict) else {}
+    turnaround = rg.get("turnaround") if isinstance(rg.get("turnaround"), dict) else {}
+    layout = str(turnaround.get("layout") or "").strip().lower()
+    if layout == "five_angle_v1":
+        return STANDARD_TURNAROUND_SPLITS, 5
+    if layout in {"legacy_four_angle_v1", "four_angle_v1", "unknown_existing"}:
+        return LEGACY_TURNAROUND_SPLITS, 4
+
+    try:
+        column_count = int(turnaround.get("column_count") or 0)
+    except (TypeError, ValueError):
+        column_count = 0
+    view_order = turnaround.get("view_order")
+    if column_count == 5 or view_order == [
+        "front", "three_quarter", "side", "rear_three_quarter", "back",
+    ]:
+        return STANDARD_TURNAROUND_SPLITS, 5
+    return LEGACY_TURNAROUND_SPLITS, 4
 
 
 def _save_front_crop(src: Path, dst: Path, kind: str, target_size: tuple[int, int]) -> list[int]:
@@ -469,15 +511,18 @@ def derive_project(
             if not face_anchor_only and turn_ready and turn_rel and turn_path.exists():
                 target_size = Image.open(turn_path).size
                 source_sha = _sha256(turn_path)
+                split_plan, column_count = _turnaround_split_plan(form)
                 if front_from_turnaround and front_rel:
                     dst = _resolve(root, front_rel)
                     if dst.exists() and not force:
                         summary["skipped"].append({"form": form_label, "field": "front", "reason": "exists"})
                     else:
                         if write:
-                            crop_box = _save_turnaround_split(turn_path, dst, 0, target_size)
+                            crop_box = _save_turnaround_split(
+                                turn_path, dst, 0, target_size, column_count=column_count
+                            )
                         else:
-                            column_width = target_size[0] / 4
+                            column_width = target_size[0] / column_count
                             inset = round(column_width * 0.06)
                             crop_box = [
                                 inset,
@@ -497,16 +542,24 @@ def derive_project(
                             "path": front_rel,
                             "method": TURNAROUND_FRONT_METHOD,
                         })
-                for key, (column_index, method) in TURNAROUND_SPLITS.items():
-                    rel = _reference_group_path(form, key, {"three_quarter": "45度", "side": "侧", "back": "背"}[key])
+                suffixes = {
+                    "three_quarter": "45度",
+                    "side": "侧",
+                    "rear_three_quarter": "后45度",
+                    "back": "背",
+                }
+                for key, (column_index, method) in split_plan.items():
+                    rel = _reference_group_path(form, key, suffixes[key])
                     dst = _resolve(root, rel)
                     if dst.exists() and not force:
                         summary["skipped"].append({"form": form_label, "field": key, "reason": "exists"})
                         continue
                     if write:
-                        crop_box = _save_turnaround_split(turn_path, dst, column_index, target_size)
+                        crop_box = _save_turnaround_split(
+                            turn_path, dst, column_index, target_size, column_count=column_count
+                        )
                     else:
-                        column_width = target_size[0] / 4
+                        column_width = target_size[0] / column_count
                         inset = round(column_width * 0.06)
                         crop_box = [
                             round(column_width * column_index) + inset,

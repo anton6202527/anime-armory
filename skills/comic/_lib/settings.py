@@ -15,6 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 
 DEFAULTS = {
+    "生产档位": "连载标准",
     "输入模式": "原创漫画",
     "漫画形态": "条漫",
     "阅读方向": "从上到下",
@@ -34,13 +35,48 @@ DEFAULTS = {
     "生图AI": "Codex",
     "参考一致性策略": "共享参考图",
     "定妆级别": "长线专门定妆",
-    "年龄形态继承": "关闭",
-    "角色一致性硬闸": "关闭",
+    "年龄形态继承": "开启",
+    "角色一致性硬闸": "开启",
     "文字语言": "中文",
     "嵌字方式": "后期嵌字",
     "导出格式": "webp+png",
     "发行地区": "未指定",
     "合规用途": "demo学习",
+}
+
+# A profile is an executable bundle, not a label.  Applying one rewrites the
+# small set of settings that jointly define the production/consistency floor,
+# preventing combinations such as "long-form model pack + identity gate off".
+PRODUCTION_PROFILE_PRESETS: Dict[str, Dict[str, str]] = {
+    "短篇验证": {
+        "传统原稿流程": "启用",
+        "参考一致性策略": "共享参考图",
+        "定妆级别": "短 demo 锚点",
+        "年龄形态继承": "关闭",
+        "角色一致性硬闸": "开启",
+    },
+    "连载标准": {
+        "传统原稿流程": "启用",
+        "参考一致性策略": "共享参考图",
+        "定妆级别": "长线专门定妆",
+        "年龄形态继承": "开启",
+        "角色一致性硬闸": "开启",
+    },
+    "连载高一致性": {
+        "传统原稿流程": "启用",
+        "参考一致性策略": "共享参考图",
+        "定妆级别": "长线专门定妆+高一致性",
+        "年龄形态继承": "开启",
+        "角色一致性硬闸": "开启",
+    },
+    "出版交付": {
+        "传统原稿流程": "启用",
+        "出图稿层": "完成稿",
+        "参考一致性策略": "共享参考图",
+        "定妆级别": "长线专门定妆+高一致性",
+        "年龄形态继承": "开启",
+        "角色一致性硬闸": "开启",
+    },
 }
 
 VISUAL_STYLE_PRESETS = (
@@ -119,13 +155,14 @@ class SettingSpec:
 
 
 SETTING_SPECS: Tuple[SettingSpec, ...] = (
+    SettingSpec("生产档位", ("comic",), tuple(PRODUCTION_PROFILE_PRESETS)),
     SettingSpec("输入模式", ("comic",), ("原创漫画", "源本改漫画", "脚本改漫画"), sensitive=True),
     SettingSpec("漫画形态", ("comic",), ("条漫", "页漫", "四格", "分镜稿")),
     SettingSpec("阅读方向", ("comic",), ("从上到下", "从左到右", "从右到左")),
     SettingSpec(
         "目标平台",
         ("comic",),
-        ("通用", "快看", "腾讯动漫", "B站漫画", "小红书", "WEBTOON", "Tapas", "自定义"),
+        ("通用", "快看", "快看漫画投稿", "腾讯动漫", "B站漫画", "小红书", "WEBTOON", "Tapas", "MANGA Plus Creators", "自定义"),
         parameterized=True,
         sensitive=True,
     ),
@@ -195,7 +232,7 @@ SETTING_SPECS: Tuple[SettingSpec, ...] = (
     SettingSpec(
         "定妆级别",
         ("comic",),
-        ("长线专门定妆", "短 demo 锚点", "锚点过渡", "手工校对"),
+        ("长线专门定妆", "长线专门定妆+高一致性", "短 demo 锚点", "锚点过渡", "手工校对"),
         key_aliases=("角色定妆级别", "角色定妆策略"),
         parameterized=True,
     ),
@@ -505,8 +542,20 @@ def set_project_setting(
     os.makedirs(work_root, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines).rstrip() + "\n")
+    applied: Dict[str, str] = {}
+    if canonical == "生产档位":
+        applied = PRODUCTION_PROFILE_PRESETS.get(normalized_value, {})
+        for preset_key, preset_value in applied.items():
+            set_project_setting(
+                work_root,
+                preset_key,
+                preset_value,
+                record=False,
+                validate=True,
+            )
     if record:
-        append_record(work_root, message or f"设置 {canonical} = {normalized_value} (原值: {old_value})")
+        suffix = f"；已应用 {len(applied)} 项联动设置" if applied else ""
+        append_record(work_root, message or f"设置 {canonical} = {normalized_value} (原值: {old_value}){suffix}")
     return old_value, normalized_value
 
 

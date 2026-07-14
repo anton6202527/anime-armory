@@ -81,8 +81,10 @@ def analyze(root: str) -> Dict[str, Any]:
         "discovered_episodes": len(raw_rows),
         "skipped_placeholder_eps": skipped_placeholder_eps,
         "front": {"eps": [r["episode"] for r in front], "avg_hooks": _avg(front, "hooks"),
+                  "avg_hook_density": _avg(front, "hook_density"),
                   "avg_shots": _avg(front, "shots"), "reversal_rate": _avg(front, "reversal")},
         "back": {"eps": [r["episode"] for r in back], "avg_hooks": _avg(back, "hooks"),
+                 "avg_hook_density": _avg(back, "hook_density"),
                  "avg_shots": _avg(back, "shots"), "reversal_rate": _avg(back, "reversal")},
     }
     if skipped_placeholder_eps:
@@ -94,20 +96,22 @@ def analyze(root: str) -> Dict[str, Any]:
                          "message": f"留存集 {len(rows)} 部（<6），曲线样本不足，仅记录指标不判趋势。"})
         return {"rows": rows, "summary": summary, "findings": findings}
 
-    fh, bh = summary["front"]["avg_hooks"], summary["back"]["avg_hooks"]
+    # Compare narrative density, not raw hook counts. A later episode with fewer
+    # shots but the same hooks-per-shot should not be mislabeled "虎头蛇尾".
+    fh, bh = summary["front"]["avg_hook_density"], summary["back"]["avg_hook_density"]
     fs, bs = summary["front"]["avg_shots"], summary["back"]["avg_shots"]
     fr, br = summary["front"]["reversal_rate"], summary["back"]["reversal_rate"]
 
     if fh > 0 and bh < 0.5 * fh:
         findings.append({"severity": "warn", "code": "back_loaded_decline_severe",
-                         "message": f"虎头蛇尾（重度）：后 1/3 集均钩子 {bh} < 前 1/3 的一半（{fh}）——"
+                         "message": f"虎头蛇尾（重度）：后 1/3 钩子密度 {bh} < 前 1/3 的一半（{fh}）——"
                                     "钩子/爽点严重前置，后段留不住人。把后段补钩或重新分配高能桥段。",
-                         "front_avg_hooks": fh, "back_avg_hooks": bh})
+                         "front_hook_density": fh, "back_hook_density": bh})
     elif fh > 0 and bh < 0.7 * fh:
         findings.append({"severity": "warn", "code": "back_loaded_decline",
-                         "message": f"叙事密度后段下滑：后 1/3 集均钩子 {bh} 仅为前 1/3（{fh}）的 {bh/fh:.0%}——"
+                         "message": f"叙事密度后段下滑：后 1/3 钩子密度 {bh} 仅为前 1/3（{fh}）的 {bh/fh:.0%}——"
                                     "确认不是把好桥段都堆在开头。",
-                         "front_avg_hooks": fh, "back_avg_hooks": bh})
+                         "front_hook_density": fh, "back_hook_density": bh})
     if fr > 0 and br == 0:
         findings.append({"severity": "warn", "code": "reversal_drought_late",
                          "message": f"后 1/3 集反转率为 0（前段 {fr:.0%}）——后段无反转，爽感断崖，补反转桥段。"})
@@ -116,15 +120,15 @@ def analyze(root: str) -> Dict[str, Any]:
                          "message": f"后 1/3 集均镜数 {bs} 明显少于前 1/3（{fs}）——可能后段制作资源被压缩，留意成片质量曲线。"})
     if not findings:
         findings.append({"severity": "info", "code": "balanced",
-                         "message": f"全剧密度均衡：前/后 1/3 均钩子 {fh}/{bh}、反转率 {fr:.0%}/{br:.0%}。"})
+                         "message": f"全剧密度均衡：前/后 1/3 钩子密度 {fh}/{bh}、反转率 {fr:.0%}/{br:.0%}。"})
     return {"rows": rows, "summary": summary, "findings": findings}
 
 
 def print_human(res: Dict[str, Any]) -> None:
     s = res["summary"]
     print(f"# 剧级质量/资源均衡 — {s['episodes']} 集")
-    print(f"前 1/3：均钩子 {s['front']['avg_hooks']}　均镜数 {s['front']['avg_shots']}　反转率 {s['front']['reversal_rate']:.0%}")
-    print(f"后 1/3：均钩子 {s['back']['avg_hooks']}　均镜数 {s['back']['avg_shots']}　反转率 {s['back']['reversal_rate']:.0%}")
+    print(f"前 1/3：钩子密度 {s['front']['avg_hook_density']}　均钩子 {s['front']['avg_hooks']}　均镜数 {s['front']['avg_shots']}　反转率 {s['front']['reversal_rate']:.0%}")
+    print(f"后 1/3：钩子密度 {s['back']['avg_hook_density']}　均钩子 {s['back']['avg_hooks']}　均镜数 {s['back']['avg_shots']}　反转率 {s['back']['reversal_rate']:.0%}")
     icon = {"warn": "WARN", "info": "INFO"}
     for f in res["findings"]:
         print(f"- {icon.get(f['severity'], 'INFO')} [{f['code']}] {f['message']}")

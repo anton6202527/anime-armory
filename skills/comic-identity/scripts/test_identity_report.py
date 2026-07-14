@@ -207,10 +207,10 @@ def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatc
     assert rc == 0
     registry = json.loads((root / "出图" / "共享" / "identity_registry.json").read_text(encoding="utf-8"))
     assert registry["assets"]["CHAR_A"]["views"]["front"].endswith("CHAR_A__front.png")
-    assert registry["assets"]["CHAR_A"]["status"] == "partial"
+    assert registry["assets"]["CHAR_A"]["status"] == "needs_fix"
     assert registry["assets"]["CHAR_A"]["view_readiness"] == {
         "required": ["front", "three_quarter", "side", "back", "face"],
-        "tier": "unspecified(full)",
+        "tier": "core_full",
         "ready": ["front"],
         "missing": ["three_quarter", "side", "back", "face"],
         "complete": False,
@@ -307,7 +307,7 @@ def test_views_can_generate_front_from_text_anchor(tmp_path: Path, monkeypatch) 
     assert source["style_reference_role"] == "style_only"
     assert source["prompt_sha256"]
     assert (root / source["prompt_path"]).is_file()
-    assert registry["assets"]["CHAR_A"]["status"] == "partial"
+    assert registry["assets"]["CHAR_A"]["status"] == "needs_fix"
 
 
 def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch) -> None:
@@ -413,6 +413,23 @@ def test_style_and_fx_prefixes_have_specialized_anchor_contracts() -> None:
     assert "单一视觉特效 reference art" in fx_prompt
 
 
+def test_style_anchor_prompt_does_not_inject_classical_defaults() -> None:
+    prompt = identity.asset_anchor_prompt(
+        "STYLE_NEON_NOIR",
+        {
+            "type": "style",
+            "display_name": "露萅黑色科幻",
+            "description": "高对比冷色几何形、硬表面和城市雨夜",
+        },
+        visual_style="黑色科幻图形漫画",
+    )
+    assert "黑色科幻图形漫画" in prompt
+    assert "高对比冷色几何形" in prompt
+    assert "无具体身份的古典人物" not in prompt
+    assert "矿物淡彩、三值明暗和墨晕" not in prompt
+    assert "不得自行假定古典" in prompt
+
+
 def test_location_anchor_reserves_blocking_without_baking_in_characters() -> None:
     prompt = identity.asset_anchor_prompt(
         "LOC_SPIRIT_RIVER",
@@ -477,3 +494,25 @@ def test_required_views_for_tiers():
     assert _id.required_views_for({}) == _id.REQUIRED_CHARACTER_VIEWS
     assert _id.required_views_for(None) == _id.REQUIRED_CHARACTER_VIEWS
     assert _id.required_views_for({"library_tier": "restricted_partial"}) == ()
+
+
+def test_story_bible_notes_use_exact_stable_heading_id(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    bible = root / "设定库" / "story_bible.md"
+    bible.parent.mkdir(parents=True)
+    bible.write_text(
+        "# 故事圣经\n\n"
+        "### 林冲之子 CHAR_LINCHONG\n- 不应误取\n\n"
+        "### 林冲 CHAR_LIN\n- 角色DNA：豹头环眼\n\n"
+        "#### 基础服装\n- 青灰圆领袍\n\n"
+        "### 鲁智深 CHAR_LU\n- 角色DNA：面圆耳大\n",
+        encoding="utf-8",
+    )
+
+    notes = identity.story_bible_character_notes(root, "CHAR_LIN")
+
+    assert notes.startswith("### 林冲 CHAR_LIN")
+    assert "豹头环眼" in notes
+    assert "青灰圆领袍" in notes
+    assert "不应误取" not in notes
+    assert "面圆耳大" not in notes

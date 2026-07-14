@@ -32,6 +32,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _styleid_release_gate_required,
     _styleid_release_signoff_path,
     _styleid_structured_signoff_ok,
+    _storyboard_character_appearance_evidence,
     _validate_character_asset_bundle,
     _validate_character_dna,
     _validate_generation_control,
@@ -43,6 +44,7 @@ from gate_core import (  # import* 默认漏的下划线私有助手，按需显
     _validate_wardrobe_profile,
     _video_route_backend_roles,
 )
+from n2d_contract import character_library_tier_for_record
 from seam_contract import needs_end_anchor
 
 def check_input_frame_qc(root: str, ep: str) -> None:
@@ -193,6 +195,10 @@ def check_identity_registry(
         add(BLOCK, "资产身份注册层", p, "characters[] 缺失或为空；明确角色/形态必须登记")
         return
 
+    # 独立下界：只读已物化 storyboard 的结构化可见角色 ID。四份资产
+    # tier 声明即使协同改低，也不能覆盖角色已经跨多集实际出场的事实。
+    # 旧项目没有 storyboard/structured ids 时返回空，不猜、不误拦。
+    storyboard_appearances = _storyboard_character_appearance_evidence(root)
     seen_ids = set()
     for ci, char in enumerate(chars, 1):
         loc = f"{p} character#{ci}"
@@ -203,12 +209,24 @@ def check_identity_registry(
             if _field_is_missing(char, key):
                 add(BLOCK, "资产身份注册层", loc, f"character 缺字段：{key}")
         char_id = str(char.get("id", "")).strip()
+        appearance_evidence = storyboard_appearances.get(char_id, {})
+        observed_episode_count = int(appearance_evidence.get("episode_count") or 0)
+        expected_library_tier = character_library_tier_for_record(
+            char,
+            observed_episode_count=observed_episode_count,
+        )
         if char_id:
             if char_id in seen_ids:
                 add(BLOCK, "资产身份注册层", loc, f"重复 character id：{char_id}")
             seen_ids.add(char_id)
 
-        _validate_character_asset_bundle(root, char, loc)
+        _validate_character_asset_bundle(
+            root,
+            char,
+            loc,
+            expected_tier=expected_library_tier,
+            expected_tier_evidence=appearance_evidence,
+        )
 
         char_strict_references = required_character_ids is None or char_id in required_character_ids
         refs_for_char = {
@@ -271,6 +289,7 @@ def check_identity_registry(
                 strict_references,
                 require_reference_assets,
                 restricted_partial=restricted_partial,
+                expected_tier=expected_library_tier,
             )
             if not isinstance(reference_group, dict):
                 add(BLOCK, "资产身份注册层", floc, "reference_group 必须是对象")
@@ -295,7 +314,9 @@ def check_identity_registry(
                         if require_reference_assets and strict_references and not _identity_reference_exists(root, rel):
                             add(BLOCK, "资产身份注册层", os.path.join(root, rel) if not os.path.isabs(rel) else rel, f"reference_group.{key} 路径不存在")
                 else:
-                    required_group_fields = _required_character_reference_group_fields(form)
+                    required_group_fields = _required_character_reference_group_fields(
+                        form, expected_library_tier
+                    )
                     for key in required_group_fields:
                         if _field_is_missing(reference_group, key):
                             if strict_references:
@@ -403,6 +424,39 @@ def check_identity_registry(
             drift_forbidden = form.get("drift_forbidden")
             if not isinstance(drift_forbidden, list) or not drift_forbidden:
                 add(BLOCK, "资产身份注册层", floc, "drift_forbidden 必须是非空列表")
+
+
+def check_identity_eval_pack(root: str, ep: str) -> None:
+    """付费 Clip 出图前硬验核心人物逐视图身份收据。
+
+    production_consistency 在 review 仍会独立复核；这里把同一证据契约
+    前移到 image_preflight，避免等 Clip/视频都花完钱才发现后45°换脸。
+    """
+    try:
+        import production_consistency as pc
+        result = pc.check_multiview_identity_pack(root, ep)
+    except Exception as exc:
+        add(
+            BLOCK,
+            "核心人物多视图验收",
+            os.path.join(root, "生产数据", "identity_eval_pack.json"),
+            f"无法运行 MVIEW 验收：{type(exc).__name__}: {exc}",
+            return_to_stage="image",
+        )
+        return
+    for row in result.get("findings") or []:
+        verdict = str(row.get("verdict") or "warn").strip().lower()
+        severity = BLOCK if verdict == "block" else WARN
+        artifacts = row.get("affected_artifacts") if isinstance(row.get("affected_artifacts"), list) else []
+        loc = os.path.join(root, artifacts[0]) if artifacts else os.path.join(root, "生产数据", "identity_eval_pack.json")
+        add(
+            severity,
+            "核心人物多视图验收",
+            loc,
+            str(row.get("message") or "MVIEW 验收失败"),
+            return_to_stage="image",
+            affected_artifacts=artifacts,
+        )
 
 def check_identity_adapter_matrix(root: str) -> None:
     p = identity_adapter_matrix_path(root)
@@ -935,6 +989,7 @@ __all__ = [
     'check_input_frame_qc',
     'check_identity_handoff_inheritance',
     'check_identity_registry',
+    'check_identity_eval_pack',
     'check_identity_adapter_matrix',
     'check_production_core_identity_lock',
     'check_route_identity_readiness',

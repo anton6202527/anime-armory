@@ -20,7 +20,7 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 
 - `设定库/story_bible.md`：补齐角色、场景、道具、视觉禁漂移项。
 - `脚本/第N话/source_semantics.json/md`：当源本是外语、文言/古汉语、混合语言或用户要求强制归一化时，先记录源语言、目标嵌字语言、专名表、逐段白话/译文、歧义点和改编取舍账。
-- `脚本/第N话/分话大纲.md`：本话目标、冲突、转折、结尾钩子、预计格数。
+- `脚本/第N话/分话大纲.md`：本话目标、冲突、转折/兑现、结尾模式和软容量意图。
 - `脚本/第N话/panel_script.json`：逐格脚本，schema 见 `references/panel_script_schema.md`。
 - `_进度.md`：本话 `漫画脚本` 列完成后回写为 `✅`。
 
@@ -29,21 +29,21 @@ description: 画漫画脚本阶段。Use when converting a story source, idea, o
 1. 先读作品根 `_进度.md` 和 `_设置.md`，确认当前话、输入模式、漫画形态。
 2. 读 `story_bible.md`；缺角色、场景、视觉规则时先补草案并标 `待确认`。
 3. 源本是外语、文言/古汉语、混合语言，或用户要求跨语种/古文改编时，先跑源语义归一化 gate；未通过前不要写最终 `panel_script.json`。
-4. 选择分话目标：本话必须有开场吸引、冲突推进、转折或爽点、结尾钩子。
-5. 写 `分话大纲.md`，避免只按字数切段；边界服从戏剧闭环。
-6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。需要镜头感时，参考 `skills/comic/references/运镜/manifest.json`，把视频运镜转译为静态机位/景别/前景遮挡/速度线/格子轻重（如推镜头=近景聚焦，拉镜头=扩大环境，甩镜=斜切格+速度线，焦点转移=前后景虚实）。若本话经过源语义归一化，每格还要保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。需要传统漫画审美时，可预填 `layout_weight`、`panel_shape`、`gutter_intent`、`ink_plan`、`black_fill_plan`、`tone_plan`、`value_plan`、`effects_plan`，供 `comic-name` 和 `comic-finishing` 继承。
+4. 先填 `脚本/split_blueprint.json` v2 的本话 chapter contract：`source_spans / reader_promise / core_conflict / turning_point / payoff / ending_mode / budget / entry_state / continuity_delta / exit_state`，schema 见 `references/chapter_contract_schema.md`。连载话边界服从戏剧闭环；四格、完结短篇和情绪落点不强制 cliffhanger。
+5. 写 `分话大纲.md`，避免按字数、固定格数或源回目硬切；容量只写 `budget.soft_range`，不得设置硬上下限。
+6. 写 `panel_script.json`。顶层必须有 `visual_contract`，把本话风格基线、场景锚、光位/冷暖、轴线视线、角色状态演进和人物完整性口径写成可审字段。每格至少有 `panel_id`、`story_function`、`description`、`characters`、`dialogue`、`narration`、`sfx`、`art_notes`；含角色格还必须有 `character_bindings[]`（`character_id/form_id/outfit_id/expression_id/state_id`）、`gaze_target`、`eyeline_direction`、`character_integrity`，含场景格还必须有 `scene_anchor_id`、`spatial_layout`、`lighting_anchor`、`axis_eyeline`（可从 `visual_contract.scene_anchors` 继承）。`scene_anchor_id` 必须登记成 `LOC_` 场景锚；眼神目标不能只写情绪词、远方或看镜头；多人同格必须写 `spatial_relationships/blocking/staging`。需要镜头感时，参考 `skills/comic/references/运镜/manifest.json`，把视频运镜转译为静态机位/景别/前景遮挡/速度线/格子轻重（如推镜头=近景聚焦，拉镜头=扩大环境，甩镜=斜切格+速度线，焦点转移=前后景虚实）。源本改编时每格还要写 `source_segment_refs`；跨语种/古文归一化继续保留 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_note`。需要传统漫画审美时，可预填 `layout_weight`、`panel_shape`、`gutter_intent`、`ink_plan`、`black_fill_plan`、`tone_plan`、`value_plan`、`effects_plan`，供 `comic-name` 和 `comic-finishing` 继承。
 7. 台词写入结构字段，不要求图像模型直接生成文字；跨语种/古文改编时，最终嵌字文本写 `dialogue[].text_target`、`narration_target` 或对应目标字段，原文不要覆盖掉。
 8. 自检通过后回写 `_进度.md` 的 `漫画脚本` 列。
 
 ## 源语义归一化 gate
 
-默认扫描作品根 `源本/`，自动判断源语言；若检测到外语、文言/古汉语或混合语言，会生成待填写账本并以非零状态退出。填完专名、释义、目标嵌字、歧义和改编取舍后再次运行，同一文件通过才继续分格。
+v2 改编合同优先消费 `split_blueprint.source_spans`，不再默认把第 N 话等同源本第 N 章；没有 v2 合同时才兼容扫描作品根 `源本/`。报告绑定本话合同 SHA 和源文件 SHA，源变化会 stale。所有源段完整建账，`--max-segments` 仅保留兼容参数、不再截断第 12 段之后的内容。外语、文言/古汉语或混合语言还须填专名、释义、目标嵌字与歧义；panel_script 存在后会确定性验证 `source_segment_refs` 和改编决策 coverage。
 
 ```bash
 python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫画/作品名" --chapter 第1话
 ```
 
-DOCX 会用标准库直接读取 `word/document.xml` 的正文段落；页眉、批注和修订说明不会混入改编源文本。无法解析的 DOCX 会显式记为 `invalid` 并阻断，不会静默当作无源本。
+DOCX 会用标准库直接读取 `word/document.xml` 的正文段落；页眉、批注和修订说明不会混入改编源文本。DOCX/TXT 的统一清洗只删除已登记、完整且独立成段的抓取包装签名（例如 Wikisource 导出残留 `Public domainPublic domainfalsefalse`，也兼容其拆成相邻文本行的形态）；包含额外正文或标点的 `public domain` 叙述一律保留，避免用关键词误删原文。无法解析的 DOCX 会显式记为 `invalid` 并阻断，不会静默当作无源本。
 
 常用覆盖：
 
@@ -55,16 +55,16 @@ python3 skills/comic-script/scripts/source_semantics_gate.py "创作区/画漫�
 
 - `source_language`、`target_text_language` 已记录。
 - `proper_noun_glossary` 已处理，`glossary_reviewed=true`。
-- 每段有 `source_excerpt`、`meaning_zh`、`text_target`、`adaptation_decision`、`adaptation_note`。
+- 每段都有 `source_excerpt`、已定稿的 `adaptation_decision` 和 `adaptation_note`；需语言归一化时另有 `meaning_zh`、`text_target`。
 - 歧义点已处理，`ambiguity_reviewed=true`。
-- `panel_script.json` 中的每格能追溯到源摘录、中文释义、目标嵌字文本和改编取舍说明。
+- `panel_script.json` 中每格用 `source_segment_refs` 追溯源段；新增衔接格须显式写 `adaptation_origin=original_bridge` 和改编说明。
 
 ## 系列级开发与机检（2026-07 落地·参照同仓成熟生产线已验证模式的漫画重实现）
 
-- **开发包（长篇源本改编建议先跑）**：`python3 skills/comic-script/scripts/development_pack.py <作品根> scaffold --write` 生成 `开发包/adaptation_strategy.json`（改编边界+**爽点承诺账/因果链主干/伏笔账**——补 source_semantics 只管语言归一化、不管理解的缺口）、`开发包/season_arc.json`（前 3-5 话追更弧）、`脚本/split_blueprint.json`（**全书拆分蓝图**：候选话次边界账。实证空档：10 回只拆 1 回、无蓝图导致第 2 话断供）。内容填完置 `confirmed` 后，由 reviewer 在 `开发包/signoff.json` 对三件套 SHA 签收（`check --strict` 校验缺件/占位/签收过期；脚本只 scaffold 不自我签收）。
-- **分话节拍机检（report-only 起步·gate image_preflight 自动跑）**：`chapter_beat_audit.py <作品根> 第N话 --write` 查首格开场钩/末格结尾钩（must 级：条漫每话绝不平收）/高潮位 ~2/3 处/格数带/全书拆分蓝图缺失。
+- **开发包（长篇源本改编建议先跑）**：`python3 skills/comic-script/scripts/development_pack.py <作品根> scaffold --write` 生成开发三件套和 v2 `split_blueprint`。每话以真实 `source_spans`、读者承诺、冲突/转折/兑现、精确 `ending_mode`、软 `budget` 和长线状态三段式形成可签收合同。内容填完置 `confirmed` 后，由 reviewer 在 `开发包/signoff.json` 对三件套 SHA 签收；`check --strict` 对缺件、v1 未迁移、缺源、合同字段/话次/coverage 缺口、占位与签收 stale 非零退出。
+- **分话节拍机检**：`chapter_beat_audit.py <作品根> 第N话 --write`。合同/文件缺失是确定性 must；首屏、末格功能、高潮格序、软容量和平台投稿快照都是 `heuristic/platform WARN`。四格不套 20 格与 cliffhanger，`20` 只在目标平台明确为快看时提示，不能作为通用切话标准。
 - **伏笔种下→兑现跨话账本（SP1·report-only 起步·gate image_preflight 自动跑）**：`development_pack.foreshadowing_ledger` 是立项期一次性静态清单，逐话写完分格后无人回头核对「这坑第几话兑现、有没有忘、兑现有没有早于种下」。条漫是长线连载，实证空档正是「后续话次断供」（伏笔埋了不收=追更动力流失）。`setup_payoff_ledger.py <作品根> 第N话 --write` 从故事面文本（台词/旁白/音效·不扫 art_notes craft 术语）按**显式悬念标记**捞 `open` 坑（进 gate）、按**挖坑句式**捞 `candidate` 弱信号（只提示），并把 development_pack 手填坑作**种子**合入 `设定库/setup_payoff_ledger.json`（不覆盖已填 payoff_chapter）。逐话审 `setup_unlogged/payoff_unfilled/payoff_overdue/payoff_before_setup`。`--all` 刷全书账本；`--strict` 本话 must 级 exit 1（想开硬闸时用）。SP1 与 `source_semantics`（语言归一）、`visual_contract`（视觉状态跨格）、`chapter_beat_audit`（单话节拍）正交——它管**叙事坑跨话**。
-- **分话量化基准（2026-07 实搜·置信度标注）**：每话 **20-60 格**（快看官方成稿门槛 ≥20 格·官方投稿页实抓=高置信；商业周更常态 40-60=从业者口径·中）；拆话参照 ≈1.5 章网文/话 或 3000 字→30-60 格（中·两说冲突取带宽）；气泡 ≤2 行、字号 14-18px@800px 画布（中）；作业画布 1500-2500px 高分作业→按目标平台导出（快看 1280px 宽/腾讯 1200-2500px 仅 PNG/WEBTOON 800×1280 切片=官方口径·高）。这些进 `_设置.md`/`目标平台` profile 校验，不写死在脚本。
+- **分话量化原则**：没有跨格式通用格数。快看投稿不少于 20 格仅属于目标平台快照；页漫、条漫、四格、短篇分别用自己的 `format_profile`，周更产能只进 `budget.soft_range`。高潮格序同样只是粗筛，正式节奏在ネーム/页面或滚动几何中复核。
 
 ## 分格规则
 

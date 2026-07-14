@@ -17,6 +17,13 @@ from pathlib import Path
 from typing import Any
 
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in __import__("sys").path:
+    __import__("sys").path.insert(0, str(SCRIPT_DIR))
+from model_pack import apply_character_readiness, png_dimensions  # noqa: E402
+from registry_v2 import migrate_registry, validate_registry  # noqa: E402
+
+
 PNG_SIG = b"\x89PNG\r\n\x1a\n"
 REQUIRED_CHARACTER_VIEWS = ("front", "three_quarter", "side", "back", "face")
 # tier 分档必需视图（2026-07 标准审计·参照同仓成熟生产线档位模式的漫画重实现，不跨线 import）：
@@ -162,11 +169,9 @@ def load_registry(root: Path) -> dict:
     if path.is_file():
         data = load_json(path)
         if isinstance(data, dict):
-            data.setdefault("schema_version", 1)
-            data.setdefault("kind", "comic_identity_registry")
-            data.setdefault("assets", {})
-            return data
-    return {"schema_version": 1, "kind": "comic_identity_registry", "assets": {}}
+            migrated, _ = migrate_registry(data)
+            return migrated
+    return {"schema_version": 2, "kind": "comic_identity_registry", "assets": {}, "schema_meta": {}}
 
 
 def codex_version() -> str:
@@ -399,15 +404,20 @@ def story_bible_character_notes(root: Path, character_id: str) -> str:
         return ""
     lines = path.read_text(encoding="utf-8").splitlines()
     start = None
+    # Stable story-bible contract: ``### 人读名称 CHAR_STABLE_ID``.  Match the
+    # ID as a complete token so CHAR_LIN never consumes CHAR_LINCHONG's notes.
+    heading = re.compile(
+        rf"^\s*#{{3,6}}\s+.*(?<![A-Z0-9_]){re.escape(character_id)}(?![A-Z0-9_]).*$"
+    )
     for idx, line in enumerate(lines):
-        if line.strip().startswith("###") and character_id in line:
+        if heading.match(line):
             start = idx
             break
     if start is None:
         return ""
     out: list[str] = []
     for line in lines[start:start + 24]:
-        if out and line.strip().startswith("###"):
+        if out and re.match(r"^\s*###(?!#)\s+", line):
             break
         out.append(line)
     return "\n".join(out).strip()
@@ -562,8 +572,19 @@ def asset_anchor_prompt(
         "style_anchor": "style",
     }.get(kind, kind)
     display_name = compact_contract(asset.get("display_name"))
-    style_contract = compact_contract(asset.get("style_contract"), max_len=900)
-    prop_contract = compact_contract(asset.get("prop_contract"), max_len=900)
+    # Text-only registry bootstrap exposes a generic ``description`` before a
+    # specialist has split it into style/prop/dna contracts.  Consume that
+    # honest project description as a fallback instead of silently reverting
+    # to a hard-coded aesthetic.
+    style_contract = compact_contract(
+        asset.get("style_contract") or (asset.get("description") if kind == "style" else ""),
+        max_len=900,
+    )
+    prop_contract = compact_contract(
+        asset.get("prop_contract")
+        or (asset.get("description") if kind in {"monster", "location", "prop", "vfx"} else ""),
+        max_len=900,
+    )
     dna_contract = compact_contract(asset.get("dna_contract"), max_len=900)
     forbidden = compact_contract(asset.get("forbidden_inheritance"), max_len=900)
     style_reference_note = (
@@ -574,9 +595,9 @@ def asset_anchor_prompt(
     )
     if kind == "style":
         subject_rules = (
-            "生成一张原创、单幅、非叙事的漫画风格校准画：以一名无具体身份的古典人物半身或全身为视觉中心，"
-            "同时包含少量绢、木、石与衣料细节，并让一侧现实自然光自然过渡到另一侧的水墨梦境边缘；"
-            "必须清楚展示人物脸与手、细线层级、肤色、衣纹、矿物淡彩、三值明暗和墨晕边缘。"
+            "生成一张原创、单幅、非叙事的漫画风格校准画，严格服从项目基础视觉风格和 style_contract；"
+            "用一名无具体身份的中性测试人物与少量契约指定的衣料、建筑/自然材质来校验线、色、光、明暗、边缘和表面语言；"
+            "人物脸、手和材质要清楚可读，但不得自行假定古典、水墨、矿物淡彩、现代摄影或任何其他未登记时代/媒介。"
             "这不是项目角色、影视演员、剧情镜头、拼贴、九宫格、角色卡、设定表或多视图。"
         )
     elif kind == "monster":
@@ -623,7 +644,7 @@ def asset_anchor_prompt(
 
 画面要求：
 1. {subject_rules}
-2. 保持项目基础视觉风格：{visual_style}；古典、克制、线稿和灰阶体积清楚，避免现代摄影感、游戏 UI、角色卡边框和高饱和泛彩漫。
+2. 保持项目基础视觉风格：{visual_style}；以登记的 style_contract 为时代、媒介、色域、材质和明暗唯一真值，不得将未登记的古典/水墨/矿物色、现代摄影、游戏 UI 或高饱和彩漫风偷渡进项目；线与灰阶体积应清楚可审。
 3. 这是一张长期共享锚点，不是剧情分镜；构图应稳定、信息清楚、少动态夸张，适合后续作为逐格生图参考附件。
 4. 如果资产是告示、榜文、门帘、银两等道具，只画图像结构，不生成可读长文或乱码文字。
 5. 生成完成后只回复一句完成，不要写文件、不要搜索文件系统、不要输出 Markdown。
@@ -761,12 +782,30 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
     asset = assets.get(character_id) if isinstance(assets.get(character_id), dict) else {}
     rel = rel_to_root(root, path)
     refs = [item for item in asset.get("reference_images", []) if not (isinstance(item, dict) and item.get("view") == view)]
+    anchor_raw = str(source.get("anchor_path") or "").strip()
+    anchor = resolve_path(root, anchor_raw) if anchor_raw else path
+    origin_sha = file_sha256(anchor) if png_valid(anchor) else file_sha256(path)
+    derivation = {
+        "method": (
+            "generated_from_text_seed"
+            if str(source.get("anchor_kind") or "") == "text_prompt_seed"
+            else "generated_from_shared_anchor"
+            if str(source.get("kind") or "").startswith("generated")
+            else "adopted_existing_view"
+        ),
+        "source_path": rel_to_root(root, anchor),
+        "source_sha256": origin_sha,
+        "crop_box": [],
+    }
+    dims = png_dimensions(path)
     refs.append(
         {
             "view": view,
             "path": rel,
             "sha256": file_sha256(path),
             "source": source,
+            "derivation": derivation,
+            "canvas": {"width": dims[0], "height": dims[1]} if dims else {},
             "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
         }
     )
@@ -784,7 +823,7 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
         {
             "id": character_id,
             "type": "character",
-            "status": "ready" if not missing_views else "partial",
+            "status": "partial" if missing_views else "needs_approval",
             "views": views,
             "view_readiness": {
                 "required": list(tier_required),
@@ -798,6 +837,7 @@ def register_character_view(registry: dict, root: Path, character_id: str, view:
         }
     )
     assets[character_id] = asset
+    apply_character_readiness(root, registry, character_id)
 
 
 def register_asset_anchor(registry: dict, root: Path, ref_id: str, path: Path, *, source: dict[str, Any]) -> None:
@@ -1098,7 +1138,7 @@ def seed(args: argparse.Namespace) -> int:
             **(assets.get(rid) if isinstance(assets.get(rid), dict) else {}),
             "id": rid,
             "type": ref_type(rid),
-            "status": "ready",
+            "status": "partial" if rid.startswith(("CHAR_", "MON_")) else "ready",
             "anchor_path": rel,
             "source": {
                 "kind": "accepted_panel_anchor",
@@ -1204,6 +1244,8 @@ def report_markdown(report: dict[str, Any]) -> str:
         f"- reference 总数：{report['summary']['reference_count']}",
         f"- 缺失 reference：{len(report['missing_refs'])}",
         f"- 需要重抽格：{len(report['rerun_targets'])}",
+        f"- registry v2 结构问题：{report.get('registry_validation', {}).get('summary', {}).get('block', 0)}",
+        f"- model pack 待修/待签收：{len(report.get('model_pack_gaps') or {})}",
         "",
     ]
     if report["missing_refs"]:
@@ -1339,6 +1381,17 @@ def report(args: argparse.Namespace) -> int:
         if missing:
             missing_character_views[rid] = missing
 
+    registry_validation = validate_registry(registry)
+    model_pack_reports: dict[str, dict[str, Any]] = {}
+    model_pack_gaps: dict[str, str] = {}
+    for rid in char_ids:
+        pack = apply_character_readiness(root, registry, rid)
+        model_pack_reports[rid] = pack
+        if pack.get("readiness") != "ready":
+            model_pack_gaps[rid] = str(pack.get("readiness") or "unknown")
+    if args.write:
+        write_json(registry_path(root), registry)
+
     payload = {
         "schema_version": 1,
         "kind": "comic_identity_report",
@@ -1355,6 +1408,9 @@ def report(args: argparse.Namespace) -> int:
             "outfit_gap_count": len(outfit_gaps),
         },
         "outfit_gaps": outfit_gaps,
+        "registry_validation": registry_validation,
+        "model_pack_reports": model_pack_reports,
+        "model_pack_gaps": model_pack_gaps,
         "missing_refs": missing_refs,
         "required_character_views": list(REQUIRED_CHARACTER_VIEWS),
         "tier_required_views": {k: list(v) for k, v in TIER_REQUIRED_VIEWS.items()},

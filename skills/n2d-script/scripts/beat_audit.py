@@ -97,8 +97,8 @@ HOOK_GAP_SEC = 20.0   # 中段钩子间隔上限·国内默认（导演节奏 §
 DEFAULT_OVERSEAS_HOOK_GAP_SEC = 10.0  # G2·海外档：ReelShort/TikTok 出海素材更碎更狠（每~10s 一反转）
 HOOK_GAP_SHOTS = 4    # 无真实时长时：相邻钩子最多隔几镜
 LINK_WINDOW = 3       # 集尾钩 / 下集冷开场 的窗口拍数（取首/尾各 N 拍算实体重合）
-# G1·开场拉力地板：开场只「有钩」不够，要够深（conflict/suspense/reversal 至少一条强层）。
-# 2026 Sensor Tower：下一集解锁率与本集**开场钩子强度**相关性高于集尾悬念——开场是最高杠杆留存信号。
+# G1·开场拉力启发式：开场只「有钩」不够，要够深。阈值是可由本项目
+# feedback/proxy_thresholds 校准的创作代理，不冒充跨平台解锁率定律。
 DEFAULT_COLD_OPEN_PULL_FLOOR = 0.3
 # 开场拉力四层正则（与 cold_open_quality_score 共用·提到模块级，G1 逐集与 --series 同源单一真值）。
 COLD_OPEN_CONFLICT_RE = re.compile(r"(冲突|矛盾|对抗|危机|危险|威胁|追杀|逃|战|敌|恨|怒|杀|死|仇|争|斗|围审|审问|逼问|压迫|羞辱|嘲笑|围住|受审|俯视)")
@@ -320,9 +320,9 @@ def _cold_open_pull_floor(root):
 def audit_cold_open_pull_strength(root, ep, beats):
     """G1·开场拉力（独立留存杠杆）。
 
-    Sensor Tower 2026：第2集解锁率 ≈ 上一集**开场钩子强度**，相关性高于集尾悬念。此前 n2d 把开场强度
-    只当 --series 连续性（接没接住上集的钩）来查，且 cold_open 检查只问「有没有钩」(二值)；本检查把「开场够不够深」
-    提为逐集留存信号——开场只有单薄 info 层 / 零强层 = 拉力不足，正式出图前补强（改开场比改成片便宜）。
+    此前 n2d 只在 --series 查「有没有接住上集」，本检查再给开场内容深度一个
+    可校准的代理分。它不是对真实解锁率的因果结论；若项目已有第一方留存数据，
+    由 proxy_thresholds 覆盖默认地板。
 
     score < floor → warn（开场缺 conflict/suspense/reversal 任一强层）；nonzero 但仍偏薄 → info 提示加深。
     报告产物：voiceover.txt 开场窗（前2拍，与 cold_open/cold_open_quality_score 同窗）。"""
@@ -336,12 +336,11 @@ def audit_cold_open_pull_strength(root, ep, beats):
         shown = "/".join(present) if present else "无强层"
         return [("warn", "cold_open_pull_weak",
                  f"开场拉力 {score:.2f} < 地板 {floor:.2f}（命中层：{shown}）——开场只『有钩』不够深："
-                 "2026 数据显示下一集解锁率与本集**开场钩子强度**相关性高于集尾悬念，"
-                 "开场补到至少一条强层（直给冲突/抛悬念/反转直入），别把最强信息留到中段")]
+                 "建议补到至少一条强层（直给冲突/抛悬念/反转直入）；按项目第一方留存数据校准地板")]
     if score < 0.6:
         return [("info", "cold_open_pull_thin",
                  f"开场拉力 {score:.2f}（命中层：{'/'.join(present)}）达地板但偏单薄——"
-                 "叠加第二条强层（冲突+悬念/反转）可进一步拉高下一集解锁率，留存最高杠杆在开场")]
+                 "可测试叠加第二条强层（冲突+悬念/反转）；是否提升留存以本项目 A/B 数据为准")]
     return []
 
 
@@ -1008,7 +1007,7 @@ def audit_episode(root, ep):
     # ①e 钩子类型轮换（GAP-4）：集内同型钩子连甩 = 观众疲劳，advisory 提示换角度。
     findings.extend(audit_hook_type_rotation(root, ep, beats))
 
-    # ①f 开场拉力（G1·最高杠杆留存信号）：开场只「有钩」不够，要够深——下一集解锁率与开场强度相关性 > 集尾悬念。
+    # ①f 开场拉力（G1·可校准代理）：开场只「有钩」不够，要检查内容深度；真实效果以项目反馈校准。
     findings.extend(audit_cold_open_pull_strength(root, ep, beats))
 
     # ② 钩子间隔（导演节奏 §二）·用 marker∪content 钩子算间隔（漏标记不再误判 hook_gap）

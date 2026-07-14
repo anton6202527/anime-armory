@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 KIND = "n2d_no_cost_reference_pack"
-BASE_VIEW_KEYS = ("front", "three_quarter", "side", "back")
+BASE_VIEW_KEYS = ("front", "three_quarter", "side", "rear_three_quarter", "back")
 BODY_VIEW_KEYS = ("half_body", "full_body")
 EXPRESSION_MIN_CORE = 5
 EXPRESSION_MIN_NORMAL = 3
@@ -177,7 +177,7 @@ def _expected_character_refs(form: Mapping[str, Any], action_needed: bool) -> Li
 
     for key in BASE_VIEW_KEYS:
         path = _first_ready_base_view(atlas, key) or _ready_ref_path(rg.get(key))
-        add(key, bool(path), path, "基础多角度视图；无成本档不省 45°/侧/背。")
+        add(key, bool(path), path, "基础多角度视图；核心档不省正/前3/4/侧/后3/4/背。")
     body_path = ""
     body_ready = False
     for key in BODY_VIEW_KEYS:

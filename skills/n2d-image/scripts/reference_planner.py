@@ -23,6 +23,7 @@ load_clips/present_characters/project_default_backend；契约 image_identity_pr
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -45,8 +46,13 @@ except Exception:  # pragma: no cover - 异常布局兜底
     cir = None  # type: ignore
 
 try:
-    from n2d_contract import image_identity_profile, image_lock_tier
+    from n2d_contract import (
+        character_library_tier_for_record,
+        image_identity_profile,
+        image_lock_tier,
+    )
 except Exception:  # pragma: no cover - 异常布局兜底
+    character_library_tier_for_record = None  # type: ignore
     image_identity_profile = None  # type: ignore
     image_lock_tier = None  # type: ignore
 
@@ -82,7 +88,8 @@ _CORE_SCOPE_RE = re.compile(r"全篇|全程|长线|核心|主角|女主|男主|�
 
 # 参考角色 → 默认 image2image 强度建议（对齐现有 01_分镜出图.md 写法）。
 STRENGTH = {
-    "front": 0.8, "expression": 0.6, "side": 0.55, "back": 0.5,
+    "front": 0.8, "expression": 0.6, "side": 0.55,
+    "rear_three_quarter": 0.55, "back": 0.5,
     "three_quarter": 0.65, "face_anchor": 0.7, "outfit": 0.5, "turnaround": 0.5, "scene_light": 0.45,
     # G2 跨集记忆锚（memory-sink）：最早定妆锚，最高优先（抗 EntityBench 复现间隔衰减）。
     "memory_anchor": 0.78,
@@ -175,17 +182,12 @@ def _face_anchor_paths(reference_group: Mapping[str, Any], reference_atlas: Mapp
 
 
 def _character_library_tier(char: Mapping[str, Any], atlas: Mapping[str, Any]) -> str:
-    value = str(
-        atlas.get("build_tier")
-        or char.get("library_tier")
-        or "core_full"
-    ).strip()
-    if value in {"recurring_standard", "named_minimal", "restricted_partial", "core_full"}:
-        return value
-    if value.startswith("restricted_partial"):
-        return "restricted_partial"
-    # `standard_full` and missing/unknown legacy values retain the old strict contract.
-    return "core_full"
+    record = dict(char)
+    if "library_tier" not in record and atlas.get("build_tier"):
+        record["library_tier"] = atlas.get("build_tier")
+    if character_library_tier_for_record is None:
+        return "core_full"  # safe fallback: never reduce requirements on import damage
+    return character_library_tier_for_record(record)
 
 
 def _is_emotion_bank(expr_paths: Sequence[str]) -> bool:
@@ -227,8 +229,8 @@ def plan_character_in_clip(
     controlnet: List[str] = []
 
     def add_ref(role: str, key: Optional[str] = None) -> None:
-        if role == "three_quarter":
-            path = _base_view_path(atlas, "three_quarter") or _ref_item_path(rg.get(key or role), require_ready=True)
+        if role in {"front", "three_quarter", "side", "rear_three_quarter", "back"}:
+            path = _base_view_path(atlas, role) or _ref_item_path(rg.get(key or role), require_ready=True)
         else:
             path = _ref_item_path(rg.get(key or role), require_ready=True)
         if path:
@@ -251,10 +253,10 @@ def plan_character_in_clip(
     add_ref("outfit")
     # G2 跨集记忆锚（memory-sink）：长间隔再登场/晚集/已漂移角色，把最早定妆记忆锚前置为最高优先锚，
     # 抗 EntityBench 复现间隔衰减。前置=后端预算封顶时最先保留；去重已在 refs 里的同路径。
+    memory_requested = list(dict.fromkeys(str(p or "").strip() for p in memory_refs if str(p or "").strip()))
     memory_injected: List[Dict[str, Any]] = []
     _have = {r["path"] for r in refs}
-    for _mp in memory_refs:
-        mp = str(_mp or "").strip()
+    for mp in memory_requested:
         if mp and mp not in _have:
             memory_injected.append({"role": "memory_anchor", "path": mp,
                                     "strength_hint": STRENGTH["memory_anchor"]})
@@ -293,6 +295,14 @@ def plan_character_in_clip(
             add_ref("back")
         else:
             missing.append("背身参考（过肩/背身镜）")
+    if "rear_three_quarter" in need_extra or "rear_3q" in need_extra:
+        rear_path = _base_view_path(atlas, "rear_three_quarter") or _ref_item_path(
+            rg.get("rear_three_quarter"), require_ready=True
+        )
+        if rear_path:
+            add_ref("rear_three_quarter")
+        else:
+            missing.append("后3/4参考（后侧动作/过肩/回身镜）")
 
     # 多人同框 → 控制网锁站位（正交叠加：控制网锁站位、参考锁身份），仅多参考后端且非已注册主体时建议
     if multi and bool(profile.get("multi_reference")) and tier in {"reference_group", "multi_reference"}:
@@ -329,6 +339,17 @@ def plan_character_in_clip(
     if isinstance(max_refs, int) and max_refs > 0 and len(refs) > max_refs:
         dropped_refs = refs[max_refs:]
         refs = refs[:max_refs]
+    selected_paths = {str(row.get("path") or "") for row in refs}
+    memory_consumed = [path for path in memory_requested if path in selected_paths]
+    memory_dropped = [path for path in memory_requested if path not in selected_paths]
+    if memory_requested and not memory_consumed:
+        missing.append("跨集记忆锚未进入本镜实际参考包；不得只在侧车声称已重注入")
+    elif memory_dropped:
+        missing.append(
+            "跨集记忆锚未全部进入实际参考包（被预算丢弃 "
+            + "、".join(memory_dropped)
+            + "）；重选参考或拆镜"
+        )
     reference_budget = {
         "limit": max_refs if isinstance(max_refs, int) and max_refs > 0 else None,
         "requested": requested_ref_count,
@@ -412,7 +433,10 @@ def plan_character_in_clip(
         "native_subject_action": native_action,
         "escalation": escalation,
         "needs_action": needs_action,
-        "memory_anchor_reinjected": bool(memory_injected),
+        "memory_anchor_reinjected": bool(memory_consumed),
+        "memory_anchor_refs_requested": memory_requested,
+        "memory_anchor_refs_consumed": memory_consumed,
+        "memory_anchor_refs_dropped": memory_dropped,
         "pose_gaze_directive": pose_gaze_directive,
         "prompt_required": prompt_required,
     }
@@ -833,35 +857,195 @@ def _pick_form(char: Mapping[str, Any], clip_text: str) -> Dict[str, Any]:
     return forms[0]
 
 
-def _load_memory_anchor_map(root: Path, ep: str) -> Dict[str, List[str]]:
-    """读 n2d-identity 的 memory_anchor_plan_<集>.json（文件契约·跨 skill 不 import），
-    返回 {drift_char_key: 记忆锚参考路径} 仅含标 reinject 的角色。缺文件→{}（无记忆锚=现状）。"""
+def _file_sha256(path: Path) -> str:
+    try:
+        h = hashlib.sha256()
+        with path.open("rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return ""
+
+
+def _memory_anchor_contract(root: Path, ep: str) -> Tuple[Dict[str, List[str]], Dict[str, Any]]:
+    """读并 fail-closed 核验 memory_anchor_plan。
+
+    只有当 v3 plan.available 严格为 true、registry/drift/storyboard 三个当前文件都可读且
+    SHA 与 source_fingerprint 精确一致、每条 reinject 的每个 reference 都是真实文件时，
+    才返回可消费 memory_map。任一项失败则 map={} ，但保留逐项证据供 gate 独立核销。
+    """
     path = root / "生产数据" / f"memory_anchor_plan_{ep}.json"
+    rel_path = str(path.relative_to(root))
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
-        return {}
-    out: Dict[str, List[str]] = {}
-    for r in (data.get("rows") or []) if isinstance(data, Mapping) else []:
-        if isinstance(r, Mapping) and r.get("reinject"):
-            key = str(r.get("char", "")).strip()
-            if key:
-                out[key] = [str(p).strip() for p in (r.get("memory_anchor_refs") or []) if str(p).strip()]
-    return out
+        return {}, {
+            "status": "missing",
+            "available": False,
+            "path": rel_path,
+            "sha256": "",
+            "required_rows": 0,
+            "required_char_keys": [],
+            "consumed_char_keys": [],
+            "consumed_clip_ids_by_char": {},
+            "missing_reference_rows": [],
+            "missing_reference_files": {},
+            "validated_reference_sha256_by_char": {},
+            "errors": ["memory_anchor_plan_missing"],
+            "source_fingerprint": {},
+            "current_source_fingerprint": {},
+        }
+    errors: List[str] = []
+    if not isinstance(data, Mapping) or data.get("kind") != "n2d_memory_anchor_plan":
+        errors.append("kind_invalid")
+        data = data if isinstance(data, Mapping) else {}
+    try:
+        plan_version = int(data.get("version") or 0)
+    except (TypeError, ValueError):
+        plan_version = 0
+    if plan_version < 3:
+        errors.append("plan_version_legacy")
+    if str(data.get("status") or "").strip().lower() != "ready":
+        errors.append("plan_status_not_ready")
+    available = data.get("available") is True
+    if not available:
+        errors.append("plan_available_not_true")
+    if str(data.get("episode") or "") != ep:
+        errors.append("episode_mismatch")
+    source = data.get("source_fingerprint") if isinstance(data.get("source_fingerprint"), Mapping) else {}
+    current_registry = _file_sha256(root / "出图" / "共享" / "identity_registry.json")
+    current_drift = _file_sha256(root / "生产数据" / "identity_drift_report.json")
+    current_storyboard = _file_sha256(root / "脚本" / ep / "storyboard.json")
+    source_registry = str(source.get("identity_registry_sha256") or "").strip()
+    source_drift = str(source.get("identity_drift_report_sha256") or "").strip()
+    source_storyboard = str(source.get("storyboard_sha256") or "").strip()
+    if not current_registry:
+        errors.append("identity_registry_missing_or_unreadable")
+    elif not source_registry:
+        errors.append("identity_registry_sha256_missing")
+    elif source_registry != current_registry:
+        errors.append("identity_registry_sha256_stale")
+    if not current_drift:
+        errors.append("identity_drift_report_missing_or_unreadable")
+    elif not source_drift:
+        errors.append("identity_drift_report_sha256_missing")
+    elif source_drift != current_drift:
+        errors.append("identity_drift_report_sha256_stale")
+    if not current_storyboard:
+        errors.append("storyboard_missing_or_unreadable")
+    elif not source_storyboard:
+        errors.append("storyboard_sha256_missing")
+    elif source_storyboard != current_storyboard:
+        errors.append("storyboard_sha256_stale")
+    raw_rows = data.get("rows")
+    if not isinstance(raw_rows, list):
+        errors.append("rows_invalid")
+        raw_rows = []
+    rows = [
+        row for row in raw_rows
+        if isinstance(row, Mapping) and row.get("reinject") is True
+    ]
+    memory_map: Dict[str, List[str]] = {}
+    missing_refs: List[str] = []
+    missing_files: Dict[str, List[str]] = {}
+    validated_sha: Dict[str, Dict[str, str]] = {}
+    required_keys: List[str] = []
+    for row in rows:
+        key = str(row.get("char") or "").strip()
+        if not key:
+            errors.append("reinject_row_char_missing")
+            continue
+        if key in required_keys:
+            errors.append(f"reinject_row_duplicate:{key}")
+            continue
+        required_keys.append(key)
+        raw_refs = row.get("memory_anchor_refs")
+        refs = [str(p).strip() for p in raw_refs] if isinstance(raw_refs, list) else []
+        refs = list(dict.fromkeys(p for p in refs if p))
+        if not refs:
+            missing_refs.append(key)
+            errors.append(f"memory_anchor_refs_missing:{key}")
+            continue
+        valid_refs: List[str] = []
+        missing_for_key: List[str] = []
+        sha_for_key: Dict[str, str] = {}
+        for rel in refs:
+            ref_path = Path(rel).expanduser()
+            if not ref_path.is_absolute():
+                ref_path = root / ref_path
+            sha = _file_sha256(ref_path) if ref_path.is_file() else ""
+            if not sha:
+                missing_for_key.append(rel)
+                errors.append(f"memory_anchor_ref_missing:{key}:{rel}")
+                continue
+            valid_refs.append(rel)
+            sha_for_key[rel] = sha
+        if missing_for_key:
+            missing_refs.append(key)
+            missing_files[key] = missing_for_key
+        if valid_refs:
+            memory_map[key] = valid_refs
+            validated_sha[key] = sha_for_key
+    status = "invalid" if errors or missing_refs else "ready"
+    contract = {
+        "status": status,
+        "available": available,
+        "path": rel_path,
+        "sha256": _file_sha256(path),
+        "required_rows": len(rows),
+        "required_char_keys": sorted(required_keys),
+        "consumed_char_keys": [],
+        "consumed_clip_ids_by_char": {},
+        "missing_reference_rows": sorted(set(missing_refs)),
+        "missing_reference_files": {
+            key: sorted(values) for key, values in sorted(missing_files.items())
+        },
+        "validated_reference_sha256_by_char": {
+            key: dict(sorted(values.items())) for key, values in sorted(validated_sha.items())
+        },
+        "errors": errors,
+        "source_fingerprint": dict(source),
+        "current_source_fingerprint": {
+            "identity_registry_sha256": current_registry,
+            "identity_drift_report_sha256": current_drift,
+            "storyboard_sha256": current_storyboard,
+        },
+    }
+    return (memory_map if status == "ready" else {}), contract
+
+
+def _memory_match_for(
+    mem_map: Mapping[str, List[str]], cid: str, name: str, asset_key: str
+) -> Tuple[str, List[str]]:
+    """精确对齐 clip 角色与 drift key，禁止子串串绑。
+
+    允许：asset_key/cid/name 整值 exact，或 key 以 ``cid/`` / ``name/`` 开头。
+    不允许：``cid in key`` / ``name in key``；因此 CHAR_1 绝不会命中 CHAR_10。
+    """
+    cid = str(cid or "").strip()
+    name = str(name or "").strip()
+    asset_key = str(asset_key or "").strip()
+    for candidate in dict.fromkeys(value for value in (asset_key, cid, name) if value):
+        if candidate in mem_map:
+            return candidate, list(mem_map[candidate])
+    prefix_matches: List[Tuple[str, List[str]]] = []
+    for raw_key, refs in mem_map.items():
+        key = str(raw_key or "").strip()
+        if (cid and key.startswith(cid + "/")) or (name and key.startswith(name + "/")):
+            prefix_matches.append((key, list(refs)))
+    # A cid/name-only fallback is safe only for a single registered form.
+    # With multiple forms, choosing the first dictionary row would silently
+    # inject the wrong costume/state memory; leave it unconsumed so the gate
+    # forces an exact storyboard form binding.
+    if len(prefix_matches) == 1:
+        return prefix_matches[0]
+    return "", []
 
 
 def _memory_refs_for(mem_map: Mapping[str, List[str]], cid: str, name: str, asset_key: str) -> List[str]:
-    """把 clip 角色（id/name/form asset_key）对到 memory_anchor_plan 的 drift key。宽松匹配：
-    精确命中 id/name/asset_key，或 drift key 以 'id/' 形态前缀（asset_key 'CHAR_X/形态'）含 id/name。"""
-    cid, name, asset_key = str(cid or ""), str(name or ""), str(asset_key or "")
-    for key, refs in mem_map.items():
-        if key in {cid, name, asset_key}:
-            return refs
-        if cid and (key.startswith(cid + "/") or cid in key):
-            return refs
-        if name and name in key:
-            return refs
-    return []
+    """向后兼容的 refs-only 包装；新消费证据用 `_memory_match_for` 保留命中 key。"""
+    return _memory_match_for(mem_map, cid, name, asset_key)[1]
 
 
 def plan_shared_assets(root: Path, chars: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
@@ -947,7 +1131,7 @@ def plan_shared_assets(root: Path, chars: Sequence[Mapping[str, Any]]) -> Dict[s
 def build_plan(root: Path, ep: str) -> Dict[str, Any]:
     chars = load_character_forms(root)
     clips = fdr.load_clips(root, ep)
-    memory_map = _load_memory_anchor_map(root, ep)
+    memory_map, memory_contract = _memory_anchor_contract(root, ep)
     backend = fdr.project_default_backend(root)
     profile = fdr.backend_profile(backend)
     notes: List[str] = []
@@ -958,6 +1142,21 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
 
     clip_plans: List[Dict[str, Any]] = []
     action_required: List[Dict[str, Any]] = []
+    core_present = any(_CORE_SCOPE_RE.search(str(char.get("scope") or "")) for char in chars)
+    if core_present and memory_contract.get("status") != "ready":
+        action_required.append({
+            "kind": "memory_anchor_contract",
+            "issue": memory_contract.get("status"),
+            "errors": memory_contract.get("errors") or [],
+            "fix": f"先运行 n2d-identity memory_anchor.py <作品根> {ep}，再重建 reference_plan。",
+        })
+    for char_key in memory_contract.get("missing_reference_rows") or []:
+        action_required.append({
+            "kind": "memory_anchor_missing_reference",
+            "char": char_key,
+            "issue": "reinject_row_has_no_ready_anchor",
+            "fix": "先补齐并验收该角色最早定妆锚，再重跑 memory_anchor.py/reference_planner.py。",
+        })
     need_registration: set = set()
     need_lora: set = set()
     multi_subject_actions: List[Dict[str, Any]] = []
@@ -995,11 +1194,24 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             deltas = variation_deltas(lens, text, form.get("angle_policy") or {},
                                       parsed["shot_size"], parsed["expression_span"])
             cf = {"id": c["id"], "name": c["name"], "form": form.get("form"),
+                  "scope": c.get("scope"),
+                  "narrative_tier": c.get("narrative_tier"),
+                  "library_tier": c.get("library_tier") or form.get("library_tier"),
+                  "planned_episode_count": c.get("planned_episode_count"),
+                  "face_policy": form.get("face_policy") or c.get("face_policy"),
+                  "restricted_partial": form.get("restricted_partial") or c.get("restricted_partial"),
+                  "restricted_partial_contract": form.get("restricted_partial_contract") or c.get("restricted_partial_contract"),
                   "reference_group": form.get("reference_group") or {},
                   "reference_atlas": form.get("reference_atlas") or {},
                   "angle_policy": form.get("angle_policy") or {}}
-            mem_refs = _memory_refs_for(memory_map, c["id"], c["name"], str(form.get("asset_key", "")))
+            memory_char_key, mem_refs = _memory_match_for(
+                memory_map, c["id"], c["name"], str(form.get("asset_key", ""))
+            )
             p = plan_character_in_clip(cf, deltas, multi, profile, tier, scope_is_core, memory_refs=mem_refs)
+            if memory_char_key:
+                p["memory_anchor_required_char_key"] = memory_char_key
+                if p.get("memory_anchor_refs_consumed"):
+                    p["memory_anchor_char_key"] = memory_char_key
             char_plans.append(p)
             if p["needs_action"]:
                 action_required.append({"clip": clip_id, "char_id": p["char_id"],
@@ -1048,6 +1260,44 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             action_required.append(action)
             multi_subject_actions.append(action)
         clip_plans.append(clip_plan)
+
+    # G2 消费证据必须从最终 clip plan 反推，不信上游 row 的 reinject 声明。
+    # 只有真实进入 recommended_references（含与常规 front 同路径去重的情况）
+    # 才记 consumed；并保留逐角色的真实 clip ids，供 gate 独立核销。
+    consumed_clip_ids_by_char: Dict[str, List[str]] = {}
+    for clip_plan in clip_plans:
+        clip_id = str(clip_plan.get("clip_id") or "").strip()
+        for char_plan in clip_plan.get("characters") or []:
+            if not isinstance(char_plan, Mapping) or not char_plan.get("memory_anchor_refs_consumed"):
+                continue
+            key = str(char_plan.get("memory_anchor_char_key") or "").strip()
+            if not key:
+                continue
+            ids = consumed_clip_ids_by_char.setdefault(key, [])
+            if clip_id and clip_id not in ids:
+                ids.append(clip_id)
+    consumed_clip_ids_by_char = {
+        key: values for key, values in sorted(consumed_clip_ids_by_char.items())
+    }
+    consumed_char_keys = sorted(consumed_clip_ids_by_char)
+    required_char_keys = sorted(
+        str(key) for key in (memory_contract.get("required_char_keys") or []) if str(key)
+    )
+    unconsumed_char_keys = sorted(set(required_char_keys) - set(consumed_char_keys))
+    memory_contract = {
+        **memory_contract,
+        "required_char_keys": required_char_keys,
+        "consumed_char_keys": consumed_char_keys,
+        "consumed_clip_ids_by_char": consumed_clip_ids_by_char,
+        "unconsumed_char_keys": unconsumed_char_keys,
+    }
+    if memory_contract.get("status") == "ready" and unconsumed_char_keys:
+        action_required.append({
+            "kind": "memory_anchor_unconsumed",
+            "chars": unconsumed_char_keys,
+            "issue": "required_memory_anchor_not_consumed_by_any_real_clip_plan",
+            "fix": "修正角色/形态 key 映射或 storyboard 出场绑定，再重建reference_plan。",
+        })
 
     # G3 项目级建议：多人同框是 2026 仍未解的崩脸/串脸高发区（attention leakage·swap/blend）。
     # 默认 GPT Image 2 等 multi_reference 后端在 2026 多角色一致性 benchmark 无专门优势；reference-library /
@@ -1108,8 +1358,14 @@ def build_plan(root: Path, ep: str) -> Dict[str, Any]:
             ),
             "memory_anchor_reinjected_clips": sum(
                 1 for cp in clip_plans
-                if any(p.get("memory_anchor_reinjected") for p in cp.get("characters") or [])
+                if any(p.get("memory_anchor_refs_consumed") for p in cp.get("characters") or [])
             ),
+            "memory_anchor_contract": memory_contract,
+            # 顶层镜像便于 gate/报表无需解释内嵌 contract 就能逐项核销；
+            # 内嵌 memory_anchor_contract 中同时保留这三项作自包含证据。
+            "required_char_keys": required_char_keys,
+            "consumed_char_keys": consumed_char_keys,
+            "consumed_clip_ids_by_char": consumed_clip_ids_by_char,
             "tagged_multi_image_clips": sum(
                 1 for cp in clip_plans
                 if any((p.get("reference_feed") or {}).get("mode") == "tagged_multi_image"

@@ -3,136 +3,183 @@ name: comic-review
 description: 画漫画审查阶段。Use when reviewing comic scripts, name boards, layouts, traditional ink/tone/effects coverage, panel art, lettering, bilingual lettering, empty bubbles, long-scroll exports, readability, panel order, text overlap, hand/foot anatomy, character consistency, source adaptation faithfulness, platform deliverable readiness, or rework lists for projects under 创作区/画漫画. Triggers 漫画审查, 漫画质检, 阅读顺序, 遮挡, 角色一致性, 手脚错乱, 空气泡, 双语嵌字, 台词太多, 长图检查, ネーム检查, 网点检查, 效果线检查, 发布前检查, comic-review.
 ---
 
-# comic-review — 漫画审查与返修
+# comic-review — 漫画审查、阶段 Gate 与发布裁决
 
-审查漫画是否读得顺、看得清、角色不漂、文字不挡、导出规格可用。它不生产新内容，只产问题清单、返修建议和发布前判断。`合规用途=demo学习/自用草稿` 时，字体/素材授权 pending 只记录在 notes，不作为问题；切到发布候选、商用或授权交付时才启用发布前授权 gate。
+comic-review 负责证明“当前版本是否可以继续”，不负责代写脚本、改图或代替人签收。审查分三层：确定性合同 gate、启发式视觉/叙事告警、人工责任签收。最终再由 `release_verdict.py` 把技术完成、生产完成和公开发布就绪分开。
+
+## 证据规则
+
+- **可 block 的确定性事实**：缺文件、非法 schema、合同必填字段缺失、章节/source/panel 覆盖不闭合、角色 binding 或 registry 状态不可解析、真实参考缺失、审批/签收缺失、SHA stale、job 与当前合同不一致、缺 panel、post-QC 确定性失败、manifest 或渲染物缺失、目标发布 profile 的权利条件不满足。
+- **只能 warn/info 的启发式信号**：节拍关键词、台词/构图重复相似度、CCIP/embedding、face/hair/outfit 色彩指纹、dHash、黑白灰/线宽代理、场景布局指纹、调色离群和多模态模型判断。即使来源报告标成 block，gate 也应按启发式置信度降级。
+- **人审签收不能覆盖确定性缺件**：可签收计划内光效、遮挡、低机位、换装、蒙太奇或像素代理误报；不能批准不存在的图片、缺参考、错误 schema、失效合同或明显使用了错误人物/服装。
+- **所有签收绑定当前证据**：图片、任务或上游内容变化后，旧 SHA receipt 自动失效。
 
 ## 输入
 
-- `_进度.md`、`_设置.md`。
-- `脚本/第N话/panel_script.json`。
-- `排版/第N话/layout.json`、`lettering.json`、`export_manifest.json`。
-- 可选 `排版/第N话/name_board.json` 和 `出图/第N话/finishing/finishing_plan.json`。
-- `出图/第N话/panels/`。
-- 可选源本、故事圣经和共享参考。
+- `_设置.md`、`_meta.json`、`_进度.md`。
+- 开发包、`split_blueprint.json`、本话 `source_semantics.json` 和 `panel_script.json`。
+- `identity_registry.json`、model-pack report/signoff、共享参考图。
+- `name_board.json`、`layout.json`、`finishing_plan.json`。
+- reference plan、`panel_jobs.json`、panel PNG 与逐格 post-QC。
+- `lettering.json`、`export_manifest.json` 和真实渲染物。
 
 ## 输出
 
-- `生产数据/comic_review_第N话.json`。
-- `生产数据/comic_review_第N话.md`。
-- `生产数据/comic_style_consistency_第N话.json/md` 与 `consistency_findings_style_第N话.json`：面板风格一致性、场景族群基线、调色离群、拼贴/分栏/外框嫌疑和生成配方一致性 findings。
-- `生产数据/comic_character_consistency_第N话.json/md` 与 `consistency_findings_character_第N话.json`：角色参考图对本话面板的并排复核、CCIP 身份快筛（可用时）、face/hair/outfit 指纹提示和返修目标。
-- `生产数据/comic_scene_prop_consistency_第N话.json/md`：场景锚组 contact sheet、组内布局指纹离群、`PROP_/SYS_/FX_` 并排复核与参考缺口（LOC_/PROP_ 的图像级覆盖）。
-- `生产数据/comic_vlm_judge_tasks_第N话.json` / `comic_vlm_judge_verdicts_第N话.json`：CANVAS 三轴 VLM 并排判定任务包与 agent 裁决（脸/服装体型、背景连续、道具身份位置；sha 绑定，重抽自动失效）。
-- `生产数据/comic_gate_<stage>_第N话.json/md` 与 `gate_findings_<stage>_第N话.json`：`image_preflight` / `image` / `compose` / `review` 阶段 gate 结果，供 `comic-batch` 和人工续跑消费。
-- `生产数据/qa_previews/第N话_panels_contact_sheet.jpg`、`第N话_style_outliers_detail.jpg`、`第N话_character_consistency_contact_sheet.jpg`：风格和角色复核自动生成的人审证据图，用于签收计划内光效、系统特效、动作速度线、构图差异或启发式角色指纹误报。
-- `_进度.md`：人工或机器审查通过后，把 `审查` 标 `✅`；有阻断问题时不回写完成。
+- `生产数据/comic_gate_<stage>_第N话.json/md`：完整 gate 报告。
+- `生产数据/gate_findings_<stage>_第N话.json`：结构化 finding。
+- `生产数据/gate_receipts/<stage>_第N话.json`：绑定 stage 输入 fingerprint、报告 SHA 和 panel jobs SHA 的收据。
+- `生产数据/comic_continuity_audit.json/md`：跨话 entry/delta/exit 确定性审计。
+- `生产数据/comic_style_consistency_第N话.json/md`、`comic_character_consistency_第N话.json/md`、`comic_scene_prop_consistency_第N话.json/md`：视觉一致性证据与返修目标。
+- `生产数据/comic_vlm_judge_tasks_第N话.json` / `comic_vlm_judge_verdicts_第N话.json`：脸/服装体型、背景连续、道具身份位置的并排判定任务与裁决。
+- `生产数据/qa_previews/`：panel、角色、风格 contact sheet 和长图预览。
+- `生产数据/comic_review_第N话.json/md`：综合审查报告。
+- `生产数据/release_verdict_第N话.json/md`：技术/生产/发布状态裁决。
 
-## 怎么跑
+## 阶段 Gate
 
-生成审查报告，不回写进度：
-
-```bash
-python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话
-```
-
-如果报告 `verdict=pass`，可显式允许脚本把 `_进度.md` 的 `审查` 标为 `✅`：
+正式链路按阶段运行；后一个 stage 会复核其依赖的前置合同：
 
 ```bash
-python3 skills/comic-review/scripts/review.py "创作区/画漫画/作品名" --chapter 第1话 --write-progress
+ROOT="创作区/画漫画/作品名"
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage script
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage name
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage layout
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage finishing
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage image_preflight
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage image
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage compose
+python3 skills/comic-review/scripts/gate.py "$ROOT" --chapter 第1话 --stage review
 ```
 
-脚本会刷新 `生产数据/qa_previews/第N话_longstrip_preview.webp`，并检查设置、脚本、排版、嵌字、导出 manifest、一致性报告、权利状态、`lettering_slot_qc` 嵌字槽位接触表和疑似烘焙空白气泡。视觉美术判断仍需人工复核；机检发现的疑似气泡是定位线索，不是像素级最终判决。
+| stage | 确定性验收重点 | 告警/人审重点 |
+|---|---|---|
+| `script` | 生产档位自洽；开发包 strict 通过且 signoff SHA 当前；source trace/合同绑定；visual contract 和跨话状态无矛盾 | 节拍、钩子、软容量、冗余仅提示 |
+| `name` | script 通过；name schema v2、`approved`、审批主体和上游 SHA 当前 | 页流、翻页钩子、格子轻重、气泡优先级 |
+| `layout` | name 通过；layout schema v2、validator、几何 profile、approval SHA 当前 | 破格/跨页/特殊装帧的人工节奏 |
+| `finishing` | 已签收 name/layout；逐格/逐页同序覆盖；上游 SHA 当前 | 黑场、网点、效果线、拟声词的审美作用 |
+| `image_preflight` | registry v2；结构化 bindings；model pack 技术齐套且当前人审签收；reference plan/job 当前；真实引用闭合；后端/profile/compiler 一致 | 节拍、构图重复和像素代理只 warn |
+| `image` | preflight 通过；必需 panel 文件存在；job `ready`；生成合同 SHA 当前；确定性 post-QC 无 block | 风格/角色/场景/道具/画面相似度告警需看原图 |
+| `compose` | image 通过；lettering/manifest 存在；无 missing panels；有真实渲染物；平台 profile 可验证 | 文字密度、留白与疑似气泡需逐页人审 |
+| `review` | compose 通过；综合报告无确定性 block | 阅读、表演、审美、改编效果和告警处置 |
 
-只跑风格一致性机检：
+gate 即使 block 也会写 receipt，因此“文件存在”不等于通过。消费者必须同时检查：`verdict != block` 且 `inputs_fingerprint_sha256` 与当前 stage 输入一致。任一输入变化后重跑相应 stage，不复制旧收据。
+
+`--no-refresh` 只禁止刷新 identity report；不会把旧 style/character 结果当成永久事实。
+
+## Script 与连续性审查
+
+正式 script gate 会运行开发包 strict 检查，并把以下事实作为硬合同：
+
+- 每话 chapter contract 有明确 source mode、读者承诺、冲突、转折、兑现、ending mode 和软 budget。
+- 改编项目的 source spans 文件存在，未说明缺口/重叠被阻断；`source_semantics.json` 绑定当前合同/源 SHA，逐格 source refs 覆盖有效。
+- `panel_script.json.chapter_contract_sha256` 绑定 `split_blueprint.json` 中当前本话合同。
+- 长线合同 `entry_state → continuity_delta[] → exit_state` 可计算；每个 transition 有 `entity_id/field/from/to/panel_id/reason`，证据格存在；上一话 exit 与下一话 entry 不矛盾。
+- `visual_contract.scene_anchors`、角色完整性、具体 gaze target、空间布局、光位/冷暖和轴线可执行。
+
+单独运行跨话审计：
 
 ```bash
-python3 skills/comic-review/scripts/style_consistency.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic-review/scripts/continuity_audit.py "$ROOT" --through-chapter 第1话 --write --strict
 ```
 
-该报告使用漫画线自包含的风格一致性口径：同一话必须统一生图模型/渠道、登记风格锚/`style_contract`（`未指定/无/待定` 等占位值不算锚），并用面板风格指纹检查画风/照片感/细节密度离群；全话基线之外还会按场景族群复核，避免把脚本计划内的日景、夜景、山路、水底或蒙太奇误判成画风漂移。同场景会检查冷暖/品绿调色横跳，并检测疑似内部分栏、拼贴 gutter、外框/截图边。另有三层新增检查：① **跨话基准回归**——首话（或 `--rebaseline` 指定话）+ 风格锚图的指纹持久化到 `出图/共享/style_baseline.json`，后续各话整体指纹与基准比，抓"整话一起漂"（换模型版本/风格锚失效，话内相对比较发现不了）；② **相邻格连续性**——同场景锚在阅读顺序上相邻的两格冷暖/亮度跳变（光位翻转代理）；③ **黑白灰量化**——黑场占比与线宽代理（边缘密度）对话内中位的离群（网点密度/黑场/线宽口径不统一）。三层均 warn-only。`block` 回 `comic-image` 重抽，`warn` 必须人审签收或重抽。
+## 身份、多视图和逐格引用审查
 
-只跑角色一致性机检：
+`image_preflight` 不把“有一张角色图”当长期一致性完成。它会复核：
+
+- `identity_registry.json` 为 schema v2；角色 form/outfit/expression/state/default binding 合法。
+- 每个具名角色都有本格 `character_bindings[]`；未知或互相冲突的 ID 直接阻断 job。
+- 角色按 `library_tier` 补齐必需视图，确定性技术检查没有重复图冒充、错误视图、占位图或比例基线问题。
+- 核心多视图有当前 SHA 的人工并排签收；任一视图变化后 signoff stale。
+- LOC、常驻 PROP、服装和关键 VFX/STYLE 引用已登记且有真实图片。
+- reference plan 先保证每个具名角色至少一张身份锚，再保留场景/道具；超过后端附件上限时明确拆格或分区合成。
+- panel jobs 实际消费 reference plan，记录选中图片 SHA、`panel_plan_sha256`、`execution_input_sha256` 和 `consumed_contracts`。
+
+多视图技术检查和签收由 `comic-identity` 执行；comic-review 只验证其结果是否当前有效。
+
+## 视觉一致性与启发式告警
+
+可分别运行：
 
 ```bash
-python3 skills/comic-review/scripts/character_consistency.py "创作区/画漫画/作品名" --chapter 第1话
+python3 skills/comic-review/scripts/style_consistency.py "$ROOT" --chapter 第1话
+python3 skills/comic-review/scripts/character_consistency.py "$ROOT" --chapter 第1话
+python3 skills/comic-review/scripts/scene_prop_consistency.py "$ROOT" --chapter 第1话
 ```
 
-该报告优先产出并排人审证据：每个 `CHAR_`/`MON_` 的共享参考图放在同一张 contact sheet 里，旁边是本话所有出场 panel；`characters` 里没有 ref ID 也匹配不到 registry display_name 的裸名字会记 `named_character_without_ref` warn（一致性机检覆盖不到的角色必须显式登记）。机检分三层：① **CCIP 动漫身份 embedding 快筛**（安装 `dghs-imgutils` 时启用；同角色判定阈值 0.178，是动漫脸的事实标准——ArcFace 系人脸模型对动漫脸不可用；缺依赖时明示降级并给安装建议）；② Pillow face / hair / outfit 裁剪指纹（色彩分布代理，换脸同色调会漏报，仅作次级提示）；③ **CANVAS 三轴 VLM 并排判定**——`vlm_judge.py` 生成 `生产数据/comic_vlm_judge_tasks_第N话.json`（脸/服装体型、背景连续、道具身份位置三轴），由多模态 agent 看图逐条裁决写回 verdict 文件，只做相对排序；score<=2 或 suspect 转 warn，裁决绑定图像 sha、重抽自动失效。全部像素/嵌入提示只能 `warn`，最终判定仍是并排人审。
+- 风格报告检查生成配方、风格锚、场景族群、相邻格冷暖/亮度、黑白灰/线宽代理、拼贴 gutter/外框嫌疑和跨话 baseline。文件缺失与配方矛盾可确定性处理；像素离群只告警。
+- 角色报告把每个 CHAR/MON 参考与出场 panel 并排，CCIP 可用时做动漫身份 embedding 快筛，Pillow 指纹做辅助。公开 fallback 和项目内自标定都只驱动 warn，不给“相似度分数”硬阻断权。
+- 场景/道具报告按 LOC/PROP/VFX/OUTFIT 生成 contact sheet 和布局指纹；引用缺失是确定性问题，布局/色彩偏离是人审线索。
+- 多模态裁决只有在 panel SHA、task SHA、全部 reference SHA 和 evaluator `model/version` 与当前任务完全一致时才有效；重抽或换参考后旧 verdict 自动忽略。
 
-正式出图或交付前跑 gate：
+如果有人工金标集，可生成项目阈值登记：
 
 ```bash
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image_preflight
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage image
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage compose
-python3 skills/comic-review/scripts/gate.py "创作区/画漫画/作品名" --chapter 第1话 --stage review
+python3 skills/comic-review/scripts/calibrate_thresholds.py "$ROOT" --write --json
 ```
 
-`image_preflight` 在付费/批量出图前阻断缺共享参考、长线多视图缺口、缺风格锚、缺 `visual_contract`、逐格缺人物完整性/眼神目标、逐格缺场景布局/光位/轴线、`LOC_` 未登记、无理由看镜头、多人同格缺站位/遮挡/接触点、混用模型/渠道等问题；它还会用 `comic-image` 的 `build_panel_jobs.py --check` 按当前脚本/收尾/风格契约重编提交 prompt 并与落盘出图包比对，改了契约没重建出图包（`panel_jobs_stale_contract`）或脚本新增格缺 job（`panel_jobs_missing_panels`）都阻断。`image` 在出图后阻断缺图、`post_qc=block`、风格/角色一致性 block，以及成图生成时哈希与当前提交契约不一致的格（`panel_generated_under_stale_contract`，防手工把旧图改回 ready）；`compose` 追加导出 manifest 和渲染物检查；`review` 追加完整 `comic-review` 报告。`comic-batch` 出图前后会自动跑对应 gate。风格锚判定不认 `未指定/无/待定` 等占位值。
+只有达到脚本规定的正/负样本数量和 balanced accuracy 才标为 validated；登记仍是 `warn_only`。样本或 gold set SHA 变化后旧校准失效。
 
-风格一致性必须区分“画法漂移”和“导演调色变化”：脚本显式 `style_bucket`（如梦境冷灰/现实暖白）且同组至少 2 格、组内指纹一致时，可覆盖全话色调造成的 global outlier；仅由地点名称推断的分组最多清除 warn，不能洗掉 block。显式分组不代表自动放行，组内自身不一致仍照常阻断。
+## 人审告警签收
 
-若人审确认离群来自计划内画面差异（如开场空镜、巨物压迫、系统金光、梦境/蒙太奇），可写 `生产数据/style_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `style_consistency.py`。签收记录必须至少匹配 `code + panel_id` 或 `code + artifact`，并写明 `reason` 与 `evidence`；**建议写 `artifact_sha256`（当前图像的 sha256）**——带 sha 的签收在该格重抽后自动失效，不带 sha 的签收会被注记"重抽不失效"风险。**block 级机检 finding 不可签收**（拼贴 gutter/外框/缺图等硬证据必须返修）。脚本会把生效的 warn finding 降为 `info`，同时保留原始 `machine_severity`。
+三类兼容签收文件：
 
-若 face/hair/outfit 指纹低分来自低机位、遮挡、泥污、强光、动作变形或剧情换装等计划内角色状态，可写 `生产数据/character_consistency_acceptance_第N话.json` 做带证据签收，再重跑 `character_consistency.py` 或 gate。签收记录至少匹配 `code + panel_id` 或 `code + artifact`，可选再加 `character_id`；**建议写 `artifact_sha256`**——带 sha 的签收在该格重抽后自动失效。**block 级（缺图/缺参考等 deterministic finding）不可签收**。脚本会把生效的 warn finding 降为 `info`，同时保留原始 `machine_severity`。签收不能替代缺定妆图、缺角色 DNA、明显换脸或主服装设定错误的返修。
+- `生产数据/style_consistency_acceptance_第N话.json`
+- `生产数据/character_consistency_acceptance_第N话.json`
+- `生产数据/raw_bubble_acceptance_第N话.json`
 
-若“疑似烘焙空白气泡”其实是天空、雾光、宣纸留白或系统绘卷等计划内亮部，可写 `生产数据/raw_bubble_acceptance_第N话.json` 做人审签收。`accepted_findings[]` 至少包含 `{"code":"raw_bubble_candidate","panel_id":"Pxxx","artifact_sha256":"...","reason":"...","evidence":"..."}`；重跑 `comic-review` 后对应项会降为 `info`。带 SHA 的签收在该格重抽后自动失效；旧记录未带 SHA 时仅为兼容性签收并应补齐，禁止把旧图判断永久套给新图。
+每个 accepted finding 至少写 `code`、`panel_id` 或 artifact、`reason`、`evidence`，并应写当前 `artifact_sha256`；角色告警可再写 `character_id`。带 SHA 的签收在重抽后自动失效。不带 SHA 的旧签收只作兼容记录，应补齐证据。
 
-若 `panel_qc` 已带 `manual_review.verdict=pass`，gate 会把该格落盘 `post_qc=warn` 作为已签收误报降为 `info`；没有 panel_qc 人审记录时，仍需 `raw_bubble_acceptance_第N话.json` 或重抽该格。
+`panel_qc.manual_review.verdict=pass` 只覆盖该格 post-QC 的启发式 warn；不能改变文件损坏、缺参考或合同 stale。
 
-## 审查维度
+## 综合审查与进度
 
-| 维度 | 检查点 |
-|---|---|
-| 阅读顺序 | 视线是否自然，页漫/条漫方向是否一致 |
-| 叙事闭环 | 本话是否有钩子、冲突、推进、转折或收束 |
-| 分格密度 | 单格信息是否过载，台词是否过长 |
-| 画面可读性 | 主体、表情、动作、道具是否清楚 |
-| 气泡遮挡 | 是否挡脸、手、关键动作、重要道具 |
-| 角色一致性 | 脸、发型、服装、标志物是否跨格稳定 |
-| 人物完整性 | 头发、脸、手、脚、服装、标志物和关键道具是否完整可读；动作格是否裁掉叙事必要部位 |
-| 眼神/视线一致性 | `gaze_target`、`eyeline_direction` 是否存在且具体；角色是否看向戏内对象而不是“坚定眼神/看前方/无理由看镜头” |
-| 嵌字遮挡 | 不只检查越界/换行：对白框、旁白框、SFX 是否遮脸、身份标志，或遮掉 `character_integrity` 声明的关键手脚、步态、接触点和剧情道具；必须结合槽位 QC 与逐页成品复核 |
-| 场景连续性 | `scene_anchor_id` 是否登记到 `visual_contract.scene_anchors`；空间布局、主光方向/冷暖、轴线视线、常驻物件和前后景层级是否跨格继承 |
-| 站位/遮挡一致性 | 多人同格是否写清左右、前后景、遮挡、接触点和视线轴线，避免正反打或动作格空间关系漂移 |
-| 传统工艺层 | 启用 `传统原稿流程` 时，是否有 name board、原稿安全区、墨线/黑场/网点/效果线计划，以及出图 job 是否消费 finishing plan |
-| 角色指纹/并排证据 | `CHAR_` 参考图是否与本话出场 panel 并排可审，face/hair/outfit 启发式是否提示异常 |
-| 风格一致性 | 生图模型/渠道是否统一，风格锚是否登记，面板是否出现照片感/色彩/细节密度离群，场景族群内是否自洽，同场景是否冷暖调色横跳，是否出现多面板拼贴 gutter 或外框/截图边 |
-| 长线定妆 | `定妆级别=长线专门定妆` 时，常驻人物是否补齐 front / three_quarter / side / back / face |
-| 高一致性长线口径 | `角色一致性硬闸=开启` 或 `年龄形态继承=开启`（按设置值显式判断，长值策略 token 兼容）时，是否登记风格锚、角色 DNA、禁漂移项和形态继承策略；硬闸开启同时强制长线多视图缺口阻断 |
-| 手脚/动作解剖 | 脚尖、脚步、踩踏、跪地、武器落点是否被画成手或漂浮肢体 |
-| 文字质量 | 错字、标点、语气、拟声词是否统一；`文字语言` 与 manifest、`lettering.json` 是否一致 |
-| 空气泡 | 没有文字的气泡/旁白框是否已删除或回图像阶段重出 |
-| 导出规格 | 长图尺寸、可选分段、缺图、manifest 是否齐全 |
-| 合规发布 | 字体、素材、源本、第三方资产状态是否可追溯 |
+生成报告默认不回写进度：
 
-详细 checklist 见 `references/review_checklist.md`。
+```bash
+python3 skills/comic-review/scripts/review.py "$ROOT" --chapter 第1话
+```
 
-## 处理结论
+只有报告 `verdict=pass` 且用户明确要求，才允许：
 
-- `pass`：可进入发布或归档。
-- `revise`：有问题但可局部修。
-- `block`：阅读顺序、缺图、严重遮挡、角色大漂、权利不明等问题阻断发布。
+```bash
+python3 skills/comic-review/scripts/review.py "$ROOT" --chapter 第1话 --write-progress
+```
 
-对每个问题写明：
+审查至少覆盖阅读顺序、叙事闭环、气泡/文字遮挡、角色和服装、人物完整性、眼神、场景/轴线、手脚与道具接触、传统工艺层、语言、导出规格和权利可追溯。详细项见 `references/review_checklist.md`。
+
+每个 finding 必须有：
 
 - `severity`：block / warn / info。
-- `artifact`：具体文件或 panel_id。
-- `reason`：为什么影响阅读或发布。
-- `return_to`：回 `comic-script` / `comic-name` / `comic-layout` / `comic-finishing` / `comic-image` / `comic-compose`。
+- `artifact`：文件或 panel ID。
+- `reason`：对生产或交付的具体影响。
+- `return_to_stage`：返回哪个裸 skill。
 - `suggested_fix`：最小返修动作。
+- `evidence_family/confidence`：证明它是确定性事实还是启发式线索。
 
-缺 name board 或 finishing plan 默认是 warn/info；角色脸、眼神、场景轴线和共享参考缺口仍按原硬闸处理。
+## 生产完成与发布裁决
+
+综合 review 通过不等于自动可公开发布。运行：
+
+```bash
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile internal --write --json
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile digital \
+  --accept --reviewer "责任编辑" --reason "最终导出物与审查证据复核通过" --write --json
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile digital --write --json
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile print --write --json
+python3 skills/comic/scripts/release_verdict.py "$ROOT" 第1话 --profile commercial --write --json
+```
+
+裁决含：
+
+- `technical_complete`：manifest 和当前真实渲染物完整。
+- `production_complete`：technical complete，且当前 review gate receipt 非 block。
+- `publish_ready_internal/digital/print/commercial`：按 profile 追加权利与最终人审签收。
+
+`digital/print/commercial` 必须由真实签收人显式执行 `--accept --reviewer ... --reason ...`。命令先排除 acceptance 自身之外的发布阻断，再写 `生产数据/release_acceptance_第N话.json`；其 `status/reviewer/approved_at` 有效，`artifacts[]` 与当前全部导出物 `path/sha256` 完全一致，`review_receipt` 也精确绑定当前 review gate receipt。它只记录明确的人审决定，不自动决定、不发布、不回写进度。
 
 ## 不做什么
 
-- 不直接重写脚本或重出图。
-- 不用主观“好看/不好看”当硬阻断；阻断要落到可定位的阅读、画面、文字、导出或合规问题。
-- 不把草稿字体授权当正式发布授权。
-
-## 冗余/节拍/构图重复 advisory 机检（2026-07 落地）
-
-- `image_preflight` gate 自动跑两个编剧层机检（advisory·warn 并入 gate，不阻断付费）：`comic-script/scripts/chapter_beat_audit.py`（首格钩/末格钩/高潮位/格数带/全书拆分蓝图）与本目录 `redundancy_audit.py`（台词同义反复 char-2gram Jaccard≥0.6、同一事实短语 ≥3 格复现、**纯旁白格占比 >50%**=旁白硬转流水账、(场景×角色×景别) 构图重复计划）。实证：金瓶梅第 1 话纯旁白格 78% 被命中。
-- `image` gate 自动跑 `panel_variety.py`：本话全部面板两两 64 位 dHash，非相邻格距离 ≤8 记 `near_duplicate_panels` warn（相邻格微差 ≤4 豁免——连续动作合法）。这是"太相似=重复"的反向告警，补此前一致性机检只抓"太不同=漂移"的盲区。
-- **一致性阈值自标定（character_consistency）**：CCIP 有效阈值 = max(公开 0.178, 本角色定妆组内最大互距)（封顶 0.32·env `COMIC_CCIP_CALIBRATED_CAP`）；face/hair/outfit 色彩指纹地板按定妆组内最差同人对放宽（下限 0.25）。治"固定阈值跨画风必假红"；findings 里 `threshold_source=self_calibrated` 留痕，公开阈值字段保留供审计对照。
+- 不直接重写脚本、替换 layout、重抽 panel 或修改最终成品。
+- 不用“好看/不好看”或未校准分数作硬阻断。
+- 不把草稿字体、素材 pending 或内部 review 冒充公开发布授权。
+- 不因 receipt 文件存在就忽略 verdict 与 SHA freshness。

@@ -27,6 +27,13 @@ assert spec.loader is not None
 spec.loader.exec_module(production_readiness)
 
 
+def _golden_cases() -> list[Path]:
+    """The fixture pack is optional in distributable/trimmed checkouts."""
+    if not FIXTURES.is_dir():
+        pytest.skip(f"optional n2d golden fixture pack is not installed: {FIXTURES}")
+    return sorted(path for path in FIXTURES.iterdir() if path.is_dir())
+
+
 @pytest.fixture(autouse=True)
 def _stable_ffprobe(monkeypatch):
     monkeypatch.setattr(production_readiness.script_supervisor_log, "ffprobe_duration", lambda path: 1.0 if Path(path).is_file() else None)
@@ -44,7 +51,7 @@ def _stage_key(route: dict) -> str:
 
 
 def test_n2d_golden_project_routes_are_stable() -> None:
-    cases = sorted(path for path in FIXTURES.iterdir() if path.is_dir())
+    cases = _golden_cases()
     assert len(cases) == 6
     for root in cases:
         expected = json.loads((root / "生产数据" / "golden_expected.json").read_text(encoding="utf-8"))
@@ -226,7 +233,7 @@ def _enrich_release_evidence(root: Path, episode: str) -> None:
 
 
 def test_n2d_golden_project_release_gates_are_stable(tmp_path: Path) -> None:
-    cases = sorted(path for path in FIXTURES.iterdir() if path.is_dir())
+    cases = _golden_cases()
     assert len(cases) == 6
     for src in cases:
         root = tmp_path / src.name

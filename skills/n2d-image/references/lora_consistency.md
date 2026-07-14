@@ -14,7 +14,7 @@
 
 | 档 | 手段 | 适用 | 成本 |
 |---|---|---|---|
-| **档①** | 参考图派生 + 锚点句（标准三视图定妆组 + 身份锁定句） | **默认·所有入镜角色** | 最低·无 GPU |
+| **档①** | 参考图派生 + 锚点句（按 `library_tier` 的多视图定妆组；`core_full` 为正/前3/4/侧/后3/4/背 + turnaround + 身份锁定句） | **默认·所有入镜角色** | 最低·无 GPU |
 | **档②** | 后端原生主体 ID / 主体库（Seedream Universal Reference / 可灵主体库·Custom Model·Element Library / Sora Cameo / Kling Character ID / Seedance Face Lock / Veo reference controls） | 参考图压不住的复用角色 | 中·无 GPU |
 | **档③** | LoRA（开源 Flux/SDXL，走 `n2d-lora`） | 贯穿几十集核心角 + 前两档压不住 | 最高·云 GPU |
 | **附加** | 表情库（`定妆_<角色>_表情.png` 喜怒哀惊+剧情专属情绪） | 情绪戏多的核心角 opt-in | 低 |

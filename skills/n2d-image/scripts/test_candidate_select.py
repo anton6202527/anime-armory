@@ -199,6 +199,45 @@ def test_apply_pick_rejects_unsafe_source_target(tmp_path):
     assert not (tmp_path.parent / "outside.png").exists()
 
 
+def test_apply_interlock_is_nonwaivable(monkeypatch, tmp_path):
+    seen = []
+    monkeypatch.setattr(cs, "_apply_interlock_targets", lambda *args, **kwargs: [object()])
+    monkeypatch.setattr(
+        cs.cir,
+        "enforce_shared_first_interlock",
+        lambda root, ep, targets=None: seen.append((root, ep, targets)) or False,
+    )
+    assert cs.enforce_apply_shared_first(str(tmp_path), "第1集", [{"clip": "EP01_CLIP01"}]) is False
+    assert seen and seen[0][1] == "第1集" and len(seen[0][2]) == 1
+
+
+def test_main_apply_blocked_does_not_copy_candidate(monkeypatch, tmp_path):
+    report = {
+        "kind": cs.KIND,
+        "version": cs.VERSION,
+        "episode": "第1集",
+        "rows": [{
+            "clip": "EP01_CLIP01",
+            "picked": {"path": "/tmp/candidate.png", "candidate": "candidate_01"},
+            "reroll_needed": False,
+        }],
+    }
+    copied = []
+    monkeypatch.setattr(cs, "build_report", lambda *args, **kwargs: report)
+    monkeypatch.setattr(cs, "enforce_apply_shared_first", lambda *args, **kwargs: False)
+    monkeypatch.setattr(cs, "apply_pick", lambda *args, **kwargs: copied.append(args) or "unexpected.png")
+
+    rc = cs.main([str(tmp_path), "第1集", "--apply", "--no-ledger", "--json"])
+
+    assert rc == 1
+    assert copied == []
+    saved = json.loads(
+        (tmp_path / "生产数据" / "candidate_selection_第1集.json").read_text(encoding="utf-8")
+    )
+    assert saved["apply_blocked"] is True
+    assert saved["applied"] == []
+
+
 def test_apply_pick_records_promotion_event_from_candidate_event(tmp_path):
     cdir = tmp_path / "出图" / "第1集" / "候选" / "EP01_CLIP01"
     cdir.mkdir(parents=True)

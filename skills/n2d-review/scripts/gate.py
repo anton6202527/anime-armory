@@ -51,7 +51,14 @@ assert _BGM_CORE_SPEC is not None and _BGM_CORE_SPEC.loader is not None
 bgm_contract_core = importlib.util.module_from_spec(_BGM_CORE_SPEC)
 sys.modules[_BGM_CORE_SPEC.name] = bgm_contract_core
 _BGM_CORE_SPEC.loader.exec_module(bgm_contract_core)
-import series_consistency as series_consistency_core  # noqa: E402
+_SERIES_CORE_PATH = Path(__file__).resolve().parents[2] / "n2d" / "_lib" / "series_consistency.py"
+_SERIES_CORE_SPEC = importlib.util.spec_from_file_location(
+    "n2d_series_consistency_core_for_gate", _SERIES_CORE_PATH,
+)
+assert _SERIES_CORE_SPEC is not None and _SERIES_CORE_SPEC.loader is not None
+series_consistency_core = importlib.util.module_from_spec(_SERIES_CORE_SPEC)
+sys.modules[_SERIES_CORE_SPEC.name] = series_consistency_core
+_SERIES_CORE_SPEC.loader.exec_module(series_consistency_core)
 from gate_core import (  # 显式带上 import* 默认会漏的下划线私有助手
     _IDENTITY_SCRIPTS,
     _cross_episode_diff,
@@ -4112,6 +4119,8 @@ def run(root: str, ep: str, stage: str) -> None:
             check_production_core_identity_lock(root, ep, stage)
             check_costume_registry_reconcile(root)
             check_asset_reference_registry(root, require_reference_assets=False)
+        # B7 核心人物五角+表情逐视图收据：不信任 ready 字符串，只读当前 PNG hash 绑定的人审证据。
+        check_identity_eval_pack(root, ep)
         # 标记解析（花钱前）：本集引用到的 CHAR_/LOC_/PROP_/WEAPON_/OUTFIT_/VFX_ id 必须在注册层真实存在。
         # registry schema 已由上面两道校验保证；这里加 referenced⊆registered，堵「写错 id 空烧」（image_preflight 即拦）。
         check_referenced_markers_resolve(root, ep)
