@@ -37,7 +37,7 @@
       "status": "pass"
     }
   ],
-  "generated_at": "2026-07-14T12:22:31+00:00",
+  "generated_at": "2026-07-14T12:23:56+00:00",
   "kind": "n2d_director_blocking_pack_check",
   "next_when_blocked": "补齐 P-2 导演排戏包六件套并把内容 status 改为 confirmed；再用 signoff.py 由导演与制片/剪辑角色签收当前文件哈希。之后重跑 check，再进入阶段2分镜设计。",
   "root": "创作区/制漫剧/从变身少女开始斩妖除魔",

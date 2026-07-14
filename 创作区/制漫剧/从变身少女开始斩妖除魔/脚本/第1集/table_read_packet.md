@@ -19,7 +19,7 @@ status: confirmed
 - exposition_not_overloaded: accepted
 - duration_risk_understood: accepted
 - rewrite_notes: []
-- reviewer: user:project-owner-director
+- reviewer: 
 - signoff_manifest: 脚本/第1集/table_read_signoff.json
 
 ## Read Through

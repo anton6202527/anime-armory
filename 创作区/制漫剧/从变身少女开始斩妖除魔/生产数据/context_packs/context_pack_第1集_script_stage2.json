@@ -170,11 +170,11 @@
       "sha256": "67137c71bc6aa92c284cd2dc186396ba23b71e4338affd9288c191d504784468"
     },
     {
-      "bytes": 921,
+      "bytes": 1269,
       "exists": true,
-      "preview": "# P-2 导演排戏包 — 第1集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第1集/director_beat_sheet.json`\n- `脚本/第1集/axis_blocking_map.json`\n- `脚本/第1集/shot_progression_plan.json`\n- `脚本/第1集/transition_map.json`\n- `脚本/第1集/vertical_composition_plan.json`\n- `脚本/第1集/edit_rhythm_map.json`\n## Check\n- 状态：pass\n- 通过：7/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第1集/director_beat_sheet.json` | pass | - |\n| `脚本/第1集/axis_blocking_map.json` | pass | - |\n| `脚本/第1集/shot_progression_plan.json` | pass | - |\n| `脚本/第1集/transition_map.json` | pass | - |\n| `脚本/第1集/vertical_composition_plan.json` | pass | - |\n| `脚本/第1集/edit_rhythm_map.json` | pass | - |\n| `脚本/第1集/director_blocking_signoff.json` | pass | - |",
+      "preview": "# P-2 导演排戏包 — 第1集\n本包位于 Stage 1 台词之后、Stage 2 分镜之前，用来先锁导演排戏、镜头衔接和竖屏调度。\n## Required Files\n- `脚本/第1集/director_beat_sheet.json`\n- `脚本/第1集/axis_blocking_map.json`\n- `脚本/第1集/shot_progression_plan.json`\n- `脚本/第1集/transition_map.json`\n- `脚本/第1集/vertical_composition_plan.json`\n- `脚本/第1集/edit_rhythm_map.json`\n## Check\n- 状态：block\n- 通过：6/7\n| 文件 | 状态 | 问题 |\n|---|---|---|\n| `脚本/第1集/director_beat_sheet.json` | pass | - |\n| `脚本/第1集/axis_blocking_map.json` | pass | - |\n| `脚本/第1集/shot_progression_plan.json` | pass | - |\n| `脚本/第1集/transition_map.json` | pass | - |\n| `脚本/第1集/vertical_composition_plan.json` | pass | - |\n| `脚本/第1集/edit_rhythm_map.json` | pass | - |\n| `脚本/第1集/director_blocking_signoff.json` | block | input_fingerprint 缺失或过期；上游输入变化后必须重新签收；approval[user:project-owner-director:director] 未绑定当前 input_fingerprint；approval[user:project-owner-producer:producer] 未绑定当前 input_fingerprint；缺 creative 审批；允许角色：director；缺 production 审批；允许角色：editor, producer |",
       "relpath": "生产数据/director_blocking_pack_第1集.md",
-      "sha256": "d56ee70cbb805b28167ab1880af37ea5cd52e95098d8db772e17a4b698d1962a"
+      "sha256": "6ef7902555c533bf11b43a111dd3ff25a841d1bb98ff652866c1572e3b7c87b3"
     },
     {
       "bytes": 3681,
@@ -229,7 +229,7 @@
         "version": 1
       },
       "relpath": "生产数据/episode_graph_第1集.json",
-      "sha256": "72acfeba48791dd6cad0206090824a7de6e1c75cfdf20ae0310d90d9cf9aa16e"
+      "sha256": "e7aa1799dac8945ee79996ad54b4209ca88ded39001920d5e38fafbba19fb266"
     }
   ],
   "genre_pack_context": {
@@ -440,7 +440,7 @@
       }
     ],
     "episode": "第1集",
-    "generated_at": "2026-07-14T12:22:30+00:00",
+    "generated_at": "2026-07-14T12:23:55+00:00",
     "genre": {
       "genre_key": "chuanyue",
       "label": "穿越",

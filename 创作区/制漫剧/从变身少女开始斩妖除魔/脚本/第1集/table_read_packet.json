@@ -3,12 +3,12 @@
     "dialogue_voice_distinct": "accepted",
     "duration_risk_understood": "accepted",
     "exposition_not_overloaded": "accepted",
-    "reviewer": "user:project-owner-director",
+    "reviewer": "",
     "rewrite_notes": [],
     "signoff_manifest": "脚本/第1集/table_read_signoff.json"
   },
   "episode": "第1集",
-  "generated_at": "2026-07-14T11:32:28+00:00",
+  "generated_at": "2026-07-14T12:23:34+00:00",
   "inputs": {
     "script_quality_contract": "生产数据/script_quality_contract_第1集.json",
     "timing_estimate": "合成/第1集/配音/timing_estimate.json",
@@ -17,11 +17,11 @@
   },
   "inputs_fingerprint": {
     "files": {
-      "合成/第1集/配音/timing_estimate.json": "7bf89bf7ac622f66e985f457dc5127aebe99875df053c59e9ad4237be0add2f0",
+      "合成/第1集/配音/timing_estimate.json": "68fc91fc5ed7683d813985957fcc5e9858b5fb759460f3ae64cf24d285e2cc8d",
       "合成/第1集/配音/时长清单.json": null,
       "脚本/第1集/voiceover.txt": "83769e68730c415c00bb2b2488bd9e073a6d54e414b7ce5acc285653f77b17d5"
     },
-    "sha": "3139d0bbc12e49a7fec75f5462616507f0c60ec64569060e9a675bb7339fe3e2"
+    "sha": "414f086f74cb7f2dc651f4cac0ffd6e5828ef4d13dbd9b1b5989ba08aa8d1f8e"
   },
   "kind": "n2d_table_read_packet",
   "machine_reference": {

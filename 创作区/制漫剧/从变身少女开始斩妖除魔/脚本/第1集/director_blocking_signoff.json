@@ -28,12 +28,12 @@
           "sha256": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
         }
       ],
-      "note": "导演/主创批准P-2导演排戏包当前哈希。",
-      "reviewed_at": "2026-07-14T11:48:52+00:00",
+      "note": "导演/主创批准第1集P-2导演排戏包及当前分镜输入。",
+      "reviewed_at": "2026-07-14T12:23:55+00:00",
       "reviewer_id": "user:project-owner-director",
       "reviewer_role": "director",
       "signed_evidence_fingerprint_sha": "25d0a9b38110d0086f9b165d68ca3d8dbc8876f5ab395d96ebde1951bd777caf",
-      "signed_input_fingerprint_sha": "fabaad8177a1856bd52d7db375b51bd28f9301018afa410282e9fe58481369e1",
+      "signed_input_fingerprint_sha": "fb5594f31cfc558c8c78561c005f6da72d7eb17d430096ed5f65e64950fc9617",
       "unresolved_risks": [],
       "waiver_reason": ""
     },
@@ -65,19 +65,19 @@
           "sha256": "82af43d81d7f79447cf12906b253a09871771cb0b5c4014d6bdb58c9d9acb139"
         }
       ],
-      "note": "制片人批准P-2生产组当前哈希。",
-      "reviewed_at": "2026-07-14T11:48:52+00:00",
+      "note": "制片人批准第1集P-2生产组执行合同及当前分镜输入。",
+      "reviewed_at": "2026-07-14T12:23:55+00:00",
       "reviewer_id": "user:project-owner-producer",
       "reviewer_role": "producer",
       "signed_evidence_fingerprint_sha": "25d0a9b38110d0086f9b165d68ca3d8dbc8876f5ab395d96ebde1951bd777caf",
-      "signed_input_fingerprint_sha": "fabaad8177a1856bd52d7db375b51bd28f9301018afa410282e9fe58481369e1",
+      "signed_input_fingerprint_sha": "fb5594f31cfc558c8c78561c005f6da72d7eb17d430096ed5f65e64950fc9617",
       "unresolved_risks": [],
       "waiver_reason": ""
     }
   ],
   "artifact_scope": "p2_director_blocking",
   "authored_by": "automation:n2d",
-  "created_at": "2026-07-14T11:48:52+00:00",
+  "created_at": "2026-07-14T12:23:55+00:00",
   "episode": "第1集",
   "evidence_fingerprint": {
     "files": {
@@ -92,12 +92,12 @@
   },
   "input_fingerprint": {
     "files": {
-      "脚本/第1集/table_read_packet.json": "afb1455c46672282c9143351f609da4a6bb5f9298ebe025a765ef73760af6528",
-      "脚本/第1集/table_read_signoff.json": "7cdd1cb51d461de4ee4e58cb327dd243f876d6c5452b2d40b188be66912def2e",
+      "脚本/第1集/table_read_packet.json": "0b06b240b0e74c4445ce27fa439be917ead293139b7099317c08866fcd9bfa07",
+      "脚本/第1集/table_read_signoff.json": "606625f0c72893fc18fff2263a4c11258f49a215d4f97a6e4cd528ee2036a178",
       "脚本/第1集/voiceover.txt": "83769e68730c415c00bb2b2488bd9e073a6d54e414b7ce5acc285653f77b17d5",
       "设定库/source_comprehension.json": "e1f753a90ab65e1952707d4d40d1c6d8c32d42971a0f8a4392e17f9bdbaba885"
     },
-    "sha": "fabaad8177a1856bd52d7db375b51bd28f9301018afa410282e9fe58481369e1"
+    "sha": "fb5594f31cfc558c8c78561c005f6da72d7eb17d430096ed5f65e64950fc9617"
   },
   "kind": "n2d_artifact_signoff",
   "required_approval_groups": [
@@ -116,6 +116,6 @@
     }
   ],
   "status": "approved",
-  "updated_at": "2026-07-14T11:48:52+00:00",
+  "updated_at": "2026-07-14T12:23:55+00:00",
   "version": 1
 }
