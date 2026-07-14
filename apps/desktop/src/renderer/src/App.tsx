@@ -274,8 +274,8 @@ export function App() {
       .catch((e) => console.error("repo resolve failed", e));
   }, []);
 
-  // resolve the dedicated workspace on boot. seedDemos is a legacy no-op for
-  // current builds because full demos are downloaded from Release assets.
+  // Resolve the dedicated workspace on boot. seedDemos is a legacy no-op for
+  // current builds because full demos are downloaded from Cloudflare R2.
   useEffect(() => {
     defaultWorkspace()
       .then(async (ws) => {
@@ -422,7 +422,11 @@ export function App() {
         )}
       </div>
 
-      <AppStatusBar activeWork={activeWork} fileStatus={activeFileStatus} workspaceRoot={workspaceRoot} />
+      <AppStatusBar
+        activeWork={activeWork}
+        fileStatus={activeFileStatus}
+        workspaceRoot={workspaceRoot}
+      />
 
       {skillsLine && (
         <Suspense fallback={null}>

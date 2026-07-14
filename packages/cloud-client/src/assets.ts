@@ -7,6 +7,10 @@ import type {
   CompletedPart,
   CreateDownloadResponse,
   CreateUploadResponse,
+  DeleteAssetResponse,
+  EnsureProjectResponse,
+  ListAssetsResponse,
+  ListProjectsResponse,
   SignPartsResponse,
   SignedRequest,
 } from '@anime-armory/contracts'
@@ -28,6 +32,7 @@ export interface AssetApiClientOptions {
 
 export interface UploadAssetOptions {
   projectId: string
+  relativePath: string
   source: AssetUploadSource
   sha256?: string
   signal?: AbortSignal
@@ -141,6 +146,7 @@ export class AssetApiClient {
 
   async createUpload(
     projectId: string,
+    relativePath: string,
     source: AssetUploadSource,
     options: { sha256?: string; signal?: AbortSignal } = {},
   ): Promise<CreateUploadResponse> {
@@ -149,6 +155,7 @@ export class AssetApiClient {
         action: 'create-upload',
         projectId,
         fileName: source.name,
+        relativePath,
         contentType: source.type || 'application/octet-stream',
         sizeBytes: source.size,
         ...(options.sha256 ? { sha256: options.sha256 } : {}),
@@ -156,6 +163,30 @@ export class AssetApiClient {
       options.signal,
     )
     return assertResponseAction(response, 'create-upload')
+  }
+
+  async ensureProject(
+    clientKey: string,
+    name: string,
+    signal?: AbortSignal,
+  ): Promise<EnsureProjectResponse> {
+    const response = await this.request({ action: 'ensure-project', clientKey, name }, signal)
+    return assertResponseAction(response, 'ensure-project')
+  }
+
+  async listProjects(signal?: AbortSignal): Promise<ListProjectsResponse> {
+    const response = await this.request({ action: 'list-projects' }, signal)
+    return assertResponseAction(response, 'list-projects')
+  }
+
+  async listAssets(projectId: string, signal?: AbortSignal): Promise<ListAssetsResponse> {
+    const response = await this.request({ action: 'list-assets', projectId }, signal)
+    return assertResponseAction(response, 'list-assets')
+  }
+
+  async deleteAsset(assetId: string, signal?: AbortSignal): Promise<DeleteAssetResponse> {
+    const response = await this.request({ action: 'delete-asset', assetId }, signal)
+    return assertResponseAction(response, 'delete-asset')
   }
 
   async completeUpload(
@@ -201,9 +232,9 @@ export class AssetApiClient {
   }
 
   async uploadAsset(options: UploadAssetOptions): Promise<AssetRecord> {
-    const { projectId, source, signal, onProgress } = options
+    const { projectId, relativePath, source, signal, onProgress } = options
     onProgress?.(0, source.size)
-    const created = await this.createUpload(projectId, source, {
+    const created = await this.createUpload(projectId, relativePath, source, {
       ...(options.sha256 ? { sha256: options.sha256 } : {}),
       ...(signal ? { signal } : {}),
     })

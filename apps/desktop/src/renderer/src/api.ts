@@ -297,12 +297,12 @@ export async function seedDemos(workspaceRoot: string): Promise<number> {
   return invoke("demos.seed", { workspaceRoot });
 }
 
-/** Available per-line demo zips published as GitHub Release assets. */
+/** Available per-line Demo ZIP files published through the public R2 catalog. */
 export async function listDemoDownloads(workspaceRoot: string): Promise<DemoDownloadInfo[]> {
   return invoke("demos.list", { workspaceRoot });
 }
 
-/** Download one work's demo zip from Releases, extract into workspace, and mark it as DEMO. */
+/** Download one work's Demo ZIP from R2, verify it, install it, and mark it as DEMO. */
 export async function installDemo(workspaceRoot: string, rel: string): Promise<DemoInstallResult> {
   return invoke("demos.install", { workspaceRoot, rel });
 }
@@ -427,8 +427,3 @@ export async function ptyResize(id: number, rows: number, cols: number): Promise
 export async function ptyKill(id: number): Promise<void> {
   return invoke("pty.kill", { id });
 }
-
-// Optional cloud boundary. Existing components remain local-first; future
-// login/upload UI can consume this without importing provider-specific code.
-export { createDesktopAssetClient, desktopCloudCapability } from "./cloud/assets";
-export type { DesktopCloudCapability, DesktopCloudConfig } from "./cloud/assets";

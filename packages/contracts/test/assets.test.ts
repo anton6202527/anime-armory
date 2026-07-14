@@ -15,6 +15,7 @@ test('parses a create-upload request', () => {
     action: 'create-upload',
     projectId,
     fileName: 'clip.mp4',
+    relativePath: '成片/clip.mp4',
     contentType: 'video/mp4',
     sizeBytes: 1024,
     sha256: 'a'.repeat(64),
@@ -22,6 +23,7 @@ test('parses a create-upload request', () => {
 
   assert.equal(parsed.action, 'create-upload')
   assert.equal(parsed.fileName, 'clip.mp4')
+  assert.equal(parsed.relativePath, '成片/clip.mp4')
   assert.equal(parsed.sha256, 'a'.repeat(64))
 })
 
@@ -32,11 +34,51 @@ test('rejects assets above the configured limit', () => {
         action: 'create-upload',
         projectId,
         fileName: 'clip.mp4',
+        relativePath: '成片/clip.mp4',
         contentType: 'video/mp4',
         sizeBytes: DEFAULT_MAX_ASSET_BYTES + 1,
       }),
     (error: unknown) => error instanceof ContractError && error.field === 'sizeBytes',
   )
+})
+
+test('accepts empty files and rejects unsafe sync paths', () => {
+  const empty = parseAssetApiRequest({
+    action: 'create-upload',
+    projectId,
+    fileName: 'empty.txt',
+    relativePath: 'notes/empty.txt',
+    contentType: 'text/plain',
+    sizeBytes: 0,
+  })
+  assert.equal(empty.action, 'create-upload')
+  assert.equal(empty.sizeBytes, 0)
+
+  assert.throws(
+    () =>
+      parseAssetApiRequest({
+        action: 'create-upload',
+        projectId,
+        fileName: 'secret',
+        relativePath: '../secret',
+        contentType: 'application/octet-stream',
+        sizeBytes: 1,
+      }),
+    (error: unknown) => error instanceof ContractError && error.field === 'relativePath',
+  )
+})
+
+test('parses project discovery requests', () => {
+  const parsed = parseAssetApiRequest({
+    action: 'ensure-project',
+    clientKey: 'c3e39468-bae0-4a4e-b7c9-3d8e05c85950',
+    name: '本宫才是这皇宫最大的妖',
+  })
+  assert.deepEqual(parsed, {
+    action: 'ensure-project',
+    clientKey: 'c3e39468-bae0-4a4e-b7c9-3d8e05c85950',
+    name: '本宫才是这皇宫最大的妖',
+  })
 })
 
 test('sorts completed multipart parts', () => {

@@ -14,7 +14,8 @@ files:
   # node-gyp output: its loader prefers build/Release, and a darwin binary in
   # there would shadow the win32 prebuilds in cross-built Windows packages.
   - "!**/node_modules/node-pty/build/**"
-# Bundled skills repo + demo catalog, staged by tools/e2a/scripts/sync_bundle.cjs
+# Bundled skills repo + public R2 Demo catalog fallback, staged by e2a's
+# resource sync script.
 # into ./resources. The app resolves it via process.resourcesPath/resources
 # (see src/main/services/workspace.ts, demos.ts).
 extraResources:

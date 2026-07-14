@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
-# e2a — build the Electron desktop app (apps/desktop/) as release installers
-# or the per-work demo zip assets, with upload enabled only by an explicit mode.
-# Successor of the retired Tauri /r2a flow. Self-contained: demo selection
-# (scripts/select_demo.cjs), skills bundler (scripts/sync_bundle.cjs) and the
-# demo-works config live in tools/e2a/; the safe payload copier is the shared
-# tools/release-safety/demo_safety.cjs.
+# e2a — build Electron installers and the VS Code extension, with GitHub
+# Release upload enabled only by an explicit mode. Public Demo payloads are a
+# separate R2 publication flow (`npm run demos:publish`) and never enter a
+# GitHub Release.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -16,7 +14,6 @@ NOTARY_PROFILE="${E2A_NOTARY_KEYCHAIN_PROFILE:-}"
 UPLOAD_RETRIES="${E2A_UPLOAD_RETRIES:-6}"
 
 BUILD_APP_ASSETS=1
-BUILD_DEMO_ASSETS=0
 BUILD_MAC=1
 BUILD_WIN=0
 BUILD_VSCODE=0
@@ -31,9 +28,6 @@ SOURCE_SHA="unknown"
 SOURCE_DIRTY="unknown"
 OUT_DIR=""
 ASSETS=()
-DEMO_WORKS=()
-DEMO_KEYS=()
-DEMO_ASSET_NAMES=()
 CREATIVE_LINES=("写小说" "制漫剧" "画漫画" "写歌" "制MV" "拍广告")
 CREATION_MANUALS=("创作区/使用手册.md")
 for line in "${CREATIVE_LINES[@]}"; do
@@ -47,20 +41,17 @@ Usage:
 
 Default behaviour (no flags):
   Snapshot the local checkout, build the Electron macOS Apple Silicon DMG
-  (AnimeArmory_electron_macos_arm64.dmg) WITH the bundled skills repo + demo
-  catalog, write SHA256SUMS.txt, and keep all artifacts local. Demo zip assets
-  are not built and nothing is uploaded.
+  (AnimeArmory_electron_macos_arm64.dmg) with the bundled skills repo and R2
+  Demo catalog fallback, write SHA256SUMS.txt, and keep all artifacts local.
   README download links are NOT touched and the release is NOT marked latest
-  (the Tauri /r2a flow owns those).
+  automatically.
 
 Options:
   --up                            Build the macOS DMG and upload it.
-  --demos                         Build only demo zip assets and upload them.
   --all                           Build all desktop installers (macOS DMG +
                                   Windows x64 EXE) plus the VS Code VSIX and
-                                  upload them; no demo zips.
-  --apps-only, --no-demo-assets   Build only app installers (advanced/legacy).
-  --demo-assets, --demo           Alias of --demos.
+                                  upload them.
+  --apps-only                     Build only app installers (advanced/legacy).
   --win                           Also build the Windows x64 NSIS installer
                                   (cross-built on macOS; node-pty uses its
                                   bundled win32 NAPI prebuilds; unsigned).
@@ -78,8 +69,6 @@ Release artifact names:
   AnimeArmory_electron_macos_arm64.dmg
   AnimeArmory_electron_windows.exe (--win)
   anime-armory.vsix (--vscode or --all)
-  AnimeArmory_demo_<line-key>_<rel-hash>.zip (one asset per progressed work)
-  AnimeArmory_demo_catalog.json (all demo metadata, hashes, sizes, fixed-tag URLs)
 
 Environment:
   E2A_OUTPUT_DIR                Artifact output dir. Default: dist/e2a-release-<tag>.
@@ -106,21 +95,19 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --up)
       select_primary_mode "upload-dmg"
-      BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; BUILD_MAC=1; BUILD_WIN=0; BUILD_VSCODE=0; UPLOAD=1
+      BUILD_APP_ASSETS=1; BUILD_MAC=1; BUILD_WIN=0; BUILD_VSCODE=0; UPLOAD=1
       shift
       ;;
     --all)
       select_primary_mode "upload-all-apps"
-      BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; BUILD_MAC=1; BUILD_WIN=1; BUILD_VSCODE=1; UPLOAD=1
+      BUILD_APP_ASSETS=1; BUILD_MAC=1; BUILD_WIN=1; BUILD_VSCODE=1; UPLOAD=1
       shift
       ;;
-    --apps-only|--no-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=0; shift ;;
-    --demo-assets|--demos|--demo)
-      select_primary_mode "upload-demos"
-      BUILD_APP_ASSETS=0; BUILD_DEMO_ASSETS=1; BUILD_MAC=0; BUILD_WIN=0; BUILD_VSCODE=0; UPLOAD=1
-      shift
+    --apps-only|--no-demo-assets) BUILD_APP_ASSETS=1; shift ;;
+    --demo-assets|--demos|--demo|--with-demo-assets)
+      echo "Demo assets moved to R2. Use: npm run demos:publish" >&2
+      exit 2
       ;;
-    --with-demo-assets) BUILD_APP_ASSETS=1; BUILD_DEMO_ASSETS=1; shift ;;
     --win) BUILD_WIN=1; shift ;;
     --vscode) BUILD_VSCODE=1; shift ;;
     --no-mac) BUILD_MAC=0; shift ;;
@@ -146,7 +133,7 @@ json_value() {
   node -p "JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'))${2}" "$1"
 }
 
-# --- source snapshot (same exclusion policy as r2a) -------------------------
+# --- source snapshot ---------------------------------------------------------
 
 rsync_common_excludes=(
   --exclude='.git/'
@@ -189,47 +176,6 @@ rsync_common_excludes=(
   --exclude='vscode-extension/node_modules/'
 )
 
-select_demo_works() {
-  local source_root="$1"
-  local demo key asset_name
-  DEMO_WORKS=()
-  DEMO_KEYS=()
-  DEMO_ASSET_NAMES=()
-  while IFS=$'\t' read -r demo key asset_name; do
-    [[ -n "$demo" ]] || continue
-    case "$demo" in
-      创作区/*/*) ;;
-      *) echo "Invalid demo path selected: $demo" >&2; exit 1 ;;
-    esac
-    if [[ "$demo" == *".."* || ! -d "$source_root/$demo" ]]; then
-      echo "Demo work is missing or unsafe: $demo" >&2
-      exit 1
-    fi
-    DEMO_WORKS+=("$demo")
-    DEMO_KEYS+=("$key")
-    DEMO_ASSET_NAMES+=("$asset_name")
-  done < <(node "$ROOT/tools/e2a/scripts/select_demo.cjs" "$source_root" --all-progress --assets)
-
-  if [[ "$BUILD_DEMO_ASSETS" == "1" && "${#DEMO_WORKS[@]}" -eq 0 ]]; then
-    echo "No progressed demo works found under 创作区/<系列>/<作品>/_进度.md" >&2
-    exit 1
-  fi
-
-  echo "[e2a] progressed demo works: ${#DEMO_WORKS[@]}"
-  local i
-  for ((i=0; i<${#DEMO_WORKS[@]}; i++)); do
-    echo "[e2a]   - ${DEMO_WORKS[$i]} → ${DEMO_ASSET_NAMES[$i]}"
-  done
-}
-
-copy_work_reference() {
-  local rel="$1"
-  mkdir -p "$SOURCE_DIR/$rel"
-  if [[ -f "$ROOT/$rel/_进度.md" ]]; then
-    cp "$ROOT/$rel/_进度.md" "$SOURCE_DIR/$rel/_进度.md"
-  fi
-}
-
 snapshot_local_source() {
   require_cmd git
   require_cmd rsync
@@ -237,8 +183,6 @@ snapshot_local_source() {
   WORK="$(mktemp -d "${TMPDIR:-/tmp}/e2a.XXXXXX")"
   SOURCE_DIR="$WORK/source"
   mkdir -p "$SOURCE_DIR"
-
-  select_demo_works "$ROOT"
 
   echo "[e2a] snapshotting local checkout: $ROOT"
   local snapshot_attempt=1
@@ -262,14 +206,6 @@ snapshot_local_source() {
     cp -p "$ROOT/$rel" "$SOURCE_DIR/$rel"
   done
 
-  # the snapshot only ever carries _进度.md references — keeping full payloads
-  # out of the snapshot keeps sync-skills' bundled seeds (and thus the app
-  # resources) slim; demo zips copy payloads straight from the checkout.
-  local demo
-  for demo in ${DEMO_WORKS+"${DEMO_WORKS[@]}"}; do
-    copy_work_reference "$demo"
-  done
-
   SOURCE_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo "unknown")"
   if [[ -n "$(git -C "$ROOT" status --short 2>/dev/null || true)" ]]; then
     SOURCE_DIRTY="yes"
@@ -286,14 +222,8 @@ stage_bundled_resources() {
   # sync_bundle.cjs bundles skills/tools/manuals + demo_catalog.json into
   # apps/desktop/resources; the packaged app reads the same layout from
   # process.resourcesPath/resources (electron-builder extraResources).
-  local featured_works
-  featured_works="$(printf '%s\n' ${DEMO_WORKS+"${DEMO_WORKS[@]}"})"
-  echo "[e2a] bundling skills repo + demo catalog"
+  echo "[e2a] bundling skills repo + R2 Demo catalog fallback"
   rm -rf "$SOURCE_DIR/apps/desktop/resources"
-  E2A_INCLUDE_DEMOS=0 \
-  E2A_FEATURED_WORKS="$featured_works" \
-  E2A_TARGET_REPO="$TARGET_REPO" \
-  E2A_RELEASE_TAG="$TAG" \
   E2A_BUNDLE_DIR="$SOURCE_DIR/apps/desktop/resources" \
     node "$SOURCE_DIR/tools/e2a/scripts/sync_bundle.cjs"
   if [[ ! -f "$SOURCE_DIR/apps/desktop/resources/demo_catalog.json" ]]; then
@@ -506,84 +436,6 @@ build_vscode_extension() {
   ASSETS+=("$artifact_vsix")
 }
 
-# --- demo zip assets (same layout + slimming as r2a) -------------------------
-
-demo_line_key() {
-  case "$1" in
-    "写小说") echo "novel" ;;
-    "制漫剧") echo "n2d" ;;
-    "画漫画") echo "comic" ;;
-    "写歌") echo "song" ;;
-    "制MV") echo "mv" ;;
-    "拍广告") echo "ad" ;;
-    *) echo "Unknown creative line for demo asset: $1" >&2; exit 1 ;;
-  esac
-}
-
-keep_only_named_child_dirs() {
-  local dir="$1"; shift
-  [[ -d "$dir" ]] || return 0
-  local child name keep wanted
-  for child in "$dir"/*; do
-    [[ -d "$child" ]] || continue
-    name="$(basename "$child")"
-    keep=0
-    for wanted in "$@"; do
-      [[ "$name" == "$wanted" ]] && keep=1 && break
-    done
-    [[ "$keep" == "1" ]] || rm -rf "$child"
-  done
-}
-
-prune_demo_asset_stage() {
-  local work_dir="$1" key="$2"
-  [[ -d "$work_dir" ]] || return 0
-  case "$key" in
-    n2d)
-      echo "[e2a] slimming n2d demo asset to first-episode media payload"
-      keep_only_named_child_dirs "$work_dir/出图" "第1集"
-      keep_only_named_child_dirs "$work_dir/合成" "第1集"
-      find "$work_dir/合成/第1集/配音" -maxdepth 1 -type f -name 'line_*.wav' -delete 2>/dev/null || true
-      ;;
-  esac
-}
-
-build_demo_zip_assets() {
-  require_cmd zip
-  require_cmd unzip
-  local i demo rest line key asset_name asset stage
-  for ((i=0; i<${#DEMO_WORKS[@]}; i++)); do
-    demo="${DEMO_WORKS[$i]}"
-    key="${DEMO_KEYS[$i]}"
-    asset_name="${DEMO_ASSET_NAMES[$i]}"
-    rest="${demo#创作区/}"
-    line="${rest%%/*}"
-    [[ "$(demo_line_key "$line")" == "$key" ]] || { echo "Demo line key mismatch: $demo" >&2; exit 1; }
-    asset="$ARTIFACT_DIR/$asset_name"
-    stage="$(mktemp -d "${TMPDIR:-/tmp}/e2a-demo-${key}.XXXXXX")"
-    mkdir -p "$stage/$(dirname "$demo")"
-    # payload comes straight from the checkout through the release-safety
-    # copier (secret/cache filtering) — the snapshot holds references only
-    node "$ROOT/tools/release-safety/demo_safety.cjs" copy "$ROOT/$demo" "$stage/$demo"
-    prune_demo_asset_stage "$stage/$demo" "$key"
-    rm -f "$asset"
-    (
-      cd "$stage"
-      find "创作区" -exec touch -h -t 202001010000 {} + 2>/dev/null || find "创作区" -exec touch -t 202001010000 {} +
-      COPYFILE_DISABLE=1 zip -X -qr "$asset" "创作区"
-    )
-    rm -rf "$stage"
-    echo "[e2a] validating zip container: $(basename "$asset")"
-    unzip -tqq "$asset"
-    ASSETS+=("$asset")
-  done
-
-  local catalog="$ARTIFACT_DIR/AnimeArmory_demo_catalog.json"
-  node "$ROOT/tools/e2a/scripts/build_demo_catalog.cjs" \
-    "$ROOT" "$TARGET_REPO" "$TAG" "$ARTIFACT_DIR" "$catalog" "${DEMO_WORKS[@]}"
-  ASSETS+=("$catalog")
-}
-
 # --- checksums / release notes / upload --------------------------------------
 
 write_checksums() {
@@ -600,7 +452,7 @@ write_checksums() {
   merge_remote_checksums
 }
 
-# Incremental uploads (--win --no-mac, --demo-assets) must not clobber the
+# Incremental uploads (--win --no-mac) must not clobber the
 # release's SHA256SUMS.txt with a subset: keep remote entries for assets not
 # rebuilt in this run.
 merge_remote_checksums() {
@@ -649,14 +501,9 @@ release_notes() {
     echo
     echo "- Source commit: ${SOURCE_SHA} (dirty: ${SOURCE_DIRTY})"
     echo "- Desktop shell: Electron (apps/desktop/)"
-    echo "- Bundled: skills repo + creation manuals + demo catalog (payloads download on demand)"
+    echo "- Bundled: skills repo + creation manuals + R2 Demo catalog fallback"
+    echo "- Demo payload delivery: public Cloudflare R2 (not GitHub Release)"
     echo "- Release artifacts committed to git history: no"
-    echo
-    echo "Configured demo works:"
-    local demo
-    for demo in ${DEMO_WORKS+"${DEMO_WORKS[@]}"}; do
-      echo "- ${demo}"
-    done
     echo
     echo "Assets:"
     local asset
@@ -740,7 +587,7 @@ upload_release() {
       gh release edit "$TAG" --repo "$TARGET_REPO" \
         --title "AnimeArmory (Electron) ${TAG}" --notes-file "$notes"
     else
-      # incremental uploads (e.g. --win --no-mac, --demo-assets) must not
+      # Incremental uploads (for example --win --no-mac) must not
       # shrink the notes to just this run's asset subset
       echo "[e2a] release ${TAG} exists: keeping its notes (--refresh-notes to overwrite)"
     fi
@@ -772,7 +619,7 @@ mkdir -p "$OUT_DIR" "$ARTIFACT_DIR"
 
 echo "[e2a] release tag: $TAG"
 echo "[e2a] release repo: $TARGET_REPO"
-echo "[e2a] mode: $PRIMARY_MODE (upload=$UPLOAD, mac=$BUILD_MAC, win=$BUILD_WIN, vscode=$BUILD_VSCODE, demos=$BUILD_DEMO_ASSETS)"
+echo "[e2a] mode: $PRIMARY_MODE (upload=$UPLOAD, mac=$BUILD_MAC, win=$BUILD_WIN, vscode=$BUILD_VSCODE)"
 
 if [[ "$BUILD_APP_ASSETS" == "1" ]]; then
   if [[ "$BUILD_MAC" == "1" ]]; then
@@ -785,10 +632,6 @@ fi
 if [[ "$BUILD_VSCODE" == "1" ]]; then
   build_vscode_extension
 fi
-if [[ "$BUILD_DEMO_ASSETS" == "1" ]]; then
-  build_demo_zip_assets
-fi
-
 if [[ "${#ASSETS[@]}" -eq 0 ]]; then
   echo "No release assets were built; aborting" >&2
   exit 1

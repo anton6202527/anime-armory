@@ -21,6 +21,7 @@ test('maps database rows to provider-neutral asset records', () => {
     object_etag: 'etag',
     object_version_id: null,
     original_name: 'original.mp4',
+    relative_path: '成片/original.mp4',
     content_type: 'video/mp4',
     size_bytes: '1024',
     sha256: null,
@@ -31,6 +32,7 @@ test('maps database rows to provider-neutral asset records', () => {
 
   assert.equal(asset.object.provider, 'r2')
   assert.equal(asset.sizeBytes, 1024)
+  assert.equal(asset.relativePath, '成片/original.mp4')
 })
 
 test('rejects bigint values that are unsafe in JavaScript', () => {
@@ -46,6 +48,7 @@ test('rejects bigint values that are unsafe in JavaScript', () => {
         object_etag: null,
         object_version_id: null,
         original_name: 'file',
+        relative_path: 'file',
         content_type: 'application/octet-stream',
         size_bytes: '9007199254740992',
         sha256: null,
