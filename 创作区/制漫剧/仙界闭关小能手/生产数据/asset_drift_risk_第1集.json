@@ -1,0 +1,12 @@
+{
+  "assets": [],
+  "episode": "第1集",
+  "high": 0,
+  "kind": "n2d_asset_drift_risk",
+  "medium": 0,
+  "notes": [
+    "asset_registry.json 缺失/无资产——无法算物料风险分。"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "version": 1
+}

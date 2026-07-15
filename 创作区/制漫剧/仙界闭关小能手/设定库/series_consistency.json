@@ -1,0 +1,42 @@
+{
+  "kind": "n2d_series_consistency",
+  "version": 1,
+  "status": "confirmed",
+  "subtitle_style": {
+    "zh_font_paths": [
+      "/System/Library/Fonts/STHeiti Medium.ttc"
+    ],
+    "en_font_paths": [
+      "/System/Library/Fonts/Supplemental/Arial.ttf"
+    ],
+    "zh_size_px": 38,
+    "en_size_px": 28,
+    "zh_fill": "#FFFFFF",
+    "en_fill": "#EBEBEB",
+    "outline_fill": "#0A0A0A",
+    "zh_outline_px": 4,
+    "en_outline_px": 3,
+    "bottom_margin_px": 130,
+    "safe_width_margin_px": 60
+  },
+  "canonical_names": {
+    "CHAR_01": "贺平生",
+    "CHAR_02": "张老大",
+    "CHAR_03": "韩老三",
+    "SECT_01": "太虚门",
+    "LOC_01": "秀竹峰",
+    "PROP_01": "破旧陶盆"
+  },
+  "dialogue_registers": {
+    "贺平生": "十四岁少年，谨慎、恭敬、短句，不说现代网络梗；心声比对白稍直接但仍克制",
+    "张老大": "粗声粗气、命令式、带嘲弄和威胁，称上层为老爷们/姑奶奶们",
+    "韩老三": "瘦高中年杂役，话少、实用、避免抢戏",
+    "旁白": "简短、冷静、只补画面无法自然呈现的背景，不替角色总结情绪"
+  },
+  "audio_baseline": {
+    "target_lufs": -16.0,
+    "tolerance_lu": 1.0,
+    "true_peak_dbtp": -1.0
+  },
+  "note": "填完后设 status=confirmed；多集长线/发布项目的字幕、人名、语域和响度以此为剧级真值。"
+}

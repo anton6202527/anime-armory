@@ -60,8 +60,19 @@ def _atomic_json(path: Path, payload: Mapping[str, Any]) -> None:
 
 
 def _visible_text(text: str) -> str:
-    out = re.sub(r"[⚡💥🪝🎬🔑]", "", str(text or ""))
+    out = re.sub(
+        r"\s*[⚡💥🪝]\s*[\u4e00-\u9fffA-Za-z0-9_-]{0,12}\s*$",
+        "",
+        str(text or ""),
+    )
+    out = re.sub(r"[⚡💥🪝🎬🔑]", "", out)
+    out = re.sub(r"(?:钩子|爽点|反转|爆点|集尾)\s*$", "", out)
     out = out.replace("||", "，")
+    out = re.sub(r"[，,]\s*[，,]+", "，", out)
+    out = re.sub(r"([。！？…—；：、》」』）])\s*[，,]\s*", r"\1", out)
+    out = re.sub(r"^\s*[，,]\s*", "", out)
+    out = re.sub(r"\s+([，,])", r"\1", out)
+    out = re.sub(r"，\s+", "，", out)
     return re.sub(r"\s+", " ", out).strip()
 
 

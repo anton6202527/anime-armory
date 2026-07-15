@@ -1,0 +1,146 @@
+{
+  "kind": "n2d_story_integrity_ledger",
+  "version": 1,
+  "generated_at": "2026-07-15",
+  "episodes": [
+    {
+      "episode": "第1集",
+      "dialogue_functions": [
+        {
+          "shot": 1,
+          "role": "张老大",
+          "tags": [
+            "reveal"
+          ],
+          "text": "五行灵根？|| 原来是个费钱货！你这种废物，也配来争仙缘？ ⚡钩子"
+        },
+        {
+          "shot": 2,
+          "role": "众杂役",
+          "tags": [
+            "texture"
+          ],
+          "text": "哈哈哈哈哈！"
+        },
+        {
+          "shot": 3,
+          "role": "张老大",
+          "tags": [
+            "pressure"
+          ],
+          "text": "从今天起，秀竹峰挑水的活儿，归你了。每天二十趟，少一趟都不行！这是命令。"
+        },
+        {
+          "shot": 4,
+          "role": "贺平生",
+          "tags": [
+            "texture"
+          ],
+          "text": "是。"
+        },
+        {
+          "shot": 5,
+          "role": "旁白",
+          "tags": [
+            "texture"
+          ],
+          "text": "贺平生，十四岁。父母双亡，五行灵根耗资巨大，连外门都不肯收他。 ⚡信息钩子"
+        },
+        {
+          "shot": 6,
+          "role": "贺平生",
+          "tags": [
+            "decide",
+            "goal"
+          ],
+          "text": "我要留下，离仙人近一点，|| 不然我不可能还有机会。 💥小爽点"
+        },
+        {
+          "shot": 7,
+          "role": "旁白",
+          "tags": [
+            "texture"
+          ],
+          "text": "两桶水，二里山路。一个来回，就压得他喘不过气。"
+        },
+        {
+          "shot": 8,
+          "role": "贺平生",
+          "tags": [
+            "decide"
+          ],
+          "text": "明天才开工。今天，我决定先挑五趟。 💥爽点"
+        },
+        {
+          "shot": 9,
+          "role": "旁白",
+          "tags": [
+            "consequence"
+          ],
+          "text": "于是，一趟。两趟。三趟。月亮升起时，他第五次回到浅潭。"
+        },
+        {
+          "shot": 10,
+          "role": "贺平生",
+          "tags": [
+            "texture"
+          ],
+          "text": "水底……有东西？"
+        },
+        {
+          "shot": 11,
+          "role": "贺平生",
+          "tags": [
+            "reveal"
+          ],
+          "text": "我还以为是宝贝。|| 原来只是个破盆。"
+        },
+        {
+          "shot": 12,
+          "role": "贺平生",
+          "tags": [
+            "texture"
+          ],
+          "text": "正好，拿回去洗衣洗脸。"
+        },
+        {
+          "shot": 13,
+          "role": "旁白",
+          "tags": [
+            "action"
+          ],
+          "text": "他转身时，破盆底下，一缕幽光悄然亮起。 🪝集尾"
+        }
+      ],
+      "choices": [
+        {
+          "shot": 6,
+          "character": "贺平生",
+          "text": "我要留下，离仙人近一点，|| 不然我不可能还有机会。 💥小爽点"
+        },
+        {
+          "shot": 8,
+          "character": "贺平生",
+          "text": "明天才开工。今天，我决定先挑五趟。 💥爽点"
+        }
+      ],
+      "consequences": [
+        {
+          "shot": 9,
+          "character": "旁白",
+          "text": "于是，一趟。两趟。三趟。月亮升起时，他第五次回到浅潭。"
+        }
+      ],
+      "motivations": [
+        {
+          "shot": 6,
+          "character": "贺平生",
+          "signals": [
+            "goal"
+          ],
+          "text": "我要留下，离仙人近一点，|| 不然我不可能还有机会。 💥小爽点"
+        }
+      ]
+    }
+  ]
+}

@@ -844,6 +844,17 @@ def test_clip_assets_normalize_prose_suffix_against_offscreen_id() -> None:
     assert "VFX_01退出清晰画面" not in ids
 
 
+def test_clip_assets_do_not_mint_chinese_prose_suffix_as_asset() -> None:
+    clip = {
+        "object_ids": ["PROP_旧布包", "PROP_01"],
+        "continuity": {
+            "entry_exit": "PROP_旧布包在上镜后留在杂役院画外；PROP_01仍未入画。",
+        },
+    }
+
+    assert image_prompt_pack.clip_assets(clip) == ["PROP_旧布包", "PROP_01"]
+
+
 def test_material_list_supplies_asset_names_and_prompts(tmp_path: Path) -> None:
     ep_dir = tmp_path / "脚本" / "第2集"
     ep_dir.mkdir(parents=True)
@@ -890,6 +901,31 @@ def test_derived_scene_drift_uses_generic_continuity_not_stale_wildland(tmp_path
 
     assert "巨岩/尸堆" not in drift
     assert "空间轴线" in drift
+
+
+def test_scene_visual_contract_is_scoped_to_matching_location(tmp_path: Path) -> None:
+    story = {
+        "clips": [{"location_id": "LOC_01"}, {"location_id": "LOC_02"}],
+        "visual_contract": {
+            "场景光位锚": {
+                "LOC_01": {"主光方向": "画左高处", "色温": "4800K冷灰"},
+                "LOC_02": {"主光方向": "画右后", "色温": "4300K傍晚"},
+            },
+            "场景轴线视线": {
+                "LOC_01": {"轴线": "入口到木台"},
+                "LOC_02": {"轴线": "水缸到山路"},
+            },
+        },
+    }
+
+    defs = image_prompt_pack.derive_asset_defs(tmp_path, story)
+
+    assert "画左高处" in defs["LOC_01"]["constraints"]["light_anchor"]
+    assert "画右后" not in defs["LOC_01"]["constraints"]["light_anchor"]
+    assert "入口到木台" in defs["LOC_01"]["constraints"]["axis_rules"]
+    assert "水缸到山路" not in defs["LOC_01"]["constraints"]["axis_rules"]
+    assert "画右后" in defs["LOC_02"]["scene_dna"]["color_lighting_weather"]
+    assert "画左高处" not in defs["LOC_02"]["scene_dna"]["color_lighting_weather"]
 
 
 def test_scene_card_resident_subject_id_is_preserved_in_scene_dna(tmp_path: Path) -> None:
@@ -1098,6 +1134,31 @@ def test_clip_assets_do_not_bind_plain_alias_from_prose() -> None:
     }
 
     assert image_prompt_pack.clip_assets(clip) == ["WEAPON_01"]
+
+
+def test_planned_episode_count_honors_explicit_library_tier() -> None:
+    assert image_prompt_pack.planned_episode_count(
+        "- 计划出场集数：前期多集复现（recurring_standard）", {}, "杂役班长"
+    ) == 3
+    assert image_prompt_pack.planned_episode_count(
+        "- 计划出场集数：长线（core_full）", {}, "主角"
+    ) == 10
+
+
+def test_material_character_map_reads_heading_sections(tmp_path: Path) -> None:
+    ep_dir = tmp_path / "脚本" / "第1集"
+    ep_dir.mkdir(parents=True)
+    (ep_dir / "素材清单.md").write_text(
+        "### GROUP_01 杂役背景组\n\n"
+        "中文 Prompt：三至五名粗布杂役远后景，脸部不清晰。\n",
+        encoding="utf-8",
+    )
+    rows = image_prompt_pack.material_character_map(
+        tmp_path, {"episode": "第1集"}
+    )
+
+    assert rows["GROUP_01"]["name"] == "杂役背景组"
+    assert "三至五名" in rows["GROUP_01"]["profile"]
 
 
 def test_continuity_targets_use_explicit_action_anchors() -> None:

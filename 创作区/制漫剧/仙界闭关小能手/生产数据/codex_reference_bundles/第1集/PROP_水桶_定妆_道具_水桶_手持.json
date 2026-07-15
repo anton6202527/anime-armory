@@ -1,0 +1,53 @@
+{
+  "backend": "codex",
+  "carried_identity": [],
+  "cli_image_input_count": 1,
+  "cli_image_input_limit": 24,
+  "cli_image_inputs": [
+    {
+      "abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_水桶.png",
+      "bytes": 1987864,
+      "owner": "PROP_水桶::定妆_道具_水桶_手持",
+      "prepared_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/生产数据/reference_enhanced/第1集/定妆_道具_水桶__7d3d3993e74d_941x1672_to_1024x1819.png",
+      "prepared_bytes": 2385132,
+      "prepared_rel_path": "生产数据/reference_enhanced/第1集/定妆_道具_水桶__7d3d3993e74d_941x1672_to_1024x1819.png",
+      "prepared_sha256": "3b8481348b8afcf5e0bf2457344deccad35427bb6949748cbd611b6b8716e9d7",
+      "priority": 100,
+      "reference_quality": {
+        "enabled": true,
+        "enhanced": true,
+        "max_long_edge": 2048,
+        "method": "lanczos_upscale_unsharp_mask",
+        "min_short_edge": 1024,
+        "original_height": 1672,
+        "original_long_edge": 1672,
+        "original_short_edge": 941,
+        "original_width": 941,
+        "policy": "low_res_reference_enhancement",
+        "prepared_height": 1819,
+        "prepared_width": 1024,
+        "status": "enhanced",
+        "target_height": 1819,
+        "target_width": 1024
+      },
+      "rel_path": "出图/共享/图片/定妆_道具_水桶.png",
+      "role": "asset",
+      "sequence": 0,
+      "sha256": "7d3d3993e74d01a0861b57b8f6ec36acd3868f62da66b1d167863ffa514d00d4",
+      "source": "same_prop_primary_parent",
+      "source_abs_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/出图/共享/图片/定妆_道具_水桶.png"
+    }
+  ],
+  "episode": "第1集",
+  "items": [],
+  "kind": "n2d_codex_reference_bundle",
+  "missing_ready_refs": [
+    "PROP_水桶"
+  ],
+  "persistent_subject_support": false,
+  "reference_input_mode": "codex_exec_image_flags",
+  "shot": "PROP_水桶::定妆_道具_水桶_手持",
+  "target": "出图/共享/图片/定妆_道具_水桶_手持.png",
+  "true_image_reference_support": true,
+  "version": 2
+}

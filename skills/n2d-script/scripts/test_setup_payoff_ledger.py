@@ -35,6 +35,13 @@ def test_detect_setups_cleans_voiceover_hook_suffix():
     assert setups[0]["desc"] == "死了半月的人回家了。"
 
 
+def test_detect_setups_cleans_descriptive_hook_suffix():
+    text = "[镜头5·旁白·平静·中] 五行灵根耗资巨大，连外门都不肯收他。 ⚡信息钩子"
+    setups = sp.detect_setups(text, "第1集")
+    assert len(setups) == 1
+    assert setups[0]["desc"] == "五行灵根耗资巨大，连外门都不肯收他。"
+
+
 def test_detect_setups_recognizes_ending_hook_marker():
     text = "[镜头20·妖·濒死·慢] 这眼睛……|| 他当年，也有。 🪝集尾"
     setups = sp.detect_setups(text, "第1集")

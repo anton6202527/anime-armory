@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_vertical_composition_plan", "version": 1, "episode": "第1集", "status": "confirmed",
+  "composition_rules": {"face_readability": "说话和反应至少MCU", "overlay_policy": "字幕标题只由compose overlay", "safe_zone": "左右60px/底部130px/上方25%标题区", "z_axis_depth": "前中后景分层，不横排挤脸"},
+  "beat_composition": [
+    {"beat_id": "Beat_01", "primary_subject_zone": "少年中下偏左/张老大上中偏右", "foreground_midground_background": "手/少年/人群低梁", "vertical_motion": "手从上拍下，少年轻抬眼", "subtitle_clearance": "不盖脸和拍肩手"},
+    {"beat_id": "Beat_02", "primary_subject_zone": "少年中轴略下", "foreground_midground_background": "桶/少年/巨缸山路", "vertical_motion": "起担弯腰上坡倒水", "subtitle_clearance": "置于空石路"},
+    {"beat_id": "Beat_03", "primary_subject_zone": "脸中上偏右/盆下中偏左", "foreground_midground_background": "盆/手脸/窄瀑竹影", "vertical_motion": "站立到跪下再起身", "subtitle_clearance": "结尾尽量无字幕，不盖盆"}
+  ]
+}

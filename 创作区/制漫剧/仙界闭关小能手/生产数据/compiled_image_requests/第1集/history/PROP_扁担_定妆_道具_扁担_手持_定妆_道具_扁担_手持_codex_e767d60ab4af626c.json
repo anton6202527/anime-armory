@@ -1,0 +1,82 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_扁担_定妆_道具_扁担_手持_定妆_道具_扁担_手持.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_扁担_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；+ PROP_水桶；结构锁: + PROP_水桶；归属/用途: 剧情资产；当前状态: + PROP_水桶；剧情生命周期: 共享定妆、本集引用；材质与颜色: + PROP_水桶；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为PROP_扁担::定妆_道具_扁担_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让扁担结构/颜色/尺寸漂移；结构漂移；数量漂移；让+ PROP_水桶结构/颜色/尺寸漂移；looking at viewer\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1248,
+  "actual_submit_prompt_sha256": "d4b2f30185cb4a2b6b4b2887348ece5f890bde5dc8c828ce8c0668810aaad68c",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=prop_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_PROP_扁担_定妆_道具_扁担_手持_定妆_道具_扁担_手持.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成独立生产级资产参考图：图片/定妆_道具_扁担_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；+ PROP_水桶；结构锁: + PROP_水桶；归属/用途: 剧情资产；当前状态: + PROP_水桶；剧情生命周期: 共享定妆、本集引用；材质与颜色: + PROP_水桶；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为PROP_扁担::定妆_道具_扁担_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让扁担结构/颜色/尺寸漂移；结构漂移；数量漂移；让+ PROP_水桶结构/颜色/尺寸漂移；looking at viewer\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "PROP_扁担::定妆_道具_扁担_手持",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_扁担__ea4e3cf2c7c6_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0871c39596d02e9735243f8f0bb556227285daabc63ad1e6a5ccde3f1011fb76"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "e767d60ab4af626c5fc61bb9b499567fa17c5bcf3f7e28dd8434a10bcd04f7f3",
+    "compiler_decisions": [],
+    "execution_context_sha256": "c79f750b0fc47dec3c7e4b6d209ca25cce6071b9e8be1fc7eee00a91ecef5a33",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:33>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 33,
+      "constraint_compression": {
+        "policy_guard_input": 2,
+        "policy_guard_output": 2,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 192,
+      "negative_chars": 0,
+      "prompt_chars": 766,
+      "reference_count": 1
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-12.1",
+    "prompt": "生成独立生产级资产参考图：图片/定妆_道具_扁担_手持.png；本次目标是道具手持/携行参考：必须出现单手/双手/前臂或下巴以下中性人台，清楚展示手与提带/背带/握点/包体的接触方式、承重点和携行姿态；道具主体仍要完整可读且结构不漂移。禁止只画无人静物，禁止清晰人物五官/新角色脸，禁止把道具改成现代背包、武器或不相关器物 主体：独立资产档案：仅一件完整资产置于中性浅灰干净背景，均匀柔光，无剧情场景、无人、无手、无脸、无持握动作、无特效光轨；+ PROP_水桶；结构锁: + PROP_水桶；归属/用途: 剧情资产；当前状态: + PROP_水桶；剧情生命周期: 共享定妆、本集引用；材质与颜色: + PROP_水桶；脸部策略: faceless；资产参考图默认不生成未绑定身份的清晰人物脸；比例/手持参考只允许无脸手部、人台或下巴以下尺度参照 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为PROP_扁担::定妆_道具_扁担_手持的asset参考 镜头为旁观者视角：角色不看镜头，视线锁定场内对手、武器来路、命中点、对话对象或所视之物；身份可辨使用三分之二、45°、侧脸或过肩露脸，不转成正对镜头肖像摆拍 道具尺度派生板可用无脸手部或下巴以下尺度参照；道具结构完整，不出现清晰人脸或具名角色身份 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；资产禁项：现代物件；文字水印；结构漂移；资产禁漂：不要让扁担结构/颜色/尺寸漂移；结构漂移；数量漂移；让+ PROP_水桶结构/颜色/尺寸漂移；looking at viewer",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "PROP_扁担::定妆_道具_扁担_手持",
+        "path": "生产数据/reference_enhanced/第1集/定妆_道具_扁担__ea4e3cf2c7c6_941x1672_to_1024x1819.png",
+        "role": "asset",
+        "sha256": "0871c39596d02e9735243f8f0bb556227285daabc63ad1e6a5ccde3f1011fb76"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "e628c75530307f006453b7c020f81450b53367a679d2189584c5714630dbf014",
+    "source_contract_text_sha256": "40aef21aeb53d51075d633eba679df9dab2ff7ab97e60a58761253e9ff42692f",
+    "task_type": "prop_asset",
+    "version": 1
+  },
+  "created_at": "2026-07-14T18:28:03+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "5b2892ab803bbee71821fb0461029b7c00c43fe77606d350e354319db3c9ab2c",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "PROP_扁担::定妆_道具_扁担_手持",
+  "target": "出图/共享/图片/定妆_道具_扁担_手持.png",
+  "version": 1
+}

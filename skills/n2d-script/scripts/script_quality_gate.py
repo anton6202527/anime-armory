@@ -663,6 +663,16 @@ def write_outputs(root: Path, ep: str, contract: Mapping[str, Any]) -> Tuple[Pat
     out = root / "生产数据"
     jp = out / f"script_quality_contract_{ep}.json"
     mp = out / f"script_quality_contract_{ep}.md"
+    previous = load_json(jp)
+    if isinstance(previous, Mapping):
+        old_semantic = {k: v for k, v in previous.items() if k != "generated_at"}
+        new_semantic = {k: v for k, v in contract.items() if k != "generated_at"}
+        if old_semantic == new_semantic:
+            # Keep the original timestamp and bytes. Downstream P-3 sign-off
+            # fingerprints this artifact, so a no-op gate run must be a no-op.
+            if isinstance(contract, dict) and previous.get("generated_at"):
+                contract["generated_at"] = previous["generated_at"]
+            return jp, mp
     write_atomic(jp, json.dumps(contract, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
     write_atomic(mp, render_md(contract))
     return jp, mp

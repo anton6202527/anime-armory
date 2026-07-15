@@ -1,0 +1,28 @@
+{
+  "kind": "comic_season_arc",
+  "version": 2,
+  "status": "confirmed",
+  "chapters": [
+    {
+      "chapter": "第1话",
+      "core_conflict": "姜月初必须在无户籍、无武力且虎妖复生的绝境中找到活路",
+      "ending_mode": "cliffhanger",
+      "ending_intent": "以姜月初把刀刺入裴长青胸口收尾，让读者在道德震惊中追问她为何杀唯一的同伴",
+      "promise_refs": ["PRM_001"]
+    },
+    {
+      "chapter": "第2话",
+      "core_conflict": "姜月初以裴长青性命换得二十年道行，必须在一刀内斩杀具有复生神通的虎妖",
+      "ending_mode": "reveal",
+      "ending_intent": "虎妖被斩后百妖谱显现收录反应，首次兑现主角的核心成长机制",
+      "promise_refs": ["PRM_001"]
+    },
+    {
+      "chapter": "第3话",
+      "core_conflict": "姜月初必须隐藏杀死镇魔司队正的真相，同时处理新获神通与官府身份追查",
+      "ending_mode": "closure_with_new_promise",
+      "ending_intent": "完成荒野求生小弧，并开启姜月初借百妖谱踏入镇魔世界的新承诺",
+      "promise_refs": ["PRM_001"]
+    }
+  ]
+}

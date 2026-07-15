@@ -2518,6 +2518,30 @@ def test_shared_prop_board_guidance_allows_faceless_scale_for_variant() -> None:
     assert "只画干净物件本体" not in guidance
 
 
+def test_shared_prop_variant_attaches_primary_prop_parent(tmp_path: Path) -> None:
+    rel = "出图/共享/图片/定妆_道具_木牌.png"
+    parent = tmp_path / rel
+    parent.parent.mkdir(parents=True)
+    parent.write_bytes(b"approved-prop-primary")
+    section = codex_image_runner.ClipSection("PROP_TEST", "## PROP_TEST", "", "")
+    target = codex_image_runner.Target(
+        "PROP_TEST::定妆_道具_木牌_比例",
+        "PROP_TEST",
+        "shared",
+        "出图/共享/图片/定妆_道具_木牌_比例.png",
+        section,
+    )
+    target.aliases = {"PROP_TEST"}
+
+    inputs = codex_image_runner.codex_reference_inputs_for_target(
+        tmp_path, "第1集", target, {"items": []}
+    )
+
+    assert [item["rel_path"] for item in inputs] == [rel]
+    assert inputs[0]["role"] == "asset"
+    assert inputs[0]["source"] == "same_prop_primary_parent"
+
+
 def test_style_anchor_target_marks_registry_ready(tmp_path: Path) -> None:
     rel = "出图/共享/图片/风格锚_冷灰写实3D国风漫剧.png"
 

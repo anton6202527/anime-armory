@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="944" viewBox="0 0 1012 944">
+<rect width="100%" height="100%" fill="#f2efe7"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;font-size:11px;fill:#222}.pid{font-weight:700}.note{font-size:9px;fill:#555}</style>
+<rect x="28" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="46">SCROLL_001 scroll</text>
+<rect x="46" y="62" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="77">P001</text>
+<text class="note" x="51" y="92">极长竖向开场：冷灰荒野与血色余晖，枯草间尸骸横陈，风卷起墨色尘…</text>
+<rect x="46" y="135" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="150">P002</text>
+<text class="note" x="51" y="165">姜月初从尸骸间撑起身，高马尾和破损灰白囚服被风吹动，她难以置信…</text>
+<rect x="57" y="209" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="224">P003</text>
+<text class="note" x="62" y="239">主角视角扫过囚服尸体和黑衣赤云纹的镇魔卫尸体，两种服装形成清楚…</text>
+<rect x="46" y="259" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="274">P004</text>
+<text class="note" x="51" y="289">巨岩下，虎山神人身虎头的巨躯斜倚着，胸口巨大窟窿涌出黑血；姜月…</text>
+<rect x="57" y="333" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="348">P005</text>
+<text class="note" x="62" y="363">镜头从虎妖黑血滑向半跪的裴长青；他用断刀撑地，黑衣赤纹、左臂扭…</text>
+<rect x="57" y="384" width="242" height="45" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="399">P006</text>
+<text class="note" x="62" y="414">姜月初踮起脚尖后退；裴长青艰难抬头，干裂的嘴唇吐出命令。无字原…</text>
+<text class="note" x="38" y="448">hook: P006 threat_dialogue</text>
+<rect x="356" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="46">SCROLL_002 scroll</text>
+<rect x="396" y="62" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="77">P007</text>
+<text class="note" x="401" y="85">破碎记忆以墨色剪影小格叠入：高官府门封条、女子戴枷、赤纹缇骑押…</text>
+<rect x="374" y="98" width="264" height="92" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="113">P008</text>
+<text class="note" x="379" y="128">姜月初转身要跑，一道冷光从她耳侧擦过，半截断刀铃在脚前泥地。无…</text>
+<rect x="385" y="196" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="211">P009</text>
+<text class="note" x="390" y="226">断刀贴着姜月初脚尖震颤，她僵住，额角冷汗滑下，只能慢慢转回身。…</text>
+<rect x="396" y="264" width="220" height="30" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="401" y="279">P010</text>
+<text class="note" x="401" y="287">裴长青嘴角极轻地动了一下，但藏在袖下的手已无力垂落；姜月初并未…</text>
+<rect x="385" y="300" width="242" height="61" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="315">P011</text>
+<text class="note" x="390" y="330">裴长青半跪在地，仰视走近的姜月初，主动报出身份。无字原图，不画…</text>
+<rect x="385" y="368" width="242" height="62" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="383">P012</text>
+<text class="note" x="390" y="398">裴长青的视线锁住姜月初，背后是没入荒草的死人和无路可逃的远方。…</text>
+<text class="note" x="366" y="448">hook: P012 bargain_pressure</text>
+<rect x="684" y="28" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="694" y="46">SCROLL_003 scroll</text>
+<rect x="713" y="62" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="77">P013</text>
+<text class="note" x="718" y="92">姜月初看了看断刀、荒野和自己纤细的手，最终咬牙蹲下。无字原图，…</text>
+<rect x="713" y="112" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="127">P014</text>
+<text class="note" x="718" y="142">姜月初绕到裴长青右侧，把他滚烫沉重的身体架在肩上，两人踉跄向南…</text>
+<rect x="702" y="163" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="178">P015</text>
+<text class="note" x="707" y="193">两人刚走几步，身后传来咳嗽；姜月初手一松，裴长青直挺挺摔回泥地…</text>
+<rect x="702" y="237" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="252">P016</text>
+<text class="note" x="707" y="267">虎山神从巨岩下缓缓站起，胸口巨大窟窿仍然流黑血，它扭动脆子露出…</text>
+<rect x="713" y="310" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="718" y="325">P017</text>
+<text class="note" x="718" y="340">裴长青瞳孔紧缩，他的记忆剪影闪过刀锋贯穿虎妖心脏，再与当下不死…</text>
+<rect x="702" y="361" width="264" height="68" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="707" y="376">P018</text>
+<text class="note" x="707" y="391">裴长青从地上抓起同僚横刀，强行爆发最后气血，拖着扭曲左臂跃起斩…</text>
+<text class="note" x="694" y="448">hook: P018 desperate_attack</text>
+<rect x="28" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="38" y="504">SCROLL_004 scroll</text>
+<rect x="46" y="520" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="535">P019</text>
+<text class="note" x="51" y="550">虎妖不闪不避，后发先至一脚蹬在裴长青胸口；他横向倒飞，横刀脱手…</text>
+<rect x="46" y="593" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="608">P020</text>
+<text class="note" x="51" y="623">俯视姜月初、濒死裴长青与脚边横刀；虎妖高大阴影从画右覆压过来，…</text>
+<rect x="46" y="667" width="264" height="67" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="51" y="682">P021</text>
+<text class="note" x="51" y="697">姜月初眼前的世界暗下，一幅古朴绘卷以墨色和金光展开；系统文字不…</text>
+<rect x="57" y="740" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="755">P022</text>
+<text class="note" x="62" y="770">姜月初的手在金光前收紧，她看向远处不死虎妖，凡人身躯与巨妖形成…</text>
+<rect x="57" y="791" width="242" height="44" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="806">P023</text>
+<text class="note" x="62" y="821">姜月初俯身捡起裴长青脱手的横刀，刀柄余温与血污粘住手心；裴长青…</text>
+<rect x="57" y="842" width="242" height="45" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="62" y="857">P024</text>
+<text class="note" x="62" y="872">从裴长青低角度看，姜月初持刀背对他，似乎要走向虎妖；虎妖在远处…</text>
+<text class="note" x="38" y="906">hook: P024 misdirection</text>
+<rect x="356" y="486" width="300" height="430" fill="#fffdf7" stroke="#222" stroke-width="2"/>
+<text x="366" y="504">SCROLL_005 scroll</text>
+<rect x="385" y="520" width="242" height="70" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="535">P025</text>
+<text class="note" x="390" y="550">姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看…</text>
+<rect x="374" y="596" width="264" height="104" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="611">P026</text>
+<text class="note" x="379" y="626">主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖…</text>
+<rect x="385" y="706" width="242" height="70" fill="#f7f7f7" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="390" y="721">P027</text>
+<text class="note" x="390" y="736">姜月初半跪到裴长青身侧，脸藏在头发阴影中；裴长青困惑地抬眼看她…</text>
+<rect x="374" y="782" width="264" height="105" fill="#ece8dc" stroke="#333" stroke-width="1.5"/>
+<text class="pid" x="379" y="797">P028</text>
+<text class="note" x="379" y="812">超近景冲击格：姜月初双手将横刀刺入裴长青胸口，接触点被深红血色…</text>
+<text class="note" x="366" y="906">hook: P028 cliffhanger</text>
+</svg>

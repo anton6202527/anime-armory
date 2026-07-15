@@ -1,0 +1,239 @@
+{
+  "clips": [
+    {
+      "clip": "EP01_CLIP01",
+      "detail_allowed": false,
+      "detail_reason": "揭示/对质/冷开/集尾可保留辨识度，但不应铺成 20s+ 长段。",
+      "duration_sec": 6.237,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "低梁下的羞辱",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook",
+        "ordinary_reaction_or_bridge"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": "ensemble_blocking"
+    },
+    {
+      "clip": "EP01_CLIP02",
+      "detail_allowed": false,
+      "detail_reason": "揭示/对质/冷开/集尾可保留辨识度，但不应铺成 20s+ 长段。",
+      "duration_sec": 7.969,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "二十趟命令",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": "dialogue_shot_reverse"
+    },
+    {
+      "clip": "EP01_CLIP03",
+      "detail_allowed": false,
+      "detail_reason": "解释/情报/旁白信息应压成短镜、道具细节或一句旁白。",
+      "duration_sec": 11.609,
+      "economy_class": "compact_story",
+      "finding": {
+        "code": "story_clip_over_economy_target",
+        "severity": "warn"
+      },
+      "hard_max_story_clip_sec": 12.0,
+      "label": "不肯离山",
+      "narration_weight": 0.0,
+      "over_budget_sec": 5.609,
+      "recommended_action": "compress_or_narrate_before_video",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 3-6s：一句旁白承载信息，画面只拍能改变局势的物件/表情/动作。",
+      "signals": [
+        "exposition"
+      ],
+      "target_story_clip_sec": {
+        "max": 6.0,
+        "min": 3.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "detail_allowed": false,
+      "detail_reason": "揭示/对质/冷开/集尾可保留辨识度，但不应铺成 20s+ 长段。",
+      "duration_sec": 8.267,
+      "economy_class": "selective_detail",
+      "finding": {
+        "code": "story_clip_over_economy_target",
+        "severity": "warn"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "先挑五趟",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.267,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP05",
+      "detail_allowed": false,
+      "detail_reason": "行进/换场/建立关系适合蒙太奇或少量关键画面，不宜长拍。",
+      "duration_sec": 4.795,
+      "economy_class": "montage_bridge",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 12.0,
+      "label": "第五次到潭边",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "merge_or_montage_before_video",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 3-6s 蒙太奇：建立镜一闪 + 关键道具/动作特写 + 目的地落幅。",
+      "signals": [
+        "travel_or_establishing"
+      ],
+      "target_story_clip_sec": {
+        "max": 6.0,
+        "min": 3.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP06",
+      "detail_allowed": false,
+      "detail_reason": "揭示/对质/冷开/集尾可保留辨识度，但不应铺成 20s+ 长段。",
+      "duration_sec": 7.458,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "水下破盆",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": ""
+    },
+    {
+      "clip": "EP01_CLIP07",
+      "detail_allowed": false,
+      "detail_reason": "揭示/对质/冷开/集尾可保留辨识度，但不应铺成 20s+ 长段。",
+      "duration_sec": 3.896,
+      "economy_class": "selective_detail",
+      "finding": {
+        "severity": "pass"
+      },
+      "hard_max_story_clip_sec": 15.0,
+      "label": "盆底幽光",
+      "narration_weight": 0.0,
+      "over_budget_sec": 0.0,
+      "recommended_action": "trim_to_selective_detail",
+      "recommended_video_shot_sec": {
+        "max": 8.0,
+        "min": 4.0
+      },
+      "rewrite_demo": "改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "signals": [
+        "selective_reveal_or_hook"
+      ],
+      "target_story_clip_sec": {
+        "max": 8.0,
+        "min": 5.0
+      },
+      "template": ""
+    }
+  ],
+  "episode": "第1集",
+  "findings": [
+    {
+      "clip": "EP01_CLIP03",
+      "code": "story_clip_over_economy_target",
+      "message": "EP01_CLIP03 当前 11.609s，分类=compact_story，建议 3-6s；compress_or_narrate_before_video。改成 3-6s：一句旁白承载信息，画面只拍能改变局势的物件/表情/动作。",
+      "severity": "warn"
+    },
+    {
+      "clip": "EP01_CLIP04",
+      "code": "story_clip_over_economy_target",
+      "message": "EP01_CLIP04 当前 8.267s，分类=selective_detail，建议 5-8s；trim_to_selective_detail。改成 5-8s：建立局势 + 一个决定性细节 + 一个反应/宣判落点。",
+      "severity": "warn"
+    }
+  ],
+  "generated_at": "2026-07-14T16:28:29+00:00",
+  "kind": "n2d_story_economy_audit",
+  "ok": true,
+  "rules": [
+    "默认把秒数还给战斗/动作、男女主或核心人物强情绪交流、真正反转/集尾钩。",
+    "解释、行进、普通反应、情报交代优先压成 2-6s，或并入相邻强戏。",
+    "长 story_clip 若不值得详拍，不应先拆成多个视频段烧额度；应先回 n2d-script 压缩剧情表达。"
+  ],
+  "summary": {
+    "blocks": 0,
+    "clips": 7,
+    "compact_or_montage": 2,
+    "potential_savings_sec": 5.876,
+    "premium_detail": 0,
+    "rewrite_required": 2,
+    "target_total_max_sec": 52.0,
+    "target_total_min_sec": 31.0,
+    "total_duration_sec": 50.231,
+    "warnings": 2
+  },
+  "version": 1
+}

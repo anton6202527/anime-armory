@@ -1,0 +1,189 @@
+{
+  "continuity_owner": "script_supervisor",
+  "episode": "第1集",
+  "generated_at": "2026-07-14T16:28:23+00:00",
+  "kind": "n2d_continuity_breakdown",
+  "rows": [
+    {
+      "clip_id": "EP01_CLIP01",
+      "end_state": "贺平生仍站画左，木牌贴回胸口，垂眼但脚没退",
+      "eyeline": "CHAR_01看画右，CHAR_02看画左",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道自己被判为资质差"
+        ],
+        "CHAR_02": [
+          "知道少年无处可去"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_木牌；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02",
+        "PROP_木牌"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01看画右，CHAR_02看画左；转场方式：笑声骤停后硬切下一道命令。",
+      "shot_reverse_continuity": {},
+      "start_state": "贺平生站在画左中景，木牌在胸前，张老大画右高位俯视",
+      "transition_guard": "笑声骤停后硬切下一道命令",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02、PROP_木牌；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP02",
+      "end_state": "张老大右手从贺平生左肩移开，贺平生仍画左低头应下",
+      "eyeline": "CHAR_01向画右上，CHAR_02向画左下",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道每日挑水二十趟"
+        ],
+        "CHAR_02": [
+          "知道命令远超新人体力"
+        ]
+      },
+      "location_id": "LOC_01",
+      "props_continuity": "关键物件保持可追踪：PROP_木牌；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "CHAR_02"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01向画右上，CHAR_02向画左下；转场方式：命令尾音延续到空院物件镜。",
+      "shot_reverse_continuity": {
+        "axis_line": "CHAR_01↔CHAR_02横轴",
+        "buffer_or_reestablishing": "手掌压肩插入镜",
+        "camera_coverage": "双人建立+清洁单人+手部插入+反应特写",
+        "coverage_order": [
+          "two-shot",
+          "CHAR_02 MCU",
+          "hand insert",
+          "CHAR_01 reaction CU"
+        ],
+        "crossing_axis_policy": "禁止越轴",
+        "eyeline_match": "CHAR_01向画右上，CHAR_02向画左下",
+        "lens_height_distance_match": "焦段统一，只用机位高差表达权力",
+        "screen_sides": {
+          "left": "CHAR_01",
+          "right": "CHAR_02"
+        },
+        "shot_pairing": "张老大低机位MCU / 贺平生平视CU"
+      },
+      "start_state": "贺平生仍站画左，木牌贴回胸口，垂眼但脚没退",
+      "transition_guard": "命令尾音延续到空院物件镜",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、CHAR_02；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP03",
+      "end_state": "贺平生站在巨缸旁，双手握住扁担中点，望向画左上山路",
+      "eyeline": "CHAR_01先看画左的旧布包，再看画左上山路",
+      "knowledge_state": {
+        "CHAR_01": [
+          "明知自己本钱不足，仍想留在仙门附近"
+        ]
+      },
+      "location_id": "LOC_02",
+      "props_continuity": "关键物件保持可追踪：PROP_旧布包、PROP_扁担、PROP_水桶；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "PROP_扁担",
+        "PROP_水桶"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01先看画左的旧布包，再看画左上山路；转场方式：木梁横线匹配扁担横线。",
+      "shot_reverse_continuity": {},
+      "start_state": "张老大右手从贺平生左肩移开，贺平生仍画左低头应下",
+      "transition_guard": "木梁横线匹配扁担横线",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、PROP_扁担、PROP_水桶；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP04",
+      "end_state": "贺平生已把扁担压上右肩，两只空桶在身体前后稳定，脚尖指向画左上山路",
+      "eyeline": "CHAR_01看画左上前路",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道明日才正式开工",
+          "决定今日先完成五趟"
+        ]
+      },
+      "location_id": "LOC_02",
+      "props_continuity": "关键物件保持可追踪：PROP_扁担、PROP_水桶；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "PROP_扁担",
+        "PROP_水桶"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01看画左上前路；转场方式：从完整起担动作硬切多趟跳切。",
+      "shot_reverse_continuity": {},
+      "start_state": "贺平生站在巨缸旁，双手握住扁担中点，望向画左上山路",
+      "transition_guard": "从完整起担动作硬切多趟跳切",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、PROP_扁担、PROP_水桶；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP05",
+      "end_state": "月夜浅潭边，贺平生画右弯腰将两桶置于碎石地，扁担仍在右肩后侧",
+      "eyeline": "CHAR_01先看画左上前路，抵达后低头看水桶",
+      "knowledge_state": {
+        "CHAR_01": [
+          "知道这是今日第五趟，尚未看见水下之物"
+        ]
+      },
+      "location_id": "LOC_03",
+      "props_continuity": "关键物件保持可追踪：PROP_扁担、PROP_水桶；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "PROP_扁担",
+        "PROP_水桶"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01先看画左上前路，抵达后低头看水桶；转场方式：水桶下落动作匹配月夜触地。",
+      "shot_reverse_continuity": {},
+      "start_state": "贺平生已把扁担压上右肩，两只空桶在身体前后稳定，脚尖指向画左上山路",
+      "transition_guard": "水桶下落动作匹配月夜触地",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、PROP_扁担、PROP_水桶；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP06",
+      "end_state": "贺平生站在画右双手托持破损黑盆，盆口朝上，水桶与扁担留在画右地面",
+      "eyeline": "CHAR_01看画左下水中PROP_01",
+      "knowledge_state": {
+        "CHAR_01": [
+          "只把PROP_01当作可用的破盆，不知其异常"
+        ]
+      },
+      "location_id": "LOC_03",
+      "props_continuity": "关键物件保持可追踪：PROP_01、PROP_水桶、PROP_扁担；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "PROP_01"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01看画左下水中PROP_01；转场方式：自嘲笑保留至他转身，后浮出盆底插入镜。",
+      "shot_reverse_continuity": {},
+      "start_state": "月夜浅潭边，贺平生画右弯腰将两桶置于碎石地，扁担仍在右肩后侧",
+      "transition_guard": "自嘲笑保留至他转身，后浮出盆底插入镜",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、PROP_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    },
+    {
+      "clip_id": "EP01_CLIP07",
+      "end_state": "贺平生抱盆走向画右山路，画面停在盆底一缕青金幽光上",
+      "eyeline": "CHAR_01看画右山路，不看盆底",
+      "knowledge_state": {
+        "AUDIENCE": [
+          "第一次看见盆底青金幽光"
+        ],
+        "CHAR_01": [
+          "仍不知盆底异常"
+        ]
+      },
+      "location_id": "LOC_03",
+      "props_continuity": "关键物件保持可追踪：PROP_01；位置变化必须由动作或转场解释。",
+      "required_presence": [
+        "CHAR_01",
+        "PROP_01"
+      ],
+      "screen_direction": "守本场左右轴线；视线接力：CHAR_01看画右山路，不看盆底；转场方式：集尾在幽光刚可读时硬切黑场。",
+      "shot_reverse_continuity": {},
+      "start_state": "贺平生站在画右双手托持破损黑盆，盆口朝上，水桶与扁担留在画右地面",
+      "transition_guard": "集尾在幽光刚可读时硬切黑场",
+      "wardrobe_makeup_continuity": "按本镜 required_presence 锁定：CHAR_01、PROP_01；血尘、战损、泪痕和形态只按 start_state→end_state 演进。"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1
+}

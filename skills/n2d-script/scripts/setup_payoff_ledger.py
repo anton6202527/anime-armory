@@ -40,7 +40,13 @@ STORYBOARD_META_RE = re.compile(
 )
 MARKDOWN_TABLE_RE = re.compile(r"^\s*\|")
 VOICEOVER_PREFIX_RE = re.compile(r"^\[镜头\d+·[^]]+\]\s*")
-HOOK_LABEL_RE = re.compile(r"\s*[⚡💥🪝]?\s*(?:钩子|爽点|集尾)\s*$", re.IGNORECASE)
+# 制作标记会带语义前缀（如「⚡信息钩子」、「💥小爽点」）。
+# 整段移除，避免同一伏笔因残留「⚡信息」而与账本无法匹配。
+HOOK_LABEL_RE = re.compile(
+    r"\s*[⚡💥🪝]\s*[\u4e00-\u9fffA-Za-z0-9_-]{0,12}\s*$|"
+    r"\s*(?:钩子|爽点|集尾)\s*$",
+    re.IGNORECASE,
+)
 
 # 无显式标记、但句式本身就是「挖坑」的弱信号——交编剧确认后才算坑（status=candidate，不进 gate）。
 # 治「作者漏标记 → 真伏笔永不进账」：身世/凶手/神秘信物/未解之谜的疑问句与悬置物。

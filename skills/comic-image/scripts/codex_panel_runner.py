@@ -317,6 +317,7 @@ def write_reference_manifest(
     panel_id: str,
     records: list[dict[str, str]],
     omitted: list[dict[str, str]] | None = None,
+    attachment_limit: int = CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
 ) -> Path:
     omitted = omitted or []
     path = root / "生产数据" / "codex_reference_bundles" / chapter / f"{panel_id}.json"
@@ -326,7 +327,7 @@ def write_reference_manifest(
         "chapter": chapter,
         "panel_id": panel_id,
         "reference_input_mode": "codex_exec_image_flags",
-        "reference_attachment_limit": CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
+        "reference_attachment_limit": attachment_limit,
         "cli_image_input_count": len(records),
         "references": [
             {key: value for key, value in record.items() if key != "abs_path"}
@@ -609,6 +610,58 @@ def archive_existing(path: Path, archive_dir: Path, reason: str) -> str:
     return str(archived)
 
 
+def safety_shape_visual_prompt(text: str) -> str:
+    """把剧情中的暴力事实改写为非血腥视觉语言，避免请求输出伤口细节。
+
+    只作用于 Codex Image 2 的运行时视觉 wrapper；编译后的剧情 contract 与哈希保持原样，
+    因而审计仍能追溯原始剧情事实。改写不删除人物选择或动作因果，只把呈现方式收束为
+    剪影、衣物破损、墨迹遮挡和冲击前/后瞬间。
+    """
+    shaped = str(text or "")
+    replacements = (
+        ("超近景冲击格：姜月初双手将横刀刺入裴长青胸口，接触点被深红血色与飞散墨点遮挡，不展示露骨伤口",
+         "超近景冲击格：姜月初双手握刀骤然推向裴长青胸前；用暗红布片与飞散墨点完全遮住接触处，只表现双方错愕和冲击，不表现穿刺、伤口或体液"),
+        ("囚服尸体和黑衣赤云纹的镇魔卫尸体", "倒卧的囚服无面剪影与黑衣赤云纹无面剪影"),
+        ("枯草间尸骸横陈", "枯草间散落着被破布覆盖的静止无面剪影"),
+        ("从尸骸间", "从破布覆盖的静止剪影之间"),
+        ("尸骸缝隙", "破布与枯草缝隙"),
+        ("尸骸", "被破布覆盖的静止无面剪影"),
+        ("尸体", "静止无面剪影"),
+        ("胸口巨大血窟窿", "仅位于前胸的圆形暗黑能量空洞"),
+        ("胸口血窟窿", "仅位于前胸的圆形暗黑能量空洞"),
+        ("巨大窟窿涌出黑血", "圆形暗黑能量空洞逸散黑色墨气"),
+        ("巨大窟窿仍然流黑血", "圆形暗黑能量空洞仍逸散黑色墨气"),
+        ("虎妖黑血", "虎妖周围的黑色墨迹"),
+        ("黑色妖血", "黑色妖墨"),
+        ("以妖血为墨", "以妖墨为媒"),
+        ("黑血", "黑色墨迹"),
+        ("妖血", "妖墨"),
+        ("血色余晖", "暗红余晖"),
+        ("血色轮廓光", "暗红轮廓光"),
+        ("深红血色", "深暗红色"),
+        ("血痕", "暗色尘泥拖痕"),
+        ("血污", "尘泥污迹"),
+        ("重伤濒死", "极度虚弱、近乎失去意识"),
+        ("濒死", "极度虚弱"),
+        ("左臂扭曲", "左臂无力垂落"),
+        ("重伤", "虚弱"),
+        ("伤口仍在", "前胸暗黑标志仍在"),
+        ("伤口", "破损处"),
+        ("死亡假象", "倒地静止状态"),
+        ("死亡", "倒地静止"),
+        ("斩杀生物", "击败妖物"),
+        ("斩杀", "击败"),
+        ("最后气血", "最后力量"),
+        ("斩向虎妖脖颈", "挥向虎妖肩侧"),
+        ("刺入", "推向"),
+        ("刺进", "推向"),
+        ("过度血腥特写", "任何写实伤害细节"),
+    )
+    for old, new in replacements:
+        shaped = shaped.replace(old, new)
+    return shaped
+
+
 def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference_records: list[dict[str, str]]) -> str:
     """Build the small execution wrapper around the compiled provider prompt."""
     validate_compiled_job(job, expected_backend=CODEX_MODEL + " " + CODEX_CHANNEL)
@@ -620,14 +673,18 @@ def build_prompt(job: dict[str, Any], project_name: str, chapter: str, reference
         if reference_records else
         "本格没有参考图附件，只按可见画面描述生成。"
     )
-    negative = f"\n独立负向字段：{job.get('negative_prompt')}" if job.get("negative_prompt") else ""
+    submit_prompt = safety_shape_visual_prompt(str(job.get("submit_prompt") or ""))
+    negative_prompt = safety_shape_visual_prompt(str(job.get("negative_prompt") or ""))
+    negative = f"\n独立负向字段：{negative_prompt}" if negative_prompt else ""
     return f"""请用内置 image_generation 工具生成一张漫画分格 PNG。
 
 目标尺寸：{width}x{height}，长宽比约 {width / max(height, 1):.3f}
 {ref_line}
 
 模型提交 prompt：
-{job.get('submit_prompt', '')}{negative}
+{submit_prompt}{negative}
+
+安全呈现硬约束：这是非血腥奇幻漫画。只允许静止无面剪影、破损衣物、黑色墨气、暗红布片与冲击线；禁止可见伤口、穿刺细节、体液、残肢或痛苦特写。用遮挡、剪影和动作前后瞬间保留剧情因果。
 
 本格人体/接触点补充：
 {anatomy_guidance(job)}
@@ -817,6 +874,12 @@ def main() -> int:
     parser.add_argument("--targets", default="", help="逗号分隔 panel_id；默认全部未完成")
     parser.add_argument("--limit", type=int, default=0, help="最多生成多少张；0 表示不限")
     parser.add_argument("--max-attempts", type=int, default=1, help="每格最多尝试次数；适合预算充足时重试失败请求")
+    parser.add_argument(
+        "--reference-limit",
+        type=int,
+        default=CODEX_IMAGE_GENERATION_REFERENCE_LIMIT,
+        help="每格实际传给 Codex Image 2 的参考图上限（1-5）；多参考超时格可降到关键主体+场景三张",
+    )
     parser.add_argument("--force", action="store_true", help="即使 job 已 ready 也重新生成；原图会归档到 candidates/")
     parser.add_argument("--allow-missing-refs", action="store_true", help="允许带 references 的格子在参考图缺失时继续文生图")
     parser.add_argument("--timeout-sec", type=int, default=240)
@@ -837,6 +900,11 @@ def main() -> int:
         "--recheck-existing",
         action="store_true",
         help="只对目标格现有 PNG 重跑 post-QC 并刷新 job 状态，不调用生图模型、不归档或重抽",
+    )
+    parser.add_argument(
+        "--adopt-builtin",
+        action="store_true",
+        help="配合 --recheck-existing：把现有 PNG 登记为内置 Codex Image 2 路由降级产物并补齐 provenance",
     )
     parser.add_argument(
         "--skip-gate",
@@ -880,6 +948,7 @@ def main() -> int:
     data["channel"] = CODEX_CHANNEL
     targets = {item.strip() for item in args.targets.split(",") if item.strip()}
     max_attempts = max(1, args.max_attempts)
+    reference_limit = max(1, min(CODEX_IMAGE_GENERATION_REFERENCE_LIMIT, int(args.reference_limit)))
     jobs = selected_jobs(data.get("jobs") or [], targets, args.limit, args.force)
     if not jobs:
         print("[ok] no pending jobs")
@@ -907,7 +976,7 @@ def main() -> int:
         started = time.monotonic()
         last_error = ""
         all_reference_records = collect_reference_images(root, job)
-        reference_records, omitted_reference_records = select_reference_attachments(all_reference_records)
+        reference_records, omitted_reference_records = select_reference_attachments(all_reference_records, reference_limit)
         omitted_required = [record for record in omitted_reference_records if record.get("required")]
         selected_subjects = {str(record.get("id") or "") for record in reference_records if str(record.get("id") or "").startswith(("CHAR_", "MON_"))}
         required_subjects = {str(binding.get("character_id") or "") for binding in job.get("character_bindings") or [] if isinstance(binding, dict)}
@@ -921,13 +990,13 @@ def main() -> int:
             )
             return 2
         reference_manifest = write_reference_manifest(
-            root, args.chapter, str(pid), reference_records, omitted_reference_records
+            root, args.chapter, str(pid), reference_records, omitted_reference_records, reference_limit
         )
         if omitted_reference_records:
             omitted_ids = ", ".join(record["id"] for record in omitted_reference_records)
             print(
                 f"[warn] {pid} reference attachments capped at "
-                f"{CODEX_IMAGE_GENERATION_REFERENCE_LIMIT}; textual contracts retained for: {omitted_ids}",
+                f"{reference_limit}; textual contracts retained for: {omitted_ids}",
                 flush=True,
             )
         reference_paths = [Path(record["abs_path"]) for record in reference_records]
@@ -949,6 +1018,20 @@ def main() -> int:
             job["result_path"] = rel_to_root(root, final)
             job["post_qc"] = verdict
             job["reference_manifest"] = rel_to_root(root, reference_manifest)
+            if args.adopt_builtin:
+                job.update({
+                    "source": CODEX_CHANNEL,
+                    "model": CODEX_MODEL,
+                    "execution_backend_override": "Codex built-in image_generation（同模型路由降级，CLI 子代理连续只读说明超时）",
+                    "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+                    "artifact_sha256": file_sha256(final),
+                    "reference_input_mode": "builtin_image_generation_referenced_image_paths",
+                    "reference_input_count": len(reference_records),
+                    "generated_from_contract_sha256": str(job.get("source_contract_sha256") or ""),
+                    "generated_from_submit_prompt_sha256": str(job.get("submit_prompt_sha256") or ""),
+                    "generated_from_execution_input_sha256": str(job.get("execution_input_sha256") or ""),
+                })
+                job.pop("error", None)
             write_json(jobs_path, data)
             print(f"[recheck] {pid} -> post_qc={verdict}", flush=True)
             if verdict == "block":

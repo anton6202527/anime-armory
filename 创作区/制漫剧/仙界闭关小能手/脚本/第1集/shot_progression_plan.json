@@ -1,0 +1,9 @@
+{
+  "kind": "n2d_shot_progression_plan", "version": 1, "episode": "第1集", "status": "confirmed",
+  "rules": {"establishing": "三场各有关系建立镜", "movement_motivation": "压迫慢推、劳作跟拍、发现异常缓推", "peak_closeup": "受辱落脸CU、集尾落道具ECU", "scale_ladder": "MS-MCU-CU / LS-CU-MS-LS / ELS-MS-ECU"},
+  "progressions": [
+    {"beat_id": "Beat_01", "start_shot_size": "MS", "peak_shot_size": "CU", "release_shot_size": "MS", "camera_move": "双人建立→低机位慢推→反应固定", "camera_motivation": "放大权力差", "must_have_insert_or_reaction": "拍肩insert+垂眼反应"},
+    {"beat_id": "Beat_02", "start_shot_size": "LS", "peak_shot_size": "CU", "release_shot_size": "LS", "camera_move": "拉远→肩手CU→山路侧跟→俯拍倒水", "camera_motivation": "显示尺度与身体负担", "must_have_insert_or_reaction": "肩布受压+重新起担"},
+    {"beat_id": "Beat_03", "start_shot_size": "ELS", "peak_shot_size": "ECU", "release_shot_size": "ECU", "camera_move": "定场→潭面缓推→过肩→盆底定格", "camera_motivation": "把信息从人转交给观众", "must_have_insert_or_reaction": "手触盆沿+自嘲一笑+幽光"}
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "episode": "第1集",
+  "gate": "run.py image_prompt prework requires all P-3 production handoff files to be confirmed.",
+  "generated_at": "2026-07-14T16:28:23+00:00",
+  "inputs": {
+    "director_blocking_pack.json": "脚本/第1集/director_blocking_pack.json",
+    "preventive_contracts.json": "脚本/第1集/preventive_contracts.json",
+    "script_quality_contract_第1集.json": "生产数据/script_quality_contract_第1集.json",
+    "source_comprehension.json": "设定库/source_comprehension.json",
+    "storyboard.json": "脚本/第1集/storyboard.json",
+    "voiceover.txt": "脚本/第1集/voiceover.txt",
+    "镜头时长.json": "脚本/第1集/镜头时长.json"
+  },
+  "inputs_fingerprint": {
+    "files": {
+      "生产数据/script_quality_contract_第1集.json": "09d450216a1481dfb776275b6f31154f8f228c17696dd770278fab666feb48b3",
+      "脚本/第1集/director_blocking_pack.json": "234653871713eda5b8538e9b84e03ba7b776f0934b593a614c09a0cfc29bc4a9",
+      "脚本/第1集/preventive_contracts.json": "ace9538a0cb12d8ba27a3dc1877134d0a4d99c17876a642665dd9040f8c8d29f",
+      "脚本/第1集/storyboard.json": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc",
+      "脚本/第1集/voiceover.txt": "8583285a8894320317aafc6da7387a328d3dc24fcd7f4928fc13eb135e5c0158",
+      "脚本/第1集/镜头时长.json": "3cc009bed4ab22a411127a7d293c9c530dabc47c3013308b0ff35148267cf95c",
+      "设定库/source_comprehension.json": "31817bdcebc5243949cc83811a9401c45b42817c74d20c16b7ef5d8bf660968a"
+    },
+    "sha": "5ed54c2195c823f2c60f079a368267ffdded177b2ca6058a091078298f4c9654"
+  },
+  "kind": "n2d_production_handoff_pack",
+  "required_files": [
+    "脚本/第1集/production_breakdown.json",
+    "脚本/第1集/continuity_breakdown.json",
+    "脚本/第1集/continuity_chain.json",
+    "脚本/第1集/continuity_bible.json",
+    "脚本/第1集/ai_shooting_schedule.json",
+    "脚本/第1集/ai_call_sheet.md"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "status": "confirmed",
+  "version": 1
+}

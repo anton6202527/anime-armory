@@ -1,0 +1,27 @@
+{
+  "kind": "comic_adaptation_strategy",
+  "version": 2,
+  "status": "confirmed",
+  "adaptation_boundary": "保留姜月初为求生亲手杀死裴长青的黑暗选择与道德冲击；不弱化妖魔吃人与尸骸荒野的危险感，但以构图、剪影、墨色和反应镜头控制血腥细节；网文内部吐槽压缩为短旁白和表情反应，不烘焙平台梗或可读系统文字到原图。",
+  "promise_ledger": [
+    {
+      "promise_id": "PRM_001",
+      "promise": "穿越成弱少女的姜月初如何靠百妖谱在妖魔世界活下去，并一步步夺取妖魔神通",
+      "opened_chapter": "第1话",
+      "payoff_chapter": "第2话",
+      "status": "open"
+    }
+  ],
+  "causality_spine": [
+    "姜月初穿越到妖魔袭杀后的囚徒尸地→虎妖复生封死退路→百妖谱要求斩杀生物换道行→她杀死濒死裴长青获得二十年道行→以唯一一刀反杀虎妖并收录神通→求生选择改变她的道德边界与人妖世界的力量格局"
+  ],
+  "foreshadowing_ledger": [
+    {
+      "setup_id": "FSH_001",
+      "setup": "虎妖心口被贯穿却能复生，暗示鸣骨境妖物可觉醒天赋神通",
+      "planted_chapter": "第1话",
+      "payoff_chapter": "第2话",
+      "status": "planted"
+    }
+  ]
+}

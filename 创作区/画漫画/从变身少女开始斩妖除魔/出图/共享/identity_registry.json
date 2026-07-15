@@ -1,0 +1,876 @@
+{
+  "schema_version": 2,
+  "kind": "comic_identity_registry",
+  "assets": {
+    "CHAR_JIANG_YUECHU": {
+      "id": "CHAR_JIANG_YUECHU",
+      "type": "character",
+      "display_name": "姜月初",
+      "character_dna": "年轻东方少女；鹅蛋脸偏窄，下颌利落；冷锐杏眼、深色瞳仁、眉形纤长；黑色浓密长发高束马尾，额前自然碎发与两缕鬓发；身形纤细但姿态有韧性；核心气质是冷静、警觉、决绝，不媚俗",
+      "variant_policy": "囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化",
+      "forbidden_inheritance": "不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰",
+      "library_tier": "core_full",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "囚服、白衣、镇魔司服、受伤、觉醒与战斗形态都继承同一脸型、眼型、发际线、发量与高马尾轮廓；只允许服装、污损、表情、伤势和百妖谱特效变化",
+          "forbidden": "不得继承参考图的小红书水印、账号、任何可读文字、平台UI；不得把毛笔永久当随身武器；不得继承成年御姐式夸张妆容、现代服饰或随机首饰",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+              "role": "approved_front_model_view"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+              "role": "approved_prison_robe_reference"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+              "role": "approved_face_anchor"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_DREAD": {
+          "id": "EXPR_DREAD",
+          "name": "惊惧压抑",
+          "emotion": "fear_and_internal_conflict",
+          "intensity": "strong",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+              "role": "identity_anchor_expression_to_be_directed"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_DREAD": {
+          "id": "STATE_DREAD",
+          "name": "惊惧与抉择",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_DREAD",
+          "transient": true,
+          "continuity_contract": "仅在威胁逼近或内心抉择格使用"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "anchor_path": "出图/共享/图片/user_reference_clean_source.png",
+      "reference_images": [
+        {
+          "view": "user_reference",
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+          "source": {
+            "kind": "user_provided_visual_reference",
+            "role": "identity_and_mood_reference",
+            "rights_status": "user_provided_for_project_reference",
+            "forbidden_inheritance": [
+              "小红书水印",
+              "账号文字",
+              "平台UI",
+              "毛笔作为永久武器"
+            ]
+          },
+          "canvas": {
+            "width": 1440,
+            "height": 810
+          },
+          "updated_at": "2026-07-14T21:36:00"
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+          "sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+          "source": {
+            "kind": "existing_character_view",
+            "anchor_path": "出图/共享/图片/user_reference_clean_source.png",
+            "anchor_kind": "registry_anchor",
+            "view": "front",
+            "chapter": "第1话"
+          },
+          "derivation": {
+            "method": "adopted_existing_view",
+            "source_path": "出图/共享/图片/user_reference_clean_source.png",
+            "source_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-14T22:07:08"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+          "sha256": "63ab2bd80d4fbb158885389b1b0361898f200273c954bbdbb6d48a1a44f2023e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANG_YUECHU__three_quarter_codex__20260714T215455808228.md",
+            "prompt_sha256": "60406c30c92ba38689c1807e63d26774e58655ac2458a88ab3c2552acda5d87f",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-14T22:07:08"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+          "sha256": "d516d73910275496b04243c87a9c6751610868f27e2232e4afddb540972e3491",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANG_YUECHU__side_codex__20260714T215643077116.md",
+            "prompt_sha256": "1ac7b9baa6bc6e5ebaac33f15f094f9c30b6e723e94dd1befbbf8aa04bd4188a",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-14T22:07:08"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+          "sha256": "f8a76b244e408caeb8a6225ef4cbfd1ee8c9aff854deffc0140da894a6645ebe",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANG_YUECHU__back_codex__20260714T215900039379.md",
+            "prompt_sha256": "9daa8b2609fdc98c4bcf4f4f8e8418edbaf03ac8e5c6e73143c2293bbe411fdc",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-14T22:07:08"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png",
+          "sha256": "f5d0ba3435156d5d3c8e7bb547b995733fb771d8d15cc2d54556386974604321",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_JIANG_YUECHU__face_codex__20260714T220059483289.md",
+            "prompt_sha256": "40eb54fe9a0259f45af3a75f76edf4fdd0b2a43537bd15736e902d62833d01cf",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+            "source_sha256": "c7596e62df99113b4498fae9f4d745ddab15137166bc3ac9b97f9f85fd13b4fa",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1024,
+            "height": 1536
+          },
+          "updated_at": "2026-07-14T22:07:09"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T22:07:09",
+      "views": {
+        "front": "出图/共享/图片/CHAR_JIANG_YUECHU__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_JIANG_YUECHU__three_quarter.png",
+        "side": "出图/共享/图片/CHAR_JIANG_YUECHU__side.png",
+        "back": "出图/共享/图片/CHAR_JIANG_YUECHU__back.png",
+        "face": "出图/共享/图片/CHAR_JIANG_YUECHU__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "tier": "core_full",
+        "ready": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "af482223115b6e220c798538afe9ed99c5854871d2e62c2a0037434469f92da1",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "side",
+          "back",
+          "face"
+        ],
+        "updated_at": "2026-07-14T14:07:26+00:00"
+      }
+    },
+    "CHAR_PEI_CHANGQING": {
+      "id": "CHAR_PEI_CHANGQING",
+      "type": "character",
+      "display_name": "裴长青",
+      "character_dna": "二十出头的大唐镇魔司武者；高大挺拔；硬朗年轻面孔；黑衣赤云纹劲装；重伤仍有压迫感",
+      "variant_policy": "所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯",
+      "forbidden_inheritance": "不得继承主角女性面孔、参考图白衣与毛笔；不得现代化",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "所有伤势与濒死状态继承同一脸型、体格、黑衣赤纹制服和右手用刀习惯",
+          "forbidden": "不得继承主角女性面孔、参考图白衣与毛笔；不得现代化",
+          "reference_images": [],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+              "role": "approved_uniform_reference"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+              "role": "approved_face_anchor"
+            }
+          ],
+          "status": "ready"
+        },
+        "EXPR_PAIN": {
+          "id": "EXPR_PAIN",
+          "name": "濒死痛楚",
+          "emotion": "pain_and_confusion",
+          "intensity": "strong",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+              "role": "identity_anchor_expression_to_be_directed"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        },
+        "STATE_PAIN": {
+          "id": "STATE_PAIN",
+          "name": "濒死痛楚",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_PAIN",
+          "transient": true,
+          "continuity_contract": "重伤场景持续，身份与制服结构不变"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "view": "front",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+          "sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+          "source": {
+            "kind": "generated_character_view_text_seed",
+            "anchor_path": "",
+            "anchor_kind": "text_prompt_seed",
+            "view": "front",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PEI_CHANGQING__front_codex__20260714T221826217869.md",
+            "prompt_sha256": "4769403b29db2b376f965bb37b89a7fd34bcdc6c67067c124fc0a5151f09e82a",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4",
+            "style_reference_path": "出图/共享/图片/user_reference_clean_source.png",
+            "style_reference_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "style_reference_role": "style_only"
+          },
+          "derivation": {
+            "method": "generated_from_text_seed",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 862,
+            "height": 1824
+          },
+          "updated_at": "2026-07-14T22:33:27"
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+          "sha256": "917be1be267c14064da35f883b9c923f4e680b7af2a3c2670c5950f0bae1b61e",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PEI_CHANGQING__three_quarter_codex__20260714T222913082992.md",
+            "prompt_sha256": "b2799146a052c563d0ad125b38de00723b6c76934e9ef48a8ba9b95da38e747e",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4",
+            "archived_previous_path": "出图/共享/candidates/CHAR_PEI_CHANGQING/three_quarter/20260714T223253937125__b5cc31c28234.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 862,
+            "height": 1824
+          },
+          "updated_at": "2026-07-14T22:33:27"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png",
+          "sha256": "aeb1921af5b9d2f09bfda24cc4eb5e57b274c1515935a1089661fe0575a079ba",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "anchor_kind": "front_view_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/CHAR_PEI_CHANGQING__face_codex__20260714T222530902249.md",
+            "prompt_sha256": "2ec1a4d768e7947a50db07e479355cbdf7b06c23da46fdc5783f93ac1ca39442",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+            "source_sha256": "fb007bf80f6a40599c75ae0e87dd71e5e8e5eda992fb379ffc1d1cb3602ab001",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 1060,
+            "height": 1484
+          },
+          "updated_at": "2026-07-14T22:33:27"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T22:33:27",
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "0928789fe04d2aec76bec47fb4c6fdd1729609a3dfa571c9342374048f241f7e",
+        "readiness": "ready",
+        "signoff_status": "current",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T14:34:15+00:00"
+      },
+      "views": {
+        "front": "出图/共享/图片/CHAR_PEI_CHANGQING__front.png",
+        "three_quarter": "出图/共享/图片/CHAR_PEI_CHANGQING__three_quarter.png",
+        "face": "出图/共享/图片/CHAR_PEI_CHANGQING__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      }
+    },
+    "MON_TIGER_SHANSHEN": {
+      "id": "MON_TIGER_SHANSHEN",
+      "type": "monster",
+      "display_name": "虎山神",
+      "character_dna": "严格的直立双足妖将：完整人类男性巨人身体、两条人形手臂、两条人形腿，双足站立，只有头部是凶煞虎首；仅前胸正中心有圆形暗黑空洞，以墨色妖气和破碎甲片遮挡内部，不展示组织或血腥细节；后背必须完整、绝无洞口；禁止四足老虎、普通虎躯、兽类前爪落地、长尾或萌宠比例",
+      "variant_policy": "死亡假象、复苏与战斗状态始终保留虎首、人形巨躯和仅位于前胸的暗黑空洞；背视图不得出现洞口，前胸标志在正面与侧前角度不可消失",
+      "forbidden_inheritance": "不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志",
+      "library_tier": "recurring_standard",
+      "forms": {
+        "FORM_BASE": {
+          "id": "FORM_BASE",
+          "name": "基础形态",
+          "inheritance_contract": "始终保留虎首、人形巨躯与仅位于前胸正中的暗黑空洞；背部皮肤和护甲结构完整，不得复制洞口",
+          "forbidden": "不得画成普通老虎、萌宠或穿现代服装；不得丢失胸口致命伤标志",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+              "role": "approved_humanoid_form_anchor"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "outfits": {
+        "OUTFIT_BASE": {
+          "id": "OUTFIT_BASE",
+          "name": "基础服装",
+          "description": "继承角色基础定妆中的服装结构、配色与标志配饰",
+          "forbidden": "不得改变领型、配饰、主色或标志纹样",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+              "role": "approved_armor_reference"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "expressions": {
+        "EXPR_NEUTRAL": {
+          "id": "EXPR_NEUTRAL",
+          "name": "中性表情",
+          "emotion": "neutral",
+          "intensity": "neutral",
+          "reference_images": [
+            {
+              "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+              "role": "approved_tiger_face_anchor"
+            }
+          ],
+          "status": "ready"
+        }
+      },
+      "states": {
+        "STATE_BASE": {
+          "id": "STATE_BASE",
+          "name": "基础状态",
+          "form_id": "FORM_BASE",
+          "outfit_id": "OUTFIT_BASE",
+          "expression_id": "EXPR_NEUTRAL",
+          "transient": false,
+          "continuity_contract": "除非剧情状态账明确变更，否则延续此状态"
+        }
+      },
+      "default_binding": {
+        "form_id": "FORM_BASE",
+        "outfit_id": "OUTFIT_BASE",
+        "expression_id": "EXPR_NEUTRAL",
+        "state_id": "STATE_BASE"
+      },
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+          "source": {
+            "kind": "generated_builtin_image2_humanoid_correction",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex built-in image_generation",
+            "model": "GPT Image 2",
+            "backend_version": "built-in",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_TIGER_SHANSHEN__anchor_builtin_codex_image2__20260714T225025.md",
+            "prompt_sha256": "35dfd78abbb048e590c13367d3315478287e5da5614f088fb4e7aa0f85e5d124",
+            "style_reference_path": "出图/共享/图片/user_reference_clean_source.png",
+            "style_reference_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "style_reference_role": "style_only",
+            "archived_previous_path": "出图/共享/candidates/MON_TIGER_SHANSHEN/anchor/20260714T224747057298__ce9d1bbe1447.png"
+          },
+          "updated_at": "2026-07-14T22:50:25"
+        },
+        {
+          "view": "front",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+          "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+          "source": {
+            "kind": "approved_anchor_reuse",
+            "role": "front"
+          }
+        },
+        {
+          "view": "three_quarter",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+          "sha256": "999cee8064271fdf302a12bd253db4e7913b2ca09bb5315793c69307c8ee6f91",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "three_quarter",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_TIGER_SHANSHEN__three_quarter_codex__20260714T230209951623.md",
+            "prompt_sha256": "4203c70908fdbd3ae3c4ef7498b388a4d380233396133d1554f0e5499747d1a7",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 941,
+            "height": 1672
+          },
+          "updated_at": "2026-07-14T23:05:10"
+        },
+        {
+          "view": "side",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+          "sha256": "9caa72249df89fcf71f938bbba2c1ebf56fde929067cf3b92e49db146575f501",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "side",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_TIGER_SHANSHEN__side_codex__20260714T230510856970.md",
+            "prompt_sha256": "51fa5971087fe9259e9d1c1fb51b56422b843f5ec0db4224c7c8cc9668259899",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 941,
+            "height": 1672
+          },
+          "updated_at": "2026-07-14T23:07:45"
+        },
+        {
+          "view": "face",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png",
+          "sha256": "1838ae945bb77ad63aa9e5872fa49f4688bd7714ebb0732c967c23e591735dd4",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "face",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_TIGER_SHANSHEN__face_codex__20260714T231017572751.md",
+            "prompt_sha256": "20ad28016ff79d8e04fff65e3ec25febbb6418b6ae197e1dd47661951dd17ba1",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 941,
+            "height": 1672
+          },
+          "updated_at": "2026-07-14T23:12:21"
+        },
+        {
+          "view": "back",
+          "path": "出图/共享/图片/MON_TIGER_SHANSHEN__back.png",
+          "sha256": "d6429f1d68b5a579dab318c7723a645e56ca97f539bf9b7f963acca5edd0d4a9",
+          "source": {
+            "kind": "generated_character_view",
+            "anchor_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "anchor_kind": "registry_anchor",
+            "view": "back",
+            "chapter": "第1话",
+            "attempt": 1,
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/MON_TIGER_SHANSHEN__back_codex__20260714T231325858200.md",
+            "prompt_sha256": "1bd01321e806a96115d86abaf0c0be0170fe737ad83143c3262d696e0e3fc689",
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4",
+            "archived_previous_path": "出图/共享/candidates/MON_TIGER_SHANSHEN/back/20260714T231539451794__d4c0ac12fa00.png"
+          },
+          "derivation": {
+            "method": "generated_from_shared_anchor",
+            "source_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+            "source_sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+            "crop_box": []
+          },
+          "canvas": {
+            "width": 941,
+            "height": 1672
+          },
+          "updated_at": "2026-07-14T23:15:39"
+        }
+      ],
+      "status": "needs_approval",
+      "updated_at": "2026-07-14T23:15:39",
+      "anchor_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "primary_path": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+      "sha256": "ff993f0dcfc6ab67d99d833dbb38617cd60a8b932a372eb121b0399e445f783a",
+      "views": {
+        "front": "出图/共享/图片/MON_TIGER_SHANSHEN__anchor.png",
+        "three_quarter": "出图/共享/图片/MON_TIGER_SHANSHEN__three_quarter.png",
+        "side": "出图/共享/图片/MON_TIGER_SHANSHEN__side.png",
+        "back": "出图/共享/图片/MON_TIGER_SHANSHEN__back.png",
+        "face": "出图/共享/图片/MON_TIGER_SHANSHEN__face.png"
+      },
+      "view_readiness": {
+        "required": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "tier": "recurring_standard",
+        "ready": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "missing": [],
+        "complete": true
+      },
+      "model_pack": {
+        "kind": "comic_character_model_pack",
+        "version": 1,
+        "fingerprint": "b0c5e3e071548fba8ca9ce8fa3164a21781e3f383d41a51adad962de0e66cd5c",
+        "readiness": "needs_approval",
+        "signoff_status": "missing",
+        "required_views": [
+          "front",
+          "three_quarter",
+          "face"
+        ],
+        "updated_at": "2026-07-14T15:12:21+00:00"
+      }
+    },
+    "LOC_DESOLATE_WILDERNESS": {
+      "id": "LOC_DESOLATE_WILDERNESS",
+      "type": "location",
+      "display_name": "尸骸荒野",
+      "description": "大唐边疆破败荒野的空景定妆：枯草连天，破旗、囚车残迹、散落衣物和断裂兵器标示袭击后现场，不画人物或尸体；远处巨岩，夕阳自西侧低角度照入，冷灰天光与暗红轮廓光并存",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+          "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/LOC_DESOLATE_WILDERNESS__anchor_codex__20260714T223730774356.md",
+            "prompt_sha256": "811dcf193f784e69c0bf7be24cf5ac05677659915cc74ff1a7f2b1ce93dadcb0",
+            "style_reference_path": "出图/共享/图片/user_reference_clean_source.png",
+            "style_reference_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-14T22:41:45"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T22:41:45",
+      "anchor_path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+      "primary_path": "出图/共享/图片/LOC_DESOLATE_WILDERNESS__anchor.png",
+      "sha256": "16a8ac41617ae1fa4da105d7076ae8ea3c32f1adaf95697819314a64b5622a8a"
+    },
+    "PROP_HENGDAO_BROKEN": {
+      "id": "PROP_HENGDAO_BROKEN",
+      "type": "prop",
+      "display_name": "镇魔司断横刀",
+      "description": "唐制横刀，战损断刃，刀柄缠布染血；第1话关键生存道具",
+      "reference_images": [
+        {
+          "kind": "anchor",
+          "path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+          "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b",
+          "source": {
+            "kind": "generated_text_anchor",
+            "chapter": "第1话",
+            "attempt": 1,
+            "backend": "Codex CLI",
+            "model": "GPT Image 2",
+            "backend_version": "codex-cli 0.144.4",
+            "prompt_path": "生产数据/comic_identity_prompts/第1话/PROP_HENGDAO_BROKEN__anchor_codex__20260714T224145776598.md",
+            "prompt_sha256": "129350a53da2d3104ebb841650ebbbea0a0d945b3dd21dd820277b64bb4935b6",
+            "style_reference_path": "出图/共享/图片/user_reference_clean_source.png",
+            "style_reference_sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+            "style_reference_role": "style_only"
+          },
+          "updated_at": "2026-07-14T22:44:16"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T22:44:16",
+      "anchor_path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+      "primary_path": "出图/共享/图片/PROP_HENGDAO_BROKEN__anchor.png",
+      "sha256": "375eb880984bbafa9732b1e86d09ec408245ed3c02113bae36ce14ea7f21c32b"
+    },
+    "STYLE_USER_JIANG_YUECHU_REF": {
+      "id": "STYLE_USER_JIANG_YUECHU_REF",
+      "type": "style",
+      "display_name": "用户主角视觉参考与水墨电影感风格锚",
+      "description": "白衣黑发东方少女、国风山水、黑墨动态笔触、金色能量火花、写实电影光影；仅提炼人物DNA和技法，不继承水印文字",
+      "anchor_path": "出图/共享/图片/user_reference_clean_source.png",
+      "reference_images": [
+        {
+          "path": "出图/共享/图片/user_reference_clean_source.png",
+          "sha256": "8d34732469e565d47cd4438eccb13cc27e458783447d39a827e46a18ff540fa0",
+          "source": {
+            "kind": "user_provided_visual_reference",
+            "role": "style_and_mood_reference",
+            "forbidden_inheritance": [
+              "任何水印或可读文字",
+              "平台UI"
+            ]
+          },
+          "canvas": {
+            "width": 1440,
+            "height": 810
+          },
+          "updated_at": "2026-07-14T21:36:00"
+        }
+      ],
+      "status": "ready",
+      "updated_at": "2026-07-14T13:31:42+00:00"
+    }
+  },
+  "schema_meta": {
+    "initialized_at": "2026-07-14",
+    "initialized_by": "comic init_project bootstrap"
+  }
+}

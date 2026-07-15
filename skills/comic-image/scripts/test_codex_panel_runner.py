@@ -49,6 +49,34 @@ def test_reference_attachment_budget_prioritizes_identity_scene_and_prop() -> No
     assert [record["id"] for record in omitted] == ["FX_A"]
 
 
+def test_reference_attachment_limit_three_keeps_all_required_subjects_and_scene() -> None:
+    records = [
+        {"id": "CHAR_A", "path": "a.png", "required": True},
+        {"id": "MON_B", "path": "b.png", "required": True},
+        {"id": "LOC_A", "path": "loc.png", "required": True},
+        {"id": "STYLE_A", "path": "style.png", "required": False},
+        {"id": "CHAR_A", "path": "a-front.png", "required": False},
+    ]
+
+    selected, omitted = runner.select_reference_attachments(records, limit=3)
+
+    assert [record["id"] for record in selected] == ["CHAR_A", "MON_B", "LOC_A"]
+    assert [record["id"] for record in omitted] == ["STYLE_A", "CHAR_A"]
+
+
+def test_safety_shape_visual_prompt_preserves_plot_with_non_graphic_language() -> None:
+    raw = "枯草间尸骸横陈，姜月初双手将横刀刺入裴长青胸口，血色飞溅，以妖血为墨。"
+    shaped = runner.safety_shape_visual_prompt(raw)
+
+    assert "姜月初" in shaped and "裴长青" in shaped
+    assert "推向裴长青胸口" in shaped
+    assert "静止无面剪影" in shaped
+    assert "妖墨" in shaped
+    assert "尸骸" not in shaped
+    assert "刺入" not in shaped
+    assert "妖血" not in shaped
+
+
 def test_reference_manifest_discloses_omitted_text_only_contract(tmp_path: Path) -> None:
     used = [{"id": "CHAR_A", "path": "a.png", "abs_path": "/tmp/a.png", "sha256": "a"}]
     omitted = [{"id": "FX_A", "path": "fx.png", "abs_path": "/tmp/fx.png", "sha256": "f"}]

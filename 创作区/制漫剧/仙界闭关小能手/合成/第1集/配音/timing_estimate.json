@@ -1,0 +1,319 @@
+{
+  "audio_generated": false,
+  "episode": "第1集",
+  "generated_at": "2026-07-14T16:17:49+00:00",
+  "kind": "n2d_timing_estimate",
+  "lines": [
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        3.493,
+        5.198
+      ],
+      "end": 4.26,
+      "estimated_duration_sec": 4.26,
+      "gap_after": 0.6,
+      "idx": 0,
+      "line_index": 1,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 0.0,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "五行灵根？原来是个费钱货！你这种废物，也配来争仙缘？",
+      "时长": 4.26,
+      "表演提示": "轻蔑·快",
+      "角色": "张老大",
+      "镜头": "镜头1"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        0.801,
+        1.191
+      ],
+      "end": 5.837,
+      "estimated_duration_sec": 0.977,
+      "gap_after": 0.4,
+      "idx": 1,
+      "line_index": 2,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 4.86,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "哈哈哈哈哈！",
+      "时长": 0.977,
+      "表演提示": "哄笑·快",
+      "角色": "众杂役",
+      "镜头": "镜头2"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        5.223,
+        7.77
+      ],
+      "end": 12.606,
+      "estimated_duration_sec": 6.369,
+      "gap_after": 0.4,
+      "idx": 2,
+      "line_index": 3,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 6.237,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "从今天起，秀竹峰挑水的活儿，归你了。每天二十趟，少一趟都不行！这是命令。",
+      "时长": 6.369,
+      "表演提示": "压迫·常速",
+      "角色": "张老大",
+      "镜头": "镜头3"
+    },
+    {
+      "audio_path": "",
+      "confidence": "low",
+      "duration_range_sec": [
+        0.656,
+        0.976
+      ],
+      "end": 13.806,
+      "estimated_duration_sec": 0.8,
+      "gap_after": 0.4,
+      "idx": 3,
+      "line_index": 4,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 13.006,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "是。",
+      "时长": 0.8,
+      "表演提示": "谨慎·短促",
+      "角色": "贺平生",
+      "镜头": "镜头4"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        4.645,
+        6.911
+      ],
+      "end": 19.871,
+      "estimated_duration_sec": 5.665,
+      "gap_after": 0.6,
+      "idx": 4,
+      "line_index": 5,
+      "line_type": "narration_or_offscreen",
+      "split_suggested": false,
+      "start": 14.206,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "贺平生，十四岁。父母双亡，五行灵根耗资巨大，连外门都不肯收他。",
+      "时长": 5.665,
+      "表演提示": "低沉·常速",
+      "角色": "旁白",
+      "镜头": "镜头5"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        3.808,
+        5.665
+      ],
+      "end": 25.115,
+      "estimated_duration_sec": 4.644,
+      "gap_after": 0.7,
+      "idx": 5,
+      "line_index": 6,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 20.471,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "我要留下，离仙人近一点，不然我不可能还有机会。",
+      "时长": 4.644,
+      "表演提示": "坚定·慢",
+      "角色": "贺平生",
+      "镜头": "镜头6"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        3.424,
+        5.094
+      ],
+      "end": 29.99,
+      "estimated_duration_sec": 4.175,
+      "gap_after": 0.4,
+      "idx": 6,
+      "line_index": 7,
+      "line_type": "narration_or_offscreen",
+      "split_suggested": false,
+      "start": 25.815,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "两桶水，二里山路。一个来回，就压得他喘不过气。",
+      "时长": 4.175,
+      "表演提示": "克制·常速",
+      "角色": "旁白",
+      "镜头": "镜头7"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        2.454,
+        3.651
+      ],
+      "end": 33.382,
+      "estimated_duration_sec": 2.992,
+      "gap_after": 0.7,
+      "idx": 7,
+      "line_index": 8,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 30.39,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "明天才开工。今天，我决定先挑五趟。",
+      "时长": 2.992,
+      "表演提示": "决绝·常速",
+      "角色": "贺平生",
+      "镜头": "镜头8"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        3.604,
+        5.362
+      ],
+      "end": 38.477,
+      "estimated_duration_sec": 4.395,
+      "gap_after": 0.4,
+      "idx": 8,
+      "line_index": 9,
+      "line_type": "narration_or_offscreen",
+      "split_suggested": false,
+      "start": 34.082,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "于是，一趟。两趟。三趟。月亮升起时，他第五次回到浅潭。",
+      "时长": 4.395,
+      "表演提示": "紧迫·快",
+      "角色": "旁白",
+      "镜头": "镜头9"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        1.177,
+        1.751
+      ],
+      "end": 40.312,
+      "estimated_duration_sec": 1.435,
+      "gap_after": 0.4,
+      "idx": 9,
+      "line_index": 10,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 38.877,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "水底……有东西？",
+      "时长": 1.435,
+      "表演提示": "惊疑·慢",
+      "角色": "贺平生",
+      "镜头": "镜头10"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        2.372,
+        3.529
+      ],
+      "end": 43.604,
+      "estimated_duration_sec": 2.892,
+      "gap_after": 0.4,
+      "idx": 10,
+      "line_index": 11,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 40.712,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "我还以为是宝贝。原来只是个破盆。",
+      "时长": 2.892,
+      "表演提示": "自嘲·常速",
+      "角色": "贺平生",
+      "镜头": "镜头11"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        1.583,
+        2.356
+      ],
+      "end": 45.935,
+      "estimated_duration_sec": 1.931,
+      "gap_after": 0.4,
+      "idx": 11,
+      "line_index": 12,
+      "line_type": "character_dialogue",
+      "split_suggested": false,
+      "start": 44.004,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "正好，拿回去洗衣洗脸。",
+      "时长": 1.931,
+      "表演提示": "平静·常速",
+      "角色": "贺平生",
+      "镜头": "镜头12"
+    },
+    {
+      "audio_path": "",
+      "confidence": "medium",
+      "duration_range_sec": [
+        3.194,
+        4.753
+      ],
+      "end": 50.231,
+      "estimated_duration_sec": 3.896,
+      "gap_after": 0.0,
+      "idx": 12,
+      "line_index": 13,
+      "line_type": "narration_or_offscreen",
+      "split_suggested": false,
+      "start": 46.335,
+      "timing_basis": "text_estimate_no_audio",
+      "文本": "他转身时，破盆底下，一缕幽光悄然亮起。",
+      "时长": 3.896,
+      "表演提示": "神秘·慢",
+      "角色": "旁白",
+      "镜头": "镜头13"
+    }
+  ],
+  "not_suitable_for": [
+    "final_mix",
+    "visible_mouth_final_performance",
+    "final_lipsync",
+    "voice_identity_approval"
+  ],
+  "policy": "time_basis_first_without_disposable_wav",
+  "source_fingerprint": "0acc07341dea797f5eb755b4a59d1f6a9c263900575865127bea8a6e6a0acd46",
+  "source_path": "脚本/第1集/voiceover.txt",
+  "status": "provisional",
+  "suitable_for": [
+    "animatic",
+    "rough_editorial_timing",
+    "narration_offscreen_pacing",
+    "picture_first_shots"
+  ],
+  "summary": {
+    "dialogue_lines": 9,
+    "duration_sec": 50.231,
+    "line_count": 13,
+    "narration_or_offscreen_lines": 4,
+    "split_suggested_lines": 0
+  },
+  "timing_basis": "text_estimate_no_audio",
+  "version": 1
+}

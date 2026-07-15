@@ -1,0 +1,1150 @@
+{
+  "action_contract": {
+    "owner": "n2d-image",
+    "paid_or_irreversible": false,
+    "prework_steps": [
+      "episode_graph",
+      "source_adaptation_audit",
+      "beat_audit",
+      "story_economy_audit",
+      "spectacle_contract_audit",
+      "setup_payoff_gate",
+      "series_retention_gate",
+      "shot_risk_audit",
+      "shot_split_decision",
+      "shot_intent_gate",
+      "production_breakdown",
+      "spectacle_plan",
+      "gate"
+    ],
+    "requires_context_pack": true,
+    "requires_creative_loop": true,
+    "requires_human_approval": false,
+    "requires_trace": true,
+    "schema_version": 2,
+    "specialist": "n2d-visual-agent",
+    "stage_key": "image_prompt",
+    "stop_policy": "needs_agent_gen",
+    "supervisor_contract": {
+      "may_auto_run_deterministic_prework": true,
+      "may_call_specialist": true,
+      "may_change_backend_without_adapter": false,
+      "may_execute_paid_work": false,
+      "may_write_progress_without_stage_verification": false
+    }
+  },
+  "episode": "第1集",
+  "files": [
+    {
+      "bytes": 2249,
+      "exists": true,
+      "preview": "[AUTHORITATIVE CURRENT SETTINGS — settings region only]\nstatus: ok\naudit records cannot override these values\n- 制作模式: 混合自动路由  # source=explicit_user\n- 合成阶段: 启用  # source=explicit_user\n- 项目规模: 多集长线  # source=explicit_user\n- 基础视觉风格: 国漫写实  # source=explicit_user\n- 生图模型: GPT Image 2  # source=explicit_user\n- 生图AI: Codex CLI  # source=explicit_user\n- 视频模型路由: 自动按镜头路由  # source=explicit_user\n- 生视频模型: Seedance 2.0  # source=explicit_user\n- 生视频渠道: 即梦/Dreamina  # source=explicit_user\n- 生成粒度: 逐个  # source=explicit_user\n- 生成优先序: 分镜顺序  # source=explicit_user\n- 重抽预算策略: 预算充足  # source=explicit_user\n- 出视频规格: 预算一般  # source=explicit_user\n- 画幅: 9:16  # source=explicit_user\n- 字幕语言: 中文  # source=explicit_user\n- 合规用途: internal_only  # source=explicit_user\n- 一致性严格度: production  # source=explicit_user\n- 一致性增强: image2image_reference_chain  # source=explicit_user\n\nraw audit history omitted: records_seen=18, corrections_included=0/3",
+      "preview_policy": "settings_region_plus_bounded_corrections",
+      "relpath": "_设置.md",
+      "sha256": "1d7821b28b3868cbb3ad04e390b2f309f7282205d5e03fd8baaac6e54af52280"
+    },
+    {
+      "bytes": 583,
+      "exists": true,
+      "preview": "# 仙界闭关小能手 — 生产进度\n已粗切 **1** 集（全本约估 1176 集；首批/部分先切，精修验证后重跑 split 加大 --limit 续切，或用 --all 补全）。\n| 集 | 字数 | raw | 剧本改编 | bgm | 封面 | 配音 | 分镜设计 | 素材清单 | 字幕中 | 字幕英 | 奇观连续性 | 出图prompt | 出图 | 视频prompt | 视频 | 成片 | 验收 |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|\n| 第1集 | 2355 | ✅ | ✅ | ✅ | ✅ | ⏳rough | ✅ | ✅ | ✅ | — | — | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |",
+      "relpath": "_进度.md",
+      "sha256": "cc97945ee9f791177a625253c4798a104746d2587f01cb9675e7f7a5f97b5e2f"
+    },
+    {
+      "bytes": 36669,
+      "exists": true,
+      "preview": {
+        "clips": [
+          {
+            "audience_effect": "对恣意羞辱产生反感，对少年的反应产生好奇",
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02",
+              "GROUP_01"
+            ],
+            "compression_plan": "两句声音用同一组景别与后景反应完成。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP01_a1.png",
+                  "at_sec": 2.7,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 4.553,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "贺平生仍站画左，木牌贴回胸口，垂眼但脚没退",
+              "entry_exit": "三类主体仍在殿内，下镜将GROUP_01转为画外",
+              "expression_span": "中",
+              "eyeline": "CHAR_01看画右，CHAR_02看画左",
+              "midframe_exempt_reason": "4.553秒低幅表演，单主动作且无跨镜同帧需求",
+              "need_endframe": false,
+              "seam_evidence": {
+                "editorial_intent": "用笑声骤停断出张老大命令的更强压迫"
+              },
+              "seam_mode": "hard_cut",
+              "shot_size": "MCU→CU",
+              "start_state": "贺平生站在画左中景，木牌在胸前，张老大画右高位俯视",
+              "transition": "笑声骤停后硬切下一道命令",
+              "微表情节拍": "CHAR_01 AU4轻压眉、AU24抑制抿唇，笑声起时短暂屏息但不躲闪"
+            },
+            "dramatic_function": "冷开场建立阶层压力和少年处境",
+            "duration": 6.237,
+            "editing_intent": "从弹回名牌的动作硬切受辱反应，笑声刚涌起就切断。",
+            "emotional_turn": "从期待被收留转为当众受辱。",
+            "end_sec": 6.237,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/常态",
+                "CHAR_02/常态",
+                "GROUP_01/背景杂役"
+              ],
+              "forbidden_presence": [
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道自己被判为资质差"
+                ],
+                "CHAR_02": [
+                  "知道少年无处可去"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "PROP_木牌"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02",
+                "PROP_木牌"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP01.png",
+            "id": "EP01_CLIP01",
+            "label": "低梁下的羞辱",
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "regional_construct_required：先生成LOC_01空景，再按画左CHAR_01、画右CHAR_02、后景GROUP_01分区逐次构建；后景脸只保留模糊形状。",
+            "object_ids": [
+              "PROP_木牌"
+            ],
+            "pacing_role": "冷开场主钩",
+            "rhythm": "铺垫·长镜",
+            "runtime_priority": "primary",
+            "scene": "LOC_01/日/内",
+            "shots": [
+              {
+                "desc": "张老大画右用两指弹回木牌，贺平生画左承受冲击但不后退，梁尘缓慢下落",
+                "lens": "MCU·低机位微推",
+                "t": "0-2.7s",
+                "video_prompt": "手指只完成一次弹牌，相机缓慢推近，尘埃在斜光中下落，所有人保持左右站位"
+              },
+              {
+                "desc": "少年垂眼不退，背后只有虚化的肩膀与张口形状",
+                "lens": "CU·固定",
+                "t": "2.7-6.237s",
+                "video_prompt": "少年仅屏息、抿唇和轻微抬眼，背景小幅晃动，镜头不移动"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_PROMISE_001"
+            ],
+            "start_sec": 0.0,
+            "subject_slots": {
+              "BACKGROUND_SLOT": "GROUP_01",
+              "LEFT_SLOT": "CHAR_01",
+              "RIGHT_SLOT": "CHAR_02"
+            },
+            "template": "ensemble_blocking",
+            "template_contract": {
+              "beats": [
+                "名牌被弹回",
+                "少年不后退",
+                "后景笑声涌起"
+              ],
+              "blocking": "CHAR_01画左中景低位，CHAR_02画右近景高位，GROUP_01只作后景模糊层次",
+              "camera_rule": "先双人中近景，再轻推少年反应，不越入口至木台横轴",
+              "continuity_must": [
+                "CHAR_01始终画左",
+                "CHAR_02始终画右",
+                "后景不新增清晰正脸",
+                "冷光画左高处"
+              ],
+              "crowd_simplification": "GROUP_01只画虚焦肩线、侧脸或张口剪影，不生成可识别清晰正脸，不单独表演",
+              "focus_hierarchy": "第一焦点是CHAR_02弹回木牌的手，第二焦点是CHAR_01不后退的脸，GROUP_01永不抢焦",
+              "negative": [
+                "不要交换左右",
+                "不要将后景每个人都画清脸",
+                "不要新增仙门华服"
+              ],
+              "screen_positions": "CHAR_01固定画左中景低位，CHAR_02固定画右近景高位，GROUP_01仅在后景低梁下形成肩部和嘴形层次",
+              "template_id": "ensemble_blocking"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP01.mp4",
+            "visual_question": "他会后退还是忍下？",
+            "voiceover_indices": [
+              1,
+              2
+            ]
+          },
+          {
+            "audience_effect": "明确外部压力尺度，留意少年为何不反驳",
+            "character_ids": [
+              "CHAR_01",
+              "CHAR_02"
+            ],
+            "compression_plan": "命令与回应合在同一轴线，用拍肩手部特写缓冲。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_a1.png",
+                  "at_sec": 4.8,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 7.1,
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP02_a2.png",
+                  "at_sec": 6.1,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 7.1,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "张老大右手从贺平生左肩移开，贺平生仍画左低头应下",
+              "entry_exit": "GROUP_01仍在画外；下镜为明确记忆叠化，CHAR_02不入画",
+              "expression_span": "中",
+              "eyeline": "CHAR_01向画右上，CHAR_02向画左下",
+              "midframe_exempt_reason": "轴线对话由多个内部切点组成，不作单长动作插值",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_source": "张老大命令的殿内混响",
+                "audio_tail_sec": 0.35
+              },
+              "seam_mode": "l_cut",
+              "shot_size": "MS→MCU→insert→CU",
+              "start_state": "贺平生仍站画左，木牌贴回胸口，垂眼但脚没退",
+              "transition": "命令尾音延续到空院物件镜",
+              "微表情节拍": "CHAR_01 AU4轻压、AU7微紧，听到二十趟时瞳孔微收，随后AU24抿唇应下"
+            },
+            "dramatic_function": "把羞辱变成具体劳役，展示主角的忍耐",
+            "duration": 7.969,
+            "editing_intent": "以张老大MCU、压肩insert、贺平生CU三步递进，让命令落到身体。",
+            "emotional_turn": "从羞辱转为必须承担的具体重压。",
+            "end_sec": 14.206,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/常态",
+                "CHAR_02/常态"
+              ],
+              "forbidden_presence": [
+                "CHAR_03"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道每日挑水二十趟"
+                ],
+                "CHAR_02": [
+                  "知道命令远超新人体力"
+                ]
+              },
+              "locations": [
+                "LOC_01"
+              ],
+              "objects": [
+                "PROP_木牌"
+              ],
+              "offscreen_presence": [
+                "GROUP_01"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "CHAR_02"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP02.png",
+            "id": "EP01_CLIP02",
+            "label": "二十趟命令",
+            "location_id": "LOC_01",
+            "multi_subject_strategy": "shot_reverse_shot：双人建立后拆CHAR_02单人MCU、手部insert、CHAR_01单人CU，不用两张清晰脸同时承担说话表演。",
+            "object_ids": [
+              "PROP_木牌"
+            ],
+            "pacing_role": "压力加码",
+            "rhythm": "铺垫·长镜",
+            "runtime_priority": "secondary",
+            "scene": "LOC_01/日/内",
+            "shots": [
+              {
+                "desc": "张老大俯身把命令逐字压下，低梁在头顶横贯",
+                "lens": "MCU·张老大低机位",
+                "t": "0-4.8s",
+                "video_prompt": "张老大只做俯身和抬手两个连续小动作，相机慢推，冷光与梁尘不变"
+              },
+              {
+                "desc": "粗大右手压在瘦削左肩，粗布轻微凹下",
+                "lens": "insert·固定",
+                "t": "4.8-6.1s",
+                "video_prompt": "手掌缓慢施压后移开，只有布料凹陷和尘粒小幅移动"
+              },
+              {
+                "desc": "贺平生垂眼短促应下",
+                "lens": "CU·平视固定",
+                "t": "6.1-7.969s",
+                "video_prompt": "少年仅一次轻微点头与呼气，不看镜头"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_MOTIVE_001"
+            ],
+            "start_sec": 6.237,
+            "subject_slots": {
+              "LEFT_SLOT": "CHAR_01",
+              "RIGHT_SLOT": "CHAR_02"
+            },
+            "template": "dialogue_shot_reverse",
+            "template_contract": {
+              "axis": "CHAR_01↔CHAR_02横轴",
+              "beats": [
+                "张老大俯身下令",
+                "手掌压到少年肩头",
+                "少年低声应下"
+              ],
+              "blocking": "CHAR_01画左低位，CHAR_02画右高位，肩头接触只用手部插入镜",
+              "buffer_or_reestablishing": "手掌压肩插入镜",
+              "camera_coverage": "双人建立+清洁单人+手部插入+反应特写",
+              "camera_rule": "双人建立→张老大MCU→肩头手部insert→贺平生CU，永不越轴",
+              "continuity_must": [
+                "左右站位不换",
+                "视线互补",
+                "拍肩为张老大右手",
+                "木牌始终在少年胸前"
+              ],
+              "coverage_order": [
+                "two-shot",
+                "CHAR_02 MCU",
+                "hand insert",
+                "CHAR_01 reaction CU"
+              ],
+              "crossing_axis_policy": "禁止越轴",
+              "eyeline": "CHAR_01向画右上，CHAR_02向画左下",
+              "lens_height_distance_match": "焦段统一，只用机位高差表达权力",
+              "negative": [
+                "不要越轴",
+                "不要让两人看镜头",
+                "不要增加肢体",
+                "不要把少年拍成成年人"
+              ],
+              "screen_sides": {
+                "left": "CHAR_01",
+                "right": "CHAR_02"
+              },
+              "shot_pairing": "张老大低机位MCU / 贺平生平视CU",
+              "template_id": "dialogue_shot_reverse"
+            },
+            "video_out": "出视频/第1集/视频/EP01_CLIP02.mp4",
+            "visual_question": "他为什么不反驳？",
+            "voiceover_indices": [
+              3,
+              4
+            ]
+          },
+          {
+            "audience_effect": "把怜悯转为对其选择的理解",
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "compression_plan": "不展开人物回忆，用旧布包、空院和远处山门三个可视物交代过往。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP03_a1.png",
+                  "at_sec": 4.7,
+                  "reason": "9.816秒从物件叠化切到少年握住扁担，作为明确剪辑焊点",
+                  "use": "split"
+                }
+              ],
+              "end_state": "贺平生站在巨缸旁，双手握住扁担中点，望向画左上山路",
+              "entry_exit": "明确从殿内切至傍晚杂役院，CHAR_02与GROUP_01不再在场",
+              "expression_span": "中",
+              "eyeline": "CHAR_01先看画左的旧布包，再看画左上山路",
+              "need_endframe": false,
+              "seam_evidence": {
+                "composition_relation": "两条横线都在竖屏中上部并由左指向右",
+                "match_element_in": "少年手中扁担的横向木线",
+                "match_element_out": "殿内低梁的横向暗线"
+              },
+              "seam_mode": "graphic_match",
+              "shot_size": "CU insert→MS",
+              "start_state": "张老大右手从贺平生左肩移开，贺平生仍画左低头应下",
+              "transition": "木梁横线匹配扁担横线",
+              "微表情节拍": "AU4从紧绷松开半度，AU24抿唇转AU17下颔轻提，吸气后目光定住"
+            },
+            "dramatic_function": "用物件压缩过往背景，交代主角留在秀竹峰的真正动机",
+            "duration": 11.609,
+            "editing_intent": "先用旧物叠化压缩过往，再以横线匹配切到扁担，从解释落回当下选择。",
+            "emotional_turn": "从无人收留的孤立转为不肯离山的坚定。",
+            "end_sec": 25.815,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/常态"
+              ],
+              "forbidden_presence": [
+                "CHAR_02",
+                "GROUP_01"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "明知自己本钱不足，仍想留在仙门附近"
+                ]
+              },
+              "locations": [
+                "LOC_02"
+              ],
+              "objects": [
+                "PROP_旧布包",
+                "PROP_扁担",
+                "PROP_水桶"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_01",
+                "PROP_扁担",
+                "PROP_水桶"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP03.png",
+            "id": "EP01_CLIP03",
+            "label": "不肯离山",
+            "location_id": "LOC_02",
+            "object_ids": [
+              "PROP_旧布包",
+              "PROP_扁担",
+              "PROP_水桶"
+            ],
+            "pacing_role": "动机交代",
+            "rhythm": "铺垫·长镜",
+            "runtime_priority": "primary",
+            "scene": "LOC_02/傍晚/外",
+            "shots": [
+              {
+                "desc": "旧布包、一双空旧鞋和远处山门的层叠画面，不出现回忆人脸",
+                "lens": "CU insert·缓慢横移",
+                "t": "0-4.7s",
+                "video_prompt": "相机缓慢从旧布包移向空院远处，布角被微风轻吹，夕阳尘粒缓慢浮动"
+              },
+              {
+                "desc": "贺平生在两口巨缸前握紧扁担，远看山路",
+                "lens": "MS·缓慢推近",
+                "t": "4.7-11.609s",
+                "video_prompt": "少年从看水桶转为望山路，双手缓慢握紧扁担，相机只做轻推"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_MOTIVE_001"
+            ],
+            "start_sec": 14.206,
+            "video_out": "出视频/第1集/视频/EP01_CLIP03.mp4",
+            "visual_question": "巨缸与山路这样的重压值得吗？",
+            "voiceover_indices": [
+              5,
+              6
+            ]
+          },
+          {
+            "audience_effect": "对少年的笨拙韧劲产生认同",
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "compression_plan": "只拍第一次起担的身体受力，不在本镜重复往返。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP04_a1.png",
+                  "at_sec": 3.8,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 8.267,
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP04_a2.png",
+                  "at_sec": 5.4,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 8.267,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "贺平生已把扁担压上右肩，两只空桶在身体前后稳定，脚尖指向画左上山路",
+              "entry_exit": "PROP_旧布包在上镜身世插入镜后留在杂役院画外；本镜只有CHAR_01与挑水器具在画内，下镜保持同一主体与行进方向",
+              "expression_span": "中",
+              "eyeline": "CHAR_01看画左上前路",
+              "need_endframe": false,
+              "seam_evidence": {
+                "editorial_intent": "在主角说出五趟并站稳的意志落点切入时间压缩"
+              },
+              "seam_mode": "hard_cut",
+              "shot_size": "MS→CU手部→MS",
+              "start_state": "贺平生站在巨缸旁，双手握住扁担中点，望向画左上山路",
+              "transition": "从完整起担动作硬切多趟跳切",
+              "微表情节拍": "起担前AU4眉压与AU24抿唇，重量压下时AU7眼睑收紧、鼻翼微张，站稳后慢呼气"
+            },
+            "dramatic_function": "让主角从被动受辱转成主动试路",
+            "duration": 8.267,
+            "editing_intent": "用一次完整起担和手部受力特写给选择重量，在迈出第一步时完成小爽点。",
+            "emotional_turn": "从被迫服从转为主动给自己加码。",
+            "end_sec": 34.082,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/出汗态"
+              ],
+              "forbidden_presence": [
+                "CHAR_02",
+                "GROUP_01"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道明日才正式开工",
+                  "决定今日先完成五趟"
+                ]
+              },
+              "locations": [
+                "LOC_02"
+              ],
+              "objects": [
+                "PROP_扁担",
+                "PROP_水桶"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_01",
+                "PROP_扁担",
+                "PROP_水桶"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP04.png",
+            "id": "EP01_CLIP04",
+            "label": "先挑五趟",
+            "location_id": "LOC_02",
+            "object_ids": [
+              "PROP_扁担",
+              "PROP_水桶"
+            ],
+            "pacing_role": "小爽点与主动选择",
+            "rhythm": "爽点·CU硬切",
+            "runtime_priority": "primary",
+            "scene": "LOC_02/黄昏/外",
+            "shots": [
+              {
+                "desc": "少年屈膝将扁担压上右肩，两桶保持清晰前后归属",
+                "lens": "MS·侧前固定",
+                "t": "0-3.8s",
+                "video_prompt": "少年只完成屈膝、肩入扁担、缓慢站起的一次起担，相机固定，桶不变数量"
+              },
+              {
+                "desc": "掌心勒紧扁担，红痕和木刺清晰",
+                "lens": "CU insert·固定",
+                "t": "3.8-5.4s",
+                "video_prompt": "手指缓慢扣紧木杆，汗滴滑过手背，不改变手指数量"
+              },
+              {
+                "desc": "少年站稳后向画左上迈出第一步，夕阳在右肩给一道暖边",
+                "lens": "MS·轻跟",
+                "t": "5.4-8.267s",
+                "video_prompt": "少年站稳、呼气、迈出一步，相机仅侧向轻跟，水桶小幅同步摆动"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_CAUSE_001"
+            ],
+            "start_sec": 25.815,
+            "video_out": "出视频/第1集/视频/EP01_CLIP04.mp4",
+            "visual_question": "他能否把主动选择真正做完？",
+            "voiceover_indices": [
+              7,
+              8
+            ]
+          },
+          {
+            "audience_effect": "在节奏加快中感到重量与时间流逝",
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "compression_plan": "三个同构图跳切+月夜抵达，不生成每一趟完整过程。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP05_a1.png",
+                  "at_sec": 2.5,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 4.336,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "月夜浅潭边，贺平生画右弯腰将两桶置于碎石地，扁担仍在右肩后侧",
+              "entry_exit": "明确日落至月夜时间压缩；主角和器具保持连续，PROP_01仍未入画",
+              "expression_span": "中",
+              "eyeline": "CHAR_01先看画左上前路，抵达后低头看水桶",
+              "midframe_exempt_reason": "4.336秒剪辑蒙太奇，每个内部动作只保留一个可读姿态",
+              "need_endframe": false,
+              "seam_evidence": {
+                "action_phase_in": "月夜同一水桶继续下降并触地",
+                "action_phase_out": "水桶从膝侧下降到距地一掌",
+                "screen_direction": "画右主体向画左水边"
+              },
+              "seam_mode": "match_on_action",
+              "shot_size": "WS跳切→MS",
+              "start_state": "贺平生已把扁担压上右肩，两只空桶在身体前后稳定，脚尖指向画左上山路",
+              "transition": "水桶下落动作匹配月夜触地",
+              "微表情节拍": "眼睑AU7逐步收紧，嘴唇张开喘气，最后一步下颔微颤但目光不涣散"
+            },
+            "dramatic_function": "用劳作蒙太奇把主动选择推到精疲力竭的后果",
+            "duration": 4.795,
+            "editing_intent": "用同构图跳切逐步变更天光、水线和步幅，最后用水桶下落匹配月夜触地。",
+            "emotional_turn": "从起担的倔强转为体力接近极限。",
+            "end_sec": 38.877,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/疲惫态"
+              ],
+              "forbidden_presence": [
+                "CHAR_02",
+                "GROUP_01",
+                "PROP_01"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "知道这是今日第五趟，尚未看见水下之物"
+                ]
+              },
+              "locations": [
+                "LOC_02",
+                "LOC_03"
+              ],
+              "objects": [
+                "PROP_扁担",
+                "PROP_水桶"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_01",
+                "PROP_扁担",
+                "PROP_水桶"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP05.png",
+            "id": "EP01_CLIP05",
+            "label": "第五次到潭边",
+            "location_id": "LOC_03",
+            "object_ids": [
+              "PROP_扁担",
+              "PROP_水桶"
+            ],
+            "pacing_role": "选择后果加速",
+            "rhythm": "加速·碎切",
+            "runtime_priority": "secondary",
+            "scene": "LOC_02→LOC_03/日落至月夜/外",
+            "shots": [
+              {
+                "desc": "同一侧面构图中水桶水线和日光逐步变化，少年步幅变小",
+                "lens": "WS·同构图跳切",
+                "t": "0-2.5s",
+                "video_prompt": "用三个清晰跳切表现时间，少年始终向画左上行进，桶体数量、衣服和扁担不变"
+              },
+              {
+                "desc": "月夜潭边，少年把两桶缓慢放到碎石地",
+                "lens": "MS·固定",
+                "t": "2.5-4.795s",
+                "video_prompt": "少年弯腰将两只水桶同步下降到地面，只听见水声与夜虫，相机固定"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_CAUSE_001"
+            ],
+            "start_sec": 34.082,
+            "video_out": "出视频/第1集/视频/EP01_CLIP05.mp4",
+            "visual_question": "第五趟除了疲惫还会带来什么？",
+            "voiceover_indices": [
+              9
+            ]
+          },
+          {
+            "audience_effect": "先随主角失望，为集尾反差蓄力",
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "compression_plan": "发现、伸手和抱起三拍清楚串联，不加不必要奇观。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_a1.png",
+                  "at_sec": 2.0,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 7.558,
+                  "use": "edit_cut"
+                },
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP06_a2.png",
+                  "at_sec": 4.5,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 7.558,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "贺平生站在画右双手托持破损黑盆，盆口朝上，水桶与扁担留在画右地面",
+              "entry_exit": "PROP_01从画左浅水入画并被CHAR_01抱起；器具留在画右地面，下镜仍在场但画外",
+              "expression_span": "中",
+              "eyeline": "CHAR_01看画左下水中PROP_01",
+              "need_endframe": false,
+              "seam_evidence": {
+                "audio_source": "贺平生自嘲的一声轻笑与潭水声",
+                "audio_tail_sec": 0.4
+              },
+              "seam_mode": "l_cut",
+              "shot_size": "CU脸→insert水下→MS",
+              "start_state": "月夜浅潭边，贺平生画右弯腰将两桶置于碎石地，扁担仍在右肩后侧",
+              "transition": "自嘲笑保留至他转身，后浮出盆底插入镜",
+              "微表情节拍": "发现时AU1眉内上提+AU5上眼睁大，确认是破盆后AU12单侧微笑、眼睑放松并呼气"
+            },
+            "dramatic_function": "让普通劳作结果与核心道具相遇，先降低角色预期",
+            "duration": 7.458,
+            "editing_intent": "从视线反应切水下insert，再回到托盆起身；把发现拍清楚但故意拍得普通。",
+            "emotional_turn": "从对未知的短暂期待转为对破盆的自嘲失望。",
+            "end_sec": 46.335,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/疲惫湿裤脚态"
+              ],
+              "forbidden_presence": [
+                "CHAR_02",
+                "GROUP_01"
+              ],
+              "knowledge_state": {
+                "CHAR_01": [
+                  "只把PROP_01当作可用的破盆，不知其异常"
+                ]
+              },
+              "locations": [
+                "LOC_03"
+              ],
+              "objects": [
+                "PROP_01/破损黑盆",
+                "PROP_水桶",
+                "PROP_扁担"
+              ],
+              "offscreen_presence": [],
+              "required_presence": [
+                "CHAR_01",
+                "PROP_01"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP06.png",
+            "id": "EP01_CLIP06",
+            "label": "水下破盆",
+            "location_id": "LOC_03",
+            "object_ids": [
+              "PROP_01",
+              "PROP_水桶",
+              "PROP_扁担"
+            ],
+            "pacing_role": "核心道具登场",
+            "rhythm": "留白·定格",
+            "runtime_priority": "secondary",
+            "scene": "LOC_03/月夜/外",
+            "shots": [
+              {
+                "desc": "少年忽然看向画左下方，月光在脸侧不变",
+                "lens": "CU·视线下移",
+                "t": "0-2.0s",
+                "video_prompt": "少年从喘气转为屏息，眼睛下移，相机仅轻推"
+              },
+              {
+                "desc": "清水下的破损黑盆卡在砂石间，少年单手从画右伸向画左",
+                "lens": "insert·水面上方固定",
+                "t": "2.0-4.5s",
+                "video_prompt": "水波缓慢向外扩散，右手从画右伸入浅水抓住盆沿，盆体形状不变，不出现亮光"
+              },
+              {
+                "desc": "少年托起滴水破盆，自嘲一笑后起身",
+                "lens": "MS·固定",
+                "t": "4.5-7.458s",
+                "video_prompt": "少年双手托住盆侧并缓慢站起，水滴从盆沿落下，表情只从惊疑转为自嘲"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_FORESHADOW_001"
+            ],
+            "start_sec": 38.877,
+            "video_out": "出视频/第1集/视频/EP01_CLIP06.mp4",
+            "visual_question": "这只破盆真的只是废物吗？",
+            "voiceover_indices": [
+              10,
+              11,
+              12
+            ]
+          },
+          {
+            "audience_effect": "产生明确的下集追看问题",
+            "character_ids": [
+              "CHAR_01"
+            ],
+            "compression_plan": "仅一次转身和一个盆底特写，在观众看清异常时硬断。",
+            "continuity": {
+              "anchors": [
+                {
+                  "anchor_png": "出图/第1集/图片/EP01_CLIP07_a1.png",
+                  "at_sec": 2.4,
+                  "reason": "edit_cut: storyboard 镜位切换边界，作为前一 take 尾帧与后一 take 首帧",
+                  "source_duration": 4.339,
+                  "use": "edit_cut"
+                }
+              ],
+              "end_state": "贺平生抱盆走向画右山路，画面停在盆底一缕青金幽光上",
+              "entry_exit": "CHAR_01抱PROP_01向画右出画；水桶与扁担留在原地但为画外",
+              "expression_span": "微",
+              "eyeline": "CHAR_01看画右山路，不看盆底",
+              "midframe_exempt_reason": "4.339秒单次转身加物件插入镜，无跨镜连续边界",
+              "need_endframe": false,
+              "shot_size": "MS背影→ECU盆底",
+              "start_state": "贺平生站在画右双手托持破损黑盆，盆口朝上，水桶与扁担留在画右地面",
+              "transition": "集尾在幽光刚可读时硬切黑场",
+              "微表情节拍": "CHAR_01仅保留疲惫后的松驰呼气，不对幽光做知情反应"
+            },
+            "dramatic_function": "给普通破盆加上只对观众可见的异常，完成集尾钩子",
+            "duration": 3.896,
+            "editing_intent": "先让主角不知情地转身，再切ECU盆底，在微光刚可读的第一帧硬断。",
+            "emotional_turn": "角色仍然失望，但观众已从失望转为惊喜和好奇。",
+            "end_sec": 50.231,
+            "entity_schedule": {
+              "characters": [
+                "CHAR_01/疲惫抱盆态"
+              ],
+              "forbidden_presence": [
+                "CHAR_02",
+                "GROUP_01"
+              ],
+              "knowledge_state": {
+                "AUDIENCE": [
+                  "第一次看见盆底青金幽光"
+                ],
+                "CHAR_01": [
+                  "仍不知盆底异常"
+                ]
+              },
+              "locations": [
+                "LOC_03"
+              ],
+              "objects": [
+                "PROP_01/破损黑盆"
+              ],
+              "offscreen_presence": [
+                "PROP_水桶",
+                "PROP_扁担"
+              ],
+              "required_presence": [
+                "CHAR_01",
+                "PROP_01"
+              ]
+            },
+            "firstframe_png": "出图/第1集/图片/EP01_CLIP07.png",
+            "id": "EP01_CLIP07",
+            "label": "盆底幽光",
+            "location_id": "LOC_03",
+            "object_ids": [
+              "PROP_01"
+            ],
+            "pacing_role": "集尾硬钩",
+            "rhythm": "留白·定格",
+            "runtime_priority": "primary",
+            "scene": "LOC_03/月夜/外",
+            "shots": [
+              {
+                "desc": "少年抱着破盆转向画右山路，不知盆底变化",
+                "lens": "MS背侧·缓慢跟半步",
+                "t": "0-2.4s",
+                "video_prompt": "少年只完成一次缓慢转身并走出半步，相机轻跟，月光方向不变"
+              },
+              {
+                "desc": "水滴滑过破损盆底，一缕低强度青金幽光从细纹中亮起",
+                "lens": "ECU insert·固定慢推",
+                "t": "2.4-3.896s",
+                "video_prompt": "盆底形状完全不变，水滴滑落，细纹里的青金微光从无到有缓慢亮起，不照亮整个潭边，相机极慢推近"
+              }
+            ],
+            "source_trace_ids": [
+              "SRC_FORESHADOW_001"
+            ],
+            "start_sec": 46.335,
+            "video_out": "出视频/第1集/视频/EP01_CLIP07.mp4",
+            "visual_question": "盆底青金幽光会在下集触发什么？",
+            "voiceover_indices": [
+              13
+            ]
+          }
+        ],
+        "episode": "第1集",
+        "kind": "n2d_storyboard",
+        "top_level_keys": [
+          "kind",
+          "version",
+          "episode",
+          "title",
+          "source",
+          "source_trace_ids",
+          "total_duration",
+          "core_attraction",
+          "policy",
+          "first_3s_visual_hook",
+          "retention_promise_ledger",
+          "pacing_allocation",
+          "visual_contract",
+          "style_contract",
+          "clips"
+        ],
+        "version": 1
+      },
+      "relpath": "脚本/第1集/storyboard.json",
+      "sha256": "d7136f958417128897e8a1d364b18639102fa85e86177e16b20f4fe1d21b6dfc"
+    },
+    {
+      "bytes": 3769,
+      "exists": true,
+      "preview": "# 仙界闭关小能手_第1集_素材清单\n> 待精修：参考 references/formats.md「素材清单」格式，供 AI 图片生成（中文为主+英文备用；平台档案见 references/platforms.md）。\n# 《仙界闭关小能手》第1集素材清单\n## 角色出图\n### CHAR_01 贺平生 @ 常态/出汗态/疲惫湿裤脚态\n中文 Prompt：国漫写实，十四岁瘦削中式少年，未脱稚气的窄脸，深棕黑眼，黑发束成简单高马尾，额前碎发，磨旧灰褐粗布短打，深灰绑腿，布鞋；身形瘦但不孱弱，眼神谨慎又倔强，不穿仙袍、不成年化、不欧美脸，9:16。疲惫态仅增加衣领汗湿、掌心红痕、发丝贴额，不改变脸型发型服装。\nEnglish Prompt: Chinese semi-realistic manhua style, a lean fourteen-year-old Chinese boy with a still-youthful narrow face, deep dark-brown eyes, black hair tied in a simple high ponytail with loose forehead strands, worn gray-brown coarse-cloth short workwear, dark leg wraps and cloth shoes; cautious yet stubborn gaze, lean but not frail, no immortal robe, no adult face, no western facial features, vertical 9:16. Tired state only adds a sweat-darkened collar, red palms and damp hair on forehead without changing identity or costume.\n### CHAR_02 张老大 @ 杂役头子\n中文 Prompt：国漫写实，三十多岁高壮中式男人，方脸、颚骨宽、眼缝窄、鼻头厚，黑发粗高发髻，深褐粗布上衣、暗红腰带、袖口沾油污，右手粗大，神情轻蔑，不是仙师、不穿华服甲胄，9:16。\nEnglish Prompt: Chinese semi-realistic manhua style, a tall broad Chinese male labor foreman in his thirties, square face, broad cheekbones, narrow eyes, thick nose, rough high hair bun, dark-brown coarse work jacket, muted red sash, greasy cuffs, large rough right hand, contemptuous expression; not an immortal master, no ornate robe or armor, vertical 9:16.\n### GROUP_01 杂役背景组\n中文 Prompt：三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。\n## 场景出图\n### LOC_01 秀竹峰杂役大殿\n国漫写实，破庙状狭长木殿，发黑低梁积灰，剥落灰墙，土石地面，油污木桌，画左高破窗冷灰斜光切开尘埃，画右后旧门弱轮廓光，不要宏大仙殿、金碧辉煌或佛像，9:16。\n### LOC_02 秀竹峰杂役院\n国漫写实，六七间低矮杂役房围成的夼土院，旧木门、灰瓦、碎石地，侧边两口大于少年上半身的巨型青苔水缸，画右后傍晚暖斜光，不要整洁仙门客院，9:16。\n### LOC_03 秀竹峰后山浅潭\n国漫写实竖屏，画左上细窄瀑布落在湿灰巨石，前景浅水可见砂石，画右下崎岖山路，竹影青苔围合，冷银月光从右上照入，安静克制，不要大瀑布、深湖、华丽秘境、洞穴或漂浮仙岛，9:16。\n## 道具出图\n### PROP_01 破损黑盆\n国漫写实，普通乡野旧黑褐陶盆，直径约少年肩宽，盆沿缺一个小口，外壁不对称沙眼和磨痕，盆底有很浅的自然细纹，无文字无符号，无金属光泽，大部分时间完全不发光；集尾只允许一缕低强度青金微光从盆底细纹中出现。\n### PROP_扁担 + PROP_水桶\n暗黄老竹扁担，中部肩压磨亮；两只同款旧木桶，铁箍暗锈，数量永远是二，水桶与扁担的绳索连接点固定，不要塑料、不要金色法器化。\n## 风格锚\n国漫写实，东方修仙但不华丽，山间底层劳役环境，冷青灰低饱和，影视化光影，人物比例略理想化，木料、粗布、湿岩和水面高细节，不照片化，不页游，不过度磨皮，9:16。",
+      "relpath": "脚本/第1集/素材清单.md",
+      "sha256": "f302eb83a43bf9aff26b9589e262c91b22eca5aee0e3a3ad9d4c629612f68c12"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/identity_registry.json"
+    },
+    {
+      "exists": false,
+      "relpath": "出图/共享/asset_registry.json"
+    },
+    {
+      "bytes": 263,
+      "exists": true,
+      "preview": {
+        "clips": [],
+        "episode": "第1集",
+        "kind": "n2d_spectacle_plan",
+        "summary": {
+          "contract_missing_clips": 0,
+          "motion_control_required_clips": 0,
+          "spectacle_clips": 0
+        },
+        "top_level_keys": [
+          "kind",
+          "version",
+          "root",
+          "episode",
+          "clips",
+          "summary"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/spectacle_plan_第1集.json",
+      "sha256": "2d9ca5d4793df487991d90576aa6b73114d22e73dea827ee3a3de71ca438e750"
+    },
+    {
+      "bytes": 2806,
+      "exists": true,
+      "preview": {
+        "episode": "第1集",
+        "graph_hash": "f58498c9a5a1aa6a3eb533fe75a39b1e592872a3375ab3a95ef0b376dd0ac9db",
+        "kind": "n2d_episode_graph",
+        "status": "pass",
+        "summary": {
+          "edges": 7,
+          "lineage_gaps": 0,
+          "masters": 0,
+          "nodes": 8,
+          "routes": 0,
+          "story_clips": 7,
+          "video_media": 0
+        },
+        "top_level_keys": [
+          "authority",
+          "edges",
+          "episode",
+          "generated_at",
+          "graph_hash",
+          "kind",
+          "lineage_gaps",
+          "nodes",
+          "root",
+          "source_files",
+          "status",
+          "summary",
+          "version"
+        ],
+        "version": 1
+      },
+      "relpath": "生产数据/episode_graph_第1集.json",
+      "sha256": "a52ee1225f6668ff39c96a29a8235f55e146b118abc36507507ff2a9b32f02cf"
+    }
+  ],
+  "genre_pack_context": {
+    "activation": {
+      "reason": "项目未设置题材；没有题材包可触发。",
+      "state": "genre_unset",
+      "storyboard_clip_count": 7,
+      "storyboard_path": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手/脚本/第1集/storyboard.json",
+      "storyboard_state": "ready",
+      "triggered": false
+    },
+    "active_scene_archetypes": [],
+    "episode": "第1集",
+    "generated_at": "2026-07-14T16:28:29+00:00",
+    "genre": {
+      "genre_key": "",
+      "label": "",
+      "matched": false,
+      "matched_genre_keys": [],
+      "matched_labels": [],
+      "matches": [],
+      "raw": ""
+    },
+    "issues": [],
+    "kind": "n2d_genre_pack_context",
+    "pack": {
+      "degrade_plans": [],
+      "genre_keys": [],
+      "labels": [],
+      "matched_packs": [],
+      "motion_contract_fields": [],
+      "qc_focus": [],
+      "style_binding_policy": {}
+    },
+    "root": "/Users/lalala/learn/anime-armory/创作区/制漫剧/仙界闭关小能手",
+    "stage_key": "image_prompt",
+    "status": "pass",
+    "summary": {
+      "activation_state": "genre_unset",
+      "active_scenes": 0,
+      "issues": 0,
+      "matched_clips": 0,
+      "matched_genre_keys": [],
+      "matched_packs": 0,
+      "storyboard_clip_count": 7,
+      "storyboard_state": "ready"
+    },
+    "version": 1
+  },
+  "kind": "n2d_context_pack",
+  "missing_required_files": [
+    "出图/共享/identity_registry.json",
+    "出图/共享/asset_registry.json"
+  ],
+  "root": "创作区/制漫剧/仙界闭关小能手",
+  "settings_context": {
+    "authority": {
+      "audit_records": "provenance_only_non_authoritative",
+      "effective_settings": "settings.load_settings_meta:settings_region_before_record_section",
+      "records_can_override_effective_settings": false
+    },
+    "effective_settings": {
+      "一致性严格度": {
+        "source": "explicit_user",
+        "value": "production"
+      },
+      "一致性增强": {
+        "source": "explicit_user",
+        "value": "image2image_reference_chain"
+      },
+      "出视频规格": {
+        "source": "explicit_user",
+        "value": "预算一般"
+      },
+      "制作模式": {
+        "source": "explicit_user",
+        "value": "混合自动路由"
+      },
+      "合成阶段": {
+        "source": "explicit_user",
+        "value": "启用"
+      },
+      "合规用途": {
+        "source": "explicit_user",
+        "value": "internal_only"
+      },
+      "基础视觉风格": {
+        "source": "explicit_user",
+        "value": "国漫写实"
+      },
+      "字幕语言": {
+        "source": "explicit_user",
+        "value": "中文"
+      },
+      "生图AI": {
+        "source": "explicit_user",
+        "value": "Codex CLI"
+      },
+      "生图模型": {
+        "source": "explicit_user",
+        "value": "GPT Image 2"
+      },
+      "生成优先序": {
+        "source": "explicit_user",
+        "value": "分镜顺序"
+      },
+      "生成粒度": {
+        "source": "explicit_user",
+        "value": "逐个"
+      },
+      "生视频模型": {
+        "source": "explicit_user",
+        "value": "Seedance 2.0"
+      },
+      "生视频渠道": {
+        "source": "explicit_user",
+        "value": "即梦/Dreamina"
+      },
+      "画幅": {
+        "source": "explicit_user",
+        "value": "9:16"
+      },
+      "视频模型路由": {
+        "source": "explicit_user",
+        "value": "自动按镜头路由"
+      },
+      "重抽预算策略": {
+        "source": "explicit_user",
+        "value": "预算充足"
+      },
+      "项目规模": {
+        "source": "explicit_user",
+        "value": "多集长线"
+      }
+    },
+    "kind": "n2d_settings_context",
+    "recent_corrections": [],
+    "record_summary": {
+      "corrections_included": 0,
+      "corrections_seen": 0,
+      "format": "record_section",
+      "full_history_omitted": true,
+      "limit": 3,
+      "records_seen": 18
+    },
+    "source_path": "_设置.md",
+    "source_sha256": "1d7821b28b3868cbb3ad04e390b2f309f7282205d5e03fd8baaac6e54af52280",
+    "status": "ok",
+    "version": 1
+  },
+  "stage_key": "image_prompt",
+  "usage": {
+    "read_order": [
+      "_设置.md",
+      "_进度.md",
+      "脚本/第1集/storyboard.json",
+      "脚本/第1集/素材清单.md",
+      "生产数据/spectacle_plan_第1集.json",
+      "生产数据/episode_graph_第1集.json"
+    ],
+    "rule": "Use this pack first; open full references only when the pack points to a missing contract or ambiguity."
+  },
+  "version": 1
+}

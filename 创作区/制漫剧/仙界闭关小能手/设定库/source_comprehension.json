@@ -1,0 +1,111 @@
+{
+  "kind": "n2d_source_comprehension",
+  "version": 1,
+  "register": "modern_zh",
+  "lang_guess": "modern_baihua",
+  "confidence": "high",
+  "signals": [
+    "现代白话特征：「的」密度 3.6%、现代虚词 4.3%"
+  ],
+  "scores": {
+    "classical_strong": 0.0224,
+    "de_density": 0.0359,
+    "modern_marker": 0.043,
+    "yue_count": 3,
+    "trad_ratio": 0.0,
+    "cjk_ratio": 0.839
+  },
+  "source_traits": {
+    "content_chars": 2492184,
+    "chapter_markers": 1179,
+    "long_form": true,
+    "power_system_likely": true
+  },
+  "source": "小说/仙界闭关小能手.txt",
+  "status": "confirmed",
+  "comprehension_doc": "设定库/source_comprehension.md",
+  "understanding_contract": {
+    "modern_understanding": "长篇凡人流修仙爽文。十四岁孤儿贺平生因五行灵根耗资巨大而被宗门放弃，自愿进入秀竹峰做杂役，只为靠近仙途。他谨慎、能忍、会提前准备，在最苦的挑水差事中捡到外表破旧的陶盆。陶盆可在一夜之间增量并提升投入物品质：清水变灵水、劣等灵米变极品金米、下品丹药复制并升品。主线爽感来自底层求生者用信息差、耐心和资源复利秘密变强；危险来自阶层压迫、宝物暴露和修行资源争夺。第一集只完成受辱与受苦、主动多挑五趟、月下捡盆的闭环，以破盆异光为钩，不提前揭示完整能力。",
+    "episode_promise_basis": [
+      {
+        "trace_id": "SRC_PROMISE_001",
+        "promise": "人人看不起的五行灵根杂役，能否靠一只破盆踏上仙途",
+        "opened_at": "第1章：五行灵根被嘲为费钱货；月下捡到破盆",
+        "payoff_or_progress": "第2-6章逐步验证灵水、灵米、丹药的增量与升品能力；之后用资源复利推动修行",
+        "risk_if_cut": "会失去底层逆袭的核心承诺、破盆能力的渐进揭秘与长期资源逻辑"
+      }
+    ],
+    "character_motives": [
+      {
+        "trace_id": "SRC_MOTIVE_001",
+        "character": "贺平生",
+        "want": "进入仙途并拥有保护自己的力量",
+        "obstacle": "五行灵根极耗资源、父母双亡、资源被夺、无师门接纳且身处杂役阶层",
+        "choice_pressure": "忍受压迫并隐藏锋芒，还是冒险争取修行机会；得到宝盆后更要在使用与暴露之间权衡",
+        "arc_delta": "从只能靠谨慎吃苦求机会的少年，成长为能利用信息差和资源复利主动布局的修士"
+      }
+    ],
+    "causality_chain": [
+      {
+        "trace_id": "SRC_CAUSE_001",
+        "cause": "五行灵根无人愿意培养，江剑又将离开",
+        "effect": "贺平生进入秀竹峰杂役班并接下最苦的挑水差事",
+        "must_keep": "解释主角为何在底层、为何渴望仙途、为何会去后山并捡到陶盆",
+        "adaptation_note": "背景可压成张老大问话、挑水蒙太奇和少量旁白，但选择与因果不能删"
+      }
+    ],
+    "foreshadowing_ledger": [
+      {
+        "trace_id": "SRC_FORESHADOW_001",
+        "setup": "贺平生父亲被妖兽杀死、母亲随后离奇死亡、家中资源被修士抢空",
+        "payoff_plan": "作为长线身世与宗门黑暗伏笔，后续按原著推进，不在首集擅自解释真相",
+        "status": "open",
+        "do_not_drop_reason": "决定主角的不安全感、资源执念和对宗门权力结构的警惕"
+      }
+    ],
+    "adaptation_boundaries": {
+      "preserve": [
+        "贺平生十四岁、五行灵根、父母双亡、想靠近仙途的动机",
+        "主动提前挑水与第五趟发现破盆的因果",
+        "宝盆能力按水、灵米、丹药逐步验证，不一次性全说透",
+        "底层宗门的阶层压迫与主角谨慎隐忍"
+      ],
+      "modernize_or_compress": [
+        "大段杂役制度说明转成画面、动作与短旁白",
+        "重复挑水用节奏蒙太奇和次数视觉化",
+        "心理独白尽量转成可见动作、停顿与简短心声"
+      ],
+      "do_not_change": [
+        "不得把五行灵根改成废灵根或单灵根",
+        "不得提前让张老大或宗门知道宝盆能力",
+        "不得把宝盆改成无代价即时系统面板",
+        "不得删除贺平生主动多挑五趟这一性格证据"
+      ]
+    },
+    "power_system_rules": {
+      "applicable": "yes",
+      "level_or_rank_rules": [
+        "五行灵根不是不能修炼，而是需要远超普通灵根的资源",
+        "灵米和丹药按品质分档，丹纹数量是丹药品质的可见标志",
+        "炼气等境界提升必须由功法、灵气和资源积累支撑，不能无账跳级"
+      ],
+      "growth_constraints": [
+        "宝盆先表现增量与升品，能力边界随原著验证，不自由增加新功能",
+        "主角初期体能仍是十四岁少年水平，吃到高品质资源后才可有可见改善",
+        "秘密宝物带来暴露风险，资源产出不能直接等于公开战力"
+      ],
+      "combat_consistency_rules": [
+        "未正式修行前贺平生不能展示法术或超越凡人的战斗力",
+        "炼气期与凡人、不同境界之间的压制关系按原著台账推进",
+        "法宝、符箓、丹药效果必须登记来源、品质、消耗与结果"
+      ],
+      "not_applicable_reason": ""
+    },
+    "source_register_strategy": {
+      "register": "modern_zh",
+      "dialogue_style": "现代白话古风语域：杂役粗粝直接，贺平生谨慎克制；避免网络梗和现代职场腔",
+      "terms_to_keep": ["太虚门", "秀竹峰", "五行灵根", "杂役弟子", "灵米", "聚宝盆", "金骨丹", "丹纹"],
+      "terms_to_translate": []
+    }
+  }
+}

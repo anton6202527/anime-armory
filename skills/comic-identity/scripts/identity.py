@@ -667,7 +667,11 @@ def asset_anchor_prompt(
         or (asset.get("description") if kind in {"monster", "location", "prop", "vfx"} else ""),
         max_len=900,
     )
-    dna_contract = compact_contract(asset.get("dna_contract"), max_len=900)
+    dna_contract = compact_contract(
+        asset.get("dna_contract")
+        or (asset.get("character_dna") if kind == "monster" else ""),
+        max_len=900,
+    )
     forbidden = compact_contract(asset.get("forbidden_inheritance"), max_len=900)
     style_reference_note = (
         "已附一张项目风格锚图片。它只用于继承线条、上色、明暗、材质、色域和墨晕语言；"
@@ -684,7 +688,10 @@ def asset_anchor_prompt(
         )
     elif kind == "monster":
         subject_rules = (
-            "生成单体妖物/动物 reference art：完整主体入画，头、躯干、四肢、尾部和标志纹理清楚；"
+            "生成单体妖物 reference art：首先严格执行 dna_contract 登记的解剖结构与姿态；"
+            "完整主体入画，该有的头、躯干、手臂/前肢、腿/后肢和永久标志必须清楚；"
+            "人身兽首必须保持直立双足人体结构，不得改成四足兽；"
+            "dna_contract 未登记尾巴、翅膀、额外肢体时不得自行增加；"
             "中性低饱和背景，不要血腥内脏，不要战斗叙事，不要人物。"
         )
     elif kind == "location":
@@ -1395,6 +1402,7 @@ def report(args: argparse.Namespace) -> int:
     rerun_targets: list[str] = []
     outfit_gaps: dict[str, str] = {}
     reference_sha_cache: dict[str, str] = {}
+    registry_assets = registry.get("assets") if isinstance(registry.get("assets"), dict) else {}
     for job in jobs.get("jobs") or []:
         pid = str(job.get("panel_id") or "")
         missing, valid = job_reference_status(root, job)
@@ -1404,6 +1412,18 @@ def report(args: argparse.Namespace) -> int:
             if not outfit_binding.get("registered"):
                 outfit_gaps[pid] = f"outfit_id={outfit_id} 未在 registry.assets[角色].outfits 登记"
             else:
+                ref_id = str(outfit_binding.get("ref_id") or "")
+                asset = registry_assets.get(ref_id) if isinstance(registry_assets.get(ref_id), dict) else {}
+                outfits = asset.get("outfits") if isinstance(asset.get("outfits"), dict) else {}
+                outfit = outfits.get(outfit_id) if isinstance(outfits.get(outfit_id), dict) else {}
+                registered_paths = {
+                    rel_to_root(root, resolve_path(root, str(item.get("path") or "")))
+                    for item in outfit.get("reference_images") or []
+                    if isinstance(item, dict)
+                    and str(item.get("path") or "").strip()
+                    and resolve_path(root, str(item.get("path") or "")).is_file()
+                }
+                valid_paths = {str(ref.get("path") or "") for ref in valid}
                 attached = [
                     ref for ref in valid
                     if any(
@@ -1412,7 +1432,10 @@ def report(args: argparse.Namespace) -> int:
                         if isinstance(r, dict)
                     )
                 ]
-                if not attached:
+                # 同一张 approved front/turnaround 常同时承担身份与基础服装锚。
+                # 附件计划会按路径去重，因此不能只凭 outfit: 标签判缺；还需按
+                # registry outfits.reference_images 与已实际附入路径复核。
+                if not attached and not (registered_paths & valid_paths):
                     outfit_gaps[pid] = f"outfit_id={outfit_id} 已登记但没有可用服装参考图（补 outfits.reference_images）"
         for ref in job.get("references") or []:
             if isinstance(ref, dict) and ref.get("id"):

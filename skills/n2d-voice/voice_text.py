@@ -30,6 +30,11 @@ def parse_voiceover_line(line: str):
 
 
 def clean_text(t: str) -> str:
+    # Production annotations may use a descriptive suffix (for example
+    # ``⚡信息钩子`` or ``💥小爽点``).  Remove the whole end marker
+    # before the generic emoji pass; otherwise only deleting the emoji makes
+    # TTS literally speak the annotation and inflates the timing estimate.
+    t = re.sub(r'\s*[⚡💥🪝]\s*[\u4e00-\u9fffA-Za-z0-9_-]{0,12}\s*$', '', t)
     t = re.sub(r'[⚡💥🪝]', '', t)                          # 钩子 emoji 永不念出
     t = re.sub(r'(?:钩子|爽点|反转|爆点|集尾)\s*$', '', t)    # 行尾裸词节拍标记（仅行尾，避免误伤正文同字）
     t = t.replace('||', '，')                              # 停顿一拍 → 逗号（TTS 自然气口）

@@ -1,0 +1,2626 @@
+{
+  "schema_version": 2,
+  "kind": "comic_source_semantics",
+  "chapter": "第1话",
+  "status": "pass",
+  "created_at": "2026-07-14T21:37:38",
+  "chapter_contract": {
+    "enforced": true,
+    "sha256": "f0e79d5f547d63deff2a6fb5d6bb71299ee38d02b390df5d821f7657eca21675",
+    "source_mode": "adapted",
+    "format_profile": "vertical_serial",
+    "load_status": "loaded"
+  },
+  "source_language": "现代中文",
+  "target_text_language": "中文",
+  "target_text_metadata": {
+    "lang": "zh-Hans",
+    "dir": "ltr",
+    "script": "Hans",
+    "line_break": "cjk"
+  },
+  "requires_normalization": false,
+  "normalization_reason": [
+    "cjk_modern_or_mixed"
+  ],
+  "source_files": [
+    {
+      "path": "源本/从变身少女开始斩妖除魔.txt",
+      "status": "read",
+      "chars": 1959399,
+      "format": "txt",
+      "sha256": "215b63ec3042c4dce3c350272a3e7c0a9b879c3916992024ee1565b2b1a44f77"
+    }
+  ],
+  "source_slice": {
+    "chapter": "第1话",
+    "chars": 3483,
+    "strategy": "split_blueprint.source_spans",
+    "selections": [
+      {
+        "span_id": "SPAN_001",
+        "source_path": "源本/从变身少女开始斩妖除魔.txt",
+        "requested": {
+          "start": "第1章",
+          "end": "第1章",
+          "whole_file": false
+        },
+        "status": "read",
+        "chars": 3483,
+        "source_unit_refs": [
+          "第1章"
+        ]
+      }
+    ]
+  },
+  "glossary_reviewed": true,
+  "ambiguity_reviewed": true,
+  "proper_noun_glossary": [],
+  "segments": [
+    {
+      "segment_id": "S001",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "第1章 百妖谱 本书单身。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "删除",
+      "adaptation_note": "删除源站互动/引流文案，不属于故事正文。"
+    },
+    {
+      "segment_id": "S002",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "彦祖亦菲打卡处。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "删除",
+      "adaptation_note": "删除源站互动/引流文案，不属于故事正文。"
+    },
+    {
+      "segment_id": "S003",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "---------------- 风里带着腥气。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S004",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "破败的荒野，枯草连天，不见人烟。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S005",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初愣愣地看着眼前的一切。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S006",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她还是没能接受，自己怎么就从一个二十一世纪的现代人，穿越到一个陌生女子身上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S007",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "破碎的记忆涌入脑海。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S008",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "神州大地，大唐王朝。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S009",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "妖魔横行，食人血肉，祸乱天下。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S010",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可她这般手无缚鸡之力的女子，为何会置身于这荒郊野岭？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S011",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初站起身，环顾四周。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S012",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "遍地尸骸。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S013",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "多数人身上穿着灰扑扑的囚服，与她身上这件别无二致。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S014",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "另一些人则身着黑衣，衣襟与袖口绣着赤色云纹。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S015",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "视线尽头，一个庞大的身影斜斜倚着一块巨岩。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S016",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "当那身影的轮廓清晰，姜月初的呼吸一滞。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S017",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "人身，虎头，体魄雄壮如小山。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S018",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "即便已经没了声息，凶煞之气依旧扑面而来，让人心头发紧。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S019",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "它的胸膛上有一个巨大的窟窿，黑色的妖血流了一地。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S020",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "是妖魔！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S021",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "还好......还好是死的。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S022",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她松了半口气，目光又被虎妖不远处的另一个人影吸引。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S023",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "那人也穿着黑衣赤纹的劲装，身形挺拔。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S024",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "只是此刻，他半跪在地，一把断刀插在身前的泥土里，支撑着没有倒下。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S025",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他浑身是伤，左臂不自然地扭曲着，胸口起伏微弱，显然也到了油尽灯枯的地步。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S026",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "荒野上，风声鹤唳。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S027",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "除了这个黑衣人和她，再无活口。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S028",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初下意识地屏住呼吸，脚下悄悄向后挪了一步。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S029",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "那半跪着的黑衣人似乎察觉到了她的动静，头颅艰难地转了过来。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S030",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他的脸庞很年轻，约莫二十出头。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S031",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "只是现在看去，面色惨白，唇嘴干裂，显然状态并不好。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S032",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他看到了姜月初，用沙哑到几乎听不清的声音，吐出两个字。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S033",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“过来。” “......” 你说过来就过来？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S034",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初在心里嘀咕一句。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S035",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她想起来了。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S036",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "自己这具身体的前身，本是京城里一位高官的独女。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S037",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "奈何父亲一朝获罪，满门牵连，她被没入贱籍，发配边疆。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S038",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "而眼前这个半死不活的男人，正是押送他们的官差。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S039",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "镇魔司。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S040",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "谈及镇魔司，大唐境内，无不色变。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S041",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "有传闻说，镇魔司的缇骑一旦登门，便是阎王爷亲至。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S042",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "小儿闻其名，夜不敢啼。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S043",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "况且此行边疆，下场生不如死。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S044",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "不如趁现在跑了，兴许还能寻条生路。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S045",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初打定了主意。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S046",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她悄然后退，转身，刚要迈出步子。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S047",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "一道尖锐的破风声乍起。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S048",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“咻！” 半截断刀没入她身前半步的地上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S049",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初浑身一僵，冷汗瞬间湿了后背。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S050",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "好猛的将死之人！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S051",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "如此情况，随手一掷，还能有这般手段！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S052",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "若是起了杀心，自己这颗脑袋，怕是比地上的死人多不了几分热气。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S053",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初深吸了一口气，心中满是郁闷。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S054",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "罢了。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S055",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "过来就过来！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S056",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "人在屋檐下，不得不低头。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S057",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她僵硬地转过身，小步挪了过去。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S058",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "那人抬起头，看着她这番小鸡似的动作，嘴角似乎牵动了一下。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S059",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他刚才掷出那半截断刀，确实是用了最后几分气力。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S060",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "若是她铁了心要跑，自己还真就只能眼睁睁看着。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S061",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "好在这番动作，已经唬住了眼前的少女。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S062",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“扶我起来。” 许是怕她不从，那人又补充道：“在下裴长青，陇右镇魔都司队正。” 自报家门，算是示之以诚。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S063",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他喘了口气，视线落在她惊魂未定的脸上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S064",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“我知道你想跑...可你跑的掉么......一个没有户籍路引的贱籍逃犯，就算侥幸活到下一座城镇，又能如何？” “若是你按我说的去做，事后，我保你脱了贱籍，还你自由身。” 姜月初听着，心里已经翻起了白眼。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S065",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "靠！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S066",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "画大饼画到老子头上来了？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S067",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "前世被老板灌了多少鸡汤，许了多少空头支票。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S068",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "结果呢？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S069",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "还不是福报没修够，提前见了阎王。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S070",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "不过，他说的倒也是实话。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S071",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "自己现在这情况，跑路确实是下下策。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S072",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "一个手无缚鸡之力的古代女子，想在妖魔横行的野外生存下来，概率约等于零。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S073",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "何况，这家伙现在虽然半死不活，可谁知道他还有没有后手。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S074",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "万一恼羞成怒，一刀把自己给劈了，那才是真亏。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S075",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "权衡利弊，姜月初咬牙点头。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S076",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“......好。” 她小心翼翼地走上前，伸手去扶裴长青的胳膊。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S077",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "入手处一片滚烫，隔着衣料都能感觉到他身上那高得吓人的体温。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S078",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "血腥味和汗味混杂在一起，味道实在算不上好闻。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S079",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“这边。” 裴长青用下巴指了指自己没受伤的右臂。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S080",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初只好绕到另一边，将他的右臂吃力地搭在自己瘦弱的肩膀上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S081",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "好沉！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S082",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "男人的整个身体的重量几乎都压了过来，那重量让姜月初一个趔趄，差点俩人一起滚倒在地。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S083",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她咬紧牙关，使出了吃奶的力气，才勉强将他从地上架了起来。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S084",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "裴长青的身形很高大，此刻大半个身子都倚靠在她身上，双脚在地上拖行，每一步都显得无比艰难。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S085",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“往......往哪儿走......”姜月初喘着粗气问。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S086",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“往南。” 姜月初不再多言，专心拖着狗男子，一步一步向他指的方向走去。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S087",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可就在二人刚走出几步。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S088",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "身后，却传来一阵异响。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S089",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“咳...咳咳......” 这一刻，无论是姜月初，还是裴长青，身子都是一僵。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S090",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "紧接着，是一声悠长的叹息 “呼......” “别跑了。” “这荒郊野岭的，你们要跑哪儿去？” 姜月初只觉得老天是一点活路都不给自己留。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S091",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "都说人死不能复生...... 可没人告诉她，妖死不可啊！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S092",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她手上蓦地一松，忘了扶着。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S093",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“呃！” 身旁重伤的裴长青闷哼一声，整个人直挺挺地摔在了地上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S094",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可他已无心怪罪。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S095",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "裴长青脸上血色尽褪，双眼死死盯着不远处那道缓缓站立起来的身影。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S096",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "虎妖胸前那个血肉模糊的巨大窟窿依旧可怖。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S097",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可它就像一个没事人......或者说没事妖，扭了扭粗壮的脖颈，发出一阵的噼里啪啦的声响。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S098",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "它看着呆傻的二人，咧嘴一笑。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S099",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“很意外么......” “当真以为，就凭几个不入流的镇魔卫，加上你一个区区队正，便能杀了我？” 裴长青的后背渗出层层冷汗。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S100",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "这怎么可能！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S101",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他方才那一刀，分明已经捅穿了这虎妖的心脏。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S102",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他斩妖多年，绝对不可能分辨错。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S103",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可眼前这虎妖，除了胸前那个依旧狰狞的血窟窿，竟无半分颓势。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S104",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "除非...... 一个念头自裴长青心底升起。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S105",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "此妖，已半只脚踏入了鸣骨之境！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S106",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "传闻妖物修行，与人族武者不同。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S107",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "一旦筋骨齐鸣，便可觉醒与生俱来的天赋神通！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S108",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "或滴血重生，或操纵幻术，诡谲异常。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S109",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可这等大妖，为何会出现在此地？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S110",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "区区一队发配边疆的囚犯，如何值得它亲自出手？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S111",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "劫人？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S112",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "它又显然不在乎这些囚犯的死活。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S113",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "电光石火间，裴长青已来不及多想。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S114",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他强行催动体内翻涌的最后一缕气血，也顾不得事后会留下何等暗伤，俯身捡起脚边一柄不知哪个同僚的横刀。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S115",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“死！” 一声暴喝，裴长青合身扑上，手中横刀怒斩而出，直劈虎妖脖颈。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S116",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "然鹅。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S117",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "那虎妖却是不闪不避，抬起右腿，后发先至，一脚蹬出。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S118",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "砰！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S119",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "一声闷响。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S120",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "裴长青的身子倒飞出去，重重砸在姜月初的脚边，手中横刀亦是落在边上。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S121",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "这一幕，让姜月初心中最后一点侥幸也烟消云散。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S122",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "草！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S123",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "刚穿越过来，成了个弱女子也就罢了，现在竟是要直接丧命于妖物之口？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S124",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "这算什么？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S125",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "那虎妖舔了舔硕大的手掌，肥厚的舌头上卷着倒刺。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S126",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他并不着急，反而有心思劝道： “人身多苦厄，早些解脱，岂不美哉？莫要再反抗了。” “安心去也，日后，我会为尔等掘坟立碑，也算是行善积德。” “......” 去你的！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S127",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她才穿越几分钟？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S128",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "若是就这般死了，绝对能排入番茄最拉胯穿越者榜单。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S129",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "并且是榜首。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S130",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "就在姜月初彻底绝望之际。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S131",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "一副古朴绘卷，在姜月初眼前徐徐展开。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S132",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "金色的字迹，一行行浮现。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S133",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "【宿主：姜月初】 【境界：凡境】 【武学：无】 【道行：零（斩杀生物，可获得对应道行。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S134",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "消耗道行，可以妖魔之血为墨，以百妖谱为卷，可摹画其形，夺其神通。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S135",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "亦可用以自身招式，一次性发挥相对应年数道行威力。）】 这......这是...... 金手指？！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S136",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "前世翻阅无数网文的她，自然对其不陌生。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S137",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "可现在，这金手指有何用？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S138",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "斩杀生物？获得道行？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S139",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她去哪获得道行？！",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S140",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她一个手无缚鸡之力的凡人，去斩杀那头虎妖吗？",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S141",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "姜月初深深吸了口气，俯身捡起那柄落在地上的横刀。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S142",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "刀柄尚有余温。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S143",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“咳......” 地上的裴长青竟是又醒转过来，他睁开眼，恰好看到少女持刀而立的背影。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S144",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "他脸上满是苦涩。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S145",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "这女子倒是有几分勇气。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S146",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "只可惜，终究是螳臂当车。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S147",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "凡人之躯，又如何能在这方妖物手中，求得一线生机。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S148",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "虎妖饶有兴致地看着这一幕，“蝼蚁尚且贪生，你莫不是还想......” 姜月初却是没有去看那头虎妖。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S149",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "她低着头，长发盖住大半面庞。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S150",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "手臂微微颤抖。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S151",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "脑海里，那一行字迹无比清晰。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S152",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "斩杀生物，获得道行。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S153",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "这荒野之上，除了那头杀不死的虎妖，唯一还活着的生物... 便只剩下脚边这个奄奄一息的男人。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S154",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“抱歉......” 低低的话音，让裴长青一愣。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S155",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "“什么...” 可他还未来得及想明白这话是什么意思。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S156",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "下一秒。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S157",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "噗嗤。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S158",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "长刀没入他的胸口。",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "并入",
+      "adaptation_note": "按连续动作与读者视线合并进对应漫画格，保留因果、角色选择和必要台词。"
+    },
+    {
+      "segment_id": "S159",
+      "source_path": "源本/从变身少女开始斩妖除魔.txt",
+      "source_span_id": "SPAN_001",
+      "source_unit_refs": [
+        "第1章"
+      ],
+      "source_excerpt": "横刀 -------------- 凡尘三境：闻弦-鸣骨-成丹",
+      "meaning_zh": "",
+      "text_target": "",
+      "ambiguities": [],
+      "adaptation_decision": "删除",
+      "adaptation_note": "删除章末残留的标题分隔与境界备注；境界信息在后续剧情需要处自然带出。"
+    }
+  ],
+  "segment_policy": {
+    "coverage": "full",
+    "max_segments_legacy_ignored": 12,
+    "note": "不截断源文本；长段按 1200 字符拆块，所有源段都必须有改编决策。"
+  },
+  "adaptation_ledger": [],
+  "panel_script_contract": {
+    "required_panel_fields_when_normalized": [
+      "source_excerpt",
+      "meaning_zh",
+      "text_target",
+      "adaptation_note",
+      "source_segment_refs"
+    ],
+    "panel_script_path": "脚本/第1话/panel_script.json"
+  },
+  "panel_coverage": {
+    "status": "pass",
+    "required_segment_ids": [
+      "S003",
+      "S004",
+      "S005",
+      "S006",
+      "S007",
+      "S008",
+      "S009",
+      "S010",
+      "S011",
+      "S012",
+      "S013",
+      "S014",
+      "S015",
+      "S016",
+      "S017",
+      "S018",
+      "S019",
+      "S020",
+      "S021",
+      "S022",
+      "S023",
+      "S024",
+      "S025",
+      "S026",
+      "S027",
+      "S028",
+      "S029",
+      "S030",
+      "S031",
+      "S032",
+      "S033",
+      "S034",
+      "S035",
+      "S036",
+      "S037",
+      "S038",
+      "S039",
+      "S040",
+      "S041",
+      "S042",
+      "S043",
+      "S044",
+      "S045",
+      "S046",
+      "S047",
+      "S048",
+      "S049",
+      "S050",
+      "S051",
+      "S052",
+      "S053",
+      "S054",
+      "S055",
+      "S056",
+      "S057",
+      "S058",
+      "S059",
+      "S060",
+      "S061",
+      "S062",
+      "S063",
+      "S064",
+      "S065",
+      "S066",
+      "S067",
+      "S068",
+      "S069",
+      "S070",
+      "S071",
+      "S072",
+      "S073",
+      "S074",
+      "S075",
+      "S076",
+      "S077",
+      "S078",
+      "S079",
+      "S080",
+      "S081",
+      "S082",
+      "S083",
+      "S084",
+      "S085",
+      "S086",
+      "S087",
+      "S088",
+      "S089",
+      "S090",
+      "S091",
+      "S092",
+      "S093",
+      "S094",
+      "S095",
+      "S096",
+      "S097",
+      "S098",
+      "S099",
+      "S100",
+      "S101",
+      "S102",
+      "S103",
+      "S104",
+      "S105",
+      "S106",
+      "S107",
+      "S108",
+      "S109",
+      "S110",
+      "S111",
+      "S112",
+      "S113",
+      "S114",
+      "S115",
+      "S116",
+      "S117",
+      "S118",
+      "S119",
+      "S120",
+      "S121",
+      "S122",
+      "S123",
+      "S124",
+      "S125",
+      "S126",
+      "S127",
+      "S128",
+      "S129",
+      "S130",
+      "S131",
+      "S132",
+      "S133",
+      "S134",
+      "S135",
+      "S136",
+      "S137",
+      "S138",
+      "S139",
+      "S140",
+      "S141",
+      "S142",
+      "S143",
+      "S144",
+      "S145",
+      "S146",
+      "S147",
+      "S148",
+      "S149",
+      "S150",
+      "S151",
+      "S152",
+      "S153",
+      "S154",
+      "S155",
+      "S156",
+      "S157",
+      "S158"
+    ],
+    "used_segment_ids": [
+      "S003",
+      "S004",
+      "S005",
+      "S006",
+      "S007",
+      "S008",
+      "S009",
+      "S010",
+      "S011",
+      "S012",
+      "S013",
+      "S014",
+      "S015",
+      "S016",
+      "S017",
+      "S018",
+      "S019",
+      "S020",
+      "S021",
+      "S022",
+      "S023",
+      "S024",
+      "S025",
+      "S026",
+      "S027",
+      "S028",
+      "S029",
+      "S030",
+      "S031",
+      "S032",
+      "S033",
+      "S034",
+      "S035",
+      "S036",
+      "S037",
+      "S038",
+      "S039",
+      "S040",
+      "S041",
+      "S042",
+      "S043",
+      "S044",
+      "S045",
+      "S046",
+      "S047",
+      "S048",
+      "S049",
+      "S050",
+      "S051",
+      "S052",
+      "S053",
+      "S054",
+      "S055",
+      "S056",
+      "S057",
+      "S058",
+      "S059",
+      "S060",
+      "S061",
+      "S062",
+      "S063",
+      "S064",
+      "S065",
+      "S066",
+      "S067",
+      "S068",
+      "S069",
+      "S070",
+      "S071",
+      "S072",
+      "S073",
+      "S074",
+      "S075",
+      "S076",
+      "S077",
+      "S078",
+      "S079",
+      "S080",
+      "S081",
+      "S082",
+      "S083",
+      "S084",
+      "S085",
+      "S086",
+      "S087",
+      "S088",
+      "S089",
+      "S090",
+      "S091",
+      "S092",
+      "S093",
+      "S094",
+      "S095",
+      "S096",
+      "S097",
+      "S098",
+      "S099",
+      "S100",
+      "S101",
+      "S102",
+      "S103",
+      "S104",
+      "S105",
+      "S106",
+      "S107",
+      "S108",
+      "S109",
+      "S110",
+      "S111",
+      "S112",
+      "S113",
+      "S114",
+      "S115",
+      "S116",
+      "S117",
+      "S118",
+      "S119",
+      "S120",
+      "S121",
+      "S122",
+      "S123",
+      "S124",
+      "S125",
+      "S126",
+      "S127",
+      "S128",
+      "S129",
+      "S130",
+      "S131",
+      "S132",
+      "S133",
+      "S134",
+      "S135",
+      "S136",
+      "S137",
+      "S138",
+      "S139",
+      "S140",
+      "S141",
+      "S142",
+      "S143",
+      "S144",
+      "S145",
+      "S146",
+      "S147",
+      "S148",
+      "S149",
+      "S150",
+      "S151",
+      "S152",
+      "S153",
+      "S154",
+      "S155",
+      "S156",
+      "S157",
+      "S158"
+    ],
+    "missing_segment_ids": []
+  },
+  "checked_at": "2026-07-15T02:41:20",
+  "issues": [],
+  "stale_reasons": []
+}

@@ -1,0 +1,43 @@
+{
+  "audience_question_ledger": {
+    "ending_hook": true,
+    "findings": [],
+    "payoff_contexts": [
+      "，我决定先挑五趟。 💥爽点 [镜头9·旁白·紧迫·快] 于是，一趟。两趟。三趟。月亮升起时，他第五次回到浅潭。 [镜"
+    ],
+    "questions": [
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "s）不肯离山 铺垫·长镜。用旧布包、空旧鞋和远山门压缩身世，不拍回忆人脸。切至杂役院两口巨缸，贺平生在环境尺度下显",
+        "question_id": "Q01",
+        "signal": "身世",
+        "status": "paid_or_progressed"
+      },
+      {
+        "expected_next_handling": "本集兑现/推进",
+        "question_context": "udience_effect 明确外部压力尺度，留意少年为何不反驳 scene LOC_01/日/内 label 二",
+        "question_id": "Q02",
+        "signal": "为何",
+        "status": "paid_or_progressed"
+      }
+    ]
+  },
+  "boundary_continuation": {
+    "available": false,
+    "reason": "第1集无上集边界",
+    "status": "n/a"
+  },
+  "episode": "第1集",
+  "kind": "n2d_story_quality_pack",
+  "notes": [
+    "文本期 report-only；不把时长升成硬门，只加强剧情可看性和下游 prompt 继承。"
+  ],
+  "pack_hash": "a3a1126069c2dfc7",
+  "performance_prompt_cues": [],
+  "summary": {
+    "boundary_status": "n/a",
+    "open_questions": 0,
+    "performance_cue_clips": 0
+  },
+  "version": 1
+}

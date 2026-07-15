@@ -674,6 +674,16 @@ def controlled_makeup_parent_candidates(rel_path: str) -> List[str]:
     return out
 
 
+def shared_prop_variant_parent(rel_path: str) -> str:
+    """Return the approved primary prop path for scale/in-hand derivatives."""
+    path = Path(rel_path)
+    stem = path.stem
+    base = re.sub(r"_(?:比例|手持|scale|in_hand)$", "", stem, flags=re.IGNORECASE)
+    if base == stem:
+        return ""
+    return f"{path.parent.as_posix()}/{base}{path.suffix or '.png'}"
+
+
 def add_registry_shared_targets(root: Path, section_by_alias: list[tuple[set, ClipSection]], add_target) -> None:
     identity_path = root / "出图" / "共享" / "identity_registry.json"
     if identity_path.is_file():
@@ -2390,6 +2400,11 @@ def codex_reference_inputs_for_target(
                 continue
 
     add_explicit_source_frames()
+
+    if target.mode == "shared":
+        prop_parent = shared_prop_variant_parent(target.rel_path)
+        if prop_parent:
+            add(prop_parent, role="asset", owner=target.shot, source="same_prop_primary_parent")
 
     if target.mode == "shared" and requires_controlled_makeup_derivation(target.rel_path):
         for rel in controlled_makeup_parent_candidates(target.rel_path):

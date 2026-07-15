@@ -1,0 +1,96 @@
+{
+  "actual_submit_prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_03_定妆_场景_秀竹峰后山浅潭_定妆_场景_秀竹峰后山浅潭.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_秀竹峰后山浅潭.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：秀竹峰后山浅潭；归属锚: 秀竹峰后山浅潭；稳定地标: 秀竹峰后山浅潭；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 秀竹峰后山浅潭；光色天气: LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；常驻物件: 秀竹峰后山浅潭；反打/视线规则: LOC_01 站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左 LOC_02 站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担 LOC_03 站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下… 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01/本集为14岁杂役常态的character参考 图2作为CHAR_02/常态的character参考 场景中的常驻具名主体必须继承对应身份附件：CHAR_01、CHAR_02；尸体/倒地状态只改变姿势和生命状态，不改变物种、人形/四足拓扑、头部结构、毛色、体量或持续伤口；禁止把虎头人身妖物改成四足普通虎 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；场景禁漂：现代物品；平台UI；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置；主光方向和连续性锚点\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+  "actual_submit_prompt_chars": 1434,
+  "actual_submit_prompt_sha256": "7fb66f45affb4b7af8c81556dcc14ffdc7fd582703dbc4f83dfb49c3e021fe44",
+  "actual_submit_request": {
+    "negative_prompt": "",
+    "prompt": "为 N2D 生成且只生成 1 张正式 PNG。必须调用内置 image_generation/image_gen；不得用 Python、SVG、canvas、纯色图或占位图伪造。\n\n执行参数：\n- task_type=scene_asset; mode=shared; model=GPT Image 2\n- request_params={\"aspect_ratio\": \"9:16\", \"output_format\": \"png\"}\n- 输出由外层 runner 从事件流解码到：/var/folders/cs/yf7xlngn59d3xtssgdpl0dwm0000gn/T/n2d_codex_image_runner/manual-第1集/第1集_LOC_03_定妆_场景_秀竹峰后山浅潭_定妆_场景_秀竹峰后山浅潭.png\n- 本次 `--image` 附件及其顺序就是 compiler 中的图1/图2…，不得交换主体归属。\n\n模型实际执行 prompt：\n生成生产级场景参考图：图片/定妆_场景_秀竹峰后山浅潭.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：秀竹峰后山浅潭；归属锚: 秀竹峰后山浅潭；稳定地标: 秀竹峰后山浅潭；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 秀竹峰后山浅潭；光色天气: LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；常驻物件: 秀竹峰后山浅潭；反打/视线规则: LOC_01 站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左 LOC_02 站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担 LOC_03 站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下… 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01/本集为14岁杂役常态的character参考 图2作为CHAR_02/常态的character参考 场景中的常驻具名主体必须继承对应身份附件：CHAR_01、CHAR_02；尸体/倒地状态只改变姿势和生命状态，不改变物种、人形/四足拓扑、头部结构、毛色、体量或持续伤口；禁止把虎头人身妖物改成四足普通虎 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；场景禁漂：现代物品；平台UI；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置；主光方向和连续性锚点\n\n完成后只用一句话说明完成。无法生成真实 PNG 时直接报失败，不搜索文件系统、不创建替代文件。\n",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01/本集为14岁杂役常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    }
+  },
+  "compiler": {
+    "backend": "codex",
+    "channel": "Codex CLI",
+    "compiled_request_sha256": "ae89c4e09c3eecba3177bc9b217dfd5f34c3ec65e6397dc4b5c9d05fd56ed8e3",
+    "compiler_decisions": [],
+    "execution_context_sha256": "e0ce863316db96c9ed99610402be9168ae3132a880a2b805abfc71704e2a6566",
+    "kind": "n2d_compiled_image_prompt",
+    "language": "zh",
+    "lint": {
+      "errors": [],
+      "warnings": [
+        "submit_prompt_many_clauses:30>16"
+      ]
+    },
+    "metrics": {
+      "clause_count": 30,
+      "constraint_compression": {
+        "policy_guard_input": 1,
+        "policy_guard_output": 1,
+        "preserve_input": 0,
+        "preserve_output": 0
+      },
+      "estimated_text_tokens": 237,
+      "negative_chars": 0,
+      "prompt_chars": 948,
+      "reference_count": 2
+    },
+    "mode": "shared",
+    "model": "GPT Image 2",
+    "negative_prompt": "",
+    "negative_strategy": "inline_constraints",
+    "profile": "codex_gpt_image_agent_brief",
+    "profile_version": "2026-07-12.1",
+    "prompt": "生成生产级场景参考图：图片/定妆_场景_秀竹峰后山浅潭.png；本次目标是生产级场景主母本：优先锁定地标、空间轴线、出入口、常驻物件和主光方向；不生成摄影棚、角色立绘或人物全身参考板。若场景合同明确绑定倒地/尸体常驻主体，仅把该主体作为场景连续性地标，严格继承其身份附件 场景：秀竹峰后山浅潭；归属锚: 秀竹峰后山浅潭；稳定地标: 秀竹峰后山浅潭；空间布局/轴线: 保持 storyboard 场景轴线和地标；材质环境: 秀竹峰后山浅潭；光色天气: LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；常驻物件: 秀竹峰后山浅潭；反打/视线规则: LOC_01 站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左 LOC_02 站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担 LOC_03 站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下… 视觉风格：国漫写实；东方修仙国漫，少年比例略理想化，木料、粗布、湿岩和水面写实高细节，不照片化；冷青灰为主，木尘与湿岩保留材质层次，暖光只服务意志转折，集尾幽光低强度不把潭水变秘境 图1作为CHAR_01/本集为14岁杂役常态的character参考 图2作为CHAR_02/常态的character参考 场景中的常驻具名主体必须继承对应身份附件：CHAR_01、CHAR_02；尸体/倒地状态只改变姿势和生命状态，不改变物种、人形/四足拓扑、头部结构、毛色、体量或持续伤口；禁止把虎头人身妖物改成四足普通虎 画幅：9:16 限制：欧美脸；塑料页游服装；过度磨皮；现代物件；随机霓虹；水印；可读乱码文字；肢体或手指畸变；场景禁漂：现代物品；平台UI；空间轴线随机跳变；丢失连续性锚点；不得改变空间轴线；地标位置；主光方向和连续性锚点",
+    "reference_inputs": [
+      {
+        "index": 1,
+        "owner": "CHAR_01/本集为14岁杂役常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_01__本集为14岁杂役常态__c4277239033e_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "dc0bd68c1bee8458dd19dc638633bfe3a578909511c40806fdb5d13cb7f190f7"
+      },
+      {
+        "index": 2,
+        "owner": "CHAR_02/常态",
+        "path": "生产数据/reference_enhanced/第1集/定妆_CHAR_02__常态__6389b731f460_941x1672_to_1024x1819.png",
+        "role": "character",
+        "sha256": "2dc5f4d1f4fc6679cec692ab08d3d7becc563c557517335812df38fd97343a16"
+      }
+    ],
+    "request_params": {
+      "aspect_ratio": "9:16",
+      "output_format": "png"
+    },
+    "source_contract_sha256": "1e790077096801eb91c5806ab87d0fdf95a7f82c1b436bf711233e5507fe4e0f",
+    "source_contract_text_sha256": "8fd24d54aedcf82d089352649c927a78687a78ce2c3b474c118b15f8df5153c0",
+    "task_type": "scene_asset",
+    "version": 1
+  },
+  "created_at": "2026-07-14T16:57:05+00:00",
+  "episode": "第1集",
+  "kind": "n2d_compiled_image_request_receipt",
+  "reference_inputs_sha256": "e4a788cb3f05a139e7210223277b00952ebffbbfc5d95494dbeff15920e0181d",
+  "request_params_sha256": "3f4f3ba0badb7cbe095e4efc60aae43f35e6b75ae40d2e1dc9ba2c56fb9e655b",
+  "shot": "LOC_03::定妆_场景_秀竹峰后山浅潭",
+  "target": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+  "version": 1
+}

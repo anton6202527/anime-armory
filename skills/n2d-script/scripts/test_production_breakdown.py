@@ -93,6 +93,18 @@ def test_scaffold_creates_production_handoff_files(tmp_path: Path) -> None:
     assert bible["clips"][0]["state"]["start_state"] == "A 持令牌入画"
 
 
+def test_check_write_missing_does_not_downgrade_confirmed_manifest(tmp_path: Path) -> None:
+    _write_storyboard(tmp_path)
+    pb.scaffold(tmp_path, "第1集", confirmed=True)
+    manifest_path = tmp_path / "脚本" / "第1集" / "production_handoff_pack.json"
+    before = manifest_path.read_bytes()
+
+    pb.check(tmp_path, "第1集", write_missing=True)
+
+    assert manifest_path.read_bytes() == before
+    assert json.loads(before)["status"] == "confirmed"
+
+
 def test_scaffold_carries_shot_reverse_continuity_to_bible(tmp_path: Path) -> None:
     _write_storyboard(tmp_path)
     sb_path = tmp_path / "脚本" / "第1集" / "storyboard.json"

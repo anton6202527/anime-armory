@@ -193,6 +193,20 @@ def test_content_hash_ignores_generated_at(tmp_path: Path) -> None:
     assert SQG.stable_content_hash(contract) == SQG.stable_content_hash(changed)
 
 
+def test_write_outputs_is_byte_stable_when_only_generated_at_changes(tmp_path: Path) -> None:
+    root = write_project(tmp_path)
+    first = SQG.build_contract(root, "第1集", write_aux=True)
+    jp, _ = SQG.write_outputs(root, "第1集", first)
+    before = jp.read_bytes()
+
+    second = SQG.build_contract(root, "第1集", write_aux=True)
+    second["generated_at"] = "2099-01-01T00:00:00+00:00"
+    SQG.write_outputs(root, "第1集", second)
+
+    assert jp.read_bytes() == before
+    assert second["generated_at"] == first["generated_at"]
+
+
 def test_missing_clip_dramatic_function_blocks(tmp_path: Path) -> None:
     root = write_project(tmp_path, missing_dramatic=True)
     contract = SQG.build_contract(root, "第1集", write_aux=True)

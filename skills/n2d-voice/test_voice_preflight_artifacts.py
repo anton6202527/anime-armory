@@ -30,3 +30,18 @@ def test_zero_voice_doctor_is_dry_run_then_removes_only_legacy_empty_files(tmp_p
     assert fixed["status"] == "fixed"
     assert not bad_wav.exists() and not bad_json.exists()
     assert valid.exists() and nonempty_legacy.exists()
+
+
+def test_timing_preflight_never_speaks_descriptive_hook_annotations(tmp_path: Path) -> None:
+    episode = tmp_path / "脚本" / "第1集"
+    episode.mkdir(parents=True)
+    (episode / "voiceover.txt").write_text(
+        "[镜头1·旁白·低沉·常速] 父母双亡。|| 五行灵根耗资巨大。 ⚡信息钩子\n"
+        "[镜头2·贺平生·决绝·常速] 我要留下。 💥小爽点\n"
+        "[镜头3·旁白·神秘·慢] 幽光亮起。 🪝集尾\n",
+        encoding="utf-8",
+    )
+
+    _path, rows, _fingerprint = voice_preflight.load_voiceover(tmp_path, "第1集")
+
+    assert [row["文本"] for row in rows] == ["父母双亡。五行灵根耗资巨大。", "我要留下。", "幽光亮起。"]

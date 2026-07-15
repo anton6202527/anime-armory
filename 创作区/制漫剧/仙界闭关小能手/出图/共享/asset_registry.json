@@ -1,0 +1,842 @@
+{
+  "kind": "n2d_asset_reference_registry",
+  "version": 1,
+  "generated_at": "2026-07-14T17:06:22+00:00",
+  "assets": [
+    {
+      "id": "LOC_01",
+      "type": "scene",
+      "name": "秀竹峰杂役大殿",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+          "status": "ready",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+          "status": "ready",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "设定库/locations/秀竹峰杂役大殿.md",
+          "status": "ready",
+          "sha256": "d5e2b9c5ac4c6a37ae24720fdf4f2fbc9c88a1ee2889f5b9ab1e3742879918e2"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+          "status": "ready",
+          "sha256": "fdc3555045015eb67daf525a7389e33266f38ce307a6bd6a2bb57405e0674d1b",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光",
+        "axis_rules": "站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "cool_low_key",
+          "saturation_profile": "low_desaturated",
+          "key_light_direction": "left",
+          "source_text": "主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光；主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰杂役大殿",
+        "landmarks": [
+          "秀竹峰杂役大殿"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "秀竹峰杂役大殿",
+        "color_lighting_weather": "主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光",
+        "resident_assets": [
+          "秀竹峰杂役大殿"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左",
+      "screen_direction_rules": "站位 CHAR_01画左低位，CHAR_02画右高位，GROUP_01在后景 轴线 入口→木台横轴 默认视线 CHAR_01看画右，CHAR_02看画左",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+            "status": "ready",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰杂役大殿.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_木牌",
+      "type": "prop",
+      "name": "木牌",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_木牌.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_木牌_比例.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_木牌_手持.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_木牌.md",
+          "status": "ready",
+          "sha256": "160aafe55b6627fa17f36d263e7d2abaf40c8949e1ad072e7d862dc0e70de604"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_木牌.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "structure": "木牌",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让木牌结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "木牌 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "木牌"
+        ],
+        "spatial_layout": "木牌只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "木牌",
+        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "木牌"
+        ],
+        "forbidden": [
+          "木牌结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "木牌",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_02",
+      "type": "scene",
+      "name": "秀竹峰杂役院",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+          "status": "ready",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+          "status": "ready",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+          "status": "ready"
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+          "status": "ready"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "设定库/locations/秀竹峰杂役院.md",
+          "status": "ready",
+          "sha256": "58be124f3bd15e4982ad4445f43dffe04547bc0d50953c077550eddbc610b2cd"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+          "status": "ready",
+          "sha256": "57a8a3997329e241331459f4ea839c85fa472408a30a7e6eebd529c83a579fc2",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳",
+        "axis_rules": "站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "neutral_low_key",
+          "saturation_profile": "controlled",
+          "key_light_direction": "right",
+          "source_text": "主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳；主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰杂役院",
+        "landmarks": [
+          "秀竹峰杂役院"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "秀竹峰杂役院",
+        "color_lighting_weather": "主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳",
+        "resident_assets": [
+          "秀竹峰杂役院"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担",
+      "screen_direction_rules": "站位 水桶前景，CHAR_01中景，巨缸与山路后景 轴线 巨缸→画左上山路 默认视线 CHAR_01看前路或扁担",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+            "status": "ready",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰杂役院.png",
+            "status": "ready"
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_旧布包",
+      "type": "prop",
+      "name": "旧布包",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_旧布包.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_旧布包_比例.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_旧布包_手持.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_旧布包.md",
+          "status": "ready",
+          "sha256": "0966e0a0ba81335cf384443c90df4c8c2a15774ebd18872029e7f2319eaaf5b8"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_旧布包.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "structure": "旧布包",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让旧布包结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "旧布包 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "旧布包"
+        ],
+        "spatial_layout": "旧布包只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "旧布包",
+        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "旧布包"
+        ],
+        "forbidden": [
+          "旧布包结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "旧布包",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_扁担",
+      "type": "prop",
+      "name": "扁担",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_扁担.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_扁担_比例.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_扁担_手持.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_扁担.md",
+          "status": "ready",
+          "sha256": "0a68dae7ac28e3bbd324d5d6eda45f7c0a41c353407e6386aade4e45a4a0a6d0"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_扁担.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "structure": "+ PROP_水桶",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让扁担结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移",
+        "不要让+ PROP_水桶结构/颜色/尺寸漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "+ PROP_水桶 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "+ PROP_水桶"
+        ],
+        "spatial_layout": "+ PROP_水桶只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "+ PROP_水桶",
+        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "+ PROP_水桶"
+        ],
+        "forbidden": [
+          "+ PROP_水桶结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "+ PROP_水桶",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "PROP_水桶",
+      "type": "prop",
+      "name": "水桶",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_水桶.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_水桶_比例.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_水桶_手持.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_水桶.md",
+          "status": "ready",
+          "sha256": "c62afef010c44f2344e2a7ca20b2638bb440065872e002a1a3126bf050eb13e0"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_水桶.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "structure": "水桶",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让水桶结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "水桶 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "水桶"
+        ],
+        "spatial_layout": "水桶只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "水桶",
+        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "水桶"
+        ],
+        "forbidden": [
+          "水桶结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "水桶",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    },
+    {
+      "id": "LOC_03",
+      "type": "scene",
+      "name": "秀竹峰后山浅潭",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "front": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "reverse": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "floor_plan": {
+          "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "设定库/locations/秀竹峰后山浅潭.md",
+          "status": "ready",
+          "sha256": "fd1ce4a46e96959ced47b293e6b962d1b10fe1d41bef6589a0ae0492b5ba4dba"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+          "status": "review_pending",
+          "sha256": "d2a9a2e3f0aa7a753005c64673f3afa948147d1de8e9b86b904a288b6e4f95bc",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "layout": "保持 storyboard 场景轴线和地标。",
+        "light_anchor": "主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "axis_rules": "站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "平台UI",
+          "水印",
+          "空间轴线随机跳变"
+        ],
+        "lighting_signature": {
+          "color_temperature": "cool_low_key",
+          "saturation_profile": "controlled",
+          "key_light_direction": "right",
+          "source_text": "主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射；主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+          "numeric_measurement": "pending_after_landed_frame_qc"
+        }
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要丢失本场景地标、空间轴线、光位和常驻物件",
+        "不要把本场景随机改成仙宫、现代空间或无关地点"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "秀竹峰后山浅潭",
+        "landmarks": [
+          "秀竹峰后山浅潭"
+        ],
+        "spatial_layout": "保持 storyboard 场景轴线和地标。",
+        "architecture_materials": "秀竹峰后山浅潭",
+        "color_lighting_weather": "主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "秀竹峰后山浅潭"
+        ],
+        "forbidden": [
+          "现代物件",
+          "地标漂移",
+          "空间轴线随机跳变"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "existing shared PNG reused by prompt pack",
+      "core": true,
+      "frequency": 12,
+      "spatial_layout": "保持 storyboard 场景轴线和地标。",
+      "floor_plan": "保持 storyboard 场景轴线和地标。",
+      "doors_windows": "按场景卡，不新增现代门窗或室内结构。",
+      "axis_rules": "站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下",
+      "screen_direction_rules": "站位 PROP_01前景偏左，CHAR_01中景偏右，窄瀑后景 轴线 画右山路→画左浅水 默认视线 CHAR_01看画左水下",
+      "scene_atlas": {
+        "base_views": {
+          "front": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+            "status": "review_pending",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
+          },
+          "back": {
+            "path": "出图/共享/图片/定妆_场景_秀竹峰后山浅潭.png",
+            "status": "review_pending",
+            "human_review": {
+              "status": "pending",
+              "reason": "Codex text-generated character candidate requires human approval before ready"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "PROP_01",
+      "type": "prop",
+      "name": "破损黑盆",
+      "reference_group": {
+        "primary": {
+          "path": "出图/共享/图片/定妆_道具_破损黑盆.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "scale_ref": {
+          "path": "出图/共享/图片/定妆_道具_破损黑盆_比例.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        },
+        "in_hand": {
+          "path": "出图/共享/图片/定妆_道具_破损黑盆_手持.png",
+          "status": "planned"
+        }
+      },
+      "reference_slots": [
+        {
+          "slot": "asset_card",
+          "path": "生产数据/卡片快照/资产/PROP_01_破损黑盆.md",
+          "status": "ready",
+          "sha256": "8ca47bc2acdc51697f4857d0de32728e801ced57b0608090fc185f2b23bbe952"
+        },
+        {
+          "slot": "primary_reference",
+          "path": "出图/共享/图片/定妆_道具_破损黑盆.png",
+          "status": "review_pending",
+          "human_review": {
+            "status": "pending",
+            "reason": "Codex text-generated character candidate requires human approval before ready"
+          }
+        }
+      ],
+      "constraints": {
+        "structure": "破损黑盆",
+        "face_policy": "faceless",
+        "must_not_have": [
+          "现代物件",
+          "文字水印",
+          "结构漂移",
+          "数量漂移"
+        ]
+      },
+      "face_policy": "faceless",
+      "drift_forbidden": [
+        "不要让破损黑盆结构/颜色/尺寸漂移",
+        "不要现代物件",
+        "不要文字水印",
+        "不要结构漂移",
+        "不要数量漂移"
+      ],
+      "scene_dna": {
+        "belonging_anchor": "破损黑盆 属于本集剧情资产，不是独立场景。",
+        "landmarks": [
+          "破损黑盆"
+        ],
+        "spatial_layout": "破损黑盆只作为剧情资产出现在被声明镜头，比例和位置服从角色手部/场景轴线。",
+        "architecture_materials": "破损黑盆",
+        "color_lighting_weather": "LOC_01 主光方向 画左高处 色温 4800K冷灰 动机光源 破窗天光 LOC_02 主光方向 画右后 色温 4300K傍晚 动机光源 低位夕阳 LOC_03 主光方向 画右上 色温 6500K冷银 动机光源 月光与水面反射",
+        "resident_assets": [
+          "破损黑盆"
+        ],
+        "forbidden": [
+          "破损黑盆结构漂移",
+          "现代物件",
+          "文字水印",
+          "数量漂移"
+        ]
+      },
+      "self_check_passed": false,
+      "self_check_note": "prompt-stage registered; PNG 自检在出图后回填。",
+      "owner": "剧情资产",
+      "current_state": "破损黑盆",
+      "lifecycle": {
+        "first_seen": "第1集",
+        "state_order": [
+          "共享定妆",
+          "本集引用"
+        ],
+        "status": "active"
+      }
+    }
+  ],
+  "notes": "第1集 prompt 阶段资产注册层；ready 表示定妆位已定义，PNG 文件由下一步 image 阶段生成。"
+}

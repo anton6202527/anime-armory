@@ -1,0 +1,185 @@
+{
+  "episodes_scanned": [
+    "第1集"
+  ],
+  "generated_at": "2026-07-14T16:17:49+00:00",
+  "kind": "n2d_voice_casting",
+  "policy": "casting_first_final_render_later",
+  "roles": [
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "哄笑·快",
+          "episode": "第1集",
+          "line_index": 2,
+          "text": "哈哈哈哈哈！"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 1,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "众杂役",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "轻蔑·快",
+          "episode": "第1集",
+          "line_index": 1,
+          "text": "五行灵根？原来是个费钱货！你这种废物，也配来争仙缘？"
+        },
+        {
+          "cue": "压迫·常速",
+          "episode": "第1集",
+          "line_index": 3,
+          "text": "从今天起，秀竹峰挑水的活儿，归你了。每天二十趟，少一趟都不行！这是命令。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 2,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "张老大",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "低沉·常速",
+          "episode": "第1集",
+          "line_index": 5,
+          "text": "贺平生，十四岁。父母双亡，五行灵根耗资巨大，连外门都不肯收他。"
+        },
+        {
+          "cue": "克制·常速",
+          "episode": "第1集",
+          "line_index": 7,
+          "text": "两桶水，二里山路。一个来回，就压得他喘不过气。"
+        },
+        {
+          "cue": "紧迫·快",
+          "episode": "第1集",
+          "line_index": 9,
+          "text": "于是，一趟。两趟。三趟。月亮升起时，他第五次回到浅潭。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 4,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "旁白",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    },
+    {
+      "approved_at": "",
+      "approved_by": "",
+      "audition_lines": [
+        {
+          "cue": "谨慎·短促",
+          "episode": "第1集",
+          "line_index": 4,
+          "text": "是。"
+        },
+        {
+          "cue": "坚定·慢",
+          "episode": "第1集",
+          "line_index": 6,
+          "text": "我要留下，离仙人近一点，不然我不可能还有机会。"
+        },
+        {
+          "cue": "决绝·常速",
+          "episode": "第1集",
+          "line_index": 8,
+          "text": "明天才开工。今天，我决定先挑五趟。"
+        }
+      ],
+      "authorization": "not_applicable_synthetic_or_pending",
+      "backend": "",
+      "canonical_sample": "",
+      "episodes": [
+        "第1集"
+      ],
+      "line_count": 6,
+      "lock_hash": "",
+      "model": "",
+      "reference_audio": "",
+      "required": true,
+      "role": "贺平生",
+      "status": "unselected",
+      "voice_id": "",
+      "voice_spec": {
+        "accent": "",
+        "age_impression": "",
+        "pace": "",
+        "performance_boundary": "",
+        "texture": ""
+      }
+    }
+  ],
+  "rules": [
+    "No final episode render before every required role is locked.",
+    "A text timing estimate is not a voice asset and creates no WAV files.",
+    "Guide audio must be explicitly guide_approved or locked; never treat an arbitrary filler voice as performance truth."
+  ],
+  "status": "casting",
+  "summary": {
+    "locked_count": 0,
+    "pending_count": 4,
+    "required_count": 4,
+    "role_count": 4
+  },
+  "version": 1
+}

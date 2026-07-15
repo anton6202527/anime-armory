@@ -1,0 +1,33 @@
+{
+  "authority": "repair view only; it does not create a new gate or override existing verdicts",
+  "blocked": false,
+  "blockers": [
+    {
+      "message": "读 n2d-image 的 prompt 包 → 调 LLM 生成 → 注入项目；完成后回写进度再 run next。",
+      "step": "needs_agent_gen"
+    }
+  ],
+  "category": "creative_or_execution",
+  "episode": "第1集",
+  "episode_graph": {
+    "graph_hash": "f58498c9a5a1aa6a3eb533fe75a39b1e592872a3375ab3a95ef0b376dd0ac9db",
+    "lineage_gaps": 0,
+    "status": "pass"
+  },
+  "gate": {
+    "affected_artifacts": [],
+    "findings_path": "创作区/制漫剧/仙界闭关小能手/生产数据/gate_findings_image_prompt_preflight_第1集.json",
+    "return_to_stage": null,
+    "stage": "image_prompt_preflight"
+  },
+  "generated_at": "2026-07-15T00:28:30+0800",
+  "headline": "第1集 出图prompt：脚手架就绪，待代理生成",
+  "kind": "n2d_blocking_bundle",
+  "owner": "n2d-image",
+  "repair_commands": [
+    "n2d-image 创作区/制漫剧/仙界闭关小能手 第1集"
+  ],
+  "stage_key": "image_prompt",
+  "stop_reason": "needs_agent_gen",
+  "version": 1
+}

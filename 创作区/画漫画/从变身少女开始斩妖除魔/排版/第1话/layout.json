@@ -1,0 +1,2716 @@
+{
+  "schema_version": 2,
+  "kind": "comic_layout",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "geometry_profile": "longstrip_single_column",
+  "format_supported_by_script": true,
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "name_board": "排版/第1话/name_board.json",
+  "canvas": {
+    "width": 1440,
+    "height": "auto"
+  },
+  "segments": [
+    {
+      "segment_id": "SCROLL_001",
+      "source_name_page_id": "SCROLL_001",
+      "width": 1440,
+      "height": 6424,
+      "reading_order": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "panels": [
+        {
+          "panel_id": "P001",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "opening pause",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 249,
+                "w": 777,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 83,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 83,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B001N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B001S2",
+              "type": "sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 950,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 56
+        },
+        {
+          "panel_id": "P002",
+          "x": 72,
+          "y": 1204,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "identity shock",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1409,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 136,
+                "y": 1255,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B002N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1252,
+              "w": 430,
+              "h": 122
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P003",
+          "x": 126,
+          "y": 2272,
+          "w": 1188,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "scan and identify",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2477,
+                "w": 712,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.narration",
+              "rect": {
+                "x": 185,
+                "y": 2323,
+                "w": 475,
+                "h": 344
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B003N1",
+              "type": "narration",
+              "content_ref": "panel:P003.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 2320,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P004",
+          "x": 72,
+          "y": 3340,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "first monster scale reveal",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3545,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 3391,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B004N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 3388,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P005",
+          "x": 126,
+          "y": 4408,
+          "w": 1188,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "quiet survival reveal",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4613,
+                "w": 712,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 4459,
+                "w": 475,
+                "h": 344
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B005N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4456,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P006",
+          "x": 126,
+          "y": 5476,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "first confrontation",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_001",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P006 threat_dialogue",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P006",
+              "story_function": "threat_dialogue"
+            },
+            "payoff": {
+              "panel_id": "P007",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5660,
+                "w": 712,
+                "h": 641
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 5520,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 5520,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B006N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 5524,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B006D2",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 652,
+              "y": 5524,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_002",
+      "source_name_page_id": "SCROLL_002",
+      "width": 1440,
+      "height": 5728,
+      "reading_order": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "panels": [
+        {
+          "panel_id": "P007",
+          "x": 180,
+          "y": 28,
+          "w": 1080,
+          "h": 700,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "memory montage",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 164,
+                "w": 648,
+                "h": 486
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 234,
+                "y": 58,
+                "w": 432,
+                "h": 233
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B007N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 218,
+              "y": 66,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P008",
+          "x": 72,
+          "y": 756,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "knife halts escape",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 977,
+                "w": 777,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 810,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 810,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:2",
+              "rect": {
+                "x": 136,
+                "y": 810,
+                "w": 518,
+                "h": 373
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B008N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 804,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B008S2",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1678,
+              "w": 360,
+              "h": 150
+            },
+            {
+              "slot_id": "B008S3",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:2",
+              "speaker": "",
+              "order": 3,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1520,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P009",
+          "x": 126,
+          "y": 1904,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "fear reaction",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2087,
+                "w": 712,
+                "h": 643
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 1947,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B009N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1952,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P010",
+          "x": 180,
+          "y": 2852,
+          "w": 1080,
+          "h": 960,
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "audience learns the bluff",
+          "bubble_first": "none",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 3039,
+                "w": 648,
+                "h": 667
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P011",
+          "x": 126,
+          "y": 3840,
+          "w": 1188,
+          "h": 840,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "name and bargain setup",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4007,
+                "w": 712,
+                "h": 587
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 3879,
+                "w": 475,
+                "h": 280
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B011D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 172,
+              "y": 3886,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P012",
+          "x": 126,
+          "y": 4708,
+          "w": 1188,
+          "h": 992,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "offer with no good alternative",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_002",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_001",
+          "page_turn_hook": "P012 bargain_pressure",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P012",
+              "story_function": "bargain_pressure"
+            },
+            "payoff": {
+              "panel_id": "P013",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4903,
+                "w": 712,
+                "h": 693
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 185,
+                "y": 4754,
+                "w": 475,
+                "h": 330
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 4754,
+                "w": 475,
+                "h": 330
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B012N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4756,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B012D2",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 652,
+              "y": 4756,
+              "w": 430,
+              "h": 156
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_003",
+      "source_name_page_id": "SCROLL_003",
+      "width": 1440,
+      "height": 6512,
+      "reading_order": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "panels": [
+        {
+          "panel_id": "P013",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "acceptance",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 210,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 185,
+                "y": 73,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 73,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B013N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 122
+            },
+            {
+              "slot_id": "B013D2",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              },
+              "x": 652,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P014",
+          "x": 126,
+          "y": 976,
+          "w": 1188,
+          "h": 1120,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "two bodies moving as one",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1197,
+                "w": 712,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.narration",
+              "rect": {
+                "x": 185,
+                "y": 1031,
+                "w": 475,
+                "h": 371
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1031,
+                "w": 475,
+                "h": 371
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:2",
+              "rect": {
+                "x": 185,
+                "y": 1031,
+                "w": 475,
+                "h": 371
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_04",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 1031,
+                "w": 475,
+                "h": 371
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B014N1",
+              "type": "narration",
+              "content_ref": "panel:P014.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 1024,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014D2",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              },
+              "x": 652,
+              "y": 1024,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014D3",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:2",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 3,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 174,
+              "y": 1228,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B014S4",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 4,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 1898,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P015",
+          "x": 72,
+          "y": 2124,
+          "w": 1296,
+          "h": 1120,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "voice from behind",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2345,
+                "w": 777,
+                "h": 781
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 136,
+                "y": 2179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 2179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 2179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_04",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:2",
+              "rect": {
+                "x": 784,
+                "y": 2179,
+                "w": 518,
+                "h": 372
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B015N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2172,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B015D2",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              },
+              "x": 598,
+              "y": 2172,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B015S3",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 3,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 3046,
+              "w": 360,
+              "h": 150
+            },
+            {
+              "slot_id": "B015S4",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:2",
+              "speaker": "",
+              "order": 4,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 2888,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P016",
+          "x": 72,
+          "y": 3272,
+          "w": 1296,
+          "h": 1076,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "full resurrection reveal",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3484,
+                "w": 777,
+                "h": 750
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 3325,
+                "w": 518,
+                "h": 357
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 3325,
+                "w": 518,
+                "h": 357
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B016D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              },
+              "x": 120,
+              "y": 3320,
+              "w": 430,
+              "h": 122
+            },
+            {
+              "slot_id": "B016S2",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4150,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P017",
+          "x": 126,
+          "y": 4376,
+          "w": 1188,
+          "h": 1040,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "recognition of impossible power",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4581,
+                "w": 712,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.narration",
+              "rect": {
+                "x": 185,
+                "y": 4427,
+                "w": 475,
+                "h": 344
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B017N1",
+              "type": "narration",
+              "content_ref": "panel:P017.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4424,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P018",
+          "x": 72,
+          "y": 5444,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "last attack launch",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_003",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P018 desperate_attack",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P018",
+              "story_function": "desperate_attack"
+            },
+            "payoff": {
+              "panel_id": "P019",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 5650,
+                "w": 777,
+                "h": 724
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 5494,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 5494,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B018D1",
+              "type": "dialogue",
+              "content_ref": "panel:P018.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 120,
+              "y": 5492,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B018S2",
+              "type": "sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 6286,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_004",
+      "source_name_page_id": "SCROLL_004",
+      "width": 1440,
+      "height": 6076,
+      "reading_order": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "panels": [
+        {
+          "panel_id": "P019",
+          "x": 72,
+          "y": 28,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "kick impact and weapon transfer",
+          "bubble_first": "none",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 233,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 79,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B019S1",
+              "type": "sfx",
+              "content_ref": "panel:P019.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 870,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P020",
+          "x": 72,
+          "y": 1096,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "absolute low point",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1301,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 136,
+                "y": 1147,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 1147,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B020N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1144,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B020D2",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              },
+              "x": 598,
+              "y": 1144,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P021",
+          "x": 72,
+          "y": 2164,
+          "w": 1296,
+          "h": 1040,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "golden system reveal",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 2369,
+                "w": 777,
+                "h": 725
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.narration",
+              "rect": {
+                "x": 136,
+                "y": 2215,
+                "w": 518,
+                "h": 345
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B021N1",
+              "type": "narration",
+              "content_ref": "panel:P021.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 2212,
+              "w": 430,
+              "h": 122
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P022",
+          "x": 126,
+          "y": 3232,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "rule seems useless",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 3414,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.narration",
+              "rect": {
+                "x": 185,
+                "y": 3277,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B022N1",
+              "type": "narration",
+              "content_ref": "panel:P022.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 3280,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P023",
+          "x": 126,
+          "y": 4180,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "picks up blade",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 4362,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 185,
+                "y": 4225,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B023N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 4228,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P024",
+          "x": 126,
+          "y": 5128,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "audience expects attack on tiger",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_004",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_002",
+          "page_turn_hook": "P024 misdirection",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P024",
+              "story_function": "misdirection"
+            },
+            "payoff": {
+              "panel_id": "P025",
+              "mode": "next_page_open"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 5312,
+                "w": 712,
+                "h": 641
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.narration",
+              "rect": {
+                "x": 185,
+                "y": 5172,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 5172,
+                "w": 475,
+                "h": 305
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B024N1",
+              "type": "narration",
+              "content_ref": "panel:P024.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 5176,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B024D2",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              },
+              "x": 652,
+              "y": 5176,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        }
+      ]
+    },
+    {
+      "segment_id": "SCROLL_005",
+      "source_name_page_id": "SCROLL_005",
+      "width": 1440,
+      "height": 4404,
+      "reading_order": [
+        "P025",
+        "P026",
+        "P027",
+        "P028"
+      ],
+      "panels": [
+        {
+          "panel_id": "P025",
+          "x": 126,
+          "y": 28,
+          "w": 1188,
+          "h": 920,
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "target changes",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P028 cliffhanger",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P028",
+              "story_function": "cliffhanger"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 212,
+                "w": 712,
+                "h": 642
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.narration",
+              "rect": {
+                "x": 185,
+                "y": 71,
+                "w": 475,
+                "h": 306
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B025N1",
+              "type": "narration",
+              "content_ref": "panel:P025.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 174,
+              "y": 76,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P026",
+          "x": 72,
+          "y": 976,
+          "w": 1296,
+          "h": 1197,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "solution revealed to audience",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P028 cliffhanger",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P028",
+              "story_function": "cliffhanger"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1214,
+                "w": 777,
+                "h": 836
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.narration",
+              "rect": {
+                "x": 136,
+                "y": 1034,
+                "w": 518,
+                "h": 398
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B026N1",
+              "type": "narration",
+              "content_ref": "panel:P026.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              },
+              "x": 120,
+              "y": 1024,
+              "w": 430,
+              "h": 122
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P027",
+          "x": 126,
+          "y": 2201,
+          "w": 1188,
+          "h": 960,
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "last human beat",
+          "bubble_first": "top",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P028 cliffhanger",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P028",
+              "story_function": "cliffhanger"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 2393,
+                "w": 712,
+                "h": 670
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 2246,
+                "w": 475,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 2246,
+                "w": 475,
+                "h": 320
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B027D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              },
+              "x": 174,
+              "y": 2249,
+              "w": 430,
+              "h": 88
+            },
+            {
+              "slot_id": "B027D2",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:2",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              },
+              "x": 652,
+              "y": 2249,
+              "w": 430,
+              "h": 88
+            }
+          ],
+          "gutter_after": 28
+        },
+        {
+          "panel_id": "P028",
+          "x": 72,
+          "y": 3189,
+          "w": 1296,
+          "h": 1199,
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "hard cut after impact",
+          "bubble_first": "none",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。",
+          "name_page_id": "SCROLL_005",
+          "page_side": "scroll",
+          "spread_id": "SPREAD_003",
+          "page_turn_hook": "P028 cliffhanger",
+          "page_turn": {
+            "setup": {
+              "panel_id": "P028",
+              "story_function": "cliffhanger"
+            },
+            "payoff": {
+              "panel_id": "",
+              "mode": "chapter_end"
+            }
+          },
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 3427,
+                "w": 777,
+                "h": 839
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 3247,
+                "w": 518,
+                "h": 397
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "bubble_slots": [
+            {
+              "slot_id": "B028S1",
+              "type": "sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              },
+              "x": 540,
+              "y": 4190,
+              "w": 360,
+              "h": 150
+            }
+          ],
+          "gutter_after": 16
+        }
+      ]
+    }
+  ],
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155",
+    "name_board": "排版/第1话/name_board.json",
+    "name_board_sha256": "82bb9b770b525783b45e0c18476b62307da6aad8d1c02688720da23ef2f47c33",
+    "name_approval_subject_sha256": "e878bc5225e721f95b76f04f29577a13d6768fe20b674a2ae0e84c6216b40792",
+    "settings": "_设置.md",
+    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4",
+    "legacy_name_waiver": false
+  },
+  "approval": {
+    "kind": "comic_layout_approval",
+    "status": "approved",
+    "reviewed_by": "Codex代理编辑（用户授权连续执行）",
+    "reviewed_at": "2026-07-14T15:16:41.020968+00:00",
+    "note": "",
+    "subject_sha256": "cae9cd343ce4cfeefad9ea3f80d7f4302a09b259ff3a69b7dc8fa2def8f38b58",
+    "panel_script_sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155",
+    "name_board_sha256": "82bb9b770b525783b45e0c18476b62307da6aad8d1c02688720da23ef2f47c33",
+    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

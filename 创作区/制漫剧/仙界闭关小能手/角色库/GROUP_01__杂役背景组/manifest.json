@@ -1,0 +1,23 @@
+{
+  "kind": "n2d_project_character_asset_bundle",
+  "version": 1,
+  "character_id": "GROUP_01",
+  "name": "杂役背景组",
+  "scope": "三至五名粗布杂役作为远后景层，灰褐与深青低饱和布衣，脸部不清晰，只保留张口笑声和肩膀轮廓，不增加可识别主要角色。",
+  "library_tier": "restricted_partial",
+  "planned_episode_count": 0,
+  "directories": {
+    "reference": "角色库/GROUP_01__杂役背景组/reference",
+    "prompts": "角色库/GROUP_01__杂役背景组/prompts",
+    "lora": "角色库/GROUP_01__杂役背景组/lora",
+    "voice": "角色库/GROUP_01__杂役背景组/voice",
+    "adapters": "角色库/GROUP_01__杂役背景组/adapters",
+    "qc": "角色库/GROUP_01__杂役背景组/qc"
+  },
+  "truth_sources": {
+    "identity_registry": "出图/共享/identity_registry.json",
+    "character_card": "设定库/characters/杂役背景组.md"
+  },
+  "created_by": "n2d-image image_prompt_pack.py",
+  "updated_at": "2026-07-14T17:06:22+00:00"
+}

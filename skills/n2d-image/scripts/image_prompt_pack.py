@@ -746,6 +746,18 @@ def flatten(value: Any) -> str:
     return str(value or "")
 
 
+def scoped_visual_contract_text(visual: Mapping[str, Any], field: str, asset_id: str) -> str:
+    """Flatten one visual-contract field without leaking sibling locations."""
+    value = visual.get(field, {})
+    if isinstance(value, Mapping):
+        scoped = value.get(asset_id)
+        if scoped not in (None, "", [], {}):
+            return flatten(scoped)
+        if any(str(key).startswith("LOC_") for key in value):
+            return ""
+    return flatten(value)
+
+
 def shot_reverse_contract_patterns(root: Path, ep: str) -> Dict[str, Mapping[str, Any]]:
     data = load_json(root / "脚本" / ep / "shot_reverse_contract.json")
     if not isinstance(data, Mapping):
@@ -1574,7 +1586,21 @@ def planned_episode_count(text: str, manifest: Mapping[str, Any], scope: str) ->
         except (TypeError, ValueError):
             pass
     match = PLANNED_EPISODE_RE.search(f"{text}\n{scope}")
-    return int(match.group(1)) if match else 0
+    if match:
+        return int(match.group(1))
+    # Character cards may intentionally declare a library tier instead of a
+    # numeric count (``前期多集复现（recurring_standard）``). Preserve
+    # that explicit production decision by mapping it to the tier's minimum
+    # appearance count; otherwise recurring roles silently fall to
+    # ``named_minimal`` and lose their required three-quarter anchor.
+    tier_text = f"{text}\n{scope}".lower()
+    if "core_full" in tier_text:
+        return 10
+    if "recurring_standard" in tier_text:
+        return 3
+    if "named_minimal" in tier_text:
+        return 1
+    return 0
 
 
 def character_library_tier(*, scope: str, narrative_tier: str, episode_count: int,
@@ -1737,6 +1763,14 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
         explicit_partial = any(tok in text for tok in ("不生成清晰正脸", "禁止清晰正脸", "绝不清晰主角脸", "只使用局部", "局部参考"))
         is_partial = any(tok in partial_probe for tok in ("虚化", "剪影", "背影", "回忆影", "局部参考")) or explicit_partial
         tier = "restricted_partial" if cid.startswith(("CROWD_", "GROUP_")) or is_partial else "core"
+        if cid.startswith(("CROWD_", "GROUP_")):
+            crowd_truth = material_profile or "三至五名低饱和粗布背景人群，只保留肩线、侧后轮廓和虚化嘴形，不建立清晰正脸。"
+            face = crowd_truth
+            hair = "背景杂役使用不同的低小髻或旧布巾，只作虚化轮廓，不建立单人发型身份。"
+            outfit = crowd_truth
+            accessory = "无固定配饰；背景人群不携带抢焦道具。"
+            performance = "只作远后景笑声和肩部轮廓层，不单独表演，不出现可识别清晰脸。"
+            anchor = crowd_truth
         equipment: List[str] = []
         for aid in required_asset_ids(story):
             if aid.startswith("WEAPON_") and name and name in vc_text and aid not in equipment:
@@ -1757,6 +1791,8 @@ def derive_character_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dic
             "不要高饱和页游光效",
             "不要丢失本角色锚点句",
         ]
+        if cid.startswith(("CROWD_", "GROUP_")):
+            drift.extend(["不要单人全身定妆", "不要清晰正脸或可识别主要角色", "不要华丽长袍"])
         drift_hint = ""
         m = re.search(r"禁漂项\s*[=＝:：]\s*([^。\n]+)", text)
         if m:
@@ -1905,6 +1941,12 @@ def material_asset_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Mappin
         end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
         body = text[match.end():end]
         raw_name = clean_material_name(match.group(2), aid)
+        # A heading may group several machine ids, e.g.
+        # ``### PROP_扁担 + PROP_水桶``.  The ``+ PROP_...`` tail is not
+        # the first asset's display name; treating it as one aliases the first
+        # target path to the second asset and burns the wrong shared image.
+        if raw_name.startswith("+") or ASSET_PREFIX_RE.search(raw_name):
+            raw_name = ""
         cn_m = re.search(r"^\s*(?:[-*]\s*)?中文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
         en_m = re.search(r"^\s*(?:[-*]\s*)?英文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
         profile = cn_m.group(1).strip() if cn_m else raw_name
@@ -1958,22 +2000,44 @@ def material_character_map(root: Path, story: Mapping[str, Any]) -> Dict[str, Ma
         text = path.read_text(encoding="utf-8")
     except OSError:
         return {}
+    out: Dict[str, Mapping[str, Any]] = {}
+    # Stage-2 material lists commonly use heading sections, not bullets:
+    # ``### GROUP_01 杂役背景组`` followed by ``中文 Prompt：...``.
+    # Missing this form turns a faceless crowd layer into a single generic
+    # handsome character reference.
+    header_re = re.compile(
+        r"^###\s+((?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)\s*([^\n]*)$",
+        re.M,
+    )
+    headers = list(header_re.finditer(text))
+    for index, match in enumerate(headers):
+        cid = match.group(1).strip()
+        end = headers[index + 1].start() if index + 1 < len(headers) else len(text)
+        body = text[match.end():end]
+        raw_name = clean_material_name(match.group(2) or "", cid)
+        cn_m = re.search(r"^\s*(?:[-*]\s*)?中文\s*prompt\s*[：:]\s*(.+?)\s*$", body, re.M | re.I)
+        profile = cn_m.group(1).strip() if cn_m else raw_name
+        out[cid] = {
+            "id": cid,
+            "name": raw_name or human_name_from_id(cid),
+            "profile": profile,
+            "source": str(path.relative_to(root)),
+        }
     line_re = re.compile(
         r"^\s*-\s*((?:CHAR|CROWD|GROUP)_[A-Za-z0-9_\u4e00-\u9fff]+)(?:\s+([^：:\n]+?))?\s*[：:]\s*(.+?)\s*$",
         re.M,
     )
-    out: Dict[str, Mapping[str, Any]] = {}
     for match in line_re.finditer(text):
         cid = match.group(1).strip()
         raw_name = (match.group(2) or "").strip()
         desc = match.group(3).strip()
         name = raw_name.split("/", 1)[0].strip() if raw_name else human_name_from_id(cid)
-        out[cid] = {
+        out.setdefault(cid, {
             "id": cid,
             "name": name or human_name_from_id(cid),
             "profile": desc,
             "source": str(path.relative_to(root)),
-        }
+        })
     return out
 
 
@@ -1993,8 +2057,8 @@ def complete_asset_scene_dna(
     constraints = cfg.get("constraints") if isinstance(cfg.get("constraints"), Mapping) else {}
     name = str(cfg.get("name") or asset_id)
     profile = str(cfg.get("positive") or cfg.get("current_state") or constraints.get("structure") or name)
-    axis = flatten(visual.get("场景轴线视线", {}))
-    light = flatten(visual.get("场景光位锚", {}))
+    axis = scoped_visual_contract_text(visual, "场景轴线视线", asset_id)
+    light = scoped_visual_contract_text(visual, "场景光位锚", asset_id)
     if not light:
         light = "继承所在镜头场景主光，低饱和冷灰，禁止自发强光。"
     if asset_type in {"scene", "location"}:
@@ -2122,6 +2186,11 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
             )
             negative = "现代物品、平台UI、水印、空间轴线随机跳变、丢失连续性锚点"
             scene_dna = dict(hint.get("scene_dna") or {})
+            scoped_light = scoped_visual_contract_text(vc, "场景光位锚", aid) or weather
+            if scoped_light:
+                # Generated registries can carry stale values from an older
+                # prompt-pack parser.  Current storyboard/card truth wins.
+                scene_dna["color_lighting_weather"] = scoped_light
             if resident_subjects:
                 existing_residents = scene_dna.get("resident_assets")
                 if isinstance(existing_residents, str):
@@ -2135,7 +2204,7 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                     "positive": positive,
                     "constraints": {
                         "layout": anchors or scene_dna.get("spatial_layout") or "保持 storyboard 场景轴线和地标。",
-                        "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
+                        "light_anchor": scoped_light,
                     },
                     "scene_dna": scene_dna,
                 },
@@ -2156,16 +2225,16 @@ def derive_asset_defs(root: Path, story: Mapping[str, Any]) -> Dict[str, Dict[st
                 "negative": negative,
                 "constraints": {
                     "layout": anchors or scene_dna.get("spatial_layout") or "保持 storyboard 场景轴线和地标。",
-                    "light_anchor": flatten(vc.get("场景光位锚", {})) or weather,
-                    "axis_rules": flatten(vc.get("场景轴线视线", {})),
+                    "light_anchor": scoped_light,
+                    "axis_rules": scoped_visual_contract_text(vc, "场景轴线视线", aid),
                     "face_policy": "faceless",
                     "must_not_have": ["现代物件", "平台UI", "水印", "空间轴线随机跳变"],
                 },
                 "drift": drift_terms,
                 "scene_dna": scene_dna,
                 "spatial_layout": anchors or "",
-                "axis_rules": flatten(vc.get("场景轴线视线", {})),
-                "screen_direction_rules": flatten(vc.get("场景轴线视线", {})),
+                "axis_rules": scoped_visual_contract_text(vc, "场景轴线视线", aid),
+                "screen_direction_rules": scoped_visual_contract_text(vc, "场景轴线视线", aid),
                 "self_check": f"{name or aid} 的地标、空间布局、光位、角色站位和出入口方向可读。",
             }
             continue
@@ -3052,6 +3121,11 @@ def clip_assets(clip: Mapping[str, Any]) -> List[str]:
             if aid != known and aid.startswith(known):
                 normalized = known
                 break
+        # Free prose is allowed to mention declared ids, but it must never mint
+        # a new registry entity (``PROP_01仍未入画`` / ``PROP_xx留在画外``).
+        # New assets belong in object_ids / entity_schedule / asset_requirements.
+        if normalized not in known_ids and normalized not in ASSET_ID_HINTS:
+            continue
         if normalized in offscreen_ids and normalized not in structured_ids:
             continue
         add_unique(ids, normalized)

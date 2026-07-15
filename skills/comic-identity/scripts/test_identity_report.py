@@ -167,6 +167,39 @@ def test_report_flags_outfit_gaps(tmp_path: Path) -> None:
     assert "OUTFIT_X" in report["outfit_gaps"]["P001"]
 
 
+def test_report_accepts_deduplicated_front_as_registered_outfit_reference(tmp_path: Path) -> None:
+    root = tmp_path / "项目"
+    chapter = "第1话"
+    front = root / "出图" / "共享" / "图片" / "CHAR_A__front.png"
+    front.parent.mkdir(parents=True)
+    front.write_bytes(PNG_1X1)
+    jobs_dir = root / "出图" / chapter / "prompt"
+    jobs_dir.mkdir(parents=True)
+    (root / "生产数据").mkdir(parents=True)
+    rel = "出图/共享/图片/CHAR_A__front.png"
+    (jobs_dir / "panel_jobs.json").write_text(
+        json.dumps({"jobs": [{
+            "panel_id": "P001",
+            "status": "planned",
+            "references": [{"id": "CHAR_A", "path": rel, "view": "front"}],
+            "outfit_binding": {"ref_id": "CHAR_A", "outfit_id": "OUTFIT_BASE", "registered": True},
+        }]}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    (root / "出图" / "共享" / "identity_registry.json").write_text(
+        json.dumps({"assets": {"CHAR_A": {"id": "CHAR_A", "outfits": {"OUTFIT_BASE": {
+            "id": "OUTFIT_BASE", "status": "ready", "reference_images": [{"path": rel}]
+        }}}}}, ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+    rc = identity.report(type("Args", (), {"project_root": str(root), "chapter": chapter, "write": False})())
+    assert rc == 0
+    report = json.loads((root / "生产数据" / f"comic_identity_report_{chapter}.json").read_text(encoding="utf-8"))
+    assert report["summary"]["outfit_gap_count"] == 0
+    assert report["outfit_gaps"] == {}
+
+
 def test_views_registers_existing_view_without_anchor(tmp_path: Path, monkeypatch) -> None:
     root = tmp_path / "项目"
     shared = root / "出图" / "共享" / "图片"
@@ -384,6 +417,22 @@ def test_anchors_generate_non_character_text_anchor(tmp_path: Path, monkeypatch)
     assert source["style_reference_role"] == "style_only"
     assert source["prompt_sha256"]
     assert (root / source["prompt_path"]).is_file()
+
+
+def test_monster_anchor_prompt_consumes_character_dna_and_does_not_force_tail() -> None:
+    prompt = identity.asset_anchor_prompt(
+        "MON_TIGER",
+        {
+            "type": "monster",
+            "display_name": "虎首妖将",
+            "character_dna": "直立双足人体，两条人形手臂，只有头部是虎首，无尾巴",
+        },
+        visual_style="国风厚涂条漫",
+    )
+
+    assert "dna_contract: 直立双足人体" in prompt
+    assert "人身兽首必须保持直立双足人体结构" in prompt
+    assert "尾部和标志纹理清楚" not in prompt
 
 
 def test_anchor_candidate_batch_does_not_adopt_unreviewed_images(tmp_path: Path, monkeypatch) -> None:

@@ -1,0 +1,2344 @@
+{
+  "schema_version": 2,
+  "kind": "comic_name_board",
+  "workflow_status": "approved",
+  "chapter": "第1话",
+  "format": "条漫",
+  "reading_direction": "从上到下",
+  "manuscript": {
+    "spec": "数字条漫",
+    "trim_box": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1800
+    },
+    "safe_area": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    },
+    "bleed": 0,
+    "inner_frame": {
+      "x": 72,
+      "y": 72,
+      "w": 1296,
+      "h": 1656
+    }
+  },
+  "pages": [
+    {
+      "page_id": "SCROLL_001",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P006 threat_dialogue",
+      "eye_flow_path": [
+        "P001",
+        "P002",
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P001",
+        "exit_panel_id": "P006",
+        "path": [
+          "P001",
+          "P002",
+          "P003",
+          "P004",
+          "P005",
+          "P006"
+        ]
+      },
+      "gutter_intent": "P001:opening pause；P002:identity shock；P003:scan and identify；P004:first monster scale reveal；P005:quiet survival reveal；P006:first confrontation",
+      "panels": [
+        {
+          "panel_id": "P001",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "opening pause",
+          "camera_hint": "极长竖向开场：冷灰荒野与血色余晖，枯草间尸骸横陈，风卷起墨色尘沙。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P001_N1",
+              "type": "narration",
+              "content_ref": "panel:P001.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P001_S1",
+              "type": "sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.narration",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P001.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P002",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 403,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "identity shock",
+          "camera_hint": "姜月初从尸骸间撑起身，高马尾和破损灰白囚服被风吹动，她难以置信地看着自己的女性双手。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P002_N1",
+              "type": "narration",
+              "content_ref": "panel:P002.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 463,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P002.narration",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P003",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 734,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "scan and identify",
+          "camera_hint": "主角视角扫过囚服尸体和黑衣赤云纹的镇魔卫尸体，两种服装形成清楚对比。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P003_N1",
+              "type": "narration",
+              "content_ref": "panel:P003.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 774,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P003.narration",
+              "rect": {
+                "x": 185,
+                "y": 744,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P004",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 963,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "first monster scale reveal",
+          "camera_hint": "巨岩下，虎山神人身虎头的巨躯斜倚着，胸口巨大窟窿涌出黑血；姜月初在远处显得渺小。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P004_N1",
+              "type": "narration",
+              "content_ref": "panel:P004.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1023,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P004.narration",
+              "rect": {
+                "x": 136,
+                "y": 978,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P005",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1294,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "quiet survival reveal",
+          "camera_hint": "镜头从虎妖黑血滑向半跪的裴长青；他用断刀撑地，黑衣赤纹、左臂扭曲、胸口微弱起伏。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P005_N1",
+              "type": "narration",
+              "content_ref": "panel:P005.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1334,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P005.narration",
+              "rect": {
+                "x": 185,
+                "y": 1304,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P006",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "first confrontation",
+          "camera_hint": "姜月初踮起脚尖后退；裴长青艰难抬头，干裂的嘴唇吐出命令。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P006_N1",
+              "type": "narration",
+              "content_ref": "panel:P006.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P006_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P006.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.narration",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P006.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P006",
+          "story_function": "threat_dialogue"
+        },
+        "payoff": {
+          "panel_id": "P007",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_002",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_001",
+      "page_turn_hook": "P012 bargain_pressure",
+      "eye_flow_path": [
+        "P007",
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P007",
+        "exit_panel_id": "P012",
+        "path": [
+          "P007",
+          "P008",
+          "P009",
+          "P010",
+          "P011",
+          "P012"
+        ]
+      },
+      "gutter_intent": "P007:memory montage；P008:knife halts escape；P009:fear reaction；P010:audience learns the bluff；P011:name and bargain setup；P012:offer with no good alternative",
+      "panels": [
+        {
+          "panel_id": "P007",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 72,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "memory montage",
+          "camera_hint": "破碎记忆以墨色剪影小格叠入：高官府门封条、女子戴枷、赤纹缇骑押送囚车。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P007_N1",
+              "type": "narration",
+              "content_ref": "panel:P007.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 99,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P007.narration",
+              "rect": {
+                "x": 234,
+                "y": 78,
+                "w": 432,
+                "h": 46
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P008",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 237,
+            "w": 1296,
+            "h": 414
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "knife halts escape",
+          "camera_hint": "姜月初转身要跑，一道冷光从她耳侧擦过，半截断刀铃在脚前泥地。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P008_N1",
+              "type": "narration",
+              "content_ref": "panel:P008.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P008_S1",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            },
+            {
+              "balloon_id": "P008_S2",
+              "type": "sfx",
+              "content_ref": "panel:P008.sfx:2",
+              "speaker": "",
+              "order": 3,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 319,
+                "w": 777,
+                "h": 289
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.narration",
+              "rect": {
+                "x": 136,
+                "y": 257,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 257,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P008.sfx:2",
+              "rect": {
+                "x": 136,
+                "y": 257,
+                "w": 518,
+                "h": 138
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P009",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 678,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "fear reaction",
+          "camera_hint": "断刀贴着姜月初脚尖震颤，她僵住，额角冷汗滑下，只能慢慢转回身。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P009_N1",
+              "type": "narration",
+              "content_ref": "panel:P009.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 733,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P009.narration",
+              "rect": {
+                "x": 185,
+                "y": 691,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P010",
+          "thumbnail_rect": {
+            "x": 180,
+            "y": 981,
+            "w": 1080,
+            "h": 138
+          },
+          "layout_weight": "compact",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "audience learns the bluff",
+          "camera_hint": "裴长青嘴角极轻地动了一下，但藏在袖下的手已无力垂落；姜月初并未看见。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 396,
+                "y": 1008,
+                "w": 648,
+                "h": 96
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P011",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1146,
+            "w": 1188,
+            "h": 276
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "name and bargain setup",
+          "camera_hint": "裴长青半跪在地，仰视走近的姜月初，主动报出身份。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P011_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P011.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1201,
+                "w": 712,
+                "h": 193
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P011.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 1159,
+                "w": 475,
+                "h": 92
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P012",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1449,
+            "w": 1188,
+            "h": 279
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "offer with no good alternative",
+          "camera_hint": "裴长青的视线锁住姜月初，背后是没入荒草的死人和无路可逃的远方。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P012_N1",
+              "type": "narration",
+              "content_ref": "panel:P012.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P012_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P012.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1504,
+                "w": 712,
+                "h": 195
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.narration",
+              "rect": {
+                "x": 185,
+                "y": 1462,
+                "w": 475,
+                "h": 93
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P012.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1462,
+                "w": 475,
+                "h": 93
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P012",
+          "story_function": "bargain_pressure"
+        },
+        "payoff": {
+          "panel_id": "P013",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_003",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P018 desperate_attack",
+      "eye_flow_path": [
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017",
+        "P018"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P013",
+        "exit_panel_id": "P018",
+        "path": [
+          "P013",
+          "P014",
+          "P015",
+          "P016",
+          "P017",
+          "P018"
+        ]
+      },
+      "gutter_intent": "P013:acceptance；P014:two bodies moving as one；P015:voice from behind；P016:full resurrection reveal；P017:recognition of impossible power；P018:last attack launch",
+      "panels": [
+        {
+          "panel_id": "P013",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "acceptance",
+          "camera_hint": "姜月初看了看断刀、荒野和自己纤细的手，最终咬牙蹲下。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P013_N1",
+              "type": "narration",
+              "content_ref": "panel:P013.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P013_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P013.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 112,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.narration",
+              "rect": {
+                "x": 185,
+                "y": 82,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P013.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 82,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P014",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 301,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "two bodies moving as one",
+          "camera_hint": "姜月初绕到裴长青右侧，把他滚烫沉重的身体架在肩上，两人踉跄向南，脚下拖出血痕。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 3,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P014_N1",
+              "type": "narration",
+              "content_ref": "panel:P014.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P014_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              }
+            },
+            {
+              "balloon_id": "P014_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P014.dialogue:2",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 3,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            },
+            {
+              "balloon_id": "P014_S1",
+              "type": "sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "speaker": "",
+              "order": 4,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 341,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.narration",
+              "rect": {
+                "x": 185,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.dialogue:2",
+              "rect": {
+                "x": 185,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_04",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P014.sfx:1",
+              "rect": {
+                "x": 779,
+                "y": 311,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P015",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 530,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "voice from behind",
+          "camera_hint": "两人刚走几步，身后传来咳嗽；姜月初手一松，裴长青直挺挺摔回泥地。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P015_N1",
+              "type": "narration",
+              "content_ref": "panel:P015.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P015_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P015.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              }
+            },
+            {
+              "balloon_id": "P015_S1",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "speaker": "",
+              "order": 3,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            },
+            {
+              "balloon_id": "P015_S2",
+              "type": "sfx",
+              "content_ref": "panel:P015.sfx:2",
+              "speaker": "",
+              "order": 4,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 590,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.narration",
+              "rect": {
+                "x": 136,
+                "y": 545,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 545,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_03",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 545,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_04",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P015.sfx:2",
+              "rect": {
+                "x": 784,
+                "y": 545,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P016",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 861,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "full resurrection reveal",
+          "camera_hint": "虎山神从巨岩下缓缓站起，胸口巨大窟窿仍然流黑血，它扭动脆子露出笑；二人在前景完全僵住。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P016_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P016.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              }
+            },
+            {
+              "balloon_id": "P016_S1",
+              "type": "sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 921,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 876,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P016.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 876,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P017",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1192,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "recognition of impossible power",
+          "camera_hint": "裴长青瞳孔紧缩，他的记忆剪影闪过刀锋贯穿虎妖心脏，再与当下不死之躯重叠。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P017_N1",
+              "type": "narration",
+              "content_ref": "panel:P017.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1232,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P017.narration",
+              "rect": {
+                "x": 185,
+                "y": 1202,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P018",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1421,
+            "w": 1296,
+            "h": 307
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "last attack launch",
+          "camera_hint": "裴长青从地上抓起同僚横刀，强行爆发最后气血，拖着扭曲左臂跃起斩向虎妖脖颈。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P018_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P018.dialogue:1",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            },
+            {
+              "balloon_id": "P018_S1",
+              "type": "sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "speaker": "",
+              "order": 2,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1482,
+                "w": 777,
+                "h": 214
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.dialogue:1",
+              "rect": {
+                "x": 136,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P018.sfx:1",
+              "rect": {
+                "x": 784,
+                "y": 1436,
+                "w": 518,
+                "h": 102
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P018",
+          "story_function": "desperate_attack"
+        },
+        "payoff": {
+          "panel_id": "P019",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_004",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_002",
+      "page_turn_hook": "P024 misdirection",
+      "eye_flow_path": [
+        "P019",
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P019",
+        "exit_panel_id": "P024",
+        "path": [
+          "P019",
+          "P020",
+          "P021",
+          "P022",
+          "P023",
+          "P024"
+        ]
+      },
+      "gutter_intent": "P019:kick impact and weapon transfer；P020:absolute low point；P021:golden system reveal；P022:rule seems useless；P023:picks up blade；P024:audience expects attack on tiger",
+      "panels": [
+        {
+          "panel_id": "P019",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 72,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "kick impact and weapon transfer",
+          "camera_hint": "虎妖不闪不避，后发先至一脚蹬在裴长青胸口；他横向倒飞，横刀脱手落到姜月初脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P019_S1",
+              "type": "sfx",
+              "content_ref": "panel:P019.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 132,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P019.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 87,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P020",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 403,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "absolute low point",
+          "camera_hint": "俯视姜月初、濒死裴长青与脚边横刀；虎妖高大阴影从画右覆压过来，它舔着带倒刺的手掌。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P020_N1",
+              "type": "narration",
+              "content_ref": "panel:P020.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P020_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P020.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 463,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.narration",
+              "rect": {
+                "x": 136,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P020.dialogue:1",
+              "rect": {
+                "x": 784,
+                "y": 418,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P021",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 734,
+            "w": 1296,
+            "h": 304
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "golden system reveal",
+          "camera_hint": "姜月初眼前的世界暗下，一幅古朴绘卷以墨色和金光展开；系统文字不烘焙进原图，仅预留低细节金光区供后期嵌字。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P021_N1",
+              "type": "narration",
+              "content_ref": "panel:P021.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 794,
+                "w": 777,
+                "h": 212
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P021.narration",
+              "rect": {
+                "x": 136,
+                "y": 749,
+                "w": 518,
+                "h": 101
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P022",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1065,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "rule seems useless",
+          "camera_hint": "姜月初的手在金光前收紧，她看向远处不死虎妖，凡人身躯与巨妖形成无法跨越的比例差。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P022_N1",
+              "type": "narration",
+              "content_ref": "panel:P022.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1105,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P022.narration",
+              "rect": {
+                "x": 185,
+                "y": 1075,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P023",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1294,
+            "w": 1188,
+            "h": 202
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "picks up blade",
+          "camera_hint": "姜月初俯身捡起裴长青脱手的横刀，刀柄余温与血污粘住手心；裴长青在地上重新睁眼。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P023_N1",
+              "type": "narration",
+              "content_ref": "panel:P023.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1334,
+                "w": 712,
+                "h": 141
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P023.narration",
+              "rect": {
+                "x": 185,
+                "y": 1304,
+                "w": 475,
+                "h": 67
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P024",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 1523,
+            "w": 1188,
+            "h": 205
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "audience expects attack on tiger",
+          "camera_hint": "从裴长青低角度看，姜月初持刀背对他，似乎要走向虎妖；虎妖在远处饶有兴致地笑。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P024_N1",
+              "type": "narration",
+              "content_ref": "panel:P024.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            },
+            {
+              "balloon_id": "P024_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P024.dialogue:1",
+              "speaker": "MON_TIGER_SHANSHEN",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "MON_TIGER_SHANSHEN"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 1564,
+                "w": 712,
+                "h": 143
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.narration",
+              "rect": {
+                "x": 185,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P024.dialogue:1",
+              "rect": {
+                "x": 779,
+                "y": 1533,
+                "w": 475,
+                "h": 68
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P024",
+          "story_function": "misdirection"
+        },
+        "payoff": {
+          "panel_id": "P025",
+          "mode": "next_page_open"
+        }
+      }
+    },
+    {
+      "page_id": "SCROLL_005",
+      "page_side": "scroll",
+      "spread_id": "SPREAD_003",
+      "page_turn_hook": "P028 cliffhanger",
+      "eye_flow_path": [
+        "P025",
+        "P026",
+        "P027",
+        "P028"
+      ],
+      "eye_flow": {
+        "reading_direction": "从上到下",
+        "entry_panel_id": "P025",
+        "exit_panel_id": "P028",
+        "path": [
+          "P025",
+          "P026",
+          "P027",
+          "P028"
+        ]
+      },
+      "gutter_intent": "P025:target changes；P026:solution revealed to audience；P027:last human beat；P028:hard cut after impact",
+      "panels": [
+        {
+          "panel_id": "P025",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 72,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "target changes",
+          "camera_hint": "姜月初低下头，黑发遮住大半脸，双手握刀剧烈颤抖；她的视线没有看虎妖，而是慢慢落向脚边。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P025_N1",
+              "type": "narration",
+              "content_ref": "panel:P025.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 135,
+                "w": 712,
+                "h": 220
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P025.narration",
+              "rect": {
+                "x": 185,
+                "y": 87,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P026",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 414,
+            "w": 1296,
+            "h": 472
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "solution revealed to audience",
+          "camera_hint": "主观俯视：横刀刀尖和裴长青起伏微弱的胸口处在同一直线，远处虎妖反而被景深虚化。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 1,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P026_N1",
+              "type": "narration",
+              "content_ref": "panel:P026.narration",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "none",
+                "target": ""
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 508,
+                "w": 777,
+                "h": 330
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P026.narration",
+              "rect": {
+                "x": 136,
+                "y": 437,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P027",
+          "thumbnail_rect": {
+            "x": 126,
+            "y": 913,
+            "w": 1188,
+            "h": 315
+          },
+          "layout_weight": "medium",
+          "panel_shape": "wide",
+          "border_style": "standard",
+          "gutter_intent": "last human beat",
+          "camera_hint": "姜月初半跪到裴长青身侧，脸藏在头发阴影中；裴长青困惑地抬眼看她。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 2,
+          "bubble_first": "top",
+          "balloons": [
+            {
+              "balloon_id": "P027_D1",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:1",
+              "speaker": "CHAR_JIANG_YUECHU",
+              "order": 1,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_JIANG_YUECHU"
+              }
+            },
+            {
+              "balloon_id": "P027_D2",
+              "type": "dialogue",
+              "content_ref": "panel:P027.dialogue:2",
+              "speaker": "CHAR_PEI_CHANGQING",
+              "order": 2,
+              "tail": {
+                "mode": "toward_speaker",
+                "target": "CHAR_PEI_CHANGQING"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 363,
+                "y": 976,
+                "w": 712,
+                "h": 220
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:1",
+              "rect": {
+                "x": 185,
+                "y": 928,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            },
+            {
+              "region_id": "TEXT_02",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P027.dialogue:2",
+              "rect": {
+                "x": 779,
+                "y": 928,
+                "w": 475,
+                "h": 105
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        },
+        {
+          "panel_id": "P028",
+          "thumbnail_rect": {
+            "x": 72,
+            "y": 1255,
+            "w": 1296,
+            "h": 473
+          },
+          "layout_weight": "heavy",
+          "panel_shape": "tall",
+          "border_style": "standard",
+          "gutter_intent": "hard cut after impact",
+          "camera_hint": "超近景冲击格：姜月初双手将横刀刺入裴长青胸口，接触点被深红血色与飞散墨点遮挡，不展示露骨伤口；裴长青眼中只剩错愕。无字原图，不画对白气泡、旁白框或系统文字；为后期嵌字保留低细节区。",
+          "text_load": 0,
+          "bubble_first": "none",
+          "balloons": [
+            {
+              "balloon_id": "P028_S1",
+              "type": "sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "speaker": "",
+              "order": 1,
+              "tail": {
+                "mode": "action_path",
+                "target": "impact_or_motion_anchor"
+              }
+            }
+          ],
+          "subject_regions": [
+            {
+              "region_id": "SUBJECT_PRIMARY",
+              "role": "acting_subject_and_key_action",
+              "rect": {
+                "x": 331,
+                "y": 1349,
+                "w": 777,
+                "h": 331
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "avoid_regions": [
+            {
+              "region_id": "TEXT_01",
+              "role": "reserved_for_balloon_or_sfx",
+              "content_ref": "panel:P028.sfx:1",
+              "rect": {
+                "x": 136,
+                "y": 1278,
+                "w": 518,
+                "h": 157
+              },
+              "source": "heuristic_thumbnail",
+              "confidence": "heuristic"
+            }
+          ],
+          "eye_flow_entry": "top",
+          "eye_flow_exit": "bottom",
+          "effects_hint": "风、墨尘、刀光、冲击线和金色微光必须服务动作路径与视线焦点。"
+        }
+      ],
+      "page_turn": {
+        "setup": {
+          "panel_id": "P028",
+          "story_function": "cliffhanger"
+        },
+        "payoff": {
+          "panel_id": "",
+          "mode": "chapter_end"
+        }
+      }
+    }
+  ],
+  "finishing_preview": {
+    "render_stage": "完成稿",
+    "ink_plan": "clear silhouettes, stable line weight, solid blacks assigned before tone/color",
+    "tone_plan": "风格驱动: grayscale/value planning even when final art is color",
+    "effects_plan": "剧情驱动: action lines, focus lines, impact flashes, symbols, and omitted backgrounds only when they support reading"
+  },
+  "upstream_receipt": {
+    "panel_script": "脚本/第1话/panel_script.json",
+    "panel_script_sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155",
+    "settings": "_设置.md",
+    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+  },
+  "approval": {
+    "kind": "comic_name_board_approval",
+    "status": "approved",
+    "reviewed_by": "Codex代理编辑（用户授权连续执行）",
+    "reviewed_at": "2026-07-14T15:16:40.527259+00:00",
+    "note": "",
+    "subject_sha256": "e878bc5225e721f95b76f04f29577a13d6768fe20b674a2ae0e84c6216b40792",
+    "panel_script_sha256": "9eb2b458b0e794b715d13c101c7e8a543560ffdfd2ffc90d62c73344c4673155",
+    "settings_sha256": "512d011d8be3c0f00c03e1583406d0b61be53ecfba0ff6a235c883b4260f46d4"
+  },
+  "validation": {
+    "status": "pass",
+    "errors": []
+  }
+}

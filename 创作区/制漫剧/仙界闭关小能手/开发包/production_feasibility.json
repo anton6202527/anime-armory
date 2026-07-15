@@ -1,0 +1,59 @@
+{
+  "compliance_risks": [
+    "源小说与同源改编按用户仓库创作源记 original；当前为 internal_only",
+    "不克隆真人歌手或演员声音；角色为原创虚构人物",
+    "公开发行前另补平台审核、AI 标识与本地化"
+  ],
+  "core_characters": [
+    {
+      "lock_strategy": "参考图派生 / face_embedding / 主体库 / LoRA",
+      "name": "贺平生（14岁·杂役常态）",
+      "risk": "长线主角跨镜跨集脸、年龄、发髻、粗布衣与瘦弱体型一致性",
+      "lock_strategy": "core_full 五角同源定妆 + 脸锚/表情锚 + image2image reference chain + full image_qc"
+    },
+    {
+      "name": "张老大",
+      "risk": "赤膊壮汉、油污手、暗红裤与压迫表情在正反打中漂移",
+      "lock_strategy": "named_minimal 正面/半身/脸锚 + 反打参考组"
+    }
+  ],
+  "core_locations": [
+    {
+      "asset_strategy": "场景卡 + 空镜 + 多机位参考",
+      "name": "秀竹峰杂役大殿",
+      "risk": "黑暗破庙感、梁尘、人物左右站位和冷侧光连续性",
+      "asset_strategy": "LOC registry + 无人空镜 + 轴线/光位锚 + 多机位参考"
+    },
+    {
+      "name": "秀竹峰后山浅潭",
+      "risk": "月夜瀑布、浅潭、巨石、山路地理和水光在连续镜头中漂移",
+      "asset_strategy": "LOC registry + 日景/月夜两状态 + 空镜 + 水面光位锚"
+    }
+  ],
+  "generated_at": "2026-07-14T15:39:58+00:00",
+  "kind": "n2d_development_production_feasibility",
+  "model_route_risks": [
+    "GPT Image 2 无公开持久主体 ID，核心角色必须使用项目记忆参考链、真实多图附件和 full QC",
+    "Seedance 2.0 经 Dreamina 使用前需当天 smoke 与 adapter v2 状态；普通动作首帧图生视频，连续接力按锚帧计划",
+    "每张图、每个物理 Clip 必须生成后即时 QC 与执行者视觉复核，失败只重做当前单位"
+  ],
+  "props_vfx_spectacle": [
+    {
+      "degrade_plan": "拆镜 / overlay / motion control / 人审",
+      "name": "PROP_破旧陶盆",
+      "risk": "核心法宝外形、裂纹、黑陶材质与‘普通破盆’伪装跨镜漂移",
+      "degrade_plan": "先做多角度道具定妆；异光作为独立 VFX；能力不靠烤字说明"
+    },
+    {
+      "name": "VFX_破盆幽微异光",
+      "risk": "光效过强会提前泄露宝物等级或吞掉黑陶结构",
+      "degrade_plan": "只用低亮度月光反射与极轻绿芒，后期可控叠加"
+    }
+  ],
+  "status": "confirmed",
+  "version": 1,
+  "voice_and_music": {
+    "music_motif": "主角用低弦与木质敲击表现忍耐和脚步；破盆出现时加入极轻金属泛音与水滴反向声",
+    "voice_risk": "贺平生需十四岁克制少年声，张老大粗粝压迫；不用真人克隆。当前缺已锁正式音色，先做声音选角和估时，成片前必须补 final voice"
+  }
+}

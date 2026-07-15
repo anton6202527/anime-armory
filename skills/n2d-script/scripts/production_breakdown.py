@@ -1047,9 +1047,19 @@ def _md_status(path: Path) -> Tuple[str, List[str]]:
 
 def check(root: Path, ep: str, *, write_missing: bool = False) -> Dict[str, Any]:
     ep = episode_label(ep)
-    if write_missing:
-        scaffold(root, ep)
+    # ``check --write-missing`` is a repair helper, not a regeneration command.
+    # Re-scaffolding an already complete pack rewrites the manifest as ``draft``
+    # and invalidates its hash-bound approval on every supervisor poll.
     ep_dir = _episode_dir(root, ep)
+    required_paths = [ep_dir / name for name in REQUIRED_FILES]
+    manifest_path = ep_dir / "production_handoff_pack.json"
+    batch_seed_path = root / "生产数据" / BATCH_SEED_JSON.format(episode=ep)
+    if write_missing and (
+        any(not path.exists() for path in required_paths)
+        or not manifest_path.exists()
+        or not batch_seed_path.exists()
+    ):
+        scaffold(root, ep)
     rows: List[Dict[str, Any]] = []
     for name in REQUIRED_FILES:
         path = ep_dir / name
