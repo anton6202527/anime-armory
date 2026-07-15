@@ -129,7 +129,7 @@
       "retry_of_probe_id": "ee5b4ac4fc34f95b6321",
       "retry_ordinal": 2,
       "started_at": "2026-07-15T20:22:34+08:00",
-      "status": "started",
+      "status": "failed",
       "reason": "用户确认网络恢复并要求保持同一内置 imagegen 后端、同一模型、同一风格锚与同一提示词重试一次，避免风格漂移",
       "model": "GPT Image 2",
       "access_path": "内置 imagegen",
